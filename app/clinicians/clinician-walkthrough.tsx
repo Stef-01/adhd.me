@@ -23,72 +23,89 @@ const stages: Array<{ id: Stage; label: string }> = [
   { id: "practice", label: "Practice" },
 ];
 
-const womenHealthConditions = [
-  { id: "pcos", label: "PMOS", detail: "Demo anchor", locked: true },
-  { id: "gestational-diabetes", label: "Gestational diabetes", detail: "Pregnancy and follow-up" },
-  { id: "endometriosis", label: "Endometriosis & pelvic pain", detail: "Recognition and continuity" },
-  { id: "perinatal-mental-health", label: "Perinatal mental health", detail: "Depression, anxiety and shared care" },
-  { id: "postpartum-recovery", label: "Post-birth metabolic recovery", detail: "Sustainable recovery after birth" },
-  { id: "menopause", label: "Menopause & perimenopause", detail: "Whole-person midlife care" },
+/**
+ * The sub-areas inside an ADHD focus. `adhd-assessment` is locked because every archetype in
+ * src/demo/care-archetypes.ts requires it: a GP who deselected it would have a focus the finder
+ * can never route to, which is a worse state than having no focus at all.
+ */
+const adhdConditions = [
+  { id: "adhd-assessment", label: "Diagnostic assessment", detail: "Demo anchor", locked: true },
+  { id: "child-adolescent-adhd", label: "Children & adolescents", detail: "School reports and paediatric referral" },
+  { id: "titration", label: "Titration & review", detail: "Initiation, dose review, side effects" },
+  { id: "autism-adhd", label: "Co-occurring autism", detail: "Where one explanation was offered and two are needed" },
+  { id: "comorbid-mood", label: "Anxiety & mood differential", detail: "Comorbidity, differential, or both" },
+  { id: "student-academic", label: "Study & workplace adjustments", detail: "Documentation a school or employer accepts" },
 ] as const;
 
-const comingFocusAreas = ["Metabolic health", "Renal health", "Cardiac health", "Mental health", "Skin cancer"];
+const comingFocusAreas = ["Autism assessment", "Mental health", "Sleep medicine", "Metabolic health", "Skin cancer"];
 
 const cases = [
-  { label: "New PMOS assessment", detail: "Cycles · metabolic screen", time: "8:40" },
-  { label: "PMOS follow-up", detail: "COCP suitability · mood check", time: "10:20" },
-  { label: "Metformin review", detail: "Titration · GI tolerance", time: "1:10" },
-  { label: "Longer PMOS consult", detail: "Symptoms · shared plan", time: "3:40" },
+  { label: "New ADHD assessment", detail: "Developmental history · rating scales", time: "8:40" },
+  { label: "Assessment part two", detail: "Collateral history · differential", time: "10:20" },
+  { label: "Titration review", detail: "Effect · appetite · blood pressure", time: "1:10" },
+  { label: "Longer adult consult", detail: "Late presentation · shared plan", time: "3:40" },
 ];
 
+/**
+ * Learning that points OUTWARD, which is the whole design of this list.
+ *
+ * Every `href` leaves for a guideline body — AADPA, NICE, the TGA. Nothing here is clinical content
+ * ADHD.ME wrote, summarised or paraphrased, because a summary is a new clinical assertion with this
+ * product's name on it, and founder gate G5 exists to stop exactly that. The `title` and `detail`
+ * fields name WHAT A CLINICIAN WOULD GO AND READ; they do not tell them what it says.
+ *
+ * FOUNDER ACTION: every URL below needs confirming against the live source before launch. They are
+ * written from the stable landing pages of each body rather than deep links, because a deep link
+ * that has moved sends a clinician to a 404 in the middle of a consult.
+ */
 const resources = [
   {
     id: "guideline",
-    eyebrow: "Current PMOS guideline",
-    title: "Metabolic management",
-    detail: "The relevant section from the 2023 International Evidence-based Guideline.",
-    duration: "3 min",
-    href: "https://www.monash.edu/__data/assets/pdf_file/0003/3379521/Evidence-Based-Guidelines-2023.pdf",
+    eyebrow: "Australian guideline",
+    title: "AADPA evidence-based clinical practice guideline",
+    detail: "The Australian guideline for ADHD identification, assessment and support.",
+    duration: "4 min",
+    href: "https://adhdguideline.aadpa.com.au/",
   },
   {
     id: "diagnosis",
     eyebrow: "Diagnostic refresher",
-    title: "Rotterdam criteria + the AMH update",
-    detail: "A two-minute pattern check before your first consult.",
-    duration: "2 min",
-    href: "https://www.monash.edu/medicine/mchri/pcos/guideline",
+    title: "Assessment and diagnosis in adults",
+    detail: "What a defensible assessment has to establish, and what it cannot rest on.",
+    duration: "3 min",
+    href: "https://www.nice.org.uk/guidance/ng87",
   },
   {
-    id: "cocp",
+    id: "differential",
+    eyebrow: "Before you conclude",
+    title: "Differential and co-occurring conditions",
+    detail: "Anxiety, mood, trauma, sleep and substance use — what each one imitates.",
+    duration: "3 min",
+    href: "https://adhdguideline.aadpa.com.au/",
+  },
+  {
+    id: "cardiac",
     eyebrow: "Safety checklist",
-    title: "COCP contraindications",
-    detail: "A focused check against WHO medical eligibility criteria.",
+    title: "Baseline checks before a stimulant",
+    detail: "Cardiovascular history, blood pressure and heart rate, and when to refer first.",
     duration: "2 min",
-    href: "https://www.who.int/publications/i/item/9789240115583",
+    href: "https://www.nice.org.uk/guidance/ng87",
   },
   {
-    id: "metformin",
-    eyebrow: "Treatment guide",
-    title: "Metformin: start, titrate, review",
-    detail: "Tolerance, dose progression and follow-up prompts.",
-    duration: "2 min",
-    href: "https://www.monash.edu/__data/assets/pdf_file/0003/3379521/Evidence-Based-Guidelines-2023.pdf",
-  },
-  {
-    id: "paper",
-    eyebrow: "Recent evidence",
-    title: "COMET-PCOS randomised trial",
-    detail: "COCP and metformin for metabolic outcomes, published in 2025.",
-    duration: "4 min",
-    href: "https://pubmed.ncbi.nlm.nih.gov/41359669/",
+    id: "prescribing",
+    eyebrow: "Prescribing and the law",
+    title: "Stimulant authority and shared care",
+    detail: "What a GP may initiate and continue, which differs by state and changes.",
+    duration: "3 min",
+    href: "https://www.tga.gov.au/products/medicines/prescription-medicines",
   },
 ];
 
 export function ClinicianWalkthrough() {
   const [stage, setStage] = useState<Stage>("goal");
   const [target, setTarget] = useState(30);
-  const [isWomenHealthOpen, setIsWomenHealthOpen] = useState(true);
-  const [selectedConditions, setSelectedConditions] = useState<string[]>(["pcos"]);
+  const [isAdhdFocusOpen, setIsAdhdFocusOpen] = useState(true);
+  const [selectedConditions, setSelectedConditions] = useState<string[]>(["adhd-assessment"]);
   const [resourceIndex, setResourceIndex] = useState(0);
   const [reviewed, setReviewed] = useState<string[]>([]);
 
@@ -118,7 +135,7 @@ export function ClinicianWalkthrough() {
   }
 
   function toggleCondition(id: string) {
-    if (id === "pcos") return;
+    if (id === "adhd-assessment") return;
     setSelectedConditions((current) => current.includes(id)
       ? current.filter((condition) => condition !== id)
       : [...current, id]);
@@ -127,8 +144,8 @@ export function ClinicianWalkthrough() {
   function restart() {
     setStage("goal");
     setTarget(30);
-    setIsWomenHealthOpen(true);
-    setSelectedConditions(["pcos"]);
+    setIsAdhdFocusOpen(true);
+    setSelectedConditions(["adhd-assessment"]);
     setResourceIndex(0);
     setReviewed([]);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -174,27 +191,27 @@ export function ClinicianWalkthrough() {
             <button
               className="cv2-focus-card"
               type="button"
-              aria-expanded={isWomenHealthOpen}
-              aria-controls="women-health-conditions"
-              onClick={() => setIsWomenHealthOpen((current) => !current)}
+              aria-expanded={isAdhdFocusOpen}
+              aria-controls="adhd-focus-conditions"
+              onClick={() => setIsAdhdFocusOpen((current) => !current)}
             >
               <span className="cv2-icon"><Target size={21} weight="bold" aria-hidden="true" /></span>
               <span>
                 <small>Available now</small>
-                <strong>Women’s health</strong>
+                <strong>ADHD</strong>
                 <em>{selectedConditions.length} condition{selectedConditions.length === 1 ? "" : "s"} selected · choose the care you want to deepen</em>
               </span>
-              <span className={`cv2-focus-caret${isWomenHealthOpen ? " is-open" : ""}`}>
+              <span className={`cv2-focus-caret${isAdhdFocusOpen ? " is-open" : ""}`}>
                 <CaretDown size={17} weight="bold" aria-hidden="true" />
               </span>
             </button>
 
-            {isWomenHealthOpen && (
-              <fieldset id="women-health-conditions" className="cv2-condition-panel">
+            {isAdhdFocusOpen && (
+              <fieldset id="adhd-focus-conditions" className="cv2-condition-panel">
                 <legend>Choose conditions</legend>
                 <p>Select the areas you want progressively represented in your case mix and learning.</p>
                 <div className="cv2-condition-list">
-                  {womenHealthConditions.map((condition) => {
+                  {adhdConditions.map((condition) => {
                     const checked = selectedConditions.includes(condition.id);
                     return (
                       <label key={condition.id} className={checked ? "is-checked" : ""}>
@@ -277,7 +294,7 @@ export function ClinicianWalkthrough() {
                 <span>Tomorrow · Blacktown</span>
                 <Clock size={20} weight="bold" aria-hidden="true" />
               </div>
-              <div className="cv2-case-number"><strong>4</strong><span>PMOS<br />appointments</span></div>
+              <div className="cv2-case-number"><strong>4</strong><span>ADHD<br />appointments</span></div>
               <p>{target}% target mix · 9 matched cases this week</p>
             </div>
 

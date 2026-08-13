@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform, type Variants } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { InterestForm } from "./interest-form";
@@ -27,13 +26,51 @@ import { InterestForm } from "./interest-form";
  * `opacity: 0` reintroduced into an `initial` or a `hidden` variant here brings the defect back,
  * and e2e/landing.spec.ts fails on it.
  *
- * The founder storybook: a first-person account, in Narayani's voice, of the
- * logical progression from overlooked women -> lymphoedema research -> VR rehab
- * -> ADHD.ME. One desktop-optimised page with scroll-revealed chapters.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ * THE STORY, AND WHY IT ARGUES INSTEAD OF REMINISCING.
  *
- * Portrait: /narayani.png is a background-removed cut-out sitting on the paper.
+ * The page this was adapted from was a founder's biography: a named clinic, a named prize, a
+ * named honours project, a personal diagnosis. That shape only works when every specific is
+ * true, and both founders here are real people whose specifics are theirs to state. So this
+ * version carries the ARGUMENT rather than a CV — the structural reason ADHD assessment in
+ * Australia fails people, which is documented and needs nobody's biography to be true.
+ *
+ * FOUNDER ACTION, AND THE ONLY PLACE THIS PAGE IS DELIBERATELY THIN: the two `FOUNDER_BIO`
+ * entries below are roles, not biographies. Whatever Krish and Anubhav want said about
+ * themselves — training, institutions, why this problem — belongs in their own words, and
+ * inventing it here would put unverified claims about named clinicians on a public page. The
+ * numbers in the hero card and in src/compliance/landing-copy.ts need the same check: every one
+ * is sourced, none has been confirmed against the live source by anybody in this repo.
+ *
+ * No portraits. Nothing in this tree generates a face for a real person, so the founders are set
+ * typographically until they supply photographs — see also ClinicianPortrait in app/care-finder.tsx.
  */
-const PORTRAIT_SRC = "/narayani.png";
+
+/** The structural facts the hero card renders. Each needs source confirmation before launch. */
+const ASSESSMENT_GAP: ReadonlyArray<{ figure: string; detail: string }> = [
+  { figure: "Psychiatrist-gated", detail: "an adult diagnosis has largely required a specialist, of whom there are not enough" },
+  { figure: "Months to years", detail: "typical wait for an adult assessment appointment" },
+  { figure: "Thousands", detail: "common out-of-pocket cost of going privately instead" },
+  { figure: "State by state", detail: "who may prescribe, and continue prescribing, changes at the border" },
+];
+
+/**
+ * The founders, as roles. Bios are deliberately absent — see the FOUNDER ACTION note above.
+ */
+const FOUNDERS: ReadonlyArray<{ name: string; role: string; remit: string }> = [
+  {
+    name: "Krish Ganesh",
+    role: "Co-founder",
+    remit:
+      "Works on the part of this that is not clinical: what a person meets when they first look for help, and whether it treats them like someone worth assessing properly.",
+  },
+  {
+    name: "Dr Anubhav Saxena",
+    role: "Co-founder, clinical",
+    remit:
+      "Brings the measurement discipline from metabolic medicine to assessment: a documented baseline before anything starts, and review at set intervals rather than when a problem gets loud enough to prompt a call.",
+  },
+];
 
 function Reveal({
   children,
@@ -70,9 +107,9 @@ const item: Variants = {
 export function StoryLanding() {
   const reduce = useReducedMotion();
   const heroRef = useRef<HTMLElement | null>(null);
-  // Gentle parallax: the portrait drifts up slightly as the hero scrolls away.
+  // Gentle parallax: the hero card drifts up slightly as the hero scrolls away.
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const portraitY = useTransform(scrollYProgress, [0, 1], [0, -56]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [0, -56]);
   const copyY = useTransform(scrollYProgress, [0, 1], [0, -20]);
 
   return (
@@ -93,7 +130,7 @@ export function StoryLanding() {
         </div>
       </motion.header>
 
-      {/* Hero: asymmetric split, portrait cut-out on paper */}
+      {/* Hero: asymmetric split, the argument on the left and the shape of the gap on the right */}
       <section ref={heroRef} className="story-hero" aria-labelledby="story-hero-title">
         <div className="story-wrap story-hero-grid">
           <motion.div
@@ -104,14 +141,14 @@ export function StoryLanding() {
             variants={stagger}
           >
             <motion.p className="story-eyebrow" variants={item}>
-              Why I founded ADHD.ME
+              Why we founded ADHD.ME
             </motion.p>
             <motion.h1 id="story-hero-title" variants={item}>
-              For years I met women the system overlooked. Then I understood I was one of them.
+              Getting assessed for ADHD in Australia is a test of stamina, not of need.
             </motion.h1>
             <motion.p className="story-hero-sub" variants={item}>
-              The short version of how a lymphoedema clinic, a VR headset and my own diagnosis
-              led me here.
+              The people who clear it are the ones who can afford to. That is a design choice
+              somebody made, which means it is one somebody can change.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.a
@@ -126,127 +163,114 @@ export function StoryLanding() {
             </motion.div>
           </motion.div>
 
-          {/* Outer figure carries the scroll parallax; the inner div owns the
-              entrance slide so the two y-drivers never fight. No opacity in
-              `initial` anywhere on this page (A11Y-2 above). */}
+          {/* Outer figure carries the scroll parallax; the inner div owns the entrance slide so
+              the two y-drivers never fight. No opacity in `initial` anywhere on this page. */}
           <motion.figure
-            className="story-portrait"
-            style={reduce ? undefined : { y: portraitY }}
+            className="story-gap-card"
+            style={reduce ? undefined : { y: cardY }}
           >
             <motion.div
               initial={reduce ? false : { y: 18 }}
               animate={{ y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Image
-                src={PORTRAIT_SRC}
-                alt="Narayani, founder of ADHD.ME"
-                width={439}
-                height={610}
-                priority
-                sizes="(min-width: 900px) 40vw, 78vw"
-                className="story-portrait-img"
-              />
+              <figcaption>The shape of the gap</figcaption>
+              <dl>
+                {ASSESSMENT_GAP.map((entry) => (
+                  <div key={entry.figure}>
+                    <dt>{entry.figure}</dt>
+                    <dd>{entry.detail}</dd>
+                  </div>
+                ))}
+              </dl>
             </motion.div>
           </motion.figure>
         </div>
       </section>
 
-      {/* Chapter 01: the pattern that kept repeating */}
+      {/* Chapter 01: the pattern */}
       <section className="story-chapter story-chapter-open" aria-labelledby="ch1-title">
         <div className="story-wrap">
           <Reveal>
             <h2 id="ch1-title" className="story-heading">
-              The same story kept repeating in front of me.
+              The same conversation keeps happening in the same order.
             </h2>
           </Reveal>
           <Reveal delay={0.05} className="story-prose story-prose-lead">
             <p>
-              In my family the symptoms ran through every generation. My mother had them too,
-              so we assumed this was simply how the women in our family were built.
+              Somebody finally asks the question out loud. They are told they will need a
+              psychiatrist. They discover what that costs and how long the list is. They are
+              handed a number to call in six months, and the thing that made them ask in the
+              first place goes back to being a personal failing they are managing alone.
             </p>
             <p>
-              It took me years to learn that what felt normal was PMOS, the condition long known
-              as PCOS, going unnamed. Around half the women who have it never find out. I could
-              not stop noticing how often the answer was there, just never offered.
+              Almost nothing in that sequence is a clinical judgement. It is a queue.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Chapter 02: lymphoedema research + PACE prize */}
+      {/* Chapter 02: who the queue selects for */}
       <section className="story-chapter" aria-labelledby="ch2-title">
         <div className="story-wrap story-split">
           <div className="story-split-lead">
             <Reveal>
               <h2 id="ch2-title" className="story-heading">
-                So I went to where care actually breaks.
+                A queue is never neutral about who gets through it.
               </h2>
             </Reveal>
             <Reveal delay={0.05} className="story-prose">
               <p>
-                At Macquarie&rsquo;s ALERT lymphoedema clinic I worked inside a multidisciplinary
-                team on women&rsquo;s recovery before and after surgery. Lymphoedema is a condition
-                women are quietly expected to live with: stigmatised, brushed off as cosmetic, when
-                it changes how a woman dresses, works, moves and feels in her own body.
+                Clearing this one takes money, several months of persistence, the confidence to
+                self-advocate to a specialist, and enough English and spare time to keep chasing
+                it. Those are not symptoms. They are advantages.
               </p>
               <p>
-                Tracking dermal backflow pulled me into the measurement side of that gap, and
-                opened the door to lymphoedema device innovation. I rebuilt how our recovery data
-                was kept, and the work was recognised. What stayed with me was how much good care
-                quietly depends on one person caring enough to get the details right.
-              </p>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.1} className="story-stats">
-            <motion.dl
-              initial={reduce ? false : "hidden"}
-              whileInView="show"
-              viewport={{ once: true, amount: 0.4 }}
-              variants={stagger}
-            >
-              <motion.div variants={item}>
-                <dt>~20%</dt>
-                <dd>more complete recovery datasets</dd>
-              </motion.div>
-              <motion.div variants={item}>
-                <dt>30 to 35%</dt>
-                <dd>fewer documentation errors</dd>
-              </motion.div>
-              <motion.div variants={item}>
-                <dt className="story-stat-award">PACE Prize</dt>
-                <dd>2024 Professor Judyth Sachs award, for placement excellence</dd>
-              </motion.div>
-            </motion.dl>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Chapter 03: VR rehab + USYD honours + scholarship */}
-      <section className="story-chapter" aria-labelledby="ch3-title">
-        <div className="story-wrap story-split story-split-reverse">
-          <div className="story-split-lead">
-            <Reveal>
-              <h2 id="ch3-title" className="story-heading">
-                Then I followed the question into rehabilitation.
-              </h2>
-            </Reveal>
-            <Reveal delay={0.05} className="story-prose">
-              <p>
-                For my honours year at the University of Sydney I designed, built and evaluated a
-                virtual-reality supermarket: a safe place to relearn how to move through the world
-                after a stroke or vision loss. I built it with Guide Dogs Australia and tested it
-                with the people who would actually use it. It earned first-class honours and a
-                University of Sydney scholarship.
+                So the people who get assessed are systematically not the people who most need
+                it — and the ones who fall out are the ones already carrying a diagnosis of
+                anxiety, or a reputation for being difficult, or a family who thinks the whole
+                idea is imported nonsense. They do not present again. They conclude they were
+                wrong to ask.
               </p>
             </Reveal>
           </div>
 
           <Reveal delay={0.1} className="story-pull">
             <p>
-              Technology is only worth building when it bends around the person, not the other way
-              around.
+              The barrier is not scepticism about ADHD. It is that the front door was built for
+              somebody with more resources than most people have.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Chapter 03: what has actually changed */}
+      <section className="story-chapter" aria-labelledby="ch3-title">
+        <div className="story-wrap story-split story-split-reverse">
+          <div className="story-split-lead">
+            <Reveal>
+              <h2 id="ch3-title" className="story-heading">
+                What changed is that general practice is now allowed to help.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.05} className="story-prose">
+              <p>
+                Australia now has its own evidence-based ADHD guideline, a Senate inquiry that
+                said plainly that assessment is too slow and too expensive, and states that have
+                begun letting GPs take on more of this work rather than only referring it onward.
+              </p>
+              <p>
+                None of that removes the specialist from the picture, and it should not. What it
+                does is make the first appointment reachable — and put the follow-up, the
+                baseline checks and the dose reviews with the clinician a person can actually get
+                back in to see.
+              </p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.1} className="story-pull">
+            <p>
+              The permission arrived before the pathway did. Building the pathway is the work.
             </p>
           </Reveal>
         </div>
@@ -257,29 +281,29 @@ export function StoryLanding() {
         <div className="story-wrap">
           <Reveal>
             <p id="through-title" className="story-throughline-line">
-              Every project was the same problem wearing a different face. Care that never quite fit
-              the <em>person in front of it.</em>
+              Every part of this is the same problem wearing a different face. A door that only
+              opens for <em>the person who can push hardest.</em>
             </p>
           </Reveal>
           <Reveal delay={0.08} className="story-throughline-sub">
             <p>
-              Lymphoedema patients. Stroke survivors. And South Asian women, like me, whose bodies
-              were treated as a footnote. At some point I stopped waiting for the system to notice
-              them.
+              The adult who was called lazy for thirty years. The child whose school gave up
+              first. The woman whose coping stopped working and was offered another
+              antidepressant. At some point you stop waiting for the queue to fix itself.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Chapter 05: ADHD.ME, and Stefan */}
-      <section className="story-chapter" aria-labelledby="adhd-me-title">
+      {/* Chapter 05: what the product is */}
+      <section className="story-chapter" aria-labelledby="product-title">
         <div className="story-wrap">
           <Reveal className="story-eyebrow-block">
             <p className="story-eyebrow">What ADHD.ME is</p>
           </Reveal>
           <Reveal>
-            <h2 id="adhd-me-title" className="story-heading story-heading-wide">
-              ADHD.ME helps South Asian women in Western Sydney find answers earlier.
+            <h2 id="product-title" className="story-heading story-heading-wide">
+              ADHD.ME helps people reach an assessment that was built to be reachable.
             </h2>
           </Reveal>
 
@@ -291,78 +315,58 @@ export function StoryLanding() {
             variants={stagger}
           >
             <motion.li variants={item}>
-              <h3>Community education</h3>
-              <p>Practical PMOS sessions in the language schools, temples, mosques and women&rsquo;s groups where women already gather.</p>
+              <h3>Say it in your own words</h3>
+              <p>Describe what you need looked at and how you want to be treated. Not a quiz, and not a score — nothing here tells you whether you have ADHD.</p>
             </motion.li>
             <motion.li variants={item}>
-              <h3>Know the signs, privately</h3>
-              <p>Answer a few quiet questions at home, then walk into a GP conversation with a clear summary.</p>
+              <h3>A GP who does this work</h3>
+              <p>Matched on what clinicians say they see often, your language, and whether the practice is one you can physically get to.</p>
             </motion.li>
             <motion.li variants={item}>
-              <h3>An appointment that fits</h3>
-              <p>A GP who understands PMOS alongside language, culture and family context.</p>
+              <h3>The follow-up, not just the first visit</h3>
+              <p>Baseline checks before anything starts, and dose reviews on a schedule — the half of assessment that usually gets dropped.</p>
             </motion.li>
           </motion.ol>
-
         </div>
       </section>
 
-      {/* Chapter 06: Stefan, co-founder */}
-      <section className="story-chapter" aria-labelledby="cofounder-title">
-        <div className="story-wrap story-split story-cofounder-split">
-          <div className="story-split-lead">
-            <Reveal>
-              <h2 id="cofounder-title" className="story-heading">
-                I do not build this alone.
-              </h2>
-            </Reveal>
-            <Reveal delay={0.05} className="story-prose">
-              <p>
-                Stefan Thottunkal is a physician-in-training and health-systems researcher at
-                Stanford Medicine, working on precision pharmacogenomic treatment in
-                Stanford&rsquo;s concierge medicine clinic and on LLM-driven, culturally tailored
-                nutrition research at NOURISH.
-              </p>
-              <p>
-                The same conviction runs through his work and mine: care lands better when it is
-                built around the person, their culture and their family.
-              </p>
-            </Reveal>
-          </div>
+      {/* Chapter 06: the founders */}
+      <section className="story-chapter" aria-labelledby="founders-title">
+        <div className="story-wrap">
+          <Reveal>
+            <h2 id="founders-title" className="story-heading">
+              We do not build this alone.
+            </h2>
+          </Reveal>
 
-          <Reveal delay={0.1} className="story-cofounder-card">
-            <Image
-              src="/stefan.png"
-              alt="Stefan Thottunkal, co-founder of ADHD.ME"
-              width={1368}
-              height={1817}
-              sizes="(min-width: 900px) 26vw, 60vw"
-              className="story-cofounder-photo"
-            />
-            <div className="story-cofounder-id">
-              <strong>Stefan Thottunkal</strong>
-              <span>Co-founder</span>
-              <div className="story-affiliations">
-                <a
-                  href="https://med.stanford.edu/nourish-project.html"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="story-nourish-link"
-                  aria-label="NOURISH, culturally tailored nutrition research at Stanford Medicine"
-                >
-                  <Image src="/nourish-logo.png" alt="NOURISH" width={446} height={80} />
-                </a>
-                <a
-                  href="https://hsph.harvard.edu/research/health-systems-innovation-lab/team/#scholars"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="story-hsil-link"
-                  aria-label="Health Systems Innovation Lab, Harvard T.H. Chan School of Public Health"
-                >
-                  <Image src="/hsil-logo.png" alt="Harvard T.H. Chan School of Public Health, Health Systems Innovation Lab" width={472} height={54} />
-                </a>
-              </div>
-            </div>
+          <motion.ul
+            className="story-founders"
+            initial={reduce ? false : "hidden"}
+            whileInView="show"
+            viewport={{ once: true, amount: 0.25 }}
+            variants={stagger}
+          >
+            {FOUNDERS.map((founder) => (
+              <motion.li key={founder.name} variants={item}>
+                <span className="story-founder-monogram" aria-hidden="true">
+                  {founder.name.replace(/^Dr\.?\s+/, "").split(" ").map((part) => part[0]).join("")}
+                </span>
+                <div>
+                  <strong>{founder.name}</strong>
+                  <span className="story-founder-role">{founder.role}</span>
+                  <p>{founder.remit}</p>
+                </div>
+              </motion.li>
+            ))}
+          </motion.ul>
+
+          <Reveal delay={0.1} className="story-prose">
+            <p>
+              Dr Saxena also sees patients through this directory. He is listed in it like any
+              other clinician, and every listing of his carries that disclosure — because a
+              founder appearing in his own company&rsquo;s directory is a conflict whether or not
+              the ranking favours him, and you cannot see the ranking.
+            </p>
           </Reveal>
         </div>
       </section>
@@ -372,11 +376,11 @@ export function StoryLanding() {
         <div className="story-wrap story-register-grid">
           <div>
             <h2 id="register-heading" className="story-heading">
-              Join the first community sessions.
+              Be among the first to try it.
             </h2>
             <p className="story-register-copy">
-              Hear about upcoming sessions, or be among the first to try the self-check and the
-              directory.
+              Hear when the finder opens in your area, or when the first assessment appointments
+              become available.
             </p>
           </div>
           <InterestForm />

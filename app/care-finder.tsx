@@ -115,54 +115,94 @@ function Pressable(props: ComponentProps<typeof motion.button>) {
   );
 }
 
+/**
+ * A headline for what the person asked for, read back to them.
+ *
+ * READING BACK IS NOT INTERPRETING. Every branch names the KIND OF APPOINTMENT somebody is after
+ * — a first assessment, a dose review, a child's referral — and none of them says anything about
+ * whether the person has ADHD. That line matters more here than it did for the product this was
+ * adapted from: a self-check that told a visitor "sounds like ADHD" would be this product
+ * diagnosing them, which src/compliance/party-to-care.ts exists to prevent and which no amount of
+ * hedging in the copy would fix.
+ *
+ * Order is most-specific-first, because a request usually trips several of these.
+ */
 function getRequestHeadline(value: string, fallback: string) {
   const words = value.toLowerCase();
-  const hasPcos = words.includes("pcos") || words.includes("pmos") || words.includes("polycystic");
-  const hasGestationalDiabetes = words.includes("gestational diabetes") || words.includes("pregnancy diabetes");
-  const hasPostBirth = ["post-birth", "post birth", "postpartum", "after birth", "giving birth"].some((term) =>
-    words.includes(term),
-  );
-  const hasCulturalContext = ["south indian", "indian", "tamil", "malayalam", "culture", "cultural"].some((term) =>
-    words.includes(term),
-  );
-  const hasMaternalDepression = ["maternal depression", "postnatal depression", "depression after birth", "persistently low"].some((term) =>
-    words.includes(term),
-  );
-  const hasComplexMentalHealth = ["ptsd", "bipolar", "psychiatrist", "psychiatric"].some((term) =>
-    words.includes(term),
-  );
-  const hasTraumaContext = ["trauma history", "trauma-informed", "permission", "boundaries"].some((term) =>
-    words.includes(term),
-  );
+  const has = (...terms: string[]) => terms.some((term) => words.includes(term));
 
-  if (words.includes("disability") || words.includes("disabled") || words.includes("wheelchair")) {
-    return "Accessible women’s care, on your terms.";
+  const hasChild = has("my son", "my daughter", "my child", "my teenager", "child", "teenager", "adolescent");
+  const hasCulturalContext = has("south indian", "indian", "tamil", "malayalam", "culture", "cultural", "family");
+
+  if (has("disability", "disabled", "wheelchair", "ndis")) {
+    return "Accessible assessment, on your terms.";
   }
-  if (hasMaternalDepression) return "Maternal mental health, without judgement.";
-  if (hasComplexMentalHealth) return "Joined-up reproductive and mental-health care.";
-  if (hasTraumaContext) return "Trauma-sensitive care, with you in control.";
-  if (hasGestationalDiabetes) return "Gestational diabetes with whole-person support.";
-  if (hasPostBirth) return "Post-birth health, strength and emotional care.";
-  if (hasPcos && hasCulturalContext) return "PMOS, language and emotional safety.";
-  if (hasPcos) return "PMOS care without shame or assumptions.";
+  if (has("trauma history", "trauma-informed", "permission", "boundaries", "difficult childhood")) {
+    return "Assessment without having to relive it.";
+  }
+  if (has("ptsd", "bipolar", "psychiatrist", "psychiatric")) {
+    return "Joined-up, with your psychiatrist in the loop.";
+  }
+  if (has("substance", "drinking", "alcohol", "cannabis", "addict")) {
+    return "A safety question, not a character question.";
+  }
+  if (has("autism", "autistic", "audhd")) {
+    return "An assessment that can hold both.";
+  }
+  if (has("wearing off", "side effects", "dose", "titration", "already diagnosed", "diagnosed already")) {
+    return "Dose review that actually happens.";
+  }
+  if (has("heart", "cardiac", "cardiovascular", "blood pressure")) {
+    return "The heart checks first, then the dose.";
+  }
+  if (has("without medication", "no medication", "not just medication", "alternatives", "coaching")) {
+    return "The whole plan, not just the script.";
+  }
+  if (has("waitlist", "paediatrician", "referral") && hasChild) {
+    return "Use the wait instead of losing it.";
+  }
+  if (hasChild) return "Start the assessment, and get the school moving.";
+  if (has("antidepressant", "treated for anxiety", "wrong diagnosis", "misdiagnosed")) {
+    return "Anxiety, ADHD, or both — worked out properly.";
+  }
+  if (has("perimenopause", "menopause", "hormonal", "coping stopped", "got worse")) {
+    return "Not new. Just no longer survivable.";
+  }
+  if (has("missed", "late", "masking") && hasCulturalContext) {
+    return "An assessment where you don’t have to win the argument first.";
+  }
+  if (has("missed", "late", "masking", "overlooked")) {
+    return "A question worth asking properly.";
+  }
   return fallback;
 }
 
+/**
+ * The priorities a request stated, as labels.
+ *
+ * These are things the person SAID THEY WANT, not inferences about their health. "Bulk billing"
+ * belongs here; "inattentive presentation" would not, and there is no branch that could produce it.
+ */
 function getRequestPriorities(value: string) {
   const words = value.toLowerCase();
   const priorities = [
-    { label: "Gestational diabetes", terms: ["gestational diabetes", "pregnancy diabetes"] },
-    { label: "PMOS expertise", terms: ["pcos", "pmos", "polycystic"] },
-    { label: "Post-birth recovery", terms: ["post-birth", "post birth", "postpartum", "after birth", "giving birth"] },
+    { label: "First ADHD assessment", terms: ["assessment", "assessed", "diagnosis", "diagnose", "might have adhd", "think i have"] },
+    { label: "Children and adolescents", terms: ["my son", "my daughter", "my child", "child", "teenager", "adolescent", "school"] },
+    { label: "Co-occurring autism", terms: ["autism", "autistic", "audhd"] },
+    { label: "Titration and dose review", terms: ["dose", "titration", "wearing off", "side effects", "already diagnosed", "diagnosed already"] },
+    { label: "Baseline physical screening", terms: ["heart", "cardiac", "cardiovascular", "blood pressure", "baseline", "bloods", "safe"] },
     { label: "Complex mental-health shared care", terms: ["ptsd", "bipolar", "psychiatrist", "psychiatric"] },
-    { label: "Maternal depression", terms: ["maternal depression", "postnatal depression", "depression after birth", "persistently low"] },
-    { label: "Trauma-informed care", terms: ["trauma history", "trauma-informed", "boundaries", "permission", "stay in control"] },
-    { label: "Psychological safety", terms: ["mental health", "emotion", "anxiety", "anxious", "mood", "psychological", "trauma", "ptsd", "bipolar", "depression", "overwhelmed", "shame", "boundaries", "permission"] },
-    { label: "Language match", terms: ["tamil", "malayalam", "hindi", "punjabi", "spanish", "arabic", "vietnamese", "language"] },
+    { label: "Anxiety and mood differential", terms: ["antidepressant", "treated for anxiety", "wrong diagnosis", "misdiagnosed", "differential"] },
+    { label: "Trauma-informed care", terms: ["trauma history", "trauma-informed", "boundaries", "permission", "stay in control", "difficult childhood"] },
+    { label: "Substance history held safely", terms: ["substance", "drinking", "alcohol", "cannabis", "addict", "non-stimulant"] },
+    { label: "Non-medication supports", terms: ["without medication", "no medication", "not just medication", "alternatives", "coaching", "habits"] },
+    { label: "Study or workplace adjustments", terms: ["employer", "workplace", "university", "study", "adjustments", "letter", "documentation", "ndis"] },
+    { label: "Psychological safety", terms: ["mental health", "emotion", "anxiety", "anxious", "mood", "psychological", "trauma", "depression", "overwhelmed", "shame", "rejection sensitivity"] },
+    { label: "Language match", terms: ["tamil", "malayalam", "hindi", "punjabi", "spanish", "arabic", "vietnamese", "mandarin", "language"] },
     { label: "Disability rights", terms: ["disability", "disabled", "wheelchair", "autonomy", "accessible"] },
-    { label: "Weight-respectful care", terms: ["weight stigma", "body image", "body shame", "without shame", "bounce back"] },
+    { label: "Telehealth", terms: ["telehealth", "remote", "online", "cannot travel", "can’t travel", "can't travel"] },
     { label: "Woman GP", terms: ["woman", "women", "female"] },
-    { label: "Cultural understanding", terms: ["indian", "culture", "cultural", "family", "family pressure"] },
+    { label: "Cultural understanding", terms: ["indian", "culture", "cultural", "family", "family pressure", "lazy", "not real"] },
     { label: "Longer conversations", terms: ["time", "unhurried", "longer", "explain", "slowly"] },
   ];
 
@@ -179,7 +219,31 @@ function Wordmark() {
 function FinderContext() {
   return (
     <aside className="finder-context">
-      <p>Early demo in Western Sydney. All clinician profiles and availability are synthetic.</p>
+      {/* "All profiles are synthetic" stopped being true when a founder joined the roster, and a
+          disclaimer that is nearly true is worse than none: it is the sentence a reader relies on. */}
+      <p>
+        Early demo in Western Sydney. Availability is synthetic, and every profile except
+        Dr Saxena’s describes an invented clinician.
+      </p>
+    </aside>
+  );
+}
+
+/**
+ * A material interest, rendered beside the listing that carries it.
+ *
+ * Deliberately not a tooltip, not a footnote and not collapsed: a disclosure a reader has to open
+ * is a disclosure the product can claim to have made and most people will never see. It sits in
+ * the reading order immediately after the clinician's name, which is the only place it changes
+ * what somebody does next.
+ */
+function FounderDisclosure({ clinician }: { clinician: Clinician }) {
+  if (!clinician.founderInterest) return null;
+
+  return (
+    <aside className="founder-disclosure" aria-label="Disclosure">
+      <strong>Disclosure</strong>
+      <p>{clinician.founderInterest}</p>
     </aside>
   );
 }
@@ -188,6 +252,54 @@ function WaveformMark({ active = false }: { active?: boolean }) {
   return (
     <span className={`waveform-mark${active ? " is-active" : ""}`} aria-hidden="true">
       <Waveform size={88} weight="light" />
+    </span>
+  );
+}
+
+/** Initials from a display name, ignoring the title. "Dr Anubhav Saxena" -> "AS". */
+function initialsOf(name: string) {
+  return name
+    .replace(/^(?:Dr|Prof|Mr|Ms|Mrs|Mx)\.?\s+/i, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]!.toUpperCase())
+    .join("");
+}
+
+/**
+ * A clinician's portrait, or a monogram when there is none.
+ *
+ * `Clinician.image` is nullable on purpose and this is the component that makes that cheap. The
+ * synthetic demo personas have synthetic portraits; a real clinician's likeness is theirs to
+ * supply, and nothing in this tree generates a face for a real person. A monogram is a real
+ * directory pattern rather than a placeholder waiting to be filled, so the layout is correct in
+ * both states and no surface has to branch.
+ */
+function ClinicianPortrait({
+  clinician,
+  variant,
+}: {
+  clinician: Clinician;
+  /** `fill` for the framed portraits, `thumb` for the fixed-size list row. */
+  variant: "fill" | "thumb";
+}) {
+  const alt = `Portrait of ${clinician.name}`;
+
+  if (clinician.image) {
+    return variant === "fill"
+      ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 520px) 100vw, 440px" priority />
+      : <Image src={clinician.image} alt="" width={72} height={72} />;
+  }
+
+  return (
+    <span
+      className={`clinician-monogram clinician-monogram-${variant}`}
+      // The name is already beside this in every consumer, so the monogram is decorative. Giving
+      // it a label would make a screen reader read the same name twice, once as two letters.
+      aria-hidden="true"
+    >
+      {initialsOf(clinician.name)}
     </span>
   );
 }
@@ -331,8 +443,8 @@ export function CareFinder() {
             <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
               <motion.div className="voice-prompt" variants={reducedMotion ? undefined : introItem}>
                 <h1>
-                  <span>PMOS care</span>
-                  <em>that gets you.</em>
+                  <span>ADHD assessment</span>
+                  <em>that takes you seriously.</em>
                 </h1>
               </motion.div>
             </motion.div>
@@ -421,7 +533,7 @@ export function CareFinder() {
             <div className="voice-prompt listening-copy">
               <p className="eyebrow">Listening</p>
               <h1>Describe the GP you’d feel comfortable with.</h1>
-              <p className="example">Health needs, culture, emotional support. Whatever matters to you.</p>
+              <p className="example">What you need looked at, your language, how you want to be treated. Whatever matters to you.</p>
             </div>
 
             <div className="voice-actions">
@@ -453,15 +565,15 @@ export function CareFinder() {
             <div className="type-content">
               <p className="eyebrow">In your own words</p>
               <h1>
-                <span>PMOS care</span>
-                <em>that gets you.</em>
+                <span>ADHD assessment</span>
+                <em>that takes you seriously.</em>
               </h1>
               <label className="sr-only" htmlFor="doctor-request">Describe the GP you want to see</label>
               <textarea
                 id="doctor-request"
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
-                placeholder="For example: A woman GP with PMOS experience who understands South Indian family dynamics."
+                placeholder="For example: A woman GP who assesses adult ADHD, speaks Tamil, and understands a family who thinks this is an excuse."
                 autoFocus
               />
             </div>
@@ -599,13 +711,7 @@ export function CareFinder() {
                     }
                   }}
                 >
-                  <Image
-                    src={clinician.image}
-                    alt={`Portrait of ${clinician.name}`}
-                    fill
-                    sizes="(max-width: 520px) 100vw, 440px"
-                    priority
-                  />
+                  <ClinicianPortrait clinician={clinician} variant="fill" />
                   <button className="portrait-nav previous" type="button" onClick={() => moveMatch(-1)} aria-label="Previous match">
                     <CaretLeft size={24} weight="light" aria-hidden="true" />
                   </button>
@@ -617,6 +723,7 @@ export function CareFinder() {
                 <div className="match-details">
                   <h2>{clinician.name}</h2>
                   <p className="clinician-meta">{clinician.title} · {clinician.suburb}</p>
+                  <FounderDisclosure clinician={clinician} />
                   <p className="match-reason">{personalizedMatch.reason}</p>
                   <div className="practical-signal-row" aria-label="Practical appointment details">
                     {clinician.practicalSignals.slice(0, 2).map((signal) => <span key={signal}>{signal}</span>)}
@@ -658,7 +765,7 @@ export function CareFinder() {
                   transition={{ delay: Math.min(index * 0.045, 0.24), duration: 0.3 }}
                   whileTap={{ scale: 0.99 }}
                 >
-                  <Image src={item.image} alt="" width={72} height={72} />
+                  <ClinicianPortrait clinician={item} variant="thumb" />
                   <span>
                     <strong>{item.name}</strong>
                     <small>{itemMatch.signals.slice(0, 2).join(" · ") || item.focus} · {item.suburb}</small>
@@ -689,13 +796,14 @@ export function CareFinder() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.08, duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Image src={clinician.image} alt={`Portrait of ${clinician.name}`} fill sizes="(max-width: 520px) 100vw, 440px" priority />
+              <ClinicianPortrait clinician={clinician} variant="fill" />
             </motion.div>
 
             <div className="profile-content">
               <p className="eyebrow">Why this fit</p>
               <h1>{clinician.name}</h1>
               <p className="clinician-meta">{clinician.title} · {clinician.pronouns} · {clinician.suburb}</p>
+              <FounderDisclosure clinician={clinician} />
               {personalizedMatch.signals.length > 0 && (
                 <div className="fit-signal-row profile-fit-signals" aria-label="Key match reasons">
                   {personalizedMatch.signals.slice(0, 3).map((signal) => <span key={signal}>{signal}</span>)}
