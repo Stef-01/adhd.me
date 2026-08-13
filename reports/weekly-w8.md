@@ -23,7 +23,7 @@ $80 AUD average billing per attended visit, applied to
 incremental visits only.
 
 Counting every invitation-generated booking (328 visits)
-would claim $26,240 AUD — Meherr does not report that number as
+would claim $26,240 AUD — ADHD.ME does not report that number as
 impact, because it counts bookings rather than measuring them — in this window the holdout comparison came out higher, which a raw count cannot show either way.
 
 ## Guardrails

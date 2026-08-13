@@ -13,7 +13,7 @@ describe("computeRoi", () => {
     expect(r.incrementalRevenuePerWeek).toBeCloseTo(1094.4, 6);
     expect(r.annualIncrementalVisits).toBeCloseTo(711.36, 6);
     expect(r.annualIncrementalRevenue).toBeCloseTo(56908.8, 4);
-    expect(r.annualMeherrCost).toBe(11880);
+    expect(r.annualAdhdMeCost).toBe(11880);
     expect(r.netAnnualBenefit).toBeCloseTo(45028.8, 4);
     expect(r.roiMultiple).toBeCloseTo(4.79, 2);
   });
@@ -31,16 +31,16 @@ describe("computeRoi", () => {
     expect(full.annualIncrementalRevenue).toBeGreaterThan(computeRoi(BRIEF_ASSUMPTIONS).annualIncrementalRevenue);
   });
 
-  it("guards divide-by-zero when Meherr cost is zero", () => {
-    const free: RoiAssumptions = { ...BRIEF_ASSUMPTIONS, meherrMonthlyFee: 0 };
+  it("guards divide-by-zero when ADHD.ME cost is zero", () => {
+    const free: RoiAssumptions = { ...BRIEF_ASSUMPTIONS, adhdMeMonthlyFee: 0 };
     const r = computeRoi(free);
-    expect(r.annualMeherrCost).toBe(0);
+    expect(r.annualAdhdMeCost).toBe(0);
     expect(r.roiMultiple).toBe(0);
     expect(r.netAnnualBenefit).toBe(r.annualIncrementalRevenue);
   });
 
   it("net benefit turns negative when the fee outweighs incremental revenue", () => {
-    const r = computeRoi({ ...BRIEF_ASSUMPTIONS, meherrMonthlyFee: 100_000 });
+    const r = computeRoi({ ...BRIEF_ASSUMPTIONS, adhdMeMonthlyFee: 100_000 });
     expect(r.netAnnualBenefit).toBeLessThan(0);
     expect(r.roiMultiple).toBeLessThan(1);
   });

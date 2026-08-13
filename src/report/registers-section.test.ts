@@ -79,7 +79,7 @@ const GOLDEN = `## Registers
 
 Closure compares each register's invite arm with its own holdout arm. The invite arm's rate on
 its own is not evidence: most gaps close anyway, so only the difference between the arms says
-anything about Meherr.
+anything about ADHD.ME.
 
 | Register | Invite closed | Holdout closed | Difference |
 |---|---|---|---|

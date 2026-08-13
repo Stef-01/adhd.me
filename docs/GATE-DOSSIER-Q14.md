@@ -114,7 +114,7 @@ nothing.
 
 A ruling has a cost on the other side, and this dossier would be advocacy if it did not say so.
 
-Sending is the first thing Meherr would do that a patient can *receive*. Every refusal in this
+Sending is the first thing ADHD.ME would do that a patient can *receive*. Every refusal in this
 tree up to now has been enforceable by inspection — you can read the code and see that nothing
 leaves. After G3 the guarantees become operational: a template approved today is sent tomorrow,
 quiet hours are enforced by a clock rather than by a test, and a STOP that fails to register is

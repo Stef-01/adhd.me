@@ -62,11 +62,15 @@ const REFERRAL_PATTERNS: Array<{ rule: string; pattern: RegExp }> = [
     rule: "no-comparative-claim",
     pattern: /\b(more experienced|better (at|with|placed)|most qualified|the right (doctor|clinician|person) for)\b/i,
   },
-  // Meherr is not a party to clinical care (W89). Copy must not say the product arranged,
+  // ADHD.ME is not a party to clinical care (W89). Copy must not say the product arranged,
   // decided or oversees anything about the patient's treatment.
+  //
+  // The brand is spelled with a dot ("ADHD.ME") and hyphenated in slugs ("adhd-me"), so both
+  // forms are matched and the dot is escaped — an unescaped dot here would match any character
+  // and the rule would quietly be looser than it reads.
   {
     rule: "no-product-as-party",
-    pattern: /\b(we (have )?(arranged|organised) your care|our clinicians|your care team here|meherr (recommends|has referred|will arrange))\b/i,
+    pattern: /\b(we (have )?(arranged|organised) your care|our clinicians|your care team here|adhd(?:\.|-)me (recommends|has referred|will arrange|has assessed|has diagnosed))\b/i,
   },
 ];
 
@@ -134,5 +138,5 @@ export const REFERRAL_RULE_COPY: Record<string, string> = {
   "no-comparative-claim":
     "This compares clinicians. A claim that one practitioner is better than another is regulated advertising, and it is not a claim this product is in a position to make.",
   "no-product-as-party":
-    "This implies Meherr arranged or oversees the patient's care. It does not — the practices do, and the copy has to say so.",
+    "This implies ADHD.ME arranged or oversees the patient's care. It does not — the practices do, and the copy has to say so.",
 };

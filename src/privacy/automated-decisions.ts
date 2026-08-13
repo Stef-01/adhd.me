@@ -208,7 +208,7 @@ export const NEVER_AUTOMATED: readonly string[] = [
   "No clinical decision of any kind — no diagnosis, no triage, no assessment of symptoms.",
   "No decision to deny care: not being sent an availability message never affects your ability to book through the practice as usual.",
   "No inference about you. Nothing is concluded from your details that you or your practice did not record. Where a reason for something is held, somebody said it.",
-  "No ordering of patients by need or by how unwell they are, and no list of who is most at risk. Meherr decides who has an appointment offered to them, never who most needs one.",
+  "No ordering of patients by need or by how unwell they are, and no list of who is most at risk. ADHD.ME decides who has an appointment offered to them, never who most needs one.",
   "No decision that your care has moved to another clinician. When your GP refers you, the receiving practice must record that it has taken you on; silence is never read as a handover.",
   "Nothing you are sent reveals why you were selected. A message prompted by a register or by a referral is word for word the same as any other appointment invitation.",
   "No automated re-enabling of contact after you opt out. Opt-out is permanent.",
@@ -216,8 +216,8 @@ export const NEVER_AUTOMATED: readonly string[] = [
 
 /** What is read, rendered on the page. Kept beside the decisions because it is the input to them. */
 export const INFORMATION_USED: readonly string[] = [
-  "Meherr reads what your practice has already recorded about you: when you last attended, appointments you have booked, whether you have opted out, the ongoing-care conditions your practice has flagged on your record, and referrals your practice has written. Some of that is health information. It is used to decide who to invite to an appointment and when — never to work anything out about your health.",
-  "Meherr does not read your consultation notes, test results or clinical correspondence, and does not receive them.",
+  "ADHD.ME reads what your practice has already recorded about you: when you last attended, appointments you have booked, whether you have opted out, the ongoing-care conditions your practice has flagged on your record, and referrals your practice has written. Some of that is health information. It is used to decide who to invite to an appointment and when — never to work anything out about your health.",
+  "ADHD.ME does not read your consultation notes, test results or clinical correspondence, and does not receive them.",
 ];
 
 export const HUMAN_CONTROLS: readonly string[] = [
@@ -225,7 +225,7 @@ export const HUMAN_CONTROLS: readonly string[] = [
   "Every register, and the routing described above, is off unless your practice turns it on.",
   "Practice staff can pause all sending instantly with one switch.",
   "Your practice approves the exact wording of every message before any of it can be sent, and an edit of a single character withdraws that approval.",
-  "You can stop all messages by replying STOP, and can ask your practice to access or delete the information Meherr holds.",
+  "You can stop all messages by replying STOP, and can ask your practice to access or delete the information ADHD.ME holds.",
   "Every automated action is written to an audit log the practice can inspect.",
 ];
 

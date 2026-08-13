@@ -10,7 +10,7 @@ export const LANDING_COPY = {
     eyebrow: "For general practices",
     heading: "Turn unused appointment capacity into measured continuity of care.",
     sub:
-      "Meherr quietly fills your open sessions by inviting established patients back to their " +
+      "ADHD.ME quietly fills your open sessions by inviting established patients back to their " +
       "usual GP — and proves, with a built-in control group, how many of those visits are genuinely " +
       "additional.",
     primaryCta: "See a demo",
@@ -28,7 +28,7 @@ export const LANDING_COPY = {
     heading: "Let GPs choose the work they want to get better at.",
     body:
       "A GP opts into a clinical focus and chooses how much of their week it should become. " +
-      "Meherr then aligns appropriate cases, short learning and community education around that choice — " +
+      "ADHD.ME then aligns appropriate cases, short learning and community education around that choice — " +
       "giving the clinician more agency and the practice a clearer way to grow useful capability.",
     goalLabel: "Clinician-set goal",
     goalValue: "30%",
@@ -51,7 +51,7 @@ export const LANDING_COPY = {
     communityEyebrow: "From consulting room to community room",
     communityHeading: "Pay GPs to educate the public — and help practices reach people earlier.",
     communityBody:
-      "Meherr can coordinate clearly scoped talks with local community groups, workplaces and cultural organisations. " +
+      "ADHD.ME can coordinate clearly scoped talks with local community groups, workplaces and cultural organisations. " +
       "The GP chooses the topic and audience, approves the material, and receives a transparent speaker fee for preparation and delivery.",
     communityPoints: [
       "An opportunity, never an obligation",
@@ -77,13 +77,13 @@ export const LANDING_COPY = {
       "RACGP’s Sexual and Reproductive Health interest group explicitly includes PMOS, and ACRRM lists a related learning activity. " +
       "What is still missing is a clear practice-level route from a GP’s chosen focus to repeated cases, relevant learning and visible community contribution.",
     pathwayNote:
-      "Meherr does not create a clinical credential. It makes a clinician-chosen focus and learning loop visible inside the practice.",
+      "ADHD.ME does not create a clinical credential. It makes a clinician-chosen focus and learning loop visible inside the practice.",
   },
   steps: [
     {
       title: "Match, within your rules",
       body:
-        "You set who is eligible and which sessions may be offered. Meherr ranks only inside " +
+        "You set who is eligible and which sessions may be offered. ADHD.ME ranks only inside " +
         "that boundary — never outside it — and sends a plain, availability-only message.",
     },
     {
@@ -102,7 +102,7 @@ export const LANDING_COPY = {
   measurement: {
     heading: "The number you can defend.",
     body:
-      "Meherr reports incremental attended appointments per 1,000 eligible patients, measured " +
+      "ADHD.ME reports incremental attended appointments per 1,000 eligible patients, measured " +
       "against a randomised holdout. We never report the raw count of bookings we touched as impact.",
     points: [
       "Randomised holdout arm, on by default",
@@ -123,7 +123,7 @@ export const LANDING_COPY = {
     button: "See a demo",
   },
   footer: {
-    tagline: "Meherr — continuity yield for general practice.",
+    tagline: "ADHD.ME — continuity yield for general practice.",
     note: "Business-to-business service for accredited general practices. Not patient medical advice.",
   },
 } as const;

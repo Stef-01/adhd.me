@@ -20,7 +20,7 @@ const aud = (n: number) =>
 export default async function RoiPage({
   searchParams,
 }: {
-  searchParams: Promise<{ gpCount?: string; revenuePerAttendedVisit?: string; meherrMonthlyFee?: string }>;
+  searchParams: Promise<{ gpCount?: string; revenuePerAttendedVisit?: string; adhdMeMonthlyFee?: string }>;
 }) {
   const email = await requireSession();
   const sp = await searchParams;
@@ -31,22 +31,22 @@ export default async function RoiPage({
       sp.revenuePerAttendedVisit,
       BRIEF_ASSUMPTIONS.revenuePerAttendedVisit,
     ),
-    meherrMonthlyFee: positiveNumber(sp.meherrMonthlyFee, BRIEF_ASSUMPTIONS.meherrMonthlyFee),
+    adhdMeMonthlyFee: positiveNumber(sp.adhdMeMonthlyFee, BRIEF_ASSUMPTIONS.adhdMeMonthlyFee),
   };
   const r = computeRoi(assumptions);
 
   const headline: Array<[string, string, string?]> = [
-    ["Net annual benefit", aud(r.netAnnualBenefit), "incremental revenue − Meherr cost"],
-    ["Return on cost", `${r.roiMultiple.toFixed(1)}×`, "incremental revenue ÷ Meherr cost"],
+    ["Net annual benefit", aud(r.netAnnualBenefit), "incremental revenue − ADHD.ME cost"],
+    ["Return on cost", `${r.roiMultiple.toFixed(1)}×`, "incremental revenue ÷ ADHD.ME cost"],
     ["Incremental visits / year", Math.round(r.annualIncrementalVisits).toLocaleString("en-AU")],
   ];
   const rows: Array<[string, string]> = [
     ["Unfilled slots per week", Math.round(r.openSlotsPerWeek).toLocaleString("en-AU")],
-    ["Bookings Meherr generates / week", r.generatedBookingsPerWeek.toFixed(1)],
+    ["Bookings ADHD.ME generates / week", r.generatedBookingsPerWeek.toFixed(1)],
     ["Attended (after DNA) / week", r.attendedPerWeek.toFixed(1)],
     ["Incremental attended / week", r.incrementalAttendedPerWeek.toFixed(1)],
     ["Incremental revenue / year", aud(r.annualIncrementalRevenue)],
-    ["Meherr cost / year", aud(r.annualMeherrCost)],
+    ["ADHD.ME cost / year", aud(r.annualAdhdMeCost)],
   ];
 
   return (
@@ -82,12 +82,12 @@ export default async function RoiPage({
             className={inputClass}
           />
         </Field>
-        <Field label="Meherr fee (AUD/month)">
+        <Field label="ADHD.ME fee (AUD/month)">
           <input
-            name="meherrMonthlyFee"
+            name="adhdMeMonthlyFee"
             type="number"
             min={0}
-            defaultValue={assumptions.meherrMonthlyFee}
+            defaultValue={assumptions.adhdMeMonthlyFee}
             className={inputClass}
           />
         </Field>

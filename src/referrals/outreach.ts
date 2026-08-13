@@ -270,7 +270,7 @@ export const NUDGE_REFUSAL_COPY: Record<NudgeRefusal, string> = {
   barrier_already_recorded:
     "Someone has already told the practice why this did not go ahead. That deserves a conversation, not an automated text.",
   recall_already_running:
-    "The practice already has an open recall for this patient. Meherr does not write on top of one.",
+    "The practice already has an open recall for this patient. ADHD.ME does not write on top of one.",
   already_nudged:
     "This referral has already been included in one invitation. It is not sent again.",
   contact_cap_reached:

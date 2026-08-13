@@ -29,12 +29,12 @@ test("Q1: how many extra appointments did we get, and is anything wrong?", async
   await expect(page.getByTestId("results-status")).toContainText(/nothing needs your attention/i);
 });
 
-test("Q2: why is that smaller than the bookings Meherr generated?", async ({ page }) => {
+test("Q2: why is that smaller than the bookings ADHD.ME generated?", async ({ page }) => {
   await page.goto("/console/results");
   await expect(
     page.getByRole("heading", { name: "Why the smaller number is the real one" }),
   ).toBeVisible({ timeout: 30_000 });
-  await expect(page.getByTestId("results-split-total")).toContainText(/booked from a Meherr message/i);
+  await expect(page.getByTestId("results-split-total")).toContainText(/booked from a ADHD.ME message/i);
   await expect(page.getByText(/would have happened anyway/i).first()).toBeVisible();
   // The naive figure is present as context, and explicitly not claimed.
   await expect(page.getByText(/Counting all .* would let us claim/i)).toBeVisible();

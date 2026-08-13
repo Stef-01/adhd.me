@@ -32,15 +32,15 @@ interface LedgerState {
   logs: Record<string, VerificationLog>;
 }
 
-const globalStore = globalThis as { __meherrCredentialLedger?: LedgerState };
+const globalStore = globalThis as { __adhdMeCredentialLedger?: LedgerState };
 
 function state(): LedgerState {
-  globalStore.__meherrCredentialLedger ??= { logs: {} };
-  return globalStore.__meherrCredentialLedger;
+  globalStore.__adhdMeCredentialLedger ??= { logs: {} };
+  return globalStore.__adhdMeCredentialLedger;
 }
 
 export function resetLedger(): void {
-  globalStore.__meherrCredentialLedger = { logs: {} };
+  globalStore.__adhdMeCredentialLedger = { logs: {} };
 }
 
 export function logFor(practiceId: string): VerificationLog {

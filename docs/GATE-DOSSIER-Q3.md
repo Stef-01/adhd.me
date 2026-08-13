@@ -84,7 +84,7 @@ founder-commissioned document; nothing in the codebase substitutes for it.
 **What is built (behind the gate).**
 - Identity & consent ingestion (`src/pms/ingest.ts`): stable source-scoped platform ids,
   append-only consent provenance (adapter + ingest time on every record), same-capture
-  conflicts flagged never silently resolved, and the STOP one-way door — a Meherr
+  conflicts flagged never silently resolved, and the STOP one-way door — a ADHD.ME
   opt-out survives any PMS refresh, and the STOP is itself a provenance record.
 - Privacy controls (`src/privacy/`): APP 12 export, deletion with hashed deletion records
   (SHA-256 reference; raw id provably absent) plus suppression entries exempt from

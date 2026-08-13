@@ -74,12 +74,12 @@ export function DemoNavigator() {
         aria-controls="careyield-demo-navigation"
         onClick={() => setOpen((current) => !current)}
       >
-        <span>Meherr</span>
+        <span>ADHD.ME</span>
         <CaretDown size={13} weight="bold" aria-hidden="true" />
       </button>
 
       {open && (
-        <nav id="careyield-demo-navigation" className="demo-nav-popover" aria-label="Meherr demo navigation">
+        <nav id="careyield-demo-navigation" className="demo-nav-popover" aria-label="ADHD.ME demo navigation">
           <Link className="demo-nav-home" href="/" onClick={() => setOpen(false)}>
             Back to main home
           </Link>

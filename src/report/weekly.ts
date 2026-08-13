@@ -161,7 +161,7 @@ ${aud(r.revenue.perVisitAssumptionAud)} average billing per attended visit, appl
 incremental visits only.
 
 Counting every invitation-generated booking (${r.cumulative.naiveGeneratedAttended} visits)
-would claim ${aud(r.revenue.naiveWouldClaimAud)} — Meherr does not report that number as
+would claim ${aud(r.revenue.naiveWouldClaimAud)} — ADHD.ME does not report that number as
 impact${naiveNote(r)}.
 
 ## Guardrails
@@ -190,7 +190,7 @@ export async function renderWeeklyReportDocx(r: WeeklyReport): Promise<Buffer> {
     });
 
   const doc = new Document({
-    creator: "Meherr",
+    creator: "ADHD.ME",
     title: `${r.practiceName} weekly report — week ${r.week}`,
     sections: [
       {

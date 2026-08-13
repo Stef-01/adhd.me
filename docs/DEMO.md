@@ -1,4 +1,4 @@
-# Meherr demo walkthrough (W22)
+# ADHD.ME demo walkthrough (W22)
 
 Scripted end-to-end demo on the synthetic practice. Everything is fake by design
 (founder gates: no real patient data, no live SMS); the point is to show the *shape*

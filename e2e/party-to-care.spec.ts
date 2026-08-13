@@ -1,4 +1,4 @@
-// W138 verify gate (surface half): no surface implies Meherr is a party to clinical care.
+// W138 verify gate (surface half): no surface implies ADHD.ME is a party to clinical care.
 //
 // The route list is DERIVED from W102's census rather than typed out here. Three enumerated
 // coverage lists in this tree have already fallen behind the routes they cover (the dossier
@@ -31,7 +31,7 @@ async function lintRendered(page: Page, label: string) {
   const findings = lintPartyToCare(text);
   expect(
     findings.map((f) => `${f.rule}: "${f.match}" — ${f.explanation}`),
-    `${label} implies Meherr is a party to clinical care`,
+    `${label} implies ADHD.ME is a party to clinical care`,
   ).toEqual([]);
 }
 
@@ -59,7 +59,7 @@ test("the census finds the routes this sweep covers", () => {
   expect(pageRoutes).toContain("/console");
 });
 
-test("every public page keeps Meherr out of the care relationship", async ({ page }) => {
+test("every public page keeps ADHD.ME out of the care relationship", async ({ page }) => {
   const publicRoutes = pageRoutes.filter((p) => !p.startsWith("/console") && !PARAMETERISED(p));
   expect(publicRoutes.length).toBeGreaterThan(4);
 
@@ -70,7 +70,7 @@ test("every public page keeps Meherr out of the care relationship", async ({ pag
   }
 });
 
-test("every console page keeps Meherr out of the care relationship", async ({ page }) => {
+test("every console page keeps ADHD.ME out of the care relationship", async ({ page }) => {
   test.setTimeout(120_000);
   await signInAndOnboard(page);
 
@@ -86,7 +86,7 @@ test("every console page keeps Meherr out of the care relationship", async ({ pa
   }
 });
 
-test("the patient-facing booking pages keep Meherr out of it", async ({ page, request }) => {
+test("the patient-facing booking pages keep ADHD.ME out of it", async ({ page, request }) => {
   // The parameterised route the sweep skips, and the surface a patient is most likely to read
   // as "who is contacting me".
   const seeded = (await (await request.get("/api/mock/state")).json()) as {
@@ -123,5 +123,5 @@ test("the sweep would actually catch a violation", async ({ page }) => {
 
   const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
   const findings = lintPartyToCare(text);
-  expect(findings.map((f) => f.rule)).toContain("meherr-owns-clinicians");
+  expect(findings.map((f) => f.rule)).toContain("adhd-me-owns-clinicians");
 });

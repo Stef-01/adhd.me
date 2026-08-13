@@ -129,14 +129,14 @@ describe("W46 assets are produced", () => {
 
     const deck = await buildDeck();
     expect(deck.byteLength).toBeGreaterThan(10_000);
-    writeFileSync(path.join(out, "meherr-sales-deck.pptx"), deck);
+    writeFileSync(path.join(out, "adhd-me-sales-deck.pptx"), deck);
 
     const onePager = await buildOnePager();
     expect(onePager.byteLength).toBeGreaterThan(5_000);
-    writeFileSync(path.join(out, "meherr-one-pager.docx"), onePager);
+    writeFileSync(path.join(out, "adhd-me-one-pager.docx"), onePager);
 
     writeFileSync(
-      path.join(out, "meherr-figure-register.md"),
+      path.join(out, "adhd-me-figure-register.md"),
       renderFigureRegisterMarkdown(FIGURES as never),
     );
   }, 60_000);

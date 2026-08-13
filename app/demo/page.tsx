@@ -31,7 +31,7 @@ export default function DemoPage() {
         <div className="mb-10">
           <DemoNavigator />
         </div>
-        <h1 className="text-3xl font-semibold tracking-tight">Meherr demo</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">ADHD.ME demo</h1>
         <p className="mt-3 max-w-xl text-stone-500">
           A scripted synthetic practice: {rail.practiceName}, {rail.clinicianName}, one open
           session, three invited patients. No real patient data, no live SMS — the walkthrough

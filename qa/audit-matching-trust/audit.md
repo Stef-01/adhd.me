@@ -1,4 +1,4 @@
-# Meherr patient-matching trust audit
+# ADHD.ME patient-matching trust audit
 
 Date: 9 August 2026  
 Scope: Mobile patient flow from scenario selection through appointment confirmation at `390 × 844`.

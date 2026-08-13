@@ -1,12 +1,12 @@
 // W21: practice-economics / ROI model. A transparent, deterministic calculation
 // from named assumptions to the numbers a practice manager cares about: how much
-// unused capacity exists, how much of it Meherr fills, how much of THAT is
+// unused capacity exists, how much of it ADHD.ME fills, how much of THAT is
 // genuinely incremental (holdout-adjusted, not displaced organic attendance), and
 // the revenue and return that follow.
 //
 // The default assumptions are the ones already encoded across this build — slot
 // calibration (W3 synthetic generator), response/DNA rates (W12 sim), and
-// $/visit (W20 report) — so every surface tells one story. Meherr pricing is a
+// $/visit (W20 report) — so every surface tells one story. ADHD.ME pricing is a
 // stated assumption here; it is finalised at W47 (pricing pack). Revenue is only
 // ever counted on INCREMENTAL visits, never the naive generated-booking count —
 // the same honesty rule the attribution (W9) and weekly report (W20) enforce.
@@ -18,7 +18,7 @@ export interface RoiAssumptions {
   slotsPerGpPerWeek: number;
   /** Share of upcoming capacity that sits unfilled — the wedge (W3 calibration). */
   openSlotRate: number;
-  /** Share of open slots Meherr converts to a booking (W12 response rate). */
+  /** Share of open slots ADHD.ME converts to a booking (W12 response rate). */
   fillRate: number;
   /** Share of generated bookings that do not attend (W12 DNA rate). */
   dnaRate: number;
@@ -26,8 +26,8 @@ export interface RoiAssumptions {
   incrementalShare: number;
   /** Practice billing per attended GP visit, AUD (W20 default). */
   revenuePerAttendedVisit: number;
-  /** Meherr subscription, AUD/month (pricing assumption — finalised W47). */
-  meherrMonthlyFee: number;
+  /** ADHD.ME subscription, AUD/month (pricing assumption — finalised W47). */
+  adhdMeMonthlyFee: number;
 }
 
 export const BRIEF_ASSUMPTIONS: RoiAssumptions = {
@@ -38,7 +38,7 @@ export const BRIEF_ASSUMPTIONS: RoiAssumptions = {
   dnaRate: 0.05,
   incrementalShare: 0.6,
   revenuePerAttendedVisit: 80,
-  meherrMonthlyFee: 990,
+  adhdMeMonthlyFee: 990,
 };
 
 export interface RoiResult {
@@ -49,9 +49,9 @@ export interface RoiResult {
   incrementalRevenuePerWeek: number;
   annualIncrementalVisits: number;
   annualIncrementalRevenue: number;
-  annualMeherrCost: number;
+  annualAdhdMeCost: number;
   netAnnualBenefit: number;
-  /** Incremental revenue ÷ Meherr cost; 0 when cost is 0 (guarded). */
+  /** Incremental revenue ÷ ADHD.ME cost; 0 when cost is 0 (guarded). */
   roiMultiple: number;
 }
 
@@ -66,9 +66,9 @@ export function computeRoi(a: RoiAssumptions): RoiResult {
   const incrementalRevenuePerWeek = incrementalAttendedPerWeek * a.revenuePerAttendedVisit;
   const annualIncrementalVisits = incrementalAttendedPerWeek * WEEKS_PER_YEAR;
   const annualIncrementalRevenue = incrementalRevenuePerWeek * WEEKS_PER_YEAR;
-  const annualMeherrCost = a.meherrMonthlyFee * MONTHS_PER_YEAR;
-  const netAnnualBenefit = annualIncrementalRevenue - annualMeherrCost;
-  const roiMultiple = annualMeherrCost === 0 ? 0 : annualIncrementalRevenue / annualMeherrCost;
+  const annualAdhdMeCost = a.adhdMeMonthlyFee * MONTHS_PER_YEAR;
+  const netAnnualBenefit = annualIncrementalRevenue - annualAdhdMeCost;
+  const roiMultiple = annualAdhdMeCost === 0 ? 0 : annualIncrementalRevenue / annualAdhdMeCost;
   return {
     openSlotsPerWeek,
     generatedBookingsPerWeek,
@@ -77,7 +77,7 @@ export function computeRoi(a: RoiAssumptions): RoiResult {
     incrementalRevenuePerWeek,
     annualIncrementalVisits,
     annualIncrementalRevenue,
-    annualMeherrCost,
+    annualAdhdMeCost,
     netAnnualBenefit,
     roiMultiple,
   };

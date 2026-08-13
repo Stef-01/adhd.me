@@ -48,7 +48,7 @@ export const FIGURES: readonly Figure[] = [
   },
   {
     id: "roi.multiple",
-    label: "Return on the Meherr subscription",
+    label: "Return on the ADHD.ME subscription",
     value: roi.roiMultiple,
     display: "4.8×",
     source: {

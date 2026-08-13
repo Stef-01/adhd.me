@@ -1,4 +1,4 @@
-# Meherr
+# ADHD.ME
 
 GP demand-matching platform: continuity-yield outbound wedge → credentialed extended-scope GP
 network. Venture brief + research live in Stefan-Brain (`wiki/entrepreneurship/startups/careyield.md`).

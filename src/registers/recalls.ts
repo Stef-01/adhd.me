@@ -1,7 +1,7 @@
 // W71: recall coexistence — never duplicate a recall the practice is already running.
 //
-// The practice was managing recalls long before Meherr arrived. If a patient is already
-// on the practice's own recall list for their diabetes cycle of care, a Meherr offer
+// The practice was managing recalls long before ADHD.ME arrived. If a patient is already
+// on the practice's own recall list for their diabetes cycle of care, a ADHD.ME offer
 // about the same gap is not a second chance to book — it is the practice appearing to
 // contact them twice about one thing, which reads as disorganised at best and as pressure
 // at worst. W16's contact-frequency caps limit how often we write; this limits whether we

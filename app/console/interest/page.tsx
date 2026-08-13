@@ -1,4 +1,4 @@
-// W105: the community interest register, behind the Meherr-staff gate.
+// W105: the community interest register, behind the ADHD.ME-staff gate.
 //
 // The signup list is NOT FETCHED AT ALL for a non-staff visitor. Rendering it conditionally
 // would be enough for the human eye and not enough for the wire: in a server component the
@@ -8,19 +8,19 @@
 import { ConsoleShell } from "../ui";
 import { requireSession } from "../guard";
 import { listInterestSignups } from "@/interest/store";
-import { isMeherrStaff, STAFF_REFUSAL_COPY } from "@/tenancy/staff";
+import { isAdhdMeStaff, STAFF_REFUSAL_COPY } from "@/tenancy/staff";
 import { attributionFor, ingested, quoteForOperator } from "@/security/untrusted";
 
 /** W153: whose words the names below are. Written by us; a signup cannot forge it. */
 const ATTRIBUTION = attributionFor("public_form");
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Community interest — Meherr" };
+export const metadata = { title: "Community interest — ADHD.ME" };
 
 export default async function CommunityInterestPage() {
   const email = await requireSession();
 
-  if (!isMeherrStaff(email)) {
+  if (!isAdhdMeStaff(email)) {
     return (
       <ConsoleShell email={email}>
         <div>
@@ -69,7 +69,7 @@ export default async function CommunityInterestPage() {
                 {/* W153: a name typed into a public form. Carried verbatim — editing somebody's
                     name to defend against a machine that does not exist yet is a real harm
                     traded for a hypothetical one — with the attribution stated once above the
-                    list, so "Meherr Support (verified)" reads as a signup calling itself that
+                    list, so "ADHD.ME Support (verified)" reads as a signup calling itself that
                     rather than as the product saying it. */}
                 <strong className="text-sm">
                   {quoteForOperator(ingested(signup.name, "public_form")).text}

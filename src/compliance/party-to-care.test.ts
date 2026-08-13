@@ -1,4 +1,4 @@
-// W138 verify gate (linter half): the rule fires on Meherr-as-carer and stays silent on the
+// W138 verify gate (linter half): the rule fires on ADHD.ME-as-carer and stays silent on the
 // correct way to say the same thing. The surface sweep is e2e/party-to-care.spec.ts.
 
 import { describe, expect, it } from "vitest";
@@ -9,19 +9,19 @@ import {
   lintPartyToCare,
 } from "./party-to-care";
 
-describe("W138 it catches Meherr holding itself out as a carer", () => {
+describe("W138 it catches ADHD.ME holding itself out as a carer", () => {
   const violations: Array<[string, string]> = [
-    ["we treat patients with ongoing conditions", "meherr-as-care-provider"],
-    ["Meherr will assess whether you need to be seen", "meherr-as-care-provider"],
-    ["our system can diagnose common presentations", "meherr-as-care-provider"],
-    ["we monitor your blood pressure between visits", "meherr-as-care-provider"],
-    ["Meherr will review your results and get back to you", "meherr-as-care-provider"],
-    ["we manage your care between appointments", "meherr-as-care-provider"],
-    ["our doctors are available after hours", "meherr-owns-clinicians"],
-    ["book with one of our GPs", "meherr-owns-clinicians"],
-    ["your Meherr clinician will be in touch", "meherr-owns-clinicians"],
-    ["Meherr's care team is here to help", "meherr-owns-clinicians"],
-    ["Meherr is part of your care team", "meherr-as-care-team"],
+    ["we treat patients with ongoing conditions", "adhd-me-as-care-provider"],
+    ["ADHD.ME will assess whether you need to be seen", "adhd-me-as-care-provider"],
+    ["our system can diagnose common presentations", "adhd-me-as-care-provider"],
+    ["we monitor your blood pressure between visits", "adhd-me-as-care-provider"],
+    ["ADHD.ME will review your results and get back to you", "adhd-me-as-care-provider"],
+    ["we manage your care between appointments", "adhd-me-as-care-provider"],
+    ["our doctors are available after hours", "adhd-me-owns-clinicians"],
+    ["book with one of our GPs", "adhd-me-owns-clinicians"],
+    ["your ADHD.ME clinician will be in touch", "adhd-me-owns-clinicians"],
+    ["ADHD.ME's care team is here to help", "adhd-me-owns-clinicians"],
+    ["ADHD.ME is part of your care team", "adhd-me-as-care-team"],
     ["tell us your symptoms and we will help", "send-us-clinical"],
     ["send us your latest results", "send-us-clinical"],
   ];
@@ -49,15 +49,15 @@ describe("W138 it stays silent on the correct way to say it", () => {
     "Your GP will review the results with you at your appointment.",
     "Your practice will assess whether a longer appointment is needed.",
     "The practice's doctors set which registers are switched on.",
-    "Meherr offers available appointment times on your practice's instructions.",
+    "ADHD.ME offers available appointment times on your practice's instructions.",
     "We send appointment invitations on behalf of your practice.",
-    "Meherr never makes a clinical decision about any patient.",
+    "ADHD.ME never makes a clinical decision about any patient.",
     "Talk to your practice about anything to do with your health.",
     "Tell your practice if the time does not suit.",
     "Your usual GP is the person who looks after you.",
     "Our software schedules invitations; it does not provide care.",
     "We report on how many invitations led to an attended appointment.",
-    "Meherr processes the minimum information needed to deliver the service.",
+    "ADHD.ME processes the minimum information needed to deliver the service.",
     "The practice remains the custodian of its patient records.",
     "Reply STOP to opt out of these messages at any time.",
   ];
@@ -77,7 +77,7 @@ describe("W138 the canonical statements pass their own linter", () => {
     expect(lintPartyToCare(PRACTICE_RESPONSIBILITY_STATEMENT)).toEqual([]);
   });
 
-  it("each says who is responsible and what Meherr is not", () => {
+  it("each says who is responsible and what ADHD.ME is not", () => {
     expect(RESPONSIBILITY_STATEMENT).toContain("Your practice provides your care");
     expect(RESPONSIBILITY_STATEMENT).toContain("not part of your care team");
     expect(PRACTICE_RESPONSIBILITY_STATEMENT).toContain("treating entity");
@@ -90,16 +90,16 @@ describe("W138 the rule set cannot shrink unnoticed", () => {
     // Deleting a rule to make a page pass is the failure mode this guards. Adding one is fine
     // and updates this list; removing one has to be argued in a diff.
     expect([...PARTY_TO_CARE_RULES].sort()).toEqual([
-      "meherr-as-care-provider",
-      "meherr-as-care-team",
-      "meherr-owns-clinicians",
+      "adhd-me-as-care-provider",
+      "adhd-me-as-care-team",
+      "adhd-me-owns-clinicians",
       "send-us-clinical",
     ]);
   });
 
   it("reports every rule that fired, not just the first", () => {
     const findings = lintPartyToCare(
-      "Our doctors treat patients here. Meherr is part of your care team.",
+      "Our doctors treat patients here. ADHD.ME is part of your care team.",
     );
     expect(findings.length).toBeGreaterThanOrEqual(2);
   });

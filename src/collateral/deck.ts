@@ -1,6 +1,6 @@
 // W46: sales deck generator. Content comes from ./content with every figure
 // resolved through the register, so the deck cannot state a number the repo cannot
-// source. Palette is Meherr's own measurement teal — chosen for this product
+// source. Palette is ADHD.ME's own measurement teal — chosen for this product
 // rather than defaulted to corporate blue — with one motif carried throughout:
 // a filled circle marking each numbered idea.
 
@@ -36,7 +36,7 @@ export const LAYOUT = {
 export async function buildDeck(): Promise<Buffer> {
   const pres = new pptxgen();
   pres.layout = "LAYOUT_WIDE"; // 13.3 x 7.5 — set before any slide is added
-  pres.author = "Meherr";
+  pres.author = "ADHD.ME";
   pres.title = DECK.title;
 
   // --- Title slide: dark, per the sandwich structure ---

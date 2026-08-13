@@ -99,15 +99,15 @@ interface VaultState {
   documents: EvidenceDocument[];
 }
 
-const globalStore = globalThis as { __meherrEvidenceVault?: VaultState };
+const globalStore = globalThis as { __adhdMeEvidenceVault?: VaultState };
 
 function state(): VaultState {
-  globalStore.__meherrEvidenceVault ??= { documents: [] };
-  return globalStore.__meherrEvidenceVault;
+  globalStore.__adhdMeEvidenceVault ??= { documents: [] };
+  return globalStore.__adhdMeEvidenceVault;
 }
 
 export function resetVault(): void {
-  globalStore.__meherrEvidenceVault = { documents: [] };
+  globalStore.__adhdMeEvidenceVault = { documents: [] };
 }
 
 export type VaultDenial = "no_membership" | "role_denied";

@@ -21,7 +21,7 @@ export interface Slide {
 }
 
 export const DECK: { title: string; subtitle: string; slides: Slide[] } = {
-  title: "Meherr",
+  title: "ADHD.ME",
   subtitle: "Continuity yield for general practice",
   slides: [
     {
@@ -33,7 +33,7 @@ export const DECK: { title: string; subtitle: string; slides: Slide[] } = {
       ],
     },
     {
-      title: "What Meherr does",
+      title: "What ADHD.ME does",
       bullets: [
         "Finds the established patients most likely to value a return visit to their usual GP.",
         "Sends an availability-only message, inside the rules the practice sets.",
@@ -55,8 +55,8 @@ export const DECK: { title: string; subtitle: string; slides: Slide[] } = {
       layout: "cards",
       bullets: [
         "{{roi.incremental-visits-year}} incremental attended appointments a year.",
-        "{{roi.net-annual-benefit}} net annual benefit, after the Meherr subscription.",
-        "{{roi.multiple}} return on the Meherr subscription.",
+        "{{roi.net-annual-benefit}} net annual benefit, after the ADHD.ME subscription.",
+        "{{roi.multiple}} return on the ADHD.ME subscription.",
       ],
       note: "Every input is on the next slide. These are modelled, not measured — say so.",
     },
@@ -90,15 +90,15 @@ export const DECK: { title: string; subtitle: string; slides: Slide[] } = {
 };
 
 export const ONE_PAGER = {
-  title: "Meherr — continuity yield for general practice",
+  title: "ADHD.ME — continuity yield for general practice",
   intro:
-    "Meherr fills unused appointment capacity by inviting established patients back to " +
+    "ADHD.ME fills unused appointment capacity by inviting established patients back to " +
     "their usual GP, and proves how many of those visits are genuinely additional.",
   sections: [
     {
       heading: "What it does",
       body:
-        "Within the eligibility rules a practice sets, Meherr identifies established patients " +
+        "Within the eligibility rules a practice sets, ADHD.ME identifies established patients " +
         "who may value a return visit, sends an availability-only message, and books them into a " +
         "real open slot with their usual GP. When a session fills, the remaining offers close.",
     },
@@ -106,7 +106,7 @@ export const ONE_PAGER = {
       heading: "How impact is measured",
       body:
         "A share of each practice's patients is held back at random and never messaged. The " +
-        "difference between the two groups is what Meherr added. We report that figure and " +
+        "difference between the two groups is what ADHD.ME added. We report that figure and " +
         "never the raw count of bookings we touched.",
     },
     {

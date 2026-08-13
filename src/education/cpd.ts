@@ -195,7 +195,7 @@ export function renderCpdExport(trail: CpdTrail, asOf: string): string {
     `  reading. It is not a record of comprehension, agreement, or of anything being acted on.`,
     `- Entries the clinician has said were wrong are marked rather than removed, and the`,
     `  correction sits alongside the original.`,
-    `- It belongs to the clinician named above. Meherr provides no view of it to anybody else.`,
+    `- It belongs to the clinician named above. ADHD.ME provides no view of it to anybody else.`,
     ``,
   );
   return lines.join("\n");

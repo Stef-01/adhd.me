@@ -22,7 +22,7 @@
 //   contains both a focus label and a registration word, which is what makes "Women's Health GP"
 //   unrenderable rather than merely discouraged.
 //
-//   THE FRAMING SAYS WHOSE CLAIM IT IS. The clinician told us; Meherr did not verify it and
+//   THE FRAMING SAYS WHOSE CLAIM IT IS. The clinician told us; ADHD.ME did not verify it and
 //   cannot. That is W111's rule — a register hit says "this person is registered", not "this
 //   person may do the thing" — carried into public copy, where the reader has no other way to
 //   know which parts were checked. Registration is checkable and is presented as checkable, with
@@ -94,7 +94,7 @@ export const REGISTRATION_FRAMING = {
  * W187's finding: THE MODEL ADMITS A SHAPE THIS PRODUCT CANNOT PUBLISH.
  *
  * W183 gave the profile a specialist variant, and it was right to — s 133 recognises the title
- * and a model that pretended otherwise would be lying about the law. But W114 ruled that Meherr
+ * and a model that pretended otherwise would be lying about the law. But W114 ruled that ADHD.ME
  * carries no specialist titles AT ALL, deliberately stricter than the law, because whether a
  * given clinician may use one is a fact on the Ahpra specialist register that this tree cannot
  * read. That ruling lives in the linters as a flat refusal of the word.
@@ -109,7 +109,7 @@ export const REGISTRATION_FRAMING = {
 export const SPECIALIST_NOT_PUBLISHED = {
   rule: "specialist-title-not-published",
   why:
-    "Meherr does not publish specialist titles. Whether a clinician may use one is a fact on the Ahpra specialist register, which this product does not read, so it makes no such claim about anybody. This is stricter than the law requires and is deliberate. It is a founder decision to change, not a build one, and it is bound up with the G6 advertising review.",
+    "ADHD.ME does not publish specialist titles. Whether a clinician may use one is a fact on the Ahpra specialist register, which this product does not read, so it makes no such claim about anybody. This is stricter than the law requires and is deliberate. It is a founder decision to change, not a build one, and it is bound up with the G6 advertising review.",
 } as const;
 
 export interface RenderedProfile {

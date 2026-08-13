@@ -1,4 +1,4 @@
-// W44: DNA analysis — do Meherr-generated bookings no-show more than organic ones?
+// W44: DNA analysis — do ADHD.ME-generated bookings no-show more than organic ones?
 // This is the quantitative answer to the supplier-induced-demand critique: if invited patients
 // attend at organic rates, the generated visits are real demand surfaced early, not noise.
 // Analysis only; never gates sending on its own (guardrail monitors own alerting).

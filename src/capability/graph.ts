@@ -44,20 +44,20 @@ export interface CapabilityState {
   competence: ClinicianCompetence[];
 }
 
-const globalStore = globalThis as { __meherrCapability?: CapabilityState };
+const globalStore = globalThis as { __adhdMeCapability?: CapabilityState };
 
 function initial(): CapabilityState {
   return { interests: [], experience: [], competence: [] };
 }
 
 export function getCapability(): CapabilityState {
-  globalStore.__meherrCapability ??= initial();
-  return globalStore.__meherrCapability;
+  globalStore.__adhdMeCapability ??= initial();
+  return globalStore.__adhdMeCapability;
 }
 
 export function resetCapability(): CapabilityState {
-  globalStore.__meherrCapability = initial();
-  return globalStore.__meherrCapability;
+  globalStore.__adhdMeCapability = initial();
+  return globalStore.__adhdMeCapability;
 }
 
 /** Record a clinician's stated interest. Replaces any previous statement for that pair. */

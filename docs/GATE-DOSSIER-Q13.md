@@ -93,7 +93,7 @@ Stated as capability, not as unit count.
 ## The honest counter-argument
 
 A ruling has a cost on the other side, and this dossier would be advocacy if it did not say so.
-Signing off clinical content makes Meherr the publisher of that content, engages the founder's
+Signing off clinical content makes ADHD.ME the publisher of that content, engages the founder's
 and the reviewing specialist's professional exposure, and starts a maintenance obligation that
 does not stop: guidance changes, and `W118`'s versioning exists because a published pathway has
 to be re-reviewed rather than edited. **The empty catalogue is not only a cost — it is also the

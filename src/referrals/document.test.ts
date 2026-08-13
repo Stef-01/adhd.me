@@ -2,7 +2,7 @@
 // gate."
 //
 // The second half needs the right reading, and the last describe block is where that reading
-// is pinned. G5 governs clinical content MEHERR publishes. A GP writing about their own patient
+// is pinned. G5 governs clinical content ADHD.ME publishes. A GP writing about their own patient
 // is not that — so the gate is not "no free text", it is that no clinical wording originates
 // with the product. The tests therefore check that exactly one field carries prose, that it
 // must be attributed to a named clinician, and that this module contains no generator and no
@@ -159,7 +159,7 @@ describe("W131 no clinical text originates with the product", () => {
 
   it("exports no generator and no clinical template", () => {
     // The bypass the gate exists to close: system-generated clinical wording travelling inside
-    // a referral would be Meherr content that never went through W119's sign-off, wearing a
+    // a referral would be ADHD.ME content that never went through W119's sign-off, wearing a
     // GP's name. There is nothing here that could produce it.
     for (const name of Object.keys(documentModule)) {
       expect(name).not.toMatch(/template|generate|compose|draft|suggest|autofill|prefill|boilerplate/i);

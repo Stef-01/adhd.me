@@ -4,7 +4,7 @@
 // assertion alone would be theatre. What actually decides whether a practice can
 // self-serve in one sitting is structural, so this spec asserts the structure —
 // a bounded number of steps, every one completable from inputs the practice
-// already has, no step waiting on Meherr or a credential — and keeps a
+// already has, no step waiting on ADHD.ME or a credential — and keeps a
 // generous wall-clock ceiling as the regression guard against a step that starts
 // blocking (a slow sim build behind a page, say).
 

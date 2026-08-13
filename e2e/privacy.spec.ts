@@ -74,7 +74,7 @@ test("public privacy policy and ADM-transparency pages render the required state
 
   await page.goto("/privacy/automated-decisions");
   await expect(
-    page.getByRole("heading", { name: "How Meherr uses automated decision-making" }),
+    page.getByRole("heading", { name: "How ADHD.ME uses automated decision-making" }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "What is automated" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "What is never automated" })).toBeVisible();

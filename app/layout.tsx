@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Meherr — recognise PMOS earlier",
+  title: "ADHD.ME — recognise PMOS earlier",
   description:
     "A Western Sydney community program helping South Asian women recognise PMOS, formerly PCOS, earlier.",
 };

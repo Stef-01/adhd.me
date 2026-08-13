@@ -59,9 +59,9 @@ test("the storybook's copy is legible with JavaScript disabled", async ({ browse
   };
 
   await legible(page.getByRole("heading", { level: 1 }), "the hero headline");
-  await legible(page.getByText("Why I founded Meherr"), "the hero eyebrow");
+  await legible(page.getByText("Why I founded ADHD.ME"), "the hero eyebrow");
   await legible(page.getByRole("heading", { name: /The same story kept repeating/i }), "chapter 1");
-  await legible(page.getByRole("heading", { name: /Meherr helps South Asian women/i }), "chapter 5");
+  await legible(page.getByRole("heading", { name: /ADHD.ME helps South Asian women/i }), "chapter 5");
 
   await context.close();
 });

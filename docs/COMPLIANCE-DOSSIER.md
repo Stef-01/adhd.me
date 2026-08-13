@@ -1,4 +1,4 @@
-# Meherr Compliance Dossier (W50, v1 — living document)
+# ADHD.ME Compliance Dossier (W50, v1 — living document)
 
 Every user-facing surface mapped to the four regimes that govern it, with the code that enforces
 the posture. Update this document in the same commit as any change to a mapped surface — a
@@ -16,7 +16,7 @@ surface without a row here does not ship. Regulatory basis: the venture research
 3. **Ahpra advertising guidelines / s 133 National Law** — no clinical claims, no urgency, no
    testimonials/ratings, no title inflation ("specialist"/"surgeon" never near a niche scope),
    accuracy of every credential statement. Platform is itself liable ("a person who advertises").
-4. **MBS integrity (PSR posture)** — Meherr generates attendance *opportunities*, never
+4. **MBS integrity (PSR posture)** — ADHD.ME generates attendance *opportunities*, never
    billings; only clinically relevant services are billed, by the GP; incrementality + usefulness
    audit is the standing anti-low-value-care evidence.
 
@@ -36,7 +36,7 @@ surface without a row here does not ship. Regulatory basis: the venture research
 | Sales assets (deck/one-pager) | W46 | 3 | factual credential/figure claims traceable to the research page; no "specialist-equivalent" language anywhere |
 | Patient contact preferences (`app/book/[token]`) | W74 (`src/messaging/preferences.ts`) | 1, 2, 3 | patient sets their own contact hours and whether to be texted at all; unauthenticated action writes only against the invitation its signed token names, rate-limited like confirmBooking; a channel is never substituted and a send is never delivered outside the stated hours (deferred, or dropped if the offer expires first); conservative default (weekday business hours), never "any time"; copy asserted clinical-claim-free in e2e |
 | Clinician finder demo (`app/finder`) | founder commit 3317340 | 2, 3, **G6, G7** | Same component as the root care-finder, served under an explicitly demo-labelled route and title. Everything in the care-finder row applies unchanged, including the open G6/G7 questions and the seven P1 defects in `qa/audit-matching-trust/audit.md`. The route's own title and description say "demo" and "synthetic", which is the control that currently distinguishes it |
-| Community interest register (`app/console/interest`) | founder commit 3317340 (`src/interest/*`), W105 (`src/tenancy/staff.ts`) | 1, 2 | Collects expressions of interest from a named community. **W105: reads are Meherr-staff-only and the grant list ships empty.** The signup list is not fetched at all for a non-staff visitor — conditional rendering would satisfy the eye and not the wire, since in a server component the data would still reach the RSC payload, so the gate sits above the read. The header link is hidden too, but that is navigation, not access control; the route gates itself. Deliberately NOT a fourth practice role: routing it through `authorize()` would let an owner with `manage_members` grant it to themselves — W97's lesson run backwards. **Needs before any real use:** this is the first surface that would hold contact details of people who are NOT existing patients of a subscribing practice, so the W33 retention/erasure flows and the APP 5 collection-notice question apply to it and have not yet been assessed — synthetic-only today (G2), which is why it is mapped rather than blocked |
+| Community interest register (`app/console/interest`) | founder commit 3317340 (`src/interest/*`), W105 (`src/tenancy/staff.ts`) | 1, 2 | Collects expressions of interest from a named community. **W105: reads are ADHD.ME-staff-only and the grant list ships empty.** The signup list is not fetched at all for a non-staff visitor — conditional rendering would satisfy the eye and not the wire, since in a server component the data would still reach the RSC payload, so the gate sits above the read. The header link is hidden too, but that is navigation, not access control; the route gates itself. Deliberately NOT a fourth practice role: routing it through `authorize()` would let an owner with `manage_members` grant it to themselves — W97's lesson run backwards. **Needs before any real use:** this is the first surface that would hold contact details of people who are NOT existing patients of a subscribing practice, so the W33 retention/erasure flows and the APP 5 collection-notice question apply to it and have not yet been assessed — synthetic-only today (G2), which is why it is mapped rather than blocked |
 | Demo presenter page (`app/demo`) | W29 | 3 | Presenter-facing walkthrough of the synthetic world; resets every store on launch. Copy is not covered by any linter (see the W51 audit's coverage finding), so it is mapped here as an accepted gap rather than an enforced control |
 | Condition-targeted invitations | W66 (`src/messaging/condition-lint.ts`) | 1, 2, 3 | The register selects WHO is messaged and never WHAT they are told: a patient invited off a register and one invited off spare capacity receive byte-identical text (asserted). Leak check is relational — the condition that targeted the message cannot appear by code, display name or any significant word of either — so practice-authored registers are covered without editing the linter. Targeting *tells* ("we noticed", "based on your", recall framing) are banned too, because naming the condition is not the only way to disclose it. W6's rules are applied rather than re-implemented, so this path can never be held to a weaker standard |
 | Template approval | W67 (`src/messaging/approval.ts`) | 1, 3 | The practice is the legal sender, so no text reaches a patient without that practice approving that exact wording. Approval is keyed by content hash, so any edit — including whitespace — silently revokes it; `assertSendable` throws rather than returning a boolean, so a caller who forgets to check still cannot send; approval is per practice and withdrawal is immediate |
@@ -53,7 +53,7 @@ surface without a row here does not ship. Regulatory basis: the venture research
 | Credential console (`app/console/credentials`) | W113 (`src/credentials/ledger.ts`) | 2, 3 | A clinician sees their own credentialing record and can correct it, where "correct" means WITHDRAW: every action on this page can only reduce what the system claims about the person — there is no control that adds a claim, and W110 refuses self-verification outright, so the page cannot be used to manufacture a qualification. The read is scoped by SUBJECT (`ownCredentials` takes the clinician id as its query, not as a filter over a practice-wide fetch), which is the answer W109 required instead of granting evidence access to the `clinician` role. Shows lapsed entries even though W112 treats them as absent everywhere else — the person a record is about must be able to see that it lapsed. Evidence DOCUMENTS are not served here at all: W109's grant is unobtainable by a clinician and subject access to the scans themselves waits on the founder's G6 position (W117). Copy states what the practice HOLDS, never what the clinician is good at; an e2e asserts the rendered page contains no "specialist", "expert" or rating language. Holds personal information about CLINICIANS |
 | Case-mix console (`app/console/case-mix`) | W80 (`src/capability/case-mix.ts`) | 2, 3 | Derived from attended visits only, and derived is labelled as derived. The no-inference guarantee is an absence: no function exists that turns a clinician attribute into a competence claim, and a test asserts the export list. Practice-scoped and session-gated |
 | Outreach console (`app/console/outreach`) | W95 (`src/referrals/outreach.ts`) | 1, 2, 3 | The nudge IS the ordinary availability invitation, byte for byte — `planOutreach` calls W6's `renderCompliant`, and a test asserts byte-identity with `renderAvailabilityInvitation`, so a leakage nudge can never be held to a weaker standard than any other message. The referral is why the practice is looking and never what the patient is told: the specialty cannot reach the message because the planner is handed `LeakageSummary`, which does not carry one. Recipients are named (sending needs a recipient) in referral-record order, with the page stating the order carries no priority — naming is unavoidable, ranking by need is the G7 line. Synthetic referral data only; no send path is wired |
-| Community interest export (`app/api/interest/export`) | W105 (`src/tenancy/staff.ts`) | 2 | **GAP CLOSED at W105.** Previously behind `verifySession` alone, so any console user at any practice could download every signup's name and email. Now gated on `isMeherrStaff`, which **ships empty** (W68/W69 posture) — so today nobody can read it, which is strictly safer than everybody. Gated at the ROUTE as well as the page, because a route handler is independently invocable (W13): a page-level check protects the link and nothing else, and this is the endpoint that streams the whole register in one request. 403 rather than 404, since the register's existence is already public — what is withheld is the contents |
+| Community interest export (`app/api/interest/export`) | W105 (`src/tenancy/staff.ts`) | 2 | **GAP CLOSED at W105.** Previously behind `verifySession` alone, so any console user at any practice could download every signup's name and email. Now gated on `isADHD.MEStaff`, which **ships empty** (W68/W69 posture) — so today nobody can read it, which is strictly safer than everybody. Gated at the ROUTE as well as the page, because a route handler is independently invocable (W13): a page-level check protects the link and nothing else, and this is the endpoint that streams the whole register in one request. 403 rather than 404, since the register's existence is already public — what is withheld is the contents |
 | Mock introspection routes (`app/api/mock/*`) | W44 (`src/lib/mock-guard.ts`) | 2 | Eight routes that reset and read shared state, and disclose signed booking tokens. `assertMockRoutesEnabled()` 404s them outside a non-production build unless `CAREYIELD_ENABLE_MOCK_ROUTES=1` is set explicitly; a real deployment sets neither. Synthetic-phase only, removed when real persistence lands |
 
 ## Surface census (machine-checked)
@@ -117,16 +117,16 @@ unmapped surfaces" and been wrong within a day; that claim is now checked rather
 
 - No patient-facing clinical language: linter blocks "overdue", urgency, deterioration,
   diagnosis, test-result bait, benefit claims, check-up prompting. Tests seed each violation.
-- No testimonials or star-ratings on any surface Meherr controls.
+- No testimonials or star-ratings on any surface ADHD.ME controls.
 - No identifiable clinical data in model training (W33 posture; also contractual in the pilot
   agreement skeleton §6).
 - No symptom-based patient triage — matching keys on clinician attributes only (TGA boundary,
   founder gate G7).
 - No per-referral money in any direction (`docs/PRICING.md`).
-- **Meherr is never a party to clinical care, on any surface (W138).** Enforced by
+- **ADHD.ME is never a party to clinical care, on any surface (W138).** Enforced by
   `lintPartyToCare`, swept over the rendered text of every page route in `e2e/party-to-care.spec.ts`
   — the route list derived from the census above, so a new page is covered the day it lands. The
-  rule looks for *Meherr as the subject of a care verb*, not for clinical words: "your GP will
+  rule looks for *ADHD.ME as the subject of a care verb*, not for clinical words: "your GP will
   review the results" passes and "we will review your results" does not, because a linter that
   taxes correct sentences gets switched off and then protects nothing.
 
@@ -147,7 +147,7 @@ remaining Privacy Act tranche-2 reforms. Each review appends a dated line here.
 - 2026-08-10 — **W102 finding 1 (fixed here): the published ADM statement had become untrue.**
   `/privacy/automated-decisions` said *"No inference from clinical notes, test results, or
   diagnoses — we do not process them."* W57 reads recorded condition flags and W92–W95 read
-  referral records, so Meherr processes recorded diagnoses and referrals. The no-inference
+  referral records, so ADHD.ME processes recorded diagnoses and referrals. The no-inference
   boundary held — nothing is derived from symptoms — but "we do not process them" is a claim
   about processing, and a privacy statement that is wrong about what data you handle is the
   document a regulator reads first. Rewritten, with a "what information is used" section that
@@ -164,8 +164,8 @@ remaining Privacy Act tranche-2 reforms. Each review appends a dated line here.
   `/api/interest/export` is authorised by "is anyone signed in".** It streams the whole community
   interest register as CSV — name, email, audience — behind `verifySession` alone. There is no
   practice scoping and no role check, and `src/interest/store.ts` carries no practice id at all,
-  so any console user at any practice can download every signup. The register is a Meherr-run
-  community program rather than practice data, so the *correct* control is "Meherr staff only" —
+  so any console user at any practice can download every signup. The register is a ADHD.ME-run
+  community program rather than practice data, so the *correct* control is "ADHD.ME staff only" —
   and the product has no such role, meaning the right answer cannot currently be expressed. That
   makes it a product decision (add a staff role, or move the register out of the practice
   console), not something to patch inside a compliance review. Synthetic-only today under G2, so
@@ -198,7 +198,7 @@ remaining Privacy Act tranche-2 reforms. Each review appends a dated line here.
   another unit's gate decides what to test is that unit's call, not a compliance review's.
 
 - 2026-08-10 — **W105 closes PRIV-1 (W102 finding 3).** The community interest register and its
-  CSV export are now gated on a Meherr-staff grant list that ships empty, four months ahead of
+  CSV export are now gated on a ADHD.ME-staff grant list that ships empty, four months ahead of
   the APP 1.7 deadline that made it urgent. The design point worth keeping: this is **not** a
   fourth `Role`. Adding one would route the check through `authorize()`, and a practice owner
   holding `manage_members` could then grant themselves access to the contact details of people
@@ -213,7 +213,7 @@ remaining Privacy Act tranche-2 reforms. Each review appends a dated line here.
 - 2026-08-10 — **W138: the responsibility posture is now checkable.** W89 drew this line for
   specialists and W134 drew it between practices; neither covered whether the PRODUCT reads as a
   participant in care, which fails by wording rather than by architecture. Three reasons it is
-  worth a linter rather than a style note: a patient who believes Meherr is involved will wait on
+  worth a linter rather than a style note: a patient who believes ADHD.ME is involved will wait on
   us for something we will never do (and not chase their practice, which is the harm); holding
   ourselves out as providing or directing care makes us a different regulated thing, one sentence
   at a time; and it misdescribes who is accountable, since the practice is the treating entity and
@@ -227,7 +227,7 @@ remaining Privacy Act tranche-2 reforms. Each review appends a dated line here.
   care-finder now served at `/`, clinician walkthrough, practices page). They arrived without
   dossier rows, so this document's prior claim of "zero unmapped surfaces in `app/`" was untrue
   until this entry; the rows above now describe what is actually deployed, and the W23 landing-page
-  row is marked stale rather than silently left wrong. **No Meherr control has been applied to
+  row is marked stale rather than silently left wrong. **No ADHD.ME control has been applied to
   any of them** — no copy lint, no G6/G7 assessment, no G5 review of the condition/drug content.
   Awaiting the founder's ruling on whether these are design prototypes (in which case: mark
   prototype-only, keep them off any patient-reachable deployment, and the exposures below stay

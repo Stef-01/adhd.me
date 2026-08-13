@@ -4,7 +4,7 @@
 
 ## Setting
 
-A 10-GP metropolitan general practice ran Meherr for 8 weeks.
+A 10-GP metropolitan general practice ran ADHD.ME for 8 weeks.
 Availability messages went only to existing patients of the practice who passed the
 practice's own eligibility rules, with a randomised holdout group excluded from all
 contact so the effect could be measured rather than assumed.
@@ -24,7 +24,7 @@ contact so the effect could be measured rather than assumed.
 Counting every booking that followed an invitation would have claimed
 328 attended visits. Part of that attendance would have
 happened anyway; the holdout comparison removes it. The smaller number above is the
-one Meherr reports, because it is the one the practice actually gained.
+one ADHD.ME reports, because it is the one the practice actually gained.
 
 ## What the visits contained
 

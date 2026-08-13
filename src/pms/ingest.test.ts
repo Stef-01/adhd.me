@@ -182,7 +182,7 @@ describe("W32 consent provenance", () => {
 });
 
 describe("W32 the one-way door", () => {
-  it("a Meherr STOP survives any later PMS consent refresh", async () => {
+  it("a ADHD.ME STOP survives any later PMS consent refresh", async () => {
     const adapter = makeAdapter();
     const patients = await adapter.listPatients();
     const target = patients.find((p) => p.smsConsent && !p.optedOut)!;

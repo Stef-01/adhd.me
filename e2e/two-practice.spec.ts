@@ -105,7 +105,7 @@ test("asking for a practice you do not belong to is refused, not honoured", asyn
   await context.clearCookies();
   await signIn(page, OUTSIDER);
   await context.addCookies([
-    { name: "meherr_practice", value: "prac-1", domain: "127.0.0.1", path: "/" },
+    { name: "adhdme_practice", value: "prac-1", domain: "127.0.0.1", path: "/" },
   ]);
   await page.goto("/console");
   // Membership is the grant, so the forged selection resolves to nothing at all.

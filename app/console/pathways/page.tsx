@@ -37,7 +37,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Clinical content sign-off — Meherr" };
+export const metadata = { title: "Clinical content sign-off — ADHD.ME" };
 
 export default async function PathwaysPage() {
   const { email, record } = await requirePractice();
@@ -95,7 +95,7 @@ export default async function PathwaysPage() {
             </h2>
             <p>
               This is the current state of the product, not a loading error and not a page
-              waiting for you to fill it in. Meherr ships with no clinical pathway content at
+              waiting for you to fill it in. ADHD.ME ships with no clinical pathway content at
               all.
             </p>
             <p>

@@ -27,15 +27,15 @@ interface RailState {
   returns: ReturnReport[];
 }
 
-const globalStore = globalThis as { __meherrReferralRail?: RailState };
+const globalStore = globalThis as { __adhdMeReferralRail?: RailState };
 
 function state(): RailState {
-  globalStore.__meherrReferralRail ??= { documents: [], acts: [], events: [], returns: [] };
-  return globalStore.__meherrReferralRail;
+  globalStore.__adhdMeReferralRail ??= { documents: [], acts: [], events: [], returns: [] };
+  return globalStore.__adhdMeReferralRail;
 }
 
 export function resetReferralRail(): void {
-  globalStore.__meherrReferralRail = { documents: [], acts: [], events: [], returns: [] };
+  globalStore.__adhdMeReferralRail = { documents: [], acts: [], events: [], returns: [] };
 }
 
 export function addReferralDocuments(documents: readonly ReferralDocument[]): void {

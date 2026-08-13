@@ -1,6 +1,6 @@
-# Meherr sales collateral — figure register
+# ADHD.ME sales collateral — figure register
 
-Every number in `meherr-sales-deck.pptx` and `meherr-one-pager.docx` appears
+Every number in `adhd-me-sales-deck.pptx` and `adhd-me-one-pager.docx` appears
 below with its source. Generated from `src/collateral/figures.ts`; a test asserts each
 computed figure still equals what the code produces, so the assets cannot quote a stale
 number.
@@ -8,7 +8,7 @@ number.
 | Figure | Shown as | Source |
 |---|---|---|
 | Net annual benefit for a 10-GP practice | $45,029 | computed — `src/economics/roi.ts` (computeRoi(BRIEF_ASSUMPTIONS) — every input stated on the assumptions slide) |
-| Return on the Meherr subscription | 4.8× | computed — `src/economics/roi.ts` (incremental revenue ÷ subscription cost, same model) |
+| Return on the ADHD.ME subscription | 4.8× | computed — `src/economics/roi.ts` (incremental revenue ÷ subscription cost, same model) |
 | Incremental attended appointments a year | 711 | computed — `src/economics/roi.ts` (incremental only — displaced organic attendance is excluded) |
 | Practice size used in the worked example | 10 | assumption — the worked example is a ten-GP practice; the ROI calculator takes the practice's own number |
 | Share of appointment capacity unfilled | 8% | assumption — modelling assumption used throughout the build; a pilot measures the real figure per practice |

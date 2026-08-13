@@ -39,7 +39,7 @@ import { answerReferral } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Referrals — Meherr" };
+export const metadata = { title: "Referrals — ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have access to that.",

@@ -40,7 +40,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Education — Meherr" };
+export const metadata = { title: "Education — ADHD.ME" };
 
 export default async function EducationPage() {
   const { email, record } = await requirePractice();

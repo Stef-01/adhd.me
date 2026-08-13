@@ -1,4 +1,4 @@
-# Meherr — Five-Year Vibecoded Build Plan (v1, 2026-08-08)
+# ADHD.ME — Five-Year Vibecoded Build Plan (v1, 2026-08-08)
 
 > Canonical build plan. Executed by the `careyield-build-loop` (two offset hourly Claude Routines =
 > one firing every 30 minutes, each firing = one build session = one week-unit advanced).
@@ -255,7 +255,7 @@ data-flow and the retention terms.* W144, W146 and W147 are written to be builda
 **the loop must not decide this itself.**
 
 ### Q9 — Credential registry + evidence vault (W105–W117)
-- **W105** Close PRIV-1: access control for the community interest register — a Meherr-staff role, or move the register out of the practice console → verify: a practice user can neither read nor export it; e2e. **Deadline 2026-12-10 (APP 1.7).**
+- **W105** Close PRIV-1: access control for the community interest register — a ADHD.ME-staff role, or move the register out of the practice console → verify: a practice user can neither read nor export it; e2e. **Deadline 2026-12-10 (APP 1.7).**
 - **W106** Close PRIV-2: APP 12 export and APP 11 retention cover every Y2 record class (register membership, referrals, barriers, capability) → verify: an access request returns them all, retention prunes them, and the test enumerates the record classes so a NEW class fails the suite until it is handled. **Deadline 2026-12-10.**
 - **W107** [P] Dependency allowlist review ahead of the 2026-11-09 expiry → verify: `audit:gate` green with no acceptance past its review date, and no acceptance extended without a fresh rationale.
 - **W108** Credential record model: issuer, scope, evidence, verified-by, expiry — provenance required by the type (W79 pattern) → verify: no credential is representable without a verifier and a date.
@@ -292,7 +292,7 @@ data-flow and the retention terms.* W144, W146 and W147 are written to be builda
 - **W135** [P] Referral status tracking wired to W93's state machine → verify: replay; no inference from silence.
 - **W136** Loop closure: a completed return report stops W95 outreach for that chain → verify: the outreach plan withholds with a reason, and the reason is the completion.
 - **W137** [P] Referral console for both sides → verify: e2e + axe zero violations + cross-practice isolation.
-- **W138** Responsibility and indemnity posture, as code and copy → verify: no surface implies Meherr is a party to clinical care (W89).
+- **W138** Responsibility and indemnity posture, as code and copy → verify: no surface implies ADHD.ME is a party to clinical care (W89).
 - **W139** [P] Referral compliance linter → verify: no clinical claim in any referral-adjacent patient-facing copy; W6's rules applied, not re-implemented.
 - **W140** Cross-practice referral isolation → verify: the W103 scoping sweep run as this unit's gate, with every hit triaged in writing.
 - **W141** [P] Referral analytics for the practice: process, never people → verify: golden report; no patient ranking, coverage stated (W96 shape).
@@ -354,7 +354,7 @@ fails the day any adapter lands without the ruling. Nothing in Year 4 assumes mo
 
 **Proposed new gate, for founder ratification — G9: third-party organisational reporting.** Q16
 sends practice-level data to PHNs and health systems, which is the first time anything about a
-*practice* leaves Meherr to an external organisation. Existing gates do not cover it: G2 governs
+*practice* leaves ADHD.ME to an external organisation. Existing gates do not cover it: G2 governs
 holding real patient data, G6 governs public-facing directory copy, G8 governs model vendors, and
 none says whether a practice's own performance data may be transmitted to a funder or health
 system at all — a body that also commissions services from that practice. Proposed wording: *no

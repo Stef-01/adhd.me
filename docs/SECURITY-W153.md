@@ -39,7 +39,7 @@ at most, **which of our values is selected** — never what the value is.
 
 `interestSignupsCsv` quoted every cell, which made the file safe to **parse** and left it unsafe to
 **open**. A signup name of `=HYPERLINK("http://evil.invalid","Payroll")` is a valid quoted cell and
-an executable formula the moment a Meherr staff member double-clicks the download from
+an executable formula the moment a ADHD.ME staff member double-clicks the download from
 `/api/interest/export`.
 
 Everything needed for the attack was already in place: the name field accepts 2–80 characters of
@@ -57,7 +57,7 @@ Where content from outside this tree enters, and which sink it reaches today.
 | Boundary | Origin | Reaches | Notes |
 |---|---|---|---|
 | `src/pms/ingest.ts` — identity | `pms_record` | Identifier | `platformPatientId` appends the PMS id as a **suffix** to a source segment we control, so an ingested value cannot forge a different source. Collision across sources is impossible by construction, not by validation |
-| `src/pms/ingest.ts` — consent | `pms_record` | Control (boolean) + display | A PMS record can turn consent **on**; it can never re-enable contact after a Meherr STOP (W6, upheld at this boundary). The one-way door is the control |
+| `src/pms/ingest.ts` — consent | `pms_record` | Control (boolean) + display | A PMS record can turn consent **on**; it can never re-enable contact after a ADHD.ME STOP (W6, upheld at this boundary). The one-way door is the control |
 | `src/pms/adapter.ts` — patient/appointment reads | `pms_record` | Display | Names and slot data. No free text becomes a control value; W57's rule that membership is never inferred is what bounds the damage from a PMS holding wrong data |
 | `src/interest/store.ts` — signups | `public_form` | Display + **spreadsheet** | The defect above. Email is pattern-checked at the door (`app/interest-actions.ts`), which is what keeps `mailto:` out of scheme-injection range |
 | `src/credentials/vault.ts` — evidence | `uploaded_document` | Storage only | Documents are never served to a clinician (W109's grant is unobtainable by that role) and their contents are never parsed, so there is no sink to reach |
@@ -124,7 +124,7 @@ Stated plainly, because a security control that overstates itself is worse than 
 
 **One honest gap in the verification.** The operator-display sink's live consumer is
 `/console/interest`, and that page's populated branch is unreachable in the shipped product:
-`MEHERR_STAFF` ships empty (W105) and a test pins it that way, so no browser session can render
+`ADHDME_STAFF` ships empty (W105) and a test pins it that way, so no browser session can render
 the list. The mechanism is unit-tested and the page is type-checked, but the rendered result is
 not asserted end-to-end, and granting a staff email to make it testable would be a founder act
 this loop must not perform. The CSV defect — the part that was actually exploitable — is fully

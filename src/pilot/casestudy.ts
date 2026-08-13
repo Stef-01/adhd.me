@@ -92,7 +92,7 @@ export function renderCaseStudy(report: PilotReport, context: CaseStudyContext):
 ${context.syntheticData ? "> **Synthetic-data rehearsal.** Every figure below comes from the simulated practice; this document is the template a real pilot fills. It is not publishable until founder gate G4 replaces the data.\n" : ""}
 ## Setting
 
-${capitalise(context.practiceDescriptor)} ran Meherr for ${report.weeksSimulated} weeks.
+${capitalise(context.practiceDescriptor)} ran ADHD.ME for ${report.weeksSimulated} weeks.
 Availability messages went only to existing patients of the practice who passed the
 practice's own eligibility rules, with a randomised holdout group excluded from all
 contact so the effect could be measured rather than assumed.
@@ -112,7 +112,7 @@ contact so the effect could be measured rather than assumed.
 Counting every booking that followed an invitation would have claimed
 ${report.naiveGeneratedAttended} attended visits. Part of that attendance would have
 happened anyway; the holdout comparison removes it. The smaller number above is the
-one Meherr reports, because it is the one the practice actually gained.
+one ADHD.ME reports, because it is the one the practice actually gained.
 
 ## What the visits contained
 

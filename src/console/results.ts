@@ -31,7 +31,7 @@ export interface PracticeResults {
   extraAppointments: number | null;
   extraPerWeek: number | null;
   extraRevenueAud: number | null;
-  /** Attended appointments booked from a Meherr message — context, never the headline. */
+  /** Attended appointments booked from a ADHD.ME message — context, never the headline. */
   bookedFromMessage: number;
   /** The part of `bookedFromMessage` that would have happened anyway. */
   wouldHaveHappenedAnyway: number | null;

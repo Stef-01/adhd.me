@@ -123,11 +123,11 @@ describe("W159 review contradictions: a real disagreement this module may not se
     expect(found[0]?.severity).toBe("review");
   });
 
-  it("says in its copy that Meherr does not decide which side is right", () => {
+  it("says in its copy that ADHD.ME does not decide which side is right", () => {
     // The distinction from Y3-1: that failure RESOLVED an ambiguity with no principled winner.
     // Declining to resolve is the opposite mistake avoided, and the copy has to make that
     // legible to whoever reads the finding.
-    expect(CONTRADICTION_COPY.included_here_escalated_there).toContain("Meherr does not decide");
+    expect(CONTRADICTION_COPY.included_here_escalated_there).toContain("ADHD.ME does not decide");
     expect(CONTRADICTION_COPY.opposite_entry_polarity).toContain("clinical judgement");
   });
 

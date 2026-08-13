@@ -126,7 +126,7 @@ infrastructure, and the quarter that consumes it is where its design gets tested
 - **Mock routes.** `/api/mock/credentials` carries `assertMockRoutesEnabled()` like its
   siblings.
 - **Founder gates.** Nothing in Q9 ships a clinical value: `SHIPPED_SCOPE_STATEMENTS`,
-  `MEHERR_STAFF` and `SHIPPED_SAFETY_RULES` are all empty and all pinned by tests. W114's
+  `ADHDME_STAFF` and `SHIPPED_SAFETY_RULES` are all empty and all pinned by tests. W114's
   `unstatedLifetimeDays` is administration rather than clinical content, is stated as the
   founder's to set, and errs short — a test pins the direction, because the asymmetry is
   one-sided.

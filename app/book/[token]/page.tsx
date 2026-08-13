@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 // route, and during that swap the inherited layout title can be momentarily absent —
 // axe caught it as a document-title violation (WCAG 2.4.2). A patient-facing page
 // reached from an SMS deserves its own title regardless.
-export const metadata = { title: "Your appointment — Meherr" };
+export const metadata = { title: "Your appointment — ADHD.ME" };
 
 function Panel({ heading, children }: { heading: string; children: React.ReactNode }) {
   return (

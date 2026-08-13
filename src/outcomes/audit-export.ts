@@ -124,8 +124,8 @@ export function buildAuditExport(
  * not be allowed to drift into saying different things about the same export.
  */
 export const AUDIT_EXPORT_CAVEATS: readonly string[] = [
-  "This is a record of what was CHANGED in Meherr for this practice, and by whom. It does not say whether a change was correct, and it is not a measure of care.",
-  "Nothing recorded for a period means nothing was recorded — most often because Meherr was not in use yet. It does not mean nothing happened at the practice.",
+  "This is a record of what was CHANGED in ADHD.ME for this practice, and by whom. It does not say whether a change was correct, and it is not a measure of care.",
+  "Nothing recorded for a period means nothing was recorded — most often because ADHD.ME was not in use yet. It does not mean nothing happened at the practice.",
   "It covers this practice only. If your organisation runs more than one, each has its own trail and they are not combined here.",
   "It does not contain any patient's record. Changes about a patient — invitations, opt-outs, bookings — are held separately and are answered by a patient's own access request.",
 ];
@@ -151,7 +151,7 @@ export function renderAuditExport(exported: AuditExport, generatedAt: string): s
     // opposite conclusions — W127's rule, applied to a document rather than a page.
     lines.push(
       `No changes were recorded in this window. That means no configuration change was made`,
-      `through Meherr between ${exported.from} and ${exported.to} — not that the practice made`,
+      `through ADHD.ME between ${exported.from} and ${exported.to} — not that the practice made`,
       `no decisions in that time.`,
       ``,
     );

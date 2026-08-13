@@ -80,7 +80,7 @@ describe("W149 the record belongs to the clinician", () => {
 
   it("says in the export that nobody else can see it", () => {
     const rendered = renderCpdExport(trailFor(ALL, "prac-1", "clin-1"), "2026-08-11");
-    expect(rendered).toContain("Meherr provides no view of it to anybody else");
+    expect(rendered).toContain("ADHD.ME provides no view of it to anybody else");
   });
 });
 

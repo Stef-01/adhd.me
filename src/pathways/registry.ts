@@ -23,19 +23,19 @@ interface RegistryState {
   attestations: PathwayAttestation[];
 }
 
-const globalStore = globalThis as { __meherrPathwayRegistry?: RegistryState };
+const globalStore = globalThis as { __adhdMePathwayRegistry?: RegistryState };
 
 function initial(): RegistryState {
   return { events: [...SHIPPED_PATHWAYS], attestations: [...SHIPPED_ATTESTATIONS] };
 }
 
 function state(): RegistryState {
-  globalStore.__meherrPathwayRegistry ??= initial();
-  return globalStore.__meherrPathwayRegistry;
+  globalStore.__adhdMePathwayRegistry ??= initial();
+  return globalStore.__adhdMePathwayRegistry;
 }
 
 export function resetPathwayRegistry(): void {
-  globalStore.__meherrPathwayRegistry = initial();
+  globalStore.__adhdMePathwayRegistry = initial();
 }
 
 export function getPathwayEvents(): readonly PathwayEvent[] {

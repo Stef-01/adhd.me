@@ -1,4 +1,4 @@
-# Meherr Pilot Playbook (W40, v1)
+# ADHD.ME Pilot Playbook (W40, v1)
 
 The 12-week Continuity Yield pilot, operationalised. Audience: the pilot practice's owner and
 practice manager, plus whoever runs the pilot on our side. Everything here assumes founder gates
@@ -22,7 +22,7 @@ report generates from sim via `src/pilot/report.ts`).
 | Pilot sponsor | Practice owner | 1h/fortnight |
 | Operational contact | Practice manager | ~1h/week (console config, complaint intake) |
 | Clinical contact | One nominated GP | usefulness audit champion; ~5 min/day |
-| Meherr operator | Us | daily guardrail check, weekly report |
+| ADHD.ME operator | Us | daily guardrail check, weekly report |
 
 ## 3. Setup week (week 0)
 
@@ -69,7 +69,7 @@ The denominator is every patient assigned to the arm (`docs/ATTRIBUTION.md`: "ra
 1,000 arm patients"), not the smaller set who passed the eligibility rules in a given week —
 intention-to-treat holds the denominator fixed so the rate cannot be inflated by narrowing
 eligibility mid-pilot. Read against the eligible subset the figure is several times larger;
-Meherr reports the conservative one.
+ADHD.ME reports the conservative one.
 
 Secondary: conversion ≥15% of invitations → booking; ≥60% of generated bookings with the
 patient's usual GP; opt-outs <1%/week; clinician-judged-reasonable ≥80%; zero upheld

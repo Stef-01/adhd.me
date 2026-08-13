@@ -4,7 +4,7 @@
 //      ingest, and ids from different source systems can never collide.
 //   2. Consent has provenance and a one-way door: every consent observation is kept
 //      as an append-only provenance record, the latest capture wins for effective
-//      state — EXCEPT that a Meherr STOP (optedOut) is terminal and no PMS record
+//      state — EXCEPT that a ADHD.ME STOP (optedOut) is terminal and no PMS record
 //      ever re-enables contact (W6 law, upheld here at the ingestion boundary).
 
 import type { Patient, PatientId } from "@/domain/types";
@@ -167,7 +167,7 @@ export async function ingestFromAdapter(
   return { identities, provenance, patients, conflicts };
 }
 
-/** Record a Meherr STOP against a platform patient: terminal, provenance kept. */
+/** Record a ADHD.ME STOP against a platform patient: terminal, provenance kept. */
 export function recordPlatformStop(state: IngestState, platformId: PatientId, atIso: string): IngestState {
   const patient = state.patients.get(platformId);
   if (!patient) return state;

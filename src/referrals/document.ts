@@ -2,19 +2,19 @@
 //
 // The unit's gate is "no free-text clinical field that bypasses the content gate", and getting
 // it right means being precise about what the content gate is FOR. G5 governs clinical content
-// MEHERR publishes — pathway criteria, recall intervals, safety rules — because that content
-// carries the product's implicit endorsement and nobody at Meherr is qualified to write it.
+// ADHD.ME publishes — pathway criteria, recall intervals, safety rules — because that content
+// carries the product's implicit endorsement and nobody at ADHD.ME is qualified to write it.
 //
 // A GP writing about their own patient is not that. It is practitioner-to-practitioner
 // communication which that GP is professionally responsible for, and a product that refused to
 // let a doctor write a sentence about their patient would be wrong in the other direction. So
 // the gate is not "no free text". It is:
 //
-//   NO CLINICAL TEXT THAT MEHERR AUTHORS, TEMPLATES OR GENERATES. Exactly one field carries
+//   NO CLINICAL TEXT THAT ADHD.ME AUTHORS, TEMPLATES OR GENERATES. Exactly one field carries
 //   prose, it is attributed to a named clinician at a stated time, and this module contains no
 //   function that produces narrative and no template constant to fill in. That is the bypass
 //   the gate exists to close: system-generated clinical wording travelling inside a referral
-//   would be Meherr content that never went through W119's sign-off, wearing a GP's name.
+//   would be ADHD.ME content that never went through W119's sign-off, wearing a GP's name.
 //
 // Everything else is structured, and two of those choices are load-bearing:
 //
@@ -65,7 +65,7 @@ export const ALL_REFERRAL_REQUESTS: readonly ReferralRequest[] = [
  * The referring clinician's own words about their own patient.
  *
  * Attribution is required, not decorative: this is the one field the product does not govern
- * the wording of, so the record of WHO wrote it is what makes that acceptable. Meherr neither
+ * the wording of, so the record of WHO wrote it is what makes that acceptable. ADHD.ME neither
  * generates nor templates this text — see the module note.
  */
 export interface ClinicianNarrative {

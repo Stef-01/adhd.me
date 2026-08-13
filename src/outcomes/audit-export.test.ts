@@ -208,7 +208,7 @@ describe("W177 the export carries its own caveats", () => {
 
   it("says silence means nothing was recorded, not that nothing happened", () => {
     // W120's rule, in the place a reader is most likely to draw the wrong conclusion from a
-    // short list — a practice that adopted Meherr in June has an empty May.
+    // short list — a practice that adopted ADHD.ME in June has an empty May.
     expect(AUDIT_EXPORT_CAVEATS[1]).toContain("does not mean nothing happened");
   });
 

@@ -29,7 +29,7 @@ import { InterestForm } from "./interest-form";
  *
  * The founder storybook: a first-person account, in Narayani's voice, of the
  * logical progression from overlooked women -> lymphoedema research -> VR rehab
- * -> Meherr. One desktop-optimised page with scroll-revealed chapters.
+ * -> ADHD.ME. One desktop-optimised page with scroll-revealed chapters.
  *
  * Portrait: /narayani.png is a background-removed cut-out sitting on the paper.
  */
@@ -84,8 +84,8 @@ export function StoryLanding() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="story-wrap story-header-inner">
-          <Link href="/" className="story-wordmark" aria-label="Meherr home">
-            Meherr
+          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home">
+            ADHD.ME
           </Link>
           <Link href="/finder" className="story-demo-link">
             Early demo
@@ -104,7 +104,7 @@ export function StoryLanding() {
             variants={stagger}
           >
             <motion.p className="story-eyebrow" variants={item}>
-              Why I founded Meherr
+              Why I founded ADHD.ME
             </motion.p>
             <motion.h1 id="story-hero-title" variants={item}>
               For years I met women the system overlooked. Then I understood I was one of them.
@@ -140,7 +140,7 @@ export function StoryLanding() {
             >
               <Image
                 src={PORTRAIT_SRC}
-                alt="Narayani, founder of Meherr"
+                alt="Narayani, founder of ADHD.ME"
                 width={439}
                 height={610}
                 priority
@@ -271,15 +271,15 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* Chapter 05: Meherr, and Stefan */}
-      <section className="story-chapter" aria-labelledby="meherr-title">
+      {/* Chapter 05: ADHD.ME, and Stefan */}
+      <section className="story-chapter" aria-labelledby="adhd-me-title">
         <div className="story-wrap">
           <Reveal className="story-eyebrow-block">
-            <p className="story-eyebrow">What Meherr is</p>
+            <p className="story-eyebrow">What ADHD.ME is</p>
           </Reveal>
           <Reveal>
-            <h2 id="meherr-title" className="story-heading story-heading-wide">
-              Meherr helps South Asian women in Western Sydney find answers earlier.
+            <h2 id="adhd-me-title" className="story-heading story-heading-wide">
+              ADHD.ME helps South Asian women in Western Sydney find answers earlier.
             </h2>
           </Reveal>
 
@@ -333,7 +333,7 @@ export function StoryLanding() {
           <Reveal delay={0.1} className="story-cofounder-card">
             <Image
               src="/stefan.png"
-              alt="Stefan Thottunkal, co-founder of Meherr"
+              alt="Stefan Thottunkal, co-founder of ADHD.ME"
               width={1368}
               height={1817}
               sizes="(min-width: 900px) 26vw, 60vw"
@@ -386,7 +386,7 @@ export function StoryLanding() {
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
           <Link href="/" className="story-footer-wordmark">
-            Meherr
+            ADHD.ME
           </Link>
           <div className="story-footer-links">
             <a href="mailto:stefan.thottunkal@gmail.com">Contact</a>

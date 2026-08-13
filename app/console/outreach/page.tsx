@@ -31,7 +31,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Outreach — Meherr" };
+export const metadata = { title: "Outreach — ADHD.ME" };
 
 /** Availability language only, and linted at render time by W6's gate. */
 const SESSION_WINDOW = "after 5pm this week";
@@ -117,7 +117,7 @@ export default async function OutreachPage() {
           </span>
         </div>
         <p className="mt-1 text-sm text-stone-500">
-          In referral-record order. The order carries no priority — Meherr does not decide who
+          In referral-record order. The order carries no priority — ADHD.ME does not decide who
           to contact first.
         </p>
         {plan.send.length === 0 ? (

@@ -20,7 +20,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Capability — Meherr" };
+export const metadata = { title: "Capability — ADHD.ME" };
 
 const FRESHNESS_LABEL: Record<string, string> = {
   current: "Current",

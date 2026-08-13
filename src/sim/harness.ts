@@ -1,4 +1,4 @@
-// W12: simulation harness — runs the entire Meherr loop over N simulated weeks on the
+// W12: simulation harness — runs the entire ADHD.ME loop over N simulated weeks on the
 // synthetic practice (W3), wiring holdout (W8) → eligibility (W4) → pool (W5) → compliant
 // messaging (W6) → booking rail (W7) → event spine (W10) → attribution (W9).
 // Everything is seeded and deterministic. Organic attendance is modelled identically in both
@@ -560,7 +560,7 @@ export function renderReport(result: SimResult, violations: string[]): string {
   const { totals, attribution: attr, config } = result;
   const pct = (n: number, d: number) => (d === 0 ? "0%" : `${((n / d) * 100).toFixed(1)}%`);
   const num = (n: number | null) => (n === null ? "n/a" : n.toFixed(1));
-  return `# Meherr 26-week simulation report (W12)
+  return `# ADHD.ME 26-week simulation report (W12)
 
 Deterministic run — seed ${config.seed}, ${config.patientCount} synthetic patients,
 ${config.clinicianCount} clinicians, ${totals.weeksSimulated} weeks from ${config.todayIso}.

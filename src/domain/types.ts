@@ -1,4 +1,4 @@
-// Meherr core domain model (W2).
+// ADHD.ME core domain model (W2).
 // Storage-agnostic: mirrored 1:1 by supabase/migrations/0001_core.sql (consistency-tested).
 
 export type PracticeId = string & { readonly __brand: "PracticeId" };
@@ -51,7 +51,7 @@ export interface Appointment {
   startsAt: string; // ISO datetime
   status: AppointmentStatus;
   patientId: PatientId | null;
-  generatedByInvitation: boolean; // booked via a Meherr invitation
+  generatedByInvitation: boolean; // booked via a ADHD.ME invitation
   /** Optional: untyped slots (undefined) are always fillable; typed slots honour session config. */
   appointmentType?: AppointmentType;
 }

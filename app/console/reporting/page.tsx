@@ -36,7 +36,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Reporting — Meherr" };
+export const metadata = { title: "Reporting — ADHD.ME" };
 
 /**
  * The window this page reports on.
@@ -97,7 +97,7 @@ export default async function ReportingPage() {
       <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
         <h2 className="mb-1 font-medium text-stone-900">Nothing here has been sent</h2>
         <p className="text-sm text-stone-600" data-testid="no-disclosure">
-          Meherr does not disclose figures about your practice to any outside organisation, and
+          ADHD.ME does not disclose figures about your practice to any outside organisation, and
           there is no control on this page that would. This is your own record, shown to you.
         </p>
       </section>
@@ -149,7 +149,7 @@ export default async function ReportingPage() {
           <p className="mt-2 text-sm text-stone-600" data-testid="coverage-not-computed">
             {`Not produced by this product yet: ${report.coverage.notComputed
               .map((k) => KIND_LABELS[k])
-              .join(", ")}. Nothing was looked for, so this says nothing about your practice — it is a gap in Meherr, not in your record.`}
+              .join(", ")}. Nothing was looked for, so this says nothing about your practice — it is a gap in ADHD.ME, not in your record.`}
           </p>
         )}
       </section>

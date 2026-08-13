@@ -8,7 +8,7 @@ import { resolveFigures } from "@/collateral/render";
 
 export async function buildOnePager(): Promise<Buffer> {
   const doc = new Document({
-    creator: "Meherr",
+    creator: "ADHD.ME",
     title: ONE_PAGER.title,
     sections: [
       {
@@ -49,9 +49,9 @@ export function renderFigureRegisterMarkdown(figures: readonly {
     if (s.kind === "published") return `published — ${s.publication}, effective ${s.effectiveFrom}`;
     return `assumption — ${s.note}`;
   };
-  return `# Meherr sales collateral — figure register
+  return `# ADHD.ME sales collateral — figure register
 
-Every number in \`meherr-sales-deck.pptx\` and \`meherr-one-pager.docx\` appears
+Every number in \`adhd-me-sales-deck.pptx\` and \`adhd-me-one-pager.docx\` appears
 below with its source. Generated from \`src/collateral/figures.ts\`; a test asserts each
 computed figure still equals what the code produces, so the assets cannot quote a stale
 number.

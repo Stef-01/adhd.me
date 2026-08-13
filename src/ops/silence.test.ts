@@ -177,7 +177,7 @@ describe("W179 the copy keeps the states distinguishable", () => {
     expect(lintCopyBundle(SILENCE_COPY)).toEqual([]);
     for (const cause of causes) {
       const text = Object.values(SILENCE_COPY[cause]).join(" ");
-      expect(lintPartyToCare(text), `${cause} implies Meherr is party to care`).toEqual([]);
+      expect(lintPartyToCare(text), `${cause} implies ADHD.ME is party to care`).toEqual([]);
     }
   });
 

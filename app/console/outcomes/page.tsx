@@ -40,7 +40,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Outcomes — Meherr" };
+export const metadata = { title: "Outcomes — ADHD.ME" };
 
 const VERDICT_LABEL: Record<OutcomeVerdict, string> = {
   reached: "Recorded as getting there",
@@ -166,7 +166,7 @@ export default async function OutcomesPage() {
                 Each referral, and what the verdict rests on
               </h2>
               <p className="max-w-3xl text-sm text-stone-600">
-                In referral-record order. The order carries no meaning — Meherr does not decide
+                In referral-record order. The order carries no meaning — ADHD.ME does not decide
                 which of these matters more.
               </p>
               <table className="w-full text-sm">

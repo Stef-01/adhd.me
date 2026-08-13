@@ -34,7 +34,7 @@ test("renders the brief figures and recalculates from inputs", async ({ page }) 
   await expect(page.getByTestId("roi-Net annual benefit")).toHaveText("$16,574");
 
   // A fee that dwarfs incremental revenue drives the return below 1×.
-  await page.goto("/console/roi?meherrMonthlyFee=100000");
+  await page.goto("/console/roi?adhdMeMonthlyFee=100000");
   const roi = await page.getByTestId("roi-Return on cost").textContent();
   expect(Number(roi!.replace("×", ""))).toBeLessThan(1);
 });

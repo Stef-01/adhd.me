@@ -1,6 +1,6 @@
 // W72: condition attribution — incrementality per register cohort.
 //
-// W9 answers "did Meherr add attended appointments at this practice". This answers it
+// W9 answers "did ADHD.ME add attended appointments at this practice". This answers it
 // per condition, because a practice deciding whether to keep the diabetes register on
 // needs the diabetes number, not the practice-wide one.
 //

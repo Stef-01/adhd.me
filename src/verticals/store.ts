@@ -30,15 +30,15 @@ interface VerticalState {
   specs: VerticalSpec[];
 }
 
-const globalStore = globalThis as { __meherrVerticals?: VerticalState };
+const globalStore = globalThis as { __adhdMeVerticals?: VerticalState };
 
 function state(): VerticalState {
-  globalStore.__meherrVerticals ??= { specs: [] };
-  return globalStore.__meherrVerticals;
+  globalStore.__adhdMeVerticals ??= { specs: [] };
+  return globalStore.__adhdMeVerticals;
 }
 
 export function resetVerticals(): void {
-  globalStore.__meherrVerticals = { specs: [] };
+  globalStore.__adhdMeVerticals = { specs: [] };
 }
 
 export function getVerticalSpecs(): readonly VerticalSpec[] {

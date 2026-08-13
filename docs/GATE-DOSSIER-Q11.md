@@ -75,7 +75,7 @@ The posture that emerged, recorded because it generalises:
 - **The product never concludes from silence.** W135 reports `unknown` rather than inferring, and
   reports disagreements between its two state machines rather than resolving them.
 - **The product writes no clinical text.** W131 and W139 draw the line: G5 governs content
-  *Meherr* publishes; a GP writing about their own patient is professional communication this
+  *ADHD.ME* publishes; a GP writing about their own patient is professional communication this
   product neither generates nor edits.
 
 **My reading is that this sits inside G7's stated default**, because every clinical judgement in
@@ -93,7 +93,7 @@ Two things the rail assumes and does not yet enforce, recorded now rather than d
    to the disclosing practice. Synthetic today, so it is theoretical — but it is the same shape
    as the Y2 dossier's note about the interest register, which was also theoretical until it was
    not.
-2. **Meherr's own position is documented but not contractual.** W138 states the responsibility
+2. **ADHD.ME's own position is documented but not contractual.** W138 states the responsibility
    and indemnity posture in code and copy. Whether the pilot agreement says the same thing is a
    founder question, and a mismatch between what the product says and what the contract says is
    worse than either alone.

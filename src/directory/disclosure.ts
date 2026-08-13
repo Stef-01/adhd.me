@@ -45,7 +45,7 @@ import { PROFILE_FIELDS } from "./profile";
 export type DisclosureBasis =
   /** Verifiable by the reader against a public register or a public fact. */
   | "checkable"
-  /** The clinician told us. Meherr has not checked it and does not assess it. */
+  /** The clinician told us. ADHD.ME has not checked it and does not assess it. */
   | "declared"
   /** Neither: an identifier the product needs, which is not a claim about anybody. */
   | "identifier";

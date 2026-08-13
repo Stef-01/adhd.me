@@ -1,6 +1,6 @@
-# Meherr build tree — laws for loop sessions
+# ADHD.ME build tree — laws for loop sessions
 
-You are (probably) a `careyield-build-loop` firing. This tree is the Meherr product build
+You are (probably) a `careyield-build-loop` firing. This tree is the ADHD.ME product build
 (venture brief: `wiki/entrepreneurship/startups/careyield.md`; plan: `docs/FIVE-YEAR-PLAN.md`;
 ledger: `BUILD-STATE.md`).
 

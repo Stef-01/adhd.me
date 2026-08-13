@@ -37,7 +37,7 @@ import { withdrawOwnCredential } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Your credentials — Meherr" };
+export const metadata = { title: "Your credentials — ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have access to that.",

@@ -30,7 +30,7 @@ export type Severity = "info" | "warning" | "error";
 export interface ErrorMeaning {
   code: IntegrationErrorCode;
   severity: Severity;
-  /** True when the condition must stop Meherr offering appointments. */
+  /** True when the condition must stop ADHD.ME offering appointments. */
   blocksSending: boolean;
   /** What it means, in the words an operator needs. */
   summary: string;

@@ -105,12 +105,12 @@ describe("W139 the rules a referral needs and nothing else has", () => {
     }
   });
 
-  it("refuses copy implying Meherr is a party to the care", () => {
+  it("refuses copy implying ADHD.ME is a party to the care", () => {
     // W89's line. The practices provide care; this product moves paperwork between them.
     for (const text of [
       "We have arranged your care with another practice.",
       "Our clinicians will look after this.",
-      "Meherr has referred you on.",
+      "ADHD.ME has referred you on.",
     ]) {
       expect(rulesFor(text), text).toContain("no-product-as-party");
     }

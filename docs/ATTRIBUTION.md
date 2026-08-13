@@ -4,7 +4,7 @@
 > document change together; golden-fixture tests in `src/engine/attribution.test.ts` pin the
 > arithmetic. Any change to these definitions is a new version, never a silent edit.
 
-## The claim Meherr makes
+## The claim ADHD.ME makes
 
 **Incremental attended appointments**: the number of attended appointments in the invite arm
 above what the holdout arm's organic rate predicts. Nothing else is ever presented as impact.
@@ -29,7 +29,7 @@ incrementalAttended = incrementalPer1000 × inviteArm.patients ÷ 1000
   practice, with a start date inside the measurement window (inclusive of both endpoints,
   practice-local dates).
 - **All** attended appointments in each arm count — organic and invitation-generated alike.
-  The subtraction against the holdout arm is what isolates Meherr's contribution; counting
+  The subtraction against the holdout arm is what isolates ADHD.ME's contribution; counting
   only "generated" bookings would ignore displacement (see below).
 - Multiple attended appointments by one patient each count. The unit is appointments, not
   patients.

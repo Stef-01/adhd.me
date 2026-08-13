@@ -1,6 +1,6 @@
 // W27: PMS read-adapter interface. Every practice-management-system integration
 // (Best Practice, Halo, HotDoc, …) is an anti-corruption layer that maps the PMS's
-// own shapes onto these normalised Meherr reads. The contract in ./contract is
+// own shapes onto these normalised ADHD.ME reads. The contract in ./contract is
 // the suite EVERY adapter must pass before it ships — so a new PMS is "done" the
 // day its adapter is green against the contract, with no surprises downstream.
 //
@@ -35,8 +35,8 @@ export interface ConsentRecord {
 }
 
 /**
- * The read surface Meherr needs from any PMS. Read-only by design in Phase 1 —
- * Meherr never writes back to the PMS. All reads are practice-scoped: an adapter
+ * The read surface ADHD.ME needs from any PMS. Read-only by design in Phase 1 —
+ * ADHD.ME never writes back to the PMS. All reads are practice-scoped: an adapter
  * instance serves exactly one practice, returned on every row as `practiceId`.
  */
 export interface PmsReadAdapter {

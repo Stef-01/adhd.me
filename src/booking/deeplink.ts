@@ -1,5 +1,5 @@
 // W29: booking deep-link providers. A practice books through whichever rail it
-// already uses — Meherr's own tokenised page (W7), or its existing HotDoc /
+// already uses — ADHD.ME's own tokenised page (W7), or its existing HotDoc /
 // HealthEngine listing. Each provider turns one invitation into the URL that goes
 // in the SMS, and every provider is behind a per-practice flag: unconfigured or
 // disabled falls back to the internal link, so a misconfiguration can never send a
@@ -11,7 +11,7 @@
 // against live listings is part of the gated integration (W39 dossier).
 //
 // Privacy rule enforced in code: a deep link may never carry patient identifiers.
-// The invitation token is an opaque HMAC (W7) and is the only Meherr identifier
+// The invitation token is an opaque HMAC (W7) and is the only ADHD.ME identifier
 // permitted in a URL.
 
 import { signBookingToken } from "@/booking/token";
@@ -27,7 +27,7 @@ export interface DeepLinkContext {
 
 export interface InternalProviderConfig {
   provider: "internal";
-  /** Origin of the Meherr booking page, e.g. https://book.careyield.test */
+  /** Origin of the ADHD.ME booking page, e.g. https://book.careyield.test */
   baseUrl: string;
 }
 

@@ -1,5 +1,5 @@
 // W36: multi-PMS resilience. A PMS is a third-party system that will be slow,
-// flaky, or down — and Meherr runs many practices at once, each on its own
+// flaky, or down — and ADHD.ME runs many practices at once, each on its own
 // adapter. Two guarantees here:
 //
 //   1. FAILURE ISOLATION — one practice's adapter throwing, hanging, or returning

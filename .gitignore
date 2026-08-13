@@ -12,8 +12,8 @@ playwright-report/
 reports/weekly-w8.docx
 reports/load-w48.md
 # test-regenerated binary artifacts (zip timestamps make them non-deterministic — W20 precedent)
-reports/meherr-one-pager.docx
-reports/meherr-sales-deck.pptx
+reports/adhd-me-one-pager.docx
+reports/adhd-me-sales-deck.pptx
 
 .vercel
 .env*

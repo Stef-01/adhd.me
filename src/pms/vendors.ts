@@ -133,7 +133,7 @@ export const bestPracticeMapping: VendorMapping<BpRawResponses> = {
       futureBookingAt: p.NextAppointmentDate,
       activeRecall: p.ActiveRecall,
       chronicCare: p.ChronicDiseaseRegister,
-      holdout: false, // Meherr-internal; the PMS never sets this
+      holdout: false, // ADHD.ME-internal; the PMS never sets this
     }));
   },
   toOpenSlots(raw, practiceId) {

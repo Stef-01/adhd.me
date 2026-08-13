@@ -1,4 +1,4 @@
-// W71 verify gate: dedup against synthetic recall data — a Meherr offer never
+// W71 verify gate: dedup against synthetic recall data — a ADHD.ME offer never
 // duplicates a recall the practice is already running for the same gap.
 
 import { describe, expect, it } from "vitest";

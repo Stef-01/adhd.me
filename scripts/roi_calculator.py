@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""W21: generate the Meherr ROI calculator as a living .xlsx.
+"""W21: generate the ADHD.ME ROI calculator as a living .xlsx.
 
 The workbook mirrors src/economics/roi.ts exactly: an Assumptions sheet of
 editable inputs (blue = practice levers, yellow = fixed model assumptions) and a
@@ -34,7 +34,7 @@ wb = Workbook()
 # ---- Assumptions -----------------------------------------------------------
 a = wb.active
 a.title = "Assumptions"
-a["A1"] = "Meherr ROI calculator — assumptions"
+a["A1"] = "ADHD.ME ROI calculator — assumptions"
 a["A1"].font = TITLE
 a["A2"] = "Blue cells are practice levers you can change. Yellow cells are the model's fixed assumptions."
 a["A2"].font = Font(name="Arial", italic=True, size=9)
@@ -44,11 +44,11 @@ rows = [
     ("Participating GPs", "B4", 10, "0", True, "Practice lever"),
     ("Bookable slots per GP per week", "B5", 120, "0", True, "24 slots/day x 5 days (W3)"),
     ("Share of capacity unfilled", "B6", 0.08, PCT, False, "W3 synthetic calibration"),
-    ("Share of open slots Meherr fills", "B7", 0.25, PCT, False, "W12 sim response rate"),
+    ("Share of open slots ADHD.ME fills", "B7", 0.25, PCT, False, "W12 sim response rate"),
     ("Did-not-attend rate on generated bookings", "B8", 0.05, PCT, False, "W12 sim"),
     ("Share of attended visits that are incremental", "B9", 0.60, PCT, False, "holdout-adjusted; not displaced"),
     ("Practice billing per attended visit (AUD)", "B10", 80, AUD, True, "W20 default; practice-set"),
-    ("Meherr subscription (AUD/month)", "B11", 990, AUD, True, "pricing assumption — finalised W47"),
+    ("ADHD.ME subscription (AUD/month)", "B11", 990, AUD, True, "pricing assumption — finalised W47"),
 ]
 a["A3"], a["B3"] = "Input", "Value"
 for c in ("A3", "B3", "C3"):
@@ -87,7 +87,7 @@ results = [
     ("Incremental revenue per week", "=B7*Assumptions!B10", AUD),
     ("Incremental visits per year", "=B7*52", NUM1),
     ("Incremental revenue per year", "=B8*52", AUD),
-    ("Meherr cost per year", "=Assumptions!B11*12", AUD),
+    ("ADHD.ME cost per year", "=Assumptions!B11*12", AUD),
     ("Net annual benefit", "=B10-B11", AUD),
     ("Return on cost (x)", "=IF(B11=0,0,B10/B11)", "0.0\\x"),
 ]

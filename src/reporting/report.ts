@@ -137,10 +137,10 @@ export function buildPracticeReport(
  * opens both at once.
  */
 export const REPORT_CAVEATS: readonly string[] = [
-  "This report describes what is recorded in Meherr for this practice in the period named above. It is not a measure of care, and no figure in it says whether anything was done well.",
+  "This report describes what is recorded in ADHD.ME for this practice in the period named above. It is not a measure of care, and no figure in it says whether anything was done well.",
   "Every figure states what it was counted over. A count without its denominator is an impression, so if a denominator is missing the figure is missing too.",
   "A figure that is absent because nothing was recorded is listed as such. Nothing recorded is not the same as nothing happening, and this report cannot tell you which it was.",
-  "Nothing here has been sent to anybody. Meherr does not disclose practice-identifiable figures to any outside organisation, and there is no control on this page that would.",
+  "Nothing here has been sent to anybody. ADHD.ME does not disclose practice-identifiable figures to any outside organisation, and there is no control on this page that would.",
 ];
 
 /** The document. Structured object first, rendered from it — W20's pattern. */
@@ -184,7 +184,7 @@ export function renderPracticeReport(report: PracticeReport, generatedAt: string
     lines.push(
       `Not produced by this product yet: ${report.coverage.notComputed
         .map((k) => KIND_LABELS[k])
-        .join(", ")}. Nothing was looked for, so this says nothing about your practice — it is a gap in Meherr, not in your record.`,
+        .join(", ")}. Nothing was looked for, so this says nothing about your practice — it is a gap in ADHD.ME, not in your record.`,
     );
   }
 

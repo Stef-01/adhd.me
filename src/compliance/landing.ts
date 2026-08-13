@@ -1,4 +1,4 @@
-// W23: copy-compliance linter for the public B2B landing page. Meherr sells to
+// W23: copy-compliance linter for the public B2B landing page. ADHD.ME sells to
 // general practices, so the site must carry ZERO regulated therapeutic advertising
 // (Ahpra advertising guidelines / s 133 National Law / TGA therapeutic-goods rules)
 // and none of the things CLAUDE.md law 6 bans anywhere: no clinical claims, no

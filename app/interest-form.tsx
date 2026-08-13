@@ -49,7 +49,7 @@ export function InterestForm() {
 
       <label className="community-consent">
         <input name="consent" type="checkbox" value="yes" aria-invalid={Boolean(state.fieldErrors?.consent)} aria-describedby={state.fieldErrors?.consent ? "interest-consent-error" : undefined} required />
-        <span>I agree to Meherr storing these details and contacting me about community sessions and early testing.</span>
+        <span>I agree to ADHD.ME storing these details and contacting me about community sessions and early testing.</span>
       </label>
       {state.fieldErrors?.consent && <small id="interest-consent-error" className="community-inline-error">{state.fieldErrors.consent}</small>}
 

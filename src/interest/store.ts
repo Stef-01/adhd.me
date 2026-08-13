@@ -58,7 +58,7 @@ export function listInterestSignups(options: { filePath?: string } = {}): Intere
  *
  * W153 finding: quoting alone made this file safe to PARSE and left it unsafe to OPEN. A signup
  * name of `=HYPERLINK("http://evil.invalid","Payroll")` is a valid quoted cell and an executable
- * formula the moment an operator double-clicks the download — the export is served to Meherr
+ * formula the moment an operator double-clicks the download — the export is served to ADHD.ME
  * staff from `/api/interest/export`, and the text in it was typed by anyone on the internet.
  *
  * Neutralising happens HERE, to every cell, rather than to the fields somebody judged risky. The

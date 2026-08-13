@@ -7,7 +7,7 @@ unit. The ledger rows it implies are recorded as `blocked` for the same reason.
 
 ## What "supervision" would mean here, and what it must not
 
-Meherr's Y3–Y4 direction is GPs building focused practice around conditions they see
+ADHD.ME's Y3–Y4 direction is GPs building focused practice around conditions they see
 often, with specialist input available. The supervision hook is the seam where a specialist's
 judgement enters a GP's workflow.
 
@@ -59,7 +59,7 @@ Two constraints make this safe, and both need to be structural rather than proce
 ### 3. Named-patient consultation (design only, and deliberately last)
 
 A GP asks a specialist about a specific patient. This is the hook that crosses the line
-above, and therefore the one that changes what Meherr is: it is a referral-adjacent
+above, and therefore the one that changes what ADHD.ME is: it is a referral-adjacent
 clinical service, not scheduling software.
 
 If it is ever built it needs, at minimum:
@@ -68,7 +68,7 @@ If it is ever built it needs, at minimum:
   shared — acceptance is an act, never a default or a setting;
 - the patient's informed consent to a third clinician seeing their information, which is a
   collection-and-disclosure question under APP 6, not a UI checkbox;
-- professional indemnity arrangements for the specialist that Meherr has verified rather
+- professional indemnity arrangements for the specialist that ADHD.ME has verified rather
   than assumed;
 - a defensible answer to whether the resulting artefact is a medical record, and whose.
 
@@ -92,7 +92,7 @@ Recorded so they exist as rows rather than as an assumption:
 - **Cohort-level specialist review (hook 2)** — blocked on G5. Buildable as a de-identified
   aggregate view whose output is register content; not buildable as anything patient-linked.
 - **Named-patient consultation (hook 3)** — blocked on G5 **and** a founder decision that is
-  not really about clinical content at all: whether Meherr is willing to become a party to
+  not really about clinical content at all: whether ADHD.ME is willing to become a party to
   individual clinical care. That is a company-direction question, and it should be answered
   as one rather than discovered through a feature.
 

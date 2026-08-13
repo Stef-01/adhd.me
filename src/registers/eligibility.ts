@@ -1,6 +1,6 @@
 // W59: register-driven eligibility.
 //
-// A care gap can make Meherr contact FEWER patients. It can never make it contact one it
+// A care gap can make ADHD.ME contact FEWER patients. It can never make it contact one it
 // would not otherwise have contacted. That asymmetry is the whole unit, and it is structural
 // rather than conventional: `withCareGapFilter` takes the W4 decision as its input and can
 // only ever turn an `eligible: true` into a `false`. There is no branch that produces

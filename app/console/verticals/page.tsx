@@ -32,7 +32,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Verticals — Meherr" };
+export const metadata = { title: "Verticals — ADHD.ME" };
 
 const STATUS_LABEL: Record<string, string> = {
   ready: "Ready",
@@ -111,7 +111,7 @@ export default async function VerticalsPage() {
                   Every vertical here is complete as an assembly, and none of it can be used.
                 </h2>
                 <p>
-                  Nothing listed below has cleared a clinical sign-off. Meherr ships with no
+                  Nothing listed below has cleared a clinical sign-off. ADHD.ME ships with no
                   pathway content, no monitoring intervals and no education material of its own —
                   each item needs a specialist to review it and the founder to sign it off, and
                   the interval values additionally wait on a decision that has not been taken.
@@ -205,7 +205,7 @@ export default async function VerticalsPage() {
         <p data-testid="verticals-note" className="text-sm text-stone-500">
           What a pathway actually says is not shown here. This page is about whether the parts of a
           care model have been checked and by whom, not about the clinical content itself — and
-          material nobody has reviewed does not belong in front of a clinician with Meherr&rsquo;s
+          material nobody has reviewed does not belong in front of a clinician with ADHD.ME&rsquo;s
           name on it.
         </p>
       </div>

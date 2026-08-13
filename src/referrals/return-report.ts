@@ -18,7 +18,7 @@
 // either alone. One field is recorded; the other is a function of it.
 //
 // The narrative follows W131's rule exactly: one prose field, authored by a named clinician at
-// a stated time, and nothing in this module generates or templates it. Meherr does not write
+// a stated time, and nothing in this module generates or templates it. ADHD.ME does not write
 // clinical correspondence.
 //
 // What this module will NOT do is infer a completion. No return report means the loop is open,

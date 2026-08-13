@@ -1,4 +1,4 @@
-# Meherr Q7 hardening (W91)
+# ADHD.ME Q7 hardening (W91)
 
 Review sweep over the Q7 capability-graph and routing work: W79 capability schema, W80 case-mix
 telemetry, W81 interest capture, W82 competence floor, W83 capability console, W84 in-panel

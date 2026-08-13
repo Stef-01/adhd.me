@@ -26,15 +26,15 @@ interface EducationState {
   sources: SignedOffSource[];
 }
 
-const globalStore = globalThis as { __meherrEducation?: EducationState };
+const globalStore = globalThis as { __adhdMeEducation?: EducationState };
 
 function state(): EducationState {
-  globalStore.__meherrEducation ??= { items: [], triggers: [], cpd: [], sources: [] };
-  return globalStore.__meherrEducation;
+  globalStore.__adhdMeEducation ??= { items: [], triggers: [], cpd: [], sources: [] };
+  return globalStore.__adhdMeEducation;
 }
 
 export function resetEducation(): void {
-  globalStore.__meherrEducation = { items: [], triggers: [], cpd: [], sources: [] };
+  globalStore.__adhdMeEducation = { items: [], triggers: [], cpd: [], sources: [] };
 }
 
 /**

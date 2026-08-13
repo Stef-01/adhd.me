@@ -1,4 +1,4 @@
-# Meherr Q6 hardening (W78)
+# ADHD.ME Q6 hardening (W78)
 
 Review sweep over the Q6 condition-targeting work: W66 condition lint, W67 template approval,
 W68 clinical-safety rails, W69 G5 authoring workspace, W70 condition guardrails, W71 recall

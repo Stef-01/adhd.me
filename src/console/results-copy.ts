@@ -10,7 +10,7 @@
 export const RESULTS_COPY = {
   heading: "Your results",
   lede:
-    "What your practice got from Meherr that it would not have got anyway — measured " +
+    "What your practice got from ADHD.ME that it would not have got anyway — measured " +
     "against a group of your own patients we never message.",
   syntheticNote:
     "Demonstration data. Every figure here comes from a simulated practice. The measurement " +
@@ -20,7 +20,7 @@ export const RESULTS_COPY = {
   tiles: {
     extraAppointments: {
       label: "Extra appointments",
-      explain: "Appointments your practice would not have had if Meherr had never sent a message.",
+      explain: "Appointments your practice would not have had if ADHD.ME had never sent a message.",
     },
     extraBillings: {
       label: "Extra billings, estimated",
@@ -37,12 +37,12 @@ export const RESULTS_COPY = {
   comparison: {
     heading: "Why the smaller number is the real one",
     body: [
-      "Some appointments booked from a Meherr message were going to happen anyway — our " +
+      "Some appointments booked from a ADHD.ME message were going to happen anyway — our " +
         "message changed when and how those patients booked, not whether they came.",
       "To separate the two, a share of your patients is picked at random and never messaged. " +
         "They are your comparison group. Whatever they do on their own is what the rest of " +
-        "your patients would have done without Meherr.",
-      "The difference between the two groups is what Meherr added. That is the number we " +
+        "your patients would have done without ADHD.ME.",
+      "The difference between the two groups is what ADHD.ME added. That is the number we " +
         "report, and the only number we would ever bill against.",
     ],
     barLabelExtra: "extra",
@@ -54,7 +54,7 @@ export const RESULTS_COPY = {
     allClear: "Nothing needs your attention. Every check is inside its limit.",
     attention: "Some checks need your attention.",
     continuityNote:
-      "Meherr only offers appointments with the patient's own GP, so every booking above " +
+      "ADHD.ME only offers appointments with the patient's own GP, so every booking above " +
       "kept that continuity. This confirms the rule held — it is not a result.",
   },
 
@@ -62,7 +62,7 @@ export const RESULTS_COPY = {
     heading: "The two groups, week by week",
     sub:
       "Appointments attended per 100 patients. Both lines move with your normal demand; the " +
-      "gap between them is what Meherr added.",
+      "gap between them is what ADHD.ME added.",
     caption:
       "Single weeks bounce around, and some come out negative. That is normal — one week is " +
       "too small a sample to mean anything on its own. The whole-period total is the number " +
@@ -89,5 +89,5 @@ export const RESULTS_COPY = {
     ],
   },
 
-  footer: "Meherr reports no impact figure for a practice with no comparison group.",
+  footer: "ADHD.ME reports no impact figure for a practice with no comparison group.",
 } as const;

@@ -161,7 +161,7 @@ describe("W187 the specialist variant is representable and unpublishable", () =>
   it("refuses to render one, by name", () => {
     // THE FINDING THIS UNIT SURFACED. W183 modelled a specialist profile because s 133
     // recognises the title and a model denying it would misstate the law. W114 ruled that
-    // Meherr publishes no specialist titles at all, stricter than the law on purpose, because
+    // ADHD.ME publishes no specialist titles at all, stricter than the law on purpose, because
     // whether a clinician may use one is a fact on the specialist register this tree does not
     // read. Both are right; they collide in the first unit that turns a profile into copy.
     const result = renderProfile(SPECIALIST);

@@ -27,7 +27,7 @@
 //
 // AND THE `/clinicians` DECISION IS STILL THE FOUNDER'S, so it is flagged rather than resolved.
 // Classifying it professional makes the sweep honest about the rules it applies; it does NOT
-// decide whether Meherr should publish clinical guidance at all. That question is live — Q13's
+// decide whether ADHD.ME should publish clinical guidance at all. That question is live — Q13's
 // dossier put it beside G5, noting that `/clinicians` ships real clinical content while W56 has
 // held the register chain for two years over transcribing published intervals, which is less
 // clinically consequential. Both positions are defensible; they are not simultaneously
@@ -253,5 +253,5 @@ export const VOCABULARY_BOUND =
  */
 export const STANDING_FLAGS: Readonly<Record<string, string>> = {
   "/clinicians":
-    "Ships real clinical guidance (Rotterdam criteria, COCP suitability, metformin titration) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether Meherr should publish clinical guidance at all, and that decision is the founder's. Raised in docs/GATE-DOSSIER-Y2.md, restated in docs/GATE-DOSSIER-Q13.md, and unresolved in both.",
+    "Ships real clinical guidance (Rotterdam criteria, COCP suitability, metformin titration) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether ADHD.ME should publish clinical guidance at all, and that decision is the founder's. Raised in docs/GATE-DOSSIER-Y2.md, restated in docs/GATE-DOSSIER-Q13.md, and unresolved in both.",
 };

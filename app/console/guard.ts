@@ -4,7 +4,7 @@ import { SESSION_COOKIE, verifySession } from "@/console/session";
 import { activePracticeFor, type PracticeRecord } from "@/console/store";
 
 /** Which practice the session picked. A preference, never a grant — see `requirePractice`. */
-export const PRACTICE_COOKIE = "meherr_practice";
+export const PRACTICE_COOKIE = "adhdme_practice";
 
 /**
  * Authorization primitive for the console — returns the signed-in email or

@@ -173,7 +173,7 @@ function getRequestPriorities(value: string) {
 }
 
 function Wordmark() {
-  return <Link href="/" className="wordmark finder-wordmark" aria-label="Meherr, back to main home">Meherr</Link>;
+  return <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home">ADHD.ME</Link>;
 }
 
 function FinderContext() {

@@ -4,7 +4,7 @@
 // required IntervalProvenance type). W56's loader made it impossible to *load* one.
 // Neither stops a view from quietly rendering an interval and leaving the source off,
 // which is the failure this unit closes: an interval on screen with no visible source
-// looks like Meherr's own clinical opinion rather than someone else's published
+// looks like ADHD.ME's own clinical opinion rather than someone else's published
 // guidance.
 //
 // So intervals reach the UI only as a ViewInterval, which cannot be constructed
@@ -44,7 +44,7 @@ export function describeAge(reviewedOn: string, now: Date): string {
   const then = new Date(`${reviewedOn}T00:00:00Z`);
   if (Number.isNaN(then.getTime())) return "review date unreadable";
 
-  // Compare date to date, not a UTC midnight to a wall clock. Meherr is an Australian
+  // Compare date to date, not a UTC midnight to a wall clock. ADHD.ME is an Australian
   // product (AEST = UTC+10), so a source retrieved "today" local time is a future instant in
   // UTC for the first ten hours of every day — which rendered "reviewed in the future" on the
   // one page whose job is making provenance credible.

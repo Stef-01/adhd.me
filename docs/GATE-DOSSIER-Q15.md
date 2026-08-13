@@ -34,7 +34,7 @@ the unit's dependency from a gate nobody has scheduled to a decision the Q9 doss
 
 ## What G6 does not open, which is most of what people assume it does
 
-**It does not open specialist titles.** W114 ruled that Meherr publishes no specialist title at
+**It does not open specialist titles.** W114 ruled that ADHD.ME publishes no specialist title at
 all — stricter than s 133 requires, on the argument that whether a clinician may use one is a fact
 on the Ahpra specialist register this product does not read. W187 discovered the consequence when
 it became the first unit to turn a profile into copy: `renderProfile` refuses a specialist profile
@@ -100,7 +100,7 @@ ruling.
 
 The case for leaving G6 shut indefinitely is stronger than this tree has previously written down.
 
-A directory is the one Meherr surface with no practice between the product and the public. Every
+A directory is the one ADHD.ME surface with no practice between the product and the public. Every
 other artefact is read by somebody who signed an agreement and can be told what a figure means. A
 profile is read by a woman looking for a GP, and the only control on how she reads it is the copy
 itself. The tree has now found the s 133 claim in a type, in a field, in a composed line, and in a

@@ -77,7 +77,7 @@ describe("W199/W205 the report states its own coverage, in THREE lists", () => {
     // W205's finding. `nothingRecorded` used to be "every kind the caller did not pass", and
     // nothing in the tree computes register membership or care gaps — so every live report told
     // a practice "the record held nothing to count" about two figures nobody had ever tried to
-    // count. That is a claim about the practice's rails made on the strength of a gap in Meherr.
+    // count. That is a claim about the practice's rails made on the strength of a gap in ADHD.ME.
     const report = buildPracticeReport("prac-1", "Demo", PERIOD, FIGURES, [
       ...ATTEMPTED,
       "care_gaps_detected",
@@ -93,7 +93,7 @@ describe("W199/W205 the report states its own coverage, in THREE lists", () => {
       "2026-07-01",
     );
     expect(rendered).toContain("Not produced by this product yet");
-    expect(rendered).toContain("it is a gap in Meherr, not in your record");
+    expect(rendered).toContain("it is a gap in ADHD.ME, not in your record");
   });
 
   it("distinguishes looked-for-and-empty from withheld and from zero", () => {
@@ -239,7 +239,7 @@ describe("W199 the report is golden", () => {
         ``,
         `Reported here: Care gaps detected, Referrals written, Register membership.`,
         `Everything this report looked for had something recorded in this period.`,
-        `Not produced by this product yet: Referrals with a recorded completion. Nothing was looked for, so this says nothing about your practice — it is a gap in Meherr, not in your record.`,
+        `Not produced by this product yet: Referrals with a recorded completion. Nothing was looked for, so this says nothing about your practice — it is a gap in ADHD.ME, not in your record.`,
         ``,
       ].join("\n"),
     );

@@ -25,7 +25,7 @@ posture applied eight times, plus one founder list that is empty for its own rea
 | `SHIPPED_ATTESTATIONS` | W119 | Who reviewed and signed off each version |
 | `SHIPPED_ESCALATION_RULES` | W121 | What an escalation means and who is told |
 | `SHIPPED_BINDINGS` | W123 | Which clinicians a pathway may be offered under |
-| `MEHERR_STAFF` | W105 | (Not G5 — a founder list, empty for a different reason) |
+| `ADHDME_STAFF` | W105 | (Not G5 — a founder list, empty for a different reason) |
 
 Every one is pinned at zero by its own test, so none can be filled without a deliberate commit.
 **One is not empty and should be checked**: `SHIPPED_TRIGGERS` (W88's supervision escalation)
@@ -50,7 +50,7 @@ allowed to ship. It is listed here so the founder can disagree while it is one l
 3. **SUP-1** (cohort-level specialist review). G5 plus nothing else. Buildable as a
    de-identified aggregate whose output is register content.
 4. **SUP-2** (named-patient specialist consultation). G5 **plus a company-direction decision**
-   that is not a clinical-content question: whether Meherr is willing to become a party to
+   that is not a clinical-content question: whether ADHD.ME is willing to become a party to
    individual clinical care. Ruling on G5 does **not** unblock this, and treating it as though
    it did would answer the harder question by accident.
 
@@ -117,7 +117,7 @@ would not, and still cheaper to rule on now.
 |---|---|---|---|
 | 1 | **Rule on G5** — clinical content sign-off, covering W56's intervals and the pathway catalogue together | W56 values, SUP-1, the entire Q10 content layer | The single largest unlock in the plan. Eight mechanisms are built and waiting |
 | 2 | **Rule A or B on credential visibility** (Q9 dossier action 1) | W131's model, W133, W137 | Time-critical unless W131 is built to the safe intersection |
-| 3 | **Decide SUP-2's company-direction question** — is Meherr willing to be a party to individual clinical care? | SUP-2 | Explicitly NOT a clinical-content question. Ruling on G5 must not be read as answering it |
+| 3 | **Decide SUP-2's company-direction question** — is ADHD.ME willing to be a party to individual clinical care? | SUP-2 | Explicitly NOT a clinical-content question. Ruling on G5 must not be read as answering it |
 | 4 | **Resolve the `/clinicians` inconsistency** — the same G5 standard, or a stated reason they differ | Nothing; it is a coherence problem | Open since Y2 |
 | 5 | **Commission or decline the Ahpra advertising review** of `/` and `/finder` | G6 | Asked in three consecutive dossiers. "Prototype only" is a complete answer |
 | 6 | **Confirm `SHIPPED_TRIGGERS`' one live rule** is a routing rule rather than clinical content | Nothing | Cheap to disagree with while it is one line |

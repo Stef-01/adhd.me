@@ -1,7 +1,7 @@
 // W41: practice onboarding wizard — self-serve configuration in one sitting.
 // Five short steps, each independently saveable, with a visible progress rail so a
 // practice manager always knows how much is left. Every input is something the
-// practice already knows; nothing here waits on Meherr, so setup never blocks
+// practice already knows; nothing here waits on ADHD.ME, so setup never blocks
 // on us. Copy stays operational — no clinical claims (CLAUDE.md law 6).
 
 import Link from "next/link";

@@ -68,7 +68,7 @@ the same argument.
 
 **Releases one unit. Priced in full in `docs/GATE-DOSSIER-Q15.md`; three points carried here.**
 
-G6 does not open specialist titles. W114 ruled separately that Meherr publishes none at all, and
+G6 does not open specialist titles. W114 ruled separately that ADHD.ME publishes none at all, and
 W187 made the consequence concrete: `renderProfile` refuses a specialist profile outright,
 because any honest wording contains the protected word. That survives G6 untouched and is Q9's
 action 4.

@@ -161,7 +161,7 @@ describe("W192 the sweep catches what it claims to", () => {
   });
 
   it("passes ordinary copy on both", () => {
-    const copy = "Meherr helps a practice see which of its own recalls are outstanding.";
+    const copy = "ADHD.ME helps a practice see which of its own recalls are outstanding.";
     expect(sweepSurface("/", "patient", copy)).toEqual([]);
     expect(sweepSurface("/practices", "professional", copy)).toEqual([]);
   });

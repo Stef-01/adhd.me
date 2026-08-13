@@ -34,7 +34,7 @@ unchanged in kind, only wider in surface.
 **One new question the founder should see.** `app/console/interest` (founder commit 3317340)
 would hold contact details for people who are **not** patients of a subscribing practice.
 That is a different collection to everything else in the tree: APP 5 notice, retention and
-erasure all need answering for a population Meherr has no existing relationship with.
+erasure all need answering for a population ADHD.ME has no existing relationship with.
 Synthetic today, so the exposure is theoretical — but it is not covered by the existing G2
 analysis, which assumes practice-held patient records.
 

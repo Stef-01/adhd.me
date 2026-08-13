@@ -70,7 +70,7 @@ Each is asserted in `e2e/results.spec.ts`, so the checklist cannot rot.
 |---|---|---|
 | 1 | How many extra appointments did we get? | "Extra appointments" tile — a whole number, with "about N a week" underneath |
 | 2 | Is anything going wrong? | Status line above the tiles, plain sentence + dot, before any number |
-| 3 | Why is that smaller than the bookings Meherr generated? | "Why the smaller number is the real one" card: prose, split bar, and the explicit "counting all N would let us claim $X" sentence |
+| 3 | Why is that smaller than the bookings ADHD.ME generated? | "Why the smaller number is the real one" card: prose, split bar, and the explicit "counting all N would let us claim $X" sentence |
 | 4 | What is it worth? | "Extra billings, estimated" tile, with its per-visit assumption stated on the tile |
 | 5 | How many patients asked us to stop? | "Patients who asked us to stop" tile, as a count and a percentage of messages |
 | 6 | Which weeks were good or bad? | Two-group chart + the week-by-week table (same data, either route) |

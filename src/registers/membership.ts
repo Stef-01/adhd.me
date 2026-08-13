@@ -77,7 +77,7 @@ export function deriveMemberships(inputs: MembershipInputs, atIso: string): Regi
 
   // Practice confirmation is applied second so it can add a patient the PMS has not
   // flagged. It deliberately cannot REMOVE a PMS-flagged patient: unticking a box in
-  // Meherr must not silently contradict the clinical record in the PMS.
+  // ADHD.ME must not silently contradict the clinical record in the PMS.
   const add = (
     patientId: PatientId,
     conditionCode: ConditionCode,

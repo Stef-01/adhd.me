@@ -97,7 +97,7 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
   {
     id: "writes-no-clinical-text",
     statement:
-      "The product writes no clinical text. G5 governs content Meherr publishes; a GP writing about their own patient is professional communication this product neither generates nor edits.",
+      "The product writes no clinical text. G5 governs content ADHD.ME publishes; a GP writing about their own patient is professional communication this product neither generates nor edits.",
     establishedBy: ["W131", "W139"],
     y4Rederivation:
       "Y4 added the two places clinical text could have entered and neither did. Every pathway, interval and education catalogue still ships empty behind G5, so there is no authored clinical content to write, and W191's dermatology vertical is a spec awaiting the same sign-off rather than shipped content. `/clinicians` carries clinical guidance and is the one live tension — W192 classified it professional and flagged the underlying question as the founder's, which is a disclosure decision rather than the product generating text.",
@@ -386,7 +386,7 @@ export const ACCEPTED_COPY_FINDINGS: readonly AcceptedCopyFinding[] = [
     exportName: "REMAINING_CHAIN",
     rule: "no-benefit-claims",
     match: "specialist",
-    why: "'a specialist review and then a founder sign-off (G5)' describes Meherr's own content governance chain to whoever is watching a vertical fill up. The rule bundles 'specialist' because a clinician claiming to be one is a prohibited title claim (W6, W184); a specialist reviewing our pathway content is the opposite direction of the same word.",
+    why: "'a specialist review and then a founder sign-off (G5)' describes ADHD.ME's own content governance chain to whoever is watching a vertical fill up. The rule bundles 'specialist' because a clinician claiming to be one is a prohibited title claim (W6, W184); a specialist reviewing our pathway content is the opposite direction of the same word.",
     reviewBy: "2027-02-11",
   },
   {

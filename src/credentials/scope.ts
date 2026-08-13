@@ -23,7 +23,7 @@
 // worst exactly where it is most tempting — beside a narrow scope, where it reads as
 // "specialist in <condition>". A blanket refusal here is STRICTER than the law, and
 // deliberately so: whether a given clinician may use the title is a fact on the Ahpra
-// specialist register, which W111 can read and this module cannot rule on. Meherr does not
+// specialist register, which W111 can read and this module cannot rule on. ADHD.ME does not
 // carry specialist titles at all. That is safe whichever way the founder later rules, and the
 // refusal says so rather than leaving the next reader to guess it was an oversight.
 
@@ -156,7 +156,7 @@ export function explainScopeViolation(rule: string): string {
     case "label-missing":
       return "Say what this credential covers.";
     case "no-specialist-title":
-      return "“Specialist” is a protected title under s 133 of the National Law, and Meherr does not carry specialist titles. Describe what the credential covers instead.";
+      return "“Specialist” is a protected title under s 133 of the National Law, and ADHD.ME does not carry specialist titles. Describe what the credential covers instead.";
     default:
       return `This wording is not allowed next to a clinician's name (${rule}). Describe what the practice checked, not how good anyone is.`;
   }

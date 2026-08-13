@@ -41,7 +41,7 @@ materially without a decision" happened the first time.
 Three positions were taken in Q9 by build units. Each was chosen to be safe under any ruling,
 and each is the founder's to ratify or reverse:
 
-1. **Meherr carries no specialist titles at all** (W114). "Specialist" is refused in every
+1. **ADHD.ME carries no specialist titles at all** (W114). "Specialist" is refused in every
    scope label, which is stricter than s 133 requires — the law permits the title where the
    practitioner holds specialist registration, a fact on the Ahpra specialist register that
    W111 can read and W114 cannot rule on. The refusal copy says so.
@@ -117,7 +117,7 @@ Numbered by when they block something, not by size.
    exist, the constraint is already written down: it must be scoped to the subject, never
    granted to the `clinician` role. *Blocks: nothing today; an APP 12 question that grows
    sharper as G2 approaches.*
-4. **Ratify or overturn the W114 specialist position.** Meherr refusing specialist titles
+4. **Ratify or overturn the W114 specialist position.** ADHD.ME refusing specialist titles
    entirely is a product decision a build unit made. It is safe, and it may be wrong for a
    practice with a genuinely specialist-registered GP. *Blocks: nothing; cheap to change now,
    expensive once practices have authored labels around it.*

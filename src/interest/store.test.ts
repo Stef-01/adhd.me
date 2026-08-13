@@ -60,7 +60,7 @@ describe("community interest store", () => {
   });
 
   it("W153: a signup name cannot become a formula in the operator's spreadsheet", () => {
-    // The export is served to Meherr staff and the text in it was typed by anyone on the
+    // The export is served to ADHD.ME staff and the text in it was typed by anyone on the
     // internet. Quoting made the file safe to PARSE; it was still executable on open.
     const filePath = tempFile();
     saveInterestSignup({

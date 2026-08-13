@@ -67,9 +67,9 @@ test("the coverage section separates our gap from the practice's record", async 
   // W205 split this into two claims because the page was making the wrong one. Nothing in the
   // tree derives register membership or care gaps, and the page used to report them as the
   // practice's record holding nothing — a claim about their rails made on the strength of a gap
-  // in Meherr. It now names them as ours.
+  // in ADHD.ME. It now names them as ours.
   await expect(page.getByTestId("coverage-not-computed")).toContainText(
-    "it is a gap in Meherr, not in your record",
+    "it is a gap in ADHD.ME, not in your record",
   );
   await expect(page.getByTestId("coverage-not-computed")).toContainText("Register membership");
 });
@@ -91,7 +91,7 @@ test("an attempted kind with nothing recorded reads differently from one we neve
 
   // Both sentences present at once, saying different things about different kinds — which is the
   // whole point of the split.
-  await expect(page.getByTestId("coverage-not-computed")).toContainText("gap in Meherr");
+  await expect(page.getByTestId("coverage-not-computed")).toContainText("gap in ADHD.ME");
 });
 
 test("a withheld figure appears as a named withholding, never as a gap", async ({

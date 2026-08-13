@@ -1,5 +1,5 @@
 // W33, revised at W102, rewritten at W201: ADM-transparency statement (Privacy Act 1988, APP 1.7,
-// commencing 10 December 2026) — what Meherr automates, what it never automates, and the human
+// commencing 10 December 2026) — what ADHD.ME automates, what it never automates, and the human
 // controls.
 //
 // W102 revised this page and left an instruction in a comment: keep it in the same commit as any
@@ -19,13 +19,13 @@ import {
   NEVER_AUTOMATED,
 } from "@/privacy/automated-decisions";
 
-export const metadata = { title: "Automated decisions — Meherr" };
+export const metadata = { title: "Automated decisions — ADHD.ME" };
 
 export default function AutomatedDecisionsPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="text-3xl font-semibold tracking-tight">
-        How Meherr uses automated decision-making
+        How ADHD.ME uses automated decision-making
       </h1>
       <p className="mt-4 text-sm leading-6 text-stone-500">
         This statement is published to meet the Privacy Act&apos;s automated-decision-making

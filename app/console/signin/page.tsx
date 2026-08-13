@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 // W49: a distinct title aids navigation (WCAG 2.4.2) and pins <title> across the
 // client-side redirect from sign-out, which axe can catch mid-swap otherwise.
-export const metadata = { title: "Sign in — Meherr" };
+export const metadata = { title: "Sign in — ADHD.ME" };
 
 export default async function SignInPage({
   searchParams,

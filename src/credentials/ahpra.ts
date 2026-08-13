@@ -147,7 +147,7 @@ export const AHPRA_OUTCOME_COPY: Record<
   not_found:
     "No matching entry was found on the register. That means the search found nothing, not that the person is unregistered — check the spelling and the registration number.",
   ambiguous:
-    "More than one entry matched. Meherr will not guess between them; add the registration number.",
+    "More than one entry matched. ADHD.ME will not guess between them; add the registration number.",
   lookup_unavailable:
     "The register could not be checked. Nothing has been recorded either way.",
 };

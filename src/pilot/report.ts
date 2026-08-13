@@ -99,7 +99,7 @@ export function buildPilotReport(
 
 export function renderPilotReportMarkdown(r: PilotReport): string {
   const lines = [
-    `# Meherr pilot report (${r.weeksSimulated} weeks, synthetic)`,
+    `# ADHD.ME pilot report (${r.weeksSimulated} weeks, synthetic)`,
     ``,
     `## North star`,
     `Incremental attended appointments per 1,000 patients in the messaged group: **${r.northStarIncrementalPer1000 ?? "n/a (no holdout)"}**`,

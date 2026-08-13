@@ -1,5 +1,5 @@
 // W9: attribution v1 — incremental attended appointments, invite arm vs holdout arm.
-// The product's honesty layer: Meherr claims only the difference between what the
+// The product's honesty layer: ADHD.ME claims only the difference between what the
 // invite arm attended and what the holdout arm attended organically. Definitions are
 // written law in docs/ATTRIBUTION.md (v1) — code and doc change together.
 
@@ -31,7 +31,7 @@ export interface AttributionResult {
   /** Incremental rate scaled to the invite arm — the headline estimate. Null without a holdout. */
   incrementalAttended: number | null;
   /**
-   * Attended appointments booked via a Meherr invitation, counted naively. Reported ONLY
+   * Attended appointments booked via a ADHD.ME invitation, counted naively. Reported ONLY
    * as a contrast figure: it ignores displacement (patients who would have booked anyway),
    * so it must never be presented as impact. See docs/ATTRIBUTION.md §Never counts.
    */

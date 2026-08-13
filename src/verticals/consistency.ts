@@ -227,7 +227,7 @@ export const CONTRADICTION_COPY: Record<ContradictionKind, string> = {
   pathway_unsatisfiable:
     "A pathway in this vertical includes and excludes on the same recorded fact with the same requirement, so nobody can ever satisfy it. It needs the authors to look again.",
   included_here_escalated_there:
-    "One pathway treats a recorded fact as grounds for taking a patient on, and another treats the same fact as grounds for escalating. That may be right — the two may cover different populations — or it may be an authoring error. Meherr does not decide which; a reviewer does.",
+    "One pathway treats a recorded fact as grounds for taking a patient on, and another treats the same fact as grounds for escalating. That may be right — the two may cover different populations — or it may be an authoring error. ADHD.ME does not decide which; a reviewer does.",
   opposite_entry_polarity:
     "Two pathways in this vertical require the same recorded fact with opposite polarity to enter. That may be deliberate, and it may not. It is shown rather than resolved, because choosing between them would be a clinical judgement.",
 };

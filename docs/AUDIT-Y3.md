@@ -117,7 +117,7 @@ And Y3-2 adds a second:
 | G6 no-public-directory | No public surface lists clinicians by capability; W133 remains `blocked` rather than partially built |
 | G7 no-symptom-triage | Register membership admits only `pms_condition_flag`/`practice_confirmed`; education triggers match recorded fact CODES; no path from free text to a trigger |
 | G8 (proposed) | **Nothing in `src`, `app` or `scripts` names a model endpoint or SDK** — scanned by `instruction-sinks.test.ts` (W153) with an empty declared-exception list. W146/W147 remain `blocked` |
-| Authorization | All 13 `"use server"` files gate inside the action; all 13 route handlers gate (`assertMockRoutesEnabled`, `requireSession`/`isMeherrStaff`, or a signed token) |
+| Authorization | All 13 `"use server"` files gate inside the action; all 13 route handlers gate (`assertMockRoutesEnabled`, `requireSession`/`isADHD.MEStaff`, or a signed token) |
 | Determinism | `Math.random` appears once, in a comment saying it is banned. Every `new Date()` outside tests is at an action/route boundary, never inside a domain function |
 | Type escapes | **Zero** `as any` and zero `@ts-ignore` in 29.5k lines. All 25 `@ts-expect-error` are in tests and are deliberate compile-time assertions |
 | Code debt | Zero TODO/FIXME/HACK/XXX markers |
@@ -139,7 +139,7 @@ Not defects — decisions this loop must not make, or work already scheduled.
 | 4 | **Credential visibility across a practice boundary** (Q9 dossier action 1). W131/W137 are built to the safe intersection pending an A-or-B ruling | Founder |
 | 5 | ~~**W152's `RenderableItem` is not what W151's console renders.**~~ **CLOSED by W154 (`bce55e6`) while this audit was being written** — filed from the W151 close-out, confirmed critical by Q12 hardening, and fixed there. Recorded rather than deleted because a finding that was raised, routed and closed is evidence the ledger works | Closed |
 | 6 | **The console still cannot represent two practices** (Y2 finding B2, still open). Console-side scoping remains untestable end-to-end | Y4 |
-| 7 | **`MEHERR_STAFF` ships empty**, so `/console/interest`'s populated branch is unreachable and W153's display sink is not asserted end-to-end | Founder |
+| 7 | **`ADHDME_STAFF` ships empty**, so `/console/interest`'s populated branch is unreachable and W153's display sink is not asserted end-to-end | Founder |
 
 ## Method
 

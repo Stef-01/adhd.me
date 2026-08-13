@@ -3,7 +3,7 @@
 import { signOut, switchPractice } from "./actions";
 import { DemoNavigator } from "../demo-navigator";
 import Link from "next/link";
-import { isMeherrStaff } from "@/tenancy/staff";
+import { isAdhdMeStaff } from "@/tenancy/staff";
 
 /**
  * W166: the practices this session may act for, and which one it is on.
@@ -68,9 +68,9 @@ export function ConsoleShell({
                 <PracticeSwitcher practices={practices} activeId={activeId} />
               )}
             <form action={signOut} className="flex items-center gap-3">
-              {/* W105: Meherr-internal, so it is not offered to practice accounts. The
+              {/* W105: ADHD.ME-internal, so it is not offered to practice accounts. The
                   route still gates itself — hiding a link is navigation, not access control. */}
-              {isMeherrStaff(email) && (
+              {isAdhdMeStaff(email) && (
                 <Link href="/console/interest" className="text-sm text-stone-500 underline hover:text-stone-800">Interest</Link>
               )}
               <span className="text-sm text-stone-500">{email}</span>
