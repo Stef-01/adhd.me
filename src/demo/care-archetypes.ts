@@ -101,7 +101,7 @@ export const careArchetypes: CareArchetype[] = [
     example: "A Hindi or Punjabi speaking woman GP who can work out whether years of anxiety treatment missed something.",
     request:
       "I’ve been treated for anxiety and put on an antidepressant for years and I’m anxious it was the wrong diagnosis. I want a calm woman GP who speaks Hindi or Punjabi, will go back to what school was actually like, and explain the differential slowly.",
-    headline: "Anxiety, ADHD, or both — worked out properly.",
+    headline: "Anxiety, ADHD, or both: worked out properly.",
     expectedFirstMatch: "nisha-kapoor",
     requirements: {
       careAreas: ["adhd-assessment", "adult-adhd", "comorbid-mood"],
@@ -167,7 +167,7 @@ export const careArchetypes: CareArchetype[] = [
     eyebrow: "The part that gets called a personality problem",
     example: "A GP who understands rejection sensitivity and emotional regulation rather than reading it as immaturity.",
     request:
-      "The hardest part for me is emotional — rejection sensitivity, shame spirals, reacting to everything. I want a GP who treats emotional regulation as part of ADHD rather than a character flaw, and who gives me clear steps I can actually follow.",
+      "The hardest part for me is emotional: rejection sensitivity, shame spirals, reacting to everything. I want a GP who treats emotional regulation as part of ADHD rather than a character flaw, and who gives me clear steps I can actually follow.",
     headline: "The emotional half, taken seriously.",
     expectedFirstMatch: "tom-bennett",
     requirements: {

@@ -177,11 +177,37 @@ test("patient booking states pass WCAG A/AA", async ({ page, request }) => {
   await expectNoViolations(page, "invalid-link page");
 });
 
+const PUBLIC_PATHS = ["/", "/finder", "/practices", "/clinicians", "/privacy", "/privacy/automated-decisions", "/demo"];
+
 test("public pages pass WCAG A/AA", async ({ page }) => {
   // The public root is the community program; the synthetic finder lives separately.
   // Every public surface remains on the same zero-violation rule.
-  for (const path of ["/", "/finder", "/practices", "/clinicians", "/privacy", "/privacy/automated-decisions", "/demo"]) {
+  for (const path of PUBLIC_PATHS) {
     await page.goto(path);
     await expectNoViolations(page, path);
+  }
+});
+
+/**
+ * 2026-08-13, design audit: THE SAME BAR IN DARK MODE.
+ *
+ * Dark mode arrived in the audit, and a theme nothing scans is a theme that regresses on the next
+ * edit. It is not a copy of the test above with a flag flipped, because the failure modes differ:
+ * a light-mode contrast bug is usually a value tuned too pale, and a dark-mode one is usually a
+ * surface that never inverted at all. Three of those existed before this test did — the profile
+ * header stayed light under an inverted wordmark, `--cv2-ink` was serving as both text colour and
+ * dark-panel ground, and `.clinician-v2` painted a literal `#fbfaf7`. Each rendered light-on-light
+ * and each would have been invisible to a light-only sweep.
+ *
+ * `emulateMedia` sets both, in one call, before the first navigation: the reduced-motion reasoning
+ * in this file's header applies unchanged, and the colour scheme has to be in place for the first
+ * paint for the same reason.
+ */
+test("public pages pass WCAG A/AA in dark mode", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+
+  for (const path of PUBLIC_PATHS) {
+    await page.goto(path);
+    await expectNoViolations(page, `${path} (dark)`);
   }
 });

@@ -42,7 +42,7 @@ export default function PracticesPage() {
         <section id="practice-story" className="border-t border-stone-100 py-20 sm:py-24">
           <div className="grid items-end gap-10 lg:grid-cols-[1.25fr_0.75fr]">
             <div>
-              <p className="text-sm font-medium uppercase tracking-[0.16em] text-[#656e51]">
+              <p className="text-sm font-medium uppercase tracking-[0.16em] text-[var(--sage)]">
                 {C.practiceStory.eyebrow}
               </p>
               <h2 className="mt-4 max-w-3xl font-serif text-4xl font-medium leading-[1.02] tracking-[-0.035em] sm:text-6xl">
@@ -52,7 +52,7 @@ export default function PracticesPage() {
             </div>
 
             <div className="rounded-[2rem] bg-stone-950 p-7 text-white sm:p-9">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#c9d1b3]">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--on-band)]">
                 {C.practiceStory.goalLabel}
               </p>
               <div className="mt-7 flex items-end gap-3">
@@ -69,16 +69,16 @@ export default function PracticesPage() {
           <ol className="mt-12 grid gap-4 md:grid-cols-3">
             {C.practiceStory.stages.map((stage, index) => (
               <li key={stage.title} className="rounded-2xl border border-stone-200 p-6">
-                <span className="text-xs font-semibold text-[#656e51]">0{index + 1}</span>
+                <span className="text-xs font-semibold text-[var(--sage)]">0{index + 1}</span>
                 <h3 className="mt-8 text-lg font-medium">{stage.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-stone-600">{stage.body}</p>
               </li>
             ))}
           </ol>
 
-          <div className="mt-12 grid gap-10 rounded-[2rem] bg-[#eff1e8] p-7 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:p-12">
+          <div className="mt-12 grid gap-10 rounded-[2rem] bg-[var(--sage-soft)] p-7 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:p-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#656e51]">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--sage)]">
                 {C.practiceStory.communityEyebrow}
               </p>
               <h3 className="mt-4 max-w-2xl font-serif text-3xl font-medium leading-tight tracking-[-0.025em] sm:text-4xl">
@@ -88,8 +88,8 @@ export default function PracticesPage() {
             </div>
             <ul className="flex flex-col justify-end gap-3">
               {C.practiceStory.communityPoints.map((point) => (
-                <li key={point} className="flex items-start gap-3 border-b border-[#d8dccd] pb-3 text-sm text-stone-700 last:border-0">
-                  <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#656e51]" />
+                <li key={point} className="flex items-start gap-3 border-b border-[var(--line)] pb-3 text-sm text-stone-700 last:border-0">
+                  <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--sage)]" />
                   {point}
                 </li>
               ))}

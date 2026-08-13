@@ -3,7 +3,18 @@
 @import "@fontsource-variable/newsreader";
 
 :root {
+  color-scheme: light;
   --ink: #191a17;
+  /* The ground of the primary buttons, and the label that sits on it. Identical to --ink and to
+     white in light mode, which is exactly why they were never separate tokens; they are separate
+     jobs, and in dark mode a primary button inverts to a LIGHT pill with a dark label rather than
+     following the text colour. Axe caught the unsplit version as white-on-light on /finder. */
+  --ground: #191a17;
+  --on-ground: #ffffff;
+  /* Accent text on the one deliberately inverted band (/practices' hero, bg-stone-950). Its
+     ground flips with the theme, so the accent on it has to flip the opposite way: the light
+     rose reads on near-black, the deep rose reads on near-white. */
+  --on-band: #E0AEBA;
   --muted: #6e706a;
   /* Darkened from #a3a49f (2.4:1 on --paper) — failed WCAG AA at 11px. Now 5.1:1. */
   --faint: #6b6c67;
@@ -23,6 +34,12 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* The body's colour, so app/layout.tsx does not hardcode a palette. See the note there. */
+.app-body {
+  color: var(--ink);
+  background: var(--paper);
 }
 
 html {
@@ -230,8 +247,8 @@ textarea:focus-visible {
   margin-top: 12px;
   padding: 10px 14px;
   border-radius: 999px;
-  color: white;
-  background: var(--ink);
+  color: var(--on-ground);
+  background: var(--ground);
   text-decoration: none;
 }
 
@@ -368,8 +385,8 @@ textarea:focus-visible {
   place-items: center;
   border: 0;
   border-radius: 50%;
-  color: white;
-  background: var(--ink);
+  color: var(--on-ground);
+  background: var(--ground);
   box-shadow: 0 14px 30px rgb(28 29 25 / 12%);
   cursor: pointer;
   transition: transform 180ms ease, background 180ms ease;
@@ -479,8 +496,8 @@ textarea:focus-visible {
   padding: 15px 22px;
   border: 0;
   border-radius: 8px;
-  color: white;
-  background: var(--ink);
+  color: var(--on-ground);
+  background: var(--ground);
   font-size: 16px;
   font-weight: 650;
   cursor: pointer;
@@ -544,7 +561,7 @@ textarea:focus-visible {
 .fit-signal-row span {
   padding: 5px 8px;
   border-radius: 3px;
-  color: #5f7047;
+  color: var(--sage);
   background: var(--sage-soft);
   font-size: 11px;
   font-weight: 620;
@@ -735,7 +752,7 @@ textarea:focus-visible {
   border: 0;
   border-radius: 50%;
   color: var(--ink);
-  background: rgb(251 250 247 / 88%);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
   box-shadow: 0 4px 18px rgb(28 29 25 / 10%);
   cursor: pointer;
   opacity: 0;
@@ -878,7 +895,7 @@ textarea:focus-visible {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: rgb(251 250 247 / 94%);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(16px);
 }
 
@@ -929,6 +946,8 @@ textarea:focus-visible {
 
 .profile-content section p,
 .profile-content section li {
+  display: flex;
+  align-items: flex-start;
   color: #4f514c;
   font-size: 14px;
   line-height: 1.65;
@@ -948,8 +967,16 @@ textarea:focus-visible {
 }
 
 .profile-content li::before {
-  content: "—";
-  margin-right: 7px;
+  /* A drawn rule rather than a dash character. The em-dash it used to print was the one instance
+     the copy sweep could not reach, and a 10px rule is what a dash-bullet is trying to look like
+     anyway. `currentColor` keeps it on the accent in both themes without a second declaration. */
+  content: "";
+  flex: 0 0 auto;
+  width: 10px;
+  height: 1px;
+  margin-top: 0.72em;
+  margin-right: 8px;
+  background: currentColor;
   color: var(--sage);
 }
 
@@ -976,7 +1003,7 @@ textarea:focus-visible {
   gap: 14px;
   padding: 15px 24px max(18px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--line);
-  background: rgb(251 250 247 / 96%);
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
   backdrop-filter: blur(16px);
 }
 
@@ -1490,8 +1517,8 @@ textarea:focus-visible {
   padding: 0 18px;
   border: 0;
   border-radius: 6px;
-  color: white;
-  background: var(--ink);
+  color: var(--on-ground);
+  background: var(--ground);
   font-size: 12px;
   font-weight: 620;
   cursor: pointer;
@@ -2155,14 +2182,14 @@ textarea:focus-visible {
 @media (min-width: 600px) {
   .care-app.patient-v2 {
     display: block;
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 0;
   }
 
   .patient-v2 .care-shell,
   .patient-v2 .screen {
     width: 520px;
-    min-height: 100vh;
+    min-height: 100dvh;
     height: auto;
     max-height: none;
   }
@@ -2172,7 +2199,7 @@ textarea:focus-visible {
 .clinician-v2 {
   --cv2-ink: #1d2019;
   /* WCAG AA on the TINTED panels, not just the ground. Tuned against #fbfaf7 these
-     read fine, but .cv2-focus-card paints #f0f2eb, and at 10px the untinted values
+     read fine, but .cv2-focus-card paints var(--stone), and at 10px the untinted values
      (#6f716b / #66774a) measure 4.37:1 and 4.32:1 — under the 4.5:1 bar, with no
      large-text concession at that size. Now 4.64:1 on the tint, 5.02:1 on the ground,
      same hue; where --cv2-sage is a background under white text this only widens the
@@ -2181,14 +2208,25 @@ textarea:focus-visible {
      token, one per-rule — then each deferred to the other and removed both, putting
      the failure straight back on main. This token fix is the single mechanism; there
      are deliberately no per-rule colour overrides on .cv2-focus-card. */
-  --cv2-muted: #6b6d67;
-  --cv2-soft: #f1f0e9;
-  --cv2-sage: #617247;
+  /* 2026-08-13, design audit: #6b6d67 was tuned against the old literal tint #f0f2eb and gave
+     4.64:1 there. Routing .cv2-focus-card to var(--stone) (#eeece5, marginally darker) dropped it
+     to 4.43:1 and axe caught it on one 10px node — which is the failure the note above predicted,
+     arriving from a change that looked like pure token hygiene. Now 4.70:1 on the tint and 5.33:1
+     on the ground, same hue. Re-derive both if either ground moves again. */
+  --cv2-muted: #676963;
+  /* Muted text where a cv2 panel is dark rather than tinted. */
+  --cv2-on-dark-muted: #c9c6be;
+  /* The ground of the dark panels (case hero, learning card, tooltip, primary button). Identical
+     to --cv2-ink in light mode, which is why the two were one token; they are not the same job,
+     because white text sits on THIS one and it therefore must stay dark in both themes. */
+  --cv2-ground: #1d2019;
+  --cv2-soft: var(--sage-soft);
+  --cv2-sage: #8B263E;
   --cv2-line: #dfded7;
   min-height: 100svh;
   padding: 0;
   color: var(--cv2-ink);
-  background: #fbfaf7;
+  background: var(--paper);
 }
 
 .cv2-shell {
@@ -2197,7 +2235,7 @@ textarea:focus-visible {
   margin: 0 auto;
   border-right: 1px solid var(--cv2-line);
   border-left: 1px solid var(--cv2-line);
-  background: #fbfaf7;
+  background: var(--paper);
 }
 
 .cv2-header {
@@ -2330,7 +2368,7 @@ textarea:focus-visible {
   border: 1px solid #cfd3c5;
   border-radius: 18px;
   color: var(--cv2-ink);
-  background: #f0f2eb;
+  background: var(--stone);
   text-align: left;
   cursor: pointer;
   transition: border-color 160ms ease, background-color 160ms ease;
@@ -2338,8 +2376,8 @@ textarea:focus-visible {
 
 .cv2-focus-card:hover,
 .cv2-focus-card:focus-visible {
-  border-color: #aeb79e;
-  background: #ebeee4;
+  border-color: var(--rose-petal);
+  background: var(--sage-soft);
   outline: none;
 }
 
@@ -2355,7 +2393,7 @@ textarea:focus-visible {
   width: 44px;
   height: 44px;
   color: var(--cv2-sage);
-  background: #fbfaf7;
+  background: var(--paper);
 }
 
 .cv2-selected {
@@ -2444,7 +2482,7 @@ textarea:focus-visible {
   padding: 12px;
   border: 1px solid var(--cv2-line);
   border-radius: 12px;
-  background: #fbfaf7;
+  background: var(--paper);
   cursor: pointer;
   transition: border-color 150ms ease, background-color 150ms ease;
 }
@@ -2452,8 +2490,8 @@ textarea:focus-visible {
 .cv2-condition-list label:hover,
 .cv2-condition-list label:focus-within,
 .cv2-condition-list label.is-checked {
-  border-color: #b9c1aa;
-  background: #f0f2eb;
+  border-color: var(--rose-petal);
+  background: var(--stone);
 }
 
 .cv2-condition-list label:has(input:disabled) {
@@ -2561,7 +2599,7 @@ textarea:focus-visible {
   padding: 7px 9px;
   border-radius: 8px;
   color: white;
-  background: var(--cv2-ink);
+  background: var(--cv2-ground);
   box-shadow: 0 8px 24px rgb(30 32 26 / 15%);
   font-size: 9px;
   font-weight: 650;
@@ -2577,7 +2615,7 @@ textarea:focus-visible {
   top: 100%;
   right: 12px;
   border: 5px solid transparent;
-  border-top-color: var(--cv2-ink);
+  border-top-color: var(--cv2-ground);
   content: "";
 }
 
@@ -2645,7 +2683,7 @@ textarea:focus-visible {
   border: 0;
   border-radius: 999px;
   color: white;
-  background: var(--cv2-ink);
+  background: var(--cv2-ground);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -2654,7 +2692,7 @@ textarea:focus-visible {
 
 .cv2-action > button:hover,
 .cv2-learning-card > button:hover {
-  background: #30342b;
+  background: #33262b;
   transform: translateY(-1px);
 }
 
@@ -2686,7 +2724,7 @@ textarea:focus-visible {
   padding: 22px;
   border-radius: 22px;
   color: white;
-  background: var(--cv2-ink);
+  background: var(--cv2-ground);
 }
 
 .cv2-case-hero-top {
@@ -2770,7 +2808,7 @@ textarea:focus-visible {
 }
 
 .cv2-case-list svg {
-  color: #aeb4a2;
+  color: var(--rose-petal);
 }
 
 .cv2-learning-card {
@@ -2778,7 +2816,7 @@ textarea:focus-visible {
   overflow: hidden;
   border-radius: 24px;
   color: white;
-  background: var(--cv2-ink);
+  background: var(--cv2-ground);
   animation: cv2-card-in 230ms ease both;
 }
 
@@ -2787,7 +2825,7 @@ textarea:focus-visible {
   justify-content: space-between;
   padding: 20px 22px;
   border-bottom: 1px solid rgb(255 255 255 / 16%);
-  color: #c8cbc2;
+  color: var(--cv2-on-dark-muted);
   font-size: 10px;
   font-weight: 650;
 }
@@ -2799,7 +2837,7 @@ textarea:focus-visible {
 
 .cv2-learning-body > p {
   margin: 0;
-  color: #b9c7a5;
+  color: var(--rose-petal);
   font-size: 10px;
   font-weight: 720;
 }
@@ -2818,7 +2856,7 @@ textarea:focus-visible {
   display: block;
   max-width: 400px;
   margin-top: 20px;
-  color: #c8cbc2;
+  color: var(--cv2-on-dark-muted);
   font-size: 12px;
   line-height: 1.55;
 }
@@ -2874,7 +2912,7 @@ textarea:focus-visible {
 
 .cv2-resource-progress button.is-current {
   border-color: var(--cv2-sage);
-  box-shadow: inset 0 0 0 4px #fbfaf7;
+  box-shadow: inset 0 0 0 4px var(--paper);
   background: var(--cv2-sage);
 }
 
@@ -2894,7 +2932,7 @@ textarea:focus-visible {
   margin-top: 36px;
   padding: 26px;
   border-radius: 22px;
-  background: #edf0e8;
+  background: var(--sage-soft);
 }
 
 .cv2-practice-hero > svg {
@@ -3076,7 +3114,7 @@ textarea:focus-visible {
     margin: 14px -22px -42px;
     padding: 13px 22px max(18px, env(safe-area-inset-bottom));
     border-top: 1px solid var(--cv2-line);
-    background: rgb(251 250 247 / 96%);
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
     backdrop-filter: blur(14px);
   }
 
@@ -3140,7 +3178,7 @@ textarea:focus-visible {
 @media (min-width: 600px) {
   .care-app {
     display: grid;
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 24px;
     place-items: center;
   }
@@ -3148,17 +3186,17 @@ textarea:focus-visible {
   .care-shell,
   .screen {
     width: 440px;
-    min-height: min(852px, calc(100vh - 48px));
+    min-height: min(852px, calc(100dvh - 48px));
   }
 
   .care-shell {
-    max-height: min(852px, calc(100vh - 48px));
+    max-height: min(852px, calc(100dvh - 48px));
     border: 1px solid #dad8d1;
     border-radius: 14px;
   }
 
   .screen {
-    height: min(852px, calc(100vh - 48px));
+    height: min(852px, calc(100dvh - 48px));
   }
 
   .match-screen,
@@ -3206,379 +3244,6 @@ textarea:focus-visible {
 }
 
 /* Western Sydney community landing — intentionally editorial and early-stage. */
-.community-home {
-  --community-ink: #20231d;
-  --community-muted: #62665d;
-  --community-paper: #f8f4ec;
-  --community-sage: #596845;
-  --community-soft: #e9ecdf;
-  --community-line: #d8d5cb;
-  min-height: 100svh;
-  color: var(--community-ink);
-  background: var(--community-paper);
-  font-family: "Inter Variable", Inter, system-ui, sans-serif;
-}
-
-.community-home *,
-.community-home *::before,
-.community-home *::after {
-  box-sizing: border-box;
-}
-
-.community-wrap {
-  width: min(1080px, calc(100% - 40px));
-  margin-inline: auto;
-}
-
-.community-header {
-  border-bottom: 1px solid var(--community-line);
-}
-
-.community-header-inner {
-  display: flex;
-  min-height: 68px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.community-wordmark {
-  color: var(--community-ink);
-  font-size: 21px;
-  font-weight: 740;
-  letter-spacing: -0.055em;
-  text-decoration: none;
-}
-
-.community-demo-link {
-  display: inline-flex;
-  min-height: 40px;
-  align-items: center;
-  padding: 0 15px;
-  border: 1px solid #aaa99f;
-  border-radius: 999px;
-  color: var(--community-ink);
-  font-size: 12px;
-  font-weight: 680;
-  text-decoration: none;
-}
-
-.community-demo-link:hover,
-.community-demo-link:focus-visible {
-  border-color: var(--community-ink);
-  outline: 2px solid transparent;
-}
-
-.community-hero {
-  padding-block: 88px 96px;
-}
-
-.community-eyebrow {
-  margin: 0;
-  color: var(--community-sage);
-  font-size: 12px;
-  font-weight: 740;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.community-hero h1,
-.community-section-heading h2,
-.community-register h2,
-.community-team h2 {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-weight: 440;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
-
-.community-hero h1 {
-  max-width: 930px;
-  margin: 22px 0 0;
-  font-size: clamp(48px, 8.7vw, 88px);
-  line-height: 0.96;
-}
-
-.community-hero-copy {
-  max-width: 680px;
-  margin: 32px 0 0;
-  color: var(--community-muted);
-  font-size: 18px;
-  line-height: 1.65;
-}
-
-.community-hero-copy strong {
-  color: var(--community-ink);
-  font-weight: 720;
-}
-
-.community-primary-link {
-  display: inline-flex;
-  min-height: 54px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 34px;
-  padding: 0 25px;
-  border-radius: 999px;
-  color: #fff;
-  background: var(--community-ink);
-  font-size: 14px;
-  font-weight: 720;
-  text-decoration: none;
-}
-
-.community-primary-link:hover,
-.community-primary-link:focus-visible {
-  background: #34382f;
-  outline: 3px solid #adb79d;
-  outline-offset: 3px;
-}
-
-.community-synthetic-note {
-  max-width: 610px;
-  margin: 28px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--community-line);
-  color: var(--community-muted);
-  font-size: 12px;
-  line-height: 1.55;
-}
-
-.community-synthetic-note strong {
-  color: var(--community-ink);
-}
-
-.community-section {
-  padding-block: 104px;
-  border-top: 1px solid var(--community-line);
-}
-
-.community-problem {
-  background: #f1eee6;
-}
-
-.community-problem-block {
-  max-width: 880px;
-  margin-top: 46px;
-}
-
-.community-problem-block p {
-  margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(36px, 6.2vw, 62px);
-  font-weight: 440;
-  line-height: 1.03;
-  letter-spacing: -0.04em;
-}
-
-.community-problem-block p + p {
-  margin-top: 10px;
-  color: var(--community-muted);
-}
-
-.community-problem-block strong {
-  color: var(--community-sage);
-  font-weight: 560;
-}
-
-.community-problem blockquote {
-  max-width: 860px;
-  margin: 96px 0;
-  padding: 8px 0 8px 30px;
-  border-left: 4px solid var(--community-sage);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(32px, 5.7vw, 56px);
-  font-weight: 440;
-  font-style: normal;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-}
-
-.community-problem-last p:last-child {
-  color: var(--community-ink);
-}
-
-.community-section-heading {
-  max-width: 710px;
-}
-
-.community-section-heading h2,
-.community-register h2,
-.community-team h2 {
-  margin: 15px 0 0;
-  font-size: clamp(43px, 6vw, 64px);
-  line-height: 0.99;
-}
-
-.community-section-heading > p:last-child,
-.community-register-grid > div:first-child > p:last-child {
-  margin: 24px 0 0;
-  color: var(--community-muted);
-  font-size: 17px;
-  line-height: 1.65;
-}
-
-.community-steps {
-  margin: 60px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.community-steps li {
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 22px;
-  padding: 30px 0;
-  border-top: 1px solid var(--community-line);
-}
-
-.community-steps li:last-child {
-  border-bottom: 1px solid var(--community-line);
-}
-
-.community-steps li > span {
-  color: var(--community-sage);
-  font-size: 13px;
-  font-weight: 740;
-}
-
-.community-steps h3 {
-  margin: 0;
-  font-size: 20px;
-  letter-spacing: -0.02em;
-}
-
-.community-steps p {
-  max-width: 700px;
-  margin: 9px 0 0;
-  color: var(--community-muted);
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-.community-measure-note {
-  max-width: 760px;
-  margin: 36px 0 0 86px;
-  color: var(--community-ink);
-  font-size: 14px;
-  font-weight: 620;
-  line-height: 1.55;
-}
-
-.community-why {
-  color: #f9f7f0;
-  background: #242820;
-}
-
-.community-why .community-eyebrow {
-  color: #b9c7a1;
-}
-
-.community-why .community-section-heading > p:last-child {
-  color: #d2d3cd;
-}
-
-.community-life-course {
-  max-width: 940px;
-  margin: 76px 0 0;
-  padding: 0;
-  border: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(34px, 5.6vw, 58px);
-  font-weight: 430;
-  font-style: normal;
-  line-height: 1.06;
-  letter-spacing: -0.04em;
-}
-
-.community-trust-note {
-  display: grid;
-  max-width: 850px;
-  grid-template-columns: 190px 1fr;
-  gap: 28px;
-  margin-top: 78px;
-  padding-top: 28px;
-  border-top: 1px solid #51564c;
-}
-
-.community-trust-note strong {
-  color: #d9e0c8;
-  font-size: 14px;
-}
-
-.community-trust-note p {
-  margin: 0;
-  color: #d2d3cd;
-  font-size: 14px;
-  line-height: 1.65;
-}
-
-.community-sources {
-  max-width: 850px;
-  margin: 30px 0 0;
-  color: #aeb1a9;
-  font-size: 11px;
-  line-height: 1.65;
-}
-
-.community-sources a {
-  color: #d9e0c8;
-  text-underline-offset: 3px;
-}
-
-.community-people {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 54px;
-  margin-top: 58px;
-}
-
-.community-people article {
-  padding-top: 24px;
-  border-top: 1px solid var(--community-line);
-}
-
-.community-person-mark {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  place-items: center;
-  margin: 0;
-  border-radius: 50%;
-  color: #fff;
-  background: var(--community-sage);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 24px;
-}
-
-.community-people h3 {
-  margin: 24px 0 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 34px;
-  font-weight: 460;
-  letter-spacing: -0.035em;
-}
-
-.community-people article > p:last-child {
-  max-width: 460px;
-  margin: 12px 0 0;
-  color: var(--community-muted);
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-.community-register {
-  padding-block: 104px;
-  border-top: 1px solid #cfd4c4;
-  background: var(--community-soft);
-}
-
-.community-register-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 80px;
-  align-items: start;
-}
 
 .community-interest-form {
   padding: 28px;
@@ -3590,9 +3255,9 @@ textarea:focus-visible {
 .community-form-error {
   margin: 0 0 18px;
   padding: 11px 12px;
-  border-left: 3px solid #8d472f;
-  color: #6f2e1e;
-  background: #f4e6df;
+  border-left: 3px solid var(--sage);
+  color: var(--sage);
+  background: var(--sage-soft);
   font-size: 12px;
 }
 
@@ -3625,7 +3290,7 @@ textarea:focus-visible {
 }
 
 .community-interest-form input[aria-invalid="true"] {
-  border-color: #8d472f;
+  border-color: var(--sage);
 }
 
 .community-interest-form input:focus-visible {
@@ -3639,7 +3304,7 @@ textarea:focus-visible {
 .community-inline-error {
   display: block;
   margin-top: 6px;
-  color: #742f20;
+  color: var(--sage);
   font-size: 11px;
 }
 
@@ -3682,7 +3347,7 @@ textarea:focus-visible {
 .community-interest-options input:checked + span {
   border-color: var(--community-sage);
   color: var(--community-ink);
-  background: #e3e8d8;
+  background: var(--sage-soft);
 }
 
 .community-interest-options input:focus-visible + span {
@@ -3736,7 +3401,7 @@ textarea:focus-visible {
 
 .community-interest-form > button:hover,
 .community-interest-form > button:focus-visible {
-  background: #34382f;
+  background: #33262b;
   outline: 3px solid #aeb99d;
   outline-offset: 2px;
 }
@@ -3775,113 +3440,7 @@ textarea:focus-visible {
   line-height: 1.6;
 }
 
-.community-footer {
-  padding-block: 34px;
-  color: #dcddd8;
-  background: #1f211c;
-}
-
-.community-footer .community-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.community-footer p {
-  max-width: 620px;
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.community-footer div div {
-  display: flex;
-  gap: 16px;
-}
-
-.community-footer a {
-  color: #dcddd8;
-  font-size: 11px;
-  text-underline-offset: 3px;
-}
-
 @media (max-width: 720px) {
-  .community-wrap {
-    width: min(100% - 32px, 1080px);
-  }
-
-  .community-header-inner {
-    min-height: 62px;
-  }
-
-  .community-demo-link {
-    min-height: 38px;
-    padding-inline: 12px;
-    font-size: 11px;
-  }
-
-  .community-hero {
-    padding-block: 62px 70px;
-  }
-
-  .community-hero h1 {
-    margin-top: 18px;
-    font-size: clamp(46px, 13.6vw, 62px);
-  }
-
-  .community-hero-copy {
-    margin-top: 26px;
-    font-size: 16px;
-  }
-
-  .community-section,
-  .community-register {
-    padding-block: 76px;
-  }
-
-  .community-problem-block {
-    margin-top: 36px;
-  }
-
-  .community-problem blockquote {
-    margin-block: 68px;
-    padding-left: 22px;
-  }
-
-  .community-steps {
-    margin-top: 44px;
-  }
-
-  .community-steps li {
-    grid-template-columns: 38px 1fr;
-    gap: 12px;
-    padding-block: 25px;
-  }
-
-  .community-measure-note {
-    margin-left: 50px;
-  }
-
-  .community-trust-note {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-top: 56px;
-  }
-
-  .community-people,
-  .community-register-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .community-people {
-    gap: 36px;
-    margin-top: 44px;
-  }
-
-  .community-register-grid {
-    gap: 42px;
-  }
 
   .community-field-row {
     grid-template-columns: 1fr;
@@ -3890,324 +3449,10 @@ textarea:focus-visible {
   .community-interest-form {
     padding: 22px 18px;
   }
-
-  .community-footer .community-wrap {
-    align-items: flex-start;
-    flex-direction: column;
-  }
 }
 
-@media (max-width: 380px) {
-  .community-demo-link {
-    padding-inline: 10px;
-  }
-
-  .community-problem-block p {
-    font-size: 34px;
-  }
-
-  .community-life-course {
-    font-size: 33px;
-  }
-}
 
 /* Main introduction — restrained editorial system based on the supplied references. */
-.community-home {
-  --community-ink: #1e211b;
-  --community-muted: #686c63;
-  --community-paper: #f5f1e9;
-  --community-white: #fffefa;
-  --community-sage: #566044;
-  --community-soft: #e4e7da;
-  --community-line: #d6d2c8;
-  overflow: hidden;
-  background: var(--community-paper);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.community-wrap {
-  width: min(1240px, calc(100% - 64px));
-}
-
-.community-header {
-  border: 0;
-  background: var(--community-paper);
-}
-
-.community-header-inner {
-  min-height: 88px;
-}
-
-.community-wordmark,
-.community-footer-wordmark {
-  color: var(--community-ink);
-  font-size: 25px;
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  text-decoration: none;
-}
-
-.community-demo-link {
-  min-height: 44px;
-  padding-inline: 20px;
-  border-color: #a8a79f;
-  color: var(--community-ink);
-  background: transparent;
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.community-hero {
-  min-height: min(640px, calc(100svh - 104px));
-  margin: 16px;
-  padding: 58px 0 54px;
-  border-radius: 24px;
-  color: #f9f7f0;
-  background: #20251d;
-}
-
-.community-hero-grid {
-  display: grid;
-  min-height: min(528px, calc(100svh - 216px));
-  grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.45fr);
-  gap: 60px;
-  align-items: end;
-}
-
-.community-hero-grid > div:first-child {
-  align-self: start;
-}
-
-.community-eyebrow {
-  color: var(--community-sage);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-}
-
-.community-hero .community-eyebrow {
-  color: #c5cdb5;
-}
-
-.community-hero h1,
-.community-home h2,
-.community-register h2 {
-  margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
-
-.community-hero h1 {
-  max-width: 840px;
-  margin-top: 30px;
-  font-size: clamp(58px, 7vw, 88px);
-  line-height: 0.96;
-}
-
-.community-hero-action {
-  padding-bottom: 7px;
-}
-
-.community-hero-action p {
-  max-width: 330px;
-  margin: 0;
-  color: #d2d5cd;
-  font-size: 15px;
-  line-height: 1.55;
-}
-
-.community-primary-link {
-  min-height: auto;
-  margin-top: 27px;
-  padding: 0 0 7px;
-  border-bottom: 1px solid currentColor;
-  border-radius: 0;
-  color: #fff;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.community-primary-link:hover,
-.community-primary-link:focus-visible {
-  color: #dfe7cf;
-  background: transparent;
-  outline: 0;
-}
-
-.community-section {
-  padding-block: 108px;
-  border-top: 1px solid var(--community-line);
-  background: var(--community-paper);
-}
-
-.community-problem {
-  background: var(--community-paper);
-}
-
-.community-statement-grid {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  gap: 64px;
-  align-items: start;
-}
-
-.community-home h2,
-.community-register h2 {
-  max-width: 860px;
-  font-size: clamp(42px, 4.8vw, 62px);
-  line-height: 1.02;
-}
-
-.community-supporting-copy {
-  max-width: 620px;
-  margin: 28px 0 0;
-  color: var(--community-muted);
-  font-size: 17px;
-  line-height: 1.55;
-}
-
-.community-inline-quote {
-  max-width: 780px;
-  margin: 64px 0 0;
-  padding: 28px 0 0;
-  border-top: 1px solid #a9aaa2;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(28px, 3.2vw, 42px);
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.15;
-  letter-spacing: -0.035em;
-}
-
-.community-steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin: 72px 0 0 244px;
-}
-
-.community-steps li {
-  display: block;
-  padding: 22px 22px 0 0;
-  border-top: 1px solid #9e9e96;
-}
-
-.community-steps li:last-child {
-  border-bottom: 0;
-}
-
-.community-steps li > span {
-  color: var(--community-sage);
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.community-steps h3 {
-  margin-top: 30px;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.035em;
-}
-
-.community-steps p {
-  margin-top: 12px;
-  color: var(--community-muted);
-  font-size: 14px;
-  line-height: 1.55;
-}
-
-.community-why {
-  color: var(--community-ink);
-  background: var(--community-paper);
-}
-
-.community-why .community-eyebrow {
-  color: var(--community-sage);
-}
-
-.community-why .community-supporting-copy {
-  color: #5e6259;
-}
-
-.community-sources {
-  max-width: 620px;
-  margin-top: 34px;
-  padding-top: 18px;
-  border-top: 1px solid #b8bcaf;
-  color: var(--community-muted);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.community-sources summary {
-  width: fit-content;
-  color: var(--community-ink);
-  cursor: pointer;
-  font-weight: 650;
-}
-
-.community-sources p {
-  margin: 16px 0 0;
-}
-
-.community-sources a {
-  color: var(--community-ink);
-}
-
-.community-team {
-  background: var(--community-paper);
-}
-
-.community-people {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 84px;
-  margin: 72px 0 0 244px;
-}
-
-.community-people article {
-  padding-top: 20px;
-  border-color: #a9aaa3;
-}
-
-.community-people h3 {
-  margin-top: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 32px;
-  font-weight: 500;
-  letter-spacing: -0.045em;
-}
-
-.community-people article > p:last-child {
-  margin-top: 16px;
-  color: var(--community-muted);
-  font-size: 14px;
-  line-height: 1.62;
-}
-
-.community-register {
-  padding-block: 108px;
-  border-top: 1px solid var(--community-line);
-  background: var(--community-paper);
-}
-
-.community-register-grid {
-  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.8fr);
-  gap: 120px;
-}
-
-.community-register-grid > div:first-child > p:last-child {
-  max-width: 480px;
-  margin-top: 30px;
-  font-size: 16px;
-  line-height: 1.55;
-}
-
-.community-register h2 {
-  margin-top: 24px;
-}
 
 .community-interest-form,
 .community-form-success {
@@ -4233,174 +3478,6 @@ textarea:focus-visible {
   border-radius: 0;
 }
 
-.community-footer {
-  padding-block: 42px;
-  color: #dfe1da;
-  background: #20231d;
-}
-
-.community-footer .community-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.community-footer-wordmark {
-  color: #f7f5ef;
-  font-size: 20px;
-}
-
-.community-footer div div {
-  gap: 22px;
-}
-
-@media (max-width: 920px) {
-  .community-hero-grid {
-    grid-template-columns: 1fr;
-    gap: 80px;
-  }
-
-  .community-hero-action {
-    justify-self: end;
-  }
-
-  .community-statement-grid {
-    grid-template-columns: 130px minmax(0, 1fr);
-    gap: 40px;
-  }
-
-  .community-steps,
-  .community-people {
-    margin-left: 170px;
-  }
-
-  .community-register-grid {
-    grid-template-columns: 1fr;
-    gap: 72px;
-  }
-}
-
-@media (max-width: 720px) {
-  .community-wrap {
-    width: min(100% - 40px, 1240px);
-  }
-
-  .community-header-inner {
-    min-height: 70px;
-  }
-
-  .community-wordmark {
-    font-size: 22px;
-  }
-
-  .community-demo-link {
-    min-height: 38px;
-    padding-inline: 15px;
-    font-size: 11px;
-  }
-
-  .community-hero {
-    min-height: min(570px, calc(100svh - 86px));
-    margin: 8px;
-    padding-block: 36px 38px;
-    border-radius: 18px;
-  }
-
-  .community-hero-grid {
-    min-height: min(496px, calc(100svh - 160px));
-    grid-template-columns: 1fr;
-    gap: 64px;
-  }
-
-  .community-eyebrow {
-    font-size: 10px;
-  }
-
-  .community-hero h1 {
-    margin-top: 23px;
-    font-size: clamp(42px, 12.5vw, 54px);
-    line-height: 0.98;
-  }
-
-  .community-hero-action {
-    width: min(100%, 310px);
-    justify-self: start;
-  }
-
-  .community-hero-action p {
-    font-size: 14px;
-  }
-
-  .community-section {
-    padding-block: 72px;
-  }
-
-  .community-statement-grid {
-    grid-template-columns: 1fr;
-    gap: 34px;
-  }
-
-  .community-home h2,
-  .community-register h2 {
-    font-size: clamp(34px, 9.8vw, 44px);
-    line-height: 1.04;
-  }
-
-  .community-supporting-copy {
-    margin-top: 30px;
-    font-size: 16px;
-  }
-
-  .community-inline-quote {
-    margin-top: 48px;
-    padding-top: 22px;
-    font-size: 27px;
-    line-height: 1.18;
-  }
-
-  .community-steps {
-    grid-template-columns: 1fr;
-    gap: 28px;
-    margin: 52px 0 0;
-  }
-
-  .community-steps h3 {
-    margin-top: 24px;
-  }
-
-  .community-people {
-    grid-template-columns: 1fr;
-    gap: 56px;
-    margin: 52px 0 0;
-  }
-
-  .community-people h3 {
-    margin-top: 0;
-  }
-
-  .community-register {
-    padding-block: 72px;
-  }
-
-  .community-register-grid {
-    gap: 58px;
-  }
-
-  .community-footer .community-wrap {
-    align-items: center;
-    flex-direction: row;
-  }
-}
-
-@media (max-width: 390px) {
-  .community-wrap {
-    width: min(100% - 32px, 1240px);
-  }
-
-  .community-hero h1 {
-    font-size: 44px;
-  }
-}
 
 /* ---------------------------------------------------------------------------
    D1 (2026-08-10) — composition fix for the finder's opening screen.
@@ -4767,20 +3844,29 @@ textarea:focus-visible {
 .story-hero-grid {
   display: grid;
   grid-template-columns: 1.12fr 0.88fr;
-  align-items: center;
+  /* Was `center`, which floated the copy ~215px down a 900px viewport and read as a layout bug
+     rather than as space. Both columns now start from a capped top edge (88px, under the 96px
+     hero cap) and share it, which is also what makes the asymmetry legible. */
+  align-items: start;
   gap: 32px;
-  min-height: calc(100dvh - 66px);
-  padding-block: 24px 48px;
+  /* Not a full viewport. Start-aligning the two columns left ~285px of nothing under the
+     composition at 900px tall, and the fix is not to re-centre it (that was the float) but to
+     stop the hero claiming height it does not use. At 82dvh the next section's top edge sits
+     just below the fold, which invites the scroll that Section 9.F forbids labelling. */
+  min-height: 82dvh;
+  padding-block: 88px 48px;
 }
 .story-hero-copy {
-  align-self: center;
+  align-self: start;
   max-width: none;
 }
 .story-hero-copy h1 {
   margin: 22px 0 0;
-  max-width: 15.5ch;
+  /* Sized to the column it sits in. At 15.5ch the measure was roughly half the available
+     645px and forced the headline to five lines. */
+  max-width: 22ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(42px, 5vw, 78px);
+  font-size: clamp(40px, 4.5vw, 66px);
   font-weight: 430;
   line-height: 1;
   letter-spacing: -0.045em;
@@ -4815,7 +3901,7 @@ textarea:focus-visible {
   text-decoration: none;
   transition: transform 0.15s ease, background 0.2s ease;
 }
-.story-primary-link:hover { background: #34382d; }
+.story-primary-link:hover { background: #3a2c31; }
 .story-primary-link:active { transform: translateY(1px); }
 .story-primary-link:focus-visible { outline: 3px solid var(--s-petal); outline-offset: 3px; }
 
@@ -4824,7 +3910,8 @@ textarea:focus-visible {
    no photograph of either founder in this tree and none is generated. */
 .story-gap-card {
   position: relative;
-  align-self: center;
+  /* Shares the copy column's top edge, per .story-hero-grid's note. */
+  align-self: start;
   justify-self: center;
   margin: 0;
   width: 100%;
@@ -4954,8 +4041,12 @@ textarea:focus-visible {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: clamp(34px, 5.2vw, 74px);
   font-weight: 400;
-  line-height: 1.06;
+  /* 1.06 clipped the italic descenders. The emphasised phrase here is "the person who can push
+     hardest" — a p in `person` and another in `push` — and Newsreader's italic descender is long.
+     1.12 plus the padding reserve clears both at the 74px ceiling. */
+  line-height: 1.12;
   letter-spacing: -0.04em;
+  padding-bottom: 0.08em;
   text-wrap: balance;
 }
 /* Tulip Bloom on Deep: 4.6:1, AA at this display size */
@@ -5092,7 +4183,6 @@ textarea:focus-visible {
 .story .community-interest-form > button:hover,
 .story .community-interest-form > button:focus-visible { outline-color: var(--s-petal); }
 .story .community-form-success { border-color: #dfb9c2; }
-.story .community-register { border-top-color: #e5cdd3; }
 
 /* Footer ------------------------------------------------------------------ */
 .story-footer {
@@ -5153,4 +4243,161 @@ textarea:focus-visible {
   .story-hero-actions { gap: 12px; }
   .story-primary-link { width: 100%; }
   .story-footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
+}
+
+/* ==========================================================================
+   DARK MODE
+   ==========================================================================
+
+   Added by the design audit. The site was light-only, which is a gap rather than a
+   style choice for a page somebody may open at 2am on a phone because they cannot
+   sleep and have started reading about ADHD. That is a real slice of this audience.
+
+   HOW IT WORKS, AND WHY IT IS SHORT. Every surface here already reads its colours
+   from three token blocks (`:root`, `.story`, `.clinician-v2`), so dark mode is a
+   re-declaration of those tokens plus the handful of one-off values that assumed a
+   light ground. No component was touched. If a future rule hardcodes a hex, it will
+   be wrong in exactly one mode, which is the argument for the tokens.
+
+   THE ACCENT LIFTS RATHER THAN DESATURATING. Crushed Rose (#8B263E) measures 2.2:1
+   on a near-black ground, so it cannot carry text in dark mode. Instead of muddying
+   it into a grey-pink invention, the accent steps up to Tulip Bloom (#D17484) — the
+   next value in the SAME founder-supplied rose palette — at 5.6:1 on the dark ground.
+   The brand stays recognisable because the replacement is the brand's own tint.
+
+   NEUTRALS STAY OLIVE-CAST. The light palette is warm-olive paper, not neutral grey,
+   and inverting to a cold grey would change the brand. The dark grounds carry the
+   same green-shifted hue at low lightness.
+
+   NO PURE BLACK, NO PURE WHITE (Section 8.B). #15160f and #f4f1e9 respectively.
+*/
+@media (prefers-color-scheme: dark) {
+  /* THE OTHER HALF OF THE THEME, AND THE REASON IT IS HERE RATHER THAN IN THE MARKUP.
+     /practices, /privacy, /privacy/automated-decisions and /demo are built from Tailwind's
+     `stone` colour utilities, 91 of them, while every other surface reads the tokens above. That
+     is the same two-strategy split that left the body cream (see app/layout.tsx) and it is why
+     those four pages stayed light while the rest of the site inverted, printing stone-900 text on
+     a near-black ground at 1.04:1.
+     Tailwind v4 compiles every colour utility to `var(--color-*)`, so redefining the scale flips
+     all 91 at once with no markup churn and no `dark:` variant on every element — which would
+     have entrenched the split rather than closed it. The ramp is inverted around its midpoint and
+     shifted to the warm-olive hue the rest of the palette uses, so `stone` here means this
+     product's neutral rather than Tailwind's. */
+  :root {
+    --color-white: #15160f;
+    --color-black: #f4f1e9;
+    --color-stone-50: #1a1b14;
+    --color-stone-100: #22231b;
+    --color-stone-200: #2c2d24;
+    --color-stone-300: #3a3b31;
+    --color-stone-400: #6f7167;
+    --color-stone-500: #9b998f;
+    --color-stone-600: #b4b2a9;
+    --color-stone-700: #d3d0c7;
+    --color-stone-800: #e6e3da;
+    --color-stone-900: #f1efe8;
+    --color-stone-950: #f8f6ef;
+  }
+
+  :root {
+    color-scheme: dark;
+    --ink: #f1efe8;
+    --muted: #a6a49b;
+    /* Mirrors the light-mode note: --faint has to clear AA at 11px, and it does at 5.4:1. */
+    --faint: #9b998f;
+    --paper: #15160f;
+    --stone: #1e1f18;
+    --line: #33352c;
+    /* Tulip Bloom, not Crushed Rose. See the header note. */
+    --sage: #D17484;
+    --sage-soft: #2b1b20;
+    --rose-mid: #E0AEBA;
+    --rose-petal: #EFD5DA;
+    /* The primary button inverts to a light pill with a dark label. */
+    --ground: #f1efe8;
+    --on-ground: #15160f;
+    /* The inverted band flips the other way: deep rose now reads on near-white. */
+    --on-band: #8B263E;
+  }
+
+  /* Buttons and inputs that painted a light ground directly. */
+  /* Hovers darken from a light pill in dark mode instead of lightening from a dark one. */
+  .primary-button:hover:not(:disabled) { background: #ded9ce; }
+  .primary-button:disabled { color: #74736c; background: #26271f; }
+  .mic-button:hover { background: #ded9ce; }
+  .mic-button.recording { background: var(--sage); color: #15160f; }
+  .demo-nav-next:hover { background: #ded9ce; }
+  .type-content textarea::placeholder { color: #8b8981; }
+  .patient-v2 .type-content textarea { background: #1b1c15; }
+  .demo-nav-next span { color: #8b8981; }
+  .founder-disclosure { background: #23241c; }
+  .clinician-row:hover { background: #23241c; }
+  .profile-content section li { color: #b4b2a9; }
+  .tomorrow-panel { background: #1a1b14; }
+  .clinician-shell { border-color: #33352c; }
+
+  /* The GP walkthrough. Same three roles, inverted. */
+  .clinician-v2 {
+    --cv2-ink: #f1efe8;
+    --cv2-muted: #a6a49b;
+    --cv2-on-dark-muted: #c9c6be;
+    --cv2-sage: #D17484;
+    /* Stays dark: white text sits on it. Lifted a little so a dark panel still reads as a panel
+       against a dark page rather than dissolving into it. */
+    --cv2-ground: #24251d;
+  }
+  .cv2-progress button::after { background: #33352c; }
+  /* The unchecked box painted literal `white`, which reads as a solid block on a dark page.
+     Its CHECKED state already uses --cv2-sage and needs nothing. */
+  .cv2-checkbox { border-color: #4a4c42; background: #24251d; }
+  .cv2-coming-grid button { color: #a6a49b; background: #1b1c15; }
+  .cv2-coming-grid button > small { color: #85837b; }
+  .cv2-note p { color: #b4b2a9; }
+  /* A dark primary button on a dark page needs its lift to go up, not further down. */
+  .cv2-action > button:hover { background: #efece4; color: #15160f; }
+  /* The learning card's button is the inverse case: it painted literal `white` on the dark card,
+     so in dark mode it takes the light surface explicitly and its label goes dark with it.
+     Its rose hover already works in both themes and is left alone. */
+  .cv2-learning-card > button { background: #efece4; color: #15160f; }
+
+  /* The founder story. */
+  .story {
+    --s-paper: #14150f;
+    --s-paper-2: #1d1e17;
+    --s-ink: #f4f1e9;
+    --s-muted: #a8a69d;
+    --s-sage: #D17484;
+    --s-sage-soft: #251a1e;
+    --s-petal: #E0AEBA;
+    --s-line: #32342b;
+    /* The throughline is a BEAT, and a darker beat on a dark page is invisible. In dark
+       mode it becomes the raised surface instead, which keeps the change of register
+       without flipping the page theme (Section 4.11). Its copy stays light either way. */
+    --s-dark: #262720;
+    --community-ink: #f4f1e9;
+    --community-muted: #a8a69d;
+    --community-sage: #D17484;
+  }
+  .story-throughline { color: #f4f1e9; }
+  .story-throughline-sub p { color: #b0aea5; }
+  /* Tulip Bloom already; on the raised beat it reads at 4.8:1. */
+  .story-throughline-line em { color: #E0AEBA; }
+  /* The primary link inverts: light pill, dark label, so it still reads as the one action. */
+  .story-primary-link { color: #14150f; background: #f4f1e9; }
+  .story-primary-link:hover { background: #e6e2d8; }
+  .story-demo-link { color: #14150f; }
+  .story-demo-link:focus-visible { background: #E0AEBA; }
+
+  /* The interest form. */
+  .community-interest-form { background: #1b1c15; }
+  .community-interest-form input[type="email"],
+  .community-interest-form input[type="text"],
+  .community-interest-options label > span { background: #24251d; }
+  .community-interest-options label > span { border-color: #4a4c42; }
+  .community-interest-form > button { color: #14150f; background: #f4f1e9; }
+  .community-interest-form > button:focus-visible { background: #e6e2d8; }
+  .community-form-success { background: #1c2419; }
+  .story .community-form-success { border-color: #4d3a40; }
+  .story .community-interest-form { border-color: #3d2f34; }
+  .story .community-interest-options input:checked + span { background: #3d2b31; }
 }

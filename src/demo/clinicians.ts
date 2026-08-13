@@ -93,7 +93,7 @@ export const clinicians: Clinician[] = [
     fitSignals: ["ADHD assessment", "Hindi & Punjabi", "Late diagnosis in women", "Longer first visits"],
     practicalSignals: ["Bulk billing eligible", "8 min by bus", "Evening appointments"],
     about:
-      "Maya sees adults asking the question for the first time in their thirties or forties, often after a child was assessed. She works through developmental history, school reports where they still exist, and the coping strategies that hid the difficulty — and says plainly when the picture does not meet criteria.",
+      "Maya sees adults asking the question for the first time in their thirties or forties, often after a child was assessed. She works through developmental history, school reports where they still exist, and the coping strategies that hid the difficulty. She says plainly when the picture does not meet criteria.",
     experience: ["Adult ADHD assessment", "Late-recognised presentations in women", "Anxiety and low mood alongside ADHD", "Referral and shared care"],
     languages: ["English", "Hindi", "Punjabi"],
     careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "comorbid-mood"],
@@ -118,7 +118,7 @@ export const clinicians: Clinician[] = [
     fitSignals: ["Cardiac screening", "Titration monitoring", "Shared care"],
     practicalSignals: ["Mixed billing", "9 min by train", "On-site pathology"],
     about:
-      "Daniel does the groundwork a stimulant decision rests on — blood pressure, heart rate, cardiac and family history, and the questions that decide whether a specialist opinion is needed before anything is prescribed. He then holds the follow-up through titration rather than leaving it to the next available appointment.",
+      "Daniel does the groundwork a stimulant decision rests on: blood pressure, heart rate, cardiac and family history, and the questions that decide whether a specialist opinion is needed before anything is prescribed. He then holds the follow-up through titration rather than leaving it to the next available appointment.",
     experience: ["Baseline cardiovascular screening", "Blood pressure and heart-rate monitoring", "Titration follow-up", "Shared-care prescribing"],
     languages: ["English", "Igbo"],
     careAreas: ["adhd-assessment", "adult-adhd", "cardiac-screening", "titration"],
@@ -143,7 +143,7 @@ export const clinicians: Clinician[] = [
     fitSignals: ["Disability rights", "Vietnamese", "Accessible assessment", "Autonomy"],
     practicalSignals: ["Bulk bills care plans", "12 min by train", "Wheelchair accessible"],
     about:
-      "Linh assesses disabled adults for ADHD without treating an existing diagnosis as the whole explanation. She plans around access needs, explains what each step is for before it happens, and supports the adjustment documentation that follows — at work, at study, or with a support scheme.",
+      "Linh assesses disabled adults for ADHD without treating an existing diagnosis as the whole explanation. She plans around access needs, explains what each step is for before it happens, and supports the adjustment documentation that follows, at work, at study, or with a support scheme.",
     experience: ["Disability-rights focused care", "Adult ADHD assessment", "Co-occurring autism", "Adjustment and support documentation"],
     languages: ["English", "Vietnamese"],
     careAreas: ["adhd-assessment", "adult-adhd", "disability-rights", "autism-adhd"],
@@ -168,7 +168,7 @@ export const clinicians: Clinician[] = [
     fitSignals: ["Child & adolescent", "Arabic", "Paediatric shared care", "School reports"],
     practicalSignals: ["Bulk billing eligible", "14 min by train", "Wheelchair accessible"],
     about:
-      "Aisha helps families start a child's assessment and keep it moving — gathering teacher observations and rating scales, preparing the paediatric referral properly so the wait is not wasted, and carrying the shared-care follow-up once a plan exists.",
+      "Aisha helps families start a child's assessment and keep it moving: gathering teacher observations and rating scales, preparing the paediatric referral properly so the wait is not wasted, and carrying the shared-care follow-up once a plan exists.",
     experience: ["Child and adolescent ADHD", "Teacher and school reports", "Paediatric referral and shared care", "Family and interpreter-supported consultations"],
     languages: ["English", "Arabic"],
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "shared-care", "student-academic"],
@@ -193,7 +193,7 @@ export const clinicians: Clinician[] = [
     fitSignals: ["ADHD assessment", "Non-medication options", "Emotional regulation", "Clear plans"],
     practicalSignals: ["Mixed billing", "11 min by bus", "Telehealth follow-ups"],
     about:
-      "Tom assesses adults and then talks about the whole plan, not only whether a script is appropriate — sleep, structure, workload, coaching and what to change first. Appointments use written steps and realistic follow-up, without reading executive-function difficulty as not caring.",
+      "Tom assesses adults and then talks about the whole plan, not only whether a script is appropriate: sleep, structure, workload, coaching and what to change first. Appointments use written steps and realistic follow-up, without reading executive-function difficulty as not caring.",
     experience: ["Adult ADHD assessment", "Non-medication strategies", "Emotional dysregulation and rejection sensitivity", "Shared care"],
     languages: ["English"],
     careAreas: ["adhd-assessment", "adult-adhd", "non-medication", "emotional-regulation"],
@@ -418,7 +418,7 @@ export const clinicians: Clinician[] = [
     fitSignals: ["Autism & ADHD", "Sensory-considerate", "Non-medication supports", "Clear plans"],
     practicalSignals: ["Mixed billing", "15 min by bus", "Sensory-considerate rooms"],
     about:
-      "Grace assesses adults for ADHD and co-occurring autism in appointments designed to be survivable — lower light, no waiting-room ambush, written summaries afterwards. She sets out medication and non-medication options side by side without treating either as the default.",
+      "Grace assesses adults for ADHD and co-occurring autism in appointments designed to be survivable: lower light, no waiting-room ambush, written summaries afterwards. She sets out medication and non-medication options side by side without treating either as the default.",
     experience: ["Adult ADHD and autism assessment", "Sensory-considerate consultations", "Non-medication strategies", "Emotional regulation support"],
     languages: ["English", "Mandarin"],
     careAreas: ["adhd-assessment", "autism-adhd", "adult-adhd", "non-medication", "emotional-regulation"],
@@ -562,6 +562,21 @@ export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician
   });
 }
 
+/**
+ * "a", "a and b", "a, b and c" - a readable list, so no surface needs a separator character.
+ *
+ * `Intl.ListFormat` rather than hand-rolled joining, for two reasons. It gets the Australian
+ * conjunction right (no Oxford comma) without this file holding an opinion about it, and the
+ * hand-rolled version indexed `items[items.length - 1]`, which W167's fold-site register counts
+ * as a fold and would have needed a declared rationale. A fold that does not have to exist is
+ * better removed than declared.
+ */
+const LIST_FORMAT = new Intl.ListFormat("en-AU", { style: "long", type: "conjunction" });
+
+function asList(items: readonly string[]): string {
+  return LIST_FORMAT.format(items);
+}
+
 export function getPersonalizedMatch(clinician: Clinician, query: string) {
   const words = query.toLowerCase();
   const signals: string[] = [];
@@ -635,9 +650,12 @@ export function getPersonalizedMatch(clinician: Clinician, query: string) {
   }
 
   const uniqueSignals = [...new Set(signals)].slice(0, 4);
+  // Joined as prose, not as a middle-dot chain. Four signals separated by dots is a metadata
+  // strip pretending to be a sentence, and the surfaces that show the signals as pills would
+  // then be printing the same list twice in two different visual languages.
   const reason = uniqueSignals.length
-    ? `Matches your stated priorities: ${uniqueSignals.join(" · ")}.`
-    : "Accepting new patients—review the profile to decide whether this approach fits.";
+    ? `Matches your stated priorities: ${asList(uniqueSignals)}.`
+    : "Accepting new patients. Review the profile to decide whether this approach fits.";
 
   return { signals: uniqueSignals, reason };
 }

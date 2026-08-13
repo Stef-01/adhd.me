@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ADHD.ME Clinician — Build a focused practice",
+  title: "Build a focused practice | ADHD.ME",
   description: "A clinician pathway for concentrating appropriate cases and learning deliberately around the work ahead.",
 };
 

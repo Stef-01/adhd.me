@@ -163,7 +163,7 @@ function getRequestHeadline(value: string, fallback: string) {
   }
   if (hasChild) return "Start the assessment, and get the school moving.";
   if (has("antidepressant", "treated for anxiety", "wrong diagnosis", "misdiagnosed")) {
-    return "Anxiety, ADHD, or both — worked out properly.";
+    return "Anxiety, ADHD, or both: worked out properly.";
   }
   if (has("perimenopause", "menopause", "hormonal", "coping stopped", "got worse")) {
     return "Not new. Just no longer survivable.";
@@ -768,7 +768,7 @@ export function CareFinder() {
                   <ClinicianPortrait clinician={item} variant="thumb" />
                   <span>
                     <strong>{item.name}</strong>
-                    <small>{itemMatch.signals.slice(0, 2).join(" · ") || item.focus} · {item.suburb}</small>
+                    <small>{itemMatch.signals.slice(0, 2).join(", ") || item.focus} · {item.suburb}</small>
                     <small className="row-practical">{item.practicalSignals.slice(0, 2).join(" · ")}</small>
                     <small className="row-availability">Next: {item.nextAvailable}</small>
                   </span>
@@ -802,7 +802,7 @@ export function CareFinder() {
             <div className="profile-content">
               <p className="eyebrow">Why this fit</p>
               <h1>{clinician.name}</h1>
-              <p className="clinician-meta">{clinician.title} · {clinician.pronouns} · {clinician.suburb}</p>
+              <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {clinician.suburb}</p>
               <FounderDisclosure clinician={clinician} />
               {personalizedMatch.signals.length > 0 && (
                 <div className="fit-signal-row profile-fit-signals" aria-label="Key match reasons">
@@ -813,8 +813,11 @@ export function CareFinder() {
                 {clinician.practicalSignals.slice(0, 2).map((signal) => <span key={signal}>{signal}</span>)}
               </div>
 
+              {/* The signal pills above already enumerate the match, so `reason` is deliberately
+                  NOT repeated here: printing the same list twice on one screen, once as pills and
+                  once as a sentence, is the same content in two visual languages. The match screen
+                  has no pills, so it keeps the sentence. */}
               <div className="fit-list">
-                <p>{personalizedMatch.reason}</p>
                 <p>{clinician.appointmentLength}</p>
                 <p>{clinician.distance}</p>
               </div>
@@ -833,7 +836,7 @@ export function CareFinder() {
 
               <section>
                 <h2>Languages</h2>
-                <p>{clinician.languages.join(" · ")}</p>
+                <p>{clinician.languages.join(", ")}</p>
               </section>
             </div>
 

@@ -144,11 +144,12 @@ export function StoryLanding() {
               Why we founded ADHD.ME
             </motion.p>
             <motion.h1 id="story-hero-title" variants={item}>
-              Getting assessed for ADHD in Australia is a test of stamina, not of need.
+              Getting assessed for ADHD is a test of stamina.
             </motion.h1>
+            {/* 14 words, cap is 20. The rest of the argument is chapter 2's job; a hero that
+                makes the whole case is a hero nobody finishes reading. */}
             <motion.p className="story-hero-sub" variants={item}>
-              The people who clear it are the ones who can afford to. That is a design choice
-              somebody made, which means it is one somebody can change.
+              Not of need. The people who clear it are the ones who can afford to.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.a
@@ -227,7 +228,7 @@ export function StoryLanding() {
               </p>
               <p>
                 So the people who get assessed are systematically not the people who most need
-                it — and the ones who fall out are the ones already carrying a diagnosis of
+                it. The ones who fall out are the ones already carrying a diagnosis of
                 anxiety, or a reputation for being difficult, or a family who thinks the whole
                 idea is imported nonsense. They do not present again. They conclude they were
                 wrong to ask.
@@ -261,7 +262,7 @@ export function StoryLanding() {
               </p>
               <p>
                 None of that takes psychiatry out of the picture, and it should not. What it does
-                is make the first appointment reachable — and put the follow-up, the baseline
+                is make the first appointment reachable, and put the follow-up, the baseline
                 checks and the dose adjustments with the clinician a person can actually get back in
                 to see.
               </p>
@@ -316,7 +317,7 @@ export function StoryLanding() {
           >
             <motion.li variants={item}>
               <h3>Say it in your own words</h3>
-              <p>Describe what you need looked at and how you want to be treated. Not a quiz, and not a score — nothing here tells you whether you have ADHD.</p>
+              <p>Describe what you need looked at and how you want to be treated. Not a quiz, and not a score. Nothing here tells you whether you have ADHD.</p>
             </motion.li>
             <motion.li variants={item}>
               <h3>A GP who does this work</h3>
@@ -324,7 +325,7 @@ export function StoryLanding() {
             </motion.li>
             <motion.li variants={item}>
               <h3>The follow-up, not just the first visit</h3>
-              <p>Baseline checks before anything starts, and dose adjustments on a schedule — the half of assessment that usually gets dropped.</p>
+              <p>Baseline checks before anything starts, and dose adjustments on a schedule: the half of assessment that usually gets dropped.</p>
             </motion.li>
           </motion.ol>
         </div>
@@ -363,7 +364,7 @@ export function StoryLanding() {
           <Reveal delay={0.1} className="story-prose">
             <p>
               Dr Saxena also sees patients through this directory. He is listed in it like any
-              other clinician, and every listing of his carries that disclosure — because a
+              other clinician, and every listing of his carries that disclosure, because a
               founder appearing in his own company&rsquo;s directory is a conflict whether or not
               the ranking favours him, and you cannot see the ranking.
             </p>

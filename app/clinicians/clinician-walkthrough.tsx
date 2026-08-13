@@ -40,10 +40,10 @@ const adhdConditions = [
 const comingFocusAreas = ["Autism assessment", "Mental health", "Sleep medicine", "Metabolic health", "Skin cancer"];
 
 const cases = [
-  { label: "New ADHD assessment", detail: "Developmental history · rating scales", time: "8:40" },
-  { label: "Assessment part two", detail: "Collateral history · differential", time: "10:20" },
-  { label: "Titration follow-up", detail: "Effect · appetite · blood pressure", time: "1:10" },
-  { label: "Longer adult consult", detail: "Late presentation · shared plan", time: "3:40" },
+  { label: "New ADHD assessment", detail: "Developmental history, rating scales", time: "8:40" },
+  { label: "Assessment part two", detail: "Collateral history, differential", time: "10:20" },
+  { label: "Titration follow-up", detail: "Effect, appetite, blood pressure", time: "1:10" },
+  { label: "Longer adult consult", detail: "Late presentation, shared plan", time: "3:40" },
 ];
 
 /**
@@ -79,7 +79,7 @@ const resources = [
     id: "differential",
     eyebrow: "Before you conclude",
     title: "Differential and co-occurring conditions",
-    detail: "Anxiety, mood, trauma, sleep and substance use — what each one imitates.",
+    detail: "Anxiety, mood, trauma, sleep and substance use: what each one imitates.",
     duration: "3 min",
     href: "https://adhdguideline.aadpa.com.au/",
   },

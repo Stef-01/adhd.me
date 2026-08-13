@@ -11,7 +11,7 @@ export const LANDING_COPY = {
     heading: "Turn unused appointment capacity into measured continuity of care.",
     sub:
       "ADHD.ME quietly fills your open sessions by inviting established patients back to their " +
-      "usual GP — and proves, with a built-in control group, how many of those visits are genuinely " +
+      "usual GP, and proves, with a built-in control group, how many of those visits are genuinely " +
       "additional.",
     primaryCta: "See a demo",
     secondaryCta: "Practice sign-in",
@@ -21,14 +21,14 @@ export const LANDING_COPY = {
     body:
       "Late cancellations and quiet mid-week sessions leave clinician time unused. Manual recalls " +
       "are slow, hard to target, and impossible to measure. Most tools count every booking they " +
-      "touch as their own — which tells you nothing about real impact.",
+      "touch as their own, which tells you nothing about real impact.",
   },
   practiceStory: {
     eyebrow: "The practice story",
     heading: "Let GPs choose the work they want to get better at.",
     body:
       "A GP opts into a clinical focus and chooses how much of their week it should become. " +
-      "ADHD.ME then aligns appropriate cases, short learning and community education around that choice — " +
+      "ADHD.ME then aligns appropriate cases, short learning and community education around that choice, " +
       "giving the clinician more agency and the practice a clearer way to grow useful capability.",
     goalLabel: "Clinician-set goal",
     goalValue: "30%",
@@ -49,7 +49,7 @@ export const LANDING_COPY = {
       },
     ],
     communityEyebrow: "From consulting room to community room",
-    communityHeading: "Pay GPs to educate the public — and help practices reach people earlier.",
+    communityHeading: "Pay GPs to educate the public, and help practices reach people earlier.",
     communityBody:
       "ADHD.ME can coordinate clearly scoped talks with local community groups, workplaces and cultural organisations. " +
       "The GP chooses the topic and audience, approves the material, and receives a transparent speaker fee for preparation and delivery.",
@@ -94,7 +94,7 @@ export const LANDING_COPY = {
       title: "Match, within your rules",
       body:
         "You set who is eligible and which sessions may be offered. ADHD.ME ranks only inside " +
-        "that boundary — never outside it — and sends a plain, availability-only message.",
+        "that boundary, never outside it, and sends a plain, availability-only message.",
     },
     {
       title: "Patients book with their usual GP",
@@ -116,7 +116,7 @@ export const LANDING_COPY = {
       "against a randomised holdout. We never report the raw count of bookings we touched as impact.",
     points: [
       "Randomised holdout arm, on by default",
-      "Attended appointments only — no-shows never count",
+      "Attended appointments only. No-shows never count",
       "Every message, booking and opt-out on an immutable audit log",
     ],
   },
@@ -133,7 +133,7 @@ export const LANDING_COPY = {
     button: "See a demo",
   },
   footer: {
-    tagline: "ADHD.ME — continuity yield for general practice.",
+    tagline: "ADHD.ME: continuity yield for general practice.",
     note: "Business-to-business service for accredited general practices. Not patient medical advice.",
   },
 } as const;

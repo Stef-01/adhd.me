@@ -45,7 +45,7 @@
 /** The canonical statement. Rendered, never paraphrased. */
 export const RESPONSIBILITY_STATEMENT =
   "Your practice provides your care. ADHD.ME is software your practice uses to offer you " +
-  "appointment times — it does not provide treatment, does not give clinical advice, and is " +
+  "appointment times. It does not provide treatment, does not give clinical advice, and is " +
   "not part of your care team. Anything about your health goes to your practice, not to us.";
 
 /** The same point for the practice-facing side, where the reader is the treating entity. */
