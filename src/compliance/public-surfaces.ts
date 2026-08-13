@@ -1,9 +1,9 @@
 // W192: the public copy sweep — every surface a stranger can reach, and which rules it answers to.
 //
 // The unit's gate is "no clinical claim on any of them", and taken literally the sweep would fail
-// on the day it was written. `/clinicians` carries Rotterdam criteria, COCP suitability and
-// metformin titration, which is clinical content by any reading. The Y2 dossier noticed this, the
-// Q13 dossier re-checked it and noticed it again, and both filed it as an inconsistency. Filing it
+// on the day it was written. `/clinicians` names differential diagnosis, pre-stimulant cardiac
+// screening and titration review, which is clinical content by any reading. The Y2 dossier noticed
+// this, the Q13 dossier re-checked it and noticed it again, and both filed it as an inconsistency. Filing it
 // a third time would be the control this tree has watched fail.
 //
 // SO THE SWEEP CLASSIFIES BY AUDIENCE, AND THE CLASSIFICATION IS THE UNIT. "No clinical claim" is
@@ -176,17 +176,22 @@ export function sweepSurface(path: string, audience: Audience, text: string): Su
  * and a check that accepts silently stops being a check. So an exception is DATA — the exact
  * path, rule and matched text, an argument, and a date somebody has to look again.
  *
- * FOUND BY THIS SWEEP ON ITS FIRST RUN. The landing page says "a lymphoedema clinic, a VR headset
- * and my own diagnosis led me here". `\bdiagnos\w*\b` fires, and it should — that pattern exists
- * because a patient-facing page saying "diagnosis" is usually offering one. Here it is the founder
- * describing her own, in the first person, in a paragraph about why she started the company. That
- * is autobiography rather than a therapeutic claim, and the linter cannot see the difference
- * because the difference is who the sentence is about.
+ * WHAT THIS LIST IS FOR, WITH THE CASE THAT ESTABLISHED IT. `\bdiagnos\w*\b` fires on the landing
+ * page, and it should — that pattern exists because a patient-facing page saying "diagnosis" is
+ * usually offering one. On `/` the word appears in a sentence about people who ALREADY CARRY a
+ * diagnosis of anxiety and were never assessed for anything else. That is a description of who the
+ * pathway fails, not an offer, and the linter cannot see the difference because the difference is
+ * who the sentence is about.
  *
- * Accepted rather than exempted, and accepted rather than edited: rewriting a founder's account of
- * her own illness to satisfy a regex is the wrong move by a wide margin, and quietly widening the
- * rule would drop the word everywhere it does matter. Whether a first-person diagnosis belongs on
- * a patient-reachable page is an advertising-compliance judgement, so it has a review date on it.
+ * Accepted rather than exempted, and accepted rather than edited: quietly widening the rule would
+ * drop the word everywhere it does matter, and editing the sentence to satisfy a regex would
+ * remove the one group the page exists to name. Whether it belongs on a patient-reachable page is
+ * an advertising-compliance judgement, so it carries a review date.
+ *
+ * THIS LIST WILL BE LONGER FOR THIS PRODUCT THAN FOR THE ONE IT WAS WRITTEN FOR, and the reason is
+ * structural rather than sloppy — see the `/finder` entry in STANDING_FLAGS. Each entry still has
+ * to be argued individually, which is the point: a long list of reasoned acceptances is reviewable,
+ * and a widened rule is not.
  */
 export interface AcceptedFinding {
   path: string;
@@ -203,7 +208,7 @@ export const ACCEPTED_FINDINGS: readonly AcceptedFinding[] = [
     path: "/",
     rule: "no-clinical-claims",
     match: "diagnosis",
-    why: "The founder's first-person account of her own diagnosis, in the paragraph explaining why she started the company. Autobiography, not an offer of diagnosis — the rule cannot tell the difference because the difference is whose diagnosis it is.",
+    why: "Describes people who already carry a diagnosis of anxiety and were never assessed for anything else — who the pathway fails, not an offer of diagnosis. The rule cannot tell the difference because the difference is whose diagnosis the sentence is about.",
     reviewBy: "2027-02-11",
   },
   {
@@ -214,6 +219,20 @@ export const ACCEPTED_FINDINGS: readonly AcceptedFinding[] = [
     reviewBy: "2027-02-11",
   },
 ];
+
+/**
+ * Open questions that are not about a route, and therefore cannot live in `STANDING_FLAGS`.
+ *
+ * The route map is checked in both directions — a flagged path must be a surface the sweep covers,
+ * because a flag about a page that has moved reads as coverage. That invariant is worth keeping, so
+ * a concern that spans every surface gets its own list rather than a fake key that would weaken it.
+ *
+ * Exactly one entry, and it is not a small one.
+ */
+export const PRODUCT_FLAGS: Readonly<Record<string, string>> = {
+  "brand-is-a-condition":
+    "The product is called ADHD.ME, so every patient-facing surface names a condition in its title, its URL and every sentence naming the product. That is condition-targeting by construction, arriving through the one string no linter can refuse — see the header of src/compliance/landing.ts, which is why `no-condition-targeting` must never be given the word. It needs an Ahpra advertising review of the NAME, separately from the copy. The product this tree was adapted from deliberately kept the condition out of its brand and out of its B2B positioning; this one cannot. That is a defensible choice and a different risk position, and it should be taken deliberately rather than inherited from a rename.",
+};
 
 /** Findings not covered by an acceptance. These fail the sweep. */
 export function unaccepted(
@@ -230,8 +249,8 @@ export function unaccepted(
  * What this sweep does NOT establish, stated so a green run is not over-read.
  *
  * Found while writing the unit: the linters hold a short vocabulary. They know "diagnosis",
- * "diabetes", "kidney" and a handful beside them; they do not know "metformin", "COCP",
- * "Rotterdam" or "titration". A page can therefore carry clinical content and pass, which is
+ * "diabetes", "kidney" and a handful beside them; they do not know "methylphenidate",
+ * "lisdexamfetamine", "DSM-5-TR" or "ASRS". A page can therefore carry clinical content and pass, which is
  * exactly what `/clinicians` mostly does — its `diagnosis` and `diabetes` are what trip, not the
  * drug names. Widening the vocabulary is a real unit and not this one; pretending the bound is
  * not there would make every future green run mean more than it does.
@@ -253,5 +272,7 @@ export const VOCABULARY_BOUND =
  */
 export const STANDING_FLAGS: Readonly<Record<string, string>> = {
   "/clinicians":
-    "Ships real clinical guidance (Rotterdam criteria, COCP suitability, metformin titration) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether ADHD.ME should publish clinical guidance at all, and that decision is the founder's. Raised in docs/GATE-DOSSIER-Y2.md, restated in docs/GATE-DOSSIER-Q13.md, and unresolved in both.",
+    "Names real clinical territory (differential diagnosis, pre-stimulant cardiac screening, titration review) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether ADHD.ME should publish clinical guidance at all, and that decision is the founder's. Raised in docs/GATE-DOSSIER-Y2.md, restated in docs/GATE-DOSSIER-Q13.md, and unresolved in both. NARROWED, NOT CLOSED: the walkthrough's learning list now LINKS OUT to AADPA and NICE rather than restating their content, and a link is not a claim — but the page still names the territory.",
+  "/finder":
+    "A patient-facing surface whose content is people describing what they want from a clinician, in their own words — which for this product means the rendered page carries 'diagnosis', 'medication', 'psychiatrist' and drug classes. The distinction the rules cannot see is that these are QUOTED REQUESTS rather than claims the product makes: 'I want a GP who will discuss non-stimulant options honestly' is a preference, and the same words in the product's voice would be an offer. That distinction is real and it is a judgement, so the findings it produces are accepted individually in ACCEPTED_FINDINGS with review dates rather than the patient classification being weakened.",
 };

@@ -56,8 +56,8 @@ describe("W195 the dossier's claim that G6 does not open specialist titles", () 
       location: { practiceId: "prac-1", suburb: "Parramatta", state: "NSW" },
       languages: ["English"],
       acceptingNewPatients: true,
-      descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-      specialty: "endocrinology",
+      descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+      specialty: "psychiatry",
     };
     const result = renderProfile(specialist);
     expect(result.ok).toBe(false);

@@ -119,9 +119,9 @@ describe("W66 W6's existing rules are still enforced, not replaced", () => {
 
 describe("W66 the check extends to registers nobody has invented yet", () => {
   it("covers a practice-authored register without touching the linter", () => {
-    const invented = condition("perinatal_mental_health", "Perinatal Mental Health");
-    const text = `Hi Sam, perinatal appointments available at Demo Family Practice. Book: https://example.test/book/abc — or reply STOP to opt out.`;
-    expect(disclosesCondition(text, invented)).toBe("perinatal");
+    const invented = condition("titration_review", "Titration Review");
+    const text = `Hi Sam, titration appointments available at Demo Family Practice. Book: https://example.test/book/abc — or reply STOP to opt out.`;
+    expect(disclosesCondition(text, invented)).toBe("titration");
   });
 
   it("does not fire on generic words shared with ordinary copy", () => {

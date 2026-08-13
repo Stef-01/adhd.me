@@ -10,6 +10,7 @@ import {
   PROFESSIONAL_EXEMPT_RULES,
   PUBLIC_SURFACES,
   STANDING_FLAGS,
+  PRODUCT_FLAGS,
   ACCEPTED_FINDINGS,
   VOCABULARY_BOUND,
   rulesFor,
@@ -144,11 +145,11 @@ describe("W192 the sweep catches what it claims to", () => {
 
   it("is only as strong as the vocabulary W23 and W6 hold, and that bound is stated", () => {
     // Found while writing this unit. The linters know "diagnosis", "diabetes", "kidney" and a
-    // short list beside them; they do not know "metformin", "COCP", "Rotterdam" or "titration".
+    // short list beside them; they do not know "methylphenidate", "lisdexamfetamine" or "DSM-5-TR".
     // So "no clinical claim on any surface" is enforced to the extent of that vocabulary and no
     // further — which is worth pinning, because the sweep passing is otherwise easy to read as
     // the stronger claim.
-    for (const unknown of ["Metformin titration", "Rotterdam criteria", "COCP suitability"]) {
+    for (const unknown of ["Methylphenidate titration", "DSM-5-TR criteria", "ASRS screening scale"]) {
       expect(sweepSurface("/", "patient", unknown), unknown).toEqual([]);
     }
     expect(VOCABULARY_BOUND).toMatch(/vocabulary/i);
@@ -211,5 +212,20 @@ describe("W192 the open question is kept in the suite, not in a document", () =>
       expect(paths, `${path} is flagged but is not a public surface`).toContain(path);
     }
     expect(Object.keys(STANDING_FLAGS).length).toBeGreaterThan(0);
+  });
+
+  /**
+   * The product-wide flag has its own list precisely so the invariant above stays strict. This
+   * asserts the separation holds in both directions: a route concern must not drift into
+   * PRODUCT_FLAGS to escape the path check, and the brand concern must not be quietly dropped.
+   */
+  it("keeps the product-wide question out of the route map without losing it", () => {
+    const paths = new Set(PUBLIC_SURFACES.map((s) => s.path));
+    for (const key of Object.keys(PRODUCT_FLAGS)) {
+      expect(paths, `${key} is route-shaped and belongs in STANDING_FLAGS`).not.toContain(key);
+    }
+
+    expect(PRODUCT_FLAGS["brand-is-a-condition"]).toBeDefined();
+    expect(PRODUCT_FLAGS["brand-is-a-condition"]!).toMatch(/Ahpra advertising review of the NAME/);
   });
 });

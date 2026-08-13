@@ -80,7 +80,7 @@ test("the sweep would notice a violation, so a clean run means something", async
 
 test("the professional surfaces are the ones with a standing flag on them", async ({ page }) => {
   // /clinicians passes because it is classified professional, NOT because it carries no clinical
-  // content — it carries Rotterdam criteria, COCP suitability and metformin titration. The flag is
+  // content — it names differential diagnosis, cardiac screening and titration review. The flag is
   // asserted here so a green sweep cannot be read as the stronger claim.
   await page.goto("/clinicians");
   await page.waitForLoadState("networkidle");
