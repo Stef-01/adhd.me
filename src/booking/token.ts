@@ -1,6 +1,6 @@
 // W7: tokenised booking deep links. An invitation's SMS carries /book/<token>;
 // the token is an HMAC-signed invitation id, so links can't be guessed or altered.
-// Synthetic phase only — secret defaults for dev; production supplies CAREYIELD_TOKEN_SECRET.
+// Synthetic phase only — secret defaults for dev; production supplies ADHDME_TOKEN_SECRET.
 
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type { InvitationId } from "@/domain/types";

@@ -71,7 +71,7 @@ export function DemoNavigator() {
         className="demo-nav-trigger wordmark"
         type="button"
         aria-expanded={open}
-        aria-controls="careyield-demo-navigation"
+        aria-controls="adhd-me-demo-navigation"
         onClick={() => setOpen((current) => !current)}
       >
         <span>ADHD.ME</span>
@@ -79,7 +79,7 @@ export function DemoNavigator() {
       </button>
 
       {open && (
-        <nav id="careyield-demo-navigation" className="demo-nav-popover" aria-label="ADHD.ME demo navigation">
+        <nav id="adhd-me-demo-navigation" className="demo-nav-popover" aria-label="ADHD.ME demo navigation">
           <Link className="demo-nav-home" href="/" onClick={() => setOpen(false)}>
             Back to main home
           </Link>

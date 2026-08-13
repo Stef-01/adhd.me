@@ -60,16 +60,16 @@ function seed(): AuditState {
   };
 }
 
-const globalStore = globalThis as { __careyieldAudit?: AuditState };
+const globalStore = globalThis as { __adhdMeAudit?: AuditState };
 
 export function getAudit(): AuditState {
-  globalStore.__careyieldAudit ??= seed();
-  return globalStore.__careyieldAudit;
+  globalStore.__adhdMeAudit ??= seed();
+  return globalStore.__adhdMeAudit;
 }
 
 export function resetAudit(): AuditState {
-  globalStore.__careyieldAudit = seed();
-  return globalStore.__careyieldAudit;
+  globalStore.__adhdMeAudit = seed();
+  return globalStore.__adhdMeAudit;
 }
 
 /** Visits with no outcome recorded yet, for ONE practice — what the one-tap form shows. */

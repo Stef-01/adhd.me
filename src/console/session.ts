@@ -1,7 +1,7 @@
 // W11: console session tokens — an HMAC-signed staff identity carried in a cookie.
 // Auth provider abstraction: the mock provider signs anyone in by email (synthetic
 // phase — founder gate blocks production credentials). Supabase auth replaces the
-// provider behind CAREYIELD_AUTH_PROVIDER without touching session handling.
+// provider behind ADHDME_AUTH_PROVIDER without touching session handling.
 // W37: sessions carry an issued-at and expire — a captured cookie value is not a
 // forever-credential. Legacy (pre-W37) cookie values fail closed: re-sign-in.
 

@@ -14,7 +14,7 @@
 //
 // What "clears the floor" means is deliberately a practice setting, not our judgement. A
 // practice may require a verified credential, or a minimum number of attended visits, or
-// both. What CareYield fixes is the shape of the rule, never its threshold.
+// both. What ADHD.ME fixes is the shape of the rule, never its threshold.
 
 import type {
   ClinicianCompetence,

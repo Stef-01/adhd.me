@@ -36,7 +36,7 @@ only reaches routes it knows about.
 
 **Known tension, stated honestly:** warm near-white + sage + serif display is a saturated
 "calm healthtech" family — the first-order category reflex. It is the founder's selected
-direction (`design/careyield-selected-direction.png`), so identity preservation wins over
+direction (`design/adhd-me-selected-direction.png`), so identity preservation wins over
 novelty. If the aesthetic is ever revisited, the move is a committed ground (a saturated brand
 surface or a true off-white at chroma 0), not another warm-neutral variant.
 

@@ -136,7 +136,7 @@ describe("W31 Twilio adapter — sandbox integration", () => {
 
 describe("W31 STOP webhook", () => {
   const authToken = "sandbox-auth-token";
-  const webhookUrl = "https://hooks.careyield.test/sms/inbound";
+  const webhookUrl = "https://hooks.adhd-me.test/sms/inbound";
   const patient: Patient = {
     id: "pat-1" as PatientId,
     practiceId: "prac-1" as PracticeId,

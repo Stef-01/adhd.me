@@ -12,11 +12,11 @@ interface WindowState {
   count: number;
 }
 
-const globalStore = globalThis as { __careyieldRateLimit?: Map<string, WindowState> };
+const globalStore = globalThis as { __adhdMeRateLimit?: Map<string, WindowState> };
 
 function store(): Map<string, WindowState> {
-  globalStore.__careyieldRateLimit ??= new Map();
-  return globalStore.__careyieldRateLimit;
+  globalStore.__adhdMeRateLimit ??= new Map();
+  return globalStore.__adhdMeRateLimit;
 }
 
 /** True when the call is allowed; false when the (bucket, key) pair is over its limit. */

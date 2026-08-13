@@ -83,16 +83,16 @@ function seed(scenario: RailScenario = "standard"): RailStore {
   };
 }
 
-const globalStore = globalThis as { __careyieldRail?: RailStore };
+const globalStore = globalThis as { __adhdMeRail?: RailStore };
 
 export function getStore(): RailStore {
-  globalStore.__careyieldRail ??= seed();
-  return globalStore.__careyieldRail;
+  globalStore.__adhdMeRail ??= seed();
+  return globalStore.__adhdMeRail;
 }
 
 export function resetStore(scenario: RailScenario = "standard"): RailStore {
-  globalStore.__careyieldRail = seed(scenario);
-  return globalStore.__careyieldRail;
+  globalStore.__adhdMeRail = seed(scenario);
+  return globalStore.__adhdMeRail;
 }
 
 /** The appointment type offered in an invitation's session (telehealth vs in-person). */

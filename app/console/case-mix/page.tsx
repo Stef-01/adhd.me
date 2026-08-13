@@ -17,7 +17,7 @@ import { stateInterest } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Your case mix — CareYield" };
+export const metadata = { title: "Your case mix — ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have access to that.",

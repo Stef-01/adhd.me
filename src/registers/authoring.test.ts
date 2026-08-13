@@ -23,7 +23,7 @@ import {
 const COND = "placeholder_register_a" as ConditionCode;
 const AUTHOR = "author@practice.example";
 const REVIEWER = "specialist@example.org";
-const FOUNDER = "stefan@careyield.example";
+const FOUNDER = "stefan@adhd-me.example";
 const T = "2026-08-10T10:00:00Z";
 
 // Deliberately non-clinical: this file must not become a back door for real content.

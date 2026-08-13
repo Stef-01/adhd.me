@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 // build). A real deployment sets neither, so the routes 404 and can never leak.
 export function mockRoutesEnabled(): boolean {
   if (process.env.NODE_ENV !== "production") return true;
-  return process.env.CAREYIELD_ENABLE_MOCK_ROUTES === "1";
+  return process.env.ADHDME_ENABLE_MOCK_ROUTES === "1";
 }
 
 export function assertMockRoutesEnabled(): void {

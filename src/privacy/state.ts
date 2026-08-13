@@ -11,18 +11,18 @@ export interface PrivacyState {
   suppressions: SuppressionEntry[];
 }
 
-const globalStore = globalThis as { __careyieldPrivacy?: PrivacyState };
+const globalStore = globalThis as { __adhdMePrivacy?: PrivacyState };
 
 function initial(): PrivacyState {
   return { retention: { ...DEFAULT_RETENTION }, deletions: [], suppressions: [] };
 }
 
 export function getPrivacy(): PrivacyState {
-  globalStore.__careyieldPrivacy ??= initial();
-  return globalStore.__careyieldPrivacy;
+  globalStore.__adhdMePrivacy ??= initial();
+  return globalStore.__adhdMePrivacy;
 }
 
 export function resetPrivacy(): PrivacyState {
-  globalStore.__careyieldPrivacy = initial();
-  return globalStore.__careyieldPrivacy;
+  globalStore.__adhdMePrivacy = initial();
+  return globalStore.__adhdMePrivacy;
 }

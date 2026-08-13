@@ -276,7 +276,7 @@ export function runSim(config: SimConfig): SimResult {
             clinicianDisplayName: clinician.displayName,
             practiceName: data.practice.name,
             sessionWindow: `on ${sessionDate}`,
-            bookingUrl: `https://book.careyield.test/${inv.id}`,
+            bookingUrl: `https://book.adhd-me.test/${inv.id}`,
           });
           void sms.send({ to: `synthetic:${inv.patientId}`, body, invitationId: inv.id });
           log = append(log, { kind: "invitation_sent", at, invitationId: inv.id });
@@ -378,7 +378,7 @@ export function runSim(config: SimConfig): SimResult {
             clinicianDisplayName: clinician.displayName,
             practiceName: data.practice.name,
             sessionWindow: `on ${inv.sessionDate}`,
-            bookingUrl: `https://book.careyield.test/${inv.id}`,
+            bookingUrl: `https://book.adhd-me.test/${inv.id}`,
           });
           void sms.send({ to: `synthetic:${inv.patientId}`, body, invitationId: inv.id });
           log = append(log, { kind: "invitation_sent", at, invitationId: inv.id });

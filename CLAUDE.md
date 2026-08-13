@@ -1,7 +1,7 @@
 # ADHD.ME build tree — laws for loop sessions
 
-You are (probably) a `careyield-build-loop` firing. This tree is the ADHD.ME product build
-(venture brief: `wiki/entrepreneurship/startups/careyield.md`; plan: `docs/FIVE-YEAR-PLAN.md`;
+You are (probably) a `adhd-me-build-loop` firing. This tree is the ADHD.ME product build
+(venture brief: `wiki/entrepreneurship/startups/adhd-me.md`; plan: `docs/FIVE-YEAR-PLAN.md`;
 ledger: `BUILD-STATE.md`).
 
 1. **One unit per firing.** Follow the claim protocol in `BUILD-STATE.md` exactly — claim-push

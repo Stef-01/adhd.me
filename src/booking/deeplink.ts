@@ -27,7 +27,7 @@ export interface DeepLinkContext {
 
 export interface InternalProviderConfig {
   provider: "internal";
-  /** Origin of the ADHD.ME booking page, e.g. https://book.careyield.test */
+  /** Origin of the ADHD.ME booking page, e.g. https://book.adhd-me.test */
   baseUrl: string;
 }
 

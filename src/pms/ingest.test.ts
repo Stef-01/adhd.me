@@ -197,8 +197,8 @@ describe("W32 the one-way door", () => {
     const after = state.patients.get(platformId);
     expect(after?.optedOut).toBe(true);
     expect(after?.smsConsent).toBe(false);
-    // The STOP is itself a provenance record, source careyield:stop.
-    expect(state.provenance.some((r) => r.patientId === platformId && r.source === "careyield:stop")).toBe(true);
+    // The STOP is itself a provenance record, source adhd-me:stop.
+    expect(state.provenance.some((r) => r.patientId === platformId && r.source === "adhd-me:stop")).toBe(true);
   });
 
   it("recording a STOP for an unknown patient is a no-op, never an invention", () => {

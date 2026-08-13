@@ -62,7 +62,7 @@ describe("W204 the stated life is checked against the tree, not merely stated", 
       if (!file.endsWith(".ts") || file.endsWith(".test.ts")) continue;
       const source = readFileSync(file, "utf8");
       expect(source, `${path.basename(file)} appears to hold a store`).not.toMatch(
-        /globalThis|__careyield/,
+        /globalThis|__adhd-me/,
       );
     }
   });

@@ -46,7 +46,7 @@ const code = (value: string): ConditionCode => value as ConditionCode;
  */
 const PLACEHOLDER_PROVENANCE = {
   citation: "Synthetic placeholder — not clinical guidance, not a real source",
-  url: "https://example.invalid/careyield-placeholder",
+  url: "https://example.invalid/adhd-me-placeholder",
   publishedOn: "2026-01-01",
   retrievedOn: "2026-01-01",
 } as const;
@@ -91,16 +91,16 @@ function initial(): RegisterState {
   return { ...seedCatalogue(), disabledByPractice: {}, countsByPractice: {} };
 }
 
-const globalStore = globalThis as { __careyieldRegisters?: RegisterState };
+const globalStore = globalThis as { __adhdMeRegisters?: RegisterState };
 
 export function getRegisters(): RegisterState {
-  globalStore.__careyieldRegisters ??= initial();
-  return globalStore.__careyieldRegisters;
+  globalStore.__adhdMeRegisters ??= initial();
+  return globalStore.__adhdMeRegisters;
 }
 
 export function resetRegisters(): RegisterState {
-  globalStore.__careyieldRegisters = initial();
-  return globalStore.__careyieldRegisters;
+  globalStore.__adhdMeRegisters = initial();
+  return globalStore.__adhdMeRegisters;
 }
 
 /** Seed synthetic counts for a practice (test/demo only — W57/W58 replace this). */

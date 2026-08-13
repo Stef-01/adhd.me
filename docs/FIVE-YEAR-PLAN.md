@@ -1,8 +1,8 @@
 # ADHD.ME — Five-Year Vibecoded Build Plan (v1, 2026-08-08)
 
-> Canonical build plan. Executed by the `careyield-build-loop` (two offset hourly Claude Routines =
+> Canonical build plan. Executed by the `adhd-me-build-loop` (two offset hourly Claude Routines =
 > one firing every 30 minutes, each firing = one build session = one week-unit advanced).
-> Venture brief: `Stefan-Brain/wiki/entrepreneurship/startups/careyield.md`.
+> Venture brief: `Stefan-Brain/wiki/entrepreneurship/startups/adhd-me.md`.
 > Research base: `Stefan-Brain/wiki/entrepreneurship/startups/extended-scope-gp-network-research.md`.
 
 ---
@@ -13,7 +13,7 @@
 - **Verify gate is hard.** A unit is `done` only when its stated verification passes (`pnpm verify` — typecheck + tests + build + dependency-audit gate — at minimum). Partial work commits green (behind flags) with continuation notes — never a red main.
 - **Karpathy laws apply** (think before coding · simplicity first · surgical changes · goal-driven execution). Minimum code that passes the gate; no speculative flexibility.
 - **Synthetic-first, founder-gated production.** The loop NEVER handles real patient data, never sends real SMS, never touches production credentials. Everything builds and proves against the synthetic practice engine. Crossing to real data/messages/pilots requires the founder gates in §4 — the loop builds *up to* each gate and flags it.
-- **Home**: `stef-01/stef-01-careyield-`, branch `main` (W-MIGRATE completed 2026-08-08).
+- **Home**: `stef-01/stef-01-adhd-me-`, branch `main` (W-MIGRATE completed 2026-08-08).
 
 ## 1. Stack
 
@@ -45,7 +45,7 @@ Next.js (App Router) + TypeScript strict + Tailwind · Supabase (Postgres + RLS 
 
 ## 4. Founder gates (the loop NEVER crosses these; it builds to them and flags)
 
-- **G0** — ~~create the dedicated repo~~ CLEARED 2026-08-08: `stef-01/stef-01-careyield-` live, tree migrated.
+- **G0** — ~~create the dedicated repo~~ CLEARED 2026-08-08: `stef-01/stef-01-adhd-me-` live, tree migrated.
 - **G1** — real PMS/booking API credentials (Halo/Best Practice, HotDoc partner access)
 - **G2** — real patient data of any kind (requires privacy impact assessment first; APP 7 posture per brief)
 - **G3** — live SMS to real patients (Spam Act consent flows verified; message templates founder-approved)

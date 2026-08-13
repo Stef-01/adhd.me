@@ -21,20 +21,20 @@ export interface OpsState {
   feed: Record<PracticeId, FeedEvidence>;
 }
 
-const globalStore = globalThis as { __careyieldOps?: OpsState };
+const globalStore = globalThis as { __adhdMeOps?: OpsState };
 
 function initial(): OpsState {
   return { switches: { ...ALL_CLEAR, pausedPracticeIds: [] }, auditEvents: [], feed: {} };
 }
 
 export function getOps(): OpsState {
-  globalStore.__careyieldOps ??= initial();
-  return globalStore.__careyieldOps;
+  globalStore.__adhdMeOps ??= initial();
+  return globalStore.__adhdMeOps;
 }
 
 export function resetOps(): OpsState {
-  globalStore.__careyieldOps = initial();
-  return globalStore.__careyieldOps;
+  globalStore.__adhdMeOps = initial();
+  return globalStore.__adhdMeOps;
 }
 
 const QUEUE_STATUSES: InvitationStatus[] = ["queued", "sent", "booked", "expired", "opted_out"];

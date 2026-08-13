@@ -36,7 +36,7 @@ export interface PrivacyDataset {
 
 /** One-way reference to a patient — provable identity match, no stored identifier. */
 export function patientRef(patientId: string): string {
-  return createHash("sha256").update(`careyield:patient:${patientId}`).digest("hex");
+  return createHash("sha256").update(`adhd-me:patient:${patientId}`).digest("hex");
 }
 
 export interface SuppressionEntry {

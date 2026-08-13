@@ -57,7 +57,7 @@ client — its own G3 guard covers it.)
 
 **Exact activation steps (in order, after credentials exist).**
 1. Implement a live `PmsApiClient` (HTTP) alongside `RecordedFixtureClient`; credentials
-   injected via new env vars (proposed: `CAREYIELD_BP_API_KEY`, `CAREYIELD_HALO_API_KEY`) —
+   injected via new env vars (proposed: `ADHDME_BP_API_KEY`, `ADHDME_HALO_API_KEY`) —
    never committed, never defaulted.
 2. Reconcile `BpRawResponses`/`HaloRawResponses` field mappings against real sandbox
    responses; update fixtures to genuine recordings; `describePmsContract` and the W38
@@ -100,7 +100,7 @@ founder-commissioned document; nothing in the codebase substitutes for it.
 2. Live Postgres/Supabase project wired: migrations 0001–0003 applied (they are
    paper-only today — no client library is even installed), generated types compiled,
    RLS smoke tests green (the W2 ledger note already defers "live apply" here).
-3. Real auth provider replaces mock sign-in (`CAREYIELD_AUTH_PROVIDER` is the documented
+3. Real auth provider replaces mock sign-in (`ADHDME_AUTH_PROVIDER` is the documented
    seam in `src/console/session.ts`; today it is a comment, not a code path — the swap is
    real work, not a flag flip).
 4. The in-memory stores (rail, console, ops, audit, privacy, rate-limit) move to the
@@ -138,7 +138,7 @@ into the sim and app surfaces.
 
 **Credentials the founder must obtain to open G3.**
 1. Twilio account: Account SID + Auth Token (proposed env names:
-   `CAREYIELD_TWILIO_ACCOUNT_SID`, `CAREYIELD_TWILIO_AUTH_TOKEN` — injected only;
+   `ADHDME_TWILIO_ACCOUNT_SID`, `ADHDME_TWILIO_AUTH_TOKEN` — injected only;
    `TwilioConfig` has no defaults by design).
 2. An Australian sender (mobile number or alphanumeric ID per Spam Act identification
    rules) for `fromNumber`.
@@ -180,9 +180,9 @@ non-production deployment defeats every guarantee in this table.
 
 | Item | Setting | Source |
 |---|---|---|
-| `CAREYIELD_TOKEN_SECRET` | **MUST be set** — signing fails closed in production without it | `src/lib/secret.ts` |
-| `CAREYIELD_ENABLE_MOCK_ROUTES` | **MUST be unset** — token-disclosing introspection routes 404 | `src/lib/mock-guard.ts` |
-| `CAREYIELD_ENABLE_DEMO` | **MUST be unset** — demo mints owner sessions + resets stores | `src/lib/demo-guard.ts` |
+| `ADHDME_TOKEN_SECRET` | **MUST be set** — signing fails closed in production without it | `src/lib/secret.ts` |
+| `ADHDME_ENABLE_MOCK_ROUTES` | **MUST be unset** — token-disclosing introspection routes 404 | `src/lib/mock-guard.ts` |
+| `ADHDME_ENABLE_DEMO` | **MUST be unset** — demo mints owner sessions + resets stores | `src/lib/demo-guard.ts` |
 | Infra rate limiting / WAF | Required in front of the app; in-process limiter is single-node only | docs/SECURITY-REVIEW-Q3.md §3 |
 | Session lifecycle | 7-day expiry enforced in code; no action needed | `src/console/session.ts` |
 | Real auth provider | Required before G2 (mock sign-in accepts any email) | docs/SECURITY-REVIEW-Q3.md standing items |

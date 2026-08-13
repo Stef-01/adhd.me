@@ -28,16 +28,16 @@ export interface ComplaintsState {
   seq: number;
 }
 
-const globalStore = globalThis as { __careyieldComplaints?: ComplaintsState };
+const globalStore = globalThis as { __adhdMeComplaints?: ComplaintsState };
 
 export function getComplaints(): ComplaintsState {
-  globalStore.__careyieldComplaints ??= { complaints: [], seq: 1 };
-  return globalStore.__careyieldComplaints;
+  globalStore.__adhdMeComplaints ??= { complaints: [], seq: 1 };
+  return globalStore.__adhdMeComplaints;
 }
 
 export function resetComplaints(): ComplaintsState {
-  globalStore.__careyieldComplaints = { complaints: [], seq: 1 };
-  return globalStore.__careyieldComplaints;
+  globalStore.__adhdMeComplaints = { complaints: [], seq: 1 };
+  return globalStore.__adhdMeComplaints;
 }
 
 /**

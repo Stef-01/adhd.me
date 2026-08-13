@@ -71,7 +71,7 @@ export interface FieldErrors {
   [field: string]: string;
 }
 
-const globalStore = globalThis as { __careyieldConsole?: ConsoleState };
+const globalStore = globalThis as { __adhdMeConsole?: ConsoleState };
 
 function initial(): ConsoleState {
   return { practices: [], auditEvents: [], memberships: [], nextPracticeSeq: 0 };
@@ -132,13 +132,13 @@ export function activePracticeFor(
 }
 
 export function getConsole(): ConsoleState {
-  globalStore.__careyieldConsole ??= initial();
-  return globalStore.__careyieldConsole;
+  globalStore.__adhdMeConsole ??= initial();
+  return globalStore.__adhdMeConsole;
 }
 
 export function resetConsole(): ConsoleState {
-  globalStore.__careyieldConsole = initial();
-  return globalStore.__careyieldConsole;
+  globalStore.__adhdMeConsole = initial();
+  return globalStore.__adhdMeConsole;
 }
 
 export interface OnboardingInput {

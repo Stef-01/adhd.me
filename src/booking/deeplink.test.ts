@@ -19,7 +19,7 @@ const CTX: DeepLinkContext = {
 
 const INTERNAL: InternalProviderConfig = {
   provider: "internal",
-  baseUrl: "https://book.careyield.test",
+  baseUrl: "https://book.adhd-me.test",
 };
 
 const HOTDOC: VendorProviderConfig = {
@@ -45,7 +45,7 @@ describe("W29 booking deep-link formats", () => {
   it("internal provider emits the tokenised ADHD.ME link", () => {
     const link = buildBookingLink(settings(INTERNAL), CTX);
     expect(link.provider).toBe("internal");
-    expect(link.url.startsWith("https://book.careyield.test/book/")).toBe(true);
+    expect(link.url.startsWith("https://book.adhd-me.test/book/")).toBe(true);
     // The token in the link resolves back to this invitation and nothing else.
     const token = link.url.split("/book/")[1]!;
     expect(verifyBookingToken(token)).toBe(CTX.invitationId);
@@ -93,7 +93,7 @@ describe("W29 flag + fallback behaviour", () => {
     const link = buildBookingLink(settings(HOTDOC, false), CTX);
     expect(link.provider).toBe("internal");
     expect(link.fellBackBecause).toBe("provider_disabled");
-    expect(link.url.startsWith("https://book.careyield.test/book/")).toBe(true);
+    expect(link.url.startsWith("https://book.adhd-me.test/book/")).toBe(true);
   });
 
   it("falls back when the clinician has no vendor slug mapped", () => {
@@ -109,9 +109,9 @@ describe("W29 flag + fallback behaviour", () => {
 
 describe("W29 link safety guard", () => {
   it("rejects non-https links", () => {
-    expect(() => assertSafeLink("http://book.careyield.test/book/abc")).toThrow(UnsafeDeepLinkError);
+    expect(() => assertSafeLink("http://book.adhd-me.test/book/abc")).toThrow(UnsafeDeepLinkError);
     expect(() =>
-      buildBookingLink(settings({ ...INTERNAL, baseUrl: "http://book.careyield.test" }), CTX),
+      buildBookingLink(settings({ ...INTERNAL, baseUrl: "http://book.adhd-me.test" }), CTX),
     ).toThrow(/https/);
   });
 

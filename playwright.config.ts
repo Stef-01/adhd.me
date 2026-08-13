@@ -26,6 +26,11 @@ function chromiumExecutable(): string | undefined {
 
 const executablePath = chromiumExecutable();
 
+// The port is overridable so a stale server on the default cannot make the suite unrunnable —
+// which is exactly what happened once, and "the e2e cannot start" reads like a product failure.
+const PORT = process.env.E2E_PORT ?? "3100";
+const BASE_URL = `http://127.0.0.1:${PORT}`;
+
 export default defineConfig({
   testDir: "e2e",
   // The mock rail/console/audit stores are process-global singletons (synthetic
@@ -34,20 +39,20 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   use: {
-    baseURL: "http://127.0.0.1:3100",
+    baseURL: BASE_URL,
     launchOptions: executablePath ? { executablePath } : {},
   },
   webServer: {
-    command: "pnpm exec next build && pnpm exec next start -p 3100",
-    url: "http://127.0.0.1:3100",
+    command: `pnpm exec next build && pnpm exec next start -p ${PORT}`,
+    url: BASE_URL,
     timeout: 240_000,
     reuseExistingServer: false,
     // The e2e drives a production build, so supply the signing secret (fail-closed
     // in prod) and opt the mock introspection routes in explicitly.
     env: {
-      CAREYIELD_TOKEN_SECRET: "e2e-signing-secret",
-      CAREYIELD_ENABLE_MOCK_ROUTES: "1",
-      CAREYIELD_ENABLE_DEMO: "1", // W37: demo fails closed in prod builds unless opted in
+      ADHDME_TOKEN_SECRET: "e2e-signing-secret",
+      ADHDME_ENABLE_MOCK_ROUTES: "1",
+      ADHDME_ENABLE_DEMO: "1", // W37: demo fails closed in prod builds unless opted in
     },
   },
 });

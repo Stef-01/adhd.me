@@ -34,7 +34,7 @@ possession; `signIn`/`signOut` legitimately need no prior session.
 ### M1 — Fail-open dev signing secret (Medium) — FIXED
 
 `token.ts` and `session.ts` fell back to a committed literal
-(`"careyield-synthetic-dev-secret"`) when `CAREYIELD_TOKEN_SECRET` was unset,
+(`"adhd-me-synthetic-dev-secret"`) when `ADHDME_TOKEN_SECRET` was unset,
 signing with a publicly known key rather than refusing to start. In any real
 deployment missing the env var, an attacker could forge session cookies for any
 email and booking tokens for any invitation id.
@@ -51,7 +51,7 @@ Nothing prevented them from being served by a production build.
 
 **Fix:** both route handlers call `assertMockRoutesEnabled()`
 (`src/lib/mock-guard.ts`), which returns `notFound()` in a production build
-unless `CAREYIELD_ENABLE_MOCK_ROUTES=1` is explicitly set. The Playwright config
+unless `ADHDME_ENABLE_MOCK_ROUTES=1` is explicitly set. The Playwright config
 opts in for its production-build run; a real deployment sets neither the flag,
 so the routes 404.
 

@@ -15,7 +15,7 @@ import type { InterestSignup } from "./types";
 const dirs: string[] = [];
 
 function tempFile(): string {
-  const dir = mkdtempSync(path.join(tmpdir(), "careyield-interest-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "adhd-me-interest-"));
   dirs.push(dir);
   return path.join(dir, "signups.jsonl");
 }

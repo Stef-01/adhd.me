@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 // a deployment explicitly opts in (same posture as the mock introspection routes).
 export function demoEnabled(): boolean {
   if (process.env.NODE_ENV !== "production") return true;
-  return process.env.CAREYIELD_ENABLE_DEMO === "1";
+  return process.env.ADHDME_ENABLE_DEMO === "1";
 }
 
 export function assertDemoEnabled(): void {

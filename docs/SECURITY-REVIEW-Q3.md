@@ -15,7 +15,7 @@ the same unit.
 
 | # | Severity | Area | Finding | Outcome |
 |---|---|---|---|---|
-| 1 | **Critical** | Demo surface | `/demo` and its launch action were unauthenticated in every environment: any visitor could obtain an owner session cookie and reset every mock store | **Fixed.** `src/lib/demo-guard.ts`: fails closed in production builds unless `CAREYIELD_ENABLE_DEMO=1` (same posture as the mock introspection routes). Applied to both the page and the action. |
+| 1 | **Critical** | Demo surface | `/demo` and its launch action were unauthenticated in every environment: any visitor could obtain an owner session cookie and reset every mock store | **Fixed.** `src/lib/demo-guard.ts`: fails closed in production builds unless `ADHDME_ENABLE_DEMO=1` (same posture as the mock introspection routes). Applied to both the page and the action. |
 | 2 | High | Token lifecycle | Console session cookies were HMAC-of-email with no issued-at — a captured value was a forever-credential | **Fixed.** Sessions embed issued-at; verification enforces a 7-day max age and refuses future-dated values beyond 60s skew. Legacy-format cookies fail closed (one-time re-sign-in). |
 | 3 | High | Rate limits | No throttling anywhere; `signIn` and `confirmBooking` are unauthenticated POST endpoints | **Fixed.** Fixed-window in-memory limiter (`src/lib/rate-limit.ts`) wired: sign-in 20/min per identifier, booking-confirm 10/min per invitation. In-memory is honest single-process posture; **production deployments additionally need infra-level limits** (deployment checklist, W39 dossier). |
 | 4 | Medium (accepted) | Token lifecycle | Booking deep-link tokens carry no TTL of their own | Accepted: lifecycle is governed server-side by invitation state — expired offers refuse, deleted patients' links die (W33 e2e proves it). A token without a live invitation is inert. Revisit if tokens ever become bearer credentials for anything beyond the one booking view. |
@@ -28,4 +28,4 @@ the same unit.
 
 - Infra-level rate limiting + WAF in front of any real deployment (finding 3 residual).
 - Real auth provider (Supabase) replaces mock sign-in before any non-synthetic data.
-- `CAREYIELD_ENABLE_DEMO` and `CAREYIELD_ENABLE_MOCK_ROUTES` must be UNSET in production.
+- `ADHDME_ENABLE_DEMO` and `ADHDME_ENABLE_MOCK_ROUTES` must be UNSET in production.

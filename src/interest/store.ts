@@ -5,7 +5,7 @@ import { neutraliseSpreadsheetFormula } from "@/security/untrusted";
 import type { InterestReason, InterestSignup } from "./types";
 
 function defaultStorePath(): string {
-  const configured = process.env.CAREYIELD_INTEREST_PATH?.trim();
+  const configured = process.env.ADHDME_INTEREST_PATH?.trim();
   return configured || path.join(process.cwd(), ".data", "interest-signups.jsonl");
 }
 
