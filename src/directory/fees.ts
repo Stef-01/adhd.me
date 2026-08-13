@@ -200,7 +200,13 @@ const SERVICE_WORD_PATTERN = new RegExp(
  * W23's landing tests, which is its own unit.
  */
 export const RATING_RULE_OVER_BROAD =
-  "W23's `no-ratings` matches the bare word \"review\", which has now produced false positives on three surfaces: /clinicians (the identifier `is-reviewed`, W192), /privacy/automated-decisions (an ADM notice saying a review is scheduled, W192, accepted — and since retired at W201, whose rewrite of that page removed the phrase, so the acceptance was deleted rather than left to rot), and fee service names (\"Care plan review\", W198, exempted here). A patient rating is caught separately by the star, 5/5 and \"rated\" branches of the same rule. Narrowing the word branch is a unit of its own because W23's landing tests depend on the current pattern.";
+  "W23's `no-ratings` matches the bare word \"review\", which has now produced false positives on three surfaces: /clinicians (the identifier `is-reviewed`, W192), /privacy/automated-decisions (an ADM notice saying a review is scheduled, W192, accepted — and since retired at W201, whose rewrite of that page removed the phrase, so the acceptance was deleted rather than left to rot), and fee service names (\"Care plan review\", W198, exempted here). A patient rating is caught separately by the star, 5/5 and \"rated\" branches of the same rule. Narrowing the word branch is a unit of its own because W23's landing tests depend on the current pattern. " +
+  "ESCALATED BY THE ADHD REORIENTATION, AND THE CHARACTER OF THE PROBLEM CHANGED WITH IT. " +
+  "The previous three were incidental collisions on three unrelated surfaces, each fixable by rewording one sentence. " +
+  "For an assessment-and-titration product \"dose review\", \"medication review\" and \"titration review\" are not incidental — they are what the follow-up half of the product IS, and the words a clinician and a patient would both use for it. " +
+  "The landing page and the GP walkthrough were reworded once more (to \"dose adjustments\" and \"titration follow-up\") to keep the sweep honest without touching W23, which is still the right boundary. " +
+  "But rewording is now a recurring tax on the product's core vocabulary rather than a one-off, and the next surface to hit it will be the finder's deeper stages, where the copy belongs to the clinicians rather than to us. " +
+  "That is the point at which narrowing the word branch stops being a hardening nicety and becomes load-bearing.";
 
 function lintFeeOnly(text: string, field: string): ProfileCopyViolation[] {
   const out: ProfileCopyViolation[] = [];

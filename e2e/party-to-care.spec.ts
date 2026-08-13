@@ -9,10 +9,42 @@
 // written; the rendered page is where a patient reads it, and the two differ wherever a value
 // is interpolated — which is exactly where a sentence about "our clinicians" would arrive from
 // a practice name or a clinician display name.
+//
+// BLOCK BOUNDARIES ARE SENTENCE BOUNDARIES, AND ERASING THEM MANUFACTURES VIOLATIONS.
+//
+// This normaliser used to be `.replace(/\s+/g, " ")`, which flattened the newlines `innerText`
+// puts between block elements into ordinary spaces. The W138 linter looks for the product as the
+// SUBJECT OF A CARE VERB — a claim about grammar — so joining two unrelated blocks into one
+// string invents grammar that nobody wrote.
+//
+// It was caught by a real failure rather than by reasoning: an eyebrow reading "Why we founded
+// ADHD.ME" sits directly above a headline beginning "Getting assessed for ADHD…", and flattened
+// they read as "ADHD.ME Getting assessed" — the brand, then a care verb, four words apart. The
+// rule fired exactly as designed on a sentence that does not exist on the page.
+//
+// So line breaks become SENTENCE TERMINATORS and only intra-line whitespace is collapsed. A real
+// violation lives inside one block and is unaffected: `innerText` does not break on soft wrap, so
+// "we will review your results" in a paragraph still arrives on one line and is still caught.
+// The tests at the bottom of this file assert both halves, because a normaliser that suppressed
+// real findings would look identical to this one from the outside.
 
 import { expect, test, type Page } from "@playwright/test";
 import { discoverSurfaces } from "../src/compliance/surfaces";
 import { lintPartyToCare } from "../src/compliance/party-to-care";
+
+/**
+ * Rendered text, with block structure preserved as punctuation.
+ *
+ * The terminator is a full stop because it is what the boundary MEANS, and because it reads
+ * correctly in a failure message — the matched text is quoted back to whoever has to fix it.
+ */
+function renderedSentences(raw: string): string {
+  return raw
+    .split(/\r?\n+/)
+    .map((line) => line.replace(/[^\S\r\n]+/g, " ").trim())
+    .filter(Boolean)
+    .join(". ");
+}
 
 const pageRoutes = discoverSurfaces("app")
   .filter((s) => s.kind === "page")
@@ -24,7 +56,7 @@ const PARAMETERISED = (path: string) => path.includes("[");
 async function lintRendered(page: Page, label: string) {
   // The visible text, not the HTML: class names and data-testids are not copy, and linting
   // them would produce findings nobody can act on.
-  const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+  const text = renderedSentences(await page.locator("body").innerText());
   // Guard against a vacuous pass — an empty or errored page lints clean.
   expect(text.length, `${label} rendered almost nothing`).toBeGreaterThan(80);
 
@@ -121,7 +153,35 @@ test("the sweep would actually catch a violation", async ({ page }) => {
     document.body.appendChild(p);
   });
 
-  const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+  const text = renderedSentences(await page.locator("body").innerText());
   const findings = lintPartyToCare(text);
   expect(findings.map((f) => f.rule)).toContain("adhd-me-owns-clinicians");
+});
+
+test("the normaliser separates blocks without muting a real violation", async ({ page }) => {
+  // BOTH HALVES, because the failure modes are opposite and a normaliser that got either wrong
+  // would look identical from outside. The first half is the defect this function exists for; the
+  // second is the way fixing it could go wrong — a separator that broke real sentences would turn
+  // the whole sweep green and mean nothing.
+  await page.goto("/privacy");
+  await page.evaluate(() => {
+    const eyebrow = document.createElement("p");
+    eyebrow.textContent = "Why we founded ADHD.ME";
+    const heading = document.createElement("h2");
+    heading.textContent = "Getting assessed for ADHD in Australia is a test of stamina.";
+    const real = document.createElement("p");
+    real.textContent = "We will assess your symptoms and call you back.";
+    document.body.append(eyebrow, heading, real);
+  });
+
+  const raw = await page.locator("body").innerText();
+
+  // The phantom: flattening every whitespace run joins the two blocks into a claim nobody wrote.
+  expect(lintPartyToCare(raw.replace(/\s+/g, " ")).map((f) => f.rule))
+    .toContain("adhd-me-as-care-provider");
+
+  // The fix drops it — and still catches the genuine one-block violation appended above.
+  const findings = lintPartyToCare(renderedSentences(raw));
+  expect(findings.map((f) => f.match).join(" ")).not.toMatch(/ADHD\.ME Getting/);
+  expect(findings.map((f) => f.rule)).toContain("adhd-me-as-care-provider");
 });

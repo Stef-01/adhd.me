@@ -31,7 +31,7 @@ const stages: Array<{ id: Stage; label: string }> = [
 const adhdConditions = [
   { id: "adhd-assessment", label: "Diagnostic assessment", detail: "Demo anchor", locked: true },
   { id: "child-adolescent-adhd", label: "Children & adolescents", detail: "School reports and paediatric referral" },
-  { id: "titration", label: "Titration & review", detail: "Initiation, dose review, side effects" },
+  { id: "titration", label: "Titration & follow-up", detail: "Initiation, dose adjustment, side effects" },
   { id: "autism-adhd", label: "Co-occurring autism", detail: "Where one explanation was offered and two are needed" },
   { id: "comorbid-mood", label: "Anxiety & mood differential", detail: "Comorbidity, differential, or both" },
   { id: "student-academic", label: "Study & workplace adjustments", detail: "Documentation a school or employer accepts" },
@@ -42,7 +42,7 @@ const comingFocusAreas = ["Autism assessment", "Mental health", "Sleep medicine"
 const cases = [
   { label: "New ADHD assessment", detail: "Developmental history · rating scales", time: "8:40" },
   { label: "Assessment part two", detail: "Collateral history · differential", time: "10:20" },
-  { label: "Titration review", detail: "Effect · appetite · blood pressure", time: "1:10" },
+  { label: "Titration follow-up", detail: "Effect · appetite · blood pressure", time: "1:10" },
   { label: "Longer adult consult", detail: "Late presentation · shared plan", time: "3:40" },
 ];
 
@@ -390,7 +390,7 @@ export function ClinicianWalkthrough() {
               {[
                 ["Choose", "Make the clinical direction explicit."],
                 ["Concentrate", "See enough similar cases to recognise patterns."],
-                ["Learn", "Review only what tomorrow’s work makes useful."],
+                ["Learn", "Read only what tomorrow’s work makes useful."],
                 ["Repeat", "Let exposure and reflection compound."],
               ].map(([title, detail], index) => (
                 <div key={title}>

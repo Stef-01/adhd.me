@@ -48,10 +48,10 @@ import { InterestForm } from "./interest-form";
 
 /** The structural facts the hero card renders. Each needs source confirmation before launch. */
 const ASSESSMENT_GAP: ReadonlyArray<{ figure: string; detail: string }> = [
-  { figure: "Psychiatrist-gated", detail: "an adult diagnosis has largely required a specialist, of whom there are not enough" },
+  { figure: "Referral-gated", detail: "the adult pathway has largely run through psychiatry, and there is not enough of it" },
   { figure: "Months to years", detail: "typical wait for an adult assessment appointment" },
   { figure: "Thousands", detail: "common out-of-pocket cost of going privately instead" },
-  { figure: "State by state", detail: "who may prescribe, and continue prescribing, changes at the border" },
+  { figure: "State by state", detail: "what a GP is allowed to do for you changes at the border" },
 ];
 
 /**
@@ -62,13 +62,13 @@ const FOUNDERS: ReadonlyArray<{ name: string; role: string; remit: string }> = [
     name: "Krish Ganesh",
     role: "Co-founder",
     remit:
-      "Works on the part of this that is not clinical: what a person meets when they first look for help, and whether it treats them like someone worth assessing properly.",
+      "Works on the part of this that is not clinical: what a person meets when they first look for help, and whether it meets them as somebody worth assessing properly.",
   },
   {
     name: "Dr Anubhav Saxena",
     role: "Co-founder, clinical",
     remit:
-      "Brings the measurement discipline from metabolic medicine to assessment: a documented baseline before anything starts, and review at set intervals rather than when a problem gets loud enough to prompt a call.",
+      "Brings the measurement discipline from metabolic medicine to assessment: a documented baseline before anything starts, and follow-up at set intervals rather than when a problem gets loud enough to prompt a call.",
   },
 ];
 
@@ -222,8 +222,8 @@ export function StoryLanding() {
             <Reveal delay={0.05} className="story-prose">
               <p>
                 Clearing this one takes money, several months of persistence, the confidence to
-                self-advocate to a specialist, and enough English and spare time to keep chasing
-                it. Those are not symptoms. They are advantages.
+                hold your ground in a consulting room, and enough English and spare time to keep
+                chasing it. Those are not symptoms. They are advantages.
               </p>
               <p>
                 So the people who get assessed are systematically not the people who most need
@@ -260,10 +260,10 @@ export function StoryLanding() {
                 begun letting GPs take on more of this work rather than only referring it onward.
               </p>
               <p>
-                None of that removes the specialist from the picture, and it should not. What it
-                does is make the first appointment reachable — and put the follow-up, the
-                baseline checks and the dose reviews with the clinician a person can actually get
-                back in to see.
+                None of that takes psychiatry out of the picture, and it should not. What it does
+                is make the first appointment reachable — and put the follow-up, the baseline
+                checks and the dose adjustments with the clinician a person can actually get back in
+                to see.
               </p>
             </Reveal>
           </div>
@@ -303,7 +303,7 @@ export function StoryLanding() {
           </Reveal>
           <Reveal>
             <h2 id="product-title" className="story-heading story-heading-wide">
-              ADHD.ME helps people reach an assessment that was built to be reachable.
+              ADHD.ME is how you find a GP who does this work.
             </h2>
           </Reveal>
 
@@ -324,7 +324,7 @@ export function StoryLanding() {
             </motion.li>
             <motion.li variants={item}>
               <h3>The follow-up, not just the first visit</h3>
-              <p>Baseline checks before anything starts, and dose reviews on a schedule — the half of assessment that usually gets dropped.</p>
+              <p>Baseline checks before anything starts, and dose adjustments on a schedule — the half of assessment that usually gets dropped.</p>
             </motion.li>
           </motion.ol>
         </div>
