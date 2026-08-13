@@ -237,6 +237,25 @@ function FinderContext() {
  * the reading order immediately after the clinician's name, which is the only place it changes
  * what somebody does next.
  */
+/**
+ * The NSW training, rendered as what it is: the clinician's own statement.
+ *
+ * "Says they have completed" rather than "has completed", because there is no register this
+ * product can check it against. W193's whole distinction is between a fact a reader can verify
+ * and a claim they are being asked to take on trust, and rendering the second as the first is the
+ * failure that module exists to prevent. The wording is the disclosure.
+ */
+function NswTraining({ clinician }: { clinician: Clinician }) {
+  if (!clinician.nswAdhdTrained) return null;
+
+  return (
+    <p className="declared-claim">
+      Says they have completed the NSW training to carry ADHD care without ongoing specialist
+      involvement. ADHD.ME has not verified this.
+    </p>
+  );
+}
+
 function FounderDisclosure({ clinician }: { clinician: Clinician }) {
   if (!clinician.founderInterest) return null;
 
@@ -723,6 +742,7 @@ export function CareFinder() {
                 <div className="match-details">
                   <h2>{clinician.name}</h2>
                   <p className="clinician-meta">{clinician.title} · {clinician.suburb}</p>
+                  <NswTraining clinician={clinician} />
                   <FounderDisclosure clinician={clinician} />
                   <p className="match-reason">{personalizedMatch.reason}</p>
                   <div className="practical-signal-row" aria-label="Practical appointment details">
@@ -803,6 +823,7 @@ export function CareFinder() {
               <p className="eyebrow">Why this fit</p>
               <h1>{clinician.name}</h1>
               <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {clinician.suburb}</p>
+              <NswTraining clinician={clinician} />
               <FounderDisclosure clinician={clinician} />
               {personalizedMatch.signals.length > 0 && (
                 <div className="fit-signal-row profile-fit-signals" aria-label="Key match reasons">

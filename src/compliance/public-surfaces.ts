@@ -204,21 +204,18 @@ export interface AcceptedFinding {
 }
 
 export const ACCEPTED_FINDINGS: readonly AcceptedFinding[] = [
-  {
-    path: "/",
-    rule: "no-clinical-claims",
-    match: "diagnosis",
-    why: "Describes people who already carry a diagnosis of anxiety and were never assessed for anything else — who the pathway fails, not an offer of diagnosis. The rule cannot tell the difference because the difference is whose diagnosis the sentence is about.",
-    reviewBy: "2027-02-11",
-  },
-  {
-    path: "/",
-    rule: "no-diagnosis-or-condition",
-    match: "diagnosis",
-    why: "Same sentence, caught a second time by W6's patient-message linter. Accepted on the same grounds and listed separately so neither rule is switched off by accepting the other.",
-    reviewBy: "2027-02-11",
-  },
+  // EMPTY, AND THAT IS A RESULT RATHER THAN AN OVERSIGHT.
+  //
+  // Two entries lived here for the landing page's use of "diagnosis". The 2026-08-13 rewrite cut
+  // that page from eight sections to five and the sentence went with it, so both acceptances
+  // stopped describing anything. The test checks BOTH directions and failed on exactly that: an
+  // acceptance for a finding the page no longer produces reads as coverage, which is worse than
+  // no acceptance at all because it looks like somebody considered the case recently.
+  //
+  // Deleted rather than kept "in case it comes back". If the wording returns, so does the finding,
+  // and it can be argued again then with a fresh review date.
 ];
+
 
 /**
  * Open questions that are not about a route, and therefore cannot live in `STANDING_FLAGS`.

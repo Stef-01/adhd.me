@@ -60,8 +60,8 @@ test("the storybook's copy is legible with JavaScript disabled", async ({ browse
 
   await legible(page.getByRole("heading", { level: 1 }), "the hero headline");
   await legible(page.getByText("Why we founded ADHD.ME"), "the hero eyebrow");
-  await legible(page.getByRole("heading", { name: /The same conversation keeps happening/i }), "chapter 1");
-  await legible(page.getByRole("heading", { name: /ADHD\.ME is how you find a GP/i }), "chapter 5");
+  await legible(page.getByRole("heading", { name: /The rule changed in NSW/i }), "the NSW section");
+  await legible(page.getByRole("heading", { name: /How it works/i }).first(), "the steps section");
 
   await context.close();
 });

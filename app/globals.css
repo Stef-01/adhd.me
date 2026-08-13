@@ -2,35 +2,77 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/newsreader";
 
+/* THE PALETTE. One theme, one accent, one place to change either.
+   Neutrals are warm-olive at low lightness, which is the hue the tree has always used;
+   they are darkened rather than re-hued so nothing else has to move.
+   The accent is amber. It replaced Crushed Rose, which replaced sage before it, and the
+   token is finally NAMED for its job rather than for a colour it used to be. */
 :root {
-  color-scheme: light;
-  --ink: #191a17;
-  /* The ground of the primary buttons, and the label that sits on it. Identical to --ink and to
-     white in light mode, which is exactly why they were never separate tokens; they are separate
-     jobs, and in dark mode a primary button inverts to a LIGHT pill with a dark label rather than
-     following the text colour. Axe caught the unsplit version as white-on-light on /finder. */
-  --ground: #191a17;
-  --on-ground: #ffffff;
-  /* Accent text on the one deliberately inverted band (/practices' hero, bg-stone-950). Its
-     ground flips with the theme, so the accent on it has to flip the opposite way: the light
-     rose reads on near-black, the deep rose reads on near-white. */
-  --on-band: #E0AEBA;
-  --muted: #6e706a;
-  /* Darkened from #a3a49f (2.4:1 on --paper) — failed WCAG AA at 11px. Now 5.1:1. */
-  --faint: #6b6c67;
-  --paper: #fbfaf7;
-  --stone: #eeece5;
-  --line: #dfddd6;
-  /* 2026-08-10 rebrand: accent moved from sage green to Crushed Rose (#8B263E),
-     from the founder-supplied rose palette (Blush Petal #E0AEBA, Tulip Bloom #D17484,
-     Crushed Rose #8B263E). Token name kept so every accent usage flips in one move.
-     Contrast on --paper: 7.8:1 — passes WCAG AA/AAA as text everywhere the old
-     sage (4.7:1) did. --sage-soft is now a blush surface wash. */
-  --sage: #8B263E;
-  --sage-soft: #f6e8ea;
-  --rose-mid: #D17484;
-  --rose-petal: #E0AEBA;
+  color-scheme: dark;
+
+  /* Ink and grounds */
+  --ink: #f1efe8;
+  --muted: #a6a49b;
+  /* Has to clear AA at 11px, the smallest size this token is used at. 5.4:1 on --paper. */
+  --faint: #9b998f;
+  --paper: #15160f;
+  --stone: #1e1f18;
+  --line: #33352c;
+
+  /* Accent. 8.3:1 on --paper, so it carries text as well as marks. */
+  --accent: #E0A458;
+  /* The label on an accent GROUND. White measures 2.2:1 on amber and is never correct here. */
+  --on-accent: #17150d;
+  --accent-soft: #241d12;
+  --accent-mid: #EFC489;
+  --accent-tint: #F5DDB8;
+
+  /* The primary button: a light pill with a dark label. */
+  --ground: #f1efe8;
+  --on-ground: #15160f;
+  /* Accent on the one light band (/practices hero), where the dark amber reads instead. */
+  --on-band: #6E4A12;
+
+  /* Tailwind's stone scale, redefined. /practices, /privacy and /demo are built from these
+     utilities rather than the tokens above, and Tailwind v4 compiles every colour utility to
+     var(--color-*), so the ramp is inverted here once instead of with a dark: variant on each
+     of the 91 usages. */
+  --color-white: #15160f;
+  --color-black: #f4f1e9;
+  --color-stone-50: #1a1b14;
+  --color-stone-100: #22231b;
+  --color-stone-200: #2c2d24;
+  --color-stone-300: #3a3b31;
+  --color-stone-400: #6f7167;
+  --color-stone-500: #9b998f;
+  --color-stone-600: #b4b2a9;
+  --color-stone-700: #d3d0c7;
+  --color-stone-800: #e6e3da;
+  --color-stone-900: #f1efe8;
+  --color-stone-950: #f8f6ef;
+
+  /* Semantic families the console uses (amber for notices, emerald for confirmations, red for
+     refusals). Inverted on the same principle as the stone ramp: a 50 is a tinted GROUND and a
+     700-900 is TEXT on it, so on a dark page the ground has to become dark and the text light.
+     Left un-inverted, `text-emerald-800` printed #006045 on #1a1b14 at 2.27:1. */
+  --color-amber-50: #241d12;
+  --color-amber-100: #2e2416;
+  --color-amber-200: #3d3120;
+  --color-amber-500: #E0A458;
+  --color-amber-700: #EFC489;
+  --color-amber-900: #F5DDB8;
+
+  --color-emerald-50: #14211a;
+  --color-emerald-200: #23392e;
+  --color-emerald-600: #3f9d78;
+  --color-emerald-700: #7fceac;
+  --color-emerald-800: #9adcbe;
+  --color-emerald-900: #b6e8d1;
+
+  --color-red-600: #b4463c;
+  --color-red-700: #f0a49c;
 }
+
 
 * {
   box-sizing: border-box;
@@ -67,7 +109,7 @@ a {
 button:focus-visible,
 a:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--sage);
+  outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
 
@@ -161,7 +203,7 @@ textarea:focus-visible {
 
 .demo-nav-home:hover,
 .demo-nav-home:focus-visible {
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .demo-nav-heading {
@@ -177,7 +219,7 @@ textarea:focus-visible {
 }
 
 .demo-nav-heading strong {
-  color: var(--sage);
+  color: var(--accent);
   font-weight: 750;
 }
 
@@ -204,7 +246,7 @@ textarea:focus-visible {
 }
 
 .demo-nav-stops > a.is-active {
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .demo-nav-number {
@@ -320,7 +362,7 @@ textarea:focus-visible {
 
 .eyebrow {
   margin: 0;
-  color: var(--sage);
+  color: var(--accent);
   font-size: 13px;
   font-weight: 650;
   letter-spacing: 0.015em;
@@ -403,7 +445,7 @@ textarea:focus-visible {
 
 .mic-button.recording {
   background: #252820;
-  box-shadow: 0 0 0 9px var(--sage-soft), 0 14px 30px rgb(28 29 25 / 12%);
+  box-shadow: 0 0 0 9px var(--accent-soft), 0 14px 30px rgb(28 29 25 / 12%);
 }
 
 .micro-footer {
@@ -432,7 +474,7 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .waveform-mark.is-active {
@@ -561,8 +603,8 @@ textarea:focus-visible {
 .fit-signal-row span {
   padding: 5px 8px;
   border-radius: 3px;
-  color: var(--sage);
-  background: var(--sage-soft);
+  color: var(--accent);
+  background: var(--accent-soft);
   font-size: 11px;
   font-weight: 620;
   line-height: 1.25;
@@ -590,7 +632,7 @@ textarea:focus-visible {
   margin-top: 22px;
   padding: 0;
   border: 0;
-  color: var(--sage);
+  color: var(--accent);
   background: transparent;
   font-size: 14px;
   font-weight: 620;
@@ -661,7 +703,7 @@ textarea:focus-visible {
   margin-top: 10px;
   padding: 0;
   border: 0;
-  color: var(--sage);
+  color: var(--accent);
   background: transparent;
   font-size: 14px;
   font-weight: 620;
@@ -715,6 +757,15 @@ textarea:focus-visible {
   height: 72px;
   border-radius: 2px;
   font-size: 1.5rem;
+}
+
+/* A claim the clinician made about themselves, styled so it does not read as a verified badge.
+   No accent, no icon, no pill: the point is that it is unconfirmed. */
+.declared-claim {
+  margin: 10px 0 0;
+  color: var(--faint);
+  font-size: 12.5px;
+  line-height: 1.5;
 }
 
 /* A disclosure a reader has to open is one most people never see, so this is always expanded and
@@ -804,7 +855,7 @@ textarea:focus-visible {
 
 .availability,
 .row-availability {
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .availability {
@@ -883,7 +934,7 @@ textarea:focus-visible {
 
 .clinician-row .row-availability {
   margin-top: 2px;
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .clinician-row .row-practical {
@@ -977,7 +1028,7 @@ textarea:focus-visible {
   margin-top: 0.72em;
   margin-right: 8px;
   background: currentColor;
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .fit-list {
@@ -1019,7 +1070,7 @@ textarea:focus-visible {
 }
 
 .profile-footer strong {
-  color: var(--sage);
+  color: var(--accent);
   font-weight: 630;
 }
 
@@ -1050,8 +1101,8 @@ textarea:focus-visible {
 
 .time-list button:hover,
 .time-list button.selected {
-  border-color: var(--sage);
-  background: var(--sage-soft);
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .confirmed-screen > div {
@@ -1060,7 +1111,7 @@ textarea:focus-visible {
 }
 
 .confirmed-screen svg {
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .confirmed-screen h1 {
@@ -1149,9 +1200,9 @@ textarea:focus-visible {
 }
 
 .walkthrough-progress button.is-reached span {
-  border-color: var(--sage);
-  color: white;
-  background: var(--sage);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  background: var(--accent);
 }
 
 .clinician-stage {
@@ -1208,7 +1259,7 @@ textarea:focus-visible {
 
 .direction-label svg,
 .panel-heading > svg {
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .focus-options {
@@ -1236,14 +1287,14 @@ textarea:focus-visible {
 }
 
 .focus-options button.selected {
-  border-color: var(--sage);
+  border-color: var(--accent);
   color: var(--ink);
-  background: var(--sage-soft);
+  background: var(--accent-soft);
 }
 
 .focus-options button svg {
   flex: 0 0 auto;
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .target-control {
@@ -1274,7 +1325,7 @@ textarea:focus-visible {
 .target-control input {
   width: 100%;
   margin: 18px 0 0;
-  accent-color: var(--sage);
+  accent-color: var(--accent);
   cursor: pointer;
 }
 
@@ -1379,7 +1430,7 @@ textarea:focus-visible {
 }
 
 .case-row time {
-  color: var(--sage);
+  color: var(--accent);
   font-size: 12px;
   font-weight: 620;
 }
@@ -1445,8 +1496,9 @@ textarea:focus-visible {
 }
 
 .resource-row.is-reviewed .resource-check {
-  border-color: var(--sage);
-  background: var(--sage);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  background: var(--accent);
 }
 
 .resource-row > div:nth-child(2) > * {
@@ -1454,7 +1506,7 @@ textarea:focus-visible {
 }
 
 .resource-eyebrow {
-  color: var(--sage);
+  color: var(--accent);
   font-size: 10px;
   font-weight: 650;
 }
@@ -1551,7 +1603,7 @@ textarea:focus-visible {
 }
 
 .practice-loop > div > span {
-  color: var(--sage);
+  color: var(--accent);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 22px;
 }
@@ -1574,12 +1626,12 @@ textarea:focus-visible {
   margin-top: 23px;
   padding: 17px 18px;
   border-radius: 7px;
-  background: var(--sage-soft);
+  background: var(--accent-soft);
 }
 
 .skin-cancer-note svg {
   flex: 0 0 auto;
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .skin-cancer-note p {
@@ -2197,35 +2249,14 @@ textarea:focus-visible {
 
 /* Clinician pathway v2 — quiet, prompt-led and intentionally single-column. */
 .clinician-v2 {
-  --cv2-ink: #1d2019;
-  /* WCAG AA on the TINTED panels, not just the ground. Tuned against #fbfaf7 these
-     read fine, but .cv2-focus-card paints var(--stone), and at 10px the untinted values
-     (#6f716b / #66774a) measure 4.37:1 and 4.32:1 — under the 4.5:1 bar, with no
-     large-text concession at that size. Now 4.64:1 on the tint, 5.02:1 on the ground,
-     same hue; where --cv2-sage is a background under white text this only widens the
-     margin.
-     DO NOT revert as a duplicate: two sessions fixed this simultaneously — one at the
-     token, one per-rule — then each deferred to the other and removed both, putting
-     the failure straight back on main. This token fix is the single mechanism; there
-     are deliberately no per-rule colour overrides on .cv2-focus-card. */
-  /* 2026-08-13, design audit: #6b6d67 was tuned against the old literal tint #f0f2eb and gave
-     4.64:1 there. Routing .cv2-focus-card to var(--stone) (#eeece5, marginally darker) dropped it
-     to 4.43:1 and axe caught it on one 10px node — which is the failure the note above predicted,
-     arriving from a change that looked like pure token hygiene. Now 4.70:1 on the tint and 5.33:1
-     on the ground, same hue. Re-derive both if either ground moves again. */
-  --cv2-muted: #676963;
-  /* Muted text where a cv2 panel is dark rather than tinted. */
+  --cv2-ink: #f1efe8;
+  --cv2-muted: #a6a49b;
   --cv2-on-dark-muted: #c9c6be;
-  /* The ground of the dark panels (case hero, learning card, tooltip, primary button). Identical
-     to --cv2-ink in light mode, which is why the two were one token; they are not the same job,
-     because white text sits on THIS one and it therefore must stay dark in both themes. */
-  --cv2-ground: #1d2019;
-  --cv2-soft: var(--sage-soft);
-  --cv2-sage: #8B263E;
-  --cv2-line: #dfded7;
-  min-height: 100svh;
-  padding: 0;
-  color: var(--cv2-ink);
+  --cv2-soft: var(--accent-soft);
+  --cv2-accent: var(--accent);
+  /* The ground of the panels that carry an inverted label. Lifted off --paper so a panel still
+     reads as a panel rather than dissolving into the page. */
+  --cv2-ground: #24251d;
   background: var(--paper);
 }
 
@@ -2319,7 +2350,7 @@ textarea:focus-visible {
 
 .cv2-progress button.is-complete::after,
 .cv2-progress button.is-current::after {
-  background: var(--cv2-sage);
+  background: var(--cv2-accent);
 }
 
 .cv2-stage {
@@ -2333,7 +2364,7 @@ textarea:focus-visible {
 
 .cv2-eyebrow {
   margin: 0;
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   font-size: 11px;
   font-weight: 720;
   letter-spacing: 0.01em;
@@ -2376,8 +2407,8 @@ textarea:focus-visible {
 
 .cv2-focus-card:hover,
 .cv2-focus-card:focus-visible {
-  border-color: var(--rose-petal);
-  background: var(--sage-soft);
+  border-color: var(--accent-tint);
+  background: var(--accent-soft);
   outline: none;
 }
 
@@ -2392,7 +2423,7 @@ textarea:focus-visible {
 .cv2-icon {
   width: 44px;
   height: 44px;
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   background: var(--paper);
 }
 
@@ -2400,13 +2431,13 @@ textarea:focus-visible {
   width: 27px;
   height: 27px;
   color: white;
-  background: var(--cv2-sage);
+  background: var(--cv2-accent);
 }
 
 .cv2-focus-caret {
   width: 27px;
   height: 27px;
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   transition: transform 180ms ease;
 }
 
@@ -2421,7 +2452,7 @@ textarea:focus-visible {
 }
 
 .cv2-focus-card small {
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   font-size: 10px;
   font-weight: 700;
 }
@@ -2490,7 +2521,7 @@ textarea:focus-visible {
 .cv2-condition-list label:hover,
 .cv2-condition-list label:focus-within,
 .cv2-condition-list label.is-checked {
-  border-color: var(--rose-petal);
+  border-color: var(--accent-tint);
   background: var(--stone);
 }
 
@@ -2518,8 +2549,9 @@ textarea:focus-visible {
 }
 
 .cv2-condition-list label.is-checked .cv2-checkbox {
-  border-color: var(--cv2-sage);
-  background: var(--cv2-sage);
+  border-color: var(--cv2-accent);
+  background: var(--cv2-accent);
+  color: var(--on-accent);
 }
 
 .cv2-condition-list strong,
@@ -2655,7 +2687,7 @@ textarea:focus-visible {
 .cv2-mix-card input {
   width: 100%;
   margin-top: 18px;
-  accent-color: var(--cv2-sage);
+  accent-color: var(--cv2-accent);
   cursor: pointer;
 }
 
@@ -2692,7 +2724,7 @@ textarea:focus-visible {
 
 .cv2-action > button:hover,
 .cv2-learning-card > button:hover {
-  background: #33262b;
+  background: #2a2a22;
   transform: translateY(-1px);
 }
 
@@ -2787,7 +2819,7 @@ textarea:focus-visible {
 }
 
 .cv2-case-list time {
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   font-size: 11px;
   font-weight: 720;
 }
@@ -2808,7 +2840,7 @@ textarea:focus-visible {
 }
 
 .cv2-case-list svg {
-  color: var(--rose-petal);
+  color: var(--accent-tint);
 }
 
 .cv2-learning-card {
@@ -2837,7 +2869,7 @@ textarea:focus-visible {
 
 .cv2-learning-body > p {
   margin: 0;
-  color: var(--rose-petal);
+  color: var(--accent-tint);
   font-size: 10px;
   font-weight: 720;
 }
@@ -2880,8 +2912,8 @@ textarea:focus-visible {
 }
 
 .cv2-learning-card > button:hover {
-  color: white;
-  background: var(--cv2-sage);
+  color: var(--on-accent);
+  background: var(--cv2-accent);
 }
 
 .cv2-resource-progress {
@@ -2911,14 +2943,15 @@ textarea:focus-visible {
 }
 
 .cv2-resource-progress button.is-current {
-  border-color: var(--cv2-sage);
+  border-color: var(--cv2-accent);
   box-shadow: inset 0 0 0 4px var(--paper);
-  background: var(--cv2-sage);
+  background: var(--cv2-accent);
 }
 
 .cv2-resource-progress button.is-reviewed {
-  border-color: var(--cv2-sage);
-  background: var(--cv2-sage);
+  border-color: var(--cv2-accent);
+  color: var(--on-accent);
+  background: var(--cv2-accent);
 }
 
 .cv2-resource-progress > span {
@@ -2932,14 +2965,14 @@ textarea:focus-visible {
   margin-top: 36px;
   padding: 26px;
   border-radius: 22px;
-  background: var(--sage-soft);
+  background: var(--accent-soft);
 }
 
 .cv2-practice-hero > svg {
   position: absolute;
   top: 25px;
   right: 25px;
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
 }
 
 .cv2-practice-hero > div:first-child span,
@@ -2949,7 +2982,7 @@ textarea:focus-visible {
 }
 
 .cv2-practice-hero > div:first-child span {
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   font-size: 10px;
   font-weight: 720;
 }
@@ -3001,7 +3034,7 @@ textarea:focus-visible {
 }
 
 .cv2-loop > div > span {
-  color: var(--cv2-sage);
+  color: var(--cv2-accent);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 20px;
 }
@@ -3020,7 +3053,7 @@ textarea:focus-visible {
 .cv2-note {
   margin-top: 18px;
   padding: 17px 18px;
-  border-left: 3px solid var(--cv2-sage);
+  border-left: 3px solid var(--cv2-accent);
   background: var(--cv2-soft);
 }
 
@@ -3255,9 +3288,9 @@ textarea:focus-visible {
 .community-form-error {
   margin: 0 0 18px;
   padding: 11px 12px;
-  border-left: 3px solid var(--sage);
-  color: var(--sage);
-  background: var(--sage-soft);
+  border-left: 3px solid var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
   font-size: 12px;
 }
 
@@ -3290,11 +3323,11 @@ textarea:focus-visible {
 }
 
 .community-interest-form input[aria-invalid="true"] {
-  border-color: var(--sage);
+  border-color: var(--accent);
 }
 
 .community-interest-form input:focus-visible {
-  border-color: var(--community-sage);
+  border-color: var(--community-accent);
   outline: 3px solid #d2dbc2;
   outline-offset: 1px;
 }
@@ -3304,7 +3337,7 @@ textarea:focus-visible {
 .community-inline-error {
   display: block;
   margin-top: 6px;
-  color: var(--sage);
+  color: var(--accent);
   font-size: 11px;
 }
 
@@ -3345,9 +3378,9 @@ textarea:focus-visible {
 }
 
 .community-interest-options input:checked + span {
-  border-color: var(--community-sage);
+  border-color: var(--community-accent);
   color: var(--community-ink);
-  background: var(--sage-soft);
+  background: var(--accent-soft);
 }
 
 .community-interest-options input:focus-visible + span {
@@ -3367,7 +3400,7 @@ textarea:focus-visible {
   width: 18px;
   height: 18px;
   margin: 1px 0 0;
-  accent-color: var(--community-sage);
+  accent-color: var(--community-accent);
 }
 
 .community-consent > span {
@@ -3401,7 +3434,7 @@ textarea:focus-visible {
 
 .community-interest-form > button:hover,
 .community-interest-form > button:focus-visible {
-  background: #33262b;
+  background: #2a2a22;
   outline: 3px solid #aeb99d;
   outline-offset: 2px;
 }
@@ -3623,7 +3656,7 @@ textarea:focus-visible {
 }
 
 .patient-v2 .scenario-toggle svg {
-  color: var(--sage);
+  color: var(--accent);
 }
 
 .patient-v2 .scenario-screen {
@@ -3742,21 +3775,20 @@ textarea:focus-visible {
    three disciplined display tiers. Extends DESIGN.md rather than inventing anew.
    =========================================================================== */
 .story {
-  --s-paper: #f7f3ea;
-  --s-paper-2: #f1ece1;
-  --s-ink: #1f221c;
-  --s-muted: #63665d;
-  /* Rose rebrand: accent = Crushed Rose, wash = Blush Petal over paper,
-     dark beat ground = Deep (#292800) from the supporting olive pair. */
-  --s-sage: #8B263E;
-  --s-sage-soft: #f3e2e6;
-  --s-petal: #E0AEBA;
-  --s-line: #e0ddd2;
-  --s-dark: #292800;
-  /* Tokens the reused InterestForm (.community-*) reads; map to the story palette */
-  --community-ink: #1f221c;
-  --community-muted: #63665d;
-  --community-sage: #8B263E;
+  --s-paper: #14150f;
+  --s-paper-2: #1d1e17;
+  --s-ink: #f4f1e9;
+  --s-muted: #a8a69d;
+  --s-accent: var(--accent);
+  --s-accent-soft: var(--accent-soft);
+  --s-accent-mid: var(--accent-mid);
+  --s-line: #32342b;
+  /* The throughline is a BEAT, so on a dark page it is the RAISED surface rather than a darker
+     one. A darker beat on a dark ground is not a beat, it is a hole. */
+  --s-dark: #262720;
+  --community-ink: #f4f1e9;
+  --community-muted: #a8a69d;
+  --community-accent: var(--accent);
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
@@ -3800,7 +3832,7 @@ textarea:focus-visible {
   border: 0;
   border-radius: 999px;
   color: #fff;
-  background: var(--s-sage);
+  background: var(--s-accent);
   font-size: 13px;
   font-weight: 640;
   letter-spacing: 0.01em;
@@ -3810,10 +3842,10 @@ textarea:focus-visible {
 }
 .story-demo-link:hover,
 .story-demo-link:focus-visible {
-  background: #711d31;
+  background: var(--accent-soft);
   animation-play-state: paused;
 }
-.story-demo-link:focus-visible { outline: 3px solid var(--s-petal); outline-offset: 3px; }
+.story-demo-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 .story-demo-link:active { transform: translateY(1px); }
 
 /* One soft double-hop every 5s, then rest. */
@@ -3832,7 +3864,7 @@ textarea:focus-visible {
 /* Shared eyebrow ---------------------------------------------------------- */
 .story-eyebrow {
   margin: 0;
-  color: var(--s-sage);
+  color: var(--s-accent);
   font-size: 12px;
   font-weight: 680;
   letter-spacing: 0.14em;
@@ -3841,21 +3873,6 @@ textarea:focus-visible {
 
 /* Hero -------------------------------------------------------------------- */
 .story-hero { position: relative; overflow: hidden; }
-.story-hero-grid {
-  display: grid;
-  grid-template-columns: 1.12fr 0.88fr;
-  /* Was `center`, which floated the copy ~215px down a 900px viewport and read as a layout bug
-     rather than as space. Both columns now start from a capped top edge (88px, under the 96px
-     hero cap) and share it, which is also what makes the asymmetry legible. */
-  align-items: start;
-  gap: 32px;
-  /* Not a full viewport. Start-aligning the two columns left ~285px of nothing under the
-     composition at 900px tall, and the fix is not to re-centre it (that was the float) but to
-     stop the hero claiming height it does not use. At 82dvh the next section's top edge sits
-     just below the fold, which invites the scroll that Section 9.F forbids labelling. */
-  min-height: 82dvh;
-  padding-block: 88px 48px;
-}
 .story-hero-copy {
   align-self: start;
   max-width: none;
@@ -3901,60 +3918,19 @@ textarea:focus-visible {
   text-decoration: none;
   transition: transform 0.15s ease, background 0.2s ease;
 }
-.story-primary-link:hover { background: #3a2c31; }
+.story-primary-link:hover { background: #2a2a22; }
 .story-primary-link:active { transform: translateY(1px); }
-.story-primary-link:focus-visible { outline: 3px solid var(--s-petal); outline-offset: 3px; }
+.story-primary-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 
 /* Hero portrait cut-out on paper ----------------------------------------- */
 /* The hero's right column. Was a portrait cut-out; is now the argument, set as data — there is
    no photograph of either founder in this tree and none is generated. */
-.story-gap-card {
-  position: relative;
-  /* Shares the copy column's top edge, per .story-hero-grid's note. */
-  align-self: start;
-  justify-self: center;
-  margin: 0;
-  width: 100%;
-  max-width: 460px;
-  padding: 30px 32px 34px;
-  border: 1px solid var(--s-line);
-  background: var(--s-paper-2);
-}
-.story-gap-card figcaption {
-  margin-bottom: 20px;
-  color: var(--s-muted);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.story-gap-card dl { margin: 0; display: grid; gap: 0; }
-.story-gap-card div {
-  padding: 15px 0;
-  border-top: 1px solid var(--s-line);
-}
-.story-gap-card div:first-child { border-top: 0; padding-top: 0; }
-.story-gap-card dt {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(21px, 2vw, 27px);
-  font-weight: 460;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-  color: var(--s-ink);
-}
-.story-gap-card dd {
-  margin: 5px 0 0;
-  color: var(--s-muted);
-  font-size: 14px;
-  line-height: 1.5;
-}
 
 /* Chapters ---------------------------------------------------------------- */
 .story-chapter {
   padding-block: clamp(88px, 11vw, 168px);
   border-top: 1px solid var(--s-line);
 }
-.story-chapter-open { border-top: 0; padding-top: clamp(40px, 5vw, 72px); }
 
 .story-heading {
   margin: 0;
@@ -3966,7 +3942,6 @@ textarea:focus-visible {
   letter-spacing: -0.038em;
   text-wrap: balance;
 }
-.story-heading-wide { max-width: 20ch; }
 
 .story-prose { margin-top: 28px; }
 .story-prose p {
@@ -3978,118 +3953,17 @@ textarea:focus-visible {
   text-wrap: pretty;
 }
 .story-prose p:last-child { margin-bottom: 0; }
-.story-prose-lead { max-width: 720px; }
-.story-prose-lead p:first-child { color: var(--s-ink); }
 
 /* Split chapters (02, 03) ------------------------------------------------- */
-.story-split {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(40px, 6vw, 96px);
-  align-items: center;
-}
-.story-split-reverse .story-split-lead { order: 2; }
-.story-split-reverse .story-pull { order: 1; }
 
 /* Stat rail (no boxes), numerals sit below the heading tier --------------- */
-.story-stats dl { margin: 0; display: grid; gap: 0; }
-.story-stats div {
-  padding: 22px 0;
-  border-top: 1px solid var(--s-line);
-}
-.story-stats div:last-child { border-bottom: 1px solid var(--s-line); }
-.story-stats dt {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(28px, 2.6vw, 38px);
-  font-weight: 430;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--s-ink);
-}
-.story-stats dt.story-stat-award { font-size: clamp(24px, 2.2vw, 32px); color: var(--s-sage); }
-.story-stats dd {
-  margin: 9px 0 0;
-  color: var(--s-muted);
-  font-size: 14.5px;
-  line-height: 1.5;
-  max-width: 32ch;
-}
 
 /* Conviction pull-line (03) ---------------------------------------------- */
-.story-pull p {
-  margin: 0;
-  max-width: 16ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(24px, 2.5vw, 34px);
-  font-weight: 430;
-  font-style: italic;
-  line-height: 1.14;
-  letter-spacing: -0.02em;
-  color: var(--s-ink);
-  padding-bottom: 4px;
-}
 
 /* Through-line (dark moment) --------------------------------------------- */
-.story-throughline {
-  padding-block: clamp(104px, 13vw, 200px);
-  background: var(--s-dark);
-  color: #f4f1e8;
-}
-.story-throughline-line {
-  max-width: 20ch;
-  margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(34px, 5.2vw, 74px);
-  font-weight: 400;
-  /* 1.06 clipped the italic descenders. The emphasised phrase here is "the person who can push
-     hardest" — a p in `person` and another in `push` — and Newsreader's italic descender is long.
-     1.12 plus the padding reserve clears both at the 74px ceiling. */
-  line-height: 1.12;
-  letter-spacing: -0.04em;
-  padding-bottom: 0.08em;
-  text-wrap: balance;
-}
 /* Tulip Bloom on Deep: 4.6:1, AA at this display size */
-.story-throughline-line em { font-style: italic; color: #D17484; }
-.story-throughline-sub { margin-top: 40px; }
-.story-throughline-sub p {
-  max-width: 54ch;
-  margin: 0;
-  color: #c3c4ba;
-  font-size: clamp(16px, 1.3vw, 19px);
-  line-height: 1.7;
-}
 
 /* ADHD.ME pillars (vertical story beats, not a 3-up card row) -------------- */
-.story-eyebrow-block { margin-bottom: 18px; }
-.story-pillars {
-  margin: 60px 0 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--s-line);
-}
-.story-pillars li {
-  display: grid;
-  grid-template-columns: 5fr 7fr;
-  gap: clamp(20px, 5vw, 72px);
-  align-items: baseline;
-  padding: 34px 0;
-  border-bottom: 1px solid var(--s-line);
-}
-.story-pillars h3 {
-  margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(24px, 2.4vw, 30px);
-  font-weight: 460;
-  letter-spacing: -0.025em;
-}
-.story-pillars p {
-  margin: 0;
-  color: var(--s-muted);
-  font-size: clamp(15px, 1.1vw, 17px);
-  line-height: 1.65;
-  max-width: 46ch;
-}
 /* Co-founder section: one split, photo cut-out + name + NOURISH link ------- */
 /* The founder pair. Set typographically: no photograph of either founder exists in this tree,
    and a monogram is an honest treatment rather than a slot waiting for one. */
@@ -4133,7 +4007,7 @@ textarea:focus-visible {
 .story-founder-role {
   display: block;
   margin-top: 3px;
-  color: var(--s-sage);
+  color: var(--s-accent);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -4146,11 +4020,76 @@ textarea:focus-visible {
   line-height: 1.62;
 }
 
+/* The hero is one column and starts near the top. Section 14 caps hero top padding at 96px;
+   88 plus the 66px header is the whole distance before the first word. */
+.story-hero-copy {
+  padding-block: 88px 0;
+  max-width: none;
+}
+.story-hero-copy h1 {
+  margin: 20px 0 0;
+  max-width: 16ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(40px, 6vw, 84px);
+  font-weight: 430;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.story-hero-sub {
+  max-width: 42ch;
+  margin: 26px 0 0;
+  color: var(--s-muted);
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.6;
+}
+.story-hero-actions { margin-top: 40px; }
+.story-hero { min-height: 78dvh; }
+
+/* The change. One statement, one qualification, a lot of air around both. */
+.story-change { padding-block: clamp(96px, 12vw, 168px); border-top: 1px solid var(--s-line); }
+.story-change-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+}
+.story-note { color: var(--s-muted); font-size: 14.5px; line-height: 1.65; }
+
+/* How it works. Numbered, hairline-separated, no cards. */
+.story-steps-section { padding-block: clamp(96px, 12vw, 168px); border-top: 1px solid var(--s-line); }
+.story-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 clamp(28px, 5vw, 72px);
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.story-steps li { padding-top: 26px; border-top: 1px solid var(--s-line); }
+.story-step-n {
+  display: block;
+  margin-bottom: 20px;
+  color: var(--s-accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+.story-steps h3 {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(20px, 1.9vw, 26px);
+  font-weight: 460;
+  letter-spacing: -0.02em;
+  color: var(--s-ink);
+}
+.story-steps p { margin: 10px 0 0; color: var(--s-muted); font-size: 15px; line-height: 1.6; }
+
 /* Register ---------------------------------------------------------------- */
 .story-register {
   padding-block: clamp(88px, 10vw, 148px);
   border-top: 1px solid var(--s-line);
-  background: var(--s-sage-soft);
+  background: var(--s-accent-soft);
 }
 .story-register-grid {
   display: grid;
@@ -4170,19 +4109,19 @@ textarea:focus-visible {
 .story .community-consent > span { font-size: 12.5px !important; }
 .story .community-form-privacy { font-size: 12px; }
 /* Rose rebrand of the form's green-tinted details */
-.story .community-interest-form { border-color: #dfc3ca; }
+.story .community-interest-form { border-color: #3a3325; }
 .story .community-interest-form input:focus-visible {
-  border-color: var(--s-sage);
-  outline-color: #ecd0d7;
+  border-color: var(--s-accent);
+  outline-color: var(--accent-mid);
 }
 .story .community-interest-options input:checked + span {
-  border-color: var(--s-sage);
-  background: #f3dde2;
+  border-color: var(--s-accent);
+  background: var(--accent-soft);
 }
-.story .community-interest-options input:focus-visible + span { outline-color: var(--s-petal); }
+.story .community-interest-options input:focus-visible + span { outline-color: var(--s-accent-mid); }
 .story .community-interest-form > button:hover,
-.story .community-interest-form > button:focus-visible { outline-color: var(--s-petal); }
-.story .community-form-success { border-color: #dfb9c2; }
+.story .community-interest-form > button:focus-visible { outline-color: var(--s-accent-mid); }
+.story .community-form-success { border-color: #3a3325; }
 
 /* Footer ------------------------------------------------------------------ */
 .story-footer {
@@ -4215,23 +4154,9 @@ textarea:focus-visible {
 /* Tablet ------------------------------------------------------------------ */
 @media (max-width: 900px) {
   .story-wrap { width: min(100% - 44px, 1280px); }
-  .story-hero-grid {
-    grid-template-columns: 1fr;
-    align-items: start;
-    gap: 12px;
-    min-height: 0;
-    padding-top: 44px;
-    padding-bottom: 0;
-  }
   .story-hero-copy { padding-bottom: 0; order: 1; }
   .story-hero-copy h1 { max-width: none; }
   .story-hero-sub { max-width: 40ch; }
-  .story-gap-card { order: 2; justify-self: stretch; max-width: none; margin-top: 24px; }
-  .story-split { grid-template-columns: 1fr; gap: 40px; align-items: start; }
-  .story-split-reverse .story-split-lead { order: 1; }
-  .story-split-reverse .story-pull { order: 2; }
-  .story-pull p { max-width: 24ch; }
-  .story-pillars li { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
   .story-founders { grid-template-columns: 1fr; gap: 0; }
   .story-register-grid { grid-template-columns: 1fr; gap: 40px; }
 }
@@ -4259,9 +4184,9 @@ textarea:focus-visible {
    light ground. No component was touched. If a future rule hardcodes a hex, it will
    be wrong in exactly one mode, which is the argument for the tokens.
 
-   THE ACCENT LIFTS RATHER THAN DESATURATING. Crushed Rose (#8B263E) measures 2.2:1
+   THE ACCENT LIFTS RATHER THAN DESATURATING. Crushed Rose (var(--accent)) measures 2.2:1
    on a near-black ground, so it cannot carry text in dark mode. Instead of muddying
-   it into a grey-pink invention, the accent steps up to Tulip Bloom (#D17484) — the
+   it into a grey-pink invention, the accent steps up to Tulip Bloom (var(--accent)) — the
    next value in the SAME founder-supplied rose palette — at 5.6:1 on the dark ground.
    The brand stays recognisable because the replacement is the brand's own tint.
 
@@ -4271,133 +4196,88 @@ textarea:focus-visible {
 
    NO PURE BLACK, NO PURE WHITE (Section 8.B). #15160f and #f4f1e9 respectively.
 */
-@media (prefers-color-scheme: dark) {
-  /* THE OTHER HALF OF THE THEME, AND THE REASON IT IS HERE RATHER THAN IN THE MARKUP.
-     /practices, /privacy, /privacy/automated-decisions and /demo are built from Tailwind's
-     `stone` colour utilities, 91 of them, while every other surface reads the tokens above. That
-     is the same two-strategy split that left the body cream (see app/layout.tsx) and it is why
-     those four pages stayed light while the rest of the site inverted, printing stone-900 text on
-     a near-black ground at 1.04:1.
-     Tailwind v4 compiles every colour utility to `var(--color-*)`, so redefining the scale flips
-     all 91 at once with no markup churn and no `dark:` variant on every element — which would
-     have entrenched the split rather than closed it. The ramp is inverted around its midpoint and
-     shifted to the warm-olive hue the rest of the palette uses, so `stone` here means this
-     product's neutral rather than Tailwind's. */
-  :root {
-    --color-white: #15160f;
-    --color-black: #f4f1e9;
-    --color-stone-50: #1a1b14;
-    --color-stone-100: #22231b;
-    --color-stone-200: #2c2d24;
-    --color-stone-300: #3a3b31;
-    --color-stone-400: #6f7167;
-    --color-stone-500: #9b998f;
-    --color-stone-600: #b4b2a9;
-    --color-stone-700: #d3d0c7;
-    --color-stone-800: #e6e3da;
-    --color-stone-900: #f1efe8;
-    --color-stone-950: #f8f6ef;
-  }
+/* ==========================================================================
+   THE THEME
+   ==========================================================================
 
-  :root {
-    color-scheme: dark;
-    --ink: #f1efe8;
-    --muted: #a6a49b;
-    /* Mirrors the light-mode note: --faint has to clear AA at 11px, and it does at 5.4:1. */
-    --faint: #9b998f;
-    --paper: #15160f;
-    --stone: #1e1f18;
-    --line: #33352c;
-    /* Tulip Bloom, not Crushed Rose. See the header note. */
-    --sage: #D17484;
-    --sage-soft: #2b1b20;
-    --rose-mid: #E0AEBA;
-    --rose-petal: #EFD5DA;
-    /* The primary button inverts to a light pill with a dark label. */
-    --ground: #f1efe8;
-    --on-ground: #15160f;
-    /* The inverted band flips the other way: deep rose now reads on near-white. */
-    --on-band: #8B263E;
-  }
+   Dark, and only dark. This was a light site with a dark variant behind
+   `prefers-color-scheme`; the variant is now the product. Two consequences worth
+   stating because they are easy to undo by accident:
 
-  /* Buttons and inputs that painted a light ground directly. */
-  /* Hovers darken from a light pill in dark mode instead of lightening from a dark one. */
-  .primary-button:hover:not(:disabled) { background: #ded9ce; }
-  .primary-button:disabled { color: #74736c; background: #26271f; }
-  .mic-button:hover { background: #ded9ce; }
-  .mic-button.recording { background: var(--sage); color: #15160f; }
-  .demo-nav-next:hover { background: #ded9ce; }
-  .type-content textarea::placeholder { color: #8b8981; }
-  .patient-v2 .type-content textarea { background: #1b1c15; }
-  .demo-nav-next span { color: #8b8981; }
-  .founder-disclosure { background: #23241c; }
-  .clinician-row:hover { background: #23241c; }
-  .profile-content section li { color: #b4b2a9; }
-  .tomorrow-panel { background: #1a1b14; }
-  .clinician-shell { border-color: #33352c; }
+   1. `color-scheme: dark` is declared on :root, so native controls, scrollbars and
+      form widgets are painted dark by the browser. Without it the consent checkbox
+      and the scrollbar come back light.
+   2. There is no light branch left to keep in sync. A value hardcoded in a rule is
+      now wrong in exactly one theme instead of two, which is a smaller trap but the
+      same one: colours belong in the tokens below.
+*/
+/* THE OTHER HALF OF THE THEME, AND THE REASON IT IS HERE RATHER THAN IN THE MARKUP.
+   /practices, /privacy, /privacy/automated-decisions and /demo are built from Tailwind's
+   `stone` colour utilities, 91 of them, while every other surface reads the tokens above. That
+   is the same two-strategy split that left the body cream (see app/layout.tsx) and it is why
+   those four pages stayed light while the rest of the site inverted, printing stone-900 text on
+   a near-black ground at 1.04:1.
+   Tailwind v4 compiles every colour utility to `var(--color-*)`, so redefining the scale flips
+   all 91 at once with no markup churn and no `dark:` variant on every element — which would
+   have entrenched the split rather than closed it. The ramp is inverted around its midpoint and
+   shifted to the warm-olive hue the rest of the palette uses, so `stone` here means this
+   product's neutral rather than Tailwind's. */
 
-  /* The GP walkthrough. Same three roles, inverted. */
-  .clinician-v2 {
-    --cv2-ink: #f1efe8;
-    --cv2-muted: #a6a49b;
-    --cv2-on-dark-muted: #c9c6be;
-    --cv2-sage: #D17484;
-    /* Stays dark: white text sits on it. Lifted a little so a dark panel still reads as a panel
-       against a dark page rather than dissolving into it. */
-    --cv2-ground: #24251d;
-  }
-  .cv2-progress button::after { background: #33352c; }
-  /* The unchecked box painted literal `white`, which reads as a solid block on a dark page.
-     Its CHECKED state already uses --cv2-sage and needs nothing. */
-  .cv2-checkbox { border-color: #4a4c42; background: #24251d; }
-  .cv2-coming-grid button { color: #a6a49b; background: #1b1c15; }
-  .cv2-coming-grid button > small { color: #85837b; }
-  .cv2-note p { color: #b4b2a9; }
-  /* A dark primary button on a dark page needs its lift to go up, not further down. */
-  .cv2-action > button:hover { background: #efece4; color: #15160f; }
-  /* The learning card's button is the inverse case: it painted literal `white` on the dark card,
-     so in dark mode it takes the light surface explicitly and its label goes dark with it.
-     Its rose hover already works in both themes and is left alone. */
-  .cv2-learning-card > button { background: #efece4; color: #15160f; }
 
-  /* The founder story. */
-  .story {
-    --s-paper: #14150f;
-    --s-paper-2: #1d1e17;
-    --s-ink: #f4f1e9;
-    --s-muted: #a8a69d;
-    --s-sage: #D17484;
-    --s-sage-soft: #251a1e;
-    --s-petal: #E0AEBA;
-    --s-line: #32342b;
-    /* The throughline is a BEAT, and a darker beat on a dark page is invisible. In dark
-       mode it becomes the raised surface instead, which keeps the change of register
-       without flipping the page theme (Section 4.11). Its copy stays light either way. */
-    --s-dark: #262720;
-    --community-ink: #f4f1e9;
-    --community-muted: #a8a69d;
-    --community-sage: #D17484;
-  }
-  .story-throughline { color: #f4f1e9; }
-  .story-throughline-sub p { color: #b0aea5; }
-  /* Tulip Bloom already; on the raised beat it reads at 4.8:1. */
-  .story-throughline-line em { color: #E0AEBA; }
-  /* The primary link inverts: light pill, dark label, so it still reads as the one action. */
-  .story-primary-link { color: #14150f; background: #f4f1e9; }
-  .story-primary-link:hover { background: #e6e2d8; }
-  .story-demo-link { color: #14150f; }
-  .story-demo-link:focus-visible { background: #E0AEBA; }
+/* Buttons and inputs that painted a light ground directly. */
+/* Hovers darken from a light pill in dark mode instead of lightening from a dark one. */
+.primary-button:hover:not(:disabled) { background: #ded9ce; }
+.primary-button:disabled { color: #74736c; background: #26271f; }
+.mic-button:hover { background: #ded9ce; }
+.mic-button.recording { background: var(--accent); color: var(--on-accent); }
+.demo-nav-next:hover { background: #ded9ce; }
+.type-content textarea::placeholder { color: #8b8981; }
+.patient-v2 .type-content textarea { background: #1b1c15; }
+.demo-nav-next span { color: #8b8981; }
+.founder-disclosure { background: #23241c; }
+.clinician-row:hover { background: #23241c; }
+.profile-content section li { color: #b4b2a9; }
+.tomorrow-panel { background: #1a1b14; }
+.clinician-shell { border-color: #33352c; }
 
-  /* The interest form. */
-  .community-interest-form { background: #1b1c15; }
-  .community-interest-form input[type="email"],
-  .community-interest-form input[type="text"],
-  .community-interest-options label > span { background: #24251d; }
-  .community-interest-options label > span { border-color: #4a4c42; }
-  .community-interest-form > button { color: #14150f; background: #f4f1e9; }
-  .community-interest-form > button:focus-visible { background: #e6e2d8; }
-  .community-form-success { background: #1c2419; }
-  .story .community-form-success { border-color: #4d3a40; }
-  .story .community-interest-form { border-color: #3d2f34; }
-  .story .community-interest-options input:checked + span { background: #3d2b31; }
+/* The GP walkthrough. Same three roles, inverted. */
+.clinician-v2 {
+  /* merged above */
 }
+.cv2-progress button::after { background: #33352c; }
+/* The unchecked box painted literal `white`, which reads as a solid block on a dark page.
+   Its CHECKED state already uses --cv2-accent and needs nothing. */
+.cv2-checkbox { border-color: #4a4c42; background: #24251d; }
+.cv2-coming-grid button { color: #a6a49b; background: #1b1c15; }
+.cv2-coming-grid button > small { color: #85837b; }
+.cv2-note p { color: #b4b2a9; }
+/* A dark primary button on a dark page needs its lift to go up, not further down. */
+.cv2-action > button:hover { background: #efece4; color: #15160f; }
+/* The learning card's button is the inverse case: it painted literal `white` on the dark card,
+   so in dark mode it takes the light surface explicitly and its label goes dark with it.
+   Its rose hover already works in both themes and is left alone. */
+.cv2-learning-card > button { background: #efece4; color: #15160f; }
+
+/* The founder story. */
+.story {
+  /* merged above */
+}
+/* Tulip Bloom already; on the raised beat it reads at 4.8:1. */
+/* The primary link inverts: light pill, dark label, so it still reads as the one action. */
+.story-primary-link { color: #14150f; background: #f4f1e9; }
+.story-primary-link:hover { background: #e6e2d8; }
+.story-demo-link { color: var(--on-accent); }
+.story-demo-link:focus-visible { background: var(--accent-mid); color: var(--on-accent); }
+
+/* The interest form. */
+.community-interest-form { background: #1b1c15; }
+.community-interest-form input[type="email"],
+.community-interest-form input[type="text"],
+.community-interest-options label > span { background: #24251d; }
+.community-interest-options label > span { border-color: #4a4c42; }
+.community-interest-form > button { color: #14150f; background: #f4f1e9; }
+.community-interest-form > button:focus-visible { background: #e6e2d8; }
+.community-form-success { background: #1c2419; }
+.story .community-form-success { border-color: #3a3325; }
+.story .community-interest-form { border-color: #3a3325; }
+.story .community-interest-options input:checked + span { background: var(--accent-soft); }

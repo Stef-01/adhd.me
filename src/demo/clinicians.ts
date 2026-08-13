@@ -53,6 +53,17 @@ export type Clinician = {
   appointmentLength: string;
   keywords: string[];
   /**
+   * The clinician says they have completed the training NSW requires to carry ADHD care without
+   * ongoing specialist involvement.
+   *
+   * DECLARED, NOT CHECKED, and the surfaces say so. W193 splits every published field into
+   * "checkable on a public register" and "the clinician told us", and this is firmly the second:
+   * there is no public register of who has done it, so ADHD.ME cannot confirm it and must not
+   * render it as though it had. It is a boolean rather than a certificate reference for the same
+   * reason W183 refuses a free-text bio: a field that can hold evidence invites publishing it.
+   */
+  nswAdhdTrained?: true;
+  /**
    * Set when the entry describes a real, identifiable clinician rather than a demo persona.
    *
    * The finder shows synthetic and real entries side by side, and a reader cannot tell them apart
@@ -97,6 +108,7 @@ export const clinicians: Clinician[] = [
     experience: ["Adult ADHD assessment", "Late-recognised presentations in women", "Anxiety and low mood alongside ADHD", "Referral and shared care"],
     languages: ["English", "Hindi", "Punjabi"],
     careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "comorbid-mood"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Longer first appointments available",
     keywords: ["adhd", "assessment", "assessed", "diagnosis", "diagnosed", "adult", "late", "woman", "female", "women", "missed", "overlooked", "coping", "masking", "calm", "explain", "anxiety", "mood", "depression", "hindi", "punjabi", "indian", "south asian", "cultural", "culture", "family", "my daughter was diagnosed"],
@@ -122,6 +134,7 @@ export const clinicians: Clinician[] = [
     experience: ["Baseline cardiovascular screening", "Blood pressure and heart-rate monitoring", "Titration follow-up", "Shared-care prescribing"],
     languages: ["English", "Igbo"],
     careAreas: ["adhd-assessment", "adult-adhd", "cardiac-screening", "titration"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
     keywords: ["adhd", "assessment", "medication", "stimulant", "methylphenidate", "dexamphetamine", "lisdexamfetamine", "titration", "dose", "starting medication", "heart", "cardiac", "cardiovascular", "blood pressure", "pulse", "safe", "safety", "check", "monitoring", "follow-up", "shared care", "physical health"],
@@ -147,6 +160,7 @@ export const clinicians: Clinician[] = [
     experience: ["Disability-rights focused care", "Adult ADHD assessment", "Co-occurring autism", "Adjustment and support documentation"],
     languages: ["English", "Vietnamese"],
     careAreas: ["adhd-assessment", "adult-adhd", "disability-rights", "autism-adhd"],
+    nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
     keywords: ["adhd", "assessment", "disability", "disabled", "wheelchair", "accessible", "access", "rights", "autonomy", "consent", "advocate", "adjustments", "support", "ndis", "vietnamese", "autism", "autistic", "audhd", "coordination", "diagnosis"],
@@ -172,6 +186,7 @@ export const clinicians: Clinician[] = [
     experience: ["Child and adolescent ADHD", "Teacher and school reports", "Paediatric referral and shared care", "Family and interpreter-supported consultations"],
     languages: ["English", "Arabic"],
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "shared-care", "student-academic"],
+    nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
     keywords: ["adhd", "assessment", "child", "my son", "my daughter", "kid", "children", "teenager", "adolescent", "school", "teacher", "classroom", "report", "paediatrician", "paediatric", "referral", "waitlist", "arabic", "family", "interpreter", "shared care", "plan"],
@@ -197,6 +212,7 @@ export const clinicians: Clinician[] = [
     experience: ["Adult ADHD assessment", "Non-medication strategies", "Emotional dysregulation and rejection sensitivity", "Shared care"],
     languages: ["English"],
     careAreas: ["adhd-assessment", "adult-adhd", "non-medication", "emotional-regulation"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
     keywords: ["adhd", "assessment", "attention", "neurodivergent", "executive function", "overwhelmed", "structured", "clear steps", "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits", "rejection sensitivity", "rsd", "emotional", "regulation", "shame", "shared care", "adult"],
@@ -222,6 +238,7 @@ export const clinicians: Clinician[] = [
     experience: ["Child and adolescent ADHD", "School and learning adjustments", "Behavioural and environmental supports", "Parent-supported consultations"],
     languages: ["English", "Spanish"],
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "student-academic", "non-medication"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
     keywords: ["adhd", "assessment", "child", "my son", "my daughter", "school", "teacher", "learning", "classroom", "falling behind", "concentrate", "adjustments", "documentation", "letter", "plan", "spanish", "behaviour", "without medication", "supports", "parent"],
@@ -247,6 +264,7 @@ export const clinicians: Clinician[] = [
     experience: ["PTSD and bipolar shared care", "ADHD assessment with psychiatric comorbidity", "Anxiety, depression and substance-use history", "Psychiatrist coordination"],
     languages: ["English"],
     careAreas: ["adhd-assessment", "adult-adhd", "complex-mental-health", "comorbid-mood", "shared-care", "trauma-informed", "substance-history"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Longer appointments available",
     keywords: ["adhd", "assessment", "mental health", "ptsd", "bipolar", "psychiatrist", "psychiatric", "shared care", "medication", "anxiety", "depression", "trauma", "complex", "comorbid", "misdiagnosed", "wrong diagnosis", "explained away", "substance", "drinking", "alcohol", "cannabis", "addict", "non-stimulant", "gentle", "longer", "coordinate", "adult"],
@@ -272,6 +290,7 @@ export const clinicians: Clinician[] = [
     experience: ["Adult ADHD assessment", "Late-recognised presentations in women", "Anxiety and low mood", "Culturally responsive consultations"],
     languages: ["English", "Malayalam", "Tamil"],
     careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "comorbid-mood"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Longer first appointments available",
     keywords: ["adhd", "assessment", "diagnosis", "south indian", "indian", "malayalam", "tamil", "cultural", "culture", "family", "family pressure", "lazy", "excuse", "not real", "woman", "women", "young", "anxiety", "mood", "judgement", "private", "adult", "late"],
@@ -297,6 +316,7 @@ export const clinicians: Clinician[] = [
     experience: ["ADHD assessment in women", "Hormonal change and symptom shift", "Sleep and circadian review", "Shared decision-making"],
     languages: ["English", "Malayalam", "Tamil"],
     careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "sleep"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Longer first appointments available",
     keywords: ["adhd", "assessment", "woman", "women", "perimenopause", "menopause", "hormonal", "hormones", "cycle", "after my baby", "got worse", "worse lately", "coping stopped", "sleep", "insomnia", "tired", "exhausted", "south indian", "malayalam", "tamil", "unhurried", "explain", "late", "adult"],
@@ -322,6 +342,7 @@ export const clinicians: Clinician[] = [
     experience: ["Adult ADHD assessment", "Anxiety and depression differential", "Developmental history taking", "Referral and shared care"],
     languages: ["English", "Hindi", "Punjabi"],
     careAreas: ["adhd-assessment", "adult-adhd", "comorbid-mood", "adhd-in-women"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
     keywords: ["adhd", "assessment", "anxiety", "anxious", "depression", "antidepressant", "treated for anxiety", "misdiagnosed", "differential", "which one", "hindi", "punjabi", "woman", "women", "mood", "family", "family expectations", "calm", "explain", "slowly", "school", "adult"],
@@ -347,6 +368,7 @@ export const clinicians: Clinician[] = [
     experience: ["Titration and dose review", "Side-effect monitoring", "Workplace and study adjustments", "Shared-care prescribing"],
     languages: ["English", "Spanish"],
     careAreas: ["adhd-assessment", "adult-adhd", "titration", "student-academic"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
     keywords: ["adhd", "titration", "dose", "medication", "review", "side effects", "appetite", "not working", "wearing off", "adjust", "follow-up", "spanish", "work", "employer", "workplace", "university", "study", "adjustments", "letter", "documentation", "diagnosed already", "assessment"],
@@ -372,6 +394,7 @@ export const clinicians: Clinician[] = [
     experience: ["Adolescent ADHD assessment", "Anxiety and school refusal", "Paediatric and mental-health coordination", "Family-inclusive consultations"],
     languages: ["English", "Arabic"],
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "comorbid-mood", "shared-care"],
+    nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
     keywords: ["adhd", "assessment", "teenager", "adolescent", "my son", "my daughter", "school refusal", "school", "anxiety", "anxious", "arabic", "mental health", "paediatrician", "coordinate", "family", "consent", "confidential", "preferences", "child"],
@@ -397,6 +420,7 @@ export const clinicians: Clinician[] = [
     experience: ["Co-occurring autism and ADHD", "Adult ADHD assessment", "Disability-rights focused care", "Adjustment documentation"],
     languages: ["English", "Vietnamese"],
     careAreas: ["adhd-assessment", "autism-adhd", "disability-rights", "adult-adhd"],
+    nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
     keywords: ["adhd", "autism", "autistic", "audhd", "both", "assessment", "neurodivergent", "disability", "disabled", "disability rights", "wheelchair", "accessible", "sensory", "autonomy", "consent", "vietnamese", "ndis", "adjustments", "documentation", "adult"],
@@ -422,6 +446,7 @@ export const clinicians: Clinician[] = [
     experience: ["Adult ADHD and autism assessment", "Sensory-considerate consultations", "Non-medication strategies", "Emotional regulation support"],
     languages: ["English", "Mandarin"],
     careAreas: ["adhd-assessment", "autism-adhd", "adult-adhd", "non-medication", "emotional-regulation"],
+    nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Standard and longer appointments",
     keywords: ["adhd", "autism", "autistic", "audhd", "assessment", "attention", "neurodivergent", "neurodiversity", "affirming", "sensory", "overwhelmed", "clear steps", "written", "mandarin", "without medication", "options", "realistic", "adult", "woman"],
@@ -447,6 +472,7 @@ export const clinicians: Clinician[] = [
     experience: ["Trauma-informed GP care", "ADHD assessment with trauma history", "PTSD and bipolar shared care", "Consent-led consultations"],
     languages: ["English"],
     careAreas: ["adhd-assessment", "trauma-informed", "adult-adhd", "complex-mental-health", "shared-care"],
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Longer appointments available",
     keywords: ["adhd", "assessment", "trauma", "trauma history", "trauma-informed", "childhood", "difficult childhood", "permission", "boundaries", "consent", "control", "ptsd", "bipolar", "psychiatrist", "shared care", "cptsd", "anxiety", "depression", "gentle", "longer", "mental health", "unhurried", "no records", "adult"],
@@ -486,6 +512,7 @@ export const clinicians: Clinician[] = [
       "sleep",
       "shared-care",
     ],
+    nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
     keywords: ["adhd", "assessment", "structured", "thorough", "measured", "baseline", "bloods", "pathology", "physical", "heart", "cardiac", "cardiovascular", "blood pressure", "metabolic", "sleep", "titration", "dose", "medication", "stimulant", "monitoring", "review", "telehealth", "remote", "online", "substance", "drinking", "alcohol", "cannabis", "history", "non-stimulant", "shared care", "hindi", "adult", "founder"],

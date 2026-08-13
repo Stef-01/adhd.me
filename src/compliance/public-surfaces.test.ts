@@ -178,21 +178,57 @@ describe("W192 an accepted finding is data with a date on it", () => {
       expect(a.reviewBy).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(PUBLIC_SURFACES.map((s) => s.path)).toContain(a.path);
     }
-    expect(ACCEPTED_FINDINGS.length).toBeGreaterThan(0);
   });
+
+  /**
+   * The list is EMPTY, and these tests are written against a fixture rather than against it.
+   *
+   * `ACCEPTED_FINDINGS.length > 0` used to be asserted here as a non-vacuity guard, back when the
+   * landing page's "my own diagnosis" sentence needed accepting. The 2026-08-13 rewrite removed
+   * the sentence, the acceptance went stale, and the e2e both-directions check correctly demanded
+   * it be deleted. Re-adding the length assertion would mean the suite requires this product to
+   * have at least one accepted violation forever, which is the opposite of the intent.
+   *
+   * So the SUBTRACTION LOGIC is what gets tested, against an acceptance constructed here. That
+   * keeps the mechanism covered whether or not the shipped list happens to be empty today.
+   */
+  // TWO entries, because "diagnosis" trips W23's no-clinical-claims AND W6's
+  // no-diagnosis-or-condition. That is the same pair the shipped list used to carry, and it is the
+  // property worth keeping: an acceptance covers ONE rule, so a second rule on the same word still
+  // fails until it is argued separately.
+  const FIXTURE = [
+    {
+      path: "/",
+      rule: "no-clinical-claims",
+      match: "diagnosis",
+      why: "Fixture for the subtraction logic only. Never shipped, and deliberately not in ACCEPTED_FINDINGS, which is empty.",
+      reviewBy: "2099-01-01",
+    },
+    {
+      path: "/",
+      rule: "no-diagnosis-or-condition",
+      match: "diagnosis",
+      why: "The same word caught a second time by the patient-message linter. Listed separately so neither rule is switched off by accepting the other.",
+      reviewBy: "2099-01-01",
+    },
+  ] as const;
 
   it("subtracts only the exact finding, leaving anything else failing", () => {
     const accepted = sweepSurface("/", "patient", "my own diagnosis led me here");
     expect(accepted.length).toBeGreaterThan(0);
-    expect(unaccepted(accepted)).toEqual([]);
+    expect(unaccepted(accepted, FIXTURE)).toEqual([]);
     // A different clinical claim on the same page is NOT covered by that acceptance.
     const other = sweepSurface("/", "patient", "we treat diabetes");
-    expect(unaccepted(other).length).toBeGreaterThan(0);
+    expect(unaccepted(other, FIXTURE).length).toBeGreaterThan(0);
   });
 
   it("does not carry the acceptance to another surface", () => {
     const elsewhere = sweepSurface("/finder", "patient", "my own diagnosis led me here");
-    expect(unaccepted(elsewhere).length).toBeGreaterThan(0);
+    expect(unaccepted(elsewhere, FIXTURE).length).toBeGreaterThan(0);
+  });
+
+  it("accepts nothing today, so the sweep is passing on its own merits", () => {
+    expect(ACCEPTED_FINDINGS).toEqual([]);
   });
 });
 

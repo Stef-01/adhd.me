@@ -32,7 +32,7 @@ export const LANDING_COPY = {
       "giving the clinician more agency and the practice a clearer way to grow useful capability.",
     goalLabel: "Clinician-set goal",
     goalValue: "30%",
-    goalTitle: "ADHD assessment and shared care",
+    goalTitle: "ADHD care under the NSW pathway",
     goalBody: "Chosen by the GP. Adjustable at any time. Never assigned by an algorithm or manager.",
     stages: [
       {
@@ -60,31 +60,31 @@ export const LANDING_COPY = {
       "Practices extend reach by being genuinely useful",
     ],
     evidenceEyebrow: "Why concentrated capability matters",
-    evidenceHeading: "The current ADHD pathway loses time, money and people.",
+    evidenceHeading: "The NSW rule changed. The practice pathway has not caught up.",
     evidenceBody:
-      "These describe the pathway, not any individual patient. The opportunity is to make a relevant GP easier to find and help that GP keep getting better through repeated, supported work.",
+      "These describe the pathway, not any individual patient. The opportunity is to make a GP who has done the training easier to find, and to help that GP keep getting better through repeated, supported work.",
     // FOUNDER ACTION — NOT ONE OF THESE FIGURES HAS BEEN CONFIRMED AGAINST ITS SOURCE BY ANYBODY
     // IN THIS REPO, and they are the most quotable thing on the page. They are written as
     // qualitative ranges rather than false precision on purpose: a decimal implies a study
     // somebody checked, and a wrong decimal beside a health claim is worse than a vaguer true
     // one. Replace each with a sourced number, or delete it. See `evidenceNote`.
     evidence: [
-      { value: "Months–years", label: "typical wait for an adult ADHD assessment appointment" },
-      { value: "$1k–$5k", label: "common out-of-pocket cost of a private adult assessment" },
+      { value: "Months to years", label: "typical wait for an adult ADHD assessment appointment" },
+      { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
       // Phrased around ACCESS rather than the clinical act, because the W23 linter refuses
       // "specialist", "diagnos*" and "prescrib*" here and is right to: this page's reader is a
       // practice manager, and a clinical claim on a B2B page is still therapeutic advertising.
-      { value: "Referral-gated", label: "the adult pathway has largely run outside general practice" },
-      { value: "State by state", label: "the rules a practice must follow differ by jurisdiction" },
+      { value: "Now in-practice", label: "NSW lets a GP with the required training carry the whole pathway" },
+      { value: "Training-gated", label: "which GPs may do it depends on training a practice has to track" },
     ],
     evidenceNote:
       "Indicative figures pending source confirmation. Anchors: the AADPA Australian evidence-based " +
       "clinical practice guideline for ADHD (2022) and the 2023 Senate inquiry into ADHD assessment " +
       "and support services.",
     pathwayEyebrow: "The real capability gap",
-    pathwayHeading: "The guideline exists. The practice pathway does not.",
+    pathwayHeading: "The permission exists. The practice pathway does not.",
     pathwayBody:
-      "Australia has a national evidence-based ADHD guideline, and several jurisdictions have moved to let GPs take on more of this work rather than only refer it onward. " +
+      "NSW now lets a GP with the required training carry ADHD care end to end rather than only refer it onward, and other states are moving the same way. " +
       "What is still missing is a clear practice-level route from a GP’s chosen focus to repeated cases, relevant learning and visible community contribution.",
     pathwayNote:
       "ADHD.ME does not create a clinical credential, and ADHD is not a specialty Ahpra recognises. It makes a clinician-chosen focus and learning loop visible inside the practice.",
