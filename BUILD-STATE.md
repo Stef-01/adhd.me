@@ -2,6 +2,16 @@
 
 > Machine-maintained by the adhd-me-build-loop. One row per week-unit. This file IS the lock.
 
+> **PROVENANCE — READ BEFORE TRUSTING A ROW'S CLINICAL DETAIL.** This tree is a fork of the
+> Meherr / CareYield repository, reoriented to ADHD assessment. Every row below W205 was written
+> when the product was a PMOS and perinatal women's-health one, and each row describes the product
+> **as it was on the day that unit shipped** — so their clinical examples are PMOS ones and their
+> named registers, pathways and copy no longer exist in this form. The engine those rows describe
+> did carry over; the domain did not. The reorientation is the commits from `Baseline: exact copy
+> of the Meherr site tree` onward, and it is not in this ledger. Rows have deliberately NOT been
+> rewritten: a build history edited to claim it was always about ADHD would be a fabrication, and
+> the reasoning in these entries is most of their value.
+
 ## Claim protocol (every loop session follows this exactly)
 
 1. `git pull --rebase` the working branch (see **Home resolution** below) so this file is current.

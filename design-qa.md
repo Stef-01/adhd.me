@@ -1,5 +1,10 @@
 # Main introduction reference design QA
 
+> **PRE-FORK RECORD.** This documents the landing page of the Meherr product, before this tree was
+> reoriented to ADHD assessment. The hero, the PMOS/PCOS naming and the "South Asian women"
+> positioning it evaluates were all replaced — see `app/story-landing.tsx`. Kept because the
+> typography and hierarchy reasoning still applies to the page that replaced it.
+
 ## Evidence
 
 - Source visual truth: `/Users/devasiathottunkal/Desktop/web design/IMG_5251.PNG` and `/Users/devasiathottunkal/Desktop/web design/IMG_5252.PNG`.

@@ -1,5 +1,12 @@
 # ADHD.ME patient-matching trust audit
 
+> **PRE-FORK RECORD.** Audited the Meherr finder, before this tree was reoriented to ADHD
+> assessment, so the scenarios and screenshots below are PMOS ones and the UI has since changed.
+> Kept because the FINDING is not about PMOS: the flow presented static clinician attributes as
+> personalised match reasons, which is a defect the ADHD finder could reproduce exactly. See
+> `getPersonalizedMatch` in `src/demo/clinicians.ts`, which now gates every signal on a term the
+> patient actually used.
+
 Date: 9 August 2026  
 Scope: Mobile patient flow from scenario selection through appointment confirmation at `390 × 844`.
 

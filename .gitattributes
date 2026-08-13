@@ -1,0 +1,19 @@
+# Every text file in this tree is LF, and a CRLF file here is not a cosmetic problem.
+#
+# THE FAILURE THIS PREVENTS, BECAUSE IT IS NOT OBVIOUS. Several tests in src/quality/ parse
+# BUILD-STATE.md and docs/FIVE-YEAR-PLAN.md line by line with regexes anchored by `$` — and in
+# JavaScript `.` does not match `\r`, which is a line terminator. So a CRLF rewrite of the plan
+# makes `/^- \*\*(W\d+)\*\* (.*)$/` match NOTHING: the parser silently found zero of 260 units,
+# and because every assertion in plan-ledger.test.ts runs over that list, four tests failed at
+# once while the files themselves looked untouched in an editor.
+#
+# It reached this repo by an editing tool writing files back through Python's text mode on
+# Windows, which translates \n to \r\n on write. Normalising here means it cannot be committed
+# again regardless of which tool does the writing.
+* text=auto eol=lf
+
+# Binaries, so nothing tries to normalise inside them.
+*.png binary
+*.pptx binary
+*.docx binary
+*.xlsx binary
