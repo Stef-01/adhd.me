@@ -44,8 +44,8 @@ const gp = (over: Partial<GeneralProfile> & { displayName: string }): GeneralPro
 });
 
 const PANEL: GeneralProfile[] = [
-  gp({ displayName: "Dr Zara Ahmed", focus: [focus("Women's health")] }),
-  gp({ displayName: "Dr Alan Brooks", acceptingNewPatients: false, focus: [focus("Women's health")] }),
+  gp({ displayName: "Dr Zara Ahmed", focus: [focus("ADHD assessment")] }),
+  gp({ displayName: "Dr Alan Brooks", acceptingNewPatients: false, focus: [focus("ADHD assessment")] }),
   gp({ displayName: "Dr Mira Chen", location: { practiceId: "prac-2", suburb: "Auburn", state: "NSW" }, languages: ["English", "Mandarin"] }),
   gp({ displayName: "Dr Sam Diaz", focus: [focus("Long-term conditions")] }),
 ];
@@ -79,15 +79,17 @@ describe("W189 G7 — the searcher never describes themselves", () => {
     // The field that looks like the G7 problem and is not: the searcher picks a label a
     // CLINICIAN published, not a description of themselves. Exactness is what keeps it that
     // way — a near-miss silently becoming a hit is the product deciding what somebody meant.
-    expect(searchDirectory(PANEL, { focusLabel: "women's health" }).matches).toHaveLength(2);
-    expect(searchDirectory(PANEL, { focusLabel: "womens health" }).matches).toEqual([]);
-    expect(searchDirectory(PANEL, { focusLabel: "period pain" }).matches).toEqual([]);
+    expect(searchDirectory(PANEL, { focusLabel: "adhd assessment" }).matches).toHaveLength(2);
+    // "adhd" is the near-miss that matters most here: it is what a searcher would actually type,
+    // and letting it hit "ADHD assessment" would be the product deciding what they meant.
+    expect(searchDirectory(PANEL, { focusLabel: "adhd" }).matches).toEqual([]);
+    expect(searchDirectory(PANEL, { focusLabel: "autism assessment" }).matches).toEqual([]);
   });
 
   it("offers only labels clinicians actually published", () => {
     // Generated from the profiles, not kept beside them: a hand-maintained list eventually
     // offers a category nobody declared, which is the product inventing one.
-    expect(publishedFocusLabels(PANEL)).toEqual(["long-term conditions", "women's health"]);
+    expect(publishedFocusLabels(PANEL)).toEqual(["adhd assessment", "long-term conditions"]);
   });
 });
 
@@ -102,7 +104,7 @@ describe("W189 the result is not a selection", () => {
   });
 
   it("attaches no score, rank or relevance to any clinician", () => {
-    const results = searchDirectory(PANEL, { focusLabel: "women's health" });
+    const results = searchDirectory(PANEL, { focusLabel: "adhd assessment" });
     for (const match of results.matches) {
       for (const key of Object.keys(match)) {
         expect(key).not.toMatch(/score|rank|relevance|match(?:ed)?Strength|recommend/i);
@@ -119,7 +121,7 @@ describe("W189 the result is not a selection", () => {
   it("does not reorder based on anything the searcher asked for", () => {
     // The claim the basis makes ("the order does not change based on anything you told us") has
     // to be true. Filters narrow the list; they never move anybody up it.
-    const filtered = searchDirectory(PANEL, { focusLabel: "women's health" }).matches;
+    const filtered = searchDirectory(PANEL, { focusLabel: "adhd assessment" }).matches;
     const unfiltered = searchDirectory(PANEL, {}).matches.filter((p) => filtered.includes(p));
     expect(filtered).toEqual(unfiltered);
   });
@@ -228,10 +230,10 @@ describe("W189 a specialist publishes no focus, so none can be searched", () => 
       location: { practiceId: "prac-1", suburb: "Parramatta", state: "NSW" },
       languages: ["English"],
       acceptingNewPatients: true,
-      descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-      specialty: "endocrinology",
+      descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+      specialty: "psychiatry",
     };
-    expect(searchDirectory([specialist], { focusLabel: "women's health" }).matches).toEqual([]);
+    expect(searchDirectory([specialist], { focusLabel: "adhd assessment" }).matches).toEqual([]);
     expect(publishedFocusLabels([specialist])).toEqual([]);
   });
 });

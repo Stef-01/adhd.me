@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ADHD.ME — recognise PMOS earlier",
+  title: "ADHD.ME — ADHD assessment you can actually reach",
   description:
-    "A Western Sydney community program helping South Asian women recognise PMOS, formerly PCOS, earlier.",
+    "Find a GP in Western Sydney who does ADHD assessment, in your language, at a practice you can get to.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

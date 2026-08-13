@@ -45,13 +45,13 @@ const CORE = {
 const GENERAL: GeneralProfile = {
   ...CORE,
   descriptor: { kind: "general_registration", profession: "general_practitioner" },
-  focus: [focus("Women's health")],
+  focus: [focus("ADHD assessment")],
 };
 
 const SPECIALIST: SpecialistProfile = {
   ...CORE,
-  descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-  specialty: "endocrinology",
+  descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+  specialty: "psychiatry",
 };
 
 describe("W183 a niche focus beside a specialty is unrepresentable", () => {
@@ -61,23 +61,23 @@ describe("W183 a niche focus beside a specialty is unrepresentable", () => {
     // <thing>" — and it does not typecheck.
     const attempt: SpecialistProfile = {
       ...CORE,
-      descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-      specialty: "endocrinology",
+      descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+      specialty: "psychiatry",
       // @ts-expect-error — a specialist profile has no focus list; `focus` is typed `never`.
-      focus: [focus("Women's health")],
+      focus: [focus("ADHD assessment")],
     };
     expect(attempt.descriptor.kind).toBe("recognised_specialist");
   });
 
   it("refuses a specialty on a general profile just as firmly", () => {
     // The other direction: a general-registration clinician cannot acquire a specialty field,
-    // so "GP, specialist in women's health" has no representation either.
+    // so "GP, specialist in ADHD" has no representation either.
     const attempt: GeneralProfile = {
       ...CORE,
       descriptor: { kind: "general_registration", profession: "general_practitioner" },
       focus: [],
       // @ts-expect-error — `specialty` is `never` on a general profile.
-      specialty: "endocrinology",
+      specialty: "psychiatry",
     };
     expect(attempt.descriptor.kind).toBe("general_registration");
   });
@@ -85,11 +85,11 @@ describe("W183 a niche focus beside a specialty is unrepresentable", () => {
   it("admits no invented specialty, because the list is closed", () => {
     const attempt: SpecialistProfile = {
       ...CORE,
-      // @ts-expect-error — "PMOS" is not a specialty Ahpra recognises, so it cannot be claimed.
-      descriptor: { kind: "recognised_specialist", specialty: "pmos" },
-      specialty: "endocrinology",
+      // @ts-expect-error — "ADHD" is not a specialty Ahpra recognises, so it cannot be claimed.
+      descriptor: { kind: "recognised_specialist", specialty: "adhd" },
+      specialty: "psychiatry",
     };
-    expect(attempt.specialty).toBe("endocrinology");
+    expect(attempt.specialty).toBe("psychiatry");
   });
 
   it("leaves the nearest REPRESENTABLE thing being what such a clinician actually is", () => {
@@ -113,7 +113,7 @@ describe("W183 W114's linter still guards the words, as the second line", () => 
     const result = scopeStatement({
       credentialId: "cred-1",
       scope: { kind: "condition", conditionCode: "E28.2" },
-      label: "Specialist in women's health",
+      label: "Specialist in ADHD",
       permits: ["record_only"],
     });
     expect(result.ok).toBe(false);
@@ -136,7 +136,7 @@ describe("W183 W114's linter still guards the words, as the second line", () => 
       ...CORE,
       descriptor: { kind: "general_registration", profession: "general_practitioner" },
       // @ts-expect-error — a raw string is not a ScopeStatement and cannot be published.
-      focus: ["Women's health"],
+      focus: ["ADHD assessment"],
     };
     expect(attempt.focus).toHaveLength(1);
   });

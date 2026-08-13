@@ -25,8 +25,9 @@
 //   typecheck.
 //
 //   `RecognisedSpecialty` is a closed list of specialties Ahpra actually recognises. It is not a
-//   string, so "specialist in PMOS" cannot be invented — the nearest representable thing is a
-//   general profile with a declared focus, which is what such a clinician actually is.
+//   string, so "specialist in ADHD" cannot be invented — ADHD is not a specialty on the register,
+//   and the nearest representable thing is a general profile with a declared focus, which is what
+//   such a clinician actually is. A GP with a deep ADHD practice is a GP.
 //
 // WHAT IS ABSENT, AND ABSENT BY CONSTRUCTION: no rating, no star, no score, no review, no
 // testimonial, no endorsement, no free-text "about" paragraph. CLAUDE.md law 6 bans the first
@@ -59,8 +60,12 @@ export type RegisteredProfession =
  *
  * Short on purpose: this list is a statement about what the register recognises, and adding to
  * it is a factual claim somebody has to check, not a convenience.
+ *
+ * Psychiatry and paediatrics are here because they are the two specialties an ADHD pathway
+ * actually routes to. Note what is NOT here and cannot be added: ADHD itself. That absence is the
+ * s 133 construction doing its job — the type has no way to say "ADHD specialist".
  */
-export type RecognisedSpecialty = "general_practice" | "obstetrics_and_gynaecology" | "endocrinology";
+export type RecognisedSpecialty = "general_practice" | "psychiatry" | "paediatrics";
 
 /** Where a clinician can be seen. Checkable facts, not descriptions. */
 export interface PracticeLocation {
@@ -86,7 +91,7 @@ interface ProfileCore {
 /**
  * A clinician holding general registration.
  *
- * `focus` is where "women's health", "chronic disease" and the rest live, and every entry is a
+ * `focus` is where "ADHD assessment", "chronic disease" and the rest live, and every entry is a
  * `ScopeStatement` — W114's brand, mintable only through `scopeStatement()`, which runs the W23
  * marketing rules and the W6 message rules and refuses "specialist" beside a narrow scope.
  * Reached through its own module so a rule added there reaches profiles the same day.

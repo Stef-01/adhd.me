@@ -41,7 +41,7 @@ const GP: GeneralProfile = {
   languages: ["English", "Hindi"],
   acceptingNewPatients: true,
   descriptor: { kind: "general_registration", profession: "general_practitioner" },
-  focus: [focus("Women's health")],
+  focus: [focus("ADHD assessment")],
 };
 
 describe("W193 what leaves the tenancy is enumerated", () => {

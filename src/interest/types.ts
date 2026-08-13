@@ -1,5 +1,5 @@
 export const INTEREST_REASONS = [
-  "I want to learn more about PMOS",
+  "I want to learn more about ADHD assessment",
   "I want to bring a session to my community",
   "I’m a clinician",
 ] as const;

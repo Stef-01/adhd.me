@@ -1,17 +1,22 @@
 // W187: how a GP with a deep interest is described without being called a specialist.
 //
-// This is the sentence the whole directory turns on. A clinician who has spent years on
-// women's health IS more use to a woman looking for help, and saying nothing about it makes the
-// directory worthless. Saying it the obvious way — "women's health specialist", "specialises in
-// PMOS" — is an offence under s 133 for a general registrant. The product's job is the third
-// thing: state the scope truthfully, and let no reader conclude a specialty from it.
+// This is the sentence the whole directory turns on. A GP who has spent years on ADHD assessment
+// IS more use to somebody looking for one, and saying nothing about it makes the directory
+// worthless. Saying it the obvious way — "ADHD specialist", "specialises in ADHD" — is an offence
+// under s 133 for a general registrant. The product's job is the third thing: state the scope
+// truthfully, and let no reader conclude a specialty from it.
+//
+// AND "ADHD SPECIALIST" IS THE PHRASE THIS DOMAIN REACHES FOR FIRST. It is in common use, it is
+// what people search, and ADHD is not a specialty Ahpra recognises — so the term names something
+// that cannot exist on the register. That gap is exactly where an implied claim gets made, which
+// is why the control below is composition rather than a word list.
 //
 // W183 made the bad SHAPE unwritable and W184 made the bad SENTENCE unpublishable. Neither sees
 // what this unit is about:
 //
 //   EVERY FIELD CAN PASS AND THE COMPOSITION STILL MAKE THE CLAIM. "Dr Jane Smith" is a clean
-//   name. "General practitioner" is a clean profession. "Women's health" is a linted focus
-//   label. Rendered as "Dr Jane Smith — Women's Health GP" they are an implied specialty that no
+//   name. "General practitioner" is a clean profession. "ADHD assessment" is a linted focus
+//   label. Rendered as "Dr Jane Smith — ADHD Assessment GP" they are an implied specialty that no
 //   per-field linter ever saw, because the offending string does not exist until a template
 //   joins three compliant ones. A field-level check cannot catch a claim made by juxtaposition.
 //
@@ -19,7 +24,7 @@
 //
 //   THE SCOPE NEVER TOUCHES THE REGISTRATION. Focus labels appear only inside the framed block,
 //   never on the heading and never on the registration line. A test asserts no rendered line
-//   contains both a focus label and a registration word, which is what makes "Women's Health GP"
+//   contains both a focus label and a registration word, which is what makes "ADHD Assessment GP"
 //   unrenderable rather than merely discouraged.
 //
 //   THE FRAMING SAYS WHOSE CLAIM IT IS. The clinician told us; ADHD.ME did not verify it and

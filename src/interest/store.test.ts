@@ -30,7 +30,7 @@ describe("community interest store", () => {
     const result = saveInterestSignup({
       name: "  Asha Rao  ",
       email: " ASHA@example.com ",
-      interests: ["I want to learn more about PMOS"],
+      interests: ["I want to learn more about ADHD assessment"],
     }, { filePath, now: new Date("2026-08-10T00:00:00.000Z") });
 
     expect(result.created).toBe(true);
@@ -51,12 +51,12 @@ describe("community interest store", () => {
     const filePath = tempFile();
     saveInterestSignup({
       name: "Narayani",
-      email: "narayani@example.com",
-      interests: ["I want to learn more about PMOS", "I want to bring a session to my community"],
+      email: "krish@example.com",
+      interests: ["I want to learn more about ADHD assessment", "I want to bring a session to my community"],
     }, { filePath, now: new Date("2026-08-10T01:00:00.000Z") });
     const csv = interestSignupsCsv({ filePath });
     expect(csv).toContain('"created_at","name","email","interests","source"');
-    expect(csv).toContain("I want to learn more about PMOS | I want to bring a session to my community");
+    expect(csv).toContain("I want to learn more about ADHD assessment | I want to bring a session to my community");
   });
 
   it("W153: a signup name cannot become a formula in the operator's spreadsheet", () => {
@@ -66,7 +66,7 @@ describe("community interest store", () => {
     saveInterestSignup({
       name: '=HYPERLINK("http://evil.invalid","Payroll")',
       email: "formula@example.com",
-      interests: ["I want to learn more about PMOS"],
+      interests: ["I want to learn more about ADHD assessment"],
     }, { filePath, now: new Date("2026-08-10T01:00:00.000Z") });
     const csv = interestSignupsCsv({ filePath });
     expect(csv).toContain(`"'=HYPERLINK(""http://evil.invalid"",""Payroll"")"`);
@@ -83,7 +83,7 @@ describe("W106 access and retention for the interest register", () => {
   // practice. Different collection to everything else in the tree, same rights.
   const tmp = tempFile;
 
-  const REASON: InterestSignup["interests"][number] = "I want to learn more about PMOS";
+  const REASON: InterestSignup["interests"][number] = "I want to learn more about ADHD assessment";
   const save = (filePath: string, email: string, now: string) =>
     saveInterestSignup({ name: "Test Person", email, interests: [REASON] }, { filePath, now: new Date(now) });
 

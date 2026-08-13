@@ -46,8 +46,8 @@ const specialist = (): SpecialistProfile => ({
   location: { practiceId: "prac-1", suburb: "Coburg", state: "VIC" },
   languages: ["English"],
   acceptingNewPatients: false,
-  descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-  specialty: "endocrinology",
+  descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+  specialty: "psychiatry",
 });
 
 describe("W184 the rules are applied, not re-implemented", () => {
@@ -181,13 +181,13 @@ describe("W184 every emitting field is disposed of, checked against the tree", (
 
   it("what is rendered and what is linted come from the same list", () => {
     // A page rendering a field the linter does not walk would be showing unchecked copy.
-    const profile = general({ focus: [focusOf("women's health")] });
+    const profile = general({ focus: [focusOf("adhd assessment")] });
     const rendered = renderableText(profile);
     expect(rendered).toContain("Dr Jane Smith");
     expect(rendered).toContain("Coburg");
-    expect(rendered).toContain("women's health");
+    expect(rendered).toContain("adhd assessment");
     // The specialist shape renders no focus, because it has none to render.
-    expect(renderableText(specialist())).not.toContain("women's health");
+    expect(renderableText(specialist())).not.toContain("adhd assessment");
   });
 
   it("skips nothing silently — every non-structured field is actually walked", () => {

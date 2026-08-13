@@ -36,7 +36,7 @@ const profile = (over: Partial<GeneralProfile> = {}): GeneralProfile => ({
   languages: ["English", "Greek"],
   acceptingNewPatients: true,
   descriptor: { kind: "general_registration", profession: "general_practitioner" },
-  focus: [focusOf("women's health")],
+  focus: [focusOf("adhd assessment")],
   ...over,
 });
 

@@ -43,13 +43,13 @@ const CORE = {
 const GP: GeneralProfile = {
   ...CORE,
   descriptor: { kind: "general_registration", profession: "general_practitioner" },
-  focus: [focus("Women's health"), focus("Long-term conditions")],
+  focus: [focus("ADHD assessment"), focus("Long-term conditions")],
 };
 
 const SPECIALIST: SpecialistProfile = {
   ...CORE,
-  descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-  specialty: "endocrinology",
+  descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+  specialty: "psychiatry",
 };
 
 const ok = (profile: GeneralProfile) => {
@@ -67,7 +67,7 @@ describe("W187 the scope is stated without implying a specialty", () => {
   });
 
   it("never puts a focus area on the same line as how the clinician is registered", () => {
-    // THIS is what makes "Dr Jane Smith — Women's Health GP" unrenderable rather than merely
+    // THIS is what makes "Dr Jane Smith — ADHD Assessment GP" unrenderable rather than merely
     // discouraged. Every individual string is compliant; the juxtaposition is the claim, and
     // no per-field linter can see a string that does not exist until a template builds it.
     const rendered = ok(GP);
@@ -108,7 +108,7 @@ describe("W187 the scope is stated without implying a specialty", () => {
 
   it("frames the scope on every profile, not only where somebody remembered", () => {
     // A one-focus profile is the likely place for the framing to be judged unnecessary.
-    const single: GeneralProfile = { ...GP, focus: [focus("Women's health")] };
+    const single: GeneralProfile = { ...GP, focus: [focus("ADHD assessment")] };
     expect(ok(single).scope).toContain(SCOPE_FRAMING.denial);
     expect(ok(single).scope).toContain(SCOPE_FRAMING.attribution);
   });
@@ -148,12 +148,12 @@ describe("W187 W183's compile-time guarantee, exercised", () => {
     // than existing and being correct.
     const attempt: SpecialistProfile = {
       ...CORE,
-      descriptor: { kind: "recognised_specialist", specialty: "endocrinology" },
-      specialty: "endocrinology",
+      descriptor: { kind: "recognised_specialist", specialty: "psychiatry" },
+      specialty: "psychiatry",
       // @ts-expect-error — `focus` is `never` on a specialist profile (W183).
-      focus: [focus("Women's health")],
+      focus: [focus("ADHD assessment")],
     };
-    expect(attempt.specialty).toBe("endocrinology");
+    expect(attempt.specialty).toBe("psychiatry");
   });
 });
 
@@ -184,7 +184,7 @@ describe("W187 the specialist variant is representable and unpublishable", () =>
   it("would trip its own linter if it rendered, which is why it does not try", () => {
     // Proof the refusal is necessary rather than cautious: any honest wording of specialist
     // registration contains the protected word, and the union refuses that word outright.
-    const honest = "Holds specialist registration in endocrinology.";
+    const honest = "Holds specialist registration in psychiatry.";
     expect(lintDirectoryText(honest, "registration[0]").map((v) => v.rule)).toContain(
       "no-specialist",
     );
@@ -212,7 +212,7 @@ describe("W187 rendering fails closed", () => {
   });
 
   it("catches the s 133 claim made as a verb, in composed copy", () => {
-    const bad: GeneralProfile = { ...GP, displayName: "Dr Example Name who specialises in PMOS" };
+    const bad: GeneralProfile = { ...GP, displayName: "Dr Example Name who specialises in ADHD" };
     const result = renderProfile(bad);
     expect(result.ok).toBe(false);
     if (!result.ok) {

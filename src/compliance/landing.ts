@@ -6,6 +6,26 @@
 // twin of the W6 patient-message linter: same posture, tuned for marketing copy.
 // The landing page imports its copy from ./landing-copy; the test lints that copy,
 // so a non-compliant edit fails the build.
+//
+// ─────────────────────────────────────────────────────────────────────────────────
+// THE PRODUCT IS NAMED AFTER A DIAGNOSIS, AND THAT IS A STANDING HAZARD THIS FILE
+// CANNOT FIX. "ADHD.ME" puts a condition in every page title, every URL and every
+// sentence naming the product, which is condition-targeting by construction — the
+// exact thing `no-condition-targeting` exists to catch, arriving through the one
+// string no linter can refuse.
+//
+// SO DO NOT ADD "adhd" TO `no-condition-targeting`. It would fail on the brand and
+// the only available fix would be to stop linting the page. The rule keeps naming
+// the conditions the copy has no business raising, and the brand is handled where it
+// actually has to be handled: by a founder decision, not a regex.
+//
+// FOUNDER ACTION, AND IT IS NOT A SMALL ONE: a name that asserts a condition needs an
+// Ahpra advertising review in its own right, separately from the page copy. The
+// product this was adapted from deliberately kept the condition out of its name and
+// out of its B2B positioning; this one cannot. That is a legitimate choice and it is
+// a different risk position, which somebody should take deliberately rather than
+// inherit from a rename. Recorded here because this is the file a reviewer opens.
+// ─────────────────────────────────────────────────────────────────────────────────
 
 export interface LandingViolation {
   rule: string;

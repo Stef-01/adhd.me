@@ -106,10 +106,34 @@ describe("W100 Year-2 register section", () => {
   it("never names a condition — there is no field to put one in", () => {
     // De-identification, not just lint: "a 10-GP metropolitan practice" is not identifying,
     // but the same practice plus a named register is a much smaller haystack.
-    const text = renderCaseStudy(report, { ...CONTEXT, registers: REGISTERS });
-    for (const banned of ["diabetes", "kidney", "ckd", "pcos", "cardiac", "mental health"]) {
-      expect(text.toLowerCase(), `case study must not name "${banned}"`).not.toContain(banned);
+    //
+    // THE BRAND IS A CONDITION NAME, WHICH THIS CHECK HAS TO SURVIVE. "ADHD.ME" appears in the
+    // document as the product's name, and "adhd" has to stay on the banned list because a named
+    // ADHD register is precisely the disclosure this test exists to prevent. Both are true at
+    // once, so the brand token is removed before the scan rather than the condition being dropped
+    // from the list — dropping it is the tempting fix and it silently deletes the protection.
+    //
+    // Order matters: strip the longest form first, or "ADHD.ME" leaves an orphan ".ME" behind and
+    // a bare "ADHD" in some other spelling would slip past.
+    const withoutBrand = renderCaseStudy(report, { ...CONTEXT, registers: REGISTERS })
+      .toLowerCase()
+      .replace(/adhd\.me/g, "«product»");
+
+    for (const banned of ["diabetes", "kidney", "ckd", "adhd", "cardiac", "mental health"]) {
+      expect(withoutBrand, `case study must not name "${banned}"`).not.toContain(banned);
     }
+  });
+
+  /**
+   * The stripping above must not be able to hide a real leak. If the brand replacement were
+   * greedy or wrong, a document naming an ADHD register would pass the test above and this one
+   * fails — which is what keeps that mitigation honest rather than a way of muting the check.
+   */
+  it("still catches a condition name that is not the brand", () => {
+    const leaked = `${renderCaseStudy(report, { ...CONTEXT, registers: REGISTERS })}\nADHD register, 412 patients.`;
+    const withoutBrand = leaked.toLowerCase().replace(/adhd\.me/g, "«product»");
+
+    expect(withoutBrand).toContain("adhd");
   });
 
   it("says the message itself was unchanged — registers pick WHO, not WHAT", () => {

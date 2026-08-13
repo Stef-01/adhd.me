@@ -34,7 +34,7 @@ const profile = (over: Partial<GeneralProfile> = {}): GeneralProfile => ({
   languages: ["English", "Greek"],
   acceptingNewPatients: true,
   descriptor: { kind: "general_registration", profession: "general_practitioner" },
-  focus: [focusOf("women's health"), focusOf("chronic disease care")],
+  focus: [focusOf("adhd assessment"), focusOf("chronic disease care")],
   ...over,
 });
 
@@ -67,7 +67,7 @@ describe("W190 no control adds a claim", () => {
     expect(before).toBeGreaterThan(3);
     const targets: Record<CorrectionKind, Partial<CorrectionRequest>> = {
       withdraw_profile: {},
-      remove_focus_area: { target: "women's health" },
+      remove_focus_area: { target: "adhd assessment" },
       stop_accepting_new_patients: {},
       remove_language: { target: "Greek" },
       correct_display_name: { replacement: "Dr Jane Smyth" },
@@ -85,7 +85,7 @@ describe("W190 no control adds a claim", () => {
     const language = applyCorrection(profile(), request({ kind: "remove_language", target: "Greek" }));
     expect(language.ok && language.profile!.languages).toEqual(["English"]);
 
-    const focus = applyCorrection(profile(), request({ kind: "remove_focus_area", target: "women's health" }));
+    const focus = applyCorrection(profile(), request({ kind: "remove_focus_area", target: "adhd assessment" }));
     expect(focus.ok && (focus.profile as GeneralProfile).focus.map((f) => f.label)).toEqual([
       "chronic disease care",
     ]);

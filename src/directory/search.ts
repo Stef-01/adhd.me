@@ -10,7 +10,7 @@
 //   patient's symptoms, reasons over it, and returns a clinical recommendation. That is
 //   software making a decision about a person's care, and it is what G7 refuses.
 //
-//   "These clinicians have told us they see a lot of women's health; here they all are" takes
+//   "These clinicians have told us they see a lot of ADHD assessment; here they all are" takes
 //   an attribute OF A CLINICIAN, which the clinician declared about themselves, and filters a
 //   list on it. Nobody described a patient. Nothing was inferred about anybody.
 //
