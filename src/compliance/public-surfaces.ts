@@ -85,6 +85,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "A walkthrough addressed to GPs, describing what the software does with a worked clinical example. Clinical content between clinicians is professional communication rather than therapeutic advertising — see STANDING_FLAGS, because whether to publish it at all is a separate and open question.",
   },
   {
+    path: "/clinicians/join",
+    audience: "professional",
+    why: "The application form for GPs who want to be listed. Addressed to clinicians, asks a clinician about their own practice, and asks nothing about any patient. Public because a GP has to be able to reach it without an account, which is also why it is swept.",
+  },
+  {
     path: "/demo",
     audience: "professional",
     why: "A presenter view for showing the product to a practice. Not linked from anywhere a patient would be, but public, so it is swept.",

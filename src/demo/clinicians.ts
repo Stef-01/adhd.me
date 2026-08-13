@@ -63,7 +63,7 @@ export type Clinician = {
   keywords: string[];
   /**
    * The clinician says they have completed the training NSW requires to carry ADHD care without
-   * ongoing specialist involvement.
+   * ongoing psychiatrist involvement.
    *
    * DECLARED, NOT CHECKED, and the surfaces say so. W193 splits every published field into
    * "checkable on a public register" and "the clinician told us", and this is firmly the second:

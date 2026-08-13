@@ -132,6 +132,18 @@ export interface CopySurface {
 
 export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
   {
+    module: "src/onboarding/types.ts",
+    operatorCopy: ["CARE_AREA_LABELS"],
+    notCopy:
+      "REFUSED_APPLICATION_FIELDS states, to a reviewer, the fields this form deliberately lacks and why, so it necessarily names the bio and the certificate upload it refuses. OFFERED_LANGUAGES is a list of language names. Only CARE_AREA_LABELS is copy a GP reads while choosing, and it is linted as such.",
+  },
+  {
+    module: "src/onboarding/store.ts",
+    operatorCopy: [],
+    notCopy:
+      "Validation messages addressed to the GP filling the form in, not to a practice operator, plus storage. They tell somebody their registration number is the wrong shape; they make no claim about care, a patient or a clinician's competence.",
+  },
+  {
     module: "src/geo/suburbs.ts",
     operatorCopy: [],
     notCopy:

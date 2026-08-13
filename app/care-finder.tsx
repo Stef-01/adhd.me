@@ -266,8 +266,8 @@ function NswTraining({ clinician }: { clinician: Clinician }) {
 
   return (
     <p className="declared-claim">
-      Says they have completed the NSW training to carry ADHD care without ongoing specialist
-      involvement. ADHD.ME has not verified this.
+      Says they have completed the NSW training to carry ADHD care without ongoing psychiatrist
+      involvement. This has not been verified.
     </p>
   );
 }

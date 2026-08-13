@@ -273,6 +273,7 @@ export function ClinicianWalkthrough() {
               <button type="button" onClick={() => move(1)}>
                 Build my pathway <ArrowRight size={18} weight="bold" aria-hidden="true" />
               </button>
+              <a className="cv2-join-link" href="/clinicians/join">Or apply to join the directory</a>
               <p>Demo pathway only. Scope and credentialing remain practice-led.</p>
             </div>
           </section>
