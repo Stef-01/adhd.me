@@ -238,6 +238,7 @@ export const HUMAN_CONTROLS: readonly string[] = [
  */
 export const NOT_A_DECISION: Readonly<Record<string, string>> = {
   "src/booking/store.ts": "The store behind the booking pages. It records the transitions the rail decides; it decides nothing.",
+  "src/voice/speech.ts": "Speech to text at the finder's microphone. The only thing it decides is whether the BROWSER can transcribe, which is a capability check about software rather than a decision about a person. It was caught by the detector for exporting a type ending in `Reason`, and the type is kept rather than renamed: renaming it to slip past a deliberately broad detector would be the exact evasion this register exists to make visible. No audio or transcript reaches this product.",
   "src/complaints/store.ts": "Storage for complaints. The complaint is the practice's record and the store keeps it.",
   "src/complaints/workflow.ts": "Intake and resolution of a complaint by practice staff. Every step is a person acting.",
   "src/credentials/verification.ts": "A clinician's credential and who verified it. Nothing about a patient.",

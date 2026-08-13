@@ -14,9 +14,25 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from "motion/react";
-import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
-import { clinicians, getPersonalizedMatch, rankClinicians, type Clinician } from "@/demo/clinicians";
+import {
+  clinicians,
+  distanceTo,
+  getPersonalizedMatch,
+  rankCliniciansNear,
+  rankClinicians,
+  type Clinician,
+} from "@/demo/clinicians";
+import { coveredSuburbs, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
+import {
+  SPEECH_DISCLOSURE,
+  SPEECH_ERROR_COPY,
+  speechUnavailable,
+  startSpeech,
+  type SpeechError,
+  type SpeechSession,
+} from "@/voice/speech";
 
 type Stage =
   | "welcome"
@@ -335,17 +351,30 @@ export function CareFinder() {
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   const [matchingStep, setMatchingStep] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
   const [selectedTime, setSelectedTime] = useState("");
+  // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
+  // is the only reliable signal to somebody that the microphone is actually working.
+  // Where the person says they are. A typed suburb or postcode, never the device's location: no
+  // permission prompt, and no coordinate leaves the browser.
+  const [place, setPlace] = useState("");
+  const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
+  const [heard, setHeard] = useState("");
+  const [speechError, setSpeechError] = useState<SpeechError | null>(null);
+  const speech = useRef<SpeechSession | null>(null);
 
   const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
 
+  // Stop the microphone whenever this screen is left, by any route: the X, a stage change, an
+  // unmount. A recogniser left running after its screen is gone keeps the mic light on, which is
+  // alarming and correct to be alarmed by.
   useEffect(() => {
-    if (stage !== "listening") return;
-    const timer = window.setInterval(() => setElapsed((value) => Math.min(value + 1, 20)), 1000);
-    return () => window.clearInterval(timer);
+    if (stage === "listening") return;
+    speech.current?.cancel();
+    speech.current = null;
   }, [stage]);
+
+  useEffect(() => () => speech.current?.cancel(), []);
 
   useEffect(() => {
     if (stage !== "matching") return;
@@ -393,20 +422,57 @@ export function CareFinder() {
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
 
   function startListening() {
-    setElapsed(0);
+    setHeard("");
+    setSpeechError(null);
+
+    const session = startSpeech({
+      onPartial: setHeard,
+      onFinal: (text) => {
+        speech.current = null;
+        // Nothing heard is not an error worth a red message; it is a reason to let somebody type.
+        if (!text) {
+          setStage("type");
+          return;
+        }
+        setHeard(text);
+        setRequest(text);
+        setDraft(text);
+        setStage("review");
+      },
+      onError: (error) => {
+        speech.current = null;
+        // A deliberate stop is not a failure to report.
+        if (error === "aborted") return;
+        setSpeechError(error);
+        setStage("type");
+      },
+    });
+
+    // Unsupported browser, insecure origin, or a constructor that threw: go straight to typing
+    // rather than showing a microphone screen that cannot work.
+    if (!session) {
+      setSpeechError(null);
+      setStage("type");
+      return;
+    }
+
+    speech.current = session;
     setStage("listening");
   }
 
+  /** "Done" asks the recogniser to finish; the final transcript arrives through onFinal. */
   function finishListening() {
-    setRequest(archetype.request);
-    setDraft(archetype.request);
-    setStage("review");
+    if (speech.current) {
+      speech.current.stop();
+      return;
+    }
+    setStage("type");
   }
 
   function findMatches(value = request) {
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
-    setMatches(rankClinicians(nextRequest));
+    setMatches(rankCliniciansNear(nextRequest, origin));
     setMatchIndex(0);
     setStage("matching");
   }
@@ -552,12 +618,19 @@ export function CareFinder() {
             <div className="voice-prompt listening-copy">
               <p className="eyebrow">Listening</p>
               <h1>Describe the GP you’d feel comfortable with.</h1>
-              <p className="example">What you need looked at, your language, how you want to be treated. Whatever matters to you.</p>
+              {/* The transcript replaces the prompt as soon as there is one: once somebody is
+                  talking, the instruction is noise and the words are the feedback. `aria-live`
+                  is polite so a screen reader is not interrupted on every revision. */}
+              {heard ? (
+                <p className="listening-transcript" aria-live="polite">{heard}</p>
+              ) : (
+                <p className="example">What you need looked at, your language, how you want to be treated. Whatever matters to you.</p>
+              )}
             </div>
 
             <div className="voice-actions">
               <motion.div
-                animate={{ scale: [1, 1.035, 1] }}
+                animate={reducedMotion ? undefined : { scale: [1, 1.035, 1] }}
                 transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
               >
                 <Pressable className="mic-button recording" type="button" onClick={finishListening} aria-label="Finish voice description">
@@ -565,8 +638,10 @@ export function CareFinder() {
                 </Pressable>
               </motion.div>
               <WaveformMark active />
-              <p className="listening-time">Listening · 0:{elapsed.toString().padStart(2, "0")}</p>
-              <button className="text-action" type="button" onClick={finishListening}>Done</button>
+              <button className="primary-button listening-done" type="button" onClick={finishListening}>Done</button>
+              <button className="text-action" type="button" onClick={() => setStage("type")}>Type instead</button>
+              {/* Beside the microphone, not in a policy page. See src/voice/speech.ts. */}
+              <p className="speech-disclosure">{SPEECH_DISCLOSURE}</p>
             </div>
           </MotionScreen>
         )}
@@ -583,6 +658,7 @@ export function CareFinder() {
 
             <div className="type-content">
               <p className="eyebrow">In your own words</p>
+              {speechError && <p className="speech-error" role="status">{SPEECH_ERROR_COPY[speechError]}</p>}
               <h1>
                 <span>ADHD assessment</span>
                 <em>that takes you seriously.</em>
@@ -622,6 +698,32 @@ export function CareFinder() {
               {requestHeadline !== requestSummary && (
                 <p className="review-transcript">“{requestSummary}”</p>
               )}
+              {/* Where they are. Asked here rather than up front because it is the second question,
+                  and asked as a typed suburb rather than a geolocation prompt. Optional: a blank
+                  field ranks on stated preference alone rather than blocking the search. */}
+              <div className="place-field">
+                <label htmlFor="place">Where are you? Suburb or postcode, if you like.</label>
+                <input
+                  id="place"
+                  name="place"
+                  list="covered-suburbs"
+                  value={place}
+                  onChange={(event) => setPlace(event.target.value)}
+                  placeholder="Blacktown"
+                  autoComplete="address-level2"
+                />
+                <datalist id="covered-suburbs">
+                  {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
+                </datalist>
+                <p className="place-status" role="status">
+                  {place.trim() === ""
+                    ? "Leave it blank and we will match on what you asked for."
+                    : origin
+                      ? `Matching around ${origin.suburb} ${origin.postcode}.`
+                      : "We do not cover that one yet, so we will match on what you asked for."}
+                </p>
+              </div>
+
               {requestPriorities.length > 0 && (
                 <div className="priority-list" aria-label="Matching priorities">
                   {requestPriorities.map((priority, index) => (
@@ -741,7 +843,10 @@ export function CareFinder() {
 
                 <div className="match-details">
                   <h2>{clinician.name}</h2>
-                  <p className="clinician-meta">{clinician.title} · {clinician.suburb}</p>
+                  <p className="clinician-meta">
+                    {clinician.title} · {clinician.suburb}
+                    {distanceTo(clinician, origin) && <span className="clinician-distance">{distanceTo(clinician, origin)}</span>}
+                  </p>
                   <NswTraining clinician={clinician} />
                   <FounderDisclosure clinician={clinician} />
                   <p className="match-reason">{personalizedMatch.reason}</p>
@@ -840,7 +945,7 @@ export function CareFinder() {
                   has no pills, so it keeps the sentence. */}
               <div className="fit-list">
                 <p>{clinician.appointmentLength}</p>
-                <p>{clinician.distance}</p>
+                <p>{distanceTo(clinician, origin) ?? clinician.reach}</p>
               </div>
 
               <section>

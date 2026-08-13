@@ -1,4 +1,5 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
+import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 
 /**
  * The demo roster behind /finder and the walkthrough.
@@ -30,7 +31,15 @@ export type Clinician = {
   pronouns: string;
   title: string;
   suburb: string;
-  distance: string;
+  /**
+   * Only meaningful for a practice somebody travels to.
+   *
+   * The `distance` string this replaced was a fabricated "4.8 km away" measured from nowhere: the
+   * same number rendered for a reader in the next street and one two suburbs over. Distance is now
+   * computed from the suburb the person gives (src/geo/suburbs.ts), and this field carries only
+   * what is true without knowing where they are.
+   */
+  reach: string;
   /**
    * A portrait, or null.
    *
@@ -95,7 +104,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Blacktown",
-    distance: "1.2 km away",
+    reach: "Practice appointments",
     image: "/clinicians/maya-singh.png",
     nextAvailable: "Tuesday, 10:20 am",
     acceptingNewPatients: true,
@@ -121,7 +130,7 @@ export const clinicians: Clinician[] = [
     pronouns: "he/him",
     title: "General practitioner",
     suburb: "Seven Hills",
-    distance: "4.8 km away",
+    reach: "Practice appointments",
     image: "/clinicians/daniel-okafor.png",
     nextAvailable: "Monday, 3:40 pm",
     acceptingNewPatients: true,
@@ -147,7 +156,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Doonside",
-    distance: "4.1 km away",
+    reach: "Practice appointments",
     image: "/clinicians/linh-nguyen.png",
     nextAvailable: "Wednesday, 9:00 am",
     acceptingNewPatients: true,
@@ -173,7 +182,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Mount Druitt",
-    distance: "8.5 km away",
+    reach: "Practice appointments",
     image: "/clinicians/aisha-rahman.png",
     nextAvailable: "Thursday, 11:10 am",
     acceptingNewPatients: true,
@@ -199,7 +208,7 @@ export const clinicians: Clinician[] = [
     pronouns: "he/him",
     title: "General practitioner",
     suburb: "Lalor Park",
-    distance: "3.2 km away",
+    reach: "Practice appointments",
     image: "/clinicians/tom-bennett.png",
     nextAvailable: "Tuesday, 4:30 pm",
     acceptingNewPatients: true,
@@ -225,7 +234,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Blacktown",
-    distance: "900 m away",
+    reach: "Practice appointments",
     image: "/clinicians/sofia-alvarez.png",
     nextAvailable: "Friday, 8:40 am",
     acceptingNewPatients: true,
@@ -251,7 +260,7 @@ export const clinicians: Clinician[] = [
     pronouns: "he/him",
     title: "General practitioner",
     suburb: "Kings Langley",
-    distance: "5.1 km away",
+    reach: "Practice appointments",
     image: "/clinicians/noah-williams.png",
     nextAvailable: "Wednesday, 1:20 pm",
     acceptingNewPatients: true,
@@ -277,7 +286,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Toongabbie",
-    distance: "6.4 km away",
+    reach: "Practice appointments",
     image: "/clinicians/priya-nair.png",
     nextAvailable: "Monday, 9:30 am",
     acceptingNewPatients: true,
@@ -303,7 +312,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Glenwood",
-    distance: "7.2 km away",
+    reach: "Practice appointments",
     image: "/clinicians/anjali-menon.png",
     nextAvailable: "Tuesday, 12:30 pm",
     acceptingNewPatients: true,
@@ -329,7 +338,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Quakers Hill",
-    distance: "7.5 km away",
+    reach: "Practice appointments",
     image: "/clinicians/nisha-kapoor.png",
     nextAvailable: "Wednesday, 3:10 pm",
     acceptingNewPatients: true,
@@ -355,7 +364,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Prospect",
-    distance: "4.6 km away",
+    reach: "Practice appointments",
     image: "/clinicians/camila-torres.png",
     nextAvailable: "Monday, 11:20 am",
     acceptingNewPatients: true,
@@ -381,7 +390,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Rooty Hill",
-    distance: "7.0 km away",
+    reach: "Practice appointments",
     image: "/clinicians/leila-haddad.png",
     nextAvailable: "Thursday, 2:40 pm",
     acceptingNewPatients: true,
@@ -407,7 +416,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Marayong",
-    distance: "4.9 km away",
+    reach: "Practice appointments",
     image: "/clinicians/hanh-tran.png",
     nextAvailable: "Friday, 10:10 am",
     acceptingNewPatients: true,
@@ -433,7 +442,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Woodcroft",
-    distance: "5.7 km away",
+    reach: "Practice appointments",
     image: "/clinicians/grace-chen.png",
     nextAvailable: "Tuesday, 1:40 pm",
     acceptingNewPatients: true,
@@ -459,7 +468,7 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner",
     suburb: "Seven Hills",
-    distance: "4.3 km away",
+    reach: "Practice appointments",
     image: "/clinicians/erin-walsh.png",
     nextAvailable: "Monday, 1:20 pm",
     acceptingNewPatients: true,
@@ -485,7 +494,7 @@ export const clinicians: Clinician[] = [
     pronouns: "he/him",
     title: "General practitioner",
     suburb: "Parramatta",
-    distance: "Telehealth, plus Parramatta rooms",
+    reach: "Practice appointments",
     // A real person's likeness is theirs to supply. Renders as a monogram until he provides one.
     image: null,
     nextAvailable: "Thursday, 8:30 am",
@@ -572,6 +581,55 @@ export function rankClinicians(query: string): Clinician[] {
 
     return score(b) - score(a);
   });
+}
+
+/**
+ * Rank by stated preference, then bring the near ones forward.
+ *
+ * TWO-STAGE ON PURPOSE. Distance does not outrank fit: somebody who asked for a Tamil-speaking GP
+ * is not helped by the nearest one who does not speak Tamil, and a directory that sorted purely by
+ * kilometres would quietly undo everything the preference weights express. So the preference order
+ * is computed first and distance only reorders WITHIN a band of comparable fit.
+ *
+ * Clinicians whose suburb is not in the gazetteer keep their preference position rather than
+ * sinking. An unknown location is a gap in our data, and penalising a practice for it would be
+ * making them pay for our missing row.
+ */
+export function rankCliniciansNear(query: string, origin: SuburbPoint | null): Clinician[] {
+  const byFit = rankClinicians(query);
+  if (!origin) return byFit;
+
+  const fitRank = new Map(byFit.map((c, i) => [c.id, i]));
+  const km = (c: Clinician) => {
+    const point = resolvePlace(c.suburb);
+    return point ? distanceKm(origin, point) : null;
+  };
+
+  return [...byFit].sort((a, b) => {
+    const fitGap = Math.abs(fitRank.get(a.id)! - fitRank.get(b.id)!);
+    // Outside the band, fit wins outright.
+    if (fitGap > COMPARABLE_FIT_BAND) return fitRank.get(a.id)! - fitRank.get(b.id)!;
+    const da = km(a);
+    const db = km(b);
+    if (da === null || db === null) return fitRank.get(a.id)! - fitRank.get(b.id)!;
+    return da - db;
+  });
+}
+
+/**
+ * How close in the preference order two clinicians must be before distance decides between them.
+ *
+ * Four is a judgement, and a small one on a sixteen-entry roster: it lets the top handful reorder
+ * by geography while keeping somebody ranked 12th on fit from jumping to first for being nearby.
+ */
+const COMPARABLE_FIT_BAND = 4;
+
+/** The distance sentence for a clinician, or null when there is nothing honest to say. */
+export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {
+  if (!origin) return null;
+  const point = resolvePlace(clinician.suburb);
+  if (!point) return null;
+  return describeDistance(distanceKm(origin, point));
 }
 
 export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician[] {

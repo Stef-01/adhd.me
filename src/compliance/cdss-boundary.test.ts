@@ -77,6 +77,7 @@ const NAMESPACES: Record<string, () => Promise<Record<string, unknown>>> = {
   "src/reporting/report.ts": () => import("@/reporting/report"),
   "src/reporting/retention.ts": () => import("@/reporting/retention"),
   "src/reporting/suppression.ts": () => import("@/reporting/suppression"),
+  "src/geo/suburbs.ts": () => import("@/geo/suburbs"),
   "src/matching/explain.ts": () => import("@/matching/explain"),
   "src/outcomes/counterfactual.ts": () => import("@/outcomes/counterfactual"),
   "src/outcomes/response.ts": () => import("@/outcomes/response"),
@@ -87,6 +88,7 @@ const NAMESPACES: Record<string, () => Promise<Record<string, unknown>>> = {
   "src/verticals/dermatology.ts": () => import("@/verticals/dermatology"),
   "src/verticals/model.ts": () => import("@/verticals/model"),
   "src/verticals/store.ts": () => import("@/verticals/store"),
+  "src/voice/speech.ts": () => import("@/voice/speech"),
 };
 
 async function allFindings(): Promise<CopyFinding[]> {

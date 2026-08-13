@@ -759,6 +759,66 @@ textarea:focus-visible {
   font-size: 1.5rem;
 }
 
+/* Where are you. A label above the input, never a placeholder-as-label. */
+.place-field { margin-top: 22px; }
+.place-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.place-field input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--stone);
+  font: inherit;
+  font-size: 15px;
+}
+.place-field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.place-status { margin: 8px 0 0; color: var(--faint); font-size: 12px; line-height: 1.5; }
+
+/* The computed distance, on its own line so it does not join the metadata dot chain. */
+.clinician-distance { display: block; margin-top: 3px; color: var(--faint); }
+
+/* The live transcript. Serif and large, because it is the person's own words being read back. */
+.listening-transcript {
+  margin: 18px 0 0;
+  max-width: 32ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(20px, 5vw, 27px);
+  font-weight: 420;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.listening-done { margin-top: 6px; }
+
+/* Sits under the microphone. Quiet, but present before the button is pressed rather than after. */
+.speech-disclosure {
+  max-width: 34ch;
+  margin: 18px auto 0;
+  color: var(--faint);
+  font-size: 11.5px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.speech-error {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 /* A claim the clinician made about themselves, styled so it does not read as a verified badge.
    No accent, no icon, no pill: the point is that it is unconfirmed. */
 .declared-claim {

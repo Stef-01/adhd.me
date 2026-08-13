@@ -132,6 +132,18 @@ export interface CopySurface {
 
 export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
   {
+    module: "src/geo/suburbs.ts",
+    operatorCopy: [],
+    notCopy:
+      "Distances and suburb names, addressed to a PATIENT rather than to an operator. `describeDistance` is the only string-producing export and it is linted where it renders, by the W192 sweep over /finder, which is the surface a patient actually reads. Declared here because a W211 header makes it visible to this census, and an undeclared Y4 module is an unlinted one.",
+  },
+  {
+    module: "src/voice/speech.ts",
+    operatorCopy: [],
+    notCopy:
+      "SPEECH_DISCLOSURE and SPEECH_ERROR_COPY are patient-facing, not operator-facing: they sit beside the microphone on /finder and are swept there by W192. The disclosure necessarily names what happens to the audio, which is the whole reason it exists rather than something to lint out.",
+  },
+  {
     module: "src/compliance/cdss-boundary.ts",
     operatorCopy: [],
     notCopy:
