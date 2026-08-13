@@ -335,10 +335,6 @@ textarea:focus-visible {
 
 .quiet-link,
 .text-action,
-.match-count {
-  font-size: 14px;
-  font-weight: 540;
-}
 
 .quiet-link:hover,
 .text-action:hover,
@@ -568,24 +564,8 @@ textarea:focus-visible {
   text-align: center;
 }
 
-.review-content {
-  margin: auto 0;
-  padding: 24px 28px 34px;
-}
 
-.review-content h1 {
-  max-width: 390px;
-  font-size: 44px;
-  line-height: 1.03;
-}
 
-.review-transcript {
-  max-width: 365px;
-  margin: 18px 0 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
-}
 
 .priority-list,
 .fit-signal-row,
@@ -595,9 +575,6 @@ textarea:focus-visible {
   gap: 6px;
 }
 
-.priority-list {
-  margin-top: 17px;
-}
 
 .priority-list span,
 .fit-signal-row span {
@@ -647,40 +624,11 @@ textarea:focus-visible {
   padding: 28px 24px 34px;
 }
 
-.matching-screen > div {
-  margin: auto 0;
-  text-align: center;
-}
 
-.matching-screen h1 {
-  margin: 22px 0 8px;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 40px;
-  font-weight: 430;
-}
 
-.matching-screen p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-}
 
-.match-screen {
-  min-height: 100svh;
-  overflow-y: auto;
-}
 
-.match-header {
-  min-height: 66px;
-}
 
-.match-count {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 0 8px 10px;
-  color: var(--ink);
-}
 
 .request-banner {
   padding: 22px 30px 14px;
@@ -715,23 +663,12 @@ textarea:focus-visible {
   height: 26px;
 }
 
-.match-portrait {
-  position: relative;
-  width: 100%;
-  height: min(88vw, 344px);
-  overflow: hidden;
-  touch-action: pan-y;
-  background: var(--stone);
-}
 
 .match-portrait > img,
 .profile-portrait > img {
   object-fit: cover;
 }
 
-.match-portrait > img {
-  object-position: center 36%;
-}
 
 /* A clinician with no portrait — see ClinicianPortrait in app/care-finder.tsx. Sized from the
    frame rather than a fixed value so the two variants cannot drift apart from their containers. */
@@ -852,53 +789,13 @@ textarea:focus-visible {
   line-height: 1.5;
 }
 
-.portrait-nav {
-  position: absolute;
-  top: 50%;
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  color: var(--ink);
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  box-shadow: 0 4px 18px rgb(28 29 25 / 10%);
-  cursor: pointer;
-  opacity: 0;
-  transform: translateY(-50%);
-  transition: opacity 150ms ease;
-}
 
 .match-portrait:hover .portrait-nav,
-.portrait-nav:focus-visible {
-  opacity: 1;
-}
 
-.portrait-nav.previous {
-  left: 12px;
-}
 
-.portrait-nav.next {
-  right: 12px;
-}
 
-.match-details {
-  padding: 17px 30px 11px;
-  animation: details-in 240ms ease both;
-}
 
-.match-details h2 {
-  margin: 0;
-  font-size: 27px;
-  font-weight: 680;
-  letter-spacing: -0.035em;
-}
 
-.match-details .fit-signal-row {
-  margin-top: 11px;
-}
 
 .clinician-meta {
   margin: 7px 0 0;
@@ -930,13 +827,7 @@ textarea:focus-visible {
   overflow-y: auto;
 }
 
-.all-heading {
-  padding: 26px 24px 18px;
-}
 
-.all-heading h1 {
-  font-size: 38px;
-}
 
 .clinician-list {
   padding: 0 18px 28px;
@@ -3320,9 +3211,6 @@ textarea:focus-visible {
 }
 
 @media (hover: none) {
-  .portrait-nav {
-    opacity: 1;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4452,3 +4340,31 @@ textarea:focus-visible {
   font-weight: 600;
   text-underline-offset: 3px;
 }
+
+/* Results, the one screen that replaced four ---------------------------------- */
+.results-screen { display: flex; flex-direction: column; }
+.results-head { padding: 8px 24px 26px; border-bottom: 1px solid var(--line); }
+.results-head h1 {
+  margin: 10px 0 0;
+  max-width: 18ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(26px, 7vw, 36px);
+  font-weight: 430;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.results-head .refine-compact {
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.results-head .place-field { margin-top: 22px; }

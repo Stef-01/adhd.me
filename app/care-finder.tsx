@@ -7,7 +7,6 @@ import {
   CheckCircle,
   CaretLeft,
   CaretRight,
-  List,
   Microphone,
   PencilSimple,
   Waveform,
@@ -34,27 +33,25 @@ import {
   type SpeechSession,
 } from "@/voice/speech";
 
+/**
+ * Seven screens, down from eleven.
+ *
+ * `review`, `matching`, `match` and `all` collapsed into `results` in the first minimalism round:
+ * a confirmation step, a fake loading animation and two competing views of the same list. See the
+ * note above the results screen for what each one was and why it went.
+ */
 type Stage =
   | "welcome"
   | "scenarios"
   | "listening"
   | "type"
-  | "review"
-  | "matching"
-  | "match"
-  | "all"
+  | "results"
   | "profile"
   | "booking"
   | "confirmed";
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
-const matchingSteps = [
-  "Understanding what matters to you.",
-  "Considering clinical and cultural fit.",
-  "Checking access and availability.",
-];
-
 const stageVariants: Variants = {
   initial: { opacity: 0, y: 12, filter: "blur(3px)" },
   animate: {
@@ -86,20 +83,6 @@ const introStagger: Variants = {
 const introItem: Variants = {
   initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
-};
-
-const matchVariants: Variants = {
-  initial: (direction: number) => ({ opacity: 0, x: direction * 28 }),
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", stiffness: 310, damping: 31, mass: 0.78 },
-  },
-  exit: (direction: number) => ({
-    opacity: 0,
-    x: direction * -22,
-    transition: { duration: 0.16, ease: [0.4, 0, 1, 1] },
-  }),
 };
 
 function MotionScreen({ className, children }: { className: string; children: ReactNode }) {
@@ -193,41 +176,6 @@ function getRequestHeadline(value: string, fallback: string) {
   return fallback;
 }
 
-/**
- * The priorities a request stated, as labels.
- *
- * These are things the person SAID THEY WANT, not inferences about their health. "Bulk billing"
- * belongs here; "inattentive presentation" would not, and there is no branch that could produce it.
- */
-function getRequestPriorities(value: string) {
-  const words = value.toLowerCase();
-  const priorities = [
-    { label: "First ADHD assessment", terms: ["assessment", "assessed", "diagnosis", "diagnose", "might have adhd", "think i have"] },
-    { label: "Children and adolescents", terms: ["my son", "my daughter", "my child", "child", "teenager", "adolescent", "school"] },
-    { label: "Co-occurring autism", terms: ["autism", "autistic", "audhd"] },
-    { label: "Titration and dose review", terms: ["dose", "titration", "wearing off", "side effects", "already diagnosed", "diagnosed already"] },
-    { label: "Baseline physical screening", terms: ["heart", "cardiac", "cardiovascular", "blood pressure", "baseline", "bloods", "safe"] },
-    { label: "Complex mental-health shared care", terms: ["ptsd", "bipolar", "psychiatrist", "psychiatric"] },
-    { label: "Anxiety and mood differential", terms: ["antidepressant", "treated for anxiety", "wrong diagnosis", "misdiagnosed", "differential"] },
-    { label: "Trauma-informed care", terms: ["trauma history", "trauma-informed", "boundaries", "permission", "stay in control", "difficult childhood"] },
-    { label: "Substance history held safely", terms: ["substance", "drinking", "alcohol", "cannabis", "addict", "non-stimulant"] },
-    { label: "Non-medication supports", terms: ["without medication", "no medication", "not just medication", "alternatives", "coaching", "habits"] },
-    { label: "Study or workplace adjustments", terms: ["employer", "workplace", "university", "study", "adjustments", "letter", "documentation", "ndis"] },
-    { label: "Psychological safety", terms: ["mental health", "emotion", "anxiety", "anxious", "mood", "psychological", "trauma", "depression", "overwhelmed", "shame", "rejection sensitivity"] },
-    { label: "Language match", terms: ["tamil", "malayalam", "hindi", "punjabi", "spanish", "arabic", "vietnamese", "mandarin", "language"] },
-    { label: "Disability rights", terms: ["disability", "disabled", "wheelchair", "autonomy", "accessible"] },
-    { label: "Telehealth", terms: ["telehealth", "remote", "online", "cannot travel", "can’t travel", "can't travel"] },
-    { label: "Woman GP", terms: ["woman", "women", "female"] },
-    { label: "Cultural understanding", terms: ["indian", "culture", "cultural", "family", "family pressure", "lazy", "not real"] },
-    { label: "Longer conversations", terms: ["time", "unhurried", "longer", "explain", "slowly"] },
-  ];
-
-  return priorities
-    .filter((priority) => priority.terms.some((term) => words.includes(term)))
-    .map((priority) => priority.label)
-    .slice(0, 4);
-}
-
 function Wordmark() {
   return <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home">ADHD.ME</Link>;
 }
@@ -311,6 +259,27 @@ function initialsOf(name: string) {
  * directory pattern rather than a placeholder waiting to be filled, so the layout is correct in
  * both states and no surface has to branch.
  */
+/**
+ * Drop the signals every result shares.
+ *
+ * Round 2 of the minimalism pass. Every clinician in this directory does ADHD assessment, so
+ * "ADHD assessment" appeared on all sixteen rows and told a reader nothing about which to choose.
+ * The same happens to "Woman GP" when somebody asks for one and eleven of the results are women.
+ * A signal is only a reason to pick something if the other options lack it, so the shared ones are
+ * removed from the ROW and kept on the profile, where there is nothing to compare against.
+ *
+ * Returns the original list when everything would be stripped, because an empty row is worse than
+ * a repetitive one.
+ */
+function distinguishingSignals(signals: string[], everyone: string[][]): string[] {
+  if (everyone.length < 2) return signals;
+  const shared = new Set(
+    everyone[0]!.filter((signal) => everyone.every((list) => list.includes(signal))),
+  );
+  const kept = signals.filter((signal) => !shared.has(signal));
+  return kept.length > 0 ? kept : signals;
+}
+
 function ClinicianPortrait({
   clinician,
   variant,
@@ -350,7 +319,6 @@ export function CareFinder() {
   const [matches, setMatches] = useState(() => rankClinicians(exampleRequest));
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
-  const [matchingStep, setMatchingStep] = useState(0);
   const [selectedTime, setSelectedTime] = useState("");
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
   // is the only reliable signal to somebody that the microphone is actually working.
@@ -358,6 +326,9 @@ export function CareFinder() {
   // permission prompt, and no coordinate leaves the browser.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
+  // Round 2: sixteen near-identical rows is the "long list" anti-pattern. Five is enough to choose
+  // from, and the rest are one tap away for somebody who wants to read all of them.
+  const [showAll, setShowAll] = useState(false);
   const [heard, setHeard] = useState("");
   const [speechError, setSpeechError] = useState<SpeechError | null>(null);
   const speech = useRef<SpeechSession | null>(null);
@@ -375,19 +346,6 @@ export function CareFinder() {
   }, [stage]);
 
   useEffect(() => () => speech.current?.cancel(), []);
-
-  useEffect(() => {
-    if (stage !== "matching") return;
-    setMatchingStep(0);
-    const stepTimer = window.setInterval(() => {
-      setMatchingStep((current) => Math.min(current + 1, matchingSteps.length - 1));
-    }, 1400);
-    const timer = window.setTimeout(() => setStage("match"), 4250);
-    return () => {
-      window.clearInterval(stepTimer);
-      window.clearTimeout(timer);
-    };
-  }, [stage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -418,7 +376,12 @@ export function CareFinder() {
     () => request.trim() === archetype.request ? archetype.headline : getRequestHeadline(request, requestSummary),
     [archetype.headline, archetype.request, request, requestSummary],
   );
-  const requestPriorities = useMemo(() => getRequestPriorities(request), [request]);
+  const allSignals = useMemo(
+    () => matches.map((item) => getPersonalizedMatch(item, request).signals),
+    [matches, request],
+  );
+  const shown = showAll ? matches : matches.slice(0, 5);
+
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
 
   function startListening() {
@@ -435,9 +398,8 @@ export function CareFinder() {
           return;
         }
         setHeard(text);
-        setRequest(text);
         setDraft(text);
-        setStage("review");
+        findMatches(text);
       },
       onError: (error) => {
         speech.current = null;
@@ -474,19 +436,16 @@ export function CareFinder() {
     setRequest(nextRequest);
     setMatches(rankCliniciansNear(nextRequest, origin));
     setMatchIndex(0);
-    setStage("matching");
+    setShowAll(false);
+    // Straight to the results. The sort is synchronous and already done; the screen that used to
+    // sit here spent 4.25 seconds saying so.
+    setStage("results");
   }
 
-  function moveMatch(direction: 1 | -1) {
-    setMatchDirection(direction);
-    setMatchIndex((current) => (current + direction + matches.length) % matches.length);
-  }
-
-  function chooseClinician(selected: Clinician, destination: "match" | "profile" = "profile") {
+  function chooseClinician(selected: Clinician) {
     const index = matches.findIndex((item) => item.id === selected.id);
     if (index >= 0) setMatchIndex(index);
-    setMatchDirection(1);
-    setStage(destination);
+    setStage("profile");
   }
 
   function reset() {
@@ -675,32 +634,37 @@ export function CareFinder() {
 
             <div className="bottom-action">
               <Pressable className="primary-button" type="button" disabled={!draft.trim()} onClick={() => {
-                setRequest(draft);
-                setStage("review");
+                findMatches(draft);
               }}>
-                Continue
+                Find a GP
               </Pressable>
               <p>Don’t include identifying or urgent health details.</p>
             </div>
           </MotionScreen>
         )}
 
-        {stage === "review" && (
-          <MotionScreen key="review" className="review-screen">
+        {/* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
+            Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
+            animation of three rotating reassurances while a synchronous sort had already
+            finished), and the swipe deck, which showed ONE clinician at a time with a large
+            portrait and made comparing two of them a memory exercise.
+            A person choosing a GP is comparing, so the list is the primary view and the only one.
+            Where you are moved here from its own screen because it belongs beside the results it
+            changes: editing it re-ranks in place instead of sending anybody back a step. */}
+        {stage === "results" && (
+          <MotionScreen key="results" className="results-screen">
             <header className="minimal-header">
               <Wordmark />
               <button className="text-action" type="button" onClick={reset}>Start over</button>
             </header>
 
-            <div className="review-content">
-              <p className="eyebrow">What matters to you</p>
+            <div className="results-head">
+              <p className="eyebrow">You asked for</p>
               <h1>{requestHeadline}</h1>
-              {requestHeadline !== requestSummary && (
-                <p className="review-transcript">“{requestSummary}”</p>
-              )}
-              {/* Where they are. Asked here rather than up front because it is the second question,
-                  and asked as a typed suburb rather than a geolocation prompt. Optional: a blank
-                  field ranks on stated preference alone rather than blocking the search. */}
+              <button className="refine-compact" type="button" onClick={() => { setDraft(request); setStage("type"); }}>
+                <span>Change what you said</span>
+              </button>
+
               <div className="place-field">
                 <label htmlFor="place">Where are you? Suburb or postcode, if you like.</label>
                 <input
@@ -708,7 +672,10 @@ export function CareFinder() {
                   name="place"
                   list="covered-suburbs"
                   value={place}
-                  onChange={(event) => setPlace(event.target.value)}
+                  onChange={(event) => {
+                    setPlace(event.target.value);
+                    setMatches(rankCliniciansNear(request, resolvePlace(event.target.value)));
+                  }}
                   placeholder="Blacktown"
                   autoComplete="address-level2"
                 />
@@ -716,203 +683,61 @@ export function CareFinder() {
                   {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
                 </datalist>
                 <p className="place-status" role="status">
+                  {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
+                      is a number that describes something the reader cannot see. */}
                   {place.trim() === ""
-                    ? "Leave it blank and we will match on what you asked for."
+                    ? `${shown.length} of ${matches.length}, ranked on what you asked for.`
                     : origin
-                      ? `Matching around ${origin.suburb} ${origin.postcode}.`
-                      : "We do not cover that one yet, so we will match on what you asked for."}
+                      ? `${shown.length} of ${matches.length}, nearest to ${origin.suburb} first.`
+                      : "We do not cover that one yet, so these are ranked on what you asked for."}
                 </p>
               </div>
-
-              {requestPriorities.length > 0 && (
-                <div className="priority-list" aria-label="Matching priorities">
-                  {requestPriorities.map((priority, index) => (
-                    <motion.span
-                      key={priority}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.11 + index * 0.055, duration: 0.28 }}
-                    >
-                      {priority}
-                    </motion.span>
-                  ))}
-                </div>
-              )}
-              <button className="refine-line" type="button" onClick={() => {
-                setDraft(request);
-                setStage("type");
-              }}>
-                <Waveform size={34} weight="light" aria-hidden="true" />
-                <span>Refine</span>
-                <PencilSimple size={18} weight="light" aria-hidden="true" />
-              </button>
             </div>
 
-            <div className="bottom-action">
-              <Pressable className="primary-button" type="button" onClick={() => findMatches(request)}>Show my matches</Pressable>
-              <p>We’ll show fit reasons, not ratings.</p>
-            </div>
-          </MotionScreen>
-        )}
-
-        {stage === "matching" && (
-          <MotionScreen key="matching" className="matching-screen">
-            <Wordmark />
-            <motion.div
-              className="matching-core"
-              initial={{ opacity: 0, scale: 0.985 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <motion.div
-                className="matching-wave"
-                animate={{ opacity: [0.45, 1, 0.45], scaleX: [0.84, 1, 0.84] }}
-                transition={{ duration: 1.4, ease: "easeInOut", repeat: Infinity }}
-              >
-                <WaveformMark />
-              </motion.div>
-              <h1>Finding the right fit…</h1>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={matchingStep}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.24 }}
-                >
-                  {matchingSteps[matchingStep]}
-                </motion.p>
-              </AnimatePresence>
-            </motion.div>
-          </MotionScreen>
-        )}
-
-        {stage === "match" && (
-          <MotionScreen key="match" className="match-screen">
-            <header className="minimal-header match-header">
-              <Wordmark />
-              <button className="match-count" type="button" onClick={() => setStage("all")}>
-                {matchIndex + 1} of {matches.length}
-                <List size={17} weight="regular" aria-hidden="true" />
-              </button>
-            </header>
-
-            <div className="request-banner">
-              <p className="eyebrow">You asked for</p>
-              <h1>{requestHeadline}</h1>
-              <button className="refine-compact" type="button" onClick={() => {
-                setDraft(request);
-                setStage("type");
-              }}>
-                <WaveformMark />
-                <span>Refine</span>
-              </button>
-            </div>
-
-            <AnimatePresence mode="wait" initial={false} custom={matchDirection}>
-              <motion.div
-                className="match-result-motion"
-                key={clinician.id}
-                custom={matchDirection}
-                variants={matchVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                <motion.div
-                  className="match-portrait"
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.12}
-                  style={{ touchAction: "pan-y" }}
-                  whileDrag={{ scale: 0.992 }}
-                  onDragEnd={(_, info) => {
-                    if (Math.abs(info.offset.x) > 55 || Math.abs(info.velocity.x) > 450) {
-                      moveMatch(info.offset.x < 0 ? 1 : -1);
-                    }
-                  }}
-                >
-                  <ClinicianPortrait clinician={clinician} variant="fill" />
-                  <button className="portrait-nav previous" type="button" onClick={() => moveMatch(-1)} aria-label="Previous match">
-                    <CaretLeft size={24} weight="light" aria-hidden="true" />
-                  </button>
-                  <button className="portrait-nav next" type="button" onClick={() => moveMatch(1)} aria-label="Next match">
-                    <CaretRight size={24} weight="light" aria-hidden="true" />
-                  </button>
-                </motion.div>
-
-                <div className="match-details">
-                  <h2>{clinician.name}</h2>
-                  <p className="clinician-meta">
-                    {clinician.title} · {clinician.suburb}
-                    {distanceTo(clinician, origin) && <span className="clinician-distance">{distanceTo(clinician, origin)}</span>}
-                  </p>
-                  <NswTraining clinician={clinician} />
-                  <FounderDisclosure clinician={clinician} />
-                  <p className="match-reason">{personalizedMatch.reason}</p>
-                  <div className="practical-signal-row" aria-label="Practical appointment details">
-                    {clinician.practicalSignals.slice(0, 2).map((signal) => <span key={signal}>{signal}</span>)}
-                  </div>
-                  <p className="availability">Accepting new patients · Next: {clinician.nextAvailable.split(",")[0]}</p>
-                  <Pressable className="primary-button" type="button" onClick={() => setStage("profile")}>
-                    View profile <CaretRight size={18} weight="bold" aria-hidden="true" />
-                  </Pressable>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </MotionScreen>
-        )}
-
-        {stage === "all" && (
-          <MotionScreen key="all" className="all-screen">
-            <header className="minimal-header">
-              <button className="icon-button" type="button" onClick={() => setStage("match")} aria-label="Back to current match">
-                <ArrowLeft size={25} weight="light" aria-hidden="true" />
-              </button>
-              <Wordmark />
-              <span className="header-spacer" />
-            </header>
-            <div className="all-heading">
-              <p className="eyebrow">Tailored for you</p>
-              <h1>{matches.length} GPs to explore</h1>
-            </div>
             <div className="clinician-list">
-              {matches.map((item, index) => {
+              {shown.map((item, index) => {
                 const itemMatch = getPersonalizedMatch(item, request);
+                const away = distanceTo(item, origin);
+                const reasons = distinguishingSignals(itemMatch.signals, allSignals);
                 return (
                   <motion.button
-                  key={item.id}
-                  className="clinician-row"
-                  type="button"
-                  onClick={() => chooseClinician(item)}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(index * 0.045, 0.24), duration: 0.3 }}
-                  whileTap={{ scale: 0.99 }}
-                >
-                  <ClinicianPortrait clinician={item} variant="thumb" />
-                  <span>
-                    <strong>{item.name}</strong>
-                    <small>{itemMatch.signals.slice(0, 2).join(", ") || item.focus} · {item.suburb}</small>
-                    <small className="row-practical">{item.practicalSignals.slice(0, 2).join(" · ")}</small>
-                    <small className="row-availability">Next: {item.nextAvailable}</small>
-                  </span>
-                  <CaretRight size={20} weight="light" aria-hidden="true" />
+                    key={item.id}
+                    className="clinician-row"
+                    type="button"
+                    onClick={() => chooseClinician(item)}
+                    initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26 }}
+                    whileTap={reducedMotion ? undefined : { scale: 0.99 }}
+                  >
+                    <ClinicianPortrait clinician={item} variant="thumb" />
+                    <span>
+                      <strong>{item.name}</strong>
+                      <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
+                      <small className="row-availability">{away ? `${item.suburb}, ${away}` : item.suburb}</small>
+                    </span>
+                    <CaretRight size={20} weight="light" aria-hidden="true" />
                   </motion.button>
                 );
               })}
             </div>
+
+            {matches.length > shown.length && (
+              <button className="show-all" type="button" onClick={() => setShowAll(true)}>
+                Show the other {matches.length - shown.length}
+              </button>
+            )}
           </MotionScreen>
         )}
 
         {stage === "profile" && (
           <MotionScreen key="profile" className="profile-screen">
             <header className="minimal-header profile-header">
-              <button className="icon-button" type="button" onClick={() => setStage("match")} aria-label="Back to matches">
+              <button className="icon-button" type="button" onClick={() => setStage("results")} aria-label="Back to results">
                 <ArrowLeft size={25} weight="light" aria-hidden="true" />
               </button>
               <Wordmark />
-              <button className="text-action" type="button" onClick={() => setStage("all")}>All matches</button>
+              <button className="text-action" type="button" onClick={() => setStage("results")}>All results</button>
             </header>
 
             <motion.div
