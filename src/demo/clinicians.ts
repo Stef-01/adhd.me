@@ -1,4 +1,26 @@
-import type { CareArchetype } from "./care-archetypes";
+import type { CareArchetype, CareArea } from "./care-archetypes";
+
+/**
+ * The demo roster behind /finder and the walkthrough.
+ *
+ * SYNTHETIC, WITH ONE EXCEPTION THAT IS MARKED. Fifteen of these are demo personas — invented
+ * people, invented availability, invented suburbs — which is what lets the finder be shown to
+ * anybody without a practice agreement in place. Dr Anubhav Saxena is a real person and a
+ * founder of this product, and both of those facts are carried on the record rather than left
+ * for a reader to discover: see `realPerson` and `founderInterest` below.
+ *
+ * WHY `careAreas` IS A CLOSED VOCABULARY AND NOT FREE TEXT. Matching reads these, and a free
+ * string would let a demo persona claim an area the archetypes cannot express, which produces
+ * a finder that appears to work and silently cannot match. `CareArea` is therefore a union, and
+ * an archetype requiring an area no clinician holds is a type error rather than an empty result.
+ *
+ * NOTHING HERE IS A COMPETENCE CLAIM. `focus`, `about` and `experience` are what a clinician says
+ * they see often. This product does not assess clinicians, does not rank them by quality, and —
+ * per src/directory/profile.ts — could not publish "ADHD specialist" even if somebody asked,
+ * because ADHD is not an Ahpra-recognised specialty and s 133 governs the word.
+ */
+
+export type { CareArea };
 
 export type Clinician = {
   id: string;
@@ -9,7 +31,14 @@ export type Clinician = {
   title: string;
   suburb: string;
   distance: string;
-  image: string;
+  /**
+   * A portrait, or null.
+   *
+   * Null is a supported state, not a gap to fill later: the demo personas are synthetic and their
+   * portraits are too, and a real clinician's likeness is theirs to supply. Surfaces render a
+   * monogram when this is null. Nothing in this tree generates a face for a real person.
+   */
+  image: string | null;
   nextAvailable: string;
   acceptingNewPatients: boolean;
   focus: string;
@@ -19,10 +48,31 @@ export type Clinician = {
   about: string;
   experience: string[];
   languages: string[];
-  careAreas: string[];
+  careAreas: CareArea[];
   wheelchairAccessible: boolean;
   appointmentLength: string;
   keywords: string[];
+  /**
+   * Set when the entry describes a real, identifiable clinician rather than a demo persona.
+   *
+   * The finder shows synthetic and real entries side by side, and a reader cannot tell them apart
+   * from the copy. Holding it as data means a surface can say which is which, and means nobody
+   * later mistakes a real person's record for one they may freely edit.
+   */
+  realPerson?: true;
+  /**
+   * A material interest the reader would want disclosed — carried BESIDE the listing, always.
+   *
+   * A founder of this product appearing in its own directory is a conflict whether or not the
+   * ranking favours them, because the reader cannot see the ranking. The disclosure is a field on
+   * the record rather than a sentence in someone's `about`, so it cannot be edited out of the copy
+   * while the interest remains, and so the finder renders it without having to know who is who.
+   *
+   * The public directory (src/directory/profile.ts) has no equivalent field yet and does not need
+   * one while `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6. It WILL need one
+   * before that gate lifts, and adding it there means an entry in W193's `DISCLOSED_FIELDS` too.
+   */
+  founderInterest?: string;
 };
 
 export const clinicians: Clinician[] = [
@@ -38,18 +88,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/maya-singh.png",
     nextAvailable: "Tuesday, 10:20 am",
     acceptingNewPatients: true,
-    focus: "PMOS & maternal mental health",
-    matchLine: "PMOS care that makes room for mood, family expectations and unhurried decisions.",
-    fitSignals: ["PMOS", "Hindi & Punjabi", "Perinatal mental health", "Women’s health"],
+    focus: "Adult ADHD assessment & late diagnosis in women",
+    matchLine: "ADHD assessment that takes a lifetime of coping seriously as evidence, not as proof you are fine.",
+    fitSignals: ["ADHD assessment", "Hindi & Punjabi", "Late diagnosis in women", "Longer first visits"],
     practicalSignals: ["Bulk billing eligible", "8 min by bus", "Evening appointments"],
     about:
-      "Maya supports women navigating PMOS, pregnancy planning, maternal depression and post-birth emotional change. She takes a collaborative, plain-language approach and coordinates perinatal mental-health support when care needs extend beyond general practice.",
-    experience: ["PMOS care", "Maternal and postnatal depression", "Perinatal mental health", "Reproductive health"],
+      "Maya sees adults asking the question for the first time in their thirties or forties, often after a child was assessed. She works through developmental history, school reports where they still exist, and the coping strategies that hid the difficulty — and says plainly when the picture does not meet criteria.",
+    experience: ["Adult ADHD assessment", "Late-recognised presentations in women", "Anxiety and low mood alongside ADHD", "Referral and shared care"],
     languages: ["English", "Hindi", "Punjabi"],
-    careAreas: ["pcos", "perinatal-mental-health", "maternal-depression", "post-birth"],
+    careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "comorbid-mood"],
     wheelchairAccessible: false,
     appointmentLength: "Longer first appointments available",
-    keywords: ["pcos", "polycystic", "woman", "female", "women", "young", "calm", "explain", "mental health", "perinatal", "maternal depression", "postnatal depression", "depression after birth", "anxiety", "mood", "hindi", "punjabi", "indian", "south asian", "cultural", "culture", "family"],
+    keywords: ["adhd", "assessment", "assessed", "diagnosis", "diagnosed", "adult", "late", "woman", "female", "women", "missed", "overlooked", "coping", "masking", "calm", "explain", "anxiety", "mood", "depression", "hindi", "punjabi", "indian", "south asian", "cultural", "culture", "family", "my daughter was diagnosed"],
   },
   {
     id: "daniel-okafor",
@@ -63,18 +113,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/daniel-okafor.png",
     nextAvailable: "Monday, 3:40 pm",
     acceptingNewPatients: true,
-    focus: "Post-birth heart & metabolic health",
-    matchLine: "Post-birth strength and heart-health support without weight-first assumptions.",
-    fitSignals: ["Post-birth recovery", "Heart health", "Metabolic health"],
+    focus: "Pre-treatment heart checks & titration monitoring",
+    matchLine: "The physical-health half of starting medication: baseline checks first, then dose review that actually happens.",
+    fitSignals: ["Cardiac screening", "Titration monitoring", "Shared care"],
     practicalSignals: ["Mixed billing", "9 min by train", "On-site pathology"],
     about:
-      "Daniel supports women rebuilding strength, energy and confidence after birth while keeping heart and metabolic health in view. Plans are paced around recovery, sleep, body image and the realities of caring for a baby.",
-    experience: ["Post-birth recovery", "Heart health", "Blood pressure", "Metabolic care plans"],
+      "Daniel does the groundwork a stimulant decision rests on — blood pressure, heart rate, cardiac and family history, and the questions that decide whether a specialist opinion is needed before anything is prescribed. He then holds the follow-up through titration rather than leaving it to the next available appointment.",
+    experience: ["Baseline cardiovascular screening", "Blood pressure and heart-rate monitoring", "Titration follow-up", "Shared-care prescribing"],
     languages: ["English", "Igbo"],
-    careAreas: ["post-birth", "metabolic", "cardiac", "pcos"],
+    careAreas: ["adhd-assessment", "adult-adhd", "cardiac-screening", "titration"],
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
-    keywords: ["post-birth", "post birth", "postpartum", "after birth", "strength", "energy", "heart", "cardiac", "cardiovascular", "blood pressure", "cholesterol", "body image", "bounce back", "weight", "ongoing", "pcos", "pmos", "polycystic"],
+    keywords: ["adhd", "assessment", "medication", "stimulant", "methylphenidate", "dexamphetamine", "lisdexamfetamine", "titration", "dose", "starting medication", "heart", "cardiac", "cardiovascular", "blood pressure", "pulse", "safe", "safety", "check", "monitoring", "follow-up", "shared care", "physical health"],
   },
   {
     id: "linh-nguyen",
@@ -88,18 +138,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/linh-nguyen.png",
     nextAvailable: "Wednesday, 9:00 am",
     acceptingNewPatients: true,
-    focus: "Disability-rights & kidney-aware care",
-    matchLine: "Disability-rights focused women’s care with Vietnamese language support.",
-    fitSignals: ["Disability rights", "Vietnamese", "Kidney-aware care", "Women’s health"],
+    focus: "Accessible assessment & disability rights",
+    matchLine: "Assessment built around access needs, with consent and autonomy held explicitly throughout.",
+    fitSignals: ["Disability rights", "Vietnamese", "Accessible assessment", "Autonomy"],
     practicalSignals: ["Bulk bills care plans", "12 min by train", "Wheelchair accessible"],
     about:
-      "Linh supports disabled women and people managing kidney health through reproductive decisions, pregnancy and post-birth recovery. She centres consent, autonomy and accessible care, with clear explanations and coordinated follow-up.",
-    experience: ["Disability-rights focused care", "Women’s health", "Kidney health", "Medication reviews"],
+      "Linh assesses disabled adults for ADHD without treating an existing diagnosis as the whole explanation. She plans around access needs, explains what each step is for before it happens, and supports the adjustment documentation that follows — at work, at study, or with a support scheme.",
+    experience: ["Disability-rights focused care", "Adult ADHD assessment", "Co-occurring autism", "Adjustment and support documentation"],
     languages: ["English", "Vietnamese"],
-    careAreas: ["disability-rights", "kidney", "post-birth"],
+    careAreas: ["adhd-assessment", "adult-adhd", "disability-rights", "autism-adhd"],
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
-    keywords: ["disability", "disabled", "wheelchair", "accessible", "access", "rights", "autonomy", "consent", "advocate", "vietnamese", "post-birth", "post birth", "postpartum", "renal", "kidney", "nephrology", "chronic", "medication", "coordination"],
+    keywords: ["adhd", "assessment", "disability", "disabled", "wheelchair", "accessible", "access", "rights", "autonomy", "consent", "advocate", "adjustments", "support", "ndis", "vietnamese", "autism", "autistic", "audhd", "coordination", "diagnosis"],
   },
   {
     id: "aisha-rahman",
@@ -113,18 +163,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/aisha-rahman.png",
     nextAvailable: "Thursday, 11:10 am",
     acceptingNewPatients: true,
-    focus: "Gestational diabetes & complex care",
-    matchLine: "Arabic-language gestational diabetes support with calm hospital coordination.",
-    fitSignals: ["Gestational diabetes", "Arabic", "Complex care", "Women’s health"],
+    focus: "Child & adolescent assessment, paediatric shared care",
+    matchLine: "Arabic-language support through a child's assessment, including the school half of it.",
+    fitSignals: ["Child & adolescent", "Arabic", "Paediatric shared care", "School reports"],
     practicalSignals: ["Bulk billing eligible", "14 min by train", "Wheelchair accessible"],
     about:
-      "Aisha supports women managing gestational diabetes alongside kidney or other complex health needs. She works with hospital and community teams while keeping the patient’s preferences central to everyday care.",
-    experience: ["Gestational diabetes", "Dialysis care", "Kidney health", "Hospital follow-up"],
+      "Aisha helps families start a child's assessment and keep it moving — gathering teacher observations and rating scales, preparing the paediatric referral properly so the wait is not wasted, and carrying the shared-care follow-up once a plan exists.",
+    experience: ["Child and adolescent ADHD", "Teacher and school reports", "Paediatric referral and shared care", "Family and interpreter-supported consultations"],
     languages: ["English", "Arabic"],
-    careAreas: ["gestational-diabetes", "kidney", "dialysis"],
+    careAreas: ["adhd-assessment", "child-adolescent-adhd", "shared-care", "student-academic"],
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
-    keywords: ["gestational diabetes", "pregnancy diabetes", "pregnant", "arabic", "woman", "women", "anxiety", "dialysis", "renal", "kidney", "hospital", "complex", "care team", "coordinate"],
+    keywords: ["adhd", "assessment", "child", "my son", "my daughter", "kid", "children", "teenager", "adolescent", "school", "teacher", "classroom", "report", "paediatrician", "paediatric", "referral", "waitlist", "arabic", "family", "interpreter", "shared care", "plan"],
   },
   {
     id: "tom-bennett",
@@ -138,18 +188,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/tom-bennett.png",
     nextAvailable: "Tuesday, 4:30 pm",
     acceptingNewPatients: true,
-    focus: "Neurodivergent women’s health",
-    matchLine: "Structured PMOS and post-birth care that works with executive-function needs.",
-    fitSignals: ["ADHD", "Post-birth care", "PMOS", "Clear plans"],
+    focus: "Adult ADHD assessment & non-medication supports",
+    matchLine: "Assessment that does not assume medication is the only outcome you came for.",
+    fitSignals: ["ADHD assessment", "Non-medication options", "Emotional regulation", "Clear plans"],
     practicalSignals: ["Mixed billing", "11 min by bus", "Telehealth follow-ups"],
     about:
-      "Tom supports neurodivergent women managing PMOS, pregnancy transitions and post-birth overwhelm. Appointments use clear steps, realistic follow-up and shared-care coordination without moralising executive-function difficulty.",
-    experience: ["ADHD care", "Women’s health", "PMOS support", "Shared care"],
+      "Tom assesses adults and then talks about the whole plan, not only whether a script is appropriate — sleep, structure, workload, coaching and what to change first. Appointments use written steps and realistic follow-up, without reading executive-function difficulty as not caring.",
+    experience: ["Adult ADHD assessment", "Non-medication strategies", "Emotional dysregulation and rejection sensitivity", "Shared care"],
     languages: ["English"],
-    careAreas: ["adhd", "post-birth", "pcos"],
+    careAreas: ["adhd-assessment", "adult-adhd", "non-medication", "emotional-regulation"],
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
-    keywords: ["adhd", "attention", "neurodivergent", "executive function", "overwhelmed", "structured", "clear steps", "post-birth", "post birth", "postpartum", "pcos", "mental health", "shared care"],
+    keywords: ["adhd", "assessment", "attention", "neurodivergent", "executive function", "overwhelmed", "structured", "clear steps", "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits", "rejection sensitivity", "rsd", "emotional", "regulation", "shame", "shared care", "adult"],
   },
   {
     id: "sofia-alvarez",
@@ -163,18 +213,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/sofia-alvarez.png",
     nextAvailable: "Friday, 8:40 am",
     acceptingNewPatients: true,
-    focus: "PMOS & gestational diabetes",
-    matchLine: "Spanish-language metabolic care without weight stigma or unrealistic targets.",
-    fitSignals: ["Gestational diabetes", "PMOS", "Spanish", "Weight-neutral care"],
+    focus: "Child assessment & school documentation",
+    matchLine: "Spanish-language support through a child's assessment, and paperwork the school will accept.",
+    fitSignals: ["Child & adolescent", "Spanish", "School adjustments", "Non-medication supports"],
     practicalSignals: ["Bulk bills", "12 min walk", "Saturday mornings"],
     about:
-      "Sofia supports women navigating PMOS, gestational diabetes and post-birth metabolic health without reducing every concern to weight. She builds realistic plans around work, food, sleep, movement and emotional wellbeing.",
-    experience: ["Gestational diabetes", "PMOS care", "Post-birth metabolic health", "Nutrition support"],
+      "Sofia works with families whose child is struggling at school before anyone has used the word ADHD. She helps gather what an assessment needs, writes the documentation a school will act on, and sets out the classroom and home supports that do not wait on a diagnosis.",
+    experience: ["Child and adolescent ADHD", "School and learning adjustments", "Behavioural and environmental supports", "Parent-supported consultations"],
     languages: ["English", "Spanish"],
-    careAreas: ["pcos", "gestational-diabetes", "post-birth", "metabolic"],
+    careAreas: ["adhd-assessment", "child-adolescent-adhd", "student-academic", "non-medication"],
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
-    keywords: ["pcos", "polycystic", "gestational diabetes", "pregnancy diabetes", "diabetes", "blood sugar", "post-birth", "post birth", "postpartum", "metabolic", "nutrition", "movement", "strength", "weight", "weight stigma", "body image", "non-judgemental", "without shame", "spanish"],
+    keywords: ["adhd", "assessment", "child", "my son", "my daughter", "school", "teacher", "learning", "classroom", "falling behind", "concentrate", "adjustments", "documentation", "letter", "plan", "spanish", "behaviour", "without medication", "supports", "parent"],
   },
   {
     id: "noah-williams",
@@ -188,18 +238,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/noah-williams.png",
     nextAvailable: "Wednesday, 1:20 pm",
     acceptingNewPatients: true,
-    focus: "Perinatal & complex mental-health shared care",
-    matchLine: "Gentle, trauma-aware support for anxiety and emotional recovery after birth.",
-    fitSignals: ["Perinatal mental health", "Birth trauma", "Longer visits"],
+    focus: "ADHD alongside complex mental health, shared care",
+    matchLine: "ADHD questions held alongside bipolar or PTSD, with your psychiatrist rather than around them.",
+    fitSignals: ["Complex mental health", "Psychiatrist shared care", "Comorbid mood", "Longer visits"],
     practicalSignals: ["Bulk billing eligible", "16 min by bus", "Telehealth available"],
     about:
-      "Noah provides trauma-informed general practice for anxiety, PTSD, bipolar disorder, maternal depression and emotional recovery around pregnancy. He coordinates with psychiatrists and perinatal teams; specialist medication decisions remain within shared care.",
-    experience: ["PTSD and bipolar shared care", "Maternal and postnatal depression", "Birth trauma", "Perinatal mental health"],
+      "Noah works with people whose ADHD question sits alongside PTSD, bipolar disorder, long-standing anxiety or a substance-use history, where sequence matters and one diagnosis has often been used to explain everything. He coordinates with treating psychiatrists; specialist medication decisions stay within shared care.",
+    experience: ["PTSD and bipolar shared care", "ADHD assessment with psychiatric comorbidity", "Anxiety, depression and substance-use history", "Psychiatrist coordination"],
     languages: ["English"],
-    careAreas: ["perinatal-mental-health", "trauma-informed", "complex-mental-health", "maternal-depression", "post-birth"],
+    careAreas: ["adhd-assessment", "adult-adhd", "complex-mental-health", "comorbid-mood", "shared-care", "trauma-informed", "substance-history"],
     wheelchairAccessible: false,
     appointmentLength: "Longer appointments available",
-    keywords: ["mental health", "perinatal", "birth trauma", "trauma", "trauma history", "trauma-informed", "ptsd", "bipolar", "psychiatrist", "psychiatric", "shared care", "medication", "maternal depression", "postnatal depression", "depression after birth", "post-birth", "post birth", "postpartum", "after birth", "anxiety", "depression", "disconnected", "sleep", "gentle", "longer", "judgement"],
+    keywords: ["adhd", "assessment", "mental health", "ptsd", "bipolar", "psychiatrist", "psychiatric", "shared care", "medication", "anxiety", "depression", "trauma", "complex", "comorbid", "misdiagnosed", "wrong diagnosis", "explained away", "substance", "drinking", "alcohol", "cannabis", "addict", "non-stimulant", "gentle", "longer", "coordinate", "adult"],
   },
   {
     id: "priya-nair",
@@ -213,18 +263,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/priya-nair.png",
     nextAvailable: "Monday, 9:30 am",
     acceptingNewPatients: true,
-    focus: "PMOS, Tamil & Malayalam care",
-    matchLine: "Tamil and Malayalam PMOS care with culturally responsive mental-health support.",
-    fitSignals: ["PMOS", "Tamil & Malayalam", "South Indian context", "Mental health"],
+    focus: "Adult ADHD, Tamil & Malayalam, family context",
+    matchLine: "Tamil and Malayalam ADHD assessment where the family does not yet believe it is real.",
+    fitSignals: ["ADHD assessment", "Tamil & Malayalam", "South Indian context", "Late diagnosis in women"],
     practicalSignals: ["Bulk bills", "11 min by train", "Telehealth follow-ups"],
     about:
-      "Priya supports young women navigating PMOS, pregnancy planning, mood changes and the pressure that health conversations can carry within South Indian families. She makes room for sensitive conversations and shared decisions without assumptions.",
-    experience: ["PMOS care", "Women’s health", "Perinatal mental health", "Reproductive health"],
+      "Priya assesses adults navigating an ADHD question inside families where it reads as laziness or a Western invention. She makes room for that conversation without requiring anyone to win it first, and keeps what is discussed private from relatives unless the patient asks otherwise.",
+    experience: ["Adult ADHD assessment", "Late-recognised presentations in women", "Anxiety and low mood", "Culturally responsive consultations"],
     languages: ["English", "Malayalam", "Tamil"],
-    careAreas: ["pcos", "perinatal-mental-health"],
+    careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "comorbid-mood"],
     wheelchairAccessible: false,
     appointmentLength: "Longer first appointments available",
-    keywords: ["pcos", "pmos", "polycystic", "south indian", "indian", "malayalam", "tamil", "cultural", "culture", "family", "family pressure", "woman", "women", "young", "mental health", "anxiety", "mood", "judgement"],
+    keywords: ["adhd", "assessment", "diagnosis", "south indian", "indian", "malayalam", "tamil", "cultural", "culture", "family", "family pressure", "lazy", "excuse", "not real", "woman", "women", "young", "anxiety", "mood", "judgement", "private", "adult", "late"],
   },
   {
     id: "anjali-menon",
@@ -238,18 +288,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/anjali-menon.png",
     nextAvailable: "Tuesday, 12:30 pm",
     acceptingNewPatients: true,
-    focus: "PMOS, metabolic & reproductive mental health",
-    matchLine: "Tamil and Malayalam PMOS support with culturally aware conversations about mood and family.",
-    fitSignals: ["PMOS", "Tamil & Malayalam", "Mental health", "Women’s health"],
+    focus: "ADHD in women, hormonal change & sleep",
+    matchLine: "Tamil and Malayalam assessment for symptoms that got louder in your forties, not newer.",
+    fitSignals: ["ADHD in women", "Tamil & Malayalam", "Hormonal change", "Sleep"],
     practicalSignals: ["Bulk billing eligible", "18 min by bus", "Long first visits"],
     about:
-      "Anjali works with women managing PMOS, metabolic health, reproductive decisions and emotional wellbeing. She supports sensitive conversations about family expectations while keeping the patient’s own goals and privacy central.",
-    experience: ["PMOS care", "Metabolic health", "Reproductive mental health", "Shared decision-making"],
+      "Anjali sees women whose difficulty became unmanageable around perimenopause or after a baby, where the strategies that worked for thirty years stopped working. She treats that as a history worth taking properly rather than as evidence the problem is recent, and reviews sleep alongside it.",
+    experience: ["ADHD assessment in women", "Hormonal change and symptom shift", "Sleep and circadian review", "Shared decision-making"],
     languages: ["English", "Malayalam", "Tamil"],
-    careAreas: ["pcos", "metabolic", "perinatal-mental-health"],
+    careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women", "sleep"],
     wheelchairAccessible: false,
     appointmentLength: "Longer first appointments available",
-    keywords: ["pcos", "polycystic", "metabolic", "sustainable", "healthier", "south indian", "malayalam", "tamil", "woman", "women", "mental health", "anxiety", "mood", "family", "culture", "cultural", "explain", "unhurried"],
+    keywords: ["adhd", "assessment", "woman", "women", "perimenopause", "menopause", "hormonal", "hormones", "cycle", "after my baby", "got worse", "worse lately", "coping stopped", "sleep", "insomnia", "tired", "exhausted", "south indian", "malayalam", "tamil", "unhurried", "explain", "late", "adult"],
   },
   {
     id: "nisha-kapoor",
@@ -263,18 +313,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/nisha-kapoor.png",
     nextAvailable: "Wednesday, 3:10 pm",
     acceptingNewPatients: true,
-    focus: "PMOS, mood & family context",
-    matchLine: "Hindi and Punjabi PMOS care with calm explanations and space for family dynamics.",
-    fitSignals: ["PMOS", "Hindi & Punjabi", "Mental health", "Longer visits"],
+    focus: "ADHD & anxiety: which is which",
+    matchLine: "Hindi and Punjabi assessment that separates ADHD from the anxiety it has been called for years.",
+    fitSignals: ["ADHD assessment", "Hindi & Punjabi", "Anxiety differential", "Longer visits"],
     practicalSignals: ["Bulk bills care plans", "12 min by train", "Evening appointments"],
     about:
-      "Nisha supports PMOS and reproductive-health care alongside anxiety, low mood and difficult family conversations. She uses clear options and checks understanding without rushing decisions.",
-    experience: ["PMOS care", "Women’s health", "Anxiety and mood", "Reproductive health"],
+      "Nisha works through the question of whether long-treated anxiety or depression has been the whole story. She goes back to what was happening at school, checks understanding as she goes, and does not rush the decision in either direction.",
+    experience: ["Adult ADHD assessment", "Anxiety and depression differential", "Developmental history taking", "Referral and shared care"],
     languages: ["English", "Hindi", "Punjabi"],
-    careAreas: ["pcos", "perinatal-mental-health"],
+    careAreas: ["adhd-assessment", "adult-adhd", "comorbid-mood", "adhd-in-women"],
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
-    keywords: ["pcos", "polycystic", "hindi", "punjabi", "woman", "women", "mental health", "anxiety", "anxious", "mood", "family", "family expectations", "calm", "explain", "slowly"],
+    keywords: ["adhd", "assessment", "anxiety", "anxious", "depression", "antidepressant", "treated for anxiety", "misdiagnosed", "differential", "which one", "hindi", "punjabi", "woman", "women", "mood", "family", "family expectations", "calm", "explain", "slowly", "school", "adult"],
   },
   {
     id: "camila-torres",
@@ -288,18 +338,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/camila-torres.png",
     nextAvailable: "Monday, 11:20 am",
     acceptingNewPatients: true,
-    focus: "Gestational diabetes & post-birth health",
-    matchLine: "Spanish-language pregnancy and post-birth metabolic care built around real routines, not shame.",
-    fitSignals: ["Gestational diabetes", "Spanish", "Post-birth care", "Weight-respectful care"],
+    focus: "Titration follow-up & workplace adjustments",
+    matchLine: "Spanish-language dose review that keeps happening, plus the letter your employer needs.",
+    fitSignals: ["Titration", "Spanish", "Workplace adjustments", "Telehealth follow-ups"],
     practicalSignals: ["Mixed billing", "14 min by bus", "Telehealth follow-ups"],
     about:
-      "Camila supports gestational diabetes and post-birth metabolic health with practical plans for food, work, sleep and movement. She avoids weight-first assumptions and coordinates with maternity teams when needed.",
-    experience: ["Gestational diabetes", "Post-birth recovery", "Metabolic health", "Shared maternity care"],
+      "Camila holds the weeks after a diagnosis, when the dose is still being found and most people are left waiting for a review. She tracks effect, appetite, sleep and blood pressure across visits, and writes the study or workplace documentation that turns a diagnosis into an actual adjustment.",
+    experience: ["Titration and dose review", "Side-effect monitoring", "Workplace and study adjustments", "Shared-care prescribing"],
     languages: ["English", "Spanish"],
-    careAreas: ["gestational-diabetes", "post-birth", "metabolic", "pcos"],
+    careAreas: ["adhd-assessment", "adult-adhd", "titration", "student-academic"],
     wheelchairAccessible: false,
     appointmentLength: "Standard and longer appointments",
-    keywords: ["gestational diabetes", "pregnancy diabetes", "spanish", "woman", "women", "post-birth", "post birth", "postpartum", "metabolic", "blood sugar", "food", "weight stigma", "without shame", "maternity", "coordinate", "pcos", "pmos", "polycystic"],
+    keywords: ["adhd", "titration", "dose", "medication", "review", "side effects", "appetite", "not working", "wearing off", "adjust", "follow-up", "spanish", "work", "employer", "workplace", "university", "study", "adjustments", "letter", "documentation", "diagnosed already", "assessment"],
   },
   {
     id: "leila-haddad",
@@ -313,18 +363,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/leila-haddad.png",
     nextAvailable: "Thursday, 2:40 pm",
     acceptingNewPatients: true,
-    focus: "Gestational diabetes & perinatal wellbeing",
-    matchLine: "Arabic-language gestational diabetes care that includes anxiety, preferences and family context.",
-    fitSignals: ["Gestational diabetes", "Arabic", "Perinatal mental health", "Women’s health"],
+    focus: "Adolescent assessment & anxiety, family context",
+    matchLine: "Arabic-language assessment for a teenager, with the anxiety and the family both in the room.",
+    fitSignals: ["Child & adolescent", "Arabic", "Anxiety differential", "Shared care"],
     practicalSignals: ["Bulk billing eligible", "10 min by train", "Wheelchair accessible"],
     about:
-      "Leila combines gestational-diabetes follow-up with calm support for anxiety and the emotional load of pregnancy. She can involve family when invited while keeping consent and the patient’s preferences explicit.",
-    experience: ["Gestational diabetes", "Perinatal mental health", "Women’s health", "Shared maternity care"],
+      "Leila assesses adolescents where school refusal, anxiety and attention difficulty have become hard to separate. She can involve family when invited while keeping the young person's confidentiality explicit, and coordinates with paediatric and mental-health teams.",
+    experience: ["Adolescent ADHD assessment", "Anxiety and school refusal", "Paediatric and mental-health coordination", "Family-inclusive consultations"],
     languages: ["English", "Arabic"],
-    careAreas: ["gestational-diabetes", "perinatal-mental-health", "pcos"],
+    careAreas: ["adhd-assessment", "child-adolescent-adhd", "comorbid-mood", "shared-care"],
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
-    keywords: ["gestational diabetes", "pregnancy diabetes", "arabic", "woman", "women", "anxiety", "anxious", "perinatal", "mental health", "hospital", "maternity", "coordinate", "family", "consent", "preferences", "pcos", "pmos", "polycystic"],
+    keywords: ["adhd", "assessment", "teenager", "adolescent", "my son", "my daughter", "school refusal", "school", "anxiety", "anxious", "arabic", "mental health", "paediatrician", "coordinate", "family", "consent", "confidential", "preferences", "child"],
   },
   {
     id: "hanh-tran",
@@ -338,18 +388,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/hanh-tran.png",
     nextAvailable: "Friday, 10:10 am",
     acceptingNewPatients: true,
-    focus: "Disability rights, kidney & post-birth care",
-    matchLine: "Vietnamese-language care that centres disability rights, kidney health and patient autonomy.",
-    fitSignals: ["Disability rights", "Vietnamese", "Kidney-aware care", "Post-birth care"],
+    focus: "Co-occurring autism & ADHD, accessible care",
+    matchLine: "Vietnamese-language assessment that can hold autism and ADHD as two answers, not one.",
+    fitSignals: ["Autism & ADHD", "Vietnamese", "Disability rights", "Accessible assessment"],
     practicalSignals: ["Bulk bills care plans", "9 min by train", "Wheelchair accessible"],
     about:
-      "Hanh supports disabled women and people balancing reproductive or post-birth care with kidney health. She plans around access needs, explains medication decisions clearly and centres consent and autonomy.",
-    experience: ["Disability-rights focused care", "Kidney health", "Post-birth recovery", "Medication reviews"],
+      "Hanh assesses adults who have been given one neurodevelopmental explanation and suspect there are two. She plans around sensory and access needs, explains decisions clearly, and supports the documentation needed for study, work or a support scheme.",
+    experience: ["Co-occurring autism and ADHD", "Adult ADHD assessment", "Disability-rights focused care", "Adjustment documentation"],
     languages: ["English", "Vietnamese"],
-    careAreas: ["disability-rights", "kidney", "post-birth"],
+    careAreas: ["adhd-assessment", "autism-adhd", "disability-rights", "adult-adhd"],
     wheelchairAccessible: true,
     appointmentLength: "Longer appointments available",
-    keywords: ["disability", "disabled", "disability rights", "wheelchair", "accessible", "autonomy", "consent", "vietnamese", "kidney", "renal", "post-birth", "post birth", "postpartum", "medicines", "medication", "coordinate"],
+    keywords: ["adhd", "autism", "autistic", "audhd", "both", "assessment", "neurodivergent", "disability", "disabled", "disability rights", "wheelchair", "accessible", "sensory", "autonomy", "consent", "vietnamese", "ndis", "adjustments", "documentation", "adult"],
   },
   {
     id: "grace-chen",
@@ -363,18 +413,18 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/grace-chen.png",
     nextAvailable: "Tuesday, 1:40 pm",
     acceptingNewPatients: true,
-    focus: "ADHD & post-birth women’s health",
-    matchLine: "Neurodiversity-affirming post-birth care with clear, realistic plans and low-pressure follow-up.",
-    fitSignals: ["ADHD", "Post-birth care", "Women’s health", "Clear plans"],
+    focus: "Autism & ADHD assessment, sensory-considerate",
+    matchLine: "Neurodiversity-affirming assessment in a room built for it, with written steps to take home.",
+    fitSignals: ["Autism & ADHD", "Sensory-considerate", "Non-medication supports", "Clear plans"],
     practicalSignals: ["Mixed billing", "15 min by bus", "Sensory-considerate rooms"],
     about:
-      "Grace supports neurodivergent women through PMOS, pregnancy transitions and post-birth overload. She uses written steps, collaborative pacing and practical follow-up without moralising executive-function difficulty.",
-    experience: ["Adult ADHD", "Women’s health", "Post-birth recovery", "PMOS support"],
+      "Grace assesses adults for ADHD and co-occurring autism in appointments designed to be survivable — lower light, no waiting-room ambush, written summaries afterwards. She sets out medication and non-medication options side by side without treating either as the default.",
+    experience: ["Adult ADHD and autism assessment", "Sensory-considerate consultations", "Non-medication strategies", "Emotional regulation support"],
     languages: ["English", "Mandarin"],
-    careAreas: ["adhd", "post-birth", "pcos"],
+    careAreas: ["adhd-assessment", "autism-adhd", "adult-adhd", "non-medication", "emotional-regulation"],
     wheelchairAccessible: true,
     appointmentLength: "Standard and longer appointments",
-    keywords: ["adhd", "attention", "neurodivergent", "executive function", "overwhelmed", "clear steps", "post-birth", "post birth", "postpartum", "woman", "women", "pcos", "mental health", "shared care", "realistic"],
+    keywords: ["adhd", "autism", "autistic", "audhd", "assessment", "attention", "neurodivergent", "neurodiversity", "affirming", "sensory", "overwhelmed", "clear steps", "written", "mandarin", "without medication", "options", "realistic", "adult", "woman"],
   },
   {
     id: "erin-walsh",
@@ -388,39 +438,90 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/erin-walsh.png",
     nextAvailable: "Monday, 1:20 pm",
     acceptingNewPatients: true,
-    focus: "Trauma-informed & maternal mental health",
-    matchLine: "Trauma-aware post-birth care with longer conversations and gentle, practical follow-up.",
-    fitSignals: ["Birth trauma", "Perinatal mental health", "Post-birth care", "Longer visits"],
+    focus: "Trauma-informed assessment",
+    matchLine: "Assessment that can tell trauma and ADHD apart without making you relive either.",
+    fitSignals: ["Trauma-informed", "Complex mental health", "Longer visits", "Consent-led"],
     practicalSignals: ["Bulk billing eligible", "8 min by train", "Long appointments"],
     about:
-      "Erin provides trauma-informed care for people experiencing PTSD, bipolar disorder, maternal depression, birth trauma or disconnection around pregnancy. Appointments prioritise consent and control, with psychiatrist and perinatal-team coordination for specialist treatment.",
-    experience: ["Trauma-informed GP care", "Maternal and postnatal depression", "PTSD and bipolar shared care", "Birth trauma"],
+      "Erin assesses people for whom childhood history is not a neutral topic, where trauma and ADHD present through each other and being asked to prove either is its own harm. Appointments prioritise consent and control, with psychiatrist coordination where specialist treatment is involved.",
+    experience: ["Trauma-informed GP care", "ADHD assessment with trauma history", "PTSD and bipolar shared care", "Consent-led consultations"],
     languages: ["English"],
-    careAreas: ["perinatal-mental-health", "trauma-informed", "complex-mental-health", "maternal-depression", "post-birth"],
+    careAreas: ["adhd-assessment", "trauma-informed", "adult-adhd", "complex-mental-health", "shared-care"],
     wheelchairAccessible: false,
     appointmentLength: "Longer appointments available",
-    keywords: ["birth trauma", "trauma", "trauma history", "trauma-informed", "permission", "boundaries", "consent", "control", "ptsd", "bipolar", "psychiatrist", "shared care", "maternal depression", "postnatal depression", "depression after birth", "perinatal", "post-birth", "post birth", "postpartum", "anxiety", "anxious", "depression", "disconnected", "gentle", "longer", "mental health", "unhurried"],
+    keywords: ["adhd", "assessment", "trauma", "trauma history", "trauma-informed", "childhood", "difficult childhood", "permission", "boundaries", "consent", "control", "ptsd", "bipolar", "psychiatrist", "shared care", "cptsd", "anxiety", "depression", "gentle", "longer", "mental health", "unhurried", "no records", "adult"],
+  },
+  {
+    id: "anubhav-saxena",
+    name: "Dr Anubhav Saxena",
+    shortName: "Dr Saxena",
+    gender: "man",
+    pronouns: "he/him",
+    title: "General practitioner",
+    suburb: "Parramatta",
+    distance: "Telehealth, plus Parramatta rooms",
+    // A real person's likeness is theirs to supply. Renders as a monogram until he provides one.
+    image: null,
+    nextAvailable: "Thursday, 8:30 am",
+    acceptingNewPatients: true,
+    focus: "Structured assessment, baseline physical screening & titration",
+    matchLine: "A measured assessment with the physical baseline done properly, then titration reviewed on a schedule.",
+    fitSignals: ["ADHD assessment", "Baseline physical screening", "Titration", "Telehealth"],
+    practicalSignals: ["Mixed billing", "Telehealth Australia-wide", "Structured review schedule"],
+    about:
+      "Anubhav works from measurement: a documented baseline before anything starts, then review at set intervals rather than when a problem gets loud enough to prompt a call. He covers cardiovascular and sleep screening before a stimulant is considered, takes a substance history as a safety question rather than a character one, and coordinates with the treating psychiatrist where prescribing sits with them.",
+    experience: [
+      "Structured adult ADHD assessment",
+      "Baseline cardiovascular and metabolic screening",
+      "Titration and scheduled review",
+      "Telehealth follow-up",
+    ],
+    languages: ["English", "Hindi"],
+    careAreas: [
+      "adhd-assessment",
+      "adult-adhd",
+      "titration",
+      "cardiac-screening",
+      "substance-history",
+      "sleep",
+      "shared-care",
+    ],
+    wheelchairAccessible: true,
+    appointmentLength: "Long first appointment, scheduled reviews",
+    keywords: ["adhd", "assessment", "structured", "thorough", "measured", "baseline", "bloods", "pathology", "physical", "heart", "cardiac", "cardiovascular", "blood pressure", "metabolic", "sleep", "titration", "dose", "medication", "stimulant", "monitoring", "review", "telehealth", "remote", "online", "substance", "drinking", "alcohol", "cannabis", "history", "non-stimulant", "shared care", "hindi", "adult", "founder"],
+    realPerson: true,
+    founderInterest:
+      "Dr Saxena is a co-founder of ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",
   },
 ];
 
+/**
+ * Rank the roster against a free-text request.
+ *
+ * The weights are per-clinician and per-phrase, which is a deliberate refusal to build a general
+ * relevance model: a general model would be a quality ranking of named clinicians derived from
+ * inference, which W83 refused internally and which is worse in public. These weights only
+ * express what each clinician SAYS they see often, matched against what the person SAID they want.
+ */
 export function rankClinicians(query: string): Clinician[] {
   const words = query.toLowerCase();
   const focusSignals: Record<string, Array<[string, number]>> = {
-    "maya-singh": [["pcos", 20], ["pmos", 20], ["polycystic", 20], ["hindi", 26], ["punjabi", 26], ["family expectations", 16], ["family", 8], ["mental health", 12], ["maternal depression", 26], ["postnatal depression", 26], ["depression after birth", 24], ["perinatal", 16], ["anxiety", 10], ["calm", 12], ["explain", 10], ["south asian", 12]],
-    "daniel-okafor": [["pcos", 10], ["pmos", 10], ["polycystic", 10], ["post-birth", 18], ["post birth", 18], ["postpartum", 18], ["strength", 22], ["energy", 18], ["cardiometabolic", 22], ["bounce back", 18], ["heart", 20], ["cardiac", 20], ["cardiovascular", 20], ["blood pressure", 14], ["cholesterol", 14]],
-    "linh-nguyen": [["disability rights", 30], ["disabled", 24], ["wheelchair", 24], ["autonomy", 20], ["consent", 16], ["accessible", 18], ["vietnamese", 28], ["renal", 22], ["kidney", 22], ["nephrology", 22], ["medicines", 12]],
-    "aisha-rahman": [["gestational diabetes", 26], ["pregnancy diabetes", 26], ["arabic", 28], ["complex", 14], ["hospital team", 18], ["coordinate", 14], ["dialysis", 24], ["renal", 14], ["kidney", 14]],
-    "tom-bennett": [["adhd", 26], ["attention", 18], ["neurodivergent", 28], ["executive function", 24], ["clear steps", 18], ["overwhelmed", 12], ["shared care", 14]],
-    "sofia-alvarez": [["gestational diabetes", 24], ["pregnancy diabetes", 24], ["spanish", 28], ["pcos", 22], ["pmos", 22], ["polycystic", 22], ["diabetes", 16], ["blood sugar", 16], ["metabolic", 18], ["weight stigma", 22], ["without shame", 18], ["weight", 10], ["sustainable", 14]],
-    "noah-williams": [["ptsd", 34], ["bipolar", 34], ["psychiatrist", 20], ["psychiatric", 20], ["shared care", 18], ["medicines", 15], ["medication", 15], ["maternal depression", 25], ["postnatal depression", 25], ["depression after birth", 24], ["birth trauma", 30], ["trauma history", 22], ["trauma", 22], ["perinatal", 24], ["post-birth", 12], ["post birth", 12], ["postpartum", 12], ["disconnected", 18], ["mental health", 18], ["anxiety", 16], ["depression", 16], ["gentle", 12], ["longer", 10]],
-    "priya-nair": [["pcos", 22], ["pmos", 22], ["polycystic", 22], ["south indian", 28], ["malayalam", 28], ["tamil", 28], ["indian", 12], ["cultural", 14], ["culture", 14], ["family pressure", 18], ["family", 10], ["mental health", 14], ["anxiety", 10], ["woman", 8], ["young", 4]],
-    "anjali-menon": [["pcos", 20], ["pmos", 20], ["polycystic", 20], ["south indian", 24], ["malayalam", 26], ["tamil", 26], ["cultural", 12], ["culture", 12], ["family pressure", 14], ["family", 8], ["mental health", 14], ["anxiety", 10], ["woman", 8], ["unhurried", 8]],
-    "nisha-kapoor": [["pcos", 19], ["pmos", 19], ["polycystic", 19], ["hindi", 24], ["punjabi", 24], ["family expectations", 14], ["family", 8], ["mental health", 13], ["anxiety", 9], ["anxious", 9], ["calm", 10], ["explain", 9], ["slowly", 9], ["woman", 8]],
-    "camila-torres": [["pcos", 14], ["pmos", 14], ["polycystic", 14], ["gestational diabetes", 22], ["pregnancy diabetes", 22], ["spanish", 26], ["post-birth", 16], ["post birth", 16], ["postpartum", 16], ["after birth", 18], ["follow-up", 14], ["realistic", 12], ["metabolic", 15], ["blood sugar", 14], ["weight stigma", 18], ["without shame", 16], ["maternity", 12], ["coordinate", 10], ["woman", 8]],
-    "leila-haddad": [["pcos", 12], ["pmos", 12], ["polycystic", 12], ["gestational diabetes", 24], ["pregnancy diabetes", 24], ["arabic", 26], ["anxiety", 14], ["anxious", 14], ["mental health", 12], ["perinatal", 12], ["hospital team", 15], ["maternity", 14], ["coordinate", 12], ["family", 8], ["woman", 8]],
-    "hanh-tran": [["disability rights", 28], ["disabled", 22], ["wheelchair", 22], ["autonomy", 18], ["consent", 15], ["accessible", 17], ["vietnamese", 26], ["renal", 20], ["kidney", 20], ["post-birth", 15], ["post birth", 15], ["postpartum", 15], ["medicines", 11], ["woman", 8]],
-    "grace-chen": [["adhd", 24], ["attention", 16], ["neurodivergent", 26], ["executive function", 22], ["clear steps", 16], ["overwhelmed", 11], ["post-birth", 14], ["post birth", 14], ["postpartum", 14], ["pcos", 12], ["pmos", 12], ["woman", 8]],
-    "erin-walsh": [["ptsd", 30], ["bipolar", 28], ["psychiatrist", 16], ["shared care", 16], ["maternal depression", 30], ["postnatal depression", 30], ["depression after birth", 28], ["trauma history", 32], ["permission", 24], ["boundaries", 22], ["consent", 20], ["control", 16], ["birth trauma", 27], ["trauma", 20], ["perinatal", 22], ["post-birth", 13], ["post birth", 13], ["postpartum", 13], ["disconnected", 16], ["mental health", 17], ["anxiety", 14], ["anxious", 14], ["depression", 14], ["gentle", 11], ["longer", 10], ["woman", 8]],
+    "maya-singh": [["adhd", 12], ["assessment", 10], ["late", 20], ["missed", 20], ["masking", 20], ["coping", 16], ["hindi", 26], ["punjabi", 26], ["family expectations", 16], ["family", 8], ["anxiety", 10], ["mood", 10], ["calm", 12], ["explain", 10], ["south asian", 12], ["woman", 10], ["women", 10], ["my daughter was diagnosed", 24]],
+    "daniel-okafor": [["adhd", 8], ["heart", 26], ["cardiac", 26], ["cardiovascular", 26], ["blood pressure", 22], ["safe", 16], ["safety", 16], ["starting medication", 22], ["stimulant", 20], ["titration", 20], ["dose", 16], ["monitoring", 18], ["follow-up", 14], ["physical health", 20], ["shared care", 12]],
+    "linh-nguyen": [["disability rights", 30], ["disabled", 24], ["wheelchair", 24], ["autonomy", 20], ["consent", 16], ["accessible", 18], ["adjustments", 18], ["ndis", 22], ["vietnamese", 28], ["autism", 14], ["adhd", 8], ["assessment", 8]],
+    "aisha-rahman": [["child", 24], ["my son", 26], ["my daughter", 26], ["kid", 20], ["children", 20], ["school", 20], ["teacher", 22], ["paediatrician", 24], ["referral", 16], ["waitlist", 18], ["arabic", 28], ["interpreter", 18], ["shared care", 14], ["adhd", 8]],
+    "tom-bennett": [["adhd", 12], ["without medication", 28], ["no medication", 28], ["not just medication", 28], ["alternatives", 22], ["coaching", 20], ["executive function", 24], ["rejection sensitivity", 24], ["rsd", 24], ["emotional", 18], ["regulation", 18], ["clear steps", 18], ["overwhelmed", 12], ["neurodivergent", 16], ["shared care", 10]],
+    "sofia-alvarez": [["child", 22], ["my son", 24], ["my daughter", 24], ["school", 24], ["teacher", 20], ["learning", 20], ["classroom", 22], ["falling behind", 24], ["adjustments", 20], ["documentation", 18], ["letter", 16], ["spanish", 28], ["behaviour", 16], ["without medication", 16], ["parent", 16], ["adhd", 8]],
+    "noah-williams": [["ptsd", 32], ["bipolar", 34], ["psychiatrist", 22], ["psychiatric", 22], ["shared care", 18], ["medication", 12], ["complex", 20], ["comorbid", 22], ["misdiagnosed", 22], ["wrong diagnosis", 24], ["explained away", 24], ["mental health", 18], ["anxiety", 14], ["depression", 14], ["trauma", 14], ["trauma history", 20], ["trauma-informed", 18], ["childhood", 14], ["substance", 20], ["drinking", 18], ["alcohol", 18], ["cannabis", 18], ["addict", 20], ["non-stimulant", 18], ["gentle", 12], ["longer", 10], ["adhd", 8]],
+    "priya-nair": [["south indian", 28], ["malayalam", 28], ["tamil", 28], ["indian", 12], ["cultural", 14], ["culture", 14], ["family pressure", 20], ["lazy", 24], ["excuse", 22], ["not real", 24], ["family", 10], ["private", 16], ["anxiety", 10], ["woman", 10], ["women", 10], ["adhd", 10], ["assessment", 8], ["young", 4]],
+    "anjali-menon": [["perimenopause", 30], ["menopause", 28], ["hormonal", 26], ["hormones", 26], ["cycle", 18], ["after my baby", 24], ["got worse", 24], ["worse lately", 22], ["coping stopped", 26], ["sleep", 20], ["insomnia", 20], ["exhausted", 16], ["south indian", 22], ["malayalam", 26], ["tamil", 26], ["woman", 12], ["women", 12], ["unhurried", 8], ["adhd", 8]],
+    "nisha-kapoor": [["anxiety", 22], ["anxious", 22], ["depression", 20], ["antidepressant", 26], ["treated for anxiety", 30], ["misdiagnosed", 20], ["differential", 20], ["which one", 22], ["hindi", 24], ["punjabi", 24], ["family expectations", 14], ["family", 8], ["calm", 10], ["explain", 9], ["slowly", 9], ["school", 10], ["woman", 10], ["adhd", 8]],
+    "camila-torres": [["titration", 30], ["dose", 26], ["review", 18], ["side effects", 26], ["appetite", 22], ["not working", 24], ["wearing off", 26], ["adjust", 20], ["spanish", 26], ["work", 18], ["employer", 22], ["workplace", 22], ["university", 22], ["study", 20], ["adjustments", 18], ["letter", 18], ["documentation", 18], ["diagnosed already", 22], ["follow-up", 14]],
+    "leila-haddad": [["teenager", 26], ["adolescent", 26], ["my son", 20], ["my daughter", 20], ["school refusal", 28], ["school", 16], ["anxiety", 18], ["anxious", 18], ["arabic", 26], ["mental health", 14], ["paediatrician", 18], ["coordinate", 12], ["family", 10], ["confidential", 16], ["child", 14], ["adhd", 8]],
+    "hanh-tran": [["autism", 26], ["autistic", 26], ["audhd", 30], ["both", 16], ["disability rights", 26], ["disabled", 22], ["wheelchair", 22], ["sensory", 20], ["autonomy", 18], ["consent", 15], ["accessible", 17], ["vietnamese", 26], ["ndis", 20], ["adjustments", 16], ["adhd", 8]],
+    "grace-chen": [["autism", 24], ["autistic", 24], ["audhd", 28], ["neurodiversity", 26], ["affirming", 24], ["sensory", 24], ["neurodivergent", 22], ["written", 18], ["clear steps", 18], ["without medication", 18], ["options", 14], ["mandarin", 26], ["overwhelmed", 12], ["adhd", 8], ["woman", 8]],
+    "erin-walsh": [["trauma history", 32], ["trauma", 24], ["trauma-informed", 30], ["childhood", 22], ["difficult childhood", 28], ["permission", 24], ["boundaries", 22], ["consent", 20], ["control", 16], ["ptsd", 26], ["cptsd", 28], ["bipolar", 20], ["psychiatrist", 16], ["shared care", 14], ["no records", 22], ["anxiety", 12], ["depression", 12], ["gentle", 12], ["longer", 10], ["unhurried", 10], ["woman", 8]],
+    "anubhav-saxena": [["structured", 26], ["thorough", 24], ["measured", 22], ["baseline", 24], ["bloods", 22], ["pathology", 20], ["physical", 18], ["heart", 16], ["cardiac", 16], ["blood pressure", 16], ["metabolic", 20], ["sleep", 16], ["titration", 22], ["dose", 18], ["stimulant", 18], ["monitoring", 20], ["review", 16], ["telehealth", 30], ["remote", 24], ["online", 24], ["substance", 26], ["drinking", 24], ["alcohol", 24], ["cannabis", 24], ["non-stimulant", 26], ["shared care", 14], ["hindi", 18], ["adhd", 8], ["assessment", 10]],
   };
 
   return [...clinicians].sort((a, b) => {
@@ -466,35 +567,53 @@ export function getPersonalizedMatch(clinician: Clinician, query: string) {
   const signals: string[] = [];
   const hasAny = (terms: string[]) => terms.some((term) => words.includes(term));
 
-  if (hasAny(["pcos", "pmos", "polycystic"]) && clinician.careAreas.includes("pcos")) {
-    signals.push("PMOS expertise");
+  if (hasAny(["adhd", "attention", "assessment", "assessed", "diagnosis", "diagnosed"]) && clinician.careAreas.includes("adhd-assessment")) {
+    signals.push("ADHD assessment");
   }
-  if (hasAny(["gestational diabetes", "pregnancy diabetes"]) && clinician.careAreas.includes("gestational-diabetes")) {
-    signals.push("Gestational diabetes");
+  if (hasAny(["child", "my son", "my daughter", "kid", "children", "teenager", "adolescent", "school"]) && clinician.careAreas.includes("child-adolescent-adhd")) {
+    signals.push("Children and adolescents");
   }
-  if (hasAny(["post-birth", "post birth", "postpartum", "after birth", "giving birth"]) && clinician.careAreas.includes("post-birth")) {
-    signals.push("Post-birth care");
+  if (hasAny(["late", "missed", "masking", "coping", "perimenopause", "menopause", "hormonal", "woman", "women"]) && clinician.careAreas.includes("adhd-in-women")) {
+    signals.push("Late-recognised presentations in women");
   }
-  if (hasAny(["adhd", "neurodivergent", "executive function"]) && clinician.careAreas.includes("adhd")) {
-    signals.push("ADHD experience");
+  if (hasAny(["autism", "autistic", "audhd", "sensory"]) && clinician.careAreas.includes("autism-adhd")) {
+    signals.push("Co-occurring autism");
   }
-  if (hasAny(["disability", "disabled", "wheelchair", "autonomy", "accessible"]) && clinician.careAreas.includes("disability-rights")) {
+  if (hasAny(["titration", "dose", "side effects", "wearing off", "not working", "adjust", "review"]) && clinician.careAreas.includes("titration")) {
+    signals.push("Titration and dose review");
+  }
+  if (hasAny(["heart", "cardiac", "cardiovascular", "blood pressure", "safe", "safety", "baseline", "physical"]) && clinician.careAreas.includes("cardiac-screening")) {
+    signals.push("Baseline physical screening");
+  }
+  if (hasAny(["without medication", "no medication", "not just medication", "alternatives", "coaching", "habits"]) && clinician.careAreas.includes("non-medication")) {
+    signals.push("Non-medication supports");
+  }
+  if (hasAny(["rejection sensitivity", "rsd", "emotional", "regulation", "shame", "overwhelmed"]) && clinician.careAreas.includes("emotional-regulation")) {
+    signals.push("Emotional regulation");
+  }
+  if (hasAny(["anxiety", "anxious", "depression", "antidepressant", "misdiagnosed", "differential", "which one"]) && clinician.careAreas.includes("comorbid-mood")) {
+    signals.push("Anxiety and mood differential");
+  }
+  if (hasAny(["substance", "drinking", "alcohol", "cannabis", "non-stimulant"]) && clinician.careAreas.includes("substance-history")) {
+    signals.push("Substance history held safely");
+  }
+  if (hasAny(["sleep", "insomnia", "tired", "exhausted"]) && clinician.careAreas.includes("sleep")) {
+    signals.push("Sleep review");
+  }
+  if (hasAny(["disability", "disabled", "wheelchair", "autonomy", "accessible", "adjustments", "ndis"]) && clinician.careAreas.includes("disability-rights")) {
     signals.push("Disability rights");
   }
-  if (hasAny(["kidney", "renal", "dialysis"]) && clinician.careAreas.includes("kidney")) {
-    signals.push("Kidney-aware care");
-  }
-  if (hasAny(["metabolic", "strength", "energy", "sustainable", "healthier"]) && clinician.careAreas.includes("metabolic")) {
-    signals.push("Metabolic health");
-  }
-  if (hasAny(["trauma history", "trauma-informed", "trauma", "ptsd", "permission", "boundaries"]) && clinician.careAreas.includes("trauma-informed")) {
+  if (hasAny(["trauma history", "trauma-informed", "trauma", "childhood", "permission", "boundaries", "cptsd"]) && clinician.careAreas.includes("trauma-informed")) {
     signals.push("Trauma-informed care");
   }
   if (hasAny(["ptsd", "bipolar", "psychiatrist", "psychiatric", "complex mental health"]) && clinician.careAreas.includes("complex-mental-health")) {
     signals.push("Complex mental-health shared care");
   }
-  if (hasAny(["maternal depression", "postnatal depression", "depression after birth", "persistently low"]) && clinician.careAreas.includes("maternal-depression")) {
-    signals.push("Maternal depression experience");
+  if (hasAny(["work", "employer", "workplace", "university", "study", "adjustments", "letter", "documentation"]) && clinician.careAreas.includes("student-academic")) {
+    signals.push("Study and workplace documentation");
+  }
+  if (hasAny(["paediatrician", "psychiatrist", "referral", "waitlist", "shared care", "already diagnosed", "diagnosed already"]) && clinician.careAreas.includes("shared-care")) {
+    signals.push("Shared care");
   }
 
   const requestedLanguage = clinician.languages.find((language) =>
@@ -507,11 +626,9 @@ export function getPersonalizedMatch(clinician: Clinician, query: string) {
     || /\bsafer with (?:a\s+)?[^.]*woman gp\b/.test(words);
   if (requestsWoman && clinician.gender === "woman") signals.push("Woman GP");
 
-  if (hasAny(["mental health", "mental-health", "emotion", "anxiety", "anxious", "mood", "trauma", "ptsd", "bipolar", "depression", "persistently low", "guilty", "overwhelmed"]) && clinician.careAreas.includes("perinatal-mental-health")) {
-    signals.push("Psychological safety");
-  }
-  if (hasAny(["weight stigma", "body image", "body shame", "without shame", "bounce back"]) && clinician.keywords.some((keyword) => ["weight stigma", "body image", "without shame", "bounce back"].includes(keyword))) {
-    signals.push("Weight-respectful care");
+  if (hasAny(["telehealth", "remote", "online", "cannot travel", "can't travel"])
+    && clinician.practicalSignals.some((signal) => signal.toLowerCase().includes("telehealth"))) {
+    signals.push("Telehealth available");
   }
   if (hasAny(["wheelchair", "accessible"]) && clinician.wheelchairAccessible) {
     signals.push("Wheelchair accessible");
