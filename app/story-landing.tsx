@@ -135,7 +135,7 @@ const STEPS: ReadonlyArray<{ title: string; body: string }> = [
  * fold.
  */
 const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = [
-  { value: "Months to years", label: "typical wait for an adult ADHD assessment appointment" },
+  { value: "12–24 months", label: "typical wait for an adult ADHD assessment appointment" },
   { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
   // "the RIGHT training", not "the required training", and the difference is the compliance
   // linter's, not a stylist's: `no-clinical-necessity` fires on "required" and it is right to.
