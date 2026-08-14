@@ -82,10 +82,10 @@ const FOUNDERS: ReadonlyArray<{
   {
     name: "Vikram Ganeshalingam",
     role: "Co-founder",
-    remit: "Final-year MD candidate, Bond University.",
+    remit: "What a person meets when they first look for help.",
     portrait: "/vikram.png",
     affiliations: [
-      { name: "Bond University", logo: null, href: "https://bond.edu.au/", label: "Bond University" },
+      { name: "Final-year MD candidate, Bond University", logo: null, href: "https://bond.edu.au/", label: "Final-year MD candidate, Bond University" },
     ],
   },
   {
