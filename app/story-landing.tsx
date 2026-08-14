@@ -36,8 +36,8 @@ import { CoverageMap } from "./coverage-map";
  *   4. The cost    - what the old route cost, as indicative figures with their own disclaimer.
  *   5. Throughline - the one dark beat. The permission changed; the appointment must be findable.
  *   6. How         - three lines, because "what do I actually do" is the next question.
- *   7. Founders    - three names, because a health product with anonymous founders is a red flag.
- *   8. Register    - the only action on the page.
+ *   7. Register    - the only action on the page, placed before the founders.
+ *   8. Founders    - three names, because a health product with anonymous founders is a red flag.
  *
  * FOUNDER ACTION. The three founders are real people and their entries are ROLES, not
  * biographies: whatever Vikram and Anubhav want said about themselves belongs in their own words,
@@ -251,7 +251,7 @@ export function StoryLanding() {
       </section>
 
       {/* 3. The fact it rests on. Set wide and opened without a rule. */}
-      <section className="story-chapter story-chapter-open" aria-labelledby="change-title">
+      <section className="story-chapter story-chapter-open story-chapter-tint" aria-labelledby="change-title">
         <div className="story-wrap">
           <Reveal>
             <h2 id="change-title" className="story-heading">The rule is changing in NSW and QLD.</h2>
@@ -350,7 +350,20 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* 7. Who is behind it. */}
+      {/* 7. The one action, moved above the founders. */}
+      <section id="register" className="story-register" aria-labelledby="register-heading">
+        <div className="story-wrap story-register-grid">
+          <div>
+            <h2 id="register-heading" className="story-heading">Be among the first.</h2>
+            <p className="story-register-copy">
+              We will tell you when the finder opens in your area.
+            </p>
+          </div>
+          <InterestForm />
+        </div>
+      </section>
+
+      {/* 8. Who is behind it. */}
       <section className="story-chapter" aria-labelledby="founders-title">
         <div className="story-wrap">
           <Reveal>
@@ -405,19 +418,6 @@ export function StoryLanding() {
               </motion.li>
             ))}
           </motion.ul>
-        </div>
-      </section>
-
-      {/* 8. The one action */}
-      <section id="register" className="story-register" aria-labelledby="register-heading">
-        <div className="story-wrap story-register-grid">
-          <div>
-            <h2 id="register-heading" className="story-heading">Be among the first.</h2>
-            <p className="story-register-copy">
-              We will tell you when the finder opens in your area.
-            </p>
-          </div>
-          <InterestForm />
         </div>
       </section>
 
