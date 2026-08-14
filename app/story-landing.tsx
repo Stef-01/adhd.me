@@ -46,9 +46,9 @@ import { CoverageMap } from "./coverage-map";
  * guideline before launch; they are written without false precision for that reason, and the
  * stat rail carries that qualification directly under it rather than in a footer.
  *
- * No portraits except the one that was supplied. Nothing in this tree generates a face for a
- * real person, and the two founders without a photograph get a monogram at the same size rather
- * than an empty frame.
+ * No portraits except the ones that were supplied. Nothing in this tree generates a face for a
+ * real person, and the founder without a supplied photograph gets a monogram at the same size
+ * rather than an empty frame.
  */
 
 /**
@@ -60,7 +60,7 @@ import { CoverageMap } from "./coverage-map";
  * we hold (both Stefan's, from his own work) render as images and the rest render as names. Drop
  * a licensed file in and set `logo` to swap it without touching the layout.
  *
- * `portrait` is null for two of the three for the same reason: nothing here generates a face for
+ * `portrait` is null only where no photograph has been supplied: nothing here generates a face for
  * somebody who has not supplied one.
  */
 interface Affiliation {
@@ -82,7 +82,7 @@ const FOUNDERS: ReadonlyArray<{
     name: "Vikram Ganeshalingam",
     role: "Co-founder",
     remit: "What a person meets when they first look for help.",
-    portrait: null,
+    portrait: "/vikram.png",
     affiliations: [
       { name: "Bond University", logo: null, href: "https://bond.edu.au/", label: "Bond University" },
     ],
