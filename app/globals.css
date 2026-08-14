@@ -3920,8 +3920,9 @@ textarea:focus-visible {
    and a monogram is an honest treatment rather than a slot waiting for one. */
 .story-founders {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 52px;
+  /* Three founders. Stacks to one column below 900px with the other single-column rules. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 40px;
   margin: 44px 0 0;
   padding: 0;
   list-style: none;
@@ -4371,3 +4372,83 @@ textarea:focus-visible {
   text-underline-offset: 3px;
 }
 .results-head .place-field { margin-top: 22px; }
+
+/* Stefan's portrait, sized to the monogram box so a mixed row keeps one rhythm. */
+.story-founder-photo {
+  width: 62px;
+  height: 62px;
+  border-radius: 2px;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+/* Affiliations belong to one founder and are checkable, so they are links rather than claims. */
+.story-affiliations-row {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid var(--s-line);
+}
+/* These are somebody else's marks, drawn dark-on-transparent for a light page, so on this ground
+   they were nearly invisible. They sit on a light chip rather than being filtered: inverting a
+   third-party logo changes its colours, which is both worse-looking and not ours to do. */
+.story-affiliations-row a {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #f4f1e9;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+.story-affiliations-row a:hover,
+.story-affiliations-row a:focus-visible { opacity: 1; outline-offset: 4px; }
+.story-affiliations-row img { width: auto; height: 24px; }
+.story-affiliations-row a:last-child img { height: 18px; }
+
+/* The coverage diagram. Drawn from the gazetteer, so it cannot drift from the matcher. */
+.coverage-map {
+  display: grid;
+  grid-template-columns: minmax(0, 168px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 60px);
+  justify-content: start;
+  align-items: center;
+  margin: 56px 0 0;
+  padding-top: 36px;
+  border-top: 1px solid var(--s-line);
+}
+.coverage-map svg { width: 100%; height: auto; overflow: visible; }
+/* The dots carry the whole diagram, so they are drawn at the ink colour rather than the muted one:
+   at r=1.35 on a 100-unit box a mid-grey reads as dust. */
+.coverage-dot { fill: var(--s-ink); opacity: 0.75; }
+.coverage-dot.is-here { fill: var(--s-accent); opacity: 1; }
+.coverage-halo { fill: none; stroke: var(--s-accent); stroke-width: 0.7; opacity: 0.55; }
+.coverage-map figcaption { display: grid; gap: 10px; }
+.coverage-count {
+  color: var(--s-accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.coverage-names { max-width: 46ch; color: var(--s-muted); font-size: 14px; line-height: 1.65; }
+
+@media (max-width: 720px) {
+  .coverage-map { grid-template-columns: 1fr; }
+  .coverage-map svg { max-width: 220px; }
+  .story-affiliations-row { flex-wrap: wrap; gap: 18px; }
+}
+
+/* The coverage diagram inside the finder, where it appears only for an uncovered suburb. */
+.results-head .coverage-map {
+  grid-template-columns: minmax(0, 120px) minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top-color: var(--line);
+}
+.results-head .coverage-map .coverage-names { font-size: 12.5px; }
+.results-head .coverage-dot { fill: var(--ink); }
+.results-head .coverage-count { color: var(--accent); font-size: 11px; }

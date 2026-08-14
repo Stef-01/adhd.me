@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, getPersonalizedMatch, rankClinicians } from "./clinicians";
+import { clinicians, distanceTo, getPersonalizedMatch, rankClinicians, rankCliniciansNear } from "./clinicians";
+import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
 describe("demo clinician matching", () => {
@@ -68,6 +69,48 @@ describe("demo clinician matching", () => {
     expect(rankClinicians(generic)[0]!.id).not.toBe("anubhav-saxena");
   });
 
+  /**
+   * The failure this pins is the one that made the founder effectively unlistable.
+   *
+   * Dr Saxena sits 3rd on stated preference and fell to 13th the moment a Blacktown origin was
+   * given, because his rooms are in Parramatta while the other fifteen are one cluster. With five
+   * results shown by default that put him behind a fold, for a service that needs no travel at
+   * all. Distance is simply not a fact about somebody you see by telehealth.
+   */
+  it("does not let distance bury a clinician nobody has to travel to", () => {
+    const request = "I need an ADHD assessment";
+    const byFit = rankClinicians(request).findIndex((c) => c.id === "anubhav-saxena");
+
+    for (const suburb of ["Blacktown", "Mount Druitt", "Toongabbie", "Quakers Hill"]) {
+      const near = rankCliniciansNear(request, resolvePlace(suburb));
+      const at = near.findIndex((c) => c.id === "anubhav-saxena");
+      expect(at, `telehealth clinician moved from ${byFit} to ${at} for ${suburb}`).toBe(byFit);
+    }
+  });
+
+  it("says telehealth instead of a kilometre figure that answers no question", () => {
+    const saxena = clinicians.find((c) => c.id === "anubhav-saxena")!;
+    const local = clinicians.find((c) => c.id === "maya-singh")!;
+    const origin = resolvePlace("Blacktown");
+
+    expect(distanceTo(saxena, origin)).toMatch(/telehealth/i);
+    expect(distanceTo(saxena, origin)).not.toMatch(/km/);
+    // And a clinician you DO travel to still gets a distance.
+    expect(distanceTo(local, origin)).toMatch(/km|in your suburb/);
+  });
+
+  it("marks telehealth-first explicitly rather than reading it off a display string", () => {
+    // Several clinicians advertise telehealth FOLLOW-UPS and still need a first visit in person.
+    // Inferring the ranking rule from practicalSignals would collapse that difference silently.
+    const flagged = clinicians.filter((c) => c.telehealthFirstAppointment).map((c) => c.id);
+    expect(flagged).toEqual(["anubhav-saxena"]);
+
+    const mentionsTelehealth = clinicians.filter((c) =>
+      c.practicalSignals.some((signal) => /telehealth/i.test(signal)),
+    );
+    expect(mentionsTelehealth.length).toBeGreaterThan(flagged.length);
+  });
+
   it("keeps every demo clinician in the Blacktown area, with the telehealth practice named", () => {
     const blacktownArea = new Set([
       "Blacktown",
@@ -77,8 +120,9 @@ describe("demo clinician matching", () => {
       "Lalor Park",
       "Marayong",
       "Mount Druitt",
-      // Parramatta is outside the Blacktown cluster: it is the telehealth-led practice, and the
-      // `distance` field says so rather than implying a short bus ride.
+      // Parramatta is outside the Blacktown cluster: it is the telehealth-led practice, and
+      // `telehealthFirstAppointment` keeps it out of the distance ranking rather than implying a
+      // short bus ride.
       "Parramatta",
       "Prospect",
       "Quakers Hill",

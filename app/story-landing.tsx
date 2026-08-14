@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { type ReactNode } from "react";
+import Image from "next/image";
 import { InterestForm } from "./interest-form";
+import { CoverageMap } from "./coverage-map";
 
 /**
  * A11Y-2 — WHY NOTHING HERE ANIMATES OPACITY.
@@ -42,17 +44,36 @@ import { InterestForm } from "./interest-form";
  * No portraits. Nothing in this tree generates a face for a real person.
  */
 
-/** Roles, not biographies. See the FOUNDER ACTION note above. */
-const FOUNDERS: ReadonlyArray<{ name: string; role: string; remit: string }> = [
+/**
+ * Roles, not biographies. See the FOUNDER ACTION note above.
+ *
+ * `portrait` is null for two of the three, and that is the honest state rather than a gap: Stefan
+ * supplied his own photograph, and nothing in this tree generates a face for anybody who has not.
+ * The monogram is a real treatment, not a placeholder, so the row reads as deliberate either way.
+ */
+const FOUNDERS: ReadonlyArray<{
+  name: string;
+  role: string;
+  remit: string;
+  portrait: string | null;
+}> = [
   {
     name: "Krish Ganesh",
     role: "Co-founder",
     remit: "The part that is not clinical: what a person meets when they first look for help.",
+    portrait: null,
   },
   {
     name: "Dr Anubhav Saxena",
     role: "Co-founder, clinical",
     remit: "Measurement discipline from metabolic medicine: a documented baseline, then follow-up on a schedule.",
+    portrait: null,
+  },
+  {
+    name: "Stefan Thottunkal",
+    role: "Co-founder",
+    remit: "Physician-in-training and health-systems researcher at Stanford Medicine, working on precision pharmacogenomic care and on culturally tailored nutrition research at NOURISH.",
+    portrait: "/stefan.png",
   },
 ];
 
@@ -159,6 +180,10 @@ export function StoryLanding() {
               </motion.li>
             ))}
           </motion.ol>
+
+          <Reveal delay={0.12}>
+            <CoverageMap />
+          </Reveal>
         </div>
       </section>
 
@@ -177,9 +202,19 @@ export function StoryLanding() {
           >
             {FOUNDERS.map((f) => (
               <motion.li key={f.name} variants={item}>
-                <span className="story-founder-monogram" aria-hidden="true">
-                  {f.name.replace(/^Dr\.?\s+/, "").split(" ").map((part) => part[0]).join("")}
-                </span>
+                {f.portrait ? (
+                  <Image
+                    className="story-founder-photo"
+                    src={f.portrait}
+                    alt={`${f.name}, co-founder of ADHD.ME`}
+                    width={124}
+                    height={124}
+                  />
+                ) : (
+                  <span className="story-founder-monogram" aria-hidden="true">
+                    {f.name.replace(/^Dr\.?\s+/, "").split(" ").map((part) => part[0]).join("")}
+                  </span>
+                )}
                 <div>
                   <strong>{f.name}</strong>
                   <span className="story-founder-role">{f.role}</span>
@@ -188,6 +223,15 @@ export function StoryLanding() {
               </motion.li>
             ))}
           </motion.ul>
+          <Reveal delay={0.08} className="story-affiliations-row">
+            <a href="https://med.stanford.edu/nourish-project.html" target="_blank" rel="noreferrer" aria-label="NOURISH, Stanford Medicine">
+              <Image src="/nourish-logo.png" alt="NOURISH" width={446} height={80} />
+            </a>
+            <a href="https://hsph.harvard.edu/research/health-systems-innovation-lab/team/#scholars" target="_blank" rel="noreferrer" aria-label="Health Systems Innovation Lab, Harvard T.H. Chan School of Public Health">
+              <Image src="/hsil-logo.png" alt="Harvard T.H. Chan School of Public Health, Health Systems Innovation Lab" width={472} height={54} />
+            </a>
+          </Reveal>
+
           <Reveal delay={0.1} className="story-prose">
             <p className="story-note">
               Dr Saxena also sees patients through this directory, and every listing of his says so.

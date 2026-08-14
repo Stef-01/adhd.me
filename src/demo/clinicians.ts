@@ -62,6 +62,20 @@ export type Clinician = {
   appointmentLength: string;
   keywords: string[];
   /**
+   * Set when the FIRST appointment can be by telehealth, not just the follow-ups.
+   *
+   * The distinction matters for ranking rather than for display. A clinician somebody can see
+   * without travelling is equally reachable from every suburb, so sorting them by the distance to
+   * rooms they do not need to visit measures the wrong thing: Dr Saxena sat 3rd on stated
+   * preference and fell to 13th the moment a Blacktown origin was given, which put him behind a
+   * "show the other eleven" fold for a service that is available anywhere in the state.
+   *
+   * Deliberately not inferred from `practicalSignals`. Several clinicians offer telehealth
+   * FOLLOW-UPS and still need a first visit in person, and reading a display string to decide a
+   * ranking rule would collapse that difference silently.
+   */
+  telehealthFirstAppointment?: true;
+  /**
    * The clinician says they have completed the training NSW requires to carry ADHD care without
    * ongoing psychiatrist involvement.
    *
@@ -524,6 +538,7 @@ export const clinicians: Clinician[] = [
     nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
+    telehealthFirstAppointment: true,
     keywords: ["adhd", "assessment", "structured", "thorough", "measured", "baseline", "bloods", "pathology", "physical", "heart", "cardiac", "cardiovascular", "blood pressure", "metabolic", "sleep", "titration", "dose", "medication", "stimulant", "monitoring", "review", "telehealth", "remote", "online", "substance", "drinking", "alcohol", "cannabis", "history", "non-stimulant", "shared care", "hindi", "adult", "founder"],
     realPerson: true,
     founderInterest:
@@ -606,12 +621,14 @@ export function rankCliniciansNear(query: string, origin: SuburbPoint | null): C
   };
 
   return [...byFit].sort((a, b) => {
-    const fitGap = Math.abs(fitRank.get(a.id)! - fitRank.get(b.id)!);
-    // Outside the band, fit wins outright.
-    if (fitGap > COMPARABLE_FIT_BAND) return fitRank.get(a.id)! - fitRank.get(b.id)!;
+    const byPreference = fitRank.get(a.id)! - fitRank.get(b.id)!;
+    // Somebody you do not travel to is equally near from everywhere, so distance has nothing to
+    // say about them and their stated-preference position stands.
+    if (a.telehealthFirstAppointment || b.telehealthFirstAppointment) return byPreference;
+    if (Math.abs(byPreference) > COMPARABLE_FIT_BAND) return byPreference;
     const da = km(a);
     const db = km(b);
-    if (da === null || db === null) return fitRank.get(a.id)! - fitRank.get(b.id)!;
+    if (da === null || db === null) return byPreference;
     return da - db;
   });
 }
@@ -626,6 +643,8 @@ const COMPARABLE_FIT_BAND = 4;
 
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
 export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {
+  // A kilometre figure beside somebody you never travel to is a number that answers no question.
+  if (clinician.telehealthFirstAppointment) return "by telehealth, anywhere in NSW";
   if (!origin) return null;
   const point = resolvePlace(clinician.suburb);
   if (!point) return null;

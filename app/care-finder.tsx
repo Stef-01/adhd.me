@@ -24,6 +24,7 @@ import {
   type Clinician,
 } from "@/demo/clinicians";
 import { coveredSuburbs, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
+import { CoverageMap } from "./coverage-map";
 import {
   SPEECH_DISCLOSURE,
   SPEECH_ERROR_COPY,
@@ -691,6 +692,14 @@ export function CareFinder() {
                       ? `${shown.length} of ${matches.length}, nearest to ${origin.suburb} first.`
                       : "We do not cover that one yet, so these are ranked on what you asked for."}
                 </p>
+
+                {/* Only when the answer is no. "We do not cover that one" raises the question of
+                    what IS covered, and this answers it in place instead of leaving somebody to
+                    guess which suburbs to try. In every other case it would be a block of screen
+                    saying something the reader did not ask. */}
+                {place.trim() !== "" && !origin && (
+                  <CoverageMap highlight={null} />
+                )}
               </div>
             </div>
 
