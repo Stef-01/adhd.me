@@ -4,7 +4,7 @@ ADHD assessment you can actually reach. A patient-facing finder that matches peo
 ADHD assessment — on care area, language and whether the practice is one they can physically get to
 — plus a practice-facing console for the demand-matching and shared-care side of it.
 
-Co-founders: **Krish Ganesh** and **Dr Anubhav Saxena**.
+Co-founders: **Vikram Ganesh**, **Dr Anubhav Saxena** and **Stefan Thottunkal**.
 
 ## Provenance
 

@@ -3693,20 +3693,28 @@ textarea:focus-visible {
    Minimalist: paper ground, one sage accent, Newsreader display, generous air,
    three disciplined display tiers. Extends DESIGN.md rather than inventing anew.
    =========================================================================== */
+/* THE LANDING'S PALETTE IS SCOPED TO `.story` AND NO LONGER INHERITS `--accent`.
+   The rest of the tree stays amber (`:root --accent: #8A5A16`); this one page carries the deep
+   rose the founders asked for after the Meherr build. Scoping it rather than moving `:root` is
+   deliberate — /finder, /practices and /clinicians are a different audience with their own
+   contrast budget, and a global hue swap would silently re-rate every one of them.
+
+   CONTRAST, MEASURED, NOT ASSUMED. #8b263e is 7.75:1 as text on --s-paper and 8.58:1 under white,
+   so it works as a colour and as a ground; #e0aeba is the focus ring only, never text. */
 .story {
   --s-paper: #f7f3ea;
   --s-paper-2: #f1ece1;
   --s-ink: #1f221c;
   --s-muted: #63665d;
-  --s-accent: var(--accent);
-  --s-accent-soft: var(--accent-soft);
-  --s-accent-mid: var(--accent-mid);
+  --s-accent: #8b263e;
+  --s-accent-soft: #f3e2e6;
+  --s-accent-mid: #e0aeba;
   --s-line: #e0ddd2;
-  /* The one dark beat on the page. */
-  --s-dark: #24251d;
+  /* The one dark beat on the page. Olive-black, not neutral: the paper is warm. */
+  --s-dark: #292800;
   --community-ink: #1f221c;
   --community-muted: #63665d;
-  --community-accent: var(--accent);
+  --community-accent: #8b263e;
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
@@ -3875,84 +3883,190 @@ textarea:focus-visible {
 }
 .story-prose p:last-child { margin-bottom: 0; }
 
-/* Split chapters (02, 03) ------------------------------------------------- */
+/* THE PAGE IS NOW A STORYBOOK WITH SEVEN BEATS, NOT FIVE STACKED BANDS.
+   Beat rhythm, in order: a two-column hero, an opening chapter set wide, a split with a stat
+   rail, a split reversed against a pull-line, one dark band, the pillars, the founders, the
+   register. Every chapter is separated by a hairline and clamp(88px, 11vw, 168px) of air rather
+   than by a background change, so the paper runs unbroken until the one dark beat — which is the
+   only place on the page that inverts, and therefore the only place the eye is forced to stop. */
 
-/* Stat rail (no boxes), numerals sit below the heading tier --------------- */
-
-/* Conviction pull-line (03) ---------------------------------------------- */
-
-/* Through-line (dark moment) --------------------------------------------- */
-/* Tulip Bloom on Deep: 4.6:1, AA at this display size */
-
-/* ADHD.ME pillars (vertical story beats, not a 3-up card row) -------------- */
-/* Co-founder section: one split, photo cut-out + name + NOURISH link ------- */
-/* The founder pair. Set typographically: no photograph of either founder exists in this tree,
-   and a monogram is an honest treatment rather than a slot waiting for one. */
-
-/* The hero is one column and starts near the top. Section 14 caps hero top padding at 96px;
-   88 plus the 66px header is the whole distance before the first word. */
+/* Hero. Copy left, the coverage diagram right, both centred in a full-viewport band. ------- */
+.story-hero { position: relative; overflow: hidden; }
+.story-hero-grid {
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  align-items: center;
+  gap: 32px;
+  min-height: calc(100dvh - 66px);
+  padding-block: 24px 48px;
+}
 .story-hero-copy {
-  padding-block: 88px 0;
+  align-self: center;
   max-width: none;
+  padding-block: 0;
 }
 .story-hero-copy h1 {
-  margin: 20px 0 0;
-  max-width: 16ch;
+  margin: 22px 0 0;
+  max-width: 15.5ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(40px, 6vw, 84px);
+  font-size: clamp(42px, 5vw, 78px);
   font-weight: 430;
-  line-height: 1.02;
+  line-height: 1;
   letter-spacing: -0.045em;
   text-wrap: balance;
 }
 .story-hero-sub {
-  max-width: 42ch;
-  margin: 26px 0 0;
+  max-width: 34ch;
+  margin: 30px 0 0;
   color: var(--s-muted);
-  font-size: clamp(16px, 1.3vw, 19px);
-  line-height: 1.6;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.65;
+  text-wrap: pretty;
 }
-.story-hero-actions { margin-top: 40px; }
-.story-hero { min-height: 78dvh; }
+.story-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 38px; }
 
-/* The change. One statement, one qualification, a lot of air around both. */
-.story-change { padding-block: clamp(96px, 12vw, 168px); border-top: 1px solid var(--s-line); }
-.story-change-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  gap: clamp(32px, 6vw, 96px);
-  align-items: start;
-}
-.story-note { color: var(--s-muted); font-size: 14.5px; line-height: 1.65; }
-
-/* How it works. Numbered, hairline-separated, no cards. */
-.story-steps-section { padding-block: clamp(96px, 12vw, 168px); border-top: 1px solid var(--s-line); }
-.story-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 clamp(28px, 5vw, 72px);
-  margin: 56px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.story-steps li { padding-top: 26px; border-top: 1px solid var(--s-line); }
-.story-step-n {
-  display: block;
-  margin-bottom: 20px;
-  color: var(--s-accent);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-}
-.story-steps h3 {
+/* THE HERO'S RIGHT COLUMN IS THE COVERAGE DIAGRAM, AND THAT IS THE WHOLE ARGUMENT FOR IT.
+   The layout wants a figure at this size; the honest candidates were a photograph of a founder
+   (there is one, and it belongs beside his name, not above the product claim), stock photography
+   of a consulting room (implies a practice this product does not run) or a generated face (a
+   person who does not exist, on a page about real clinicians). The diagram answers the question
+   the reader actually has at that moment — is my suburb in this? — and it cannot drift, because
+   it is drawn from the same gazetteer the matcher uses. */
+.story-portrait {
+  display: flex;
+  place-self: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   margin: 0;
+  position: relative;
+}
+.story-portrait > * { width: 100%; }
+/* In the hero the diagram is the FIGURE, not a footnote under a section: it loses the rule and
+   the top padding it wears in-body, stacks instead of sitting in two columns, and the plot is
+   given real size. At the in-body 168px the dot cluster reads as dust from across a room. */
+.story-portrait .coverage-map {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 26px;
+  max-width: 420px;
+  margin: 0 auto;
+  padding-top: 0;
+  border-top: 0;
+}
+.story-portrait .coverage-map svg { max-width: 320px; }
+.story-portrait .coverage-map figcaption { justify-items: center; text-align: center; }
+
+/* Chapters ---------------------------------------------------------------- */
+.story-chapter-open { border-top: 0; padding-top: clamp(40px, 5vw, 72px); }
+.story-heading-wide { max-width: 20ch; }
+.story-prose-lead { max-width: 720px; }
+/* The first paragraph of an opening chapter carries ink weight; the rest recede to --s-muted.
+   One tier of contrast inside a single block is what makes it read as a lead rather than a wall. */
+.story-prose-lead p:first-child { color: var(--s-ink); }
+.story-note { color: var(--s-muted); font-size: 14.5px; line-height: 1.65; }
+.story-eyebrow-block { margin-bottom: 18px; }
+
+/* Split chapters: heading + prose on one side, a stat rail or a pull-line on the other. ---- */
+.story-split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 96px);
+}
+.story-split-reverse .story-split-lead { order: 2; }
+.story-split-reverse .story-pull { order: 1; }
+
+/* Stat rail. No boxes and no cards: hairlines only, numerals set in the display face one tier
+   below the chapter heading, so the figures read as part of the prose rather than as a widget. */
+.story-stats dl { display: grid; gap: 0; margin: 0; }
+.story-stats div { padding: 22px 0; border-top: 1px solid var(--s-line); }
+.story-stats div:last-child { border-bottom: 1px solid var(--s-line); }
+.story-stats dt {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(20px, 1.9vw, 26px);
-  font-weight: 460;
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 430;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--s-ink);
+}
+.story-stats dt.story-stat-accent { color: var(--s-accent); font-size: clamp(22px, 2vw, 29px); }
+.story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 14.5px; line-height: 1.5; }
+/* The figures above are indicative and unsourced (see src/compliance/landing-copy.ts). The note
+   is not fine print hidden at the foot of the page — it sits under the rail it qualifies. */
+.story-stats-note { max-width: 40ch; margin: 18px 0 0; color: var(--s-muted); font-size: 12.5px; line-height: 1.6; }
+
+/* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
+.story-pull p {
+  max-width: 16ch;
+  margin: 0;
+  padding-bottom: 4px;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-style: italic;
+  font-weight: 430;
+  line-height: 1.14;
   letter-spacing: -0.02em;
   color: var(--s-ink);
 }
-.story-steps p { margin: 10px 0 0; color: var(--s-muted); font-size: 15px; line-height: 1.6; }
+
+/* The one dark beat. The accent cannot carry text here (2.4:1 on --s-dark), so the emphasis
+   inside the line lifts to the palette's own tint at 5.2:1 rather than being invented. */
+.story-throughline {
+  padding-block: clamp(104px, 13vw, 200px);
+  background: var(--s-dark);
+  color: #f4f1e8;
+}
+.story-throughline-line {
+  max-width: 20ch;
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(34px, 5.2vw, 74px);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.story-throughline-line em { color: #e0aeba; font-style: italic; }
+.story-throughline-sub { margin-top: 40px; }
+.story-throughline-sub p {
+  max-width: 54ch;
+  margin: 0;
+  color: #c3c4ba;
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.7;
+}
+
+/* Pillars. A hairline-ruled list where the title and the body sit on one baseline, not a 3-up
+   card row: three cards would give equal weight to three things read in sequence. */
+.story-pillars {
+  margin: 60px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--s-line);
+  list-style: none;
+}
+.story-pillars li {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: baseline;
+  gap: clamp(20px, 5vw, 72px);
+  padding: 34px 0;
+  border-bottom: 1px solid var(--s-line);
+}
+.story-pillars h3 {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 460;
+  letter-spacing: -0.025em;
+}
+.story-pillars p {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--s-muted);
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.65;
+}
 
 /* Register ---------------------------------------------------------------- */
 .story-register {
@@ -3981,11 +4095,11 @@ textarea:focus-visible {
 .story .community-interest-form { border-color: #3a3325; }
 .story .community-interest-form input:focus-visible {
   border-color: var(--s-accent);
-  outline-color: var(--accent-mid);
+  outline-color: var(--s-accent-mid);
 }
 .story .community-interest-options input:checked + span {
   border-color: var(--s-accent);
-  background: var(--accent-soft);
+  background: #fff;
 }
 .story .community-interest-options input:focus-visible + span { outline-color: var(--s-accent-mid); }
 .story .community-interest-form > button:hover,
@@ -4023,10 +4137,26 @@ textarea:focus-visible {
 /* Tablet ------------------------------------------------------------------ */
 @media (max-width: 900px) {
   .story-wrap { width: min(100% - 44px, 1280px); }
+  /* The hero stops being a viewport-height band on a phone: `min-height` plus a stacked figure
+     is how a hero becomes two screens of scrolling before the first sentence. */
+  .story-hero-grid {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 12px;
+    min-height: 0;
+    padding-top: 44px;
+    padding-bottom: 0;
+  }
   .story-hero-copy { padding-bottom: 0; order: 1; }
   .story-hero-copy h1 { max-width: none; }
   .story-hero-sub { max-width: 40ch; }
-  .story-founders { grid-template-columns: 1fr; gap: 0; }
+  .story-portrait { order: 2; justify-self: center; max-width: 380px; margin-top: 20px; }
+  .story-split { grid-template-columns: 1fr; align-items: start; gap: 40px; }
+  .story-split-reverse .story-split-lead { order: 1; }
+  .story-split-reverse .story-pull { order: 2; }
+  .story-pull p { max-width: 24ch; }
+  .story-pillars li { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
+  .story-founders { grid-template-columns: 1fr; gap: 56px; }
   .story-register-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
@@ -4213,7 +4343,9 @@ textarea:focus-visible {
 /* These are somebody else's marks, drawn dark-on-transparent for a light page, so on this ground
    they were nearly invisible. They sit on a light chip rather than being filtered: inverting a
    third-party logo changes its colours, which is both worse-looking and not ours to do. */
-.story-affiliations-row a:hover,
+/* `.story-affiliations-row a:hover,` used to dangle here with no declarations of its own, which
+   silently made every `.coverage-map` rule below apply to a hover state on a row that no longer
+   exists in the tree. Removed rather than completed: the selector has no markup to match. */
 
 /* The coverage diagram. Drawn from the gazetteer, so it cannot drift from the matcher. */
 .coverage-map {
@@ -4261,99 +4393,117 @@ textarea:focus-visible {
 .results-head .coverage-count { color: var(--accent); font-size: 11px; }
 
 /* FOUNDERS ------------------------------------------------------------------
-   Built mobile-first. Each founder is a card: head (portrait or monogram, name, role), one line
-   of remit, then their affiliations underneath at a size that is actually readable on a phone.
-   The affiliations are the point of this block, so they get the room rather than the leftovers. */
+   Three cards, each a cut-out portrait on bare paper with the name, the role and the
+   affiliations centred beneath it. No frame, no border, no rounded corner and no shadow: the
+   photograph is a cut-out with a transparent ground, so it sits ON the paper rather than in a
+   box, and a box would put a card treatment on a page that has none anywhere else.
+
+   ONLY ONE FOUNDER HAS A PHOTOGRAPH AND THE OTHER TWO ARE NOT WAITING FOR ONE. Their plates are
+   monograms at the same aspect and the same optical weight — an honest treatment, not an empty
+   slot, and nothing in this tree generates a face for a real person. Drop a cut-out into
+   public/, set `portrait` in app/story-landing.tsx, and the plate swaps without a layout change. */
 .story-founders {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
-  margin: 36px 0 0;
+  gap: 56px;
+  margin: 60px 0 0;
   padding: 0;
   list-style: none;
 }
-.story-founders > li {
-  padding: 26px 0;
-  border-top: 1px solid var(--s-line);
+.story-founders > li { display: grid; justify-items: center; }
+
+/* The plate. A fixed 3:4 frame so three cards share one baseline regardless of what fills them. */
+.story-founder-photo,
+.story-founder-monogram {
+  width: min(100%, 260px);
+  aspect-ratio: 3 / 4;
 }
-.story-founder-head { display: flex; align-items: center; gap: 16px; }
-.story-founder-monogram,
-.story-founder-photo {
-  flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
-  border-radius: 3px;
-}
+.story-founder-photo { height: auto; object-fit: contain; object-position: center bottom; }
+/* THE MONOGRAM IS NOT A PLACEHOLDER AND MUST NOT LOOK LIKE ONE. A filled rectangle with faint
+   initials inside it is exactly what a broken image looks like, and the first draft of this rule
+   was one: #e0ddd2 initials on an #f1ece1 fill, which read as "photo still loading" beside a real
+   photograph. So the fill is gone. The initials sit on the same bare paper the cut-out does, at a
+   weight that is clearly deliberate, and the hairline underneath is what aligns the three plates
+   rather than the edge of a box. */
 .story-founder-monogram {
   display: grid;
-  place-items: center;
-  border: 1px solid var(--s-line);
-  background: var(--s-paper-2);
+  place-items: end center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--s-line);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 20px;
-  color: var(--s-ink);
+  font-size: clamp(56px, 7vw, 76px);
+  font-weight: 380;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  /* MEASURED, NOT PICKED. axe scans this element despite the aria-hidden, and it is large text,
+     so it owes 3:1. The first value here was --s-muted at opacity 0.42, which composites to
+     #b9b8af and lands at 1.79:1 — the monogram was quite literally too faint to see. #85867e is
+     3.32:1 on --s-paper, set as a flat colour rather than an opacity so the ratio is legible in
+     the source instead of being the product of two values in different rules. */
+  color: #85867e;
   user-select: none;
 }
-.story-founder-photo { object-fit: cover; object-position: center 20%; }
+/* The photograph gets the same baseline rule, so a mixed row reads as one row. */
+.story-founder-photo { padding-bottom: 14px; border-bottom: 1px solid var(--s-line); }
+
+.story-founder-id { display: grid; justify-items: center; gap: 4px; margin-top: 18px; text-align: center; }
 .story-founders strong {
-  display: block;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 21px;
+  font-size: 23px;
   font-weight: 480;
   letter-spacing: -0.02em;
   color: var(--s-ink);
 }
-.story-founder-role {
-  display: block;
-  margin-top: 2px;
-  color: var(--s-accent);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
+.story-founder-role { color: var(--s-muted); font-size: 13.5px; }
 .story-founder-remit {
+  max-width: 34ch;
   margin: 14px 0 0;
   color: var(--s-muted);
-  font-size: 15px;
+  font-size: 14.5px;
   line-height: 1.6;
+  text-align: center;
 }
 
-/* The affiliations. Chips rather than bare marks, so an image logo and a wordmark sit at the same
-   visual weight and the row reads as one thing on a small screen. */
+/* The affiliations. Bare marks on paper, divided by a hairline — the marks are the point, and a
+   chip around each one would compete with the portrait directly above it. A wordmark (for the
+   institutions whose logo is not ours to copy) is set at the same optical weight as a logo. */
 .story-affiliations {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 16px 0 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 18px 0 0;
   padding: 0;
   list-style: none;
 }
+.story-affiliations li + li a { padding-left: 20px; border-left: 1px solid var(--s-line); }
 .story-affiliations a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 8px 13px;
-  border: 1px solid var(--s-line);
-  border-radius: 6px;
-  background: var(--s-paper-2);
-  color: var(--s-ink);
+  padding-right: 20px;
+  color: var(--s-muted);
   font-size: 13px;
   font-weight: 560;
-  letter-spacing: -0.005em;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  transition: border-color 0.18s ease, background-color 0.18s ease;
+  transition: color 0.2s ease;
 }
+.story-affiliations li:last-child a { padding-right: 0; }
 .story-affiliations a:hover,
-.story-affiliations a:focus-visible { border-color: var(--s-accent); background: var(--s-paper); }
-/* Sized for legibility rather than tidiness: the Harvard lockup is a two-part mark and is
-   unreadable below about 26px, which defeats the point of showing it. */
-.story-affiliations img { width: auto; height: 26px; }
-.story-affiliations a { min-height: 48px; }
+.story-affiliations a:focus-visible { color: var(--s-ink); outline-offset: 4px; }
+/* THE OPACITY IS ON THE MARK, NOT ON THE LINK. It used to sit on the `a`, which was fine for the
+   two founders whose affiliation is a logo and wrong for the three whose affiliation is a
+   wordmark: --s-muted at 0.85 composites to #797b72 and reads 3.87:1 at this size, under the
+   4.5:1 that body-sized text owes. Text now runs at the token's own 5.28:1; only the images are
+   softened, and an image has no contrast requirement to fail. */
+.story-affiliations img { width: auto; height: 22px; opacity: 0.85; transition: opacity 0.2s ease; }
+.story-affiliations a:hover img,
+.story-affiliations a:focus-visible img { opacity: 1; }
 
 @media (min-width: 900px) {
-  .story-founders { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; }
-  .story-founders > li { padding: 28px 0 0; }
+  .story-founders { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(32px, 4vw, 64px); }
 }
 
 /* The two one-line notes that replaced paragraphs of hedging. */

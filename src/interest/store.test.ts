@@ -50,7 +50,7 @@ describe("community interest store", () => {
   it("exports a spreadsheet-ready CSV", () => {
     const filePath = tempFile();
     saveInterestSignup({
-      name: "Krish",
+      name: "Vikram",
       email: "krish@example.com",
       interests: ["I want to learn more about ADHD assessment", "I want to bring a session to my community"],
     }, { filePath, now: new Date("2026-08-10T01:00:00.000Z") });
