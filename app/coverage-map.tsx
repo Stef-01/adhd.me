@@ -51,9 +51,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
   return (
     <figure className="coverage-map">
       <svg viewBox="0 0 100 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
-        <title id="coverage-map-title">
-          The {SUBURBS.length} Western Sydney suburbs ADHD.ME currently covers
-        </title>
+        <title id="coverage-map-title">{`The ${SUBURBS.length} Western Sydney suburbs ADHD.ME currently covers`}</title>
         {points.map((p) => {
           const isHere = marked === p.suburb.toLowerCase();
           return (
