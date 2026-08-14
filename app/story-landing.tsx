@@ -267,8 +267,8 @@ export function StoryLanding() {
               and follow-up start with one clinician near you — not at the back of a referral queue.
             </p>
             <p className="story-note">
-              Every clinician here is a GP who has completed the training the new rules require —
-              trained to assess and manage ADHD to Australia's national clinical guideline.
+              Every clinician here is a GP with dedicated training in ADHD assessment and care,
+              working to Australia's national clinical guideline.
             </p>
           </Reveal>
         </div>
