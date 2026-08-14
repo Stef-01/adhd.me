@@ -7,71 +7,33 @@
    they are darkened rather than re-hued so nothing else has to move.
    The accent is amber. It replaced Crushed Rose, which replaced sage before it, and the
    token is finally NAMED for its job rather than for a colour it used to be. */
+/* THE PALETTE. Light paper, warm-olive neutrals, one amber accent.
+   #8A5A16 measures 5.66:1 as text on paper and 5.91:1 under white, so it works as a colour and
+   as a ground. Change either here and every surface follows. */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Ink and grounds */
-  --ink: #f1efe8;
-  --muted: #a6a49b;
-  /* Has to clear AA at 11px, the smallest size this token is used at. 5.4:1 on --paper. */
-  --faint: #9b998f;
-  --paper: #15160f;
-  --stone: #1e1f18;
-  --line: #33352c;
+  --ink: #191a17;
+  --muted: #6e706a;
+  /* Has to clear AA at 11px, the smallest size this token is used at. 5.1:1 on --paper. */
+  --faint: #6b6c67;
+  --paper: #fbfaf7;
+  --stone: #eeece5;
+  --line: #dfddd6;
 
-  /* Accent. 8.3:1 on --paper, so it carries text as well as marks. */
-  --accent: #E0A458;
-  /* The label on an accent GROUND. White measures 2.2:1 on amber and is never correct here. */
-  --on-accent: #17150d;
-  --accent-soft: #241d12;
-  --accent-mid: #EFC489;
-  --accent-tint: #F5DDB8;
+  --accent: #8A5A16;
+  --on-accent: #ffffff;
+  --accent-soft: #f7efe3;
+  --accent-mid: #B98436;
+  --accent-tint: #E9D6B4;
 
-  /* The primary button: a light pill with a dark label. */
-  --ground: #f1efe8;
-  --on-ground: #15160f;
-  /* Accent on the one light band (/practices hero), where the dark amber reads instead. */
-  --on-band: #6E4A12;
-
-  /* Tailwind's stone scale, redefined. /practices, /privacy and /demo are built from these
-     utilities rather than the tokens above, and Tailwind v4 compiles every colour utility to
-     var(--color-*), so the ramp is inverted here once instead of with a dark: variant on each
-     of the 91 usages. */
-  --color-white: #15160f;
-  --color-black: #f4f1e9;
-  --color-stone-50: #1a1b14;
-  --color-stone-100: #22231b;
-  --color-stone-200: #2c2d24;
-  --color-stone-300: #3a3b31;
-  --color-stone-400: #6f7167;
-  --color-stone-500: #9b998f;
-  --color-stone-600: #b4b2a9;
-  --color-stone-700: #d3d0c7;
-  --color-stone-800: #e6e3da;
-  --color-stone-900: #f1efe8;
-  --color-stone-950: #f8f6ef;
-
-  /* Semantic families the console uses (amber for notices, emerald for confirmations, red for
-     refusals). Inverted on the same principle as the stone ramp: a 50 is a tinted GROUND and a
-     700-900 is TEXT on it, so on a dark page the ground has to become dark and the text light.
-     Left un-inverted, `text-emerald-800` printed #006045 on #1a1b14 at 2.27:1. */
-  --color-amber-50: #241d12;
-  --color-amber-100: #2e2416;
-  --color-amber-200: #3d3120;
-  --color-amber-500: #E0A458;
-  --color-amber-700: #EFC489;
-  --color-amber-900: #F5DDB8;
-
-  --color-emerald-50: #14211a;
-  --color-emerald-200: #23392e;
-  --color-emerald-600: #3f9d78;
-  --color-emerald-700: #7fceac;
-  --color-emerald-800: #9adcbe;
-  --color-emerald-900: #b6e8d1;
-
-  --color-red-600: #b4463c;
-  --color-red-700: #f0a49c;
+  /* The primary button: dark pill, light label. */
+  --ground: #191a17;
+  --on-ground: #ffffff;
+  /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
+  --on-band: #E0A458;
 }
+
 
 
 * {
@@ -874,13 +836,18 @@ textarea:focus-visible {
   letter-spacing: -0.015em;
 }
 
+/* Two lines, not one clipped one. The signals on this line are chosen to be the ones that are NOT
+   shared across the shortlist, so clipping to a single line threw away the differing half and
+   printed the same string on three rows: the exact confusion the selection exists to prevent. */
 .clinician-row small {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.45;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .clinician-row .row-availability {
@@ -2200,14 +2167,15 @@ textarea:focus-visible {
 
 /* Clinician pathway v2 — quiet, prompt-led and intentionally single-column. */
 .clinician-v2 {
-  --cv2-ink: #f1efe8;
-  --cv2-muted: #a6a49b;
+  --cv2-ink: #1d2019;
+  /* 4.70:1 on the tinted panels and 5.33:1 on the ground, at the 10px this is used at. */
+  --cv2-muted: #676963;
+  /* Muted text where a cv2 panel is dark rather than tinted. */
   --cv2-on-dark-muted: #c9c6be;
   --cv2-soft: var(--accent-soft);
   --cv2-accent: var(--accent);
-  /* The ground of the panels that carry an inverted label. Lifted off --paper so a panel still
-     reads as a panel rather than dissolving into the page. */
-  --cv2-ground: #24251d;
+  /* The ground of the dark panels that carry a white label. Stays dark in a light theme. */
+  --cv2-ground: #1d2019;
   background: var(--paper);
 }
 
@@ -3726,19 +3694,18 @@ textarea:focus-visible {
    three disciplined display tiers. Extends DESIGN.md rather than inventing anew.
    =========================================================================== */
 .story {
-  --s-paper: #14150f;
-  --s-paper-2: #1d1e17;
-  --s-ink: #f4f1e9;
-  --s-muted: #a8a69d;
+  --s-paper: #f7f3ea;
+  --s-paper-2: #f1ece1;
+  --s-ink: #1f221c;
+  --s-muted: #63665d;
   --s-accent: var(--accent);
   --s-accent-soft: var(--accent-soft);
   --s-accent-mid: var(--accent-mid);
-  --s-line: #32342b;
-  /* The throughline is a BEAT, so on a dark page it is the RAISED surface rather than a darker
-     one. A darker beat on a dark ground is not a beat, it is a hole. */
-  --s-dark: #262720;
-  --community-ink: #f4f1e9;
-  --community-muted: #a8a69d;
+  --s-line: #e0ddd2;
+  /* The one dark beat on the page. */
+  --s-dark: #24251d;
+  --community-ink: #1f221c;
+  --community-muted: #63665d;
   --community-accent: var(--accent);
   min-height: 100dvh;
   color: var(--s-ink);
@@ -3791,9 +3758,12 @@ textarea:focus-visible {
   transition: background 0.2s ease, transform 0.15s ease;
   animation: story-demo-nudge 5s ease-in-out infinite;
 }
+/* Hover DARKENS. It used to reach for --accent-soft, which was a dark brown while the palette
+   was dark and became a near-white cream when the palette went back to light, putting white text
+   on cream and erasing the only header button on the site. */
 .story-demo-link:hover,
 .story-demo-link:focus-visible {
-  background: var(--accent-soft);
+  background: color-mix(in srgb, var(--s-accent) 82%, #000);
   animation-play-state: paused;
 }
 .story-demo-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
@@ -3918,59 +3888,6 @@ textarea:focus-visible {
 /* Co-founder section: one split, photo cut-out + name + NOURISH link ------- */
 /* The founder pair. Set typographically: no photograph of either founder exists in this tree,
    and a monogram is an honest treatment rather than a slot waiting for one. */
-.story-founders {
-  display: grid;
-  /* Three founders. Stacks to one column below 900px with the other single-column rules. */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 40px;
-  margin: 44px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.story-founders li {
-  display: grid;
-  grid-template-columns: 62px 1fr;
-  gap: 20px;
-  align-items: start;
-  padding: 30px 0;
-  border-top: 1px solid var(--s-line);
-}
-.story-founder-monogram {
-  display: grid;
-  place-items: center;
-  width: 62px;
-  height: 62px;
-  border: 1px solid var(--s-line);
-  background: var(--s-paper-2);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 22px;
-  letter-spacing: 0.02em;
-  color: var(--s-ink);
-  user-select: none;
-}
-.story-founders strong {
-  display: block;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 23px;
-  font-weight: 480;
-  letter-spacing: -0.02em;
-  color: var(--s-ink);
-}
-.story-founder-role {
-  display: block;
-  margin-top: 3px;
-  color: var(--s-accent);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.story-founders p {
-  margin: 12px 0 0;
-  color: var(--s-muted);
-  font-size: 15.5px;
-  line-height: 1.62;
-}
 
 /* The hero is one column and starts near the top. Section 14 caps hero top padding at 96px;
    88 plus the 66px header is the whole distance before the first word. */
@@ -4148,92 +4065,6 @@ textarea:focus-visible {
 
    NO PURE BLACK, NO PURE WHITE (Section 8.B). #15160f and #f4f1e9 respectively.
 */
-/* ==========================================================================
-   THE THEME
-   ==========================================================================
-
-   Dark, and only dark. This was a light site with a dark variant behind
-   `prefers-color-scheme`; the variant is now the product. Two consequences worth
-   stating because they are easy to undo by accident:
-
-   1. `color-scheme: dark` is declared on :root, so native controls, scrollbars and
-      form widgets are painted dark by the browser. Without it the consent checkbox
-      and the scrollbar come back light.
-   2. There is no light branch left to keep in sync. A value hardcoded in a rule is
-      now wrong in exactly one theme instead of two, which is a smaller trap but the
-      same one: colours belong in the tokens below.
-*/
-/* THE OTHER HALF OF THE THEME, AND THE REASON IT IS HERE RATHER THAN IN THE MARKUP.
-   /practices, /privacy, /privacy/automated-decisions and /demo are built from Tailwind's
-   `stone` colour utilities, 91 of them, while every other surface reads the tokens above. That
-   is the same two-strategy split that left the body cream (see app/layout.tsx) and it is why
-   those four pages stayed light while the rest of the site inverted, printing stone-900 text on
-   a near-black ground at 1.04:1.
-   Tailwind v4 compiles every colour utility to `var(--color-*)`, so redefining the scale flips
-   all 91 at once with no markup churn and no `dark:` variant on every element — which would
-   have entrenched the split rather than closed it. The ramp is inverted around its midpoint and
-   shifted to the warm-olive hue the rest of the palette uses, so `stone` here means this
-   product's neutral rather than Tailwind's. */
-
-
-/* Buttons and inputs that painted a light ground directly. */
-/* Hovers darken from a light pill in dark mode instead of lightening from a dark one. */
-.primary-button:hover:not(:disabled) { background: #ded9ce; }
-.primary-button:disabled { color: #74736c; background: #26271f; }
-.mic-button:hover { background: #ded9ce; }
-.mic-button.recording { background: var(--accent); color: var(--on-accent); }
-.demo-nav-next:hover { background: #ded9ce; }
-.type-content textarea::placeholder { color: #8b8981; }
-.patient-v2 .type-content textarea { background: #1b1c15; }
-.demo-nav-next span { color: #8b8981; }
-.founder-disclosure { background: #23241c; }
-.clinician-row:hover { background: #23241c; }
-.profile-content section li { color: #b4b2a9; }
-.tomorrow-panel { background: #1a1b14; }
-.clinician-shell { border-color: #33352c; }
-
-/* The GP walkthrough. Same three roles, inverted. */
-.clinician-v2 {
-  /* merged above */
-}
-.cv2-progress button::after { background: #33352c; }
-/* The unchecked box painted literal `white`, which reads as a solid block on a dark page.
-   Its CHECKED state already uses --cv2-accent and needs nothing. */
-.cv2-checkbox { border-color: #4a4c42; background: #24251d; }
-.cv2-coming-grid button { color: #a6a49b; background: #1b1c15; }
-.cv2-coming-grid button > small { color: #85837b; }
-.cv2-note p { color: #b4b2a9; }
-/* A dark primary button on a dark page needs its lift to go up, not further down. */
-.cv2-action > button:hover { background: #efece4; color: #15160f; }
-/* The learning card's button is the inverse case: it painted literal `white` on the dark card,
-   so in dark mode it takes the light surface explicitly and its label goes dark with it.
-   Its rose hover already works in both themes and is left alone. */
-.cv2-learning-card > button { background: #efece4; color: #15160f; }
-
-/* The founder story. */
-.story {
-  /* merged above */
-}
-/* Tulip Bloom already; on the raised beat it reads at 4.8:1. */
-/* The primary link inverts: light pill, dark label, so it still reads as the one action. */
-.story-primary-link { color: #14150f; background: #f4f1e9; }
-.story-primary-link:hover { background: #e6e2d8; }
-.story-demo-link { color: var(--on-accent); }
-.story-demo-link:focus-visible { background: var(--accent-mid); color: var(--on-accent); }
-
-/* The interest form. */
-.community-interest-form { background: #1b1c15; }
-.community-interest-form input[type="email"],
-.community-interest-form input[type="text"],
-.community-interest-options label > span { background: #24251d; }
-.community-interest-options label > span { border-color: #4a4c42; }
-.community-interest-form > button { color: #14150f; background: #f4f1e9; }
-.community-interest-form > button:focus-visible { background: #e6e2d8; }
-.community-form-success { background: #1c2419; }
-.story .community-form-success { border-color: #3a3325; }
-.story .community-interest-form { border-color: #3a3325; }
-.story .community-interest-options input:checked + span { background: var(--accent-soft); }
-
 /* Clinician onboarding ------------------------------------------------------
    One page, four groups, no wizard. See the note in app/clinicians/join/join-form.tsx. */
 .join-page { min-height: 100dvh; padding: 0 24px 96px; background: var(--paper); }
@@ -4292,11 +4123,14 @@ textarea:focus-visible {
 /* Checkboxes are a two-column list rather than a grid of cards: seventeen care areas as cards
    would be a wall, and the question is only "which of these". */
 .join-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin-top: 18px; }
-.join-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; }
-.join-check input { width: 18px; height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
-.join-check > span { color: var(--muted); font-size: 14px; font-weight: 400; line-height: 1.45; }
+/* Qualified with .join-form deliberately. `.join-form label` is 0,1,1 and a bare `.join-check` is
+   0,1,0, so the generic block rule above won every checkbox on the page: the box stacked ABOVE its
+   own label and the form ran to about 4200px on a phone. */
+.join-form .join-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; min-height: 30px; }
+.join-form .join-check input { width: 18px; height: 18px; margin: 1px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
+.join-form .join-check > span { display: inline; margin-bottom: 0; color: var(--muted); font-size: 14px; font-weight: 400; line-height: 1.45; }
+.join-form .join-declaration > span { color: var(--ink); }
 .join-declaration { margin-top: 18px; }
-.join-declaration > span { color: var(--ink); }
 
 .join-form > button {
   justify-self: start;
@@ -4374,39 +4208,12 @@ textarea:focus-visible {
 .results-head .place-field { margin-top: 22px; }
 
 /* Stefan's portrait, sized to the monogram box so a mixed row keeps one rhythm. */
-.story-founder-photo {
-  width: 62px;
-  height: 62px;
-  border-radius: 2px;
-  object-fit: cover;
-  object-position: center 22%;
-}
 
 /* Affiliations belong to one founder and are checkable, so they are links rather than claims. */
-.story-affiliations-row {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-  margin-top: 34px;
-  padding-top: 26px;
-  border-top: 1px solid var(--s-line);
-}
 /* These are somebody else's marks, drawn dark-on-transparent for a light page, so on this ground
    they were nearly invisible. They sit on a light chip rather than being filtered: inverting a
    third-party logo changes its colours, which is both worse-looking and not ours to do. */
-.story-affiliations-row a {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 6px;
-  background: #f4f1e9;
-  opacity: 0.9;
-  transition: opacity 0.2s ease;
-}
 .story-affiliations-row a:hover,
-.story-affiliations-row a:focus-visible { opacity: 1; outline-offset: 4px; }
-.story-affiliations-row img { width: auto; height: 24px; }
-.story-affiliations-row a:last-child img { height: 18px; }
 
 /* The coverage diagram. Drawn from the gazetteer, so it cannot drift from the matcher. */
 .coverage-map {
@@ -4452,3 +4259,185 @@ textarea:focus-visible {
 .results-head .coverage-map .coverage-names { font-size: 12.5px; }
 .results-head .coverage-dot { fill: var(--ink); }
 .results-head .coverage-count { color: var(--accent); font-size: 11px; }
+
+/* FOUNDERS ------------------------------------------------------------------
+   Built mobile-first. Each founder is a card: head (portrait or monogram, name, role), one line
+   of remit, then their affiliations underneath at a size that is actually readable on a phone.
+   The affiliations are the point of this block, so they get the room rather than the leftovers. */
+.story-founders {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 36px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.story-founders > li {
+  padding: 26px 0;
+  border-top: 1px solid var(--s-line);
+}
+.story-founder-head { display: flex; align-items: center; gap: 16px; }
+.story-founder-monogram,
+.story-founder-photo {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 3px;
+}
+.story-founder-monogram {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--s-line);
+  background: var(--s-paper-2);
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 20px;
+  color: var(--s-ink);
+  user-select: none;
+}
+.story-founder-photo { object-fit: cover; object-position: center 20%; }
+.story-founders strong {
+  display: block;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 21px;
+  font-weight: 480;
+  letter-spacing: -0.02em;
+  color: var(--s-ink);
+}
+.story-founder-role {
+  display: block;
+  margin-top: 2px;
+  color: var(--s-accent);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.story-founder-remit {
+  margin: 14px 0 0;
+  color: var(--s-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* The affiliations. Chips rather than bare marks, so an image logo and a wordmark sit at the same
+   visual weight and the row reads as one thing on a small screen. */
+.story-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.story-affiliations a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 13px;
+  border: 1px solid var(--s-line);
+  border-radius: 6px;
+  background: var(--s-paper-2);
+  color: var(--s-ink);
+  font-size: 13px;
+  font-weight: 560;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+.story-affiliations a:hover,
+.story-affiliations a:focus-visible { border-color: var(--s-accent); background: var(--s-paper); }
+/* Sized for legibility rather than tidiness: the Harvard lockup is a two-part mark and is
+   unreadable below about 26px, which defeats the point of showing it. */
+.story-affiliations img { width: auto; height: 26px; }
+.story-affiliations a { min-height: 48px; }
+
+@media (min-width: 900px) {
+  .story-founders { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; }
+  .story-founders > li { padding: 28px 0 0; }
+}
+
+/* The two one-line notes that replaced paragraphs of hedging. */
+.credential-line {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.disclosure-line {
+  margin: 6px 0 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* MOBILE TAP TARGETS ---------------------------------------------------------
+   A row of 17px text links is fine with a mouse and a coin-toss with a thumb. Every small
+   interactive element gets a 44px touch height without growing visually: the padding is vertical
+   only and the negative margin pulls the layout back, so the target grows and the rhythm does not.
+   Applied by CLASS rather than to every `a`, because body-copy links inside a paragraph must not
+   gain 44px of leading. */
+.text-action,
+.show-all,
+.refine-compact,
+.finder-home-link,
+.cv2-join-link,
+.join-back,
+.story-demo-link,
+.story-footer-links a,
+.wordmark,
+.story-wordmark,
+.story-footer-wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-block: 10px;
+  margin-block: -10px;
+}
+
+/* The finder's disclose-the-rest control is a real button, so it looks like one. */
+.show-all {
+  justify-content: center;
+  width: 100%;
+  margin: 4px 0 0;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 560;
+  cursor: pointer;
+}
+.show-all:hover { background: var(--stone); }
+
+@media (max-width: 720px) {
+  /* Height only, and never `display`. This rule previously set `display: inline-flex` on every
+     anchor inside a nav. Rules in this file are unlayered and Tailwind's utilities live in
+     @layer utilities, so unlayered wins whatever the specificity: it revived the three
+     `hidden sm:inline` links in the /practices header and pushed that page 63px wider than a
+     390px phone. Padding gives the same 44px target without touching the box type. */
+  nav a:not(.hidden) { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* The last four controls sitting between 40px and 42px. Each is a real button somebody taps with
+     a thumb, and each was short by a hair rather than by design. */
+  .patient-v2 .scenario-toggle,
+  .results-head .refine-compact,
+  .profile-header button { min-height: 44px; }
+}
+
+/* MOBILE COLLAPSE for the two grids added in the round-1 rebuild.
+   Both shipped without a small-screen rule, so at 390px the NSW section put a three-word heading
+   in a narrow column beside its own body text, and "How it works" squeezed three steps into three
+   columns of about 100px each. Section 4.7's rule is that every multi-column layout declares its
+   own fallback rather than assuming one. */
+@media (max-width: 760px) {
+  .story-change-grid { grid-template-columns: 1fr; gap: 18px; }
+  .story-steps { grid-template-columns: 1fr; gap: 0; margin-top: 34px; }
+  .story-steps li { padding: 22px 0; }
+  .story-step-n { margin-bottom: 12px; }
+  .story-hero-copy h1 { max-width: none; }
+  .story-hero { min-height: auto; }
+  .story-hero-copy { padding-block: 56px 0; }
+  .story-change,
+  .story-steps-section { padding-block: 56px; }
+}

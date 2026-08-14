@@ -194,50 +194,29 @@ function FinderContext() {
   );
 }
 
-/**
- * A material interest, rendered beside the listing that carries it.
- *
- * Deliberately not a tooltip, not a footnote and not collapsed: a disclosure a reader has to open
- * is a disclosure the product can claim to have made and most people will never see. It sits in
- * the reading order immediately after the clinician's name, which is the only place it changes
- * what somebody does next.
- */
-/**
- * The NSW training, rendered as what it is: the clinician's own statement.
- *
- * "Says they have completed" rather than "has completed", because there is no register this
- * product can check it against. W193's whole distinction is between a fact a reader can verify
- * and a claim they are being asked to take on trust, and rendering the second as the first is the
- * failure that module exists to prevent. The wording is the disclosure.
- */
-function NswTraining({ clinician }: { clinician: Clinician }) {
-  if (!clinician.nswAdhdTrained) return null;
-
-  return (
-    <p className="declared-claim">
-      Says they have completed the NSW training to carry ADHD care without ongoing psychiatrist
-      involvement. This has not been verified.
-    </p>
-  );
-}
-
-function FounderDisclosure({ clinician }: { clinician: Clinician }) {
-  if (!clinician.founderInterest) return null;
-
-  return (
-    <aside className="founder-disclosure" aria-label="Disclosure">
-      <strong>Disclosure</strong>
-      <p>{clinician.founderInterest}</p>
-    </aside>
-  );
-}
-
 function WaveformMark({ active = false }: { active?: boolean }) {
   return (
     <span className={`waveform-mark${active ? " is-active" : ""}`} aria-hidden="true">
       <Waveform size={88} weight="light" />
     </span>
   );
+}
+
+/**
+ * Drop the signals every result shares.
+ *
+ * Every clinician in this directory does ADHD assessment, so "ADHD assessment" appeared on every
+ * row and told a reader nothing about which to choose. A signal is only a reason to pick something
+ * if the other options lack it, so the shared ones are removed from the ROW and kept on the
+ * profile, where there is nothing to compare against.
+ */
+function distinguishingSignals(signals: string[], everyone: string[][]): string[] {
+  if (everyone.length < 2) return signals;
+  const shared = new Set(
+    everyone[0]!.filter((signal) => everyone.every((list) => list.includes(signal))),
+  );
+  const kept = signals.filter((signal) => !shared.has(signal));
+  return kept.length > 0 ? kept : signals;
 }
 
 /** Initials from a display name, ignoring the title. "Dr Anubhav Saxena" -> "AS". */
@@ -254,33 +233,10 @@ function initialsOf(name: string) {
 /**
  * A clinician's portrait, or a monogram when there is none.
  *
- * `Clinician.image` is nullable on purpose and this is the component that makes that cheap. The
- * synthetic demo personas have synthetic portraits; a real clinician's likeness is theirs to
+ * The synthetic demo personas have synthetic portraits; a real clinician's likeness is theirs to
  * supply, and nothing in this tree generates a face for a real person. A monogram is a real
- * directory pattern rather than a placeholder waiting to be filled, so the layout is correct in
- * both states and no surface has to branch.
+ * directory pattern rather than a placeholder, so the layout is correct in both states.
  */
-/**
- * Drop the signals every result shares.
- *
- * Round 2 of the minimalism pass. Every clinician in this directory does ADHD assessment, so
- * "ADHD assessment" appeared on all sixteen rows and told a reader nothing about which to choose.
- * The same happens to "Woman GP" when somebody asks for one and eleven of the results are women.
- * A signal is only a reason to pick something if the other options lack it, so the shared ones are
- * removed from the ROW and kept on the profile, where there is nothing to compare against.
- *
- * Returns the original list when everything would be stripped, because an empty row is worse than
- * a repetitive one.
- */
-function distinguishingSignals(signals: string[], everyone: string[][]): string[] {
-  if (everyone.length < 2) return signals;
-  const shared = new Set(
-    everyone[0]!.filter((signal) => everyone.every((list) => list.includes(signal))),
-  );
-  const kept = signals.filter((signal) => !shared.has(signal));
-  return kept.length > 0 ? kept : signals;
-}
-
 function ClinicianPortrait({
   clinician,
   variant,
@@ -300,13 +256,24 @@ function ClinicianPortrait({
   return (
     <span
       className={`clinician-monogram clinician-monogram-${variant}`}
-      // The name is already beside this in every consumer, so the monogram is decorative. Giving
-      // it a label would make a screen reader read the same name twice, once as two letters.
+      // The name is already beside this in every consumer, so the monogram is decorative.
       aria-hidden="true"
     >
       {initialsOf(clinician.name)}
     </span>
   );
+}
+
+/** The NSW training, as a credential line. Self-reported, which the profile notes once. */
+function NswTraining({ clinician }: { clinician: Clinician }) {
+  if (!clinician.nswAdhdTrained) return null;
+  return <p className="credential-line">NSW ADHD training</p>;
+}
+
+/** A material interest, stated beside the listing it concerns. One line, not an essay. */
+function FounderDisclosure({ clinician }: { clinician: Clinician }) {
+  if (!clinician.founderInterest) return null;
+  return <p className="disclosure-line">Co-founder of ADHD.ME</p>;
 }
 
 export function CareFinder() {

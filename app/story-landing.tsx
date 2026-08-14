@@ -45,35 +45,70 @@ import { CoverageMap } from "./coverage-map";
  */
 
 /**
- * Roles, not biographies. See the FOUNDER ACTION note above.
+ * The three founders, with the affiliations that sit under each of them.
  *
- * `portrait` is null for two of the three, and that is the honest state rather than a gap: Stefan
- * supplied his own photograph, and nothing in this tree generates a face for anybody who has not.
- * The monogram is a real treatment, not a placeholder, so the row reads as deliberate either way.
+ * `logo` points at a file in public/logos when there is one licensed to use, and is null
+ * otherwise; the chip falls back to the institution's name set as a wordmark. That is deliberate
+ * rather than a stopgap: a university mark is trademarked and not ours to copy off a website, so
+ * the two we hold (both Stefan's, from his own work) render as images and the rest render as
+ * names. Drop a licensed file in and set `logo` to swap it without touching the layout.
+ *
+ * `portrait` is null for two of the three for the same reason: nothing here generates a face for
+ * somebody who has not supplied one.
  */
+interface Affiliation {
+  name: string;
+  logo: string | null;
+  href: string;
+  /** Alt text and the accessible name of the link. */
+  label: string;
+}
+
 const FOUNDERS: ReadonlyArray<{
   name: string;
   role: string;
   remit: string;
   portrait: string | null;
+  affiliations: readonly Affiliation[];
 }> = [
   {
     name: "Krish Ganesh",
     role: "Co-founder",
-    remit: "The part that is not clinical: what a person meets when they first look for help.",
+    remit: "What a person meets when they first look for help.",
     portrait: null,
+    affiliations: [
+      { name: "Bond University", logo: null, href: "https://bond.edu.au/", label: "Bond University" },
+    ],
   },
   {
     name: "Dr Anubhav Saxena",
     role: "Co-founder, clinical",
-    remit: "Measurement discipline from metabolic medicine: a documented baseline, then follow-up on a schedule.",
+    remit: "A documented baseline before anything starts, then follow-up on a schedule.",
     portrait: null,
+    affiliations: [
+      { name: "Beecroft", logo: null, href: "#", label: "Beecroft" },
+      { name: "University of Sydney", logo: null, href: "https://www.sydney.edu.au/", label: "University of Sydney" },
+    ],
   },
   {
     name: "Stefan Thottunkal",
     role: "Co-founder",
-    remit: "Physician-in-training and health-systems researcher at Stanford Medicine, working on precision pharmacogenomic care and on culturally tailored nutrition research at NOURISH.",
+    remit: "Physician-in-training and health-systems researcher, Stanford Medicine.",
     portrait: "/stefan.png",
+    affiliations: [
+      {
+        name: "NOURISH, Stanford Medicine",
+        logo: "/nourish-logo.png",
+        href: "https://med.stanford.edu/nourish-project.html",
+        label: "NOURISH, Stanford Medicine",
+      },
+      {
+        name: "Harvard T.H. Chan",
+        logo: "/hsil-logo.png",
+        href: "https://hsph.harvard.edu/research/health-systems-innovation-lab/team/#scholars",
+        label: "Health Systems Innovation Lab, Harvard T.H. Chan School of Public Health",
+      },
+    ],
   },
 ];
 
@@ -197,48 +232,47 @@ export function StoryLanding() {
             className="story-founders"
             initial={reduce ? false : "hidden"}
             whileInView="show"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.25 }}
             variants={stagger}
           >
             {FOUNDERS.map((f) => (
               <motion.li key={f.name} variants={item}>
-                {f.portrait ? (
-                  <Image
-                    className="story-founder-photo"
-                    src={f.portrait}
-                    alt={`${f.name}, co-founder of ADHD.ME`}
-                    width={124}
-                    height={124}
-                  />
-                ) : (
-                  <span className="story-founder-monogram" aria-hidden="true">
-                    {f.name.replace(/^Dr\.?\s+/, "").split(" ").map((part) => part[0]).join("")}
-                  </span>
-                )}
-                <div>
-                  <strong>{f.name}</strong>
-                  <span className="story-founder-role">{f.role}</span>
-                  <p>{f.remit}</p>
+                <div className="story-founder-head">
+                  {f.portrait ? (
+                    <Image
+                      className="story-founder-photo"
+                      src={f.portrait}
+                      alt={`${f.name}, co-founder of ADHD.ME`}
+                      width={124}
+                      height={124}
+                    />
+                  ) : (
+                    <span className="story-founder-monogram" aria-hidden="true">
+                      {f.name.replace(/^Dr\.?\s+/, "").split(" ").map((part) => part[0]).join("")}
+                    </span>
+                  )}
+                  <div>
+                    <strong>{f.name}</strong>
+                    <span className="story-founder-role">{f.role}</span>
+                  </div>
                 </div>
+
+                <p className="story-founder-remit">{f.remit}</p>
+
+                <ul className="story-affiliations">
+                  {f.affiliations.map((a) => (
+                    <li key={a.name}>
+                      <a href={a.href} target="_blank" rel="noreferrer" aria-label={a.label}>
+                        {a.logo
+                          ? <Image src={a.logo} alt={a.label} width={446} height={80} />
+                          : <span>{a.name}</span>}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </motion.li>
             ))}
           </motion.ul>
-          <Reveal delay={0.08} className="story-affiliations-row">
-            <a href="https://med.stanford.edu/nourish-project.html" target="_blank" rel="noreferrer" aria-label="NOURISH, Stanford Medicine">
-              <Image src="/nourish-logo.png" alt="NOURISH" width={446} height={80} />
-            </a>
-            <a href="https://hsph.harvard.edu/research/health-systems-innovation-lab/team/#scholars" target="_blank" rel="noreferrer" aria-label="Health Systems Innovation Lab, Harvard T.H. Chan School of Public Health">
-              <Image src="/hsil-logo.png" alt="Harvard T.H. Chan School of Public Health, Health Systems Innovation Lab" width={472} height={54} />
-            </a>
-          </Reveal>
-
-          <Reveal delay={0.1} className="story-prose">
-            <p className="story-note">
-              Dr Saxena also sees patients through this directory, and every listing of his says so.
-              A founder in his own company&rsquo;s directory is a conflict whether or not the
-              ranking favours him, and you cannot see the ranking.
-            </p>
-          </Reveal>
         </div>
       </section>
 
