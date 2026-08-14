@@ -81,7 +81,7 @@ const FOUNDERS: ReadonlyArray<{
 }> = [
   {
     name: "Vikram Ganeshalingam",
-    role: "Co-founder",
+    role: "Co-founder, final-year MD candidate",
     remit: "What a person meets when they first look for help.",
     portrait: "/vikram.png",
     affiliations: [
