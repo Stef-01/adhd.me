@@ -57,8 +57,24 @@ const toXY = (pt: readonly [number, number]) => {
   return [(px - bounds.minX) * scale + offsetX, (py - bounds.minY) * scale + offsetY] as const;
 };
 
-const pathOf = (ring: ReadonlyArray<readonly [number, number]>) =>
-  ring.map((pt, i) => `${i === 0 ? "M" : "L"}${toXY(pt).map((n) => n.toFixed(1)).join(" ")}`).join(" ") + " Z";
+/**
+ * A smooth closed outline through the projected vertices — a gentle Catmull-Rom spline (low
+ * tension, so it hugs the polygon and rounds the corners rather than a torn-edge look), rendered
+ * as cubic Béziers. Coastline and markers still share the projection, so nothing shifts.
+ */
+const pathOf = (ring: ReadonlyArray<readonly [number, number]>) => {
+  const pts = ring.map(toXY);
+  const n = pts.length;
+  const at = (i: number) => pts[((i % n) + n) % n]!;
+  let d = `M${at(0)[0].toFixed(1)} ${at(0)[1].toFixed(1)}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = at(i - 1), p1 = at(i), p2 = at(i + 1), p3 = at(i + 2);
+    const c1x = p1[0] + (p2[0] - p0[0]) / 8, c1y = p1[1] + (p2[1] - p0[1]) / 8;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 8, c2y = p2[1] - (p3[1] - p1[1]) / 8;
+    d += ` C${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+  }
+  return d + " Z";
+};
 
 const AUSTRALIA_PATH = pathOf(AUSTRALIA);
 const TASMANIA_PATH = pathOf(TASMANIA);
@@ -94,9 +110,9 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
           const isHere = m.suburbs.some((s) => s.suburb.toLowerCase() === marked);
           return (
             <g key={m.key}>
-              {isHere && <circle cx={m.at[0]} cy={m.at[1]} r="4.4" className="coverage-halo" />}
-              <circle cx={m.at[0]} cy={m.at[1]} r={isHere ? 2.8 : 2.3} className={isHere ? "coverage-dot is-here" : "coverage-dot"} />
-              <text className="coverage-pin-label" x={m.at[0] + 4} y={m.at[1] + 1.4}>{m.label}</text>
+              <circle cx={m.at[0]} cy={m.at[1]} r={isHere ? 5 : 4.2} className="coverage-pin-halo" />
+              <circle cx={m.at[0]} cy={m.at[1]} r={isHere ? 2.9 : 2.5} className={isHere ? "coverage-dot is-here" : "coverage-dot"} />
+              <text className="coverage-pin-label" x={m.at[0] + 4.6} y={m.at[1] + 1.4}>{m.label}</text>
             </g>
           );
         })}

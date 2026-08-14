@@ -4411,9 +4411,11 @@ textarea:focus-visible {
 .coverage-map svg { width: 100%; height: auto; overflow: visible; }
 /* The dots carry the whole diagram, so they are drawn at the ink colour rather than the muted one:
    at r=1.35 on a 100-unit box a mid-grey reads as dust. */
-.coverage-dot { fill: var(--s-ink); opacity: 0.75; }
+.coverage-dot { fill: var(--s-accent); opacity: 1; }
 .coverage-dot.is-here { fill: var(--s-accent); opacity: 1; }
 .coverage-halo { fill: none; stroke: var(--s-accent); stroke-width: 0.7; opacity: 0.55; }
+/* A soft rose halo behind each marker, so the two covered areas read as pins the eye lands on. */
+.coverage-pin-halo { fill: var(--s-accent-soft); }
 /* The Australia silhouette the two markers sit on: a subtle filled landmass with a hairline edge,
    so it reads as scenery and the accent dots carry the eye. */
 .coverage-land { fill: var(--s-line); stroke: var(--s-muted); stroke-width: 0.45; opacity: 0.7; stroke-linejoin: round; }
@@ -4443,7 +4445,8 @@ textarea:focus-visible {
   border-top-color: var(--line);
 }
 .results-head .coverage-map .coverage-names { font-size: 12.5px; }
-.results-head .coverage-dot { fill: var(--ink); }
+.results-head .coverage-dot { fill: var(--accent); }
+.results-head .coverage-pin-halo { fill: var(--accent-soft); }
 .results-head .coverage-count { color: var(--accent); font-size: 11px; }
 .results-head .coverage-land { fill: var(--line); stroke: var(--muted); }
 .results-head .coverage-pin-label { fill: var(--ink); }
