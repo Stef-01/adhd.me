@@ -146,8 +146,8 @@ const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = 
 ];
 
 const COST_NOTE =
-  "Indicative figures pending source confirmation, and the NSW and Queensland prescribing-rule " +
-  "changes are stated pending confirmation against each state's current guidance. Anchors: the " +
+  "Indicative figures pending source confirmation, and the NSW and Queensland rule changes are " +
+  "stated pending confirmation against each state's current guidance. Anchors: the " +
   "AADPA Australian evidence-based clinical practice guideline for ADHD (2022) and the 2023 " +
   "Senate inquiry into ADHD assessment and support services.";
 
@@ -254,17 +254,24 @@ export function StoryLanding() {
       <section className="story-chapter story-chapter-open" aria-labelledby="change-title">
         <div className="story-wrap">
           <Reveal>
-            <h2 id="change-title" className="story-heading">The rule is changing in NSW and Queensland.</h2>
+            <h2 id="change-title" className="story-heading">The rule is changing in NSW and QLD.</h2>
           </Reveal>
           <Reveal delay={0.06} className="story-prose story-prose-lead">
             <p>
-              In New South Wales and Queensland, GPs with the right training can now assess ADHD
-              and manage it themselves. Psychiatry stays available for the complex cases. The queue
-              stops being the default.
+              Getting assessed for ADHD has meant a long, costly wait for a psychiatrist — often
+              many months, and a fee most people cannot plan for. In New South Wales and Queensland,
+              GPs with the right training can now carry out the assessment and ongoing care
+              themselves, so that wait is no longer the only way in.
+            </p>
+            <p>
+              That is the gap ADHD.ME was built to close. We connect you directly to those GPs, so
+              assessment and follow-up can begin with one clinician close to home rather than at the
+              back of a referral queue. Psychiatry stays available for the complex cases — it is no
+              longer the default first step.
             </p>
             <p className="story-note">
-              ADHD.ME lists the GPs who have done that training. Every one of them is a GP.
-              ADHD is not a specialty on the register, and nobody here claims otherwise.
+              Every clinician listed here is a GP who has completed that training. ADHD is not a
+              specialty on the register, and nobody here claims otherwise.
             </p>
           </Reveal>
         </div>

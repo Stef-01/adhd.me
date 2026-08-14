@@ -4364,6 +4364,12 @@ textarea:focus-visible {
 .coverage-dot { fill: var(--s-ink); opacity: 0.75; }
 .coverage-dot.is-here { fill: var(--s-accent); opacity: 1; }
 .coverage-halo { fill: none; stroke: var(--s-accent); stroke-width: 0.7; opacity: 0.55; }
+/* The scale diagram's labels and dimension line. The label naming each area is the accent, the
+   distance is muted, and the line is the hairline — the same three roles the caption already uses. */
+.coverage-node-label { fill: var(--s-accent); font-size: 4.6px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.coverage-scale-label { fill: var(--s-muted); font-size: 5px; font-weight: 600; }
+.coverage-scale-line { stroke: var(--s-line); stroke-width: 0.7; }
+.coverage-scale-tick { fill: none; stroke: var(--s-muted); stroke-width: 0.7; opacity: 0.7; }
 .coverage-map figcaption { display: grid; gap: 10px; }
 .coverage-count {
   color: var(--s-accent);
@@ -4391,6 +4397,10 @@ textarea:focus-visible {
 .results-head .coverage-map .coverage-names { font-size: 12.5px; }
 .results-head .coverage-dot { fill: var(--ink); }
 .results-head .coverage-count { color: var(--accent); font-size: 11px; }
+.results-head .coverage-node-label { fill: var(--accent); }
+.results-head .coverage-scale-label { fill: var(--muted); }
+.results-head .coverage-scale-line { stroke: var(--line); }
+.results-head .coverage-scale-tick { stroke: var(--muted); }
 
 /* FOUNDERS ------------------------------------------------------------------
    Three cards, each a cut-out portrait on bare paper with the name, the role and the
