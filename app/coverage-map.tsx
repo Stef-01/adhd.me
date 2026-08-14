@@ -1,46 +1,96 @@
-// W215: the covered suburbs, drawn from the same coordinates the matcher uses.
+// W215 + repositioning: the coverage diagram — a simplified map of Australia with the two focus
+// areas marked, Beecroft in northern Sydney (NSW) and the Gold Coast (QLD).
 //
-// WHY THIS AND NOT A PHOTOGRAPH. The page needed a visual and the obvious reaches were all wrong
-// for it: stock photography of a consulting room implies a practice this product does not run,
-// generated faces are people who do not exist on a page about real clinicians, and an abstract
-// gradient is decoration pretending to be information. This draws the ACTUAL gazetteer in
-// src/geo/suburbs.ts, so it answers the question a visitor has at that moment - is my suburb in
-// this? - and it cannot drift from the matcher, because adding a suburb there adds a dot here.
+// The map is an illustration, not a survey: the coastline is a hand-simplified outline, drawn only
+// so the two dots have somewhere recognisable to sit. What is REAL is the dots — each focus area's
+// centroid is projected with the same equirectangular transform as the coastline, so a dot lands
+// where the place actually is on the east coast, and adding a suburb to the gazetteer moves the
+// centroid it sits at. The precise, drift-proof half stays the suburb LIST in the caption, read
+// straight from src/geo/suburbs.ts.
 //
-// IT IS A DIAGRAM, NOT A MAP. There is no basemap, no roads, no coastline: just the fourteen
-// points, projected. Drawing a real map would raise the question of whose map, at what licence,
-// and would imply a precision the centroids do not have. The shape that emerges is the actual
-// spatial arrangement of the network, which is the only geographic claim being made.
-//
-// The projection is plate carree with a cos(latitude) correction on x. At this scale - about
-// 20km across - the difference from a proper projection is smaller than a dot.
+// Projection: equirectangular with a cos(latitude) correction on longitude, fit to the box with
+// the aspect preserved. Coastline and markers share it, so they cannot disagree about where the
+// coast is relative to a marker.
 
-import { SUBURBS } from "@/geo/suburbs";
+import { SUBURBS, type SuburbPoint } from "@/geo/suburbs";
 
-const PAD = 8;
-const LAT_MID = SUBURBS.reduce((sum, s) => sum + s.lat, 0) / SUBURBS.length;
+/**
+ * A deliberately coarse Australian coastline, as [lon, lat] vertices going clockwise from Cape
+ * York. Enough points to read as Australia — the Gulf of Carpentaria, the south-east bulge, the
+ * Great Australian Bight — and no more; this is scenery for the two markers, not a basemap.
+ */
+const AUSTRALIA: ReadonlyArray<readonly [number, number]> = [
+  [142.8, -10.7], [145.8, -15.0], [146.3, -18.8], [149.2, -21.0], [150.8, -23.5],
+  [153.1, -25.9], [153.6, -28.2], [152.9, -31.0], [151.3, -33.6], [150.2, -37.3],
+  [147.0, -38.6], [144.5, -38.4], [141.6, -38.4], [140.0, -37.0], [138.6, -35.6],
+  [137.9, -35.3], [136.8, -35.2], [135.2, -34.7], [131.5, -31.5], [126.0, -32.3],
+  [123.5, -34.0], [118.0, -35.1], [115.1, -34.4], [114.9, -30.0], [113.8, -26.0],
+  [113.4, -22.0], [116.5, -20.6], [121.0, -19.6], [122.2, -18.1], [126.5, -14.0],
+  [129.5, -14.7], [130.6, -12.4], [132.5, -11.2], [135.0, -14.6], [136.5, -12.1],
+  [137.0, -15.9], [139.6, -17.4], [141.0, -16.0], [141.5, -12.6],
+];
+
+/** Tasmania, as its own small closed shape below the south-east. */
+const TASMANIA: ReadonlyArray<readonly [number, number]> = [
+  [146.6, -41.1], [148.3, -42.0], [147.8, -43.6], [145.6, -43.2], [144.7, -41.2],
+];
+
+const PAD = 7;
+const LAT_MID = -27; // continental mid-latitude for the longitude correction
 const COS_LAT = Math.cos((LAT_MID * Math.PI) / 180);
 
-const xs = SUBURBS.map((s) => s.lon * COS_LAT);
-const ys = SUBURBS.map((s) => -s.lat);
+const project = ([lon, lat]: readonly [number, number]) => [lon * COS_LAT, -lat] as const;
+
+const allXY = AUSTRALIA.map(project);
 const bounds = {
-  minX: Math.min(...xs), maxX: Math.max(...xs),
-  minY: Math.min(...ys), maxY: Math.max(...ys),
+  minX: Math.min(...allXY.map((p) => p[0])), maxX: Math.max(...allXY.map((p) => p[0])),
+  minY: Math.min(...allXY.map((p) => p[1])), maxY: Math.max(...allXY.map((p) => p[1])),
 };
 const spanX = bounds.maxX - bounds.minX;
 const spanY = bounds.maxY - bounds.minY;
-
-/** Fit to a 100x100 box, preserving aspect so the arrangement is not stretched. */
 const scale = (100 - PAD * 2) / Math.max(spanX, spanY);
 const offsetX = (100 - spanX * scale) / 2;
 const offsetY = (100 - spanY * scale) / 2;
 
-const points = SUBURBS.map((s) => ({
-  suburb: s.suburb,
-  postcode: s.postcode,
-  x: (s.lon * COS_LAT - bounds.minX) * scale + offsetX,
-  y: (-s.lat - bounds.minY) * scale + offsetY,
-}));
+const toXY = (pt: readonly [number, number]) => {
+  const [px, py] = project(pt);
+  return [(px - bounds.minX) * scale + offsetX, (py - bounds.minY) * scale + offsetY] as const;
+};
+
+/**
+ * A smooth closed outline through the projected vertices — a gentle Catmull-Rom spline (low
+ * tension, so it hugs the polygon and rounds the corners rather than a torn-edge look), rendered
+ * as cubic Béziers. Coastline and markers still share the projection, so nothing shifts.
+ */
+const pathOf = (ring: ReadonlyArray<readonly [number, number]>) => {
+  const pts = ring.map(toXY);
+  const n = pts.length;
+  const at = (i: number) => pts[((i % n) + n) % n]!;
+  let d = `M${at(0)[0].toFixed(1)} ${at(0)[1].toFixed(1)}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = at(i - 1), p1 = at(i), p2 = at(i + 1), p3 = at(i + 2);
+    const c1x = p1[0] + (p2[0] - p0[0]) / 8, c1y = p1[1] + (p2[1] - p0[1]) / 8;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 8, c2y = p2[1] - (p3[1] - p1[1]) / 8;
+    d += ` C${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+  }
+  return d + " Z";
+};
+
+const AUSTRALIA_PATH = pathOf(AUSTRALIA);
+const TASMANIA_PATH = pathOf(TASMANIA);
+
+/** The two focus areas, split by latitude, each reduced to the centroid the marker sits on. */
+const QLD = SUBURBS.filter((s) => s.lat > -30);
+const NSW = SUBURBS.filter((s) => s.lat <= -30);
+const centroid = (list: readonly SuburbPoint[]): readonly [number, number] => [
+  list.reduce((sum, s) => sum + s.lon, 0) / list.length,
+  list.reduce((sum, s) => sum + s.lat, 0) / list.length,
+];
+
+const MARKERS = [
+  { key: "qld", label: "Gold Coast, QLD", suburbs: QLD, at: toXY(centroid(QLD)) },
+  { key: "nsw", label: "Beecroft, NSW", suburbs: NSW, at: toXY(centroid(NSW)) },
+];
 
 /**
  * @param highlight Suburb name to mark as the reader's own, if they have given one.
@@ -50,29 +100,27 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
 
   return (
     <figure className="coverage-map">
-      <svg viewBox="0 0 100 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
-        {/* ONE INTERPOLATED STRING, NOT A MIXED CHILD LIST, AND THE REASON IS HYDRATION. Written
-            as `The {SUBURBS.length} Western Sydney suburbs...` this is three children — text,
-            expression, text — which React's SVG server renderer flattens and its client renderer
-            does not. Every page carrying this diagram threw "Hydration failed... this tree will
-            be regenerated on the client" and silently re-rendered the whole route below it. */}
-        <title id="coverage-map-title">
-          {`The ${SUBURBS.length} Western Sydney suburbs ADHD.ME currently covers`}
-        </title>
-        {points.map((p) => {
-          const isHere = marked === p.suburb.toLowerCase();
+      {/* The viewBox is wider than the 0–100 map so the pin labels sit INSIDE it: the whole
+          graphic then scales as one unit with the container and never clips, on any screen. */}
+      <svg viewBox="0 0 136 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
+        <title id="coverage-map-title">{`A map of Australia marking ADHD.ME's two focus areas — Beecroft, NSW and the Gold Coast, QLD, across ${SUBURBS.length} suburbs`}</title>
+        <path className="coverage-land" d={AUSTRALIA_PATH} />
+        <path className="coverage-land" d={TASMANIA_PATH} />
+        {MARKERS.map((m) => {
+          const isHere = m.suburbs.some((s) => s.suburb.toLowerCase() === marked);
           return (
-            <g key={p.suburb}>
-              {isHere && <circle cx={p.x} cy={p.y} r="4.6" className="coverage-halo" />}
-              <circle cx={p.x} cy={p.y} r={isHere ? 2.6 : 1.9} className={isHere ? "coverage-dot is-here" : "coverage-dot"} />
+            <g key={m.key}>
+              <circle cx={m.at[0]} cy={m.at[1]} r={isHere ? 5 : 4.2} className="coverage-pin-halo" />
+              <circle cx={m.at[0]} cy={m.at[1]} r={isHere ? 2.9 : 2.5} className={isHere ? "coverage-dot is-here" : "coverage-dot"} />
+              <text className="coverage-pin-label" x={m.at[0] + 4.6} y={m.at[1] + 1.4}>{m.label}</text>
             </g>
           );
         })}
       </svg>
-      {/* The names are the useful half. A reader scanning for their own suburb reads the list, not
-          the dots; the dots are what make the network legible as a shape. */}
+      {/* The names are the precise half. A reader scanning for their own suburb reads the list; the
+          map gives them where, on the coast, the two areas sit. */}
       <figcaption>
-        <span className="coverage-count">{SUBURBS.length} suburbs</span>
+        <span className="coverage-count">Beecroft, NSW &amp; the Gold Coast, QLD</span>
         <span className="coverage-names">
           {SUBURBS.map((s) => s.suburb).join(", ")}
         </span>

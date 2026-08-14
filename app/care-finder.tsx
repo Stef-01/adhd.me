@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
+  ArrowRight,
   CheckCircle,
   CaretLeft,
   CaretRight,
@@ -187,7 +188,7 @@ function FinderContext() {
       {/* "All profiles are synthetic" stopped being true when a founder joined the roster, and a
           disclaimer that is nearly true is worse than none: it is the sentence a reader relies on. */}
       <p>
-        Early demo in Western Sydney. Availability is synthetic, and every profile except
+        Early demo in Beecroft and on the Gold Coast. Availability is synthetic, and every profile except
         Dr Saxena’s describes an invented clinician.
       </p>
     </aside>
@@ -467,10 +468,33 @@ export function CareFinder() {
               animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ delay: 0.24, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Pressable className="mic-button" type="button" onClick={startListening} aria-label="Start voice description">
-                <Microphone size={38} weight="light" aria-hidden="true" />
-                <span>Talk for 20 seconds</span>
-              </Pressable>
+              {/* ONE field, ONE dual-functional control. Empty → a microphone that talks; the
+                  moment there is text → a send arrow that searches. Both routes converge on the
+                  same voice/findMatches() path, so speaking and writing rank clinicians identically. */}
+              <div className="dual-input">
+                <label className="sr-only" htmlFor="welcome-request">
+                  Describe the GP you are looking for, or use the microphone to talk
+                </label>
+                <input
+                  id="welcome-request"
+                  type="text"
+                  className="dual-input-field"
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  onKeyDown={(event) => { if (event.key === "Enter" && draft.trim()) findMatches(draft); }}
+                  placeholder="Describe the GP you're looking for…"
+                />
+                <Pressable
+                  className={draft.trim() ? "dual-input-action is-send" : "dual-input-action is-talk"}
+                  type="button"
+                  onClick={() => (draft.trim() ? findMatches(draft) : startListening())}
+                  aria-label={draft.trim() ? "Find a GP" : "Talk instead of typing"}
+                >
+                  {draft.trim()
+                    ? <ArrowRight size={21} weight="bold" aria-hidden="true" />
+                    : <Microphone size={21} weight="fill" aria-hidden="true" />}
+                </Pressable>
+              </div>
 
               <button
                 className="scenario-toggle"
@@ -644,7 +668,7 @@ export function CareFinder() {
                     setPlace(event.target.value);
                     setMatches(rankCliniciansNear(request, resolvePlace(event.target.value)));
                   }}
-                  placeholder="Blacktown"
+                  placeholder="Beecroft"
                   autoComplete="address-level2"
                 />
                 <datalist id="covered-suburbs">

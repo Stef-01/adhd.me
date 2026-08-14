@@ -261,9 +261,9 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
   },
   {
     module: "src/outcomes/response-graph.ts",
-    operatorCopy: ["SPINE_NOT_RESPONSES"],
+    operatorCopy: ["SPINE_NOT_RESPONSES", "RESPONSE_GRAPH_DISCLOSURE_COPY"],
     notCopy:
-      "SPINE_RESPONSE_KINDS is a translation table of event identifiers. The rendered graph composes from counts, W211's absence copy and the per-kind reasons in SPINE_NOT_RESPONSES, which is the only prose the module authors itself.",
+      "SPINE_RESPONSE_KINDS is a translation table of event identifiers. The prose the module authors is the per-kind reasons in SPINE_NOT_RESPONSES and W218's RESPONSE_GRAPH_DISCLOSURE_COPY, which explains a withheld small cell; both are linted here. The rendered graph otherwise composes from counts and W211's absence copy.",
   },
   {
     module: "src/outcomes/time-to-escalation.ts",

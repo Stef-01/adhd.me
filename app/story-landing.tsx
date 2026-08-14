@@ -34,25 +34,26 @@ import { CoverageMap } from "./coverage-map";
  * has not changed and no claim has been added — the beats below are the same five points plus
  * two that carry no new assertion (a stat rail quoting figures already in
  * src/compliance/landing-copy.ts, and one dark band restating the hero's claim). What changed is
- * that the page now has a RHYTHM: wide, split, split-reversed, inverted, ruled list, portraits,
+ * that the page now has a RHYTHM: wide, split-reversed, split, inverted, ruled list, portraits,
  * form. Nothing sits at the same width as the thing above it, which is the entire reason it
  * reads as a page rather than as a stack.
  *
  *   1. Hero        - the claim, in one sentence, beside the coverage diagram.
- *   2. The change  - the fact the whole product rests on. Without it the claim is marketing.
- *   3. The cost    - what the old route cost, as indicative figures with their own disclaimer.
- *   4. The shape   - one GP end to end, against a pull-line.
+ *   2. The shape   - one GP end to end, against a pull-line.
+ *   3. The change  - the fact the whole product rests on. Without it the claim is marketing.
+ *   4. The cost    - what the old route cost, as indicative figures with their own disclaimer.
  *   5. Throughline - the one dark beat. The permission changed; the appointment must be findable.
  *   6. How         - three lines, because "what do I actually do" is the next question.
- *   7. Founders    - three names, because a health product with anonymous founders is a red flag.
- *   8. Register    - the only action on the page.
+ *   7. Register    - the only action on the page, placed before the founders.
+ *   8. Founders    - three names, because a health product with anonymous founders is a red flag.
  *
  * FOUNDER ACTION. The three founders are real people and their entries are ROLES, not
  * biographies: whatever Vikram and Anubhav want said about themselves belongs in their own words,
  * and inventing it would put unverified claims about named clinicians on a public page. The NSW
- * statement and the figures in src/compliance/landing-copy.ts need confirming against the current
- * guideline before launch; they are written without false precision for that reason, and the
- * stat rail carries that qualification directly under it rather than in a footer.
+ * AND QUEENSLAND rule statements and the figures in src/compliance/landing-copy.ts need confirming
+ * against each state's current guideline before launch; they are written without false precision
+ * for that reason, and the stat rail carries that qualification directly under it rather than in a
+ * footer.
  *
  * ALL THREE PORTRAITS ARE NOW SUPPLIED, AND THE MONOGRAM FALLBACK STAYS ANYWAY. Nothing in this
  * tree generates a face for a real person: each of these is a photograph its subject handed over,
@@ -71,7 +72,7 @@ import { CoverageMap } from "./coverage-map";
  * we hold (both Stefan's, from his own work) render as images and the rest render as names. Drop
  * a licensed file in and set `logo` to swap it without touching the layout.
  *
- * `portrait` is null for two of the three for the same reason: nothing here generates a face for
+ * `portrait` is null only where no photograph has been supplied: nothing here generates a face for
  * somebody who has not supplied one.
  */
 interface Affiliation {
@@ -90,17 +91,17 @@ const FOUNDERS: ReadonlyArray<{
   affiliations: readonly Affiliation[];
 }> = [
   {
-    name: "Vikram Ganesh",
+    name: "Vikram Ganeshalingam",
     role: "Co-founder",
     remit: "What a person meets when they first look for help.",
-    portrait: "/vikram-ganesh.png",
+    portrait: "/vikram.png",
     affiliations: [
-      { name: "Bond University", logo: null, href: "https://bond.edu.au/", label: "Bond University" },
+      { name: "Final-year MD candidate, Bond University", logo: null, href: "https://bond.edu.au/", label: "Final-year MD candidate, Bond University" },
     ],
   },
   {
     name: "Dr Anubhav Saxena",
-    role: "Co-founder, clinical",
+    role: "Co-founder, MBBS, FRACGP",
     remit: "A documented baseline before anything starts, then follow-up on a schedule.",
     portrait: "/anubhav-saxena.png",
     affiliations: [
@@ -145,20 +146,21 @@ const STEPS: ReadonlyArray<{ title: string; body: string }> = [
  * fold.
  */
 const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = [
-  { value: "Months to years", label: "typical wait for an adult ADHD assessment appointment" },
+  { value: "6–12 months", label: "typical wait for an adult ADHD assessment appointment" },
   { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
   // "the RIGHT training", not "the required training", and the difference is the compliance
   // linter's, not a stylist's: `no-clinical-necessity` fires on "required" and it is right to.
   // landing-copy.ts can say it because /practices is addressed to practice managers; this page
   // is addressed to patients, where the same word reads as a claim about what care somebody
   // needs. Same fact, phrased for the audience that is actually reading it.
-  { value: "Now in-practice", label: "NSW lets a GP with the right training carry the whole pathway", accent: true },
+  { value: "Now in-practice", label: "NSW and Queensland now let a GP with the right training carry the whole pathway", accent: true },
 ];
 
 const COST_NOTE =
-  "Indicative figures pending source confirmation. Anchors: the AADPA Australian evidence-based " +
-  "clinical practice guideline for ADHD (2022) and the 2023 Senate inquiry into ADHD assessment " +
-  "and support services.";
+  "Indicative figures pending source confirmation, and the NSW and Queensland rule changes are " +
+  "stated pending confirmation against each state's current guidance. Anchors: the " +
+  "AADPA Australian evidence-based clinical practice guideline for ADHD (2022) and the 2023 " +
+  "Senate inquiry into ADHD assessment and support services.";
 
 /* ─────────────────────────────────────────────────────────────────────────────────────────────
  * MOTION.
@@ -316,27 +318,56 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* 2. The fact it rests on. Set wide and opened without a rule: it is the first chapter. */}
-      <section className="story-chapter story-chapter-open" aria-labelledby="change-title">
+      {/* 2. The shape of the alternative, against a pull-line. */}
+      <section className="story-chapter" aria-labelledby="shape-title" ref={pullRef}>
+        <div className="story-wrap story-split story-split-reverse">
+          <div className="story-split-lead">
+            <Reveal>
+              <h2 id="shape-title" className="story-heading">
+                One GP, from the first appointment to the follow-up.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.06} className="story-prose">
+              <p>
+                Nobody should have to tell their story twice to get through a door. One clinician
+                holds the assessment, the medication and the follow-up, and what they wrote down
+                in the first appointment is still there in the fourth.
+              </p>
+            </Reveal>
+          </div>
+          <Reveal delay={0.12} className="story-pull">
+            <motion.p style={live ? { y: pullY } : undefined}>
+              Care that fits the person in front of it.
+            </motion.p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 3. The fact it rests on. Set wide and opened without a rule. */}
+      <section className="story-chapter story-chapter-open story-chapter-tint" aria-labelledby="change-title">
         <div className="story-wrap">
           <Reveal>
-            <h2 id="change-title" className="story-heading">The rule changed in NSW.</h2>
+            <h2 id="change-title" className="story-heading">The rule is changing in NSW and QLD.</h2>
           </Reveal>
           <Reveal delay={0.06} className="story-prose story-prose-lead">
             <p>
-              GPs with the right training can now assess ADHD and manage it themselves.
-              Psychiatry stays available for the complex cases. The queue stops being the
-              default.
+              For years, an ADHD assessment meant a long, costly wait for a psychiatrist. In New
+              South Wales and Queensland, GPs with the right training can now do it themselves — so
+              the wait is no longer the only way in.
+            </p>
+            <p>
+              That gap is what ADHD.ME closes. We connect you straight to those GPs, so assessment
+              and follow-up start with one clinician near you — not at the back of a referral queue.
             </p>
             <p className="story-note">
-              ADHD.ME lists the GPs who have done that training. Every one of them is a GP.
-              ADHD is not a specialty on the register, and nobody here claims otherwise.
+              Every clinician here is a GP with dedicated training in ADHD assessment and care,
+              working to Australia's national clinical guideline.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* 3. What the old route cost. */}
+      {/* 4. What the old route cost. */}
       <section className="story-chapter" aria-labelledby="cost-title">
         <div className="story-wrap story-split">
           <div className="story-split-lead">
@@ -365,31 +396,6 @@ export function StoryLanding() {
               ))}
             </dl>
             <p className="story-stats-note">{COST_NOTE}</p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 4. The shape of the alternative, against a pull-line. */}
-      <section className="story-chapter" aria-labelledby="shape-title" ref={pullRef}>
-        <div className="story-wrap story-split story-split-reverse">
-          <div className="story-split-lead">
-            <Reveal>
-              <h2 id="shape-title" className="story-heading">
-                One GP, from the first appointment to the follow-up.
-              </h2>
-            </Reveal>
-            <Reveal delay={0.06} className="story-prose">
-              <p>
-                Nobody should have to tell their story twice to get through a door. One clinician
-                holds the assessment, the medication and the follow-up, and what they wrote down
-                in the first appointment is still there in the fourth.
-              </p>
-            </Reveal>
-          </div>
-          <Reveal delay={0.12} className="story-pull">
-            <motion.p style={live ? { y: pullY } : undefined}>
-              Care that fits the person in front of it.
-            </motion.p>
           </Reveal>
         </div>
       </section>
@@ -447,7 +453,20 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* 7. Who is behind it. */}
+      {/* 7. The one action, moved above the founders. */}
+      <section id="register" className="story-register" aria-labelledby="register-heading">
+        <div className="story-wrap story-register-grid">
+          <div>
+            <h2 id="register-heading" className="story-heading">Be among the first.</h2>
+            <p className="story-register-copy">
+              We will tell you when the finder opens in your area.
+            </p>
+          </div>
+          <InterestForm />
+        </div>
+      </section>
+
+      {/* 8. Who is behind it. */}
       <section className="story-chapter" aria-labelledby="founders-title">
         <div className="story-wrap">
           <Reveal>
@@ -508,19 +527,6 @@ export function StoryLanding() {
               </motion.li>
             ))}
           </motion.ul>
-        </div>
-      </section>
-
-      {/* 8. The one action */}
-      <section id="register" className="story-register" aria-labelledby="register-heading">
-        <div className="story-wrap story-register-grid">
-          <div>
-            <h2 id="register-heading" className="story-heading">Be among the first.</h2>
-            <p className="story-register-copy">
-              We will tell you when the finder opens in your area.
-            </p>
-          </div>
-          <InterestForm />
         </div>
       </section>
 

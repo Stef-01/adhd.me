@@ -1782,8 +1782,12 @@ textarea:focus-visible {
   gap: 10px;
   padding: 0 24px;
   border-radius: 999px;
-  box-shadow: none;
+  /* The talk option carries the page's amber accent so it stands out as the primary way in. */
+  background: var(--accent);
+  color: var(--on-ground);
+  box-shadow: 0 10px 24px rgb(138 90 22 / 22%);
 }
+.patient-v2 .voice-screen .mic-button:hover { background: #744910; }
 
 .patient-v2 .voice-screen .mic-button span {
   font-size: 13px;
@@ -1801,6 +1805,87 @@ textarea:focus-visible {
   border: 1px solid var(--line);
   border-radius: 999px;
 }
+
+/* The dual-functional input: one field, one trailing control that morphs between talk (mic) and
+   search (arrow) by whether there is text. The field is the amber-outlined pill; the control is a
+   solid amber circle inside it. */
+.patient-v2 .voice-actions .dual-input { position: relative; display: flex; align-items: center; width: 100%; }
+.patient-v2 .voice-actions .dual-input-field {
+  width: 100%;
+  height: 66px;
+  padding: 0 70px 0 26px;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.patient-v2 .voice-actions .dual-input-field::placeholder { color: #9c7b45; }
+.patient-v2 .voice-actions .dual-input-action {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-ground);
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+.patient-v2 .voice-actions .dual-input-action:hover { background: #744910; }
+.patient-v2 .voice-actions .dual-input-action:active { transform: scale(0.93); }
+
+/* The written option, layered below the microphone. Same aesthetic as the /type screen's box,
+   sized compact so both input paths sit on the one panel. */
+.patient-v2 .voice-actions .voice-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 4px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.patient-v2 .voice-actions .voice-or::before,
+.patient-v2 .voice-actions .voice-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.patient-v2 .voice-actions .voice-type {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+}
+.patient-v2 .voice-actions .voice-type-input {
+  width: 100%;
+  height: 60px;
+  padding: 0 24px;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+.patient-v2 .voice-actions .voice-type-input::placeholder { color: #9c7b45; }
+/* The written option's submit joins the amber system, so talk / write / find read as one panel.
+   Disabled stays the default grey until there is something to search on. */
+.patient-v2 .voice-actions .voice-type .primary-button { background: var(--accent); color: var(--on-ground); }
+.patient-v2 .voice-actions .voice-type .primary-button:hover:not(:disabled) { background: #744910; }
+.patient-v2 .voice-actions .scenario-toggle { margin-top: 14px; }
 
 .patient-v2 .micro-footer {
   bottom: 13px;
@@ -3345,7 +3430,7 @@ textarea:focus-visible {
   border: 0;
   border-radius: 999px;
   color: #fff;
-  background: var(--community-ink);
+  background: var(--community-accent);
   font-size: 13px;
   font-weight: 720;
   cursor: pointer;
@@ -3353,8 +3438,8 @@ textarea:focus-visible {
 
 .community-interest-form > button:hover,
 .community-interest-form > button:focus-visible {
-  background: #2a2a22;
-  outline: 3px solid #aeb99d;
+  background: #6f1e31;
+  outline: 3px solid var(--community-accent);
   outline-offset: 2px;
 }
 
@@ -3855,13 +3940,13 @@ textarea:focus-visible {
   padding: 0 30px;
   border-radius: 999px;
   color: #fff;
-  background: var(--s-ink);
+  background: var(--s-accent);
   font-size: 14.5px;
   font-weight: 640;
   text-decoration: none;
   transition: transform 0.15s ease, background 0.2s ease;
 }
-.story-primary-link:hover { background: #2a2a22; }
+.story-primary-link:hover { background: #6f1e31; }
 .story-primary-link:active { transform: translateY(1px); }
 .story-primary-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 
@@ -4005,6 +4090,10 @@ textarea:focus-visible {
 
 /* Chapters ---------------------------------------------------------------- */
 .story-chapter-open { border-top: 0; padding-top: clamp(40px, 5vw, 72px); }
+/* The rule beat sits on its own warm-parchment band — a distinct tile in the warm side of the
+   palette, apart from the blush register and the dark throughline, and light enough to keep the
+   muted note legible. Full-bleed like the other coloured sections; padding evened out for a band. */
+.story-chapter-tint { background: #efe6d3; padding-block: clamp(72px, 9vw, 132px); }
 .story-heading-wide { max-width: 20ch; }
 .story-prose-lead { max-width: 720px; }
 /* The first paragraph of an opening chapter carries ink weight; the rest recede to --s-muted.
@@ -4040,7 +4129,7 @@ textarea:focus-visible {
 .story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 14.5px; line-height: 1.5; }
 /* The figures above are indicative and unsourced (see src/compliance/landing-copy.ts). The note
    is not fine print hidden at the foot of the page — it sits under the rail it qualifies. */
-.story-stats-note { max-width: 40ch; margin: 18px 0 0; color: var(--s-muted); font-size: 12.5px; line-height: 1.6; }
+.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 11px; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
 .story-pull p {
@@ -4407,9 +4496,15 @@ textarea:focus-visible {
 .coverage-map svg { width: 100%; height: auto; overflow: visible; }
 /* The dots carry the whole diagram, so they are drawn at the ink colour rather than the muted one:
    at r=1.35 on a 100-unit box a mid-grey reads as dust. */
-.coverage-dot { fill: var(--s-ink); opacity: 0.75; }
+.coverage-dot { fill: var(--s-accent); opacity: 1; }
 .coverage-dot.is-here { fill: var(--s-accent); opacity: 1; }
 .coverage-halo { fill: none; stroke: var(--s-accent); stroke-width: 0.7; opacity: 0.55; }
+/* A soft rose halo behind each marker, so the two covered areas read as pins the eye lands on. */
+.coverage-pin-halo { fill: var(--s-accent-soft); }
+/* The Australia silhouette the two markers sit on: a subtle filled landmass with a hairline edge,
+   so it reads as scenery and the accent dots carry the eye. */
+.coverage-land { fill: var(--s-line); stroke: var(--s-muted); stroke-width: 0.45; opacity: 0.7; stroke-linejoin: round; }
+.coverage-pin-label { fill: var(--s-ink); font-size: 4.2px; font-weight: 500; letter-spacing: 0.01em; }
 .coverage-map figcaption { display: grid; gap: 10px; }
 .coverage-count {
   color: var(--s-accent);
@@ -4435,8 +4530,11 @@ textarea:focus-visible {
   border-top-color: var(--line);
 }
 .results-head .coverage-map .coverage-names { font-size: 12.5px; }
-.results-head .coverage-dot { fill: var(--ink); }
+.results-head .coverage-dot { fill: var(--accent); }
+.results-head .coverage-pin-halo { fill: var(--accent-soft); }
 .results-head .coverage-count { color: var(--accent); font-size: 11px; }
+.results-head .coverage-land { fill: var(--line); stroke: var(--muted); }
+.results-head .coverage-pin-label { fill: var(--ink); }
 
 /* FOUNDERS ------------------------------------------------------------------
    Three cards, each a cut-out portrait on bare paper with the name, the role and the

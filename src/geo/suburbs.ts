@@ -18,10 +18,12 @@
 //   train line, and a product that printed "12 min" without knowing the timetable would be making
 //   the same fabricated-precision mistake in a new unit.
 //
-// THE TABLE IS SMALL AND HAND-WRITTEN because the demo roster covers one part of Sydney. A real
-// deployment reads this from a gazetteer; the shape of the lookup is what matters here, and the
-// test pins that every suburb a clinician claims is present, so a new practice in an unlisted
-// suburb fails the suite rather than silently ranking last.
+// THE TABLE IS SMALL AND HAND-WRITTEN because the demo roster covers two focus areas — Beecroft in
+// northern Sydney (NSW) and the Gold Coast (QLD). A real deployment reads this from a gazetteer;
+// the shape of the lookup is what matters here, and the test pins that every suburb a clinician
+// claims is present, so a new practice in an unlisted suburb fails the suite rather than silently
+// ranking last. The two areas are hundreds of kilometres apart on purpose: distances are always
+// computed within an area, and a search resolves to whichever point the person names.
 
 export interface SuburbPoint {
   suburb: string;
@@ -32,20 +34,16 @@ export interface SuburbPoint {
 
 /** Approximate centroids. Good to a few hundred metres, which is the resolution being claimed. */
 export const SUBURBS: readonly SuburbPoint[] = [
-  { suburb: "Blacktown", postcode: "2148", lat: -33.7688, lon: 150.9063 },
-  { suburb: "Doonside", postcode: "2767", lat: -33.7669, lon: 150.8636 },
-  { suburb: "Glenwood", postcode: "2768", lat: -33.7370, lon: 150.9280 },
-  { suburb: "Kings Langley", postcode: "2147", lat: -33.7460, lon: 150.9370 },
-  { suburb: "Lalor Park", postcode: "2147", lat: -33.7580, lon: 150.9280 },
-  { suburb: "Marayong", postcode: "2148", lat: -33.7480, lon: 150.8930 },
-  { suburb: "Mount Druitt", postcode: "2770", lat: -33.7700, lon: 150.8180 },
-  { suburb: "Parramatta", postcode: "2150", lat: -33.8150, lon: 151.0000 },
-  { suburb: "Prospect", postcode: "2148", lat: -33.8000, lon: 150.9130 },
-  { suburb: "Quakers Hill", postcode: "2763", lat: -33.7340, lon: 150.8790 },
-  { suburb: "Rooty Hill", postcode: "2766", lat: -33.7710, lon: 150.8420 },
-  { suburb: "Seven Hills", postcode: "2147", lat: -33.7745, lon: 150.9370 },
-  { suburb: "Toongabbie", postcode: "2146", lat: -33.7880, lon: 150.9520 },
-  { suburb: "Woodcroft", postcode: "2767", lat: -33.7580, lon: 150.8830 },
+  // Focus area 1 — Beecroft and its neighbours, northern Sydney, NSW.
+  { suburb: "Beecroft", postcode: "2119", lat: -33.7503, lon: 151.0586 },
+  { suburb: "Cheltenham", postcode: "2119", lat: -33.7447, lon: 151.0778 },
+  { suburb: "Pennant Hills", postcode: "2120", lat: -33.7383, lon: 151.0719 },
+  { suburb: "Epping", postcode: "2121", lat: -33.7726, lon: 151.0817 },
+  // Focus area 2 — the Gold Coast, QLD.
+  { suburb: "Southport", postcode: "4215", lat: -27.9676, lon: 153.4000 },
+  { suburb: "Surfers Paradise", postcode: "4217", lat: -28.0027, lon: 153.4309 },
+  { suburb: "Broadbeach", postcode: "4218", lat: -28.0333, lon: 153.4300 },
+  { suburb: "Robina", postcode: "4226", lat: -28.0700, lon: 153.3900 },
 ];
 
 const byName = new Map(SUBURBS.map((s) => [s.suburb.toLowerCase(), s]));

@@ -45,7 +45,7 @@ export default async function CommunityInterestPage() {
         <div>
           <p className="text-sm font-medium text-stone-500">Demand evidence</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Community interest</h1>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-stone-600">Unique, consented registrations from the Western Sydney community landing page.</p>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-stone-600">Unique, consented registrations from the Beecroft and Gold Coast community landing page.</p>
         </div>
         <a href="/api/interest/export" className="rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-medium hover:border-stone-500">Download CSV</a>
       </div>

@@ -67,7 +67,7 @@ export type Clinician = {
    * The distinction matters for ranking rather than for display. A clinician somebody can see
    * without travelling is equally reachable from every suburb, so sorting them by the distance to
    * rooms they do not need to visit measures the wrong thing: Dr Saxena sat 3rd on stated
-   * preference and fell to 13th the moment a Blacktown origin was given, which put him behind a
+   * preference and fell to 13th the moment a Beecroft origin was given, which put him behind a
    * "show the other eleven" fold for a service that is available anywhere in the state.
    *
    * Deliberately not inferred from `practicalSignals`. Several clinicians offer telehealth
@@ -117,7 +117,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Blacktown",
+    suburb: "Beecroft",
     reach: "Practice appointments",
     image: "/clinicians/maya-singh.png",
     nextAvailable: "Tuesday, 10:20 am",
@@ -143,7 +143,7 @@ export const clinicians: Clinician[] = [
     gender: "man",
     pronouns: "he/him",
     title: "General practitioner",
-    suburb: "Seven Hills",
+    suburb: "Robina",
     reach: "Practice appointments",
     image: "/clinicians/daniel-okafor.png",
     nextAvailable: "Monday, 3:40 pm",
@@ -169,7 +169,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Doonside",
+    suburb: "Cheltenham",
     reach: "Practice appointments",
     image: "/clinicians/linh-nguyen.png",
     nextAvailable: "Wednesday, 9:00 am",
@@ -195,7 +195,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Mount Druitt",
+    suburb: "Pennant Hills",
     reach: "Practice appointments",
     image: "/clinicians/aisha-rahman.png",
     nextAvailable: "Thursday, 11:10 am",
@@ -221,7 +221,7 @@ export const clinicians: Clinician[] = [
     gender: "man",
     pronouns: "he/him",
     title: "General practitioner",
-    suburb: "Lalor Park",
+    suburb: "Beecroft",
     reach: "Practice appointments",
     image: "/clinicians/tom-bennett.png",
     nextAvailable: "Tuesday, 4:30 pm",
@@ -247,7 +247,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Blacktown",
+    suburb: "Beecroft",
     reach: "Practice appointments",
     image: "/clinicians/sofia-alvarez.png",
     nextAvailable: "Friday, 8:40 am",
@@ -273,7 +273,7 @@ export const clinicians: Clinician[] = [
     gender: "man",
     pronouns: "he/him",
     title: "General practitioner",
-    suburb: "Kings Langley",
+    suburb: "Epping",
     reach: "Practice appointments",
     image: "/clinicians/noah-williams.png",
     nextAvailable: "Wednesday, 1:20 pm",
@@ -299,7 +299,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Toongabbie",
+    suburb: "Southport",
     reach: "Practice appointments",
     image: "/clinicians/priya-nair.png",
     nextAvailable: "Monday, 9:30 am",
@@ -325,7 +325,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Glenwood",
+    suburb: "Pennant Hills",
     reach: "Practice appointments",
     image: "/clinicians/anjali-menon.png",
     nextAvailable: "Tuesday, 12:30 pm",
@@ -351,7 +351,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Quakers Hill",
+    suburb: "Surfers Paradise",
     reach: "Practice appointments",
     image: "/clinicians/nisha-kapoor.png",
     nextAvailable: "Wednesday, 3:10 pm",
@@ -377,7 +377,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Prospect",
+    suburb: "Southport",
     reach: "Practice appointments",
     image: "/clinicians/camila-torres.png",
     nextAvailable: "Monday, 11:20 am",
@@ -403,7 +403,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Rooty Hill",
+    suburb: "Broadbeach",
     reach: "Practice appointments",
     image: "/clinicians/leila-haddad.png",
     nextAvailable: "Thursday, 2:40 pm",
@@ -429,7 +429,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Marayong",
+    suburb: "Cheltenham",
     reach: "Practice appointments",
     image: "/clinicians/hanh-tran.png",
     nextAvailable: "Friday, 10:10 am",
@@ -455,7 +455,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Woodcroft",
+    suburb: "Surfers Paradise",
     reach: "Practice appointments",
     image: "/clinicians/grace-chen.png",
     nextAvailable: "Tuesday, 1:40 pm",
@@ -481,7 +481,7 @@ export const clinicians: Clinician[] = [
     gender: "woman",
     pronouns: "she/her",
     title: "General practitioner",
-    suburb: "Seven Hills",
+    suburb: "Robina",
     reach: "Practice appointments",
     image: "/clinicians/erin-walsh.png",
     nextAvailable: "Monday, 1:20 pm",
@@ -507,7 +507,7 @@ export const clinicians: Clinician[] = [
     gender: "man",
     pronouns: "he/him",
     title: "General practitioner",
-    suburb: "Parramatta",
+    suburb: "Beecroft",
     reach: "Practice appointments",
     // A real person's likeness is theirs to supply, and he has. Square with its own background,
     // like the fifteen synthetic personas around it — a cut-out on transparency would make the
@@ -646,7 +646,7 @@ const COMPARABLE_FIT_BAND = 4;
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
 export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {
   // A kilometre figure beside somebody you never travel to is a number that answers no question.
-  if (clinician.telehealthFirstAppointment) return "by telehealth, anywhere in NSW";
+  if (clinician.telehealthFirstAppointment) return "by telehealth, wherever you are";
   if (!origin) return null;
   const point = resolvePlace(clinician.suburb);
   if (!point) return null;
