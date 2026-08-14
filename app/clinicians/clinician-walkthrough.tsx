@@ -5,10 +5,8 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
-  CaretDown,
   Check,
   Clock,
-  Target,
   TrendUp,
 } from "@phosphor-icons/react";
 import { useState } from "react";
@@ -29,15 +27,13 @@ const stages: Array<{ id: Stage; label: string }> = [
  * can never route to, which is a worse state than having no focus at all.
  */
 const adhdConditions = [
-  { id: "adhd-assessment", label: "Diagnostic assessment", detail: "Demo anchor", locked: true },
-  { id: "child-adolescent-adhd", label: "Children & adolescents", detail: "School reports and paediatric referral" },
-  { id: "titration", label: "Titration & follow-up", detail: "Initiation, dose adjustment, side effects" },
-  { id: "autism-adhd", label: "Co-occurring autism", detail: "Where one explanation was offered and two are needed" },
-  { id: "comorbid-mood", label: "Anxiety & mood differential", detail: "Comorbidity, differential, or both" },
-  { id: "student-academic", label: "Study & workplace adjustments", detail: "Documentation a school or employer accepts" },
+  { id: "adhd-assessment", label: "Diagnostic assessment", locked: true },
+  { id: "child-adolescent-adhd", label: "Children & adolescents" },
+  { id: "titration", label: "Titration & follow-up" },
+  { id: "autism-adhd", label: "Co-occurring autism" },
+  { id: "comorbid-mood", label: "Anxiety & mood differential" },
+  { id: "student-academic", label: "Study & workplace adjustments" },
 ] as const;
-
-const comingFocusAreas = ["Autism assessment", "Mental health", "Sleep medicine", "Metabolic health", "Skin cancer"];
 
 const cases = [
   { label: "New ADHD assessment", detail: "Developmental history, rating scales", time: "8:40" },
@@ -104,7 +100,6 @@ const resources = [
 export function ClinicianWalkthrough() {
   const [stage, setStage] = useState<Stage>("goal");
   const [target, setTarget] = useState(30);
-  const [isAdhdFocusOpen, setIsAdhdFocusOpen] = useState(true);
   const [selectedConditions, setSelectedConditions] = useState<string[]>(["adhd-assessment"]);
   const [resourceIndex, setResourceIndex] = useState(0);
   const [reviewed, setReviewed] = useState<string[]>([]);
@@ -144,7 +139,6 @@ export function ClinicianWalkthrough() {
   function restart() {
     setStage("goal");
     setTarget(30);
-    setIsAdhdFocusOpen(true);
     setSelectedConditions(["adhd-assessment"]);
     setResourceIndex(0);
     setReviewed([]);
@@ -180,76 +174,43 @@ export function ClinicianWalkthrough() {
           </div>
         </nav>
 
+        {/* ROUND 3. This screen carried five blocks: an intro, a collapsible focus CARD wrapping a
+            single option, the conditions inside it, a grid of five greyed-out "coming soon"
+            pathways, and a percentage slider. Three are gone.
+            The focus card was a disclosure control around ONE choice, which is ceremony rather
+            than a choice. The coming-soon grid was a roadmap teaser: five things a GP cannot pick,
+            taking more room than the one they can. The per-condition sub-labels went with them,
+            because a checkbox list where every row explains itself is a list nobody reads. */}
         {stage === "goal" && (
           <section className="cv2-stage cv2-goal">
             <div className="cv2-intro">
               <p className="cv2-eyebrow">Choose your direction</p>
               <h1>What kind of GP do you want to become?</h1>
-              <p>Choose a focus. We’ll shape your case mix and learning around it.</p>
+              <p>ADHD is the pathway available now. Pick the parts you want more of.</p>
             </div>
 
-            <button
-              className="cv2-focus-card"
-              type="button"
-              aria-expanded={isAdhdFocusOpen}
-              aria-controls="adhd-focus-conditions"
-              onClick={() => setIsAdhdFocusOpen((current) => !current)}
-            >
-              <span className="cv2-icon"><Target size={21} weight="bold" aria-hidden="true" /></span>
-              <span>
-                <small>Available now</small>
-                <strong>ADHD</strong>
-                <em>{selectedConditions.length} condition{selectedConditions.length === 1 ? "" : "s"} selected · choose the care you want to deepen</em>
-              </span>
-              <span className={`cv2-focus-caret${isAdhdFocusOpen ? " is-open" : ""}`}>
-                <CaretDown size={17} weight="bold" aria-hidden="true" />
-              </span>
-            </button>
-
-            {isAdhdFocusOpen && (
-              <fieldset id="adhd-focus-conditions" className="cv2-condition-panel">
-                <legend>Choose conditions</legend>
-                <p>Select the areas you want progressively represented in your case mix and learning.</p>
-                <div className="cv2-condition-list">
-                  {adhdConditions.map((condition) => {
-                    const checked = selectedConditions.includes(condition.id);
-                    return (
-                      <label key={condition.id} className={checked ? "is-checked" : ""}>
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          disabled={"locked" in condition && condition.locked}
-                          onChange={() => toggleCondition(condition.id)}
-                        />
-                        <span className="cv2-checkbox" aria-hidden="true">
-                          {checked && <Check size={13} weight="bold" />}
-                        </span>
-                        <span>
-                          <strong>{condition.label}</strong>
-                          <small>{condition.detail}</small>
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </fieldset>
-            )}
-
-            <div className="cv2-coming-section">
-              <div><span>Other clinical focus areas</span><small>More pathways are being built</small></div>
-              <div className="cv2-coming-grid">
-                {comingFocusAreas.map((focus, index) => {
-                  const tooltipId = `coming-focus-${index}`;
+            <fieldset id="adhd-focus-conditions" className="cv2-condition-panel">
+              <legend className="sr-only">Choose conditions</legend>
+              <div className="cv2-condition-list">
+                {adhdConditions.map((condition) => {
+                  const checked = selectedConditions.includes(condition.id);
                   return (
-                    <button key={focus} type="button" aria-disabled="true" aria-describedby={tooltipId}>
-                      <span>{focus}</span>
-                      <small>Soon</small>
-                      <span id={tooltipId} role="tooltip" className="cv2-coming-tooltip">Coming soon</span>
-                    </button>
+                    <label key={condition.id} className={checked ? "is-checked" : ""}>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={"locked" in condition && condition.locked}
+                        onChange={() => toggleCondition(condition.id)}
+                      />
+                      <span className="cv2-checkbox" aria-hidden="true">
+                        {checked && <Check size={13} weight="bold" />}
+                      </span>
+                      <span><strong>{condition.label}</strong></span>
+                    </label>
                   );
                 })}
               </div>
-            </div>
+            </fieldset>
 
             <div className="cv2-mix-card">
               <div>

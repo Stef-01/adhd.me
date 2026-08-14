@@ -2457,11 +2457,14 @@ textarea:focus-visible {
 
 .cv2-condition-list label {
   display: grid;
-  min-height: 70px;
+  /* Was min-height 70 with align-items:start, sized for a two-line row: a label and a sub-label
+     underneath. Round 3 removed the sub-labels and left the text stranded at the top of a box
+     twice its height. Sized to the line that is actually there, and centred. */
+  min-height: 0;
   grid-template-columns: 24px 1fr;
   gap: 10px;
-  align-items: start;
-  padding: 12px;
+  align-items: center;
+  padding: 14px 14px;
   border: 1px solid var(--cv2-line);
   border-radius: 12px;
   background: var(--paper);
