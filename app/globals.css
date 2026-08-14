@@ -4083,7 +4083,7 @@ textarea:focus-visible {
 .story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 14.5px; line-height: 1.5; }
 /* The figures above are indicative and unsourced (see src/compliance/landing-copy.ts). The note
    is not fine print hidden at the foot of the page — it sits under the rail it qualifies. */
-.story-stats-note { max-width: 40ch; margin: 18px 0 0; color: var(--s-muted); font-size: 12.5px; line-height: 1.6; }
+.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 11px; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
 .story-pull p {
