@@ -509,8 +509,10 @@ export const clinicians: Clinician[] = [
     title: "General practitioner",
     suburb: "Parramatta",
     reach: "Practice appointments",
-    // A real person's likeness is theirs to supply. Renders as a monogram until he provides one.
-    image: null,
+    // A real person's likeness is theirs to supply, and he has. Square with its own background,
+    // like the fifteen synthetic personas around it — a cut-out on transparency would make the
+    // one real clinician in this roster the one that looks different in the grid.
+    image: "/clinicians/anubhav-saxena.png",
     nextAvailable: "Thursday, 8:30 am",
     acceptingNewPatients: true,
     focus: "Structured assessment, baseline physical screening & titration",

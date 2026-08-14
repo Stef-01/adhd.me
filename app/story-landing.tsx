@@ -1,8 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion, type Variants } from "motion/react";
-import { type ReactNode } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+  type Variants,
+} from "motion/react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import Image from "next/image";
 import { InterestForm } from "./interest-form";
 import { CoverageMap } from "./coverage-map";
@@ -46,9 +54,12 @@ import { CoverageMap } from "./coverage-map";
  * guideline before launch; they are written without false precision for that reason, and the
  * stat rail carries that qualification directly under it rather than in a footer.
  *
- * No portraits except the one that was supplied. Nothing in this tree generates a face for a
- * real person, and the two founders without a photograph get a monogram at the same size rather
- * than an empty frame.
+ * ALL THREE PORTRAITS ARE NOW SUPPLIED, AND THE MONOGRAM FALLBACK STAYS ANYWAY. Nothing in this
+ * tree generates a face for a real person: each of these is a photograph its subject handed over,
+ * cut out against the paper with the system subject-mask model rather than keyed off the studio
+ * backdrop, and framed to a shared 3:4 so the three heads sit on one line. `portrait: null` still
+ * renders a monogram at the same size, because the next founder or advisor added here will not
+ * have handed one over on the day they are added.
  */
 
 /**
@@ -82,7 +93,7 @@ const FOUNDERS: ReadonlyArray<{
     name: "Vikram Ganesh",
     role: "Co-founder",
     remit: "What a person meets when they first look for help.",
-    portrait: null,
+    portrait: "/vikram-ganesh.png",
     affiliations: [
       { name: "Bond University", logo: null, href: "https://bond.edu.au/", label: "Bond University" },
     ],
@@ -91,7 +102,7 @@ const FOUNDERS: ReadonlyArray<{
     name: "Dr Anubhav Saxena",
     role: "Co-founder, clinical",
     remit: "A documented baseline before anything starts, then follow-up on a schedule.",
-    portrait: null,
+    portrait: "/anubhav-saxena.png",
     affiliations: [
       { name: "Beecroft", logo: null, href: "#", label: "Beecroft" },
       { name: "University of Sydney", logo: null, href: "https://www.sydney.edu.au/", label: "University of Sydney" },
@@ -149,6 +160,52 @@ const COST_NOTE =
   "clinical practice guideline for ADHD (2022) and the 2023 Senate inquiry into ADHD assessment " +
   "and support services.";
 
+/* ─────────────────────────────────────────────────────────────────────────────────────────────
+ * MOTION.
+ *
+ * Every entrance on this page still animates from a VISIBLE state — see A11Y-2 above. That rules
+ * out the two moves a page like this usually reaches for: the opacity fade, and the mask reveal
+ * (a word inside `overflow: hidden`, translated in from below). The mask is worth naming because
+ * it LOOKS like a transform-only animation and would slip past the `opacity: 0` check in
+ * e2e/landing.spec.ts, while reintroducing the exact defect that check exists for: a headline
+ * that cannot be read until the bundle arrives, or ever, if it does not.
+ *
+ * So the vocabulary here is offset, parallax and pressure. Nothing starts hidden, and everything
+ * has somewhere to travel from.
+ * ───────────────────────────────────────────────────────────────────────────────────────────── */
+
+/** The page's one easing curve. A long tail — motion decelerates into place rather than stopping. */
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+/** Interactive pressure. Spring rather than duration, because a press has no natural length. */
+const PRESS = { type: "spring", stiffness: 420, damping: 32, mass: 0.7 } as const;
+
+/**
+ * True only after mount.
+ *
+ * SCROLL-LINKED STYLE IS GATED ON THIS, AND THE REASON IS SERVER RENDERING. `useScroll` reads 0
+ * on the server, so a `useTransform` output range that does not pass through 0 at progress 0
+ * ships as a real inline `transform` in the HTML — a section rendered 28px off its own layout
+ * position for anybody whose JavaScript never arrives. Gating the whole `style` prop means the
+ * server emits no transform at all and the parallax only ever exists where it can be driven.
+ */
+function useMounted(): boolean {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
+/**
+ * A section's own progress through the viewport, 0 as its top meets the bottom edge to 1 as its
+ * bottom leaves the top. The unit every parallax on this page is expressed in.
+ */
+function useSectionParallax(ref: RefObject<HTMLElement | null>, distance: number): MotionValue<number> {
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  // Softened, so a trackpad's jitter does not arrive as jitter in the layout.
+  const eased = useSpring(scrollYProgress, { stiffness: 90, damping: 30, mass: 0.4 });
+  return useTransform(eased, [0, 1], [distance, -distance]);
+}
+
 function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
   const reduce = useReducedMotion();
   return (
@@ -156,8 +213,10 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
       className={className}
       initial={reduce ? false : { y: 20 }}
       whileInView={{ y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+      // `margin` fires the entrance slightly BEFORE the element reaches the read line, so the
+      // movement has finished by the time it is being read rather than starting under the eye.
+      viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
+      transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
     </motion.div>
@@ -165,7 +224,9 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
 }
 
 const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
-const item: Variants = { hidden: { y: 16 }, show: { y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } } };
+const item: Variants = { hidden: { y: 16 }, show: { y: 0, transition: { duration: 0.55, ease: EASE } } };
+/** The founders' plates travel further and land slower — they are the heaviest objects on the page. */
+const plate: Variants = { hidden: { y: 28 }, show: { y: 0, transition: { duration: 0.8, ease: EASE } } };
 
 /** "Dr Anubhav Saxena" -> "AS". The honorific is not an initial. */
 function monogram(name: string): string {
@@ -178,6 +239,23 @@ function monogram(name: string): string {
 
 export function StoryLanding() {
   const reduce = useReducedMotion();
+  const mounted = useMounted();
+  const live = mounted && !reduce;
+
+  const heroRef = useRef<HTMLElement>(null);
+  const throughlineRef = useRef<HTMLElement>(null);
+  const pullRef = useRef<HTMLElement>(null);
+
+  // The hero figure drifts UP against the copy — the classic depth cue, at a magnitude small
+  // enough that it reads as depth rather than as an effect.
+  const heroFigureY = useSectionParallax(heroRef, 44);
+  const throughlineY = useSectionParallax(throughlineRef, 34);
+  const pullY = useSectionParallax(pullRef, 26);
+
+  // Read progress, drawn as a hairline under the sticky header. Decorative and aria-hidden: it
+  // repeats what a scrollbar already says, and a screen reader has better ways to ask.
+  const { scrollYProgress } = useScroll();
+  const readProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
 
   return (
     <main className="story">
@@ -185,16 +263,23 @@ export function StoryLanding() {
         className="story-header"
         initial={reduce ? false : { y: -10 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, ease: EASE }}
       >
         <div className="story-wrap story-header-inner">
           <Link href="/" className="story-wordmark" aria-label="ADHD.ME home">ADHD.ME</Link>
-          <Link href="/finder" className="story-demo-link">Find a GP</Link>
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={PRESS}>
+            <Link href="/finder" className="story-demo-link">Find a GP</Link>
+          </motion.div>
         </div>
+        <motion.span
+          className="story-progress"
+          aria-hidden="true"
+          style={live ? { scaleX: readProgress } : { scaleX: 0 }}
+        />
       </motion.header>
 
       {/* 1. The claim, beside the only honest figure this page has. */}
-      <section className="story-hero" aria-labelledby="story-hero-title">
+      <section className="story-hero" aria-labelledby="story-hero-title" ref={heroRef}>
         <div className="story-wrap story-hero-grid">
           <motion.div
             className="story-hero-copy"
@@ -210,17 +295,23 @@ export function StoryLanding() {
               Assessment, medication and follow-up with one GP. No psychiatrist queue to clear first.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
-              <Link className="story-primary-link" href="/finder">Find a GP near you</Link>
+              <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
+                <Link className="story-primary-link" href="/finder">Find a GP near you</Link>
+              </motion.div>
             </motion.div>
           </motion.div>
 
+          {/* The entrance and the parallax are on two different elements on purpose: one `y` per
+              element, or the scroll-linked value and the keyframed one fight over the transform. */}
           <motion.figure
             className="story-portrait"
             initial={reduce ? false : { y: 24 }}
             animate={{ y: 0 }}
-            transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, delay: 0.12, ease: EASE }}
           >
-            <CoverageMap />
+            <motion.div className="story-portrait-drift" style={live ? { y: heroFigureY } : undefined}>
+              <CoverageMap />
+            </motion.div>
           </motion.figure>
         </div>
       </section>
@@ -279,7 +370,7 @@ export function StoryLanding() {
       </section>
 
       {/* 4. The shape of the alternative, against a pull-line. */}
-      <section className="story-chapter" aria-labelledby="shape-title">
+      <section className="story-chapter" aria-labelledby="shape-title" ref={pullRef}>
         <div className="story-wrap story-split story-split-reverse">
           <div className="story-split-lead">
             <Reveal>
@@ -296,14 +387,19 @@ export function StoryLanding() {
             </Reveal>
           </div>
           <Reveal delay={0.12} className="story-pull">
-            <p>Care that fits the person in front of it.</p>
+            <motion.p style={live ? { y: pullY } : undefined}>
+              Care that fits the person in front of it.
+            </motion.p>
           </Reveal>
         </div>
       </section>
 
-      {/* 5. The one dark beat. No new claim — the hero's claim, restated where it lands hardest. */}
-      <section className="story-throughline" aria-labelledby="throughline-title">
-        <div className="story-wrap">
+      {/* 5. The one dark beat. No new claim — the hero's claim, restated where it lands hardest.
+          The parallax runs deepest here: it is the only section on the page whose ground moves
+          independently of the paper, so the drift reads as the band sliding past rather than as
+          text detaching from its own background. */}
+      <section className="story-throughline" aria-labelledby="throughline-title" ref={throughlineRef}>
+        <motion.div className="story-wrap" style={live ? { y: throughlineY } : undefined}>
           <Reveal>
             <p className="story-throughline-line" id="throughline-title">
               The permission already changed. <em>Now the appointment has to be findable.</em>
@@ -315,7 +411,7 @@ export function StoryLanding() {
               to close that last gap: from the change on paper to a GP near you, with a date.
             </p>
           </Reveal>
-        </div>
+        </motion.div>
       </section>
 
       {/* 6. What you actually do. */}
@@ -334,9 +430,16 @@ export function StoryLanding() {
             viewport={{ once: true, amount: 0.3 }}
             variants={stagger}
           >
+            {/* `whileHover` below is a LABEL so the row triggers and the title moves. It is not
+                paired with an `initial`/`animate` of its own: those would override the
+                hidden/show the stagger propagates down from the list and kill the entrance. */}
             {STEPS.map((step) => (
-              <motion.li key={step.title} variants={item}>
-                <h3>{step.title}</h3>
+              <motion.li key={step.title} variants={item} whileHover="lift">
+                {/* The title carries the hover, not the row: a whole ruled row sliding on hover
+                    reads as a click target, and this list is not one. */}
+                <motion.h3 variants={{ lift: { x: 6 } }} transition={PRESS}>
+                  {step.title}
+                </motion.h3>
                 <p>{step.body}</p>
               </motion.li>
             ))}
@@ -365,18 +468,24 @@ export function StoryLanding() {
             variants={stagger}
           >
             {FOUNDERS.map((f) => (
-              <motion.li key={f.name} variants={item}>
-                {f.portrait ? (
-                  <Image
-                    className="story-founder-photo"
-                    src={f.portrait}
-                    alt={`${f.name}, co-founder of ADHD.ME`}
-                    width={260}
-                    height={347}
-                  />
-                ) : (
-                  <span className="story-founder-monogram" aria-hidden="true">{monogram(f.name)}</span>
-                )}
+              <motion.li key={f.name} variants={plate} whileHover="lift">
+                <motion.div
+                  className="story-founder-plate"
+                  variants={{ lift: { y: -8 } }}
+                  transition={PRESS}
+                >
+                  {f.portrait ? (
+                    <Image
+                      className="story-founder-photo"
+                      src={f.portrait}
+                      alt={`${f.name}, co-founder of ADHD.ME`}
+                      width={260}
+                      height={347}
+                    />
+                  ) : (
+                    <span className="story-founder-monogram" aria-hidden="true">{monogram(f.name)}</span>
+                  )}
+                </motion.div>
 
                 <div className="story-founder-id">
                   <strong>{f.name}</strong>

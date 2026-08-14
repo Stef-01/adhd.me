@@ -51,8 +51,13 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
   return (
     <figure className="coverage-map">
       <svg viewBox="0 0 100 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
+        {/* ONE INTERPOLATED STRING, NOT A MIXED CHILD LIST, AND THE REASON IS HYDRATION. Written
+            as `The {SUBURBS.length} Western Sydney suburbs...` this is three children — text,
+            expression, text — which React's SVG server renderer flattens and its client renderer
+            does not. Every page carrying this diagram threw "Hydration failed... this tree will
+            be regenerated on the client" and silently re-rendered the whole route below it. */}
         <title id="coverage-map-title">
-          The {SUBURBS.length} Western Sydney suburbs ADHD.ME currently covers
+          {`The ${SUBURBS.length} Western Sydney suburbs ADHD.ME currently covers`}
         </title>
         {points.map((p) => {
           const isHere = marked === p.suburb.toLowerCase();

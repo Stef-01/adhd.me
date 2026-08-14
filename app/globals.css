@@ -3742,6 +3742,20 @@ textarea:focus-visible {
   justify-content: space-between;
   min-height: 66px;
 }
+/* Read progress, on the header's own bottom edge. Decorative and aria-hidden — it repeats what
+   the scrollbar already says. `scaleX` from a transform-origin at the left is the only property
+   touched, so it composites and never triggers layout at 60fps. */
+.story-progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: block;
+  height: 2px;
+  background: var(--s-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
 .story-wordmark {
   color: var(--s-ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
@@ -3942,6 +3956,38 @@ textarea:focus-visible {
   position: relative;
 }
 .story-portrait > * { width: 100%; }
+.story-portrait-drift { will-change: transform; }
+
+/* THE DOTS ARRIVE ONE AT A TIME, AND THIS IS CSS RATHER THAN MOTION ON PURPOSE. The dots are
+   decorative — the suburb NAMES beside them are the useful half and are plain text — so an
+   entrance that begins at scale 0 hides nothing a reader needs, which is not true of anything
+   else on this page. Keeping it in CSS also means it does not wait for the bundle, and it is
+   scoped to `.story-portrait` so the same diagram on /finder's results header stays still. */
+@media (prefers-reduced-motion: no-preference) {
+  .story-portrait .coverage-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: story-dot-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .story-portrait svg g:nth-of-type(1) .coverage-dot { animation-delay: 0.30s; }
+  .story-portrait svg g:nth-of-type(2) .coverage-dot { animation-delay: 0.36s; }
+  .story-portrait svg g:nth-of-type(3) .coverage-dot { animation-delay: 0.42s; }
+  .story-portrait svg g:nth-of-type(4) .coverage-dot { animation-delay: 0.48s; }
+  .story-portrait svg g:nth-of-type(5) .coverage-dot { animation-delay: 0.54s; }
+  .story-portrait svg g:nth-of-type(6) .coverage-dot { animation-delay: 0.60s; }
+  .story-portrait svg g:nth-of-type(7) .coverage-dot { animation-delay: 0.66s; }
+  .story-portrait svg g:nth-of-type(8) .coverage-dot { animation-delay: 0.72s; }
+  .story-portrait svg g:nth-of-type(9) .coverage-dot { animation-delay: 0.78s; }
+  .story-portrait svg g:nth-of-type(10) .coverage-dot { animation-delay: 0.84s; }
+  .story-portrait svg g:nth-of-type(11) .coverage-dot { animation-delay: 0.90s; }
+  .story-portrait svg g:nth-of-type(12) .coverage-dot { animation-delay: 0.96s; }
+  .story-portrait svg g:nth-of-type(13) .coverage-dot { animation-delay: 1.02s; }
+  .story-portrait svg g:nth-of-type(n + 14) .coverage-dot { animation-delay: 1.08s; }
+}
+@keyframes story-dot-in {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
 /* In the hero the diagram is the FIGURE, not a footnote under a section: it loses the rule and
    the top padding it wears in-body, stacks instead of sitting in two columns, and the plot is
    given real size. At the in-body 168px the dot cluster reads as dust from across a room. */
@@ -4411,6 +4457,9 @@ textarea:focus-visible {
   list-style: none;
 }
 .story-founders > li { display: grid; justify-items: center; }
+/* The plate is wrapped so the hover lift and the stagger entrance own one transform each. Two
+   `y` animations on a single element fight over `transform` and the loser is dropped silently. */
+.story-founder-plate { display: grid; justify-items: center; width: 100%; will-change: transform; }
 
 /* The plate. A fixed 3:4 frame so three cards share one baseline regardless of what fills them. */
 .story-founder-photo,

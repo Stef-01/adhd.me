@@ -241,13 +241,25 @@ describe("demo clinician matching", () => {
    * A null portrait is a supported state, not an oversight: nothing in this tree generates a face
    * for a real person, and the surfaces render a monogram instead. This pins which entries have
    * one so a synthetic persona silently losing its portrait is caught.
+   *
+   * THIS USED TO ASSERT `toBeNull()` FOR THE REAL PERSON, AND THAT WAS THE WRONG RULE STATED IN
+   * THE RIGHT SPIRIT. The hazard is a face this product INVENTED for somebody who exists, not a
+   * real clinician appearing in a directory with the photograph he handed over — refusing the
+   * second would mean the one real person in the roster is the only one rendered as initials.
+   * The rule a test can actually hold is the shape: any portrait, real or synthetic, is a file
+   * committed under public/clinicians, so a remote URL or a generated data: payload fails here.
+   * That a given file is a supplied photograph is a provenance fact no assertion can reach; it
+   * lives in the comment on the record itself.
    */
-  it("has a portrait for every synthetic persona and none invented for the real one", () => {
+  it("has a portrait for every persona, and every portrait is a committed file", () => {
     for (const clinician of clinicians.filter((c) => !c.realPerson)) {
       expect(clinician.image, `${clinician.id} should have a portrait`).toMatch(/^\/clinicians\/.+\.png$/);
     }
     for (const clinician of clinicians.filter((c) => c.realPerson)) {
-      expect(clinician.image).toBeNull();
+      if (clinician.image === null) continue;
+      expect(clinician.image, `${clinician.id}'s portrait must be a committed file`).toMatch(
+        /^\/clinicians\/.+\.png$/,
+      );
     }
   });
 });
