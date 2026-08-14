@@ -79,7 +79,7 @@ const FOUNDERS: ReadonlyArray<{
   affiliations: readonly Affiliation[];
 }> = [
   {
-    name: "Vikram Ganesh",
+    name: "Vikram Ganeshalingam",
     role: "Co-founder",
     remit: "What a person meets when they first look for help.",
     portrait: null,
