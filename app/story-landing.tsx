@@ -258,20 +258,17 @@ export function StoryLanding() {
           </Reveal>
           <Reveal delay={0.06} className="story-prose story-prose-lead">
             <p>
-              Getting assessed for ADHD has meant a long, costly wait for a psychiatrist — often
-              many months, and a fee most people cannot plan for. In New South Wales and Queensland,
-              GPs with the right training can now carry out the assessment and ongoing care
-              themselves, so that wait is no longer the only way in.
+              For years, an ADHD assessment meant a long, costly wait for a psychiatrist. In New
+              South Wales and Queensland, GPs with the right training can now do it themselves — so
+              the wait is no longer the only way in.
             </p>
             <p>
-              That is the gap ADHD.ME was built to close. We connect you directly to those GPs, so
-              assessment and follow-up can begin with one clinician close to home rather than at the
-              back of a referral queue. Psychiatry stays available for the complex cases — it is no
-              longer the default first step.
+              That gap is what ADHD.ME closes. We connect you straight to those GPs, so assessment
+              and follow-up start with one clinician near you — not at the back of a referral queue.
             </p>
             <p className="story-note">
-              Every clinician listed here is a GP who has completed that training. ADHD is not a
-              specialty on the register, and nobody here claims otherwise.
+              Every clinician here is a GP who has done that training. ADHD is not a specialty on
+              the register, and nobody here claims otherwise.
             </p>
           </Reveal>
         </div>

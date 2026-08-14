@@ -84,7 +84,9 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
 
   return (
     <figure className="coverage-map">
-      <svg viewBox="0 0 100 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
+      {/* The viewBox is wider than the 0–100 map so the pin labels sit INSIDE it: the whole
+          graphic then scales as one unit with the container and never clips, on any screen. */}
+      <svg viewBox="0 0 136 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
         <title id="coverage-map-title">{`A map of Australia marking ADHD.ME's two focus areas — Beecroft, NSW and the Gold Coast, QLD, across ${SUBURBS.length} suburbs`}</title>
         <path className="coverage-land" d={AUSTRALIA_PATH} />
         <path className="coverage-land" d={TASMANIA_PATH} />

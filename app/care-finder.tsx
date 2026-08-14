@@ -472,6 +472,26 @@ export function CareFinder() {
                 <span>Talk for 20 seconds</span>
               </Pressable>
 
+              <div className="voice-or" aria-hidden="true"><span>or</span></div>
+
+              <div className="voice-type">
+                <label className="sr-only" htmlFor="welcome-request">Describe the GP you are looking for</label>
+                <input
+                  id="welcome-request"
+                  type="text"
+                  className="voice-type-input"
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  onKeyDown={(event) => { if (event.key === "Enter" && draft.trim()) findMatches(draft); }}
+                  placeholder="Describe the GP you're looking for"
+                />
+                {/* Same path as the microphone: both converge on findMatches(), so a written
+                    description ranks clinicians exactly as a spoken one does. */}
+                <Pressable className="primary-button" type="button" disabled={!draft.trim()} onClick={() => findMatches(draft)}>
+                  Find a GP
+                </Pressable>
+              </div>
+
               <button
                 className="scenario-toggle"
                 type="button"
