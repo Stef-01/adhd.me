@@ -81,8 +81,8 @@ const FOUNDERS: ReadonlyArray<{
 }> = [
   {
     name: "Vikram Ganeshalingam",
-    role: "Co-founder, final-year MD candidate",
-    remit: "What a person meets when they first look for help.",
+    role: "Co-founder",
+    remit: "Final-year MD candidate, Bond University.",
     portrait: "/vikram.png",
     affiliations: [
       { name: "Bond University", logo: null, href: "https://bond.edu.au/", label: "Bond University" },
