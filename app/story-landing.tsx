@@ -26,14 +26,14 @@ import { CoverageMap } from "./coverage-map";
  * has not changed and no claim has been added — the beats below are the same five points plus
  * two that carry no new assertion (a stat rail quoting figures already in
  * src/compliance/landing-copy.ts, and one dark band restating the hero's claim). What changed is
- * that the page now has a RHYTHM: wide, split, split-reversed, inverted, ruled list, portraits,
+ * that the page now has a RHYTHM: wide, split-reversed, split, inverted, ruled list, portraits,
  * form. Nothing sits at the same width as the thing above it, which is the entire reason it
  * reads as a page rather than as a stack.
  *
  *   1. Hero        - the claim, in one sentence, beside the coverage diagram.
- *   2. The change  - the fact the whole product rests on. Without it the claim is marketing.
- *   3. The cost    - what the old route cost, as indicative figures with their own disclaimer.
- *   4. The shape   - one GP end to end, against a pull-line.
+ *   2. The shape   - one GP end to end, against a pull-line.
+ *   3. The change  - the fact the whole product rests on. Without it the claim is marketing.
+ *   4. The cost    - what the old route cost, as indicative figures with their own disclaimer.
  *   5. Throughline - the one dark beat. The permission changed; the appointment must be findable.
  *   6. How         - three lines, because "what do I actually do" is the next question.
  *   7. Founders    - three names, because a health product with anonymous founders is a red flag.
@@ -225,7 +225,30 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* 2. The fact it rests on. Set wide and opened without a rule: it is the first chapter. */}
+      {/* 2. The shape of the alternative, against a pull-line. */}
+      <section className="story-chapter" aria-labelledby="shape-title">
+        <div className="story-wrap story-split story-split-reverse">
+          <div className="story-split-lead">
+            <Reveal>
+              <h2 id="shape-title" className="story-heading">
+                One GP, from the first appointment to the follow-up.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.06} className="story-prose">
+              <p>
+                Nobody should have to tell their story twice to get through a door. One clinician
+                holds the assessment, the medication and the follow-up, and what they wrote down
+                in the first appointment is still there in the fourth.
+              </p>
+            </Reveal>
+          </div>
+          <Reveal delay={0.12} className="story-pull">
+            <p>Care that fits the person in front of it.</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 3. The fact it rests on. Set wide and opened without a rule. */}
       <section className="story-chapter story-chapter-open" aria-labelledby="change-title">
         <div className="story-wrap">
           <Reveal>
@@ -245,7 +268,7 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* 3. What the old route cost. */}
+      {/* 4. What the old route cost. */}
       <section className="story-chapter" aria-labelledby="cost-title">
         <div className="story-wrap story-split">
           <div className="story-split-lead">
@@ -274,29 +297,6 @@ export function StoryLanding() {
               ))}
             </dl>
             <p className="story-stats-note">{COST_NOTE}</p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 4. The shape of the alternative, against a pull-line. */}
-      <section className="story-chapter" aria-labelledby="shape-title">
-        <div className="story-wrap story-split story-split-reverse">
-          <div className="story-split-lead">
-            <Reveal>
-              <h2 id="shape-title" className="story-heading">
-                One GP, from the first appointment to the follow-up.
-              </h2>
-            </Reveal>
-            <Reveal delay={0.06} className="story-prose">
-              <p>
-                Nobody should have to tell their story twice to get through a door. One clinician
-                holds the assessment, the medication and the follow-up, and what they wrote down
-                in the first appointment is still there in the fourth.
-              </p>
-            </Reveal>
-          </div>
-          <Reveal delay={0.12} className="story-pull">
-            <p>Care that fits the person in front of it.</p>
           </Reveal>
         </div>
       </section>
