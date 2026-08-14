@@ -1846,6 +1846,10 @@ textarea:focus-visible {
   text-align: center;
 }
 .patient-v2 .voice-actions .voice-type-input::placeholder { color: #9c7b45; }
+/* The written option's submit joins the amber system, so talk / write / find read as one panel.
+   Disabled stays the default grey until there is something to search on. */
+.patient-v2 .voice-actions .voice-type .primary-button { background: var(--accent); color: var(--on-ground); }
+.patient-v2 .voice-actions .voice-type .primary-button:hover:not(:disabled) { background: #744910; }
 .patient-v2 .voice-actions .scenario-toggle { margin-top: 14px; }
 
 .patient-v2 .micro-footer {
