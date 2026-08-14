@@ -90,7 +90,7 @@ const FOUNDERS: ReadonlyArray<{
   },
   {
     name: "Dr Anubhav Saxena",
-    role: "Co-founder, clinical",
+    role: "Co-founder, MBBS, FRACGP",
     remit: "A documented baseline before anything starts, then follow-up on a schedule.",
     portrait: null,
     affiliations: [
