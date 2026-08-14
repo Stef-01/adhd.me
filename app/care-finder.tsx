@@ -187,7 +187,7 @@ function FinderContext() {
       {/* "All profiles are synthetic" stopped being true when a founder joined the roster, and a
           disclaimer that is nearly true is worse than none: it is the sentence a reader relies on. */}
       <p>
-        Early demo in Western Sydney. Availability is synthetic, and every profile except
+        Early demo in Beecroft and on the Gold Coast. Availability is synthetic, and every profile except
         Dr Saxena’s describes an invented clinician.
       </p>
     </aside>
@@ -644,7 +644,7 @@ export function CareFinder() {
                     setPlace(event.target.value);
                     setMatches(rankCliniciansNear(request, resolvePlace(event.target.value)));
                   }}
-                  placeholder="Blacktown"
+                  placeholder="Beecroft"
                   autoComplete="address-level2"
                 />
                 <datalist id="covered-suburbs">

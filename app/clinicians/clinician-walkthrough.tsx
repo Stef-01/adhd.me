@@ -253,7 +253,7 @@ export function ClinicianWalkthrough() {
 
             <div className="cv2-case-hero">
               <div className="cv2-case-hero-top">
-                <span>Tomorrow · Blacktown</span>
+                <span>Tomorrow · Beecroft</span>
                 <Clock size={20} weight="bold" aria-hidden="true" />
               </div>
               <div className="cv2-case-number"><strong>4</strong><span>ADHD<br />appointments</span></div>

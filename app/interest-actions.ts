@@ -43,7 +43,7 @@ export async function registerInterest(
   try {
     saveInterestSignup({ name, email, interests });
     revalidatePath("/console/interest");
-    return { status: "success", message: "Thanks — you’re on the list. We’ll be in touch as the Western Sydney sessions take shape." };
+    return { status: "success", message: "Thanks — you’re on the list. We’ll be in touch as the Beecroft and Gold Coast sessions take shape." };
   } catch {
     return { status: "error", message: "We couldn’t save that just now. Please email us instead." };
   }

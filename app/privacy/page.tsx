@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
             results, and we never use patient information for advertising.
           </p>
           <p className="mt-3 text-sm leading-6">
-            For the Western Sydney community interest list, we collect the name, email address
+            For our community interest list, we collect the name, email address
             and interest options a person chooses, with their consent. We use these details only
             to contact them about community sessions and early product testing. We do not ask for
             clinical records or a description of symptoms in this form.

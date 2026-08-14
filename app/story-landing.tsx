@@ -42,9 +42,10 @@ import { CoverageMap } from "./coverage-map";
  * FOUNDER ACTION. The three founders are real people and their entries are ROLES, not
  * biographies: whatever Vikram and Anubhav want said about themselves belongs in their own words,
  * and inventing it would put unverified claims about named clinicians on a public page. The NSW
- * statement and the figures in src/compliance/landing-copy.ts need confirming against the current
- * guideline before launch; they are written without false precision for that reason, and the
- * stat rail carries that qualification directly under it rather than in a footer.
+ * AND QUEENSLAND rule statements and the figures in src/compliance/landing-copy.ts need confirming
+ * against each state's current guideline before launch; they are written without false precision
+ * for that reason, and the stat rail carries that qualification directly under it rather than in a
+ * footer.
  *
  * No portraits except the ones that were supplied. Nothing in this tree generates a face for a
  * real person, and the founder without a supplied photograph gets a monogram at the same size
@@ -141,13 +142,14 @@ const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = 
   // landing-copy.ts can say it because /practices is addressed to practice managers; this page
   // is addressed to patients, where the same word reads as a claim about what care somebody
   // needs. Same fact, phrased for the audience that is actually reading it.
-  { value: "Now in-practice", label: "NSW lets a GP with the right training carry the whole pathway", accent: true },
+  { value: "Now in-practice", label: "NSW and Queensland now let a GP with the right training carry the whole pathway", accent: true },
 ];
 
 const COST_NOTE =
-  "Indicative figures pending source confirmation. Anchors: the AADPA Australian evidence-based " +
-  "clinical practice guideline for ADHD (2022) and the 2023 Senate inquiry into ADHD assessment " +
-  "and support services.";
+  "Indicative figures pending source confirmation, and the NSW and Queensland prescribing-rule " +
+  "changes are stated pending confirmation against each state's current guidance. Anchors: the " +
+  "AADPA Australian evidence-based clinical practice guideline for ADHD (2022) and the 2023 " +
+  "Senate inquiry into ADHD assessment and support services.";
 
 function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
   const reduce = useReducedMotion();
@@ -252,13 +254,13 @@ export function StoryLanding() {
       <section className="story-chapter story-chapter-open" aria-labelledby="change-title">
         <div className="story-wrap">
           <Reveal>
-            <h2 id="change-title" className="story-heading">The rule changed in NSW.</h2>
+            <h2 id="change-title" className="story-heading">The rule is changing in NSW and Queensland.</h2>
           </Reveal>
           <Reveal delay={0.06} className="story-prose story-prose-lead">
             <p>
-              GPs with the right training can now assess ADHD and manage it themselves.
-              Psychiatry stays available for the complex cases. The queue stops being the
-              default.
+              In New South Wales and Queensland, GPs with the right training can now assess ADHD
+              and manage it themselves. Psychiatry stays available for the complex cases. The queue
+              stops being the default.
             </p>
             <p className="story-note">
               ADHD.ME lists the GPs who have done that training. Every one of them is a GP.

@@ -7,13 +7,14 @@
 // src/geo/suburbs.ts, so it answers the question a visitor has at that moment - is my suburb in
 // this? - and it cannot drift from the matcher, because adding a suburb there adds a dot here.
 //
-// IT IS A DIAGRAM, NOT A MAP. There is no basemap, no roads, no coastline: just the fourteen
+// IT IS A DIAGRAM, NOT A MAP. There is no basemap, no roads, no coastline: just the covered
 // points, projected. Drawing a real map would raise the question of whose map, at what licence,
 // and would imply a precision the centroids do not have. The shape that emerges is the actual
-// spatial arrangement of the network, which is the only geographic claim being made.
+// spatial arrangement of the network — two clusters, hundreds of kilometres apart — which is the
+// only geographic claim being made.
 //
-// The projection is plate carree with a cos(latitude) correction on x. At this scale - about
-// 20km across - the difference from a proper projection is smaller than a dot.
+// The projection is plate carree with a cos(latitude) correction on x. The two focus areas span
+// about 6 degrees of latitude, so the diagram reads as two tight clusters at opposite ends.
 
 import { SUBURBS } from "@/geo/suburbs";
 
@@ -51,7 +52,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
   return (
     <figure className="coverage-map">
       <svg viewBox="0 0 100 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
-        <title id="coverage-map-title">{`The ${SUBURBS.length} Western Sydney suburbs ADHD.ME currently covers`}</title>
+        <title id="coverage-map-title">{`ADHD.ME's two focus areas — Beecroft, NSW and the Gold Coast, QLD — across ${SUBURBS.length} suburbs`}</title>
         {points.map((p) => {
           const isHere = marked === p.suburb.toLowerCase();
           return (
@@ -65,7 +66,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
       {/* The names are the useful half. A reader scanning for their own suburb reads the list, not
           the dots; the dots are what make the network legible as a shape. */}
       <figcaption>
-        <span className="coverage-count">{SUBURBS.length} suburbs</span>
+        <span className="coverage-count">Beecroft, NSW &amp; the Gold Coast, QLD</span>
         <span className="coverage-names">
           {SUBURBS.map((s) => s.suburb).join(", ")}
         </span>

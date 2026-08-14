@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "ADHD.ME: assessment you can actually reach",
   description:
-    "Find a GP in Western Sydney who does ADHD assessment, in your language, at a practice you can get to.",
+    "Find a GP in Beecroft or on the Gold Coast who does ADHD assessment, in your language, at a practice you can get to.",
 };
 
 /**

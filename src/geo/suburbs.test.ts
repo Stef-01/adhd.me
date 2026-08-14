@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { clinicians } from "@/demo/clinicians";
-import { SUBURBS, coveredSuburbs, describeDistance, distanceKm, resolvePlace } from "./suburbs";
+import { SUBURBS, coveredSuburbs, describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "./suburbs";
 
 const at = (name: string) => resolvePlace(name)!;
 
@@ -20,12 +20,16 @@ describe("the gazetteer covers what the roster claims", () => {
     expect(new Set(SUBURBS.map((s) => s.suburb)).size).toBe(SUBURBS.length);
   });
 
-  it("keeps every point inside greater Sydney, so a typo in a coordinate is caught", () => {
+  it("keeps every point inside one of the two focus areas, so a typo in a coordinate is caught", () => {
+    // Two boxes, not one: a single box spanning Beecroft to the Gold Coast is ~700km tall and
+    // would wave through a Sydney point mistyped into the Queensland range. Each suburb must sit
+    // inside the northern-Sydney box OR the Gold Coast box.
+    const inSydney = (s: SuburbPoint) =>
+      s.lat > -33.9 && s.lat < -33.6 && s.lon > 150.9 && s.lon < 151.2;
+    const inGoldCoast = (s: SuburbPoint) =>
+      s.lat > -28.3 && s.lat < -27.8 && s.lon > 153.2 && s.lon < 153.6;
     for (const s of SUBURBS) {
-      expect(s.lat, `${s.suburb} latitude`).toBeGreaterThan(-34.2);
-      expect(s.lat, `${s.suburb} latitude`).toBeLessThan(-33.5);
-      expect(s.lon, `${s.suburb} longitude`).toBeGreaterThan(150.6);
-      expect(s.lon, `${s.suburb} longitude`).toBeLessThan(151.35);
+      expect(inSydney(s) || inGoldCoast(s), `${s.suburb} is outside both focus areas`).toBe(true);
       expect(s.postcode).toMatch(/^\d{4}$/);
     }
   });
@@ -33,49 +37,51 @@ describe("the gazetteer covers what the roster claims", () => {
 
 describe("resolving what somebody typed", () => {
   it("matches a suburb name regardless of case or padding", () => {
-    expect(resolvePlace("  blACKtown ")?.suburb).toBe("Blacktown");
+    expect(resolvePlace("  beeCROFT ")?.suburb).toBe("Beecroft");
   });
 
   it("matches a postcode", () => {
-    expect(resolvePlace("2770")?.suburb).toBe("Mount Druitt");
+    expect(resolvePlace("4215")?.suburb).toBe("Southport");
   });
 
   it("returns null rather than guessing at a near miss", () => {
-    // W189's rule, and here it has teeth: "Blacktow" resolving to Blacktown is harmless, but the
-    // same leniency sends "Richmond" to the nearest string match on the other side of the city.
-    for (const miss of ["Blacktow", "Black town", "Bondi", "9999", "", "   "]) {
+    // W189's rule, and here it has teeth: "Beecrof" resolving to Beecroft is harmless, but the
+    // same leniency sends "Richmond" to the nearest string match in the wrong state.
+    for (const miss of ["Beecrof", "Bee croft", "Bondi", "9999", "", "   "]) {
       expect(resolvePlace(miss), `${miss} should not resolve`).toBeNull();
     }
   });
 
   it("offers the covered suburbs, so somebody can see what is in range", () => {
-    expect(coveredSuburbs()).toContain("Blacktown");
+    expect(coveredSuburbs()).toContain("Beecroft");
     expect(coveredSuburbs().length).toBe(SUBURBS.length);
   });
 });
 
 describe("distance", () => {
   it("is zero from a place to itself", () => {
-    expect(distanceKm(at("Blacktown"), at("Blacktown"))).toBeCloseTo(0, 5);
+    expect(distanceKm(at("Beecroft"), at("Beecroft"))).toBeCloseTo(0, 5);
   });
 
   it("is symmetric", () => {
-    const a = distanceKm(at("Blacktown"), at("Parramatta"));
-    const b = distanceKm(at("Parramatta"), at("Blacktown"));
+    const a = distanceKm(at("Beecroft"), at("Epping"));
+    const b = distanceKm(at("Epping"), at("Beecroft"));
     expect(a).toBeCloseTo(b, 9);
   });
 
-  it("puts Blacktown to Parramatta in the right ballpark", () => {
-    // Roughly 10km straight line. A wide band on purpose: this asserts the maths is not broken,
+  it("puts Southport to Surfers Paradise in the right ballpark", () => {
+    // Roughly 5km straight line. A wide band on purpose: this asserts the maths is not broken,
     // not that the centroids are survey-grade.
-    const km = distanceKm(at("Blacktown"), at("Parramatta"));
-    expect(km).toBeGreaterThan(7);
-    expect(km).toBeLessThan(13);
+    const km = distanceKm(at("Southport"), at("Surfers Paradise"));
+    expect(km).toBeGreaterThan(3);
+    expect(km).toBeLessThan(8);
   });
 
-  it("orders near before far", () => {
-    const origin = at("Blacktown");
-    expect(distanceKm(origin, at("Doonside"))).toBeLessThan(distanceKm(origin, at("Parramatta")));
+  it("orders near before far, including across the two focus areas", () => {
+    // Cheltenham is a neighbour of Beecroft; Southport is in the other state. The straight-line
+    // maths must put the neighbour first.
+    const origin = at("Beecroft");
+    expect(distanceKm(origin, at("Cheltenham"))).toBeLessThan(distanceKm(origin, at("Southport")));
   });
 });
 
