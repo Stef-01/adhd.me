@@ -292,3 +292,112 @@ export function renderResponseGraph(graph: ResponseGraph): string {
  * none.
  */
 export const SHIPPED_RESPONSE_GRAPHS: readonly ResponseGraph[] = [];
+
+// W218: the disclosure floor. W212 built the graph and its record-class entry deferred one
+// question here — a graph can hold shape a single link cannot, and the shape is a SMALL CELL. An
+// edge count is a count of people who answered an intervention a particular way, and "1 of 6
+// invitations was opted out" names that one person as surely as an identifier would. The edge
+// TYPE holds no patient id (W212), which is the identity the graph does not need and does not have;
+// the identity it can still leak is the small count, and settling that is this unit.
+//
+// THE FLOOR IS DECLARED DATA, NOT A PARAMETER — W196's rule, because a floor passed per disclosure
+// is a floor somebody tunes after seeing the cell. `discloseResponseGraph` reads the register and
+// takes no floor argument, so there is no call site at which a different one could be chosen.
+//
+// SUPPRESSED, NOT ROUNDED, and WHOLE-KIND rather than per-cell — W197's rule sharpened by this
+// graph's arithmetic. Within one intervention kind the edges and the unanswered node are counted
+// against the SAME basis (that kind's intervention total), so publishing all but one cell lets the
+// last be recovered by subtraction — the differencing W197 found between two figures that each
+// cleared the floor. So a kind containing any sub-floor cell is withheld ENTIRELY, and the
+// top-level total is recomputed over disclosed kinds only, so a withheld kind contributes to no
+// shown number. STATED, NOT LEFT AS A GAP (W145/W197): the statement is present even when nothing
+// was withheld, because a reader who sees it only sometimes learns to read its presence as a
+// warning. NOT CLAIMED, stated (W197): a reader holding two periods can still subtract across them;
+// no per-graph rule sees that, and a recipient allowlist is where it would be addressed.
+
+/** The minimum cell size for disclosing a response-graph count. Declared before any data. */
+export const RESPONSE_GRAPH_CELL_FLOOR: { readonly floor: number; readonly why: string } = {
+  floor: 5,
+  why:
+    "A response-graph count is the number of people who answered an intervention a particular way, and a count below the floor names them — the re-identification W196's aggregation floors were built against. One floor, shared across every kind and cell, because a floor that differed between them could be differenced to recover a protected count (W197).",
+};
+
+/**
+ * The only prose this half of the module authors. Linted as operator copy by W200.
+ *
+ * `as const` so the two texts are always defined under `noUncheckedIndexedAccess`, and so W200's
+ * copy census reaches them as strings.
+ */
+export const RESPONSE_GRAPH_DISCLOSURE_COPY = {
+  withheld:
+    "Some counts fell below the disclosure floor and are withheld, so that no group this small can identify the people in it. A withheld figure is not a zero: the count exists and is too small to show.",
+  nothing_withheld: "Every count in this graph clears the disclosure floor; nothing is withheld.",
+} as const;
+
+export interface DisclosedResponseGraph {
+  /** The graph with every intervention kind that contains a sub-floor cell removed whole. */
+  graph: ResponseGraph;
+  /** The kinds withheld, named — never their counts (W197: the number goes nowhere). */
+  withheldKinds: readonly { kind: InterventionKind; reason: string }[];
+  /** Always present, even when nothing was withheld (W145/W197: its absence is information). */
+  statement: string;
+}
+
+/**
+ * Make a response graph safe to disclose, or say what was withheld to make it so.
+ *
+ * Takes no floor — the register is the only source (W196). Withholds by KIND, because the cells of
+ * one kind share a basis and a partial disclosure invites subtraction (W197).
+ */
+export function discloseResponseGraph(graph: ResponseGraph): DisclosedResponseGraph {
+  const { floor } = RESPONSE_GRAPH_CELL_FLOOR;
+
+  // The counts that name people, grouped by intervention kind: every edge count and the unanswered
+  // count. An unobserved kind carries a count of zero people ("not performed", W179) and is never
+  // a small cell, so it is not gathered here and is always kept.
+  const cellsByKind = new Map<InterventionKind, number[]>();
+  for (const edge of graph.edges) {
+    cellsByKind.set(edge.from, [...(cellsByKind.get(edge.from) ?? []), edge.count]);
+  }
+  for (const node of graph.unanswered) {
+    cellsByKind.set(node.kind, [...(cellsByKind.get(node.kind) ?? []), node.count]);
+  }
+
+  const withheldKinds = [...cellsByKind.entries()]
+    .filter(([, cells]) => cells.some((c) => c < floor))
+    .map(([kind]) => ({
+      kind,
+      reason: `A count for ${kind} is below the floor of ${floor}, so the whole of this kind is withheld — showing the rest would let the small count be recovered by subtraction (W197).`,
+    }))
+    .sort((a, b) => a.kind.localeCompare(b.kind));
+  const withheld = new Set(withheldKinds.map((w) => w.kind));
+
+  const keptEdges = graph.edges.filter((e) => !withheld.has(e.from));
+  const keptUnanswered = graph.unanswered.filter((n) => !withheld.has(n.kind));
+
+  // The intervention total of a kept kind, read from any of its cells (all carry the same basis).
+  const perKindOf = (kind: InterventionKind): number =>
+    graph.edges.find((e) => e.from === kind)?.basis.recordedFacts ??
+    graph.unanswered.find((n) => n.kind === kind)?.basis.recordedFacts ??
+    0;
+
+  // Recompute the top-level total over kept kinds only, so a withheld kind contributes to no shown
+  // number and cannot be recovered by differencing the total.
+  const keptTotal = [...cellsByKind.keys()]
+    .filter((k) => !withheld.has(k))
+    .reduce((sum, k) => sum + perKindOf(k), 0);
+
+  const disclosedGraph: ResponseGraph = {
+    ...graph,
+    edges: keptEdges,
+    unanswered: keptUnanswered,
+    basis: { ...graph.basis, recordedFacts: keptTotal },
+  };
+
+  const statement =
+    withheldKinds.length === 0
+      ? RESPONSE_GRAPH_DISCLOSURE_COPY.nothing_withheld
+      : `${RESPONSE_GRAPH_DISCLOSURE_COPY.withheld} Withheld: ${withheldKinds.map((w) => w.kind).join(", ")}.`;
+
+  return { graph: disclosedGraph, withheldKinds, statement };
+}
