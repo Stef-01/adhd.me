@@ -267,8 +267,8 @@ export function StoryLanding() {
               and follow-up start with one clinician near you — not at the back of a referral queue.
             </p>
             <p className="story-note">
-              Every clinician here is a GP who has done that training. ADHD is not a specialty on
-              the register, and nobody here claims otherwise.
+              Every clinician here is a GP who has completed the training the new rules require —
+              trained to assess and manage ADHD to Australia's national clinical guideline.
             </p>
           </Reveal>
         </div>
