@@ -5,6 +5,24 @@
 > Venture brief: `Stefan-Brain/wiki/entrepreneurship/startups/adhd-me.md`.
 > Research base: `Stefan-Brain/wiki/entrepreneurship/startups/extended-scope-gp-network-research.md`.
 
+> **PROVENANCE — THE DOMAIN WAS REORIENTED AFTER MOST OF THIS PLAN WAS WRITTEN (2026-08-14).**
+> This tree is a fork of the Meherr / CareYield repository, reoriented from PMOS and perinatal
+> women's health to ADHD assessment. `BUILD-STATE.md` carries the same banner and explains why its
+> rows were not rewritten: a build history edited to claim it was always about ADHD would be a
+> fabrication. **The same rule is applied here, in one direction only.**
+>
+> - **§3, §6 and every unit already `done` describe the pre-reorientation domain and are kept as
+>   written.** Their clinical examples — diabetes cycle of care, CKD staging, dermatology — are
+>   history. The engine those units built (registers, pathways, intervals, verticals, capability,
+>   referrals, tenancy, the compliance linters) is domain-neutral and carried over intact; the
+>   clinical vocabulary did not.
+> - **Units not yet built have been reoriented to ADHD assessment.** Rewriting the future is
+>   planning; rewriting the past would be forgery. Each reoriented unit is marked `[REORIENTED
+>   2026-08-14]` and keeps its ID, its `[P]` marker, its verify gate and its founder gate.
+> - **Three unbuilt units name a clinical vertical that is a product decision, not a translation**
+>   (W186, W250, W251). They are marked `[FOUNDER: VERTICAL UNDECIDED]` rather than reassigned to a
+>   condition nobody chose. Picking ADHD.ME's second and third care areas is §4 work, not loop work.
+
 ---
 
 ## 0. Operating model
@@ -138,9 +156,14 @@ first enters the product. Two W51 process findings are units in their own right 
   updated + a stale-claim simulation test.
 - **W55** Register schema: conditions, guideline intervals, register membership, provenance of
   every interval (source + date) → verify: migration + TS registry consistency test.
-- **W56** Guideline interval tables as DATA (diabetes annual cycle of care; KHA-CARI CKD
-  monitoring by stage; GPCCMP quarterly review cadence), each row citing its source → verify:
-  every interval traceable to a cited source; no interval hardcoded in logic.
+- **W56** `[REORIENTED 2026-08-14]` Guideline interval tables as DATA (ADHD assessment and
+  shared-care review cadences: post-diagnosis titration review window; stimulant shared-care review
+  interval; annual comprehensive review), each row citing its source → verify: every interval
+  traceable to a cited source; no interval hardcoded in logic. Anchors for the eventual values are
+  the AADPA Australian evidence-based clinical practice guideline for ADHD (2022) and the relevant
+  state shared-care protocol — **not** transcribed here, and still **blocked on G5**: the container
+  ships empty and a test pins `SHIPPED_INTERVALS` empty until the ruling. Reorientation changed
+  which intervals this unit would eventually hold; it did not change whether the loop may pick them.
 - **W57** Register membership engine: derive membership from PMS-ingested condition flags only
   (never inferred from symptoms — G7 boundary) → verify: unit tests incl. explicit non-inference.
 - **W58** Care-gap detection: member + interval + last relevant visit → gap, with explicit
@@ -368,9 +391,9 @@ itself.**
 - **W158** [P] Vertical completeness report: what a vertical would need before it could ship → verify: golden report over a synthetic vertical; states its own coverage; asserts zero real clinical content present.
 - **W159** Cross-member consistency: two pathways in one vertical whose criteria disagree → verify: the contradiction is DETECTED and REPORTED, never silently resolved — and the resolver reads the detection (Y3-1's corollary).
 - **W160** [P] Vertical versioning and migration: a practice bound to v1 when v2 publishes → verify: the bound practice stays on the version it accepted; no silent upgrade; W128's withdrawal semantics inherited rather than restated.
-- **W161** Cardiometabolic pathway content → verify: two-person sign-off recorded per W119. **Blocked on G5.**
-- **W162** Early-CKD pathway content → verify: as W161. **Blocked on G5.**
-- **W163** [P] Cardiometabolic/CKD interval values — W56's question at vertical scale → verify: every interval carries a citation and a review date. **Blocked on G5.**
+- **W161** `[REORIENTED 2026-08-14]` Adult ADHD assessment pathway content — referral criteria, assessment components, escalation and the boundary at which a GP refers on → verify: two-person sign-off recorded per W119. **Blocked on G5.**
+- **W162** `[REORIENTED 2026-08-14]` Child and adolescent ADHD assessment pathway content → verify: as W161. **Blocked on G5.** Listed separately from W161 for the reason the original pair were: the two fail independently, one may be signed off without the other, and the age split is where Australian practice actually diverges — a plan that bundled them would hide that.
+- **W163** [P] `[REORIENTED 2026-08-14]` ADHD review-interval values — W56's question at vertical scale → verify: every interval carries a citation and a review date. **Blocked on G5.**
 - **W164** [P] Vertical console: which verticals exist and what each still needs → verify: e2e + axe zero violations; the zero state SAYS why it is empty rather than rendering a blank grid (W127's rule).
 - **W165** [P] Dependency allowlist review before the 2026-11-09 expiry → verify: `audit:gate` green with no acceptance past its review date, and no extension without a fresh rationale recorded against the advisory.
 - **W166** Two-practice console: `ConsoleState` holds a set and the hardcoded `prac-console` literal goes → verify: the console renders two practices, and the scoping assertions impossible since Y2 finding B2 now run end-to-end.
@@ -397,7 +420,7 @@ itself.**
 - **W183** Directory profile model: what a public profile may contain → verify: the type admits no rating, no testimonial and no free-text endorsement; a niche scope beside the word "specialist" is unrepresentable rather than linted out.
 - **W184** [P] Directory copy linter over every field a profile can emit → verify: W6/W114's rules APPLIED not re-implemented, and the emitting fields are checked against the tree so a new one fails until it is declared.
 - **W185** Public directory launch → verify: Ahpra advertising review passed; every profile field traced to a reviewed claim. **Blocked on G6.**
-- **W186** Dermatology pathway content → verify: two-person sign-off per W119. **Blocked on G5.**
+- **W186** `[FOUNDER: VERTICAL UNDECIDED]` Reference-vertical pathway content — the second care area, whichever it is → verify: two-person sign-off per W119. **Blocked on G5**, and now blocked ahead of G5 on a prior question: dermatology was the reference vertical of a PMOS product and is not a plausible ADHD.ME care area. The unit exists to prove the vertical machinery generalises beyond one condition, so it needs *a* second area named by the founder — the roster's `autism-adhd` co-occurrence is the obvious candidate but W248/W249 already hold autism, which would leave this unit doing nothing. **Do not reassign this to a condition nobody chose.**
 - **W187** [P] Stating an extended scope without implying a specialty → verify: s 133 compliance asserted on rendered copy; the compile-time guarantee from W183 exercised by a `@ts-expect-error` case.
 - **W188** Network membership: who is in the network and on what basis → verify: membership is a recorded practice decision, never inferred from activity (W57's rule); no clinician is ranked.
 - **W189** [P] Directory search that does not select a clinician for a patient → verify: results are ordered by declared, checkable attributes only; no symptom input exists (G7); the ordering basis is stated and describes the order actually used (W151's rule).
@@ -536,8 +559,8 @@ expansion unit proposes the gate for the year it is expanding.
 ### Q20 — Expansion verticals, platform APIs, five-year review (W248–W260) — **G5 load-bearing for the content units**
 - **W248** [P] Autism assessment vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. (The natural first expansion: co-occurrence is high enough that the ADHD roster already holds `autism-adhd` as a care area, and the two assessments share most of their collateral history.)
 - **W249** Autism assessment pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.**
-- **W250** [P] Respiratory vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act.
-- **W251** Respiratory pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.**
+- **W250** [P] `[FOUNDER: VERTICAL UNDECIDED]` Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. The machinery half is domain-neutral and buildable against a synthetic placeholder vertical today; only the name is undecided. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area.
+- **W251** `[FOUNDER: VERTICAL UNDECIDED]` Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186.
 - **W252** [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape.
 - **W253** Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been.
 - **W254** [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree.
