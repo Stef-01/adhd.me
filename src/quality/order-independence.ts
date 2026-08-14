@@ -113,6 +113,16 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    // W218: the disclosure floor sums the disclosed kinds' totals to recompute the top-level
+    // count. The register caught it on the first run after the fold was added, as intended.
+    module: "src/outcomes/response-graph.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "Sums the per-kind intervention totals of the disclosed kinds to one scalar, to recompute the top-level count over what is shown. Addition is commutative, so the total does not depend on the order the kinds are visited, and the kinds come from a Map keyed by intervention kind rather than from anything a store ordered.",
+    },
+  },
+  {
     // W176: declared as the register intends — a new fold site fails the suite until it is here.
     module: "src/outcomes/time-to-escalation.ts",
     folds: 1,
