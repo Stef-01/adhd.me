@@ -59,7 +59,7 @@ const SCENES: readonly Scene[] = [
     heading: "You search, and no GP comes back.",
     body:
       "Type “ADHD GP near me” and you get directories, sponsored clinics, telehealth start-ups and " +
-      "psychiatry waiting lists. What almost never comes back is a GP, near you, who does this.",
+      "psychiatry waiting lists. Almost none of it is a GP near you who assesses ADHD.",
     detail: [
       "No booking site has a filter for it",
       "The ads are for the expensive route",
@@ -71,9 +71,9 @@ const SCENES: readonly Scene[] = [
     eyebrow: "So you go looking",
     heading: "Then you read the doctors one at a time.",
     body:
-      "You open a practice page and work down the list, opening each GP in turn, scanning the " +
-      "profile for the word. Usually it is not there. A profile says “special interests” and lists " +
-      "skin checks and travel medicine, and you are left guessing.",
+      "You open a practice page and work down the list, one GP at a time, looking for the word. " +
+      "Usually it is not there. The profile says “special interests” and lists skin checks and " +
+      "travel medicine, and you are still guessing.",
     detail: [
       "Practice pages list doctors, not what they do",
       "Reception often cannot say either",
@@ -84,10 +84,10 @@ const SCENES: readonly Scene[] = [
   {
     n: "03",
     eyebrow: "The part nobody answers",
-    heading: "And none of it tells you the thing you need to know.",
+    heading: "None of it answers what you want to ask.",
     body:
-      "Even when a name finally looks plausible, the page answers none of the questions you are " +
-      "actually carrying. You are about to spend money and a day off to find out.",
+      "Even when a name finally looks plausible, the page is silent on everything that decides " +
+      "whether this GP is right for you. You book, take the day off, and find out in the room.",
     detail: [
       "Will they take me seriously?",
       "Will they think I am after something?",
@@ -99,11 +99,11 @@ const SCENES: readonly Scene[] = [
   },
   {
     n: "04",
-    eyebrow: "And the practical part",
-    heading: "Then: how far, how long, how much.",
+    eyebrow: "Money, time, distance",
+    heading: "How far, how long, how much.",
     body:
-      "The questions that decide whether you go at all are the ones the profile page never covers. " +
-      "You find them out by ringing, or by turning up.",
+      "The questions that decide whether you go at all are the ones nobody publishes. You ring and " +
+      "ask, or you turn up and find out.",
     detail: [
       "Can I get there without a car?",
       "Is a fifteen-minute appointment enough for this?",
@@ -113,11 +113,11 @@ const SCENES: readonly Scene[] = [
   },
   {
     n: "05",
-    eyebrow: "What the old route costs",
+    eyebrow: "What the old route cost",
     heading: "The wait was never the care.",
     body:
-      "Before the rule changed, the route ran through a queue with no visible end and a cost most " +
-      "people could not plan for. None of that waiting made the care better. It only made it later.",
+      "Before the rule changed, the route ran through a queue with no visible end and a bill most " +
+      "people could not plan for. None of the waiting made the care better. It only made it later.",
     detail: [
       "Time off work",
       "A referral to chase",
@@ -144,8 +144,7 @@ const SCENES: readonly Scene[] = [
     eyebrow: "What ADHD.ME is",
     heading: "How it works, end to end.",
     body:
-      "The permission already changed. What was missing was a way to act on it — so this is the " +
-      "part that was missing, and it is three steps.",
+      "The permission already changed. Acting on it is the part that was missing. Three steps.",
     detail: [
       "Say what you need, in your words. Not a quiz, and not a score.",
       "See who is near you, by suburb, care area and language.",
@@ -345,7 +344,7 @@ function SequenceStage({ scene }: { scene: number }) {
               </g>
             </g>
           ))}
-          <text x="120" y="900" className="seq-t-note">Not one of them is a GP who does this</text>
+          <text x="120" y="900" className="seq-t-note">None of them assesses ADHD</text>
         </g>
 
         {/* ── 02 the practice list ──────────────────────────────────────────────────── */}
