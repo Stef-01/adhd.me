@@ -243,14 +243,16 @@ export function StoryLanding() {
           >
             <motion.p className="story-eyebrow" variants={item}>Why we founded ADHD.ME</motion.p>
             <motion.h1 id="story-hero-title" variants={item}>
-              ADHD care, start to finish, with one GP.
+              ADHD care, start to finish, <span className="story-claim">with one GP</span>.
             </motion.h1>
             <motion.p className="story-hero-sub" variants={item}>
               Assessment, medication and follow-up with one GP. No psychiatrist queue to clear first.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
-                <Link className="story-primary-link" href="/finder">Find a GP near you</Link>
+                <Link className="story-primary-link" href="/finder">
+                  Find a GP near you<span className="arrow" aria-hidden="true">→</span>
+                </Link>
               </motion.div>
             </motion.div>
           </motion.div>

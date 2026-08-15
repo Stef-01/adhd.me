@@ -4993,3 +4993,150 @@ textarea:focus-visible {
   .seq-pin, .seq-turn-dot, .seq-far { transform: scale(1); }
   .seq-glass { opacity: 1; transform: translate(790px, 442px); }
 }
+
+/* ===========================================================================
+   SCROLL-DRIVEN SCENES  (CSS Scroll-driven Animations, Chrome/Edge 115+,
+   Safari 18+; Firefox still behind layout.css.scroll-driven-animations.enabled,
+   so ~84% global and NOT Baseline)
+
+   WHY THIS IS A LAYER AND NOT A REWRITE. Everything above already renders the
+   finished state and animates from a visible one, which is the published rule
+   for shipping this API: author the finished state as the default, then layer
+   the animation on top only where it is supported. A browser that does not
+   understand `animation-timeline` ignores this whole block and keeps the
+   IntersectionObserver behaviour, which is complete on its own.
+
+   WHAT IT BUYS. The observer can only say WHICH scene; it cannot say how far
+   through it the reader is. Every draw above therefore fires once, on entry,
+   at a duration somebody picked. Bound to a view timeline instead, the reader's
+   own scroll is the clock: the magnifier walks the list at the speed they read
+   it, the bill grows as they descend it, the line through the dark draws as
+   they arrive. Nothing runs on the main thread.
+
+   THE TIMELINES ARE THE STEPS, NOT THE STAGE. The stage is `position: sticky`
+   and therefore never leaves the scrollport, so a `view()` timeline on it would
+   never progress. Each step declares its own view timeline and `timeline-scope`
+   on `.seq` lifts those names to an ancestor both columns share.
+   =========================================================================== */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .seq { timeline-scope: --sq1, --sq2, --sq3, --sq5, --sq6, --sq7; }
+    .seq-step:nth-child(1) { view-timeline-name: --sq1; }
+    .seq-step:nth-child(2) { view-timeline-name: --sq2; }
+    .seq-step:nth-child(3) { view-timeline-name: --sq3; }
+    .seq-step:nth-child(5) { view-timeline-name: --sq5; }
+    .seq-step:nth-child(6) { view-timeline-name: --sq6; }
+    .seq-step:nth-child(7) { view-timeline-name: --sq7; }
+
+    /* 01 — the results arrive under the reader's thumb, one per scroll beat. */
+    .seq-res { opacity: 1; transform: none; animation: seqDeal linear both; animation-timeline: --sq1; }
+    .seq-res-0 { animation-range: entry 34% entry 46%; }
+    .seq-res-1 { animation-range: entry 40% entry 52%; }
+    .seq-res-2 { animation-range: entry 46% entry 58%; }
+    .seq-res-3 { animation-range: entry 52% entry 64%; }
+    .seq-res-4 { animation-range: entry 58% entry 70%; }
+    .seq-res-5 { animation-range: entry 64% entry 76%; }
+    @keyframes seqDeal { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+    /* 02 — THE BEST TRADE IN THIS BLOCK. The magnifier used to walk the list on
+       a 5.6s loop that had nothing to do with the reader. Now they drag it down
+       the list themselves, and the scene is over exactly when they have read it. */
+    [data-scene="2"] .seq-glass { animation: seqScan linear both; animation-timeline: --sq2; animation-range: entry 28% cover 55%; }
+
+    /* 03 — the crowd assembles as the questions are read, not all at once. */
+    .seq-worry { animation: seqCrowd linear both; animation-timeline: --sq3; }
+    .seq-w-0 { animation-range: entry 32% entry 44%; } .seq-w-1 { animation-range: entry 36% entry 48%; }
+    .seq-w-2 { animation-range: entry 40% entry 52%; } .seq-w-3 { animation-range: entry 44% entry 56%; }
+    .seq-w-4 { animation-range: entry 48% entry 60%; } .seq-w-5 { animation-range: entry 52% entry 64%; }
+    .seq-w-6 { animation-range: entry 56% entry 68%; } .seq-w-7 { animation-range: entry 60% entry 72%; }
+    @keyframes seqCrowd { from { opacity: 0; transform: translateY(16px) scale(.95); } to { opacity: 1; transform: none; } }
+
+    /* 05 — the months pass because the reader is scrolling through them, and the
+       bill rises out of the baseline at the pace they descend it. */
+    .seq-axis { animation: seqDraw linear both; animation-timeline: --sq5; animation-range: entry 30% entry 62%; }
+    .seq-bar  { animation: seqRaise linear both; animation-timeline: --sq5; animation-range: entry 46% entry 82%; }
+    @keyframes seqDraw  { from { stroke-dashoffset: 920; } to { stroke-dashoffset: 0; } }
+    @keyframes seqRaise { from { transform: scaleY(.08); } to { transform: scaleY(1); } }
+
+    /* 06 — the path through the dark draws as they arrive at it. */
+    .seq-turn-line { animation: seqDrawTurn linear both; animation-timeline: --sq6; animation-range: entry 34% entry 76%; }
+    .seq-turn-dot  { animation: seqPop linear both; animation-timeline: --sq6; animation-range: entry 70% entry 82%; }
+    @keyframes seqDrawTurn { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+
+    /* 07 — each rule draws under the line of type it introduces. */
+    .seq-rule { animation: seqDrawRule linear both; animation-timeline: --sq7; }
+    .seq-rule-0 { animation-range: entry 30% entry 44%; } .seq-rule-1 { animation-range: entry 38% entry 52%; }
+    .seq-rule-2 { animation-range: entry 46% entry 60%; } .seq-rule-3 { animation-range: entry 54% entry 68%; }
+    @keyframes seqDrawRule { from { stroke-dashoffset: 640; } to { stroke-dashoffset: 0; } }
+    .seq-pin { animation: seqPop linear both; animation-timeline: --sq7; }
+    .seq-pin-0 { animation-range: entry 62% entry 72%; }
+    .seq-pin-1 { animation-range: entry 68% entry 78%; }
+    @keyframes seqPop { from { transform: scale(0); } to { transform: scale(1); } }
+  }
+}
+
+/* ── The hero's claim, underscored as the reader leaves it ───────────────────
+   "with one GP" is the whole proposition, and it was set in the same ink as the
+   rest of the sentence. A rule draws under it on the way past — scroll-driven
+   where that exists, and simply absent otherwise, since an underline that never
+   arrives costs the sentence nothing. */
+.story-claim { position: relative; white-space: nowrap; }
+.story-claim::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0.06em;
+  height: 3px;
+  background: var(--s-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .story-claim::after {
+    animation: seqUnderline 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+  }
+  @keyframes seqUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+/* No motion preference: the claim is simply underscored, with no draw. */
+@media (prefers-reduced-motion: reduce) {
+  .story-claim::after { transform: scaleX(1); }
+}
+
+/* ── The CTA says which way it goes ─────────────────────────────────────────
+   A micro-interaction that carries information rather than decoration: the
+   arrow is the direction of travel, and it moves the way the reader is about
+   to. Hover and keyboard focus both trigger it. */
+.story-primary-link .arrow {
+  display: inline-block;
+  margin-left: 10px;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.story-primary-link:hover .arrow,
+.story-primary-link:focus-visible .arrow { transform: translateX(5px); }
+@media (prefers-reduced-motion: reduce) {
+  .story-primary-link .arrow { transition: none; }
+  .story-primary-link:hover .arrow { transform: none; }
+}
+
+/* ===========================================================================
+   CROSS-DOCUMENT VIEW TRANSITIONS
+
+   The landing page exists to hand somebody to /finder, and that hand-off was a
+   white flash between two documents that share a wordmark, a ground and a type
+   system. `navigation: auto` makes the browser cross-fade between them instead.
+
+   Two lines, and both are inert where the API is missing — a browser that does
+   not know `@view-transition` skips the at-rule and navigates as before, so
+   there is nothing to feature-detect and nothing to fall back to.
+
+   The wordmark is named, so it MORPHS between the two pages rather than fading
+   with everything else: it is the same object in both documents, and treating it
+   as one thing is the difference between a transition and a dissolve. */
+@view-transition { navigation: auto; }
+
+.story-wordmark, .story-footer-wordmark { view-transition-name: adhd-wordmark; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The cross-fade is decorative; a reader who has asked for less motion gets
+     the plain navigation the browser would have done anyway. */
+  @view-transition { navigation: none; }
+}
