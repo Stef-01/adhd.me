@@ -33,7 +33,12 @@ test("every result is reachable and opens a profile", async ({ page }) => {
   await intoResults(page);
   const rows = page.locator(".clinician-row");
   const count = await rows.count();
-  expect(count).toBeGreaterThan(3);
+  // Was `> 3`, which was a statement about roster SIZE dressed up as a statement about
+  // reachability. The roster is now two real GPs rather than fifteen invented ones, and the
+  // property this test is actually for — every row that renders can be opened — holds at any
+  // size. Asserting a floor of three again would be asserting that the directory must contain
+  // people it does not contain.
+  expect(count).toBeGreaterThan(0);
 
   // The first and the last, because an index bug usually shows at an end.
   for (const index of [0, count - 1]) {
@@ -70,16 +75,29 @@ test("an uncovered suburb says so rather than silently ranking on nothing", asyn
   await expect(page.locator(".clinician-row")).not.toHaveCount(0);
 });
 
-test("a booking can still be completed after the collapse", async ({ page }) => {
+/**
+ * PHASE 1 ENDS AT A HANDOFF, SO THIS TEST NOW ENDS AT ONE TOO.
+ *
+ * It used to walk a radiogroup of times to a "Request ready" screen. Those times were written
+ * into the component and the request was never sent — survivable as a mock over invented
+ * personas, and a fabricated appointment under a named doctor once the roster became real. The
+ * booking screen hands off to Healthengine instead, so what has to be pinned is that the handoff
+ * REACHES the right place: an external link, to Healthengine, opening in a new tab. A regression
+ * that quietly restored an in-app slot picker would fail here for the right reason.
+ */
+test("booking hands off to Healthengine rather than inventing a time", async ({ page }) => {
   await intoResults(page);
   await page.locator(".clinician-row").first().click();
 
-  const book = page.getByRole("button", { name: /request|appointment|book/i }).first();
-  await book.click();
-  await expect(page.getByRole("radiogroup")).toBeVisible({ timeout: 10000 });
-  await page.getByRole("radio").first().click();
-  await page.getByRole("button", { name: "Send request" }).click();
-  await expect(page.getByText("Request ready")).toBeVisible();
+  await page.getByRole("button", { name: /available times|how to book/i }).first().click();
+
+  const handoff = page.getByRole("link", { name: /Healthengine|practice page/i }).first();
+  await expect(handoff).toBeVisible({ timeout: 10000 });
+  await expect(handoff).toHaveAttribute("href", /^https:\/\/healthengine\.com\.au\//);
+  await expect(handoff).toHaveAttribute("target", "_blank");
+
+  // No in-app time picker survives anywhere on the booking screen.
+  await expect(page.getByRole("radiogroup")).toHaveCount(0);
 });
 
 test("refine returns to typing with the words already there", async ({ page }) => {

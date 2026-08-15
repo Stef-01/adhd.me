@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
-  CheckCircle,
   CaretLeft,
   CaretRight,
   Microphone,
@@ -49,8 +48,7 @@ type Stage =
   | "type"
   | "results"
   | "profile"
-  | "booking"
-  | "confirmed";
+  | "booking";
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
@@ -288,7 +286,6 @@ export function CareFinder() {
   const [matches, setMatches] = useState(() => rankClinicians(exampleRequest));
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
-  const [selectedTime, setSelectedTime] = useState("");
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
   // is the only reliable signal to somebody that the microphone is actually working.
   // Where the person says they are. A typed suburb or postcode, never the device's location: no
@@ -424,7 +421,6 @@ export function CareFinder() {
     setMatches(rankClinicians(archetype.request));
     setMatchIndex(0);
     setMatchDirection(1);
-    setSelectedTime("");
   }
 
   function cycleArchetype(direction: 1 | -1) {
@@ -436,7 +432,6 @@ export function CareFinder() {
     setMatches(rankClinicians(nextArchetype.request));
     setMatchIndex(0);
     setMatchDirection(direction);
-    setSelectedTime("");
   }
 
   return (
@@ -798,10 +793,16 @@ export function CareFinder() {
               transition={{ delay: 0.16, duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
             >
               <div>
-                <span>Next available</span>
-                <strong>{clinician.nextAvailable}</strong>
+                <span>{clinician.booking.via === "healthengine" ? "Appointments" : "Booking"}</span>
+                <strong>
+                  {clinician.booking.via === "healthengine"
+                    ? "Live on Healthengine"
+                    : "By phone with the practice"}
+                </strong>
               </div>
-              <Pressable className="primary-button" type="button" onClick={() => setStage("booking")}>Request appointment</Pressable>
+              <Pressable className="primary-button" type="button" onClick={() => setStage("booking")}>
+                {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
+              </Pressable>
             </motion.div>
           </MotionScreen>
         )}
@@ -816,56 +817,63 @@ export function CareFinder() {
               <span className="header-spacer" />
             </header>
 
+            {/* PHASE 1 IS A HANDOFF, NOT A SLOT PICKER, AND THE SCREEN SAYS SO IN PLAIN WORDS.
+                This used to render three times — one from the record, two written into this
+                component — behind a "Send request" button that set a state variable and sent
+                nothing. Against invented personas that was a mock. Against Dr Saxena and Dr Yadav
+                it would be fabricated appointments under a named doctor's photograph.
+
+                ADHD.ME does not hold availability and does not pretend to: Healthengine's API is
+                inbound-only, their robots.txt disallows /api/, /json/, /book/ and /appointment/,
+                and scraping the call their own page makes would put stale times under a real
+                doctor's name. The reader is sent to the system that actually knows. */}
             <div className="booking-content">
-              <p className="eyebrow">Request an appointment</p>
-              <h1>Choose a time with {clinician.shortName}</h1>
-              <p>The practice will confirm the request. No medical details are sent here.</p>
-              <div className="time-list" role="radiogroup" aria-label="Available appointment times">
-                {[clinician.nextAvailable, "Wednesday, 2:10 pm", "Friday, 9:40 am"].map((time, index) => (
-                  <motion.button
-                    key={time}
-                    type="button"
-                    role="radio"
-                    aria-checked={selectedTime === time}
-                    className={selectedTime === time ? "selected" : ""}
-                    onClick={() => setSelectedTime(time)}
-                    initial={{ opacity: 0, y: 9 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + index * 0.06, duration: 0.28 }}
-                    whileTap={{ scale: 0.99 }}
-                  >
-                    {time}
-                  </motion.button>
-                ))}
-              </div>
+              <p className="eyebrow">Booking</p>
+              <h1>
+                {clinician.booking.via === "healthengine"
+                  ? `Book with ${clinician.shortName} on Healthengine`
+                  : `Booking ${clinician.shortName}`}
+              </h1>
+
+              {clinician.booking.via === "healthengine" ? (
+                <>
+                  <p>
+                    {clinician.shortName}’s live appointment times are held by his practice on
+                    Healthengine. We send you straight there, so the time you pick is a time that
+                    is genuinely open.
+                  </p>
+                  <p className="booking-note">
+                    You book with {clinician.practice} on Healthengine. ADHD.ME does not see your
+                    booking and no medical details are entered here.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>{clinician.booking.note}</p>
+                  <p className="booking-note">
+                    {clinician.practice} takes his appointments by phone. Their number and hours
+                    are on the practice page.
+                  </p>
+                </>
+              )}
             </div>
 
             <div className="bottom-action">
-              <Pressable className="primary-button" type="button" disabled={!selectedTime} onClick={() => setStage("confirmed")}>Send request</Pressable>
-              <p>Demo only. Nothing will be sent.</p>
+              <a
+                className="primary-button"
+                href={clinician.booking.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {clinician.booking.via === "healthengine"
+                  ? "See times on Healthengine"
+                  : "Open the practice page"}
+              </a>
+              <p>Opens Healthengine in a new tab.</p>
             </div>
           </MotionScreen>
         )}
 
-        {stage === "confirmed" && (
-          <MotionScreen key="confirmed" className="confirmed-screen">
-            <Wordmark />
-            <div>
-              <motion.div
-                className="confirmation-icon"
-                initial={{ opacity: 0, scale: 0.76 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1, type: "spring", stiffness: 320, damping: 20 }}
-              >
-                <CheckCircle size={58} weight="light" aria-hidden="true" />
-              </motion.div>
-              <p className="eyebrow">Request ready</p>
-              <h1>{selectedTime}</h1>
-              <p>In the live product, {clinician.name}’s practice would confirm this time with you.</p>
-            </div>
-            <Pressable className="primary-button" type="button" onClick={reset}>Find another GP</Pressable>
-          </MotionScreen>
-        )}
           </AnimatePresence>
         </section>
       </main>

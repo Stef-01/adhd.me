@@ -78,208 +78,97 @@ export type CareArchetype = {
   };
 };
 
+/**
+ * THE JOURNEYS, CUT FROM FIFTEEN TO SIX WHEN THE ROSTER BECAME TWO REAL PEOPLE.
+ *
+ * The fifteen were built against fifteen invented clinicians, and nine of them asked for something
+ * neither Dr Saxena nor Dr Yadav offers: a woman GP, Tamil, Spanish, Arabic, Vietnamese, paediatric
+ * and adolescent care, a disability-rights specialism. Keeping them would have meant a demo whose
+ * scenarios lead somewhere the directory cannot go, which is a worse failure than a shorter list —
+ * it advertises coverage that does not exist, on a health product, to somebody looking for care.
+ *
+ * They are DELETED rather than parked, because a commented-out journey is a claim waiting to be
+ * uncommented by somebody who does not know why it went. When the roster grows to a GP who speaks
+ * Tamil or sees children, the journey comes back with them.
+ */
 export const careArchetypes: CareArchetype[] = [
   {
-    id: "late-diagnosis-south-indian",
-    title: "Late diagnosis + South Indian family",
-    eyebrow: "Culture and being believed",
-    example: "A woman GP who assesses adult ADHD, speaks Tamil or Malayalam, and understands a family that thinks this is an excuse.",
+    id: "structured-baseline",
+    title: "Do the physical checks properly first",
+    eyebrow: "Before anything is started",
+    example: "A GP who will check the heart, the blood pressure and the sleep before a stimulant is on the table.",
     request:
-      "I’m a South Indian woman in my thirties and I think my ADHD was missed as a child. I want a woman GP who speaks Tamil or Malayalam, understands a family who thinks this is laziness and not real, and will keep what we discuss private from my relatives.",
-    headline: "An assessment where you don’t have to win the argument first.",
-    expectedFirstMatch: "priya-nair",
+      "I want a thorough, structured assessment. Before anyone talks about a stimulant I want the physical baseline done properly — heart, blood pressure, sleep — and I want to know what gets monitored afterwards and how often.",
+    headline: "The baseline done before the prescription, not after.",
+    expectedFirstMatch: "anubhav-saxena",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women"],
-      preferredGender: "woman",
-      languageOptions: ["Tamil", "Malayalam"],
+      careAreas: ["adhd-assessment", "adult-adhd", "cardiac-screening"],
+    },
+  },
+  {
+    id: "substance-history-telehealth",
+    title: "A drinking history, and a safe conversation about it",
+    eyebrow: "Told without being judged",
+    example: "A GP who will take a substance history as a safety question rather than a character one, over the phone.",
+    request:
+      "I drink more than I should and I know it matters for this, but I have had that conversation go badly before. I want a GP who will treat it as a safety question rather than as evidence about my character, and I would rather do the first appointment by phone.",
+    headline: "A history you can tell without it being used against you.",
+    expectedFirstMatch: "anubhav-saxena",
+    requirements: {
+      careAreas: ["adhd-assessment", "adult-adhd", "substance-history"],
+    },
+  },
+  {
+    id: "titration-and-review",
+    title: "The dose isn't right",
+    eyebrow: "After the diagnosis",
+    example: "A GP who reviews titration on a schedule instead of when something goes wrong.",
+    request:
+      "I am already diagnosed and the dose is not right — it wears off by the afternoon and my appetite is gone. I want the titration reviewed on a schedule rather than whenever I manage to get an appointment.",
+    headline: "Titration reviewed on a schedule, not on a crisis.",
+    expectedFirstMatch: "anubhav-saxena",
+    requirements: {
+      careAreas: ["adhd-assessment", "adult-adhd", "titration"],
+    },
+  },
+  {
+    id: "unhurried-first-appointment",
+    title: "Somewhere that won't rush you",
+    eyebrow: "Time to say it properly",
+    example: "A GP who books a longer first appointment and takes the whole history before reaching a conclusion.",
+    request:
+      "Every time I have raised this I have been rushed, and I lose my thread when I am rushed. I want a longer first appointment with a GP who will listen to the whole story before deciding anything.",
+    headline: "A first appointment long enough to say the whole thing.",
+    expectedFirstMatch: "tushar-yadav",
+    requirements: {
+      careAreas: ["adhd-assessment", "adult-adhd"],
     },
   },
   {
     id: "anxiety-differential-hindi",
     title: "Treated for anxiety for years",
     eyebrow: "Which one is it",
-    example: "A Hindi or Punjabi speaking woman GP who can work out whether years of anxiety treatment missed something.",
+    example: "A Hindi-speaking GP who can work out whether years of anxiety treatment missed something.",
     request:
-      "I’ve been treated for anxiety and put on an antidepressant for years and I’m anxious it was the wrong diagnosis. I want a calm woman GP who speaks Hindi or Punjabi, will go back to what school was actually like, and explain the differential slowly.",
+      "I have been treated for anxiety and put on an antidepressant for years and I am anxious it was the wrong answer. I want a calm GP who speaks Hindi, will go back to what school was actually like, and explain the differential slowly.",
     headline: "Anxiety, ADHD, or both: worked out properly.",
-    expectedFirstMatch: "nisha-kapoor",
+    expectedFirstMatch: "tushar-yadav",
     requirements: {
       careAreas: ["adhd-assessment", "adult-adhd", "comorbid-mood"],
-      preferredGender: "woman",
-      languageOptions: ["Hindi", "Punjabi"],
+      languageOptions: ["Hindi"],
     },
   },
   {
-    id: "not-just-medication",
-    title: "Assessment without a script as the only outcome",
-    eyebrow: "The rest of the plan",
-    example: "A GP who will assess me but also talk about coaching, sleep and workload rather than only whether I qualify for a stimulant.",
+    id: "sleep-and-family-context",
+    title: "Sleep that has never been right",
+    eyebrow: "The rest of the picture",
+    example: "A GP who takes sleep and family context seriously rather than treating them as background noise.",
     request:
-      "I want an ADHD assessment but I’m wary of walking out with nothing but a prescription. I want a GP who will talk about alternatives, coaching and habits as seriously as medication, and give me clear steps instead of an overwhelming plan.",
-    headline: "The whole plan, not just the script.",
-    expectedFirstMatch: "tom-bennett",
+      "My sleep has never been right and my family think I am just disorganised and always have been. I want a GP who will take the sleep seriously and understands the family context I am explaining this inside.",
+    headline: "The sleep and the family, treated as part of the picture.",
+    expectedFirstMatch: "tushar-yadav",
     requirements: {
-      careAreas: ["adhd-assessment", "non-medication"],
-    },
-  },
-  {
-    id: "autism-and-adhd",
-    title: "Autism and ADHD, not one or the other",
-    eyebrow: "Two answers, not one",
-    example: "A neurodiversity-affirming GP who can assess ADHD without treating my autism as the whole explanation.",
-    request:
-      "I’m autistic and I think I have ADHD as well, but every clinician so far has used autism to explain all of it. I want a neurodiversity-affirming GP for an AuDHD assessment, with sensory-considerate appointments and something written down afterwards.",
-    headline: "An assessment that can hold both.",
-    expectedFirstMatch: "grace-chen",
-    requirements: {
-      careAreas: ["adhd-assessment", "autism-adhd"],
-    },
-  },
-  {
-    id: "child-school-spanish",
-    title: "A child falling behind at school",
-    eyebrow: "Language and the classroom",
-    example: "A Spanish-speaking GP who can start my child's assessment and write something the school will act on.",
-    request:
-      "My son is falling behind at school and his teacher keeps raising his concentration. I would feel better with a Spanish-speaking GP who can start the assessment, set out classroom adjustments and write the documentation the school needs, without medication being the first thing discussed.",
-    headline: "Start the assessment, and get the school moving.",
-    expectedFirstMatch: "sofia-alvarez",
-    requirements: {
-      careAreas: ["adhd-assessment", "child-adolescent-adhd", "student-academic"],
-    },
-  },
-  {
-    id: "adolescent-school-refusal",
-    title: "A teenager who has stopped going to school",
-    eyebrow: "Anxiety and attention, tangled",
-    example: "An Arabic-speaking GP who can assess a teenager where school refusal and anxiety have become impossible to separate.",
-    request:
-      "My teenager has stopped going to school and is very anxious, and I can’t tell any more whether it’s anxiety or attention. I want an Arabic-speaking woman GP who will assess an adolescent properly, involve me when invited but keep their confidence.",
-    headline: "School refusal, anxiety and attention, untangled.",
-    expectedFirstMatch: "leila-haddad",
-    requirements: {
-      careAreas: ["adhd-assessment", "child-adolescent-adhd"],
-    },
-  },
-  {
-    id: "emotional-regulation",
-    title: "Rejection sensitivity and emotional load",
-    eyebrow: "The part that gets called a personality problem",
-    example: "A GP who understands rejection sensitivity and emotional regulation rather than reading it as immaturity.",
-    request:
-      "The hardest part for me is emotional: rejection sensitivity, shame spirals, reacting to everything. I want a GP who treats emotional regulation as part of ADHD rather than a character flaw, and who gives me clear steps I can actually follow.",
-    headline: "The emotional half, taken seriously.",
-    expectedFirstMatch: "tom-bennett",
-    requirements: {
-      careAreas: ["adhd-assessment", "emotional-regulation"],
-    },
-  },
-  {
-    id: "perimenopause-unmasking",
-    title: "Coping strategies that stopped working",
-    eyebrow: "Hormonal change, not a new problem",
-    example: "A woman GP who understands why symptoms got unmanageable in perimenopause rather than treating it as recent.",
-    request:
-      "I coped for thirty years and around perimenopause everything stopped working. I’m exhausted and not sleeping. I want a woman GP who understands hormonal change and won’t treat this as a new problem just because it got worse lately.",
-    headline: "Not new. Just no longer survivable.",
-    expectedFirstMatch: "anjali-menon",
-    requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "adhd-in-women"],
-      preferredGender: "woman",
-    },
-  },
-  {
-    id: "substance-history-telehealth",
-    title: "A drinking history, and a safe conversation about it",
-    eyebrow: "Safety question, not a character question",
-    example: "A GP who can assess ADHD with a substance history on the table, including non-stimulant options, by telehealth.",
-    request:
-      "I drink more than I should and used cannabis for years, and I’m worried that admitting it means I’ll be refused an assessment or treated like an addict. I want a thorough GP who will discuss non-stimulant options honestly, and I need telehealth because I can’t travel.",
-    headline: "The history matters for safety, not for judgement.",
-    expectedFirstMatch: "anubhav-saxena",
-    requirements: {
-      careAreas: ["adhd-assessment", "substance-history"],
-    },
-  },
-  {
-    id: "vietnamese-accessible-assessment",
-    title: "Accessible assessment, on your terms",
-    eyebrow: "Access, autonomy and language",
-    example: "A Vietnamese-speaking GP who understands disability rights and centres my choices in an ADHD assessment.",
-    request:
-      "I’m a disabled Vietnamese-speaking woman and I need an ADHD assessment at a wheelchair accessible practice. I want a GP who understands disability rights, speaks Vietnamese, centres my consent and autonomy, and can help with the adjustments and NDIS documentation afterwards.",
-    headline: "Accessible assessment, on your terms.",
-    expectedFirstMatch: "linh-nguyen",
-    requirements: {
-      careAreas: ["adhd-assessment", "disability-rights"],
-      preferredGender: "woman",
-      languageOptions: ["Vietnamese"],
-      wheelchairAccessible: true,
-    },
-  },
-  {
-    id: "cardiac-baseline-before-medication",
-    title: "Is it safe for my heart",
-    eyebrow: "Before anything is prescribed",
-    example: "A GP who will do the cardiac and blood-pressure checks properly before starting a stimulant.",
-    request:
-      "There’s heart disease in my family and I want to know it’s safe before starting a stimulant. I want a GP who checks blood pressure and cardiovascular history properly first, and who will actually see me again while the dose is being worked out.",
-    headline: "The heart checks first, then the dose.",
-    expectedFirstMatch: "daniel-okafor",
-    requirements: {
-      careAreas: ["adhd-assessment", "cardiac-screening", "titration"],
-    },
-  },
-  {
-    id: "trauma-informed-assessment",
-    title: "Trauma history, and a childhood you can't narrate",
-    eyebrow: "Consent, control and emotional safety",
-    example: "A trauma-informed GP who asks permission, respects boundaries and doesn't need me to relive my childhood to prove this.",
-    request:
-      "I have a trauma history and a difficult childhood I can’t narrate on demand, and there are no school records left. I want a trauma-informed GP who asks permission, explains each step, respects boundaries and lets me stay in control without disclosing everything at once.",
-    headline: "Assessment without having to relive it.",
-    expectedFirstMatch: "erin-walsh",
-    requirements: {
-      careAreas: ["adhd-assessment", "trauma-informed"],
-    },
-  },
-  {
-    id: "psychiatrist-shared-care",
-    title: "PTSD or bipolar, alongside the ADHD question",
-    eyebrow: "Complex mental health, in sequence",
-    example: "A GP comfortable with PTSD or bipolar disorder who will work with my psychiatrist rather than around them.",
-    request:
-      "I live with PTSD and bipolar disorder and my psychiatrist and I disagree about whether ADHD is also in the picture. I need a GP comfortable with complex mental health who will coordinate shared care with my psychiatrist and not change specialist treatment on their own.",
-    headline: "Joined-up, with your psychiatrist in the loop.",
-    expectedFirstMatch: "noah-williams",
-    requirements: {
-      careAreas: ["adhd-assessment", "complex-mental-health", "shared-care"],
-    },
-  },
-  {
-    id: "titration-and-work",
-    title: "The dose isn't right, and work needs a letter",
-    eyebrow: "After the diagnosis, before it works",
-    example: "A Spanish-speaking GP who will review my dose properly and write what my employer needs.",
-    request:
-      "I was diagnosed already but the dose is wearing off by lunchtime and the side effects are affecting my appetite. I want a Spanish-speaking GP who will review it properly instead of making me wait months, and write the workplace adjustments letter my employer is asking for.",
-    headline: "Dose review that actually happens.",
-    expectedFirstMatch: "camila-torres",
-    requirements: {
-      careAreas: ["adhd-assessment", "titration"],
-    },
-  },
-  {
-    id: "paediatric-waitlist-arabic",
-    title: "A paediatric wait that isn't being used",
-    eyebrow: "Getting the referral right",
-    example: "An Arabic-speaking GP who will prepare my child's paediatric referral properly so the wait isn't wasted.",
-    request:
-      "My son has been on a paediatrician waitlist for months and nothing is happening. I want an Arabic-speaking GP who will gather the teacher reports and prepare the referral properly now, and carry the shared care once there is a plan.",
-    headline: "Use the wait instead of losing it.",
-    expectedFirstMatch: "aisha-rahman",
-    requirements: {
-      careAreas: ["adhd-assessment", "child-adolescent-adhd", "shared-care"],
+      careAreas: ["adhd-assessment", "adult-adhd", "sleep"],
     },
   },
 ];
