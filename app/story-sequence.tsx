@@ -90,10 +90,10 @@ const SCENES: readonly Scene[] = [
       "whether this GP is right for you. You book, take the day off, and find out in the room.",
     detail: [
       "Will they take me seriously?",
-      "Will they think I am after something?",
+      "Will they think I’m after something?",
       "Do they know how this looks in women?",
       "Will they understand my family, my language?",
-      "Do I need school reports? I do not have any.",
+      "Do I need school reports? I don’t have any.",
       "Will I forget what I meant to say?",
     ],
   },
@@ -305,11 +305,11 @@ const DOCTORS = ["Dr A", "Dr B", "Dr C", "Dr D", "Dr E", "Dr F"];
 /** Scene 03's questions, placed by hand so they read as a crowd rather than a list. */
 const WORRIES: ReadonlyArray<{ t: string; x: number; y: number; w: number; d: number }> = [
   { t: "Will they take me seriously?", x: 120, y: 200, w: 300, d: 0 },
-  { t: "Will they think I'm after something?", x: 488, y: 132, w: 372, d: 1 },
+  { t: "Will they think I’m after something?", x: 488, y: 132, w: 372, d: 1 },
   { t: "Do they know how this looks in women?", x: 736, y: 288, w: 392, d: 2 },
   { t: "Will they understand my family?", x: 184, y: 360, w: 330, d: 3 },
   { t: "Do I need school reports?", x: 564, y: 448, w: 276, d: 4 },
-  { t: "I don't have any.", x: 892, y: 528, w: 202, d: 5 },
+  { t: "I don’t have any.", x: 892, y: 528, w: 202, d: 5 },
   { t: "Will I forget what I meant to say?", x: 232, y: 556, w: 340, d: 6 },
   { t: "Is fifteen minutes enough?", x: 610, y: 660, w: 288, d: 7 },
 ];
@@ -477,7 +477,7 @@ function SequenceStage({ scene }: { scene: number }) {
 
         {/* ── 08 the booking ────────────────────────────────────────────────────────── */}
         <g className="seq-layer seq-l8">
-          <g transform="translate(330 230)">
+          <g transform="translate(330 274)">
             <rect width="540" height="206" rx="9" fill="#fff" stroke="var(--s-line)" strokeWidth="2" />
             <circle cx="92" cy="103" r="48" fill="var(--s-paper-2)" />
             <text x="92" y="117" textAnchor="middle" className="seq-t-mono">AS</text>
@@ -490,15 +490,15 @@ function SequenceStage({ scene }: { scene: number }) {
               <text x="202" y="25" className="seq-t-chip">Titration</text>
             </g>
           </g>
-          <g transform="translate(390 494)">
+          <g transform="translate(390 538)">
             <g className="seq-cta">
               <rect width="420" height="72" rx="36" fill="var(--s-ink)" />
               <text x="210" y="46" textAnchor="middle" className="seq-t-cta">See available times</text>
             </g>
           </g>
-          <path d="M600 594 L600 648" stroke="var(--s-muted)" strokeWidth="2" />
-          <path d="M592 640 L600 652 L608 640" fill="none" stroke="var(--s-muted)" strokeWidth="2" strokeLinecap="round" />
-          <g transform="translate(360 668)">
+          <path d="M600 638 L600 692" stroke="var(--s-muted)" strokeWidth="2" />
+          <path d="M592 684 L600 696 L608 684" fill="none" stroke="var(--s-muted)" strokeWidth="2" strokeLinecap="round" />
+          <g transform="translate(360 712)">
             <rect width="480" height="58" rx="8" fill="var(--s-paper-2)" stroke="var(--s-line)" />
             <text x="240" y="37" textAnchor="middle" className="seq-t-sub">Healthengine, where the live times are</text>
           </g>
