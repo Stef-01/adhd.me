@@ -305,14 +305,14 @@ const DOCTORS = ["Dr A", "Dr B", "Dr C", "Dr D", "Dr E", "Dr F"];
 
 /** Scene 03's questions, placed by hand so they read as a crowd rather than a list. */
 const WORRIES: ReadonlyArray<{ t: string; x: number; y: number; w: number; d: number }> = [
-  { t: "Will they take me seriously?", x: 96, y: 150, w: 268, d: 0 },
-  { t: "Will they think I'm after something?", x: 430, y: 108, w: 330, d: 1 },
-  { t: "Do they know how this looks in women?", x: 806, y: 162, w: 344, d: 2 },
-  { t: "Will they understand my family?", x: 150, y: 268, w: 290, d: 3 },
-  { t: "Do I need school reports?", x: 520, y: 244, w: 244, d: 4 },
-  { t: "I don't have any.", x: 826, y: 300, w: 178, d: 5 },
-  { t: "Will I forget what I meant to say?", x: 220, y: 382, w: 300, d: 6 },
-  { t: "Is fifteen minutes enough?", x: 596, y: 370, w: 254, d: 7 },
+  { t: "Will they take me seriously?", x: 120, y: 200, w: 300, d: 0 },
+  { t: "Will they think I'm after something?", x: 488, y: 132, w: 372, d: 1 },
+  { t: "Do they know how this looks in women?", x: 736, y: 288, w: 392, d: 2 },
+  { t: "Will they understand my family?", x: 184, y: 360, w: 330, d: 3 },
+  { t: "Do I need school reports?", x: 564, y: 448, w: 276, d: 4 },
+  { t: "I don't have any.", x: 892, y: 528, w: 202, d: 5 },
+  { t: "Will I forget what I meant to say?", x: 232, y: 556, w: 340, d: 6 },
+  { t: "Is fifteen minutes enough?", x: 610, y: 660, w: 288, d: 7 },
 ];
 
 /** Scene 04's practical barriers, as a row of chips. */
@@ -320,54 +320,54 @@ const PRACTICAL = ["Can I get there?", "Another day off work", "Is there a gap f
 
 function SequenceStage({ scene }: { scene: number }) {
   return (
-    <svg className="seq-svg" viewBox="0 0 1200 640" data-scene={scene} role="presentation" focusable="false">
-      <rect width="1200" height="640" fill="var(--s-paper)" />
+    <svg className="seq-svg" viewBox="0 0 1200 1000" data-scene={scene} role="presentation" focusable="false">
+      <rect width="1200" height="1000" fill="var(--s-paper)" />
       <g className="seq-cam">
         {/* ── 01 the search ─────────────────────────────────────────────────────────── */}
         <g className="seq-layer seq-l1">
-          <rect x="230" y="34" width="740" height="48" rx="24" fill="#fff" stroke="var(--s-line)" />
-          <circle cx="266" cy="58" r="8" fill="none" stroke="var(--s-muted)" strokeWidth="2.2" />
-          <line x1="272" y1="64" x2="279" y2="71" stroke="var(--s-muted)" strokeWidth="2.2" strokeLinecap="round" />
-          <text x="294" y="64" className="seq-t-q">ADHD GP near me</text>
+          <rect x="120" y="96" width="860" height="60" rx="30" fill="#fff" stroke="var(--s-line)" />
+          <circle cx="162" cy="126" r="10" fill="none" stroke="var(--s-muted)" strokeWidth="2.2" />
+          <line x1="169" y1="133" x2="178" y2="142" stroke="var(--s-muted)" strokeWidth="2.2" strokeLinecap="round" />
+          <text x="194" y="133" className="seq-t-q">ADHD GP near me</text>
           {/* POSITION ON THE OUTER <g>, ANIMATION ON THE INNER ONE. A CSS `transform` property
               OVERRIDES an SVG `transform` attribute rather than composing with it, so putting
               both on one element collapses every placed row onto the origin — which is exactly
               what the first build of this scene did. The split is load-bearing everywhere a
               placed element also animates: results, doctors, questions, chips and the CTA. */}
           {RESULTS.map((r, i) => (
-            <g key={i} transform={`translate(230 ${120 + i * 72})`}>
+            <g key={i} transform={`translate(120 ${208 + i * 106})`}>
               <g className={`seq-res seq-res-${i}`}>
-                <rect width="740" height="56" rx="5" fill="var(--s-paper-2)" stroke="var(--s-line)" />
-                <rect x="18" y="16" width="66" height="24" rx="12" fill="var(--s-line)" />
-                <text x="51" y="33" className="seq-t-tag">{r.tag}</text>
-                <rect x="98" y="18" width={r.w} height="9" rx="4.5" fill="#c6c0b1" />
-                <rect x="98" y="34" width={r.w * 0.72} height="7" rx="3.5" fill="#d3cdbe" />
+                <rect width="860" height="84" rx="6" fill="var(--s-paper-2)" stroke="var(--s-line)" />
+                <rect x="24" y="26" width="96" height="32" rx="16" fill="var(--s-line)" />
+                <text x="72" y="47" className="seq-t-tag">{r.tag}</text>
+                <rect x="140" y="28" width={r.w} height="12" rx="6" fill="#c6c0b1" />
+                <rect x="140" y="52" width={r.w * 0.72} height="10" rx="5" fill="#d3cdbe" />
               </g>
             </g>
           ))}
-          <text x="600" y="600" textAnchor="middle" className="seq-t-note">Not one of them is a GP who does this</text>
+          <text x="120" y="900" className="seq-t-note">Not one of them is a GP who does this</text>
         </g>
 
         {/* ── 02 the practice list ──────────────────────────────────────────────────── */}
         <g className="seq-layer seq-l2">
-          <text x="150" y="70" className="seq-t-lbl">OUR DOCTORS</text>
+          <text x="120" y="118" className="seq-t-lbl">OUR DOCTORS</text>
           {DOCTORS.map((d, i) => (
-            <g key={d} transform={`translate(150 ${96 + i * 74})`}>
+            <g key={d} transform={`translate(120 ${164 + i * 116})`}>
               <g className={`seq-doc seq-doc-${i}`}>
-                <rect width="620" height="58" rx="5" fill="var(--s-paper-2)" stroke="var(--s-line)" />
-                <circle cx="34" cy="29" r="18" fill="#d8d3c6" />
-                <text x="70" y="27" className="seq-t-doc">{d}</text>
-                <text x="70" y="45" className="seq-t-sub">General practitioner</text>
-                <text x="600" y="34" textAnchor="end" className="seq-t-scan">?</text>
+                <rect width="720" height="92" rx="6" fill="var(--s-paper-2)" stroke="var(--s-line)" />
+                <circle cx="48" cy="46" r="26" fill="#d8d3c6" />
+                <text x="96" y="42" className="seq-t-doc">{d}</text>
+                <text x="96" y="68" className="seq-t-sub">General practitioner</text>
+                <text x="688" y="56" textAnchor="end" className="seq-t-scan">?</text>
               </g>
             </g>
           ))}
           {/* the magnifier that works down the list, finding nothing */}
           <g className="seq-glass">
-            <circle cx="0" cy="0" r="26" fill="none" stroke="var(--s-accent)" strokeWidth="3" />
-            <line x1="19" y1="19" x2="34" y2="34" stroke="var(--s-accent)" strokeWidth="3" strokeLinecap="round" />
+            <circle cx="0" cy="0" r="34" fill="none" stroke="var(--s-accent)" strokeWidth="4" />
+            <line x1="25" y1="25" x2="45" y2="45" stroke="var(--s-accent)" strokeWidth="4" strokeLinecap="round" />
           </g>
-          <text x="880" y="300" className="seq-t-note">The word is not on the page</text>
+          <text x="908" y="470" className="seq-t-note">The word is<tspan x="908" dy="34">not on the page</tspan></text>
         </g>
 
         {/* ── 03 the questions ──────────────────────────────────────────────────────── */}
@@ -375,28 +375,28 @@ function SequenceStage({ scene }: { scene: number }) {
           {WORRIES.map((w) => (
             <g key={w.t} transform={`translate(${w.x} ${w.y})`}>
               <g className={`seq-worry seq-w-${w.d}`}>
-                <rect width={w.w} height="52" rx="26" fill="#fff" stroke="var(--s-line)" />
-                <text x={w.w / 2} y="32" textAnchor="middle" className="seq-t-worry">{w.t}</text>
+                <rect width={w.w} height="60" rx="30" fill="#fff" stroke="var(--s-line)" />
+                <text x={w.w / 2} y="37" textAnchor="middle" className="seq-t-worry">{w.t}</text>
               </g>
             </g>
           ))}
-          <text x="600" y="522" textAnchor="middle" className="seq-t-note">None of this is answered anywhere</text>
+          <text x="120" y="836" className="seq-t-note">None of this is answered anywhere</text>
         </g>
 
         {/* ── 04 how far, how long, how much ────────────────────────────────────────── */}
         <g className="seq-layer seq-l4">
-          <circle cx="290" cy="286" r="128" fill="none" stroke="var(--s-line)" strokeWidth="2" strokeDasharray="6 8" />
-          <circle cx="290" cy="286" r="72" fill="none" stroke="var(--s-line)" strokeWidth="2" strokeDasharray="6 8" />
-          <circle className="seq-you" cx="290" cy="286" r="9" fill="var(--s-ink)" />
-          <text x="290" y="322" textAnchor="middle" className="seq-t-sub">you</text>
-          <circle className="seq-far" cx="404" cy="216" r="8" fill="var(--s-accent)" />
-          <text x="424" y="212" className="seq-t-sub">the one GP</text>
-          <path className="seq-route" d="M299 280 C330 258, 366 236, 396 220" fill="none" stroke="var(--s-accent)" strokeWidth="2" strokeDasharray="4 5" />
+          <circle cx="352" cy="512" r="212" fill="none" stroke="var(--s-line)" strokeWidth="2" strokeDasharray="6 8" />
+          <circle cx="352" cy="512" r="120" fill="none" stroke="var(--s-line)" strokeWidth="2" strokeDasharray="6 8" />
+          <circle className="seq-you" cx="352" cy="512" r="13" fill="var(--s-ink)" />
+          <text x="352" y="560" textAnchor="middle" className="seq-t-sub">you</text>
+          <circle className="seq-far" cx="528" cy="394" r="12" fill="var(--s-accent)" />
+          <text x="554" y="389" className="seq-t-sub">the one GP</text>
+          <path className="seq-route" d="M364 504 C410 470, 470 428, 518 400" fill="none" stroke="var(--s-accent)" strokeWidth="2" strokeDasharray="4 5" />
           {PRACTICAL.map((p, i) => (
-            <g key={p} transform={`translate(620 ${180 + i * 82})`}>
+            <g key={p} transform={`translate(672 ${372 + i * 122})`}>
               <g className={`seq-prac seq-prac-${i}`}>
-                <rect width="428" height="60" rx="30" fill="var(--s-paper-2)" stroke="var(--s-line)" />
-                <text x="30" y="37" className="seq-t-prac">{p}</text>
+                <rect width="452" height="76" rx="38" fill="var(--s-paper-2)" stroke="var(--s-line)" />
+                <text x="36" y="47" className="seq-t-prac">{p}</text>
               </g>
             </g>
           ))}
@@ -404,32 +404,32 @@ function SequenceStage({ scene }: { scene: number }) {
 
         {/* ── 05 the wait and the bill ──────────────────────────────────────────────── */}
         <g className="seq-layer seq-l5">
-          <line className="seq-axis" x1="140" y1="300" x2="1060" y2="300" stroke="var(--s-line)" strokeWidth="2" />
+          <line className="seq-axis" x1="120" y1="430" x2="1000" y2="430" stroke="var(--s-line)" strokeWidth="2" />
           <g stroke="#d8d3c6" strokeWidth="2">
-            <line x1="216" y1="292" x2="216" y2="308" /><line x1="292" y1="292" x2="292" y2="308" />
-            <line x1="368" y1="292" x2="368" y2="308" /><line x1="444" y1="292" x2="444" y2="308" />
-            <line x1="520" y1="292" x2="520" y2="308" />
+            <line x1="216" y1="420" x2="216" y2="440" /><line x1="292" y1="420" x2="292" y2="440" />
+            <line x1="368" y1="420" x2="368" y2="440" /><line x1="444" y1="420" x2="444" y2="440" />
+            <line x1="520" y1="420" x2="520" y2="440" />
           </g>
           <g stroke="var(--s-accent)" strokeWidth="2">
-            <line x1="596" y1="288" x2="596" y2="312" /><line x1="672" y1="288" x2="672" y2="312" />
-            <line x1="748" y1="288" x2="748" y2="312" /><line x1="824" y1="288" x2="824" y2="312" />
-            <line x1="900" y1="288" x2="900" y2="312" /><line x1="976" y1="288" x2="976" y2="312" />
+            <line x1="596" y1="414" x2="596" y2="446" /><line x1="672" y1="414" x2="672" y2="446" />
+            <line x1="748" y1="414" x2="748" y2="446" /><line x1="824" y1="414" x2="824" y2="446" />
+            <line x1="900" y1="414" x2="900" y2="446" /><line x1="976" y1="414" x2="976" y2="446" />
           </g>
-          <text x="216" y="332" textAnchor="middle" className="seq-t-tick">1</text>
-          <text x="596" y="332" textAnchor="middle" className="seq-t-tick seq-hot">6</text>
-          <text x="976" y="332" textAnchor="middle" className="seq-t-tick seq-hot">12</text>
-          <rect x="1000" y="252" width="56" height="48" rx="5" fill="var(--s-accent-soft)" stroke="var(--s-accent)" strokeDasharray="4 4" />
-          <text x="1028" y="284" textAnchor="middle" className="seq-t-qm">?</text>
-          <text x="140" y="420" className="seq-t-fig">6–12 months</text>
-          <text x="144" y="452" className="seq-t-sub">typical wait for an adult ADHD assessment appointment</text>
+          <text x="216" y="472" textAnchor="middle" className="seq-t-tick">1</text>
+          <text x="596" y="472" textAnchor="middle" className="seq-t-tick seq-hot">6</text>
+          <text x="976" y="472" textAnchor="middle" className="seq-t-tick seq-hot">12</text>
+          <rect x="1014" y="374" width="64" height="56" rx="5" fill="var(--s-accent-soft)" stroke="var(--s-accent)" strokeDasharray="4 4" />
+          <text x="1046" y="414" textAnchor="middle" className="seq-t-qm">?</text>
+          <text x="120" y="222" className="seq-t-fig">6–12 months</text>
+          <text x="124" y="262" className="seq-t-sub">typical wait for an adult ADHD assessment appointment</text>
           <g className="seq-bar-wrap">
-            <rect x="700" y="380" width="140" height="70" rx="3" fill="var(--s-accent-soft)" stroke="var(--s-line)" />
-            <text x="770" y="424" textAnchor="middle" className="seq-t-cost seq-cost-q">$1k</text>
-            <g className="seq-bar"><rect x="880" y="150" width="140" height="300" rx="3" fill="var(--s-accent)" /></g>
-            <text x="950" y="424" textAnchor="middle" className="seq-t-cost seq-cost-p">$5k</text>
-            <line x1="700" y1="450" x2="1060" y2="450" stroke="var(--s-ink)" strokeWidth="2" />
+            <rect x="120" y="748" width="176" height="86" rx="3" fill="var(--s-accent-soft)" stroke="var(--s-line)" />
+            <text x="208" y="802" textAnchor="middle" className="seq-t-cost seq-cost-q">$1k</text>
+            <g className="seq-bar"><rect x="328" y="534" width="176" height="300" rx="3" fill="var(--s-accent)" /></g>
+            <text x="416" y="802" textAnchor="middle" className="seq-t-cost seq-cost-p">$5k</text>
+            <line x1="120" y1="834" x2="620" y2="834" stroke="var(--s-ink)" strokeWidth="2" />
           </g>
-          <text x="700" y="490" className="seq-t-sub">common out-of-pocket cost of a private adult assessment</text>
+          <text x="120" y="874" className="seq-t-sub">common out-of-pocket cost of a private adult assessment</text>
         </g>
 
         {/* ── 06 the turn ───────────────────────────────────────────────────────────── */}
@@ -439,69 +439,69 @@ function SequenceStage({ scene }: { scene: number }) {
               an SVG child's box is measured from its geometry regardless of clipping, and
               e2e/mobile-fit.spec.ts correctly reported it 14px past the right edge of a 390px
               phone. The camera never pans in this scene, so the bleed bought nothing. */}
-          <rect x="0" y="0" width="1200" height="640" fill="var(--s-dark)" />
+          <rect x="0" y="0" width="1200" height="1000" fill="var(--s-dark)" />
           <g fill="#332f0a" opacity=".5">
-            <rect x="90" y="66" width="112" height="30" rx="4" /><rect x="226" y="60" width="112" height="30" rx="4" />
-            <rect x="362" y="70" width="112" height="30" rx="4" /><rect x="498" y="62" width="112" height="30" rx="4" />
-            <rect x="634" y="68" width="112" height="30" rx="4" /><rect x="770" y="61" width="112" height="30" rx="4" />
-            <rect x="906" y="67" width="112" height="30" rx="4" /><rect x="1042" y="64" width="112" height="30" rx="4" />
+            <rect x="90" y="120" width="112" height="34" rx="4" /><rect x="226" y="112" width="112" height="34" rx="4" />
+            <rect x="362" y="126" width="112" height="34" rx="4" /><rect x="498" y="115" width="112" height="34" rx="4" />
+            <rect x="634" y="123" width="112" height="34" rx="4" /><rect x="770" y="114" width="112" height="34" rx="4" />
+            <rect x="906" y="122" width="112" height="34" rx="4" /><rect x="1042" y="118" width="112" height="34" rx="4" />
           </g>
-          <path className="seq-turn-line" d="M105 124 C420 132, 760 134, 1095 128" fill="none" stroke="var(--s-accent-mid)" strokeWidth="2.6" strokeLinecap="round" />
-          <circle className="seq-turn-dot" cx="1095" cy="128" r="6.5" fill="var(--s-accent-mid)" />
-          <text x="105" y="272" className="seq-t-turn">The permission already</text>
-          <text x="105" y="340" className="seq-t-turn">changed.</text>
-          <text x="105" y="408" className="seq-t-turn seq-em">Now the appointment</text>
-          <text x="105" y="476" className="seq-t-turn seq-em">has to be findable.</text>
+          <path className="seq-turn-line" d="M120 214 C420 222, 760 224, 1000 218" fill="none" stroke="var(--s-accent-mid)" strokeWidth="2.6" strokeLinecap="round" />
+          <circle className="seq-turn-dot" cx="1000" cy="218" r="8" fill="var(--s-accent-mid)" />
+          <text x="120" y="430" className="seq-t-turn">The permission already</text>
+          <text x="120" y="514" className="seq-t-turn">changed.</text>
+          <text x="120" y="598" className="seq-t-turn seq-em">Now the appointment</text>
+          <text x="120" y="682" className="seq-t-turn seq-em">has to be findable.</text>
         </g>
 
         {/* ── 07 the method ─────────────────────────────────────────────────────────── */}
         <g className="seq-layer seq-l7">
           <g stroke="var(--s-line)" strokeWidth="2">
-            <line className="seq-rule seq-rule-0" x1="120" y1="150" x2="760" y2="150" />
-            <line className="seq-rule seq-rule-1" x1="120" y1="284" x2="760" y2="284" />
+            <line className="seq-rule seq-rule-0" x1="120" y1="230" x2="760" y2="230" />
+            <line className="seq-rule seq-rule-1" x1="120" y1="606" x2="760" y2="606" />
             <line className="seq-rule seq-rule-2" x1="120" y1="418" x2="760" y2="418" />
-            <line className="seq-rule seq-rule-3" x1="120" y1="552" x2="760" y2="552" />
+            <line className="seq-rule seq-rule-3" x1="120" y1="794" x2="760" y2="794" />
           </g>
-          <text x="120" y="206" className="seq-t-step">Say what you need</text>
-          <text x="120" y="236" className="seq-t-sub">In your words. Not a quiz, and not a score.</text>
-          <text x="120" y="340" className="seq-t-step">See who is near you</text>
-          <text x="120" y="370" className="seq-t-sub">By suburb, care area and language.</text>
-          <text x="120" y="474" className="seq-t-step">Book the first appointment</text>
-          <text x="120" y="504" className="seq-t-sub">With one GP who carries it through.</text>
-          <g transform="translate(820 130) scale(3.1)">
+          <text x="120" y="304" className="seq-t-step">Say what you need</text>
+          <text x="120" y="344" className="seq-t-sub">In your words. Not a quiz, and not a score.</text>
+          <text x="120" y="492" className="seq-t-step">See who is near you</text>
+          <text x="120" y="532" className="seq-t-sub">By suburb, care area and language.</text>
+          <text x="120" y="680" className="seq-t-step">Book the first appointment</text>
+          <text x="120" y="720" className="seq-t-sub">With one GP who carries it through.</text>
+          <g transform="translate(806 236) scale(3.7)">
             <path d={AUS} fill="var(--s-paper-2)" stroke="#cfc9ba" strokeWidth=".6" />
             <circle className="seq-pin seq-pin-0" cx="87.6" cy="71.8" r="2.6" fill="var(--s-accent)" />
             <circle className="seq-pin seq-pin-1" cx="92.6" cy="58" r="2.6" fill="var(--s-accent)" />
           </g>
-          <text x="975" y="520" textAnchor="middle" className="seq-t-place">Beecroft, NSW &amp; the Gold Coast, QLD</text>
+          <text x="991" y="672" textAnchor="middle" className="seq-t-place">Beecroft, NSW &amp; the Gold Coast, QLD</text>
         </g>
 
         {/* ── 08 the booking ────────────────────────────────────────────────────────── */}
         <g className="seq-layer seq-l8">
-          <g transform="translate(360 120)">
-            <rect width="480" height="180" rx="8" fill="#fff" stroke="var(--s-line)" strokeWidth="2" />
-            <circle cx="82" cy="90" r="42" fill="var(--s-paper-2)" />
-            <text x="82" y="102" textAnchor="middle" className="seq-t-mono">AS</text>
-            <text x="148" y="76" className="seq-t-name">Dr Anubhav Saxena</text>
-            <text x="148" y="106" className="seq-t-sub">General practitioner · Beecroft</text>
-            <g transform="translate(148 124)">
-              <rect width="146" height="32" rx="16" fill="var(--s-accent-soft)" />
-              <text x="20" y="21" className="seq-t-chip">ADHD assessment</text>
-              <rect x="158" width="100" height="32" rx="16" fill="var(--s-accent-soft)" />
-              <text x="178" y="21" className="seq-t-chip">Titration</text>
+          <g transform="translate(330 230)">
+            <rect width="540" height="206" rx="9" fill="#fff" stroke="var(--s-line)" strokeWidth="2" />
+            <circle cx="92" cy="103" r="48" fill="var(--s-paper-2)" />
+            <text x="92" y="117" textAnchor="middle" className="seq-t-mono">AS</text>
+            <text x="168" y="86" className="seq-t-name">Dr Anubhav Saxena</text>
+            <text x="168" y="122" className="seq-t-sub">General practitioner · Beecroft</text>
+            <g transform="translate(168 142)">
+              <rect width="166" height="38" rx="19" fill="var(--s-accent-soft)" />
+              <text x="22" y="25" className="seq-t-chip">ADHD assessment</text>
+              <rect x="180" width="114" height="38" rx="19" fill="var(--s-accent-soft)" />
+              <text x="202" y="25" className="seq-t-chip">Titration</text>
             </g>
           </g>
-          <g transform="translate(420 336)">
+          <g transform="translate(390 494)">
             <g className="seq-cta">
-              <rect width="360" height="60" rx="30" fill="var(--s-ink)" />
-              <text x="180" y="38" textAnchor="middle" className="seq-t-cta">See available times</text>
+              <rect width="420" height="72" rx="36" fill="var(--s-ink)" />
+              <text x="210" y="46" textAnchor="middle" className="seq-t-cta">See available times</text>
             </g>
           </g>
-          <path d="M600 420 L600 458" stroke="var(--s-muted)" strokeWidth="2" />
-          <path d="M593 451 L600 461 L607 451" fill="none" stroke="var(--s-muted)" strokeWidth="2" strokeLinecap="round" />
-          <g transform="translate(390 474)">
-            <rect width="420" height="48" rx="7" fill="var(--s-paper-2)" stroke="var(--s-line)" />
-            <text x="210" y="31" textAnchor="middle" className="seq-t-sub">Healthengine — live times, real booking</text>
+          <path d="M600 594 L600 648" stroke="var(--s-muted)" strokeWidth="2" />
+          <path d="M592 640 L600 652 L608 640" fill="none" stroke="var(--s-muted)" strokeWidth="2" strokeLinecap="round" />
+          <g transform="translate(360 668)">
+            <rect width="480" height="58" rx="8" fill="var(--s-paper-2)" stroke="var(--s-line)" />
+            <text x="240" y="37" textAnchor="middle" className="seq-t-sub">Healthengine, where the live times are</text>
           </g>
         </g>
       </g>

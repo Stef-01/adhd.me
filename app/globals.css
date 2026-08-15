@@ -4774,7 +4774,7 @@ textarea:focus-visible {
 }
 .seq-svg { width: 100%; height: auto; max-height: 82vh; display: block; }
 .seq-steps { flex: 0 0 452px; width: 452px; border-left: 1px solid var(--s-line); }
-.seq-step { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 10vh 0; }
+.seq-step { min-height: 86vh; display: flex; flex-direction: column; justify-content: center; padding: 7vh 0; }
 .seq-step-in { padding-left: 40px; }
 
 .seq-n {
@@ -4796,7 +4796,7 @@ textarea:focus-visible {
   letter-spacing: -0.03em;
   text-wrap: balance;
 }
-.seq-body { margin: 0; max-width: 46ch; color: var(--s-muted); font-size: 16px; line-height: 1.68; }
+.seq-body { margin: 0; max-width: 46ch; color: var(--s-muted); font-size: 16px; line-height: 1.68; text-wrap: pretty; }
 .seq-detail { margin: 20px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
 .seq-detail li {
   position: relative;
@@ -4845,36 +4845,36 @@ textarea:focus-visible {
 
 /* ── Stage type ─────────────────────────────────────────────────────────── */
 .seq-svg text { font-family: "Inter Variable", Inter, system-ui, sans-serif; }
-.seq-t-q { font-size: 18px; fill: var(--s-ink); }
-.seq-t-tag { font-size: 11px; font-weight: 600; fill: var(--s-muted); text-anchor: middle; }
-.seq-t-note { font-size: 15px; fill: var(--s-accent); font-weight: 560; }
-.seq-t-lbl { font-size: 12px; font-weight: 640; letter-spacing: 0.14em; fill: var(--s-muted); }
-.seq-t-doc { font-size: 17px; fill: var(--s-ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; }
-.seq-t-sub { font-size: 13.5px; fill: var(--s-muted); }
-.seq-t-scan { font-size: 18px; fill: var(--s-line); }
-.seq-t-worry { font-size: 15px; fill: var(--s-ink); }
-.seq-t-prac { font-size: 17px; fill: var(--s-ink); }
-.seq-t-tick { font-size: 14px; fill: var(--s-muted); }
+.seq-t-q { font-size: 24px; fill: var(--s-ink); }
+.seq-t-tag { font-size: 18px; font-weight: 600; fill: var(--s-muted); text-anchor: middle; }
+.seq-t-note { font-size: 22px; fill: var(--s-accent); font-weight: 560; }
+.seq-t-lbl { font-size: 18px; font-weight: 640; letter-spacing: 0.14em; fill: var(--s-muted); }
+.seq-t-doc { font-size: 26px; fill: var(--s-ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; }
+.seq-t-sub { font-size: 19px; fill: var(--s-muted); }
+.seq-t-scan { font-size: 26px; fill: var(--s-line); }
+.seq-t-worry { font-size: 21px; fill: var(--s-ink); }
+.seq-t-prac { font-size: 24px; fill: var(--s-ink); }
+.seq-t-tick { font-size: 20px; fill: var(--s-muted); }
 .seq-t-tick.seq-hot { fill: var(--s-accent); }
-.seq-t-qm { font-size: 22px; fill: var(--s-accent); }
+.seq-t-qm { font-size: 30px; fill: var(--s-accent); }
 .seq-t-fig {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 62px; fill: var(--s-ink); letter-spacing: -0.03em;
+  font-size: 92px; fill: var(--s-ink); letter-spacing: -0.03em;
 }
-.seq-t-cost { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 30px; }
+.seq-t-cost { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 42px; }
 .seq-cost-q { fill: var(--s-muted); }
 .seq-cost-p { fill: var(--s-paper); }
 .seq-t-turn {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 58px; fill: #f4f1e8; letter-spacing: -0.025em;
+  font-size: 74px; fill: #f4f1e8; letter-spacing: -0.025em;
 }
 .seq-t-turn.seq-em { fill: var(--s-accent-mid); font-style: italic; }
-.seq-t-step { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 30px; fill: var(--s-ink); }
-.seq-t-place { font-size: 14px; fill: var(--s-accent); }
-.seq-t-mono { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 30px; fill: #85867e; }
-.seq-t-name { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 28px; fill: var(--s-ink); }
-.seq-t-chip { font-size: 13px; fill: var(--s-accent); }
-.seq-t-cta { font-size: 19px; font-weight: 600; fill: #fff; }
+.seq-t-step { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 42px; fill: var(--s-ink); }
+.seq-t-place { font-size: 20px; fill: var(--s-accent); }
+.seq-t-mono { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 36px; fill: #85867e; }
+.seq-t-name { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 34px; fill: var(--s-ink); }
+.seq-t-chip { font-size: 18px; fill: var(--s-accent); }
+.seq-t-cta { font-size: 26px; font-weight: 600; fill: #fff; }
 
 /* ── Scene 01: results arrive in sequence, none of them the answer ──────── */
 .seq-res { transform: translateY(16px); opacity: 0; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease; }
@@ -4887,20 +4887,15 @@ textarea:focus-visible {
 [data-scene="1"] .seq-res-5 { transition-delay: 0.50s; }
 
 /* ── Scene 02: the magnifier works down the list and finds nothing ──────── */
-.seq-glass { transform: translate(700px, 125px); opacity: 0; }
+.seq-glass { transform: translate(790px, 210px); opacity: 0; }
 [data-scene="2"] .seq-glass { opacity: 1; animation: seqScan 5.6s cubic-bezier(0.6,0,0.4,1) 0.4s infinite; }
 @keyframes seqScan {
-  0%   { transform: translate(700px, 125px); }
-  14%  { transform: translate(700px, 125px); }
-  20%  { transform: translate(700px, 199px); }
-  34%  { transform: translate(700px, 199px); }
-  40%  { transform: translate(700px, 273px); }
-  54%  { transform: translate(700px, 273px); }
-  60%  { transform: translate(700px, 347px); }
-  74%  { transform: translate(700px, 347px); }
-  80%  { transform: translate(700px, 421px); }
-  94%  { transform: translate(700px, 495px); }
-  100% { transform: translate(700px, 495px); }
+  0%,  12% { transform: translate(790px, 210px); }
+  18%, 30% { transform: translate(790px, 326px); }
+  36%, 48% { transform: translate(790px, 442px); }
+  54%, 66% { transform: translate(790px, 558px); }
+  72%, 84% { transform: translate(790px, 674px); }
+  90%,100% { transform: translate(790px, 790px); }
 }
 .seq-doc { opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .5s cubic-bezier(0.16,1,0.3,1); }
 [data-scene="2"] .seq-doc { opacity: 1; transform: none; }
@@ -4996,5 +4991,5 @@ textarea:focus-visible {
   .seq-route, .seq-axis, .seq-turn-line, .seq-rule { stroke-dashoffset: 0; }
   .seq-bar { transform: scaleY(1); }
   .seq-pin, .seq-turn-dot, .seq-far { transform: scale(1); }
-  .seq-glass { opacity: 1; transform: translate(700px, 273px); }
+  .seq-glass { opacity: 1; transform: translate(790px, 442px); }
 }
