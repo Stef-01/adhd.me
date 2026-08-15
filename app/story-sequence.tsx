@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { coveredSuburbs, describeDistance, distanceKm, resolvePlace, SUBURBS, type SuburbPoint } from "@/geo/suburbs";
 
 /**
  * THE SCROLL SEQUENCE — the middle of the landing page, animated.
@@ -165,6 +166,60 @@ const SCENES: readonly Scene[] = [
   },
 ];
 
+/**
+ * THE PRACTICE THE ROSTER ACTUALLY LISTS.
+ *
+ * Scene 04 asks "how far", and until now the page asked it rhetorically: a diagram of rings with
+ * an invented dot on it. It can be answered instead, from the same gazetteer the matcher uses, so
+ * the scene stops being a picture of the question and becomes the answer to it.
+ *
+ * Beecroft, not "your nearest practice", because both GPs on the roster are at Beecroft Family &
+ * Skin Cancer Clinic. Writing this as a lookup over practices would be building for a roster that
+ * does not exist yet and would quietly imply coverage the directory cannot honour.
+ */
+const LISTED_AT: SuburbPoint = SUBURBS.find((s) => s.suburb === "Beecroft")!;
+
+/**
+ * What to tell somebody who typed a place. Three outcomes, and the third is the one that matters:
+ * an unresolved input is reported AS unresolved rather than fuzzy-matched to the nearest thing,
+ * for the reason `resolvePlace` gives — a near-miss silently becoming a hit is the product
+ * deciding what somebody meant, and here it would send them to the wrong side of Sydney.
+ */
+function answerFor(input: string): { state: "empty" | "unknown" | "found"; line: string; at: SuburbPoint | null } {
+  const typed = input.trim();
+  if (!typed) return { state: "empty", line: "", at: null };
+  const point = resolvePlace(typed);
+  if (!point) {
+    return {
+      state: "unknown",
+      line: `We do not cover ${typed} yet. Today the listed GPs are in Beecroft, NSW.`,
+      at: null,
+    };
+  }
+  if (point.suburb === LISTED_AT.suburb) {
+    return { state: "found", line: "The GPs listed today are in your suburb.", at: point };
+  }
+  const km = distanceKm(point, LISTED_AT);
+  /* A COVERED SUBURB THE ROSTER CANNOT SERVE YET GETS SAID OUT LOUD.
+     The coverage map names two focus areas and both listed GPs are at Beecroft, so somebody in
+     the Gold Coast area is told, truthfully, that the nearest listed GP is 670km away. Rounding
+     that off or hiding it behind "not covered" would be the product covering for itself: the
+     suburb IS in the gazetteer, and the honest answer is that the directory has not caught up
+     with the map. Phrased so it reads as a gap in the listing rather than a gap in the person. */
+  if (km > 100) {
+    return {
+      state: "found",
+      line: `${point.suburb} is a covered area, but every GP listed today is at Beecroft, NSW — about ${Math.round(km)} km away. More are being added.`,
+      at: point,
+    };
+  }
+  return {
+    state: "found",
+    line: `From ${point.suburb}, the GPs listed today are ${describeDistance(km)}.`,
+    at: point,
+  };
+}
+
 /** The page's one easing curve, shared with story-landing.tsx. */
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -190,6 +245,8 @@ function Rise({ children, delay = 0, className }: { children: ReactNode; delay?:
 
 export function StorySequence() {
   const [scene, setScene] = useState(1);
+  const [place, setPlace] = useState("");
+  const answer = answerFor(place);
   const stepsRef = useRef<HTMLDivElement>(null);
 
   /**
@@ -239,7 +296,7 @@ export function StorySequence() {
         {/* The illustration. aria-hidden because every word inside it is also in the prose
             beside it — a screen reader that read both would hear the page twice. */}
         <div className="seq-stage" aria-hidden="true">
-          <SequenceStage scene={scene} />
+          <SequenceStage scene={scene} here={answer.at} />
         </div>
 
         <div className="seq-steps" ref={stepsRef}>
@@ -264,6 +321,34 @@ export function StorySequence() {
                         <li key={d}>{d}</li>
                       ))}
                     </ul>
+                  </Rise>
+                ) : null}
+                {s.n === "04" ? (
+                  <Rise delay={0.16}>
+                    <div className="seq-ask">
+                      <label className="seq-ask-label" htmlFor="seq-place">
+                        So: how far is it for you?
+                      </label>
+                      <input
+                        id="seq-place"
+                        className="seq-ask-input"
+                        type="text"
+                        list="seq-places"
+                        autoComplete="off"
+                        placeholder="Your suburb or postcode"
+                        value={place}
+                        onChange={(event) => setPlace(event.target.value)}
+                      />
+                      <datalist id="seq-places">
+                        {coveredSuburbs().map((name) => <option key={name} value={name} />)}
+                      </datalist>
+                      {/* The answer is announced here rather than drawn only on the stage: the
+                          stage is aria-hidden, so a reader who cannot see it would otherwise type
+                          into a control that appears to do nothing. */}
+                      <p className={`seq-ask-out seq-ask-${answer.state}`} role="status" aria-live="polite">
+                        {answer.state === "empty" ? "Straight-line distance, from the same list the finder uses." : answer.line}
+                      </p>
+                    </div>
                   </Rise>
                 ) : null}
                 {s.foot ? (
@@ -317,7 +402,7 @@ const WORRIES: ReadonlyArray<{ t: string; x: number; y: number; w: number; d: nu
 /** Scene 04's practical barriers, as a row of chips. */
 const PRACTICAL = ["Can I get there?", "Another day off work", "Is there a gap fee?"];
 
-function SequenceStage({ scene }: { scene: number }) {
+function SequenceStage({ scene, here }: { scene: number; here: SuburbPoint | null }) {
   return (
     <svg className="seq-svg" viewBox="0 0 1200 1000" data-scene={scene} role="presentation" focusable="false">
       <rect width="1200" height="1000" fill="var(--s-paper)" />
@@ -387,10 +472,13 @@ function SequenceStage({ scene }: { scene: number }) {
           <circle cx="352" cy="512" r="212" fill="none" stroke="var(--s-line)" strokeWidth="2" strokeDasharray="6 8" />
           <circle cx="352" cy="512" r="120" fill="none" stroke="var(--s-line)" strokeWidth="2" strokeDasharray="6 8" />
           <circle className="seq-you" cx="352" cy="512" r="13" fill="var(--s-ink)" />
-          <text x="352" y="560" textAnchor="middle" className="seq-t-sub">you</text>
+          <text x="352" y="560" textAnchor="middle" className="seq-t-sub">{here ? here.suburb : "you"}</text>
           <circle className="seq-far" cx="528" cy="394" r="12" fill="var(--s-accent)" />
-          <text x="554" y="389" className="seq-t-sub">the one GP</text>
+          <text x="554" y="389" className="seq-t-sub">the listed GPs</text>
           <path className="seq-route" d="M364 504 C410 470, 470 428, 518 400" fill="none" stroke="var(--s-accent)" strokeWidth="2" strokeDasharray="4 5" />
+          <text x="120" y="856" className="seq-t-note">
+            {here ? `${here.suburb} to Beecroft — ${describeDistance(distanceKm(here, LISTED_AT))}` : "Type a suburb to see how far"}
+          </text>
           {PRACTICAL.map((p, i) => (
             <g key={p} transform={`translate(672 ${372 + i * 122})`}>
               <g className={`seq-prac seq-prac-${i}`}>

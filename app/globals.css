@@ -5140,3 +5140,48 @@ textarea:focus-visible {
      the plain navigation the browser would have done anyway. */
   @view-transition { navigation: none; }
 }
+
+/* ── The one control on the sequence ────────────────────────────────────────
+   Scene 04 asks how far it is, and this answers. It is a real form control, not
+   a decoration: a visible label (never a placeholder standing in for one), a
+   44px target, a focus ring that is not the browser default removed, and a live
+   region so the answer is announced rather than only drawn on a stage that is
+   aria-hidden. */
+.seq-ask {
+  margin: 22px 0 0;
+  max-width: 44ch;
+  padding: 18px 20px 16px;
+  border: 1px solid var(--s-line);
+  border-radius: 4px;
+  background: var(--s-paper-2);
+}
+.seq-ask-label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--s-ink);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.seq-ask-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--s-line);
+  border-radius: 6px;
+  color: var(--s-ink);
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+}
+.seq-ask-input::placeholder { color: var(--s-muted); }
+.seq-ask-input:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 2px; border-color: var(--s-accent); }
+.seq-ask-out {
+  margin: 12px 0 0;
+  min-height: 2.6em;
+  color: var(--s-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+/* The answer earns ink; the prompt and the refusal stay quiet. Colour is never the only
+   signal — the sentence itself says which of the three states it is. */
+.seq-ask-found { color: var(--s-ink); font-weight: 560; }
