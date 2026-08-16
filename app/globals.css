@@ -5361,3 +5361,46 @@ textarea:focus-visible {
 /* The profile's honest line when nothing the reader said reached this clinician. Set at body
    weight rather than as chips, because chips would look like matched signals. */
 .profile-no-match { margin: 14px 0 0; color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 44ch; }
+
+/* ── Matching console ───────────────────────────────────────────────────────
+   Staff surface: dense, plain, no brand voice. It is a tool for reading numbers,
+   so the type is small and the table is the composition. */
+.mc { max-width: 1080px; margin: 0 auto; padding: 40px 24px 96px; color: var(--ink); }
+.mc-back { display: inline-block; margin-bottom: 20px; color: var(--muted); font-size: 13px; text-decoration: none; }
+.mc-back:hover { color: var(--ink); text-decoration: underline; }
+.mc h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 34px; font-weight: 450; letter-spacing: -0.03em; }
+.mc-lead { max-width: 62ch; margin: 12px 0 0; color: var(--muted); font-size: 14.5px; line-height: 1.6; }
+.mc-section { margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); }
+.mc-section h2 { margin: 0 0 6px; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 23px; font-weight: 460; letter-spacing: -0.02em; }
+.mc-sub { margin: 24px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+.mc-note { max-width: 68ch; margin: 8px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+.mc-note code { background: var(--stone); padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+.mc-query { margin: 14px 0 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 20px; color: var(--ink); }
+.mc-empty { margin: 10px 0 0; color: var(--muted); font-size: 13.5px; }
+
+.mc-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 0; padding: 0; list-style: none; }
+.mc-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border: 1px solid var(--line);
+  border-radius: 999px; background: var(--stone); font-size: 12.5px; }
+/* Care and manner are different KINDS of claim, so they are told apart at a glance rather than
+   by reading — a reviewer scanning a roster is checking the balance between them. */
+.mc-tag-manner { background: var(--accent-soft); border-color: var(--accent-tint); }
+.mc-weight { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 11.5px; }
+
+.mc-table-wrap { overflow-x: auto; margin-top: 10px; border: 1px solid var(--line); border-radius: 4px; }
+.mc-table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 13px; }
+.mc-table th, .mc-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.mc-table th { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+.mc-table tr:last-child td { border-bottom: 0; }
+.mc-num { font-variant-numeric: tabular-nums; font-weight: 600; }
+.mc-missed { color: var(--muted); }
+
+.mc-clinician { margin-top: 18px; }
+.mc-proposals { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.mc-proposal { padding: 14px 16px; border: 1px solid var(--line); border-radius: 4px; background: var(--stone); }
+.mc-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mc-status { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.mc-quote { margin: 10px 0 0; padding: 0; color: var(--ink); font-size: 14px; line-height: 1.55; font-style: italic; }
+.mc-cue { margin: 6px 0 0; color: var(--faint); font-size: 12px; }
+.mc-unread { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
+.mc-bio { max-width: 64ch; margin: 14px 0 0; padding: 14px 16px; border-left: 2px solid var(--accent);
+  background: var(--stone); font-size: 14.5px; line-height: 1.6; }

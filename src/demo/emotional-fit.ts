@@ -92,13 +92,18 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   unhurried: {
     label: "Unhurried first appointment",
     matchLine: "gives you an unhurried first appointment",
-    cues: ["not rushed", "won't rush", "wont rush", "take my time", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
+    cues: ["not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
       "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread", "in and out",
       // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
       // The bare stem is the commonest way anybody says it.
-      "rushes", "rushing", "hurried", "hurry me"],
+      "rushes", "rushing", "hurried", "hurry me",
+      // W223: "take my time" was dropped. "my" is a stopword, so it matched [take, time] — and
+      // "I can take time off work" is a sentence this product puts in its OWN barrier list on the
+      // landing page. Recall lost is nil: "not rushed", "rushes", "hurried", "enough time" and
+      // "longer appointment" all still reach this facet.
+      ],
   },
   non_judgmental: {
     label: "Non-judgmental",
@@ -110,7 +115,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   collaborative: {
     label: "Explains and decides with you",
     matchLine: "explains the options and decides them with you",
-    cues: ["explain", "involve me", "my options", "the options", "part of the decision", "talk it through", "work with me", "understand my choices", "shared decision", "my say"],
+    cues: ["explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
+      // W223: "work with me", "my options", "the options" and "my say" were dropped. Under token
+      // matching each reduces to ONE very common word — [work], [option], [say] — because the
+      // rest are stopwords, so "I can take time off work" proposed that the reader wanted a
+      // collaborative GP. They were authored when matching was literal substrings and the whole
+      // phrase had to be present. Replaced with phrasings that survive as more than one token.
+      ],
   },
   culturally_attuned: {
     label: "Understands your background",

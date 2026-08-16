@@ -319,6 +319,18 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W204 declares how long a produced report lives. Every export here is reviewer-facing: `REPORT_RETENTION` and `PROPOSED_DISCLOSURE_LOG` argue a retention posture to somebody auditing it, and `REPORTING_ARTEFACTS` is a checklist of what this product does and does not keep. None of it reaches an operator, and none of it describes anybody's care.",
   },
   {
+    module: "src/onboarding/transcript.ts",
+    operatorCopy: [],
+    notCopy:
+      "Declared with NO operator copy of its own, and that is the finding rather than an omission: every label this module can emit is a facet label already declared and linted on `emotional-fit.ts` or `types.ts`, re-exported here as a lookup so the console can render a proposal the same way the form does. `CARE_LABEL_BY_AREA` is a Map and yields the linter no text, which the census caught on the first attempt to declare it — so it is named here in prose instead. The remaining exports are the turn and proposal types and the reader — it composes no sentence of its own, which is deliberate: a module that turned a clinician's speech into new prose about them would be writing the biography W183 refuses. It reads only the CLINICIAN's turns, never the interviewer's, because the interviewer names every facet by asking about it. It proposes rather than writes, and every proposal carries the clinician's own sentence, so a reviewer can check it and the clinician can recognise it. Nothing here is about a patient.",
+  },
+  {
+    module: "src/onboarding/background.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports the reviewable-background and audit types, the bio assembler and the tag reader. It holds no copy of its own: every label it emits comes from a facet vocabulary declared and linted elsewhere, and the ONE sentence it composes — the assembled bio — is built at runtime from accepted facets rather than authored here. That sentence is deliberately not a field: `src/directory/profile.ts` refuses a free-text biography, so the editable surface is the facets and the prose follows them. The two fixed fragments it contributes, \"says they often see\" and \"on how they work\", exist to satisfy W193 — a declaration must be rendered AS a declaration, and the difference between \"Dr X sees adults\" and \"Dr X says they often see adults\" is the difference between vouching for a clinician and reporting one.",
+  },
+  {
     module: "src/onboarding/interview.ts",
     operatorCopy: ["INTERVIEW"],
     notCopy:

@@ -74,10 +74,23 @@ function trimDouble(stemmed: string): string {
   return last && last === stemmed.at(-2) && !"aeiou".includes(last) ? stemmed.slice(0, -1) : stemmed;
 }
 
-/** Sentence or cue → the tokens matching actually compares. Deterministic and total. */
+/**
+ * Sentence or cue → the tokens matching actually compares. Deterministic and total.
+ *
+ * APOSTROPHES ARE DELETED, NOT TURNED INTO SPACES, and the difference is not cosmetic. Splitting
+ * on the apostrophe turns "don't" into ["don", "t"] and "that's" into ["s"] once "that" is dropped
+ * as a stopword. That silently destroyed the single commonest negator in English: the transcript
+ * reader's "do not propose from a denial" check could never fire on "I don't do that", because the
+ * token `dont` did not exist for it to find. The patient matcher had it too — the cue "won't rush"
+ * was being compared as ["won", "t", "rush"].
+ *
+ * Found by an edge case written for the transcript reader, and it was wrong here, one layer down,
+ * for both callers.
+ */
 export function tokenise(text: string): string[] {
   return text
     .toLowerCase()
+    .replace(/['’]/g, "")
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
     .filter((word) => word.length > 0 && !STOPWORDS.has(word))

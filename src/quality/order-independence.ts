@@ -121,6 +121,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/onboarding/background.ts",
+    folds: 2,
+    disposition: {
+      kind: "rationale",
+      why: "Two sites, both benign. `matchAudit` sums the weight of the facets a clinician matched: addition is commutative and it produces a TOTAL rather than a winner, so no clinician can be preferred over another by the order their facets were declared in — the ordering that decides a match lives in `rankClinicians`, which has its own tie-break and its own test. `asList` reads the final item of a list it is joining into a sentence, which is grammar rather than selection: the caller has already decided which facets are in the sentence, and reversing them would change the reading order of a list, not which clinician is preferred.",
+    },
+  },
+  {
     module: "src/onboarding/interview.ts",
     folds: 1,
     disposition: {
