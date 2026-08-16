@@ -14,6 +14,7 @@ const valid = {
   practiceSuburb: "Blacktown",
   practiceName: "Blacktown Family Practice",
   careAreas: ["adhd-assessment", "adult-adhd"],
+  manner: ["unhurried"],
   languages: ["Hindi"],
   nswAdhdTrained: true,
   acceptingNewPatients: true,

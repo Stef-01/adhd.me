@@ -16,6 +16,7 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { neutraliseSpreadsheetFormula } from "@/security/untrusted";
 import type { CareArea } from "@/demo/care-archetypes";
+import { EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
 import { CARE_AREA_LABELS, OFFERED_LANGUAGES, type ClinicianApplication } from "./types";
 
 function defaultStorePath(): string {
@@ -52,6 +53,7 @@ export interface ApplicationInput {
   practiceSuburb: string;
   practiceName: string;
   careAreas: string[];
+  manner: string[];
   languages: string[];
   nswAdhdTrained: boolean;
   acceptingNewPatients: boolean;
@@ -59,6 +61,7 @@ export interface ApplicationInput {
 
 export type ApplicationFieldError = keyof Omit<ApplicationInput, "nswAdhdTrained" | "acceptingNewPatients">;
 
+const VALID_MANNER = new Set<string>(EI_QUALITY_KEYS);
 const VALID_AREAS = new Set<string>(CARE_AREA_LABELS.map((a) => a.id));
 const VALID_LANGUAGES = new Set<string>(OFFERED_LANGUAGES);
 
@@ -85,6 +88,12 @@ export function validateApplication(
   // that silently never appears in a result.
   const areas = input.careAreas.filter((a) => VALID_AREAS.has(a));
   if (areas.length === 0) errors.careAreas = "Choose at least one area you see often.";
+  /* At least one way of working, because a clinician who declares none is invisible to every
+     patient who asks about manner rather than about scope — which the finder probe found is about
+     half of them. This is a floor on the GP's own findability, not a hoop. */
+  if (input.manner.filter((m) => VALID_MANNER.has(m)).length === 0) {
+    errors.manner = "Choose at least one that describes how you work.";
+  }
   else if (!areas.includes("adhd-assessment")) {
     errors.careAreas = "Diagnostic assessment is the anchor every listing holds, so please include it.";
   }
@@ -114,6 +123,10 @@ export function saveApplication(
     practiceSuburb: neutraliseSpreadsheetFormula(input.practiceSuburb.trim()),
     practiceName: neutraliseSpreadsheetFormula(input.practiceName.trim()),
     careAreas: [...new Set(input.careAreas.filter((a) => VALID_AREAS.has(a)))] as CareArea[],
+    /* Filtered against the closed vocabulary like `careAreas`, so a submission cannot declare a
+       way of working the finder has no facet for — an application for a field that does not
+       exist is how the field eventually gets built. */
+    manner: [...new Set(input.manner.filter((m) => VALID_MANNER.has(m)))] as EIQuality[],
     languages: [...new Set(input.languages.filter((l) => VALID_LANGUAGES.has(l)))],
     nswAdhdTrained: input.nswAdhdTrained,
     acceptingNewPatients: input.acceptingNewPatients,

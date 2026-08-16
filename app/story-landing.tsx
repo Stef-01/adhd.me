@@ -532,6 +532,28 @@ export function StoryLanding() {
         </div>
       </section>
 
+      {/* JOIN US — the clinician door, immediately after the founders.
+          It sits here rather than in the header because the reader who acts on it has just read
+          who is behind this: a GP deciding whether to be listed is deciding whether to stand
+          beside these three names, and the answer to "who are you" is the paragraph above. */}
+      <section className="story-join" aria-labelledby="join-title">
+        <div className="story-wrap story-join-inner">
+          <div>
+            <p className="story-eyebrow">Join us</p>
+            <h2 id="join-title" className="story-heading">Are you a GP who does this work?</h2>
+            <p className="story-join-copy">
+              If you have done the NSW or Queensland training, being findable is the whole
+              difference. Onboarding is one sitting: what you see often, how you work, and how
+              somebody reaches you. A person reads every application, and nothing is published
+              until you have read it back.
+            </p>
+          </div>
+          <Link className="story-join-link" href="/clinicians/join">
+            Start onboarding<span className="arrow" aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </section>
+
       {/* THE LONG VERSION, AS A DOOR RATHER THAN A CORRIDOR.
           The eight-scene sequence used to sit in the middle of this page, which meant every
           reader scrolled through six screens of argument to reach the form. It lives at

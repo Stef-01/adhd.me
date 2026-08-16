@@ -118,7 +118,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   structured: {
     label: "A structured, measured approach",
-    matchLine: "works to a documented baseline and reviews on a schedule",
+    matchLine: "works to a documented baseline and follows up on a schedule",
     cues: ["structured", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline"],
   },
 };

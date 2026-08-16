@@ -20,6 +20,7 @@
 // holds documents behind a grant inside a practice tenancy rather than in a signup row.
 
 import type { CareArea } from "@/demo/care-archetypes";
+import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
 
 /** What a GP is asked. Ordered as the form asks it, so the two cannot drift apart. */
 export interface ClinicianApplication {
@@ -34,6 +35,20 @@ export interface ClinicianApplication {
   practiceName: string;
   /** From the closed vocabulary, so an application cannot claim an area the finder cannot match. */
   careAreas: CareArea[];
+  /**
+   * HOW THEY WORK, which onboarding did not ask for until W221 and which is half of what a patient
+   * is actually choosing on.
+   *
+   * A probe of the finder found that the queries people write are as often about manner as about
+   * scope — "I can never get a word in", "somewhere I can be honest about how much I drink" — and
+   * a clinician who declares only care areas cannot be matched on any of it. They are then
+   * invisible to half the people who would have chosen them, which is a worse outcome for the GP
+   * than for the product.
+   *
+   * Closed vocabulary (`EIQuality`), for the same reason `careAreas` is: a free-text answer here
+   * would be the biography W183 refuses, arriving through the form instead of the profile.
+   */
+  manner: EIQuality[];
   /** Declared, checked by nobody, and rendered as declared. */
   languages: string[];
   /** Says they have completed the NSW training. See the header. */
@@ -54,7 +69,7 @@ export interface ClinicianFormState {
   status: "idle" | "error" | "success";
   message: string;
   fieldErrors?: Partial<
-    Record<"fullName" | "ahpraRegistrationNumber" | "email" | "practiceSuburb" | "practiceName" | "careAreas" | "languages" | "consent", string>
+    Record<"fullName" | "ahpraRegistrationNumber" | "email" | "practiceSuburb" | "practiceName" | "careAreas" | "manner" | "languages" | "consent", string>
   >;
 }
 
@@ -111,3 +126,32 @@ export const REFUSED_APPLICATION_FIELDS: Readonly<Record<string, string>> = {
   streetAddress: "A patient is asking which suburb, not which building. Precision beyond the question is disclosure without purpose.",
   fees: "Fees are the practice's to state, on the practice's own terms, and a fee captured at signup is stale the day it changes.",
 };
+
+/** What each quality asks, in the clinician's language. See `MANNER_LABELS` below. */
+const MANNER_ASKS: Record<EIQuality, string> = {
+  attuned: "Somebody arrives having been brushed off before. Is that a consult you are good at?",
+  steadying: "Do you spend the first minutes settling somebody who arrives anxious?",
+  sense_making: "Do you help people join the dots, or focus on the decision in front of you?",
+  motivating: "Do people leave with a plan that builds on what already works for them?",
+  unhurried: "Do you book a longer first appointment for this?",
+  non_judgmental: "Do you open the substance and coping questions as safety questions?",
+  collaborative: "Do you decide the options with the patient rather than recommend and explain?",
+  culturally_attuned: "Do family and language usually come into the room in your practice?",
+  structured: "Do you work to a documented baseline and scheduled follow-up?",
+};
+
+/**
+ * The manner questions, as a GP reads them.
+ *
+ * PHRASED AS A FACT ABOUT THE DAY, NOT AS A SELF-DESCRIPTION, which is the hardest and most
+ * important thing about asking these. "Do you book a longer first appointment?" has a true answer;
+ * "are you unhurried?" has only a flattering one. Labels come from `EI_QUALITIES` so the form, the
+ * matcher and the reason a patient reads are the same words.
+ */
+export const MANNER_LABELS: ReadonlyArray<{ id: EIQuality; label: string; ask: string }> = EI_QUALITY_KEYS.map(
+  (id) => ({
+    id,
+    label: EI_QUALITIES[id].label,
+    ask: MANNER_ASKS[id],
+  }),
+);

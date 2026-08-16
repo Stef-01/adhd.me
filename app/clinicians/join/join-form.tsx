@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { submitApplication } from "./actions";
-import { CARE_AREA_LABELS, OFFERED_LANGUAGES, type ClinicianFormState } from "@/onboarding/types";
+import { CARE_AREA_LABELS, MANNER_LABELS, OFFERED_LANGUAGES, type ClinicianFormState } from "@/onboarding/types";
 import { coveredSuburbs } from "@/geo/suburbs";
 
 const initialState: ClinicianFormState = { status: "idle", message: "" };
@@ -86,6 +86,32 @@ export function ClinicianJoinForm() {
             </label>
           ))}
         </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>How you work</legend>
+        {/* THE HALF THAT SCOPE CANNOT CARRY. A probe of the finder found that about as many people
+            describe what they want by MANNER as by clinical area — "I can never get a word in",
+            "somewhere I can be honest about how much I drink" — and a clinician who declares only
+            care areas is invisible to every one of them. That is a worse outcome for the GP than
+            for us, which is why the form asks and why at least one is required.
+
+            Each is phrased as a fact about the day rather than as a self-description: "do you book
+            a longer first appointment" has a true answer, "are you unhurried" has only a nice one. */}
+        <p className="join-hint">
+          Pick the ones that are true of how your day actually runs. Patients search on these as
+          often as they search on clinical areas, and we only ever show one to somebody who asked
+          for it.
+        </p>
+        <div className="join-checks">
+          {MANNER_LABELS.map((quality) => (
+            <label key={quality.id} className="join-check">
+              <input type="checkbox" name="manner" value={quality.id} />
+              <span>{quality.ask}</span>
+            </label>
+          ))}
+        </div>
+        {state.fieldErrors?.manner && <p className="join-field-error" role="alert">{state.fieldErrors.manner}</p>}
       </fieldset>
 
       <fieldset>

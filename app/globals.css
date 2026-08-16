@@ -5309,3 +5309,51 @@ textarea:focus-visible {
    cannot serve what was asked. It is a correction to what the list appears to claim, so it sits
    with the count rather than as a banner: a banner would be louder than the finding. */
 .match-quality { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 46ch; }
+
+/* ── Join us: the clinician door ────────────────────────────────────────────
+   Sits on the accent-soft wash so it reads as addressed to somebody else — a
+   patient scrolling past should be able to tell in a glance that this band is
+   not for them, without it shouting. Same shape as the approach door below it,
+   one tint apart, so the foot of the page has two doors and one rhythm. */
+.story-join {
+  border-top: 1px solid var(--s-line);
+  background: var(--s-accent-soft);
+  padding-block: clamp(48px, 6vw, 84px);
+}
+.story-join-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 64px);
+  flex-wrap: wrap;
+}
+.story-join-copy {
+  max-width: 54ch;
+  margin: 14px 0 0;
+  color: var(--s-muted);
+  font-size: 15.5px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.story-join-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: 999px;
+  background: var(--s-accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 640;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+.story-join-link .arrow { display: inline-block; margin-left: 10px; transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
+.story-join-link:hover, .story-join-link:focus-visible { background: #711d31; }
+.story-join-link:hover .arrow, .story-join-link:focus-visible .arrow { transform: translateX(5px); }
+.story-join-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .story-join-link, .story-join-link .arrow { transition: none; }
+  .story-join-link:hover .arrow { transform: none; }
+}
