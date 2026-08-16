@@ -111,7 +111,14 @@ export function professionalBio(background: ClinicianBackground): string {
      "sees children". Half the vocabulary names a procedure, and "says they often see baseline
      physical screening" is not a sentence. "Lists ... as areas they see often" is grammatical
      across the whole vocabulary and keeps the declaration posture in the verb. */
-  if (care.length > 0) sentences.push(`${background.displayName} lists ${asList(care)} as areas they say they see often.`);
+  if (care.length > 0) {
+    /* Singular and plural, because a bio that reads "lists assessment as areas they see often" is
+       a sentence nobody wrote and everybody notices. The assembled-bio design means the product
+       owns this grammar; a free-text field would have made it the clinician's problem, which is
+       one of the small costs of the trade and worth paying properly rather than ignoring. */
+    const noun = care.length === 1 ? "an area" : "areas";
+    sentences.push(`${background.displayName} lists ${asList(care)} as ${noun} they say they see often.`);
+  }
   if (manner.length > 0) sentences.push(`On how they work, they describe themselves as: ${asList(manner)}.`);
   /* "Says they" and "on how they work" are load-bearing. W193's rule is that a declaration is
      rendered AS a declaration, and the difference between "Dr X sees adults" and "Dr X says they

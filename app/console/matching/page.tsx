@@ -1,9 +1,11 @@
 // W223: the matching console — what the finder did, and why.
 //
 // STAFF-ONLY AND SYNTHETIC, LIKE EVERY OTHER CONSOLE ROUTE. It renders the roster's declared tags
-// and re-runs the finder's own functions over a query typed here. It reads no patient data, holds
-// no state and writes nothing: the audit is computed from the same `matchAudit` the tests pin
-// against the ranker, so this page cannot show a number the product does not act on.
+// and re-runs the finder's own functions over a worked example. It reads no patient data and
+// PERSISTS nothing: the audit is computed from the same `matchAudit` the tests pin against the
+// ranker, so this page cannot show a number the product does not act on. The review editor below
+// holds state in the browser for the length of a visit and writes nowhere — see the note at the
+// foot of it for why a save button would be a lie while G6 is closed.
 //
 // WHY IT EXISTS. The finder tells a patient one sentence about why a GP was shown. When somebody
 // asks "why was he first" a month later, the honest answer today would mean reading the lexicon
@@ -16,9 +18,11 @@
 import Link from "next/link";
 import { clinicians } from "@/demo/clinicians";
 import { clinicianTags, matchAudit } from "@/onboarding/background";
-import { professionalBio } from "@/onboarding/background";
 import { backgroundFromProposals } from "@/onboarding/background";
 import { readTranscript } from "@/onboarding/transcript";
+import { CARE_AREA_LABELS } from "@/onboarding/types";
+import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
+import { BackgroundEditor, type VocabularyEntry } from "./background-editor";
 
 export const metadata = { title: "Matching console — ADHD.ME" };
 
@@ -35,12 +39,16 @@ const EXAMPLE_TRANSCRIPT = [
   { speaker: "clinician" as const, text: "I run a walking group on Thursdays for my older patients." },
 ];
 
+/** Every facet that exists, so correction works in both directions. */
+const VOCABULARY: VocabularyEntry[] = [
+  ...CARE_AREA_LABELS.map((area) => ({ key: `care:${area.id}`, kind: "care" as const, label: area.label })),
+  ...EI_QUALITY_KEYS.map((trait) => ({ key: `manner:${trait}`, kind: "manner" as const, label: EI_QUALITIES[trait].label })),
+];
+
 export default function MatchingConsolePage() {
   const audit = matchAudit(EXAMPLE_QUERY, clinicians);
   const read = readTranscript(EXAMPLE_TRANSCRIPT);
   const background = backgroundFromProposals("example", "Dr Example", read.proposed, read.unread);
-  // Accept everything for the preview, so the page can show what an assembled bio looks like.
-  const accepted = { ...background, facets: background.facets.map((f) => ({ ...f, status: "accepted" as const })) };
 
   return (
     <main className="mc">
@@ -117,18 +125,7 @@ export default function MatchingConsolePage() {
           rejects it. Nothing here writes a profile.
         </p>
 
-        <ul className="mc-proposals">
-          {background.facets.map((facet) => (
-            <li key={facet.key} className="mc-proposal">
-              <div className="mc-proposal-head">
-                <span className={`mc-tag mc-tag-${facet.kind}`}>{facet.label}</span>
-                <span className="mc-status">{facet.status}</span>
-              </div>
-              <blockquote className="mc-quote">“{facet.quote}”</blockquote>
-              <p className="mc-cue">reached by “{facet.cue}”</p>
-            </li>
-          ))}
-        </ul>
+        <BackgroundEditor initial={background} vocabulary={VOCABULARY} reviewer="Console reviewer" />
 
         <h3 className="mc-sub">Not proposed, and why that is the important part</h3>
         <p className="mc-note">
@@ -147,17 +144,6 @@ export default function MatchingConsolePage() {
         </ul>
       </section>
 
-      <section className="mc-section" aria-labelledby="bio-h">
-        <h2 id="bio-h">The professional bio, assembled</h2>
-        <p className="mc-note">
-          <strong>The bio is not a text field and must not become one.</strong>{" "}
-          <code>src/directory/profile.ts</code> refuses a free-text biography because it is where
-          ratings, comparisons and specialty claims reappear as prose. The editable surface is the
-          facets above — tick, untick, correct. The sentence follows from them, the clinician
-          confirms it, and nobody types into it.
-        </p>
-        <p className="mc-bio">{professionalBio(accepted) || "Nothing accepted yet."}</p>
-      </section>
     </main>
   );
 }

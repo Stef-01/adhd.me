@@ -100,3 +100,30 @@ describe("W223 tags are declared, never inferred", () => {
     }
   });
 });
+
+describe("W224 the assembled sentence has to read like a sentence", () => {
+  const one = () => {
+    const b = backgroundFromProposals("x", "Dr Example", readTranscript([
+      { speaker: "clinician", text: "I do titration myself." },
+    ]).proposed, []);
+    b.facets.forEach((f) => { f.status = "accepted"; });
+    return professionalBio(b);
+  };
+
+  it("says 'an area' for one and 'areas' for several", () => {
+    expect(one()).toMatch(/as an area they say they see often/);
+    const many = backgroundFromProposals("x", "Dr Example", readTranscript([
+      { speaker: "clinician", text: "I do titration, and the cardiovascular baseline, and I see adults." },
+    ]).proposed, []);
+    many.facets.forEach((f) => { f.status = "accepted"; });
+    expect(professionalBio(many)).toMatch(/as areas they say they see often/);
+  });
+
+  it("joins a list with commas and a final 'and'", () => {
+    const b = backgroundFromProposals("x", "Dr Example", readTranscript([
+      { speaker: "clinician", text: "I do titration, the cardiovascular baseline, and I see adults." },
+    ]).proposed, []);
+    b.facets.forEach((f) => { f.status = "accepted"; });
+    expect(professionalBio(b)).toMatch(/, .+ and /);
+  });
+});

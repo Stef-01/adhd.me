@@ -5404,3 +5404,34 @@ textarea:focus-visible {
 .mc-unread { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
 .mc-bio { max-width: 64ch; margin: 14px 0 0; padding: 14px 16px; border-left: 2px solid var(--accent);
   background: var(--stone); font-size: 14.5px; line-height: 1.6; }
+
+/* ── Background editor ──────────────────────────────────────────────────────
+   A review surface. Status is carried by a word as well as by colour, because
+   "accepted" and "rejected" are decisions somebody will be asked to justify and
+   a colour alone is not a record. */
+.be { margin-top: 14px; display: grid; gap: 26px; }
+.be-list { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.be-row { padding: 14px 16px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 4px; background: var(--stone); }
+.be-row.be-accepted { border-left-color: var(--accent); background: var(--accent-soft); }
+.be-row.be-rejected { border-left-color: var(--line); opacity: 0.62; }
+.be-row.be-proposed { border-left-color: var(--faint); }
+.be-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
+  padding: 0; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; min-height: 44px; }
+.be-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.be-state { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.be-row.be-accepted .be-state { color: var(--accent); font-weight: 700; }
+
+.be-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.be-chip { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+.be-chip:hover { border-color: var(--accent); color: var(--ink); }
+.be-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.be-chip.be-accepted { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.be-chip.be-rejected { text-decoration: line-through; opacity: 0.55; }
+
+.be-confirm { display: flex; align-items: flex-start; gap: 10px; margin: 16px 0 0; max-width: 64ch;
+  color: var(--ink); font-size: 13.5px; line-height: 1.55; }
+.be-confirm input { width: 18px; height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
+.be-persist { max-width: 64ch; margin: 16px 0 0; padding: 10px 13px; border-left: 2px solid var(--line);
+  color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+.be-persist code { background: var(--stone); padding: 1px 5px; border-radius: 3px; }
