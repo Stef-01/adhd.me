@@ -121,6 +121,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/onboarding/background-store.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "`latestBackground` takes the LAST row for a clinician, and that fold is order-dependent on purpose: latest-wins is the whole read model. The order it depends on is not incidental, it is guaranteed by the write — the file is append-only, every save appends one line, so position in file IS chronological order and there is no path that rewrites or reorders rows. Merging the rows instead would be worse, not safer: a reviewer's save is a complete statement of what they decided, and a merge of two would produce a background nobody ever approved. The earlier rows are kept deliberately and read by `backgroundHistory`, which is the audit trail.",
+    },
+  },
+  {
     module: "src/onboarding/background.ts",
     folds: 2,
     disposition: {

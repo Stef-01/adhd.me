@@ -325,6 +325,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Declared with NO operator copy of its own, and that is the finding rather than an omission: every label this module can emit is a facet label already declared and linted on `emotional-fit.ts` or `types.ts`, re-exported here as a lookup so the console can render a proposal the same way the form does. `CARE_LABEL_BY_AREA` is a Map and yields the linter no text, which the census caught on the first attempt to declare it — so it is named here in prose instead. The remaining exports are the turn and proposal types and the reader — it composes no sentence of its own, which is deliberate: a module that turned a clinician's speech into new prose about them would be writing the biography W183 refuses. It reads only the CLINICIAN's turns, never the interviewer's, because the interviewer names every facet by asking about it. It proposes rather than writes, and every proposal carries the clinician's own sentence, so a reviewer can check it and the clinician can recognise it. Nothing here is about a patient.",
   },
   {
+    module: "src/onboarding/background-store.ts",
+    operatorCopy: [],
+    notCopy:
+      "No copy at all: types, a writer, three readers and one thrown error. The error message is addressed to a developer, not an operator, and says why the save was refused — an accepted facet naming nobody would mean the machine accepted it. The rows it stores DO carry verbatim clinician speech from a transcript, which is not copy this tree authored and is neutralised at the writer for W153's reason, sharpened here: a quote beginning with an equals sign is a valid JSON string and an executable formula the moment somebody exports the review queue and opens it in a spreadsheet. Nothing here is about a patient and nothing here can publish.",
+  },
+  {
     module: "src/onboarding/background.ts",
     operatorCopy: [],
     notCopy:
