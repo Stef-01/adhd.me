@@ -5435,3 +5435,20 @@ textarea:focus-visible {
 .be-persist { max-width: 64ch; margin: 16px 0 0; padding: 10px 13px; border-left: 2px solid var(--line);
   color: var(--muted); font-size: 12.5px; line-height: 1.55; }
 .be-persist code { background: var(--stone); padding: 1px 5px; border-radius: 3px; }
+
+/* ── The clarifying question ────────────────────────────────────────────────
+   Shown only when the order is not earned, so it never competes with a result
+   list that already means something. Chips rather than a form: the whole point
+   is that answering costs one tap, and a text box would ask the reader to do
+   again the thing that just did not work. */
+.clarify { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.clarify-lead { margin: 0 0 9px; color: var(--muted); font-size: 13px; }
+.clarify-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.clarify-chip {
+  min-height: 44px; padding: 9px 15px; border: 1px solid var(--accent-tint); border-radius: 999px;
+  background: var(--accent-soft); color: var(--ink); font: inherit; font-size: 13.5px;
+  text-align: left; cursor: pointer; transition: background-color .18s ease, border-color .18s ease;
+}
+.clarify-chip:hover { background: #fff; border-color: var(--accent); }
+.clarify-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .clarify-chip { transition: none; } }

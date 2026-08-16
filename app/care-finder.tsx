@@ -26,6 +26,7 @@ import {
   MATCH_QUALITY_COPY,
   type Clinician,
 } from "@/demo/clinicians";
+import { clarifiers } from "@/matching/clarify";
 import { coveredSuburbs, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { CoverageMap } from "./coverage-map";
 import {
@@ -693,6 +694,38 @@ export function CareFinder() {
                   <p className="place-status match-quality" role="status">
                     {MATCH_QUALITY_COPY[matchQuality(request)]}
                   </p>
+                )}
+
+                {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY.
+                    Saying "this is not a ranking" is honest and it is a dead end: the commonest
+                    sentence in the product reaches only the facet every GP declares, so the reader
+                    is told the order means nothing and left where they started. These are the
+                    facets this roster actually DISAGREES on, so answering one reorders it — a
+                    question that could not change the order would be data collection from somebody
+                    who came here to find a GP. Tapping appends the answer in the reader's own
+                    words and the whole sentence is re-read, so the finder can still say "you said
+                    this" about a signal it prompted. */}
+                {matchQuality(request) !== "informed" && clarifiers(request, matches).length > 0 && (
+                  <div className="clarify">
+                    <p className="clarify-lead">One answer would narrow it:</p>
+                    <ul className="clarify-row">
+                      {clarifiers(request, matches).map((clarifier) => (
+                        <li key={clarifier.facetKey}>
+                          <button
+                            type="button"
+                            className="clarify-chip"
+                            onClick={() => {
+                              const next = `${request}, ${clarifier.answer}`;
+                              setRequest(next);
+                              setMatches(rankCliniciansNear(next, origin));
+                            }}
+                          >
+                            {clarifier.prompt}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
 
                 {/* A care area nobody on the roster declares is a gap in the LISTING, and the

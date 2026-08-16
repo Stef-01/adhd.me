@@ -349,6 +349,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports a stemmer, a tokeniser and a cue-finder. It holds NO copy at all — not a label, not a sentence, not a fragment — because it operates on words a patient typed and words a lexicon author wrote, and produces token positions. It is declared with an empty `operatorCopy` rather than left out: a module absent from this census is indistinguishable from a module nobody has checked, and the whole point of a both-directions register is that absence cannot be silent.",
   },
   {
+    module: "src/matching/clarify.ts",
+    operatorCopy: ["CARE_PROMPTS", "MANNER_PROMPTS"],
+    notCopy:
+      "The rest is the selection logic and a label helper. Both copy tables are PATIENT-FACING and are exported for exactly that reason: the prompt is read by somebody choosing a GP, and the answer is appended to their own request and read back, so it has to survive the same linter as anything else on `/finder`. They are questions about preference and circumstance — how long an appointment, whether family is in the room, whether the dose is already being worked on — and never about symptoms, severity or history, because a triage question asked by a directory is a clinical act it has no business performing.",
+  },
+  {
     module: "src/matching/needs.ts",
     operatorCopy: ["NEED_LABELS"],
     notCopy:
