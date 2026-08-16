@@ -319,6 +319,18 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W204 declares how long a produced report lives. Every export here is reviewer-facing: `REPORT_RETENTION` and `PROPOSED_DISCLOSURE_LOG` argue a retention posture to somebody auditing it, and `REPORTING_ARTEFACTS` is a checklist of what this product does and does not keep. None of it reaches an operator, and none of it describes anybody's care.",
   },
   {
+    module: "src/onboarding/interview.ts",
+    operatorCopy: ["INTERVIEW"],
+    notCopy:
+      "The remaining exports are the question and profile types, the frequency union and the facet map. `INTERVIEW` is read ALOUD TO A CLINICIAN during onboarding — every `ask` and every `saidAloud`. It asks a GP what they see often and how they work, and it asks nothing about any patient. Two of its `saidAloud` lines exist to satisfy W193 at the moment of collection rather than at the moment of display: the training is recorded as a declaration with no register to check it against, and a language is only ever shown to somebody who asked for that language. A test asserts the instrument cannot take free text for scope or manner, because a free-text scope answer is the biography `src/directory/profile.ts` refuses, with an interviewer's handwriting on it.",
+  },
+  {
+    module: "src/matching/needs.ts",
+    operatorCopy: ["NEED_LABELS"],
+    notCopy:
+      "The remaining exports are the facet unions, the reader and the key helper. `NEED_LABELS` is the closed vocabulary a match reason is composed from — the phrases a PATIENT reads back as why this GP was shown. Every one is written as a description of CARE rather than a finding about a person, which is the distinction this file exists to hold: \"a substance history held safely\" is a way of working, where \"substance use\" would be a clinical statement about somebody. The lexicon that reaches these labels reads a preference about care and never classifies a symptom, so the finder stays on the clinician-attribute side of G7.",
+  },
+  {
     module: "src/matching/explain.ts",
     operatorCopy: ["MATCH_REASON_COPY", "MATCH_FLOOR_BREACH_COPY"],
     notCopy:

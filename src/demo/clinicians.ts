@@ -1,5 +1,6 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
+import { facetKey, readNeeds, type MannerTrait, type NeedSignal } from "@/matching/needs";
 
 /**
  * The roster behind /finder and the walkthrough.
@@ -101,6 +102,16 @@ export type Clinician = {
   experience: string[];
   languages: string[];
   careAreas: CareArea[];
+  /**
+   * How this clinician works, declared by them, closed vocabulary (`MannerTrait`).
+   *
+   * The half of "will they understand me" that clinical scope cannot carry. Somebody writing "I
+   * get rushed every time and I lose my thread" is not naming a care area; they are naming a way
+   * of working. Before this field the only way to express that was a hand-written keyword weight
+   * on one doctor's name in `rankClinicians`, which is a private editorial judgement about a
+   * named person. Declared in the onboarding interview instead — see docs/MATCHING-PLAN.md §5.
+   */
+  manner: MannerTrait[];
   wheelchairAccessible: boolean;
   appointmentLength: string;
   keywords: string[];
@@ -187,6 +198,7 @@ export const clinicians: Clinician[] = [
       "sleep",
       "shared-care",
     ],
+    manner: ["structured", "non-judgemental"],
     nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
@@ -234,6 +246,7 @@ export const clinicians: Clinician[] = [
       "sleep",
       "shared-care",
     ],
+    manner: ["unhurried", "explains-carefully", "family-context"],
     nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Longer first appointments available",
@@ -260,52 +273,101 @@ export const clinicians: Clinician[] = [
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
 export function rankClinicians(query: string): Clinician[] {
-  const words = query.toLowerCase();
-  const focusSignals: Record<string, Array<[string, number]>> = {
-    "anubhav-saxena": [["structured", 26], ["thorough", 24], ["measured", 22], ["baseline", 24], ["bloods", 22], ["pathology", 20], ["physical", 18], ["heart", 16], ["cardiac", 16], ["blood pressure", 16], ["metabolic", 20], ["titration", 22], ["dose", 18], ["stimulant", 18], ["monitoring", 20], ["review", 16], ["telehealth", 30], ["phone", 22], ["remote", 24], ["online", 24], ["substance", 26], ["drinking", 24], ["alcohol", 24], ["cannabis", 24], ["non-stimulant", 26], ["shared care", 14], ["urdu", 26], ["adhd", 8], ["assessment", 10]],
-    "tushar-yadav": [["unhurried", 26], ["longer", 22], ["long appointment", 24], ["not rushed", 26], ["rushed", 20], ["time", 12], ["history", 20], ["whole story", 24], ["listen", 22], ["sleep", 22], ["insomnia", 22], ["tired", 18], ["exhausted", 18], ["mood", 20], ["anxiety", 18], ["anxious", 18], ["depression", 18], ["family", 16], ["cultural", 20], ["culture", 20], ["hindi", 26], ["indian", 16], ["south asian", 18], ["work", 16], ["job", 16], ["explain", 14], ["calm", 14], ["adhd", 8], ["assessment", 10]],
-  };
-
+  const needs = readNeeds(query);
   return [...clinicians].sort((a, b) => {
-    const score = (clinician: Clinician) => {
-      const focusScore = (focusSignals[clinician.id] ?? []).reduce(
-        (total, [keyword, weight]) => total + (words.includes(keyword) ? weight : 0),
-        0,
-      );
-      const mannerScore = clinician.keywords.reduce(
-        (total, keyword) => total + (words.includes(keyword) ? 2 : 0),
-        0,
-      );
-      const requestsWoman = /\b(?:woman|female)\s+(?:gp|doctor|clinician)\b/.test(words)
-        || /\bprefer(?:red)?\s+(?:a\s+)?woman\b/.test(words);
-      const genderScore = requestsWoman && clinician.gender === "woman" ? 18 : 0;
-      const languageScore = clinician.languages.some((language) =>
-        language !== "English" && words.includes(language.toLowerCase()),
-      ) ? 18 : 0;
-      return focusScore + mannerScore + genderScore + languageScore;
-    };
-
-    const byScore = score(b) - score(a);
+    const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
     if (byScore !== 0) return byScore;
 
     /**
-     * A TIE MUST NEVER BE BROKEN IN THE FOUNDER'S FAVOUR, AND UNTIL NOW IT SILENTLY WAS.
+     * A TIE MUST NEVER BE BROKEN IN THE FOUNDER'S FAVOUR, AND UNTIL W221 IT SILENTLY WAS.
      *
      * `Array.prototype.sort` is stable, so equal scores kept source order — and Dr Saxena is the
-     * first record in the file. On "I think I might have ADHD and I would like an assessment",
-     * which names nothing either GP is weighted for, both score identically and the founder took
-     * first place on every such request. With fifteen invented clinicians the effect was buried
-     * under the noise of a long roster; with two it is half the queries, and it is exactly the
-     * bias a reader cannot see and cannot check.
-     *
-     * Reordering the file would only move the accident. The rule is stated instead: where the
-     * stated preference does not separate them, a clinician with a disclosed interest in this
-     * product sorts BEHIND one without. It costs the founder nothing he has earned on fit, and it
-     * means the top slot is never his by default.
+     * first record in the file. On a request that names nothing either GP is declared for, both
+     * score identically and the founder took first place every time. Reordering the file would
+     * only move the accident, so the rule is stated: where the stated preference does not separate
+     * them, a clinician with a disclosed interest in this product sorts BEHIND one without.
      */
     const conflicted = (clinician: Clinician) => (clinician.founderInterest ? 1 : 0);
     return conflicted(a) - conflicted(b);
   });
+}
+
+/**
+ * How well one clinician answers what was asked for.
+ *
+ * THE WHOLE SCORE IS OVERLAP BETWEEN TWO DECLARED SETS. A facet the reader asked for and the
+ * clinician declared earns its weight; a facet they did not declare earns nothing. There is no
+ * per-clinician coefficient anywhere in this function, which is the property that lets a new GP
+ * be added by declaring facets rather than by an engineer inventing weights for them.
+ *
+ * Exported so the explanation can be shown to derive from the same evidence — see
+ * `matchEvidence` and the test that asserts a clinician can never be ranked for a reason the
+ * page then declines to give.
+ */
+export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[]): number {
+  let total = 0;
+  for (const need of needs) {
+    if (!answers(clinician, need)) continue;
+    total += need.weight;
+  }
+  return total;
+}
+
+/** Whether this clinician answers one stated need. Declared facets only. */
+function answers(clinician: Clinician, need: NeedSignal): boolean {
+  const facet = need.facet;
+  if (facet.kind === "care") return clinician.careAreas.includes(facet.area);
+  if (facet.kind === "manner") return clinician.manner.includes(facet.trait);
+  switch (facet.preference) {
+    case "woman-gp":
+      return clinician.gender === "woman";
+    case "telehealth-first":
+      return clinician.telehealthFirstAppointment === true;
+    case "longer-appointment":
+      return clinician.manner.includes("unhurried");
+    case "bulk-billing":
+      return clinician.practicalSignals.some((signal) => /bulk/i.test(signal));
+  }
+}
+
+/**
+ * The needs this clinician actually answers, in the reader's asking order.
+ *
+ * ONE COMPUTATION, TWO CONSUMERS. The ranking and the explanation both read this, so the page
+ * cannot rank somebody first for a reason it then fails to print — which is exactly what the two
+ * separate lexicons used to allow. A language the reader did not ask for is not in here at all,
+ * because it was never a `NeedSignal`.
+ */
+export function matchEvidence(clinician: Clinician, query: string): NeedSignal[] {
+  return [...readNeeds(query).filter((need) => answers(clinician, need)), ...languageAsked(clinician, query)];
+}
+
+/**
+ * A language the reader asked for that this clinician speaks.
+ *
+ * WHY THIS IS NOT IN THE LEXICON. Every other facet is a fixed vocabulary shared by all
+ * clinicians, so it can live in `needs.ts` as a static table. Languages are not: they are
+ * per-clinician DATA, and a static lexicon would have to enumerate every language any clinician
+ * might ever speak, which is a list that goes stale the day somebody who speaks Tamil joins.
+ * Reading it off the clinician's own declaration keeps the property that matters — no
+ * per-clinician WEIGHT anywhere — while letting the vocabulary grow with the roster.
+ *
+ * SURFACED ONLY WHEN ASKED FOR, which is the older rule this preserves. English is excluded
+ * because "speaks English" is not a match reason in Australia; it is the assumption. And a
+ * clinician who speaks Hindi is not shown as a Hindi match to somebody who never mentioned it —
+ * telling a reader their GP speaks a language they did not ask about is a guess about who they
+ * are, dressed up as a feature.
+ */
+function languageAsked(clinician: Clinician, query: string): NeedSignal[] {
+  const words = query.toLowerCase();
+  return clinician.languages
+    .filter((language) => language !== "English" && words.includes(language.toLowerCase()))
+    .map((language) => ({
+      facet: { kind: "manner" as const, trait: "family-context" as const },
+      matched: language.toLowerCase(),
+      label: `${language}-speaking`,
+      weight: 30,
+    }));
 }
 
 /**
@@ -392,84 +454,29 @@ function asList(items: readonly string[]): string {
 }
 
 export function getPersonalizedMatch(clinician: Clinician, query: string) {
-  const words = query.toLowerCase();
-  const signals: string[] = [];
-  const hasAny = (terms: string[]) => terms.some((term) => words.includes(term));
+  /**
+   * DERIVED, NOT RE-DERIVED. This used to be a second lexicon: a forty-line if-chain testing its
+   * own phrase lists against the same care areas the ranker tested against different ones. Two
+   * lexicons for one job, and they had already drifted — the ranker weighted "wearing off" and
+   * this did not, so a clinician could be ranked first for a reason the page then declined to
+   * print. Both now read `matchEvidence`, so the explanation IS the ranking's evidence and the
+   * two cannot disagree. `src/matching/needs.test.ts` asserts that property directly.
+   */
+  const evidence = matchEvidence(clinician, query);
+  const signals = evidence.map((need) => need.label);
 
-  if (hasAny(["adhd", "attention", "assessment", "assessed", "diagnosis", "diagnosed"]) && clinician.careAreas.includes("adhd-assessment")) {
-    signals.push("ADHD assessment");
-  }
-  if (hasAny(["child", "my son", "my daughter", "kid", "children", "teenager", "adolescent", "school"]) && clinician.careAreas.includes("child-adolescent-adhd")) {
-    signals.push("Children and adolescents");
-  }
-  if (hasAny(["late", "missed", "masking", "coping", "perimenopause", "menopause", "hormonal", "woman", "women"]) && clinician.careAreas.includes("adhd-in-women")) {
-    signals.push("Late-recognised presentations in women");
-  }
-  if (hasAny(["autism", "autistic", "audhd", "sensory"]) && clinician.careAreas.includes("autism-adhd")) {
-    signals.push("Co-occurring autism");
-  }
-  if (hasAny(["titration", "dose", "side effects", "wearing off", "not working", "adjust", "review"]) && clinician.careAreas.includes("titration")) {
-    signals.push("Titration and dose review");
-  }
-  if (hasAny(["heart", "cardiac", "cardiovascular", "blood pressure", "safe", "safety", "baseline", "physical"]) && clinician.careAreas.includes("cardiac-screening")) {
-    signals.push("Baseline physical screening");
-  }
-  if (hasAny(["without medication", "no medication", "not just medication", "alternatives", "coaching", "habits"]) && clinician.careAreas.includes("non-medication")) {
-    signals.push("Non-medication supports");
-  }
-  if (hasAny(["rejection sensitivity", "rsd", "emotional", "regulation", "shame", "overwhelmed"]) && clinician.careAreas.includes("emotional-regulation")) {
-    signals.push("Emotional regulation");
-  }
-  if (hasAny(["anxiety", "anxious", "depression", "antidepressant", "misdiagnosed", "differential", "which one"]) && clinician.careAreas.includes("comorbid-mood")) {
-    signals.push("Anxiety and mood differential");
-  }
-  if (hasAny(["substance", "drinking", "alcohol", "cannabis", "non-stimulant"]) && clinician.careAreas.includes("substance-history")) {
-    signals.push("Substance history held safely");
-  }
-  if (hasAny(["sleep", "insomnia", "tired", "exhausted"]) && clinician.careAreas.includes("sleep")) {
-    signals.push("Sleep review");
-  }
-  if (hasAny(["disability", "disabled", "wheelchair", "autonomy", "accessible", "adjustments", "ndis"]) && clinician.careAreas.includes("disability-rights")) {
-    signals.push("Disability rights");
-  }
-  if (hasAny(["trauma history", "trauma-informed", "trauma", "childhood", "permission", "boundaries", "cptsd"]) && clinician.careAreas.includes("trauma-informed")) {
-    signals.push("Trauma-informed care");
-  }
-  if (hasAny(["ptsd", "bipolar", "psychiatrist", "psychiatric", "complex mental health"]) && clinician.careAreas.includes("complex-mental-health")) {
-    signals.push("Complex mental-health shared care");
-  }
-  if (hasAny(["work", "employer", "workplace", "university", "study", "adjustments", "letter", "documentation"]) && clinician.careAreas.includes("student-academic")) {
-    signals.push("Study and workplace documentation");
-  }
-  if (hasAny(["paediatrician", "psychiatrist", "referral", "waitlist", "shared care", "already diagnosed", "diagnosed already"]) && clinician.careAreas.includes("shared-care")) {
-    signals.push("Shared care");
-  }
+  /**
+   * The reason sentence, composed from the closed vocabulary and nothing else — W213's floor. It
+   * is never templated from the reader's own words: echoing somebody's phrasing back at them
+   * reads as understanding and is only string interpolation, and on a health surface the
+   * difference matters.
+   */
+  const reason = signals.length === 0
+    ? clinician.matchLine
+    /* Labels keep the case they were authored in. Lower-casing them read tidily until a label
+       carried a proper noun — "Hindi-speaking" became "hindi-speaking", which is a typo on the
+       one word in the sentence a reader is scanning for. */
+    : `${clinician.shortName}: ${asList(signals.slice(0, 3))}.`;
 
-  const requestedLanguage = clinician.languages.find((language) =>
-    language !== "English" && words.includes(language.toLowerCase()),
-  );
-  if (requestedLanguage) signals.push(`${requestedLanguage}-speaking`);
-
-  const requestsWoman = /\b(?:woman|female)\s+(?:gp|doctor|clinician)\b/.test(words)
-    || /\bprefer(?:red)?\s+(?:a\s+)?woman\b/.test(words)
-    || /\bsafer with (?:a\s+)?[^.]*woman gp\b/.test(words);
-  if (requestsWoman && clinician.gender === "woman") signals.push("Woman GP");
-
-  if (hasAny(["telehealth", "remote", "online", "cannot travel", "can't travel"])
-    && clinician.practicalSignals.some((signal) => signal.toLowerCase().includes("telehealth"))) {
-    signals.push("Telehealth available");
-  }
-  if (hasAny(["wheelchair", "accessible"]) && clinician.wheelchairAccessible) {
-    signals.push("Wheelchair accessible");
-  }
-
-  const uniqueSignals = [...new Set(signals)].slice(0, 4);
-  // Joined as prose, not as a middle-dot chain. Four signals separated by dots is a metadata
-  // strip pretending to be a sentence, and the surfaces that show the signals as pills would
-  // then be printing the same list twice in two different visual languages.
-  const reason = uniqueSignals.length
-    ? `Matches your stated priorities: ${asList(uniqueSignals)}.`
-    : "Accepting new patients. Review the profile to decide whether this approach fits.";
-
-  return { signals: uniqueSignals, reason };
+  return { reason, signals };
 }

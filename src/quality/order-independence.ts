@@ -71,14 +71,6 @@ export interface FoldSite {
  */
 export const FOLD_SITES: readonly FoldSite[] = [
   {
-    module: "src/demo/clinicians.ts",
-    folds: 2,
-    disposition: {
-      kind: "rationale",
-      why: "Both fold to a scalar total over a fixed synthetic roster. Addition is commutative, and the roster is a literal in the same file rather than anything a store ordered.",
-    },
-  },
-  {
     // W188: a same-day join/leave pair is a real tie on a day-granular date, and the tie-break
     // is a safety decision rather than a guess — see the test.
     module: "src/directory/membership.ts",
@@ -110,6 +102,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     disposition: {
       kind: "tie_break_test",
       test: "src/messaging/approval.test.ts :: W167 two withdrawals at the same instant pick the same one",
+    },
+  },
+  {
+    module: "src/onboarding/interview.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "`interviewMinutes` sums the per-question minute budget over `INTERVIEW`, which is a literal in the same file. Addition is commutative and there is no tie to break — the fold produces a total, not a winner, so no record can be preferred over another by the order they arrived in.",
     },
   },
   {
