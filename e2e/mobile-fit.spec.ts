@@ -17,7 +17,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 /** Public surfaces. The console is behind sign-in and is not a phone surface. */
-const SURFACES = ["/", "/finder", "/clinicians", "/clinicians/join", "/practices", "/privacy"];
+const SURFACES = ["/", "/approach", "/finder", "/clinicians", "/clinicians/join", "/practices", "/privacy"];
 
 /** iPhone 12/13/14 logical width - the narrowest mainstream phone still in wide use. */
 const PHONE = { width: 390, height: 844 };

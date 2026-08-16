@@ -14,7 +14,6 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from "rea
 import Image from "next/image";
 import { InterestForm } from "./interest-form";
 import { CoverageMap } from "./coverage-map";
-import { StorySequence } from "./story-sequence";
 
 /**
  * A11Y-2 — WHY NOTHING HERE ANIMATES OPACITY.
@@ -132,6 +131,52 @@ const FOUNDERS: ReadonlyArray<{
   },
 ];
 
+const STEPS: ReadonlyArray<{ title: string; body: string }> = [
+  { title: "Say what you need", body: "In your words. Not a quiz, and not a score." },
+  { title: "See who is near you", body: "GPs who have done the training, by suburb, care area and language." },
+  { title: "Book the first appointment", body: "Assessment, baseline checks and follow-up with one clinician." },
+];
+
+/**
+ * The stat rail. EVERY FIGURE HERE IS COPIED FROM src/compliance/landing-copy.ts RATHER THAN
+ * WRITTEN AGAIN, so the two public pages cannot drift into quoting different numbers for the same
+ * thing — which is the failure mode that makes a health page indefensible. They are qualitative
+ * ranges on purpose: a decimal implies a study somebody checked, and none of these has been
+ * confirmed against its source by anybody in this repo. `note` ships beside them, not below the
+ * fold.
+ */
+const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = [
+  { value: "6–12 months", label: "typical wait for an adult ADHD assessment appointment" },
+  { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
+  // "the RIGHT training", not "the required training", and the difference is the compliance
+  // linter's, not a stylist's: `no-clinical-necessity` fires on "required" and it is right to.
+  // landing-copy.ts can say it because /practices is addressed to practice managers; this page
+  // is addressed to patients, where the same word reads as a claim about what care somebody
+  // needs. Same fact, phrased for the audience that is actually reading it.
+  { value: "Now in-practice", label: "NSW and Queensland now let a GP with the right training carry the whole pathway", accent: true },
+];
+
+const COST_NOTE =
+  "Indicative figures pending source confirmation, and the NSW and Queensland rule changes are " +
+  "stated pending confirmation against each state's current guidance. Anchors: the " +
+  "AADPA Australian evidence-based clinical practice guideline for ADHD (2022) and the 2023 " +
+  "Senate inquiry into ADHD assessment and support services.";
+
+/* ─────────────────────────────────────────────────────────────────────────────────────────────
+ * MOTION.
+ *
+ * Every entrance on this page still animates from a VISIBLE state — see A11Y-2 above. That rules
+ * out the two moves a page like this usually reaches for: the opacity fade, and the mask reveal
+ * (a word inside `overflow: hidden`, translated in from below). The mask is worth naming because
+ * it LOOKS like a transform-only animation and would slip past the `opacity: 0` check in
+ * e2e/landing.spec.ts, while reintroducing the exact defect that check exists for: a headline
+ * that cannot be read until the bundle arrives, or ever, if it does not.
+ *
+ * So the vocabulary here is offset, parallax and pressure. Nothing starts hidden, and everything
+ * has somewhere to travel from.
+ * ───────────────────────────────────────────────────────────────────────────────────────────── */
+
+/** The page's one easing curve. A long tail — motion decelerates into place rather than stopping. */
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /** Interactive pressure. Spring rather than duration, because a press has no natural length. */
@@ -154,8 +199,7 @@ function useMounted(): boolean {
 
 /**
  * A section's own progress through the viewport, 0 as its top meets the bottom edge to 1 as its
- * bottom leaves the top. One caller left — the hero figure — since the sequence took the
- * throughline and the pull-line and drives their motion from CSS instead.
+ * bottom leaves the top. The unit every parallax on this page is expressed in.
  */
 function useSectionParallax(ref: RefObject<HTMLElement | null>, distance: number): MotionValue<number> {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -201,10 +245,14 @@ export function StoryLanding() {
   const live = mounted && !reduce;
 
   const heroRef = useRef<HTMLElement>(null);
+  const throughlineRef = useRef<HTMLElement>(null);
+  const pullRef = useRef<HTMLElement>(null);
 
   // The hero figure drifts UP against the copy — the classic depth cue, at a magnitude small
   // enough that it reads as depth rather than as an effect.
   const heroFigureY = useSectionParallax(heroRef, 44);
+  const throughlineY = useSectionParallax(throughlineRef, 34);
+  const pullY = useSectionParallax(pullRef, 26);
 
   // Read progress, drawn as a hairline under the sticky header. Decorative and aria-hidden: it
   // repeats what a scrollbar already says, and a screen reader has better ways to ask.
@@ -272,15 +320,140 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* ══ 2–8. THE SEQUENCE ═══════════════════════════════════════════════════════════════
-          Six stacked bands became eight scrolled scenes. The beats they replaced said the same
-          things — the shape of the alternative, the rule change, the wait, the cost, the
-          throughline, the three steps — as a heading over a paragraph each, which is an argument
-          set as a list. The sequence keeps every one of those claims and adds the half the page
-          never had: what the search actually returns, what reading a practice page is like, and
-          the questions a profile page never answers. See app/story-sequence.tsx for why the copy
-          lives in the steps and the illustration is aria-hidden. */}
-      <StorySequence />
+      {/* 2. The shape of the alternative, against a pull-line. */}
+      <section className="story-chapter" aria-labelledby="shape-title" ref={pullRef}>
+        <div className="story-wrap story-split story-split-reverse">
+          <div className="story-split-lead">
+            <Reveal>
+              <h2 id="shape-title" className="story-heading">
+                One GP, from the first appointment to the follow-up.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.06} className="story-prose">
+              <p>
+                Nobody should have to tell their story twice to get through a door. One clinician
+                holds the assessment, the medication and the follow-up, and what they wrote down
+                in the first appointment is still there in the fourth.
+              </p>
+            </Reveal>
+          </div>
+          <Reveal delay={0.12} className="story-pull">
+            <motion.p style={live ? { y: pullY } : undefined}>
+              Care that fits the person in front of it.
+            </motion.p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 3. The fact it rests on. Set wide and opened without a rule. */}
+      <section className="story-chapter story-chapter-open story-chapter-tint" aria-labelledby="change-title">
+        <div className="story-wrap">
+          <Reveal>
+            <h2 id="change-title" className="story-heading">The rule is changing in NSW and QLD.</h2>
+          </Reveal>
+          <Reveal delay={0.06} className="story-prose story-prose-lead">
+            <p>
+              For years, an ADHD assessment meant a long, costly wait for a psychiatrist. In New
+              South Wales and Queensland, GPs with the right training can now do it themselves — so
+              the wait is no longer the only way in.
+            </p>
+            <p>
+              That gap is what ADHD.ME closes. We connect you straight to those GPs, so assessment
+              and follow-up start with one clinician near you — not at the back of a referral queue.
+            </p>
+            <p className="story-note">
+              Every clinician here is a GP with dedicated training in ADHD assessment and care,
+              working to Australia's national clinical guideline.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 4. What the old route cost. */}
+      <section className="story-chapter" aria-labelledby="cost-title">
+        <div className="story-wrap story-split">
+          <div className="story-split-lead">
+            <Reveal>
+              <h2 id="cost-title" className="story-heading">The wait was never the care.</h2>
+            </Reveal>
+            <Reveal delay={0.06} className="story-prose">
+              <p>
+                The old route ran through a queue with no visible end and a cost most people
+                could not plan for. Some waited it out. Most of them paid for it twice, in time
+                and then again at the door.
+              </p>
+              <p>
+                None of that waiting made the care better. It only made it later.
+              </p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.12} className="story-stats">
+            <dl>
+              {COST.map((stat) => (
+                <div key={stat.value}>
+                  <dt className={stat.accent ? "story-stat-accent" : undefined}>{stat.value}</dt>
+                  <dd>{stat.label}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="story-stats-note">{COST_NOTE}</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 5. The one dark beat. No new claim — the hero's claim, restated where it lands hardest.
+          The parallax runs deepest here: it is the only section on the page whose ground moves
+          independently of the paper, so the drift reads as the band sliding past rather than as
+          text detaching from its own background. */}
+      <section className="story-throughline" aria-labelledby="throughline-title" ref={throughlineRef}>
+        <motion.div className="story-wrap" style={live ? { y: throughlineY } : undefined}>
+          <Reveal>
+            <p className="story-throughline-line" id="throughline-title">
+              The permission already changed. <em>Now the appointment has to be findable.</em>
+            </p>
+          </Reveal>
+          <Reveal delay={0.08} className="story-throughline-sub">
+            <p>
+              A rule that nobody can act on is a rule that did not change anything. ADHD.ME exists
+              to close that last gap: from the change on paper to a GP near you, with a date.
+            </p>
+          </Reveal>
+        </motion.div>
+      </section>
+
+      {/* 6. What you actually do. */}
+      <section className="story-chapter" aria-labelledby="steps-title">
+        <div className="story-wrap">
+          <Reveal className="story-eyebrow-block">
+            <p className="story-eyebrow">What ADHD.ME is</p>
+          </Reveal>
+          <Reveal delay={0.04}>
+            <h2 id="steps-title" className="story-heading story-heading-wide">How it works, end to end.</h2>
+          </Reveal>
+          <motion.ol
+            className="story-pillars"
+            initial={reduce ? false : "hidden"}
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={stagger}
+          >
+            {/* `whileHover` below is a LABEL so the row triggers and the title moves. It is not
+                paired with an `initial`/`animate` of its own: those would override the
+                hidden/show the stagger propagates down from the list and kill the entrance. */}
+            {STEPS.map((step) => (
+              <motion.li key={step.title} variants={item} whileHover="lift">
+                {/* The title carries the hover, not the row: a whole ruled row sliding on hover
+                    reads as a click target, and this list is not one. */}
+                <motion.h3 variants={{ lift: { x: 6 } }} transition={PRESS}>
+                  {step.title}
+                </motion.h3>
+                <p>{step.body}</p>
+              </motion.li>
+            ))}
+          </motion.ol>
+        </div>
+      </section>
 
       {/* 7. The one action, moved above the founders. */}
       <section id="register" className="story-register" aria-labelledby="register-heading">
@@ -356,6 +529,26 @@ export function StoryLanding() {
               </motion.li>
             ))}
           </motion.ul>
+        </div>
+      </section>
+
+      {/* THE LONG VERSION, AS A DOOR RATHER THAN A CORRIDOR.
+          The eight-scene sequence used to sit in the middle of this page, which meant every
+          reader scrolled through six screens of argument to reach the form. It lives at
+          /approach now and this is the way in: last thing on the page, for the reader who wants
+          it, invisible to the reader who came here to find a GP. */}
+      <section className="story-approach" aria-labelledby="approach-cta-title">
+        <div className="story-wrap story-approach-inner">
+          <div>
+            <h2 id="approach-cta-title" className="story-approach-title">The ADHD.ME approach</h2>
+            <p className="story-approach-copy">
+              The long version: what the search actually returns, what the old route cost, and
+              what changed. Eight scenes, a few minutes.
+            </p>
+          </div>
+          <Link className="story-approach-link" href="/approach">
+            See the approach<span className="arrow" aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
 

@@ -70,7 +70,7 @@ test("no public page ships hidden content in its server-rendered HTML", async ({
   // The mechanism, pinned alongside the outcome. Checking the rendered bytes catches a hidden
   // element the visibility assertions above do not happen to name — and names the page, so a
   // regression on a surface nobody thought about still fails loudly.
-  for (const path of ["/", "/finder", "/practices", "/clinicians", "/privacy", "/demo"]) {
+  for (const path of ["/", "/approach", "/finder", "/practices", "/clinicians", "/privacy", "/demo"]) {
     const html = await (await request.get(path)).text();
     const hidden = html.match(/opacity:\s*0[;"']/g) ?? [];
     expect(hidden, `${path} server-renders ${hidden.length} element(s) at opacity 0`).toEqual([]);
