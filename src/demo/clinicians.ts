@@ -1,5 +1,6 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
+import { emotionalFitScore, emotionalFitSignals, type EIQuality } from "./emotional-fit";
 
 /**
  * The roster behind /finder and the walkthrough.
