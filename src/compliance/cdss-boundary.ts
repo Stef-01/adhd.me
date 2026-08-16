@@ -331,6 +331,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the quality union, the key list and the two scoring helpers. `EI_QUALITIES` carries a reader-facing `label` and `matchLine` for each declared quality — the words a PATIENT reads as why this GP was shown. Every one describes the clinician's manner (\"listens and takes you seriously\", \"is non-judgmental, so you can be honest\"), never a state of the reader: the cues that reach them are PREFERENCE expressions, so \"I do not want to feel rushed\" is read as a want and not as a finding about somebody. That is the same side of G7 the rest of the finder sits on — a stated want matched to a declared attribute, which is what the roster already does for language and gender.",
   },
   {
+    module: "src/matching/read.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports a stemmer, a tokeniser and a cue-finder. It holds NO copy at all — not a label, not a sentence, not a fragment — because it operates on words a patient typed and words a lexicon author wrote, and produces token positions. It is declared with an empty `operatorCopy` rather than left out: a module absent from this census is indistinguishable from a module nobody has checked, and the whole point of a both-directions register is that absence cannot be silent.",
+  },
+  {
     module: "src/matching/needs.ts",
     operatorCopy: ["NEED_LABELS"],
     notCopy:

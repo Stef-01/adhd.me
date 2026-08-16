@@ -769,15 +769,30 @@ export function CareFinder() {
             </motion.div>
 
             <div className="profile-content">
-              <p className="eyebrow">Why this fit</p>
+              {/* THE HEADING MUST NOT PROMISE A REASON THERE IS NONE OF.
+                  "Why this fit" was rendered unconditionally while the chips under it were
+                  rendered only when something matched, so a reader whose words reached no facet
+                  got a heading asking a question the page then declined to answer — directly over
+                  a named doctor, which is the worst place on the site to look evasive. The eyebrow
+                  now describes what is actually below it. */}
+              <p className="eyebrow">
+                {personalizedMatch.signals.length > 0 ? "Why this fit" : "About this GP"}
+              </p>
               <h1>{clinician.name}</h1>
               <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {clinician.suburb}</p>
               <NswTraining clinician={clinician} />
               <FounderDisclosure clinician={clinician} />
-              {personalizedMatch.signals.length > 0 && (
+              {personalizedMatch.signals.length > 0 ? (
                 <div className="fit-signal-row profile-fit-signals" aria-label="Key match reasons">
                   {personalizedMatch.signals.slice(0, 3).map((signal) => <span key={signal}>{signal}</span>)}
                 </div>
+              ) : (
+                /* Nothing in what they said reached this clinician, so the honest line is what he
+                   says he does — the same fallback the result row already used, which is why the
+                   rows looked right while the profile did not. */
+                <p className="profile-no-match">
+                  {clinician.focus}. Nothing in what you said pointed here specifically.
+                </p>
               )}
               <div className="practical-signal-row profile-practical-signals" aria-label="Practical appointment details">
                 {clinician.practicalSignals.slice(0, 2).map((signal) => <span key={signal}>{signal}</span>)}

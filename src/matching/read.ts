@@ -1,0 +1,135 @@
+// W222: how a cue is actually matched against a sentence.
+//
+// THE PROBLEM THIS SOLVES, DIAGNOSED RATHER THAN GUESSED AT. W221 matched cues as contiguous
+// substrings, and a probe over realistic first-person queries put every remaining failure in one
+// of two mechanical classes — neither of them semantic, both of them fixable without a model:
+//
+//   INSERTION.   "my brain has never let me finish anything" misses the cue "never finish
+//                anything" because two words sit in the middle of it.
+//   INFLECTION.  "she rushes me every time" misses "rushed". "someone who explains things"
+//                misses "explain" — the cue is a prefix of the word in the sentence and a
+//                space-delimited substring search cannot see it.
+//
+// Both are morphology and word order, not meaning. A sentence-embedding model would fix them, and
+// it would be the wrong tool: it costs a 20MB+ ONNX download, it puts a similarity threshold
+// between a patient and a GP, and its output cannot be rendered as W213's one sentence. The
+// hybrid-retrieval literature is clear that a well-built sparse matcher is the first stage anyway;
+// what W221 shipped was not a well-built sparse matcher, it was `String.includes`.
+//
+// SO: STEM THE TOKENS, AND MATCH A CUE AS AN ORDERED SUBSEQUENCE WITHIN A WINDOW.
+//
+// "never finish anything" → [never, finish, anyth] must appear in the sentence in that ORDER, each
+// within a few tokens of the last. That accepts "never LET ME finish anything" and rejects a
+// sentence that merely contains all three words scattered across two unrelated clauses.
+//
+// WHY ORDERED-SUBSEQUENCE AND NOT BM25. BM25 scores a bag of words and returns a number, and the
+// number would then need a threshold nobody can defend and could not be explained to a patient.
+// Ordered subsequence is a PREDICATE: the cue is present or it is not, the answer is the same
+// every time, and the reason a facet fired is still "you said this". Precision stays where
+// `String.includes` had it — every content word of the cue must be there, in order — while recall
+// goes up by the whole insertion-and-inflection class.
+
+/**
+ * Words dropped before matching.
+ *
+ * NEGATIONS ARE DELIBERATELY NOT IN THIS LIST. "not", "no", "never" and "without" are the
+ * difference between "not just medication" and "medication" — the cue that means somebody wants
+ * alternatives and the cue that means the opposite. A stopword list that swallowed them would
+ * make the matcher confidently wrong on the one distinction it most needs to keep.
+ */
+const STOPWORDS = new Set([
+  "the", "a", "an", "and", "or", "of", "to", "in", "on", "at", "for", "with", "that", "this",
+  "it", "its", "is", "are", "was", "were", "be", "been", "am", "i", "me", "my", "we", "our",
+  "you", "your", "he", "she", "they", "them", "his", "her", "their", "as", "so", "but", "if",
+  "then", "than", "there", "here", "have", "has", "had", "do", "does", "did", "get", "got",
+  "would", "could", "should", "will", "can", "just", "really", "very", "some", "any", "one",
+  "about", "from", "by", "up", "out", "over", "into", "who", "what", "when", "where", "how",
+]);
+
+/**
+ * A deliberately small suffix stripper.
+ *
+ * NOT A PORTER STEMMER, and that is a choice rather than a shortcut. Porter conflates aggressively
+ * — "university" and "universe" collide — and every collision here is a facet firing on a sentence
+ * that did not ask for it, beside a named clinician. This handles the four inflections that
+ * actually appeared in the probe (plural, past, progressive, third-person) and stops. A cue and a
+ * word must still share a real root; they no longer have to share spelling.
+ *
+ * The length guards exist so short words are left alone: stripping "es" from "does" or "ing" from
+ * "thing" produces a stem that matches nothing anybody meant.
+ */
+export function stem(word: string): string {
+  if (word.length <= 4) return word;
+  if (word.endsWith("ies") && word.length > 5) return `${word.slice(0, -3)}y`;
+  if (word.endsWith("ing") && word.length > 6) return trimDouble(word.slice(0, -3));
+  if (word.endsWith("ed") && word.length > 5) return trimDouble(word.slice(0, -2));
+  if (word.endsWith("es") && word.length > 5) return word.slice(0, -2);
+  if (word.endsWith("s") && !word.endsWith("ss")) return word.slice(0, -1);
+  return word;
+}
+
+/** "rushhed" → "rushed" → "rush". Doubling appears when a suffix was added to a short stem. */
+function trimDouble(stemmed: string): string {
+  const last = stemmed.at(-1);
+  return last && last === stemmed.at(-2) && !"aeiou".includes(last) ? stemmed.slice(0, -1) : stemmed;
+}
+
+/** Sentence or cue → the tokens matching actually compares. Deterministic and total. */
+export function tokenise(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 0 && !STOPWORDS.has(word))
+    .map(stem);
+}
+
+/**
+ * How many tokens may sit between two consecutive cue tokens.
+ *
+ * TWO, AND THE FIGURE WAS SET BY A TEST RATHER THAN BY TASTE. It was three, and an edge case
+ * written to prove the matcher was strict enough proved the opposite: "my heart is fine and
+ * honestly the parking there is safe" matched the cue [heart, safe], because the gap is counted in
+ * CONTENT tokens — stopwords are already gone, so three of them is most of a clause, not an
+ * insertion. Two accepts "never LET ME finish anything" (one content token inserted) and the
+ * possessive and adjective insertions English actually puts inside a phrase, and rejects a cue
+ * whose halves are in different clauses.
+ */
+const MAX_GAP = 2;
+
+/**
+ * Where a cue occurs in a sentence, or null.
+ *
+ * Returns the token span so the caller can stop a second cue re-reading the same words — the same
+ * guarantee the substring matcher got from claiming character ranges, kept for the same reason:
+ * one clause should produce one facet, not three overlapping ones.
+ */
+export function findCue(
+  sentence: readonly string[],
+  cue: readonly string[],
+): { from: number; to: number } | null {
+  if (cue.length === 0) return null;
+
+  for (let start = 0; start <= sentence.length - 1; start++) {
+    if (sentence[start] !== cue[0]) continue;
+
+    let at = start;
+    let matched = 1;
+    while (matched < cue.length) {
+      const want = cue[matched]!;
+      let next = -1;
+      for (let k = at + 1; k <= Math.min(at + 1 + MAX_GAP, sentence.length - 1); k++) {
+        if (sentence[k] === want) {
+          next = k;
+          break;
+        }
+      }
+      if (next === -1) break;
+      at = next;
+      matched++;
+    }
+
+    if (matched === cue.length) return { from: start, to: at };
+  }
+  return null;
+}

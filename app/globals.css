@@ -5357,3 +5357,7 @@ textarea:focus-visible {
   .story-join-link, .story-join-link .arrow { transition: none; }
   .story-join-link:hover .arrow { transform: none; }
 }
+
+/* The profile's honest line when nothing the reader said reached this clinician. Set at body
+   weight rather than as chips, because chips would look like matched signals. */
+.profile-no-match { margin: 14px 0 0; color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 44ch; }

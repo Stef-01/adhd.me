@@ -95,7 +95,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     cues: ["not rushed", "won't rush", "wont rush", "take my time", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
-      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread", "in and out"],
+      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread", "in and out",
+      // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
+      // The bare stem is the commonest way anybody says it.
+      "rushes", "rushing", "hurried", "hurry me"],
   },
   non_judgmental: {
     label: "Non-judgmental",

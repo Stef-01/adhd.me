@@ -105,6 +105,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/matching/read.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "`trimDouble` reads the LAST CHARACTER OF A STRING, not the last record of a collection. The detector is right to see it — it cannot tell a string from an array, and one that guessed would miss the family it exists for — but there is no order to depend on, because a word's letters do not arrive in a different sequence depending on how a store returned them. Declared rather than rewritten to dodge the pattern, since dodging a detector is how a register stops describing the tree. NOTE FOR THE NEXT EDITOR: this rationale deliberately does not spell the index expression out. Only comments are stripped before scanning, so writing the literal here makes this file match its own detector — which is exactly what happened on the first draft.",
+    },
+  },
+  {
     module: "src/messaging/approval.ts",
     folds: 1,
     disposition: {

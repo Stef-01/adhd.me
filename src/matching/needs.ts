@@ -36,6 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
+import { findCue, tokenise } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -200,48 +201,57 @@ const LEXICON: readonly Entry[] = [
 ];
 
 /**
- * Phrases, longest first.
+ * Cues, pre-tokenised, longest first.
  *
  * ORDER MATTERS AND THE REASON IS A REAL DEFECT IT PREVENTS. "not just medication" contains
- * "medication"; "treated for anxiety" contains "anxiety". Reading short phrases first would let a
+ * "medication"; "treated for anxiety" contains "anxiety". Reading short cues first would let a
  * general term claim a sentence whose specific term says something different — in the first case
- * close to the opposite. Longest-first, and a phrase already consumed cannot be re-read.
+ * close to the opposite. Sorted by TOKEN count now rather than character length, because that is
+ * what specificity means once matching is done on tokens.
  */
-const PHRASES: ReadonlyArray<{ phrase: string; entry: Entry }> = LEXICON.flatMap((entry) =>
-  entry.phrases.map((phrase) => ({ phrase, entry })),
-).sort((a, b) => b.phrase.length - a.phrase.length);
+const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = LEXICON.flatMap((entry) =>
+  entry.phrases.map((phrase) => ({ phrase, tokens: tokenise(phrase), entry })),
+)
+  .filter((cue) => cue.tokens.length > 0)
+  .sort((a, b) => b.tokens.length - a.tokens.length || b.phrase.length - a.phrase.length);
 
 /**
  * Read what somebody said into the closed vocabulary.
  *
  * Deterministic and total: the same text always yields the same signals, and text that reaches
  * nothing yields an empty list rather than a guess. An empty list is a supported outcome — the
- * caller ranks on everything else it knows (distance, accepting new patients) and says so.
+ * finder says so (`matchQuality`) rather than presenting an arbitrary order as a ranking.
  *
- * THIS IS THE PLUGGABLE HALF of docs/MATCHING-PLAN.md's architecture. A semantic normaliser
- * (option C) lands here, behind this same signature, and everything downstream is unchanged: it
- * would map phrasing the lexicon missed onto the same facets, above a confidence floor, and the
- * ranking would never know the difference. Keeping that seam is why this returns a closed
- * vocabulary rather than a similarity score.
+ * MATCHING IS ORDERED-SUBSEQUENCE OVER STEMMED TOKENS — see `read.ts` for why, and for the two
+ * failure classes it fixes that a substring search could not. The claiming below is unchanged in
+ * spirit: a cue that matched some words takes them, so one clause produces one facet.
+ *
+ * THIS IS THE PLUGGABLE HALF of docs/MATCHING-PLAN.md's architecture. A dense retriever lands here
+ * behind this same signature and everything downstream is unchanged, because what crosses the
+ * boundary is a closed vocabulary rather than a similarity score.
  */
 export function readNeeds(text: string): NeedSignal[] {
-  const haystack = ` ${text.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ")} `;
+  const sentence = tokenise(text);
   const signals: NeedSignal[] = [];
   const seen = new Set<string>();
-  /** Character spans already claimed, so a shorter phrase cannot re-read a longer one's words. */
   const claimed: Array<[number, number]> = [];
 
-  for (const { phrase, entry } of PHRASES) {
-    const at = haystack.indexOf(` ${phrase} `);
-    if (at === -1) continue;
-    const span: [number, number] = [at, at + phrase.length + 2];
-    if (claimed.some(([from, to]) => span[0] < to && from < span[1])) continue;
-    claimed.push(span);
+  for (const cue of CUES) {
+    const at = findCue(sentence, cue.tokens);
+    if (!at) continue;
+    if (claimed.some(([from, to]) => at.from <= to && from <= at.to)) continue;
 
-    const key = facetKey(entry.facet);
+    const key = facetKey(cue.entry.facet);
     if (seen.has(key)) continue;
+
+    claimed.push([at.from, at.to]);
     seen.add(key);
-    signals.push({ facet: entry.facet, matched: phrase, label: entry.label, weight: entry.weight });
+    signals.push({
+      facet: cue.entry.facet,
+      matched: cue.phrase,
+      label: cue.entry.label,
+      weight: cue.entry.weight,
+    });
   }
 
   return signals;

@@ -45,13 +45,13 @@ const CORPUS: readonly string[] = [
 const reached = (query: string) => readNeeds(query).length > 0;
 
 describe("W221 how much of a real sentence the lexicon can hear", () => {
-  it("reaches at least two thirds of the corpus", () => {
+  it("reaches all but the queries that express no need", () => {
     const misses = CORPUS.filter((query) => !reached(query));
     const rate = misses.length / CORPUS.length;
     expect(
       rate,
       `miss rate ${(rate * 100).toFixed(0)}% — unreached: ${JSON.stringify(misses)}`,
-    ).toBeLessThanOrEqual(0.34);
+    ).toBeLessThanOrEqual(0.15);
   });
 
   /**
@@ -61,7 +61,7 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
   it("reaches most of the sentences that avoid its own vocabulary", () => {
     const paraphrase = CORPUS.slice(5, 13);
     const misses = paraphrase.filter((query) => !reached(query));
-    expect(misses.length, `unreached paraphrase: ${JSON.stringify(misses)}`).toBeLessThanOrEqual(2);
+    expect(misses.length, `unreached paraphrase: ${JSON.stringify(misses)}`).toBeLessThanOrEqual(1);
   });
 
   /**
