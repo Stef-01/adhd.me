@@ -14,12 +14,18 @@
 // proposed, plus everything it did not, in one list. Adding a facet the interview missed is the
 // same gesture as rejecting one it invented.
 //
-// NOTHING HERE PERSISTS YET, AND THAT IS HONEST RATHER THAN UNFINISHED. `SHIPPED_DIRECTORY_PROFILES`
-// is empty behind founder gate G6 and no code path can publish a profile, so a save button would
-// write to a store nothing reads and imply an approval workflow that does not exist. The page says
-// so. When G6 opens, this component's state is the shape that gets written.
+// SAVING WRITES A DRAFT, NEVER A PROFILE, and the difference is structural rather than a promise.
+// `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6 and nothing on this path can change
+// that: `saveBackground` returns `StoredBackground`, which has no publishable status to set. What
+// is stored is which facets were accepted, by whom, and whether the clinician confirmed the
+// read-back — the material G6 would be opened on, rather than somebody's memory of an interview.
+//
+// (This header previously said nothing here persisted, which was true when it was written and
+// stopped being true one commit later. A comment describing a previous version of its own file is
+// worse than no comment, because it is read as current.)
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { saveReview, type SaveState } from "./actions";
 import {
   professionalBio,
   type BackgroundFacet,
@@ -65,6 +71,8 @@ export function BackgroundEditor({
     ];
   });
   const [confirmed, setConfirmed] = useState(false);
+  const [save, setSave] = useState<SaveState>({ status: "idle", message: "" });
+  const [saving, startSaving] = useTransition();
 
   const background: ClinicianBackground = useMemo(
     () => ({ ...initial, facets, readBackConfirmed: confirmed }),
@@ -143,10 +151,26 @@ export function BackgroundEditor({
           </span>
         </label>
 
+        <div className="be-save">
+          <button
+            type="button"
+            className="be-save-button"
+            disabled={saving}
+            onClick={() => startSaving(async () => setSave(await saveReview(background, reviewer)))}
+          >
+            {saving ? "Saving…" : "Save this review"}
+          </button>
+          {save.status !== "idle" && (
+            <p className={`be-save-msg be-save-${save.status}`} role="status">{save.message}</p>
+          )}
+        </div>
+
         <p className="be-persist">
-          Nothing on this page saves. <code>SHIPPED_DIRECTORY_PROFILES</code> is empty behind
-          founder gate G6 and no code path can publish a profile, so a save button would write to a
-          store nothing reads and imply an approval workflow that does not exist.
+          Saving writes a DRAFT, never a profile. <code>SHIPPED_DIRECTORY_PROFILES</code> is empty
+          behind founder gate G6 and nothing here changes that — what is stored is which facets were
+          accepted, by whom, and whether the clinician confirmed the read-back, which is the
+          material that gate would be opened on. Every save is kept, so “who changed it and when”
+          has an answer.
         </p>
       </section>
     </div>
