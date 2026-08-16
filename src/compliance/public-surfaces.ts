@@ -80,6 +80,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "A patient following a link from an invitation. The most patient-facing surface in the product, and the only one reached by somebody who was contacted rather than somebody who went looking.",
   },
   {
+    path: "/approach",
+    audience: "patient",
+    why: "The landing page's argument at length, addressed to the same reader the landing page is: somebody deciding whether to look for a GP. Same rules, same linter, and the copy is the copy that was on `/` until it moved here — nothing was relaxed by giving it a route of its own.",
+  },
+  {
     path: "/clinicians",
     audience: "professional",
     why: "A walkthrough addressed to GPs, describing what the software does with a worked clinical example. Clinical content between clinicians is professional communication rather than therapeutic advertising — see STANDING_FLAGS, because whether to publish it at all is a separate and open question.",

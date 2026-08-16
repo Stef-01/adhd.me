@@ -177,7 +177,7 @@ test("patient booking states pass WCAG A/AA", async ({ page, request }) => {
   await expectNoViolations(page, "invalid-link page");
 });
 
-const PUBLIC_PATHS = ["/", "/finder", "/practices", "/clinicians", "/clinicians/join", "/privacy", "/privacy/automated-decisions", "/demo"];
+const PUBLIC_PATHS = ["/", "/approach", "/finder", "/practices", "/clinicians", "/clinicians/join", "/privacy", "/privacy/automated-decisions", "/demo"];
 
 test("public pages pass WCAG A/AA", async ({ page }) => {
   // The public root is the community program; the synthetic finder lives separately.

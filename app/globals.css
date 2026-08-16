@@ -4043,36 +4043,58 @@ textarea:focus-visible {
 .story-portrait > * { width: 100%; }
 .story-portrait-drift { will-change: transform; }
 
-/* THE DOTS ARRIVE ONE AT A TIME, AND THIS IS CSS RATHER THAN MOTION ON PURPOSE. The dots are
-   decorative — the suburb NAMES beside them are the useful half and are plain text — so an
-   entrance that begins at scale 0 hides nothing a reader needs, which is not true of anything
-   else on this page. Keeping it in CSS also means it does not wait for the bundle, and it is
-   scoped to `.story-portrait` so the same diagram on /finder's results header stays still. */
+/* ── THE HERO MAP ARRIVES, RATHER THAN BEING THERE ──────────────────────────
+   Two markers on a still outline is a diagram. Drawn — coastline first, then the
+   two places it is about — it is the page introducing its own geography, which
+   is the one concrete fact the hero has to offer.
+
+   THIS BLOCK REPLACES A DEAD ONE. The old stagger addressed `g:nth-of-type(1)`
+   through `(14)`, one delay per Western Sydney suburb, and the map became an
+   outline of Australia with TWO markers when the product repositioned. Twelve of
+   those fourteen rules had matched nothing since.
+
+   Decorative, so it may start from nothing: the suburb names sit in the caption
+   as plain text and the coastline carries no information a reader needs. Scoped
+   to `.story-portrait` so the same component stays still on /finder. */
 @media (prefers-reduced-motion: no-preference) {
-  .story-portrait .coverage-dot {
+  .story-portrait .coverage-land {
+    stroke-dasharray: 620;
+    stroke-dashoffset: 620;
+    animation: story-coast 1.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+  .story-portrait .coverage-dot,
+  .story-portrait .coverage-pin-halo {
     transform-box: fill-box;
     transform-origin: center;
-    animation: story-dot-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: story-dot-in 0.62s cubic-bezier(0.34, 1.4, 0.5, 1) both;
   }
-  .story-portrait svg g:nth-of-type(1) .coverage-dot { animation-delay: 0.30s; }
-  .story-portrait svg g:nth-of-type(2) .coverage-dot { animation-delay: 0.36s; }
-  .story-portrait svg g:nth-of-type(3) .coverage-dot { animation-delay: 0.42s; }
-  .story-portrait svg g:nth-of-type(4) .coverage-dot { animation-delay: 0.48s; }
-  .story-portrait svg g:nth-of-type(5) .coverage-dot { animation-delay: 0.54s; }
-  .story-portrait svg g:nth-of-type(6) .coverage-dot { animation-delay: 0.60s; }
-  .story-portrait svg g:nth-of-type(7) .coverage-dot { animation-delay: 0.66s; }
-  .story-portrait svg g:nth-of-type(8) .coverage-dot { animation-delay: 0.72s; }
-  .story-portrait svg g:nth-of-type(9) .coverage-dot { animation-delay: 0.78s; }
-  .story-portrait svg g:nth-of-type(10) .coverage-dot { animation-delay: 0.84s; }
-  .story-portrait svg g:nth-of-type(11) .coverage-dot { animation-delay: 0.90s; }
-  .story-portrait svg g:nth-of-type(12) .coverage-dot { animation-delay: 0.96s; }
-  .story-portrait svg g:nth-of-type(13) .coverage-dot { animation-delay: 1.02s; }
-  .story-portrait svg g:nth-of-type(n + 14) .coverage-dot { animation-delay: 1.08s; }
+  .story-portrait g:nth-of-type(1) .coverage-dot,
+  .story-portrait g:nth-of-type(1) .coverage-pin-halo { animation-delay: 1.15s; }
+  .story-portrait g:nth-of-type(2) .coverage-dot,
+  .story-portrait g:nth-of-type(2) .coverage-pin-halo { animation-delay: 1.34s; }
+
+  /* One slow breath on the halos once they have landed. A pin that pulses at a
+     heartbeat rate reads as urgency, which this page is not allowed to sell and
+     does not want to: 4.5s is closer to a lighthouse. */
+  .story-portrait .coverage-pin-halo { animation-name: story-dot-in, story-pin-breathe; }
+  .story-portrait g:nth-of-type(1) .coverage-pin-halo { animation-duration: 0.62s, 4.5s; animation-delay: 1.15s, 1.9s; }
+  .story-portrait g:nth-of-type(2) .coverage-pin-halo { animation-duration: 0.62s, 4.5s; animation-delay: 1.34s, 2.2s; }
+  .story-portrait .coverage-pin-halo { animation-iteration-count: 1, infinite; animation-fill-mode: both, none; }
+
+  .story-portrait .coverage-pin-label {
+    animation: story-pin-label 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .story-portrait g:nth-of-type(1) .coverage-pin-label { animation-delay: 1.32s; }
+  .story-portrait g:nth-of-type(2) .coverage-pin-label { animation-delay: 1.51s; }
 }
-@keyframes story-dot-in {
-  from { transform: scale(0); }
-  to { transform: scale(1); }
+@keyframes story-coast { from { stroke-dashoffset: 620; } to { stroke-dashoffset: 0; } }
+@keyframes story-dot-in { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes story-pin-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
+@keyframes story-pin-label { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: none; } }
+
 /* In the hero the diagram is the FIGURE, not a footnote under a section: it loses the rule and
    the top padding it wears in-body, stacks instead of sitting in two columns, and the plot is
    given real size. At the in-body 168px the dot cluster reads as dust from across a room. */
@@ -4080,12 +4102,12 @@ textarea:focus-visible {
   grid-template-columns: 1fr;
   justify-items: center;
   gap: 26px;
-  max-width: 420px;
+  max-width: 480px;
   margin: 0 auto;
   padding-top: 0;
   border-top: 0;
 }
-.story-portrait .coverage-map svg { max-width: 320px; }
+.story-portrait .coverage-map svg { max-width: 400px; }
 .story-portrait .coverage-map figcaption { justify-items: center; text-align: center; }
 
 /* Chapters ---------------------------------------------------------------- */
@@ -5185,3 +5207,100 @@ textarea:focus-visible {
 /* The answer earns ink; the prompt and the refusal stay quiet. Colour is never the only
    signal — the sentence itself says which of the three states it is. */
 .seq-ask-found { color: var(--s-ink); font-weight: 560; }
+
+/* ── The door to the long version ───────────────────────────────────────────
+   Last band before the footer. A quiet invitation rather than a second CTA:
+   the page already has one action (the form above it) and this must not
+   compete with it, so it is a hairline band and a text link, not a filled
+   button on a tinted ground. */
+.story-approach {
+  border-top: 1px solid var(--s-line);
+  padding-block: clamp(44px, 5vw, 68px);
+}
+.story-approach-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(20px, 4vw, 56px);
+  flex-wrap: wrap;
+}
+.story-approach-title {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 450;
+  letter-spacing: -0.025em;
+  color: var(--s-ink);
+}
+.story-approach-copy {
+  max-width: 52ch;
+  margin: 8px 0 0;
+  color: var(--s-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+.story-approach-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--s-accent);
+  border-radius: 999px;
+  color: var(--s-accent);
+  font-size: 14.5px;
+  font-weight: 620;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.story-approach-link .arrow {
+  display: inline-block;
+  margin-left: 9px;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.story-approach-link:hover,
+.story-approach-link:focus-visible { background: var(--s-accent); color: #fff; }
+.story-approach-link:hover .arrow,
+.story-approach-link:focus-visible .arrow { transform: translateX(5px); }
+.story-approach-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .story-approach-link, .story-approach-link .arrow { transition: none; }
+  .story-approach-link:hover .arrow { transform: none; }
+}
+
+/* ── /approach: the sequence's own page ─────────────────────────────────────
+   An opening and a close around the sequence, so the route is a page rather
+   than a component with a URL. Both use the landing page's own tokens; nothing
+   here introduces a treatment the rest of the site does not have. */
+.approach-open { padding-block: clamp(56px, 7vw, 96px) clamp(32px, 4vw, 52px); }
+.approach-close {
+  border-top: 1px solid var(--s-line);
+  padding-block: clamp(56px, 7vw, 96px);
+}
+.approach-title { max-width: 20ch; margin-top: 18px; }
+.approach-lede {
+  max-width: 54ch;
+  margin: 22px 0 0;
+  color: var(--s-muted);
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.approach-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px 26px;
+  margin-top: 30px;
+}
+.approach-back {
+  color: var(--s-muted);
+  font-size: 14.5px;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+.approach-back:hover { color: var(--s-ink); text-decoration: underline; }
+/* On its own page the sequence opens against the page rather than under a rule
+   it shares with a section above it. */
+.approach-page .seq { border-top: 0; }
