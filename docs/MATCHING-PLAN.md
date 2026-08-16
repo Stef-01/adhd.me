@@ -262,14 +262,43 @@ live in the suite, because a paraphrase lexicon regresses *silently* — every o
 the ranking still works, and it quietly stops hearing anybody. The ceiling is to be lowered as
 reach improves and never raised to make a red build green.
 
-### What this changes about the roadmap
+### What this changed about the roadmap, and how that turned out
 
-**Option C is promoted from "next" to required.** The 19% residual is not a polish item. The one
-substantive remaining miss — "my brain has never let me finish anything and I'm 34" — fails
-because the lexicon matches literal phrases and the cue is "never finish anything": three words
-apart in the sentence, invisible to substring matching. No amount of curation fixes that class;
-only normalisation does. The honest statement of where this stands: **the matcher is explainable,
-scalable and now truthful about its own confidence, and it is not yet perceptive.**
+**W221 concluded: "Option C is promoted from 'next' to required."** The argument was that the 19%
+residual could not be curated away, because "my brain has never let me finish anything" misses the
+cue "never finish anything" by three words and only normalisation fixes that class.
+
+**The diagnosis was right and the prescription was wrong, which is worth leaving on the record
+rather than quietly editing.** The failures were real and they were *mechanical* — insertion and
+inflection — not semantic. What they needed was a competent sparse matcher, and what W221 had
+shipped was `String.includes`. W222 stemmed the tokens and matched cues as an ordered subsequence
+within a two-token window:
+
+| | W221 | W222 |
+|---|---|---|
+| Hard corpus (paraphrase, inflection, insertion) | 3 misses / 10 | **0 / 10** |
+| Soft corpus | 3 / 16 | **2 / 16**, both `"help"` and `"I don't know where to start"` |
+| False positives on neutral queries | — | **0 / 9** |
+
+The two remaining misses *should* miss: they express no need, and the product says so.
+
+**So option C is back to "next", not "required", and the reason to reach for it has changed.** It
+is no longer needed to fix a broken matcher. It would be for genuine synonymy — "can't focus" and
+"my attention goes everywhere" share no stem and no order, and no curation reaches that. That is a
+real limit and it is much further out than a 19% miss rate implied.
+
+**What actually answered "does it understand me" was not a model.** It was W225: when the words do
+not separate the roster, ask one question whose answer *would*. The commonest sentence in the
+product — "I think I might have ADHD" — used to end at "this is not a ranking". It now offers three
+questions, and one tap changes who is first. A clarifier is worth more here than a better
+embedding, because it makes the reader's own next sentence the thing that resolves the ambiguity,
+and the finder can still say "you said this".
+
+**Where this stands, honestly:** explainable, scalable, truthful about its own confidence, no
+longer defeated by ordinary English, and still not perceptive. The next real gain is synonymy, and
+the next real risk is a roster large enough that three clarifying questions is no longer enough to
+separate it.
+
 
 ---
 
@@ -282,3 +311,30 @@ scalable and now truthful about its own confidence, and it is not yet perceptive
   preference reading.
 - It does not claim the matching is good. It claims it is explainable, scalable and honest about
   being built from declarations. Whether it puts the right GP first is measured in step 4.
+
+---
+
+## 9. What shipped, end to end
+
+The pipeline the plan described now runs from a conversation to a ranked list. Each piece is a
+commit with its reasoning in the message.
+
+| Unit | What it does | Where |
+|---|---|---|
+| W221 | Facets, weights, the reason a patient reads; `matchQuality` so an unearned order is never shown as a ranking; `unservedAsks` so a gap in the listing is named as ours | `src/matching/needs.ts`, `src/demo/clinicians.ts` |
+| W222 | Stemmed, ordered-subsequence cue matching. Contractions preserved — splitting on the apostrophe had been destroying the commonest negator in English for both the patient matcher and the transcript reader | `src/matching/read.ts` |
+| W223 | A 30-minute transcript read into proposals, each carrying the clinician's own sentence. Reads only their turns; refuses to propose from a denial; keeps what it could not read as the lexicon's to-do list | `src/onboarding/transcript.ts` |
+| W223 | The console: audit totals pinned against the ranker, roster tags, the assembled bio | `app/console/matching/` |
+| W224 | The review editor. Facets are editable in both directions; the bio is the read-out and cannot be typed into | `app/console/matching/background-editor.tsx` |
+| W225 | One question when the words did not separate anybody, chosen only if the answer reorders the roster | `src/matching/clarify.ts` |
+| W226 | Persistence. Append-only, latest-wins, every save kept as the audit trail; refuses an accepted facet that names nobody | `src/onboarding/background-store.ts` |
+| W227 | The save action, closing the loop from interview to gate | `app/console/matching/actions.ts` |
+
+**The 30-minute claim, checked against what exists.** An interview using the instrument produces a
+transcript; the transcript produces proposals with quotes; a reviewer accepts, rejects and adds in
+one pass; the clinician reads the assembled bio back and confirms; the save records who decided
+what. That is one sitting, and the output is durable and auditable.
+
+**What it does not yet do:** publish. `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6,
+and nothing in this pipeline can set a published status — there is no such status to set. What the
+pipeline produces is the evidence that gate would be opened on.
