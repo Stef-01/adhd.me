@@ -325,6 +325,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the question and profile types, the frequency union and the facet map. `INTERVIEW` is read ALOUD TO A CLINICIAN during onboarding — every `ask` and every `saidAloud`. It asks a GP what they see often and how they work, and it asks nothing about any patient. Two of its `saidAloud` lines exist to satisfy W193 at the moment of collection rather than at the moment of display: the training is recorded as a declaration with no register to check it against, and a language is only ever shown to somebody who asked for that language. A test asserts the instrument cannot take free text for scope or manner, because a free-text scope answer is the biography `src/directory/profile.ts` refuses, with an interviewer's handwriting on it.",
   },
   {
+    module: "src/demo/emotional-fit.ts",
+    operatorCopy: ["EI_QUALITIES"],
+    notCopy:
+      "The remaining exports are the quality union, the key list and the two scoring helpers. `EI_QUALITIES` carries a reader-facing `label` and `matchLine` for each declared quality — the words a PATIENT reads as why this GP was shown. Every one describes the clinician's manner (\"listens and takes you seriously\", \"is non-judgmental, so you can be honest\"), never a state of the reader: the cues that reach them are PREFERENCE expressions, so \"I do not want to feel rushed\" is read as a want and not as a finding about somebody. That is the same side of G7 the rest of the finder sits on — a stated want matched to a declared attribute, which is what the roster already does for language and gender.",
+  },
+  {
     module: "src/matching/needs.ts",
     operatorCopy: ["NEED_LABELS"],
     notCopy:

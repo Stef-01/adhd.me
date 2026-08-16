@@ -1,6 +1,7 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
-import { facetKey, readNeeds, type MannerTrait, type NeedSignal } from "@/matching/needs";
+import { facetKey, readNeeds, type NeedSignal } from "@/matching/needs";
+import { type EIQuality } from "./emotional-fit";
 
 /**
  * The roster behind /finder and the walkthrough.
@@ -111,7 +112,7 @@ export type Clinician = {
    * on one doctor's name in `rankClinicians`, which is a private editorial judgement about a
    * named person. Declared in the onboarding interview instead — see docs/MATCHING-PLAN.md §5.
    */
-  manner: MannerTrait[];
+  manner: EIQuality[];
   wheelchairAccessible: boolean;
   appointmentLength: string;
   keywords: string[];
@@ -198,7 +199,7 @@ export const clinicians: Clinician[] = [
       "sleep",
       "shared-care",
     ],
-    manner: ["structured", "non-judgemental"],
+    manner: ["structured", "non_judgmental", "sense_making"],
     nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
@@ -246,7 +247,7 @@ export const clinicians: Clinician[] = [
       "sleep",
       "shared-care",
     ],
-    manner: ["unhurried", "explains-carefully", "family-context"],
+    manner: ["unhurried", "collaborative", "culturally_attuned", "attuned"],
     nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Longer first appointments available",
@@ -363,7 +364,7 @@ function languageAsked(clinician: Clinician, query: string): NeedSignal[] {
   return clinician.languages
     .filter((language) => language !== "English" && words.includes(language.toLowerCase()))
     .map((language) => ({
-      facet: { kind: "manner" as const, trait: "family-context" as const },
+      facet: { kind: "manner" as const, trait: "culturally_attuned" as const },
       matched: language.toLowerCase(),
       label: `${language}-speaking`,
       weight: 30,

@@ -71,6 +71,14 @@ export interface FoldSite {
  */
 export const FOLD_SITES: readonly FoldSite[] = [
   {
+    module: "src/demo/emotional-fit.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "`emotionalFitScore` sums a fixed per-facet weight over the qualities a clinician declared. Addition is commutative, the declared list is a literal on the roster record, and the fold produces a total rather than a winner — no clinician can be preferred over another by the order their facets were written in.",
+    },
+  },
+  {
     // W188: a same-day join/leave pair is a real tie on a day-granular date, and the tie-break
     // is a safety decision rather than a guess — see the test.
     module: "src/directory/membership.ts",

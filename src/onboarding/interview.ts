@@ -101,10 +101,14 @@ const CARE_QUESTIONS: ReadonlyArray<{ area: CareArea; ask: string }> = [
  * unhurried?" has only a nice one.
  */
 const MANNER_QUESTIONS: ReadonlyArray<{ trait: MannerTrait; ask: string }> = [
+  { trait: "attuned", ask: "When somebody arrives having been brushed off before, how does that go in your room?" },
+  { trait: "steadying", ask: "If somebody is anxious or overwhelmed at the start, what do you do first?" },
+  { trait: "sense_making", ask: "Do you help people join the dots on what has been going on, or focus on the decision in front of you?" },
+  { trait: "motivating", ask: "Do people usually leave with a plan they can act on, and does it build on what already works for them?" },
   { trait: "unhurried", ask: "Do you book a longer first appointment for this, and roughly how long?" },
-  { trait: "explains-carefully", ask: "Do you talk through the differential and the options, or keep it brief unless asked?" },
-  { trait: "family-context", ask: "Do family and language usually come into the room with the patient in your practice?" },
-  { trait: "non-judgemental", ask: "How do you open the substance and coping questions?" },
+  { trait: "non_judgmental", ask: "How do you open the substance and coping questions?" },
+  { trait: "collaborative", ask: "Do you talk through the options and decide with the patient, or recommend and explain if asked?" },
+  { trait: "culturally_attuned", ask: "Do family and language usually come into the room with the patient in your practice?" },
   { trait: "structured", ask: "Do you work to a documented baseline and a review schedule, or review when something comes up?" },
 ];
 
@@ -122,7 +126,7 @@ export const INTERVIEW: readonly Question[] = [
     answer: "frequency" as const,
     options: FREQUENCIES,
     target: { kind: "care" as const, area },
-    minutes: 8 / CARE_QUESTIONS.length,
+    minutes: 7 / CARE_QUESTIONS.length,
     saidAloud: "Answer for what you actually see, not what you could see. Patients read this as what you do often.",
   })),
 
@@ -133,7 +137,7 @@ export const INTERVIEW: readonly Question[] = [
     answer: "frequency" as const,
     options: FREQUENCIES,
     target: { kind: "manner" as const, trait },
-    minutes: 6 / MANNER_QUESTIONS.length,
+    minutes: 7 / MANNER_QUESTIONS.length,
   })),
 
   // ── Access (6 min) ───────────────────────────────────────────────────────────────────────
@@ -158,7 +162,10 @@ export const INTERVIEW: readonly Question[] = [
 
 /** Total interview length, in minutes. Pinned by the test against the thirty-minute budget. */
 export function interviewMinutes(): number {
-  return INTERVIEW.reduce((total, question) => total + question.minutes, 0);
+  // Rounded to a tenth. The per-question figures are fractions of a block (7 minutes over 17 scope
+  // questions), and summing them in binary gives 30.00000000000001 — a budget assertion that fails
+  // on float representation rather than on the interview being too long.
+  return Math.round(INTERVIEW.reduce((total, question) => total + question.minutes, 0) * 10) / 10;
 }
 
 /**

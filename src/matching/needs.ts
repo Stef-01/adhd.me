@@ -35,40 +35,25 @@
 // care.
 
 import type { CareArea } from "@/demo/care-archetypes";
+import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
 
 /**
  * How a clinician works, as opposed to what they see.
  *
- * THIS VOCABULARY IS THE PIECE THAT WAS MISSING, and its absence is why per-clinician weights
- * existed at all. "I get rushed every time and I lose my thread" is not a care area — it names
- * nothing clinical — so under the old model the only way to express it was a hand-written weight
- * on one doctor's name. As a declared facet it is something any clinician can state in the
- * onboarding interview in under a minute, and it carries the half of "will they understand me"
- * that clinical scope cannot.
+ * THIS VOCABULARY IS NOT DEFINED HERE. It is `EIQuality` in `src/demo/emotional-fit.ts`, which
+ * arrived in parallel with this file and is the better-grounded of the two — its facets are the
+ * four MSCEIT branches plus the plain interpersonal qualities that decide whether an ADHD consult
+ * goes well, and it carries a reader-facing label for each. Two overlapping manner vocabularies
+ * would have been the same defect this unit removed from the ranker: one job, two lexicons,
+ * drifting. So there is one, it lives there, and this file reads its cues.
  *
- * Closed, and short on purpose. Every entry has to be something a GP can answer honestly about
- * themselves in an interview, and something a patient can recognise wanting. A trait that fails
- * either test is a trait that produces a profile nobody can trust.
+ * The one facet added to it here is `structured`, because "documented baseline, review on a
+ * schedule" is a real declared way of working that is not an emotional-intelligence quality and
+ * that one of the two GPs on the roster leads with.
  */
-export type MannerTrait =
-  /** Books longer first appointments; will not rush the history. */
-  | "unhurried"
-  /** Explains the reasoning, the options and the differential in plain terms. */
-  | "explains-carefully"
-  /** Works with family, culture and language as part of the picture rather than around it. */
-  | "family-context"
-  /** Takes a history that is easy to be judged for — substances, gaps, coping — as a safety question. */
-  | "non-judgemental"
-  /** Documented baseline, protocol-driven, review on a schedule rather than on a crisis. */
-  | "structured";
+export type MannerTrait = EIQuality;
 
-export const MANNER_TRAITS: readonly MannerTrait[] = [
-  "unhurried",
-  "explains-carefully",
-  "family-context",
-  "non-judgemental",
-  "structured",
-];
+export const MANNER_TRAITS: readonly MannerTrait[] = EI_QUALITY_KEYS;
 
 /** A facet is either something a clinician sees or a way they work. Both are declared. */
 export type Facet = { kind: "care"; area: CareArea } | { kind: "manner"; trait: MannerTrait };
@@ -186,25 +171,17 @@ const LEXICON: readonly Entry[] = [
     "disability", "disabled", "wheelchair", "ndis", "autonomy", "accessible",
   ]),
 
-  // ── How somebody wants to be treated while it happens ─────────────────────────────────────
-  manner("unhurried", "A longer first appointment", 26, [
-    "rushed", "rush me", "not rushed", "unhurried", "longer appointment", "long appointment",
-    "more time", "whole story", "lose my thread", "fifteen minutes",
-  ]),
-  manner("explains-carefully", "Explains things properly", 22, [
-    "explain", "explains", "understand what is happening", "slowly", "plain language", "clear steps",
-  ]),
-  manner("family-context", "Family and cultural context", 24, [
-    "my family", "my parents", "cultural", "culture", "my community", "they think i am lazy",
-    "think i am just disorganised", "not real",
-  ]),
-  manner("non-judgemental", "Held without judgement", 26, [
-    "without being judged", "judged", "treated like an addict", "after something", "drug seeking",
-    "taken seriously", "believed",
-  ]),
-  manner("structured", "A structured, measured approach", 24, [
-    "structured", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan",
-  ]),
+  /**
+   * ── How somebody wants to be treated while it happens ──────────────────────────────────────
+   *
+   * DERIVED FROM `EI_QUALITIES` RATHER THAN RESTATED. Their cue lists and reader-facing labels are
+   * the source of truth; restating them here would recreate the two-lexicon drift this unit
+   * exists to remove. Weight is uniform because these are alternatives to each other, not a
+   * ranking of which way of working is better — that judgement is not the product's to make.
+   */
+  ...EI_QUALITY_KEYS.map((quality) =>
+    manner(quality, EI_QUALITIES[quality].label, 24, EI_QUALITIES[quality].cues),
+  ),
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
   pref("woman-gp", "A woman GP", 30, ["woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman"]),

@@ -144,7 +144,18 @@ underneath.
    the same evidence. A test asserts they cannot disagree.
 5. **Tie-breaks stay arbitrary and disclosed** — the founder-behind rule stands.
 
-**MannerTrait is the piece that was missing.** "I get rushed every time" is not a care area; it is
+**The manner vocabulary converged from two directions, which is worth recording.** This unit
+introduced `MannerTrait` and a parallel session introduced `EIQuality` in
+`src/demo/emotional-fit.ts` — the same idea, arrived at independently: declared interpersonal
+qualities matched against expressed preferences, with the same G7 boundary argument. Theirs is
+better grounded (the four MSCEIT branches plus the plain qualities that decide whether an ADHD
+consult goes well) and carries a reader-facing label per quality, so it won. `MannerTrait` is now
+an alias for it, `needs.ts` reads its cues rather than restating them, and `structured` was added
+to it — a way of ORGANISING care rather than a way of being with somebody, and the one thing the
+MSCEIT frame does not cover that a GP on the roster leads with. **Two overlapping manner lexicons
+would have been the same defect this unit removed from the ranker.**
+
+**The manner facet is the piece that was missing.** "I get rushed every time" is not a care area; it is
 a fact about how a clinician works. Today only a hand-written weight on Dr Yadav's name expresses
 it. As a declared facet it is something any clinician can state in thirty minutes, and it is
 the half of "understands my needs" that clinical scope cannot carry.
