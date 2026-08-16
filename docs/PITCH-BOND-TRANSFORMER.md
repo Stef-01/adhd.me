@@ -131,11 +131,14 @@ first state where a GP can carry this pathway. Bond is in Queensland.
 
 ## Figma
 
-`figma-slides-06-15.js` exists because the Figma MCP tool-call quota on the Starter plan ran
-out mid-build. Slides 1–5 are live in the Slides file
-(`DkS0rta61zfawq8WZGcDEB`) and match this system exactly; 6–15 are not. Paste the script into
-`use_figma` in two batches once quota allows. The two product screenshots need `upload_assets`
-to fill the `SHOT_FINDER` and `SHOT_PRACTICE` frames — `figma.createImageAsync` is unavailable.
+All 15 slides are live and validated at
+https://www.figma.com/slides/YCJjlwrFNcELigr3BovJoZ — in the `adhd` team on
+`vikram.ganeshalingam@student.bond.edu.au`, as native text and vectors with both product
+screenshots embedded. Build it again with `figma-slides-06-15.js`.
+
+Use that account for Figma work on this deck; `krishganesh80@gmail.com` is Starter tier with an
+exhausted MCP quota, and the partial 5-slide file stranded in its drafts
+(`DkS0rta61zfawq8WZGcDEB`) should be ignored.
 
 ## Sources
 

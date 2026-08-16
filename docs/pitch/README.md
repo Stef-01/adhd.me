@@ -64,10 +64,21 @@ Keep it that way.
 
 ## Figma
 
-`figma-slides-06-15.js` exists because the Figma MCP tool-call quota on the Starter plan ran
-out mid-build. Slides **1–5 only** are live in the Slides file
-(`DkS0rta61zfawq8WZGcDEB`) and match this system exactly. Paste the script into `use_figma` in
-two batches once the quota allows, and use `upload_assets` to fill the `SHOT_FINDER` and
-`SHOT_PRACTICE` frames — `figma.createImageAsync` is not available in that environment.
+**Live, all 15 slides:** https://www.figma.com/slides/YCJjlwrFNcELigr3BovJoZ
 
-The HTML/PDF is the complete deck. Figma is currently the partial one.
+In the **`adhd`** team on `vikram.ganeshalingam@student.bond.edu.au`. Native text and vectors,
+not images, so the copy is editable in Figma. Both product screenshots are embedded as image
+fills on the `SHOT_FINDER` and `SHOT_PRACTICE` frames.
+
+Use that account for any further Figma work on this deck. The `krishganesh80@gmail.com` account
+is Starter tier and its MCP tool-call quota is exhausted; a stranded 5-slide draft
+(`DkS0rta61zfawq8WZGcDEB`) lives there and should be ignored.
+
+`figma-slides-06-15.js` is kept as the reproducible build for slides 6–15 — it is what was run
+to produce the live file, and it is the fastest way to rebuild if the deck is ever recreated
+from scratch. Images go in via the `upload_assets` MCP tool; `figma.createImageAsync` is not
+available in that environment.
+
+**Two copies now exist and they can drift.** The HTML in this folder is the source of truth for
+content — if you change copy, change it in `deck.src.html` / `build-deck.mjs` and mirror it into
+Figma, or the deck you present and the deck you version-control stop agreeing.
