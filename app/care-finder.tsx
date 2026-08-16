@@ -19,8 +19,11 @@ import {
   clinicians,
   distanceTo,
   getPersonalizedMatch,
+  matchQuality,
   rankCliniciansNear,
   rankClinicians,
+  unservedAsks,
+  MATCH_QUALITY_COPY,
   type Clinician,
 } from "@/demo/clinicians";
 import { coveredSuburbs, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
@@ -678,6 +681,27 @@ export function CareFinder() {
                       ? `${shown.length} of ${matches.length}, nearest to ${origin.suburb} first.`
                       : "We do not cover that one yet, so these are ranked on what you asked for."}
                 </p>
+
+                {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
+                    A probe over realistic first-person queries found the lexicon reached nothing
+                    on nine of seventeen and that ten tied exactly — including "I think I might
+                    have ADHD", the likeliest thing anybody types. Every one of those still
+                    rendered as a ranked list whose order came from the tie-break: from nothing,
+                    presented as from something. This is one line and it only appears when the
+                    order means nothing, which is the only time it has anything to add. */}
+                {matchQuality(request) !== "informed" && (
+                  <p className="place-status match-quality" role="status">
+                    {MATCH_QUALITY_COPY[matchQuality(request)]}
+                  </p>
+                )}
+
+                {/* A care area nobody on the roster declares is a gap in the LISTING, and the
+                    reader should not be left to conclude it is a gap in their question. */}
+                {unservedAsks(request).length > 0 && (
+                  <p className="place-status match-quality" role="status">
+                    {`No GP listed today says they do ${unservedAsks(request)[0]!.toLowerCase()}. That is a gap in our listing, not in what you asked for.`}
+                  </p>
+                )}
 
                 {/* Only when the answer is no. "We do not cover that one" raises the question of
                     what IS covered, and this answers it in place instead of leaving somebody to

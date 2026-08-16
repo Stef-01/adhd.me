@@ -332,6 +332,63 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
 }
 
 /**
+ * Care areas the reader asked for that NOBODY on the roster declares.
+ *
+ * The probe found nine of the seventeen care areas are declared by neither GP — trauma-informed
+ * care, children and adolescents, co-occurring autism, disability rights and five more. With two
+ * clinicians that is expected and it is not a defect. Saying nothing about it IS a defect: a
+ * reader who asks for trauma-informed care currently gets a list of two GPs, neither of whom said
+ * they do it, and no indication that the gap is in the listing rather than in their question.
+ *
+ * Same posture as the Gold Coast answer in the sequence: name the gap, put it on the directory,
+ * and do not let the reader conclude it is about them.
+ */
+export function unservedAsks(query: string): string[] {
+  const declared = new Set(clinicians.flatMap((clinician) => clinician.careAreas));
+  return readNeeds(query)
+    .filter((need) => need.facet.kind === "care" && !declared.has(need.facet.area))
+    .map((need) => need.label);
+}
+
+/**
+ * WHETHER THE ORDER MEANS ANYTHING, which the finder has to be able to say.
+ *
+ * THE DEFECT THIS EXISTS FOR, measured rather than suspected. A probe over seventeen realistic
+ * first-person queries found the lexicon reached NOTHING on nine of them and that ten produced an
+ * exact score tie — including "I think I might have ADHD", which is the single most likely thing
+ * anybody types. In every one of those cases the list still rendered as a ranked list, and the
+ * order was decided by the founder-behind tie-break: by nothing, presented as by something.
+ *
+ * That is the same class of defect as the fabricated `nextAvailable` this file deleted. A ranking
+ * nobody can act on is worse than no ranking, because the reader spends their trust on it. So the
+ * fact is computed and surfaced, and the finder says which of the three it is:
+ *
+ *   informed  — the words reached facets and the clinicians differ on them. The order is earned.
+ *   tied      — facets were reached and every clinician answers them equally. Order is arbitrary.
+ *   unmatched — nothing was reached. There is no order; this is just the roster.
+ *
+ * It is not a confidence score. It is a statement about whether a comparison happened at all,
+ * which is a fact rather than an estimate, and it can therefore be said in one sentence — W213's
+ * floor applies to this as much as to a match reason.
+ */
+export type MatchQuality = "informed" | "tied" | "unmatched";
+
+export function matchQuality(query: string): MatchQuality {
+  const needs = readNeeds(query);
+  if (needs.length === 0) return "unmatched";
+  const scores = clinicians.map((clinician) => scoreAgainst(clinician, needs));
+  return new Set(scores).size > 1 ? "informed" : "tied";
+}
+
+/** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
+export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
+  informed: "",
+  tied: "Both of these answer what you asked for equally well, so this is not a ranking — read both.",
+  unmatched:
+    "We could not tell from that what you are looking for, so this is everyone we list rather than an order. Saying more about what you want helps.",
+};
+
+/**
  * The needs this clinician actually answers, in the reader's asking order.
  *
  * ONE COMPUTATION, TWO CONSUMERS. The ranking and the explanation both read this, so the page

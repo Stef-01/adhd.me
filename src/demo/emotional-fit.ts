@@ -70,7 +70,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   attuned: {
     label: "Listens and takes you seriously",
     matchLine: "listens and takes you seriously",
-    cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed", "talked over"],
+    cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed", "talked over",
+      // W221 probe: "decides before I finish the sentence" reached nothing.
+      "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to"],
   },
   steadying: {
     label: "Calm and steadying",
@@ -90,12 +92,17 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   unhurried: {
     label: "Unhurried first appointment",
     matchLine: "gives you an unhurried first appointment",
-    cues: ["not rushed", "won't rush", "wont rush", "take my time", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number"],
+    cues: ["not rushed", "won't rush", "wont rush", "take my time", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
+      // W221 probe: none of these reached `unhurried`, and every one of them is somebody
+      // describing being rushed without using the word.
+      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread", "in and out"],
   },
   non_judgmental: {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
-    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about"],
+    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
+      // W221 probe: "won't make me feel like I'm making it up" reached nothing.
+      "making it up", "make it up", "attention seeking", "drug seeking", "faking", "believe me", "not believed"],
   },
   collaborative: {
     label: "Explains and decides with you",
@@ -105,7 +112,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   culturally_attuned: {
     label: "Understands your background",
     matchLine: "understands your background and family",
-    cues: ["my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian"],
+    cues: ["my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
+      // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
+      "my mum", "my mother", "my dad", "my father", "my parents", "in the room with me", "nonsense", "not real", "just lazy", "an excuse"],
   },
   structured: {
     label: "A structured, measured approach",

@@ -222,6 +222,57 @@ Steps 1 and 2 are built in this unit. Steps 3–5 are engineering. Step 6 is not
 
 ---
 
+## 6a. Critical appraisal of what shipped, measured
+
+The MVP was probed with seventeen first-person queries, half written deliberately **without**
+lexicon vocabulary — "I can never get a word in", not "unhurried". A corpus written by reading the
+lexicon measures only that somebody can copy a list.
+
+**The first result was bad, and it is the finding that matters most:**
+
+| | Before | After |
+|---|---|---|
+| Queries reaching **no** facet | **9/17 (53%)** | 3/16 (19%) |
+| Unearned orders shown as rankings | **10/17 (59%)** | **0** |
+| Paraphrase reaching no facet | 7/9 | 1/8 |
+
+**Option B alone does not "understand" anybody.** It is a keyword matcher with good hygiene. Over
+half of realistic phrasing reached nothing, and — worse — *the product still rendered a ranked
+list in every one of those cases*, ordered by the founder-behind tie-break. Ordered by nothing,
+presented as ordered by something. `"I think I might have ADHD"`, the likeliest sentence anybody
+types, scored 12–12 and put one of two real doctors first for no reason. That is the same class of
+defect as the fabricated `nextAvailable`: the reader spends trust on a signal that is not there.
+
+**Three fixes shipped in response, in order of importance:**
+
+1. **`matchQuality` — the finder says when the order is not earned.** `informed` / `tied` /
+   `unmatched`, computed and surfaced in one line that only appears when it has something to
+   correct. It is a fact about whether a comparison happened, not a confidence score, so it can be
+   said in one sentence like every other reason. **This is the integrity fix and it would matter
+   even if reach were perfect.**
+2. **`unservedAsks` — a care area nobody declares is named as our gap.** Nine of seventeen areas
+   are declared by neither GP, which is expected at a roster of two; saying nothing is what makes
+   it a defect. Same posture as the Gold Coast answer: name the gap, put it on the directory,
+   never let the reader conclude it is about them.
+3. **The lexicon was widened against the measured misses**, not against imagination. Each new
+   phrase family is one the probe proved unreachable.
+
+**`src/matching/reach.test.ts` makes this a standing control.** The corpus and a ratchet ceiling
+live in the suite, because a paraphrase lexicon regresses *silently* — every other test passes,
+the ranking still works, and it quietly stops hearing anybody. The ceiling is to be lowered as
+reach improves and never raised to make a red build green.
+
+### What this changes about the roadmap
+
+**Option C is promoted from "next" to required.** The 19% residual is not a polish item. The one
+substantive remaining miss — "my brain has never let me finish anything and I'm 34" — fails
+because the lexicon matches literal phrases and the cue is "never finish anything": three words
+apart in the sentence, invisible to substring matching. No amount of curation fixes that class;
+only normalisation does. The honest statement of where this stands: **the matcher is explainable,
+scalable and now truthful about its own confidence, and it is not yet perceptive.**
+
+---
+
 ## 7. What this plan deliberately does not do
 
 - It does not rank patients. That is `docs/GATE-DOSSIER-Q17.md`'s question and it stays shut.

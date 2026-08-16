@@ -5304,3 +5304,8 @@ textarea:focus-visible {
 /* On its own page the sequence opens against the page rather than under a rule
    it shares with a section above it. */
 .approach-page .seq { border-top: 0; }
+
+/* One quiet line under the results count, shown only when the order is not earned or the listing
+   cannot serve what was asked. It is a correction to what the list appears to claim, so it sits
+   with the count rather than as a banner: a banner would be louder than the finding. */
+.match-quality { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 46ch; }

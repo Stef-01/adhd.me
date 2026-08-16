@@ -127,7 +127,12 @@ const LEXICON: readonly Entry[] = [
   care("adhd-assessment", "ADHD assessment", 12, [
     "adhd", "assessment", "assessed", "diagnosis", "diagnosed", "attention",
   ]),
-  care("adult-adhd", "Adult ADHD", 10, ["adult", "in my thirties", "at my age", "grown up"]),
+  care("adult-adhd", "Adult ADHD", 10, [
+    "adult", "in my thirties", "in my forties", "at my age", "grown up",
+    // Probe: "my brain has never let me finish anything and I'm 34" reached nothing. These are
+    // the ways people describe the experience rather than the label.
+    "never finish anything", "cannot finish", "can never finish", "my whole life", "always been like this",
+  ]),
   care("child-adolescent-adhd", "Children and adolescents", 26, [
     "my son", "my daughter", "my child", "my kid", "teenager", "adolescent", "children", "school report",
   ]),
@@ -142,10 +147,14 @@ const LEXICON: readonly Entry[] = [
   care("cardiac-screening", "Baseline physical screening", 26, [
     "heart", "cardiac", "blood pressure", "physical baseline", "baseline checks", "is it safe",
     "bloods", "pathology",
+    // Probe: "not going to hurt my heart before I start anything" reached this only via "heart".
+    "safe for me", "before i start", "check me over", "physical check",
   ]),
   care("comorbid-mood", "Anxiety and mood differential", 24, [
-    "anxiety", "anxious", "depression", "antidepressant", "misdiagnosed", "differential",
-    "wrong answer", "wrong diagnosis", "treated for anxiety",
+    "anxiety", "anxious", "depression", "antidepressant", "antidepressants", "misdiagnosed",
+    "differential", "wrong answer", "wrong diagnosis", "treated for anxiety",
+    // Probe: "I've been on antidepressants for six years and nothing shifted" reached nothing.
+    "nothing shifted", "nothing helped", "nothing worked", "still not right",
   ]),
   care("substance-history", "Substance history held safely", 26, [
     "drink", "drinking", "alcohol", "cannabis", "substance", "non-stimulant",
