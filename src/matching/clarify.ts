@@ -30,7 +30,7 @@
 import type { Clinician } from "@/demo/clinicians";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { facetKey, readNeeds, type Facet } from "./needs";
+import { facetKey, holdsPreference, readNeeds, type Facet, type Preference } from "./needs";
 
 /**
  * A question, and the words that answering it adds to the request.
@@ -121,15 +121,51 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
   },
 };
 
+/**
+ * Access preferences, asked the same way (O5/F7). These were absent by construction —
+ * `declaredKeys` was care ∪ manner — yet they are hard filters or strong lifts with the
+ * highest roster variance there is: "do you want a woman GP" splits any mixed roster and is
+ * the most-stated preference in real directory search. The module's own principle ("a question
+ * earns its place only if the answer changes the order") selects FOR them.
+ *
+ * `pref:longer-appointment` is deliberately not here: `manner:unhurried` already asks that
+ * question in its own words, and two prompts for one answer is the drift this file exists to
+ * prevent.
+ */
+export const PREF_PROMPTS: Record<string, { prompt: string; answer: string }> = {
+  "pref:woman-gp": {
+    prompt: "Would you rather see a woman GP?",
+    answer: "I would prefer a woman doctor",
+  },
+  "pref:telehealth-first": {
+    prompt: "Would you rather the first appointment was by phone or video?",
+    answer: "I want the first appointment by phone",
+  },
+  "pref:bulk-billing": {
+    prompt: "Does the appointment need to be bulk billed?",
+    answer: "it needs to be bulk billed",
+  },
+};
+
+/** The preferences a clarifier may ask about. Derived from the prompt table, never wider. */
+const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing"];
+
 function promptFor(key: string): { prompt: string; answer: string } | null {
-  return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? null;
+  return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? PREF_PROMPTS[key] ?? null;
 }
 
-/** Every facet a clinician declares, as keys. */
+/** Every facet a clinician declares or verifiably holds, as keys. */
 function declaredKeys(clinician: Clinician): Set<string> {
   return new Set<string>([
     ...clinician.careAreas.map((area) => facetKey({ kind: "care", area } as Facet)),
     ...clinician.manner.map((trait) => facetKey({ kind: "manner", trait } as Facet)),
+    // Held preferences count as declarations: gender, telehealth and billing are facts on the
+    // record, and a preference nobody holds is correctly never asked about — putting "do you
+    // want a woman GP" in front of a reader when no woman is listed sets up a disappointment
+    // the roster cannot answer.
+    ...ASKABLE_PREFERENCES.filter((preference) => holdsPreference(clinician, preference)).map(
+      (preference) => `pref:${preference}`,
+    ),
   ]);
 }
 
@@ -170,6 +206,15 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
 export function facetLabel(key: string): string {
   const care = CARE_AREA_LABELS.find((area) => `care:${area.id}` === key);
   if (care) return care.label;
+  const preference = PREF_LABELS[key];
+  if (preference) return preference;
   const trait = key.startsWith("manner:") ? key.slice("manner:".length) : null;
   return trait && trait in EI_QUALITIES ? EI_QUALITIES[trait as keyof typeof EI_QUALITIES].label : key;
 }
+
+/** Console-facing names for the preference facets, matching the lexicon's own labels. */
+const PREF_LABELS: Record<string, string> = {
+  "pref:woman-gp": "A woman GP",
+  "pref:telehealth-first": "By phone or telehealth",
+  "pref:bulk-billing": "Bulk billing",
+};

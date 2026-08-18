@@ -1,6 +1,9 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
-import { facetKey, languageNeeds, readNeeds, type NeedSignal } from "@/matching/needs";
+import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal } from "@/matching/needs";
+// Value import of copy tables only. `clarify.ts` imports nothing but TYPES from this module, so
+// this direction is the one that keeps the graph acyclic at runtime.
+import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "@/matching/clarify";
 import { type EIQuality } from "./emotional-fit";
 
 /**
@@ -365,16 +368,7 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
   if (facet.kind === "language") {
     return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase());
   }
-  switch (facet.preference) {
-    case "woman-gp":
-      return clinician.gender === "woman";
-    case "telehealth-first":
-      return clinician.telehealthFirstAppointment === true;
-    case "longer-appointment":
-      return clinician.manner.includes("unhurried");
-    case "bulk-billing":
-      return clinician.practicalSignals.some((signal) => /bulk/i.test(signal));
-  }
+  return holdsPreference(clinician, facet.preference);
 }
 
 /**
@@ -495,11 +489,45 @@ export function topTieNote(query: string, roster: readonly Clinician[] = clinici
  */
 export function needsFor(query: string): NeedSignal[] {
   const signals = [...readNeeds(query), ...languageNeeds(query, SPOKEN_ON_ROSTER)];
-  return signals.map((need) => ({
-    ...need,
-    weight: need.weight * separation(clinicians.filter((c) => answers(c, need)).length, clinicians.length),
-  }));
+  const said = query.toLowerCase();
+  return signals.map((need) => {
+    const answer = CLARIFIER_ANSWERS.get(facetKey(need.facet));
+    const confirmed = answer !== undefined && said.includes(answer);
+    return {
+      ...need,
+      weight:
+        need.weight *
+        (confirmed ? STATED_IMPORTANCE_LIFT : 1) *
+        separation(clinicians.filter((c) => answers(c, need)).length, clinicians.length),
+    };
+  });
 }
+
+/**
+ * Every clarifier answer sentence, keyed by the facet it confirms.
+ *
+ * WHY SUBSTRING DETECTION IS FINE HERE AND WAS NOT IN W222: these are OUR OWN fixed sentences,
+ * appended verbatim by the clarifier UI ("tapping appends the answer in the reader's own
+ * request") — this is marker detection on constants, not an attempt to read a person's
+ * language. A reader who types the sentence unprompted has still said it, and the lift is
+ * still their own statement being taken at its word.
+ */
+const CLARIFIER_ANSWERS: ReadonlyMap<string, string> = new Map(
+  Object.entries({ ...CARE_PROMPTS, ...MANNER_PROMPTS, ...PREF_PROMPTS }).map(([key, copy]) => [
+    key,
+    copy.answer.toLowerCase(),
+  ]),
+);
+
+/**
+ * OkCupid's deepest design insight, collected conversationally (O5/F6): importance is the
+ * READER'S datum, not the platform's. The lexicon's 30/20/12 weights guess how much any asker
+ * cares about titration vs sleep — the same guess for everyone. An answered clarifier is the
+ * reader SAYING a facet matters, so a confirmed facet carries half again its lexicon weight:
+ * "you told us this was the main thing" is a sentence about their own words, inside the floor.
+ * One-and-a-half is a judgement, and a sayable one — more than a passing mention, not a veto.
+ */
+const STATED_IMPORTANCE_LIFT = 1.5;
 
 /**
  * How much of a facet's weight survives, given how many of the roster hold it (the O2/F1

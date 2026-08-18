@@ -257,6 +257,37 @@ export function readNeeds(text: string): NeedSignal[] {
   return signals;
 }
 
+/**
+ * Whether a clinician's declared record answers an access preference.
+ *
+ * ONE PLACE (O5/F7). This predicate used to live only inside the ranker's `answers`, which
+ * meant the clarifier could not compute `heldBy` for preference facets and so never asked the
+ * questions that separate rosters hardest — "do you want a woman GP" splits any mixed roster
+ * and is the single most-stated preference in real directory search. The parameter is
+ * structural on purpose: this file cannot import the `Clinician` type without a cycle, and the
+ * four fields named here are the whole of what a preference reads.
+ */
+export function holdsPreference(
+  clinician: {
+    gender: string;
+    telehealthFirstAppointment?: boolean;
+    manner: readonly string[];
+    practicalSignals: readonly string[];
+  },
+  preference: Preference,
+): boolean {
+  switch (preference) {
+    case "woman-gp":
+      return clinician.gender === "woman";
+    case "telehealth-first":
+      return clinician.telehealthFirstAppointment === true;
+    case "longer-appointment":
+      return clinician.manner.includes("unhurried");
+    case "bulk-billing":
+      return clinician.practicalSignals.some((signal) => /bulk/i.test(signal));
+  }
+}
+
 /** Stable identity for a facet, so a reader asking twice for one thing counts once. */
 export function facetKey(facet: NeedSignal["facet"]): string {
   if (facet.kind === "care") return `care:${facet.area}`;

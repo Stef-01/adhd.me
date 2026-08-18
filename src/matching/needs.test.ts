@@ -232,3 +232,28 @@ describe("O2 breadth has a price (F1)", () => {
     expect(scoreAgainst(sometimes, needsFor("my sleep has never been right"))).toBe(claimed.weight);
   });
 });
+
+describe("O5 stated importance is the reader's datum (F6)", () => {
+  /**
+   * THE DEFECT THIS PINS. The lexicon's weights encode how much ANY asker cares about a facet —
+   * the product's guess, identical for every reader. An answered clarifier is the reader saying
+   * a facet matters, and that statement now lifts the confirmed facet's weight. The mechanism is
+   * marker detection on our own appended answer sentences, not a reading of the person.
+   */
+  it("weighs a clarifier-confirmed facet above the same facet mentioned in passing", () => {
+    const confirmed = needsFor("I want the first appointment by phone");
+    const mentioned = needsFor("by phone");
+    const key = "pref:telehealth-first";
+    const weightOf = (needs: ReturnType<typeof needsFor>) =>
+      needs.find((n) => facetKey(n.facet) === key)!.weight;
+    expect(weightOf(confirmed)).toBe(weightOf(mentioned) * 1.5);
+  });
+
+  it("turns an unmatched request into an informed order when the answer separates the roster", () => {
+    expect(matchQuality("hello")).toBe("unmatched");
+    // The clarifier UI appends the answer verbatim; only one GP is telehealth-first.
+    const afterTap = "hello, I want the first appointment by phone";
+    expect(matchQuality(afterTap)).toBe("informed");
+    expect(rankClinicians(afterTap)[0]!.id).toBe("anubhav-saxena");
+  });
+});
