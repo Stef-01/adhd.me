@@ -86,9 +86,14 @@ export default function MatchingConsolePage() {
               <tr><th>Clinician</th><th>Score</th><th>Declares</th><th>Matched</th><th>Missed — why they are not first</th></tr>
             </thead>
             <tbody>
-              {[...audit.rows].sort((a, b) => b.total - a.total).map((row) => (
+              {/* Sorted the way the finder actually ranks: score, then open books first (O4) —
+                  a console that sorted by total alone would show the opposite of the product
+                  on a capacity-broken tie. */}
+              {[...audit.rows]
+                .sort((a, b) => b.total - a.total || Number(b.booksOpen) - Number(a.booksOpen))
+                .map((row) => (
                 <tr key={row.clinicianId}>
-                  <td>{row.name}</td>
+                  <td>{row.name}{row.booksOpen ? "" : " · books closed"}</td>
                   <td className="mc-num">{row.total}</td>
                   {/* Breadth beside score: a row that declares nearly everything is visible
                       exactly where its declarations are earning rank (O2/F1). */}

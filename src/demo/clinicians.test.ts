@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, distanceTo, getPersonalizedMatch, matchQuality, unservedAsks, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, needsFor, roundScore, scoreAgainst, unservedAsks, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -352,5 +352,43 @@ describe("O8 review findings, pinned", () => {
     const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), [far, t, near]);
     // In-rooms clinicians swap among their own positions by distance; telehealth keeps its slot.
     expect(out.map((c) => c.id)).toEqual(["near", "tele", "far"]);
+  });
+});
+
+describe("Codex review on PR #1, pinned", () => {
+  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+  const bare = (id: string) => ({
+    ...yadav(),
+    id,
+    careAreas: [] as CareArea[],
+    manner: [] as (typeof clinicians)[number]["manner"],
+  });
+
+  it("the audit's sum of evidence equals the score exactly, sometimes-declarers included", () => {
+    // The review's counterexample: three clinicians, two declaring two areas, one holding both
+    // as 'sometimes' - per-item rounding on one path vs total-only rounding on the other
+    // diverged by a thousandth. Both paths now round identically.
+    const a = { ...bare("a"), careAreas: ["titration", "cardiac-screening"] as CareArea[] };
+    const b = { ...bare("b"), careAreas: ["titration", "cardiac-screening"] as CareArea[] };
+    const both = { ...bare("both-sometimes"), careAreasSometimes: ["titration", "cardiac-screening"] as CareArea[] };
+    const roster = [a, b, both];
+    const query = "titration please, and the heart checked first";
+    for (const clinician of roster) {
+      const evidence = matchEvidence(clinician, query, roster);
+      expect(scoreAgainst(clinician, needsFor(query, roster))).toBe(
+        roundScore(evidence.reduce((sum, n) => sum + n.weight, 0)),
+      );
+    }
+  });
+
+  it("only claims 'they fit what you asked' when a fit was actually computed", () => {
+    const closed = { ...bare("closed"), careAreas: ["sleep"] as CareArea[], acceptingNewPatients: false };
+    // A fit exists: the fitting sentence.
+    expect(closedBooksNote(closed, "my sleep has never been right")).toMatch(/fit what you asked/);
+    // No fit exists: the neutral fact, no claim.
+    expect(closedBooksNote(closed, "hello")).not.toMatch(/fit what you asked/);
+    expect(closedBooksNote(closed, "hello")).toMatch(/books are closed/);
+    // Open books: nothing.
+    expect(closedBooksNote({ ...closed, acceptingNewPatients: true }, "hello")).toBeNull();
   });
 });

@@ -160,6 +160,9 @@ export type MatchAudit = {
     /** Declaration breadth, so inflation is visible where it is priced (O2/F1):
      *  "declares 15 of 17 areas" is a sentence a reviewer can act on. */
     declares: { often: number; sometimes: number; of: number };
+    /** Capacity breaks score ties in the finder (O4), so the audit must carry it or its
+     *  sort disagrees with the ranking it claims to reproduce (Codex review on PR #1). */
+    booksOpen: boolean;
   }>;
 };
 
@@ -195,6 +198,7 @@ export function matchAudit(query: string, roster: readonly Clinician[]): MatchAu
           sometimes: sometimesOnly.length,
           of: CARE_LABEL_BY_AREA.size,
         },
+        booksOpen: clinician.acceptingNewPatients,
       };
     }),
   };

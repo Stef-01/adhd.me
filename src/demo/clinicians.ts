@@ -338,7 +338,11 @@ export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[])
   let total = 0;
   for (const need of needs) {
     if (!answers(clinician, need)) continue;
-    total += need.weight * declarationFactor(clinician, need);
+    // Each contribution is rounded EXACTLY as `matchEvidence` rounds it, then the total is
+    // rounded again — the same arithmetic in the same order, so the audit's sum of evidence
+    // can never differ from the score by a thousandth (Codex review on PR #1 constructed the
+    // counterexample: per-item rounding on one path, total-only rounding on the other).
+    total += roundScore(need.weight * declarationFactor(clinician, need));
   }
   // Rounded so equal-by-arithmetic totals are equal-by-===; see `roundScore`.
   return roundScore(total);
@@ -426,13 +430,26 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
 }
 
 /**
- * The sentence beside a closed-books listing (O4/F5). Shown, not filtered: hiding a clinician
+ * The sentences beside a closed-books listing (O4/F5). Shown, not filtered: hiding a clinician
  * whose books are closed would decide for the reader that the waitlist is not worth their time,
  * and quietly ranking them first without this sentence is the dating-app anti-pattern of
  * recommending a profile that never swipes back. A fact, one sentence, inside W213's floor.
+ *
+ * TWO SENTENCES, NOT ONE, because "shown because they fit what you asked" is only true when a
+ * fit was actually computed. On an unmatched query — or a zero-score row — no such fit exists,
+ * and the fitting sentence would be the finder explaining a ranking that never happened, the
+ * exact defect O1 removed. The caller picks by whether the clinician has match evidence.
  */
 export const CLOSED_BOOKS_COPY =
   "Their books are closed to new patients right now — shown because they fit what you asked. The practice can say when that changes.";
+export const CLOSED_BOOKS_NEUTRAL_COPY =
+  "Their books are closed to new patients right now. The practice can say when that changes.";
+
+/** The right closed-books sentence for this clinician and query. Empty when books are open. */
+export function closedBooksNote(clinician: Clinician, query: string): string | null {
+  if (clinician.acceptingNewPatients) return null;
+  return matchEvidence(clinician, query).length > 0 ? CLOSED_BOOKS_COPY : CLOSED_BOOKS_NEUTRAL_COPY;
+}
 
 /** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
