@@ -156,6 +156,6 @@ commit); PR made ready for review.
 | O3 | F3, F4 | done | 82fac14 |
 | O4 | F5 | done | a35d568 |
 | O5 | F6, F7 | done | d9c398e |
-| O6 | F8 | available (independent) | — |
+| O6 | F8 | done | 44a4bdc |
 | O7 | F10 | available (independent) | — |
 | O8 | review | last | — |
