@@ -75,3 +75,13 @@ test("a suburb re-ranks with distance said per row, telehealth exempt (O3/O4)", 
   await expect(page.getByText(/by telehealth, wherever you are/).first()).toBeVisible();
   await page.screenshot(shot("08-geo-reranks-with-honest-distance"));
 });
+
+test("the query that failed in production now reads both halves (O13)", async ({ page }) => {
+  await searchFor(page, "Kind Hindi speaking and non judgemental");
+  // The non_judgmental declarer first, both cards carrying Hindi, no disclaimer banner:
+  // the order is earned, where production (pre-overhaul main) showed 'unmatched' beside
+  // Hindi-speaking evidence and a count line claiming a ranking.
+  await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
+  await expect(page.getByText(/everyone we list rather than an order/)).toHaveCount(0);
+  await page.screenshot(shot("09-production-failure-query-now-reads"));
+});

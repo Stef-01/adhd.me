@@ -72,7 +72,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     matchLine: "listens and takes you seriously",
     cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed", "talked over",
       // W221 probe: "decides before I finish the sentence" reached nothing.
-      "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to"],
+      "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to",
+      // O13: "takes me seriously" missed — the stemmer keeps "taken" and "takes" apart
+      // ("taken" has no strippable suffix), so the present-tense ask needs its own cue.
+      "take seriously", "takes me seriously", "attentive"],
   },
   steadying: {
     label: "Calm and steadying",
@@ -105,6 +108,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
       // The bare stem is the commonest way anybody says it.
       "rushes", "rushing", "hurried", "hurry me",
+      // O13 considered and REFUSED "takes their time": "their" is a stopword, so it survives
+      // as the same [take, time] W223 dropped for firing on "take time off work". The recall
+      // it would add is already carried by "not rushed", "unhurried" and "rushes".
       // W223: "take my time" was dropped. "my" is a stopword, so it matched [take, time] — and
       // "I can take time off work" is a sentence this product puts in its OWN barrier list on the
       // landing page. Recall lost is nil: "not rushed", "rushes", "hurried", "enough time" and
@@ -114,14 +120,23 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   non_judgmental: {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
-    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
+    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without judgement", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
       // W221 probe: "won't make me feel like I'm making it up" reached nothing.
-      "making it up", "make it up", "attention seeking", "drug seeking", "faking", "believe me", "not believed"],
+      "making it up", "make it up", "attention seeking", "drug seeking", "faking", "believe me", "not believed",
+      // O13, from a real query this facet's own NAME could not reach: "Kind Hindi speaking and
+      // non judgemental" read as nothing but the language. The cue list was verb-phrase-heavy
+      // ("won't judge", "judged") and the stemmer cannot bridge "judgemental"→"judg", so the
+      // single commonest ADJECTIVE form — the word on the label itself — was unreadable in
+      // either spelling, negated or not. "non-judgemental" tokenises to "non judgemental", so
+      // the bare adjective covers the hyphenated ask too; a complaint ("she was so judgemental")
+      // is the same preference, which is the reading this file always takes.
+      "judgemental", "judgmental"],
   },
   collaborative: {
     label: "Explains and decides with you",
     matchLine: "explains the options and decides them with you",
-    cues: ["explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
+    // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
+    cues: ["collaborative", "explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
       // W223: "work with me", "my options", "the options" and "my say" were dropped. Under token
       // matching each reduces to ONE very common word — [work], [option], [say] — because the
       // rest are stopwords, so "I can take time off work" proposed that the reader wanted a
@@ -132,14 +147,16 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   culturally_attuned: {
     label: "Understands your background",
     matchLine: "understands your background and family",
-    cues: ["my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
+    // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
+    cues: ["culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
       "my mum", "my mother", "my dad", "my father", "my parents", "in the room with me", "nonsense", "not real", "just lazy", "an excuse"],
   },
   structured: {
     label: "A structured, measured approach",
     matchLine: "works to a documented baseline and follows up on a schedule",
-    cues: ["structured", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline"],
+    // O13: "methodical" is the plain word for this way of working and missed.
+    cues: ["structured", "methodical", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline"],
   },
 };
 

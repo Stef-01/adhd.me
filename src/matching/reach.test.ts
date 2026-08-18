@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, scoreAgainst, unservedAsks } from "@/demo/clinicians";
+import { clinicians, matchQuality, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
 import { stem } from "./read";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
@@ -156,5 +156,53 @@ describe("O7 a cue cannot cross a full stop (F10)", () => {
       .not.toContain("Cardiac and physical baseline first");
     // And the same words inside ONE clause still match.
     expect(readNeeds("I want my heart checked so it is safe").length).toBeGreaterThan(0);
+  });
+});
+
+describe("O13 every manner facet is reachable by its plain name", () => {
+  /**
+   * THE FAILURE THIS PINS, verbatim from production: "Kind Hindi speaking and non judgemental"
+   * read as nothing but the language — the non_judgmental facet's own NAME was unreadable,
+   * because the cue lists were verb-phrase-heavy and the stemmer cannot bridge
+   * "judgemental"→"judg". O9's edge suite never asked the basic question this table asks:
+   * can a person request each way-of-working by the word on its label?
+   *
+   * Deliberately absent: "kind" (survives as one token and fires on "what kind of doctor"),
+   * "patient" as an adjective (this is a health product), "takes their time" (the [take, time]
+   * shape W223 removed for cause). Precision refusals, recorded so they are not re-litigated.
+   */
+  const PLAIN_NAMES: ReadonlyArray<[string, string]> = [
+    ["manner:non_judgmental", "non judgemental"],
+    ["manner:non_judgmental", "non-judgmental"],
+    ["manner:non_judgmental", "not judgemental please"],
+    ["manner:non_judgmental", "she was so judgmental about it"],
+    ["manner:non_judgmental", "without judgement"],
+    ["manner:unhurried", "unhurried"],
+    ["manner:unhurried", "not rushed"],
+    ["manner:structured", "structured"],
+    ["manner:structured", "methodical"],
+    ["manner:collaborative", "a collaborative GP"],
+    ["manner:sense_making", "helps me make sense of it"],
+    ["manner:steadying", "calm and gentle"],
+    ["manner:attuned", "takes me seriously"],
+    ["manner:attuned", "attentive"],
+    ["manner:culturally_attuned", "culturally sensitive"],
+  ];
+
+  it.each(PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
+    expect(readNeeds(phrase).map((n) => facetKey(n.facet))).toContain(key);
+  });
+});
+
+describe("O13 the query that failed in production, end to end", () => {
+  it("reads both halves of 'Kind Hindi speaking and non judgemental' and earns the order", () => {
+    const query = "Kind Hindi speaking and non judgemental";
+    const keys = readNeeds(query).map((n) => facetKey(n.facet));
+    expect(keys).toContain("manner:non_judgmental");
+    // Hindi is spoken by both GPs (an honest tie on its own); non_judgmental is declared by
+    // one — so the whole ask now separates the roster and the order is earned, not disclaimed.
+    expect(matchQuality(query)).toBe("informed");
+    const first = rankClinicians(query)[0]!;
+    expect(first.manner).toContain("non_judgmental");
   });
 });
