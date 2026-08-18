@@ -24,6 +24,7 @@ import {
   rankClinicians,
   topTieNote,
   unservedAsks,
+  CLOSED_BOOKS_COPY,
   MATCH_QUALITY_COPY,
   type Clinician,
 } from "@/demo/clinicians";
@@ -777,6 +778,11 @@ export function CareFinder() {
                       <strong>{item.name}</strong>
                       <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
                       <small className="row-availability">{away ? `${item.suburb}, ${away}` : item.suburb}</small>
+                      {/* Closed books never outrank open ones at equal fit, and never hide
+                          either — the row says why somebody unactionable is still here (O4). */}
+                      {!item.acceptingNewPatients && (
+                        <small className="row-availability">{CLOSED_BOOKS_COPY}</small>
+                      )}
                     </span>
                     <CaretRight size={20} weight="light" aria-hidden="true" />
                   </motion.button>
@@ -848,6 +854,7 @@ export function CareFinder() {
               <div className="fit-list">
                 <p>{clinician.appointmentLength}</p>
                 <p>{distanceTo(clinician, origin) ?? clinician.reach}</p>
+                {!clinician.acceptingNewPatients && <p>{CLOSED_BOOKS_COPY}</p>}
               </div>
 
               <section>

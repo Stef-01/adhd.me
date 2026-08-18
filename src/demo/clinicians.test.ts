@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, distanceTo, getPersonalizedMatch, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { clinicians, distanceTo, getPersonalizedMatch, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -254,5 +254,52 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
     expect(note).toMatch(/not a ranking/);
     // And on a fully tied or unmatched roster the roster-level copy already owns the sentence.
     expect(topTieNote("hello", [tiedA, tiedB])).toBeNull();
+  });
+});
+
+describe("O4 reciprocity as capacity (F5)", () => {
+  /**
+   * THE DEFECT THIS PINS. The one structural lesson of reciprocal recommendation: ranking by
+   * one side's preference alone fails both sides. acceptingNewPatients existed, was filterable
+   * in the directory, and was invisible to the finder — a perfect-fit GP with closed books
+   * ranked first with nothing saying the match was unactionable. Capacity now breaks ties
+   * (never scores): closed books cannot outrank open ones at equal fit, cost no fit when the
+   * fit is real, and are said on the card rather than silently filtered.
+   */
+  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
+  it("never lets closed books outrank open ones at equal fit, whatever the file order", () => {
+    const closedFirst = [
+      { ...yadav(), id: "closed", acceptingNewPatients: false },
+      { ...yadav(), id: "open", acceptingNewPatients: true },
+    ];
+    expect(rankClinicians("hello", closedFirst).map((c) => c.id)).toEqual(["open", "closed"]);
+  });
+
+  it("never charges a single point of fit for closed books", () => {
+    const roster = [
+      { ...yadav(), id: "open-no-fit", careAreas: [] as CareArea[], acceptingNewPatients: true },
+      { ...yadav(), id: "closed-fits", careAreas: ["sleep"] as CareArea[], acceptingNewPatients: false },
+    ];
+    // The reader may want exactly this GP and their waitlist; the card carries the sentence.
+    expect(rankClinicians("my sleep has never been right", roster)[0]!.id).toBe("closed-fits");
+  });
+
+  it("puts capacity before kilometres inside a tie", () => {
+    const roster = [
+      { ...yadav(), id: "near-closed", suburb: "Epping", acceptingNewPatients: false },
+      { ...yadav(), id: "far-open", suburb: "Southport", acceptingNewPatients: true },
+    ];
+    const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster);
+    expect(near[0]!.id).toBe("far-open");
+  });
+
+  it("keeps the whole roster on the page: capacity annotates, it does not filter", () => {
+    const roster = [
+      { ...yadav(), id: "closed", acceptingNewPatients: false },
+      { ...yadav(), id: "open", acceptingNewPatients: true },
+    ];
+    expect(rankClinicians("hello", roster)).toHaveLength(2);
+    expect(CLOSED_BOOKS_COPY).toMatch(/shown because they fit what you asked/);
   });
 });

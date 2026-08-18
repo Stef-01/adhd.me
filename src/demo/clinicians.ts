@@ -289,6 +289,23 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
     if (byScore !== 0) return byScore;
 
     /**
+     * WITHIN EQUAL FIT, SOMEBODY WHO CAN ACTUALLY SEE YOU COMES FIRST (O4/F5).
+     *
+     * The one structural lesson of every reciprocal-recommendation system since RECON: in a
+     * two-sided market, ranking by one side's preference alone fails both sides. This tree
+     * refuses learned mutual preference (C3/C4, G7), but the clinician side of reciprocity here
+     * is not a model — it is DECLARED CAPACITY, already on the record and already filterable in
+     * the directory, and until O4 invisible to the finder: a perfect-fit GP whose books were
+     * closed ranked first with nothing saying the match was unactionable. Closed books never
+     * outrank open ones at equal fit — and never cost a single point of fit either, because a
+     * reader may want exactly that GP and their waitlist; the card says why they are still
+     * shown (`CLOSED_BOOKS_COPY`). Position from an operational fact, sayable in one sentence.
+     */
+    const closed = (clinician: Clinician) => (clinician.acceptingNewPatients ? 0 : 1);
+    const byCapacity = closed(a) - closed(b);
+    if (byCapacity !== 0) return byCapacity;
+
+    /**
      * A TIE MUST NEVER BE BROKEN IN THE FOUNDER'S FAVOUR, AND UNTIL W221 IT SILENTLY WAS.
      *
      * `Array.prototype.sort` is stable, so equal scores kept source order — and Dr Saxena is the
@@ -408,6 +425,15 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
   const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
   return new Set(scores).size > 1 ? "informed" : "tied";
 }
+
+/**
+ * The sentence beside a closed-books listing (O4/F5). Shown, not filtered: hiding a clinician
+ * whose books are closed would decide for the reader that the waitlist is not worth their time,
+ * and quietly ranking them first without this sentence is the dating-app anti-pattern of
+ * recommending a profile that never swipes back. A fact, one sentence, inside W213's floor.
+ */
+export const CLOSED_BOOKS_COPY =
+  "Their books are closed to new patients right now — shown because they fit what you asked. The practice can say when that changes.";
 
 /** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
@@ -556,6 +582,10 @@ export function rankCliniciansNear(
   return [...byFit].sort((a, b) => {
     const byScore = score.get(b.id)! - score.get(a.id)!;
     if (byScore !== 0) return byScore;
+    // Capacity before distance (O4): the nearest GP whose books are closed is still a GP the
+    // reader cannot book, and kilometres do not change that.
+    const closed = (c: Clinician) => (c.acceptingNewPatients ? 0 : 1);
+    if (closed(a) !== closed(b)) return closed(a) - closed(b);
     const byFitOrder = fitRank.get(a.id)! - fitRank.get(b.id)!;
     // Somebody you do not travel to is equally near from everywhere, so distance has nothing to
     // say about them and their stated-preference position stands.
