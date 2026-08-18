@@ -30,7 +30,7 @@
 import type { Clinician } from "@/demo/clinicians";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { facetKey, readNeeds, type Facet } from "./needs";
+import { facetKey, holdsPreference, readNeeds, type Facet, type Preference } from "./needs";
 
 /**
  * A question, and the words that answering it adds to the request.
@@ -61,20 +61,18 @@ export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Is your dose already something you are working on?",
     answer: "my dose needs titration and follow-up",
   },
-  "care:cardiac-screening": {
-    prompt: "Do you want the physical checks done before anything starts?",
-    answer: "I want the heart and blood pressure baseline checked first",
-  },
   "care:substance-history": {
     prompt: "Do you want somewhere you can be honest about drinking or other substances?",
     answer: "I want to be honest about drinking without being judged",
   },
-  "care:comorbid-mood": {
-    prompt: "Have you been treated for anxiety or low mood before?",
-    answer: "I have been on antidepressants and I am not sure it was the right answer",
+  "care:depression": {
+    prompt: "Is low mood part of this?",
+    answer: "I have been on antidepressants and my mood is still low",
   },
-  "care:sleep": { prompt: "Is your sleep part of this?", answer: "my sleep has never been right" },
-  "care:adult-adhd": { prompt: "Is this for you as an adult?", answer: "I am an adult asking for myself" },
+  "care:anxiety": {
+    prompt: "Have you been treated for anxiety before?",
+    answer: "I was treated for anxiety and I am not sure it was the right answer",
+  },
   "care:child-adolescent-adhd": { prompt: "Is this for a child or teenager?", answer: "this is for my child" },
   "care:shared-care": {
     prompt: "Are you already seeing a psychiatrist or paediatrician for this?",
@@ -105,7 +103,10 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
   },
   "manner:structured": {
     prompt: "Would you rather it was done to a plan, with follow-up booked?",
-    answer: "I want it done to a documented plan with follow-up booked",
+    /* Reworded by O7: "a documented plan with follow-up booked" was being claimed by a
+       degenerate strengths cue and never reached manner:structured — the reach pin that now
+       re-reads every answer is what caught it. */
+    answer: "I want it done properly, with a follow-up plan booked",
   },
   "manner:attuned": {
     prompt: "Have you been brushed off about this before?",
@@ -121,15 +122,54 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
   },
 };
 
+/**
+ * Access preferences, asked the same way (O5/F7). These were absent by construction —
+ * `declaredKeys` was care ∪ manner — yet they are hard filters or strong lifts with the
+ * highest roster variance there is: "do you want a woman GP" splits any mixed roster and is
+ * the most-stated preference in real directory search. The module's own principle ("a question
+ * earns its place only if the answer changes the order") selects FOR them.
+ *
+ * `pref:longer-appointment` is deliberately not here: `manner:unhurried` already asks that
+ * question in its own words, and two prompts for one answer is the drift this file exists to
+ * prevent.
+ */
+export const PREF_PROMPTS: Record<string, { prompt: string; answer: string }> = {
+  "pref:woman-gp": {
+    prompt: "Would you rather see a woman GP?",
+    answer: "I would prefer a woman doctor",
+  },
+  "pref:telehealth-first": {
+    prompt: "Would you rather the first appointment was by phone or video?",
+    answer: "I want the first appointment by phone",
+  },
+  "pref:bulk-billing": {
+    prompt: "Does the appointment need to be bulk billed?",
+    answer: "it needs to be bulk billed",
+  },
+};
+
+/** The preferences a clarifier may ask about. Derived from the prompt table, never wider. */
+const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing"];
+
 function promptFor(key: string): { prompt: string; answer: string } | null {
-  return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? null;
+  return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? PREF_PROMPTS[key] ?? null;
 }
 
-/** Every facet a clinician declares, as keys. */
+/** Every facet a clinician declares or verifiably holds, as keys. */
 function declaredKeys(clinician: Clinician): Set<string> {
   return new Set<string>([
     ...clinician.careAreas.map((area) => facetKey({ kind: "care", area } as Facet)),
+    // A "sometimes" declaration answers an ask at half weight (O2), so a question about it can
+    // still reorder the roster — leaving these out made heldBy disagree with the ranker (O8 review).
+    ...(clinician.careAreasSometimes ?? []).map((area) => facetKey({ kind: "care", area } as Facet)),
     ...clinician.manner.map((trait) => facetKey({ kind: "manner", trait } as Facet)),
+    // Held preferences count as declarations: gender, telehealth and billing are facts on the
+    // record, and a preference nobody holds is correctly never asked about — putting "do you
+    // want a woman GP" in front of a reader when no woman is listed sets up a disappointment
+    // the roster cannot answer.
+    ...ASKABLE_PREFERENCES.filter((preference) => holdsPreference(clinician, preference)).map(
+      (preference) => `pref:${preference}`,
+    ),
   ]);
 }
 
@@ -142,6 +182,9 @@ function declaredKeys(clinician: Clinician): Set<string> {
  * twenty.
  */
 export function clarifiers(query: string, roster: readonly Clinician[], limit = 3): Clarifier[] {
+  // THE ROSTER ARGUMENT MUST BE THE LIST THE READER IS LOOKING AT (O7/F10). `heldBy` and the
+  // evenness ordering are computed over exactly what is passed: hand this the full roster while
+  // the screen shows a filtered one and the questions stop being about the list they reorder.
   if (roster.length < 2) return [];
 
   const alreadyAsked = new Set(readNeeds(query).map((need) => facetKey(need.facet)));
@@ -170,6 +213,15 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
 export function facetLabel(key: string): string {
   const care = CARE_AREA_LABELS.find((area) => `care:${area.id}` === key);
   if (care) return care.label;
+  const preference = PREF_LABELS[key];
+  if (preference) return preference;
   const trait = key.startsWith("manner:") ? key.slice("manner:".length) : null;
   return trait && trait in EI_QUALITIES ? EI_QUALITIES[trait as keyof typeof EI_QUALITIES].label : key;
 }
+
+/** Console-facing names for the preference facets, matching the lexicon's own labels. */
+const PREF_LABELS: Record<string, string> = {
+  "pref:woman-gp": "A woman GP",
+  "pref:telehealth-first": "By phone or telehealth",
+  "pref:bulk-billing": "Bulk billing",
+};

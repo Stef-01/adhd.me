@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ClinicianJoinForm } from "./join-form";
 
 export const metadata: Metadata = {
-  title: "Join the directory | ADHD.ME",
+  title: "Join the directory",
   description:
     "For GPs who have completed the NSW training to carry ADHD care. Apply to be listed in the ADHD.ME directory.",
 };

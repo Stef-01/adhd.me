@@ -1,6 +1,9 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
-import { facetKey, readNeeds, type NeedSignal } from "@/matching/needs";
+import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal } from "@/matching/needs";
+// Value import of copy tables only. `clarify.ts` imports nothing but TYPES from this module, so
+// this direction is the one that keeps the graph acyclic at runtime.
+import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "@/matching/clarify";
 import { type EIQuality } from "./emotional-fit";
 
 /**
@@ -103,6 +106,15 @@ export type Clinician = {
   experience: string[];
   languages: string[];
   careAreas: CareArea[];
+  /**
+   * Areas declared "sometimes" rather than "often" — the interview's three-state answer
+   * (docs/MATCHING-PLAN.md §5), made representable by O2/F1. Breadth has to cost something:
+   * a sometimes-declared area answers an ask at half its weight, so ticking every box in the
+   * interview is no longer the dominant strategy. Absent means the profile predates the
+   * three-state interview and every declaration is read as "often" — which is exactly what
+   * those interviews asked.
+   */
+  careAreasSometimes?: CareArea[];
   /**
    * How this clinician works, declared by them, closed vocabulary (`MannerTrait`).
    *
@@ -270,26 +282,28 @@ export const clinicians: Clinician[] = [
  * inference, which W83 refused internally and which is worse in public. These weights only
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
-/**
- * The score the finder actually RANKS and GRADES on: every reason it would show, weighted.
- *
- * THIS IS `matchEvidence` SUMMED, and it has to be. `scoreAgainst(readNeeds(query))` scores only the
- * closed lexicon, and language is NOT in that lexicon — it is per-clinician data read by
- * `languageAsked` and folded into `matchEvidence`. So ranking on readNeeds alone printed "speaks
- * Hindi" as a match pill while the order ignored it entirely: a reason shown but not counted, the
- * mirror image of the blind spot `matchEvidence` was built to close. Ranking on the evidence keeps
- * both halves honest — nothing is ranked that is not shown, and nothing is shown that is not ranked.
- */
-export function evidenceScore(clinician: Clinician, query: string): number {
-  let total = 0;
-  for (const need of matchEvidence(clinician, query)) total += need.weight;
-  return total;
-}
-
-export function rankClinicians(query: string): Clinician[] {
-  return [...clinicians].sort((a, b) => {
-    const byScore = evidenceScore(b, query) - evidenceScore(a, query);
+export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians): Clinician[] {
+  const needs = needsFor(query, roster);
+  return [...roster].sort((a, b) => {
+    const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
     if (byScore !== 0) return byScore;
+
+    /**
+     * WITHIN EQUAL FIT, SOMEBODY WHO CAN ACTUALLY SEE YOU COMES FIRST (O4/F5).
+     *
+     * The one structural lesson of every reciprocal-recommendation system since RECON: in a
+     * two-sided market, ranking by one side's preference alone fails both sides. This tree
+     * refuses learned mutual preference (C3/C4, G7), but the clinician side of reciprocity here
+     * is not a model — it is DECLARED CAPACITY, already on the record and already filterable in
+     * the directory, and until O4 invisible to the finder: a perfect-fit GP whose books were
+     * closed ranked first with nothing saying the match was unactionable. Closed books never
+     * outrank open ones at equal fit — and never cost a single point of fit either, because a
+     * reader may want exactly that GP and their waitlist; the card says why they are still
+     * shown (`CLOSED_BOOKS_COPY`). Position from an operational fact, sayable in one sentence.
+     */
+    const closed = (clinician: Clinician) => (clinician.acceptingNewPatients ? 0 : 1);
+    const byCapacity = closed(a) - closed(b);
+    if (byCapacity !== 0) return byCapacity;
 
     /**
      * A TIE MUST NEVER BE BROKEN IN THE FOUNDER'S FAVOUR, AND UNTIL W221 IT SILENTLY WAS.
@@ -321,26 +335,42 @@ export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[])
   let total = 0;
   for (const need of needs) {
     if (!answers(clinician, need)) continue;
-    total += need.weight;
+    // Each contribution is rounded EXACTLY as `matchEvidence` rounds it, then the total is
+    // rounded again — the same arithmetic in the same order, so the audit's sum of evidence
+    // can never differ from the score by a thousandth (Codex review on PR #1 constructed the
+    // counterexample: per-item rounding on one path, total-only rounding on the other).
+    total += roundScore(need.weight * declarationFactor(clinician, need));
   }
-  return total;
+  // Rounded so equal-by-arithmetic totals are equal-by-===; see `roundScore`.
+  return roundScore(total);
+}
+
+/**
+ * What one declared answer is worth: everything for "often", half for "sometimes".
+ *
+ * NOT A PER-CLINICIAN COEFFICIENT. C2 forbids an engineered number keyed to a named person;
+ * this is the clinician's OWN interview answer given its stated price, the same way the
+ * declaration itself is their own datum. Half is a judgement, and a sayable one: "they see
+ * this sometimes rather than often" is a sentence, where a tuned 0.63 would not be.
+ */
+function declarationFactor(clinician: Clinician, need: NeedSignal): number {
+  const facet = need.facet;
+  if (facet.kind !== "care") return 1;
+  if (clinician.careAreas.includes(facet.area)) return 1;
+  return (clinician.careAreasSometimes ?? []).includes(facet.area) ? 0.5 : 1;
 }
 
 /** Whether this clinician answers one stated need. Declared facets only. */
 function answers(clinician: Clinician, need: NeedSignal): boolean {
   const facet = need.facet;
-  if (facet.kind === "care") return clinician.careAreas.includes(facet.area);
-  if (facet.kind === "manner") return clinician.manner.includes(facet.trait);
-  switch (facet.preference) {
-    case "woman-gp":
-      return clinician.gender === "woman";
-    case "telehealth-first":
-      return clinician.telehealthFirstAppointment === true;
-    case "longer-appointment":
-      return clinician.manner.includes("unhurried");
-    case "bulk-billing":
-      return clinician.practicalSignals.some((signal) => /bulk/i.test(signal));
+  if (facet.kind === "care") {
+    return clinician.careAreas.includes(facet.area) || (clinician.careAreasSometimes ?? []).includes(facet.area);
   }
+  if (facet.kind === "manner") return clinician.manner.includes(facet.trait);
+  if (facet.kind === "language") {
+    return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase());
+  }
+  return holdsPreference(clinician, facet.preference);
 }
 
 /**
@@ -356,7 +386,11 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
  * and do not let the reader conclude it is about them.
  */
 export function unservedAsks(query: string): string[] {
-  const declared = new Set(clinicians.flatMap((clinician) => clinician.careAreas));
+  // A "sometimes" declaration is still a declaration (O2): a clinician the ranking scores for
+  // an area must not appear under "no GP listed today says they do this" on the same screen.
+  const declared = new Set(
+    clinicians.flatMap((clinician) => [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]),
+  );
   return readNeeds(query)
     .filter((need) => need.facet.kind === "care" && !declared.has(need.facet.area))
     .map((need) => need.label);
@@ -385,12 +419,38 @@ export function unservedAsks(query: string): string[] {
  */
 export type MatchQuality = "informed" | "tied" | "unmatched";
 
-export function matchQuality(query: string): MatchQuality {
-  // Graded on the SAME evidence the finder ranks and shows — language included — so a query that
-  // reaches nobody's lexicon facet but names a language a GP speaks is a real match, not "unmatched".
-  const scores = clinicians.map((clinician) => evidenceScore(clinician, query));
+export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
+  const needs = needsFor(query, roster);
+  if (needs.length === 0) return "unmatched";
+  const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
+  // Main's W221 rebuild carried one improvement the overhaul had not made, kept through the
+  // merge: words that were READ but that nobody on the roster answers are not a tie — "both of
+  // these answer what you asked for equally well" would be false. It is an unmatched listing,
+  // and `unservedAsks` names whose gap it is.
   if (scores.every((score) => score === 0)) return "unmatched";
   return new Set(scores).size > 1 ? "informed" : "tied";
+}
+
+/**
+ * The sentences beside a closed-books listing (O4/F5). Shown, not filtered: hiding a clinician
+ * whose books are closed would decide for the reader that the waitlist is not worth their time,
+ * and quietly ranking them first without this sentence is the dating-app anti-pattern of
+ * recommending a profile that never swipes back. A fact, one sentence, inside W213's floor.
+ *
+ * TWO SENTENCES, NOT ONE, because "shown because they fit what you asked" is only true when a
+ * fit was actually computed. On an unmatched query — or a zero-score row — no such fit exists,
+ * and the fitting sentence would be the finder explaining a ranking that never happened, the
+ * exact defect O1 removed. The caller picks by whether the clinician has match evidence.
+ */
+export const CLOSED_BOOKS_COPY =
+  "Their books are closed to new patients right now — shown because they fit what you asked. The practice can say when that changes.";
+export const CLOSED_BOOKS_NEUTRAL_COPY =
+  "Their books are closed to new patients right now. The practice can say when that changes.";
+
+/** The right closed-books sentence for this clinician and query. Empty when books are open. */
+export function closedBooksNote(clinician: Clinician, query: string): string | null {
+  if (clinician.acceptingNewPatients) return null;
+  return matchEvidence(clinician, query).length > 0 ? CLOSED_BOOKS_COPY : CLOSED_BOOKS_NEUTRAL_COPY;
 }
 
 /** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
@@ -402,6 +462,135 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
 };
 
 /**
+ * The ranked roster, grouped where the scores are exactly equal.
+ *
+ * WHY BANDS EXIST (the O3/F3 repair). `matchQuality` is roster-global: any two differing scores
+ * read `informed`, so "one GP scored 24 and fifteen scored 0" would dress fifteen arbitrary
+ * file-order positions in a banner that only disclaims full ties. The honesty the quality flag
+ * bought at roster level has to exist at every boundary the reader acts on: within a band the
+ * order is NOT a ranking, and a surface can now say so exactly where it is true rather than
+ * only when it is true everywhere. Same closed-vocabulary posture as everything else — a band
+ * is a fact about equal numbers, not an estimate.
+ */
+export type RankBand = { score: number; clinicians: Clinician[] };
+
+export function rankBands(query: string, roster: readonly Clinician[] = clinicians): RankBand[] {
+  const needs = needsFor(query, roster);
+  const bands: RankBand[] = [];
+  for (const clinician of rankClinicians(query, roster)) {
+    const score = scoreAgainst(clinician, needs);
+    const last = bands.at(-1);
+    if (last && last.score === score) last.clinicians.push(clinician);
+    else bands.push({ score, clinicians: [clinician] });
+  }
+  return bands;
+}
+
+/**
+ * The sentence for a top-of-list tie that the roster-global verdict cannot see.
+ *
+ * `informed` with a tied first band is the case F3 found: an order exists somewhere in the
+ * list, just not at the boundary the reader acts on first. Only the count is interpolated —
+ * a numeral is arithmetic, not authored copy, the same rule the audit's "declares N of M" uses.
+ */
+export function topTieNote(query: string, roster: readonly Clinician[] = clinicians): string | null {
+  if (matchQuality(query, roster) !== "informed") return null;
+  const top = rankBands(query, roster)[0];
+  if (!top || top.clinicians.length < 2) return null;
+  return `The first ${top.clinicians.length} all answer what you asked equally well, so the order between them is not a ranking — read them as a group.`;
+}
+
+/**
+ * Everything the reader asked for that this roster can be compared on: the lexicon's closed
+ * vocabulary plus the languages the roster itself declares.
+ *
+ * THIS IS THE ONE ENTRY POINT (the O1/F2 repair). Until the overhaul, language signals were
+ * appended to `matchEvidence` alone — shown on the card, invisible to `scoreAgainst` and
+ * `matchQuality` — so somebody who asked only for a Tamil-speaking GP was told "this is
+ * everyone we list rather than an order" beside a card explaining a ranking that never
+ * happened. The ranking, the quality verdict, the explanation and the console audit now all
+ * read this function, so none of them can see a signal the others cannot.
+ */
+export function needsFor(query: string, roster: readonly Clinician[] = clinicians): NeedSignal[] {
+  // The language vocabulary and the rarity statistics both come from the roster ACTUALLY being
+  // ranked — the O8 review caught the first draft reading the global roster here while every
+  // ranking entry point accepted an injectable one, which scored a custom roster against a
+  // different roster's statistics (clarify.ts states the rule: the list the reader is looking at).
+  const spoken = [...new Set(roster.flatMap((c) => c.languages))];
+  const signals = [...readNeeds(query), ...languageNeeds(query, spoken)];
+  const said = query.toLowerCase();
+  return signals.map((need) => {
+    const answer = CLARIFIER_ANSWERS.get(facetKey(need.facet));
+    const confirmed = answer !== undefined && said.includes(answer);
+    return {
+      ...need,
+      weight: roundScore(
+        need.weight *
+          (confirmed ? STATED_IMPORTANCE_LIFT : 1) *
+          separation(roster.filter((c) => answers(c, need)).length, roster.length),
+      ),
+    };
+  });
+}
+
+/**
+ * Scores snap to three decimal places wherever one is produced.
+ *
+ * WHY (O8 review): the separation factor puts `(N − heldBy + 1) / N` into every weight, which
+ * is not exactly representable in floating point once N is not a power of two — so two
+ * mathematically equal totals could compare unequal, and a band boundary or an "informed"
+ * verdict would then be dressing float dust as preference information. The smallest real
+ * difference the arithmetic can produce is far above a thousandth; anything below it is noise,
+ * rounded away at the source so every comparison downstream stays a plain `===`.
+ */
+export function roundScore(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
+/**
+ * Every clarifier answer sentence, keyed by the facet it confirms.
+ *
+ * WHY SUBSTRING DETECTION IS FINE HERE AND WAS NOT IN W222: these are OUR OWN fixed sentences,
+ * appended verbatim by the clarifier UI ("tapping appends the answer in the reader's own
+ * request") — this is marker detection on constants, not an attempt to read a person's
+ * language. A reader who types the sentence unprompted has still said it, and the lift is
+ * still their own statement being taken at its word.
+ */
+const CLARIFIER_ANSWERS: ReadonlyMap<string, string> = new Map(
+  Object.entries({ ...CARE_PROMPTS, ...MANNER_PROMPTS, ...PREF_PROMPTS }).map(([key, copy]) => [
+    key,
+    copy.answer.toLowerCase(),
+  ]),
+);
+
+/**
+ * OkCupid's deepest design insight, collected conversationally (O5/F6): importance is the
+ * READER'S datum, not the platform's. The lexicon's 30/20/12 weights guess how much any asker
+ * cares about titration vs sleep — the same guess for everyone. An answered clarifier is the
+ * reader SAYING a facet matters, so a confirmed facet carries half again its lexicon weight:
+ * "you told us this was the main thing" is a sentence about their own words, inside the floor.
+ * One-and-a-half is a judgement, and a sayable one — more than a passing mention, not a veto.
+ */
+const STATED_IMPORTANCE_LIFT = 1.5;
+
+/**
+ * How much of a facet's weight survives, given how many of the roster hold it (the O2/F1
+ * rarity discount — OkCupid's normalisation and IR's IDF, reduced to a sentence).
+ *
+ * `(N − heldBy + 1) / N`, capped at 1. A facet nobody else declares keeps its whole weight; a
+ * facet the entire roster declares keeps 1/N of it — it is still true of everyone shown, so it
+ * still counts, but it cannot decide an order between people it does not separate. The quantity
+ * is the same `heldBy / roster` the clarifier already ranks its questions by, and it is sayable
+ * within W213's floor: "declared by most of the GPs listed, so it separates them less" or "few
+ * of the GPs listed say they do this". Without this, `scoreAgainst` is monotone in declarations
+ * and ticking every interview box is the dominant strategy the day the roster self-declares.
+ */
+function separation(heldBy: number, rosterSize: number): number {
+  if (rosterSize === 0) return 1;
+  return Math.min(1, (rosterSize - heldBy + 1) / rosterSize);
+}
+
+/**
  * The needs this clinician actually answers, in the reader's asking order.
  *
  * ONE COMPUTATION, TWO CONSUMERS. The ranking and the explanation both read this, so the page
@@ -409,36 +598,17 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  * separate lexicons used to allow. A language the reader did not ask for is not in here at all,
  * because it was never a `NeedSignal`.
  */
-export function matchEvidence(clinician: Clinician, query: string): NeedSignal[] {
-  return [...readNeeds(query).filter((need) => answers(clinician, need)), ...languageAsked(clinician, query)];
-}
-
-/**
- * A language the reader asked for that this clinician speaks.
- *
- * WHY THIS IS NOT IN THE LEXICON. Every other facet is a fixed vocabulary shared by all
- * clinicians, so it can live in `needs.ts` as a static table. Languages are not: they are
- * per-clinician DATA, and a static lexicon would have to enumerate every language any clinician
- * might ever speak, which is a list that goes stale the day somebody who speaks Tamil joins.
- * Reading it off the clinician's own declaration keeps the property that matters — no
- * per-clinician WEIGHT anywhere — while letting the vocabulary grow with the roster.
- *
- * SURFACED ONLY WHEN ASKED FOR, which is the older rule this preserves. English is excluded
- * because "speaks English" is not a match reason in Australia; it is the assumption. And a
- * clinician who speaks Hindi is not shown as a Hindi match to somebody who never mentioned it —
- * telling a reader their GP speaks a language they did not ask about is a guess about who they
- * are, dressed up as a feature.
- */
-function languageAsked(clinician: Clinician, query: string): NeedSignal[] {
-  const words = query.toLowerCase();
-  return clinician.languages
-    .filter((language) => language !== "English" && words.includes(language.toLowerCase()))
-    .map((language) => ({
-      facet: { kind: "manner" as const, trait: "culturally_attuned" as const },
-      matched: language.toLowerCase(),
-      label: `${language}-speaking`,
-      weight: 30,
-    }));
+export function matchEvidence(
+  clinician: Clinician,
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+): NeedSignal[] {
+  return needsFor(query, roster)
+    .filter((need) => answers(clinician, need))
+    // The weight the card's evidence carries is the weight this clinician's answer actually
+    // earned - halved where they declared "sometimes" - so the audit and the unity test can
+    // hold score === sum of evidence with no carve-outs.
+    .map((need) => ({ ...need, weight: roundScore(need.weight * declarationFactor(clinician, need)) }));
 }
 
 /**
@@ -447,42 +617,74 @@ function languageAsked(clinician: Clinician, query: string): NeedSignal[] {
  * TWO-STAGE ON PURPOSE. Distance does not outrank fit: somebody who asked for a Tamil-speaking GP
  * is not helped by the nearest one who does not speak Tamil, and a directory that sorted purely by
  * kilometres would quietly undo everything the preference weights express. So the preference order
- * is computed first and distance only reorders WITHIN a band of comparable fit.
+ * is computed first and distance only reorders WITHIN comparable fit.
+ *
+ * COMPARABLE FIT IS AN EXACT SCORE TIE, NOT A NUMBER OF LIST POSITIONS (the O3/F4 repair). The
+ * old band was four RANK positions — but rank positions inside a score tie are arbitrary (stable
+ * sort = file order), so on an unmatched query with an origin the nearest clinician at file
+ * position 13 could not rise past a band that was protecting nothing but file order. Inside an
+ * exact tie no preference information exists, so distance — a fact the reader gave us — is the
+ * only honest sort; across ANY real score difference, the stated preference stands, however
+ * small the gap. No threshold, no judgement call: the predicate is "did the preferences
+ * separate them at all". An unmatched query with an origin is now fully distance-sorted, which
+ * is exactly what the reader asked for. This is also how the dating platforms treat distance:
+ * a hard input within preference-comparable candidates, never a post-hoc shuffle bounded by
+ * list position.
  *
  * Clinicians whose suburb is not in the gazetteer keep their preference position rather than
  * sinking. An unknown location is a gap in our data, and penalising a practice for it would be
  * making them pay for our missing row.
  */
-export function rankCliniciansNear(query: string, origin: SuburbPoint | null): Clinician[] {
-  const byFit = rankClinicians(query);
+export function rankCliniciansNear(
+  query: string,
+  origin: SuburbPoint | null,
+  roster: readonly Clinician[] = clinicians,
+): Clinician[] {
+  const byFit = rankClinicians(query, roster);
   if (!origin) return byFit;
 
-  const fitRank = new Map(byFit.map((c, i) => [c.id, i]));
+  const needs = needsFor(query, roster);
   const km = (c: Clinician) => {
     const point = resolvePlace(c.suburb);
     return point ? distanceKm(origin, point) : null;
   };
 
-  return [...byFit].sort((a, b) => {
-    const byPreference = fitRank.get(a.id)! - fitRank.get(b.id)!;
-    // Somebody you do not travel to is equally near from everywhere, so distance has nothing to
-    // say about them and their stated-preference position stands.
-    if (a.telehealthFirstAppointment || b.telehealthFirstAppointment) return byPreference;
-    if (Math.abs(byPreference) > COMPARABLE_FIT_BAND) return byPreference;
-    const da = km(a);
-    const db = km(b);
-    if (da === null || db === null) return byPreference;
-    return da - db;
-  });
-}
+  /**
+   * NOT A COMPARATOR, ON PURPOSE (O8 review). The pairwise version was intransitive: a
+   * telehealth clinician compared by fit order against neighbours who compared by distance
+   * against each other, which is a cycle the moment those two orders disagree — and a sort
+   * over a cyclic comparator renders whatever the engine's pivot choices happen to produce.
+   * So the reorder is structural instead: within each (score, capacity) tie, the clinicians
+   * with a real distance swap among the POSITIONS they already occupy, sorted by kilometres;
+   * telehealth-first and unknown-suburb clinicians keep their exact fit position, because
+   * somebody you do not travel to is equally near from everywhere, and an unknown location is
+   * our missing row, not their penalty. Total, deterministic, and every guarantee holds by
+   * construction: distance never crosses a score or capacity boundary, and equal kilometres
+   * keep the fit order (which carries the founder-behind rule).
+   */
+  const out = [...byFit];
+  const tieKey = (c: Clinician) => `${scoreAgainst(c, needs)}|${c.acceptingNewPatients ? 0 : 1}`;
+  let start = 0;
+  while (start < out.length) {
+    let end = start;
+    while (end + 1 < out.length && tieKey(out[end + 1]!) === tieKey(out[start]!)) end += 1;
 
-/**
- * How close in the preference order two clinicians must be before distance decides between them.
- *
- * Four is a judgement, and a small one on a sixteen-entry roster: it lets the top handful reorder
- * by geography while keeping somebody ranked 12th on fit from jumping to first for being nearby.
- */
-const COMPARABLE_FIT_BAND = 4;
+    const movable: number[] = [];
+    for (let i = start; i <= end; i += 1) {
+      const c = out[i]!;
+      if (!c.telehealthFirstAppointment && km(c) !== null) movable.push(i);
+    }
+    const nearestFirst = movable
+      .map((i) => out[i]!)
+      .sort((a, b) => km(a)! - km(b)!);
+    movable.forEach((position, j) => {
+      out[position] = nearestFirst[j]!;
+    });
+
+    start = end + 1;
+  }
+  return out;
+}
 
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
 export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {

@@ -338,3 +338,30 @@ what. That is one sitting, and the output is durable and auditable.
 **What it does not yet do:** publish. `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6,
 and nothing in this pipeline can set a published status — there is no such status to set. What the
 pipeline produces is the evidence that gate would be opened on.
+
+### The overhaul against the field (O1–O8, 2026-08-18)
+
+`docs/MATCHING-APPRAISAL.md` held this pipeline against the published matching industry —
+dating apps, the reciprocal-recommendation literature, the NRMP — and its ten findings were
+executed as `docs/MATCHING-OVERHAUL-PLAN.md`, all units done, on the appraisal's branch.
+The delta table in the appraisal's §7 maps every finding to its disposition and commit. What
+changed in this plan's terms:
+
+| Unit | What it does | Where |
+|---|---|---|
+| O1 | Languages are scored, not just printed: one `needsFor()` entry point for ranking, quality, evidence and audit; the substring language matcher is gone | `src/matching/needs.ts` (`languageNeeds`), `src/demo/clinicians.ts` |
+| O2 | Breadth has a price: rarity discount over roster declarations, three-state declarations (`careAreasSometimes`, half weight), breadth visible in the console | `src/demo/clinicians.ts`, `src/onboarding/background.ts` |
+| O3 | Ties visible at every boundary: `rankBands`, `topTieNote`, geo comparability = exact score tie | `src/demo/clinicians.ts`, `app/care-finder.tsx` |
+| O4 | Declared capacity breaks ties and says so on the card (`CLOSED_BOOKS_COPY`) | `src/demo/clinicians.ts`, `app/care-finder.tsx` |
+| O5 | Preference clarifiers (woman GP / telehealth / bulk billing) and the stated-importance lift — W225's question set finally covers what separates rosters hardest | `src/matching/clarify.ts`, `src/matching/needs.ts` (`holdsPreference`) |
+| O6 | The W214 greedy's optimality gap is measured against a test-only maximum-matching oracle and pinned; MATCH-2 tripwires patient-facing availability | `src/matching/match.oracle.test.ts`, `src/quality/latent-findings.ts` |
+| O7 | The reader pinned against itself — self-reach and clarifier-answer pins (which caught three live lexicon defects), explicit cue claiming, a clause boundary no cue can cross | `src/matching/read.ts`, `src/matching/needs.ts`, `src/matching/reach.test.ts` |
+| O8 | The review gate: /code-review (8 findings, fixed and pinned) and /security-review (none) over the whole diff | throughout |
+
+**What this changed about §2's options:** nothing structural — option B remains the shipped
+architecture, and the appraisal's verdict was that B is RECON's content-based core with an
+explanation layer the field does not have. The overhaul closed the gaps *within* B (one
+pipeline, normalisation, tie honesty, reciprocity-as-capacity, user-stated importance) rather
+than reaching for C/D/E/F, and affirmed the refusals: Tinder retired the Elo that C2/W83
+refused, and the fairness literature now recommends against the collaborative filtering that
+option F declined. Option C's trigger is unchanged: measured synonymy misses, not fashion.

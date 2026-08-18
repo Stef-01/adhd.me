@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { clarifiers } from "./clarify";
+import { clarifiers, PREF_PROMPTS } from "./clarify";
 import { clinicians, matchQuality, rankClinicians } from "@/demo/clinicians";
-import { readNeeds } from "./needs";
+import { facetKey, readNeeds } from "./needs";
 
 describe("W225 a question only earns its place if the answer changes the order", () => {
   /** THE PROPERTY THE WHOLE FILE EXISTS FOR. Anything else is data collection from somebody who
@@ -75,5 +75,36 @@ describe("W225 the answer is the reader's sentence, not a facet name", () => {
     // At least two different clinicians come first across the offered questions, or the questions
     // are not actually discriminating between them.
     expect(new Set(orders).size).toBeGreaterThan(1);
+  });
+});
+
+describe("O5 preference clarifiers (F7)", () => {
+  /**
+   * THE DEFECT THIS PINS. `clarifiers()` built its candidates from care ∪ manner, so the
+   * questions with the highest roster variance — woman GP, telehealth, bulk billing — were
+   * excluded by construction, against the module's own stated principle.
+   */
+  it("asks about a preference the roster splits on", () => {
+    // Only Dr Saxena takes the first appointment by phone, so the question can reorder.
+    const keys = clarifiers("hello", clinicians, 20).map((c) => c.facetKey);
+    expect(keys).toContain("pref:telehealth-first");
+  });
+
+  it("never asks about a preference nobody on the roster holds", () => {
+    // No woman is listed: the question would set up a disappointment the roster cannot answer.
+    const keys = clarifiers("hello", clinicians, 20).map((c) => c.facetKey);
+    expect(keys).not.toContain("pref:woman-gp");
+  });
+
+  it("every preference answer re-reads to the facet its question is about", () => {
+    for (const [key, copy] of Object.entries(PREF_PROMPTS)) {
+      const reached = readNeeds(copy.answer).map((need) => facetKey(need.facet));
+      expect(reached, `${copy.answer} does not reach ${key}`).toContain(key);
+    }
+  });
+
+  it("does not ask what the reader already said", () => {
+    const keys = clarifiers("I want the first appointment by phone", clinicians, 20).map((c) => c.facetKey);
+    expect(keys).not.toContain("pref:telehealth-first");
   });
 });

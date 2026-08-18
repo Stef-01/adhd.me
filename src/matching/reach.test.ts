@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, evidenceScore, matchQuality, unservedAsks } from "@/demo/clinicians";
-import { readNeeds } from "./needs";
+import { clinicians, matchQuality, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
+import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
+import { stem } from "./read";
+import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
 /**
  * W221 follow-up: the lexicon's reach, measured and pinned.
@@ -116,9 +118,10 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
   it("never presents an unearned order as a ranking", () => {
     for (const query of CORPUS) {
       const quality = matchQuality(query);
-      // Validated on evidenceScore — the SAME score matchQuality grades on, language included — so
-      // an order earned only on a spoken language is not mis-read here as unearned.
-      const scores = clinicians.map((clinician) => evidenceScore(clinician, query));
+      // Validated on the SAME score matchQuality grades on — needsFor includes language (O1),
+      // so an order earned only on a spoken language is not mis-read here as unearned.
+      const needs = needsFor(query);
+      const scores = clinicians.map((clinician) => scoreAgainst(clinician, needs));
 
       if (quality === "informed") {
         expect(new Set(scores).size, `${query} is "informed" but every clinician scores the same`)
@@ -149,5 +152,140 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     const asks = unservedAsks("I need trauma-informed care, I have a difficult childhood");
     expect(asks.length).toBeGreaterThan(0);
     expect(unservedAsks("titration and a longer appointment")).toEqual([]);
+  });
+});
+
+describe("O7 every clarifier answer keeps reaching its facet (F10)", () => {
+  /**
+   * Clarifier answers are re-read by the same `readNeeds` as anything else, so a lexicon edit
+   * could orphan a prompt invisibly: the question still renders, the tap still appends, and the
+   * appended sentence reaches nothing. Every answer is pinned to its facet here, which makes the
+   * prompt tables part of the reach ratchet.
+   */
+  it("re-reads every prompt table answer to the facet its question is about", () => {
+    const tables = { ...CARE_PROMPTS, ...MANNER_PROMPTS, ...PREF_PROMPTS };
+    for (const [key, copy] of Object.entries(tables)) {
+      const reachedKeys = readNeeds(copy.answer).map((need) => facetKey(need.facet));
+      expect(reachedKeys, `"${copy.answer}" no longer reaches ${key}`).toContain(key);
+    }
+  });
+});
+
+describe("O7 the lexicon reaches itself (F10)", () => {
+  /**
+   * The bespoke stemmer is the right call versus Porter for this vocabulary size — but pairs
+   * like "assessed"→"asses" vs "assessment"→"assessment" mean cue and word can share a root and
+   * still miss. This pins every phrase in the lexicon as reachable through the full pipeline,
+   * so a stemmer or tokeniser edit that unhooks a cue from its own facet fails here, by name.
+   */
+  it("reads every lexicon phrase back to its own facet", () => {
+    for (const { phrase, key } of LEXICON_CUES) {
+      const reachedKeys = readNeeds(phrase).map((need) => facetKey(need.facet));
+      expect(reachedKeys, `lexicon phrase "${phrase}" no longer reaches ${key}`).toContain(key);
+    }
+  });
+
+  it("records the stemmer's known conflation edge so it is not rediscovered", () => {
+    // "assessed" and "assessment" share a root and do NOT share a stem. A cue written with one
+    // inflection will not hear the other; the lexicon must carry both spellings where it cares.
+    expect(stem("assessed")).toBe("asses");
+    expect(stem("assessment")).toBe("assessment");
+    expect(stem("assessed")).not.toBe(stem("assessment"));
+  });
+});
+
+describe("O7 a cue cannot cross a full stop (F10)", () => {
+  it("refuses the two-token bridge across a sentence boundary", () => {
+    // Both content words present, two statements apart. Before the boundary marker this was
+    // representable: sentence punctuation was deleted, so a two-token cue like [wear, off] saw
+    // its halves as adjacent across the full stop. (Reworded in the W221-scope merge: the
+    // original pinned the retired cardiac facet's [heart, safe]; the property is the reader's,
+    // not any one facet's.)
+    expect(readNeeds("my jumper is wearing. off to the shops after this").map((n) => n.label))
+      .not.toContain("Titration and dose review");
+    // And the same words inside ONE clause still match.
+    expect(readNeeds("my dose is wearing off by lunch").map((n) => n.label))
+      .toContain("Titration and dose review");
+  });
+});
+
+describe("O13 every manner facet is reachable by its plain name", () => {
+  /**
+   * THE FAILURE THIS PINS, verbatim from production: "Kind Hindi speaking and non judgemental"
+   * read as nothing but the language — the non_judgmental facet's own NAME was unreadable,
+   * because the cue lists were verb-phrase-heavy and the stemmer cannot bridge
+   * "judgemental"→"judg". O9's edge suite never asked the basic question this table asks:
+   * can a person request each way-of-working by the word on its label?
+   *
+   * Deliberately absent: "kind" (survives as one token and fires on "what kind of doctor"),
+   * "patient" as an adjective (this is a health product), "takes their time" (the [take, time]
+   * shape W223 removed for cause). Precision refusals, recorded so they are not re-litigated.
+   */
+  const PLAIN_NAMES: ReadonlyArray<[string, string]> = [
+    ["manner:non_judgmental", "non judgemental"],
+    ["manner:non_judgmental", "non-judgmental"],
+    ["manner:non_judgmental", "not judgemental please"],
+    ["manner:non_judgmental", "she was so judgmental about it"],
+    ["manner:non_judgmental", "without judgement"],
+    ["manner:unhurried", "unhurried"],
+    ["manner:unhurried", "not rushed"],
+    ["manner:structured", "structured"],
+    ["manner:structured", "methodical"],
+    ["manner:collaborative", "a collaborative GP"],
+    ["manner:sense_making", "helps me make sense of it"],
+    ["manner:steadying", "calm and gentle"],
+    ["manner:attuned", "takes me seriously"],
+    ["manner:attuned", "attentive"],
+    ["manner:culturally_attuned", "culturally sensitive"],
+  ];
+
+  it.each(PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
+    expect(readNeeds(phrase).map((n) => facetKey(n.facet))).toContain(key);
+  });
+});
+
+describe("O13 the query that failed in production, end to end", () => {
+  it("reads both halves of 'Kind Hindi speaking and non judgemental' and earns the order", () => {
+    const query = "Kind Hindi speaking and non judgemental";
+    const keys = readNeeds(query).map((n) => facetKey(n.facet));
+    expect(keys).toContain("manner:non_judgmental");
+    // Hindi is spoken by both GPs (an honest tie on its own); non_judgmental is declared by
+    // one — so the whole ask now separates the roster and the order is earned, not disclaimed.
+    expect(matchQuality(query)).toBe("informed");
+    const first = rankClinicians(query)[0]!;
+    expect(first.manner).toContain("non_judgmental");
+  });
+});
+
+describe("O17 every care area is reachable by its plain name", () => {
+  /**
+   * The O13 control, extended to the care half after the W221-scope merge brought a new
+   * twelve-area vocabulary: every area must be reachable both by its clinical word and by the
+   * words a person actually types. A probe on merge day found 27/29 already reached — and the
+   * two that missed were on the facet whose own doc comment calls them "what people describe
+   * first": "emotional dysregulation" (the stemmer cannot bridge dysregulation→regulation) and
+   * "big emotions". Fixed, and the whole table pinned so the next re-scope fails by name.
+   */
+  const CARE_PLAIN_NAMES: ReadonlyArray<[string, string]> = [
+    ["care:adhd-assessment", "an ADHD assessment"],
+    ["care:child-adolescent-adhd", "this is for my teenager"],
+    ["care:titration", "get the dose right"],
+    ["care:shared-care", "shared care with my psychiatrist"],
+    ["care:depression", "low mood"],
+    ["care:depression", "depression"],
+    ["care:anxiety", "anxiety"],
+    ["care:anxiety", "panic attacks"],
+    ["care:trauma-informed", "trauma"],
+    ["care:complex-mental-health", "bipolar"],
+    ["care:autism-adhd", "I think I am AuDHD"],
+    ["care:substance-history", "honest about drinking"],
+    ["care:emotional-regulation", "rejection sensitivity"],
+    ["care:emotional-regulation", "emotional dysregulation"],
+    ["care:emotional-regulation", "my emotions take over"],
+    ["care:non-medication", "not just medication"],
+  ];
+
+  it.each(CARE_PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
+    expect(readNeeds(phrase).map((n) => facetKey(n.facet))).toContain(key);
   });
 });

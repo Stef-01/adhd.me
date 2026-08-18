@@ -20,9 +20,12 @@ import {
   distanceTo,
   getPersonalizedMatch,
   matchQuality,
+  rankBands,
   rankCliniciansNear,
   rankClinicians,
+  topTieNote,
   unservedAsks,
+  closedBooksNote,
   MATCH_QUALITY_COPY,
   type Clinician,
 } from "@/demo/clinicians";
@@ -32,9 +35,9 @@ import { CoverageMap } from "./coverage-map";
 import {
   SPEECH_DISCLOSURE,
   SPEECH_ERROR_COPY,
+  SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
-  type SpeechError,
   type SpeechSession,
 } from "@/voice/speech";
 
@@ -300,7 +303,7 @@ export function CareFinder() {
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
   const [heard, setHeard] = useState("");
-  const [speechError, setSpeechError] = useState<SpeechError | null>(null);
+  const [speechMessage, setSpeechMessage] = useState<string | null>(null);
   const speech = useRef<SpeechSession | null>(null);
 
   const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
@@ -350,18 +353,47 @@ export function CareFinder() {
     () => matches.map((item) => getPersonalizedMatch(item, request).signals),
     [matches, request],
   );
-  const shown = showAll ? matches : matches.slice(0, 5);
+  /**
+   * ONE PIPELINE RUN PER RENDER (O8 review). These four were each computed inline in the JSX,
+   * some more than once, and every call re-runs the full lexicon read over the request — a
+   * dozen redundant scans per keystroke once the geo field re-renders the results stage.
+   */
+  const quality = useMemo(() => matchQuality(request), [request]);
+  const tieNote = useMemo(() => topTieNote(request), [request]);
+  const clarifierList = useMemo(() => clarifiers(request, matches), [request, matches]);
+  const unserved = useMemo(() => unservedAsks(request), [request]);
+
+  /**
+   * The fold never cuts a tied band (O8 review): topTieNote says "the first N answered equally
+   * well — read them as a group", and slicing at five while the tied group is eight would tell
+   * the reader to read three rows they cannot see. When the top band overruns the default
+   * fold, the fold moves to the end of the band.
+   */
+  const visibleCount = useMemo(() => {
+    if (!tieNote) return 5;
+    const topBand = rankBands(request)[0];
+    return Math.max(5, topBand ? topBand.clinicians.length : 5);
+  }, [request, tieNote]);
+  const shown = showAll ? matches : matches.slice(0, visibleCount);
 
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
 
   function startListening() {
+    // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
+    // session kept running with no handle — its handlers nulled the shared ref out from under
+    // the new session, the stage-change cleanup found nothing to cancel, and the microphone
+    // light stayed on over the typing screen. Cancel first, always.
+    speech.current?.cancel();
+    speech.current = null;
     setHeard("");
-    setSpeechError(null);
+    setSpeechMessage(null);
 
     const session = startSpeech({
       onPartial: setHeard,
       onFinal: (text) => {
-        speech.current = null;
+        // Only release the ref this session still owns — a stale handler from a replaced
+        // session must not clobber its successor's handle (O12 RCA).
+        if (speech.current === session) speech.current = null;
         // Nothing heard is not an error worth a red message; it is a reason to let somebody type.
         if (!text) {
           setStage("type");
@@ -372,18 +404,19 @@ export function CareFinder() {
         findMatches(text);
       },
       onError: (error) => {
-        speech.current = null;
+        if (speech.current === session) speech.current = null;
         // A deliberate stop is not a failure to report.
         if (error === "aborted") return;
-        setSpeechError(error);
+        setSpeechMessage(SPEECH_ERROR_COPY[error]);
         setStage("type");
       },
     });
 
-    // Unsupported browser, insecure origin, or a constructor that threw: go straight to typing
-    // rather than showing a microphone screen that cannot work.
+    // Unsupported browser, insecure origin, or a constructor that threw: go to typing AND say
+    // why (O12 RCA) — the silent version was indistinguishable from a broken button, which is
+    // exactly how it was reported.
     if (!session) {
-      setSpeechError(null);
+      setSpeechMessage(SPEECH_UNAVAILABLE_COPY[speechUnavailable() ?? "unsupported"]);
       setStage("type");
       return;
     }
@@ -608,7 +641,7 @@ export function CareFinder() {
 
             <div className="type-content">
               <p className="eyebrow">In your own words</p>
-              {speechError && <p className="speech-error" role="status">{SPEECH_ERROR_COPY[speechError]}</p>}
+              {speechMessage && <p className="speech-error" role="status">{speechMessage}</p>}
               <h1>
                 <span>ADHD assessment</span>
                 <em>that takes you seriously.</em>
@@ -650,14 +683,14 @@ export function CareFinder() {
             </header>
 
             <div className="results-head">
-              <p className="eyebrow">You asked for</p>
+              <p className="eyebrow">Based on what you told us</p>
               <h1>{requestHeadline}</h1>
               <button className="refine-compact" type="button" onClick={() => { setDraft(request); setStage("type"); }}>
                 <span>Change what you said</span>
               </button>
 
               <div className="place-field">
-                <label htmlFor="place">Where are you? Suburb or postcode, if you like.</label>
+                <label htmlFor="place">Where are you?</label>
                 <input
                   id="place"
                   name="place"
@@ -675,12 +708,23 @@ export function CareFinder() {
                 </datalist>
                 <p className="place-status" role="status">
                   {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
-                      is a number that describes something the reader cannot see. */}
+                      is a number that describes something the reader cannot see. And it only
+                      claims "ranked on what you asked for" when that is TRUE (O11): on an
+                      unmatched or tied query this line used to assert a ranking two lines above
+                      the banner saying there is no ranking — two sentences about the same fact,
+                      one of them false. When the order is not earned, the count stands alone and
+                      the quality banner owns the explanation. */}
                   {place.trim() === ""
-                    ? `${shown.length} of ${matches.length}, ranked on what you asked for.`
+                    ? quality === "informed"
+                      ? shown.length === 1
+                        ? "This GP does what you asked for."
+                        : `These ${shown.length} GPs do what you asked for.`
+                      : `${shown.length} of ${matches.length}.`
                     : origin
-                      ? `${shown.length} of ${matches.length}, nearest to ${origin.suburb} first.`
-                      : "We do not cover that one yet, so these are ranked on what you asked for."}
+                      ? `Nearest to ${origin.suburb} first.`
+                      : quality === "informed"
+                        ? "We do not cover that one yet, so these are ordered on what you asked for."
+                        : "We do not cover that one yet."}
                 </p>
 
                 {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
@@ -690,9 +734,18 @@ export function CareFinder() {
                     rendered as a ranked list whose order came from the tie-break: from nothing,
                     presented as from something. This is one line and it only appears when the
                     order means nothing, which is the only time it has anything to add. */}
-                {matchQuality(request) !== "informed" && (
+                {quality !== "informed" && (
                   <p className="place-status match-quality" role="status">
-                    {MATCH_QUALITY_COPY[matchQuality(request)]}
+                    {MATCH_QUALITY_COPY[quality]}
+                  </p>
+                )}
+
+                {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). "Informed" means an order
+                    exists somewhere in the list — not necessarily at the top, which is the one
+                    boundary the reader acts on. When the first band is a tie, say so there. */}
+                {tieNote && (
+                  <p className="place-status match-quality" role="status">
+                    {tieNote}
                   </p>
                 )}
 
@@ -705,11 +758,11 @@ export function CareFinder() {
                     who came here to find a GP. Tapping appends the answer in the reader's own
                     words and the whole sentence is re-read, so the finder can still say "you said
                     this" about a signal it prompted. */}
-                {matchQuality(request) !== "informed" && clarifiers(request, matches).length > 0 && (
+                {quality !== "informed" && clarifierList.length > 0 && (
                   <div className="clarify">
                     <p className="clarify-lead">One answer would narrow it:</p>
                     <ul className="clarify-row">
-                      {clarifiers(request, matches).map((clarifier) => (
+                      {clarifierList.map((clarifier) => (
                         <li key={clarifier.facetKey}>
                           <button
                             type="button"
@@ -730,9 +783,9 @@ export function CareFinder() {
 
                 {/* A care area nobody on the roster declares is a gap in the LISTING, and the
                     reader should not be left to conclude it is a gap in their question. */}
-                {unservedAsks(request).length > 0 && (
+                {unserved.length > 0 && (
                   <p className="place-status match-quality" role="status">
-                    {`No GP listed today says they do ${unservedAsks(request)[0]!.toLowerCase()}. That is a gap in our listing, not in what you asked for.`}
+                    {`No GP listed today says they do ${unserved[0]!.toLowerCase()}. That is a gap in our listing, not in what you asked for.`}
                   </p>
                 )}
 
@@ -767,6 +820,13 @@ export function CareFinder() {
                       <strong>{item.name}</strong>
                       <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
                       <small className="row-availability">{away ? `${item.suburb}, ${away}` : item.suburb}</small>
+                      {/* Closed books never outrank open ones at equal fit, and never hide
+                          either — the row says why somebody unactionable is still here (O4).
+                          The "they fit what you asked" sentence only renders when a fit was
+                          actually computed; otherwise the neutral fact stands alone. */}
+                      {closedBooksNote(item, request) && (
+                        <small className="row-availability">{closedBooksNote(item, request)}</small>
+                      )}
                     </span>
                     <CaretRight size={20} weight="light" aria-hidden="true" />
                   </motion.button>
@@ -838,6 +898,19 @@ export function CareFinder() {
               <div className="fit-list">
                 <p>{clinician.appointmentLength}</p>
                 <p>{distanceTo(clinician, origin) ?? clinician.reach}</p>
+                {/* Launch item 14: the practice on a map, from the practice's own name and
+                    suburb — no API key, no location asked of the reader. */}
+                <p>
+                  <a
+                    className="profile-directions"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Map and directions to {clinician.practice}
+                  </a>
+                </p>
+                {closedBooksNote(clinician, request) && <p>{closedBooksNote(clinician, request)}</p>}
               </div>
 
               <section>

@@ -33,8 +33,8 @@
 import { EI_QUALITIES, type EIQuality } from "@/demo/emotional-fit";
 import type { CareArea } from "@/demo/care-archetypes";
 import type { Clinician } from "@/demo/clinicians";
-import { matchEvidence } from "@/demo/clinicians";
-import { readNeeds, facetKey } from "@/matching/needs";
+import { matchEvidence, needsFor, roundScore } from "@/demo/clinicians";
+import { facetKey } from "@/matching/needs";
 import { CARE_LABEL_BY_AREA, type ProposedFacet } from "./transcript";
 
 /** Where a proposed facet has got to. Nothing reaches a profile without passing through here. */
@@ -145,36 +145,60 @@ function asList(items: readonly string[]): string {
  */
 export type MatchAudit = {
   query: string;
-  /** Facets the reader's words reached, whether or not anybody answers them. */
+  /** Facets the reader's words reached, whether or not anybody answers them. Weights carry the
+   *  O2 rarity discount, so a facet the whole roster declares shows what it can actually earn. */
   asked: Array<{ key: string; label: string; weight: number }>;
   rows: Array<{
     clinicianId: string;
     name: string;
     total: number;
-    /** The asked facets this clinician declared, with what each contributed. */
+    /** The asked facets this clinician declared, with what each ACTUALLY contributed for them
+     *  (halved where the declaration was "sometimes"). */
     matched: Array<{ key: string; label: string; weight: number }>;
     /** The asked facets this clinician does NOT declare. The reason they are not first. */
     missed: Array<{ key: string; label: string; weight: number }>;
+    /** Declaration breadth, so inflation is visible where it is priced (O2/F1):
+     *  "declares 15 of 17 areas" is a sentence a reviewer can act on. */
+    declares: { often: number; sometimes: number; of: number };
+    /** Capacity breaks score ties in the finder (O4), so the audit must carry it or its
+     *  sort disagrees with the ranking it claims to reproduce (Codex review on PR #1). */
+    booksOpen: boolean;
   }>;
 };
 
 export function matchAudit(query: string, roster: readonly Clinician[]): MatchAudit {
-  const needs = readNeeds(query);
+  // The same needs the ranking scores — including asked-for languages — so the audit cannot
+  // show a total the finder did not compute (the O1/F2 unity repair). Computed over the roster
+  // being audited, for the same reason the ranking is (O8 review).
+  const needs = needsFor(query, roster);
   const asked = needs.map((need) => ({ key: facetKey(need.facet), label: need.label, weight: need.weight }));
 
   return {
     query,
     asked,
     rows: roster.map((clinician) => {
-      const evidence = matchEvidence(clinician, query);
-      const hit = new Set(evidence.map((need) => facetKey(need.facet)));
-      const matched = asked.filter((entry) => hit.has(entry.key));
+      const evidence = matchEvidence(clinician, query, roster);
+      const earned = new Map(evidence.map((need) => [facetKey(need.facet), need.weight]));
+      const matched = asked
+        .filter((entry) => earned.has(entry.key))
+        .map((entry) => ({ ...entry, weight: earned.get(entry.key)! }));
+      // An area listed under both "often" and "sometimes" is one declaration, not two —
+      // declarationFactor already reads it as "often", and a breadth column that could show
+      // "18 of 17" would undermine the inflation-visibility it exists for (O8 review).
+      const often = new Set(clinician.careAreas);
+      const sometimesOnly = (clinician.careAreasSometimes ?? []).filter((area) => !often.has(area));
       return {
         clinicianId: clinician.id,
         name: clinician.name,
-        total: matched.reduce((sum, entry) => sum + entry.weight, 0),
+        total: roundScore(matched.reduce((sum, entry) => sum + entry.weight, 0)),
         matched,
-        missed: asked.filter((entry) => !hit.has(entry.key)),
+        missed: asked.filter((entry) => !earned.has(entry.key)),
+        declares: {
+          often: often.size,
+          sometimes: sometimesOnly.length,
+          of: CARE_LABEL_BY_AREA.size,
+        },
+        booksOpen: clinician.acceptingNewPatients,
       };
     }),
   };

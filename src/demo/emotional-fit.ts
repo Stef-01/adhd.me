@@ -76,7 +76,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // sense as two content tokens; the dismissal family is also covered by "dismissed"/"brushed off".
       "talked over the top",
       // W221 probe: "decides before I finish the sentence" reached nothing.
-      "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to"],
+      "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to",
+      // O13: "takes me seriously" missed — the stemmer keeps "taken" and "takes" apart
+      // ("taken" has no strippable suffix), so the present-tense ask needs its own cue.
+      "take seriously", "takes me seriously", "attentive"],
   },
   steadying: {
     label: "Calm and steadying",
@@ -91,7 +94,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   motivating: {
     label: "Strengths-focused",
     matchLine: "works from your strengths, not only the problems",
-    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "a plan i can"],
+    // "a plan i can" degenerated to the single token "plan" once stopwords were stripped, which
+    // made ANY mention of a plan read as a strengths preference — including the structured
+    // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
+    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick"],
   },
   unhurried: {
     label: "Unhurried first appointment",
@@ -99,15 +105,22 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     cues: ["not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
-      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread", "in and out",
-      // W221 recall: "not a ten minute in and out" reached nothing. The stemmer takes plural "minutes"
-      // to "minut" but leaves singular "minute", so the plural cues above could not hear the
-      // singular; the singular forms are added rather than touching the stemmer's length guards.
+      // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it
+      // tokenised to nothing and had been structurally dead since W222 — main's rebuild kept it
+      // unaware, and the removal stands through the merge. "ten minutes" and "out the door"
+      // carry the experience it was written for.
+      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread",
+      // Main's W221 recall fix, kept: the stemmer takes plural "minutes" to "minut" but leaves
+      // singular "minute", so the plural cues could not hear "a ten minute appointment"; the
+      // singular forms are added rather than touching the stemmer's length guards.
       "ten minute", "fifteen minute",
-      // W221: every cue above is multi-word, so "she rushes me every time" reached none of them.
+      // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
       // The bare stem is the commonest way anybody says it.
       "rushes", "rushing", "hurried", "hurry me",
-      // W221: "take my time" was dropped. "my" is a stopword, so it matched [take, time] — and
+      // O13 considered and REFUSED "takes their time": "their" is a stopword, so it survives
+      // as the same [take, time] W223 dropped for firing on "take time off work". The recall
+      // it would add is already carried by "not rushed", "unhurried" and "rushes".
+      // W223: "take my time" was dropped. "my" is a stopword, so it matched [take, time] — and
       // "I can take time off work" is a sentence this product puts in its OWN barrier list on the
       // landing page. Recall lost is nil: "not rushed", "rushes", "hurried", "enough time" and
       // "longer appointment" all still reach this facet.
@@ -116,15 +129,24 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   non_judgmental: {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
-    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
+    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without judgement", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
       // W221 probe: "won't make me feel like I'm making it up" reached nothing.
-      "making it up", "make it up", "attention seeking", "drug seeking", "faking", "believe me", "not believed"],
+      "making it up", "make it up", "attention seeking", "drug seeking", "faking", "believe me", "not believed",
+      // O13, from a real query this facet's own NAME could not reach: "Kind Hindi speaking and
+      // non judgemental" read as nothing but the language. The cue list was verb-phrase-heavy
+      // ("won't judge", "judged") and the stemmer cannot bridge "judgemental"→"judg", so the
+      // single commonest ADJECTIVE form — the word on the label itself — was unreadable in
+      // either spelling, negated or not. "non-judgemental" tokenises to "non judgemental", so
+      // the bare adjective covers the hyphenated ask too; a complaint ("she was so judgemental")
+      // is the same preference, which is the reading this file always takes.
+      "judgemental", "judgmental"],
   },
   collaborative: {
     label: "Explains and decides with you",
     matchLine: "explains the options and decides them with you",
-    cues: ["explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
-      // W221: "work with me", "my options", "the options" and "my say" were dropped. Under token
+    // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
+    cues: ["collaborative", "explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
+      // W221/W223: "work with me", "my options", "the options" and "my say" were dropped. Under token
       // matching each reduces to ONE very common word — [work], [option], [say] — because the
       // rest are stopwords, so "I can take time off work" proposed that the reader wanted a
       // collaborative GP. They were authored when matching was literal substrings and the whole
@@ -141,14 +163,17 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   culturally_attuned: {
     label: "Understands your background",
     matchLine: "understands your background and family",
-    cues: ["my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
+    // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
+    cues: ["culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
       "my mum", "my mother", "my dad", "my father", "my parents", "in the room with me", "nonsense", "not real", "just lazy", "an excuse"],
   },
   structured: {
     label: "A structured, measured approach",
     matchLine: "works to a documented baseline and follows up on a schedule",
-    cues: ["structured", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline",
+    // O13: "methodical" is the plain word for this way of working and missed (kept through the
+    // merge alongside main's continuity family below).
+    cues: ["structured", "methodical", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline",
       // W221 recall: continuity is part of this facet by its own definition — the onboarding ask is
       // "documented baseline and scheduled follow-up" — so "follow up and not just leave me to it"
       // belongs here rather than in a second, overlapping follow-through facet (the duplication

@@ -60,8 +60,9 @@ describe("W210 a latent finding fails the build on the day it goes live", () => 
     expect(new Set(ids).size).toBe(ids.length);
     for (const f of LATENT_FINDINGS) {
       expect(f.what.length, `${f.id} describes no defect`).toBeGreaterThan(80);
-      expect(f.recordedBy, `${f.id} names no unit`).toMatch(/^W\d+$/);
-      if (f.status === "closed") expect(f.closedBy, `${f.id} is closed by nobody`).toMatch(/^W\d+$/);
+      // W-units are the build loop's; O-units are the matching overhaul's (docs/MATCHING-OVERHAUL-PLAN.md).
+      expect(f.recordedBy, `${f.id} names no unit`).toMatch(/^[WO]\d+$/);
+      if (f.status === "closed") expect(f.closedBy, `${f.id} is closed by nobody`).toMatch(/^[WO]\d+$/);
     }
   });
 });

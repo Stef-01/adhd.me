@@ -9,6 +9,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SPEECH_DISCLOSURE,
   SPEECH_ERROR_COPY,
+  SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
   type SpeechError,
@@ -221,5 +222,79 @@ describe("the disclosure says where the audio goes", () => {
     for (const copy of Object.values(SPEECH_ERROR_COPY)) {
       expect(copy).not.toMatch(/not-allowed|audio-capture|no-speech|undefined|null/);
     }
+  });
+});
+
+describe("O12 RCA: the intermittent failures, pinned", () => {
+  it("delivers the words when the service dies after they were recognised", () => {
+    // Chrome's recogniser is a streaming network service and can drop mid-utterance. The old
+    // path reported `network` and discarded everything already recognised — the person watched
+    // their sentence appear and then lost it, which is the "sometimes it fails" report.
+    install();
+    const onFinal = vi.fn();
+    const onError = vi.fn();
+    startSpeech({ ...noop, onFinal, onError });
+    const r = FakeRecognition.last!;
+    r.emit([{ text: "my dose keeps wearing off", final: true }]);
+    r.fail("network");
+    expect(onFinal).toHaveBeenCalledWith("my dose keeps wearing off");
+    expect(onError).not.toHaveBeenCalled();
+    // And the onend Chrome fires afterwards must not deliver a second time.
+    r.stop();
+    expect(onFinal).toHaveBeenCalledTimes(1);
+  });
+
+  it("still reports the errors that mean nothing was captured", () => {
+    install();
+    const onFinal = vi.fn();
+    const onError = vi.fn();
+    startSpeech({ ...noop, onFinal, onError });
+    FakeRecognition.last!.fail("network");
+    expect(onError).toHaveBeenCalledWith("network");
+    expect(onFinal).not.toHaveBeenCalled();
+  });
+
+  it("does not duplicate text when a browser re-delivers final segments", () => {
+    // Safari's continuous mode re-sends earlier finals with resultIndex snapped back to zero.
+    // Accumulation turned each re-delivery into "my dose my dose"; rebuilding from the whole
+    // cumulative list is idempotent under exactly that misbehaviour.
+    install();
+    const onPartial = vi.fn();
+    const onFinal = vi.fn();
+    startSpeech({ ...noop, onPartial, onFinal });
+    const r = FakeRecognition.last!;
+    const segment = { text: "my dose keeps wearing off", final: true };
+    r.emit([segment]);
+    r.emit([segment], 0); // the Safari re-delivery
+    expect(onPartial).toHaveBeenLastCalledWith("my dose keeps wearing off");
+    r.stop();
+    expect(onFinal).toHaveBeenCalledWith("my dose keeps wearing off");
+  });
+
+  it("names the reason speech is unavailable, in patient words, with typing as the way out", () => {
+    for (const copy of Object.values(SPEECH_UNAVAILABLE_COPY)) {
+      expect(copy).toMatch(/typing/i);
+      expect(copy).not.toMatch(/error|code|exception/i);
+    }
+  });
+});
+
+describe("O16 the iPhone's own error codes are named, not shrugged at", () => {
+  it.each([
+    ["service-not-allowed", "service-not-allowed"],
+    ["language-not-supported", "language-not-supported"],
+  ])("maps %s to %s instead of unknown", (raw, mapped) => {
+    // Seen in production on iOS: dictation switched off fires `service-not-allowed`, and the
+    // old map's generic "did not work" gave the person nothing to act on.
+    install();
+    const onError = vi.fn();
+    startSpeech({ ...noop, onError });
+    FakeRecognition.last!.fail(raw);
+    expect(onError).toHaveBeenCalledWith(mapped as SpeechError);
+  });
+
+  it("tells the iPhone owner which switch to look for", () => {
+    expect(SPEECH_ERROR_COPY["service-not-allowed"]).toMatch(/dictation/i);
+    expect(SPEECH_ERROR_COPY["service-not-allowed"]).toMatch(/type instead/i);
   });
 });

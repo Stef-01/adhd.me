@@ -60,3 +60,106 @@ Post-fix evidence:
 ## Final result
 
 final result: passed
+
+# Minimalism review — matching surfaces (O11, 2026-08-18)
+
+Scope: every UI the matching pipeline renders through — the finder's results, clarifier,
+profile and listening screens (`app/care-finder.tsx`) and the console's matching audit
+(`app/console/matching/page.tsx`). Reviewed against the screenshots in `qa/matching-o10/`.
+
+## Verdict
+
+The surfaces are already spare: one field, one dual-function control, one count line, one
+quality banner that only renders when it has something to add, rows that carry exactly one
+distinguishing reason each. The earlier collapse (eleven screens to seven) is holding. One
+real defect and no removable elements were found.
+
+## The defect, fixed
+
+- **The count line claimed a ranking beside the banner denying one.** On an unmatched query
+  the screen read "2 of 2, ranked on what you asked for." two lines above "this is everyone
+  we list rather than an order." — two sentences about the same fact, one false. The count
+  line now claims "ranked on what you asked for" only when `matchQuality` is `informed`;
+  otherwise the count stands alone and the quality banner owns the explanation. (The
+  nearest-first variant is exempt: since O3, an unmatched query with an origin genuinely IS
+  distance-sorted, so that sentence is true in every quality state.)
+
+## Reviewed and kept, with reasons
+
+- **Quality banner + clarifier block stacking** (unmatched state shows both): not
+  duplication — the banner says what happened, the questions are the way out. Removing
+  either orphans the other.
+- **Top-tie note (O3)**: renders only when `informed` with a tied first band, which the
+  quality banner cannot say; never stacks with it.
+- **Closed-books line (O4)**: one sentence, only on affected rows, only claiming fit when
+  fit exists (Codex P2 fix).
+- **Profile**: eyebrow flips between "Why this fit" / "About this GP" on evidence; signal
+  pills deduplicate against the row reasons; no repeated sentence found.
+- **Console audit table**: the O2 "Declares" column and O8 "books closed" tag each add one
+  cell of operator-facing fact; the table remains the only place scores render.
+
+## Evidence
+
+`qa/matching-o10/*.png` (before), refreshed after the count-line fix by re-running
+`e2e/matching-verification.spec.ts`.
+
+final result: passed, one fix applied
+
+# Low-vision audit — matcher and results screens (O14, 2026-08-18)
+
+Audience audited for: a visually impaired elderly reader — the person most likely to be
+choosing a GP with someone else's phone in their hand. Method: measured contrast ratios of
+every text pair on the matcher/results screens, type sizes against what each element is FOR,
+touch targets, focus visibility, and the two platform behaviours (iOS input zoom, sticky
+hover) visible in the production screenshot that triggered O13.
+
+## Contrast: passes AA, measured
+
+| Pair | Ratio | Verdict |
+|---|---|---|
+| ink `#191a17` on paper `#fbfaf7` (body) | 16.75:1 | AAA |
+| accent `#8A5A16` on paper (links, distance, closed-books) | 5.66:1 | AA |
+| faint `#6b6c67` on paper (count line) | 5.07:1 | AA |
+| muted `#6e706a` on paper (row reasons, clarify lead) | 4.80:1 | AA |
+| ink on accent-soft `#f7efe3` (clarifier chips) | 15.32:1 | AAA |
+
+No contrast fixes needed; the token discipline (`--faint`'s own comment pins its floor) held.
+
+## The real defect: an inverted size hierarchy
+
+AA contrast at 12px is compliant and still unreadable for this audience — and the 12px text
+was exactly the text the screen turns on: the match REASON on each row (the one line that
+decides between GPs), the match-quality banner ("this is not a ranking"), and the
+closed-books warning. Meanwhile the decorative headline runs at 27px serif. The reader with
+the least vision was given the least legibility on the most consequential sentences.
+
+Fixed: row reasons 12→14px, row names 15→16px, count line 12→14px, match-quality banner and
+tie note 12→15px in `--muted`, clarify lead 13→14px, clarifier chips 13.5→15px.
+
+## Platform behaviours fixed
+
+- **iOS force-zoom on the suburb field**: any input under 16px makes iOS zoom the whole page
+  on focus — disorienting for a reader who has already zoomed where they want. 15→16px.
+- **Sticky hover**: after a touch, iOS keeps `:hover` styles until the next tap, so one
+  clarifier chip stayed white-with-border and read as a selected state meaning nothing —
+  visible in the production screenshot. Hover styles now apply only under
+  `@media (hover: hover)`.
+
+## Verified and kept
+
+- Touch targets: clarifier chips `min-height: 44px`; clinician rows ~100px; the suburb field
+  46px. All at or above the 44px floor.
+- Focus: `:focus-visible` outlines (2px accent) on chips, rows and the field.
+- Screen reader: the banner, tie note and count line carry `role="status"`; rows are real
+  buttons named by their content; the results heading order is h1-first.
+- Minimalism for this audience: fewer, larger elements is the same direction O11 pushed;
+  nothing needed removing — the screen's element count was already minimal, only its
+  emphasis was upside down.
+
+## Known bound, recorded
+
+Type is sized in px throughout the tree, so browser zoom scales everything but a user's
+OS/browser font-size *preference* does not. A rem migration is a tree-wide unit refactor —
+out of an audit's scope, filed here so it is a decision rather than a discovery.
+
+final result: passed after fixes; evidence `qa/matching-o10/` (re-rendered)

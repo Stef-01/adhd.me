@@ -17,7 +17,7 @@ import Link from "next/link";
 import { StorySequence } from "../story-sequence";
 
 export const metadata = {
-  title: "The ADHD.ME approach — how finding ADHD care actually goes",
+  title: "The approach",
   description:
     "The search that returns no GPs, the practice pages read one doctor at a time, the questions " +
     "a profile page cannot answer, and what changed in NSW and Queensland.",

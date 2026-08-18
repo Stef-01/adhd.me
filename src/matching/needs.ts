@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { findCue, tokenise } from "./read";
+import { findCue, stem, tokenise } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -73,7 +73,7 @@ export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "lon
  * requires the reason to come from a fixed set, and the fixed set is the `label` column below.
  */
 export type NeedSignal = {
-  facet: Facet | { kind: "preference"; preference: Preference };
+  facet: Facet | { kind: "preference"; preference: Preference } | { kind: "language"; language: string };
   /** The phrase from the reader's own words that reached this facet. Used for tests and logging. */
   matched: string;
   /** Closed vocabulary. What a surface may say back. */
@@ -170,6 +170,10 @@ const LEXICON: readonly Entry[] = [
   ]),
   care("emotional-regulation", "Emotional regulation", 24, [
     "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
+    // O17: this area's own doc comment calls dysregulation "what people describe first" — and
+    // "emotional dysregulation" reached nothing, because "dysregulation" does not stem to
+    // "regulation". The clinical word and the plain phrasings people actually use, added.
+    "dysregulation", "big emotions", "big feelings", "emotions take over",
   ]),
   care("non-medication", "Non-medication supports", 26, [
     "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits",
@@ -203,9 +207,23 @@ const LEXICON: readonly Entry[] = [
  * close to the opposite. Sorted by TOKEN count now rather than character length, because that is
  * what specificity means once matching is done on tokens.
  */
-const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = LEXICON.flatMap((entry) =>
-  entry.phrases.map((phrase) => ({ phrase, tokens: tokenise(phrase), entry })),
-)
+/**
+ * A PHRASE BELONGS TO ONE FACET, and the first entry to list it wins (O7/F10). "overwhelmed"
+ * appears in both `care:emotional-regulation` and the steadying manner cues; before this dedup
+ * the second copy was DEAD — the stable sort meant the earlier entry always claimed the words,
+ * and nothing said so. Dropping later duplicates makes the same behaviour explicit, keeps the
+ * self-reach pin honest (every cue in `LEXICON_CUES` genuinely reaches its facet), and leaves
+ * the emotional-fit interview's own use of its cue lists untouched.
+ */
+const FIRST_CLAIM = new Map<string, { phrase: string; entry: Entry }>();
+for (const entry of LEXICON) {
+  for (const phrase of entry.phrases) {
+    if (!FIRST_CLAIM.has(phrase)) FIRST_CLAIM.set(phrase, { phrase, entry });
+  }
+}
+
+const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = [...FIRST_CLAIM.values()]
+  .map(({ phrase, entry }) => ({ phrase, tokens: tokenise(phrase), entry }))
   .filter((cue) => cue.tokens.length > 0)
   .sort((a, b) => b.tokens.length - a.tokens.length || b.phrase.length - a.phrase.length);
 
@@ -251,12 +269,102 @@ export function readNeeds(text: string): NeedSignal[] {
   return signals;
 }
 
+/**
+ * Whether a clinician's declared record answers an access preference.
+ *
+ * ONE PLACE (O5/F7). This predicate used to live only inside the ranker's `answers`, which
+ * meant the clarifier could not compute `heldBy` for preference facets and so never asked the
+ * questions that separate rosters hardest — "do you want a woman GP" splits any mixed roster
+ * and is the single most-stated preference in real directory search. The parameter is
+ * structural on purpose: this file cannot import the `Clinician` type without a cycle, and the
+ * four fields named here are the whole of what a preference reads.
+ */
+export function holdsPreference(
+  clinician: {
+    gender: string;
+    telehealthFirstAppointment?: boolean;
+    manner: readonly string[];
+    practicalSignals: readonly string[];
+  },
+  preference: Preference,
+): boolean {
+  switch (preference) {
+    case "woman-gp":
+      return clinician.gender === "woman";
+    case "telehealth-first":
+      return clinician.telehealthFirstAppointment === true;
+    case "longer-appointment":
+      return clinician.manner.includes("unhurried");
+    case "bulk-billing":
+      return clinician.practicalSignals.some((signal) => /bulk/i.test(signal));
+  }
+}
+
 /** Stable identity for a facet, so a reader asking twice for one thing counts once. */
 export function facetKey(facet: NeedSignal["facet"]): string {
   if (facet.kind === "care") return `care:${facet.area}`;
   if (facet.kind === "manner") return `manner:${facet.trait}`;
+  if (facet.kind === "language") return `language:${facet.language.toLowerCase()}`;
   return `pref:${facet.preference}`;
 }
 
+/**
+ * A language the reader asked for, read against the languages the roster actually declares.
+ *
+ * WHY THIS IS NOT IN THE LEXICON. Every other facet is a fixed vocabulary shared by all
+ * clinicians, so it can live in the static table above. Languages are per-clinician DATA: a
+ * static lexicon would have to enumerate every language any clinician might ever speak, a list
+ * that goes stale the day somebody who speaks Tamil joins. Reading against the roster's own
+ * declarations keeps the property that matters — no per-clinician WEIGHT anywhere — while
+ * letting the vocabulary grow with the roster.
+ *
+ * WHY IT IS IN THIS FILE ANYWAY (the F2 repair). Until the overhaul this lived beside
+ * `matchEvidence` as a raw `String.includes` — the exact mechanism W222 tore out of the lexicon
+ * for cause — and its signals were shown on the card but never seen by the score, so a
+ * language-only query rendered "unmatched" beside a card explaining a ranking that never
+ * happened. It now goes through the same tokenise-and-stem pipeline as every cue and returns
+ * ordinary `NeedSignal`s, so the ranking, the quality verdict and the explanation all read it
+ * or none of them do.
+ *
+ * English is excluded: "speaks English" is not a match reason in Australia, it is the
+ * assumption. And a language the reader never mentioned is never a signal — telling somebody
+ * their GP speaks a language they did not ask about is a guess about who they are.
+ */
+export function languageNeeds(text: string, spoken: readonly string[]): NeedSignal[] {
+  const tokens = new Set(tokenise(text));
+  const signals: NeedSignal[] = [];
+  const seen = new Set<string>();
+  for (const language of spoken) {
+    if (language.toLowerCase() === "english") continue;
+    const key = facetKey({ kind: "language", language });
+    if (seen.has(key) || !tokens.has(stem(language.toLowerCase()))) continue;
+    seen.add(key);
+    signals.push({
+      facet: { kind: "language", language },
+      matched: language.toLowerCase(),
+      label: `${language}-speaking`,
+      weight: LANGUAGE_WEIGHT,
+    });
+  }
+  return signals;
+}
+
+/**
+ * Same tier as the lexicon's strongest facets (30/20/12): an asked-for language is a hard
+ * requirement of the appointment, not a nice-to-have, and it was already rendered at this
+ * weight before it was scored at all.
+ */
+const LANGUAGE_WEIGHT = 30;
+
 /** Every label a surface may say back, for the test that pins the vocabulary closed. */
 export const NEED_LABELS: readonly string[] = LEXICON.map((entry) => entry.label);
+
+/**
+ * Every phrase in the lexicon with the facet it belongs to, for the self-reachability pin
+ * (O7/F10): a stemmer or tokeniser edit that silently unhooks a cue from its own facet must
+ * fail a test, not wait for a probe. Phrases only — no weights, no labels — so nothing new is
+ * sayable from here.
+ */
+export const LEXICON_CUES: ReadonlyArray<{ phrase: string; key: string }> = [...FIRST_CLAIM.values()].map(
+  ({ phrase, entry }) => ({ phrase, key: facetKey(entry.facet) }),
+);

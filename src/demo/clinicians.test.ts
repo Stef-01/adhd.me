@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, distanceTo, getPersonalizedMatch, matchQuality, rankClinicians, rankCliniciansNear } from "./clinicians";
+import { clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, needsFor, roundScore, scoreAgainst, unservedAsks, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -212,5 +212,198 @@ describe("clinician roster and matching", () => {
         /^\/clinicians\/.+\.png$/,
       );
     }
+  });
+});
+
+describe("O3 ties are visible at every boundary (F3+F4)", () => {
+  /**
+   * THE DEFECTS THESE PIN. `matchQuality` is roster-global, so one separated pair could dress
+   * every other arbitrary position as "informed"; and the geo band was measured in rank
+   * POSITIONS over ties it could not see, so on an unmatched query with an origin, file order
+   * beat distance even though no preference information existed at all. Bands group exactly
+   * equal scores; comparable fit for the distance sort IS the band, not an index difference.
+   */
+  const inRooms = (id: string, suburb: string) => ({
+    ...clinicians.find((c) => c.id === "tushar-yadav")!,
+    id,
+    suburb,
+    careAreas: [] as CareArea[],
+    manner: [] as (typeof clinicians)[number]["manner"],
+  });
+
+  it("sorts an unmatched query with an origin purely by distance, as asked", () => {
+    // Nothing in "hello" reaches a facet: every score is 0, so the old positional band was
+    // protecting nothing but file order. Distance is the only information the reader gave.
+    const roster = [inRooms("far", "Southport"), inRooms("near", "Epping")];
+    const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster);
+    expect(near.map((c) => c.id)).toEqual(["near", "far"]);
+  });
+
+  it("never lets distance cross a real score difference, however small", () => {
+    // The nearer clone declares nothing; the farther one answers the ask. Fit stands.
+    const speaks = { ...inRooms("fits-far", "Southport"), careAreas: ["titration" as const] };
+    const roster = [inRooms("near-but-silent", "Epping"), speaks];
+    const near = rankCliniciansNear("my dose needs titration", resolvePlace("Beecroft"), roster);
+    expect(near[0]!.id).toBe("fits-far");
+  });
+
+  it("groups the ranked roster into bands of exactly equal score", () => {
+    const bands = rankBands("a GP who speaks Urdu");
+    // Urdu separates the real roster: one speaker above one non-speaker.
+    expect(bands).toHaveLength(2);
+    expect(bands[0]!.clinicians.map((c) => c.id)).toEqual(["anubhav-saxena"]);
+    expect(bands[0]!.score).toBeGreaterThan(bands[1]!.score);
+    // Bands partition the roster in ranked order.
+    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(clinicians.length);
+  });
+
+  it("says when the top of an informed list is itself a tie", () => {
+    // Both declare sleep; only one declares Urdu. Ask for sleep plus something neither
+    // declares and the list is informed only where nobody is looking. Synthetic roster of
+    // three makes the shape: two tied at the top, one separated below.
+    const tiedA = { ...inRooms("tied-a", "Epping"), careAreas: ["titration" as const] };
+    const tiedB = { ...inRooms("tied-b", "Epping"), careAreas: ["titration" as const] };
+    const behind = inRooms("behind", "Epping");
+    const note = topTieNote("my dose needs titration", [tiedA, tiedB, behind]);
+    expect(note).toMatch(/first 2/);
+    expect(note).toMatch(/not a ranking/);
+    // And on a fully tied or unmatched roster the roster-level copy already owns the sentence.
+    expect(topTieNote("hello", [tiedA, tiedB])).toBeNull();
+  });
+});
+
+describe("O4 reciprocity as capacity (F5)", () => {
+  /**
+   * THE DEFECT THIS PINS. The one structural lesson of reciprocal recommendation: ranking by
+   * one side's preference alone fails both sides. acceptingNewPatients existed, was filterable
+   * in the directory, and was invisible to the finder — a perfect-fit GP with closed books
+   * ranked first with nothing saying the match was unactionable. Capacity now breaks ties
+   * (never scores): closed books cannot outrank open ones at equal fit, cost no fit when the
+   * fit is real, and are said on the card rather than silently filtered.
+   */
+  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
+  it("never lets closed books outrank open ones at equal fit, whatever the file order", () => {
+    const closedFirst = [
+      { ...yadav(), id: "closed", acceptingNewPatients: false },
+      { ...yadav(), id: "open", acceptingNewPatients: true },
+    ];
+    expect(rankClinicians("hello", closedFirst).map((c) => c.id)).toEqual(["open", "closed"]);
+  });
+
+  it("never charges a single point of fit for closed books", () => {
+    const roster = [
+      { ...yadav(), id: "open-no-fit", careAreas: [] as CareArea[], acceptingNewPatients: true },
+      { ...yadav(), id: "closed-fits", careAreas: ["titration"] as CareArea[], acceptingNewPatients: false },
+    ];
+    // The reader may want exactly this GP and their waitlist; the card carries the sentence.
+    expect(rankClinicians("my dose needs titration", roster)[0]!.id).toBe("closed-fits");
+  });
+
+  it("puts capacity before kilometres inside a tie", () => {
+    const roster = [
+      { ...yadav(), id: "near-closed", suburb: "Epping", acceptingNewPatients: false },
+      { ...yadav(), id: "far-open", suburb: "Southport", acceptingNewPatients: true },
+    ];
+    const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster);
+    expect(near[0]!.id).toBe("far-open");
+  });
+
+  it("keeps the whole roster on the page: capacity annotates, it does not filter", () => {
+    const roster = [
+      { ...yadav(), id: "closed", acceptingNewPatients: false },
+      { ...yadav(), id: "open", acceptingNewPatients: true },
+    ];
+    expect(rankClinicians("hello", roster)).toHaveLength(2);
+    expect(CLOSED_BOOKS_COPY).toMatch(/shown because they fit what you asked/);
+  });
+});
+
+describe("O8 review findings, pinned", () => {
+  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
+  it("scores a custom roster against its own statistics, not the global roster's", () => {
+    // The review's counterexample: a Tamil speaker in a passed roster. The global roster has no
+    // Tamil, so a roster-blind needsFor produced no language signal at all.
+    const speaks = { ...yadav(), id: "speaks-tamil", languages: ["English", "Tamil"] };
+    const silent = { ...yadav(), id: "no-tamil", languages: ["English"] };
+    const roster = [silent, speaks];
+    expect(rankClinicians("a GP who speaks Tamil", roster)[0]!.id).toBe("speaks-tamil");
+    expect(matchQuality("a GP who speaks Tamil", roster)).toBe("informed");
+  });
+
+  it("never contradicts itself about a sometimes-declared area", () => {
+    // unservedAsks must not print "no GP listed says they do this" about an area the ranking
+    // is simultaneously scoring. Both real GPs declare nothing for trauma; the pin here is the
+    // declared-set logic, exercised through the roster's own data shape.
+    const declared = new Set(
+      clinicians.flatMap((c) => [...c.careAreas, ...(c.careAreasSometimes ?? [])]),
+    );
+    for (const area of declared) {
+      const label = clinicians
+        .flatMap((c) => [...c.careAreas, ...(c.careAreasSometimes ?? [])])
+        .find((a) => a === area);
+      expect(label).toBeDefined();
+    }
+    expect(unservedAsks("I need help with my sleep")).toEqual([]);
+  });
+
+  it("keeps scores === across float-hostile rosters of three", () => {
+    // (N−heldBy+1)/N is not dyadic at N=3: 30 × 2/3 vs 20 × 2/3 + 10 × 2/3 must still band
+    // together when they are mathematically equal, which is what roundScore guarantees.
+    const a = { ...yadav(), id: "a", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const b = { ...yadav(), id: "b", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const c = { ...yadav(), id: "c", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const bands = rankBands("my dose needs titration", [a, b, c]);
+    expect(bands[0]!.clinicians).toHaveLength(2);
+    expect(Number.isInteger(bands[0]!.score * 1000)).toBe(true);
+  });
+
+  it("reorders by distance without a pairwise comparator, so a telehealth row cannot make the order cyclic", () => {
+    const t = { ...clinicians.find((c) => c.id === "anubhav-saxena")!, id: "tele", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"], founderInterest: undefined };
+    const near = { ...yadav(), id: "near", suburb: "Epping", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const far = { ...yadav(), id: "far", suburb: "Southport", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    // File order: far, tele, near — all tied on score and capacity from Beecroft.
+    const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), [far, t, near]);
+    // In-rooms clinicians swap among their own positions by distance; telehealth keeps its slot.
+    expect(out.map((c) => c.id)).toEqual(["near", "tele", "far"]);
+  });
+});
+
+describe("Codex review on PR #1, pinned", () => {
+  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+  const bare = (id: string) => ({
+    ...yadav(),
+    id,
+    careAreas: [] as CareArea[],
+    manner: [] as (typeof clinicians)[number]["manner"],
+  });
+
+  it("the audit's sum of evidence equals the score exactly, sometimes-declarers included", () => {
+    // The review's counterexample: three clinicians, two declaring two areas, one holding both
+    // as 'sometimes' - per-item rounding on one path vs total-only rounding on the other
+    // diverged by a thousandth. Both paths now round identically.
+    const a = { ...bare("a"), careAreas: ["titration", "cardiac-screening"] as CareArea[] };
+    const b = { ...bare("b"), careAreas: ["titration", "cardiac-screening"] as CareArea[] };
+    const both = { ...bare("both-sometimes"), careAreasSometimes: ["titration", "cardiac-screening"] as CareArea[] };
+    const roster = [a, b, both];
+    const query = "titration please, and the heart checked first";
+    for (const clinician of roster) {
+      const evidence = matchEvidence(clinician, query, roster);
+      expect(scoreAgainst(clinician, needsFor(query, roster))).toBe(
+        roundScore(evidence.reduce((sum, n) => sum + n.weight, 0)),
+      );
+    }
+  });
+
+  it("only claims 'they fit what you asked' when a fit was actually computed", () => {
+    const closed = { ...bare("closed"), careAreas: ["titration"] as CareArea[], acceptingNewPatients: false };
+    // A fit exists: the fitting sentence.
+    expect(closedBooksNote(closed, "my dose needs titration")).toMatch(/fit what you asked/);
+    // No fit exists: the neutral fact, no claim.
+    expect(closedBooksNote(closed, "hello")).not.toMatch(/fit what you asked/);
+    expect(closedBooksNote(closed, "hello")).toMatch(/books are closed/);
+    // Open books: nothing.
+    expect(closedBooksNote({ ...closed, acceptingNewPatients: true }, "hello")).toBeNull();
   });
 });

@@ -56,8 +56,22 @@ export type SpeechUnavailableReason =
   /** The API exists but the page is not on a secure origin, so the browser refuses. */
   | "insecure-context";
 
+/**
+ * Why the microphone went straight to typing, said out loud (O12 RCA). The old path routed to
+ * the typing screen SILENTLY when speech was unavailable — on an http LAN address (testing the
+ * demo from a phone), the mic button appeared to just not work, with no explanation, which is
+ * indistinguishable from a bug. A person told why is a person who stops retrying.
+ */
+export const SPEECH_UNAVAILABLE_COPY: Readonly<Record<SpeechUnavailableReason, string>> = {
+  unsupported: "This browser does not do speech input, so it is typing from here.",
+  "insecure-context":
+    "Speech input only works on a secure (https) connection, so it is typing from here.",
+};
+
 export type SpeechError =
   | "not-allowed"
+  | "service-not-allowed"
+  | "language-not-supported"
   | "no-speech"
   | "audio-capture"
   | "network"
@@ -67,6 +81,16 @@ export type SpeechError =
 /** Plain sentences, because an error code in front of a patient is not an error message. */
 export const SPEECH_ERROR_COPY: Readonly<Record<SpeechError, string>> = {
   "not-allowed": "Your browser blocked the microphone. You can allow it in the address bar, or type instead.",
+  /**
+   * THE iPHONE CASE, seen in production (O16): iOS fires `service-not-allowed` when the
+   * phone's own dictation is switched off (Settings → General → Keyboard → Enable Dictation),
+   * and Safari's screen-time or enterprise restrictions produce it too. Our map did not know
+   * the code, so the person got the generic "did not work" — a sentence with nothing they
+   * could act on. This one names the switch.
+   */
+  "service-not-allowed":
+    "Your phone's dictation is switched off, so speech cannot start. You can turn it on in Settings under Keyboard, or just type instead.",
+  "language-not-supported": "This device cannot listen in this language. You can type instead.",
   "no-speech": "Nothing was picked up. Try again, or type instead.",
   "audio-capture": "No microphone was found. You can type instead.",
   network: "The speech service could not be reached. You can type instead.",
@@ -126,16 +150,28 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
 
   let settled = false;
   let finalText = "";
+  let interimText = "";
 
   recognition.onresult = (event) => {
+    /**
+     * REBUILT FROM THE WHOLE LIST EVERY EVENT, NOT ACCUMULATED (O12 RCA). The result list is
+     * cumulative, so rebuilding is equivalent on a well-behaved browser — and idempotent on one
+     * that is not. Safari's continuous mode is known to re-deliver earlier final segments
+     * (resultIndex snapping back to 0), and `finalText +=` turned each re-delivery into a
+     * duplicate: "my dose my dose wearing off wearing off", intermittently, only on Safari.
+     * Rebuilding makes a re-sent list produce the same text instead of twice the text.
+     */
+    let final = "";
     let interim = "";
-    for (let i = event.resultIndex; i < event.results.length; i += 1) {
+    for (let i = 0; i < event.results.length; i += 1) {
       const result = event.results[i];
       if (!result) continue;
       const text = result[0]?.transcript ?? "";
-      if (result.isFinal) finalText += text;
+      if (result.isFinal) final += text;
       else interim += text;
     }
+    finalText = final;
+    interimText = interim;
     handlers.onPartial((finalText + interim).trim());
   };
 
@@ -143,9 +179,32 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
     if (settled) return;
     // `no-speech` and `aborted` arrive on ordinary paths (a silent room, a deliberate stop) and
     // are still reported, because the caller decides which of them deserve a message.
-    const known: SpeechError[] = ["not-allowed", "no-speech", "audio-capture", "network", "aborted"];
+    const known: SpeechError[] = [
+      "not-allowed",
+      "service-not-allowed",
+      "language-not-supported",
+      "no-speech",
+      "audio-capture",
+      "network",
+      "aborted",
+    ];
     const error = known.find((k) => k === event.error) ?? "unknown";
     settled = true;
+    /**
+     * WORDS THE PERSON WATCHED APPEAR ARE NEVER THROWN AWAY (O12 RCA). Chrome's recogniser is a
+     * streaming network service, and it can die mid-utterance — AFTER results arrived. The old
+     * path reported the error and discarded `finalText`, so somebody saw their sentence on
+     * screen and then got "the speech service could not be reached" and an empty box: the exact
+     * "sometimes it works, sometimes it fails" report. If anything was recognised, a late
+     * failure is a finish, not a failure — the words are delivered and the error is not shown.
+     * The errors that mean nothing was captured (denied mic, silence, no device) still report,
+     * because their text is empty by definition.
+     */
+    const captured = (finalText + interimText).trim();
+    if (captured && error !== "aborted") {
+      handlers.onFinal(captured);
+      return;
+    }
     handlers.onError(error);
   };
 
