@@ -170,6 +170,10 @@ const LEXICON: readonly Entry[] = [
   ]),
   care("emotional-regulation", "Emotional regulation", 24, [
     "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
+    // O17: this area's own doc comment calls dysregulation "what people describe first" — and
+    // "emotional dysregulation" reached nothing, because "dysregulation" does not stem to
+    // "regulation". The clinical word and the plain phrasings people actually use, added.
+    "dysregulation", "big emotions", "big feelings", "emotions take over",
   ]),
   care("non-medication", "Non-medication supports", 26, [
     "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits",

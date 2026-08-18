@@ -165,6 +165,9 @@ commit); PR made ready for review.
 | O12 | speech-input RCA | done | edd6456 |
 | O13 | plain-name reach RCA + fix | done | see log |
 | O14 | low-vision UI audit | done | b9da9e0 |
+| O15 | launch checklist (20 items) | done | 23b7fb0 |
+| O16 | consent pop-out · standard policy · iOS speech errors | done | f96c807 |
+| O17 | care plain-name pins on the merged vocabulary | done | see log |
 
 Post-overhaul units O9–O12 (verification and hardening pass): `src/matching/edge.test.ts`,
 `e2e/matching-verification.spec.ts` + `qa/matching-o10/`, the O11 entry in `design-qa.md`,

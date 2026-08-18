@@ -256,3 +256,36 @@ describe("O13 the query that failed in production, end to end", () => {
     expect(first.manner).toContain("non_judgmental");
   });
 });
+
+describe("O17 every care area is reachable by its plain name", () => {
+  /**
+   * The O13 control, extended to the care half after the W221-scope merge brought a new
+   * twelve-area vocabulary: every area must be reachable both by its clinical word and by the
+   * words a person actually types. A probe on merge day found 27/29 already reached — and the
+   * two that missed were on the facet whose own doc comment calls them "what people describe
+   * first": "emotional dysregulation" (the stemmer cannot bridge dysregulation→regulation) and
+   * "big emotions". Fixed, and the whole table pinned so the next re-scope fails by name.
+   */
+  const CARE_PLAIN_NAMES: ReadonlyArray<[string, string]> = [
+    ["care:adhd-assessment", "an ADHD assessment"],
+    ["care:child-adolescent-adhd", "this is for my teenager"],
+    ["care:titration", "get the dose right"],
+    ["care:shared-care", "shared care with my psychiatrist"],
+    ["care:depression", "low mood"],
+    ["care:depression", "depression"],
+    ["care:anxiety", "anxiety"],
+    ["care:anxiety", "panic attacks"],
+    ["care:trauma-informed", "trauma"],
+    ["care:complex-mental-health", "bipolar"],
+    ["care:autism-adhd", "I think I am AuDHD"],
+    ["care:substance-history", "honest about drinking"],
+    ["care:emotional-regulation", "rejection sensitivity"],
+    ["care:emotional-regulation", "emotional dysregulation"],
+    ["care:emotional-regulation", "my emotions take over"],
+    ["care:non-medication", "not just medication"],
+  ];
+
+  it.each(CARE_PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
+    expect(readNeeds(phrase).map((n) => facetKey(n.facet))).toContain(key);
+  });
+});
