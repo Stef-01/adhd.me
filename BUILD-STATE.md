@@ -99,6 +99,14 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O26 (matching follow-through, out-of-band like D1) — claimed 2026-08-18T18:45Z by loop-0818.**
+> The mix-capture debt from O24: the join hero sells "the mix is yours to set" and its CTA says
+> "Set my mix", but the join form has no mix field — the percent a GP dials in is discarded on
+> submit. Unit: carry the stated mix into `ClinicianApplication` as a declared preference
+> (closed values 10–50 step 10; absent unless the GP actually touched the control, because a
+> default nobody set is not a declaration). Verify: store validation tests both directions;
+> e2e pins hero → form wiring; `pnpm verify` green.
+
 > **D1 (design, out-of-band) — DONE 2026-08-10.** Finder opening screen: the example prompt and the
 > archetype label were one idea rendered as two orphans with a ~250px dead band between them and the
 > bottom-pinned CTA (every viewport, caused by `margin:auto` on `.voice-prompt` claiming all free
