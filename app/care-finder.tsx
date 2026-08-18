@@ -22,6 +22,7 @@ import {
   matchQuality,
   rankCliniciansNear,
   rankClinicians,
+  topTieNote,
   unservedAsks,
   MATCH_QUALITY_COPY,
   type Clinician,
@@ -693,6 +694,15 @@ export function CareFinder() {
                 {matchQuality(request) !== "informed" && (
                   <p className="place-status match-quality" role="status">
                     {MATCH_QUALITY_COPY[matchQuality(request)]}
+                  </p>
+                )}
+
+                {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). "Informed" means an order
+                    exists somewhere in the list — not necessarily at the top, which is the one
+                    boundary the reader acts on. When the first band is a tie, say so there. */}
+                {topTieNote(request) && (
+                  <p className="place-status match-quality" role="status">
+                    {topTieNote(request)}
                   </p>
                 )}
 

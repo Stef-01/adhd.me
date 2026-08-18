@@ -71,6 +71,14 @@ export interface FoldSite {
  */
 export const FOLD_SITES: readonly FoldSite[] = [
   {
+    module: "src/demo/clinicians.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "`rankBands` reads the last band accumulated so far to decide whether the next clinician's score extends it or opens a new one. The input is `rankClinicians`' output, whose order is total and already carries its own declared tie-break (score, then founder-behind, then file order) — the fold walks a sequence that cannot arrive reordered, and grouping adjacent equal scores is the same partition whichever member of a tie is seen first.",
+    },
+  },
+  {
     module: "src/demo/emotional-fit.ts",
     folds: 1,
     disposition: {

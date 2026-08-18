@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, distanceTo, getPersonalizedMatch, rankClinicians, rankCliniciansNear } from "./clinicians";
+import { clinicians, distanceTo, getPersonalizedMatch, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -197,5 +197,62 @@ describe("clinician roster and matching", () => {
         /^\/clinicians\/.+\.png$/,
       );
     }
+  });
+});
+
+describe("O3 ties are visible at every boundary (F3+F4)", () => {
+  /**
+   * THE DEFECTS THESE PIN. `matchQuality` is roster-global, so one separated pair could dress
+   * every other arbitrary position as "informed"; and the geo band was measured in rank
+   * POSITIONS over ties it could not see, so on an unmatched query with an origin, file order
+   * beat distance even though no preference information existed at all. Bands group exactly
+   * equal scores; comparable fit for the distance sort IS the band, not an index difference.
+   */
+  const inRooms = (id: string, suburb: string) => ({
+    ...clinicians.find((c) => c.id === "tushar-yadav")!,
+    id,
+    suburb,
+    careAreas: [] as CareArea[],
+    manner: [] as (typeof clinicians)[number]["manner"],
+  });
+
+  it("sorts an unmatched query with an origin purely by distance, as asked", () => {
+    // Nothing in "hello" reaches a facet: every score is 0, so the old positional band was
+    // protecting nothing but file order. Distance is the only information the reader gave.
+    const roster = [inRooms("far", "Southport"), inRooms("near", "Epping")];
+    const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster);
+    expect(near.map((c) => c.id)).toEqual(["near", "far"]);
+  });
+
+  it("never lets distance cross a real score difference, however small", () => {
+    // The nearer clone declares nothing; the farther one answers the ask. Fit stands.
+    const speaks = { ...inRooms("fits-far", "Southport"), careAreas: ["sleep" as const] };
+    const roster = [inRooms("near-but-silent", "Epping"), speaks];
+    const near = rankCliniciansNear("my sleep has never been right", resolvePlace("Beecroft"), roster);
+    expect(near[0]!.id).toBe("fits-far");
+  });
+
+  it("groups the ranked roster into bands of exactly equal score", () => {
+    const bands = rankBands("a GP who speaks Urdu");
+    // Urdu separates the real roster: one speaker above one non-speaker.
+    expect(bands).toHaveLength(2);
+    expect(bands[0]!.clinicians.map((c) => c.id)).toEqual(["anubhav-saxena"]);
+    expect(bands[0]!.score).toBeGreaterThan(bands[1]!.score);
+    // Bands partition the roster in ranked order.
+    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(clinicians.length);
+  });
+
+  it("says when the top of an informed list is itself a tie", () => {
+    // Both declare sleep; only one declares Urdu. Ask for sleep plus something neither
+    // declares and the list is informed only where nobody is looking. Synthetic roster of
+    // three makes the shape: two tied at the top, one separated below.
+    const tiedA = { ...inRooms("tied-a", "Epping"), careAreas: ["sleep" as const] };
+    const tiedB = { ...inRooms("tied-b", "Epping"), careAreas: ["sleep" as const] };
+    const behind = inRooms("behind", "Epping");
+    const note = topTieNote("my sleep has never been right", [tiedA, tiedB, behind]);
+    expect(note).toMatch(/first 2/);
+    expect(note).toMatch(/not a ranking/);
+    // And on a fully tied or unmatched roster the roster-level copy already owns the sentence.
+    expect(topTieNote("hello", [tiedA, tiedB])).toBeNull();
   });
 });

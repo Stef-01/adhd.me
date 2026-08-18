@@ -282,9 +282,9 @@ export const clinicians: Clinician[] = [
  * inference, which W83 refused internally and which is worse in public. These weights only
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
-export function rankClinicians(query: string): Clinician[] {
+export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians): Clinician[] {
   const needs = needsFor(query);
-  return [...clinicians].sort((a, b) => {
+  return [...roster].sort((a, b) => {
     const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
     if (byScore !== 0) return byScore;
 
@@ -402,10 +402,10 @@ export function unservedAsks(query: string): string[] {
  */
 export type MatchQuality = "informed" | "tied" | "unmatched";
 
-export function matchQuality(query: string): MatchQuality {
+export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
   const needs = needsFor(query);
   if (needs.length === 0) return "unmatched";
-  const scores = clinicians.map((clinician) => scoreAgainst(clinician, needs));
+  const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
   return new Set(scores).size > 1 ? "informed" : "tied";
 }
 
@@ -416,6 +416,45 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   unmatched:
     "We could not tell from that what you are looking for, so this is everyone we list rather than an order. Saying more about what you want helps.",
 };
+
+/**
+ * The ranked roster, grouped where the scores are exactly equal.
+ *
+ * WHY BANDS EXIST (the O3/F3 repair). `matchQuality` is roster-global: any two differing scores
+ * read `informed`, so "one GP scored 24 and fifteen scored 0" would dress fifteen arbitrary
+ * file-order positions in a banner that only disclaims full ties. The honesty the quality flag
+ * bought at roster level has to exist at every boundary the reader acts on: within a band the
+ * order is NOT a ranking, and a surface can now say so exactly where it is true rather than
+ * only when it is true everywhere. Same closed-vocabulary posture as everything else — a band
+ * is a fact about equal numbers, not an estimate.
+ */
+export type RankBand = { score: number; clinicians: Clinician[] };
+
+export function rankBands(query: string, roster: readonly Clinician[] = clinicians): RankBand[] {
+  const needs = needsFor(query);
+  const bands: RankBand[] = [];
+  for (const clinician of rankClinicians(query, roster)) {
+    const score = scoreAgainst(clinician, needs);
+    const last = bands.at(-1);
+    if (last && last.score === score) last.clinicians.push(clinician);
+    else bands.push({ score, clinicians: [clinician] });
+  }
+  return bands;
+}
+
+/**
+ * The sentence for a top-of-list tie that the roster-global verdict cannot see.
+ *
+ * `informed` with a tied first band is the case F3 found: an order exists somewhere in the
+ * list, just not at the boundary the reader acts on first. Only the count is interpolated —
+ * a numeral is arithmetic, not authored copy, the same rule the audit's "declares N of M" uses.
+ */
+export function topTieNote(query: string, roster: readonly Clinician[] = clinicians): string | null {
+  if (matchQuality(query, roster) !== "informed") return null;
+  const top = rankBands(query, roster)[0];
+  if (!top || top.clinicians.length < 2) return null;
+  return `The first ${top.clinicians.length} all answer what you asked equally well, so the order between them is not a ranking — read them as a group.`;
+}
 
 /**
  * Everything the reader asked for that this roster can be compared on: the lexicon's closed
@@ -479,16 +518,35 @@ export function matchEvidence(clinician: Clinician, query: string): NeedSignal[]
  * TWO-STAGE ON PURPOSE. Distance does not outrank fit: somebody who asked for a Tamil-speaking GP
  * is not helped by the nearest one who does not speak Tamil, and a directory that sorted purely by
  * kilometres would quietly undo everything the preference weights express. So the preference order
- * is computed first and distance only reorders WITHIN a band of comparable fit.
+ * is computed first and distance only reorders WITHIN comparable fit.
+ *
+ * COMPARABLE FIT IS AN EXACT SCORE TIE, NOT A NUMBER OF LIST POSITIONS (the O3/F4 repair). The
+ * old band was four RANK positions — but rank positions inside a score tie are arbitrary (stable
+ * sort = file order), so on an unmatched query with an origin the nearest clinician at file
+ * position 13 could not rise past a band that was protecting nothing but file order. Inside an
+ * exact tie no preference information exists, so distance — a fact the reader gave us — is the
+ * only honest sort; across ANY real score difference, the stated preference stands, however
+ * small the gap. No threshold, no judgement call: the predicate is "did the preferences
+ * separate them at all". An unmatched query with an origin is now fully distance-sorted, which
+ * is exactly what the reader asked for. This is also how the dating platforms treat distance:
+ * a hard input within preference-comparable candidates, never a post-hoc shuffle bounded by
+ * list position.
  *
  * Clinicians whose suburb is not in the gazetteer keep their preference position rather than
  * sinking. An unknown location is a gap in our data, and penalising a practice for it would be
  * making them pay for our missing row.
  */
-export function rankCliniciansNear(query: string, origin: SuburbPoint | null): Clinician[] {
-  const byFit = rankClinicians(query);
+export function rankCliniciansNear(
+  query: string,
+  origin: SuburbPoint | null,
+  roster: readonly Clinician[] = clinicians,
+): Clinician[] {
+  const byFit = rankClinicians(query, roster);
   if (!origin) return byFit;
 
+  const needs = needsFor(query);
+  const score = new Map(byFit.map((c) => [c.id, scoreAgainst(c, needs)]));
+  // Carries the fit tie-breaks (founder-behind, then file order) into ties distance cannot see.
   const fitRank = new Map(byFit.map((c, i) => [c.id, i]));
   const km = (c: Clinician) => {
     const point = resolvePlace(c.suburb);
@@ -496,25 +554,18 @@ export function rankCliniciansNear(query: string, origin: SuburbPoint | null): C
   };
 
   return [...byFit].sort((a, b) => {
-    const byPreference = fitRank.get(a.id)! - fitRank.get(b.id)!;
+    const byScore = score.get(b.id)! - score.get(a.id)!;
+    if (byScore !== 0) return byScore;
+    const byFitOrder = fitRank.get(a.id)! - fitRank.get(b.id)!;
     // Somebody you do not travel to is equally near from everywhere, so distance has nothing to
     // say about them and their stated-preference position stands.
-    if (a.telehealthFirstAppointment || b.telehealthFirstAppointment) return byPreference;
-    if (Math.abs(byPreference) > COMPARABLE_FIT_BAND) return byPreference;
+    if (a.telehealthFirstAppointment || b.telehealthFirstAppointment) return byFitOrder;
     const da = km(a);
     const db = km(b);
-    if (da === null || db === null) return byPreference;
+    if (da === null || db === null || da === db) return byFitOrder;
     return da - db;
   });
 }
-
-/**
- * How close in the preference order two clinicians must be before distance decides between them.
- *
- * Four is a judgement, and a small one on a sixteen-entry roster: it lets the top handful reorder
- * by geography while keeping somebody ranked 12th on fit from jumping to first for being nearby.
- */
-const COMPARABLE_FIT_BAND = 4;
 
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
 export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {
