@@ -99,6 +99,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O30 (Standing debt #2, first half — the interview screen) — claimed 2026-08-18T21:48Z by
+> loop-0818b.** ONBOARDING-INTERVIEW.md build order item 2: a real `/console/interview` screen —
+> editable transcript field (the current console cross-check runs on a hard-coded example), live
+> proposals from BOTH readers as the interviewer types, each proposal carrying the clinician's
+> sentence and the STRUCTURED INTERVIEW'S OWN QUESTION as its read-back, and per-proposal
+> often/sometimes/not-me confirm recorded with the interviewer's name into the existing W226
+> background store (BackgroundFacet gains an optional `frequency`; often/sometimes → accepted,
+> not-me → rejected, unanswered stays proposed). Items 3 (gap sweep) and 4 (persisted reach
+> report) remain separate units. Verify: unit tests over the parse + confirm mapping and the
+> store round-trip; e2e over the signed-in screen; taste-skill pass with qa/ captures and a
+> DESIGN-QA entry; `pnpm verify` green.
+
 > **O26 (matching follow-through, out-of-band like D1) — DONE 2026-08-18, loop-0818 (claimed
 > 18:45Z).** The mix-capture debt from O24: the join hero sold "the mix is yours to set", its CTA
 > said "Set my mix", and the form then discarded the percent on submit. Now
