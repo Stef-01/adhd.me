@@ -54,6 +54,22 @@ export interface ClinicianApplication {
   /** Says they have completed the NSW training. See the header. */
   nswAdhdTrained: boolean;
   acceptingNewPatients: boolean;
+  /**
+   * The share of their patients the GP said they would WANT in this kind of work — the number
+   * the join hero has them set ("I want N% of my patients to be…"), carried into the
+   * application instead of being discarded at the fold.
+   *
+   * A PREFERENCE, NOT A PROFILE FIELD. This is W81's interest capture arriving through the
+   * front door: a statement about the case mix they would take more of. It is internal — no
+   * directory profile holds it and none may (a stated ambition rendered publicly reads as a
+   * competence claim) — and it feeds only the clinician-side half of matching that the year
+   * plan's Q3 reciprocity work needs stated capacity for.
+   *
+   * ABSENT UNLESS THE GP ACTUALLY SET IT. The hero opens at 30%, and a default nobody touched
+   * is not a declaration; recording it as one would manufacture a preference. So the field is
+   * optional, and the form only submits it after the control has been used.
+   */
+  desiredMixPercent?: number;
   submittedAt: string;
   /**
    * Every application arrives here and stays here until a person moves it.
@@ -69,8 +85,27 @@ export interface ClinicianFormState {
   status: "idle" | "error" | "success";
   message: string;
   fieldErrors?: Partial<
-    Record<"fullName" | "ahpraRegistrationNumber" | "email" | "practiceSuburb" | "practiceName" | "careAreas" | "manner" | "languages" | "consent", string>
+    Record<"fullName" | "ahpraRegistrationNumber" | "email" | "practiceSuburb" | "practiceName" | "careAreas" | "manner" | "languages" | "desiredMixPercent" | "consent", string>
   >;
+}
+
+/**
+ * The mix values the hero can express, shared with the store's validator so the two cannot
+ * drift: 10–50 in steps of 10. The ceiling is deliberate — a hero that let a GP ask for 100%
+ * would be selling a caseload this product has no basis to promise.
+ */
+export const MIX_PERCENT_MIN = 10;
+export const MIX_PERCENT_MAX = 50;
+export const MIX_PERCENT_STEP = 10;
+
+/** True only for the exact values the hero's control can produce. */
+export function isDeclarableMixPercent(value: number): boolean {
+  return (
+    Number.isInteger(value) &&
+    value >= MIX_PERCENT_MIN &&
+    value <= MIX_PERCENT_MAX &&
+    value % MIX_PERCENT_STEP === 0
+  );
 }
 
 /**

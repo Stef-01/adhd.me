@@ -27,6 +27,22 @@ test.describe("the join page opens with the mix, not the form", () => {
     await expect(hero.getByText(/about\s+1 matched patient a day/i)).toBeVisible();
   });
 
+  test("the mix set above reaches the application below (O26)", async ({ page }) => {
+    await page.goto("/clinicians/join");
+    // Untouched, the form carries no mix at all: the hero's 30% is an opening position, not a
+    // statement, and submitting it would manufacture a preference the GP never expressed.
+    await expect(page.getByTestId("mix-echo")).toHaveCount(0);
+    // The GP sets 50% through the accessible control…
+    await page.getByLabel(/Percentage of your patients/i).fill("50");
+    // …and the form now restates it and will submit it with the application.
+    const echo = page.getByTestId("mix-echo");
+    await expect(echo).toBeVisible();
+    await expect(echo).toContainText("50%");
+    await expect(echo.locator('input[name="desiredMixPercent"]')).toHaveValue("50");
+    // Said as a preference with its feet on the ground, like the hero's own honesty line.
+    await expect(echo).toContainText(/not a booking promise/i);
+  });
+
   test("screenshots for the design record", async ({ page }) => {
     await page.goto("/clinicians/join");
     await page.waitForTimeout(400);

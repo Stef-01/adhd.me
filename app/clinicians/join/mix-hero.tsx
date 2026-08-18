@@ -16,6 +16,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import { MIX_PERCENT_MAX, MIX_PERCENT_MIN, MIX_PERCENT_STEP } from "@/onboarding/types";
 
 /**
  * The rotating conditions, in the clinician's own shorthand. Professional surface (see
@@ -25,13 +26,19 @@ import { useEffect, useState } from "react";
  */
 const CONDITIONS = ["ADHD", "anxiety", "depression", "autism and ADHD", "complex mental health"];
 
-const PERCENT_MIN = 10;
-const PERCENT_MAX = 50;
-const PERCENT_STEP = 10;
-
-export function MixHero() {
+/**
+ * Controlled since O26: the parent (join-experience.tsx) owns the percent, because the same
+ * number now has two readers — this sentence and the application form below it. The bounds
+ * live in `src/onboarding/types.ts` beside the validator that enforces them at submission.
+ */
+export function MixHero({
+  percent,
+  onSetPercent,
+}: {
+  percent: number;
+  onSetPercent: (value: number) => void;
+}) {
   const reducedMotion = useReducedMotion();
-  const [percent, setPercent] = useState(30);
   const [conditionIndex, setConditionIndex] = useState(0);
 
   useEffect(() => {
@@ -46,7 +53,7 @@ export function MixHero() {
   const condition = CONDITIONS[conditionIndex] ?? CONDITIONS[0]!;
   // The illustration's whole arithmetic: a tenth of the percentage, as patients in a day.
   // Deliberately simple enough to verify at a glance — 30% reads as about 3 a day.
-  const perDay = Math.round(percent / PERCENT_STEP);
+  const perDay = Math.round(percent / MIX_PERCENT_STEP);
 
   return (
     <section className="mix-hero" aria-label="Set the patient mix you want">
@@ -58,8 +65,8 @@ export function MixHero() {
             className="mix-step"
             aria-hidden="true"
             tabIndex={-1}
-            disabled={percent <= PERCENT_MIN}
-            onClick={() => setPercent((value) => Math.max(PERCENT_MIN, value - PERCENT_STEP))}
+            disabled={percent <= MIX_PERCENT_MIN}
+            onClick={() => onSetPercent(Math.max(MIX_PERCENT_MIN, percent - MIX_PERCENT_STEP))}
           >
             &minus;
           </button>
@@ -69,8 +76,8 @@ export function MixHero() {
             className="mix-step"
             aria-hidden="true"
             tabIndex={-1}
-            disabled={percent >= PERCENT_MAX}
-            onClick={() => setPercent((value) => Math.min(PERCENT_MAX, value + PERCENT_STEP))}
+            disabled={percent >= MIX_PERCENT_MAX}
+            onClick={() => onSetPercent(Math.min(MIX_PERCENT_MAX, percent + MIX_PERCENT_STEP))}
           >
             +
           </button>
@@ -101,11 +108,11 @@ export function MixHero() {
         <input
           id="mix-percent-input"
           type="range"
-          min={PERCENT_MIN}
-          max={PERCENT_MAX}
-          step={PERCENT_STEP}
+          min={MIX_PERCENT_MIN}
+          max={MIX_PERCENT_MAX}
+          step={MIX_PERCENT_STEP}
           value={percent}
-          onChange={(event) => setPercent(Number(event.target.value))}
+          onChange={(event) => onSetPercent(Number(event.target.value))}
         />
       </div>
 

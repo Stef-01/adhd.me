@@ -98,6 +98,33 @@ non-rankings.
   of two clinicians' evidence; (Q4) the same provenance view inside the console so a doctor
   sees exactly what patients are told about them.
 
+## UI refinement & motion, continuously (runs all year)
+
+The standing rules, applied whenever a unit touches a surface (they are O11/O14/O24's rules
+written down as the track they already were): minimalist — one idea per screen, fold
+discipline, related facts share a row; motion via motion/react only where it carries meaning
+(a state change, an arrival — never decoration), with `prefers-reduced-motion` fully
+honoured; 44px touch floor; every visual change leaves a before/after capture in `qa/` and a
+docs/DESIGN-QA.md entry.
+
+## Standing debts
+
+Debts the plan knows about, each either a claimable build unit or marked FOUNDER. A debt
+listed here is not backlog padding — it is a promise a shipped surface already makes that the
+code does not yet keep.
+
+1. **Mix capture (from O24) — CLOSED by O26, 2026-08-18.** The join hero said "Set my mix"
+   and the form threw the number away. `desiredMixPercent` now rides the application when —
+   and only when — the GP actually set it (join-experience.tsx owns the state; store validates
+   10–50 step 10 and refuses the rest; absent means undeclared, never defaulted).
+2. **O22 console build-out** (build unit): ONBOARDING-INTERVIEW.md build order items 2–4 —
+   the console onboarding page with transcript field, live proposals and per-proposal confirm
+   wired to the existing interview record; the gap-sweep view; the per-onboarding reach
+   report.
+3. **Finder desktop composition** (build unit, from D1's reverted attempt): the ~520px shell
+   is shared by every finder stage, so a real desktop layout needs the shell widened for all
+   stages at once — it deserves its own unit, not a media query (rationale in globals.css).
+
 ## The targeting-levels audit (O23)
 
 docs/MATCHING-TARGETING-AUDIT.md judges the matcher against the advertising hierarchy

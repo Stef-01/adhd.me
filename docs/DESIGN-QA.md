@@ -124,3 +124,17 @@ Each is asserted in `e2e/results.spec.ts`, so the checklist cannot rot.
   Note: the mapped taste-skill is not installed in this session; this audit applies the
   standing rules from O11/O14 (one idea per screen, fold discipline, 44px targets, related
   facts share a row) in its place.
+
+## O26 — the hero's mix reaches the form (2026-08-18)
+
+- The debt: O24's CTA said "Set my mix" and the form had no mix field — the sentence's whole
+  promise was discarded at the fold.
+- [x] One owner for the number (join-experience.tsx); the hero edits it, the form restates it
+  in a single quiet line inside "What you see often" (`.join-mix-echo`, join-hint styling —
+  no new visual weight, the `<strong>` percent is the only emphasis).
+- [x] Honesty carried through: the echo says "your stated preference … not a booking
+  promise, and it is never published" — the hero's honesty line at the point of capture.
+- [x] Nothing renders and nothing submits until the GP actually uses the control: an
+  untouched 30% default is not a declaration, so the field is absent, not zero, not 30.
+- [x] No new motion; no touch-target change; behaviour pinned in e2e/join-hero.spec.ts
+  ("the mix set above reaches the application below").

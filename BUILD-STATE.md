@@ -99,13 +99,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **O26 (matching follow-through, out-of-band like D1) — claimed 2026-08-18T18:45Z by loop-0818.**
-> The mix-capture debt from O24: the join hero sells "the mix is yours to set" and its CTA says
-> "Set my mix", but the join form has no mix field — the percent a GP dials in is discarded on
-> submit. Unit: carry the stated mix into `ClinicianApplication` as a declared preference
-> (closed values 10–50 step 10; absent unless the GP actually touched the control, because a
-> default nobody set is not a declaration). Verify: store validation tests both directions;
-> e2e pins hero → form wiring; `pnpm verify` green.
+> **O26 (matching follow-through, out-of-band like D1) — DONE 2026-08-18, loop-0818 (claimed
+> 18:45Z).** The mix-capture debt from O24: the join hero sold "the mix is yours to set", its CTA
+> said "Set my mix", and the form then discarded the percent on submit. Now
+> `join-experience.tsx` owns the number (hero edits it, form restates and submits it);
+> `ClinicianApplication.desiredMixPercent` is optional and INTERNAL — never published, W81's
+> interest capture arriving through the front door, feeding only the year plan's Q3
+> clinician-side fit. The honesty rule is load-bearing both directions: absent unless the GP
+> actually touched the control (a default nobody set is not a declaration, key omitted rather
+> than nulled), and refused with a reason outside the control's own range (10–50 step 10,
+> `isDeclarableMixPercent` shared between hero and validator so they cannot drift). Gate:
+> typecheck, store tests 18/18 incl. tamper cases both directions, join e2e 4/4 incl. the new
+> wiring pin, full `pnpm verify` green. Year plan updated: Standing debts section added with
+> this debt closed; UI-track rules written down. Debt #2 (O22 console build-out) is the next
+> claimable standing debt.
 
 > **D1 (design, out-of-band) — DONE 2026-08-10.** Finder opening screen: the example prompt and the
 > archetype label were one idea rendered as two orphans with a ~250px dead band between them and the

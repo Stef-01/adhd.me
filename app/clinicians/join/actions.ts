@@ -30,6 +30,10 @@ export async function submitApplication(
     otherLanguages: text("otherLanguages"),
     nswAdhdTrained: formData.get("nswAdhdTrained") === "on",
     acceptingNewPatients: formData.get("acceptingNewPatients") === "on",
+    // The hero's mix, present only if the GP touched the control (the form omits the field
+    // otherwise). A non-numeric value becomes NaN here and is refused by the validator rather
+    // than guessed at.
+    desiredMixPercent: text("desiredMixPercent") === "" ? undefined : Number(text("desiredMixPercent")),
   };
 
   // Consent is checked here rather than in `validateApplication`, which validates the APPLICATION.
