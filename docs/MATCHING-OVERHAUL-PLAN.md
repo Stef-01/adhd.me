@@ -151,7 +151,7 @@ commit); PR made ready for review.
 
 | Unit | Findings | Status | Commit |
 |---|---|---|---|
-| O1 | F2 | in progress | — |
+| O1 | F2 | done | 5dd0fef |
 | O2 | F1 | available | — |
 | O3 | F3, F4 | available (needs O2) | — |
 | O4 | F5 | available (needs O3 for bands) | — |
