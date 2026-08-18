@@ -158,4 +158,4 @@ commit); PR made ready for review.
 | O5 | F6, F7 | done | d9c398e |
 | O6 | F8 | done | 44a4bdc |
 | O7 | F10 | done | abfa351 |
-| O8 | review | last | — |
+| O8 | review | done | b17e44e + close-out |

@@ -351,3 +351,27 @@ synonymy misses", not fashion).
 - Bipartite matching: [NetworkX hopcroft_karp_matching](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.bipartite.matching.hopcroft_karp_matching.html) · [SciPy maximum_bipartite_matching](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.maximum_bipartite_matching.html)
 - Open-source dating apps: [Duolicious](https://en.wikipedia.org/wiki/Duolicious) · [dating-app-microservices](https://github.com/goktugercedogan/dating-app-microservices) · [github.com/topics/dating-app](https://github.com/topics/dating-app)
 - Patient–provider matching research: [Assortment optimisation for patient–provider matching](https://arxiv.org/html/2502.10353)
+
+---
+
+## 7. Delta — what the overhaul shipped against each finding (O1–O8, 2026-08-18)
+
+Executed on `claude/matching-algorithm-review-wy2z5f` per `docs/MATCHING-OVERHAUL-PLAN.md`.
+Commit hashes are in that plan's status ledger.
+
+| Finding | Disposition | Where |
+|---|---|---|
+| F1 | **Fixed** — rarity discount `(N−heldBy+1)/N` in `needsFor`; three-state declaration (`careAreasSometimes`, half weight); breadth in the console audit | O2 |
+| F2 | **Fixed** — `{kind:"language"}` facet via the tokenise-and-stem pipeline; `needsFor` is the one entry point for ranking, quality, evidence and audit; substring matcher deleted | O1 |
+| F3 | **Fixed** — `rankBands` (exact-score groups) + `topTieNote` at the boundary the reader acts on; the fold never cuts a tied band | O3, O8 |
+| F4 | **Fixed** — comparable fit = exact score tie; unmatched+origin is fully distance-sorted; reorder is structural (positional swap within ties), not a pairwise comparator | O3, O8 |
+| F5 | **Fixed** — capacity breaks ties (never scores, never filters); `CLOSED_BOOKS_COPY` on row and profile; capacity before kilometres inside a tie | O4 |
+| F6 | **Fixed** — clarifier-confirmed facets carry 1.5× (marker detection on our own appended answer sentences) | O5 |
+| F7 | **Fixed** — `holdsPreference` in one place; `PREF_PROMPTS` for woman-GP / telehealth / bulk-billing; a preference nobody holds is never asked | O5 |
+| F8 | **Measured & tripwired** — test-only Kuhn oracle, gap pinned (≤1 slot, ≤10% of a fixed 400-instance corpus); MATCH-2 latent finding fails the build if `availableSlotIds` reaches `app/`; deferred acceptance named as successor | O6 |
+| F9 | **Untouched by design** — MATCH-1 remains the founder's decision; no unit modified `src/engine/pool.ts` | — |
+| F10 | **Fixed, and the pins found three live defects** — self-reach pin (caught the degenerate "a plan i can" cue and the all-stopword "in and out"), clarifier-answer pin (caught the structured answer landing on the wrong facet), explicit first-claim dedup ("overwhelmed"), clause-boundary token, stemmer edge recorded | O7 |
+
+The review pass (O8) ran `/code-review` at high effort (eight findings, all fixed: roster
+threading, float-stable scores, comparator transitivity, `careAreasSometimes` completeness,
+breadth double-count, render-time recompute, fold-vs-band) and `/security-review` (no findings).
