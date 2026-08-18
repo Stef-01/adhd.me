@@ -1,4 +1,4 @@
-// W223: a 30-minute interview transcript → a clinician background the matcher can use.
+// W221: a 30-minute interview transcript → a clinician background the matcher can use.
 //
 // WHAT THIS IS FOR. The interview instrument (`interview.ts`) is a set of questions someone asks;
 // this is what happens to the ANSWERS. A real interview does not arrive as ticked boxes — it
@@ -74,23 +74,21 @@ export type ProposedBackground = {
 
 /** Cues for the care areas, reusing the labels the form and the finder already share. */
 const CARE_CUES: ReadonlyArray<{ area: CareArea; label: string; cues: readonly string[] }> = [
-  { area: "adhd-assessment", label: "Assessment", cues: ["assessment", "assess", "diagnose", "diagnosis"] },
-  { area: "adult-adhd", label: "Adults", cues: ["adults", "adult patients", "grown adults"] },
-  { area: "child-adolescent-adhd", label: "Children and adolescents", cues: ["children", "adolescents", "teenagers", "paediatric"] },
-  { area: "adhd-in-women", label: "Late-recognised presentations in women", cues: ["women", "late presentation", "missed in childhood", "perimenopause"] },
-  { area: "autism-adhd", label: "Co-occurring autism", cues: ["autism", "autistic", "audhd"] },
-  { area: "titration", label: "Titration and dose follow-up", cues: ["titration", "titrate", "dose", "dosing"] },
-  { area: "cardiac-screening", label: "Baseline physical screening", cues: ["cardiovascular", "cardiac", "blood pressure", "baseline physical", "ecg"] },
-  { area: "comorbid-mood", label: "Anxiety and mood differential", cues: ["anxiety", "mood", "depression", "differential"] },
-  { area: "substance-history", label: "Substance history held safely", cues: ["substance", "alcohol", "cannabis", "drinking"] },
-  { area: "sleep", label: "Sleep", cues: ["sleep", "insomnia"] },
-  { area: "non-medication", label: "Non-medication supports", cues: ["non medication", "without medication", "coaching", "behavioural"] },
-  { area: "emotional-regulation", label: "Emotional regulation", cues: ["emotional regulation", "rejection sensitivity"] },
+  // ADHD
+  { area: "adhd-assessment", label: "ADHD assessment", cues: ["assessment", "assess", "diagnose", "diagnosis"] },
+  { area: "child-adolescent-adhd", label: "ADHD in children and adolescents", cues: ["children", "adolescents", "teenagers", "paediatric"] },
+  { area: "titration", label: "Medication titration and review", cues: ["titration", "titrate", "dose", "dosing"] },
   { area: "shared-care", label: "Shared care with a psychiatrist or paediatrician", cues: ["shared care", "psychiatrist", "co manage"] },
-  { area: "trauma-informed", label: "Trauma-informed care", cues: ["trauma", "trauma informed"] },
-  { area: "complex-mental-health", label: "Coordinated shared care", cues: ["bipolar", "ptsd", "complex presentations"] },
-  { area: "student-academic", label: "Study and workplace documentation", cues: ["university", "workplace", "documentation", "letters"] },
-  { area: "disability-rights", label: "Disability rights", cues: ["disability", "ndis"] },
+  // Depression and anxiety
+  { area: "depression", label: "Depression and low mood", cues: ["depression", "depressed", "low mood", "antidepressant"] },
+  { area: "anxiety", label: "Anxiety disorders", cues: ["anxiety", "anxious", "panic", "differential"] },
+  // Other mental health
+  { area: "trauma-informed", label: "Trauma and PTSD", cues: ["trauma", "trauma informed", "ptsd"] },
+  { area: "complex-mental-health", label: "Bipolar and complex mental health", cues: ["bipolar", "psychosis", "complex presentations"] },
+  { area: "autism-adhd", label: "Autism and neurodevelopmental", cues: ["autism", "autistic", "audhd"] },
+  { area: "substance-history", label: "Substance use", cues: ["substance", "alcohol", "cannabis", "drinking"] },
+  { area: "emotional-regulation", label: "Emotional regulation", cues: ["emotional regulation", "rejection sensitivity"] },
+  { area: "non-medication", label: "Non-medication and psychological supports", cues: ["non medication", "without medication", "coaching", "behavioural"] },
 ];
 
 /**

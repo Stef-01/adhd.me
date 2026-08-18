@@ -71,23 +71,21 @@ export type Question = {
  * then who they are, then what else is in the room, then what happens after.
  */
 const CARE_QUESTIONS: ReadonlyArray<{ area: CareArea; ask: string }> = [
-  { area: "adhd-assessment", ask: "Do you take adults through an ADHD assessment yourself?" },
-  { area: "adult-adhd", ask: "Adults specifically, as opposed to continuing childhood care?" },
-  { area: "child-adolescent-adhd", ask: "Children and adolescents?" },
-  { area: "adhd-in-women", ask: "People whose ADHD went unrecognised in childhood — often women presenting later?" },
-  { area: "autism-adhd", ask: "People who are autistic as well?" },
+  // ADHD
+  { area: "adhd-assessment", ask: "Do you take patients through an ADHD assessment yourself?" },
+  { area: "child-adolescent-adhd", ask: "Children and adolescents, as well as adults?" },
   { area: "titration", ask: "Do you carry titration and dose review yourself?" },
-  { area: "cardiac-screening", ask: "Do you do the baseline physical screening before a stimulant?" },
-  { area: "comorbid-mood", ask: "Working out anxiety or mood alongside the ADHD question?" },
+  { area: "shared-care", ask: "Shared care with a treating psychiatrist or paediatrician?" },
+  // Depression and anxiety
+  { area: "depression", ask: "Depression and low mood?" },
+  { area: "anxiety", ask: "Anxiety disorders, including working anxiety and ADHD apart?" },
+  // Other mental health
+  { area: "trauma-informed", ask: "Trauma and PTSD, where the history itself is hard to tell?" },
+  { area: "complex-mental-health", ask: "Bipolar, psychosis or other complex presentations, coordinated with a psychiatrist?" },
+  { area: "autism-adhd", ask: "Autism and other neurodevelopmental presentations?" },
   { area: "substance-history", ask: "Taking a substance history as part of the safety picture?" },
-  { area: "sleep", ask: "Sleep, as part of the assessment rather than as an afterthought?" },
-  { area: "non-medication", ask: "People who want options other than medication?" },
   { area: "emotional-regulation", ask: "Rejection sensitivity and emotional regulation?" },
-  { area: "shared-care", ask: "Shared care with a treating psychiatrist?" },
-  { area: "trauma-informed", ask: "People with a trauma history, where the history itself is hard to tell?" },
-  { area: "complex-mental-health", ask: "Alongside bipolar or PTSD, coordinated with their psychiatrist?" },
-  { area: "student-academic", ask: "Documentation for a university or an employer?" },
-  { area: "disability-rights", ask: "Disabled patients, including NDIS-related work?" },
+  { area: "non-medication", ask: "Patients who want options other than medication?" },
 ];
 
 /**

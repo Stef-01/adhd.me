@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, distanceTo, getPersonalizedMatch, rankClinicians, rankCliniciansNear } from "./clinicians";
+import { clinicians, distanceTo, getPersonalizedMatch, matchQuality, rankClinicians, rankCliniciansNear } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -125,17 +125,32 @@ describe("clinician roster and matching", () => {
       .toContain("Hindi-speaking");
   });
 
+  /**
+   * LANGUAGE MUST DRIVE THE RANKING, NOT ONLY THE SIGNAL. Language is per-clinician data read by
+   * `languageAsked` into `matchEvidence`, and is not in the lexicon `readNeeds` scans. Ranking on
+   * readNeeds alone showed "Hindi-speaking" as a pill while the order ignored it — and graded a
+   * language-only query "unmatched", telling a reader who plainly asked for a language that the
+   * finder could not tell what they wanted. The finder now ranks and grades on the evidence it shows.
+   */
+  it("ranks and grades on a spoken language, not only as a signal", () => {
+    // Only Dr Saxena speaks Urdu, so it is an earned, informed order that puts him first.
+    expect(rankClinicians("a GP who speaks Urdu")[0]!.id).toBe("anubhav-saxena");
+    expect(matchQuality("a GP who speaks Urdu")).toBe("informed");
+    // Both speak Hindi, so it is a real match that does not separate them: tied, never unmatched.
+    expect(matchQuality("I need a GP who speaks Hindi")).not.toBe("unmatched");
+  });
+
   it.each([
     ["titration", "Titration and dose review"],
     ["substance-history", "Substance history held safely"],
-    ["comorbid-mood", "Anxiety and mood differential"],
+    ["anxiety", "Anxiety"],
   ] satisfies Array<[CareArea, string]>)(
     "gives a grounded explanation for %s",
     (careArea, expectedSignal) => {
       const queryByArea: Partial<Record<CareArea, string>> = {
         titration: "My dose is wearing off and I need a review of the side effects",
         "substance-history": "I drink too much and used cannabis, is a non-stimulant an option",
-        "comorbid-mood": "I was treated for anxiety and think it was the wrong answer",
+        anxiety: "I was treated for anxiety and think it was the wrong answer",
       };
       const matches = clinicians.filter((clinician) => clinician.careAreas.includes(careArea));
 

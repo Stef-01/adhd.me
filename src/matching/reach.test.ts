@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, scoreAgainst, unservedAsks } from "@/demo/clinicians";
+import { clinicians, evidenceScore, matchQuality, unservedAsks } from "@/demo/clinicians";
 import { readNeeds } from "./needs";
 
 /**
@@ -32,14 +32,43 @@ const CORPUS: readonly string[] = [
   "every doctor I've seen decides before I finish the sentence",
   "I want someone who won't make me feel like I'm making it up",
   "I need to know it's not going to hurt my heart before I start anything",
-  "my brain has never let me finish anything and I'm 34",
   "I've been on antidepressants for six years and nothing shifted",
   "I want to actually understand what's happening to me",
   "my mum thinks this is nonsense and she'll be in the room",
+  // Paraphrases the lexicon was widened to hear, against measured misses — each resolves to a
+  // clinician-attribute preference (how they want care given), never to a symptom.
+  "I'd like a GP who works with me on the options rather than dictating",
+  "I want the first appointment to not be a ten minute in and out",
+  "I need someone who will follow up and not just leave me to it",
   // Genuinely uninformative. These SHOULD reach nothing; the product's job is to say so.
   "I think I might have ADHD",
   "help",
   "I don't know where to start",
+];
+
+/**
+ * W221: THE G7 BOUNDARY, PINNED AS AN INTENTIONAL NON-REACH — not a corpus gap to close.
+ *
+ * Every sentence here describes the reader's OWN impairment: the DSM inattention and
+ * executive-function experience. None of them expresses a preference about care. Reaching a facet
+ * from any of them would be the product concluding something clinical ABOUT the patient from their
+ * symptoms — the TGA/CDSS line docs/GATE-DOSSIER-Q17.md holds shut and the pitch states publicly:
+ * matching is keyed to a clinician's declared attributes, never to a patient's symptoms.
+ *
+ * This is a TEST rather than a comment because the failure mode already happened once. A probe read
+ * "my brain has never let me finish anything" as a recall miss and closed it by adding
+ * "never finish anything" to the Adult-ADHD facet — reaching into symptom text to make a metric go
+ * green. In a bare miss-rate number a symptom sentence and a genuine paraphrase gap look identical;
+ * the only thing that tells them apart is a human decision, recorded here. The honest behaviour is
+ * `matchQuality="unmatched"`: the finder says it could not tell from this alone, and never reaches a
+ * facet by reading a symptom.
+ */
+const SYMPTOM_NONREACH: readonly string[] = [
+  "my brain has never let me finish anything and I'm 34",
+  "I can't concentrate on anything for more than five minutes",
+  "I keep losing my keys and forgetting appointments",
+  "I procrastinate on everything until the very last minute",
+  "I've been like this my whole life",
 ];
 
 const reached = (query: string) => readNeeds(query).length > 0;
@@ -48,10 +77,12 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
   it("reaches all but the queries that express no need", () => {
     const misses = CORPUS.filter((query) => !reached(query));
     const rate = misses.length / CORPUS.length;
+    // Ratchet lowered 0.15 → 0.12 as the lexicon widened against measured misses. The only misses
+    // left are the two deliberately-uninformative queries; the ceiling sits just above them.
     expect(
       rate,
       `miss rate ${(rate * 100).toFixed(0)}% — unreached: ${JSON.stringify(misses)}`,
-    ).toBeLessThanOrEqual(0.15);
+    ).toBeLessThanOrEqual(0.12);
   });
 
   /**
@@ -59,9 +90,22 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
    * sentences that were written from it, which measures nothing.
    */
   it("reaches most of the sentences that avoid its own vocabulary", () => {
-    const paraphrase = CORPUS.slice(5, 13);
+    const paraphrase = CORPUS.slice(5, 15);
     const misses = paraphrase.filter((query) => !reached(query));
     expect(misses.length, `unreached paraphrase: ${JSON.stringify(misses)}`).toBeLessThanOrEqual(1);
+  });
+
+  /**
+   * The boundary is worth more than the recall number, so it is asserted directly and separately:
+   * a symptom description reaches NOTHING and the finder says so. If a future change makes any of
+   * these reach a facet, this fails — which is the point, because the miss-rate test above would go
+   * quietly greener as G7 was quietly crossed.
+   */
+  it("never reads a symptom description into a facet", () => {
+    for (const query of SYMPTOM_NONREACH) {
+      expect(readNeeds(query), `"${query}" reached a facet from a symptom description`).toEqual([]);
+      expect(matchQuality(query), `"${query}" was presented as a ranking`).toBe("unmatched");
+    }
   });
 
   /**
@@ -72,8 +116,9 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
   it("never presents an unearned order as a ranking", () => {
     for (const query of CORPUS) {
       const quality = matchQuality(query);
-      const needs = readNeeds(query);
-      const scores = clinicians.map((clinician) => scoreAgainst(clinician, needs));
+      // Validated on evidenceScore — the SAME score matchQuality grades on, language included — so
+      // an order earned only on a spoken language is not mis-read here as unearned.
+      const scores = clinicians.map((clinician) => evidenceScore(clinician, query));
 
       if (quality === "informed") {
         expect(new Set(scores).size, `${query} is "informed" but every clinician scores the same`)

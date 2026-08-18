@@ -23,40 +23,33 @@
  * my language", "do I have to see a psychiatrist first". None of those are a diagnosis.
  */
 export type CareArea =
+  // ── ADHD ────────────────────────────────────────────────────────────────────────────────────
   /** Structured diagnostic assessment against DSM-5-TR criteria. The anchor every profile holds. */
   | "adhd-assessment"
-  /** Adults, including the late-recognised presentations that arrive after a child's diagnosis. */
-  | "adult-adhd"
   /** Children and adolescents, where the assessment runs through school as well as home. */
   | "child-adolescent-adhd"
-  /** Presentations missed for decades in women, and how they shift with hormonal change. */
-  | "adhd-in-women"
-  /** Co-occurring autism, where one explanation is usually offered and two are needed. */
-  | "autism-adhd"
-  /** Medication initiation and dose titration, monitored over weeks rather than set once. */
+  /** Medication initiation, dose titration and review, monitored over weeks rather than set once. */
   | "titration"
   /** GP shared care under a psychiatrist's or paediatrician's plan. */
   | "shared-care"
-  /** Sleep, structure, environment and coaching — the half of the plan that is not a script. */
-  | "non-medication"
-  /** Emotional dysregulation and rejection sensitivity, which are what people describe first. */
-  | "emotional-regulation"
-  /** Anxiety and depression alongside ADHD: comorbidity, differential, or both at once. */
-  | "comorbid-mood"
+  // ── Depression & anxiety ────────────────────────────────────────────────────────────────────
+  /** Low mood and depression — the commonest thing a GP sees alongside, or instead of, ADHD. */
+  | "depression"
+  /** Anxiety disorders, and working out anxiety from ADHD when they present through each other. */
+  | "anxiety"
+  // ── Other mental health ─────────────────────────────────────────────────────────────────────
+  /** Trauma-aware assessment and PTSD, where trauma and ADHD present through each other. */
+  | "trauma-informed"
+  /** Bipolar, psychosis and other complex presentations, held with the treating psychiatrist. */
+  | "complex-mental-health"
+  /** Co-occurring autism and neurodevelopmental presentations. */
+  | "autism-adhd"
   /** A substance-use history, which changes what may safely be prescribed and by whom. */
   | "substance-history"
-  /** Sleep and circadian problems, which imitate ADHD and worsen it. */
-  | "sleep"
-  /** Baseline cardiovascular screening before a stimulant, and monitoring after. */
-  | "cardiac-screening"
-  /** Access, autonomy, and adjustments at work or study. */
-  | "disability-rights"
-  /** Trauma-aware assessment, where trauma and ADHD present through each other. */
-  | "trauma-informed"
-  /** Bipolar or PTSD alongside ADHD, held with the treating psychiatrist. */
-  | "complex-mental-health"
-  /** Documentation a school, university or employer will actually accept. */
-  | "student-academic";
+  /** Emotional dysregulation and rejection sensitivity, which are what people describe first. */
+  | "emotional-regulation"
+  /** Non-medication and psychological supports — the half of the plan that is not a script. */
+  | "non-medication";
 
 export type CareArchetype = {
   id: string;
@@ -102,7 +95,7 @@ export const careArchetypes: CareArchetype[] = [
     headline: "The baseline done before the prescription, not after.",
     expectedFirstMatch: "anubhav-saxena",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "cardiac-screening"],
+      careAreas: ["adhd-assessment", "titration"],
     },
   },
   {
@@ -115,7 +108,7 @@ export const careArchetypes: CareArchetype[] = [
     headline: "A history you can tell without it being used against you.",
     expectedFirstMatch: "anubhav-saxena",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "substance-history"],
+      careAreas: ["adhd-assessment", "substance-history"],
     },
   },
   {
@@ -128,7 +121,7 @@ export const careArchetypes: CareArchetype[] = [
     headline: "Titration reviewed on a schedule, not on a crisis.",
     expectedFirstMatch: "anubhav-saxena",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "titration"],
+      careAreas: ["adhd-assessment", "titration"],
     },
   },
   {
@@ -141,7 +134,7 @@ export const careArchetypes: CareArchetype[] = [
     headline: "A first appointment long enough to say the whole thing.",
     expectedFirstMatch: "tushar-yadav",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd"],
+      careAreas: ["adhd-assessment"],
     },
   },
   {
@@ -154,7 +147,7 @@ export const careArchetypes: CareArchetype[] = [
     headline: "Anxiety, ADHD, or both: worked out properly.",
     expectedFirstMatch: "tushar-yadav",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "comorbid-mood"],
+      careAreas: ["adhd-assessment", "anxiety"],
       languageOptions: ["Hindi"],
     },
   },
@@ -168,7 +161,7 @@ export const careArchetypes: CareArchetype[] = [
     headline: "The sleep and the family, treated as part of the picture.",
     expectedFirstMatch: "tushar-yadav",
     requirements: {
-      careAreas: ["adhd-assessment", "adult-adhd", "sleep"],
+      careAreas: ["adhd-assessment", "non-medication"],
     },
   },
 ];

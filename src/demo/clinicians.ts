@@ -192,11 +192,8 @@ export const clinicians: Clinician[] = [
     languages: ["English", "Hindi", "Urdu"],
     careAreas: [
       "adhd-assessment",
-      "adult-adhd",
       "titration",
-      "cardiac-screening",
       "substance-history",
-      "sleep",
       "shared-care",
     ],
     manner: ["structured", "non_judgmental", "sense_making"],
@@ -242,9 +239,9 @@ export const clinicians: Clinician[] = [
     languages: ["English", "Hindi"],
     careAreas: [
       "adhd-assessment",
-      "adult-adhd",
-      "comorbid-mood",
-      "sleep",
+      "anxiety",
+      "depression",
+      "non-medication",
       "shared-care",
     ],
     manner: ["unhurried", "collaborative", "culturally_attuned", "attuned"],
@@ -273,10 +270,25 @@ export const clinicians: Clinician[] = [
  * inference, which W83 refused internally and which is worse in public. These weights only
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
+/**
+ * The score the finder actually RANKS and GRADES on: every reason it would show, weighted.
+ *
+ * THIS IS `matchEvidence` SUMMED, and it has to be. `scoreAgainst(readNeeds(query))` scores only the
+ * closed lexicon, and language is NOT in that lexicon — it is per-clinician data read by
+ * `languageAsked` and folded into `matchEvidence`. So ranking on readNeeds alone printed "speaks
+ * Hindi" as a match pill while the order ignored it entirely: a reason shown but not counted, the
+ * mirror image of the blind spot `matchEvidence` was built to close. Ranking on the evidence keeps
+ * both halves honest — nothing is ranked that is not shown, and nothing is shown that is not ranked.
+ */
+export function evidenceScore(clinician: Clinician, query: string): number {
+  let total = 0;
+  for (const need of matchEvidence(clinician, query)) total += need.weight;
+  return total;
+}
+
 export function rankClinicians(query: string): Clinician[] {
-  const needs = readNeeds(query);
   return [...clinicians].sort((a, b) => {
-    const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
+    const byScore = evidenceScore(b, query) - evidenceScore(a, query);
     if (byScore !== 0) return byScore;
 
     /**
@@ -374,9 +386,10 @@ export function unservedAsks(query: string): string[] {
 export type MatchQuality = "informed" | "tied" | "unmatched";
 
 export function matchQuality(query: string): MatchQuality {
-  const needs = readNeeds(query);
-  if (needs.length === 0) return "unmatched";
-  const scores = clinicians.map((clinician) => scoreAgainst(clinician, needs));
+  // Graded on the SAME evidence the finder ranks and shows — language included — so a query that
+  // reaches nobody's lexicon facet but names a language a GP speaks is a real match, not "unmatched".
+  const scores = clinicians.map((clinician) => evidenceScore(clinician, query));
+  if (scores.every((score) => score === 0)) return "unmatched";
   return new Set(scores).size > 1 ? "informed" : "tied";
 }
 

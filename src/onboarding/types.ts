@@ -91,25 +91,31 @@ export const OFFERED_LANGUAGES = [
   "Vietnamese",
 ] as const;
 
-/** Care areas as a GP would read them, paired with the union member the finder matches on. */
-export const CARE_AREA_LABELS: ReadonlyArray<{ id: CareArea; label: string }> = [
-  { id: "adhd-assessment", label: "Assessment" },
-  { id: "adult-adhd", label: "Adults" },
-  { id: "child-adolescent-adhd", label: "Children and adolescents" },
-  { id: "adhd-in-women", label: "Late-recognised presentations in women" },
-  { id: "autism-adhd", label: "Co-occurring autism" },
-  { id: "titration", label: "Titration and dose follow-up" },
-  { id: "shared-care", label: "Shared care with a psychiatrist or paediatrician" },
-  { id: "non-medication", label: "Non-medication supports" },
-  { id: "emotional-regulation", label: "Emotional regulation" },
-  { id: "comorbid-mood", label: "Anxiety and mood differential" },
-  { id: "substance-history", label: "Substance-use history" },
-  { id: "sleep", label: "Sleep" },
-  { id: "cardiac-screening", label: "Baseline cardiovascular screening" },
-  { id: "disability-rights", label: "Disability rights and adjustments" },
-  { id: "trauma-informed", label: "Trauma-informed assessment" },
-  { id: "complex-mental-health", label: "Complex mental health" },
-  { id: "student-academic", label: "Study and workplace documentation" },
+/** The three headings the care areas sit under, in display order. Mental health, streamlined. */
+export type CareAreaGroup = "ADHD" | "Depression and anxiety" | "Other mental health";
+export const CARE_AREA_GROUPS: readonly CareAreaGroup[] = ["ADHD", "Depression and anxiety", "Other mental health"];
+
+/**
+ * Care areas as a GP would read them, grouped, paired with the union member the finder matches on.
+ *
+ * STREAMLINED ACROSS MENTAL HEALTH rather than a long list of ADHD sub-areas: a practicing GP sees
+ * mental health as conditions, not as the seventeen procedural slices the finder was first built
+ * from. The `group` is display only; the `id` is still the closed vocabulary the matcher scores,
+ * and ADHD assessment remains the anchor every listing holds.
+ */
+export const CARE_AREA_LABELS: ReadonlyArray<{ id: CareArea; label: string; group: CareAreaGroup }> = [
+  { id: "adhd-assessment", label: "ADHD assessment", group: "ADHD" },
+  { id: "child-adolescent-adhd", label: "ADHD in children and adolescents", group: "ADHD" },
+  { id: "titration", label: "Medication titration and dose follow-up", group: "ADHD" },
+  { id: "shared-care", label: "Shared care with a psychiatrist or paediatrician", group: "ADHD" },
+  { id: "depression", label: "Depression and low mood", group: "Depression and anxiety" },
+  { id: "anxiety", label: "Anxiety disorders", group: "Depression and anxiety" },
+  { id: "trauma-informed", label: "Trauma and PTSD", group: "Other mental health" },
+  { id: "complex-mental-health", label: "Bipolar and complex mental health", group: "Other mental health" },
+  { id: "autism-adhd", label: "Autism and neurodevelopmental", group: "Other mental health" },
+  { id: "substance-history", label: "Substance use", group: "Other mental health" },
+  { id: "emotional-regulation", label: "Emotional regulation", group: "Other mental health" },
+  { id: "non-medication", label: "Non-medication and psychological supports", group: "Other mental health" },
 ];
 
 /**
@@ -129,15 +135,15 @@ export const REFUSED_APPLICATION_FIELDS: Readonly<Record<string, string>> = {
 
 /** What each quality asks, in the clinician's language. See `MANNER_LABELS` below. */
 const MANNER_ASKS: Record<EIQuality, string> = {
-  attuned: "Somebody arrives having been brushed off before. Is that a consult you are good at?",
-  steadying: "Do you spend the first minutes settling somebody who arrives anxious?",
-  sense_making: "Do you help people join the dots, or focus on the decision in front of you?",
-  motivating: "Do people leave with a plan that builds on what already works for them?",
-  unhurried: "Do you book a longer first appointment for this?",
-  non_judgmental: "Do you open the substance and coping questions as safety questions?",
-  collaborative: "Do you decide the options with the patient rather than recommend and explain?",
-  culturally_attuned: "Do family and language usually come into the room in your practice?",
-  structured: "Do you work to a documented baseline and scheduled follow-up?",
+  attuned: "I take patients seriously, especially those dismissed or misdiagnosed before.",
+  steadying: "I'm comfortable settling and managing anxious or distressed patients.",
+  sense_making: "I help patients understand what's going on, not just manage today's problem.",
+  motivating: "I build management plans around the patient's existing strengths and routines.",
+  unhurried: "I offer longer first appointments for complex presentations.",
+  non_judgmental: "I take substance-use and lifestyle histories without judgement.",
+  collaborative: "I make decisions together with the patient, not for them.",
+  culturally_attuned: "I work comfortably with family involvement and cultural or language context.",
+  structured: "I work to a documented baseline with scheduled follow-up.",
 };
 
 /**
