@@ -163,6 +163,8 @@ commit); PR made ready for review.
 | O10 | screenshot verification | done | 6cd2870 |
 | O11 | UI minimalism review | done | 63ba04d |
 | O12 | speech-input RCA | done | edd6456 |
+| O13 | plain-name reach RCA + fix | done | see log |
+| O14 | low-vision UI audit | done | b9da9e0 |
 
 Post-overhaul units O9–O12 (verification and hardening pass): `src/matching/edge.test.ts`,
 `e2e/matching-verification.spec.ts` + `qa/matching-o10/`, the O11 entry in `design-qa.md`,
