@@ -15,6 +15,22 @@ buildable is a clean funnel with one honest joint in the middle.
 
 ## The funnel, layer by layer
 
+### 1b. Instrumentation (O31)
+Two additions, both cookieless and store-nothing on our side:
+- **Vercel Web Analytics** ([vercel/analytics](https://github.com/vercel/analytics)) mounted
+  site-wide: pageviews and referrers with hash-based visitor identity discarded within 24h.
+  Turned on by the founder's explicit instruction (the deliberate decision the GA gate
+  requires); the privacy page states it. Custom `track()` events are a Pro-tier upgrade —
+  wire a `booking_outbound` event on the handoff click the day the plan changes.
+- **/go emits one structured log line** (`{event:"booking-outbound", clinician, surface}`):
+  Vercel's log search answers per-clinician, per-surface counts on any tier, with no IP, UA,
+  or identifier written by this product.
+- **Self-hosted upgrade path**, if log retention ever feels short: umami
+  ([umami-software/umami](https://github.com/umami-software/umami)) or Plausible CE
+  ([plausible/analytics](https://github.com/plausible/analytics)) — both cookieless, both
+  with first-class outbound-link events, both a founder infra decision because they add a
+  datastore.
+
 ### 1. Outbound intent — OWNED, built now
 Every booking link routes through **`/go/<clinician-id>`** (`app/go/[clinician]/route.ts`), a
 302 to the clinician's Healthengine profile. This is the unique-link ability we fully

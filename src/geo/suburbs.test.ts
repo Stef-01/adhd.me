@@ -20,16 +20,19 @@ describe("the gazetteer covers what the roster claims", () => {
     expect(new Set(SUBURBS.map((s) => s.suburb)).size).toBe(SUBURBS.length);
   });
 
-  it("keeps every point inside one of the two focus areas, so a typo in a coordinate is caught", () => {
-    // Two boxes, not one: a single box spanning Beecroft to the Gold Coast is ~700km tall and
+  it("keeps every point inside one of the three focus areas, so a typo in a coordinate is caught", () => {
+    // Tight boxes, not one: a single box spanning Beecroft to the Gold Coast is ~700km tall and
     // would wave through a Sydney point mistyped into the Queensland range. Each suburb must sit
-    // inside the northern-Sydney box OR the Gold Coast box.
+    // inside the northern-Sydney box, the eastern-suburbs box (O34: Double Bay), OR the Gold
+    // Coast box.
     const inSydney = (s: SuburbPoint) =>
       s.lat > -33.9 && s.lat < -33.6 && s.lon > 150.9 && s.lon < 151.2;
+    const inEasternSuburbs = (s: SuburbPoint) =>
+      s.lat > -33.95 && s.lat < -33.83 && s.lon > 151.2 && s.lon < 151.31;
     const inGoldCoast = (s: SuburbPoint) =>
       s.lat > -28.3 && s.lat < -27.8 && s.lon > 153.2 && s.lon < 153.6;
     for (const s of SUBURBS) {
-      expect(inSydney(s) || inGoldCoast(s), `${s.suburb} is outside both focus areas`).toBe(true);
+      expect(inSydney(s) || inEasternSuburbs(s) || inGoldCoast(s), `${s.suburb} is outside both focus areas`).toBe(true);
       expect(s.postcode).toMatch(/^\d{4}$/);
     }
   });

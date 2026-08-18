@@ -104,6 +104,12 @@ export default function PrivacyPolicyPage() {
             your device. If you use the finder&apos;s microphone, your browser&apos;s speech
             service converts the audio — ADHD.ME never records or receives it.
           </p>
+          <p className="mt-2 text-sm leading-6">
+            The hosting platform (Vercel) counts page visits without cookies: visits are
+            grouped by a short-lived hash that is discarded within 24 hours, and no profile of
+            you is built or kept. When you follow a booking link to Healthengine, we count
+            that the link was used — not who used it.
+          </p>
         </section>
         <section>
           <h2 className="text-lg font-medium text-stone-900">Complaints</h2>

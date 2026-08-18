@@ -35,5 +35,16 @@ export async function GET(request: Request, context: { params: Promise<{ clinici
   destination.searchParams.set("utm_source", "adhd-me");
   destination.searchParams.set("utm_medium", "referral");
   destination.searchParams.set("utm_campaign", surface);
-  return NextResponse.redirect(destination, 302);
+
+  // O31: one structured line into the runtime log — Vercel's log search then answers
+  // "outbound bookings per clinician per surface" on any plan tier, with no store of our
+  // own and nothing about the person (no IP, no UA, no id: those stay in the platform's
+  // transport layer under its own retention, not in anything this product writes).
+  console.log(JSON.stringify({ event: "booking-outbound", clinician: id, surface }));
+
+  // no-store (vercel-optimize scanner finding, O32): a cached 302 would skip the server —
+  // and the count above IS the route's purpose. Every click must reach this function.
+  const response = NextResponse.redirect(destination, 302);
+  response.headers.set("cache-control", "no-store");
+  return response;
 }

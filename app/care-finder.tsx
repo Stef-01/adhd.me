@@ -12,6 +12,7 @@ import {
   Waveform,
   X,
 } from "@phosphor-icons/react";
+import { track } from "@vercel/analytics";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from "motion/react";
 import { useEffect, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
@@ -1036,6 +1037,11 @@ export function CareFinder() {
                 href={`/go/${clinician.id}?src=finder`}
                 target="_blank"
                 rel="noreferrer"
+                // O33: the custom event beside the server-side /go count. On the free tier
+                // Vercel drops custom events, so this records nothing today and starts
+                // recording the day the plan upgrades — no code change at that moment. No
+                // identifier travels with it; the payload is the same two fields /go logs.
+                onClick={() => track("booking_outbound", { clinician: clinician.id, surface: "finder" })}
               >
                 {clinician.booking.via === "healthengine"
                   ? "See times on Healthengine"

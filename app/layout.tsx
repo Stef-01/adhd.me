@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
 import { SITE_URL } from "./site";
@@ -80,6 +81,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <PrivacyConsent />
         <Analytics />
+        {/* O31: Vercel's cookieless pageview analytics — hash-based visitor identity, data
+            discarded after 24 hours, nothing shared beyond the host already serving the page.
+            ON by the founder's explicit 2026-08-18 instruction to advance attribution (the
+            deliberate decision app/analytics.tsx's gate exists to require); GA stays dark
+            behind its env switch. The privacy page states this layer unconditionally. */}
+        <VercelAnalytics />
       </body>
     </html>
   );

@@ -105,6 +105,8 @@ test("booking hands off to Healthengine rather than inventing a time", async ({ 
   const location = redirect.headers()["location"] ?? "";
   expect(location).toMatch(/^https:\/\/healthengine\.com\.au\//);
   expect(location).toContain("utm_source=adhd-me");
+  // no-store: a cached 302 would skip the server and silently undercount (O32 scanner find).
+  expect(redirect.headers()["cache-control"]).toContain("no-store");
 
   // No in-app time picker survives anywhere on the booking screen.
   await expect(page.getByRole("radiogroup")).toHaveCount(0);

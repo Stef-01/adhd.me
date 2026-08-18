@@ -327,3 +327,39 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     expect(labels).toContain("Understands your background");
   });
 });
+
+describe("O30 the psychographic asks, reachable and not over-reachable", () => {
+  /**
+   * The targeting audit (O23) called stated psychographics this matcher's strongest suit and
+   * named the vocabulary gaps; these are the gaps closed, pinned in both directions. Every
+   * new cue obeys O25's law (two content tokens, or a single precise WORD), and each family
+   * ships with a near-miss probe because O25 also showed reach without a false-positive
+   * control is how "room" claimed a pharmacy.
+   */
+  it.each([
+    ["someone who explains things in plain language", "Helps it make sense"],
+    ["can they say it in plain english without the jargon", "Helps it make sense"],
+    ["a doctor who is neurodiversity affirming", "Strengths-focused"],
+    ["someone neuroaffirming who gets adhd brains", "Strengths-focused"],
+    ["a neurodivergent friendly gp", "Strengths-focused"],
+    ["someone who respects my faith", "Understands your background"],
+    ["my faith is important to me", "Understands your background"],
+    ["treat me as a whole person not a diagnosis", "Listens and takes you seriously"],
+  ])("reaches: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).toContain(label);
+  });
+
+  it.each([
+    // "faith in doctors" is trust talk, not a faith-sensitivity ask: no respect+faith pair.
+    "I have lost all faith in doctors",
+    // Plain sight, not plain language.
+    "the clinic was in plain sight of the station",
+    // A whole afternoon is not a whole person.
+    "the appointment took my whole afternoon",
+  ])("does not over-reach: %s", (query) => {
+    const labels = readNeeds(query).map((n) => n.label);
+    expect(labels).not.toContain("Understands your background");
+    expect(labels).not.toContain("Helps it make sense");
+    expect(labels).not.toContain("Listens and takes you seriously");
+  });
+});
