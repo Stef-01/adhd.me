@@ -683,14 +683,14 @@ export function CareFinder() {
             </header>
 
             <div className="results-head">
-              <p className="eyebrow">You asked for</p>
+              <p className="eyebrow">Based on what you told us</p>
               <h1>{requestHeadline}</h1>
               <button className="refine-compact" type="button" onClick={() => { setDraft(request); setStage("type"); }}>
                 <span>Change what you said</span>
               </button>
 
               <div className="place-field">
-                <label htmlFor="place">Where are you? Suburb or postcode, if you like.</label>
+                <label htmlFor="place">Where are you?</label>
                 <input
                   id="place"
                   name="place"
@@ -716,12 +716,14 @@ export function CareFinder() {
                       the quality banner owns the explanation. */}
                   {place.trim() === ""
                     ? quality === "informed"
-                      ? `${shown.length} of ${matches.length}, ranked on what you asked for.`
+                      ? shown.length === 1
+                        ? "This GP does what you asked for."
+                        : `These ${shown.length} GPs do what you asked for.`
                       : `${shown.length} of ${matches.length}.`
                     : origin
-                      ? `${shown.length} of ${matches.length}, nearest to ${origin.suburb} first.`
+                      ? `Nearest to ${origin.suburb} first.`
                       : quality === "informed"
-                        ? "We do not cover that one yet, so these are ranked on what you asked for."
+                        ? "We do not cover that one yet, so these are ordered on what you asked for."
                         : "We do not cover that one yet."}
                 </p>
 
