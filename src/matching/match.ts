@@ -35,7 +35,31 @@
 //   It is deliberately not used: the reason a person did not get a slot would become "a chain of
 //   reassignments elsewhere", which cannot be rendered as one sentence a practice manager reads,
 //   and an unexplainable optimum is exactly what W213's floor exists to prevent. Stated rather
-//   than left for a reader to assume optimality.
+//   than left for a reader to assume optimality. THE PRICE IS NOW MEASURED, NOT ASSERTED (O6/F8):
+//   `match.oracle.test.ts` holds a test-only augmenting-path maximum matching and asserts the
+//   greedy's distance from optimal over a generated corpus, so "would sometimes offer one more"
+//   is a number in the suite rather than a claim in this comment. If that gap ever grows, the
+//   copy for `fewer_slots_than_candidates` is overstating scarcity and this trade gets re-argued
+//   with evidence.
+//
+//   FEWEST-OPTIONS-FIRST REWARDS RECORDED SCARCITY, and the assumption that makes it safe is
+//   stated here because it is load-bearing (O6/F8). A candidate whose recorded availability
+//   admits exactly one slot outranks everyone for that slot — the mechanism-design point the
+//   NRMP's move to deferred acceptance exists to fix, because where availability is
+//   self-reported, under-declaring becomes the winning strategy. Today availability is recorded
+//   by practice staff, never by the patient (the field's own doc says so), so the strategic
+//   surface is minimal — but the day a patient-facing "set your availability" screen ships,
+//   this mechanism silently starts paying people to say they are less available than they are.
+//   That trigger is a latent-finding row (MATCH-2, `src/quality/latent-findings.ts`), so
+//   shipping it fails the build rather than shipping the incentive.
+//
+//   THE NAMED SUCCESSOR, chosen now so it is not grown into later: when slots stop being
+//   interchangeable — a clinician attached to the slot, continuity with `usualClinicianId` —
+//   one-sided greedy stops being adequate, and the drop-in replacement is hospitals/residents
+//   deferred acceptance (Gale–Shapley's capacity-aware variant, the NRMP mechanism): stable,
+//   strategyproof for the proposing side, and with a per-person explanation that fits the
+//   floor's shape ("every slot you preferred went to someone who…"). Reference implementations:
+//   daffidwilde/matching (HospitalResident), vishnuravi/stablematch.
 //
 //   TENANCY IS IN THE QUERY, NOT AFTER IT. A candidate is only ever offered slots at their own
 //   practice, filtered where the slots are selected rather than checked afterwards — W123's rule,

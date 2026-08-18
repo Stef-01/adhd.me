@@ -177,6 +177,25 @@ export const LATENT_FINDINGS: readonly LatentFinding[] = [
     status: "open",
   }),
   declareFinding({
+    id: "MATCH-2",
+    what:
+      "`matchSlots` assigns fewest-options-first, so a candidate whose recorded availability admits exactly one slot outranks everyone for that slot. Where availability is self-reported, that pays people to under-declare — the mechanism-design failure the NRMP's move to deferred acceptance exists to fix. It is latent, not live, because availability is recorded by practice staff and no patient-facing surface writes it; that assumption is what makes the mechanism safe, and it is stated in the module note rather than assumed.",
+    recordedBy: "O6",
+    triggerStatement:
+      "A patient-facing surface lets the patient record or edit their own availability — `availableSlotIds` reached from anything under `app/` — at which point under-declaring availability becomes a ranking advantage and the mechanism needs the deferred-acceptance successor named in the module note.",
+    trigger: () => {
+      const appDir = path.join(ROOT, "app");
+      const walk = (dir: string): boolean =>
+        readdirSync(dir, { withFileTypes: true }).some((entry) => {
+          const full = path.join(dir, entry.name);
+          if (entry.isDirectory()) return walk(full);
+          return /\.(ts|tsx)$/.test(entry.name) && readFileSync(full, "utf8").includes("availableSlotIds");
+        });
+      return walk(appDir);
+    },
+    status: "open",
+  }),
+  declareFinding({
     id: "CENSUS-1",
     what:
       "W200's copy surface decides which modules it must cover by reading each module's `// W<n>` header, so a module with NO header is invisible to it — not declared, not linted, and not reported as missing. Eleven such modules exist and all are Year-1 infrastructure that holds no operator copy, which is why this is latent rather than live.",
