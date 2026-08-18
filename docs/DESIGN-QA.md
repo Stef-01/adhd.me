@@ -181,3 +181,21 @@ Captures: qa/interview-o30/ (desktop full-page + 390×844). Taste-skill pass app
 - [x] Behaviour pinned in e2e/interview.spec.ts: signed-out redirect, interviewer-line
   exclusion, scripted question rendering, record/un-record, disabled save until named,
   draft-save message.
+
+## O36 — the gap sweep on the interview screen (2026-08-18)
+
+Captures: qa/interview-o36/ (desktop + 390×844, superseding the o30 set for this screen).
+
+- [x] "Still to ask — N of M" is a live count that FALLS as the doctor talks — the screen's
+  one argument (the conversation shrinks the checklist) rendered as a number, not stated as
+  copy. A facet reached in conversation leaves the checklist because it moved up into the
+  proposals: asked once, never twice.
+- [x] Checklist rows are deliberately lighter than proposal cards — no card chrome, a rule
+  between questions, the scripted question with its facet label in the same row (related
+  facts share a row). The settled state is the same left-edge accent the proposals use, so
+  "answered" reads identically everywhere on the screen.
+- [x] Same three-state pills, same 44px floor, same un-record gesture; no new motion — a
+  static list that shrinks needs none.
+- [x] Honesty: an unanswered checklist question is recorded NOWHERE (absence, not a default);
+  the note says so on the surface. Empty state ("Nothing left. The conversation reached every
+  facet.") distinguishes finished from unstarted.

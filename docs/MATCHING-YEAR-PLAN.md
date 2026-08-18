@@ -129,8 +129,10 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    turns are never read), live proposals from both readers, each carrying the doctor's sentence
    and the structured interview's OWN question, and often/sometimes/not-me recorded with the
    interviewer's name into the W226 draft store (`frequency` kept beside the review status).
-   REMAINING as their own units: the gap-sweep view (item 3 — unproposed facets as the
-   remaining question list) and the persisted per-onboarding reach report (item 4 — the
+   Item 3 CLOSED by O36 (2026-08-18): the gap sweep — every facet the transcript has not
+   reached, rendered as the structured interview's own question with the same three-state
+   record; the count falls as the doctor talks; an unanswered question is recorded nowhere.
+   REMAINING as its own unit: the persisted per-onboarding reach report (item 4 — the
    lexicon-gap feed as a record, not just the live panel).
 3. **iPhone speech: field verification.** O18's retry + honest copy + `?debug=1` shipped, but
    no confirmation yet from the actual failing device. FOUNDER: retry on the phone; if the

@@ -99,20 +99,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **O36 (Standing debt #2, second half — the gap sweep) — claimed 2026-08-18T22:45Z by
-> loop-0818c.** ONBOARDING-INTERVIEW.md build order item 3: the interview screen gains the
-> remaining-question list — every matchable facet the transcript has NOT reached, rendered as
-> the structured interview's own question with the same often/sometimes/not-me record. The
-> checklist visibly SHRINKS as the doctor talks, which is the design's whole promise ("the
-> conversation shrinks the checklist; it does not replace it"). An answered gap facet lands in
-> the W226 record with frequency and decider but NO quote (nothing was heard — it was asked);
-> an unanswered gap facet is ABSENT from the record, because a question never asked must not
-> appear as a facet nobody decided. NUMBERING NOTE: PR #4 independently used O30–O34 and PR #5
-> used O35, colliding with this loop's O30 (the interview screen, row below); this loop
-> resumes at O36 and future claims should take the next number after BOTH the ledger and the
-> merged PR titles. Verify: capture tests for the gap mapping both directions; e2e pins the
-> shrink and a gap answer reaching the save; taste pass + qa/ captures + DESIGN-QA entry;
-> `pnpm verify` green.
+> **O36 (Standing debt #2, second half — the gap sweep) — DONE 2026-08-18, loop-0818c (claimed
+> 22:45Z).** ONBOARDING-INTERVIEW.md build order item 3 shipped on `/console/interview`: "Still
+> to ask — N of M", every matchable facet the transcript has NOT reached rendered as the
+> structured interview's own question with the same often/sometimes/not-me record, the count
+> falling as the doctor talks — the design's promise ("the conversation shrinks the checklist;
+> it does not replace it") as a number, not copy. A facet reached in conversation leaves the
+> checklist because it moved into the proposals: asked once, never twice, pinned in e2e. An
+> answered gap facet lands in the W226 record with frequency and decider but NO quote (asked,
+> not heard — the review editor's hand-added shape); an unanswered one is ABSENT, because a
+> question never asked must not be stored as a facet nobody decided, and the saved row stays
+> the size of the interview rather than the vocabulary. `gapFacets` + `MATCHABLE_VOCABULARY`
+> in capture.ts (W229); a both-directions pin asserts every vocabulary facet has a scripted
+> question. NUMBERING NOTE: PR #4 independently used O30–O34 and PR #5 used O35, colliding
+> with this loop's O30 (row below); this loop resumed at O36 — future claims take the next
+> number after BOTH the ledger and merged PR titles. Gate: 15 capture tests, interview e2e
+> 4/4, taste pass + qa/interview-o36/ + DESIGN-QA entry, full `pnpm verify` green. Item 4
+> (persisted reach report) is the debt's last claimable piece.
 
 > **O30 (Standing debt #2, first half — the interview screen) — DONE 2026-08-18, loop-0818b
 > (claimed 21:48Z).** ONBOARDING-INTERVIEW.md build order item 2 shipped as `/console/interview`

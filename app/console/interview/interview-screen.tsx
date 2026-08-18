@@ -23,6 +23,7 @@ import { useMemo, useState, useTransition } from "react";
 import { saveReview, type SaveState } from "../matching/actions";
 import {
   confirmedBackground,
+  gapFacets,
   parseTranscriptText,
   readBackQuestionFor,
 } from "@/onboarding/capture";
@@ -72,6 +73,10 @@ export function InterviewScreen() {
     const key = proposal.kind === "care" ? `care:${proposal.area}` : `manner:${proposal.trait}`;
     return answers[key] !== undefined;
   }).length;
+  // The gap sweep (O36): what the conversation has not covered yet. Watching this number fall
+  // as the doctor talks is the screen's whole argument for the conversation-first design.
+  const gaps = useMemo(() => gapFacets(read), [read]);
+  const gapsToAsk = gaps.filter((facet) => answers[facet.key] === undefined).length;
 
   const readyToSave =
     clinicianName.trim().length >= 2 && interviewer.trim().length >= 2 && turns.length > 0;
@@ -213,6 +218,47 @@ export function InterviewScreen() {
               ))}
             </ul>
           </>
+        )}
+      </section>
+
+      <section className="mc-section" aria-labelledby="iv-sweep">
+        <h2 id="iv-sweep">
+          Still to ask{gaps.length > 0 ? ` — ${gapsToAsk} of ${gaps.length}` : ""}
+        </h2>
+        <p className="mc-note">
+          The checklist the conversation has not covered yet — it shrinks as the doctor talks.
+          Ask what is left from here, same three answers; a question never asked is recorded
+          nowhere.
+        </p>
+        {gaps.length === 0 ? (
+          <p className="mc-empty">Nothing left. The conversation reached every facet.</p>
+        ) : (
+          <ul className="iv-sweep">
+            {gaps.map((facet) => {
+              const answer = answers[facet.key];
+              return (
+                <li key={facet.key} className={`iv-sweep-row${answer ? ` iv-${answer}` : ""}`}>
+                  <p className="iv-sweep-question">
+                    {readBackQuestionFor(facet.key)}
+                    <span className="iv-sweep-label">{facet.label}</span>
+                  </p>
+                  <div className="iv-answers" role="group" aria-label={`Record the answer for ${facet.label}`}>
+                    {FREQUENCIES.map((frequency) => (
+                      <button
+                        key={frequency}
+                        type="button"
+                        className="iv-answer"
+                        aria-pressed={answer === frequency}
+                        onClick={() => record(facet.key, frequency)}
+                      >
+                        {ANSWER_LABEL[frequency]}
+                      </button>
+                    ))}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </section>
 

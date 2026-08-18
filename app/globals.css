@@ -5674,6 +5674,17 @@ textarea:focus-visible {
 .iv-answer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .iv-answer[aria-pressed="true"] { background: var(--ground); border-color: var(--ground); color: var(--on-ground); font-weight: 600; }
 
+/* The gap sweep (O36): a working checklist, so rows stay compact — no card chrome, just a
+   rule between questions and the settled state on the left edge, like the proposals above. */
+.iv-sweep { margin: 14px 0 0; padding: 0; list-style: none; max-width: 720px; }
+.iv-sweep-row { padding: 14px 0 14px 14px; border-left: 3px solid transparent; border-bottom: 1px solid var(--line); }
+.iv-sweep-row:last-child { border-bottom: 0; }
+.iv-sweep-row.iv-often, .iv-sweep-row.iv-sometimes { border-left-color: var(--accent); }
+.iv-sweep-row.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
+.iv-sweep-question { margin: 0; max-width: 62ch; color: var(--ink); font-size: 14px; line-height: 1.55; font-weight: 600; }
+.iv-sweep-label { display: block; margin-top: 3px; color: var(--faint); font-size: 11.5px; font-weight: 400;
+  letter-spacing: 0.04em; text-transform: uppercase; }
+
 .iv-gaps { margin-top: 12px; max-width: 68ch; }
 .iv-gaps summary { min-height: 44px; display: flex; align-items: center; cursor: pointer;
   color: var(--muted); font-size: 13.5px; }

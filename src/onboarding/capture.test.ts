@@ -5,7 +5,13 @@ import { describe, expect, it } from "vitest";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { confirmedBackground, parseTranscriptText, readBackQuestionFor } from "./capture";
+import {
+  confirmedBackground,
+  gapFacets,
+  MATCHABLE_VOCABULARY,
+  parseTranscriptText,
+  readBackQuestionFor,
+} from "./capture";
 import { INTERVIEW } from "./interview";
 import { readTranscript } from "./transcript";
 import { saveBackground } from "./background-store";
@@ -55,6 +61,28 @@ describe("the read-back question is the interview's own", () => {
   });
 });
 
+describe("the gap sweep is the rest of the checklist", () => {
+  it("covers the whole matchable vocabulary when nothing has been said", () => {
+    const empty = readTranscript([]);
+    expect(gapFacets(empty).map((f) => f.key)).toEqual(MATCHABLE_VOCABULARY.map((f) => f.key));
+  });
+
+  it("shrinks by exactly the facets the transcript reaches, never below the vocabulary's rest", () => {
+    const read = readTranscript([
+      { speaker: "clinician", text: "Titration is mine, I do not hand that back." },
+    ]);
+    const gaps = gapFacets(read).map((f) => f.key);
+    expect(gaps).not.toContain("care:titration");
+    expect(gaps.length + read.proposed.length).toBe(MATCHABLE_VOCABULARY.length);
+  });
+
+  it("every gap facet has a scripted question — the checklist can never ask a blank", () => {
+    for (const facet of MATCHABLE_VOCABULARY) {
+      expect(readBackQuestionFor(facet.key), facet.key).not.toMatch(/drifted/i);
+    }
+  });
+});
+
 describe("folding spoken answers into the background", () => {
   const read = readTranscript([
     { speaker: "clinician", text: "Titration is mine, I do not hand that back." },
@@ -101,6 +129,26 @@ describe("folding spoken answers into the background", () => {
     const background = confirmedBackground("dr-t", "Dr T", read, { [keys[0]!]: "often" }, "Stefan");
     const saved = saveBackground(background, "Stefan", { filePath: store() });
     expect(saved.facets.find((facet) => facet.key === keys[0])!.frequency).toBe("often");
+  });
+
+  it("an answered gap question lands as a facet with no quote — asked, not heard", () => {
+    const gapKey = gapFacets(read)[0]!.key;
+    const background = confirmedBackground("dr-t", "Dr T", read, { [gapKey]: "often" }, "Stefan");
+    const facet = background.facets.find((f) => f.key === gapKey)!;
+    expect(facet).toMatchObject({ status: "accepted", frequency: "often", decidedBy: "Stefan" });
+    expect(facet.quote).toBeUndefined();
+    expect(facet.cue).toBeUndefined();
+    const saved = saveBackground(background, "Stefan", { filePath: store() });
+    expect(saved.facets.find((f) => f.key === gapKey)!.frequency).toBe("often");
+  });
+
+  it("an unanswered gap question appears nowhere in the record", () => {
+    // A question never asked must not be stored as a facet nobody decided — absence is the
+    // honest state, and it also keeps the saved row the size of the interview, not the
+    // vocabulary.
+    const background = confirmedBackground("dr-t", "Dr T", read, {}, "Stefan");
+    const proposedKeys = read.proposed.map((p) => (p.kind === "care" ? `care:${p.area}` : `manner:${p.trait}`));
+    expect(background.facets.map((f) => f.key).sort()).toEqual([...proposedKeys].sort());
   });
 
   it("a frequency outside the three states is dropped by the writer, never defaulted", () => {

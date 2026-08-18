@@ -14,9 +14,11 @@
 // That identity is the design: the conversation shrinks the checklist, it does not replace it,
 // and a confirmed answer lands as the same three-state record either path produces.
 
-import { backgroundFromProposals, type ClinicianBackground } from "./background";
+import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
+import { backgroundFromProposals, type BackgroundFacet, type ClinicianBackground } from "./background";
 import { FREQUENCIES, INTERVIEW, type Frequency, type Question } from "./interview";
 import type { ProposedBackground, TranscriptTurn } from "./transcript";
+import { CARE_AREA_LABELS } from "./types";
 
 /**
  * Parse a typed transcript into attributed turns.
@@ -64,6 +66,32 @@ export function isFrequency(value: string): value is Frequency {
   return (FREQUENCIES as readonly string[]).includes(value);
 }
 
+/** One matchable facet the checklist can still ask about. */
+export type GapFacet = { key: string; kind: "care" | "manner"; label: string };
+
+/**
+ * Every matchable facet, in the interview's own order — care first, then manner — with the
+ * label a profile would eventually carry. The two vocabularies are the same ones the readers
+ * propose from, so a facet can never be in the gap list AND proposable at once.
+ */
+export const MATCHABLE_VOCABULARY: readonly GapFacet[] = [
+  ...CARE_AREA_LABELS.map((area) => ({ key: `care:${area.id}`, kind: "care" as const, label: area.label })),
+  ...EI_QUALITY_KEYS.map((trait) => ({ key: `manner:${trait}`, kind: "manner" as const, label: EI_QUALITIES[trait].label })),
+];
+
+/**
+ * The gap sweep (O36): the facets the transcript has NOT reached, i.e. the questions still to
+ * ask. This list SHRINKING as the doctor talks is the design's whole promise — the
+ * conversation shrinks the checklist, it does not replace it (docs/ONBOARDING-INTERVIEW.md
+ * step 5).
+ */
+export function gapFacets(read: ProposedBackground): GapFacet[] {
+  const proposed = new Set(
+    read.proposed.map((p) => (p.kind === "care" ? `care:${p.area}` : `manner:${p.trait}`)),
+  );
+  return MATCHABLE_VOCABULARY.filter((facet) => !proposed.has(facet.key));
+}
+
 /**
  * Fold the clinician's spoken answers into a reviewable background.
  *
@@ -81,17 +109,27 @@ export function confirmedBackground(
   interviewer: string,
 ): ClinicianBackground {
   const base = backgroundFromProposals(clinicianId, displayName, read.proposed, read.unread);
+  const decide = (facet: BackgroundFacet, answer: Frequency): BackgroundFacet => ({
+    ...facet,
+    frequency: answer,
+    status: answer === "not-me" ? ("rejected" as const) : ("accepted" as const),
+    decidedBy: interviewer,
+  });
+  const proposedKeys = new Set(base.facets.map((facet) => facet.key));
   return {
     ...base,
-    facets: base.facets.map((facet) => {
-      const answer = answers[facet.key];
-      if (!answer) return facet;
-      return {
-        ...facet,
-        frequency: answer,
-        status: answer === "not-me" ? ("rejected" as const) : ("accepted" as const),
-        decidedBy: interviewer,
-      };
-    }),
+    facets: [
+      ...base.facets.map((facet) => {
+        const answer = answers[facet.key];
+        return answer ? decide(facet, answer) : facet;
+      }),
+      /* The gap sweep's answers (O36). An answered checklist question lands as a facet with NO
+         quote and NO cue — nothing was heard, it was asked — which is the same shape the review
+         editor gives a facet a reviewer adds by hand. An UNANSWERED checklist question appears
+         nowhere: a question never asked must not be stored as a facet nobody decided. */
+      ...MATCHABLE_VOCABULARY.filter((facet) => !proposedKeys.has(facet.key) && answers[facet.key]).map(
+        (facet) => decide({ ...facet, status: "proposed" }, answers[facet.key]!),
+      ),
+    ],
   };
 }
