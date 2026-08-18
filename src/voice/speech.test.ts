@@ -278,3 +278,23 @@ describe("O12 RCA: the intermittent failures, pinned", () => {
     }
   });
 });
+
+describe("O16 the iPhone's own error codes are named, not shrugged at", () => {
+  it.each([
+    ["service-not-allowed", "service-not-allowed"],
+    ["language-not-supported", "language-not-supported"],
+  ])("maps %s to %s instead of unknown", (raw, mapped) => {
+    // Seen in production on iOS: dictation switched off fires `service-not-allowed`, and the
+    // old map's generic "did not work" gave the person nothing to act on.
+    install();
+    const onError = vi.fn();
+    startSpeech({ ...noop, onError });
+    FakeRecognition.last!.fail(raw);
+    expect(onError).toHaveBeenCalledWith(mapped as SpeechError);
+  });
+
+  it("tells the iPhone owner which switch to look for", () => {
+    expect(SPEECH_ERROR_COPY["service-not-allowed"]).toMatch(/dictation/i);
+    expect(SPEECH_ERROR_COPY["service-not-allowed"]).toMatch(/type instead/i);
+  });
+});

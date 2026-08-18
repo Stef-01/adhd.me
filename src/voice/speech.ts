@@ -70,6 +70,8 @@ export const SPEECH_UNAVAILABLE_COPY: Readonly<Record<SpeechUnavailableReason, s
 
 export type SpeechError =
   | "not-allowed"
+  | "service-not-allowed"
+  | "language-not-supported"
   | "no-speech"
   | "audio-capture"
   | "network"
@@ -79,6 +81,16 @@ export type SpeechError =
 /** Plain sentences, because an error code in front of a patient is not an error message. */
 export const SPEECH_ERROR_COPY: Readonly<Record<SpeechError, string>> = {
   "not-allowed": "Your browser blocked the microphone. You can allow it in the address bar, or type instead.",
+  /**
+   * THE iPHONE CASE, seen in production (O16): iOS fires `service-not-allowed` when the
+   * phone's own dictation is switched off (Settings → General → Keyboard → Enable Dictation),
+   * and Safari's screen-time or enterprise restrictions produce it too. Our map did not know
+   * the code, so the person got the generic "did not work" — a sentence with nothing they
+   * could act on. This one names the switch.
+   */
+  "service-not-allowed":
+    "Your phone's dictation is switched off, so speech cannot start. You can turn it on in Settings under Keyboard, or just type instead.",
+  "language-not-supported": "This device cannot listen in this language. You can type instead.",
   "no-speech": "Nothing was picked up. Try again, or type instead.",
   "audio-capture": "No microphone was found. You can type instead.",
   network: "The speech service could not be reached. You can type instead.",
@@ -167,7 +179,15 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
     if (settled) return;
     // `no-speech` and `aborted` arrive on ordinary paths (a silent room, a deliberate stop) and
     // are still reported, because the caller decides which of them deserve a message.
-    const known: SpeechError[] = ["not-allowed", "no-speech", "audio-capture", "network", "aborted"];
+    const known: SpeechError[] = [
+      "not-allowed",
+      "service-not-allowed",
+      "language-not-supported",
+      "no-speech",
+      "audio-capture",
+      "network",
+      "aborted",
+    ];
     const error = known.find((k) => k === event.error) ?? "unknown";
     settled = true;
     /**

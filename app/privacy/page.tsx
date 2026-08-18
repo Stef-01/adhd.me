@@ -83,6 +83,46 @@ export default function PrivacyPolicyPage() {
             describes what is automated, what never is, and the human controls in force.
           </p>
         </section>
+        {/* O16: the standard-policy sections a reader expects to find (security, cookies,
+            overseas storage, complaints, contact, changes), stated at this product's actual
+            scale rather than in boilerplate that would promise more than a demo can. */}
+        <section>
+          <h2 className="text-lg font-medium text-stone-900">How information is held</h2>
+          <p className="mt-2 text-sm leading-6">
+            The service runs on Vercel&apos;s hosting platform, and information it holds may be
+            stored on infrastructure in the United States. Access is limited to the founders,
+            transport is encrypted, and no production credentials live in the codebase — the
+            product&apos;s own build gates enforce that.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-lg font-medium text-stone-900">Cookies and local storage</h2>
+          <p className="mt-2 text-sm leading-6">
+            The site sets no advertising cookies. One value is kept in your browser&apos;s own
+            storage: a record that you have seen and agreed to this policy, which never leaves
+            your device. If you use the finder&apos;s microphone, your browser&apos;s speech
+            service converts the audio — ADHD.ME never records or receives it.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-lg font-medium text-stone-900">Complaints</h2>
+          <p className="mt-2 text-sm leading-6">
+            If you think we have mishandled your information, contact us first and we will
+            respond within two business days. If you are not satisfied with the outcome, you can
+            complain to the Office of the Australian Information Commissioner (oaic.gov.au).
+          </p>
+        </section>
+        <section>
+          <h2 className="text-lg font-medium text-stone-900">Contact and changes</h2>
+          <p className="mt-2 text-sm leading-6">
+            Questions about this policy go to{" "}
+            <a className="underline" href="mailto:stefan.thottunkal@gmail.com">
+              stefan.thottunkal@gmail.com
+            </a>
+            . If the policy changes, the date and the change will be stated here — while it is
+            marked draft, it is not yet in force and no real patient data is processed.
+          </p>
+        </section>
         {/* Rendered ONLY when measurement is actually switched on (the same environment switch
             that loads the script), so this notice can never describe tracking that is not
             running, or stay silent about tracking that is. */}

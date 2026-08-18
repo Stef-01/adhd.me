@@ -85,3 +85,13 @@ person's words preserved (RC1 under RC5/RC6).
   its header — CI cannot prove Chrome transcribes).
 - What no test can cover: the real service's availability. That is RC5/RC6 territory, and the
   design answer is the fallback: typing is always one tap away and now always explained.
+
+## Addendum (O16): the iPhone's generic error, named
+
+A production screenshot showed "Speech input did not work. You can type instead." on an
+iPhone — the `unknown` fallback. iOS fires `service-not-allowed` when the phone's dictation
+is switched off (Settings → General → Keyboard → Enable Dictation) or restricted by screen
+time, and `language-not-supported` where the device cannot listen in the requested language.
+Neither code was in the error map, so both collapsed to a sentence with nothing actionable in
+it. Both are now mapped, and the dictation copy names the switch to look for. Pinned in
+`speech.test.ts`.

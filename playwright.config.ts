@@ -41,6 +41,16 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     launchOptions: executablePath ? { executablePath } : {},
+    // The privacy bar (O16) renders once per browser until agreed, fixed over the bottom of
+    // every page — which is exactly where several specs click. Every spec therefore runs in
+    // the agreed state; e2e/consent.spec.ts clears this deliberately and is the one place the
+    // bar itself is exercised and its copy swept.
+    storageState: {
+      cookies: [],
+      origins: [
+        { origin: BASE_URL, localStorage: [{ name: "adhdme-privacy-ack", value: "1" }] },
+      ],
+    },
   },
   webServer: {
     command: `pnpm exec next build && pnpm exec next start -p ${PORT}`,
