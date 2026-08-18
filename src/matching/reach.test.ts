@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, scoreAgainst, unservedAsks } from "@/demo/clinicians";
-import { readNeeds } from "./needs";
+import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
+import { stem } from "./read";
+import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
 /**
  * W221 follow-up: the lexicon's reach, measured and pinned.
@@ -104,5 +106,55 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     const asks = unservedAsks("I need trauma-informed care, I have a difficult childhood");
     expect(asks.length).toBeGreaterThan(0);
     expect(unservedAsks("titration and a longer appointment")).toEqual([]);
+  });
+});
+
+describe("O7 every clarifier answer keeps reaching its facet (F10)", () => {
+  /**
+   * Clarifier answers are re-read by the same `readNeeds` as anything else, so a lexicon edit
+   * could orphan a prompt invisibly: the question still renders, the tap still appends, and the
+   * appended sentence reaches nothing. Every answer is pinned to its facet here, which makes the
+   * prompt tables part of the reach ratchet.
+   */
+  it("re-reads every prompt table answer to the facet its question is about", () => {
+    const tables = { ...CARE_PROMPTS, ...MANNER_PROMPTS, ...PREF_PROMPTS };
+    for (const [key, copy] of Object.entries(tables)) {
+      const reachedKeys = readNeeds(copy.answer).map((need) => facetKey(need.facet));
+      expect(reachedKeys, `"${copy.answer}" no longer reaches ${key}`).toContain(key);
+    }
+  });
+});
+
+describe("O7 the lexicon reaches itself (F10)", () => {
+  /**
+   * The bespoke stemmer is the right call versus Porter for this vocabulary size — but pairs
+   * like "assessed"→"asses" vs "assessment"→"assessment" mean cue and word can share a root and
+   * still miss. This pins every phrase in the lexicon as reachable through the full pipeline,
+   * so a stemmer or tokeniser edit that unhooks a cue from its own facet fails here, by name.
+   */
+  it("reads every lexicon phrase back to its own facet", () => {
+    for (const { phrase, key } of LEXICON_CUES) {
+      const reachedKeys = readNeeds(phrase).map((need) => facetKey(need.facet));
+      expect(reachedKeys, `lexicon phrase "${phrase}" no longer reaches ${key}`).toContain(key);
+    }
+  });
+
+  it("records the stemmer's known conflation edge so it is not rediscovered", () => {
+    // "assessed" and "assessment" share a root and do NOT share a stem. A cue written with one
+    // inflection will not hear the other; the lexicon must carry both spellings where it cares.
+    expect(stem("assessed")).toBe("asses");
+    expect(stem("assessment")).toBe("assessment");
+    expect(stem("assessed")).not.toBe(stem("assessment"));
+  });
+});
+
+describe("O7 a cue cannot cross a full stop (F10)", () => {
+  it("refuses the two-token bridge across a sentence boundary", () => {
+    // Both content words present, two statements apart. Before the boundary marker this was
+    // representable: sentence punctuation was deleted, so [heart, safe] saw "heart safe".
+    expect(readNeeds("they said it could affect my heart. safe parking would be good").map((n) => n.label))
+      .not.toContain("Cardiac and physical baseline first");
+    // And the same words inside ONE clause still match.
+    expect(readNeeds("I want my heart checked so it is safe").length).toBeGreaterThan(0);
   });
 });

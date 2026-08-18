@@ -87,7 +87,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   motivating: {
     label: "Strengths-focused",
     matchLine: "works from your strengths, not only the problems",
-    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "a plan i can"],
+    // "a plan i can" degenerated to the single token "plan" once stopwords were stripped, which
+    // made ANY mention of a plan read as a strengths preference — including the structured
+    // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
+    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick"],
   },
   unhurried: {
     label: "Unhurried first appointment",
@@ -95,7 +98,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     cues: ["not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
-      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread", "in and out",
+      // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it
+      // tokenised to nothing and had been structurally dead since W222. "ten minutes" and "out
+      // the door" already carry the experience it was written for.
+      "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread",
       // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
       // The bare stem is the commonest way anybody says it.
       "rushes", "rushing", "hurried", "hurry me",

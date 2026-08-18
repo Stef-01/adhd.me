@@ -91,11 +91,21 @@ export function tokenise(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/['’]/g, "")
-    .replace(/[^a-z0-9\s]/g, " ")
+    // Sentence enders become a boundary marker instead of vanishing (O7/F10). Deleting them
+    // meant a two-content-token bridge across a full stop stayed representable: "…heart. Safe…"
+    // could satisfy [heart, safe] even after MAX_GAP was tightened for exactly that shape.
+    // The marker is a token no word can ever be, and `findCue` refuses to match across it.
+    // Commas deliberately do NOT mark a boundary: "alternatives, not just medication" is one
+    // clause, and the clarifier appends its answers after a comma.
+    .replace(/[.?!;]/g, ` ${CLAUSE_BOUNDARY} `)
+    .replace(/[^a-z0-9|\s]/g, " ")
     .split(/\s+/)
     .filter((word) => word.length > 0 && !STOPWORDS.has(word))
-    .map(stem);
+    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)));
 }
+
+/** A token no English word tokenises to, so no cue can contain it and none can cross it. */
+export const CLAUSE_BOUNDARY = "|";
 
 /**
  * How many tokens may sit between two consecutive cue tokens.
@@ -132,6 +142,9 @@ export function findCue(
       const want = cue[matched]!;
       let next = -1;
       for (let k = at + 1; k <= Math.min(at + 1 + MAX_GAP, sentence.length - 1); k++) {
+        // A clause boundary ends the window outright: however small the gap, "heart. Safe"
+        // is two statements, not a phrase (O7/F10).
+        if (sentence[k] === CLAUSE_BOUNDARY) break;
         if (sentence[k] === want) {
           next = k;
           break;

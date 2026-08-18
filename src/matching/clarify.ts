@@ -105,7 +105,10 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
   },
   "manner:structured": {
     prompt: "Would you rather it was done to a plan, with follow-up booked?",
-    answer: "I want it done to a documented plan with follow-up booked",
+    /* Reworded by O7: "a documented plan with follow-up booked" was being claimed by a
+       degenerate strengths cue and never reached manner:structured — the reach pin that now
+       re-reads every answer is what caught it. */
+    answer: "I want it done properly, with a follow-up plan booked",
   },
   "manner:attuned": {
     prompt: "Have you been brushed off about this before?",
@@ -178,6 +181,9 @@ function declaredKeys(clinician: Clinician): Set<string> {
  * twenty.
  */
 export function clarifiers(query: string, roster: readonly Clinician[], limit = 3): Clarifier[] {
+  // THE ROSTER ARGUMENT MUST BE THE LIST THE READER IS LOOKING AT (O7/F10). `heldBy` and the
+  // evenness ordering are computed over exactly what is passed: hand this the full roster while
+  // the screen shows a filtered one and the questions stop being about the list they reorder.
   if (roster.length < 2) return [];
 
   const alreadyAsked = new Set(readNeeds(query).map((need) => facetKey(need.facet)));

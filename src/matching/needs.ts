@@ -209,9 +209,23 @@ const LEXICON: readonly Entry[] = [
  * close to the opposite. Sorted by TOKEN count now rather than character length, because that is
  * what specificity means once matching is done on tokens.
  */
-const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = LEXICON.flatMap((entry) =>
-  entry.phrases.map((phrase) => ({ phrase, tokens: tokenise(phrase), entry })),
-)
+/**
+ * A PHRASE BELONGS TO ONE FACET, and the first entry to list it wins (O7/F10). "overwhelmed"
+ * appears in both `care:emotional-regulation` and the steadying manner cues; before this dedup
+ * the second copy was DEAD — the stable sort meant the earlier entry always claimed the words,
+ * and nothing said so. Dropping later duplicates makes the same behaviour explicit, keeps the
+ * self-reach pin honest (every cue in `LEXICON_CUES` genuinely reaches its facet), and leaves
+ * the emotional-fit interview's own use of its cue lists untouched.
+ */
+const FIRST_CLAIM = new Map<string, { phrase: string; entry: Entry }>();
+for (const entry of LEXICON) {
+  for (const phrase of entry.phrases) {
+    if (!FIRST_CLAIM.has(phrase)) FIRST_CLAIM.set(phrase, { phrase, entry });
+  }
+}
+
+const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = [...FIRST_CLAIM.values()]
+  .map(({ phrase, entry }) => ({ phrase, tokens: tokenise(phrase), entry }))
   .filter((cue) => cue.tokens.length > 0)
   .sort((a, b) => b.tokens.length - a.tokens.length || b.phrase.length - a.phrase.length);
 
@@ -346,3 +360,13 @@ const LANGUAGE_WEIGHT = 30;
 
 /** Every label a surface may say back, for the test that pins the vocabulary closed. */
 export const NEED_LABELS: readonly string[] = LEXICON.map((entry) => entry.label);
+
+/**
+ * Every phrase in the lexicon with the facet it belongs to, for the self-reachability pin
+ * (O7/F10): a stemmer or tokeniser edit that silently unhooks a cue from its own facet must
+ * fail a test, not wait for a probe. Phrases only — no weights, no labels — so nothing new is
+ * sayable from here.
+ */
+export const LEXICON_CUES: ReadonlyArray<{ phrase: string; key: string }> = [...FIRST_CLAIM.values()].map(
+  ({ phrase, entry }) => ({ phrase, key: facetKey(entry.facet) }),
+);
