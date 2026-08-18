@@ -159,3 +159,11 @@ commit); PR made ready for review.
 | O6 | F8 | done | 44a4bdc |
 | O7 | F10 | done | abfa351 |
 | O8 | review | done | b17e44e + close-out |
+| O9 | edge testing | done | c2fa83c |
+| O10 | screenshot verification | done | 6cd2870 |
+| O11 | UI minimalism review | done | 63ba04d |
+| O12 | speech-input RCA | done | edd6456 |
+
+Post-overhaul units O9–O12 (verification and hardening pass): `src/matching/edge.test.ts`,
+`e2e/matching-verification.spec.ts` + `qa/matching-o10/`, the O11 entry in `design-qa.md`,
+and `docs/SPEECH-RCA.md`.
