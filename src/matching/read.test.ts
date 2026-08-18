@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { findCue, stem, tokenise } from "./read";
 import { readNeeds } from "./needs";
 
-describe("W222 the two failure classes this replaced substring matching for", () => {
+describe("W221 the two failure classes this replaced substring matching for", () => {
   /** "my brain has never let me finish anything" vs the cue "never finish anything". */
   it("matches a cue with words inserted into the middle of it", () => {
     const sentence = tokenise("my brain has never let me finish anything and I'm 34");
@@ -20,7 +20,7 @@ describe("W222 the two failure classes this replaced substring matching for", ()
   });
 });
 
-describe("W222 what it must NOT match, which is the whole cost of the change", () => {
+describe("W221 what it must NOT match, which is the whole cost of the change", () => {
   it("refuses a cue whose words are scattered too far apart", () => {
     // Not a phrase any more: a heart in one clause and safety three clauses later is a different
     // statement from "is it safe for my heart".

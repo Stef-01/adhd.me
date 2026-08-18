@@ -27,6 +27,7 @@ export async function submitApplication(
     careAreas: many("careAreas"),
     manner: many("manner"),
     languages: many("languages"),
+    otherLanguages: text("otherLanguages"),
     nswAdhdTrained: formData.get("nswAdhdTrained") === "on",
     acceptingNewPatients: formData.get("acceptingNewPatients") === "on",
   };

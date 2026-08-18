@@ -89,7 +89,7 @@ const centroid = (list: readonly SuburbPoint[]): readonly [number, number] => [
 
 const MARKERS = [
   { key: "qld", label: "Gold Coast, QLD", suburbs: QLD, at: toXY(centroid(QLD)) },
-  { key: "nsw", label: "Beecroft, NSW", suburbs: NSW, at: toXY(centroid(NSW)) },
+  { key: "nsw", label: "Sydney, NSW", suburbs: NSW, at: toXY(centroid(NSW)) },
 ];
 
 /**
@@ -103,7 +103,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
       {/* The viewBox is wider than the 0–100 map so the pin labels sit INSIDE it: the whole
           graphic then scales as one unit with the container and never clips, on any screen. */}
       <svg viewBox="0 0 136 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
-        <title id="coverage-map-title">{`A map of Australia marking ADHD.ME's two focus areas — Beecroft, NSW and the Gold Coast, QLD, across ${SUBURBS.length} suburbs`}</title>
+        <title id="coverage-map-title">{`A map of Australia marking ADHD.ME's two focus areas — Sydney, NSW and the Gold Coast, QLD, across ${SUBURBS.length} suburbs`}</title>
         <path className="coverage-land" d={AUSTRALIA_PATH} />
         <path className="coverage-land" d={TASMANIA_PATH} />
         {MARKERS.map((m) => {
@@ -120,7 +120,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
       {/* The names are the precise half. A reader scanning for their own suburb reads the list; the
           map gives them where, on the coast, the two areas sit. */}
       <figcaption>
-        <span className="coverage-count">Beecroft, NSW &amp; the Gold Coast, QLD</span>
+        <span className="coverage-count">Sydney, NSW &amp; the Gold Coast, QLD</span>
         <span className="coverage-names">
           {SUBURBS.map((s) => s.suburb).join(", ")}
         </span>

@@ -1,4 +1,4 @@
-// W222: how a cue is actually matched against a sentence.
+// W221: how a cue is actually matched against a sentence.
 //
 // THE PROBLEM THIS SOLVES, DIAGNOSED RATHER THAN GUESSED AT. W221 matched cues as contiguous
 // substrings, and a probe over realistic first-person queries put every remaining failure in one

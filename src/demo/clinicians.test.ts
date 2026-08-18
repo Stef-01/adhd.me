@@ -125,17 +125,32 @@ describe("clinician roster and matching", () => {
       .toContain("Hindi-speaking");
   });
 
+  /**
+   * LANGUAGE MUST DRIVE THE RANKING, NOT ONLY THE SIGNAL. Language is per-clinician data read by
+   * `languageAsked` into `matchEvidence`, and is not in the lexicon `readNeeds` scans. Ranking on
+   * readNeeds alone showed "Hindi-speaking" as a pill while the order ignored it — and graded a
+   * language-only query "unmatched", telling a reader who plainly asked for a language that the
+   * finder could not tell what they wanted. The finder now ranks and grades on the evidence it shows.
+   */
+  it("ranks and grades on a spoken language, not only as a signal", () => {
+    // Only Dr Saxena speaks Urdu, so it is an earned, informed order that puts him first.
+    expect(rankClinicians("a GP who speaks Urdu")[0]!.id).toBe("anubhav-saxena");
+    expect(matchQuality("a GP who speaks Urdu")).toBe("informed");
+    // Both speak Hindi, so it is a real match that does not separate them: tied, never unmatched.
+    expect(matchQuality("I need a GP who speaks Hindi")).not.toBe("unmatched");
+  });
+
   it.each([
     ["titration", "Titration and dose review"],
     ["substance-history", "Substance history held safely"],
-    ["comorbid-mood", "Anxiety and mood differential"],
+    ["anxiety", "Anxiety"],
   ] satisfies Array<[CareArea, string]>)(
     "gives a grounded explanation for %s",
     (careArea, expectedSignal) => {
       const queryByArea: Partial<Record<CareArea, string>> = {
         titration: "My dose is wearing off and I need a review of the side effects",
         "substance-history": "I drink too much and used cannabis, is a non-stimulant an option",
-        "comorbid-mood": "I was treated for anxiety and think it was the wrong answer",
+        anxiety: "I was treated for anxiety and think it was the wrong answer",
       };
       const matches = clinicians.filter((clinician) => clinician.careAreas.includes(careArea));
 
@@ -226,9 +241,9 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
 
   it("never lets distance cross a real score difference, however small", () => {
     // The nearer clone declares nothing; the farther one answers the ask. Fit stands.
-    const speaks = { ...inRooms("fits-far", "Southport"), careAreas: ["sleep" as const] };
+    const speaks = { ...inRooms("fits-far", "Southport"), careAreas: ["titration" as const] };
     const roster = [inRooms("near-but-silent", "Epping"), speaks];
-    const near = rankCliniciansNear("my sleep has never been right", resolvePlace("Beecroft"), roster);
+    const near = rankCliniciansNear("my dose needs titration", resolvePlace("Beecroft"), roster);
     expect(near[0]!.id).toBe("fits-far");
   });
 
@@ -246,10 +261,10 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
     // Both declare sleep; only one declares Urdu. Ask for sleep plus something neither
     // declares and the list is informed only where nobody is looking. Synthetic roster of
     // three makes the shape: two tied at the top, one separated below.
-    const tiedA = { ...inRooms("tied-a", "Epping"), careAreas: ["sleep" as const] };
-    const tiedB = { ...inRooms("tied-b", "Epping"), careAreas: ["sleep" as const] };
+    const tiedA = { ...inRooms("tied-a", "Epping"), careAreas: ["titration" as const] };
+    const tiedB = { ...inRooms("tied-b", "Epping"), careAreas: ["titration" as const] };
     const behind = inRooms("behind", "Epping");
-    const note = topTieNote("my sleep has never been right", [tiedA, tiedB, behind]);
+    const note = topTieNote("my dose needs titration", [tiedA, tiedB, behind]);
     expect(note).toMatch(/first 2/);
     expect(note).toMatch(/not a ranking/);
     // And on a fully tied or unmatched roster the roster-level copy already owns the sentence.
@@ -279,10 +294,10 @@ describe("O4 reciprocity as capacity (F5)", () => {
   it("never charges a single point of fit for closed books", () => {
     const roster = [
       { ...yadav(), id: "open-no-fit", careAreas: [] as CareArea[], acceptingNewPatients: true },
-      { ...yadav(), id: "closed-fits", careAreas: ["sleep"] as CareArea[], acceptingNewPatients: false },
+      { ...yadav(), id: "closed-fits", careAreas: ["titration"] as CareArea[], acceptingNewPatients: false },
     ];
     // The reader may want exactly this GP and their waitlist; the card carries the sentence.
-    expect(rankClinicians("my sleep has never been right", roster)[0]!.id).toBe("closed-fits");
+    expect(rankClinicians("my dose needs titration", roster)[0]!.id).toBe("closed-fits");
   });
 
   it("puts capacity before kilometres inside a tie", () => {
@@ -336,10 +351,10 @@ describe("O8 review findings, pinned", () => {
   it("keeps scores === across float-hostile rosters of three", () => {
     // (N−heldBy+1)/N is not dyadic at N=3: 30 × 2/3 vs 20 × 2/3 + 10 × 2/3 must still band
     // together when they are mathematically equal, which is what roundScore guarantees.
-    const a = { ...yadav(), id: "a", careAreas: ["sleep"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    const b = { ...yadav(), id: "b", careAreas: ["sleep"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const a = { ...yadav(), id: "a", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const b = { ...yadav(), id: "b", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     const c = { ...yadav(), id: "c", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    const bands = rankBands("my sleep has never been right", [a, b, c]);
+    const bands = rankBands("my dose needs titration", [a, b, c]);
     expect(bands[0]!.clinicians).toHaveLength(2);
     expect(Number.isInteger(bands[0]!.score * 1000)).toBe(true);
   });
@@ -382,9 +397,9 @@ describe("Codex review on PR #1, pinned", () => {
   });
 
   it("only claims 'they fit what you asked' when a fit was actually computed", () => {
-    const closed = { ...bare("closed"), careAreas: ["sleep"] as CareArea[], acceptingNewPatients: false };
+    const closed = { ...bare("closed"), careAreas: ["titration"] as CareArea[], acceptingNewPatients: false };
     // A fit exists: the fitting sentence.
-    expect(closedBooksNote(closed, "my sleep has never been right")).toMatch(/fit what you asked/);
+    expect(closedBooksNote(closed, "my dose needs titration")).toMatch(/fit what you asked/);
     // No fit exists: the neutral fact, no claim.
     expect(closedBooksNote(closed, "hello")).not.toMatch(/fit what you asked/);
     expect(closedBooksNote(closed, "hello")).toMatch(/books are closed/);

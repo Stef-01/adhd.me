@@ -4,7 +4,7 @@ import { readTranscript, type TranscriptTurn } from "./transcript";
 const clinician = (text: string): TranscriptTurn => ({ speaker: "clinician", text });
 const interviewer = (text: string): TranscriptTurn => ({ speaker: "interviewer", text });
 
-describe("W223 what it proposes", () => {
+describe("W221 what it proposes", () => {
   it("proposes a facet with the clinician's own sentence attached", () => {
     const { proposed } = readTranscript([
       clinician("I always book a longer first appointment because you cannot do this in fifteen minutes."),
@@ -30,7 +30,7 @@ describe("W223 what it proposes", () => {
   });
 });
 
-describe("W223 the two ways this could do real harm", () => {
+describe("W221 the two ways this could do real harm", () => {
   /**
    * THE WORST OUTPUT THIS PIPELINE COULD PRODUCE. A GP asked "do you see children?" very often
    * answers "no, I don't see children" — and the keyword is right there. Proposing on presence
@@ -76,7 +76,7 @@ describe("W223 the two ways this could do real harm", () => {
   });
 });
 
-describe("W223 what it does with what it cannot hear", () => {
+describe("W221 what it does with what it cannot hear", () => {
   /**
    * The most useful output for anybody improving the vocabulary: thirty minutes of a GP describing
    * their practice, and the sentences the closed vocabulary could not hear. That is the lexicon's

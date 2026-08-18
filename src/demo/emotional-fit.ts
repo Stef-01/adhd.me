@@ -70,7 +70,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   attuned: {
     label: "Listens and takes you seriously",
     matchLine: "listens and takes you seriously",
-    cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed", "talked over",
+    cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed",
+      // "talked over" was dropped: "over" is a stopword, so it collapsed to the single token [talk]
+      // and false-matched "before anyone talks about a stimulant". "talked over the top" keeps the
+      // sense as two content tokens; the dismissal family is also covered by "dismissed"/"brushed off".
+      "talked over the top",
       // W221 probe: "decides before I finish the sentence" reached nothing.
       "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to",
       // O13: "takes me seriously" missed — the stemmer keeps "taken" and "takes" apart
@@ -102,9 +106,14 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
       // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it
-      // tokenised to nothing and had been structurally dead since W222. "ten minutes" and "out
-      // the door" already carry the experience it was written for.
+      // tokenised to nothing and had been structurally dead since W222 — main's rebuild kept it
+      // unaware, and the removal stands through the merge. "ten minutes" and "out the door"
+      // carry the experience it was written for.
       "get a word in", "finish the sentence", "finish a sentence", "before i finish", "cut me off", "out the door", "ten minutes", "fifteen minutes", "lose my thread",
+      // Main's W221 recall fix, kept: the stemmer takes plural "minutes" to "minut" but leaves
+      // singular "minute", so the plural cues could not hear "a ten minute appointment"; the
+      // singular forms are added rather than touching the stemmer's length guards.
+      "ten minute", "fifteen minute",
       // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
       // The bare stem is the commonest way anybody says it.
       "rushes", "rushing", "hurried", "hurry me",
@@ -137,11 +146,18 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     matchLine: "explains the options and decides them with you",
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
     cues: ["collaborative", "explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
-      // W223: "work with me", "my options", "the options" and "my say" were dropped. Under token
+      // W221/W223: "work with me", "my options", "the options" and "my say" were dropped. Under token
       // matching each reduces to ONE very common word — [work], [option], [say] — because the
       // rest are stopwords, so "I can take time off work" proposed that the reader wanted a
       // collaborative GP. They were authored when matching was literal substrings and the whole
       // phrase had to be present. Replaced with phrasings that survive as more than one token.
+      //
+      // W221 recall: "works with me on the options rather than dictating" reached nothing — the tokens
+      // that survive are [work, option, rather, dictat] and none of the cues above is a subsequence
+      // of them. "rather than dictating" → [rather, dictat] catches the family (nobody says they
+      // want to be dictated to) and cannot be reached by "time off work", the false positive W221
+      // removed. Kept two-token deliberately, for the same reason W221 dropped the one-token cues.
+      "rather than dictating", "rather than telling me", "not just told what",
       ],
   },
   culturally_attuned: {
@@ -155,8 +171,17 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   structured: {
     label: "A structured, measured approach",
     matchLine: "works to a documented baseline and follows up on a schedule",
-    // O13: "methodical" is the plain word for this way of working and missed.
-    cues: ["structured", "methodical", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline"],
+    // O13: "methodical" is the plain word for this way of working and missed (kept through the
+    // merge alongside main's continuity family below).
+    cues: ["structured", "methodical", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline",
+      // W221 recall: continuity is part of this facet by its own definition — the onboarding ask is
+      // "documented baseline and scheduled follow-up" — so "follow up and not just leave me to it"
+      // belongs here rather than in a second, overlapping follow-through facet (the duplication
+      // W221 removed). Bare "follow up" is deliberately NOT a cue: it collapses to [follow] once
+      // "up" is dropped as a stopword, and [follow] would also fire on "I can't follow a
+      // conversation" — reading an inattention SYMPTOM into a facet, the G7 line. These phrasings
+      // are about wanting continuity of CARE and each survives as two content tokens.
+      "not just leave me", "leave me to figure", "stay on top of", "keep an eye", "not one and done", "ongoing care"],
   },
 };
 

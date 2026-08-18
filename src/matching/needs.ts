@@ -125,60 +125,54 @@ const pref = (preference: Preference, label: string, weight: number, phrases: re
  */
 const LEXICON: readonly Entry[] = [
   // ── What somebody is trying to get done ───────────────────────────────────────────────────
+  // ── ADHD ──────────────────────────────────────────────────────────────────────────────────
   care("adhd-assessment", "ADHD assessment", 12, [
     "adhd", "assessment", "assessed", "diagnosis", "diagnosed", "attention",
   ]),
-  care("adult-adhd", "Adult ADHD", 10, [
-    "adult", "in my thirties", "in my forties", "at my age", "grown up",
-    // Probe: "my brain has never let me finish anything and I'm 34" reached nothing. These are
-    // the ways people describe the experience rather than the label.
-    "never finish anything", "cannot finish", "can never finish", "my whole life", "always been like this",
-  ]),
+  // ── G7 BOUNDARY — DO NOT ADD SYMPTOM DESCRIPTIONS TO ANY CARE FACET ──────────────────────────
+  // A prior probe read "my brain has never let me finish anything" as a recall gap and closed it by
+  // adding "never finish anything" to a care facet. That is a description of the reader's own
+  // impairment — DSM inattention text — not a preference about care, and reading it into a facet is
+  // the product concluding a diagnosis from a symptom: the move docs/GATE-DOSSIER-Q17.md holds shut
+  // and the pitch states publicly ("keyed to clinician attributes — never to a patient's symptoms").
+  // Every care cue below names a condition the reader is ASKING FOR CARE ABOUT, the same
+  // preference-reading `substance-history` takes for "I drink too much" — never a symptom the finder
+  // infers. Symptom sentences are pinned as an intentional non-reach in reach.test.ts. Widen cues
+  // for what a reader WANTS or SAYS THEY HAVE, never for what the finder would have to deduce.
   care("child-adolescent-adhd", "Children and adolescents", 26, [
     "my son", "my daughter", "my child", "my kid", "teenager", "adolescent", "children", "school report",
   ]),
-  care("adhd-in-women", "Late-recognised presentations in women", 24, [
-    "missed as a child", "late diagnosis", "masking", "coping strategies", "perimenopause",
-    "menopause", "hormonal", "as a woman", "in women",
-  ]),
-  care("autism-adhd", "Co-occurring autism", 26, ["autism", "autistic", "audhd", "sensory"]),
   care("titration", "Titration and dose review", 28, [
     "titration", "dose", "wearing off", "wears off", "side effects", "not working", "adjust the dose",
-  ]),
-  care("cardiac-screening", "Baseline physical screening", 26, [
-    "heart", "cardiac", "blood pressure", "physical baseline", "baseline checks", "is it safe",
-    "bloods", "pathology",
-    // Probe: "not going to hurt my heart before I start anything" reached this only via "heart".
-    "safe for me", "before i start", "check me over", "physical check",
-  ]),
-  care("comorbid-mood", "Anxiety and mood differential", 24, [
-    "anxiety", "anxious", "depression", "antidepressant", "antidepressants", "misdiagnosed",
-    "differential", "wrong answer", "wrong diagnosis", "treated for anxiety",
-    // Probe: "I've been on antidepressants for six years and nothing shifted" reached nothing.
-    "nothing shifted", "nothing helped", "nothing worked", "still not right",
-  ]),
-  care("substance-history", "Substance history held safely", 26, [
-    "drink", "drinking", "alcohol", "cannabis", "substance", "non-stimulant",
-  ]),
-  care("sleep", "Sleep", 22, ["sleep", "insomnia", "exhausted", "never rested", "tired all the time"]),
-  care("non-medication", "Non-medication supports", 26, [
-    "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits",
-  ]),
-  care("emotional-regulation", "Emotional regulation", 24, [
-    "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
   ]),
   care("shared-care", "Shared care with a psychiatrist", 18, [
     "shared care", "psychiatrist", "already diagnosed", "existing prescription",
   ]),
+  // ── Depression & anxiety ────────────────────────────────────────────────────────────────────
+  care("depression", "Depression and low mood", 24, [
+    "depression", "depressed", "low mood", "antidepressant", "antidepressants",
+    // Probe: "I've been on antidepressants for six years and nothing shifted" reached nothing.
+    "nothing shifted", "nothing helped", "nothing worked",
+  ]),
+  care("anxiety", "Anxiety", 24, [
+    "anxiety", "anxious", "panic", "treated for anxiety",
+    // Working the anxiety/ADHD line out — the reader asking which one it is, not the finder deciding.
+    "misdiagnosed", "differential", "wrong answer", "wrong diagnosis",
+  ]),
+  // ── Other mental health ─────────────────────────────────────────────────────────────────────
   care("trauma-informed", "Trauma-informed care", 28, [
     "trauma", "trauma history", "difficult childhood", "boundaries", "permission", "ptsd", "cptsd",
   ]),
-  care("complex-mental-health", "Coordinated shared care", 26, ["bipolar", "complex", "comorbid"]),
-  care("student-academic", "Study and workplace documentation", 24, [
-    "university", "workplace", "employer", "adjustments", "letter", "documentation", "study",
+  care("complex-mental-health", "Bipolar and complex mental health", 26, ["bipolar", "complex", "psychosis", "schizophrenia"]),
+  care("autism-adhd", "Autism and neurodevelopmental", 26, ["autism", "autistic", "audhd", "sensory"]),
+  care("substance-history", "Substance history held safely", 26, [
+    "drink", "drinking", "alcohol", "cannabis", "substance", "non-stimulant",
   ]),
-  care("disability-rights", "Disability rights", 28, [
-    "disability", "disabled", "wheelchair", "ndis", "autonomy", "accessible",
+  care("emotional-regulation", "Emotional regulation", 24, [
+    "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
+  ]),
+  care("non-medication", "Non-medication supports", 26, [
+    "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits",
   ]),
 
   /**

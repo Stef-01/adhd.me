@@ -61,20 +61,18 @@ export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Is your dose already something you are working on?",
     answer: "my dose needs titration and follow-up",
   },
-  "care:cardiac-screening": {
-    prompt: "Do you want the physical checks done before anything starts?",
-    answer: "I want the heart and blood pressure baseline checked first",
-  },
   "care:substance-history": {
     prompt: "Do you want somewhere you can be honest about drinking or other substances?",
     answer: "I want to be honest about drinking without being judged",
   },
-  "care:comorbid-mood": {
-    prompt: "Have you been treated for anxiety or low mood before?",
-    answer: "I have been on antidepressants and I am not sure it was the right answer",
+  "care:depression": {
+    prompt: "Is low mood part of this?",
+    answer: "I have been on antidepressants and my mood is still low",
   },
-  "care:sleep": { prompt: "Is your sleep part of this?", answer: "my sleep has never been right" },
-  "care:adult-adhd": { prompt: "Is this for you as an adult?", answer: "I am an adult asking for myself" },
+  "care:anxiety": {
+    prompt: "Have you been treated for anxiety before?",
+    answer: "I was treated for anxiety and I am not sure it was the right answer",
+  },
   "care:child-adolescent-adhd": { prompt: "Is this for a child or teenager?", answer: "this is for my child" },
   "care:shared-care": {
     prompt: "Are you already seeing a psychiatrist or paediatrician for this?",

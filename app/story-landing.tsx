@@ -147,7 +147,8 @@ const STEPS: ReadonlyArray<{ title: string; body: string }> = [
  */
 const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = [
   { value: "6–12 months", label: "typical wait for an adult ADHD assessment appointment" },
-  { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
+  { value: "$1k to $2k", label: "common out-of-pocket cost of a private adult assessment" },
+  { value: "$270 to $600", label: "out-of-pocket via a GP-led pathway, in the states that now allow it" },
   // "the RIGHT training", not "the required training", and the difference is the compliance
   // linter's, not a stylist's: `no-clinical-necessity` fires on "required" and it is right to.
   // landing-copy.ts can say it because /practices is addressed to practice managers; this page
@@ -294,7 +295,7 @@ export function StoryLanding() {
               ADHD care, start to finish, <span className="story-claim">with one GP</span>.
             </motion.h1>
             <motion.p className="story-hero-sub" variants={item}>
-              Assessment, medication and follow-up with one GP. No psychiatrist queue to clear first.
+              Everything from assessment to follow-up, all with one GP. No psychiatrist queue to clear first.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
@@ -546,10 +547,9 @@ export function StoryLanding() {
             <p className="story-eyebrow">Join us</p>
             <h2 id="join-title" className="story-heading">Are you a GP who does this work?</h2>
             <p className="story-join-copy">
-              If you have done the NSW or Queensland training, being findable is the whole
-              difference. Onboarding is one sitting: what you see often, how you work, and how
-              somebody reaches you. A person reads every application, and nothing is published
-              until you have read it back.
+              Done the NSW or Queensland training? Get found. One sitting — what you see, how you
+              work, how to reach you. A person reads every application, and nothing goes live until
+              you have read it back.
             </p>
           </div>
           <Link className="story-join-link" href="/clinicians/join">

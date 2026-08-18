@@ -115,9 +115,9 @@ describe("O9 hostile and accidental input", () => {
   });
 
   it("handles a ten-thousand-word essay without falling over", () => {
-    const essay = `${"my life story continues here and ".repeat(1500)} my sleep has never been right`;
+    const essay = `${"my life story continues here and ".repeat(1500)} my dose needs titration`;
     const needs = needsFor(essay);
-    expect(needs.some((n) => facetKey(n.facet) === "care:sleep")).toBe(true);
+    expect(needs.some((n) => facetKey(n.facet) === "care:titration")).toBe(true);
     expect(rankClinicians(essay)).toHaveLength(clinicians.length);
   });
 });
@@ -152,10 +152,10 @@ describe("O9 degenerate rosters", () => {
 
   it("a roster where every book is closed keeps its fit order", () => {
     const closed = [
-      { ...bare("a"), careAreas: ["sleep"] as CareArea[], acceptingNewPatients: false },
+      { ...bare("a"), careAreas: ["titration"] as CareArea[], acceptingNewPatients: false },
       { ...bare("b"), acceptingNewPatients: false },
     ];
-    expect(rankClinicians("my sleep has never been right", closed)[0]!.id).toBe("a");
+    expect(rankClinicians("my dose needs titration", closed)[0]!.id).toBe("a");
   });
 
   it("a roster nobody can locate keeps its fit order under a distance sort", () => {
@@ -179,10 +179,10 @@ describe("O9 degenerate rosters", () => {
   });
 
   it("a clinician who declares nothing at all still renders, at the bottom", () => {
-    const roster = [bare("empty"), { ...bare("full"), careAreas: ["sleep"] as CareArea[] }];
-    const ranked = rankClinicians("my sleep has never been right", roster);
+    const roster = [bare("empty"), { ...bare("full"), careAreas: ["titration"] as CareArea[] }];
+    const ranked = rankClinicians("my dose needs titration", roster);
     expect(ranked.map((c) => c.id)).toEqual(["full", "empty"]);
-    expect(scoreAgainst(ranked[1]!, needsFor("my sleep has never been right", roster))).toBe(0);
+    expect(scoreAgainst(ranked[1]!, needsFor("my dose needs titration", roster))).toBe(0);
   });
 });
 

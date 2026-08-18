@@ -7,6 +7,8 @@
 // regression is visible to a reviewer who never reads this file.
 
 import { expect, test, type Page } from "@playwright/test";
+import { clinicians } from "../src/demo/clinicians";
+import { clarifiers } from "../src/matching/clarify";
 
 const shot = (name: string) => ({ path: `qa/matching-o10/${name}.png`, fullPage: true as const });
 
@@ -51,9 +53,12 @@ test("answering the one question visibly turns a non-order into an order (W225+O
   await expect(page.getByText(/One answer would narrow it/)).toBeVisible();
   await page.screenshot(shot("05-clarifier-offered"));
 
-  // Tap the physical-checks question: only one GP declares cardiac screening, so the answer
-  // must both remove the 'no order' banner and produce an earned first place.
-  await page.getByRole("button", { name: /physical checks done before anything starts/i }).click();
+  // Tap the first question the product itself would offer — computed from the same function
+  // the page renders, so a re-scoped care vocabulary (the W221 merge retired the hardcoded
+  // physical-checks prompt this test used to name) cannot strand the spec. Every offered
+  // question splits the roster by construction, so answering must earn the order.
+  const offered = clarifiers("hello there", clinicians, 1)[0]!;
+  await page.getByRole("button", { name: offered.prompt }).click();
   await expect(page.locator(".clinician-list")).toBeVisible();
   await expect(page.getByText(/everyone we list rather than an order/)).toHaveCount(0);
   await page.screenshot(shot("06-clarifier-answer-reorders"));

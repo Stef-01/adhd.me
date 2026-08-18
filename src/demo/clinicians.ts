@@ -204,11 +204,8 @@ export const clinicians: Clinician[] = [
     languages: ["English", "Hindi", "Urdu"],
     careAreas: [
       "adhd-assessment",
-      "adult-adhd",
       "titration",
-      "cardiac-screening",
       "substance-history",
-      "sleep",
       "shared-care",
     ],
     manner: ["structured", "non_judgmental", "sense_making"],
@@ -254,9 +251,9 @@ export const clinicians: Clinician[] = [
     languages: ["English", "Hindi"],
     careAreas: [
       "adhd-assessment",
-      "adult-adhd",
-      "comorbid-mood",
-      "sleep",
+      "anxiety",
+      "depression",
+      "non-medication",
       "shared-care",
     ],
     manner: ["unhurried", "collaborative", "culturally_attuned", "attuned"],
@@ -426,6 +423,11 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
   const needs = needsFor(query, roster);
   if (needs.length === 0) return "unmatched";
   const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
+  // Main's W221 rebuild carried one improvement the overhaul had not made, kept through the
+  // merge: words that were READ but that nobody on the roster answers are not a tie — "both of
+  // these answer what you asked for equally well" would be false. It is an unmatched listing,
+  // and `unservedAsks` names whose gap it is.
+  if (scores.every((score) => score === 0)) return "unmatched";
   return new Set(scores).size > 1 ? "informed" : "tied";
 }
 

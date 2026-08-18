@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { submitApplication } from "./actions";
-import { CARE_AREA_LABELS, MANNER_LABELS, OFFERED_LANGUAGES, type ClinicianFormState } from "@/onboarding/types";
+import { CARE_AREA_GROUPS, CARE_AREA_LABELS, MANNER_LABELS, OFFERED_LANGUAGES, type ClinicianFormState } from "@/onboarding/types";
 import { coveredSuburbs } from "@/geo/suburbs";
 
 const initialState: ClinicianFormState = { status: "idle", message: "" };
@@ -74,18 +74,24 @@ export function ClinicianJoinForm() {
       <fieldset>
         <legend>What you see often</legend>
         <p className="join-hint">
-          Your own statement about your own practice. Nobody here checks it, nothing here ranks
-          clinicians against each other, and none of it is published as a specialty.
+          Your own statement about your own practice, across mental health — not just ADHD. Nobody
+          here checks it, nothing here ranks clinicians against each other, and none of it is
+          published as a specialty.
         </p>
         {err.careAreas && <small role="alert" className="join-field-error">{err.careAreas}</small>}
-        <div className="join-checks">
-          {CARE_AREA_LABELS.map((area) => (
-            <label key={area.id} className="join-check">
-              <input type="checkbox" name="careAreas" value={area.id} defaultChecked={area.id === "adhd-assessment"} />
-              <span>{area.label}</span>
-            </label>
-          ))}
-        </div>
+        {CARE_AREA_GROUPS.map((group) => (
+          <div key={group} className="join-check-group">
+            <p className="join-check-group-title">{group}</p>
+            <div className="join-checks">
+              {CARE_AREA_LABELS.filter((area) => area.group === group).map((area) => (
+                <label key={area.id} className="join-check">
+                  <input type="checkbox" name="careAreas" value={area.id} defaultChecked={area.id === "adhd-assessment"} />
+                  <span>{area.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
       </fieldset>
 
       <fieldset>
@@ -125,6 +131,11 @@ export function ClinicianJoinForm() {
             </label>
           ))}
         </div>
+        <label className="join-other-languages">
+          <span>Another language not listed</span>
+          <input name="otherLanguages" type="text" placeholder="e.g. Punjabi, Cantonese, Nepali" />
+          <small className="join-hint">Separate several with commas. Declared by you and checked by nobody, like the rest.</small>
+        </label>
       </fieldset>
 
       <fieldset>

@@ -12,7 +12,7 @@ const bg = (statuses: Array<"proposed" | "accepted" | "rejected">) => {
   return b;
 };
 
-describe("W223 the bio is assembled, never typed", () => {
+describe("W221 the bio is assembled, never typed", () => {
   it("says nothing at all until a human has accepted something", () => {
     // A proposal is a machine reading a sentence. An empty profile is honest; a padded one is a
     // claim, and the review step is the only thing standing between the two.
@@ -46,7 +46,7 @@ describe("W223 the bio is assembled, never typed", () => {
   });
 });
 
-describe("W223 the audit reports the match, it does not recompute it", () => {
+describe("W221 the audit reports the match, it does not recompute it", () => {
   /**
    * THE PROPERTY THAT MAKES A METRICS PANEL WORTH HAVING. If this file did its own arithmetic it
    * would eventually disagree with the ranking, and a panel that disagrees with the product is
@@ -92,7 +92,7 @@ describe("W223 the audit reports the match, it does not recompute it", () => {
   });
 });
 
-describe("W223 tags are declared, never inferred", () => {
+describe("W221 tags are declared, never inferred", () => {
   it("shows exactly the facets on the record and no others", () => {
     for (const clinician of clinicians) {
       const tags = clinicianTags(clinician);
@@ -114,7 +114,7 @@ describe("W224 the assembled sentence has to read like a sentence", () => {
   it("says 'an area' for one and 'areas' for several", () => {
     expect(one()).toMatch(/as an area they say they see often/);
     const many = backgroundFromProposals("x", "Dr Example", readTranscript([
-      { speaker: "clinician", text: "I do titration, and the cardiovascular baseline, and I see adults." },
+      { speaker: "clinician", text: "I do titration, I take a substance history, and I do a lot of coaching." },
     ]).proposed, []);
     many.facets.forEach((f) => { f.status = "accepted"; });
     expect(professionalBio(many)).toMatch(/as areas they say they see often/);
@@ -122,7 +122,7 @@ describe("W224 the assembled sentence has to read like a sentence", () => {
 
   it("joins a list with commas and a final 'and'", () => {
     const b = backgroundFromProposals("x", "Dr Example", readTranscript([
-      { speaker: "clinician", text: "I do titration, the cardiovascular baseline, and I see adults." },
+      { speaker: "clinician", text: "I do titration, I take a substance history, and I do a lot of coaching." },
     ]).proposed, []);
     b.facets.forEach((f) => { f.status = "accepted"; });
     expect(professionalBio(b)).toMatch(/, .+ and /);

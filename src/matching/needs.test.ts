@@ -216,20 +216,20 @@ describe("O2 breadth has a price (F1)", () => {
 
   it("a 'sometimes' declaration answers at half the weight of an 'often' one", () => {
     const base = clinicians[0]!;
-    const often = { ...base, careAreas: ["sleep" as const], careAreasSometimes: [] };
-    const sometimes = { ...base, careAreas: [], careAreasSometimes: ["sleep" as const] };
-    const needs = needsFor("my sleep has never been right");
-    const sleep = needs.filter((n) => n.facet.kind === "care" && n.facet.area === "sleep");
+    const often = { ...base, careAreas: ["titration" as const], careAreasSometimes: [] };
+    const sometimes = { ...base, careAreas: [], careAreasSometimes: ["titration" as const] };
+    const needs = needsFor("my dose needs titration");
+    const sleep = needs.filter((n) => n.facet.kind === "care" && n.facet.area === "titration");
     expect(sleep).toHaveLength(1);
     expect(scoreAgainst(sometimes, sleep)).toBe(scoreAgainst(often, sleep) / 2);
   });
 
   it("the card's evidence carries the earned weight, not the authored one", () => {
     const base = clinicians[0]!;
-    const sometimes = { ...base, careAreas: [], careAreasSometimes: ["sleep" as const] };
-    const evidence = matchEvidence(sometimes, "my sleep has never been right");
-    const claimed = evidence.find((n) => n.facet.kind === "care" && n.facet.area === "sleep")!;
-    expect(scoreAgainst(sometimes, needsFor("my sleep has never been right"))).toBe(claimed.weight);
+    const sometimes = { ...base, careAreas: [], careAreasSometimes: ["titration" as const] };
+    const evidence = matchEvidence(sometimes, "my dose needs titration");
+    const claimed = evidence.find((n) => n.facet.kind === "care" && n.facet.area === "titration")!;
+    expect(scoreAgainst(sometimes, needsFor("my dose needs titration"))).toBe(claimed.weight);
   });
 });
 

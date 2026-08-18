@@ -55,8 +55,26 @@ export interface ApplicationInput {
   careAreas: string[];
   manner: string[];
   languages: string[];
+  /**
+   * Free-text languages the checkbox list does not offer. Declared by the clinician and checked by
+   * nobody, like the listed ones — the offered set is a convenience, not the limit of who a GP can
+   * speak to. Sanitised to letter-only names (see `sanitiseOtherLanguages`) rather than validated
+   * against a vocabulary, because the whole point of the box is a language we did not think to list.
+   */
+  otherLanguages?: string;
   nswAdhdTrained: boolean;
   acceptingNewPatients: boolean;
+}
+
+/** Split the free-text "other languages" box into clean, letter-only names. Caps count and length. */
+function sanitiseOtherLanguages(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(",")
+    .map((name) => name.replace(/[^\p{L}\s'-]/gu, "").replace(/\s+/g, " ").trim())
+    .filter((name) => name.length >= 2 && name.length <= 30)
+    .map((name) => neutraliseSpreadsheetFormula(name))
+    .slice(0, 5);
 }
 
 export type ApplicationFieldError = keyof Omit<ApplicationInput, "nswAdhdTrained" | "acceptingNewPatients">;
@@ -127,7 +145,10 @@ export function saveApplication(
        way of working the finder has no facet for — an application for a field that does not
        exist is how the field eventually gets built. */
     manner: [...new Set(input.manner.filter((m) => VALID_MANNER.has(m)))] as EIQuality[],
-    languages: [...new Set(input.languages.filter((l) => VALID_LANGUAGES.has(l)))],
+    languages: [...new Set([
+      ...input.languages.filter((l) => VALID_LANGUAGES.has(l)),
+      ...sanitiseOtherLanguages(input.otherLanguages),
+    ])],
     nswAdhdTrained: input.nswAdhdTrained,
     acceptingNewPatients: input.acceptingNewPatients,
     submittedAt: (options.now ?? new Date()).toISOString(),

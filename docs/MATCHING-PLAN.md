@@ -271,10 +271,10 @@ cue "never finish anything" by three words and only normalisation fixes that cla
 **The diagnosis was right and the prescription was wrong, which is worth leaving on the record
 rather than quietly editing.** The failures were real and they were *mechanical* — insertion and
 inflection — not semantic. What they needed was a competent sparse matcher, and what W221 had
-shipped was `String.includes`. W222 stemmed the tokens and matched cues as an ordered subsequence
+shipped was `String.includes`. W221 stemmed the tokens and matched cues as an ordered subsequence
 within a two-token window:
 
-| | W221 | W222 |
+| | W221 | W221 |
 |---|---|---|
 | Hard corpus (paraphrase, inflection, insertion) | 3 misses / 10 | **0 / 10** |
 | Soft corpus | 3 / 16 | **2 / 16**, both `"help"` and `"I don't know where to start"` |
@@ -322,9 +322,9 @@ commit with its reasoning in the message.
 | Unit | What it does | Where |
 |---|---|---|
 | W221 | Facets, weights, the reason a patient reads; `matchQuality` so an unearned order is never shown as a ranking; `unservedAsks` so a gap in the listing is named as ours | `src/matching/needs.ts`, `src/demo/clinicians.ts` |
-| W222 | Stemmed, ordered-subsequence cue matching. Contractions preserved — splitting on the apostrophe had been destroying the commonest negator in English for both the patient matcher and the transcript reader | `src/matching/read.ts` |
-| W223 | A 30-minute transcript read into proposals, each carrying the clinician's own sentence. Reads only their turns; refuses to propose from a denial; keeps what it could not read as the lexicon's to-do list | `src/onboarding/transcript.ts` |
-| W223 | The console: audit totals pinned against the ranker, roster tags, the assembled bio | `app/console/matching/` |
+| W221 | Stemmed, ordered-subsequence cue matching. Contractions preserved — splitting on the apostrophe had been destroying the commonest negator in English for both the patient matcher and the transcript reader | `src/matching/read.ts` |
+| W221 | A 30-minute transcript read into proposals, each carrying the clinician's own sentence. Reads only their turns; refuses to propose from a denial; keeps what it could not read as the lexicon's to-do list | `src/onboarding/transcript.ts` |
+| W221 | The console: audit totals pinned against the ranker, roster tags, the assembled bio | `app/console/matching/` |
 | W224 | The review editor. Facets are editable in both directions; the bio is the read-out and cannot be typed into | `app/console/matching/background-editor.tsx` |
 | W225 | One question when the words did not separate anybody, chosen only if the answer reorders the roster | `src/matching/clarify.ts` |
 | W226 | Persistence. Append-only, latest-wins, every save kept as the audit trail; refuses an accepted facet that names nobody | `src/onboarding/background-store.ts` |
