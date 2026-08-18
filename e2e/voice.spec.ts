@@ -58,25 +58,30 @@ async function installFakeSpeech(page: Page, opts: { present?: boolean } = {}) {
 
 async function openMic(page: Page) {
   await page.goto("/finder");
-  await page.getByRole("button", { name: /Start voice description/i }).click();
+  // The welcome screen's one dual-function control: a microphone while the field is empty.
+  // (Was "Start voice description" until the single-field collapse renamed it; this spec had
+  // gone stale against that rename because e2e is outside the pnpm verify gate.)
+  await page.getByRole("button", { name: /Talk instead of typing/i }).click();
 }
 
 test("a spoken request reaches the results", async ({ page }) => {
   await installFakeSpeech(page);
   await openMic(page);
 
-  await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Vietnamese", false));
+  await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Urdu", false));
   // The interim transcript is on screen while somebody is still talking, which is the only
   // reliable signal to them that the microphone is working.
-  await expect(page.locator(".listening-transcript")).toContainText("Vietnamese");
+  await expect(page.locator(".listening-transcript")).toContainText("Urdu");
 
-  await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Vietnamese", true));
+  await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Urdu", true));
   await page.evaluate(() => (window as any).__speech.finish());
 
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  // And the words were actually used: a Vietnamese speaker should be near the top.
+  // And the words were actually used: the roster's one Urdu speaker ranks first. (This asked
+  // for a Vietnamese speaker when the roster was fifteen invented personas; the roster is two
+  // real GPs now, and O1 made an asked-for language a scored signal rather than a printed one.)
   const names = await page.locator(".clinician-row strong").allInnerTexts();
-  expect(names.join(" ")).toMatch(/Nguyen|Tran/);
+  expect(names[0]).toMatch(/Saxena/);
 });
 
 test("pressing Done mid-sentence keeps what was already said", async ({ page }) => {
@@ -165,7 +170,7 @@ test("starting twice does not leave two recognisers running", async ({ page }) =
   await installFakeSpeech(page);
   await openMic(page);
   await page.getByRole("button", { name: "Cancel" }).click();
-  await page.getByRole("button", { name: /Start voice description/i }).click();
+  await page.getByRole("button", { name: /Talk instead of typing/i }).click();
   await expect.poll(() => page.evaluate(() => (window as any).__speech.state.started)).toBe(2);
   // The first one was aborted before the second started.
   expect(await page.evaluate(() => (window as any).__speech.state.aborted)).toBe(true);
