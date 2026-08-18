@@ -99,6 +99,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O36 (Standing debt #2, second half — the gap sweep) — claimed 2026-08-18T22:45Z by
+> loop-0818c.** ONBOARDING-INTERVIEW.md build order item 3: the interview screen gains the
+> remaining-question list — every matchable facet the transcript has NOT reached, rendered as
+> the structured interview's own question with the same often/sometimes/not-me record. The
+> checklist visibly SHRINKS as the doctor talks, which is the design's whole promise ("the
+> conversation shrinks the checklist; it does not replace it"). An answered gap facet lands in
+> the W226 record with frequency and decider but NO quote (nothing was heard — it was asked);
+> an unanswered gap facet is ABSENT from the record, because a question never asked must not
+> appear as a facet nobody decided. NUMBERING NOTE: PR #4 independently used O30–O34 and PR #5
+> used O35, colliding with this loop's O30 (the interview screen, row below); this loop
+> resumes at O36 and future claims should take the next number after BOTH the ledger and the
+> merged PR titles. Verify: capture tests for the gap mapping both directions; e2e pins the
+> shrink and a gap answer reaching the save; taste pass + qa/ captures + DESIGN-QA entry;
+> `pnpm verify` green.
+
 > **O30 (Standing debt #2, first half — the interview screen) — DONE 2026-08-18, loop-0818b
 > (claimed 21:48Z).** ONBOARDING-INTERVIEW.md build order item 2 shipped as `/console/interview`
 > (session-gated): editable transcript where `i:`-prefixed turns are the interviewer's and are
