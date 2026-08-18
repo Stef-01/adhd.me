@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { backgroundFromProposals, clinicianTags, matchAudit, professionalBio } from "./background";
 import { readTranscript } from "./transcript";
-import { clinicians, rankClinicians, scoreAgainst } from "@/demo/clinicians";
-import { readNeeds } from "@/matching/needs";
+import { clinicians, needsFor, rankClinicians, scoreAgainst } from "@/demo/clinicians";
+
 
 const bg = (statuses: Array<"proposed" | "accepted" | "rejected">) => {
   const b = backgroundFromProposals("x", "Dr Example", readTranscript([
@@ -59,7 +59,8 @@ describe("W223 the audit reports the match, it does not recompute it", () => {
     "help",
   ])("totals agree with the ranker for: %s", (query) => {
     const audit = matchAudit(query, clinicians);
-    const needs = readNeeds(query);
+    // The needs the ranker actually scores - discounted, language-inclusive (O1+O2).
+    const needs = needsFor(query);
     for (const row of audit.rows) {
       const clinician = clinicians.find((c) => c.id === row.clinicianId)!;
       expect(row.total).toBe(scoreAgainst(clinician, needs));

@@ -145,16 +145,21 @@ function asList(items: readonly string[]): string {
  */
 export type MatchAudit = {
   query: string;
-  /** Facets the reader's words reached, whether or not anybody answers them. */
+  /** Facets the reader's words reached, whether or not anybody answers them. Weights carry the
+   *  O2 rarity discount, so a facet the whole roster declares shows what it can actually earn. */
   asked: Array<{ key: string; label: string; weight: number }>;
   rows: Array<{
     clinicianId: string;
     name: string;
     total: number;
-    /** The asked facets this clinician declared, with what each contributed. */
+    /** The asked facets this clinician declared, with what each ACTUALLY contributed for them
+     *  (halved where the declaration was "sometimes"). */
     matched: Array<{ key: string; label: string; weight: number }>;
     /** The asked facets this clinician does NOT declare. The reason they are not first. */
     missed: Array<{ key: string; label: string; weight: number }>;
+    /** Declaration breadth, so inflation is visible where it is priced (O2/F1):
+     *  "declares 15 of 17 areas" is a sentence a reviewer can act on. */
+    declares: { often: number; sometimes: number; of: number };
   }>;
 };
 
@@ -169,14 +174,21 @@ export function matchAudit(query: string, roster: readonly Clinician[]): MatchAu
     asked,
     rows: roster.map((clinician) => {
       const evidence = matchEvidence(clinician, query);
-      const hit = new Set(evidence.map((need) => facetKey(need.facet)));
-      const matched = asked.filter((entry) => hit.has(entry.key));
+      const earned = new Map(evidence.map((need) => [facetKey(need.facet), need.weight]));
+      const matched = asked
+        .filter((entry) => earned.has(entry.key))
+        .map((entry) => ({ ...entry, weight: earned.get(entry.key)! }));
       return {
         clinicianId: clinician.id,
         name: clinician.name,
         total: matched.reduce((sum, entry) => sum + entry.weight, 0),
         matched,
-        missed: asked.filter((entry) => !hit.has(entry.key)),
+        missed: asked.filter((entry) => !earned.has(entry.key)),
+        declares: {
+          often: clinician.careAreas.length,
+          sometimes: (clinician.careAreasSometimes ?? []).length,
+          of: CARE_LABEL_BY_AREA.size,
+        },
       };
     }),
   };

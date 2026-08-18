@@ -104,6 +104,15 @@ export type Clinician = {
   languages: string[];
   careAreas: CareArea[];
   /**
+   * Areas declared "sometimes" rather than "often" — the interview's three-state answer
+   * (docs/MATCHING-PLAN.md §5), made representable by O2/F1. Breadth has to cost something:
+   * a sometimes-declared area answers an ask at half its weight, so ticking every box in the
+   * interview is no longer the dominant strategy. Absent means the profile predates the
+   * three-state interview and every declaration is read as "often" — which is exactly what
+   * those interviews asked.
+   */
+  careAreasSometimes?: CareArea[];
+  /**
    * How this clinician works, declared by them, closed vocabulary (`MannerTrait`).
    *
    * The half of "will they understand me" that clinical scope cannot carry. Somebody writing "I
@@ -309,15 +318,32 @@ export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[])
   let total = 0;
   for (const need of needs) {
     if (!answers(clinician, need)) continue;
-    total += need.weight;
+    total += need.weight * declarationFactor(clinician, need);
   }
   return total;
+}
+
+/**
+ * What one declared answer is worth: everything for "often", half for "sometimes".
+ *
+ * NOT A PER-CLINICIAN COEFFICIENT. C2 forbids an engineered number keyed to a named person;
+ * this is the clinician's OWN interview answer given its stated price, the same way the
+ * declaration itself is their own datum. Half is a judgement, and a sayable one: "they see
+ * this sometimes rather than often" is a sentence, where a tuned 0.63 would not be.
+ */
+function declarationFactor(clinician: Clinician, need: NeedSignal): number {
+  const facet = need.facet;
+  if (facet.kind !== "care") return 1;
+  if (clinician.careAreas.includes(facet.area)) return 1;
+  return (clinician.careAreasSometimes ?? []).includes(facet.area) ? 0.5 : 1;
 }
 
 /** Whether this clinician answers one stated need. Declared facets only. */
 function answers(clinician: Clinician, need: NeedSignal): boolean {
   const facet = need.facet;
-  if (facet.kind === "care") return clinician.careAreas.includes(facet.area);
+  if (facet.kind === "care") {
+    return clinician.careAreas.includes(facet.area) || (clinician.careAreasSometimes ?? []).includes(facet.area);
+  }
   if (facet.kind === "manner") return clinician.manner.includes(facet.trait);
   if (facet.kind === "language") {
     return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase());
@@ -403,7 +429,28 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  * read this function, so none of them can see a signal the others cannot.
  */
 export function needsFor(query: string): NeedSignal[] {
-  return [...readNeeds(query), ...languageNeeds(query, SPOKEN_ON_ROSTER)];
+  const signals = [...readNeeds(query), ...languageNeeds(query, SPOKEN_ON_ROSTER)];
+  return signals.map((need) => ({
+    ...need,
+    weight: need.weight * separation(clinicians.filter((c) => answers(c, need)).length, clinicians.length),
+  }));
+}
+
+/**
+ * How much of a facet's weight survives, given how many of the roster hold it (the O2/F1
+ * rarity discount — OkCupid's normalisation and IR's IDF, reduced to a sentence).
+ *
+ * `(N − heldBy + 1) / N`, capped at 1. A facet nobody else declares keeps its whole weight; a
+ * facet the entire roster declares keeps 1/N of it — it is still true of everyone shown, so it
+ * still counts, but it cannot decide an order between people it does not separate. The quantity
+ * is the same `heldBy / roster` the clarifier already ranks its questions by, and it is sayable
+ * within W213's floor: "declared by most of the GPs listed, so it separates them less" or "few
+ * of the GPs listed say they do this". Without this, `scoreAgainst` is monotone in declarations
+ * and ticking every interview box is the dominant strategy the day the roster self-declares.
+ */
+function separation(heldBy: number, rosterSize: number): number {
+  if (rosterSize === 0) return 1;
+  return Math.min(1, (rosterSize - heldBy + 1) / rosterSize);
 }
 
 /** Every language anybody on the roster declares. Grows with the roster, never enumerated. */
@@ -418,7 +465,12 @@ const SPOKEN_ON_ROSTER: readonly string[] = [...new Set(clinicians.flatMap((c) =
  * because it was never a `NeedSignal`.
  */
 export function matchEvidence(clinician: Clinician, query: string): NeedSignal[] {
-  return needsFor(query).filter((need) => answers(clinician, need));
+  return needsFor(query)
+    .filter((need) => answers(clinician, need))
+    // The weight the card's evidence carries is the weight this clinician's answer actually
+    // earned - halved where they declared "sometimes" - so the audit and the unity test can
+    // hold score === sum of evidence with no carve-outs.
+    .map((need) => ({ ...need, weight: need.weight * declarationFactor(clinician, need) }));
 }
 
 /**

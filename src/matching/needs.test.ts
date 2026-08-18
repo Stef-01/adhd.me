@@ -190,3 +190,45 @@ describe("O1 languages go through the one pipeline (F2)", () => {
     expect(needs).toHaveLength(1);
   });
 });
+
+describe("O2 breadth has a price (F1)", () => {
+  /**
+   * THE DEFECT THIS PINS. `scoreAgainst` was a raw sum over declared facets — monotone in
+   * declarations, so at a self-declaring roster ticking every interview box was the dominant
+   * strategy. Two prices now exist: a facet's weight is discounted by how much of the roster
+   * declares it (rarity separates; universality does not), and a "sometimes" declaration earns
+   * half of an "often" one. Both are the clinician's or the roster's own data, both sayable.
+   */
+  it("discounts a facet by how much of the roster declares it, but never to zero", () => {
+    // Hindi is declared by both GPs; Urdu by one. Equal authored weight, unequal separation.
+    const needs = needsFor("a GP who speaks Hindi and Urdu");
+    const hindi = needs.find((n) => n.label === "Hindi-speaking")!;
+    const urdu = needs.find((n) => n.label === "Urdu-speaking")!;
+    expect(urdu.weight).toBeGreaterThan(hindi.weight);
+    expect(hindi.weight).toBeGreaterThan(0);
+  });
+
+  it("a facet the whole roster declares cannot change the relative order", () => {
+    const withoutUniversal = rankClinicians("a GP who speaks Urdu").map((c) => c.id);
+    const withUniversal = rankClinicians("a GP who speaks Urdu and also Hindi").map((c) => c.id);
+    expect(withUniversal).toEqual(withoutUniversal);
+  });
+
+  it("a 'sometimes' declaration answers at half the weight of an 'often' one", () => {
+    const base = clinicians[0]!;
+    const often = { ...base, careAreas: ["sleep" as const], careAreasSometimes: [] };
+    const sometimes = { ...base, careAreas: [], careAreasSometimes: ["sleep" as const] };
+    const needs = needsFor("my sleep has never been right");
+    const sleep = needs.filter((n) => n.facet.kind === "care" && n.facet.area === "sleep");
+    expect(sleep).toHaveLength(1);
+    expect(scoreAgainst(sometimes, sleep)).toBe(scoreAgainst(often, sleep) / 2);
+  });
+
+  it("the card's evidence carries the earned weight, not the authored one", () => {
+    const base = clinicians[0]!;
+    const sometimes = { ...base, careAreas: [], careAreasSometimes: ["sleep" as const] };
+    const evidence = matchEvidence(sometimes, "my sleep has never been right");
+    const claimed = evidence.find((n) => n.facet.kind === "care" && n.facet.area === "sleep")!;
+    expect(scoreAgainst(sometimes, needsFor("my sleep has never been right"))).toBe(claimed.weight);
+  });
+});
