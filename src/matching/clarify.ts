@@ -161,6 +161,9 @@ function promptFor(key: string): { prompt: string; answer: string } | null {
 function declaredKeys(clinician: Clinician): Set<string> {
   return new Set<string>([
     ...clinician.careAreas.map((area) => facetKey({ kind: "care", area } as Facet)),
+    // A "sometimes" declaration answers an ask at half weight (O2), so a question about it can
+    // still reorder the roster — leaving these out made heldBy disagree with the ranker (O8 review).
+    ...(clinician.careAreasSometimes ?? []).map((area) => facetKey({ kind: "care", area } as Facet)),
     ...clinician.manner.map((trait) => facetKey({ kind: "manner", trait } as Facet)),
     // Held preferences count as declarations: gender, telehealth and billing are facts on the
     // record, and a preference nobody holds is correctly never asked about — putting "do you

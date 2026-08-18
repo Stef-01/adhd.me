@@ -33,7 +33,7 @@
 import { EI_QUALITIES, type EIQuality } from "@/demo/emotional-fit";
 import type { CareArea } from "@/demo/care-archetypes";
 import type { Clinician } from "@/demo/clinicians";
-import { matchEvidence, needsFor } from "@/demo/clinicians";
+import { matchEvidence, needsFor, roundScore } from "@/demo/clinicians";
 import { facetKey } from "@/matching/needs";
 import { CARE_LABEL_BY_AREA, type ProposedFacet } from "./transcript";
 
@@ -165,28 +165,34 @@ export type MatchAudit = {
 
 export function matchAudit(query: string, roster: readonly Clinician[]): MatchAudit {
   // The same needs the ranking scores — including asked-for languages — so the audit cannot
-  // show a total the finder did not compute (the O1/F2 unity repair).
-  const needs = needsFor(query);
+  // show a total the finder did not compute (the O1/F2 unity repair). Computed over the roster
+  // being audited, for the same reason the ranking is (O8 review).
+  const needs = needsFor(query, roster);
   const asked = needs.map((need) => ({ key: facetKey(need.facet), label: need.label, weight: need.weight }));
 
   return {
     query,
     asked,
     rows: roster.map((clinician) => {
-      const evidence = matchEvidence(clinician, query);
+      const evidence = matchEvidence(clinician, query, roster);
       const earned = new Map(evidence.map((need) => [facetKey(need.facet), need.weight]));
       const matched = asked
         .filter((entry) => earned.has(entry.key))
         .map((entry) => ({ ...entry, weight: earned.get(entry.key)! }));
+      // An area listed under both "often" and "sometimes" is one declaration, not two —
+      // declarationFactor already reads it as "often", and a breadth column that could show
+      // "18 of 17" would undermine the inflation-visibility it exists for (O8 review).
+      const often = new Set(clinician.careAreas);
+      const sometimesOnly = (clinician.careAreasSometimes ?? []).filter((area) => !often.has(area));
       return {
         clinicianId: clinician.id,
         name: clinician.name,
-        total: matched.reduce((sum, entry) => sum + entry.weight, 0),
+        total: roundScore(matched.reduce((sum, entry) => sum + entry.weight, 0)),
         matched,
         missed: asked.filter((entry) => !earned.has(entry.key)),
         declares: {
-          often: clinician.careAreas.length,
-          sometimes: (clinician.careAreasSometimes ?? []).length,
+          often: often.size,
+          sometimes: sometimesOnly.length,
           of: CARE_LABEL_BY_AREA.size,
         },
       };

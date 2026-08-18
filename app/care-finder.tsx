@@ -20,6 +20,7 @@ import {
   distanceTo,
   getPersonalizedMatch,
   matchQuality,
+  rankBands,
   rankCliniciansNear,
   rankClinicians,
   topTieNote,
@@ -352,7 +353,28 @@ export function CareFinder() {
     () => matches.map((item) => getPersonalizedMatch(item, request).signals),
     [matches, request],
   );
-  const shown = showAll ? matches : matches.slice(0, 5);
+  /**
+   * ONE PIPELINE RUN PER RENDER (O8 review). These four were each computed inline in the JSX,
+   * some more than once, and every call re-runs the full lexicon read over the request — a
+   * dozen redundant scans per keystroke once the geo field re-renders the results stage.
+   */
+  const quality = useMemo(() => matchQuality(request), [request]);
+  const tieNote = useMemo(() => topTieNote(request), [request]);
+  const clarifierList = useMemo(() => clarifiers(request, matches), [request, matches]);
+  const unserved = useMemo(() => unservedAsks(request), [request]);
+
+  /**
+   * The fold never cuts a tied band (O8 review): topTieNote says "the first N answered equally
+   * well — read them as a group", and slicing at five while the tied group is eight would tell
+   * the reader to read three rows they cannot see. When the top band overruns the default
+   * fold, the fold moves to the end of the band.
+   */
+  const visibleCount = useMemo(() => {
+    if (!tieNote) return 5;
+    const topBand = rankBands(request)[0];
+    return Math.max(5, topBand ? topBand.clinicians.length : 5);
+  }, [request, tieNote]);
+  const shown = showAll ? matches : matches.slice(0, visibleCount);
 
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
 
@@ -692,18 +714,18 @@ export function CareFinder() {
                     rendered as a ranked list whose order came from the tie-break: from nothing,
                     presented as from something. This is one line and it only appears when the
                     order means nothing, which is the only time it has anything to add. */}
-                {matchQuality(request) !== "informed" && (
+                {quality !== "informed" && (
                   <p className="place-status match-quality" role="status">
-                    {MATCH_QUALITY_COPY[matchQuality(request)]}
+                    {MATCH_QUALITY_COPY[quality]}
                   </p>
                 )}
 
                 {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). "Informed" means an order
                     exists somewhere in the list — not necessarily at the top, which is the one
                     boundary the reader acts on. When the first band is a tie, say so there. */}
-                {topTieNote(request) && (
+                {tieNote && (
                   <p className="place-status match-quality" role="status">
-                    {topTieNote(request)}
+                    {tieNote}
                   </p>
                 )}
 
@@ -716,11 +738,11 @@ export function CareFinder() {
                     who came here to find a GP. Tapping appends the answer in the reader's own
                     words and the whole sentence is re-read, so the finder can still say "you said
                     this" about a signal it prompted. */}
-                {matchQuality(request) !== "informed" && clarifiers(request, matches).length > 0 && (
+                {quality !== "informed" && clarifierList.length > 0 && (
                   <div className="clarify">
                     <p className="clarify-lead">One answer would narrow it:</p>
                     <ul className="clarify-row">
-                      {clarifiers(request, matches).map((clarifier) => (
+                      {clarifierList.map((clarifier) => (
                         <li key={clarifier.facetKey}>
                           <button
                             type="button"
@@ -741,9 +763,9 @@ export function CareFinder() {
 
                 {/* A care area nobody on the roster declares is a gap in the LISTING, and the
                     reader should not be left to conclude it is a gap in their question. */}
-                {unservedAsks(request).length > 0 && (
+                {unserved.length > 0 && (
                   <p className="place-status match-quality" role="status">
-                    {`No GP listed today says they do ${unservedAsks(request)[0]!.toLowerCase()}. That is a gap in our listing, not in what you asked for.`}
+                    {`No GP listed today says they do ${unserved[0]!.toLowerCase()}. That is a gap in our listing, not in what you asked for.`}
                   </p>
                 )}
 

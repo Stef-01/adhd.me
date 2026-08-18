@@ -286,7 +286,7 @@ export const clinicians: Clinician[] = [
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
 export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians): Clinician[] {
-  const needs = needsFor(query);
+  const needs = needsFor(query, roster);
   return [...roster].sort((a, b) => {
     const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
     if (byScore !== 0) return byScore;
@@ -340,7 +340,8 @@ export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[])
     if (!answers(clinician, need)) continue;
     total += need.weight * declarationFactor(clinician, need);
   }
-  return total;
+  // Rounded so equal-by-arithmetic totals are equal-by-===; see `roundScore`.
+  return roundScore(total);
 }
 
 /**
@@ -384,7 +385,11 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
  * and do not let the reader conclude it is about them.
  */
 export function unservedAsks(query: string): string[] {
-  const declared = new Set(clinicians.flatMap((clinician) => clinician.careAreas));
+  // A "sometimes" declaration is still a declaration (O2): a clinician the ranking scores for
+  // an area must not appear under "no GP listed today says they do this" on the same screen.
+  const declared = new Set(
+    clinicians.flatMap((clinician) => [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]),
+  );
   return readNeeds(query)
     .filter((need) => need.facet.kind === "care" && !declared.has(need.facet.area))
     .map((need) => need.label);
@@ -414,7 +419,7 @@ export function unservedAsks(query: string): string[] {
 export type MatchQuality = "informed" | "tied" | "unmatched";
 
 export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
-  const needs = needsFor(query);
+  const needs = needsFor(query, roster);
   if (needs.length === 0) return "unmatched";
   const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
   return new Set(scores).size > 1 ? "informed" : "tied";
@@ -451,7 +456,7 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
 export type RankBand = { score: number; clinicians: Clinician[] };
 
 export function rankBands(query: string, roster: readonly Clinician[] = clinicians): RankBand[] {
-  const needs = needsFor(query);
+  const needs = needsFor(query, roster);
   const bands: RankBand[] = [];
   for (const clinician of rankClinicians(query, roster)) {
     const score = scoreAgainst(clinician, needs);
@@ -487,20 +492,40 @@ export function topTieNote(query: string, roster: readonly Clinician[] = clinici
  * happened. The ranking, the quality verdict, the explanation and the console audit now all
  * read this function, so none of them can see a signal the others cannot.
  */
-export function needsFor(query: string): NeedSignal[] {
-  const signals = [...readNeeds(query), ...languageNeeds(query, SPOKEN_ON_ROSTER)];
+export function needsFor(query: string, roster: readonly Clinician[] = clinicians): NeedSignal[] {
+  // The language vocabulary and the rarity statistics both come from the roster ACTUALLY being
+  // ranked — the O8 review caught the first draft reading the global roster here while every
+  // ranking entry point accepted an injectable one, which scored a custom roster against a
+  // different roster's statistics (clarify.ts states the rule: the list the reader is looking at).
+  const spoken = [...new Set(roster.flatMap((c) => c.languages))];
+  const signals = [...readNeeds(query), ...languageNeeds(query, spoken)];
   const said = query.toLowerCase();
   return signals.map((need) => {
     const answer = CLARIFIER_ANSWERS.get(facetKey(need.facet));
     const confirmed = answer !== undefined && said.includes(answer);
     return {
       ...need,
-      weight:
+      weight: roundScore(
         need.weight *
-        (confirmed ? STATED_IMPORTANCE_LIFT : 1) *
-        separation(clinicians.filter((c) => answers(c, need)).length, clinicians.length),
+          (confirmed ? STATED_IMPORTANCE_LIFT : 1) *
+          separation(roster.filter((c) => answers(c, need)).length, roster.length),
+      ),
     };
   });
+}
+
+/**
+ * Scores snap to three decimal places wherever one is produced.
+ *
+ * WHY (O8 review): the separation factor puts `(N − heldBy + 1) / N` into every weight, which
+ * is not exactly representable in floating point once N is not a power of two — so two
+ * mathematically equal totals could compare unequal, and a band boundary or an "informed"
+ * verdict would then be dressing float dust as preference information. The smallest real
+ * difference the arithmetic can produce is far above a thousandth; anything below it is noise,
+ * rounded away at the source so every comparison downstream stays a plain `===`.
+ */
+export function roundScore(value: number): number {
+  return Math.round(value * 1000) / 1000;
 }
 
 /**
@@ -546,9 +571,6 @@ function separation(heldBy: number, rosterSize: number): number {
   return Math.min(1, (rosterSize - heldBy + 1) / rosterSize);
 }
 
-/** Every language anybody on the roster declares. Grows with the roster, never enumerated. */
-const SPOKEN_ON_ROSTER: readonly string[] = [...new Set(clinicians.flatMap((c) => c.languages))];
-
 /**
  * The needs this clinician actually answers, in the reader's asking order.
  *
@@ -557,13 +579,17 @@ const SPOKEN_ON_ROSTER: readonly string[] = [...new Set(clinicians.flatMap((c) =
  * separate lexicons used to allow. A language the reader did not ask for is not in here at all,
  * because it was never a `NeedSignal`.
  */
-export function matchEvidence(clinician: Clinician, query: string): NeedSignal[] {
-  return needsFor(query)
+export function matchEvidence(
+  clinician: Clinician,
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+): NeedSignal[] {
+  return needsFor(query, roster)
     .filter((need) => answers(clinician, need))
     // The weight the card's evidence carries is the weight this clinician's answer actually
     // earned - halved where they declared "sometimes" - so the audit and the unity test can
     // hold score === sum of evidence with no carve-outs.
-    .map((need) => ({ ...need, weight: need.weight * declarationFactor(clinician, need) }));
+    .map((need) => ({ ...need, weight: roundScore(need.weight * declarationFactor(clinician, need)) }));
 }
 
 /**
@@ -598,31 +624,47 @@ export function rankCliniciansNear(
   const byFit = rankClinicians(query, roster);
   if (!origin) return byFit;
 
-  const needs = needsFor(query);
-  const score = new Map(byFit.map((c) => [c.id, scoreAgainst(c, needs)]));
-  // Carries the fit tie-breaks (founder-behind, then file order) into ties distance cannot see.
-  const fitRank = new Map(byFit.map((c, i) => [c.id, i]));
+  const needs = needsFor(query, roster);
   const km = (c: Clinician) => {
     const point = resolvePlace(c.suburb);
     return point ? distanceKm(origin, point) : null;
   };
 
-  return [...byFit].sort((a, b) => {
-    const byScore = score.get(b.id)! - score.get(a.id)!;
-    if (byScore !== 0) return byScore;
-    // Capacity before distance (O4): the nearest GP whose books are closed is still a GP the
-    // reader cannot book, and kilometres do not change that.
-    const closed = (c: Clinician) => (c.acceptingNewPatients ? 0 : 1);
-    if (closed(a) !== closed(b)) return closed(a) - closed(b);
-    const byFitOrder = fitRank.get(a.id)! - fitRank.get(b.id)!;
-    // Somebody you do not travel to is equally near from everywhere, so distance has nothing to
-    // say about them and their stated-preference position stands.
-    if (a.telehealthFirstAppointment || b.telehealthFirstAppointment) return byFitOrder;
-    const da = km(a);
-    const db = km(b);
-    if (da === null || db === null || da === db) return byFitOrder;
-    return da - db;
-  });
+  /**
+   * NOT A COMPARATOR, ON PURPOSE (O8 review). The pairwise version was intransitive: a
+   * telehealth clinician compared by fit order against neighbours who compared by distance
+   * against each other, which is a cycle the moment those two orders disagree — and a sort
+   * over a cyclic comparator renders whatever the engine's pivot choices happen to produce.
+   * So the reorder is structural instead: within each (score, capacity) tie, the clinicians
+   * with a real distance swap among the POSITIONS they already occupy, sorted by kilometres;
+   * telehealth-first and unknown-suburb clinicians keep their exact fit position, because
+   * somebody you do not travel to is equally near from everywhere, and an unknown location is
+   * our missing row, not their penalty. Total, deterministic, and every guarantee holds by
+   * construction: distance never crosses a score or capacity boundary, and equal kilometres
+   * keep the fit order (which carries the founder-behind rule).
+   */
+  const out = [...byFit];
+  const tieKey = (c: Clinician) => `${scoreAgainst(c, needs)}|${c.acceptingNewPatients ? 0 : 1}`;
+  let start = 0;
+  while (start < out.length) {
+    let end = start;
+    while (end + 1 < out.length && tieKey(out[end + 1]!) === tieKey(out[start]!)) end += 1;
+
+    const movable: number[] = [];
+    for (let i = start; i <= end; i += 1) {
+      const c = out[i]!;
+      if (!c.telehealthFirstAppointment && km(c) !== null) movable.push(i);
+    }
+    const nearestFirst = movable
+      .map((i) => out[i]!)
+      .sort((a, b) => km(a)! - km(b)!);
+    movable.forEach((position, j) => {
+      out[position] = nearestFirst[j]!;
+    });
+
+    start = end + 1;
+  }
+  return out;
 }
 
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
