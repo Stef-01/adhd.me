@@ -35,9 +35,9 @@ import { CoverageMap } from "./coverage-map";
 import {
   SPEECH_DISCLOSURE,
   SPEECH_ERROR_COPY,
+  SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
-  type SpeechError,
   type SpeechSession,
 } from "@/voice/speech";
 
@@ -303,7 +303,7 @@ export function CareFinder() {
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
   const [heard, setHeard] = useState("");
-  const [speechError, setSpeechError] = useState<SpeechError | null>(null);
+  const [speechMessage, setSpeechMessage] = useState<string | null>(null);
   const speech = useRef<SpeechSession | null>(null);
 
   const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
@@ -379,13 +379,21 @@ export function CareFinder() {
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
 
   function startListening() {
+    // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
+    // session kept running with no handle — its handlers nulled the shared ref out from under
+    // the new session, the stage-change cleanup found nothing to cancel, and the microphone
+    // light stayed on over the typing screen. Cancel first, always.
+    speech.current?.cancel();
+    speech.current = null;
     setHeard("");
-    setSpeechError(null);
+    setSpeechMessage(null);
 
     const session = startSpeech({
       onPartial: setHeard,
       onFinal: (text) => {
-        speech.current = null;
+        // Only release the ref this session still owns — a stale handler from a replaced
+        // session must not clobber its successor's handle (O12 RCA).
+        if (speech.current === session) speech.current = null;
         // Nothing heard is not an error worth a red message; it is a reason to let somebody type.
         if (!text) {
           setStage("type");
@@ -396,18 +404,19 @@ export function CareFinder() {
         findMatches(text);
       },
       onError: (error) => {
-        speech.current = null;
+        if (speech.current === session) speech.current = null;
         // A deliberate stop is not a failure to report.
         if (error === "aborted") return;
-        setSpeechError(error);
+        setSpeechMessage(SPEECH_ERROR_COPY[error]);
         setStage("type");
       },
     });
 
-    // Unsupported browser, insecure origin, or a constructor that threw: go straight to typing
-    // rather than showing a microphone screen that cannot work.
+    // Unsupported browser, insecure origin, or a constructor that threw: go to typing AND say
+    // why (O12 RCA) — the silent version was indistinguishable from a broken button, which is
+    // exactly how it was reported.
     if (!session) {
-      setSpeechError(null);
+      setSpeechMessage(SPEECH_UNAVAILABLE_COPY[speechUnavailable() ?? "unsupported"]);
       setStage("type");
       return;
     }
@@ -632,7 +641,7 @@ export function CareFinder() {
 
             <div className="type-content">
               <p className="eyebrow">In your own words</p>
-              {speechError && <p className="speech-error" role="status">{SPEECH_ERROR_COPY[speechError]}</p>}
+              {speechMessage && <p className="speech-error" role="status">{speechMessage}</p>}
               <h1>
                 <span>ADHD assessment</span>
                 <em>that takes you seriously.</em>
