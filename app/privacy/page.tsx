@@ -53,8 +53,9 @@ export default function PrivacyPolicyPage() {
             If you type a suburb, that word is looked up on your device too — the site never asks
             your browser for your location. If you use the microphone, your browser&apos;s own
             speech service (Apple&apos;s or Google&apos;s, depending on your browser) converts
-            the audio to text; ADHD.ME never records or receives the audio, and the same
-            in-browser rule applies to the text that comes back.
+            the audio to text, which may happen on that vendor&apos;s servers overseas;
+            ADHD.ME never records or receives the audio, and the same in-browser rule applies
+            to the text that comes back.
           </p>
           <p className="mt-2 text-sm leading-6">
             Some people use the finder for a child or teenager in their care. The same rule
