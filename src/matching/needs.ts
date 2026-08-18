@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { findCue, tokenise } from "./read";
+import { findCue, stem, tokenise } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -73,7 +73,7 @@ export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "lon
  * requires the reason to come from a fixed set, and the fixed set is the `label` column below.
  */
 export type NeedSignal = {
-  facet: Facet | { kind: "preference"; preference: Preference };
+  facet: Facet | { kind: "preference"; preference: Preference } | { kind: "language"; language: string };
   /** The phrase from the reader's own words that reached this facet. Used for tests and logging. */
   matched: string;
   /** Closed vocabulary. What a surface may say back. */
@@ -261,8 +261,57 @@ export function readNeeds(text: string): NeedSignal[] {
 export function facetKey(facet: NeedSignal["facet"]): string {
   if (facet.kind === "care") return `care:${facet.area}`;
   if (facet.kind === "manner") return `manner:${facet.trait}`;
+  if (facet.kind === "language") return `language:${facet.language.toLowerCase()}`;
   return `pref:${facet.preference}`;
 }
+
+/**
+ * A language the reader asked for, read against the languages the roster actually declares.
+ *
+ * WHY THIS IS NOT IN THE LEXICON. Every other facet is a fixed vocabulary shared by all
+ * clinicians, so it can live in the static table above. Languages are per-clinician DATA: a
+ * static lexicon would have to enumerate every language any clinician might ever speak, a list
+ * that goes stale the day somebody who speaks Tamil joins. Reading against the roster's own
+ * declarations keeps the property that matters — no per-clinician WEIGHT anywhere — while
+ * letting the vocabulary grow with the roster.
+ *
+ * WHY IT IS IN THIS FILE ANYWAY (the F2 repair). Until the overhaul this lived beside
+ * `matchEvidence` as a raw `String.includes` — the exact mechanism W222 tore out of the lexicon
+ * for cause — and its signals were shown on the card but never seen by the score, so a
+ * language-only query rendered "unmatched" beside a card explaining a ranking that never
+ * happened. It now goes through the same tokenise-and-stem pipeline as every cue and returns
+ * ordinary `NeedSignal`s, so the ranking, the quality verdict and the explanation all read it
+ * or none of them do.
+ *
+ * English is excluded: "speaks English" is not a match reason in Australia, it is the
+ * assumption. And a language the reader never mentioned is never a signal — telling somebody
+ * their GP speaks a language they did not ask about is a guess about who they are.
+ */
+export function languageNeeds(text: string, spoken: readonly string[]): NeedSignal[] {
+  const tokens = new Set(tokenise(text));
+  const signals: NeedSignal[] = [];
+  const seen = new Set<string>();
+  for (const language of spoken) {
+    if (language.toLowerCase() === "english") continue;
+    const key = facetKey({ kind: "language", language });
+    if (seen.has(key) || !tokens.has(stem(language.toLowerCase()))) continue;
+    seen.add(key);
+    signals.push({
+      facet: { kind: "language", language },
+      matched: language.toLowerCase(),
+      label: `${language}-speaking`,
+      weight: LANGUAGE_WEIGHT,
+    });
+  }
+  return signals;
+}
+
+/**
+ * Same tier as the lexicon's strongest facets (30/20/12): an asked-for language is a hard
+ * requirement of the appointment, not a nice-to-have, and it was already rendered at this
+ * weight before it was scored at all.
+ */
+const LANGUAGE_WEIGHT = 30;
 
 /** Every label a surface may say back, for the test that pins the vocabulary closed. */
 export const NEED_LABELS: readonly string[] = LEXICON.map((entry) => entry.label);

@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, matchEvidence, rankClinicians, scoreAgainst, getPersonalizedMatch } from "@/demo/clinicians";
-import { MANNER_TRAITS, NEED_LABELS, facetKey, readNeeds } from "./needs";
+import {
+  clinicians,
+  matchEvidence,
+  matchQuality,
+  needsFor,
+  rankClinicians,
+  scoreAgainst,
+  getPersonalizedMatch,
+} from "@/demo/clinicians";
+import { MANNER_TRAITS, NEED_LABELS, facetKey, languageNeeds, readNeeds } from "./needs";
 
 describe("W221 reading what somebody said into the closed vocabulary", () => {
   it("reads a preference about care, and reaches nothing on text that names none", () => {
@@ -73,10 +81,11 @@ describe("W221 the ranking and the explanation are one computation", () => {
       // Everything the page says came from the evidence.
       for (const label of said) expect(evidence.map((e) => e.label)).toContain(label);
 
-      // And the score is exactly the evidence's weight — no unexplainable contribution.
-      const fromLexicon = readNeeds(query).filter((n) => evidence.some((e) => facetKey(e.facet) === facetKey(n.facet)));
-      expect(scoreAgainst(clinician, readNeeds(query))).toBe(
-        fromLexicon.reduce((sum, n) => sum + n.weight, 0),
+      // And the score is exactly the evidence's weight — no unexplainable contribution, and
+      // since O1 no carve-out either: language evidence is scored like everything else, so the
+      // comparison is against the full needs the ranking actually reads.
+      expect(scoreAgainst(clinician, needsFor(query))).toBe(
+        evidence.reduce((sum, n) => sum + n.weight, 0),
       );
     }
   });
@@ -121,5 +130,63 @@ describe("W221 what the roster declares", () => {
   it("still does not float the founder on a request that separates nobody", () => {
     expect(rankClinicians("I think I might have ADHD and I would like an assessment")[0]!.id)
       .not.toBe("anubhav-saxena");
+  });
+});
+
+describe("O1 languages go through the one pipeline (F2)", () => {
+  /**
+   * THE DEFECT THIS PINS. Until O1, language signals were appended to `matchEvidence` alone by a
+   * raw-substring matcher: shown on the card, invisible to `scoreAgainst` and `matchQuality`.
+   * A reader who asked only for a language was told "this is everyone we list rather than an
+   * order" — beside a card explaining a ranking that never happened. That is the inverse of the
+   * drift W221 removed (ranked for a reason not given; here, given a reason not ranked on), and
+   * these tests hold the guarantee in both directions.
+   */
+  it("ranks the speaker first on a language-only request, and calls the order informed", () => {
+    // Urdu separates the roster: Dr Saxena declares it, Dr Yadav does not.
+    const query = "a GP who speaks Urdu";
+    expect(rankClinicians(query)[0]!.id).toBe("anubhav-saxena");
+    expect(matchQuality(query)).toBe("informed");
+  });
+
+  it("reads an inflected language mention the substring matcher was never tested on", () => {
+    const needs = needsFor("an Urdu-speaking GP please");
+    expect(needs.some((n) => n.label === "Urdu-speaking")).toBe(true);
+  });
+
+  it("scores what the card says: language evidence is never explanation-only", () => {
+    const query = "a GP who speaks Urdu";
+    for (const clinician of clinicians) {
+      const evidence = matchEvidence(clinician, query);
+      const spoken = evidence.filter((n) => n.facet.kind === "language");
+      // Every language on the card contributed to the score...
+      expect(scoreAgainst(clinician, needsFor(query))).toBe(evidence.reduce((s, n) => s + n.weight, 0));
+      // ...and only speakers carry it.
+      for (const need of spoken) {
+        if (need.facet.kind !== "language") continue;
+        const asked = need.facet.language.toLowerCase();
+        expect(clinician.languages.map((l) => l.toLowerCase())).toContain(asked);
+      }
+    }
+  });
+
+  it("a language shared by the whole roster ties rather than separates, and says so", () => {
+    // Both GPs declare Hindi, so a Hindi-only request is an honest tie, not a ranking.
+    expect(matchQuality("a GP who speaks Hindi")).toBe("tied");
+  });
+
+  it("reaches nothing on a language nobody on the roster declares", () => {
+    // Only declared data is matchable: an undeclared language must not invent a signal.
+    expect(needsFor("a GP who speaks Tamil").filter((n) => n.facet.kind === "language")).toEqual([]);
+    expect(matchQuality("a GP who speaks Tamil")).toBe("unmatched");
+  });
+
+  it("never treats English as a match reason", () => {
+    expect(languageNeeds("an English speaking GP", ["English", "Hindi"])).toEqual([]);
+  });
+
+  it("counts an asked language once however it is cased or repeated", () => {
+    const needs = languageNeeds("urdu URDU Urdu", ["Urdu", "urdu"]);
+    expect(needs).toHaveLength(1);
   });
 });

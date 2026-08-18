@@ -33,8 +33,8 @@
 import { EI_QUALITIES, type EIQuality } from "@/demo/emotional-fit";
 import type { CareArea } from "@/demo/care-archetypes";
 import type { Clinician } from "@/demo/clinicians";
-import { matchEvidence } from "@/demo/clinicians";
-import { readNeeds, facetKey } from "@/matching/needs";
+import { matchEvidence, needsFor } from "@/demo/clinicians";
+import { facetKey } from "@/matching/needs";
 import { CARE_LABEL_BY_AREA, type ProposedFacet } from "./transcript";
 
 /** Where a proposed facet has got to. Nothing reaches a profile without passing through here. */
@@ -159,7 +159,9 @@ export type MatchAudit = {
 };
 
 export function matchAudit(query: string, roster: readonly Clinician[]): MatchAudit {
-  const needs = readNeeds(query);
+  // The same needs the ranking scores — including asked-for languages — so the audit cannot
+  // show a total the finder did not compute (the O1/F2 unity repair).
+  const needs = needsFor(query);
   const asked = needs.map((need) => ({ key: facetKey(need.facet), label: need.label, weight: need.weight }));
 
   return {

@@ -1,6 +1,6 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
-import { facetKey, readNeeds, type NeedSignal } from "@/matching/needs";
+import { facetKey, languageNeeds, readNeeds, type NeedSignal } from "@/matching/needs";
 import { type EIQuality } from "./emotional-fit";
 
 /**
@@ -274,7 +274,7 @@ export const clinicians: Clinician[] = [
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
 export function rankClinicians(query: string): Clinician[] {
-  const needs = readNeeds(query);
+  const needs = needsFor(query);
   return [...clinicians].sort((a, b) => {
     const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
     if (byScore !== 0) return byScore;
@@ -319,6 +319,9 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
   const facet = need.facet;
   if (facet.kind === "care") return clinician.careAreas.includes(facet.area);
   if (facet.kind === "manner") return clinician.manner.includes(facet.trait);
+  if (facet.kind === "language") {
+    return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase());
+  }
   switch (facet.preference) {
     case "woman-gp":
       return clinician.gender === "woman";
@@ -374,7 +377,7 @@ export function unservedAsks(query: string): string[] {
 export type MatchQuality = "informed" | "tied" | "unmatched";
 
 export function matchQuality(query: string): MatchQuality {
-  const needs = readNeeds(query);
+  const needs = needsFor(query);
   if (needs.length === 0) return "unmatched";
   const scores = clinicians.map((clinician) => scoreAgainst(clinician, needs));
   return new Set(scores).size > 1 ? "informed" : "tied";
@@ -389,6 +392,24 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
 };
 
 /**
+ * Everything the reader asked for that this roster can be compared on: the lexicon's closed
+ * vocabulary plus the languages the roster itself declares.
+ *
+ * THIS IS THE ONE ENTRY POINT (the O1/F2 repair). Until the overhaul, language signals were
+ * appended to `matchEvidence` alone — shown on the card, invisible to `scoreAgainst` and
+ * `matchQuality` — so somebody who asked only for a Tamil-speaking GP was told "this is
+ * everyone we list rather than an order" beside a card explaining a ranking that never
+ * happened. The ranking, the quality verdict, the explanation and the console audit now all
+ * read this function, so none of them can see a signal the others cannot.
+ */
+export function needsFor(query: string): NeedSignal[] {
+  return [...readNeeds(query), ...languageNeeds(query, SPOKEN_ON_ROSTER)];
+}
+
+/** Every language anybody on the roster declares. Grows with the roster, never enumerated. */
+const SPOKEN_ON_ROSTER: readonly string[] = [...new Set(clinicians.flatMap((c) => c.languages))];
+
+/**
  * The needs this clinician actually answers, in the reader's asking order.
  *
  * ONE COMPUTATION, TWO CONSUMERS. The ranking and the explanation both read this, so the page
@@ -397,35 +418,7 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  * because it was never a `NeedSignal`.
  */
 export function matchEvidence(clinician: Clinician, query: string): NeedSignal[] {
-  return [...readNeeds(query).filter((need) => answers(clinician, need)), ...languageAsked(clinician, query)];
-}
-
-/**
- * A language the reader asked for that this clinician speaks.
- *
- * WHY THIS IS NOT IN THE LEXICON. Every other facet is a fixed vocabulary shared by all
- * clinicians, so it can live in `needs.ts` as a static table. Languages are not: they are
- * per-clinician DATA, and a static lexicon would have to enumerate every language any clinician
- * might ever speak, which is a list that goes stale the day somebody who speaks Tamil joins.
- * Reading it off the clinician's own declaration keeps the property that matters — no
- * per-clinician WEIGHT anywhere — while letting the vocabulary grow with the roster.
- *
- * SURFACED ONLY WHEN ASKED FOR, which is the older rule this preserves. English is excluded
- * because "speaks English" is not a match reason in Australia; it is the assumption. And a
- * clinician who speaks Hindi is not shown as a Hindi match to somebody who never mentioned it —
- * telling a reader their GP speaks a language they did not ask about is a guess about who they
- * are, dressed up as a feature.
- */
-function languageAsked(clinician: Clinician, query: string): NeedSignal[] {
-  const words = query.toLowerCase();
-  return clinician.languages
-    .filter((language) => language !== "English" && words.includes(language.toLowerCase()))
-    .map((language) => ({
-      facet: { kind: "manner" as const, trait: "culturally_attuned" as const },
-      matched: language.toLowerCase(),
-      label: `${language}-speaking`,
-      weight: 30,
-    }));
+  return needsFor(query).filter((need) => answers(clinician, need));
 }
 
 /**
