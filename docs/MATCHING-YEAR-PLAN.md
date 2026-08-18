@@ -117,14 +117,21 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
 Everything asked across this arc that is still outstanding or thinner than the ask deserved,
 so the loop cannot lose it. Build-loop units unless marked FOUNDER:
 
-1. **The mix hero doesn't yet keep its promise mechanically.** The percent and condition a GP
-   sets on /clinicians/join are display-only — they are not captured into the application
-   payload, so "finish onboarding and get this mix" ends at the sentence. Wire the chosen mix
-   into the join form (and the console's view of the application) as declared case-mix intent.
-2. **Onboarding interview build-out (O22 items 2–4).** The console shows the cross-check on a
-   hard-coded example transcript; the real screen needs an editable transcript field with live
-   proposals, confirm buttons wired to the interview record, the gap-sweep view, and the
-   per-onboarding reach report.
+1. **The mix hero doesn't yet keep its promise mechanically — LARGELY CLOSED by O26
+   (2026-08-18).** `desiredMixPercent` now rides the application when — and only when — the GP
+   actually set it (join-experience.tsx owns the state; the store validates 10–50 step 10 and
+   refuses the rest; absent means undeclared, never defaulted). The condition is not captured
+   by design: it rotates as an invitation and the GP never chooses one — the form's care areas
+   are the chosen work. REMAINING: no console surface renders applications yet, so the declared
+   mix has no reader; when an applications view is built, the mix renders as stated preference.
+2. **Onboarding interview build-out (O22 items 2–4) — item 2 CLOSED by O30 (2026-08-18).**
+   `/console/interview` is the working instrument: editable transcript (i:-prefixed interviewer
+   turns are never read), live proposals from both readers, each carrying the doctor's sentence
+   and the structured interview's OWN question, and often/sometimes/not-me recorded with the
+   interviewer's name into the W226 draft store (`frequency` kept beside the review status).
+   REMAINING as their own units: the gap-sweep view (item 3 — unproposed facets as the
+   remaining question list) and the persisted per-onboarding reach report (item 4 — the
+   lexicon-gap feed as a record, not just the live panel).
 3. **iPhone speech: field verification.** O18's retry + honest copy + `?debug=1` shipped, but
    no confirmation yet from the actual failing device. FOUNDER: retry on the phone; if the
    banner shows, send the bracketed code. Build side: keep the raw-code path first-class in
@@ -143,6 +150,9 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
 9. **Vercel free-tier deploy quota** keeps blocking previews/production for hours at a time.
    FOUNDER: either upgrade the plan or accept batched deploys; the loop should batch pushes
    (one push per verified unit, no pixel-only pushes between) either way.
+10. **Finder desktop composition** (build unit, from D1's reverted attempt): the ~520px shell
+    is shared by every finder stage, so a real desktop layout needs the shell widened for all
+    stages at once — its own unit, not a media query (rationale in globals.css).
 
 ## Explaining the fit, continuously (runs all year)
 
@@ -151,33 +161,6 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
   change this order" — surfacing the top clarifier ON the profile; (Q3) side-by-side compare
   of two clinicians' evidence; (Q4) the same provenance view inside the console so a doctor
   sees exactly what patients are told about them.
-
-## UI refinement & motion, continuously (runs all year)
-
-The standing rules, applied whenever a unit touches a surface (they are O11/O14/O24's rules
-written down as the track they already were): minimalist — one idea per screen, fold
-discipline, related facts share a row; motion via motion/react only where it carries meaning
-(a state change, an arrival — never decoration), with `prefers-reduced-motion` fully
-honoured; 44px touch floor; every visual change leaves a before/after capture in `qa/` and a
-docs/DESIGN-QA.md entry.
-
-## Standing debts
-
-Debts the plan knows about, each either a claimable build unit or marked FOUNDER. A debt
-listed here is not backlog padding — it is a promise a shipped surface already makes that the
-code does not yet keep.
-
-1. **Mix capture (from O24) — CLOSED by O26, 2026-08-18.** The join hero said "Set my mix"
-   and the form threw the number away. `desiredMixPercent` now rides the application when —
-   and only when — the GP actually set it (join-experience.tsx owns the state; store validates
-   10–50 step 10 and refuses the rest; absent means undeclared, never defaulted).
-2. **O22 console build-out** (build unit): ONBOARDING-INTERVIEW.md build order items 2–4 —
-   the console onboarding page with transcript field, live proposals and per-proposal confirm
-   wired to the existing interview record; the gap-sweep view; the per-onboarding reach
-   report.
-3. **Finder desktop composition** (build unit, from D1's reverted attempt): the ~520px shell
-   is shared by every finder stage, so a real desktop layout needs the shell widened for all
-   stages at once — it deserves its own unit, not a media query (rationale in globals.css).
 
 ## The targeting-levels audit (O23)
 

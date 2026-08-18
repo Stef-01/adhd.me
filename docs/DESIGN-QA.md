@@ -158,3 +158,26 @@ text-wrap, ellipses and tabular numerals. Violations found and fixed:
   untouched 30% default is not a declaration, so the field is absent, not zero, not 30.
 - [x] No new motion; no touch-target change; behaviour pinned in e2e/join-hero.spec.ts
   ("the mix set above reaches the application below").
+
+## O30 — the onboarding interview screen, `/console/interview` (2026-08-18)
+
+Captures: qa/interview-o30/ (desktop full-page + 390×844). Taste-skill pass applied.
+
+- [x] One idea per section, in the interview's own order: who is in the room → the
+  conversation → heard so far → for after → record it. No form on screen while the doctor
+  talks — the transcript IS the input.
+- [x] Related facts share the card: the facet chip, the doctor's own sentence, and the
+  structured interview's scripted question sit together; the answer buttons are inside the
+  same card. Nothing to cross-reference.
+- [x] The cross-check ("patients ask for this in their own words") is quiet accent caps —
+  it informs which question to ask first and must not read as the machine grading the doctor.
+- [x] Motion carries meaning only: a proposal ARRIVING fades/rises 8px via motion/react;
+  `useReducedMotion` renders it static; nothing loops.
+- [x] 44px floor on answer pills, inputs and the details summary; `touch-action:
+  manipulation`; hover gated behind `(hover: hover)`; visible focus rings throughout.
+- [x] Honesty gates: empty state says what will happen ("Proposals appear here as the doctor
+  talks"), not that something is wrong; the save note states the G6 posture verbatim; the
+  gap feed is disclosure-hidden ("For after the interview") so live work stays uncluttered.
+- [x] Behaviour pinned in e2e/interview.spec.ts: signed-out redirect, interviewer-line
+  exclusion, scripted question rendering, record/un-record, disabled save until named,
+  draft-save message.

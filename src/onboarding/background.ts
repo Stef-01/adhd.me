@@ -35,6 +35,7 @@ import type { CareArea } from "@/demo/care-archetypes";
 import type { Clinician } from "@/demo/clinicians";
 import { matchEvidence, needsFor, roundScore } from "@/demo/clinicians";
 import { facetKey } from "@/matching/needs";
+import type { Frequency } from "./interview";
 import { CARE_LABEL_BY_AREA, type ProposedFacet } from "./transcript";
 
 /** Where a proposed facet has got to. Nothing reaches a profile without passing through here. */
@@ -57,6 +58,16 @@ export type BackgroundFacet = {
    * visible rather than silent.
    */
   decidedBy?: string;
+  /**
+   * The clinician's own answer at confirm time — often / sometimes / not-me (O30).
+   *
+   * The interview refuses tickboxes because three states carry information a boolean throws away
+   * (interview.ts's header), so the record keeps what was SAID, not just whether the facet
+   * survived review: "sometimes" and "often" both read `accepted`, and collapsing them at the
+   * moment of capture would rebuild the tickbox one layer down. Absent on a facet decided by a
+   * reviewer working from the transcript alone rather than from the clinician's spoken answer.
+   */
+  frequency?: Frequency;
 };
 
 export type ClinicianBackground = {

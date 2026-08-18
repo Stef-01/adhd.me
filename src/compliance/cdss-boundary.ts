@@ -343,6 +343,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
   },
   {
+    module: "src/onboarding/capture.ts",
+    operatorCopy: [],
+    notCopy:
+      "W229 is the live interview's pure logic: parsing a typed transcript into attributed turns, finding the read-back question for a proposed facet, and folding spoken answers into the reviewable background. It authors no copy: every question it returns is `INTERVIEW`'s own `ask`, verbatim — already declared operator copy on this surface at src/onboarding/interview.ts — and its one original sentence is the drift fallback, which names a vocabulary/interview mismatch to the interviewer so the failure is visible in the room rather than thrown. Nothing here is about a patient and nothing here can publish; the only write path is the W226 store with its own refusals.",
+  },
+  {
     module: "src/onboarding/expertise.ts",
     operatorCopy: [],
     notCopy:

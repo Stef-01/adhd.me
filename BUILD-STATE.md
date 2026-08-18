@@ -99,17 +99,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **O30 (Standing debt #2, first half — the interview screen) — claimed 2026-08-18T21:48Z by
-> loop-0818b.** ONBOARDING-INTERVIEW.md build order item 2: a real `/console/interview` screen —
-> editable transcript field (the current console cross-check runs on a hard-coded example), live
-> proposals from BOTH readers as the interviewer types, each proposal carrying the clinician's
-> sentence and the STRUCTURED INTERVIEW'S OWN QUESTION as its read-back, and per-proposal
-> often/sometimes/not-me confirm recorded with the interviewer's name into the existing W226
-> background store (BackgroundFacet gains an optional `frequency`; often/sometimes → accepted,
-> not-me → rejected, unanswered stays proposed). Items 3 (gap sweep) and 4 (persisted reach
-> report) remain separate units. Verify: unit tests over the parse + confirm mapping and the
-> store round-trip; e2e over the signed-in screen; taste-skill pass with qa/ captures and a
-> DESIGN-QA entry; `pnpm verify` green.
+> **O30 (Standing debt #2, first half — the interview screen) — DONE 2026-08-18, loop-0818b
+> (claimed 21:48Z).** ONBOARDING-INTERVIEW.md build order item 2 shipped as `/console/interview`
+> (session-gated): editable transcript where `i:`-prefixed turns are the interviewer's and are
+> NEVER read — the convention fails toward a visible wrong proposal, not silently discarded
+> doctor speech; live proposals from both readers, each carrying the clinician's sentence and
+> the STRUCTURED INTERVIEW'S OWN question as read-back (`readBackQuestionFor` — the conversation
+> shrinks the checklist, it does not replace it); often/sometimes/not-me recorded with the
+> interviewer's name into the W226 store. `BackgroundFacet.frequency` keeps the spoken answer
+> beside the review status because collapsing sometimes/often at capture would rebuild the
+> tickbox the interview refuses; the writer drops an out-of-vocabulary frequency rather than
+> defaulting it. Unanswered proposals stay `proposed` with nobody named, so the W226 rule —
+> accepted must name its decider — holds by construction. Pure logic in
+> `src/onboarding/capture.ts`. Gate: 10 new capture tests + store round-trip, interview e2e 3/3
+> (signed-out redirect, live flow, captures), taste pass with qa/interview-o30/ + DESIGN-QA
+> entry, full `pnpm verify` green. Year plan reconciled: duplicate Standing-debts and UI-track
+> sections merged into the founder's audited list; debt #2 marked item-2-closed (items 3–4
+> remain); debt #1 marked largely closed with the applications-view residual named. Items 3
+> (gap sweep) and 4 (persisted reach report) are the next claimable halves of this debt.
 
 > **O26 (matching follow-through, out-of-band like D1) — DONE 2026-08-18, loop-0818 (claimed
 > 18:45Z).** The mix-capture debt from O24: the join hero sold "the mix is yours to set", its CTA

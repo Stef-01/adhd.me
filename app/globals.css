@@ -5638,6 +5638,47 @@ textarea:focus-visible {
    the reviewer has to go and fix. */
 .be-save-error { color: var(--accent); }
 
+/* ── The interview screen (O30) ─────────────────────────────────────────────
+   Same family as the matching console (mc-*) and review editor (be-*); iv-*
+   carries only what is new — the identity row, the live transcript, and the
+   three-state answer buttons. */
+.iv { display: grid; gap: 0; }
+.iv-who { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; max-width: 720px; }
+@media (max-width: 640px) { .iv-who { grid-template-columns: 1fr; } }
+.iv-field { display: grid; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.iv-field input, .iv-field textarea {
+  min-height: 44px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 4px;
+  background: #fff; color: var(--ink); font: inherit; font-size: 14.5px;
+}
+.iv-field input:focus-visible, .iv-field textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+}
+.iv-transcript { margin-top: 12px; max-width: 720px; }
+.iv-transcript textarea { line-height: 1.6; resize: vertical; }
+
+.iv-proposals { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 720px; }
+.iv-proposal { padding: 14px 16px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 4px;
+  background: var(--stone); }
+.iv-proposal.iv-often, .iv-proposal.iv-sometimes { border-left-color: var(--accent); background: var(--accent-soft); }
+.iv-proposal.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
+.iv-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+/* The cross-check note is quiet on purpose: it informs which question to ask first, and a
+   louder treatment would read as the machine grading the doctor. */
+.iv-cross { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.iv-question { margin: 10px 0 0; max-width: 62ch; color: var(--ink); font-size: 14px; line-height: 1.55; font-weight: 600; }
+.iv-answers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.iv-answer { min-height: 44px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--muted); font: inherit; font-size: 13.5px; cursor: pointer;
+  touch-action: manipulation; }
+@media (hover: hover) { .iv-answer:hover { border-color: var(--accent); color: var(--ink); } }
+.iv-answer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.iv-answer[aria-pressed="true"] { background: var(--ground); border-color: var(--ground); color: var(--on-ground); font-weight: 600; }
+
+.iv-gaps { margin-top: 12px; max-width: 68ch; }
+.iv-gaps summary { min-height: 44px; display: flex; align-items: center; cursor: pointer;
+  color: var(--muted); font-size: 13.5px; }
+.iv-gaps summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 /* ── Launch checklist surfaces (O15) ─────────────────────────────────────────────────────── */
 
 /* The 404 (item 1): the same calm register as every other dead end in the product. */

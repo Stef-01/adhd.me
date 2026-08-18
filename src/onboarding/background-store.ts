@@ -30,6 +30,7 @@ import { existsSync, mkdirSync, appendFileSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { neutraliseSpreadsheetFormula } from "@/security/untrusted";
 import type { BackgroundFacet, ClinicianBackground, FacetStatus } from "./background";
+import { FREQUENCIES, type Frequency } from "./interview";
 
 /** A saved review. Never a profile — see the header. */
 export type StoredBackground = ClinicianBackground & {
@@ -60,6 +61,7 @@ function readRows(filePath: string): StoredBackground[] {
 }
 
 const VALID_STATUS = new Set<FacetStatus>(["proposed", "accepted", "rejected"]);
+const VALID_FREQUENCY = new Set<Frequency>(FREQUENCIES);
 
 function cleanFacet(facet: BackgroundFacet): BackgroundFacet {
   return {
@@ -71,6 +73,9 @@ function cleanFacet(facet: BackgroundFacet): BackgroundFacet {
     ...(facet.cue ? { cue: facet.cue } : {}),
     status: VALID_STATUS.has(facet.status) ? facet.status : "proposed",
     ...(facet.decidedBy ? { decidedBy: neutraliseSpreadsheetFormula(facet.decidedBy) } : {}),
+    // The clinician's spoken answer (O30). Dropped rather than defaulted when it is not one of
+    // the three states — a frequency this record cannot hold is a frequency nobody said.
+    ...(facet.frequency && VALID_FREQUENCY.has(facet.frequency) ? { frequency: facet.frequency } : {}),
   };
 }
 
