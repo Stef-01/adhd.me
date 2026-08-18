@@ -708,12 +708,21 @@ export function CareFinder() {
                 </datalist>
                 <p className="place-status" role="status">
                   {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
-                      is a number that describes something the reader cannot see. */}
+                      is a number that describes something the reader cannot see. And it only
+                      claims "ranked on what you asked for" when that is TRUE (O11): on an
+                      unmatched or tied query this line used to assert a ranking two lines above
+                      the banner saying there is no ranking — two sentences about the same fact,
+                      one of them false. When the order is not earned, the count stands alone and
+                      the quality banner owns the explanation. */}
                   {place.trim() === ""
-                    ? `${shown.length} of ${matches.length}, ranked on what you asked for.`
+                    ? quality === "informed"
+                      ? `${shown.length} of ${matches.length}, ranked on what you asked for.`
+                      : `${shown.length} of ${matches.length}.`
                     : origin
                       ? `${shown.length} of ${matches.length}, nearest to ${origin.suburb} first.`
-                      : "We do not cover that one yet, so these are ranked on what you asked for."}
+                      : quality === "informed"
+                        ? "We do not cover that one yet, so these are ranked on what you asked for."
+                        : "We do not cover that one yet."}
                 </p>
 
                 {/* WHEN THE ORDER IS NOT EARNED, SAY SO.

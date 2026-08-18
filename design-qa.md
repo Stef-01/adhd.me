@@ -60,3 +60,47 @@ Post-fix evidence:
 ## Final result
 
 final result: passed
+
+# Minimalism review — matching surfaces (O11, 2026-08-18)
+
+Scope: every UI the matching pipeline renders through — the finder's results, clarifier,
+profile and listening screens (`app/care-finder.tsx`) and the console's matching audit
+(`app/console/matching/page.tsx`). Reviewed against the screenshots in `qa/matching-o10/`.
+
+## Verdict
+
+The surfaces are already spare: one field, one dual-function control, one count line, one
+quality banner that only renders when it has something to add, rows that carry exactly one
+distinguishing reason each. The earlier collapse (eleven screens to seven) is holding. One
+real defect and no removable elements were found.
+
+## The defect, fixed
+
+- **The count line claimed a ranking beside the banner denying one.** On an unmatched query
+  the screen read "2 of 2, ranked on what you asked for." two lines above "this is everyone
+  we list rather than an order." — two sentences about the same fact, one false. The count
+  line now claims "ranked on what you asked for" only when `matchQuality` is `informed`;
+  otherwise the count stands alone and the quality banner owns the explanation. (The
+  nearest-first variant is exempt: since O3, an unmatched query with an origin genuinely IS
+  distance-sorted, so that sentence is true in every quality state.)
+
+## Reviewed and kept, with reasons
+
+- **Quality banner + clarifier block stacking** (unmatched state shows both): not
+  duplication — the banner says what happened, the questions are the way out. Removing
+  either orphans the other.
+- **Top-tie note (O3)**: renders only when `informed` with a tied first band, which the
+  quality banner cannot say; never stacks with it.
+- **Closed-books line (O4)**: one sentence, only on affected rows, only claiming fit when
+  fit exists (Codex P2 fix).
+- **Profile**: eyebrow flips between "Why this fit" / "About this GP" on evidence; signal
+  pills deduplicate against the row reasons; no repeated sentence found.
+- **Console audit table**: the O2 "Declares" column and O8 "books closed" tag each add one
+  cell of operator-facing fact; the table remains the only place scores render.
+
+## Evidence
+
+`qa/matching-o10/*.png` (before), refreshed after the count-line fix by re-running
+`e2e/matching-verification.spec.ts`.
+
+final result: passed, one fix applied
