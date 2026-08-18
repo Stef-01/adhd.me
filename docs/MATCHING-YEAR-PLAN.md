@@ -132,8 +132,11 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    Item 3 CLOSED by O36 (2026-08-18): the gap sweep — every facet the transcript has not
    reached, rendered as the structured interview's own question with the same three-state
    record; the count falls as the doctor talks; an unanswered question is recorded nowhere.
-   REMAINING as its own unit: the persisted per-onboarding reach report (item 4 — the
-   lexicon-gap feed as a record, not just the live panel).
+   Item 4 CLOSED by O38 (2026-08-18): the reach report — patient-side silent sentences ride
+   the W226 save beside `unread`, and the matching console renders the per-onboarding feed
+   (latest save per clinician, two silences kept apart because they grow different cue lists).
+   **DEBT CLOSED — the O22 loop is now standing infrastructure; what remains is Q1's ongoing
+   review of what the feed surfaces, which is the year plan's work, not a debt.**
 3. **iPhone speech: field verification.** O18's retry + honest copy + `?debug=1` shipped, but
    no confirmation yet from the actual failing device. FOUNDER: retry on the phone; if the
    banner shows, send the bracketed code. Build side: keep the raw-code path first-class in

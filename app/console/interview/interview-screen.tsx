@@ -103,6 +103,9 @@ export function InterviewScreen() {
           interviewer.trim(),
         ),
         readBackConfirmed: readBack,
+        // The reach-gap feed rides the save (O38): what a patient's words could not reach in
+        // this doctor's speech is part of the interview's record, not just its display.
+        patientSilent,
       };
       setSave(await saveReview(background, interviewer.trim()));
     });

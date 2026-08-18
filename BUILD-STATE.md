@@ -99,16 +99,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **O38 (Standing debt #2, last piece — the persisted reach report) — claimed 2026-08-18T23:46Z
-> by loop-0818d.** ONBOARDING-INTERVIEW.md build order item 4: the lexicon-gap feed as a RECORD,
-> not just the live panel. The W226 row gains the patient-side silent sentences beside the
-> clinician-side `unread` it already keeps (both are verbatim clinician speech — neutralised at
-> the writer per W153); a new reach-report module aggregates the latest save per clinician into
-> the per-onboarding feed; the matching console renders it where lexicon review already lives —
-> no new route, so the W102 census is unchanged, and the section's empty state distinguishes
-> "no onboardings saved" from "saved, nothing unheard". Closes Standing debt #2. Verify:
-> report aggregation + store round-trip tests; e2e drives interview save → feed render;
-> DESIGN-QA entry + qa/ capture; `pnpm verify` green.
+> **O38 (Standing debt #2, last piece — the persisted reach report) — DONE 2026-08-18,
+> loop-0818d (claimed 23:46Z). DEBT #2 CLOSED.** ONBOARDING-INTERVIEW.md item 4 shipped: the
+> lexicon-gap feed is a record. `ClinicianBackground.patientSilent` rides every interview save
+> beside `unread` (optional — a pre-O38 row reports empty rather than invented; the key is
+> omitted when a save carries none, W153 neutralisation at the writer since both are verbatim
+> clinician speech). `src/onboarding/reach-report.ts` (W230) aggregates the LATEST save per
+> clinician — a later conversation that resolved a gap removes the entry, because a feed that
+> re-raises resolved work trains people to ignore it — keeping the two silences apart since
+> they grow different cue lists (proposer cues vs the finder's patient lexicon). Rendered on
+> the matching console where lexicon review lives (now force-dynamic; no new route, W102
+> census unchanged; W200 declaration + loader added for the module). Three states on the
+> surface: no onboardings / fully heard / outstanding, per W179. Gate: 7 report tests +
+> round-trip, interview e2e 5/5 incl. save → feed, DESIGN-QA entry + qa/reach-o38/, full
+> `pnpm verify` green. With items 2–4 all shipped, the O22 interview loop is standing
+> infrastructure; the year plan's Q1 items are the loop's next territory.
 
 > **O36 (Standing debt #2, second half — the gap sweep) — DONE 2026-08-18, loop-0818c (claimed
 > 22:45Z).** ONBOARDING-INTERVIEW.md build order item 3 shipped on `/console/interview`: "Still

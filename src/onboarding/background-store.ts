@@ -110,6 +110,12 @@ export function saveBackground(
     displayName: neutraliseSpreadsheetFormula(background.displayName),
     facets: background.facets.map(cleanFacet),
     unread: background.unread.map(neutraliseSpreadsheetFormula),
+    // The patient-side gap feed (O38). Verbatim clinician speech like `unread`, so the same
+    // W153 neutralisation; the key is omitted when the save carries none, so a pre-O38 row and
+    // a gap-free row stay distinguishable from each other only by date, never invented.
+    ...(background.patientSilent && background.patientSilent.length > 0
+      ? { patientSilent: background.patientSilent.map(neutraliseSpreadsheetFormula) }
+      : {}),
     readBackConfirmed: background.readBackConfirmed,
     savedAt: (options.now ?? new Date()).toISOString(),
     savedBy: neutraliseSpreadsheetFormula(savedBy),

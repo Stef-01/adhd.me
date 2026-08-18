@@ -76,6 +76,15 @@ export type ClinicianBackground = {
   facets: BackgroundFacet[];
   /** Transcript sentences the vocabulary could not read. The lexicon's to-do list. */
   unread: string[];
+  /**
+   * Sentences the PATIENT'S reader heard nothing in (W227's `reachGaps`), kept per onboarding
+   * since O38 so the reach-gap feed is a record rather than a live panel that evaporates with
+   * the tab. `unread` is what the CLINICIAN vocabulary missed; this is what a patient's own
+   * words could not reach — each entry a candidate O13 caught at onboarding instead of in
+   * production. Optional because rows saved before O38 do not carry it, and absence must stay
+   * distinguishable from "read everything".
+   */
+  patientSilent?: string[];
   /** True once the clinician has seen the assembled bio and said it is them. */
   readBackConfirmed: boolean;
 };

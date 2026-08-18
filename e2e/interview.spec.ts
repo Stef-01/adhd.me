@@ -89,6 +89,34 @@ test("the checklist shrinks as the doctor talks, and a gap answer reaches the sa
   await expect(page.getByText(/Saved as a draft\. 2 accepted/)).toBeVisible();
 });
 
+test("a saved interview's unheard sentences land in the reach-gap feed (O38)", async ({ page }) => {
+  await signIn(page);
+
+  // A sentence both readers are silent on, riding beside one they hear.
+  await page.getByLabel("Interview transcript").fill(
+    "Titration is mine, I do not hand that back.\nI run a walking group on Thursdays for my older patients.",
+  );
+  await page.locator(".iv-proposal", { hasText: "Titration is mine" }).getByRole("button", { name: "Often" }).click();
+  await page.getByLabel("Doctor’s name, as patients will see it").fill("Dr Reach Feed");
+  await page.getByLabel("Interviewer — recorded beside every answer").fill("Console interviewer");
+  await page.getByRole("button", { name: "Save this interview" }).click();
+  await expect(page.getByText(/Saved as a draft/)).toBeVisible();
+
+  // The feed on the matching console carries it, as a record rather than a live panel.
+  await page.goto("/console/matching");
+  const feed = page.locator(".mc-section", { has: page.getByRole("heading", { name: "The reach-gap feed" }) });
+  const entry = feed.locator(".mc-clinician", { hasText: "Dr Reach Feed" });
+  await expect(entry).toBeVisible();
+  // Unheard by BOTH readers, so the sentence sits in both lists — patient-side and proposer-side.
+  await expect(entry.getByText(/walking group on Thursdays/)).toHaveCount(2);
+  await expect(entry.getByText(/saved \d{4}-\d{2}-\d{2} by Console interviewer/)).toBeVisible();
+
+  // The design record: the feed as shipped, desktop and phone widths.
+  await feed.screenshot({ path: "qa/reach-o38/reach-feed-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await feed.screenshot({ path: "qa/reach-o38/reach-feed-mobile.png" });
+});
+
 test("screenshots for the design record", async ({ page }) => {
   await signIn(page);
   await page.getByLabel("Interview transcript").fill(

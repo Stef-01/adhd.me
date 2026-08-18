@@ -199,3 +199,19 @@ Captures: qa/interview-o36/ (desktop + 390×844, superseding the o30 set for thi
 - [x] Honesty: an unanswered checklist question is recorded NOWHERE (absence, not a default);
   the note says so on the surface. Empty state ("Nothing left. The conversation reached every
   facet.") distinguishes finished from unstarted.
+
+## O38 — the reach-gap feed on the matching console (2026-08-18)
+
+Captures: qa/reach-o38/ (feed section, desktop + 390 widths).
+
+- [x] The feed sits on the matching console where lexicon review already lives — no new
+  route, no new nav. Real saved onboardings, explicitly distinguished from the worked
+  example above them.
+- [x] Two lists per entry, labelled by what they grow ("candidate lexicon cues" vs "unread
+  by the proposer's vocabulary") — related facts share the entry; the reviewer never
+  cross-references which reader missed what.
+- [x] Entry heading carries provenance in one line: who, saved when, by whom.
+- [x] Three states kept apart: no onboardings at all ("the feed starts with the first saved
+  interview"), onboardings fully heard ("nothing is waiting for lexicon review"), and
+  outstanding entries — W179's empty-state rule.
+- [x] Static list, no motion, existing mc-* type scale and rhythm throughout.

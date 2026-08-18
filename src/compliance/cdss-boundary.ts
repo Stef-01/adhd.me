@@ -343,6 +343,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
   },
   {
+    module: "src/onboarding/reach-report.ts",
+    operatorCopy: [],
+    notCopy:
+      "W230 aggregates saved onboarding rows into the reach-gap feed: per clinician, the sentences neither reader could hear. It authors nothing — every string it returns is verbatim clinician speech already neutralised at the W226 writer, plus identity fields from the same row. The feed renders on the staff-only matching console for lexicon review; nothing here is about a patient and nothing here can publish.",
+  },
+  {
     module: "src/onboarding/capture.ts",
     operatorCopy: [],
     notCopy:

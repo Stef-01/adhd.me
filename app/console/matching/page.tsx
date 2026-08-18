@@ -23,9 +23,13 @@ import { proposeDeclarations, reachGaps } from "@/onboarding/expertise";
 import { readTranscript } from "@/onboarding/transcript";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
+import { reachReport } from "@/onboarding/reach-report";
 import { BackgroundEditor, type VocabularyEntry } from "./background-editor";
 
 export const metadata = { title: "Matching console — ADHD.ME" };
+// O38: the page now reads the saved-onboarding store for the reach-gap feed, so it renders
+// per request rather than from the build.
+export const dynamic = "force-dynamic";
 
 /** The worked example. Synthetic, and labelled as such on the page. */
 const EXAMPLE_QUERY = "she rushes me and my family think it is an excuse, and my dose wears off";
@@ -48,6 +52,8 @@ const VOCABULARY: VocabularyEntry[] = [
 
 export default function MatchingConsolePage() {
   const audit = matchAudit(EXAMPLE_QUERY, clinicians);
+  // O38: the reach-gap feed — real saved onboardings, not the worked example below.
+  const reach = reachReport();
   const read = readTranscript(EXAMPLE_TRANSCRIPT);
   const background = backgroundFromProposals("example", "Dr Example", read.proposed, read.unread);
   // O22: the cross-check — only the clinician's own turns, re-read by the patient lexicon.
@@ -187,6 +193,46 @@ export default function MatchingConsolePage() {
               {patientUnheard.map((line) => <li key={line}>“{line}”</li>)}
             </ul>
           </>
+        )}
+      </section>
+
+      <section className="mc-section" aria-labelledby="reach-h">
+        <h2 id="reach-h">The reach-gap feed</h2>
+        <p className="mc-note">
+          From real saved onboardings (the interview screen), not the worked example above: for
+          each doctor, what the machine could not hear. The two lists grow different things —
+          the proposer’s cue list and the finder’s patient lexicon — which is why they are kept
+          apart. Most gaps are correctly unreadable (logistics, small talk); the ones that are
+          genuine expertise become cues, which is the O13 review moved to onboarding time.
+        </p>
+        {!reach.hasOnboardings ? (
+          <p className="mc-empty">No onboardings saved yet — the feed starts with the first saved interview.</p>
+        ) : reach.entries.length === 0 ? (
+          <p className="mc-empty">Every saved onboarding was fully heard. Nothing is waiting for lexicon review.</p>
+        ) : (
+          reach.entries.map((entry) => (
+            <div key={entry.clinicianId} className="mc-clinician">
+              <h3 className="mc-sub">
+                {entry.displayName} · saved {entry.savedAt.slice(0, 10)} by {entry.savedBy}
+              </h3>
+              {entry.patientSilent.length > 0 && (
+                <>
+                  <p className="mc-note">Silent to a patient’s search — candidate lexicon cues:</p>
+                  <ul className="mc-unread">
+                    {entry.patientSilent.map((line) => <li key={line}>“{line}”</li>)}
+                  </ul>
+                </>
+              )}
+              {entry.unread.length > 0 && (
+                <>
+                  <p className="mc-note">Unread by the proposer’s vocabulary:</p>
+                  <ul className="mc-unread">
+                    {entry.unread.map((line) => <li key={line}>“{line}”</li>)}
+                  </ul>
+                </>
+              )}
+            </div>
+          ))
         )}
       </section>
 
