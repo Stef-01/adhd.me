@@ -2,9 +2,13 @@
 // pilot. No clinical claims, no patient-facing marketing (compliance law #6).
 
 import Link from "next/link";
+import { GA_ID } from "../analytics";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
 
-export const metadata = { title: "Privacy policy (draft) — ADHD.ME" };
+export const metadata = {
+  title: "Privacy policy (draft)",
+  description: "What ADHD.ME holds, what it never holds, and the choices you keep — stated as a draft while the product is a demo.",
+};
 
 export default function PrivacyPolicyPage() {
   return (
@@ -79,6 +83,19 @@ export default function PrivacyPolicyPage() {
             describes what is automated, what never is, and the human controls in force.
           </p>
         </section>
+        {/* Rendered ONLY when measurement is actually switched on (the same environment switch
+            that loads the script), so this notice can never describe tracking that is not
+            running, or stay silent about tracking that is. */}
+        {GA_ID && (
+          <section>
+            <h2 className="text-lg font-medium text-stone-900">Site measurement</h2>
+            <p className="mt-2 text-sm leading-6">
+              This site uses Google Analytics 4 to count page visits. Advertising signals are
+              switched off, Google discards the connecting IP address on receipt, and nothing you
+              type or say into the finder is sent to it.
+            </p>
+          </section>
+        )}
       </div>
     </main>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { registerInterest } from "./interest-actions";
 import { INTEREST_REASONS, type InterestFormState } from "@/interest/types";
 
@@ -8,6 +9,15 @@ const initialState: InterestFormState = { status: "idle", message: "" };
 
 export function InterestForm() {
   const [state, action, pending] = useActionState(registerInterest, initialState);
+  const router = useRouter();
+
+  // Launch item 4: success lands on a page, not a message. A page can be returned to and
+  // screenshotted, and it is the only shape a conversion can be counted in without watching
+  // anybody. The inline block below still renders for the instant before navigation, so the
+  // announcement reaches assistive tech either way.
+  useEffect(() => {
+    if (state.status === "success") router.replace("/thanks");
+  }, [state.status, router]);
 
   if (state.status === "success") {
     return (

@@ -463,6 +463,10 @@ export function StoryLanding() {
             <p className="story-register-copy">
               We will tell you when the finder opens in your area.
             </p>
+            {/* Launch item 8: the reply is promised in numbers a person can hold us to. */}
+            <p className="story-register-copy">
+              A person reads every registration, and we reply within two business days.
+            </p>
           </div>
           <InterestForm />
         </div>
@@ -577,12 +581,25 @@ export function StoryLanding() {
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
           <Link href="/" className="story-footer-wordmark">ADHD.ME</Link>
+          {/* Launch item 3: the whole site, reachable from its front door. */}
           <div className="story-footer-links">
+            <Link href="/finder">Find a GP</Link>
+            <Link href="/examples">Worked examples</Link>
+            <Link href="/faq">Questions</Link>
+            <Link href="/approach">The approach</Link>
+            <Link href="/practices">For practices</Link>
             <a href="mailto:stefan.thottunkal@gmail.com">Contact</a>
             <Link href="/privacy">Privacy</Link>
           </div>
         </div>
       </footer>
+
+      {/* Launch item 9: on a phone, the one action this page exists for stays reachable without
+          scrolling back up. Hidden on wider screens, where the hero's own call is above the
+          fold; it carries the same words as the hero link on purpose — one action, one name. */}
+      <div className="story-sticky-cta">
+        <Link href="/finder">Find a GP near you<span className="arrow" aria-hidden="true">→</span></Link>
+      </div>
     </main>
   );
 }

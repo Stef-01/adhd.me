@@ -4292,7 +4292,7 @@ textarea:focus-visible {
   letter-spacing: -0.02em;
   text-decoration: none;
 }
-.story-footer-links { display: flex; gap: 26px; }
+.story-footer-links { display: flex; flex-wrap: wrap; gap: 10px 26px; }
 .story-footer-links a {
   color: var(--s-muted);
   font-size: 14px;
@@ -5474,3 +5474,87 @@ textarea:focus-visible {
 /* The refusal is shown verbatim: it names which facets have nobody against them, which is what
    the reviewer has to go and fix. */
 .be-save-error { color: var(--accent); }
+
+/* ── Launch checklist surfaces (O15) ─────────────────────────────────────────────────────── */
+
+/* The 404 (item 1): the same calm register as every other dead end in the product. */
+.notfound-screen {
+  min-height: 100svh; display: flex; flex-direction: column; align-items: flex-start;
+  justify-content: center; gap: 10px; max-width: 560px; margin: 0 auto; padding: 32px 24px;
+}
+.notfound-code { margin: 0; color: var(--faint); font-size: 15px; letter-spacing: 0.08em; }
+.notfound-screen h1 {
+  margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(30px, 6vw, 44px); font-weight: 480; letter-spacing: -0.02em;
+}
+.notfound-copy { margin: 6px 0 18px; color: var(--muted); font-size: 16px; line-height: 1.55; }
+.notfound-doors { display: flex; flex-wrap: wrap; gap: 12px; }
+.notfound-primary {
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px;
+  border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 15px;
+  text-decoration: none;
+}
+.notfound-secondary {
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 20px;
+  border: 1px solid var(--line); border-radius: 999px; color: var(--ink);
+  font-size: 15px; text-decoration: none;
+}
+.notfound-primary:focus-visible, .notfound-secondary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Prose pages: /faq, /examples, /thanks (items 4, 6, 7). */
+.prose-screen { min-height: 100svh; display: flex; flex-direction: column; }
+.prose-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 28px 24px 48px; flex: 1; }
+.prose-wrap h1 {
+  margin: 10px 0 14px; font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(30px, 6vw, 42px); font-weight: 480; letter-spacing: -0.02em;
+}
+.prose-wrap p { margin: 0 0 14px; font-size: 16px; line-height: 1.6; }
+.prose-note { color: var(--muted); }
+.prose-doors { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.faq-item h2, .example-item h2 {
+  margin: 26px 0 8px; font-size: 19px; font-weight: 620; letter-spacing: -0.01em; line-height: 1.35;
+}
+.example-item p { color: var(--ink); }
+
+/* Breadcrumbs (item 5). */
+.crumbs { margin: 4px 0 6px; }
+.crumbs ol { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.crumbs li { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--faint); }
+.crumbs li + li::before { content: "/"; color: var(--line); }
+.crumbs a { color: var(--accent); text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+.crumbs [aria-current="page"] { color: var(--muted); }
+
+/* The shared footer (item 3). */
+.site-footer {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px 22px;
+  max-width: 640px; margin: 0 auto; padding: 22px 24px 30px; width: 100%;
+  border-top: 1px solid var(--line);
+}
+.site-footer-wordmark { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
+.site-footer ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
+.site-footer a { color: var(--muted); font-size: 14px; text-decoration: none; }
+.site-footer a:hover { color: var(--ink); text-decoration: underline; }
+
+/* Sticky mobile CTA on the landing page (item 9). */
+.story-sticky-cta { display: none; }
+@media (max-width: 640px) {
+  .story-sticky-cta {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line);
+  }
+  .story-sticky-cta a {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; border-radius: 999px; background: var(--ink); color: var(--paper);
+    font-size: 16px; text-decoration: none;
+  }
+  .story-sticky-cta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* The page's own footer must outlive the bar. */
+  .story-footer { padding-bottom: 86px; }
+}
+
+/* Directions (item 14), on the profile's fit list. */
+.profile-directions { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }

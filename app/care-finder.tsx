@@ -896,6 +896,18 @@ export function CareFinder() {
               <div className="fit-list">
                 <p>{clinician.appointmentLength}</p>
                 <p>{distanceTo(clinician, origin) ?? clinician.reach}</p>
+                {/* Launch item 14: the practice on a map, from the practice's own name and
+                    suburb — no API key, no location asked of the reader. */}
+                <p>
+                  <a
+                    className="profile-directions"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Map and directions to {clinician.practice}
+                  </a>
+                </p>
                 {closedBooksNote(clinician, request) && <p>{closedBooksNote(clinician, request)}</p>}
               </div>
 

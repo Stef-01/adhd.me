@@ -3,7 +3,14 @@
 // Everything here is synthetic (founder gates G2/G3); the walkthrough script
 // lives in docs/DEMO.md.
 
+import type { Metadata } from "next";
 import { getStore } from "@/booking/store";
+
+export const metadata: Metadata = {
+  title: "Presenter demo",
+  description: "The scripted, fully synthetic demo world for showing the product to a practice.",
+  robots: { index: false },
+};
 import { signBookingToken } from "@/booking/token";
 import { getConsole } from "@/console/store";
 import { DemoNavigator } from "../demo-navigator";

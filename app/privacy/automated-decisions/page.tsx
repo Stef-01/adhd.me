@@ -19,7 +19,10 @@ import {
   NEVER_AUTOMATED,
 } from "@/privacy/automated-decisions";
 
-export const metadata = { title: "Automated decisions — ADHD.ME" };
+export const metadata = {
+  title: "Automated decisions",
+  description: "Exactly what this product decides automatically, what it never decides, and how the ordering of clinicians works.",
+};
 
 export default function AutomatedDecisionsPage() {
   return (

@@ -100,6 +100,16 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "A presenter view for showing the product to a practice. Not linked from anywhere a patient would be, but public, so it is swept.",
   },
   {
+    path: "/examples",
+    audience: "patient",
+    why: "Worked examples of the finder on demo scenarios — the compliant form of a case-studies page. Read by somebody deciding whether to trust the product, so it answers to every patient rule; it deliberately contains no patient story, because a patient outcome presented as marketing is a testimonial and the National Law prohibits those.",
+  },
+  {
+    path: "/faq",
+    audience: "patient",
+    why: "Questions a person searching for ADHD care arrives with, answered as administrative fact. The single likeliest page to be quoted back to somebody, so its copy is held to every patient rule including the ones about claims and conditions.",
+  },
+  {
     path: "/finder",
     audience: "patient",
     why: "A synthetic clinician finder. Its whole shape is a patient looking for care, so it answers to the patient rules regardless of the data being synthetic.",
@@ -108,6 +118,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     path: "/practices",
     audience: "professional",
     why: "The B2B landing page, addressed to practice owners and managers. W23's linter was written for this page specifically.",
+  },
+  {
+    path: "/thanks",
+    audience: "patient",
+    why: "The page after the interest form. Whoever registered reads it, and it makes one operational promise (a person replies within two business days), which is exactly the kind of sentence the sweep exists to hold to account.",
   },
   {
     path: "/privacy",
