@@ -99,6 +99,17 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O38 (Standing debt #2, last piece — the persisted reach report) — claimed 2026-08-18T23:46Z
+> by loop-0818d.** ONBOARDING-INTERVIEW.md build order item 4: the lexicon-gap feed as a RECORD,
+> not just the live panel. The W226 row gains the patient-side silent sentences beside the
+> clinician-side `unread` it already keeps (both are verbatim clinician speech — neutralised at
+> the writer per W153); a new reach-report module aggregates the latest save per clinician into
+> the per-onboarding feed; the matching console renders it where lexicon review already lives —
+> no new route, so the W102 census is unchanged, and the section's empty state distinguishes
+> "no onboardings saved" from "saved, nothing unheard". Closes Standing debt #2. Verify:
+> report aggregation + store round-trip tests; e2e drives interview save → feed render;
+> DESIGN-QA entry + qa/ capture; `pnpm verify` green.
+
 > **O36 (Standing debt #2, second half — the gap sweep) — DONE 2026-08-18, loop-0818c (claimed
 > 22:45Z).** ONBOARDING-INTERVIEW.md build order item 3 shipped on `/console/interview`: "Still
 > to ask — N of M", every matchable facet the transcript has NOT reached rendered as the
