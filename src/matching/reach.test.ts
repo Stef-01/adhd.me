@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
-import { stem } from "./read";
+import { stem, tokenise } from "./read";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
 /**
@@ -287,5 +287,43 @@ describe("O17 every care area is reachable by its plain name", () => {
 
   it.each(CARE_PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
     expect(readNeeds(phrase).map((n) => facetKey(n.facet))).toContain(key);
+  });
+});
+
+describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
+  /**
+   * THE DEFECT THIS PINS. Stopword stripping can collapse an authored phrase to a single
+   * token, so the shipped matcher is looser than the phrase its author reviewed:
+   * "in the room with me" collapsed to [room], and "my rooms are above the pharmacy" claimed
+   * `manner:culturally_attuned` (found by the W227 reach-gap feed, O22). Many collapses are
+   * intended — "my son" IS the word "son", "by phone" IS the word "phone" — so the set is
+   * FROZEN rather than banned: every entry below was reviewed as fine-as-a-word, and a new
+   * multi-word cue that collapses fails this test until somebody reviews the word it really is.
+   * The list may shrink as the Q1 corpus re-authors cues; it must never grow silently.
+   */
+  const REVIEWED_SINGLE_TOKEN_PHRASES = [
+    "an excuse", "at ease", "been heard", "believe me", "by phone", "figure out",
+    "get a word in", "honest about", "hurry me", "involve me", "just lazy", "listened to",
+    "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
+    "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
+    "name it", "on a schedule", "on edge", "out the door", "over the phone", "really listen",
+    "understand what", "what is going on",
+  ];
+
+  it("freezes the set of phrases that ship as one token", () => {
+    const collapsed = LEXICON_CUES
+      .filter((cue) => cue.phrase.trim().split(/\s+/).length >= 2 && tokenise(cue.phrase).length <= 1)
+      .map((cue) => cue.phrase)
+      .sort();
+    expect(collapsed).toEqual(REVIEWED_SINGLE_TOKEN_PHRASES);
+  });
+
+  it("the pharmacy sentence no longer reaches anybody's background", () => {
+    expect(readNeeds("my rooms are above the pharmacy and I trained at Westmead")).toEqual([]);
+  });
+
+  it("family presence in the room still reaches, through the two-token cue", () => {
+    const labels = readNeeds("they want to come into the room for the appointment").map((n) => n.label);
+    expect(labels).toContain("Understands your background");
   });
 });

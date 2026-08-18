@@ -98,3 +98,29 @@ Each is asserted in `e2e/results.spec.ts`, so the checklist cannot rot.
 - [x] Numbers use `tabular-nums` so columns align.
 - [x] Null-safe: a practice with no comparison group renders an em dash, never a zero or the raw count dressed up as impact (unit-tested).
 - [x] Signed-out access redirects to sign-in (e2e-verified).
+
+## O24 — GP join landing (patient-mix hero) + whole-surface declutter audit (2026-08-18)
+
+### The hero (/clinicians/join)
+- [x] One idea at display scale: "I want ⟨N⟩% of my patients to be ⟨rotating condition⟩" — every
+  control lives inside the sentence; nothing else competes above the fold.
+- [x] The payoff line restates the mix as an illustrative daily figure ("about 3 matched
+  patients a day") with the honesty line in the same breath — no invented booking forecast on a
+  professional surface.
+- [x] Rotation pauses under `prefers-reduced-motion`; the rotating sentence is `aria-hidden`
+  with an sr-only slider as the accessible control; `role="status"` restates the figure.
+- [x] Steppers 44px (O14 touch floor); accent reserved for the two live tokens; serif and
+  tracking inherited from the page's own h1 scale; `to be` non-breaking so the sentence never
+  strands a word.
+- [x] Behaviour pinned in e2e/join-hero.spec.ts; captures in qa/join-o24/.
+
+### Declutter audit of the prose surfaces (qa/ui-o24/, 390px full-page)
+- `/` and `/practices`: long by design — the argument-at-length pages; hierarchy (numbered
+  sections, stat panels, dark interludes) is consistent and scannable. No surgery.
+- `/clinicians`: already the minimal pathway-builder ("what kind of GP do you want to
+  become?", % slider). Now feeds the join hero coherently: explore the mix there, set it here.
+- `/faq`, `/examples`, `/privacy`: linted single-column prose from the launch pass; unchanged.
+- Verdict: the clutter debt was concentrated on the join page's cold open, which O24 replaced.
+  Note: the mapped taste-skill is not installed in this session; this audit applies the
+  standing rules from O11/O14 (one idea per screen, fold discipline, 44px targets, related
+  facts share a row) in its place.

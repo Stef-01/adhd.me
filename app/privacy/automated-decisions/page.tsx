@@ -20,6 +20,7 @@ import {
 } from "@/privacy/automated-decisions";
 
 export const metadata = {
+  alternates: { canonical: "/privacy/automated-decisions" },
   title: "Automated decisions",
   description: "Exactly what this product decides automatically, what it never decides, and how the ordering of clinicians works.",
 };

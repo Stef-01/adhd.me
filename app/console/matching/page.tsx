@@ -19,6 +19,7 @@ import Link from "next/link";
 import { clinicians } from "@/demo/clinicians";
 import { clinicianTags, matchAudit } from "@/onboarding/background";
 import { backgroundFromProposals } from "@/onboarding/background";
+import { proposeDeclarations, reachGaps } from "@/onboarding/expertise";
 import { readTranscript } from "@/onboarding/transcript";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
@@ -49,6 +50,12 @@ export default function MatchingConsolePage() {
   const audit = matchAudit(EXAMPLE_QUERY, clinicians);
   const read = readTranscript(EXAMPLE_TRANSCRIPT);
   const background = backgroundFromProposals("example", "Dr Example", read.proposed, read.unread);
+  // O22: the cross-check — only the clinician's own turns, re-read by the patient lexicon.
+  const clinicianSpeech = EXAMPLE_TRANSCRIPT.filter((turn) => turn.speaker === "clinician")
+    .map((turn) => turn.text)
+    .join(" ");
+  const crossCheck = proposeDeclarations(clinicianSpeech);
+  const patientUnheard = reachGaps(clinicianSpeech);
 
   return (
     <main className="mc">
@@ -153,6 +160,34 @@ export default function MatchingConsolePage() {
         <ul className="mc-unread">
           {read.unread.map((line) => <li key={line}>“{line}”</li>)}
         </ul>
+
+        <h3 className="mc-sub">The same words, heard by the patient’s reader (W227)</h3>
+        <p className="mc-note">
+          The finder’s own lexicon re-reads the clinician’s turns. A facet both readers reach is
+          one patients genuinely ask for in their own words — confirm those first. A sentence
+          neither reader hears is a candidate patient-side reach gap, caught at onboarding
+          instead of in production.
+        </p>
+        <ul className="mc-tags">
+          {crossCheck.length === 0 ? (
+            <li className="mc-empty">Nothing the patient lexicon can reach yet.</li>
+          ) : (
+            crossCheck.map((proposal) => (
+              <li key={proposal.label} className="mc-tag">
+                {proposal.label}
+                <span className="mc-weight">“{proposal.heard}”</span>
+              </li>
+            ))
+          )}
+        </ul>
+        {patientUnheard.length > 0 && (
+          <>
+            <p className="mc-note">Said by the clinician, silent to a patient’s search:</p>
+            <ul className="mc-unread">
+              {patientUnheard.map((line) => <li key={line}>“{line}”</li>)}
+            </ul>
+          </>
+        )}
       </section>
 
     </main>

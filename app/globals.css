@@ -549,6 +549,41 @@ textarea:focus-visible {
   line-height: 1.25;
 }
 
+/* O21: the profile's match reasons with provenance. Same accent language as the pills the
+   list replaced, one reason per line so the label and its "from your words" pair read as a
+   unit at any zoom — the low-vision audit's rule that related facts share a row. */
+.fit-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fit-evidence li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.fit-evidence-label {
+  padding: 5px 8px;
+  border-radius: 3px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-size: 11px;
+  font-weight: 620;
+  line-height: 1.25;
+}
+
+.fit-evidence-said {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .practical-signal-row {
   margin-top: 7px;
 }
@@ -4385,6 +4420,97 @@ textarea:focus-visible {
   color: var(--ink);
 }
 .join-lead { max-width: 46ch; margin: 18px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+/* O24: the patient-mix hero. One sentence at display scale; every control lives inside the
+   sentence itself so nothing on screen competes with the idea. Same serif and tracking as the
+   page's h1 family, accent reserved for the two live tokens (the percent, the condition). */
+.mix-hero {
+  margin: 8px 0 56px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mix-line {
+  margin: 20px 0 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(34px, 5.4vw, 54px);
+  font-weight: 430;
+  line-height: 1.14;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.mix-percent-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.mix-percent {
+  min-width: 2.2ch;
+  text-align: center;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.mix-step {
+  inline-size: 44px;
+  block-size: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+@media (hover: hover) {
+  .mix-step:hover:not(:disabled) { color: var(--accent); border-color: var(--accent-mid); }
+}
+.mix-step:disabled { opacity: 0.35; cursor: default; }
+
+.mix-condition-slot {
+  display: block;
+  min-height: 1.2em;
+}
+
+.mix-condition {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.mix-result {
+  margin: 22px 0 0;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.mix-result strong { font-weight: 640; }
+
+.mix-honesty {
+  max-width: 52ch;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.mix-cta {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 560;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .mix-cta:hover { background: var(--accent); }
+}
 
 .join-form { display: grid; gap: 40px; }
 .join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }

@@ -6,6 +6,7 @@ import { GA_ID } from "../analytics";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
 
 export const metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy policy (draft)",
   description: "What ADHD.ME holds, what it never holds, and the choices you keep — stated as a draft while the product is a demo.",
 };

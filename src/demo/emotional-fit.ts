@@ -166,7 +166,12 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
     cues: ["culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
-      "my mum", "my mother", "my dad", "my father", "my parents", "in the room with me", "nonsense", "not real", "just lazy", "an excuse"],
+      // O25: "in the room with me" stopword-stripped down to the single token [room], so
+      // "my rooms are above the pharmacy" claimed this facet (found by the W227 reach-gap
+      // feed). Replaced with a variant that keeps two content tokens — [come, room] — so the
+      // family-presence meaning survives and a wall with rooms in it does not. The probe
+      // sentence stays covered by "my mum".
+      "my mum", "my mother", "my dad", "my father", "my parents", "come into the room", "nonsense", "not real", "just lazy", "an excuse"],
   },
   structured: {
     label: "A structured, measured approach",
