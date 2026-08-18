@@ -90,6 +90,60 @@ non-rankings.
 15. **Year-end appraisal.** Re-run the F1–F10 appraisal against the year's state; publish
     MATCHING-APPRAISAL-2027 with the same severity honesty.
 
+## UI refinement & motion, continuously (runs all year)
+
+The founder's standing directive (2026-08-18): every surface a minimalist, modern 2026-grade
+piece — no clutter anywhere, things very clear — with motion treated as an innovation track,
+not decoration. The product already uses `motion/react` (Framer Motion's successor); the work
+is to use it the way the mix hero does: motion that carries MEANING (a value resolving, an
+order re-sorting, a proposal arriving) and nothing that merely draws the eye.
+
+- Cadence: at least one UI-refinement unit per week from the hourly build loop, each with a
+  before/after capture in `qa/` and a `docs/DESIGN-QA.md` entry. The declutter audit
+  (qa/ui-o24/) is the baseline record.
+- Motion innovations queued, hardest constraint first (`prefers-reduced-motion` always fully
+  honoured — every effect has a static equal): shared-layout transitions between the finder's
+  screens (`layoutId` from result row → profile, so the chosen GP visibly *is* the same
+  object); the results list re-sorting with `layout` animations when a clarifier answer
+  reorders it (the order changing is the product's whole argument — show it); the match
+  evidence weights drawing in as the score line settles; scroll-linked reveal on the story
+  landing kept within one viewport of intent.
+- Guardrails: 44px touch floor (O14), fold discipline (W167 register), no motion on patient
+  error paths, and the taste rules recorded in `docs/DESIGN-QA.md` stand in for the
+  taste-skill wherever the loop session lacks it.
+
+## Standing debts from the founder's asks (audited 2026-08-18)
+
+Everything asked across this arc that is still outstanding or thinner than the ask deserved,
+so the loop cannot lose it. Build-loop units unless marked FOUNDER:
+
+1. **The mix hero doesn't yet keep its promise mechanically.** The percent and condition a GP
+   sets on /clinicians/join are display-only — they are not captured into the application
+   payload, so "finish onboarding and get this mix" ends at the sentence. Wire the chosen mix
+   into the join form (and the console's view of the application) as declared case-mix intent.
+2. **Onboarding interview build-out (O22 items 2–4).** The console shows the cross-check on a
+   hard-coded example transcript; the real screen needs an editable transcript field with live
+   proposals, confirm buttons wired to the interview record, the gap-sweep view, and the
+   per-onboarding reach report.
+3. **iPhone speech: field verification.** O18's retry + honest copy + `?debug=1` shipped, but
+   no confirmation yet from the actual failing device. FOUNDER: retry on the phone; if the
+   banner shows, send the bracketed code. Build side: keep the raw-code path first-class in
+   any speech change.
+4. **Speech is en-AU only.** "Kind Hindi speaking" as a *query* works, but a person who wants
+   to *speak* Hindi to the mic cannot — `recognition.lang = "en-AU"`. Unit: language picker
+   or auto-follow of a detected language ask, within the same disclosure rules.
+5. **Privacy policy is still titled "draft".** Deliberate while the product is a demo;
+   FOUNDER decision to finalise wording before any real-patient launch (gates plan §4).
+6. **Google Analytics is wired but dark.** `NEXT_PUBLIC_GA_ID` is unset in production.
+   FOUNDER: set the env var in Vercel when tracking should start; nothing to build.
+7. **px→rem migration** (O14 low-vision audit follow-up). FOUNDER accepted the risk note;
+   still the right migration — schedule as a mechanical unit with visual-regression captures.
+8. **MATCH-1/F9 reciprocity finding** stays open until Q3's reciprocal-matching work closes
+   it in the latent-findings register, not just in prose.
+9. **Vercel free-tier deploy quota** keeps blocking previews/production for hours at a time.
+   FOUNDER: either upgrade the plan or accept batched deploys; the loop should batch pushes
+   (one push per verified unit, no pixel-only pushes between) either way.
+
 ## Explaining the fit, continuously (runs all year)
 
 - O21 shipped provenance on the profile ("from your words: …"). Next increments, one per

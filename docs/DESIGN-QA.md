@@ -125,6 +125,26 @@ Each is asserted in `e2e/results.spec.ts`, so the checklist cannot rot.
   standing rules from O11/O14 (one idea per screen, fold discipline, 44px targets, related
   facts share a row) in its place.
 
+## O29 — Web-guidelines audit + micro-polish (2026-08-18)
+
+Audited the patient surfaces against Vercel's Web Interface Guidelines (fresh fetch, full
+ruleset) — the tree was already clean on transition scoping, focus-visible coverage,
+text-wrap, ellipses and tabular numerals. Violations found and fixed:
+
+- [x] `touch-action: manipulation` on all controls — kills the 300ms double-tap delay
+  without touching pinch zoom (matters for readers who zoom).
+- [x] `.cv2-focus-card` keyboard focus was a tint swap with `outline: none`; it now carries
+  a real 2px accent ring at offset.
+- [x] Consent dialog gets `overscroll-behavior: contain` so reading the policy cannot
+  scroll the page behind it.
+- [x] Mix-hero rotation gains its stop conditions: pauses under the pointer, stops for good
+  the moment the reader engages the percent (autoplay >5s rule; reduced-motion already
+  disabled it).
+- [x] Attribution polish: /go segments by source surface (`?src=`, allow-listed, never
+  echoed) and the booking screen carries the one-line "how you heard" nudge (layer 3 of
+  docs/BOOKING-ATTRIBUTION.md), styled quiet.
+- [x] `adhdme-taste` project skill authored — the tree's design law as a loadable skill,
+  closing plan §2's missing taste-skill; bound in CLAUDE.md law 5.
 ## O26 — the hero's mix reaches the form (2026-08-18)
 
 - The debt: O24's CTA said "Set my mix" and the form had no mix field — the sentence's whole

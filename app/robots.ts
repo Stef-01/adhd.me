@@ -5,7 +5,9 @@ import { SITE_URL } from "./site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/console/", "/api/", "/book/"] }],
+    // /go/ is the outbound booking redirect (O28): an index entry for a redirect is a wrong
+    // door, and crawler hits would pollute the one count the route exists to keep clean.
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/console/", "/api/", "/book/", "/go/"] }],
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

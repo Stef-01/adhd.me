@@ -40,15 +40,23 @@ export function MixHero({
 }) {
   const reducedMotion = useReducedMotion();
   const [conditionIndex, setConditionIndex] = useState(0);
+  /**
+   * The rotation is an invitation, not a fixture (O29): autoplaying motion that runs
+   * indefinitely beside content needs a stop, and the natural stop is ENGAGEMENT — the
+   * moment the reader touches the percent, the sentence is theirs and the word should hold
+   * still while they read what it now says. Hovering pauses it for the same reason.
+   */
+  const [engaged, setEngaged] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || engaged || hovered) return;
     const timer = window.setInterval(
       () => setConditionIndex((index) => (index + 1) % CONDITIONS.length),
       2200,
     );
     return () => window.clearInterval(timer);
-  }, [reducedMotion]);
+  }, [reducedMotion, engaged, hovered]);
 
   const condition = CONDITIONS[conditionIndex] ?? CONDITIONS[0]!;
   // The illustration's whole arithmetic: a tenth of the percentage, as patients in a day.
@@ -56,7 +64,12 @@ export function MixHero({
   const perDay = Math.round(percent / MIX_PERCENT_STEP);
 
   return (
-    <section className="mix-hero" aria-label="Set the patient mix you want">
+    <section
+      className="mix-hero"
+      aria-label="Set the patient mix you want"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <p className="mix-line" aria-hidden="true">
         I want{" "}
         <span className="mix-percent-group">
@@ -66,7 +79,7 @@ export function MixHero({
             aria-hidden="true"
             tabIndex={-1}
             disabled={percent <= MIX_PERCENT_MIN}
-            onClick={() => onSetPercent(Math.max(MIX_PERCENT_MIN, percent - MIX_PERCENT_STEP))}
+            onClick={() => { setEngaged(true); onSetPercent(Math.max(MIX_PERCENT_MIN, percent - MIX_PERCENT_STEP)); }}
           >
             &minus;
           </button>
@@ -77,7 +90,7 @@ export function MixHero({
             aria-hidden="true"
             tabIndex={-1}
             disabled={percent >= MIX_PERCENT_MAX}
-            onClick={() => onSetPercent(Math.min(MIX_PERCENT_MAX, percent + MIX_PERCENT_STEP))}
+            onClick={() => { setEngaged(true); onSetPercent(Math.min(MIX_PERCENT_MAX, percent + MIX_PERCENT_STEP)); }}
           >
             +
           </button>
@@ -112,7 +125,7 @@ export function MixHero({
           max={MIX_PERCENT_MAX}
           step={MIX_PERCENT_STEP}
           value={percent}
-          onChange={(event) => onSetPercent(Number(event.target.value))}
+          onChange={(event) => { setEngaged(true); onSetPercent(Number(event.target.value)); }}
         />
       </div>
 

@@ -1028,9 +1028,12 @@ export function CareFinder() {
             </div>
 
             <div className="bottom-action">
+              {/* Routed through /go/<id> (O28): outbound booking intent becomes countable per
+                  clinician from this domain's own logs, with nothing stored — see the route's
+                  header and docs/BOOKING-ATTRIBUTION.md. The destination is unchanged. */}
               <a
                 className="primary-button"
-                href={clinician.booking.url}
+                href={`/go/${clinician.id}?src=finder`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -1039,6 +1042,12 @@ export function CareFinder() {
                   : "Open the practice page"}
               </a>
               <p>Opens Healthengine in a new tab.</p>
+              {/* Attribution layer 3 (docs/BOOKING-ATTRIBUTION.md): Healthengine asks new
+                  patients how they heard about the practice, and the practice sees the
+                  answer. One factual sentence, no incentive, no claim. */}
+              {clinician.booking.via === "healthengine" && (
+                <p className="booking-heard">If the booking asks how you heard about the practice, you can say ADHD.ME.</p>
+              )}
             </div>
           </MotionScreen>
         )}

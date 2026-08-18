@@ -337,6 +337,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports the reviewable-background and audit types, the bio assembler and the tag reader. It holds no copy of its own: every label it emits comes from a facet vocabulary declared and linted elsewhere, and the ONE sentence it composes — the assembled bio — is built at runtime from accepted facets rather than authored here. That sentence is deliberately not a field: `src/directory/profile.ts` refuses a free-text biography, so the editable surface is the facets and the prose follows them. The two fixed fragments it contributes, \"says they often see\" and \"on how they work\", exist to satisfy W193 — a declaration must be rendered AS a declaration, and the difference between \"Dr X sees adults\" and \"Dr X says they often see adults\" is the difference between vouching for a clinician and reporting one.",
   },
   {
+    module: "src/demo/pending-clinicians.ts",
+    operatorCopy: [],
+    notCopy:
+      "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
+  },
+  {
     module: "src/onboarding/expertise.ts",
     operatorCopy: [],
     notCopy:
