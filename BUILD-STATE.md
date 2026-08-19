@@ -119,6 +119,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O55 (Q2 item 6 — fuzz the reader, and budget it) — claimed 2026-08-19T10:45Z by
+> loop-0819k.** Two halves, per the plan. The BUDGET is a production change: the reader gains
+> an input cap — `tokenise` and `tokeniseKeepingStopwords` truncate at fixed token counts
+> (stated constants, the two caps aligned so the O45 skeleton can never confirm words the
+> capped read did not see) — so a 10k-word essay is read as its opening and nothing can stall
+> the finder; a partial read of an absurd input is the documented behaviour, not a silent
+> one. The FUZZ extends W232's fast-check home: unicode soup, emoji, mixed scripts and
+> generated essays — no throw, deterministic, cap honoured, and a generous wall-clock bound
+> on the single worst case. Boundary pinned in both directions: a cue inside the cap reads, a
+> cue planted beyond it does not (that is the truncation being real, not hoped). Verify: the
+> new fuzz suite; every prior reach/corpus/property pin green; `pnpm verify` green.
+
 > **O54 (Q2 item 5 — property-based testing over the pipeline) — claimed 2026-08-19T09:46Z by
 > loop-0819j.** Q1's enumerated items are done, so the quarter's next item is Q2's first:
 > fast-check over the matching pipeline, asserting FOR ALL INPUTS the invariants the O-units
