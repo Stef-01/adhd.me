@@ -104,8 +104,16 @@ non-rankings.
    disagree with the finder. Boundaries and tie fixtures pinned with a fixed clock; the
    plan's "demote to sometimes-grade confidence" was adapted — demoting CONFIDENCE would
    touch scores, and the mechanism's law is that capacity orders ties only.
-8. **Tie-quality metric.** Track, per synthetic corpus run, how often the top band ties at
-   size >3 — the "clarifier failed to separate" rate. It becomes the KPI clarifier work moves.
+8. **Tie-quality metric. DONE — O62, 2026-08-19, adapted to the real roster.** The size->3
+   threshold is unreachable on three GPs, so the definition is relative to roster size and
+   survives growth: per corpus run (W231's reaching sentences), each request's top band is
+   separated (1), a partial tie, or unseparated (whole roster tied — the "failed to separate"
+   case at any roster size). `tieQualityReport` (src/matching/tie-quality.ts, W234) measured
+   2026-08-19: 97 separated / 12 partial / 42 unseparated over 151 heard requests, 64%
+   separation — pinned in BOTH directions in tie-quality.test.ts (a regression fails; an
+   improvement demands the pin move), and rendered on the matching console from the same
+   function so panel and gate cannot drift. The 42 is the clarifier's work queue, which is
+   what Q3's clarifier-policy item now has a number to move.
 
 ## Q3 (Mar–May): the roster grows — matching as a market, not a list
 

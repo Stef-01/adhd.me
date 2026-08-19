@@ -391,3 +391,18 @@ the sweep's strictness untouched.
   real overflow.
 - [x] Accessibility unchanged and re-proven: the join-hero e2e still drives the slider
   through its accessible name, and the WCAG A/AA suite is green over the page.
+
+## O62 — tie quality, the clarifier's KPI on the console (2026-08-19)
+
+Captures: qa/tie-o62/ (the tie-quality block, desktop and 390px). Taste-skill pass applied.
+
+- [x] One idea, four numbers: how often the words separated the top of the list, said as the
+  console's existing tag vocabulary (label + weight share a row). The prose names what the
+  unseparated count IS — the clarifier's work queue — so the number carries its action.
+- [x] Honesty gates: the panel renders the same function the verify gate pins (W234), so the
+  page cannot show a KPI CI does not hold; the note says the sentences are synthetic and the
+  pipeline real; nothing here scores, filters or reorders anybody.
+- [x] The baseline is measured, not aspired: 97/12/42 over 151 heard requests (64% separated),
+  pinned in both directions so neither a regression nor a silent improvement can pass unread.
+- [x] No new CSS, no motion, no new touch targets; e2e reads the rendered counts and asserts
+  they partition the stated total, which is the same invariant the gate holds.

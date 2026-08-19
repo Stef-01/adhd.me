@@ -343,6 +343,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
   },
   {
+    module: "src/matching/tie-quality.ts",
+    operatorCopy: [],
+    notCopy:
+      "W234 computes the tie-quality KPI: over the W231 corpus's reaching sentences, how many requests' top band was one clinician (separated), some of the roster (partial tie) or the whole roster (unseparated — the clarifier's work queue). It emits counts and outcome keys, no sentences; the staff-only matching console renders the numbers and its copy is linted where it renders. Nothing here is about a patient — the sentences it reads are the corpus's synthetic fixtures — and nothing here can publish or reorder anything: it reports on rankBands, it never feeds it.",
+  },
+  {
     module: "src/matching/corpus.ts",
     operatorCopy: [],
     notCopy:

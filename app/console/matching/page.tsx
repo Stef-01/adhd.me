@@ -17,6 +17,7 @@
 
 import Link from "next/link";
 import { CAPACITY_FRESH_DAYS, CAPACITY_ORDER, capacityGrade, clinicians } from "@/demo/clinicians";
+import { tieQualityReport } from "@/matching/tie-quality";
 import { clinicianTags, matchAudit } from "@/onboarding/background";
 import { backgroundFromProposals } from "@/onboarding/background";
 import { proposeDeclarations, reachGaps } from "@/onboarding/expertise";
@@ -187,6 +188,32 @@ export default function MatchingConsolePage() {
             </div>
           );
         })}
+      </section>
+
+      <section className="mc-section" aria-labelledby="tie-h">
+        <h2 id="tie-h">Tie quality</h2>
+        {(() => {
+          // The same function the verify gate pins (W234) — a panel computing its own number
+          // would eventually disagree with the KPI it claims to report.
+          const tie = tieQualityReport();
+          return (
+            <>
+              <p className="mc-note">
+                Over the reach corpus’s {tie.total} heard requests: how often the words actually
+                separated the top of the list. The unseparated count is the clarifier’s work
+                queue — requests the reader heard but the roster’s declarations could not order.
+                Synthetic sentences, real pipeline; the gate pins these numbers in both
+                directions, so this panel and CI cannot drift apart.
+              </p>
+              <ul className="mc-tags" data-testid="tie-quality">
+                <li className="mc-tag">separated<span className="mc-weight">{tie.separated}</span></li>
+                <li className="mc-tag">partial tie<span className="mc-weight">{tie.partialTie}</span></li>
+                <li className="mc-tag">unseparated<span className="mc-weight">{tie.unseparated}</span></li>
+                <li className="mc-tag">separation rate<span className="mc-weight">{Math.round(tie.separationRate * 100)}%</span></li>
+              </ul>
+            </>
+          );
+        })()}
       </section>
 
       <section className="mc-section" aria-labelledby="tx-h">

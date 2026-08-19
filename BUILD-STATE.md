@@ -120,7 +120,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O62 (Q2 item 8 — the tie-quality metric: how often the finder fails to separate the top)
-> — claimed 2026-08-19T18:04Z by loop-0819r.** The plan's wording assumes a big roster ("top
+> — DONE 2026-08-19 by loop-0819r.** Measured baseline: 97 separated / 12 partial ties / 42
+> unseparated over the corpus's 151 heard requests (64% separation), pinned exactly in
+> tie-quality.test.ts; console block renders from the gated function, e2e asserts the
+> rendered counts partition the stated total (qa/tie-o62/); year-plan item 8 marked done
+> with the adaptation recorded; full `pnpm verify` green (210 files, 3037 tests). The plan's wording assumes a big roster ("top
 > band ties at size >3"); the roster is three real GPs, so the metric is ADAPTED HONESTLY
 > rather than shipped meaningless: per synthetic corpus run (the W231 reaching sentences —
 > the same corpus the reach ratchet already trusts), classify each request's TOP BAND as

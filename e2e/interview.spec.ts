@@ -140,6 +140,30 @@ test("the matching console prices capacity age: a freshness row and a reconfirm 
   await panel.screenshot({ path: "qa/capacity-o56/freshness-panel-mobile.png" });
 });
 
+test("the tie-quality KPI renders from the gated function, counts partitioning the run (O62)", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/console/matching");
+
+  const panel = page.locator(".mc-section", { has: page.getByRole("heading", { name: "Tie quality" }) });
+  await expect(panel).toBeVisible();
+
+  const tags = panel.getByTestId("tie-quality").locator(".mc-tag");
+  await expect(tags).toHaveCount(4);
+  // The three outcome counts must partition the total the note states — the same invariant
+  // the W234 gate pins, read off the rendered page so panel and gate cannot drift apart.
+  const note = await panel.locator(".mc-note").innerText();
+  const total = Number(note.match(/(\d+) heard requests/)![1]);
+  const counts = await Promise.all(
+    [0, 1, 2].map(async (i) => Number(await tags.nth(i).locator(".mc-weight").innerText())),
+  );
+  expect(counts.reduce((a, b) => a + b, 0)).toBe(total);
+  expect(total).toBeGreaterThan(100);
+
+  await panel.screenshot({ path: "qa/tie-o62/tie-quality-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await panel.screenshot({ path: "qa/tie-o62/tie-quality-mobile.png" });
+});
+
 test("screenshots for the design record", async ({ page }) => {
   await signIn(page);
   await page.getByLabel("Interview transcript").fill(
