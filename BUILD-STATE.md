@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O61 (the defect O60 ledgered: /clinicians/join overflows a 390px phone) — claimed
+> 2026-08-19T17:07Z by loop-0819q.** Red e2e on a patient surface, found during O60 and
+> proven pre-existing by stash-and-rerun. DIAGNOSIS from the saved error context: the two
+> offenders are the mix hero's screen-reader slider — a `.sr-only` WRAPPER div clips its own
+> 1px box, but the label and range input inside are inline-level and lay out at natural width
+> (right=485 and right=614 in a 390px viewport), visually clipped yet honestly reported by
+> the mobile-fit sweep's bounding-rect check. Fix, the standard pattern: `sr-only` goes on
+> EACH hidden element rather than a wrapper, so every box is its own 1px clip — no loosening
+> of the sweep (the tripwire stays exactly as strict), no visual change (the block was never
+> visible), accessible name and slider semantics unchanged. Verify: mobile-fit e2e green on
+> /clinicians/join (and the other six surfaces untouched); join-hero e2e still drives the
+> slider through its accessible label; a11y suite green; full `pnpm verify` green. UI-track
+> unit on a patient surface, but zero visible pixels change — DESIGN-QA entry records the
+> fix with the passing-sweep evidence in place of a capture diff.
+
 > **O60 (Standing debt 7 — px→rem for every font size: the O14 low-vision follow-up) —
 > DONE 2026-08-19 by loop-0819p.** Gate result: all 344 conversions exact (310 plain + 34
 > clamp() bounds, script-converted with an inexactness guard that never fired); before/after
