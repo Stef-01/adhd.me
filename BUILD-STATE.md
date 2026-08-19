@@ -171,6 +171,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > stays green (the rule is tuned against them, per the plan — not the other way round);
 > `pnpm verify` green.
 
+> **O48 (founder-verdict — "still cluttered, speech still not fixed") — claimed and DONE
+> 2026-08-19, interactive session (not a loop firing).** Two responses. SPEECH: the O46
+> analysis already named the unfixable half — WebKit starts recognition only from a screen
+> tap, so the auto-retry that runs after the Allow dialog can be refused no matter how warm
+> the audio session is. The recovery that works is the person's next tap, and it is now a
+> CONTROL: a permission-flavoured failure renders "Try the microphone again" under the
+> banner (44px floor), pinned in voice e2e both ways (offered on service-not-allowed /
+> not-allowed, absent on audio-capture). CLUTTER, second pass on the unmatched state: the
+> three-line unmatched banner is one sentence ("We could not tell what you are looking for,
+> so this is everyone we list — not an order." — the clarifier owns the say-more invitation),
+> and the "Based on what you told us" eyebrow no longer renders above words the product just
+> said it could not read. Timing note for the record: production received O46 at 03:43:55Z,
+> minutes before the founder's verdict — the phone was almost certainly on the older build.
+> Next free number is O49.
+
 > **O46 (founder-reported — the iPhone microphone after Allow, and the screen it broke onto) —
 > claimed and DONE 2026-08-19, interactive session (not a loop firing).** The report: the mic
 > permission prompt appears, Allow is pressed, it breaks anyway — and the founder's screenshot

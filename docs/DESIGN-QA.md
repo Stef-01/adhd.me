@@ -233,3 +233,14 @@ Captures: qa/matching-o10/04-unmatched-says-so.png (re-rendered), e2e/voice.spec
   collapsed review screen used to provide, without restoring the screen.
 - [x] No new motion anywhere in the change; the quote inherits the existing type ramp and
   palette tokens.
+
+## O48 — unmatched state, second pass (2026-08-19)
+
+Captures: qa/matching-o10/04-unmatched-says-so.png (re-rendered).
+
+- [x] The unmatched banner is one sentence; the clarifier owns the say-more invitation.
+- [x] The eyebrow does not render above words the product could not read — the quote stands
+  alone. Fewer stacked text blocks between the header and the clarifier: quote, change link,
+  suburb field, one-line banner, one question.
+- [x] The mic permission failure's "try once more" is a 44px control under the banner it
+  answers, not a sentence pointing at a control two screens away.

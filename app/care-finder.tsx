@@ -306,6 +306,14 @@ export function CareFinder() {
   const [showAll, setShowAll] = useState(false);
   const [heard, setHeard] = useState("");
   const [speechMessage, setSpeechMessage] = useState<string | null>(null);
+  /**
+   * O48: the permission failure's way back is a BUTTON, not a sentence. WebKit only starts
+   * recognition from a screen tap, so the O18 auto-retry that runs after the Allow dialog can
+   * be refused no matter what the module does — the recovery that actually works on an iPhone
+   * is the person tapping again, with permission now granted. The copy said "try once more";
+   * this renders the once-more as a control beside it.
+   */
+  const [speechRetryable, setSpeechRetryable] = useState(false);
   const speech = useRef<SpeechSession | null>(null);
   /** True only between the Done tap and its onFinal — the person asked for the finish. */
   const stopRequested = useRef(false);
@@ -399,6 +407,7 @@ export function CareFinder() {
     speech.current = null;
     setHeard("");
     setSpeechMessage(null);
+    setSpeechRetryable(false);
     stopRequested.current = false;
 
     const session = startSpeech({
@@ -440,6 +449,9 @@ export function CareFinder() {
         // the default banner stays a plain sentence with no error-code language.
         const debug = new URLSearchParams(window.location.search).has("debug");
         setSpeechMessage(debug ? `${SPEECH_ERROR_COPY[error]} [${raw}]` : SPEECH_ERROR_COPY[error]);
+        // O48: the permission-flavoured failures get their once-more as a button — see
+        // `speechRetryable` above. The next tap carries the gesture WebKit wants.
+        setSpeechRetryable(error === "service-not-allowed" || error === "not-allowed");
         setStage("type");
       },
     });
@@ -675,6 +687,11 @@ export function CareFinder() {
             <div className="type-content">
               <p className="eyebrow">In your own words</p>
               {speechMessage && <p className="speech-error" role="status">{speechMessage}</p>}
+              {speechRetryable && (
+                <button className="speech-retry" type="button" onClick={startListening}>
+                  Try the microphone again
+                </button>
+              )}
               <h1>
                 <span>ADHD assessment</span>
                 <em>that takes you seriously.</em>
@@ -716,15 +733,19 @@ export function CareFinder() {
             </header>
 
             <div className="results-head">
-              <p className="eyebrow">Based on what you told us</p>
               {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46). When no branch and
                   no reading matched, the fallback headline was the person's own text at display
                   scale — fine for a sentence, absurd for the fragment a cut-short microphone
                   delivers ("Cx." in 40px serif, above a banner admitting nothing was read).
                   Unearned text renders as a quiet quote instead: still their words, no longer a
-                  proclamation. */}
+                  proclamation — and the eyebrow goes with it (O48): "Based on what you told us"
+                  above words the product just admitted it could not read was one more line, and
+                  a contradiction. */}
               {requestHeadline !== requestSummary || quality === "informed" ? (
-                <h1>{requestHeadline}</h1>
+                <>
+                  <p className="eyebrow">Based on what you told us</p>
+                  <h1>{requestHeadline}</h1>
+                </>
               ) : (
                 <p className="results-request-quote">&ldquo;{requestSummary}&rdquo;</p>
               )}

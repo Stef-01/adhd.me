@@ -522,8 +522,10 @@ export function closedBooksNote(clinician: Clinician, query: string): string | n
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   informed: "",
   tied: "Both of these answer what you asked for equally well, so this is not a ranking — read both.",
+  // O48: one sentence, not three lines. The clarifier beneath owns the "say more" invitation,
+  // so this line only has to state the fact.
   unmatched:
-    "We could not tell from that what you are looking for, so this is everyone we list rather than an order. Saying more about what you want helps.",
+    "We could not tell what you are looking for, so this is everyone we list — not an order.",
 };
 
 /**

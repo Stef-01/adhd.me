@@ -778,6 +778,23 @@ textarea:focus-visible {
   line-height: 1.5;
 }
 
+/* O48: the permission failure's once-more as a control — WebKit starts recognition only from
+   a tap, so the recovery the error copy points to has to BE a tap. Sits under the banner it
+   answers (related facts share a row), 44px floor. */
+.speech-retry {
+  margin: 8px 0 0;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
 /* A claim the clinician made about themselves, styled so it does not read as a verified badge.
    No accent, no icon, no pill: the point is that it is unconfirmed. */
 .declared-claim {

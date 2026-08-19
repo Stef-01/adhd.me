@@ -140,6 +140,24 @@ test.describe("every failure lands on the typed route, not a dead end", () => {
   }
 });
 
+test("a permission failure offers the microphone again as a button, and the tap restarts listening (O48)", async ({ page }) => {
+  // WebKit starts recognition only from a screen tap, so the O18 auto-retry that runs after
+  // the Allow dialog can be refused regardless — the recovery that works on an iPhone is the
+  // person tapping again with permission now granted. The copy said "try once more"; this
+  // pins the once-more as a control, and that tapping it actually listens again.
+  await installFakeSpeech(page);
+  await openMic(page);
+  await page.evaluate(() => (window as any).__speech.fail("service-not-allowed"));
+  const retry = page.getByRole("button", { name: "Try the microphone again" });
+  await expect(retry).toBeVisible();
+  await retry.click();
+  await expect(page.locator(".listening-screen")).toBeVisible();
+  // And a non-permission failure does not offer it: a missing microphone will not appear
+  // because somebody taps again.
+  await page.evaluate(() => (window as any).__speech.fail("audio-capture"));
+  await expect(page.getByRole("button", { name: "Try the microphone again" })).toHaveCount(0);
+});
+
 test("a browser without the API never shows a microphone screen at all", async ({ page }) => {
   // Firefox. Showing a listening screen that cannot listen is the failure this prevents.
   await installFakeSpeech(page, { present: false });

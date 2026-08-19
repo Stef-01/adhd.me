@@ -44,7 +44,7 @@ test("a language ask is ranked on and explained, not just printed (O1)", async (
 
 test("a request the lexicon cannot read says so instead of faking an order", async ({ page }) => {
   await searchFor(page, "hello there");
-  await expect(page.getByText(/everyone we list rather than an order/)).toBeVisible();
+  await expect(page.getByText(/everyone we list/)).toBeVisible();
   // O46: unearned words are a quiet quote, not a display headline — and the bare count
   // ("3 of 3.") is gone when everyone is shown anyway, because it said nothing.
   await expect(page.locator(".results-head h1")).toHaveCount(0);
@@ -65,7 +65,7 @@ test("answering the one question visibly turns a non-order into an order (W225+O
   const offered = clarifiers("hello there", clinicians, 1)[0]!;
   await page.getByRole("button", { name: offered.prompt }).click();
   await expect(page.locator(".clinician-list")).toBeVisible();
-  await expect(page.getByText(/everyone we list rather than an order/)).toHaveCount(0);
+  await expect(page.getByText(/everyone we list/)).toHaveCount(0);
   await page.screenshot(shot("06-clarifier-answer-reorders"));
 });
 
@@ -92,7 +92,7 @@ test("the query that failed in production now reads both halves (O13)", async ({
   // the order is earned, where production (pre-overhaul main) showed 'unmatched' beside
   // Hindi-speaking evidence and a count line claiming a ranking.
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
-  await expect(page.getByText(/everyone we list rather than an order/)).toHaveCount(0);
+  await expect(page.getByText(/everyone we list/)).toHaveCount(0);
   await page.screenshot(shot("09-production-failure-query-now-reads"));
 });
 
