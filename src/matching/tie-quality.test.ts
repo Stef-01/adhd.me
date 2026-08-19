@@ -15,8 +15,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  History: 151/97/12/42 at O62 (baseline); 196/122/15/59 at O64 (tranche three fed the thin
  *  facets, rate 64%→62% — the metric finding work, not the ranking worsening); 200/126/15/59
  *  at O65 (the longer-appointment cues promoted four aspiring sentences into the run, and
- *  every one of them separates — an ask one GP's unhurried declaration answers). */
-const PINNED = { total: 200, separated: 126, partialTie: 15, unseparated: 59 };
+ *  every one of them separates — an ask one GP's unhurried declaration answers); 229/145/18/66
+ *  at O68 (tranche four's 29 new reaching requests split 19 separated / 3 partial / 7
+ *  unseparated — compounds separate more often than single asks, because two asks rarely
+ *  land on the same declaration set). */
+const PINNED = { total: 229, separated: 145, partialTie: 18, unseparated: 66 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -438,6 +438,79 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "flat for months, everything is heavy", never: ["care:depression"] },
   { text: "the worry never stops, even when things are fine", never: ["care:anxiety"] },
   { text: "my brain jumps channels mid-sentence", never: ["care:adhd-assessment"] },
+
+  // ═══ TRANCHE FOUR (O68, 2026-08-19): compound requests and the discipline registers. ═════
+  // Real sentences carry two and three asks at once, and until now the corpus was mostly
+  // single-ask — so this tranche's first job is compounds, measured whole. Tagged from
+  // measurement as always: reaches = heard, aspires = the to-do list, never = the boundary.
+
+  // ── compounds: two and three asks in one breath ─────────────────────────────────────────
+  { text: "a woman GP who bulk bills and won't rush me", reaches: ["pref:woman-gp", "pref:bulk-billing", "manner:unhurried"] },
+  { text: "a female doctor for an ADHD assessment, by video if possible", reaches: ["care:adhd-assessment", "pref:woman-gp"], aspires: ["pref:telehealth-first"] },
+  { text: "bulk billed titration review with someone patient", reaches: ["care:titration", "pref:bulk-billing"], aspires: ["manner:unhurried"] },
+  { text: "a calm woman doctor who understands anxiety", reaches: ["care:anxiety", "manner:steadying", "pref:woman-gp"] },
+  { text: "telehealth assessment and I speak Hindi at home", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
+  { text: "a gentle GP who takes trauma seriously and bulk bills", reaches: ["manner:attuned", "manner:steadying", "pref:bulk-billing"], aspires: ["care:trauma-informed"] },
+  { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:unhurried"] },
+  { text: "an unhurried structured assessment with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:unhurried"] },
+  { text: "my teenager needs an assessment and we want a woman doctor", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd", "pref:woman-gp"] },
+  { text: "a non-judgmental GP for my drinking history and my ADHD", reaches: ["care:adhd-assessment", "care:substance-history", "manner:non_judgmental"] },
+  { text: "someone strengths focused who also handles the depression side", reaches: ["care:depression", "manner:motivating"] },
+  { text: "video appointments and a doctor who explains what is going on", reaches: ["pref:telehealth-first", "manner:sense_making", "manner:collaborative"] },
+  { text: "an autistic-friendly GP who won't lecture me about my past", reaches: ["care:autism-adhd"], aspires: ["manner:non_judgmental"] },
+  { text: "a woman GP in the eastern suburbs who does titration", reaches: ["care:titration", "pref:woman-gp"] },
+  { text: "phone first, bulk billed, and please actually listen", reaches: ["pref:telehealth-first", "pref:bulk-billing"], aspires: ["manner:attuned"] },
+
+  // ── paraphrase depth on the lowest floors ────────────────────────────────────────────────
+  { text: "gender matters to me, a woman doctor", reaches: ["pref:woman-gp"] },
+  { text: "a lady GP would make this easier", aspires: ["pref:woman-gp"] },
+  { text: "someone who is not a man, please", aspires: ["pref:woman-gp"] },
+  { text: "trauma informed care is non-negotiable for me", reaches: ["care:trauma-informed"] },
+  { text: "I need the trauma handled gently or not at all", reaches: ["care:trauma-informed"] },
+  { text: "on a healthcare card, so bulk billing please", reaches: ["pref:bulk-billing"] },
+  { text: "I cannot pay gap fees on my wage", aspires: ["pref:bulk-billing"] },
+  { text: "everything online please, I am housebound", reaches: ["pref:telehealth-first"] },
+  { text: "remote appointments only, I live three hours out", reaches: ["pref:telehealth-first"] },
+
+  // ── mid facets: substance, non-medication, shared-care, complex ─────────────────────────
+  { text: "my drinking is part of this story", reaches: ["care:substance-history"] },
+  { text: "sober two years and proud of it, keep that in mind", aspires: ["care:substance-history"] },
+  { text: "skills and strategies before any script", aspires: ["care:non-medication"] },
+  { text: "I would rather not take medication if there is another way", aspires: ["care:non-medication"] },
+  { text: "my psychiatrist suggested GP shared care", reaches: ["care:shared-care"] },
+  { text: "a GP willing to do the shared care paperwork", reaches: ["care:shared-care"] },
+  { text: "schizoaffective and finally ready to look at the attention side", reaches: ["care:adhd-assessment", "care:complex-mental-health"] },
+  { text: "complex needs, more than one diagnosis already", reaches: ["care:adhd-assessment", "care:complex-mental-health"] },
+
+  // ── G7: more symptom sentences with no want, pinned silent ──────────────────────────────
+  { text: "I start ten things and finish none", never: ["care:adhd-assessment"] },
+  { text: "time just disappears on me", never: ["care:adhd-assessment"] },
+  { text: "everyone says I talk over them", never: ["care:adhd-assessment"] },
+  { text: "my desk is buried and so am I", never: ["care:adhd-assessment"] },
+
+  // ── logistics with shared vocabulary, pinned silent where they could leak ───────────────
+  { text: "the practice is next to the train station", never: ["manner:unhurried"] },
+  { text: "I park behind the chemist on Tuesdays", never: ["manner:unhurried"] },
+  { text: "my last GP retired in March", never: ["care:adhd-assessment"] },
+  { text: "the referral letter is dated last week", never: ["care:shared-care"] },
+
+  // ── negation and collapse discipline, walked at the O40/O53 seams ───────────────────────
+  { text: "not after therapy, I want the assessment done properly", reaches: ["manner:structured"], aspires: ["care:adhd-assessment"] },
+  { text: "no more waiting rooms, video only from here", aspires: ["pref:telehealth-first"] },
+  { text: "I don't want a woman GP, whoever is soonest", never: ["pref:woman-gp"] },
+  { text: "no interest in the dose, I want the diagnosis question answered", never: ["care:titration"], aspires: ["care:adhd-assessment"] },
+  { text: "I never feel heard and I want that to change", reaches: ["manner:attuned"] },
+  { text: "don't need it bulk billed but do need evenings", never: ["pref:bulk-billing"] },
+  /**
+   * KNOWN FALSE POSITIVE, pinned as today's truth (O68). Bare "not" before a cue does not
+   * negate: O40 covers explicit desire phrases only, by design ("never let me finish
+   * anything" is the founding counterexample), and the O53 tight rule constrains cues whose
+   * OWN first token is a negator, not a sentence's negator before a cue. So this sentence
+   * reaches bulk-billing although it asks for the opposite. Pinned `reaches` so the behaviour
+   * is visible and its FIX is deliberate: a bare-not negation unit must retag this to `never`
+   * in the same commit, exactly as the promotion gate forces in the other direction.
+   */
+  { text: "not bulk billing, I am happy to pay for time", reaches: ["pref:bulk-billing"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -468,36 +541,36 @@ export function corpusReachByFacet(
  */
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // Measured 2026-08-19 (O47); raised by O49 (first sweep), O50 (inflection table), O53
-  // (tranche two: ~200 entries) and O64 (tranche three: thin facets fed first, 262 entries,
-  // floors re-measured off the grown set). The open aspirations are the standing lexicon
+  // (tranche two: ~200 entries) and O64 (tranche three), O65 and O68
+  // (tranche four: compounds + discipline registers, 311 entries, floors re-measured). The open aspirations are the standing lexicon
   // to-do list; the three attuned hesitations from O49 remain the founder's call.
   // pref:longer-appointment sat at 1 after O64's tranche aimed straight at it; O65 closed
   // the gap (five two-token cues) and the floor is now the measured 6 of 7 — the seventh,
   // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
   // nobody noticed.
-  "care:adhd-assessment": 22,
-  "care:anxiety": 9,
-  "care:autism-adhd": 9,
-  "care:child-adolescent-adhd": 9,
-  "care:complex-mental-health": 8,
-  "care:depression": 8,
+  "care:adhd-assessment": 29,
+  "care:anxiety": 10,
+  "care:autism-adhd": 10,
+  "care:child-adolescent-adhd": 10,
+  "care:complex-mental-health": 10,
+  "care:depression": 9,
   "care:emotional-regulation": 8,
   "care:non-medication": 7,
-  "care:shared-care": 9,
-  "care:substance-history": 7,
-  "care:titration": 11,
-  "care:trauma-informed": 6,
-  "manner:attuned": 8,
-  "manner:collaborative": 8,
+  "care:shared-care": 12,
+  "care:substance-history": 9,
+  "care:titration": 13,
+  "care:trauma-informed": 8,
+  "manner:attuned": 10,
+  "manner:collaborative": 9,
   "manner:culturally_attuned": 9,
-  "manner:motivating": 8,
-  "manner:non_judgmental": 10,
-  "manner:sense_making": 9,
-  "manner:steadying": 9,
-  "manner:structured": 9,
-  "manner:unhurried": 11,
-  "pref:bulk-billing": 6,
+  "manner:motivating": 9,
+  "manner:non_judgmental": 11,
+  "manner:sense_making": 10,
+  "manner:steadying": 11,
+  "manner:structured": 11,
+  "manner:unhurried": 14,
+  "pref:bulk-billing": 12,
   "pref:longer-appointment": 6,
-  "pref:telehealth-first": 6,
-  "pref:woman-gp": 4,
+  "pref:telehealth-first": 11,
+  "pref:woman-gp": 10,
 };

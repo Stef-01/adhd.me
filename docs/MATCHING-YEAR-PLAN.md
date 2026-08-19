@@ -15,10 +15,14 @@ non-rankings.
 
 ## Q1 (Sep–Nov 2026): reach and evidence — make the reader hear more, provably
 
-1. **Reach corpus at scale.** *Progress: 264 entries after O64's tranche three and O65's
-   leak pins (2026-08-19). Every floor rose across the two units; the longer-appointment gap
-   O64 named was closed by O65 the same day (floor 1 → 6 of 7, with the seventh a recorded
-   precision decision, not a miss). Target ~500 stands; tie-quality repinned with each move.*
+1. **Reach corpus at scale.** *Progress: 311 entries after O68's tranche four (compounds +
+   discipline registers, 2026-08-19); every floor rose again (woman-gp 4→10, bulk-billing
+   6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN
+   FALSE POSITIVE as today's truth: bare "not" before a cue does not negate ("not bulk
+   billing, I am happy to pay for time" reaches bulk-billing) — O40 covers desire phrases
+   only, by design; the pin makes the eventual bare-not unit retag it deliberately. That
+   unit is the next reader candidate this file names. Target ~500 stands; tie-quality
+   repinned with each move (229/145/18/66 — compounds separate more often than single asks).*
    Extend O13's plain-name sweep into a standing corpus of ~500
    real-shaped requests (synthetic, founder-authored + paraphrase variants). Gate: reach
    percentage per facet tracked in CI; any drop fails the build. This is the matching

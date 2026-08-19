@@ -120,7 +120,13 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O68 (Q1 item 1 — corpus tranche four: compound requests and the discipline registers) —
-> claimed 2026-08-20T00:04Z by loop-0819x.** Growth 264 → ~330 of the ~500 target. This
+> DONE 2026-08-19 by loop-0819x (311 entries; 47 added — 15 compounds, 9 paraphrases, 8 mid-
+> facet, 8 G7/logistics nevers, 7 discipline mixes; every floor rose, woman-gp 4→10 and
+> bulk-billing 6→12 the furthest; ONE finding pinned as today's truth rather than fixed out
+> of scope: bare "not" before a cue does not negate — "not bulk billing, I am happy to pay
+> for time" reaches bulk-billing, pinned `reaches` with the retag demand written on it, the
+> next reader-unit candidate; tie-quality repinned 229/145/18/66, compounds separating more
+> often than single asks).** Growth 264 → ~330 of the ~500 target. This
 > tranche's emphasis, complementing tranche three's thin-floor feeding: (1) COMPOUND
 > requests — real sentences carry two and three asks at once ("a woman GP who bulk bills and
 > won't rush me"), and the corpus is still mostly single-ask; (2) the discipline registers —
