@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O72 (the reader unit O68's pin demanded: a bare negator ADJACENT to a care/pref cue is a
+> refusal) — claimed 2026-08-20T03:0xZ by loop-0819ab.** The corpus's first known-false-
+> positive pin: "not bulk billing, I am happy to pay for time" reaches bulk-billing, because
+> O40 covers explicit desire phrases only and the O53 tight rule constrains cues whose OWN
+> first token is a negator — nothing covers a sentence's bare "not"/"no" immediately before
+> a cue. Change, scoped by every boundary the earlier units bled for: `bareNegatorBefore` in
+> read.ts — suppression only when the token IMMEDIATELY before the matched cue span is "no"
+> or "not" (adjacency IS the idiom, the O53 finding); "without" excluded ("what can we do
+> without medication" IS the non-medication ask, pinned); "never" and contracted verb
+> negators excluded (the insertion class's founding examples); manner EXEMPT exactly as O40
+> ("I don't want to feel rushed" is the unhurried ask); cues whose own phrase begins with a
+> negator unaffected (the check looks before the span). Applied in readNeeds beside
+> negatedWant, care+pref only; a suppressed cue claims nothing. The pinned false positive is
+> retagged reaches→never IN THIS COMMIT exactly as its pin demands; floors and tie-quality
+> re-measured and moved with the run, the lowered bulk-billing count explained where it
+> lowers (the facet's asked set lost a false positive, not a hearing). Verify: §O72 pins
+> both directions in reach.test.ts; corpus + property suites green; full `pnpm verify` green.
+
 > **O71 (founder-directed: Dr Anusha Saxena's entry made launch-ready from her PUBLISHED
 > attributes) — DONE 2026-08-19 by interactive session loop-0819aa. Gate: roster + matching
 > suites green (660), patient-copy sweep green over every public surface, her profile e2e
