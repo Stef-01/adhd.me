@@ -112,6 +112,14 @@ const INFLECTIONS: Readonly<Record<string, string>> = {
   believ: "believe",
   judg: "judge",
   minut: "minute",
+  // O53, corpus tranche two's finds. "kids" sits at four letters, under the stem floor, so
+  // "my kid's teacher" never met the cue "my kid" (the sees-family failure again). And
+  // trimDouble strips past-tense double consonants that the present tense KEEPS — "dismissed"
+  // → dismis while "dismiss" stays dismiss (the ss-guard protects it from s-stripping), so
+  // the cue and the present-tense ask could never meet; "embarrassed" is the same family.
+  kids: "kid",
+  dismis: "dismiss",
+  embarras: "embarrass",
 };
 
 function canonical(stemmed: string): string {
@@ -308,6 +316,20 @@ export function negatedWant(sentence: readonly string[], cueFrom: number): boole
   return false;
 }
 
+/**
+ * Negators that BIND TIGHTLY when they open a cue (O53). "no medication" is an adjacency
+ * idiom: the corpus caught "no interest in coaching, the medication is working" reaching
+ * `non-medication` through [no, …2 words…, medication] — the negator negating something else
+ * entirely. When a cue's first token is one of these, its second token must be ADJACENT.
+ *
+ * DETERMINER-NEGATORS ONLY, on the evidence. "never" and the contracted verb negators spread
+ * naturally with adverbs and objects — "never LET ME finish anything" is the insertion class's
+ * own founding example, and "won't ever judge" is ordinary speech — so tightening them would
+ * hand back the recall W221 bought. The drift defect the corpus caught is specific to
+ * "no"/"not"/"without" + noun, where adjacency IS the idiom.
+ */
+const TIGHT_NEGATORS = new Set(["no", "not", "without"]);
+
 export function findCue(
   sentence: readonly string[],
   cue: readonly string[],
@@ -322,7 +344,11 @@ export function findCue(
     while (matched < cue.length) {
       const want = cue[matched]!;
       let next = -1;
-      for (let k = at + 1; k <= Math.min(at + 1 + MAX_GAP, sentence.length - 1); k++) {
+      const windowEnd =
+        matched === 1 && TIGHT_NEGATORS.has(cue[0]!)
+          ? at + 1
+          : Math.min(at + 1 + MAX_GAP, sentence.length - 1);
+      for (let k = at + 1; k <= Math.min(windowEnd, sentence.length - 1); k++) {
         // A clause boundary ends the window outright: however small the gap, "heart. Safe"
         // is two statements, not a phrase (O7/F10).
         if (sentence[k] === CLAUSE_BOUNDARY) break;

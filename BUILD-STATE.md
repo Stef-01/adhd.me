@@ -127,8 +127,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > depression, anxiety, the four preferences), more `never` pins for the G7 symptom family and
 > the O40/O45 disciplines, and clause-mixing entries (two asks in one sentence, negation in
 > one clause and a want in the next) that exercise the machinery the last three units built.
-> Floors re-measured to the new heard counts in the same commit. Verify: corpus gate green
-> on the grown set; no floor lowered anywhere; `pnpm verify` green.
+> Floors re-measured to the new heard counts in the same commit. DONE 2026-08-19. ~95 entries
+> landed (≈200 total) and the tranche EARNED ITS KEEP three times over: (1) a real false
+> positive — "no interest in coaching, the medication is working" reached non-medication via
+> the "no medication" cue drifting across two insertions — fixed in findCue with the tight
+> determiner-negator rule (no/not/without bind adjacent; "never" and the contracted verb
+> negators deliberately keep the insertion tolerance, since tightening them rejects the
+> insertion class's founding example — all pinned both ways); (2) two new O50-table warts,
+> found and bridged with named sentences (kids at the length floor; dismissed→dismis vs
+> dismiss under trimDouble, embarrassed the same family); (3) seven honest cue additions
+> (paediatric, take over my scripts, psych history, schizoaffective, video appointment/call,
+> phone first, time to talk, someone who listens, faith matters). Two aspirations promoted by
+> the gate; five new entries retagged aspires where the lexicon is genuinely deaf; floors
+> re-measured across all 25 facets, none lowered. Gate: full `pnpm verify` green (206 files,
+> 3004 tests, audit gate PASS).
 
 > **O52 (UI refinement & motion — the re-sort made visible) — claimed 2026-08-19T07:45Z by
 > loop-0819h.** The founder's motion queue, item two: "the results list re-sorting with layout

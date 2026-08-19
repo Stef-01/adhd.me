@@ -62,9 +62,25 @@ describe("W221 what it must NOT match, which is the whole cost of the change", (
     expect(stem("judged")).toBe(stem("judge"));
     expect(stem("judges")).toBe(stem("judge"));
     expect(stem("minutes")).toBe(stem("minute"));
+    // O53 additions: the length floor again (kids at four letters), and trimDouble stripping
+    // a past tense to a stem the PRESENT tense never reduces to (dismissed→dismis vs dismiss).
+    expect(stem("kids")).toBe("kid");
+    expect(stem("dismissed")).toBe(stem("dismiss"));
+    expect(stem("embarrassed")).toBe(stem("embarrass"));
     // And the table must not leak: neighbours of a family keep their own stems.
     expect(stem("mistaken")).not.toBe("take");
     expect(stem("juggle")).not.toBe("judge");
+  });
+
+  it("a determiner-negator binds tightly to the word it negates (O53)", () => {
+    // The corpus caught "no interest in coaching, the medication is working" reaching
+    // non-medication through [no, …, medication]. Adjacency is the idiom for no/not/without…
+    expect(findCue(tokenise("no interest in coaching, the medication is working"), tokenise("no medication"))).toBeNull();
+    expect(findCue(tokenise("no medication please"), tokenise("no medication"))).not.toBeNull();
+    expect(findCue(tokenise("not just medication"), tokenise("not just medication"))).not.toBeNull();
+    // …while "never" keeps the insertion tolerance: it spreads naturally, and tightening it
+    // would reject the insertion class's own founding example.
+    expect(findCue(tokenise("my brain has never let me finish anything"), tokenise("never finish anything"))).not.toBeNull();
   });
 
   /** Precision guard. None of these express a want; firing on them would be a false positive. */

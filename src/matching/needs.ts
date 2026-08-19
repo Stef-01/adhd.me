@@ -149,6 +149,8 @@ const LEXICON: readonly Entry[] = [
     // O49: the ask phrased from the clinician side — "someone who sees kids". Both verb forms;
     // bare "kids" is refused because stem("kidding") is "kid" and "no kidding" is not a child.
     "sees kids", "see kids",
+    // O53: the clinical adjective parents actually type; single and precise.
+    "paediatric",
   ]),
   care("titration", "Titration and dose review", 28, [
     "titration", "dose", "wearing off", "wears off", "side effects", "not working", "adjust the dose",
@@ -158,6 +160,8 @@ const LEXICON: readonly Entry[] = [
     // O49: the paediatric half of shared care, both spellings — the corpus ask names the
     // clinician to be shared WITH, exactly like "psychiatrist" above.
     "paediatrician", "pediatrician",
+    // O53: the handover said as itself. Two content tokens ([take, script]).
+    "take over my scripts",
   ]),
   // ── Depression & anxiety ────────────────────────────────────────────────────────────────────
   care("depression", "Depression and low mood", 24, [
@@ -174,7 +178,9 @@ const LEXICON: readonly Entry[] = [
   care("trauma-informed", "Trauma-informed care", 28, [
     "trauma", "trauma history", "difficult childhood", "boundaries", "permission", "ptsd", "cptsd",
   ]),
-  care("complex-mental-health", "Bipolar and complex mental health", 26, ["bipolar", "complex", "psychosis", "schizophrenia"]),
+  care("complex-mental-health", "Bipolar and complex mental health", 26, ["bipolar", "complex", "psychosis", "schizophrenia",
+    // O53: how people name the whole file rather than one diagnosis. Two content tokens.
+    "psych history", "schizoaffective"]),
   care("autism-adhd", "Autism and neurodevelopmental", 26, ["autism", "autistic", "audhd", "sensory",
     // O49: the self-identification word, single and precise (the "neuroaffirming" precedent).
     "neurodivergent"]),
@@ -211,7 +217,9 @@ const LEXICON: readonly Entry[] = [
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
   pref("woman-gp", "A woman GP", 30, ["woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman"]),
-  pref("telehealth-first", "By phone or telehealth", 28, ["telehealth", "by phone", "over the phone", "remote", "online"]),
+  pref("telehealth-first", "By phone or telehealth", 28, ["telehealth", "by phone", "over the phone", "remote", "online",
+    // O53: video is how half of them say it, and "phone first" is the ask in appointment order.
+    "video appointment", "video call", "phone first"]),
   pref("bulk-billing", "Bulk billing", 24, ["bulk bill", "bulk billed", "bulk billing", "cannot afford", "cheap"]),
   pref("longer-appointment", "A longer first appointment", 20, ["longer first appointment"]),
 ];

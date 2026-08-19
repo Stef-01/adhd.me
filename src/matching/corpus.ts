@@ -202,6 +202,128 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "diagnosed at forty and still getting my head around it", reaches: ["manner:sense_making"] },
   { text: "I want the science, not the pep talk", reaches: ["manner:sense_making"] },
   { text: "appointments where I do not have to perform being fine", aspires: ["manner:attuned"] },
+
+  // ═══ TRANCHE TWO (O53) — authored, then measured, then retagged to reality ═══════════════
+  // Emphasis: paraphrase depth on the thin facets, more `never` discipline (G7 symptoms,
+  // O40 negation, O45 collapse), and clause-mixing entries that exercise all three rules at
+  // once. Same law as tranche one: nothing below was pinned `reaches` without a real run.
+
+  // ── care:adhd-assessment, said six more ways ─────────────────────────────────────────────
+  { text: "time to find out properly whether this is ADHD", reaches: ["care:adhd-assessment"] },
+  { text: "an adult assessment, I was never tested as a kid", reaches: ["care:adhd-assessment"] },
+  { text: "start the diagnosis process", reaches: ["care:adhd-assessment"] },
+  { text: "assess me for ADHD, not just the anxiety", reaches: ["care:adhd-assessment", "care:anxiety"] },
+  { text: "how do I get tested for ADHD", reaches: ["care:adhd-assessment"] },
+  { text: "a full workup for adult ADHD", reaches: ["care:adhd-assessment"] },
+
+  // ── care:child-adolescent-adhd ───────────────────────────────────────────────────────────
+  { text: "my kid's teacher suggested an assessment", reaches: ["care:child-adolescent-adhd", "care:adhd-assessment"] },
+  { text: "a paediatric ADHD assessment", reaches: ["care:child-adolescent-adhd"] },
+  { text: "my teenager needs this sorted before the HSC", reaches: ["care:child-adolescent-adhd"] },
+  { text: "both my children probably have it", reaches: ["care:child-adolescent-adhd"] },
+
+  // ── care:titration ───────────────────────────────────────────────────────────────────────
+  { text: "the afternoon crash is brutal, the dose is wrong", reaches: ["care:titration"] },
+  { text: "my script needs adjusting", aspires: ["care:titration"] },
+  { text: "increase the dose or change the medication, something", reaches: ["care:titration"] },
+  { text: "side effects worse than the thing being treated", reaches: ["care:titration"] },
+  { text: "the stimulant wears off before school pickup", reaches: ["care:titration"] },
+  { text: "I don't want a higher dose", never: ["care:titration"] },
+
+  // ── care:shared-care ─────────────────────────────────────────────────────────────────────
+  { text: "my psychiatrist discharged me back to GP care", reaches: ["care:shared-care"] },
+  { text: "co-manage with the paediatrician", reaches: ["care:shared-care"] },
+  { text: "take over my scripts from the ADHD clinic", reaches: ["care:shared-care"] },
+  { text: "the shared care agreement paperwork needs a GP", reaches: ["care:shared-care"] },
+
+  // ── care:depression / care:anxiety ───────────────────────────────────────────────────────
+  { text: "the depression is back on top of everything", reaches: ["care:depression"] },
+  { text: "low mood and no interest in anything for months", reaches: ["care:depression"] },
+  { text: "the antidepressants did nothing for the real problem", reaches: ["care:depression"] },
+  { text: "flat and hopeless most days", never: ["care:depression"] },
+  { text: "panic in the waiting room every time", reaches: ["care:anxiety"] },
+  { text: "health anxiety on top of everything else", reaches: ["care:anxiety"] },
+  { text: "treated for anxiety for a decade when it was ADHD all along", reaches: ["care:anxiety"] },
+  { text: "wound up and anxious about the assessment itself", reaches: ["care:anxiety", "care:adhd-assessment"] },
+
+  // ── care:trauma-informed / care:complex-mental-health ───────────────────────────────────
+  { text: "a trauma informed GP please", reaches: ["care:trauma-informed"] },
+  { text: "I need to not be pushed on the details of the history", aspires: ["care:trauma-informed"] },
+  { text: "childhood was rough and it comes up in appointments", aspires: ["care:trauma-informed"] },
+  { text: "cptsd and probably ADHD underneath it", reaches: ["care:trauma-informed"] },
+  { text: "schizoaffective and ADHD together, it is a lot", reaches: ["care:complex-mental-health"] },
+  { text: "a psychosis history, so stimulants are complicated", reaches: ["care:complex-mental-health"] },
+  { text: "a complicated psych history most GPs won't touch", reaches: ["care:complex-mental-health"] },
+
+  // ── care:autism-adhd / care:substance-history ───────────────────────────────────────────
+  { text: "an AuDHD friendly GP", reaches: ["care:autism-adhd"] },
+  { text: "autistic burnout and maybe ADHD underneath", reaches: ["care:autism-adhd"] },
+  { text: "sensory stuff makes clinics hard for me", reaches: ["care:autism-adhd"] },
+  { text: "assessed for autism last year, ADHD is next", reaches: ["care:autism-adhd", "care:adhd-assessment"] },
+  { text: "I use alcohol to cope and I know it", reaches: ["care:substance-history"] },
+  { text: "clean two years and I need that respected, not relitigated", aspires: ["care:substance-history"] },
+  { text: "vaping weed for sleep most nights", aspires: ["care:substance-history"] },
+  { text: "a doctor who won't panic about my drinking", reaches: ["care:substance-history"] },
+
+  // ── care:emotional-regulation / care:non-medication ─────────────────────────────────────
+  { text: "RSD is the worst part of all of it", reaches: ["care:emotional-regulation"] },
+  { text: "rage over tiny things and then the shame after", reaches: ["care:emotional-regulation"] },
+  { text: "want to try coaching before tablets", reaches: ["care:non-medication"] },
+  { text: "not ready for medication yet, what else is there", aspires: ["care:non-medication"] },
+  { text: "alternatives to stimulants please", reaches: ["care:non-medication"] },
+  { text: "no interest in coaching, the medication is working", never: ["care:non-medication"] },
+
+  // ── manner, said more ways ───────────────────────────────────────────────────────────────
+  { text: "a doctor who does not roll their eyes", aspires: ["manner:attuned"] },
+  { text: "listened to properly for once", reaches: ["manner:attuned"] },
+  { text: "somebody who won't dismiss me at hello", reaches: ["manner:attuned"] },
+  { text: "take my concerns seriously", reaches: ["manner:attuned"] },
+  { text: "sick of being brushed off", reaches: ["manner:attuned"] },
+  { text: "I shake in waiting rooms, I need calm", reaches: ["manner:steadying"] },
+  { text: "someone reassuring, I arrive overwhelmed", reaches: ["manner:steadying"] },
+  { text: "a calm voice and no rushing", reaches: ["manner:steadying", "manner:unhurried"] },
+  { text: "explain what ADHD actually is, properly", aspires: ["manner:sense_making"] },
+  { text: "help me understand my own brain", aspires: ["manner:sense_making"] },
+  { text: "the whole picture in plain english", reaches: ["manner:sense_making"] },
+  { text: "why do the meds work, I want the mechanism", aspires: ["manner:sense_making"] },
+  { text: "build on what I already do well", aspires: ["manner:motivating"] },
+  { text: "a plan that works with my chaos, not against it", aspires: ["manner:motivating"] },
+  { text: "strengths first, please", reaches: ["manner:motivating"] },
+  { text: "a double appointment from the start", aspires: ["pref:longer-appointment"] },
+  { text: "time to actually talk", reaches: ["manner:unhurried"] },
+  { text: "not shoved out the door in twelve minutes", reaches: ["manner:unhurried"] },
+  { text: "no shame about how I have coped", aspires: ["manner:non_judgmental"] },
+  { text: "somewhere safe to say the ugly bits out loud", reaches: ["manner:non_judgmental"] },
+  { text: "explain my options and let me choose", reaches: ["manner:collaborative"] },
+  { text: "decide together or not at all", reaches: ["manner:collaborative"] },
+  { text: "talk the choices through with me", reaches: ["manner:collaborative"] },
+  { text: "a GP who gets South Asian families", reaches: ["manner:culturally_attuned"] },
+  { text: "my community views this stuff badly and it matters", reaches: ["manner:culturally_attuned"] },
+  { text: "my mother comes in to translate", reaches: ["manner:culturally_attuned"] },
+  { text: "faith matters in my care", reaches: ["manner:culturally_attuned"] },
+  { text: "baseline bloods first and a written plan", reaches: ["manner:structured"] },
+  { text: "monitoring on a schedule, not when things break", reaches: ["manner:structured"] },
+  { text: "methodical follow-up, please", reaches: ["manner:structured"] },
+
+  // ── preferences, said more ways ──────────────────────────────────────────────────────────
+  { text: "a lady doctor if at all possible", aspires: ["pref:woman-gp"] },
+  { text: "video appointments only, I am rural", reaches: ["pref:telehealth-first"] },
+  { text: "keep it bulk billed please", reaches: ["pref:bulk-billing"] },
+  { text: "a woman doctor who bulk bills", reaches: ["pref:woman-gp", "pref:bulk-billing"] },
+  { text: "phone first, clinic later if we must", reaches: ["pref:telehealth-first"] },
+
+  // ── G7: more symptom descriptions, pinned as intentional non-reaches ────────────────────
+  { text: "I lose my keys every single day", never: ["care:adhd-assessment"] },
+  { text: "my head is a browser with forty tabs open", never: ["care:adhd-assessment"] },
+  { text: "I zone out mid conversation constantly", never: ["care:adhd-assessment"] },
+  { text: "always late no matter what I try", never: ["care:adhd-assessment"] },
+
+  // ── discipline mixes: negation, collapse and clause scope in one breath ─────────────────
+  { text: "I don't want medication changes, just someone who listens", never: ["care:titration"], reaches: ["manner:attuned"] },
+  { text: "not looking for an assessment. my dose needs looking at", never: ["care:adhd-assessment"], reaches: ["care:titration"] },
+  { text: "next door to the pharmacy there is a clinic", never: ["manner:unhurried", "manner:culturally_attuned"] },
+  { text: "the sign on the practice door says closed", never: ["manner:sense_making"] },
+  { text: "she was quick to judge and rushed me out the door", reaches: ["manner:non_judgmental", "manner:unhurried"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -231,33 +353,33 @@ export function corpusReachByFacet(
  * percentage so a one-entry facet cannot pass on rounding.
  */
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
-  // Measured 2026-08-19 (O47); RAISED 2026-08-19 (O49) after the first aspiration sweep
-  // promoted sixteen entries the widened lexicon now hears, and again (O50) when the
-  // inflection table bridged the believe/judge wart families. Three attuned aspirations stay
-  // open on purpose — see the O49 ledger row for the hesitations.
-  "care:adhd-assessment": 7,
-  "care:anxiety": 3,
-  "care:autism-adhd": 3,
-  "care:child-adolescent-adhd": 4,
-  "care:complex-mental-health": 2,
-  "care:depression": 3,
-  "care:emotional-regulation": 4,
-  "care:non-medication": 3,
-  "care:shared-care": 3,
-  "care:substance-history": 3,
-  "care:titration": 5,
-  "care:trauma-informed": 2,
-  "manner:attuned": 3,
-  "manner:collaborative": 2,
-  "manner:culturally_attuned": 3,
-  "manner:motivating": 3,
-  "manner:non_judgmental": 6,
-  "manner:sense_making": 5,
-  "manner:steadying": 4,
-  "manner:structured": 4,
-  "manner:unhurried": 4,
-  "pref:bulk-billing": 2,
+  // Measured 2026-08-19 (O47); raised by O49 (first sweep), O50 (inflection table) and O53
+  // (tranche two: ~200 entries, floors re-measured off the grown set). The open aspirations
+  // are the standing lexicon to-do list; the three attuned hesitations from O49 remain the
+  // founder's call.
+  "care:adhd-assessment": 16,
+  "care:anxiety": 8,
+  "care:autism-adhd": 7,
+  "care:child-adolescent-adhd": 8,
+  "care:complex-mental-health": 5,
+  "care:depression": 6,
+  "care:emotional-regulation": 6,
+  "care:non-medication": 5,
+  "care:shared-care": 7,
+  "care:substance-history": 5,
+  "care:titration": 10,
+  "care:trauma-informed": 4,
+  "manner:attuned": 8,
+  "manner:collaborative": 5,
+  "manner:culturally_attuned": 7,
+  "manner:motivating": 4,
+  "manner:non_judgmental": 8,
+  "manner:sense_making": 6,
+  "manner:steadying": 7,
+  "manner:structured": 7,
+  "manner:unhurried": 8,
+  "pref:bulk-billing": 4,
   "pref:longer-appointment": 1,
-  "pref:telehealth-first": 2,
-  "pref:woman-gp": 2,
+  "pref:telehealth-first": 4,
+  "pref:woman-gp": 3,
 };

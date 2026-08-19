@@ -80,6 +80,8 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O13: "takes me seriously" missed — the stemmer keeps "taken" and "takes" apart
       // ("taken" has no strippable suffix), so the present-tense ask needs its own cue.
       "take seriously", "takes me seriously", "attentive",
+      // O53: the listening ask in its commonest surface form ([someone, listen]).
+      "someone who listens",
       // O30 psychographics: "treat me as a whole person" is the plainest values statement in
       // the corpus family this facet answers.
       "whole person"],
@@ -130,6 +132,8 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // singular "minute", so the plural cues could not hear "a ten minute appointment"; the
       // singular forms are added rather than touching the stemmer's length guards.
       "ten minute", "fifteen minute",
+      // O53: the ask for the appointment's texture, not its length label ([time, talk]).
+      "time to talk",
       // W222: every cue above is multi-word, so "she rushes me every time" reached none of them.
       // The bare stem is the commonest way anybody says it.
       "rushes", "rushing", "hurried", "hurry me",
@@ -198,6 +202,8 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // family-in-the-room. Verb+noun pairs so nothing collapses ("my faith" alone would
       // strip to [faith] and claim "faith in doctors").
       "respects my faith", "respect my faith", "faith is important", "respects my religion",
+      // O53: the shorter way the same value is said ([faith, matter]).
+      "faith matters",
       // O49: family presence stated as a fact rather than a fear — "family will be involved".
       "family involved"],
   },

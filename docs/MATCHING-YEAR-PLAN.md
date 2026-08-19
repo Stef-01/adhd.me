@@ -44,7 +44,12 @@ non-rankings.
    carried as data), or ASPIRES to (the measured gap list — 14 entries, the lexicon's
    to-do list); per-facet heard-counts gated against measured floors, and a met aspiration
    fails the build until promoted in the same commit. Growth to ~500 continues across Q1 in
-   the same format; founder-authored entries welcome. **First aspiration sweep DONE — O49,
+   the same format; founder-authored entries welcome. **Tranche two DONE — O53, 2026-08-19**:
+   ~95 further entries (≈200 total), which caught one real reader defect (the "no medication"
+   cue drifting across insertions — fixed with the tight determiner-negator rule in findCue,
+   pinned both directions) and two more stemmer warts for the O50 table (kids under the
+   length floor; dismissed/dismiss split by trimDouble); floors re-measured across all 25
+   facets. **First aspiration sweep DONE — O49,
    2026-08-19**: 16 entries promoted after G7-reviewed cue widening across nine facets
    (want-phrasings only), floors raised in the same commit, one over-loose cue removed after
    the corpus caught it shadowing another facet's cue inside its claimed span. Three attuned
