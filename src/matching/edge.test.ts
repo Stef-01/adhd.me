@@ -114,11 +114,22 @@ describe("O9 hostile and accidental input", () => {
     );
   });
 
-  it("handles a ten-thousand-word essay without falling over", () => {
-    const essay = `${"my life story continues here and ".repeat(1500)} my dose needs titration`;
-    const needs = needsFor(essay);
-    expect(needs.some((n) => facetKey(n.facet) === "care:titration")).toBe(true);
-    expect(rankClinicians(essay)).toHaveLength(clinicians.length);
+  it("handles a ten-thousand-word essay without falling over — by reading its opening (O55)", () => {
+    // REWRITTEN WITH THE CONTRACT, deliberately. This pin used to plant the ask at the END of
+    // the essay and require it heard, which quietly demanded the reader scale with whatever
+    // arrived. The year plan's budget (Q2 item 6) chose the other side of that trade: the
+    // reader is input-capped so no request can stall the finder, and a request beyond any
+    // good-faith length is read as its opening. Both directions of the new contract are
+    // pinned: the same monster essay still crashes nothing and ranks everybody, an ask in its
+    // OPENING is heard, and an ask planted past the cap is honestly not.
+    const filler = "my life story continues here and ".repeat(1500);
+    const askFirst = `my dose needs titration. ${filler}`;
+    expect(needsFor(askFirst).some((n) => facetKey(n.facet) === "care:titration")).toBe(true);
+    expect(rankClinicians(askFirst)).toHaveLength(clinicians.length);
+
+    const askLast = `${filler} my dose needs titration`;
+    expect(needsFor(askLast).some((n) => facetKey(n.facet) === "care:titration")).toBe(false);
+    expect(rankClinicians(askLast)).toHaveLength(clinicians.length);
   });
 });
 

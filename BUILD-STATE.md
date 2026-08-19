@@ -128,8 +128,16 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > one. The FUZZ extends W232's fast-check home: unicode soup, emoji, mixed scripts and
 > generated essays — no throw, deterministic, cap honoured, and a generous wall-clock bound
 > on the single worst case. Boundary pinned in both directions: a cue inside the cap reads, a
-> cue planted beyond it does not (that is the truncation being real, not hoped). Verify: the
-> new fuzz suite; every prior reach/corpus/property pin green; `pnpm verify` green.
+> cue planted beyond it does not (that is the truncation being real, not hoped). DONE
+> 2026-08-19. Two things the build surfaced and settled: the first restructure of `tokenise`
+> flipped the filter/stem order and the O25 frozen list CAUGHT IT within minutes (a word that
+> merely stems into a stopword — "gets" — was being dropped as one), so the final shape keeps
+> the original order through a shared un-stemmed split; and the O9 essay pin, which planted
+> its ask at the END of a 10k-word essay, was rewritten WITH ITS REASONING KEPT — it had
+> quietly demanded the reader scale with whatever arrived, which is the very contract the
+> plan's budget rejects; both directions of the new contract are pinned in edge.test.ts.
+> Caps: 400 content / 1,200 raw. Gate: property+fuzz suite 9/9, all matching suites 544/544,
+> full `pnpm verify` green (207 files, 3013 tests, audit gate PASS).
 
 > **O54 (Q2 item 5 — property-based testing over the pipeline) — claimed 2026-08-19T09:46Z by
 > loop-0819j.** Q1's enumerated items are done, so the quarter's next item is Q2's first:

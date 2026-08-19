@@ -25,6 +25,7 @@ import {
   type Clinician,
 } from "@/demo/clinicians";
 import { facetKey, LEXICON_CUES, readNeeds } from "./needs";
+import { MAX_RAW_TOKENS, MAX_READ_TOKENS, tokenise, tokeniseKeepingStopwords } from "./read";
 import type { CareArea } from "@/demo/care-archetypes";
 
 const SEED = 20260819;
@@ -151,5 +152,55 @@ describe("W232 the invariants, for all inputs", () => {
       }),
       { seed: SEED, numRuns: 200 },
     );
+  });
+});
+
+/**
+ * O55 (Q2 item 6): the reader fuzzed the way the plan lists it — token soups, emoji, mixed
+ * scripts, essays — and the budget that makes the worst case a constant.
+ */
+describe("O55 the reader under abuse, within its budget", () => {
+  const emojiSoup = fc
+    .array(
+      fc.oneof(
+        fc.constantFrom(...CUE_WORDS),
+        fc.constantFrom("😅", "🧠", "💊", "‽", "مرحبا", "你好", "नमस्ते", "🙃🙃🙃", "Ω≈ç√"),
+        fc.string({ maxLength: 12 }),
+      ),
+      { minLength: 0, maxLength: 60 },
+    )
+    .map((parts) => parts.join(" "));
+
+  it("emoji, mixed scripts and unicode junk never throw and stay deterministic", () => {
+    fc.assert(
+      fc.property(emojiSoup, (text) => {
+        const first = readNeeds(text).map((n) => facetKey(n.facet));
+        expect(readNeeds(text).map((n) => facetKey(n.facet))).toEqual(first);
+        expect(() => rankBands(text, clinicians)).not.toThrow();
+      }),
+      { seed: SEED, numRuns: 300 },
+    );
+  });
+
+  it("the budget holds for every input: token streams never exceed their caps", () => {
+    fc.assert(
+      fc.property(fc.oneof(sentence, soup, emojiSoup), fc.nat({ max: 30 }), (text, repeats) => {
+        const monster = `${text} `.repeat(repeats + 1);
+        expect(tokenise(monster).length).toBeLessThanOrEqual(MAX_READ_TOKENS);
+        expect(tokeniseKeepingStopwords(monster).length).toBeLessThanOrEqual(MAX_RAW_TOKENS);
+      }),
+      { seed: SEED, numRuns: 150 },
+    );
+  });
+
+  it("a ten-thousand-word essay completes inside a human moment, not proportional to its size", () => {
+    // A generous single-case wall-clock bound rather than a per-run micro budget: CI machines
+    // vary, but "under two seconds for the absurd case" holds by orders of magnitude once the
+    // cap makes the read a constant — before the cap this input was the stall risk itself.
+    const essay = "and then another thing happened to me that day which ".repeat(1200);
+    const started = performance.now();
+    readNeeds(essay);
+    rankBands(essay, clinicians);
+    expect(performance.now() - started).toBeLessThan(2000);
   });
 });

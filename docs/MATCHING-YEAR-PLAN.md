@@ -85,8 +85,14 @@ non-rankings.
    declaration safe for a GP, holding THROUGH the rarity reweighing), the W213 unity
    (score === sum of printed evidence) and band coherence. Generators compose from the
    lexicon's own vocabulary plus the fillers and negators the O40/O45/O53 rules live among.
-6. **Fuzz the reader.** Random token soups, emoji, mixed scripts, 10k-word essays; budget the
-   reader (time-boxed, input-capped) so no request can stall the finder.
+6. **Fuzz the reader. DONE — O55, 2026-08-19.** The budget is production code: `tokenise`
+   caps at 400 content tokens and the raw stream at 1,200 (constants in read.ts, aligned so
+   the O45 skeleton can only confirm what the capped read saw), so a 10k-word paste is read
+   as its opening and the worst case is a constant — with the truncation pinned honestly in
+   BOTH directions (an ask in the opening heard, an ask planted past the cap not; the O9
+   essay pin rewritten with the contract stated). The fuzz lives in the W232 fast-check home:
+   emoji, mixed scripts, unicode junk — no throw, deterministic; caps held for every
+   generated input; one generous wall-clock bound on the absurd case.
 7. **Capacity truthfulness (F5 follow-through).** Closed-books and slot data age; add a
    staleness rule — declarations older than N days demote to "sometimes"-grade confidence
    with console nudges to reconfirm. The matching-market lesson (deferred-acceptance systems

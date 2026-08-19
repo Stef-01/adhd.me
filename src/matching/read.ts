@@ -146,6 +146,16 @@ function trimDouble(stemmed: string): string {
  * for both callers.
  */
 export function tokenise(text: string): string[] {
+  // Stopwords are dropped BEFORE stemming, as they always were: a word that merely STEMS into
+  // a stopword ("gets" → "get") is content and must survive. The O55 budget caps what remains.
+  return splitWords(text)
+    .filter((word) => word === CLAUSE_BOUNDARY || !STOPWORDS.has(word))
+    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)))
+    .slice(0, MAX_READ_TOKENS);
+}
+
+/** The shared split: lowercased, boundary-marked words, not yet stemmed or filtered. */
+function splitWords(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/['’]/g, "")
@@ -158,12 +168,30 @@ export function tokenise(text: string): string[] {
     .replace(/[.?!;]/g, ` ${CLAUSE_BOUNDARY} `)
     .replace(/[^a-z0-9|\s]/g, " ")
     .split(/\s+/)
-    .filter((word) => word.length > 0 && !STOPWORDS.has(word))
-    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)));
+    .filter((word) => word.length > 0);
 }
 
 /** A token no English word tokenises to, so no cue can contain it and none can cross it. */
 export const CLAUSE_BOUNDARY = "|";
+
+/**
+ * The reader's budget (O55, year plan Q2 item 6): how much of a request is read.
+ *
+ * A real request is a sentence or three; the corpus's longest entries tokenise to under
+ * thirty content tokens. Four hundred is more than ten times that — nothing anybody types in
+ * good faith gets truncated — and it turns the reader's worst case from "proportional to
+ * whatever arrived" into a constant, so a 10k-word paste cannot stall the finder. A request
+ * longer than the cap is read as its opening; that partial read is the DOCUMENTED behaviour,
+ * pinned in both directions by the fuzz suite, never a silent one.
+ *
+ * The raw cap is deliberately larger: stopwords survive in the raw stream, so the same text
+ * yields more raw tokens than content tokens. Keeping the raw window at least as long as the
+ * content window (in the same text) means the O45 skeleton check can only ever look WITHIN
+ * what the capped content read saw — it confirms cues findCue matched, and findCue matched
+ * inside the content cap.
+ */
+export const MAX_READ_TOKENS = 400;
+export const MAX_RAW_TOKENS = 1200;
 
 /**
  * The same pipeline as `tokenise`, with the stopwords KEPT (O45).
@@ -175,14 +203,10 @@ export const CLAUSE_BOUNDARY = "|";
  * would silently turn every collapsed cue off.
  */
 export function tokeniseKeepingStopwords(text: string): string[] {
-  return text
-    .toLowerCase()
-    .replace(/['’]/g, "")
-    .replace(/[.?!;]/g, ` ${CLAUSE_BOUNDARY} `)
-    .replace(/[^a-z0-9|\s]/g, " ")
-    .split(/\s+/)
-    .filter((word) => word.length > 0)
-    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)));
+  // Same split as `tokenise`, stopwords kept, with the raw half of the O55 budget.
+  return splitWords(text)
+    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)))
+    .slice(0, MAX_RAW_TOKENS);
 }
 
 export function isStopword(word: string): boolean {
