@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O71 (founder-directed: Dr Anusha Saxena's entry made launch-ready from her PUBLISHED
+> attributes) — claimed 2026-08-20T02:1xZ by interactive session loop-0819aa.** The founder
+> asked for her text made launch-ready "by inferring with research online her key
+> attributes". The tree's law makes "inferring" mean exactly one thing: only attributes she
+> or her practice have PUBLISHED may land, each with its source cited in the entry comment —
+> the same rule O34 used to build her entry from her own Healthengine bio. Research findings
+> (practice site beecroftfp.com.au/about-us + her Healthengine profiles, via search snippets;
+> direct fetches egress-blocked): medical degree at ANU; FRACGP; hospital training across
+> NSW (Blacktown & Bathurst) with rotations in cardiology, paediatrics and psychiatry; the
+> Sydney Child Health Program (Sydney Children's Hospital Network); published special
+> interests — women's health, child health, mental wellbeing, gut health, cardiovascular and
+> metabolic health, weight management, healthy ageing; a stated focus on preventative health
+> and functional medicine (corroborating O58's founder-supplied bio). EXCLUDED by law: a
+> review snippet ("helpful and listens") — testimonial content never lands anywhere. Change:
+> title gains FRACGP; about/experience rewritten launch-grade merging the O58 founder bio
+> with the published record; fitSignals + keywords extended with published interests only;
+> no new facet declarations (care/manner grades stay exactly as her interview left them);
+> sourcing comment updated with URLs and date. Verify: roster pins green, patient-copy sweep
+> green, her profile e2e + fresh capture, full `pnpm verify` green.
+
 > **O70 (founder-directed goal: every mic failure mode named, fixes brainstormed, speech.ts
 > refactored) — DONE 2026-08-19 by interactive session loop-0819z. Gate: all 40 pre-refactor
 > speech pins green UNCHANGED (the definition of behaviour-identical) plus 4 new (the G4
