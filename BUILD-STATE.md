@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O54 (Q2 item 5 — property-based testing over the pipeline) — claimed 2026-08-19T09:46Z by
+> loop-0819j.** Q1's enumerated items are done, so the quarter's next item is Q2's first:
+> fast-check over the matching pipeline, asserting FOR ALL INPUTS the invariants the O-units
+> pinned by example — determinism (same text, same signals, every time), roster
+> permutation-invariance (shuffling the roster never changes the resulting order),
+> monotonicity (adding a declared facet never lowers that clinician), rounding stability
+> (score === sum of its own evidence, the W213 unity), band coherence (bands partition the
+> ranking, equal scores within, strictly descending across), and totality (arbitrary garbage
+> never throws). Generators compose sentences from the lexicon's own vocabulary plus fillers,
+> negators and punctuation — the space where the O40/O45/O53 rules live — plus raw string
+> soup for totality. fast-check lands as a devDependency per the plan ("fast-check over the
+> pipeline"), subject to audit:gate like everything else. Verify: the property suite itself,
+> seeded and reproducible; `pnpm verify` green including the dependency audit.
+
 > **O53 (Q1 item 1, standing growth — corpus tranche two) — claimed 2026-08-19T08:45Z by
 > loop-0819i.** ~100 further entries toward the ~500 target, same three-register discipline
 > and the same honest loop as O47/O49: author first, MEASURE, retag to what the reader
