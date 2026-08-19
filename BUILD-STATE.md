@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O66 (Explaining-the-fit Q2 increment — "what would change this order", the top clarifier
+> on the profile) — claimed 2026-08-19T22:04Z by loop-0819v.** O21 gave the profile
+> provenance ("from your words"), O51 gave it the missed asks; the fit story still ends
+> there, and the one question that could genuinely reorder the list lives only back on the
+> results screen, gated to uninformed orders. Change: the profile's fit block gains ONE
+> quiet line — "What would change this order:" followed by the TOP clarifier as a single
+> tappable question (limit 1, never a chip row; the profile is about this clinician, not a
+> quiz). Tapping appends the answer in the reader's own words exactly as the results chips
+> do, re-ranks, and returns to the RESULTS stage so the O52 layout animation shows the order
+> actually changing — a claim about reordering that ends on a screen where nothing visibly
+> reorders would be motion-less in the one place motion carries the meaning. Rendered
+> whenever a discriminating unasked facet exists (clarifiers() already guarantees the
+> question can reorder; an informed order that could still change is told so honestly).
+> Verify: finder-flow e2e — the line renders on the profile, tapping lands on results with
+> the request extended and the list re-ranked; qa/ capture + DESIGN-QA entry; mobile-fit
+> green; full `pnpm verify` green.
+
 > **O65 (Q1 item 2, the O22 loop closing the gap O64 named: longer-appointment hears its own
 > vocabulary) — DONE 2026-08-19 by loop-0819u (floor 1→6 of 7; five promotions demanded by
 > the gate and made; three leak pins hold the long-words-without-the-ask boundary;
