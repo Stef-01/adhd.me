@@ -29,3 +29,28 @@ ledger: `BUILD-STATE.md`).
    niche scope.
 7. **Log**: one-line entry in Stefan-Brain `wiki/_log/YYYY-MM-DD.md` (vault law). If the vault
    is unreachable, note the skip in your commit message.
+8. **Concurrency laws** (written after the 2026-08-19 force-push wipe, ledger O42–O43; human
+   rules live in `CONTRIBUTING.md`). Several writers share this repo — interactive Claude
+   sessions, the hourly build loop, and humans — and these rules are what let them overlap:
+   - **Never force-push `main`. No exceptions, no matter what state it appears to be in.**
+     `--force-with-lease` is permitted only on your own `claude/*` work branch, and only when
+     the branch holds nothing but already-merged history being restarted.
+   - **Fetch immediately before you claim, and again immediately before you push.** If a push
+     to `main` is rejected non-fast-forward, the answer is always reconcile (pull/rebase or
+     merge) — never `--force`, never delete the remote branch.
+   - **Wipe detection is part of every firing.** After fetching, confirm the ledger's most
+     recent DONE entry still exists in `BUILD-STATE.md` on `origin/main`. If history you know
+     was merged is missing from `main`, STOP building. Do not build units on the wiped base.
+     Recover by branching from the last good head (your own clone's refs, `refs/pull/*/head`,
+     or a `rescue/*` branch), merging — not force-pushing — the surviving line back together
+     with whatever new commits landed on the wiped base, and landing it as a PR. Record the
+     incident in the ledger. The 2026-08-19 restoration (PRs #9/#10) is the worked example.
+   - **Unit numbers collide when sessions overlap; the ledger is the tiebreak.** Before using
+     the next O-number, check the ledger AND open/merged PR titles on `main`; on rebase,
+     renumber yours, never relabel someone else's.
+   - **Deploy quota is a shared resource.** The Vercel free tier allows ~100 builds/day and
+     every push used to burn one; `vercel.json`'s `ignoreCommand` now skips builds for every
+     ref except `main`, so previews do not exist — the local gate (`pnpm verify` + the unit's
+     e2e) is the only pre-merge verification, and production deploys are what the quota is
+     for. Do not remove or weaken `ignoreCommand` to get a preview URL, and never retry a
+     quota-failed deploy in a loop; quota failures are noise, the local gate is authoritative.

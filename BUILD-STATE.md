@@ -137,6 +137,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > locally (upstream-rewind fork-point behaviour), so the loss propagates.** Once the restore PR
 > merges, loop numbering continues at O43.
 
+> **O43 (founder-directed — the O42 incident's rules, codified) — claimed and DONE 2026-08-19,
+> interactive session (not a loop firing).** The founder's ask after the restoration: RCA why
+> merges appeared to stop landing and concurrent building failed, and set rules. Three layers
+> found: (1) repo — the force-push wipe (O42's incident; merges WERE landing, the wipe erased
+> them); (2) agents — the two Claude writers coordinated correctly throughout (ledger claims,
+> renumber-on-rebase, both independently detected and repaired the wipe), costing only noise
+> (duplicate restoration PRs #9/#10, O-number renumbers); (3) deploys — every push to any ref
+> burned a free-tier Vercel build (~100/day), quota exhausted mid-restoration, so landed
+> merges stopped appearing on the site, which read as "merges not happening". Rules shipped:
+> CLAUDE.md law 8 (never force-push main; fetch-before-claim and fetch-before-push; wipe
+> detection every firing with a stop-and-restore playbook; ledger as unit-number tiebreak;
+> deploy quota is shared — previews off, no deploy retries), CONTRIBUTING.md (the human rules,
+> incl. the admin ask to enable GitHub's Block force pushes ruleset on main — not settable
+> from a Claude session, verified: the API proxy refuses ruleset writes), and vercel.json
+> `ignoreCommand` skipping every non-main build so the quota is spent only on production.
+> Loop firings: O43 is taken — next free number is O44.
+
 > **O41 (founder-directed — the counsel check visible on-site) — claimed and DONE 2026-08-19,
 > interactive session (not a loop firing).** `/privacy/counsel-review` explains the draft
 > banners in the product's own register: what counsel has been asked to check (patient-safe
