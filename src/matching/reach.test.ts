@@ -401,3 +401,44 @@ describe("O40 negation clauses", () => {
     expect(readNeeds(query).map((n) => n.label), query).toContain(label);
   });
 });
+
+/**
+ * O45 (Q1 item 1's deliverable): the collapse-aware rule, pinned in both directions.
+ *
+ * A cue that stopword-strips to one content token now also requires an ADJACENT, IN-ORDER pair
+ * of its authored words (function words kept, stemming identical, content word included) in the
+ * same clause — the year plan's "kept function-word skeleton" option, designed against this
+ * file's corpus rather than by re-authoring cues one at a time. The false positives below are
+ * the plan's own named examples; every preserved sentence is one the coupled precision/recall
+ * analysis predicted a naive fix would lose.
+ */
+describe("O45 a collapsed cue must look like its authored phrase", () => {
+  it.each([
+    // The year plan's named false positives, dead.
+    ["my GP is next door to the chemist", "Unhurried first appointment"],
+    ["the practice name is on the sign", "Helps it make sense"],
+    ["the school is on the edge of town", "Calm and steadying"],
+    // The one the corpus itself was propping up: "…not GOING to…" is not "what is going on".
+    ["I need to know it's not going to hurt my heart before I start anything", "Helps it make sense"],
+  ])("no longer fires on: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).not.toContain(label);
+  });
+
+  it.each([
+    // The intended sentences the plan said a naive per-cue fix would lose.
+    ["I can never get a word in before the appointment is over", "Unhurried first appointment"],
+    ["she rushed me out the door in ten minutes", "Unhurried first appointment"],
+    ["I'm always on edge in waiting rooms", "Calm and steadying"],
+    // A contraction elides the middle of the authored phrase; any surviving pair suffices.
+    ["I just want to understand what's going on", "Helps it make sense"],
+    ["somewhere I can be honest about how much I drink", "Substance history held safely"],
+    ["my mum thinks this is nonsense and she'll be in the room", "Understands your background"],
+  ])("still reaches through: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).toContain(label);
+  });
+
+  it("the cardiac-safety ask is now heard as itself, not as a collapse artefact", () => {
+    const labels = readNeeds("I need to know it's not going to hurt my heart before I start anything").map((n) => n.label);
+    expect(labels).toContain("A structured, measured approach");
+  });
+});

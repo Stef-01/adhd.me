@@ -119,8 +119,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
-> **O44 (Q1 item 1's deliverable — the collapse-aware rule for one-token cues) — claimed
-> 2026-08-19T02:46Z by loop-0819c.** The frozen list (reach.test.ts §O25) holds 33 multi-word
+> **O45 (Q1 item 1's deliverable — the collapse-aware rule for one-token cues) — claimed
+> 2026-08-19T02:46Z by loop-0819c as O44; renumbered O45 on rebase when PR #13's title took
+> O44 (the recurring number race — see O30/O40). Claim timestamp and holder unchanged.
+> DONE 2026-08-19.** Shipped as designed, plus one finding the build itself surfaced: the
+> corpus was PROPPING ITSELF UP — "I need to know it's not going to hurt my heart" counted as
+> reached only because "what is going on" fired on "…not GOING to…", a wrong facet inflating
+> the reach number. The rule killed it, the ratchet correctly went red, and the fix was the
+> honest one: the cardiac-safety ask now has real cues on the structured facet ("hurt my
+> heart", "safe for my heart", "heart checked", "check my heart" — each two content tokens,
+> none collapsing), NOT a loosened ratchet. Gate: reach suite 78/78 (three named false
+> positives dead, six intended sentences preserved incl. the contraction case), full
+> `pnpm verify` green (205 files, 2815 tests, audit gate PASS). Q1 item 1's remaining half is
+> the corpus at scale. The frozen list (reach.test.ts §O25) holds 33 multi-word
 > cues that ship as ONE stemmed token, and the year plan names why they cannot be re-authored
 > one by one: the intended sentences strip to the same token, so precision and recall are
 > coupled at the stopword layer. The rule, designed against the pinned corpus (the plan's

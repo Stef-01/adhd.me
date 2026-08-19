@@ -108,6 +108,69 @@ export function tokenise(text: string): string[] {
 export const CLAUSE_BOUNDARY = "|";
 
 /**
+ * The same pipeline as `tokenise`, with the stopwords KEPT (O45).
+ *
+ * Exists for exactly one consumer: the collapsed-cue skeleton check below, which needs to see
+ * the function words `tokenise` deletes. Everything else about the two must stay identical —
+ * same casing, same apostrophe deletion, same boundary markers, same stemming — because a
+ * skeleton compared against a differently-normalised stream would match nothing and the rule
+ * would silently turn every collapsed cue off.
+ */
+export function tokeniseKeepingStopwords(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[.?!;]/g, ` ${CLAUSE_BOUNDARY} `)
+    .replace(/[^a-z0-9|\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 0)
+    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)));
+}
+
+export function isStopword(word: string): boolean {
+  return STOPWORDS.has(word);
+}
+
+/**
+ * The collapse-aware rule (O45, year plan Q1 item 1).
+ *
+ * THE DEFECT CLASS. Stopword stripping collapses 33 authored multi-word cues to a single
+ * content token, so the shipped matcher is looser than the phrase its author reviewed: "out
+ * the door" ships as [door] and fires on "next door to the chemist"; "on edge" ships as
+ * [edge] and fires on "school on the edge of town". The cues cannot be re-authored one by one
+ * because the INTENDED sentences strip to the same token — precision and recall are coupled
+ * at the stopword layer (year plan Q1 item 1's analysis).
+ *
+ * THE RULE — the plan's "kept function-word skeleton" option: a collapsed cue must also find,
+ * somewhere in the same clause-bounded raw stream (stopwords kept, stemming identical), one
+ * ADJACENT, IN-ORDER, CONSECUTIVE pair of its authored tokens that includes at least one
+ * content word. "out the door" is satisfied by "…rushed me out the door" (the [the, door]
+ * pair) and not by "next door to the chemist" (no authored pair survives). Any single pair
+ * suffices — not the whole phrase — because contractions and elisions routinely drop the
+ * middle of an authored phrase: "what's going on" keeps the [going, on] pair of
+ * "what is going on", and demanding the full skeleton would lose it.
+ *
+ * Requiring the pair to CONTAIN A CONTENT WORD stops a cue's function words alone
+ * re-introducing the looseness ("get a" appearing near an unrelated "word" must not fire
+ * "get a word in"); adjacency across a clause boundary is impossible by construction, since
+ * the boundary is itself a token.
+ */
+export function collapsedCueSatisfied(
+  rawSentence: readonly string[],
+  rawCue: readonly string[],
+): boolean {
+  for (let i = 0; i < rawCue.length - 1; i++) {
+    const a = rawCue[i]!;
+    const b = rawCue[i + 1]!;
+    if (isStopword(a) && isStopword(b)) continue;
+    for (let k = 0; k < rawSentence.length - 1; k++) {
+      if (rawSentence[k] === a && rawSentence[k + 1] === b) return true;
+    }
+  }
+  return false;
+}
+
+/**
  * How many tokens may sit between two consecutive cue tokens.
  *
  * TWO, AND THE FIGURE WAS SET BY A TEST RATHER THAN BY TASTE. It was three, and an edge case

@@ -201,7 +201,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // "up" is dropped as a stopword, and [follow] would also fire on "I can't follow a
       // conversation" — reading an inattention SYMPTOM into a facet, the G7 line. These phrasings
       // are about wanting continuity of CARE and each survives as two content tokens.
-      "not just leave me", "leave me to figure", "stay on top of", "keep an eye", "not one and done", "ongoing care"],
+      "not just leave me", "leave me to figure", "stay on top of", "keep an eye", "not one and done", "ongoing care",
+      // O45: the cardiac-safety ask, heard as itself. "I need to know it's not going to hurt my
+      // heart" was previously COUNTED as reached because the collapsed cue "what is going on"
+      // fired on "…not GOING to…" — a wrong facet propping up the reach number. The real ask is
+      // this facet's own definition (the baseline physical — heart, blood pressure — before a
+      // stimulant), so it gets real cues. Each survives as two content tokens; none collapses.
+      "hurt my heart", "safe for my heart", "heart checked", "check my heart"],
   },
 };
 

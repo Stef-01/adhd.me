@@ -31,6 +31,14 @@ non-rankings.
    coupled at the stopword layer. The Q1 deliverable is therefore matcher-level: a collapse-
    aware rule (e.g. one-token cues demand clause-level co-occurrence with another same-facet
    cue, or a kept function-word skeleton) designed against the corpus, not cue whack-a-mole.
+   **The rule is DONE — O45, 2026-08-19** (`collapsedCueSatisfied` in read.ts: a collapsed cue
+   also needs an adjacent, in-order authored-word pair with stopwords kept, content word
+   included, same clause; the three named false positives are pinned dead and every intended
+   sentence preserved in reach.test.ts §O45). Building it also caught the corpus propping
+   itself up: the cardiac-safety sentence was "reached" only by "what is going on" firing on
+   "…not GOING to…", and now reaches honestly through new structured-facet heart cues. The
+   REMAINING Q1 item-1 work is the corpus at scale (~500 requests, per-facet reach percentage
+   in CI).
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
 3. **Morphology upgrade.** Replace the suffix-stemmer's worst misses (found by the corpus)

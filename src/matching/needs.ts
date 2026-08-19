@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { findCue, negatedWant, stem, tokenise } from "./read";
+import { collapsedCueSatisfied, findCue, negatedWant, stem, tokenise, tokeniseKeepingStopwords } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -222,8 +222,18 @@ for (const entry of LEXICON) {
   }
 }
 
-const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = [...FIRST_CLAIM.values()]
-  .map(({ phrase, entry }) => ({ phrase, tokens: tokenise(phrase), entry }))
+const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; raw: string[]; collapsed: boolean; entry: Entry }> = [...FIRST_CLAIM.values()]
+  .map(({ phrase, entry }) => ({
+    phrase,
+    tokens: tokenise(phrase),
+    raw: tokeniseKeepingStopwords(phrase),
+    /* O45: an authored multi-word phrase that ships as at most one content token is matched
+       under the collapse-aware rule — see `collapsedCueSatisfied` in read.ts. Computed here,
+       once, from the same two tokenisations the matcher itself uses, so the rule's membership
+       can never drift from what actually collapses. */
+    collapsed: phrase.trim().split(/\s+/).length >= 2 && tokenise(phrase).length <= 1,
+    entry,
+  }))
   .filter((cue) => cue.tokens.length > 0)
   .sort((a, b) => b.tokens.length - a.tokens.length || b.phrase.length - a.phrase.length);
 
@@ -244,6 +254,8 @@ const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; entry: Entry }> = 
  */
 export function readNeeds(text: string): NeedSignal[] {
   const sentence = tokenise(text);
+  // The same words with the function words kept, for the collapse-aware rule only (O45).
+  const rawSentence = tokeniseKeepingStopwords(text);
   const signals: NeedSignal[] = [];
   const seen = new Set<string>();
   const claimed: Array<[number, number]> = [];
@@ -251,6 +263,11 @@ export function readNeeds(text: string): NeedSignal[] {
   for (const cue of CUES) {
     const at = findCue(sentence, cue.tokens);
     if (!at) continue;
+    /* O45 (Q1 item 1): a cue that collapsed to one content token fires only when the sentence
+       also carries an adjacent pair of the cue's AUTHORED words — "out the door" must look
+       like "out the door" somewhere, not merely contain "door". A refused collapsed cue
+       claims nothing, so the words stay readable by any cue that genuinely matches them. */
+    if (cue.collapsed && !collapsedCueSatisfied(rawSentence, cue.raw)) continue;
     /* O40 (Q1 item 4): a CARE or PREFERENCE cue in the scope of a desire negation is a refusal,
        not an ask — "I don't want my dose changed" must not reach titration. MANNER stays exempt
        BY DESIGN: patients state manner wants through negation ("I don't want to feel rushed" is
