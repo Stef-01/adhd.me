@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
+import { AcknowledgementOfCountry } from "./acknowledgement-of-country";
 import { SITE_URL } from "./site";
 
 /**
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
         />
         {children}
+        <AcknowledgementOfCountry />
         <PrivacyConsent />
         <Analytics />
       </body>
