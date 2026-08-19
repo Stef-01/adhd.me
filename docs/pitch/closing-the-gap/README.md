@@ -55,8 +55,17 @@ Structural, not stylistic. Removing any of them makes the deck weaker with this 
   code by `reach.test.ts :: SYMPTOM_NONREACH`.
 - **The absence of an ACCHO partner is stated** (11), and Phase 0 is securing one.
 - **The team slide leaves a seat visibly empty.**
-- **No Aboriginal visual motifs.** No ochre, no dot or line-work. Without an Aboriginal artist or
-  community mandate that is appropriation, and this audience reads it as tokenism.
+- **A Country palette, and no cultural motifs.** The deck uses ochre, bone and charcoal — colours
+  of this continent, owned by nobody. It contains no dot painting, no cross-hatching, no x-ray
+  motifs and no concentric-circle iconography. That distinction is the whole point: a palette is
+  not owned, but specific designs are, and concentric circles in particular carry real meaning in
+  Central and Western Desert traditions. An AI generating any of that would be appropriation
+  regardless of intent, and this audience would read it as tokenism instantly.
+- **If a graphic device is wanted, commission it.** The correct way to put Aboriginal design on
+  this deck is to pay an Aboriginal artist or design studio for artwork, with ICIP terms agreed.
+  Do not let anyone — human or model — approximate it.
+- **Contrast is a hard gate.** Every text/ground pair in the palette passes WCAG 2.1 AA, verified
+  against the rendered output rather than the tokens. If the palette is touched, re-run that check.
 
 ## Before this is sent
 

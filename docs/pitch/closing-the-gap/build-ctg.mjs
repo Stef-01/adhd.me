@@ -36,7 +36,7 @@ const PARADOX = [
 ].map((s,i)=>{
   const x = 150 + i*420;
   return (i?`<div class="a hair" style="left:${P(x-40)};top:${P(608)};width:1px;height:${P(210)}"></div>`:'')
-    + txt('stat',x,604,s.v.length>6?46:62,`width:${P(360)};color:${s.hi?'#A8BA88':'var(--paper)'}`,s.v)
+    + txt('stat',x,604,s.v.length>6?46:62,`width:${P(360)};color:${s.hi?'var(--sage-light)':'var(--paper)'}`,s.v)
     + txt('body',x,700,18,`width:${P(340)};color:var(--paper-dim)`,s.l);
 }).join('');
 
