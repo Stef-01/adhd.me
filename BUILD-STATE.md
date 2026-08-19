@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O42 (incident response — main restored after an accidental force-push) — DONE
+> 2026-08-19T01:54Z, loop-0819b.** Some time after the founder merged PR #8 at 01:06Z, a
+> session working from a STALE CHECKOUT (based at 69686bb, the 18 Aug morning tip) force-pushed
+> `main`, discarding every merged commit since — PRs #2–#8 (speech fixes, year plan, Saxena,
+> privacy policy, counsel package, terms, the on-site counsel check) and loop units O26, O30,
+> O36, O38, O40 — while adding four deck + Acknowledgement of Country commits on the stale
+> base. That it rewound the founder's own just-merged PR #8 is what marks it accidental.
+> Response, all non-destructive: the lost tip preserved at `rescue/main-20260819-pre-forcepush`
+> (2e57cd4); a merge of PR #8's head (3196fe8 = full lost line + O41) with the deck line
+> (a6b7223) built on `restore/main-after-forcepush` — clean auto-merge, both lines verified
+> present (terms page AND site-wide Acknowledgement), `pnpm verify` green (205 files, 2804
+> tests, audit gate PASS) — and offered as a PR for the founder to land, since restoring `main`
+> is the founder's call to confirm. **FOR WHOEVER FORCE-PUSHES NEXT: never force-push main;
+> `git pull --rebase` first. A stale session that force-pushes erases other sessions' merged
+> work, and `git pull --rebase` in every OTHER session then silently drops the same commits
+> locally (upstream-rewind fork-point behaviour), so the loss propagates.** Once the restore PR
+> merges, loop numbering continues at O43.
+
 > **O41 (founder-directed — the counsel check visible on-site) — claimed and DONE 2026-08-19,
 > interactive session (not a loop firing).** `/privacy/counsel-review` explains the draft
 > banners in the product's own register: what counsel has been asked to check (patient-safe
