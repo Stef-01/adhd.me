@@ -99,6 +99,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O39 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
+> loop-0819a.** `readNeeds` has no negation handling (the transcript reader does), and a probe
+> confirms the year plan's exact class: "I don't want my dose changed" reaches titration, "I'm
+> not looking for a diagnosis" reaches assessment, "I don't need it bulk billed" reaches
+> bulk-billing. Design (NegEx convention — explicit trigger PHRASES, not bare negators, scope
+> ends at the clause boundary): a small list of stemmed desire-negation phrases ("don't want",
+> "not looking for", "don't need", "no interest") suppresses a CARE or PREFERENCE cue whose
+> span starts within a short window after the phrase, same clause only. MANNER and LANGUAGE
+> are exempt BY DESIGN and pinned: patients state manner wants through negation ("I don't want
+> to feel rushed" wants unhurried). Bare negators are deliberately NOT triggers, pinned: "my
+> GP won't do titration" is a complaint that wants titration, "I've never had an assessment
+> and I want one" is history, not refusal. Verify: both directions pinned for every case
+> above; reach corpus untouched (no ratchet movement); `pnpm verify` green.
+
 > **O38 (Standing debt #2, last piece — the persisted reach report) — DONE 2026-08-18,
 > loop-0818d (claimed 23:46Z). DEBT #2 CLOSED.** ONBOARDING-INTERVIEW.md item 4 shipped: the
 > lexicon-gap feed is a record. `ClinicianBackground.patientSilent` rides every interview save
