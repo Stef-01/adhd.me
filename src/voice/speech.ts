@@ -1,6 +1,5 @@
 // W212: speech to text for the finder microphone, on the browser Web Speech API.
 //
-//
 // WHY THE BROWSER API AND NOT A SERVICE. The alternatives are a cloud transcription API (an audio
 // recording of somebody describing their health, leaving to a vendor this product would then have
 // to name in the privacy notice and hold a contract with) or an on-device model (Whisper via
@@ -22,6 +21,14 @@
 // fails on a denied permission or a bad connection. Every one of those paths returns the person to
 // the typed route rather than a dead end, which is also why this module reports a REASON rather
 // than a boolean.
+//
+// THE FULL FAILURE MAP lives in docs/MIC-FAILURE-MODES.md (O70): every mode from feature
+// detection to the deploy layer, with its handling and its fix status. This file is organised
+// in the same order — detection, copy, the carried stream, then the session itself.
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The browser surface, as TypeScript does not ship it.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
 
 /** What the browser calls the constructor, and what TypeScript does not ship types for. */
 type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
@@ -44,6 +51,10 @@ interface SpeechResultEventLike {
   resultIndex: number;
   results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// Copy and vocabulary: everything a person might read, in one place.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
 
 /** Rendered beside the microphone. See the header: this is a disclosure, not a policy link. */
 export const SPEECH_DISCLOSURE =
@@ -143,6 +154,10 @@ export const SPEECH_ERROR_COPY: Readonly<Record<SpeechError, string>> = {
   unknown: "Speech input did not work. You can type instead.",
 };
 
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// Detection: whether speech can run here at all, and why not (failure modes A1–A5).
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+
 function constructor(): SpeechRecognitionCtor | null {
   if (typeof window === "undefined") return null;
   const w = window as unknown as {
@@ -161,16 +176,62 @@ export function speechUnavailable(): SpeechUnavailableReason | null {
   return null;
 }
 
-export interface SpeechSession {
-  /** Ask the browser to stop and deliver whatever it has. */
-  stop(): void;
-  /** Drop the session without delivering. Used on unmount. */
-  cancel(): void;
+/** Map the browser's raw error string to this module's closed vocabulary (failure mode E7:
+ *  a code this list has never seen collapses to "unknown" for the patient, while the raw
+ *  string rides to the caller for the debug surface — the O16 lesson). */
+export function mapSpeechError(raw: string): SpeechError {
+  const known: readonly SpeechError[] = [
+    "not-allowed",
+    "service-not-allowed",
+    "language-not-supported",
+    "no-speech",
+    "audio-capture",
+    "network",
+    "aborted",
+  ];
+  return known.find((k) => k === raw) ?? "unknown";
 }
 
 /**
- * THE CARRIED STREAM (O69): the bridge between WebKit's two demands.
+ * The environment, said as one compact line for the ?debug=1 banner (O70).
  *
+ * The B2 family (iOS `service-not-allowed`) refuses to say WHICH of its causes fired, so the
+ * debug surface now carries the facts that separate them: `standalone:yes` points at the
+ * home-screen web app case (A3); `mic:denied` points at a settings switch (B1); `mic:granted`
+ * with the failure persisting points at the WebKit intermittent, whose recovery is the O69
+ * warm tap. Async because the Permissions API is; callers append the line when it resolves.
+ * Every probe is defensive — a browser that lacks one reports the fact as absent, never throws.
+ */
+export async function speechDebugFacts(lang: string = DEFAULT_SPEECH_LANGUAGE.tag): Promise<string> {
+  const facts: string[] = [`lang:${lang}`];
+  if (typeof window !== "undefined") {
+    facts.push(`secure:${window.isSecureContext ? "yes" : "no"}`);
+    const standalone = (window.navigator as unknown as { standalone?: boolean }).standalone;
+    if (standalone !== undefined) facts.push(`standalone:${standalone ? "yes" : "no"}`);
+  }
+  facts.push(`api:${constructor() ? "yes" : "no"}`);
+  if (typeof navigator !== "undefined") {
+    facts.push(`media:${typeof navigator.mediaDevices?.getUserMedia === "function" ? "yes" : "no"}`);
+    try {
+      const permissions = (navigator as unknown as {
+        permissions?: { query(d: { name: string }): Promise<{ state: string }> };
+      }).permissions;
+      if (permissions?.query) {
+        const status = await permissions.query({ name: "microphone" });
+        facts.push(`mic:${status.state}`);
+      }
+    } catch {
+      // Safari versions that reject the "microphone" name: the fact is simply not reportable.
+    }
+  }
+  return facts.join(" ");
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The carried stream (O69): the bridge between WebKit's two demands.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+
+/**
  * The O46 caveat, read to its conclusion: WebKit gates recognition.start() on a USER GESTURE,
  * and the reported behaviour is that recognition only succeeds while an audio session is
  * GENUINELY LIVE. No pre-O69 path had both at once — the in-session retry holds the live
@@ -220,6 +281,17 @@ function adoptCarriedStream(): MediaStream | null {
   return stream;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The session.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+
+export interface SpeechSession {
+  /** Ask the browser to stop and deliver whatever it has. */
+  stop(): void;
+  /** Drop the session without delivering. Used on unmount. */
+  cancel(): void;
+}
+
 export interface SpeechHandlers {
   /** Fires repeatedly as the browser revises its guess. Interim text, safe to render. */
   onPartial(text: string): void;
@@ -236,11 +308,36 @@ export interface SpeechHandlers {
 }
 
 /**
+ * Rebuild the transcript from the WHOLE cumulative list, never accumulate (O12 RCA, failure
+ * mode E3). Rebuilding is equivalent on a well-behaved browser — and idempotent on one that
+ * is not. Safari's continuous mode is known to re-deliver earlier final segments (resultIndex
+ * snapping back to 0), and `finalText +=` turned each re-delivery into a duplicate: "my dose
+ * my dose wearing off wearing off", intermittently, only on Safari.
+ */
+function readCumulativeResults(event: SpeechResultEventLike): { final: string; interim: string } {
+  let final = "";
+  let interim = "";
+  for (let i = 0; i < event.results.length; i += 1) {
+    const result = event.results[i];
+    if (!result) continue;
+    const text = result[0]?.transcript ?? "";
+    if (result.isFinal) final += text;
+    else interim += text;
+  }
+  return { final, interim };
+}
+
+/**
  * Start listening. Returns null when speech is unavailable, so the caller routes to typing.
  *
  * `continuous` is on because people describing a health concern pause mid-sentence, and the
  * default stops at the first silence. `interimResults` is on so the screen shows words appearing
  * while somebody speaks, which is what makes it obvious the microphone is working.
+ *
+ * The session is a small state machine held in this closure: `settled` latches exactly one
+ * outcome (final, or error); `active` names the recogniser whose end counts (the O18 retry
+ * replaces it); the warm stream's lifecycle is the O46/O69 story told above. Each named step
+ * below handles one failure family from docs/MIC-FAILURE-MODES.md.
  */
 export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPEECH_LANGUAGE.tag): SpeechSession | null {
   const Ctor = constructor();
@@ -281,6 +378,83 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
   // starts synchronously inside this tap's gesture, with the audio session already live.
   warmStream = adoptCarriedStream();
 
+  /**
+   * WORDS THE PERSON WATCHED APPEAR ARE NEVER THROWN AWAY (O12 RCA, failure mode E2).
+   * Chrome's recogniser is a streaming network service, and it can die mid-utterance — AFTER
+   * results arrived. The old path reported the error and discarded `finalText`, so somebody
+   * saw their sentence on screen and then got "the speech service could not be reached" and
+   * an empty box: the exact "sometimes it works, sometimes it fails" report. If anything was
+   * recognised, a late failure is a finish, not a failure — the words are delivered and the
+   * error is not shown. Returns true when it finished the session that way.
+   */
+  const finishWithCapturedInstead = (error: SpeechError): boolean => {
+    const captured = (finalText + interimText).trim();
+    if (!captured || error === "aborted") return false;
+    settled = true;
+    releaseWarmStream();
+    handlers.onFinal(captured);
+    return true;
+  };
+
+  /**
+   * THE iPHONE RETRY (O18, failure mode B2). iOS Safari fires `service-not-allowed`
+   * intermittently even with dictation on — seen in production against a device where the
+   * setting was verified. The widely reported workaround is to obtain microphone permission
+   * through getUserMedia (which surfaces the proper prompt and warms up the audio session)
+   * and start again. One retry, only on the permission-flavoured codes, only when nothing was
+   * captured: if it works the person never sees a message, and if it does not, the honest
+   * copy shows. Returns true when the retry was launched (the session stays open for it).
+   */
+  const attemptWarmRetry = (error: SpeechError, raw: string): boolean => {
+    const media = typeof navigator !== "undefined" ? navigator.mediaDevices : undefined;
+    if (retried || !media?.getUserMedia) return false;
+    retried = true;
+    // This recogniser is done; releasing it here keeps its onend (Safari fires one after
+    // onerror) from being read as the session finishing while the retry is still pending.
+    active = null;
+    media.getUserMedia({ audio: true }).then(
+      (stream) => {
+        // Held open, not stopped — see `warmStream` above (O46). One honest caveat this
+        // retry cannot remove: WebKit also gates start() on a user gesture, and a start
+        // reached through a permission prompt may be outside one. If it refuses again,
+        // the error copy shows — and the person's NEXT tap starts with permission already
+        // granted, the gesture WebKit wants, AND the carried stream (O69).
+        // Release-before-assign (O70, failure mode G4): a session that ADOPTED a carried
+        // stream and still failed would otherwise orphan it here with its tracks live —
+        // a mic light with no path to off, found by this refactor's own audit.
+        releaseWarmStream();
+        warmStream = stream;
+        if (settled) {
+          releaseWarmStream();
+          return;
+        }
+        const again = new Ctor();
+        wire(again);
+        try {
+          again.start();
+          active = again;
+        } catch {
+          settled = true;
+          settleStream(true);
+          handlers.onError(error, raw);
+        }
+      },
+      () => {
+        if (settled) return;
+        settled = true;
+        handlers.onError(error, raw);
+      },
+    );
+    return true;
+  };
+
+  /** The one place an error becomes the session's outcome (stream carried or released first). */
+  const settleWithError = (error: SpeechError, raw: string, permissionFlavoured: boolean) => {
+    settled = true;
+    settleStream(permissionFlavoured);
+    handlers.onError(error, raw);
+  };
+
   const wire = (recognition: SpeechRecognitionLike) => {
     recognition.lang = lang;
     recognition.continuous = true;
@@ -288,23 +462,7 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
     recognition.maxAlternatives = 1;
 
     recognition.onresult = (event) => {
-      /**
-       * REBUILT FROM THE WHOLE LIST EVERY EVENT, NOT ACCUMULATED (O12 RCA). The result list is
-       * cumulative, so rebuilding is equivalent on a well-behaved browser — and idempotent on one
-       * that is not. Safari's continuous mode is known to re-deliver earlier final segments
-       * (resultIndex snapping back to 0), and `finalText +=` turned each re-delivery into a
-       * duplicate: "my dose my dose wearing off wearing off", intermittently, only on Safari.
-       * Rebuilding makes a re-sent list produce the same text instead of twice the text.
-       */
-      let final = "";
-      let interim = "";
-      for (let i = 0; i < event.results.length; i += 1) {
-        const result = event.results[i];
-        if (!result) continue;
-        const text = result[0]?.transcript ?? "";
-        if (result.isFinal) final += text;
-        else interim += text;
-      }
+      const { final, interim } = readCumulativeResults(event);
       finalText = final;
       interimText = interim;
       handlers.onPartial((finalText + interim).trim());
@@ -312,84 +470,13 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
 
     recognition.onerror = (event) => {
       if (settled) return;
-      // `no-speech` and `aborted` arrive on ordinary paths (a silent room, a deliberate stop) and
-      // are still reported, because the caller decides which of them deserve a message.
-      const known: SpeechError[] = [
-        "not-allowed",
-        "service-not-allowed",
-        "language-not-supported",
-        "no-speech",
-        "audio-capture",
-        "network",
-        "aborted",
-      ];
-      const error = known.find((k) => k === event.error) ?? "unknown";
-      /**
-       * WORDS THE PERSON WATCHED APPEAR ARE NEVER THROWN AWAY (O12 RCA). Chrome's recogniser is a
-       * streaming network service, and it can die mid-utterance — AFTER results arrived. The old
-       * path reported the error and discarded `finalText`, so somebody saw their sentence on
-       * screen and then got "the speech service could not be reached" and an empty box: the exact
-       * "sometimes it works, sometimes it fails" report. If anything was recognised, a late
-       * failure is a finish, not a failure — the words are delivered and the error is not shown.
-       * The errors that mean nothing was captured (denied mic, silence, no device) still report,
-       * because their text is empty by definition.
-       */
-      const captured = (finalText + interimText).trim();
-      if (captured && error !== "aborted") {
-        settled = true;
-        releaseWarmStream();
-        handlers.onFinal(captured);
-        return;
-      }
-      /**
-       * THE iPHONE RETRY (O18). iOS Safari fires `service-not-allowed` intermittently even with
-       * dictation on — seen in production against a device where the setting was verified. The
-       * widely reported workaround is to obtain microphone permission through getUserMedia
-       * (which surfaces the proper prompt and warms up the audio session) and start again.
-       * One retry, only on the permission-flavoured codes, only when nothing was captured:
-       * if it works the person never sees a message, and if it does not, the honest copy shows.
-       */
+      // `no-speech` and `aborted` arrive on ordinary paths (a silent room, a deliberate stop)
+      // and are still reported, because the caller decides which of them deserve a message.
+      const error = mapSpeechError(event.error);
+      if (finishWithCapturedInstead(error)) return;
       const permissionFlavoured = error === "service-not-allowed" || error === "not-allowed";
-      const media = typeof navigator !== "undefined" ? navigator.mediaDevices : undefined;
-      if (permissionFlavoured && !retried && media?.getUserMedia) {
-        retried = true;
-        // This recogniser is done; releasing it here keeps its onend (Safari fires one after
-        // onerror) from being read as the session finishing while the retry is still pending.
-        active = null;
-        media.getUserMedia({ audio: true }).then(
-          (stream) => {
-            // Held open, not stopped — see `warmStream` above (O46). One honest caveat this
-            // retry cannot remove: WebKit also gates start() on a user gesture, and a start
-            // reached through a permission prompt may be outside one. If it refuses again,
-            // the error copy shows — and the person's NEXT tap starts with permission already
-            // granted and the gesture WebKit wants, which is why the copy says "try once more".
-            warmStream = stream;
-            if (settled) {
-              releaseWarmStream();
-              return;
-            }
-            const again = new Ctor();
-            wire(again);
-            try {
-              again.start();
-              active = again;
-            } catch {
-              settled = true;
-              settleStream(true);
-              handlers.onError(error, event.error);
-            }
-          },
-          () => {
-            if (settled) return;
-            settled = true;
-            handlers.onError(error, event.error);
-          },
-        );
-        return;
-      }
-      settled = true;
-      settleStream(permissionFlavoured);
-      handlers.onError(error, event.error);
+      if (permissionFlavoured && attemptWarmRetry(error, event.error)) return;
+      settleWithError(error, event.error, permissionFlavoured);
     };
 
     recognition.onend = () => {
@@ -408,7 +495,7 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
     first.start();
   } catch {
     // Chrome throws if start() is called twice, and on some insecure-context combinations that
-    // `speechUnavailable` cannot detect ahead of time.
+    // `speechUnavailable` cannot detect ahead of time (failure mode A5).
     return null;
   }
   active = first;
@@ -419,9 +506,9 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
         active.stop();
         return;
       }
-      // Stop pressed inside the retry gap. The retry only runs when nothing was captured, so
-      // there is nothing to deliver — finish quietly instead of letting the pending retry
-      // re-open the microphone over a screen that asked it to stop.
+      // Stop pressed inside the retry gap (failure mode C2). The retry only runs when nothing
+      // was captured, so there is nothing to deliver — finish quietly instead of letting the
+      // pending retry re-open the microphone over a screen that asked it to stop.
       if (!settled) {
         settled = true;
         releaseWarmStream();

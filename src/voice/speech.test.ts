@@ -9,6 +9,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_SPEECH_LANGUAGE,
   dropCarriedStream,
+  mapSpeechError,
+  speechDebugFacts,
   SPEECH_DISCLOSURE,
   SPEECH_ENGLISH_MATCHING_NOTE,
   SPEECH_ERROR_COPY,
@@ -550,5 +552,77 @@ describe("O69 the recovery tap starts warm: the carried stream", () => {
     // Idempotent: a second drop stops nothing twice.
     dropCarriedStream();
     expect(stopped).toBe(1);
+  });
+});
+
+describe("O70 the refactor's own findings, pinned", () => {
+  const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+  it("never orphans an adopted stream when the retry opens a fresh one (G4)", async () => {
+    // The leak the O70 audit found: a session that ADOPTED the carried stream and still
+    // failed ran the O18 retry, whose fresh getUserMedia overwrote warmStream with the
+    // adopted tracks live — a mic light with no path to off.
+    install();
+    let adoptedStops = 0;
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = {
+      getUserMedia: () => Promise.resolve({ getTracks: () => [{ stop: () => { adoptedStops += 1; } }] }),
+    };
+    // Session one fails twice and carries its stream (stop count still 0).
+    startSpeech(noop);
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    expect(adoptedStops).toBe(0);
+
+    // Session two adopts it, fails again, and the retry acquires a SECOND stream: the
+    // adopted one must be stopped at that handoff, not orphaned.
+    let secondStops = 0;
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = {
+      getUserMedia: () => Promise.resolve({ getTracks: () => [{ stop: () => { secondStops += 1; } }] }),
+    };
+    const onFinal = vi.fn();
+    startSpeech({ ...noop, onFinal });
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    expect(adoptedStops).toBe(1); // released at the handoff, no orphan
+    // And the second stream still follows the normal lifecycle: released on settle.
+    FakeRecognition.last!.emit([{ text: "working now", final: true }]);
+    FakeRecognition.last!.stop();
+    expect(onFinal).toHaveBeenCalledWith("working now");
+    expect(secondStops).toBe(1);
+  });
+
+  it("maps raw codes through the exported vocabulary, unknown included", () => {
+    expect(mapSpeechError("service-not-allowed")).toBe("service-not-allowed");
+    expect(mapSpeechError("brand-new-webkit-code")).toBe("unknown");
+  });
+
+  it("reports the environment as compact facts, defensively, for the debug banner", async () => {
+    install();
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = {
+      getUserMedia: () => Promise.resolve({ getTracks: () => [] }),
+    };
+    (globalThis.navigator as unknown as Record<string, unknown>).permissions = {
+      query: ({ name }: { name: string }) =>
+        name === "microphone" ? Promise.resolve({ state: "granted" }) : Promise.reject(new Error("no")),
+    };
+    const facts = await speechDebugFacts("hi-IN");
+    expect(facts).toContain("lang:hi-IN");
+    expect(facts).toContain("api:yes");
+    expect(facts).toContain("media:yes");
+    expect(facts).toContain("mic:granted");
+    delete (globalThis.navigator as unknown as Record<string, unknown>).permissions;
+  });
+
+  it("never throws when a probe is missing — an absent fact is absent, not an error", async () => {
+    install({ present: false });
+    (globalThis.navigator as unknown as Record<string, unknown>).permissions = {
+      query: () => Promise.reject(new Error("unsupported name")),
+    };
+    const facts = await speechDebugFacts();
+    expect(facts).toContain("api:no");
+    expect(facts).not.toContain("mic:");
+    delete (globalThis.navigator as unknown as Record<string, unknown>).permissions;
   });
 });

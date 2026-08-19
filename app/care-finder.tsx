@@ -38,6 +38,7 @@ import { CoverageMap } from "./coverage-map";
 import {
   DEFAULT_SPEECH_LANGUAGE,
   dropCarriedStream,
+  speechDebugFacts,
   SPEECH_DISCLOSURE,
   SPEECH_ENGLISH_MATCHING_NOTE,
   SPEECH_ERROR_COPY,
@@ -474,6 +475,15 @@ export function CareFinder() {
         // the default banner stays a plain sentence with no error-code language.
         const debug = new URLSearchParams(window.location.search).has("debug");
         setSpeechMessage(debug ? `${SPEECH_ERROR_COPY[error]} [${raw}]` : SPEECH_ERROR_COPY[error]);
+        // O70: the raw code alone could not separate the iOS failure family (B2 in
+        // docs/MIC-FAILURE-MODES.md), so the debug banner now carries the environment that
+        // produced it — standalone flag, mic-permission state, secure context, language.
+        // Appended when it resolves; patients never see any of this.
+        if (debug) {
+          void speechDebugFacts(language.tag).then((facts) =>
+            setSpeechMessage(`${SPEECH_ERROR_COPY[error]} [${raw} | ${facts}]`),
+          );
+        }
         // O48: the permission-flavoured failures get their once-more as a button — see
         // `speechRetryable` above. The next tap carries the gesture WebKit wants.
         setSpeechRetryable(error === "service-not-allowed" || error === "not-allowed");

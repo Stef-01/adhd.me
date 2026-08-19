@@ -120,7 +120,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O70 (founder-directed goal: every mic failure mode named, fixes brainstormed, speech.ts
-> refactored) — claimed 2026-08-20T01:4xZ by interactive session loop-0819z.** Three parts,
+> refactored) — DONE 2026-08-19 by interactive session loop-0819z. Gate: all 40 pre-refactor
+> speech pins green UNCHANGED (the definition of behaviour-identical) plus 4 new (the G4
+> orphaned-adopted-stream leak the refactor itself found and fixed, mapSpeechError, debug
+> facts present and defensive); voice e2e 14/14; full `pnpm verify` green (210 files, 3141
+> tests). The inventory names 24 modes across 7 layers, 18 SHIPPED, and queues the next
+> two diagnostic units (build SHA in debug facts; language auto-revert).** Three parts,
 > one unit. (1) docs/MIC-FAILURE-MODES.md: the exhaustive failure-module inventory — every
 > layer from feature detection through permission, gesture, session, language, integration,
 > environment and DEPLOY (today's live lesson: the founder tested a build the quota had kept
