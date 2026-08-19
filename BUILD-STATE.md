@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O50 (Q1 item 3 — the morphology upgrade) — claimed 2026-08-19T05:46Z by loop-0819f.**
+> The plan's prescription: replace the suffix-stemmer's worst misses, FOUND BY THE CORPUS,
+> with explicit inflection tables — borrow test cases from `natural`, never the dependency.
+> The corpus work has now named the wart families the four suffix rules cannot bridge:
+> irregular pasts and participles (taken/took vs take, seen vs see), the length-guard edge
+> (sees at 4 letters unstemmed, seeing at 6 under the >6 ing-guard), and e-dropping stems
+> that strip to a form their own base word does not reach (believed→believ vs believe,
+> judged→judg vs judge, minutes→minut vs minute). Design: a small, corpus-driven
+> INFLECTIONS table applied as stem()'s last step — canonical forms for named wart families
+> only, each entry justified by a sentence somewhere in this tree's tests, NEVER a general
+> stemmer (Porter conflates, and every conflation is a facet firing beside a named clinician).
+> Verify: stem-equivalence pins per family; at least two previously-unreachable corpus
+> phrasings pinned reaching through the bridge with floors raised; every prior reach/corpus/
+> collapse pin green; `pnpm verify` green.
+
 > **O49 (Q1 standing work — the first aspiration sweep over the O47 corpus) — claimed
 > 2026-08-19T04:46Z by loop-0819e.** The corpus shipped with 14 measured aspirations — requests
 > the lexicon is deaf to. This unit is the review loop the corpus exists to feed, run for the
