@@ -76,10 +76,15 @@ non-rankings.
 
 ## Q2 (Dec–Feb): robustness — the ranking under adversarial and degenerate input
 
-5. **Property-based testing.** fast-check (github.com/dubzzz/fast-check) over the pipeline:
-   determinism, permutation-invariance of roster order, monotonicity (adding a declared facet
-   never lowers that clinician), rounding stability, band coherence. These are the invariants
-   the O-units asserted by example; properties assert them for all inputs.
+5. **Property-based testing. DONE — O54, 2026-08-19.** fast-check over the pipeline in
+   `src/matching/properties.test.ts` (W232), seeded for reproducibility: determinism,
+   totality (garbage never throws, and an empty read never claims an informed order),
+   permutation-invariance asserted at BAND level (within-band row order is explicitly not a
+   ranking, so pinning it would claim the thing the product refuses to), monotonicity
+   (adding a declared care area never lowers that clinician — the property that makes honest
+   declaration safe for a GP, holding THROUGH the rarity reweighing), the W213 unity
+   (score === sum of printed evidence) and band coherence. Generators compose from the
+   lexicon's own vocabulary plus the fillers and negators the O40/O45/O53 rules live among.
 6. **Fuzz the reader.** Random token soups, emoji, mixed scripts, 10k-word essays; budget the
    reader (time-boxed, input-capped) so no request can stall the finder.
 7. **Capacity truthfulness (F5 follow-through).** Closed-books and slot data age; add a

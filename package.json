@@ -32,6 +32,7 @@
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "adm-zip": "^0.6.0",
+    "fast-check": "^4.9.0",
     "postcss": "^8.5.0",
     "pptxgenjs": "^4.0.1",
     "tailwindcss": "^4.1.0",

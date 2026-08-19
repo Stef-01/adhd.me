@@ -130,8 +130,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > never throws). Generators compose sentences from the lexicon's own vocabulary plus fillers,
 > negators and punctuation — the space where the O40/O45/O53 rules live — plus raw string
 > soup for totality. fast-check lands as a devDependency per the plan ("fast-check over the
-> pipeline"), subject to audit:gate like everything else. Verify: the property suite itself,
-> seeded and reproducible; `pnpm verify` green including the dependency audit.
+> pipeline"), subject to audit:gate like everything else. DONE 2026-08-19. Six properties,
+> ~1,300 generated cases per run, seed fixed at 20260819 so a failure reproduces exactly. Two
+> design decisions worth their ink: permutation-invariance is asserted at BAND level, because
+> within-band row order is explicitly not a ranking and pinning it would claim the thing the
+> product refuses to claim; and monotonicity is stated THROUGH the rarity reweighing (the
+> added facet just became more common, but a weight cannot go below zero and the clinician's
+> other facets are untouched), which is the property that makes honest declaration safe for a
+> GP. fast-check devDependency, audit gate PASS. Gate: property suite 6/6, full `pnpm verify`
+> green (207 files, 3010 tests).
 
 > **O53 (Q1 item 1, standing growth — corpus tranche two) — claimed 2026-08-19T08:45Z by
 > loop-0819i.** ~100 further entries toward the ~500 target, same three-register discipline
