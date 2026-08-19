@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O47 (Q1 item 1, second half — the standing reach corpus with per-facet CI gates) —
+> claimed 2026-08-19T03:46Z by loop-0819d.** The plan's corpus-at-scale item, built as
+> infrastructure plus the first tranche: `src/matching/corpus.ts` (W231) holds first-person
+> requests as DATA — each entry pins the facets it MUST reach, may pin facets it must NEVER
+> reach (the false-positive discipline O25/O45 demand), and may name facets it is ABOUT but
+> the lexicon cannot yet hear (`aspires`), which is the measurable gap list. The CI gate:
+> per-facet reach percentage over aspirational entries, asserted against a pinned floor —
+> any drop fails the build, exactly the golden-file posture the plan asks for; floors are
+> measured, never guessed, and only a deliberate unit may raise them. Seeded with ~120
+> loop-authored synthetic requests across every care area, manner facet and preference
+> (search phrasings only — no clinical content, no gate crossed); growth to ~500 continues
+> across Q1 with founder-authored entries welcome in the same format. Verify: every hard pin
+> green, every `never` pin green, floors match measured reality, `pnpm verify` green.
+
 > **O45 (Q1 item 1's deliverable — the collapse-aware rule for one-token cues) — claimed
 > 2026-08-19T02:46Z by loop-0819c as O44; renumbered O45 on rebase when PR #13's title took
 > O44 (the recurring number race — see O30/O40). Claim timestamp and holder unchanged.
