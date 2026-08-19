@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O65 (Q1 item 2, the O22 loop closing the gap O64 named: longer-appointment hears its own
+> vocabulary) — claimed 2026-08-19T21:03Z by loop-0819u.** The corpus's loudest finding:
+> pref:longer-appointment carries ONE cue ("longer first appointment", all three tokens
+> required in order), so "long appointment", "long consult", "double session", "double
+> appointment" and "extended appointment" all land as aspirations — people asking for the
+> thing in the commonest words are unheard. Change: five cues added to the one pref entry in
+> needs.ts (long appointment · long consult · double appointment · double session · extended
+> appointment — each keeps two content tokens, so the O25 frozen single-token list does not
+> move); "more than fifteen minutes" is DELIBERATELY not cued, with the reason recorded:
+> stopword-stripping collapses it to [fifteen, minute], which is also how distance phrasings
+> read ("fifteen minutes from the station"), and that precision is not worth this recall —
+> the sentence stays an aspiration. The promotion gate then does its job: every newly-heard
+> aspiration is retagged reaches IN THIS COMMIT (five from tranche three, "a double
+> appointment from the start" from tranche two), the floor rises from its measured 1 to the
+> new measured count, leak pins land in the corpus never register for the long-words-without-
+> the-ask shapes, and the W234 tie-quality pin re-measures and moves. Verify: corpus +
+> reach + tie-quality + property suites green on the re-tagged set; full `pnpm verify` green.
+
 > **O64 (Q1 item 1 — corpus tranche three: the thin facets fed first) — DONE 2026-08-19 by
 > loop-0819t (corpus now 261 of ~500; every floor except longer-appointment rose; that one's
 > four aimed phrasings ALL landed as aspirations — the loudest cue-gap on record, flagged in
