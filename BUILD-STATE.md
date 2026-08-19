@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O56 (Q2 item 7 — capacity truthfulness: declarations age) — claimed 2026-08-19T11:45Z by
+> loop-0819l.** The matching-market lesson the plan cites: stated capacity drifts from real
+> capacity, and the mechanism must price that in. Today `acceptingNewPatients` is an undated
+> boolean that the O4 tie-break trusts forever. Change: `capacityDeclaredAt` on the roster
+> (real go-live date for Dr Saxena, synthetic dates for the synthetic clinicians);
+> `capacityConfidence(clinician, today)` grades a declaration fresh / stale (older than
+> CAPACITY_FRESH_DAYS = 90 — a quarter, the natural reconfirm cadence) / unknown, with
+> UNDATED graded like stale because an undated declaration cannot claim freshness; the O4
+> tie-break becomes three-grade (fresh-open, then stale-open, then closed) with `today`
+> injected for determinism (the W232 properties keep holding); and the matching console gains
+> the freshness panel with a reconfirm nudge per stale declaration — the plan's "console
+> nudges" said as rows. Patient-facing COPY unchanged (ordering only), so no compliance
+> surface moves. Verify: grade boundaries + tie-break fixtures + property suite green; console
+> e2e renders the nudge; DESIGN-QA note + capture for the console panel; `pnpm verify` green.
+
 > **O55 (Q2 item 6 — fuzz the reader, and budget it) — claimed 2026-08-19T10:45Z by
 > loop-0819k.** Two halves, per the plan. The BUDGET is a production change: the reader gains
 > an input cap — `tokenise` and `tokeniseKeepingStopwords` truncate at fixed token counts
