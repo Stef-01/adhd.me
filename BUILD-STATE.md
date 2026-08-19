@@ -119,8 +119,10 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
-> **O61 (the defect O60 ledgered: /clinicians/join overflows a 390px phone) — claimed
-> 2026-08-19T17:07Z by loop-0819q.** Red e2e on a patient surface, found during O60 and
+> **O61 (the defect O60 ledgered: /clinicians/join overflows a 390px phone) — DONE
+> 2026-08-19 by loop-0819q.** Gate result: mobile-fit green on all seven public surfaces,
+> join-hero e2e still drives the slider through its accessible name, WCAG A/AA suite green,
+> full `pnpm verify` green (209 files, 3033 tests). Red e2e on a patient surface, found during O60 and
 > proven pre-existing by stash-and-rerun. DIAGNOSIS from the saved error context: the two
 > offenders are the mix hero's screen-reader slider — a `.sr-only` WRAPPER div clips its own
 > 1px box, but the label and range input inside are inline-level and lay out at natural width

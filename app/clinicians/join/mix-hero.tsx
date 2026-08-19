@@ -113,21 +113,24 @@ export function MixHero({
       </p>
 
       {/* The visual sentence above is decorative to a screen reader (rotating text and
-          unlabelled steppers are noise read aloud); this is the same control said once. */}
-      <div className="sr-only">
-        <label htmlFor="mix-percent-input">
-          Percentage of your patients you would want in a chosen area
-        </label>
-        <input
-          id="mix-percent-input"
-          type="range"
-          min={MIX_PERCENT_MIN}
-          max={MIX_PERCENT_MAX}
-          step={MIX_PERCENT_STEP}
-          value={percent}
-          onChange={(event) => { setEngaged(true); onSetPercent(Number(event.target.value)); }}
-        />
-      </div>
+          unlabelled steppers are noise read aloud); this is the same control said once.
+          `sr-only` sits on EACH element, not a wrapper (O61): a clipped wrapper hides its
+          children visually but their inline boxes still lay out at natural width — 485px and
+          614px in a 390px viewport — which is a real overflow to the mobile-fit sweep and
+          stays one honest resize away from being a real overflow to a reader. */}
+      <label className="sr-only" htmlFor="mix-percent-input">
+        Percentage of your patients you would want in a chosen area
+      </label>
+      <input
+        className="sr-only"
+        id="mix-percent-input"
+        type="range"
+        min={MIX_PERCENT_MIN}
+        max={MIX_PERCENT_MAX}
+        step={MIX_PERCENT_STEP}
+        value={percent}
+        onChange={(event) => { setEngaged(true); onSetPercent(Number(event.target.value)); }}
+      />
 
       <p className="mix-result" role="status">
         That mix looks like about <strong>{perDay === 1 ? "1 matched patient" : `${perDay} matched patients`} a day</strong> asking

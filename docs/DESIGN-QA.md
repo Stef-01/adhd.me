@@ -375,3 +375,19 @@ every size following the reader's setting, layout holding). Taste-skill pass app
   /clinicians/join 390px fit test fails identically before and after this migration (an
   unstyled label+input pair overflowing) — ledgered for the next firing rather than widened
   into this one.
+
+## O61 — the invisible overflow on the join page (2026-08-19)
+
+No capture diff: zero visible pixels changed, by design. The evidence is the sweep itself —
+e2e/mobile-fit.spec.ts "/clinicians/join fits a 390px phone" red before, green after, with
+the sweep's strictness untouched.
+
+- [x] The defect: the mix hero's screen-reader slider used a `.sr-only` WRAPPER; the wrapper
+  clips to 1px but its inline children (label 485px, range input 614px) still lay out at
+  natural width past a 390px viewport — invisible to the eye, honestly reported by the
+  bounding-rect sweep, and one positioning change away from being a real overflow.
+- [x] The fix is the standard pattern, not a loosened test: `sr-only` on each hidden element,
+  so every box is its own 1px clip. The tripwire keeps its exact strictness for the next
+  real overflow.
+- [x] Accessibility unchanged and re-proven: the join-hero e2e still drives the slider
+  through its accessible name, and the WCAG A/AA suite is green over the page.
