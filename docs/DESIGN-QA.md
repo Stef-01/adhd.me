@@ -319,3 +319,19 @@ actually ships in, because the staff list is empty by founder design). Taste-ski
 - [x] No motion, no new touch targets; the granted view's sentences are pinned in
   src/onboarding/applications-view.test.ts so nothing here ships unverified while the gate
   stays shut.
+
+## O58 — Dr Anusha Saxena's background, in her own supply (2026-08-19)
+
+Captures: qa/matching-o34/ re-rendered (02-anusha-profile.png now carries the founder-supplied
+background). Copy-only change on her profile; no layout, motion or control touched.
+
+- [x] Honesty gates, word by word: every new sentence is her declaration reported ("has
+  completed", "is currently training", "further qualifications underway"); in-progress study
+  renders as underway, never as held; her approach paragraph is introduced with "In her own
+  words"; "prescriber" never renders on a patient surface — the credential line stays
+  "NSW ADHD training" and the experience row says "endorsed ADHD training course".
+- [x] No manner invented: the approach prose did not become manner declarations — those stay
+  behind mannerPending for her interview, and the about still says so.
+- [x] Interest stays interest: functional/lifestyle medicine landed as `non-medication` at the
+  "sometimes" grade, the same rule her other bio interests followed in PR #4.
+- [x] Public-sweep e2e green over every patient surface after the change.

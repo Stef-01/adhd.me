@@ -120,7 +120,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O58 (founder-supplied: Dr Anusha Saxena's professional background lands on her entry) —
-> claimed 2026-08-19T13:58Z by session loop-0819n (interactive founder message, not a Routine
+> DONE 2026-08-19 by session loop-0819n (interactive founder message, not a Routine
 > firing).** The founder pasted her professional background into the build session — the
 > supply her entry has been waiting on since O34 ("the parts that come from her own answers
 > will be added from her own answers rather than written for her"). Change, all of it sourced

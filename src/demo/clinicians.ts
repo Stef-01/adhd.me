@@ -303,8 +303,21 @@ export const clinicians: Clinician[] = [
      * experience; other interests women's health and paediatrics) — interest-level claims
      * are recorded at the interview's "sometimes" grade, not inflated to "often". What her
      * interview has not yet captured is left EMPTY and marked, never guessed: no manner
-     * claims (mannerPending), English only until she names her languages, no NSW-training or
+     * claims (mannerPending), English only until she names her languages, no
      * accessibility claims, and no portrait — she chose the monogram for now.
+     *
+     * O58 (2026-08-19): the founder supplied her professional background in this session, and
+     * everything it added below is sourced to that message: the endorsed ADHD prescriber
+     * course completed (relayed as `nswAdhdTrained` — the field is a declaration relayed from
+     * the founders, and this is that relay; the word "prescriber" itself never renders on a
+     * patient surface, per the no-clinical-claims register), Focused Psychological Strategies
+     * training UNDERWAY, functional medicine / nutrition / lifestyle nutrition / health
+     * coaching qualifications UNDERWAY (in-progress study renders as in progress, never as
+     * held), and her interest in functional and lifestyle medicine recorded as
+     * `non-medication` at the "sometimes" grade — the same interest-level rule as above. Her
+     * approach paragraph ("holistic, patient-centred…") is quoted in `about` AS her own
+     * description; it is not translated into manner declarations, which stay hers to make in
+     * the onboarding interview.
      */
     id: "anusha-saxena",
     name: "Dr Anusha Saxena",
@@ -318,29 +331,37 @@ export const clinicians: Clinician[] = [
     image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-18",
-    focus: "Mental health in general practice, women's health & paediatrics",
+    focus: "ADHD assessment & management, mental health, women's health & lifestyle",
     matchLine: "Brings a mental-health focus to general practice, with psychology training behind it.",
-    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Paediatrics"],
+    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Paediatrics", "Lifestyle & nutrition interest"],
     // Billing leads by roster convention; hers is stated by the practice until her interview
     // supplies the specifics — a fact about where the fact lives, not a guess at it.
     practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
     about:
-      "Anusha is a GP at Bay Health Clinic in Double Bay with a special interest in mental health. She took First Class Honours in Psychology at the University of Sydney and worked in clinical psychiatry before general practice, and her other interests are women's health and paediatrics. Her profile here is young: the parts of it that come from a proper onboarding conversation — how she works, the languages she consults in — will be added from her own answers rather than written for her.",
+      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, with a background in psychology (First Class Honours, University of Sydney), clinical psychiatry and general medicine. Her clinical experience spans general practice, women's health and mental health, with a particular interest in ADHD assessment and management, and she has completed an endorsed ADHD training course. She is currently training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle nutrition and health coaching. In her own words, she takes a holistic, patient-centred approach, integrating medical, psychological and lifestyle perspectives. How she works day to day — and the languages she consults in — will be added from her own onboarding answers rather than written for her.",
     experience: [
       "General practice, Bay Health Clinic, Double Bay",
       "First Class Honours in Psychology, University of Sydney",
-      "Clinical psychiatry experience",
+      "Clinical psychiatry and general medicine experience",
+      "Endorsed ADHD training course — completed",
+      "Focused Psychological Strategies — training underway",
+      "Functional medicine, nutrition & health coaching — further qualifications underway",
     ],
     languages: ["English"],
     careAreas: ["adhd-assessment"],
-    // Interest-level claims from her published bio sit at the "sometimes" grade until her
-    // interview upgrades or removes them — half weight, honestly earned (O2).
-    careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd"],
+    // Interest-level claims from her bio sit at the "sometimes" grade until her interview
+    // upgrades or removes them — half weight, honestly earned (O2). `non-medication` is O58's
+    // addition: her stated interest in functional and lifestyle medicine plus the Focused
+    // Psychological Strategies training underway is exactly that facet's territory
+    // ("non-medication and psychological supports"), claimed at interest grade, not above it.
+    careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd", "non-medication"],
     manner: [],
     mannerPending:
       "2026-08-18: listed ahead of her onboarding interview; manner claims are hers to make there.",
-    // nswAdhdTrained and telehealthFirstAppointment are claim-or-absent (`?: true`): omitted
-    // here because neither has been claimed, which is exactly what omission means.
+    // The endorsed ADHD prescriber course she has completed, relayed by the founder 2026-08-19
+    // — the declaration this field exists to carry. telehealthFirstAppointment stays omitted:
+    // not claimed, and omission is exactly what that means.
+    nswAdhdTrained: true,
     wheelchairAccessible: false,
     appointmentLength: "Appointment lengths set with the practice",
     booking: {
@@ -348,7 +369,7 @@ export const clinicians: Clinician[] = [
       practitionerId: "160121",
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
-    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "double bay", "eastern suburbs", "depression", "anxiety", "mood"],
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "double bay", "eastern suburbs", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching"],
     realPerson: true,
   },
 ];
