@@ -119,6 +119,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O64 (Q1 item 1 — corpus tranche three: the thin facets fed first) — claimed
+> 2026-08-19T20:04Z by loop-0819t.** The standing corpus is ~200 entries against the plan's
+> ~500; this tranche authors ~60 first-person requests aimed at the thinnest floors
+> (longer-appointment sits at ONE; woman-gp 3; trauma-informed, motivating, bulk-billing,
+> telehealth-first 4; substance-history, complex-mental-health, non-medication,
+> collaborative 5) plus G7 symptom sentences carried as `never` pins. The honest loop as
+> established (author → MEASURE → retag): every entry's `reaches` is what the reader
+> actually heard, intended-but-unheard tags land in `aspires` as the lexicon to-do list —
+> no cue edits in this unit, growth only, so the reader itself does not move. Floors
+> re-measured off the grown set and raised to the new counts; the W234 tie-quality pin is
+> re-measured and MOVED IN THE SAME COMMIT (its run is the reaching register, which this
+> unit grows — the both-directions gate exists to force exactly this honesty). Verify:
+> corpus well-formed + floor gate + promotion-demand + reach ratchet green on the grown set;
+> tie-quality pinned at the new measured numbers; property suite green; full `pnpm verify`
+> green.
+
 > **O63 (Standing debt 10 — the finder's desktop shell, widened for every stage at once) —
 > DONE 2026-08-19 by loop-0819s.** D1 tried a two-column desktop INSIDE the 520px
 > shell and reverted it with the rule this unit obeys: a real desktop composition widens the
