@@ -119,6 +119,17 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O53 (Q1 item 1, standing growth — corpus tranche two) — claimed 2026-08-19T08:45Z by
+> loop-0819i.** ~100 further entries toward the ~500 target, same three-register discipline
+> and the same honest loop as O47/O49: author first, MEASURE, retag to what the reader
+> actually does, promote nothing by hand that the gate does not confirm. Emphasis this
+> tranche: paraphrase depth on the thin facets (attuned, steadying, trauma, complex,
+> depression, anxiety, the four preferences), more `never` pins for the G7 symptom family and
+> the O40/O45 disciplines, and clause-mixing entries (two asks in one sentence, negation in
+> one clause and a want in the next) that exercise the machinery the last three units built.
+> Floors re-measured to the new heard counts in the same commit. Verify: corpus gate green
+> on the grown set; no floor lowered anywhere; `pnpm verify` green.
+
 > **O52 (UI refinement & motion — the re-sort made visible) — claimed 2026-08-19T07:45Z by
 > loop-0819h.** The founder's motion queue, item two: "the results list re-sorting with layout
 > animations when a clarifier answer reorders it — the order changing is the product's whole
