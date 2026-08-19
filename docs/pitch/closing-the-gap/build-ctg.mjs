@@ -187,6 +187,22 @@ const ASK = [
  + `<div class="a hair" style="left:${P(150)};top:${P(876)};width:${P(1620)};height:1px"></div>`
  + txt('h reg',150,906,34,`letter-spacing:-.02em;color:var(--sage-light);width:${P(1620)}`,'If the holdout shows no effect, that is the finding, and we will publish it.');
 
+
+// ── 14 the offer: what the Department is actually buying ──
+const OFFER = [
+  {k:'The deliverable', t:'An audited incrementality read-out on one Closing the Gap-relevant measure, published whether it is positive or null. Not a portal subscription, and not a dashboard nobody opens.', hi:true},
+  {k:'The commercial model', t:'A flat platform fee per service. No percentage of clinical revenue and no per-referral payment, ever — a compliance posture under fee-splitting and inducement rules, not a pricing preference.'},
+  {k:'Indicative scale', t:'$4,800 to $18,000 per service per year at steady state, by size; a twelve-week pilot at $2,400 per service. The program figure is set with the partner in Phase 0, not before it.'},
+  {k:'At the end of it', t:'The register and the infrastructure stay with the partner organisation. No lock-in, no dependency, and nothing that has to be renewed for the community to keep the capability.'},
+].map((r,i)=>{
+  const y = 468 + i*102;
+  return hair(150,y,1620)
+    + txt('eyebrow',150,y+28,14,`letter-spacing:.12em;width:${P(320)}${r.hi?'':';color:var(--faint)'}`,r.k)
+    + txt('sub',510,y+20,23,`width:${P(1260)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
+}).join('')
+ + hair(150,468+4*102,1620)
+ + txt('h reg',150,902,30,`letter-spacing:-.02em;width:${P(1620)};color:var(--sage)`,'Governments buy certainty. What is on offer is a number allowed to come back negative, and a capability that stays behind either way.');
+
 // ── assemble ──
 let html = fs.readFileSync(S + '/ctg.src.html','utf8');
 html = html
@@ -201,6 +217,7 @@ html = html
   .replace('<!--CONTROL-->', CONTROL)
   .replace('<!--COST-->', COST)
   .replace('<!--PILOT-->', PILOT)
+  .replace('<!--OFFER-->', OFFER)
   .replace('<!--TEAM-->', TEAM)
   .replace('<!--ASK-->', ASK)
   .replace('__IMG_FINDER__', 'data:image/png;base64,' + fs.readFileSync(S + '/crop-finder.png').toString('base64'))

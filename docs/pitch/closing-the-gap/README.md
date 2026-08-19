@@ -1,6 +1,6 @@
 # ADHD.ME — a preventative health proposal to the Minister for Health and Ageing
 
-16 slides. Same design system as the Bond Transformer deck (`../`); a policy proposal to a
+17 slides. Same design system as the Bond Transformer deck (`../`); a policy proposal to a
 federal department, not a startup pitch.
 
 **Acknowledgement:** the deck uses ACT-specific wording modelled on the ACT Government's protocol
@@ -43,6 +43,10 @@ Rebuild: `node docs/pitch/closing-the-gap/build-ctg.mjs`, run from the repo root
    measured within the same individuals.
 6. **ADHD.ME (08–10).** The model, then the barrier list inverted point by point, then the
    randomised holdout that lets the program report zero.
+7. **The offer (14).** What the Department is actually buying: an audited read-out published
+   either way, a flat fee that is never a cut of care, an indicative price band, and
+   infrastructure that transfers to the partner at the end. The deck argues a case for thirteen
+   slides; this is the one that makes it a proposition.
 
 ## Non-negotiables
 
