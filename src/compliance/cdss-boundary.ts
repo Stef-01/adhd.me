@@ -153,7 +153,7 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     module: "src/voice/speech.ts",
     operatorCopy: [],
     notCopy:
-      "SPEECH_DISCLOSURE, SPEECH_ERROR_COPY and SPEECH_UNAVAILABLE_COPY are patient-facing, not operator-facing: they sit beside the microphone on /finder and are swept there by W192. The disclosure necessarily names what happens to the audio, which is the whole reason it exists rather than something to lint out.",
+      "SPEECH_DISCLOSURE, SPEECH_ERROR_COPY, SPEECH_UNAVAILABLE_COPY, SPEECH_LANGUAGES and SPEECH_ENGLISH_MATCHING_NOTE are patient-facing, not operator-facing: they sit beside the microphone on /finder and are swept there by W192. The disclosure necessarily names what happens to the audio, which is the whole reason it exists rather than something to lint out. The language list (O59) is closed and roster-derived — English plus the languages listed GPs declare — and the matching note is the honesty line that ships WITH the picker: a non-English choice is told, before speaking, that matching reads English for now, so the picker cannot invite somebody into a list that quietly ignores what they said.",
   },
   {
     module: "src/compliance/cdss-boundary.ts",

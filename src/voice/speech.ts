@@ -50,6 +50,47 @@ export const SPEECH_DISCLOSURE =
   "Your browser converts speech to text, which means the audio goes to your browser's speech " +
   "service. ADHD.ME does not record it or receive it. You can type instead.";
 
+/**
+ * The languages the microphone offers (O59, Standing debt 4).
+ *
+ * A CLOSED LIST WITH A STATED BASIS: English, plus exactly the languages the listed GPs
+ * themselves declare on their profiles — because "speak to the microphone in Hindi" is only
+ * an honest offer on a directory where somebody actually consults in Hindi. A test derives
+ * this basis from the roster, so the list cannot quietly outgrow the people on it. When a GP
+ * who consults in another language joins, their language joins here with them.
+ *
+ * `label` is the language in its own script, because the control exists for the person who
+ * prefers that script; `english` is the roster's own spelling of the same language, which is
+ * what the basis test checks against the clinicians' declared lists.
+ */
+export interface SpeechLanguage {
+  /** BCP-47 tag handed to the recogniser. Whether a DEVICE supports it varies, which is why
+   *  the `language-not-supported` copy below exists and the fallback ladder is unchanged. */
+  tag: string;
+  label: string;
+  english: string;
+}
+
+export const SPEECH_LANGUAGES: readonly SpeechLanguage[] = [
+  { tag: "en-AU", label: "English", english: "English" },
+  { tag: "hi-IN", label: "हिन्दी", english: "Hindi" },
+  { tag: "ur-PK", label: "اردو", english: "Urdu" },
+];
+
+/** The default stays what it always was; everything else is a choice somebody made. */
+export const DEFAULT_SPEECH_LANGUAGE = SPEECH_LANGUAGES[0]!;
+
+/**
+ * THE HONESTY LINE THAT SHIPS WITH THE PICKER, NOT AFTER IT. The finder's reader matches
+ * English words to declared facets; words spoken in another language are kept, shown and
+ * searchable as text, but the reader cannot weigh them yet — so the moment a non-English
+ * language is chosen, the product says so, BEFORE anything is spoken. Without this sentence
+ * the picker would be an invitation into a list that quietly ignores what was said, which is
+ * the exact dishonesty W221 exists to prevent.
+ */
+export const SPEECH_ENGLISH_MATCHING_NOTE =
+  "Matching reads English for now, so what you say is kept and shown, but may not order the list.";
+
 export type SpeechUnavailableReason =
   /** Firefox, and any browser without the API. */
   | "unsupported"
@@ -149,7 +190,7 @@ export interface SpeechHandlers {
  * default stops at the first silence. `interimResults` is on so the screen shows words appearing
  * while somebody speaks, which is what makes it obvious the microphone is working.
  */
-export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
+export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPEECH_LANGUAGE.tag): SpeechSession | null {
   const Ctor = constructor();
   if (!Ctor || speechUnavailable()) return null;
 
@@ -173,7 +214,7 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
   };
 
   const wire = (recognition: SpeechRecognitionLike) => {
-    recognition.lang = "en-AU";
+    recognition.lang = lang;
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;

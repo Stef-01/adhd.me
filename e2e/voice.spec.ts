@@ -196,6 +196,39 @@ test("the recogniser is configured for Australian English and long pauses", asyn
   expect(config).toEqual({ lang: "en-AU", continuous: true, interim: true, started: 1 });
 });
 
+test("choosing a roster language restarts listening in it, with the honesty line on screen (O59)", async ({ page }) => {
+  await installFakeSpeech(page);
+  await openMic(page);
+
+  // English is the default and carries no note — nothing changed for the common path.
+  const languageLine = page.getByTestId("speech-language");
+  await expect(languageLine).toContainText("Listening in English");
+  await expect(page.locator(".speech-language-note")).toHaveCount(0);
+
+  // The choices are the roster's own languages, in their own script.
+  await languageLine.getByRole("button", { name: "हिन्दी" }).click();
+  await expect(page.getByTestId("speech-language")).toContainText("हिन्दी");
+
+  // The recogniser was actually restarted in the chosen language — not just relabelled.
+  await expect.poll(() => page.evaluate(() => (window as any).__speech.state.started)).toBe(2);
+  expect(await page.evaluate(() => (window as any).__speech.state.instance.lang)).toBe("hi-IN");
+
+  // And the honesty line is up BEFORE anything is said: kept and shown, may not order.
+  const note = page.locator(".speech-language-note");
+  await expect(note).toBeVisible();
+  await expect(note).toContainText(/reads English/i);
+
+  // The design record: the listening screen with the picker and the honesty line.
+  await page.screenshot({ path: "qa/voice-o59/listening-hindi-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: "qa/voice-o59/listening-hindi-mobile.png" });
+
+  // Spoken words still land in the box and still search — no dead end behind the picker.
+  await page.evaluate(() => (window as any).__speech.say("मुझे ADHD जांच चाहिए", true));
+  await page.getByRole("button", { name: "Done" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
+});
+
 test("starting twice does not leave two recognisers running", async ({ page }) => {
   await installFakeSpeech(page);
   await openMic(page);

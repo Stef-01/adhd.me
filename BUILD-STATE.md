@@ -119,8 +119,8 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
-> **O59 (Standing debt 4 — the microphone learns the roster's own languages) — claimed
-> 2026-08-19T15:02Z by loop-0819o.** The debt: `recognition.lang = "en-AU"` is hard-wired, so
+> **O59 (Standing debt 4 — the microphone learns the roster's own languages) — DONE
+> 2026-08-19 by loop-0819o.** The debt: `recognition.lang = "en-AU"` is hard-wired, so
 > "kind Hindi speaking" works as a QUERY but a person who wants to SPEAK Hindi to the mic
 > cannot. The debt offers two shapes and this takes the picker. Change: `SPEECH_LANGUAGES` in
 > src/voice/speech.ts — a closed list with a stated basis (English plus exactly the languages

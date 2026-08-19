@@ -335,3 +335,22 @@ background). Copy-only change on her profile; no layout, motion or control touch
 - [x] Interest stays interest: functional/lifestyle medicine landed as `non-medication` at the
   "sometimes" grade, the same rule her other bio interests followed in PR #4.
 - [x] Public-sweep e2e green over every patient surface after the change.
+
+## O59 — the microphone in the roster's own languages (2026-08-19)
+
+Captures: qa/voice-o59/ (the listening screen in Hindi mode, desktop and 390px — picker line,
+own-script controls, honesty note). Taste-skill pass applied.
+
+- [x] Controls live inside the statement: one quiet line in the disclosure block — "Listening
+  in English." with the alternatives as the sentence's own controls, in their own script
+  (हिन्दी, اردو), each with a `lang` attribute so screen readers pronounce them properly.
+- [x] Honesty gates: the closed list's basis is stated and test-derived (English plus exactly
+  what listed GPs declare — an invitation to speak Hindi is only honest where somebody
+  consults in it); the honesty line ships WITH the picker and renders BEFORE anything is said
+  — matching reads English for now, words are kept and shown but may not order the list. The
+  note is quiet but louder than the disclosure, because it changes what the list will do.
+- [x] No dead end: a request spoken in Hindi still lands in the editable box, still searches,
+  still reaches the honest unordered fallback and the browsable profiles; the whole existing
+  failure ladder (language-not-supported copy included) is unchanged.
+- [x] Touch floor held: small type, full-height padded hit areas, touch-action manipulation;
+  English default untouched, so the common path gained nothing but one quiet line.

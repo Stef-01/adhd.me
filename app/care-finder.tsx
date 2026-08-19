@@ -36,8 +36,11 @@ import { clarifiers } from "@/matching/clarify";
 import { coveredSuburbs, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { CoverageMap } from "./coverage-map";
 import {
+  DEFAULT_SPEECH_LANGUAGE,
   SPEECH_DISCLOSURE,
+  SPEECH_ENGLISH_MATCHING_NOTE,
   SPEECH_ERROR_COPY,
+  SPEECH_LANGUAGES,
   SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
@@ -315,6 +318,13 @@ export function CareFinder() {
    * this renders the once-more as a control beside it.
    */
   const [speechRetryable, setSpeechRetryable] = useState(false);
+  /**
+   * O59 (Standing debt 4): which language the microphone listens in. Default English (AU),
+   * as it always was; the alternatives are exactly the languages the listed GPs declare
+   * (`SPEECH_LANGUAGES` states the basis). Choosing one restarts listening in it, and while a
+   * non-English language is active the honesty line renders — matching reads English for now.
+   */
+  const [speechLang, setSpeechLang] = useState(DEFAULT_SPEECH_LANGUAGE);
   const speech = useRef<SpeechSession | null>(null);
   /** True only between the Done tap and its onFinal — the person asked for the finish. */
   const stopRequested = useRef(false);
@@ -407,7 +417,7 @@ export function CareFinder() {
    */
   const profileMissed = useMemo(() => missedAsks(clinician, request), [clinician, request]);
 
-  function startListening() {
+  function startListening(language = speechLang) {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
     // session kept running with no handle — its handlers nulled the shared ref out from under
     // the new session, the stage-change cleanup found nothing to cancel, and the microphone
@@ -463,7 +473,7 @@ export function CareFinder() {
         setSpeechRetryable(error === "service-not-allowed" || error === "not-allowed");
         setStage("type");
       },
-    });
+    }, language.tag);
 
     // Unsupported browser, insecure origin, or a constructor that threw: go to typing AND say
     // why (O12 RCA) — the silent version was indistinguishable from a broken button, which is
@@ -679,6 +689,30 @@ export function CareFinder() {
               <button className="text-action" type="button" onClick={() => setStage("type")}>Type instead</button>
               {/* Beside the microphone, not in a policy page. See src/voice/speech.ts. */}
               <p className="speech-disclosure">{SPEECH_DISCLOSURE}</p>
+              {/* O59: the language control lives inside the disclosure block it shares rules
+                  with — one quiet line, the alternatives being exactly the languages listed
+                  GPs declare. Choosing one restarts listening in it. */}
+              <p className="speech-language" data-testid="speech-language">
+                Listening in {speechLang.label}.
+                {SPEECH_LANGUAGES.filter((l) => l.tag !== speechLang.tag).map((l) => (
+                  <button
+                    key={l.tag}
+                    className="text-action speech-language-choice"
+                    type="button"
+                    lang={l.tag}
+                    onClick={() => {
+                      setSpeechLang(l);
+                      startListening(l);
+                    }}
+                  >
+                    {l.label}
+                  </button>
+                ))}
+              </p>
+              {/* The honesty line ships with the picker, not after it — see speech.ts. */}
+              {speechLang.tag !== DEFAULT_SPEECH_LANGUAGE.tag && (
+                <p className="speech-language-note">{SPEECH_ENGLISH_MATCHING_NOTE}</p>
+              )}
             </div>
           </MotionScreen>
         )}
@@ -697,7 +731,7 @@ export function CareFinder() {
               <p className="eyebrow">In your own words</p>
               {speechMessage && <p className="speech-error" role="status">{speechMessage}</p>}
               {speechRetryable && (
-                <button className="speech-retry" type="button" onClick={startListening}>
+                <button className="speech-retry" type="button" onClick={() => startListening()}>
                   Try the microphone again
                 </button>
               )}

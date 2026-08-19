@@ -195,9 +195,15 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    no confirmation yet from the actual failing device. FOUNDER: retry on the phone; if the
    banner shows, send the bracketed code. Build side: keep the raw-code path first-class in
    any speech change.
-4. **Speech is en-AU only.** "Kind Hindi speaking" as a *query* works, but a person who wants
-   to *speak* Hindi to the mic cannot — `recognition.lang = "en-AU"`. Unit: language picker
-   or auto-follow of a detected language ask, within the same disclosure rules.
+4. **Speech is en-AU only — CLOSED by O59 (2026-08-19), picker shape.** `SPEECH_LANGUAGES`
+   is a closed, roster-derived list (English plus exactly the languages listed GPs declare —
+   Hindi and Urdu today; a test derives the basis so the list cannot outgrow the roster);
+   the listening screen offers them in their own script inside the disclosure block, choosing
+   one restarts listening in it, and the honesty line ships with the picker: matching reads
+   English for now, so spoken words are kept and shown but may not order the list. en-AU
+   default and the whole failure ladder unchanged. REMAINING (Q3's reciprocity/lexicon work,
+   not a debt): teaching the reader non-English vocabulary, at which point the honesty line
+   retires itself.
 5. **Privacy policy is still titled "draft".** Deliberate while the product is a demo;
    FOUNDER decision to finalise wording before any real-patient launch (gates plan §4).
 6. **Google Analytics is wired but dark.** `NEXT_PUBLIC_GA_ID` is unset in production.

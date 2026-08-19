@@ -7,13 +7,17 @@
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  DEFAULT_SPEECH_LANGUAGE,
   SPEECH_DISCLOSURE,
+  SPEECH_ENGLISH_MATCHING_NOTE,
   SPEECH_ERROR_COPY,
+  SPEECH_LANGUAGES,
   SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
   type SpeechError,
 } from "./speech";
+import { clinicians } from "@/demo/clinicians";
 
 type Handler = ((e: unknown) => void) | (() => void) | null;
 
@@ -216,6 +220,43 @@ describe("errors and teardown", () => {
     expect(r.lang).toBe("en-AU");
     expect(r.continuous).toBe(true);
     expect(r.interimResults).toBe(true);
+  });
+});
+
+describe("O59 the microphone's languages are the roster's, and the default never moved", () => {
+  it("threads a chosen language to the recogniser, with en-AU still the default", () => {
+    install();
+    startSpeech(noop);
+    expect(FakeRecognition.last!.lang).toBe("en-AU");
+    startSpeech(noop, "hi-IN");
+    expect(FakeRecognition.last!.lang).toBe("hi-IN");
+  });
+
+  it("offers English first, plus exactly the languages listed GPs declare — no more", () => {
+    // The list's stated basis, derived rather than trusted: a language nobody on the roster
+    // consults in must not be offered to the microphone, because "speak Hindi to us" is only
+    // an honest invitation on a directory where somebody actually speaks Hindi back.
+    expect(DEFAULT_SPEECH_LANGUAGE.tag).toBe("en-AU");
+    expect(SPEECH_LANGUAGES[0]).toBe(DEFAULT_SPEECH_LANGUAGE);
+    const declared = new Set(clinicians.flatMap((c) => c.languages));
+    for (const language of SPEECH_LANGUAGES) {
+      expect(declared.has(language.english), `${language.english} is offered but nobody on the roster declares it`).toBe(true);
+    }
+    // Well-formed: unique BCP-47-shaped tags, own-script labels present.
+    expect(new Set(SPEECH_LANGUAGES.map((l) => l.tag)).size).toBe(SPEECH_LANGUAGES.length);
+    for (const language of SPEECH_LANGUAGES) {
+      expect(language.tag).toMatch(/^[a-z]{2}-[A-Z]{2}$/);
+      expect(language.label.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("says the honesty line whole: kept and shown, but maybe not ordering the list", () => {
+    // Both halves matter. "Kept and shown" alone would oversell; "may not order the list"
+    // alone would read as the words being discarded. And it must never claim the words ARE
+    // used for ordering, which is the one thing the reader cannot do yet.
+    expect(SPEECH_ENGLISH_MATCHING_NOTE).toMatch(/reads English/i);
+    expect(SPEECH_ENGLISH_MATCHING_NOTE).toMatch(/kept and shown/i);
+    expect(SPEECH_ENGLISH_MATCHING_NOTE).toMatch(/may not order/i);
   });
 });
 
