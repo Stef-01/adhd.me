@@ -1,0 +1,169 @@
+<title>ADHD.ME</title>
+<style>
+/*__FONTS__*/
+:root{
+  --paper:#FBFAF7; --ink:#191A17; --muted:#6E706A; --faint:#6B6C67;
+  --sage:#66774A; --sage-soft:#EEF1E8; --stone:#EEECE5; --line:#DFDDD6;
+  --deep:#242B1C; --sage-light:#A8BA88; --paper-dim:#B9BBB2;
+}
+:root{color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#E7E5DE;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.deck{display:flex;flex-direction:column;align-items:center;gap:28px;padding:28px 20px 64px}
+.slide{
+  position:relative;width:100%;max-width:1600px;aspect-ratio:16/9;
+  container-type:inline-size;overflow:hidden;
+  background:var(--paper);color:var(--ink);
+  box-shadow:0 1px 2px rgba(25,26,23,.10),0 12px 40px rgba(25,26,23,.10);
+}
+.slide *{--px:calc(100cqw / 1920)}
+.slide{--px:calc(100cqw / 1920)}
+.dark{background:var(--deep);color:var(--paper)}
+.stoneBg{background:var(--stone)}
+
+/* absolute helper */
+.a{position:absolute}
+
+/* type roles */
+.h{font-family:Newsreader,Georgia,serif;font-weight:300;letter-spacing:-.035em;line-height:1.04;color:var(--ink)}
+.h.reg{font-weight:400}
+.dark .h{color:var(--paper)}
+.sub{font-family:Inter;font-weight:300;line-height:1.6;color:var(--muted)}
+.dark .sub{color:var(--paper-dim)}
+.body{font-family:Inter;font-weight:400;line-height:1.58;color:var(--muted)}
+.eyebrow{font-family:Inter;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+.dark .eyebrow{color:var(--sage-light)}
+.rule{background:var(--sage)}
+.dark .rule{background:var(--sage-light)}
+.hair{background:var(--line)}
+.dark .hair{background:#3A432F}
+.chrome{font-family:Inter;font-weight:500;letter-spacing:.12em;color:var(--faint)}
+.dark .chrome{color:var(--paper-dim)}
+.num{font-family:Inter;font-weight:400;letter-spacing:.04em;color:var(--faint)}
+.dark .num{color:var(--paper-dim)}
+.stat{font-family:Newsreader,Georgia,serif;font-weight:400;letter-spacing:-.03em;line-height:1;color:var(--ink)}
+.note{font-family:Inter;font-weight:400;line-height:1.55;color:var(--faint)}
+svg.ic{display:block;fill:none;stroke:var(--sage);stroke-linecap:round;stroke-linejoin:round}
+.dark svg.ic{stroke:var(--sage-light)}
+
+@media print{
+  body{background:#fff}
+  .deck{gap:0;padding:0}
+  .slide{max-width:none;width:100vw;box-shadow:none;break-after:page;page-break-after:always}
+  @page{size:1600px 900px;margin:0}
+}
+</style>
+
+<div class="deck">
+
+<!-- 01 TITLE -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(306*var(--px));width:calc(64*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a h reg" style="left:calc(150*var(--px));top:calc(338*var(--px));font-size:calc(132*var(--px));letter-spacing:-.04em">ADHD.ME</div>
+  <div class="a sub" style="left:calc(150*var(--px));top:calc(566*var(--px));font-size:calc(38*var(--px));line-height:1.68;width:calc(760*var(--px))">findable.<br>nearby.<br>continuous.</div>
+  <div class="a note" style="left:calc(1010*var(--px));top:calc(578*var(--px));font-size:calc(18*var(--px));width:calc(760*var(--px));line-height:1.72">A patient-facing finder that matches people to GPs who actually do ADHD assessment, and a practice console that fills the appointments it creates &mdash; with the lift measured against a randomised control.</div>
+  <div class="a hair" style="left:calc(150*var(--px));top:calc(862*var(--px));width:calc(1620*var(--px));height:1px"></div>
+  <div class="a note" style="left:calc(150*var(--px));top:calc(898*var(--px));font-size:calc(17*var(--px));width:calc(900*var(--px))">Bond University Transformer &nbsp;&middot;&nbsp; Launchpad 2026</div>
+  <div class="a note" style="left:calc(1170*var(--px));top:calc(898*var(--px));font-size:calc(17*var(--px));width:calc(600*var(--px));text-align:right">ADHD assessment you can actually reach.</div>
+</section>
+
+<!-- 02 THE PROBLEM -->
+<section class="slide dark">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">The problem</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(316*var(--px));font-size:calc(112*var(--px));width:calc(1250*var(--px))">the permission changed.<br>the pathway didn&rsquo;t.</div>
+  <div class="a sub" style="left:calc(150*var(--px));top:calc(628*var(--px));font-size:calc(28*var(--px));width:calc(940*var(--px))">A GP is now allowed to carry ADHD assessment end to end. There is still no way for a person to find out which GP near them actually does it &mdash; and no way for a practice to show that it can.</div>
+  <div class="a hair" style="left:calc(150*var(--px));top:calc(786*var(--px));width:calc(1620*var(--px));height:1px"></div>
+  <!--PROB-->
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">02</div>
+</section>
+
+<!-- 03 WHY NOW -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">Why now</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(310*var(--px));font-size:calc(116*var(--px))">the rule just changed.</div>
+  <!--ROWS-->
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">03</div>
+</section>
+
+<!-- 04 WHAT WE HEARD -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">Customer discovery &middot; interview 01</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(306*var(--px));font-size:calc(100*var(--px));width:calc(1500*var(--px))">finding someone was the hard part.</div>
+  <!--FINDINGS-->
+  <div class="a note" style="left:calc(150*var(--px));top:calc(922*var(--px));font-size:calc(15*var(--px));width:calc(1620*var(--px))">First patient interview, 16 August 2026. One participant &mdash; a signal to test, not evidence of demand. De-identified findings only, recorded with the participant&rsquo;s knowledge. The interview programme continues.</div>
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">04</div>
+</section>
+
+<!-- 05 THE MARKET -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">The market is the people nobody found</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(300*var(--px));font-size:calc(100*var(--px));width:calc(1620*var(--px))">two in three are not being treated.</div>
+  <!--CHART-->
+  <div class="a note" style="left:calc(150*var(--px));top:calc(880*var(--px));font-size:calc(15*var(--px));width:calc(1620*var(--px))">Prevalence estimate: ~1.5 million Australians living with ADHD (2023 estimate; 2&ndash;6% of adults, 6&ndash;10% of children). Treatment: ~470,000 Australians dispensed ADHD medication in 2022&ndash;23 (AIHW). Dispensing is a lower bound on diagnosis &mdash; some diagnosed people are not medicated by choice &mdash; so the untreated share is the ceiling, not the count of undiagnosed.</div>
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">05</div>
+</section>
+
+<!-- 06 THE PRODUCT -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">The product, running</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(292*var(--px));font-size:calc(88*var(--px));width:calc(820*var(--px))">say it in your words.<br>book with one person.</div>
+  <div class="a sub" style="left:calc(150*var(--px));top:calc(508*var(--px));font-size:calc(23*var(--px));width:calc(740*var(--px))">A patient-facing finder and a practice-facing console on one engine, running end to end today. No clinical language on any patient surface &mdash; the compliance linter fails the build if it appears.</div>
+  <!--STEPS-->
+  <img class="a" src="__IMG_FINDER__" alt="ADHD.ME patient finder" style="left:calc(1010*var(--px));top:calc(180*var(--px));width:calc(760*var(--px));height:calc(700*var(--px));object-fit:cover;object-position:top center;border:1px solid var(--line);border-radius:calc(10*var(--px))">
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">06</div>
+</section>
+
+<!-- 07 THE BUSINESS -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">What a GP earns</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(296*var(--px));font-size:calc(100*var(--px));width:calc(1620*var(--px))">the practice earns more. the patient pays less.</div>
+  <div class="a hair" style="left:calc(150*var(--px));top:calc(508*var(--px));width:calc(1620*var(--px));height:1px"></div>
+  <!--REVENUE-->
+  <div class="a note" style="left:calc(150*var(--px));top:calc(920*var(--px));font-size:calc(15*var(--px));width:calc(1620*var(--px))">MBS rebates at 1 August 2026. ADHD assessment and review bill as Level C and D, not Level B. Annual figure: one prolonged consult per working day &times; 46 weeks &mdash; conservative, and before any private gap. Patient saving is the out-of-pocket difference on a GP-led pathway in the states that now permit one.</div>
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">07</div>
+</section>
+
+<!-- 08 WHERE WE ARE -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">Status</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(302*var(--px));font-size:calc(100*var(--px));width:calc(1620*var(--px))">built and verified. pre-pilot, and saying so.</div>
+  <div class="a hair" style="left:calc(150*var(--px));top:calc(604*var(--px));width:calc(1620*var(--px));height:1px"></div>
+  <!--STATUS-->
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">08</div>
+</section>
+
+<!-- 09 TEAM -->
+<section class="slide">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">Team</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(310*var(--px));font-size:calc(104*var(--px))">three founders. one of them yours.</div>
+  <!--TEAM-->
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">ADHD.ME</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">09</div>
+</section>
+
+<!-- 10 THE ASK -->
+<section class="slide dark">
+  <div class="a rule" style="left:calc(150*var(--px));top:calc(214*var(--px));width:calc(56*var(--px));height:calc(2*var(--px))"></div>
+  <div class="a eyebrow" style="left:calc(226*var(--px));top:calc(206*var(--px));font-size:calc(14*var(--px))">The ask</div>
+  <div class="a h" style="left:calc(150*var(--px));top:calc(292*var(--px));font-size:calc(100*var(--px));width:calc(1400*var(--px))">what we&rsquo;re asking<br>Transformer for.</div>
+  <!--ASK-->
+  <div class="a chrome" style="left:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">__CONTACT__</div>
+  <div class="a num" style="right:calc(150*var(--px));bottom:calc(70*var(--px));font-size:calc(15*var(--px))">10</div>
+</section>
+
+</div>
