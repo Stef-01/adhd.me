@@ -119,6 +119,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O60 (Standing debt 7 — px→rem for every font size: the O14 low-vision follow-up) —
+> claimed 2026-08-19T16:05Z by loop-0819p.** The debt the founder accepted the risk note on
+> and still wants: text set in px ignores the reader's own browser font-size setting, which
+> is the one control a low-vision reader actually has. Scope, stated exactly: every
+> `font-size: <N>px` in app/globals.css (344 of them, the only stylesheet) becomes its exact
+> rem equal at the browser-default 16px root (N/16 — every value in the file divides exactly,
+> e.g. 11.5px → 0.71875rem), converted by script, not by hand. DELIBERATELY NOT TOUCHED:
+> borders, shadows, radii, fixed dimensions and px media queries — the accessibility-bearing
+> property is type size, and widening the diff past the debt is how a mechanical unit stops
+> being verifiable. The root font-size stays unset, so 1rem IS the reader's setting.
+> Verification is the debt's own: visual regression — key pages captured before and after
+> must render identically at the default root (the conversion is exact, so any pixel that
+> moves is a bug), plus the payoff capture: the same screen with an enlarged root, text now
+> following it, in qa/type-o60/ with a DESIGN-QA entry; a source ratchet test pins globals.css
+> at zero px font sizes so the migration cannot silently regress; full `pnpm verify` green.
+
 > **O59 (Standing debt 4 — the microphone learns the roster's own languages) — DONE
 > 2026-08-19 by loop-0819o.** The debt: `recognition.lang = "en-AU"` is hard-wired, so
 > "kind Hindi speaking" works as a QUERY but a person who wants to SPEAK Hindi to the mic
