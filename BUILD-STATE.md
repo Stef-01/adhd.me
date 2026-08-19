@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O44 (Q1 item 1's deliverable — the collapse-aware rule for one-token cues) — claimed
+> 2026-08-19T02:46Z by loop-0819c.** The frozen list (reach.test.ts §O25) holds 33 multi-word
+> cues that ship as ONE stemmed token, and the year plan names why they cannot be re-authored
+> one by one: the intended sentences strip to the same token, so precision and recall are
+> coupled at the stopword layer. The rule, designed against the pinned corpus (the plan's
+> "kept function-word skeleton" option): a collapsed cue additionally requires the sentence to
+> contain, ADJACENT AND IN ORDER, at least one consecutive token pair from the cue's authored
+> phrase with stopwords KEPT (stemmed, clause-bounded) — so "out the door" still fires on
+> "rushed me out the door" and stops firing on "next door to the chemist"; "on edge" fires on
+> "always on edge", not "on the edge of town"; contractions survive because any adjacent pair
+> suffices ("what's going on" keeps the [going, on] pair of "what is going on"). Verify: the
+> plan's three named false positives pinned dead; every existing reach/corpus/O13/O17 pin
+> stays green (the rule is tuned against them, per the plan — not the other way round);
+> `pnpm verify` green.
+
 > **O42 (incident response — main restored after an accidental force-push) — DONE
 > 2026-08-19T01:54Z, loop-0819b.** Some time after the founder merged PR #8 at 01:06Z, a
 > session working from a STALE CHECKOUT (based at 69686bb, the 18 Aug morning tip) force-pushed
