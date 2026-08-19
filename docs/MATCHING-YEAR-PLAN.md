@@ -15,7 +15,12 @@ non-rankings.
 
 ## Q1 (Sep–Nov 2026): reach and evidence — make the reader hear more, provably
 
-1. **Reach corpus at scale.** Extend O13's plain-name sweep into a standing corpus of ~500
+1. **Reach corpus at scale.** *Progress: 261 entries after O64's tranche three (2026-08-19),
+   which fed the thinnest floors first — every floor except longer-appointment rose; that one
+   is still 1 after four phrasings aimed straight at it, all landing as aspirations, which is
+   the loudest cue-gap the corpus currently names (flagged for the O22 review). Target ~500
+   stands; tie-quality re-measured over the grown run and repinned in the same commit.*
+   Extend O13's plain-name sweep into a standing corpus of ~500
    real-shaped requests (synthetic, founder-authored + paraphrase variants). Gate: reach
    percentage per facet tracked in CI; any drop fails the build. This is the matching
    equivalent of a golden-file suite. It must test FALSE positives as hard as misses: first

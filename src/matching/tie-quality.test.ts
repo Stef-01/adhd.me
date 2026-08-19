@@ -11,8 +11,12 @@ import { describe, expect, it } from "vitest";
 import { clinicians } from "@/demo/clinicians";
 import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
 
-/** Move these ONLY with a measured run in the commit that moves them. */
-const PINNED = { total: 151, separated: 97, partialTie: 12, unseparated: 42 };
+/** Move these ONLY with a measured run in the commit that moves them.
+ *  Moved by O64 (corpus tranche three grew the run 151→196): the new sentences split 25
+ *  separated / 3 partial / 17 unseparated, landing the rate at 62% — the corpus deliberately
+ *  fed the THIN facets, which are exactly the asks a three-GP roster often cannot separate
+ *  on, so the KPI dipping from 64% is the metric working, not the ranking worsening. */
+const PINNED = { total: 196, separated: 122, partialTie: 15, unseparated: 59 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -324,6 +324,111 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "next door to the pharmacy there is a clinic", never: ["manner:unhurried", "manner:culturally_attuned"] },
   { text: "the sign on the practice door says closed", never: ["manner:sense_making"] },
   { text: "she was quick to judge and rushed me out the door", reaches: ["manner:non_judgmental", "manner:unhurried"] },
+
+  // ═══ TRANCHE THREE (O64, 2026-08-19): the thin floors fed first. ═══════════════════════
+  // Authored against the floors as they stood (longer-appointment at ONE, woman-gp 3,
+  // trauma-informed/motivating/bulk-billing/telehealth-first 4), then MEASURED and tagged
+  // from measurement: `reaches` is what the reader actually heard, `aspires` is the intended
+  // reach it could not hear — the lexicon's to-do list, grown deliberately. Growth only: no
+  // cue was edited in this tranche, so every tag below is the reader as it already was.
+
+  // ── pref:longer-appointment — one reaching phrasing existed; these are the misses ───────
+  { text: "please book me a long appointment for the first visit", aspires: ["pref:longer-appointment"] },
+  { text: "a proper long consult, not a squeeze-in", aspires: ["pref:longer-appointment"] },
+  { text: "can we make the first one a double session", aspires: ["pref:longer-appointment"] },
+  // Heard as unhurried manner but not as the booking preference — both truths recorded.
+  { text: "I need more than fifteen minutes to get through this", reaches: ["manner:unhurried"], aspires: ["pref:longer-appointment"] },
+  { text: "an extended appointment so nothing gets cut off", reaches: ["manner:unhurried"], aspires: ["pref:longer-appointment"] },
+
+  // ── pref:woman-gp ────────────────────────────────────────────────────────────────────────
+  { text: "a female GP is important to me", reaches: ["pref:woman-gp"] },
+  { text: "I would feel safer with a woman", aspires: ["pref:woman-gp"] },
+  { text: "women doctors only please, after what happened", aspires: ["pref:woman-gp"] },
+
+  // ── pref:telehealth-first / pref:bulk-billing ────────────────────────────────────────────
+  { text: "I cannot get into a clinic, everything has to be online", reaches: ["pref:telehealth-first"] },
+  { text: "a video call for the first appointment please", reaches: ["pref:telehealth-first"] },
+  { text: "phone appointments suit my shift work better", aspires: ["pref:telehealth-first"] },
+  { text: "it has to be bulk billed, I am on a pension", reaches: ["pref:bulk-billing"] },
+  { text: "money is tight so bulk billing matters", reaches: ["pref:bulk-billing"] },
+  { text: "no out of pocket costs please", aspires: ["pref:bulk-billing"] },
+
+  // ── care:trauma-informed ─────────────────────────────────────────────────────────────────
+  { text: "I need someone trauma informed, my last doctor was not", reaches: ["care:trauma-informed"] },
+  { text: "complex PTSD alongside the attention stuff", reaches: ["care:trauma-informed", "care:complex-mental-health", "care:adhd-assessment"] },
+  { text: "there is family violence in my past and it affects appointments", aspires: ["care:trauma-informed"] },
+  { text: "an abusive relationship left me jumpy in clinics", aspires: ["care:trauma-informed"] },
+
+  // ── manner:motivating ────────────────────────────────────────────────────────────────────
+  { text: "I want to work with my strengths, not just hear what is broken", reaches: ["manner:motivating"] },
+  { text: "someone encouraging rather than critical", reaches: ["manner:motivating"] },
+  { text: "a doctor who is hopeful about what I can do", reaches: ["manner:motivating"] },
+  { text: "neurodiversity affirming care or nothing", reaches: ["manner:motivating"] },
+
+  // ── care:substance-history ───────────────────────────────────────────────────────────────
+  { text: "I used to drink heavily and I am upfront about it", reaches: ["care:substance-history"] },
+  { text: "there is a substance history they will see in my file", reaches: ["care:substance-history"] },
+  { text: "I am in recovery and need that respected", aspires: ["care:substance-history"] },
+  { text: "methamphetamine years ago, clean since", aspires: ["care:substance-history"] },
+
+  // ── care:complex-mental-health ───────────────────────────────────────────────────────────
+  { text: "bipolar and maybe ADHD, it is complicated", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
+  { text: "schizophrenia is managed, the focus trouble is not", reaches: ["care:complex-mental-health"] },
+  // BPD by name is silent to the reader today — a gap worth closing carefully, not by reflex.
+  { text: "borderline personality disorder plus the attention problems", reaches: ["care:adhd-assessment"], aspires: ["care:complex-mental-health"] },
+  { text: "I hear voices sometimes and I still want this looked at", aspires: ["care:complex-mental-health"] },
+
+  // ── care:non-medication / manner:collaborative ───────────────────────────────────────────
+  { text: "coaching and skills, not another prescription", reaches: ["care:non-medication"] },
+  { text: "what can we do without medication", reaches: ["care:non-medication"] },
+  { text: "I want strategies first, tablets later if ever", aspires: ["care:non-medication"] },
+  { text: "psychological approaches before anything else", aspires: ["care:non-medication"] },
+  { text: "treatment choices talked through with me, never over my head", reaches: ["manner:collaborative"] },
+  { text: "I want a say in my own treatment plan", reaches: ["manner:collaborative"] },
+  { text: "someone who works alongside me as a partner", aspires: ["manner:collaborative"] },
+
+  // ── care:depression / manner:sense_making ────────────────────────────────────────────────
+  { text: "the low moods are back and worse than the distraction", reaches: ["care:depression"] },
+  { text: "depression on top of everything else", reaches: ["care:depression"] },
+  { text: "help me join the dots on why my life looks like this", reaches: ["manner:sense_making"] },
+  { text: "I want it to finally make sense", reaches: ["manner:sense_making"] },
+  { text: "someone who can explain what is actually going on with me", reaches: ["manner:sense_making", "manner:collaborative"] },
+
+  // ── care:emotional-regulation / manner:steadying ─────────────────────────────────────────
+  { text: "big feelings I cannot switch off", reaches: ["care:emotional-regulation"] },
+  { text: "I get overwhelmed in appointments and need someone calm", reaches: ["care:emotional-regulation", "manner:steadying"] },
+  { text: "a gentle doctor, I am easily rattled", reaches: ["manner:steadying"] },
+  // This facet's territory IS the description (see care-archetypes.ts), so unheard
+  // descriptions are candidate cues here — aspires, not never, unlike depression below.
+  { text: "rejection hits me like a truck", aspires: ["care:emotional-regulation"] },
+  { text: "my temper goes from zero to a hundred in seconds", aspires: ["care:emotional-regulation"] },
+
+  // ── care:shared-care / care:anxiety / care:autism-adhd / care:child-adolescent-adhd ─────
+  { text: "my psychiatrist wants a GP to share the care with", reaches: ["care:shared-care"] },
+  { text: "shared care with the psychiatrist who diagnosed me", reaches: ["care:shared-care", "care:adhd-assessment"] },
+  { text: "panic attacks in supermarkets, it is getting worse", reaches: ["care:anxiety"] },
+  { text: "I am autistic as well, the two tangle together", reaches: ["care:autism-adhd"] },
+  { text: "AuDHD, both sides need understanding", reaches: ["care:autism-adhd"] },
+  { text: "my teenager is falling apart at school", reaches: ["care:child-adolescent-adhd"] },
+  { text: "our ten year old needs an assessment", reaches: ["care:adhd-assessment"], aspires: ["care:child-adolescent-adhd"] },
+
+  // ── manner breadth: culturally_attuned, attuned, non_judgmental, unhurried, structured ──
+  { text: "someone who understands where my family comes from", reaches: ["manner:culturally_attuned"] },
+  { text: "a doctor who gets cultural context, mine is complicated", reaches: ["manner:culturally_attuned"] },
+  { text: "I want to be believed the first time I say it", aspires: ["manner:attuned"] },
+  { text: "somewhere I will not be judged for how long I left this", reaches: ["manner:non_judgmental"] },
+  { text: "no lectures, I know the history looks bad", reaches: ["manner:non_judgmental"] },
+  { text: "I do not want to be rushed out the door again", reaches: ["manner:unhurried"] },
+  { text: "a methodical workup done properly", reaches: ["manner:structured"] },
+
+  // ── anchors: titration and assessment phrasings not yet in the set ──────────────────────
+  { text: "the dose needs adjusting, it stopped holding in the afternoons", reaches: ["care:titration"] },
+  { text: "I think it has been ADHD all along, test me properly", reaches: ["care:adhd-assessment", "manner:structured"] },
+
+  // ── G7: state descriptions with no want, pinned as intentional non-reaches ──────────────
+  { text: "flat for months, everything is heavy", never: ["care:depression"] },
+  { text: "the worry never stops, even when things are fine", never: ["care:anxiety"] },
+  { text: "my brain jumps channels mid-sentence", never: ["care:adhd-assessment"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -353,33 +458,37 @@ export function corpusReachByFacet(
  * percentage so a one-entry facet cannot pass on rounding.
  */
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
-  // Measured 2026-08-19 (O47); raised by O49 (first sweep), O50 (inflection table) and O53
-  // (tranche two: ~200 entries, floors re-measured off the grown set). The open aspirations
-  // are the standing lexicon to-do list; the three attuned hesitations from O49 remain the
-  // founder's call.
-  "care:adhd-assessment": 16,
-  "care:anxiety": 8,
-  "care:autism-adhd": 7,
-  "care:child-adolescent-adhd": 8,
-  "care:complex-mental-health": 5,
-  "care:depression": 6,
-  "care:emotional-regulation": 6,
-  "care:non-medication": 5,
-  "care:shared-care": 7,
-  "care:substance-history": 5,
-  "care:titration": 10,
-  "care:trauma-informed": 4,
+  // Measured 2026-08-19 (O47); raised by O49 (first sweep), O50 (inflection table), O53
+  // (tranche two: ~200 entries) and O64 (tranche three: thin facets fed first, 262 entries,
+  // floors re-measured off the grown set). The open aspirations are the standing lexicon
+  // to-do list; the three attuned hesitations from O49 remain the founder's call.
+  // pref:longer-appointment is STILL 1 after a tranche aimed straight at it — four new
+  // phrasings ("long appointment", "long consult", "double session", "more than fifteen
+  // minutes") all land as aspirations, which is the loudest cue-gap this file currently
+  // names for the O22 review.
+  "care:adhd-assessment": 22,
+  "care:anxiety": 9,
+  "care:autism-adhd": 9,
+  "care:child-adolescent-adhd": 9,
+  "care:complex-mental-health": 8,
+  "care:depression": 8,
+  "care:emotional-regulation": 8,
+  "care:non-medication": 7,
+  "care:shared-care": 9,
+  "care:substance-history": 7,
+  "care:titration": 11,
+  "care:trauma-informed": 6,
   "manner:attuned": 8,
-  "manner:collaborative": 5,
-  "manner:culturally_attuned": 7,
-  "manner:motivating": 4,
-  "manner:non_judgmental": 8,
-  "manner:sense_making": 6,
-  "manner:steadying": 7,
-  "manner:structured": 7,
-  "manner:unhurried": 8,
-  "pref:bulk-billing": 4,
+  "manner:collaborative": 8,
+  "manner:culturally_attuned": 9,
+  "manner:motivating": 8,
+  "manner:non_judgmental": 10,
+  "manner:sense_making": 9,
+  "manner:steadying": 9,
+  "manner:structured": 9,
+  "manner:unhurried": 11,
+  "pref:bulk-billing": 6,
   "pref:longer-appointment": 1,
-  "pref:telehealth-first": 4,
-  "pref:woman-gp": 3,
+  "pref:telehealth-first": 6,
+  "pref:woman-gp": 4,
 };

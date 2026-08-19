@@ -119,8 +119,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
-> **O64 (Q1 item 1 — corpus tranche three: the thin facets fed first) — claimed
-> 2026-08-19T20:04Z by loop-0819t.** The standing corpus is ~200 entries against the plan's
+> **O64 (Q1 item 1 — corpus tranche three: the thin facets fed first) — DONE 2026-08-19 by
+> loop-0819t (corpus now 261 of ~500; every floor except longer-appointment rose; that one's
+> four aimed phrasings ALL landed as aspirations — the loudest cue-gap on record, flagged in
+> REACH_FLOORS' comment for the O22 review; tie-quality repinned 196/122/15/59 with the dip
+> from 64%→62% explained where the pin moved).** The standing corpus is ~200 entries against the plan's
 > ~500; this tranche authors ~60 first-person requests aimed at the thinnest floors
 > (longer-appointment sits at ONE; woman-gp 3; trauma-informed, motivating, bulk-billing,
 > telehealth-first 4; substance-history, complex-mental-health, non-medication,
