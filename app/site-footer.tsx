@@ -10,6 +10,7 @@ const DOORS: ReadonlyArray<{ label: string; href: string }> = [
   { label: "For practices", href: "/practices" },
   { label: "For GPs", href: "/clinicians/join" },
   { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
 ];
 
 export function SiteFooter() {

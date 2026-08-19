@@ -96,6 +96,9 @@ Every material claim in the policy, and where its truth is enforced:
    should move into the policy proper.
 9. What must change for the *Draft — not yet in force* banner to come down, and whether it
    should come down before the first practice pilot or only at it.
+10. The terms of use (`/terms`, O39) travel with this review: confirm the ACL wording, the
+    liability limitation, the no-endorsement and Healthengine-boundary clauses, and whether
+    the two documents should cross-refer more formally.
 
 ## 5. Process to completion
 
