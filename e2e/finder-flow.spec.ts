@@ -93,8 +93,20 @@ test("booking hands off to Healthengine rather than inventing a time", async ({ 
 
   const handoff = page.getByRole("link", { name: /Healthengine|practice page/i }).first();
   await expect(handoff).toBeVisible({ timeout: 10000 });
-  await expect(handoff).toHaveAttribute("href", /^https:\/\/healthengine\.com\.au\//);
+  // Since O28 the link goes through this domain's own /go/<id> redirect, which is what makes
+  // outbound booking intent countable; the redirect target is asserted below at request level.
+  await expect(handoff).toHaveAttribute("href", /^\/go\/[a-z-]+\?src=finder$/);
   await expect(handoff).toHaveAttribute("target", "_blank");
+
+  // The redirect itself: a 302 to Healthengine carrying the utm tail, with nothing stored.
+  const goHref = await handoff.getAttribute("href");
+  const redirect = await page.request.get(goHref!, { maxRedirects: 0 });
+  expect(redirect.status()).toBe(302);
+  const location = redirect.headers()["location"] ?? "";
+  expect(location).toMatch(/^https:\/\/healthengine\.com\.au\//);
+  expect(location).toContain("utm_source=adhd-me");
+  // no-store: a cached 302 would skip the server and silently undercount (O32 scanner find).
+  expect(redirect.headers()["cache-control"]).toContain("no-store");
 
   // No in-app time picker survives anywhere on the booking screen.
   await expect(page.getByRole("radiogroup")).toHaveCount(0);

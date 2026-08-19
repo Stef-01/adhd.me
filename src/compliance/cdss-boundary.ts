@@ -337,6 +337,30 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports the reviewable-background and audit types, the bio assembler and the tag reader. It holds no copy of its own: every label it emits comes from a facet vocabulary declared and linted elsewhere, and the ONE sentence it composes — the assembled bio — is built at runtime from accepted facets rather than authored here. That sentence is deliberately not a field: `src/directory/profile.ts` refuses a free-text biography, so the editable surface is the facets and the prose follows them. The two fixed fragments it contributes, \"says they often see\" and \"on how they work\", exist to satisfy W193 — a declaration must be rendered AS a declaration, and the difference between \"Dr X sees adults\" and \"Dr X says they often see adults\" is the difference between vouching for a clinician and reporting one.",
   },
   {
+    module: "src/demo/pending-clinicians.ts",
+    operatorCopy: [],
+    notCopy:
+      "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
+  },
+  {
+    module: "src/onboarding/reach-report.ts",
+    operatorCopy: [],
+    notCopy:
+      "W230 aggregates saved onboarding rows into the reach-gap feed: per clinician, the sentences neither reader could hear. It authors nothing — every string it returns is verbatim clinician speech already neutralised at the W226 writer, plus identity fields from the same row. The feed renders on the staff-only matching console for lexicon review; nothing here is about a patient and nothing here can publish.",
+  },
+  {
+    module: "src/onboarding/capture.ts",
+    operatorCopy: [],
+    notCopy:
+      "W229 is the live interview's pure logic: parsing a typed transcript into attributed turns, finding the read-back question for a proposed facet, and folding spoken answers into the reviewable background. It authors no copy: every question it returns is `INTERVIEW`'s own `ask`, verbatim — already declared operator copy on this surface at src/onboarding/interview.ts — and its one original sentence is the drift fallback, which names a vocabulary/interview mismatch to the interviewer so the failure is visible in the room rather than thrown. Nothing here is about a patient and nothing here can publish; the only write path is the W226 store with its own refusals.",
+  },
+  {
+    module: "src/onboarding/expertise.ts",
+    operatorCopy: [],
+    notCopy:
+      "W227 reads an onboarding interview transcript with the patient lexicon and returns declaration PROPOSALS. The read-back questions it composes are spoken by the interviewer to the clinician being onboarded, quoting the clinician's own transcript back to them; nothing here renders to a patient or an operator surface, and a proposal becomes copy only after it is confirmed into the structured interview record, which is where the census already looks.",
+  },
+  {
     module: "src/onboarding/interview.ts",
     operatorCopy: ["INTERVIEW"],
     notCopy:

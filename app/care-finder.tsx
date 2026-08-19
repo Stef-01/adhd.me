@@ -12,6 +12,7 @@ import {
   Waveform,
   X,
 } from "@phosphor-icons/react";
+import { track } from "@vercel/analytics";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from "motion/react";
 import { useEffect, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
@@ -19,6 +20,7 @@ import {
   clinicians,
   distanceTo,
   getPersonalizedMatch,
+  matchEvidence,
   matchQuality,
   rankBands,
   rankCliniciansNear,
@@ -377,6 +379,14 @@ export function CareFinder() {
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
+  /**
+   * The evidence behind the pills, with provenance (O21). `matchEvidence` already carries the
+   * phrase from the reader's OWN words that reached each facet (`matched`) — the ranking has
+   * always known it; the page just never showed it. Quoting it back beside the closed-vocabulary
+   * label is attribution, not templating: the reason sentence is still composed only from the
+   * fixed set (W213), and the quote is visibly the reader's text, not the product's claim.
+   */
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request), [clinician, request]);
 
   function startListening() {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
@@ -403,11 +413,16 @@ export function CareFinder() {
         setDraft(text);
         findMatches(text);
       },
-      onError: (error) => {
+      onError: (error, raw) => {
         if (speech.current === session) speech.current = null;
         // A deliberate stop is not a failure to report.
         if (error === "aborted") return;
-        setSpeechMessage(SPEECH_ERROR_COPY[error]);
+        // ?debug=1 appends the browser's raw error code for the founder's own phone (O18).
+        // The Web Speech API's code is the only diagnostic it gives, and the production RCA
+        // stalled for a day because "unknown" flattened it away. Patients never see this:
+        // the default banner stays a plain sentence with no error-code language.
+        const debug = new URLSearchParams(window.location.search).has("debug");
+        setSpeechMessage(debug ? `${SPEECH_ERROR_COPY[error]} [${raw}]` : SPEECH_ERROR_COPY[error]);
         setStage("type");
       },
     });
@@ -876,9 +891,19 @@ export function CareFinder() {
               <NswTraining clinician={clinician} />
               <FounderDisclosure clinician={clinician} />
               {personalizedMatch.signals.length > 0 ? (
-                <div className="fit-signal-row profile-fit-signals" aria-label="Key match reasons">
-                  {personalizedMatch.signals.slice(0, 3).map((signal) => <span key={signal}>{signal}</span>)}
-                </div>
+                /* Each reason now shows its provenance (O21): the closed-vocabulary label the
+                   ranking scored, and the phrase that reached it. `matched` is the lexicon's cue
+                   (every word of it stem-matched, in order, in the reader's text), not a verbatim
+                   quote — so the line says "from your words", which is exactly true, rather than
+                   "you said", which could misquote an inflection. */
+                <ul className="fit-evidence" aria-label="Why this GP is listed for you">
+                  {profileEvidence.slice(0, 3).map((need) => (
+                    <li key={need.label}>
+                      <span className="fit-evidence-label">{need.label}</span>
+                      <span className="fit-evidence-said">from your words: &ldquo;{need.matched}&rdquo;</span>
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 /* Nothing in what they said reached this clinician, so the honest line is what he
                    says he does — the same fallback the result row already used, which is why the
@@ -1004,17 +1029,31 @@ export function CareFinder() {
             </div>
 
             <div className="bottom-action">
+              {/* Routed through /go/<id> (O28): outbound booking intent becomes countable per
+                  clinician from this domain's own logs, with nothing stored — see the route's
+                  header and docs/BOOKING-ATTRIBUTION.md. The destination is unchanged. */}
               <a
                 className="primary-button"
-                href={clinician.booking.url}
+                href={`/go/${clinician.id}?src=finder`}
                 target="_blank"
                 rel="noreferrer"
+                // O33: the custom event beside the server-side /go count. On the free tier
+                // Vercel drops custom events, so this records nothing today and starts
+                // recording the day the plan upgrades — no code change at that moment. No
+                // identifier travels with it; the payload is the same two fields /go logs.
+                onClick={() => track("booking_outbound", { clinician: clinician.id, surface: "finder" })}
               >
                 {clinician.booking.via === "healthengine"
                   ? "See times on Healthengine"
                   : "Open the practice page"}
               </a>
               <p>Opens Healthengine in a new tab.</p>
+              {/* Attribution layer 3 (docs/BOOKING-ATTRIBUTION.md): Healthengine asks new
+                  patients how they heard about the practice, and the practice sees the
+                  answer. One factual sentence, no incentive, no claim. */}
+              {clinician.booking.via === "healthengine" && (
+                <p className="booking-heard">If the booking asks how you heard about the practice, you can say ADHD.ME.</p>
+              )}
             </div>
           </MotionScreen>
         )}

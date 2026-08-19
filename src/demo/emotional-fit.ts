@@ -79,7 +79,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       "decides before", "made up their mind", "did not listen", "didn't listen", "not listened to",
       // O13: "takes me seriously" missed — the stemmer keeps "taken" and "takes" apart
       // ("taken" has no strippable suffix), so the present-tense ask needs its own cue.
-      "take seriously", "takes me seriously", "attentive"],
+      "take seriously", "takes me seriously", "attentive",
+      // O30 psychographics: "treat me as a whole person" is the plainest values statement in
+      // the corpus family this facet answers.
+      "whole person"],
   },
   steadying: {
     label: "Calm and steadying",
@@ -89,7 +92,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   sense_making: {
     label: "Helps it make sense",
     matchLine: "helps you make sense of what is going on",
-    cues: ["make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing"],
+    cues: ["make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
+      // O30 psychographics: the plain-language ask is a values statement about how somebody
+      // wants medicine spoken to them. Every cue keeps two content tokens (the O25 law);
+      // "without"/"no" survive stripping because negations are never stopwords.
+      "plain language", "plain english", "simple terms", "without the jargon", "no jargon"],
   },
   motivating: {
     label: "Strengths-focused",
@@ -97,7 +104,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     // "a plan i can" degenerated to the single token "plan" once stopwords were stripped, which
     // made ANY mention of a plan read as a strengths preference — including the structured
     // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
-    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick"],
+    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick",
+      // O30 psychographics: neurodiversity-affirming language is how a large cohort states
+      // the strengths-not-deficits value. "neuroaffirming" is a single WORD (precise, so
+      // allowed); the multi-word cues keep two content tokens.
+      "neurodiversity affirming", "neuroaffirming", "neurodivergent friendly"],
   },
   unhurried: {
     label: "Unhurried first appointment",
@@ -166,7 +177,16 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
     cues: ["culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
-      "my mum", "my mother", "my dad", "my father", "my parents", "in the room with me", "nonsense", "not real", "just lazy", "an excuse"],
+      // O25: "in the room with me" stopword-stripped down to the single token [room], so
+      // "my rooms are above the pharmacy" claimed this facet (found by the W227 reach-gap
+      // feed). Replaced with a variant that keeps two content tokens — [come, room] — so the
+      // family-presence meaning survives and a wall with rooms in it does not. The probe
+      // sentence stays covered by "my mum".
+      "my mum", "my mother", "my dad", "my father", "my parents", "come into the room", "nonsense", "not real", "just lazy", "an excuse",
+      // O30 psychographics: faith named as part of the appointment is the same values ask as
+      // family-in-the-room. Verb+noun pairs so nothing collapses ("my faith" alone would
+      // strip to [faith] and claim "faith in doctors").
+      "respects my faith", "respect my faith", "faith is important", "respects my religion"],
   },
   structured: {
     label: "A structured, measured approach",

@@ -1,0 +1,24 @@
+import { describe, expect, it } from "vitest";
+import { clinicians } from "./clinicians";
+import { PENDING_CLINICIANS } from "./pending-clinicians";
+
+describe("W228 the staging area stays honest in both directions", () => {
+  it("leaks nobody pending into the live roster", () => {
+    for (const pending of PENDING_CLINICIANS) {
+      expect(clinicians.some((c) => c.id === pending.id), `${pending.id} is live AND pending`).toBe(false);
+    }
+  });
+
+  it("Dr Anusha Saxena graduated from pending to live (O34), with the ungathered parts marked", () => {
+    // The first record to pass through this module, pinned so the go-live cannot silently
+    // revert: she is live, she is the roster's woman GP, and what her interview has not yet
+    // supplied is visibly pending rather than authored for her.
+    expect(PENDING_CLINICIANS.some((p) => p.id === "anusha-saxena")).toBe(false);
+    const anusha = clinicians.find((c) => c.id === "anusha-saxena")!;
+    expect(anusha.gender).toBe("woman");
+    expect(anusha.booking.via === "healthengine" && anusha.booking.practitionerId).toBe("160121");
+    expect(anusha.image).toBeNull();
+    expect(anusha.manner).toEqual([]);
+    expect(anusha.mannerPending).toContain("2026-08-18");
+  });
+});

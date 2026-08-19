@@ -17,7 +17,13 @@ ledger: `BUILD-STATE.md`).
    Synthetic data only. If a unit needs a gate, mark it `blocked` and flag loudly.
 5. **Use the skills** mapped in plan §2 (supabase, impeccable/taste-skill, dataviz, code-review,
    security-review, simplify, run, docx/pptx/xlsx). A hardening week without the review skills
-   is not done.
+   is not done. Vercel's agent skills are vendored in `.claude/skills/` (react-best-practices,
+   composition-patterns, web-design-guidelines, vercel-optimize, react-view-transitions):
+   consult react-best-practices before writing or refactoring React/Next code, and
+   web-design-guidelines + react-view-transitions on every UI-track unit. Where a Vercel
+   guideline conflicts with this tree's compliance or copy laws, the tree's laws win.
+   `adhdme-taste` (same directory) is this tree's OWN design law — load it before any UI
+   work; it is the taste-skill plan §2 refers to.
 6. **Compliance is code.** Message templates pass the compliance linter; UI copy makes no
    clinical claims; no testimonials/ratings anywhere; "specialist" never appears next to a
    niche scope.

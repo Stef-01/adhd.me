@@ -95,3 +95,42 @@ time, and `language-not-supported` where the device cannot listen in the request
 Neither code was in the error map, so both collapsed to a sentence with nothing actionable in
 it. Both are now mapped, and the dictation copy names the switch to look for. Pinned in
 `speech.test.ts`.
+
+## Addendum (O18): the O16 copy was wrong on a real phone, and what replaced it
+
+Two production reports followed O16, and they correct each other:
+
+1. **"Still broken", generic banner, 19:47 AEST.** Timeline evidence: the merge deploy's
+   production cutover completed at 09:55:33Z; 19:47 AEST is 09:47Z — the screenshot was taken
+   **eight minutes before** the O16 build went live, from the old bundle whose `unknown`
+   fallback produces exactly that sentence. Not a code failure; a deploy race plus, likely, a
+   Safari tab still holding the old page.
+2. **"It says dictation is not enabled, but it is."** On the O16 build, the phone fired
+   `service-not-allowed` with dictation verifiably ON. The O16 copy asserted the commonest
+   cause as fact — a diagnosis the browser API gives us no way to verify. On the device where
+   it was wrong, the product contradicted the person's own eyes.
+
+**Root cause (O18):** iOS Safari's `service-not-allowed` is a family, not a single cause —
+dictation or Siri off, Safari denied the microphone for the site, screen-time or enterprise
+restriction, home-screen web app context (WebKit withholds the API there), and a known
+intermittent WebKit failure where the identical tap succeeds on retry (WICG speech-api #96;
+Apple Developer forum threads 699881, 728822; WebKit bug 225298). A copy string keyed to one
+member of that family will be wrong on every other member.
+
+**Fixes:**
+
+- **The copy no longer diagnoses.** It names the switches worth checking ("if Siri or
+  dictation is on and Safari is allowed to use the microphone…") and keeps typing as the way
+  out. A test now rejects any future copy that asserts a setting's state as fact.
+- **One warm-up retry.** On `service-not-allowed`/`not-allowed` with nothing captured,
+  `startSpeech` requests microphone permission via `getUserMedia` (the widely reported
+  workaround: it surfaces the proper prompt and warms the audio session) and starts a fresh
+  recogniser once. When the retry works — the intermittent-WebKit case — the person never
+  sees a message at all. Stop/cancel during the warm-up are honoured; the retry cannot
+  re-open a microphone somebody asked to close.
+- **The raw code is no longer flattened away.** `onError` now carries the browser's own error
+  string, and `?debug=1` on the finder appends it to the banner in brackets. Patients on the
+  default URL still see plain sentences; the founder's next screenshot carries the diagnosis.
+
+Pinned in `speech.test.ts` (O18 block: granted, denied, retry-once, stop-during-warm-up,
+no-retry-for-honest-errors).

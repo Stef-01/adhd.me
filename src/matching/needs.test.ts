@@ -117,12 +117,16 @@ describe("W221 the ranking and the explanation are one computation", () => {
 });
 
 describe("W221 what the roster declares", () => {
-  it("gives every clinician at least one declared manner trait", () => {
+  it("gives every clinician a declared manner trait, or a dated note that theirs is pending", () => {
     // A clinician with no declared manner can never match "will they understand me", which is
     // half of what somebody is asking. The onboarding interview must not be able to finish
-    // without one.
+    // without one — and a clinician listed AHEAD of their interview (O34) carries a dated
+    // `mannerPending` note instead, so the gap is visible state rather than a silent hole.
     for (const clinician of clinicians) {
-      expect(clinician.manner.length, `${clinician.id} declares no manner`).toBeGreaterThan(0);
+      if (clinician.manner.length === 0) {
+        expect(clinician.mannerPending, `${clinician.id} declares no manner and no pending note`).toBeTruthy();
+        expect(clinician.mannerPending).toMatch(/^\d{4}-\d{2}-\d{2}/);
+      }
       for (const trait of clinician.manner) expect(MANNER_TRAITS).toContain(trait);
     }
   });
@@ -171,8 +175,14 @@ describe("O1 languages go through the one pipeline (F2)", () => {
   });
 
   it("a language shared by the whole roster ties rather than separates, and says so", () => {
-    // Both GPs declare Hindi, so a Hindi-only request is an honest tie, not a ranking.
-    expect(matchQuality("a GP who speaks Hindi")).toBe("tied");
+    // The whole-roster case needs a roster that actually shares a language: since O34 the
+    // full roster does not (Dr Anusha Saxena has not yet declared hers), so the property is
+    // asserted on the Beecroft pair, both of whom declare Hindi. On the FULL roster the same
+    // ask now separates — which is the next test's territory, not a loophole in this one.
+    const beecroft = clinicians.filter((c) => c.suburb === "Beecroft");
+    expect(matchQuality("a GP who speaks Hindi", beecroft)).toBe("tied");
+    // And on the full roster, Hindi is now a separator: an earned order, honestly reported.
+    expect(matchQuality("a GP who speaks Hindi")).toBe("informed");
   });
 
   it("reaches nothing on a language nobody on the roster declares", () => {
@@ -209,8 +219,11 @@ describe("O2 breadth has a price (F1)", () => {
   });
 
   it("a facet the whole roster declares cannot change the relative order", () => {
-    const withoutUniversal = rankClinicians("a GP who speaks Urdu").map((c) => c.id);
-    const withUniversal = rankClinicians("a GP who speaks Urdu and also Hindi").map((c) => c.id);
+    // Asserted on the Beecroft pair, where Hindi genuinely is universal (see the tie test:
+    // the O34 roster as a whole no longer shares a language).
+    const beecroft = clinicians.filter((c) => c.suburb === "Beecroft");
+    const withoutUniversal = rankClinicians("a GP who speaks Urdu", beecroft).map((c) => c.id);
+    const withUniversal = rankClinicians("a GP who speaks Urdu and also Hindi", beecroft).map((c) => c.id);
     expect(withUniversal).toEqual(withoutUniversal);
   });
 
