@@ -16,7 +16,7 @@
 // "missed" tells you why somebody was not, which is the question that actually gets asked.
 
 import Link from "next/link";
-import { clinicians } from "@/demo/clinicians";
+import { CAPACITY_FRESH_DAYS, CAPACITY_ORDER, capacityGrade, clinicians } from "@/demo/clinicians";
 import { clinicianTags, matchAudit } from "@/onboarding/background";
 import { backgroundFromProposals } from "@/onboarding/background";
 import { proposeDeclarations, reachGaps } from "@/onboarding/expertise";
@@ -51,7 +51,10 @@ const VOCABULARY: VocabularyEntry[] = [
 ];
 
 export default function MatchingConsolePage() {
-  const audit = matchAudit(EXAMPLE_QUERY, clinicians);
+  // One clock per render, threaded everywhere a grade is computed, so the audit table and the
+  // freshness panel cannot disagree about what "today" is (O56).
+  const today = new Date();
+  const audit = matchAudit(EXAMPLE_QUERY, clinicians, today);
   // O38: the reach-gap feed — real saved onboardings, not the worked example below.
   const reach = reachReport();
   const read = readTranscript(EXAMPLE_TRANSCRIPT);
@@ -99,14 +102,14 @@ export default function MatchingConsolePage() {
               <tr><th>Clinician</th><th>Score</th><th>Declares</th><th>Matched</th><th>Missed — why they are not first</th></tr>
             </thead>
             <tbody>
-              {/* Sorted the way the finder actually ranks: score, then open books first (O4) —
-                  a console that sorted by total alone would show the opposite of the product
-                  on a capacity-broken tie. */}
+              {/* Sorted the way the finder actually ranks: score, then capacity grade (O4,
+                  three grades since O56) — a console that sorted by total alone would show
+                  the opposite of the product on a capacity-broken tie. */}
               {[...audit.rows]
-                .sort((a, b) => b.total - a.total || Number(b.booksOpen) - Number(a.booksOpen))
+                .sort((a, b) => b.total - a.total || CAPACITY_ORDER[a.capacity] - CAPACITY_ORDER[b.capacity])
                 .map((row) => (
                 <tr key={row.clinicianId}>
-                  <td>{row.name}{row.booksOpen ? "" : " · books closed"}</td>
+                  <td>{row.name}{row.capacity === "closed" ? " · books closed" : row.capacity === "stale-open" ? " · books open, unconfirmed" : ""}</td>
                   <td className="mc-num">{row.total}</td>
                   {/* Breadth beside score: a row that declares nearly everything is visible
                       exactly where its declarations are earning rank (O2/F1). */}
@@ -139,6 +142,51 @@ export default function MatchingConsolePage() {
             </ul>
           </div>
         ))}
+      </section>
+
+      <section className="mc-section" aria-labelledby="capacity-h">
+        <h2 id="capacity-h">Capacity freshness</h2>
+        <p className="mc-note">
+          Capacity is the one declared fact that goes wrong by itself — books close without
+          anybody editing a profile. A declaration stays fresh for {CAPACITY_FRESH_DAYS} days;
+          after that the finder stops vouching for it at a tie (it sorts behind a confirmed one,
+          never off the page). Each date below is when the declaration went on the record;
+          reconfirming is the only thing that moves it.
+        </p>
+        {clinicians.map((clinician) => {
+          const grade = capacityGrade(clinician, today);
+          const declared = clinician.capacityDeclaredAt;
+          const reconfirmBy = declared
+            ? new Date(new Date(declared).getTime() + CAPACITY_FRESH_DAYS * 86_400_000).toISOString().slice(0, 10)
+            : null;
+          return (
+            <div key={clinician.id} className="mc-clinician">
+              <h3 className="mc-sub">{clinician.name}</h3>
+              <ul className="mc-tags">
+                <li className="mc-tag">
+                  {grade === "closed"
+                    ? "books closed"
+                    : grade === "fresh-open"
+                      ? "open, confirmed"
+                      : "open, unconfirmed"}
+                  {declared && <span className="mc-weight">declared {declared}</span>}
+                </li>
+              </ul>
+              {grade === "closed" ? (
+                <p className="mc-note">Shown to readers with the closed-books sentence; nothing to reconfirm.</p>
+              ) : grade === "stale-open" ? (
+                <p className="mc-note mc-missed">
+                  Reconfirm needed: {declared
+                    ? `this declaration passed its ${CAPACITY_FRESH_DAYS}-day window on ${reconfirmBy}.`
+                    : "this declaration was never dated, so it cannot claim freshness."}{" "}
+                  Ask the practice whether the books are still open and move the date.
+                </p>
+              ) : (
+                <p className="mc-note">Reconfirm by {reconfirmBy} to keep this declaration fresh.</p>
+              )}
+            </div>
+          );
+        })}
       </section>
 
       <section className="mc-section" aria-labelledby="tx-h">

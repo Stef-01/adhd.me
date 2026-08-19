@@ -93,11 +93,17 @@ non-rankings.
    essay pin rewritten with the contract stated). The fuzz lives in the W232 fast-check home:
    emoji, mixed scripts, unicode junk — no throw, deterministic; caps held for every
    generated input; one generous wall-clock bound on the absurd case.
-7. **Capacity truthfulness (F5 follow-through).** Closed-books and slot data age; add a
-   staleness rule — declarations older than N days demote to "sometimes"-grade confidence
-   with console nudges to reconfirm. The matching-market lesson (deferred-acceptance systems
-   like NRMP) is that stated capacity drifts from real capacity and the mechanism must price
-   that in.
+7. **Capacity truthfulness (F5 follow-through). DONE — O56, 2026-08-19.** Declarations now
+   carry `capacityDeclaredAt` (the date each went on the record, from the file's own git
+   history — never invented for a real person) and `capacityGrade` prices the age with an
+   injected clock: fresh-open (≤90 days), stale-open (older or undated), closed. The O4
+   tie-break is three-grade — stale still beats closed, no longer beats confirmed — grading
+   never scores, never filters, patient copy unchanged. The matching console gained the
+   freshness panel: per declaration its grade, date and reconfirm-by nudge; stale rows say
+   what lapsed and what to do. `matchAudit` carries the grade so the console sort cannot
+   disagree with the finder. Boundaries and tie fixtures pinned with a fixed clock; the
+   plan's "demote to sometimes-grade confidence" was adapted — demoting CONFIDENCE would
+   touch scores, and the mechanism's law is that capacity orders ties only.
 8. **Tie-quality metric.** Track, per synthetic corpus run, how often the top band ties at
    size >3 — the "clarifier failed to separate" rate. It becomes the KPI clarifier work moves.
 

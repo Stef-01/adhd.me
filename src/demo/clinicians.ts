@@ -98,6 +98,14 @@ export type Clinician = {
         note: string;
       };
   acceptingNewPatients: boolean;
+  /**
+   * When the books declaration was last made or reconfirmed (O56, year plan Q2 item 7).
+   * ISO date. Capacity is the one declared fact that goes wrong by itself — a GP's books
+   * close without anybody editing a profile — so the mechanism prices its age in: see
+   * `capacityGrade`. Optional because a future entry may arrive undated, and an undated
+   * declaration cannot claim freshness (it grades as stale, never as fresh).
+   */
+  capacityDeclaredAt?: string;
   focus: string;
   matchLine: string;
   fitSignals: string[];
@@ -197,6 +205,10 @@ export const clinicians: Clinician[] = [
     reach: "Practice appointments and phone consultations",
     image: "/clinicians/anubhav-saxena.png",
     acceptingNewPatients: true,
+    // The date each declaration went on the record, from this file's own history — not a survey
+    // answer we never ran. Both Beecroft declarations landed 2026-08-14 (21196bd), Dr Anusha
+    // Saxena's 2026-08-18 (PR #4). Reconfirming moves the date; nothing else does.
+    capacityDeclaredAt: "2026-08-14",
     focus: "Structured assessment, baseline physical screening & titration",
     matchLine: "A measured assessment with the physical baseline done properly, then titration reviewed on a schedule.",
     fitSignals: ["ADHD assessment", "Baseline physical screening", "Titration", "Phone consultations"],
@@ -244,6 +256,7 @@ export const clinicians: Clinician[] = [
     // No portrait supplied. Renders as a monogram; nothing here generates a face for a real person.
     image: null,
     acceptingNewPatients: true,
+    capacityDeclaredAt: "2026-08-14",
     focus: "Unhurried first appointments & ADHD care alongside the rest of general practice",
     matchLine: "A longer first appointment with a GP who will take the whole history before reaching for a conclusion.",
     fitSignals: ["ADHD assessment", "Longer first appointment", "Hindi", "Family context"],
@@ -304,6 +317,7 @@ export const clinicians: Clinician[] = [
     reach: "Practice appointments in Double Bay",
     image: null,
     acceptingNewPatients: true,
+    capacityDeclaredAt: "2026-08-18",
     focus: "Mental health in general practice, women's health & paediatrics",
     matchLine: "Brings a mental-health focus to general practice, with psychology training behind it.",
     fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Paediatrics"],
@@ -347,7 +361,32 @@ export const clinicians: Clinician[] = [
  * inference, which W83 refused internally and which is worse in public. These weights only
  * express what each clinician SAYS they see often, matched against what the person SAID they want.
  */
-export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians): Clinician[] {
+/**
+ * How long a books declaration stays fresh: a quarter. Long enough that nobody is nagged
+ * weekly, short enough that a directory cannot spend a year advertising capacity nobody has —
+ * the NRMP lesson the year plan cites, priced in as data rather than trusted as a boolean.
+ */
+export const CAPACITY_FRESH_DAYS = 90;
+
+export type CapacityGrade = "fresh-open" | "stale-open" | "closed";
+
+/**
+ * Grade a capacity declaration by its age (O56). `today` is injected so ranking stays a pure
+ * function of its arguments — tests pin the boundary with a fixed clock, the UI passes now.
+ * An UNDATED open declaration grades stale: freshness is a claim, and a claim nobody dated
+ * cannot make it.
+ */
+export function capacityGrade(clinician: Clinician, today: Date = new Date()): CapacityGrade {
+  if (!clinician.acceptingNewPatients) return "closed";
+  if (!clinician.capacityDeclaredAt) return "stale-open";
+  const ageDays = (today.getTime() - new Date(clinician.capacityDeclaredAt).getTime()) / 86_400_000;
+  return ageDays <= CAPACITY_FRESH_DAYS ? "fresh-open" : "stale-open";
+}
+
+/** Exported so the console's audit sort is the SAME order the finder uses, not a re-guess. */
+export const CAPACITY_ORDER: Record<CapacityGrade, number> = { "fresh-open": 0, "stale-open": 1, closed: 2 };
+
+export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date()): Clinician[] {
   const needs = needsFor(query, roster);
   return [...roster].sort((a, b) => {
     const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
@@ -366,8 +405,11 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
      * reader may want exactly that GP and their waitlist; the card says why they are still
      * shown (`CLOSED_BOOKS_COPY`). Position from an operational fact, sayable in one sentence.
      */
-    const closed = (clinician: Clinician) => (clinician.acceptingNewPatients ? 0 : 1);
-    const byCapacity = closed(a) - closed(b);
+    /* O56: the O4 boundary, now three grades. A stale open declaration still beats closed
+       books (there is still a door to knock on), but no longer beats one confirmed this
+       quarter — capacity that nobody has reconfirmed is capacity the mechanism stops
+       vouching for at a tie. */
+    const byCapacity = CAPACITY_ORDER[capacityGrade(a, today)] - CAPACITY_ORDER[capacityGrade(b, today)];
     if (byCapacity !== 0) return byCapacity;
 
     /**
@@ -733,8 +775,9 @@ export function rankCliniciansNear(
   query: string,
   origin: SuburbPoint | null,
   roster: readonly Clinician[] = clinicians,
+  today: Date = new Date(),
 ): Clinician[] {
-  const byFit = rankClinicians(query, roster);
+  const byFit = rankClinicians(query, roster, today);
   if (!origin) return byFit;
 
   const needs = needsFor(query, roster);
@@ -757,7 +800,7 @@ export function rankCliniciansNear(
    * keep the fit order (which carries the founder-behind rule).
    */
   const out = [...byFit];
-  const tieKey = (c: Clinician) => `${scoreAgainst(c, needs)}|${c.acceptingNewPatients ? 0 : 1}`;
+  const tieKey = (c: Clinician) => `${scoreAgainst(c, needs)}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;
   let start = 0;
   while (start < out.length) {
     let end = start;

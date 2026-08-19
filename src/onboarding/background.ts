@@ -32,8 +32,8 @@
 
 import { EI_QUALITIES, type EIQuality } from "@/demo/emotional-fit";
 import type { CareArea } from "@/demo/care-archetypes";
-import type { Clinician } from "@/demo/clinicians";
-import { matchEvidence, needsFor, roundScore } from "@/demo/clinicians";
+import type { CapacityGrade, Clinician } from "@/demo/clinicians";
+import { capacityGrade, matchEvidence, needsFor, roundScore } from "@/demo/clinicians";
 import { facetKey } from "@/matching/needs";
 import type { Frequency } from "./interview";
 import { CARE_LABEL_BY_AREA, type ProposedFacet } from "./transcript";
@@ -180,13 +180,14 @@ export type MatchAudit = {
     /** Declaration breadth, so inflation is visible where it is priced (O2/F1):
      *  "declares 15 of 17 areas" is a sentence a reviewer can act on. */
     declares: { often: number; sometimes: number; of: number };
-    /** Capacity breaks score ties in the finder (O4), so the audit must carry it or its
-     *  sort disagrees with the ranking it claims to reproduce (Codex review on PR #1). */
-    booksOpen: boolean;
+    /** Capacity breaks score ties in the finder (O4, three grades since O56), so the audit
+     *  must carry the GRADE or its sort disagrees with the ranking it claims to reproduce
+     *  (Codex review on PR #1; the boolean stopped being the tie-break in O56). */
+    capacity: CapacityGrade;
   }>;
 };
 
-export function matchAudit(query: string, roster: readonly Clinician[]): MatchAudit {
+export function matchAudit(query: string, roster: readonly Clinician[], today: Date = new Date()): MatchAudit {
   // The same needs the ranking scores — including asked-for languages — so the audit cannot
   // show a total the finder did not compute (the O1/F2 unity repair). Computed over the roster
   // being audited, for the same reason the ranking is (O8 review).
@@ -218,7 +219,7 @@ export function matchAudit(query: string, roster: readonly Clinician[]): MatchAu
           sometimes: sometimesOnly.length,
           of: CARE_LABEL_BY_AREA.size,
         },
-        booksOpen: clinician.acceptingNewPatients,
+        capacity: capacityGrade(clinician, today),
       };
     }),
   };

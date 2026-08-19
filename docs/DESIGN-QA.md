@@ -278,3 +278,21 @@ changed). Taste-skill pass applied.
 - [x] E2e pins what the tween animates BETWEEN: the same keyed rows, reordered, nobody minted
   and nobody lost; a chip that merely confirms the order is tolerated, per clarify.ts's own
   contract.
+
+## O56 — capacity freshness on the matching console (2026-08-19)
+
+Captures: qa/capacity-o56/ (the freshness panel, desktop and 390px). Taste-skill pass applied.
+
+- [x] One idea per section: a declaration's age, said plainly. Grade and its evidence share a
+  row (the tag carries "open, confirmed · declared 2026-08-14"); the nudge is the sentence
+  beneath, so a reviewer joins fact to action without scanning two regions.
+- [x] Console vocabulary reused whole (`mc-section`, `mc-clinician`, `mc-tag`, `mc-note`) — no
+  new CSS, no accent spent: nothing on this panel is a live token, so nothing is coloured as
+  one. Stale rows borrow `mc-missed`, the console's existing "needs attention" register.
+- [x] Honesty gates: the panel never characterises the clinician — it dates OUR record of THEIR
+  declaration. Dates come from this file's own git history, not a survey that never ran; the
+  reconfirm nudge asks staff to ask the practice, never asserts what the practice will say.
+- [x] Staff-only surface: patient-facing copy untouched (ordering only, and only within exact
+  score ties). The closed-books sentence patients see is unchanged.
+- [x] No motion, no new touch targets; grade boundaries (90/91 days, undated-open→stale) are
+  unit-pinned with an injected clock so this panel can never disagree with the finder's sort.

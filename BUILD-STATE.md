@@ -119,20 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
-> **O56 (Q2 item 7 — capacity truthfulness: declarations age) — claimed 2026-08-19T11:45Z by
+> **O56 (Q2 item 7 — capacity truthfulness: declarations age) — DONE 2026-08-19 by
 > loop-0819l.** The matching-market lesson the plan cites: stated capacity drifts from real
-> capacity, and the mechanism must price that in. Today `acceptingNewPatients` is an undated
-> boolean that the O4 tie-break trusts forever. Change: `capacityDeclaredAt` on the roster
-> (real go-live date for Dr Saxena, synthetic dates for the synthetic clinicians);
-> `capacityConfidence(clinician, today)` grades a declaration fresh / stale (older than
-> CAPACITY_FRESH_DAYS = 90 — a quarter, the natural reconfirm cadence) / unknown, with
-> UNDATED graded like stale because an undated declaration cannot claim freshness; the O4
-> tie-break becomes three-grade (fresh-open, then stale-open, then closed) with `today`
-> injected for determinism (the W232 properties keep holding); and the matching console gains
-> the freshness panel with a reconfirm nudge per stale declaration — the plan's "console
-> nudges" said as rows. Patient-facing COPY unchanged (ordering only), so no compliance
-> surface moves. Verify: grade boundaries + tie-break fixtures + property suite green; console
-> e2e renders the nudge; DESIGN-QA note + capture for the console panel; `pnpm verify` green.
+> capacity, and the mechanism must price that in. `acceptingNewPatients` was an undated
+> boolean the O4 tie-break trusted forever. Shipped: `capacityDeclaredAt` on the roster —
+> since every entry is now a real person, each date is the commit that put the declaration
+> on the record (Beecroft pair 2026-08-14 in 21196bd, Dr Anusha Saxena 2026-08-18 in PR #4),
+> nothing invented; `capacityGrade(clinician, today)` grades fresh-open (≤ CAPACITY_FRESH_DAYS
+> = 90, a quarter, the natural reconfirm cadence) / stale-open (older, or UNDATED — an undated
+> declaration cannot claim freshness) / closed; the O4 tie-break is three-grade in both
+> `rankClinicians` and `rankCliniciansNear` with `today` injected (W232 properties hold);
+> `matchAudit` carries the grade so the console sort cannot disagree with the finder; and the
+> console gained the capacity-freshness panel — grade + declared date share a row, reconfirm-by
+> nudge per open declaration, the stale wording says what lapsed. Patient copy unchanged
+> (ordering only, within exact score ties). The plan's "demote to sometimes-grade confidence"
+> was adapted: confidence demotion would touch scores, and capacity's law is ties only. Gate:
+> 8 new pins in clinicians.test.ts §O56 (90/91-day boundary with a fixed clock, undated-open,
+> fresh>stale>closed whatever the file order, staleness never costs fit, distance stays inside
+> the grade, founder-behind intact, live roster fully dated); console e2e renders the panel and
+> nudges (qa/capacity-o56/); DESIGN-QA entry added; full `pnpm verify` green (207 files, 3021
+> tests). Year plan Q2 item 7 marked done.
 
 > **O55 (Q2 item 6 — fuzz the reader, and budget it) — claimed 2026-08-19T10:45Z by
 > loop-0819k.** Two halves, per the plan. The BUDGET is a production change: the reader gains

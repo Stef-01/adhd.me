@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { capacityGrade, clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -318,6 +318,88 @@ describe("O4 reciprocity as capacity (F5)", () => {
     ];
     expect(rankClinicians("hello", roster)).toHaveLength(2);
     expect(CLOSED_BOOKS_COPY).toMatch(/shown because they fit what you asked/);
+  });
+});
+
+describe("O56 capacity truthfulness: a declaration ages, and the tie-break prices its age", () => {
+  /**
+   * THE DEFECT THIS PINS. `acceptingNewPatients: true` written once is a claim the directory
+   * repeats forever — books close without anybody editing a profile (the NRMP lesson the year
+   * plan cites). So the declaration now carries its date, freshness is graded from that date
+   * with the clock INJECTED, and the O4 tie-break becomes three grades: a stale open
+   * declaration still beats closed books (there is a door to knock on) but no longer beats one
+   * confirmed this quarter. Grading never scores and never filters — order within a tie only,
+   * exactly like O4 before it.
+   */
+  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+  const on = (iso: string) => new Date(`${iso}T00:00:00Z`);
+
+  it("grades the boundary exactly: fresh at 90 days, stale at 91", () => {
+    const declared = { ...yadav(), capacityDeclaredAt: "2026-08-19" };
+    expect(capacityGrade(declared, on("2026-08-19"))).toBe("fresh-open");
+    // Day CAPACITY_FRESH_DAYS is the last fresh day; one more and the claim has lapsed.
+    expect(capacityGrade(declared, on("2026-11-17"))).toBe("fresh-open"); // +90
+    expect(capacityGrade(declared, on("2026-11-18"))).toBe("stale-open"); // +91
+    expect(CAPACITY_FRESH_DAYS).toBe(90);
+  });
+
+  it("never lets an undated open declaration claim freshness", () => {
+    const undated = { ...yadav(), capacityDeclaredAt: undefined };
+    expect(capacityGrade(undated, on("2026-08-19"))).toBe("stale-open");
+  });
+
+  it("grades closed books closed regardless of any date on record", () => {
+    const closed = { ...yadav(), acceptingNewPatients: false, capacityDeclaredAt: "2026-08-19" };
+    expect(capacityGrade(closed, on("2026-08-19"))).toBe("closed");
+  });
+
+  it("breaks an equal-fit tie fresh over stale over closed, whatever the file order", () => {
+    const roster = [
+      { ...yadav(), id: "closed", acceptingNewPatients: false },
+      { ...yadav(), id: "stale", capacityDeclaredAt: "2026-01-01" },
+      { ...yadav(), id: "fresh", capacityDeclaredAt: "2026-08-01" },
+    ];
+    expect(rankClinicians("hello", roster, on("2026-08-19")).map((c) => c.id)).toEqual([
+      "fresh",
+      "stale",
+      "closed",
+    ]);
+  });
+
+  it("never charges a point of fit for staleness — grade orders ties only", () => {
+    const roster = [
+      { ...yadav(), id: "fresh-no-fit", careAreas: [] as CareArea[], capacityDeclaredAt: "2026-08-01" },
+      { ...yadav(), id: "stale-fits", careAreas: ["titration"] as CareArea[], capacityDeclaredAt: "2025-01-01" },
+    ];
+    expect(rankClinicians("my dose needs titration", roster, on("2026-08-19"))[0]!.id).toBe("stale-fits");
+  });
+
+  it("keeps distance inside the grade boundary: near-stale never crosses far-fresh", () => {
+    const roster = [
+      { ...yadav(), id: "near-stale", suburb: "Epping", capacityDeclaredAt: "2025-01-01" },
+      { ...yadav(), id: "far-fresh", suburb: "Southport", capacityDeclaredAt: "2026-08-01" },
+    ];
+    const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster, on("2026-08-19"));
+    expect(near[0]!.id).toBe("far-fresh");
+  });
+
+  it("keeps the founder-behind rule intact within a grade", () => {
+    const saxena = clinicians.find((c) => c.id === "anubhav-saxena")!;
+    expect(saxena.founderInterest).toBeTruthy();
+    const tied = [
+      { ...saxena, capacityDeclaredAt: "2026-08-01" },
+      { ...yadav(), careAreas: saxena.careAreas, careAreasSometimes: saxena.careAreasSometimes, manner: saxena.manner, languages: saxena.languages, capacityDeclaredAt: "2026-08-01" },
+    ];
+    // Same grade, same declarations: the disclosed interest still sorts behind (W221).
+    expect(rankClinicians("hello", tied, on("2026-08-19"))[0]!.id).toBe("tushar-yadav");
+  });
+
+  it("dates every live roster declaration, so nothing on the record is undated", () => {
+    // The dates are the commits that put each declaration on the record — see the roster
+    // comment. A new entry without a date grades stale until somebody actually confirms it.
+    for (const clinician of clinicians) {
+      expect(clinician.capacityDeclaredAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
   });
 });
 

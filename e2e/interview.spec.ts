@@ -117,6 +117,29 @@ test("a saved interview's unheard sentences land in the reach-gap feed (O38)", a
   await feed.screenshot({ path: "qa/reach-o38/reach-feed-mobile.png" });
 });
 
+test("the matching console prices capacity age: a freshness row and a reconfirm date per declaration (O56)", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/console/matching");
+
+  const panel = page.locator(".mc-section", { has: page.getByRole("heading", { name: "Capacity freshness" }) });
+  await expect(panel).toBeVisible();
+
+  // Every roster declaration is dated and carries its nudge. The live roster is fresh today,
+  // so the nudge is the reconfirm-by date; the stale wording is pinned by the unit tests with
+  // an injected clock, because a real stale entry on this page would mean the date had actually
+  // lapsed for a real practice.
+  for (const clinician of ["Dr Anubhav Saxena", "Dr Tushar Yadav", "Dr Anusha Saxena"]) {
+    const row = panel.locator(".mc-clinician", { hasText: clinician });
+    await expect(row.getByText(/declared \d{4}-\d{2}-\d{2}/)).toBeVisible();
+    await expect(row.getByText(/Reconfirm (by \d{4}-\d{2}-\d{2}|needed)/)).toBeVisible();
+  }
+
+  // The design record for the panel.
+  await panel.screenshot({ path: "qa/capacity-o56/freshness-panel-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await panel.screenshot({ path: "qa/capacity-o56/freshness-panel-mobile.png" });
+});
+
 test("screenshots for the design record", async ({ page }) => {
   await signIn(page);
   await page.getByLabel("Interview transcript").fill(
