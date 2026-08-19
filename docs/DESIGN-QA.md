@@ -354,3 +354,24 @@ own-script controls, honesty note). Taste-skill pass applied.
   failure ladder (language-not-supported copy included) is unchanged.
 - [x] Touch floor held: small type, full-height padded hit areas, touch-action manipulation;
   English default untouched, so the common path gained nothing but one quiet line.
+
+## O60 — type in rem, so text follows the reader (2026-08-19)
+
+Captures: qa/type-o60/ (the finder at the default root, and the same screens at a 20px root —
+every size following the reader's setting, layout holding). Taste-skill pass applied.
+
+- [x] The migration IS the taste rule: the reader's browser font-size preference is the one
+  low-vision control that works without per-page zooming, and px type ignored it. All 344
+  font sizes in globals.css are now exact rem equals (px ÷ 16, clamp() bounds included, the
+  fluid vw middles untouched).
+- [x] Zero visual drift bought honestly: before/after full-page captures of /, /finder,
+  /clinicians/join and /approach at the default root are BYTE-IDENTICAL — the conversion is
+  arithmetic, so any pixel that moved would have been a bug, and none did.
+- [x] The root stays unset: 1rem is the reader's setting, and the new ratchet test refuses
+  both a reintroduced px font size and any future `html { font-size }` re-anchoring.
+- [x] px kept where px is right: borders, radii, shadows, fixed dimensions and breakpoints
+  are not type and were deliberately not churned.
+- [x] a11y e2e green across all public surfaces. Known and recorded, NOT from this unit: the
+  /clinicians/join 390px fit test fails identically before and after this migration (an
+  unstyled label+input pair overflowing) — ledgered for the next firing rather than widened
+  into this one.

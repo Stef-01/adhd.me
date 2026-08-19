@@ -119,7 +119,7 @@ textarea:focus-visible {
 
 .wordmark {
   color: var(--ink);
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 700;
   letter-spacing: -0.045em;
 }
@@ -170,7 +170,7 @@ textarea:focus-visible {
   padding: 8px 5px 12px;
   border-bottom: 1px solid var(--line);
   color: var(--ink);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 700;
   text-decoration: none;
 }
@@ -186,7 +186,7 @@ textarea:focus-visible {
   justify-content: space-between;
   padding: 2px 5px 12px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -225,7 +225,7 @@ textarea:focus-visible {
 
 .demo-nav-number {
   color: var(--faint);
-  font-size: 9px;
+  font-size: 0.5625rem;
   font-weight: 700;
   letter-spacing: 0.06em;
 }
@@ -241,7 +241,7 @@ textarea:focus-visible {
 
 .demo-nav-stops strong {
   color: var(--ink);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -249,7 +249,7 @@ textarea:focus-visible {
   overflow: hidden;
   margin-top: 3px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -275,7 +275,7 @@ textarea:focus-visible {
 
 .demo-nav-next span {
   color: #c9c8c2;
-  font-size: 9px;
+  font-size: 0.5625rem;
   font-weight: 650;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -283,7 +283,7 @@ textarea:focus-visible {
 
 .demo-nav-next strong {
   margin-top: 2px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .demo-nav-next svg {
@@ -333,7 +333,7 @@ textarea:focus-visible {
 .eyebrow {
   margin: 0;
   color: var(--accent);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 650;
   letter-spacing: 0.015em;
 }
@@ -365,7 +365,7 @@ textarea:focus-visible {
 }
 
 .voice-prompt h1 {
-  font-size: clamp(42px, 11vw, 54px);
+  font-size: clamp(2.625rem, 11vw, 3.375rem);
   line-height: 0.99;
 }
 
@@ -373,7 +373,7 @@ textarea:focus-visible {
   max-width: 330px;
   margin: 23px auto 0;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.55;
 }
 
@@ -387,7 +387,7 @@ textarea:focus-visible {
 .voice-actions > p {
   margin: 15px 0 12px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .mic-button {
@@ -424,7 +424,7 @@ textarea:focus-visible {
   bottom: 18px;
   left: 0;
   color: var(--faint);
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: center;
 }
 
@@ -433,7 +433,7 @@ textarea:focus-visible {
 }
 
 .listening-copy h1 {
-  font-size: clamp(39px, 10vw, 50px);
+  font-size: clamp(2.4375rem, 10vw, 3.125rem);
 }
 
 .listening-screen .voice-actions {
@@ -471,7 +471,7 @@ textarea:focus-visible {
 .confirmed-screen h1 {
   margin: 10px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 43px;
+  font-size: 2.6875rem;
   font-weight: 430;
   line-height: 1.03;
   letter-spacing: -0.035em;
@@ -489,7 +489,7 @@ textarea:focus-visible {
   color: var(--ink);
   background: transparent;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 26px;
+  font-size: 1.625rem;
   line-height: 1.28;
 }
 
@@ -506,7 +506,7 @@ textarea:focus-visible {
 .booking-heard {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.5;
 }
 
@@ -518,7 +518,7 @@ textarea:focus-visible {
   border-radius: 8px;
   color: var(--on-ground);
   background: var(--ground);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 650;
   cursor: pointer;
   transition: transform 150ms ease, background 150ms ease;
@@ -542,7 +542,7 @@ textarea:focus-visible {
 .bottom-action > p {
   margin: 12px 0 0;
   color: var(--faint);
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: center;
 }
 
@@ -564,7 +564,7 @@ textarea:focus-visible {
   border-radius: 3px;
   color: var(--accent);
   background: var(--accent-soft);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 620;
   line-height: 1.25;
 }
@@ -593,14 +593,14 @@ textarea:focus-visible {
   border-radius: 3px;
   color: var(--accent);
   background: var(--accent-soft);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 620;
   line-height: 1.25;
 }
 
 .fit-evidence-said {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.4;
 }
 
@@ -614,7 +614,7 @@ textarea:focus-visible {
   padding: 0;
   list-style: none;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.45;
   max-width: 52ch;
 }
@@ -631,7 +631,7 @@ textarea:focus-visible {
   border-radius: 3px;
   color: var(--muted);
   background: transparent;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 560;
   line-height: 1.25;
 }
@@ -645,7 +645,7 @@ textarea:focus-visible {
   border: 0;
   color: var(--accent);
   background: transparent;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 620;
   cursor: pointer;
 }
@@ -672,7 +672,7 @@ textarea:focus-visible {
   display: -webkit-box;
   overflow: hidden;
   max-width: 350px;
-  font-size: 36px;
+  font-size: 2.25rem;
   line-height: 1.02;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -687,7 +687,7 @@ textarea:focus-visible {
   border: 0;
   color: var(--accent);
   background: transparent;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 620;
   cursor: pointer;
 }
@@ -736,7 +736,7 @@ textarea:focus-visible {
   display: block;
   margin-bottom: 8px;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 0.78125rem;
   font-weight: 500;
 }
 .place-field input {
@@ -749,14 +749,14 @@ textarea:focus-visible {
   color: var(--ink);
   background: var(--stone);
   font: inherit;
-  font-size: 16px;
+  font-size: 1rem;
 }
 .place-field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.place-status { margin: 8px 0 0; color: var(--faint); font-size: 14px; line-height: 1.5; }
+.place-status { margin: 8px 0 0; color: var(--faint); font-size: 0.875rem; line-height: 1.5; }
 /* The match-quality banner and top-tie note carry the sentence the whole screen turns on —
    "this is not a ranking". They were 12px faint grey: AA-compliant and functionally invisible
    to the low-vision reader the finder most needs to be honest with (O14). */
-.match-quality { font-size: 15px; color: var(--muted); }
+.match-quality { font-size: 0.9375rem; color: var(--muted); }
 
 /* The computed distance, on its own line so it does not join the metadata dot chain. */
 .clinician-distance { display: block; margin-top: 3px; color: var(--faint); }
@@ -766,7 +766,7 @@ textarea:focus-visible {
   margin: 18px 0 0;
   max-width: 32ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(20px, 5vw, 27px);
+  font-size: clamp(1.25rem, 5vw, 1.6875rem);
   font-weight: 420;
   line-height: 1.32;
   letter-spacing: -0.02em;
@@ -780,7 +780,7 @@ textarea:focus-visible {
   max-width: 34ch;
   margin: 18px auto 0;
   color: var(--faint);
-  font-size: 11.5px;
+  font-size: 0.71875rem;
   line-height: 1.55;
   text-align: center;
 }
@@ -790,7 +790,7 @@ textarea:focus-visible {
 .speech-language {
   margin: 8px auto 0;
   color: var(--faint);
-  font-size: 11.5px;
+  font-size: 0.71875rem;
   line-height: 1.55;
   text-align: center;
 }
@@ -798,7 +798,7 @@ textarea:focus-visible {
 .speech-language-choice {
   margin-left: 10px;
   padding: 12px 6px; /* small type, full-height touch target (O14 floor) */
-  font-size: 13px;
+  font-size: 0.8125rem;
   text-decoration: underline;
   text-underline-offset: 3px;
   touch-action: manipulation;
@@ -809,7 +809,7 @@ textarea:focus-visible {
   max-width: 34ch;
   margin: 6px auto 0;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 0.78125rem;
   line-height: 1.55;
   text-align: center;
 }
@@ -820,7 +820,7 @@ textarea:focus-visible {
   border-left: 2px solid var(--accent);
   background: var(--accent-soft);
   color: var(--ink);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.5;
 }
 
@@ -835,7 +835,7 @@ textarea:focus-visible {
   border-radius: 10px;
   background: var(--paper);
   color: var(--ink);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   touch-action: manipulation;
   cursor: pointer;
@@ -846,7 +846,7 @@ textarea:focus-visible {
 .declared-claim {
   margin: 10px 0 0;
   color: var(--faint);
-  font-size: 12.5px;
+  font-size: 0.78125rem;
   line-height: 1.5;
 }
 
@@ -885,13 +885,13 @@ textarea:focus-visible {
 .clinician-meta {
   margin: 7px 0 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.45;
 }
 
 .match-line {
   margin: 10px 0 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.38;
 }
 
@@ -902,7 +902,7 @@ textarea:focus-visible {
 
 .availability {
   margin: 8px 0 10px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 580;
 }
 
@@ -957,7 +957,7 @@ textarea:focus-visible {
 
 .clinician-row strong {
   margin-bottom: 5px;
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing: -0.015em;
 }
 
@@ -974,7 +974,7 @@ textarea:focus-visible {
   /* 12px put the match REASON — the one line that decides between rows — in the smallest type
      on the screen, under a 15px name and a 27px headline. Inverted hierarchy for the reader
      who most needs the reason legible (O14). */
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.45;
 }
 
@@ -1017,7 +1017,7 @@ textarea:focus-visible {
 
 .profile-content h1 {
   margin: 8px 0 0;
-  font-size: 34px;
+  font-size: 2.125rem;
   line-height: 1.05;
   letter-spacing: -0.04em;
 }
@@ -1037,7 +1037,7 @@ textarea:focus-visible {
 
 .profile-content section h2 {
   margin: 0 0 10px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 680;
 }
 
@@ -1046,7 +1046,7 @@ textarea:focus-visible {
   display: flex;
   align-items: flex-start;
   color: #4f514c;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.65;
 }
 
@@ -1086,7 +1086,7 @@ textarea:focus-visible {
   margin: 0;
   padding: 15px 0;
   border-bottom: 1px solid var(--line);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.45;
 }
 
@@ -1108,7 +1108,7 @@ textarea:focus-visible {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .profile-footer span {
@@ -1123,7 +1123,7 @@ textarea:focus-visible {
 .booking-content > p:not(.eyebrow) {
   margin: 17px 0 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.55;
 }
 
@@ -1140,7 +1140,7 @@ textarea:focus-visible {
   border-radius: 5px;
   color: var(--ink);
   background: transparent;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-align: left;
   cursor: pointer;
 }
@@ -1161,14 +1161,14 @@ textarea:focus-visible {
 }
 
 .confirmed-screen h1 {
-  font-size: 42px;
+  font-size: 2.625rem;
 }
 
 .confirmed-screen div > p:last-child {
   max-width: 330px;
   margin: 18px auto 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.55;
 }
 
@@ -1205,7 +1205,7 @@ textarea:focus-visible {
 
 .clinician-product-name {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 520;
 }
 
@@ -1225,7 +1225,7 @@ textarea:focus-visible {
   border: 0;
   color: var(--faint);
   background: transparent;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 570;
   text-align: left;
   cursor: pointer;
@@ -1238,7 +1238,7 @@ textarea:focus-visible {
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .walkthrough-progress button.is-reached {
@@ -1263,7 +1263,7 @@ textarea:focus-visible {
 .clinician-stage-heading h1 {
   margin: 10px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(42px, 5vw, 58px);
+  font-size: clamp(2.625rem, 5vw, 3.625rem);
   font-weight: 430;
   line-height: 1.01;
   letter-spacing: -0.035em;
@@ -1273,7 +1273,7 @@ textarea:focus-visible {
   max-width: 620px;
   margin: 16px 0 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.6;
 }
 
@@ -1299,7 +1299,7 @@ textarea:focus-visible {
 
 .direction-label {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 620;
 }
 
@@ -1326,7 +1326,7 @@ textarea:focus-visible {
   border-radius: 6px;
   color: var(--muted);
   background: var(--paper);
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.35;
   text-align: left;
   cursor: pointer;
@@ -1358,13 +1358,13 @@ textarea:focus-visible {
 
 .target-control label {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 620;
 }
 
 .target-control strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 33px;
+  font-size: 2.0625rem;
   font-weight: 460;
 }
 
@@ -1380,7 +1380,7 @@ textarea:focus-visible {
   justify-content: space-between;
   margin-top: 4px;
   color: var(--faint);
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .clinician-stage-action {
@@ -1398,7 +1398,7 @@ textarea:focus-visible {
 .clinician-stage-action > p {
   margin: 10px 0 0;
   color: var(--faint);
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.45;
 }
 
@@ -1411,7 +1411,7 @@ textarea:focus-visible {
   border: 0;
   color: var(--muted);
   background: transparent;
-  font-size: 12px;
+  font-size: 0.75rem;
   cursor: pointer;
 }
 
@@ -1440,12 +1440,12 @@ textarea:focus-visible {
 .feed-summary span,
 .practice-metrics span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .feed-summary strong {
   margin-top: 5px;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .panel-heading {
@@ -1455,7 +1455,7 @@ textarea:focus-visible {
 
 .panel-heading h2 {
   margin: 5px 0 0;
-  font-size: 19px;
+  font-size: 1.1875rem;
   letter-spacing: -0.025em;
 }
 
@@ -1477,7 +1477,7 @@ textarea:focus-visible {
 
 .case-row time {
   color: var(--accent);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 620;
 }
 
@@ -1487,13 +1487,13 @@ textarea:focus-visible {
 }
 
 .case-row strong {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .case-row span {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .inline-action {
@@ -1553,19 +1553,19 @@ textarea:focus-visible {
 
 .resource-eyebrow {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 650;
 }
 
 .resource-row strong {
   margin-top: 4px;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .resource-row small {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 1.4;
 }
 
@@ -1577,7 +1577,7 @@ textarea:focus-visible {
 
 .resource-meta > span {
   color: var(--faint);
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .resource-meta a {
@@ -1607,7 +1607,7 @@ textarea:focus-visible {
 
 .briefing-footer > span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .briefing-footer > button {
@@ -1617,7 +1617,7 @@ textarea:focus-visible {
   border-radius: 6px;
   color: var(--on-ground);
   background: var(--ground);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 620;
   cursor: pointer;
 }
@@ -1629,7 +1629,7 @@ textarea:focus-visible {
 .practice-metrics strong {
   margin-top: 7px;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 30px;
+  font-size: 1.875rem;
   font-weight: 450;
 }
 
@@ -1651,17 +1651,17 @@ textarea:focus-visible {
 .practice-loop > div > span {
   color: var(--accent);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 22px;
+  font-size: 1.375rem;
 }
 
 .practice-loop strong {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .practice-loop p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 1.45;
 }
 
@@ -1683,7 +1683,7 @@ textarea:focus-visible {
 .skin-cancer-note p {
   margin: 0;
   color: #4f5942;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -1711,13 +1711,13 @@ textarea:focus-visible {
   .walkthrough-progress button {
     min-height: 48px;
     gap: 5px;
-    font-size: 9px;
+    font-size: 0.5625rem;
   }
 
   .walkthrough-progress button span {
     width: 18px;
     height: 18px;
-    font-size: 9px;
+    font-size: 0.5625rem;
   }
 
   .clinician-stage {
@@ -1725,7 +1725,7 @@ textarea:focus-visible {
   }
 
   .clinician-stage-heading h1 {
-    font-size: 41px;
+    font-size: 2.5625rem;
   }
 
   .direction-panel,
@@ -1781,7 +1781,7 @@ textarea:focus-visible {
   }
 
   .practice-metrics strong {
-    font-size: 25px;
+    font-size: 1.5625rem;
   }
 
   .practice-loop {
@@ -1839,14 +1839,14 @@ textarea:focus-visible {
 }
 
 .patient-v2 .wordmark {
-  font-size: 23px;
+  font-size: 1.4375rem;
   letter-spacing: -0.055em;
 }
 
 .patient-v2 .quiet-link,
 .patient-v2 .text-action,
 .patient-v2 .match-count {
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 650;
 }
 
@@ -1860,7 +1860,7 @@ textarea:focus-visible {
 .patient-v2 .voice-prompt h1 {
   max-width: 455px;
   margin-top: 12px;
-  font-size: clamp(50px, 12vw, 64px);
+  font-size: clamp(3.125rem, 12vw, 4rem);
   line-height: 0.97;
   letter-spacing: -0.045em;
   text-wrap: balance;
@@ -1870,7 +1870,7 @@ textarea:focus-visible {
   max-width: 410px;
   margin: 22px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.55;
 }
 
@@ -1918,7 +1918,7 @@ textarea:focus-visible {
 .patient-v2 .voice-screen .mic-button:hover { background: #744910; }
 
 .patient-v2 .voice-screen .mic-button span {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 700;
 }
 
@@ -1947,7 +1947,7 @@ textarea:focus-visible {
   background: var(--accent-soft);
   color: var(--ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing: -0.01em;
 }
 .patient-v2 .voice-actions .dual-input-field::placeholder { color: #9c7b45; }
@@ -1977,7 +1977,7 @@ textarea:focus-visible {
   gap: 12px;
   margin: 16px 0 4px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2004,7 +2004,7 @@ textarea:focus-visible {
   background: var(--accent-soft);
   color: var(--ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 14px;
+  font-size: 0.875rem;
   letter-spacing: -0.01em;
   text-align: center;
 }
@@ -2017,7 +2017,7 @@ textarea:focus-visible {
 
 .patient-v2 .micro-footer {
   bottom: 13px;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .patient-v2 .listening-copy {
@@ -2047,7 +2047,7 @@ textarea:focus-visible {
 .patient-v2 .booking-content h1,
 .patient-v2 .all-heading h1,
 .patient-v2 .confirmed-screen h1 {
-  font-size: 48px;
+  font-size: 3rem;
   line-height: 0.99;
   letter-spacing: -0.045em;
 }
@@ -2059,7 +2059,7 @@ textarea:focus-visible {
   border: 1px solid var(--line);
   border-radius: 20px;
   background: #f5f4ef;
-  font-size: 23px;
+  font-size: 1.4375rem;
   line-height: 1.32;
 }
 
@@ -2074,12 +2074,12 @@ textarea:focus-visible {
   justify-content: center;
   gap: 8px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 720;
 }
 
 .patient-v2 .bottom-action > p {
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .patient-v2 .review-content {
@@ -2089,7 +2089,7 @@ textarea:focus-visible {
 
 .patient-v2 .review-content h1 {
   max-width: 455px;
-  font-size: 51px;
+  font-size: 3.1875rem;
   line-height: 0.98;
   letter-spacing: -0.045em;
 }
@@ -2099,7 +2099,7 @@ textarea:focus-visible {
   overflow: hidden;
   max-width: 430px;
   margin-top: 18px;
-  font-size: 12px;
+  font-size: 0.75rem;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
@@ -2117,7 +2117,7 @@ textarea:focus-visible {
   border-radius: 0;
   color: var(--ink);
   background: transparent;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 650;
 }
 
@@ -2139,7 +2139,7 @@ textarea:focus-visible {
 }
 
 .patient-v2 .matching-screen h1 {
-  font-size: 48px;
+  font-size: 3rem;
   line-height: 0.98;
 }
 
@@ -2157,7 +2157,7 @@ textarea:focus-visible {
 
 .patient-v2 .request-banner h1 {
   max-width: 430px;
-  font-size: 35px;
+  font-size: 2.1875rem;
   line-height: 1;
   letter-spacing: -0.045em;
 }
@@ -2165,7 +2165,7 @@ textarea:focus-visible {
 .patient-v2 .refine-compact {
   min-height: 40px;
   margin-top: 7px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .patient-v2 .refine-compact .waveform-mark svg {
@@ -2192,7 +2192,7 @@ textarea:focus-visible {
 
 .patient-v2 .match-details h2 {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 37px;
+  font-size: 2.3125rem;
   font-weight: 470;
   line-height: 1;
   letter-spacing: -0.045em;
@@ -2200,13 +2200,13 @@ textarea:focus-visible {
 
 .patient-v2 .clinician-meta {
   margin-top: 6px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .patient-v2 .match-reason {
   max-width: 440px;
   margin: 14px 0 0;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 570;
   line-height: 1.45;
 }
@@ -2219,12 +2219,12 @@ textarea:focus-visible {
 .patient-v2 .practical-signal-row span {
   padding: 6px 9px;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .patient-v2 .availability {
   margin: 12px 0 14px;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 650;
 }
 
@@ -2253,11 +2253,11 @@ textarea:focus-visible {
 }
 
 .patient-v2 .clinician-row strong {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .patient-v2 .clinician-row small {
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .patient-v2 .profile-header {
@@ -2278,7 +2278,7 @@ textarea:focus-visible {
 
 .patient-v2 .profile-content h1 {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 43px;
+  font-size: 2.6875rem;
   font-weight: 470;
 }
 
@@ -2289,7 +2289,7 @@ textarea:focus-visible {
 .patient-v2 .fit-signal-row span {
   padding: 6px 9px;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .patient-v2 .fit-list {
@@ -2309,7 +2309,7 @@ textarea:focus-visible {
 
 .patient-v2 .profile-content section p,
 .patient-v2 .profile-content section li {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .patient-v2 .profile-footer {
@@ -2328,7 +2328,7 @@ textarea:focus-visible {
   min-height: 64px;
   padding: 15px 18px;
   border-radius: 18px;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .patient-v2 .confirmed-screen > div {
@@ -2347,18 +2347,18 @@ textarea:focus-visible {
   }
 
   .patient-v2 .voice-prompt h1 {
-    font-size: 52px;
+    font-size: 3.25rem;
   }
 
   .patient-v2 .review-content h1 {
-    font-size: 48px;
+    font-size: 3rem;
   }
 
   .patient-v2 .type-content h1,
   .patient-v2 .booking-content h1,
   .patient-v2 .all-heading h1,
   .patient-v2 .confirmed-screen h1 {
-    font-size: 44px;
+    font-size: 2.75rem;
   }
 }
 
@@ -2417,13 +2417,13 @@ textarea:focus-visible {
 }
 
 .cv2-brand .wordmark {
-  font-size: 23px;
+  font-size: 1.4375rem;
   letter-spacing: -0.055em;
 }
 
 .cv2-brand > span:last-child {
   color: var(--cv2-muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 550;
 }
 
@@ -2433,7 +2433,7 @@ textarea:focus-visible {
   gap: 6px;
   min-height: 44px;
   color: var(--cv2-muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 620;
   text-decoration: none;
 }
@@ -2448,7 +2448,7 @@ textarea:focus-visible {
 .cv2-progress > span {
   flex: 0 0 auto;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 650;
   letter-spacing: 0.02em;
 }
@@ -2497,7 +2497,7 @@ textarea:focus-visible {
 .cv2-eyebrow {
   margin: 0;
   color: var(--cv2-accent);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 720;
   letter-spacing: 0.01em;
 }
@@ -2505,7 +2505,7 @@ textarea:focus-visible {
 .cv2-intro h1 {
   margin: 12px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(48px, 8vw, 64px);
+  font-size: clamp(3rem, 8vw, 4rem);
   font-weight: 430;
   line-height: 0.98;
   letter-spacing: -0.045em;
@@ -2516,7 +2516,7 @@ textarea:focus-visible {
   max-width: 490px;
   margin: 19px 0 0;
   color: var(--cv2-muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.55;
 }
 
@@ -2593,20 +2593,20 @@ textarea:focus-visible {
 
 .cv2-focus-card small {
   color: var(--cv2-accent);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
 }
 
 .cv2-focus-card strong {
   margin-top: 4px;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.3;
 }
 
 .cv2-focus-card em {
   margin-top: 5px;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-style: normal;
   line-height: 1.4;
 }
@@ -2624,7 +2624,7 @@ textarea:focus-visible {
   width: 100%;
   padding: 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 26px;
+  font-size: 1.625rem;
   font-weight: 470;
   letter-spacing: -0.025em;
 }
@@ -2633,7 +2633,7 @@ textarea:focus-visible {
   clear: both;
   margin: 7px 0 0;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.5;
 }
 
@@ -2703,14 +2703,14 @@ textarea:focus-visible {
 }
 
 .cv2-condition-list strong {
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 1.35;
 }
 
 .cv2-condition-list small {
   margin-top: 4px;
   color: var(--cv2-muted);
-  font-size: 9px;
+  font-size: 0.5625rem;
   line-height: 1.35;
 }
 
@@ -2726,13 +2726,13 @@ textarea:focus-visible {
 }
 
 .cv2-coming-section > div:first-child span {
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 680;
 }
 
 .cv2-coming-section > div:first-child small {
   color: var(--cv2-muted);
-  font-size: 9px;
+  font-size: 0.5625rem;
 }
 
 .cv2-coming-grid {
@@ -2754,14 +2754,14 @@ textarea:focus-visible {
   border-radius: 11px;
   color: #6f716b;
   background: #f7f6f2;
-  font-size: 9px;
+  font-size: 0.5625rem;
   text-align: left;
   cursor: not-allowed;
 }
 
 .cv2-coming-grid button > small {
   color: #92948e;
-  font-size: 8px;
+  font-size: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -2776,7 +2776,7 @@ textarea:focus-visible {
   color: white;
   background: var(--cv2-ground);
   box-shadow: 0 8px 24px rgb(30 32 26 / 15%);
-  font-size: 9px;
+  font-size: 0.5625rem;
   font-weight: 650;
   white-space: nowrap;
   opacity: 0;
@@ -2816,13 +2816,13 @@ textarea:focus-visible {
 
 .cv2-mix-card > div:first-child span {
   color: var(--cv2-muted);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 620;
 }
 
 .cv2-mix-card strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 38px;
+  font-size: 2.375rem;
   font-weight: 470;
   letter-spacing: -0.04em;
 }
@@ -2839,7 +2839,7 @@ textarea:focus-visible {
   justify-content: space-between;
   margin-top: 5px;
   color: var(--cv2-muted);
-  font-size: 9px;
+  font-size: 0.5625rem;
 }
 
 .cv2-action {
@@ -2859,7 +2859,7 @@ textarea:focus-visible {
   border-radius: 999px;
   color: white;
   background: var(--cv2-ground);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 700;
   cursor: pointer;
   transition: transform 160ms ease, background-color 160ms ease;
@@ -2874,7 +2874,7 @@ textarea:focus-visible {
 .cv2-action > p {
   margin: 11px 0 0;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.45;
   text-align: center;
 }
@@ -2889,7 +2889,7 @@ textarea:focus-visible {
   border: 0;
   color: var(--cv2-muted);
   background: transparent;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 650;
   cursor: pointer;
 }
@@ -2907,7 +2907,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: space-between;
   color: #d7d9d0;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 650;
 }
 
@@ -2920,14 +2920,14 @@ textarea:focus-visible {
 
 .cv2-case-number strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 82px;
+  font-size: 5.125rem;
   font-weight: 430;
   line-height: 0.8;
   letter-spacing: -0.06em;
 }
 
 .cv2-case-number span {
-  font-size: 19px;
+  font-size: 1.1875rem;
   font-weight: 650;
   line-height: 1.08;
 }
@@ -2937,7 +2937,7 @@ textarea:focus-visible {
   padding-top: 16px;
   border-top: 1px solid rgb(255 255 255 / 18%);
   color: #c6c9bf;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .cv2-case-list {
@@ -2963,7 +2963,7 @@ textarea:focus-visible {
 
 .cv2-case-list time {
   color: var(--cv2-accent);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 720;
 }
 
@@ -2973,13 +2973,13 @@ textarea:focus-visible {
 }
 
 .cv2-case-list strong {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .cv2-case-list span {
   margin-top: 4px;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .cv2-case-list svg {
@@ -3001,7 +3001,7 @@ textarea:focus-visible {
   padding: 20px 22px;
   border-bottom: 1px solid rgb(255 255 255 / 16%);
   color: var(--cv2-on-dark-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 650;
 }
 
@@ -3013,7 +3013,7 @@ textarea:focus-visible {
 .cv2-learning-body > p {
   margin: 0;
   color: var(--accent-tint);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 720;
 }
 
@@ -3021,7 +3021,7 @@ textarea:focus-visible {
   max-width: 460px;
   margin: 13px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 46px;
+  font-size: 2.875rem;
   font-weight: 430;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -3032,7 +3032,7 @@ textarea:focus-visible {
   max-width: 400px;
   margin-top: 20px;
   color: var(--cv2-on-dark-muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.55;
 }
 
@@ -3042,7 +3042,7 @@ textarea:focus-visible {
   gap: 6px;
   margin-top: 30px;
   color: white;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 700;
   text-decoration: none;
 }
@@ -3099,7 +3099,7 @@ textarea:focus-visible {
 
 .cv2-resource-progress > span {
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 650;
 }
 
@@ -3126,14 +3126,14 @@ textarea:focus-visible {
 
 .cv2-practice-hero > div:first-child span {
   color: var(--cv2-accent);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 720;
 }
 
 .cv2-practice-hero > div:first-child strong {
   margin-top: 8px;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 86px;
+  font-size: 5.375rem;
   font-weight: 430;
   line-height: 0.86;
   letter-spacing: -0.065em;
@@ -3142,7 +3142,7 @@ textarea:focus-visible {
 .cv2-practice-hero > div:first-child small {
   margin-top: 10px;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .cv2-practice-mini {
@@ -3155,13 +3155,13 @@ textarea:focus-visible {
 
 .cv2-practice-mini span {
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .cv2-practice-mini strong {
   margin-right: 4px;
   color: var(--cv2-ink);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .cv2-loop {
@@ -3179,17 +3179,17 @@ textarea:focus-visible {
 .cv2-loop > div > span {
   color: var(--cv2-accent);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .cv2-loop strong {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .cv2-loop p {
   margin: 4px 0 0;
   color: var(--cv2-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.45;
 }
 
@@ -3203,7 +3203,7 @@ textarea:focus-visible {
 .cv2-note p {
   margin: 0;
   color: #55594f;
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.55;
 }
 
@@ -3222,7 +3222,7 @@ textarea:focus-visible {
   }
 
   .cv2-exit {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 
   .cv2-progress {
@@ -3234,7 +3234,7 @@ textarea:focus-visible {
   }
 
   .cv2-intro h1 {
-    font-size: 48px;
+    font-size: 3rem;
   }
 
   .cv2-focus-card {
@@ -3271,7 +3271,7 @@ textarea:focus-visible {
   }
 
   .cv2-case-number strong {
-    font-size: 74px;
+    font-size: 4.625rem;
   }
 
   .cv2-learning-body {
@@ -3280,7 +3280,7 @@ textarea:focus-visible {
   }
 
   .cv2-learning-body h2 {
-    font-size: 42px;
+    font-size: 2.625rem;
   }
 
   .cv2-feed .cv2-action {
@@ -3301,7 +3301,7 @@ textarea:focus-visible {
 
 @media (max-width: 360px) {
   .cv2-intro h1 {
-    font-size: 43px;
+    font-size: 2.6875rem;
   }
 
   .cv2-focus-card em {
@@ -3389,7 +3389,7 @@ textarea:focus-visible {
   }
 
   .voice-prompt h1 {
-    font-size: 39px;
+    font-size: 2.4375rem;
   }
 
   .voice-actions {
@@ -3431,7 +3431,7 @@ textarea:focus-visible {
   border-left: 3px solid var(--accent);
   color: var(--accent);
   background: var(--accent-soft);
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .community-field-row {
@@ -3445,7 +3445,7 @@ textarea:focus-visible {
   display: block;
   margin-bottom: 7px;
   color: var(--community-ink);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 680;
 }
 
@@ -3459,7 +3459,7 @@ textarea:focus-visible {
   color: var(--community-ink);
   background: #fff;
   font: inherit;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .community-interest-form input[aria-invalid="true"] {
@@ -3478,7 +3478,7 @@ textarea:focus-visible {
   display: block;
   margin-top: 6px;
   color: var(--accent);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .community-interest-form fieldset {
@@ -3513,7 +3513,7 @@ textarea:focus-visible {
   color: var(--community-muted);
   background: #fff;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 620;
 }
 
@@ -3546,7 +3546,7 @@ textarea:focus-visible {
 .community-consent > span {
   margin: 0 !important;
   color: var(--community-muted) !important;
-  font-size: 11px !important;
+  font-size: 0.6875rem !important;
   font-weight: 520 !important;
   line-height: 1.5;
 }
@@ -3567,7 +3567,7 @@ textarea:focus-visible {
   border-radius: 999px;
   color: #fff;
   background: var(--community-accent);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 720;
   cursor: pointer;
 }
@@ -3587,7 +3587,7 @@ textarea:focus-visible {
 .community-form-privacy {
   margin: 12px 0 0;
   color: var(--community-muted);
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.5;
   text-align: center;
 }
@@ -3601,7 +3601,7 @@ textarea:focus-visible {
 
 .community-form-success strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 470;
   letter-spacing: -0.035em;
 }
@@ -3609,7 +3609,7 @@ textarea:focus-visible {
 .community-form-success p {
   margin: 12px 0 0;
   color: var(--community-muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.6;
 }
 
@@ -3693,7 +3693,7 @@ textarea:focus-visible {
   margin: 0 auto;
   max-width: 52ch;
   color: var(--faint);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 560;
   line-height: 1.5;
 }
@@ -3744,7 +3744,7 @@ textarea:focus-visible {
 .patient-v2 .voice-screen .voice-prompt h1 {
   max-width: none;
   margin-top: 0;
-  font-size: clamp(46px, 11vw, 58px);
+  font-size: clamp(2.875rem, 11vw, 3.625rem);
 }
 
 .patient-v2 .voice-screen .voice-prompt h1 span,
@@ -3785,7 +3785,7 @@ textarea:focus-visible {
   border: 0;
   color: var(--muted);
   background: transparent;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 650;
   cursor: pointer;
   transition: color 160ms ease;
@@ -3827,7 +3827,7 @@ textarea:focus-visible {
   max-width: 22ch;
   margin: 0 auto;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(24px, 5.6vw, 31px);
+  font-size: clamp(1.5rem, 5.6vw, 1.9375rem);
   font-weight: 420;
   line-height: 1.32;
   letter-spacing: -0.02em;
@@ -3838,7 +3838,7 @@ textarea:focus-visible {
 .patient-v2 .scenario-count {
   margin: 0;
   color: var(--faint);
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: center;
 }
 
@@ -3881,7 +3881,7 @@ textarea:focus-visible {
   }
 
   .patient-v2 .voice-screen .voice-prompt h1 {
-    font-size: clamp(56px, 5.2vw, 66px);
+    font-size: clamp(3.5rem, 5.2vw, 4.125rem);
   }
 
   .patient-v2[data-stage="type"] .type-content {
@@ -3896,7 +3896,7 @@ textarea:focus-visible {
   }
 
   .patient-v2[data-stage="type"] .type-content h1 {
-    font-size: clamp(46px, 4.6vw, 56px);
+    font-size: clamp(2.875rem, 4.6vw, 3.5rem);
   }
 
   .patient-v2[data-stage="type"] .type-content textarea {
@@ -3980,7 +3980,7 @@ textarea:focus-visible {
 .story-wordmark {
   color: var(--s-ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.03em;
   text-decoration: none;
@@ -3994,7 +3994,7 @@ textarea:focus-visible {
   border-radius: 999px;
   color: #fff;
   background: var(--s-accent);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 640;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -4029,7 +4029,7 @@ textarea:focus-visible {
 .story-eyebrow {
   margin: 0;
   color: var(--s-accent);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 680;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -4047,7 +4047,7 @@ textarea:focus-visible {
      645px and forced the headline to five lines. */
   max-width: 22ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(40px, 4.5vw, 66px);
+  font-size: clamp(2.5rem, 4.5vw, 4.125rem);
   font-weight: 430;
   line-height: 1;
   letter-spacing: -0.045em;
@@ -4057,7 +4057,7 @@ textarea:focus-visible {
   max-width: 34ch;
   margin: 30px 0 0;
   color: var(--s-muted);
-  font-size: clamp(16px, 1.25vw, 19px);
+  font-size: clamp(1rem, 1.25vw, 1.1875rem);
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -4077,7 +4077,7 @@ textarea:focus-visible {
   border-radius: 999px;
   color: #fff;
   background: var(--s-accent);
-  font-size: 14.5px;
+  font-size: 0.90625rem;
   font-weight: 640;
   text-decoration: none;
   transition: transform 0.15s ease, background 0.2s ease;
@@ -4100,7 +4100,7 @@ textarea:focus-visible {
   margin: 0;
   max-width: 18ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(30px, 3.6vw, 52px);
+  font-size: clamp(1.875rem, 3.6vw, 3.25rem);
   font-weight: 435;
   line-height: 1.04;
   letter-spacing: -0.038em;
@@ -4112,7 +4112,7 @@ textarea:focus-visible {
   max-width: 60ch;
   margin: 0 0 18px;
   color: var(--s-muted);
-  font-size: clamp(16px, 1.15vw, 18px);
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
   line-height: 1.72;
   text-wrap: pretty;
 }
@@ -4144,7 +4144,7 @@ textarea:focus-visible {
   margin: 22px 0 0;
   max-width: 15.5ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(42px, 5vw, 78px);
+  font-size: clamp(2.625rem, 5vw, 4.875rem);
   font-weight: 430;
   line-height: 1;
   letter-spacing: -0.045em;
@@ -4154,7 +4154,7 @@ textarea:focus-visible {
   max-width: 34ch;
   margin: 30px 0 0;
   color: var(--s-muted);
-  font-size: clamp(16px, 1.25vw, 19px);
+  font-size: clamp(1rem, 1.25vw, 1.1875rem);
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -4257,7 +4257,7 @@ textarea:focus-visible {
 /* The first paragraph of an opening chapter carries ink weight; the rest recede to --s-muted.
    One tier of contrast inside a single block is what makes it read as a lead rather than a wall. */
 .story-prose-lead p:first-child { color: var(--s-ink); }
-.story-note { color: var(--s-muted); font-size: 14.5px; line-height: 1.65; }
+.story-note { color: var(--s-muted); font-size: 0.90625rem; line-height: 1.65; }
 .story-eyebrow-block { margin-bottom: 18px; }
 
 /* Split chapters: heading + prose on one side, a stat rail or a pull-line on the other. ---- */
@@ -4277,17 +4277,17 @@ textarea:focus-visible {
 .story-stats div:last-child { border-bottom: 1px solid var(--s-line); }
 .story-stats dt {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(26px, 2.4vw, 34px);
+  font-size: clamp(1.625rem, 2.4vw, 2.125rem);
   font-weight: 430;
   line-height: 1.08;
   letter-spacing: -0.03em;
   color: var(--s-ink);
 }
-.story-stats dt.story-stat-accent { color: var(--s-accent); font-size: clamp(22px, 2vw, 29px); }
-.story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 14.5px; line-height: 1.5; }
+.story-stats dt.story-stat-accent { color: var(--s-accent); font-size: clamp(1.375rem, 2vw, 1.8125rem); }
+.story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 0.90625rem; line-height: 1.5; }
 /* The figures above are indicative and unsourced (see src/compliance/landing-copy.ts). The note
    is not fine print hidden at the foot of the page — it sits under the rail it qualifies. */
-.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 11px; line-height: 1.55; }
+.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.6875rem; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
 .story-pull p {
@@ -4295,7 +4295,7 @@ textarea:focus-visible {
   margin: 0;
   padding-bottom: 4px;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(24px, 2.5vw, 34px);
+  font-size: clamp(1.5rem, 2.5vw, 2.125rem);
   font-style: italic;
   font-weight: 430;
   line-height: 1.14;
@@ -4314,7 +4314,7 @@ textarea:focus-visible {
   max-width: 20ch;
   margin: 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(34px, 5.2vw, 74px);
+  font-size: clamp(2.125rem, 5.2vw, 4.625rem);
   font-weight: 400;
   line-height: 1.06;
   letter-spacing: -0.04em;
@@ -4326,7 +4326,7 @@ textarea:focus-visible {
   max-width: 54ch;
   margin: 0;
   color: #c3c4ba;
-  font-size: clamp(16px, 1.3vw, 19px);
+  font-size: clamp(1rem, 1.3vw, 1.1875rem);
   line-height: 1.7;
 }
 
@@ -4349,7 +4349,7 @@ textarea:focus-visible {
 .story-pillars h3 {
   margin: 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(24px, 2.4vw, 30px);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
   font-weight: 460;
   letter-spacing: -0.025em;
 }
@@ -4357,7 +4357,7 @@ textarea:focus-visible {
   max-width: 46ch;
   margin: 0;
   color: var(--s-muted);
-  font-size: clamp(15px, 1.1vw, 17px);
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
   line-height: 1.65;
 }
 
@@ -4377,13 +4377,13 @@ textarea:focus-visible {
   max-width: 40ch;
   margin: 24px 0 0;
   color: var(--s-muted);
-  font-size: clamp(16px, 1.2vw, 18px);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   line-height: 1.65;
 }
 /* Legibility bumps for the reused form on the consumer-health close */
-.story .community-interest-options label > span { font-size: 12.5px; }
-.story .community-consent > span { font-size: 12.5px !important; }
-.story .community-form-privacy { font-size: 12px; }
+.story .community-interest-options label > span { font-size: 0.78125rem; }
+.story .community-consent > span { font-size: 0.78125rem !important; }
+.story .community-form-privacy { font-size: 0.75rem; }
 /* Rose rebrand of the form's green-tinted details */
 .story .community-interest-form { border-color: #3a3325; }
 .story .community-interest-form input:focus-visible {
@@ -4413,7 +4413,7 @@ textarea:focus-visible {
 .story-footer-wordmark {
   color: var(--s-ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 500;
   letter-spacing: -0.02em;
   text-decoration: none;
@@ -4421,7 +4421,7 @@ textarea:focus-visible {
 .story-footer-links { display: flex; flex-wrap: wrap; gap: 10px 26px; }
 .story-footer-links a {
   color: var(--s-muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   text-decoration: none;
   text-underline-offset: 3px;
 }
@@ -4444,7 +4444,7 @@ textarea:focus-visible {
   padding: 0 24px 26px;
   text-align: center;
   color: #4a3420;
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.65;
 }
 .aoc-art {
@@ -4454,7 +4454,7 @@ textarea:focus-visible {
 }
 @media (max-width: 640px) {
   .aoc-art { height: 60px; }
-  .aoc-text { font-size: 14px; }
+  .aoc-text { font-size: 0.875rem; }
 }
 
 /* Tablet ------------------------------------------------------------------ */
@@ -4486,7 +4486,7 @@ textarea:focus-visible {
 /* Phone ------------------------------------------------------------------- */
 @media (max-width: 560px) {
   .story-wrap { width: min(100% - 32px, 1280px); }
-  .story-hero-copy h1 { font-size: clamp(38px, 11.5vw, 54px); }
+  .story-hero-copy h1 { font-size: clamp(2.375rem, 11.5vw, 3.375rem); }
   .story-hero-actions { gap: 12px; }
   .story-primary-link { width: 100%; }
   .story-footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
@@ -4527,20 +4527,20 @@ textarea:focus-visible {
   display: inline-block;
   margin-bottom: 28px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   text-decoration: none;
 }
 .join-back:hover { color: var(--ink); }
 .join-header h1 {
   margin: 12px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(32px, 5vw, 50px);
+  font-size: clamp(2rem, 5vw, 3.125rem);
   font-weight: 430;
   line-height: 1.06;
   letter-spacing: -0.04em;
   color: var(--ink);
 }
-.join-lead { max-width: 46ch; margin: 18px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.join-lead { max-width: 46ch; margin: 18px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.6; }
 
 /* O24: the patient-mix hero. One sentence at display scale; every control lives inside the
    sentence itself so nothing on screen competes with the idea. Same serif and tracking as the
@@ -4554,7 +4554,7 @@ textarea:focus-visible {
 .mix-line {
   margin: 20px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(34px, 5.4vw, 54px);
+  font-size: clamp(2.125rem, 5.4vw, 3.375rem);
   font-weight: 430;
   line-height: 1.14;
   letter-spacing: -0.035em;
@@ -4582,7 +4582,7 @@ textarea:focus-visible {
   border-radius: 50%;
   background: transparent;
   color: var(--muted);
-  font-size: 19px;
+  font-size: 1.1875rem;
   line-height: 1;
   cursor: pointer;
   transition: color 120ms ease, border-color 120ms ease;
@@ -4605,7 +4605,7 @@ textarea:focus-visible {
 .mix-result {
   margin: 22px 0 0;
   color: var(--ink);
-  font-size: 17px;
+  font-size: 1.0625rem;
   line-height: 1.55;
 }
 .mix-result strong { font-weight: 640; }
@@ -4614,7 +4614,7 @@ textarea:focus-visible {
   max-width: 52ch;
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.55;
 }
 
@@ -4625,7 +4625,7 @@ textarea:focus-visible {
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 560;
   text-decoration: none;
 }
@@ -4638,13 +4638,13 @@ textarea:focus-visible {
 .join-form legend {
   padding: 0;
   color: var(--accent);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .join-form label { display: block; margin-top: 20px; }
-.join-form label > span { display: block; margin-bottom: 7px; color: var(--ink); font-size: 14px; font-weight: 550; }
+.join-form label > span { display: block; margin-bottom: 7px; color: var(--ink); font-size: 0.875rem; font-weight: 550; }
 .join-form input[type="text"],
 .join-form input[type="email"] {
   width: 100%;
@@ -4655,22 +4655,22 @@ textarea:focus-visible {
   color: var(--ink);
   background: var(--stone);
   font: inherit;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .join-form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .join-form input[aria-invalid="true"] { border-color: var(--accent); }
-.join-form small { display: block; margin-top: 6px; font-size: 12.5px; line-height: 1.5; }
+.join-form small { display: block; margin-top: 6px; font-size: 0.78125rem; line-height: 1.5; }
 .join-form small[role="alert"] { color: var(--accent); }
-.join-hint { margin: 10px 0 0; color: var(--faint); font-size: 12.5px; line-height: 1.55; }
-.join-field-error { color: var(--accent); font-size: 12.5px; }
+.join-hint { margin: 10px 0 0; color: var(--faint); font-size: 0.78125rem; line-height: 1.55; }
+.join-field-error { color: var(--accent); font-size: 0.78125rem; }
 
 /* The care areas sit under three headings — ADHD, depression & anxiety, other mental health — so a
    GP reads them as conditions rather than one long list. */
 .join-check-group { margin-top: 20px; }
-.join-check-group-title { margin: 0; color: var(--faint); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.join-check-group-title { margin: 0; color: var(--faint); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 .join-check-group .join-checks { margin-top: 10px; }
 .join-other-languages { display: block; margin-top: 18px; }
-.join-other-languages > span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 14px; }
+.join-other-languages > span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.875rem; }
 .join-other-languages input { width: 100%; }
 
 /* Checkboxes are a two-column list rather than a grid of cards: seventeen care areas as cards
@@ -4681,7 +4681,7 @@ textarea:focus-visible {
    own label and the form ran to about 4200px on a phone. */
 .join-form .join-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; min-height: 30px; }
 .join-form .join-check input { width: 18px; height: 18px; margin: 1px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
-.join-form .join-check > span { display: inline; margin-bottom: 0; color: var(--muted); font-size: 14px; font-weight: 400; line-height: 1.45; }
+.join-form .join-check > span { display: inline; margin-bottom: 0; color: var(--muted); font-size: 0.875rem; font-weight: 400; line-height: 1.45; }
 .join-form .join-declaration > span { color: var(--ink); }
 .join-declaration { margin-top: 18px; }
 
@@ -4694,7 +4694,7 @@ textarea:focus-visible {
   color: var(--on-ground);
   background: var(--ground);
   font: inherit;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -4707,17 +4707,17 @@ textarea:focus-visible {
   border-left: 2px solid var(--accent);
   background: var(--accent-soft);
   color: var(--ink);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .join-success { padding: 32px 0 0; }
 .join-success h2 {
   margin: 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 30px;
+  font-size: 1.875rem;
   font-weight: 450;
   color: var(--ink);
 }
-.join-success p { max-width: 52ch; margin: 14px 0 0; color: var(--muted); font-size: 15.5px; line-height: 1.6; }
+.join-success p { max-width: 52ch; margin: 14px 0 0; color: var(--muted); font-size: 0.96875rem; line-height: 1.6; }
 
 @media (max-width: 620px) {
   .join-checks { grid-template-columns: 1fr; }
@@ -4727,7 +4727,7 @@ textarea:focus-visible {
   display: inline-block;
   margin-top: 14px;
   color: var(--cv2-accent);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-underline-offset: 3px;
 }
@@ -4739,7 +4739,7 @@ textarea:focus-visible {
   margin: 10px 0 0;
   max-width: 18ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(26px, 7vw, 36px);
+  font-size: clamp(1.625rem, 7vw, 2.25rem);
   font-weight: 430;
   line-height: 1.12;
   letter-spacing: -0.03em;
@@ -4751,7 +4751,7 @@ textarea:focus-visible {
   max-width: 34ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-style: italic;
-  font-size: 19px;
+  font-size: 1.1875rem;
   line-height: 1.35;
   color: var(--muted);
 }
@@ -4762,7 +4762,7 @@ textarea:focus-visible {
   background: none;
   color: var(--accent);
   font: inherit;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -4802,16 +4802,16 @@ textarea:focus-visible {
 /* The Australia silhouette the two markers sit on: a subtle filled landmass with a hairline edge,
    so it reads as scenery and the accent dots carry the eye. */
 .coverage-land { fill: var(--s-line); stroke: var(--s-muted); stroke-width: 0.45; opacity: 0.7; stroke-linejoin: round; }
-.coverage-pin-label { fill: var(--s-ink); font-size: 4.2px; font-weight: 500; letter-spacing: 0.01em; }
+.coverage-pin-label { fill: var(--s-ink); font-size: 0.2625rem; font-weight: 500; letter-spacing: 0.01em; }
 .coverage-map figcaption { display: grid; gap: 10px; }
 .coverage-count {
   color: var(--s-accent);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.coverage-names { max-width: 46ch; color: var(--s-muted); font-size: 14px; line-height: 1.65; }
+.coverage-names { max-width: 46ch; color: var(--s-muted); font-size: 0.875rem; line-height: 1.65; }
 
 @media (max-width: 720px) {
   .coverage-map { grid-template-columns: 1fr; }
@@ -4827,10 +4827,10 @@ textarea:focus-visible {
   padding-top: 20px;
   border-top-color: var(--line);
 }
-.results-head .coverage-map .coverage-names { font-size: 12.5px; }
+.results-head .coverage-map .coverage-names { font-size: 0.78125rem; }
 .results-head .coverage-dot { fill: var(--accent); }
 .results-head .coverage-pin-halo { fill: var(--accent-soft); }
-.results-head .coverage-count { color: var(--accent); font-size: 11px; }
+.results-head .coverage-count { color: var(--accent); font-size: 0.6875rem; }
 .results-head .coverage-land { fill: var(--line); stroke: var(--muted); }
 .results-head .coverage-pin-label { fill: var(--ink); }
 
@@ -4876,7 +4876,7 @@ textarea:focus-visible {
   padding-bottom: 14px;
   border-bottom: 1px solid var(--s-line);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(56px, 7vw, 76px);
+  font-size: clamp(3.5rem, 7vw, 4.75rem);
   font-weight: 380;
   letter-spacing: 0.02em;
   line-height: 1;
@@ -4894,17 +4894,17 @@ textarea:focus-visible {
 .story-founder-id { display: grid; justify-items: center; gap: 4px; margin-top: 18px; text-align: center; }
 .story-founders strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 23px;
+  font-size: 1.4375rem;
   font-weight: 480;
   letter-spacing: -0.02em;
   color: var(--s-ink);
 }
-.story-founder-role { color: var(--s-muted); font-size: 13.5px; }
+.story-founder-role { color: var(--s-muted); font-size: 0.84375rem; }
 .story-founder-remit {
   max-width: 34ch;
   margin: 14px 0 0;
   color: var(--s-muted);
-  font-size: 14.5px;
+  font-size: 0.90625rem;
   line-height: 1.6;
   text-align: center;
 }
@@ -4929,7 +4929,7 @@ textarea:focus-visible {
   min-height: 44px;
   padding-right: 20px;
   color: var(--s-muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 560;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -4955,12 +4955,12 @@ textarea:focus-visible {
 .credential-line {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 0.78125rem;
 }
 .disclosure-line {
   margin: 6px 0 0;
   color: var(--accent);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -4999,7 +4999,7 @@ textarea:focus-visible {
   background: transparent;
   color: var(--ink);
   font: inherit;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 560;
   cursor: pointer;
 }
@@ -5078,7 +5078,7 @@ textarea:focus-visible {
 .seq-n {
   margin: 0 0 14px;
   color: var(--s-accent);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 640;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -5088,20 +5088,20 @@ textarea:focus-visible {
   margin: 0 0 16px;
   max-width: 20ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(26px, 2.6vw, 34px);
+  font-size: clamp(1.625rem, 2.6vw, 2.125rem);
   font-weight: 440;
   line-height: 1.12;
   letter-spacing: -0.03em;
   text-wrap: balance;
 }
-.seq-body { margin: 0; max-width: 44ch; color: var(--s-muted); font-size: 17px; line-height: 1.65; text-wrap: pretty; }
+.seq-body { margin: 0; max-width: 44ch; color: var(--s-muted); font-size: 1.0625rem; line-height: 1.65; text-wrap: pretty; }
 .seq-detail { margin: 20px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
 .seq-detail li {
   position: relative;
   padding-left: 18px;
   max-width: 44ch;
   color: var(--s-ink);
-  font-size: 14.5px;
+  font-size: 0.90625rem;
   line-height: 1.5;
 }
 .seq-detail li::before {
@@ -5110,7 +5110,7 @@ textarea:focus-visible {
   width: 7px; height: 1px;
   background: var(--s-accent);
 }
-.seq-foot { margin: 20px 0 0; max-width: 46ch; color: var(--s-muted); font-size: 13px; line-height: 1.6; }
+.seq-foot { margin: 20px 0 0; max-width: 46ch; color: var(--s-muted); font-size: 0.8125rem; line-height: 1.6; }
 
 /* ── Camera ─────────────────────────────────────────────────────────────────
    A transform on a group, not a tweened viewBox: it composites on the GPU, it
@@ -5143,36 +5143,36 @@ textarea:focus-visible {
 
 /* ── Stage type ─────────────────────────────────────────────────────────── */
 .seq-svg text { font-family: "Inter Variable", Inter, system-ui, sans-serif; }
-.seq-t-q { font-size: 24px; fill: var(--s-ink); }
-.seq-t-tag { font-size: 18px; font-weight: 600; fill: var(--s-muted); text-anchor: middle; }
-.seq-t-note { font-size: 22px; fill: var(--s-accent); font-weight: 560; }
-.seq-t-lbl { font-size: 18px; font-weight: 640; letter-spacing: 0.14em; fill: var(--s-muted); }
-.seq-t-doc { font-size: 26px; fill: var(--s-ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; }
-.seq-t-sub { font-size: 19px; fill: var(--s-muted); }
-.seq-t-scan { font-size: 26px; fill: var(--s-line); }
-.seq-t-worry { font-size: 21px; fill: var(--s-ink); }
-.seq-t-prac { font-size: 24px; fill: var(--s-ink); }
-.seq-t-tick { font-size: 20px; fill: var(--s-muted); }
+.seq-t-q { font-size: 1.5rem; fill: var(--s-ink); }
+.seq-t-tag { font-size: 1.125rem; font-weight: 600; fill: var(--s-muted); text-anchor: middle; }
+.seq-t-note { font-size: 1.375rem; fill: var(--s-accent); font-weight: 560; }
+.seq-t-lbl { font-size: 1.125rem; font-weight: 640; letter-spacing: 0.14em; fill: var(--s-muted); }
+.seq-t-doc { font-size: 1.625rem; fill: var(--s-ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; }
+.seq-t-sub { font-size: 1.1875rem; fill: var(--s-muted); }
+.seq-t-scan { font-size: 1.625rem; fill: var(--s-line); }
+.seq-t-worry { font-size: 1.3125rem; fill: var(--s-ink); }
+.seq-t-prac { font-size: 1.5rem; fill: var(--s-ink); }
+.seq-t-tick { font-size: 1.25rem; fill: var(--s-muted); }
 .seq-t-tick.seq-hot { fill: var(--s-accent); }
-.seq-t-qm { font-size: 30px; fill: var(--s-accent); }
+.seq-t-qm { font-size: 1.875rem; fill: var(--s-accent); }
 .seq-t-fig {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 92px; fill: var(--s-ink); letter-spacing: -0.03em;
+  font-size: 5.75rem; fill: var(--s-ink); letter-spacing: -0.03em;
 }
-.seq-t-cost { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 42px; }
+.seq-t-cost { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 2.625rem; }
 .seq-cost-q { fill: var(--s-muted); }
 .seq-cost-p { fill: var(--s-paper); }
 .seq-t-turn {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 74px; fill: #f4f1e8; letter-spacing: -0.025em;
+  font-size: 4.625rem; fill: #f4f1e8; letter-spacing: -0.025em;
 }
 .seq-t-turn.seq-em { fill: var(--s-accent-mid); font-style: italic; }
-.seq-t-step { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 42px; fill: var(--s-ink); }
-.seq-t-place { font-size: 20px; fill: var(--s-accent); }
-.seq-t-mono { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 36px; fill: #85867e; }
-.seq-t-name { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 34px; fill: var(--s-ink); }
-.seq-t-chip { font-size: 18px; fill: var(--s-accent); }
-.seq-t-cta { font-size: 26px; font-weight: 600; fill: #fff; }
+.seq-t-step { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 2.625rem; fill: var(--s-ink); }
+.seq-t-place { font-size: 1.25rem; fill: var(--s-accent); }
+.seq-t-mono { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 2.25rem; fill: #85867e; }
+.seq-t-name { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 2.125rem; fill: var(--s-ink); }
+.seq-t-chip { font-size: 1.125rem; fill: var(--s-accent); }
+.seq-t-cta { font-size: 1.625rem; font-weight: 600; fill: #fff; }
 
 /* ── Scene 01: results arrive in sequence, none of them the answer ──────── */
 .seq-res { transform: translateY(16px); opacity: 0; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease; }
@@ -5457,7 +5457,7 @@ textarea:focus-visible {
   display: block;
   margin-bottom: 10px;
   color: var(--s-ink);
-  font-size: 14.5px;
+  font-size: 0.90625rem;
   font-weight: 600;
 }
 .seq-ask-input {
@@ -5469,7 +5469,7 @@ textarea:focus-visible {
   color: var(--s-ink);
   background: #fff;
   font: inherit;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .seq-ask-input::placeholder { color: var(--s-muted); }
 .seq-ask-input:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 2px; border-color: var(--s-accent); }
@@ -5477,7 +5477,7 @@ textarea:focus-visible {
   margin: 12px 0 0;
   min-height: 2.6em;
   color: var(--s-muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 /* The answer earns ink; the prompt and the refusal stay quiet. Colour is never the only
@@ -5503,7 +5503,7 @@ textarea:focus-visible {
 .story-approach-title {
   margin: 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(22px, 2.2vw, 28px);
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
   font-weight: 450;
   letter-spacing: -0.025em;
   color: var(--s-ink);
@@ -5512,7 +5512,7 @@ textarea:focus-visible {
   max-width: 52ch;
   margin: 8px 0 0;
   color: var(--s-muted);
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.6;
   text-wrap: pretty;
 }
@@ -5524,7 +5524,7 @@ textarea:focus-visible {
   border: 1px solid var(--s-accent);
   border-radius: 999px;
   color: var(--s-accent);
-  font-size: 14.5px;
+  font-size: 0.90625rem;
   font-weight: 620;
   text-decoration: none;
   white-space: nowrap;
@@ -5559,7 +5559,7 @@ textarea:focus-visible {
   max-width: 54ch;
   margin: 22px 0 0;
   color: var(--s-muted);
-  font-size: clamp(16px, 1.2vw, 18px);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -5572,7 +5572,7 @@ textarea:focus-visible {
 }
 .approach-back {
   color: var(--s-muted);
-  font-size: 14.5px;
+  font-size: 0.90625rem;
   text-decoration: none;
   text-underline-offset: 3px;
 }
@@ -5584,7 +5584,7 @@ textarea:focus-visible {
 /* One quiet line under the results count, shown only when the order is not earned or the listing
    cannot serve what was asked. It is a correction to what the list appears to claim, so it sits
    with the count rather than as a banner: a banner would be louder than the finding. */
-.match-quality { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 46ch; }
+.match-quality { margin-top: 8px; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; max-width: 46ch; }
 
 /* ── Join us: the clinician door ────────────────────────────────────────────
    Sits on the accent-soft wash so it reads as addressed to somebody else — a
@@ -5607,7 +5607,7 @@ textarea:focus-visible {
   max-width: 54ch;
   margin: 14px 0 0;
   color: var(--s-muted);
-  font-size: 15.5px;
+  font-size: 0.96875rem;
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -5619,7 +5619,7 @@ textarea:focus-visible {
   border-radius: 999px;
   background: var(--s-accent);
   color: #fff;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 640;
   text-decoration: none;
   white-space: nowrap;
@@ -5636,36 +5636,36 @@ textarea:focus-visible {
 
 /* The profile's honest line when nothing the reader said reached this clinician. Set at body
    weight rather than as chips, because chips would look like matched signals. */
-.profile-no-match { margin: 14px 0 0; color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 44ch; }
+.profile-no-match { margin: 14px 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.55; max-width: 44ch; }
 
 /* ── Matching console ───────────────────────────────────────────────────────
    Staff surface: dense, plain, no brand voice. It is a tool for reading numbers,
    so the type is small and the table is the composition. */
 .mc { max-width: 1080px; margin: 0 auto; padding: 40px 24px 96px; color: var(--ink); }
-.mc-back { display: inline-block; margin-bottom: 20px; color: var(--muted); font-size: 13px; text-decoration: none; }
+.mc-back { display: inline-block; margin-bottom: 20px; color: var(--muted); font-size: 0.8125rem; text-decoration: none; }
 .mc-back:hover { color: var(--ink); text-decoration: underline; }
-.mc h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 34px; font-weight: 450; letter-spacing: -0.03em; }
-.mc-lead { max-width: 62ch; margin: 12px 0 0; color: var(--muted); font-size: 14.5px; line-height: 1.6; }
+.mc h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 2.125rem; font-weight: 450; letter-spacing: -0.03em; }
+.mc-lead { max-width: 62ch; margin: 12px 0 0; color: var(--muted); font-size: 0.90625rem; line-height: 1.6; }
 .mc-section { margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); }
-.mc-section h2 { margin: 0 0 6px; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 23px; font-weight: 460; letter-spacing: -0.02em; }
-.mc-sub { margin: 24px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
-.mc-note { max-width: 68ch; margin: 8px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
-.mc-note code { background: var(--stone); padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
-.mc-query { margin: 14px 0 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 20px; color: var(--ink); }
-.mc-empty { margin: 10px 0 0; color: var(--muted); font-size: 13.5px; }
+.mc-section h2 { margin: 0 0 6px; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 1.4375rem; font-weight: 460; letter-spacing: -0.02em; }
+.mc-sub { margin: 24px 0 10px; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+.mc-note { max-width: 68ch; margin: 8px 0 0; color: var(--muted); font-size: 0.84375rem; line-height: 1.6; }
+.mc-note code { background: var(--stone); padding: 1px 5px; border-radius: 3px; font-size: 0.78125rem; }
+.mc-query { margin: 14px 0 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 1.25rem; color: var(--ink); }
+.mc-empty { margin: 10px 0 0; color: var(--muted); font-size: 0.84375rem; }
 
 .mc-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 0; padding: 0; list-style: none; }
 .mc-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border: 1px solid var(--line);
-  border-radius: 999px; background: var(--stone); font-size: 12.5px; }
+  border-radius: 999px; background: var(--stone); font-size: 0.78125rem; }
 /* Care and manner are different KINDS of claim, so they are told apart at a glance rather than
    by reading — a reviewer scanning a roster is checking the balance between them. */
 .mc-tag-manner { background: var(--accent-soft); border-color: var(--accent-tint); }
-.mc-weight { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 11.5px; }
+.mc-weight { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.71875rem; }
 
 .mc-table-wrap { overflow-x: auto; margin-top: 10px; border: 1px solid var(--line); border-radius: 4px; }
-.mc-table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 13px; }
+.mc-table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 0.8125rem; }
 .mc-table th, .mc-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.mc-table th { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+.mc-table th { font-size: 0.65625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 700; }
 .mc-table tr:last-child td { border-bottom: 0; }
 .mc-num { font-variant-numeric: tabular-nums; font-weight: 600; }
 .mc-missed { color: var(--muted); }
@@ -5674,12 +5674,12 @@ textarea:focus-visible {
 .mc-proposals { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
 .mc-proposal { padding: 14px 16px; border: 1px solid var(--line); border-radius: 4px; background: var(--stone); }
 .mc-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.mc-status { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
-.mc-quote { margin: 10px 0 0; padding: 0; color: var(--ink); font-size: 14px; line-height: 1.55; font-style: italic; }
-.mc-cue { margin: 6px 0 0; color: var(--faint); font-size: 12px; }
-.mc-unread { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
+.mc-status { font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.mc-quote { margin: 10px 0 0; padding: 0; color: var(--ink); font-size: 0.875rem; line-height: 1.55; font-style: italic; }
+.mc-cue { margin: 6px 0 0; color: var(--faint); font-size: 0.75rem; }
+.mc-unread { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.84375rem; line-height: 1.7; }
 .mc-bio { max-width: 64ch; margin: 14px 0 0; padding: 14px 16px; border-left: 2px solid var(--accent);
-  background: var(--stone); font-size: 14.5px; line-height: 1.6; }
+  background: var(--stone); font-size: 0.90625rem; line-height: 1.6; }
 
 /* ── Background editor ──────────────────────────────────────────────────────
    A review surface. Status is carried by a word as well as by colour, because
@@ -5694,22 +5694,22 @@ textarea:focus-visible {
 .be-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
   padding: 0; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; min-height: 44px; }
 .be-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.be-state { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.be-state { font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
 .be-row.be-accepted .be-state { color: var(--accent); font-weight: 700; }
 
 .be-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
 .be-chip { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
-  background: #fff; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+  background: #fff; color: var(--muted); font: inherit; font-size: 0.8125rem; cursor: pointer; }
 .be-chip:hover { border-color: var(--accent); color: var(--ink); }
 .be-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .be-chip.be-accepted { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 .be-chip.be-rejected { text-decoration: line-through; opacity: 0.55; }
 
 .be-confirm { display: flex; align-items: flex-start; gap: 10px; margin: 16px 0 0; max-width: 64ch;
-  color: var(--ink); font-size: 13.5px; line-height: 1.55; }
+  color: var(--ink); font-size: 0.84375rem; line-height: 1.55; }
 .be-confirm input { width: 18px; height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
 .be-persist { max-width: 64ch; margin: 16px 0 0; padding: 10px 13px; border-left: 2px solid var(--line);
-  color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+  color: var(--muted); font-size: 0.78125rem; line-height: 1.55; }
 .be-persist code { background: var(--stone); padding: 1px 5px; border-radius: 3px; }
 
 /* ── The clarifying question ────────────────────────────────────────────────
@@ -5718,11 +5718,11 @@ textarea:focus-visible {
    is that answering costs one tap, and a text box would ask the reader to do
    again the thing that just did not work. */
 .clarify { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
-.clarify-lead { margin: 0 0 9px; color: var(--muted); font-size: 14px; }
+.clarify-lead { margin: 0 0 9px; color: var(--muted); font-size: 0.875rem; }
 .clarify-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .clarify-chip {
   min-height: 44px; padding: 9px 15px; border: 1px solid var(--accent-tint); border-radius: 999px;
-  background: var(--accent-soft); color: var(--ink); font: inherit; font-size: 15px;
+  background: var(--accent-soft); color: var(--ink); font: inherit; font-size: 0.9375rem;
   text-align: left; cursor: pointer; transition: background-color .18s ease, border-color .18s ease;
 }
 @media (hover: hover) { .clarify-chip:hover { background: #fff; border-color: var(--accent); } }
@@ -5732,10 +5732,10 @@ textarea:focus-visible {
 /* Save control on the review editor. */
 .be-save { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
 .be-save-button { min-height: 44px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--ground);
-  color: var(--on-ground); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  color: var(--on-ground); font: inherit; font-size: 0.875rem; font-weight: 600; cursor: pointer; }
 .be-save-button:disabled { opacity: 0.6; cursor: default; }
 .be-save-button:focus-visible { outline: 3px solid var(--accent-mid); outline-offset: 3px; }
-.be-save-msg { margin: 0; font-size: 13px; max-width: 52ch; line-height: 1.5; }
+.be-save-msg { margin: 0; font-size: 0.8125rem; max-width: 52ch; line-height: 1.5; }
 .be-save-saved { color: var(--ink); }
 /* The refusal is shown verbatim: it names which facets have nobody against them, which is what
    the reviewer has to go and fix. */
@@ -5748,10 +5748,10 @@ textarea:focus-visible {
 .iv { display: grid; gap: 0; }
 .iv-who { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; max-width: 720px; }
 @media (max-width: 640px) { .iv-who { grid-template-columns: 1fr; } }
-.iv-field { display: grid; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.iv-field { display: grid; gap: 6px; font-size: 0.78125rem; color: var(--muted); }
 .iv-field input, .iv-field textarea {
   min-height: 44px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 4px;
-  background: #fff; color: var(--ink); font: inherit; font-size: 14.5px;
+  background: #fff; color: var(--ink); font: inherit; font-size: 0.90625rem;
 }
 .iv-field input:focus-visible, .iv-field textarea:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 1px;
@@ -5767,11 +5767,11 @@ textarea:focus-visible {
 .iv-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 /* The cross-check note is quiet on purpose: it informs which question to ask first, and a
    louder treatment would read as the machine grading the doctor. */
-.iv-cross { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-.iv-question { margin: 10px 0 0; max-width: 62ch; color: var(--ink); font-size: 14px; line-height: 1.55; font-weight: 600; }
+.iv-cross { font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.iv-question { margin: 10px 0 0; max-width: 62ch; color: var(--ink); font-size: 0.875rem; line-height: 1.55; font-weight: 600; }
 .iv-answers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .iv-answer { min-height: 44px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px;
-  background: #fff; color: var(--muted); font: inherit; font-size: 13.5px; cursor: pointer;
+  background: #fff; color: var(--muted); font: inherit; font-size: 0.84375rem; cursor: pointer;
   touch-action: manipulation; }
 @media (hover: hover) { .iv-answer:hover { border-color: var(--accent); color: var(--ink); } }
 .iv-answer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -5784,13 +5784,13 @@ textarea:focus-visible {
 .iv-sweep-row:last-child { border-bottom: 0; }
 .iv-sweep-row.iv-often, .iv-sweep-row.iv-sometimes { border-left-color: var(--accent); }
 .iv-sweep-row.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
-.iv-sweep-question { margin: 0; max-width: 62ch; color: var(--ink); font-size: 14px; line-height: 1.55; font-weight: 600; }
-.iv-sweep-label { display: block; margin-top: 3px; color: var(--faint); font-size: 11.5px; font-weight: 400;
+.iv-sweep-question { margin: 0; max-width: 62ch; color: var(--ink); font-size: 0.875rem; line-height: 1.55; font-weight: 600; }
+.iv-sweep-label { display: block; margin-top: 3px; color: var(--faint); font-size: 0.71875rem; font-weight: 400;
   letter-spacing: 0.04em; text-transform: uppercase; }
 
 .iv-gaps { margin-top: 12px; max-width: 68ch; }
 .iv-gaps summary { min-height: 44px; display: flex; align-items: center; cursor: pointer;
-  color: var(--muted); font-size: 13.5px; }
+  color: var(--muted); font-size: 0.84375rem; }
 .iv-gaps summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ── Launch checklist surfaces (O15) ─────────────────────────────────────────────────────── */
@@ -5800,22 +5800,22 @@ textarea:focus-visible {
   min-height: 100svh; display: flex; flex-direction: column; align-items: flex-start;
   justify-content: center; gap: 10px; max-width: 560px; margin: 0 auto; padding: 32px 24px;
 }
-.notfound-code { margin: 0; color: var(--faint); font-size: 15px; letter-spacing: 0.08em; }
+.notfound-code { margin: 0; color: var(--faint); font-size: 0.9375rem; letter-spacing: 0.08em; }
 .notfound-screen h1 {
   margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(30px, 6vw, 44px); font-weight: 480; letter-spacing: -0.02em;
+  font-size: clamp(1.875rem, 6vw, 2.75rem); font-weight: 480; letter-spacing: -0.02em;
 }
-.notfound-copy { margin: 6px 0 18px; color: var(--muted); font-size: 16px; line-height: 1.55; }
+.notfound-copy { margin: 6px 0 18px; color: var(--muted); font-size: 1rem; line-height: 1.55; }
 .notfound-doors { display: flex; flex-wrap: wrap; gap: 12px; }
 .notfound-primary {
   display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px;
-  border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 15px;
+  border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 0.9375rem;
   text-decoration: none;
 }
 .notfound-secondary {
   display: inline-flex; align-items: center; min-height: 46px; padding: 0 20px;
   border: 1px solid var(--line); border-radius: 999px; color: var(--ink);
-  font-size: 15px; text-decoration: none;
+  font-size: 0.9375rem; text-decoration: none;
 }
 .notfound-primary:focus-visible, .notfound-secondary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -5824,20 +5824,20 @@ textarea:focus-visible {
 .prose-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 28px 24px 48px; flex: 1; }
 .prose-wrap h1 {
   margin: 10px 0 14px; font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(30px, 6vw, 42px); font-weight: 480; letter-spacing: -0.02em;
+  font-size: clamp(1.875rem, 6vw, 2.625rem); font-weight: 480; letter-spacing: -0.02em;
 }
-.prose-wrap p { margin: 0 0 14px; font-size: 16px; line-height: 1.6; }
+.prose-wrap p { margin: 0 0 14px; font-size: 1rem; line-height: 1.6; }
 .prose-note { color: var(--muted); }
 .prose-doors { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .faq-item h2, .example-item h2 {
-  margin: 26px 0 8px; font-size: 19px; font-weight: 620; letter-spacing: -0.01em; line-height: 1.35;
+  margin: 26px 0 8px; font-size: 1.1875rem; font-weight: 620; letter-spacing: -0.01em; line-height: 1.35;
 }
 .example-item p { color: var(--ink); }
 
 /* Breadcrumbs (item 5). */
 .crumbs { margin: 4px 0 6px; }
 .crumbs ol { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.crumbs li { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--faint); }
+.crumbs li { display: flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--faint); }
 .crumbs li + li::before { content: "/"; color: var(--line); }
 .crumbs a { color: var(--accent); text-decoration: none; }
 .crumbs a:hover { text-decoration: underline; }
@@ -5851,7 +5851,7 @@ textarea:focus-visible {
 }
 .site-footer-wordmark { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
 .site-footer ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
-.site-footer a { color: var(--muted); font-size: 14px; text-decoration: none; }
+.site-footer a { color: var(--muted); font-size: 0.875rem; text-decoration: none; }
 .site-footer a:hover { color: var(--ink); text-decoration: underline; }
 
 /* Sticky mobile CTA on the landing page (item 9). */
@@ -5867,7 +5867,7 @@ textarea:focus-visible {
   .story-sticky-cta a {
     display: flex; align-items: center; justify-content: center; gap: 8px;
     min-height: 48px; border-radius: 999px; background: var(--ink); color: var(--paper);
-    font-size: 16px; text-decoration: none;
+    font-size: 1rem; text-decoration: none;
   }
   .story-sticky-cta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   /* The page's own footer must outlive the bar. */
@@ -5884,16 +5884,16 @@ textarea:focus-visible {
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   background: var(--ink); color: var(--paper);
 }
-.consent-bar > p { margin: 0; font-size: 14px; line-height: 1.45; max-width: 52ch; }
+.consent-bar > p { margin: 0; font-size: 0.875rem; line-height: 1.45; max-width: 52ch; }
 .consent-actions { display: flex; gap: 10px; }
 .consent-agree {
   min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px;
-  background: var(--paper); color: var(--ink); font: inherit; font-size: 14px; font-weight: 600;
+  background: var(--paper); color: var(--ink); font: inherit; font-size: 0.875rem; font-weight: 600;
   cursor: pointer;
 }
 .consent-read {
   min-height: 44px; padding: 0 16px; border: 1px solid color-mix(in srgb, var(--paper) 45%, transparent);
-  border-radius: 999px; background: transparent; color: var(--paper); font: inherit; font-size: 14px;
+  border-radius: 999px; background: transparent; color: var(--paper); font: inherit; font-size: 0.875rem;
   cursor: pointer;
 }
 .consent-agree:focus-visible, .consent-read:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
@@ -5904,10 +5904,10 @@ textarea:focus-visible {
 .consent-dialog::backdrop { background: rgb(25 26 23 / 0.45); }
 /* O29: scrolling to the policy's end must not scroll the page behind the modal. */
 .consent-dialog { overscroll-behavior: contain; }
-.consent-dialog h2 { margin: 0 0 12px; font-size: 18px; letter-spacing: -0.01em; }
+.consent-dialog h2 { margin: 0 0 12px; font-size: 1.125rem; letter-spacing: -0.01em; }
 .consent-dialog ul { margin: 0 0 12px; padding-left: 18px; }
-.consent-dialog li { margin-bottom: 8px; font-size: 15px; line-height: 1.5; }
-.consent-dialog p { margin: 0 0 16px; font-size: 15px; }
+.consent-dialog li { margin-bottom: 8px; font-size: 0.9375rem; line-height: 1.5; }
+.consent-dialog p { margin: 0 0 16px; font-size: 0.9375rem; }
 .consent-dialog a { color: var(--accent); }
 .consent-dialog-actions { display: flex; gap: 10px; }
 .consent-dialog .consent-read { border-color: var(--line); color: var(--ink); }

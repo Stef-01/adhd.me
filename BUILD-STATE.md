@@ -120,7 +120,16 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O60 (Standing debt 7 — px→rem for every font size: the O14 low-vision follow-up) —
-> claimed 2026-08-19T16:05Z by loop-0819p.** The debt the founder accepted the risk note on
+> DONE 2026-08-19 by loop-0819p.** Gate result: all 344 conversions exact (310 plain + 34
+> clamp() bounds, script-converted with an inexactness guard that never fired); before/after
+> full-page captures of /, /finder, /clinicians/join and /approach BYTE-IDENTICAL at the
+> default root; enlarged-root payoff captured (qa/type-o60/); ratchet test added
+> (src/compliance/typography.test.ts — zero px font sizes, no root re-anchoring, non-vacuous);
+> a11y e2e green; full `pnpm verify` green. DEFECT FOUND, NOT MINE, NEXT FIRING'S CANDIDATE:
+> e2e/mobile-fit.spec.ts "/clinicians/join fits a 390px phone" fails IDENTICALLY on the
+> pre-O60 tree (verified by stash-and-rerun) — an unclassed label+input pair (the
+> other-languages row, by its reported widths) overflows the 390px viewport. Pre-existing on
+> a patient surface; claim it as its own unit rather than widening this one. The debt the founder accepted the risk note on
 > and still wants: text set in px ignores the reader's own browser font-size setting, which
 > is the one control a low-vision reader actually has. Scope, stated exactly: every
 > `font-size: <N>px` in app/globals.css (344 of them, the only stylesheet) becomes its exact

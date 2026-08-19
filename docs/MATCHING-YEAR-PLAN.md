@@ -208,8 +208,12 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    FOUNDER decision to finalise wording before any real-patient launch (gates plan §4).
 6. **Google Analytics is wired but dark.** `NEXT_PUBLIC_GA_ID` is unset in production.
    FOUNDER: set the env var in Vercel when tracking should start; nothing to build.
-7. **px→rem migration** (O14 low-vision audit follow-up). FOUNDER accepted the risk note;
-   still the right migration — schedule as a mechanical unit with visual-regression captures.
+7. **px→rem migration — CLOSED for type by O60 (2026-08-19).** Every font-size in
+   globals.css (344, clamp() bounds included) is its exact rem equal at the browser-default
+   root; before/after captures byte-identical at the default root, the enlarged-root payoff
+   captured in qa/type-o60/, and a ratchet test pins zero px font sizes AND refuses any
+   future `html { font-size }` re-anchoring. Borders/radii/shadows/dimensions/breakpoints
+   deliberately stay px — they are not type; reopen only if a low-vision finding names them.
 8. **MATCH-1/F9 reciprocity finding** stays open until Q3's reciprocal-matching work closes
    it in the latent-findings register, not just in prose.
 9. **Vercel free-tier deploy quota** keeps blocking previews/production for hours at a time.
