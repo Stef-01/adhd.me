@@ -3,6 +3,10 @@
 16 slides. Same design system as the Bond Transformer deck (`../`); a policy proposal to a
 federal department, not a startup pitch.
 
+**Acknowledgement:** the deck uses ACT-specific wording modelled on the ACT Government's protocol
+— Ngunnawal as Traditional Custodians, recognising others with connection to the lands including
+those identifying as Ngambri (Kamberri). If the pitch moves out of Canberra, change it.
+
 **Live in Figma:** https://www.figma.com/slides/ZPi89QFNGBV0o9DjirqH02 (adhd team,
 `vikram.ganeshalingam@student.bond.edu.au`) — native text and vectors.
 
@@ -61,14 +65,27 @@ Structural, not stylistic. Removing any of them makes the deck weaker with this 
   not owned, but specific designs are, and concentric circles in particular carry real meaning in
   Central and Western Desert traditions. An AI generating any of that would be appropriation
   regardless of intent, and this audience would read it as tokenism instantly.
-- **If a graphic device is wanted, commission it.** The correct way to put Aboriginal design on
-  this deck is to pay an Aboriginal artist or design studio for artwork, with ICIP terms agreed.
-  Do not let anyone — human or model — approximate it.
+- **The artwork band is reserved, not decorative.** Every slide carries a 10px full-bleed band at
+  the top (`.slide::before` in the HTML, a rect named `ARTWORK_BAND` in Figma). It is flat ochre
+  today. It exists so commissioned artwork can be dropped in by replacing one fill, with no layout
+  change anywhere. Export the artwork at 1920x10 at 2x or better, or as a repeating tile.
+- **Commission the artwork; do not approximate it.** For a Canberra pitch that means a **Ngunnawal**
+  artist, engaged and paid, with ICIP terms agreed in writing (attribution, permitted uses,
+  duration, moral rights). Routes: the ACT Government's Aboriginal and Torres Strait Islander
+  Elected Body, Winnunga Nimmityjah, or an Indigenous-owned design studio. No human or model
+  should approximate a pattern belonging to a named people.
+- **Never generate Ngunnawal or Ngambri motifs.** Two reasons, and the second is the serious one.
+  They are the cultural property of living peoples; and there is no reliable public source for
+  them, so anything generated would be an *invented* pattern attributed to a real community. The
+  ACT Government apologised to the Ngambri people in 2023 after two decades of recognising only
+  Ngunnawal — a fabricated motif would land inside a live custodianship dispute.
 - **Contrast is a hard gate.** Every text/ground pair in the palette passes WCAG 2.1 AA, verified
   against the rendered output rather than the tokens. If the palette is touched, re-run that check.
 
 ## Before this is sent
 
+0. **Commission the header artwork** from a Ngunnawal artist if this is presented in Canberra —
+   see the artwork band note above. The deck is ready to receive it.
 1. **Contact address** — slide 16 still reads "add contact email before sending".
 2. **Partnership sequencing** — the deck asks the Department for an introduction to NACCHO.
    Approaching the Minister before the sector inverts the order the deck itself argues for.

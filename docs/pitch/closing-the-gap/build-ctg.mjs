@@ -176,7 +176,7 @@ const TEAM = [
 
 // ── 15 the ask ──
 const ASK = [
-  {ic:'hands', t:'An introduction to NACCHO or a state affiliate, so that partnership begins with the sector rather than with us.'},
+  {ic:'hands', t:'An introduction to Winnunga Nimmityjah, the ACT\u2019s Aboriginal Community Controlled Health Service, and to NACCHO \u2014 so partnership begins with the sector rather than with us.'},
   {ic:'wallet', t:'Scoped pilot funding, released in two tranches — partnership first, build second.'},
   {ic:'db', t:'Access to linked health, education and justice data at regional level, on Priority Reform Four terms set by the partner.'},
   {ic:'users', t:'A named contact in Health and one in the Attorney-General’s portfolio, because this sits across both.'},

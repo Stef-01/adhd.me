@@ -29,7 +29,7 @@ const vline = (x, y, h) => `<div class="a hair" style="left:${P(x)};top:${P(y)};
 // ═══ 03 STATS ═══
 const stats = [
   { ic:'clock',    v:'6–12 mo', l:'typical wait for an adult ADHD assessment appointment' },
-  { ic:'wallet',   v:'$1k–$5k', l:'common out-of-pocket cost of a private adult assessment' },
+  { ic:'wallet',   v:'$1k–$2k', l:'common out-of-pocket cost of a private adult assessment' },
   { ic:'users',    v:'1m+',     l:'Australians living with ADHD <span style="white-space:nowrap">(2023 Senate inquiry)</span>' },
   { ic:'landmark', v:'$20bn+',  l:'estimated annual cost of ADHD to Australia (2023 Senate inquiry)' },
 ];
