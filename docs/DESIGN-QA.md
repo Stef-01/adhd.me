@@ -426,3 +426,22 @@ had). Taste-skill pass applied.
 - [x] Phone and 600–819px viewports change by nothing (mobile-fit 28/28 green, all seven
   surfaces); the fold discipline holds at 640px — the results screen shows the claim, the
   suburb control and the first rows above the fold, nothing cut mid-band.
+
+## O66 — what would change this order, on the profile (2026-08-19)
+
+Captures: qa/profile-o66/ (the profile's fit block with the question in context, desktop
+element shot and 390px). Taste-skill pass applied.
+
+- [x] One idea, one question: the TOP clarifier only, never a chip row — the profile is
+  about this clinician, not a quiz. The label and its control share a sentence ("What would
+  change this order: <question>"), in the missed-asks register: quieter than the evidence,
+  present beside it.
+- [x] Motion carries the meaning where it lives: tapping appends the answer in the reader's
+  own words (exactly what the results chips do), re-reads the whole sentence, and RETURNS to
+  results — so the O52 layout animation shows the order actually changing instead of the
+  profile asserting that it did.
+- [x] Honesty gates: clarifiers() only ever offers a facet the roster genuinely disagrees on
+  and the reader has not asked — a question that could not reorder is never rendered; after
+  answering, the same question cannot recur (the facet is now asked), pinned in e2e.
+- [x] Touch floor held (44px padded hit area on quiet type); no new colour spent; fold
+  discipline unchanged — the line rides inside the existing fit block.

@@ -621,6 +621,30 @@ textarea:focus-visible {
 
 .fit-missed-label { color: var(--ink); font-weight: 600; }
 
+/* O66: the reorder question, in the missed-asks register — context, not a headline. The
+   question itself is the control (related facts share a row), padded to the touch floor. */
+.profile-clarify {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  max-width: 52ch;
+}
+
+.profile-clarify-question {
+  border: 0;
+  padding: 12px 2px; /* quiet type, full-height hit area (O14 floor) */
+  margin: -12px 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
 .practical-signal-row {
   margin-top: 7px;
 }

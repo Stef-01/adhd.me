@@ -120,7 +120,9 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O66 (Explaining-the-fit Q2 increment — "what would change this order", the top clarifier
-> on the profile) — claimed 2026-08-19T22:04Z by loop-0819v.** O21 gave the profile
+> on the profile) — DONE 2026-08-19 by loop-0819v (finder-flow e2e 9/9 incl. the new pin:
+> renders on the profile, tap lands on results with the sentence re-read, the answered facet
+> never re-asked; mobile-fit green; qa/profile-o66/ captures + DESIGN-QA entry).** O21 gave the profile
 > provenance ("from your words"), O51 gave it the missed asks; the fit story still ends
 > there, and the one question that could genuinely reorder the list lives only back on the
 > results screen, gated to uninformed orders. Change: the profile's fit block gains ONE

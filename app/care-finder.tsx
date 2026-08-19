@@ -1036,6 +1036,30 @@ export function CareFinder() {
                   {clinician.focus}. Nothing in what you said pointed here specifically.
                 </p>
               )}
+              {/* O66 (explaining-the-fit Q2): the one question that could genuinely reorder
+                  the list, said on the profile where the reader is actually weighing it. TOP
+                  clarifier only — the profile is about this clinician, not a quiz — and the
+                  tap does exactly what the results chips do (answer appended in the reader's
+                  own words, whole sentence re-read), then RETURNS to results so the O52
+                  layout animation shows the order changing rather than asserting it did. */}
+              {clarifierList.length > 0 && (
+                <p className="profile-clarify">
+                  What would change this order:{" "}
+                  <button
+                    type="button"
+                    className="profile-clarify-question"
+                    onClick={() => {
+                      const next = `${request}, ${clarifierList[0]!.answer}`;
+                      setRequest(next);
+                      setMatches(rankCliniciansNear(next, origin));
+                      setMatchIndex(0);
+                      setStage("results");
+                    }}
+                  >
+                    {clarifierList[0]!.prompt}
+                  </button>
+                </p>
+              )}
               <div className="practical-signal-row profile-practical-signals" aria-label="Practical appointment details">
                 {clinician.practicalSignals.slice(0, 2).map((signal) => <span key={signal}>{signal}</span>)}
               </div>

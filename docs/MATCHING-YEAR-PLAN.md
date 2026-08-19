@@ -250,7 +250,10 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
   (2026-08-19)**: `missedAsks` partitions the reader's care/manner asks against the same
   `needsFor` read as the evidence, and the profile says "you also asked for X — not something
   they declare" in W193's declaration framing, capped at two, only beside existing evidence; (Q2) "what would
-  change this order" — surfacing the top clarifier ON the profile; (Q3) side-by-side compare
+  change this order" — **DONE, O66 (2026-08-19)**: the TOP clarifier renders on the profile
+  as one quiet tappable question in the missed-asks register; tapping appends the answer in
+  the reader's own words and returns to results so the O52 animation shows the reorder; a
+  question that could not reorder is never rendered (clarifiers() guarantees it); (Q3) side-by-side compare
   of two clinicians' evidence; (Q4) the same provenance view inside the console so a doctor
   sees exactly what patients are told about them.
 

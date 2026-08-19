@@ -179,6 +179,41 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
   expect(found, "no profile showed a missed ask for a three-ask query").toBe(true);
 });
 
+test("the profile says what would change this order, and tapping it returns to a re-read list (O66)", async ({ page }) => {
+  await intoResults(page);
+  await page.locator(".clinician-row").first().click();
+  await expect(page.locator(".profile-content")).toBeVisible();
+
+  // One quiet line, one question — the top clarifier only, never a chip row on a profile.
+  const line = page.locator(".profile-clarify");
+  await expect(line).toBeVisible();
+  await expect(line).toContainText("What would change this order");
+  const question = line.locator(".profile-clarify-question");
+  await expect(question).toHaveCount(1);
+
+  // The design record before the tap: the whole profile column, question in context —
+  // an element shot, because the profile scrolls inside its own shell.
+  await page.waitForTimeout(450);
+  await page.locator(".profile-content").screenshot({ path: "qa/profile-o66/clarify-on-profile-desktop.png" });
+
+  // Tapping does what the results chips do — answer appended, whole sentence re-read — and
+  // LANDS ON RESULTS, where the O52 layout animation is what shows the order changing.
+  const askedPrompt = ((await question.textContent()) ?? "").trim();
+  await question.click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
+  // The re-read is real: the answered facet is no longer an open question, so the profile's
+  // question can never be a dead tap that changes nothing and says nothing.
+  await page.locator(".clinician-row").first().click();
+  await expect(page.locator(".profile-content")).toBeVisible();
+  const after = page.locator(".profile-clarify .profile-clarify-question");
+  if (await after.count()) {
+    expect(((await after.textContent()) ?? "").trim()).not.toBe(askedPrompt);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(450);
+  await page.locator(".profile-content").screenshot({ path: "qa/profile-o66/clarify-on-profile-mobile.png" });
+});
+
 test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
   await page.goto("/finder");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
