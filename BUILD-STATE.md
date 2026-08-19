@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O63 (Standing debt 10 — the finder's desktop shell, widened for every stage at once) —
+> claimed 2026-08-19T19:03Z by loop-0819s.** D1 tried a two-column desktop INSIDE the 520px
+> shell and reverted it with the rule this unit obeys: a real desktop composition widens the
+> SHELL, for all stages, as its own unit. Today the shell is 520px for every stage at ≥600px,
+> except welcome/scenarios/type which snap to 640px at ≥820px behind a stage-keyed selector
+> list — so mid-flow the frame visibly jumps width (with a 280ms tween papering over it), the
+> results list and profile stay a phone strip on a desktop, and the fixed booking bar centres
+> itself against a hard-coded 520px that the widened stages already contradict. Change: ONE
+> width token — `--shell-w: 520px`, 640px at ≥820px on the finder root — consumed by every
+> rule that keys the shell (the shell width rules, the ≥600px block, the profile booking
+> bar's centring offsets); the stage-keyed widening and its width tween are DELETED (no
+> stage-to-stage width change remains, so the motion had no meaning left to carry); the
+> seamless borderless paper treatment the 2026-08-11 overhaul gave the intro stages extends
+> to all stages at ≥820px, one composition end to end. Phone and 600–819px widths change by
+> nothing. Verify: mobile-fit green (phone untouched); finder-flow + matching-verification
+> e2e green; desktop captures of results, profile and booking at 1280px in qa/desktop-o63/
+> reviewed against the taste law, with the DESIGN-QA entry; full `pnpm verify` green.
+
 > **O62 (Q2 item 8 — the tie-quality metric: how often the finder fails to separate the top)
 > — DONE 2026-08-19 by loop-0819r.** Measured baseline: 97 separated / 12 partial ties / 42
 > unseparated over the corpus's 151 heard requests (64% separation), pinned exactly in
