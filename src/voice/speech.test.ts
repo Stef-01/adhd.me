@@ -367,6 +367,31 @@ describe("O18 the iPhone retry: permission warm-up before the message shows", ()
     expect(onError).toHaveBeenCalledWith("service-not-allowed", "service-not-allowed");
   });
 
+  it("holds the warm-up stream open while the retried recogniser runs, releasing it on settle (O46)", async () => {
+    // The first version stopped the tracks the moment permission resolved, and the founder's
+    // phone showed the result: Allow pressed, broken anyway. The reported WebKit behaviour is
+    // that recognition works while the audio session is live, so the stream is held until the
+    // session settles — and released then, because a microphone light that never goes off is
+    // its own bug.
+    install();
+    let stopped = 0;
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = {
+      getUserMedia: () =>
+        Promise.resolve({ getTracks: () => [{ stop: () => { stopped += 1; } }] }),
+    };
+    const onFinal = vi.fn();
+    startSpeech({ ...noop, onFinal });
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    const second = FakeRecognition.last!;
+    expect(second.started).toBe(true);
+    expect(stopped).toBe(0);
+    second.emit([{ text: "kind and speaks Hindi", final: true }]);
+    second.stop();
+    expect(onFinal).toHaveBeenCalledWith("kind and speaks Hindi");
+    expect(stopped).toBe(1);
+  });
+
   it("does not re-open the microphone when stop was pressed during the warm-up", async () => {
     install();
     installMicrophone("granted");

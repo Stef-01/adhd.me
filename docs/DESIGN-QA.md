@@ -215,3 +215,21 @@ Captures: qa/reach-o38/ (feed section, desktop + 390 widths).
   interview"), onboardings fully heard ("nothing is waiting for lexicon review"), and
   outstanding entries — W179's empty-state rule.
 - [x] Static list, no motion, existing mc-* type scale and rhythm throughout.
+
+## O46 — the unearned headline and the mic that stops on its own (2026-08-19)
+
+Captures: qa/matching-o10/04-unmatched-says-so.png (re-rendered), e2e/voice.spec.ts pins.
+
+- [x] The person's raw words render at display scale only when they earned a reading (a
+  headline branch or an informed match). Unearned text is a quiet italic quote in the muted
+  ink — still their words, no longer a proclamation. The founder's phone showed the failure:
+  "Cx." in 40px serif above a banner admitting nothing was read.
+- [x] The bare count ("3 of 3.") is dropped when everyone is shown anyway — the quality
+  banner owns the whole explanation, one sentence instead of a number that says nothing.
+  When rows genuinely are hidden, the line says "Showing N of M."
+- [x] A browser-initiated recognition end no longer auto-searches: the words land in the
+  editable box with one plain sentence ("The microphone stopped on its own…"), one tap from
+  searching. Only a Done the person tapped searches directly. This restores the safety the
+  collapsed review screen used to provide, without restoring the screen.
+- [x] No new motion anywhere in the change; the quote inherits the existing type ramp and
+  palette tokens.

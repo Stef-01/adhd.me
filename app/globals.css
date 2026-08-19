@@ -4682,6 +4682,16 @@ textarea:focus-visible {
   letter-spacing: -0.03em;
   color: var(--ink);
 }
+/* O46: the person's own words when they earned no headline — quiet, quoted, theirs. */
+.results-head .results-request-quote {
+  margin: 10px 0 0;
+  max-width: 34ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--muted);
+}
 .results-head .refine-compact {
   margin-top: 14px;
   padding: 0;

@@ -307,6 +307,8 @@ export function CareFinder() {
   const [heard, setHeard] = useState("");
   const [speechMessage, setSpeechMessage] = useState<string | null>(null);
   const speech = useRef<SpeechSession | null>(null);
+  /** True only between the Done tap and its onFinal — the person asked for the finish. */
+  const stopRequested = useRef(false);
 
   const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
@@ -397,6 +399,7 @@ export function CareFinder() {
     speech.current = null;
     setHeard("");
     setSpeechMessage(null);
+    stopRequested.current = false;
 
     const session = startSpeech({
       onPartial: setHeard,
@@ -411,7 +414,21 @@ export function CareFinder() {
         }
         setHeard(text);
         setDraft(text);
-        findMatches(text);
+        /**
+         * ONLY A FINISH THE PERSON ASKED FOR SEARCHES (O46). iOS Safari ends continuous
+         * recognition on its own — after a pause, or seconds in — delivering a fragment. This
+         * used to auto-submit that fragment, so a person mid-sentence landed on a results
+         * screen headlined by half a word ("Cx.") with no idea why: the exact "press allow and
+         * then it breaks" report. The review screen that once absorbed this was collapsed in
+         * the minimalism round; its safety note lives on here — a browser-initiated end now
+         * lands the words in the editable box instead, one tap from searching.
+         */
+        if (stopRequested.current) {
+          findMatches(text);
+          return;
+        }
+        setSpeechMessage("The microphone stopped on its own. What it heard is below — add to it, or search.");
+        setStage("type");
       },
       onError: (error, raw) => {
         if (speech.current === session) speech.current = null;
@@ -443,6 +460,7 @@ export function CareFinder() {
   /** "Done" asks the recogniser to finish; the final transcript arrives through onFinal. */
   function finishListening() {
     if (speech.current) {
+      stopRequested.current = true;
       speech.current.stop();
       return;
     }
@@ -699,7 +717,17 @@ export function CareFinder() {
 
             <div className="results-head">
               <p className="eyebrow">Based on what you told us</p>
-              <h1>{requestHeadline}</h1>
+              {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46). When no branch and
+                  no reading matched, the fallback headline was the person's own text at display
+                  scale — fine for a sentence, absurd for the fragment a cut-short microphone
+                  delivers ("Cx." in 40px serif, above a banner admitting nothing was read).
+                  Unearned text renders as a quiet quote instead: still their words, no longer a
+                  proclamation. */}
+              {requestHeadline !== requestSummary || quality === "informed" ? (
+                <h1>{requestHeadline}</h1>
+              ) : (
+                <p className="results-request-quote">&ldquo;{requestSummary}&rdquo;</p>
+              )}
               <button className="refine-compact" type="button" onClick={() => { setDraft(request); setStage("type"); }}>
                 <span>Change what you said</span>
               </button>
@@ -721,26 +749,30 @@ export function CareFinder() {
                 <datalist id="covered-suburbs">
                   {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
                 </datalist>
-                <p className="place-status" role="status">
-                  {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
-                      is a number that describes something the reader cannot see. And it only
-                      claims "ranked on what you asked for" when that is TRUE (O11): on an
-                      unmatched or tied query this line used to assert a ranking two lines above
-                      the banner saying there is no ranking — two sentences about the same fact,
-                      one of them false. When the order is not earned, the count stands alone and
-                      the quality banner owns the explanation. */}
-                  {place.trim() === ""
+                {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
+                    is a number that describes something the reader cannot see. And it only
+                    claims "ranked on what you asked for" when that is TRUE (O11): on an
+                    unmatched or tied query this line used to assert a ranking two lines above
+                    the banner saying there is no ranking — two sentences about the same fact,
+                    one of them false. When the order is not earned the quality banner owns the
+                    whole explanation — and when everyone is shown anyway, the bare count ("3 of
+                    3.") said nothing at all and is dropped (O46). */}
+                {(() => {
+                  const countLine = place.trim() === ""
                     ? quality === "informed"
                       ? shown.length === 1
                         ? "This GP does what you asked for."
                         : `These ${shown.length} GPs do what you asked for.`
-                      : `${shown.length} of ${matches.length}.`
+                      : shown.length === matches.length
+                        ? null
+                        : `Showing ${shown.length} of ${matches.length}.`
                     : origin
                       ? `Nearest to ${origin.suburb} first.`
                       : quality === "informed"
                         ? "We do not cover that one yet, so these are ordered on what you asked for."
-                        : "We do not cover that one yet."}
-                </p>
+                        : "We do not cover that one yet.";
+                  return countLine ? <p className="place-status" role="status">{countLine}</p> : null;
+                })()}
 
                 {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
                     A probe over realistic first-person queries found the lexicon reached nothing

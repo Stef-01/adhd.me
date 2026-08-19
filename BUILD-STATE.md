@@ -145,6 +145,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > stays green (the rule is tuned against them, per the plan — not the other way round);
 > `pnpm verify` green.
 
+> **O46 (founder-reported — the iPhone microphone after Allow, and the screen it broke onto) —
+> claimed and DONE 2026-08-19, interactive session (not a loop firing).** The report: the mic
+> permission prompt appears, Allow is pressed, it breaks anyway — and the founder's screenshot
+> showed where it lands: a results screen headlined "Cx." in display serif above the unmatched
+> banner. Three causes, three fixes. (1) The O18 warm-up stopped its getUserMedia tracks the
+> moment permission resolved; WebKit reports recognition working while the audio session is
+> genuinely live, so the stream is now HELD OPEN until the retried session settles (pinned in
+> speech.test.ts). The user-activation caveat is written where the retry lives: a start()
+> reached through a permission prompt may still be refused, and the person's next tap — fresh
+> gesture, permission now warm — is the recovery the copy already points to. (2) iOS ends
+> continuous recognition on its own and the collapsed review screen's safety went with it:
+> a browser-initiated end auto-searched whatever fragment existed. Only a Done the person
+> tapped searches now; an end the browser chose lands the words in the editable box with one
+> plain sentence. (3) The results screen no longer blazons unearned words: a request that
+> earned no reading renders as a quiet quote, not a display headline, and the bare count
+> ("3 of 3.") is dropped when everyone is shown (kept as "Showing N of M." when rows hide).
+> DESIGN-QA entry + re-rendered captures. Gate: pnpm verify green; voice + matching e2e green
+> on the rebased tree. Next free number is O47.
+
 > **O42 (incident response — main restored after an accidental force-push) — DONE
 > 2026-08-19T01:54Z, loop-0819b.** Some time after the founder merged PR #8 at 01:06Z, a
 > session working from a STALE CHECKOUT (based at 69686bb, the 18 Aug morning tip) force-pushed

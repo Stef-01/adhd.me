@@ -159,6 +159,18 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
   let retried = false;
   /** The recogniser currently listening. Reassigned by the O18 retry, so stop/cancel act on it. */
   let active: SpeechRecognitionLike | null = null;
+  /**
+   * The O18 warm-up stream, HELD OPEN while the retried recogniser runs (O46). The first
+   * version stopped the tracks the moment permission resolved — and the founder's phone showed
+   * the exact result: the permission prompt appears, Allow is pressed, and it still breaks.
+   * The reported WebKit behaviour is that recognition succeeds while the audio session is
+   * genuinely live, so the stream is released only when the session settles.
+   */
+  let warmStream: MediaStream | null = null;
+  const releaseWarmStream = () => {
+    warmStream?.getTracks().forEach((track) => track.stop());
+    warmStream = null;
+  };
 
   const wire = (recognition: SpeechRecognitionLike) => {
     recognition.lang = "en-AU";
@@ -216,6 +228,7 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
       const captured = (finalText + interimText).trim();
       if (captured && error !== "aborted") {
         settled = true;
+        releaseWarmStream();
         handlers.onFinal(captured);
         return;
       }
@@ -236,8 +249,16 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
         active = null;
         media.getUserMedia({ audio: true }).then(
           (stream) => {
-            stream.getTracks().forEach((track) => track.stop());
-            if (settled) return;
+            // Held open, not stopped — see `warmStream` above (O46). One honest caveat this
+            // retry cannot remove: WebKit also gates start() on a user gesture, and a start
+            // reached through a permission prompt may be outside one. If it refuses again,
+            // the error copy shows — and the person's NEXT tap starts with permission already
+            // granted and the gesture WebKit wants, which is why the copy says "try once more".
+            warmStream = stream;
+            if (settled) {
+              releaseWarmStream();
+              return;
+            }
             const again = new Ctor();
             wire(again);
             try {
@@ -245,6 +266,7 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
               active = again;
             } catch {
               settled = true;
+              releaseWarmStream();
               handlers.onError(error, event.error);
             }
           },
@@ -257,6 +279,7 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
         return;
       }
       settled = true;
+      releaseWarmStream();
       handlers.onError(error, event.error);
     };
 
@@ -264,6 +287,7 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
       // The recogniser the retry replaced also ends; only the active one's end is a finish.
       if (settled || recognition !== active) return;
       settled = true;
+      releaseWarmStream();
       handlers.onFinal(finalText.trim());
     };
   };
@@ -291,11 +315,13 @@ export function startSpeech(handlers: SpeechHandlers): SpeechSession | null {
       // re-open the microphone over a screen that asked it to stop.
       if (!settled) {
         settled = true;
+        releaseWarmStream();
         handlers.onFinal("");
       }
     },
     cancel: () => {
       settled = true;
+      releaseWarmStream();
       active?.abort();
     },
   };

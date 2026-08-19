@@ -74,8 +74,20 @@ test("a spoken request reaches the results", async ({ page }) => {
   await expect(page.locator(".listening-transcript")).toContainText("Urdu");
 
   await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Urdu", true));
+  /**
+   * THE END THE PERSON DID NOT ASK FOR (O46). iOS Safari closes continuous recognition on its
+   * own — after a pause, or seconds in — and this used to auto-submit whatever fragment it had:
+   * a results screen headlined "Cx." on the founder's phone. A browser-initiated end now lands
+   * the words in the editable box, said out loud, one tap from searching. Only Done searches
+   * directly (the test below this one).
+   */
   await page.evaluate(() => (window as any).__speech.finish());
+  const box = page.getByRole("textbox");
+  await expect(box).toBeVisible();
+  await expect(box).toHaveValue(/Urdu/);
+  await expect(page.locator(".speech-error")).toContainText("stopped on its own");
 
+  await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   // And the words were actually used: the roster's one Urdu speaker ranks first. (This asked
   // for a Vietnamese speaker when the roster was fifteen invented personas; the roster is two
