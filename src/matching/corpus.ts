@@ -289,7 +289,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "build on what I already do well", aspires: ["manner:motivating"] },
   { text: "a plan that works with my chaos, not against it", aspires: ["manner:motivating"] },
   { text: "strengths first, please", reaches: ["manner:motivating"] },
-  { text: "a double appointment from the start", aspires: ["pref:longer-appointment"] },
+  // Promoted by O65: heard since the cue set grew past its single three-token phrase.
+  { text: "a double appointment from the start", reaches: ["pref:longer-appointment"] },
   { text: "time to actually talk", reaches: ["manner:unhurried"] },
   { text: "not shoved out the door in twelve minutes", reaches: ["manner:unhurried"] },
   { text: "no shame about how I have coped", aspires: ["manner:non_judgmental"] },
@@ -332,13 +333,21 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // reach it could not hear — the lexicon's to-do list, grown deliberately. Growth only: no
   // cue was edited in this tranche, so every tag below is the reader as it already was.
 
-  // ── pref:longer-appointment — one reaching phrasing existed; these are the misses ───────
-  { text: "please book me a long appointment for the first visit", aspires: ["pref:longer-appointment"] },
-  { text: "a proper long consult, not a squeeze-in", aspires: ["pref:longer-appointment"] },
-  { text: "can we make the first one a double session", aspires: ["pref:longer-appointment"] },
-  // Heard as unhurried manner but not as the booking preference — both truths recorded.
+  // ── pref:longer-appointment — O64 authored these as misses against a one-cue facet;
+  //    O65 grew the cue set and the promotion gate demanded these retags in the same commit.
+  { text: "please book me a long appointment for the first visit", reaches: ["pref:longer-appointment"] },
+  { text: "a proper long consult, not a squeeze-in", reaches: ["pref:longer-appointment"] },
+  { text: "can we make the first one a double session", reaches: ["pref:longer-appointment"] },
+  // Still only unhurried MANNER: "more than fifteen minutes" is deliberately uncued — it
+  // strips to [fifteen, minute], which is also distance talk, and that precision is not
+  // worth this recall. The standing aspiration is the record of that decision.
   { text: "I need more than fifteen minutes to get through this", reaches: ["manner:unhurried"], aspires: ["pref:longer-appointment"] },
-  { text: "an extended appointment so nothing gets cut off", reaches: ["manner:unhurried"], aspires: ["pref:longer-appointment"] },
+  { text: "an extended appointment so nothing gets cut off", reaches: ["manner:unhurried", "pref:longer-appointment"] },
+
+  // ── O65 leak pins: long-words-without-the-ask must stay silent to this facet ────────────
+  { text: "the waiting list at that clinic is long", never: ["pref:longer-appointment"] },
+  { text: "it took a long time to get this referral sorted", never: ["pref:longer-appointment"] },
+  { text: "I doubled back to the pharmacy on the way home", never: ["pref:longer-appointment"] },
 
   // ── pref:woman-gp ────────────────────────────────────────────────────────────────────────
   { text: "a female GP is important to me", reaches: ["pref:woman-gp"] },
@@ -462,10 +471,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // (tranche two: ~200 entries) and O64 (tranche three: thin facets fed first, 262 entries,
   // floors re-measured off the grown set). The open aspirations are the standing lexicon
   // to-do list; the three attuned hesitations from O49 remain the founder's call.
-  // pref:longer-appointment is STILL 1 after a tranche aimed straight at it — four new
-  // phrasings ("long appointment", "long consult", "double session", "more than fifteen
-  // minutes") all land as aspirations, which is the loudest cue-gap this file currently
-  // names for the O22 review.
+  // pref:longer-appointment sat at 1 after O64's tranche aimed straight at it; O65 closed
+  // the gap (five two-token cues) and the floor is now the measured 6 of 7 — the seventh,
+  // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
+  // nobody noticed.
   "care:adhd-assessment": 22,
   "care:anxiety": 9,
   "care:autism-adhd": 9,
@@ -488,7 +497,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "manner:structured": 9,
   "manner:unhurried": 11,
   "pref:bulk-billing": 6,
-  "pref:longer-appointment": 1,
+  "pref:longer-appointment": 6,
   "pref:telehealth-first": 6,
   "pref:woman-gp": 4,
 };

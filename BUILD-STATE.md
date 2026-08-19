@@ -120,7 +120,9 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O65 (Q1 item 2, the O22 loop closing the gap O64 named: longer-appointment hears its own
-> vocabulary) — claimed 2026-08-19T21:03Z by loop-0819u.** The corpus's loudest finding:
+> vocabulary) — DONE 2026-08-19 by loop-0819u (floor 1→6 of 7; five promotions demanded by
+> the gate and made; three leak pins hold the long-words-without-the-ask boundary;
+> tie-quality repinned 200/126/15/59 — all four newly-heard requests separate).** The corpus's loudest finding:
 > pref:longer-appointment carries ONE cue ("longer first appointment", all three tokens
 > required in order), so "long appointment", "long consult", "double session", "double
 > appointment" and "extended appointment" all land as aspirations — people asking for the

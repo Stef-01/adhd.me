@@ -15,11 +15,10 @@ non-rankings.
 
 ## Q1 (Sep–Nov 2026): reach and evidence — make the reader hear more, provably
 
-1. **Reach corpus at scale.** *Progress: 261 entries after O64's tranche three (2026-08-19),
-   which fed the thinnest floors first — every floor except longer-appointment rose; that one
-   is still 1 after four phrasings aimed straight at it, all landing as aspirations, which is
-   the loudest cue-gap the corpus currently names (flagged for the O22 review). Target ~500
-   stands; tie-quality re-measured over the grown run and repinned in the same commit.*
+1. **Reach corpus at scale.** *Progress: 264 entries after O64's tranche three and O65's
+   leak pins (2026-08-19). Every floor rose across the two units; the longer-appointment gap
+   O64 named was closed by O65 the same day (floor 1 → 6 of 7, with the seventh a recorded
+   precision decision, not a miss). Target ~500 stands; tie-quality repinned with each move.*
    Extend O13's plain-name sweep into a standing corpus of ~500
    real-shaped requests (synthetic, founder-authored + paraphrase variants). Gate: reach
    percentage per facet tracked in CI; any drop fails the build. This is the matching
@@ -59,7 +58,12 @@ non-rankings.
    (want-phrasings only), floors raised in the same commit, one over-loose cue removed after
    the corpus caught it shadowing another facet's cue inside its claimed span. Three attuned
    aspirations stay open deliberately — their phrasings read distress rather than a want, and
-   authoring cues for them needs a founder-side judgment call.
+   authoring cues for them needs a founder-side judgment call. **The loop's cleanest worked
+   example is now O64→O65 (2026-08-19)**: tranche three measured longer-appointment stuck at
+   ONE heard phrasing and named it the loudest gap on record; the next unit widened the cue
+   set (five two-token cues, plus one deliberate non-cue with its precision reason written
+   down), whereupon the promotion gate demanded — and got — every newly-heard aspiration
+   retagged and the floor raised 1→6, all in the closing commit.
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
 3. **Morphology upgrade. DONE — O50, 2026-08-19.** The `INFLECTIONS` table in read.ts,

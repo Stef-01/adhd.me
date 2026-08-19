@@ -221,7 +221,14 @@ const LEXICON: readonly Entry[] = [
     // O53: video is how half of them say it, and "phone first" is the ask in appointment order.
     "video appointment", "video call", "phone first"]),
   pref("bulk-billing", "Bulk billing", 24, ["bulk bill", "bulk billed", "bulk billing", "cannot afford", "cheap"]),
-  pref("longer-appointment", "A longer first appointment", 20, ["longer first appointment"]),
+  pref("longer-appointment", "A longer first appointment", 20, ["longer first appointment",
+    // O65 (the O22 loop on O64's corpus finding): the facet carried ONE three-token cue, so
+    // the commonest phrasings of this ask were all unheard — measured, not guessed, in
+    // corpus tranche three. Each cue keeps two content tokens (the O25 collapse rule).
+    // "more than fifteen minutes" stays UNCUED on purpose: it strips to [fifteen, minute],
+    // which is also how distance talk reads ("fifteen minutes from the station"), and that
+    // precision is not worth this recall — the corpus carries it as a standing aspiration.
+    "long appointment", "long consult", "double appointment", "double session", "extended appointment"]),
 ];
 
 /**
