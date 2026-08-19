@@ -120,7 +120,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O57 (Standing debt 1 remainder — the applications console: the declared mix gets its
-> reader) — claimed 2026-08-19T12:52Z by loop-0819m.** O26 closed the capture side of the mix
+> reader) — DONE 2026-08-19 by loop-0819m.** O26 closed the capture side of the mix
 > hero's promise: `desiredMixPercent` rides the application only when the GP actually set it.
 > The debt's stated remainder: "no console surface renders applications yet, so the declared
 > mix has no reader; when an applications view is built, the mix renders as stated preference."
@@ -132,9 +132,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > the row carries it — as stated preference, never a promise. NO approve/publish control:
 > status is `received` and W183's Ahpra-review gate is a human act outside this console (G6
 > stays shut; nothing writes toward the directory). Tripwires honestly: W102 dossier row +
-> census line for the new route. Verify: store fixture unit test for the page's read; e2e —
-> non-staff refusal, and a submitted application with a set mix rendering as stated preference
-> (and one without staying silent); DESIGN-QA entry + qa/ capture; full `pnpm verify` green.
+> census line for the new route; new module `src/onboarding/applications-view.ts` declared as
+> W233 with its cdss-boundary entry and loader. ONE ADAPTATION from the claim, recorded here:
+> the claim planned an e2e of the granted view rendering the mix — impossible without a staff
+> grant, and the grant list ships empty by founder design (W105: a grant is a founder commit,
+> not something a unit does in passing). So the granted view's sentences are PURE FUNCTIONS of
+> the stored row (W233) and unit-pinned instead: mix present → stated-preference sentence with
+> both failure modes denied by name, mix absent → null (O26's "absence stays absent"), Ahpra as
+> unchecked shape, training/books as the applicant's answers, no banned register anywhere. The
+> e2e proves the half that protects real people, non-vacuously: an application is genuinely
+> submitted through the join form (mix set) and then neither a signed-out visitor nor a
+> practice owner can see one byte of it — name, number, email, count and mix sentence all
+> asserted absent from the response. Gate: 6 unit pins (applications-view.test.ts), both census
+> suites green, e2e 2/2 with qa/applications-o57/ captures, DESIGN-QA entry, year-plan Standing
+> debt 1 marked closed, full `pnpm verify` green (208 files, 3027 tests).
 
 > **O56 (Q2 item 7 — capacity truthfulness: declarations age) — DONE 2026-08-19 by
 > loop-0819l.** The matching-market lesson the plan cites: stated capacity drifts from real

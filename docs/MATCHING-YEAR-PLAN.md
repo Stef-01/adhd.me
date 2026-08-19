@@ -173,8 +173,11 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    actually set it (join-experience.tsx owns the state; the store validates 10–50 step 10 and
    refuses the rest; absent means undeclared, never defaulted). The condition is not captured
    by design: it rotates as an invitation and the GP never chooses one — the form's care areas
-   are the chosen work. REMAINING: no console surface renders applications yet, so the declared
-   mix has no reader; when an applications view is built, the mix renders as stated preference.
+   are the chosen work. **CLOSED by O57 (2026-08-19):** `/console/applications` renders every
+   received application — ADHD.ME-staff-gated above the read like the interest register, no
+   approve control (listing stays a human Ahpra-review act, G6 shut) — and the declared mix
+   renders, when and only when the row carries one, as stated preference with the sentence
+   unit-pinned (W233). The reader exists; access is one founder staff-grant commit away.
 2. **Onboarding interview build-out (O22 items 2–4) — item 2 CLOSED by O30 (2026-08-18).**
    `/console/interview` is the working instrument: editable transcript (i:-prefixed interviewer
    turns are never read), live proposals from both readers, each carrying the doctor's sentence

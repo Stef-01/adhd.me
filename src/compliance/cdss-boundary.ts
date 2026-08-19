@@ -349,6 +349,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W231 is the standing reach corpus: synthetic first-person SEARCH PHRASINGS with pinned expectations, consumed only by its own test as the year plan's per-facet CI gate. Nothing in it renders anywhere, to anybody — the strings are test fixtures in the W60 posture, not authored copy — and the file's own G7 section pins symptom descriptions as intentional NON-reaches, which is the boundary carried as data rather than as a comment.",
   },
   {
+    module: "src/onboarding/applications-view.ts",
+    operatorCopy: [],
+    notCopy:
+      "W233 turns a stored clinician application into the sentences the staff-gated applications console renders, as pure functions so each is unit-pinned without a staff grant existing (the W105 list ships empty). Every sentence REPORTS a declaration and none vouches: the Ahpra number is said to be an unchecked shape, the NSW training and books answers are said as the applicant's answers, and the join hero's mix renders only when the row carries one and only as stated preference — never a referral promise, never a directory field. Free-text fields (name, email, practice) pass through verbatim for the page to render under the W153 public_form attribution; this module authors nothing about any patient and nothing here can publish or advance an application.",
+  },
+  {
     module: "src/onboarding/reach-report.ts",
     operatorCopy: [],
     notCopy:

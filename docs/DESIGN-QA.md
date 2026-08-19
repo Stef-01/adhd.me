@@ -296,3 +296,26 @@ Captures: qa/capacity-o56/ (the freshness panel, desktop and 390px). Taste-skill
   score ties). The closed-books sentence patients see is unchanged.
 - [x] No motion, no new touch targets; grade boundaries (90/91 days, undated-open→stale) are
   unit-pinned with an injected clock so this panel can never disagree with the finder's sort.
+
+## O57 — the applications register, present and closed (2026-08-19)
+
+Captures: qa/applications-o57/ (the refusal state, desktop and 390px — the state this surface
+actually ships in, because the staff list is empty by founder design). Taste-skill pass applied.
+
+- [x] One idea per screen, both states: refused says whose register this is and that nobody
+  has access yet, in W105's own sentence; granted (unit-pinned, unreachable until a founder
+  grant) is one list where each row is one application said whole — name and email share a
+  row, the Ahpra line sits under them as quiet small text because an unchecked shape must not
+  read as a credential.
+- [x] Honesty gates: every sentence is a report of a declaration ("says they", "asked for",
+  "given by the applicant and not yet checked"); the mix renders only when the GP stated one,
+  as stated preference with both failure modes denied by name (not a referral promise); no
+  testimonials, no "specialist", no approve control anywhere — the page reads requests and
+  cannot grant them.
+- [x] Console vocabulary reused whole (ConsoleShell, the interest register's stone palette and
+  list rhythm) — a second register should read as the first one's sibling, not a new idea.
+- [x] The W153 attribution line renders once above the list, so an applicant's own words are
+  framed as theirs before any of them appear.
+- [x] No motion, no new touch targets; the granted view's sentences are pinned in
+  src/onboarding/applications-view.test.ts so nothing here ships unverified while the gate
+  stays shut.
