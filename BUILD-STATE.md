@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O69 (the iPhone microphone, advanced: the recovery tap starts warm — founder-directed,
+> interactive session loop-0819y, claimed 2026-08-20T01:0xZ).** The O46 caveat, read to its
+> conclusion: WebKit gates recognition on a USER GESTURE and reportedly succeeds only while
+> an audio session is GENUINELY LIVE — and no current path has both at once. The in-session
+> retry has the live stream but starts outside the gesture (getUserMedia resolves after it);
+> the O48 recovery tap has the gesture but starts cold, because the second failure's handler
+> releases the warm stream on its way to the error copy. Change: when the retried recogniser
+> ALSO fails on a permission-flavoured code, the warm stream is CARRIED instead of released —
+> module-held, 45-second window — and the next startSpeech adopts it, so the recovery tap
+> runs recognition synchronously in its gesture WITH the audio session already live: both
+> requirements, first time, one tap after Allow. The price is stated where it is paid: the
+> mic indicator stays lit for up to 45 seconds after the failure (or until the retry tap or
+> leaving the finder), which is the deliberate cost of keeping the session warm — bounded by
+> the timer, dropped on adoption, on the next session's settle or cancel, and by the finder
+> on unmount. Everything else unchanged: non-permission failures never carry, the error copy
+> and O48 button behave as shipped, `?debug=1` untouched. Verify: unit pins for carry /
+> adopt / expiry / non-permission-never-carries / cancel-releases with fake timers; voice
+> e2e suite green unchanged; full `pnpm verify` green. Field verification on the actual
+> device remains FOUNDER (debt 3) — this is the build side advancing to meet it.
+
 > **O68 (Q1 item 1 — corpus tranche four: compound requests and the discipline registers) —
 > DONE 2026-08-19 by loop-0819x (311 entries; 47 added — 15 compounds, 9 paraphrases, 8 mid-
 > facet, 8 G7/logistics nevers, 7 discipline mixes; every floor rose, woman-gp 4→10 and
