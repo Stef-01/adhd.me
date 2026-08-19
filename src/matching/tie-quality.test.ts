@@ -18,8 +18,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  every one of them separates — an ask one GP's unhurried declaration answers); 229/145/18/66
  *  at O68 (tranche four's 29 new reaching requests split 19 separated / 3 partial / 7
  *  unseparated — compounds separate more often than single asks, because two asks rarely
- *  land on the same declaration set). */
-const PINNED = { total: 229, separated: 145, partialTie: 18, unseparated: 66 };
+ *  land on the same declaration set); 228/145/18/65 at O72 (the bare-not rule retagged the
+ *  known false positive out of the reaching register — one unseparated request was never
+ *  really a request for what it scored on). */
+const PINNED = { total: 228, separated: 145, partialTie: 18, unseparated: 65 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

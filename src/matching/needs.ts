@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { collapsedCueSatisfied, findCue, negatedWant, stem, tokenise, tokeniseKeepingStopwords } from "./read";
+import { bareNegatorBefore, collapsedCueSatisfied, findCue, negatedWant, softenedNotJust, stem, tokenise, tokeniseKeepingStopwords } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -307,9 +307,17 @@ export function readNeeds(text: string): NeedSignal[] {
        the unhurried ask itself), so suppressing it would silence the very sentences the facet
        exists for. A suppressed cue claims nothing, so it cannot shadow a different, unnegated
        reading of the same words. */
+    /* O72 joins O40 under the same guard: a bare "no"/"not" immediately before the cue span
+       is a refusal too ("not bulk billing, I am happy to pay for time" — the corpus's first
+       known-false-positive pin, now retagged) — UNLESS the raw stream shows the additive
+       "not just" idiom pointing at this cue ("assess me for ADHD, not just the anxiety"
+       means anxiety AND MORE, the corpus caught the difference while this rule was built).
+       Same manner exemption, same claims-nothing rule; the negator inside a cue's own
+       phrase is untouched because the check looks strictly before the span. */
     if (
       (cue.entry.facet.kind === "care" || cue.entry.facet.kind === "preference") &&
-      negatedWant(sentence, at.from)
+      (negatedWant(sentence, at.from) ||
+        (bareNegatorBefore(sentence, at.from) && !softenedNotJust(rawSentence, cue.tokens[0]!)))
     ) {
       continue;
     }

@@ -502,15 +502,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I never feel heard and I want that to change", reaches: ["manner:attuned"] },
   { text: "don't need it bulk billed but do need evenings", never: ["pref:bulk-billing"] },
   /**
-   * KNOWN FALSE POSITIVE, pinned as today's truth (O68). Bare "not" before a cue does not
-   * negate: O40 covers explicit desire phrases only, by design ("never let me finish
-   * anything" is the founding counterexample), and the O53 tight rule constrains cues whose
-   * OWN first token is a negator, not a sentence's negator before a cue. So this sentence
-   * reaches bulk-billing although it asks for the opposite. Pinned `reaches` so the behaviour
-   * is visible and its FIX is deliberate: a bare-not negation unit must retag this to `never`
-   * in the same commit, exactly as the promotion gate forces in the other direction.
+   * O68 pinned this as the corpus's first KNOWN FALSE POSITIVE (bare "not" before a cue did
+   * not negate); O72 built the rule and retagged it in the same commit, exactly as the pin
+   * demanded. Building the rule surfaced its own boundary, kept as the next two pins: the
+   * additive "not just" idiom must NOT be read as refusal.
    */
-  { text: "not bulk billing, I am happy to pay for time", reaches: ["pref:bulk-billing"] },
+  { text: "not bulk billing, I am happy to pay for time", never: ["pref:bulk-billing"] },
+  { text: "not telehealth for this, it has to be face to face", never: ["pref:telehealth-first"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -569,7 +567,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "manner:steadying": 11,
   "manner:structured": 11,
   "manner:unhurried": 14,
-  "pref:bulk-billing": 12,
+  // bulk-billing lowered 12→11 by O72: the count lost the KNOWN FALSE POSITIVE ("not bulk
+  // billing…" retagged reaches→never when the bare-not rule landed) — a correction, not a
+  // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
+  // honestly reclassified is the one sanctioned direction, and this comment is its record.
+  "pref:bulk-billing": 11,
   "pref:longer-appointment": 6,
   "pref:telehealth-first": 11,
   "pref:woman-gp": 10,

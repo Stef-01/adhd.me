@@ -341,6 +341,53 @@ export function negatedWant(sentence: readonly string[], cueFrom: number): boole
 }
 
 /**
+ * A bare negator IMMEDIATELY before a care/preference cue is a refusal (O72).
+ *
+ * The gap O68's corpus pin named: O40 covers explicit desire phrases ("don't want", "no
+ * interest"), and the O53 tight rule constrains cues whose OWN first token is a negator —
+ * but "not bulk billing, I am happy to pay for time" slipped both, reaching the exact
+ * opposite of its ask. Adjacency IS the idiom here, the same finding O53 made from the
+ * other side: "not <cue>" negates; "not the usual bulk billing crowd" (a gap) does not,
+ * and tightening past adjacency is how "never LET ME finish anything" got broken once.
+ *
+ * The set is {no, not} ONLY, every exclusion a pinned lesson:
+ *   - "without" excluded — "what can we do without medication" IS the non-medication ask.
+ *   - "never" excluded — history and complaint, not refusal ("never had an assessment").
+ *   - contracted verb negators excluded — "won't do titration" is a complaint, i.e. a want.
+ * MANNER stays exempt at the call site exactly as O40: "not rushed" is the unhurried ask.
+ * A cue whose own phrase begins with a negator is untouched — this looks BEFORE the span.
+ */
+const BARE_NEGATORS = new Set(["no", "not"]);
+
+export function bareNegatorBefore(sentence: readonly string[], cueFrom: number): boolean {
+  if (cueFrom === 0) return false;
+  const before = sentence[cueFrom - 1];
+  return before !== undefined && BARE_NEGATORS.has(before);
+}
+
+/**
+ * The "not just" veto (O72's own corpus finding, caught while building the rule above).
+ *
+ * Stopword-stripping erases the difference between refusal and ADDITION: "assess me for
+ * ADHD, not just the anxiety" strips to […, not, anxiety] — indistinguishable from a
+ * refusal, yet the idiom means "anxiety AND MORE", the same shape as the authored cue
+ * "not just medication". So the veto reads the RAW stream (stopwords kept, the O45 trick):
+ * a "not just" bigram whose few following same-clause tokens include the cue's first
+ * authored word is an addition, and the suppression stands down. "not bulk billing, I am
+ * happy to pay" carries no "just" and stays a refusal.
+ */
+export function softenedNotJust(rawSentence: readonly string[], cueFirstRawStem: string): boolean {
+  for (let i = 0; i + 1 < rawSentence.length; i++) {
+    if (rawSentence[i] !== "not" || rawSentence[i + 1] !== "just") continue;
+    for (let k = i + 2; k <= Math.min(i + 4, rawSentence.length - 1); k++) {
+      if (rawSentence[k] === CLAUSE_BOUNDARY) break;
+      if (rawSentence[k] === cueFirstRawStem) return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Negators that BIND TIGHTLY when they open a cue (O53). "no medication" is an adjacency
  * idiom: the corpus caught "no interest in coaching, the medication is working" reaching
  * `non-medication` through [no, …2 words…, medication] — the negator negating something else

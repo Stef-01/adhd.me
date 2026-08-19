@@ -120,7 +120,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O72 (the reader unit O68's pin demanded: a bare negator ADJACENT to a care/pref cue is a
-> refusal) — claimed 2026-08-20T03:0xZ by loop-0819ab.** The corpus's first known-false-
+> refusal) — DONE 2026-08-19 by loop-0819ab. Building the rule surfaced ITS OWN boundary,
+> fixed inside the unit: stopword-stripping erases the additive "not just" idiom ("assess me
+> for ADHD, not just the anxiety" read as an anxiety refusal), so a raw-stream veto
+> (`softenedNotJust`, the O45 trick) stands the suppression down when "not just" points at
+> the cue. Founding false positive retagged reaches→never as its pin demanded, plus a
+> telehealth sibling never-pin; bulk-billing floor lowered 12→11 with the sanction written
+> where it lowers (a false positive corrected is not a hearing lost); tie-quality repinned
+> 228/145/18/65. §O72 pins both directions incl. every prior exclusion re-asserted; 495
+> matching tests green; full `pnpm verify` green (210 files, 3145 tests).** The corpus's first known-false-
 > positive pin: "not bulk billing, I am happy to pay for time" reaches bulk-billing, because
 > O40 covers explicit desire phrases only and the O53 tight rule constrains cues whose OWN
 > first token is a negator — nothing covers a sentence's bare "not"/"no" immediately before

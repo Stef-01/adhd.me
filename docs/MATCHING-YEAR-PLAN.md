@@ -20,8 +20,11 @@ non-rankings.
    6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN
    FALSE POSITIVE as today's truth: bare "not" before a cue does not negate ("not bulk
    billing, I am happy to pay for time" reaches bulk-billing) — O40 covers desire phrases
-   only, by design; the pin makes the eventual bare-not unit retag it deliberately. That
-   unit is the next reader candidate this file names. Target ~500 stands; tie-quality
+   only, by design; the pin made the bare-not unit retag it deliberately — **which O72 did,
+   2026-08-19**: `bareNegatorBefore` ({no, not} only, adjacency only, manner exempt, cue-own
+   negators untouched) plus the `softenedNotJust` raw-stream veto its building surfaced (the
+   additive "not just X" idiom must never read as refusal). Founding pin retagged, floors
+   and tie-quality moved with the run in the same commit. Target ~500 stands; tie-quality
    repinned with each move (229/145/18/66 — compounds separate more often than single asks).*
    Extend O13's plain-name sweep into a standing corpus of ~500
    real-shaped requests (synthetic, founder-authored + paraphrase variants). Gate: reach

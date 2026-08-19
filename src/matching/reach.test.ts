@@ -445,3 +445,34 @@ describe("O45 a collapsed cue must look like its authored phrase", () => {
     expect(labels).toContain("A structured, measured approach");
   });
 });
+
+describe("§O72 a bare negator adjacent to a care/pref cue is a refusal — with every boundary held", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("suppresses the corpus's founding false positive and its siblings", () => {
+    expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
+    expect(facets("not telehealth for this, it has to be face to face")).not.toContain("pref:telehealth-first");
+    // (second clauses re-reach on their own words, honestly: "the dose is settled" would
+    // re-earn titration through the dose cue — so the pin isolates the negated clause.)
+    expect(facets("no titration for me thanks")).not.toContain("care:titration");
+  });
+
+  it("the additive 'not just' idiom is never read as refusal (the veto's own founding case)", () => {
+    const heard = facets("assess me for ADHD, not just the anxiety");
+    expect(heard).toContain("care:anxiety");
+    expect(heard).toContain("care:adhd-assessment");
+  });
+
+  it("every exclusion the earlier units bled for still stands", () => {
+    // "without" is an ask, not a refusal (O64's measured pin).
+    expect(facets("what can we do without medication")).toContain("care:non-medication");
+    // A cue whose OWN phrase begins with a negator is untouched — the check looks before the span.
+    expect(facets("not just medication")).toContain("care:non-medication");
+    // Manner stays exempt (O40): the negated phrasing IS the ask.
+    expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
+    // "never" is history and complaint, not refusal.
+    expect(facets("I have never had a proper assessment")).toContain("care:adhd-assessment");
+    // Adjacency only: a gap between negator and cue is not the idiom.
+    expect(facets("not the usual bulk billing crowd, but bulk billed would help")).toContain("pref:bulk-billing");
+  });
+});
