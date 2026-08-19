@@ -119,6 +119,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O49 (Q1 standing work — the first aspiration sweep over the O47 corpus) — claimed
+> 2026-08-19T04:46Z by loop-0819e.** The corpus shipped with 14 measured aspirations — requests
+> the lexicon is deaf to. This unit is the review loop the corpus exists to feed, run for the
+> first time: each aspiration judged against the G7 law (a cue may name what a reader WANTS or
+> SAYS THEY HAVE, never a symptom the finder would deduce from), the hearable ones widened
+> with cues that survive as two content tokens or pass the O45 collapse rule by construction,
+> the heard ones PROMOTED with floors raised in the same commit (the corpus gate makes doing
+> otherwise a build failure), and the genuinely-unclear ones left OPEN with the hesitation
+> recorded — an aspiration is allowed to stay an aspiration. Verify: corpus gate green with
+> raised floors; no reach ratchet loosened anywhere; every prior pin green; `pnpm verify`
+> green.
+
 > **O47 (Q1 item 1, second half — the standing reach corpus with per-facet CI gates) —
 > claimed 2026-08-19T03:46Z by loop-0819d. DONE 2026-08-19.** The plan's corpus-at-scale item, built as
 > infrastructure plus the first tranche: `src/matching/corpus.ts` (W231) holds first-person
