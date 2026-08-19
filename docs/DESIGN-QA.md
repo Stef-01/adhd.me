@@ -98,3 +98,183 @@ Each is asserted in `e2e/results.spec.ts`, so the checklist cannot rot.
 - [x] Numbers use `tabular-nums` so columns align.
 - [x] Null-safe: a practice with no comparison group renders an em dash, never a zero or the raw count dressed up as impact (unit-tested).
 - [x] Signed-out access redirects to sign-in (e2e-verified).
+
+## O24 — GP join landing (patient-mix hero) + whole-surface declutter audit (2026-08-18)
+
+### The hero (/clinicians/join)
+- [x] One idea at display scale: "I want ⟨N⟩% of my patients to be ⟨rotating condition⟩" — every
+  control lives inside the sentence; nothing else competes above the fold.
+- [x] The payoff line restates the mix as an illustrative daily figure ("about 3 matched
+  patients a day") with the honesty line in the same breath — no invented booking forecast on a
+  professional surface.
+- [x] Rotation pauses under `prefers-reduced-motion`; the rotating sentence is `aria-hidden`
+  with an sr-only slider as the accessible control; `role="status"` restates the figure.
+- [x] Steppers 44px (O14 touch floor); accent reserved for the two live tokens; serif and
+  tracking inherited from the page's own h1 scale; `to be` non-breaking so the sentence never
+  strands a word.
+- [x] Behaviour pinned in e2e/join-hero.spec.ts; captures in qa/join-o24/.
+
+### Declutter audit of the prose surfaces (qa/ui-o24/, 390px full-page)
+- `/` and `/practices`: long by design — the argument-at-length pages; hierarchy (numbered
+  sections, stat panels, dark interludes) is consistent and scannable. No surgery.
+- `/clinicians`: already the minimal pathway-builder ("what kind of GP do you want to
+  become?", % slider). Now feeds the join hero coherently: explore the mix there, set it here.
+- `/faq`, `/examples`, `/privacy`: linted single-column prose from the launch pass; unchanged.
+- Verdict: the clutter debt was concentrated on the join page's cold open, which O24 replaced.
+  Note: the mapped taste-skill is not installed in this session; this audit applies the
+  standing rules from O11/O14 (one idea per screen, fold discipline, 44px targets, related
+  facts share a row) in its place.
+
+## O29 — Web-guidelines audit + micro-polish (2026-08-18)
+
+Audited the patient surfaces against Vercel's Web Interface Guidelines (fresh fetch, full
+ruleset) — the tree was already clean on transition scoping, focus-visible coverage,
+text-wrap, ellipses and tabular numerals. Violations found and fixed:
+
+- [x] `touch-action: manipulation` on all controls — kills the 300ms double-tap delay
+  without touching pinch zoom (matters for readers who zoom).
+- [x] `.cv2-focus-card` keyboard focus was a tint swap with `outline: none`; it now carries
+  a real 2px accent ring at offset.
+- [x] Consent dialog gets `overscroll-behavior: contain` so reading the policy cannot
+  scroll the page behind it.
+- [x] Mix-hero rotation gains its stop conditions: pauses under the pointer, stops for good
+  the moment the reader engages the percent (autoplay >5s rule; reduced-motion already
+  disabled it).
+- [x] Attribution polish: /go segments by source surface (`?src=`, allow-listed, never
+  echoed) and the booking screen carries the one-line "how you heard" nudge (layer 3 of
+  docs/BOOKING-ATTRIBUTION.md), styled quiet.
+- [x] `adhdme-taste` project skill authored — the tree's design law as a loadable skill,
+  closing plan §2's missing taste-skill; bound in CLAUDE.md law 5.
+## O26 — the hero's mix reaches the form (2026-08-18)
+
+- The debt: O24's CTA said "Set my mix" and the form had no mix field — the sentence's whole
+  promise was discarded at the fold.
+- [x] One owner for the number (join-experience.tsx); the hero edits it, the form restates it
+  in a single quiet line inside "What you see often" (`.join-mix-echo`, join-hint styling —
+  no new visual weight, the `<strong>` percent is the only emphasis).
+- [x] Honesty carried through: the echo says "your stated preference … not a booking
+  promise, and it is never published" — the hero's honesty line at the point of capture.
+- [x] Nothing renders and nothing submits until the GP actually uses the control: an
+  untouched 30% default is not a declaration, so the field is absent, not zero, not 30.
+- [x] No new motion; no touch-target change; behaviour pinned in e2e/join-hero.spec.ts
+  ("the mix set above reaches the application below").
+
+## O30 — the onboarding interview screen, `/console/interview` (2026-08-18)
+
+Captures: qa/interview-o30/ (desktop full-page + 390×844). Taste-skill pass applied.
+
+- [x] One idea per section, in the interview's own order: who is in the room → the
+  conversation → heard so far → for after → record it. No form on screen while the doctor
+  talks — the transcript IS the input.
+- [x] Related facts share the card: the facet chip, the doctor's own sentence, and the
+  structured interview's scripted question sit together; the answer buttons are inside the
+  same card. Nothing to cross-reference.
+- [x] The cross-check ("patients ask for this in their own words") is quiet accent caps —
+  it informs which question to ask first and must not read as the machine grading the doctor.
+- [x] Motion carries meaning only: a proposal ARRIVING fades/rises 8px via motion/react;
+  `useReducedMotion` renders it static; nothing loops.
+- [x] 44px floor on answer pills, inputs and the details summary; `touch-action:
+  manipulation`; hover gated behind `(hover: hover)`; visible focus rings throughout.
+- [x] Honesty gates: empty state says what will happen ("Proposals appear here as the doctor
+  talks"), not that something is wrong; the save note states the G6 posture verbatim; the
+  gap feed is disclosure-hidden ("For after the interview") so live work stays uncluttered.
+- [x] Behaviour pinned in e2e/interview.spec.ts: signed-out redirect, interviewer-line
+  exclusion, scripted question rendering, record/un-record, disabled save until named,
+  draft-save message.
+
+## O36 — the gap sweep on the interview screen (2026-08-18)
+
+Captures: qa/interview-o36/ (desktop + 390×844, superseding the o30 set for this screen).
+
+- [x] "Still to ask — N of M" is a live count that FALLS as the doctor talks — the screen's
+  one argument (the conversation shrinks the checklist) rendered as a number, not stated as
+  copy. A facet reached in conversation leaves the checklist because it moved up into the
+  proposals: asked once, never twice.
+- [x] Checklist rows are deliberately lighter than proposal cards — no card chrome, a rule
+  between questions, the scripted question with its facet label in the same row (related
+  facts share a row). The settled state is the same left-edge accent the proposals use, so
+  "answered" reads identically everywhere on the screen.
+- [x] Same three-state pills, same 44px floor, same un-record gesture; no new motion — a
+  static list that shrinks needs none.
+- [x] Honesty: an unanswered checklist question is recorded NOWHERE (absence, not a default);
+  the note says so on the surface. Empty state ("Nothing left. The conversation reached every
+  facet.") distinguishes finished from unstarted.
+
+## O38 — the reach-gap feed on the matching console (2026-08-18)
+
+Captures: qa/reach-o38/ (feed section, desktop + 390 widths).
+
+- [x] The feed sits on the matching console where lexicon review already lives — no new
+  route, no new nav. Real saved onboardings, explicitly distinguished from the worked
+  example above them.
+- [x] Two lists per entry, labelled by what they grow ("candidate lexicon cues" vs "unread
+  by the proposer's vocabulary") — related facts share the entry; the reviewer never
+  cross-references which reader missed what.
+- [x] Entry heading carries provenance in one line: who, saved when, by whom.
+- [x] Three states kept apart: no onboardings at all ("the feed starts with the first saved
+  interview"), onboardings fully heard ("nothing is waiting for lexicon review"), and
+  outstanding entries — W179's empty-state rule.
+- [x] Static list, no motion, existing mc-* type scale and rhythm throughout.
+
+## O46 — the unearned headline and the mic that stops on its own (2026-08-19)
+
+Captures: qa/matching-o10/04-unmatched-says-so.png (re-rendered), e2e/voice.spec.ts pins.
+
+- [x] The person's raw words render at display scale only when they earned a reading (a
+  headline branch or an informed match). Unearned text is a quiet italic quote in the muted
+  ink — still their words, no longer a proclamation. The founder's phone showed the failure:
+  "Cx." in 40px serif above a banner admitting nothing was read.
+- [x] The bare count ("3 of 3.") is dropped when everyone is shown anyway — the quality
+  banner owns the whole explanation, one sentence instead of a number that says nothing.
+  When rows genuinely are hidden, the line says "Showing N of M."
+- [x] A browser-initiated recognition end no longer auto-searches: the words land in the
+  editable box with one plain sentence ("The microphone stopped on its own…"), one tap from
+  searching. Only a Done the person tapped searches directly. This restores the safety the
+  collapsed review screen used to provide, without restoring the screen.
+- [x] No new motion anywhere in the change; the quote inherits the existing type ramp and
+  palette tokens.
+
+## O48 — unmatched state, second pass (2026-08-19)
+
+Captures: qa/matching-o10/04-unmatched-says-so.png (re-rendered).
+
+- [x] The unmatched banner is one sentence; the clarifier owns the say-more invitation.
+- [x] The eyebrow does not render above words the product could not read — the quote stands
+  alone. Fewer stacked text blocks between the header and the clarifier: quote, change link,
+  suburb field, one-line banner, one question.
+- [x] The mic permission failure's "try once more" is a 44px control under the banner it
+  answers, not a sentence pointing at a control two screens away.
+
+## O51 — the profile names the asks this GP does not answer (2026-08-19)
+
+Captures: qa/profile-o51/ (desktop + 390, missed line in frame). Taste-skill pass applied.
+
+- [x] The two lists are one account: the missed asks sit directly under the matched evidence,
+  same visual language, deliberately quieter (muted, no chips) — context, not the headline.
+- [x] Honesty gates: declaration framing throughout ("not something they declare"), never a
+  deficiency or competence claim beside a named clinician; "Another listing may" keeps the
+  reader moving without disparaging anybody.
+- [x] Capped at two lines so the page stays about the fit that exists; asks nobody on the
+  roster declares remain covered by the finder's global note.
+- [x] Rendered only when matched evidence exists — the no-match fallback already tells that
+  story whole, and stacking misses onto it would pile on.
+- [x] No new motion, no new touch targets; the partition property (evidence ∪ missed = asks,
+  no overlap) is unit-pinned so the two lists can never contradict.
+
+## O52 — the re-sort made visible (2026-08-19)
+
+Captures: qa/motion-o52/ (the same three rows before and after a clarifier answer, order
+changed). Taste-skill pass applied.
+
+- [x] Motion carries meaning and nothing else: `layout="position"` on the result rows, so the
+  ONE moment the product proves an answer mattered — the re-rank — is shown as rows gliding
+  to their new places instead of a teleport that reads as a fresh list. A row pushed past the
+  fold exits with a short fade rather than vanishing.
+- [x] The static equal is automatic: the existing `MotionConfig reducedMotion="user"` disables
+  layout tweens under prefers-reduced-motion, leaving an instant reorder — the same truth
+  without the movement. Nothing loops; nothing moves unprompted.
+- [x] Timing subordinate to reading: 340ms position ease, 160ms exit fade, no added delay —
+  the glide finishes before a reader's eye settles on the new first row.
+- [x] E2e pins what the tween animates BETWEEN: the same keyed rows, reordered, nobody minted
+  and nobody lost; a chip that merely confirms the order is tolerated, per clarify.ts's own
+  contract.

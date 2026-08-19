@@ -3,9 +3,10 @@ import { careArchetypes } from "./care-archetypes";
 import { cliniciansMatchingArchetype, clinicians, rankClinicians } from "./clinicians";
 
 describe("ADHD assessment demo archetypes", () => {
-  it("includes six distinct qualitative journeys", () => {
-    expect(careArchetypes).toHaveLength(6);
-    expect(new Set(careArchetypes.map((archetype) => archetype.id)).size).toBe(6);
+  it("includes seven distinct qualitative journeys", () => {
+    // Seven since O34: the woman-GP journey arrived with Dr Anusha Saxena.
+    expect(careArchetypes).toHaveLength(7);
+    expect(new Set(careArchetypes.map((archetype) => archetype.id)).size).toBe(7);
   });
 
   it.each(careArchetypes)("ranks the intended first match for $title", (archetype) => {

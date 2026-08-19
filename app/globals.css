@@ -36,6 +36,18 @@
 
 
 
+/* O29: kill the 300ms double-tap-zoom delay on every control at once. Pinch zoom is
+   untouched — this matters on a site tuned for older readers who DO zoom. */
+button,
+a,
+input,
+textarea,
+select,
+label,
+[role="button"] {
+  touch-action: manipulation;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -490,6 +502,14 @@ textarea:focus-visible {
   padding: 24px;
 }
 
+/* O29: the one-line "how you heard" nudge under the booking button — quiet by design. */
+.booking-heard {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .primary-button {
   width: 100%;
   min-height: 58px;
@@ -548,6 +568,58 @@ textarea:focus-visible {
   font-weight: 620;
   line-height: 1.25;
 }
+
+/* O21: the profile's match reasons with provenance. Same accent language as the pills the
+   list replaced, one reason per line so the label and its "from your words" pair read as a
+   unit at any zoom — the low-vision audit's rule that related facts share a row. */
+.fit-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fit-evidence li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.fit-evidence-label {
+  padding: 5px 8px;
+  border-radius: 3px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-size: 11px;
+  font-weight: 620;
+  line-height: 1.25;
+}
+
+.fit-evidence-said {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* O51: the asks this GP does not answer — quieter than the evidence above on purpose (it is
+   context, not the headline), but the same visual language, so the two read as one account. */
+.fit-missed {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  max-width: 52ch;
+}
+
+.fit-missed-label { color: var(--ink); font-weight: 600; }
 
 .practical-signal-row {
   margin-top: 7px;
@@ -721,6 +793,23 @@ textarea:focus-visible {
   color: var(--ink);
   font-size: 13px;
   line-height: 1.5;
+}
+
+/* O48: the permission failure's once-more as a control — WebKit starts recognition only from
+   a tap, so the recovery the error copy points to has to BE a tap. Sits under the banner it
+   answers (related facts share a row), 44px floor. */
+.speech-retry {
+  margin: 8px 0 0;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  touch-action: manipulation;
+  cursor: pointer;
 }
 
 /* A claim the clinician made about themselves, styled so it does not read as a verified badge.
@@ -2419,11 +2508,19 @@ textarea:focus-visible {
   transition: border-color 160ms ease, background-color 160ms ease;
 }
 
-.cv2-focus-card:hover,
+.cv2-focus-card:hover {
+  border-color: var(--accent-tint);
+  background: var(--accent-soft);
+}
+
+/* O29: keyboard focus gets a real ring, not a tint swap — a border-colour change alone is
+   below the contrast a keyboard user needs to find their place (web-interface-guidelines:
+   never outline:none without a visible replacement). */
 .cv2-focus-card:focus-visible {
   border-color: var(--accent-tint);
   background: var(--accent-soft);
-  outline: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .cv2-icon,
@@ -4416,6 +4513,97 @@ textarea:focus-visible {
 }
 .join-lead { max-width: 46ch; margin: 18px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
 
+/* O24: the patient-mix hero. One sentence at display scale; every control lives inside the
+   sentence itself so nothing on screen competes with the idea. Same serif and tracking as the
+   page's h1 family, accent reserved for the two live tokens (the percent, the condition). */
+.mix-hero {
+  margin: 8px 0 56px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mix-line {
+  margin: 20px 0 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(34px, 5.4vw, 54px);
+  font-weight: 430;
+  line-height: 1.14;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.mix-percent-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.mix-percent {
+  min-width: 2.2ch;
+  text-align: center;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.mix-step {
+  inline-size: 44px;
+  block-size: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+@media (hover: hover) {
+  .mix-step:hover:not(:disabled) { color: var(--accent); border-color: var(--accent-mid); }
+}
+.mix-step:disabled { opacity: 0.35; cursor: default; }
+
+.mix-condition-slot {
+  display: block;
+  min-height: 1.2em;
+}
+
+.mix-condition {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.mix-result {
+  margin: 22px 0 0;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.mix-result strong { font-weight: 640; }
+
+.mix-honesty {
+  max-width: 52ch;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.mix-cta {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 560;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .mix-cta:hover { background: var(--accent); }
+}
+
 .join-form { display: grid; gap: 40px; }
 .join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }
 .join-form legend {
@@ -4527,6 +4715,16 @@ textarea:focus-visible {
   line-height: 1.12;
   letter-spacing: -0.03em;
   color: var(--ink);
+}
+/* O46: the person's own words when they earned no headline — quiet, quoted, theirs. */
+.results-head .results-request-quote {
+  margin: 10px 0 0;
+  max-width: 34ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--muted);
 }
 .results-head .refine-compact {
   margin-top: 14px;
@@ -5514,6 +5712,58 @@ textarea:focus-visible {
    the reviewer has to go and fix. */
 .be-save-error { color: var(--accent); }
 
+/* ── The interview screen (O30) ─────────────────────────────────────────────
+   Same family as the matching console (mc-*) and review editor (be-*); iv-*
+   carries only what is new — the identity row, the live transcript, and the
+   three-state answer buttons. */
+.iv { display: grid; gap: 0; }
+.iv-who { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; max-width: 720px; }
+@media (max-width: 640px) { .iv-who { grid-template-columns: 1fr; } }
+.iv-field { display: grid; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.iv-field input, .iv-field textarea {
+  min-height: 44px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 4px;
+  background: #fff; color: var(--ink); font: inherit; font-size: 14.5px;
+}
+.iv-field input:focus-visible, .iv-field textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+}
+.iv-transcript { margin-top: 12px; max-width: 720px; }
+.iv-transcript textarea { line-height: 1.6; resize: vertical; }
+
+.iv-proposals { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 720px; }
+.iv-proposal { padding: 14px 16px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 4px;
+  background: var(--stone); }
+.iv-proposal.iv-often, .iv-proposal.iv-sometimes { border-left-color: var(--accent); background: var(--accent-soft); }
+.iv-proposal.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
+.iv-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+/* The cross-check note is quiet on purpose: it informs which question to ask first, and a
+   louder treatment would read as the machine grading the doctor. */
+.iv-cross { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.iv-question { margin: 10px 0 0; max-width: 62ch; color: var(--ink); font-size: 14px; line-height: 1.55; font-weight: 600; }
+.iv-answers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.iv-answer { min-height: 44px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--muted); font: inherit; font-size: 13.5px; cursor: pointer;
+  touch-action: manipulation; }
+@media (hover: hover) { .iv-answer:hover { border-color: var(--accent); color: var(--ink); } }
+.iv-answer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.iv-answer[aria-pressed="true"] { background: var(--ground); border-color: var(--ground); color: var(--on-ground); font-weight: 600; }
+
+/* The gap sweep (O36): a working checklist, so rows stay compact — no card chrome, just a
+   rule between questions and the settled state on the left edge, like the proposals above. */
+.iv-sweep { margin: 14px 0 0; padding: 0; list-style: none; max-width: 720px; }
+.iv-sweep-row { padding: 14px 0 14px 14px; border-left: 3px solid transparent; border-bottom: 1px solid var(--line); }
+.iv-sweep-row:last-child { border-bottom: 0; }
+.iv-sweep-row.iv-often, .iv-sweep-row.iv-sometimes { border-left-color: var(--accent); }
+.iv-sweep-row.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
+.iv-sweep-question { margin: 0; max-width: 62ch; color: var(--ink); font-size: 14px; line-height: 1.55; font-weight: 600; }
+.iv-sweep-label { display: block; margin-top: 3px; color: var(--faint); font-size: 11.5px; font-weight: 400;
+  letter-spacing: 0.04em; text-transform: uppercase; }
+
+.iv-gaps { margin-top: 12px; max-width: 68ch; }
+.iv-gaps summary { min-height: 44px; display: flex; align-items: center; cursor: pointer;
+  color: var(--muted); font-size: 13.5px; }
+.iv-gaps summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 /* ── Launch checklist surfaces (O15) ─────────────────────────────────────────────────────── */
 
 /* The 404 (item 1): the same calm register as every other dead end in the product. */
@@ -5623,6 +5873,8 @@ textarea:focus-visible {
   border-radius: 10px; background: var(--paper); color: var(--ink);
 }
 .consent-dialog::backdrop { background: rgb(25 26 23 / 0.45); }
+/* O29: scrolling to the policy's end must not scroll the page behind the modal. */
+.consent-dialog { overscroll-behavior: contain; }
 .consent-dialog h2 { margin: 0 0 12px; font-size: 18px; letter-spacing: -0.01em; }
 .consent-dialog ul { margin: 0 0 12px; padding-left: 18px; }
 .consent-dialog li { margin-bottom: 8px; font-size: 15px; line-height: 1.5; }

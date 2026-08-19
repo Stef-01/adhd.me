@@ -12,6 +12,7 @@ import {
   Waveform,
   X,
 } from "@phosphor-icons/react";
+import { track } from "@vercel/analytics";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from "motion/react";
 import { useEffect, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
@@ -19,6 +20,7 @@ import {
   clinicians,
   distanceTo,
   getPersonalizedMatch,
+  matchEvidence,
   matchQuality,
   rankBands,
   rankCliniciansNear,
@@ -27,6 +29,7 @@ import {
   unservedAsks,
   closedBooksNote,
   MATCH_QUALITY_COPY,
+  missedAsks,
   type Clinician,
 } from "@/demo/clinicians";
 import { clarifiers } from "@/matching/clarify";
@@ -304,7 +307,17 @@ export function CareFinder() {
   const [showAll, setShowAll] = useState(false);
   const [heard, setHeard] = useState("");
   const [speechMessage, setSpeechMessage] = useState<string | null>(null);
+  /**
+   * O48: the permission failure's way back is a BUTTON, not a sentence. WebKit only starts
+   * recognition from a screen tap, so the O18 auto-retry that runs after the Allow dialog can
+   * be refused no matter what the module does — the recovery that actually works on an iPhone
+   * is the person tapping again, with permission now granted. The copy said "try once more";
+   * this renders the once-more as a control beside it.
+   */
+  const [speechRetryable, setSpeechRetryable] = useState(false);
   const speech = useRef<SpeechSession | null>(null);
+  /** True only between the Done tap and its onFinal — the person asked for the finish. */
+  const stopRequested = useRef(false);
 
   const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
@@ -377,6 +390,22 @@ export function CareFinder() {
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
+  /**
+   * The evidence behind the pills, with provenance (O21). `matchEvidence` already carries the
+   * phrase from the reader's OWN words that reached each facet (`matched`) — the ranking has
+   * always known it; the page just never showed it. Quoting it back beside the closed-vocabulary
+   * label is attribution, not templating: the reason sentence is still composed only from the
+   * fixed set (W213), and the quote is visibly the reader's text, not the product's claim.
+   */
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request), [clinician, request]);
+  /**
+   * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
+   * with the filter inverted, so the two lists partition what the reader asked and cannot
+   * disagree with the ranking. Named here because a page that lists only the hits invites the
+   * reader to assume the rest were hits too, which is the quiet dishonesty the console's
+   * "Missed" column was built to prevent — for staff. The reader gets the same truth.
+   */
+  const profileMissed = useMemo(() => missedAsks(clinician, request), [clinician, request]);
 
   function startListening() {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
@@ -387,6 +416,8 @@ export function CareFinder() {
     speech.current = null;
     setHeard("");
     setSpeechMessage(null);
+    setSpeechRetryable(false);
+    stopRequested.current = false;
 
     const session = startSpeech({
       onPartial: setHeard,
@@ -401,13 +432,35 @@ export function CareFinder() {
         }
         setHeard(text);
         setDraft(text);
-        findMatches(text);
+        /**
+         * ONLY A FINISH THE PERSON ASKED FOR SEARCHES (O46). iOS Safari ends continuous
+         * recognition on its own — after a pause, or seconds in — delivering a fragment. This
+         * used to auto-submit that fragment, so a person mid-sentence landed on a results
+         * screen headlined by half a word ("Cx.") with no idea why: the exact "press allow and
+         * then it breaks" report. The review screen that once absorbed this was collapsed in
+         * the minimalism round; its safety note lives on here — a browser-initiated end now
+         * lands the words in the editable box instead, one tap from searching.
+         */
+        if (stopRequested.current) {
+          findMatches(text);
+          return;
+        }
+        setSpeechMessage("The microphone stopped on its own. What it heard is below — add to it, or search.");
+        setStage("type");
       },
-      onError: (error) => {
+      onError: (error, raw) => {
         if (speech.current === session) speech.current = null;
         // A deliberate stop is not a failure to report.
         if (error === "aborted") return;
-        setSpeechMessage(SPEECH_ERROR_COPY[error]);
+        // ?debug=1 appends the browser's raw error code for the founder's own phone (O18).
+        // The Web Speech API's code is the only diagnostic it gives, and the production RCA
+        // stalled for a day because "unknown" flattened it away. Patients never see this:
+        // the default banner stays a plain sentence with no error-code language.
+        const debug = new URLSearchParams(window.location.search).has("debug");
+        setSpeechMessage(debug ? `${SPEECH_ERROR_COPY[error]} [${raw}]` : SPEECH_ERROR_COPY[error]);
+        // O48: the permission-flavoured failures get their once-more as a button — see
+        // `speechRetryable` above. The next tap carries the gesture WebKit wants.
+        setSpeechRetryable(error === "service-not-allowed" || error === "not-allowed");
         setStage("type");
       },
     });
@@ -428,6 +481,7 @@ export function CareFinder() {
   /** "Done" asks the recogniser to finish; the final transcript arrives through onFinal. */
   function finishListening() {
     if (speech.current) {
+      stopRequested.current = true;
       speech.current.stop();
       return;
     }
@@ -642,6 +696,11 @@ export function CareFinder() {
             <div className="type-content">
               <p className="eyebrow">In your own words</p>
               {speechMessage && <p className="speech-error" role="status">{speechMessage}</p>}
+              {speechRetryable && (
+                <button className="speech-retry" type="button" onClick={startListening}>
+                  Try the microphone again
+                </button>
+              )}
               <h1>
                 <span>ADHD assessment</span>
                 <em>that takes you seriously.</em>
@@ -683,8 +742,22 @@ export function CareFinder() {
             </header>
 
             <div className="results-head">
-              <p className="eyebrow">Based on what you told us</p>
-              <h1>{requestHeadline}</h1>
+              {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46). When no branch and
+                  no reading matched, the fallback headline was the person's own text at display
+                  scale — fine for a sentence, absurd for the fragment a cut-short microphone
+                  delivers ("Cx." in 40px serif, above a banner admitting nothing was read).
+                  Unearned text renders as a quiet quote instead: still their words, no longer a
+                  proclamation — and the eyebrow goes with it (O48): "Based on what you told us"
+                  above words the product just admitted it could not read was one more line, and
+                  a contradiction. */}
+              {requestHeadline !== requestSummary || quality === "informed" ? (
+                <>
+                  <p className="eyebrow">Based on what you told us</p>
+                  <h1>{requestHeadline}</h1>
+                </>
+              ) : (
+                <p className="results-request-quote">&ldquo;{requestSummary}&rdquo;</p>
+              )}
               <button className="refine-compact" type="button" onClick={() => { setDraft(request); setStage("type"); }}>
                 <span>Change what you said</span>
               </button>
@@ -706,26 +779,30 @@ export function CareFinder() {
                 <datalist id="covered-suburbs">
                   {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
                 </datalist>
-                <p className="place-status" role="status">
-                  {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
-                      is a number that describes something the reader cannot see. And it only
-                      claims "ranked on what you asked for" when that is TRUE (O11): on an
-                      unmatched or tied query this line used to assert a ranking two lines above
-                      the banner saying there is no ranking — two sentences about the same fact,
-                      one of them false. When the order is not earned, the count stands alone and
-                      the quality banner owns the explanation. */}
-                  {place.trim() === ""
+                {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
+                    is a number that describes something the reader cannot see. And it only
+                    claims "ranked on what you asked for" when that is TRUE (O11): on an
+                    unmatched or tied query this line used to assert a ranking two lines above
+                    the banner saying there is no ranking — two sentences about the same fact,
+                    one of them false. When the order is not earned the quality banner owns the
+                    whole explanation — and when everyone is shown anyway, the bare count ("3 of
+                    3.") said nothing at all and is dropped (O46). */}
+                {(() => {
+                  const countLine = place.trim() === ""
                     ? quality === "informed"
                       ? shown.length === 1
                         ? "This GP does what you asked for."
                         : `These ${shown.length} GPs do what you asked for.`
-                      : `${shown.length} of ${matches.length}.`
+                      : shown.length === matches.length
+                        ? null
+                        : `Showing ${shown.length} of ${matches.length}.`
                     : origin
                       ? `Nearest to ${origin.suburb} first.`
                       : quality === "informed"
                         ? "We do not cover that one yet, so these are ordered on what you asked for."
-                        : "We do not cover that one yet."}
-                </p>
+                        : "We do not cover that one yet.";
+                  return countLine ? <p className="place-status" role="status">{countLine}</p> : null;
+                })()}
 
                 {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
                     A probe over realistic first-person queries found the lexicon reached nothing
@@ -800,7 +877,15 @@ export function CareFinder() {
             </div>
 
             <div className="clinician-list">
-              {shown.map((item, index) => {
+              {/* O52: the re-sort, made visible. A clarifier answer re-ranks this list, and the
+                  order changing is the product's whole argument — so rows GLIDE to their new
+                  positions (`layout="position"`) instead of teleporting, and a row pushed out
+                  of the visible fold leaves visibly rather than vanishing. The surrounding
+                  MotionConfig reducedMotion="user" is what makes the static equal automatic:
+                  under prefers-reduced-motion the reorder is instant, which is the same truth
+                  without the movement. */}
+              <AnimatePresence initial={false}>
+                {shown.map((item, index) => {
                 const itemMatch = getPersonalizedMatch(item, request);
                 const away = distanceTo(item, origin);
                 const reasons = distinguishingSignals(itemMatch.signals, allSignals);
@@ -809,10 +894,12 @@ export function CareFinder() {
                     key={item.id}
                     className="clinician-row"
                     type="button"
+                    layout="position"
                     onClick={() => chooseClinician(item)}
                     initial={reducedMotion ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26 }}
+                    exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
+                    transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26, layout: { duration: 0.34, ease: [0.22, 1, 0.36, 1], delay: 0 } }}
                     whileTap={reducedMotion ? undefined : { scale: 0.99 }}
                   >
                     <ClinicianPortrait clinician={item} variant="thumb" />
@@ -831,7 +918,8 @@ export function CareFinder() {
                     <CaretRight size={20} weight="light" aria-hidden="true" />
                   </motion.button>
                 );
-              })}
+                })}
+              </AnimatePresence>
             </div>
 
             {matches.length > shown.length && (
@@ -876,9 +964,36 @@ export function CareFinder() {
               <NswTraining clinician={clinician} />
               <FounderDisclosure clinician={clinician} />
               {personalizedMatch.signals.length > 0 ? (
-                <div className="fit-signal-row profile-fit-signals" aria-label="Key match reasons">
-                  {personalizedMatch.signals.slice(0, 3).map((signal) => <span key={signal}>{signal}</span>)}
-                </div>
+                /* Each reason now shows its provenance (O21): the closed-vocabulary label the
+                   ranking scored, and the phrase that reached it. `matched` is the lexicon's cue
+                   (every word of it stem-matched, in order, in the reader's text), not a verbatim
+                   quote — so the line says "from your words", which is exactly true, rather than
+                   "you said", which could misquote an inflection. */
+                <>
+                  <ul className="fit-evidence" aria-label="Why this GP is listed for you">
+                    {profileEvidence.slice(0, 3).map((need) => (
+                      <li key={need.label}>
+                        <span className="fit-evidence-label">{need.label}</span>
+                        <span className="fit-evidence-said">from your words: &ldquo;{need.matched}&rdquo;</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {/* O51: the asks this GP does not answer, said here rather than implied away.
+                      Declaration-framed (W193): "not something they declare" is a fact about a
+                      declaration, never a claim about ability. Capped at two so the page stays
+                      about the fit that exists; the finder's global note still covers asks
+                      nobody on the roster declares. */}
+                  {profileMissed.length > 0 && (
+                    <ul className="fit-missed" aria-label="What you asked for that this GP has not declared">
+                      {profileMissed.slice(0, 2).map((need) => (
+                        <li key={need.label}>
+                          You also asked for <span className="fit-missed-label">{need.label.toLowerCase()}</span> — not
+                          something they declare. Another listing may.
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
               ) : (
                 /* Nothing in what they said reached this clinician, so the honest line is what he
                    says he does — the same fallback the result row already used, which is why the
@@ -903,7 +1018,7 @@ export function CareFinder() {
                 <p>
                   <a
                     className="profile-directions"
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}`)}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}, Australia`)}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -931,12 +1046,12 @@ export function CareFinder() {
               </section>
             </div>
 
-            <motion.div
-              className="profile-footer"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.16, duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-            >
+            {/* O44: no entrance animation on the booking bar. It is the screen's primary action
+                and a fixed overlay: a delayed fade means a person who arrives and scrolls in the
+                first third of a second sees a profile with no way to book — which is exactly how
+                the "no booking link" report read — and the animation carried no meaning
+                (adhdme-taste: motion must carry meaning or not exist). */}
+            <div className="profile-footer">
               <div>
                 <span>{clinician.booking.via === "healthengine" ? "Appointments" : "Booking"}</span>
                 <strong>
@@ -948,7 +1063,7 @@ export function CareFinder() {
               <Pressable className="primary-button" type="button" onClick={() => setStage("booking")}>
                 {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
               </Pressable>
-            </motion.div>
+            </div>
           </MotionScreen>
         )}
 
@@ -982,8 +1097,11 @@ export function CareFinder() {
 
               {clinician.booking.via === "healthengine" ? (
                 <>
+                  {/* O44: "his practice" was written when Dr Anubhav Saxena was the only
+                      online-bookable GP, and misgendered every clinician added after him.
+                      The practice holds the times; no pronoun is needed to say so. */}
                   <p>
-                    {clinician.shortName}’s live appointment times are held by his practice on
+                    {clinician.shortName}’s live appointment times are held by the practice on
                     Healthengine. We send you straight there, so the time you pick is a time that
                     is genuinely open.
                   </p>
@@ -996,7 +1114,7 @@ export function CareFinder() {
                 <>
                   <p>{clinician.booking.note}</p>
                   <p className="booking-note">
-                    {clinician.practice} takes his appointments by phone. Their number and hours
+                    {clinician.practice} takes these appointments by phone. Their number and hours
                     are on the practice page.
                   </p>
                 </>
@@ -1004,17 +1122,31 @@ export function CareFinder() {
             </div>
 
             <div className="bottom-action">
+              {/* Routed through /go/<id> (O28): outbound booking intent becomes countable per
+                  clinician from this domain's own logs, with nothing stored — see the route's
+                  header and docs/BOOKING-ATTRIBUTION.md. The destination is unchanged. */}
               <a
                 className="primary-button"
-                href={clinician.booking.url}
+                href={`/go/${clinician.id}?src=finder`}
                 target="_blank"
                 rel="noreferrer"
+                // O33: the custom event beside the server-side /go count. On the free tier
+                // Vercel drops custom events, so this records nothing today and starts
+                // recording the day the plan upgrades — no code change at that moment. No
+                // identifier travels with it; the payload is the same two fields /go logs.
+                onClick={() => track("booking_outbound", { clinician: clinician.id, surface: "finder" })}
               >
                 {clinician.booking.via === "healthengine"
                   ? "See times on Healthengine"
                   : "Open the practice page"}
               </a>
               <p>Opens Healthengine in a new tab.</p>
+              {/* Attribution layer 3 (docs/BOOKING-ATTRIBUTION.md): Healthengine asks new
+                  patients how they heard about the practice, and the practice sees the
+                  answer. One factual sentence, no incentive, no claim. */}
+              {clinician.booking.via === "healthengine" && (
+                <p className="booking-heard">If the booking asks how you heard about the practice, you can say ADHD.ME.</p>
+              )}
             </div>
           </MotionScreen>
         )}

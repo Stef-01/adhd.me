@@ -99,6 +99,326 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O40 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
+> loop-0819a as O39; RENUMBERED to O40 in the same firing when PR #7's title ('Terms of use — O39') became visible on rebase. Same collision as O30/PR #4; the claim's timestamp and holder are unchanged. DONE 2026-08-19.** `readNeeds` has no negation handling (the transcript reader does), and a probe
+> confirms the year plan's exact class: "I don't want my dose changed" reaches titration, "I'm
+> not looking for a diagnosis" reaches assessment, "I don't need it bulk billed" reaches
+> bulk-billing. Design (NegEx convention — explicit trigger PHRASES, not bare negators, scope
+> ends at the clause boundary): a small list of stemmed desire-negation phrases ("don't want",
+> "not looking for", "don't need", "no interest") suppresses a CARE or PREFERENCE cue whose
+> span starts within a short window after the phrase, same clause only. MANNER and LANGUAGE
+> are exempt BY DESIGN and pinned: patients state manner wants through negation ("I don't want
+> to feel rushed" wants unhurried). Bare negators are deliberately NOT triggers, pinned: "my
+> GP won't do titration" is a complaint that wants titration, "I've never had an assessment
+> and I want one" is history, not refusal. Shipped exactly as designed: `negatedWant` in
+> read.ts (trigger phrases in tokenised form, one inserted content token allowed inside a
+> phrase, MAX_NEGATION_LEAD=3, scope stops at the clause boundary, and only tokens BEFORE the
+> cue span are read, so a cue's own negator — "not working", "no medication" — is never read
+> as negating it); wired in readNeeds for care+preference, with a suppressed cue claiming
+> nothing so it cannot shadow an unnegated reading of the same words. Gate: 10 new pins both
+> directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
+> `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
+
+> **O52 (UI refinement & motion — the re-sort made visible) — claimed 2026-08-19T07:45Z by
+> loop-0819h.** The founder's motion queue, item two: "the results list re-sorting with layout
+> animations when a clarifier answer reorders it — the order changing is the product's whole
+> argument, show it." Today a clarifier answer re-ranks the list and the rows TELEPORT, so the
+> one moment the product proves an answer mattered reads as a flicker. Change: `layout`
+> position animation on the result rows plus exit handling for rows that leave the visible
+> fold, under the existing `MotionConfig reducedMotion="user"` so the static equal (instant
+> reorder) is automatic — motion carrying meaning, nothing decorative. DONE 2026-08-19.
+> Shipped exactly as queued: `layout="position"` on the rows with a 340ms ease and a 160ms
+> exit fade for rows leaving the fold, inside AnimatePresence; the static equal costs nothing
+> because MotionConfig reducedMotion="user" already governs the tree. The e2e pins what the
+> tween animates BETWEEN (same keyed rows, new order, nobody minted or lost) and tolerates a
+> chip that merely confirms the order — clarify.ts promises the offered QUESTIONS can
+> reorder, not that every answer does; the test walks chips until one moves the list, which
+> on the current roster is the shared-care answer (captured before/after in qa/motion-o52/).
+> Gate: finder-flow e2e 9/9, DESIGN-QA entry, full `pnpm verify` green (206 files, 2923
+> tests, audit gate PASS).
+
+> **O51 (Explaining the fit, Q1 increment — unmatched asks named per-clinician) — claimed
+> 2026-08-19T06:46Z by loop-0819g.** The year plan's continuous track, Q1 step: O21 put
+> provenance on the profile's matched reasons; this puts the OTHER half beside them — the
+> asks THIS clinician does not answer, named on the profile in the closed vocabulary, instead
+> of living only in the console's "Missed" column and the global "no GP declares this" note.
+> Data: a `missedAsks` sibling of `matchEvidence` (same needsFor read, inverted answer
+> filter), so the profile and the audit cannot disagree. Copy is declaration-framed and
+> compliance-safe: "you also asked for X — not something they declare", a fact about
+> declarations in W193's posture, never a deficiency claim about a named clinician. UI unit:
+> taste law, qa/ captures, DESIGN-QA entry. Verify: unit pins on missedAsks (complement of
+> evidence over the same read; empty when everything is answered); e2e drives a two-ask query
+> to a one-answer profile and reads the missed ask; `pnpm verify` green. DONE 2026-08-19.
+> Shipped as designed: `missedAsks` beside `matchEvidence` (one needsFor read, inverted
+> filter, care+manner only — a preference or a language is who somebody IS, and "they have
+> not declared being a woman" is not a sentence to put beside a name); the profile renders it
+> under the evidence, quieter, capped at two, only when evidence exists. Partition pinned
+> per-clinician (evidence ∪ missed = asks, no overlap, non-vacuous); e2e walks a three-ask
+> query to the first profile with a miss and checks the framing and the no-contradiction
+> property in the DOM. Gate: demo suite 41/41, finder e2e incl. the new pin, captures in
+> qa/profile-o51/ + DESIGN-QA entry, full `pnpm verify` green.
+
+> **O50 (Q1 item 3 — the morphology upgrade) — claimed 2026-08-19T05:46Z by loop-0819f.**
+> The plan's prescription: replace the suffix-stemmer's worst misses, FOUND BY THE CORPUS,
+> with explicit inflection tables — borrow test cases from `natural`, never the dependency.
+> The corpus work has now named the wart families the four suffix rules cannot bridge:
+> irregular pasts and participles (taken/took vs take, seen vs see), the length-guard edge
+> (sees at 4 letters unstemmed, seeing at 6 under the >6 ing-guard), and e-dropping stems
+> that strip to a form their own base word does not reach (believed→believ vs believe,
+> judged→judg vs judge, minutes→minut vs minute). Design: a small, corpus-driven
+> INFLECTIONS table applied as stem()'s last step — canonical forms for named wart families
+> only, each entry justified by a sentence somewhere in this tree's tests, NEVER a general
+> stemmer (Porter conflates, and every conflation is a facet firing beside a named clinician).
+> DONE 2026-08-19. Shipped as designed: `INFLECTIONS` keyed by SUFFIX-STEMMED form, applied
+> as stem()'s last step so every caller — cue tokens, sentence tokens, O45 raw skeletons —
+> unifies identically. Seven entries across three families, each earned by a named sentence;
+> leak pins hold the borders (mistaken≠take, juggle≠judge). One historical pin updated with
+> its reasoning kept: "sees" left the leave-short-words-alone list because a per-word table
+> review is not the blind stripping that pin refuses — the length guards themselves still
+> stand, proven on does/this/used/goes/gets. Corpus: "nobody ever believes me" and "quick to
+> judge, every one of them" pinned reaching non_judgmental (both previously stranded on
+> believ/judg), floor 4→6. The promotion gate confirmed the table alone promotes nothing —
+> morphology changes stems, not vocabulary, which is exactly the separation the plan drew.
+> Gate: read 15/15 incl. family equivalences, corpus 102/102, reach 78/78, full `pnpm verify`
+> green (206 files, 2919 tests, audit gate PASS). Q1 items 1, 3 and 4 are now all DONE;
+> remaining Q1: corpus growth to ~500 and the standing O22/UI/explanation tracks.
+
+> **O49 (Q1 standing work — the first aspiration sweep over the O47 corpus) — claimed
+> 2026-08-19T04:46Z by loop-0819e.** The corpus shipped with 14 measured aspirations — requests
+> the lexicon is deaf to. This unit is the review loop the corpus exists to feed, run for the
+> first time: each aspiration judged against the G7 law (a cue may name what a reader WANTS or
+> SAYS THEY HAVE, never a symptom the finder would deduce from), the hearable ones widened
+> with cues that survive as two content tokens or pass the O45 collapse rule by construction,
+> the heard ones PROMOTED with floors raised in the same commit (the corpus gate makes doing
+> otherwise a build failure), and the genuinely-unclear ones left OPEN with the hesitation
+> recorded — an aspiration is allowed to stay an aspiration. DONE 2026-08-19. SIXTEEN
+> promotions from cue widening across nine facets, every addition a want-phrasing surviving as
+> two content tokens or O45-collapse-safe by construction ("diagnose me" and "get checked"
+> reviewed INTO the O25 frozen list — the rule that made them safe to add is the rule that
+> guards them). One removal: "not one and done" survived as [not, done] with two insertions and
+> the corpus caught it SHADOWING non_judgmental's own "judged" cue inside its claimed span —
+> the first shadowing find, its recall carried by four sibling cues (the W223 trade). Floors
+> raised on eleven facets in the same commit, as the gate demands. THREE ATTUNED ASPIRATIONS
+> LEFT OPEN with the hesitation recorded: "I cry in the car", "seen women like me before" and
+> "perform being fine" read closer to distress than to a stated want, and the steadying
+> precedent ("overwhelmed" as a cue) does not obviously stretch to them — a cue authored there
+> is a judgment about where preference-reading ends, which is the founder's line to draw, not
+> the loop's. Gate: corpus 84/84 with raised floors, reach 78/78 incl. re-frozen O25 list,
+> full `pnpm verify` green (206 files, 2916 tests, audit gate PASS).
+
+> **O47 (Q1 item 1, second half — the standing reach corpus with per-facet CI gates) —
+> claimed 2026-08-19T03:46Z by loop-0819d. DONE 2026-08-19.** The plan's corpus-at-scale item, built as
+> infrastructure plus the first tranche: `src/matching/corpus.ts` (W231) holds first-person
+> requests as DATA — each entry pins the facets it MUST reach, may pin facets it must NEVER
+> reach (the false-positive discipline O25/O45 demand), and may name facets it is ABOUT but
+> the lexicon cannot yet hear (`aspires`), which is the measurable gap list. The CI gate:
+> per-facet reach percentage over aspirational entries, asserted against a pinned floor —
+> any drop fails the build, exactly the golden-file posture the plan asks for; floors are
+> measured, never guessed, and only a deliberate unit may raise them. Seeded with ~120
+> loop-authored synthetic requests across every care area, manner facet and preference
+> (search phrasings only — no clinical content, no gate crossed); growth to ~500 continues
+> across Q1 with founder-authored entries welcome in the same format. Verify: every hard pin
+> green, every `never` pin green, floors match measured reality, `pnpm verify` green.
+> SHIPPED with the measurement loop run honestly: entries were authored first, MEASURED, and
+> retagged to reality — two aspirations found already heard were promoted on the spot; five
+> entries the G7 boundary forbids (symptom descriptions — "my brain has never let me finish
+> anything" is DSM inattention text, per the law beside the assessment cues) became `never`
+> pins so the boundary is data; language expectations were removed with the reason stated
+> (languageNeeds reads the ROSTER, not the lexicon — a readNeeds corpus would assert the
+> wrong layer). Floors are measured heard-COUNTS (a one-entry facet cannot pass on rounding);
+> a met aspiration FAILS the build until promoted in the same commit, which makes the plan's
+> golden-file loop mechanical. 14 open aspirations = the lexicon to-do list. Gate: corpus
+> suite 84/84, W200 declaration + loader, full `pnpm verify` green (206 files, 2900 tests,
+> audit gate PASS).
+
+
+> **O45 (Q1 item 1's deliverable — the collapse-aware rule for one-token cues) — claimed
+> 2026-08-19T02:46Z by loop-0819c as O44; renumbered O45 on rebase when PR #13's title took
+> O44 (the recurring number race — see O30/O40). Claim timestamp and holder unchanged.
+> DONE 2026-08-19.** Shipped as designed, plus one finding the build itself surfaced: the
+> corpus was PROPPING ITSELF UP — "I need to know it's not going to hurt my heart" counted as
+> reached only because "what is going on" fired on "…not GOING to…", a wrong facet inflating
+> the reach number. The rule killed it, the ratchet correctly went red, and the fix was the
+> honest one: the cardiac-safety ask now has real cues on the structured facet ("hurt my
+> heart", "safe for my heart", "heart checked", "check my heart" — each two content tokens,
+> none collapsing), NOT a loosened ratchet. Gate: reach suite 78/78 (three named false
+> positives dead, six intended sentences preserved incl. the contraction case), full
+> `pnpm verify` green (205 files, 2815 tests, audit gate PASS). Q1 item 1's remaining half is
+> the corpus at scale. The frozen list (reach.test.ts §O25) holds 33 multi-word
+> cues that ship as ONE stemmed token, and the year plan names why they cannot be re-authored
+> one by one: the intended sentences strip to the same token, so precision and recall are
+> coupled at the stopword layer. The rule, designed against the pinned corpus (the plan's
+> "kept function-word skeleton" option): a collapsed cue additionally requires the sentence to
+> contain, ADJACENT AND IN ORDER, at least one consecutive token pair from the cue's authored
+> phrase with stopwords KEPT (stemmed, clause-bounded) — so "out the door" still fires on
+> "rushed me out the door" and stops firing on "next door to the chemist"; "on edge" fires on
+> "always on edge", not "on the edge of town"; contractions survive because any adjacent pair
+> suffices ("what's going on" keeps the [going, on] pair of "what is going on"). Verify: the
+> plan's three named false positives pinned dead; every existing reach/corpus/O13/O17 pin
+> stays green (the rule is tuned against them, per the plan — not the other way round);
+> `pnpm verify` green.
+
+> **O48 (founder-verdict — "still cluttered, speech still not fixed") — claimed and DONE
+> 2026-08-19, interactive session (not a loop firing).** Two responses. SPEECH: the O46
+> analysis already named the unfixable half — WebKit starts recognition only from a screen
+> tap, so the auto-retry that runs after the Allow dialog can be refused no matter how warm
+> the audio session is. The recovery that works is the person's next tap, and it is now a
+> CONTROL: a permission-flavoured failure renders "Try the microphone again" under the
+> banner (44px floor), pinned in voice e2e both ways (offered on service-not-allowed /
+> not-allowed, absent on audio-capture). CLUTTER, second pass on the unmatched state: the
+> three-line unmatched banner is one sentence ("We could not tell what you are looking for,
+> so this is everyone we list — not an order." — the clarifier owns the say-more invitation),
+> and the "Based on what you told us" eyebrow no longer renders above words the product just
+> said it could not read. Timing note for the record: production received O46 at 03:43:55Z,
+> minutes before the founder's verdict — the phone was almost certainly on the older build.
+> Next free number is O49.
+
+> **O46 (founder-reported — the iPhone microphone after Allow, and the screen it broke onto) —
+> claimed and DONE 2026-08-19, interactive session (not a loop firing).** The report: the mic
+> permission prompt appears, Allow is pressed, it breaks anyway — and the founder's screenshot
+> showed where it lands: a results screen headlined "Cx." in display serif above the unmatched
+> banner. Three causes, three fixes. (1) The O18 warm-up stopped its getUserMedia tracks the
+> moment permission resolved; WebKit reports recognition working while the audio session is
+> genuinely live, so the stream is now HELD OPEN until the retried session settles (pinned in
+> speech.test.ts). The user-activation caveat is written where the retry lives: a start()
+> reached through a permission prompt may still be refused, and the person's next tap — fresh
+> gesture, permission now warm — is the recovery the copy already points to. (2) iOS ends
+> continuous recognition on its own and the collapsed review screen's safety went with it:
+> a browser-initiated end auto-searched whatever fragment existed. Only a Done the person
+> tapped searches now; an end the browser chose lands the words in the editable box with one
+> plain sentence. (3) The results screen no longer blazons unearned words: a request that
+> earned no reading renders as a quiet quote, not a display headline, and the bare count
+> ("3 of 3.") is dropped when everyone is shown (kept as "Showing N of M." when rows hide).
+> DESIGN-QA entry + re-rendered captures. Gate: pnpm verify green; voice + matching e2e green
+> on the rebased tree. Next free number is O47.
+
+> **O42 (incident response — main restored after an accidental force-push) — DONE
+> 2026-08-19T01:54Z, loop-0819b.** Some time after the founder merged PR #8 at 01:06Z, a
+> session working from a STALE CHECKOUT (based at 69686bb, the 18 Aug morning tip) force-pushed
+> `main`, discarding every merged commit since — PRs #2–#8 (speech fixes, year plan, Saxena,
+> privacy policy, counsel package, terms, the on-site counsel check) and loop units O26, O30,
+> O36, O38, O40 — while adding four deck + Acknowledgement of Country commits on the stale
+> base. That it rewound the founder's own just-merged PR #8 is what marks it accidental.
+> Response, all non-destructive: the lost tip preserved at `rescue/main-20260819-pre-forcepush`
+> (2e57cd4); a merge of PR #8's head (3196fe8 = full lost line + O41) with the deck line
+> (a6b7223) built on `restore/main-after-forcepush` — clean auto-merge, both lines verified
+> present (terms page AND site-wide Acknowledgement), `pnpm verify` green (205 files, 2804
+> tests, audit gate PASS) — and offered as a PR for the founder to land, since restoring `main`
+> is the founder's call to confirm. **FOR WHOEVER FORCE-PUSHES NEXT: never force-push main;
+> `git pull --rebase` first. A stale session that force-pushes erases other sessions' merged
+> work, and `git pull --rebase` in every OTHER session then silently drops the same commits
+> locally (upstream-rewind fork-point behaviour), so the loss propagates.** Once the restore PR
+> merges, loop numbering continues at O43.
+
+> **O43 (founder-directed — the O42 incident's rules, codified) — claimed and DONE 2026-08-19,
+> interactive session (not a loop firing).** The founder's ask after the restoration: RCA why
+> merges appeared to stop landing and concurrent building failed, and set rules. Three layers
+> found: (1) repo — the force-push wipe (O42's incident; merges WERE landing, the wipe erased
+> them); (2) agents — the two Claude writers coordinated correctly throughout (ledger claims,
+> renumber-on-rebase, both independently detected and repaired the wipe), costing only noise
+> (duplicate restoration PRs #9/#10, O-number renumbers); (3) deploys — every push to any ref
+> burned a free-tier Vercel build (~100/day), quota exhausted mid-restoration, so landed
+> merges stopped appearing on the site, which read as "merges not happening". Rules shipped:
+> CLAUDE.md law 8 (never force-push main; fetch-before-claim and fetch-before-push; wipe
+> detection every firing with a stop-and-restore playbook; ledger as unit-number tiebreak;
+> deploy quota is shared — previews off, no deploy retries), CONTRIBUTING.md (the human rules,
+> incl. the admin ask to enable GitHub's Block force pushes ruleset on main — not settable
+> from a Claude session, verified: the API proxy refuses ruleset writes), and vercel.json
+> `ignoreCommand` skipping every non-main build so the quota is spent only on production.
+> Loop firings: O43 is taken — next free number is O44.
+
+> **O44 (founder-reported — Dr Anusha Saxena's booking path, root-caused and repaired) —
+> claimed and DONE 2026-08-19, interactive session (not a loop firing).** The report was "no
+> booking link, formatting differs from the gold standard (Dr Anubhav Saxena), weird map and
+> directions". Findings: the link WAS wired (/go/anusha-saxena → p160121 with utm) but three
+> real defects stood in front of it. (1) The booking screen said "held by HIS practice" — copy
+> hardcoded when Dr Anubhav was the only online-bookable GP, misgendering every clinician
+> added after him; now pronoun-free ("held by the practice"), with the practice-phone path
+> de-gendered too. (2) The profile's booking bar entered by delayed fade as a fixed overlay —
+> a primary CTA behind meaningless motion (adhdme-taste violation), invisible in fullPage
+> evidence captures (Chromium drops fixed elements) and missable live; now static. (3) The
+> maps query lacked a country qualifier; now "practice, suburb, Australia". Pinned in the O34
+> e2e: booking bar visible, copy contains "held by the practice" and no bare "his", href
+> exact, viewport-shot evidence (qa/matching-o34/03-04) so the bar is IN the record. Gate:
+> pnpm verify green, matching-verification + finder-flow 18/18. Next free number is O45.
+
+> **O41 (founder-directed — the counsel check visible on-site) — claimed and DONE 2026-08-19,
+> interactive session (not a loop firing).** `/privacy/counsel-review` explains the draft
+> banners in the product's own register: what counsel has been asked to check (patient-safe
+> wording; the raw brief linked as working-document-not-advice), and that banners come down on
+> counsel's word only. Linked from both draft banners (/privacy, /terms); public-surfaces
+> patient_notice row, dossier census + surface-map row, sitemap entry. Sweep forced a global
+> review→check rename on the page and both banner links (no-ratings bans "review" on patient
+> surfaces). Loop firings: O41 is taken — next free number is O42.
+
+> **O38 (Standing debt #2, last piece — the persisted reach report) — DONE 2026-08-18,
+> loop-0818d (claimed 23:46Z). DEBT #2 CLOSED.** ONBOARDING-INTERVIEW.md item 4 shipped: the
+> lexicon-gap feed is a record. `ClinicianBackground.patientSilent` rides every interview save
+> beside `unread` (optional — a pre-O38 row reports empty rather than invented; the key is
+> omitted when a save carries none, W153 neutralisation at the writer since both are verbatim
+> clinician speech). `src/onboarding/reach-report.ts` (W230) aggregates the LATEST save per
+> clinician — a later conversation that resolved a gap removes the entry, because a feed that
+> re-raises resolved work trains people to ignore it — keeping the two silences apart since
+> they grow different cue lists (proposer cues vs the finder's patient lexicon). Rendered on
+> the matching console where lexicon review lives (now force-dynamic; no new route, W102
+> census unchanged; W200 declaration + loader added for the module). Three states on the
+> surface: no onboardings / fully heard / outstanding, per W179. Gate: 7 report tests +
+> round-trip, interview e2e 5/5 incl. save → feed, DESIGN-QA entry + qa/reach-o38/, full
+> `pnpm verify` green. With items 2–4 all shipped, the O22 interview loop is standing
+> infrastructure; the year plan's Q1 items are the loop's next territory.
+
+> **O36 (Standing debt #2, second half — the gap sweep) — DONE 2026-08-18, loop-0818c (claimed
+> 22:45Z).** ONBOARDING-INTERVIEW.md build order item 3 shipped on `/console/interview`: "Still
+> to ask — N of M", every matchable facet the transcript has NOT reached rendered as the
+> structured interview's own question with the same often/sometimes/not-me record, the count
+> falling as the doctor talks — the design's promise ("the conversation shrinks the checklist;
+> it does not replace it") as a number, not copy. A facet reached in conversation leaves the
+> checklist because it moved into the proposals: asked once, never twice, pinned in e2e. An
+> answered gap facet lands in the W226 record with frequency and decider but NO quote (asked,
+> not heard — the review editor's hand-added shape); an unanswered one is ABSENT, because a
+> question never asked must not be stored as a facet nobody decided, and the saved row stays
+> the size of the interview rather than the vocabulary. `gapFacets` + `MATCHABLE_VOCABULARY`
+> in capture.ts (W229); a both-directions pin asserts every vocabulary facet has a scripted
+> question. NUMBERING NOTE: PR #4 independently used O30–O34 and PR #5 used O35, colliding
+> with this loop's O30 (row below); this loop resumed at O36 — future claims take the next
+> number after BOTH the ledger and merged PR titles. Gate: 15 capture tests, interview e2e
+> 4/4, taste pass + qa/interview-o36/ + DESIGN-QA entry, full `pnpm verify` green. Item 4
+> (persisted reach report) is the debt's last claimable piece.
+
+> **O30 (Standing debt #2, first half — the interview screen) — DONE 2026-08-18, loop-0818b
+> (claimed 21:48Z).** ONBOARDING-INTERVIEW.md build order item 2 shipped as `/console/interview`
+> (session-gated): editable transcript where `i:`-prefixed turns are the interviewer's and are
+> NEVER read — the convention fails toward a visible wrong proposal, not silently discarded
+> doctor speech; live proposals from both readers, each carrying the clinician's sentence and
+> the STRUCTURED INTERVIEW'S OWN question as read-back (`readBackQuestionFor` — the conversation
+> shrinks the checklist, it does not replace it); often/sometimes/not-me recorded with the
+> interviewer's name into the W226 store. `BackgroundFacet.frequency` keeps the spoken answer
+> beside the review status because collapsing sometimes/often at capture would rebuild the
+> tickbox the interview refuses; the writer drops an out-of-vocabulary frequency rather than
+> defaulting it. Unanswered proposals stay `proposed` with nobody named, so the W226 rule —
+> accepted must name its decider — holds by construction. Pure logic in
+> `src/onboarding/capture.ts`. Gate: 10 new capture tests + store round-trip, interview e2e 3/3
+> (signed-out redirect, live flow, captures), taste pass with qa/interview-o30/ + DESIGN-QA
+> entry, full `pnpm verify` green. Year plan reconciled: duplicate Standing-debts and UI-track
+> sections merged into the founder's audited list; debt #2 marked item-2-closed (items 3–4
+> remain); debt #1 marked largely closed with the applications-view residual named. Items 3
+> (gap sweep) and 4 (persisted reach report) are the next claimable halves of this debt.
+
+> **O26 (matching follow-through, out-of-band like D1) — DONE 2026-08-18, loop-0818 (claimed
+> 18:45Z).** The mix-capture debt from O24: the join hero sold "the mix is yours to set", its CTA
+> said "Set my mix", and the form then discarded the percent on submit. Now
+> `join-experience.tsx` owns the number (hero edits it, form restates and submits it);
+> `ClinicianApplication.desiredMixPercent` is optional and INTERNAL — never published, W81's
+> interest capture arriving through the front door, feeding only the year plan's Q3
+> clinician-side fit. The honesty rule is load-bearing both directions: absent unless the GP
+> actually touched the control (a default nobody set is not a declaration, key omitted rather
+> than nulled), and refused with a reason outside the control's own range (10–50 step 10,
+> `isDeclarableMixPercent` shared between hero and validator so they cannot drift). Gate:
+> typecheck, store tests 18/18 incl. tamper cases both directions, join e2e 4/4 incl. the new
+> wiring pin, full `pnpm verify` green. Year plan updated: Standing debts section added with
+> this debt closed; UI-track rules written down. Debt #2 (O22 console build-out) is the next
+> claimable standing debt.
+
 > **D1 (design, out-of-band) — DONE 2026-08-10.** Finder opening screen: the example prompt and the
 > archetype label were one idea rendered as two orphans with a ~250px dead band between them and the
 > bottom-pinned CTA (every viewport, caused by `margin:auto` on `.voice-prompt` claiming all free

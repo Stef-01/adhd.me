@@ -39,6 +39,11 @@ export const SUBURBS: readonly SuburbPoint[] = [
   { suburb: "Cheltenham", postcode: "2119", lat: -33.7447, lon: 151.0778 },
   { suburb: "Pennant Hills", postcode: "2120", lat: -33.7383, lon: 151.0719 },
   { suburb: "Epping", postcode: "2121", lat: -33.7726, lon: 151.0817 },
+  // Focus area 3 — Sydney eastern suburbs, NSW (O34: Bay Health Clinic, Double Bay).
+  { suburb: "Double Bay", postcode: "2028", lat: -33.8775, lon: 151.2437 },
+  { suburb: "Edgecliff", postcode: "2027", lat: -33.8790, lon: 151.2360 },
+  { suburb: "Rose Bay", postcode: "2029", lat: -33.8710, lon: 151.2700 },
+  { suburb: "Bondi Junction", postcode: "2022", lat: -33.8912, lon: 151.2469 },
   // Focus area 2 — the Gold Coast, QLD.
   { suburb: "Southport", postcode: "4215", lat: -27.9676, lon: 153.4000 },
   { suburb: "Surfers Paradise", postcode: "4217", lat: -28.0027, lon: 153.4309 },

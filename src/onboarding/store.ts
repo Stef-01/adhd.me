@@ -17,7 +17,7 @@ import path from "node:path";
 import { neutraliseSpreadsheetFormula } from "@/security/untrusted";
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { CARE_AREA_LABELS, OFFERED_LANGUAGES, type ClinicianApplication } from "./types";
+import { CARE_AREA_LABELS, OFFERED_LANGUAGES, isDeclarableMixPercent, type ClinicianApplication } from "./types";
 
 function defaultStorePath(): string {
   const configured = process.env.ADHDME_CLINICIAN_PATH?.trim();
@@ -64,6 +64,12 @@ export interface ApplicationInput {
   otherLanguages?: string;
   nswAdhdTrained: boolean;
   acceptingNewPatients: boolean;
+  /**
+   * The mix the GP set in the join hero, if they set it. Optional end to end: an untouched
+   * control submits nothing, because a default is not a declaration (see the field's note on
+   * `ClinicianApplication`).
+   */
+  desiredMixPercent?: number;
 }
 
 /** Split the free-text "other languages" box into clean, letter-only names. Caps count and length. */
@@ -120,6 +126,14 @@ export function validateApplication(
     errors.languages = "Choose from the languages listed.";
   }
 
+  // Refused with a reason rather than silently dropped: this value only ever arrives from the
+  // hero's own control, so anything outside its range is a tampered or mangled submission, and
+  // storing a "preference" the control cannot express would put an invented number in front of
+  // whoever reviews.
+  if (input.desiredMixPercent !== undefined && !isDeclarableMixPercent(input.desiredMixPercent)) {
+    errors.desiredMixPercent = "The mix has to be one the page can actually set — 10% to 50%, in steps of 10.";
+  }
+
   return errors;
 }
 
@@ -151,6 +165,11 @@ export function saveApplication(
     ])],
     nswAdhdTrained: input.nswAdhdTrained,
     acceptingNewPatients: input.acceptingNewPatients,
+    /* Present only when the GP set it AND the value is one the control can express — the key is
+       omitted entirely otherwise, so a reviewer reading the row never sees a mix nobody stated. */
+    ...(input.desiredMixPercent !== undefined && isDeclarableMixPercent(input.desiredMixPercent)
+      ? { desiredMixPercent: input.desiredMixPercent }
+      : {}),
     submittedAt: (options.now ?? new Date()).toISOString(),
     // The only status there is. See the note on the type.
     status: "received",

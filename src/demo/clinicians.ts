@@ -116,6 +116,14 @@ export type Clinician = {
    */
   careAreasSometimes?: CareArea[];
   /**
+   * Set ONLY while a clinician is listed ahead of their onboarding interview (O34): a dated
+   * note that manner claims are theirs to make there. The roster law still holds — a profile
+   * with no manner can never match half of what people ask — but the honest intermediate
+   * state is VISIBLE and dated, not silently complete and not filled in for them. The roster
+   * test accepts an empty `manner` only when this is present.
+   */
+  mannerPending?: string;
+  /**
    * How this clinician works, declared by them, closed vocabulary (`MannerTrait`).
    *
    * The half of "will they understand me" that clinical scope cannot carry. Somebody writing "I
@@ -270,6 +278,63 @@ export const clinicians: Clinician[] = [
       note: "Dr Yadav's appointments are not online yet — the practice books him by phone.",
     },
     keywords: ["adhd", "assessment", "adult", "unhurried", "longer", "long appointment", "history", "sleep", "insomnia", "mood", "anxiety", "depression", "family", "cultural", "culture", "hindi", "indian", "south asian", "work", "job", "beecroft", "shared care", "explain", "calm"],
+    realPerson: true,
+  },
+  {
+    /**
+     * O34: LISTED AT HER OWN REQUEST, relayed by the founder (2026-08-18: "she has asked us
+     * to upload it ASAP"), which is the consent the W228 checklist required. Every claim
+     * below is sourced: identity, practice and booking from the founder's instruction; the
+     * interests from HER OWN published Healthengine bio (special interest in mental health,
+     * First Class Honours in Psychology at the University of Sydney, clinical psychiatry
+     * experience; other interests women's health and paediatrics) — interest-level claims
+     * are recorded at the interview's "sometimes" grade, not inflated to "often". What her
+     * interview has not yet captured is left EMPTY and marked, never guessed: no manner
+     * claims (mannerPending), English only until she names her languages, no NSW-training or
+     * accessibility claims, and no portrait — she chose the monogram for now.
+     */
+    id: "anusha-saxena",
+    name: "Dr Anusha Saxena",
+    shortName: "Dr Anusha Saxena",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "General practitioner",
+    suburb: "Double Bay",
+    practice: "Bay Health Clinic",
+    reach: "Practice appointments in Double Bay",
+    image: null,
+    acceptingNewPatients: true,
+    focus: "Mental health in general practice, women's health & paediatrics",
+    matchLine: "Brings a mental-health focus to general practice, with psychology training behind it.",
+    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Paediatrics"],
+    // Billing leads by roster convention; hers is stated by the practice until her interview
+    // supplies the specifics — a fact about where the fact lives, not a guess at it.
+    practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
+    about:
+      "Anusha is a GP at Bay Health Clinic in Double Bay with a special interest in mental health. She took First Class Honours in Psychology at the University of Sydney and worked in clinical psychiatry before general practice, and her other interests are women's health and paediatrics. Her profile here is young: the parts of it that come from a proper onboarding conversation — how she works, the languages she consults in — will be added from her own answers rather than written for her.",
+    experience: [
+      "General practice, Bay Health Clinic, Double Bay",
+      "First Class Honours in Psychology, University of Sydney",
+      "Clinical psychiatry experience",
+    ],
+    languages: ["English"],
+    careAreas: ["adhd-assessment"],
+    // Interest-level claims from her published bio sit at the "sometimes" grade until her
+    // interview upgrades or removes them — half weight, honestly earned (O2).
+    careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd"],
+    manner: [],
+    mannerPending:
+      "2026-08-18: listed ahead of her onboarding interview; manner claims are hers to make there.",
+    // nswAdhdTrained and telehealthFirstAppointment are claim-or-absent (`?: true`): omitted
+    // here because neither has been claimed, which is exactly what omission means.
+    wheelchairAccessible: false,
+    appointmentLength: "Appointment lengths set with the practice",
+    booking: {
+      via: "healthengine",
+      practitionerId: "160121",
+      url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
+    },
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "double bay", "eastern suburbs", "depression", "anxiety", "mood"],
     realPerson: true,
   },
 ];
@@ -457,8 +522,10 @@ export function closedBooksNote(clinician: Clinician, query: string): string | n
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   informed: "",
   tied: "Both of these answer what you asked for equally well, so this is not a ranking — read both.",
+  // O48: one sentence, not three lines. The clarifier beneath owns the "say more" invitation,
+  // so this line only has to state the fact.
   unmatched:
-    "We could not tell from that what you are looking for, so this is everyone we list rather than an order. Saying more about what you want helps.",
+    "We could not tell what you are looking for, so this is everyone we list — not an order.",
 };
 
 /**
@@ -609,6 +676,33 @@ export function matchEvidence(
     // earned - halved where they declared "sometimes" - so the audit and the unity test can
     // hold score === sum of evidence with no carve-outs.
     .map((need) => ({ ...need, weight: roundScore(need.weight * declarationFactor(clinician, need)) }));
+}
+
+/**
+ * The other half of the profile's honesty (O51, year plan "Explaining the fit", Q1): the asks
+ * THIS clinician does not answer, named per clinician instead of living only in the console's
+ * "Missed" column and the global unserved note.
+ *
+ * SAME READ AS THE EVIDENCE, INVERTED FILTER — `matchEvidence` and this function consume one
+ * `needsFor` pass, so the profile's two lists partition the reader's asks exactly and can
+ * never disagree with the ranking or with each other.
+ *
+ * CARE AND MANNER ONLY, because the surface copy frames these as DECLARATIONS ("not something
+ * they declare", W193's posture): a care area or a way of working is a thing a clinician
+ * declares or does not. A preference like "a woman GP" or a language is a fact about who they
+ * are, and "they have not declared being a woman" is not a sentence this product should put
+ * beside a name — those asks keep their existing surfaces (the preference ordering itself,
+ * and the language line).
+ */
+export function missedAsks(
+  clinician: Clinician,
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+): NeedSignal[] {
+  return needsFor(query, roster).filter(
+    (need) =>
+      (need.facet.kind === "care" || need.facet.kind === "manner") && !answers(clinician, need),
+  );
 }
 
 /**

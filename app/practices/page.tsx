@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/practices" },
   title: "For practices",
   description: "What ADHD.ME does for a general practice: patients who arrive already matched to the clinician who declared that work.",
 };

@@ -73,10 +73,26 @@ function install({ secure = true, present = true } = {}) {
   if (!("window" in globalThis)) w.window = globalThis;
 }
 
+/**
+ * A grantable microphone, for the O18 retry tests. jsdom ships no `navigator.mediaDevices`,
+ * which the module treats as "no warm-up possible" — so every pre-O18 test runs the immediate
+ * error path unchanged, and only tests that install this see the retry.
+ */
+function installMicrophone(outcome: "granted" | "denied") {
+  const nav = globalThis.navigator as unknown as Record<string, unknown>;
+  nav.mediaDevices = {
+    getUserMedia: () =>
+      outcome === "granted"
+        ? Promise.resolve({ getTracks: () => [] })
+        : Promise.reject(new Error("denied")),
+  };
+}
+
 afterEach(() => {
   const w = globalThis as unknown as Record<string, unknown>;
   delete w.SpeechRecognition;
   delete w.webkitSpeechRecognition;
+  delete (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices;
   FakeRecognition.last = null;
   FakeRecognition.throwOnStart = false;
 });
@@ -164,7 +180,8 @@ describe("errors and teardown", () => {
     const onError = vi.fn();
     startSpeech({ ...noop, onError });
     FakeRecognition.last!.fail(raw);
-    expect(onError).toHaveBeenCalledWith(mapped as SpeechError);
+    // The mapped code drives the copy; the raw code rides along for the debug surface (O18).
+    expect(onError).toHaveBeenCalledWith(mapped as SpeechError, raw);
   });
 
   it("does not also fire a final after an error", () => {
@@ -250,7 +267,7 @@ describe("O12 RCA: the intermittent failures, pinned", () => {
     const onError = vi.fn();
     startSpeech({ ...noop, onFinal, onError });
     FakeRecognition.last!.fail("network");
-    expect(onError).toHaveBeenCalledWith("network");
+    expect(onError).toHaveBeenCalledWith("network", "network");
     expect(onFinal).not.toHaveBeenCalled();
   });
 
@@ -290,11 +307,113 @@ describe("O16 the iPhone's own error codes are named, not shrugged at", () => {
     const onError = vi.fn();
     startSpeech({ ...noop, onError });
     FakeRecognition.last!.fail(raw);
-    expect(onError).toHaveBeenCalledWith(mapped as SpeechError);
+    expect(onError).toHaveBeenCalledWith(mapped as SpeechError, raw);
   });
 
-  it("tells the iPhone owner which switch to look for", () => {
-    expect(SPEECH_ERROR_COPY["service-not-allowed"]).toMatch(/dictation/i);
-    expect(SPEECH_ERROR_COPY["service-not-allowed"]).toMatch(/type instead/i);
+  it("names the switches worth checking without asserting any of them is off", () => {
+    // The O16 copy said "your phone's dictation is switched off" — stated as fact, and false on
+    // the production device that motivated O18. The module cannot see the phone's settings, so
+    // the copy must suggest, never diagnose.
+    const copy = SPEECH_ERROR_COPY["service-not-allowed"];
+    expect(copy).toMatch(/dictation/i);
+    expect(copy).toMatch(/type instead/i);
+    expect(copy).not.toMatch(/is switched off|is turned off|is disabled/i);
+  });
+});
+
+describe("O18 the iPhone retry: permission warm-up before the message shows", () => {
+  const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+  it("retries once behind a granted microphone, and the person never sees an error", async () => {
+    // Production case: dictation verifiably ON, `service-not-allowed` anyway. The reported
+    // workaround is a getUserMedia warm-up; if the second attempt works, the failure is invisible.
+    install();
+    installMicrophone("granted");
+    const onError = vi.fn();
+    const onFinal = vi.fn();
+    startSpeech({ ...noop, onError, onFinal });
+    const first = FakeRecognition.last!;
+    first.fail("service-not-allowed");
+    await flush();
+    const second = FakeRecognition.last!;
+    expect(second).not.toBe(first);
+    expect(second.started).toBe(true);
+    second.emit([{ text: "kind and speaks Hindi", final: true }]);
+    second.stop();
+    expect(onFinal).toHaveBeenCalledWith("kind and speaks Hindi");
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it("reports the original error when the microphone is denied", async () => {
+    install();
+    installMicrophone("denied");
+    const onError = vi.fn();
+    startSpeech({ ...noop, onError });
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    expect(onError).toHaveBeenCalledWith("service-not-allowed", "service-not-allowed");
+  });
+
+  it("retries only once: a second failure is reported, not looped", async () => {
+    install();
+    installMicrophone("granted");
+    const onError = vi.fn();
+    startSpeech({ ...noop, onError });
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledWith("service-not-allowed", "service-not-allowed");
+  });
+
+  it("holds the warm-up stream open while the retried recogniser runs, releasing it on settle (O46)", async () => {
+    // The first version stopped the tracks the moment permission resolved, and the founder's
+    // phone showed the result: Allow pressed, broken anyway. The reported WebKit behaviour is
+    // that recognition works while the audio session is live, so the stream is held until the
+    // session settles — and released then, because a microphone light that never goes off is
+    // its own bug.
+    install();
+    let stopped = 0;
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = {
+      getUserMedia: () =>
+        Promise.resolve({ getTracks: () => [{ stop: () => { stopped += 1; } }] }),
+    };
+    const onFinal = vi.fn();
+    startSpeech({ ...noop, onFinal });
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    const second = FakeRecognition.last!;
+    expect(second.started).toBe(true);
+    expect(stopped).toBe(0);
+    second.emit([{ text: "kind and speaks Hindi", final: true }]);
+    second.stop();
+    expect(onFinal).toHaveBeenCalledWith("kind and speaks Hindi");
+    expect(stopped).toBe(1);
+  });
+
+  it("does not re-open the microphone when stop was pressed during the warm-up", async () => {
+    install();
+    installMicrophone("granted");
+    const onFinal = vi.fn();
+    const session = startSpeech({ ...noop, onFinal })!;
+    const first = FakeRecognition.last!;
+    first.fail("service-not-allowed");
+    session.stop();
+    expect(onFinal).toHaveBeenCalledWith("");
+    await flush();
+    // The warm-up resolved after the stop; a new recogniser must not have started.
+    expect(FakeRecognition.last).toBe(first);
+  });
+
+  it("does not retry the errors that already have honest answers", () => {
+    // `network`, `no-speech`, `audio-capture` are not permission problems; a warm-up cannot fix
+    // them and would only delay the message.
+    install();
+    installMicrophone("granted");
+    const onError = vi.fn();
+    startSpeech({ ...noop, onError });
+    FakeRecognition.last!.fail("network");
+    expect(onError).toHaveBeenCalledWith("network", "network");
   });
 });

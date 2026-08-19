@@ -15,7 +15,7 @@ const initialState: ClinicianFormState = { status: "idle", message: "" };
  * see how long it is. Everything visible at once is shorter to complete and honest about its
  * length. Labels sit above inputs and errors below them, never a placeholder as a label.
  */
-export function ClinicianJoinForm() {
+export function ClinicianJoinForm({ desiredMixPercent }: { desiredMixPercent?: number }) {
   const [state, action, pending] = useActionState(submitApplication, initialState);
 
   if (state.status === "success") {
@@ -92,6 +92,18 @@ export function ClinicianJoinForm() {
             </div>
           </div>
         ))}
+        {/* O26: the mix from the hero, no longer discarded at the fold. Only rendered — and only
+            submitted — once the GP has actually set it; an untouched default is not a statement,
+            so the field is simply absent until then. */}
+        {desiredMixPercent !== undefined && (
+          <p className="join-hint join-mix-echo" data-testid="mix-echo">
+            The mix you set above — <strong>{desiredMixPercent}%</strong> of your patients in this
+            kind of work — goes with your application as your stated preference. A preference we
+            match toward, not a booking promise, and it is never published.
+            <input type="hidden" name="desiredMixPercent" value={desiredMixPercent} />
+          </p>
+        )}
+        {err.desiredMixPercent && <small role="alert" className="join-field-error">{err.desiredMixPercent}</small>}
       </fieldset>
 
       <fieldset>

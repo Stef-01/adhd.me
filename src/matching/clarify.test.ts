@@ -91,9 +91,13 @@ describe("O5 preference clarifiers (F7)", () => {
   });
 
   it("never asks about a preference nobody on the roster holds", () => {
-    // No woman is listed: the question would set up a disappointment the roster cannot answer.
-    const keys = clarifiers("hello", clinicians, 20).map((c) => c.facetKey);
-    expect(keys).not.toContain("pref:woman-gp");
+    // The property, on a roster where it bites: among the two Beecroft GPs no woman is
+    // listed, so the question would set up a disappointment that roster cannot answer.
+    const beecroft = clinicians.filter((c) => c.suburb === "Beecroft");
+    expect(clarifiers("hello", beecroft, 20).map((c) => c.facetKey)).not.toContain("pref:woman-gp");
+    // And the flip side since O34: Dr Anusha Saxena splits the full roster on it, so the
+    // most-stated preference in real directory search is finally askable here.
+    expect(clarifiers("hello", clinicians, 20).map((c) => c.facetKey)).toContain("pref:woman-gp");
   });
 
   it("every preference answer re-reads to the facet its question is about", () => {

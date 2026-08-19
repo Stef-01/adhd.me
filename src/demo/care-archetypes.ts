@@ -164,4 +164,19 @@ export const careArchetypes: CareArchetype[] = [
       careAreas: ["adhd-assessment", "non-medication"],
     },
   },
+  {
+    /* O34: the journey the roster could not serve before Dr Anusha Saxena joined — the
+       most-stated preference in real directory search, finally answerable. */
+    id: "woman-gp",
+    title: "A woman GP, please",
+    eyebrow: "Who you see matters",
+    example: "Somebody who would simply rather talk this through with a woman doctor.",
+    request:
+      "I would prefer a woman doctor for this. I was treated for anxiety before and it never quite fitted, and I want an ADHD assessment looked at properly this time.",
+    headline: "A woman GP with mental health behind her.",
+    expectedFirstMatch: "anusha-saxena",
+    requirements: {
+      careAreas: ["adhd-assessment"],
+    },
+  },
 ];

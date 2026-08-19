@@ -93,8 +93,20 @@ test("booking hands off to Healthengine rather than inventing a time", async ({ 
 
   const handoff = page.getByRole("link", { name: /Healthengine|practice page/i }).first();
   await expect(handoff).toBeVisible({ timeout: 10000 });
-  await expect(handoff).toHaveAttribute("href", /^https:\/\/healthengine\.com\.au\//);
+  // Since O28 the link goes through this domain's own /go/<id> redirect, which is what makes
+  // outbound booking intent countable; the redirect target is asserted below at request level.
+  await expect(handoff).toHaveAttribute("href", /^\/go\/[a-z-]+\?src=finder$/);
   await expect(handoff).toHaveAttribute("target", "_blank");
+
+  // The redirect itself: a 302 to Healthengine carrying the utm tail, with nothing stored.
+  const goHref = await handoff.getAttribute("href");
+  const redirect = await page.request.get(goHref!, { maxRedirects: 0 });
+  expect(redirect.status()).toBe(302);
+  const location = redirect.headers()["location"] ?? "";
+  expect(location).toMatch(/^https:\/\/healthengine\.com\.au\//);
+  expect(location).toContain("utm_source=adhd-me");
+  // no-store: a cached 302 would skip the server and silently undercount (O32 scanner find).
+  expect(redirect.headers()["cache-control"]).toContain("no-store");
 
   // No in-app time picker survives anywhere on the booking screen.
   await expect(page.getByRole("radiogroup")).toHaveCount(0);
@@ -124,4 +136,86 @@ test("no screen the collapse removed is still reachable", async ({ page }) => {
     const text = await page.locator("main").innerText();
     expect(text.trim().length, "a stage rendered nothing").toBeGreaterThan(40);
   }
+});
+
+test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
+  await page.goto("/finder");
+  await page.getByRole("button", { name: "Try a demo scenario" }).click();
+  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await page.getByRole("button", { name: /Change what you said/i }).click();
+  const box = page.getByRole("textbox");
+  await box.fill("I need titration and I don't want to feel rushed, somewhere I can be honest about drinking");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  // Walk the rows until a profile shows the missed list — the partition property behind it is
+  // unit-pinned; this pins the RENDERING and its honesty framing.
+  const rows = page.locator(".clinician-row");
+  const count = await rows.count();
+  let found = false;
+  for (let index = 0; index < count; index++) {
+    await rows.nth(index).click();
+    await expect(page.locator(".profile-content")).toBeVisible();
+    const missed = page.locator(".fit-missed li");
+    if ((await missed.count()) > 0) {
+      found = true;
+      // Declaration-framed, never a deficiency claim; and never contradicting the evidence list.
+      await expect(missed.first()).toContainText("not something they declare");
+      const missedLabel = (await missed.first().locator(".fit-missed-label").innerText()).toLowerCase();
+      const evidence = (await page.locator(".fit-evidence-label").allInnerTexts()).map((t) => t.toLowerCase());
+      expect(evidence).not.toContain(missedLabel);
+      // The design record: both halves of the account in one frame, desktop and phone widths.
+      await missed.first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: "qa/profile-o51/profile-missed-desktop.png", fullPage: false });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await missed.first().scrollIntoViewIfNeeded();
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: "qa/profile-o51/profile-missed-mobile.png", fullPage: false });
+      break;
+    }
+    await page.getByRole("button", { name: /Back to results/i }).click();
+  }
+  expect(found, "no profile showed a missed ask for a three-ask query").toBe(true);
+});
+
+test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
+  await page.goto("/finder");
+  await page.getByRole("button", { name: "Try a demo scenario" }).click();
+  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await page.getByRole("button", { name: /Change what you said/i }).click();
+  // Every listing declares assessment, so this ties the roster and the clarifier renders.
+  await page.getByRole("textbox").fill("I need an ADHD assessment");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
+
+  const before = await page.locator(".clinician-row strong").allInnerTexts();
+  await page.screenshot({ path: "qa/motion-o52/results-before-clarifier.png", fullPage: false });
+
+  // A single answer may legitimately CONFIRM the current order; clarify.ts's contract is that
+  // the offered questions can reorder, so walk the chips until one does. The rows glide rather
+  // than teleport (layout animation) — an e2e cannot pin the tween, but it CAN pin what the
+  // tween animates between: the same keyed rows, in a different order, nobody vanishing.
+  const chipCount = await page.locator(".clarify-chip").count();
+  let reordered = false;
+  for (let chip = 0; chip < chipCount && !reordered; chip++) {
+    if (chip > 0) {
+      await page.getByRole("button", { name: /Change what you said/i }).click();
+      await page.getByRole("textbox").fill("I need an ADHD assessment");
+      await page.getByRole("button", { name: "Find a GP" }).click();
+      await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
+    }
+    await page.locator(".clarify-chip").nth(chip).click();
+    await page.waitForTimeout(600);
+    const after = await page.locator(".clinician-row strong").allInnerTexts();
+    expect(after.length).toBeGreaterThan(0);
+    // Everyone still shown was already known — a clarifier narrows an order, never mints rows.
+    for (const name of after) expect(before).toContain(name);
+    if (after.join("|") !== before.join("|")) {
+      reordered = true;
+      await page.screenshot({ path: "qa/motion-o52/results-after-clarifier.png", fullPage: false });
+    }
+  }
+  expect(reordered, "no clarifier answer reordered a tied roster").toBe(true);
 });

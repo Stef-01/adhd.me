@@ -59,6 +59,10 @@ const STOPWORDS = new Set([
  * "thing" produces a stem that matches nothing anybody meant.
  */
 export function stem(word: string): string {
+  return canonical(suffixStem(word));
+}
+
+function suffixStem(word: string): string {
   if (word.length <= 4) return word;
   if (word.endsWith("ies") && word.length > 5) return `${word.slice(0, -3)}y`;
   if (word.endsWith("ing") && word.length > 6) return trimDouble(word.slice(0, -3));
@@ -66,6 +70,52 @@ export function stem(word: string): string {
   if (word.endsWith("es") && word.length > 5) return word.slice(0, -2);
   if (word.endsWith("s") && !word.endsWith("ss")) return word.slice(0, -1);
   return word;
+}
+
+/**
+ * The inflection table (O50, year plan Q1 item 3): explicit canonical forms for the wart
+ * families the four suffix rules cannot bridge, found by the corpus rather than imagined.
+ *
+ * THREE FAMILIES, EACH WITH A NAMED SENTENCE BEHIND IT:
+ *
+ *   IRREGULARS.     "taken"/"took" share no strippable suffix with "take"; "seen" none with
+ *                   "see". The O13 workaround was duplicate cues ("take seriously" AND "takes
+ *                   me seriously" AND "taken seriously"); the table makes the family one stem.
+ *   LENGTH GUARDS.  "sees" (4 letters) is under the ≤4 floor and "seeing" (6) under the >6
+ *                   ing-guard, so neither reduces to "see" — the guards are right in general
+ *                   (stripping "does" or "thing" would be worse) and wrong for this one verb.
+ *   E-DROPPERS.     Stripping "ed"/"es" from a verb whose base ENDS IN E strands a stem the
+ *                   base word itself never reduces to: believed→believ but believe→believe,
+ *                   judged→judg but judge→judge, minutes→minut but minute→minute. So
+ *                   "nobody ever believes me" could not satisfy the authored pair of
+ *                   "believe me", and the unhurried list carries "ten minutes" AND
+ *                   "ten minute" as two cues for one phrase.
+ *
+ * KEYED BY SUFFIX-STEMMED FORM and applied as stem()'s last step, so every caller — cues,
+ * sentences, raw skeletons — unifies identically and the O45 pair rule keeps working across
+ * inflection. THE TABLE MUST STAY SMALL AND EARNED: this is deliberately not a Porter stemmer
+ * (Porter conflates, and every conflation is a facet firing on a sentence that did not ask
+ * for it, beside a named clinician). A new entry needs a real sentence somewhere in this
+ * tree's tests that the suffix rules demonstrably cannot bridge — the `natural` library's
+ * trade-offs were studied for test cases, per the plan, not imported as a dependency.
+ */
+const INFLECTIONS: Readonly<Record<string, string>> = {
+  // take: takes→take already; the rest are irregular.
+  taken: "take",
+  took: "take",
+  // see: every form fails a different way — sees under the length floor, seeing under the
+  // ing-guard, seen irregular.
+  sees: "see",
+  seeing: "see",
+  seen: "see",
+  // e-dropping verbs and nouns the corpus asks actually use.
+  believ: "believe",
+  judg: "judge",
+  minut: "minute",
+};
+
+function canonical(stemmed: string): string {
+  return INFLECTIONS[stemmed] ?? stemmed;
 }
 
 /** "rushhed" → "rushed" → "rush". Doubling appears when a suffix was added to a short stem. */
@@ -108,6 +158,69 @@ export function tokenise(text: string): string[] {
 export const CLAUSE_BOUNDARY = "|";
 
 /**
+ * The same pipeline as `tokenise`, with the stopwords KEPT (O45).
+ *
+ * Exists for exactly one consumer: the collapsed-cue skeleton check below, which needs to see
+ * the function words `tokenise` deletes. Everything else about the two must stay identical —
+ * same casing, same apostrophe deletion, same boundary markers, same stemming — because a
+ * skeleton compared against a differently-normalised stream would match nothing and the rule
+ * would silently turn every collapsed cue off.
+ */
+export function tokeniseKeepingStopwords(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[.?!;]/g, ` ${CLAUSE_BOUNDARY} `)
+    .replace(/[^a-z0-9|\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 0)
+    .map((word) => (word === CLAUSE_BOUNDARY ? word : stem(word)));
+}
+
+export function isStopword(word: string): boolean {
+  return STOPWORDS.has(word);
+}
+
+/**
+ * The collapse-aware rule (O45, year plan Q1 item 1).
+ *
+ * THE DEFECT CLASS. Stopword stripping collapses 33 authored multi-word cues to a single
+ * content token, so the shipped matcher is looser than the phrase its author reviewed: "out
+ * the door" ships as [door] and fires on "next door to the chemist"; "on edge" ships as
+ * [edge] and fires on "school on the edge of town". The cues cannot be re-authored one by one
+ * because the INTENDED sentences strip to the same token — precision and recall are coupled
+ * at the stopword layer (year plan Q1 item 1's analysis).
+ *
+ * THE RULE — the plan's "kept function-word skeleton" option: a collapsed cue must also find,
+ * somewhere in the same clause-bounded raw stream (stopwords kept, stemming identical), one
+ * ADJACENT, IN-ORDER, CONSECUTIVE pair of its authored tokens that includes at least one
+ * content word. "out the door" is satisfied by "…rushed me out the door" (the [the, door]
+ * pair) and not by "next door to the chemist" (no authored pair survives). Any single pair
+ * suffices — not the whole phrase — because contractions and elisions routinely drop the
+ * middle of an authored phrase: "what's going on" keeps the [going, on] pair of
+ * "what is going on", and demanding the full skeleton would lose it.
+ *
+ * Requiring the pair to CONTAIN A CONTENT WORD stops a cue's function words alone
+ * re-introducing the looseness ("get a" appearing near an unrelated "word" must not fire
+ * "get a word in"); adjacency across a clause boundary is impossible by construction, since
+ * the boundary is itself a token.
+ */
+export function collapsedCueSatisfied(
+  rawSentence: readonly string[],
+  rawCue: readonly string[],
+): boolean {
+  for (let i = 0; i < rawCue.length - 1; i++) {
+    const a = rawCue[i]!;
+    const b = rawCue[i + 1]!;
+    if (isStopword(a) && isStopword(b)) continue;
+    for (let k = 0; k < rawSentence.length - 1; k++) {
+      if (rawSentence[k] === a && rawSentence[k + 1] === b) return true;
+    }
+  }
+  return false;
+}
+
+/**
  * How many tokens may sit between two consecutive cue tokens.
  *
  * TWO, AND THE FIGURE WAS SET BY A TEST RATHER THAN BY TASTE. It was three, and an edge case
@@ -127,6 +240,74 @@ const MAX_GAP = 2;
  * guarantee the substring matcher got from claiming character ranges, kept for the same reason:
  * one clause should produce one facet, not three overlapping ones.
  */
+/**
+ * Desire-negation triggers (O40, year plan Q1 item 4).
+ *
+ * NEGEX'S CONVENTION, NOT ITS MODEL: explicit trigger PHRASES with a bounded scope, kept as a
+ * rule list a reviewer can read. Bare negators are DELIBERATELY not triggers, because in
+ * first-person patient language they usually sit inside the want rather than around it: "my GP
+ * won't do titration" is a complaint that wants titration, "I've never had an assessment, and I
+ * want one" is history, and "no one listens to me" is the manner ask itself. What reliably
+ * marks a refusal is a negated DESIRE VERB — don't want, not looking for, don't need, no
+ * interest — and that is the whole list. Phrases are written as tokenise() leaves them
+ * ("do not want" arrives as [not, want] once "do" is stopword-stripped).
+ */
+const DESIRE_NEGATIONS: ReadonlyArray<readonly string[]> = [
+  ["dont", "want"],
+  ["not", "want"],
+  ["dont", "need"],
+  ["not", "need"],
+  ["dont", "look"],
+  ["not", "look"],
+  ["no", "interest"],
+  ["not", "interest"],
+  ["not", "after"],
+  ["rather", "not"],
+];
+
+/** Content tokens allowed between a trigger's last word and the cue it negates. */
+const MAX_NEGATION_LEAD = 3;
+
+/**
+ * Whether the cue starting at `cueFrom` sits in the scope of a desire negation.
+ *
+ * Scope is NegEx's: forward from the trigger, ending at the clause boundary — "they don't want
+ * to help. My dose keeps wearing off" negates nothing in the second sentence. The trigger must
+ * complete shortly before the cue (MAX_NEGATION_LEAD content tokens), so a negation at the far
+ * end of a long clause does not swallow an unrelated ask. Only tokens BEFORE the cue span are
+ * read: a negator inside the cue's own words ("not working", "no medication") is part of what
+ * the cue means, never a negation of it.
+ */
+export function negatedWant(sentence: readonly string[], cueFrom: number): boolean {
+  let clauseFrom = cueFrom;
+  while (clauseFrom > 0 && sentence[clauseFrom - 1] !== CLAUSE_BOUNDARY) clauseFrom--;
+
+  for (const phrase of DESIRE_NEGATIONS) {
+    for (let start = clauseFrom; start < cueFrom; start++) {
+      if (sentence[start] !== phrase[0]) continue;
+      let at = start;
+      let matched = 1;
+      while (matched < phrase.length) {
+        const want = phrase[matched]!;
+        let next = -1;
+        // Within the phrase itself one inserted content token is allowed ("don't actually want").
+        for (let k = at + 1; k <= Math.min(at + 2, cueFrom - 1); k++) {
+          if (sentence[k] === CLAUSE_BOUNDARY) break;
+          if (sentence[k] === want) {
+            next = k;
+            break;
+          }
+        }
+        if (next === -1) break;
+        at = next;
+        matched++;
+      }
+      if (matched === phrase.length && cueFrom - at - 1 <= MAX_NEGATION_LEAD) return true;
+    }
+  }
+  return false;
+}
+
 export function findCue(
   sentence: readonly string[],
   cue: readonly string[],

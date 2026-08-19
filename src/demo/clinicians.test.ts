@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, needsFor, roundScore, scoreAgainst, unservedAsks, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -31,8 +31,9 @@ describe("clinician roster and matching", () => {
   });
 
   it("keeps the full roster available", () => {
-    expect(clinicians).toHaveLength(2);
-    expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(2);
+    // Three since O34: the Beecroft pair plus Dr Anusha Saxena in Double Bay.
+    expect(clinicians).toHaveLength(3);
+    expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(3);
   });
 
   /**
@@ -110,8 +111,9 @@ describe("clinician roster and matching", () => {
 
   it("keeps every clinician in one of the two focus areas", () => {
     const nsw = new Set(["Beecroft", "Cheltenham", "Pennant Hills", "Epping"]);
+    const easternSuburbs = new Set(["Double Bay", "Edgecliff", "Rose Bay", "Bondi Junction"]);
     const goldCoast = new Set(["Southport", "Surfers Paradise", "Broadbeach", "Robina"]);
-    const focusAreas = new Set([...nsw, ...goldCoast]);
+    const focusAreas = new Set([...nsw, ...easternSuburbs, ...goldCoast]);
 
     expect(clinicians.every((clinician) => focusAreas.has(clinician.suburb))).toBe(true);
   });
@@ -405,5 +407,46 @@ describe("Codex review on PR #1, pinned", () => {
     expect(closedBooksNote(closed, "hello")).toMatch(/books are closed/);
     // Open books: nothing.
     expect(closedBooksNote({ ...closed, acceptingNewPatients: true }, "hello")).toBeNull();
+  });
+});
+
+/**
+ * O51: the profile's two lists — evidence and missed asks — partition what the reader asked.
+ */
+describe("O51 missed asks are the exact complement of the evidence", () => {
+  const query = "I need titration and I don't want to feel rushed, somewhere I can be honest about drinking";
+
+  it("partitions care and manner asks per clinician, with no overlap and no leak", () => {
+    const askedKeys = needsFor(query, clinicians)
+      .filter((n) => n.facet.kind === "care" || n.facet.kind === "manner")
+      .map((n) => n.label)
+      .sort();
+    for (const clinician of clinicians) {
+      const heard = matchEvidence(clinician, query, clinicians)
+        .filter((n) => n.facet.kind === "care" || n.facet.kind === "manner")
+        .map((n) => n.label);
+      const missed = missedAsks(clinician, query, clinicians).map((n) => n.label);
+      expect([...heard, ...missed].sort(), clinician.id).toEqual(askedKeys);
+      for (const label of missed) expect(heard, clinician.id).not.toContain(label);
+    }
+  });
+
+  it("is not vacuous: at least one clinician misses something on this query", () => {
+    expect(clinicians.some((clinician) => missedAsks(clinician, query).length > 0)).toBe(true);
+  });
+
+  it("never frames a preference or language as an undeclared ask", () => {
+    // "a woman GP who speaks Hindi" is about who somebody is, not what they declare — those
+    // asks keep their own surfaces, and this list must not touch them.
+    for (const clinician of clinicians) {
+      for (const need of missedAsks(clinician, "a woman GP who speaks Hindi and does titration")) {
+        expect(["care", "manner"]).toContain(need.facet.kind);
+      }
+    }
+  });
+
+  it("is empty when a clinician answers everything asked", () => {
+    const answered = clinicians.find((clinician) => missedAsks(clinician, "titration").length === 0);
+    expect(answered, "somebody on the roster declares titration").toBeDefined();
   });
 });
