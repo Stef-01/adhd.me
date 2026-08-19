@@ -134,6 +134,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── manner:non_judgmental ────────────────────────────────────────────────────────────────
   { text: "no lectures, I have heard them all", reaches: ["manner:non_judgmental"] },
   { text: "somewhere I will not be judged for the coping I have done", reaches: ["manner:non_judgmental"] },
+  // O50 (morphology): each of these previously missed on an inflection the suffix rules cannot
+  // bridge — "believes" stranded at [believ], bare "judge" unable to meet the cue "judged".
+  // The INFLECTIONS table in read.ts is what makes them hearable; these pins hold it there.
+  { text: "nobody ever believes me", reaches: ["manner:non_judgmental"] },
+  { text: "quick to judge, every one of them", reaches: ["manner:non_judgmental"] },
   { text: "I need to be able to tell the truth without the face", reaches: ["manner:non_judgmental"] },
 
   // ── manner:collaborative ─────────────────────────────────────────────────────────────────
@@ -227,8 +232,9 @@ export function corpusReachByFacet(
  */
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // Measured 2026-08-19 (O47); RAISED 2026-08-19 (O49) after the first aspiration sweep
-  // promoted sixteen entries the widened lexicon now hears. Three attuned aspirations stay
-  // open on purpose — see the sweep's ledger row for the hesitations.
+  // promoted sixteen entries the widened lexicon now hears, and again (O50) when the
+  // inflection table bridged the believe/judge wart families. Three attuned aspirations stay
+  // open on purpose — see the O49 ledger row for the hesitations.
   "care:adhd-assessment": 7,
   "care:anxiety": 3,
   "care:autism-adhd": 3,
@@ -245,7 +251,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "manner:collaborative": 2,
   "manner:culturally_attuned": 3,
   "manner:motivating": 3,
-  "manner:non_judgmental": 4,
+  "manner:non_judgmental": 6,
   "manner:sense_making": 5,
   "manner:steadying": 4,
   "manner:structured": 4,

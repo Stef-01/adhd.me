@@ -43,7 +43,28 @@ describe("W221 what it must NOT match, which is the whole cost of the change", (
   });
 
   it("leaves short words alone rather than stemming them into nonsense", () => {
-    for (const word of ["does", "this", "sees", "used"]) expect(stem(word)).toBe(word);
+    // "sees" left this list at O50: it now reduces to "see" via the explicit INFLECTIONS
+    // table, which is a per-word review, not the blind suffix stripping this pin refuses —
+    // the length guards themselves still stand, as the words below prove.
+    for (const word of ["does", "this", "used", "goes", "gets"]) expect(stem(word)).toBe(word);
+  });
+
+  it("bridges the table's wart families to one canonical stem (O50)", () => {
+    // Each family has a named sentence behind it — see INFLECTIONS in read.ts. A cue and a
+    // sentence inflect differently and must still meet.
+    expect(stem("taken")).toBe(stem("takes"));
+    expect(stem("took")).toBe(stem("take"));
+    expect(stem("sees")).toBe("see");
+    expect(stem("seeing")).toBe("see");
+    expect(stem("seen")).toBe("see");
+    expect(stem("believed")).toBe(stem("believe"));
+    expect(stem("believes")).toBe(stem("believe"));
+    expect(stem("judged")).toBe(stem("judge"));
+    expect(stem("judges")).toBe(stem("judge"));
+    expect(stem("minutes")).toBe(stem("minute"));
+    // And the table must not leak: neighbours of a family keep their own stems.
+    expect(stem("mistaken")).not.toBe("take");
+    expect(stem("juggle")).not.toBe("judge");
   });
 
   /** Precision guard. None of these express a want; firing on them would be a false positive. */

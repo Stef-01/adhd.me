@@ -52,10 +52,15 @@ non-rankings.
    authoring cues for them needs a founder-side judgment call.
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
-3. **Morphology upgrade.** Replace the suffix-stemmer's worst misses (found by the corpus)
-   with explicit inflection tables per cue where needed. Study: `natural` (github.com/
-   NaturalNode/natural) for its Lancaster/Porter trade-offs — borrow test cases, not the
-   dependency.
+3. **Morphology upgrade. DONE — O50, 2026-08-19.** The `INFLECTIONS` table in read.ts,
+   applied as stem()'s last step so cues, sentences and O45 raw skeletons unify identically.
+   Three corpus-named wart families bridged: irregulars (taken/took→take, seen→see), the
+   length-guard edge (sees, seeing→see), and e-droppers stranded by ed/es-stripping
+   (believ→believe, judg→judge, minut→minute). Deliberately not Porter — every entry needs a
+   real sentence in the tests the suffix rules demonstrably cannot bridge; `natural` was
+   studied for test cases, not imported. Pinned: stem-equivalence per family + two
+   previously-deaf corpus phrasings now reaching ("nobody ever believes me", "quick to
+   judge"), non_judgmental floor raised with them.
 4. **Negation clauses. DONE — O40, 2026-08-19.** `negatedWant` in read.ts, NegEx's convention
    scaled to this reader: explicit desire-negation phrases ("don't want", "not looking for",
    "don't need", "no interest") — never bare negators — with scope forward to the clause

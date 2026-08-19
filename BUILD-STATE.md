@@ -130,9 +130,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > INFLECTIONS table applied as stem()'s last step — canonical forms for named wart families
 > only, each entry justified by a sentence somewhere in this tree's tests, NEVER a general
 > stemmer (Porter conflates, and every conflation is a facet firing beside a named clinician).
-> Verify: stem-equivalence pins per family; at least two previously-unreachable corpus
-> phrasings pinned reaching through the bridge with floors raised; every prior reach/corpus/
-> collapse pin green; `pnpm verify` green.
+> DONE 2026-08-19. Shipped as designed: `INFLECTIONS` keyed by SUFFIX-STEMMED form, applied
+> as stem()'s last step so every caller — cue tokens, sentence tokens, O45 raw skeletons —
+> unifies identically. Seven entries across three families, each earned by a named sentence;
+> leak pins hold the borders (mistaken≠take, juggle≠judge). One historical pin updated with
+> its reasoning kept: "sees" left the leave-short-words-alone list because a per-word table
+> review is not the blind stripping that pin refuses — the length guards themselves still
+> stand, proven on does/this/used/goes/gets. Corpus: "nobody ever believes me" and "quick to
+> judge, every one of them" pinned reaching non_judgmental (both previously stranded on
+> believ/judg), floor 4→6. The promotion gate confirmed the table alone promotes nothing —
+> morphology changes stems, not vocabulary, which is exactly the separation the plan drew.
+> Gate: read 15/15 incl. family equivalences, corpus 102/102, reach 78/78, full `pnpm verify`
+> green (206 files, 2919 tests, audit gate PASS). Q1 items 1, 3 and 4 are now all DONE;
+> remaining Q1: corpus growth to ~500 and the standing O22/UI/explanation tracks.
 
 > **O49 (Q1 standing work — the first aspiration sweep over the O47 corpus) — claimed
 > 2026-08-19T04:46Z by loop-0819e.** The corpus shipped with 14 measured aspirations — requests

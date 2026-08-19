@@ -59,6 +59,10 @@ const STOPWORDS = new Set([
  * "thing" produces a stem that matches nothing anybody meant.
  */
 export function stem(word: string): string {
+  return canonical(suffixStem(word));
+}
+
+function suffixStem(word: string): string {
   if (word.length <= 4) return word;
   if (word.endsWith("ies") && word.length > 5) return `${word.slice(0, -3)}y`;
   if (word.endsWith("ing") && word.length > 6) return trimDouble(word.slice(0, -3));
@@ -66,6 +70,52 @@ export function stem(word: string): string {
   if (word.endsWith("es") && word.length > 5) return word.slice(0, -2);
   if (word.endsWith("s") && !word.endsWith("ss")) return word.slice(0, -1);
   return word;
+}
+
+/**
+ * The inflection table (O50, year plan Q1 item 3): explicit canonical forms for the wart
+ * families the four suffix rules cannot bridge, found by the corpus rather than imagined.
+ *
+ * THREE FAMILIES, EACH WITH A NAMED SENTENCE BEHIND IT:
+ *
+ *   IRREGULARS.     "taken"/"took" share no strippable suffix with "take"; "seen" none with
+ *                   "see". The O13 workaround was duplicate cues ("take seriously" AND "takes
+ *                   me seriously" AND "taken seriously"); the table makes the family one stem.
+ *   LENGTH GUARDS.  "sees" (4 letters) is under the ≤4 floor and "seeing" (6) under the >6
+ *                   ing-guard, so neither reduces to "see" — the guards are right in general
+ *                   (stripping "does" or "thing" would be worse) and wrong for this one verb.
+ *   E-DROPPERS.     Stripping "ed"/"es" from a verb whose base ENDS IN E strands a stem the
+ *                   base word itself never reduces to: believed→believ but believe→believe,
+ *                   judged→judg but judge→judge, minutes→minut but minute→minute. So
+ *                   "nobody ever believes me" could not satisfy the authored pair of
+ *                   "believe me", and the unhurried list carries "ten minutes" AND
+ *                   "ten minute" as two cues for one phrase.
+ *
+ * KEYED BY SUFFIX-STEMMED FORM and applied as stem()'s last step, so every caller — cues,
+ * sentences, raw skeletons — unifies identically and the O45 pair rule keeps working across
+ * inflection. THE TABLE MUST STAY SMALL AND EARNED: this is deliberately not a Porter stemmer
+ * (Porter conflates, and every conflation is a facet firing on a sentence that did not ask
+ * for it, beside a named clinician). A new entry needs a real sentence somewhere in this
+ * tree's tests that the suffix rules demonstrably cannot bridge — the `natural` library's
+ * trade-offs were studied for test cases, per the plan, not imported as a dependency.
+ */
+const INFLECTIONS: Readonly<Record<string, string>> = {
+  // take: takes→take already; the rest are irregular.
+  taken: "take",
+  took: "take",
+  // see: every form fails a different way — sees under the length floor, seeing under the
+  // ing-guard, seen irregular.
+  sees: "see",
+  seeing: "see",
+  seen: "see",
+  // e-dropping verbs and nouns the corpus asks actually use.
+  believ: "believe",
+  judg: "judge",
+  minut: "minute",
+};
+
+function canonical(stemmed: string): string {
+  return INFLECTIONS[stemmed] ?? stemmed;
 }
 
 /** "rushhed" → "rushed" → "rush". Doubling appears when a suffix was added to a short stem. */
