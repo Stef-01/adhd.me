@@ -119,6 +119,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O67 (motion queue — the chosen GP is visibly the same object: layoutId row→profile) —
+> claimed 2026-08-19T23:04Z by loop-0819w.** The queue's first unshipped item: tapping a
+> result row currently swaps screens and the portrait re-enters as a NEW object (opacity +
+> scale in), so the one continuity that matters — this person you chose is this person you
+> are now reading — is asserted by the name alone. Change: the row's portrait slot and the
+> profile's portrait frame share `layoutId` per clinician, so the chosen GP's image/monogram
+> travels from its row slot into the profile hero as one object (motion/react shared layout;
+> the registry carries the box across the staged AnimatePresence). The profile's existing
+> enter tween stays for everything BELOW the portrait; the portrait itself stops double-
+> animating (a layout morph plus an opacity/scale pop on one element is two stories about
+> one thing). Static equal free: MotionConfig reducedMotion="user" already disables layout
+> animations, leaving today's instant swap. Wiring pinned in e2e via matching data attributes
+> on both elements (the DOM contract the tween hangs off), mid-transition + settled captures
+> in qa/motion-o67/ for the design record; DESIGN-QA entry; finder-flow + mobile-fit green;
+> full `pnpm verify` green.
+
 > **O66 (Explaining-the-fit Q2 increment — "what would change this order", the top clarifier
 > on the profile) — DONE 2026-08-19 by loop-0819v (finder-flow e2e 9/9 incl. the new pin:
 > renders on the profile, tap lands on results with the sentence re-read, the answered facet
