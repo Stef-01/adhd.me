@@ -133,7 +133,8 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
   honoured — every effect has a static equal): shared-layout transitions between the finder's
   screens (`layoutId` from result row → profile, so the chosen GP visibly *is* the same
   object); the results list re-sorting with `layout` animations when a clarifier answer
-  reorders it (the order changing is the product's whole argument — show it); the match
+  reorders it (the order changing is the product's whole argument — show it) — **SHIPPED,
+  O52 (2026-08-19)**; the match
   evidence weights drawing in as the score line settles; scroll-linked reveal on the story
   landing kept within one viewport of intent.
 - Guardrails: 44px touch floor (O14), fold discipline (W167 register), no motion on patient

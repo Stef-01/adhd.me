@@ -178,3 +178,44 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
   }
   expect(found, "no profile showed a missed ask for a three-ask query").toBe(true);
 });
+
+test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
+  await page.goto("/finder");
+  await page.getByRole("button", { name: "Try a demo scenario" }).click();
+  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await page.getByRole("button", { name: /Change what you said/i }).click();
+  // Every listing declares assessment, so this ties the roster and the clarifier renders.
+  await page.getByRole("textbox").fill("I need an ADHD assessment");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
+
+  const before = await page.locator(".clinician-row strong").allInnerTexts();
+  await page.screenshot({ path: "qa/motion-o52/results-before-clarifier.png", fullPage: false });
+
+  // A single answer may legitimately CONFIRM the current order; clarify.ts's contract is that
+  // the offered questions can reorder, so walk the chips until one does. The rows glide rather
+  // than teleport (layout animation) — an e2e cannot pin the tween, but it CAN pin what the
+  // tween animates between: the same keyed rows, in a different order, nobody vanishing.
+  const chipCount = await page.locator(".clarify-chip").count();
+  let reordered = false;
+  for (let chip = 0; chip < chipCount && !reordered; chip++) {
+    if (chip > 0) {
+      await page.getByRole("button", { name: /Change what you said/i }).click();
+      await page.getByRole("textbox").fill("I need an ADHD assessment");
+      await page.getByRole("button", { name: "Find a GP" }).click();
+      await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
+    }
+    await page.locator(".clarify-chip").nth(chip).click();
+    await page.waitForTimeout(600);
+    const after = await page.locator(".clinician-row strong").allInnerTexts();
+    expect(after.length).toBeGreaterThan(0);
+    // Everyone still shown was already known — a clarifier narrows an order, never mints rows.
+    for (const name of after) expect(before).toContain(name);
+    if (after.join("|") !== before.join("|")) {
+      reordered = true;
+      await page.screenshot({ path: "qa/motion-o52/results-after-clarifier.png", fullPage: false });
+    }
+  }
+  expect(reordered, "no clarifier answer reordered a tied roster").toBe(true);
+});

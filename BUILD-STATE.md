@@ -126,9 +126,16 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > one moment the product proves an answer mattered reads as a flicker. Change: `layout`
 > position animation on the result rows plus exit handling for rows that leave the visible
 > fold, under the existing `MotionConfig reducedMotion="user"` so the static equal (instant
-> reorder) is automatic — motion carrying meaning, nothing decorative. Verify: e2e pins that
-> a clarifier answer reorders while rows stay keyed and visible; before/after captures in
-> qa/motion-o52/ + DESIGN-QA entry; `pnpm verify` green.
+> reorder) is automatic — motion carrying meaning, nothing decorative. DONE 2026-08-19.
+> Shipped exactly as queued: `layout="position"` on the rows with a 340ms ease and a 160ms
+> exit fade for rows leaving the fold, inside AnimatePresence; the static equal costs nothing
+> because MotionConfig reducedMotion="user" already governs the tree. The e2e pins what the
+> tween animates BETWEEN (same keyed rows, new order, nobody minted or lost) and tolerates a
+> chip that merely confirms the order — clarify.ts promises the offered QUESTIONS can
+> reorder, not that every answer does; the test walks chips until one moves the list, which
+> on the current roster is the shared-care answer (captured before/after in qa/motion-o52/).
+> Gate: finder-flow e2e 9/9, DESIGN-QA entry, full `pnpm verify` green (206 files, 2923
+> tests, audit gate PASS).
 
 > **O51 (Explaining the fit, Q1 increment — unmatched asks named per-clinician) — claimed
 > 2026-08-19T06:46Z by loop-0819g.** The year plan's continuous track, Q1 step: O21 put

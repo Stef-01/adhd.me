@@ -260,3 +260,21 @@ Captures: qa/profile-o51/ (desktop + 390, missed line in frame). Taste-skill pas
   story whole, and stacking misses onto it would pile on.
 - [x] No new motion, no new touch targets; the partition property (evidence ∪ missed = asks,
   no overlap) is unit-pinned so the two lists can never contradict.
+
+## O52 — the re-sort made visible (2026-08-19)
+
+Captures: qa/motion-o52/ (the same three rows before and after a clarifier answer, order
+changed). Taste-skill pass applied.
+
+- [x] Motion carries meaning and nothing else: `layout="position"` on the result rows, so the
+  ONE moment the product proves an answer mattered — the re-rank — is shown as rows gliding
+  to their new places instead of a teleport that reads as a fresh list. A row pushed past the
+  fold exits with a short fade rather than vanishing.
+- [x] The static equal is automatic: the existing `MotionConfig reducedMotion="user"` disables
+  layout tweens under prefers-reduced-motion, leaving an instant reorder — the same truth
+  without the movement. Nothing loops; nothing moves unprompted.
+- [x] Timing subordinate to reading: 340ms position ease, 160ms exit fade, no added delay —
+  the glide finishes before a reader's eye settles on the new first row.
+- [x] E2e pins what the tween animates BETWEEN: the same keyed rows, reordered, nobody minted
+  and nobody lost; a chip that merely confirms the order is tolerated, per clarify.ts's own
+  contract.

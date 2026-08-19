@@ -877,7 +877,15 @@ export function CareFinder() {
             </div>
 
             <div className="clinician-list">
-              {shown.map((item, index) => {
+              {/* O52: the re-sort, made visible. A clarifier answer re-ranks this list, and the
+                  order changing is the product's whole argument — so rows GLIDE to their new
+                  positions (`layout="position"`) instead of teleporting, and a row pushed out
+                  of the visible fold leaves visibly rather than vanishing. The surrounding
+                  MotionConfig reducedMotion="user" is what makes the static equal automatic:
+                  under prefers-reduced-motion the reorder is instant, which is the same truth
+                  without the movement. */}
+              <AnimatePresence initial={false}>
+                {shown.map((item, index) => {
                 const itemMatch = getPersonalizedMatch(item, request);
                 const away = distanceTo(item, origin);
                 const reasons = distinguishingSignals(itemMatch.signals, allSignals);
@@ -886,10 +894,12 @@ export function CareFinder() {
                     key={item.id}
                     className="clinician-row"
                     type="button"
+                    layout="position"
                     onClick={() => chooseClinician(item)}
                     initial={reducedMotion ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26 }}
+                    exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
+                    transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26, layout: { duration: 0.34, ease: [0.22, 1, 0.36, 1], delay: 0 } }}
                     whileTap={reducedMotion ? undefined : { scale: 0.99 }}
                   >
                     <ClinicianPortrait clinician={item} variant="thumb" />
@@ -908,7 +918,8 @@ export function CareFinder() {
                     <CaretRight size={20} weight="light" aria-hidden="true" />
                   </motion.button>
                 );
-              })}
+                })}
+              </AnimatePresence>
             </div>
 
             {matches.length > shown.length && (
