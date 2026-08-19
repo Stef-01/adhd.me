@@ -465,3 +465,20 @@ Taste-skill pass applied.
   loses its pairing, CI fails before anybody notices the motion is quietly gone.
 - [x] No layout shift bought: the row anchor is exactly the 72px slot the portrait already
   occupied (mobile-fit 7/7 surfaces green), no new colour, no touch-target change.
+
+## O71 — Dr Anusha Saxena, launch-ready from the published record (2026-08-19)
+
+Captures: qa/matching-o34/02-anusha-profile.png re-rendered (the profile as it will launch).
+Copy-only change on her surfaces.
+
+- [x] Every added attribute has a citable published source (practice doctors page +
+  her Healthengine profiles, listed with URLs in the entry comment): ANU medical degree,
+  FRACGP, NSW hospital training with cardiology/paediatrics/psychiatry rotations, the
+  Sydney Child Health Program, and her published special-interest list.
+- [x] Testimonial law held under temptation: the research surfaced praise ("helpful and
+  listens") and it landed NOWHERE — review content is banned however warm.
+- [x] No facet inflation: published interests inform copy and keywords only; her care
+  grades stay exactly where the interview left them, manner stays behind mannerPending,
+  languages stay English-only until she names them — the about still says so.
+- [x] Patient-copy sweep green over every public surface with the new credential lines;
+  "weight management" deliberately kept OUT of rendered copy (keywords only).

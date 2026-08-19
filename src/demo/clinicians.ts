@@ -318,13 +318,28 @@ export const clinicians: Clinician[] = [
      * approach paragraph ("holistic, patient-centred…") is quoted in `about` AS her own
      * description; it is not translated into manner declarations, which stay hers to make in
      * the onboarding interview.
+     *
+     * O71 (2026-08-19, founder-directed launch pass): attributes added from her PUBLISHED
+     * professional record only — the practice's own doctors page (beecroftfp.com.au/about-us)
+     * and her Healthengine profiles (p150804 Beecroft, p160121 Double Bay), read via search
+     * snippets because the egress proxy blocks the sites directly. Published there: medical
+     * degree at ANU; FRACGP; hospital training across NSW (Blacktown and Bathurst Hospitals)
+     * with rotations in cardiology, paediatrics and psychiatry; the Sydney Child Health
+     * Program (Sydney Children's Hospital Network); special interests in women's health,
+     * child health, mental wellbeing, gut health, cardiovascular and metabolic health,
+     * weight management and healthy ageing; a stated focus on preventative health and
+     * functional medicine — corroborating the founder-supplied O58 bio. EXCLUDED on purpose:
+     * a review snippet praising her ("helpful and listens") — testimonial content never
+     * lands anywhere in this tree, whatever its warmth. No new facet grades: published
+     * INTERESTS inform copy and keywords; care/manner declarations stay exactly where her
+     * interview left them.
      */
     id: "anusha-saxena",
     name: "Dr Anusha Saxena",
     shortName: "Dr Anusha Saxena",
     gender: "woman",
     pronouns: "she/her",
-    title: "General practitioner",
+    title: "General practitioner, FRACGP",
     suburb: "Double Bay",
     practice: "Bay Health Clinic",
     reach: "Practice appointments in Double Bay",
@@ -333,16 +348,19 @@ export const clinicians: Clinician[] = [
     capacityDeclaredAt: "2026-08-18",
     focus: "ADHD assessment & management, mental health, women's health & lifestyle",
     matchLine: "Brings a mental-health focus to general practice, with psychology training behind it.",
-    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Paediatrics", "Lifestyle & nutrition interest"],
+    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Child & family health", "Lifestyle & preventative care"],
     // Billing leads by roster convention; hers is stated by the practice until her interview
     // supplies the specifics — a fact about where the fact lives, not a guess at it.
     practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
     about:
-      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, with a background in psychology (First Class Honours, University of Sydney), clinical psychiatry and general medicine. Her clinical experience spans general practice, women's health and mental health, with a particular interest in ADHD assessment and management, and she has completed an endorsed ADHD training course. She is currently training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle nutrition and health coaching. In her own words, she takes a holistic, patient-centred approach, integrating medical, psychological and lifestyle perspectives. How she works day to day — and the languages she consults in — will be added from her own onboarding answers rather than written for her.",
+      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She studied psychology before medicine — First Class Honours at the University of Sydney, then her medical degree at the Australian National University — and trained in hospitals across NSW, including Blacktown and Bathurst, with rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network. Her clinical experience spans general practice, women's health and mental health, with a particular interest in ADHD assessment and management, and she has completed an endorsed ADHD training course. Alongside that sit her published interests in child health, preventative care, cardiovascular and metabolic health, and healthy ageing. She is currently training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition and health coaching. In her own words, she takes a holistic, patient-centred approach, integrating medical, psychological and lifestyle perspectives. How she works day to day — and the languages she consults in — will be added from her own onboarding answers rather than written for her.",
     experience: [
       "General practice, Bay Health Clinic, Double Bay",
+      "Fellow of the Royal Australian College of General Practitioners",
+      "Medical degree, Australian National University",
       "First Class Honours in Psychology, University of Sydney",
-      "Clinical psychiatry and general medicine experience",
+      "Hospital training across NSW — rotations in cardiology, paediatrics and psychiatry",
+      "Sydney Child Health Program, Sydney Children's Hospital Network",
       "Endorsed ADHD training course — completed",
       "Focused Psychological Strategies — training underway",
       "Functional medicine, nutrition & health coaching — further qualifications underway",
@@ -369,7 +387,7 @@ export const clinicians: Clinician[] = [
       practitionerId: "160121",
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
-    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "double bay", "eastern suburbs", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching"],
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight"],
     realPerson: true,
   },
 ];

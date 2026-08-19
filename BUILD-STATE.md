@@ -120,7 +120,10 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O71 (founder-directed: Dr Anusha Saxena's entry made launch-ready from her PUBLISHED
-> attributes) — claimed 2026-08-20T02:1xZ by interactive session loop-0819aa.** The founder
+> attributes) — DONE 2026-08-19 by interactive session loop-0819aa. Gate: roster + matching
+> suites green (660), patient-copy sweep green over every public surface, her profile e2e
+> walk green with the launch capture re-rendered, full `pnpm verify` green. The one thing
+> research surfaced that landed NOWHERE: review praise — testimonial law held.** The founder
 > asked for her text made launch-ready "by inferring with research online her key
 > attributes". The tree's law makes "inferring" mean exactly one thing: only attributes she
 > or her practice have PUBLISHED may land, each with its source cited in the entry comment —
