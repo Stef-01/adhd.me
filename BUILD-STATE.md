@@ -119,6 +119,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O51 (Explaining the fit, Q1 increment — unmatched asks named per-clinician) — claimed
+> 2026-08-19T06:46Z by loop-0819g.** The year plan's continuous track, Q1 step: O21 put
+> provenance on the profile's matched reasons; this puts the OTHER half beside them — the
+> asks THIS clinician does not answer, named on the profile in the closed vocabulary, instead
+> of living only in the console's "Missed" column and the global "no GP declares this" note.
+> Data: a `missedAsks` sibling of `matchEvidence` (same needsFor read, inverted answer
+> filter), so the profile and the audit cannot disagree. Copy is declaration-framed and
+> compliance-safe: "you also asked for X — not something they declare", a fact about
+> declarations in W193's posture, never a deficiency claim about a named clinician. UI unit:
+> taste law, qa/ captures, DESIGN-QA entry. Verify: unit pins on missedAsks (complement of
+> evidence over the same read; empty when everything is answered); e2e drives a two-ask query
+> to a one-answer profile and reads the missed ask; `pnpm verify` green.
+
 > **O50 (Q1 item 3 — the morphology upgrade) — claimed 2026-08-19T05:46Z by loop-0819f.**
 > The plan's prescription: replace the suffix-stemmer's worst misses, FOUND BY THE CORPUS,
 > with explicit inflection tables — borrow test cases from `natural`, never the dependency.
