@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O68 (Q1 item 1 — corpus tranche four: compound requests and the discipline registers) —
+> claimed 2026-08-20T00:04Z by loop-0819x.** Growth 264 → ~330 of the ~500 target. This
+> tranche's emphasis, complementing tranche three's thin-floor feeding: (1) COMPOUND
+> requests — real sentences carry two and three asks at once ("a woman GP who bulk bills and
+> won't rush me"), and the corpus is still mostly single-ask; (2) the discipline registers —
+> more G7 symptom sentences pinned never, more negation/collapse mixes walking the
+> O40/O45/O53 seams, more logistics sentences pinned silent; (3) paraphrase depth on the
+> still-lowest floors (woman-gp 4, trauma-informed 6, bulk-billing 6, telehealth-first 6).
+> Same honest loop as every tranche: author → MEASURE → tag from measurement (reaches =
+> heard; aspires = the to-do list; never = the boundary), growth only, no cue edits. Floors
+> re-measured and raised; the W234 tie-quality pin re-measured and moved in the same commit.
+> Verify: corpus well-formed + floor gate + promotion-demand + never pins green on the grown
+> set; tie-quality repinned at measured numbers; property suite green; full `pnpm verify`
+> green.
+
 > **O67 (motion queue — the chosen GP is visibly the same object: layoutId row→profile) —
 > DONE 2026-08-19 by loop-0819w (finder-flow 10/10 incl. the wiring pin; mobile-fit 7/7;
 > the mid-flight capture shows the frame genuinely mid-morph — thumb rounding still
