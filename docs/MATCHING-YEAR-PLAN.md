@@ -190,7 +190,10 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
 ## Explaining the fit, continuously (runs all year)
 
 - O21 shipped provenance on the profile ("from your words: …"). Next increments, one per
-  quarter: (Q1) unmatched asks named per-clinician, not just globally; (Q2) "what would
+  quarter: (Q1) unmatched asks named per-clinician, not just globally — **DONE, O51
+  (2026-08-19)**: `missedAsks` partitions the reader's care/manner asks against the same
+  `needsFor` read as the evidence, and the profile says "you also asked for X — not something
+  they declare" in W193's declaration framing, capped at two, only beside existing evidence; (Q2) "what would
   change this order" — surfacing the top clarifier ON the profile; (Q3) side-by-side compare
   of two clinicians' evidence; (Q4) the same provenance view inside the console so a doctor
   sees exactly what patients are told about them.

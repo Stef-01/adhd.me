@@ -29,6 +29,7 @@ import {
   unservedAsks,
   closedBooksNote,
   MATCH_QUALITY_COPY,
+  missedAsks,
   type Clinician,
 } from "@/demo/clinicians";
 import { clarifiers } from "@/matching/clarify";
@@ -397,6 +398,14 @@ export function CareFinder() {
    * fixed set (W213), and the quote is visibly the reader's text, not the product's claim.
    */
   const profileEvidence = useMemo(() => matchEvidence(clinician, request), [clinician, request]);
+  /**
+   * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
+   * with the filter inverted, so the two lists partition what the reader asked and cannot
+   * disagree with the ranking. Named here because a page that lists only the hits invites the
+   * reader to assume the rest were hits too, which is the quiet dishonesty the console's
+   * "Missed" column was built to prevent — for staff. The reader gets the same truth.
+   */
+  const profileMissed = useMemo(() => missedAsks(clinician, request), [clinician, request]);
 
   function startListening() {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
@@ -949,14 +958,31 @@ export function CareFinder() {
                    (every word of it stem-matched, in order, in the reader's text), not a verbatim
                    quote — so the line says "from your words", which is exactly true, rather than
                    "you said", which could misquote an inflection. */
-                <ul className="fit-evidence" aria-label="Why this GP is listed for you">
-                  {profileEvidence.slice(0, 3).map((need) => (
-                    <li key={need.label}>
-                      <span className="fit-evidence-label">{need.label}</span>
-                      <span className="fit-evidence-said">from your words: &ldquo;{need.matched}&rdquo;</span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="fit-evidence" aria-label="Why this GP is listed for you">
+                    {profileEvidence.slice(0, 3).map((need) => (
+                      <li key={need.label}>
+                        <span className="fit-evidence-label">{need.label}</span>
+                        <span className="fit-evidence-said">from your words: &ldquo;{need.matched}&rdquo;</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {/* O51: the asks this GP does not answer, said here rather than implied away.
+                      Declaration-framed (W193): "not something they declare" is a fact about a
+                      declaration, never a claim about ability. Capped at two so the page stays
+                      about the fit that exists; the finder's global note still covers asks
+                      nobody on the roster declares. */}
+                  {profileMissed.length > 0 && (
+                    <ul className="fit-missed" aria-label="What you asked for that this GP has not declared">
+                      {profileMissed.slice(0, 2).map((need) => (
+                        <li key={need.label}>
+                          You also asked for <span className="fit-missed-label">{need.label.toLowerCase()}</span> — not
+                          something they declare. Another listing may.
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
               ) : (
                 /* Nothing in what they said reached this clinician, so the honest line is what he
                    says he does — the same fallback the result row already used, which is why the

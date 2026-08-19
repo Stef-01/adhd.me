@@ -137,3 +137,44 @@ test("no screen the collapse removed is still reachable", async ({ page }) => {
     expect(text.trim().length, "a stage rendered nothing").toBeGreaterThan(40);
   }
 });
+
+test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
+  await page.goto("/finder");
+  await page.getByRole("button", { name: "Try a demo scenario" }).click();
+  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await page.getByRole("button", { name: /Change what you said/i }).click();
+  const box = page.getByRole("textbox");
+  await box.fill("I need titration and I don't want to feel rushed, somewhere I can be honest about drinking");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  // Walk the rows until a profile shows the missed list — the partition property behind it is
+  // unit-pinned; this pins the RENDERING and its honesty framing.
+  const rows = page.locator(".clinician-row");
+  const count = await rows.count();
+  let found = false;
+  for (let index = 0; index < count; index++) {
+    await rows.nth(index).click();
+    await expect(page.locator(".profile-content")).toBeVisible();
+    const missed = page.locator(".fit-missed li");
+    if ((await missed.count()) > 0) {
+      found = true;
+      // Declaration-framed, never a deficiency claim; and never contradicting the evidence list.
+      await expect(missed.first()).toContainText("not something they declare");
+      const missedLabel = (await missed.first().locator(".fit-missed-label").innerText()).toLowerCase();
+      const evidence = (await page.locator(".fit-evidence-label").allInnerTexts()).map((t) => t.toLowerCase());
+      expect(evidence).not.toContain(missedLabel);
+      // The design record: both halves of the account in one frame, desktop and phone widths.
+      await missed.first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: "qa/profile-o51/profile-missed-desktop.png", fullPage: false });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await missed.first().scrollIntoViewIfNeeded();
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: "qa/profile-o51/profile-missed-mobile.png", fullPage: false });
+      break;
+    }
+    await page.getByRole("button", { name: /Back to results/i }).click();
+  }
+  expect(found, "no profile showed a missed ask for a three-ask query").toBe(true);
+});

@@ -679,6 +679,33 @@ export function matchEvidence(
 }
 
 /**
+ * The other half of the profile's honesty (O51, year plan "Explaining the fit", Q1): the asks
+ * THIS clinician does not answer, named per clinician instead of living only in the console's
+ * "Missed" column and the global unserved note.
+ *
+ * SAME READ AS THE EVIDENCE, INVERTED FILTER — `matchEvidence` and this function consume one
+ * `needsFor` pass, so the profile's two lists partition the reader's asks exactly and can
+ * never disagree with the ranking or with each other.
+ *
+ * CARE AND MANNER ONLY, because the surface copy frames these as DECLARATIONS ("not something
+ * they declare", W193's posture): a care area or a way of working is a thing a clinician
+ * declares or does not. A preference like "a woman GP" or a language is a fact about who they
+ * are, and "they have not declared being a woman" is not a sentence this product should put
+ * beside a name — those asks keep their existing surfaces (the preference ordering itself,
+ * and the language line).
+ */
+export function missedAsks(
+  clinician: Clinician,
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+): NeedSignal[] {
+  return needsFor(query, roster).filter(
+    (need) =>
+      (need.facet.kind === "care" || need.facet.kind === "manner") && !answers(clinician, need),
+  );
+}
+
+/**
  * Rank by stated preference, then bring the near ones forward.
  *
  * TWO-STAGE ON PURPOSE. Distance does not outrank fit: somebody who asked for a Tamil-speaking GP

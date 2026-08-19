@@ -604,6 +604,23 @@ textarea:focus-visible {
   line-height: 1.4;
 }
 
+/* O51: the asks this GP does not answer — quieter than the evidence above on purpose (it is
+   context, not the headline), but the same visual language, so the two read as one account. */
+.fit-missed {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  max-width: 52ch;
+}
+
+.fit-missed-label { color: var(--ink); font-weight: 600; }
+
 .practical-signal-row {
   margin-top: 7px;
 }

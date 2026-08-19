@@ -244,3 +244,19 @@ Captures: qa/matching-o10/04-unmatched-says-so.png (re-rendered).
   suburb field, one-line banner, one question.
 - [x] The mic permission failure's "try once more" is a 44px control under the banner it
   answers, not a sentence pointing at a control two screens away.
+
+## O51 — the profile names the asks this GP does not answer (2026-08-19)
+
+Captures: qa/profile-o51/ (desktop + 390, missed line in frame). Taste-skill pass applied.
+
+- [x] The two lists are one account: the missed asks sit directly under the matched evidence,
+  same visual language, deliberately quieter (muted, no chips) — context, not the headline.
+- [x] Honesty gates: declaration framing throughout ("not something they declare"), never a
+  deficiency or competence claim beside a named clinician; "Another listing may" keeps the
+  reader moving without disparaging anybody.
+- [x] Capped at two lines so the page stays about the fit that exists; asks nobody on the
+  roster declares remain covered by the finder's global note.
+- [x] Rendered only when matched evidence exists — the no-match fallback already tells that
+  story whole, and stacking misses onto it would pile on.
+- [x] No new motion, no new touch targets; the partition property (evidence ∪ missed = asks,
+  no overlap) is unit-pinned so the two lists can never contradict.

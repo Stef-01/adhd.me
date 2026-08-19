@@ -130,7 +130,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > declarations in W193's posture, never a deficiency claim about a named clinician. UI unit:
 > taste law, qa/ captures, DESIGN-QA entry. Verify: unit pins on missedAsks (complement of
 > evidence over the same read; empty when everything is answered); e2e drives a two-ask query
-> to a one-answer profile and reads the missed ask; `pnpm verify` green.
+> to a one-answer profile and reads the missed ask; `pnpm verify` green. DONE 2026-08-19.
+> Shipped as designed: `missedAsks` beside `matchEvidence` (one needsFor read, inverted
+> filter, care+manner only — a preference or a language is who somebody IS, and "they have
+> not declared being a woman" is not a sentence to put beside a name); the profile renders it
+> under the evidence, quieter, capped at two, only when evidence exists. Partition pinned
+> per-clinician (evidence ∪ missed = asks, no overlap, non-vacuous); e2e walks a three-ask
+> query to the first profile with a miss and checks the framing and the no-contradiction
+> property in the DOM. Gate: demo suite 41/41, finder e2e incl. the new pin, captures in
+> qa/profile-o51/ + DESIGN-QA entry, full `pnpm verify` green.
 
 > **O50 (Q1 item 3 — the morphology upgrade) — claimed 2026-08-19T05:46Z by loop-0819f.**
 > The plan's prescription: replace the suffix-stemmer's worst misses, FOUND BY THE CORPUS,
