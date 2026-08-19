@@ -214,10 +214,16 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    (latest save per clinician, two silences kept apart because they grow different cue lists).
    **DEBT CLOSED — the O22 loop is now standing infrastructure; what remains is Q1's ongoing
    review of what the feed surfaces, which is the year plan's work, not a debt.**
-3. **iPhone speech: field verification.** O18's retry + honest copy + `?debug=1` shipped, but
-   no confirmation yet from the actual failing device. FOUNDER: retry on the phone; if the
-   banner shows, send the bracketed code. Build side: keep the raw-code path first-class in
-   any speech change.
+3. **iPhone speech: field verification.** O18's retry + honest copy + `?debug=1` shipped;
+   O46 held the warm-up stream open through the retry; O48 made the once-more a button; and
+   **O69 (2026-08-19, founder-directed) closed the last known code-side gap**: the recovery
+   tap now starts WARM — a second permission failure carries its live stream (45s window,
+   dropped on adoption/settle/cancel/leaving/expiry) so the next tap runs recognition inside
+   its own gesture with the audio session already live, the two things WebKit reportedly
+   demands at once. FOUNDER: retry on the phone; if the banner still shows, send the
+   bracketed `?debug=1` code — with O69 in, a persisting failure points at device settings
+   (Siri & Dictation / Safari mic permission / screen-time) rather than at this sequence.
+   Build side: keep the raw-code path first-class in any speech change.
 4. **Speech is en-AU only — CLOSED by O59 (2026-08-19), picker shape.** `SPEECH_LANGUAGES`
    is a closed, roster-derived list (English plus exactly the languages listed GPs declare —
    Hindi and Urdu today; a test derives the basis so the list cannot outgrow the roster);

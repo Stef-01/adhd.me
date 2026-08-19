@@ -120,7 +120,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O69 (the iPhone microphone, advanced: the recovery tap starts warm — founder-directed,
-> interactive session loop-0819y, claimed 2026-08-20T01:0xZ).** The O46 caveat, read to its
+> interactive session loop-0819y) — DONE 2026-08-19 (6 new unit pins: carry past the double
+> permission failure, adopt without a fresh getUserMedia, 45s expiry with fake timers,
+> non-permission never carries, cancel releases, explicit drop idempotent; voice e2e 14/14
+> unchanged; full `pnpm verify` green, 210 files / 3137 tests. No screen changed, so no
+> capture — the change is when the mic light goes off, stated in the module note).** The O46 caveat, read to its
 > conclusion: WebKit gates recognition on a USER GESTURE and reportedly succeeds only while
 > an audio session is GENUINELY LIVE — and no current path has both at once. The in-session
 > retry has the live stream but starts outside the gesture (getUserMedia resolves after it);

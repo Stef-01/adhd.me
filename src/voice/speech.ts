@@ -168,6 +168,58 @@ export interface SpeechSession {
   cancel(): void;
 }
 
+/**
+ * THE CARRIED STREAM (O69): the bridge between WebKit's two demands.
+ *
+ * The O46 caveat, read to its conclusion: WebKit gates recognition.start() on a USER GESTURE,
+ * and the reported behaviour is that recognition only succeeds while an audio session is
+ * GENUINELY LIVE. No pre-O69 path had both at once — the in-session retry holds the live
+ * stream but starts outside the gesture (getUserMedia resolves after the tap has expired),
+ * and the O48 recovery tap has a fresh gesture but starts cold, because the second failure
+ * released the warm stream on its way to the error copy.
+ *
+ * So when the retried recogniser ALSO fails on a permission-flavoured code, the stream is
+ * carried here instead of released. The next `startSpeech` — the person's recovery tap —
+ * adopts it, which means recognition starts synchronously inside the gesture WITH the audio
+ * session already live: both requirements, met at last, one tap after Allow.
+ *
+ * THE PRICE, STATED WHERE IT IS PAID: the phone's microphone indicator stays lit for up to
+ * CARRY_WINDOW_MS after the failure. That is deliberate and bounded — dropped on adoption,
+ * on the adopting session's settle or cancel, when the finder leaves the screen, or when the
+ * timer runs out, whichever comes first. A mic light with no path to off would be its own
+ * bug (the O46 rule), which is exactly what the timer exists to prevent.
+ */
+const CARRY_WINDOW_MS = 45_000;
+let carriedStream: MediaStream | null = null;
+let carriedTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Stop and forget the carried stream. Exported so the finder can drop it on leaving. */
+export function dropCarriedStream(): void {
+  carriedStream?.getTracks().forEach((track) => track.stop());
+  carriedStream = null;
+  if (carriedTimer !== null) {
+    clearTimeout(carriedTimer);
+    carriedTimer = null;
+  }
+}
+
+function carryStream(stream: MediaStream): void {
+  dropCarriedStream();
+  carriedStream = stream;
+  carriedTimer = setTimeout(dropCarriedStream, CARRY_WINDOW_MS);
+}
+
+/** Take the carried stream, if one is still alive, clearing the carry state. */
+function adoptCarriedStream(): MediaStream | null {
+  const stream = carriedStream;
+  carriedStream = null;
+  if (carriedTimer !== null) {
+    clearTimeout(carriedTimer);
+    carriedTimer = null;
+  }
+  return stream;
+}
+
 export interface SpeechHandlers {
   /** Fires repeatedly as the browser revises its guess. Interim text, safe to render. */
   onPartial(text: string): void;
@@ -212,6 +264,22 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
     warmStream?.getTracks().forEach((track) => track.stop());
     warmStream = null;
   };
+  /**
+   * O69: on a second permission-flavoured failure the stream is carried for the recovery tap
+   * instead of stopped — see the module note on `carriedStream`. Everything else releases.
+   */
+  const settleStream = (permissionFlavoured: boolean) => {
+    if (permissionFlavoured && warmStream) {
+      carryStream(warmStream);
+      warmStream = null;
+      return;
+    }
+    releaseWarmStream();
+  };
+
+  // The recovery tap adopts the stream a failed session carried (O69): recognition below
+  // starts synchronously inside this tap's gesture, with the audio session already live.
+  warmStream = adoptCarriedStream();
 
   const wire = (recognition: SpeechRecognitionLike) => {
     recognition.lang = lang;
@@ -307,7 +375,7 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
               active = again;
             } catch {
               settled = true;
-              releaseWarmStream();
+              settleStream(true);
               handlers.onError(error, event.error);
             }
           },
@@ -320,7 +388,7 @@ export function startSpeech(handlers: SpeechHandlers, lang: string = DEFAULT_SPE
         return;
       }
       settled = true;
-      releaseWarmStream();
+      settleStream(permissionFlavoured);
       handlers.onError(error, event.error);
     };
 

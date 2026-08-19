@@ -37,6 +37,7 @@ import { coveredSuburbs, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { CoverageMap } from "./coverage-map";
 import {
   DEFAULT_SPEECH_LANGUAGE,
+  dropCarriedStream,
   SPEECH_DISCLOSURE,
   SPEECH_ENGLISH_MATCHING_NOTE,
   SPEECH_ERROR_COPY,
@@ -341,7 +342,12 @@ export function CareFinder() {
     speech.current = null;
   }, [stage]);
 
-  useEffect(() => () => speech.current?.cancel(), []);
+  // O69: leaving the finder also drops any stream a failed session is carrying for the
+  // recovery tap — the mic light must not outlive the screen the retry button lives on.
+  useEffect(() => () => {
+    speech.current?.cancel();
+    dropCarriedStream();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);

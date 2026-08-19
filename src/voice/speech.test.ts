@@ -8,6 +8,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_SPEECH_LANGUAGE,
+  dropCarriedStream,
   SPEECH_DISCLOSURE,
   SPEECH_ENGLISH_MATCHING_NOTE,
   SPEECH_ERROR_COPY,
@@ -99,6 +100,9 @@ afterEach(() => {
   delete (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices;
   FakeRecognition.last = null;
   FakeRecognition.throwOnStart = false;
+  // O69: carried-stream state is module-level by design; tests must not leak it to each other.
+  dropCarriedStream();
+  vi.useRealTimers();
 });
 
 const noop = { onPartial: () => {}, onFinal: () => {}, onError: () => {} };
@@ -456,5 +460,95 @@ describe("O18 the iPhone retry: permission warm-up before the message shows", ()
     startSpeech({ ...noop, onError });
     FakeRecognition.last!.fail("network");
     expect(onError).toHaveBeenCalledWith("network", "network");
+  });
+});
+
+describe("O69 the recovery tap starts warm: the carried stream", () => {
+  const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+  const microphone = (onStop: () => void) => ({
+    getUserMedia: () => Promise.resolve({ getTracks: () => [{ stop: onStop }] }),
+  });
+
+  /** Drive a session to the double permission failure that makes it carry its stream. */
+  async function failTwice(onStop: () => void) {
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = microphone(onStop);
+    const onError = vi.fn();
+    startSpeech({ ...noop, onError });
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    // The retried recogniser fails on the same code — pre-O69 this released the stream.
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    expect(onError).toHaveBeenCalledTimes(1);
+  }
+
+  it("carries the stream past the second permission failure, and the next start adopts it", async () => {
+    install();
+    let stopped = 0;
+    await failTwice(() => { stopped += 1; });
+    // Carried, not stopped: the recovery tap needs the session live.
+    expect(stopped).toBe(0);
+
+    // The recovery tap: no new getUserMedia is awaited — recognition starts synchronously
+    // inside the gesture, and the adopted stream is released when the session settles.
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = {
+      getUserMedia: vi.fn(() => Promise.reject(new Error("must not be called on adoption"))),
+    };
+    const onFinal = vi.fn();
+    startSpeech({ ...noop, onFinal });
+    const second = FakeRecognition.last!;
+    expect(second.started).toBe(true);
+    second.emit([{ text: "heard at last", final: true }]);
+    second.stop();
+    expect(onFinal).toHaveBeenCalledWith("heard at last");
+    expect(stopped).toBe(1);
+  });
+
+  it("drops the carried stream after the window, so the mic light always has a path to off", async () => {
+    install();
+    vi.useFakeTimers();
+    let stopped = 0;
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = microphone(() => { stopped += 1; });
+    startSpeech(noop);
+    FakeRecognition.last!.fail("service-not-allowed");
+    await vi.runOnlyPendingTimersAsync();
+    FakeRecognition.last!.fail("service-not-allowed");
+    await vi.advanceTimersByTimeAsync(0);
+    expect(stopped).toBe(0);
+    await vi.advanceTimersByTimeAsync(45_000);
+    expect(stopped).toBe(1);
+  });
+
+  it("never carries for a failure a warm session cannot fix", async () => {
+    install();
+    let stopped = 0;
+    (globalThis.navigator as unknown as Record<string, unknown>).mediaDevices = microphone(() => { stopped += 1; });
+    startSpeech(noop);
+    FakeRecognition.last!.fail("service-not-allowed");
+    await flush();
+    // The retried recogniser dies on a NON-permission code: no microphone, no fix by warmth.
+    FakeRecognition.last!.fail("audio-capture");
+    await flush();
+    expect(stopped).toBe(1);
+  });
+
+  it("cancel on the adopting session releases the adopted stream", async () => {
+    install();
+    let stopped = 0;
+    await failTwice(() => { stopped += 1; });
+    const session = startSpeech(noop)!;
+    session.cancel();
+    expect(stopped).toBe(1);
+  });
+
+  it("dropCarriedStream releases it explicitly, for the finder leaving the screen", async () => {
+    install();
+    let stopped = 0;
+    await failTwice(() => { stopped += 1; });
+    dropCarriedStream();
+    expect(stopped).toBe(1);
+    // Idempotent: a second drop stops nothing twice.
+    dropCarriedStream();
+    expect(stopped).toBe(1);
   });
 });
