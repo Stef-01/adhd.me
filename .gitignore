@@ -20,3 +20,6 @@ reports/adhd-me-sales-deck.pptx
 
 .vercel
 .env*
+
+# macOS
+.DS_Store

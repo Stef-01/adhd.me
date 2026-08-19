@@ -25,102 +25,133 @@ const txt = (cls,x,y,size,extra,html) =>
 const hair = (x,y,w) => `<div class="a hair" style="left:${P(x)};top:${P(y)};width:${P(w)};height:1px"></div>`;
 const vline = (x,y,h) => `<div class="a hair" style="left:${P(x)};top:${P(y)};width:1px;height:${P(h)}"></div>`;
 
-// ── 03 scoreboard ──
-const SCORE = [
-  {ic:'scale', v:'4 / 19', l:'Closing the Gap targets on track (Annual Data Compilation, July 2026)'},
-  {ic:'activity', v:'8.8 yrs', l:'life expectancy gap for men; 8.1 years for women. Target 1 not on track'},
-  {ic:'users', v:'89.2%', l:'of babies at a healthy birthweight, against a 91% target. Not on track'},
-  {ic:'down', v:'2024', l:'Productivity Commission review: fundamental change is required'},
+
+
+// ── 02 the paradox (dark ground) ──
+const PARADOX = [
+  {v:'15.8%', l:'of Aboriginal children with clinically significant hyperactivity — against 9.7% of other children'},
+  {v:'two-thirds', l:'less likely to receive stimulant treatment, where both parents are Aboriginal', hi:true},
+  {v:'30%', l:'more likely than other children to be living with disability'},
+  {v:'none', l:'validated ADHD symptom norms exist for most Aboriginal and Torres Strait Islander groups'},
 ].map((s,i)=>{
   const x = 150 + i*420;
-  return (i?vline(x-40,668,232):'')
-    + icon(s.ic,x,668,28,1.6)
-    + txt('stat',x,722,58,`width:${P(360)}`,s.v)
-    + txt('body',x,812,17,`width:${P(340)}`,s.l);
+  return (i?`<div class="a hair" style="left:${P(x-40)};top:${P(608)};width:1px;height:${P(210)}"></div>`:'')
+    + txt('stat',x,604,s.v.length>6?46:62,`width:${P(360)};color:${s.hi?'var(--sage-light)':'var(--paper)'}`,s.v)
+    + txt('body',x,700,18,`width:${P(340)};color:var(--paper-dim)`,s.l);
 }).join('');
 
-// ── 04 what this is not ──
-const NOT = [
-  {k:'Who decides', t:'Priority Reform One settles that: formal partnership and shared decision-making with Aboriginal and Torres Strait Islander people. That is not us.'},
-  {k:'Who delivers', t:'Priority Reform Two settles that: the community-controlled sector. ACCHOs already outperform mainstream general practice for the people this concerns. That is not us either.'},
-  {k:'What we offer', t:'Infrastructure and measurement &mdash; for a community-controlled organisation to use, adapt, or refuse.', hi:true},
+// ── 03 the barriers, all system-side ──
+const BARRIERS = [
+  {k:'The instruments', t:'There are no psychometric studies of ADHD questionnaires, and no symptom norms, for most Aboriginal and Torres Strait Islander groups. The tools were normed on somebody else.'},
+  {k:'The history', t:'Fear tied to eugenics and the Stolen Generations — which the guideline notes is still in living memory.', hi:true},
+  {k:'The reception', t:'Discrimination, racism and ignorance when seeking mental health support, which suppresses help-seeking before a clinician is ever involved.'},
+  {k:'The record', t:'Under-identification of Aboriginal and Torres Strait Islander status in health settings, so the list of children to look at never forms.'},
+  {k:'The label', t:'A cultural dislike of labelling and of diagnostic stigma, and reluctance to seek help until difficulties are extreme.'},
+].map((r,i)=>{
+  const y = 470 + i*86;
+  return hair(150,y,1620)
+    + txt('eyebrow',150,y+24,14,`letter-spacing:.13em;width:${P(300)}${r.hi?'':';color:var(--faint)'}`,r.k)
+    + txt('sub',490,y+16,22,`width:${P(1280)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
+}).join('') + hair(150,470+5*86,1620);
+
+// ── 04 the pipeline, four stages ──
+const PIPELINE = [
+  {k:'In school',    v:'8.6% → 25%', l:'share of enrolments, against share of students suspended'},
+  {k:'By Year 7',    v:'98%',        l:'increase in disciplinary absences between Year 6 and Year 7'},
+  {k:'In detention', v:'89%',        l:'of children assessed had a severe neurodevelopmental impairment, most never diagnosed'},
+  {k:'In prison',    v:'31% v 10%',  l:'adult ADHD among Aboriginal prisoners, against non-Aboriginal prisoners', hi:true},
+].map((s,i)=>{
+  const x = 150 + i*420;
+  return (i?vline(x-40,596,212):'')
+    + txt('eyebrow',x,592,13,`letter-spacing:.13em;width:${P(340)}${s.hi?'':';color:var(--faint)'}`,s.k)
+    + txt('stat',x,632,s.v.length>7?44:56,`width:${P(360)};color:${s.hi?'var(--sage)':'var(--ink)'}`,s.v)
+    + txt('body',x,714,17,`width:${P(340)}`,s.l);
+}).join('')
+ + hair(150,832,1620)
+ + txt('h reg',150,860,31,`letter-spacing:-.02em;width:${P(1620)};color:var(--sage)`,'The behaviour a child is suspended for — disruption, disengagement — is the diagnostic criteria for the condition nobody assessed.');
+
+// ── 05 Closing the Gap, one slide ──
+const CTG = [
+  {ic:'scale', v:'4 / 19', l:'Closing the Gap targets on track, halfway to the 2031 deadline'},
+  {ic:'users', v:'3% → 37%', l:'share of the adult population, against share of people in custody'},
+  {ic:'down',  v:'2,500', l:'Aboriginal and Torres Strait Islander adults imprisoned per 100,000 — up from 1,925 in 2019'},
+  {ic:'activity', v:'No change', l:'Target 11, youth detention, against a 30% reduction by 2031'},
+].map((s,i)=>{
+  const x = 150 + i*420;
+  return (i?vline(x-40,668,236):'')
+    + icon(s.ic,x,668,28,1.6)
+    + txt('stat',x,722,52,`width:${P(360)}`,s.v)
+    + txt('body',x,802,17,`width:${P(340)}`,s.l);
+}).join('');
+
+// ── 07 what this does not claim ──
+const NOTCLAIM = [
+  {k:'What drives it', t:'Colonisation and dispossession, poverty, housing, over-policing, bail laws, and the age of criminal responsibility. Nothing in this proposal touches any of them.'},
+  {k:'What is also true', t:'Among children already in contact with the system, severe neurodevelopmental impairment is close to universal, and mostly undiagnosed until a court asks.'},
+  {k:'What we propose', t:'Treating a treatable condition in children who are not currently offered treatment. That is health care, not a theory of crime.', hi:true},
 ].map((r,i)=>{
   const y = 480 + i*112;
   return hair(150,y,1620)
-    + txt('eyebrow',150,y+30,14,`letter-spacing:.13em;width:${P(300)}${r.hi?'':';color:var(--faint)'}`,r.k)
-    + txt('sub',490,y+22,24,`width:${P(1280)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
+    + txt('eyebrow',150,y+30,14,`letter-spacing:.13em;width:${P(320)}${r.hi?'':';color:var(--faint)'}`,r.k)
+    + txt('sub',510,y+22,24,`width:${P(1260)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
 }).join('') + hair(150,480+3*112,1620);
 
-// ── 05 the 715 number ──
-const S715 =
-  hair(1010,470,760)
-  + txt('stat',1010,506,132,`width:${P(760)}`,'27.9%')
-  + txt('body',1010,672,19,`width:${P(700)}`,'of Aboriginal and Torres Strait Islander people received a 715 health assessment in 2023&ndash;24')
-  + hair(1010,782,760)
-  + txt('stat',1010,818,50,`width:${P(340)}`,'17%')
-  + txt('body',1010,884,16,`width:${P(320)}`,'in the lowest Primary Health Network areas')
-  + vline(1390,808,120)
-  + txt('stat',1440,818,50,`width:${P(340)}`,'48%')
-  + txt('body',1440,884,16,`width:${P(330)}`,'of regular ACCHO clients aged 15 and over');
+// ── 08 the model, three steps beside the finder screenshot ──
+const MODEL = [
+  'Say what you need — in your own words, including how you want to be treated.',
+  'See who is near you — by suburb, language, care area, and how that clinician works.',
+  'Book once — assessment, baseline and follow-up with the same person.',
+].map((t,i)=> icon('split',150,700+i*62,18,1.7).replace(IC.split,'<path d="m5 12 5 5L20 7"/>')
+  + txt('body',190,696+i*62,19,`width:${P(700)}`,t)).join('');
 
-// ── 06 barriers ──
-const BARRIERS = [
-  {k:'Identification', t:'Indigenous status is not recorded, so the list of eligible patients does not exist to begin with.'},
-  {k:'Item knowledge', t:'Practice staff do not know which MBS item applies, or who in the practice is entitled to claim it.'},
-  {k:'Ownership', t:'Nobody owns the recall, so the health assessment is nobody&rsquo;s job in particular.', hi:true},
-  {k:'Billing avoidance', t:'Practices avoid claiming an item they are not confident they have satisfied the requirements for.'},
+// ── 09 barrier → product mapping. The core slide of the deck. ──
+const MAPPING = [
+  {k:'The instruments', t:'ADHD.ME never screens and never scores. It carries no questionnaire, so it cannot inherit a questionnaire normed on the wrong population. It routes to a clinician who assesses.', hi:true},
+  {k:'The reception', t:'A person says what they want from care — including not being judged — and is matched on those clinician attributes, by suburb and language. Matching is on the clinician, never on the patient’s symptoms.'},
+  {k:'The record', t:'The register is built inside the service, from its own records, under its own rules. Identification improves without data leaving the building.'},
+  {k:'The label', t:'Scheduling language only. No diagnosis talk, no urgency, no clinical claims on any patient-facing surface — enforced by linters that fail the build, not by a style guide.'},
+  {k:'The evidence gap', t:'Every invitation runs against a randomised holdout, so the pilot produces the Australian evidence the guideline says does not exist.'},
 ].map((r,i)=>{
-  const y = 470 + i*100;
+  const y = 470 + i*86;
   return hair(150,y,1620)
-    + txt('eyebrow',150,y+28,14,`letter-spacing:.13em;width:${P(300)}${r.hi?'':';color:var(--faint)'}`,r.k)
-    + txt('sub',490,y+20,24,`width:${P(1280)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
-}).join('') + hair(150,470+4*100,1620);
+    + txt('eyebrow',150,y+24,14,`letter-spacing:.13em;width:${P(300)}${r.hi?'':';color:var(--faint)'}`,r.k)
+    + txt('sub',490,y+16,22,`width:${P(1280)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
+}).join('') + hair(150,470+5*86,1620);
 
-// ── 07 the engine ──
-const ENGINE = [
-  {ic:'clip', n:'01', t:'Identify', b:'A register of eligible patients built from the service&rsquo;s own records, inside rules it sets. Nothing leaves the service to build it.'},
-  {ic:'cal', n:'02', t:'Invite', b:'A plain, availability-only message. The patient books with their own clinician, at their own service.'},
-  {ic:'split', n:'03', t:'Count', b:'Attended assessments only, against a randomised holdout. No-shows never count, and neither do bookings we merely touched.'},
-].map((s,i)=>{
-  const x = 150 + i*550;
-  return hair(x,640,510)
-    + icon(s.ic,x,686,30,1.5)
-    + txt('eyebrow',x+468,692,14,'letter-spacing:.14em',s.n)
-    + txt('h reg',x,742,38,`letter-spacing:-.02em;width:${P(470)};line-height:1.18`,s.t)
-    + txt('body',x,822,19,`width:${P(470)}`,s.b);
-}).join('');
-
-// ── 09 contrast ──
-const CONTRAST =
-  hair(150,470,1620)
-  + txt('eyebrow',150,510,14,'letter-spacing:.14em;color:var(--faint)','What programs usually report')
-  + txt('sub',150,562,24,`width:${P(700)};font-weight:300`,'Activity. Messages sent, checks performed, dollars spent, people reached. Every one of those numbers counts something the program did &mdash; and not one of them answers whether it changed anything.')
-  + vline(940,500,262)
-  + txt('eyebrow',1010,510,14,'letter-spacing:.14em','What this reports')
-  + txt('sub',1010,562,24,`width:${P(760)};font-weight:300;color:var(--ink)`,'Incremental attended assessments per 1,000 eligible patients, against a randomised control arm running continuously. If the program did nothing, the number is zero, and the report says zero.')
-  + hair(150,806,1620)
-  + txt('h reg',150,838,34,`letter-spacing:-.02em;width:${P(1620)};color:var(--sage)`,'The 2024 Review found that governments cannot show what is working. This is a literal answer to that: a number that is allowed to come back negative.');
-
-// ── 10 priority reforms ──
-const REFORMS = [
-  {n:'Priority Reform One', t:'Shared decision-making', b:'The partner organisation sets eligibility, message content, and whether the pilot proceeds at all. Written into the agreement rather than left to goodwill.'},
-  {n:'Priority Reform Two', t:'Community-controlled sector', b:'Deployed as the partner&rsquo;s own infrastructure. We never hold the patient relationship, the clinical record, or the Medicare claim.'},
-  {n:'Priority Reform Three', t:'Transforming government', b:'The same measurement is offered to mainstream practices &mdash; where Aboriginal and Torres Strait Islander patients most often are not identified at all.'},
-  {n:'Priority Reform Four', t:'Shared access to data', b:'The partner organisation is the data custodian. Nothing is disclosed, published or shared without its decision.', hi:true},
+// ── 11 community control ──
+const CONTROL = [
+  {k:'Priority Reform Two', t:'Deployed as the partner organisation’s own infrastructure. We never hold the patient relationship, the clinical record, or the Medicare claim.'},
+  {k:'Priority Reform Four', t:'The partner organisation is the data custodian. Nothing is disclosed, published or shared without its decision.', hi:true},
+  {k:'Priority Reform One', t:'The partner sets eligibility, message content, and whether the pilot proceeds at all — written into the agreement rather than left to goodwill.'},
+  {k:'No partner yet', t:'We have no Aboriginal or Torres Strait Islander partner organisation today. Securing one is Phase 0, before any build.'},
 ].map((r,i)=>{
-  const x = 150 + i*420;
-  return hair(x,500,360)
-    + txt('eyebrow',x,538,13,`letter-spacing:.12em;width:${P(360)}${r.hi?'':';color:var(--faint)'}`,r.n)
-    + txt('h reg',x,584,29,`letter-spacing:-.02em;width:${P(350)};line-height:1.2;color:${r.hi?'var(--sage)':'var(--ink)'}`,r.t)
-    + txt('body',x,668,18,`width:${P(350)}`,r.b);
-}).join('');
+  const y = 480 + i*104;
+  return hair(150,y,1620)
+    + txt('eyebrow',150,y+28,14,`letter-spacing:.12em;width:${P(320)}${r.hi?'':';color:var(--faint)'}`,r.k)
+    + txt('sub',510,y+20,23,`width:${P(1260)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
+}).join('') + hair(150,480+4*104,1620);
 
-// ── 11 pilot ──
+// ── 12 the arithmetic ──
+const COST = [
+  {v:'$3,600', l:'one child, one day, in youth detention'},
+  {v:'$1.3m', l:'one child, one year', hi:true},
+  {v:'~900', l:'ADHD assessments the same year would fund', hi:true},
+  {v:'$159,510', l:'one adult, one year, in prison'},
+].map((s,i)=>{
+  const x = 150 + i*420;
+  return (i?vline(x-40,668,200):'')
+    + txt('stat',x,664,62,`width:${P(360)};color:${s.hi?'var(--sage)':'var(--ink)'}`,s.v)
+    + txt('body',x,754,18,`width:${P(340)}`,s.l);
+}).join('')
+ + hair(150,834,1620)
+ + txt('h reg',150,862,32,`letter-spacing:-.02em;width:${P(1620)};color:var(--sage)`,'Detention is the most expensive thing this system does, and the least effective. Assessment is among the cheapest.');
+
+// ── 13 the pilot ──
 const PILOT = [
-  {k:'Phase 0 &middot; months 1&ndash;3', t:'Partnership first. No build, no data and no deployment until an Aboriginal Community Controlled Health Organisation has agreed scope, governance and data terms in writing.', hi:true},
-  {k:'Phase 1 &middot; months 4&ndash;9', t:'Deployment inside partner services. Register, invitation and booking under the partner&rsquo;s rules, with the randomised holdout running from the first day.'},
-  {k:'Phase 2 &middot; months 10&ndash;12', t:'Independent read-out: incremental attended 715 assessments per 1,000 eligible patients, and a plain account of what did not work.'},
-  {k:'Publication', t:'The result is published whether positive or null, with the partner as co-author, and the underlying data remains theirs.'},
+  {k:'Phase 0 · months 1–3', t:'Partnership first. No build, no data and no deployment until an Aboriginal Community Controlled Health Organisation has agreed scope, governance and data terms in writing.', hi:true},
+  {k:'Phase 1 · months 4–9', t:'Identification and assessment pathway inside partner services, under the partner’s rules, with the randomised holdout running from the first day.'},
+  {k:'Phase 2 · months 10–12', t:'Read-out: assessments completed, treatment initiated, treatment retained at three months — and a plain account of what did not work.'},
+  {k:'Publication', t:'Published whether positive or null, with the partner as co-author, and the underlying data remaining theirs.'},
 ].map((r,i)=>{
   const y = 520 + i*96;
   return hair(150,y,1620)
@@ -128,12 +159,12 @@ const PILOT = [
     + txt('sub',510,y+20,23,`width:${P(1260)};font-weight:300;color:${r.hi?'var(--ink)':'var(--muted)'}`,r.t);
 }).join('') + hair(150,520+4*96,1620);
 
-// ── 12 team, with the fourth seat left open ──
+// ── 14 team, fourth seat left open ──
 const TEAM = [
   {ic:'cap', n:'Vikram Ganeshalingam', r:'CO-FOUNDER', b:'Final-year MD candidate, Bond University'},
-  {ic:'steth', n:'Dr Anubhav Saxena', r:'CO-FOUNDER &middot; MBBS, FRACGP', b:'Practising GP &middot; University of Sydney'},
-  {ic:'micro', n:'Stefan Thottunkal', r:'CO-FOUNDER', b:'NOURISH, Stanford Medicine &middot; Health Systems Innovation Lab, Harvard T.H. Chan'},
-  {ic:'seat', n:'Vacant, deliberately', r:'ABORIGINAL AND TORRES STRAIT ISLANDER GOVERNANCE', b:'A condition of this work proceeding &mdash; not an advisory seat added after funding.', hi:true},
+  {ic:'steth', n:'Dr Anubhav Saxena', r:'CO-FOUNDER · MBBS, FRACGP', b:'Practising GP · University of Sydney'},
+  {ic:'micro', n:'Stefan Thottunkal', r:'CO-FOUNDER', b:'NOURISH, Stanford Medicine · Health Systems Innovation Lab, Harvard T.H. Chan'},
+  {ic:'seat', n:'Vacant, deliberately', r:'ABORIGINAL AND TORRES STRAIT ISLANDER GOVERNANCE', b:'A condition of this work proceeding — not an advisory seat added after funding.', hi:true},
 ].map((t,i)=>{
   const x = 150 + i*420;
   return hair(x,520,360)
@@ -143,12 +174,12 @@ const TEAM = [
     + txt('body',x,762,17,`width:${P(350)}`,t.b);
 }).join('');
 
-// ── 13 the ask ──
+// ── 15 the ask ──
 const ASK = [
   {ic:'hands', t:'An introduction to NACCHO or a state affiliate, so that partnership begins with the sector rather than with us.'},
-  {ic:'wallet', t:'Scoped pilot funding, released in two tranches &mdash; partnership first, build second.'},
-  {ic:'db', t:'Access to regional MBS 715 claim data, on Priority Reform Four terms set by the partner.'},
-  {ic:'users', t:'A named contact in the Department to hold us to the measurement standard we are proposing.'},
+  {ic:'wallet', t:'Scoped pilot funding, released in two tranches — partnership first, build second.'},
+  {ic:'db', t:'Access to linked health, education and justice data at regional level, on Priority Reform Four terms set by the partner.'},
+  {ic:'users', t:'A named contact in Health and one in the Attorney-General’s portfolio, because this sits across both.'},
 ].map((a,i)=>{
   const y = 500 + i*92;
   return icon(a.ic,150,y,26,1.5) + txt('sub',210,y-8,26,`width:${P(1200)};color:var(--paper);font-weight:300`,a.t);
@@ -160,16 +191,19 @@ const ASK = [
 let html = fs.readFileSync(S + '/ctg.src.html','utf8');
 html = html
   .replace('/*__FONTS__*/', fs.readFileSync(S + '/fonts-inline.css','utf8'))
-  .replace('<!--SCORE-->', SCORE)
-  .replace('<!--NOT-->', NOT)
-  .replace('<!--S715-->', S715)
+  .replace('<!--PARADOX-->', PARADOX)
   .replace('<!--BARRIERS-->', BARRIERS)
-  .replace('<!--ENGINE-->', ENGINE)
-  .replace('<!--CONTRAST-->', CONTRAST)
-  .replace('<!--REFORMS-->', REFORMS)
+  .replace('<!--PIPELINE-->', PIPELINE)
+  .replace('<!--CTG-->', CTG)
+  .replace('<!--NOTCLAIM-->', NOTCLAIM)
+  .replace('<!--MODEL-->', MODEL)
+  .replace('<!--MAPPING-->', MAPPING)
+  .replace('<!--CONTROL-->', CONTROL)
+  .replace('<!--COST-->', COST)
   .replace('<!--PILOT-->', PILOT)
   .replace('<!--TEAM-->', TEAM)
   .replace('<!--ASK-->', ASK)
+  .replace('__IMG_FINDER__', 'data:image/png;base64,' + fs.readFileSync(S + '/crop-finder.png').toString('base64'))
   .replace('__IMG_CONSOLE__', 'data:image/png;base64,' + fs.readFileSync(S + '/crop-console.png').toString('base64'))
   .replace('__CONTACT__', process.env.CONTACT || 'add contact email before sending');
 

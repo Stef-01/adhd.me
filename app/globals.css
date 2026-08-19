@@ -4364,6 +4364,36 @@ textarea:focus-visible {
 }
 .story-footer-links a:hover { color: var(--s-ink); text-decoration: underline; }
 
+/* Acknowledgement of Country — a full-width band closing every page: the words on a warm sky, an
+   abstract earth-toned horizon along the bottom. */
+.aoc-band {
+  position: relative;
+  width: 100%;
+  padding-top: 34px;
+  background: linear-gradient(180deg, #f6ecdd 0%, #f3ddbe 100%);
+  overflow: hidden;
+}
+.aoc-text {
+  position: relative;
+  z-index: 1;
+  max-width: 60ch;
+  margin: 0 auto;
+  padding: 0 24px 26px;
+  text-align: center;
+  color: #4a3420;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.aoc-art {
+  display: block;
+  width: 100%;
+  height: 84px;
+}
+@media (max-width: 640px) {
+  .aoc-art { height: 60px; }
+  .aoc-text { font-size: 14px; }
+}
+
 /* Tablet ------------------------------------------------------------------ */
 @media (max-width: 900px) {
   .story-wrap { width: min(100% - 44px, 1280px); }
