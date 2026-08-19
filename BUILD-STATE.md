@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O59 (Standing debt 4 — the microphone learns the roster's own languages) — claimed
+> 2026-08-19T15:02Z by loop-0819o.** The debt: `recognition.lang = "en-AU"` is hard-wired, so
+> "kind Hindi speaking" works as a QUERY but a person who wants to SPEAK Hindi to the mic
+> cannot. The debt offers two shapes and this takes the picker. Change: `SPEECH_LANGUAGES` in
+> src/voice/speech.ts — a closed list with a stated basis (English plus exactly the languages
+> the listed GPs themselves declare: Hindi and Urdu today; a test derives the basis from the
+> roster so the list cannot outgrow it); `startSpeech` takes the language tag with en-AU the
+> unchanged default; the listening screen gains a one-line language control inside the
+> disclosure block ("Listening in English — हिन्दी / اردو"), choosing one restarts listening
+> in it; and the HONESTY LINE ships with the feature, not after it: while a non-English
+> language is chosen, one sentence says matching reads English for now, so spoken words are
+> kept and shown but may not order the list — the words still land in the box, the suburb,
+> books and browsing still work, nothing dead-ends. Same disclosure rules, same fallback
+> ladder (language-not-supported copy already exists). Verify: lang threading + list-basis
+> unit pins; voice e2e — switch restarts with the new tag, honesty line present in Hindi and
+> absent in English, en-AU default pin unchanged; qa/ capture + DESIGN-QA entry; full
+> `pnpm verify` green.
+
 > **O58 (founder-supplied: Dr Anusha Saxena's professional background lands on her entry) —
 > DONE 2026-08-19 by session loop-0819n (interactive founder message, not a Routine
 > firing).** The founder pasted her professional background into the build session — the
