@@ -119,6 +119,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O58 (founder-supplied: Dr Anusha Saxena's professional background lands on her entry) —
+> claimed 2026-08-19T13:58Z by session loop-0819n (interactive founder message, not a Routine
+> firing).** The founder pasted her professional background into the build session — the
+> supply her entry has been waiting on since O34 ("the parts that come from her own answers
+> will be added from her own answers rather than written for her"). Change, all of it sourced
+> to that message and nothing invented: `about`/`experience` rewritten from the supplied text
+> in declaration framing; `nswAdhdTrained: true` from "completed an endorsed ADHD prescriber
+> course" (the field's own doc says it is a declaration relayed from the founders — this is
+> that relay, for a NSW GP, in NSW's own "endorsed course" language); Focused Psychological
+> Strategies training and the functional-medicine/nutrition/health-coaching study recorded as
+> UNDERWAY, never as held; `careAreasSometimes` gains `non-medication` at the interest grade
+> (the same rule PR #4 set: interest-level claims from her bio sit at "sometimes" until her
+> interview upgrades them); keywords extended to match. Manner stays EMPTY with mannerPending
+> — an approach paragraph is not a closed-vocabulary manner declaration, and those remain hers
+> to make in the interview. Patient-copy law observed word by word: "prescriber" never renders
+> (the credential line stays "NSW ADHD training"; experience says "endorsed ADHD training
+> course for GPs"). Verify: roster pins green, ranking fixtures re-checked after the sometimes
+> addition, finder profile e2e + capture, full `pnpm verify` green.
+
 > **O57 (Standing debt 1 remainder — the applications console: the declared mix gets its
 > reader) — DONE 2026-08-19 by loop-0819m.** O26 closed the capture side of the mix
 > hero's promise: `desiredMixPercent` rides the application only when the GP actually set it.
