@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O70 (founder-directed goal: every mic failure mode named, fixes brainstormed, speech.ts
+> refactored) — claimed 2026-08-20T01:4xZ by interactive session loop-0819z.** Three parts,
+> one unit. (1) docs/MIC-FAILURE-MODES.md: the exhaustive failure-module inventory — every
+> layer from feature detection through permission, gesture, session, language, integration,
+> environment and DEPLOY (today's live lesson: the founder tested a build the quota had kept
+> O69 out of), each with its trigger, its current handling, and its fix — shipped, candidate,
+> or impossible-with-reason. (2) speech.ts refactored thoroughly but behaviour-identically:
+> the error mapping and cumulative-result rebuild extracted as named pure functions, the
+> onerror monolith split into named steps (deliver-captured / warm-retry / settle), the file
+> organised into labelled sections, every load-bearing RCA comment kept — the 40 unit pins
+> and 14 voice e2e are the definition of 'identical'. (3) One new diagnostic the inventory
+> demands: `speechDebugFacts()` — standalone-mode flag, permission state where queryable,
+> secure context, chosen language, API/mediaDevices presence — appended to the ?debug=1
+> banner so the founder's next bracketed code arrives with the environment that produced it
+> (debt 3's field half finally gets a usable instrument). Verify: all speech pins green plus
+> new facts pins; voice e2e 14/14; full `pnpm verify` green.
+
 > **O69 (the iPhone microphone, advanced: the recovery tap starts warm — founder-directed,
 > interactive session loop-0819y) — DONE 2026-08-19 (6 new unit pins: carry past the double
 > permission failure, adopt without a fresh getUserMedia, 45s expiry with fake timers,
