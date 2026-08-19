@@ -140,4 +140,21 @@ test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena 
   await expect(page.getByText("Dr Anusha Saxena").first()).toBeVisible();
   await expect(page.getByText(/from your words/).first()).toBeVisible();
   await page.screenshot({ path: "qa/matching-o34/02-anusha-profile.png", fullPage: true });
+
+  // O44: her booking path, walked to the handoff. The bar is a fixed overlay, so the evidence
+  // here is a viewport shot — fullPage screenshots drop fixed elements, which is how the last
+  // capture showed a profile with no way to book. And the copy is pinned pronoun-clean: the
+  // screen once said "held by his practice" to a she/her clinician.
+  const bookingBar = page.locator(".profile-footer");
+  await expect(bookingBar).toBeVisible();
+  await page.screenshot({ path: "qa/matching-o34/03-anusha-booking-bar.png" });
+  await bookingBar.getByRole("button", { name: "See available times" }).click();
+  const bookingCopy = await page.locator(".booking-content").textContent();
+  expect(bookingCopy).toContain("held by the practice");
+  expect(bookingCopy).not.toMatch(/\bhis\b/);
+  await expect(page.locator(".bottom-action a.primary-button")).toHaveAttribute(
+    "href",
+    "/go/anusha-saxena?src=finder",
+  );
+  await page.screenshot({ path: "qa/matching-o34/04-anusha-booking-screen.png" });
 });

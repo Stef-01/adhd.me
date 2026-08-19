@@ -154,6 +154,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `ignoreCommand` skipping every non-main build so the quota is spent only on production.
 > Loop firings: O43 is taken — next free number is O44.
 
+> **O44 (founder-reported — Dr Anusha Saxena's booking path, root-caused and repaired) —
+> claimed and DONE 2026-08-19, interactive session (not a loop firing).** The report was "no
+> booking link, formatting differs from the gold standard (Dr Anubhav Saxena), weird map and
+> directions". Findings: the link WAS wired (/go/anusha-saxena → p160121 with utm) but three
+> real defects stood in front of it. (1) The booking screen said "held by HIS practice" — copy
+> hardcoded when Dr Anubhav was the only online-bookable GP, misgendering every clinician
+> added after him; now pronoun-free ("held by the practice"), with the practice-phone path
+> de-gendered too. (2) The profile's booking bar entered by delayed fade as a fixed overlay —
+> a primary CTA behind meaningless motion (adhdme-taste violation), invisible in fullPage
+> evidence captures (Chromium drops fixed elements) and missable live; now static. (3) The
+> maps query lacked a country qualifier; now "practice, suburb, Australia". Pinned in the O34
+> e2e: booking bar visible, copy contains "held by the practice" and no bare "his", href
+> exact, viewport-shot evidence (qa/matching-o34/03-04) so the bar is IN the record. Gate:
+> pnpm verify green, matching-verification + finder-flow 18/18. Next free number is O45.
+
 > **O41 (founder-directed — the counsel check visible on-site) — claimed and DONE 2026-08-19,
 > interactive session (not a loop firing).** `/privacy/counsel-review` explains the draft
 > banners in the product's own register: what counsel has been asked to check (patient-safe

@@ -928,7 +928,7 @@ export function CareFinder() {
                 <p>
                   <a
                     className="profile-directions"
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}`)}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}, Australia`)}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -956,12 +956,12 @@ export function CareFinder() {
               </section>
             </div>
 
-            <motion.div
-              className="profile-footer"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.16, duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-            >
+            {/* O44: no entrance animation on the booking bar. It is the screen's primary action
+                and a fixed overlay: a delayed fade means a person who arrives and scrolls in the
+                first third of a second sees a profile with no way to book — which is exactly how
+                the "no booking link" report read — and the animation carried no meaning
+                (adhdme-taste: motion must carry meaning or not exist). */}
+            <div className="profile-footer">
               <div>
                 <span>{clinician.booking.via === "healthengine" ? "Appointments" : "Booking"}</span>
                 <strong>
@@ -973,7 +973,7 @@ export function CareFinder() {
               <Pressable className="primary-button" type="button" onClick={() => setStage("booking")}>
                 {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
               </Pressable>
-            </motion.div>
+            </div>
           </MotionScreen>
         )}
 
@@ -1007,8 +1007,11 @@ export function CareFinder() {
 
               {clinician.booking.via === "healthengine" ? (
                 <>
+                  {/* O44: "his practice" was written when Dr Anubhav Saxena was the only
+                      online-bookable GP, and misgendered every clinician added after him.
+                      The practice holds the times; no pronoun is needed to say so. */}
                   <p>
-                    {clinician.shortName}’s live appointment times are held by his practice on
+                    {clinician.shortName}’s live appointment times are held by the practice on
                     Healthengine. We send you straight there, so the time you pick is a time that
                     is genuinely open.
                   </p>
@@ -1021,7 +1024,7 @@ export function CareFinder() {
                 <>
                   <p>{clinician.booking.note}</p>
                   <p className="booking-note">
-                    {clinician.practice} takes his appointments by phone. Their number and hours
+                    {clinician.practice} takes these appointments by phone. Their number and hours
                     are on the practice page.
                   </p>
                 </>
