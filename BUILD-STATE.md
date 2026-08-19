@@ -120,7 +120,9 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O67 (motion queue — the chosen GP is visibly the same object: layoutId row→profile) —
-> claimed 2026-08-19T23:04Z by loop-0819w.** The queue's first unshipped item: tapping a
+> DONE 2026-08-19 by loop-0819w (finder-flow 10/10 incl. the wiring pin; mobile-fit 7/7;
+> the mid-flight capture shows the frame genuinely mid-morph — thumb rounding still
+> interpolating — in qa/motion-o67/).** The queue's first unshipped item: tapping a
 > result row currently swaps screens and the portrait re-enters as a NEW object (opacity +
 > scale in), so the one continuity that matters — this person you chose is this person you
 > are now reading — is asserted by the name alone. Change: the row's portrait slot and the

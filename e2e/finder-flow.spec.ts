@@ -138,6 +138,31 @@ test("no screen the collapse removed is still reachable", async ({ page }) => {
   }
 });
 
+test("the chosen GP's portrait is one object from row to profile (O67)", async ({ page }) => {
+  await intoResults(page);
+  const firstRow = page.locator(".clinician-row").first();
+  const rowAnchor = firstRow.locator(".row-portrait-anchor");
+  await expect(rowAnchor).toBeVisible();
+  const chosenId = await rowAnchor.getAttribute("data-portrait-of");
+  expect(chosenId).toBeTruthy();
+
+  await firstRow.click();
+  // Mid-flight frame for the design record: the results screen's exit runs ~260ms under
+  // mode="wait", so the shared element's travel starts after it — aim ~150ms into the 420ms
+  // tween. Best-effort timing; the settled shot below is the hard record.
+  await page.waitForTimeout(410);
+  await page.screenshot({ path: "qa/motion-o67/portrait-mid-flight.png", fullPage: false });
+
+  // THE WIRING CONTRACT the tween hangs off: the profile's portrait frame declares itself
+  // the same object (same id) the tapped row declared. If either side loses its layoutId
+  // pairing attribute, this fails before anybody has to notice the motion is gone.
+  const profilePortrait = page.locator(".profile-portrait");
+  await expect(profilePortrait).toBeVisible();
+  await expect(profilePortrait).toHaveAttribute("data-portrait-of", chosenId!);
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: "qa/motion-o67/portrait-settled.png", fullPage: false });
+});
+
 test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
   await page.goto("/finder");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();

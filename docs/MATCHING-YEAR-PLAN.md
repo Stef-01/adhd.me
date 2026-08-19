@@ -171,7 +171,9 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
 - Motion innovations queued, hardest constraint first (`prefers-reduced-motion` always fully
   honoured — every effect has a static equal): shared-layout transitions between the finder's
   screens (`layoutId` from result row → profile, so the chosen GP visibly *is* the same
-  object); the results list re-sorting with `layout` animations when a clarifier answer
+  object) — **SHIPPED, O67 (2026-08-19)**: the row's portrait slot and the profile frame
+  share a per-clinician layoutId, the portrait's competing enter tween removed, wiring
+  pinned in e2e via data-portrait-of, mid-flight morph captured in qa/motion-o67/; the results list re-sorting with `layout` animations when a clarifier answer
   reorders it (the order changing is the product's whole argument — show it) — **SHIPPED,
   O52 (2026-08-19)**; the match
   evidence weights drawing in as the score line settles; scroll-linked reveal on the story

@@ -445,3 +445,23 @@ element shot and 390px). Taste-skill pass applied.
   answering, the same question cannot recur (the facet is now asked), pinned in e2e.
 - [x] Touch floor held (44px padded hit area on quiet type); no new colour spent; fold
   discipline unchanged — the line rides inside the existing fit block.
+
+## O67 — the chosen GP is one object, row to profile (2026-08-19)
+
+Captures: qa/motion-o67/ (portrait-mid-flight.png — the shared element genuinely mid-morph,
+thumb rounding still interpolating; portrait-settled.png — landed in the hero frame).
+Taste-skill pass applied.
+
+- [x] Motion carries the one continuity that matters: the person you tapped IS the person
+  you are reading. The row's portrait slot and the profile's frame share a per-clinician
+  layoutId, so the image travels as one object instead of a new one fading in.
+- [x] One story per object: the portrait's old opacity/scale enter tween is REMOVED — a
+  layout morph plus an enter pop on the same element is two stories about one thing.
+  Everything below the portrait keeps the screen's own enter.
+- [x] The static equal is automatic: MotionConfig reducedMotion="user" disables layout
+  animations, leaving today's instant swap — the same truth without the movement.
+- [x] The wiring is pinned, not hoped: both elements carry data-portrait-of, and the e2e
+  asserts the profile frame declares the same id the tapped row declared — if either side
+  loses its pairing, CI fails before anybody notices the motion is quietly gone.
+- [x] No layout shift bought: the row anchor is exactly the 72px slot the portrait already
+  occupied (mobile-fit 7/7 surfaces green), no new colour, no touch-target change.

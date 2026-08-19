@@ -970,6 +970,14 @@ textarea:focus-visible {
   object-fit: cover;
 }
 
+/* O67: the shared-layout anchor around the row portrait — a measurable box of its own so
+   layoutId can pair it with the profile's frame. Exactly the slot's size, nothing painted. */
+.row-portrait-anchor {
+  display: block;
+  width: 72px;
+  height: 72px;
+}
+
 .clinician-row > span {
   min-width: 0;
 }

@@ -936,7 +936,17 @@ export function CareFinder() {
                     transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26, layout: { duration: 0.34, ease: [0.22, 1, 0.36, 1], delay: 0 } }}
                     whileTap={reducedMotion ? undefined : { scale: 0.99 }}
                   >
-                    <ClinicianPortrait clinician={item} variant="thumb" />
+                    {/* O67: the same layoutId as the profile's portrait frame, so the chosen
+                        GP's image travels from this slot into the hero as ONE object — the
+                        continuity is shown, not asserted by the repeated name. The wrapper
+                        exists because layoutId needs a measurable box of its own. */}
+                    <motion.span
+                      className="row-portrait-anchor"
+                      layoutId={`gp-portrait-${item.id}`}
+                      data-portrait-of={item.id}
+                    >
+                      <ClinicianPortrait clinician={item} variant="thumb" />
+                    </motion.span>
                     <span>
                       <strong>{item.name}</strong>
                       <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
@@ -974,11 +984,17 @@ export function CareFinder() {
               <button className="text-action" type="button" onClick={() => setStage("results")}>All results</button>
             </header>
 
+            {/* O67: shares its layoutId with the chosen row's portrait slot, so this frame
+                is the row's image ARRIVING rather than a new object fading in — which is why
+                the old opacity/scale pop is gone from this element: a layout morph plus an
+                enter tween on one thing is two stories about one object. Everything below
+                the portrait keeps the screen's own enter. Under reduced motion the layout
+                animation is disabled by MotionConfig and this is an instant swap, as now. */}
             <motion.div
               className="profile-portrait"
-              initial={{ opacity: 0, scale: 0.985 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.08, duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              layoutId={`gp-portrait-${clinician.id}`}
+              data-portrait-of={clinician.id}
+              transition={{ layout: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } }}
             >
               <ClinicianPortrait clinician={clinician} variant="fill" />
             </motion.div>
