@@ -343,6 +343,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
   },
   {
+    module: "src/matching/corpus.ts",
+    operatorCopy: [],
+    notCopy:
+      "W231 is the standing reach corpus: synthetic first-person SEARCH PHRASINGS with pinned expectations, consumed only by its own test as the year plan's per-facet CI gate. Nothing in it renders anywhere, to anybody — the strings are test fixtures in the W60 posture, not authored copy — and the file's own G7 section pins symptom descriptions as intentional NON-reaches, which is the boundary carried as data rather than as a comment.",
+  },
+  {
     module: "src/onboarding/reach-report.ts",
     operatorCopy: [],
     notCopy:

@@ -120,7 +120,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O47 (Q1 item 1, second half — the standing reach corpus with per-facet CI gates) —
-> claimed 2026-08-19T03:46Z by loop-0819d.** The plan's corpus-at-scale item, built as
+> claimed 2026-08-19T03:46Z by loop-0819d. DONE 2026-08-19.** The plan's corpus-at-scale item, built as
 > infrastructure plus the first tranche: `src/matching/corpus.ts` (W231) holds first-person
 > requests as DATA — each entry pins the facets it MUST reach, may pin facets it must NEVER
 > reach (the false-positive discipline O25/O45 demand), and may name facets it is ABOUT but
@@ -132,6 +132,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (search phrasings only — no clinical content, no gate crossed); growth to ~500 continues
 > across Q1 with founder-authored entries welcome in the same format. Verify: every hard pin
 > green, every `never` pin green, floors match measured reality, `pnpm verify` green.
+> SHIPPED with the measurement loop run honestly: entries were authored first, MEASURED, and
+> retagged to reality — two aspirations found already heard were promoted on the spot; five
+> entries the G7 boundary forbids (symptom descriptions — "my brain has never let me finish
+> anything" is DSM inattention text, per the law beside the assessment cues) became `never`
+> pins so the boundary is data; language expectations were removed with the reason stated
+> (languageNeeds reads the ROSTER, not the lexicon — a readNeeds corpus would assert the
+> wrong layer). Floors are measured heard-COUNTS (a one-entry facet cannot pass on rounding);
+> a met aspiration FAILS the build until promoted in the same commit, which makes the plan's
+> golden-file loop mechanical. 14 open aspirations = the lexicon to-do list. Gate: corpus
+> suite 84/84, W200 declaration + loader, full `pnpm verify` green (206 files, 2900 tests,
+> audit gate PASS).
+
 
 > **O45 (Q1 item 1's deliverable — the collapse-aware rule for one-token cues) — claimed
 > 2026-08-19T02:46Z by loop-0819c as O44; renumbered O45 on rebase when PR #13's title took

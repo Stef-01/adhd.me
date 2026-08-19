@@ -38,7 +38,13 @@ non-rankings.
    itself up: the cardiac-safety sentence was "reached" only by "what is going on" firing on
    "…not GOING to…", and now reaches honestly through new structured-facet heart cues. The
    REMAINING Q1 item-1 work is the corpus at scale (~500 requests, per-facet reach percentage
-   in CI).
+   in CI). **The corpus infrastructure and first tranche are DONE — O47, 2026-08-19**
+   (`src/matching/corpus.ts`, W231): ~100 requests as data, each pinning what it MUST reach,
+   MUST NEVER reach (incl. the G7 rule that symptom descriptions are intentional non-reaches,
+   carried as data), or ASPIRES to (the measured gap list — 14 entries, the lexicon's
+   to-do list); per-facet heard-counts gated against measured floors, and a met aspiration
+   fails the build until promoted in the same commit. Growth to ~500 continues across Q1 in
+   the same format; founder-authored entries welcome.
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
 3. **Morphology upgrade.** Replace the suffix-stemmer's worst misses (found by the corpus)
