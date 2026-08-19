@@ -44,7 +44,12 @@ non-rankings.
    carried as data), or ASPIRES to (the measured gap list — 14 entries, the lexicon's
    to-do list); per-facet heard-counts gated against measured floors, and a met aspiration
    fails the build until promoted in the same commit. Growth to ~500 continues across Q1 in
-   the same format; founder-authored entries welcome.
+   the same format; founder-authored entries welcome. **First aspiration sweep DONE — O49,
+   2026-08-19**: 16 entries promoted after G7-reviewed cue widening across nine facets
+   (want-phrasings only), floors raised in the same commit, one over-loose cue removed after
+   the corpus caught it shadowing another facet's cue inside its claimed span. Three attuned
+   aspirations stay open deliberately — their phrasings read distress rather than a want, and
+   authoring cues for them needs a founder-side judgment call.
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
 3. **Morphology upgrade.** Replace the suffix-stemmer's worst misses (found by the corpus)

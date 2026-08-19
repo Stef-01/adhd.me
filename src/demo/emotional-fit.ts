@@ -96,7 +96,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O30 psychographics: the plain-language ask is a values statement about how somebody
       // wants medicine spoken to them. Every cue keeps two content tokens (the O25 law);
       // "without"/"no" survive stripping because negations are never stopwords.
-      "plain language", "plain english", "simple terms", "without the jargon", "no jargon"],
+      "plain language", "plain english", "simple terms", "without the jargon", "no jargon",
+      // O49 (corpus aspirations): late diagnosis as a sense-making ask, and the ask for
+      // mechanism over reassurance. Both keep two content tokens.
+      "head around", "want the science"],
   },
   motivating: {
     label: "Strengths-focused",
@@ -108,7 +111,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O30 psychographics: neurodiversity-affirming language is how a large cohort states
       // the strengths-not-deficits value. "neuroaffirming" is a single WORD (precise, so
       // allowed); the multi-word cues keep two content tokens.
-      "neurodiversity affirming", "neuroaffirming", "neurodivergent friendly"],
+      "neurodiversity affirming", "neuroaffirming", "neurodivergent friendly",
+      // O49: "a plan I can actually act on" — the verb kept, per this list's own header.
+      "plan i can act"],
   },
   unhurried: {
     label: "Unhurried first appointment",
@@ -150,7 +155,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // either spelling, negated or not. "non-judgemental" tokenises to "non judgemental", so
       // the bare adjective covers the hyphenated ask too; a complaint ("she was so judgemental")
       // is the same preference, which is the reading this file always takes.
-      "judgemental", "judgmental"],
+      "judgemental", "judgmental",
+      // O49: two corpus asks. "no lectures" is the refusal of moralising; "tell the truth" is
+      // what being unjudged is FOR. Both two content tokens ("no" is a negator, never dropped).
+      "no lectures", "tell the truth"],
   },
   collaborative: {
     label: "Explains and decides with you",
@@ -169,6 +177,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // want to be dictated to) and cannot be reached by "time off work", the false positive W221
       // removed. Kept two-token deliberately, for the same reason W221 dropped the one-token cues.
       "rather than dictating", "rather than telling me", "not just told what",
+      // O49: the corpus asks in their own words. [decision, made] and [say, plan] both keep
+      // two content tokens; W223's dropped one-token [say] stays dropped.
+      "decisions made with me", "say in the plan",
       ],
   },
   culturally_attuned: {
@@ -186,7 +197,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O30 psychographics: faith named as part of the appointment is the same values ask as
       // family-in-the-room. Verb+noun pairs so nothing collapses ("my faith" alone would
       // strip to [faith] and claim "faith in doctors").
-      "respects my faith", "respect my faith", "faith is important", "respects my religion"],
+      "respects my faith", "respect my faith", "faith is important", "respects my religion",
+      // O49: family presence stated as a fact rather than a fear — "family will be involved".
+      "family involved"],
   },
   structured: {
     label: "A structured, measured approach",
@@ -201,7 +214,12 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // "up" is dropped as a stopword, and [follow] would also fire on "I can't follow a
       // conversation" — reading an inattention SYMPTOM into a facet, the G7 line. These phrasings
       // are about wanting continuity of CARE and each survives as two content tokens.
-      "not just leave me", "leave me to figure", "stay on top of", "keep an eye", "not one and done", "ongoing care",
+      "not just leave me", "leave me to figure", "stay on top of", "keep an eye", "ongoing care",
+      // O49 REMOVED "not one and done": it survived as [not, done] with two insertions allowed,
+      // which matched "will NOT be judGED for the coping I have DONE" — and by claiming that
+      // span it SHADOWED the non_judgmental cue sitting inside it ("judged"), the corpus's
+      // first shadowing find. Its recall is carried by "ongoing care", "keep an eye",
+      // "stay on top of" and "not just leave me", the same trade W223 made for [take, time].
       // O45: the cardiac-safety ask, heard as itself. "I need to know it's not going to hurt my
       // heart" was previously COUNTED as reached because the collapsed cue "what is going on"
       // fired on "…not GOING to…" — a wrong facet propping up the reach number. The real ask is

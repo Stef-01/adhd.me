@@ -127,9 +127,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > with cues that survive as two content tokens or pass the O45 collapse rule by construction,
 > the heard ones PROMOTED with floors raised in the same commit (the corpus gate makes doing
 > otherwise a build failure), and the genuinely-unclear ones left OPEN with the hesitation
-> recorded — an aspiration is allowed to stay an aspiration. Verify: corpus gate green with
-> raised floors; no reach ratchet loosened anywhere; every prior pin green; `pnpm verify`
-> green.
+> recorded — an aspiration is allowed to stay an aspiration. DONE 2026-08-19. SIXTEEN
+> promotions from cue widening across nine facets, every addition a want-phrasing surviving as
+> two content tokens or O45-collapse-safe by construction ("diagnose me" and "get checked"
+> reviewed INTO the O25 frozen list — the rule that made them safe to add is the rule that
+> guards them). One removal: "not one and done" survived as [not, done] with two insertions and
+> the corpus caught it SHADOWING non_judgmental's own "judged" cue inside its claimed span —
+> the first shadowing find, its recall carried by four sibling cues (the W223 trade). Floors
+> raised on eleven facets in the same commit, as the gate demands. THREE ATTUNED ASPIRATIONS
+> LEFT OPEN with the hesitation recorded: "I cry in the car", "seen women like me before" and
+> "perform being fine" read closer to distress than to a stated want, and the steadying
+> precedent ("overwhelmed" as a cue) does not obviously stretch to them — a cue authored there
+> is a judgment about where preference-reading ends, which is the founder's line to draw, not
+> the loop's. Gate: corpus 84/84 with raised floors, reach 78/78 incl. re-frozen O25 list,
+> full `pnpm verify` green (206 files, 2916 tests, audit gate PASS).
 
 > **O47 (Q1 item 1, second half — the standing reach corpus with per-facet CI gates) —
 > claimed 2026-08-19T03:46Z by loop-0819d. DONE 2026-08-19.** The plan's corpus-at-scale item, built as

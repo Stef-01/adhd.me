@@ -128,6 +128,11 @@ const LEXICON: readonly Entry[] = [
   // ── ADHD ──────────────────────────────────────────────────────────────────────────────────
   care("adhd-assessment", "ADHD assessment", 12, [
     "adhd", "assessment", "assessed", "diagnosis", "diagnosed", "attention",
+    // O49 (corpus aspirations): "diagnose me" collapses to [diagnose] ("me" is a stopword), so
+    // the O45 rule demands the authored pair — "can a GP diagnose me" fires, a stray
+    // "diagnose" in an unrelated clause does not. "get checked" collapses to [check] and is
+    // safe the same way; its raw pair also hears "getting checked" through the stemmer.
+    "diagnose me", "get checked",
   ]),
   // ── G7 BOUNDARY — DO NOT ADD SYMPTOM DESCRIPTIONS TO ANY CARE FACET ──────────────────────────
   // A prior probe read "my brain has never let me finish anything" as a recall gap and closed it by
@@ -141,12 +146,18 @@ const LEXICON: readonly Entry[] = [
   // for what a reader WANTS or SAYS THEY HAVE, never for what the finder would have to deduce.
   care("child-adolescent-adhd", "Children and adolescents", 26, [
     "my son", "my daughter", "my child", "my kid", "teenager", "adolescent", "children", "school report",
+    // O49: the ask phrased from the clinician side — "someone who sees kids". Both verb forms;
+    // bare "kids" is refused because stem("kidding") is "kid" and "no kidding" is not a child.
+    "sees kids", "see kids",
   ]),
   care("titration", "Titration and dose review", 28, [
     "titration", "dose", "wearing off", "wears off", "side effects", "not working", "adjust the dose",
   ]),
   care("shared-care", "Shared care with a psychiatrist", 18, [
     "shared care", "psychiatrist", "already diagnosed", "existing prescription",
+    // O49: the paediatric half of shared care, both spellings — the corpus ask names the
+    // clinician to be shared WITH, exactly like "psychiatrist" above.
+    "paediatrician", "pediatrician",
   ]),
   // ── Depression & anxiety ────────────────────────────────────────────────────────────────────
   care("depression", "Depression and low mood", 24, [
@@ -164,9 +175,13 @@ const LEXICON: readonly Entry[] = [
     "trauma", "trauma history", "difficult childhood", "boundaries", "permission", "ptsd", "cptsd",
   ]),
   care("complex-mental-health", "Bipolar and complex mental health", 26, ["bipolar", "complex", "psychosis", "schizophrenia"]),
-  care("autism-adhd", "Autism and neurodevelopmental", 26, ["autism", "autistic", "audhd", "sensory"]),
+  care("autism-adhd", "Autism and neurodevelopmental", 26, ["autism", "autistic", "audhd", "sensory",
+    // O49: the self-identification word, single and precise (the "neuroaffirming" precedent).
+    "neurodivergent"]),
   care("substance-history", "Substance history held safely", 26, [
     "drink", "drinking", "alcohol", "cannabis", "substance", "non-stimulant",
+    // O49: the word people actually use. Two content tokens, so a garden stays a garden.
+    "smoke weed",
   ]),
   care("emotional-regulation", "Emotional regulation", 24, [
     "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
@@ -177,6 +192,9 @@ const LEXICON: readonly Entry[] = [
   ]),
   care("non-medication", "Non-medication supports", 26, [
     "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits",
+    // O49: the script-shaped refusal of scripts. Negators are never stopwords, so both keep
+    // two tokens; O40 does not suppress them because the negator is inside the cue's own words.
+    "not a script", "without a script",
   ]),
 
   /**

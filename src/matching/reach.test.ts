@@ -302,8 +302,11 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
    * The list may shrink as the Q1 corpus re-authors cues; it must never grow silently.
    */
   const REVIEWED_SINGLE_TOKEN_PHRASES = [
-    "an excuse", "at ease", "been heard", "believe me", "by phone", "figure out",
-    "get a word in", "honest about", "hurry me", "involve me", "just lazy", "listened to",
+    // "diagnose me" and "get checked" are O49 additions, reviewed under the O45 collapse rule:
+    // each ships as one token BUT can only fire beside its authored adjacent pair, so a stray
+    // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
+    "an excuse", "at ease", "been heard", "believe me", "by phone", "diagnose me", "figure out",
+    "get a word in", "get checked", "honest about", "hurry me", "involve me", "just lazy", "listened to",
     "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
     "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
     "name it", "on a schedule", "on edge", "out the door", "over the phone", "really listen",

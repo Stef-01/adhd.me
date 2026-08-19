@@ -44,13 +44,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I need an ADHD assessment", reaches: ["care:adhd-assessment"] },
   { text: "I want to get assessed properly, start to finish", reaches: ["care:adhd-assessment"] },
   { text: "I think I have ADHD and I want to find out for real", reaches: ["care:adhd-assessment"] },
-  { text: "can a GP actually diagnose me or do I need a psychiatrist", aspires: ["care:adhd-assessment"] },
-  { text: "I have been putting off getting checked for years", aspires: ["care:adhd-assessment"] },
+  { text: "can a GP actually diagnose me or do I need a psychiatrist", reaches: ["care:adhd-assessment"] },
+  { text: "I have been putting off getting checked for years", reaches: ["care:adhd-assessment"] },
 
   // ── care:child-adolescent-adhd ───────────────────────────────────────────────────────────
   { text: "this is for my teenager", reaches: ["care:child-adolescent-adhd"] },
   { text: "my daughter is twelve and school keeps calling", reaches: ["care:child-adolescent-adhd"] },
-  { text: "looking for someone who sees kids", aspires: ["care:child-adolescent-adhd"] },
+  { text: "looking for someone who sees kids", reaches: ["care:child-adolescent-adhd"] },
   { text: "my son cannot sit through a class", reaches: ["care:child-adolescent-adhd"] },
 
   // ── care:titration ───────────────────────────────────────────────────────────────────────
@@ -63,7 +63,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:shared-care ─────────────────────────────────────────────────────────────────────
   { text: "shared care with my psychiatrist", reaches: ["care:shared-care"] },
   { text: "my psychiatrist wants my GP to take over the scripts", reaches: ["care:shared-care"] },
-  { text: "a GP who will work with my paediatrician", aspires: ["care:shared-care"] },
+  { text: "a GP who will work with my paediatrician", reaches: ["care:shared-care"] },
 
   // ── care:depression ──────────────────────────────────────────────────────────────────────
   { text: "low mood most days", reaches: ["care:depression"] },
@@ -86,11 +86,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:autism-adhd ─────────────────────────────────────────────────────────────────────
   { text: "I think I am AuDHD", reaches: ["care:autism-adhd"] },
   { text: "autistic and probably ADHD too", reaches: ["care:autism-adhd"] },
-  { text: "neurodivergent, the whole picture, not just attention", aspires: ["care:autism-adhd"] },
+  { text: "neurodivergent, the whole picture, not just attention", reaches: ["care:autism-adhd"] },
 
   // ── care:substance-history ───────────────────────────────────────────────────────────────
   { text: "somewhere I can be honest about how much I drink", reaches: ["care:substance-history"] },
-  { text: "I smoke weed most nights and I need to be able to say that", aspires: ["care:substance-history"] },
+  { text: "I smoke weed most nights and I need to be able to say that", reaches: ["care:substance-history"] },
   { text: "honest about drinking", reaches: ["care:substance-history"] },
 
   // ── care:emotional-regulation ────────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── care:non-medication ──────────────────────────────────────────────────────────────────
   { text: "not just medication", reaches: ["care:non-medication"] },
-  { text: "I want options that are not a script", aspires: ["care:non-medication"] },
+  { text: "I want options that are not a script", reaches: ["care:non-medication"] },
   { text: "coaching and habits first, tablets later if ever", reaches: ["care:non-medication"] },
 
   // ── manner:attuned ───────────────────────────────────────────────────────────────────────
@@ -121,7 +121,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "help me join the dots on thirty years of this", reaches: ["manner:sense_making"] },
 
   // ── manner:motivating ────────────────────────────────────────────────────────────────────
-  { text: "a plan I can actually act on, built around what already works", aspires: ["manner:motivating"] },
+  { text: "a plan I can actually act on, built around what already works", reaches: ["manner:motivating"] },
   { text: "someone strengths focused, not deficit focused", reaches: ["manner:motivating"] },
   { text: "a doctor who is neurodiversity affirming", reaches: ["manner:motivating"] },
 
@@ -132,17 +132,17 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my GP is next door to the chemist", never: ["manner:unhurried"] },
 
   // ── manner:non_judgmental ────────────────────────────────────────────────────────────────
-  { text: "no lectures, I have heard them all", aspires: ["manner:non_judgmental"] },
-  { text: "somewhere I will not be judged for the coping I have done", aspires: ["manner:non_judgmental"] },
-  { text: "I need to be able to tell the truth without the face", aspires: ["manner:non_judgmental"] },
+  { text: "no lectures, I have heard them all", reaches: ["manner:non_judgmental"] },
+  { text: "somewhere I will not be judged for the coping I have done", reaches: ["manner:non_judgmental"] },
+  { text: "I need to be able to tell the truth without the face", reaches: ["manner:non_judgmental"] },
 
   // ── manner:collaborative ─────────────────────────────────────────────────────────────────
-  { text: "decisions made with me, not for me", aspires: ["manner:collaborative"] },
-  { text: "I want a say in the plan", aspires: ["manner:collaborative"] },
+  { text: "decisions made with me, not for me", reaches: ["manner:collaborative"] },
+  { text: "I want a say in the plan", reaches: ["manner:collaborative"] },
 
   // ── manner:culturally_attuned ────────────────────────────────────────────────────────────
   { text: "my mum thinks this is nonsense and she'll be in the room", reaches: ["manner:culturally_attuned"] },
-  { text: "family will be involved whether anyone likes it or not", aspires: ["manner:culturally_attuned"] },
+  { text: "family will be involved whether anyone likes it or not", reaches: ["manner:culturally_attuned"] },
   { text: "someone who respects my faith", reaches: ["manner:culturally_attuned"] },
   { text: "my rooms are above the pharmacy", never: ["manner:culturally_attuned"] },
 
@@ -194,8 +194,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the house is chaos and so is my head", never: ["care:adhd-assessment"] },
   { text: "I cry in the car after every appointment", aspires: ["manner:attuned"] },
   { text: "I need someone who has seen women like me before", aspires: ["manner:attuned"] },
-  { text: "diagnosed at forty and still getting my head around it", aspires: ["manner:sense_making"] },
-  { text: "I want the science, not the pep talk", aspires: ["manner:sense_making"] },
+  { text: "diagnosed at forty and still getting my head around it", reaches: ["manner:sense_making"] },
+  { text: "I want the science, not the pep talk", reaches: ["manner:sense_making"] },
   { text: "appointments where I do not have to perform being fine", aspires: ["manner:attuned"] },
 ];
 
@@ -226,25 +226,27 @@ export function corpusReachByFacet(
  * percentage so a one-entry facet cannot pass on rounding.
  */
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
-  // Measured 2026-08-19 (O47), run against the tree at the commit introducing this file.
-  "care:adhd-assessment": 5,
+  // Measured 2026-08-19 (O47); RAISED 2026-08-19 (O49) after the first aspiration sweep
+  // promoted sixteen entries the widened lexicon now hears. Three attuned aspirations stay
+  // open on purpose — see the sweep's ledger row for the hesitations.
+  "care:adhd-assessment": 7,
   "care:anxiety": 3,
-  "care:autism-adhd": 2,
-  "care:child-adolescent-adhd": 3,
+  "care:autism-adhd": 3,
+  "care:child-adolescent-adhd": 4,
   "care:complex-mental-health": 2,
   "care:depression": 3,
   "care:emotional-regulation": 4,
-  "care:non-medication": 2,
-  "care:shared-care": 2,
-  "care:substance-history": 2,
+  "care:non-medication": 3,
+  "care:shared-care": 3,
+  "care:substance-history": 3,
   "care:titration": 5,
   "care:trauma-informed": 2,
   "manner:attuned": 3,
-  "manner:collaborative": 0,
-  "manner:culturally_attuned": 2,
-  "manner:motivating": 2,
-  "manner:non_judgmental": 1,
-  "manner:sense_making": 3,
+  "manner:collaborative": 2,
+  "manner:culturally_attuned": 3,
+  "manner:motivating": 3,
+  "manner:non_judgmental": 4,
+  "manner:sense_making": 5,
   "manner:steadying": 4,
   "manner:structured": 4,
   "manner:unhurried": 4,
