@@ -13,7 +13,9 @@ export const dynamic = "force-dynamic";
 // route, and during that swap the inherited layout title can be momentarily absent —
 // axe caught it as a document-title violation (WCAG 2.4.2). A patient-facing page
 // reached from an SMS deserves its own title regardless.
-export const metadata = { title: "Your appointment — ADHD.ME" };
+// noindex, not just robots.txt-disallowed (O19): a tokened page in a search index is a leaked
+// link even after the token expires.
+export const metadata = { title: "Your appointment — ADHD.ME", robots: { index: false, follow: false } };
 
 function Panel({ heading, children }: { heading: string; children: React.ReactNode }) {
   return (

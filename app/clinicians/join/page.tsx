@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ClinicianJoinForm } from "./join-form";
+import { JoinExperience } from "./join-experience";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/clinicians/join" },
   title: "Join the directory",
   description:
     "For GPs who have completed the NSW training to carry ADHD care. Apply to be listed in the ADHD.ME directory.",
@@ -11,19 +11,9 @@ export const metadata: Metadata = {
 export default function JoinPage() {
   return (
     <main className="join-page">
-      <div className="join-wrap">
-        <header className="join-header">
-          <Link href="/clinicians" className="join-back">For clinicians</Link>
-          <p className="eyebrow">Join the directory</p>
-          <h1>Be findable by the people already looking.</h1>
-          <p className="join-lead">
-            For GPs who have completed the NSW training. Five minutes, and a person reads every
-            application.
-          </p>
-        </header>
-
-        <ClinicianJoinForm />
-      </div>
+      {/* O26: hero and form share one owner, so the mix set above actually reaches the
+          application below — see join-experience.tsx. */}
+      <JoinExperience />
     </main>
   );
 }

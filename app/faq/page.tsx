@@ -7,6 +7,7 @@ import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/faq" },
   title: "Questions",
   description:
     "What ADHD.ME is, what it costs, where it operates, and how the order of GPs is decided — answered plainly.",

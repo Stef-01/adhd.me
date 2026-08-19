@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
-import { stem } from "./read";
+import { stem, tokenise } from "./read";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
 /**
@@ -287,5 +287,117 @@ describe("O17 every care area is reachable by its plain name", () => {
 
   it.each(CARE_PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
     expect(readNeeds(phrase).map((n) => facetKey(n.facet))).toContain(key);
+  });
+});
+
+describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
+  /**
+   * THE DEFECT THIS PINS. Stopword stripping can collapse an authored phrase to a single
+   * token, so the shipped matcher is looser than the phrase its author reviewed:
+   * "in the room with me" collapsed to [room], and "my rooms are above the pharmacy" claimed
+   * `manner:culturally_attuned` (found by the W227 reach-gap feed, O22). Many collapses are
+   * intended — "my son" IS the word "son", "by phone" IS the word "phone" — so the set is
+   * FROZEN rather than banned: every entry below was reviewed as fine-as-a-word, and a new
+   * multi-word cue that collapses fails this test until somebody reviews the word it really is.
+   * The list may shrink as the Q1 corpus re-authors cues; it must never grow silently.
+   */
+  const REVIEWED_SINGLE_TOKEN_PHRASES = [
+    "an excuse", "at ease", "been heard", "believe me", "by phone", "figure out",
+    "get a word in", "honest about", "hurry me", "involve me", "just lazy", "listened to",
+    "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
+    "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
+    "name it", "on a schedule", "on edge", "out the door", "over the phone", "really listen",
+    "understand what", "what is going on",
+  ];
+
+  it("freezes the set of phrases that ship as one token", () => {
+    const collapsed = LEXICON_CUES
+      .filter((cue) => cue.phrase.trim().split(/\s+/).length >= 2 && tokenise(cue.phrase).length <= 1)
+      .map((cue) => cue.phrase)
+      .sort();
+    expect(collapsed).toEqual(REVIEWED_SINGLE_TOKEN_PHRASES);
+  });
+
+  it("the pharmacy sentence no longer reaches anybody's background", () => {
+    expect(readNeeds("my rooms are above the pharmacy and I trained at Westmead")).toEqual([]);
+  });
+
+  it("family presence in the room still reaches, through the two-token cue", () => {
+    const labels = readNeeds("they want to come into the room for the appointment").map((n) => n.label);
+    expect(labels).toContain("Understands your background");
+  });
+});
+
+describe("O30 the psychographic asks, reachable and not over-reachable", () => {
+  /**
+   * The targeting audit (O23) called stated psychographics this matcher's strongest suit and
+   * named the vocabulary gaps; these are the gaps closed, pinned in both directions. Every
+   * new cue obeys O25's law (two content tokens, or a single precise WORD), and each family
+   * ships with a near-miss probe because O25 also showed reach without a false-positive
+   * control is how "room" claimed a pharmacy.
+   */
+  it.each([
+    ["someone who explains things in plain language", "Helps it make sense"],
+    ["can they say it in plain english without the jargon", "Helps it make sense"],
+    ["a doctor who is neurodiversity affirming", "Strengths-focused"],
+    ["someone neuroaffirming who gets adhd brains", "Strengths-focused"],
+    ["a neurodivergent friendly gp", "Strengths-focused"],
+    ["someone who respects my faith", "Understands your background"],
+    ["my faith is important to me", "Understands your background"],
+    ["treat me as a whole person not a diagnosis", "Listens and takes you seriously"],
+  ])("reaches: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).toContain(label);
+  });
+
+  it.each([
+    // "faith in doctors" is trust talk, not a faith-sensitivity ask: no respect+faith pair.
+    "I have lost all faith in doctors",
+    // Plain sight, not plain language.
+    "the clinic was in plain sight of the station",
+    // A whole afternoon is not a whole person.
+    "the appointment took my whole afternoon",
+  ])("does not over-reach: %s", (query) => {
+    const labels = readNeeds(query).map((n) => n.label);
+    expect(labels).not.toContain("Understands your background");
+    expect(labels).not.toContain("Helps it make sense");
+    expect(labels).not.toContain("Listens and takes you seriously");
+  });
+});
+
+/**
+ * O40 (Q1 item 4): negation clauses, pinned in both directions.
+ *
+ * The rule is NegEx's convention scaled to this reader: explicit desire-negation PHRASES
+ * ("don't want", "not looking for", "don't need", "no interest"), scope forward to the clause
+ * boundary, care and preference cues only. Every exemption below is a design decision with a
+ * sentence that would break if it changed — not a case the pass happens to miss.
+ */
+describe("O40 negation clauses", () => {
+  it.each([
+    // The year plan's own example class: a negated desire verb on a care ask is a refusal.
+    ["I don't want my dose changed", "Titration and dose review"],
+    ["I'm not looking for a diagnosis, just someone to talk to", "ADHD assessment"],
+    ["no interest in titration at all", "Titration and dose review"],
+    ["I would rather not have an assessment yet", "ADHD assessment"],
+    // Preferences take the same pass: a negated preference must not lift anybody.
+    ["I don't need it bulk billed", "Bulk billing"],
+  ])("suppresses the refused ask: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).not.toContain(label);
+  });
+
+  it.each([
+    // MANNER IS EXEMPT BY DESIGN: patients state manner wants through negation — this sentence
+    // IS the unhurried ask, and suppressing it would silence the facet's own vocabulary.
+    ["I don't want to feel rushed", "Unhurried first appointment"],
+    // A bare negator is not a trigger: a complaint about somebody ELSE refusing is a want.
+    ["my GP won't do titration and I need someone who will", "Titration and dose review"],
+    // "never had" is history, not refusal.
+    ["I've never had an assessment and I want one", "ADHD assessment"],
+    // Scope ends at the clause boundary: the negation lives in the previous sentence.
+    ["they don't want to help me. my dose keeps wearing off", "Titration and dose review"],
+    // And the plain positive stays reachable, so the pass cannot pass vacuously.
+    ["I need an ADHD assessment", "ADHD assessment"],
+  ])("still reaches the real ask: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).toContain(label);
   });
 });

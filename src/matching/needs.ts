@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { findCue, stem, tokenise } from "./read";
+import { findCue, negatedWant, stem, tokenise } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -251,6 +251,18 @@ export function readNeeds(text: string): NeedSignal[] {
   for (const cue of CUES) {
     const at = findCue(sentence, cue.tokens);
     if (!at) continue;
+    /* O40 (Q1 item 4): a CARE or PREFERENCE cue in the scope of a desire negation is a refusal,
+       not an ask — "I don't want my dose changed" must not reach titration. MANNER stays exempt
+       BY DESIGN: patients state manner wants through negation ("I don't want to feel rushed" is
+       the unhurried ask itself), so suppressing it would silence the very sentences the facet
+       exists for. A suppressed cue claims nothing, so it cannot shadow a different, unnegated
+       reading of the same words. */
+    if (
+      (cue.entry.facet.kind === "care" || cue.entry.facet.kind === "preference") &&
+      negatedWant(sentence, at.from)
+    ) {
+      continue;
+    }
     if (claimed.some(([from, to]) => at.from <= to && from <= at.to)) continue;
 
     const key = facetKey(cue.entry.facet);

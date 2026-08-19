@@ -68,7 +68,9 @@ describe("W165 the scanner reads code, not prose", () => {
   it("reports the packages the app genuinely uses, and no others", () => {
     // Pinned exactly. A new runtime dependency is a real change and should be seen in a diff,
     // not absorbed silently — and if this ever shrinks, the walk has stopped walking.
-    expect(reach().packages).toEqual(["@phosphor-icons/react", "motion", "next", "react"]);
+    // @vercel/analytics joined at O31: the cookieless pageview layer, mounted in the root
+    // layout by the founder's explicit attribution instruction.
+    expect(reach().packages).toEqual(["@phosphor-icons/react", "@vercel/analytics", "motion", "next", "react"]);
   });
 });
 

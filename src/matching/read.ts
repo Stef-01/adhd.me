@@ -127,6 +127,74 @@ const MAX_GAP = 2;
  * guarantee the substring matcher got from claiming character ranges, kept for the same reason:
  * one clause should produce one facet, not three overlapping ones.
  */
+/**
+ * Desire-negation triggers (O40, year plan Q1 item 4).
+ *
+ * NEGEX'S CONVENTION, NOT ITS MODEL: explicit trigger PHRASES with a bounded scope, kept as a
+ * rule list a reviewer can read. Bare negators are DELIBERATELY not triggers, because in
+ * first-person patient language they usually sit inside the want rather than around it: "my GP
+ * won't do titration" is a complaint that wants titration, "I've never had an assessment, and I
+ * want one" is history, and "no one listens to me" is the manner ask itself. What reliably
+ * marks a refusal is a negated DESIRE VERB — don't want, not looking for, don't need, no
+ * interest — and that is the whole list. Phrases are written as tokenise() leaves them
+ * ("do not want" arrives as [not, want] once "do" is stopword-stripped).
+ */
+const DESIRE_NEGATIONS: ReadonlyArray<readonly string[]> = [
+  ["dont", "want"],
+  ["not", "want"],
+  ["dont", "need"],
+  ["not", "need"],
+  ["dont", "look"],
+  ["not", "look"],
+  ["no", "interest"],
+  ["not", "interest"],
+  ["not", "after"],
+  ["rather", "not"],
+];
+
+/** Content tokens allowed between a trigger's last word and the cue it negates. */
+const MAX_NEGATION_LEAD = 3;
+
+/**
+ * Whether the cue starting at `cueFrom` sits in the scope of a desire negation.
+ *
+ * Scope is NegEx's: forward from the trigger, ending at the clause boundary — "they don't want
+ * to help. My dose keeps wearing off" negates nothing in the second sentence. The trigger must
+ * complete shortly before the cue (MAX_NEGATION_LEAD content tokens), so a negation at the far
+ * end of a long clause does not swallow an unrelated ask. Only tokens BEFORE the cue span are
+ * read: a negator inside the cue's own words ("not working", "no medication") is part of what
+ * the cue means, never a negation of it.
+ */
+export function negatedWant(sentence: readonly string[], cueFrom: number): boolean {
+  let clauseFrom = cueFrom;
+  while (clauseFrom > 0 && sentence[clauseFrom - 1] !== CLAUSE_BOUNDARY) clauseFrom--;
+
+  for (const phrase of DESIRE_NEGATIONS) {
+    for (let start = clauseFrom; start < cueFrom; start++) {
+      if (sentence[start] !== phrase[0]) continue;
+      let at = start;
+      let matched = 1;
+      while (matched < phrase.length) {
+        const want = phrase[matched]!;
+        let next = -1;
+        // Within the phrase itself one inserted content token is allowed ("don't actually want").
+        for (let k = at + 1; k <= Math.min(at + 2, cueFrom - 1); k++) {
+          if (sentence[k] === CLAUSE_BOUNDARY) break;
+          if (sentence[k] === want) {
+            next = k;
+            break;
+          }
+        }
+        if (next === -1) break;
+        at = next;
+        matched++;
+      }
+      if (matched === phrase.length && cueFrom - at - 1 <= MAX_NEGATION_LEAD) return true;
+    }
+  }
+  return false;
+}
+
 export function findCue(
   sentence: readonly string[],
   cue: readonly string[],

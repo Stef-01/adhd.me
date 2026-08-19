@@ -67,6 +67,24 @@ describe("validation reports everything at once", () => {
   it("refuses a language outside the offered list", () => {
     expect(validateApplication({ ...valid, languages: ["Klingon"] }).languages).toBeDefined();
   });
+
+  it("accepts every mix the hero's control can express, and nothing else", () => {
+    // The value only ever arrives from the hero (10–50, step 10), so anything outside that range
+    // is a tampered or mangled submission and is refused with a reason, never rounded or guessed.
+    for (const declarable of [10, 20, 30, 40, 50]) {
+      expect(validateApplication({ ...valid, desiredMixPercent: declarable })).toEqual({});
+    }
+    for (const tampered of [0, 5, 15, 55, 100, -10, 30.5, Number.NaN]) {
+      expect(
+        validateApplication({ ...valid, desiredMixPercent: tampered }).desiredMixPercent,
+        String(tampered),
+      ).toBeDefined();
+    }
+  });
+
+  it("treats an absent mix as fine, because a default nobody set is not a declaration", () => {
+    expect(validateApplication(valid)).toEqual({});
+  });
 });
 
 describe("storage", () => {
@@ -106,6 +124,22 @@ describe("storage", () => {
     );
     expect(application.fullName.startsWith("=")).toBe(false);
     expect(readFileSync(file, "utf8")).not.toMatch(/"fullName":"=/);
+  });
+
+  it("stores the declared mix, and omits the key entirely when none was declared", () => {
+    // O26: the join hero's percent used to be discarded on submit. When the GP set one it is now
+    // part of the row a reviewer reads; when they did not, the key is absent — not null, not a
+    // default — so the file cannot show a preference nobody stated.
+    const file = store();
+    const withMix = saveApplication({ ...valid, desiredMixPercent: 40 }, { filePath: file });
+    expect(withMix.application.desiredMixPercent).toBe(40);
+
+    const without = saveApplication(
+      { ...valid, ahpraRegistrationNumber: "MED0001111111" },
+      { filePath: file },
+    );
+    expect("desiredMixPercent" in without.application).toBe(false);
+    expect(readFileSync(file, "utf8").split("\n")[1]).not.toContain("desiredMixPercent");
   });
 
   it("has exactly one status, so no code path can approve an application", () => {

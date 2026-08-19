@@ -125,9 +125,19 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The page after the interest form. Whoever registered reads it, and it makes one operational promise (a person replies within two business days), which is exactly the kind of sentence the sweep exists to hold to account.",
   },
   {
+    path: "/terms",
+    audience: "patient_notice",
+    why: "Terms of use are read by the same person the privacy policy addresses, and carry the same duty: administrative fact in plain words, no clinical claims, the canonical responsibility statement rendered from its constant. Draft-marked and counsel-gated alongside the privacy policy (O39).",
+  },
+  {
     path: "/privacy",
     audience: "patient_notice",
     why: "A privacy notice is read by the people whose data it concerns, and APP 1 requires it to state the kinds of information held — which for this product means naming diagnoses and test results. Marketing rules apply; the data-category rules cannot, or the notice cannot be written.",
+  },
+  {
+    path: "/privacy/counsel-review",
+    audience: "patient_notice",
+    why: "Explains why the two legal documents are draft-marked and what an independent lawyer has been asked to check — the automated-decisions transparency move applied to the legal process itself. Read by the person the drafts concern, so it answers to the same patient rules.",
   },
   {
     path: "/privacy/automated-decisions",

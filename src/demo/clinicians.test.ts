@@ -31,8 +31,9 @@ describe("clinician roster and matching", () => {
   });
 
   it("keeps the full roster available", () => {
-    expect(clinicians).toHaveLength(2);
-    expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(2);
+    // Three since O34: the Beecroft pair plus Dr Anusha Saxena in Double Bay.
+    expect(clinicians).toHaveLength(3);
+    expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(3);
   });
 
   /**
@@ -110,8 +111,9 @@ describe("clinician roster and matching", () => {
 
   it("keeps every clinician in one of the two focus areas", () => {
     const nsw = new Set(["Beecroft", "Cheltenham", "Pennant Hills", "Epping"]);
+    const easternSuburbs = new Set(["Double Bay", "Edgecliff", "Rose Bay", "Bondi Junction"]);
     const goldCoast = new Set(["Southport", "Surfers Paradise", "Broadbeach", "Robina"]);
-    const focusAreas = new Set([...nsw, ...goldCoast]);
+    const focusAreas = new Set([...nsw, ...easternSuburbs, ...goldCoast]);
 
     expect(clinicians.every((clinician) => focusAreas.has(clinician.suburb))).toBe(true);
   });

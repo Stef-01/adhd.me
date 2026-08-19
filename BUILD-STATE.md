@@ -99,6 +99,103 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O40 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
+> loop-0819a as O39; RENUMBERED to O40 in the same firing when PR #7's title ('Terms of use — O39') became visible on rebase. Same collision as O30/PR #4; the claim's timestamp and holder are unchanged. DONE 2026-08-19.** `readNeeds` has no negation handling (the transcript reader does), and a probe
+> confirms the year plan's exact class: "I don't want my dose changed" reaches titration, "I'm
+> not looking for a diagnosis" reaches assessment, "I don't need it bulk billed" reaches
+> bulk-billing. Design (NegEx convention — explicit trigger PHRASES, not bare negators, scope
+> ends at the clause boundary): a small list of stemmed desire-negation phrases ("don't want",
+> "not looking for", "don't need", "no interest") suppresses a CARE or PREFERENCE cue whose
+> span starts within a short window after the phrase, same clause only. MANNER and LANGUAGE
+> are exempt BY DESIGN and pinned: patients state manner wants through negation ("I don't want
+> to feel rushed" wants unhurried). Bare negators are deliberately NOT triggers, pinned: "my
+> GP won't do titration" is a complaint that wants titration, "I've never had an assessment
+> and I want one" is history, not refusal. Shipped exactly as designed: `negatedWant` in
+> read.ts (trigger phrases in tokenised form, one inserted content token allowed inside a
+> phrase, MAX_NEGATION_LEAD=3, scope stops at the clause boundary, and only tokens BEFORE the
+> cue span are read, so a cue's own negator — "not working", "no medication" — is never read
+> as negating it); wired in readNeeds for care+preference, with a suppressed cue claiming
+> nothing so it cannot shadow an unnegated reading of the same words. Gate: 10 new pins both
+> directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
+> `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
+
+> **O41 (founder-directed — the counsel check visible on-site) — claimed and DONE 2026-08-19,
+> interactive session (not a loop firing).** `/privacy/counsel-review` explains the draft
+> banners in the product's own register: what counsel has been asked to check (patient-safe
+> wording; the raw brief linked as working-document-not-advice), and that banners come down on
+> counsel's word only. Linked from both draft banners (/privacy, /terms); public-surfaces
+> patient_notice row, dossier census + surface-map row, sitemap entry. Sweep forced a global
+> review→check rename on the page and both banner links (no-ratings bans "review" on patient
+> surfaces). Loop firings: O41 is taken — next free number is O42.
+
+> **O38 (Standing debt #2, last piece — the persisted reach report) — DONE 2026-08-18,
+> loop-0818d (claimed 23:46Z). DEBT #2 CLOSED.** ONBOARDING-INTERVIEW.md item 4 shipped: the
+> lexicon-gap feed is a record. `ClinicianBackground.patientSilent` rides every interview save
+> beside `unread` (optional — a pre-O38 row reports empty rather than invented; the key is
+> omitted when a save carries none, W153 neutralisation at the writer since both are verbatim
+> clinician speech). `src/onboarding/reach-report.ts` (W230) aggregates the LATEST save per
+> clinician — a later conversation that resolved a gap removes the entry, because a feed that
+> re-raises resolved work trains people to ignore it — keeping the two silences apart since
+> they grow different cue lists (proposer cues vs the finder's patient lexicon). Rendered on
+> the matching console where lexicon review lives (now force-dynamic; no new route, W102
+> census unchanged; W200 declaration + loader added for the module). Three states on the
+> surface: no onboardings / fully heard / outstanding, per W179. Gate: 7 report tests +
+> round-trip, interview e2e 5/5 incl. save → feed, DESIGN-QA entry + qa/reach-o38/, full
+> `pnpm verify` green. With items 2–4 all shipped, the O22 interview loop is standing
+> infrastructure; the year plan's Q1 items are the loop's next territory.
+
+> **O36 (Standing debt #2, second half — the gap sweep) — DONE 2026-08-18, loop-0818c (claimed
+> 22:45Z).** ONBOARDING-INTERVIEW.md build order item 3 shipped on `/console/interview`: "Still
+> to ask — N of M", every matchable facet the transcript has NOT reached rendered as the
+> structured interview's own question with the same often/sometimes/not-me record, the count
+> falling as the doctor talks — the design's promise ("the conversation shrinks the checklist;
+> it does not replace it") as a number, not copy. A facet reached in conversation leaves the
+> checklist because it moved into the proposals: asked once, never twice, pinned in e2e. An
+> answered gap facet lands in the W226 record with frequency and decider but NO quote (asked,
+> not heard — the review editor's hand-added shape); an unanswered one is ABSENT, because a
+> question never asked must not be stored as a facet nobody decided, and the saved row stays
+> the size of the interview rather than the vocabulary. `gapFacets` + `MATCHABLE_VOCABULARY`
+> in capture.ts (W229); a both-directions pin asserts every vocabulary facet has a scripted
+> question. NUMBERING NOTE: PR #4 independently used O30–O34 and PR #5 used O35, colliding
+> with this loop's O30 (row below); this loop resumed at O36 — future claims take the next
+> number after BOTH the ledger and merged PR titles. Gate: 15 capture tests, interview e2e
+> 4/4, taste pass + qa/interview-o36/ + DESIGN-QA entry, full `pnpm verify` green. Item 4
+> (persisted reach report) is the debt's last claimable piece.
+
+> **O30 (Standing debt #2, first half — the interview screen) — DONE 2026-08-18, loop-0818b
+> (claimed 21:48Z).** ONBOARDING-INTERVIEW.md build order item 2 shipped as `/console/interview`
+> (session-gated): editable transcript where `i:`-prefixed turns are the interviewer's and are
+> NEVER read — the convention fails toward a visible wrong proposal, not silently discarded
+> doctor speech; live proposals from both readers, each carrying the clinician's sentence and
+> the STRUCTURED INTERVIEW'S OWN question as read-back (`readBackQuestionFor` — the conversation
+> shrinks the checklist, it does not replace it); often/sometimes/not-me recorded with the
+> interviewer's name into the W226 store. `BackgroundFacet.frequency` keeps the spoken answer
+> beside the review status because collapsing sometimes/often at capture would rebuild the
+> tickbox the interview refuses; the writer drops an out-of-vocabulary frequency rather than
+> defaulting it. Unanswered proposals stay `proposed` with nobody named, so the W226 rule —
+> accepted must name its decider — holds by construction. Pure logic in
+> `src/onboarding/capture.ts`. Gate: 10 new capture tests + store round-trip, interview e2e 3/3
+> (signed-out redirect, live flow, captures), taste pass with qa/interview-o30/ + DESIGN-QA
+> entry, full `pnpm verify` green. Year plan reconciled: duplicate Standing-debts and UI-track
+> sections merged into the founder's audited list; debt #2 marked item-2-closed (items 3–4
+> remain); debt #1 marked largely closed with the applications-view residual named. Items 3
+> (gap sweep) and 4 (persisted reach report) are the next claimable halves of this debt.
+
+> **O26 (matching follow-through, out-of-band like D1) — DONE 2026-08-18, loop-0818 (claimed
+> 18:45Z).** The mix-capture debt from O24: the join hero sold "the mix is yours to set", its CTA
+> said "Set my mix", and the form then discarded the percent on submit. Now
+> `join-experience.tsx` owns the number (hero edits it, form restates and submits it);
+> `ClinicianApplication.desiredMixPercent` is optional and INTERNAL — never published, W81's
+> interest capture arriving through the front door, feeding only the year plan's Q3
+> clinician-side fit. The honesty rule is load-bearing both directions: absent unless the GP
+> actually touched the control (a default nobody set is not a declaration, key omitted rather
+> than nulled), and refused with a reason outside the control's own range (10–50 step 10,
+> `isDeclarableMixPercent` shared between hero and validator so they cannot drift). Gate:
+> typecheck, store tests 18/18 incl. tamper cases both directions, join e2e 4/4 incl. the new
+> wiring pin, full `pnpm verify` green. Year plan updated: Standing debts section added with
+> this debt closed; UI-track rules written down. Debt #2 (O22 console build-out) is the next
+> claimable standing debt.
+
 > **D1 (design, out-of-band) — DONE 2026-08-10.** Finder opening screen: the example prompt and the
 > archetype label were one idea rendered as two orphans with a ~250px dead band between them and the
 > bottom-pinned CTA (every viewport, caused by `margin:auto` on `.voice-prompt` claiming all free

@@ -18,6 +18,7 @@ import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/examples" },
   title: "Worked examples",
   description:
     "Demo scenarios run through the real finder: how much it understood, whether the order was earned, and who it showed first — with the reasons printed in the product itself.",

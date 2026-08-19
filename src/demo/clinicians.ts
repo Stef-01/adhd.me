@@ -116,6 +116,14 @@ export type Clinician = {
    */
   careAreasSometimes?: CareArea[];
   /**
+   * Set ONLY while a clinician is listed ahead of their onboarding interview (O34): a dated
+   * note that manner claims are theirs to make there. The roster law still holds — a profile
+   * with no manner can never match half of what people ask — but the honest intermediate
+   * state is VISIBLE and dated, not silently complete and not filled in for them. The roster
+   * test accepts an empty `manner` only when this is present.
+   */
+  mannerPending?: string;
+  /**
    * How this clinician works, declared by them, closed vocabulary (`MannerTrait`).
    *
    * The half of "will they understand me" that clinical scope cannot carry. Somebody writing "I
@@ -270,6 +278,63 @@ export const clinicians: Clinician[] = [
       note: "Dr Yadav's appointments are not online yet — the practice books him by phone.",
     },
     keywords: ["adhd", "assessment", "adult", "unhurried", "longer", "long appointment", "history", "sleep", "insomnia", "mood", "anxiety", "depression", "family", "cultural", "culture", "hindi", "indian", "south asian", "work", "job", "beecroft", "shared care", "explain", "calm"],
+    realPerson: true,
+  },
+  {
+    /**
+     * O34: LISTED AT HER OWN REQUEST, relayed by the founder (2026-08-18: "she has asked us
+     * to upload it ASAP"), which is the consent the W228 checklist required. Every claim
+     * below is sourced: identity, practice and booking from the founder's instruction; the
+     * interests from HER OWN published Healthengine bio (special interest in mental health,
+     * First Class Honours in Psychology at the University of Sydney, clinical psychiatry
+     * experience; other interests women's health and paediatrics) — interest-level claims
+     * are recorded at the interview's "sometimes" grade, not inflated to "often". What her
+     * interview has not yet captured is left EMPTY and marked, never guessed: no manner
+     * claims (mannerPending), English only until she names her languages, no NSW-training or
+     * accessibility claims, and no portrait — she chose the monogram for now.
+     */
+    id: "anusha-saxena",
+    name: "Dr Anusha Saxena",
+    shortName: "Dr Anusha Saxena",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "General practitioner",
+    suburb: "Double Bay",
+    practice: "Bay Health Clinic",
+    reach: "Practice appointments in Double Bay",
+    image: null,
+    acceptingNewPatients: true,
+    focus: "Mental health in general practice, women's health & paediatrics",
+    matchLine: "Brings a mental-health focus to general practice, with psychology training behind it.",
+    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Paediatrics"],
+    // Billing leads by roster convention; hers is stated by the practice until her interview
+    // supplies the specifics — a fact about where the fact lives, not a guess at it.
+    practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
+    about:
+      "Anusha is a GP at Bay Health Clinic in Double Bay with a special interest in mental health. She took First Class Honours in Psychology at the University of Sydney and worked in clinical psychiatry before general practice, and her other interests are women's health and paediatrics. Her profile here is young: the parts of it that come from a proper onboarding conversation — how she works, the languages she consults in — will be added from her own answers rather than written for her.",
+    experience: [
+      "General practice, Bay Health Clinic, Double Bay",
+      "First Class Honours in Psychology, University of Sydney",
+      "Clinical psychiatry experience",
+    ],
+    languages: ["English"],
+    careAreas: ["adhd-assessment"],
+    // Interest-level claims from her published bio sit at the "sometimes" grade until her
+    // interview upgrades or removes them — half weight, honestly earned (O2).
+    careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd"],
+    manner: [],
+    mannerPending:
+      "2026-08-18: listed ahead of her onboarding interview; manner claims are hers to make there.",
+    // nswAdhdTrained and telehealthFirstAppointment are claim-or-absent (`?: true`): omitted
+    // here because neither has been claimed, which is exactly what omission means.
+    wheelchairAccessible: false,
+    appointmentLength: "Appointment lengths set with the practice",
+    booking: {
+      via: "healthengine",
+      practitionerId: "160121",
+      url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
+    },
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "double bay", "eastern suburbs", "depression", "anxiety", "mood"],
     realPerson: true,
   },
 ];

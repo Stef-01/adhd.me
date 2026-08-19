@@ -90,3 +90,54 @@ test("the query that failed in production now reads both halves (O13)", async ({
   await expect(page.getByText(/everyone we list rather than an order/)).toHaveCount(0);
   await page.screenshot(shot("09-production-failure-query-now-reads"));
 });
+
+test("a psychographic ask ranks, explains, and shows its provenance on screen (O30)", async ({ page }) => {
+  // Values-level language on both sides of the roster's manner split: plain-language reaches
+  // sense_making (Dr Saxena declares it), faith-in-the-room reaches culturally_attuned
+  // (Dr Yadav declares it). Both rows must carry their reason, and the profile must quote
+  // the provenance — the O21 "from your words" line — for a phrase added in O30.
+  await searchFor(page, "explain things in plain language and someone who respects my faith");
+  const rows = page.locator(".clinician-row");
+  await expect(rows.first().getByText("Helps it make sense").or(rows.first().getByText("Understands your background"))).toBeVisible();
+  await page.screenshot({ path: "qa/matching-o30/01-psychographic-ask-ranked.png", fullPage: true });
+
+  await rows.first().click();
+  await expect(page.getByText(/from your words/).first()).toBeVisible();
+  await page.screenshot({ path: "qa/matching-o30/02-psychographic-provenance.png", fullPage: true });
+});
+
+test("the neurodiversity ask is read, and unanswered honestly while nobody declares it (O30)", async ({ page }) => {
+  // "neurodiversity affirming" reaches Strengths-focused — a facet NO roster member declares
+  // today. The honest render is the point: the words are understood (not the unmatched
+  // banner), but no row claims a strengths reason it has not declared.
+  await searchFor(page, "a neurodiversity affirming doctor who explains in plain language");
+  await expect(page.locator(".clinician-list")).toBeVisible();
+  await expect(page.locator(".clinician-row").getByText("Strengths-focused")).toHaveCount(0);
+  await page.screenshot({ path: "qa/matching-o30/03-neurodiversity-honest-nondeclaration.png", fullPage: true });
+});
+
+test("a triple ask — language, psychographic, care — reads all three families at once (O33)", async ({ page }) => {
+  // The recursive edge case: three vocabularies in one sentence. Urdu (language pipeline),
+  // no-jargon (O30 psychographic), titration (care). All three must appear as evidence, and
+  // the order must be earned (Dr Saxena declares Urdu + sense_making + titration).
+  await searchFor(page, "an Urdu speaking GP who explains without the jargon, my dose needs titration");
+  await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
+  await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
+  await page.locator(".clinician-row").first().click();
+  await expect(page.getByText("Urdu-speaking").first()).toBeVisible();
+  await page.screenshot({ path: "qa/matching-o30/04-triple-ask-language-psychographic-care.png", fullPage: true });
+});
+
+test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena first (O34)", async ({ page }) => {
+  // The founder's instruction, verified in pixels: she is live, she is first on the ask that
+  // motivated listing her, the reason is printed, and the monogram renders (no photo, by her
+  // choice) rather than a placeholder or a gap.
+  await searchFor(page, "I would prefer a woman doctor for an ADHD assessment");
+  await expect(page.locator(".clinician-row strong").first()).toHaveText(/Anusha/);
+  await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
+  await page.screenshot({ path: "qa/matching-o34/01-woman-gp-ranked-first.png", fullPage: true });
+  await page.locator(".clinician-row").first().click();
+  await expect(page.getByText("Dr Anusha Saxena").first()).toBeVisible();
+  await expect(page.getByText(/from your words/).first()).toBeVisible();
+  await page.screenshot({ path: "qa/matching-o34/02-anusha-profile.png", fullPage: true });
+});

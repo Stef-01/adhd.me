@@ -78,6 +78,30 @@ export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Are you already seeing a psychiatrist or paediatrician for this?",
     answer: "I need shared care with the psychiatrist I already see",
   },
+  // O33: the five declared care areas that had no question. A facet a clinician can declare
+  // but a reader cannot be asked about is separation the roster holds and the product wastes.
+  // Same register as the rest of the table: what care somebody WANTS, never a symptom the
+  // finder infers — the Q17 boundary the file header already states.
+  "care:trauma-informed": {
+    prompt: "Is there past trauma this needs to be careful around?",
+    answer: "there is past trauma and I want that handled carefully",
+  },
+  "care:complex-mental-health": {
+    prompt: "Is there other mental health history, like bipolar, in the picture?",
+    answer: "I also live with bipolar and it is part of the picture",
+  },
+  "care:autism-adhd": {
+    prompt: "Is autism part of this, or something you are exploring alongside ADHD?",
+    answer: "I am autistic and want that understood alongside the ADHD",
+  },
+  "care:emotional-regulation": {
+    prompt: "Do you want help with moods and emotions that take over?",
+    answer: "my emotions take over and I want help with that",
+  },
+  "care:non-medication": {
+    prompt: "Do you want options beyond medication?",
+    answer: "I want alternatives, not just medication",
+  },
 };
 
 /**
@@ -119,6 +143,18 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
   "manner:collaborative": {
     prompt: "Do you want to decide the options together rather than be told?",
     answer: "I want to talk it through and decide together",
+  },
+  // O33: the two manner qualities that had no question. Dormant until a clinician declares
+  // them (`clarifiers` only offers facets the roster splits on), but the day one does —
+  // Strengths-focused is exactly where the neurodiversity-affirming cohort lands (O30) —
+  // the question exists instead of being discovered missing in production.
+  "manner:steadying": {
+    prompt: "Would a calm, reassuring manner help most?",
+    answer: "I need someone calm and reassuring",
+  },
+  "manner:motivating": {
+    prompt: "Do you want it built on your strengths, not only the problems?",
+    answer: "build it on my strengths, not just problems",
   },
 };
 
@@ -191,7 +227,7 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
   const declared = roster.map(declaredKeys);
   const keys = new Set(declared.flatMap((set) => [...set]));
 
-  return [...keys]
+  const ranked = [...keys]
     .filter((key) => !alreadyAsked.has(key))
     .map((key) => ({ key, heldBy: declared.filter((set) => set.has(key)).length }))
     // Splits the roster: somebody has it, somebody does not. Anything else cannot reorder.
@@ -205,8 +241,34 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
       // Closest to an even split first.
       const evenness = (n: number) => Math.abs(n / roster.length - 0.5);
       return evenness(a.heldBy) - evenness(b.heldBy) || a.facetKey.localeCompare(b.facetKey);
-    })
-    .slice(0, limit);
+    });
+
+  /**
+   * THE OFFERED SET SPANS THE ROSTER, NOT JUST THE ALPHABET (O33). Evenness ties are common —
+   * with two clinicians every split is perfectly even — and the old alphabetical tie-break
+   * could hand a reader three questions that all separate toward the SAME clinician: three
+   * different words for one reordering, and no path to the other GP. Selection is now greedy
+   * on the holder signature (WHICH clinicians hold the facet): a question whose answer lifts
+   * a different subset of the roster beats a better-alphabetised duplicate. Deterministic,
+   * and the W225 pin ("changes who is first, not merely the scores") is the test that forced
+   * it — the O33 prompt additions made the degenerate all-one-direction top-3 real.
+   */
+  const signatureOf = (entry: Clarifier) =>
+    declared.map((set) => (set.has(entry.facetKey) ? "1" : "0")).join("");
+  const picked: Clarifier[] = [];
+  const usedSignatures = new Set<string>();
+  for (const entry of ranked) {
+    if (picked.length >= limit) break;
+    if (!usedSignatures.has(signatureOf(entry))) {
+      picked.push(entry);
+      usedSignatures.add(signatureOf(entry));
+    }
+  }
+  for (const entry of ranked) {
+    if (picked.length >= limit) break;
+    if (!picked.includes(entry)) picked.push(entry);
+  }
+  return picked;
 }
 
 /** Human-readable labels, so the console can show which facet a question is about. */

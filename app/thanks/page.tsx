@@ -9,6 +9,7 @@ import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/thanks" },
   title: "You're registered",
   description: "Your registration reached us. What happens next, in plain terms.",
   robots: { index: false },
