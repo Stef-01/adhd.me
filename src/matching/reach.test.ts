@@ -363,3 +363,41 @@ describe("O30 the psychographic asks, reachable and not over-reachable", () => {
     expect(labels).not.toContain("Listens and takes you seriously");
   });
 });
+
+/**
+ * O40 (Q1 item 4): negation clauses, pinned in both directions.
+ *
+ * The rule is NegEx's convention scaled to this reader: explicit desire-negation PHRASES
+ * ("don't want", "not looking for", "don't need", "no interest"), scope forward to the clause
+ * boundary, care and preference cues only. Every exemption below is a design decision with a
+ * sentence that would break if it changed — not a case the pass happens to miss.
+ */
+describe("O40 negation clauses", () => {
+  it.each([
+    // The year plan's own example class: a negated desire verb on a care ask is a refusal.
+    ["I don't want my dose changed", "Titration and dose review"],
+    ["I'm not looking for a diagnosis, just someone to talk to", "ADHD assessment"],
+    ["no interest in titration at all", "Titration and dose review"],
+    ["I would rather not have an assessment yet", "ADHD assessment"],
+    // Preferences take the same pass: a negated preference must not lift anybody.
+    ["I don't need it bulk billed", "Bulk billing"],
+  ])("suppresses the refused ask: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).not.toContain(label);
+  });
+
+  it.each([
+    // MANNER IS EXEMPT BY DESIGN: patients state manner wants through negation — this sentence
+    // IS the unhurried ask, and suppressing it would silence the facet's own vocabulary.
+    ["I don't want to feel rushed", "Unhurried first appointment"],
+    // A bare negator is not a trigger: a complaint about somebody ELSE refusing is a want.
+    ["my GP won't do titration and I need someone who will", "Titration and dose review"],
+    // "never had" is history, not refusal.
+    ["I've never had an assessment and I want one", "ADHD assessment"],
+    // Scope ends at the clause boundary: the negation lives in the previous sentence.
+    ["they don't want to help me. my dose keeps wearing off", "Titration and dose review"],
+    // And the plain positive stays reachable, so the pass cannot pass vacuously.
+    ["I need an ADHD assessment", "ADHD assessment"],
+  ])("still reaches the real ask: %s", (query, label) => {
+    expect(readNeeds(query).map((n) => n.label), query).toContain(label);
+  });
+});

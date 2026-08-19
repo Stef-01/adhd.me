@@ -99,8 +99,8 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **O39 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
-> loop-0819a.** `readNeeds` has no negation handling (the transcript reader does), and a probe
+> **O40 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
+> loop-0819a as O39; RENUMBERED to O40 in the same firing when PR #7's title ('Terms of use — O39') became visible on rebase. Same collision as O30/PR #4; the claim's timestamp and holder are unchanged. DONE 2026-08-19.** `readNeeds` has no negation handling (the transcript reader does), and a probe
 > confirms the year plan's exact class: "I don't want my dose changed" reaches titration, "I'm
 > not looking for a diagnosis" reaches assessment, "I don't need it bulk billed" reaches
 > bulk-billing. Design (NegEx convention — explicit trigger PHRASES, not bare negators, scope
@@ -110,8 +110,14 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > are exempt BY DESIGN and pinned: patients state manner wants through negation ("I don't want
 > to feel rushed" wants unhurried). Bare negators are deliberately NOT triggers, pinned: "my
 > GP won't do titration" is a complaint that wants titration, "I've never had an assessment
-> and I want one" is history, not refusal. Verify: both directions pinned for every case
-> above; reach corpus untouched (no ratchet movement); `pnpm verify` green.
+> and I want one" is history, not refusal. Shipped exactly as designed: `negatedWant` in
+> read.ts (trigger phrases in tokenised form, one inserted content token allowed inside a
+> phrase, MAX_NEGATION_LEAD=3, scope stops at the clause boundary, and only tokens BEFORE the
+> cue span are read, so a cue's own negator — "not working", "no medication" — is never read
+> as negating it); wired in readNeeds for care+preference, with a suppressed cue claiming
+> nothing so it cannot shadow an unnegated reading of the same words. Gate: 10 new pins both
+> directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
+> `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O38 (Standing debt #2, last piece — the persisted reach report) — DONE 2026-08-18,
 > loop-0818d (claimed 23:46Z). DEBT #2 CLOSED.** ONBOARDING-INTERVIEW.md item 4 shipped: the

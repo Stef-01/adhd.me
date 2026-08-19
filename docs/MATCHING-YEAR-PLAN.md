@@ -37,9 +37,13 @@ non-rankings.
    with explicit inflection tables per cue where needed. Study: `natural` (github.com/
    NaturalNode/natural) for its Lancaster/Porter trade-offs — borrow test cases, not the
    dependency.
-4. **Negation clauses.** "I don't want medication changes" currently risks reaching
-   `titration`. Extend clause rules with a small negation-scope pass; pin both directions.
-   Study: negspacy's NegEx implementation for scope conventions (rule lists, not the model).
+4. **Negation clauses. DONE — O40, 2026-08-19.** `negatedWant` in read.ts, NegEx's convention
+   scaled to this reader: explicit desire-negation phrases ("don't want", "not looking for",
+   "don't need", "no interest") — never bare negators — with scope forward to the clause
+   boundary, applied to care and preference cues only. Manner is exempt BY DESIGN and pinned:
+   "I don't want to feel rushed" IS the unhurried ask. Also pinned: "my GP won't do titration"
+   (complaint = want) and "never had an assessment" (history ≠ refusal) still reach. Both
+   directions in reach.test.ts §O40.
 
 ## Q2 (Dec–Feb): robustness — the ranking under adversarial and degenerate input
 
