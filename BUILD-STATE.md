@@ -120,7 +120,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O63 (Standing debt 10 — the finder's desktop shell, widened for every stage at once) —
-> claimed 2026-08-19T19:03Z by loop-0819s.** D1 tried a two-column desktop INSIDE the 520px
+> DONE 2026-08-19 by loop-0819s.** D1 tried a two-column desktop INSIDE the 520px
 > shell and reverted it with the rule this unit obeys: a real desktop composition widens the
 > SHELL, for all stages, as its own unit. Today the shell is 520px for every stage at ≥600px,
 > except welcome/scenarios/type which snap to 640px at ≥820px behind a stage-keyed selector

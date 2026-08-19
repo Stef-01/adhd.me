@@ -406,3 +406,23 @@ Captures: qa/tie-o62/ (the tie-quality block, desktop and 390px). Taste-skill pa
   pinned in both directions so neither a regression nor a silent improvement can pass unread.
 - [x] No new CSS, no motion, no new touch targets; e2e reads the rendered counts and asserts
   they partition the stated total, which is the same invariant the gate holds.
+
+## O63 — one shell, every stage (2026-08-19)
+
+Captures: qa/desktop-o63/ (welcome, results and profile at 1280px — the stages that were a
+520px phone strip on desktop, now the same 640px seamless column the intro stages already
+had). Taste-skill pass applied.
+
+- [x] The shell width is ONE token (`--shell-w`: 520px, 640px at ≥820px) consumed by every
+  rule that keys off it — the shell rules, the ≥600px block, and the fixed booking bar's
+  centring offsets, which previously hard-coded 520px and already disagreed with the widened
+  intro stages. A frame that cannot be told two widths cannot jump between them.
+- [x] Motion carries meaning or goes: the 280ms width tween existed to paper over the
+  stage-keyed width snap; with no width change left between stages, it is deleted rather
+  than kept as decoration.
+- [x] One theme end to end: the 2026-08-11 overhaul's seamless borderless paper, previously
+  only on welcome/scenarios/type, now holds through listening, results, profile and booking
+  — no hairline side borders popping in mid-flow.
+- [x] Phone and 600–819px viewports change by nothing (mobile-fit 28/28 green, all seven
+  surfaces); the fold discipline holds at 640px — the results screen shows the claim, the
+  suburb control and the first rows above the fold, nothing cut mid-band.

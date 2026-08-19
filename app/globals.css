@@ -1791,13 +1791,23 @@ textarea:focus-visible {
 
 /* Patient pathway v2 — intimate, portrait-led and intentionally low-friction. */
 .care-app.patient-v2 {
+  /* THE ONE SHELL WIDTH (O63, standing debt 10). Every stage shares this shell, so its
+     width is a single token: widening for desktop happens here, for all stages at once —
+     never per-stage (the frame would jump mid-flow, which is exactly what D1's reverted
+     attempt taught) and never by splitting columns inside the phone width. The fixed
+     booking bar centres against the same token, so it can never disagree with the shell. */
+  --shell-w: 520px;
   min-height: 100svh;
   padding: 0;
   background: var(--paper);
 }
 
+@media (min-width: 820px) {
+  .care-app.patient-v2 { --shell-w: 640px; }
+}
+
 .patient-v2 .care-shell {
-  width: min(520px, 100%);
+  width: min(var(--shell-w), 100%);
   min-height: 100svh;
   max-height: none;
   border-right: 1px solid var(--line);
@@ -2313,8 +2323,8 @@ textarea:focus-visible {
 }
 
 .patient-v2 .profile-footer {
-  right: max(0px, calc((100vw - 520px) / 2));
-  left: max(0px, calc((100vw - 520px) / 2));
+  right: max(0px, calc((100vw - var(--shell-w)) / 2));
+  left: max(0px, calc((100vw - var(--shell-w)) / 2));
   gap: 11px;
   padding: 13px 22px max(18px, env(safe-area-inset-bottom));
 }
@@ -2371,7 +2381,7 @@ textarea:focus-visible {
 
   .patient-v2 .care-shell,
   .patient-v2 .screen {
-    width: 520px;
+    width: var(--shell-w);
     min-height: 100dvh;
     height: auto;
     max-height: none;
@@ -3853,23 +3863,15 @@ textarea:focus-visible {
   width: min(340px, 100%);
 }
 
-/* Finder desktop (2026-08-11 overhaul): the welcome and type stages once painted
-   a #292800 olive card with petal-pink accents inside a 1180px shadow box while
-   every other stage stayed paper. One theme now: a seamless paper ground, a single
-   centred column, the intro group optically centred between header and foot. */
+/* Finder desktop (2026-08-11 overhaul; O63 finished the thought): the welcome and
+   type stages once painted a #292800 olive card with petal-pink accents inside a
+   1180px shadow box while every other stage stayed paper. One theme now: a seamless
+   paper ground, a single centred column — EVERY stage in the same 640px shell
+   (--shell-w above), so the frame never changes width or grows borders mid-flow.
+   The old stage-keyed width list and its 280ms width tween are gone: with nothing
+   changing width between stages, that motion had no meaning left to carry. */
 @media (min-width: 820px) {
-  .patient-v2 .care-shell,
-  .patient-v2 .screen {
-    transition: width 280ms ease;
-  }
-
-  .patient-v2[data-stage="welcome"] .care-shell,
-  .patient-v2[data-stage="welcome"] .screen,
-  .patient-v2[data-stage="scenarios"] .care-shell,
-  .patient-v2[data-stage="scenarios"] .screen,
-  .patient-v2[data-stage="type"] .care-shell,
-  .patient-v2[data-stage="type"] .screen {
-    width: min(640px, 100%);
+  .patient-v2 .care-shell {
     border: 0;
   }
 

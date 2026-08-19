@@ -227,9 +227,12 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
 9. **Vercel free-tier deploy quota** keeps blocking previews/production for hours at a time.
    FOUNDER: either upgrade the plan or accept batched deploys; the loop should batch pushes
    (one push per verified unit, no pixel-only pushes between) either way.
-10. **Finder desktop composition** (build unit, from D1's reverted attempt): the ~520px shell
-    is shared by every finder stage, so a real desktop layout needs the shell widened for all
-    stages at once — its own unit, not a media query (rationale in globals.css).
+10. **Finder desktop composition — CLOSED by O63 (2026-08-19), the shell way D1's revert
+    prescribed.** One `--shell-w` token (520px; 640px at ≥820px) drives the shell, the
+    ≥600px block and the fixed booking bar's centring, for every stage at once; the
+    stage-keyed width list and its 280ms tween are deleted (nothing changes width mid-flow
+    any more, so the motion had no meaning left), and the intro stages' seamless borderless
+    paper now holds end to end. Phone and 600–819px unchanged; captures in qa/desktop-o63/.
 
 ## Explaining the fit, continuously (runs all year)
 
