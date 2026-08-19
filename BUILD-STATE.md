@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O62 (Q2 item 8 — the tie-quality metric: how often the finder fails to separate the top)
+> — claimed 2026-08-19T18:04Z by loop-0819r.** The plan's wording assumes a big roster ("top
+> band ties at size >3"); the roster is three real GPs, so the metric is ADAPTED HONESTLY
+> rather than shipped meaningless: per synthetic corpus run (the W231 reaching sentences —
+> the same corpus the reach ratchet already trusts), classify each request's TOP BAND as
+> separated (size 1), partial tie (size 2) or unseparated (the whole roster tied at the top —
+> exactly the "clarifier failed to separate" case at roster size 3, and the size->3 case when
+> the roster grows past it, so the definition survives growth). Change: `tieQualityReport`
+> in a new src/matching/tie-quality.ts (W234, boundary-declared), measured over the corpus
+> and pinned as a BOTH-DIRECTIONS ratchet the way REACH_FLOORS is: the separated count may
+> not fall, and an improvement demands the pin move up rather than passing silently — this is
+> the KPI clarifier work moves, so it must be impossible to regress it quietly. Console: the
+> matching console gains the KPI as one small block computed from the same function (a panel
+> that computed its own number would eventually disagree with the gate). Verify: measure
+> first, pin the measured numbers; console e2e asserts the block renders the same counts;
+> qa/ capture + DESIGN-QA entry; year-plan item 8 marked done; full `pnpm verify` green.
+
 > **O61 (the defect O60 ledgered: /clinicians/join overflows a 390px phone) — DONE
 > 2026-08-19 by loop-0819q.** Gate result: mobile-fit green on all seven public surfaces,
 > join-hero e2e still drives the slider through its accessible name, WCAG A/AA suite green,
