@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O57 (Standing debt 1 remainder — the applications console: the declared mix gets its
+> reader) — claimed 2026-08-19T12:52Z by loop-0819m.** O26 closed the capture side of the mix
+> hero's promise: `desiredMixPercent` rides the application only when the GP actually set it.
+> The debt's stated remainder: "no console surface renders applications yet, so the declared
+> mix has no reader; when an applications view is built, the mix renders as stated preference."
+> Change: `/console/applications` — ADHD.ME-staff-gated like `/console/interest`, with the gate
+> ABOVE the read so a non-staff session never assembles the list into the RSC payload; renders
+> each received application's declared facets (care areas, manner, languages, NSW training and
+> books answers as answers), W153-quoted free-text fields with the public_form attribution
+> stated once, the Ahpra number labelled as unchecked shape, and the mix — when and only when
+> the row carries it — as stated preference, never a promise. NO approve/publish control:
+> status is `received` and W183's Ahpra-review gate is a human act outside this console (G6
+> stays shut; nothing writes toward the directory). Tripwires honestly: W102 dossier row +
+> census line for the new route. Verify: store fixture unit test for the page's read; e2e —
+> non-staff refusal, and a submitted application with a set mix rendering as stated preference
+> (and one without staying silent); DESIGN-QA entry + qa/ capture; full `pnpm verify` green.
+
 > **O56 (Q2 item 7 — capacity truthfulness: declarations age) — DONE 2026-08-19 by
 > loop-0819l.** The matching-market lesson the plan cites: stated capacity drifts from real
 > capacity, and the mechanism must price that in. `acceptingNewPatients` was an undated
