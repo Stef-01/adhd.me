@@ -135,6 +135,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "A privacy notice is read by the people whose data it concerns, and APP 1 requires it to state the kinds of information held — which for this product means naming diagnoses and test results. Marketing rules apply; the data-category rules cannot, or the notice cannot be written.",
   },
   {
+    path: "/privacy/counsel-review",
+    audience: "patient_notice",
+    why: "Explains why the two legal documents are draft-marked and what an independent lawyer has been asked to check — the automated-decisions transparency move applied to the legal process itself. Read by the person the drafts concern, so it answers to the same patient rules.",
+  },
+  {
     path: "/privacy/automated-decisions",
     audience: "patient_notice",
     why: "Same reason as /privacy. An ADM transparency notice exists for the person the decision is about, and describing what the software decides means naming what it decides it from.",

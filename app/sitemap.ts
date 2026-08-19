@@ -3,7 +3,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "./site";
 
-const PUBLIC_PATHS = ["/", "/finder", "/approach", "/examples", "/faq", "/practices", "/clinicians", "/clinicians/join", "/privacy", "/privacy/automated-decisions", "/terms", "/thanks"];
+const PUBLIC_PATHS = ["/", "/finder", "/approach", "/examples", "/faq", "/practices", "/clinicians", "/clinicians/join", "/privacy", "/privacy/automated-decisions", "/privacy/counsel-review", "/terms", "/thanks"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return PUBLIC_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, changeFrequency: "weekly", priority: path === "/" ? 1 : 0.6 }));

@@ -119,6 +119,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O41 (founder-directed — the counsel check visible on-site) — claimed and DONE 2026-08-19,
+> interactive session (not a loop firing).** `/privacy/counsel-review` explains the draft
+> banners in the product's own register: what counsel has been asked to check (patient-safe
+> wording; the raw brief linked as working-document-not-advice), and that banners come down on
+> counsel's word only. Linked from both draft banners (/privacy, /terms); public-surfaces
+> patient_notice row, dossier census + surface-map row, sitemap entry. Sweep forced a global
+> review→check rename on the page and both banner links (no-ratings bans "review" on patient
+> surfaces). Loop firings: O41 is taken — next free number is O42.
+
 > **O38 (Standing debt #2, last piece — the persisted reach report) — DONE 2026-08-18,
 > loop-0818d (claimed 23:46Z). DEBT #2 CLOSED.** ONBOARDING-INTERVIEW.md item 4 shipped: the
 > lexicon-gap feed is a record. `ClinicianBackground.patientSilent` rides every interview save

@@ -27,8 +27,12 @@ export const metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <p className="mb-6 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
+      <p className="mb-2 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
         Draft — not yet in force
+      </p>
+      <p className="mb-6 text-sm text-stone-500">
+        Why it is a draft, and what is being checked:{" "}
+        <Link href="/privacy/counsel-review" className="underline">the legal check</Link>.
       </p>
       <h1 className="text-3xl font-semibold tracking-tight">Privacy policy</h1>
       <div className="prose prose-stone mt-8 space-y-6 text-stone-700">
