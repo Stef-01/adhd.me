@@ -119,6 +119,17 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O52 (UI refinement & motion — the re-sort made visible) — claimed 2026-08-19T07:45Z by
+> loop-0819h.** The founder's motion queue, item two: "the results list re-sorting with layout
+> animations when a clarifier answer reorders it — the order changing is the product's whole
+> argument, show it." Today a clarifier answer re-ranks the list and the rows TELEPORT, so the
+> one moment the product proves an answer mattered reads as a flicker. Change: `layout`
+> position animation on the result rows plus exit handling for rows that leave the visible
+> fold, under the existing `MotionConfig reducedMotion="user"` so the static equal (instant
+> reorder) is automatic — motion carrying meaning, nothing decorative. Verify: e2e pins that
+> a clarifier answer reorders while rows stay keyed and visible; before/after captures in
+> qa/motion-o52/ + DESIGN-QA entry; `pnpm verify` green.
+
 > **O51 (Explaining the fit, Q1 increment — unmatched asks named per-clinician) — claimed
 > 2026-08-19T06:46Z by loop-0819g.** The year plan's continuous track, Q1 step: O21 put
 > provenance on the profile's matched reasons; this puts the OTHER half beside them — the
