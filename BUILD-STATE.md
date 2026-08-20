@@ -120,7 +120,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O80 (founder-directed 2026-08-20, clarifying O79: a standalone PYTHON tool for the
-> Australian GP-led ADHD pathway) — claimed 2026-08-20T04:47Z by loop-0820f.** The founder's
+> Australian GP-led ADHD pathway) — claimed 2026-08-20T04:47Z by loop-0820f; DONE
+> 2026-08-20. Gate: `python3 -m unittest` green (21 tests: every filter both directions
+> incl. inclusive age bounds and stacking reasons, weights pinned to the directed values
+> and sum 1, every raw score in [0,1] with a sentence, total = printed breakdown exactly,
+> binding-fact availability, neutral-midpoint unknown locations, pathway-keyed MBS sets,
+> determinism under permutation of both inputs, cut-inside-a-tie said, authorization note
+> claims asserted, and the maintenance law itself tested — a state rule without a note and
+> review_by date fails); demo prints the worked example; `pnpm verify` green untouched
+> (212 files, 3247 tests — the tool lives in tools/gp-match/, outside the src census).**
 > full spec: patients (location, state, age, existing_diagnosis_status, urgency,
 > communication_preference, funding_preference) × GPs (location, state, capacity,
 > gp_authorization_level, age_range_supported, mbs_items_billed, bulk_billing_available,

@@ -227,6 +227,18 @@ lane, when a surface wants it: a console rendering of one patient's breakdown (d
 copy where it renders), and wiring `statedNeeds` from `readNeeds` output so the finder's
 reader and the allocator share one vocabulary end to end.
 
+**O80 (2026-08-20, founder clarification of O79): the standalone Python variant for the
+GP-led pathway** — `tools/gp-match/` (`config.py` + `adhd_gp_match.py` + 21-test suite).
+Adds the jurisdiction layer the founder specified: state-match and authorization-level
+hard filters (undiagnosed → initiate_and_diagnose only; diagnosed → either authorized
+level; not_authorized never), age range, capacity, and bulk-billed-only as a hard
+constraint; weights 30/25/20/15/10 (availability, proximity, cost, communication, MBS
+pathway fit); top-3 with breakdown and a plain-language authorization note carrying the
+state's rollout context. State rules and MBS sets live in config with per-entry notes and
+review dates — a test refuses an entry without one — because the rules are actively
+changing through 2026. FOUNDER MAINTENANCE: re-check each config entry by its review_by
+date; the tool's rules are only as current as their last review.
+
 ## Refactoring, continuously (runs all year — founder directive 2026-08-19)
 
 Codebases this young rot at the seams that grow fastest. The founder's ask: keep refactoring
