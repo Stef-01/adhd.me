@@ -40,6 +40,9 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  329/180/51/98 at O91 (the bare-without rule: the retagged independence ask left the
+ *  run, and its four boundary pins joined — the double-negative wants separate, the
+ *  assessment-without-reliving ask lands unseparated on a facet everybody declares);
  *  327/179/52/96 at O88 (Dr Anusha's supplied bio declared Hindi, Urdu and her first two
  *  manner facets: Urdu asks that separated one Saxena now band both above Dr Yadav (partial
  *  ties, honestly said), Hindi asks that separated two-of-three now tie the whole roster,
@@ -47,7 +50,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 327, separated: 179, partialTie: 52, unseparated: 96 };
+const PINNED = { total: 329, separated: 180, partialTie: 51, unseparated: 98 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

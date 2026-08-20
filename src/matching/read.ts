@@ -403,19 +403,40 @@ export function suppressedByDesireNegation(
  * other side: "not <cue>" negates; "not the usual bulk billing crowd" (a gap) does not,
  * and tightening past adjacency is how "never LET ME finish anything" got broken once.
  *
- * The set is {no, not} ONLY, every exclusion a pinned lesson:
- *   - "without" excluded — "what can we do without medication" IS the non-medication ask.
+ * The set was {no, not} at O72, every exclusion a pinned lesson:
  *   - "never" excluded — history and complaint, not refusal ("never had an assessment").
  *   - contracted verb negators excluded — "won't do titration" is a complaint, i.e. a want.
  * MANNER stays exempt at the call site exactly as O40: "not rushed" is the unhurried ask.
  * A cue whose own phrase begins with a negator is untouched — this looks BEFORE the span.
+ *
+ * "WITHOUT" JOINED AT O91, and the original exclusion turned out to be protecting nothing.
+ * O72 kept it out for "what can we do without medication" — but that sentence reaches
+ * through a cue whose OWN phrase starts with the negator ("without medication"), which
+ * this check never touches. Meanwhile the corpus caught the cost of the exclusion: "do
+ * any GPs do the whole thing without a psychiatrist referral" — an independence ask, the
+ * product's premise — read as a shared-care want. Measured over the 500-entry corpus, the
+ * extension moves exactly that pin and nothing else.
+ *
+ * THE DOUBLE-NEGATIVE GUARD, designed against the one shape scouting found: "I can't do
+ * this without bulk billing" NEEDS bulk billing — "can't … without X" is a want wearing
+ * two negatives. A need-marker token earlier in the same clause stands the suppression
+ * down. The guard reads the content stream (the markers are content tokens or kept
+ * negators, never stopwords).
  */
-const BARE_NEGATORS = new Set(["no", "not"]);
+const BARE_NEGATORS = new Set(["no", "not", "without"]);
+const NEED_MARKERS = new Set(["cant", "cannot", "not", "no", "never", "wont"]);
 
 export function bareNegatorBefore(sentence: readonly string[], cueFrom: number): boolean {
   if (cueFrom === 0) return false;
   const before = sentence[cueFrom - 1];
-  return before !== undefined && BARE_NEGATORS.has(before);
+  if (before === undefined || !BARE_NEGATORS.has(before)) return false;
+  if (before !== "without") return true;
+  for (let k = cueFrom - 2; k >= 0; k--) {
+    const token = sentence[k]!;
+    if (token === CLAUSE_BOUNDARY) break;
+    if (NEED_MARKERS.has(token)) return false;
+  }
+  return true;
 }
 
 /**

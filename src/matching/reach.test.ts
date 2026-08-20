@@ -503,6 +503,36 @@ describe("§O84 the sit-register refusal, and the phrasing that survived", () =>
   });
 });
 
+describe("§O91 'without X' is going without X — with the double negative flipping it back", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("suppresses the independence ask O87 pinned, exactly as the pin's analysis predicted", () => {
+    expect(facets("do any GPs do the whole thing without a psychiatrist referral")).not.toContain("care:shared-care");
+    expect(facets("an appointment without the dose conversation for once")).not.toContain("care:titration");
+  });
+
+  it("a need-marker before 'without' in the same clause keeps the want", () => {
+    expect(facets("I can't do this without bulk billing")).toContain("pref:bulk-billing");
+    expect(facets("I cannot manage the trips without telehealth")).toContain("pref:telehealth-first");
+    expect(facets("there is no way I keep going without bulk billing")).toContain("pref:bulk-billing");
+  });
+
+  it("the guard does not cross a clause boundary", () => {
+    expect(facets("I said no to that. going without telehealth suits me fine")).not.toContain("pref:telehealth-first");
+  });
+
+  it("every exclusion O72 protected still stands", () => {
+    // A cue whose OWN phrase starts with the negator is untouched — the check looks
+    // strictly before the span, which is why the original exclusion protected nothing.
+    expect(facets("what can we do without medication")).toContain("care:non-medication");
+    expect(facets("not just medication")).toContain("care:non-medication");
+    // Manner stays exempt: "without judgement" IS the non-judgmental ask.
+    expect(facets("without judgement")).toContain("manner:non_judgmental");
+    // A cue BEFORE the "without" is out of its reach entirely.
+    expect(facets("I need someone to adjust the dose without a three month wait")).toContain("care:titration");
+  });
+});
+
 describe("§O83 somebody else's 'no' is a complaint, not the reader's refusal", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

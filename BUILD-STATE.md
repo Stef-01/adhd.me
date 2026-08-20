@@ -134,7 +134,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (shared-care floor moved by sanctioned reclassification if the count drops), the
 > double-negative and cue-initial boundaries pinned both directions in §O91 + corpus
 > data, every §O72/§O81/§O83 pin green, tie-quality repinned if the run changes, full
-> `pnpm verify` green.
+> `pnpm verify` green. DONE 2026-08-20: the pin's analysis MEASURED TRUE — with "without"
+> in BARE_NEGATORS the 504-entry corpus's whole diff was the predicted retag plus the
+> unit's own four boundary pins; every O72-protected exclusion held exactly as the
+> analysis said it would (cue-initial negators are before-the-span-invisible; manner
+> exempt; a cue before the "without" untouched). The double-negative guard shipped as
+> designed ({cant, cannot, not, no, never, wont} before "without", same clause — "I can't
+> do this without bulk billing" keeps its want, and the guard refuses to cross a clause
+> boundary). §O91 pins both directions; floors: assessment 58→59 + bulk-billing 20→21 +
+> telehealth 19→20 on the new pins, shared-care 20→19 by SANCTIONED RECLASSIFICATION (the
+> O72 precedent's third use, comment at the floor); tie-quality repinned 329/180/51/98 on
+> top of O88's interim repin (Dr Anusha's declarations reshuffled the partition mid-day —
+> the interactive session moved the pin with its own measured run, exactly as the law
+> requires, and this unit's diff sits cleanly on top). Full verify green (212 files,
+> 3336 tests). O87's harvest now stands at one fixed (this), two open (the raw-determiner
+> "without MY script" rule; the [the, phone] cue re-author).
 
 > **O90 (founder-directed 2026-08-20: "move it all to an About us section") — claimed
 > 2026-08-20T08:28Z by loop-0820n.** The landing's founders chapter ("We do not build this

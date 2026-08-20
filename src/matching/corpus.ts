@@ -777,17 +777,20 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "how much does an ADHD assessment cost with a GP", reaches: ["care:adhd-assessment"], aspires: ["pref:bulk-billing"] },
   { text: "how long is the wait to see someone who does assessments", reaches: ["care:adhd-assessment"] },
   /**
-   * KNOWN FALSE POSITIVE (O87): "WITHOUT a psychiatrist referral" is an independence ask —
-   * GP-led care, the product's whole premise — and the psychiatrist cue reads it as the
-   * OPPOSITE, a shared-care want. Pinned as today's truth per the O68 pattern. The fix
-   * analysis is already half-done: "without" sits in TIGHT_NEGATORS but was excluded from
-   * BARE_NEGATORS by O72 to protect "what can we do without medication" — yet that
-   * sentence reaches through a cue whose OWN phrase starts with the negator, which the
-   * bare-negator check never touches (it looks strictly before the span). Extending
-   * BARE_NEGATORS with "without" may therefore be safe; the fix unit must measure that
-   * claim and retag this to `never` in the same commit.
+   * O87 pinned this as a KNOWN FALSE POSITIVE (an independence ask — GP-led care, the
+   * product's premise — read as a shared-care want); O91 measured the pin's own analysis,
+   * found it right ("without" was excluded to protect a sentence that reaches through a
+   * cue-initial negator the check never touches), extended BARE_NEGATORS, and retagged —
+   * the O68 pattern's fifth full run. The double-negative guard's pins sit below.
    */
-  { text: "do any GPs do the whole thing without a psychiatrist referral", reaches: ["care:shared-care"] },
+  { text: "do any GPs do the whole thing without a psychiatrist referral", never: ["care:shared-care"] },
+  // O91's boundary as data: "can't … without X" is a want wearing two negatives, so the
+  // guard stands the suppression down; a plain "without X" suppresses; a cue that starts
+  // with its own negator is untouched, exactly as O72 built it.
+  { text: "I can't do this without bulk billing", reaches: ["pref:bulk-billing"] },
+  { text: "I cannot manage the trips without telehealth", reaches: ["pref:telehealth-first"] },
+  { text: "an appointment without the dose conversation for once", never: ["care:titration"] },
+  { text: "an assessment without having to relive it please", reaches: ["care:adhd-assessment"], aspires: ["care:trauma-informed"] },
   { text: "is telehealth enough for a dose review", reaches: ["pref:telehealth-first", "care:titration"] },
   { text: "who bulk bills for children's appointments", reaches: ["pref:bulk-billing", "care:child-adolescent-adhd"] },
 
@@ -883,7 +886,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // the gap (five two-token cues) and the floor is the measured count — the standing gap,
   // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
   // nobody noticed.
-  "care:adhd-assessment": 58,
+  "care:adhd-assessment": 59,
   "care:anxiety": 17,
   "care:autism-adhd": 16,
   "care:child-adolescent-adhd": 16,
@@ -891,7 +894,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:depression": 13,
   "care:emotional-regulation": 9,
   "care:non-medication": 8,
-  "care:shared-care": 20,
+  // shared-care lowered 20→19 by O91: the count lost a KNOWN FALSE POSITIVE ("without a
+  // psychiatrist referral" retagged reaches→never when the bare-without rule landed) — a
+  // correction, not a hearing lost; the O72 bulk-billing precedent, third use.
+  "care:shared-care": 19,
   "care:substance-history": 9,
   // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
   // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
@@ -911,9 +917,9 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
   // honestly reclassified is the one sanctioned direction, and this comment is its record.
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
-  "pref:bulk-billing": 20,
+  "pref:bulk-billing": 21,
   "pref:longer-appointment": 6,
-  "pref:telehealth-first": 19,
+  "pref:telehealth-first": 20,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.

@@ -23,9 +23,11 @@ non-rankings.
    KNOWN FALSE POSITIVES pinned with retag demands: "without MY script" (deprivation) fires
    non-medication — the fix reads the raw determiner; "the phone menu hung up" fires
    telehealth through the [the, phone] pair — O84's [the, room] lesson living undiscovered
-   in an older cue; and "without a psychiatrist referral" (an independence ask, the
-   product's premise) fires shared-care BACKWARDS — the pin carries the half-done analysis
-   that extending BARE_NEGATORS with "without" may be safe. The standing gap list (~60
+   in an older cue; and "without a psychiatrist referral" — **FIXED by O91
+   (2026-08-20): the pin's analysis measured TRUE over the 500-entry corpus ("without" was
+   excluded to protect a cue-initial-negator sentence the check never touches); "without"
+   joined BARE_NEGATORS with a double-negative guard ("can't … without X" keeps the want),
+   the pin retagged, shared-care floor moved by sanctioned reclassification.** The standing gap list (~60
    aspirations) is the lexicon's work queue; growth continues opportunistically but the
    CI-gate deliverable is DONE.* Earlier: 401 entries after O75's tranche five (2026-08-20):
    the registers real traffic arrives in — question forms, on-behalf bookings (partner or
