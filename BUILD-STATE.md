@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O79 (founder-directed 2026-08-20: weighted multi-criteria pair scoring — patients to
+> prescribing doctors, hard filters then 30/25/20/15/10) — claimed 2026-08-20T04:33Z by
+> loop-0820e.** New machinery module `src/matching/allocation.ts` (W236): takes synthetic
+> patient requests (location, insurance type, stated urgency, communication preference) and
+> doctor records (specialty, location, capacity, insurance accepted, communication style);
+> hard filters exclude incompatible pairs with NAMED refusal reasons (insurance not
+> accepted / at capacity / specialty mismatch — never silent); surviving pairs score on
+> five criteria with DECLARED weights (clinical fit .30, availability .25, proximity .20,
+> cost .15, communication .10), each sub-score normalised 0–1 by a stated formula and
+> rendered as a W213 sentence; top-3 doctors per patient with ties said out loud.
+> Tree-law reconciliations written in the module: assignment may exclude at-capacity
+> doctors (the finder's O4 law — show closed books — governs LISTING, not allocation);
+> stated urgency is the patient's own preference, never symptom triage (G7); weights are
+> global and coarse, never per-clinician (C2). Synthetic data only; machinery only, no UI.
+> Gate: weights sum pinned, unity (total = weighted sum of breakdown) pinned, refusals
+> both directions, determinism under input permutation, top-3 shape, boundary census
+> (cdss-boundary W236 declaration + loader), full `pnpm verify` green.
+
 > **O78 (founder-directed 2026-08-20: "continue optimising the matching algorithm with a
 > thorough code audit") — claimed 2026-08-20T04:19Z by loop-0820d; DONE 2026-08-20. Gate:
 > docs/MATCHING-AUDIT-O78.md written (fixed / named-for-next / verified-sound / refused,
