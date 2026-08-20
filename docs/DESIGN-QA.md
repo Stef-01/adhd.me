@@ -757,3 +757,42 @@ Captures: qa/evidence-o115/ (before and after at 390, plus the scrolled state).
 - [x] Second collision of this exact kind found today (O99 was the first, on `.match-quality`).
   Both were an unqualified or under-scoped selector in a 6,000-line stylesheet quietly beating
   a specific one. O96's sectioning pass is what made both findable by reading.
+
+## O117 — a doctor can read what patients are told about them (2026-08-20)
+
+Captures: qa/told-o117/ (the panel at 1280 and 390, as a doctor reads it).
+
+- [x] The explaining-the-fit lane's Q4, and its only clinician-facing increment. Everything else
+  in the matching console is QUERY-driven — pick a sentence, watch the roster score against it —
+  which answers the staff question ("is the ranking behaving") and not the doctor's ("what does
+  this thing say about me").
+- [x] Built from DECLARATIONS rather than from a query, which is what makes it complete: what
+  the finder can say about a GP is fixed by what they declared, so the panel enumerates all of
+  it instead of sampling whichever query is typed. Three groups: the labels their declarations
+  can put in front of a patient, the sentences those labels sit inside, and what a patient is
+  told when they ask for something not declared.
+- [x] Every line is composed by the functions the finder calls — the reason line from
+  `getPersonalizedMatch`, the closed-books line from `closedBooksNote`, the distance line from
+  `distanceTo`. A unit test asserts the panel and the finder cannot disagree, because a "what
+  patients see" view that authored its own copy would become a reassuring fiction the first time
+  a sentence changed.
+- [x] Why it matters beyond transparency: W190 gives a clinician a path to correct a profile
+  that is wrong about them, and that path is only real if the thing to be corrected is legible.
+  A doctor cannot object to a sentence they have never been shown. Every row names the field
+  that produced it, so a correction request can point at something.
+- [x] Layout: two columns on desktop (said | source), one on a phone — a sentence and its source
+  are one fact and side-by-side at 390px they stop reading as a pair.
+
+**Found while building, fixed here:** `/console/matching` had NO guard. Its own first line says
+"STAFF-ONLY AND SYNTHETIC, LIKE EVERY OTHER CONSOLE ROUTE" and it was the only console route
+besides sign-in that never called `requireSession` — it answered 200 to anybody. Nothing on it
+was patient data, but the handoff tallies and reach report are the practice's business, and a
+page that enumerates what patients are told about three named real doctors should not be the one
+route that skipped the door. Now 307s to sign-in, pinned by e2e.
+
+**Found, not fixed — the next unit.** The O51 missed-asks line lowercases its label, so it renders
+"You also asked for adhd in children and adolescents". O21 already learned this lesson on the
+reason line ("Hindi-speaking" became "hindi-speaking", a typo on the one word a reader is
+scanning for) and stopped lowercasing there; the missed-asks line never got the same treatment.
+Neither pure approach works — "You also asked for A longer first appointment" is as wrong as
+"adhd" — so it needs a small helper with its own test, which is a unit rather than a line.

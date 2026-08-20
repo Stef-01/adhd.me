@@ -409,6 +409,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the quality union, the key list and the two scoring helpers. `EI_QUALITIES` carries a reader-facing `label` and `matchLine` for each declared quality — the words a PATIENT reads as why this GP was shown. Every one describes the clinician's manner (\"listens and takes you seriously\", \"is non-judgmental, so you can be honest\"), never a state of the reader: the cues that reach them are PREFERENCE expressions, so \"I do not want to feel rushed\" is read as a want and not as a finding about somebody. That is the same side of G7 the rest of the finder sits on — a stated want matched to a declared attribute, which is what the roster already does for language and gender.",
   },
   {
+    module: "src/matching/provenance.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports three enumerators over a clinician's own declarations and a `ToldLine` type. It holds NO copy of its own and is declared with an empty `operatorCopy` deliberately, because the whole point of the module is that it AUTHORS NOTHING: every sentence it returns is composed by the function the finder itself calls — the reason line by `getPersonalizedMatch`, the closed-books line by `closedBooksNote`, the distance line by `distanceTo`, the listing-gap line by `unservedCopy` — and the two fixed frames it does carry are the profile's missed-asks sentence and a source label naming the field a line came from, neither of which a patient ever reads. A test asserts the panel and the finder cannot disagree. That property is the module's reason to exist: a \"what patients are told\" view that wrote its own copy would drift from the product the first time a sentence changed, and the clinician reading it would be reading a reassuring fiction about their own listing.",
+  },
+  {
     module: "src/matching/read.ts",
     operatorCopy: [],
     notCopy:

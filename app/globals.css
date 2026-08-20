@@ -6038,6 +6038,28 @@ textarea:focus-visible {
 .mc-tag-manner { background: var(--accent-soft); border-color: var(--accent-tint); }
 .mc-weight { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.71875rem; }
 
+/* O117: what patients are told, as rows of sentence-and-source. The said half carries the
+   ink because it is what a doctor is checking; the source is the quiet half beside it,
+   because a clinician reading their own listing needs to know WHICH declaration produced a
+   line before they can ask for it to be corrected (W190). */
+.mc-told { margin: 8px 0 14px; padding: 0; list-style: none; }
+.mc-told li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4px 16px;
+  align-items: baseline;
+  padding: 7px 0;
+  border-top: 1px solid var(--line);
+}
+.mc-told li:first-child { border-top: 0; }
+.mc-told-said { color: var(--ink); font-size: 0.8125rem; line-height: 1.45; }
+.mc-told-from { color: var(--muted); font-size: 0.71875rem; line-height: 1.45; }
+@media (max-width: 700px) {
+  /* One column on a phone: a sentence and its source are one fact, and side-by-side at this
+     width they stop being readable as a pair. */
+  .mc-told li { grid-template-columns: minmax(0, 1fr); }
+}
+
 .mc-table-wrap { overflow-x: auto; margin-top: 10px; border: 1px solid var(--line); border-radius: 4px; }
 .mc-table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 0.8125rem; }
 .mc-table th, .mc-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }

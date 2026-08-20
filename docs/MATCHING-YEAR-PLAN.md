@@ -498,7 +498,16 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
   make the first one easier; no score, no total, no winner language, pinned by an e2e that
   fails on the words; W193's posture stated once for the whole table; the control hidden
   entirely when the reader's words reached nothing to compare on; (Q4) the same provenance view inside the console so a doctor
-  sees exactly what patients are told about them.
+  sees exactly what patients are told about them — **DONE, O117 (2026-08-20)**:
+  `src/matching/provenance.ts` enumerates, per clinician, every label their declarations can put
+  in front of a patient, the sentences those labels sit inside, and the not-declared frames —
+  all composed by the functions the finder itself calls, with a test asserting the panel and the
+  finder cannot disagree. Built from DECLARATIONS rather than a query, so it is complete rather
+  than a sample. It exists because W190's correction path is only real if the thing to be
+  corrected is legible: a doctor cannot object to a sentence nobody has shown them. Found and
+  fixed in the same unit: `/console/matching` had never called `requireSession`, though its own
+  header claimed staff-only, and was the single console route answering 200 to anybody.
+  **The explaining-the-fit lane is now complete for the year: Q1 O51, Q2 O66, Q3 O102, Q4 O117.**
 
 ## The targeting-levels audit (O23)
 

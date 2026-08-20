@@ -142,6 +142,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > panel's sentences derived from the same functions the finder calls (a test asserts the panel
 > and the finder cannot disagree); every roster clinician rendered; adhdme-taste with a qa/
 > capture and DESIGN-QA entry; e2e green; full `pnpm verify` green.
+> DONE 2026-08-20. `src/matching/provenance.ts` (W213) enumerates, per clinician: every label
+> their declarations can put in front of a patient, the sentences those labels sit inside, and
+> the not-declared frames — rendered in the matching console as three groups per GP, each row a
+> sentence beside the field that produced it. Six unit tests plus four e2e. The property the
+> module exists for is the one under test: every line is composed by the function the FINDER
+> calls, so a wording change on the patient side changes this with it. A "what patients see"
+> panel that authored its own copy would become a reassuring fiction the first time a sentence
+> moved, and the clinician reading it would be checking something that no longer happens.
+>
+> **THE UNIT FOUND AN OPEN DOOR, AND MY OWN CLAIM HAD ASSERTED IT WAS SHUT.** The claim above
+> says "console is staff-gated above the read (O57's posture)". `/console/matching` answered
+> **200 to anybody** — it had never called `requireSession`, and it was the ONLY console route
+> besides sign-in without a guard, while its own first line reads "STAFF-ONLY AND SYNTHETIC,
+> LIKE EVERY OTHER CONSOLE ROUTE". A file asserting a property it does not have. Nothing on it
+> was patient data, but the handoff tallies and the reach report are the practice's business,
+> and the page now enumerates what patients are told about three NAMED REAL DOCTORS — which is
+> what made checking worth doing rather than assuming. Guarded, 307s to sign-in, pinned by
+> e2e. I would not have looked if the panel had not raised the stakes; the lesson is that
+> "like every other route" is a claim, and claims in headers are the ones nothing tests.
+>
+> CENSUS-1 fired on the new module exactly as it did in O100 — no `// W<n>` header — and then
+> W200 required the copy surface declared, the same two-step. Filed under W213, the unit where
+> "every point of score is sayable in closed vocabulary" became law, since this module is that
+> vocabulary read back to its subject. `operatorCopy: []` is deliberate and the `notCopy` says
+> why: the module authors nothing.
+>
+> FOUND, NOT FIXED, AND IT IS THE NEXT UNIT. The panel renders O51's missed-asks line as "You
+> also asked for adhd in children and adolescents" — the label lower-cased, mangling the
+> acronym. O21 learned this exact lesson on the reason line ("Hindi-speaking" became
+> "hindi-speaking", a typo on the one word a reader is scanning for) and stopped lower-casing
+> there; the missed-asks line never got the same treatment. Neither pure approach works, since
+> "You also asked for A longer first appointment" is as wrong as "adhd", so it needs a small
+> helper with its own test rather than a one-line edit.
+>
+> **The explaining-the-fit lane is now complete for the year: Q1 O51, Q2 O66, Q3 O102, Q4 O117.**
 
 > **O116 (Q1 lexicon: four mid-sized facets, and the comparative the stemmer never bridged)
 > — claimed 2026-08-20T18:42Z by loop-0820s.** `care:titration` (5), `care:shared-care` (5),

@@ -16,6 +16,7 @@
 // "missed" tells you why somebody was not, which is the question that actually gets asked.
 
 import Link from "next/link";
+import { requireSession } from "../guard";
 import { CAPACITY_FRESH_DAYS, CAPACITY_ORDER, capacityGrade, clinicians } from "@/demo/clinicians";
 import { tieQualityReport } from "@/matching/tie-quality";
 import { tallyOutbound } from "@/attribution/outbound-store";
@@ -26,6 +27,7 @@ import { readTranscript } from "@/onboarding/transcript";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
 import { reachReport } from "@/onboarding/reach-report";
+import { notDeclaredFrames, reasonsPatientsCanSee, sentencesPatientsSee } from "@/matching/provenance";
 import { BackgroundEditor, type VocabularyEntry } from "./background-editor";
 
 export const metadata = { title: "Matching console — ADHD.ME" };
@@ -52,7 +54,17 @@ const VOCABULARY: VocabularyEntry[] = [
   ...EI_QUALITY_KEYS.map((trait) => ({ key: `manner:${trait}`, kind: "manner" as const, label: EI_QUALITIES[trait].label })),
 ];
 
-export default function MatchingConsolePage() {
+export default async function MatchingConsolePage() {
+  /* O117: THIS PAGE'S OWN HEADER SAYS "STAFF-ONLY … LIKE EVERY OTHER CONSOLE ROUTE" AND IT WAS
+     THE ONLY CONSOLE ROUTE WITHOUT A GUARD. Twenty-three sibling pages call `requireSession`;
+     this one never did, so it answered 200 to anybody, and the comment at the top of the file
+     had been asserting a property the file did not have. Found while adding the provenance
+     panel below — which is what raised the stakes enough to check: a page that enumerates what
+     patients are told about three NAMED REAL DOCTORS should not be the one route that skipped
+     the door. Nothing here was patient data and nothing was secret, but the handoff tallies
+     and the reach report are the practice's business rather than the public's, and a file
+     whose first line is a claim about access should be right about it. */
+  await requireSession();
   // One clock per render, threaded everywhere a grade is computed, so the audit table and the
   // freshness panel cannot disagree about what "today" is (O56).
   const today = new Date();
@@ -140,6 +152,63 @@ export default function MatchingConsolePage() {
             <ul className="mc-tags">
               {clinicianTags(clinician).map((tag) => (
                 <li key={tag.key} className={`mc-tag mc-tag-${tag.kind}`}>{tag.label}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+
+      {/* O117 (explaining the fit, Q4): the lane's only clinician-facing increment. Every other
+          view here is QUERY-driven — pick a sentence, watch the roster score against it — which
+          answers the staff question and not the doctor's. This one is built from DECLARATIONS,
+          which is what makes it complete: what the finder can say about a GP is fixed by what
+          they declared, so this enumerates all of it rather than sampling a typed query.
+
+          W190 gives a clinician a path to correct a profile that is wrong about them, and that
+          path is only real if the thing to be corrected is legible. A doctor cannot object to a
+          sentence they have never been shown. */}
+      <section className="mc-section" aria-labelledby="told-h">
+        <h2 id="told-h">What patients are told about each GP</h2>
+        <p className="mc-note">
+          Composed by the same functions the finder calls, never authored here — if the wording
+          on the patient side changes, this changes with it. Read it as the doctor: every line
+          below is something a patient can see, and the field beside it is the declaration that
+          produced it. Nothing is inferred and nothing is a judgement about them.
+        </p>
+        {clinicians.map((clinician) => (
+          <div key={clinician.id} className="mc-clinician" data-testid={`told-${clinician.id}`}>
+            <h3 className="mc-sub">{clinician.name}</h3>
+
+            <p className="mc-note">Reasons their declarations can put in front of a patient</p>
+            <ul className="mc-told">
+              {reasonsPatientsCanSee(clinician).map((line) => (
+                <li key={line.key ?? line.said}>
+                  <span className="mc-told-said">{line.said}</span>
+                  <span className="mc-told-from">{line.from}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mc-note">The sentences those labels sit inside</p>
+            <ul className="mc-told">
+              {sentencesPatientsSee(clinician).map((line) => (
+                <li key={line.said}>
+                  <span className="mc-told-said">{line.said}</span>
+                  <span className="mc-told-from">{line.from}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* The half a doctor is most likely to want to check. Both lines are facts about a
+                DECLARATION and never claims about ability (W193) — which is exactly the
+                distinction somebody reading their own listing will be looking for. */}
+            <p className="mc-note">What a patient is told when they ask for something not declared</p>
+            <ul className="mc-told">
+              {notDeclaredFrames(clinician).map((line) => (
+                <li key={line.said}>
+                  <span className="mc-told-said">{line.said}</span>
+                  <span className="mc-told-from">{line.from}</span>
+                </li>
               ))}
             </ul>
           </div>
