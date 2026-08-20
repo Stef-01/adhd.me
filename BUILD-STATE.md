@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O116 (Q1 lexicon: four mid-sized facets, and the comparative the stemmer never bridged)
+> — claimed 2026-08-20T18:42Z by loop-0820s.** `care:titration` (5), `care:shared-care` (5),
+> `pref:longer-appointment` (4) and `manner:unhurried` (4) — eighteen aspirations, all plain
+> wants, so they sweep together like O113's. `care:complex-mental-health` is deliberately NOT
+> in this unit: four of its five name a diagnosis or an admission ("borderline personality
+> disorder", "psych ward admissions in my twenties", "I hear voices sometimes"), which is the
+> disclosure question the founder already owes an answer on for three other facets, and adding
+> a fourth silently would be the opposite of consolidating it.
+>
+> THE FINDING THAT MADE THIS UNIT WORTH MORE THAN A CUE LIST. Measuring candidates turned up a
+> morphology gap: `stem("longer")` is "longer", not "long". So `pref:longer-appointment` — the
+> facet whose LABEL IS "A longer first appointment" — cannot hear the word "longer", and the
+> corpus has the sentence proving it ("can I ask for a longer appointment when I book" has sat
+> as an aspiration). O65 widened this facet's cues and could not have found it: every cue it
+> added says "long", so the whole set is deaf to the comparative in the same way. The fix
+> belongs in O50's `INFLECTIONS` table and in its idiom — NAMED entries with a real sentence
+> each, never a general -er rule, because "water"→"wat" and "other"→"oth" are what a general
+> rule does to this corpus. Gate: O103's method on every candidate cue; the stemmer entry
+> justified by its corpus sentence and pinned in both directions, with a NON-VACUITY pin that
+> the general -er stripping this deliberately avoids would break words the corpus contains;
+> zero `never` pins broken; promotions retagged in-commit; floors and tie-quality moved; full
+> `pnpm verify` green.
+
 > **O115 (UI refinement: the evidence list has never had the layout it was written with) —
 > claimed 2026-08-20T18:16Z by loop-0820s.** The lane's own review procedure, run on the
 > profile — the surface today's work made denser — and it found the same class of defect O99
