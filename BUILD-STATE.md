@@ -119,6 +119,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O115 (UI refinement: the evidence list has never had the layout it was written with) —
+> claimed 2026-08-20T18:16Z by loop-0820s.** The lane's own review procedure, run on the
+> profile — the surface today's work made denser — and it found the same class of defect O99
+> did, in a place that matters more. `.fit-evidence` is authored as
+> `display: flex; flex-direction: column`: one row per reason, each label beside the phrase
+> from the reader's own words that reached it. It has never rendered that way.
+> `.profile-content ul` — written for the two-up "Focus and experience" list — is 0,1,1 to its
+> 0,1,0, so EVERY list in the profile is a two-column grid, including the evidence list and
+> O51's missed-asks list, both of which declare their own single-column layout and lose.
+> The cost is not cosmetic. In two 164px columns the items have unequal heights, so a label
+> and the quote that belongs to it sit at different vertical offsets from the pair beside them
+> — the reader cannot tell whether "from your words: 'assessment'" belongs to the chip above
+> it or the one beside it. That is the layout law's own sentence ("if the reader must scan two
+> regions to join one fact, the layout is wrong") failing on the ONE element whose entire
+> purpose is joining a claim to its evidence (O21's provenance). Design: scope the generic
+> rule to the list it was written for — the experience list is the only `ul` inside a
+> `<section>` on this screen — so the classed lists get the layout they declare, and nothing
+> else moves. Gate: `scripts/css-computed-dump.mjs` diffed before/after with the change
+> CONFINED to the profile's lists; before/after captures at 390 and 1280; DESIGN-QA entry;
+> e2e green; full `pnpm verify` green.
+
 > **O114 (Q1 lexicon: woman-GP's vocabulary, and emotional-regulation's third G7 sort) —
 > claimed 2026-08-20T17:50Z by loop-0820s.** The two loudest left, and they are opposite
 > kinds of problem, which is the reason to take them together — the contrast is the unit's
