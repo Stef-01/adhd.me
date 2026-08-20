@@ -15,7 +15,19 @@ non-rankings.
 
 ## Q1 (Sep–Nov 2026): reach and evidence — make the reader hear more, provably
 
-1. **Reach corpus at scale.** *Progress: 401 entries after O75's tranche five (2026-08-20):
+1. **Reach corpus at scale. TARGET REACHED — 500 entries, O87 (2026-08-20).** *Tranche six
+   added the SPOKEN register (the finder has voice input — filler, run-ons, self-correction
+   all read cleanly), the medication-shortage and moved-cities continuation asks, question
+   forms round two, and walked the O81/O83 rules in the wild. 18 floors rose; tie-quality
+   repinned 327/204/28/95 (~62% separation holding). The tranche's harvest is THREE new
+   KNOWN FALSE POSITIVES pinned with retag demands: "without MY script" (deprivation) fires
+   non-medication — the fix reads the raw determiner; "the phone menu hung up" fires
+   telehealth through the [the, phone] pair — O84's [the, room] lesson living undiscovered
+   in an older cue; and "without a psychiatrist referral" (an independence ask, the
+   product's premise) fires shared-care BACKWARDS — the pin carries the half-done analysis
+   that extending BARE_NEGATORS with "without" may be safe. The standing gap list (~60
+   aspirations) is the lexicon's work queue; growth continues opportunistically but the
+   CI-gate deliverable is DONE.* Earlier: 401 entries after O75's tranche five (2026-08-20):
    the registers real traffic arrives in — question forms, on-behalf bookings (partner or
    parent typing for the person), life-stage context and hedged polite asks — 18 floors
    raised on the measured run, tie-quality repinned 274/170/23/81. Tranche five's harvest is

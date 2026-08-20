@@ -120,7 +120,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O87 (Q1 item 1, corpus tranche six: to the ~500 target) — claimed 2026-08-20T07:46Z by
-> loop-0820l.** ~80 new entries in the registers still thin or untested: the SPOKEN
+> loop-0820l; DONE 2026-08-20. THE TARGET IS REACHED: exactly 500 entries. Gate: corpus
+> green both directions (zero misses, zero leaks, zero unpromoted aspirations), 18 floors
+> raised on the measured run (assessment 41→58 the largest single move on record — the
+> spoken register and question forms are assessment-heavy), tie-quality repinned
+> 327/204/28/95 (41 new reaching requests, separation holding ~62%), full `pnpm verify`
+> green (212 files, 3328 tests).** 79 entries: the SPOKEN register reads cleanly through
+> filler and run-ons ("um so I think I might have ADHD and I want to actually get tested"
+> reaches); shortage/continuation asks landed with the moved-cities and retired-prescriber
+> shapes heard through existing cues; the O77/O81/O83 rules all earned their keep in the
+> wild (the anxious-mum compound holds the on-behalf boundary inside a compound; the
+> reported-refusal veto works in question form; the consume-once proxy's non-cue-object
+> limit is recorded as an ASPIRATION, not a boundary). Harvest: THREE new KNOWN FALSE
+> POSITIVES pinned with retag demands — "without MY script" fires non-medication (the
+> determiner that separates deprivation from preference is a stopword; fix reads the raw
+> determiner); "the phone menu hung up on me twice" fires telehealth through [the, phone]
+> (O84's [the, room] weakness living undiscovered in an older cue); "do any GPs do the
+> whole thing without a psychiatrist referral" fires shared-care BACKWARDS (an
+> independence ask — the pin carries the half-done analysis that "without" may be safe to
+> add to BARE_NEGATORS since the O72 exclusion case reaches through a cue-initial negator
+> the check never touches). ~60 standing aspirations are the lexicon's work queue; the
+> plan's Q1 item 1 CI-gate deliverable is closed.** ~80 new entries in the registers still thin or untested: the SPOKEN
 > register (the finder has voice input — filler, run-ons, self-corrections), medication
 > shortage and moved-cities continuation asks, question-forms round two, more compounds,
 > paraphrase depth on the thinnest floors (non-medication 7, emotional-regulation 8,

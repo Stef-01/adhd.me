@@ -699,6 +699,151 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the room was cold last time", never: ["manner:culturally_attuned"] },
   { text: "peer support has helped me before", never: ["manner:culturally_attuned"] },
   { text: "my support worker suggested this", never: ["manner:culturally_attuned"] },
+
+  // ═══ TRANCHE SIX (O87, 2026-08-20): the spoken register, continuation asks, and the ═════
+  // discipline rules walked in the wild. Authored, then MEASURED, then tagged — the law of
+  // every tranche. Its harvest is three new KNOWN FALSE POSITIVES pinned as today's truth
+  // (the O68 pattern), each with the retag its fix unit owes.
+
+  // ── the spoken register: the finder has voice input, and speech is not typing ───────────
+  { text: "um so I think I might have ADHD and I want to actually get tested", reaches: ["care:adhd-assessment"] },
+  { text: "ok so basically I need an assessment but like a proper one", reaches: ["care:adhd-assessment"] },
+  { text: "um yeah so basically my dose stopped working around lunch", reaches: ["care:titration"] },
+  { text: "look I just need someone to listen properly for once", reaches: ["manner:attuned"] },
+  { text: "sorry this is rambling but I need an assessment and maybe the anxiety looked at too", reaches: ["care:adhd-assessment", "care:anxiety"] },
+  { text: "you know how it is, doctors rush you, I want the opposite", reaches: ["manner:unhurried"] },
+
+  // ── history and self-recognition ─────────────────────────────────────────────────────────
+  // The son sentence straddles: the family history is genuine context and the child reach is
+  // left unjudged (unnamed) — the pinned ask is the adult's own assessment.
+  { text: "after my son was diagnosed I recognised myself and now I want my own assessment", reaches: ["care:adhd-assessment"] },
+  { text: "I have been reading about adult ADHD and it is time to find out properly", reaches: ["care:adhd-assessment", "manner:structured"] },
+  { text: "my psychologist thinks I should get assessed by a doctor who can prescribe", reaches: ["care:adhd-assessment"] },
+  { text: "twenty years of struggling and I finally want answers on the ADHD question", reaches: ["care:adhd-assessment"] },
+  { text: "diagnosed autistic at thirty, the ADHD question never got asked", reaches: ["care:adhd-assessment", "care:autism-adhd"] },
+
+  // ── shortage and continuation: the register the 2026 supply problems created ────────────
+  /**
+   * KNOWN FALSE POSITIVE (O87): "without MY script" is deprivation, not a preference for
+   * non-medication care — but the cue "without a script" hears both, because the
+   * determiner that separates them is a stopword. Pinned as today's truth per the O68
+   * pattern; the fix unit reads the raw determiner ("my"/"the" = lacking it, "a"/"any" =
+   * declining it) and must retag this to `never` in the same commit.
+   */
+  { text: "the medication shortage keeps leaving me without my script", reaches: ["care:non-medication"] },
+  { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", aspires: ["care:shared-care"] },
+  { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:adhd-assessment"], aspires: ["care:shared-care"] },
+  { text: "my prescriber retired and nobody will take over the script", reaches: ["care:shared-care"] },
+  { text: "the afternoon rebound is worse than the mornings ever were", aspires: ["care:titration"] },
+
+  // ── depression and anxiety, deeper ───────────────────────────────────────────────────────
+  { text: "the ADHD makes the depression worse and I want both handled together", reaches: ["care:depression", "care:adhd-assessment"] },
+  { text: "antidepressants numbed me without fixing anything, I want the ADHD looked at", reaches: ["care:depression", "care:adhd-assessment"] },
+  { text: "my anxiety spikes every time I have to make a phone call", reaches: ["care:anxiety"] },
+  { text: "worried sick before every appointment, I need help with that", aspires: ["care:anxiety"] },
+  { text: "keep the depression treatment going while we sort the attention side", reaches: ["care:depression", "care:adhd-assessment"] },
+
+  // ── emotional regulation / non-medication / substance: the thin floors fed ──────────────
+  { text: "I want help with the rage before it costs me my marriage", aspires: ["care:emotional-regulation"] },
+  { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
+  { text: "crying at work over nothing and I want it taken seriously", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
+  { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
+  { text: "what about diet and exercise before we go straight to stimulants", aspires: ["care:non-medication"] },
+  { text: "structure and skills first, medication as a last resort", aspires: ["care:non-medication"] },
+  { text: "I am on suboxone and need a GP who can work with that", aspires: ["care:substance-history"] },
+  { text: "weekend cocaine use is part of my history and I will not lie about it", aspires: ["care:substance-history"] },
+
+  // ── manner, wider ────────────────────────────────────────────────────────────────────────
+  { text: "my community treats this as a western invention and I need a GP who gets that", reaches: ["manner:culturally_attuned"] },
+  { text: "I want a doctor who understands migrant families", reaches: ["manner:culturally_attuned"] },
+  { text: "someone who talks to me like an adult, not a case file", aspires: ["manner:attuned"] },
+  { text: "explain the plan on paper so I can take it home", aspires: ["manner:sense_making"] },
+  { text: "walk me through every result line by line", aspires: ["manner:sense_making"] },
+  { text: "no sugar coating, just tell me straight", aspires: ["manner:sense_making"] },
+  { text: "go gently, my last practice made things worse", aspires: ["manner:steadying"] },
+  { text: "point out what I am doing right for once", aspires: ["manner:motivating"] },
+  { text: "I respond better to encouragement than to warnings", aspires: ["manner:motivating"] },
+  { text: "we decide the plan together or I walk", reaches: ["manner:collaborative"] },
+  { text: "bring me into every decision about my own brain", aspires: ["manner:collaborative"] },
+  // Punctuality is not the unhurried facet: wanting appointments to START on time is a
+  // different ask from wanting them not to be rushed once they start.
+  { text: "I need appointments that start on time, waiting destroys me", never: ["manner:unhurried"] },
+  { text: "I dissociate when doctors rush me", reaches: ["manner:unhurried"], aspires: ["care:trauma-informed"] },
+  { text: "meltdowns after appointments unless things are predictable", aspires: ["care:autism-adhd", "manner:structured"] },
+  { text: "my file says borderline and doors close", aspires: ["care:complex-mental-health"] },
+  { text: "psych ward admissions in my twenties, stable for years now", aspires: ["care:complex-mental-health"] },
+
+  // ── question forms, round two ────────────────────────────────────────────────────────────
+  { text: "how much does an ADHD assessment cost with a GP", reaches: ["care:adhd-assessment"], aspires: ["pref:bulk-billing"] },
+  { text: "how long is the wait to see someone who does assessments", reaches: ["care:adhd-assessment"] },
+  /**
+   * KNOWN FALSE POSITIVE (O87): "WITHOUT a psychiatrist referral" is an independence ask —
+   * GP-led care, the product's whole premise — and the psychiatrist cue reads it as the
+   * OPPOSITE, a shared-care want. Pinned as today's truth per the O68 pattern. The fix
+   * analysis is already half-done: "without" sits in TIGHT_NEGATORS but was excluded from
+   * BARE_NEGATORS by O72 to protect "what can we do without medication" — yet that
+   * sentence reaches through a cue whose OWN phrase starts with the negator, which the
+   * bare-negator check never touches (it looks strictly before the span). Extending
+   * BARE_NEGATORS with "without" may therefore be safe; the fix unit must measure that
+   * claim and retag this to `never` in the same commit.
+   */
+  { text: "do any GPs do the whole thing without a psychiatrist referral", reaches: ["care:shared-care"] },
+  { text: "is telehealth enough for a dose review", reaches: ["pref:telehealth-first", "care:titration"] },
+  { text: "who bulk bills for children's appointments", reaches: ["pref:bulk-billing", "care:child-adolescent-adhd"] },
+
+  // ── compounds, round three ───────────────────────────────────────────────────────────────
+  { text: "a woman GP who does assessments and speaks to teenagers without talking down", reaches: ["pref:woman-gp", "care:adhd-assessment", "care:child-adolescent-adhd"] },
+  { text: "bulk billed telehealth titration, I am rural and broke", reaches: ["pref:bulk-billing", "pref:telehealth-first", "care:titration"] },
+  { text: "an unhurried structured assessment for my autistic teenager", reaches: ["care:adhd-assessment", "manner:structured", "manner:unhurried", "care:child-adolescent-adhd", "care:autism-adhd"] },
+  { text: "shared care plus depression support under one roof", reaches: ["care:shared-care", "care:depression"] },
+  // The on-behalf boundary holding inside a compound: the mum is the patient, so the
+  // family word stays silent while her asks reach (O77's rule earning its keep).
+  { text: "a calm doctor for my anxious mum, she speaks Hindi", reaches: ["care:anxiety", "manner:steadying"], never: ["manner:culturally_attuned"] },
+
+  // ── G7: more symptom-only sentences, pinned silent ───────────────────────────────────────
+  { text: "I rewatch the same show because new plots are too much", never: ["care:adhd-assessment"] },
+  { text: "my bag is full of unfinished lists", never: ["care:adhd-assessment"] },
+  { text: "I interrupt people even when I try not to", never: ["care:adhd-assessment"] },
+  { text: "deadlines only exist for me at midnight the night before", never: ["care:adhd-assessment"] },
+  { text: "I bought five planners this year", never: ["care:adhd-assessment"] },
+  { text: "our daughter cries over homework every single night", never: ["care:adhd-assessment", "care:child-adolescent-adhd"] },
+
+  // ── logistics noise ──────────────────────────────────────────────────────────────────────
+  { text: "the receptionist said the doctor is running an hour behind", never: ["manner:unhurried"] },
+  { text: "my referral expired before I could use it", never: ["care:shared-care"] },
+  { text: "parking near the clinic costs a fortune", never: ["pref:bulk-billing"] },
+  /**
+   * KNOWN FALSE POSITIVE (O87): a phone-menu complaint reaches telehealth through the
+   * "over the phone" cue's [the, phone] raw pair — the exact weakness O84 measured and
+   * refused in [the, room], living undiscovered in an older cue. Pinned as today's truth
+   * per the O68 pattern; the fix unit re-authors the cue (or lands the run-demand rule)
+   * and must retag this to `never` in the same commit.
+   */
+  { text: "the phone menu hung up on me twice", reaches: ["pref:telehealth-first"] },
+
+  // ── O81/O83 discipline, walked in the wild ───────────────────────────────────────────────
+  // The consume-once proxy's known limit as data: the negation's true object ("a big
+  // clinic") is not a cue, so the trigger spends itself on the woman-GP ask instead. The
+  // want is real, so this is an ASPIRATION, not a boundary — it promotes when the reader
+  // learns to see non-cue objects.
+  { text: "I don't want a big clinic, a woman GP in a small practice please", aspires: ["pref:woman-gp"] },
+  { text: "they told me no telehealth scripts are allowed, is that true here", reaches: ["pref:telehealth-first"] },
+  { text: "if that makes sense as a plan, I would rather come in", never: ["manner:sense_making"] },
+  { text: "not looking for therapy, medication management is what I need", aspires: ["care:titration"] },
+  { text: "no more GP roulette, I want one doctor who owns my ADHD care from assessment to reviews", reaches: ["care:adhd-assessment"] },
+
+  // ── preference depth ─────────────────────────────────────────────────────────────────────
+  { text: "a female doctor who has lived a bit, someone my age", reaches: ["pref:woman-gp"] },
+  { text: "video reviews after work hours", aspires: ["pref:telehealth-first"] },
+  { text: "pension card, so it has to be bulk billed", reaches: ["pref:bulk-billing"] },
+  { text: "gap fees are why I stopped going", aspires: ["pref:bulk-billing"] },
+  { text: "book a double slot, I have twenty years to explain", aspires: ["pref:longer-appointment"] },
+  { text: "forty minutes minimum or it is not worth starting", aspires: ["pref:longer-appointment"] },
+
+  // ── shared care, wider ───────────────────────────────────────────────────────────────────
+  { text: "my paediatrician is handing me over to adult care and I am lost", reaches: ["care:shared-care"] },
+  { text: "the psychiatrist only sees me yearly now, a GP needs to hold the rest", reaches: ["care:shared-care"] },
+  { text: "school suggested an educational psychologist but we want a GP first", aspires: ["care:child-adolescent-adhd"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -738,41 +883,41 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // the gap (five two-token cues) and the floor is the measured count — the standing gap,
   // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
   // nobody noticed.
-  "care:adhd-assessment": 41,
-  "care:anxiety": 14,
-  "care:autism-adhd": 14,
-  "care:child-adolescent-adhd": 13,
+  "care:adhd-assessment": 58,
+  "care:anxiety": 17,
+  "care:autism-adhd": 16,
+  "care:child-adolescent-adhd": 16,
   "care:complex-mental-health": 11,
-  "care:depression": 9,
-  "care:emotional-regulation": 8,
-  "care:non-medication": 7,
-  "care:shared-care": 15,
+  "care:depression": 13,
+  "care:emotional-regulation": 9,
+  "care:non-medication": 8,
+  "care:shared-care": 20,
   "care:substance-history": 9,
   // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
   // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
-  "care:titration": 21,
+  "care:titration": 24,
   "care:trauma-informed": 9,
-  "manner:attuned": 12,
-  "manner:collaborative": 10,
-  "manner:culturally_attuned": 13,
+  "manner:attuned": 14,
+  "manner:collaborative": 11,
+  "manner:culturally_attuned": 15,
   "manner:motivating": 9,
   "manner:non_judgmental": 11,
   "manner:sense_making": 14,
-  "manner:steadying": 13,
-  "manner:structured": 15,
-  "manner:unhurried": 16,
+  "manner:steadying": 14,
+  "manner:structured": 17,
+  "manner:unhurried": 19,
   // bulk-billing lowered 12→11 by O72: the count lost the KNOWN FALSE POSITIVE ("not bulk
   // billing…" retagged reaches→never when the bare-not rule landed) — a correction, not a
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
   // honestly reclassified is the one sanctioned direction, and this comment is its record.
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
-  "pref:bulk-billing": 17,
+  "pref:bulk-billing": 20,
   "pref:longer-appointment": 6,
-  "pref:telehealth-first": 15,
+  "pref:telehealth-first": 19,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.
   // O77: culturally_attuned holds at 11 the same way — the on-behalf retag took one out
   // and the presence boundary pin ("I want my mum in the room for this") put one back.
-  "pref:woman-gp": 16,
+  "pref:woman-gp": 18,
 };

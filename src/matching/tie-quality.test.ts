@@ -29,7 +29,9 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  at O77 (the on-behalf rule: the retagged booking sentence stays in the run on its honest
  *  structured reach and now separates where the false culturally_attuned reach had it
  *  partially tied, and the new presence pin separates — a precision fix moving the KPI is
- *  the KPI working); 286/180/22/84 at O84 (the support-person pins joined the run, both
+ *  the KPI working); 327/204/28/95 at O87 (tranche six took the corpus to the ~500 target:
+ *  41 new reaching requests split 24 separated / 6 partial / 11 unseparated, holding the
+ *  separation rate at ~62%); 286/180/22/84 at O84 (the support-person pins joined the run, both
  *  separating); 284/178/22/84 at O83 (reported refusal: the promoted aspiration and
  *  the rule's two earned reaching pins joined the run, all three separating — titration
  *  and telehealth asks that one declaration answers); earlier 279/175/22/82 at O78 (the audit's per-occurrence suppression fix: the
@@ -38,7 +40,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly). */
-const PINNED = { total: 286, separated: 180, partialTie: 22, unseparated: 84 };
+const PINNED = { total: 327, separated: 204, partialTie: 28, unseparated: 95 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
