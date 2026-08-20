@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O83 (the O78 audit's second queued rule: somebody ELSE's "no" is a complaint, not the
+> reader's refusal) — claimed 2026-08-20T05:45Z by loop-0820h.** "they said no to titration
+> and I want it anyway" reaches nothing: O72's bare-negator adjacency fires on a refusal
+> that was REPORTED, not made — and O40/O72 both read complaints as wants everywhere else
+> ("my GP won't do titration" reaches). Design (the audit's sketch, raw-stream family): a
+> reporting verb directly before the bare negator marks reported speech and the suppression
+> stands down — UNLESS the raw stream shows the reporter is the reader themselves ("I said
+> no to titration" is a standing refusal; "i"/"ive" before the verb keeps the suppression).
+> Earned-set law: reporting verbs ship only with demonstrating sentences pinned in the same
+> commit ({said, told} to start). Gate: the waiting aspiration promotes and retags in this
+> commit, floors and tie-quality moved with the measured run, §O83 pins both directions
+> (reported vetoes suppression; self-report keeps it; plain bare-not untouched), every
+> §O40/§O72/§O81 pin green, full `pnpm verify` green.
+
 > **O82 (founder-supplied — Dr Anusha Saxena's portrait) — claimed and DONE 2026-08-20,
 > interactive session (not a loop firing).** The founder supplied her portrait directly
 > (attached in-session, 2026-08-20), which is the only route a real person's likeness enters
