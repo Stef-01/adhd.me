@@ -119,6 +119,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O123 (the founder question was over-claimed, and it was blocking work nobody had to
+> block) — claimed 2026-08-20T21:45Z by loop-0820s.** Plan item 1b records a real G7 question
+> — may the matcher be cued on what HAPPENED to somebody — raised by O104 over five
+> trauma-informed aspirations. Since then unit after unit has deferred to it: O119, O122 and
+> others parked complex-mental-health, emotional-regulation, attuned, substance-history,
+> depression and anxiety aspirations under the same heading, and the plan text still describes
+> only trauma's five. TWENTY-FOUR aspirations across SEVEN facets now sit behind a question
+> whose written scope is five sentences in one facet.
+> Checking them one at a time against how each facet ALREADY works says most of them were
+> never blocked. `care:complex-mental-health` is cued on "bipolar", "psychosis",
+> "schizophrenia", "schizoaffective", "psych history" — pure diagnosis disclosure, settled
+> design. `care:substance-history` is cued on "drinking", "cannabis", "in recovery", and the
+> plan's own worked example of the G7 line is "I drink more than I should" being read as
+> wanting that conversation held safely. `care:depression` is cued on "depression",
+> "depressed", "low mood". A sentence saying "borderline personality disorder plus the
+> attention problems" is not a new question for a facet that already reads "schizoaffective";
+> it is a missing cue, filed under a founder gate because the previous unit was working fast
+> and "G7" is a comfortable place to put a hard sentence.
+> That is the defect this unit fixes, and it is a defect of PROCESS rather than of code: a
+> genuine gate had become a catch-all, which makes the founder's decision look bigger than it
+> is and quietly parks work nobody needs to park. Deliverables: every deferred aspiration
+> classified against its own facet's existing vocabulary; the ones that were never blocked
+> cued and promoted under O103's method; the ones that GENUINELY await the founder marked IN
+> THE DATA rather than in prose, so item 1b's scope is generated from the corpus and cannot
+> drift again. Gate: no facet gains a cue in a register it does not already read (that is the
+> whole argument, so it is the whole gate); O119's precision probe green; zero `never` pins
+> broken; floors and tie-quality moved; full `pnpm verify` green.
+
 > **O122 (Q1 lexicon: three unblocked facets, and the family words the child facet never
 > learned) — claimed 2026-08-20T20:56Z by loop-0820s.** The queue's biggest remaining blocks
 > (trauma 5, complex-mental-health 5, emotional-regulation 4) are all waiting on the founder
