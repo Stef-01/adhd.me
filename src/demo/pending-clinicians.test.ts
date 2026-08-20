@@ -17,7 +17,9 @@ describe("W228 the staging area stays honest in both directions", () => {
     const anusha = clinicians.find((c) => c.id === "anusha-saxena")!;
     expect(anusha.gender).toBe("woman");
     expect(anusha.booking.via === "healthengine" && anusha.booking.practitionerId).toBe("160121");
-    expect(anusha.image).toBeNull();
+    // O82: the portrait arrived from the founder on her behalf (2026-08-20) — the monogram era
+    // ended the way the O34 note said it would: with the real thing supplied, never generated.
+    expect(anusha.image).toBe("/clinicians/anusha-saxena.png");
     expect(anusha.manner).toEqual([]);
     expect(anusha.mannerPending).toContain("2026-08-18");
   });

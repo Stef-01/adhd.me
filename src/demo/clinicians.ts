@@ -343,7 +343,9 @@ export const clinicians: Clinician[] = [
     suburb: "Double Bay",
     practice: "Bay Health Clinic",
     reach: "Practice appointments in Double Bay",
-    image: null,
+    // O82: her portrait, supplied by the founder on her behalf (2026-08-20) — the only route a
+    // real person's likeness enters this tree. Until then the monogram was her choice, not a gap.
+    image: "/clinicians/anusha-saxena.png",
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-18",
     focus: "ADHD assessment & management, mental health, women's health & lifestyle",

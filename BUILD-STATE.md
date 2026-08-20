@@ -119,6 +119,16 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O82 (founder-supplied — Dr Anusha Saxena's portrait) — claimed and DONE 2026-08-20,
+> interactive session (not a loop firing).** The founder supplied her portrait directly
+> (attached in-session, 2026-08-20), which is the only route a real person's likeness enters
+> this tree — the O34 monogram was her choice while no photo was supplied, never a gap to
+> fill. Cropped square and sized to the roster convention (800×800 PNG beside Dr Anubhav's),
+> `image` set on her entry, the W228 graduation pin flipped from asserts-null to asserts-path,
+> and the O34 e2e now asserts the portrait renders on both her result row and her profile.
+> Gate: pnpm verify green (after a node_modules refresh against the day's lockfile), O34 e2e
+> green, captures re-rendered. Loop firings: O82 is taken — next free number is O83.
+
 > **O81 (the O78 audit's headline named defect: a desire negation spends itself on the
 > NEAREST following ask — consume-once scope) — claimed 2026-08-20T04:56Z by loop-0820g;
 > DONE 2026-08-20. Gate: the two waiting aspirations PROMOTED exactly as predicted and

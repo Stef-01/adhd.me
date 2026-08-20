@@ -135,15 +135,20 @@ test("a triple ask — language, psychographic, care — reads all three familie
 
 test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena first (O34)", async ({ page }) => {
   // The founder's instruction, verified in pixels: she is live, she is first on the ask that
-  // motivated listing her, the reason is printed, and the monogram renders (no photo, by her
-  // choice) rather than a placeholder or a gap.
+  // motivated listing her, the reason is printed, and — since O82 — her portrait renders (the
+  // founder supplied it on her behalf; the monogram era ended with the real thing, never a
+  // generated one).
   await searchFor(page, "I would prefer a woman doctor for an ADHD assessment");
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Anusha/);
   await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
+  await expect(
+    page.locator(".clinician-row").first().locator(`img[src*="anusha-saxena"]`),
+  ).toBeVisible();
   await page.screenshot({ path: "qa/matching-o34/01-woman-gp-ranked-first.png", fullPage: true });
   await page.locator(".clinician-row").first().click();
   await expect(page.getByText("Dr Anusha Saxena").first()).toBeVisible();
   await expect(page.getByText(/from your words/).first()).toBeVisible();
+  await expect(page.locator(`.profile-screen img[src*="anusha-saxena"], img[src*="anusha-saxena"]`).first()).toBeVisible();
   await page.screenshot({ path: "qa/matching-o34/02-anusha-profile.png", fullPage: true });
 
   // O44: her booking path, walked to the handoff. The bar is a fixed overlay, so the evidence
