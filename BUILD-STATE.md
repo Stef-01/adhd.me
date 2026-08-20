@@ -120,7 +120,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O85 (founder-directed 2026-08-20: Dr Anusha Saxena also consults in Hornsby — the
-> roster learns second locations) — claimed 2026-08-20T06:56Z by loop-0820j.** The founder
+> roster learns second locations) — claimed 2026-08-20T06:56Z by loop-0820j; DONE
+> 2026-08-20. Gate: §O85 unit pins green (nearest-location distance from Hornsby, Double
+> Bay and Beecroft origins; the rooms-naming rule in both directions — plain from the
+> primary suburb, "(their Hornsby rooms)" otherwise; the near-sort putting her ahead of
+> Beecroft for a Hornsby reader; locationLabel; focus-area sweep extended over every
+> declared location with gazetteer resolution asserted), O85 e2e green with
+> qa/location-o85 captures (row from a Hornsby origin, profile at desktop + 390×844),
+> DESIGN-QA entry appended, all 20 finder+mobile e2e green, full `pnpm verify` green
+> (212 files, 3274 tests).** The founder
 > supplied the fact ("put in Hornsby too as location"); nothing else about the Hornsby
 > rooms is invented — no practice name, no separate hours. Model: `alsoConsultsAt?:
 > string[]` on Clinician (founder/clinician-declared consulting suburbs beside the primary

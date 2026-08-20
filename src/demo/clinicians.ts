@@ -124,6 +124,17 @@ export type Clinician = {
    */
   careAreasSometimes?: CareArea[];
   /**
+   * Consulting locations beside the primary `suburb`, when a clinician genuinely works from
+   * more than one (O85). Suburb names resolved against the same gazetteer as everything
+   * else; DECLARED (founder- or clinician-supplied) and never inferred — and nothing about
+   * a second location is invented to fill it out: no practice name, no separate hours,
+   * until whoever supplied the location supplies those too. The distance machinery reads
+   * the NEAREST of a clinician's locations, and the sentence names which rooms it measured
+   * whenever that is not the primary suburb, so a distance to one location never renders
+   * beside the other's name.
+   */
+  alsoConsultsAt?: string[];
+  /**
    * Set ONLY while a clinician is listed ahead of their onboarding interview (O34): a dated
    * note that manner claims are theirs to make there. The roster law still holds — a profile
    * with no manner can never match half of what people ask — but the honest intermediate
@@ -341,8 +352,14 @@ export const clinicians: Clinician[] = [
     pronouns: "she/her",
     title: "General practitioner, FRACGP",
     suburb: "Double Bay",
+    // O85: the founder supplied Hornsby as her second consulting location (2026-08-20,
+    // "put in Hornsby too as location"). The suburb is the whole of what was supplied:
+    // no Hornsby practice name, hours or booking route is invented here, and her
+    // Healthengine booking below remains the Double Bay profile until she or the founder
+    // supplies a Hornsby one.
+    alsoConsultsAt: ["Hornsby"],
     practice: "Bay Health Clinic",
-    reach: "Practice appointments in Double Bay",
+    reach: "Practice appointments in Double Bay and Hornsby",
     // O82: her portrait, supplied by the founder on her behalf (2026-08-20) — the only route a
     // real person's likeness enters this tree. Until then the monogram was her choice, not a gap.
     image: "/clinicians/anusha-saxena.png",
@@ -389,7 +406,7 @@ export const clinicians: Clinician[] = [
       practitionerId: "160121",
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
-    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight"],
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "hornsby", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight"],
     realPerson: true,
   },
 ];
@@ -825,10 +842,9 @@ export function rankCliniciansNear(
   if (!origin) return byFit;
 
   const needs = needsFor(query, roster);
-  const km = (c: Clinician) => {
-    const point = resolvePlace(c.suburb);
-    return point ? distanceKm(origin, point) : null;
-  };
+  // O85: the distance a clinician sorts on is the nearest of their consulting locations —
+  // somebody with Hornsby rooms IS near a Hornsby reader, whatever their primary suburb says.
+  const km = (c: Clinician) => nearestLocation(c, origin)?.km ?? null;
 
   /**
    * NOT A COMPARATOR, ON PURPOSE (O8 review). The pairwise version was intransitive: a
@@ -867,14 +883,48 @@ export function rankCliniciansNear(
   return out;
 }
 
+/**
+ * A clinician's consulting locations that the gazetteer can place: the primary suburb plus
+ * any declared `alsoConsultsAt` (O85). A location the gazetteer cannot resolve is simply
+ * absent from the list — our missing row, never their penalty (the standing law).
+ */
+function consultingPoints(clinician: Clinician): Array<{ suburb: string; point: SuburbPoint }> {
+  return [clinician.suburb, ...(clinician.alsoConsultsAt ?? [])]
+    .map((suburb) => ({ suburb, point: resolvePlace(suburb) }))
+    .filter((entry): entry is { suburb: string; point: SuburbPoint } => entry.point !== null);
+}
+
+/** The nearest of a clinician's consulting locations to an origin, or null if none resolve. */
+function nearestLocation(clinician: Clinician, origin: SuburbPoint): { suburb: string; km: number } | null {
+  let best: { suburb: string; km: number } | null = null;
+  for (const { suburb, point } of consultingPoints(clinician)) {
+    const km = distanceKm(origin, point);
+    if (!best || km < best.km) best = { suburb, km };
+  }
+  return best;
+}
+
+/**
+ * Every place this clinician consults, as one label: "Double Bay & Hornsby" (O85). The row
+ * and the profile render this instead of the bare suburb, so a second location is a fact
+ * the reader sees rather than one only the distance sort knows.
+ */
+export function locationLabel(clinician: Clinician): string {
+  return [clinician.suburb, ...(clinician.alsoConsultsAt ?? [])].join(" & ");
+}
+
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
 export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {
   // A kilometre figure beside somebody you never travel to is a number that answers no question.
   if (clinician.telehealthFirstAppointment) return "by telehealth, wherever you are";
   if (!origin) return null;
-  const point = resolvePlace(clinician.suburb);
-  if (!point) return null;
-  return describeDistance(distanceKm(origin, point));
+  const nearest = nearestLocation(clinician, origin);
+  if (!nearest) return null;
+  const said = describeDistance(nearest.km);
+  /* O85: with more than one consulting location the sentence names the rooms it measured
+     whenever they are not the primary suburb — a distance to the Hornsby rooms must never
+     render as though it were the distance to Double Bay. */
+  return nearest.suburb === clinician.suburb ? said : `${said} (their ${nearest.suburb} rooms)`;
 }
 
 export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician[] {

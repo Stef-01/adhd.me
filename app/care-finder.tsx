@@ -19,6 +19,7 @@ import { careArchetypes } from "@/demo/care-archetypes";
 import {
   clinicians,
   distanceTo,
+  locationLabel,
   getPersonalizedMatch,
   matchEvidence,
   matchQuality,
@@ -966,7 +967,10 @@ export function CareFinder() {
                     <span>
                       <strong>{item.name}</strong>
                       <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
-                      <small className="row-availability">{away ? `${item.suburb}, ${away}` : item.suburb}</small>
+                      {/* O85: every place they consult, one label — a second location is a
+                          fact the reader sees, and the distance sentence names which rooms
+                          it measured when that matters. */}
+                      <small className="row-availability">{away ? `${locationLabel(item)}, ${away}` : locationLabel(item)}</small>
                       {/* Closed books never outrank open ones at equal fit, and never hide
                           either — the row says why somebody unactionable is still here (O4).
                           The "they fit what you asked" sentence only renders when a fit was
@@ -1026,7 +1030,7 @@ export function CareFinder() {
                 {personalizedMatch.signals.length > 0 ? "Why this fit" : "About this GP"}
               </p>
               <h1>{clinician.name}</h1>
-              <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {clinician.suburb}</p>
+              <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {locationLabel(clinician)}</p>
               <NswTraining clinician={clinician} />
               <FounderDisclosure clinician={clinician} />
               {personalizedMatch.signals.length > 0 ? (

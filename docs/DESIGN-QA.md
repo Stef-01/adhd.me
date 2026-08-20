@@ -495,3 +495,20 @@ reused whole; no new CSS.
   a clinician with zero handoffs renders as a zero row, because an empty count is a fact;
   nothing about any person is stored or shown (clinician, surface, day — W235's whole row).
 - [x] e2e proves the loop end to end: a real /go request lands a row the console then reads.
+
+## O85 — Hornsby joins Dr Anusha's listing, distance honest about which rooms (2026-08-20)
+
+Captures: qa/location-o85/ (row from a Hornsby origin; profile desktop + 390×844). No new
+CSS — the existing row and meta lines carry the pair.
+
+- [x] Related facts share a row: "Double Bay & Hornsby, in your suburb (their Hornsby
+  rooms)" — every place she consults and the distance to the nearest, one line, one scan.
+- [x] Honesty gates: the distance sentence NAMES the rooms it measured whenever they are
+  not the primary suburb, so a kilometre figure to Hornsby never renders as though Double
+  Bay were that close; from Double Bay the sentence stays plain because the label already
+  says it. Nothing about the Hornsby rooms is invented — no practice name, no hours; the
+  map link still targets the NAMED practice (Bay Health Clinic, Double Bay) rather than a
+  guessed Hornsby address, and the booking route stays her Healthengine profile.
+- [x] Founder-supplied fact, source cited in the entry comment (2026-08-20); the roster
+  test now sweeps every declared location through the gazetteer and focus areas, so a
+  second location can never be an unresolvable string.

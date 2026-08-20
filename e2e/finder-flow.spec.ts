@@ -50,6 +50,29 @@ test("every result is reachable and opens a profile", async ({ page }) => {
   }
 });
 
+test("a second consulting location is a fact the reader sees, with the distance honest about which rooms (O85)", async ({ page }) => {
+  await intoResults(page);
+
+  // The row shows every place she consults, not only the primary suburb.
+  const anushaRow = page.locator(".clinician-row", { hasText: "Dr Anusha Saxena" });
+  await expect(anushaRow.getByText(/Double Bay & Hornsby/)).toBeVisible();
+
+  // From Hornsby, the distance is measured to her Hornsby rooms and SAYS so — a kilometre
+  // figure to one location never renders as though it were the other.
+  await page.getByLabel(/Where are you/i).fill("Hornsby");
+  await expect(page.getByText(/nearest to Hornsby first/i)).toBeVisible();
+  await expect(anushaRow.getByText(/in your suburb \(their Hornsby rooms\)/)).toBeVisible();
+  await anushaRow.screenshot({ path: "qa/location-o85/row-hornsby-origin.png" });
+
+  // The profile carries the same pair on its meta line.
+  await anushaRow.click();
+  await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();
+  await page.locator(".profile-content").screenshot({ path: "qa/location-o85/profile-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(300);
+  await page.locator(".profile-content").screenshot({ path: "qa/location-o85/profile-mobile.png" });
+});
+
 test("changing the suburb re-ranks in place instead of losing the search", async ({ page }) => {
   await intoResults(page);
   const before = await page.locator(".clinician-row strong").allInnerTexts();

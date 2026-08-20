@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { capacityGrade, clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, matchEvidence, matchQuality, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { capacityGrade, clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -110,12 +110,58 @@ describe("clinician roster and matching", () => {
   });
 
   it("keeps every clinician in one of the two focus areas", () => {
-    const nsw = new Set(["Beecroft", "Cheltenham", "Pennant Hills", "Epping"]);
+    const nsw = new Set(["Beecroft", "Cheltenham", "Pennant Hills", "Epping", "Hornsby"]);
     const easternSuburbs = new Set(["Double Bay", "Edgecliff", "Rose Bay", "Bondi Junction"]);
     const goldCoast = new Set(["Southport", "Surfers Paradise", "Broadbeach", "Robina"]);
     const focusAreas = new Set([...nsw, ...easternSuburbs, ...goldCoast]);
 
-    expect(clinicians.every((clinician) => focusAreas.has(clinician.suburb))).toBe(true);
+    // O85: the check covers EVERY declared consulting location, not only the primary —
+    // a second location outside the focus areas (or missing from the gazetteer) is the
+    // same defect in a quieter field.
+    for (const clinician of clinicians) {
+      for (const suburb of [clinician.suburb, ...(clinician.alsoConsultsAt ?? [])]) {
+        expect(focusAreas.has(suburb), `${clinician.id} lists ${suburb}`).toBe(true);
+        expect(resolvePlace(suburb), `${suburb} is not in the gazetteer`).not.toBeNull();
+      }
+    }
+  });
+
+  /**
+   * §O85: a second consulting location is a fact the machinery reads and the reader sees.
+   * Dr Anusha's Hornsby rooms were founder-supplied (2026-08-20); the distance sentence
+   * must name the rooms it measured whenever they are not her primary suburb, so a
+   * kilometre figure to Hornsby never renders as though Double Bay were that close.
+   */
+  describe("§O85 second consulting locations", () => {
+    const anusha = clinicians.find((c) => c.id === "anusha-saxena")!;
+
+    it("distance reads the nearest location and names it when it is not the primary", () => {
+      const fromHornsby = distanceTo(anusha, resolvePlace("Hornsby"));
+      expect(fromHornsby).toContain("in your suburb");
+      expect(fromHornsby).toContain("(their Hornsby rooms)");
+      // From her primary suburb the sentence stays plain — the card already says Double Bay.
+      const fromDoubleBay = distanceTo(anusha, resolvePlace("Double Bay"));
+      expect(fromDoubleBay).toContain("in your suburb");
+      expect(fromDoubleBay).not.toContain("rooms");
+      // From Beecroft, Hornsby (~6 km) is far nearer than Double Bay (~20 km).
+      expect(distanceTo(anusha, resolvePlace("Beecroft"))).toContain("(their Hornsby rooms)");
+    });
+
+    it("the label shows every place she consults", () => {
+      expect(locationLabel(anusha)).toBe("Double Bay & Hornsby");
+      // Single-location clinicians are untouched.
+      expect(locationLabel(clinicians.find((c) => c.id === "tushar-yadav")!)).toBe("Beecroft");
+    });
+
+    it("the near-sort reads the nearest location: a Hornsby reader finds her adjacent, not 25 km away", () => {
+      // An unmatched query with an origin is fully distance-sorted within the tie (O3/F4),
+      // and Dr Anubhav is telehealth-first (keeps fit position) — so between the two
+      // travel-to clinicians, Anusha's Hornsby rooms must beat Beecroft from Hornsby.
+      const near = rankCliniciansNear("zzz qqq", resolvePlace("Hornsby"));
+      const anushaAt = near.findIndex((c) => c.id === "anusha-saxena");
+      const yadavAt = near.findIndex((c) => c.id === "tushar-yadav");
+      expect(anushaAt).toBeLessThan(yadavAt);
+    });
   });
 
   it("only presents language as a match reason when the patient requested it", () => {
