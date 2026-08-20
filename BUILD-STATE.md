@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O113 (Q1 lexicon: the three remaining manner facets, swept together) — claimed
+> 2026-08-20T17:35Z by loop-0820s.** `sense_making` (7), `motivating` (6) and
+> `non_judgmental` (5) — eighteen aspirations, and unlike O104's trauma and O112's attuned
+> there is NO founder question here: read them and every one names the clinician's conduct.
+> Nobody in this set describes their own state. So the sort that took most of the last two
+> units is unnecessary and the whole register can be cued, which is why they go together —
+> O49's nine-facet sweep is the precedent for a multi-facet unit when the judgement is
+> uniform. Each facet is deaf in the same way: it knows abstract nouns for itself and none of
+> the concrete ways people ask. `sense_making` has no cue for "step by step", "line by line",
+> "tell me straight" or "no sugar coating"; `motivating` none for encouragement, for building
+> on what somebody already does well, or for "what is right with me"; `non_judgmental` none
+> for "no shame", for being lectured, or for "treat me like I should know better". Expect at
+> least one negator-inside-the-cue ("no shame", "won't lecture me") — that pattern is now
+> named and predicted rather than rediscovered. Gate: O103's method on every candidate, zero
+> `never` pins broken, promotions retagged in-commit, floors and tie-quality moved, full
+> `pnpm verify` green.
+
 > **O112 (Q1 lexicon: attuned, sorting the wants from the distress) — claimed
 > 2026-08-20T17:18Z by loop-0820s.** Now the loudest at eight, and the facet Q1's first sweep
 > already flagged: O49 left three attuned aspirations standing because "their phrasings read
