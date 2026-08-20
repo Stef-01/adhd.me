@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O121 (UI refinement: the finder walked end to end, after a day that changed most of it) —
+> claimed 2026-08-20T20:42Z by loop-0820s.** The lane's cadence is a UI-refinement unit per
+> week and its procedure is explicit: screenshot the surface at 390 and desktop, walk the
+> checklists, fix in place with the smallest diff, re-capture. O115 ran it on ONE surface and
+> found a rule that had never rendered as authored. Today changed the flow in eight places —
+> a whole new screen (O102's compare), the profile's evidence layout (O115) and its compare
+> link, the results banner (O111) and its listing-gap line (O110), the missed-asks sentence
+> (O118) — and NOBODY HAS LOOKED AT THEM TOGETHER. Each was captured alone, against its own
+> query, which is exactly the condition under which a flow accumulates: every screen correct,
+> the sequence not.
+> This is a review unit, so its findings are unknown by construction and the gate cannot name
+> them. What the gate CAN require is honesty about the walk: every stage captured at both
+> viewports from ONE continuous journey rather than per-screen queries, the taste checklists
+> walked in order (one idea per screen, related facts share a row, the fold governed, 44px
+> targets, palette tokens only, motion carrying meaning, claims rendering only when earned),
+> and every finding either fixed with a re-capture or REFUSED IN WRITING with its reason —
+> a review that finds nothing must say so and show the captures that justify the claim, since
+> "looked fine" is what a review says when it did not happen. Gate: captures in qa/, a
+> DESIGN-QA entry recording findings and refusals, e2e green, full `pnpm verify` green.
+
 > **O120 (the subject-blind false positive that actually harms somebody) — claimed
 > 2026-08-20T20:20Z by loop-0820s.** O119 named a class with five instances and earned the
 > mechanism; this takes the ONE of the five with real consequences rather than all five at
