@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O133 (allocation lane: one patient's breakdown, rendered) — claimed 2026-08-20T23:40Z by
+> loop-0820s.** The lane's last named step, and the allocator's FIRST CONSUMER: nothing in the
+> tree renders `matchPatientsToPrescribers` today, so W236's machinery has the same
+> zero-consumers shape the directory modules had at W195 — 300 lines and a test suite, and no
+> surface where a person can see whether it says anything sensible. O132 gave it the finder's
+> vocabulary; this gives it somewhere to be read.
+> `/console/allocation`, staff-gated like the rest of the console. It shows one synthetic
+> patient's words, the vocabulary those words DERIVE through `readNeeds` (so O132's wiring is
+> visible rather than asserted), the top three with every criterion's weight, normalised score,
+> weighted contribution and its W213 sentence, the tie note when there is one, and every
+> excluded doctor with every reason that applied.
+> Two scope decisions taken up front. The doctor records are SYNTHETIC, not the real roster:
+> the module's own header frames it as scoring synthetic requests against declared records, and
+> rendering an assignment of a patient to Dr Saxena would be the product doing something the
+> finder deliberately does not — the finder LISTS, it does not allocate, and O4 governs that
+> surface. And the patient is synthetic by founder gate, which is absolute. The page will say
+> both things on itself rather than relying on the reader knowing.
+> Gate: the page declares its copy in W200's census (the lane's own wording — "declares its copy
+> where it renders"); every number shown is read from the module rather than recomputed in the
+> page, so the surface cannot disagree with the scorer; an e2e that signs in and asserts the
+> breakdown renders with its sentences and that the synthetic labelling is present; full
+> `pnpm verify` green.
+
 > **O132 (allocation lane: the allocator and the finder share one vocabulary) — claimed
 > 2026-08-20T23:30Z by loop-0820s.** The lane names its own next step: "wiring `statedNeeds`
 > from `readNeeds` output so the finder's reader and the allocator share one vocabulary end to
