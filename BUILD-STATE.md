@@ -132,7 +132,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > small fixes land in-unit with before/after captures; anything larger is ledgered, not
 > absorbed (the O60→O61 precedent). Gate: qa/design-o93 before/after captures, DESIGN-QA
 > entries per fix, e2e suites green (finder, landing, mobile-fit, a11y), full `pnpm
-> verify` green.
+> verify` green. DONE 2026-08-20: the anchor bug is fixed at the mechanism, not the
+> symptom — the bar is position:sticky as the profile screen's last child (pinned while
+> the profile scrolls, settling in flow at the profile's own end, acknowledgement band
+> below it uncovered), which took three recorded enablers: .care-shell overflow
+> hidden→clip (same clipping, no scroll container), the vestigial overflow-y:auto split
+> off .profile-screen, and the framed-demo media block's screen overflow scoped away from
+> .patient-v2. Both bottom-padding reservations (154px base, 160px patient-v2) deleted —
+> the founder's dead-space find was the reservation for the bar that no longer floats.
+> Debugged with a computed-style ancestor walk after the first sticky attempt silently
+> failed (two scroll-container ancestors, found one at a time — the walk is in the
+> scratchpad pattern now). 390 sweep of welcome/scenarios/results/booking found nothing
+> else small; nothing larger to ledger. 27 e2e green (finder, mobile-fit, booking, a11y);
+> qa/design-o93 captures + DESIGN-QA entry; full verify green (212 files, 3341 tests).
 
 > **O92 (O87's second pin: "without MY script" is deprivation, not declining — the
 > determiner rule) — claimed 2026-08-20T09:05Z by loop-0820p.** "the medication shortage

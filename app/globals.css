@@ -97,7 +97,11 @@ textarea:focus-visible {
   width: 100%;
   min-height: 100svh;
   margin: 0 auto;
-  overflow: hidden;
+  /* O93: `clip`, not `hidden`. Same clipping, but hidden makes this box a scroll
+     container, and a scroll-container ancestor is what kept the profile's booking bar
+     position:fixed — which floated it over the acknowledgement band at the end of the
+     page (the founder's capture). clip lets the bar be sticky against the body. */
+  overflow: clip;
   background: var(--paper);
 }
 
@@ -930,10 +934,16 @@ textarea:focus-visible {
   font-weight: 580;
 }
 
-.all-screen,
-.profile-screen {
+.all-screen {
   min-height: 100svh;
   overflow-y: auto;
+}
+
+.profile-screen {
+  min-height: 100svh;
+  /* O93: no overflow-y here. The body is what actually scrolls this screen, and an
+     overflow-y:auto ancestor becomes the sticky container — which parked the booking bar
+     at the flow end instead of pinning it to the viewport while the profile scrolls. */
 }
 
 
@@ -1044,7 +1054,7 @@ textarea:focus-visible {
 }
 
 .profile-content {
-  padding: 30px 26px 154px;
+  padding: 30px 26px 34px;
 }
 
 .profile-content h1 {
@@ -1123,10 +1133,13 @@ textarea:focus-visible {
 }
 
 .profile-footer {
-  position: fixed;
-  right: max(0px, calc((100vw - 440px) / 2));
+  /* O93: sticky, not fixed. Fixed floated this bar over the acknowledgement-of-country
+     band once the reader reached the end of the page — a bar that belongs to the profile
+     covering content it does not own. Sticky pins it to the viewport bottom while the
+     profile scrolls and lets it settle, in flow, at the profile's own end; being in flow
+     also retires the 154px of dead padding the content reserved for it. */
+  position: sticky;
   bottom: 0;
-  left: max(0px, calc((100vw - 440px) / 2));
   z-index: 6;
   display: grid;
   gap: 14px;
@@ -2315,7 +2328,9 @@ textarea:focus-visible {
 }
 
 .patient-v2 .profile-content {
-  padding: 28px 22px 160px;
+  /* O93: the 160px bottom reservation went with the fixed bar — the sticky bar is in
+     flow now and takes its own space (the founder's dead-space capture was this). */
+  padding: 28px 22px 34px;
 }
 
 .patient-v2 .profile-content h1 {
@@ -2355,8 +2370,6 @@ textarea:focus-visible {
 }
 
 .patient-v2 .profile-footer {
-  right: max(0px, calc((100vw - var(--shell-w)) / 2));
-  left: max(0px, calc((100vw - var(--shell-w)) / 2));
   gap: 11px;
   padding: 13px 22px max(18px, env(safe-area-inset-bottom));
 }
@@ -3421,6 +3434,14 @@ textarea:focus-visible {
   .all-screen,
   .profile-screen {
     overflow-y: auto;
+  }
+
+  /* O93: the framed demo shell above scrolls its screens INTERNALLY, so overflow-y:auto
+     is right for it — but the patient shell scrolls the BODY, and a scroll-container
+     screen becomes the sticky containing block, which parks the profile's booking bar at
+     the flow end instead of pinning it while the reader scrolls. */
+  .patient-v2 .profile-screen {
+    overflow-y: visible;
   }
 }
 

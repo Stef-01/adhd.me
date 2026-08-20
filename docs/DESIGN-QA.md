@@ -560,3 +560,23 @@ Captures: qa/about-o90/ (the anchored section, desktop 2×2 and 390×844 stacked
 - [x] Honesty gates: no clinical claims in any remit line; the finder-profile disclosure
   line did NOT move here — its reason ("a reader cannot see the ranking") is listing-side
   law, so About us is where the story lives, not where the disclosure goes.
+
+## O93 — the booking bar learns where the profile ends (2026-08-20, founder-directed)
+
+Captures: qa/design-o93/ (the founder's reported overlap fixed at full scroll; the pinned
+mid-scroll state; the 390 sweep of welcome, scenarios, results and booking).
+
+- [x] The anchor bug: the profile's booking bar was position:fixed, so at the end of the
+  page it floated over the acknowledgement-of-country band — a bar covering content it
+  does not own. It is now position:sticky as the last child of the profile screen: pinned
+  to the viewport while the profile scrolls, settling in flow at the profile's own end,
+  with the acknowledgement band below it, uncovered. Three enablers, each recorded at the
+  rule: .care-shell overflow hidden → clip (same clipping, no scroll container), the
+  vestigial overflow-y:auto split off .profile-screen, and the framed-demo media block's
+  overflow scoped away from .patient-v2 (the framed shell scrolls internally; the patient
+  shell scrolls the body).
+- [x] The dead space: both 154px/160px bottom reservations for the fixed bar are gone —
+  a sticky bar takes its own space, so Languages now flows into the bar instead of into a
+  void (the founder's second circled find).
+- [x] Sweep: results and booking at 390 read clean; no other small fixes found; nothing
+  larger surfaced to ledger. 27 e2e green across finder, mobile-fit, booking and a11y.
