@@ -293,7 +293,15 @@ The queue, largest seam first:
    updater and moved them to an effect.
 2. **app/globals.css** (~6,000 lines): section the file by surface with the banner convention
    the finder sections already use; no selector changes (byte-identical computed styles at
-   the default root, the O60 proof pattern).
+   the default root, the O60 proof pattern). — DONE (O96): a file map at the top naming all
+   fifteen regions, banners at the boundaries that lacked them, the finder's stranded
+   results block moved home, and three cascade-load-bearing blocks left in place with the
+   reason written at the rule. The O60 proof is now machine-checked and reusable:
+   `scripts/css-computed-dump.mjs` walks every route and finder stage at both viewports and
+   diffs ~110 computed properties per element — validated by probe, then byte-identical
+   across all 4,232 rendered elements. Audit finding carried forward as its own unit: two
+   `.match-quality` declarations at equal specificity, so the finder's honesty banner
+   renders at the /approach rule's size rather than the one O14 chose for it.
 3. **src/demo/clinicians.ts** (~900 lines): the roster DATA and the ranking LOGIC share a
    file; split data out so a roster edit can never touch a ranking line. The full matching
    suite defines identical.

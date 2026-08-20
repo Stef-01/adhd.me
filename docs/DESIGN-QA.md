@@ -580,3 +580,39 @@ mid-scroll state; the 390 sweep of welcome, scenarios, results and booking).
   void (the founder's second circled find).
 - [x] Sweep: results and booking at 390 read clean; no other small fixes found; nothing
   larger surfaced to ledger. 27 e2e green across finder, mobile-fit, booking and a11y.
+
+## O96 — globals.css sectioned, with a machine-checked proof (2026-08-20)
+
+No visual change is claimed, and that is the entry: this is the refactor lane's second
+queue item, and its whole deliverable is that the stylesheet became navigable while every
+rendered pixel stayed put. The evidence is not a capture pair — 5,981 lines across every
+surface is past what eyes can hold — it is `scripts/css-computed-dump.mjs`, which walks
+every route and all seven finder stages at 390 and 1280, dumps ~110 computed properties
+per element, and diffs before against after.
+
+- [x] Proof, and the proof of the proof: the harness was validated by probe before it was
+  trusted — one `letter-spacing: 0.021em` added to `.clinician-row small` moved 46 lines,
+  so a silent pass means something. Final run: **byte-identical across all 4,232 rendered
+  elements**, both viewports, every route, every finder stage.
+- [x] The harness ignores `<head>` on purpose. Next.js varies its metadata tag order
+  between builds, which produced a standing 20-line diff on a change that touched nothing
+  visible; a proof tool that always shows noise is a proof tool nobody reads. `html` and
+  `body` are dumped explicitly, since they carry the ground and the base type.
+- [x] One rule block moved: the finder's results screen, stranded ~2,500 lines away inside
+  the storybook-landing region since the landing pass. It moved into the patient-v2 region
+  and NOT into the v1 finder block above it, because `.results-head .refine-compact` and
+  `.patient-v2 .refine-compact` have equal specificity — moving it higher would have
+  restyled "Change what you said" with nothing in the diff to show it.
+- [x] Three blocks were examined and deliberately left where they are, each with the reason
+  written at the rule: the O14 tap-target group (cross-surface, and `.show-all` is declared
+  twice at equal specificity so file order decides its padding), the coverage diagram's
+  finder overrides (they must stay below the base rules they override), and the duplicate
+  `.match-quality`. Cascade-load-bearing order is a fact about the design, not untidiness.
+- [x] Audit finding recorded, not fixed: `.match-quality` is declared twice at 0,1,0, so
+  the finder's honesty banner renders at the /approach rule's 0.8125rem rather than the
+  0.9375rem written beside it — the size O14 chose for a low-vision reader. Deciding which
+  surface owns the class changes computed output, so it is a unit of its own. Noted at
+  BOTH declarations so neither can be edited in ignorance of the other.
+- [x] Comment repairs (provably invisible): a note describing a portrait rule that no
+  longer exists was dropped, and two paragraphs about the founders' affiliations were moved
+  from the coverage-map block down to the rules they actually describe.

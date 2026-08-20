@@ -2,6 +2,45 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/newsreader";
 
+/* ===========================================================================
+   THE FILE MAP (O96 — refactor lane, queue item 2)
+
+   ~6,000 lines, every surface in the product, one stylesheet. This map exists
+   because the regions below were discovered by reading, not by design: the
+   file grew a surface at a time and each pass appended. Search the banner text
+   to jump; the regions appear in this order.
+
+     1.  Palette and root tokens        `:root`, the body ground, touch-action
+     2.  The finder, v1 base            screens, headers, clinician rows,
+                                        profile, speech, place field
+     3.  Staff and console, v1          walkthrough, panels, targets, case mix,
+                                        briefings, resources
+     4.  Patient pathway v2             `.patient-v2` — the finder as it ships,
+                                        overriding region 2 throughout
+     5.  Clinician pathway v2           `.cv2-*`
+     6.  Shared utilities and motion    `.sr-only`, keyframes, the global
+                                        reduced-motion block
+     7.  Community landing              `.community-*` (Western Sydney)
+     8.  Main introduction              the finder welcome/scenarios overhaul
+     9.  Founder storybook landing      `.story-*`, its own scoped palette
+     10. Clinician onboarding / join    `.join-*`, `.mix-*`
+     11. The coverage diagram           SHARED by 9 and the finder's results
+     12. Founders and affiliations      the About us row
+     13. Mobile tap targets (O14)       cross-surface, ORDER-DEPENDENT
+     14. The scroll sequence            `.seq-*`
+     15. Approach, matching console,    `.approach-*`, `.mc-*`, `.be-*`,
+         interview, site chrome         `.iv-*`, `.consent-*`, footer, 404
+
+   THE LAW OF THIS FILE: order decides outcomes. Rules of equal specificity are
+   settled by which one comes last, and several pairs here depend on exactly
+   that — they are flagged with a CASCADE NOTE at the site. Before moving any
+   rule, take a computed-style dump with `node scripts/css-computed-dump.mjs`
+   against the build, move, rebuild, dump again, and diff: byte-identical or
+   the move is a behaviour change wearing a refactor's clothes. O96 moved one
+   block under that proof and left three others in place because they could
+   not pass it.
+   =========================================================================== */
+
 /* THE PALETTE. One theme, one accent, one place to change either.
    Neutrals are warm-olive at low lightness, which is the hue the tree has always used;
    they are darkened rather than re-hued so nothing else has to move.
@@ -87,6 +126,15 @@ textarea:focus-visible {
   outline-offset: 4px;
 }
 
+/* ===========================================================================
+   REGION 2 — THE FINDER, v1 BASE (app/care-finder.tsx, app/finder-stages/)
+
+   The finder's structural layer: the shell and its screens, the clinician rows,
+   the profile, the speech controls, the place field. Region 4 (`.patient-v2`)
+   overrides most of what is set here — this is the base those overrides are
+   written against, so a change here moves BOTH the v1 base and whatever v2 does
+   not restate. Check region 4 before editing anything in this one.
+   =========================================================================== */
 .care-app {
   min-height: 100svh;
   background: var(--stone);
@@ -783,7 +831,13 @@ textarea:focus-visible {
 .place-status { margin: 8px 0 0; color: var(--faint); font-size: 0.875rem; line-height: 1.5; }
 /* The match-quality banner and top-tie note carry the sentence the whole screen turns on —
    "this is not a ranking". They were 12px faint grey: AA-compliant and functionally invisible
-   to the low-vision reader the finder most needs to be honest with (O14). */
+   to the low-vision reader the finder most needs to be honest with (O14).
+
+   O96 AUDIT FINDING: this rule does NOT win. Region 15 declares `.match-quality`
+   again at the same specificity, later in the file, and the finder's banner
+   actually renders at that rule's 0.8125rem. Search "AUDIT FINDING, RECORDED NOT
+   FIXED" there for the full note; do not adjust this size expecting it to move
+   the screen until the two rules are untangled. */
 .match-quality { font-size: 0.9375rem; color: var(--muted); }
 
 /* The computed distance, on its own line so it does not join the metadata dot chain. */
@@ -1254,6 +1308,15 @@ textarea:focus-visible {
   font-weight: 520;
 }
 
+/* ===========================================================================
+   REGION 3 — STAFF AND CONSOLE SURFACES, v1
+
+   Everything behind the staff gate and the clinician walkthrough: progress
+   rails, panels, targets, focus areas, the practice and case-mix views, the
+   briefing and resource lists. Patients never see any of it, which is why the
+   compliance copy rules that govern the regions above do not repeat here — but
+   the palette does, so these surfaces still move when region 1 moves.
+   =========================================================================== */
 .walkthrough-progress {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2315,6 +2378,56 @@ textarea:focus-visible {
   font-size: 0.625rem;
 }
 
+/* ── The results screen, moved home (O96) ──────────────────────────────────
+   These rules were physically stranded in the storybook-landing region, ~2,500
+   lines from the rest of the finder, because the screen was built during the
+   landing pass. They belong here with the list they head.
+
+   CASCADE NOTE, and the reason they land HERE rather than in the v1 finder
+   block above: `.results-head .refine-compact` below and `.patient-v2
+   .refine-compact` (earlier in this section) have EQUAL specificity, so the
+   later one wins. Moving these rules above that rule would silently restyle
+   the "Change what you said" control. Anything moved into this file must be
+   checked the same way — scripts/css-computed-dump.mjs is the proof.
+   ────────────────────────────────────────────────────────────────────────── */
+/* Results, the one screen that replaced four ---------------------------------- */
+.results-screen { display: flex; flex-direction: column; }
+.results-head { padding: 8px 24px 26px; border-bottom: 1px solid var(--line); }
+.results-head h1 {
+  margin: 10px 0 0;
+  max-width: 18ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(1.625rem, 7vw, 2.25rem);
+  font-weight: 430;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+/* O46: the person's own words when they earned no headline — quiet, quoted, theirs. */
+.results-head .results-request-quote {
+  margin: 10px 0 0;
+  max-width: 34ch;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-style: italic;
+  font-size: 1.1875rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.results-head .refine-compact {
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.results-head .place-field { margin-top: 22px; }
+
 .patient-v2 .profile-header {
   min-height: 64px;
 }
@@ -3374,6 +3487,15 @@ textarea:focus-visible {
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* ===========================================================================
+   REGION 6 — SHARED UTILITIES AND MOTION
+
+   `.sr-only`, the screen keyframes, and the file's global reduced-motion block.
+   The reduced-motion rules are deliberately gathered rather than written beside
+   each animation: `prefers-reduced-motion` is one promise the product makes,
+   and honouring it at eleven call sites is eleven chances to forget. Anything
+   animated anywhere in this file needs its static equal declared HERE.
+   =========================================================================== */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -4787,55 +4909,23 @@ textarea:focus-visible {
   text-underline-offset: 3px;
 }
 
-/* Results, the one screen that replaced four ---------------------------------- */
-.results-screen { display: flex; flex-direction: column; }
-.results-head { padding: 8px 24px 26px; border-bottom: 1px solid var(--line); }
-.results-head h1 {
-  margin: 10px 0 0;
-  max-width: 18ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.625rem, 7vw, 2.25rem);
-  font-weight: 430;
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-}
-/* O46: the person's own words when they earned no headline — quiet, quoted, theirs. */
-.results-head .results-request-quote {
-  margin: 10px 0 0;
-  max-width: 34ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-style: italic;
-  font-size: 1.1875rem;
-  line-height: 1.35;
-  color: var(--muted);
-}
-.results-head .refine-compact {
-  margin-top: 14px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--accent);
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.results-head .place-field { margin-top: 22px; }
 
-/* Stefan's portrait, sized to the monogram box so a mixed row keeps one rhythm. */
+/* ── The coverage diagram (SHARED: the storybook hero and the finder) ────────
+   Drawn from the gazetteer, so it cannot drift from the matcher.
 
-/* Affiliations belong to one founder and are checkable, so they are links rather than claims. */
-/* These are somebody else's marks, drawn dark-on-transparent for a light page, so on this ground
-   they were nearly invisible. They sit on a light chip rather than being filtered: inverting a
-   third-party logo changes its colours, which is both worse-looking and not ours to do. */
-/* `.story-affiliations-row a:hover,` used to dangle here with no declarations of its own, which
-   silently made every `.coverage-map` rule below apply to a hover state on a row that no longer
-   exists in the tree. Removed rather than completed: the selector has no markup to match. */
+   CASCADE NOTE: the `.results-head .coverage-map` overrides at the foot of this
+   block re-colour the same diagram for the finder and MUST stay below the base
+   rules they override — they were left here when the results screen moved out
+   (O96), because moving them with it would have put them above the rules they
+   depend on. This is the shared component's home; the two consumers both reach
+   into it from here.
 
-/* The coverage diagram. Drawn from the gazetteer, so it cannot drift from the matcher. */
+   The comments that used to sit at the top of this block described the founders'
+   portrait and affiliation rules, which live ~130 lines further down; one of them
+   documented a `.story-affiliations-row a:hover,` selector that had been deleted.
+   O96 moved the surviving prose to the rules it is about and dropped the note
+   about the deleted selector, which had nothing left to warn anybody off.
+   ────────────────────────────────────────────────────────────────────────── */
 .coverage-map {
   display: grid;
   grid-template-columns: minmax(0, 168px) minmax(0, 1fr);
@@ -4966,7 +5056,14 @@ textarea:focus-visible {
 
 /* The affiliations. Bare marks on paper, divided by a hairline — the marks are the point, and a
    chip around each one would compete with the portrait directly above it. A wordmark (for the
-   institutions whose logo is not ours to copy) is set at the same optical weight as a logo. */
+   institutions whose logo is not ours to copy) is set at the same optical weight as a logo.
+
+   Affiliations belong to one founder and are checkable, so they are links rather than claims.
+   These are somebody else's marks, drawn dark-on-transparent for a light page, so on this ground
+   they were nearly invisible. They sit on a light chip rather than being filtered: inverting a
+   third-party logo changes its colours, which is both worse-looking and not ours to do.
+   (O96 brought these two paragraphs down from the coverage-map block, where they had been
+   stranded describing rules a reader could not see from there.) */
 .story-affiliations {
   display: flex;
   flex-wrap: wrap;
@@ -5030,12 +5127,24 @@ textarea:focus-visible {
   font-weight: 600;
 }
 
-/* MOBILE TAP TARGETS ---------------------------------------------------------
+/* ===========================================================================
+   REGION 13 — MOBILE TAP TARGETS (O14). CROSS-SURFACE AND ORDER-DEPENDENT.
+
    A row of 17px text links is fine with a mouse and a coin-toss with a thumb. Every small
    interactive element gets a 44px touch height without growing visually: the padding is vertical
    only and the negative margin pulls the layout back, so the target grows and the rhythm does not.
    Applied by CLASS rather than to every `a`, because body-copy links inside a paragraph must not
-   gain 44px of leading. */
+   gain 44px of leading.
+
+   CASCADE NOTE — WHY THIS BLOCK IS NOT FILED WITH THE SURFACES IT STYLES.
+   It names controls from four different regions on purpose, and its POSITION is
+   load-bearing twice over. `.show-all` appears in the group below AND again
+   immediately after it at the same specificity (0,1,0), where `padding: 14px 18px`
+   overrides this group's `padding-block: 10px` — file order is the only thing
+   deciding that. Filing either rule with the finder, ~4,000 lines up, would flip
+   it. O96 looked at moving them and left them here for exactly this reason: the
+   order is a fact about the design, not untidiness.
+   =========================================================================== */
 .text-action,
 .show-all,
 .refine-compact,
@@ -5649,7 +5758,17 @@ textarea:focus-visible {
 
 /* One quiet line under the results count, shown only when the order is not earned or the listing
    cannot serve what was asked. It is a correction to what the list appears to claim, so it sits
-   with the count rather than as a banner: a banner would be louder than the finding. */
+   with the count rather than as a banner: a banner would be louder than the finding.
+
+   O96 AUDIT FINDING, RECORDED NOT FIXED: this is the SECOND unqualified
+   `.match-quality` rule in the file — the finder declares its own near the top of
+   region 2, and because both are 0,1,0 this one, being later, wins everywhere.
+   The finder's banner therefore renders at THIS rule's 0.8125rem, not at the
+   0.9375rem written beside it, and picks up this rule's max-width and
+   line-height too. It may well be the better size; the point is that nobody
+   chose it. Deciding which surface owns the class (and scoping the other) changes
+   computed output, so it is a unit of its own rather than a line in a refactor
+   that promised to change nothing. */
 .match-quality { margin-top: 8px; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; max-width: 46ch; }
 
 /* ── Join us: the clinician door ────────────────────────────────────────────

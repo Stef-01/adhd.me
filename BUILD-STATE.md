@@ -135,7 +135,47 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > blocks, contradicting declarations found while reading are candidates — recorded, and
 > fixed only if the fix is provably invisible under the same dump). Gate: dump
 > byte-identical before/after across all surfaces, full `pnpm verify` green, audit notes
-> in the ledger close.
+> in the ledger close. DONE 2026-08-20. THE PROOF CAME FIRST AND WAS ITSELF PROVEN:
+> `scripts/css-computed-dump.mjs` (new, and the unit's most durable output) walks every
+> route and all seven finder stages at 390 and 1280, dumping ~110 computed properties per
+> element; before trusting a silent pass, one `letter-spacing: 0.021em` was added to
+> `.clinician-row small` and moved 46 lines, so the harness demonstrably fails when it
+> should. It also learned to ignore `<head>`: Next.js varies its metadata tag order between
+> builds, which produced a standing 20-line diff on a change touching nothing visible, and
+> a proof tool that always shows noise is one nobody reads. FINAL: byte-identical across
+> all 4,232 rendered elements. Shipped: a file map at the top naming all fifteen regions
+> with the law of the file stated once ("order decides outcomes"), banners at the four
+> boundaries that had none (finder v1 base, staff/console v1, shared utilities & motion,
+> tap targets), and ONE rule block moved — the finder's results screen, stranded ~2,500
+> lines inside the storybook-landing region since the landing pass, now in the patient-v2
+> region. THE MOVE'S OWN LIMIT IS THE UNIT'S BEST FINDING: it could not go into the v1
+> finder block where it "belongs", because `.results-head .refine-compact` and `.patient-v2
+> .refine-compact` are both 0,2,0 — moving it higher would have restyled "Change what you
+> said" with nothing in the diff to show it. Three further blocks were examined and LEFT IN
+> PLACE with the reason written at the rule, exactly as the claim allowed: the O14
+> tap-target group (`.show-all` is declared twice at equal specificity, so file order
+> decides its padding), the coverage diagram's finder overrides (must stay below the base
+> rules they override), and the duplicate `.match-quality`. AUDIT FINDING, RECORDED NOT
+> FIXED — carried to the plan as its own unit: `.match-quality` is declared twice at 0,1,0,
+> so the finder's "this is not a ranking" banner renders at the /approach rule's 0.8125rem,
+> not the 0.9375rem written beside it — the size O14 deliberately raised FOR the low-vision
+> reader the finder most needs to be honest with. Nobody chose the size that ships. Noted at
+> both declarations so neither can be edited in ignorance of the other; fixing it changes
+> computed output, which this unit promised not to do. Also repaired (provably invisible):
+> a comment describing a portrait rule that no longer exists, dropped; two paragraphs about
+> the founders' affiliations moved from the coverage-map block to the rules they describe.
+> Gate met: dump byte-identical, full `pnpm verify` green, whole e2e suite green,
+> docs/DESIGN-QA.md O96 entry. Year plan refactor queue item 2 done.
+>
+> RED GATE FOUND IN PASSING, NOT CAUSED BY THIS UNIT — running the WHOLE e2e suite (218
+> passed, 1 failed) rather than the five suites a UI unit usually needs surfaced
+> `party-to-care.spec.ts` failing on /privacy: the compliance linter reads "we suspect
+> information we hold has been lost … we will assess it promptly" as ADHD.ME offering
+> clinical assessment. The copy is the Notifiable Data Breaches obligation and is CORRECT;
+> the linter's `adhd-me-as-care-provider` rule cannot see that the object of "assess" is a
+> breach, not a person. This unit changed no copy and no compliance code, so the failure
+> predates it — and it has been red unnoticed because e2e sits outside the `pnpm verify`
+> gate. Claimed as O97 below.
 
 > **O95 (refactor lane, queue item 1: app/care-finder.tsx split by stage) — claimed
 > 2026-08-20T10:45Z by loop-0820s.** The lane's largest seam: 1,253 lines, seven stages in
