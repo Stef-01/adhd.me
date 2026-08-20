@@ -360,7 +360,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "phone appointments suit my shift work better", reaches: ["pref:telehealth-first"] },
   { text: "it has to be bulk billed, I am on a pension", reaches: ["pref:bulk-billing"] },
   { text: "money is tight so bulk billing matters", reaches: ["pref:bulk-billing"] },
-  { text: "no out of pocket costs please", aspires: ["pref:bulk-billing"] },
+  { text: "no out of pocket costs please", reaches: ["pref:bulk-billing"] },
 
   // ── care:trauma-informed ─────────────────────────────────────────────────────────────────
   { text: "I need someone trauma informed, my last doctor was not", reaches: ["care:trauma-informed"] },
@@ -468,7 +468,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "trauma informed care is non-negotiable for me", reaches: ["care:trauma-informed"] },
   { text: "I need the trauma handled gently or not at all", reaches: ["care:trauma-informed"] },
   { text: "on a healthcare card, so bulk billing please", reaches: ["pref:bulk-billing"] },
-  { text: "I cannot pay gap fees on my wage", aspires: ["pref:bulk-billing"] },
+  { text: "I cannot pay gap fees on my wage", reaches: ["pref:bulk-billing"] },
   { text: "everything online please, I am housebound", reaches: ["pref:telehealth-first"] },
   { text: "remote appointments only, I live three hours out", reaches: ["pref:telehealth-first"] },
 
@@ -621,8 +621,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the good doctors never make you watch the clock", aspires: ["manner:unhurried"] },
   { text: "give me the full appointment, not the doorway version", aspires: ["manner:unhurried"] },
   { text: "a female GP for personal reasons", reaches: ["pref:woman-gp"] },
-  { text: "medicare only, I cannot pay extra", aspires: ["pref:bulk-billing"] },
-  { text: "does it cost anything out of pocket", aspires: ["pref:bulk-billing"] },
+  { text: "medicare only, I cannot pay extra", reaches: ["pref:bulk-billing"] },
+  { text: "does it cost anything out of pocket", reaches: ["pref:bulk-billing"] },
   { text: "an online consult first then face to face if needed", reaches: ["pref:telehealth-first"] },
 
   // ── G7: more symptom-only sentences, pinned silent ───────────────────────────────────────
@@ -781,7 +781,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "psych ward admissions in my twenties, stable for years now", aspires: ["care:complex-mental-health"] },
 
   // ── question forms, round two ────────────────────────────────────────────────────────────
-  { text: "how much does an ADHD assessment cost with a GP", reaches: ["care:adhd-assessment"], aspires: ["pref:bulk-billing"] },
+  { text: "how much does an ADHD assessment cost with a GP", reaches: ["care:adhd-assessment", "pref:bulk-billing"] },
   { text: "how long is the wait to see someone who does assessments", reaches: ["care:adhd-assessment"] },
   /**
    * O87 pinned this as a KNOWN FALSE POSITIVE (an independence ask — GP-led care, the
@@ -848,7 +848,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a female doctor who has lived a bit, someone my age", reaches: ["pref:woman-gp"] },
   { text: "video reviews after work hours", reaches: ["pref:telehealth-first"] },
   { text: "pension card, so it has to be bulk billed", reaches: ["pref:bulk-billing"] },
-  { text: "gap fees are why I stopped going", aspires: ["pref:bulk-billing"] },
+  { text: "gap fees are why I stopped going", reaches: ["pref:bulk-billing"] },
   { text: "book a double slot, I have twenty years to explain", aspires: ["pref:longer-appointment"] },
   { text: "forty minutes minimum or it is not worth starting", aspires: ["pref:longer-appointment"] },
 
@@ -942,7 +942,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
   // honestly reclassified is the one sanctioned direction, and this comment is its record.
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
-  "pref:bulk-billing": 21,
+  // O109 raised 21→27, and this facet is now HEARD 27 OF 27 — the first in the corpus with
+  // no standing aspiration left. It got there by learning the words the ask is actually made
+  // in (out of pocket, gap fees, Medicare-only, "does it cost anything"); it had known three
+  // sayings of its own name and no synonym for the thing it is about.
+  "pref:bulk-billing": 27,
   "pref:longer-appointment": 6,
   // telehealth lowered 20→19 by O94 (the phone-menu pin reclassified reaches→never when
   // the run demand landed) then held at 20 by the unit's own kept-recall pin — measured.

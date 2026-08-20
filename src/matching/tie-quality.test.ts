@@ -40,6 +40,13 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  358/202/52/104 at O109 (bulk-billing's cost register: five sentences joined the run and
+ *  ALL FIVE land unseparated, so separation FELL, 57.2%→56.4%. Recorded rather than
+ *  smoothed, because the cause is a fact about the roster and not about the reader: NO
+ *  GP on this roster declares bulk billing — two say mixed billing, one says billing is
+ *  set by the practice — so a cost ask ties everybody at zero by construction. Hearing
+ *  it is still the right outcome: the alternative was five readers silently unheard.
+ *  A KPI that only moved when the news was good would not be one);
  *  353/202/52/99 at O108 (telehealth's preposition and appointment-noun registers: four
  *  more sentences joined the run — two of the six promoted were already in it on their
  *  other facets — and THE UNSEPARATED COUNT FELL for the first time in the day's sweeps,
@@ -80,7 +87,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 353, separated: 202, partialTie: 52, unseparated: 99 };
+const PINNED = { total: 358, separated: 202, partialTie: 52, unseparated: 104 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -325,7 +325,28 @@ const LEXICON: readonly Entry[] = [
        (the negation family, pointed the other way) and not a cue. Left standing, deliberately.
        "video only" survives this test because it names the wanted thing, not the avoided one. */
   ]),
-  pref("bulk-billing", "Bulk billing", 24, ["bulk bill", "bulk billed", "bulk billing", "cannot afford", "cheap"]),
+  pref("bulk-billing", "Bulk billing", 24, ["bulk bill", "bulk billed", "bulk billing", "cannot afford", "cheap",
+    /* O109: THE FACET KNEW ITS OWN NAME AND NO SYNONYM FOR THE THING IT IS ABOUT. All six of
+       its standing aspirations asked about money in words the list did not contain — out of
+       pocket, gap fees, Medicare-only, "does it cost anything" — on the ask most likely to
+       decide whether somebody books at all.
+
+       "out of pocket" collapses to [pocket] and so ships under O45's pair demand, which is
+       what keeps it honest. */
+    "out of pocket", "gap fee", "gap fees", "medicare only", "cost anything",
+    "how much does it cost",
+    /* "no out of pocket" CARRIES ITS OWN NEGATOR, the O104 lesson met a second time: the bare
+       cue is present in "no out of pocket costs please" and reached nothing, because O72 read
+       the adjacent "no" as a refusal of the facet — when wanting NO out-of-pocket cost is
+       precisely the bulk-billing ask. The negator has to live inside the cue's own words. */
+    "no out of pocket",
+    /* TWO REFUSED, AND THE FIRST IS THE MOST IMPORTANT REFUSAL IN THE DAY'S SWEEPS:
+         "cannot pay" fires on "I CANNOT PAY ATTENTION for long" — an ADHD symptom sentence,
+                      and reading that as a request about billing would be both wrong and
+                      exactly the kind of wrong G7 exists to prevent. The two corpus sentences
+                      it was meant for are covered by "gap fees" and "medicare only" anyway.
+         "free"       fires on "free up my afternoons". */
+  ]),
   pref("longer-appointment", "A longer first appointment", 20, ["longer first appointment",
     // O65 (the O22 loop on O64's corpus finding): the facet carried ONE three-token cue, so
     // the commonest phrasings of this ask were all unheard — measured, not guessed, in

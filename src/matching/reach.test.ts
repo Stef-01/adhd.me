@@ -321,7 +321,11 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     "involve me", "just lazy", "listened to",
     "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
     "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
-    "name it", "on a schedule", "on edge", "out the door", "over the phone",
+    "name it", "on a schedule", "on edge",
+    // O109: collapses to [pocket] and ships under the O45 pair demand. Its negated sibling
+    // "no out of pocket" is NOT here and must not be: the negator is a content token, so that
+    // cue keeps two and never collapses.
+    "out of pocket", "out the door", "over the phone",
     // O108: see "by video" above — same phrase, other preposition.
     "over video", "really listen",
     "understand what", "what is going on",
@@ -1024,5 +1028,43 @@ describe("§O108 telehealth hears video as a preposition, and refuses the regist
     expect(facets("can we do it over the phone")).toContain("pref:telehealth-first");
     // O94's run demand still refuses the phone-menu leak.
     expect(facets("the phone menu hung up on me twice")).not.toContain("pref:telehealth-first");
+  });
+});
+
+describe("§O109 bulk-billing learns the words the ask is actually made in", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the cost register, all six phrasings", () => {
+    for (const said of [
+      "no out of pocket costs please",
+      "I cannot pay gap fees on my wage",
+      "medicare only, I cannot pay extra",
+      "does it cost anything out of pocket",
+      "gap fees are why I stopped going",
+      "how much does an ADHD assessment cost with a GP",
+    ]) expect(facets(said)).toContain("pref:bulk-billing");
+  });
+
+  /**
+   * THE MOST IMPORTANT REFUSAL IN THE DAY'S SWEEPS.
+   *
+   * "cannot pay" was the obvious cue for two of those sentences. It fires on "I cannot pay
+   * ATTENTION for long" — an ADHD symptom sentence — and reading that as a request about
+   * billing would be both wrong and exactly the class of wrong G7 exists to prevent. Both
+   * sentences it was meant for are covered by "gap fees" and "medicare only" anyway, so the
+   * recall cost of refusing it is zero.
+   */
+  it("refuses the cue that would have read a symptom sentence as a billing request", () => {
+    expect(facets("I cannot pay attention for long")).not.toContain("pref:bulk-billing");
+    // "free" would have fired here.
+    expect(facets("free up my afternoons")).not.toContain("pref:bulk-billing");
+  });
+
+  it("the negated ask is the ask: wanting NO out-of-pocket cost is bulk billing", () => {
+    // O104's lesson, met a second time — the bare cue reached nothing because O72 read the
+    // adjacent "no" as a refusal of the facet, so the negator lives inside the cue.
+    expect(facets("no out of pocket costs please")).toContain("pref:bulk-billing");
+    // And a genuine refusal of the facet is still a refusal.
+    expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
   });
 });

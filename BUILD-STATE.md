@@ -140,6 +140,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > the survey written down and O108's handoff downgraded from best-specified to measured-and-not-
 > yet-earned (the O84 pattern). Gate: O103's method on every candidate, zero `never` pins
 > broken, promotions retagged in-commit, floors and tie-quality moved, full `pnpm verify` green.
+> DONE 2026-08-20. ALL SIX promoted, floor 21→27, and **`pref:bulk-billing` is now HEARD 27
+> OF 27 — the first facet in the corpus with no standing aspiration left.** It got there by
+> learning the words the ask is made in rather than three sayings of its own name.
+>
+> THE MOST IMPORTANT REFUSAL OF THE DAY: "cannot pay" was the obvious cue for two of the six
+> sentences, and it fires on "I CANNOT PAY ATTENTION for long" — an ADHD symptom sentence.
+> Reading that as a request about billing would be wrong twice over, and it is exactly the
+> class of wrong G7 exists to prevent. Both sentences it was meant for are covered by "gap
+> fees" and "medicare only", so refusing it cost no recall at all. "free" refused likewise
+> (fires on "free up my afternoons"). O104's self-negating-cue lesson arrived a second time:
+> "no out of pocket costs please" reached nothing until the negator moved inside the cue.
+>
+> TIE-QUALITY FELL AND IS RECORDED AS IT FELL: 353/202/52/99 → 358/202/52/104, separation
+> 57.2%→56.4%. All five new sentences land unseparated, and the cause is a fact about the
+> ROSTER, not about the reader — no GP listed declares bulk billing (two say mixed billing,
+> one says billing is set by the practice), so a cost ask ties everybody at zero by
+> construction. Hearing it is still right: the alternative was five readers silently unheard.
+> A KPI that only moved when the news was good would not be one.
+>
+> **O108's HANDOFF, SURVEYED AND DOWNGRADED.** The avoidance register measured FIVE
+> aspirations across three facets — but three of the five were never that mechanism: two are
+> plain vocabulary gaps this unit just closed with cues, and the third is O103's
+> already-refused "another way". That leaves TWO true pole-inversion cases, both telehealth,
+> and inverting them needs a concept the lexicon does not have — the OPPOSITE POLE of a
+> facet. `telehealth-first` has no in-person counterpart to invert into, so the work is not
+> "point the negation the other way" but "give preferences antonyms", a design change on the
+> one facet whose mirror-image sentence people really type. Not earned at two cases: it goes
+> back to the queue with the survey attached, and O108's "best-specified thing in the queue"
+> is corrected to measured-and-not-yet-earned (the O84 pattern).
+>
+> **FINDING FOR THE NEXT UNIT, and it is this unit's own consequence.** `unservedAsks` — the
+> function behind "No GP listed today says they do X. That is a gap in our listing, not in
+> what you asked for" — filters to `care` facets ONLY. So the five readers this unit just
+> made audible are heard by the lexicon and then told NOTHING about why the list cannot serve
+> them: the honesty line that exists for exactly this case is blind to preferences, which is
+> where a three-GP roster's real gaps are (bulk billing, telehealth, a woman GP, a longer
+> appointment). Patient-facing copy, so it needs its own unit with a capture and a DESIGN-QA
+> entry.
 
 > **O108 (Q1 lexicon: telehealth-first, and the register that asks by refusing) — claimed
 > 2026-08-20T16:00Z by loop-0820s.** Eight unheard phrasings, now joint-loudest. The cue list
