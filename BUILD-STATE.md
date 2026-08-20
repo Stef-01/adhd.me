@@ -142,6 +142,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > changes (O56 built a whole freshness grade around exactly that), so it is the one thing in
 > that row the token is for. Gate: accent count re-measured across all three screens after,
 > before/after captures, DESIGN-QA entry, e2e green, full `pnpm verify` green.
+> DONE 2026-08-20. Results screen 5 accent elements → 2; the dead `.availability` rule deleted
+> rather than re-coloured; the closed-books note keeps the token because it is the one thing in
+> that row that genuinely changes.
+> **A SECOND PASS WAS NEEDED, and it is the part worth keeping.** With the accent removed, the
+> location and the match reason were both `--muted` and read as a single block — a WRONG
+> emphasis traded for NO emphasis, which is the failure mode of every "just make it quieter"
+> fix. Three steps now: the name in `--ink`, the reason that decides between rows in `--muted`,
+> the suburb in `--faint` — the token chosen because it clears AA at 11px (5.1:1 on `--paper`),
+> so the quietest step is still legible to the reader this product exists for. Removing a colour
+> is not the same as fixing a hierarchy, and the first version had only done the removing.
+> Profile stays at 5, each defensible per O129 and none of them a fossil: eyebrow, compliance
+> disclosure, the matched-facet chip (the live token the colour is actually for), a link, a
+> booking status. Gate met: qa/accent-o130/ at both viewports, DESIGN-QA entry, 26 e2e green,
+> `pnpm verify` green 3579.
 
 > **O129 (FOUNDER-REPORTED: the profile "looks terrible" — a thorough design audit) — claimed
 > 2026-08-20T22:52Z by loop-0820s.** Founder sent a screenshot of Dr Anubhav Saxena's profile

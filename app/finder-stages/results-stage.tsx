@@ -261,7 +261,12 @@ export function ResultsStage({
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}
-                <small className="row-availability">{away ? `${locationLabel(item)}, ${away}` : locationLabel(item)}</small>
+                {/* O130: `row-location`, not `row-availability`. The accent on that class is a
+                    fossil of `nextAvailable` — a written-in appointment time, deleted when the
+                    roster became real people — and it had been painting a static suburb ever
+                    since. A location is not a value that changes; the closed-books note below
+                    is, and keeps it. */}
+                <small className="row-location">{away ? `${locationLabel(item)}, ${away}` : locationLabel(item)}</small>
                 {/* Closed books never outrank open ones at equal fit, and never hide
                     either — the row says why somebody unactionable is still here (O4).
                     The "they fit what you asked" sentence only renders when a fit was

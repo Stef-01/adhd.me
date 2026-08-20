@@ -1169,15 +1169,25 @@ textarea:focus-visible {
   line-height: 1.38;
 }
 
-.availability,
+/* O130: `.availability` is deleted, not re-coloured. It had NO CONSUMER in the tree — it styled
+   `nextAvailable`, the written-in "Thursday, 8:30 am" the roster removed when every entry became
+   a real person, because a hardcoded time is a fabricated appointment under a named doctor. Its
+   `font-weight: 580` is the giveaway: that is how you set a value that changes.
+
+   `.row-availability` keeps the accent because what it carries NOW — the closed-books note — is
+   genuinely such a value. Books open and close without anybody editing a profile, which is the
+   whole reason O56 built a freshness grade for them. The LOCATION line that used to share this
+   class does not change, and has moved to `.row-location` below. */
 .row-availability {
   color: var(--accent);
 }
 
-.availability {
-  margin: 8px 0 10px;
-  font-size: 0.8125rem;
-  font-weight: 580;
+/* Neutral metadata: which suburbs a GP consults from, and how far that is. It sat in accent for
+   months because it inherited a class written for appointment times, which meant the loudest
+   colour on the results screen pointed at the suburb rather than at the reason this GP was
+   matched — the line directly above it, in plain muted grey. */
+.row-location {
+  color: var(--muted);
 }
 
 .all-screen {
@@ -1269,6 +1279,17 @@ textarea:focus-visible {
 .clinician-row .row-availability {
   margin-top: 2px;
   color: var(--accent);
+}
+
+.clinician-row .row-location {
+  margin-top: 2px;
+  /* --faint, not --muted, and the reason is hierarchy rather than taste. With the accent gone
+     the location and the match REASON above it were the same grey and read as one block, which
+     traded a wrong emphasis for no emphasis. Three steps now: the name in ink, the reason that
+     decides between rows in muted, the suburb in faint. --faint is the token that clears AA at
+     11px (5.1:1 on --paper), so the quietest step is still legible to the reader this product
+     is for. */
+  color: var(--faint);
 }
 
 .clinician-row .row-practical {

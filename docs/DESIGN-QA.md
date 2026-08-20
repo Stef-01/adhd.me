@@ -976,3 +976,32 @@ Sources consulted: [Bringhurst's 45–75 via Baymard](https://baymard.com/blog/l
 [UXPin's 50–75 rule](https://www.uxpin.com/studio/blog/optimal-line-length-for-readability/),
 [USWDS typography](https://designsystem.digital.gov/components/typography/),
 [Vercel Web Interface Guidelines](https://github.com/vercel-labs/web-interface-guidelines).
+
+## O130 — the accent pointed at the wrong thing, and it was a fossil (2026-08-20)
+
+Captures: qa/accent-o130/ (results at 390 and 1280, after).
+
+- [x] O129 reduced accent inflation on the profile and recorded that it was reduced, not solved.
+  This measured the whole flow: paint the `--accent` token, resolve it, and count every element
+  whose computed colour matches. Welcome 0, results 5, profile 5.
+- [x] **Three of the results screen's five were the LOCATION line on every row** — "Beecroft",
+  "Double Bay & Hornsby" — while the line directly above it, the reason this GP was matched, sat
+  in plain grey. On the one screen where a reader chooses between GPs, the loudest colour pointed
+  at the suburb.
+- [x] **It was a fossil, which is why nobody noticed.** `.availability` and `.row-availability`
+  shared `color: var(--accent)` with no rationale on either, and `.availability` — carrying
+  `font-weight: 580`, which is how you set a value that changes — had NO CONSUMER anywhere in the
+  tree. It styled `nextAvailable`, the written-in "Thursday, 8:30 am" the roster deleted when
+  every entry became a real person, because a hardcoded time is a fabricated appointment under a
+  named doctor. The field went; the colour stayed; it ended up painting a static suburb.
+- [x] The dead rule is deleted rather than re-coloured. The location moved to `.row-location`.
+  The closed-books note KEEPS the accent, because books opening and closing genuinely is a value
+  that changes — O56 built an entire freshness grade around exactly that.
+- [x] **A second pass was needed and is worth recording.** With the accent gone, the location and
+  the reason were both `--muted` and read as one block: a wrong emphasis had been traded for no
+  emphasis. Three steps now — name in `--ink`, the reason that decides between rows in `--muted`,
+  the suburb in `--faint`, which is the token that clears AA at 11px (5.1:1 on `--paper`) so the
+  quietest step is still legible to the reader this product is for.
+- [x] Results screen: 5 accent elements → 2 (the eyebrow, and one control). Profile unchanged at
+  5, each defensible per O129: eyebrow, compliance disclosure, the matched-facet chip (the live
+  token the colour is actually for), a link, and a booking status.
