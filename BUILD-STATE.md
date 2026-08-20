@@ -119,6 +119,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O76 (the reader unit O75's hedge pin demanded: a conversational hedge is filler, not an
+> ask) — claimed 2026-08-20T02:46Z by loop-0820b.** O75 pinned "a she not a he, if that
+> makes sense" as a KNOWN FALSE POSITIVE: the trailing hedge fires the sense_making cue
+> though it asks for nothing. Design (the O45/O72 family: read the raw stream where the
+> stopwords live): a small closed set of hedge idioms ("if that makes sense" and kin),
+> matched with stopwords kept; a cue whose matched span lies inside a hedge idiom's span
+> claims nothing. Precision boundary: "help me make sense of it", "I want it to finally
+> make sense" and every existing sense_making pin must keep reaching — the hedge is the
+> conditional-deixis shape, not the words "make sense". Gate: the O75 pin retagged
+> reaches→never in the same commit (with the sense_making floor moved by sanctioned
+> reclassification if the count drops), §O76 pins both directions in reach.test.ts,
+> tie-quality repinned if the run shrinks, full `pnpm verify` green.
+
 > **O75 (Q1 item 1, corpus tranche five: the registers real traffic arrives in) — claimed
 > 2026-08-20T01:50Z by loop-0820a; DONE 2026-08-20. Gate: 401-entry corpus green both
 > directions (zero misses, zero leaks, zero unpromoted aspirations), 18 floors raised on the
