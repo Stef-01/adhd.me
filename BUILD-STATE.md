@@ -119,6 +119,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O109 (Q1 lexicon: bulk-billing's cost register; and O108's handoff, measured and refused)
+> — claimed 2026-08-20T16:16Z by loop-0820s.** Two things, and the second is the reason the
+> first is the right unit. (1) `pref:bulk-billing` carries five cues — three sayings of "bulk
+> bill", plus "cannot afford" and "cheap" — and six standing aspirations, ALL of which ask
+> about money in words the list does not contain: out-of-pocket, gap fees, Medicare-only, "does
+> it cost anything". This is not a subtle gap; it is a facet that knows its own name and no
+> synonym for the thing it is about, on the ask most likely to decide whether somebody books.
+> (2) O108 handed on "the negation family pointed the other way" as the queue's best-specified
+> mechanism. Surveyed before building: the avoidance register is FIVE standing aspirations
+> across three facets, which clears the two-case bar — but three of the five are not that
+> mechanism at all. "I cannot pay gap fees on my wage" and "medicare only, I cannot pay extra"
+> are plain VOCABULARY gaps that this unit closes with cues, and "I would rather not take
+> medication if there is another way" is O103's already-refused "another way". That leaves
+> exactly TWO true pole-inversion cases, both telehealth, and inverting them needs a concept
+> this lexicon does not have: the OPPOSITE POLE of a facet. `telehealth-first` has no in-person
+> counterpart to invert into, so the mechanism is not "point the negation the other way", it is
+> "give preferences antonyms" — a design change, on a facet where the mirror-image sentence is
+> a real thing people type. Expected outcome: the cost cues ship, the mechanism is REFUSED with
+> the survey written down and O108's handoff downgraded from best-specified to measured-and-not-
+> yet-earned (the O84 pattern). Gate: O103's method on every candidate, zero `never` pins
+> broken, promotions retagged in-commit, floors and tie-quality moved, full `pnpm verify` green.
+
 > **O108 (Q1 lexicon: telehealth-first, and the register that asks by refusing) — claimed
 > 2026-08-20T16:00Z by loop-0820s.** Eight unheard phrasings, now joint-loudest. The cue list
 > knows "telehealth", "by phone", "video appointment" — and the corpus asks for it three other
