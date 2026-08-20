@@ -390,14 +390,16 @@ export function readNeeds(text: string): NeedSignal[] {
   const rawSentence = tokeniseKeepingStopwords(text);
   const signals: NeedSignal[] = [];
   const seen = new Set<string>();
-  const claimed: Array<[number, number]> = [];
+  /* O106: the token positions already spoken for. Positions, not ranges — a cue claims the
+     words it MATCHED, never the words it straddled. See the claiming step below. */
+  const claimed = new Set<number>();
 
   /* PHASE 1 (O78 shape, O81 arrangement): collect every occurrence of every cue that
      survives the occurrence-local rules. findCue retries past a refused span (O78: a
      clause-one refusal must not silence a clause-two ask); the sentence-global collapse
      check skips the cue outright. Desire negation is deliberately NOT decided here —
      it needs to see all spans at once, which is the whole of O81. */
-  type Candidate = { cue: (typeof CUES)[number]; from: number; to: number };
+  type Candidate = { cue: Cue; from: number; to: number; at: number[] };
   const candidates: Candidate[] = [];
   for (const cue of CUES) {
     /* O45 (Q1 item 1): a cue that collapsed to one content token fires only when the sentence
@@ -470,7 +472,7 @@ export function readNeeds(text: string): NeedSignal[] {
       ) {
         continue;
       }
-      candidates.push({ cue, from: at.from, to: at.to });
+      candidates.push({ cue, from: at.from, to: at.to, at: at.at });
     }
   }
 
@@ -497,13 +499,21 @@ export function readNeeds(text: string): NeedSignal[] {
      occurrence of the same cue may still land (the O78 retry, preserved). */
   candidates.forEach((candidate, index) => {
     if (negated.has(index)) return;
-    const { cue, from, to } = candidate;
-    if (claimed.some(([cFrom, cTo]) => from <= cTo && cFrom <= to)) return;
+    const { cue } = candidate;
+    /* O106: A CUE CLAIMS THE WORDS IT MATCHED, NOT THE WORDS IT STRADDLED.
+       This compared RANGES, so a cue matching across a gap marked the intervening tokens
+       spoken for as well. manner:attuned's "take seriously" therefore claimed
+       [take, trauma, seriously] in "a gentle GP who takes trauma seriously", and the word
+       "trauma" — which that cue never matched — was unavailable to the trauma cue that
+       would have. The reader's own word went to another facet and vanished from the read.
+       Specificity ordering still does its work: "not just medication" claims [not,
+       medication], so the bare "medication" cue finds its token taken exactly as before. */
+    if (candidate.at.some((position) => claimed.has(position))) return;
 
     const key = facetKey(cue.entry.facet);
     if (seen.has(key)) return;
 
-    claimed.push([from, to]);
+    for (const position of candidate.at) claimed.add(position);
     seen.add(key);
     signals.push({
       facet: cue.entry.facet,

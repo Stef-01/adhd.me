@@ -796,24 +796,21 @@ describe("§O104 trauma-informed hears how somebody wants to be asked, not what 
   });
 
   /**
-   * THE SPAN-SWALLOW, MEASURED AND LEFT STANDING (O104's recorded finding).
+   * THE SPAN-SWALLOW — pinned here as today's truth by O104, FIXED BY O106 the same day.
    *
-   * "a gentle GP who takes trauma seriously" does NOT reach this facet, and not for want of a
-   * cue: "trauma" is right there. `findCue` matches in order ACROSS intervening words, so
-   * manner:attuned's "take seriously" claims the span [take … seriously] — which CONTAINS
-   * "trauma" — and a shorter cue cannot claim a token already spoken for. The reader's word is
-   * given to another facet and vanishes.
-   *
-   * Fixing it is a mechanism unit, not a cue: cue whack-a-mole is what the year plan warns
-   * against, and re-authoring "take seriously" would only move the collision. Pinned as
-   * TODAY'S TRUTH in the O68 known-false-positive style so the fix unit has a failing case
-   * waiting for it, and so nobody reads the missing facet as a lexicon gap.
+   * O104 measured it and refused to fix it in a cue unit: "a gentle GP who takes trauma
+   * seriously" did not reach this facet although "trauma" is right there, because
+   * manner:attuned's "take seriously" matched across the gap and Phase 3 claimed the whole
+   * RANGE — so a cue that never matched "trauma" made it unavailable to the cue that would.
+   * The pin was deliberately written as a failing case waiting for the fix unit (the O68
+   * pattern), and O106 flipped it by claiming matched POSITIONS instead of spans. Kept, with
+   * both directions live, because the expectation reversing is the record of the fix.
    */
-  it("pins the span-swallow as today's truth: an intervening word is claimed by the spanning cue", () => {
+  it("a word a spanning cue never matched still reaches its own facet (O104 found, O106 fixed)", () => {
     const heard = facets("a gentle GP who takes trauma seriously and bulk bills");
     expect(heard).toContain("manner:attuned");
-    expect(heard).not.toContain("care:trauma-informed");
-    // Without the spanning cue's other half, the same word reaches perfectly well.
+    expect(heard).toContain("care:trauma-informed");
+    // And the same word reaches without the spanning cue at all, as it always did.
     expect(facets("a gentle GP who takes trauma into account")).toContain("care:trauma-informed");
   });
 });
@@ -876,5 +873,50 @@ describe("§O105 a comma ends a negation's scope, and ends nothing else", () => 
     // The clarifier's own append shape: request, then the answer it added in the reader's words.
     expect(facets("I think I might have ADHD, I would prefer a woman GP")).toContain("pref:woman-gp");
     expect(facets("coaching and habits first, tablets later if ever")).toContain("care:non-medication");
+  });
+});
+
+describe("§O106 a cue claims the words it matched, not the words it straddled", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("frees an intervening word for the facet that actually matches it", () => {
+    // The founding case: attuned's "take seriously" spans "trauma" without matching it.
+    const heard = facets("a gentle GP who takes trauma seriously and bulk bills");
+    expect(heard).toContain("manner:attuned");
+    expect(heard).toContain("care:trauma-informed");
+    expect(heard).toContain("pref:bulk-billing");
+  });
+
+  /**
+   * THE PART THAT COULD HAVE BROKEN, AND THE REASON THIS IS SAFE.
+   *
+   * Specificity ordering exists so a general term cannot claim a sentence whose specific term
+   * says something different — in the "not just medication" case, close to the opposite. That
+   * still holds under position-claiming, because the specific cue MATCHES the general cue's
+   * token: "not just medication" claims [not, medication], so the bare "medication" cue finds
+   * its own token already taken. Only words nobody matched are freed.
+   */
+  it("specificity still wins where the specific cue matches the general one's word", () => {
+    const heard = facets("assess me for ADHD, not just the anxiety");
+    expect(heard).toContain("care:anxiety");
+    expect(heard).toContain("care:adhd-assessment");
+    expect(facets("not just medication")).toContain("care:non-medication");
+    // "treated for anxiety" is the specific reading, and it keeps its own word.
+    expect(facets("I was treated for anxiety for years")).toContain("care:anxiety");
+  });
+
+  it("a token matched by one cue is still unavailable to another", () => {
+    // Two cues cannot both claim the same word: that is what the claim set is for, and it is
+    // unchanged. Whatever reads "telehealth" here, only one facet may.
+    const heard = facets("telehealth please");
+    expect(heard.filter((f) => f === "pref:telehealth-first")).toHaveLength(1);
+  });
+
+  it("the whole existing rule family reads exactly as it did", () => {
+    // Spot-checks across the suppression rules, all of which run on spans and positions.
+    expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
+    expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
+    expect(facets("help me make sense of thirty years, if that makes sense")).toContain("manner:sense_making");
+    expect(facets("this is for my teenager")).toContain("care:child-adolescent-adhd");
   });
 });

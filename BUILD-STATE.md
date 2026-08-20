@@ -138,7 +138,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > precision cost is real, the finding stays pinned as today's truth and the mechanism is
 > reverted with the measurement written down — the O84 pattern. Gate: the corpus decides;
 > zero `never` pins broken is the bar for shipping, every promotion retagged in-commit, floors
-> and tie-quality moved, full `pnpm verify` green.
+> and tie-quality moved, full `pnpm verify` green. DONE 2026-08-20, and the corpus said ship.
+> `findCue` now returns the positions it MATCHED alongside the span, and Phase 3 claims those
+> positions rather than the range — a five-line change in two files, once the diagnosis was
+> right. The claim set became a `Set<number>` and a candidate is refused only when its own
+> matched positions collide.
+>
+> THE MEASUREMENT IS THE UNIT. Freeing intervening words lets more cues land, so the risk was
+> precision, and the corpus is what decides that: on the first run exactly TWO tests failed,
+> both of them expected — the promotion gate demanding a retag, and O104's own span-swallow
+> pin, which had been written the same day AS A FAILING CASE WAITING FOR THIS UNIT (the O68
+> pattern, and its fastest turnaround yet). ZERO `never` pins broke across 508 entries. The
+> pin is kept rather than deleted, with its expectation reversed, because an expectation
+> flipping is the record of the fix. Floor 12→13, tie-quality unmoved (the sentence was
+> already in the run — it gained a facet, not a place).
+>
+> Specificity ordering was the thing that could have broken and it does not, for a reason
+> worth stating: a specific cue MATCHES the general cue's token, so "not just medication"
+> claims [not, medication] and the bare "medication" cue still finds its word taken. Only
+> words NOBODY matched are freed. Pinned in §O106 along with the whole suppression family.
+>
+> The class this unit existed to close is now measurably closed: O104's sweep found 9
+> aspirations whose cue was present but unclaimed; after O105 and O106 there are SIX, and
+> every one of the six is a collapse-rule refusal working exactly as O45 designed it ("by
+> phone" collapses to [phone] and demands its authored pair). What was a mixed bag of
+> mechanism defects and correct behaviour is now entirely correct behaviour.
 
 > **O105 (the defect O104 measured: a desire-negation deletes a stated want) — claimed
 > 2026-08-20T15:02Z by loop-0820s.** "I don't want a big clinic, a woman GP in a small

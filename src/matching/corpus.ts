@@ -450,7 +450,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "bulk billed titration review with someone patient", reaches: ["care:titration", "pref:bulk-billing"], aspires: ["manner:unhurried"] },
   { text: "a calm woman doctor who understands anxiety", reaches: ["care:anxiety", "manner:steadying", "pref:woman-gp"] },
   { text: "telehealth assessment and I speak Hindi at home", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
-  { text: "a gentle GP who takes trauma seriously and bulk bills", reaches: ["manner:attuned", "manner:steadying", "pref:bulk-billing"], aspires: ["care:trauma-informed"] },
+  { text: "a gentle GP who takes trauma seriously and bulk bills", reaches: ["manner:attuned", "manner:steadying", "pref:bulk-billing", "care:trauma-informed"] },
   { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:unhurried"] },
   { text: "an unhurried structured assessment with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:unhurried"] },
   { text: "my teenager needs an assessment and we want a woman doctor", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd", "pref:woman-gp"] },
@@ -920,10 +920,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
   // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
   "care:titration": 24,
-  // O104 raised 9→12: the pace-and-consent register cued (see needs.ts). The facet's other
-  // five aspirations are NOT a vocabulary gap — they name what happened to the person, and
-  // whether this product may read that is a founder call, raised in the ledger.
-  "care:trauma-informed": 12,
+  // O104 raised 9→12 (the pace-and-consent register); O106 raised 12→13 by freeing the word
+  // a spanning cue had swallowed. The facet's other four aspirations are NOT a vocabulary
+  // gap — they name what happened to the person, and whether this product may read that is a
+  // founder call, raised in the ledger.
+  "care:trauma-informed": 13,
   "manner:attuned": 14,
   "manner:collaborative": 11,
   "manner:culturally_attuned": 16,

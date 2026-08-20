@@ -805,7 +805,7 @@ export function findCue(
   sentence: readonly string[],
   cue: readonly string[],
   from = 0,
-): { from: number; to: number } | null {
+): { from: number; to: number; at: number[] } | null {
   if (cue.length === 0) return null;
 
   for (let start = from; start <= sentence.length - 1; start++) {
@@ -813,6 +813,10 @@ export function findCue(
 
     let at = start;
     let matched = 1;
+    /* O106: the positions this cue actually MATCHED, as distinct from the span it covers.
+       A cue may straddle up to MAX_GAP tokens it never matched, and claiming those was
+       giving another facet's word away — see the claiming step in needs.ts. */
+    const positions = [start];
     while (matched < cue.length) {
       const want = cue[matched]!;
       let next = -1;
@@ -831,10 +835,11 @@ export function findCue(
       }
       if (next === -1) break;
       at = next;
+      positions.push(next);
       matched++;
     }
 
-    if (matched === cue.length) return { from: start, to: at };
+    if (matched === cue.length) return { from: start, to: at, at: positions };
   }
   return null;
 }
