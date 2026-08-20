@@ -119,6 +119,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O106 (the span-swallow O104 pinned: a cue claims words it never matched) — claimed
+> 2026-08-20T15:25Z by loop-0820s.** "a gentle GP who takes trauma seriously" does not reach
+> `care:trauma-informed`, and not for want of a cue — "trauma" is right there in the sentence.
+> `findCue` matches in order across up to `MAX_GAP` intervening tokens, and Phase 3 then
+> claims the whole RANGE `[from..to]`. So manner:attuned's "take seriously" claims
+> [take, trauma, seriously], the word "trauma" is marked spoken-for by a cue that never
+> matched it, and the shorter cue that would have matched it cannot. The reader's own word is
+> given to another facet and disappears. O104's sweep sized the class: of 135 standing
+> aspirations, 9 have their cue PRESENT but unclaimed and 111 are genuine vocabulary gaps —
+> small, real, and invisible while everything unheard looked alike. Design: A CUE CLAIMS THE
+> WORDS IT MATCHED, NOT THE WORDS IT STRADDLED. `findCue` returns the matched positions
+> alongside the span; Phase 3 claims those positions and refuses a candidate only when its own
+> matched positions collide. Specificity ordering is untouched and still does its work — "not
+> just medication" claims [not, medication] and the bare "medication" cue then finds its token
+> taken, exactly as today. THIS UNIT MAY END IN A REFUSAL AND THAT IS AN ACCEPTABLE OUTCOME:
+> freeing intervening words lets more cues land, and if the corpus's `never` pins say the
+> precision cost is real, the finding stays pinned as today's truth and the mechanism is
+> reverted with the measurement written down — the O84 pattern. Gate: the corpus decides;
+> zero `never` pins broken is the bar for shipping, every promotion retagged in-commit, floors
+> and tie-quality moved, full `pnpm verify` green.
+
 > **O105 (the defect O104 measured: a desire-negation deletes a stated want) — claimed
 > 2026-08-20T15:02Z by loop-0820s.** "I don't want a big clinic, a woman GP in a small
 > practice please" reaches NOTHING. The second clause alone reaches pref:woman-gp. Same shape:
