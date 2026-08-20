@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O97 (RED GATE: the party-to-care linter reads a data-breach sentence as clinical care)
+> — claimed 2026-08-20T11:55Z by loop-0820s.** Found by O96 running the whole e2e suite:
+> `party-to-care.spec.ts` fails on /privacy because the `adhd-me-as-care-provider` rule
+> matches "we … will assess it promptly" in the Notifiable Data Breaches paragraph. The
+> COPY IS RIGHT — that sentence is a statutory obligation and the object of "assess" is a
+> breach — so the defect is in the linter, and the fix is not to reword a legal duty into
+> something vaguer to please a regex. The rule's own comment states the assumption that
+> broke: "each is a thing only a treating clinician does, so a false positive means the copy
+> really did say we do it." That is true of `diagnose`, `prescribe` and `examine`; it is
+> false of `assess`, `treat` and `monitor`, which are ordinary English for non-clinical
+> objects (assess a breach, treat data carefully, monitor uptime) — and this tree WILL write
+> those sentences, because it publishes a privacy policy and a security page. Design: split
+> the verb list. The unambiguous verbs keep firing on subject+verb alone; the three ordinary
+> ones additionally demand a CLINICAL OBJECT in a short window after the verb (you, your,
+> patient, ADHD, symptoms, condition, diagnosis, dose, medication, health), so "we assess
+> you" and "ADHD.ME will assess patients" still fail and "we will assess it promptly" does
+> not. An allowlist of clinical objects, never a denylist of innocent ones — the enumerable
+> side is the clinical side. Gate: the /privacy sentence passes UNCHANGED (a copy edit here
+> would be the wrong fix and is refused); new pins both directions for every split verb
+> including the ones that must still fire; the existing party-to-care suite green with no
+> weakening; full `pnpm verify` plus the e2e spec that found it, green. Also in scope: say
+> in the ledger why e2e sits outside `pnpm verify`, since that is why this was red unseen.
+
 > **O96 (refactor lane, queue item 2: app/globals.css sectioned by surface) — claimed
 > 2026-08-20T11:16Z by loop-0820s.** 5,981 lines; banners exist only in the later half and
 > the same surface's rules sit in several places (the finder's results-screen block lives
