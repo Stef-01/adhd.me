@@ -473,6 +473,30 @@ describe("§O76 a cue inside a conversational hedge is filler, not an ask", () =
   });
 });
 
+describe("§O77 'for my mum' is a patient, not a presence", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("suppresses the on-behalf register, exactly as O75's second pin demanded", () => {
+    const booking = facets("booking on behalf of my mum, she wants this looked into properly");
+    expect(booking).not.toContain("manner:culturally_attuned");
+    expect(booking).toContain("manner:structured"); // the honest half stays
+    expect(facets("the appointment is for my mum, I am just organising it")).toEqual([]);
+  });
+
+  it("every family-presence ask keeps reaching — the governor must sit directly before", () => {
+    expect(facets("my mum thinks this is nonsense and she'll be in the room")).toContain("manner:culturally_attuned");
+    expect(facets("my mother comes in to translate")).toContain("manner:culturally_attuned");
+    expect(facets("family will be involved whether anyone likes it or not")).toContain("manner:culturally_attuned");
+    // A "for" later in the clause governs something else; adjacency is the idiom (O72's lesson).
+    expect(facets("I want my mum in the room for this")).toContain("manner:culturally_attuned");
+  });
+
+  it("the child facet is exempt BY DESIGN: on-behalf IS that facet's register", () => {
+    expect(facets("this is for my teenager")).toContain("care:child-adolescent-adhd");
+    expect(facets("a woman GP for my daughter's assessment, bulk billed if possible")).toContain("care:child-adolescent-adhd");
+  });
+});
+
 describe("§O72 a bare negator adjacent to a care/pref cue is a refusal — with every boundary held", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

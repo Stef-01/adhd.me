@@ -25,8 +25,12 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  and on-behalf registers behave like the single asks they wrap, and the full-roster-tie
  *  share holds near 30%, which remains the clarifier's standing work queue); 275/171/23/81
  *  at O76 (the hedge rule retagged O75's filler pin out of the run and added two boundary
- *  pins, one of which — the woman-doctor ask with a trailing hedge — separates). */
-const PINNED = { total: 275, separated: 171, partialTie: 23, unseparated: 81 };
+ *  pins, one of which — the woman-doctor ask with a trailing hedge — separates); 276/173/22/81
+ *  at O77 (the on-behalf rule: the retagged booking sentence stays in the run on its honest
+ *  structured reach and now separates where the false culturally_attuned reach had it
+ *  partially tied, and the new presence pin separates — a precision fix moving the KPI is
+ *  the KPI working). */
+const PINNED = { total: 276, separated: 173, partialTie: 22, unseparated: 81 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

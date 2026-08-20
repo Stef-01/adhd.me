@@ -24,9 +24,12 @@ non-rankings.
    second full run: `withinHedge` in read.ts reads the raw stream O45-style, maps the cue
    span across, and suppresses only a cue wholly inside the idiom, so "help me make sense of
    thirty years, if that makes sense" keeps reaching; the idiom set is one earned entry,
-   O50's law** — and the on-behalf register collides with the family-presence cues ("booking
-   on behalf of my mum" fires culturally_attuned; the for-my-mum vs in-the-room distinction
-   still owes it). Earlier: 311
+   O50's law** — and the on-behalf register collides with the family-presence cues —
+   **retagged by O77 (2026-08-20), the pattern's third run: `onBehalfBefore` in read.ts
+   reads the governor off the raw stream ("for" / "behalf of" directly before the family
+   reference, O72's adjacency lesson), suppresses only the culturally_attuned reading, and
+   the child facet is exempt BY DESIGN because on-behalf IS that facet's register ("this is
+   for my teenager")**. Earlier: 311
    entries after O68's tranche four (compounds +
    discipline registers, 2026-08-19); every floor rose again (woman-gp 4→10, bulk-billing
    6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN

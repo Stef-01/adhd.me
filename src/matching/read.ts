@@ -425,18 +425,9 @@ export function withinHedge(
   cueFrom: number,
   cueTo: number,
 ): boolean {
-  let rawFrom = -1;
-  let rawTo = -1;
-  let ci = 0;
-  for (let ri = 0; ri < rawSentence.length && ci <= cueTo; ri++) {
-    const token = rawSentence[ri]!;
-    if (token !== CLAUSE_BOUNDARY && isStopword(token)) continue;
-    if (sentence[ci] !== token) return false;
-    if (ci === cueFrom) rawFrom = ri;
-    if (ci === cueTo) rawTo = ri;
-    ci++;
-  }
-  if (rawFrom === -1 || rawTo === -1) return false;
+  const span = mapSpanToRaw(sentence, rawSentence, cueFrom, cueTo);
+  if (!span) return false;
+  const { rawFrom, rawTo } = span;
 
   for (const idiom of HEDGE_IDIOMS) {
     for (let h = 0; h + idiom.length <= rawSentence.length; h++) {
@@ -450,6 +441,73 @@ export function withinHedge(
     }
   }
   return false;
+}
+
+/**
+ * Content-stream span → raw-stream span (O76, shared by every raw-stream rule that needs to
+ * know WHERE a cue sat, not just what surrounds it).
+ *
+ * The content stream is the raw stream minus stopwords, in order, with clause boundaries
+ * kept by both — so the span maps across by a single walk. If the two streams diverge (the
+ * O55 caps trim them at different lengths on absurd input), the mapping returns null and
+ * every caller bails toward NOT suppressing: a rule that could silence a real ask on a
+ * 10k-word paste would cost more than what it catches.
+ */
+function mapSpanToRaw(
+  sentence: readonly string[],
+  rawSentence: readonly string[],
+  cueFrom: number,
+  cueTo: number,
+): { rawFrom: number; rawTo: number } | null {
+  let rawFrom = -1;
+  let rawTo = -1;
+  let ci = 0;
+  for (let ri = 0; ri < rawSentence.length && ci <= cueTo; ri++) {
+    const token = rawSentence[ri]!;
+    if (token !== CLAUSE_BOUNDARY && isStopword(token)) continue;
+    if (sentence[ci] !== token) return null;
+    if (ci === cueFrom) rawFrom = ri;
+    if (ci === cueTo) rawTo = ri;
+    ci++;
+  }
+  return rawFrom === -1 || rawTo === -1 ? null : { rawFrom, rawTo };
+}
+
+/**
+ * The on-behalf rule (O77, the rule O75's second corpus pin demanded).
+ *
+ * THE DEFECT CLASS. The culturally_attuned facet hears family-PRESENCE asks through cues
+ * like "my mum" and "my family" — a relative in the room, family views that shape the
+ * appointment. But the on-behalf register uses the same words for a different person
+ * entirely: "booking on behalf of my mum" names the PATIENT being booked for, and reading
+ * it as a cultural-context ask hands a facet to a sentence that never asked for one.
+ * Stopword-stripping erases the governor ("for", "on behalf of" — all function words), so
+ * like O45's skeletons, O72's veto and O76's hedges, the rule reads the RAW stream.
+ *
+ * THE RULE, adjacency-tight exactly as O72 found negation to be: the token straight before
+ * the cue's raw span (skipping the possessive "my" the family cues are authored with) is
+ * the governor "for", or the pair "behalf of". "for my mum" is on-behalf; "my mum will be
+ * in the room" has no governor and stays a presence ask; "I want my mum in the room for
+ * this" keeps reaching because the "for" governs "this", not the family reference.
+ *
+ * SCOPE IS THE CALLER'S, and the child facet is exempt BY DESIGN: "this is for my
+ * teenager" IS the child-adolescent ask — on-behalf is that facet's entire register, the
+ * same shape as O40's manner exemption. Only the culturally_attuned reading is suppressed.
+ */
+export function onBehalfBefore(
+  sentence: readonly string[],
+  rawSentence: readonly string[],
+  cueFrom: number,
+  cueTo: number,
+): boolean {
+  const span = mapSpanToRaw(sentence, rawSentence, cueFrom, cueTo);
+  if (!span) return false;
+
+  let g = span.rawFrom - 1;
+  if (g >= 0 && rawSentence[g] === "my") g--;
+  if (g < 0) return false;
+  if (rawSentence[g] === "for") return true;
+  return rawSentence[g] === "of" && g >= 1 && rawSentence[g - 1] === "behalf";
 }
 
 /**

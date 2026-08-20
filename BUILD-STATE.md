@@ -120,18 +120,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O77 (the reader unit O75's OTHER pin demanded: "for my mum" is a patient, not a
-> presence) — claimed 2026-08-20T03:46Z by loop-0820c.** O75's second KNOWN FALSE POSITIVE:
-> "booking on behalf of my mum, she wants this looked into properly" fires culturally_attuned
-> through the family-presence cue "my mum", though the mum is the PATIENT being booked for,
-> not a relative joining the appointment. Design (the raw-stream family again): an on-behalf
-> governor directly before the family reference — "for my <family>" / "on behalf of my
-> <family>", adjacency-tight like O72 — suppresses the culturally_attuned reading only.
-> The CHILD facet is exempt BY DESIGN and the exemption pinned: "this is for my teenager"
-> IS the child-adolescent ask — on-behalf is that facet's whole register. Every presence
-> pin ("my mum thinks this is nonsense and she'll be in the room", "my mother comes in to
-> translate") must keep reaching. Gate: the O75 pin retagged reaches→never in the same
-> commit, §O77 pins both directions, floors and tie-quality moved with the measured run,
-> full `pnpm verify` green.
+> presence) — claimed 2026-08-20T03:46Z by loop-0820c; DONE 2026-08-20. Gate: §O77 pins
+> both directions in reach.test.ts (on-behalf suppressed with the honest structured reach
+> kept, every presence pin held, child exemption pinned), 405-entry corpus green with zero
+> misses/leaks/unpromoted aspirations, every floor HELD on the measured run
+> (culturally_attuned kept 11 — lost the retagged false positive, gained the presence
+> boundary pin), tie-quality repinned 276/173/22/81, full `pnpm verify` green (211 files,
+> 3223 tests).** The rule is `onBehalfBefore` in read.ts, the raw-stream family's fourth
+> member: the on-behalf governor is all function words ("for", "on behalf of"), erased by
+> stopword-stripping, so the rule maps the cue span into the raw stream (via
+> `mapSpanToRaw`, extracted from O76's hedge rule for both to share) and checks the token
+> directly before the family reference, skipping the authored possessive "my" —
+> adjacency-tight exactly as O72 found negation to be, so "I want my mum in the room for
+> this" keeps reaching (that "for" governs "this"). Suppression is scoped to
+> manner:culturally_attuned alone; the CHILD facet is exempt BY DESIGN and pinned, because
+> on-behalf IS its register ("this is for my teenager" is the ask) — the same exemption
+> shape O40 gives manner. The O75 pin retagged reaches→never in the same commit: the O68
+> pattern's third full run, and O75's false-positive harvest is now fully paid. Tie-quality
+> note: the retagged booking sentence now SEPARATES where the false reach had it partially
+> tied — a precision fix moving the KPI is the KPI working.
 
 > **O76 (the reader unit O75's hedge pin demanded: a conversational hedge is filler, not an
 > ask) — claimed 2026-08-20T02:46Z by loop-0820b; DONE 2026-08-20. Gate: §O76 pins both

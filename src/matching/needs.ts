@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { bareNegatorBefore, collapsedCueSatisfied, findCue, negatedWant, softenedNotJust, stem, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueSatisfied, findCue, negatedWant, onBehalfBefore, softenedNotJust, stem, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -307,6 +307,16 @@ export function readNeeds(text: string): NeedSignal[] {
        keeps reaching even when a hedge trails it. A hedged cue claims nothing, the same
        rule as every other suppression here. */
     if (withinHedge(sentence, rawSentence, at.from, at.to)) continue;
+    /* O77 (O75's other pin): "for my mum" / "on behalf of my mum" names the PATIENT, not a
+       relative joining the appointment, so the culturally_attuned reading stands down. ONLY
+       that facet: the child facet's whole register is on-behalf ("this is for my teenager"
+       IS the ask), the same exemption shape O40 gives manner. */
+    if (
+      facetKey(cue.entry.facet) === "manner:culturally_attuned" &&
+      onBehalfBefore(sentence, rawSentence, at.from, at.to)
+    ) {
+      continue;
+    }
     /* O40 (Q1 item 4): a CARE or PREFERENCE cue in the scope of a desire negation is a refusal,
        not an ask — "I don't want my dose changed" must not reach titration. MANNER stays exempt
        BY DESIGN: patients state manner wants through negation ("I don't want to feel rushed" is

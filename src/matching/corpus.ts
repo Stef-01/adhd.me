@@ -533,14 +533,18 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my wife would prefer a woman GP for this", reaches: ["pref:woman-gp"] },
   { text: "my partner needs the dose looked at and cannot get in anywhere", reaches: ["care:titration"] },
   /**
-   * KNOWN FALSE POSITIVE (O75): the on-behalf register collides with the family-PRESENCE
-   * cues. "my mum" here is the PATIENT, not a relative joining the appointment, yet the
-   * culturally_attuned family cue fires. Pinned as today's truth per the O68 pattern; the
-   * unit that teaches the reader to tell "for my mum" (on-behalf) from "my mum will be in
-   * the room" (presence) must retag this to `never` in the same commit. The structured
-   * reach ("looked into properly") is honest and stays either way.
+   * O75 pinned this as a KNOWN FALSE POSITIVE (the on-behalf register colliding with the
+   * family-PRESENCE cues — "my mum" here is the PATIENT, not a relative joining the
+   * appointment); O77 built the governor rule and retagged it in the same commit, the O68
+   * pattern's third full run. The structured reach ("looked into properly") was honest all
+   * along and stays. The rule's own boundary pins sit beside it below.
    */
-  { text: "booking on behalf of my mum, she wants this looked into properly", reaches: ["manner:structured", "manner:culturally_attuned"] },
+  { text: "booking on behalf of my mum, she wants this looked into properly", reaches: ["manner:structured"], never: ["manner:culturally_attuned"] },
+  // O77's boundary as data: a pure on-behalf sentence is silent to the facet, while a
+  // presence ask keeps reaching even with a "for" later in the clause — the governor must
+  // sit DIRECTLY before the family reference, O72's adjacency lesson applied again.
+  { text: "the appointment is for my mum, I am just organising it", never: ["manner:culturally_attuned"] },
+  { text: "I want my mum in the room for this", reaches: ["manner:culturally_attuned"] },
   { text: "my son's paediatrician says a GP can manage this now", reaches: ["care:shared-care"], aspires: ["care:child-adolescent-adhd"] },
   { text: "year seven has been a disaster, we need answers for our boy", aspires: ["care:child-adolescent-adhd"] },
 
@@ -720,5 +724,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.
+  // O77: culturally_attuned holds at 11 the same way — the on-behalf retag took one out
+  // and the presence boundary pin ("I want my mum in the room for this") put one back.
   "pref:woman-gp": 16,
 };
