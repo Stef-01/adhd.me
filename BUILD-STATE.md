@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O100 (refactor lane, queue item 3: the roster DATA leaves the ranking LOGIC) — claimed
+> 2026-08-20T13:07Z by loop-0820s.** src/demo/clinicians.ts is 1,010 lines with a clean seam
+> at line 450: the `Clinician` type and the roster array above it, every ranking and copy
+> function below. The plan's reason is the real one — "split data out so a roster edit can
+> never touch a ranking line" — and it matters more here than in an ordinary tree because
+> THE ROSTER IS THREE REAL PEOPLE. A roster edit is a factual claim about a named doctor,
+> reviewed against what they published; a ranking edit is a behaviour change reviewed against
+> the corpus. Today one careless diff can be both, and the file's own header is a page of
+> real-person law that a reader looking for `scoreAgainst` scrolls straight past. Design:
+> `src/demo/roster.ts` takes the type, the roster array and the real-person header verbatim;
+> clinicians.ts re-exports both so NOT ONE import site changes (the module stays the public
+> face; this is a seam, not a rename). The full matching suite defines identical, per the
+> lane. Gate: zero call-site edits outside the two files (proved by grep, not by claim), the
+> whole matching + demo suite green unchanged, full `pnpm verify` green, e2e finder green.
+
 > **O99 (O96's audit finding: O14's accessibility fix has never rendered) — claimed
 > 2026-08-20T12:44Z by loop-0820s.** O96 recorded two unqualified `.match-quality`
 > declarations at equal specificity and left the fix as its own unit because fixing it
