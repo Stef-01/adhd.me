@@ -203,7 +203,14 @@ const LEXICON: readonly Entry[] = [
     "nothing shifted", "nothing helped", "nothing worked",
   ]),
   care("anxiety", "Anxiety", 24, [
-    "anxiety", "anxious", "panic", "treated for anxiety",
+    "anxiety", "anxious", "treated for anxiety",
+    /* O119 NARROWED "panic" → "panic attack". The bare word fired on "a doctor who won't panic
+       about my drinking", where "panic" describes the DOCTOR'S reaction and the ask is that
+       substance history be held safely — the opposite of a request for anxiety care. Every
+       corpus sentence that legitimately wanted this facet says "panic attacks". Bare "panic"
+       would otherwise only have reached a description of the reader's own state, which is the
+       G7 reading O114 refused for "anger" and "rage" in the facet next door. */
+    "panic attack",
     // Working the anxiety/ADHD line out — the reader asking which one it is, not the finder deciding.
     "misdiagnosed", "differential", "wrong answer", "wrong diagnosis",
   ]),
@@ -289,7 +296,15 @@ const LEXICON: readonly Entry[] = [
        same thing to this one. The state half stays standing and goes to the founder question
        with trauma's and attuned's — the third facet to split the same way. */
     "help with the anger", "help with the rage", "the emotional side",
-    "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
+    "rejection sensitivity", "rsd", "emotional regulation", "shame",
+    /* O119 REMOVED bare "overwhelmed" and kept the want-framing, which is O114's rule applied
+       to the word that unit did not reach. "somebody calm, because I arrive overwhelmed" is a
+       person describing their own state and asking for a CALM GP — it reaches
+       `manner:steadying` on "calm", correctly, and reading it into a care facet as well is the
+       DSM-text trap this module's header names. "overwhelmed" survives in the steadying cue
+       list, where it expresses a preference about the clinician rather than a finding about
+       the reader. */
+    "help with the overwhelm", "feeling overwhelmed by",
     // O17: this area's own doc comment calls dysregulation "what people describe first" — and
     // "emotional dysregulation" reached nothing, because "dysregulation" does not stem to
     // "regulation". The clinical word and the plain phrasings people actually use, added.

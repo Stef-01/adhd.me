@@ -141,6 +141,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > either a pinned `reaches` or a fixed/refused cue with its measurement written; the probe
 > itself landed as a TEST so the class cannot silently regrow; floors and tie-quality moved;
 > zero existing `never` pins broken; full `pnpm verify` green.
+> DONE 2026-08-20, and it is the day's most important unit because it is the only one that
+> made the numbers WORSE on purpose. All 32 examined. Three cues were manufacturing reach and
+> are gone; 25 real reaches are now declared, five of them as KNOWN FALSE POSITIVES with retag
+> demands (the O68 pattern, eighth run). Floors LOWERED with rationale — structured 17→12,
+> anxiety 17→15, emotional-regulation 12→11 — and tie-quality 392/223/61/108 → 391/214/63/114,
+> separation 56.9%→54.7%, the largest fall in the corpus's history. Every point of that fall
+> was reach the lexicon had not earned. A KPI that could only be improved by adding cues would
+> reward exactly the behaviour this unit exists to correct, which is why the fall is recorded
+> in the pin's own history chain rather than explained away.
+>
+> THE PROBE IS NOW A TEST (`src/matching/precision.test.ts`), so the corpus gates PRECISION the
+> way it has always gated recall: no entry may hear a facet it declares in no direction, and
+> the failure names the sentence. It carries its own non-vacuity pin, because a green
+> both-directions gate that cannot see a violation is worse than no gate.
+>
+> AND IT NAMED A CLASS, which is the part that outlives the unit. **Every cue in the lexicon is
+> written as though the CLINICIAN is the subject** — "explains things", "believes me", "my son"
+> — and five corpus sentences put somebody else there: the patient doing the explaining ("a
+> longer first appointment so I can actually explain"), the family doing the disbelieving ("my
+> family does not believe in ADHD"), and the sharpest, "after my son was diagnosed I recognised
+> myself and now I want my OWN assessment", which fires the paediatric facet on an adult's own
+> ask and would show that reader children's GPs. One of the five is O113's own cue leaking, and
+> it is pinned as mine rather than quietly dropped. Five instances clears the two-case bar, so
+> the subject check is earned — but it is a mechanism, not a cue, and it gets its own unit with
+> five failing cases waiting for it.
 
 > **O118 (the missed-asks line lower-cases an acronym) — claimed 2026-08-20T19:38Z by
 > loop-0820s.** O117's panel rendered it and made it obvious: the profile prints "You also

@@ -158,6 +158,28 @@ non-rankings.
    the product's most expensive one to be wrong about. FOUNDER: a yes/no, and if yes, whether
    the cues must require the care clause.
 
+1d. **The precision counterpart, O119 (2026-08-20) — and it is the day's most important
+   unit.** A day of recall work (O103–O114, ~60 cues) checked every candidate against a
+   sentence that would refuse it. That check has a blind spot it cannot see past: it asks "does
+   this cue fire where it should not" against sentences the AUTHOR chose, and a `never` pin
+   exists only where somebody thought of the collision. Probing the other direction — which
+   corpus entries hear a facet they declare in NO direction — found **32 of 508**. Three cues
+   were manufacturing reach and are gone: **"properly"** on `manner:structured` (it fired on
+   every sentence containing the adverb; none of them asks for a documented baseline),
+   **bare "panic"** on `care:anxiety` (it read "a doctor who won't panic about my drinking", a
+   figurative line about the DOCTOR), and **bare "overwhelmed"** on `care:emotional-regulation`
+   (it read a person describing their own state — the DSM-text trap the module's header names,
+   arriving from the direction nobody was watching). Floors LOWERED with rationale: structured
+   17→12, anxiety 17→15, emotional-regulation 12→11. Tie-quality 392/223/61/108 →
+   391/214/63/114, separation 56.9%→54.7%, **the largest fall recorded and every point of it
+   reach the lexicon had not earned.** The probe now ships as `src/matching/precision.test.ts`,
+   so the corpus gates precision in the same way it has always gated recall. It also named a
+   CLASS with five worked instances: **every cue assumes the CLINICIAN is the subject**
+   ("explains things", "believes me", "my son"), and five sentences put the patient or a
+   relative there — the sharpest being "after my son was diagnosed I recognised myself and now
+   I want my own assessment", which fires the paediatric facet on an adult's own ask. Pinned as
+   today's truth with retag demands; the fix is a subject check, a mechanism unit.
+
 1c. **The aspiration queue, worked 2026-08-20 (O103, O104, O107) with two mechanism fixes it
    surfaced (O105, O106).** Three of the four loudest facets closed: non-medication 9→17
    (SEQUENCE and ALTERNATIVE registers), substance-history 9→16 (the substances the list never

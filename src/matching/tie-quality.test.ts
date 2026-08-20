@@ -40,6 +40,13 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  391/214/63/114 at O119 (the PRECISION audit: the first unit in this history to move every
+ *  number the wrong way on purpose. Four sentences left the run and separation fell
+ *  56.9%→54.6% — the largest single drop recorded — because three cues that were
+ *  manufacturing reach were removed: "properly" on structured, bare "panic" on anxiety,
+ *  bare "overwhelmed" on emotional-regulation. Every point of that fall was reach the
+ *  lexicon had not earned. A KPI that could only be improved by adding cues would reward
+ *  exactly the behaviour this unit exists to correct);
  *  392/223/61/108 at O116 (four mid-sized facets plus the comparative the stemmer never
  *  bridged: twelve sentences joined the run, nine separating, and the UNSEPARATED count
  *  fell again, 109→108. Separation 56.3%→56.9% — the highest it has been. Two of the
@@ -107,7 +114,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 392, separated: 223, partialTie: 61, unseparated: 108 };
+const PINNED = { total: 391, separated: 214, partialTie: 63, unseparated: 114 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -256,7 +256,15 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     matchLine: "works to a documented baseline and follows up on a schedule",
     // O13: "methodical" is the plain word for this way of working and missed (kept through the
     // merge alongside main's continuity family below).
-    cues: ["structured", "methodical", "thorough", "measured", "properly", "on a schedule", "monitoring", "follow-up plan", "baseline",
+    cues: ["structured", "methodical", "thorough", "measured", "on a schedule", "monitoring", "follow-up plan", "baseline",
+      /* O119 REMOVED "properly". Every other cue here names a WAY OF ORGANISING care — a
+         baseline, a schedule, monitoring. "properly" is a generic intensifier and it fired on
+         every sentence containing the adverb: "I want to get assessed properly", "listened to
+         properly for once", "time to find out properly whether this is ADHD". In all three it
+         means THOROUGHLY, which is either another facet's meaning or none, and none of the
+         three is asking for a documented baseline and a review schedule. Found by the O119
+         probe rather than by a per-cue check, because no `never` pin existed to catch it: the
+         collision was with sentences nobody had thought to pin. */
       // W221 recall: continuity is part of this facet by its own definition — the onboarding ask is
       // "documented baseline and scheduled follow-up" — so "follow up and not just leave me to it"
       // belongs here rather than in a second, overlapping follow-through facet (the duplication

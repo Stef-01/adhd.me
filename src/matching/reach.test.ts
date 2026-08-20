@@ -723,7 +723,15 @@ describe("§O77 'for my mum' is a patient, not a presence", () => {
   it("suppresses the on-behalf register, exactly as O75's second pin demanded", () => {
     const booking = facets("booking on behalf of my mum, she wants this looked into properly");
     expect(booking).not.toContain("manner:culturally_attuned");
-    expect(booking).toContain("manner:structured"); // the honest half stays
+    /* O119: this line used to assert `manner:structured` as "the honest half stays", which was
+       only ever true because "properly" was a structured cue — a cue O119 removed as too loose
+       (it fired on every sentence containing the adverb, none of which asks for a documented
+       baseline). The suppression is what this pin is FOR, and it needs a positive control that
+       does not depend on a cue somebody may delete for unrelated reasons, so the control moves
+       to a sentence carrying a real second ask. */
+    const withRealAsk = facets("booking on behalf of my mum, she needs an ADHD assessment");
+    expect(withRealAsk).not.toContain("manner:culturally_attuned");
+    expect(withRealAsk).toContain("care:adhd-assessment"); // the honest half stays
     expect(facets("the appointment is for my mum, I am just organising it")).toEqual([]);
   });
 
