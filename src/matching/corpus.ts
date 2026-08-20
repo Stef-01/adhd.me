@@ -671,9 +671,16 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   //    out because "don't want anyone touching the dose" is a real refusal). The refused
   //    half stays refused and the following ask now reaches, in one entry:
   { text: "I don't want a woman GP, bulk billing matters more", never: ["pref:woman-gp"], reaches: ["pref:bulk-billing"] },
-  // 2) reported refusal: "they said no to X" is somebody ELSE refusing — a complaint, which
-  //    O40/O72 both read as a want everywhere except this bare-not-after-reporting-verb shape.
-  { text: "they said no to titration and I want it anyway", aspires: ["care:titration"] },
+  // 2) reported refusal — FIXED BY O83 ({said, told} before the negator vetoes the O72
+  //    suppression; the raw stream's subject walk keeps the reader's OWN reported "no"
+  //    refusing). The rule's earned sentences sit beside the promoted one:
+  { text: "they said no to titration and I want it anyway", reaches: ["care:titration"] },
+  { text: "my old GP told me no on a dose review, I need someone who will", reaches: ["care:titration"] },
+  { text: "the practice said no to telehealth, which is exactly what I need", reaches: ["pref:telehealth-first"] },
+  // The self-report boundary: "I said no" is a standing refusal however it is tensed —
+  // the subject walk crosses auxiliaries ("I have said no"), so neither of these reaches.
+  { text: "I said no to titration and I still mean it", never: ["care:titration"] },
+  { text: "I have said no to the dose before and nothing has changed", never: ["care:titration"] },
   // 3) presence phrasing the cue set cannot hear: "sit in the room" has no cue since O25
   //    re-authored "in the room with me" to "come into the room". The on-behalf suppression
   //    of "for my mum's sake" is CORRECT here; the presence half of the sentence is the gap.
@@ -729,7 +736,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:substance-history": 9,
   // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
   // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
-  "care:titration": 19,
+  "care:titration": 21,
   "care:trauma-informed": 9,
   "manner:attuned": 12,
   "manner:collaborative": 10,
@@ -747,7 +754,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
   "pref:bulk-billing": 17,
   "pref:longer-appointment": 6,
-  "pref:telehealth-first": 14,
+  "pref:telehealth-first": 15,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.

@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { bareNegatorBefore, collapsedCueSatisfied, findCue, onBehalfBefore, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueSatisfied, findCue, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -333,10 +333,16 @@ export function readNeeds(text: string): NeedSignal[] {
          anxiety" means anxiety AND MORE). Adjacency-tight, so it is already consume-once
          and stays an occurrence-local check; the negator inside a cue's own phrase is
          untouched because the check looks strictly before the span. Manner exempt (O40). */
+      /* O83 joins the same guard: a reporting verb directly before the negator marks the
+         refusal as somebody ELSE's — "they said no to titration and I want it anyway" is a
+         complaint, which O40/O72 read as a want everywhere else — unless the raw stream
+         shows the reader reporting their OWN no ("I said no to titration"), which is a
+         refusal that stands. */
       if (
         (cue.entry.facet.kind === "care" || cue.entry.facet.kind === "preference") &&
         bareNegatorBefore(sentence, at.from) &&
-        !softenedNotJust(rawSentence, cue.tokens[0]!)
+        !softenedNotJust(rawSentence, cue.tokens[0]!) &&
+        !reportedRefusal(sentence, rawSentence, at.from)
       ) {
         continue;
       }

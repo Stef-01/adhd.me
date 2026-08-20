@@ -61,7 +61,13 @@ the dose", a real refusal with two inserted content words. Consume-once needs cr
 coordination (the negation must know which matched span is nearest), which is a readNeeds
 architecture change too large to ride along in an audit unit.
 
-### 4. Reported refusal reads as the reader's own refusal
+### 4. Reported refusal reads as the reader's own refusal — FIXED BY O83 (2026-08-20)
+
+> Landed as sketched: `reportedRefusal` in read.ts — a reporting verb ({said, told}, earned
+> set) directly before the bare negator vetoes the O72 suppression, with the raw-stream
+> subject walk keeping the reader's OWN reported "no" refusing ("I said no", "I have said
+> no"). The waiting aspiration promoted and the verb set's demonstrating sentences pinned
+> in the same commit.
 
 "**they said no to titration** and I want it anyway" → nothing: the O72 bare-not adjacency
 fires although the refuser is somebody else. O40/O72 both read complaints as wants everywhere

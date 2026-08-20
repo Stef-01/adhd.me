@@ -564,6 +564,54 @@ export function onBehalfBefore(
 }
 
 /**
+ * Reported refusal (O83, the O78 audit's second queued rule): somebody ELSE's "no" is a
+ * complaint, not the reader's refusal.
+ *
+ * THE GAP THIS CLOSES. O40 and O72 both read complaints as wants — "my GP won't do
+ * titration" reaches — but "they said no to titration and I want it anyway" reached
+ * nothing, because the bare-negator adjacency rule fired on a refusal that was REPORTED,
+ * not made. A reporting verb directly before the negator marks reported speech, and the
+ * suppression stands down. Adjacency-tight in the content stream, O72's own law: the verb
+ * sits straight before the negator ("said no", "told ... no" once stopwords drop "me"),
+ * and a gap is not the idiom.
+ *
+ * THE SELF-REPORT BOUNDARY, read from the raw stream (this family's trick, because the
+ * subject pronoun is a stopword the content stream erased): "I said no to titration" is
+ * the reader's OWN standing refusal, so the suppression stands. The subject search walks
+ * BACK from the verb over stopwords — auxiliaries ride between subject and verb ("I have
+ * said no", "I would have just said no") — and settles on the first thing that is not
+ * one: "i"/"ive" means self; any content word ("my GP said no"), a clause boundary, or
+ * the sentence start means somebody else. If the two streams have diverged under the O55
+ * caps the check bails toward keeping the suppression — the conservative side here is
+ * the one that refuses, since the veto widens reach.
+ *
+ * THE VERB SET IS SMALL AND EARNED (O50's law): {said, told}, each with a demonstrating
+ * corpus sentence pinned in the commit that added it. "says"/"tell" stems join only with
+ * their own sentences.
+ */
+const REPORTING_VERBS = new Set(["said", "told"]);
+const SELF_REPORTERS = new Set(["i", "ive"]);
+
+export function reportedRefusal(
+  sentence: readonly string[],
+  rawSentence: readonly string[],
+  cueFrom: number,
+): boolean {
+  if (cueFrom < 2) return false;
+  const reporter = sentence[cueFrom - 2];
+  if (reporter === undefined || !REPORTING_VERBS.has(reporter)) return false;
+  const span = mapSpanToRaw(sentence, rawSentence, cueFrom - 2, cueFrom - 2);
+  if (!span) return false;
+  for (let k = span.rawFrom - 1; k >= 0; k--) {
+    const token = rawSentence[k]!;
+    if (token === CLAUSE_BOUNDARY) return true;
+    if (SELF_REPORTERS.has(token)) return false;
+    if (!isStopword(token)) return true;
+  }
+  return true;
+}
+
+/**
  * Negators that BIND TIGHTLY when they open a cue (O53). "no medication" is an adjacency
  * idiom: the corpus caught "no interest in coaching, the medication is working" reaching
  * `non-medication` through [no, …2 words…, medication] — the negator negating something else

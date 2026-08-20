@@ -120,7 +120,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O83 (the O78 audit's second queued rule: somebody ELSE's "no" is a complaint, not the
-> reader's refusal) — claimed 2026-08-20T05:45Z by loop-0820h.** "they said no to titration
+> reader's refusal) — claimed 2026-08-20T05:45Z by loop-0820h; DONE 2026-08-20. Gate: the
+> waiting aspiration PROMOTED and nothing else moved on the pre-pin run (the measured diff
+> was that one promotion); the rule's earned sentences landed as corpus data ({said, told}
+> each demonstrated, the self-report boundary pinned both plain and auxiliary-tensed — "I
+> said no" AND "I have said no" keep refusing, which the first draft missed until the
+> probe caught the auxiliary riding between subject and verb); 415-entry corpus green,
+> floors titration 19→21 + telehealth-first 14→15, §O83 pins both directions, every
+> §O40/§O72/§O81 pin green, tie-quality repinned 284/178/22/84 (all three new reaching
+> entries separate), full `pnpm verify` green (212 files, 3262 tests).** Shipped as the
+> audit sketched: `reportedRefusal` in read.ts — a reporting verb directly before the bare
+> negator marks reported speech and the O72 suppression stands down; the subject is read
+> off the RAW stream (the family's trick — pronouns are stopwords the content stream
+> erased) by walking back from the verb over stopwords: "i"/"ive" means the reader
+> reporting their own standing refusal (suppression holds), a content word or boundary
+> means somebody else (complaint = want, O40's own posture). Streams-diverged bails toward
+> suppression, the conservative side for a reach-widening veto. The O78 audit queue now
+> has ONE open item: the sit-in-the-room presence cue (lexicon work, an O22-loop unit). "they said no to titration
 > and I want it anyway" reaches nothing: O72's bare-negator adjacency fires on a refusal
 > that was REPORTED, not made — and O40/O72 both read complaints as wants everywhere else
 > ("my GP won't do titration" reaches). Design (the audit's sketch, raw-stream family): a

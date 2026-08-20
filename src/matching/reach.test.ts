@@ -473,6 +473,28 @@ describe("§O76 a cue inside a conversational hedge is filler, not an ask", () =
   });
 });
 
+describe("§O83 somebody else's 'no' is a complaint, not the reader's refusal", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("a reported refusal reaches — the ask survives being quoted", () => {
+    expect(facets("they said no to titration and I want it anyway")).toContain("care:titration");
+    expect(facets("my old GP told me no on a dose review, I need someone who will")).toContain("care:titration");
+    expect(facets("the practice said no to telehealth, which is exactly what I need")).toContain("pref:telehealth-first");
+  });
+
+  it("the reader's OWN reported no keeps refusing, auxiliaries and all", () => {
+    expect(facets("I said no to titration and I still mean it")).not.toContain("care:titration");
+    // The subject walk crosses "have": still the reader speaking.
+    expect(facets("I have said no to the dose before and nothing has changed")).not.toContain("care:titration");
+  });
+
+  it("a bare negator with no reporting verb is untouched — every §O72 suppression stands", () => {
+    expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
+    expect(facets("no titration for me thanks")).not.toContain("care:titration");
+    expect(facets("no video appointments, my internet is hopeless")).not.toContain("pref:telehealth-first");
+  });
+});
+
 describe("§O81 a desire negation spends itself on the nearest ask — consume-once scope", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

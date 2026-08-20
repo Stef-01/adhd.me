@@ -39,7 +39,10 @@ non-rankings.
    following ask, manner spends it without being suppressed; both waiting aspirations
    promoted ("…woman GP, bulk billing matters more" and the dose/diagnosis sentence that
    had looked like a lexicon gap since O68), floors and tie-quality moved with them** —
-   reported refusal ("they said no to X"), and the sit-in-the-room presence phrasing.
+   reported refusal — **FIXED by O83 (2026-08-20): {said, told} directly before the bare
+   negator vetoes the O72 suppression; the raw-stream subject walk keeps "I said no" (and
+   "I have said no") refusing; aspiration promoted, verbs earned with pinned sentences** —
+   and the sit-in-the-room presence phrasing (the audit queue's last open item).
    Refused with written reasons: micro-caching, cue indexing (0.049 ms/call measured),
    Porter, maximum matching.** Earlier: 311
    entries after O68's tranche four (compounds +
