@@ -146,6 +146,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > drift again. Gate: no facet gains a cue in a register it does not already read (that is the
 > whole argument, so it is the whole gate); O119's precision probe green; zero `never` pins
 > broken; floors and tie-quality moved; full `pnpm verify` green.
+> DONE 2026-08-20. Twenty-four aspirations classified one at a time against the vocabulary
+> each facet ALREADY reads. **Fourteen were never blocked.** Eleven cued and promoted —
+> complex-mental-health 11→15, substance-history 16→18, depression 13→14, anxiety 15→16,
+> attuned 19→21 — and two more turned out to be O119 PRECISION problems rather than G7 ones
+> (the waiting-room "panic" phrasings, uncued because bare "panic" fired on a line about the
+> DOCTOR). The founder's question is now TEN sentences, marked `awaitingFounder` on the corpus
+> entry as `"experience"` or `"self-state"` and pinned as a LIST in corpus.test.ts, so item 1b's
+> scope is generated from the data instead of described in prose that drifted for a day.
+> Tie-quality 397/220/62/115 → 403/223/63/117: separation flat at 55.3%, which is the honest
+> shape — these are disclosure sentences on facets one or two GPs declare, so they add reach
+> without adding separation.
+>
+> **THE UNIT TESTED ITS OWN THESIS ON ITSELF THREE TIMES, AND FAILED TWICE BEFORE PASSING.**
+> A mood cue was written and reverted twice: "eye on my mood" swallowed "keep an eye", which
+> `manner:structured` was legitimately reading as monitoring (a corpus pin caught it), and the
+> narrowed "my mood" then fired on "my moods flip fast and I say things I regret" — one of the
+> ten sentences the founder's question is ABOUT. That cue would have quietly answered the
+> question in the unit written to stop exactly that, and O119's own precision probe is what
+> caught it. Depression keeps only the idiom; the mood aspiration stays standing.
+> Two attuned cues broke §O112's pin, which deliberately leaves "I rehearse what to say and
+> still leave unheard" and "I cry in the car after every appointment" unread. There IS a real
+> argument for reversing half of it — the facet already reads bare conduct reports like
+> "brushed off", and leaving an appointment unheard is conduct where crying in the car is the
+> reader's own state — but **filing work under a G7 gate carelessly and UNfiling it carelessly
+> are the same error**, and this unit's whole thesis is the first. Reverted, argument written
+> down for a unit that takes it deliberately with the founder question attached.
+> One cue was also dropped for span theft rather than honesty: "more than one diagnosis"
+> outranks `care:adhd-assessment`'s "diagnosis" at three tokens and CONSUMED it, so a pinned
+> sentence stopped reaching assessment. A cue that reads one facet by taking a word another
+> facet needs is not a gain.
+>
+> The defect fixed here is one of PROCESS, and worth naming for the next fast day: "G7" is a
+> comfortable place to put a hard sentence, and a genuine gate becomes a catch-all one deferral
+> at a time. The founder's decision looked five times bigger than it is, and fourteen
+> aspirations sat unserved behind a question that did not govern them.
 
 > **O122 (Q1 lexicon: three unblocked facets, and the family words the child facet never
 > learned) — claimed 2026-08-20T20:56Z by loop-0820s.** The queue's biggest remaining blocks

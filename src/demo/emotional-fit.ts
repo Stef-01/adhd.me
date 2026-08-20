@@ -70,7 +70,23 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   attuned: {
     label: "Listens and takes you seriously",
     matchLine: "listens and takes you seriously",
-    cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed",
+    cues: [
+      /* O123: this facet's cues are all CARE-EXPERIENCE — "feel heard", "dismissed", "brushed
+         off", "not believed" — a register about how appointments have gone. "I need someone who
+         has seen women like me before" is a plain WANT in that register and was parked under
+         the founder question by mistake.
+
+         TWO OTHERS WERE CUED AND THEN REVERTED IN-BUILD, and the reason matters more than the
+         cues. "leave unheard" and "rehearse what to say" broke §O112's pin, which deliberately
+         leaves "I rehearse what to say and still leave unheard" and "I cry in the car after
+         every appointment" unread. There is a real argument for reversing half of it — the
+         facet already reads bare conduct reports like "brushed off", and leaving an
+         appointment unheard is conduct, where crying in the car is the reader's own state.
+         But O123's whole thesis is that a G7-adjacent line must not be moved in passing by a
+         unit doing something else. That cuts BOTH ways: filing work under the gate carelessly
+         and unfiling it carelessly are the same error. The argument is recorded for the unit
+         that takes it deliberately, with the founder question attached. */
+      "seen women like me", "feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed",
       /* O112: the plain WANTS in this facet's corpus register — each names the clinician's
          CONDUCT, which is what this quality is, and none states anything about the reader.
 

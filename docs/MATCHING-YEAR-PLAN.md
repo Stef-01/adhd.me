@@ -141,8 +141,24 @@ non-rankings.
    set (five two-token cues, plus one deliberate non-cue with its precision reason written
    down), whereupon the promotion gate demanded — and got — every newly-heard aspiration
    retagged and the floor raised 1→6, all in the closing commit.
-1b. **FOUNDER QUESTION, raised by O104 (2026-08-20): may the matcher be cued on what
-   happened to somebody?** Five of `care:trauma-informed`'s standing aspirations name the
+1b. **FOUNDER QUESTION — SCOPE CORRECTED BY O123 (2026-08-20), and the correction is most of
+   the story.** This item was written by O104 about five trauma sentences. Unit after unit then
+   deferred to it in passing, until TWENTY-FOUR aspirations across SEVEN facets sat behind a
+   question whose written scope was five sentences in one facet. O123 checked every one against
+   the vocabulary its own facet already reads, and **most of them were never blocked**:
+   `care:complex-mental-health` is cued on "bipolar", "psychosis", "schizophrenia",
+   "schizoaffective"; `care:substance-history` on "drinking", "cannabis", "in recovery" — and
+   this plan's own worked example of the G7 line is "I drink more than I should" read as a
+   want; `care:depression` on "depression", "low mood". A sentence saying "borderline
+   personality disorder plus the attention problems" is not a new question for a facet that
+   already reads "schizoaffective". Eleven were cued and promoted in O123; two more turned out
+   to be O119 PRECISION problems (the waiting-room "panic" phrasings), not G7 ones.
+   **The real question is now TEN sentences, and it lives in the data**: `awaitingFounder` on
+   the corpus entry, `"experience"` or `"self-state"`, pinned as a list in corpus.test.ts so
+   the scope is generated rather than described and a silent promotion fails the build.
+   **The question itself, unchanged:** may the matcher be cued on what
+   happened to somebody, or on a state they describe in themselves? Five of
+   `care:trauma-informed`'s standing aspirations name the
    reader's history rather than their preference — "there is family violence in my past and
    it affects appointments", "an abusive relationship left me jumpy in clinics", "what
    happened to me before makes doctors hard to trust", "childhood was rough and it comes up
@@ -157,6 +173,23 @@ non-rankings.
    facet would then be reachable by a sentence that is purely history, and G7's boundary is
    the product's most expensive one to be wrong about. FOUNDER: a yes/no, and if yes, whether
    the cues must require the care clause.
+   **The other five, added to this question by O123 rather than invented by it**: four
+   `care:emotional-regulation` sentences that describe the reader's own state with no
+   appointment clause at all ("rejection hits me like a truck", "my temper goes from zero to a
+   hundred in seconds", "my moods flip fast and I say things I regret", "crying at work over
+   nothing and I want it taken seriously") and one `manner:attuned` sentence of the same shape
+   ("I cry in the car after every appointment"). These are the DSM-adjacent half of the
+   question, and O119 is the reason they are held separately from the trauma five: it removed
+   bare "overwhelmed" from `care:emotional-regulation` for reading a person describing their
+   own state, so cueing these would reverse a precision fix that was made deliberately.
+   **A note on the discipline, because O123 tested it on itself.** Two cues written during that
+   unit were reverted in-build for trying to answer this question sideways: a mood cue fired on
+   "my moods flip fast and I say things I regret" (O119's probe caught it), and two attuned
+   cues broke §O112's pin, which deliberately leaves "I rehearse what to say and still leave
+   unheard" unread. There is a real argument for reversing half of §O112 — the facet already
+   reads bare conduct reports like "brushed off" — but filing work under this gate carelessly
+   and UNfiling it carelessly are the same error, so the argument is written down for a unit
+   that takes it deliberately rather than acted on in passing.
 
 1d. **The precision counterpart, O119 (2026-08-20) — and it is the day's most important
    unit.** A day of recall work (O103–O114, ~60 cues) checked every candidate against a

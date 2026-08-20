@@ -219,11 +219,31 @@ const LEXICON: readonly Entry[] = [
   ]),
   // ── Depression & anxiety ────────────────────────────────────────────────────────────────────
   care("depression", "Depression and low mood", 24, [
+    /* O123: the facet reads "depression", "depressed", "low mood" already; these are the same
+       thing in the words people actually use for it. "black dog" is the Australian idiom and
+       carries two content tokens, so it cannot fire on a literal dog sentence alone.
+
+       A MOOD CUE WAS ATTEMPTED TWICE AND REFUSED TWICE, which is the whole unit in miniature.
+       "eye on my mood" swallowed "keep an eye", which `manner:structured` was legitimately
+       reading as monitoring — a corpus pin caught that. Narrowing to "my mood" then fired on
+       "my moods flip fast and I say things I regret", one of the ten sentences marked
+       `awaitingFounder`: the cue would have QUIETLY ANSWERED the founder's G7 question in a
+       unit written to stop exactly that, and O119's precision probe caught it. So depression
+       gains only the idiom, and "keep an eye on my mood while we sort the attention side"
+       stays standing. */
+    "black dog",
     "depression", "depressed", "low mood", "antidepressant", "antidepressants",
     // Probe: "I've been on antidepressants for six years and nothing shifted" reached nothing.
     "nothing shifted", "nothing helped", "nothing worked",
   ]),
   care("anxiety", "Anxiety", 24, [
+    /* O123: "worried sick" is the same register this facet already reads ("anxious",
+       "anxiety") and is specific enough not to repeat O119's mistake — that unit removed BARE
+       "panic" because it fired on "a doctor who won't panic about my drinking", a figurative
+       line about the DOCTOR. The two waiting-room panic phrasings stay uncued for that
+       precision reason and NOT for a G7 one: "waiting room" would fire on "the waiting room
+       was full". They are a cue-authoring problem, not a founder question. */
+    "worried sick",
     "anxiety", "anxious", "treated for anxiety",
     /* O119 NARROWED "panic" → "panic attack". The bare word fired on "a doctor who won't panic
        about my drinking", where "panic" describes the DOCTOR'S reaction and the ask is that
@@ -269,13 +289,31 @@ const LEXICON: readonly Entry[] = [
        for them needs a founder-side judgment call". The same call is owed here and a build
        loop is not the thing to make it. Raised in BUILD-STATE as a named founder question. */
   ]),
-  care("complex-mental-health", "Bipolar and complex mental health", 26, ["bipolar", "complex", "psychosis", "schizophrenia",
+  care("complex-mental-health", "Bipolar and complex mental health", 26, [
+    /* O123: the register this facet ALREADY reads. Its settled vocabulary is "bipolar",
+       "psychosis", "schizophrenia", "schizoaffective", "psych history" — pure diagnosis
+       disclosure — so a sentence saying "borderline personality disorder plus the attention
+       problems" was never a new G7 question. It was a missing word, parked under the founder
+       gate because the unit that met it was moving fast. Nothing here reads a symptom the
+       reader is describing in themselves; every one names a diagnosis or an admission the
+       reader is DISCLOSING in order to ask that it be held.
+
+       "more than one diagnosis" was written and then REMOVED: at three tokens it outranks
+       `care:adhd-assessment`'s "diagnosis" and CONSUMES the span, so "complex needs, more than
+       one diagnosis already" stopped reaching assessment — a pin caught it. A cue that reads
+       one facet by taking a word another facet needs is not a gain, and the aspiration it
+       would have served stays standing. */
+    "borderline", "personality disorder", "hear voices", "psych ward","bipolar", "complex", "psychosis", "schizophrenia",
     // O53: how people name the whole file rather than one diagnosis. Two content tokens.
     "psych history", "schizoaffective"]),
   care("autism-adhd", "Autism and neurodevelopmental", 26, ["autism", "autistic", "audhd", "sensory",
     // O49: the self-identification word, single and precise (the "neuroaffirming" precedent).
     "neurodivergent"]),
   care("substance-history", "Substance history held safely", 26, [
+    /* O123: same register as "I drink more than I should", which the year plan uses as its own
+       worked example of the G7 line — a disclosure made in order to ask that the conversation
+       be held safely. This facet has read that register since it was written. */
+    "clean two years", "past drug use",
     "drink", "drinking", "alcohol", "cannabis", "substance", "non-stimulant",
     // O49: the word people actually use. Two content tokens, so a garden stays a garden.
     "smoke weed",

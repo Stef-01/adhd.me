@@ -80,3 +80,44 @@ describe("the per-facet gate (the year plan's CI ratchet)", () => {
     expect(met).toEqual([]);
   });
 });
+
+/**
+ * O123: the founder's G7 question, scoped from the corpus rather than from prose.
+ *
+ * Year plan 1b was written about five trauma sentences, and then unit after unit deferred to
+ * it in passing until twenty-four aspirations across seven facets sat behind it — while most
+ * of them turned out never to have been blocked, because the facets they belong to already
+ * read exactly that register by settled design. A paragraph cannot notice that happening.
+ * These do.
+ */
+describe("O123 the founder question knows its own size", () => {
+  const awaiting = REACH_CORPUS.filter((entry) => entry.awaitingFounder);
+
+  it("is exactly the sentences that name an experience or a self-state", () => {
+    // Pinned as a list, not a count: a new one must be added deliberately, with its kind.
+    expect(awaiting.map((e) => e.text).sort()).toEqual([
+      "I cry in the car after every appointment",
+      "I dissociate when doctors rush me",
+      "I rehearse what to say and still leave unheard",
+      "an abusive relationship left me jumpy in clinics",
+      "childhood was rough and it comes up in appointments",
+      "crying at work over nothing and I want it taken seriously",
+      "my moods flip fast and I say things I regret",
+      "my temper goes from zero to a hundred in seconds",
+      "rejection hits me like a truck",
+      "there is family violence in my past and it affects appointments",
+      "what happened to me before makes doctors hard to trust",
+    ]);
+    for (const entry of awaiting) {
+      expect(["experience", "self-state"]).toContain(entry.awaitingFounder);
+    }
+  });
+
+  it("never marks an entry that is already heard, which would be a decision taken quietly", () => {
+    // The whole point is that these are UNheard pending a human call. If a cue starts reaching
+    // one, that is the founder's question being answered by a cue author instead of a founder.
+    for (const entry of awaiting) {
+      expect(entry.aspires ?? [], `${entry.text} is marked awaiting but aspires to nothing`).not.toHaveLength(0);
+    }
+  });
+});

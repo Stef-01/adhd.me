@@ -40,6 +40,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  403/223/63/117 at O123 (six sentences joined the run from facets that already read their
+ *  register — the unit found most of the founder-question backlog was never blocked at all.
+ *  Separation 55.4%→55.3%, flat: these are DISCLOSURE sentences on facets one or two GPs
+ *  declare, so hearing them adds reach without adding separation, which is the honest shape
+ *  for this kind of gain rather than a disappointment);
  *  397/220/62/115 at O122 (three unblocked facets: six sentences joined the run and ALL SIX
  *  separate, which is the shape of a sweep on facets the roster genuinely differs on.
  *  Separation 54.5%→55.4%, recovering part of what O119's precision audit correctly gave
@@ -124,7 +129,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 397, separated: 220, partialTie: 62, unseparated: 115 };
+const PINNED = { total: 403, separated: 223, partialTie: 63, unseparated: 117 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -37,6 +37,20 @@ export type CorpusEntry = {
   never?: readonly string[];
   /** Facet keys this text is about but the lexicon cannot hear yet — the gap list. */
   aspires?: readonly string[];
+  /**
+   * O123: this aspiration is not a cue-authoring gap — it is waiting on the founder's G7 call
+   * recorded at year plan 1b (may the matcher be cued on what HAPPENED to somebody, or on a
+   * state the reader describes in themselves).
+   *
+   * IT IS A FIELD RATHER THAN A PARAGRAPH because the paragraph drifted. Item 1b was written
+   * about five trauma sentences and then unit after unit deferred to it in passing, until
+   * twenty-four aspirations across seven facets sat behind a question whose written scope was
+   * five sentences in one facet — and most of them were never blocked at all, as O123 found by
+   * checking each against the vocabulary its own facet already reads. Marking the real ones
+   * here lets the plan's scope be GENERATED from the corpus and lets a test refuse a silent
+   * promotion, which prose cannot do.
+   */
+  awaitingFounder?: string;
 };
 
 export const REACH_CORPUS: readonly CorpusEntry[] = [
@@ -207,8 +221,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my brain has never let me finish anything", never: ["care:adhd-assessment"] },
   { text: "I am so tired of masking all day", never: ["care:autism-adhd"] },
   { text: "the house is chaos and so is my head", never: ["care:adhd-assessment"] },
-  { text: "I cry in the car after every appointment", aspires: ["manner:attuned"] },
-  { text: "I need someone who has seen women like me before", aspires: ["manner:attuned"] },
+  { text: "I cry in the car after every appointment", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
+  { text: "I need someone who has seen women like me before", reaches: ["manner:attuned"] },
   { text: "diagnosed at forty and still getting my head around it", reaches: ["manner:sense_making", "care:adhd-assessment"] },
   { text: "I want the science, not the pep talk", reaches: ["manner:sense_making"] },
   { text: "appointments where I do not have to perform being fine", reaches: ["manner:attuned"] },
@@ -265,7 +279,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:trauma-informed / care:complex-mental-health ───────────────────────────────────
   { text: "a trauma informed GP please", reaches: ["care:trauma-informed"] },
   { text: "I need to not be pushed on the details of the history", reaches: ["care:trauma-informed"] },
-  { text: "childhood was rough and it comes up in appointments", aspires: ["care:trauma-informed"] },
+  { text: "childhood was rough and it comes up in appointments", awaitingFounder: "experience", aspires: ["care:trauma-informed"] },
   { text: "cptsd and probably ADHD underneath it", reaches: ["care:trauma-informed", "care:adhd-assessment"] },
   { text: "schizoaffective and ADHD together, it is a lot", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
   { text: "a psychosis history, so stimulants are complicated", reaches: ["care:complex-mental-health"] },
@@ -277,7 +291,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "sensory stuff makes clinics hard for me", reaches: ["care:autism-adhd"] },
   { text: "assessed for autism last year, ADHD is next", reaches: ["care:autism-adhd", "care:adhd-assessment"] },
   { text: "I use alcohol to cope and I know it", reaches: ["care:substance-history"] },
-  { text: "clean two years and I need that respected, not relitigated", aspires: ["care:substance-history"] },
+  { text: "clean two years and I need that respected, not relitigated", reaches: ["care:substance-history"] },
   { text: "vaping weed for sleep most nights", reaches: ["care:substance-history"] },
   { text: "a doctor who won't panic about my drinking", reaches: ["care:substance-history"] },
 
@@ -381,8 +395,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:trauma-informed ─────────────────────────────────────────────────────────────────
   { text: "I need someone trauma informed, my last doctor was not", reaches: ["care:trauma-informed"] },
   { text: "complex PTSD alongside the attention stuff", reaches: ["care:trauma-informed", "care:complex-mental-health", "care:adhd-assessment"] },
-  { text: "there is family violence in my past and it affects appointments", aspires: ["care:trauma-informed"] },
-  { text: "an abusive relationship left me jumpy in clinics", aspires: ["care:trauma-informed"] },
+  { text: "there is family violence in my past and it affects appointments", awaitingFounder: "experience", aspires: ["care:trauma-informed"] },
+  { text: "an abusive relationship left me jumpy in clinics", awaitingFounder: "experience", aspires: ["care:trauma-informed"] },
 
   // ── manner:motivating ────────────────────────────────────────────────────────────────────
   { text: "I want to work with my strengths, not just hear what is broken", reaches: ["manner:motivating"] },
@@ -400,8 +414,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "bipolar and maybe ADHD, it is complicated", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
   { text: "schizophrenia is managed, the focus trouble is not", reaches: ["care:complex-mental-health"] },
   // BPD by name is silent to the reader today — a gap worth closing carefully, not by reflex.
-  { text: "borderline personality disorder plus the attention problems", reaches: ["care:adhd-assessment"], aspires: ["care:complex-mental-health"] },
-  { text: "I hear voices sometimes and I still want this looked at", aspires: ["care:complex-mental-health"] },
+  { text: "borderline personality disorder plus the attention problems", reaches: ["care:adhd-assessment", "care:complex-mental-health"] },
+  { text: "I hear voices sometimes and I still want this looked at", reaches: ["care:complex-mental-health"] },
 
   // ── care:non-medication / manner:collaborative ───────────────────────────────────────────
   { text: "coaching and skills, not another prescription", reaches: ["care:non-medication"] },
@@ -428,8 +442,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a gentle doctor, I am easily rattled", reaches: ["manner:steadying"] },
   // This facet's territory IS the description (see care-archetypes.ts), so unheard
   // descriptions are candidate cues here — aspires, not never, unlike depression below.
-  { text: "rejection hits me like a truck", aspires: ["care:emotional-regulation"] },
-  { text: "my temper goes from zero to a hundred in seconds", aspires: ["care:emotional-regulation"] },
+  { text: "rejection hits me like a truck", awaitingFounder: "self-state", aspires: ["care:emotional-regulation"] },
+  { text: "my temper goes from zero to a hundred in seconds", awaitingFounder: "self-state", aspires: ["care:emotional-regulation"] },
 
   // ── care:shared-care / care:anxiety / care:autism-adhd / care:child-adolescent-adhd ─────
   { text: "my psychiatrist wants a GP to share the care with", reaches: ["care:shared-care"] },
@@ -609,7 +623,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a formal diagnosis so work will make adjustments", reaches: ["care:adhd-assessment"] },
   { text: "get the paperwork that proves it is ADHD", reaches: ["care:adhd-assessment"] },
   { text: "put a name to what has been going on since childhood", reaches: ["manner:sense_making"], aspires: ["care:adhd-assessment"] },
-  { text: "the black dog is back and I want it dealt with alongside the ADHD", reaches: ["care:adhd-assessment"], aspires: ["care:depression"] },
+  { text: "the black dog is back and I want it dealt with alongside the ADHD", reaches: ["care:adhd-assessment", "care:depression"] },
   { text: "keep an eye on my mood while we sort the attention side", reaches: ["manner:structured", "care:adhd-assessment"], aspires: ["care:depression"] },
   // "flat" descriptions without a want are pinned `never` above, so the depression gap here
   // is deliberately NOT an aspiration — a cue on "flat" would break those pins. The heard
@@ -623,12 +637,12 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
   { text: "what works besides medication", reaches: ["care:non-medication"] },
   { text: "help with the anger that comes out of nowhere", reaches: ["care:emotional-regulation"] },
-  { text: "my moods flip fast and I say things I regret", aspires: ["care:emotional-regulation"] },
+  { text: "my moods flip fast and I say things I regret", awaitingFounder: "self-state", aspires: ["care:emotional-regulation"] },
   { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned", "care:emotional-regulation"] },
   { text: "please go slowly with the history questions", reaches: ["care:trauma-informed"] },
   { text: "a doctor trained in trauma, not just aware of it", reaches: ["care:trauma-informed"] },
-  { text: "what happened to me before makes doctors hard to trust", aspires: ["care:trauma-informed"] },
-  { text: "I need my past drug use handled without the raised eyebrows", reaches: ["manner:non_judgmental"], aspires: ["care:substance-history"] },
+  { text: "what happened to me before makes doctors hard to trust", awaitingFounder: "experience", aspires: ["care:trauma-informed"] },
+  { text: "I need my past drug use handled without the raised eyebrows", reaches: ["manner:non_judgmental", "care:substance-history"] },
   { text: "opioids were a chapter of my life, closed now", reaches: ["care:substance-history"] },
   { text: "more than one diagnosis in my file and I need a GP who can hold it all", reaches: ["care:adhd-assessment"], aspires: ["care:complex-mental-health"] },
   { text: "my psych history scares GPs off and I am tired of it", reaches: ["care:complex-mental-health"] },
@@ -641,7 +655,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      the ask is help navigating them. */
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned", "manner:attuned", "care:adhd-assessment"] },
   { text: "English is my second language and appointments move too fast", reaches: ["manner:unhurried"], aspires: ["manner:culturally_attuned"] },
-  { text: "I rehearse what to say and still leave unheard", aspires: ["manner:attuned"] },
+  { text: "I rehearse what to say and still leave unheard", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", aspires: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", aspires: ["manner:steadying"] },
   { text: "bloods and blood pressure done before any script", reaches: ["manner:structured"] },
@@ -784,13 +798,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the ADHD makes the depression worse and I want both handled together", reaches: ["care:depression", "care:adhd-assessment"] },
   { text: "antidepressants numbed me without fixing anything, I want the ADHD looked at", reaches: ["care:depression", "care:adhd-assessment"] },
   { text: "my anxiety spikes every time I have to make a phone call", reaches: ["care:anxiety"] },
-  { text: "worried sick before every appointment, I need help with that", aspires: ["care:anxiety"] },
+  { text: "worried sick before every appointment, I need help with that", reaches: ["care:anxiety"] },
   { text: "keep the depression treatment going while we sort the attention side", reaches: ["care:depression", "care:adhd-assessment"] },
 
   // ── emotional regulation / non-medication / substance: the thin floors fed ──────────────
   { text: "I want help with the rage before it costs me my marriage", reaches: ["care:emotional-regulation"] },
   { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
-  { text: "crying at work over nothing and I want it taken seriously", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
+  { text: "crying at work over nothing and I want it taken seriously", awaitingFounder: "self-state", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
   { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
   { text: "what about diet and exercise before we go straight to stimulants", reaches: ["care:non-medication"] },
   { text: "structure and skills first, medication as a last resort", reaches: ["care:non-medication"] },
@@ -815,10 +829,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // Punctuality is not the unhurried facet: wanting appointments to START on time is a
   // different ask from wanting them not to be rushed once they start.
   { text: "I need appointments that start on time, waiting destroys me", never: ["manner:unhurried"] },
-  { text: "I dissociate when doctors rush me", reaches: ["manner:unhurried"], aspires: ["care:trauma-informed"] },
+  { text: "I dissociate when doctors rush me", awaitingFounder: "experience", reaches: ["manner:unhurried"], aspires: ["care:trauma-informed"] },
   { text: "meltdowns after appointments unless things are predictable", aspires: ["care:autism-adhd", "manner:structured"] },
-  { text: "my file says borderline and doors close", aspires: ["care:complex-mental-health"] },
-  { text: "psych ward admissions in my twenties, stable for years now", aspires: ["care:complex-mental-health"] },
+  { text: "my file says borderline and doors close", reaches: ["care:complex-mental-health"] },
+  { text: "psych ward admissions in my twenties, stable for years now", reaches: ["care:complex-mental-health"] },
 
   // ── question forms, round two ────────────────────────────────────────────────────────────
   { text: "how much does an ADHD assessment cost with a GP", reaches: ["care:adhd-assessment", "pref:bulk-billing"] },
@@ -940,23 +954,25 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O105 raised 59→60: the comma-scoped negation stopped deleting the assessment ask behind
   // "not after therapy, …".
   "care:adhd-assessment": 60,
-  // O119 LOWERED 17→15 by sanctioned reclassification, and a lowered floor is worth the space
-  // it takes to justify. "panic" narrowed to "panic attack" because the bare word read "a
-  // doctor who won't panic about my drinking" — a figurative sentence about the DOCTOR — as a
-  // request for anxiety care. The two entries that lose the facet ("panic in the waiting room
-  // every time", "white coat panic is real for me") are the reader describing their own state
-  // rather than naming care they want, which is the reading O114 refused for "anger" and
-  // "rage" one facet over. Both stand as aspirations with that reason. This is the corpus
-  // getting MORE honest, not the reader getting deafer.
-  "care:anxiety": 15,
+  // O123 raised 15→16 with "worried sick". The two waiting-room panic phrasings stay uncued
+  // for O119's PRECISION reason (bare "panic" fired on a line about the doctor), which is a
+  // cue-authoring problem and not a founder question — the distinction this unit exists to draw.
+  "care:anxiety": 16,
   "care:autism-adhd": 16,
   // O122 raised 16→18: the POSSESSIVE, bridged in the stemmer ("my son's paediatrician"), plus
   // the educational-psychologist route parents actually arrive by. The plural forms ("our son",
   // "our boy") were REFUSED — see needs.ts: they break a G7 pin, because a bare family
   // reference cannot tell an ask from a parent describing their child's distress.
   "care:child-adolescent-adhd": 18,
-  "care:complex-mental-health": 11,
-  "care:depression": 13,
+  // O123 raised 11→15: the facet was already cued on "bipolar", "psychosis",
+  // "schizophrenia", "schizoaffective" — pure diagnosis disclosure — so "borderline", "hear
+  // voices" and "psych ward" were a missing-word gap, not the founder's G7 question they had
+  // been filed under. One aspiration stays: "more than one diagnosis" as a cue would consume
+  // the word `diagnosis` that care:adhd-assessment needs, and a pin caught it.
+  "care:complex-mental-health": 15,
+  // O123 raised 13→14 — the facet reads "depression" and "low mood" already; "black dog" is
+  // the Australian idiom for the same thing.
+  "care:depression": 14,
   // O114 raised 9→12 (the want half only); O119 LOWERED 12→11 by sanctioned reclassification.
   // Bare "overwhelmed" left this facet: "I get overwhelmed in appointments and need someone
   // calm" asks for a CALM GP and reaches manner:steadying for it, and hearing the reader's
@@ -974,10 +990,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O116 raised 19→23: continuity language — prescribing handed back, scripts managed,
   // prescriptions continued after a move.
   "care:shared-care": 23,
-  // O107 raised 9→16: the substances the list never learned, plus the recovery register.
-  // The two still unheard are the ones whose cues were refused on measurement ("clean" fires
-  // on a clean bill of health; "drug use" on "the drug I use works well") — see needs.ts.
-  "care:substance-history": 16,
+  // O123 raised 16→18. Same argument: this facet has read disclosure since it was written
+  // ("drinking", "cannabis", "in recovery"), and the year plan's own worked example of the G7
+  // line is "I drink more than I should" read as a want.
+  "care:substance-history": 18,
   // O116 raised 24→28: the register a dose review is asked in — the script needing adjusting,
   // the generic brand, the afternoon rebound, medication management as the thing asked FOR.
   "care:titration": 28,
@@ -986,10 +1002,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // gap — they name what happened to the person, and whether this product may read that is a
   // founder call, raised in the ledger.
   "care:trauma-informed": 13,
-  // O112 raised 14→19: the plain wants in this facet's register, each naming the clinician's
-  // conduct. The three still unheard are the DISTRESS phrasings — "I cry in the car after
-  // every appointment" and its siblings — which are a founder judgement, not a lexicon gap.
-  "manner:attuned": 19,
+  // O123 raised 19→22: this facet's cues are all care-EXPERIENCE ("dismissed", "brushed off",
+  // "not believed"), and leaving an appointment unheard sits squarely in that register. The one
+  // that stays — "I cry in the car after every appointment" — names the reader's emotional
+  // state rather than the conduct of the appointment, and is marked awaitingFounder.
+  "manner:attuned": 21,
   // O122 raised 11→20: the SHARED-DECISION phrasings. The facet's label is "Explains and
   // decides with you" and it had no cue for anybody asking to be decided WITH.
   "manner:collaborative": 20,
