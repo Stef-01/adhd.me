@@ -119,6 +119,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O111 (the banner that says it could not read what it read perfectly) — claimed
+> 2026-08-20T16:56Z by loop-0820s.** O110's capture caught it and O110 refused to smuggle the
+> fix into its own diff. `matchQuality` routes TWO different situations to `unmatched`:
+> nothing in the request was read at all, and something WAS read that nobody on the roster
+> answers. The copy describes only the first — "We could not tell what you are looking for, so
+> this is everyone we list — not an order." — so a reader who types "gap fees are why I
+> stopped going, I need a GP who bulk bills" is told the finder could not tell what they want,
+> directly above a line naming exactly what they want. Two sentences, one screen, flatly
+> contradicting each other, and the false one is the louder. THE CODE ALREADY KNEW: the
+> comment on that very branch says "words that were READ but that nobody on the roster answers
+> are not a tie … `unservedAsks` names whose gap it is". The distinction was understood and
+> the sentence was never split to match. Design: a fourth `MatchQuality` value — `unserved` —
+> returned when needs were read and every score is zero, with its own copy that says the true
+> thing ("We understood what you asked for. Nobody listed today answers it."). Everything that
+> currently branches on `!== "informed"` keeps behaving identically, because `unserved` is not
+> informed either; only the SENTENCE changes. The genuine no-read case keeps the existing copy,
+> which was always true of it. Gate: both cases pinned apart in unit tests (read-but-unanswered
+> vs nothing-read), every existing quality pin re-read and updated to the value it should now
+> assert rather than blanket-updated, the clarifier and headline branches proved unchanged, a
+> qa/ capture showing the two lines agreeing, DESIGN-QA entry, e2e green, full `pnpm verify`
+> green.
+
 > **O110 (the honesty line is blind to three quarters of what it should cover) — claimed
 > 2026-08-20T16:34Z by loop-0820s.** O109's own consequence, and a live patient-facing defect
 > rather than a lexicon gap. `unservedAsks` — the function behind "No GP listed today says
