@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O122 (Q1 lexicon: three unblocked facets, and the family words the child facet never
+> learned) — claimed 2026-08-20T20:56Z by loop-0820s.** The queue's biggest remaining blocks
+> (trauma 5, complex-mental-health 5, emotional-regulation 4) are all waiting on the founder
+> question, so this takes the three loudest that are NOT: `manner:collaborative` (4),
+> `care:child-adolescent-adhd` (4) and `manner:structured` (3). Eleven aspirations, every one a
+> plain want, so they sweep together like O113's.
+> Each is deaf in a way worth naming. `child-adolescent-adhd` knows "my son", "my daughter",
+> "my teenager" — and the corpus asks in the first-person PLURAL and the possessive: "our ten
+> year old needs an assessment", "we need answers for our boy", "my son's paediatrician says a
+> GP can manage this now". A facet whose entire register is a parent talking about their child
+> knows only one of the two words Australian parents use for the relationship, which is a
+> vocabulary gap of the same shape as O114's "lady doctor". `collaborative` has no cue for the
+> SHARED-DECISION phrasings — "ask me what I think before deciding", "run the options past me
+> first", "works alongside me as a partner". And `structured` is the facet O119 just stripped
+> unearned reach from, removing "properly" because it fired on any sentence containing the
+> adverb; the corpus meanwhile holds the phrasings that ARE this facet — "bloods and blood
+> pressure done before any script", "the follow up booked before I leave each time" — which is
+> the honest pairing: O119 took away reach that was not earned, this gives back reach that is.
+> Gate: O103's method on every candidate; the O119 precision gate green (no entry may hear a
+> facet it declares in no direction, which now catches a loose cue on the way in rather than
+> months later); zero `never` pins broken; promotions retagged in-commit; floors and
+> tie-quality moved; full `pnpm verify` green.
+
 > **O121 (UI refinement: the finder walked end to end, after a day that changed most of it) —
 > claimed 2026-08-20T20:42Z by loop-0820s.** The lane's cadence is a UI-refinement unit per
 > week and its procedure is explicit: screenshot the surface at 390 and desktop, walk the
