@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O132 (allocation lane: the allocator and the finder share one vocabulary) — claimed
+> 2026-08-20T23:30Z by loop-0820s.** The lane names its own next step: "wiring `statedNeeds`
+> from `readNeeds` output so the finder's reader and the allocator share one vocabulary end to
+> end". Today they do not. `PatientRequest.statedNeeds` and `.communicationPreference` are
+> HAND-SUPPLIED arrays of care-area ids and manner words, so a caller writes the vocabulary out
+> by hand while the finder derives the same vocabulary from a sentence — two ways of saying what
+> a patient asked for, which is the exact shape of the defect this tree already paid for once
+> (the ranker and the explainer holding separate lexicons and drifting, W221/O1's F2 repair).
+> Design: a `requestFromWords` constructor that takes the patient's own sentence and derives
+> both fields through `readNeeds`, the same read the finder uses — care facets to `statedNeeds`,
+> manner traits to `communicationPreference`. The hand-supplied fields stay, because synthetic
+> allocation runs legitimately want to state a vocabulary directly; what changes is that there
+> is now ONE derivation and it is the finder's.
+> The gate is a unity pin rather than a feature test: for a set of real-shaped sentences, the
+> vocabulary the allocator receives must be exactly what `readNeeds` produces for the same
+> words — no facet the finder cannot read, none dropped. Two boundaries also get pinned because
+> the constructor is the place they could quietly be crossed: it may introduce NO reading of its
+> own (G7 — the allocator must not become a second, looser reader of patients), and stated
+> urgency stays a caller-supplied timing preference, never derived from the words, because
+> inferring urgency from what somebody wrote is triage in the one lane whose header promises it
+> is not. Gate: unity pinned both directions, G7 non-derivation pinned, allocation suite green
+> unchanged, full `pnpm verify` green.
+
 > **O131 (the two-case bar, made checkable) — claimed 2026-08-20T23:22Z by loop-0820s.**
 > O128 pinned two false positives with retag demands. Before building either mechanism I applied
 > the tree's own O84 bar — two cases earn a mechanism, one does not — by searching all 558
