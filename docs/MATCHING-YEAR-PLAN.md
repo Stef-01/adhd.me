@@ -553,7 +553,14 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
   make the first one easier; no score, no total, no winner language, pinned by an e2e that
   fails on the words; W193's posture stated once for the whole table; the control hidden
   entirely when the reader's words reached nothing to compare on; (Q4) the same provenance view inside the console so a doctor
-  sees exactly what patients are told about them — **DONE, O117 (2026-08-20)**:
+  sees exactly what patients are told about them — **DONE, O117 (2026-08-20)**, and **EXTENDED by O126
+  (2026-08-20)**, which carried the QUERY-side provenance through as well: `matchAudit` computed
+  the reaching phrase for every asked facet and dropped it on the way out, so the console's
+  worked match showed "Titration and dose review 28" with no way to learn it came from somebody
+  typing "wearing off". Now rendered as "reached by …", beside the patient's "from your words",
+  with the two pinned character-identical. O126's claim wrongly described Q4 as still open —
+  O117 had closed it — and the correction is recorded in that unit's ledger row.
+  Original O117 record:
   `src/matching/provenance.ts` enumerates, per clinician, every label their declarations can put
   in front of a patient, the sentences those labels sit inside, and the not-declared frames —
   all composed by the functions the finder itself calls, with a test asserting the panel and the

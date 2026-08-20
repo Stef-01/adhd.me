@@ -138,6 +138,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > one story and a patient another. Gate: console and patient provenance pinned equal for every
 > facet of a worked query; the console renders nothing the patient cannot see; qa/ capture and
 > a DESIGN-QA entry; e2e green; full `pnpm verify` green.
+> DONE 2026-08-20 — **with a correction to this claim, which was wrong about its own place in
+> the plan.** The claim called this "the lane's last increment" and said Q1–Q3 were done. Q4 was
+> ALSO done: O117 closed it earlier today with `src/matching/provenance.ts`, the per-clinician
+> enumeration of what patients are told. I read the lane's prose, saw the Q4 sentence, and did
+> not read far enough to see it already carried a DONE. The work here is still real and still
+> new — O117 answered "what is said about this GP", O126 answers "what in THIS READER'S WORDS
+> produced it", which is the query side rather than the clinician side — but it is an EXTENSION
+> of a closed increment, not the increment. Recorded rather than quietly renamed, because a
+> ledger that lets a unit mis-describe its own scope is how a lane comes to look emptier than
+> it is.
+>
+> The work: `matchAudit.asked` carries `matched` through and the console renders it —
+> "Titration and dose review 28 · reached by \"wearing off\"" — so a doctor can trace every
+> reason to the words that produced it. Unity pinned three ways rather than trusted: the
+> console's phrase for a facet is character-identical to the patient profile's, every asked
+> facet has one, and the console can show nothing the patient-side read did not produce. That is
+> the O1/F2 repair applied to provenance.
+> Register kept distinct: the patient reads "from your words", the console reads "reached by".
+> Both true, neither claiming to quote — `matched` is the lexicon's cue, every token
+> stem-matched in order, not a verbatim extract. An e2e fails the build if the console ever says
+> "they said".
+> ONE THING THE UNIT TESTS COULD NOT HAVE CAUGHT, so it got its own e2e: a field carried through
+> the audit and never PRINTED would satisfy every unity pin and show the doctor nothing.
+> Layout followed the fact: the asked list was a chip cloud and is now a stack of rows, because
+> a label and the phrase that reached it are one fact and must share a row.
+>
+> LEDGER NOTE: like O124, this close landed a commit late — the plan edit asserted on an anchor
+> that had already changed, the script stopped, and the code commit ran anyway because the two
+> were separate statements rather than chained. The assertion did its job (nothing false was
+> written); the sequencing did not. Both fixed here in one follow-up.
 
 > **O125 (the tail: six small facets, and the end of the unblocked queue) — claimed
 > 2026-08-20T22:01Z by loop-0820s.** What remains in the aspiration list after O122–O124 is a
