@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O73 (MIC-FAILURE-MODES D2, the inventory's first queued unit: the debug banner proves
+> WHICH build ran) — claimed 2026-08-20T04:0xZ by loop-0819ac.** Today's field round burned
+> an hour on exactly this: the founder tested "the fix" against a build the deploy quota had
+> silently kept it out of, and a stale-cache variant of the same confusion is one Safari
+> bfcache away. Change: `speechDebugFacts` gains a `build:` fact — the first seven characters
+> of NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA (Vercel's system env, inlined at build time when
+> statically referenced), `build:dev` when absent — so a ?debug=1 screenshot carries proof of
+> the code that produced it, and "it failed" can never again mean "the old build failed"
+> without the banner saying so. Defensive by design: if the Vercel project has system envs
+> unexposed the fact degrades to build:dev IN PRODUCTION, which is itself the visible signal
+> to flip the toggle (noted for the founder rather than assumed). Verify: unit pins for
+> present/absent env (stubbed), all speech pins green, voice e2e green, D2 flipped to
+> instrumented in the inventory; full `pnpm verify` green.
+
 > **O72 (the reader unit O68's pin demanded: a bare negator ADJACENT to a care/pref cue is a
 > refusal) — DONE 2026-08-19 by loop-0819ab. Building the rule surfaced ITS OWN boundary,
 > fixed inside the unit: stopword-stripping erases the additive "not just" idiom ("assess me
