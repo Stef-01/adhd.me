@@ -119,6 +119,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O75 (Q1 item 1, corpus tranche five: the reach corpus grows toward ~500 with the same
+> author→measure→tag loop as O64/O68) — claimed 2026-08-20T01:50Z by loop-0820a.** Scope:
+> ~90 new entries in `src/matching/corpus.ts` across registers the corpus is thinnest in,
+> each MEASURED before tagging (reaches / never — incl. G7 symptom-only pins — / aspires);
+> REACH_FLOORS re-measured and raised wherever counts rose, with the promotion gate forcing
+> any newly-heard aspiration retagged in the same commit; the W234 tie-quality pin re-run
+> and moved with the run. Verify: reach corpus suite green both directions, floor gate
+> green, tie-quality pin matches the measured partition, full `pnpm verify` green.
+
 > **O74 (founder-directed: attribution advanced to a store of record + the year plan gains
 > the standing refactor lane) — DONE 2026-08-19 by interactive session loop-0819ad. Gate: 8
 > store pins (record/refuse/never-throw/tally/zero-rows/torn-tail), boundary census green,
