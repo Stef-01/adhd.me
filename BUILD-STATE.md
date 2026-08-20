@@ -119,6 +119,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O112 (Q1 lexicon: attuned, sorting the wants from the distress) — claimed
+> 2026-08-20T17:18Z by loop-0820s.** Now the loudest at eight, and the facet Q1's first sweep
+> already flagged: O49 left three attuned aspirations standing because "their phrasings read
+> distress rather than a want, and authoring cues for them needs a founder-side judgment
+> call". That judgement is still owed and is still not a build loop's to make — but it was
+> made about THREE of them, and the other five have accumulated since without anyone sorting
+> them. Doing that sort is this unit. The plain wants name a way of being treated: "someone
+> who talks to me like an adult, not a case file", "a doctor who does not roll their eyes",
+> "appointments where I do not have to perform being fine", "I want to be believed the first
+> time I say it", "please actually listen". Each describes the clinician's conduct, which is
+> what this facet IS, and none states anything about the reader's condition. The distress
+> phrasings — "I cry in the car after every appointment", "I rehearse what to say and still
+> leave unheard" — describe what the reader is going through, and cueing them would have the
+> matcher reading distress off a sentence typed into a finder. Same line as O104's trauma
+> call, same answer: they stay standing, sorted and labelled, and go to the founder with the
+> others rather than accumulating unexamined. Expect the negative-framed wants ("does not roll
+> their eyes", "do not have to perform being fine") to need their negator INSIDE the cue —
+> that lesson has now arrived three times (O104, O109, and O49's original "not a script").
+> Gate: O103's method on every candidate, zero `never` pins broken, promotions retagged
+> in-commit, floors and tie-quality moved, full `pnpm verify` green.
+
 > **O111 (the banner that says it could not read what it read perfectly) — claimed
 > 2026-08-20T16:56Z by loop-0820s.** O110's capture caught it and O110 refused to smuggle the
 > fix into its own diff. `matchQuality` routes TWO different situations to `unmatched`:
