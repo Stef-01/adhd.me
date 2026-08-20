@@ -141,6 +141,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > inferring urgency from what somebody wrote is triage in the one lane whose header promises it
 > is not. Gate: unity pinned both directions, G7 non-derivation pinned, allocation suite green
 > unchanged, full `pnpm verify` green.
+> DONE 2026-08-20. `requestFromWords` derives `statedNeeds` and `communicationPreference` from
+> the patient's own sentence through `readNeeds` — one derivation, and it is the finder's. The
+> hand-supplied fields stay: a synthetic allocation run legitimately wants to state a vocabulary
+> directly, and forcing every fixture through prose would make it harder to read rather than the
+> system more honest. What changed is that when WORDS are the input they are read the way the
+> product reads them.
+> Unity pinned in both directions over three real-shaped sentences — no facet added, none
+> dropped — plus the two boundary pins the claim promised, because a constructor is exactly
+> where they could be crossed without anybody noticing. It introduces NO reading of its own
+> (there is no keyword table, no synonym list, nothing the finder cannot also hear; an allocator
+> that grew a second, looser reader would be a second place patients get interpreted, and G7 is
+> about interpretation of people rather than about which module does it). And urgency stays a
+> caller-supplied argument: the test feeds it "this is urgent, I need to be seen as soon as
+> possible" and asserts the value is unchanged, because deducing priority from what somebody
+> wrote is triage in the one lane whose header promises stated urgency is a timing preference
+> and never a judgement.
+> THE GATE CAUGHT WHAT THE TESTS DID NOT: vitest passed 20/20 while `tsc` failed — a `Set`
+> inferred as `Set<CareArea | EIQuality | "">` that I was probing with a `string`. The suite was
+> green and the build was not, which is the whole argument for typecheck sitting ahead of test
+> in `verify` rather than beside it.
+> Gate met: allocation suite green 20/20 unchanged in shape, `pnpm verify` green 3591.
 
 > **O131 (the two-case bar, made checkable) — claimed 2026-08-20T23:22Z by loop-0820s.**
 > O128 pinned two false positives with retag demands. Before building either mechanism I applied

@@ -2,17 +2,8 @@
 // sub-score is normalised and sayable, the total equals the printed breakdown, and the top
 // three per patient is deterministic with its ties said out loud.
 import { describe, expect, it } from "vitest";
-import {
-  CRITERION_WEIGHTS,
-  DEFAULT_ALLOCATION_CONFIG,
-  MATCHES_PER_PATIENT,
-  PROXIMITY_CAP_KM,
-  type DoctorRecord,
-  type PatientRequest,
-  hardFilterReasons,
-  matchPatientsToPrescribers,
-  scorePair,
-} from "./allocation";
+import { CRITERION_WEIGHTS, DEFAULT_ALLOCATION_CONFIG, MATCHES_PER_PATIENT, PROXIMITY_CAP_KM, hardFilterReasons, matchPatientsToPrescribers, requestFromWords, scorePair, type DoctorRecord, type PatientRequest } from "./allocation";
+import { readNeeds } from "./needs";
 
 const doctor = (overrides: Partial<DoctorRecord> & { doctorRef: string }): DoctorRecord => ({
   specialty: DEFAULT_ALLOCATION_CONFIG.requiredSpecialty,
@@ -234,5 +225,72 @@ describe("W236 the ranked output", () => {
     );
     expect(result!.matches).toEqual([]);
     expect(result!.excluded).toHaveLength(DOCTORS.length);
+  });
+});
+
+/**
+ * O132 (allocation lane): the allocator and the finder share ONE vocabulary.
+ *
+ * The lane's own next step. Before this, `statedNeeds` and `communicationPreference` were
+ * hand-supplied arrays while the finder derived exactly that vocabulary from a sentence — two
+ * ways of saying what a patient asked for, which is the shape W221 found when the ranker and the
+ * explainer held separate lexicons and had already drifted apart.
+ */
+describe("O132 the allocator reads a patient the way the finder does", () => {
+  const base = {
+    patientRef: "p1",
+    location: "Beecroft",
+    insuranceType: "bulk-billing",
+    urgency: "this-month" as const,
+  };
+
+  it("derives exactly what readNeeds produces — no facet added, none dropped", () => {
+    for (const words of [
+      "a woman GP who bulk bills, unhurried, and can do adult ADHD assessment and titration",
+      "someone who explains things properly and does shared care with my psychiatrist",
+      "hindi speaking GP who takes time",
+    ]) {
+      const built = requestFromWords(base, words);
+      const needs = readNeeds(words);
+      expect([...built.statedNeeds!].sort()).toEqual(
+        needs.flatMap((n) => (n.facet.kind === "care" ? [n.facet.area] : [])).sort(),
+      );
+      expect([...built.communicationPreference].sort()).toEqual(
+        needs.flatMap((n) => (n.facet.kind === "manner" ? [n.facet.trait] : [])).sort(),
+      );
+    }
+  });
+
+  it("hears nothing the finder cannot hear", () => {
+    // The one thing that would make this a second reader: a facet appearing here that the
+    // finder's own read of the same words does not contain.
+    const words = "I want a longer first appointment and someone who is not judgmental";
+    const built = requestFromWords(base, words);
+    const readable = new Set<string>(
+      readNeeds(words).map((n) => (n.facet.kind === "care" ? n.facet.area : n.facet.kind === "manner" ? n.facet.trait : "")),
+    );
+    for (const area of built.statedNeeds!) expect(readable.has(area)).toBe(true);
+    for (const trait of built.communicationPreference) expect(readable.has(trait)).toBe(true);
+  });
+
+  it("says nothing when the words reach nothing, rather than guessing", () => {
+    const built = requestFromWords(base, "qqzz wibble");
+    expect(built.statedNeeds).toEqual([]);
+    expect(built.communicationPreference).toEqual([]);
+    // And the scorer's own "nothing stated" branch is what then applies — a 1 with a sentence
+    // saying why, not a guess in either direction.
+  });
+
+  /**
+   * G7: URGENCY IS NEVER DERIVED FROM THE WORDS.
+   *
+   * Reading clinical priority out of a sentence is triage, in the one lane whose header promises
+   * stated urgency is a timing preference and never a judgement. The patient may state it; this
+   * constructor will not deduce it — including from a sentence that says it plainly.
+   */
+  it("does not infer urgency, even from a sentence that shouts it", () => {
+    const built = requestFromWords(base, "this is urgent, I need to be seen as soon as possible");
+    expect(built.urgency).toBe("this-month");
+    expect(requestFromWords({ ...base, urgency: "whenever" }, "urgent urgent urgent").urgency).toBe("whenever");
   });
 });

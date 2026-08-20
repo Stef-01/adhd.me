@@ -396,10 +396,18 @@ each sub-score normalised 0–1 by a stated formula and carrying a W213 sentence
 doctors per patient with ties said out loud. The reconciliations live in the module header
 and the census entry: allocation may exclude at-capacity doctors because assignment is not
 listing (O4 governs the roster surface); stated urgency is a timing preference, never
-triage (G7); no ordering of patients exists anywhere (the ADM notice holds). NEXT in this
-lane, when a surface wants it: a console rendering of one patient's breakdown (declares its
-copy where it renders), and wiring `statedNeeds` from `readNeeds` output so the finder's
-reader and the allocator share one vocabulary end to end.
+triage (G7); no ordering of patients exists anywhere (the ADM notice holds). **The vocabulary wiring is DONE — O132 (2026-08-20)**: `requestFromWords`
+builds a `PatientRequest` from the patient's own sentence through `readNeeds`, the same read the
+finder uses, so care facets become `statedNeeds` and manner traits become
+`communicationPreference`. There is now ONE derivation and it is the finder's — the hand-supplied
+fields stay, because a synthetic run legitimately wants to state a vocabulary directly, but when
+WORDS are the input they are read the way the product reads them. Pinned as a unity test in both
+directions (no facet added, none dropped) plus two boundary pins: the constructor introduces no
+reading of its own (an allocator with a second, looser reader would be a second place patients
+get interpreted), and urgency is never derived from the words — inferring priority from what
+somebody wrote is triage, in the lane whose header promises stated urgency is a timing preference.
+NEXT in this lane, when a surface wants it: a console rendering of one patient's breakdown
+(declares its copy where it renders).
 
 **O80 (2026-08-20, founder clarification of O79): the standalone Python variant for the
 GP-led pathway** — `tools/gp-match/` (`config.py` + `adhd_gp_match.py` + 21-test suite).

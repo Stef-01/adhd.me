@@ -34,6 +34,7 @@
 //   to put a name, a birth date, or a symptom. Real patient data does not enter this tree.
 
 import { distanceKm, resolvePlace } from "@/geo/suburbs";
+import { readNeeds } from "./needs";
 
 /** A request, synthetic, carrying only declared preferences. */
 export type PatientRequest = {
@@ -326,4 +327,46 @@ export function matchPatientsToPrescribers(
 
       return { patientRef: patient.patientRef, matches, tieNote, excluded };
     });
+}
+
+/**
+ * A patient request built from the patient's OWN SENTENCE, through the finder's reader.
+ *
+ * WHY THIS EXISTS (allocation lane, O132). `statedNeeds` and `communicationPreference` are
+ * hand-supplied arrays: a caller writes out care-area ids and manner words while the finder
+ * derives exactly that vocabulary from a sentence. Two ways of saying what a patient asked for
+ * is the shape of the defect this tree already paid for once — W221 found the ranker and the
+ * explainer holding separate lexicons that had already drifted, so a query could be ranked for
+ * a reason the page then declined to give. There is now ONE derivation and it is the finder's.
+ *
+ * The hand-supplied fields stay. A synthetic allocation run legitimately wants to state a
+ * vocabulary directly, and forcing every caller through prose would make the fixture harder to
+ * read, not the system more honest. What is fixed is that when words ARE the input, they are
+ * read the same way the product reads them.
+ *
+ * TWO BOUNDARIES THIS FUNCTION COULD QUIETLY CROSS, AND DOES NOT.
+ *
+ * It introduces NO reading of its own. Every facet comes from `readNeeds`; there is no keyword
+ * table here, no synonym list, nothing the finder cannot also hear. An allocator that grew a
+ * second, looser reader would be a second place patients get interpreted, and G7's boundary is
+ * about interpretation of people, not about which module does it.
+ *
+ * And `urgency` stays a CALLER-SUPPLIED argument rather than something inferred from the words.
+ * Reading "I need this sorted urgently" out of a sentence and turning it into a scoring input
+ * would be inferring clinical priority from what somebody wrote, which is triage — in the one
+ * lane whose header promises stated urgency is a timing preference and never a judgement. The
+ * patient may state it; this function will not deduce it.
+ */
+export function requestFromWords(
+  base: Omit<PatientRequest, "statedNeeds" | "communicationPreference">,
+  words: string,
+): PatientRequest {
+  const needs = readNeeds(words);
+  return {
+    ...base,
+    statedNeeds: needs.flatMap((need) => (need.facet.kind === "care" ? [need.facet.area] : [])),
+    communicationPreference: needs.flatMap((need) =>
+      need.facet.kind === "manner" ? [need.facet.trait] : [],
+    ),
+  };
 }
