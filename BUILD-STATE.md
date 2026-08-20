@@ -119,6 +119,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O125 (the tail: six small facets, and the end of the unblocked queue) — claimed
+> 2026-08-20T22:01Z by loop-0820s.** What remains in the aspiration list after O122–O124 is a
+> tail of twos and threes, and most of it is already spoken for: trauma (5) and
+> emotional-regulation (4) are the founder's ten, non-medication's three were refused ON
+> MEASUREMENT by O103 (`findCue` spans gaps, so each would have labelled a medication ask as
+> its opposite), child-adolescent's two by O122 (the G7 pin and the adult-age trap),
+> longer-appointment's one by O65, and attuned's two are §O112's deliberate pin. Subtracting
+> those leaves TWELVE candidates across six facets that nobody has examined: `manner:steadying`,
+> `pref:woman-gp`, `pref:telehealth-first`, `manner:non_judgmental`, `manner:motivating` and
+> `care:adhd-assessment`.
+> Two are known-hard and get measured before anything is written. The woman-GP pair is phrased
+> as NEGATION — "someone who is not a man, please", "a she not a he" — which runs straight into
+> O40's desire-negation and O72's bare-negator rules, so the question is whether the want
+> survives its own grammar. And "believe women when they describe this" contains the word
+> `manner:attuned` already reads ("not believed"), so it may simply be span theft in the
+> shape of a new cue, the way O123's "more than one diagnosis" was. Gate: O103's method on
+> every candidate, no cue that steals a span another facet is reading, zero `never` pins
+> broken, O119's precision probe green, floors and tie-quality moved, full `pnpm verify` green.
+
 > **O124 (the precision-blocked pair, re-cued with the precision kept) — claimed
 > 2026-08-20T21:57Z by loop-0820s.** O119 removed three cues that were manufacturing reach;
 > O122 gave `manner:structured` back its reach with concrete phrasings that genuinely name the
