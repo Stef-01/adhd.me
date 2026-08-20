@@ -344,7 +344,11 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     "an excuse", "at ease",
     // O112: reviewed and DELIBERATE — bare "believe" fires on "it is hard to believe how long
     // the wait is", and the pair does not.
-    "be believed", "been heard", "believe me", "by phone",
+    "be believed", "been heard", "believe me",
+    // O113: four more collapses, each reviewed. Every one is a multi-word phrase whose content
+    // reduces to a single token, so the O45 pair demand is what keeps it precise — bare
+    // [build], [lecture], [right] and [mechanism] would each be far too loose alone.
+    "build on what", "by phone",
     // O108: reviewed and DELIBERATE, the same device as "in recovery". Bare "video" fires on
     // "I watched a video about ADHD"; authored as a pair, the collapse rule demands "by video"
     // / "over video" in the raw stream and the innocent sentence is refused.
@@ -357,7 +361,7 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // O94: O25's removed phrase, home under the raw-RUN demand (RUN_DEMANDED in needs.ts)
     // — reviewed as run-only, so the [room] collapse can never fire on a bare pair again.
     "in the room with me",
-    "involve me", "just lazy", "listened to",
+    "involve me", "just lazy", "lecture me", "listened to",
     "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
     "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
     "name it", "on a schedule", "on edge",
@@ -366,7 +370,7 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // cue keeps two and never collapses.
     "out of pocket", "out the door", "over the phone",
     // O108: see "by video" above — same phrase, other preposition.
-    "over video", "really listen",
+    "over video", "really listen", "right with me", "the mechanism",
     "understand what", "what is going on",
   ];
 
@@ -1196,5 +1200,60 @@ describe("§O112 attuned hears the wants and leaves the distress standing", () =
   it("does not read distress as a preference", () => {
     expect(facets("I cry in the car after every appointment")).not.toContain("manner:attuned");
     expect(facets("I rehearse what to say and still leave unheard")).not.toContain("manner:attuned");
+  });
+});
+
+describe("§O113 the three remaining manner facets learn the concrete phrasings", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("sense-making hears being walked through something, and being told straight", () => {
+    for (const said of [
+      "it would help if things were explained step by step",
+      "walk me through every result line by line",
+      "no sugar coating, just tell me straight",
+      "why do the meds work, I want the mechanism",
+      "explain the plan on paper so I can take it home",
+      "help me understand my own brain",
+    ]) expect(facets(said)).toContain("manner:sense_making");
+  });
+
+  it("motivating hears strengths language as people actually say it", () => {
+    for (const said of [
+      "build on what I already do well",
+      "someone who sees what is right with me too",
+      "point out what I am doing right for once",
+      "I respond better to encouragement than to warnings",
+    ]) expect(facets(said)).toContain("manner:motivating");
+  });
+
+  it("non-judgmental hears shame, lecturing and raised eyebrows", () => {
+    for (const said of [
+      "no shame about how I have coped",
+      "an autistic-friendly GP who won't lecture me about my past",
+      "I need my past drug use handled without the raised eyebrows",
+    ]) expect(facets(said)).toContain("manner:non_judgmental");
+  });
+
+  /** Refused on measurement, pinned as the sentence that refused it. */
+  it("refuses the cue that fires on ordinary cynicism", () => {
+    // "know better" would have fired here — a flat statement of low expectations, not an ask.
+    expect(facets("I know better than to expect much")).not.toContain("manner:non_judgmental");
+    // And "step by step" must not fire on a step in a process.
+    expect(facets("the next step is a referral")).not.toContain("manner:sense_making");
+  });
+
+  /**
+   * ONE ASPIRATION STAYS, AND IT IS NOT A VOCABULARY GAP.
+   *
+   * "explain what ADHD actually is, properly" reaches collaborative and adhd-assessment but
+   * not sense-making: the word "explain" belongs to another facet under FIRST_CLAIM, which is
+   * the dedup that makes a phrase belong to exactly one facet (O7/F10). Adding a sense-making
+   * cue for it would take the word from the facet that already owns it. Pinned so the miss
+   * reads as the design decision it is.
+   */
+  it("a phrase another facet already owns is not a gap in this one", () => {
+    const heard = facets("explain what ADHD actually is, properly");
+    expect(heard).toContain("care:adhd-assessment");
+    expect(heard).not.toContain("manner:sense_making");
   });
 });

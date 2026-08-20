@@ -106,7 +106,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   sense_making: {
     label: "Helps it make sense",
     matchLine: "helps you make sense of what is going on",
-    cues: ["make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
+    cues: [
+      /* O113: the CONCRETE ways this is asked for. The facet knew abstract nouns for itself and
+         none of the phrasings people use — being walked through something in order, being told
+         straight, wanting the mechanism rather than the instruction. */
+      "step by step", "line by line", "tell me straight", "sugar coating", "the mechanism", "explain the plan", "my own brain", "make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
       // O30 psychographics: the plain-language ask is a values statement about how somebody
       // wants medicine spoken to them. Every cue keeps two content tokens (the O25 law);
       // "without"/"no" survive stripping because negations are never stopwords.
@@ -121,7 +125,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     // "a plan i can" degenerated to the single token "plan" once stopwords were stripped, which
     // made ANY mention of a plan read as a strengths preference — including the structured
     // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
-    cues: ["hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick",
+    cues: [
+      /* O113: strengths language as people actually say it — what they already do well, what is
+         right with them, encouragement rather than warnings. */
+      "encouragement", "doing right", "build on what", "right with me", "hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick",
       // O30 psychographics: neurodiversity-affirming language is how a large cohort states
       // the strengths-not-deficits value. "neuroaffirming" is a single WORD (precise, so
       // allowed); the multi-word cues keep two content tokens.
@@ -161,7 +168,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   non_judgmental: {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
-    cues: ["won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without judgement", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
+    cues: [
+      /* O113: "no shame" carries its own negator, the pattern named in O112 and predicted in
+         this unit's claim rather than rediscovered. "know better" was REFUSED on measurement:
+         it fires on "I know better than to expect much". */
+      "no shame", "lecture me", "raised eyebrows", "won't judge", "wont judge", "no judgment", "no judgement", "without judgment", "without judgement", "without being judged", "judged", "ashamed", "shame", "embarrassed", "safe to say", "honest about",
       // W221 probe: "won't make me feel like I'm making it up" reached nothing.
       "making it up", "make it up", "attention seeking", "drug seeking", "faking", "believe me", "not believed",
       // O13, from a real query this facet's own NAME could not reach: "Kind Hindi speaking and

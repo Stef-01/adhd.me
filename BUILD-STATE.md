@@ -135,6 +135,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > named and predicted rather than rediscovered. Gate: O103's method on every candidate, zero
 > `never` pins broken, promotions retagged in-commit, floors and tie-quality moved, full
 > `pnpm verify` green.
+> DONE 2026-08-20. THIRTEEN of the eighteen promoted across the three facets — sense_making
+> 14→20, motivating 9→13, non_judgmental 11→14 — and the multi-facet shape was the right call:
+> the judgement really was uniform, so the unit spent its effort on measurement rather than on
+> re-deciding G7 three times. Tie-quality 362/202/56/104 → 374/210/57/107: TWELVE sentences
+> joined the run, the largest single move in the corpus's history, and they land eight
+> separated / one partial / three unseparated — roughly the shape of the roster itself, and
+> the first sweep big enough to show that shape rather than a single facet's quirk.
+>
+> The claim predicted a negator-inside-the-cue and got one ("no shame"), which is the
+> difference between a pattern and a recurring surprise. Four new collapsed pairs registered
+> in O25's frozen list with their reasoning — bare [build], [lecture], [right] and [mechanism]
+> would each be far too loose alone, and the O45 pair demand is what makes them precise.
+> "know better" refused on measurement: it fires on "I know better than to expect much",
+> ordinary cynicism rather than an ask.
+>
+> ONE MISS IS PINNED AS A DESIGN DECISION RATHER THAN A GAP. "explain what ADHD actually is,
+> properly" reaches collaborative and adhd-assessment but not sense_making, because "explain"
+> belongs to another facet under FIRST_CLAIM — the dedup that makes a phrase belong to exactly
+> one facet (O7/F10). Cueing it for sense_making would take the word from the facet that
+> already owns it. That distinction — a miss caused by the lexicon's own arbitration versus a
+> miss caused by missing words — is the same one O104's sweep drew for mechanism-blocked
+> aspirations, and it is worth keeping visible: neither is fixed by adding vocabulary.
 
 > **O112 (Q1 lexicon: attuned, sorting the wants from the distress) — claimed
 > 2026-08-20T17:18Z by loop-0820s.** Now the loudest at eight, and the facet Q1's first sweep
