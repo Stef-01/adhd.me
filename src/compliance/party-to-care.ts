@@ -72,17 +72,21 @@ const BRAND = String.raw`adhd(?:\.|-)me`;
 const SUBJECT = String.raw`(?:${BRAND}|we|our)`;
 
 /**
- * Verbs that describe providing, directing or holding clinical care. Deliberately narrow: each
- * is a thing only a treating clinician does, so a false positive means the copy really did say
- * we do it.
+ * Verbs only a treating clinician uses, whatever follows them. Subject plus verb is enough.
+ *
+ * This list used to hold `assess`, `treat` and `monitor` too, under the assumption written here
+ * at the time: "each is a thing only a treating clinician does, so a false positive means the
+ * copy really did say we do it." O97 found that assumption false, on our own privacy policy. The
+ * Notifiable Data Breaches paragraph says "if we suspect information we hold has been lost … we
+ * will assess it promptly" — a statutory obligation, whose object is a breach — and the rule read
+ * it as ADHD.ME offering clinical assessment. The three ordinary-English verbs moved to the list
+ * below rather than being deleted, and the copy was NOT reworded: a compliance linter that makes
+ * a legal duty get vaguer to please a regex is doing the opposite of its job.
  */
 const CARE_VERBS = [
-  "treat",
   "diagnos",
   "prescrib",
-  "assess",
   "examine",
-  "monitor",
   "manage your care",
   "manage your condition",
   "review your results",
@@ -90,6 +94,26 @@ const CARE_VERBS = [
   "look after",
   "care for you",
 ];
+
+/**
+ * Verbs that are clinical ONLY when their object is a person or a person's health. A product
+ * that publishes a privacy policy and a security page will write "assess a breach", "treat data
+ * carefully" and "monitor uptime", and none of those says anything about care.
+ */
+const AMBIGUOUS_CARE_VERBS = ["treat", "assess", "monitor"];
+
+/**
+ * What makes one of those verbs clinical. An ALLOWLIST of clinical objects, never a denylist of
+ * innocent ones: the clinical side is the enumerable side, and a denylist would have to imagine
+ * every non-clinical noun the product might ever assess.
+ *
+ * KNOWN LIMIT, pinned in the tests as today's truth: `your` is here because "we monitor your
+ * blood pressure" must keep failing and the roster of health nouns after `your` is not
+ * enumerable either — so "we treat your data with care" would still be flagged. That sentence
+ * is not in this tree, and if it is ever written it earns its own narrowing with a real
+ * sentence attached, the way this rule earned its split.
+ */
+const CLINICAL_OBJECT = String.raw`(?:you|your|patients?|adhd|symptoms?|conditions?|diagnos(?:is|es)|dose|dosage|medications?|health|anyone|someone|anybody|somebody)`;
 
 interface Rule {
   name: string;
@@ -100,10 +124,25 @@ interface Rule {
 const RULES: Rule[] = [
   {
     name: "adhd-me-as-care-provider",
-    // "we treat", "ADHD.ME will assess", "our team can diagnose" — the subject is us and the
-    // verb is care. Up to four words between them absorbs "will", "can", "may also".
+    // "ADHD.ME can diagnose", "our team will prescribe" — the subject is us and the verb is
+    // care whatever follows it. Up to four words between them absorbs "will", "can", "may also".
     pattern: new RegExp(
       String.raw`\b${SUBJECT}\b(?:\s+\w+){0,4}\s+\b(?:${CARE_VERBS.join("|")})`,
+      "i",
+    ),
+    explanation:
+      "This says ADHD.ME provides or directs care. The practice is the treating entity — describe what the practice does, not what we do.",
+  },
+  {
+    // Same finding, same name — a reader of the output should not have to know the rule was
+    // split — but the object has to be a person or their health before it counts. "we treat
+    // patients", "ADHD.ME will assess whether you need to be seen" and "we monitor your blood
+    // pressure" all fail here; "we will assess it promptly" (a data breach) does not. The
+    // object window is the same four words of slack, so an adverb or a determiner between the
+    // verb and its object does not let a real claim through.
+    name: "adhd-me-as-care-provider",
+    pattern: new RegExp(
+      String.raw`\b${SUBJECT}\b(?:\s+\w+){0,4}\s+\b(?:${AMBIGUOUS_CARE_VERBS.join("|")})\w*\b(?:\s+\w+){0,4}\s+\b${CLINICAL_OBJECT}\b`,
       "i",
     ),
     explanation:
@@ -161,5 +200,13 @@ export function lintPartyToCare(text: string): PartyToCareFinding[] {
   return findings;
 }
 
-/** Rule names, for tests that assert the rule set has not silently shrunk. */
-export const PARTY_TO_CARE_RULES: readonly string[] = RULES.map((r) => r.name);
+/**
+ * Rule names, for tests that assert the rule set has not silently shrunk.
+ *
+ * Deduplicated since O97: one name can now be carried by more than one pattern (the
+ * care-provider rule has an unconditional arm and an object-conditional one), and a reader of
+ * a finding should not have to know which arm caught them. The census still does its job — it
+ * is the NAMES that must not disappear — and it caught this change on the way through, which
+ * is the tripwire working rather than complaining.
+ */
+export const PARTY_TO_CARE_RULES: readonly string[] = [...new Set(RULES.map((r) => r.name))];

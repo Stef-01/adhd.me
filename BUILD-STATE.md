@@ -141,6 +141,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > including the ones that must still fire; the existing party-to-care suite green with no
 > weakening; full `pnpm verify` plus the e2e spec that found it, green. Also in scope: say
 > in the ledger why e2e sits outside `pnpm verify`, since that is why this was red unseen.
+> DONE 2026-08-20, shipped as designed and the copy never touched. `CARE_VERBS` keeps the
+> verbs only a treating clinician uses whatever follows them (diagnos, prescrib, examine and
+> the already-objected phrases); `AMBIGUOUS_CARE_VERBS` = {treat, assess, monitor} is a
+> second arm of the SAME rule name — a reader of a finding should not have to know the rule
+> was split — demanding a `CLINICAL_OBJECT` within the same four words of slack the subject
+> side already allows. Pins both directions in §O97: every previously-flagged sentence still
+> fails ("we treat patients", "ADHD.ME will assess whether you need to be seen", "we monitor
+> your blood pressure", plus new "we can assess you", "ADHD.ME will treat anyone"), and the
+> breach paragraph passes VERBATIM from app/privacy/page.tsx with a comment on the pin
+> saying that if it ever fails again the rule is what gets fixed, not the policy. Known limit
+> pinned as today's truth in the O68 manner: `your` alone carries the clinical reading (it
+> has to, for "monitor your blood pressure"), so "we treat your data with care" is still
+> flagged — not a sentence in this tree, and it earns its own narrowing when one is written.
+> THE CENSUS CAUGHT THE CHANGE ON THE WAY THROUGH, which is the tripwire working:
+> `PARTY_TO_CARE_RULES` was `RULES.map(name)` and gained a duplicate, so it now dedupes with
+> the reason written — the guard is that a NAME must not disappear, and that still holds.
+> Gate met: 44 unit tests green, `pnpm verify` green (212 files, 3357 passed), the
+> party-to-care e2e sweep 7/7 green with /privacy unchanged.
+>
+> WHY IT WAS RED UNSEEN, since the claim asked: `pnpm verify` is typecheck · test · build ·
+> audit:gate, and ci.yml runs exactly that — nothing anywhere runs `pnpm e2e`. The reason is
+> real (the suite builds and starts its own production server and takes ~8 minutes) but the
+> consequence is that the compliance SURFACE sweeps have no automatic gate at all, and
+> party-to-care is the sweep that reads every rendered page for this exact class of claim.
+> "Compliance is code" is law here, and code with no gate is a comment. Opened as year-plan
+> standing debt 11 (a build unit, not a founder decision): give e2e its own CI job, or split
+> the compliance sweeps into a shorter suite that does run. Also worth stating plainly for
+> the next firing: a unit that touches copy, compliance code or a rendered page should run
+> the compliance sweeps itself, because nothing else will.
 
 > **O96 (refactor lane, queue item 2: app/globals.css sectioned by surface) — claimed
 > 2026-08-20T11:16Z by loop-0820s.** 5,981 lines; banners exist only in the later half and

@@ -375,6 +375,18 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
     stage-keyed width list and its 280ms tween are deleted (nothing changes width mid-flow
     any more, so the motion had no meaning left), and the intro stages' seamless borderless
     paper now holds end to end. Phone and 600–819px unchanged; captures in qa/desktop-o63/.
+11. **The e2e suite runs nowhere automatically — build unit, opened by O97 (2026-08-20).**
+    `pnpm verify` is typecheck · test · build · audit:gate, and `.github/workflows/ci.yml`
+    runs exactly that: nothing runs `pnpm e2e`. The reason is real rather than an oversight —
+    the suite drives a production build of its own (`webServer` does `next build && next
+    start`, `reuseExistingServer: false`) and takes ~8 minutes — but the consequence is that
+    the COMPLIANCE SURFACE SWEEPS have no automatic gate at all. `party-to-care.spec.ts` is
+    the one that lints every rendered public and console page for ADHD.ME holding itself out
+    as a carer, and O97 found it red on /privacy with nobody watching; the tree's own law is
+    "compliance is code", and code with no gate is a comment. The unit: add an e2e job to
+    ci.yml (its own job, so a slow browser run never blocks the fast verify job), or, if the
+    minutes are not there, split the compliance sweeps into a shorter suite that does run.
+    Not merely a debt — a red gate can hide here again tomorrow.
 
 ## Explaining the fit, continuously (runs all year)
 

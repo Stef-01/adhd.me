@@ -41,6 +41,64 @@ describe("W138 it catches ADHD.ME holding itself out as a carer", () => {
   });
 });
 
+describe("§O97 the ordinary-English verbs need a clinical object", () => {
+  /**
+   * The rule's `assess`, `treat` and `monitor` arm was split off because it read our OWN privacy
+   * policy's Notifiable Data Breaches paragraph as an offer of clinical assessment. These pins
+   * hold both directions of that split: a person or their health as the object still fails, and
+   * a breach, an incident or a server does not.
+   */
+  const stillFlagged = [
+    "we treat patients with ongoing conditions",
+    "ADHD.ME will assess whether you need to be seen",
+    "we monitor your blood pressure between visits",
+    "we can assess you at short notice",
+    "ADHD.ME will treat anyone who asks",
+    "we will assess your ADHD and get back to you",
+  ];
+  for (const text of stillFlagged) {
+    it(`still flags "${text}"`, () => {
+      expect(lintPartyToCare(text).map((f) => f.rule)).toContain("adhd-me-as-care-provider");
+    });
+  }
+
+  const nowSilent = [
+    // The sentence that found the defect, verbatim from app/privacy/page.tsx. It is a statutory
+    // obligation under the NDB scheme; if this pin ever fails, fix the rule, not the policy.
+    "If we suspect information we hold has been lost or accessed without authority, we will assess it promptly, tell the people affected what happened and what we are doing about it, and notify the Office of the Australian Information Commissioner where the Notifiable Data Breaches scheme requires it.",
+    "We assess every incident within thirty days.",
+    "We monitor uptime and error rates.",
+    "We treat every report of a fault as urgent.",
+  ];
+  for (const text of nowSilent) {
+    it(`passes "${text.slice(0, 56)}…"`, () => {
+      expect(lintPartyToCare(text)).toEqual([]);
+    });
+  }
+
+  it("KNOWN LIMIT, today's truth: `your` alone carries the clinical reading", () => {
+    /**
+     * `your` is in the clinical-object list because "we monitor your blood pressure" must keep
+     * failing and the health nouns that can follow `your` are not enumerable. The price is that
+     * a non-clinical `your` object is still flagged. Pinned rather than fixed: the sentence is
+     * not in this tree, and when one is written it earns its own narrowing with a real sentence
+     * attached — the way this split was earned by a real page. If a future unit narrows it,
+     * this pin is the one to update, deliberately.
+     */
+    expect(lintPartyToCare("we treat your data with care").map((f) => f.rule))
+      .toContain("adhd-me-as-care-provider");
+  });
+});
+
+describe("W138 the finding still names its sentence", () => {
+  it("names the sentence, not just the page", () => {
+    // A linter whose output is "this page is non-compliant" gets ignored.
+    const [finding] = lintPartyToCare("Our doctors will call you back.");
+    expect(finding?.match.toLowerCase()).toContain("our doctors");
+    expect(finding?.explanation.length).toBeGreaterThan(30);
+  });
+});
+
 describe("W138 it stays silent on the correct way to say it", () => {
   // The half that decides whether the rule survives contact with real copy. The W23
   // `no-ratings` rule has blocked correct wording three times; a linter that taxes correct
