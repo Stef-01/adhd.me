@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { backgroundFromProposals, clinicianTags, matchAudit, professionalBio } from "./background";
 import { readTranscript } from "./transcript";
 import { clinicians, needsFor, rankClinicians, scoreAgainst } from "@/demo/clinicians";
+import { facetKey } from "@/matching/needs";
 
 
 const bg = (statuses: Array<"proposed" | "accepted" | "rejected">) => {
@@ -126,5 +127,50 @@ describe("W224 the assembled sentence has to read like a sentence", () => {
     ]).proposed, []);
     b.facets.forEach((f) => { f.status = "accepted"; });
     expect(professionalBio(b)).toMatch(/, .+ and /);
+  });
+});
+
+/**
+ * O126 (explaining the fit, Q4): the console and the patient profile cannot tell different
+ * stories about where a reason came from.
+ *
+ * The patient sees `from your words: "…"` under every reason (O21). The console showed the
+ * label and the weight and dropped the phrase, so a doctor reading their own listing could see
+ * "A woman GP (+30)" with no way to learn what produced it — which is exactly what W190's
+ * correction path needs a doctor to be able to check. This is the O1/F2 unity repair applied
+ * to provenance: same field, same source, pinned equal rather than trusted to stay equal.
+ */
+describe("O126 the doctor sees the provenance the patient sees", () => {
+  const QUERY = "a woman GP who bulk bills and does adult ADHD assessment";
+
+  it("gives every asked facet the phrase that reached it", () => {
+    const audit = matchAudit(QUERY, clinicians);
+    expect(audit.asked.length).toBeGreaterThan(0);
+    for (const entry of audit.asked) {
+      expect(entry.matched, `${entry.label} has no provenance`).toBeTruthy();
+    }
+  });
+
+  it("and the phrase is character-identical to the one the patient is shown", () => {
+    const audit = matchAudit(QUERY, clinicians);
+    // needsFor is what the patient profile's evidence list renders from (via matchEvidence),
+    // so this is the same read the reader sees, not a parallel one.
+    const patientSide = new Map(
+      needsFor(QUERY, clinicians).map((need) => [facetKey(need.facet), need.matched]),
+    );
+    for (const entry of audit.asked) {
+      expect(patientSide.get(entry.key), `console and patient disagree on ${entry.label}`)
+        .toBe(entry.matched);
+    }
+  });
+
+  it("shows the doctor nothing a patient could not see", () => {
+    // The console may show LESS than the patient, never more: every phrase it prints must be
+    // one the patient-side read produced for the same query.
+    const audit = matchAudit(QUERY, clinicians);
+    const patientPhrases = new Set(needsFor(QUERY, clinicians).map((need) => need.matched));
+    for (const entry of audit.asked) {
+      expect(patientPhrases.has(entry.matched)).toBe(true);
+    }
   });
 });

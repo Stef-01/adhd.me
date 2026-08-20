@@ -100,10 +100,18 @@ export default async function MatchingConsolePage() {
         {audit.asked.length === 0 ? (
           <p className="mc-empty">Nothing. The finder says so rather than presenting an order.</p>
         ) : (
-          <ul className="mc-tags">
+          /* O126: the label, the weight, AND the phrase from the reader's own words that
+             reached it — the same `matched` the patient profile renders as "from your words".
+             It is a cue the lexicon matched (every token stem-matched, in order) rather than a
+             verbatim quote, which is why the patient side says "from your words" and this says
+             "reached by", both true and neither claiming to quote somebody exactly. */
+          <ul className="mc-asked">
             {audit.asked.map((entry) => (
-              <li key={entry.key} className="mc-tag">
-                {entry.label}<span className="mc-weight">{entry.weight}</span>
+              <li key={entry.key}>
+                <span className="mc-tag">
+                  {entry.label}<span className="mc-weight">{entry.weight}</span>
+                </span>
+                <span className="mc-asked-from">reached by &ldquo;{entry.matched}&rdquo;</span>
               </li>
             ))}
           </ul>

@@ -869,3 +869,30 @@ condition under which every screen is correct and the sequence is not.
   while the other does not. The profile's evidence list reads one reason per row (O115). The
   banner and gap line agree (O111). No raw hex, no missing focus states, no claim rendering
   unearned other than the one fixed above.
+
+## O126 — the doctor sees the provenance the patient sees (2026-08-20)
+
+Capture: qa/provenance-o126/asked-desktop.png (the console's worked match, with provenance).
+
+- [x] Explaining-the-fit Q4, the lane's last increment that is not roster-blocked. The patient
+  profile has shown "from your words: …" under every reason since O21. The console showed the
+  label and the weight and dropped the phrase — so a doctor reading their own listing saw
+  "Titration and dose review 28" with no way to learn it came from somebody typing "wearing
+  off". `matchAudit` computed `matched` all along and discarded it on the way out.
+- [x] Why it matters beyond symmetry: this section exists so a NAMED REAL PERSON can check what
+  is said about them, and W190's correction path assumes a doctor who thinks a reason is wrong
+  can contest it. Without provenance they can see that a reason exists and not what produced
+  it, which is the half that makes a correction possible.
+- [x] Unity pinned rather than trusted: three unit tests assert the console's phrase for a facet
+  is character-identical to the patient profile's, that every asked facet has one, and that the
+  console shows nothing the patient-side read did not produce. This is the O1/F2 repair applied
+  to provenance — the same failure mode as the ranker and explainer drifting apart.
+- [x] Register: the patient side says "from your words", the console says "reached by". Both
+  are true and neither claims to quote — `matched` is the lexicon's cue (every token
+  stem-matched, in order), not a verbatim extract. An e2e test fails the build if the console
+  ever says "they said" or "the patient said".
+- [x] Layout: the asked list was a chip cloud and is now a stack of rows, because the label and
+  the phrase that reached it are ONE fact and must share a row rather than sitting in two
+  regions the reader joins by eye.
+- [x] An e2e test asserts the field is actually RENDERED on every row — a value carried through
+  the audit and never printed would satisfy every unit test and show the doctor nothing.

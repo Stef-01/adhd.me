@@ -6014,6 +6014,26 @@ textarea:focus-visible {
    weight rather than as chips, because chips would look like matched signals. */
 .profile-no-match { margin: 14px 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.55; max-width: 44ch; }
 
+/* O126: the asked list carries provenance now, so it is a stack of rows rather than a chip
+   cloud — the label and the phrase that reached it are ONE fact and must share a row (the
+   layout law), not sit in two regions the reader joins by eye. */
+.mc-asked {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.mc-asked li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 0;
+}
+.mc-asked-from {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
 /* ── Matching console ───────────────────────────────────────────────────────
    Staff surface: dense, plain, no brand voice. It is a tool for reading numbers,
    so the type is small and the table is the composition. */

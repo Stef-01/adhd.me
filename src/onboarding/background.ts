@@ -167,7 +167,16 @@ export type MatchAudit = {
   query: string;
   /** Facets the reader's words reached, whether or not anybody answers them. Weights carry the
    *  O2 rarity discount, so a facet the whole roster declares shows what it can actually earn. */
-  asked: Array<{ key: string; label: string; weight: number }>;
+  /**
+   * What the reader asked for, and — O126 — the phrase from their OWN WORDS that reached it.
+   *
+   * `matched` is the same field the patient profile renders as "from your words: …" (O21). It
+   * was computed here all along and dropped on the way out, so a doctor reading their own
+   * listing could see "A woman GP (+30)" with no way to learn it came from somebody typing
+   * "woman gp". That is the half W190's correction path needs: a doctor who thinks a reason is
+   * wrong cannot contest it without seeing what produced it.
+   */
+  asked: Array<{ key: string; label: string; weight: number; matched: string }>;
   rows: Array<{
     clinicianId: string;
     name: string;
@@ -192,7 +201,7 @@ export function matchAudit(query: string, roster: readonly Clinician[], today: D
   // show a total the finder did not compute (the O1/F2 unity repair). Computed over the roster
   // being audited, for the same reason the ranking is (O8 review).
   const needs = needsFor(query, roster);
-  const asked = needs.map((need) => ({ key: facetKey(need.facet), label: need.label, weight: need.weight }));
+  const asked = needs.map((need) => ({ key: facetKey(need.facet), label: need.label, weight: need.weight, matched: need.matched }));
 
   return {
     query,
