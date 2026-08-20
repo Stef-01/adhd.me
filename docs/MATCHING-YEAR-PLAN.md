@@ -311,6 +311,14 @@ The queue, largest seam first:
    no `// W<n>` header and fired CENSUS-1 in the latent-findings register, on the twelfth
    header-less module, exactly as W210 designed it to.
 4. **src/matching/needs.ts**: the CUES pipeline builds in one expression; name its stages.
+   — DONE (O101). Four named stages (first-claim dedup, pre-tokenise, drop the unmatchable,
+   sort most-specific-first), each with the original prose moved to the stage it is actually
+   about, plus a named `Cue` type replacing the inline one that `Candidate` reached for as
+   `(typeof CUES)[number]`. The full matching suite green unchanged is the proof.
+   **THE REFACTOR LANE'S OPENING QUEUE IS NOW EMPTY** (O95 care-finder, O96 globals.css,
+   O100 clinicians.ts, O101 needs.ts). Refactoring continues as the founder directed, but
+   from findings rather than from this list — the next entries should be earned by reading,
+   the way O96 earned the `.match-quality` collision that became O99.
 
 ## Standing debts from the founder's asks (audited 2026-08-18)
 

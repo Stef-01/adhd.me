@@ -135,7 +135,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > rename would touch the self-reach pin for no gain. Gate: the FULL matching suite green
 > UNCHANGED — that is the lane's definition of identical and this module is where a silent
 > behaviour change would be most expensive; every reach pin and the tie-quality partition
-> unmoved; full `pnpm verify` green.
+> unmoved; full `pnpm verify` green. DONE 2026-08-20. Four named stages —
+> `FIRST_CLAIM` (unchanged, first-claim dedup), `TOKENISED_CUES`, `MATCHABLE_CUES`,
+> `CUES` — each carrying the original prose moved to the stage it is actually about, plus
+> the named `Cue` type. The sort-order paragraph now sits on the sort, where a reader
+> looking for why "not just medication" beats "medication" will find it; it used to sit on
+> the dedup loop. No step changed and no step was added: the filter and the sort are the
+> same predicates, and stage 3 gained the only genuinely new sentence in the unit — why a
+> cue that tokenises to nothing is not a cue. Gate met exactly as written: the full
+> matching suite green UNCHANGED (758 tests across 15 files, every reach pin and the
+> tie-quality partition {331,181,52,98} untouched), `pnpm verify` green 3357 passed.
+> THE REFACTOR LANE'S OPENING QUEUE IS NOW EMPTY — O95 care-finder, O96 globals.css, O100
+> clinicians.ts, O101 needs.ts, all four in one day. The lane continues under the founder's
+> standing directive, but its next entries have to be EARNED BY READING rather than taken
+> from a list: O96 read globals.css and found the `.match-quality` collision that became
+> O99, which is the shape the lane should keep.
 
 > **O100 (refactor lane, queue item 3: the roster DATA leaves the ranking LOGIC) — claimed
 > 2026-08-20T13:07Z by loop-0820s.** src/demo/clinicians.ts is 1,010 lines with a clean seam

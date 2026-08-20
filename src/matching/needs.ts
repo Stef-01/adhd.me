@@ -232,21 +232,37 @@ const LEXICON: readonly Entry[] = [
 ];
 
 /**
- * Cues, pre-tokenised, longest first.
+ * One authored phrase, ready to match: both tokenisations the matcher uses, whether it
+ * collapsed, and the facet it speaks for.
  *
- * ORDER MATTERS AND THE REASON IS A REAL DEFECT IT PREVENTS. "not just medication" contains
- * "medication"; "treated for anxiety" contains "anxiety". Reading short cues first would let a
- * general term claim a sentence whose specific term says something different — in the first case
- * close to the opposite. Sorted by TOKEN count now rather than character length, because that is
- * what specificity means once matching is done on tokens.
+ * O101 named this type. It was written inline on `CUES` and reached for elsewhere as
+ * `(typeof CUES)[number]`, which made the matcher's central record legible only by
+ * inference from the expression that happened to build it.
  */
+type Cue = {
+  phrase: string;
+  tokens: string[];
+  raw: string[];
+  collapsed: boolean;
+  entry: Entry;
+};
+
+/*
+ * THE CUE TABLE IS BUILT IN FOUR NAMED STAGES (O101).
+ *
+ * It used to be one chained expression under two doc comments stranded above it in an order
+ * that read backwards — the paragraph about sort order sat directly above the dedup loop, which
+ * answers a different question. Every comment below is the original prose, moved to the stage
+ * it is actually about. No step changed.
+ */
+
 /**
- * A PHRASE BELONGS TO ONE FACET, and the first entry to list it wins (O7/F10). "overwhelmed"
- * appears in both `care:emotional-regulation` and the steadying manner cues; before this dedup
- * the second copy was DEAD — the stable sort meant the earlier entry always claimed the words,
- * and nothing said so. Dropping later duplicates makes the same behaviour explicit, keeps the
- * self-reach pin honest (every cue in `LEXICON_CUES` genuinely reaches its facet), and leaves
- * the emotional-fit interview's own use of its cue lists untouched.
+ * STAGE 1 — A PHRASE BELONGS TO ONE FACET, and the first entry to list it wins (O7/F10).
+ * "overwhelmed" appears in both `care:emotional-regulation` and the steadying manner cues;
+ * before this dedup the second copy was DEAD — the stable sort meant the earlier entry always
+ * claimed the words, and nothing said so. Dropping later duplicates makes the same behaviour
+ * explicit, keeps the self-reach pin honest (every cue in `LEXICON_CUES` genuinely reaches its
+ * facet), and leaves the emotional-fit interview's own use of its cue lists untouched.
  */
 const FIRST_CLAIM = new Map<string, { phrase: string; entry: Entry }>();
 for (const entry of LEXICON) {
@@ -255,20 +271,44 @@ for (const entry of LEXICON) {
   }
 }
 
-const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; raw: string[]; collapsed: boolean; entry: Entry }> = [...FIRST_CLAIM.values()]
-  .map(({ phrase, entry }) => ({
-    phrase,
-    tokens: tokenise(phrase),
-    raw: tokeniseKeepingStopwords(phrase),
-    /* O45: an authored multi-word phrase that ships as at most one content token is matched
-       under the collapse-aware rule — see `collapsedCueSatisfied` in read.ts. Computed here,
-       once, from the same two tokenisations the matcher itself uses, so the rule's membership
-       can never drift from what actually collapses. */
-    collapsed: phrase.trim().split(/\s+/).length >= 2 && tokenise(phrase).length <= 1,
-    entry,
-  }))
-  .filter((cue) => cue.tokens.length > 0)
-  .sort((a, b) => b.tokens.length - a.tokens.length || b.phrase.length - a.phrase.length);
+/**
+ * STAGE 2 — pre-tokenise, both ways, once.
+ *
+ * The matcher reads a stripped stream and a raw one, so every cue carries both rather than
+ * being re-tokenised per sentence.
+ */
+const TOKENISED_CUES: readonly Cue[] = [...FIRST_CLAIM.values()].map(({ phrase, entry }) => ({
+  phrase,
+  tokens: tokenise(phrase),
+  raw: tokeniseKeepingStopwords(phrase),
+  /* O45: an authored multi-word phrase that ships as at most one content token is matched
+     under the collapse-aware rule — see `collapsedCueSatisfied` in read.ts. Computed here,
+     once, from the same two tokenisations the matcher itself uses, so the rule's membership
+     can never drift from what actually collapses. */
+  collapsed: phrase.trim().split(/\s+/).length >= 2 && tokenise(phrase).length <= 1,
+  entry,
+}));
+
+/**
+ * STAGE 3 — drop cues that tokenise to nothing at all.
+ *
+ * A phrase made entirely of stopwords has no content token to match on, so it would either
+ * match everything or nothing depending on the rule that read it. Neither is a cue.
+ */
+const MATCHABLE_CUES: readonly Cue[] = TOKENISED_CUES.filter((cue) => cue.tokens.length > 0);
+
+/**
+ * STAGE 4 — most specific first.
+ *
+ * ORDER MATTERS AND THE REASON IS A REAL DEFECT IT PREVENTS. "not just medication" contains
+ * "medication"; "treated for anxiety" contains "anxiety". Reading short cues first would let a
+ * general term claim a sentence whose specific term says something different — in the first case
+ * close to the opposite. Sorted by TOKEN count now rather than character length, because that is
+ * what specificity means once matching is done on tokens.
+ */
+const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
+  (a, b) => b.tokens.length - a.tokens.length || b.phrase.length - a.phrase.length,
+);
 
 /**
  * Read what somebody said into the closed vocabulary.
