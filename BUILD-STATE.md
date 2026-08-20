@@ -120,7 +120,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O93 (founder-directed 2026-08-20: "do visual improvement and refinement across site,
-> fix issues such as attached too") — claimed 2026-08-20T09:32Z by loop-0820q.** The
+> fix issues such as attached too") — claimed 2026-08-20T09:11Z by loop-0820q.** The
 > attached capture shows the anchor bug: on the finder profile, the FIXED booking bar
 > ("Appointments · See available times") floats over the acknowledgement-of-country band
 > — a bar that belongs to the profile is covering page content it does not own — and the
