@@ -119,6 +119,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O105 (the defect O104 measured: a desire-negation deletes a stated want) — claimed
+> 2026-08-20T15:02Z by loop-0820s.** "I don't want a big clinic, a woman GP in a small
+> practice please" reaches NOTHING. The second clause alone reaches pref:woman-gp. Same shape:
+> "not after therapy, I want the assessment done properly" loses care:adhd-assessment. This is
+> worse than any missed cue this tree has fixed — a want the reader STATED is deleted, and the
+> register it lives in (say what you don't want, then what you do) is one of the commonest
+> ways anybody asks for anything. Diagnosed, not guessed: O81's consume-once binds a trigger
+> to its nearest FOLLOWING ask, and `suppressedByDesireNegation` already refuses to cross a
+> CLAUSE_BOUNDARY — but `splitWords` marks a boundary for `.?!;` and NOT for a comma. When the
+> thing actually being declined ("a big clinic", "therapy") carries no cue, there is no ask to
+> consume, so the trigger floats across the comma and eats the real one behind it.
+> THE OBVIOUS FIX IS WRONG AND THE FILE SAYS SO. splitWords carries a written reason for
+> excluding commas: "alternatives, not just medication" is ONE clause, and the clarifier
+> appends its answers after a comma (`${request}, ${answer}`) — so a comma that stopped cue
+> matching would break the product's own reorder path. The fix must therefore be asymmetric,
+> which is also what is linguistically true: A COMMA IS NOT A BOUNDARY FOR MATCHING A CUE, BUT
+> IT DOES END A NEGATION'S SCOPE. Design: both existing token streams stay BYTE-IDENTICAL —
+> no cue behaviour may change anywhere — and the negation scope check alone learns where the
+> commas were, via a helper that reports them as content-stream positions. Gate: the two
+> deleted wants restored and pinned; the negation rule's whole existing pin set green
+> UNCHANGED (O40, O81, O72, O83 — this is the most heavily-pinned rule family in the tree and
+> that is the point); zero corpus `never` pins broken; floors and tie-quality moved in the
+> closing commit; full `pnpm verify` green.
+
 > **O104 (Q1 lexicon: trauma-informed, and the half of it that is not the loop's to decide)
 > — claimed 2026-08-20T14:43Z by loop-0820s.** Next-loudest gap after O103's: nine unheard
 > phrasings, cues that hear only the NAMED-CONDITION register ("trauma", "ptsd",
