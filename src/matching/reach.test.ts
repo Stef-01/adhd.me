@@ -1439,3 +1439,61 @@ describe("§O120 'my own' names the speaker as the patient", () => {
     expect(facets("I want a say in my own treatment plan")).toContain("manner:collaborative");
   });
 });
+
+describe("§O122 three facets learn their registers, and one refusal comes from a G7 pin", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("collaborative hears somebody asking to be decided WITH", () => {
+    for (const said of [
+      "someone who works alongside me as a partner",
+      "ask me what I think before deciding",
+      "run the options past me first",
+    ]) expect(facets(said)).toContain("manner:collaborative");
+  });
+
+  it("structured hears the concrete routine that IS this facet", () => {
+    // O119 removed "properly" from here for firing on any sentence containing the adverb.
+    // These name the documented baseline and the schedule, which is what the label describes.
+    expect(facets("bloods and blood pressure done before any script")).toContain("manner:structured");
+    expect(facets("I want the follow up booked before I leave each time")).toContain("manner:structured");
+    // And O119's refusal is not quietly reversed while working in the same facet.
+    expect(facets("I want to get assessed properly, start to finish")).not.toContain("manner:structured");
+  });
+
+  /**
+   * THE POSSESSIVE, bridged in the stemmer rather than by a cue.
+   *
+   * Apostrophes are stripped before stemming, so "my son's paediatrician" arrived as
+   * [my, sons, …] and the cue "my son" never met it — a facet whose entire register is a parent
+   * talking about their child, deaf to the commonest way a parent refers to them.
+   */
+  it("a possessive reaches the facet the plain form already did", () => {
+    expect(facets("my son's paediatrician says a GP can manage this now")).toContain("care:child-adolescent-adhd");
+    expect(facets("my daughter's school keeps calling")).toContain("care:child-adolescent-adhd");
+    expect(stem("sons")).toBe("son");
+    expect(stem("daughters")).toBe("daughter");
+  });
+
+  /**
+   * THE REFUSAL THE CORPUS MADE FOR ME, and it is a better reason than any measurement.
+   *
+   * "our son", "our daughter", "our boy", "our girl" were written and immediately broke a G7
+   * `never` pin: "our daughter cries over homework every single night" is pinned as reaching
+   * NOTHING, because it is a parent describing their child's distress rather than asking for
+   * care. A bare family reference cannot tell that from "we need answers for our boy" — the
+   * difference is the ASK, and the cue only sees the relationship. The plural forms are not
+   * added and the sentence that wanted them stays standing, rather than a G7 boundary being
+   * moved to fit a cue.
+   */
+  it("a parent describing distress is not a parent asking for care", () => {
+    expect(facets("our daughter cries over homework every single night")).toEqual([]);
+    expect(facets("year seven has been a disaster, we need answers for our boy"))
+      .not.toContain("care:child-adolescent-adhd");
+  });
+
+  it("an age is not a relationship", () => {
+    // "year old" would have fired here — an adult stating their age, ranked against paediatric
+    // GPs, which is the harm O120 fixed from the other direction.
+    expect(facets("I am forty years old and finally asking")).not.toContain("care:child-adolescent-adhd");
+  });
+});

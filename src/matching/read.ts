@@ -132,6 +132,14 @@ const INFLECTIONS: Readonly<Record<string, string>> = {
      needs a sentence the suffix rules demonstrably cannot bridge; these have one. */
   longer: "long",
   longest: "long",
+  /* O122: the POSSESSIVE, which the child facet is named after and could not read. Apostrophes
+     are stripped before stemming, so "my son's paediatrician" arrives as [my, sons, …] and the
+     cue "my son" never met it — a facet whose whole register is a parent talking about their
+     child, deaf to the commonest way a parent refers to them. Named entries again, not an
+     s-rule: the stemmer's own s-stripping is guarded for good reasons this corpus paid for
+     (O53's "dismissed"/"dismiss" family), and these two words need no wider rule. */
+  sons: "son",
+  daughters: "daughter",
 };
 
 function canonical(stemmed: string): string {

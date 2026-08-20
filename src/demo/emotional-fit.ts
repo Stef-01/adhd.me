@@ -193,7 +193,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Explains and decides with you",
     matchLine: "explains the options and decides them with you",
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
-    cues: ["collaborative", "explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
+    cues: [
+      /* O122: the SHARED-DECISION phrasings. The facet's label is "Explains and decides with
+         you" and it had no cue for anybody asking to be decided WITH. */
+      "works alongside me", "ask me what i think", "options past me", "collaborative", "explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
       // W221/W223: "work with me", "my options", "the options" and "my say" were dropped. Under token
       // matching each reduces to ONE very common word — [work], [option], [say] — because the
       // rest are stopwords, so "I can take time off work" proposed that the reader wanted a
@@ -256,7 +259,18 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     matchLine: "works to a documented baseline and follows up on a schedule",
     // O13: "methodical" is the plain word for this way of working and missed (kept through the
     // merge alongside main's continuity family below).
-    cues: ["structured", "methodical", "thorough", "measured", "on a schedule", "monitoring", "follow-up plan", "baseline",
+    cues: [
+      /* O122: the CONCRETE routine, which is what this facet actually is — a documented
+         baseline and a follow-up on a schedule. O119 removed "properly" from here because it
+         fired on any sentence containing the adverb and meant only "thoroughly"; these are the
+         phrasings that genuinely name the thing, so the pair of units reads as one movement:
+         reach that was not earned taken away, reach that is given back.
+
+         "before any script" was REFUSED — it fires on "we talked before my script ran out",
+         which is a titration sentence, and O103 refused the identical cue for non-medication
+         for the identical reason. A cue refused once should stay refused when it shows up
+         wearing a different facet's colours. */
+      "follow up booked", "bloods and blood pressure", "structured", "methodical", "thorough", "measured", "on a schedule", "monitoring", "follow-up plan", "baseline",
       /* O119 REMOVED "properly". Every other cue here names a WAY OF ORGANISING care — a
          baseline, a schedule, monitoring. "properly" is a generic intensifier and it fired on
          every sentence containing the adverb: "I want to get assessed properly", "listened to

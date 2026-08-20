@@ -171,6 +171,27 @@ const LEXICON: readonly Entry[] = [
   // infers. Symptom sentences are pinned as an intentional non-reach in reach.test.ts. Widen cues
   // for what a reader WANTS or SAYS THEY HAVE, never for what the finder would have to deduce.
   care("child-adolescent-adhd", "Children and adolescents", 26, [
+    /* O122: THE FIRST-PERSON PLURAL. This facet knew "my son" and "my daughter" and not "our" —
+       and a parent booking for a child says "our ten year old", "our boy", "we need answers".
+       Each of these collapses to one token, so O45's pair demand is what keeps them precise: a
+       stray "boy" cannot fire, only the authored pair can.
+
+       THE PLURAL FORMS WERE REFUSED BY THE CORPUS ITSELF, which is a stronger reason than any
+       measurement I could have made. "our son", "our daughter", "our boy", "our girl" were
+       written, and "our daughter" immediately broke a G7 `never` pin: "our daughter cries over
+       homework every single night" is pinned as reaching NOTHING — a parent describing their
+       child's distress, not asking for care — and the cue read the relationship as an ask.
+       A bare family reference cannot tell "we need answers for our boy" from "our daughter
+       cries over homework", because the difference between them is the ASK, and the cue only
+       sees the relationship. That weakness is not new here: the existing "my son"/"my daughter"
+       cues share it exactly, and are untested only because no pin happened to use them in a
+       description. So the plural forms are not added, and the sentences that wanted them stay
+       standing rather than a G7 boundary being moved to fit a cue.
+
+       "year old" was refused too, on measurement: it fires on "I am forty years old and finally
+       asking" — an ADULT stating their age — which is the harm O120 fixed from the other
+       direction, an adult ranked against paediatric GPs. An age is not a relationship. */
+    "educational psychologist",
     "my son", "my daughter", "my child", "my kid", "teenager", "adolescent", "children", "school report",
     // O49: the ask phrased from the clinician side — "someone who sees kids". Both verb forms;
     // bare "kids" is refused because stem("kidding") is "kid" and "no kidding" is not a child.

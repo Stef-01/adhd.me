@@ -410,7 +410,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "psychological approaches before anything else", reaches: ["care:non-medication"] },
   { text: "treatment choices talked through with me, never over my head", reaches: ["manner:collaborative"] },
   { text: "I want a say in my own treatment plan", reaches: ["manner:collaborative"] },
-  { text: "someone who works alongside me as a partner", aspires: ["manner:collaborative"] },
+  { text: "someone who works alongside me as a partner", reaches: ["manner:collaborative"] },
 
   // ── care:depression / manner:sense_making ────────────────────────────────────────────────
   { text: "the low moods are back and worse than the distraction", reaches: ["care:depression"] },
@@ -572,7 +572,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // sit DIRECTLY before the family reference, O72's adjacency lesson applied again.
   { text: "the appointment is for my mum, I am just organising it", never: ["manner:culturally_attuned"] },
   { text: "I want my mum in the room for this", reaches: ["manner:culturally_attuned"] },
-  { text: "my son's paediatrician says a GP can manage this now", reaches: ["care:shared-care"], aspires: ["care:child-adolescent-adhd"] },
+  { text: "my son's paediatrician says a GP can manage this now", reaches: ["care:shared-care", "care:child-adolescent-adhd"] },
+  /* O122: stays standing, and the reason is a G7 pin four hundred lines down rather than a
+     measurement. Cueing "our boy" would reach this sentence — and would also reach "our
+     daughter cries over homework every single night", which is pinned as reaching NOTHING
+     because it is a parent describing distress, not asking for care. A bare family reference
+     cannot tell the two apart: the difference is the ASK, and the cue only sees the
+     relationship. */
   { text: "year seven has been a disaster, we need answers for our boy", aspires: ["care:child-adolescent-adhd"] },
 
   // ── life-stage and situation: the context the ask rides in on ───────────────────────────
@@ -638,10 +644,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I rehearse what to say and still leave unheard", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", aspires: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", aspires: ["manner:steadying"] },
-  { text: "bloods and blood pressure done before any script", aspires: ["manner:structured"] },
-  { text: "I want the follow up booked before I leave each time", aspires: ["manner:structured"] },
-  { text: "ask me what I think before deciding", aspires: ["manner:collaborative"] },
-  { text: "run the options past me first", aspires: ["manner:collaborative"] },
+  { text: "bloods and blood pressure done before any script", reaches: ["manner:structured"] },
+  { text: "I want the follow up booked before I leave each time", reaches: ["manner:structured"] },
+  { text: "ask me what I think before deciding", reaches: ["manner:collaborative"] },
+  { text: "run the options past me first", reaches: ["manner:collaborative"] },
   { text: "someone who sees what is right with me too", reaches: ["manner:motivating"] },
   { text: "less what is wrong with you, more what we can build", aspires: ["manner:motivating"] },
   { text: "the good doctors never make you watch the clock", reaches: ["manner:unhurried"] },
@@ -891,7 +897,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── shared care, wider ───────────────────────────────────────────────────────────────────
   { text: "my paediatrician is handing me over to adult care and I am lost", reaches: ["care:shared-care"] },
   { text: "the psychiatrist only sees me yearly now, a GP needs to hold the rest", reaches: ["care:shared-care"] },
-  { text: "school suggested an educational psychologist but we want a GP first", aspires: ["care:child-adolescent-adhd"] },
+  { text: "school suggested an educational psychologist but we want a GP first", reaches: ["care:child-adolescent-adhd"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -944,7 +950,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // getting MORE honest, not the reader getting deafer.
   "care:anxiety": 15,
   "care:autism-adhd": 16,
-  "care:child-adolescent-adhd": 16,
+  // O122 raised 16→18: the POSSESSIVE, bridged in the stemmer ("my son's paediatrician"), plus
+  // the educational-psychologist route parents actually arrive by. The plural forms ("our son",
+  // "our boy") were REFUSED — see needs.ts: they break a G7 pin, because a bare family
+  // reference cannot tell an ask from a parent describing their child's distress.
+  "care:child-adolescent-adhd": 18,
   "care:complex-mental-health": 11,
   "care:depression": 13,
   // O114 raised 9→12 (the want half only); O119 LOWERED 12→11 by sanctioned reclassification.
@@ -980,7 +990,9 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // conduct. The three still unheard are the DISTRESS phrasings — "I cry in the car after
   // every appointment" and its siblings — which are a founder judgement, not a lexicon gap.
   "manner:attuned": 19,
-  "manner:collaborative": 11,
+  // O122 raised 11→20: the SHARED-DECISION phrasings. The facet's label is "Explains and
+  // decides with you" and it had no cue for anybody asking to be decided WITH.
+  "manner:collaborative": 20,
   "manner:culturally_attuned": 16,
   // O113 raised 9→13: strengths language as people say it — encouragement, what they already
   // do well, what is right with them.
@@ -993,15 +1005,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // first — a FIRST_CLAIM outcome, not a vocabulary gap.
   "manner:sense_making": 20,
   "manner:steadying": 14,
-  // O119 LOWERED 17→12, the largest sanctioned reclassification in the corpus's history, and
-  // the one most worth reading. "properly" was a cue on this facet and it fired on every
-  // sentence containing the adverb — "test me properly", "assessment done properly", "looked
-  // into properly", "sorting this out properly", "find out properly". In all of them it means
-  // THOROUGHLY. None of those people is asking for what this facet IS: a documented baseline
-  // and a review on a schedule. Five entries stop reaching it and the floor drops a third,
-  // which looks like a regression and is the opposite — the facet was being credited with
-  // reach it had not earned, and the number now says what it actually hears.
-  "manner:structured": 12,
+  // O119 lowered 17→12 by removing "properly"; O122 raised 12→14 with the phrasings that
+  // genuinely name this facet — bloods and blood pressure before a script, the follow-up booked
+  // before leaving. The pair reads as one movement: unearned reach taken away, earned reach
+  // given back.
+  "manner:structured": 14,
   // O116 raised 19→20 NET, and the number hides two movements: two sentences left for
   // pref:longer-appointment in the reclassification above, and three arrived (the clock, the
   // full appointment, appointments moving too fast). Written out because a floor that only

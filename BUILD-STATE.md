@@ -141,6 +141,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > facet it declares in no direction, which now catches a loose cue on the way in rather than
 > months later); zero `never` pins broken; promotions retagged in-commit; floors and
 > tie-quality moved; full `pnpm verify` green.
+> DONE 2026-08-20. SEVEN of the eleven promoted — collaborative 11→20, structured 12→14,
+> child-adolescent 16→18 — plus a stemmer entry. Tie-quality 391/213/63/115 → 397/220/62/115,
+> and ALL SIX new run entries separate: separation 54.5%→55.4%, recovering part of what O119's
+> precision audit correctly gave up. The two units read as one movement — reach that was not
+> earned taken away, reach that is given back — which is what the number is for.
+>
+> THE POSSESSIVE WAS A STEMMER FIX, NOT A CUE. Apostrophes are stripped before stemming, so
+> "my son's paediatrician" arrived as [my, sons, …] and the cue "my son" never met it: a facet
+> whose entire register is a parent talking about their child was deaf to the commonest way a
+> parent refers to them. `sons`/`daughters` joined O50's table as named entries, the same idiom
+> as O116's comparative and for the same stated reason — the stemmer's s-stripping is guarded
+> for things this corpus already paid for, so these two words get an entry rather than a rule.
+>
+> **THE REFUSAL CAME FROM THE CORPUS RATHER THAN FROM ME, WHICH IS A BETTER REASON THAN ANY
+> MEASUREMENT.** "our son", "our daughter", "our boy", "our girl" were written — the plural is
+> how Australian parents talk — and "our daughter" immediately broke a G7 `never` pin four
+> hundred lines away: "our daughter cries over homework every single night" is pinned as
+> reaching NOTHING, because it is a parent describing their child's DISTRESS rather than asking
+> for care. A bare family reference cannot tell that from "we need answers for our boy": the
+> difference between them is the ASK, and the cue only sees the relationship. So the plural
+> forms are not added and the sentence that wanted them stays standing. A G7 boundary does not
+> move to fit a cue.
+>
+> Worth recording that the weakness is NOT NEW: the existing "my son" and "my daughter" cues
+> share it exactly, and are untested only because no pin happened to use them in a description.
+> The corpus caught this one because somebody wrote the G7 block in the plural — which is the
+> argument for pinning refusals in the register they actually occur in.
+>
+> "year old" refused on measurement too: it fires on "I am forty years old and finally asking",
+> an adult stating their age, which is the harm O120 fixed from the other direction. An age is
+> not a relationship.
 
 > **O121 (UI refinement: the finder walked end to end, after a day that changed most of it) —
 > claimed 2026-08-20T20:42Z by loop-0820s.** The lane's cadence is a UI-refinement unit per
