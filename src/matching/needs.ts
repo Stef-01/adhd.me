@@ -177,6 +177,36 @@ const LEXICON: readonly Entry[] = [
   // ── Other mental health ─────────────────────────────────────────────────────────────────────
   care("trauma-informed", "Trauma-informed care", 28, [
     "trauma", "trauma history", "difficult childhood", "boundaries", "permission", "ptsd", "cptsd",
+    /* O104: the PACE-AND-CONSENT-OVER-HISTORY register. Every cue above names the condition
+       ("trauma", "ptsd") or the era ("difficult childhood"); nine phrasings stood unheard in
+       the corpus and four of them never mention trauma at all — they ask for a way of being
+       asked. "Please go slowly with the history questions" is a preference about how the
+       appointment is conducted, which is the reading G7 requires and the safest possible
+       thing this facet can be cued on: it names no experience and diagnoses nobody.
+
+       "relive" ships as a single word deliberately. It is not a collapse (a one-WORD cue is
+       not a multi-word phrase that collapsed, so the O45 pair rule does not apply to it), and
+       it is rare enough in this domain to carry the whole ask — "without having to relive
+       it", "I don't want to relive everything" — where a two-token version would hear only
+       one phrasing of it.
+
+       "not be pushed" CARRIES ITS OWN NEGATOR, and it has to. The first draft cued "pushed
+       on the details", which is present in the corpus sentence and reached nothing: O72's
+       bare-negator rule saw the "not" sitting directly before the cue span and read the ask
+       as a refusal of it. But "I need to NOT be pushed on the details" is the ask — the same
+       shape as "I don't want to feel rushed", which manner is exempt from by design. Care
+       facets are not exempt, so the negator has to live inside the cue's own words, which is
+       exactly what O49 did for "not a script". Measured both ways before shipping. */
+    "relive", "slowly with the history", "not be pushed",
+    /* THE OTHER FIVE ASPIRATIONS ARE NOT CUED, AND THAT IS THIS UNIT'S MAIN DECISION.
+       They name what happened to the person — family violence, an abusive relationship,
+       "what happened to me before" — or, in one case, use a clinical term for a symptom ("I
+       dissociate when doctors rush me"). Cueing those means the matcher reading a history off
+       a sentence somebody typed into a finder, which is the G7 line, and Q1's first sweep
+       already set the precedent for exactly this: three attuned aspirations were left
+       standing because "their phrasings read distress rather than a want, and authoring cues
+       for them needs a founder-side judgment call". The same call is owed here and a build
+       loop is not the thing to make it. Raised in BUILD-STATE as a named founder question. */
   ]),
   care("complex-mental-health", "Bipolar and complex mental health", 26, ["bipolar", "complex", "psychosis", "schizophrenia",
     // O53: how people name the whole file rather than one diagnosis. Two content tokens.

@@ -764,3 +764,56 @@ describe("§O103 non-medication is asked in three registers, and the cues hear t
     expect(facets("no interest in coaching, the medication is working")).not.toContain("care:non-medication");
   });
 });
+
+describe("§O104 trauma-informed hears how somebody wants to be asked, not what happened to them", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the PACE-AND-CONSENT register, which names no experience and diagnoses nobody", () => {
+    expect(facets("please go slowly with the history questions")).toContain("care:trauma-informed");
+    expect(facets("I need to not be pushed on the details of the history")).toContain("care:trauma-informed");
+    expect(facets("an assessment without having to relive it please")).toContain("care:trauma-informed");
+  });
+
+  it("keeps the named-condition register the earlier cues carried", () => {
+    expect(facets("I have a trauma history")).toContain("care:trauma-informed");
+    expect(facets("difficult childhood, and I want that handled carefully")).toContain("care:trauma-informed");
+  });
+
+  /**
+   * "not be pushed" carries its own negator, and the pin records why.
+   *
+   * The first draft cued "pushed on the details". It is present in the corpus sentence and
+   * reached NOTHING, because O72's bare-negator rule saw the "not" directly before the span
+   * and read the ask as a refusal of it — when "I need to not be pushed" IS the ask. Care
+   * facets are not exempt from that rule the way manner is, so the negator has to live inside
+   * the cue, which is what O49 did for "not a script". If somebody later shortens this cue,
+   * this is the case that fails.
+   */
+  it("the ask survives its own negator, and the shorter cue would not have", () => {
+    expect(facets("I need to not be pushed on the details of the history")).toContain("care:trauma-informed");
+    // The refusal register still refuses: this is somebody declining the facet, not asking.
+    expect(facets("no trauma stuff please, just the ADHD assessment")).not.toContain("care:trauma-informed");
+  });
+
+  /**
+   * THE SPAN-SWALLOW, MEASURED AND LEFT STANDING (O104's recorded finding).
+   *
+   * "a gentle GP who takes trauma seriously" does NOT reach this facet, and not for want of a
+   * cue: "trauma" is right there. `findCue` matches in order ACROSS intervening words, so
+   * manner:attuned's "take seriously" claims the span [take … seriously] — which CONTAINS
+   * "trauma" — and a shorter cue cannot claim a token already spoken for. The reader's word is
+   * given to another facet and vanishes.
+   *
+   * Fixing it is a mechanism unit, not a cue: cue whack-a-mole is what the year plan warns
+   * against, and re-authoring "take seriously" would only move the collision. Pinned as
+   * TODAY'S TRUTH in the O68 known-false-positive style so the fix unit has a failing case
+   * waiting for it, and so nobody reads the missing facet as a lexicon gap.
+   */
+  it("pins the span-swallow as today's truth: an intervening word is claimed by the spanning cue", () => {
+    const heard = facets("a gentle GP who takes trauma seriously and bulk bills");
+    expect(heard).toContain("manner:attuned");
+    expect(heard).not.toContain("care:trauma-informed");
+    // Without the spanning cue's other half, the same word reaches perfectly well.
+    expect(facets("a gentle GP who takes trauma into account")).toContain("care:trauma-informed");
+  });
+});

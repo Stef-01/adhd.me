@@ -141,6 +141,23 @@ non-rankings.
    set (five two-token cues, plus one deliberate non-cue with its precision reason written
    down), whereupon the promotion gate demanded — and got — every newly-heard aspiration
    retagged and the floor raised 1→6, all in the closing commit.
+1b. **FOUNDER QUESTION, raised by O104 (2026-08-20): may the matcher be cued on what
+   happened to somebody?** Five of `care:trauma-informed`'s standing aspirations name the
+   reader's history rather than their preference — "there is family violence in my past and
+   it affects appointments", "an abusive relationship left me jumpy in clinics", "what
+   happened to me before makes doctors hard to trust", "childhood was rough and it comes up
+   in appointments", "I dissociate when doctors rush me" (that last one a clinical term for a
+   symptom). O104 cued the PACE-AND-CONSENT register instead, which names no experience and
+   diagnoses nobody, and left these five standing. The precedent is Q1's first sweep, which
+   left three attuned aspirations for the same reason. The question is genuinely finely
+   balanced and it is not a build-loop call: reading these WOULD serve the reader who wrote
+   them — every one of those sentences ends in a statement about appointments, which is a
+   care preference by the same logic that lets "I drink more than I should" be read as
+   wanting that conversation held safely. Against it: the cues would be experience words, the
+   facet would then be reachable by a sentence that is purely history, and G7's boundary is
+   the product's most expensive one to be wrong about. FOUNDER: a yes/no, and if yes, whether
+   the cues must require the care clause.
+
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
 3. **Morphology upgrade. DONE — O50, 2026-08-19.** The `INFLECTIONS` table in read.ts,

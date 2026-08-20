@@ -248,7 +248,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── care:trauma-informed / care:complex-mental-health ───────────────────────────────────
   { text: "a trauma informed GP please", reaches: ["care:trauma-informed"] },
-  { text: "I need to not be pushed on the details of the history", aspires: ["care:trauma-informed"] },
+  { text: "I need to not be pushed on the details of the history", reaches: ["care:trauma-informed"] },
   { text: "childhood was rough and it comes up in appointments", aspires: ["care:trauma-informed"] },
   { text: "cptsd and probably ADHD underneath it", reaches: ["care:trauma-informed"] },
   { text: "schizoaffective and ADHD together, it is a lot", reaches: ["care:complex-mental-health"] },
@@ -596,7 +596,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "help with the anger that comes out of nowhere", aspires: ["care:emotional-regulation"] },
   { text: "my moods flip fast and I say things I regret", aspires: ["care:emotional-regulation"] },
   { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
-  { text: "please go slowly with the history questions", aspires: ["care:trauma-informed"] },
+  { text: "please go slowly with the history questions", reaches: ["care:trauma-informed"] },
   { text: "a doctor trained in trauma, not just aware of it", reaches: ["care:trauma-informed"] },
   { text: "what happened to me before makes doctors hard to trust", aspires: ["care:trauma-informed"] },
   { text: "I need my past drug use handled without the raised eyebrows", aspires: ["care:substance-history", "manner:non_judgmental"] },
@@ -797,7 +797,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I can't do this without bulk billing", reaches: ["pref:bulk-billing"] },
   { text: "I cannot manage the trips without telehealth", reaches: ["pref:telehealth-first"] },
   { text: "an appointment without the dose conversation for once", never: ["care:titration"] },
-  { text: "an assessment without having to relive it please", reaches: ["care:adhd-assessment"], aspires: ["care:trauma-informed"] },
+  { text: "an assessment without having to relive it please", reaches: ["care:adhd-assessment", "care:trauma-informed"] },
   { text: "is telehealth enough for a dose review", reaches: ["pref:telehealth-first", "care:titration"] },
   { text: "who bulk bills for children's appointments", reaches: ["pref:bulk-billing", "care:child-adolescent-adhd"] },
 
@@ -918,7 +918,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
   // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
   "care:titration": 24,
-  "care:trauma-informed": 9,
+  // O104 raised 9→12: the pace-and-consent register cued (see needs.ts). The facet's other
+  // five aspirations are NOT a vocabulary gap — they name what happened to the person, and
+  // whether this product may read that is a founder call, raised in the ledger.
+  "care:trauma-informed": 12,
   "manner:attuned": 14,
   "manner:collaborative": 11,
   "manner:culturally_attuned": 16,

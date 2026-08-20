@@ -140,7 +140,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > to a precision measurement. Gate: the four wants promoted, every candidate cue measured
 > against the real matcher for cross-gap false positives before it ships (O103's method),
 > zero `never` pins broken, floors and tie-quality moved in the closing commit, full
-> `pnpm verify` green.
+> `pnpm verify` green. DONE 2026-08-20. THREE of the four wants promoted, floor
+> 9→12, tie-quality 339/189/52/98 → 341/189/52/100 — and both new sentences land UNSEPARATED,
+> which is the honest outcome recorded rather than smoothed: the roster answers
+> trauma-informed uniformly, so hearing the ask is the reader's whole win at three GPs and
+> ordering it is not available. Cues: "relive" (a single WORD, so the O45 pair rule does not
+> apply, and rare enough in this domain to carry the ask), "slowly with the history", and
+> "not be pushed" — which CARRIES ITS OWN NEGATOR because the first draft did not. That draft
+> cued "pushed on the details", which is present in the corpus sentence and reached nothing:
+> O72's bare-negator rule saw the "not" before the span and read the ask as a refusal of it,
+> when "I need to NOT be pushed" IS the ask. Care facets are not exempt the way manner is, so
+> the negator moved inside the cue, exactly as O49 did for "not a script". Measured both ways
+> before shipping, and pinned so a later shortening fails.
+>
+> TWO FINDINGS THIS UNIT DID NOT FIX, BOTH MEASURED, BOTH HANDED ON:
+>
+> (1) **THE SPAN-SWALLOW.** "a gentle GP who takes trauma seriously" does not reach this
+> facet, and not for want of a cue — "trauma" is right there. `findCue` matches in order
+> ACROSS intervening words, so manner:attuned's "take seriously" claims the span
+> [take … seriously], which CONTAINS "trauma", and a shorter cue cannot claim a token already
+> spoken for. The reader's own word is given to another facet and disappears. A sweep of all
+> 135 standing aspirations separates the classes for the first time: **9 have their cue
+> PRESENT but unclaimed, 111 are genuine vocabulary gaps** — so this class is small, real, and
+> was invisible while everything unheard looked like a missing word. Re-authoring "take
+> seriously" would only move the collision (cue whack-a-mole is what the year plan warns
+> against), so it is pinned as today's truth in the O68 style with a failing case waiting for
+> the mechanism unit.
+>
+> (2) **A DESIRE-NEGATION EATS AN UNRELATED LATER ASK — the one that should worry somebody.**
+> "I don't want a big clinic, a woman GP in a small practice please" reaches NOTHING, while
+> the second clause alone reaches pref:woman-gp. "not after therapy, I want the assessment
+> done properly" loses care:adhd-assessment the same way. O81's consume-once binds a trigger
+> to its nearest FOLLOWING ask — but when the thing actually being declined ("a big clinic",
+> "therapy") is not in the lexicon, there is no ask to consume, so the trigger floats past the
+> comma and eats the real one. This is worse than a missed cue: a STATED WANT IS DELETED, and
+> the register it appears in — say what you don't want, then what you do — is one of the
+> commonest ways people ask for anything. O40's original design says scope runs "forward to
+> the clause boundary"; the clause boundary is what is missing. Claimed next as O105.
 
 > **O103 (Q1 lexicon: the loudest gap on record, non-medication) — claimed
 > 2026-08-20T14:24Z by loop-0820s.** With Q1's corpus gate and all of Q2 done, and Q3's three

@@ -40,6 +40,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  341/189/52/100 at O104 (the trauma pace-and-consent register: two more sentences joined
+ *  the run and BOTH land unseparated, which is the honest outcome and worth reading as
+ *  one — the roster answers trauma-informed uniformly, so hearing the ask is the
+ *  reader's whole win here and ordering it is not available at three GPs. A KPI that
+ *  only ever moves in the flattering direction would not be measuring anything);
  *  339/189/52/98 at O103 (the loudest-gap sweep: the non-medication facet's SEQUENCE and
  *  ALTERNATIVE registers were cued, promoting eight standing aspirations into the run —
  *  and ALL EIGHT SEPARATE, which is the outcome this KPI exists to notice. Separation
@@ -60,7 +65,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 339, separated: 189, partialTie: 52, unseparated: 98 };
+const PINNED = { total: 341, separated: 189, partialTie: 52, unseparated: 100 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
