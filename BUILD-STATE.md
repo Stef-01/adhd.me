@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O99 (O96's audit finding: O14's accessibility fix has never rendered) — claimed
+> 2026-08-20T12:44Z by loop-0820s.** O96 recorded two unqualified `.match-quality`
+> declarations at equal specificity and left the fix as its own unit because fixing it
+> changes computed output. Dated now: the region-15 rule (`font-size: 0.8125rem`, 13px)
+> landed 2026-08-15 in the matcher-appraisal commit; O14 later raised the finder's own rule
+> to `0.9375rem` (15px) with the reason written beside it — "they were 12px faint grey:
+> AA-compliant and functionally invisible to the low-vision reader the finder most needs to
+> be honest with". The later-in-file rule wins, so O14'S RAISE NEVER TOOK EFFECT: the
+> sentence the whole results screen turns on ("this is not a ranking", the top-tie note, the
+> unserved-ask note) has been rendering at 13px since the day the fix was written. The class
+> has exactly ONE consumer — three elements in results-stage.tsx — so the second rule was
+> written for the finder and misfiled, not written for another surface. Design: one rule, in
+> the finder region where its consumer lives, carrying O14's 0.9375rem plus the useful parts
+> the misfiled rule added (`max-width: 46ch` is a real measure, `line-height`, `margin-top`);
+> the duplicate deleted. THIS UNIT DELIBERATELY CHANGES PIXELS, which is why it is its own
+> unit and not a line in O96. Gate: `scripts/css-computed-dump.mjs` diffed before/after and
+> the change CONFINED to elements carrying `.match-quality` — a diff anywhere else means the
+> merge took something with it; qa/ capture and a DESIGN-QA entry per the taste law; a11y
+> and finder e2e green; full `pnpm verify` green.
+
 > **O98 (standing debt 11: the compliance sweeps get a gate that actually runs) — claimed
 > 2026-08-20T12:20Z by loop-0820s.** O97's close named this and it is the unit that stops
 > the next O97: `pnpm verify` is typecheck · test · build · audit:gate, ci.yml runs exactly
