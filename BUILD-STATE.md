@@ -121,7 +121,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 > **O79 (founder-directed 2026-08-20: weighted multi-criteria pair scoring — patients to
 > prescribing doctors, hard filters then 30/25/20/15/10) — claimed 2026-08-20T04:33Z by
-> loop-0820e.** New machinery module `src/matching/allocation.ts` (W236): takes synthetic
+> loop-0820e; DONE 2026-08-20. Gate: 16 allocation pins (weights sum + exact 30/25/20/15/10,
+> refusals named and stacking, every raw score in [0,1] with a sentence, W213 unity to the
+> thousandth, per-criterion behaviour incl. neutral-midpoint unknown locations and the
+> binding-fact availability sentence, determinism under permutation of BOTH input lists,
+> cut-inside-a-tie and in-list ties said, all-refused patient gets an empty list plus a full
+> excluded register); three census tripwires satisfied — cdss-boundary W236 declaration +
+> loader, W201 NOT_A_DECISION entry (caught for exporting RefusalReason, kept per speech.ts's
+> no-evasion rule, with the classification-change trigger written: first rendering surface or
+> first non-synthetic call site moves it to AUTOMATED_DECISIONS), W167 fold register (2 folds,
+> rationale; first draft tripped the register's own spell-the-pattern trap exactly as
+> read.ts's note warns); plan gains the Allocation machinery lane; full `pnpm verify` green
+> (212 files, 3247 tests).** New machinery module `src/matching/allocation.ts` (W236): takes synthetic
 > patient requests (location, insurance type, stated urgency, communication preference) and
 > doctor records (specialty, location, capacity, insurance accepted, communication style);
 > hard filters exclude incompatible pairs with NAMED refusal reasons (insurance not

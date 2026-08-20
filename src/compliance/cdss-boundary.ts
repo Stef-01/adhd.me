@@ -349,6 +349,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W235 stores one row per booking handoff — clinician id (roster-validated), surface (allow-listed shape), DAY-truncated date — and tallies them for the staff console. No copy at all, and deliberately nothing about the person: no IP, no user agent, no session, no full timestamp, because an exact time beside a three-GP roster is a re-identification seed this product refuses to hold. The person is not the unit of measurement; the handoff is. Best-effort by contract (never throws into the redirect that calls it); the serverless-ephemerality limit is stated in the module header rather than discovered later.",
   },
   {
+    module: "src/matching/allocation.ts",
+    operatorCopy: [],
+    notCopy:
+      "W236 is the weighted pair-scoring machinery (founder-directed): synthetic patient requests against declared doctor records, hard filters with NAMED refusal reasons, then five global criterion weights (30/25/20/15/10, pinned to sum to 1) over sub-scores each normalised 0-1 by a stated formula. It renders nowhere yet — the breakdown sentences are fixed templates inside the scorers, interpolating only numerals and declared facts, never a patient's own words, and the surface that eventually renders them must declare its copy where it renders (the tie-quality precedent). Boundary facts: stated urgency is the patient's own timing preference and statedNeeds are asks in needs.ts's preference reading — nothing here reads symptoms or infers severity (G7); output is doctor lists per patient and no ordering of patients exists anywhere in the module, keeping the W201 ADM notice's 'no ordering of patients by need' true; weights are global, never keyed to a named doctor (C2); patientRef is an opaque synthetic reference with nowhere to put a name or a symptom (G2). Allocation may exclude an at-capacity doctor because assignment is not listing — the finder's O4 show-closed-books law governs the roster surface, which this module never touches.",
+  },
+  {
     module: "src/matching/tie-quality.ts",
     operatorCopy: [],
     notCopy:

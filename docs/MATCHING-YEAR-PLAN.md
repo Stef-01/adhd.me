@@ -212,6 +212,21 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
   error paths, and the taste rules recorded in `docs/DESIGN-QA.md` stand in for the
   taste-skill wherever the loop session lacks it.
 
+## Allocation machinery (W236 — founder-directed 2026-08-20, O79)
+
+Beside the finder, not inside it: `src/matching/allocation.ts` scores synthetic patient
+requests against declared doctor records — hard filters with named refusal reasons
+(insurance not accepted / at capacity / specialty mismatch), then five global criterion
+weights (clinical fit .30, availability .25, proximity .20, cost .15, communication .10),
+each sub-score normalised 0–1 by a stated formula and carrying a W213 sentence; top three
+doctors per patient with ties said out loud. The reconciliations live in the module header
+and the census entry: allocation may exclude at-capacity doctors because assignment is not
+listing (O4 governs the roster surface); stated urgency is a timing preference, never
+triage (G7); no ordering of patients exists anywhere (the ADM notice holds). NEXT in this
+lane, when a surface wants it: a console rendering of one patient's breakdown (declares its
+copy where it renders), and wiring `statedNeeds` from `readNeeds` output so the finder's
+reader and the allocator share one vocabulary end to end.
+
 ## Refactoring, continuously (runs all year — founder directive 2026-08-19)
 
 Codebases this young rot at the seams that grow fastest. The founder's ask: keep refactoring

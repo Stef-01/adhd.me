@@ -113,6 +113,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/matching/allocation.ts",
+    folds: 2,
+    disposition: {
+      kind: "rationale",
+      why: "Two folds (W236). `scorePair` sums five per-item-rounded weighted criterion scores — addition over a FIXED five-element list built in declared criterion order, so no input ordering exists to vary, and the O8 per-item rounding makes the total reproducible to the thousandth. The second fold reads the last element of the top-three slice to ask whether the cut fell inside a tie; its input is sorted by a total comparator with a declared arbitrary tie-break (total descending, then doctorRef), and both patient and doctor lists are ref-sorted before any work, so the read walks a sequence that cannot arrive reordered — the suite's determinism test permutes both inputs and pins identical output. (Following read.ts's note below, this rationale does not spell either expression out.)",
+    },
+  },
+  {
     module: "src/matching/read.ts",
     folds: 1,
     disposition: {
