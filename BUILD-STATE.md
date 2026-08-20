@@ -131,7 +131,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > the O87 pin retagged reaches→never in this commit (non-medication floor moved by
 > sanctioned reclassification if the count drops), deprivation/declining pinned both
 > directions in §O92 + corpus data, every §O53/§O72/§O91 pin green, tie-quality repinned
-> if the run changes, full `pnpm verify` green.
+> if the run changes, full `pnpm verify` green. DONE 2026-08-20: shipped exactly as the
+> pin specified — `lackingNotDeclining` in read.ts (raw-stream family, sixth member) reads
+> the determiner slot after a cue-initial tight negator; possessive/definite = deprivation
+> and the cue claims nothing, indefinite/bare = declining and everything O91 measured
+> stays untouched. The 507-entry corpus's whole diff was the predicted retag plus the
+> unit's three boundary pins; non-medication floor 8→7 by sanctioned reclassification then
+> back to 9 on the unit's own declining pins; tie-quality repinned 330/181/51/98; §O92
+> both directions; full verify green (212 files, 3341 tests). O87's harvest: two fixed,
+> one open (the [the, phone] cue re-author).
 
 > **O91 (the O87 pin with its analysis pre-written: "without X" is going WITHOUT X, so the
 > bare-negator rule learns the word) — claimed 2026-08-20T08:44Z by loop-0820o.** "do any

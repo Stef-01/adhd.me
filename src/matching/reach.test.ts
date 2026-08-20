@@ -503,6 +503,23 @@ describe("§O84 the sit-register refusal, and the phrasing that survived", () =>
   });
 });
 
+describe("§O92 a cue's own negator declines a thing — unless the raw determiner says the reader LACKS it", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("deprivation stays silent: possessive and definite determiners inside the span", () => {
+    expect(facets("the medication shortage keeps leaving me without my script")).not.toContain("care:non-medication");
+    expect(facets("three weeks without the medication and nobody warned me")).not.toContain("care:non-medication");
+  });
+
+  it("declining keeps reaching: bare, indefinite, and the not-just idiom", () => {
+    expect(facets("what can we do without medication")).toContain("care:non-medication");
+    expect(facets("I want options that are not a script")).toContain("care:non-medication");
+    expect(facets("not just medication")).toContain("care:non-medication");
+    expect(facets("no medication please, I want strategies")).toContain("care:non-medication");
+    expect(facets("coaching first, without a script if we can")).toContain("care:non-medication");
+  });
+});
+
 describe("§O91 'without X' is going without X — with the double negative flipping it back", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

@@ -646,6 +646,11 @@ export function reportedRefusal(
  */
 const TIGHT_NEGATORS = new Set(["no", "not", "without"]);
 
+/** Whether a cue's own first token is one of the tight negators (exported for O92's rule). */
+export function isTightNegator(word: string): boolean {
+  return TIGHT_NEGATORS.has(word);
+}
+
 /**
  * `from` (O78): where the search starts. The audit found that returning only the FIRST
  * occurrence made every suppression rule sentence-global by accident — a cue negated,
@@ -654,6 +659,44 @@ const TIGHT_NEGATORS = new Set(["no", "not", "without"]);
  * nothing. readNeeds now retries from past a refused occurrence; every existing caller
  * passes nothing and keeps first-occurrence behaviour.
  */
+/**
+ * The deprivation determiner (O92, O87's second pinned false positive).
+ *
+ * THE DEFECT CLASS. Cues that carry their own negator — "without medication", "without a
+ * script", "no medication" — mean DECLINING the thing. But the same words with a
+ * possessive or definite determiner mean LACKING it: "the medication shortage keeps
+ * leaving me without MY script" is deprivation, a complaint about supply, not a
+ * preference for non-medication care. The determiner that separates the two readings is
+ * a stopword, erased before matching — so like every rule in this family, the check
+ * reads the RAW stream, where "my" and "the" survive.
+ *
+ * THE RULE: for a cue whose own FIRST token is a tight negator, map the matched span into
+ * the raw stream and read what sits between the negator and the first matched content
+ * token after it. A possessive or definite determiner ({my, your, our, his, her, their,
+ * the}) marks deprivation, and the cue claims nothing. Indefinite ("a", "any") or bare
+ * keeps the declining read — "what can we do without medication" and "not a script" are
+ * untouched, which is the boundary O91 measured this family against.
+ */
+const DEPRIVATION_DETERMINERS = new Set(["my", "your", "our", "his", "her", "their", "the"]);
+
+export function lackingNotDeclining(
+  sentence: readonly string[],
+  rawSentence: readonly string[],
+  cueFrom: number,
+  cueTo: number,
+): boolean {
+  const span = mapSpanToRaw(sentence, rawSentence, cueFrom, cueTo);
+  if (!span) return false;
+  for (let k = span.rawFrom + 1; k < rawSentence.length; k++) {
+    const token = rawSentence[k]!;
+    if (token === CLAUSE_BOUNDARY) return false;
+    if (DEPRIVATION_DETERMINERS.has(token)) return true;
+    // The first non-determiner content word ends the determiner slot either way.
+    if (!isStopword(token)) return false;
+  }
+  return false;
+}
+
 export function findCue(
   sentence: readonly string[],
   cue: readonly string[],

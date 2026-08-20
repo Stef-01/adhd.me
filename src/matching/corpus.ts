@@ -724,13 +724,17 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── shortage and continuation: the register the 2026 supply problems created ────────────
   /**
-   * KNOWN FALSE POSITIVE (O87): "without MY script" is deprivation, not a preference for
-   * non-medication care — but the cue "without a script" hears both, because the
-   * determiner that separates them is a stopword. Pinned as today's truth per the O68
-   * pattern; the fix unit reads the raw determiner ("my"/"the" = lacking it, "a"/"any" =
-   * declining it) and must retag this to `never` in the same commit.
+   * O87 pinned this as a KNOWN FALSE POSITIVE (deprivation read as a preference); O92
+   * built the determiner rule exactly as the pin specified — `lackingNotDeclining` reads
+   * the raw determiner between a cue's own negator and its noun ("my"/"the" = lacking,
+   * "a"/"any"/bare = declining) — and retagged it, the O68 pattern's sixth full run.
    */
-  { text: "the medication shortage keeps leaving me without my script", reaches: ["care:non-medication"] },
+  { text: "the medication shortage keeps leaving me without my script", never: ["care:non-medication"] },
+  // O92's boundary as data: definite-article deprivation suppresses too; every declining
+  // shape keeps reaching, including the indefinite article inside the cue's own span.
+  { text: "three weeks without the medication and nobody warned me", never: ["care:non-medication"] },
+  { text: "no medication please, I want strategies", reaches: ["care:non-medication"] },
+  { text: "coaching first, without a script if we can", reaches: ["care:non-medication"] },
   { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", aspires: ["care:shared-care"] },
   { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:adhd-assessment"], aspires: ["care:shared-care"] },
   { text: "my prescriber retired and nobody will take over the script", reaches: ["care:shared-care"] },
@@ -893,7 +897,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:complex-mental-health": 11,
   "care:depression": 13,
   "care:emotional-regulation": 9,
-  "care:non-medication": 8,
+  // non-medication lowered 8→7 by O92 (the shortage sentence reclassified reaches→never
+  // when the determiner rule landed) then raised back 7→9 by the unit's own declining
+  // pins — the sanctioned-reclassification precedent and the ratchet in one move.
+  "care:non-medication": 9,
   // shared-care lowered 20→19 by O91: the count lost a KNOWN FALSE POSITIVE ("without a
   // psychiatrist referral" retagged reaches→never when the bare-without rule landed) — a
   // correction, not a hearing lost; the O72 bulk-billing precedent, third use.

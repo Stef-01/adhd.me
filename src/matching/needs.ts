@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { bareNegatorBefore, collapsedCueSatisfied, findCue, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueSatisfied, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -343,6 +343,18 @@ export function readNeeds(text: string): NeedSignal[] {
         bareNegatorBefore(sentence, at.from) &&
         !softenedNotJust(rawSentence, cue.tokens[0]!) &&
         !reportedRefusal(sentence, rawSentence, at.from)
+      ) {
+        continue;
+      }
+      /* O92 (O87's second pin): a cue that carries its OWN negator means DECLINING the
+         thing — unless the raw determiner says the reader is LACKING it. "what can we do
+         without medication" declines; "leaving me without MY script" is a supply
+         complaint, and reading it as a non-medication preference was the pinned false
+         positive. Same claims-nothing rule, same care/pref scope. */
+      if (
+        (cue.entry.facet.kind === "care" || cue.entry.facet.kind === "preference") &&
+        isTightNegator(cue.tokens[0]!) &&
+        lackingNotDeclining(sentence, rawSentence, at.from, at.to)
       ) {
         continue;
       }
