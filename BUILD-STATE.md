@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O124 (the precision-blocked pair, re-cued with the precision kept) — claimed
+> 2026-08-20T21:57Z by loop-0820s.** O119 removed three cues that were manufacturing reach;
+> O122 gave `manner:structured` back its reach with concrete phrasings that genuinely name the
+> facet; O123 established that `care:anxiety`'s two waiting-room aspirations are blocked for
+> that same PRECISION reason and not by the founder's G7 question. This closes them, which
+> completes the arc: bare "panic" fired on "a doctor who won't panic about my drinking" — a
+> figurative line about the DOCTOR — so the fix is not to re-add "panic" but to cue the two
+> phrasings that carry a second content token. "white coat" is [white, coat] and cannot mean
+> anything else in a clinic. "panic in the waiting" is [panic, wait], and it is ORDER-SENSITIVE
+> in a way that helps: "I had to wait and then panic set in about the cost" has the tokens the
+> other way round and does not match. Both measured silent on O119's exact false positive
+> before being written. Gate: the two aspirations promoted, O119's FP pinned as still-refused
+> in the same test so the reason survives the fix, O119's precision probe green, floors and
+> tie-quality moved, full `pnpm verify` green.
+
 > **O123 (the founder question was over-claimed, and it was blocking work nobody had to
 > block) — claimed 2026-08-20T21:45Z by loop-0820s.** Plan item 1b records a real G7 question
 > — may the matcher be cued on what HAPPENED to somebody — raised by O104 over five
