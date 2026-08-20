@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O101 (refactor lane, queue item 4, and the queue's last: name the CUES pipeline's
+> stages) — claimed 2026-08-20T13:41Z by loop-0820s.** `src/matching/needs.ts` builds the
+> matcher's cue table in one chained expression — dedup by first claim, tokenise twice,
+> drop the empties, sort by specificity — and the two doc comments that explain WHY are
+> stranded above it in an order that reads backwards: the paragraph describing `CUES`
+> ("longest first, and the reason is a real defect it prevents") sits directly above the
+> `FIRST_CLAIM` loop, which is a different stage answering a different question. A reader
+> arriving at the most load-bearing data structure in the matcher has to hold four
+> transformations in their head to see which comment is about which. Design: one named
+> const per stage, each with its own comment adjacent to the code it explains and the
+> existing prose moved verbatim — nothing rewritten, nothing added, no cleverness. A `Cue`
+> type replaces the inline structural type that `Candidate` currently reaches for via
+> `(typeof CUES)[number]`. `FIRST_CLAIM` keeps its name: `LEXICON_CUES` reads it, and a
+> rename would touch the self-reach pin for no gain. Gate: the FULL matching suite green
+> UNCHANGED — that is the lane's definition of identical and this module is where a silent
+> behaviour change would be most expensive; every reach pin and the tie-quality partition
+> unmoved; full `pnpm verify` green.
+
 > **O100 (refactor lane, queue item 3: the roster DATA leaves the ranking LOGIC) — claimed
 > 2026-08-20T13:07Z by loop-0820s.** src/demo/clinicians.ts is 1,010 lines with a clean seam
 > at line 450: the `Clinician` type and the roster array above it, every ranking and copy
