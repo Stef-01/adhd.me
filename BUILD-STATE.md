@@ -119,6 +119,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O108 (Q1 lexicon: telehealth-first, and the register that asks by refusing) — claimed
+> 2026-08-20T16:00Z by loop-0820s.** Eight unheard phrasings, now joint-loudest. The cue list
+> knows "telehealth", "by phone", "video appointment" — and the corpus asks for it three other
+> ways. VIDEO AS A PREPOSITION ("by video if possible", "done over video", "video reviews
+> after work hours") where the existing cues need the noun spelled out. PHONE APPOINTMENTS,
+> which sounds like it should already work and does not: "by phone" collapses to [phone] and
+> O45 rightly demands the authored pair, so "phone appointments suit my shift work better"
+> reaches nothing. And the register worth the unit — ASKING BY REFUSING THE ALTERNATIVE: "no
+> more waiting rooms, video only from here", "I am immunocompromised so clinic visits are a
+> risk", "social anxiety makes phone calls easier than visits". Nobody in those sentences says
+> telehealth; they say what they cannot do, and the want is the other side of it. That is the
+> most interesting thing in the queue and also the most dangerous, because the mirror-image
+> sentence ("I'd rather come in than do it by video") is a REFUSAL of the same facet, and a
+> cue read off the avoided thing will hear both identically. Expect refusals: bare "video"
+> almost certainly fires on "I watched a video about ADHD", and "clinic visits" is the exact
+> phrase somebody uses to ASK for in-person care. Both get measured and written down. Gate:
+> O103's method on every candidate, zero `never` pins broken, promotions retagged in-commit,
+> floors and tie-quality moved, full `pnpm verify` green.
+
 > **O107 (Q1 lexicon: substance-history, the third-loudest gap) — claimed
 > 2026-08-20T15:43Z by loop-0820s.** Nine unheard phrasings. UNLIKE O104's trauma facet there
 > is no G7 question to refer upward here, and the file itself says why: this module's header
