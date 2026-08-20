@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O80 (founder-directed 2026-08-20, clarifying O79: a standalone PYTHON tool for the
+> Australian GP-led ADHD pathway) — claimed 2026-08-20T04:47Z by loop-0820f.** The founder's
+> full spec: patients (location, state, age, existing_diagnosis_status, urgency,
+> communication_preference, funding_preference) × GPs (location, state, capacity,
+> gp_authorization_level, age_range_supported, mbs_items_billed, bulk_billing_available,
+> gap_payment_estimate, communication_style). Hard filters BEFORE scoring, each named:
+> state mismatch (authorization is jurisdiction-specific), authorization level vs diagnosis
+> status (undiagnosed → initiate_and_diagnose only; diagnosed → initiate or continuation;
+> not_authorized never matches), age outside supported range, at capacity, and
+> bulk_billed_only vs no bulk billing. Then weighted scoring 30/25/20/15/10 (availability,
+> proximity, cost fit, communication fit, MBS pathway fit), each sub-score normalised 0–1.
+> Output: top-3 GPs per patient with total, per-criterion breakdown, and a plain-language
+> authorization note. Structure as directed: state rules + MBS items in a separate config
+> module with review dates (rules actively changing through 2026); weights and filter list
+> adjustable without touching the core function; reasoning comments on every filter,
+> heaviest on state/authorization. Lives in tools/gp-match/ (synthetic data only, not wired
+> to the product; census tripwires scan src/ and are untouched). Gate: python3 -m unittest
+> green over the tool's own suite (filters both directions, normalisation bounds, unity,
+> determinism, top-3 + notes), demo run prints a worked example, `pnpm verify` green.
+
 > **O79 (founder-directed 2026-08-20: weighted multi-criteria pair scoring — patients to
 > prescribing doctors, hard filters then 30/25/20/15/10) — claimed 2026-08-20T04:33Z by
 > loop-0820e; DONE 2026-08-20. Gate: 16 allocation pins (weights sum + exact 30/25/20/15/10,
