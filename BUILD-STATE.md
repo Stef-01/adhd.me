@@ -141,7 +141,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > deleted wants restored and pinned; the negation rule's whole existing pin set green
 > UNCHANGED (O40, O81, O72, O83 — this is the most heavily-pinned rule family in the tree and
 > that is the point); zero corpus `never` pins broken; floors and tie-quality moved in the
-> closing commit; full `pnpm verify` green.
+> closing commit; full `pnpm verify` green. DONE 2026-08-20. `commaBreaksBefore` in read.ts
+> reports where the commas were in `tokenise`'s OWN coordinates, by walking the same
+> `splitWords` output the content stream is built from — the alternative, counting words in
+> the raw string, would drift the first time either pipeline changed, which is the exact drift
+> the raw-skeleton check was built to avoid. `suppressedByDesireNegation` takes it as an
+> optional argument defaulting to empty, so every other caller keeps its behaviour by
+> construction. BOTH TOKEN STREAMS ARE UNCHANGED, which was the design constraint and is now
+> the pinned one: cues still read straight across a comma, including the clarifier's own
+> `${request}, ${answer}` append shape, and §O105 fails if somebody later "simplifies" this
+> into splitWords.
+>
+> All three deleted wants restored, and the strongest statement of the fix is pinned as an
+> equality: "I don't want a big clinic, a woman GP in a small practice please" now reads
+> EXACTLY as "a woman GP in a small practice please" does standing alone. The negated preamble
+> changes nothing about the clause behind it. Floors: woman-gp 18→19, adhd-assessment 59→60.
+> Tie-quality 341/189/52/100 → 342/190/52/100 — the smallest movement of the day, on the worst
+> defect of the day, and the two are consistent: the KPI counts HEARD requests, and a want
+> that was being silently deleted had simply never been counted.
+>
+> WHAT DID NOT MOVE IS THE RESULT WORTH READING. The negation family is the most heavily
+> pinned rule set in this tree — O40's desire phrases, O81's consume-once, O72's bare
+> negators, O83's reported refusal — and every one of those pins is green UNCHANGED. The only
+> test that failed on first run was the corpus promotion gate, which is the gate doing its
+> job. One correction in-build: the first floor for adhd-assessment was set from a script that
+> counted the whole corpus rather than the entries declaring that facet, and the gate's own
+> message ("heard 60 of 62") corrected it — the floors are the gate's number, not a
+> separately-derived one, which is the point of measuring against the gate.
 
 > **O104 (Q1 lexicon: trauma-informed, and the half of it that is not the loop's to decide)
 > — claimed 2026-08-20T14:43Z by loop-0820s.** Next-loudest gap after O103's: nine unheard

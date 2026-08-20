@@ -817,3 +817,64 @@ describe("§O104 trauma-informed hears how somebody wants to be asked, not what 
     expect(facets("a gentle GP who takes trauma into account")).toContain("care:trauma-informed");
   });
 });
+
+describe("§O105 a comma ends a negation's scope, and ends nothing else", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  /**
+   * THE DEFECT, IN THE TWO SENTENCES THAT FOUND IT.
+   *
+   * O81's consume-once binds a trigger to its nearest FOLLOWING ask. When the thing actually
+   * being declined carries no cue — nothing in "a big clinic" or "therapy" is in the lexicon —
+   * there was no ask to consume, so the trigger floated across the comma and suppressed the
+   * ask behind it. Both sentences reached NOTHING of what they asked for: a want the reader
+   * stated, deleted. This is the register people ask in — what I don't want, then what I do.
+   */
+  it("keeps the want stated after the comma", () => {
+    expect(facets("I don't want a big clinic, a woman GP in a small practice please"))
+      .toContain("pref:woman-gp");
+    expect(facets("I don't want a big clinic, bulk billing please")).toContain("pref:bulk-billing");
+    expect(facets("not after therapy, I want the assessment done properly"))
+      .toContain("care:adhd-assessment");
+  });
+
+  it("each clause reads exactly as it does standing alone", () => {
+    // The strongest statement of the fix: the negated preamble now changes nothing about
+    // what the second clause reaches.
+    expect(facets("I don't want a big clinic, a woman GP in a small practice please"))
+      .toEqual(facets("a woman GP in a small practice please"));
+  });
+
+  it("the negation still binds its own object, with no comma in the way", () => {
+    // O40/O81's whole point, untouched: a refusal before the ask it refuses still refuses it.
+    expect(facets("I don't want telehealth")).not.toContain("pref:telehealth-first");
+    expect(facets("I am not looking for bulk billing")).not.toContain("pref:bulk-billing");
+  });
+
+  it("O81's consume-once still spends the trigger on the nearest ask, comma or not", () => {
+    // The founding consume-once case: the refusal takes the woman-GP ask and the bulk-billing
+    // ask behind it survives. That behaviour predates this unit and must be identical.
+    const heard = facets("I don't want a woman GP, bulk billing matters more");
+    expect(heard).not.toContain("pref:woman-gp");
+    expect(heard).toContain("pref:bulk-billing");
+  });
+
+  it("manner stays exempt, and a comma does not change that", () => {
+    expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
+    expect(facets("I don't want to feel rushed, and I want bulk billing")).toContain("manner:unhurried");
+  });
+
+  /**
+   * A COMMA IS NOT A BOUNDARY FOR MATCHING A CUE. `splitWords` carries the written reason —
+   * "alternatives, not just medication" is one clause, and the clarifier appends its answers
+   * after a comma (`${request}, ${answer}`), so a comma that stopped cue matching would break
+   * the product's own reorder path. This unit changed neither token stream; these are the
+   * cases that would fail if somebody later "simplified" it into splitWords.
+   */
+  it("cues still read straight across a comma", () => {
+    expect(facets("alternatives, not just medication")).toContain("care:non-medication");
+    // The clarifier's own append shape: request, then the answer it added in the reader's words.
+    expect(facets("I think I might have ADHD, I would prefer a woman GP")).toContain("pref:woman-gp");
+    expect(facets("coaching and habits first, tablets later if ever")).toContain("care:non-medication");
+  });
+});

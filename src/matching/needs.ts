@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -488,6 +488,8 @@ export function readNeeds(text: string): NeedSignal[] {
       negatable:
         candidate.cue.entry.facet.kind === "care" || candidate.cue.entry.facet.kind === "preference",
     })),
+    // O105: where the commas were. A comma ends a negation's scope without ending a cue's.
+    commaBreaksBefore(text),
   );
 
   /* PHASE 3: claiming, in the same specificity order as always. A suppressed occurrence

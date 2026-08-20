@@ -495,7 +495,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the referral letter is dated last week", never: ["care:shared-care"] },
 
   // ── negation and collapse discipline, walked at the O40/O53 seams ───────────────────────
-  { text: "not after therapy, I want the assessment done properly", reaches: ["manner:structured"], aspires: ["care:adhd-assessment"] },
+  { text: "not after therapy, I want the assessment done properly", reaches: ["manner:structured", "care:adhd-assessment"] },
   { text: "no more waiting rooms, video only from here", aspires: ["pref:telehealth-first"] },
   { text: "I don't want a woman GP, whoever is soonest", never: ["pref:woman-gp"] },
   // Promoted by O81: this sat in the aspiration list since O68 looking like a lexicon gap,
@@ -838,7 +838,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // clinic") is not a cue, so the trigger spends itself on the woman-GP ask instead. The
   // want is real, so this is an ASPIRATION, not a boundary — it promotes when the reader
   // learns to see non-cue objects.
-  { text: "I don't want a big clinic, a woman GP in a small practice please", aspires: ["pref:woman-gp"] },
+  { text: "I don't want a big clinic, a woman GP in a small practice please", reaches: ["pref:woman-gp"] },
   { text: "they told me no telehealth scripts are allowed, is that true here", reaches: ["pref:telehealth-first"] },
   { text: "if that makes sense as a plan, I would rather come in", never: ["manner:sense_making"] },
   { text: "not looking for therapy, medication management is what I need", aspires: ["care:titration"] },
@@ -895,7 +895,9 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // the gap (five two-token cues) and the floor is the measured count — the standing gap,
   // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
   // nobody noticed.
-  "care:adhd-assessment": 59,
+  // O105 raised 59→60: the comma-scoped negation stopped deleting the assessment ask behind
+  // "not after therapy, …".
+  "care:adhd-assessment": 60,
   "care:anxiety": 17,
   "care:autism-adhd": 16,
   "care:child-adolescent-adhd": 16,
@@ -946,5 +948,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.
   // O77: culturally_attuned holds at 11 the same way — the on-behalf retag took one out
   // and the presence boundary pin ("I want my mum in the room for this") put one back.
-  "pref:woman-gp": 18,
+  // O105 raised 18→19: the comma-scoped negation stopped deleting the woman-GP ask behind
+  // "I don't want a big clinic, …".
+  "pref:woman-gp": 19,
 };

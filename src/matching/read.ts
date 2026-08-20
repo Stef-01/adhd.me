@@ -209,6 +209,65 @@ export function tokeniseKeepingStopwords(text: string): string[] {
     .slice(0, MAX_RAW_TOKENS);
 }
 
+/**
+ * Where the commas were, in `tokenise`'s own coordinates (O105).
+ *
+ * A COMMA IS NOT A BOUNDARY FOR MATCHING A CUE, BUT IT DOES END A NEGATION'S SCOPE. Those two
+ * facts are both true and they pull opposite ways, which is why this is a separate reading of
+ * the text rather than a new marker in either stream. `splitWords` carries a written reason
+ * for keeping commas out: "alternatives, not just medication" is ONE clause, and the clarifier
+ * appends its answers after a comma — a comma that stopped cue matching would break the
+ * product's own reorder path. So both token streams stay byte-identical and only the negation
+ * scope learns about commas.
+ *
+ * Returns the set of CONTENT-token indices such that a comma appears somewhere before that
+ * token and after the previous one. Walking the same `splitWords` output that `tokenise`
+ * consumes is what keeps the coordinates honest: the alternative — counting words in the raw
+ * string — would drift the first time either pipeline changed, which is the drift the raw
+ * skeleton check was built to avoid.
+ */
+export function commaBreaksBefore(text: string): Set<number> {
+  const breaks = new Set<number>();
+  let contentIndex = 0;
+  let pendingComma = false;
+  for (const word of splitWordsKeepingCommas(text)) {
+    if (word === COMMA_MARK) {
+      pendingComma = true;
+      continue;
+    }
+    const isBoundary = word === CLAUSE_BOUNDARY;
+    if (!isBoundary && STOPWORDS.has(word)) continue;
+    if (contentIndex >= MAX_READ_TOKENS) break;
+    if (pendingComma) {
+      breaks.add(contentIndex);
+      pendingComma = false;
+    }
+    contentIndex++;
+  }
+  return breaks;
+}
+
+/** A mark no word can contain: the cleanup below strips every character except these. */
+const COMMA_MARK = "~";
+
+/**
+ * `splitWords`, with commas surviving as their own token. Nothing else differs — same casing,
+ * same apostrophe deletion, same boundary marks, same cleanup — because these coordinates have
+ * to line up with `tokenise`'s exactly. A tilde the reader typed is removed FIRST, so it can
+ * never be mistaken for a comma this produced.
+ */
+function splitWordsKeepingCommas(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/['\u2019]/g, "")
+    .replace(/~/g, " ")
+    .replace(/[.?!;]/g, ` ${CLAUSE_BOUNDARY} `)
+    .replace(/,/g, ` ${COMMA_MARK} `)
+    .replace(/[^a-z0-9|~\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 0);
+}
+
 export function isStopword(word: string): boolean {
   return STOPWORDS.has(word);
 }
@@ -396,6 +455,12 @@ export function desireNegationEnds(sentence: readonly string[]): number[] {
 export function suppressedByDesireNegation(
   sentence: readonly string[],
   spans: readonly { from: number; negatable: boolean }[],
+  /**
+   * O105: content-token positions a comma sits before, from `commaBreaksBefore`. Optional so
+   * every existing caller and test keeps its exact behaviour; omitted means "no commas known",
+   * which is what this rule assumed for its whole life until now.
+   */
+  commaBreaks: ReadonlySet<number> = new Set(),
 ): Set<number> {
   const suppressed = new Set<number>();
   for (const end of desireNegationEnds(sentence)) {
@@ -404,8 +469,19 @@ export function suppressedByDesireNegation(
       if (span.from <= end) continue;
       if (span.from - end - 1 > MAX_NEGATION_LEAD) continue;
       let boundaryBetween = false;
-      for (let k = end + 1; k < span.from; k++) {
-        if (sentence[k] === CLAUSE_BOUNDARY) {
+      for (let k = end + 1; k <= span.from; k++) {
+        /* O105: a comma ends the scope as surely as a full stop does. Without this, a
+           trigger whose OBJECT carries no cue — "I don't want a big clinic", where nothing
+           in "big clinic" is in the lexicon — found no ask to consume, floated across the
+           comma and suppressed the ask behind it. "I don't want a big clinic, a woman GP in
+           a small practice please" then reached NOTHING AT ALL, deleting a want the reader
+           had actually stated. The `<=` matters: the break is recorded BEFORE the token it
+           precedes, so a comma sitting immediately in front of the span still counts. */
+        if (k > end && commaBreaks.has(k)) {
+          boundaryBetween = true;
+          break;
+        }
+        if (k < span.from && sentence[k] === CLAUSE_BOUNDARY) {
           boundaryBetween = true;
           break;
         }

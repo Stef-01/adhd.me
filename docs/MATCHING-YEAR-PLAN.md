@@ -169,7 +169,18 @@ non-rankings.
    studied for test cases, not imported. Pinned: stem-equivalence per family + two
    previously-deaf corpus phrasings now reaching ("nobody ever believes me", "quick to
    judge"), non_judgmental floor raised with them.
-4. **Negation clauses. DONE — O40, 2026-08-19.** `negatedWant` in read.ts, NegEx's convention
+4. **Negation clauses. DONE — O40, 2026-08-19; SCOPE CORRECTED — O105, 2026-08-20.**
+   *O105 fixed the defect O104's aspiration sweep surfaced: a desire-negation whose object
+   carries no cue found no ask to consume and floated ACROSS A COMMA to suppress the ask
+   behind it, so "I don't want a big clinic, a woman GP in a small practice please" reached
+   nothing at all — a want the reader stated, deleted, in the commonest register anybody asks
+   in. The rule already refused to cross a CLAUSE_BOUNDARY; commas were never marked as one,
+   deliberately and for a good reason (a comma that stopped cue matching would break
+   "alternatives, not just medication" AND the clarifier's own `${request}, ${answer}` append).
+   So the fix is asymmetric, which is also what is linguistically true: a comma is not a
+   boundary for matching a cue, but it does end a negation's scope. `commaBreaksBefore` reports
+   comma positions in `tokenise`'s own coordinates; both token streams are unchanged and pinned
+   so. Every O40/O81/O72/O83 pin green unchanged; woman-gp 18→19, adhd-assessment 59→60.* `negatedWant` in read.ts, NegEx's convention
    scaled to this reader: explicit desire-negation phrases ("don't want", "not looking for",
    "don't need", "no interest") — never bare negators — with scope forward to the clause
    boundary, applied to care and preference cues only. Manner is exempt BY DESIGN and pinned:
