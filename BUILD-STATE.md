@@ -119,6 +119,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O130 (the accent points at the wrong thing, and it is a fossil) — claimed
+> 2026-08-20T23:15Z by loop-0820s.** O129 reduced accent inflation on the profile and recorded
+> that it was reduced, not solved, for a unit that could look across the whole flow at once.
+> This is that unit, and measuring the flow found something better than a balance problem.
+> Painted the accent token across welcome → results → profile and resolved every element whose
+> computed colour matches it: welcome 0, results 5, profile 5. On the RESULTS screen three of
+> the five are `.row-availability` — the LOCATION line on every row ("Beecroft", "Double Bay &
+> Hornsby") — while the line directly above it, the reason this GP was matched, is unaccented.
+> The taste law reserves accent for "the value that changes, the word that matters", and on the
+> screen where a reader chooses between GPs the accent currently points at the suburb rather
+> than at the reason.
+> **IT IS A FOSSIL, WHICH IS WHY NOBODY NOTICED.** `.availability` and `.row-availability` share
+> `color: var(--accent)` with no rationale comment on either, and `.availability` carries
+> `font-weight: 580` and HAS NO CONSUMER ANYWHERE IN THE TREE. It styled `nextAvailable` — the
+> written-in "Thursday, 8:30 am" that the roster deleted when every entry became a real person,
+> because a hardcoded time is a fabricated appointment under a named doctor. That line WAS a
+> value that changes, so the accent was right. The field went; the colour stayed; it now paints
+> a static suburb.
+> Design: the location line becomes neutral, the dead `.availability` rule goes, and the
+> closed-books note KEEPS the accent — books opening and closing is genuinely a value that
+> changes (O56 built a whole freshness grade around exactly that), so it is the one thing in
+> that row the token is for. Gate: accent count re-measured across all three screens after,
+> before/after captures, DESIGN-QA entry, e2e green, full `pnpm verify` green.
+
 > **O129 (FOUNDER-REPORTED: the profile "looks terrible" — a thorough design audit) — claimed
 > 2026-08-20T22:52Z by loop-0820s.** Founder sent a screenshot of Dr Anubhav Saxena's profile
 > with "visually looks terrible, do thorough design audit to make it much more visually
