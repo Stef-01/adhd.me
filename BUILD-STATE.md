@@ -119,6 +119,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O135 (the site-wide measure and accent sweep the founder actually asked for) — claimed
+> 2026-08-20T23:56Z by loop-0820s.** The founder's design brief was "visually coherent ACROSS
+> SITE". O129 audited the profile, O130 the accent across the finder flow, O134 the new /about —
+> three surfaces out of fifteen public routes, and the other twelve have never been measured for
+> the two things those units found defects in every time they looked.
+> Now worth doing properly, because O134 made the tooling trustworthy: before it, a sweep of
+> fifteen routes would have produced a list of confident findings I could not distinguish from
+> capture artefacts, which is exactly how O134 nearly "fixed" a page that was fine.
+> The sweep measures three things per route at 390 and 1280: characters per line on every
+> substantial text block (the 45–75 range, 66 optimum, 60–70 for dyslexic readers — the same
+> sources O129 used), how many elements carry the accent token (the taste law reserves it for
+> the value that changes), and whether any image fails to render once the page is walked. All
+> three are NUMBERS, so the sweep produces evidence rather than opinions.
+> Discipline, learned from this session: findings get fixed only where the fix is clear and
+> provably invisible elsewhere; anything arguable is RECORDED with its measurement and left, the
+> way O129 left the disclosure's prominence and O130 left the remaining five accent roles. A
+> fifteen-route sweep is exactly the shape of unit that turns into indiscriminate churn if every
+> number becomes a change. Gate: every public route measured at both viewports with the numbers
+> written down, fixes only where provable, a DESIGN-QA entry carrying the whole table so the
+> next sweep has a baseline, e2e green, full `pnpm verify` green.
+
 > **O134 (the capture harness lies, twice in one day) — claimed 2026-08-20T23:48Z by
 > loop-0820s.** Auditing the new `/about` route, my capture showed Stefan Thottunkal's plate as
 > a large empty gap where the other three founders had portraits. It looked like a broken image
