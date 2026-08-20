@@ -130,7 +130,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > disclosure test updated to the PAIR (both name the interest; Dr Yadav stays undefined),
 > the founder-not-floated pin extended to every disclosed founder on the generic request,
 > rank pins re-verified under the new tie-break, e2e profile capture with the disclosure
-> line (qa/founder-o89) + DESIGN-QA entry, full `pnpm verify` green.
+> line (qa/founder-o89) + DESIGN-QA entry, full `pnpm verify` green. DONE 2026-08-20:
+> all of the above landed exactly as claimed — 741 roster+matching tests green under the
+> widened tie-break with no pinned ranking flipped, the not-floated pin tightened from
+> "not Dr Anubhav" to "no disclosed founder" (the tie-break exists to spend ties against
+> the house, never for it), e2e asserts the line renders on her profile, full verify
+> green (212 files, 3328 tests).
 
 > **O88 (founder-relayed — Dr Anusha Saxena's official bio, coded into her declarations) —
 > claimed and DONE 2026-08-20, interactive session (not a loop firing).** The founder supplied

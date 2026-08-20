@@ -423,8 +423,15 @@ export const clinicians: Clinician[] = [
       practitionerId: "160121",
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
-    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "hornsby", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight", "hindi", "urdu", "indian", "south asian", "culture", "cultural", "patient-centred"],
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "hornsby", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight", "hindi", "urdu", "indian", "south asian", "culture", "cultural", "patient-centred", "founder"],
     realPerson: true,
+    // O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page"). The same
+    // law that governs her co-founder's entry governs hers: the disclosure exists because
+    // a reader cannot see the ranking, and it carries the standing ranking COST — at an
+    // exact tie she now sorts behind an undisclosed clinician, and that cost is not
+    // waived for being the second founder to carry it.
+    founderInterest:
+      "Dr Anusha Saxena is a co-founder of ADHD.ME. Disclosed because she appears in a directory her own company operates, and a reader cannot see the ranking that put her there.",
   },
 ];
 

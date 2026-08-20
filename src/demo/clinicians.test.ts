@@ -50,13 +50,17 @@ describe("clinician roster and matching", () => {
    * because the reader cannot see the ranking. The disclosure is required to exist on the record
    * and to name the interest — not merely to be a non-empty string.
    */
-  it("discloses the founder interest on the founder's own listing", () => {
-    const saxena = clinicians.find((clinician) => clinician.id === "anubhav-saxena")!;
-
-    expect(saxena.founderInterest).toMatch(/co-founder/i);
-    expect(saxena.founderInterest).toMatch(/ADHD\.ME/);
-
-    for (const clinician of clinicians.filter((c) => c.id !== "anubhav-saxena")) {
+  it("discloses the founder interest on every founder's own listing, and nobody else's", () => {
+    // O89: two founders on the roster now, both directed onto the record by the founder
+    // (Dr Anubhav from the start; Dr Anusha 2026-08-20). The register carries exactly what
+    // was directed — Dr Yadav carries no interest because none was declared for him.
+    const FOUNDERS = ["anubhav-saxena", "anusha-saxena"];
+    for (const id of FOUNDERS) {
+      const founder = clinicians.find((clinician) => clinician.id === id)!;
+      expect(founder.founderInterest, id).toMatch(/co-founder/i);
+      expect(founder.founderInterest, id).toMatch(/ADHD\.ME/);
+    }
+    for (const clinician of clinicians.filter((c) => !FOUNDERS.includes(c.id))) {
       expect(clinician.founderInterest).toBeUndefined();
     }
   });
@@ -69,10 +73,15 @@ describe("clinician roster and matching", () => {
    * that names nothing either of them is weighted for, the tie has to break somewhere other than
    * the founder.
    */
-  it("does not float the founder to the top of an unspecific request", () => {
+  it("does not float any disclosed founder to the top of an unspecific request", () => {
     const generic = "I think I might have ADHD and I would like an assessment";
 
-    expect(rankClinicians(generic)[0]!.id).not.toBe("anubhav-saxena");
+    // O89: with two of three roster entries now disclosed, the property tightens — on a
+    // request that separates nobody, the top spot must go to a clinician WITHOUT an
+    // interest in this product, because the tie-break exists to spend ties against the
+    // house, never for it.
+    const first = rankClinicians(generic)[0]!;
+    expect(first.founderInterest, first.id).toBeUndefined();
   });
 
   /**

@@ -527,3 +527,17 @@ the O85 label carries it.
   profile and the map link his named practice.
 - [x] Founder-supplied fact, source cited in the entry comment (2026-08-20); the roster
   sweep resolves the pair through the gazetteer and focus areas like every location.
+
+## O89 — Dr Anusha's co-founder disclosure (2026-08-20)
+
+Captures: qa/founder-o89/ (her profile with the disclosure line). No new CSS — the
+existing .disclosure-line carries it, same position as her co-founder's.
+
+- [x] Honesty gates: a material interest is stated exactly where the listing is read, one
+  line, not an essay; the wording is the register's own ("appears in a directory her own
+  company operates, and a reader cannot see the ranking that put her there").
+- [x] The disclosure keeps its price: at an exact tie she now sorts BEHIND an undisclosed
+  clinician — the founder-behind rule is not waived for a second founder, and the
+  not-floated pin tightened to cover every disclosed founder on a generic request.
+- [x] Founder-directed fact, source cited in the entry comment; nobody else's status
+  changed, because nothing else was directed.
