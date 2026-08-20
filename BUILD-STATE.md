@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O85 (founder-directed 2026-08-20: Dr Anusha Saxena also consults in Hornsby — the
+> roster learns second locations) — claimed 2026-08-20T06:56Z by loop-0820j.** The founder
+> supplied the fact ("put in Hornsby too as location"); nothing else about the Hornsby
+> rooms is invented — no practice name, no separate hours. Model: `alsoConsultsAt?:
+> string[]` on Clinician (founder/clinician-declared consulting suburbs beside the primary
+> `suburb`), Hornsby added to the gazetteer (real coordinates, focus area 1), and the
+> distance machinery reads the NEAREST of a clinician's locations: `rankCliniciansNear`'s
+> within-tie ordering and `distanceTo` both — with the sentence naming the rooms
+> ("about X km away (their Hornsby rooms)") whenever the nearest is not the primary
+> suburb, so a distance measured to one location never renders beside the other's name.
+> Row and profile show the full location set ("Double Bay & Hornsby"). Gate: unit pins
+> (nearest-location distance both directions, the naming rule, focus-area test extended
+> over alsoConsultsAt), e2e asserts row + profile render the pair with qa/location-o85
+> captures + DESIGN-QA entry (adhdme-taste law), full `pnpm verify` green.
+
 > **O84 (the O78 audit queue's LAST item: the presence phrasing O25's re-authoring left
 > unheard — closed by bringing the phrase home under the discipline that now exists) —
 > claimed 2026-08-20T06:46Z by loop-0820i; DONE 2026-08-20, HALF FIXED AND HALF REFUSED —
