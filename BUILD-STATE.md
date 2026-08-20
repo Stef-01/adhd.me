@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O107 (Q1 lexicon: substance-history, the third-loudest gap) — claimed
+> 2026-08-20T15:43Z by loop-0820s.** Nine unheard phrasings. UNLIKE O104's trauma facet there
+> is no G7 question to refer upward here, and the file itself says why: this module's header
+> uses this exact facet as its worked example — "I drink more than I should" is not read as a
+> substance-use finding, it is read as *this person wants that conversation held safely*,
+> which is a fact about what they want from a clinician and not a fact about them. The
+> existing cues already name substances ("alcohol", "cannabis", "drink"), so naming more of
+> them is the established reading rather than a new one. Two registers are deaf. SUBSTANCES
+> THE LIST NEVER LEARNED — methamphetamine, opioids, cocaine, suboxone — where the lexicon
+> knows the two legal ones and none of the rest, which reads as a lexicon that was written
+> quickly rather than one that made a judgement. And RECOVERY, the register in which people
+> raise this most carefully: "I am in recovery and need that respected", "sober two years and
+> proud of it", "clean since". That second register is the one that matters most for the
+> reader — somebody who volunteers it is asking to be met a particular way — and the finder
+> currently hears nothing at all. Every cue measured against the real matcher for cross-gap
+> false positives before it ships (O103's method, now standard); "clean" will almost certainly
+> be refused on measurement and that refusal gets written down. Gate: zero `never` pins
+> broken, promotions retagged in-commit, floors and tie-quality moved, full `pnpm verify`
+> green.
+
 > **O106 (the span-swallow O104 pinned: a cue claims words it never matched) — claimed
 > 2026-08-20T15:25Z by loop-0820s.** "a gentle GP who takes trauma seriously" does not reach
 > `care:trauma-informed`, and not for want of a cue — "trauma" is right there in the sentence.
