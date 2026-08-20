@@ -197,10 +197,12 @@ describe("clinician roster and matching", () => {
    * finder could not tell what they wanted. The finder now ranks and grades on the evidence it shows.
    */
   it("ranks and grades on a spoken language, not only as a signal", () => {
-    // Only Dr Saxena speaks Urdu, so it is an earned, informed order that puts him first.
-    expect(rankClinicians("a GP who speaks Urdu")[0]!.id).toBe("anubhav-saxena");
+    // O88: BOTH Saxenas declare Urdu now (Dr Anusha's supplied bio), so the earned order puts
+    // the two speakers — either order within their tie — above Dr Yadav, and stays informed.
+    const ranked = rankClinicians("a GP who speaks Urdu");
+    expect(ranked.slice(0, 2).map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
     expect(matchQuality("a GP who speaks Urdu")).toBe("informed");
-    // Both speak Hindi, so it is a real match that does not separate them: tied, never unmatched.
+    // The whole roster speaks Hindi, so it is a real match that separates nobody: tied, never unmatched.
     expect(matchQuality("I need a GP who speaks Hindi")).not.toBe("unmatched");
   });
 
@@ -313,9 +315,9 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
 
   it("groups the ranked roster into bands of exactly equal score", () => {
     const bands = rankBands("a GP who speaks Urdu");
-    // Urdu separates the real roster: one speaker above one non-speaker.
+    // Urdu separates the real roster: two speakers, banded together, above one non-speaker (O88).
     expect(bands).toHaveLength(2);
-    expect(bands[0]!.clinicians.map((c) => c.id)).toEqual(["anubhav-saxena"]);
+    expect(bands[0]!.clinicians.map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
     expect(bands[0]!.score).toBeGreaterThan(bands[1]!.score);
     // Bands partition the roster in ranked order.
     expect(bands.flatMap((b) => b.clinicians)).toHaveLength(clinicians.length);

@@ -373,14 +373,16 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/anusha-saxena.png",
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-18",
-    focus: "ADHD assessment & management, mental health, women's health & lifestyle",
+    focus: "ADHD assessment & management, mental health, women's health & functional medicine",
     matchLine: "Brings a mental-health focus to general practice, with psychology training behind it.",
-    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Child & family health", "Lifestyle & preventative care"],
+    fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Hindi & Urdu", "Lifestyle & preventative care"],
     // Billing leads by roster convention; hers is stated by the practice until her interview
     // supplies the specifics — a fact about where the fact lives, not a guess at it.
     practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
+    // O88: her official bio, supplied through the founder (2026-08-20), merged with the
+    // already-verified detail from O58 — nothing below is authored for her.
     about:
-      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She studied psychology before medicine — First Class Honours at the University of Sydney, then her medical degree at the Australian National University — and trained in hospitals across NSW, including Blacktown and Bathurst, with rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network. Her clinical experience spans general practice, women's health and mental health, with a particular interest in ADHD assessment and management, and she has completed an endorsed ADHD training course. Alongside that sit her published interests in child health, preventative care, cardiovascular and metabolic health, and healthy ageing. She is currently training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition and health coaching. In her own words, she takes a holistic, patient-centred approach, integrating medical, psychological and lifestyle perspectives. How she works day to day — and the languages she consults in — will be added from her own onboarding answers rather than written for her.",
+      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology — First Class Honours at the University of Sydney — then her medical degree at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport — cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
     experience: [
       "General practice, Bay Health Clinic, Double Bay",
       "Fellow of the Royal Australian College of General Practitioners",
@@ -388,11 +390,13 @@ export const clinicians: Clinician[] = [
       "First Class Honours in Psychology, University of Sydney",
       "Hospital training across NSW — rotations in cardiology, paediatrics and psychiatry",
       "Sydney Child Health Program, Sydney Children's Hospital Network",
-      "Endorsed ADHD training course — completed",
+      "Endorsed ADHD prescriber course — completed",
       "Focused Psychological Strategies — training underway",
-      "Functional medicine, nutrition & health coaching — further qualifications underway",
+      "Functional medicine, nutrition, lifestyle medicine & health coaching — further qualifications underway",
     ],
-    languages: ["English"],
+    // O88: from her supplied bio — "of Indian origin and speaking Hindi and Urdu". Languages
+    // are ranked on (O1), so this is a matching fact, not decoration.
+    languages: ["English", "Hindi", "Urdu"],
     careAreas: ["adhd-assessment"],
     // Interest-level claims from her bio sit at the "sometimes" grade until her interview
     // upgrades or removes them — half weight, honestly earned (O2). `non-medication` is O58's
@@ -400,9 +404,14 @@ export const clinicians: Clinician[] = [
     // Psychological Strategies training underway is exactly that facet's territory
     // ("non-medication and psychological supports"), claimed at interest grade, not above it.
     careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd", "non-medication"],
-    manner: [],
-    mannerPending:
-      "2026-08-18: listed ahead of her onboarding interview; manner claims are hers to make there.",
+    // O88: her first manner claims, in her own supplied words — "values culturally sensitive,
+    // holistic and patient-centred care". Culturally sensitive care from a Hindi- and
+    // Urdu-speaking GP of Indian origin is culturally_attuned; holistic and patient-centred is
+    // attuned (the whole-person facet). Claimed because SHE said them — the day-to-day grain
+    // of how she works is still her interview's to add, but a values statement she supplied is
+    // not something this file may leave unheard. mannerPending ends here: it existed to mark
+    // an EMPTY manner as pending, not to outlive her first declarations.
+    manner: ["culturally_attuned", "attuned"],
     // The endorsed ADHD prescriber course she has completed, relayed by the founder 2026-08-19
     // — the declaration this field exists to carry. telehealthFirstAppointment stays omitted:
     // not claimed, and omission is exactly what that means.
@@ -414,7 +423,7 @@ export const clinicians: Clinician[] = [
       practitionerId: "160121",
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
-    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "hornsby", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight"],
+    keywords: ["adhd", "assessment", "mental health", "psychology", "psychiatry", "women", "woman", "female", "paediatrics", "children", "child", "family", "double bay", "eastern suburbs", "hornsby", "depression", "anxiety", "mood", "lifestyle", "nutrition", "holistic", "functional medicine", "health coaching", "preventative", "prevention", "gut health", "metabolic", "cardiovascular", "healthy ageing", "weight", "hindi", "urdu", "indian", "south asian", "culture", "cultural", "patient-centred"],
     realPerson: true,
   },
 ];

@@ -32,9 +32,13 @@ test("a separating ask ranks the declared clinician first, on screen", async ({ 
 
 test("a language ask is ranked on and explained, not just printed (O1)", async ({ page }) => {
   await searchFor(page, "an Urdu-speaking GP please, for an ADHD assessment");
-  // Only Dr Saxena declares Urdu: the order is earned, so no 'not a ranking' banner renders.
+  // O88: BOTH Saxenas declare Urdu now, so the earned order puts the speakers on top — and
+  // their internal tie is SAID (the O3 law), not dressed as a ranking. The banner this used
+  // to forbid was the roster-level one; the top-band tie note is the honesty the roster's
+  // new shape requires.
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
-  await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
+  await expect(page.getByText(/everyone we list/)).toHaveCount(0);
+  await expect(page.getByText(/read them as a group/)).toBeVisible();
   await page.screenshot(shot("02-urdu-ranked-and-earned"));
   // And the profile says the reason in the closed vocabulary.
   await page.locator(".clinician-row").first().click();

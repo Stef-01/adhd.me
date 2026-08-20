@@ -20,7 +20,12 @@ describe("W228 the staging area stays honest in both directions", () => {
     // O82: the portrait arrived from the founder on her behalf (2026-08-20) — the monogram era
     // ended the way the O34 note said it would: with the real thing supplied, never generated.
     expect(anusha.image).toBe("/clinicians/anusha-saxena.png");
-    expect(anusha.manner).toEqual([]);
-    expect(anusha.mannerPending).toContain("2026-08-18");
+    // O88: her supplied bio made her first declarations — languages ranked on (O1), and the
+    // values statement she wrote became her first manner claims. mannerPending ended with
+    // them: it marks an EMPTY manner as pending, and hers no longer is. The day-to-day grain
+    // stays her interview's to add.
+    expect(anusha.languages).toEqual(["English", "Hindi", "Urdu"]);
+    expect(anusha.manner).toEqual(["culturally_attuned", "attuned"]);
+    expect(anusha.mannerPending).toBeUndefined();
   });
 });

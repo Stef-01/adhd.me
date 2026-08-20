@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O88 (founder-relayed — Dr Anusha Saxena's official bio, coded into her declarations) —
+> claimed and DONE 2026-08-20, interactive session (not a loop firing).** The founder supplied
+> her official bio; the matching facts in it are now declarations, not prose. Languages:
+> English, Hindi, Urdu (ranked on, O1). Manner: her own values statement — "culturally
+> sensitive, holistic and patient-centred care" — became her first manner claims
+> (culturally_attuned, attuned), and mannerPending ended with them (it marks an EMPTY manner,
+> and hers no longer is; the day-to-day grain stays her interview's). The about is rewritten
+> from her supplied text merged with O58's verified detail — prescriber-course wording,
+> psychiatry and general-medicine background, functional and lifestyle medicine, Indian
+> origin, and the personal close (travel, cultures, charity and community work, cricket and
+> tennis). Focus and fitSignals updated (Hindi & Urdu is a fit signal); keywords widened.
+> The cascade, re-pinned honestly: Urdu now bands BOTH Saxenas above Dr Yadav (partial tie,
+> said on screen — the O1 e2e now asserts the tie note); Hindi ties the whole roster (the
+> whole-roster tie property is real again); W234 tie-quality re-measured 327/179/52/96 (rate
+> 62%→55% — the roster converging on answerable asks, movement explained at the pin); W228
+> graduation pin asserts the new declarations. Gate: pnpm verify green (3,328 tests),
+> matching + public-sweep e2e 15/15. Loop firings: O88 is taken — next free number is O89.
+
 > **O87 (Q1 item 1, corpus tranche six: to the ~500 target) — claimed 2026-08-20T07:46Z by
 > loop-0820l; DONE 2026-08-20. THE TARGET IS REACHED: exactly 500 entries. Gate: corpus
 > green both directions (zero misses, zero leaks, zero unpromoted aspirations), 18 floors

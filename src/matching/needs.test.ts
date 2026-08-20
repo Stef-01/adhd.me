@@ -146,10 +146,12 @@ describe("O1 languages go through the one pipeline (F2)", () => {
    * drift W221 removed (ranked for a reason not given; here, given a reason not ranked on), and
    * these tests hold the guarantee in both directions.
    */
-  it("ranks the speaker first on a language-only request, and calls the order informed", () => {
-    // Urdu separates the roster: Dr Saxena declares it, Dr Yadav does not.
+  it("ranks the speakers first on a language-only request, and calls the order informed", () => {
+    // Urdu separates the roster: both Saxenas declare it (O88), Dr Yadav does not — so the
+    // speakers rank above the non-speaker and the order is earned, with their internal tie
+    // the banding layer's to say.
     const query = "a GP who speaks Urdu";
-    expect(rankClinicians(query)[0]!.id).toBe("anubhav-saxena");
+    expect(rankClinicians(query).slice(0, 2).map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
     expect(matchQuality(query)).toBe("informed");
   });
 
@@ -175,14 +177,13 @@ describe("O1 languages go through the one pipeline (F2)", () => {
   });
 
   it("a language shared by the whole roster ties rather than separates, and says so", () => {
-    // The whole-roster case needs a roster that actually shares a language: since O34 the
-    // full roster does not (Dr Anusha Saxena has not yet declared hers), so the property is
-    // asserted on the Beecroft pair, both of whom declare Hindi. On the FULL roster the same
-    // ask now separates — which is the next test's territory, not a loophole in this one.
+    // Since O88 the whole-roster case is real again: Dr Anusha's supplied bio declared Hindi,
+    // so all three clinicians share it and a Hindi-only ask separates nobody — tied, said out
+    // loud, never dressed as an order. The Beecroft pair pins the same property on a
+    // sub-roster, so this test would survive a future roster member who does not speak Hindi.
     const beecroft = clinicians.filter((c) => c.suburb === "Beecroft");
     expect(matchQuality("a GP who speaks Hindi", beecroft)).toBe("tied");
-    // And on the full roster, Hindi is now a separator: an earned order, honestly reported.
-    expect(matchQuality("a GP who speaks Hindi")).toBe("informed");
+    expect(matchQuality("a GP who speaks Hindi")).toBe("tied");
   });
 
   it("reaches nothing on a language nobody on the roster declares", () => {

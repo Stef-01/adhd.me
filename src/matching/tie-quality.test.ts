@@ -39,8 +39,15 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  three new clause-two-ask pins joined the run, two separating); 281/175/22/84 at O81
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
- *  them was the reader's win and ordering them is now the clarifier's queue, correctly). */
-const PINNED = { total: 327, separated: 204, partialTie: 28, unseparated: 95 };
+ *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  327/179/52/96 at O88 (Dr Anusha's supplied bio declared Hindi, Urdu and her first two
+ *  manner facets: Urdu asks that separated one Saxena now band both above Dr Yadav (partial
+ *  ties, honestly said), Hindi asks that separated two-of-three now tie the whole roster,
+ *  and culturally_attuned asks tie the two declarers. The rate fell 62%→55% because a REAL
+ *  declaration made more requests genuinely answerable by more of the roster — the KPI
+ *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
+ *  exactly the asks her declarations joined). */
+const PINNED = { total: 327, separated: 179, partialTie: 52, unseparated: 96 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
