@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O86 (founder-directed 2026-08-20: Dr Anubhav Saxena's finder listing shows Beecroft &
+> Double Bay) — claimed 2026-08-20T07:08Z by loop-0820k.** The O85 machinery's second
+> user, same laws: `alsoConsultsAt: ["Double Bay"]` on his entry (founder-supplied
+> 2026-08-20, "similar in the finder view for Anubhav, add Beecroft and Double Bay" —
+> Beecroft is already his primary suburb), source cited in the entry comment, nothing
+> about the Double Bay rooms invented — no practice name, no separate booking. He is
+> telehealth-first, so the distance machinery's posture is unchanged BY DESIGN: the
+> sentence stays "by telehealth, wherever you are" and the near-sort keeps his fit
+> position (O85's nearest-location logic never applies to somebody nobody travels to) —
+> what changes is the LABEL: row and profile show "Beecroft & Double Bay". Gate: §O86
+> unit pins (label pair; telehealth sentence unchanged with a second location present;
+> near-sort exemption held), e2e row assertion with qa/location-o86 capture + DESIGN-QA
+> entry, full `pnpm verify` green.
+
 > **O85 (founder-directed 2026-08-20: Dr Anusha Saxena also consults in Hornsby — the
 > roster learns second locations) — claimed 2026-08-20T06:56Z by loop-0820j; DONE
 > 2026-08-20. Gate: §O85 unit pins green (nearest-location distance from Hornsby, Double
