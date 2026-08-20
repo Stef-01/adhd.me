@@ -375,7 +375,16 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
     stage-keyed width list and its 280ms tween are deleted (nothing changes width mid-flow
     any more, so the motion had no meaning left), and the intro stages' seamless borderless
     paper now holds end to end. Phone and 600–819px unchanged; captures in qa/desktop-o63/.
-11. **The e2e suite runs nowhere automatically — build unit, opened by O97 (2026-08-20).**
+11. **The e2e suite runs nowhere automatically — CLOSED by O98 (2026-08-20).** ci.yml now
+    has a second job, `e2e`, beside `verify`: chromium only, the config's own `webServer`
+    doing the build, the HTML report and `test-results/` uploaded on failure so a red gate
+    is diagnosable from the run that caught it. Separate job on purpose — the suite measures
+    8.8 minutes and hanging that off the fast gate would tempt somebody to trim the fast
+    gate. Two guards came with it, both about the gate being REAL rather than looking real:
+    `forbidOnly` in CI (a stray `test.only` would run one test, report green, and leave the
+    compliance sweep guarding nothing) and `trace: retain-on-failure`. The fallback in the
+    claim — a `@compliance` subset if the minutes were not there — was not needed at 8.8
+    minutes and stays unbuilt rather than speculative. Original statement of the debt:
     `pnpm verify` is typecheck · test · build · audit:gate, and `.github/workflows/ci.yml`
     runs exactly that: nothing runs `pnpm e2e`. The reason is real rather than an oversight —
     the suite drives a production build of its own (`webServer` does `next build && next

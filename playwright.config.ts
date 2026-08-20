@@ -33,6 +33,19 @@ const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 export default defineConfig({
   testDir: "e2e",
+  /**
+   * O98: a stray `test.only` makes a sweep vacuous — it would run one test, report green,
+   * and the compliance surface sweep would guard nothing while looking like it guards
+   * everything. That is the same failure the rule-name census guards against on the linter
+   * side. Locally `.only` stays useful for debugging; in CI it is an error.
+   */
+  forbidOnly: !!process.env.CI,
+  /**
+   * O98: CI also writes the HTML report, because a red compliance gate has to be
+   * diagnosable from the run that caught it. Locally the list reporter is the whole story
+   * and an auto-opening report is a nuisance.
+   */
+  reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : [["list"]],
   // The mock rail/console/audit stores are process-global singletons (synthetic
   // phase). Run e2e single-worker so one spec's reset can't clobber another's
   // state mid-run; fullyParallel:false alone only serializes within a file.
@@ -41,6 +54,9 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     launchOptions: executablePath ? { executablePath } : {},
+    // O98: a trace for failures only. Costs nothing on a green run, and turns "the sweep
+    // is red on CI" into something a person can actually open and read.
+    trace: "retain-on-failure",
     // The privacy bar (O16) renders once per browser until agreed, fixed over the bottom of
     // every page — which is exactly where several specs click. Every spec therefore runs in
     // the agreed state; e2e/consent.spec.ts clears this deliberately and is the one place the

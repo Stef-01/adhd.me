@@ -19,3 +19,48 @@ jobs:
       # W53: dependency advisories (moderate+). Accepted risks live in
       # src/security/audit-allowlist.ts and expire on their reviewBy date.
       - run: pnpm audit:gate
+
+  # O98 (standing debt 11). Until this job existed, NOTHING ran `pnpm e2e` — not
+  # `verify`, not CI — so every browser-level sweep guarded only whatever a person
+  # remembered to run. That is how O97 happened: `party-to-care.spec.ts`, which reads
+  # every rendered page for ADHD.ME holding itself out as a carer, sat red on /privacy
+  # with nobody watching. "Compliance is code" is this tree's law, and code with no gate
+  # is a comment.
+  #
+  # It is a SEPARATE job on purpose. The suite drives its own production build and takes
+  # minutes; hanging that off the fast gate would tempt somebody to trim the fast gate.
+  # Two jobs means a failure in either is visible on its own, and `verify` still answers
+  # in the time it always did.
+  e2e:
+    runs-on: ubuntu-latest
+    # The suite measures ~8 minutes locally plus its own `next build`; the ceiling is
+    # generous so a slow runner reports a real result rather than a timeout that reads
+    # like a product failure.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      # Chromium only. The suite pins one engine (playwright.config.ts launches it and
+      # falls back to a pre-provisioned binary when the pinned revision is missing), so
+      # installing firefox and webkit would buy nothing and cost minutes on every run.
+      - run: pnpm exec playwright install --with-deps chromium
+      # playwright.config.ts owns the server: it runs `next build && next start` on its
+      # own port with the env the production build fails closed without. Nothing to
+      # start here.
+      - run: pnpm e2e
+        env:
+          CI: "true"
+      # A red compliance gate has to be diagnosable from the run that caught it, or the
+      # next person's first move is to re-run it locally and hope.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

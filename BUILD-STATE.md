@@ -135,6 +135,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > on the measured time, not guessed. The suite's ~8 minutes measured in this container is
 > the number to beat. Gate: ci.yml valid (parsed, not eyeballed), the full local e2e suite
 > green so the job is not born red, `pnpm verify` green, standing debt 11 closed in the plan.
+> DONE 2026-08-20. ci.yml has a second job `e2e` beside `verify`: chromium only
+> (`--with-deps chromium` — the suite pins one engine, so firefox and webkit would cost
+> minutes and buy nothing), the config's own `webServer` doing the build, `timeout-minutes:
+> 30`, and `playwright-report/` + `test-results/` uploaded on failure. THE FALLBACK WAS NOT
+> NEEDED AND SO WAS NOT BUILT: the full suite measured **8.8 minutes for 219 tests** in CI
+> mode, well inside a free runner, so the `@compliance` subset stays unwritten rather than
+> speculative — the claim said the decision would be made on the measured time, and it was.
+> Two config guards came with it, both about the gate being REAL rather than looking real:
+> `forbidOnly` when CI is set (a stray `test.only` would run one test, report green, and
+> leave the compliance sweep guarding nothing — the same vacuous-pass failure the rule-name
+> census guards on the linter side; no `.only` is in the tree today, which is the moment to
+> add the guard rather than after one lands) and `trace: retain-on-failure`, free on green
+> runs, which turns "the sweep is red on CI" into something a person can open. THE UPLOAD
+> STEP AS FIRST DRAFTED WAS DECORATIVE and the check caught it: Playwright's default
+> reporter writes no report, so `playwright-report/` would have been an empty directory —
+> the HTML reporter is now switched on for CI, and the verifying run confirmed the file
+> exists rather than assuming it. Verified: ci.yml parsed as YAML (both jobs, every step,
+> the timeout), the full suite run with CI=true green 219/219, `pnpm verify` green.
+> Standing debt 11 closed.
 
 > **O97 (RED GATE: the party-to-care linter reads a data-breach sentence as clinical care)
 > — claimed 2026-08-20T11:55Z by loop-0820s.** Found by O96 running the whole e2e suite:
