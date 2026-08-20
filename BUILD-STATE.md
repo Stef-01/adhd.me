@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O92 (O87's second pin: "without MY script" is deprivation, not declining — the
+> determiner rule) — claimed 2026-08-20T09:05Z by loop-0820p.** "the medication shortage
+> keeps leaving me without my script" fires care:non-medication through the cue "without a
+> script": the determiner that separates LACKING a thing from DECLINING it ("my"/"the" vs
+> "a"/"any") is a stopword the content stream erases. Design (the raw-stream family):
+> for a cue whose own first token is a tight negator, map the span into the raw stream and
+> read the determiner between the negator and its noun — a possessive or definite
+> determiner marks deprivation and the cue claims nothing; indefinite or bare keeps the
+> declining read ("what can we do without medication", "not a script" untouched). Gate:
+> the O87 pin retagged reaches→never in this commit (non-medication floor moved by
+> sanctioned reclassification if the count drops), deprivation/declining pinned both
+> directions in §O92 + corpus data, every §O53/§O72/§O91 pin green, tie-quality repinned
+> if the run changes, full `pnpm verify` green.
+
 > **O91 (the O87 pin with its analysis pre-written: "without X" is going WITHOUT X, so the
 > bare-negator rule learns the word) — claimed 2026-08-20T08:44Z by loop-0820o.** "do any
 > GPs do the whole thing without a psychiatrist referral" reaches shared-care — an
