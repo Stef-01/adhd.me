@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O104 (Q1 lexicon: trauma-informed, and the half of it that is not the loop's to decide)
+> — claimed 2026-08-20T14:43Z by loop-0820s.** Next-loudest gap after O103's: nine unheard
+> phrasings, cues that hear only the NAMED-CONDITION register ("trauma", "ptsd",
+> "difficult childhood"). THIS UNIT IS DELIBERATELY PARTIAL, and the reason is the tree's own
+> precedent: Q1's first aspiration sweep (O49) left three attuned aspirations standing
+> because "their phrasings read distress rather than a want, and authoring cues for them
+> needs a founder-side judgment call". The same test applied here splits the nine cleanly.
+> FOUR ARE PLAIN WANTS about how the appointment is conducted — "please go slowly with the
+> history questions", "I need to not be pushed on the details of the history", "an
+> assessment without having to relive it", "a gentle GP who takes trauma seriously" — and
+> cueing a PACE-AND-CONSENT-OVER-HISTORY register is exactly the preference reading G7
+> requires. THE OTHER FIVE NAME WHAT HAPPENED TO THE PERSON — family violence, an abusive
+> relationship, "what happened to me before", "I dissociate when doctors rush me" — and
+> cueing those means the matcher reading a person's history, or in the dissociation case a
+> clinical term, off a sentence they typed into a finder. That is the G7 line, and a loop
+> firing should not be the thing that decides where it sits on the most sensitive facet in
+> the lexicon. Those five stay standing WITH THE REASON WRITTEN and are raised to the
+> founder as a named question, which is the O65 pattern applied to a judgement rather than
+> to a precision measurement. Gate: the four wants promoted, every candidate cue measured
+> against the real matcher for cross-gap false positives before it ships (O103's method),
+> zero `never` pins broken, floors and tie-quality moved in the closing commit, full
+> `pnpm verify` green.
+
 > **O103 (Q1 lexicon: the loudest gap on record, non-medication) — claimed
 > 2026-08-20T14:24Z by loop-0820s.** With Q1's corpus gate and all of Q2 done, and Q3's three
 > items each waiting on a roster bigger than three (founder gate G6), the live work is the
