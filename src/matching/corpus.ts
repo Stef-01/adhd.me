@@ -262,7 +262,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "assessed for autism last year, ADHD is next", reaches: ["care:autism-adhd", "care:adhd-assessment"] },
   { text: "I use alcohol to cope and I know it", reaches: ["care:substance-history"] },
   { text: "clean two years and I need that respected, not relitigated", aspires: ["care:substance-history"] },
-  { text: "vaping weed for sleep most nights", aspires: ["care:substance-history"] },
+  { text: "vaping weed for sleep most nights", reaches: ["care:substance-history"] },
   { text: "a doctor who won't panic about my drinking", reaches: ["care:substance-history"] },
 
   // ── care:emotional-regulation / care:non-medication ─────────────────────────────────────
@@ -377,8 +377,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:substance-history ───────────────────────────────────────────────────────────────
   { text: "I used to drink heavily and I am upfront about it", reaches: ["care:substance-history"] },
   { text: "there is a substance history they will see in my file", reaches: ["care:substance-history"] },
-  { text: "I am in recovery and need that respected", aspires: ["care:substance-history"] },
-  { text: "methamphetamine years ago, clean since", aspires: ["care:substance-history"] },
+  { text: "I am in recovery and need that respected", reaches: ["care:substance-history"] },
+  { text: "methamphetamine years ago, clean since", reaches: ["care:substance-history"] },
 
   // ── care:complex-mental-health ───────────────────────────────────────────────────────────
   { text: "bipolar and maybe ADHD, it is complicated", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
@@ -474,7 +474,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── mid facets: substance, non-medication, shared-care, complex ─────────────────────────
   { text: "my drinking is part of this story", reaches: ["care:substance-history"] },
-  { text: "sober two years and proud of it, keep that in mind", aspires: ["care:substance-history"] },
+  { text: "sober two years and proud of it, keep that in mind", reaches: ["care:substance-history"] },
   { text: "skills and strategies before any script", reaches: ["care:non-medication"] },
   { text: "I would rather not take medication if there is another way", aspires: ["care:non-medication"] },
   { text: "my psychiatrist suggested GP shared care", reaches: ["care:shared-care"] },
@@ -600,7 +600,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a doctor trained in trauma, not just aware of it", reaches: ["care:trauma-informed"] },
   { text: "what happened to me before makes doctors hard to trust", aspires: ["care:trauma-informed"] },
   { text: "I need my past drug use handled without the raised eyebrows", aspires: ["care:substance-history", "manner:non_judgmental"] },
-  { text: "opioids were a chapter of my life, closed now", aspires: ["care:substance-history"] },
+  { text: "opioids were a chapter of my life, closed now", reaches: ["care:substance-history"] },
   { text: "more than one diagnosis in my file and I need a GP who can hold it all", reaches: ["care:adhd-assessment"], aspires: ["care:complex-mental-health"] },
   { text: "my psych history scares GPs off and I am tired of it", reaches: ["care:complex-mental-health"] },
   { text: "sensory friendly appointments would change everything", reaches: ["care:autism-adhd"] },
@@ -757,8 +757,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
   { text: "what about diet and exercise before we go straight to stimulants", reaches: ["care:non-medication"] },
   { text: "structure and skills first, medication as a last resort", reaches: ["care:non-medication"] },
-  { text: "I am on suboxone and need a GP who can work with that", aspires: ["care:substance-history"] },
-  { text: "weekend cocaine use is part of my history and I will not lie about it", aspires: ["care:substance-history"] },
+  { text: "I am on suboxone and need a GP who can work with that", reaches: ["care:substance-history"] },
+  { text: "weekend cocaine use is part of my history and I will not lie about it", reaches: ["care:substance-history"] },
 
   // ── manner, wider ────────────────────────────────────────────────────────────────────────
   { text: "my community treats this as a western invention and I need a GP who gets that", reaches: ["manner:culturally_attuned"] },
@@ -916,7 +916,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // psychiatrist referral" retagged reaches→never when the bare-without rule landed) — a
   // correction, not a hearing lost; the O72 bulk-billing precedent, third use.
   "care:shared-care": 19,
-  "care:substance-history": 9,
+  // O107 raised 9→16: the substances the list never learned, plus the recovery register.
+  // The two still unheard are the ones whose cues were refused on measurement ("clean" fires
+  // on a clean bill of health; "drug use" on "the drug I use works well") — see needs.ts.
+  "care:substance-history": 16,
   // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
   // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
   "care:titration": 24,

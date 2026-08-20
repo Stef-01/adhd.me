@@ -137,7 +137,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > false positives before it ships (O103's method, now standard); "clean" will almost certainly
 > be refused on measurement and that refusal gets written down. Gate: zero `never` pins
 > broken, promotions retagged in-commit, floors and tie-quality moved, full `pnpm verify`
-> green.
+> green. DONE 2026-08-20. SEVEN of the nine promoted, floor 9→16,
+> tie-quality 342/190/52/100 → 349/197/52/100 — and ALL SEVEN newly heard requests SEPARATE,
+> the second time today a facet's reach and its usefulness moved together (the roster
+> genuinely disagrees about substance history, so hearing the ask orders the list).
+> Separation 55.6%→56.4%.
+>
+> The two registers: the substances the list never learned — methamphetamine, opioids,
+> cocaine, suboxone, heroin, vaping weed — and RECOVERY, where the finder had heard nothing
+> at all despite it being how people raise this most carefully.
+>
+> "IN RECOVERY" IS AUTHORED AS A PAIR AND THAT IS THE UNIT'S ONE PIECE OF CRAFT. Bare
+> "recovery" is the obvious cue and fires on "recovery time after surgery". Authored as two
+> words it collapses to a single token, which puts it under O45's rule DEMANDING the authored
+> pair in the raw stream — so the precision the bare word could not give comes from a
+> mechanism already in the tree rather than from a new one. O25's frozen collapse list
+> refused it until it was registered with that reasoning, which is the ratchet doing exactly
+> its job: the list can shrink but never grow silently, and it made me write down why.
+>
+> Four cues refused on measurement and pinned as the sentences that refused them: "clean"
+> fires on "a clean bill of health", "recovery" on "recovery time after surgery", "drug use"
+> on "the drug I use works well", and "ice" — the Australian street term, the tempting one —
+> on "ice packs for the headaches". A facet whose whole job is meeting somebody without raised
+> eyebrows is the last place to accept a cue that reads a bill of health as a drug history.
+> The two aspirations those cues would have served stay standing. Gate met: zero `never` pins
+> broken, promotions retagged in-commit, floors and tie-quality moved, `pnpm verify` green.
 
 > **O106 (the span-swallow O104 pinned: a cue claims words it never matched) — claimed
 > 2026-08-20T15:25Z by loop-0820s.** "a gentle GP who takes trauma seriously" does not reach

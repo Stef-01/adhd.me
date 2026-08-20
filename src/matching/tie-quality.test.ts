@@ -40,6 +40,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  349/197/52/100 at O107 (substance-history's two deaf registers: seven sentences joined
+ *  the run and ALL SEVEN separate — the roster disagrees about substance history, so
+ *  hearing the ask orders the list, which is the second time in a day the KPI has shown
+ *  a facet's reach and its usefulness moving together. Separation 55.6%→56.4%);
  *  342/190/52/100 at O105 (the comma-scoped negation: two sentences whose stated want the
  *  reader had been having DELETED rejoin the run, one of them separating. The smallest
  *  movement of the day and the one that fixed the worst defect — the KPI counts heard
@@ -69,7 +73,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 342, separated: 190, partialTie: 52, unseparated: 100 };
+const PINNED = { total: 349, separated: 197, partialTie: 52, unseparated: 100 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

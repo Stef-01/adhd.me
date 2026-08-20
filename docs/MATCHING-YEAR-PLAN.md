@@ -158,6 +158,22 @@ non-rankings.
    the product's most expensive one to be wrong about. FOUNDER: a yes/no, and if yes, whether
    the cues must require the care clause.
 
+1c. **The aspiration queue, worked 2026-08-20 (O103, O104, O107) with two mechanism fixes it
+   surfaced (O105, O106).** Three of the four loudest facets closed: non-medication 9→17
+   (SEQUENCE and ALTERNATIVE registers), substance-history 9→16 (the substances the list never
+   learned, plus RECOVERY), trauma-informed 9→13 (PACE-AND-CONSENT only — the rest is the
+   founder question at 1b). Eighteen aspirations promoted; tie-quality 331/181/52/98 →
+   349/197/52/100, separation 54.7%→56.4%, with every promoted request in the non-medication
+   and substance sweeps landing SEPARATED. Method, now standard and worth keeping: every
+   candidate cue is run against the real matcher on a sentence that means something else
+   BEFORE it ships, and the refusals are pinned as those sentences — eight cues were refused
+   this way ("non drug" on "a non stimulant drug", "clean" on "a clean bill of health", "ice"
+   on "ice packs", "drug use" on "the drug I use works well", and four more), most of which
+   would have labelled an ask as its opposite. The sweep also separated, for the first time,
+   aspirations that are VOCABULARY gaps from ones BLOCKED by a mechanism: 9 blocked at the
+   start of the day, 6 now, and all six remaining are collapse-rule refusals working as O45
+   designed them.
+
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
 3. **Morphology upgrade. DONE — O50, 2026-08-19.** The `INFLECTIONS` table in read.ts,

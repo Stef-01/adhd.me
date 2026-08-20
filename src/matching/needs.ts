@@ -218,6 +218,30 @@ const LEXICON: readonly Entry[] = [
     "drink", "drinking", "alcohol", "cannabis", "substance", "non-stimulant",
     // O49: the word people actually use. Two content tokens, so a garden stays a garden.
     "smoke weed",
+    /* O107, first register: THE SUBSTANCES THE LIST NEVER LEARNED. The lexicon knew the two
+       legal ones and none of the rest, which reads as a list written quickly rather than one
+       that made a judgement. Each is a single unambiguous word — no collapse rule applies to
+       a one-WORD cue — and naming a substance is the established reading for this facet, not
+       a new one: the header of this module uses it as the worked example of G7's preference
+       reading ("I drink more than I should" is a request about how a conversation is held,
+       not a finding about the person). */
+    "methamphetamine", "opioids", "cocaine", "suboxone", "heroin", "vaping weed",
+    /* O107, second register: RECOVERY — how people raise this most carefully, and where the
+       finder heard nothing at all. Somebody who volunteers "I am in recovery" is asking to be
+       met a particular way, which is the whole facet.
+
+       "in recovery" is deliberately TWO WORDS that collapse to one token, which makes the O45
+       rule demand the authored pair in the raw stream. That is precisely what makes it safe:
+       bare "recovery" fires on "recovery time after surgery", and the pair does not. */
+    "in recovery", "sober",
+    /* FOUR REFUSED ON MEASUREMENT (O103's method, now standard):
+         "clean"     fires on "a clean bill of health"
+         "recovery"  fires on "recovery time after surgery" — hence the pair above
+         "drug use"  fires on "the drug I use works well"
+         "ice"       fires on "ice packs for the headaches" — the Australian street term is
+                     the tempting one and the least safe of all
+       Their sentences stay aspirations. A facet about meeting somebody without raised
+       eyebrows is the last place to accept a cue that fires on a bill of health. */
   ]),
   care("emotional-regulation", "Emotional regulation", 24, [
     "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",

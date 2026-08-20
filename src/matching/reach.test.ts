@@ -307,6 +307,10 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
     "an excuse", "at ease", "been heard", "believe me", "by phone", "diagnose me", "figure out",
     "get a word in", "get checked", "honest about", "hurry me",
+    // O107: reviewed and DELIBERATE. Bare "recovery" fires on "recovery time after surgery",
+    // so the cue is authored as the pair — the collapse rule then demands "in recovery" in
+    // the raw stream, which is exactly the precision the bare word could not give.
+    "in recovery",
     // O94: O25's removed phrase, home under the raw-RUN demand (RUN_DEMANDED in needs.ts)
     // — reviewed as run-only, so the [room] collapse can never fire on a bare pair again.
     "in the room with me",
@@ -918,5 +922,56 @@ describe("§O106 a cue claims the words it matched, not the words it straddled",
     expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
     expect(facets("help me make sense of thirty years, if that makes sense")).toContain("manner:sense_making");
     expect(facets("this is for my teenager")).toContain("care:child-adolescent-adhd");
+  });
+});
+
+describe("§O107 substance-history hears the substances and the recovery register", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("knows more than the two legal substances", () => {
+    for (const said of [
+      "methamphetamine years ago, clean since",
+      "opioids were a chapter of my life, closed now",
+      "weekend cocaine use is part of my history and I will not lie about it",
+      "I am on suboxone and need a GP who can work with that",
+      "vaping weed for sleep most nights",
+    ]) expect(facets(said)).toContain("care:substance-history");
+  });
+
+  it("hears the recovery register, which is how people raise this most carefully", () => {
+    expect(facets("I am in recovery and need that respected")).toContain("care:substance-history");
+    expect(facets("sober two years and proud of it, keep that in mind")).toContain("care:substance-history");
+  });
+
+  /**
+   * "in recovery" IS THE PAIR, AND THAT IS THE WHOLE POINT.
+   *
+   * It is authored as two words that collapse to one token, so O45's rule demands the authored
+   * pair in the raw stream. Bare "recovery" would have been simpler and fires on "recovery
+   * time after surgery". Registered in O25's frozen collapse list with the same reasoning.
+   */
+  it("the collapsed pair refuses the sentence the bare word would have taken", () => {
+    expect(facets("recovery time after surgery")).not.toContain("care:substance-history");
+    expect(facets("I am in recovery and need that respected")).toContain("care:substance-history");
+  });
+
+  /** The refusals, pinned as the sentences that refused them (O103's method). */
+  it("refuses the cues that fire on innocent sentences", () => {
+    // "clean" would fire here — and the facet whose job is to meet somebody without raised
+    // eyebrows is the last place to accept a cue that reads a bill of health as a drug history.
+    expect(facets("a clean bill of health")).not.toContain("care:substance-history");
+    // "drug use" would fire here.
+    expect(facets("the drug I use works well")).not.toContain("care:substance-history");
+    // "ice" — the Australian street term, the tempting one, the least safe of all.
+    expect(facets("ice packs for the headaches")).not.toContain("care:substance-history");
+  });
+
+  it("G7 holds: this is a request about how a conversation is held, not a finding", () => {
+    // The module header's own worked example. The label a surface may print says "held
+    // safely" — a description of care — and never names a condition of the reader.
+    const heard = readNeeds("I drink more than I should and want that handled without judgement");
+    expect(heard.map((n) => facetKey(n.facet))).toContain("care:substance-history");
+    expect(heard.find((n) => facetKey(n.facet) === "care:substance-history")!.label)
+      .toBe("Substance history held safely");
   });
 });
