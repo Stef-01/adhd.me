@@ -137,7 +137,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > unit and not a line in O96. Gate: `scripts/css-computed-dump.mjs` diffed before/after and
 > the change CONFINED to elements carrying `.match-quality` — a diff anywhere else means the
 > merge took something with it; qa/ capture and a DESIGN-QA entry per the taste law; a11y
-> and finder e2e green; full `pnpm verify` green.
+> and finder e2e green; full `pnpm verify` green. DONE 2026-08-20, and the gate caught a
+> hole in the PROOF before it could pass the unit. First run of the dump reported a
+> ZERO-line diff — not because nothing moved, but because nothing on screen carried the
+> class: the harness walked only the demo scenario, which ranks informed, and the entire
+> honesty layer (match-quality, the tie note, the clarifier chips, the unserved-ask line)
+> renders ONLY when the order is not earned. O96's proof had been silently blind to the
+> conditional half of the results screen, which is the same guard-that-looks-like-a-guard
+> failure O98 fixed in CI and O97 fixed in the linter — three in one day, from three
+> directions. `scripts/css-computed-dump.mjs` now walks a second state, "I think I might
+> have ADHD" (the year plan's own example of the commonest request the lexicon cannot
+> separate), and WAITS for `.match-quality` before dumping, so the blindness cannot return
+> quietly. With the hole closed the diff is exactly the gate's shape: the banner element
+> plus the ancestors whose height its taller text drives, on that one screen, and nothing
+> else anywhere. Measured 13px/19.5 → 15px/22.5. The merged rule lives in region 2 beside
+> its only consumer and keeps the misfiled rule's 46ch measure and line-height, which were
+> its good part; a note stands where the duplicate was, so the next person searching that
+> region finds out where it went. Gate met: qa/honesty-o99/ at both viewports,
+> docs/DESIGN-QA.md entry, full `pnpm verify` green, finder and a11y e2e green.
 
 > **O98 (standing debt 11: the compliance sweeps get a gate that actually runs) — claimed
 > 2026-08-20T12:20Z by loop-0820s.** O97's close named this and it is the unit that stops

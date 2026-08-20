@@ -149,6 +149,27 @@ async function finderStages(page, dump, label) {
   await page.locator(".booking-screen").waitFor({ state: "visible", timeout: 5000 });
   await page.waitForTimeout(800);
   await dump(`${label}\t/finder#booking`);
+
+  /**
+   * A SECOND results state, because the first one cannot see half the screen.
+   *
+   * The demo scenario ranks informed, and the results screen's honesty furniture — the
+   * match-quality banner, the top-tie note, the clarifier chips, the unserved-ask line —
+   * renders ONLY when the order is not earned. O99 discovered this the hard way: a change
+   * to `.match-quality` produced a zero-line diff, not because nothing moved but because
+   * nothing on screen carried the class. A proof that silently skips the conditional half
+   * of a screen is the kind of guard that looks like a guard.
+   *
+   * "I think I might have ADHD" is the year plan's own example of the likeliest thing
+   * anybody types and one the lexicon cannot separate, so it lands on exactly that state.
+   */
+  await page.goto(`${BASE}/finder`, { waitUntil: "networkidle" });
+  await page.locator("#welcome-request").fill("I think I might have ADHD");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.locator(".clinician-list").waitFor({ state: "visible", timeout: 5000 });
+  await page.locator(".match-quality").first().waitFor({ state: "visible", timeout: 5000 });
+  await page.waitForTimeout(800);
+  await dump(`${label}\t/finder#results-unranked`);
 }
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });

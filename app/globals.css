@@ -833,12 +833,24 @@ textarea:focus-visible {
    "this is not a ranking". They were 12px faint grey: AA-compliant and functionally invisible
    to the low-vision reader the finder most needs to be honest with (O14).
 
-   O96 AUDIT FINDING: this rule does NOT win. Region 15 declares `.match-quality`
-   again at the same specificity, later in the file, and the finder's banner
-   actually renders at that rule's 0.8125rem. Search "AUDIT FINDING, RECORDED NOT
-   FIXED" there for the full note; do not adjust this size expecting it to move
-   the screen until the two rules are untangled. */
-.match-quality { font-size: 0.9375rem; color: var(--muted); }
+   O99: FOR THREE MONTHS THAT FIX DID NOT RENDER. A second unqualified `.match-quality`
+   arrived on 2026-08-15 in the matcher-appraisal commit, ~4,900 lines further down; O14
+   raised the size here afterwards, the later rule won on equal specificity, and the
+   sentence kept rendering at 13px. Nothing in either diff showed it — O96's sectioning
+   pass found the collision by reading, and dated it here. The two rules are now one, in
+   the region where the only consumer lives (three elements in app/finder-stages/
+   results-stage.tsx, and nothing else in the tree uses the class): O14's size, plus the
+   measure and rhythm the misfiled rule contributed, which were the good part of it.
+
+   The lesson is filed in this file's map: an unqualified class in a stylesheet this size
+   is a global, and a second one is not a conflict anybody sees. */
+.match-quality {
+  margin-top: 8px;
+  max-width: 46ch;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
 
 /* The computed distance, on its own line so it does not join the metadata dot chain. */
 .clinician-distance { display: block; margin-top: 3px; color: var(--faint); }
@@ -5756,20 +5768,13 @@ textarea:focus-visible {
    it shares with a section above it. */
 .approach-page .seq { border-top: 0; }
 
-/* One quiet line under the results count, shown only when the order is not earned or the listing
-   cannot serve what was asked. It is a correction to what the list appears to claim, so it sits
-   with the count rather than as a banner: a banner would be louder than the finding.
-
-   O96 AUDIT FINDING, RECORDED NOT FIXED: this is the SECOND unqualified
-   `.match-quality` rule in the file — the finder declares its own near the top of
-   region 2, and because both are 0,1,0 this one, being later, wins everywhere.
-   The finder's banner therefore renders at THIS rule's 0.8125rem, not at the
-   0.9375rem written beside it, and picks up this rule's max-width and
-   line-height too. It may well be the better size; the point is that nobody
-   chose it. Deciding which surface owns the class (and scoping the other) changes
-   computed output, so it is a unit of its own rather than a line in a refactor
-   that promised to change nothing. */
-.match-quality { margin-top: 8px; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; max-width: 46ch; }
+/* O99 removed a second unqualified `.match-quality` rule that stood here. It was written for
+   the finder — the class has no other consumer in the tree — but being ~4,900 lines below the
+   finder's own rule it silently won on equal specificity and held the honesty banner at 13px
+   after O14 had raised it to 15px for low-vision readers. Its useful parts (the 46ch measure,
+   the line-height) moved up to the single rule in region 2; nothing was lost but the
+   duplication. Left as a note rather than a silent deletion so the next person searching this
+   region for `.match-quality` finds out where it went. */
 
 /* ── Join us: the clinician door ────────────────────────────────────────────
    Sits on the accent-soft wash so it reads as addressed to somebody else — a

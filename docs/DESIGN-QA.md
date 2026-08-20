@@ -616,3 +616,31 @@ per element, and diffs before against after.
 - [x] Comment repairs (provably invisible): a note describing a portrait rule that no
   longer exists was dropped, and two paragraphs about the founders' affiliations were moved
   from the coverage-map block down to the rules they actually describe.
+
+## O99 — the honesty banner finally renders at the size O14 chose (2026-08-20)
+
+Captures: qa/honesty-o99/ (the unranked results head at 390 and 1280, with the "not a
+ranking" sentence at its intended size).
+
+- [x] The finding, dated: a second unqualified `.match-quality` rule landed 2026-08-15 in
+  the matcher-appraisal commit, ~4,900 lines below the finder's own. O14 raised the
+  finder's rule to 0.9375rem AFTERWARDS, with the reason written beside it — the sentence
+  was "12px faint grey: AA-compliant and functionally invisible to the low-vision reader
+  the finder most needs to be honest with". The later rule won on equal specificity, so
+  the raise never rendered: the banner has been 13px ever since. Measured, not assumed —
+  before 13px/19.5px line-height, after 15px/22.5px.
+- [x] Merged into one rule in the region where the only consumer lives (three elements in
+  results-stage.tsx; nothing else in the tree uses the class). The misfiled rule's good
+  parts — the 46ch measure and the line-height — came up with it, so the fix keeps the
+  reading measure and gains the size.
+- [x] Proof, and a hole found in the proof: the computed-style dump reported a ZERO-line
+  diff at first. Not because nothing moved — because nothing on screen carried the class.
+  The harness walked only the demo scenario, which ranks informed, and the entire honesty
+  layer (match-quality, tie note, clarifier chips, unserved-ask line) renders only when the
+  order is NOT earned. `scripts/css-computed-dump.mjs` now walks a second results state
+  ("I think I might have ADHD", the year plan's own example of the commonest untypeable
+  request) and asserts the banner is present before dumping. A proof that skips the
+  conditional half of a screen is the kind of guard that looks like a guard.
+- [x] With the hole closed, the diff is exactly what it should be: the `.match-quality`
+  element and the ancestors whose height its taller text drives, on that one screen. No
+  other route, no other surface, no other element.
