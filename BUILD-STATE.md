@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O127 (the motion queue, closed honestly: one shipped and measured, one refused) — claimed
+> 2026-08-20T22:18Z by loop-0820s.** The UI & motion lane queued four innovations "hardest
+> constraint first". Two shipped (O67's shared-layout portrait, O52's re-sorting list) and two
+> have sat unmarked, so the lane reads as having a backlog it may not have.
+> **Item three — scroll-linked reveal on the story landing, kept within one viewport of intent
+> — looks already built**, and this unit's job is to MEASURE that rather than assume it: the
+> `Reveal` wrapper and the founders' stagger both gate at the hook (`initial={reduce ? false :
+> …}`, the taste law's requirement that reduced motion be checked at the hook and not only in
+> CSS), and both carry viewport thresholds that should fire near the read line. The guardrail
+> is a NUMBER — "within one viewport of intent" — so it gets measured at both viewports and
+> marked shipped or fixed, not marked shipped because the code looks right.
+> **Item four — the match evidence weights drawing in as the score line settles — I expect to
+> REFUSE, and the claim says so up front so the refusal is not a convenience.** Patients never
+> see a score (W213 and the whole no-ranking posture), so the only surface with a score line is
+> the staff console, where the numbers are server-rendered and already known. A count-up there
+> animates a value that is not resolving — it is decoration wearing the costume of the lane's
+> "a value resolving" case, which is exactly the thing the founder's directive excludes. If the
+> measurement changes my mind, it ships; if not, the reason is written where the item is.
+> Verification is deliberately heavier than the diff: **the FULL e2e suite**, which has not been
+> run end to end since O98 while thirty-two units changed the tree underneath it. Gate: reveal
+> timing measured at 390 and 1280, the lane's queue left with no unmarked item, full e2e green,
+> full `pnpm verify` green.
+
 > **O126 (explaining the fit, Q4: the doctor sees the provenance the patient sees) — claimed
 > 2026-08-20T22:10Z by loop-0820s.** The lane's last increment, and the only one left that is
 > not roster-blocked: Q1 (O51, per-clinician missed asks), Q2 (O66, the reorder question) and
