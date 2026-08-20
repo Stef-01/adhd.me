@@ -130,7 +130,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (no page.tsx, not routable), the orchestrator keeps the state machine, the speech
 > session and refs stay in the orchestrator (the O69 carried-stream lifecycle must not
 > split across files), props passed plainly. Gate: all five e2e suites green unchanged,
-> full `pnpm verify` green, the audit finding recorded in the ledger close.
+> full `pnpm verify` green, the audit finding recorded in the ledger close. DONE
+> 2026-08-20: shipped exactly as claimed — app/finder-stages/ holds shared.tsx (Stage,
+> the variants, MotionScreen, Pressable, getRequestHeadline, Wordmark, FinderContext,
+> WaveformMark, distinguishingSignals, ClinicianPortrait, NswTraining, FounderDisclosure)
+> plus one file per stage; the orchestrator is 455 lines and keeps every piece of state,
+> every memo, the speech session/refs and the O69 lifecycle; every RCA comment moved
+> verbatim. THE AUDIT FOUND ITS DEFECT, as the lane predicts: the scenarios auto-cycle
+> interval ran four sibling setState calls INSIDE the setArchetypeIndex updater —
+> updaters must be pure (StrictMode replays them; React may call them twice), so under
+> StrictMode every auto-advance re-ranked the roster twice per tick. Fixed in-unit: the
+> interval now only advances the index, and a separate auto-only effect derives
+> request/matches/matchIndex/direction from wherever the index lands (manual cycling
+> sets autoCycle false first and carries its own direction, so the effect never fights
+> it; rendered output identical on every path). Gate met: finder-flow, voice, booking,
+> mobile-fit, a11y run UNCHANGED — 41 passed, zero edits to any spec; full `pnpm verify`
+> green (212 files, build and audit gate clean). Year plan refactor queue item 1 done.
 
 > **O94 (the raw-RUN demand earns its way in — O84's refused mechanism, now with two
 > cases, applied to both) — claimed 2026-08-20T09:45Z by loop-0820r.** O84 refused a

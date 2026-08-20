@@ -1,0 +1,88 @@
+"use client";
+
+// O95: the welcome screen, verbatim from care-finder.tsx. State and handlers live in the
+// orchestrator; this renders them.
+
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
+import { motion } from "motion/react";
+import { FinderContext, introItem, introStagger, MotionScreen, Pressable, Wordmark } from "./shared";
+
+export function WelcomeStage({
+  draft,
+  setDraft,
+  reducedMotion,
+  onSearch,
+  onTalk,
+  onScenarios,
+}: {
+  draft: string;
+  setDraft: (value: string) => void;
+  reducedMotion: boolean | null;
+  onSearch: (value: string) => void;
+  onTalk: () => void;
+  onScenarios: () => void;
+}) {
+  return (
+    <MotionScreen key="welcome" className="voice-screen">
+      <header className="minimal-header">
+        <Wordmark />
+        <Link href="/" className="quiet-link finder-home-link">
+          <ArrowLeft size={15} weight="regular" aria-hidden="true" /> Home
+        </Link>
+      </header>
+
+      <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
+        <motion.div className="voice-prompt" variants={reducedMotion ? undefined : introItem}>
+          <h1>
+            <span>ADHD assessment</span>
+            <em>that takes you seriously.</em>
+          </h1>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="voice-actions"
+        initial={reducedMotion ? undefined : { opacity: 0, y: 14 }}
+        animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={{ delay: 0.24, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* ONE field, ONE dual-functional control. Empty → a microphone that talks; the
+            moment there is text → a send arrow that searches. Both routes converge on the
+            same voice/findMatches() path, so speaking and writing rank clinicians identically. */}
+        <div className="dual-input">
+          <label className="sr-only" htmlFor="welcome-request">
+            Describe the GP you are looking for, or use the microphone to talk
+          </label>
+          <input
+            id="welcome-request"
+            type="text"
+            className="dual-input-field"
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => { if (event.key === "Enter" && draft.trim()) onSearch(draft); }}
+            placeholder="Describe the GP you're looking for…"
+          />
+          <Pressable
+            className={draft.trim() ? "dual-input-action is-send" : "dual-input-action is-talk"}
+            type="button"
+            onClick={() => (draft.trim() ? onSearch(draft) : onTalk())}
+            aria-label={draft.trim() ? "Find a GP" : "Talk instead of typing"}
+          >
+            {draft.trim()
+              ? <ArrowRight size={21} weight="bold" aria-hidden="true" />
+              : <Microphone size={21} weight="fill" aria-hidden="true" />}
+          </Pressable>
+        </div>
+
+        <button className="scenario-toggle" type="button" onClick={onScenarios}>
+          Try a demo scenario
+          <CaretRight size={14} weight="bold" aria-hidden="true" />
+        </button>
+      </motion.div>
+
+      <FinderContext />
+
+    </MotionScreen>
+  );
+}

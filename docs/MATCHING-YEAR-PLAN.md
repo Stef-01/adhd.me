@@ -288,7 +288,9 @@ The queue, largest seam first:
 
 1. **app/care-finder.tsx** (~1,200 lines): one component holds seven stages. Split by stage
    into co-located components with the shared state lifted plainly; the e2e suites define
-   identical.
+   identical. — DONE (O95): app/finder-stages/, 455-line orchestrator, five e2e suites run
+   unchanged; the audit found the auto-cycle interval running side effects inside a state
+   updater and moved them to an effect.
 2. **app/globals.css** (~6,000 lines): section the file by surface with the banner convention
    the finder sections already use; no selector changes (byte-identical computed styles at
    the default root, the O60 proof pattern).
