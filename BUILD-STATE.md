@@ -138,6 +138,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > a review that finds nothing must say so and show the captures that justify the claim, since
 > "looked fine" is what a review says when it did not happen. Gate: captures in qa/, a
 > DESIGN-QA entry recording findings and refusals, e2e green, full `pnpm verify` green.
+> DONE 2026-08-20. Six stages captured at both viewports from ONE continuous journey, and the
+> walk earned itself immediately: **the finder was claiming a full fit directly above a gap it
+> had just admitted.** "These 3 GPs do what you asked for." rendered immediately over "Bulk
+> billing is not something any GP listed today declares" — two adjacent sentences flatly
+> contradicting each other, at both viewports, the louder one false. Same shape as O111's
+> banner, one line further down the same screen, arriving from a different direction.
+>
+> THE DEFECT EXISTED BECAUSE OF HOW THE DAY'S UNITS WERE CHECKED, which is the finding behind
+> the finding. O110 made the gap line cover preferences; O111 fixed the banner above it; both
+> were captured against a query chosen to show the thing being fixed. Neither capture contained
+> a query where the completeness claim and the gap line are both true at once, so neither could
+> see the collision. Every screen was correct; the sequence was not. That is precisely what a
+> per-surface review cannot find and a flow walk can, and it is the argument for the lane's
+> cadence being a WALK rather than a screenshot.
+>
+> Fixed with the inverse of the rule the same block already followed: when the claim is not
+> earned, the line that explains why owns the space. Pinned in e2e both directions — and the
+> non-vacuity half needed care, because my first attempt used "adult ADHD assessment", which is
+> a TIE and renders no claim either, so it would have passed for the wrong reason.
+>
+> ONE FINDING REFUSED IN WRITING. The sticky booking bar bisects whatever sits at the fold — in
+> this walk, the "Compare with Dr Yadav" control, sliced horizontally. O115 raised it and
+> measured it; it is what a bottom-sticky bar does, the bar carries an opaque ground and a top
+> hairline so the cut reads as "more below" rather than breakage, and padding CANNOT fix it
+> (padding clears the end of the document, not the band the bar holds mid-scroll). The honest
+> options are removing the sticky bar or accepting the convention, which is a product decision
+> about how hard to push booking rather than a CSS fix. Recorded rather than quietly tolerated,
+> because a review that only lists what it fixed is not a review.
 
 > **O120 (the subject-blind false positive that actually harms somebody) — claimed
 > 2026-08-20T20:20Z by loop-0820s.** O119 named a class with five instances and earned the

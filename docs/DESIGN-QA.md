@@ -827,3 +827,45 @@ acronym case is live).
 - [x] The sentence moved into the matching module beside `unservedCopy`, and both surfaces now
   call it instead of composing their own. The console panel having reproduced the bug by copying
   the wording is the argument for that in one line.
+
+## O121 — the finder walked end to end, after a day that changed most of it (2026-08-20)
+
+Captures: qa/flow-o121/ — six stages at 390 and 1280, from ONE continuous journey on one query
+rather than a query per screen. That distinction is the unit: today changed the flow in eight
+places and each was captured alone against a query chosen to show it, which is exactly the
+condition under which every screen is correct and the sequence is not.
+
+### Found and fixed
+
+- [x] **The finder claimed a full fit directly above a gap it had just admitted.** "These 3 GPs
+  do what you asked for." rendered immediately over "Bulk billing is not something any GP listed
+  today declares. That is a gap in our listing, not in what you asked for." Two adjacent
+  sentences flatly contradicting each other, at both viewports, and the louder one false — the
+  same shape O111 fixed on the banner one line up, arriving from a different direction. The
+  completeness claim now stands down when `unserved` is non-empty, which is the inverse of the
+  rule this block already followed ("when the order is not earned the quality banner owns the
+  whole explanation"). The reader loses nothing: everyone is shown anyway, which is what made
+  the bare count redundant in O46. Pinned in e2e both ways — the claim must not appear beside a
+  gap, and must still appear when the fit really is complete. The non-vacuity half needed a
+  query the roster SEPARATES on: "adult ADHD assessment" alone is a tie, which renders no claim
+  either, and would have passed for the wrong reason.
+
+### Found and deliberately not fixed
+
+- [ ] **The sticky booking bar bisects whatever sits at the fold** — in this walk, the "Compare
+  with Dr Yadav" control, sliced horizontally at the bar's top edge. Raised in O115 as a fold
+  question and measured then: the bar occludes real content at every content length. It is what
+  a bottom-sticky action bar does, the bar carries an opaque ground and a top hairline so the
+  cut reads as "there is more below" rather than as breakage, and the content is one scroll
+  away. Reserving space cannot fix it — padding only clears the END of the document, not the
+  band the bar holds mid-scroll. The honest options are removing the sticky bar or accepting the
+  convention, and that is a product decision about how hard to push booking, not a CSS fix.
+  Recorded here rather than quietly tolerated.
+
+### Walked and clean
+
+- [x] Welcome, scenarios, results, profile, compare and booking at both viewports. Compare
+  (O102) holds its column alignment with real data, including a name that wraps to two lines
+  while the other does not. The profile's evidence list reads one reason per row (O115). The
+  banner and gap line agree (O111). No raw hex, no missing focus states, no claim rendering
+  unearned other than the one fixed above.

@@ -119,8 +119,20 @@ export function ResultsStage({
               whole explanation — and when everyone is shown anyway, the bare count ("3 of
               3.") said nothing at all and is dropped (O46). */}
           {(() => {
+            /* O121: THE COMPLETENESS CLAIM STANDS DOWN WHEN PART OF THE ASK IS SERVED BY
+               NOBODY. Walking the whole flow found "These 3 GPs do what you asked for."
+               rendering directly above "Bulk billing is not something any GP listed today
+               declares" — two adjacent sentences flatly contradicting each other, and the
+               louder one false. It is the same shape O111 fixed on the banner: a claim
+               rendering that was not fully earned, beside the line that disproves it.
+               `unserved` is exactly the test — it is non-empty only when something the reader
+               asked for is declared by nobody — and the rule is the inverse of the one this
+               block already follows: when the claim is not earned, the line that explains why
+               owns the space. The reader loses nothing, because everyone is shown anyway and
+               the count said so redundantly (O46's finding about the bare count). */
+            const claimsFullFit = quality === "informed" && unserved.length === 0;
             const countLine = place.trim() === ""
-              ? quality === "informed"
+              ? claimsFullFit
                 ? shown.length === 1
                   ? "This GP does what you asked for."
                   : `These ${shown.length} GPs do what you asked for.`
@@ -129,7 +141,7 @@ export function ResultsStage({
                   : `Showing ${shown.length} of ${matches.length}.`
               : origin
                 ? `Nearest to ${origin.suburb} first.`
-                : quality === "informed"
+                : claimsFullFit
                   ? "We do not cover that one yet, so these are ordered on what you asked for."
                   : "We do not cover that one yet.";
             return countLine ? <p className="place-status" role="status">{countLine}</p> : null;

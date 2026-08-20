@@ -311,3 +311,44 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   }
   expect(reordered, "no clarifier answer reordered a tied roster").toBe(true);
 });
+
+/**
+ * O121: the completeness claim and the listing-gap line cannot both be on screen.
+ *
+ * Found by walking the whole flow rather than one screen: "These 3 GPs do what you asked for."
+ * rendered directly above "Bulk billing is not something any GP listed today declares" — two
+ * adjacent sentences contradicting each other, and the louder one false. Each screen had been
+ * captured against its own query, which is the condition under which a flow accumulates a
+ * defect no single-surface review can see.
+ */
+test("the finder never claims a full fit beside a gap it just admitted (O121)", async ({ page }) => {
+  await page.goto("/finder");
+  await page.locator("#welcome-request").fill(
+    "a woman GP who does adult ADHD assessment, bulk billing, and I need a longer first appointment",
+  );
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  const head = await page.locator(".results-head").innerText();
+  // The gap is admitted...
+  expect(head).toContain("not something any GP listed today declares");
+  // ...so the completeness claim must not be beside it.
+  expect(head).not.toContain("do what you asked for");
+  expect(head).not.toContain("does what you asked for");
+});
+
+test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {
+  await page.goto("/finder");
+  // Deliberately a query the roster SEPARATES on and serves completely: "adult ADHD
+  // assessment" alone is a tie (all three declare it), and a tie renders no claim either — so
+  // it would have passed this test for the wrong reason.
+  await page.locator("#welcome-request").fill("ADHD assessment and titration");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  const head = await page.locator(".results-head").innerText();
+  // Nothing unserved here, so the claim is earned and must still render — otherwise the fix
+  // above would have been a deletion rather than a condition.
+  expect(head).not.toContain("not something any GP listed today declares");
+  expect(head).toMatch(/do(es)? what you asked for/);
+});
