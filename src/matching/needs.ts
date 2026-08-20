@@ -237,6 +237,15 @@ const LEXICON: readonly Entry[] = [
     "nothing shifted", "nothing helped", "nothing worked",
   ]),
   care("anxiety", "Anxiety", 24, [
+    /* O124: the clinic-anxiety phrasings, cued WITHOUT re-adding the word O119 removed.
+       That unit deleted bare "panic" because it fired on "a doctor who won't panic about my
+       drinking" — a figurative line about the DOCTOR, not a person asking for help with
+       anxiety. Both cues here carry a second content token, so neither can reach that
+       sentence: "white coat" is [white, coat] and means one thing in a clinic, and "panic in
+       the waiting" is [panic, wait] — order-sensitive, which is a bonus rather than the
+       point: "I had to wait and then panic set in about the cost" has the tokens the other
+       way round and stays silent. Measured against O119's exact false positive first. */
+    "white coat", "panic in the waiting",
     /* O123: "worried sick" is the same register this facet already reads ("anxious",
        "anxiety") and is specific enough not to repeat O119's mistake — that unit removed BARE
        "panic" because it fired on "a doctor who won't panic about my drinking", a figurative

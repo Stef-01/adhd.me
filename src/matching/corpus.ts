@@ -271,7 +271,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      the waiting room every time" is the reader describing their own state, not naming care they
      want, which is the reading O114 refused for "anger" and "rage" one facet over. Standing as
      an aspiration with the reason, rather than kept reaching by a cue that misreads elsewhere. */
-  { text: "panic in the waiting room every time", aspires: ["care:anxiety"] },
+  { text: "panic in the waiting room every time", reaches: ["care:anxiety"] },
   { text: "health anxiety on top of everything else", reaches: ["care:anxiety"] },
   { text: "treated for anxiety for a decade when it was ADHD all along", reaches: ["care:anxiety", "care:adhd-assessment"] },
   { text: "wound up and anxious about the assessment itself", reaches: ["care:anxiety", "care:adhd-assessment"] },
@@ -647,7 +647,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "more than one diagnosis in my file and I need a GP who can hold it all", reaches: ["care:adhd-assessment"], aspires: ["care:complex-mental-health"] },
   { text: "my psych history scares GPs off and I am tired of it", reaches: ["care:complex-mental-health"] },
   { text: "sensory friendly appointments would change everything", reaches: ["care:autism-adhd"] },
-  { text: "white coat panic is real for me", aspires: ["care:anxiety", "manner:steadying"] },
+  { text: "white coat panic is real for me", reaches: ["care:anxiety"], aspires: ["manner:steadying"] },
   { text: "the anxiety needs treating alongside, not instead", reaches: ["care:anxiety"] },
   { text: "social anxiety makes phone calls easier than visits", reaches: ["care:anxiety"], aspires: ["pref:telehealth-first"] },
   /* O119 KNOWN FALSE POSITIVE, pinned as today's truth (the O68 pattern).
@@ -954,10 +954,12 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O105 raised 59→60: the comma-scoped negation stopped deleting the assessment ask behind
   // "not after therapy, …".
   "care:adhd-assessment": 60,
-  // O123 raised 15→16 with "worried sick". The two waiting-room panic phrasings stay uncued
-  // for O119's PRECISION reason (bare "panic" fired on a line about the doctor), which is a
-  // cue-authoring problem and not a founder question — the distinction this unit exists to draw.
-  "care:anxiety": 16,
+  // O123 raised 15→16 with "worried sick" and named the two waiting-room phrasings a PRECISION
+  // problem rather than a founder question; O124 then closed them, 16→18, completing the arc
+  // O119 opened. The fix was not to re-add the word O119 removed: "white coat" and "panic in
+  // the waiting" each carry a second content token, so neither reaches the figurative line
+  // about the doctor that made bare "panic" wrong.
+  "care:anxiety": 18,
   "care:autism-adhd": 16,
   // O122 raised 16→18: the POSSESSIVE, bridged in the stemmer ("my son's paediatrician"), plus
   // the educational-psychologist route parents actually arrive by. The plural forms ("our son",

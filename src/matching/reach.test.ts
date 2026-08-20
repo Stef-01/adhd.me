@@ -1497,3 +1497,31 @@ describe("§O122 three facets learn their registers, and one refusal comes from 
     expect(facets("I am forty years old and finally asking")).not.toContain("care:child-adolescent-adhd");
   });
 });
+
+/**
+ * §O124: the pair O119 had to give up, taken back without giving up what O119 bought.
+ *
+ * O119 removed bare "panic" from `care:anxiety` because it fired on "a doctor who won't panic
+ * about my drinking" — a figurative line about the DOCTOR, not somebody asking for help with
+ * anxiety. That was right, and it left two real asks unheard. The fix is a second content
+ * token rather than the word back.
+ */
+describe("§O124 clinic anxiety is heard, and the line about the doctor still is not", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the two phrasings people actually use", () => {
+    expect(facets("panic in the waiting room every time")).toContain("care:anxiety");
+    expect(facets("white coat panic is real for me")).toContain("care:anxiety");
+  });
+
+  /** O119's exact false positive, kept in the suite so the reason survives the fix. */
+  it("still refuses the figurative line that made bare panic wrong", () => {
+    expect(facets("a doctor who won't panic about my drinking")).not.toContain("care:anxiety");
+  });
+
+  it("and the order-sensitivity is real, not incidental", () => {
+    // "panic in the waiting" is [panic, wait]; this sentence has them the other way round.
+    expect(facets("I had to wait and then panic set in about the cost")).not.toContain("care:anxiety");
+    expect(facets("the waiting room was full")).toEqual([]);
+  });
+});
