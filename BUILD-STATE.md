@@ -141,6 +141,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > page, so the surface cannot disagree with the scorer; an e2e that signs in and asserts the
 > breakdown renders with its sentences and that the synthetic labelling is present; full
 > `pnpm verify` green.
+> DONE 2026-08-20. `/console/allocation` is the allocator's first consumer — W236's machinery
+> has had a test suite and no surface since O79, the same zero-consumers shape W195 found across
+> seven directory modules. It renders the synthetic patient's words, the vocabulary those words
+> derive through `readNeeds` (O132's wiring, shown rather than asserted), the top prescribers
+> with every criterion's weight / normalised score / weighted contribution / W213 sentence, the
+> tie note, and every excluded prescriber with every reason. Five e2e, including the signed-out
+> redirect and a pin that no criterion row may print a number with an empty "why".
+> **THE TREE CORRECTED ME ON WHICH REGISTER A PAGE BELONGS IN, and the correction is the useful
+> part.** The lane says "declares its copy where it renders", so I declared the page in W200's
+> copy census — and the census immediately failed BOTH directions: it enumerates `src/` modules
+> carrying a `// W<n>` header, so an `app/` page is a module it says is not one. Reverted. The
+> right register found me on the next run: **W102's surface census** covers served ROUTES, and
+> demands a dossier row plus a census line for every one. Then it failed a third time, precisely:
+> the census line's label must MATCH the table row's label, and mine carried an extra "(W236)".
+> Three failures, each naming exactly what was wrong — a page's compliance home is W102, a
+> module's is W200, and the tree knows the difference even when I did not.
+> Both scope decisions held and are now written where a reader meets them, in the dossier row
+> and on the page itself: the patient is synthetic by founder gate, and the PRESCRIBERS are
+> synthetic because the module scores an ASSIGNMENT and the finder deliberately does not do that
+> — it lists, and a person chooses. Rendering "this patient goes to Dr Saxena" would show the
+> product doing something it has decided against, using a real doctor's name to do it.
+> Gate met: qa/allocation-o133/breakdown.png, 5 e2e green, `pnpm verify` green 3591, W102 census
+> and COMPLIANCE-DOSSIER row added.
+
+> **O-NUMBER COLLISION, 2026-08-20: TWO UNITS CALLED O132.** An interactive session merged PR
+> #18 titled "Credentials trued, and About us becomes /about, titled Team (O132)" while this
+> loop's O132 (below) was already on `main` at da9fb8b. The concurrency law says the rebasing
+> party renumbers and never relabels somebody else's — but mine had already landed and theirs
+> carries the number only in a commit title, not in a ledger row, so there is exactly ONE O132
+> blockquote here and it is the loop's. Recorded rather than silently reconciled: the ledger is
+> the tiebreak, and a reader finding two O132 commit titles in `git log` should be able to find
+> out here which one the ledger means. Nothing is renamed in either direction.
 
 > **O132 (allocation lane: the allocator and the finder share one vocabulary) — claimed
 > 2026-08-20T23:30Z by loop-0820s.** The lane names its own next step: "wiring `statedNeeds`

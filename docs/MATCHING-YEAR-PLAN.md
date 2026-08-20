@@ -406,8 +406,14 @@ directions (no facet added, none dropped) plus two boundary pins: the constructo
 reading of its own (an allocator with a second, looser reader would be a second place patients
 get interpreted), and urgency is never derived from the words — inferring priority from what
 somebody wrote is triage, in the lane whose header promises stated urgency is a timing preference.
-NEXT in this lane, when a surface wants it: a console rendering of one patient's breakdown
-(declares its copy where it renders).
+**The console rendering is DONE — O133 (2026-08-20)**: `/console/allocation`,
+the allocator's first consumer, showing the patient's words, the vocabulary they derive through
+the finder's own reader, every criterion's weight and sentence, and every exclusion with its
+reason. Both sides synthetic and the page says so — the prescribers too, because the module
+scores an ASSIGNMENT and the finder deliberately does not. Its copy is declared where a PAGE's
+copy belongs: W102's surface census and a COMPLIANCE-DOSSIER row, not W200's module census,
+which the tree pointed out by failing three times until the right register was used.
+**The allocation lane's named steps are now all done.**
 
 **O80 (2026-08-20, founder clarification of O79): the standalone Python variant for the
 GP-led pathway** — `tools/gp-match/` (`config.py` + `adhd_gp_match.py` + 21-test suite).
