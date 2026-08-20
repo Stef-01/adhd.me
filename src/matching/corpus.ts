@@ -357,7 +357,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── pref:telehealth-first / pref:bulk-billing ────────────────────────────────────────────
   { text: "I cannot get into a clinic, everything has to be online", reaches: ["pref:telehealth-first"] },
   { text: "a video call for the first appointment please", reaches: ["pref:telehealth-first"] },
-  { text: "phone appointments suit my shift work better", aspires: ["pref:telehealth-first"] },
+  { text: "phone appointments suit my shift work better", reaches: ["pref:telehealth-first"] },
   { text: "it has to be bulk billed, I am on a pension", reaches: ["pref:bulk-billing"] },
   { text: "money is tight so bulk billing matters", reaches: ["pref:bulk-billing"] },
   { text: "no out of pocket costs please", aspires: ["pref:bulk-billing"] },
@@ -446,7 +446,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── compounds: two and three asks in one breath ─────────────────────────────────────────
   { text: "a woman GP who bulk bills and won't rush me", reaches: ["pref:woman-gp", "pref:bulk-billing", "manner:unhurried"] },
-  { text: "a female doctor for an ADHD assessment, by video if possible", reaches: ["care:adhd-assessment", "pref:woman-gp"], aspires: ["pref:telehealth-first"] },
+  { text: "a female doctor for an ADHD assessment, by video if possible", reaches: ["care:adhd-assessment", "pref:woman-gp", "pref:telehealth-first"] },
   { text: "bulk billed titration review with someone patient", reaches: ["care:titration", "pref:bulk-billing"], aspires: ["manner:unhurried"] },
   { text: "a calm woman doctor who understands anxiety", reaches: ["care:anxiety", "manner:steadying", "pref:woman-gp"] },
   { text: "telehealth assessment and I speak Hindi at home", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
@@ -496,7 +496,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── negation and collapse discipline, walked at the O40/O53 seams ───────────────────────
   { text: "not after therapy, I want the assessment done properly", reaches: ["manner:structured", "care:adhd-assessment"] },
-  { text: "no more waiting rooms, video only from here", aspires: ["pref:telehealth-first"] },
+  { text: "no more waiting rooms, video only from here", reaches: ["pref:telehealth-first"] },
   { text: "I don't want a woman GP, whoever is soonest", never: ["pref:woman-gp"] },
   // Promoted by O81: this sat in the aspiration list since O68 looking like a lexicon gap,
   // and the O78 audit showed it never was one — O40's everything-in-lead scope was
@@ -525,7 +525,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── question forms: the ask arrives as a question about the roster ──────────────────────
   { text: "is there a doctor who bulk bills new patients", reaches: ["pref:bulk-billing"] },
   { text: "do any of your GPs do dose adjustments", reaches: ["care:titration"] },
-  { text: "can the assessment be done over video", reaches: ["care:adhd-assessment"], aspires: ["pref:telehealth-first"] },
+  { text: "can the assessment be done over video", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
   { text: "is a woman doctor available", reaches: ["pref:woman-gp"] },
   { text: "does anyone there see children", reaches: ["care:child-adolescent-adhd"] },
   { text: "who handles shared care agreements", reaches: ["care:shared-care"] },
@@ -555,7 +555,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── life-stage and situation: the context the ask rides in on ───────────────────────────
   { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment"] },
   { text: "fifty years old and finally sorting this out properly", reaches: ["manner:structured"], aspires: ["care:adhd-assessment"] },
-  { text: "shift work means I can only do phone appointments", aspires: ["pref:telehealth-first"] },
+  { text: "shift work means I can only do phone appointments", reaches: ["pref:telehealth-first"] },
   { text: "a new baby at home, everything has to be online for now", reaches: ["pref:telehealth-first"] },
   { text: "I am a nurse and I need someone who will not treat me like I should know better", aspires: ["manner:non_judgmental"] },
   { text: "I am immunocompromised so clinic visits are a risk", aspires: ["pref:telehealth-first"] },
@@ -846,7 +846,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── preference depth ─────────────────────────────────────────────────────────────────────
   { text: "a female doctor who has lived a bit, someone my age", reaches: ["pref:woman-gp"] },
-  { text: "video reviews after work hours", aspires: ["pref:telehealth-first"] },
+  { text: "video reviews after work hours", reaches: ["pref:telehealth-first"] },
   { text: "pension card, so it has to be bulk billed", reaches: ["pref:bulk-billing"] },
   { text: "gap fees are why I stopped going", aspires: ["pref:bulk-billing"] },
   { text: "book a double slot, I have twenty years to explain", aspires: ["pref:longer-appointment"] },
@@ -946,7 +946,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "pref:longer-appointment": 6,
   // telehealth lowered 20→19 by O94 (the phone-menu pin reclassified reaches→never when
   // the run demand landed) then held at 20 by the unit's own kept-recall pin — measured.
-  "pref:telehealth-first": 20,
+  // O108 raised 20→26: video as a preposition, plus the "phone appointments" noun the list
+  // had somehow never learned. The two still unheard ask by refusing the alternative, and
+  // their cues each fired on the OPPOSITE ask when measured — see needs.ts.
+  "pref:telehealth-first": 26,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.

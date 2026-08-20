@@ -40,6 +40,13 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  353/202/52/99 at O108 (telehealth's preposition and appointment-noun registers: four
+ *  more sentences joined the run — two of the six promoted were already in it on their
+ *  other facets — and THE UNSEPARATED COUNT FELL for the first time in the day's sweeps,
+ *  100→99. A request that was tied gained the telehealth facet, which this roster
+ *  disagrees on, and separated. That is the mechanism by which hearing better can
+ *  eventually order better, and it had not been observed until this unit — the other
+ *  sweeps only ever added already-separable requests to the run);
  *  349/197/52/100 at O107 (substance-history's two deaf registers: seven sentences joined
  *  the run and ALL SEVEN separate — the roster disagrees about substance history, so
  *  hearing the ask orders the list, which is the second time in a day the KPI has shown
@@ -73,7 +80,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 349, separated: 197, partialTie: 52, unseparated: 100 };
+const PINNED = { total: 353, separated: 202, partialTie: 52, unseparated: 99 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

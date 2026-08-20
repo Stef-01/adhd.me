@@ -136,7 +136,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > almost certainly fires on "I watched a video about ADHD", and "clinic visits" is the exact
 > phrase somebody uses to ASK for in-person care. Both get measured and written down. Gate:
 > O103's method on every candidate, zero `never` pins broken, promotions retagged in-commit,
-> floors and tie-quality moved, full `pnpm verify` green.
+> floors and tie-quality moved, full `pnpm verify` green. DONE 2026-08-20. SIX of the eight promoted,
+> floor 20→26, and the KPI did something it had not done all day: 349/197/52/100 →
+> 353/202/52/**99**. THE UNSEPARATED COUNT FELL. A request that was tied gained the telehealth
+> facet — one this roster genuinely disagrees on — and separated. Every earlier sweep today
+> only ever added already-separable requests to the run; this is the first time hearing
+> something better actually ORDERED something better, which is the mechanism the whole lane
+> assumes and had not yet demonstrated.
+>
+> Cues: "by video" and "over video" (collapsed pairs, the O107 "in recovery" device — bare
+> "video" fires on "I watched a video about ADHD"), "video only", "video reviews", and
+> "phone appointments", which sounds like it should have worked all along and did not: "by
+> phone" collapses to [phone] and rightly demands its pair, so the commonest phrasing of the
+> commonest telehealth ask reached nothing.
+>
+> THE REGISTER LEFT STANDING IS THE INTERESTING PART. Three sentences ask for telehealth by
+> REFUSING THE ALTERNATIVE — "no more waiting rooms", "clinic visits are a risk", "phone calls
+> easier than visits". The want is real and it is the other side of what they said, and every
+> candidate cue for it was measured firing on a sentence meaning the OPPOSITE: "clinic visits"
+> on somebody asking to come in, "phone calls" on somebody who hates them, "waiting rooms" on
+> an anxiety sentence (the [wait, room] collision O84 already paid for). A cue read off the
+> avoided thing cannot tell an ask from its mirror image. Hearing this register needs the
+> NEGATION FAMILY POINTED THE OTHER WAY — read the refusal, then invert it — which is a
+> mechanism unit and is now the best-specified thing in the queue.
+>
+> One test I wrote was wrong and the suite caught it: the first draft of the mirror-image pin
+> said "I would prefer clinic visits to telehealth", which reaches through the plain
+> "telehealth" cue and proved nothing about "clinic visits" at all. Rewritten without the
+> word, with the mistake noted in the pin so it is not made again.
 
 > **O107 (Q1 lexicon: substance-history, the third-loudest gap) — claimed
 > 2026-08-20T15:43Z by loop-0820s.** Nine unheard phrasings. UNLIKE O104's trauma facet there

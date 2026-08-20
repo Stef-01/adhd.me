@@ -300,7 +300,31 @@ const LEXICON: readonly Entry[] = [
   pref("woman-gp", "A woman GP", 30, ["woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman"]),
   pref("telehealth-first", "By phone or telehealth", 28, ["telehealth", "by phone", "over the phone", "remote", "online",
     // O53: video is how half of them say it, and "phone first" is the ask in appointment order.
-    "video appointment", "video call", "phone first"]),
+    "video appointment", "video call", "phone first",
+    /* O108: VIDEO AS A PREPOSITION, and the appointment noun the list somehow lacked.
+       "by video" and "over video" collapse to [video] and therefore ship under O45's rule
+       demanding the authored pair — which is what makes them safe, because bare "video"
+       fires on "I watched a video about ADHD". Same device as O107's "in recovery": the
+       precision comes from a mechanism already here rather than a new one.
+
+       "phone appointments" sounds like it should already have worked and did not: "by phone"
+       collapses to [phone] and rightly demands its pair, so the commonest way anybody says
+       this reached nothing at all. */
+    "by video", "over video", "video only", "video reviews", "phone appointments",
+    /* THE REGISTER THIS UNIT COULD NOT SAFELY HEAR, and the reason is worth the space.
+       Three corpus sentences ask for telehealth by refusing the alternative — "no more
+       waiting rooms", "clinic visits are a risk", "phone calls easier than visits". The want
+       is real and it is the other side of what they said. But a cue read off the AVOIDED
+       thing cannot tell the ask from its mirror image, and each of these was measured firing
+       on a sentence meaning the OPPOSITE:
+         "clinic visits" fires on "I would prefer clinic visits to telehealth"
+         "phone calls"   fires on "I hate phone calls, please do it in person"
+         "waiting rooms" fires on "the waiting room makes my anxiety worse" — an anxiety
+                         sentence, and the [wait, room] collision O84 already paid for
+       Hearing the want here needs to read the REFUSAL and invert it, which is a mechanism
+       (the negation family, pointed the other way) and not a cue. Left standing, deliberately.
+       "video only" survives this test because it names the wanted thing, not the avoided one. */
+  ]),
   pref("bulk-billing", "Bulk billing", 24, ["bulk bill", "bulk billed", "bulk billing", "cannot afford", "cheap"]),
   pref("longer-appointment", "A longer first appointment", 20, ["longer first appointment",
     // O65 (the O22 loop on O64's corpus finding): the facet carried ONE three-token cue, so

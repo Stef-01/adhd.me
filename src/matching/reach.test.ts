@@ -305,7 +305,11 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // "diagnose me" and "get checked" are O49 additions, reviewed under the O45 collapse rule:
     // each ships as one token BUT can only fire beside its authored adjacent pair, so a stray
     // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
-    "an excuse", "at ease", "been heard", "believe me", "by phone", "diagnose me", "figure out",
+    "an excuse", "at ease", "been heard", "believe me", "by phone",
+    // O108: reviewed and DELIBERATE, the same device as "in recovery". Bare "video" fires on
+    // "I watched a video about ADHD"; authored as a pair, the collapse rule demands "by video"
+    // / "over video" in the raw stream and the innocent sentence is refused.
+    "by video", "diagnose me", "figure out",
     "get a word in", "get checked", "honest about", "hurry me",
     // O107: reviewed and DELIBERATE. Bare "recovery" fires on "recovery time after surgery",
     // so the cue is authored as the pair — the collapse rule then demands "in recovery" in
@@ -317,7 +321,9 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     "involve me", "just lazy", "listened to",
     "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
     "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
-    "name it", "on a schedule", "on edge", "out the door", "over the phone", "really listen",
+    "name it", "on a schedule", "on edge", "out the door", "over the phone",
+    // O108: see "by video" above — same phrase, other preposition.
+    "over video", "really listen",
     "understand what", "what is going on",
   ];
 
@@ -973,5 +979,50 @@ describe("§O107 substance-history hears the substances and the recovery registe
     expect(heard.map((n) => facetKey(n.facet))).toContain("care:substance-history");
     expect(heard.find((n) => facetKey(n.facet) === "care:substance-history")!.label)
       .toBe("Substance history held safely");
+  });
+});
+
+describe("§O108 telehealth hears video as a preposition, and refuses the register it cannot tell apart", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the preposition forms and the appointment noun", () => {
+    for (const said of [
+      "can the assessment be done over video",
+      "a female doctor for an ADHD assessment, by video if possible",
+      "video reviews after work hours",
+      "no more waiting rooms, video only from here",
+      "phone appointments suit my shift work better",
+      "shift work means I can only do phone appointments",
+    ]) expect(facets(said)).toContain("pref:telehealth-first");
+  });
+
+  it("the collapsed pair refuses the sentence the bare word would have taken", () => {
+    // "by video" / "over video" collapse to [video] and demand the authored pair (O45).
+    expect(facets("I watched a video about ADHD")).not.toContain("pref:telehealth-first");
+  });
+
+  /**
+   * THE REGISTER LEFT STANDING, AND WHY IT IS A MECHANISM AND NOT A CUE.
+   *
+   * Three corpus sentences ask for telehealth by refusing the alternative. The want is real,
+   * but a cue read off the AVOIDED thing cannot tell the ask from its mirror image — each of
+   * these was measured firing on a sentence meaning the opposite. Hearing them needs the
+   * negation family pointed the other way: read the refusal, then invert it.
+   */
+  it("refuses cues that cannot tell the ask from its mirror image", () => {
+    // (Deliberately without the word "telehealth" in it: the first draft of this pin said
+    //  "…clinic visits to telehealth", which reaches through the plain "telehealth" cue and
+    //  proved nothing about "clinic visits" at all.)
+    expect(facets("I would prefer clinic visits, in person")).not.toContain("pref:telehealth-first");
+    expect(facets("I hate phone calls, please do it in person")).not.toContain("pref:telehealth-first");
+    // And the [wait, room] collision O84 already paid for, still refused.
+    expect(facets("the waiting room makes my anxiety worse")).not.toContain("pref:telehealth-first");
+  });
+
+  it("the existing telehealth cues are untouched", () => {
+    expect(facets("telehealth please")).toContain("pref:telehealth-first");
+    expect(facets("can we do it over the phone")).toContain("pref:telehealth-first");
+    // O94's run demand still refuses the phone-menu leak.
+    expect(facets("the phone menu hung up on me twice")).not.toContain("pref:telehealth-first");
   });
 });
