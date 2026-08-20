@@ -119,6 +119,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O87 (Q1 item 1, corpus tranche six: to the ~500 target) — claimed 2026-08-20T07:46Z by
+> loop-0820l.** ~80 new entries in the registers still thin or untested: the SPOKEN
+> register (the finder has voice input — filler, run-ons, self-corrections), medication
+> shortage and moved-cities continuation asks, question-forms round two, more compounds,
+> paraphrase depth on the thinnest floors (non-medication 7, emotional-regulation 8,
+> depression 9, substance 9), O81/O83 discipline walks (consume-once with a non-cue
+> object; reported refusal in question form), more G7 symptom-only and logistics-noise
+> pins. Same law as every tranche: authored, then MEASURED, then tagged from measurement —
+> reaches is what the reader heard today, aspires the to-do list, never the boundary.
+> Gate: corpus green both directions with zero unpromoted aspirations, floors re-measured
+> and raised where counts rose, tie-quality repinned with the run, full `pnpm verify`
+> green.
+
 > **O86 (founder-directed 2026-08-20: Dr Anubhav Saxena's finder listing shows Beecroft &
 > Double Bay) — claimed 2026-08-20T07:08Z by loop-0820k; DONE 2026-08-20. Gate: §O86 unit
 > pin green (label pair "Beecroft & Double Bay"; the telehealth sentence unchanged from
