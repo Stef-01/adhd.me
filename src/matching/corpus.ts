@@ -165,7 +165,14 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "telehealth to start, I am rural", reaches: ["pref:telehealth-first"] },
   { text: "bulk billed if at all possible", reaches: ["pref:bulk-billing"] },
   { text: "I cannot afford gap fees", reaches: ["pref:bulk-billing"] },
-  { text: "a longer appointment booked from the start", reaches: ["manner:unhurried"] },
+  /* O116, sanctioned reclassification: this entry and "can I ask for a longer appointment
+     when I book" moved manner:unhurried → pref:longer-appointment. "longer appointment" was
+     cued by BOTH facets; the stemmer entry teaching the reader that "longer" is "long" made
+     the two cues collide, and FIRST_CLAIM allows a phrase exactly one owner. The facet whose
+     LABEL is the phrase owns it. The corpus agreed in advance: both entries already carried
+     pref:longer-appointment as their ASPIRATION, so this is an aspiration being met rather
+     than a pin being weakened. */
+  { text: "a longer appointment booked from the start", reaches: ["pref:longer-appointment"] },
   { text: "I don't need it bulk billed", never: ["pref:bulk-billing"] },
 
   // ── languages ────────────────────────────────────────────────────────────────────────────
@@ -224,7 +231,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── care:titration ───────────────────────────────────────────────────────────────────────
   { text: "the afternoon crash is brutal, the dose is wrong", reaches: ["care:titration"] },
-  { text: "my script needs adjusting", aspires: ["care:titration"] },
+  { text: "my script needs adjusting", reaches: ["care:titration"] },
   { text: "increase the dose or change the medication, something", reaches: ["care:titration"] },
   { text: "side effects worse than the thing being treated", reaches: ["care:titration"] },
   { text: "the stimulant wears off before school pickup", reaches: ["care:titration"] },
@@ -529,7 +536,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "is a woman doctor available", reaches: ["pref:woman-gp"] },
   { text: "does anyone there see children", reaches: ["care:child-adolescent-adhd"] },
   { text: "who handles shared care agreements", reaches: ["care:shared-care"] },
-  { text: "can I ask for a longer appointment when I book", reaches: ["manner:unhurried"], aspires: ["pref:longer-appointment"] },
+  { text: "can I ask for a longer appointment when I book", reaches: ["pref:longer-appointment"] },
   { text: "do you have anyone who understands autism as well", reaches: ["care:autism-adhd"] },
 
   // ── on-behalf: somebody else is typing ───────────────────────────────────────────────────
@@ -586,10 +593,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // is deliberately NOT an aspiration — a cue on "flat" would break those pins. The heard
   // half (taken seriously) is the ask; the mood word stays the reader's silence.
   { text: "burnt out and flat, and I want both taken seriously", reaches: ["manner:attuned"] },
-  { text: "the generic brand hits different and nobody will discuss it", aspires: ["care:titration"] },
+  { text: "the generic brand hits different and nobody will discuss it", reaches: ["care:titration"] },
   { text: "review whether this is still the right medication for me", aspires: ["care:titration"] },
   { text: "the ADHD clinic discharged me and I need my scripts kept going", aspires: ["care:shared-care"] },
-  { text: "hand the prescribing back to a GP near home", aspires: ["care:shared-care"] },
+  { text: "hand the prescribing back to a GP near home", reaches: ["care:shared-care"] },
   { text: "lifestyle changes before we talk prescriptions", reaches: ["care:non-medication"] },
   { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
   { text: "what works besides medication", reaches: ["care:non-medication"] },
@@ -608,7 +615,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the anxiety needs treating alongside, not instead", reaches: ["care:anxiety"] },
   { text: "social anxiety makes phone calls easier than visits", reaches: ["care:anxiety"], aspires: ["pref:telehealth-first"] },
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned"] },
-  { text: "English is my second language and appointments move too fast", aspires: ["manner:culturally_attuned", "manner:unhurried"] },
+  { text: "English is my second language and appointments move too fast", reaches: ["manner:unhurried"], aspires: ["manner:culturally_attuned"] },
   { text: "I rehearse what to say and still leave unheard", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", aspires: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", aspires: ["manner:steadying"] },
@@ -618,8 +625,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "run the options past me first", aspires: ["manner:collaborative"] },
   { text: "someone who sees what is right with me too", reaches: ["manner:motivating"] },
   { text: "less what is wrong with you, more what we can build", aspires: ["manner:motivating"] },
-  { text: "the good doctors never make you watch the clock", aspires: ["manner:unhurried"] },
-  { text: "give me the full appointment, not the doorway version", aspires: ["manner:unhurried"] },
+  { text: "the good doctors never make you watch the clock", reaches: ["manner:unhurried"] },
+  { text: "give me the full appointment, not the doorway version", reaches: ["manner:unhurried"] },
   { text: "a female GP for personal reasons", reaches: ["pref:woman-gp"] },
   { text: "medicare only, I cannot pay extra", reaches: ["pref:bulk-billing"] },
   { text: "does it cost anything out of pocket", reaches: ["pref:bulk-billing"] },
@@ -643,7 +650,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "no video appointments, my internet is hopeless", never: ["pref:telehealth-first"] },
   // The veto's second worked case: additive "not just X" keeps the ask alive.
   { text: "not just the dose, I want the whole plan looked at again", reaches: ["care:titration"] },
-  { text: "no assessment needed, that part is done, I need the scripts managed", never: ["care:adhd-assessment"], aspires: ["care:shared-care"] },
+  { text: "no assessment needed, that part is done, I need the scripts managed", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
   { text: "I don't want telehealth, I need to be in the room with someone", never: ["pref:telehealth-first", "manner:culturally_attuned"] },
   /**
    * O75 pinned this as a KNOWN FALSE POSITIVE (the conversational hedge "if that makes
@@ -738,10 +745,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "three weeks without the medication and nobody warned me", never: ["care:non-medication"] },
   { text: "no medication please, I want strategies", reaches: ["care:non-medication"] },
   { text: "coaching first, without a script if we can", reaches: ["care:non-medication"] },
-  { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", aspires: ["care:shared-care"] },
-  { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:adhd-assessment"], aspires: ["care:shared-care"] },
+  { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", reaches: ["care:shared-care"] },
+  { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:adhd-assessment", "care:shared-care"] },
   { text: "my prescriber retired and nobody will take over the script", reaches: ["care:shared-care"] },
-  { text: "the afternoon rebound is worse than the mornings ever were", aspires: ["care:titration"] },
+  { text: "the afternoon rebound is worse than the mornings ever were", reaches: ["care:titration"] },
 
   // ── depression and anxiety, deeper ───────────────────────────────────────────────────────
   { text: "the ADHD makes the depression worse and I want both handled together", reaches: ["care:depression", "care:adhd-assessment"] },
@@ -841,7 +848,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I don't want a big clinic, a woman GP in a small practice please", reaches: ["pref:woman-gp"] },
   { text: "they told me no telehealth scripts are allowed, is that true here", reaches: ["pref:telehealth-first"] },
   { text: "if that makes sense as a plan, I would rather come in", never: ["manner:sense_making"] },
-  { text: "not looking for therapy, medication management is what I need", aspires: ["care:titration"] },
+  { text: "not looking for therapy, medication management is what I need", reaches: ["care:titration"] },
   { text: "no more GP roulette, I want one doctor who owns my ADHD care from assessment to reviews", reaches: ["care:adhd-assessment"] },
 
   // ── preference depth ─────────────────────────────────────────────────────────────────────
@@ -849,8 +856,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "video reviews after work hours", reaches: ["pref:telehealth-first"] },
   { text: "pension card, so it has to be bulk billed", reaches: ["pref:bulk-billing"] },
   { text: "gap fees are why I stopped going", reaches: ["pref:bulk-billing"] },
-  { text: "book a double slot, I have twenty years to explain", aspires: ["pref:longer-appointment"] },
-  { text: "forty minutes minimum or it is not worth starting", aspires: ["pref:longer-appointment"] },
+  { text: "book a double slot, I have twenty years to explain", reaches: ["pref:longer-appointment"] },
+  { text: "forty minutes minimum or it is not worth starting", reaches: ["pref:longer-appointment"] },
 
   // ── shared care, wider ───────────────────────────────────────────────────────────────────
   { text: "my paediatrician is handing me over to adult care and I am lost", reaches: ["care:shared-care"] },
@@ -915,17 +922,16 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // cued (see needs.ts) — the three that remain are the ones whose cues were refused for
   // measured precision, and their reason is written at the cue list rather than here.
   "care:non-medication": 17,
-  // shared-care lowered 20→19 by O91: the count lost a KNOWN FALSE POSITIVE ("without a
-  // psychiatrist referral" retagged reaches→never when the bare-without rule landed) — a
-  // correction, not a hearing lost; the O72 bulk-billing precedent, third use.
-  "care:shared-care": 19,
+  // O116 raised 19→23: continuity language — prescribing handed back, scripts managed,
+  // prescriptions continued after a move.
+  "care:shared-care": 23,
   // O107 raised 9→16: the substances the list never learned, plus the recovery register.
   // The two still unheard are the ones whose cues were refused on measurement ("clean" fires
   // on a clean bill of health; "drug use" on "the drug I use works well") — see needs.ts.
   "care:substance-history": 16,
-  // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
-  // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
-  "care:titration": 24,
+  // O116 raised 24→28: the register a dose review is asked in — the script needing adjusting,
+  // the generic brand, the afternoon rebound, medication management as the thing asked FOR.
+  "care:titration": 28,
   // O104 raised 9→12 (the pace-and-consent register); O106 raised 12→13 by freeing the word
   // a spanning cue had swallowed. The facet's other four aspirations are NOT a vocabulary
   // gap — they name what happened to the person, and whether this product may read that is a
@@ -949,7 +955,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "manner:sense_making": 20,
   "manner:steadying": 14,
   "manner:structured": 17,
-  "manner:unhurried": 19,
+  // O116 raised 19→20 NET, and the number hides two movements: two sentences left for
+  // pref:longer-appointment in the reclassification above, and three arrived (the clock, the
+  // full appointment, appointments moving too fast). Written out because a floor that only
+  // shows the net would make a reclassification look like growth.
+  "manner:unhurried": 20,
   // bulk-billing lowered 12→11 by O72: the count lost the KNOWN FALSE POSITIVE ("not bulk
   // billing…" retagged reaches→never when the bare-not rule landed) — a correction, not a
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
@@ -960,7 +970,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // in (out of pocket, gap fees, Medicare-only, "does it cost anything"); it had known three
   // sayings of its own name and no synonym for the thing it is about.
   "pref:bulk-billing": 27,
-  "pref:longer-appointment": 6,
+  // O116 raised 6→10. Two of those are the sanctioned reclassification from manner:unhurried:
+  // the stemmer entry teaching the reader that "longer" is "long" collided two facets' cues on
+  // one phrase, and the facet named after the phrase owns it. Both entries already carried this
+  // facet as their aspiration.
+  "pref:longer-appointment": 10,
   // telehealth lowered 20→19 by O94 (the phone-menu pin reclassified reaches→never when
   // the run demand landed) then held at 20 by the unit's own kept-recall pin — measured.
   // O108 raised 20→26: video as a preposition, plus the "phone appointments" noun the list

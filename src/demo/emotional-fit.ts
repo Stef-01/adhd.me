@@ -139,7 +139,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   unhurried: {
     label: "Unhurried first appointment",
     matchLine: "gives you an unhurried first appointment",
-    cues: ["not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
+    cues: [
+      /* O116: the clock, and the full appointment as opposed to the doorway version. */
+      "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
       // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it

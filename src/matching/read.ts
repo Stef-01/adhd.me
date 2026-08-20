@@ -120,6 +120,18 @@ const INFLECTIONS: Readonly<Record<string, string>> = {
   kids: "kid",
   dismis: "dismiss",
   embarras: "embarrass",
+  /* O116: the COMPARATIVE, which nothing had bridged and which one facet is named after.
+     `pref:longer-appointment` renders as "A longer first appointment" and every cue O65
+     authored for it says "long" — so the facet could not hear its own adjective, and the
+     corpus carried the proof ("can I ask for a longer appointment when I book" sat as an
+     aspiration through two sweeps of this facet).
+
+     Named entries, not a general -er rule, and the reason is in this corpus: stripping -er
+     turns "water" into "wat" and "other" into "oth", both of which appear in real requests
+     ("I drink more water than coffee", "the other GP said"). O50's law is that every entry
+     needs a sentence the suffix rules demonstrably cannot bridge; these have one. */
+  longer: "long",
+  longest: "long",
 };
 
 function canonical(stemmed: string): string {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
 import { stem, tokenise } from "./read";
+import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
 /**
@@ -1302,5 +1303,88 @@ describe("§O114 woman-GP learns the words people use; emotional-regulation hear
       "my temper goes from zero to a hundred in seconds",
       "my moods flip fast and I say things I regret",
     ]) expect(facets(said)).not.toContain("care:emotional-regulation");
+  });
+});
+
+describe("§O116 the comparative reaches, and four facets learn their registers", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  /**
+   * THE STEMMER ENTRY, AND WHY IT IS A TABLE AND NOT A RULE.
+   *
+   * `stem("longer")` was "longer", so `pref:longer-appointment` — the facet whose label IS "A
+   * longer first appointment" — could not hear its own adjective, and O65's widening could not
+   * have found it because every cue that sweep added says "long". Bridged in O50's INFLECTIONS
+   * table as named entries. A general -er rule is what this corpus cannot have: it turns
+   * "water" into "wat" and "other" into "oth", both of which appear in real requests.
+   */
+  it("hears the comparative and the superlative", () => {
+    expect(facets("can I ask for a longer appointment when I book")).toContain("pref:longer-appointment");
+    expect(facets("please book me a long appointment for the first visit")).toContain("pref:longer-appointment");
+  });
+
+  it("does not strip -er off words that are not comparatives", () => {
+    // The non-vacuity pin for the refusal above: a general rule would wreck these, and both
+    // are sentences a reader could plausibly type.
+    expect(stem("water")).toBe("water");
+    expect(stem("other")).toBe("other");
+    expect(stem("her")).toBe("her");
+  });
+
+  /**
+   * THE COLLISION THE STEMMER ENTRY EXPOSED, resolved deliberately.
+   *
+   * "longer appointment" was cued by BOTH manner:unhurried and pref:longer-appointment. While
+   * "longer" and "long" were different tokens the two cues never met; once they were the same
+   * token they collided, and FIRST_CLAIM allows a phrase exactly one owner. The facet whose
+   * LABEL is the phrase owns it — and the corpus had said so in advance, carrying
+   * pref:longer-appointment as the aspiration on both affected entries.
+   */
+  /**
+   * AND THE TWO READERS ARE ALLOWED TO DIFFER, WHICH IS THE PART THAT NEEDED SAYING.
+   *
+   * The onboarding interview reads `EI_QUALITIES` cue lists DIRECTLY to propose facets from a
+   * doctor's own words (W221/O22). A GP who says "I book longer appointments" IS describing an
+   * unhurried manner, so the phrase must stay in that list — while a PATIENT typing the same
+   * words is stating a preference. `PREFERENCE_OWNED_PHRASES` in needs.ts is that seam, and
+   * the first draft of this unit got it wrong by deleting the phrase outright, which broke
+   * three onboarding tests. Pinned from both sides so the next edit has to choose deliberately.
+   */
+  it("the clinician-side reader keeps the phrase the patient-side reader gives away", () => {
+    expect(EI_QUALITIES.unhurried.cues).toContain("longer appointment");
+    expect(readNeeds("a longer appointment booked from the start").map((n) => facetKey(n.facet)))
+      .not.toContain("manner:unhurried");
+  });
+
+  it("the phrase belongs to the facet named after it", () => {
+    expect(facets("a longer appointment booked from the start")).toContain("pref:longer-appointment");
+    // Unhurried keeps every cue that is actually about not being rushed.
+    expect(facets("I do not want to feel rushed")).toContain("manner:unhurried");
+    expect(facets("the good doctors never make you watch the clock")).toContain("manner:unhurried");
+    expect(facets("give me the full appointment, not the doorway version")).toContain("manner:unhurried");
+  });
+
+  it("titration hears how a dose review is actually asked for", () => {
+    for (const said of [
+      "my script needs adjusting",
+      "the generic brand hits different and nobody will discuss it",
+      "the afternoon rebound is worse than the mornings ever were",
+      "not looking for therapy, medication management is what I need",
+    ]) expect(facets(said)).toContain("care:titration");
+  });
+
+  it("shared care hears continuity language", () => {
+    for (const said of [
+      "hand the prescribing back to a GP near home",
+      "my script keeps bouncing between pharmacies, I need someone who can manage that",
+      "no assessment needed, that part is done, I need the scripts managed",
+      "just moved to Sydney and I need a new GP to continue my ADHD prescriptions",
+    ]) expect(facets(said)).toContain("care:shared-care");
+  });
+
+  it("O65's deliberate refusal still stands", () => {
+    // "more than fifteen minutes" strips to [fifteen, minute], which is also how distance talk
+    // reads. O65 refused it on precision and this unit does not quietly reverse that.
+    expect(facets("the clinic is fifteen minutes from the station")).not.toContain("pref:longer-appointment");
   });
 });

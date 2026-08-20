@@ -176,7 +176,17 @@ non-rankings.
 
 2. **Onboarding-driven lexicon growth (O22 loop).** Every doctor interview's "sentences that
    proposed nothing" feed lexicon review — the clinician side discovers patient-side gaps.
-3. **Morphology upgrade. DONE — O50, 2026-08-19.** The `INFLECTIONS` table in read.ts,
+3. **Morphology upgrade. DONE — O50, 2026-08-19; COMPARATIVES BRIDGED — O116, 2026-08-20.**
+   *O116 found the gap the table had never covered: `stem("longer")` was "longer", so
+   `pref:longer-appointment` — the facet whose LABEL is "A longer first appointment" — could
+   not hear its own adjective. O65's widening of that same facet could not have found it,
+   because every cue that sweep added says "long". Added as named entries in O50's idiom
+   (`longer`/`longest` → `long`), never a general -er rule: stripping -er turns "water" into
+   "wat" and "other" into "oth", both of which appear in real requests, and the non-vacuity
+   pin asserts exactly that. The entry exposed a live collision — "longer appointment" was
+   cued by BOTH `manner:unhurried` and `pref:longer-appointment`, invisible while the two
+   words were different tokens — resolved by giving the phrase to the facet named after it,
+   which is what both affected corpus entries already carried as their aspiration.* The `INFLECTIONS` table in read.ts,
    applied as stem()'s last step so cues, sentences and O45 raw skeletons unify identically.
    Three corpus-named wart families bridged: irregulars (taken/took→take, seen→see), the
    length-guard edge (sees, seeing→see), and e-droppers stranded by ed/es-stripping

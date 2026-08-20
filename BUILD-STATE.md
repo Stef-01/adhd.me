@@ -141,6 +141,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > the general -er stripping this deliberately avoids would break words the corpus contains;
 > zero `never` pins broken; promotions retagged in-commit; floors and tie-quality moved; full
 > `pnpm verify` green.
+> DONE 2026-08-20. FOURTEEN promotions across the four facets — titration 24→28, shared-care
+> 19→23, longer-appointment 6→10, unhurried 19→20 net — plus the stemmer entry. Tie-quality
+> 380/214/57/109 → 392/223/61/108: twelve sentences joined the run, nine separating, the
+> unseparated count fell again, and separation reached 56.9%, the highest it has been.
+>
+> THE STEMMER ENTRY DID MORE THAN IT WAS ASKED TO. Teaching the reader that "longer" is "long"
+> immediately broke a pinned `reaches`, and the break was correct: "longer appointment" was
+> cued by BOTH `manner:unhurried` and `pref:longer-appointment`, and while the two words
+> stemmed differently the cues never met — so the collision had sat there since both were
+> authored. FIRST_CLAIM gives a phrase one owner and the winner was decided by lexicon order
+> and phrase length, which is no way to decide anything: unhurried silently owned the words for
+> the facet named after them, and "a long appointment" stopped reaching
+> `pref:longer-appointment` at all.
+>
+> MY FIRST FIX WAS WRONG AND THE SUITE CAUGHT IT — worth recording, because the mistake is the
+> interesting part. I deleted the phrase from `EI_QUALITIES.unhurried`, which fixed the patient
+> side and broke THREE onboarding tests: the interview reads those cue lists DIRECTLY to
+> propose facets from a doctor's own words (W221/O22), and a GP who says "I book longer
+> appointments" IS describing an unhurried manner. THE TWO READERS LEGITIMATELY WANT DIFFERENT
+> ANSWERS ABOUT THE SAME PHRASE — one reads a patient's ask, the other a clinician's account of
+> their practice — and nothing in the tree had ever had to say so. `PREFERENCE_OWNED_PHRASES`
+> in needs.ts is that seam, declared once in the reader that needs the exception, with the
+> clinician-side list untouched. Pinned from BOTH sides so the next edit has to choose
+> deliberately rather than rediscover it.
+>
+> The refusal is pinned as hard as the fix: a general -er rule turns "water" into "wat" and
+> "other" into "oth", and §O116 asserts those survive stemming intact. O65's own refusal
+> ("more than fifteen minutes" reads like distance talk) is re-pinned rather than quietly
+> reversed while I was inside the same facet. Floors around the reclassification are written
+> out longhand, because a net floor would make a reclassification look like growth.
 
 > **O115 (UI refinement: the evidence list has never had the layout it was written with) —
 > claimed 2026-08-20T18:16Z by loop-0820s.** The lane's own review procedure, run on the

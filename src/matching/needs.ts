@@ -123,6 +123,32 @@ const pref = (preference: Preference, label: string, weight: number, phrases: re
  * the thing they asked for" versus "this is context they mentioned", not a calibrated belief.
  * Anything finer would be false precision of exactly the kind the stat rail refuses.
  */
+/**
+ * Phrases a PREFERENCE facet owns, even though a manner quality also lists them (O116).
+ *
+ * `manner:unhurried` and `pref:longer-appointment` both cue "longer appointment". While
+ * `stem("longer")` was "longer" the two never met, so the collision sat here unseen since both
+ * were authored. O116 taught the stemmer that "longer" is "long" — correctly, since the facet
+ * whose LABEL is "A longer first appointment" could not otherwise hear its own adjective — and
+ * the two cues immediately collided. FIRST_CLAIM gives a phrase one owner, and the winner was
+ * decided by lexicon order and phrase length, which is no way to decide anything: unhurried
+ * silently owned the words for the facet named after them, and "a long appointment" stopped
+ * reaching `pref:longer-appointment` at all.
+ *
+ * THE OWNERSHIP IS DECLARED HERE RATHER THAN LEFT TO SORT ORDER. Note what this does NOT do:
+ * it does not remove the phrases from `EI_QUALITIES`, because the onboarding interview reads
+ * those cue lists DIRECTLY to propose facets from a doctor's own words (W221/O22), and a GP
+ * who says "I book longer appointments" is describing an unhurried manner. The two readers
+ * legitimately want different answers about the same phrase — one is reading a patient's ask,
+ * the other a clinician's description of their practice — and this is the seam where they
+ * differ, stated once, in the reader that needs the exception.
+ */
+const PREFERENCE_OWNED_PHRASES: ReadonlySet<string> = new Set(["longer appointment", "longer first"]);
+
+function mannerPhrases(quality: MannerTrait): readonly string[] {
+  return EI_QUALITIES[quality].cues.filter((phrase) => !PREFERENCE_OWNED_PHRASES.has(phrase));
+}
+
 const LEXICON: readonly Entry[] = [
   // ── What somebody is trying to get done ───────────────────────────────────────────────────
   // ── ADHD ──────────────────────────────────────────────────────────────────────────────────
@@ -153,9 +179,16 @@ const LEXICON: readonly Entry[] = [
     "paediatric",
   ]),
   care("titration", "Titration and dose review", 28, [
+    /* O116: the register a dose review is actually asked in — the script needing adjusting,
+       the generic brand, the afternoon rebound, and "medication management" as the thing
+       being asked FOR rather than therapy. */
+    "script needs adjusting", "the generic brand", "afternoon rebound", "medication management",
     "titration", "dose", "wearing off", "wears off", "side effects", "not working", "adjust the dose",
   ]),
   care("shared-care", "Shared care with a psychiatrist", 18, [
+    /* O116: continuity language. Somebody discharged from a clinic, or newly moved, asks for
+       their prescribing to be CONTINUED or HANDED BACK — none of which the facet could hear. */
+    "hand the prescribing back", "scripts managed", "continue my prescriptions", "between pharmacies",
     "shared care", "psychiatrist", "already diagnosed", "existing prescription",
     // O49: the paediatric half of shared care, both spellings — the corpus ask names the
     // clinician to be shared WITH, exactly like "psychiatrist" above.
@@ -305,7 +338,7 @@ const LEXICON: readonly Entry[] = [
    * ranking of which way of working is better — that judgement is not the product's to make.
    */
   ...EI_QUALITY_KEYS.map((quality) =>
-    manner(quality, EI_QUALITIES[quality].label, 24, EI_QUALITIES[quality].cues),
+    manner(quality, EI_QUALITIES[quality].label, 24, mannerPhrases(quality)),
   ),
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
@@ -370,7 +403,11 @@ const LEXICON: readonly Entry[] = [
                       it was meant for are covered by "gap fees" and "medicare only" anyway.
          "free"       fires on "free up my afternoons". */
   ]),
-  pref("longer-appointment", "A longer first appointment", 20, ["longer first appointment",
+  pref("longer-appointment", "A longer first appointment", 20, [
+    /* O116: "double slot" and "forty minutes" — and the comparative itself now reaches through
+       the stemmer entry rather than through a cue, so every "long…" cue O65 wrote hears
+       "longer" too. "more than fifteen minutes" stays refused exactly as O65 refused it. */
+    "double slot", "forty minutes","longer first appointment",
     // O65 (the O22 loop on O64's corpus finding): the facet carried ONE three-token cue, so
     // the commonest phrasings of this ask were all unheard — measured, not guessed, in
     // corpus tranche three. Each cue keeps two content tokens (the O25 collapse rule).
