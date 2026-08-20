@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O78 (founder-directed 2026-08-20: "continue optimising the matching algorithm with a
+> thorough code audit") — claimed 2026-08-20T04:19Z by loop-0820d.** The O70 worked example
+> applied to the matching pipeline: read read.ts / needs.ts / match.ts / clarify.ts /
+> explain.ts and the ranking half of clinicians.ts closely, probe every suspected defect
+> class against the live reader, fix what the reading finds IN-UNIT with pins (refused
+> fixes recorded with reasons, the O65 non-cue pattern). Suspects going in: findCue's
+> first-occurrence-only return means a cue suppressed at its first occurrence (negated,
+> hedged, on-behalf) never retries a later GENUINE occurrence in another clause; span-claim
+> interactions between overlapping cues; stemmer warts the corpus has not yet named. Gate:
+> audit findings written to docs/MATCHING-AUDIT-O78.md (found / fixed / refused, each with
+> its sentence), every fix pinned both directions in reach.test.ts §O78 + corpus data,
+> floors and tie-quality moved with the measured run if they move, full `pnpm verify`
+> green.
+
 > **O77 (the reader unit O75's OTHER pin demanded: "for my mum" is a patient, not a
 > presence) — claimed 2026-08-20T03:46Z by loop-0820c; DONE 2026-08-20. Gate: §O77 pins
 > both directions in reach.test.ts (on-behalf suppressed with the honest structured reach
