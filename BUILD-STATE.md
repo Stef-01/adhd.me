@@ -119,6 +119,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O118 (the missed-asks line lower-cases an acronym) — claimed 2026-08-20T19:38Z by
+> loop-0820s.** O117's panel rendered it and made it obvious: the profile prints "You also
+> asked for **adhd in children and adolescents** — not something they declare." O21 learned
+> this exact lesson on the REASON line — "Hindi-speaking" became "hindi-speaking", which its
+> comment calls "a typo on the one word in the sentence a reader is scanning for" — and stopped
+> lower-casing there. The missed-asks line never got the same treatment, and neither did
+> O117's own not-declared frame, which copied the same call.
+> Surveyed the whole vocabulary rather than the one label that showed: SIX of the twenty-seven
+> labels are damaged — "ADHD assessment", "ADHD in children and adolescents", "Trauma and
+> PTSD", "A woman GP", "Hindi-speaking", "Urdu-speaking" — and the other twenty-one genuinely
+> READ BETTER lowered, because "You also asked for A longer first appointment" is as wrong as
+> "adhd". So neither pure approach works and this is a helper, not a one-line edit. Rule, from
+> the survey: lower the FIRST CHARACTER only, never an interior word (that alone saves PTSD and
+> GP), skip it when the first word is an acronym, and skip it for language facets, whose labels
+> are proper nouns by construction — information the caller already has, since it is holding a
+> `NeedSignal` and its facet kind. The sentence moves into the matching module beside
+> `unservedCopy` for the reason O110 moved that one: copy deciding an honesty claim should be
+> unit-testable, not only walkable. Gate: every label in the vocabulary asserted to render
+> correctly — acronyms, proper nouns and ordinary words each pinned by example, not by rule
+> restatement; the profile and O117's console panel proved to use the same helper; qa/ capture
+> and DESIGN-QA entry; e2e green; full `pnpm verify` green.
+
 > **O117 (explaining the fit, Q4: a doctor sees what patients are told about them) — claimed
 > 2026-08-20T19:07Z by loop-0820s.** The lane's last increment, and the only one pointed at
 > the clinician rather than the reader: "the same provenance view inside the console so a
