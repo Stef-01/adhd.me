@@ -141,6 +141,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > it executes. Gate: the four open subject-blind FPs and O128's two registered with their real
 > current behaviour measured, the bar demonstrably firing on a seeded second case, full
 > `pnpm verify` green.
+> DONE 2026-08-20. `src/matching/known-fps.ts` + its test: six entries and the O84 bar
+> executing rather than remembered.
+> **THE BAR'S FIRST RUN CORRECTED THE DESIGN, which is the best thing that happened in this
+> unit.** It failed immediately: the `subject-blind` family has FOUR open members, so by the law
+> as I had encoded it a mechanism was four times earned and nobody had built it. That is not
+> what those four are. O119 examined them and found the readings harmless — somebody who writes
+> "so I can actually explain" would not object to being matched with a GP who explains — and
+> O120 fixed the one member that was NOT harmless within a day, an adult's "my own assessment"
+> ranking them against paediatric GPs. They are ACCEPTED, not waiting. The register gained a
+> third status in W53's posture: an acceptance carries its REASON, because one without is
+> indistinguishable from nobody having looked, and a test enforces the reason is substantive.
+> Collapsing "we looked and it is fine" into "nobody has got to it yet" is what makes a backlog
+> look like a to-do list, and it would have had the bar crying wolf on the day it was built.
+> Checked in both directions and against the corpus: every OPEN or ACCEPTED entry must still
+> exhibit its false positive (a stale acceptance is the dead-exemption defect W194 found in its
+> own list), every FIXED entry must no longer exhibit it, and every registered sentence must
+> exist in the corpus so the register cannot drift from what it describes. The bar's
+> non-vacuity is proven on a seeded pair rather than asserted.
+> Standing state it now makes visible at a glance: FOUR accepted (subject-blind, O119), TWO open
+> and each alone in its family (O128's negated-saying-of-a-state and on-behalf-governor-after) —
+> the measurement that says neither mechanism is built today, and the build will say so itself
+> the moment a second case of either arrives.
+> Gate met: `pnpm verify` green 3587, W200 copy census declares the new module.
 
 > **O130 (the accent points at the wrong thing, and it is a fossil) — claimed
 > 2026-08-20T23:15Z by loop-0820s.** O129 reduced accent inflation on the profile and recorded

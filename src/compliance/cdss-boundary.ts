@@ -415,6 +415,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports three enumerators over a clinician's own declarations and a `ToldLine` type. It holds NO copy of its own and is declared with an empty `operatorCopy` deliberately, because the whole point of the module is that it AUTHORS NOTHING: every sentence it returns is composed by the function the finder itself calls — the reason line by `getPersonalizedMatch`, the closed-books line by `closedBooksNote`, the distance line by `distanceTo`, the listing-gap line by `unservedCopy` — and the two fixed frames it does carry are the profile's missed-asks sentence and a source label naming the field a line came from, neither of which a patient ever reads. A test asserts the panel and the finder cannot disagree. That property is the module's reason to exist: a \"what patients are told\" view that wrote its own copy would drift from the product the first time a sentence changed, and the clinician reading it would be reading a reassuring fiction about their own listing.",
   },
   {
+    module: "src/matching/known-fps.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports the false-positive register, its two selectors and its type. It holds no operator copy: every string in it is a build-time note — a corpus sentence quoted verbatim, the facet it wrongly reaches, the construction family it belongs to, and where an entry is accepted, the reason. None of it is rendered to anybody. Declared with an empty `operatorCopy` for the reason src/matching/read.ts states: a module absent from this census is indistinguishable from a module nobody has checked. What it is FOR is the O84 bar — one case does not earn a matcher mechanism, two do — which the tree had been applying from memory since August because the evidence for it lived in sixteen prose comments spread across corpus.ts. The register makes the count automatic, and its own first run taught it a distinction it lacked: a reading examined and judged harmless is ACCEPTED, not queued, and collapsing the two would have made the bar demand a mechanism for a family O119 had already looked at and cleared.",
+  },
+  {
     module: "src/matching/refused-cues.ts",
     operatorCopy: [],
     notCopy:
