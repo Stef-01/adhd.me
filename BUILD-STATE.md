@@ -140,6 +140,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > assert rather than blanket-updated, the clarifier and headline branches proved unchanged, a
 > qa/ capture showing the two lines agreeing, DESIGN-QA entry, e2e green, full `pnpm verify`
 > green.
+> DONE 2026-08-20. `MatchQuality` gained `unserved`, returned when needs were read and every
+> score is zero; the genuine no-read case keeps `unmatched` and the sentence that was always
+> true of it. The new copy says the true thing and HANDS OFF to the gap line instead of
+> contradicting it: "We understood what you asked for. Nobody listed today answers it — so
+> this is everyone we list, not an order." Captured before and after on the same query.
+>
+> No existing pin had to be rewritten, which is worth noting because it means no test had ever
+> asserted the false value for a read-but-unanswered query — the falsehood lived entirely in
+> copy, where the suite could not see it, and only a screenshot could catch it. That is the
+> argument for the taste law's capture step in one sentence.
+>
+> THE SAME FALSEHOOD EXISTED ONE PAGE OVER and is fixed with it: /examples described every
+> non-informed verdict as "the words reached nothing", which is false for an unserved read —
+> and it is the page that exists to explain the product's honesty, so blaming the reader for
+> the roster's gap there is the worst place to do it. Found by following the type change to
+> its consumers rather than by chance.
+>
+> Pinned four ways: the two situations separate; the two banners differ and the unserved one
+> can never contain "could not tell"; the banner and the gap line agree on the exact query
+> that exposed the disagreement; and `unserved` stays on the non-informed side of every
+> honesty branch, so nothing else on the screen changed behaviour.
 
 > **O110 (the honesty line is blind to three quarters of what it should cover) — claimed
 > 2026-08-20T16:34Z by loop-0820s.** O109's own consequence, and a live patient-facing defect

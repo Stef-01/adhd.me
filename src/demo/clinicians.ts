@@ -236,17 +236,28 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
  * which is a fact rather than an estimate, and it can therefore be said in one sentence — W213's
  * floor applies to this as much as to a match reason.
  */
-export type MatchQuality = "informed" | "tied" | "unmatched";
+/**
+ * What the order on the results screen is worth.
+ *
+ * O111 split `unserved` out of `unmatched`. The two had always been different situations —
+ * NOTHING WAS READ, versus SOMETHING WAS READ THAT NOBODY ANSWERS — and `matchQuality` had
+ * routed both to one value with copy describing only the first. A reader asking about bulk
+ * billing was told "we could not tell what you are looking for" directly above a line naming
+ * bulk billing. Everything that branches on `!== "informed"` is unaffected: `unserved` is not
+ * an informed order either, and only the sentence differs.
+ */
+export type MatchQuality = "informed" | "tied" | "unmatched" | "unserved";
 
 export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
   const needs = needsFor(query, roster);
   if (needs.length === 0) return "unmatched";
   const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
-  // Main's W221 rebuild carried one improvement the overhaul had not made, kept through the
-  // merge: words that were READ but that nobody on the roster answers are not a tie — "both of
-  // these answer what you asked for equally well" would be false. It is an unmatched listing,
-  // and `unservedAsks` names whose gap it is.
-  if (scores.every((score) => score === 0)) return "unmatched";
+  // Words that were READ but that nobody on the roster answers are not a tie — "both of these
+  // answer what you asked for equally well" would be false. O111: they are not `unmatched`
+  // either, which is the claim that the request could not be read. This branch always knew the
+  // difference (the note said "`unservedAsks` names whose gap it is") and said it out loud only
+  // in a comment; now it says it to the reader.
+  if (scores.every((score) => score === 0)) return "unserved";
   return new Set(scores).size > 1 ? "informed" : "tied";
 }
 
@@ -280,6 +291,12 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   // so this line only has to state the fact.
   unmatched:
     "We could not tell what you are looking for, so this is everyone we list — not an order.",
+  /* O111: the sentence for a request that WAS read and that nobody listed answers. The old
+     copy claimed a failure of comprehension where the real failure is coverage, which is the
+     product blaming the reader for its own gap — and it rendered directly above the line that
+     names the gap. This one is true, and it hands off to that line instead of contradicting
+     it. `unservedAsks` supplies the specifics; this only has to stop lying. */
+  unserved: "We understood what you asked for. Nobody listed today answers it — so this is everyone we list, not an order.",
 };
 
 /**

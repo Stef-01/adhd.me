@@ -708,3 +708,27 @@ read, and something was read that nobody answers — and the copy only describes
 The code comment beside it already knew ("words that were READ but that nobody answers are not
 a tie … `unservedAsks` names whose gap it is"), but the sentence was never split. The falsehood
 predates this unit; O110 only put a true sentence beside it, which is what made it visible.
+
+## O111 — the banner stops saying it could not read what it read perfectly (2026-08-20)
+
+Captures: qa/honesty-o111/ (the same query as qa/unserved-o110/, with the two lines agreeing).
+
+- [x] The defect O110's capture found. `matchQuality` routed two different situations to
+  `unmatched` — nothing was read, and something was read that nobody on the roster answers —
+  and the copy described only the first. A reader typing "gap fees are why I stopped going, I
+  need a GP who bulk bills" was told "We could not tell what you are looking for", directly
+  above a line naming bulk billing. Two sentences, one screen, contradicting each other, and
+  the false one set louder.
+- [x] Fixed at the value, not the sentence: a fourth `MatchQuality`, `unserved`, returned when
+  needs were read and every score is zero. The genuine no-read case keeps the copy that was
+  always true of it. `unserved` sits on the same side of every `!== "informed"` branch as the
+  value it split from, so no other honesty rule changes — pinned.
+- [x] The same falsehood existed one page over and is fixed with it: /examples described every
+  non-informed verdict as "the words reached nothing", which is false for an unserved read and
+  blames the reader for the roster's gap in the one place the product explains its own honesty.
+- [x] Before: "We could not tell what you are looking for…" above "Bulk billing is not
+  something any GP listed today declares." After: "We understood what you asked for. Nobody
+  listed today answers it…" above the same line. The banner now hands off to the gap line
+  instead of contradicting it.
+- [x] Pinned so it cannot regress: the two banners must differ, and the unserved sentence must
+  never contain "could not tell".

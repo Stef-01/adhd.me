@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
+import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
 import { stem, tokenise } from "./read";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
@@ -1102,5 +1102,46 @@ describe("§O109 bulk-billing learns the words the ask is actually made in", () 
     expect(facets("no out of pocket costs please")).toContain("pref:bulk-billing");
     // And a genuine refusal of the facet is still a refusal.
     expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
+  });
+});
+
+describe("§O111 the finder does not say it could not read what it read perfectly", () => {
+  /**
+   * TWO SITUATIONS THAT WERE ONE VALUE.
+   *
+   * `matchQuality` routed both "nothing was read" and "something was read that nobody
+   * answers" to `unmatched`, whose copy describes only the first. So a bulk-billing ask —
+   * read perfectly — was told "We could not tell what you are looking for", directly above the
+   * line naming bulk billing as the listing's gap. Two sentences on one screen, contradicting
+   * each other, and the false one louder.
+   */
+  it("separates a request nobody answers from a request nobody could read", () => {
+    expect(matchQuality("gap fees are why I stopped going, I need a GP who bulk bills")).toBe("unserved");
+    expect(matchQuality("someone calm who can steady me")).toBe("unserved");
+    // The genuine no-read case keeps the value and the sentence that were always true of it.
+    expect(matchQuality("zzz qqq")).toBe("unmatched");
+  });
+
+  it("the two banners say different things, and neither claims the other's failure", () => {
+    expect(MATCH_QUALITY_COPY.unserved).toContain("We understood what you asked for");
+    expect(MATCH_QUALITY_COPY.unmatched).toContain("could not tell");
+    // The unserved sentence must never claim a failure of comprehension: that is the whole bug.
+    expect(MATCH_QUALITY_COPY.unserved.toLowerCase()).not.toContain("could not tell");
+  });
+
+  it("the banner and the gap line agree, on the query that exposed the disagreement", () => {
+    const said = "gap fees are why I stopped going, I need a GP who bulk bills";
+    expect(MATCH_QUALITY_COPY[matchQuality(said)]).toContain("Nobody listed today answers it");
+    expect(unservedAsks(said)[0]).toContain("Bulk billing is not something any GP listed today declares");
+  });
+
+  it("nothing that branches on an earned order changes: unserved is not informed either", () => {
+    // Every honesty branch in the UI asks `quality !== "informed"`, so the new value must sit
+    // on the same side of that line as the one it split from.
+    for (const said of ["gap fees are why I stopped going", "zzz qqq", "someone calm who can steady me"]) {
+      expect(matchQuality(said)).not.toBe("informed");
+    }
+    // And a request the roster genuinely answers is still informed.
+    expect(matchQuality("my dose wears off and needs titration reviewed")).toBe("informed");
   });
 });

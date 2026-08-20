@@ -37,7 +37,14 @@ export default function ExamplesPage() {
           ? "the order was earned, and the reason is printed on the card"
           : quality === "tied"
             ? "the listed GPs answered it equally well, and the finder says so instead of pretending to rank them"
-            : "the words reached nothing, and the finder says so instead of inventing an order",
+            // O111: this page had the same falsehood the finder's banner did. "The words
+            // reached nothing" is true of `unmatched` and false of `unserved`, where the
+            // words reached a facet and the LISTING is what falls short — and saying it
+            // here would blame the reader for the roster's gap in the one place the product
+            // is explaining its own honesty.
+            : quality === "unserved"
+              ? "the words were read, nobody listed answers them, and the finder names the gap as ours"
+              : "the words reached nothing, and the finder says so instead of inventing an order",
     };
   });
 
