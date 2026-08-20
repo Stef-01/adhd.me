@@ -153,6 +153,22 @@ describe("clinician roster and matching", () => {
       expect(locationLabel(clinicians.find((c) => c.id === "tushar-yadav")!)).toBe("Beecroft");
     });
 
+    /**
+     * §O86: Dr Anubhav's pair (founder-supplied 2026-08-20). He is telehealth-first, so a
+     * second location changes the LABEL a reader sees and nothing else: the sentence stays
+     * telehealth — no kilometre figure, no rooms parenthetical — and the near-sort keeps
+     * treating him as equally near from everywhere.
+     */
+    it("a telehealth-first clinician's second location changes the label only", () => {
+      const anubhav = clinicians.find((c) => c.id === "anubhav-saxena")!;
+      expect(locationLabel(anubhav)).toBe("Beecroft & Double Bay");
+      for (const suburb of ["Beecroft", "Double Bay", "Hornsby", "Southport"]) {
+        const said = distanceTo(anubhav, resolvePlace(suburb));
+        expect(said).toMatch(/telehealth/i);
+        expect(said).not.toMatch(/km|rooms/);
+      }
+    });
+
     it("the near-sort reads the nearest location: a Hornsby reader finds her adjacent, not 25 km away", () => {
       // An unmatched query with an origin is fully distance-sorted within the tie (O3/F4),
       // and Dr Anubhav is telehealth-first (keeps fit position) — so between the two

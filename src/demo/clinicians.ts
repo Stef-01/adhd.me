@@ -212,6 +212,14 @@ export const clinicians: Clinician[] = [
     pronouns: "he/him",
     title: "General practitioner, MBBS FRACGP MPhil BSc(Adv) DCH",
     suburb: "Beecroft",
+    // O86: the founder supplied Double Bay as his second consulting location (2026-08-20,
+    // "similar in the finder view for Anubhav, add Beecroft and Double Bay"). The suburb is
+    // the whole of what was supplied — no Double Bay practice name or booking route is
+    // written here — and his telehealth-first posture is untouched: the distance sentence
+    // stays "by telehealth, wherever you are", so the second location changes the LABEL a
+    // reader sees, never the kilometre arithmetic (O85's rooms-naming rule only speaks for
+    // clinicians somebody travels to).
+    alsoConsultsAt: ["Double Bay"],
     practice: "Beecroft Family & Skin Cancer Clinic",
     reach: "Practice appointments and phone consultations",
     image: "/clinicians/anubhav-saxena.png",
@@ -249,7 +257,7 @@ export const clinicians: Clinician[] = [
       practitionerId: "123180",
       url: "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
     },
-    keywords: ["adhd", "assessment", "structured", "thorough", "measured", "baseline", "bloods", "pathology", "physical", "heart", "cardiac", "cardiovascular", "blood pressure", "metabolic", "sleep", "titration", "dose", "medication", "stimulant", "monitoring", "review", "telehealth", "phone", "remote", "online", "substance", "drinking", "alcohol", "cannabis", "history", "non-stimulant", "shared care", "hindi", "urdu", "adult", "founder"],
+    keywords: ["adhd", "assessment", "structured", "thorough", "measured", "baseline", "bloods", "pathology", "physical", "heart", "cardiac", "cardiovascular", "blood pressure", "metabolic", "sleep", "titration", "dose", "medication", "stimulant", "monitoring", "review", "telehealth", "phone", "remote", "online", "substance", "drinking", "alcohol", "cannabis", "history", "non-stimulant", "shared care", "hindi", "urdu", "adult", "founder", "beecroft", "double bay"],
     realPerson: true,
     founderInterest:
       "Dr Saxena is a co-founder of ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",

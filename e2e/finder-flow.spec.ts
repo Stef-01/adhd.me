@@ -64,6 +64,12 @@ test("a second consulting location is a fact the reader sees, with the distance 
   await expect(anushaRow.getByText(/in your suburb \(their Hornsby rooms\)/)).toBeVisible();
   await anushaRow.screenshot({ path: "qa/location-o85/row-hornsby-origin.png" });
 
+  // O86: Dr Anubhav's pair renders the same way — and being telehealth-first, his line
+  // says telehealth rather than a kilometre figure, second location or not.
+  const anubhavRow = page.locator(".clinician-row", { hasText: "Dr Anubhav Saxena" });
+  await expect(anubhavRow.getByText(/Beecroft & Double Bay, by telehealth/)).toBeVisible();
+  await anubhavRow.screenshot({ path: "qa/location-o86/row-telehealth-pair.png" });
+
   // The profile carries the same pair on its meta line.
   await anushaRow.click();
   await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();

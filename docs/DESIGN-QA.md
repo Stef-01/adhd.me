@@ -512,3 +512,18 @@ CSS — the existing row and meta lines carry the pair.
 - [x] Founder-supplied fact, source cited in the entry comment (2026-08-20); the roster
   test now sweeps every declared location through the gazetteer and focus areas, so a
   second location can never be an unresolvable string.
+
+## O86 — Beecroft & Double Bay on Dr Anubhav's listing (2026-08-20)
+
+Captures: qa/location-o86/ (his row with the pair and the telehealth line). No new CSS —
+the O85 label carries it.
+
+- [x] Related facts share a row: "Beecroft & Double Bay, by telehealth, wherever you are"
+  — every place he consults plus how an appointment actually reaches him, one line.
+- [x] Honesty gates: telehealth-first means the second location changes the LABEL only —
+  no kilometre figure appears, no rooms parenthetical, and the near-sort keeps his fit
+  position (a distance to somebody nobody travels to answers no question, the standing
+  law). Nothing about the Double Bay rooms is invented; booking stays his Healthengine
+  profile and the map link his named practice.
+- [x] Founder-supplied fact, source cited in the entry comment (2026-08-20); the roster
+  sweep resolves the pair through the gazetteer and focus areas like every location.
