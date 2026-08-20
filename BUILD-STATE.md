@@ -147,6 +147,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > overruling a compliance law, which this tree forbids. Gate: before/after captures at 390 and
 > 1280 plus the founder's own 1000@2x, measured characters-per-line inside 45–75 after, a
 > DESIGN-QA entry naming each finding, e2e green, full `pnpm verify` green.
+> DONE 2026-08-20. Six defects found by measurement, all fixed; two recorded as deliberately
+> unchanged.
+> **The dash was the founder's "terrible".** `.profile-content li::before` is now
+> `.profile-content section li::before` — scoped to the experience list it was written for, and
+> confirmed by computed style: the evidence row's `::before` box is gone (`width: auto`) while
+> the experience list's is intact (`10px`). This is O115's bug in the very next rule, and the
+> general lesson is now written where both live: an unscoped descendant selector in a shared
+> region is never ONE bug, it is however many classed elements happen to live in that region.
+> **Measure**: About prose 87→67 characters per line, credential line 103→74, both inside the
+> 45–75 range every source agrees on. The tuning is the part worth keeping: a 66ch cap measured
+> out at 79 ACTUAL characters, because `ch` is the advance of "0" and narrower than this face's
+> average lowercase. 56ch measures 66. Checked against a rendered line rather than reasoned from
+> the unit, and the comment tells the next person to measure rather than reason.
+> Also fixed: the boxed fit-list flattened to hairlines (it was the heaviest object on the page
+> carrying the lightest facts, and its padding was what pushed those rows out of the single left
+> column); a doubled hairline where its last rule met the next section's; and 10px between the
+> disclosure and the evidence chip, because butted together "Co-founder of ADHD.ME" read as the
+> FIRST REASON this GP was matched.
+> **Two things deliberately not changed, both recorded in DESIGN-QA.** The disclosure stays
+> amber and bold — it is compliance copy about a material interest, and quietening it for visual
+> balance would be the taste law overruling a compliance law, which this tree forbids in that
+> order. And accent inflation is reduced, not solved: removing the dash took one of six amber
+> roles away, the remaining five are each defensible alone, and the eyebrow is shared with the
+> results screen, so changing it here only would trade one incoherence for another.
+> **METHOD NOTE, because my first reading of the screenshot was wrong.** I concluded the shell
+> had lost its width constraint and was running full-bleed. It had not — 640px exactly as O63
+> set it; I had misread a 2× capture as 1×. Everything in this unit was measured in the browser
+> before anything was changed, which is the only reason the real defects were found instead of a
+> confident fix to a width that was already correct.
+> Gate met: before/after at the founder's own 1000@2× plus after at 390 and 1280 in
+> qa/profile-o129/, DESIGN-QA entry naming every finding and both refusals, 32 e2e green,
+> `pnpm verify` green 3579.
 
 > **O128 (corpus tranche seven: the adversarial pass over today's own work) — claimed
 > 2026-08-20T22:44Z by loop-0820s.** Today added roughly ninety cues and four mechanisms across

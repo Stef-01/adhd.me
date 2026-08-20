@@ -628,7 +628,11 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin: 0;
+  /* O129: separated from the disclosure line above it. Butted together, "Co-founder of ADHD.ME"
+     read as the first item of the evidence list — a material-interest disclosure being mistaken
+     for a reason this GP was matched, which is the one adjacency on this screen worth spending
+     10px to prevent. */
+  margin: 10px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -1151,6 +1155,9 @@ textarea:focus-visible {
 
 .clinician-meta {
   margin: 7px 0 0;
+  /* O129: ~103 characters per line before this — the longest line on the screen was also the
+     smallest type on it, which is the worst pairing available. */
+  max-width: 62ch;
   color: var(--muted);
   font-size: 0.875rem;
   line-height: 1.45;
@@ -1331,8 +1338,24 @@ textarea:focus-visible {
   line-height: 1.65;
 }
 
+/* O129: MEASURE. This prose ran ~87 characters per line inside the 640px shell, and the
+   credential line above it ~103. Bringhurst's 45–75, the 50–75 consensus and the British
+   Dyslexia Association's 60–70 all sit well below that, and this product's readers are tired,
+   often low-vision and often dyslexic — the measure is not a nicety here, it is the difference
+   between reading a paragraph and losing your place in it.
+
+   Capped in `ch`, so it tracks the font rather than a pixel guess, and it narrows the TEXT
+   rather than the shell: O63 set the shell width deliberately for the whole flow, and a
+   paragraph is not a reason to move it.
+
+   56ch, NOT 66ch, and the difference is worth writing down: the `ch` unit is the advance of "0",
+   which is narrower than this face's average lowercase letter, so a 66ch cap measured out at 79
+   actual characters — still over the range it was set to satisfy. The number was checked against
+   a rendered line rather than trusted, and 56ch measures 66. Anyone retuning this should measure
+   again rather than reason from the unit. */
 .profile-content section p {
   margin: 0;
+  max-width: 56ch;
 }
 
 /* O115: SCOPED TO THE LIST IT WAS WRITTEN FOR. As `.profile-content ul` this was 0,1,1 and
@@ -1357,10 +1380,23 @@ textarea:focus-visible {
   list-style: none;
 }
 
-.profile-content li::before {
-  /* A drawn rule rather than a dash character. The em-dash it used to print was the one instance
-     the copy sweep could not reach, and a 10px rule is what a dash-bullet is trying to look like
-     anyway. `currentColor` keeps it on the accent in both themes without a second declaration. */
+/* O129 (founder-reported): SCOPED TO THE SAME LIST AS THE RULE ABOVE, and for the same reason.
+   As `.profile-content li::before` this was 0,1,1 and painted a 10px ACCENT dash on every list
+   item in the profile — including `.fit-evidence` and `.fit-missed`, which are flex rows, not
+   bulleted lists. The founder's screenshot shows it as a dash floating beside the
+   "Hindi-speaking" chip with nothing to bullet.
+
+   This is O115's bug in the very next rule. That unit scoped `.profile-content ul` after it had
+   spent months beating classed lists at the same specificity, wrote down that "the experience
+   list is the only `ul` inside a `<section>` here, which is what makes the scoping exact" — and
+   did not look at the `::before` immediately beneath it, which needed exactly the same sentence.
+   The lesson is that an unscoped descendant selector in a shared region is never a single bug:
+   it is however many classed elements happen to live in that region.
+
+   The dash is a drawn rule rather than a dash character. The em-dash it used to print was the
+   one instance the copy sweep could not reach, and a 10px rule is what a dash-bullet is trying
+   to look like anyway. */
+.profile-content section li::before {
   content: "";
   flex: 0 0 auto;
   width: 10px;
@@ -1374,6 +1410,14 @@ textarea:focus-visible {
 .fit-list {
   margin: 26px 0 12px;
   border-top: 1px solid var(--line);
+}
+
+/* O129: the last row drops its rule. With a border-bottom on every row, the final one landed
+   ~15px above the next section's border-top and the page showed TWO hairlines with nothing
+   between them — the kind of doubled line that reads as a rendering fault rather than a
+   divider. */
+.fit-list p:last-child {
+  border-bottom: 0;
 }
 
 .fit-list p {
@@ -2660,15 +2704,20 @@ textarea:focus-visible {
   font-size: 0.625rem;
 }
 
+/* O129: THE PRACTICAL FACTS ARE A LIST, NOT A CARD. A 1px box with an 18px radius and ruled
+   rows read as a data table dropped into a page built from editorial hairlines — it was the
+   heaviest object on the screen while carrying the lightest facts (appointment length, reach,
+   a map link). The rules stay, because the facts genuinely are separate lines; the box goes, so
+   the eye reads a list and the page keeps one visual language. The horizontal padding goes with
+   it: the box was the only thing that made the rows indent from the column everything else on
+   the screen shares, which is what made the left edge look ragged in the founder's capture. */
 .patient-v2 .fit-list {
-  overflow: hidden;
   margin-top: 24px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
+  border-top: 1px solid var(--line);
 }
 
 .patient-v2 .fit-list p {
-  padding: 14px 16px;
+  padding: 13px 0;
 }
 
 .patient-v2 .profile-content section {

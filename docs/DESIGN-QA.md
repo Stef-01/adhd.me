@@ -921,3 +921,58 @@ and the record is the measurement.
   the reader arrives. Animating them is not "a value resolving" — it is decoration wearing the
   lane's own phrase for meaningful motion. Refused with the reason kept in the plan rather than
   quietly dropped, so a later author meets the argument instead of the empty slot.
+
+## O129 — the profile, audited after the founder said it looked terrible (2026-08-20)
+
+Captures: qa/profile-o129/ — before and after at the founder's own viewport (1000×900 @2×), plus
+after at 390 and 1280.
+
+**Method note first, because my first reading was wrong.** Looking at the screenshot I concluded
+the shell had lost its width constraint and the content was running full-bleed. It had not — the
+shell was 640px exactly as O63 set it, and I had misread a 2× capture as 1× . Everything below
+was measured in the browser before anything was changed.
+
+### Found and fixed
+
+- [x] **A stray amber dash on every evidence and missed row — and it is O115's bug in the very
+  next rule.** `.profile-content li::before` draws a 10px accent rule as a dash-bullet at 0,1,1
+  specificity. It was written for the "Focus and experience" list and also landed on
+  `.fit-evidence` and `.fit-missed`, which are flex rows with nothing to bullet — the dash
+  floating beside the "Hindi-speaking" chip in the founder's screenshot. O115 fixed exactly this
+  shape one rule above, wrote down why the scoping was exact, and did not look at the `::before`
+  directly beneath it. An unscoped descendant selector in a shared region is never one bug; it is
+  however many classed elements live in that region.
+- [x] **Measure far outside the readable range.** The About prose ran ~87 characters per line and
+  the credential line ~103 — the longest line on the screen was also the smallest type on it.
+  Now 67 and 74. Sources below put the optimum at 45–75 (Bringhurst), 50–75 with 66 as target,
+  and 60–70 for dyslexic readers; this product's readers are tired, often low-vision and often
+  dyslexic, so measure is not a nicety here.
+- [x] **56ch, not 66ch, and the difference is worth recording.** The `ch` unit is the advance of
+  "0", narrower than this face's average lowercase, so a 66ch cap measured out at 79 actual
+  characters — still over the range it was set to satisfy. Checked against a rendered line rather
+  than reasoned from the unit.
+- [x] **The practical facts read as a boxed data table** (1px border, 18px radius, ruled rows) on
+  a page otherwise built from editorial hairlines — the heaviest object on the screen carrying
+  the lightest facts. Box removed, rules kept, and the horizontal padding with it: the box was
+  what pushed those rows out of the single left column everything else shares.
+- [x] **A doubled hairline** where the list's last row rule landed ~15px above the next section's
+  top rule — two lines with nothing between them read as a rendering fault, not a divider.
+- [x] **The disclosure butted against the evidence chip**, so "Co-founder of ADHD.ME" read as the
+  first item of the reasons list — a material-interest disclosure mistaken for a reason this GP
+  was matched. 10px, and the one adjacency on the screen worth spending it on.
+
+### Deliberately not changed
+
+- [ ] **The disclosure's prominence.** It is amber and bold and it stays that way. It is
+  compliance copy about a material interest, and quietening it to improve visual balance would be
+  the taste law overruling a compliance law, which this tree forbids in that order.
+- [ ] **Accent inflation is reduced, not solved.** Amber still carries the eyebrow, the
+  disclosure, the chip, the map link and the booking status. Removing the dash took one of six
+  away; the rest are each defensible alone, and the eyebrow is shared with the results screen, so
+  changing it here only would trade one incoherence for another. Recorded for a unit that can
+  look at accent across the whole flow at once.
+
+Sources consulted: [Bringhurst's 45–75 via Baymard](https://baymard.com/blog/line-length-readability),
+[UXPin's 50–75 rule](https://www.uxpin.com/studio/blog/optimal-line-length-for-readability/),
+[USWDS typography](https://designsystem.digital.gov/components/typography/),
+[Vercel Web Interface Guidelines](https://github.com/vercel-labs/web-interface-guidelines).
