@@ -301,21 +301,20 @@ const DESIRE_NEGATIONS: ReadonlyArray<readonly string[]> = [
 const MAX_NEGATION_LEAD = 3;
 
 /**
- * Whether the cue starting at `cueFrom` sits in the scope of a desire negation.
+ * Where every desire-negation trigger COMPLETES in this sentence (O81).
  *
- * Scope is NegEx's: forward from the trigger, ending at the clause boundary — "they don't want
- * to help. My dose keeps wearing off" negates nothing in the second sentence. The trigger must
- * complete shortly before the cue (MAX_NEGATION_LEAD content tokens), so a negation at the far
- * end of a long clause does not swallow an unrelated ask. Only tokens BEFORE the cue span are
- * read: a negator inside the cue's own words ("not working", "no medication") is part of what
- * the cue means, never a negation of it.
+ * The scanner half of what was `negatedWant`: same phrases, same one-inserted-content-token
+ * allowance ("don't actually want"), same refusal to cross a clause boundary mid-phrase.
+ * Split out because O81 changed WHO decides scope: the old per-cue check asked "is any
+ * trigger shortly before me?", which made one trigger suppress EVERY cue within its lead —
+ * the O78 audit's headline defect ("I don't want a woman GP, bulk billing matters more"
+ * lost bulk-billing). Binding is now done once per trigger, over all candidate spans, in
+ * `suppressedByDesireNegation` below.
  */
-export function negatedWant(sentence: readonly string[], cueFrom: number): boolean {
-  let clauseFrom = cueFrom;
-  while (clauseFrom > 0 && sentence[clauseFrom - 1] !== CLAUSE_BOUNDARY) clauseFrom--;
-
+export function desireNegationEnds(sentence: readonly string[]): number[] {
+  const ends = new Set<number>();
   for (const phrase of DESIRE_NEGATIONS) {
-    for (let start = clauseFrom; start < cueFrom; start++) {
+    for (let start = 0; start < sentence.length; start++) {
       if (sentence[start] !== phrase[0]) continue;
       let at = start;
       let matched = 1;
@@ -323,7 +322,7 @@ export function negatedWant(sentence: readonly string[], cueFrom: number): boole
         const want = phrase[matched]!;
         let next = -1;
         // Within the phrase itself one inserted content token is allowed ("don't actually want").
-        for (let k = at + 1; k <= Math.min(at + 2, cueFrom - 1); k++) {
+        for (let k = at + 1; k <= Math.min(at + 2, sentence.length - 1); k++) {
           if (sentence[k] === CLAUSE_BOUNDARY) break;
           if (sentence[k] === want) {
             next = k;
@@ -334,10 +333,64 @@ export function negatedWant(sentence: readonly string[], cueFrom: number): boole
         at = next;
         matched++;
       }
-      if (matched === phrase.length && cueFrom - at - 1 <= MAX_NEGATION_LEAD) return true;
+      if (matched === phrase.length) ends.add(at);
     }
   }
-  return false;
+  return [...ends].sort((a, b) => a - b);
+}
+
+/**
+ * CONSUME-ONCE SCOPE (O81, the rule the O78 audit designed): a desire negation spends
+ * itself on the NEAREST following candidate span, and only that one.
+ *
+ * WHY NEAREST AND NOT EVERYTHING-IN-LEAD. "I don't want a woman GP, bulk billing matters
+ * more" refuses ONE thing; the old everything-in-lead scope suppressed both asks, and the
+ * audit ruled out the tempting alternative — a shorter lead — because "don't want anyone
+ * touching the dose" is a real refusal with two inserted content words. Linguistically the
+ * negation governs its object; the nearest matched span is the closest computable proxy for
+ * that object with no model and no threshold.
+ *
+ * Scope per trigger is unchanged from O40: forward only, at most MAX_NEGATION_LEAD content
+ * tokens between trigger end and span start, never across a clause boundary. What changed
+ * is arity: one trigger, one binding.
+ *
+ * MANNER SPENDS THE NEGATION WITHOUT BEING SUPPRESSED. Spans are passed with a `negatable`
+ * flag (care/pref true, manner false — O40's exemption). When the nearest span is a manner
+ * ask, the trigger has found its object — "I don't want to feel rushed" IS the unhurried
+ * ask — and nothing further suppresses: the negation is spent, not skipped. Treating manner
+ * as invisible instead would hand the old defect back one step later ("don't want to feel
+ * rushed about the dose" would refuse the dose).
+ *
+ * Returns the indices (into `spans`) that are suppressed. Two cues matching at the same
+ * start position are the same object said twice, so all negatable spans at the nearest
+ * start suppress together.
+ */
+export function suppressedByDesireNegation(
+  sentence: readonly string[],
+  spans: readonly { from: number; negatable: boolean }[],
+): Set<number> {
+  const suppressed = new Set<number>();
+  for (const end of desireNegationEnds(sentence)) {
+    let nearestFrom = Infinity;
+    for (const span of spans) {
+      if (span.from <= end) continue;
+      if (span.from - end - 1 > MAX_NEGATION_LEAD) continue;
+      let boundaryBetween = false;
+      for (let k = end + 1; k < span.from; k++) {
+        if (sentence[k] === CLAUSE_BOUNDARY) {
+          boundaryBetween = true;
+          break;
+        }
+      }
+      if (boundaryBetween) continue;
+      if (span.from < nearestFrom) nearestFrom = span.from;
+    }
+    if (nearestFrom === Infinity) continue;
+    spans.forEach((span, index) => {
+      if (span.from === nearestFrom && span.negatable) suppressed.add(index);
+    });
+  }
+  return suppressed;
 }
 
 /**

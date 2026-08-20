@@ -34,10 +34,14 @@ non-rankings.
    sentence-global (findCue returned only the first occurrence, so a clause-one refusal or
    hedge silenced a clause-two ask; now per-occurrence with retry, behaviour-identical over
    the standing 405 entries), and unservedAsks was the last reader of the global roster.
-   Named for their own units, carried as corpus gap data: desire-negation over-scope (the
-   consume-once design), reported refusal ("they said no to X"), and the sit-in-the-room
-   presence phrasing. Refused with written reasons: micro-caching, cue indexing (0.049
-   ms/call measured), Porter, maximum matching.** Earlier: 311
+   Named for their own units, carried as corpus gap data: desire-negation over-scope —
+   **FIXED by O81 (2026-08-20): consume-once scope, a trigger binds only its nearest
+   following ask, manner spends it without being suppressed; both waiting aspirations
+   promoted ("…woman GP, bulk billing matters more" and the dose/diagnosis sentence that
+   had looked like a lexicon gap since O68), floors and tie-quality moved with them** —
+   reported refusal ("they said no to X"), and the sit-in-the-room presence phrasing.
+   Refused with written reasons: micro-caching, cue indexing (0.049 ms/call measured),
+   Porter, maximum matching.** Earlier: 311
    entries after O68's tranche four (compounds +
    discipline registers, 2026-08-19); every floor rose again (woman-gp 4→10, bulk-billing
    6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN

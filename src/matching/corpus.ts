@@ -498,7 +498,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "not after therapy, I want the assessment done properly", reaches: ["manner:structured"], aspires: ["care:adhd-assessment"] },
   { text: "no more waiting rooms, video only from here", aspires: ["pref:telehealth-first"] },
   { text: "I don't want a woman GP, whoever is soonest", never: ["pref:woman-gp"] },
-  { text: "no interest in the dose, I want the diagnosis question answered", never: ["care:titration"], aspires: ["care:adhd-assessment"] },
+  // Promoted by O81: this sat in the aspiration list since O68 looking like a lexicon gap,
+  // and the O78 audit showed it never was one — O40's everything-in-lead scope was
+  // swallowing the second ask. Consume-once spends the trigger on "the dose" and the
+  // diagnosis question now reaches.
+  { text: "no interest in the dose, I want the diagnosis question answered", never: ["care:titration"], reaches: ["care:adhd-assessment"] },
   { text: "I never feel heard and I want that to change", reaches: ["manner:attuned"] },
   { text: "don't need it bulk billed but do need evenings", never: ["pref:bulk-billing"] },
   /**
@@ -660,13 +664,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I don't want titration. but titration support is exactly what I came for", reaches: ["care:titration"] },
   { text: "not bulk billing at my old clinic. bulk billing is essential now", reaches: ["pref:bulk-billing"] },
   { text: "if that makes sense is all I ever say, but truly I need help to make sense of this", reaches: ["manner:sense_making"] },
-  // NAMED, NOT FIXED — the audit's remaining gap list, each a class with a design sketch in
-  // docs/MATCHING-AUDIT-O78.md. The promotion gate forces these retags when their rules land:
-  // 1) desire-negation over-scope: the trigger's 3-token lead swallows the NEXT ask in the
-  //    same clause; the honest fix is consume-once scope (a negation spends itself on the
-  //    nearest following ask), not a shorter lead — shortening breaks "don't want anyone
-  //    touching the dose", a real refusal with two inserted content words.
-  { text: "I don't want a woman GP, bulk billing matters more", never: ["pref:woman-gp"], aspires: ["pref:bulk-billing"] },
+  // NAMED by the O78 audit as its gap list; each retag below lands with its rule, forced
+  // by the promotion gate. Design sketches live in docs/MATCHING-AUDIT-O78.md.
+  // 1) desire-negation over-scope — FIXED BY O81 (consume-once: a negation spends itself
+  //    on the nearest following ask, not everything in its lead; a shorter lead was ruled
+  //    out because "don't want anyone touching the dose" is a real refusal). The refused
+  //    half stays refused and the following ask now reaches, in one entry:
+  { text: "I don't want a woman GP, bulk billing matters more", never: ["pref:woman-gp"], reaches: ["pref:bulk-billing"] },
   // 2) reported refusal: "they said no to X" is somebody ELSE refusing — a complaint, which
   //    O40/O72 both read as a want everywhere except this bare-not-after-reporting-verb shape.
   { text: "they said no to titration and I want it anyway", aspires: ["care:titration"] },
@@ -713,7 +717,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // the gap (five two-token cues) and the floor is the measured count — the standing gap,
   // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
   // nobody noticed.
-  "care:adhd-assessment": 40,
+  "care:adhd-assessment": 41,
   "care:anxiety": 14,
   "care:autism-adhd": 14,
   "care:child-adolescent-adhd": 13,
@@ -741,7 +745,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
   // honestly reclassified is the one sanctioned direction, and this comment is its record.
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
-  "pref:bulk-billing": 16,
+  "pref:bulk-billing": 17,
   "pref:longer-appointment": 6,
   "pref:telehealth-first": 14,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes

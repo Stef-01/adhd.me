@@ -41,7 +41,14 @@ defaulting unchanged for the one production caller.
 Each is recorded as corpus data (`never` for today's truth, `aspires` for the gap), so the
 promotion gate forces the retag in the same commit its fix lands — the O68→O72/O76/O77 loop.
 
-### 3. Desire-negation over-scope swallows the NEXT ask in the same clause
+### 3. Desire-negation over-scope swallows the NEXT ask in the same clause — FIXED BY O81 (2026-08-20)
+
+> Landed as designed below: `desireNegationEnds` + `suppressedByDesireNegation` in read.ts,
+> readNeeds restructured to collect candidates first and bind each trigger to its nearest
+> following span (manner spends the trigger without being suppressed, so a care ask behind a
+> manner object is no longer swallowed either). Both waiting aspirations promoted and
+> retagged in the same commit; every §O40/§O72/§O78 pin held; the rest of the corpus was
+> behaviour-identical.
 
 "I don't want a woman GP, **bulk billing matters more**" reads as nothing: the O40 trigger's
 3-token lead reaches past `woman gp` and suppresses `bulk billing` too. The same over-scope is

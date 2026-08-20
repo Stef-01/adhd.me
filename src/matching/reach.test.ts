@@ -473,6 +473,45 @@ describe("§O76 a cue inside a conversational hedge is filler, not an ask", () =
   });
 });
 
+describe("§O81 a desire negation spends itself on the nearest ask — consume-once scope", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("the refused ask is suppressed and the following ask survives, in one clause", () => {
+    const womanGp = facets("I don't want a woman GP, bulk billing matters more");
+    expect(womanGp).not.toContain("pref:woman-gp");
+    expect(womanGp).toContain("pref:bulk-billing");
+    // The aspiration that sat in the gap list since O68, never a lexicon gap after all.
+    const dose = facets("no interest in the dose, I want the diagnosis question answered");
+    expect(dose).not.toContain("care:titration");
+    expect(dose).toContain("care:adhd-assessment");
+  });
+
+  it("a manner object SPENDS the negation without being suppressed", () => {
+    // The negation's object is the rushing; the dose is the topic, not the refusal.
+    const heard = facets("I don't want to feel rushed about the dose");
+    expect(heard).toContain("manner:unhurried");
+    expect(heard).toContain("care:titration");
+  });
+
+  it("a genuine refusal with inserted words still suppresses — the lead was not shortened", () => {
+    expect(facets("I don't want anyone touching the dose")).not.toContain("care:titration");
+  });
+
+  it("every §O40 suppression still holds under the new scope", () => {
+    expect(facets("I don't want my dose changed")).not.toContain("care:titration");
+    expect(facets("I'm not looking for a diagnosis, just someone to talk to")).not.toContain("care:adhd-assessment");
+    expect(facets("no interest in titration at all")).not.toContain("care:titration");
+    expect(facets("I would rather not have an assessment yet")).not.toContain("care:adhd-assessment");
+    expect(facets("I don't need it bulk billed")).not.toContain("pref:bulk-billing");
+  });
+
+  it("scope still ends at the clause boundary, and a spent trigger stays spent", () => {
+    expect(facets("they don't want to help me. my dose keeps wearing off")).toContain("care:titration");
+    // One trigger, one binding: the second ask two clauses of thought later is untouched.
+    expect(facets("not looking for an assessment. my dose needs looking at")).toContain("care:titration");
+  });
+});
+
 describe("§O78 suppression is per-occurrence: a refused clause does not silence a later ask", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

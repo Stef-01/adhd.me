@@ -120,7 +120,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O81 (the O78 audit's headline named defect: a desire negation spends itself on the
-> NEAREST following ask — consume-once scope) — claimed 2026-08-20T04:56Z by loop-0820g.**
+> NEAREST following ask — consume-once scope) — claimed 2026-08-20T04:56Z by loop-0820g;
+> DONE 2026-08-20. Gate: the two waiting aspirations PROMOTED exactly as predicted and
+> nothing else moved (411 entries: zero misses, zero leaks, zero other promotions — the
+> measured run's whole diff was the two retags, assessment floor 40→41, bulk-billing
+> 16→17); §O81 pins both directions incl. the manner-spends case ("I don't want to feel
+> rushed about the dose" now hears BOTH unhurried and titration — the old scope refused
+> the dose) and the not-shortened-lead case ("don't want anyone touching the dose" still
+> refuses); every §O40/§O72/§O78 pin green; tie-quality repinned 281/175/22/84 (both
+> promoted entries land unseparated — hearing them was the reader's win, ordering them is
+> the clarifier's queue, correctly); full `pnpm verify` green (212 files, 3254 tests).**
+> Shipped as the O78 design said: `desireNegationEnds` (the scanner half of the old
+> negatedWant — same phrases, same insertion allowance) plus `suppressedByDesireNegation`
+> (one trigger, one binding: nearest following span within the unchanged lead+clause
+> scope; care/pref suppressed, manner SPENDS the trigger without being suppressed) in
+> read.ts; readNeeds restructured to three phases — collect candidate occurrences
+> (collapse/hedge/on-behalf/O72 stay occurrence-local, the O78 retry preserved), bind
+> negations over all spans at once, then claim in specificity order. negatedWant is gone;
+> O72's bare-negator rule untouched (adjacency was already consume-once). The audit doc's
+> finding 3 is marked fixed; its remaining queue: reported refusal, sit-in-the-room cue.
 > Today O40's trigger suppresses EVERY care/pref cue within its 3-token lead, so "I don't
 > want a woman GP, bulk billing matters more" loses bulk-billing, and "no interest in the
 > dose, I want the diagnosis question answered" has sat in the aspiration list since O68
