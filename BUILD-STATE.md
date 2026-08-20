@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O126 (explaining the fit, Q4: the doctor sees the provenance the patient sees) — claimed
+> 2026-08-20T22:10Z by loop-0820s.** The lane's last increment, and the only one left that is
+> not roster-blocked: Q1 (O51, per-clinician missed asks), Q2 (O66, the reorder question) and
+> Q3 (O102, the side-by-side) are done. The console already has a "what patients are told"
+> section and a worked match — but the worked match shows LABELS and WEIGHTS, and the patient
+> profile shows something the doctor cannot see anywhere: PROVENANCE. O21 put "from your words:
+> …" under every reason on the patient side; `matchAudit.asked` carries `{key, label, weight}`
+> and drops `matched`, the phrase from the reader's own text that reached the facet.
+> So a doctor reading their own listing sees "A woman GP (+30)" and has no way to learn it came
+> from somebody typing "woman gp". That asymmetry is worth closing on its own terms — the whole
+> section exists so a named real person can check what is said about them — and it is load
+> bearing for W190's correction path: a doctor who thinks a reason is WRONG cannot contest it
+> without seeing what produced it. Design: `asked` carries `matched` through to the console,
+> rendered in the same "from your words" register the patient reads, and a test pins that the
+> console's phrase for a facet is CHARACTER-IDENTICAL to the patient profile's — the O1/F2
+> unity repair applied to provenance, so the two surfaces cannot drift into telling a doctor
+> one story and a patient another. Gate: console and patient provenance pinned equal for every
+> facet of a worked query; the console renders nothing the patient cannot see; qa/ capture and
+> a DESIGN-QA entry; e2e green; full `pnpm verify` green.
+
 > **O125 (the tail: six small facets, and the end of the unblocked queue) — claimed
 > 2026-08-20T22:01Z by loop-0820s.** What remains in the aspiration list after O122–O124 is a
 > tail of twos and threes, and most of it is already spoken for: trauma (5) and
