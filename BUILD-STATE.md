@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O98 (standing debt 11: the compliance sweeps get a gate that actually runs) — claimed
+> 2026-08-20T12:20Z by loop-0820s.** O97's close named this and it is the unit that stops
+> the next O97: `pnpm verify` is typecheck · test · build · audit:gate, ci.yml runs exactly
+> that, and NOTHING runs `pnpm e2e` — so `party-to-care.spec.ts`, the sweep that reads every
+> rendered page for ADHD.ME holding itself out as a carer, guards nothing between one
+> person's decision to run it and the next. "Compliance is code" is this tree's law; code
+> with no gate is a comment. Design, cheapest thing that closes it honestly: a SECOND CI job
+> (`e2e`) beside `verify`, so an ~8-minute browser run never slows the fast gate and a
+> failure in either is visible on its own. Playwright needs its browser in CI, so the job
+> installs chromium only (`--with-deps chromium`, not all three engines) and the config's
+> own `webServer` does the build. Scope discipline: no spec is rewritten, no spec is
+> skipped, and if the full suite proves too slow for the free minutes the fallback is a
+> `@compliance` grep-tagged subset that runs on every push with the rest nightly — decided
+> on the measured time, not guessed. The suite's ~8 minutes measured in this container is
+> the number to beat. Gate: ci.yml valid (parsed, not eyeballed), the full local e2e suite
+> green so the job is not born red, `pnpm verify` green, standing debt 11 closed in the plan.
+
 > **O97 (RED GATE: the party-to-care linter reads a data-breach sentence as clinical care)
 > — claimed 2026-08-20T11:55Z by loop-0820s.** Found by O96 running the whole e2e suite:
 > `party-to-care.spec.ts` fails on /privacy because the `adhd-me-as-care-provider` rule
