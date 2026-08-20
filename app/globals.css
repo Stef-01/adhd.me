@@ -1335,7 +1335,20 @@ textarea:focus-visible {
   margin: 0;
 }
 
-.profile-content ul {
+/* O115: SCOPED TO THE LIST IT WAS WRITTEN FOR. As `.profile-content ul` this was 0,1,1 and
+   beat every classed list on the screen at 0,1,0 — so `.fit-evidence` and O51's `.fit-missed`,
+   both of which declare `flex-direction: column`, rendered as two-column grids and had never
+   once had the layout they were authored with.
+
+   The cost was not cosmetic. In two columns the items have unequal heights, so a reason's
+   label and the phrase from the reader's own words that reached it sat at different vertical
+   offsets from the pair beside them, and the reader could not tell which quote belonged to
+   which chip. That is the layout law failing on the one element whose whole purpose is
+   joining a claim to its evidence (O21's provenance).
+
+   The experience list is the only `ul` inside a `<section>` here, which is what makes the
+   scoping exact rather than a guess. */
+.profile-content section ul {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 7px 18px;

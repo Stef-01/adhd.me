@@ -139,6 +139,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > else moves. Gate: `scripts/css-computed-dump.mjs` diffed before/after with the change
 > CONFINED to the profile's lists; before/after captures at 390 and 1280; DESIGN-QA entry;
 > e2e green; full `pnpm verify` green.
+> DONE 2026-08-20. One selector scoped — `.profile-content ul` → `.profile-content section ul`
+> — and the classed lists get the layout they were authored with. The scoping is exact rather
+> than a guess: the experience list is the only `ul` inside a `<section>` on this screen.
+> The dump diff is confined to the evidence list, its items and the ancestors whose height
+> they drive; nothing else on any route moves.
+>
+> SECOND COLLISION OF THIS EXACT KIND TODAY. O99 was `.match-quality` at equal specificity;
+> this is `.profile-content ul` at HIGHER specificity than the rule it silently beat. Both had
+> stood for months, both were invisible in every diff that touched them, and both were found
+> by READING — O96's sectioning pass made the first findable and the lane's review procedure
+> (screenshot the surface, walk the checklist) made this one. Worth stating plainly: in a
+> 6,000-line stylesheet, an under-scoped selector is not a style, it is a global, and the only
+> reliable detector this tree has for the class is a person looking at the screen.
+>
+> Found in passing and NOT fixed: the sticky booking bar covers whatever sits behind it until
+> the reader scrolls to the end, which is how a bottom-sticky element works and is why the
+> third reason's quote was clipped in the before-capture. With the list in one column the
+> clipping is gone at this content length, but the general behaviour stands. It is a fold
+> question rather than a bug and belongs to a unit that measures it across content lengths.
 
 > **O114 (Q1 lexicon: woman-GP's vocabulary, and emotional-regulation's third G7 sort) —
 > claimed 2026-08-20T17:50Z by loop-0820s.** The two loudest left, and they are opposite

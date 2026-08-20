@@ -732,3 +732,28 @@ Captures: qa/honesty-o111/ (the same query as qa/unserved-o110/, with the two li
   instead of contradicting it.
 - [x] Pinned so it cannot regress: the two banners must differ, and the unserved sentence must
   never contain "could not tell".
+
+## O115 — the evidence list finally has the layout it was written with (2026-08-20)
+
+Captures: qa/evidence-o115/ (before and after at 390, plus the scrolled state).
+
+- [x] Found by running the lane's own review procedure over the profile — the surface today's
+  work made denser. `.fit-evidence` is authored `display: flex; flex-direction: column`: one
+  row per reason, each label beside the phrase from the reader's own words that reached it. It
+  had never rendered that way. `.profile-content ul`, written for the two-up "Focus and
+  experience" list, is 0,1,1 against its 0,1,0 — so every list on the profile was a two-column
+  grid, including O51's missed-asks list, which also declares a single column and also lost.
+- [x] The cost was not cosmetic. In two 164px columns the items had unequal heights, so a
+  reason's label and its quote sat at different vertical offsets from the pair beside them and
+  the reader could not tell which quote belonged to which chip — the layout law's own sentence
+  ("if the reader must scan two regions to join one fact, the layout is wrong") failing on the
+  one element whose entire purpose is joining a claim to its evidence (O21's provenance). The
+  third reason's quote was also being cut by the sticky booking bar.
+- [x] Fixed by scoping the generic rule to the list it was written for: the experience list is
+  the only `ul` inside a `<section>` on this screen, which makes the scoping exact rather than
+  a guess. Nothing else moves.
+- [x] Proof: the computed-style dump diffed before/after is confined to the evidence list, its
+  items and the ancestors whose height they drive — no other route, no other surface.
+- [x] Second collision of this exact kind found today (O99 was the first, on `.match-quality`).
+  Both were an unqualified or under-scoped selector in a 6,000-line stylesheet quietly beating
+  a specific one. O96's sectioning pass is what made both findable by reading.
