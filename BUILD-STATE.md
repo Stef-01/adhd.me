@@ -119,6 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O103 (Q1 lexicon: the loudest gap on record, non-medication) — claimed
+> 2026-08-20T14:24Z by loop-0820s.** With Q1's corpus gate and all of Q2 done, and Q3's three
+> items each waiting on a roster bigger than three (founder gate G6), the live work is the
+> standing aspiration list — the lexicon's own queue. Measured across it, `care:non-medication`
+> is the loudest gap on record at ELEVEN unheard phrasings, ahead of trauma-informed and
+> substance-history at nine. It is also a gap that matters: somebody asking to try something
+> before a script is asking the single question this roster's GPs most differ on. The eight
+> current cues hear the REFUSAL register ("without medication", "not a script") and are deaf
+> to the two registers the corpus actually collected — SEQUENCE ("strategies first, tablets
+> later", "before we talk prescriptions", "as a last resort") and ALTERNATIVE ("what works
+> besides medication", "the non-drug route", "more than a prescription"). This is the
+> O64→O65 loop, run a second time on the gap that has replaced longer-appointment at the top.
+> Laws it runs under, all of them earned: every cue keeps TWO content tokens (O25's collapse
+> rule) or is deliberately left uncued with the reason written (the O65 pattern); want
+> phrasings only, never symptom text (G7); a cue that measures into another facet's sentences
+> is dropped in-build rather than shipped and explained (O49's lesson); the promotion gate
+> forces every newly-heard aspiration to be retagged IN THIS COMMIT, floors raised with it.
+> Gate: the corpus's own promotion gate green, every reach pin both directions, tie-quality
+> repinned if it moves, full `pnpm verify` green.
+
 > **O102 (explaining the fit, Q3: two clinicians' evidence side by side) — claimed
 > 2026-08-20T13:54Z by loop-0820s.** The lane's Q1 (O51, per-clinician missed asks) and Q2
 > (O66, the reorder question on the profile) are done; Q3 is the compare. It is also the
