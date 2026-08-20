@@ -119,6 +119,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page") — claimed
+> 2026-08-20T08:21Z by loop-0820m.** Dr Anusha Saxena gains the founder disclosure her
+> co-founder already carries: `founderInterest` set on her entry (mirrored wording,
+> she/her), which renders the existing "Co-founder of ADHD.ME" disclosure line on her
+> profile — and, BY THE STANDING LAW, puts her behind an undisclosed clinician at exact
+> ties (the O4-era rule: a tie must never break in a founder's favour; disclosure has a
+> ranking cost by design, and that cost is not waived for a second founder). The register
+> carries exactly what the founder directed — nobody else's status changes. Gate: the
+> disclosure test updated to the PAIR (both name the interest; Dr Yadav stays undefined),
+> the founder-not-floated pin extended to every disclosed founder on the generic request,
+> rank pins re-verified under the new tie-break, e2e profile capture with the disclosure
+> line (qa/founder-o89) + DESIGN-QA entry, full `pnpm verify` green.
+
 > **O88 (founder-relayed — Dr Anusha Saxena's official bio, coded into her declarations) —
 > claimed and DONE 2026-08-20, interactive session (not a loop firing).** The founder supplied
 > her official bio; the matching facts in it are now declarations, not prose. Languages:
