@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O119 (the precision audit the day's recall work owes) — claimed 2026-08-20T20:07Z by
+> loop-0820s.** Sixty-odd cues landed today across O103–O114 and every one was measured against
+> a sentence that would have refused it. That is the right check and it has a blind spot: it
+> asks "does this cue fire where it should not", one cue at a time, against sentences I chose.
+> It cannot see a facet arriving on a corpus entry NOBODY EVER THOUGHT ABOUT — because a
+> `never` pin only exists where an author considered the collision.
+> Probed it: **32 of 508 entries hear a facet they declare in no direction — not `reaches`, not
+> `aspires`, not `never`.** Most are benign under-declaration ("depression on top of the ADHD"
+> hearing adhd-assessment is right, the entry simply never said so) and those get pinned as
+> `reaches`, which is the corpus getting MORE precise rather than less. Three look like real
+> defects and each has its own shape: **"properly" is a `manner:structured` cue**, so "I want to
+> get assessed properly" and "listened to properly for once" read as a request for a documented
+> baseline and a review schedule — "properly" there means thoroughly, which is a different
+> facet's meaning or none; **"panic" is a `care:anxiety` cue**, so "a doctor who won't panic
+> about my drinking" reads a figurative word about the DOCTOR'S reaction as the patient asking
+> for anxiety care; and **"overwhelmed" is a `care:emotional-regulation` cue**, so "somebody
+> calm, because I arrive overwhelmed" reads a person describing their own state into a care
+> facet — the exact trap this module's header names, and the same G7 line O114 drew, arriving
+> from the direction nobody was watching. Gate: every one of the 32 examined and resolved as
+> either a pinned `reaches` or a fixed/refused cue with its measurement written; the probe
+> itself landed as a TEST so the class cannot silently regrow; floors and tie-quality moved;
+> zero existing `never` pins broken; full `pnpm verify` green.
+
 > **O118 (the missed-asks line lower-cases an acronym) — claimed 2026-08-20T19:38Z by
 > loop-0820s.** O117's panel rendered it and made it obvious: the profile prints "You also
 > asked for **adhd in children and adolescents** — not something they declare." O21 learned
