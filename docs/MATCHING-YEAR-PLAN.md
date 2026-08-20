@@ -361,9 +361,27 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
   share a per-clinician layoutId, the portrait's competing enter tween removed, wiring
   pinned in e2e via data-portrait-of, mid-flight morph captured in qa/motion-o67/; the results list re-sorting with `layout` animations when a clarifier answer
   reorders it (the order changing is the product's whole argument — show it) — **SHIPPED,
-  O52 (2026-08-19)**; the match
-  evidence weights drawing in as the score line settles; scroll-linked reveal on the story
-  landing kept within one viewport of intent.
+  O52 (2026-08-19)**; **scroll-linked reveal on the story
+  landing, kept within one viewport of intent — SHIPPED and MEASURED, O127 (2026-08-20)**: the
+  `Reveal` wrapper and the founders' stagger both gate at the hook (`initial={reduce ? false :
+  …}`), which is the taste law's requirement that reduced motion be honoured where the effect is
+  decided rather than only in CSS. The guardrail is a number, so it was measured rather than
+  eyeballed: 17 elements carry a Y transform at rest; 14 are reveals and every one settles
+  within a viewport of the fold at BOTH 390 and 1280 — zero fire early — and the other 3 are the
+  continuous parallax wrappers, which correctly never settle. The first probe was wrong and is
+  worth recording: it selected `.story-chapter *`, so it counted every plain descendant that had
+  never been animated as "revealed early" and reported 24 false findings. Measuring only the
+  elements that actually start translated is what made the number mean anything.
+  **The match evidence weights drawing in as the score line settles — REFUSED, O127
+  (2026-08-20), with the reason kept here rather than dropped from the list.** Patients never
+  see a score: W213's explainability floor and the whole no-ranking posture mean the number does
+  not exist on any patient surface, and O102 refused even to total a comparison. The only screen
+  with a score line is the staff console, where the figures are server-rendered and already
+  known before the reader arrives. Animating them would not be "a value resolving" — the lane's
+  own name for meaningful motion — it would be decoration wearing that phrase, which is
+  precisely what the founder's directive excludes. If a surface ever computes a score in front
+  of somebody, the item becomes real again and this note is where to start.
+  **The motion queue now has no unmarked item.**
 - Guardrails: 44px touch floor (O14), fold discipline (W167 register), no motion on patient
   error paths, and the taste rules recorded in `docs/DESIGN-QA.md` stand in for the
   taste-skill wherever the loop session lacks it.

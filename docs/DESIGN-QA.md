@@ -896,3 +896,28 @@ Capture: qa/provenance-o126/asked-desktop.png (the console's worked match, with 
   regions the reader joins by eye.
 - [x] An e2e test asserts the field is actually RENDERED on every row — a value carried through
   the audit and never printed would satisfy every unit test and show the doctor nothing.
+
+## O127 — the motion queue, closed honestly (2026-08-20)
+
+No new capture: this unit changed no pixels. It measured one queued item and refused another,
+and the record is the measurement.
+
+- [x] **Scroll-linked reveal on the landing — shipped and measured.** The guardrail is "within
+  one viewport of intent", which is a number, so it was measured at 390 and 1280 rather than
+  eyeballed. 17 elements carry a Y transform at rest; 14 are reveals and every one settles
+  within a viewport of the fold, zero firing early; the other 3 are continuous parallax
+  wrappers, which correctly never settle. Both the `Reveal` wrapper and the founders' stagger
+  gate at the hook (`initial={reduce ? false : …}`) — the taste law's requirement that reduced
+  motion be honoured where the effect is decided, not only in CSS.
+- [x] **The first probe was wrong, and that is worth more than the result.** It selected
+  `.story-chapter *` and counted every plain descendant that had never been animated as a
+  reveal that fired early — 24 false findings at both viewports, all of them confident. The fix
+  was to derive the population from behaviour (elements that actually start translated) rather
+  than from a selector I assumed matched the animated set. A measurement whose population is
+  guessed is not a measurement.
+- [ ] **The match evidence weights drawing in as the score line settles — refused.** Patients
+  never see a score (W213, and O102 refused even to total a comparison), so the only surface
+  with a score line is the staff console, where the figures are server-rendered and known before
+  the reader arrives. Animating them is not "a value resolving" — it is decoration wearing the
+  lane's own phrase for meaningful motion. Refused with the reason kept in the plan rather than
+  quietly dropped, so a later author meets the argument instead of the empty slot.
