@@ -119,6 +119,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O134 (the capture harness lies, twice in one day) — claimed 2026-08-20T23:48Z by
+> loop-0820s.** Auditing the new `/about` route, my capture showed Stefan Thottunkal's plate as
+> a large empty gap where the other three founders had portraits. It looked like a broken image
+> on a brand-new page. It was not: the file is 800×1063 and 63% opaque, serves 200, and the
+> plate renders perfectly once the page is scrolled — the founders' plates use `whileInView`
+> reveals, and a `fullPage` screenshot taken without walking the page captures them unfired.
+> **THAT IS THE SECOND CONFIDENT FALSE FINDING FROM MY OWN MEASUREMENT TOOLING TODAY.** O127's
+> first reveal probe selected `.story-chapter *` and reported 24 reveals firing early, every one
+> false, because the population was guessed rather than derived. O90 hit the identical
+> whileInView trap and its fix — a scroll-walk before capture — was written in that unit's
+> ledger and then not carried anywhere reusable, so I rediscovered it from scratch. The other
+> session's committed `qa/about-o90/` capture is CORRECT, because they read that ledger; mine
+> was wrong because my script was written fresh.
+> This matters more than a bad screenshot. Captures are the evidence for every unit in the UI
+> lane and the thing a DESIGN-QA entry points at; a capture that silently shows an unrendered
+> page turns the lane's whole record into something that cannot be trusted, and it nearly had me
+> "fix" a page with nothing wrong with it.
+> Design: `scripts/qa-capture.mjs`, one helper doing the things every capture needs and no unit
+> should have to remember — consent dismissed, the page walked so every `whileInView` fires,
+> every image `decode()`d, scrolled back, THEN shot. It carries its own self-check: after
+> walking, it asserts no `<img>` in the shot is incomplete or zero-sized and fails loudly rather
+> than writing a picture of a half-rendered page. Gate: the helper reproduces the correct
+> /about capture where my ad-hoc script produced a false empty, its self-check demonstrably
+> fires on a deliberately un-walked run, and full `pnpm verify` green.
+
 > **O133 (allocation lane: one patient's breakdown, rendered) — claimed 2026-08-20T23:40Z by
 > loop-0820s.** The lane's last named step, and the allocator's FIRST CONSUMER: nothing in the
 > tree renders `matchPatientsToPrescribers` today, so W236's machinery has the same
