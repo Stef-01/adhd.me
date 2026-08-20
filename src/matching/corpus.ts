@@ -638,13 +638,17 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "no assessment needed, that part is done, I need the scripts managed", never: ["care:adhd-assessment"], aspires: ["care:shared-care"] },
   { text: "I don't want telehealth, I need to be in the room with someone", never: ["pref:telehealth-first", "manner:culturally_attuned"] },
   /**
-   * KNOWN FALSE POSITIVE (O75): the conversational hedge "if that makes sense" fires the
-   * sense_making cue, though it asks for nothing — it is filler people append to soften a
-   * request. Pinned as today's truth per the O68 pattern; a hedge-aware rule (the same
-   * family as O45's collapse rule and O72's veto) must retag this to `never` in the same
-   * commit it lands. The woman-gp half is the real ask, unheard today.
+   * O75 pinned this as a KNOWN FALSE POSITIVE (the conversational hedge "if that makes
+   * sense" fired the sense_making cue though it asks for nothing); O76 built the hedge rule
+   * and retagged it in the same commit, exactly as the pin demanded — the second time the
+   * O68 pattern has run to completion. The woman-gp half is the real ask, still unheard.
    */
-  { text: "a she not a he, if that makes sense", reaches: ["manner:sense_making"], aspires: ["pref:woman-gp"] },
+  { text: "a she not a he, if that makes sense", never: ["manner:sense_making"], aspires: ["pref:woman-gp"] },
+  // O76's own boundary, pinned as data beside the rule's tests: the veto is span-precise,
+  // so a trailing hedge never silences the genuine ask in front of it — and a real ask
+  // elsewhere in a hedged sentence still reaches.
+  { text: "I want a woman doctor, if that makes sense", reaches: ["pref:woman-gp"], never: ["manner:sense_making"] },
+  { text: "help me make sense of thirty years, if that makes sense", reaches: ["manner:sense_making"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -713,5 +717,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "pref:bulk-billing": 15,
   "pref:longer-appointment": 6,
   "pref:telehealth-first": 14,
-  "pref:woman-gp": 15,
+  // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
+  // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
+  // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.
+  "pref:woman-gp": 16,
 };

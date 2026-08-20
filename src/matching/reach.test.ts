@@ -446,6 +446,33 @@ describe("O45 a collapsed cue must look like its authored phrase", () => {
   });
 });
 
+describe("§O76 a cue inside a conversational hedge is filler, not an ask", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("suppresses the corpus's second known false positive, exactly as the O75 pin demanded", () => {
+    expect(facets("a she not a he, if that makes sense")).not.toContain("manner:sense_making");
+    // The hedge alone, as a whole query, reaches nothing — filler is filler.
+    expect(facets("if that makes sense")).toEqual([]);
+  });
+
+  it("is span-precise: the real ask beside a trailing hedge keeps reaching", () => {
+    // A different facet's ask rides in front of the hedge and must survive it.
+    const heard = facets("I want a woman doctor, if that makes sense");
+    expect(heard).toContain("pref:woman-gp");
+    expect(heard).not.toContain("manner:sense_making");
+    // The SAME facet asked genuinely, then hedged: findCue matches the ask, not the filler.
+    expect(facets("help me make sense of thirty years, if that makes sense")).toContain("manner:sense_making");
+  });
+
+  it("every neighbouring sense_making pin still reaches — the hedge is the idiom, not the words", () => {
+    expect(facets("helps me make sense of it")).toContain("manner:sense_making");
+    expect(facets("I want it to finally make sense")).toContain("manner:sense_making");
+    // "if" and "that" apart do not make the idiom: a conditional that happens to carry the
+    // words in another shape is left alone.
+    expect(facets("I want that to make sense at last")).toContain("manner:sense_making");
+  });
+});
+
 describe("§O72 a bare negator adjacent to a care/pref cue is a refusal — with every boundary held", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

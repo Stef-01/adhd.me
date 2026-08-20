@@ -23,8 +23,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  really a request for what it scored on); 274/170/23/81 at O75 (tranche five's 46 new
  *  reaching requests split 25 separated / 5 partial / 16 unseparated — the question-form
  *  and on-behalf registers behave like the single asks they wrap, and the full-roster-tie
- *  share holds near 30%, which remains the clarifier's standing work queue). */
-const PINNED = { total: 274, separated: 170, partialTie: 23, unseparated: 81 };
+ *  share holds near 30%, which remains the clarifier's standing work queue); 275/171/23/81
+ *  at O76 (the hedge rule retagged O75's filler pin out of the run and added two boundary
+ *  pins, one of which — the woman-doctor ask with a trailing hedge — separates). */
+const PINNED = { total: 275, separated: 171, partialTie: 23, unseparated: 81 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

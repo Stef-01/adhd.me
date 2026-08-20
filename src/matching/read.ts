@@ -388,6 +388,71 @@ export function softenedNotJust(rawSentence: readonly string[], cueFirstRawStem:
 }
 
 /**
+ * Conversational hedges (O76, the rule O75's corpus pin demanded).
+ *
+ * THE DEFECT CLASS. People soften requests with filler that happens to contain cue words:
+ * "a she not a he, if that makes sense" fires the sense_making cue, though the hedge asks
+ * for nothing — it is an apology for phrasing, not a request for a doctor who explains.
+ * Stopword-stripping makes the hedge INDISTINGUISHABLE from the ask in the content stream
+ * (both are [make, sense]), so like O45's skeletons and O72's veto, the rule reads the RAW
+ * stream, where "if that" survives to mark the idiom.
+ *
+ * THE RULE: a cue whose whole matched span sits INSIDE a hedge idiom's span claims nothing.
+ * Span-precision is the point — "help me make sense of thirty years, if that makes sense"
+ * keeps reaching, because findCue matched the genuine ask before the hedge, not the filler.
+ *
+ * THE SET STAYS SMALL AND EARNED, O50's law: one idiom, with the corpus sentence that earned
+ * it pinned in reach.test.ts §O76. "does that make sense", "if you know what I mean" and kin
+ * join only when a real sentence somewhere in this tree's tests demonstrates them firing.
+ * Phrases are written as tokeniseKeepingStopwords leaves them ("makes" arrives as "make").
+ */
+const HEDGE_IDIOMS: ReadonlyArray<readonly string[]> = [
+  ["if", "that", "make", "sense"],
+];
+
+/**
+ * Whether the cue span (content-stream indices) lies wholly inside a hedge idiom.
+ *
+ * The content stream is the raw stream minus stopwords, in order, with clause boundaries
+ * kept by both — so the span maps across by a single walk. If the two streams diverge (the
+ * O55 caps trim them at different lengths on absurd input), the mapping bails toward NOT
+ * suppressing: a hedge rule that could silence a real ask on a 10k-word paste would cost
+ * more than the filler it catches.
+ */
+export function withinHedge(
+  sentence: readonly string[],
+  rawSentence: readonly string[],
+  cueFrom: number,
+  cueTo: number,
+): boolean {
+  let rawFrom = -1;
+  let rawTo = -1;
+  let ci = 0;
+  for (let ri = 0; ri < rawSentence.length && ci <= cueTo; ri++) {
+    const token = rawSentence[ri]!;
+    if (token !== CLAUSE_BOUNDARY && isStopword(token)) continue;
+    if (sentence[ci] !== token) return false;
+    if (ci === cueFrom) rawFrom = ri;
+    if (ci === cueTo) rawTo = ri;
+    ci++;
+  }
+  if (rawFrom === -1 || rawTo === -1) return false;
+
+  for (const idiom of HEDGE_IDIOMS) {
+    for (let h = 0; h + idiom.length <= rawSentence.length; h++) {
+      if (
+        idiom.every((word, k) => rawSentence[h + k] === word) &&
+        rawFrom >= h &&
+        rawTo < h + idiom.length
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
  * Negators that BIND TIGHTLY when they open a cue (O53). "no medication" is an adjacency
  * idiom: the corpus caught "no interest in coaching, the medication is working" reaching
  * `non-medication` through [no, …2 words…, medication] — the negator negating something else

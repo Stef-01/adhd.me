@@ -20,9 +20,13 @@ non-rankings.
    parent typing for the person), life-stage context and hedged polite asks — 18 floors
    raised on the measured run, tie-quality repinned 274/170/23/81. Tranche five's harvest is
    two new KNOWN FALSE POSITIVES pinned as today's truth in the O68 pattern: the hedge idiom
-   "if that makes sense" fires sense_making (a hedge-aware rule owes the retag), and the
-   on-behalf register collides with the family-presence cues ("booking on behalf of my mum"
-   fires culturally_attuned; the for-my-mum vs in-the-room distinction owes it). Earlier: 311
+   "if that makes sense" fires sense_making — **retagged by O76 (2026-08-20), the pattern's
+   second full run: `withinHedge` in read.ts reads the raw stream O45-style, maps the cue
+   span across, and suppresses only a cue wholly inside the idiom, so "help me make sense of
+   thirty years, if that makes sense" keeps reaching; the idiom set is one earned entry,
+   O50's law** — and the on-behalf register collides with the family-presence cues ("booking
+   on behalf of my mum" fires culturally_attuned; the for-my-mum vs in-the-room distinction
+   still owes it). Earlier: 311
    entries after O68's tranche four (compounds +
    discipline registers, 2026-08-19); every floor rose again (woman-gp 4→10, bulk-billing
    6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN

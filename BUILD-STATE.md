@@ -120,17 +120,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O76 (the reader unit O75's hedge pin demanded: a conversational hedge is filler, not an
-> ask) — claimed 2026-08-20T02:46Z by loop-0820b.** O75 pinned "a she not a he, if that
-> makes sense" as a KNOWN FALSE POSITIVE: the trailing hedge fires the sense_making cue
-> though it asks for nothing. Design (the O45/O72 family: read the raw stream where the
-> stopwords live): a small closed set of hedge idioms ("if that makes sense" and kin),
-> matched with stopwords kept; a cue whose matched span lies inside a hedge idiom's span
-> claims nothing. Precision boundary: "help me make sense of it", "I want it to finally
-> make sense" and every existing sense_making pin must keep reaching — the hedge is the
-> conditional-deixis shape, not the words "make sense". Gate: the O75 pin retagged
-> reaches→never in the same commit (with the sense_making floor moved by sanctioned
-> reclassification if the count drops), §O76 pins both directions in reach.test.ts,
-> tie-quality repinned if the run shrinks, full `pnpm verify` green.
+> ask) — claimed 2026-08-20T02:46Z by loop-0820b; DONE 2026-08-20. Gate: §O76 pins both
+> directions in reach.test.ts (suppression, span-precision, every neighbouring sense_making
+> pin held), 403-entry corpus green with zero misses/leaks/unpromoted aspirations, floors
+> moved on the measured run (woman-gp 15→16; sense_making HELD at 13 — it lost the retagged
+> false positive and gained the genuine-ask boundary pin on the same run, so no sanctioned
+> lowering was needed), tie-quality repinned 275/171/23/81, full `pnpm verify` green (211
+> files, 3217 tests).** The rule is `withinHedge` in read.ts, the O45/O72 family's third
+> member: stopword-stripping makes the hedge indistinguishable from the ask in the content
+> stream (both are [make, sense]), so the rule reads the RAW stream where "if that"
+> survives, maps the cue's content span across (bailing toward NOT suppressing if the O55
+> caps ever desynchronise the streams), and suppresses only a cue lying WHOLLY inside a
+> hedge idiom's span — so "help me make sense of thirty years, if that makes sense" keeps
+> reaching through the genuine ask findCue matched first, and "I want a woman doctor, if
+> that makes sense" keeps woman-gp while dropping the filler. The idiom set is ONE earned
+> entry ("if that makes sense"), O50's law: kin like "does that make sense" join only with
+> a demonstrating sentence in the tests. The O75 pin retagged reaches→never in the same
+> commit — the O68 pattern's second full run (pin the measured false positive, then the fix
+> unit consciously flips it). Corpus gained the rule's two boundary pins as data. Remaining
+> from O75's harvest: the on-behalf/family-presence collision still owes its unit.
 
 > **O75 (Q1 item 1, corpus tranche five: the registers real traffic arrives in) — claimed
 > 2026-08-20T01:50Z by loop-0820a; DONE 2026-08-20. Gate: 401-entry corpus green both
