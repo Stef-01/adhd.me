@@ -140,6 +140,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > correctly — acronyms, proper nouns and ordinary words each pinned by example, not by rule
 > restatement; the profile and O117's console panel proved to use the same helper; qa/ capture
 > and DESIGN-QA entry; e2e green; full `pnpm verify` green.
+> DONE 2026-08-20. `labelInSentence` and `missedAskParts`/`missedAskCopy` live beside
+> `unservedCopy`; the profile and O117's console panel both call them instead of composing
+> their own. Three rules, each from a real label: only the first character is ever touched
+> (which alone saves "Trauma and PTSD" and "A woman GP"), an acronym at the start is left
+> alone, and a language facet is left alone entirely because its label is a proper noun by
+> construction — information the caller already holds. Pinned BY EXAMPLE rather than by
+> restating the rule, since a test that re-implemented it would agree with the code by
+> construction and catch nothing, plus a sweep asserting no authored capital is lost anywhere in
+> the vocabulary: a facet added tomorrow called "NDIS planning" now fails before a patient reads
+> "ndis planning".
+>
+> ACCURATE ABOUT WHERE IT WAS LIVE, which the measurement forced. On the PROFILE the damage was
+> LATENT — no currently missable label leads with an acronym, because the patient-facing label
+> for child ADHD is "Children and adolescents", not the console's fuller "ADHD in children and
+> adolescents". It was live on the console panel, and visible in O117's own capture. Recorded
+> that way rather than as a patient-facing bug it was not.
+>
+> ONE THING I BROKE AND THE SUITE CAUGHT: returning a flat string dropped the
+> `.fit-missed-label` span, which emphasises the ASK inside an otherwise muted line — the
+> reader is scanning for the thing they asked for, so that emphasis is a decision, not
+> decoration. The e2e that reads the span failed. Fixed by returning PARTS, with `missedAskCopy`
+> joining them for callers that just want the sentence: one place the words live, and the
+> surface keeps its typography. Pinned that the parts join back to exactly the sentence, so a
+> later flattening has to notice.
 
 > **O117 (explaining the fit, Q4: a doctor sees what patients are told about them) — claimed
 > 2026-08-20T19:07Z by loop-0820s.** The lane's last increment, and the only one pointed at

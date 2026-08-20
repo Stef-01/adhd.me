@@ -171,6 +171,61 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
  * It lives here rather than in the JSX because a sentence that decides an honesty claim
  * should be unit-testable, not only walkable in a browser.
  */
+/**
+ * A facet label, lowered to sit inside a sentence — without breaking the words that must not be.
+ *
+ * O21 learned this on the REASON line: lower-casing labels "read tidily until a label carried a
+ * proper noun — 'Hindi-speaking' became 'hindi-speaking', which is a typo on the one word in the
+ * sentence a reader is scanning for" — and stopped doing it there. The missed-asks line never
+ * got the same treatment and printed "You also asked for adhd in children and adolescents".
+ *
+ * NEITHER PURE APPROACH IS RIGHT, which is why this is a helper rather than a deletion. Six of
+ * the twenty-seven labels break when lowered (ADHD ×2, PTSD, GP, Hindi, Urdu); the other
+ * twenty-one read WORSE unlowered, because "You also asked for A longer first appointment" is as
+ * wrong as "adhd". Three rules, each from a real label in the vocabulary:
+ *
+ *   1. Only the FIRST CHARACTER is ever touched. That alone saves "Trauma and PTSD" and
+ *      "A woman GP", where the acronym is interior.
+ *   2. A first word that is an ACRONYM is left alone — "ADHD assessment".
+ *   3. A LANGUAGE facet is left alone entirely: its label is built from a language name, so it
+ *      is a proper noun by construction. The caller always knows this, because it is holding
+ *      the `NeedSignal` the label came from.
+ */
+export function labelInSentence(need: NeedSignal): string {
+  const label = need.label;
+  if (need.facet.kind === "language") return label;
+  const firstWord = label.split(/[\s-]/)[0] ?? "";
+  if (firstWord.length > 1 && firstWord === firstWord.toUpperCase()) return label;
+  return label.charAt(0).toLowerCase() + label.slice(1);
+}
+
+/**
+ * What the profile says about an ask this clinician has not declared (O51, moved here by O118).
+ *
+ * Declaration-framed: "not something they declare" is a fact about a declaration and never a
+ * claim about ability (W193). It lives beside `unservedCopy` for the reason O110 moved that
+ * one — copy that decides an honesty claim should be unit-testable, not only walkable.
+ *
+ * RETURNED AS PARTS, and the reason is a design decision rather than a convenience: the profile
+ * emphasises the ASK inside an otherwise muted line (`.fit-missed-label` — ink, weight 600),
+ * because the reader is scanning for the thing they asked for. Returning one flat string forced
+ * the surface to choose between that emphasis and composing its own sentence, which is the
+ * duplication this move exists to end. `missedAskCopy` joins the parts for callers that just
+ * want the sentence, so there is still exactly one place the words live.
+ */
+export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
+  return {
+    before: "You also asked for ",
+    label: labelInSentence(need),
+    after: " — not something they declare. Another listing may.",
+  };
+}
+
+export function missedAskCopy(need: NeedSignal): string {
+  const { before, label, after } = missedAskParts(need);
+  return `${before}${label}${after}`;
+}
+
 export function unservedCopy(label: string): string {
   return `${label} is not something any GP listed today declares. That is a gap in our listing, not in what you asked for.`;
 }

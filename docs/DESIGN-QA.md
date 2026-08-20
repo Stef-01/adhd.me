@@ -796,3 +796,34 @@ reason line ("Hindi-speaking" became "hindi-speaking", a typo on the one word a 
 scanning for) and stopped lowercasing there; the missed-asks line never got the same treatment.
 Neither pure approach works — "You also asked for A longer first appointment" is as wrong as
 "adhd" — so it needs a small helper with its own test, which is a unit rather than a line.
+
+## O118 — a label lowered into a sentence, without breaking the words that must not be (2026-08-20)
+
+Captures: qa/casing-o118/ (the profile's missed-asks line, and the console panel where the
+acronym case is live).
+
+- [x] O117's panel made it visible: "You also asked for **adhd in children and adolescents**".
+  O21 learned this exact lesson on the REASON line — its comment calls a lower-cased proper noun
+  "a typo on the one word in the sentence a reader is scanning for" — and stopped lower-casing
+  there. The missed-asks line never got the same treatment, and O117's own not-declared frame
+  reproduced the bug by copying the call rather than the sentence.
+- [x] Surveyed the whole vocabulary rather than the one label that showed. SIX of twenty-seven
+  break when lowered (ADHD ×2, PTSD, GP, Hindi, Urdu); the other twenty-one read WORSE unlowered,
+  because "You also asked for A longer first appointment" is as wrong as "adhd". So neither pure
+  approach works, and this is a helper rather than a deletion.
+- [x] Three rules, each from a real label: only the first character is ever touched (which alone
+  saves "Trauma and PTSD" and "A woman GP"); an acronym at the start is left alone; a language
+  facet is left alone entirely, because its label is a proper noun by construction and the caller
+  already knows the facet kind.
+- [x] Pinned by example rather than by restating the rule — a test that re-implemented it would
+  agree with the code by construction and catch nothing. Plus a sweep asserting no authored
+  capital is ever lost across the whole vocabulary, so a facet added tomorrow called "NDIS
+  planning" fails before a patient reads "ndis planning".
+- [x] **Accurate about where it was live.** On the profile the damage was LATENT: no currently
+  missable label leads with an acronym, because the patient-facing label for child ADHD is
+  "Children and adolescents". It was live on the console panel, which uses the fuller care-area
+  vocabulary — visible in O117's own capture. Recorded that way rather than as a patient-facing
+  bug it was not.
+- [x] The sentence moved into the matching module beside `unservedCopy`, and both surfaces now
+  call it instead of composing their own. The console panel having reproduced the bug by copying
+  the wording is the argument for that in one line.

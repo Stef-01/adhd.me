@@ -8,6 +8,7 @@ import {
   closedBooksNote,
   distanceTo,
   locationLabel,
+  missedAskParts,
   type Clinician,
 } from "@/demo/clinicians";
 import { type NeedSignal } from "@/matching/needs";
@@ -105,9 +106,13 @@ export function ProfileStage({
             {profileMissed.length > 0 && (
               <ul className="fit-missed" aria-label="What you asked for that this GP has not declared">
                 {profileMissed.slice(0, 2).map((need) => (
+                  /* O118: the sentence is composed in the matching module now, where a test can
+                     hold it — and where the label is lowered WITHOUT breaking an acronym. This
+                     printed "adhd in children and adolescents" until then. */
                   <li key={need.label}>
-                    You also asked for <span className="fit-missed-label">{need.label.toLowerCase()}</span> — not
-                    something they declare. Another listing may.
+                    {missedAskParts(need).before}
+                    <span className="fit-missed-label">{missedAskParts(need).label}</span>
+                    {missedAskParts(need).after}
                   </li>
                 ))}
               </ul>

@@ -24,6 +24,7 @@ import {
   distanceTo,
   getPersonalizedMatch,
   locationLabel,
+  missedAskCopy,
   unservedCopy,
   type Clinician,
 } from "@/demo/clinicians";
@@ -155,7 +156,15 @@ export function notDeclaredFrames(clinician: Clinician): ToldLine[] {
   const label = missing ? missing.label : "an area you have not declared";
   return [
     {
-      said: `You also asked for ${label.toLowerCase()} — not something they declare. Another listing may.`,
+      // O118: the profile's own sentence, called rather than copied — this panel had
+      // reproduced the lower-casing bug along with the wording, which is the argument for
+      // composing copy in one place and reading it everywhere.
+      said: missedAskCopy({
+        facet: missing ? { kind: "care", area: missing.id } : { kind: "care", area: "adhd-assessment" },
+        matched: "",
+        label,
+        weight: 0,
+      }),
       from: "the profile's missed-asks line (O51), shown for any facet this clinician has not declared",
     },
     {
