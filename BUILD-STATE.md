@@ -119,6 +119,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O94 (the raw-RUN demand earns its way in — O84's refused mechanism, now with two
+> cases, applied to both) — claimed 2026-08-20T09:45Z by loop-0820r.** O84 refused a
+> run-demand for collapsed cues as over-engineering for one cue; O87 then found the SAME
+> weak-pair class living in an older cue ("the phone menu hung up on me twice" fires
+> telehealth through "over the phone"'s [the, phone] pair — the exact [the, room] weakness
+> O84 measured). Two earners is the tree's bar. Design: an OPT-IN set of collapsed cues
+> that must find their FULL raw token run contiguously (no pair suffices); blanket
+> strengthening stays refused because "what's going on" relies on any-pair (the O45
+> contraction case, untouched). Applied to both earners in one unit: "over the phone"
+> (kills the phone-menu leak; "can the first appointment be over the phone" keeps its
+> run) and "in the room with me" comes home to culturally_attuned (O25 removed it, O84
+> measured every pair design into leaks — the RUN hears "she will sit in the room with
+> me" and stays silent on "with someone", waiting rooms and cold rooms, so the standing
+> aspiration promotes). Gate: the O87 phone pin retagged reaches→never and the O84
+> aspiration promoted in this commit; every O84 leak pin held; frozen single-token list
+> grows by one, reviewed; floors moved with the measured run (telehealth by sanctioned
+> reclassification if it drops); tie-quality repinned; §O94 both directions; full `pnpm
+> verify` green.
+
 > **O93 (founder-directed 2026-08-20: "do visual improvement and refinement across site,
 > fix issues such as attached too") — claimed 2026-08-20T09:11Z by loop-0820q.** The
 > attached capture shows the anchor bug: on the finder profile, the FIXED booking bar
