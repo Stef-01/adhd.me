@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O96 (refactor lane, queue item 2: app/globals.css sectioned by surface) — claimed
+> 2026-08-20T11:16Z by loop-0820s.** 5,981 lines; banners exist only in the later half and
+> the same surface's rules sit in several places (the finder's results-screen block lives
+> inside the story-landing region). The lane's laws govern, with the plan's own gate: NO
+> selector or declaration changes — this unit moves rules and adds banner comments, nothing
+> else — and "identical" is defined by the O60 proof pattern made machine-checked: a
+> computed-style dump (every element, every property, per surface, at the default root)
+> taken against the pre-refactor build must be BYTE-IDENTICAL against the post-refactor
+> build, across every route and every finder stage. Reordering CSS can silently flip
+> equal-specificity cascade outcomes, which is exactly what the dump exists to catch — any
+> mismatch is a bug in the move, fixed before the push, and a move that cannot be made
+> byte-identical is recorded and left in place (cascade-load-bearing order is a fact, not
+> untidiness). The refactor's own audit is part of the unit (dead selectors, duplicate
+> blocks, contradicting declarations found while reading are candidates — recorded, and
+> fixed only if the fix is provably invisible under the same dump). Gate: dump
+> byte-identical before/after across all surfaces, full `pnpm verify` green, audit notes
+> in the ledger close.
+
 > **O95 (refactor lane, queue item 1: app/care-finder.tsx split by stage) — claimed
 > 2026-08-20T10:45Z by loop-0820s.** The lane's largest seam: 1,253 lines, seven stages in
 > one component. The lane's laws govern: BEHAVIOUR-IDENTICAL with the e2e suites as the
