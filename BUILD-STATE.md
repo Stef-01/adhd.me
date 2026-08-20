@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O114 (Q1 lexicon: woman-GP's vocabulary, and emotional-regulation's third G7 sort) —
+> claimed 2026-08-20T17:50Z by loop-0820s.** The two loudest left, and they are opposite
+> kinds of problem, which is the reason to take them together — the contrast is the unit's
+> point. `pref:woman-gp` (6) is PURE VOCABULARY and carries no judgement at all: the cue list
+> knows "woman gp", "female gp", "woman doctor", "prefer a woman", and the corpus asks for it
+> as "a lady doctor", "a lady GP", "I would feel safer with a woman", "women doctors only",
+> "someone who is not a man", "a she not a he". Nobody is describing themselves; they are
+> naming who they want to see, in the words Australians actually use. That is six sentences
+> lost to a synonym list, on a preference this roster can genuinely answer — Dr Anusha Saxena
+> holds it — so every one of these is a reader who would have been ordered correctly and was
+> not. `care:emotional-regulation` (7) is the OPPOSITE and is the third instance of the sort
+> O104 and O112 made: three of its seven are wants ("help with the anger that comes out of
+> nowhere", "I want help with the rage before it costs me my marriage", "the emotional side
+> taken as seriously as the focus side") and four are the reader describing their own state
+> ("rejection hits me like a truck", "my temper goes from zero to a hundred in seconds", "my
+> moods flip fast and I say things I regret", "crying at work over nothing"). This module's
+> own header names that exact trap — a prior probe closed a "recall gap" by cueing DSM
+> inattention text — so the state half stays standing and joins the founder question, and the
+> cues that ship must require the HELP-WITH framing rather than the emotion word alone. Gate:
+> O103's method on every candidate, and specifically a pin that the bare emotion words do NOT
+> reach; zero `never` pins broken; promotions retagged in-commit; floors and tie-quality
+> moved; full `pnpm verify` green.
+
 > **O113 (Q1 lexicon: the three remaining manner facets, swept together) — claimed
 > 2026-08-20T17:35Z by loop-0820s.** `sense_making` (7), `motivating` (6) and
 > `non_judgmental` (5) — eighteen aspirations, and unlike O104's trauma and O112's attuned
