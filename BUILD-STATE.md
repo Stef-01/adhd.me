@@ -119,6 +119,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O131 (the two-case bar, made checkable) — claimed 2026-08-20T23:22Z by loop-0820s.**
+> O128 pinned two false positives with retag demands. Before building either mechanism I applied
+> the tree's own O84 bar — two cases earn a mechanism, one does not — by searching all 558
+> corpus entries for each construction. **Both families have exactly ONE member: the sentence
+> O128 itself wrote.** So neither is earned, and writing four more myself to clear the bar would
+> be manufacturing the evidence the bar exists to demand. Neither mechanism gets built today.
+> That leaves the real defect, which is that the bar is unCHECKABLE. "KNOWN FALSE POSITIVE"
+> appears sixteen times in corpus.ts, every one of them prose — findable only by reading the
+> file, exactly the shape refusals had before O125 made them data. Nobody can answer "has this
+> family reached two?" without a manual sweep, which means in practice the answer is whoever
+> happens to remember.
+> Design, in the idiom O123 and O125 established: `src/matching/known-fps.ts` registers each
+> pinned false positive as data — the sentence, the facet it wrongly reaches, the FAMILY it
+> belongs to, the unit that pinned it, and whether it is open or fixed. The test does four
+> things: every OPEN entry must still exhibit its false positive (a pin that has quietly stopped
+> being true sends the next author chasing a ghost); every FIXED entry must no longer exhibit it
+> (so a fix cannot silently regress); the register must be non-vacuous; and — the point — **any
+> family reaching TWO open members fails the build**, saying that the mechanism is now earned.
+> That is the O84 law, which the tree has been applying from memory since August, written where
+> it executes. Gate: the four open subject-blind FPs and O128's two registered with their real
+> current behaviour measured, the bar demonstrably firing on a seeded second case, full
+> `pnpm verify` green.
+
 > **O130 (the accent points at the wrong thing, and it is a fossil) — claimed
 > 2026-08-20T23:15Z by loop-0820s.** O129 reduced accent inflation on the profile and recorded
 > that it was reduced, not solved, for a unit that could look across the whole flow at once.
