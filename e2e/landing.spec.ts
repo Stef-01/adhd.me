@@ -22,6 +22,35 @@ test("landing page renders the B2B positioning and CTAs", async ({ page }) => {
   await expect(page).toHaveURL(/\/practices$/);
 });
 
+test("the founders chapter is the About us section, four plates strong (O90)", async ({ page }) => {
+  // The footer door and any /#about link land on the anchored section.
+  await page.goto("/#about");
+  const about = page.locator("#about");
+  await expect(about.getByText("About us")).toBeVisible();
+  await expect(about.getByRole("heading", { name: "We do not build this alone." })).toBeVisible();
+  await expect(about.getByText(/Four people, one conviction/)).toBeVisible();
+
+  // All four co-founders, Dr Anusha's plate among them with her real portrait.
+  await expect(about.locator(".story-founders > li")).toHaveCount(4);
+  await expect(about.getByText("Dr Anusha Saxena")).toBeVisible();
+  await expect(about.getByAltText(/Dr Anusha Saxena, co-founder of ADHD\.ME/)).toBeVisible();
+
+  // The plates reveal on view, so walk the whole section (and let the portraits load)
+  // before the design-record capture — a screenshot of unfired reveals records nothing.
+  const revealPlates = async () => {
+    for (let i = 0; i < 4; i++) {
+      await about.locator(".story-founders > li").nth(i).scrollIntoViewIfNeeded();
+      await page.waitForTimeout(200);
+    }
+    await page.waitForLoadState("networkidle");
+  };
+  await revealPlates();
+  await about.screenshot({ path: "qa/about-o90/about-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await revealPlates();
+  await about.screenshot({ path: "qa/about-o90/about-mobile.png" });
+});
+
 test("primary CTA goes to the demo; sign-in goes to the console", async ({ page }) => {
   await page.goto(B2B);
   await page.getByRole("link", { name: "Practice sign-in" }).first().click();

@@ -132,7 +132,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > ("a reader cannot see the ranking") is listing-side, so the About section is where the
 > story lives, not where the disclosure moves. Gate: landing compliance sweep green over
 > the new copy, qa/about-o90 captures at desktop + 390×844 with a DESIGN-QA entry
-> (adhdme-taste), full `pnpm verify` green.
+> (adhdme-taste), full `pnpm verify` green. DONE 2026-08-20: landed as claimed, with two
+> build-time decisions recorded — the desktop grid moved 3-across → 2×2 (four abreast
+> squeezed the portraits; an orphan fourth row read as an afterthought, exactly wrong for
+> the person the directive adds), and her plate renders the O82 photo centre-cropped ONLY
+> (the crop-only real-person law; the older plates' cutout style is their owners' supplied
+> art, and the variance is recorded as accepted in DESIGN-QA rather than "fixed" by
+> editing a real person's image). O90 e2e pins the anchor, the kicker, the four plates and
+> her named portrait; landing + public-sweep + a11y e2e all green (13), full verify green
+> (212 files, 3328 tests).
 
 > **O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page") — claimed
 > 2026-08-20T08:21Z by loop-0820m.** Dr Anusha Saxena gains the founder disclosure her

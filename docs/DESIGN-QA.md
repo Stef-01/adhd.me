@@ -541,3 +541,22 @@ existing .disclosure-line carries it, same position as her co-founder's.
   not-floated pin tightened to cover every disclosed founder on a generic request.
 - [x] Founder-directed fact, source cited in the entry comment; nobody else's status
   changed, because nothing else was directed.
+
+## O90 — the founders chapter becomes About us, four plates (2026-08-20)
+
+Captures: qa/about-o90/ (the anchored section, desktop 2×2 and 390×844 stacked).
+
+- [x] One idea per section: the sentence heading stays the idea ("We do not build this
+  alone."); "About us" rides above it as a muted uppercase kicker — wayfinding, not a
+  competing statement. The section anchors at /#about and the footer's doors link it.
+- [x] Dr Anusha's plate: role and affiliations from her published record (FRACGP, Bay
+  Health Clinic, ANU); portrait is the founder-supplied O82 photo centre-cropped to the
+  row's 3:4 — crop-only, per the real-person law, which is why hers renders as a full
+  photo card while the earlier plates use owner-supplied cutouts. Recorded as an accepted
+  variance, not a gap: nothing in this tree edits a real person's image beyond a crop.
+- [x] Grid moved 3-across → 2×2 at ≥900px: four abreast squeezed each portrait under the
+  260px the row was designed around, and an orphan fourth row read as an afterthought —
+  exactly wrong for the person the directive adds.
+- [x] Honesty gates: no clinical claims in any remit line; the finder-profile disclosure
+  line did NOT move here — its reason ("a reader cannot see the ranking") is listing-side
+  law, so About us is where the story lives, not where the disclosure goes.

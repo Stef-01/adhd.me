@@ -4982,7 +4982,18 @@ textarea:focus-visible {
 .story-affiliations a:focus-visible img { opacity: 1; }
 
 @media (min-width: 900px) {
-  .story-founders { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(32px, 4vw, 64px); }
+  /* O90: four plates since Dr Anusha joined the row. 2x2 rather than four across - four
+     abreast squeezes each portrait under the 260px the row was designed around. */
+  .story-founders { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px clamp(32px, 4vw, 64px); }
+}
+
+/* O90: the wayfinding label above a chapter heading whose sentence stays the idea. */
+.story-kicker {
+  margin: 0 0 12px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 /* The two one-line notes that replaced paragraphs of hedging. */

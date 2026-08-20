@@ -110,6 +110,20 @@ const FOUNDERS: ReadonlyArray<{
     ],
   },
   {
+    // O90 (founder-directed 2026-08-20): the fourth co-founder joins the plate row. Role
+    // and affiliations from her published record (the O58/O71/O88 sourcing in the roster
+    // entry); portrait is the founder-supplied O82 photo, centre-cropped to this row's
+    // 3:4 convention — the same crop-only handling every real portrait gets.
+    name: "Dr Anusha Saxena",
+    role: "Co-founder, FRACGP",
+    remit: "Psychology before medicine, and assessment that sees the whole person.",
+    portrait: "/anusha-saxena.png",
+    affiliations: [
+      { name: "Bay Health Clinic", logo: null, href: "#", label: "Bay Health Clinic, Double Bay & Hornsby" },
+      { name: "Australian National University", logo: null, href: "https://www.anu.edu.au/", label: "Australian National University" },
+    ],
+  },
+  {
     name: "Stefan Thottunkal",
     role: "Co-founder",
     remit: "Physician-in-training and health-systems researcher, Stanford Medicine.",
@@ -474,14 +488,20 @@ export function StoryLanding() {
       </section>
 
       {/* 8. Who is behind it. */}
-      <section className="story-chapter" aria-labelledby="founders-title">
+      {/* O90: the founders chapter is the site's ABOUT US — anchored, labelled, and linked
+          from the footer's doors. The sentence heading stays because it IS the section's
+          idea; "About us" rides above it as the wayfinding label. What deliberately does
+          not move here: the finder-profile disclosure line, whose reason ("a reader cannot
+          see the ranking") is listing-side law. */}
+      <section id="about" className="story-chapter" aria-labelledby="founders-title">
         <div className="story-wrap">
           <Reveal>
+            <p className="story-kicker">About us</p>
             <h2 id="founders-title" className="story-heading">We do not build this alone.</h2>
           </Reveal>
           <Reveal delay={0.06} className="story-prose">
             <p>
-              Three people, one conviction: care lands better when it is built around the person in
+              Four people, one conviction: care lands better when it is built around the person in
               front of it, their language and their family.
             </p>
           </Reveal>

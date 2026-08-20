@@ -7,6 +7,7 @@ const DOORS: ReadonlyArray<{ label: string; href: string }> = [
   { label: "Worked examples", href: "/examples" },
   { label: "Questions", href: "/faq" },
   { label: "The approach", href: "/approach" },
+  { label: "About us", href: "/#about" },
   { label: "For practices", href: "/practices" },
   { label: "For GPs", href: "/clinicians/join" },
   { label: "Privacy", href: "/privacy" },
