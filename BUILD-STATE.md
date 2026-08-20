@@ -141,7 +141,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > testimonials, no ratings, no "better match". Gate: adhdme-taste (44px targets, reduced
 > motion, no raw hex), an e2e test that walks results → profile → compare and asserts the
 > grouping and the disclosure line, qa/ captures at 390 and 1280, a DESIGN-QA entry, full
-> `pnpm verify` green.
+> `pnpm verify` green. DONE 2026-08-20. `app/finder-stages/compare-stage.tsx`
+> plus a `compare` stage, the entry control on the profile in the same quiet register as
+> O66's reorder question, and `compareRows` in the orchestrator. Built exactly as designed,
+> including every honesty rule: no score, no total, no winner — and that is not a promise in
+> a comment, it is an e2e assertion that fails the build if "better", "best", "winner",
+> "score", "%" or "out of" ever appears in the table. Six e2e cases, all green: the walk, the
+> grouping (differences never buried, and no group renders empty), the basis line, the
+> partner's name as a route to their profile, back returning to the profile it opened from,
+> and the NEGATIVE case — a query reaching nothing offers no compare at all.
+>
+> TWO LAYOUT DEFECTS FOUND BY LOOKING AT THE CAPTURE RATHER THAN THE CODE, which is what the
+> taste law's review procedure is for. "Not declared" wrapped to two lines in 5.5rem columns
+> (now 6rem, measured against the actual string, with nowrap). And the heads were a separate
+> two-column strip while the rows were a three-column grid — so one doctor's name sat over
+> the ASK column and the reader had to join a fact across two regions, which the layout law
+> names outright. The heads now share the rows' grid and each name sits directly above the
+> column it owns. Also caught in-build: the first CSS draft used `--rule-faint` and
+> `--paper-sunk`, tokens that do not exist in this palette; replaced with `--line` and
+> `--stone` rather than left to fail silently as inherited colour. Gate met:
+> qa/compare-o102/ at both viewports, DESIGN-QA entry, a11y + mobile-fit + party-to-care +
+> finder e2e green (31 passed), compare spec green (6), `pnpm verify` green 3357 passed.
 
 > **O101 (refactor lane, queue item 4, and the queue's last: name the CUES pipeline's
 > stages) — claimed 2026-08-20T13:41Z by loop-0820s.** `src/matching/needs.ts` builds the

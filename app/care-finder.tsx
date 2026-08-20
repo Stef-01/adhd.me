@@ -8,6 +8,7 @@ import {
   getPersonalizedMatch,
   matchEvidence,
   matchQuality,
+  needsFor,
   rankBands,
   rankCliniciansNear,
   rankClinicians,
@@ -35,6 +36,7 @@ import { ListeningStage } from "./finder-stages/listening-stage";
 import { TypeStage } from "./finder-stages/type-stage";
 import { ResultsStage } from "./finder-stages/results-stage";
 import { ProfileStage } from "./finder-stages/profile-stage";
+import { CompareStage, type CompareRow } from "./finder-stages/compare-stage";
 import { BookingStage } from "./finder-stages/booking-stage";
 
 /**
@@ -193,6 +195,43 @@ export function CareFinder() {
    * "Missed" column was built to prevent — for staff. The reader gets the same truth.
    */
   const profileMissed = useMemo(() => missedAsks(clinician, request), [clinician, request]);
+
+  /**
+   * O102: the other GP to hold this one against, and the table that compares them.
+   *
+   * THE PARTNER IS CHOSEN, NOT PICKED. A chooser would be a second decision on the screen
+   * that exists to make the first one easier, so the comparison is with the NEIGHBOUR in the
+   * order the reader is already reading — the one below, or the one above when this is the
+   * last. That is the comparison somebody is actually making when they open a profile from a
+   * list.
+   */
+  const compareWith = useMemo(() => {
+    if (matches.length < 2) return null;
+    return matches[matchIndex + 1] ?? matches[matchIndex - 1] ?? null;
+  }, [matches, matchIndex]);
+
+  /**
+   * One row per ask the reader made, deduplicated by the closed-vocabulary label the row
+   * renders. Membership comes from `matchEvidence` — the same evidence the RANKING scored —
+   * so the table cannot tell a story the order disagrees with. Empty when the reader's words
+   * reached nothing, which is what hides the control: a compare table with no rows would be
+   * a claim of thoroughness with nothing behind it.
+   */
+  const compareRows: readonly CompareRow[] = useMemo(() => {
+    if (!compareWith) return [];
+    const declaredBy = (item: Clinician) =>
+      new Set(matchEvidence(item, request).map((need) => need.label));
+    const left = declaredBy(clinician);
+    const right = declaredBy(compareWith);
+    const seen = new Set<string>();
+    const rows: CompareRow[] = [];
+    for (const ask of needsFor(request)) {
+      if (seen.has(ask.label)) continue;
+      seen.add(ask.label);
+      rows.push({ label: ask.label, left: left.has(ask.label), right: right.has(ask.label) });
+    }
+    return rows;
+  }, [clinician, compareWith, request]);
 
   function startListening(language = speechLang) {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
@@ -431,6 +470,8 @@ export function CareFinder() {
             clarifierList={clarifierList}
             request={request}
             origin={origin}
+            compareWith={compareRows.length > 0 ? compareWith : null}
+            onCompare={() => setStage("compare")}
             onBack={() => setStage("results")}
             onClarifyTop={() => {
               const next = `${request}, ${clarifierList[0]!.answer}`;
@@ -440,6 +481,19 @@ export function CareFinder() {
               setStage("results");
             }}
             onBook={() => setStage("booking")}
+          />
+        )}
+
+        {stage === "compare" && compareWith && (
+          <CompareStage
+            key="compare"
+            left={clinician}
+            right={compareWith}
+            rows={compareRows}
+            onBack={() => setStage("profile")}
+            onOpenRight={() => {
+              chooseClinician(compareWith);
+            }}
           />
         )}
 

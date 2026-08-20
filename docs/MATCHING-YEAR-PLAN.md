@@ -421,7 +421,14 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
   as one quiet tappable question in the missed-asks register; tapping appends the answer in
   the reader's own words and returns to results so the O52 animation shows the reorder; a
   question that could not reorder is never rendered (clarifiers() guarantees it); (Q3) side-by-side compare
-  of two clinicians' evidence; (Q4) the same provenance view inside the console so a doctor
+  of two clinicians' evidence — **DONE, O102 (2026-08-20)**: a `compare` stage reached from
+  the profile, rows = the asks the reader made, cells read from `matchEvidence` so the table
+  cannot disagree with the ranking it explains; grouped where-they-differ / both / neither,
+  the last carrying the listing-gap sentence; partner chosen as the neighbour in the order
+  rather than picked, because a chooser is a second decision on the screen that exists to
+  make the first one easier; no score, no total, no winner language, pinned by an e2e that
+  fails on the words; W193's posture stated once for the whole table; the control hidden
+  entirely when the reader's words reached nothing to compare on; (Q4) the same provenance view inside the console so a doctor
   sees exactly what patients are told about them.
 
 ## The targeting-levels audit (O23)

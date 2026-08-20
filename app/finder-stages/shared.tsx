@@ -28,6 +28,8 @@ export type Stage =
   | "type"
   | "results"
   | "profile"
+  // O102: the compare, reached from a profile and returning to it.
+  | "compare"
   | "booking";
 
 export const stageVariants: Variants = {

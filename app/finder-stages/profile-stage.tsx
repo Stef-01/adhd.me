@@ -17,23 +17,28 @@ import { ClinicianPortrait, FounderDisclosure, MotionScreen, NswTraining, Pressa
 
 export function ProfileStage({
   clinician,
+  compareWith,
   personalizedSignals,
   profileEvidence,
   profileMissed,
   clarifierList,
   request,
   origin,
+  onCompare,
   onBack,
   onClarifyTop,
   onBook,
 }: {
   clinician: Clinician;
+  /** O102: the GP this one is held against, or null when there is nothing to compare. */
+  compareWith: Clinician | null;
   personalizedSignals: readonly string[];
   profileEvidence: readonly NeedSignal[];
   profileMissed: readonly NeedSignal[];
   clarifierList: readonly Clarifier[];
   request: string;
   origin: SuburbPoint | null;
+  onCompare: () => void;
   onBack: () => void;
   onClarifyTop: () => void;
   onBook: () => void;
@@ -131,6 +136,18 @@ export function ProfileStage({
               onClick={onClarifyTop}
             >
               {clarifierList[0]!.prompt}
+            </button>
+          </p>
+        )}
+        {/* O102 (explaining the fit, Q3): the other GP, one tap away, in the same quiet
+            register as the reorder question above it. It renders ONLY when there is a second
+            clinician AND the reader's words reached at least one ask — a compare table with
+            no rows would be a claim of thoroughness with nothing behind it, and the caller
+            passes null in exactly that case. */}
+        {compareWith && (
+          <p className="profile-compare">
+            <button type="button" className="profile-compare-action" onClick={onCompare}>
+              Compare with {compareWith.shortName}
             </button>
           </p>
         )}

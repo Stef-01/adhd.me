@@ -644,3 +644,36 @@ ranking" sentence at its intended size).
 - [x] With the hole closed, the diff is exactly what it should be: the `.match-quality`
   element and the ancestors whose height its taller text drives, on that one screen. No
   other route, no other surface, no other element.
+
+## O102 — two clinicians, side by side (2026-08-20)
+
+Captures: qa/compare-o102/ (the compare screen at 390 and 1280, from a four-ask query).
+
+- [x] The lane's Q3. The results screen's founding note says a person choosing a GP is
+  comparing — and every screen after it showed exactly one clinician. Rows are the asks the
+  reader actually made; cells are read from `matchEvidence`, the same evidence the RANKING
+  scored, so the table cannot tell a story the order disagrees with.
+- [x] Grouped by what a row can tell the reader: **where they differ** first (the only rows
+  that can decide anything), then **both**, then **neither** — the last carrying the
+  listing-gap sentence the results screen already owns. A group with no rows never renders,
+  so a heading never makes a promise the section does not keep.
+- [x] Two layout fixes found by looking at the capture rather than the code. "Not declared"
+  wrapped to two lines in 5.5rem columns, so the verdict columns are 6rem — measured against
+  the actual string, not guessed — with `white-space: nowrap`. And the heads were a separate
+  two-column strip while the rows were a three-column grid, which put one doctor's name over
+  the ask column and left the reader joining a fact across two regions. The heads now sit in
+  the SAME grid, so each name is directly above the column of verdicts it owns.
+- [x] Honesty: no score, no total, no winner language — asserted by e2e, which fails the
+  build if "better", "best", "winner", "score", "%" or "out of" ever appears in the table.
+  W193's posture is stated ONCE beneath it ("what each GP declares about their own practice,
+  not a check ADHD.ME performed. This is not a ranking of one against the other"), because
+  "not something they declare" eight times is a drumbeat.
+- [x] The entry control renders only when there is a second clinician AND the reader's words
+  reached at least one ask; a query that reaches nothing offers no compare, pinned by e2e.
+- [x] Taste: 44px hit areas on both controls (12px padding with a -12px margin, the O14
+  pattern), palette tokens only — the first draft invented `--rule-faint` and `--paper-sunk`,
+  which do not exist, and they are now `--line` and `--stone`. Neither column takes the
+  accent: an accent here would read as a recommendation, and this screen makes none.
+- [x] No motion of its own. The screen transition is the shared one; a portrait morph between
+  profile and compare was considered and dropped rather than shipped half-working — motion
+  carries meaning here or does not exist.
