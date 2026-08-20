@@ -40,6 +40,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  391/213/63/115 at O120 (the subject check: ONE sentence stops separating, and it is the
+ *  right one — an adult asking for their own assessment no longer reaches the paediatric
+ *  facet, so the roster no longer splits on a facet that reader never asked for. A
+ *  separation bought by ranking somebody against the wrong doctors was never worth
+ *  having, and the KPI going down is the correct record of removing it);
  *  391/214/63/114 at O119 (the PRECISION audit: the first unit in this history to move every
  *  number the wrong way on purpose. Four sentences left the run and separation fell
  *  56.9%→54.6% — the largest single drop recorded — because three cues that were
@@ -114,7 +119,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 391, separated: 214, partialTie: 63, unseparated: 114 };
+const PINNED = { total: 391, separated: 213, partialTie: 63, unseparated: 115 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

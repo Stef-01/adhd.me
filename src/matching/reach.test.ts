@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
-import { stem, tokenise } from "./read";
+import { selfClaimedPatient, stem, tokenise, tokeniseKeepingStopwords } from "./read";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
@@ -1394,5 +1394,48 @@ describe("§O116 the comparative reaches, and four facets learn their registers"
     // "more than fifteen minutes" strips to [fifteen, minute], which is also how distance talk
     // reads. O65 refused it on precision and this unit does not quietly reverse that.
     expect(facets("the clinic is fifteen minutes from the station")).not.toContain("pref:longer-appointment");
+  });
+});
+
+describe("§O120 'my own' names the speaker as the patient", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("an adult asking for their own assessment is not read as a child's", () => {
+    const heard = facets("after my son was diagnosed I recognised myself and now I want my own assessment");
+    expect(heard).toContain("care:adhd-assessment");
+    expect(heard).not.toContain("care:child-adolescent-adhd");
+  });
+
+  /**
+   * THE CASE THAT DECIDED THE RULE'S SHAPE.
+   *
+   * The obvious rule — any self-reference vetoes the child facet — breaks the parent who wants
+   * both, and the corpus holds exactly ONE entry carrying both kinds of reference, so it cannot
+   * tell me such a rule is safe. It can only tell me it is untested. "my own" is the narrowest
+   * construction that says "this one is mine", and it is measurable: four uses in the corpus,
+   * every one claiming the thing for the speaker.
+   */
+  it("the parent who wants both keeps the facet they are asking for", () => {
+    expect(facets("my daughter and I both need assessments")).toContain("care:child-adolescent-adhd");
+    expect(facets("my son needs an assessment and I want one myself")).toContain("care:child-adolescent-adhd");
+  });
+
+  it("O77's exemption is untouched: on-behalf IS this facet's register", () => {
+    expect(facets("this is for my teenager")).toContain("care:child-adolescent-adhd");
+    expect(facets("my daughter is twelve and school keeps calling")).toContain("care:child-adolescent-adhd");
+    expect(facets("a woman GP for my daughter's assessment, bulk billed if possible")).toContain("care:child-adolescent-adhd");
+    expect(facets("looking for someone who sees kids")).toContain("care:child-adolescent-adhd");
+  });
+
+  it("guarded against the construction that points the other way", () => {
+    // "my own son" claims the SON, not the speaker — the veto must not fire on it.
+    expect(selfClaimedPatient(tokeniseKeepingStopwords("I want my own son assessed"))).toBe(false);
+    expect(selfClaimedPatient(tokeniseKeepingStopwords("I want my own assessment"))).toBe(true);
+  });
+
+  it("leaves every other 'my own' sentence exactly as it was", () => {
+    // The construction appears three other times in the corpus and none involves a relative.
+    expect(facets("help me understand my own brain")).toContain("manner:sense_making");
+    expect(facets("I want a say in my own treatment plan")).toContain("manner:collaborative");
   });
 });

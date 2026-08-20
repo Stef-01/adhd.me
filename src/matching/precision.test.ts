@@ -69,16 +69,30 @@ describe("O119 the corpus declares everything it hears", () => {
    * for an adult's own assessment — and the cue fires anyway. They are pinned as today's truth
    * with retag demands; the fix is a subject check, which is a mechanism unit and not a cue.
    */
-  it("the subject-blind false positives are still exactly the five that were named", () => {
+  it("the subject-blind false positives are still exactly the four that remain", () => {
     const cases: Array<[string, string]> = [
       ["a longer first appointment so I can actually explain", "manner:collaborative"],
       ["book a double slot, I have twenty years to explain", "manner:collaborative"],
       ["my family does not believe in ADHD and I need help navigating that", "manner:attuned"],
-      ["after my son was diagnosed I recognised myself and now I want my own assessment", "care:child-adolescent-adhd"],
       ["bring me into every decision about my own brain", "manner:sense_making"],
     ];
     for (const [text, facet] of cases) {
       expect(readNeeds(text).map((need) => facetKey(need.facet)), text).toContain(facet);
     }
+  });
+
+  /**
+   * THE FIFTH IS FIXED (O120), and the pin is kept with its expectation reversed because an
+   * expectation flipping is the record of the fix.
+   *
+   * It was the only one of the five with real consequences: the child facet fired on "my son"
+   * while the sentence asks for "my OWN assessment", so an adult would have been ranked against
+   * paediatric GPs. The other four leak between manner facets and cost a shade of emphasis.
+   */
+  it("an adult asking for their own assessment is not sent to paediatric GPs", () => {
+    const heard = readNeeds("after my son was diagnosed I recognised myself and now I want my own assessment")
+      .map((need) => facetKey(need.facet));
+    expect(heard).toContain("care:adhd-assessment");
+    expect(heard).not.toContain("care:child-adolescent-adhd");
   });
 });

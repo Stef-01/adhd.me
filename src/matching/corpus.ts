@@ -745,10 +745,12 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── history and self-recognition ─────────────────────────────────────────────────────────
   // The son sentence straddles: the family history is genuine context and the child reach is
   // left unjudged (unnamed) — the pinned ask is the adult's own assessment.
-  /* O119 KNOWN FALSE POSITIVE, pinned as today's truth (the O68 pattern).
-     The sharpest of the five: the sentence says "my OWN assessment" and the child facet fires
-     on "my son". This reader would be shown paediatric GPs for an adult ask. */
-  { text: "after my son was diagnosed I recognised myself and now I want my own assessment", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd"] },
+  /* O119 pinned this as a KNOWN FALSE POSITIVE and O120 FIXED IT the same day — the shortest
+     gap between a pin and its retag in this corpus. The child facet fired on "my son" while the
+     sentence says "my OWN assessment", so an adult would have been ranked against paediatric
+     GPs: a wrong appointment rather than a shade of emphasis, which is why this one of the
+     five was worth a mechanism. `selfClaimedPatient` reads the construction that says it. */
+  { text: "after my son was diagnosed I recognised myself and now I want my own assessment", reaches: ["care:adhd-assessment"], never: ["care:child-adolescent-adhd"] },
   { text: "I have been reading about adult ADHD and it is time to find out properly", reaches: ["care:adhd-assessment"] },
   { text: "my psychologist thinks I should get assessed by a doctor who can prescribe", reaches: ["care:adhd-assessment"] },
   { text: "twenty years of struggling and I finally want answers on the ADHD question", reaches: ["care:adhd-assessment"] },

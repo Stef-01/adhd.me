@@ -144,6 +144,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > asking for both pinned as still reaching the child facet; the four remaining
 > subject-blind cases left pinned with the analysis; floors and tie-quality moved; full
 > `pnpm verify` green.
+> DONE 2026-08-20. `selfClaimedPatient` in read.ts, applied to the child facet only, and the
+> harmful case is closed: an adult asking for their own assessment reaches `care:adhd-assessment`
+> and no longer the paediatric facet. O119 pinned that sentence as a KNOWN FALSE POSITIVE this
+> afternoon and O120 retagged it tonight — the shortest gap between a pin and its fix in this
+> corpus, and the O68 pattern's ninth run.
+>
+> THE RULE'S SHAPE WAS DECIDED BY WHAT THE CORPUS COULD NOT TELL ME, which is the part worth
+> keeping. The obvious rule is "a self-reference vetoes the child facet"; it breaks the parent
+> who wants both ("my daughter and I both need assessments"), and the corpus holds exactly ONE
+> entry carrying both kinds of reference — so it cannot say that rule is safe, only that it is
+> untested, and those are different findings. "my own" is measurable instead: four uses in the
+> corpus, every one claiming the thing for the SPEAKER. Guarded against "my own son", where the
+> same two words point the other way, and that guard is pinned directly on the predicate rather
+> than through a sentence, because no corpus sentence exercises it.
+>
+> Tie-quality 391/214/63/114 → 391/213/63/115: one sentence stops separating, and it is the
+> right one. The roster no longer splits on a facet that reader never asked for. A separation
+> bought by ranking somebody against the wrong doctors was never worth having, and the KPI
+> going down is the correct record of removing it — the second unit in a row where the honest
+> direction is downward.
+>
+> FOUR OF O119'S FIVE REMAIN, deliberately: they leak between MANNER facets and cost the reader
+> a shade of emphasis, where this one sent them to the wrong doctor. They stay pinned with the
+> analysis, and their fix — a general subject check over the raw stream, distinguishing "so I
+> can explain" from "someone who explains" by the passive marker — is a bigger mechanism than
+> the harm currently justifies.
 
 > **O119 (the precision audit the day's recall work owes) — claimed 2026-08-20T20:07Z by
 > loop-0820s.** Sixty-odd cues landed today across O103–O114 and every one was measured against

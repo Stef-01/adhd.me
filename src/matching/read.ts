@@ -684,6 +684,42 @@ function mapSpanToRaw(
  * teenager" IS the child-adolescent ask — on-behalf is that facet's entire register, the
  * same shape as O40's manner exemption. Only the culturally_attuned reading is suppressed.
  */
+/** Family words a cue for the child facet is built from — the ones "my own" has to outrank. */
+const FAMILY_WORDS: ReadonlySet<string> = new Set([
+  "son", "daughter", "child", "children", "kid", "kids", "teenager", "teen", "boy", "girl",
+]);
+
+/**
+ * The reader naming THEMSELVES as the patient, in a sentence that also mentions a relative
+ * (O120).
+ *
+ * "after my son was diagnosed I recognised myself and now I want MY OWN assessment" reached
+ * `care:child-adolescent-adhd`, because "my son" is one of that facet's cues. The reader is an
+ * adult asking for their own assessment, and the facet firing ranks paediatric GPs for them —
+ * a wrong appointment rather than a shade of emphasis, which is why this one of O119's five
+ * subject-blind cases was worth a mechanism.
+ *
+ * WHY IT IS THIS CONSTRUCTION AND NOT A GENERAL SELF-REFERENCE. The obvious rule — any mention
+ * of "myself" vetoes the child facet — breaks the parent who wants both: "my daughter and I
+ * both need assessments" would lose the facet that reader is actually asking for. The corpus
+ * holds exactly ONE entry carrying both kinds of reference, so it cannot tell me such a rule is
+ * safe; it can only tell me the rule is untested, which is a reason not to ship it. "my own"
+ * IS measurable: it appears four times in the corpus — "my own brain" twice, "my own treatment
+ * plan", "my own assessment" — and every one claims the thing for the SPEAKER as opposed to
+ * somebody else. That is the entire rule, and it is narrow on purpose.
+ *
+ * Guarded against "my own son", where the same words point the other way.
+ */
+export function selfClaimedPatient(rawSentence: readonly string[]): boolean {
+  for (let i = 0; i < rawSentence.length - 1; i++) {
+    if (rawSentence[i] !== "my" || rawSentence[i + 1] !== "own") continue;
+    const next = rawSentence[i + 2];
+    if (next && FAMILY_WORDS.has(next)) continue;
+    return true;
+  }
+  return false;
+}
+
 export function onBehalfBefore(
   sentence: readonly string[],
   rawSentence: readonly string[],

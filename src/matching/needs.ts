@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, selfClaimedPatient, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -582,6 +582,20 @@ export function readNeeds(text: string): NeedSignal[] {
       if (
         facetKey(cue.entry.facet) === "manner:culturally_attuned" &&
         onBehalfBefore(sentence, rawSentence, at.from, at.to)
+      ) {
+        continue;
+      }
+      /* O120: the counter-signal the child facet needs precisely BECAUSE O77 exempts it. That
+         exemption says on-behalf IS this facet's register, which is right — and it leaves the
+         facet with no way to hear a sentence where the relative is CONTEXT rather than the
+         patient. "after my son was diagnosed I recognised myself and now I want my own
+         assessment" is an adult asking for their own assessment, and the facet firing ranks
+         paediatric GPs for them: a wrong appointment, not a shade of emphasis. "my own" is the
+         narrowest construction that says it (see `selfClaimedPatient` for why a general
+         self-reference is unsafe and unmeasurable here). */
+      if (
+        facetKey(cue.entry.facet) === "care:child-adolescent-adhd" &&
+        selfClaimedPatient(rawSentence)
       ) {
         continue;
       }
