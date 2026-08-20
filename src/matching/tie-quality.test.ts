@@ -20,8 +20,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  unseparated — compounds separate more often than single asks, because two asks rarely
  *  land on the same declaration set); 228/145/18/65 at O72 (the bare-not rule retagged the
  *  known false positive out of the reaching register — one unseparated request was never
- *  really a request for what it scored on). */
-const PINNED = { total: 228, separated: 145, partialTie: 18, unseparated: 65 };
+ *  really a request for what it scored on); 274/170/23/81 at O75 (tranche five's 46 new
+ *  reaching requests split 25 separated / 5 partial / 16 unseparated — the question-form
+ *  and on-behalf registers behave like the single asks they wrap, and the full-roster-tie
+ *  share holds near 30%, which remains the clarifier's standing work queue). */
+const PINNED = { total: 274, separated: 170, partialTie: 23, unseparated: 81 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -119,14 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
-> **O75 (Q1 item 1, corpus tranche five: the reach corpus grows toward ~500 with the same
-> author→measure→tag loop as O64/O68) — claimed 2026-08-20T01:50Z by loop-0820a.** Scope:
-> ~90 new entries in `src/matching/corpus.ts` across registers the corpus is thinnest in,
-> each MEASURED before tagging (reaches / never — incl. G7 symptom-only pins — / aspires);
-> REACH_FLOORS re-measured and raised wherever counts rose, with the promotion gate forcing
-> any newly-heard aspiration retagged in the same commit; the W234 tie-quality pin re-run
-> and moved with the run. Verify: reach corpus suite green both directions, floor gate
-> green, tie-quality pin matches the measured partition, full `pnpm verify` green.
+> **O75 (Q1 item 1, corpus tranche five: the registers real traffic arrives in) — claimed
+> 2026-08-20T01:50Z by loop-0820a; DONE 2026-08-20. Gate: 401-entry corpus green both
+> directions (zero misses, zero leaks, zero unpromoted aspirations), 18 floors raised on the
+> measured run, tie-quality repinned 274/170/23/81 with history, full `pnpm verify` green
+> (211 files, 3211 tests).** Ninety new entries, every tag taken from a measured run before
+> landing (the O64/O68 law): question forms ("is there a doctor who bulk bills new
+> patients"), on-behalf bookings (a partner or parent typing for the person), life-stage
+> context (uni, shift work, new baby, immunocompromised, diagnosed-late), hedged polite
+> asks, eight more compounds, ~30 honest aspirations across the thin facets, five more G7
+> symptom-only pins, four logistics-noise pins, and six O72-discipline pins including the
+> veto's second worked case ("not just the dose…" keeps titration alive). The tranche's
+> harvest is two new KNOWN FALSE POSITIVES pinned as today's truth in the O68 pattern, each
+> carrying the retag its fix unit owes: the conversational hedge "if that makes sense"
+> fires sense_making (a hedge-aware rule in the O45/O72 family owes the flip to `never`),
+> and the on-behalf register collides with the family-PRESENCE cues ("booking on behalf of
+> my mum" fires culturally_attuned — the for-my-mum vs in-the-room distinction owes it).
+> Deliberate non-aspiration recorded in-file: "burnt out and flat…" does NOT aspire to
+> depression because a cue on "flat" would break the standing `never` pins — the mood word
+> stays the reader's silence by design. Tie-quality note: the 46 new reaching requests split
+> 25/5/16, so the full-roster-tie share holds near 30% — still the clarifier's work queue.
 
 > **O74 (founder-directed: attribution advanced to a store of record + the year plan gains
 > the standing refactor lane) — DONE 2026-08-19 by interactive session loop-0819ad. Gate: 8

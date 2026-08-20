@@ -15,7 +15,15 @@ non-rankings.
 
 ## Q1 (Sep–Nov 2026): reach and evidence — make the reader hear more, provably
 
-1. **Reach corpus at scale.** *Progress: 311 entries after O68's tranche four (compounds +
+1. **Reach corpus at scale.** *Progress: 401 entries after O75's tranche five (2026-08-20):
+   the registers real traffic arrives in — question forms, on-behalf bookings (partner or
+   parent typing for the person), life-stage context and hedged polite asks — 18 floors
+   raised on the measured run, tie-quality repinned 274/170/23/81. Tranche five's harvest is
+   two new KNOWN FALSE POSITIVES pinned as today's truth in the O68 pattern: the hedge idiom
+   "if that makes sense" fires sense_making (a hedge-aware rule owes the retag), and the
+   on-behalf register collides with the family-presence cues ("booking on behalf of my mum"
+   fires culturally_attuned; the for-my-mum vs in-the-room distinction owes it). Earlier: 311
+   entries after O68's tranche four (compounds +
    discipline registers, 2026-08-19); every floor rose again (woman-gp 4→10, bulk-billing
    6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN
    FALSE POSITIVE as today's truth: bare "not" before a cue does not negate ("not bulk
