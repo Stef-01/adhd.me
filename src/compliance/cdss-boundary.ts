@@ -397,6 +397,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the question and profile types, the frequency union and the facet map. `INTERVIEW` is read ALOUD TO A CLINICIAN during onboarding — every `ask` and every `saidAloud`. It asks a GP what they see often and how they work, and it asks nothing about any patient. Two of its `saidAloud` lines exist to satisfy W193 at the moment of collection rather than at the moment of display: the training is recorded as a declaration with no register to check it against, and a language is only ever shown to somebody who asked for that language. A test asserts the instrument cannot take free text for scope or manner, because a free-text scope answer is the biography `src/directory/profile.ts` refuses, with an interviewer's handwriting on it.",
   },
   {
+    module: "src/demo/roster.ts",
+    operatorCopy: ["clinicians"],
+    notCopy:
+      "The remaining export is the `Clinician` type. `clinicians` is the roster itself, and it is the one entry in this census whose copy is about NAMED REAL PEOPLE — which is why O100 split it into its own module and why it is filed under W193. Every reader-facing string in it (`focus`, `about`, `experience`, `manner`, the practice and suburb) is a DECLARATION relayed from a doctor or taken from what they publish, never a characterisation this product wrote about them and never a competence claim: the module's header carries that law in full, beside the entries it governs, rather than in a document somebody would have to know to look for. The distinction the census exists to draw is unusually sharp here — an edit to this module is a factual claim about a person who can be harmed by it being wrong, so it is reviewed against their published record, while an edit to src/demo/clinicians.ts next door is a ranking change reviewed against the corpus.",
+  },
+  {
     module: "src/demo/emotional-fit.ts",
     operatorCopy: ["EI_QUALITIES"],
     notCopy:

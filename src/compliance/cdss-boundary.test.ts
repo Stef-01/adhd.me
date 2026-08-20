@@ -71,6 +71,7 @@ const NAMESPACES: Record<string, () => Promise<Record<string, unknown>>> = {
   "src/onboarding/reach-report.ts": () => import("@/onboarding/reach-report"),
   "src/onboarding/expertise.ts": () => import("@/onboarding/expertise"),
   "src/demo/emotional-fit.ts": () => import("@/demo/emotional-fit"),
+  "src/demo/roster.ts": () => import("@/demo/roster"),
   "src/matching/clarify.ts": () => import("@/matching/clarify"),
   "src/matching/needs.ts": () => import("@/matching/needs"),
   "src/matching/read.ts": () => import("@/matching/read"),

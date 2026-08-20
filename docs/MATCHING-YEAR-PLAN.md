@@ -304,7 +304,12 @@ The queue, largest seam first:
    renders at the /approach rule's size rather than the one O14 chose for it.
 3. **src/demo/clinicians.ts** (~900 lines): the roster DATA and the ranking LOGIC share a
    file; split data out so a roster edit can never touch a ranking line. The full matching
-   suite defines identical.
+   suite defines identical. — DONE (O100): `src/demo/roster.ts` holds the `Clinician` type,
+   every entry and the page of real-person law that governs them; clinicians.ts re-exports
+   both, so not one of the 26 import sites changed. Filed under W193, the unit that governs
+   disclosing a named clinician — which the tree insisted on: the first draft shipped with
+   no `// W<n>` header and fired CENSUS-1 in the latent-findings register, on the twelfth
+   header-less module, exactly as W210 designed it to.
 4. **src/matching/needs.ts**: the CUES pipeline builds in one expression; name its stages.
 
 ## Standing debts from the founder's asks (audited 2026-08-18)

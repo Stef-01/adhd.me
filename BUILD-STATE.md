@@ -133,6 +133,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > face; this is a seam, not a rename). The full matching suite defines identical, per the
 > lane. Gate: zero call-site edits outside the two files (proved by grep, not by claim), the
 > whole matching + demo suite green unchanged, full `pnpm verify` green, e2e finder green.
+> DONE 2026-08-20, exactly as claimed: `src/demo/roster.ts` is 447 lines (the type, the
+> entries, the real-person header verbatim), clinicians.ts is 595 (down from 1,010) and
+> re-exports both. Zero call-site edits, proved: `git status` shows two files, and all 26
+> modules importing `@/demo/clinicians` are untouched. THE TREE CAUGHT MY OWN CARELESSNESS
+> ON THE WAY THROUGH, which is the day's fourth guard to earn its keep: the first draft of
+> roster.ts opened with a `// O100 …` comment rather than a `// W<n>` header, and W200's copy
+> census finds a module by reading that first line — so the new module was invisible to it,
+> and CENSUS-1 fired in the latent-findings register on the twelfth header-less module. W210
+> wrote that trigger against a hypothetical twelfth module; the twelfth module arrived and
+> the register did precisely what it was built for. Filed under W193, the unit that governs
+> disclosing a named clinician, with the incident recorded in the header so the attribution
+> reads as deliberate rather than arbitrary. Two boundary bugs in the split itself, both
+> caught by tsc and neither shipped: the first slice cut the header comment's closing `*/`
+> (redone with boundaries found programmatically instead of counted offsets — the same
+> lesson O94 learned about anchoring on remembered text), and `CareArea` needed re-exporting
+> from roster.ts as well. Gate met: `pnpm verify` green, full e2e green.
+>
+> THE UNIT GREW ONCE, AND THE REASON IS THE POINT. Giving roster.ts its header made it
+> visible to W200's copy census, which then demanded — correctly — that it declare its copy
+> surface, and the advice linter reached the roster's strings FOR THE FIRST TIME (they had
+> been invisible while the data sat in an undeclared module). It immediately found
+> `no-test-results-bait` on the word "pathology". The word was inside `keywords`, a
+> ~40-word free-text list on each of the three real doctors — and a tree search found NO
+> CONSUMER ANYWHERE: `keywords` fed the per-clinician keyword weights the ranker used BEFORE
+> W221, the facet system replaced that mechanism, and nothing has read the field since. So
+> the choice was between writing a compliance acceptance whose stated reason would have been
+> false ("it is matching vocabulary" — nothing matches on it) and deleting dead free text
+> attributed to three named doctors that nobody has ever rendered. Deleted, with a comment
+> standing where the field was so its absence reads as a decision. tsc proves the removal is
+> inert. Scope grew, deliberately and recorded: the alternative was a false acceptance, and
+> a register that accepts things for reasons that are not true is worth less than no
+> register. FIFTH GUARD OF THE DAY TO EARN ITS KEEP — after O97's linter, O98's CI gap,
+> O99's blind proof and CENSUS-1 above.
 
 > **O99 (O96's audit finding: O14's accessibility fix has never rendered) — claimed
 > 2026-08-20T12:44Z by loop-0820s.** O96 recorded two unqualified `.match-quality`
