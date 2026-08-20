@@ -119,6 +119,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O128 (corpus tranche seven: the adversarial pass over today's own work) — claimed
+> 2026-08-20T22:44Z by loop-0820s.** Today added roughly ninety cues and four mechanisms across
+> O103–O127, and every one was checked against sentences I CHOSE while writing it. That is the
+> blind spot O119 named and could only half close: a cue is tested against the collision its
+> author happened to think of. The corpus exists to supply the collisions nobody thought of, and
+> it has not grown since O87 while the lexicon underneath it grew by a third.
+> So: tranche seven, ~50 entries written to attack TODAY'S additions specifically rather than to
+> add general coverage. The targets are the units whose cues are broadest or whose mechanisms
+> are newest — non-medication's sequence/alternative registers (O103), the manner concretes
+> (O113), woman-GP's vocabulary (O114), the possessive stemmer entry and the comparative
+> (O116/O122), the disclosure registers reclassified out of the founder question (O123), the
+> clinic-anxiety pair (O124), and the telehealth REASONS (O125). Sentences are written first and
+> tagged from what the reader ACTUALLY does with them, never from what I hope it does — a
+> tranche that tags from intention measures the author, not the matcher.
+> Expected harvest is false positives, and they are the point: any FP is either fixed in this
+> unit if the fix is small and provable, or PINNED as today's truth with a retag demand in the
+> O68 pattern, which is how five of today's mechanisms came to exist. Gate: every entry's tags
+> measured; the corpus gate, O119's precision probe and the refusal register all green; any FP
+> pinned or fixed with its reason written; floors and tie-quality moved; full `pnpm verify`
+> green.
+
 > **O127 (the motion queue, closed honestly: one shipped and measured, one refused) — claimed
 > 2026-08-20T22:18Z by loop-0820s.** The UI & motion lane queued four innovations "hardest
 > constraint first". Two shipped (O67's shared-layout portrait, O52's re-sorting list) and two
