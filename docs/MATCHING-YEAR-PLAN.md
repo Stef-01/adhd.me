@@ -189,6 +189,32 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
   error paths, and the taste rules recorded in `docs/DESIGN-QA.md` stand in for the
   taste-skill wherever the loop session lacks it.
 
+## Refactoring, continuously (runs all year — founder directive 2026-08-19)
+
+Codebases this young rot at the seams that grow fastest. The founder's ask: keep refactoring
+as a standing lane, not a someday. The laws, set by O70's speech.ts pass (the worked example):
+
+- **Behaviour-identical, and the module's own pins are the definition of identical** — a
+  refactor unit runs the pre-refactor tests UNCHANGED and green before anything else counts.
+- **One module per unit.** A refactor that touches two subsystems is two units.
+- **RCA comments are load-bearing and move intact.** They are the tree's memory of paid-for
+  lessons; a refactor that drops one has deleted documentation, not tidied code.
+- **The refactor's own audit is part of the unit**: reading a module that closely usually
+  finds one real defect (O70 found the G4 orphaned-stream leak). Fix it in-unit, pinned.
+
+The queue, largest seam first:
+
+1. **app/care-finder.tsx** (~1,200 lines): one component holds seven stages. Split by stage
+   into co-located components with the shared state lifted plainly; the e2e suites define
+   identical.
+2. **app/globals.css** (~6,000 lines): section the file by surface with the banner convention
+   the finder sections already use; no selector changes (byte-identical computed styles at
+   the default root, the O60 proof pattern).
+3. **src/demo/clinicians.ts** (~900 lines): the roster DATA and the ranking LOGIC share a
+   file; split data out so a roster edit can never touch a ranking line. The full matching
+   suite defines identical.
+4. **src/matching/needs.ts**: the CUES pipeline builds in one expression; name its stages.
+
 ## Standing debts from the founder's asks (audited 2026-08-18)
 
 Everything asked across this arc that is still outstanding or thinner than the ask deserved,

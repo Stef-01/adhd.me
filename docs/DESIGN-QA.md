@@ -482,3 +482,16 @@ Copy-only change on her surfaces.
   languages stay English-only until she names them — the about still says so.
 - [x] Patient-copy sweep green over every public surface with the new credential lines;
   "weight management" deliberately kept OUT of rendered copy (keywords only).
+
+## O74 — booking handoffs, counted where they can be read (2026-08-19)
+
+Captures: qa/attribution-o74/ (the Booking handoffs section, desktop). Console vocabulary
+reused whole; no new CSS.
+
+- [x] One idea: outbound intent per clinician, said as the console's tag rows (label +
+  weight share a row); the prose names the honest end of the count — Healthengine has no
+  conversion endpoint, so the handoff IS the measurement.
+- [x] Honesty gates: the serverless-ephemerality limit is said ON the panel, not discovered;
+  a clinician with zero handoffs renders as a zero row, because an empty count is a fact;
+  nothing about any person is stored or shown (clinician, surface, day — W235's whole row).
+- [x] e2e proves the loop end to end: a real /go request lands a row the console then reads.

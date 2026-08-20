@@ -343,6 +343,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W228 stages a clinician the founder has asked to list before her own declarations exist. Every string is an identity or booking fact the founder supplied (name, practice, suburb, Healthengine profile URL) or an internal go-live checklist read by whoever completes the onboarding; nothing renders to a patient or an operator surface until the entry is moved into the live roster, which is the census's existing territory.",
   },
   {
+    module: "src/attribution/outbound-store.ts",
+    operatorCopy: [],
+    notCopy:
+      "W235 stores one row per booking handoff — clinician id (roster-validated), surface (allow-listed shape), DAY-truncated date — and tallies them for the staff console. No copy at all, and deliberately nothing about the person: no IP, no user agent, no session, no full timestamp, because an exact time beside a three-GP roster is a re-identification seed this product refuses to hold. The person is not the unit of measurement; the handoff is. Best-effort by contract (never throws into the redirect that calls it); the serverless-ephemerality limit is stated in the module header rather than discovered later.",
+  },
+  {
     module: "src/matching/tie-quality.ts",
     operatorCopy: [],
     notCopy:

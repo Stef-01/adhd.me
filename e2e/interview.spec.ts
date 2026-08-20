@@ -164,6 +164,24 @@ test("the tie-quality KPI renders from the gated function, counts partitioning t
   await panel.screenshot({ path: "qa/tie-o62/tie-quality-mobile.png" });
 });
 
+test("a booking handoff lands one countable row on the console (O74)", async ({ page }) => {
+  // The real path: hit /go the way a tapped booking link does, then read the console tally.
+  const before = Date.now();
+  const redirect = await page.request.get("/go/anubhav-saxena?src=finder", { maxRedirects: 0 });
+  expect(redirect.status()).toBe(302);
+
+  await signIn(page);
+  await page.goto("/console/matching");
+  const panel = page.locator(".mc-section", { has: page.getByRole("heading", { name: "Booking handoffs" }) });
+  await expect(panel).toBeVisible();
+  const anubhav = panel.getByTestId("handoffs-anubhav-saxena");
+  const total = Number(await anubhav.locator(".mc-tag").first().locator(".mc-weight").innerText());
+  expect(total, `a handoff at ${before} did not land a row`).toBeGreaterThanOrEqual(1);
+  await expect(anubhav.getByText("finder")).toBeVisible();
+
+  await panel.screenshot({ path: "qa/attribution-o74/handoffs-desktop.png" });
+});
+
 test("screenshots for the design record", async ({ page }) => {
   await signIn(page);
   await page.getByLabel("Interview transcript").fill(

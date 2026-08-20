@@ -17,6 +17,7 @@
 
 import { NextResponse } from "next/server";
 import { clinicians } from "@/demo/clinicians";
+import { recordOutbound } from "@/attribution/outbound-store";
 
 export async function GET(request: Request, context: { params: Promise<{ clinician: string }> }) {
   const { clinician: id } = await context.params;
@@ -41,6 +42,10 @@ export async function GET(request: Request, context: { params: Promise<{ clinici
   // own and nothing about the person (no IP, no UA, no id: those stay in the platform's
   // transport layer under its own retention, not in anything this product writes).
   console.log(JSON.stringify({ event: "booking-outbound", clinician: id, surface }));
+  // O74: the same count with a floor under it — W235's append-only store (clinician,
+  // surface, DAY only; nothing about the person). Best-effort by contract: recordOutbound
+  // never throws, because this redirect is the product and the count must never break it.
+  recordOutbound(id, surface);
 
   // no-store (vercel-optimize scanner finding, O32): a cached 302 would skip the server —
   // and the count above IS the route's purpose. Every click must reach this function.

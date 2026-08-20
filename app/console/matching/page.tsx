@@ -18,6 +18,7 @@
 import Link from "next/link";
 import { CAPACITY_FRESH_DAYS, CAPACITY_ORDER, capacityGrade, clinicians } from "@/demo/clinicians";
 import { tieQualityReport } from "@/matching/tie-quality";
+import { tallyOutbound } from "@/attribution/outbound-store";
 import { clinicianTags, matchAudit } from "@/onboarding/background";
 import { backgroundFromProposals } from "@/onboarding/background";
 import { proposeDeclarations, reachGaps } from "@/onboarding/expertise";
@@ -143,6 +144,32 @@ export default function MatchingConsolePage() {
             </ul>
           </div>
         ))}
+      </section>
+
+      <section className="mc-section" aria-labelledby="handoff-h">
+        <h2 id="handoff-h">Booking handoffs</h2>
+        <p className="mc-note">
+          Outbound intent this store has seen: every tap of a booking link routes through
+          /go and lands one row — clinician, surface, day, nothing about the person (W235).
+          Completed bookings stay invisible by design: Healthengine has no conversion
+          endpoint for a third party, so the handoff is the honest end of what this product
+          can count. On the hosted demo this store resets with the serverless filesystem;
+          the durable copy rides the platform logs until stores get a real backend.
+        </p>
+        {tallyOutbound().map((tally) => {
+          const clinician = clinicians.find((c) => c.id === tally.clinicianId)!;
+          return (
+            <div key={tally.clinicianId} className="mc-clinician">
+              <h3 className="mc-sub">{clinician.name}</h3>
+              <ul className="mc-tags" data-testid={`handoffs-${tally.clinicianId}`}>
+                <li className="mc-tag">handoffs<span className="mc-weight">{tally.total}</span></li>
+                {Object.entries(tally.bySurface).map(([surface, count]) => (
+                  <li key={surface} className="mc-tag">{surface}<span className="mc-weight">{count}</span></li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </section>
 
       <section className="mc-section" aria-labelledby="capacity-h">

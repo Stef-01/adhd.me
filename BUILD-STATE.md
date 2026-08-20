@@ -120,7 +120,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O74 (founder-directed: attribution advanced to a store of record + the year plan gains
-> the standing refactor lane) — claimed 2026-08-20T05:0xZ by interactive session loop-0819ad.**
+> the standing refactor lane) — DONE 2026-08-19 by interactive session loop-0819ad. Gate: 8
+> store pins (record/refuse/never-throw/tally/zero-rows/torn-tail), boundary census green,
+> console e2e proves the loop whole (a real /go request lands the row the panel then reads,
+> qa/attribution-o74/), booking + finder e2e unchanged; refactor lane added to the plan with
+> its laws and 4-item queue; full `pnpm verify` green (211 files, 3152 tests).**
 > Part A, attribution: O28 made outbound booking intent countable, but the count lives only
 > in `console.log` → Vercel runtime logs, which the free tier keeps for about an hour — the
 > product's one conversion-adjacent number evaporates daily. Change: `src/attribution/
