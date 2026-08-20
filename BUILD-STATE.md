@@ -119,6 +119,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O129 (FOUNDER-REPORTED: the profile "looks terrible" — a thorough design audit) — claimed
+> 2026-08-20T22:52Z by loop-0820s.** Founder sent a screenshot of Dr Anubhav Saxena's profile
+> with "visually looks terrible, do thorough design audit to make it much more visually
+> coherent, learn about best practices online". Reproduced at 1000×900 @2x and MEASURED before
+> touching anything, because the first read of a screenshot is usually wrong — mine was: I
+> thought the shell had lost its width constraint, and it had not (640px, exactly as O63 set
+> it; I had misread a 2× capture).
+> What the measurement actually found:
+> **(1) A STRAY AMBER DASH ON EVERY EVIDENCE AND MISSED ROW, and it is O115's bug in the very
+> next rule.** `.profile-content li::before` draws a 10px accent rule as a dash-bullet at 0,1,1
+> — written for the "Focus and experience" list, landing on `.fit-evidence` and `.fit-missed`
+> too. O115 fixed exactly this shape one rule above (`.profile-content ul` beating classed
+> lists) and did not look at the `::before` directly beneath it. It is the floating dash the
+> founder's screenshot shows beside the "Hindi-speaking" chip.
+> **(2) MEASURE FAR OVER THE READABLE RANGE.** The About prose runs ~87 characters per line and
+> the credential meta ~103. Bringhurst's 45–75, the 50–75 consensus and the British Dyslexia
+> Association's 60–70 all put this well outside — and on a product whose readers are tired,
+> possibly low-vision, and possibly dyslexic, the measure is not a nicety.
+> **(3) ACCENT INFLATION.** Amber currently carries the eyebrow, the disclosure, the chip, the
+> dash-bullet, the map link and the booking status — six roles on one screen, against the taste
+> law's "if everything is accented, nothing is".
+> **(4) The fit-list reads as a boxed data table** (1px border, 18px radius, ruled rows) on a
+> page that is otherwise editorial hairlines.
+> Scope discipline: the DISCLOSURE's prominence is not touched. It is compliance copy about a
+> material interest, and quietening it to serve visual balance would be the taste law
+> overruling a compliance law, which this tree forbids. Gate: before/after captures at 390 and
+> 1280 plus the founder's own 1000@2x, measured characters-per-line inside 45–75 after, a
+> DESIGN-QA entry naming each finding, e2e green, full `pnpm verify` green.
+
 > **O128 (corpus tranche seven: the adversarial pass over today's own work) — claimed
 > 2026-08-20T22:44Z by loop-0820s.** Today added roughly ninety cues and four mechanisms across
 > O103–O127, and every one was checked against sentences I CHOSE while writing it. That is the
