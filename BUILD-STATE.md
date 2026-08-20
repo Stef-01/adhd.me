@@ -119,6 +119,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O102 (explaining the fit, Q3: two clinicians' evidence side by side) — claimed
+> 2026-08-20T13:54Z by loop-0820s.** The lane's Q1 (O51, per-clinician missed asks) and Q2
+> (O66, the reorder question on the profile) are done; Q3 is the compare. It is also the
+> increment the product most obviously owes: the results screen's own founding note says "a
+> person choosing a GP is COMPARING, so the list is the primary view", and then every screen
+> after it shows exactly one clinician. Design: a `compare` stage reached from the profile,
+> two columns, rows = the asks the reader actually made (`needsFor`), cells = whether each
+> GP's declarations answer that ask (membership in `matchEvidence`, so the table cannot
+> disagree with the ranking — same read, same evidence). Rows GROUPED by what they tell the
+> reader: where the two differ FIRST (the only rows that can decide anything), then what
+> both answer, then what neither does — the last being the listing-gap case the finder
+> already owns a sentence for. Partner is chosen, not picked: the neighbour in the ranked
+> list, because a picker is a second decision on a screen that exists to make the first one
+> easier. HONESTY RULES, which are most of the work: no score, no total, no winner language
+> — the order already exists and this screen explains it rather than re-asserting it; W193
+> posture stated ONCE for the whole table rather than per cell ("what each GP declares about
+> their own practice, not a check ADHD.ME performed"); the entry control renders only when
+> there is a second clinician AND the reader's words reached at least one ask, because a
+> compare table with no rows is a claim of thoroughness with nothing behind it. No
+> testimonials, no ratings, no "better match". Gate: adhdme-taste (44px targets, reduced
+> motion, no raw hex), an e2e test that walks results → profile → compare and asserts the
+> grouping and the disclosure line, qa/ captures at 390 and 1280, a DESIGN-QA entry, full
+> `pnpm verify` green.
+
 > **O101 (refactor lane, queue item 4, and the queue's last: name the CUES pipeline's
 > stages) — claimed 2026-08-20T13:41Z by loop-0820s.** `src/matching/needs.ts` builds the
 > matcher's cue table in one chained expression — dedup by first claim, tokenise twice,
