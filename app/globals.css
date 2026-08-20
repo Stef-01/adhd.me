@@ -4924,7 +4924,10 @@ textarea:focus-visible {
   .story-split-reverse .story-pull { order: 2; }
   .story-pull p { max-width: 24ch; }
   .story-pillars li { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
-  .story-founders { grid-template-columns: 1fr; gap: 56px; }
+  /* The founders grid on its own page: same plates, breathing room under the one-word title. */
+.about-founders { margin-top: 48px; }
+
+.story-founders { grid-template-columns: 1fr; gap: 56px; }
   .story-register-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 

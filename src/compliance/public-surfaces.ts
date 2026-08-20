@@ -85,6 +85,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The landing page's argument at length, addressed to the same reader the landing page is: somebody deciding whether to look for a GP. Same rules, same linter, and the copy is the copy that was on `/` until it moved here — nothing was relaxed by giving it a route of its own.",
   },
   {
+    path: "/about",
+    audience: "patient",
+    why: "The founders, on their own page (the landing chapter moved here when About us became its own door). Same reader as the landing, same rules: roles and affiliations are the founders' own record, portraits are supplied, and nothing on it makes a clinical claim.",
+  },
+  {
     path: "/clinicians",
     audience: "professional",
     why: "A walkthrough addressed to GPs, describing what the software does with a worked clinical example. Clinical content between clinicians is professional communication rather than therapeutic advertising — see STANDING_FLAGS, because whether to publish it at all is a separate and open question.",

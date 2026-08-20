@@ -163,6 +163,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > in `verify` rather than beside it.
 > Gate met: allocation suite green 20/20 unchanged in shape, `pnpm verify` green 3591.
 
+> **O133 (founder-directed — credentials trued, and About us becomes /about, titled Team) —
+> claimed and DONE 2026-08-20, interactive session (not a loop firing).** Three founder
+> instructions in one unit. (1) Dr Anusha's credentials corrected at the source: Bachelor of
+> Psychology (First Class Honours) at USyd named as the degree it is, Diploma of Child Health
+> added, her MD named, and her roster title carrying the same post-nominal register as Dr
+> Anubhav's (MD FRACGP BPsych(Hons) DCH). (2) The founders chapter left the landing page for
+> /about — h1 "Team", the founder's exact one-word spec, four static plates, no motion — with
+> the register moved to app/about/founders.ts, the landing's chapter and data removed whole,
+> and the About us door at the bottom of every page (story footer gained it; site footer's
+> repointed from /#about). Census, sitemap and dossier rows shipped with the route. (3) The
+> consistency pass the founder asked for: her plate carries MD, FRACGP and all three
+> institutions, matching Dr Anubhav's format. Gate: pnpm verify green, landing + public-sweep
+> + a11y e2e 13/13, captures re-rendered (qa/about-o90). Loop firings: O132 is taken — next
+> free number is O133.
+
 > **O131 (the two-case bar, made checkable) — claimed 2026-08-20T23:22Z by loop-0820s.**
 > O128 pinned two false positives with retag demands. Before building either mechanism I applied
 > the tree's own O84 bar — two cases earn a mechanism, one does not — by searching all 558

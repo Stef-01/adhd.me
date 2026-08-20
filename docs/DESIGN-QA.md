@@ -1005,3 +1005,19 @@ Captures: qa/accent-o130/ (results at 390 and 1280, after).
 - [x] Results screen: 5 accent elements → 2 (the eyebrow, and one control). Profile unchanged at
   5, each defensible per O129: eyebrow, compliance disclosure, the matched-facet chip (the live
   token the colour is actually for), a link, and a booking status.
+
+## O133 — Team: About us as its own door (2026-08-20)
+
+Captures: qa/about-o90/about-desktop.png, about-mobile.png (re-rendered on the new route).
+
+- [x] One idea per screen, taken literally: the page is the four plates under a one-word
+  title — "Team", the founder's exact spec. No kicker, no intro sentence, no motion (a list
+  that does not reorder needs none; the landing's reveal choreography stayed on the landing).
+- [x] Reached from the "About us" door at the bottom of every page — the story footer gained
+  the door, the shared site footer's door repointed from the /#about anchor to /about.
+- [x] The landing lost the chapter whole: no orphaned anchor, no duplicated founder data
+  (the register moved to app/about/founders.ts with its portrait and trademark laws intact).
+- [x] Credentials consistent across founders: Dr Anusha's plate carries MD, FRACGP and all
+  three institutions (Bay Health Clinic, ANU, USyd — her B.Psych (Hons)), the same register
+  as Dr Anubhav's plate; her roster title matches (MD FRACGP BPsych(Hons) DCH).
+- [x] Census, sitemap, dossier rows shipped with the route; a11y and copy sweeps green on it.

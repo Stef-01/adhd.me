@@ -378,7 +378,9 @@ export const clinicians: Clinician[] = [
     shortName: "Dr Anusha Saxena",
     gender: "woman",
     pronouns: "she/her",
-    title: "General practitioner, FRACGP",
+    // Founder consistency pass (2026-08-20): degrees named as supplied — MD (ANU),
+    // B.Psych (Hons) (USyd), DCH — the same register Dr Anubhav's title uses.
+    title: "General practitioner, MD FRACGP BPsych(Hons) DCH",
     suburb: "Double Bay",
     // O85: the founder supplied Hornsby as her second consulting location (2026-08-20,
     // "put in Hornsby too as location"). The suburb is the whole of what was supplied:
@@ -402,14 +404,15 @@ export const clinicians: Clinician[] = [
     // O88: her official bio, supplied through the founder (2026-08-20), merged with the
     // already-verified detail from O58 — nothing below is authored for her.
     about:
-      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology — First Class Honours at the University of Sydney — then her medical degree at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport — cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
+      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology — a Bachelor of Psychology with First Class Honours at the University of Sydney — then her MD at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network; she holds a Diploma of Child Health. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport — cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
     experience: [
       "General practice, Bay Health Clinic, Double Bay",
       "Fellow of the Royal Australian College of General Practitioners",
       "Medical degree, Australian National University",
-      "First Class Honours in Psychology, University of Sydney",
+      "Bachelor of Psychology (First Class Honours), University of Sydney",
       "Hospital training across NSW — rotations in cardiology, paediatrics and psychiatry",
       "Sydney Child Health Program, Sydney Children's Hospital Network",
+      "Diploma of Child Health",
       "Endorsed ADHD prescriber course — completed",
       "Focused Psychological Strategies — training underway",
       "Functional medicine, nutrition, lifestyle medicine & health coaching — further qualifications underway",
