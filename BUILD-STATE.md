@@ -119,6 +119,24 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O81 (the O78 audit's headline named defect: a desire negation spends itself on the
+> NEAREST following ask — consume-once scope) — claimed 2026-08-20T04:56Z by loop-0820g.**
+> Today O40's trigger suppresses EVERY care/pref cue within its 3-token lead, so "I don't
+> want a woman GP, bulk billing matters more" loses bulk-billing, and "no interest in the
+> dose, I want the diagnosis question answered" has sat in the aspiration list since O68
+> for the same reason. The audit ruled out a shorter lead ("don't want anyone touching the
+> dose" is a real refusal at lead 2). Design: two-phase readNeeds — collect every cue
+> occurrence that survives collapse/hedge/on-behalf, scan the sentence once for trigger
+> completions (same phrases, same in-phrase insertion allowance, same clause+lead scope),
+> then each trigger binds only the NEAREST following candidate span: care/pref → that one
+> occurrence suppressed; manner → the negation is SPENT (manner keeps its O40-exempt
+> reading) and nothing else suppresses. O72's bare-negator rule is untouched (adjacency is
+> already consume-once). Claiming then runs in specificity order over unsuppressed
+> occurrences, keeping the O78 retry. Gate: both waiting aspirations promote and retag in
+> this commit (floors move with them), every §O40/§O72/§O78 pin and all ~411 corpus
+> entries green, §O81 pins both directions, tie-quality repinned, full `pnpm verify`
+> green.
+
 > **O80 (founder-directed 2026-08-20, clarifying O79: a standalone PYTHON tool for the
 > Australian GP-led ADHD pathway) — claimed 2026-08-20T04:47Z by loop-0820f; DONE
 > 2026-08-20. Gate: `python3 -m unittest` green (21 tests: every filter both directions
