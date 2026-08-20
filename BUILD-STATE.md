@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O77 (the reader unit O75's OTHER pin demanded: "for my mum" is a patient, not a
+> presence) — claimed 2026-08-20T03:46Z by loop-0820c.** O75's second KNOWN FALSE POSITIVE:
+> "booking on behalf of my mum, she wants this looked into properly" fires culturally_attuned
+> through the family-presence cue "my mum", though the mum is the PATIENT being booked for,
+> not a relative joining the appointment. Design (the raw-stream family again): an on-behalf
+> governor directly before the family reference — "for my <family>" / "on behalf of my
+> <family>", adjacency-tight like O72 — suppresses the culturally_attuned reading only.
+> The CHILD facet is exempt BY DESIGN and the exemption pinned: "this is for my teenager"
+> IS the child-adolescent ask — on-behalf is that facet's whole register. Every presence
+> pin ("my mum thinks this is nonsense and she'll be in the room", "my mother comes in to
+> translate") must keep reaching. Gate: the O75 pin retagged reaches→never in the same
+> commit, §O77 pins both directions, floors and tie-quality moved with the measured run,
+> full `pnpm verify` green.
+
 > **O76 (the reader unit O75's hedge pin demanded: a conversational hedge is filler, not an
 > ask) — claimed 2026-08-20T02:46Z by loop-0820b; DONE 2026-08-20. Gate: §O76 pins both
 > directions in reach.test.ts (suppression, span-precision, every neighbouring sense_making
