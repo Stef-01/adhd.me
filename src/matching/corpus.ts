@@ -201,7 +201,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I need someone who has seen women like me before", aspires: ["manner:attuned"] },
   { text: "diagnosed at forty and still getting my head around it", reaches: ["manner:sense_making"] },
   { text: "I want the science, not the pep talk", reaches: ["manner:sense_making"] },
-  { text: "appointments where I do not have to perform being fine", aspires: ["manner:attuned"] },
+  { text: "appointments where I do not have to perform being fine", reaches: ["manner:attuned"] },
 
   // ═══ TRANCHE TWO (O53) — authored, then measured, then retagged to reality ═══════════════
   // Emphasis: paraphrase depth on the thin facets, more `never` discipline (G7 symptoms,
@@ -274,7 +274,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "no interest in coaching, the medication is working", never: ["care:non-medication"] },
 
   // ── manner, said more ways ───────────────────────────────────────────────────────────────
-  { text: "a doctor who does not roll their eyes", aspires: ["manner:attuned"] },
+  { text: "a doctor who does not roll their eyes", reaches: ["manner:attuned"] },
   { text: "listened to properly for once", reaches: ["manner:attuned"] },
   { text: "somebody who won't dismiss me at hello", reaches: ["manner:attuned"] },
   { text: "take my concerns seriously", reaches: ["manner:attuned"] },
@@ -424,7 +424,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── manner breadth: culturally_attuned, attuned, non_judgmental, unhurried, structured ──
   { text: "someone who understands where my family comes from", reaches: ["manner:culturally_attuned"] },
   { text: "a doctor who gets cultural context, mine is complicated", reaches: ["manner:culturally_attuned"] },
-  { text: "I want to be believed the first time I say it", aspires: ["manner:attuned"] },
+  { text: "I want to be believed the first time I say it", reaches: ["manner:attuned"] },
   { text: "somewhere I will not be judged for how long I left this", reaches: ["manner:non_judgmental"] },
   { text: "no lectures, I know the history looks bad", reaches: ["manner:non_judgmental"] },
   { text: "I do not want to be rushed out the door again", reaches: ["manner:unhurried"] },
@@ -459,7 +459,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "video appointments and a doctor who explains what is going on", reaches: ["pref:telehealth-first", "manner:sense_making", "manner:collaborative"] },
   { text: "an autistic-friendly GP who won't lecture me about my past", reaches: ["care:autism-adhd"], aspires: ["manner:non_judgmental"] },
   { text: "a woman GP in the eastern suburbs who does titration", reaches: ["care:titration", "pref:woman-gp"] },
-  { text: "phone first, bulk billed, and please actually listen", reaches: ["pref:telehealth-first", "pref:bulk-billing"], aspires: ["manner:attuned"] },
+  { text: "phone first, bulk billed, and please actually listen", reaches: ["pref:telehealth-first", "pref:bulk-billing", "manner:attuned"] },
 
   // ── paraphrase depth on the lowest floors ────────────────────────────────────────────────
   { text: "gender matters to me, a woman doctor", reaches: ["pref:woman-gp"] },
@@ -763,7 +763,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── manner, wider ────────────────────────────────────────────────────────────────────────
   { text: "my community treats this as a western invention and I need a GP who gets that", reaches: ["manner:culturally_attuned"] },
   { text: "I want a doctor who understands migrant families", reaches: ["manner:culturally_attuned"] },
-  { text: "someone who talks to me like an adult, not a case file", aspires: ["manner:attuned"] },
+  { text: "someone who talks to me like an adult, not a case file", reaches: ["manner:attuned"] },
   { text: "explain the plan on paper so I can take it home", aspires: ["manner:sense_making"] },
   { text: "walk me through every result line by line", aspires: ["manner:sense_making"] },
   { text: "no sugar coating, just tell me straight", aspires: ["manner:sense_making"] },
@@ -928,7 +928,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // gap — they name what happened to the person, and whether this product may read that is a
   // founder call, raised in the ledger.
   "care:trauma-informed": 13,
-  "manner:attuned": 14,
+  // O112 raised 14→19: the plain wants in this facet's register, each naming the clinician's
+  // conduct. The three still unheard are the DISTRESS phrasings — "I cry in the car after
+  // every appointment" and its siblings — which are a founder judgement, not a lexicon gap.
+  "manner:attuned": 19,
   "manner:collaborative": 11,
   "manner:culturally_attuned": 16,
   "manner:motivating": 9,

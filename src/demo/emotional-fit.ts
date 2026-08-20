@@ -71,6 +71,18 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Listens and takes you seriously",
     matchLine: "listens and takes you seriously",
     cues: ["feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed",
+      /* O112: the plain WANTS in this facet's corpus register — each names the clinician's
+         CONDUCT, which is what this quality is, and none states anything about the reader.
+
+         Two carry their negator INSIDE the cue, the lesson's fourth arrival after O49's "not
+         a script", O104's "not be pushed" and O109's "no out of pocket": "a doctor who does
+         NOT roll their eyes" and "appointments where I do NOT have to perform being fine" are
+         the ask, and O72 would otherwise read the adjacent negator as a refusal of the facet.
+
+         "be believed" is authored as a pair that collapses to one token, so O45 demands it in
+         the raw stream — bare "believe" fires on "it is hard to believe how long the wait is". */
+      "actually listen", "like an adult", "be believed",
+      "not roll their eyes", "not have to perform",
       // "talked over" was dropped: "over" is a stopword, so it collapsed to the single token [talk]
       // and false-matched "before anyone talks about a stimulant". "talked over the top" keeps the
       // sense as two content tokens; the dismissal family is also covered by "dismissed"/"brushed off".

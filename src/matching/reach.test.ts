@@ -341,7 +341,10 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // "diagnose me" and "get checked" are O49 additions, reviewed under the O45 collapse rule:
     // each ships as one token BUT can only fire beside its authored adjacent pair, so a stray
     // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
-    "an excuse", "at ease", "been heard", "believe me", "by phone",
+    "an excuse", "at ease",
+    // O112: reviewed and DELIBERATE — bare "believe" fires on "it is hard to believe how long
+    // the wait is", and the pair does not.
+    "be believed", "been heard", "believe me", "by phone",
     // O108: reviewed and DELIBERATE, the same device as "in recovery". Bare "video" fires on
     // "I watched a video about ADHD"; authored as a pair, the collapse rule demands "by video"
     // / "over video" in the raw stream and the innocent sentence is refused.
@@ -1143,5 +1146,55 @@ describe("§O111 the finder does not say it could not read what it read perfectl
     }
     // And a request the roster genuinely answers is still informed.
     expect(matchQuality("my dose wears off and needs titration reviewed")).toBe("informed");
+  });
+});
+
+describe("§O112 attuned hears the wants and leaves the distress standing", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the plain wants, each of which names the clinician's conduct", () => {
+    for (const said of [
+      "someone who talks to me like an adult, not a case file",
+      "a doctor who does not roll their eyes",
+      "appointments where I do not have to perform being fine",
+      "I want to be believed the first time I say it",
+      "phone first, bulk billed, and please actually listen",
+    ]) expect(facets(said)).toContain("manner:attuned");
+  });
+
+  /**
+   * THE NEGATOR LIVES INSIDE THE CUE, FOR THE FOURTH TIME.
+   *
+   * "does NOT roll their eyes" and "do NOT have to perform being fine" are the ask. O72 reads
+   * a bare negator before a cue as a refusal of it, and care/preference facets are not exempt
+   * the way manner is at the O40 layer — so the cue has to carry its own negator, as O49's
+   * "not a script", O104's "not be pushed" and O109's "no out of pocket" all had to.
+   */
+  it("a want phrased as a negative is still a want", () => {
+    expect(facets("a doctor who does not roll their eyes")).toContain("manner:attuned");
+    expect(facets("appointments where I do not have to perform being fine")).toContain("manner:attuned");
+  });
+
+  it("the collapsed pair refuses what the bare word would have taken", () => {
+    // "be believed" collapses to [believe]; bare, it fires here.
+    expect(facets("it is hard to believe how long the wait is")).not.toContain("manner:attuned");
+    // "case file" was refused: it fires on a neutral admin sentence, and "like an adult"
+    // already carries the corpus sentence it was wanted for.
+    expect(facets("my case file is at the other clinic")).not.toContain("manner:attuned");
+  });
+
+  /**
+   * THE DISTRESS PHRASINGS STAY UNHEARD, AND THAT IS THE UNIT'S DECISION.
+   *
+   * O49 left three of this facet's aspirations standing because they read distress rather
+   * than a want, and said authoring cues for them needs a founder-side judgment call. That
+   * judgement is still owed. Cueing "I cry in the car after every appointment" would have the
+   * matcher reading a person's state off a sentence typed into a finder, which is the G7 line
+   * — the same call O104 made for trauma. Pinned so the silence is deliberate and visible,
+   * not mistaken for a vocabulary gap somebody should quietly fill.
+   */
+  it("does not read distress as a preference", () => {
+    expect(facets("I cry in the car after every appointment")).not.toContain("manner:attuned");
+    expect(facets("I rehearse what to say and still leave unheard")).not.toContain("manner:attuned");
   });
 });

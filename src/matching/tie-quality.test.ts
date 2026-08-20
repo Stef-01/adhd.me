@@ -40,6 +40,12 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  362/202/56/104 at O112 (attuned's plain wants: four sentences joined the run and all four
+ *  land PARTIAL — the first time a sweep has moved that column, and it is the honest
+ *  shape for this facet: some listed GPs declare attuned and some do not, so the ask
+ *  separates the top band without ordering it outright. Separation rate is flat at
+ *  55.8% because a partial tie is neither a win nor a loss, which is exactly what a
+ *  three-outcome KPI exists to be able to say);
  *  358/202/52/104 at O109 (bulk-billing's cost register: five sentences joined the run and
  *  ALL FIVE land unseparated, so separation FELL, 57.2%→56.4%. Recorded rather than
  *  smoothed, because the cause is a fact about the roster and not about the reader: NO
@@ -87,7 +93,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 358, separated: 202, partialTie: 52, unseparated: 104 };
+const PINNED = { total: 362, separated: 202, partialTie: 56, unseparated: 104 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

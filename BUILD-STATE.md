@@ -139,6 +139,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > that lesson has now arrived three times (O104, O109, and O49's original "not a script").
 > Gate: O103's method on every candidate, zero `never` pins broken, promotions retagged
 > in-commit, floors and tie-quality moved, full `pnpm verify` green.
+> DONE 2026-08-20. FIVE of the eight promoted, floor 14→19 — and the prediction held: two of
+> the five needed their negator inside the cue ("not roll their eyes", "not have to perform"),
+> the lesson's FOURTH arrival. That is now a pattern worth naming rather than a recurring
+> surprise: WHENEVER THE ASK IS THE ABSENCE OF SOMETHING, the cue must carry the negator, or
+> O72 reads the ask as a refusal of itself.
+>
+> Tie-quality 358/202/52/104 → 362/202/56/104: all four new run entries land PARTIAL, the
+> first time any sweep today has moved that column, and it is the honest shape for this facet
+> — some listed GPs declare attuned and some do not, so the ask separates the top band without
+> ordering it outright. The separation rate is flat at 55.8%, because a partial tie is neither
+> a win nor a loss. That is precisely what a three-outcome KPI exists to be able to say, and a
+> two-outcome one would have had to call it something it is not.
+>
+> Two cues refused on measurement: "case file" fires on "my case file is at the other clinic"
+> (and "like an adult" already carries the corpus sentence it was wanted for, so refusing it
+> costs no recall), and bare "believe" fires on "it is hard to believe how long the wait is" —
+> so "be believed" ships as a collapsed pair under O45, registered in O25's frozen list.
+>
+> THE DISTRESS PHRASINGS STAY UNHEARD AND ARE NOW SORTED. "I cry in the car after every
+> appointment" and "I rehearse what to say and still leave unheard" describe what the reader
+> is going through, not how they want to be treated; cueing them would have the matcher
+> reading a person's state off a sentence typed into a finder. Same line as O104's trauma
+> call. They are pinned as deliberately unheard so the silence cannot be mistaken for a
+> vocabulary gap somebody quietly fills, and the year plan's founder question now covers BOTH
+> facets in one place — the founder answers one question rather than meeting it again per
+> sweep.
 
 > **O111 (the banner that says it could not read what it read perfectly) — claimed
 > 2026-08-20T16:56Z by loop-0820s.** O110's capture caught it and O110 refused to smuggle the
