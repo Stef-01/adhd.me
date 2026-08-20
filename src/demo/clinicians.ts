@@ -158,6 +158,37 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
  * Same posture as the Gold Coast answer in the sequence: name the gap, put it on the directory,
  * and do not let the reader conclude it is about them.
  */
+/**
+ * The sentence a reader is owed when nobody listed answers what they asked for (O110).
+ *
+ * ONE SHAPE FOR EVERY FACET KIND, and it is a fact about a DECLARATION rather than a claim
+ * about ability — W193's posture, the same one the profile's missed-asks list uses. "No GP
+ * listed today says they do bulk billing" was the old shape and it only ever had to work for
+ * care areas; the labels this now covers are noun phrases ("Bulk billing") and adjectival
+ * ones ("Calm and steadying", "Strengths-focused"), and the declaration framing is the one
+ * form all three read correctly in.
+ *
+ * It lives here rather than in the JSX because a sentence that decides an honesty claim
+ * should be unit-testable, not only walkable in a browser.
+ */
+export function unservedCopy(label: string): string {
+  return `${label} is not something any GP listed today declares. That is a gap in our listing, not in what you asked for.`;
+}
+
+/**
+ * What the reader asked for that NOBODY on the roster declares.
+ *
+ * O110 widened this from care areas to care + manner + preference. It had been reading a
+ * quarter of what it claimed to cover: measured against the real roster, the three facets no
+ * listed GP declares today are `pref:bulk-billing` and the manner traits `steadying` and
+ * `motivating` — so every reader asking about cost, or for a calm or strengths-focused GP,
+ * was heard by the lexicon, ranked against a roster that could not answer them, and told
+ * nothing at all. The line built for exactly that case could not see them.
+ *
+ * Languages are deliberately absent: `languageNeeds` only creates a need for a language the
+ * roster SPEAKS, so an unspoken language never becomes a silent miss and has nothing to
+ * report here.
+ */
 export function unservedAsks(query: string, roster: readonly Clinician[] = clinicians): string[] {
   // A "sometimes" declaration is still a declaration (O2): a clinician the ranking scores for
   // an area must not appear under "no GP listed today says they do this" on the same screen.
@@ -168,8 +199,20 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
     roster.flatMap((clinician) => [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]),
   );
   return readNeeds(query)
-    .filter((need) => need.facet.kind === "care" && !declared.has(need.facet.area))
-    .map((need) => need.label);
+    .filter((need) => {
+      const facet = need.facet;
+      if (facet.kind === "care") return !declared.has(facet.area);
+      // A way of working nobody declares is a listing gap exactly as a care area is.
+      if (facet.kind === "manner") {
+        return !roster.some((clinician) => clinician.manner.includes(facet.trait));
+      }
+      // The preference kinds are where a three-GP roster's real gaps are — billing above all.
+      if (facet.kind === "preference") {
+        return !roster.some((clinician) => holdsPreference(clinician, facet.preference));
+      }
+      return false;
+    })
+    .map((need) => unservedCopy(need.label));
 }
 
 /**

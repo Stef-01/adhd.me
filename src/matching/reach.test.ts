@@ -153,6 +153,42 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     expect(asks.length).toBeGreaterThan(0);
     expect(unservedAsks("titration and a longer appointment")).toEqual([]);
   });
+
+  /**
+   * O110: it had been reading a QUARTER of what it claimed to cover.
+   *
+   * The filter was `kind === "care"`, so the two facet kinds where a three-GP roster actually
+   * has gaps — preference and manner — produced silence. Measured against the real roster the
+   * facets nobody declares today are bulk-billing, steadying and motivating, which is why
+   * those three are the cases here: they are the live ones, not invented examples.
+   */
+  it("names an unanswered PREFERENCE, which is where this roster's real gap is", () => {
+    const [said] = unservedAsks("I want a GP who bulk bills");
+    expect(said).toContain("Bulk billing is not something any GP listed today declares");
+    expect(said).toContain("a gap in our listing, not in what you asked for");
+  });
+
+  it("names an unanswered MANNER", () => {
+    expect(unservedAsks("someone calm who can steady me")[0])
+      .toContain("Calm and steadying is not something any GP listed today declares");
+  });
+
+  it("never says it about something the roster DOES declare", () => {
+    // O2's self-contradiction pin, now across all three facet kinds: the line must never
+    // appear beside a facet the ranking is simultaneously scoring.
+    expect(unservedAsks("a woman GP please")).toEqual([]);
+    expect(unservedAsks("can we do it over the phone")).toEqual([]);
+    expect(unservedAsks("I need a longer first appointment")).toEqual([]);
+    expect(unservedAsks("I need help with my sleep")).toEqual([]);
+  });
+
+  it("stays a fact about a declaration, never a claim about ability (W193)", () => {
+    const said = unservedAsks("I want a GP who bulk bills")[0]!;
+    expect(said).toContain("is not something any GP listed today declares");
+    for (const forbidden of ["cannot", "unable", "does not do", "no GP can"]) {
+      expect(said.toLowerCase()).not.toContain(forbidden);
+    }
+  });
 });
 
 describe("O7 every clarifier answer keeps reaching its facet (F10)", () => {

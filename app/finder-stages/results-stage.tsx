@@ -189,7 +189,10 @@ export function ResultsStage({
               reader should not be left to conclude it is a gap in their question. */}
           {unserved.length > 0 && (
             <p className="place-status match-quality" role="status">
-              {`No GP listed today says they do ${unserved[0]!.toLowerCase()}. That is a gap in our listing, not in what you asked for.`}
+              {/* O110: the sentence is composed in the matching module now, where it can be
+                  unit-tested — and where it covers preferences and manner, not only care
+                  areas. The screen prints what the reader is owed; it does not decide it. */}
+              {unserved[0]}
             </p>
           )}
 

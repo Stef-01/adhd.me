@@ -677,3 +677,34 @@ Captures: qa/compare-o102/ (the compare screen at 390 and 1280, from a four-ask 
 - [x] No motion of its own. The screen transition is the shared one; a portrait morph between
   profile and compare was considered and dropped rather than shipped half-working — motion
   carries meaning here or does not exist.
+
+## O110 — the honesty line covers what it always claimed to (2026-08-20)
+
+Captures: qa/unserved-o110/ (a bulk-billing ask at 390 and 1280, with the gap named).
+
+- [x] `unservedAsks` filtered to `care` facets, so it was reading a quarter of what it claimed
+  to cover. Measured against the real roster, the three facets nobody declares today are
+  `pref:bulk-billing` (two GPs say mixed billing, one says billing is set by the practice) and
+  the manner traits `steadying` and `motivating`. All three produced silence — including the
+  cost ask, which is the one most likely to decide whether somebody books, and the one O109
+  had just taught the lexicon to hear.
+- [x] One sentence shape for every facet kind, in W193's declaration framing: "{label} is not
+  something any GP listed today declares. That is a gap in our listing, not in what you asked
+  for." Checked true against all three live gaps before it was written — the labels are noun
+  phrases ("Bulk billing") and adjectival ones ("Calm and steadying", "Strengths-focused"),
+  and the declaration form is the one shape all three read correctly in.
+- [x] The sentence moved out of the JSX into the matching module. Copy that decides an honesty
+  claim should be unit-testable, not only walkable in a browser; the screen now prints what
+  the reader is owed rather than deciding it. Pinned both ways, including that it never
+  appears beside a facet the ranking is simultaneously scoring, across all three facet kinds.
+- [x] Languages are correct already and untouched: `languageNeeds` only creates a need for a
+  language the roster speaks, so an unspoken one cannot become a silent miss.
+
+**Found, not fixed, and it is the next unit.** The capture shows the new line sitting directly
+under "We could not tell what you are looking for, so this is everyone we list — not an order."
+On this query that banner is FALSE: the finder read "bulk billing" perfectly and then said it
+could not tell. `matchQuality` routes two different situations to `unmatched` — nothing was
+read, and something was read that nobody answers — and the copy only describes the first.
+The code comment beside it already knew ("words that were READ but that nobody answers are not
+a tie … `unservedAsks` names whose gap it is"), but the sentence was never split. The falsehood
+predates this unit; O110 only put a true sentence beside it, which is what made it visible.

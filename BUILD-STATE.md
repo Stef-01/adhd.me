@@ -140,6 +140,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > in unit tests rather than only in a browser; no facet the roster DOES declare ever produces
 > one (the self-contradiction pin O2 wrote must still hold, now across three facet kinds);
 > qa/ capture and DESIGN-QA entry per the taste law; e2e green; full `pnpm verify` green.
+> DONE 2026-08-20. `unservedAsks` now covers care + manner + preference, and `unservedCopy`
+> owns the sentence in the matching module where a unit test can reach it. All three live
+> gaps produce their line and every facet the roster does declare stays silent, pinned both
+> ways. The W193 pin is written as a NEGATIVE as well as a positive: the sentence must contain
+> "is not something any GP listed today declares" and must not contain "cannot", "unable",
+> "does not do" or "no GP can" — a fact about a declaration can decay into a claim about
+> ability one careless edit at a time, and now it cannot do so silently.
+>
+> **THE CAPTURE FOUND A FALSEHOOD THIS UNIT DID NOT CAUSE AND CANNOT LEAVE STANDING.** The new
+> line renders directly beneath "We could not tell what you are looking for, so this is
+> everyone we list — not an order." On this query that banner is FALSE: the finder read "bulk
+> billing" perfectly, then said it could not tell. `matchQuality` routes TWO different
+> situations to `unmatched` — nothing was read, and something was read that nobody on the
+> roster answers — and the copy describes only the first. The comment beside that branch
+> already knew the distinction existed ("words that were READ but that nobody answers are not
+> a tie … `unservedAsks` names whose gap it is"); the sentence was simply never split to match.
+> The falsehood predates this unit — those queries have been getting that banner all along —
+> and O110 only put a true sentence beside it, which is what made it visible. It is a separate
+> design decision (a fourth quality value and its copy, plus the pins that assert the current
+> one), so it is O111, claimed immediately, not smuggled into this diff. Recorded in
+> docs/DESIGN-QA.md as found-not-fixed with its cause, so the record is honest either way.
 
 > **O109 (Q1 lexicon: bulk-billing's cost register; and O108's handoff, measured and refused)
 > — claimed 2026-08-20T16:16Z by loop-0820s.** Two things, and the second is the reason the
