@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O84 (the O78 audit queue's LAST item: the presence phrasing O25's re-authoring left
+> unheard — closed by bringing the phrase home under the discipline that now exists) —
+> claimed 2026-08-20T06:46Z by loop-0820i.** "she will sit in the room with me" reaches
+> nothing: O25 re-authored "in the room with me" to "come into the room" because collapse
+> made it fire on walls ("my rooms are above the pharmacy") — pre-O45, when no pair rule
+> existed. Design, worked against the leak surface: the verb is NOT the discriminator
+> ("sit in the room" as a two-token cue [sit, room] fires on "I hate sitting in waiting
+> rooms" at MAX_GAP 1 — measured, refused); the discriminator is the [room, with]
+> skeleton. Cue "room with me" collapses to [room] and the O45 pair rule demands adjacent
+> raw [room, with] — hears "sit in the room with me" and "sits in the room with me when
+> it matters" (any verb, any tense, no INFLECTIONS entry needed), stays silent on walls,
+> cold rooms and waiting-room complaints. Frozen single-token list grows by one, reviewed.
+> Gate: the waiting aspiration promotes and retags in this commit, leak pins land as
+> never data ("I hate sitting in waiting rooms", "the room was cold last time"), floors
+> and tie-quality moved with the measured run, §O84 pins both directions, full `pnpm
+> verify` green. Closes the O78 audit queue.
+
 > **O83 (the O78 audit's second queued rule: somebody ELSE's "no" is a complaint, not the
 > reader's refusal) — claimed 2026-08-20T05:45Z by loop-0820h; DONE 2026-08-20. Gate: the
 > waiting aspiration PROMOTED and nothing else moved on the pre-pin run (the measured diff
