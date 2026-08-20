@@ -201,6 +201,33 @@ const LEXICON: readonly Entry[] = [
     // O49: the script-shaped refusal of scripts. Negators are never stopwords, so both keep
     // two tokens; O40 does not suppress them because the negator is inside the cue's own words.
     "not a script", "without a script",
+    /* O103 (the O64→O65 loop, run on the gap that replaced longer-appointment at the top of
+       the list): this facet was the loudest on record at ELEVEN unheard phrasings, and the
+       reason was register. Every cue above hears a REFUSAL — "without medication", "not a
+       script" — and the corpus had collected two registers this facet is actually asked in
+       and neither was cued:
+
+         SEQUENCE — the ask is about ORDER, not refusal. "strategies first, tablets later",
+         "medication as a last resort". Nobody here is declining a script; they are saying
+         where it goes in the plan, which is a different sentence and a real preference.
+
+         ALTERNATIVE — the ask names the other thing. "psychological approaches", "lifestyle
+         changes", "what works besides medication".
+
+       Each keeps two content tokens (O25). */
+    "strategies first", "tablets later", "last resort",
+    "psychological approaches", "skills and strategies", "lifestyle changes",
+    "diet and exercise", "besides medication", "not ready for medication",
+    /* FOUR CUES REFUSED, AND THE REASON IS MEASURED RATHER THAN ASSERTED (the O65 pattern).
+       `findCue` matches in order ACROSS intervening words, so each of these fires on a
+       sentence that means something else — checked against the real matcher before being
+       dropped, not reasoned about:
+         "non drug"              fires on "a non stimulant drug" — a MEDICATION ask, the opposite
+         "more than a prescription" fires on "talk more about my prescription" — titration
+         "before any script"     fires on "before my script ran out" — titration
+         "another way"           fires on "explain it another way" — sense-making
+       Their corpus sentences stay aspirations with this note as their reason. Precision here
+       is worth more than recall: three of the four would mislabel the ask as its opposite. */
   ]),
 
   /**

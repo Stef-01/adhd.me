@@ -137,7 +137,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > is dropped in-build rather than shipped and explained (O49's lesson); the promotion gate
 > forces every newly-heard aspiration to be retagged IN THIS COMMIT, floors raised with it.
 > Gate: the corpus's own promotion gate green, every reach pin both directions, tie-quality
-> repinned if it moves, full `pnpm verify` green.
+> repinned if it moves, full `pnpm verify` green. DONE 2026-08-20, and it is the cleanest run
+> of the O64→O65 loop yet: NINE cues in, EIGHT of the eleven aspirations promoted in the
+> closing commit, floor 9→17, and — the number the KPI exists to notice — ALL EIGHT newly
+> heard requests SEPARATE. Tie-quality 331/181/52/98 → 339/189/52/98, separation 54.7%→55.8%,
+> with the unseparated 98 untouched, which is honest: those are requests the whole roster
+> answers equally, and hearing a request better cannot order a roster that agrees.
+>
+> THE REFUSALS ARE THE PART WORTH READING, and they were MEASURED rather than judged. Four
+> further cues suggested themselves from the corpus and each was run against the real matcher
+> before being dropped: `findCue` matches in order ACROSS intervening words, so "non drug"
+> fires on "I would consider a non stimulant drug", "more than a prescription" on "I want to
+> talk more about my prescription", "before any script" on "we talked before my script ran
+> out", and "another way" on "explain it another way so it makes sense". THREE OF THE FOUR
+> WOULD HAVE LABELLED A MEDICATION ASK AS ITS OPPOSITE — the worst failure this facet has
+> available, since a reader asking to adjust a dose would have been told the GP does
+> non-medication supports. The three aspirations those cues would have served stay standing
+> with the measurement as their written reason (the O65 pattern), and the four refusing
+> sentences are pinned in reach.test.ts §O103 so a later author who reaches for one of them
+> learns what it costs before shipping it rather than after. Note also what did NOT happen:
+> zero `never` pins broke across the 508-entry corpus, so the nine cues cost no precision
+> anywhere. Gate met: promotion gate green, reach pins both directions (115 tests in that
+> file), tie-quality repinned with its history chain, `pnpm verify` green 3370 passed.
 
 > **O102 (explaining the fit, Q3: two clinicians' evidence side by side) — claimed
 > 2026-08-20T13:54Z by loop-0820s.** The lane's Q1 (O51, per-clinician missed asks) and Q2

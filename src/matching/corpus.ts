@@ -269,7 +269,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "RSD is the worst part of all of it", reaches: ["care:emotional-regulation"] },
   { text: "rage over tiny things and then the shame after", reaches: ["care:emotional-regulation"] },
   { text: "want to try coaching before tablets", reaches: ["care:non-medication"] },
-  { text: "not ready for medication yet, what else is there", aspires: ["care:non-medication"] },
+  { text: "not ready for medication yet, what else is there", reaches: ["care:non-medication"] },
   { text: "alternatives to stimulants please", reaches: ["care:non-medication"] },
   { text: "no interest in coaching, the medication is working", never: ["care:non-medication"] },
 
@@ -390,8 +390,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:non-medication / manner:collaborative ───────────────────────────────────────────
   { text: "coaching and skills, not another prescription", reaches: ["care:non-medication"] },
   { text: "what can we do without medication", reaches: ["care:non-medication"] },
-  { text: "I want strategies first, tablets later if ever", aspires: ["care:non-medication"] },
-  { text: "psychological approaches before anything else", aspires: ["care:non-medication"] },
+  { text: "I want strategies first, tablets later if ever", reaches: ["care:non-medication"] },
+  { text: "psychological approaches before anything else", reaches: ["care:non-medication"] },
   { text: "treatment choices talked through with me, never over my head", reaches: ["manner:collaborative"] },
   { text: "I want a say in my own treatment plan", reaches: ["manner:collaborative"] },
   { text: "someone who works alongside me as a partner", aspires: ["manner:collaborative"] },
@@ -475,7 +475,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── mid facets: substance, non-medication, shared-care, complex ─────────────────────────
   { text: "my drinking is part of this story", reaches: ["care:substance-history"] },
   { text: "sober two years and proud of it, keep that in mind", aspires: ["care:substance-history"] },
-  { text: "skills and strategies before any script", aspires: ["care:non-medication"] },
+  { text: "skills and strategies before any script", reaches: ["care:non-medication"] },
   { text: "I would rather not take medication if there is another way", aspires: ["care:non-medication"] },
   { text: "my psychiatrist suggested GP shared care", reaches: ["care:shared-care"] },
   { text: "a GP willing to do the shared care paperwork", reaches: ["care:shared-care"] },
@@ -590,9 +590,9 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "review whether this is still the right medication for me", aspires: ["care:titration"] },
   { text: "the ADHD clinic discharged me and I need my scripts kept going", aspires: ["care:shared-care"] },
   { text: "hand the prescribing back to a GP near home", aspires: ["care:shared-care"] },
-  { text: "lifestyle changes before we talk prescriptions", aspires: ["care:non-medication"] },
+  { text: "lifestyle changes before we talk prescriptions", reaches: ["care:non-medication"] },
   { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
-  { text: "what works besides medication", aspires: ["care:non-medication"] },
+  { text: "what works besides medication", reaches: ["care:non-medication"] },
   { text: "help with the anger that comes out of nowhere", aspires: ["care:emotional-regulation"] },
   { text: "my moods flip fast and I say things I regret", aspires: ["care:emotional-regulation"] },
   { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
@@ -755,8 +755,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
   { text: "crying at work over nothing and I want it taken seriously", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
   { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
-  { text: "what about diet and exercise before we go straight to stimulants", aspires: ["care:non-medication"] },
-  { text: "structure and skills first, medication as a last resort", aspires: ["care:non-medication"] },
+  { text: "what about diet and exercise before we go straight to stimulants", reaches: ["care:non-medication"] },
+  { text: "structure and skills first, medication as a last resort", reaches: ["care:non-medication"] },
   { text: "I am on suboxone and need a GP who can work with that", aspires: ["care:substance-history"] },
   { text: "weekend cocaine use is part of my history and I will not lie about it", aspires: ["care:substance-history"] },
 
@@ -905,7 +905,11 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // non-medication lowered 8→7 by O92 (the shortage sentence reclassified reaches→never
   // when the determiner rule landed) then raised back 7→9 by the unit's own declining
   // pins — the sanctioned-reclassification precedent and the ratchet in one move.
-  "care:non-medication": 9,
+  // O103 raised 9→17: the loudest gap on record closed in one unit. Eight of the facet's
+  // eleven standing aspirations promoted when the SEQUENCE and ALTERNATIVE registers were
+  // cued (see needs.ts) — the three that remain are the ones whose cues were refused for
+  // measured precision, and their reason is written at the cue list rather than here.
+  "care:non-medication": 17,
   // shared-care lowered 20→19 by O91: the count lost a KNOWN FALSE POSITIVE ("without a
   // psychiatrist referral" retagged reaches→never when the bare-without rule landed) — a
   // correction, not a hearing lost; the O72 bulk-billing precedent, third use.

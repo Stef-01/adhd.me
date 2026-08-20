@@ -35,7 +35,22 @@ non-rankings.
    joined BARE_NEGATORS with a double-negative guard ("can't … without X" keeps the want),
    the pin retagged, shared-care floor moved by sanctioned reclassification.** The standing gap list (~60
    aspirations) is the lexicon's work queue; growth continues opportunistically but the
-   CI-gate deliverable is DONE.* Earlier: 401 entries after O75's tranche five (2026-08-20):
+   CI-gate deliverable is DONE. **O103 (2026-08-20) worked the top of that queue**: measured
+   across the aspiration list, `care:non-medication` was the loudest gap on record at ELEVEN
+   unheard phrasings, and the cause was REGISTER — every existing cue heard a refusal
+   ("without medication", "not a script") while the corpus had collected two registers
+   nobody had cued: SEQUENCE (the ask is about ORDER, not refusal — "strategies first,
+   tablets later", "medication as a last resort") and ALTERNATIVE (the ask names the other
+   thing — "psychological approaches", "what works besides medication"). Nine cues in, EIGHT
+   of the eleven promoted in the closing commit, floor 9→17, and all eight newly-heard
+   requests SEPARATE — tie-quality 331/181/52/98 → 339/189/52/98, separation 54.7%→55.8%.
+   Four further cues were refused ON MEASUREMENT rather than on judgement: `findCue` matches
+   across intervening words, so "non drug" fires on "a non stimulant drug", "more than a
+   prescription" on "talk more about my prescription", "before any script" on "before my
+   script ran out", "another way" on "explain it another way" — three of the four would have
+   labelled a medication ask as its opposite. The three aspirations those cues would have
+   served stay standing with the measurement as their reason, and the refused sentences are
+   pinned in reach.test.ts §O103 so a later author learns what re-adding them costs.* Earlier: 401 entries after O75's tranche five (2026-08-20):
    the registers real traffic arrives in — question forms, on-behalf bookings (partner or
    parent typing for the person), life-stage context and hedged polite asks — 18 floors
    raised on the measured run, tie-quality repinned 274/170/23/81. Tranche five's harvest is

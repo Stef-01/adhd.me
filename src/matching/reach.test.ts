@@ -713,3 +713,54 @@ describe("§O72 a bare negator adjacent to a care/pref cue is a refusal — with
     expect(facets("not the usual bulk billing crowd, but bulk billed would help")).toContain("pref:bulk-billing");
   });
 });
+
+describe("§O103 non-medication is asked in three registers, and the cues hear the two that were deaf", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the SEQUENCE register — the ask is about order, not refusal", () => {
+    // Nobody in these sentences is declining a script. They are saying where it goes in the
+    // plan, which is a different sentence and a real preference.
+    expect(facets("I want strategies first, tablets later if ever")).toContain("care:non-medication");
+    expect(facets("structure and skills first, medication as a last resort")).toContain("care:non-medication");
+    expect(facets("lifestyle changes before we talk prescriptions")).toContain("care:non-medication");
+  });
+
+  it("hears the ALTERNATIVE register — the ask names the other thing", () => {
+    expect(facets("what works besides medication")).toContain("care:non-medication");
+    expect(facets("psychological approaches before anything else")).toContain("care:non-medication");
+    expect(facets("skills and strategies before any script")).toContain("care:non-medication");
+    expect(facets("what about diet and exercise before we go straight to stimulants")).toContain("care:non-medication");
+    expect(facets("not ready for medication yet, what else is there")).toContain("care:non-medication");
+  });
+
+  it("keeps the REFUSAL register the earlier units cued", () => {
+    expect(facets("what can we do without medication")).toContain("care:non-medication");
+    expect(facets("I want options that are not a script")).toContain("care:non-medication");
+  });
+
+  /**
+   * THE FOUR REFUSED CUES, PINNED AS THE SENTENCES THAT REFUSED THEM.
+   *
+   * `findCue` matches in order across intervening words, so each of these phrasings would
+   * have fired non-medication on a sentence meaning something else — three of them meaning
+   * close to the OPPOSITE. The cue list carries the reason; these are the measurements.
+   * If somebody adds one of those cues later, this block is what tells them what it costs.
+   */
+  it("refuses the cues that would have misread a medication ask as its opposite", () => {
+    // "non drug" would fire here — and a non-stimulant IS a medication.
+    expect(facets("I would consider a non stimulant drug")).not.toContain("care:non-medication");
+    // "more than a prescription" would fire on a titration ask.
+    expect(facets("I want to talk more about my prescription")).not.toContain("care:non-medication");
+    // "before any script" would fire on a script running out — titration again.
+    expect(facets("we talked before my script ran out")).not.toContain("care:non-medication");
+    // "another way" would fire on a sense-making ask.
+    expect(facets("explain it another way so it makes sense")).not.toContain("care:non-medication");
+  });
+
+  it("the promoted register does not bleed into the facets it sits beside", () => {
+    // The sequence sentences are about ORDER, and the medication facets they mention must
+    // still be heard on their own words rather than swallowed by the new cues.
+    expect(facets("my dose wears off by lunchtime")).toContain("care:titration");
+    expect(facets("no interest in coaching, the medication is working")).not.toContain("care:non-medication");
+  });
+});
