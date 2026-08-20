@@ -119,6 +119,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O110 (the honesty line is blind to three quarters of what it should cover) — claimed
+> 2026-08-20T16:34Z by loop-0820s.** O109's own consequence, and a live patient-facing defect
+> rather than a lexicon gap. `unservedAsks` — the function behind "No GP listed today says
+> they do X. That is a gap in our listing, not in what you asked for" — filters to `care`
+> facets ONLY. Measured against the actual roster, THREE facets today are declared by nobody:
+> `pref:bulk-billing` (two GPs say mixed billing, one says billing is set by the practice) and
+> the manner traits `steadying` and `motivating`. All three produce SILENCE. So a reader who
+> asks about cost — the ask most likely to decide whether they book, and the one O109 just
+> taught the lexicon to hear — is now heard, ranked against a roster that cannot answer them,
+> and told nothing about why. The line built for exactly this case cannot see them. Design:
+> extend the filter to preference and manner, and move the SENTENCE out of the JSX into the
+> matching module, because copy that decides an honesty claim belongs where it can be
+> unit-tested and not only walked by e2e. One sentence shape for every facet kind, in W193's
+> declaration framing so it stays a fact about a declaration and never a claim about ability:
+> "{label} is not something any GP listed today declares." Verified true against all three of
+> today's gaps before writing it. Languages are already correct and stay untouched —
+> `languageNeeds` only creates a need for a language the roster speaks, so an unspoken one
+> cannot become a silent miss. Gate: the three real gaps each produce their sentence, pinned
+> in unit tests rather than only in a browser; no facet the roster DOES declare ever produces
+> one (the self-contradiction pin O2 wrote must still hold, now across three facet kinds);
+> qa/ capture and DESIGN-QA entry per the taste law; e2e green; full `pnpm verify` green.
+
 > **O109 (Q1 lexicon: bulk-billing's cost register; and O108's handoff, measured and refused)
 > — claimed 2026-08-20T16:16Z by loop-0820s.** Two things, and the second is the reason the
 > first is the right unit. (1) `pref:bulk-billing` carries five cues — three sayings of "bulk
