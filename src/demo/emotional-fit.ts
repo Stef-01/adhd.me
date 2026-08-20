@@ -118,6 +118,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Calm and steadying",
     matchLine: "has a calm, steadying manner",
     cues: [
+      /* O128: "interrogated" as well as O125's "interrogation" — stem() takes them to
+         "interrogat" and "interrogation", which do not meet. The VERB is how people say it
+         ("I do not want to feel interrogated about my childhood"), and manner is exempt from
+         O40's desire-negation by design, so the "do not want" in front of it is the ask. */
+      "interrogated", 
       /* O125: what a person asks for when a previous appointment went badly. "interrogation" is
          one token but a whole word nobody uses casually here; "go gently" keeps two. */
       "interrogation", "go gently", "calm", "gentle", "reassuring", "put me at ease", "at ease", "overwhelmed", "nervous", "on edge", "reassurance"],

@@ -912,6 +912,80 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my paediatrician is handing me over to adult care and I am lost", reaches: ["care:shared-care"] },
   { text: "the psychiatrist only sees me yearly now, a GP needs to hold the rest", reaches: ["care:shared-care"] },
   { text: "school suggested an educational psychologist but we want a GP first", reaches: ["care:child-adolescent-adhd"] },
+
+  // ── Tranche seven (O128): written to attack THIS DAY'S OWN ADDITIONS ──────────────────
+  // O103–O127 added ~90 cues and four mechanisms, each checked against sentences its author
+  // chose. That is the blind spot O119 named and could only half close. These fifty were
+  // written to supply the collisions nobody thought of, and tagged from what the reader
+  // ACTUALLY does with them — a tranche tagged from intention measures the author, not the
+  // matcher. Harvest: two false positives (pinned below with retag demands), three cheap
+  // misses fixed in the same unit ("female practitioner", "immunosuppressed", "interrogated"),
+  // and — the result that matters most — every G7 symptom sentence still reaching nothing.
+
+  { text: "my psychologist suggested I ask about the non-drug options", aspires: ["care:non-medication"] },
+  { text: "the diet advice was useless, I want the actual assessment", reaches: ["care:adhd-assessment"] },
+  { text: "I already do exercise and sleep hygiene, that is not the question", never: ["care:non-medication"] },
+  { text: "skills first, then we can discuss whether a script helps", aspires: ["care:non-medication"] },
+  { text: "last resort is fine, I just want to know the order", reaches: ["care:non-medication"] },
+  { text: "walk me through what the assessment actually involves", reaches: ["care:adhd-assessment"] },
+  { text: "tell me straight if I do not have it", reaches: ["manner:sense_making"] },
+  { text: "I want to be talked through the options, not at", reaches: ["manner:collaborative"] },
+  { text: "the step by step of getting diagnosed, please", reaches: ["manner:sense_making", "care:adhd-assessment"] },
+  { text: "a lady doctor would make this easier", reaches: ["pref:woman-gp"] },
+  { text: "I would prefer a female practitioner for this", reaches: ["pref:woman-gp"] },
+  { text: "my wife is a doctor and she says get assessed", reaches: ["care:adhd-assessment"] },
+  { text: "the lady at the desk said to ask", never: ["pref:woman-gp"] },
+  { text: "can I get a longer appointment than the standard ten minutes", reaches: ["pref:longer-appointment", "manner:unhurried"] },
+  { text: "my daughter's school wants a report", reaches: ["care:child-adolescent-adhd"] },
+  { text: "my sons are both like this and so am I", reaches: ["care:child-adolescent-adhd"] },
+  { text: "the longest wait I have had was eight months", never: ["pref:longer-appointment"] },
+  { text: "bipolar two and the ADHD question has never been asked", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
+  { text: "I have borderline traits and I am tired of that closing doors", reaches: ["care:complex-mental-health"] },
+  { text: "in recovery four years, I need this handled without a lecture", reaches: ["care:substance-history"] },
+  { text: "the black dog and the attention thing arrived together", reaches: ["care:depression", "care:adhd-assessment"] },
+  { text: "my file is thick and I need someone who reads it", aspires: ["care:complex-mental-health"] },
+  { text: "white coat syndrome, so I need a bit of patience", reaches: ["care:anxiety"] },
+  { text: "I panic in waiting rooms and then cannot speak", reaches: ["care:anxiety"] },
+  { text: "the doctor panicked when I mentioned my dose", reaches: ["care:titration"] },
+  { text: "I am immunosuppressed and would rather not sit in a clinic", reaches: ["pref:telehealth-first"] },
+  { text: "phone appointments work better with my shift roster", reaches: ["pref:telehealth-first"] },
+  { text: "I live three hours away so video is the only realistic option", reaches: ["pref:telehealth-first"] },
+  { text: "the practice is a risk for me, I have a transplant", aspires: ["pref:telehealth-first"] },
+  { text: "go gently with the history, the last one was rough", reaches: ["manner:steadying"] },
+  { text: "I do not want to feel interrogated about my childhood", reaches: ["manner:steadying"] },
+  { text: "believe me when I say I have tried", reaches: ["manner:non_judgmental"] },
+  { text: "I am not looking for medication management, just the diagnosis", reaches: ["care:adhd-assessment"] },
+  { text: "my partner said no to telehealth but I want it", reaches: ["pref:telehealth-first"] },
+  { text: "she told me bulk billing was not available", reaches: ["pref:bulk-billing"] },
+  { text: "not bulk billing exactly, I can pay something", never: ["pref:bulk-billing"] },
+  { text: "if that makes sense, I want someone who explains things", reaches: ["manner:collaborative"] },
+  /* O128 KNOWN FALSE POSITIVE, pinned with a retag demand. O77 built `onBehalfBefore` for
+     exactly this register — somebody typing on another person's behalf must not read as the
+     family-presence ask — but it looks for "for" / "behalf of" directly BEFORE the family
+     reference ("booking for my mum"). This sentence has the other ordering: the family
+     reference comes first and the governor follows ("my mum booked this FOR ME"). Same
+     register, same wrong reading, an ordering the rule cannot see. It is a small extension
+     rather than a new mechanism, which is precisely why it should be its own unit with its own
+     measurement — O77's pin already shows how easily this rule over-reaches. */
+  { text: "my mum booked this for me, she is the one who is worried", reaches: ["manner:culturally_attuned"] },
+  /* O128 KNOWN FALSE POSITIVE, pinned as today's truth with a retag demand (the O68 pattern).
+     The reader DENIES the state and the reader is heard as asking for help with it. O40 covers
+     desire negation ("don't want", "not looking for"); this is a different construction — a
+     negated SAYING of a state, "I would not say I am X" — and no rule sees it. The fix belongs
+     to a unit that can measure the construction across the whole corpus, because "would not
+     say" is one of a family ("I wouldn't call it", "it is not that I am") and cueing the family
+     from one sentence is how a rule ends up over-scoped. Whoever builds it retags this. */
+  { text: "I would not say I am anxious, I would say I am exhausted", reaches: ["care:anxiety"] },
+  { text: "I lose my keys four times a day", never: ["care:adhd-assessment", "care:emotional-regulation"] },
+  { text: "my brain will not switch off at night", never: ["care:adhd-assessment", "care:emotional-regulation"] },
+  { text: "I have been sacked twice for missing deadlines", never: ["care:adhd-assessment", "care:emotional-regulation"] },
+  { text: "everything takes me three times longer than it should", never: ["care:adhd-assessment", "care:emotional-regulation"] },
+  { text: "I feel like a fraud at work every single day", never: ["care:adhd-assessment", "care:emotional-regulation"] },
+  { text: "adult ADHD assessment with someone who bulk bills", reaches: ["pref:bulk-billing", "care:adhd-assessment"] },
+  { text: "I need my prescription continued after moving from Perth", aspires: ["care:shared-care"] },
+  { text: "a GP who can do the assessment and keep the scripts going", reaches: ["care:adhd-assessment"] },
+  { text: "somewhere near Beecroft that takes new patients", never: ["care:adhd-assessment"] },
+
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -940,31 +1014,35 @@ export function corpusReachByFacet(
  * "at least this many of this facet's corpus asks are heard", as a count rather than a
  * percentage so a one-entry facet cannot pass on rounding.
  */
+// O128 (tranche seven) ratcheted NINETEEN floors in one move — the largest single rise on
+// record — because fifty new sentences landed and most of them are heard. A tranche that added
+// entries without moving floors would leave the gate measuring the OLD corpus while the file
+// claims the new one, which is how a ratchet quietly stops ratcheting.
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O125 raised 60→76 with the late-diagnosis register ("finally sorting this out"). "put a
   // name to" was refused for taking manner:sense_making's span in the same sentence.
-  "care:adhd-assessment": 76,
+  "care:adhd-assessment": 85,
   // O123 raised 15→16 with "worried sick" and named the two waiting-room phrasings a PRECISION
   // problem rather than a founder question; O124 then closed them, 16→18, completing the arc
   // O119 opened. The fix was not to re-add the word O119 removed: "white coat" and "panic in
   // the waiting" each carry a second content token, so neither reaches the figurative line
   // about the doctor that made bare "panic" wrong.
-  "care:anxiety": 18,
+  "care:anxiety": 21,
   "care:autism-adhd": 16,
   // O122 raised 16→18: the POSSESSIVE, bridged in the stemmer ("my son's paediatrician"), plus
   // the educational-psychologist route parents actually arrive by. The plural forms ("our son",
   // "our boy") were REFUSED — see needs.ts: they break a G7 pin, because a bare family
   // reference cannot tell an ask from a parent describing their child's distress.
-  "care:child-adolescent-adhd": 18,
+  "care:child-adolescent-adhd": 20,
   // O123 raised 11→15: the facet was already cued on "bipolar", "psychosis",
   // "schizophrenia", "schizoaffective" — pure diagnosis disclosure — so "borderline", "hear
   // voices" and "psych ward" were a missing-word gap, not the founder's G7 question they had
   // been filed under. One aspiration stays: "more than one diagnosis" as a cue would consume
   // the word `diagnosis` that care:adhd-assessment needs, and a pin caught it.
-  "care:complex-mental-health": 15,
+  "care:complex-mental-health": 17,
   // O123 raised 13→14 — the facet reads "depression" and "low mood" already; "black dog" is
   // the Australian idiom for the same thing.
-  "care:depression": 14,
+  "care:depression": 15,
   // O114 raised 9→12 (the want half only); O119 LOWERED 12→11 by sanctioned reclassification.
   // Bare "overwhelmed" left this facet: "I get overwhelmed in appointments and need someone
   // calm" asks for a CALM GP and reaches manner:steadying for it, and hearing the reader's
@@ -978,17 +1056,17 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // eleven standing aspirations promoted when the SEQUENCE and ALTERNATIVE registers were
   // cued (see needs.ts) — the three that remain are the ones whose cues were refused for
   // measured precision, and their reason is written at the cue list rather than here.
-  "care:non-medication": 17,
+  "care:non-medication": 18,
   // O116 raised 19→23: continuity language — prescribing handed back, scripts managed,
   // prescriptions continued after a move.
-  "care:shared-care": 23,
+  "care:shared-care": 24,
   // O123 raised 16→18. Same argument: this facet has read disclosure since it was written
   // ("drinking", "cannabis", "in recovery"), and the year plan's own worked example of the G7
   // line is "I drink more than I should" read as a want.
-  "care:substance-history": 18,
+  "care:substance-history": 19,
   // O116 raised 24→28: the register a dose review is asked in — the script needing adjusting,
   // the generic brand, the afternoon rebound, medication management as the thing asked FOR.
-  "care:titration": 28,
+  "care:titration": 29,
   // O104 raised 9→12 (the pace-and-consent register); O106 raised 12→13 by freeing the word
   // a spanning cue had swallowed. The facet's other four aspirations are NOT a vocabulary
   // gap — they name what happened to the person, and whether this product may read that is a
@@ -1001,21 +1079,21 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "manner:attuned": 21,
   // O122 raised 11→20: the SHARED-DECISION phrasings. The facet's label is "Explains and
   // decides with you" and it had no cue for anybody asking to be decided WITH.
-  "manner:collaborative": 20,
-  "manner:culturally_attuned": 16,
+  "manner:collaborative": 22,
+  "manner:culturally_attuned": 17,
   // O125 raised 13→14 with strengths language in the reader's own words ("works with my
   // chaos"). "what we can build" was refused: it strips to [build] alone.
   "manner:motivating": 14,
   // O125 raised 14→17 with "believe women". The clinician-as-patient phrasing stays uncued —
   // "should know better" is O113's refused "know better", now in REFUSED_CUES.
-  "manner:non_judgmental": 17,
+  "manner:non_judgmental": 18,
   // O113 raised 14→20: the concrete phrasings (step by step, line by line, tell me straight,
   // the mechanism). The one left asks to have ADHD explained and is claimed by another facet
   // first — a FIRST_CLAIM outcome, not a vocabulary gap.
-  "manner:sense_making": 20,
+  "manner:sense_making": 23,
   // O125 raised 14→16: what a person asks for when a previous appointment went badly —
   // "interrogation" and "go gently".
-  "manner:steadying": 16,
+  "manner:steadying": 18,
   // O119 lowered 17→12 by removing "properly"; O122 raised 12→14 with the phrasings that
   // genuinely name this facet — bloods and blood pressure before a script, the follow-up booked
   // before leaving. The pair reads as one movement: unearned reach taken away, earned reach
@@ -1025,7 +1103,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // pref:longer-appointment in the reclassification above, and three arrived (the clock, the
   // full appointment, appointments moving too fast). Written out because a floor that only
   // shows the net would make a reclassification look like growth.
-  "manner:unhurried": 20,
+  "manner:unhurried": 21,
   // bulk-billing lowered 12→11 by O72: the count lost the KNOWN FALSE POSITIVE ("not bulk
   // billing…" retagged reaches→never when the bare-not rule landed) — a correction, not a
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
@@ -1035,16 +1113,16 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // no standing aspiration left. It got there by learning the words the ask is actually made
   // in (out of pocket, gap fees, Medicare-only, "does it cost anything"); it had known three
   // sayings of its own name and no synonym for the thing it is about.
-  "pref:bulk-billing": 27,
+  "pref:bulk-billing": 29,
   // O116 raised 6→10. Two of those are the sanctioned reclassification from manner:unhurried:
   // the stemmer entry teaching the reader that "longer" is "long" collided two facets' cues on
   // one phrase, and the facet named after the phrase owns it. Both entries already carried this
   // facet as their aspiration.
-  "pref:longer-appointment": 10,
+  "pref:longer-appointment": 11,
   // O125 raised 26→28 with the two REASONS people give rather than the feature name. A reader
   // who says why ("immunocompromised", "phone calls easier than visits") does not also say
   // "telehealth", which is the register a cue list built from the feature name misses.
-  "pref:telehealth-first": 28,
+  "pref:telehealth-first": 32,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.
@@ -1055,5 +1133,5 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O114 raised 19→23: the words Australians use — lady doctor, lady GP, safer with a woman,
   // women doctors. The two left were refused on measurement ("not a man" fires on the idiom
   // "not a man of many words"; "a she not a he" collapses to the bare token [not]).
-  "pref:woman-gp": 23,
+  "pref:woman-gp": 25,
 };

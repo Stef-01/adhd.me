@@ -430,6 +430,10 @@ const LEXICON: readonly Entry[] = [
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
   pref("woman-gp", "A woman GP", 30, [
+    /* O128 (tranche seven): "female practitioner" — the corpus asked for it in a sentence the
+       existing "female gp" and "female doctor" could not read. The tranche's job is to supply
+       the phrasings the author of a cue list did not think of, and this is one. */
+    "female practitioner",
     /* O125 WROTE "not a man" HERE AND THE SUITE REVERSED IT, correctly: O114 had already measured
        that cue and refused it, because it fires on "my GP is not a man of many words" — a real
        English idiom about somebody being terse. §O114's pin caught the re-add within a minute.
@@ -449,6 +453,10 @@ const LEXICON: readonly Entry[] = [
                           sentence does not earn a mechanism (the O84 bar) */
     "lady doctor", "lady gp", "safer with a woman", "women doctors"]),
   pref("telehealth-first", "By phone or telehealth", 28, [
+    /* O128: "immunosuppressed" beside O125's "immunocompromised". They are the same reason in
+       two words people use interchangeably, and stemming does not bridge them — a reader does
+       not get to be unheard because they picked the other one. */
+    "immunosuppressed",
     /* O125: the two REASONS people give for wanting telehealth rather than the word itself. A
        reader who says why does not also say "telehealth", which is exactly the register a
        cue list built from the feature name misses. */

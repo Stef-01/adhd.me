@@ -139,6 +139,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > measured; the corpus gate, O119's precision probe and the refusal register all green; any FP
 > pinned or fixed with its reason written; floors and tie-quality moved; full `pnpm verify`
 > green.
+> DONE 2026-08-20. Fifty entries, corpus 508→558, every tag MEASURED from what the reader
+> actually does. Nineteen floors ratcheted in one move — the largest single rise on record —
+> and tie-quality 411/227/63/121 → 444/248/64/132, separation 55.2%→55.9%. The rate HOLDING
+> across a 12% corpus growth is the number worth reading: a tranche is the one place the metric
+> can move for reasons unrelated to the matcher, so a flat rate means the new sentences are
+> about as separable as the old ones rather than that nothing happened.
+>
+> **THE RESULT THAT MATTERS MOST IS A NEGATIVE ONE.** Five sentences of pure symptom text —
+> losing keys, a brain that will not switch off, sacked twice for missing deadlines, everything
+> taking three times longer, feeling like a fraud at work — reach NOTHING, after a day in which
+> the lexicon grew by roughly ninety cues. That is the G7 boundary holding under the exact
+> pressure most likely to breach it, and the five are now pinned `never` rather than left
+> untagged, so no future cue can start hearing them quietly.
+>
+> Harvest, as the claim predicted: TWO false positives, both pinned as today's truth with retag
+> demands rather than patched in passing.
+> **(1) "I would not say I am anxious, I would say I am exhausted" reaches `care:anxiety`** —
+> the reader DENIES the state and is heard asking for help with it. O40 covers desire negation;
+> this is a negated SAYING of a state, which no rule sees. Left for a unit that can measure the
+> whole family ("I wouldn't call it", "it is not that I am"), because cueing a family from one
+> sentence is how a rule ends up over-scoped.
+> **(2) "my mum booked this for me, she is the one who is worried" reaches
+> `manner:culturally_attuned`** — O77 built `onBehalfBefore` for exactly this register, but it
+> looks for the governor BEFORE the family reference ("booking for my mum") and this sentence
+> has the other ordering ("my mum booked this FOR ME"). Same register, same wrong reading, an
+> ordering the rule cannot see. A small extension, which is why it deserves its own measurement
+> — O77's own pin shows how easily this rule over-reaches.
+>
+> Three misses were cheap and provable, so they were fixed here: "female practitioner" (the
+> cue list had "female gp" and "female doctor"), "immunosuppressed" beside O125's
+> "immunocompromised" — the same reason in two interchangeable words that stemming does not
+> bridge — and "interrogated" beside O125's "interrogation", since stem() takes them to
+> "interrogat" and "interrogation", which never meet, and the VERB is how people say it.
+>
+> Two entries were dropped as duplicates of sentences O103 had already promoted, and five that
+> correctly reach nothing were given explicit `never` tags: the corpus refuses an untagged
+> entry, and it is right to — a sentence that reaches nothing is a real pin, and leaving it
+> blank makes it invisible to the gate.
 
 > **O127 (the motion queue, closed honestly: one shipped and measured, one refused) — claimed
 > 2026-08-20T22:18Z by loop-0820s.** The UI & motion lane queued four innovations "hardest
