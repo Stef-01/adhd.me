@@ -306,7 +306,11 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // each ships as one token BUT can only fire beside its authored adjacent pair, so a stray
     // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
     "an excuse", "at ease", "been heard", "believe me", "by phone", "diagnose me", "figure out",
-    "get a word in", "get checked", "honest about", "hurry me", "involve me", "just lazy", "listened to",
+    "get a word in", "get checked", "honest about", "hurry me",
+    // O94: O25's removed phrase, home under the raw-RUN demand (RUN_DEMANDED in needs.ts)
+    // — reviewed as run-only, so the [room] collapse can never fire on a bare pair again.
+    "in the room with me",
+    "involve me", "just lazy", "listened to",
     "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
     "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
     "name it", "on a schedule", "on edge", "out the door", "over the phone", "really listen",
@@ -498,8 +502,27 @@ describe("§O84 the sit-register refusal, and the phrasing that survived", () =>
     expect(facets("I hate sitting in waiting rooms")).not.toContain("manner:culturally_attuned");
     expect(facets("the room was cold last time")).not.toContain("manner:culturally_attuned");
     expect(facets("I don't want telehealth, I need to be in the room with someone")).not.toContain("manner:culturally_attuned");
-    // And the standing aspiration is still honestly unheard — the gap is the record.
-    expect(facets("I am here for my mum's sake, she will sit in the room with me")).toEqual([]);
+    // The standing aspiration was honestly unheard from O84 until O94 landed the raw-run
+    // demand this test's comment said would be needed — it reaches now, pinned in §O94.
+    expect(facets("I am here for my mum's sake, she will sit in the room with me")).toContain("manner:culturally_attuned");
+  });
+});
+
+describe("§O94 the raw-run demand: two cues must look exactly like themselves", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("the phone-menu leak is dead and the genuine phone ask lives", () => {
+    expect(facets("the phone menu hung up on me twice")).not.toContain("pref:telehealth-first");
+    expect(facets("could the whole thing happen over the phone")).toContain("pref:telehealth-first");
+    expect(facets("can the first appointment be over the phone")).toContain("pref:telehealth-first");
+  });
+
+  it("O25's phrase is home: the presence run reaches, every O84 leak stays dead", () => {
+    expect(facets("I am here for my mum's sake, she will sit in the room with me")).toContain("manner:culturally_attuned");
+    expect(facets("I don't want telehealth, I need to be in the room with someone")).not.toContain("manner:culturally_attuned");
+    expect(facets("I hate sitting in waiting rooms")).not.toContain("manner:culturally_attuned");
+    expect(facets("the room was cold last time")).not.toContain("manner:culturally_attuned");
+    expect(facets("my rooms are above the pharmacy and I trained at Westmead")).toEqual([]);
   });
 });
 

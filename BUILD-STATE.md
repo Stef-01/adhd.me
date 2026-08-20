@@ -136,7 +136,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > aspiration promoted in this commit; every O84 leak pin held; frozen single-token list
 > grows by one, reviewed; floors moved with the measured run (telehealth by sanctioned
 > reclassification if it drops); tie-quality repinned; §O94 both directions; full `pnpm
-> verify` green.
+> verify` green. DONE 2026-08-20: both earners landed exactly as claimed — the measured
+> diff was the predicted phone MISS and the predicted room PROMOTE, nothing else. The
+> telehealth floor HELD at 20 (lost the reclassified pin, gained the unit's kept-recall
+> pin "could the whole thing happen over the phone" on the same run); culturally_attuned
+> 15→16 on the promotion; frozen single-token list +1 reviewed ("in the room with me",
+> run-only); §O84's still-unheard pin updated to record the arrival its own comment
+> predicted; tie-quality repinned 331/181/52/98; full verify green (212 files, 3345
+> tests). O87'S FALSE-POSITIVE HARVEST IS FULLY CLOSED (O91 without-rule, O92 determiner,
+> O94 run demand) — the O68 pattern has now run to completion seven times.
 
 > **O93 (founder-directed 2026-08-20: "do visual improvement and refinement across site,
 > fix issues such as attached too") — claimed 2026-08-20T09:11Z by loop-0820q.** The

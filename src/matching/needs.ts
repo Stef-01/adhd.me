@@ -36,7 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
-import { bareNegatorBefore, collapsedCueSatisfied, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -285,6 +285,8 @@ const CUES: ReadonlyArray<{ phrase: string; tokens: string[]; raw: string[]; col
  * behind this same signature and everything downstream is unchanged, because what crosses the
  * boundary is a closed vocabulary rather than a similarity score.
  */
+const RUN_DEMANDED = new Set(["over the phone", "in the room with me"]);
+
 export function readNeeds(text: string): NeedSignal[] {
   const sentence = tokenise(text);
   // The same words with the function words kept, for the collapse-aware rule only (O45).
@@ -306,7 +308,20 @@ export function readNeeds(text: string): NeedSignal[] {
        like "out the door" somewhere, not merely contain "door". A refused collapsed cue
        claims nothing, so the words stay readable by any cue that genuinely matches them.
        SENTENCE-GLOBAL (the pair test reads the whole raw stream), so no retry can help. */
-    if (cue.collapsed && !collapsedCueSatisfied(rawSentence, cue.raw)) continue;
+    /* O94: two collapsed cues demand their FULL raw run rather than any pair — the
+       opt-in read.ts's collapsedCueRunPresent documents. "over the phone" leaked through
+       [the, phone] onto a phone-menu complaint (O87's pin); "in the room with me" is
+       O25's removed phrase come home — every pair design leaked (O84's measurements) and
+       the run hears the presence ask while staying silent on "with someone", waiting
+       rooms and cold rooms. A cue with a contraction form must never join this set. */
+    if (
+      cue.collapsed &&
+      !(RUN_DEMANDED.has(cue.phrase)
+        ? collapsedCueRunPresent(rawSentence, cue.raw)
+        : collapsedCueSatisfied(rawSentence, cue.raw))
+    ) {
+      continue;
+    }
     let searchFrom = 0;
     while (true) {
       const at = findCue(sentence, cue.tokens, searchFrom);

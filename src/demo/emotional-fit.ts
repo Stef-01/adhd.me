@@ -211,6 +211,12 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // "more than fifteen minutes" pattern. What precision DOES allow is the register's
       // other phrasing, added instead:
       "support person",
+      // O94: O25's removed phrase comes home under the raw-RUN demand (needs.ts's
+      // RUN_DEMANDED, read.ts's collapsedCueRunPresent). O84 measured every PAIR design
+      // into leaks; the full contiguous run "in the room with me" hears the presence ask
+      // and stays silent on "with someone", waiting rooms, cold rooms and walls — the
+      // O84 leak pins in corpus.ts now guard this cue by name.
+      "in the room with me",
       // O30 psychographics: faith named as part of the appointment is the same values ask as
       // family-in-the-room. Verb+noun pairs so nothing collapses ("my faith" alone would
       // strip to [faith] and claim "faith in doctors").

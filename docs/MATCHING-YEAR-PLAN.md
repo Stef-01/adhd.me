@@ -22,7 +22,13 @@ non-rankings.
    repinned 327/204/28/95 (~62% separation holding). The tranche's harvest is THREE new
    KNOWN FALSE POSITIVES pinned with retag demands: "without MY script" (deprivation) fires
    non-medication — the fix reads the raw determiner; "the phone menu hung up" fires
-   telehealth through the [the, phone] pair — O84's [the, room] lesson living undiscovered
+   telehealth through the [the, phone] pair — **FIXED by O94 (2026-08-20), which is also
+   the unit where O84's refused raw-RUN mechanism earned its way in (two cases is the
+   bar): an opt-in RUN_DEMANDED set makes "over the phone" and the resurrected "in the
+   room with me" find their full contiguous runs, killing the phone-menu leak, keeping
+   the genuine phone ask, and promoting O84's standing sit-in-the-room aspiration exactly
+   as its comment predicted. O87's false-positive harvest is now FULLY CLOSED
+   (O91+O92+O94)** — previously described as: O84's [the, room] lesson living undiscovered
    in an older cue; and "without a psychiatrist referral" — **FIXED by O91
    (2026-08-20): the pin's analysis measured TRUE over the 500-entry corpus ("without" was
    excluded to protect a cue-initial-negator sentence the check never touches); "without"

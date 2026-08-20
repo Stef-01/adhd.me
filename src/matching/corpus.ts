@@ -688,7 +688,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   //    the O77 never pin below caught that one in-build. The discriminator is "me", a
   //    stopword no pair can carry; this promotes only when a raw-run mechanism earns its
   //    way in. The register's OTHER phrasing was cuable and landed: "support person".
-  { text: "I am here for my mum's sake, she will sit in the room with me", aspires: ["manner:culturally_attuned"] },
+  //    AND IT DID EARN ITS WAY IN — O94, when O87 found the same weak-pair class in
+  //    "over the phone": the full-run demand hears this sentence and stays silent on
+  //    every leak O84 measured, so the aspiration promotes exactly as the comment said.
+  { text: "I am here for my mum's sake, she will sit in the room with me", reaches: ["manner:culturally_attuned"] },
 
   // ═══ O84: the sit-register refusal, as data — and the phrasing that survived. ═══════════
   // The support-person ask reaches; the leak sentences that killed the candidate cues are
@@ -820,13 +823,15 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my referral expired before I could use it", never: ["care:shared-care"] },
   { text: "parking near the clinic costs a fortune", never: ["pref:bulk-billing"] },
   /**
-   * KNOWN FALSE POSITIVE (O87): a phone-menu complaint reaches telehealth through the
-   * "over the phone" cue's [the, phone] raw pair — the exact weakness O84 measured and
-   * refused in [the, room], living undiscovered in an older cue. Pinned as today's truth
-   * per the O68 pattern; the fix unit re-authors the cue (or lands the run-demand rule)
-   * and must retag this to `never` in the same commit.
+   * O87 pinned this as a KNOWN FALSE POSITIVE (a logistics complaint reaching telehealth
+   * through [the, phone] — O84's weak-pair class living in an older cue); O94 landed the
+   * raw-RUN demand that class had now earned twice and retagged it — the O68 pattern's
+   * seventh full run, and the close of O87's entire false-positive harvest.
    */
-  { text: "the phone menu hung up on me twice", reaches: ["pref:telehealth-first"] },
+  { text: "the phone menu hung up on me twice", never: ["pref:telehealth-first"] },
+  // O94's kept-recall pin: the run is present, so the genuine over-the-phone ask still
+  // reaches — the demand tightened the skeleton, not the register.
+  { text: "could the whole thing happen over the phone", reaches: ["pref:telehealth-first"] },
 
   // ── O81/O83 discipline, walked in the wild ───────────────────────────────────────────────
   // The consume-once proxy's known limit as data: the negation's true object ("a big
@@ -912,7 +917,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:trauma-informed": 9,
   "manner:attuned": 14,
   "manner:collaborative": 11,
-  "manner:culturally_attuned": 15,
+  "manner:culturally_attuned": 16,
   "manner:motivating": 9,
   "manner:non_judgmental": 11,
   "manner:sense_making": 14,
@@ -926,6 +931,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
   "pref:bulk-billing": 21,
   "pref:longer-appointment": 6,
+  // telehealth lowered 20→19 by O94 (the phone-menu pin reclassified reaches→never when
+  // the run demand landed) then held at 20 by the unit's own kept-recall pin — measured.
   "pref:telehealth-first": 20,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false

@@ -253,6 +253,34 @@ export function collapsedCueSatisfied(
 }
 
 /**
+ * The raw-RUN demand (O94) — the mechanism O84 refused until it earned a second case.
+ *
+ * THE CLASS. A collapsed cue's any-pair rule (O45) is satisfiable by a [the, noun] pair,
+ * and "the noun" appears everywhere: O84 measured "room with me" hearing "in the room
+ * with someone", and O87 found the same weakness already LIVING in "over the phone" —
+ * "the phone menu hung up on me twice" satisfied [the, phone] and a logistics complaint
+ * reached telehealth. One case was over-engineering; two is a class.
+ *
+ * THE RULE, opt-in per cue (never blanket): the cue's FULL authored token run must appear
+ * contiguously in the raw stream. Blanket strengthening stays refused for O45's original
+ * reason — "what's going on" relies on any-pair because contractions elide the middle —
+ * so a cue joins the demanding set only when its phrasing has no contraction form and its
+ * pairs have measured leaks. Membership lives beside the cue wiring in needs.ts.
+ */
+export function collapsedCueRunPresent(
+  rawSentence: readonly string[],
+  rawCue: readonly string[],
+): boolean {
+  outer: for (let k = 0; k + rawCue.length <= rawSentence.length; k++) {
+    for (let i = 0; i < rawCue.length; i++) {
+      if (rawSentence[k + i] !== rawCue[i]) continue outer;
+    }
+    return true;
+  }
+  return false;
+}
+
+/**
  * How many tokens may sit between two consecutive cue tokens.
  *
  * TWO, AND THE FIGURE WAS SET BY A TEST RATHER THAN BY TASTE. It was three, and an edge case

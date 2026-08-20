@@ -40,6 +40,8 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  331/181/52/98 at O94 (the run demand: the phone-menu pin left the run, the promoted
+ *  room aspiration and the kept-recall phone pin joined);
  *  330/181/51/98 at O92 (the deprivation determiner: the shortage sentence left the run
  *  and the two declining pins joined, one separating);
  *  329/180/51/98 at O91 (the bare-without rule: the retagged independence ask left the
@@ -52,7 +54,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 330, separated: 181, partialTie: 51, unseparated: 98 };
+const PINNED = { total: 331, separated: 181, partialTie: 52, unseparated: 98 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
