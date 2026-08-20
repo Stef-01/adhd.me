@@ -119,6 +119,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O74 (founder-directed: attribution advanced to a store of record + the year plan gains
+> the standing refactor lane) — claimed 2026-08-20T05:0xZ by interactive session loop-0819ad.**
+> Part A, attribution: O28 made outbound booking intent countable, but the count lives only
+> in `console.log` → Vercel runtime logs, which the free tier keeps for about an hour — the
+> product's one conversion-adjacent number evaporates daily. Change: `src/attribution/
+> outbound-store.ts` (W235) — append-only JSONL in the W213/W226 pattern, one row per
+> handoff: clinician id (validated against the roster), surface (the route's existing
+> allow-list), and DAY-truncated timestamp; deliberately nothing else, because the person is
+> not the unit of measurement, the handoff is. The /go route records best-effort (a store
+> hiccup must never break the redirect — the redirect IS the product); the matching console
+> gains a "Booking handoffs" section reading the tally. Honest limit stated in the module:
+> on serverless the filesystem is ephemeral, so production durability still rides the logs
+> until the Supabase phase — the store is the mechanism-of-record SHAPE, live wherever the
+> FS persists (local, e2e, self-hosted), exactly the posture every other store ships with.
+> Part B, plan: MATCHING-YEAR-PLAN gains "Refactoring, continuously" — laws (behaviour-
+> identical, the module's own pins define identical, one module per unit, RCA comments are
+> load-bearing and move intact; O70's speech.ts pass is the worked example) and the queue in
+> size order: care-finder.tsx split, globals.css sectioning, clinicians.ts data/logic split,
+> needs.ts cue pipeline. Verify: store pins (record/tally/refusals), boundary declaration +
+> loader, console e2e renders a recorded handoff, booking e2e unchanged, full `pnpm verify`
+> green.
+
 > **O73 (MIC-FAILURE-MODES D2, the inventory's first queued unit: the debug banner proves
 > WHICH build ran) — DONE 2026-08-19 by loop-0819ac (facts now open with build:<sha7>;
 > present/absent pinned with stubbed env; speech suite 46 green, voice e2e 14/14, full
