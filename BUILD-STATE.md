@@ -120,7 +120,9 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
 > **O73 (MIC-FAILURE-MODES D2, the inventory's first queued unit: the debug banner proves
-> WHICH build ran) — claimed 2026-08-20T04:0xZ by loop-0819ac.** Today's field round burned
+> WHICH build ran) — DONE 2026-08-19 by loop-0819ac (facts now open with build:<sha7>;
+> present/absent pinned with stubbed env; speech suite 46 green, voice e2e 14/14, full
+> `pnpm verify` green 210 files / 3147 tests; D2 flipped to SHIPPED in the inventory).** Today's field round burned
 > an hour on exactly this: the founder tested "the fix" against a build the deploy quota had
 > silently kept it out of, and a stale-cache variant of the same confusion is one Safari
 > bfcache away. Change: `speechDebugFacts` gains a `build:` fact — the first seven characters

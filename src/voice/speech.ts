@@ -203,7 +203,16 @@ export function mapSpeechError(raw: string): SpeechError {
  * Every probe is defensive — a browser that lacks one reports the fact as absent, never throws.
  */
 export async function speechDebugFacts(lang: string = DEFAULT_SPEECH_LANGUAGE.tag): Promise<string> {
-  const facts: string[] = [`lang:${lang}`];
+  /**
+   * WHICH BUILD PRODUCED THIS BANNER (O73, failure mode D2). Today's field round burned an
+   * hour on a "failure" that was really the deploy quota serving yesterday's code, and a
+   * stale Safari cache can stage the same confusion after any deploy. The SHA is inlined at
+   * build time (Next replaces the statically-referenced NEXT_PUBLIC_ env), so the banner
+   * carries proof of the exact code that ran; `build:dev` means either a local build or a
+   * Vercel project with system envs unexposed — both visible, neither a guess.
+   */
+  const sha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA;
+  const facts: string[] = [`build:${sha ? sha.slice(0, 7) : "dev"}`, `lang:${lang}`];
   if (typeof window !== "undefined") {
     facts.push(`secure:${window.isSecureContext ? "yes" : "no"}`);
     const standalone = (window.navigator as unknown as { standalone?: boolean }).standalone;

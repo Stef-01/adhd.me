@@ -626,3 +626,17 @@ describe("O70 the refactor's own findings, pinned", () => {
     delete (globalThis.navigator as unknown as Record<string, unknown>).permissions;
   });
 });
+
+describe("O73 the banner proves which build ran (failure mode D2)", () => {
+  it("carries the deploy's short SHA when the build stamped one", async () => {
+    vi.stubEnv("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA", "1a266dcfeedbeefcafe");
+    expect(await speechDebugFacts()).toContain("build:1a266dc");
+    vi.unstubAllEnvs();
+  });
+
+  it("says build:dev when unstamped — a visible fact, never a guess", async () => {
+    vi.stubEnv("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA", "");
+    expect(await speechDebugFacts()).toContain("build:dev");
+    vi.unstubAllEnvs();
+  });
+});

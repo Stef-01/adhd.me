@@ -98,10 +98,10 @@ claim "live" without checking the deployment list — is now practice. PARTIAL.
 **D2. Stale cached JS on the phone** (Safari serving yesterday's bundle).
 Trigger: bfcache/asset cache after a deploy.
 Today: Next hashes assets, so a hard refresh picks up the new build; nothing forces it.
-Fix: CANDIDATE — surface the build's short SHA in the ?debug=1 facts so a screenshot proves
-WHICH code ran (cheap: NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA is available on Vercel builds).
-Recorded for the next debug unit rather than widening O70 (env wiring needs a Vercel-side
-check the quota currently blocks verifying).
+Fix: SHIPPED (O73) — the ?debug=1 facts open with `build:<sha7>`, inlined at build time from
+NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA, so a screenshot proves which code ran. `build:dev` in
+production is itself a visible signal (system envs unexposed on the Vercel project — a
+founder toggle), never a guess. Pinned present/absent.
 
 ## E. Session layer — after a successful start
 
@@ -184,6 +184,6 @@ the recovery.
 
 ## Candidate units this file queues (in order of expected value)
 
-1. **Build SHA in debug facts** (D2) — proves which code a screenshot ran.
+1. ~~Build SHA in debug facts (D2)~~ — SHIPPED, O73.
 2. **Language auto-revert** (F1) — one tap saved on an unsupported language.
 3. **Bare-not negation** (unrelated to mic; already queued by O68's corpus pin).
