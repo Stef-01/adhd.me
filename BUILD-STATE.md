@@ -119,6 +119,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O120 (the subject-blind false positive that actually harms somebody) — claimed
+> 2026-08-20T20:20Z by loop-0820s.** O119 named a class with five instances and earned the
+> mechanism; this takes the ONE of the five with real consequences rather than all five at
+> once. "after my son was diagnosed I recognised myself and now I want my own assessment"
+> reaches `care:child-adolescent-adhd`, because "my son" is a cue for it. That reader is an
+> ADULT asking for their OWN assessment, and the facet firing would rank paediatric GPs for
+> them — a wrong appointment, not a cosmetic mismatch. The other four leak between manner
+> facets and cost the reader a shade of emphasis; this one sends them to the wrong doctor.
+> WHY THE OBVIOUS FIX IS UNSAFE, measured before writing anything: a blanket "self-reference
+> vetoes the child facet" rule breaks the parent who wants both — "my daughter and I both need
+> assessments" would lose the child facet, and the corpus has exactly ONE entry carrying both
+> kinds of reference, so the corpus cannot tell me that rule is safe. It can only tell me it is
+> untested, which is a different thing and the reason not to ship it.
+> The narrow construction IS measurable: "my own" appears four times in the corpus — "my own
+> brain" ×2, "my own treatment plan", "my own assessment" — and in every one it claims the
+> thing for the SPEAKER as opposed to somebody else. That is the whole rule: when a reader says
+> "my own X", they have named themselves the patient, so a family reference elsewhere in the
+> sentence is context rather than the person being booked for. Guarded against "my own son",
+> where the construction points the other way. Applied to the CHILD facet only, because that is
+> the facet whose cues are family references — O77's exemption ("on-behalf IS that facet's
+> register") is what makes it the one that needs the counter-signal. Gate: the harmful case
+> fixed; "this is for my teenager" and every other on-behalf pin green UNCHANGED; the parent
+> asking for both pinned as still reaching the child facet; the four remaining
+> subject-blind cases left pinned with the analysis; floors and tie-quality moved; full
+> `pnpm verify` green.
+
 > **O119 (the precision audit the day's recall work owes) — claimed 2026-08-20T20:07Z by
 > loop-0820s.** Sixty-odd cues landed today across O103–O114 and every one was measured against
 > a sentence that would have refused it. That is the right check and it has a blind spot: it
