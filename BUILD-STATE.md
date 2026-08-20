@@ -141,6 +141,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > O103's method on every candidate, and specifically a pin that the bare emotion words do NOT
 > reach; zero `never` pins broken; promotions retagged in-commit; floors and tie-quality
 > moved; full `pnpm verify` green.
+> DONE 2026-08-20. Woman-GP 19→23 (four of six; "not a man" and "a she not a he" refused on
+> measurement), emotional-regulation 9→12 (the want half only, three of seven). Tie-quality
+> 374/210/57/107 → 380/214/57/109, and the interesting number is that FOUR OF THE SIX NEW
+> SENTENCES SEPARATE — all four woman-GP ones, because the roster can actually answer that ask.
+> That is the clearest case of the day of a synonym list costing real ordering: those readers
+> were always separable and the lexicon simply could not hear them say "lady doctor".
+>
+> The contrast was the point of pairing these two. One facet needed no judgement at all — six
+> sentences lost to vocabulary — and the other is the sharpest G7 case in the tree, because
+> this module's own header already names its trap: a prior probe closed a "recall gap" by
+> cueing DSM inattention text into a care facet. So the emotional-regulation cues are shaped
+> to REQUIRE the help-with framing rather than the emotion word, and §O114 pins that "rejection
+> hits me like a truck", "my temper goes from zero to a hundred" and "my moods flip fast" do
+> NOT reach. Refusing to cue an emotion word in a facet named after emotions is the kind of
+> restraint that only survives if it is written down and tested, so it is both.
+>
+> THREE FACETS NOW SPLIT THE SAME WAY — trauma (O104), attuned (O112), emotional-regulation
+> (O114) — ELEVEN SENTENCES, ONE QUESTION. The year plan now states it once, for all three:
+> may the matcher be cued on a sentence describing the reader's STATE rather than their want,
+> and if so must the cue require a clause about care? Consolidating it was worth a paragraph:
+> the founder answers once instead of meeting the same call in every sweep.
 
 > **O113 (Q1 lexicon: the three remaining manner facets, swept together) — claimed
 > 2026-08-20T17:35Z by loop-0820s.** `sense_making` (7), `motivating` (6) and

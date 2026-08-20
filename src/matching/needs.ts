@@ -244,6 +244,18 @@ const LEXICON: readonly Entry[] = [
        eyebrows is the last place to accept a cue that fires on a bill of health. */
   ]),
   care("emotional-regulation", "Emotional regulation", 24, [
+    /* O114: THE WANT HALF ONLY, and the cues are shaped to require it. Each of these carries
+       the HELP-WITH framing or names the emotional side as a thing to be TAKEN SERIOUSLY —
+       "help with the anger", "help with the rage" — rather than the emotion word alone.
+
+       The bare words are deliberately absent and pinned absent. "rejection hits me like a
+       truck", "my temper goes from zero to a hundred", "my moods flip fast and I say things I
+       regret", "crying at work over nothing" are the reader describing their own state, and
+       this module's header names that exact trap: a prior probe closed a "recall gap" by
+       cueing DSM inattention text into a care facet. Cueing "anger" or "rage" would do the
+       same thing to this one. The state half stays standing and goes to the founder question
+       with trauma's and attuned's — the third facet to split the same way. */
+    "help with the anger", "help with the rage", "the emotional side",
     "rejection sensitivity", "rsd", "emotional regulation", "shame", "overwhelmed",
     // O17: this area's own doc comment calls dysregulation "what people describe first" — and
     // "emotional dysregulation" reached nothing, because "dysregulation" does not stem to
@@ -297,7 +309,18 @@ const LEXICON: readonly Entry[] = [
   ),
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
-  pref("woman-gp", "A woman GP", 30, ["woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman"]),
+  pref("woman-gp", "A woman GP", 30, ["woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman",
+    /* O114: the words Australians actually use. Six sentences were lost to a synonym list on
+       a preference this roster can genuinely answer, so every one was a reader who would have
+       been ordered correctly and was not. Nobody here is describing themselves — they are
+       naming who they want to see — so there is no judgement in this half of the unit at all.
+
+       TWO REFUSED, both measured:
+         "not a man"      fires on "my GP is not a man of many words", a real English idiom
+         "a she not a he" collapses to the single token [not], which is far too loose to ship
+                          under any pair rule — hearing it needs the raw RUN demand, and one
+                          sentence does not earn a mechanism (the O84 bar) */
+    "lady doctor", "lady gp", "safer with a woman", "women doctors"]),
   pref("telehealth-first", "By phone or telehealth", 28, ["telehealth", "by phone", "over the phone", "remote", "online",
     // O53: video is how half of them say it, and "phone first" is the ask in appointment order.
     "video appointment", "video call", "phone first",

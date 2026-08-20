@@ -1257,3 +1257,50 @@ describe("§O113 the three remaining manner facets learn the concrete phrasings"
     expect(heard).not.toContain("manner:sense_making");
   });
 });
+
+describe("§O114 woman-GP learns the words people use; emotional-regulation hears only the want", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("hears the ask in the words Australians actually use", () => {
+    for (const said of [
+      "a lady doctor if at all possible",
+      "a lady GP would make this easier",
+      "I would feel safer with a woman",
+      "women doctors only please, after what happened",
+    ]) expect(facets(said)).toContain("pref:woman-gp");
+  });
+
+  it("refuses the two that measured badly, and says which sentence refused them", () => {
+    // "not a man" would have fired here — a real English idiom about somebody being terse.
+    expect(facets("my GP is not a man of many words")).not.toContain("pref:woman-gp");
+    // "a she not a he" collapses to the single token [not]; nothing safe can be built on it,
+    // and one sentence does not earn the raw-run mechanism (the O84 bar).
+    expect(facets("someone who is not a man, please")).not.toContain("pref:woman-gp");
+  });
+
+  it("emotional-regulation hears the help-with framing", () => {
+    for (const said of [
+      "help with the anger that comes out of nowhere",
+      "I want help with the rage before it costs me my marriage",
+      "I want the emotional side taken as seriously as the focus side",
+    ]) expect(facets(said)).toContain("care:emotional-regulation");
+  });
+
+  /**
+   * THE BARE EMOTION WORDS DO NOT REACH, AND THAT IS THE POINT OF THE UNIT.
+   *
+   * This module's header names the exact trap: a prior probe closed a "recall gap" by adding
+   * "never finish anything" — DSM inattention text — to a care facet, reading the person's
+   * impairment rather than their preference. "anger" and "rage" would do the same here, so
+   * every cue that shipped requires the HELP-WITH framing or names the emotional side as a
+   * thing to be taken seriously. The state descriptions stay unheard on purpose; they are the
+   * third facet to split this way and they go to the founder question with the others.
+   */
+  it("does not read a description of the reader's own state", () => {
+    for (const said of [
+      "rejection hits me like a truck",
+      "my temper goes from zero to a hundred in seconds",
+      "my moods flip fast and I say things I regret",
+    ]) expect(facets(said)).not.toContain("care:emotional-regulation");
+  });
+});

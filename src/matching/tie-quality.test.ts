@@ -40,6 +40,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  380/214/57/109 at O114 (woman-GP's vocabulary and emotional-regulation's want half: six
+ *  sentences joined, four of them SEPARATING — the woman-GP ones, because the roster can
+ *  actually answer that ask. Those four are the clearest case all day of a synonym list
+ *  costing real ordering: the readers were always separable and the lexicon simply could
+ *  not hear them. Separation 56.1%→56.3%);
  *  374/210/57/107 at O113 (the three remaining manner facets swept together: TWELVE
  *  sentences joined the run, the largest single move in the corpus's history — eight
  *  separate, one partial, three unseparated, which is roughly the shape of the roster
@@ -97,7 +102,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 374, separated: 210, partialTie: 57, unseparated: 107 };
+const PINNED = { total: 380, separated: 214, partialTie: 57, unseparated: 109 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

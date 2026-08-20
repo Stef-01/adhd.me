@@ -307,7 +307,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "methodical follow-up, please", reaches: ["manner:structured"] },
 
   // ── preferences, said more ways ──────────────────────────────────────────────────────────
-  { text: "a lady doctor if at all possible", aspires: ["pref:woman-gp"] },
+  { text: "a lady doctor if at all possible", reaches: ["pref:woman-gp"] },
   { text: "video appointments only, I am rural", reaches: ["pref:telehealth-first"] },
   { text: "keep it bulk billed please", reaches: ["pref:bulk-billing"] },
   { text: "a woman doctor who bulk bills", reaches: ["pref:woman-gp", "pref:bulk-billing"] },
@@ -351,8 +351,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── pref:woman-gp ────────────────────────────────────────────────────────────────────────
   { text: "a female GP is important to me", reaches: ["pref:woman-gp"] },
-  { text: "I would feel safer with a woman", aspires: ["pref:woman-gp"] },
-  { text: "women doctors only please, after what happened", aspires: ["pref:woman-gp"] },
+  { text: "I would feel safer with a woman", reaches: ["pref:woman-gp"] },
+  { text: "women doctors only please, after what happened", reaches: ["pref:woman-gp"] },
 
   // ── pref:telehealth-first / pref:bulk-billing ────────────────────────────────────────────
   { text: "I cannot get into a clinic, everything has to be online", reaches: ["pref:telehealth-first"] },
@@ -463,7 +463,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── paraphrase depth on the lowest floors ────────────────────────────────────────────────
   { text: "gender matters to me, a woman doctor", reaches: ["pref:woman-gp"] },
-  { text: "a lady GP would make this easier", aspires: ["pref:woman-gp"] },
+  { text: "a lady GP would make this easier", reaches: ["pref:woman-gp"] },
   { text: "someone who is not a man, please", aspires: ["pref:woman-gp"] },
   { text: "trauma informed care is non-negotiable for me", reaches: ["care:trauma-informed"] },
   { text: "I need the trauma handled gently or not at all", reaches: ["care:trauma-informed"] },
@@ -593,9 +593,9 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "lifestyle changes before we talk prescriptions", reaches: ["care:non-medication"] },
   { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
   { text: "what works besides medication", reaches: ["care:non-medication"] },
-  { text: "help with the anger that comes out of nowhere", aspires: ["care:emotional-regulation"] },
+  { text: "help with the anger that comes out of nowhere", reaches: ["care:emotional-regulation"] },
   { text: "my moods flip fast and I say things I regret", aspires: ["care:emotional-regulation"] },
-  { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
+  { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned", "care:emotional-regulation"] },
   { text: "please go slowly with the history questions", reaches: ["care:trauma-informed"] },
   { text: "a doctor trained in trauma, not just aware of it", reaches: ["care:trauma-informed"] },
   { text: "what happened to me before makes doctors hard to trust", aspires: ["care:trauma-informed"] },
@@ -751,7 +751,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "keep the depression treatment going while we sort the attention side", reaches: ["care:depression", "care:adhd-assessment"] },
 
   // ── emotional regulation / non-medication / substance: the thin floors fed ──────────────
-  { text: "I want help with the rage before it costs me my marriage", aspires: ["care:emotional-regulation"] },
+  { text: "I want help with the rage before it costs me my marriage", reaches: ["care:emotional-regulation"] },
   { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
   { text: "crying at work over nothing and I want it taken seriously", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
   { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
@@ -903,7 +903,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:child-adolescent-adhd": 16,
   "care:complex-mental-health": 11,
   "care:depression": 13,
-  "care:emotional-regulation": 9,
+  // O114 raised 9→12, and deliberately only the WANT half. The four still standing are the
+  // reader describing their own state, which is the trap this module's header names; they go
+  // to the founder question with trauma's and attuned's.
+  "care:emotional-regulation": 12,
   // non-medication lowered 8→7 by O92 (the shortage sentence reclassified reaches→never
   // when the determiner rule landed) then raised back 7→9 by the unit's own declining
   // pins — the sanctioned-reclassification precedent and the ratchet in one move.
@@ -971,5 +974,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // and the presence boundary pin ("I want my mum in the room for this") put one back.
   // O105 raised 18→19: the comma-scoped negation stopped deleting the woman-GP ask behind
   // "I don't want a big clinic, …".
-  "pref:woman-gp": 19,
+  // O114 raised 19→23: the words Australians use — lady doctor, lady GP, safer with a woman,
+  // women doctors. The two left were refused on measurement ("not a man" fires on the idiom
+  // "not a man of many words"; "a she not a he" collapses to the bare token [not]).
+  "pref:woman-gp": 23,
 };
