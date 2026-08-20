@@ -119,6 +119,19 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O95 (refactor lane, queue item 1: app/care-finder.tsx split by stage) — claimed
+> 2026-08-20T10:45Z by loop-0820s.** The lane's largest seam: 1,253 lines, seven stages in
+> one component. The lane's laws govern: BEHAVIOUR-IDENTICAL with the e2e suites as the
+> definition (finder-flow, voice, booking, mobile-fit, a11y run UNCHANGED and green
+> before anything else counts), one module per unit, RCA comments are load-bearing and
+> move intact, and the refactor's own audit is part of the unit — reading a module this
+> closely usually finds one real defect (O70 found G4), and whatever this read finds gets
+> fixed in-unit, pinned. Shape: stage components co-located under app/finder-stages/
+> (no page.tsx, not routable), the orchestrator keeps the state machine, the speech
+> session and refs stay in the orchestrator (the O69 carried-stream lifecycle must not
+> split across files), props passed plainly. Gate: all five e2e suites green unchanged,
+> full `pnpm verify` green, the audit finding recorded in the ledger close.
+
 > **O94 (the raw-RUN demand earns its way in — O84's refused mechanism, now with two
 > cases, applied to both) — claimed 2026-08-20T09:45Z by loop-0820r.** O84 refused a
 > run-demand for collapsed cues as over-engineering for one cue; O87 then found the SAME
