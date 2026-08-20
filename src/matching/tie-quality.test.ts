@@ -40,6 +40,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  411/227/63/121 at O125 (the tail of six small facets; separation 55.6%→55.2%, and the dip
+ *  is honest — four of the six new entries are manner and telehealth asks that most of this
+ *  roster declares, so they add reach without separating anybody. A sweep that raised the rate
+ *  here would mean the cues were reading something the roster disagrees on, which these are
+ *  not);
  *  405/225/63/117 at O124 (the two clinic-anxiety phrasings O119 had to give up, taken back
  *  with a second content token instead of the word it removed; both separate, 55.3%→55.6%);
  *  403/223/63/117 at O123 (six sentences joined the run from facets that already read their
@@ -131,7 +136,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 405, separated: 225, partialTie: 63, unseparated: 117 };
+const PINNED = { total: 411, separated: 227, partialTie: 63, unseparated: 121 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

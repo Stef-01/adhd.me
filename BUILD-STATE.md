@@ -137,6 +137,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > shape of a new cue, the way O123's "more than one diagnosis" was. Gate: O103's method on
 > every candidate, no cue that steals a span another facet is reading, zero `never` pins
 > broken, O119's precision probe green, floors and tie-quality moved, full `pnpm verify` green.
+> DONE 2026-08-20. Seven of the twelve promoted — steadying 14→16, telehealth-first 26→28,
+> motivating 13→14, non_judgmental 14→17, adhd-assessment 60→76. Tie-quality 405/225/63/117 →
+> 411/227/63/121, separation 55.6%→55.2%, and the dip is honest: four of the new entries are
+> manner and telehealth asks most of this roster declares, so they add reach without separating
+> anybody. A sweep that RAISED the rate here would mean the cues were reading something the
+> roster disagrees on, which these are not. Telehealth's pair is the nicest find — the two
+> REASONS people give ("immunocompromised", "phone calls easier than visits") rather than the
+> feature name, which is the register a cue list built from the feature name always misses.
+>
+> **THE SUITE REVERSED TWO OF MY CUES, AND THAT IS THE UNIT'S REAL CONTENT.** "should know
+> better" strips to [know, better] — the cue O113 measured and refused for firing on "I know
+> better than to expect much". "not a man" is the cue O114 measured and refused for firing on
+> "my GP is not a man of many words", a real English idiom. Both pins caught the re-add within
+> a minute and nothing shipped. But this is the THIRD time in one day: O122 wrote "before any
+> script", which O103 had refused for "we talked before my script ran out". Three catches is a
+> signal about the PROCESS, not about the three cues — the refusals lived in test names and
+> prose comments, which an author writing a new cue does not read first.
+>
+> So the unit grew a mechanism: `src/matching/refused-cues.ts` is the refusal register AS DATA
+> — phrase, facet, the sentence that refused it, why, and the unit — with a test that fails the
+> build if any refused phrase reappears in the lexicon, naming the measurement. Eleven entries,
+> back-filled from O103, O113, O114, O122, O123 and O125. It is explicitly NOT a ban list: a
+> refusal can be overturned deliberately by deleting the entry and saying why, which is exactly
+> how O94 reversed O84 once a second case earned the mechanism. What it prevents is meeting the
+> refusal by accident.
+>
+> The register's own liveness check then corrected me on its first entry: it asserts each
+> refusing sentence still fails to reach the facet, and "complex needs, more than one diagnosis
+> already" DOES reach `care:complex-mental-health` — through the older cue "complex". That
+> refusal was SPAN THEFT, a different failure from a false positive: the cue reads its own
+> facet correctly and does it by consuming tokens another facet was reading. Entries now carry
+> `protects`, and for those the check asserts the ROBBED read still holds. A register that
+> cannot tell its two kinds of refusal apart would have shipped a false entry on day one.
 
 > **O124 (the precision-blocked pair, re-cued with the precision kept) — claimed
 > 2026-08-20T21:57Z by loop-0820s.** O119 removed three cues that were manufacturing reach;

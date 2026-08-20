@@ -317,7 +317,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the whole picture in plain english", reaches: ["manner:sense_making"] },
   { text: "why do the meds work, I want the mechanism", reaches: ["manner:sense_making"] },
   { text: "build on what I already do well", reaches: ["manner:motivating"] },
-  { text: "a plan that works with my chaos, not against it", aspires: ["manner:motivating"] },
+  { text: "a plan that works with my chaos, not against it", reaches: ["manner:motivating"] },
   { text: "strengths first, please", reaches: ["manner:motivating"] },
   // Promoted by O65: heard since the cue set grew past its single three-token phrase.
   { text: "a double appointment from the start", reaches: ["pref:longer-appointment"] },
@@ -597,11 +597,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── life-stage and situation: the context the ask rides in on ───────────────────────────
   { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment"] },
-  { text: "fifty years old and finally sorting this out properly", aspires: ["care:adhd-assessment"] },
+  { text: "fifty years old and finally sorting this out properly", reaches: ["care:adhd-assessment"] },
   { text: "shift work means I can only do phone appointments", reaches: ["pref:telehealth-first"] },
   { text: "a new baby at home, everything has to be online for now", reaches: ["pref:telehealth-first"] },
   { text: "I am a nurse and I need someone who will not treat me like I should know better", aspires: ["manner:non_judgmental"] },
-  { text: "I am immunocompromised so clinic visits are a risk", aspires: ["pref:telehealth-first"] },
+  { text: "I am immunocompromised so clinic visits are a risk", reaches: ["pref:telehealth-first"] },
 
   // ── polite indirect asks: hedged, but still asks ─────────────────────────────────────────
   { text: "ideally someone gentle, I get flustered", reaches: ["manner:steadying"] },
@@ -649,15 +649,15 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "sensory friendly appointments would change everything", reaches: ["care:autism-adhd"] },
   { text: "white coat panic is real for me", reaches: ["care:anxiety"], aspires: ["manner:steadying"] },
   { text: "the anxiety needs treating alongside, not instead", reaches: ["care:anxiety"] },
-  { text: "social anxiety makes phone calls easier than visits", reaches: ["care:anxiety"], aspires: ["pref:telehealth-first"] },
+  { text: "social anxiety makes phone calls easier than visits", reaches: ["care:anxiety", "pref:telehealth-first"] },
   /* O119 KNOWN FALSE POSITIVE, pinned as today's truth (the O68 pattern).
      `attuned` reads not-being-believed BY THE DOCTOR. Here the family is the disbeliever, and
      the ask is help navigating them. */
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned", "manner:attuned", "care:adhd-assessment"] },
   { text: "English is my second language and appointments move too fast", reaches: ["manner:unhurried"], aspires: ["manner:culturally_attuned"] },
   { text: "I rehearse what to say and still leave unheard", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
-  { text: "believe women when they describe this", aspires: ["manner:non_judgmental"] },
-  { text: "I need the appointment to not feel like an interrogation", aspires: ["manner:steadying"] },
+  { text: "believe women when they describe this", reaches: ["manner:non_judgmental"] },
+  { text: "I need the appointment to not feel like an interrogation", reaches: ["manner:steadying"] },
   { text: "bloods and blood pressure done before any script", reaches: ["manner:structured"] },
   { text: "I want the follow up booked before I leave each time", reaches: ["manner:structured"] },
   { text: "ask me what I think before deciding", reaches: ["manner:collaborative"] },
@@ -818,7 +818,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "explain the plan on paper so I can take it home", reaches: ["manner:sense_making"] },
   { text: "walk me through every result line by line", reaches: ["manner:sense_making"] },
   { text: "no sugar coating, just tell me straight", reaches: ["manner:sense_making"] },
-  { text: "go gently, my last practice made things worse", aspires: ["manner:steadying"] },
+  { text: "go gently, my last practice made things worse", reaches: ["manner:steadying"] },
   { text: "point out what I am doing right for once", reaches: ["manner:motivating"] },
   { text: "I respond better to encouragement than to warnings", reaches: ["manner:motivating"] },
   { text: "we decide the plan together or I walk", reaches: ["manner:collaborative"] },
@@ -941,19 +941,9 @@ export function corpusReachByFacet(
  * percentage so a one-entry facet cannot pass on rounding.
  */
 export const REACH_FLOORS: Readonly<Record<string, number>> = {
-  // Measured 2026-08-19 (O47); raised by O49 (first sweep), O50 (inflection table), O53
-  // (tranche two: ~200 entries), O64 (tranche three), O65 and O68 (tranche four: compounds +
-  // discipline registers, 311 entries), and O75 (tranche five: question forms, on-behalf
-  // bookings, life-stage and hedged registers — 401 entries, 18 floors raised on the same
-  // run). The open aspirations are the standing lexicon to-do list; the three attuned
-  // hesitations from O49 remain the founder's call.
-  // pref:longer-appointment sat at 1 after O64's tranche aimed straight at it; O65 closed
-  // the gap (five two-token cues) and the floor is the measured count — the standing gap,
-  // "more than fifteen minutes", is the recorded precision/recall decision, not a miss
-  // nobody noticed.
-  // O105 raised 59→60: the comma-scoped negation stopped deleting the assessment ask behind
-  // "not after therapy, …".
-  "care:adhd-assessment": 60,
+  // O125 raised 60→76 with the late-diagnosis register ("finally sorting this out"). "put a
+  // name to" was refused for taking manner:sense_making's span in the same sentence.
+  "care:adhd-assessment": 76,
   // O123 raised 15→16 with "worried sick" and named the two waiting-room phrasings a PRECISION
   // problem rather than a founder question; O124 then closed them, 16→18, completing the arc
   // O119 opened. The fix was not to re-add the word O119 removed: "white coat" and "panic in
@@ -1013,17 +1003,19 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // decides with you" and it had no cue for anybody asking to be decided WITH.
   "manner:collaborative": 20,
   "manner:culturally_attuned": 16,
-  // O113 raised 9→13: strengths language as people say it — encouragement, what they already
-  // do well, what is right with them.
-  "manner:motivating": 13,
-  // O113 raised 11→14: "no shame" (its own negator inside, as predicted), being lectured, and
-  // raised eyebrows. "know better" was refused — it fires on "I know better than to expect much".
-  "manner:non_judgmental": 14,
+  // O125 raised 13→14 with strengths language in the reader's own words ("works with my
+  // chaos"). "what we can build" was refused: it strips to [build] alone.
+  "manner:motivating": 14,
+  // O125 raised 14→17 with "believe women". The clinician-as-patient phrasing stays uncued —
+  // "should know better" is O113's refused "know better", now in REFUSED_CUES.
+  "manner:non_judgmental": 17,
   // O113 raised 14→20: the concrete phrasings (step by step, line by line, tell me straight,
   // the mechanism). The one left asks to have ADHD explained and is claimed by another facet
   // first — a FIRST_CLAIM outcome, not a vocabulary gap.
   "manner:sense_making": 20,
-  "manner:steadying": 14,
+  // O125 raised 14→16: what a person asks for when a previous appointment went badly —
+  // "interrogation" and "go gently".
+  "manner:steadying": 16,
   // O119 lowered 17→12 by removing "properly"; O122 raised 12→14 with the phrasings that
   // genuinely name this facet — bloods and blood pressure before a script, the follow-up booked
   // before leaving. The pair reads as one movement: unearned reach taken away, earned reach
@@ -1049,12 +1041,10 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // one phrase, and the facet named after the phrase owns it. Both entries already carried this
   // facet as their aspiration.
   "pref:longer-appointment": 10,
-  // telehealth lowered 20→19 by O94 (the phone-menu pin reclassified reaches→never when
-  // the run demand landed) then held at 20 by the unit's own kept-recall pin — measured.
-  // O108 raised 20→26: video as a preposition, plus the "phone appointments" noun the list
-  // had somehow never learned. The two still unheard ask by refusing the alternative, and
-  // their cues each fired on the OPPOSITE ask when measured — see needs.ts.
-  "pref:telehealth-first": 26,
+  // O125 raised 26→28 with the two REASONS people give rather than the feature name. A reader
+  // who says why ("immunocompromised", "phone calls easier than visits") does not also say
+  // "telehealth", which is the register a cue list built from the feature name misses.
+  "pref:telehealth-first": 28,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes
   // sense"). sense_making holds at 13 through that unit — it lost the retagged hedge false
   // positive and gained the genuine-ask-then-trailing-hedge pin on the same run.

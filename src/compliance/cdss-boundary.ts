@@ -415,6 +415,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports three enumerators over a clinician's own declarations and a `ToldLine` type. It holds NO copy of its own and is declared with an empty `operatorCopy` deliberately, because the whole point of the module is that it AUTHORS NOTHING: every sentence it returns is composed by the function the finder itself calls — the reason line by `getPersonalizedMatch`, the closed-books line by `closedBooksNote`, the distance line by `distanceTo`, the listing-gap line by `unservedCopy` — and the two fixed frames it does carry are the profile's missed-asks sentence and a source label naming the field a line came from, neither of which a patient ever reads. A test asserts the panel and the finder cannot disagree. That property is the module's reason to exist: a \"what patients are told\" view that wrote its own copy would drift from the product the first time a sentence changed, and the clinician reading it would be reading a reassuring fiction about their own listing.",
   },
   {
+    module: "src/matching/refused-cues.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports the refusal register and its type. It holds no operator copy: every string in it is a BUILD-TIME note to the next cue author — the phrase that was refused, the sentence that refused it, and why — and none of it is rendered to a patient, a clinician or an operator. It is declared with an empty `operatorCopy` rather than left out, for the reason src/matching/read.ts states: a module absent from this census is indistinguishable from a module nobody has checked. Worth saying what the register is FOR, because it looks like a ban list and is not: a refusal is a measurement somebody paid for, and recording it as data makes it findable by the person about to repeat it. Three times in one day a unit re-added a cue an earlier unit had measured and refused, and every one was caught by a pin — being caught three times is a signal about the process, not about the three cues. An entry can be overturned deliberately by deleting it and saying why; what it prevents is meeting the refusal by accident.",
+  },
+  {
     module: "src/matching/read.ts",
     operatorCopy: [],
     notCopy:

@@ -117,7 +117,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   steadying: {
     label: "Calm and steadying",
     matchLine: "has a calm, steadying manner",
-    cues: ["calm", "gentle", "reassuring", "put me at ease", "at ease", "overwhelmed", "nervous", "on edge", "reassurance"],
+    cues: [
+      /* O125: what a person asks for when a previous appointment went badly. "interrogation" is
+         one token but a whole word nobody uses casually here; "go gently" keeps two. */
+      "interrogation", "go gently", "calm", "gentle", "reassuring", "put me at ease", "at ease", "overwhelmed", "nervous", "on edge", "reassurance"],
   },
   sense_making: {
     label: "Helps it make sense",
@@ -142,6 +145,9 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     // made ANY mention of a plan read as a strengths preference — including the structured
     // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
     cues: [
+      /* O125: strengths language in the reader's own words. "what we can build" was refused —
+         it strips to [build] alone, too generic to anchor. */
+      "works with my chaos", 
       /* O113: strengths language as people actually say it — what they already do well, what is
          right with them, encouragement rather than warnings. */
       "encouragement", "doing right", "build on what", "right with me", "hopeful", "strengths", "not just problems", "not just what is wrong", "not just what's wrong", "encourag", "motivat", "plan i can follow", "plan i can stick",
@@ -187,6 +193,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
     cues: [
+      /* O125: the sex-based dismissal women describe. It takes no span `manner:attuned` reads —
+         that facet's cue is "not believed", a different pair.
+         The clinician-as-patient register ("I am a nurse and I need someone who will not treat
+         me like I should know better") got a cue too, and the suite reversed it: "should know
+         better" strips to [know, better], which is the cue O113 had already measured and
+         refused for firing on "I know better than to expect much". Now in REFUSED_CUES. */
+      "believe women", 
       /* O113: "no shame" carries its own negator, the pattern named in O112 and predicted in
          this unit's claim rather than rediscovered. "know better" was REFUSED on measurement:
          it fires on "I know better than to expect much". */

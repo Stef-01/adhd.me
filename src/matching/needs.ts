@@ -153,6 +153,10 @@ const LEXICON: readonly Entry[] = [
   // ── What somebody is trying to get done ───────────────────────────────────────────────────
   // ── ADHD ──────────────────────────────────────────────────────────────────────────────────
   care("adhd-assessment", "ADHD assessment", 12, [
+    /* O125: the late-diagnosis register. "put a name to" was refused — it would have taken the
+       span `manner:sense_making` is already reading in "put a name to what has been going on
+       since childhood", the span-theft O123 caught in its own work. */
+    "finally sorting this out",
     "adhd", "assessment", "assessed", "diagnosis", "diagnosed", "attention",
     // O49 (corpus aspirations): "diagnose me" collapses to [diagnose] ("me" is a stopword), so
     // the O45 rule demands the authored pair — "can a GP diagnose me" fires, a stray
@@ -425,7 +429,14 @@ const LEXICON: readonly Entry[] = [
   ),
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
-  pref("woman-gp", "A woman GP", 30, ["woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman",
+  pref("woman-gp", "A woman GP", 30, [
+    /* O125 WROTE "not a man" HERE AND THE SUITE REVERSED IT, correctly: O114 had already measured
+       that cue and refused it, because it fires on "my GP is not a man of many words" — a real
+       English idiom about somebody being terse. §O114's pin caught the re-add within a minute.
+       "a she not a he" was refused separately: it strips to [not] alone, with no content word
+       to anchor a pair. Both phrasings stay standing, and the refusals are now in
+       REFUSED_CUES so the next author meets them before writing rather than after. */
+    "woman gp", "female gp", "woman doctor", "female doctor", "prefer a woman",
     /* O114: the words Australians actually use. Six sentences were lost to a synonym list on
        a preference this roster can genuinely answer, so every one was a reader who would have
        been ordered correctly and was not. Nobody here is describing themselves — they are
@@ -437,7 +448,11 @@ const LEXICON: readonly Entry[] = [
                           under any pair rule — hearing it needs the raw RUN demand, and one
                           sentence does not earn a mechanism (the O84 bar) */
     "lady doctor", "lady gp", "safer with a woman", "women doctors"]),
-  pref("telehealth-first", "By phone or telehealth", 28, ["telehealth", "by phone", "over the phone", "remote", "online",
+  pref("telehealth-first", "By phone or telehealth", 28, [
+    /* O125: the two REASONS people give for wanting telehealth rather than the word itself. A
+       reader who says why does not also say "telehealth", which is exactly the register a
+       cue list built from the feature name misses. */
+    "immunocompromised", "phone calls easier","telehealth", "by phone", "over the phone", "remote", "online",
     // O53: video is how half of them say it, and "phone first" is the ask in appointment order.
     "video appointment", "video call", "phone first",
     /* O108: VIDEO AS A PREPOSITION, and the appointment noun the list somehow lacked.
