@@ -121,20 +121,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 > **O84 (the O78 audit queue's LAST item: the presence phrasing O25's re-authoring left
 > unheard — closed by bringing the phrase home under the discipline that now exists) —
-> claimed 2026-08-20T06:46Z by loop-0820i.** "she will sit in the room with me" reaches
-> nothing: O25 re-authored "in the room with me" to "come into the room" because collapse
-> made it fire on walls ("my rooms are above the pharmacy") — pre-O45, when no pair rule
-> existed. Design, worked against the leak surface: the verb is NOT the discriminator
-> ("sit in the room" as a two-token cue [sit, room] fires on "I hate sitting in waiting
-> rooms" at MAX_GAP 1 — measured, refused); the discriminator is the [room, with]
-> skeleton. Cue "room with me" collapses to [room] and the O45 pair rule demands adjacent
-> raw [room, with] — hears "sit in the room with me" and "sits in the room with me when
-> it matters" (any verb, any tense, no INFLECTIONS entry needed), stays silent on walls,
-> cold rooms and waiting-room complaints. Frozen single-token list grows by one, reviewed.
-> Gate: the waiting aspiration promotes and retags in this commit, leak pins land as
-> never data ("I hate sitting in waiting rooms", "the room was cold last time"), floors
-> and tie-quality moved with the measured run, §O84 pins both directions, full `pnpm
-> verify` green. Closes the O78 audit queue.
+> claimed 2026-08-20T06:46Z by loop-0820i; DONE 2026-08-20, HALF FIXED AND HALF REFUSED —
+> and the refusal is the more valuable half. The claim's own design did not survive its
+> measurement: the "room with me" cue (collapse to [room], O45 pair [room, with]) heard
+> "I don't want telehealth, I need to be in the room with someone" — a face-to-face ask —
+> and O77's standing never pin FAILED THE BUILD, which is the corpus defending a boundary
+> against the very unit sent to widen it. The other candidate ([sit, room] two-token)
+> hears "I hate sitting in waiting rooms" through the insertion gap. The discriminating
+> word is "me", a stopword no O45 pair can carry (pairs need a content word), and a
+> blanket raw-RUN demand would break the contraction case O45 exists for — so the
+> sit-phrase stays a STANDING aspiration with the reason written in three places
+> (emotional-fit.ts at the cue site, corpus.ts at the aspiration, §O84 as executable
+> pins), the O65 "more than fifteen minutes" pattern. What precision allowed: "support
+> person" landed as the register's cuable phrasing ([support, person], two content
+> tokens, no collapse) — reaches both ways round, silent on peer-support and
+> support-worker talk. Gate: 421-entry corpus green, culturally_attuned floor 11→13 on
+> the two earned pins, four leak/guard nevers landed, §O84 both directions, tie-quality
+> repinned 286/180/22/84 (both support-person pins separate), full `pnpm verify` green
+> (212 files, 3271 tests). THE O78 AUDIT QUEUE IS NOW EMPTY: fixed O78+O81+O83, closed
+> with a measured refusal O84.
 
 > **O83 (the O78 audit's second queued rule: somebody ELSE's "no" is a complaint, not the
 > reader's refusal) — claimed 2026-08-20T05:45Z by loop-0820h; DONE 2026-08-20. Gate: the

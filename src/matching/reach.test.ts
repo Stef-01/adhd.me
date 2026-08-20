@@ -473,6 +473,36 @@ describe("§O76 a cue inside a conversational hedge is filler, not an ask", () =
   });
 });
 
+describe("§O84 the sit-register refusal, and the phrasing that survived", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("the support-person ask reaches, both ways round", () => {
+    expect(facets("can I bring a support person to the appointment")).toContain("manner:culturally_attuned");
+    expect(facets("I will have my support person with me")).toContain("manner:culturally_attuned");
+  });
+
+  it("support-adjacent talk that is not a presence ask stays silent", () => {
+    expect(facets("peer support has helped me before")).not.toContain("manner:culturally_attuned");
+    expect(facets("my support worker suggested this")).not.toContain("manner:culturally_attuned");
+  });
+
+  /**
+   * THE REFUSAL, EXECUTABLE. Both candidate cues for the sit-register were built and
+   * measured into leaks (emotional-fit.ts carries the full record): [sit, room] hears
+   * waiting-room complaints through the insertion gap, and the collapsed "room with me"
+   * hears "in the room with someone" — a face-to-face ask, caught by O77's own pin. These
+   * sentences pin the leak surface silent, so a future attempt fails here by name instead
+   * of rediscovering the measurements.
+   */
+  it("the leak surface that killed the candidate cues stays silent", () => {
+    expect(facets("I hate sitting in waiting rooms")).not.toContain("manner:culturally_attuned");
+    expect(facets("the room was cold last time")).not.toContain("manner:culturally_attuned");
+    expect(facets("I don't want telehealth, I need to be in the room with someone")).not.toContain("manner:culturally_attuned");
+    // And the standing aspiration is still honestly unheard — the gap is the record.
+    expect(facets("I am here for my mum's sake, she will sit in the room with me")).toEqual([]);
+  });
+});
+
 describe("§O83 somebody else's 'no' is a complaint, not the reader's refusal", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

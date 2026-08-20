@@ -198,6 +198,19 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // family-presence meaning survives and a wall with rooms in it does not. The probe
       // sentence stays covered by "my mum".
       "my mum", "my mother", "my dad", "my father", "my parents", "come into the room", "nonsense", "not real", "just lazy", "an excuse",
+      // O84 (the O78 audit queue's last item): the sit-register ("she will sit in the room
+      // with me") stays UNCUED, and this comment is the record so it is not re-attempted
+      // cue-first. Both candidate designs were built and MEASURED into refusal: a
+      // two-token [sit, room] cue hears "I hate sitting in waiting rooms" through the
+      // insertion gap, and the collapsed "room with me" cue (O45 pair [room, with]) hears
+      // "I need to be in the room with someone" — a face-to-face ask, and the O77 boundary
+      // pin caught it in-build, which is the corpus defending its own line. The
+      // discriminating word is "me", a stopword no pair can carry; hearing this register
+      // needs a raw-RUN demand the O45 machinery deliberately does not make (contractions
+      // rely on any-pair). The aspiration stands in corpus.ts with this reason — the O65
+      // "more than fifteen minutes" pattern. What precision DOES allow is the register's
+      // other phrasing, added instead:
+      "support person",
       // O30 psychographics: faith named as part of the appointment is the same values ask as
       // family-in-the-room. Verb+noun pairs so nothing collapses ("my faith" alone would
       // strip to [faith] and claim "faith in doctors").

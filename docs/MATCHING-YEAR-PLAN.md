@@ -42,7 +42,12 @@ non-rankings.
    reported refusal — **FIXED by O83 (2026-08-20): {said, told} directly before the bare
    negator vetoes the O72 suppression; the raw-stream subject walk keeps "I said no" (and
    "I have said no") refusing; aspiration promoted, verbs earned with pinned sentences** —
-   and the sit-in-the-room presence phrasing (the audit queue's last open item).
+   and the sit-in-the-room presence phrasing — **CLOSED by O84 (2026-08-20), half fixed
+   and half refused: both candidate cues measured into leaks ([sit, room] hears waiting
+   rooms; "room with me"'s [room, with] pair hears "with someone" — O77's own pin caught
+   it in-build), so the sit-phrase stays a standing aspiration with the reason written
+   (the O65 pattern) and "support person" landed as the register's cuable phrasing,
+   floors and tie-quality moved. The O78 audit queue is now EMPTY.**
    Refused with written reasons: micro-caching, cue indexing (0.049 ms/call measured),
    Porter, maximum matching.** Earlier: 311
    entries after O68's tranche four (compounds +

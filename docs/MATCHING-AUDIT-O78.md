@@ -75,7 +75,16 @@ else ("my GP won't do titration" reaches); this bare-not-after-reporting-verb sh
 gap in that posture. Candidate rule: a reporting verb ("said", "told") directly before the
 negator marks reported speech and stands the suppression down.
 
-### 5. A presence phrasing the cue set cannot hear
+### 5. A presence phrasing the cue set cannot hear — CLOSED BY O84 (2026-08-20), half fixed and half refused
+
+> The audit's sketch ("a verb-agnostic pair, or 'sit in the room' as its own cue") was
+> built and MEASURED into refusal, both halves: [sit, room] hears "I hate sitting in
+> waiting rooms" through the insertion gap, and the collapsed "room with me" (O45 pair
+> [room, with]) hears "I need to be in the room with someone" — a face-to-face ask, caught
+> in-build by O77's own never pin. The discriminating word is "me", a stopword no pair can
+> carry; the sit-phrase stays a standing aspiration (the O65 pattern) until a raw-run
+> mechanism earns its way in. What precision allowed instead: "support person" landed as a
+> cue, with the leak surface pinned silent in corpus and §O84 so the refusal is executable.
 
 "she will **sit in the room** with me" reaches nothing: O25 re-authored "in the room with me"
 to "come into the room" (collapse discipline), and the sit-shape went unheard with the wall

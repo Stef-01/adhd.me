@@ -681,10 +681,24 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // the subject walk crosses auxiliaries ("I have said no"), so neither of these reaches.
   { text: "I said no to titration and I still mean it", never: ["care:titration"] },
   { text: "I have said no to the dose before and nothing has changed", never: ["care:titration"] },
-  // 3) presence phrasing the cue set cannot hear: "sit in the room" has no cue since O25
-  //    re-authored "in the room with me" to "come into the room". The on-behalf suppression
-  //    of "for my mum's sake" is CORRECT here; the presence half of the sentence is the gap.
+  // 3) presence phrasing — INVESTIGATED BY O84 AND REFUSED, the O65 pattern: this stays a
+  //    STANDING aspiration because both candidate cues were built and measured into leaks.
+  //    [sit, room] hears "I hate sitting in waiting rooms" through the insertion gap; the
+  //    collapsed "room with me" (O45 pair [room, with]) hears "in the room with someone" —
+  //    the O77 never pin below caught that one in-build. The discriminator is "me", a
+  //    stopword no pair can carry; this promotes only when a raw-run mechanism earns its
+  //    way in. The register's OTHER phrasing was cuable and landed: "support person".
   { text: "I am here for my mum's sake, she will sit in the room with me", aspires: ["manner:culturally_attuned"] },
+
+  // ═══ O84: the sit-register refusal, as data — and the phrasing that survived. ═══════════
+  // The support-person ask reaches; the leak sentences that killed the candidate cues are
+  // pinned silent so a future naive cue fails here by name.
+  { text: "can I bring a support person to the appointment", reaches: ["manner:culturally_attuned"] },
+  { text: "I will have my support person with me", reaches: ["manner:culturally_attuned"] },
+  { text: "I hate sitting in waiting rooms", never: ["manner:culturally_attuned"] },
+  { text: "the room was cold last time", never: ["manner:culturally_attuned"] },
+  { text: "peer support has helped me before", never: ["manner:culturally_attuned"] },
+  { text: "my support worker suggested this", never: ["manner:culturally_attuned"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -740,7 +754,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:trauma-informed": 9,
   "manner:attuned": 12,
   "manner:collaborative": 10,
-  "manner:culturally_attuned": 11,
+  "manner:culturally_attuned": 13,
   "manner:motivating": 9,
   "manner:non_judgmental": 11,
   "manner:sense_making": 14,
