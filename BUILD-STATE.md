@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O93 (founder-directed 2026-08-20: "do visual improvement and refinement across site,
+> fix issues such as attached too") — claimed 2026-08-20T09:32Z by loop-0820q.** The
+> attached capture shows the anchor bug: on the finder profile, the FIXED booking bar
+> ("Appointments · See available times") floats over the acknowledgement-of-country band
+> — a bar that belongs to the profile is covering page content it does not own — and the
+> profile content ends in a block of dead whitespace after Languages. Unit: fix the
+> anchor bug properly (the bar must stop being fixed once the profile's own content ends,
+> or the page must reserve honest space — decided from the code, not guessed), tighten
+> the dead space, then a BOUNDED taste sweep of the key screens (welcome, results,
+> profile, booking, landing) at 390×844 and desktop against the adhdme-taste checklist —
+> small fixes land in-unit with before/after captures; anything larger is ledgered, not
+> absorbed (the O60→O61 precedent). Gate: qa/design-o93 before/after captures, DESIGN-QA
+> entries per fix, e2e suites green (finder, landing, mobile-fit, a11y), full `pnpm
+> verify` green.
+
 > **O92 (O87's second pin: "without MY script" is deprivation, not declining — the
 > determiner rule) — claimed 2026-08-20T09:05Z by loop-0820p.** "the medication shortage
 > keeps leaving me without my script" fires care:non-medication through the cue "without a
