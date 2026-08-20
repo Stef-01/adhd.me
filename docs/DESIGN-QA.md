@@ -1021,3 +1021,32 @@ Captures: qa/about-o90/about-desktop.png, about-mobile.png (re-rendered on the n
   three institutions (Bay Health Clinic, ANU, USyd — her B.Psych (Hons)), the same register
   as Dr Anubhav's plate; her roster title matches (MD FRACGP BPsych(Hons) DCH).
 - [x] Census, sitemap, dossier rows shipped with the route; a11y and copy sweeps green on it.
+
+## O134 — the capture harness lies, and now refuses to (2026-08-20)
+
+Captures: qa/about-o134/ (the new /about route at 390 and 1280, taken through the new helper).
+
+- [x] **The finding was a false finding, and that is the unit.** Auditing `/about`, my capture
+  showed Stefan Thottunkal's plate as a large empty gap where the other three founders had
+  portraits. It looked exactly like a broken image on a brand-new page. It was not: the file is
+  800×1063, 63% opaque, serves 200, and the plate renders perfectly. The capture was wrong.
+- [x] **And my first diagnosis of the capture was also wrong.** I put it down to a `whileInView`
+  reveal that had not fired. Measured, it is `loading="lazy"`: below-fold images had
+  `complete === false` and `naturalWidth === 0` at screenshot time — Next's Image doing exactly
+  what the interface guidelines ask for below-fold images. The page was behaving well; the
+  capture was not.
+- [x] `scripts/qa-capture.mjs` now does what no unit should have to remember: consent dismissed
+  before load, the page walked in half-viewport steps (thresholds are fractions of the ELEMENT,
+  so a full-viewport step can jump an element past its own trigger band), every image `decode()`d,
+  scrolled back, then shot.
+- [x] **It checks itself, and the check is proven on the real failure rather than a seeded one.**
+  My first non-vacuity attempt repointed every `img.src` at a missing file and the check stayed
+  silent — Next's `srcset` kept the images valid, so nothing had actually broken. Proving it
+  against the genuine un-walked page is what worked: three images `complete=false, w=0`, the
+  check fires and names them; after settling, the same page passes.
+- [x] Why this is more than a screenshot bug: captures are the evidence for every unit in this
+  lane and the thing every entry above points at. A capture that silently shows a half-rendered
+  page turns the record into something nobody can rely on — and this one nearly had me "fix" a
+  page with nothing wrong with it, which is the same shape as O127's reveal probe reporting 24
+  false findings from a guessed population. Two measurement harnesses lying in one day is a
+  pattern, not bad luck.

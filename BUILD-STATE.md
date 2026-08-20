@@ -143,6 +143,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > than writing a picture of a half-rendered page. Gate: the helper reproduces the correct
 > /about capture where my ad-hoc script produced a false empty, its self-check demonstrably
 > fires on a deliberately un-walked run, and full `pnpm verify` green.
+> DONE 2026-08-20. `scripts/qa-capture.mjs` ships and reproduces the correct /about capture at
+> both viewports where the ad-hoc script produced a false empty.
+> **THE CLAIM'S OWN DIAGNOSIS WAS WRONG AND THE MEASUREMENT CORRECTED IT.** I wrote that the
+> blank plate was a `whileInView` reveal that had not fired. It is `loading="lazy"`: on the
+> un-walked page three images report `complete === false, naturalWidth === 0`, which is Next's
+> Image doing exactly what the interface guidelines ask of below-fold images. The PAGE was
+> behaving correctly and the CAPTURE was not — the opposite of what the screenshot suggested,
+> and the second time today a confident reading of my own tooling was backwards (O127's probe
+> reported 24 reveals firing early from a guessed population). Both causes are cured by walking
+> the page, so the fix stands; the stated reason did not, and is corrected in the helper's
+> header where the next reader meets it.
+> **THE SELF-CHECK'S NON-VACUITY PROOF ALSO FAILED FIRST, usefully.** I seeded broken images by
+> repointing every `img.src` at a missing file, and the check stayed silent — Next's `srcset`
+> kept them valid, so nothing had actually broken and I had proved nothing. Proving it against
+> the REAL failure worked: on the genuine un-walked page the check fires and names the three
+> unrendered images; after settling, the same page passes. A seeded failure that does not
+> reproduce the mechanism tests the seed, not the check.
+> The helper checks `complete && naturalWidth > 0` because those catch different halves: a lazy
+> image that never started reports incomplete, a FAILED one reports complete with zero width.
+> Gate met: qa/about-o134/ at both viewports, DESIGN-QA entry, `pnpm verify` green 3591.
+> **Standing note for the UI lane: /about itself is clean** — 41–47 characters per line, one
+> accent element, all four portraits rendering. The audit that started this unit found no defect
+> on the page, which is worth recording precisely because the first capture said otherwise.
 
 > **O133 (allocation lane: one patient's breakdown, rendered) — claimed 2026-08-20T23:40Z by
 > loop-0820s.** The lane's last named step, and the allocator's FIRST CONSUMER: nothing in the
