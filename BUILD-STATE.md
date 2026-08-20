@@ -133,6 +133,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > before being written. Gate: the two aspirations promoted, O119's FP pinned as still-refused
 > in the same test so the reason survives the fix, O119's precision probe green, floors and
 > tie-quality moved, full `pnpm verify` green.
+> DONE 2026-08-20. Both promoted, `care:anxiety` 16→18, tie-quality 403/223/63/117 →
+> 405/225/63/117 with both new entries separating (55.3%→55.6%). The arc O119 opened is now
+> closed in both directions: it removed three cues that were manufacturing reach, and each
+> facet has since been given back the reach it genuinely had — structured by O122's concrete
+> phrasings, anxiety by O124's two-token clinic phrasings. The third, bare "overwhelmed" on
+> `care:emotional-regulation`, is NOT coming back the same way: those sentences are the
+> self-state half of the founder's question, which is exactly why O123 marked them rather than
+> cueing them.
+> O119's false positive — "a doctor who won't panic about my drinking" — is pinned in §O124
+> alongside the two new pins, so the REASON survives the fix rather than being a deleted line
+> somebody re-adds in a year. It now reads `care:substance-history` only, which is correct.
+> One property worth having recorded: "panic in the waiting" is [panic, wait] and therefore
+> order-sensitive, so "I had to wait and then panic set in about the cost" stays silent. That
+> is a bonus rather than the design — the design is the second content token — but it is
+> pinned so a later author does not reorder the cue thinking it is a stylistic choice.
+>
+> LEDGER NOTE: this close landed one commit late. The DONE text failed to insert on its anchor
+> while the code commit succeeded, so a0a9ac5 pushed O124's work with the row still reading as
+> an open claim. Recorded rather than quietly backfilled — the ledger IS the lock, and a claim
+> that stays open after its work has landed is exactly the state that makes two sessions
+> collide.
 
 > **O123 (the founder question was over-claimed, and it was blocking work nobody had to
 > block) — claimed 2026-08-20T21:45Z by loop-0820s.** Plan item 1b records a real G7 question
