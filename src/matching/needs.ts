@@ -294,62 +294,75 @@ export function readNeeds(text: string): NeedSignal[] {
   const claimed: Array<[number, number]> = [];
 
   for (const cue of CUES) {
-    const at = findCue(sentence, cue.tokens);
-    if (!at) continue;
-    /* O45 (Q1 item 1): a cue that collapsed to one content token fires only when the sentence
-       also carries an adjacent pair of the cue's AUTHORED words — "out the door" must look
-       like "out the door" somewhere, not merely contain "door". A refused collapsed cue
-       claims nothing, so the words stay readable by any cue that genuinely matches them. */
-    if (cue.collapsed && !collapsedCueSatisfied(rawSentence, cue.raw)) continue;
-    /* O76 (the rule O75's hedge pin demanded): a cue sitting wholly inside a conversational
-       hedge is filler, not an ask — "a she not a he, if that makes sense" must not reach
-       sense_making. The mapping is span-precise, so a genuine ask earlier in the sentence
-       keeps reaching even when a hedge trails it. A hedged cue claims nothing, the same
-       rule as every other suppression here. */
-    if (withinHedge(sentence, rawSentence, at.from, at.to)) continue;
-    /* O77 (O75's other pin): "for my mum" / "on behalf of my mum" names the PATIENT, not a
-       relative joining the appointment, so the culturally_attuned reading stands down. ONLY
-       that facet: the child facet's whole register is on-behalf ("this is for my teenager"
-       IS the ask), the same exemption shape O40 gives manner. */
-    if (
-      facetKey(cue.entry.facet) === "manner:culturally_attuned" &&
-      onBehalfBefore(sentence, rawSentence, at.from, at.to)
-    ) {
-      continue;
-    }
-    /* O40 (Q1 item 4): a CARE or PREFERENCE cue in the scope of a desire negation is a refusal,
-       not an ask — "I don't want my dose changed" must not reach titration. MANNER stays exempt
-       BY DESIGN: patients state manner wants through negation ("I don't want to feel rushed" is
-       the unhurried ask itself), so suppressing it would silence the very sentences the facet
-       exists for. A suppressed cue claims nothing, so it cannot shadow a different, unnegated
-       reading of the same words. */
-    /* O72 joins O40 under the same guard: a bare "no"/"not" immediately before the cue span
-       is a refusal too ("not bulk billing, I am happy to pay for time" — the corpus's first
-       known-false-positive pin, now retagged) — UNLESS the raw stream shows the additive
-       "not just" idiom pointing at this cue ("assess me for ADHD, not just the anxiety"
-       means anxiety AND MORE, the corpus caught the difference while this rule was built).
-       Same manner exemption, same claims-nothing rule; the negator inside a cue's own
-       phrase is untouched because the check looks strictly before the span. */
-    if (
-      (cue.entry.facet.kind === "care" || cue.entry.facet.kind === "preference") &&
-      (negatedWant(sentence, at.from) ||
-        (bareNegatorBefore(sentence, at.from) && !softenedNotJust(rawSentence, cue.tokens[0]!)))
-    ) {
-      continue;
-    }
-    if (claimed.some(([from, to]) => at.from <= to && from <= at.to)) continue;
+    /* O78 (audit): suppression is PER-OCCURRENCE, not per-cue. findCue used to return only
+       the first occurrence, which quietly made every suppression rule sentence-global: a cue
+       negated, hedged or on-behalf-governed in clause one was dead for the whole text, so
+       "I don't want titration. but titration support is exactly what I came for" read as
+       nothing. Each occurrence-local refusal below now advances past the refused span and
+       tries again; only the sentence-global checks end the search for this cue outright. */
+    let searchFrom = 0;
+    while (true) {
+      const at = findCue(sentence, cue.tokens, searchFrom);
+      if (!at) break;
+      searchFrom = at.from + 1;
+      /* O45 (Q1 item 1): a cue that collapsed to one content token fires only when the sentence
+         also carries an adjacent pair of the cue's AUTHORED words — "out the door" must look
+         like "out the door" somewhere, not merely contain "door". A refused collapsed cue
+         claims nothing, so the words stay readable by any cue that genuinely matches them.
+         SENTENCE-GLOBAL (the pair test reads the whole raw stream), so no retry can help. */
+      if (cue.collapsed && !collapsedCueSatisfied(rawSentence, cue.raw)) break;
+      /* O76 (the rule O75's hedge pin demanded): a cue sitting wholly inside a conversational
+         hedge is filler, not an ask — "a she not a he, if that makes sense" must not reach
+         sense_making. The mapping is span-precise, so a genuine ask elsewhere in the sentence
+         keeps reaching — before the hedge via findCue's order, after it via the O78 retry. */
+      if (withinHedge(sentence, rawSentence, at.from, at.to)) continue;
+      /* O77 (O75's other pin): "for my mum" / "on behalf of my mum" names the PATIENT, not a
+         relative joining the appointment, so the culturally_attuned reading stands down. ONLY
+         that facet: the child facet's whole register is on-behalf ("this is for my teenager"
+         IS the ask), the same exemption shape O40 gives manner. */
+      if (
+        facetKey(cue.entry.facet) === "manner:culturally_attuned" &&
+        onBehalfBefore(sentence, rawSentence, at.from, at.to)
+      ) {
+        continue;
+      }
+      /* O40 (Q1 item 4): a CARE or PREFERENCE cue in the scope of a desire negation is a refusal,
+         not an ask — "I don't want my dose changed" must not reach titration. MANNER stays exempt
+         BY DESIGN: patients state manner wants through negation ("I don't want to feel rushed" is
+         the unhurried ask itself), so suppressing it would silence the very sentences the facet
+         exists for. A suppressed cue claims nothing, so it cannot shadow a different, unnegated
+         reading of the same words. */
+      /* O72 joins O40 under the same guard: a bare "no"/"not" immediately before the cue span
+         is a refusal too ("not bulk billing, I am happy to pay for time" — the corpus's first
+         known-false-positive pin, now retagged) — UNLESS the raw stream shows the additive
+         "not just" idiom pointing at this cue ("assess me for ADHD, not just the anxiety"
+         means anxiety AND MORE, the corpus caught the difference while this rule was built).
+         Same manner exemption, same claims-nothing rule; the negator inside a cue's own
+         phrase is untouched because the check looks strictly before the span. */
+      if (
+        (cue.entry.facet.kind === "care" || cue.entry.facet.kind === "preference") &&
+        (negatedWant(sentence, at.from) ||
+          (bareNegatorBefore(sentence, at.from) && !softenedNotJust(rawSentence, cue.tokens[0]!)))
+      ) {
+        continue;
+      }
+      /* Words another facet already claimed are occupied, not poisoned: a later occurrence of
+         this cue may sit on free words, so this refusal retries too. */
+      if (claimed.some(([from, to]) => at.from <= to && from <= at.to)) continue;
 
-    const key = facetKey(cue.entry.facet);
-    if (seen.has(key)) continue;
+      const key = facetKey(cue.entry.facet);
+      if (seen.has(key)) break;
 
-    claimed.push([at.from, at.to]);
-    seen.add(key);
-    signals.push({
-      facet: cue.entry.facet,
-      matched: cue.phrase,
-      label: cue.entry.label,
-      weight: cue.entry.weight,
-    });
+      claimed.push([at.from, at.to]);
+      seen.add(key);
+      signals.push({
+        facet: cue.entry.facet,
+        matched: cue.phrase,
+        label: cue.entry.label,
+        weight: cue.entry.weight,
+      });
+      break;
+    }
   }
 
   return signals;

@@ -473,6 +473,31 @@ describe("§O76 a cue inside a conversational hedge is filler, not an ask", () =
   });
 });
 
+describe("§O78 suppression is per-occurrence: a refused clause does not silence a later ask", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("a clause-one refusal no longer kills the same cue's clause-two ask", () => {
+    expect(facets("I don't want titration. but titration support is exactly what I came for")).toContain("care:titration");
+    expect(facets("not bulk billing at my old clinic. bulk billing is essential now")).toContain("pref:bulk-billing");
+  });
+
+  it("a leading hedge no longer kills the genuine ask after it", () => {
+    expect(facets("if that makes sense is all I ever say, but truly I need help to make sense of this")).toContain("manner:sense_making");
+  });
+
+  it("single-occurrence suppressions still suppress — the retry finds nothing to rescue", () => {
+    expect(facets("I don't want titration")).not.toContain("care:titration");
+    expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
+    expect(facets("a she not a he, if that makes sense")).not.toContain("manner:sense_making");
+    expect(facets("the appointment is for my mum, I am just organising it")).toEqual([]);
+  });
+
+  it("a collapse refusal is sentence-global and does NOT retry — the pair test already read the whole stream", () => {
+    // Two occurrences of a collapsed cue's word, neither beside its authored pair: still silent.
+    expect(facets("next door to the chemist, and another door past that")).not.toContain("manner:unhurried");
+  });
+});
+
 describe("§O77 'for my mum' is a patient, not a presence", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 

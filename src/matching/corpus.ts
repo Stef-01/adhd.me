@@ -653,6 +653,27 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // elsewhere in a hedged sentence still reaches.
   { text: "I want a woman doctor, if that makes sense", reaches: ["pref:woman-gp"], never: ["manner:sense_making"] },
   { text: "help me make sense of thirty years, if that makes sense", reaches: ["manner:sense_making"] },
+
+  // ═══ O78 (founder-directed matching audit): what the close read found, as data. ═════════
+  // FIXED in the same commit — suppression is now per-OCCURRENCE (findCue retries past a
+  // refused span), so a clause-one refusal or hedge no longer silences a clause-two ask:
+  { text: "I don't want titration. but titration support is exactly what I came for", reaches: ["care:titration"] },
+  { text: "not bulk billing at my old clinic. bulk billing is essential now", reaches: ["pref:bulk-billing"] },
+  { text: "if that makes sense is all I ever say, but truly I need help to make sense of this", reaches: ["manner:sense_making"] },
+  // NAMED, NOT FIXED — the audit's remaining gap list, each a class with a design sketch in
+  // docs/MATCHING-AUDIT-O78.md. The promotion gate forces these retags when their rules land:
+  // 1) desire-negation over-scope: the trigger's 3-token lead swallows the NEXT ask in the
+  //    same clause; the honest fix is consume-once scope (a negation spends itself on the
+  //    nearest following ask), not a shorter lead — shortening breaks "don't want anyone
+  //    touching the dose", a real refusal with two inserted content words.
+  { text: "I don't want a woman GP, bulk billing matters more", never: ["pref:woman-gp"], aspires: ["pref:bulk-billing"] },
+  // 2) reported refusal: "they said no to X" is somebody ELSE refusing — a complaint, which
+  //    O40/O72 both read as a want everywhere except this bare-not-after-reporting-verb shape.
+  { text: "they said no to titration and I want it anyway", aspires: ["care:titration"] },
+  // 3) presence phrasing the cue set cannot hear: "sit in the room" has no cue since O25
+  //    re-authored "in the room with me" to "come into the room". The on-behalf suppression
+  //    of "for my mum's sake" is CORRECT here; the presence half of the sentence is the gap.
+  { text: "I am here for my mum's sake, she will sit in the room with me", aspires: ["manner:culturally_attuned"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -702,14 +723,16 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "care:non-medication": 7,
   "care:shared-care": 15,
   "care:substance-history": 9,
-  "care:titration": 18,
+  // O78 audit: titration, sense_making and bulk-billing each +1 from the per-occurrence
+  // suppression fix's own pins (a clause-two ask now survives a clause-one refusal or hedge).
+  "care:titration": 19,
   "care:trauma-informed": 9,
   "manner:attuned": 12,
   "manner:collaborative": 10,
   "manner:culturally_attuned": 11,
   "manner:motivating": 9,
   "manner:non_judgmental": 11,
-  "manner:sense_making": 13,
+  "manner:sense_making": 14,
   "manner:steadying": 13,
   "manner:structured": 15,
   "manner:unhurried": 16,
@@ -718,7 +741,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
   // honestly reclassified is the one sanctioned direction, and this comment is its record.
   // (O75 raised it back past the old mark on new heard entries: 11→15.)
-  "pref:bulk-billing": 15,
+  "pref:bulk-billing": 16,
   "pref:longer-appointment": 6,
   "pref:telehealth-first": 14,
   // O76: +1 from the hedge rule's own boundary pin ("I want a woman doctor, if that makes

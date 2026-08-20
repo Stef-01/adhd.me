@@ -29,8 +29,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  at O77 (the on-behalf rule: the retagged booking sentence stays in the run on its honest
  *  structured reach and now separates where the false culturally_attuned reach had it
  *  partially tied, and the new presence pin separates — a precision fix moving the KPI is
- *  the KPI working). */
-const PINNED = { total: 276, separated: 173, partialTie: 22, unseparated: 81 };
+ *  the KPI working); 279/175/22/82 at O78 (the audit's per-occurrence suppression fix: the
+ *  standing 405 entries were BEHAVIOUR-IDENTICAL under it — zero pin movement — and the
+ *  three new clause-two-ask pins joined the run, two separating). */
+const PINNED = { total: 279, separated: 175, partialTie: 22, unseparated: 82 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

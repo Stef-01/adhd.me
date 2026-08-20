@@ -524,13 +524,22 @@ export function onBehalfBefore(
  */
 const TIGHT_NEGATORS = new Set(["no", "not", "without"]);
 
+/**
+ * `from` (O78): where the search starts. The audit found that returning only the FIRST
+ * occurrence made every suppression rule sentence-global by accident — a cue negated,
+ * hedged or on-behalf-governed at its first occurrence was dead for the whole text, so
+ * "I don't want titration. but titration support is exactly what I came for" read as
+ * nothing. readNeeds now retries from past a refused occurrence; every existing caller
+ * passes nothing and keeps first-occurrence behaviour.
+ */
 export function findCue(
   sentence: readonly string[],
   cue: readonly string[],
+  from = 0,
 ): { from: number; to: number } | null {
   if (cue.length === 0) return null;
 
-  for (let start = 0; start <= sentence.length - 1; start++) {
+  for (let start = from; start <= sentence.length - 1; start++) {
     if (sentence[start] !== cue[0]) continue;
 
     let at = start;

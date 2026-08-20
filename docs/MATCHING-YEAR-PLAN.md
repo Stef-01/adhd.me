@@ -29,7 +29,15 @@ non-rankings.
    reads the governor off the raw stream ("for" / "behalf of" directly before the family
    reference, O72's adjacency lesson), suppresses only the culturally_attuned reading, and
    the child facet is exempt BY DESIGN because on-behalf IS that facet's register ("this is
-   for my teenager")**. Earlier: 311
+   for my teenager")**. **O78 (2026-08-20, founder-directed audit): the whole pipeline read
+   closely — docs/MATCHING-AUDIT-O78.md is the record. Fixed: suppression was accidentally
+   sentence-global (findCue returned only the first occurrence, so a clause-one refusal or
+   hedge silenced a clause-two ask; now per-occurrence with retry, behaviour-identical over
+   the standing 405 entries), and unservedAsks was the last reader of the global roster.
+   Named for their own units, carried as corpus gap data: desire-negation over-scope (the
+   consume-once design), reported refusal ("they said no to X"), and the sit-in-the-room
+   presence phrasing. Refused with written reasons: micro-caching, cue indexing (0.049
+   ms/call measured), Porter, maximum matching.** Earlier: 311
    entries after O68's tranche four (compounds +
    discipline registers, 2026-08-19); every floor rose again (woman-gp 4→10, bulk-billing
    6→12, telehealth 6→11, trauma 6→8). Tranche four also pinned the corpus's first KNOWN

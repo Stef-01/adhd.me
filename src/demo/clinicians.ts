@@ -531,11 +531,14 @@ function answers(clinician: Clinician, need: NeedSignal): boolean {
  * Same posture as the Gold Coast answer in the sequence: name the gap, put it on the directory,
  * and do not let the reader conclude it is about them.
  */
-export function unservedAsks(query: string): string[] {
+export function unservedAsks(query: string, roster: readonly Clinician[] = clinicians): string[] {
   // A "sometimes" declaration is still a declaration (O2): a clinician the ranking scores for
   // an area must not appear under "no GP listed today says they do this" on the same screen.
+  // O78 (audit): the roster is injectable like every other entry point — this was the last
+  // reader of the global roster, so a caller ranking a custom roster reported the GLOBAL
+  // roster's gaps beside it, the exact class the O8 review fixed in `needsFor`.
   const declared = new Set(
-    clinicians.flatMap((clinician) => [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]),
+    roster.flatMap((clinician) => [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]),
   );
   return readNeeds(query)
     .filter((need) => need.facet.kind === "care" && !declared.has(need.facet.area))
