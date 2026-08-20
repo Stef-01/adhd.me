@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O90 (founder-directed 2026-08-20: "move it all to an About us section") — claimed
+> 2026-08-20T08:28Z by loop-0820n.** The landing's founders chapter ("We do not build this
+> alone", three plates: Vikram Ganeshalingam, Dr Anubhav Saxena, Stefan Thottunkal)
+> becomes the site's ABOUT US: the section gains the `about` anchor and an "About us"
+> kicker (the sentence heading stays — it is the section's idea), Dr Anusha Saxena joins
+> as the fourth co-founder plate (her founder-supplied portrait centre-cropped to the
+> plate's 3:4 convention, role and affiliations from her published record: FRACGP, Bay
+> Health Clinic, ANU), "Three people, one conviction" becomes four, the grid takes the
+> fourth plate, and the footer's doors gain "About us" → /#about. What does NOT move: the
+> finder-profile disclosure line stays beside the listing BY LAW — the register's reason
+> ("a reader cannot see the ranking") is listing-side, so the About section is where the
+> story lives, not where the disclosure moves. Gate: landing compliance sweep green over
+> the new copy, qa/about-o90 captures at desktop + 390×844 with a DESIGN-QA entry
+> (adhdme-taste), full `pnpm verify` green.
+
 > **O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page") — claimed
 > 2026-08-20T08:21Z by loop-0820m.** Dr Anusha Saxena gains the founder disclosure her
 > co-founder already carries: `founderInterest` set on her entry (mirrored wording,
