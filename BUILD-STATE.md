@@ -119,6 +119,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O117 (explaining the fit, Q4: a doctor sees what patients are told about them) — claimed
+> 2026-08-20T19:07Z by loop-0820s.** The lane's last increment, and the only one pointed at
+> the clinician rather than the reader: "the same provenance view inside the console so a
+> doctor sees exactly what patients are told about them". Everything the console has today is
+> QUERY-driven — pick a sentence, watch the roster score against it — which answers the staff
+> question ("is the ranking behaving") and not the doctor's ("what does this thing SAY about
+> me"). Those are different questions and only one of them has an answer today.
+> Design: a per-clinician panel built from DECLARATIONS rather than from a query, because that
+> is what makes it complete — every sentence the finder can print about a named GP is
+> determined by what they declared, so the panel can enumerate them all rather than sampling
+> whichever query happens to be typed. For each declaration: the closed-vocabulary label a
+> patient reads, and the field it came from. Plus the fixed frames that surround those labels
+> — the reason line, O51's not-declared sentence, the closed-books note, the distance line —
+> shown as the sentences they are, since a doctor who wants to check what is said about them
+> should not have to reconstruct it from a vocabulary list. WHY THIS IS WORTH BUILDING RATHER
+> THAN ASSUMED: W190 gives a clinician a correction path, and a correction path is only real
+> if the thing to be corrected is legible. A doctor cannot object to a sentence they have
+> never been shown. Founder gates: console is staff-gated above the read (O57's posture), it
+> publishes nothing, and it invents no copy — every line is composed from the same closed
+> vocabulary the finder uses, so this cannot drift from what patients actually see. Gate: the
+> panel's sentences derived from the same functions the finder calls (a test asserts the panel
+> and the finder cannot disagree); every roster clinician rendered; adhdme-taste with a qa/
+> capture and DESIGN-QA entry; e2e green; full `pnpm verify` green.
+
 > **O116 (Q1 lexicon: four mid-sized facets, and the comparative the stemmer never bridged)
 > — claimed 2026-08-20T18:42Z by loop-0820s.** `care:titration` (5), `care:shared-care` (5),
 > `pref:longer-appointment` (4) and `manner:unhurried` (4) — eighteen aspirations, all plain
