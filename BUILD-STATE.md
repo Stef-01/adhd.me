@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O91 (the O87 pin with its analysis pre-written: "without X" is going WITHOUT X, so the
+> bare-negator rule learns the word) — claimed 2026-08-20T08:44Z by loop-0820o.** "do any
+> GPs do the whole thing without a psychiatrist referral" reaches shared-care — an
+> independence ask, the product's premise, read as its opposite. The pinned analysis:
+> "without" was excluded from BARE_NEGATORS by O72 to protect "what can we do without
+> medication", but that sentence reaches through a cue whose OWN phrase starts with the
+> negator, which the check never touches (it looks strictly before the span) — so the
+> exclusion may have been protecting nothing. This unit MEASURES that claim over the
+> 500-entry corpus before trusting it, and designs against the one shape scouting found:
+> the double negative ("I can't do this without bulk billing" NEEDS bulk billing), where
+> a negative token before "without" in the same clause flips it back to a want and the
+> suppression stands down. Gate: the O87 pin retagged reaches→never in this commit
+> (shared-care floor moved by sanctioned reclassification if the count drops), the
+> double-negative and cue-initial boundaries pinned both directions in §O91 + corpus
+> data, every §O72/§O81/§O83 pin green, tie-quality repinned if the run changes, full
+> `pnpm verify` green.
+
 > **O90 (founder-directed 2026-08-20: "move it all to an About us section") — claimed
 > 2026-08-20T08:28Z by loop-0820n.** The landing's founders chapter ("We do not build this
 > alone", three plates: Vikram Ganeshalingam, Dr Anubhav Saxena, Stefan Thottunkal)
