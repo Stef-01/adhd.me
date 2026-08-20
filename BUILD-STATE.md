@@ -141,6 +141,42 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > run end to end since O98 while thirty-two units changed the tree underneath it. Gate: reveal
 > timing measured at 390 and 1280, the lane's queue left with no unmarked item, full e2e green,
 > full `pnpm verify` green.
+> DONE 2026-08-20. Item three SHIPPED AND MEASURED, item four REFUSED as the claim predicted,
+> and the lane's queue now has no unmarked item.
+>
+> The reveal guardrail is a number, so it was measured at both viewports: 17 elements carry a Y
+> transform at rest; 14 are reveals and every one settles within a viewport of the fold, ZERO
+> firing early; the other 3 are the continuous parallax wrappers, which correctly never settle.
+> Both the `Reveal` wrapper and the founders' stagger gate at the hook — the taste law's actual
+> requirement, reduced motion honoured where the effect is DECIDED and not only in CSS.
+>
+> **MY FIRST PROBE WAS WRONG AND CONFIDENTLY SO, which is the finding worth keeping.** It
+> selected `.story-chapter *` and treated every untransformed descendant as a reveal that had
+> fired early — 24 "findings" at mobile, 20 at desktop, all false, because most of those
+> elements were never animated at all. Nothing was wrong with the page; the POPULATION was
+> guessed. Deriving it from behaviour instead (elements that actually start translated) turned
+> the same walk into a real measurement. A number whose population is assumed is not evidence,
+> and it would have been very easy to "fix" a page that had nothing wrong with it.
+>
+> The refusal, kept in the plan rather than dropped from the list: patients never see a score —
+> W213's floor, and O102 refused even to TOTAL a comparison — so the only surface with a score
+> line is the staff console, where the figures are server-rendered and known before the reader
+> arrives. Animating them is not "a value resolving", it is decoration wearing the lane's own
+> phrase for meaningful motion.
+>
+> Verification deliberately heavier than the diff, and it earned that: **the FULL e2e suite,
+> 233 tests, green in 6.4 minutes** — its first complete run since O98, with thirty-three units
+> landed underneath it. `pnpm verify` green 3536.
+>
+> **LEDGER NOTE — THIS IS THE THIRD TIME TODAY AND IT IS NOT BAD LUCK.** O124, O126 and now
+> O127 each pushed their code with the ledger row still reading as an open claim, because I
+> wrote the close as a heredoc script and the `git commit` on the following line is a SEPARATE
+> statement: when the script's anchor assertion stops it, the commit runs anyway. The assertion
+> has been doing its job every time — nothing false was ever written — but the sequencing
+> defeats it. The fix is procedural and starts now: the ledger edit runs in its own call and is
+> confirmed before anything is committed. Recorded here because the ledger IS the lock in this
+> tree, and a row left open after its work has landed is exactly the state the concurrency laws
+> exist to prevent.
 
 > **O126 (explaining the fit, Q4: the doctor sees the provenance the patient sees) — claimed
 > 2026-08-20T22:10Z by loop-0820s.** The lane's last increment, and the only one left that is
