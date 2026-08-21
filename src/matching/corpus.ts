@@ -825,7 +825,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   /* O119 KNOWN FALSE POSITIVE, pinned as today's truth (the O68 pattern).
      Fired by O113's own "my own brain" cue. The ask here is collaborative — being brought INTO
      decisions — and sense-making is the neighbour it leaks into. Owned rather than quietly kept. */
-  { text: "bring me into every decision about my own brain", reaches: ["manner:sense_making"], aspires: ["manner:collaborative"] },
+  { text: "bring me into every decision about my own brain", reaches: ["manner:sense_making", "manner:collaborative"] },
   // Punctuality is not the unhurried facet: wanting appointments to START on time is a
   // different ask from wanting them not to be rushed once they start.
   { text: "I need appointments that start on time, waiting destroys me", never: ["manner:unhurried"] },
@@ -943,7 +943,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I have borderline traits and I am tired of that closing doors", reaches: ["care:complex-mental-health"] },
   { text: "in recovery four years, I need this handled without a lecture", reaches: ["care:substance-history"] },
   { text: "the black dog and the attention thing arrived together", reaches: ["care:depression", "care:adhd-assessment"] },
-  { text: "my file is thick and I need someone who reads it", aspires: ["care:complex-mental-health"] },
+  { text: "my file is thick and I need someone who reads it", reaches: ["care:complex-mental-health"] },
   { text: "white coat syndrome, so I need a bit of patience", reaches: ["care:anxiety"] },
   { text: "I panic in waiting rooms and then cannot speak", reaches: ["care:anxiety"] },
   { text: "the doctor panicked when I mentioned my dose", reaches: ["care:titration"] },
@@ -1034,12 +1034,9 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // "our boy") were REFUSED — see needs.ts: they break a G7 pin, because a bare family
   // reference cannot tell an ask from a parent describing their child's distress.
   "care:child-adolescent-adhd": 20,
-  // O123 raised 11→15: the facet was already cued on "bipolar", "psychosis",
-  // "schizophrenia", "schizoaffective" — pure diagnosis disclosure — so "borderline", "hear
-  // voices" and "psych ward" were a missing-word gap, not the founder's G7 question they had
-  // been filed under. One aspiration stays: "more than one diagnosis" as a cue would consume
-  // the word `diagnosis` that care:adhd-assessment needs, and a pin caught it.
-  "care:complex-mental-health": 17,
+  // O140 raised 17→18 with "file is thick" — how somebody with a long psychiatric history
+  // describes it when asking to be read rather than re-triaged.
+  "care:complex-mental-health": 18,
   // O123 raised 13→14 — the facet reads "depression" and "low mood" already; "black dog" is
   // the Australian idiom for the same thing.
   "care:depression": 15,
@@ -1077,9 +1074,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // that stays — "I cry in the car after every appointment" — names the reader's emotional
   // state rather than the conduct of the appointment, and is marked awaitingFounder.
   "manner:attuned": 21,
-  // O122 raised 11→20: the SHARED-DECISION phrasings. The facet's label is "Explains and
-  // decides with you" and it had no cue for anybody asking to be decided WITH.
-  "manner:collaborative": 22,
+  // O140 raised 22→23 with "every decision", which is this facet's own label read back.
+  "manner:collaborative": 23,
   // O139 raised 17→18 with "second language": the ask as it arrives when somebody wants pace and
   // patience rather than an interpreter.
   "manner:culturally_attuned": 18,

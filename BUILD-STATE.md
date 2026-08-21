@@ -161,6 +161,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > queue can end in reasons instead of forced cues. Gate: two promotions, two refusals registered
 > with `leavesStanding`, zero `never` pins broken, floors and tie-quality moved, full
 > `pnpm verify` green.
+> DONE 2026-08-21. **THE UNBLOCKED QUEUE IS ZERO.** `openAspirations()` returns nothing: every
+> standing aspiration in a 556-entry corpus is now either heard, waiting on the founder's G7
+> call, or refused with a written measurement naming the sentence that refused it. That number
+> could not be computed at all two units ago, and the fact that it can be — and is checked by a
+> test rather than asserted in prose — is worth more than the number.
+> Two promotions: complex-mental-health 17→18 ("file is thick", how somebody with a long
+> psychiatric history describes it when asking to be READ rather than re-triaged) and
+> collaborative 22→23 ("every decision", this facet's own label read back).
+> **ONE CANDIDATE WAS KEPT DESPITE FIRING ON A DISTRACTOR, and the reasoning is the point.**
+> "every decision" also matches "a say in every decision the practice makes about billing". I did
+> not refuse it: this facet is "explains and decides with you", and somebody asking for a say in
+> decisions IS asking for that. A distractor I invented is not a measurement — the honest test is
+> whether the READING is wrong, not whether a sentence exists that trips the cue. Refusing here
+> would have been the discipline performing itself rather than doing anything.
+> Two genuine refusals registered: "things are predictable" fires on "I like it when things are
+> predictable at work", a self-description where the facet is about the CLINICIAN's routine —
+> the subject-blind confusion O119 found four instances of; and "what is wrong with you" strips
+> to the single token [wrong] and fires on a REPORT of something said to the reader.
+> **THE QUEUE ENDING IN REASONS IS THE CORRECT END STATE, NOT A SHORTFALL.** `manner:motivating`
+> and the autism/structured pair stay unheard with their measurements written down, which is
+> exactly what the O65 pattern exists for: a lexicon finishes honestly when the remaining gaps
+> have arguments attached, not when every gap has been forced shut with a cue that costs more
+> precision than it buys.
+> Tie-quality 445/249/65/131 → 446/248/66/132: separation 56.0%→55.6%, DOWN by one separated
+> request. Honest and worth reading — hearing a sentence on a facet most of the roster declares
+> can move it from separated to partially tied, a gain in reach and a loss in ordering, and the
+> metric showing both is the metric working.
+> Gate met: zero `never` pins broken, O119's precision probe green, refusal register green,
+> `pnpm verify` green 3597.
 
 > **O139 (the last of the unblocked queue, worked with the registers on) — claimed
 > 2026-08-21T00:55Z by loop-0820s.** O138 made the queue countable and it is TWELVE — the first

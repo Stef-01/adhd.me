@@ -183,6 +183,24 @@ export const REFUSED_CUES: readonly RefusedCue[] = [
     leavesStanding: ["white coat panic is real for me"],
   },
   {
+    phrase: "things are predictable",
+    facet: "manner:structured",
+    refusedBy: "I like it when things are predictable at work",
+    because:
+      "a self-description rather than a request about how a GP runs an appointment — this facet is about the CLINICIAN's routine, and reading the reader's own preference into it is the subject-blind confusion O119 found four instances of",
+    unit: "O140",
+    leavesStanding: ["meltdowns after appointments unless things are predictable"],
+  },
+  {
+    phrase: "what is wrong with you",
+    facet: "manner:motivating",
+    refusedBy: "the doctor asked what is wrong with you",
+    because:
+      "it strips to the single token [wrong], and the sentence it fires on is a REPORT of something said to the reader rather than anything they are asking for",
+    unit: "O140",
+    leavesStanding: ["less what is wrong with you, more what we can build"],
+  },
+  {
     phrase: "know better",
     facet: "manner:non_judgmental",
     refusedBy: "I know better than to expect much",

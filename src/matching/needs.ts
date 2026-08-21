@@ -311,6 +311,10 @@ const LEXICON: readonly Entry[] = [
        loop is not the thing to make it. Raised in BUILD-STATE as a named founder question. */
   ]),
   care("complex-mental-health", "Bipolar and complex mental health", 26, [
+    /* O140: "a thick file" is how somebody with a long psychiatric history describes it when
+       they are asking to be read rather than re-triaged. Two content tokens, and it fires on
+       nothing else in the corpus. */
+    "file is thick",
     /* O123: the register this facet ALREADY reads. Its settled vocabulary is "bipolar",
        "psychosis", "schizophrenia", "schizoaffective", "psych history" — pure diagnosis
        disclosure — so a sentence saying "borderline personality disorder plus the attention

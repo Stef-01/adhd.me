@@ -40,6 +40,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  446/248/66/132 at O140 (the queue's last two promotions; separation 56.0%→55.6%. It went
+ *  DOWN by one separated request, and that is the honest shape: hearing a sentence on a facet
+ *  most of the roster declares can move it from separated to partially tied, which is a gain in
+ *  reach and a loss in ordering, and the metric is doing its job by showing both);
  *  445/249/65/131 at O139 (the last of the unblocked queue: three promotions, separation
  *  55.9%→56.0%. The number barely moves because these are single sentences on facets already
  *  well covered — which is what the end of a queue looks like, and is the honest shape rather
@@ -145,7 +149,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 445, separated: 249, partialTie: 65, unseparated: 131 };
+const PINNED = { total: 446, separated: 248, partialTie: 66, unseparated: 132 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

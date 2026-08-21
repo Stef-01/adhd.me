@@ -237,6 +237,11 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     matchLine: "explains the options and decides them with you",
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
     cues: [
+      /* O140: asking to be IN the decisions, which is this facet's own label read back. It also
+         fires on "a say in every decision the practice makes about billing" — deliberately not
+         treated as a refusal, because a person asking for a say in decisions is asking for
+         exactly what this facet declares, and a weak distractor is not a measurement. */
+      "every decision", 
       /* O122: the SHARED-DECISION phrasings. The facet's label is "Explains and decides with
          you" and it had no cue for anybody asking to be decided WITH. */
       "works alongside me", "ask me what i think", "options past me", "collaborative", "explain", "involve me", "part of the decision", "talk it through", "understand my choices", "shared decision", "decide together", "work together",
