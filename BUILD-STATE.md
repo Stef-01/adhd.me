@@ -143,6 +143,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O171 (the semantics sweep gets the derived route list) — claimed 2026-08-21T18:11Z by
+> loop-0821a.** Fourth of O168's six.
+> **FIRST, A CORRECTION TO MY OWN TWO PREVIOUS ROWS.** O168 and O170 both classified `semantics` as
+> one of the three that "need a per-route decision about what the assertion means" and therefore
+> could not be a mechanical swap. **That was wrong, and I wrote it twice.** Reading the spec rather
+> than its coverage number: `PROBE` is entirely route-independent — one visible `h1`, no heading-level
+> jump, a `<main>` landmark, an accessible name on every visible field. Nothing in it is tuned to a
+> particular screen. I grouped it with `mobile-fit` and `keyboard-focus` on the strength of its low
+> coverage figure, which is a fact about its route array and says nothing about its probe. The
+> correction is left visible in both directions rather than quietly fixed here, because "this one is
+> hard" was my reason for deferring it through two rows.
+> **THE GAP IS THE LARGEST OF THE SIX.** The public list is complete at 15. The console list holds
+> **10 of 28** — eighteen console screens whose heading structure, landmark and field labelling have
+> never been checked, which is more unswept console than any other sweep O168 measured.
+> **AND THIS IS THE SWEEP MOST LIKELY TO FIND SOMETHING, FOR A STATED REASON.** O160's own header
+> says semantic structure "is what rots silently as pages are edited, and it is invisible to every
+> other sweep already standing — touch, focus, overflow and contrast all pass happily on a page with
+> three h1s and an unlabelled input". Eighteen console screens built across many units, by a loop
+> that has never once had this checked on them, is precisely the population that header describes.
+> O170's three findings came from twelve unswept routes; this is eighteen, against a rule that is
+> easier to break.
+> **WHAT I WILL NOT DO IS RELAX THE PROBE.** A heading jump or a second `h1` on a console screen is
+> fixed in the screen. If a finding turns out to be the probe being wrong rather than the page — a
+> visually-hidden heading, a landmark inside a portal — that is a probe fix with its own reasoning,
+> not an exclusion list, and this row will say which it was.
+> Gate: routes from `e2e/site-routes.ts`, no hardcoded path array left; the sign-in/onboarding pair
+> handled explicitly rather than dropped; a non-vacuity floor over the number of routes actually
+> probed AND over the elements the probe saw, so neither a collapsed derivation nor a probe that
+> stopped matching can pass as clean; every finding fixed in the page, or the probe corrected with
+> its reasoning stated; a seeded second `h1` and a seeded unlabelled field both caught; the observed
+> finding count reported whatever it is; `pnpm verify` green.
+
 > **O170 (the touch floor gets the derived route list) — claimed 2026-08-21T17:29Z by loop-0821a.**
 > Third of the six sweeps O168 measured, and the last of the mechanical ones. O169 took `a11y` and
 > `contrast`; this takes `touch-floor` (O14's 44px hit-area floor, swept since O145/O148).
