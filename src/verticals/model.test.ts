@@ -208,6 +208,13 @@ describe("W157 the gates are composed, never re-implemented", () => {
       .split("\n")
       .filter((line) => !line.trimStart().startsWith("//") && !line.trimStart().startsWith("*"))
       .join("\n");
+    // Y5-2 (W256): the stripper is checked. Without this, a stripper that removed too much would
+    // leave `body` empty, every `not.toContain` below would pass, and the guard W157's row calls
+    // load-bearing would be silently inert. Demonstrated during the audit: emptying the stripper
+    // left all 21 tests in this file green.
+    expect(body, "the stripper removed the code too — the bans below are checking nothing").toContain(
+      "export function usableVertical",
+    );
     for (const banned of [
       "signedOffBy",
       "signedOffAt",

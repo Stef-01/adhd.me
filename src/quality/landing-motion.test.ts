@@ -31,6 +31,13 @@ const code = source
   })
   .join("\n");
 
+describe("Y5-2 (W256) the stripper this file scans through left the code behind", () => {
+  it("is not scanning an empty string, which would pass every check below", () => {
+    expect(code.length, "the stripper emptied the source").toBeGreaterThan(200);
+    expect(code).toMatch(/motion|animate|initial/);
+  });
+});
+
 describe("A11Y-2 the storybook never ships hidden copy", () => {
   it("animates no opacity anywhere, so nothing can be server-rendered invisible", () => {
     expect(code, "story-landing.tsx animates opacity again").not.toMatch(/opacity:\s*0/);

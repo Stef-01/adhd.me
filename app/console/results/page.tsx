@@ -10,7 +10,7 @@
 //   - the estimate is labelled an estimate, and the demonstration data is labelled.
 
 import Link from "next/link";
-import { getComplaints } from "@/complaints/store";
+import { complaintsFor } from "@/complaints/store";
 import { DEFAULT_GUARDRAILS, evaluateGuardrails, metricsFromSim } from "@/guardrails/monitors";
 import { getDashboardData } from "@/sim/dashboard-data";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
@@ -18,7 +18,7 @@ import { RESULTS_COPY as C } from "@/console/results-copy";
 import { buildPracticeResults, shortDate, weeklyExtras } from "@/console/results";
 import { DEFAULT_REPORT_OPTIONS } from "@/report/options";
 import { WeeklyArmsChart } from "../dashboard/chart";
-import { requireSession } from "../guard";
+import { requirePractice } from "../guard";
 import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
@@ -37,14 +37,23 @@ function Tile({ label, value, detail }: { label: string; value: string; detail: 
 }
 
 export default async function ResultsPage() {
-  const email = await requireSession();
+  const { email, record } = await requirePractice();
   const data = getDashboardData();
   // Guardrails read the sim result itself; the dashboard cache holds the shaped view.
   // Complaints come from the live store (W51): an empty list here would make the
   // zero-tolerance complaints monitor unfireable and print "nothing needs attention"
   // over an open complaint.
+  //
+  // Y5-1 (W256): SCOPED. This read `getComplaints().complaints` — the entire store — so the
+  // zero-tolerance complaints monitor fired on every practice's complaints and a practice with
+  // none of its own was shown a guardrail alert about somebody else's. It is Y4-1's shape in a
+  // third place: W206 fixed the complaints page and the console home and did not reach this one,
+  // which is the same way Y4-1 itself survived from Year 1. No complaint row is rendered here, so
+  // unlike Y4-1 nothing patient-linked reached the screen — what crossed was the existence and
+  // count of another practice's open complaints, and the false call to action W206 named.
+  // Filtered as the query rather than afterwards (W123's rule).
   const alerts = evaluateGuardrails(
-    metricsFromSim(runSim(DEFAULT_SIM_CONFIG), getComplaints().complaints),
+    metricsFromSim(runSim(DEFAULT_SIM_CONFIG), [...complaintsFor(record.practice.id as string)]),
     DEFAULT_GUARDRAILS,
   );
   const r = buildPracticeResults(data, alerts, {

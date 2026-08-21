@@ -95,6 +95,10 @@ describe("W213 explanation is total, not best-effort", () => {
     const body = SOURCE.split("\n")
       .filter((line) => !line.trim().startsWith("//") && !line.trim().startsWith("*"))
       .join("\n");
+    // Y5-2 (W256): the stripper is checked, or an empty `body` passes both patterns below.
+    expect(body, "the stripper removed the code too — the checks below are looking at nothing").toMatch(
+      /export (function|const)/,
+    );
     expect(body, "a default: case is a home for an unexplained reason").not.toMatch(/\bdefault\s*:/);
     expect(body, "a ?? on a copy lookup renders a substitute for an unknown reason").not.toMatch(
       /_COPY\[[^\]]+\]\s*\?\?/,

@@ -100,6 +100,10 @@ describe("W175 the construction is pinned, not merely relied on", () => {
       .split("\n")
       .filter((line) => !line.trimStart().startsWith("//") && !line.trimStart().startsWith("*"))
       .join("\n");
+    // Y5-2 (W256): the stripper is checked, or an empty `body` passes every ban below.
+    expect(body, "the stripper removed the code too — the bans below are checking nothing").toMatch(
+      /export (function|const)/,
+    );
     for (const banned of ["vertical", "Vertical", "versionHash", "binding", "Binding", "pathway"]) {
       expect(body, `holdout.ts references "${banned}"`).not.toContain(banned);
     }
