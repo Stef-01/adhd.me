@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O149 (the console scrolls sideways on a phone) — claimed 2026-08-21T08:10Z by loop-0820s.**
+> Found by probing a different property than the last four units, after noticing that four of five
+> had been touch/focus sweeps and were starting to return nulls. This one is not a null: at 390px
+> **every console route overflows its viewport horizontally.** `/console/rules` measures
+> `scrollWidth` 468 against a 390 viewport; `/console` measures 548. The page itself scrolls
+> sideways — not a container, the PAGE — which is the one thing the web guidelines in this tree
+> say a body must never do.
+> The cause is the shared shell's header row: `flex items-center justify-between` holding the
+> signed-in email, which does not wrap or truncate, so `owner@demo.practice.example` pushes the
+> row past the viewport and drags the document with it. `/console` carries something further on
+> top of that, unidentified at claim time and part of the unit.
+> **I made it 6px worse yesterday and this claim records that before the fix.** Measured against
+> `bc28c2b~1`: `/console/rules` was 462 before O148's `Sign out` widening and is 468 after. The
+> defect is 72px of overflow that predates the unit entirely, but O148 pushed a row that was
+> already too wide, and a touch-target fix that quietly worsens a layout defect is exactly what
+> a sweep with no overflow gate lets you do.
+> NOT A DEFECT, and pinned so the fix does not chase it: `/console/matching`'s `.mc-table` reaches
+> x=745 while the document's scrollWidth stays 390. That is a wide table scrolling inside its own
+> `overflow-x` container, which is precisely what the guidelines require, and a probe that counted
+> element rects rather than document scrollWidth would have "fixed" it into a worse table.
+> Gate: every console route's document `scrollWidth` equal to its viewport at 390, the shell's
+> header measured before and after, the wide table still scrolling inside its own container and
+> pinned as such, a sweep added to the gate with a seeded failure, `pnpm verify` green and the
+> console e2e green.
+
 > **O148 (the console was never swept, and it is 38 under the floor) — claimed 2026-08-21T07:15Z
 > by loop-0820s.** O145 and O146 took the fifteen PUBLIC routes to zero controls under the 44px
 > floor. The console — twenty-eight routes that practice staff actually work in — was never
