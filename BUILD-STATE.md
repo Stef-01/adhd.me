@@ -167,6 +167,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > declared empty WITH a reason; no function composes prose — asserted on the namespace and the
 > source; no `display` on any coding; the narrative survives the round trip byte-identical; the
 > unmapped register from W235 extended for this resource; `pnpm verify` green.
+> DONE 2026-08-21. `src/interop/referral-profile.ts` + 11 tests. Round-tripped over **every reason ×
+> every request** the vocabularies allow, compared by value — small enough that a sample is a choice
+> nobody needs to make.
+> All three boundary-specific breaks of G7's fourth property are pinned, and all three seed cleanly:
+> **THE NARRATIVE IS CARRIED CHARACTER-IDENTICAL, ASSERTED WITH `===` ON A DELIBERATELY UNTIDY
+> FIXTURE** — leading space, double space, no full stop, lower case. Trimming it is the edit a
+> reviewer calls harmless and a professional-responsibility argument does not: those are the GP's
+> words. Seeding a `.trim().replace(/\s+/g, " ")` fails two tests.
+> **NO CODING CARRIES A `display`**, checked on the serialised resource rather than the type,
+> because the type is what a later `display?: string` widens. That field is where the human-readable
+> clinical wording goes — authoring the sentence one field further down than anybody looks. W235
+> refused to borrow a terminology URI; this refuses to write the label that would go with one.
+> **AN ABSENT NARRATIVE STAYS ABSENT.** Seeding a generated summary into the empty slot fails,
+> including on a scan that finds no prose-composing construct anywhere in the module.
+> Four R4 slots are declared EMPTY with what filling each would cost, and the register travels WITH
+> the resource rather than sitting in a document somebody has to find. `priority` is the sharpest:
+> R4's is a clinical urgency judgement, W131's reason vocabulary is deliberately operational, so
+> deriving one would be this tree making a triage decision at the boundary — G7 named in the entry.
+> **A LOSSY ROUND TRIP FOUND WHILE WRITING THE READER**, before any test existed: the condition code
+> and the W120 fact codes were both going into `orderDetail`, so a receiver could not tell a register
+> code from a recorded fact and the document came back with `conditionCode: null` and one extra fact.
+> Two different kinds of claim collapsed into one — the same silent drop W235 spent a unit ending.
+> Its own code system now, and merging them again fails two tests.
+> **AND A SOURCE SCAN FIRED ON THE EXPLANATION OF THE RULE IT ENFORCES, FOR THE THIRD TIME THIS
+> SESSION — the first time with the sentence in CODE rather than a comment.** The word "summary"
+> appears in this module's own declared reason for never generating one. Stripping comments does not
+> reach a string literal, so the structural scan now strips string literals too, with an assertion
+> that the stripper left the code behind. A scan that cannot tell an explanation from an instruction
+> reports the explanation as the violation, and the fix somebody reaches for is deleting it.
+> Registers: W200's copy surface + loader, W201's ADM register with Q9 action 1 named as the open
+> question this document's shape deliberately does not answer, and W106's record class — `derived`,
+> carrying the most identifying pair in the lane (a patient reference and prose a GP wrote about one
+> person), with the erasure argument stated: this module never copies the narrative into a store of
+> its own and never edits it, so a scrubbed source leaves nothing here to scrub.
+> Non-vacuity, five breaks: tidy the clinician's words (2 tests); author a display (2); fill an
+> absent narrative with a generated summary (2); merge the condition code into the facts (2); read
+> an unknown reason as the nearest one (1).
+> Gate: `pnpm verify` green — 236 files, 3823 tests, build, audit:gate PASS.
 
 > **W235 (FHIR R4 resource mapping as data) — claimed 2026-08-21T09:20Z by loop-0821a.** Q19 opens.
 > The row's gate has a clause that decides the design: **an unmapped field is NAMED in the output
@@ -6127,7 +6165,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W233 | done | loop-0821a | 2026-08-21T08:52Z | 3727570 | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
-| W236 | claimed | loop-0821a | 2026-08-21T09:28Z | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
+| W236 | done | loop-0821a | 2026-08-21T09:28Z | PENDING | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |

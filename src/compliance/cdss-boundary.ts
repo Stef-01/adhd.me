@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/referral-profile.ts",
+    operatorCopy: ["PROFILE_READ_REFUSAL_COPY"],
+    notCopy:
+      "The remaining exports are the profile types, three code-system constants, the register of slots left empty, and two pure functions. `PROFILE_READ_REFUSAL_COPY` is written to whoever is integrating a system: the resource is not a ServiceRequest, or it names a reason, request, requester, patient or receiving organisation this product cannot read. Each refuses rather than approximating, and the reason-code one says what approximating would cost — reading an unfamiliar reason as a familiar one puts words in the sending practice's mouth about why it asked. `REFERRAL_PROFILE_EMPTY_SLOTS` is the other prose here and it is reviewer-facing: it names each R4 slot this profile leaves empty and what filling it would cost, including that deriving a priority would be this tree making a triage judgement at the boundary. NOTHING in this module authors clinical text: the clinician's narrative is carried character-identical and no coding it emits carries a `display`, which is where the clinical wording would go.",
+  },
+  {
     module: "src/interop/fhir.ts",
     operatorCopy: ["FHIR_READ_REFUSAL_COPY"],
     notCopy:

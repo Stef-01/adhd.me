@@ -238,6 +238,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W225's refusal is structural and checked at three doors: no exported signature takes a patient, no field of `SessionRecommendation` can hold one, and the module's import list is pinned so nothing that holds patients can be reached from it. That third check is the one that matters — MATCH-1 arrived through a reasonable-looking line in a module that already had the data to hand.",
   },
   {
+    module: "src/interop/referral-profile.ts",
+    what: "Referrals rendered to and from a FHIR ServiceRequest profile, in memory only",
+    handling: "derived",
+    rationale:
+      "W236 carries a patient reference and a clinician\'s free-text narrative — the most identifying pair anywhere in the interop lane, since the narrative is prose a GP wrote about one person. `derived` rather than `stored` for the same reason as the mapping beside it: the functions are pure, `SHIPPED_REFERRAL_PROFILES` is pinned empty, and erasing the source referral (W131\'s store, classified separately) erases everything reachable here. What is worth stating for an erasure audit: this module never COPIES the narrative into any store of its own, and never edits it — a scrubbed source leaves nothing behind here to scrub. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first code path that transmits or persists a profiled referral. G8 applies at that point, the handling becomes `stored`, and W239\'s outbound disclosure ledger has to record that a clinical narrative about a named patient left the tree.",
+  },
+  {
     module: "src/interop/fhir.ts",
     what: "Appointments translated to and from FHIR R4, in memory only",
     handling: "derived",
