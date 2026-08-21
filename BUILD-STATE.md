@@ -143,6 +143,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O165 (the sweep's blind spot, closed — and it was one line) — claimed 2026-08-21T17:20Z by
+> loop-0820s.** O163 found the compliance sweep could not reach the clinician profile because a
+> profile is not a route. This finishes the same blind spot: `public-sweep.spec.ts` opens with
+> `PUBLIC_SURFACES.filter((s) => !s.path.includes("["))`, so every DYNAMIC public route is skipped
+> by construction.
+> There is exactly one, and it is the pointed one. `/book/[token]` — the surface the census itself
+> describes as "**the most patient-facing surface in the product, and the only one reached by
+> somebody who was contacted rather than somebody who went looking**". The register declares its
+> importance in prose and the sweep drops it in code, one line apart in the same suite.
+> **Measured first: it is CLEAN.** 473 characters, zero findings — "An appointment is available",
+> the clinician and practice, a confirm button, and "No action is needed if this time doesn't suit
+> you." So this unit is PREVENTIVE and says so. What makes it worth doing anyway is that it
+> completes a structural gap rather than opening a new hunt: with the profile (O163) and this,
+> every patient-facing surface in the product is read by the linter, and the sweep's coverage stops
+> depending on whether a surface happens to have a static URL.
+> The route needs a real token, so the sweep drives the demo to mint one rather than fabricating a
+> path — a booking page reached with an invalid token renders the error state, and sweeping the
+> error state while believing you swept the booking page is the exact false-assurance shape this
+> pair of units is about.
+> Gate: the booking page swept with a genuine token, a per-page vacuity guard (a blank render
+> satisfies every rule ever written), a seeded failure proving it can fail, `pnpm verify` green.
+
 > **O164 (a compliance rule that cries wolf gets switched off) — claimed 2026-08-21T16:45Z by
 > loop-0820s.** O163 raised this at source rather than accepting it forever, and this is the fix.
 > `no-ratings` matches a bare `\breviews?\b`. **Scheduled review is core language this product uses
