@@ -196,6 +196,55 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W211 builds a `Response` from W170's `RecordedEvent { chainId, kind, at }` and an `Intervention { interventionId, practiceId, chainId, kind, at }`. Neither type has a field a patient identifier could go in, and the constructor copies only from those two, so the link is a statement about a chain and a practice. Erasure is COMPOSED for the same reason W180 gave: scrub the source rail and the events these rest on are gone, with nothing here to remember to scrub. W218 classifies the GRAPH built over this, which is a different question because a graph can hold shape a single link cannot.",
   },
   {
+    module: "src/capacity/model.ts",
+    what: "Session occurrences and per-session utilisation, over the practice's own diary",
+    handling: "no_patient_identity",
+    rationale:
+      "W222's `SessionOccurrence` is a clinician id, a date, a weekday and two counts. There is no field a patient could occupy, so nothing is de-identified here — the identity never enters. MEASURED FOR SMALL CELLS RATHER THAN ASSUMED (W230): the per-session aggregates the console renders have a minimum FILLED cell of 10 over the synthetic practice, so no rendered figure is a count of a handful of people. The per-OCCURRENCE figures are smaller — 411 of them, 94 below five, minimum one filled slot of one offered, which is one person's appointment with a named clinician on a named day. Nothing discloses those today: `capacityView` carries per-session rows only. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first surface that renders per-occurrence figures, or exports them to a recipient, needs W196's aggregation floor applied the way W218 applied it to the response graph — and it must be a floor on FILLED cells only, because an unfilled slot is nobody and withholding it would suppress the one figure that identifies no one.",
+  },
+  {
+    module: "src/capacity/forecast.ts",
+    what: "The range a session has run at, applied to slots being opened",
+    handling: "no_patient_identity",
+    rationale:
+      "W223 reads W222's occurrences and returns two integers, a spread and a sentence. No patient can enter it because none can enter its input, and the figure it produces is a property of a diary rather than of anybody in it.",
+  },
+  {
+    module: "src/capacity/score.ts",
+    what: "How often the ranges contained what happened, and how wide they were",
+    handling: "no_patient_identity",
+    rationale:
+      "W224 scores W223's ranges against W222's occurrences. A prediction holds a date, a range, two counts and a boolean; a score holds counts and rates over predictions. Nothing in either can name a person.",
+  },
+  {
+    module: "src/capacity/drift.ts",
+    what: "Whether the two halves of the scored record agree",
+    handling: "no_patient_identity",
+    rationale:
+      "W228 compares summaries of W224's predictions. Its inputs hold no identity and its output is two windows of counts, so there is nothing here to scrub and nothing to withhold.",
+  },
+  {
+    module: "src/capacity/recommendation.ts",
+    what: "A conditional about opening more slots on one recurring session",
+    handling: "no_patient_identity",
+    rationale:
+      "W225's refusal is structural and checked at three doors: no exported signature takes a patient, no field of `SessionRecommendation` can hold one, and the module's import list is pinned so nothing that holds patients can be reached from it. That third check is the one that matters — MATCH-1 arrived through a reasonable-looking line in a module that already had the data to hand.",
+  },
+  {
+    module: "src/capacity/calendar.ts",
+    what: "Declared non-working days, with provenance",
+    handling: "no_patient_identity",
+    rationale:
+      "W227's calendar is about a jurisdiction and a date. It ships EMPTY and is pinned empty, so today it holds nothing at all; when it holds something it will still hold nothing about anybody.",
+  },
+  {
+    module: "src/console/capacity.ts",
+    what: "The capacity console's view over all of the above",
+    handling: "no_patient_identity",
+    rationale:
+      "W229 arranges what W222 to W228 computed and adds no data of its own. It carries per-session rows and never per-occurrence ones, which is the distinction the W222 entry above says the small-cell trigger turns on.",
+  },
+  {
     module: "src/outcomes/attribution-v2.ts",
     what: "Per-kind response rates and, when the holdout arm allows one, the practice-wide incremental figure",
     handling: "no_patient_identity",

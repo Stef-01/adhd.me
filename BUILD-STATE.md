@@ -168,6 +168,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > guarantee asserted across the whole lane, on signatures and on values, not on names; the measured
 > cell sizes recorded with the numbers rather than the impression; the trigger stated in the
 > register where a reader of that register will meet it; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/privacy.test.ts` (11 tests) + eight W106 record classes. The type
+> guarantee holds at three doors across all seven lane modules: **19+ exported signatures** take no
+> patient (checked on parameters, not names, with the count asserted so a regex matching nothing
+> cannot pass silently), **25+ interface fields** have nowhere for one, and the import list is
+> pinned to the lane's own files plus `@/reporting/model` and `@/domain/types`. Then the same claim
+> by VALUE end to end: the console's whole serialised view against 200 real synthetic patient ids
+> and 200 appointment ids.
+> **THE SMALL-CELL QUESTION IS ANSWERED BY COUNTING, AND THE ANSWER HAS TWO HALVES.** The figures a
+> reader sees are per-session aggregates: **minimum filled cell 10 over 70 sessions, none below
+> five** — pinned with the number so a thinner diary fails here rather than quietly becoming
+> untrue. **The per-occurrence figures ARE small: 411 of them, 94 below five, minimum one filled
+> slot of one offered** — one person's appointment with a named clinician on a named day. Nothing
+> discloses them, so there is no floor; a floor for a disclosure nothing performs is a guess at the
+> shape of a surface nobody has designed. The condition is written into W106's register instead,
+> where an auditor of the lane will meet it, and it names the shape the floor must take: **on
+> FILLED cells only**, because an unfilled slot is nobody and withholding it would suppress the one
+> figure that identifies no one while hiding the spare room a practice needs to see.
+> 27 sessions have between one and four UNFILLED slots — pinned, as the worked example of why that
+> floor must not be symmetric.
+> **A FOURTH VACUOUS GUARD, AND IT IS THE SAME MISTAKE AS W229's TWO, ONE UNIT LATER.** My check
+> that nothing renders per-occurrence detail compared a session row's `Object.keys` — so seeding a
+> leak (occurrence dates concatenated into `label`) left it GREEN, because stuffing data into an
+> existing string field changes no key. **I keep inspecting SHAPE where the risk is CONTENT.** The
+> check now reads what is actually in the rows: no occurrence date may appear, other than the two
+> period boundaries every basis legitimately carries, with the non-boundary set asserted non-empty
+> so the sweep cannot be moot. Re-seeded, it fails naming the date that escaped.
+> A fifth instrument corrected on its first run: the import scan matched `from "no calendar"` in
+> `calendar.ts`'s own prose — the sentence explaining that a caller can tell "no holiday that day"
+> from "no calendar". Comments stripped first, with an assertion that the stripper left the code
+> behind. That is the second time this session a source scan has fired on the explanation of the
+> rule it enforces, and the tempting fix both times was to delete the explanation.
+> `copy.ts` is deliberately NOT classified and the test says so rather than leaving the gap
+> unexplained: W226's module authors nothing and holds nothing, and W106's staleness check would
+> not catch a record class for a module with no records, because the file exists.
+> Non-vacuity, four breaks: a patient field on the occurrence type (1 test); an import of a module
+> that holds people (1); a per-occurrence leak into the rendered view (1, after the guard was
+> fixed); drop the stated trigger from the register (1).
+> Gate: `pnpm verify` green — 231 files, 3759 tests, build, audit:gate PASS.
 
 > **W229 (the capacity console — where the whole lane gets read) — claimed 2026-08-21T08:06Z by
 > loop-0821a.** Seven modules and nothing renders any of them. W220 made the argument for this
@@ -5734,7 +5772,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
-| W230 | claimed | loop-0821a | 2026-08-21T08:30Z | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
+| W230 | done | loop-0821a | 2026-08-21T08:30Z | PENDING | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
