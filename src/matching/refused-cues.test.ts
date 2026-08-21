@@ -2,7 +2,8 @@
 
 import { describe, expect, it } from "vitest";
 import { LEXICON_CUES, readNeeds, facetKey } from "./needs";
-import { REFUSED_CUES } from "./refused-cues";
+import { REACH_CORPUS } from "./corpus";
+import { openAspirations, REFUSED_CUES } from "./refused-cues";
 
 describe("O125 a cue refused once is not re-added by accident", () => {
   it("no refused phrase appears in the lexicon", () => {
@@ -45,5 +46,36 @@ describe("O125 a cue refused once is not re-added by accident", () => {
     // "coaching" is a real live cue on care:non-medication; if the register listed it, the
     // first test would fire. This proves the membership check actually reads the lexicon.
     expect(live.has("coaching")).toBe(true);
+  });
+});
+
+describe("O138 the register can say what is genuinely still open", () => {
+  it("names only real corpus sentences that are still aspiring", () => {
+    // A refusal whose aspiration has since been promoted is STALE: it would keep subtracting
+    // work that is finished, hiding the fact that the refusal itself may now be reversible.
+    const byText = new Map(REACH_CORPUS.map((e) => [e.text, e]));
+    for (const r of REFUSED_CUES) {
+      for (const text of r.leavesStanding ?? []) {
+        const entry = byText.get(text);
+        expect(entry, `${r.unit}: "${text}" is named as left standing but is not in the corpus`).toBeDefined();
+        expect(entry!.aspires?.length ?? 0,
+          `${r.unit}: "${text}" is named as left standing but no longer aspires — the refusal is stale`,
+        ).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it("subtracts finished thinking from the queue", () => {
+    const raw = REACH_CORPUS.filter((e) => e.aspires?.length && !e.awaitingFounder).length;
+    const open = openAspirations(REACH_CORPUS).length;
+    // The two must differ, or `leavesStanding` is decorative.
+    expect(open).toBeLessThan(raw);
+  });
+
+  it("never counts a founder-blocked aspiration as open work", () => {
+    const open = new Set(openAspirations(REACH_CORPUS).map((e) => e.text));
+    for (const e of REACH_CORPUS.filter((x) => x.awaitingFounder)) {
+      expect(open.has(e.text), `${e.text} is founder-blocked and is being counted as open`).toBe(false);
+    }
   });
 });
