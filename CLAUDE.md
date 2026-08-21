@@ -23,7 +23,10 @@ ledger: `BUILD-STATE.md`).
    web-design-guidelines + react-view-transitions on every UI-track unit. Where a Vercel
    guideline conflicts with this tree's compliance or copy laws, the tree's laws win.
    `adhdme-taste` (same directory) is this tree's OWN design law — load it before any UI
-   work; it is the taste-skill plan §2 refers to.
+   work; it is the taste-skill plan §2 refers to. `design-motion-principles` (installed via
+   npx skills, founder-directed 2026-08-21) governs motion work specifically — weight it
+   Jakub-primary/Emil-secondary for this product's patient surfaces; where it conflicts with
+   adhdme-taste or the compliance laws, the tree's laws win.
 6. **Compliance is code.** Message templates pass the compliance linter; UI copy makes no
    clinical claims; no testimonials/ratings anywhere; "specialist" never appears next to a
    niche scope.

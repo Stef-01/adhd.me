@@ -1122,3 +1122,31 @@ Captures: qa/join-o136/ (both viewports, taken through O134's helper).
   explanation is worse than one saying "not looked at" — the next reader trusts it and moves on,
   which is precisely what I did for one unit. O135's entry above is corrected in place rather
   than quietly overwritten, so the mistake and its correction are both readable.
+
+- [x] Accent counts were low everywhere (0–2) except /clinicians/join at 9. Left alone and
+  recorded: it is a form, its nine are field-level error and hint affordances rather than
+  decoration, and O130's rule is that accent marks the value that changes — which on a form is
+  the field that needs attention. Changing it would need the form's own unit.
+
+
+## O137 — the motion critique, and the two gaps it found (2026-08-21)
+
+Skill: design-motion-principles (installed this unit), weighted Jakub-primary (production
+polish) / Emil-secondary (restraint) for a patient-facing health product; adhdme-taste wins
+conflicts. Audit verdict on the existing system: strong — the stage transitions share one
+ease, the re-rank glide (O52) and the travelling portrait (O67) are exactly the
+meaning-carrying motion both laws want, the O44 booking bar is rightly static, and the mic
+pulse is a justified live-state indicator with an end. Two gaps, both fixed:
+
+- [x] The results-head status lines (count, quality banner, tie note, clarifier block,
+  unserved note) used to teleport in the same frame the rows below glided — the one region
+  changing state with no acknowledgment. Each now enters with the standard small rise
+  (0.2s, house ease), exits subtler than it enters (0.12s fade), and swaps when its text
+  swaps. Static in place under prefers-reduced-motion, gated at the prop like the rows.
+- [x] The Team page's plates rise once as they enter the viewport — the landing's reveal
+  language carried to the page the chapter moved to (0.55s, house ease, once). No hover
+  lift (nothing on the page is pressable but links), no loops, static under
+  prefers-reduced-motion.
+- [x] Deliberately NOT animated, per the frequency gate: the suburb input (typed,
+  high-frequency), Show-the-others expansion (instant is honest), and the booking bar (O44
+  law stands).
