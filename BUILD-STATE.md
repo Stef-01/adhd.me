@@ -143,6 +143,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W257 (five-year gate dossier) — claimed 2026-08-21T12:53Z by loop-0821a.** Every decision still
+> outstanding, priced, with counts derived from the ledger and pinned row-by-row — W207's shape.
+> **AND W207's SHAPE INCLUDES W207's BUG, WHICH IS ALREADY WAITING FOR THIS UNIT WITH A TRIGGER
+> ATTACHED.** `DOSSIER-1` in W210's latent-findings register: *"A gate dossier prices the founder
+> decisions outstanding at a point in time, and its arithmetic is pinned by a test that reads the
+> LIVE ledger. W207's did, and went red the moment W208 planned Year 5 … Every future year-close
+> dossier inherits the shape unless it bounds itself to its own year."* Its trigger is mechanical —
+> any `gate-dossier-*.test.ts` that reads `BUILD-STATE.md` without a `_LAST_UNIT` bound makes the
+> finding LIVE and fails the suite. **So this unit is the one that finding was recorded for, and if
+> I build it the obvious way the machinery stops me.** That is W210 working exactly as its row
+> claimed, and it is worth saying plainly rather than quietly complying: a recorded finding that
+> carries the condition which would make it live is the only kind that survives three years of
+> nobody re-reading it.
+> **BUT THE BOUND IS NOT THE WHOLE ANSWER HERE, AND SAYING SO IS THE UNIT'S REAL WORK.** A year-close
+> arithmetic dossier is point-in-time and must be bounded. **A dossier of OUTSTANDING DECISIONS is
+> not the same thing**: its entire subject is the live state, and if a founder rules on G10 tomorrow
+> this document SHOULD go red, because it has become wrong. Bounding it against W260 protects it
+> from future YEARS while leaving it correctly sensitive to the decisions it is about. The two
+> sensitivities have to be separated deliberately or the bound will be applied to both and the
+> document will go stale in exactly the way the row forbids.
+> **AND ONLY THREE OF THE SEVEN OUTSTANDING DECISIONS ARE LEDGER ROWS.** Four live in source: Dr
+> Anusha Saxena's relationship to ADHD.ME (a `FOUNDER:` comment in `src/demo/roster.ts`), Saif
+> Tareen's photo and remit, and two profile-copy questions marked in `e2e/profile-sweep.spec.ts`. A
+> dossier that derives its counts from the ledger alone prices three decisions and lists four from
+> memory — and the four from memory are precisely the ones that go stale, because answering one of
+> them is a source edit nobody would think to reflect in a document. **Both halves get derived**, or
+> the pinning is theatre on the half that needs it most.
+> Gate: every outstanding decision priced with what it releases and what it costs to leave shut;
+> the ledger half derived and bounded by `_LAST_UNIT` so `DOSSIER-1` stays closed — checked by
+> running the trigger, not by assuming; the IN-SOURCE half derived from the markers that carry it,
+> so answering one in code turns this document red; counts pinned row-by-row; the distinction
+> between the two sensitivities stated in the test rather than in prose; `pnpm verify` green.
+
 > **W256 (five-year full-system audit) — claimed 2026-08-21T12:34Z by loop-0821a.** W51's method:
 > the whole tree, not a diff. Every sweep RE-RUN from source rather than carried from AUDIT-Y4.
 > **REVIEWER'S INDEPENDENCE, AND IT IS WORSE THAN ANY PREVIOUS AUDIT'S.** W206 could say "most of
@@ -7289,7 +7322,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
-| W257 | available | — | — | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
+| W257 | claimed | loop-0821a | 2026-08-21T12:53Z | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
 | W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
