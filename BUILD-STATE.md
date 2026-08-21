@@ -143,6 +143,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W219 (intervention attribution v2 over the response graph) — reclaimed 2026-08-21T06:52Z by
+> loop-0821a**, from interactive-0814's seven-day-old claim with nothing pushed against it (W54:
+> 90 minutes for a holder that has pushed nothing). Row edited, not stolen — the original claim
+> time is preserved in it.
+> The unit as written asks for attribution "over the response graph", and the first honest thing to
+> say about that phrase is that **the response graph cannot carry an attribution on its own, by
+> construction.** Every intervention in it is one the product performed; a holdout patient is never
+> invited, so never has an intervention, so appears nowhere in `buildResponseGraph`'s input. The
+> graph's edges are within-arm response RATES with no comparator anywhere in the structure — and
+> "reminders are answered 20% of the time" reads to a practice as an effect. W215 already settled
+> that the observed holdout arm is the ONLY comparator this product may use. So v2 is the unit that
+> makes the graph's shape say so.
+> Design: `attributeByKind` takes the graph AND a W215 counterfactual result — it cannot be called
+> with the graph alone, which is where the refusal becomes structural rather than a comment.
+> Response rates are ALWAYS reported (counts are recorded facts); the causal claim is withheld
+> separately, W72/W215's shape. The apportionment question is refused rather than solved: with one
+> observed kind the whole incremental figure belongs to it and no arithmetic is needed; with two or
+> more kinds sharing ONE practice-wide holdout, splitting the figure between them is a guess, and
+> the guess is exactly what a "v2" is tempted to invent.
+> Gate (the row's own): cohort-level only; per-patient effect estimates refused BY ABSENCE, checked
+> on the namespace AND on every exported signature (W215's technique — `estimateFor(patient)` passes
+> a name check). Plus: the registers this module trips — W200's copy surface, W201's ADM register,
+> W106/W180's record classes, W167's fold register — extended in the same commit, and non-vacuity
+> breaks recorded, since a refusal nobody has watched fail is a refusal nobody has tested.
+
+> LEDGER NOTE (loop-0821a, 2026-08-21): **O164 and O165 were stamped ~10.5 hours in the FUTURE**
+> — 16:45Z and 17:20Z against a container clock reading 06:2xZ, which is what `git log` shows for
+> those very commits. Harmless because both units closed inside their own firing, but it is the
+> precise hazard rule 3b names: a future-dated claim is never reclaimable, so a typo plus a dying
+> holder locks a row forever. The stamps are left as written (the past is not edited) and the
+> correction recorded here. This claim is stamped from `date -u`, checked against `git log` first.
+
 > **O165 (the sweep's blind spot, closed — and it was one line) — claimed 2026-08-21T17:20Z by
 > loop-0820s.** O163 found the compliance sweep could not reach the clinician profile because a
 > profile is not a route. This finishes the same blind spot: `public-sweep.spec.ts` opens with
@@ -5050,7 +5082,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W216 | done | interactive-0814 | 2026-08-14T05:50Z | b5a8ba0 | Q17 dossier: the learned-ranking question, priced. `docs/GATE-DOSSIER-Q17.md` + `src/quality/gate-dossier-q17.test.ts` (W207's shape: derives counts from the ledger, pins the dossier's quotes against live source). Verify green (191 files / 2565 tests / build / audit:gate PASS) run after a node/pnpm toolchain became available. **The collision is already live, not hypothetical:** `rankCandidates` (src/engine/pool.ts) has ordered the live invitation pool by `chronicCare` then overdue since W5; W201's published ADM notice says "No ordering of patients by need or by how unwell they are" — that is `MATCH-1` (open, recorded by W214), and the only thing keeping it a contradiction rather than a harm is that nothing has ever been sent (G1/G2/G3 shut). The dossier prices the distinction the notice itself draws (order of offers vs who is more unwell), names the two costs — change the published notice (option a) or change who gets invited (option b) — and takes no position. **Releases exactly one blocked unit, W217** (derived from the ledger, pinned by the test with a `Q17_LAST_UNIT` bound so it does not trip `DOSSIER-1`) and resolves `MATCH-1`. Ledger-integrity checked by hand against W168's rules (in-progress needs owner+timestamp: present). **REMAINING:** run `pnpm verify` (typecheck·test·build·audit:gate); if green, set status `done` + the commit SHA. Verify not runnable in this session. |
 | W217 | blocked | — | — | — | Learned ranking of patients → verify: n/a until ruled. **Blocked. FOUNDER DECISION — Q17 action 1, recorded in docs/GATE-DOSSIER-Q17.md: whether the product may order patients by anything a model learns, which would require changing the published ADM notice.** |
 | W218 | done | interactive-0814 | 2026-08-14T06:24Z | 9913da5 | [P] Response-graph privacy classification. Settled W212's deferred floor question IN `src/outcomes/response-graph.ts` (rather than a new module, to avoid re-registering across the W106/W200/W201/W116 registers a `// W≥157` file would trip): `RESPONSE_GRAPH_CELL_FLOOR` (5, declared data, no parameter — W196), `discloseResponseGraph` withholds any intervention kind holding a sub-floor cell WHOLE and recomputes the top-level total over disclosed kinds so a withheld count cannot be recovered by subtraction (W197's differencing rule; whole-kind because a kind's cells share one basis). `RESPONSE_GRAPH_DISCLOSURE_COPY` added to W200's linted copy surface (advice-free; `lintOperatorCopy` runs only the 4 advice patterns). Record-class entry for response-graph.ts updated: deferral removed, states erasure is COMPOSED (nothing stored, `SHIPPED_RESPONSE_GRAPHS` empty). Test `src/outcomes/response-graph-disclosure.test.ts`: floor-is-data (arity guard), whole-kind suppression hunted in the render ("2 of 9" absent, "20 of 38" present), total recomputed to 38 not 47, statement always present, no patient identity by type (`@ts-expect-error`) and by value (key list), erasure composed. W167's fold register caught the `.reduce` in `discloseResponseGraph` on its first run (commutative sum, declared with a rationale) — the mechanism working as designed. Verify green: 191 files, 2565 tests, build, audit:gate PASS. |
-| W219 | claimed | interactive-0814 | 2026-08-14T11:08Z | — | Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
+| W219 | claimed | loop-0821a | 2026-08-21T06:52Z | — | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
 | W220 | available | — | — | — | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | available | — | — | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
