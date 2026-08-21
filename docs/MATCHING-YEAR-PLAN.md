@@ -582,6 +582,18 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
     ci.yml (its own job, so a slow browser run never blocks the fast verify job), or, if the
     minutes are not there, split the compliance sweeps into a shorter suite that does run.
     Not merely a debt — a red gate can hide here again tomorrow.
+12. **The review skills law 5 requires are not in the loop container. FOUNDER — O144
+    (2026-08-21).** Law 5 names supabase, impeccable/taste-skill, dataviz, **code-review**,
+    **security-review**, **simplify**, run and the docx/pptx/xlsx skills, and states that a
+    hardening week without the review skills is not done. The loop container vendors only the
+    DESIGN skills: `adhdme-taste`, `design-motion-principles` and the Vercel set
+    (react-best-practices, composition-patterns, web-design-guidelines, react-view-transitions,
+    vercel-optimize). The three review skills are absent, so law 5's hardening requirement
+    cannot be met by a loop firing — only approximated by reading, which is what O144 did.
+    Not a build unit: the remedy is to vendor them the way `design-motion-principles` was
+    vendored, which is a founder action. Until then every hardening unit should say in its
+    ledger row that it reviewed by reading rather than with the skills, so the difference stays
+    visible rather than being quietly assumed away.
 
 ## Explaining the fit, continuously (runs all year)
 

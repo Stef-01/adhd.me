@@ -166,6 +166,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: the four results recorded, the missing skills filed as a FOUNDER standing debt with the
 > remedy named (they vendor the way `design-motion-principles` did), `pnpm verify` green. No code
 > changes — if this unit produced a fix it would mean the audit found something, and it did not.
+> DONE 2026-08-21. The four checks and their results, so the next session need not repeat them:
+> (1) every `qa/` citation in DESIGN-QA against the filesystem, BOTH directions — no cited
+> directory or file is missing and no citation dangles; two directories (`audit-matching-trust`,
+> `launch-o15`) sit on disk uncited, which is unreferenced evidence rather than a falsification.
+> (2) The thirteen skipped tests — all thirteen are deliberate and accounted for exactly, in
+> `order-regressions.test.ts`: six entries times four conditional assertions, where each entry
+> skips exactly one of the order_dependent/wrong_either_way pair (6), the single entry with a
+> known-open residual skips the two shipped-is-correct assertions (2), and the other five skip
+> the residual pin (5). Every skip is paired with a complementary assertion that DOES run,
+> including one that asserts the defect is still present so that fixing it fails the test and
+> forces the entry to be promoted. That is the opposite of a gate guarding nothing, and it is
+> worth having looked, because thirteen skips in a green run is exactly what a rotted gate looks
+> like from outside. (3) The W102 route census against `app/` — sound; its both-directions test
+> already runs in the gate. (4) Every console route for a session guard — all guarded via
+> `requirePractice`, with `/console/signin` correctly open, which is the O117 defect class
+> checked and clear.
+> THE UNIT'S REAL OUTPUT IS THE ENVIRONMENT GAP, filed as standing debt 12: law 5 requires the
+> review skills for a hardening week and the loop container has none of them. A law the loop
+> structurally cannot obey is worse than no law, because every firing that "hardens" by reading
+> can quietly claim to have met it. Filed as FOUNDER with the remedy named.
+> And the honest note about method: two of the four probes produced a FALSE finding before they
+> produced a true one — "0 routes in the census" (regex looking for a literal the module does not
+> contain) and "seven unguarded console routes" (grepping `requireSession` where the console uses
+> `requirePractice`). Neither reached a report, because both were checked before being believed.
+> Three units in this tree have now been bitten by a confident probe (O127, O134, this one),
+> which says the rule should be standing: a probe's first result is a hypothesis about the probe.
+> Gate met: four results recorded, the skills gap filed with its remedy, `pnpm verify` green (219
+> files, 3607 passed). No code changed, which is the correct outcome for an audit that found
+> nothing — a hardening unit that produces a fix every time is a hardening unit that is inventing.
+
 
 > **O143 (the QA record has been silently falsified, eleven times) — claimed 2026-08-21T03:05Z
 > by loop-0820s.** Found while committing O142, and it is worse than the passing note I gave it.
