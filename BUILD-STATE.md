@@ -6220,7 +6220,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
-| W237 | done | loop-0821a | 2026-08-21T09:35Z | PENDING | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
+| W237 | done | loop-0821a | 2026-08-21T09:35Z | aa27c65 | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
