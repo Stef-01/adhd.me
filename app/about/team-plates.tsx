@@ -30,7 +30,10 @@ export function TeamPlates() {
               <Image
                 className="story-founder-photo"
                 src={f.portrait}
-                alt={`${f.name}, co-founder of ADHD.ME`}
+                /* O152: was `${f.name}, co-founder of ADHD.ME`, which asserts a role the entry
+                   may not hold — the page is the TEAM, not only its founders. The name alone is
+                   the accurate alt for a portrait, and the role sits beside it in the markup. */
+                alt={f.name}
                 width={260}
                 height={347}
               />
@@ -41,10 +44,15 @@ export function TeamPlates() {
 
           <div className="story-founder-id">
             <strong>{f.name}</strong>
-            <span className="story-founder-role">{f.role}</span>
+            {/* O152: rendered only when supplied. A role and a remit are characterisations, and
+                W193 will not let this tree write one for a named person — so the honest
+                intermediate state is a plate without them, not a plate with an invented line.
+                An empty `<span>`/`<p>` would also be the broken-empty-state the web guidelines
+                name. */}
+            {f.role && <span className="story-founder-role">{f.role}</span>}
           </div>
 
-          <p className="story-founder-remit">{f.remit}</p>
+          {f.remit && <p className="story-founder-remit">{f.remit}</p>}
 
           <ul className="story-affiliations">
             {f.affiliations.map((a) => (

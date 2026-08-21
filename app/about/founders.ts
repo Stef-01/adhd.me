@@ -28,10 +28,16 @@ export function monogram(name: string): string {
     .join("");
 }
 
+/**
+ * `role` and `remit` are OPTIONAL because they are characterisations, and W193 does not let this
+ * tree write one for a named person out of its own head (O152). Somebody can be added the day
+ * their name is supplied and gain a role and a remit when they supply those too; what is never
+ * acceptable is a plausible sentence about a real person that nobody said.
+ */
 export const FOUNDERS: ReadonlyArray<{
   name: string;
-  role: string;
-  remit: string;
+  role?: string;
+  remit?: string;
   portrait: string | null;
   affiliations: readonly Affiliation[];
 }> = [
@@ -88,6 +94,46 @@ export const FOUNDERS: ReadonlyArray<{
         logo: "/hsil-logo.png",
         href: "https://hsph.harvard.edu/research/health-systems-innovation-lab/team/#scholars",
         label: "Health Systems Innovation Lab, Harvard T.H. Chan School of Public Health",
+      },
+    ],
+  },
+  {
+    /*
+     * O152, founder-directed 2026-08-21: "add to team Saif Tareen, bachelor of commerce student
+     * at Macquarie university and works at Parliament of australia so have those logos in
+     * similarly".
+     *
+     * A REAL PERSON, so the entry holds the three supplied facts and nothing else. No `role` and
+     * no `remit`: every other plate has both, and both are characterisations — writing one for a
+     * named person nobody quoted is the exact thing W193 exists to stop. They are one message
+     * away from being filled in.
+     *
+     * `portrait: null` is NOT a placeholder decision. The photograph arrived as a chat image
+     * rather than a file, and nothing in this tree generates a face for a real person — so the
+     * monogram fallback stands until `public/saif-tareen.png` exists, which is the case the
+     * header of this file already anticipated.
+     *
+     * BOTH AFFILIATIONS CARRY `logo: null` DELIBERATELY, and that is what "similarly" means here.
+     * The rule at the top of this file is that a mark ships only when it is licensed to us; Bond,
+     * USyd and ANU all render as wordmarks for that reason, so a wordmark IS how this page treats
+     * a university. The Parliament of Australia is the stronger case: its identifier is the
+     * Commonwealth Coat of Arms, whose use is restricted under Commonwealth guidelines and is not
+     * a mark a private company may apply to itself.
+     */
+    name: "Saif Tareen",
+    portrait: null,
+    affiliations: [
+      {
+        name: "Macquarie University",
+        logo: null,
+        href: "https://www.mq.edu.au/",
+        label: "Bachelor of Commerce student, Macquarie University",
+      },
+      {
+        name: "Parliament of Australia",
+        logo: null,
+        href: "https://www.aph.gov.au/",
+        label: "Parliament of Australia",
       },
     ],
   },

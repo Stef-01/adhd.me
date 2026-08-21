@@ -34,12 +34,20 @@ test("About us is its own door: the footer button opens /about, titled Team (O90
   await page.goto("/");
   await expect(page.locator("#about")).toHaveCount(0);
 
-  // All four co-founders, Dr Anusha's plate among them with her real portrait.
+  // The team, Dr Anusha's plate among them with her real portrait. Five since O152 added
+  // Saif Tareen; the count is asserted so a plate cannot vanish silently.
   await page.goto("/about");
   const plates = page.locator(".story-founders > li");
-  await expect(plates).toHaveCount(4);
+  await expect(plates).toHaveCount(5);
   await expect(page.getByText("Dr Anusha Saxena")).toBeVisible();
-  await expect(page.getByAltText(/Dr Anusha Saxena, co-founder of ADHD\.ME/)).toBeVisible();
+  // O152: a portrait's alt is the person's name. It used to append "co-founder of ADHD.ME",
+  // which asserts a role the page cannot promise for everybody on it.
+  await expect(page.getByAltText("Dr Anusha Saxena")).toBeVisible();
+  // The new plate carries only what the founder supplied: a name and two affiliations, no
+  // invented role or remit, and a monogram until a photograph exists.
+  await expect(page.getByText("Saif Tareen")).toBeVisible();
+  await expect(page.getByLabel("Bachelor of Commerce student, Macquarie University")).toBeVisible();
+  await expect(page.getByLabel("Parliament of Australia")).toBeVisible();
 
   await page.waitForLoadState("networkidle");
   await page.screenshot({ path: "qa/_runs/about-o90/about-desktop.png", fullPage: true });

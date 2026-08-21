@@ -149,7 +149,10 @@ export default async function ReferralsPage({
                         <input
                           id={`reason-${document.referralId}`}
                           name="reason"
-                          className="rounded border border-stone-300 px-3 py-2 text-sm"
+                          /* O152: 236x38, under O14's floor. This form renders only when a
+                             referral is awaiting an answer, so the console sweep never saw it
+                             until another spec seeded that state. */
+                          className="min-h-11 rounded border border-stone-300 px-3 py-2 text-sm"
                         />
                       </div>
                       <button type="submit" name="answer" value="accept" className={primaryButtonClass}>
@@ -159,7 +162,7 @@ export default async function ReferralsPage({
                         type="submit"
                         name="answer"
                         value="decline"
-                        className="rounded border border-stone-300 px-4 py-2 text-sm text-stone-700"
+                        className="min-h-11 rounded border border-stone-300 px-4 py-2 text-sm text-stone-700"
                       >
                         Decline
                       </button>

@@ -71,7 +71,10 @@ export default function DemoPage() {
                     <a
                       href={`/book/${signBookingToken(inv.id)}`}
                       target="_blank"
-                      className="font-medium text-stone-700 underline hover:text-stone-900"
+                      /* O152: measured 115x40, under O14's floor. It renders only once an
+                         invitation is "sent" or "queued", so the touch sweep never saw it when
+                         run alone — it took another spec seeding mock state to expose it. */
+                      className="-my-0.5 inline-flex min-h-11 items-center font-medium text-stone-700 underline hover:text-stone-900"
                       data-testid={`booking-link-${i + 1}`}
                     >
                       Open booking link

@@ -171,6 +171,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `public/saif-tareen.png`, 3:4 centre-crop like the others, and the entry is one line from done.
 > Gate: `pnpm verify` green, the /about e2e and the touch/focus/overflow gates green, a capture of
 > the new plate, and no invented attribute anywhere in the entry.
+> DONE 2026-08-21. Saif is on the page with a monogram, his name, and the two supplied
+> affiliations as wordmarks — visually identical in treatment to Beecroft, USyd and ANU above him.
+> No role, no remit, no portrait, and each absence is a decision rather than an omission: the
+> founder supplied three facts and three facts is what the entry holds. The type now makes `role`
+> and `remit` optional and the plate renders without them, so the next person can be added the day
+> their name arrives. FOUNDER, two one-line unblocks: send a role and a remit, and drop
+> `public/saif-tareen.png` in at 3:4.
+> The photograph is the one thing I could not do and did not fake. It came as a chat image, there
+> is no path from those bytes to `public/`, and the tree's hardest rule is that nothing here
+> generates a face for a real person — so no stand-in, no lookalike crop, no "temporary" portrait.
+> The monogram is the fallback the file's own header anticipated for exactly this day.
+> ON THE LOGOS, the answer was already written in founders.ts and I followed it rather than the
+> literal word: a mark ships only when licensed to us, otherwise a wordmark, because "a university
+> mark is trademarked and not ours to copy off a website". Every university on the page already
+> renders as a wordmark, so "similarly" is satisfied EXACTLY. Parliament is the stronger case — its
+> identifier is the Commonwealth Coat of Arms, restricted under Commonwealth guidelines and not a
+> mark a private company applies to itself. Copying either was the one reading of the brief that
+> would have broken a law the file already carries.
+> **TWO RED GATES ABSORBED, AND THEY EXPOSED A HOLE IN MY OWN SWEEP.** The accessibility batch went
+> red on `/demo`'s "Open booking link" (115x40, three of them) and `/console/referrals`' reason
+> input and Decline button (236x38, 91x42) — none of them this unit's doing. All three are
+> STATE-DEPENDENT: they render only once an invitation is sent or a referral awaits an answer, so
+> run standalone the O145/O148 sweep sees those routes EMPTY and reports a clean pass. It took
+> another spec seeding mock data in the same batch to reveal them. Fixed here because a red gate
+> blocks a unit, and recorded in DESIGN-QA as a named follow-up: the sweep's population is not the
+> set of controls the product can render, only the set that happened to be on screen, and the fix
+> is to seed the fixtures before measuring the way the console leg already signs in.
+> **CODE-REVIEW QUEUE, recorded so it is not lost.** `code-review` over O145-O151 returned seven
+> findings, three of them guards weaker than their own doc comments: `qa-record.test.ts` matches
+> only double-quoted capture paths so two template-literal capture sites still overwrite the design
+> record; `keyboard-focus.spec.ts` reads RESTING computed style, so a link with `outline: none` and
+> no `:focus-visible` rule passes; both new guards filter `tabIndex < 0` out of the denominator,
+> which is exactly the state of an unreachable clickable div; `profile-layout.spec.ts` demands
+> every experience item fit one line at 390 (46 chars against a ~40 budget) and uses non-null
+> assertions on two conditionally-rendered blocks; `scale-fixture.ts` hand-copies the CareArea and
+> EIQuality unions with no exhaustiveness check, so adding a member silently narrows the measured
+> space while the pins stay green; and the O146 range's `margin-bottom: -8px` collapses with the
+> labels' `margin-top: 5px`, so the labels overlap the slider's bottom 3px and win hit-testing.
+> That last one is a defect in a unit I closed calling it pixel-neutral. NEXT FIRING STARTS HERE.
+> Gate met: `pnpm verify` green (219 files, 3607 passed), landing + touch-floor + keyboard-focus +
+> mobile-fit + a11y green (21) after the two red gates were fixed, capture in qa/team-o152/, and
+> not one invented attribute in the entry.
+
 
 > **O151 (the hardening pass law 5 actually asks for — and O144 was wrong that it could not be
 > done) — claimed 2026-08-21T09:40Z by loop-0820s.** O144 concluded that `code-review`,

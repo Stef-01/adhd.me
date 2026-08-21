@@ -1563,3 +1563,60 @@ Best practice consulted as asked: an 8pt spacing scale, proximity grouping, one 
 web interface guidelines' `text-wrap: pretty` rule for widows.
 
 Captures: qa/profile-o150/ (desktop and phone, after).
+
+## O152 — Saif Tareen joins the team page (2026-08-21)
+
+Founder-directed: *"add to team Saif Tareen, bachelor of commerce student at Macquarie
+university and works at Parliament of australia so have those logos in similarly"*, with a
+photograph attached.
+
+### He is a real person, so the entry holds three facts and nothing else
+
+- [x] **No `role`, no `remit`.** Every other plate carries both, and both are *characterisations*.
+  Writing one for a named person nobody quoted is exactly what W193 exists to stop. The type now
+  makes them optional and the plate renders without them — which is also the web guidelines'
+  "handle empty states" rule, since a blank `<span>`/`<p>` is broken UI. One message from the
+  founder fills them in.
+- [x] **The portrait is blocked, not substituted.** The photo arrived as a chat image, not a file,
+  and there is no path from those bytes to `public/`. The tree's hardest rule is that nothing here
+  generates a face for a real person — so there is no stand-in, no crop of something similar, no
+  placeholder that resembles him. `portrait: null` renders the monogram fallback the data model
+  documents for precisely this case. Drop `public/saif-tareen.png` in at 3:4 and the entry is one
+  line from done.
+- [x] **The portrait `alt` was fixed while here.** It read `${name}, co-founder of ADHD.ME` for
+  everybody. The page is the *Team*, not only its founders, so that asserted a role the page
+  cannot promise. A portrait's alt is now the person's name.
+
+### "Those logos in similarly" — the answer was already in the file
+
+`founders.ts` states the rule: a mark ships only *"when there is one licensed to use"*, otherwise
+the entry falls back to a wordmark, because *"a university mark is trademarked and not ours to
+copy off a website"*. Bond, USyd and ANU all render as wordmarks for that reason — so a wordmark
+**is** how this page treats a university, and "similarly" is satisfied exactly.
+
+Parliament is the stronger case: its identifier is the **Commonwealth Coat of Arms**, whose use is
+restricted under Commonwealth guidelines and is not a mark a private company may apply to itself.
+Copying either was the one reading of "logos" that would have broken the law the file already
+carries.
+
+### Two red gates absorbed, and a weakness in my own sweep
+
+The accessibility batch went red on controls that have nothing to do with this unit:
+
+| control | measured | why it was never caught |
+|---|---|---|
+| `/demo` "Open booking link" ×3 | `115×40` | renders only once an invitation is `sent`/`queued` |
+| `/console/referrals` reason input | `236×38` | renders only when a referral awaits an answer |
+| `/console/referrals` "Decline" | `91×42` | same |
+
+All three are **state-dependent surfaces**. Run standalone, the touch sweep sees `/demo` and
+`/console/referrals` in their *empty* states and reports a clean pass; it took another spec seeding
+mock data in the same batch to expose them. Fixed here because a red gate blocks the unit.
+
+- [ ] **Recorded, not fixed: the O145/O148 touch sweep measures whichever state it happens to
+  find.** Its population is not the set of controls the product can render, only the set that
+  happens to be on screen. The fix is for the sweep to seed the console and demo fixtures before
+  measuring, the way the console leg already signs in. Named here so it is a unit rather than a
+  surprise.
+
+Capture: qa/team-o152/team-mobile.png.
