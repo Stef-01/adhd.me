@@ -167,19 +167,40 @@ describe("W200 the four rail properties plus the fifth, re-derived", () => {
       expect(property.statement.length, `${property.id} states nothing`).toBeGreaterThan(80);
       expect(property.establishedBy.length, `${property.id} cites no unit`).toBeGreaterThan(0);
       // The gate's word is RE-DERIVED. A one-line "still true" is the thing it forbids.
-      expect(property.y4Rederivation.length, `${property.id} is asserted, not re-derived`).toBeGreaterThan(200);
+      for (const rederivation of property.rederivations) {
+        expect(
+          rederivation.note.length,
+          `${property.id} ${rederivation.year} is asserted, not re-derived`,
+        ).toBeGreaterThan(200);
+      }
       expect(property.enforcedBy, `${property.id} names no test`).toMatch(/\.test\.ts/);
     }
   });
 
-  it("names a Y4 unit in every re-derivation, so none of them is about the old tree", () => {
+  it("re-derives every property against every year that has closed", () => {
+    // W259 made this a list so a later year cannot overwrite an earlier answer. The years are
+    // checked rather than counted: a property carrying only Y4 has not been re-derived at five.
     for (const property of RAIL_PROPERTIES) {
-      const units = [...property.y4Rederivation.matchAll(/\bW(\d+)\b/g)].map((m) => Number(m[1]));
-      expect(units.length, `${property.id} cites no unit at all`).toBeGreaterThan(0);
-      expect(
-        units.some((u) => u >= Y4_FIRST_UNIT),
-        `${property.id} re-derives against no Y4 unit`,
-      ).toBe(true);
+      const years = property.rederivations.map((r) => r.year);
+      expect(years, `${property.id} is missing a year`).toEqual(["Y4", "Y5"]);
+      expect(new Set(years).size, `${property.id} re-derives one year twice`).toBe(years.length);
+    }
+  });
+
+  it("names a unit from the right year in each re-derivation, so none is about the old tree", () => {
+    // Y4's re-derivations must cite a Y4 unit; Y5's must cite one from Y5, or it is a Y4 answer
+    // with a new label — the exact carrying-forward the gate forbids.
+    const FIRST_OF = { Y4: Y4_FIRST_UNIT, Y5: 209 } as const;
+    for (const property of RAIL_PROPERTIES) {
+      for (const { year, note } of property.rederivations) {
+        const units = [...note.matchAll(/\bW(\d+)\b/g)].map((m) => Number(m[1]));
+        expect(units.length, `${property.id} ${year} cites no unit at all`).toBeGreaterThan(0);
+        const floor = FIRST_OF[year as keyof typeof FIRST_OF];
+        expect(
+          units.some((u) => u >= floor),
+          `${property.id} ${year} re-derives against no ${year} unit — it cites ${units.join(", ")}`,
+        ).toBe(true);
+      }
     }
   });
 });

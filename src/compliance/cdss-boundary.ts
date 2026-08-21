@@ -60,8 +60,17 @@ export interface RailProperty {
   statement: string;
   /** The units that establish it. */
   establishedBy: readonly string[];
-  /** What Y4 added that could have broken it, and why it did not. Re-derived, not carried. */
-  y4Rederivation: string;
+  /**
+   * What each year added that could have broken it, and why it did not.
+   *
+   * W259 made this a LIST. It was `y4Rederivation`, a field with a year in its name, which forces
+   * every later re-derivation to either overwrite the earlier answer — rewriting history, which
+   * this tree refuses — or add `y5Rederivation`, `y6Rederivation` and rename the schema annually.
+   * Y4's text is carried here verbatim rather than paraphrased (W177's rule): a re-derivation is
+   * evidence about a particular year and summarising it later loses the thing that made it
+   * evidence.
+   */
+  rederivations: readonly { year: string; note: string }[];
   /** The test that enforces it, so the property is not merely believed. */
   enforcedBy: string;
 }
@@ -72,8 +81,18 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
     statement:
       "The product never selects a clinician. It answers 'may this clinician be offered this pathway' — a yes/no per clinician, deliberately not a ranking, because an ordered list of clinicians for a clinical pathway is a recommendation about who is better.",
     establishedBy: ["W123", "W82 (deliberately unused)"],
-    y4Rederivation:
+    rederivations: [
+      {
+        year: "Y4",
+        note:
       "Y4 built the surface most likely to break this: W189's directory search literally takes a patient's need and returns clinicians. Re-derived rather than trusted — results are ordered by declared attributes with no clinical scoring, the ordering basis renders to the reader so the order is not mistaken for a judgement, W190 gives the clinician removal-only control over what is said about them, and W188 refuses to infer network membership from activity. The strongest new guard is W184/W187 refusing comparative claims in profile copy, which closes the prose route to the same recommendation, and W198 refusing price comparison, which closes the cheapest-first route to it.",
+      },
+      {
+        year: "Y5",
+        note:
+          "Y5 put the sharpest case in front of this property and it is not the one the plan expected. THE ROW POINTED AT Q17's matching optimisation, and Q17 is clean: W214's matcher takes a candidate type with NOWHERE to put a clinical attribute, W209's response graph counts what came back rather than scoring anybody, and W217 — learned ranking — is blocked from day one because a learned ranker over patients would contradict W201's published notice. THE HARDER CASE IS OLDER AND W258 SURFACED IT: `rankClinicians` in `src/demo/clinicians.ts` returns AN ORDERED LIST OF CLINICIANS on /finder, from a person's free text, which is the literal shape this property refuses. Re-derived rather than waved through, and the distinction is real but narrow: the property refuses an ordered list of clinicians FOR A CLINICAL PATHWAY, and the finder orders against what a person SAID they want — declared attributes, languages, manner, care areas — with no clinical scoring and no pathway involved. Three things hold the line and all three are tested rather than believed: the weights are per-clinician and per-phrase because W83 refused a general relevance model outright, calling it \"a quality ranking of named clinicians derived from inference\"; the ordering basis renders to the reader, so the order cannot be mistaken for a judgement (the same guard Y4 relied on for W189's directory search); and W258's ADM entry records three triggers, any of which moves it. THE HONEST RESIDUE: this property and that function have coexisted since Year 1 and no re-derivation before this one wrote them down together.",
+      },
+    ],
     enforcedBy: "src/directory/search.test.ts and src/directory/copy-lint.test.ts",
   },
   {
@@ -81,8 +100,18 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
     statement:
       "The product never decides that care transferred. An explicit recorded acceptance is required; there is no timeout, no assumed handover, and no state in which nobody is watching.",
     establishedBy: ["W134", "W142"],
-    y4Rederivation:
+    rederivations: [
+      {
+        year: "Y4",
+        note:
       "Q14 audits outcomes over that rail, which is where an inferred transfer would now appear. It does not infer one: W170's verdict is a statement about which events were RECORDED, `reached` requires an event evidencing the final stage, and there is no path returning it from an absence. W173's dashboard renders those verdicts and adds no arrival of its own.",
+      },
+      {
+        year: "Y5",
+        note:
+          "Y5 built the lane where an inferred handover would now be cheapest to introduce, and it refuses one structurally. W235-W246 map referrals and appointments to FHIR and back, which is exactly where \"the other system has it now\" would creep in — and W244 makes that impossible to say: an exchange has THREE outcomes, and the only route to `acknowledged` is the receiving system putting an acknowledgement in its payload. A 200 is recorded and is deliberately not decisive, because a success status means a request reached something willing to answer — a gateway, a queue, a load balancer — and none of those is the system that was meant to receive it. W239's disclosure ledger records what left and to whom without concluding anything about what happened next, and W253's platform API is read-only, so no outside system can assert a transfer either. The one thing worth flagging: `wasReceived` exists and returns true only for `acknowledged`, which is the whole property in one function.",
+      },
+    ],
     enforcedBy: "src/outcomes/model.test.ts and src/referrals/acceptance.test.ts",
   },
   {
@@ -90,8 +119,18 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
     statement:
       "The product never concludes from silence. It reports `unknown` rather than inferring, and reports disagreements between its state machines rather than resolving them.",
     establishedBy: ["W135", "W120"],
-    y4Rederivation:
+    rederivations: [
+      {
+        year: "Y4",
+        note:
       "Y4 strengthened this rather than eroding it, and the strengthening is worth recording because it is the property most often lost by accident. W170 made `not_recorded` a first-class verdict that is never folded into failure; W179 split a zero into 'nothing happened' and 'nothing arrived', which are opposite operator actions; W171 refuses to report an absent escalation as 'none needed'; and W196 refuses to emit a figure at all over an empty basis, because a 0 sent to a commissioner reads as a fact about care.",
+      },
+      {
+        year: "Y5",
+        note:
+          "Y5 IS THIS PROPERTY AT A BOUNDARY THE TREE CANNOT SEE ACROSS, which is the hardest place to hold it. W244 says outright that unknown can only be resolved by the other side — not by a retry that also timed out, not by time passing, not by nobody complaining — and its `UnknownReason` union splits silence into five distinguishable kinds rather than one bucket, so \"no answer\" never collapses into \"fine\". W243 needed the same monotonicity pointing the other way for consent, and W247 found the writer that could have broken it: `withdrawDisclosureConsent` stored an unvalidated date and a string comparison then failed OPEN, leaving a withdrawal recorded and inert. Fixed, and worth recording under this property specifically, because a withdrawal that silently never takes effect IS the product concluding from silence. W246's console then refuses to render a zero without the sentence saying which kind of zero it is, which is W179's split applied to counts nobody has attempted.",
+      },
+    ],
     enforcedBy: "src/outcomes/model.test.ts, src/ops/silence.test.ts, src/reporting/model.test.ts",
   },
   {
@@ -99,8 +138,18 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
     statement:
       "The product writes no clinical text. G5 governs content ADHD.ME publishes; a GP writing about their own patient is professional communication this product neither generates nor edits.",
     establishedBy: ["W131", "W139"],
-    y4Rederivation:
+    rederivations: [
+      {
+        year: "Y4",
+        note:
       "Y4 added the two places clinical text could have entered and neither did. Every pathway, interval and education catalogue still ships empty behind G5, so there is no authored clinical content to write, and W191's dermatology vertical is a spec awaiting the same sign-off rather than shipped content. `/clinicians` carries clinical guidance and is the one live tension — W192 classified it professional and flagged the underlying question as the founder's, which is a disclosure decision rather than the product generating text.",
+      },
+      {
+        year: "Y5",
+        note:
+          "Y5 added two lanes that could each have authored clinical text and neither did. W236's referral profile carries a clinician's free-text narrative CHARACTER-IDENTICAL in both directions and never edits it, on the stated ground that the words are that clinician's professional responsibility rather than this product's; W237's contract tests that property over a corpus rather than on one example. W248 and W250 assembled the second and third verticals and named NO CONDITION AT ALL — not because the machinery avoided it but because the ledger contradicted itself about which care area they hold, and the loop refused to pick one. Every SHIPPED_* registry that could carry clinical content is still empty and pinned: W256 re-derived that from source and found 22 registries, 21 empty, the one non-empty operational with every conditionCode null. The tension Y4 flagged on /clinicians is unchanged and still the founder's.",
+      },
+    ],
     enforcedBy: "src/compliance/public-surfaces.test.ts and the empty SHIPPED_* registries",
   },
   {
@@ -108,8 +157,18 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
     statement:
       "The product informs a clinician and never advises about a patient. 'This pathway changed on 3 March; here is what changed' informs; 'you should review this patient against the new criteria' advises, and the second sentence is one word from the first.",
     establishedBy: ["W144", "W150"],
-    y4Rederivation:
+    rederivations: [
+      {
+        year: "Y4",
+        note:
       "THE ONE THAT DID NOT SURVIVE INTACT — not the property, but its enforcement. W150's declared copy surface is six files under src/education/, and every quarter of Y4 added operator copy outside it that no linter reached: W179's silence copy, W171 and W176's empty-state copy, W173's dashboard, W187 and W198's directory rendering, W196's refusals, W159's contradiction copy in the verticals console. Re-running the advice rules over all of it found no advice about any patient, so the property held; the control did not follow the product. This unit extends the declared surface to every Y4 module, reads membership off the tree rather than a list, and accepts the three operational collisions (W179, W158, W159) by module, export and matched string rather than blunting the rule that caught them.",
+      },
+      {
+        year: "Y5",
+        note:
+          "THE ENFORCEMENT MOVED AGAIN, WHICH IS THE SAME STORY Y4 TOLD AND IS WORTH TELLING TWICE. Y4 found the declared copy surface had not followed the product; Y5's units all registered their copy correctly, and W246 then found the register itself checks only one direction — every module must appear, and nothing checks that every SENTENCE a declared module exports is declared. It measured 111 undeclared string-bearing exports, most of them data, and recorded the gap rather than closing it with a rule that would have carried 111 exceptions. So the property holds and the control is known-incomplete in a way nobody had written down. Re-running the advice rules across everything Y5 added found no advice about any patient. W255 is the strongest new guard: a refusal carries NOTHING from the request, so no error path can advise by echoing something a caller sent — and W244's carried text from another system is flagged in code as the one door the advice linter cannot cover, with the rule for the day anything renders it.",
+      },
+    ],
     enforcedBy: "src/compliance/cdss-boundary.test.ts (this unit) plus src/education/advice-lint.test.ts",
   },
 ];
