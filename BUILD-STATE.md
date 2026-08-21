@@ -175,6 +175,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > for the other's rows — Y4-1's assertion as it should have been, over the census rather than a
 > sample; the writer half too, so a literal or caller-supplied practice fails the suite; read-only
 > asserted structurally; seeded failures for each; `pnpm verify` green.
+>
+> **DONE 2026-08-21T12:14Z at `023440c`.** `src/platform/scope.ts` (the brand) and
+> `src/platform/api.ts` (the census), 16 tests.
+> **THE BRAND IS THE UNIT.** `resolveScope` is the only thing that can construct a `ScopedPractice`
+> — the symbol is never exported — so an endpoint cannot be handed a raw id in any code path,
+> including ones nobody has written. An unscoped read is not refused by a check somebody
+> remembered to write; **it does not typecheck.** The console's own sentence is carried rather than
+> rewritten: `activePracticeFor` already says a requested practice is *"a SELECTION, not a grant"*.
+> This adds no better rule — it makes the rule impossible to skip.
+> **AND THE FIRST VERSION OF THE BRAND THREW ON EVERY CALL.** I wrote `[scopeBrand]: true` into the
+> object literal; `declare const` has no runtime value, so ten of fifteen tests failed with
+> `scopeBrand is not defined`. A phantom brand is a claim about the type system, not a field —
+> W243's consent does the same and I had it open.
+> **THE ASSERTION IS THE HALF THE ROW WAS REALLY ASKING FOR.** Y4-1's lesson is not "scope your
+> reads": `Complaint.practiceId` existed from W43, and W206's diagnosis is that *the readers were
+> unscoped BECAUSE the writer was* — intake stamped a literal id no console mints, so every
+> complaint belonged to nobody. **A test asserting "this read takes a practice" would have passed
+> every day of those two years.** So the sweep seeds two practices through the REAL writers with
+> DIFFERENT counts (equal counts let a cross-practice read pass by coincidence) and runs over the
+> whole census, because Y4-1 lived in one of several reads and a spot check elsewhere would have
+> reported the store clean. Seeding the unscoped read back fails it; **so does restoring the writer
+> literal**, which is the half a signature check cannot see.
+> **WHAT THE SURFACE REFUSES TO RETURN WAS DECIDED FIRST, BECAUSE IT SHAPES EVERYTHING ELSE.** No
+> row about one person. An outside system reading patient-level data sits behind G2 and arguably
+> G8, and **neither gate covers an API this product publishes itself** — there is no ruling to build
+> behind, which is not the same as being permitted. Endpoints answer questions about a PRACTICE:
+> counts and settings. That is also what makes it assertable — a patient id is seeded into the data
+> and every endpoint's output swept for it, which a surface returning rows could not support.
+> **NO ROUTE HANDLERS, AS A DECISION.** W254 is the scope model, W255 the refusal semantics. Live
+> HTTP now would put a surface in front of both: an endpoint whose scopes are undefined and whose
+> error paths have never been swept for patient data. The surface ships as a VALUE; the transport
+> goes on top once the units that make it safe exist.
+> **W201 CORRECTED ME, WHICH IS THE THIRD REGISTER THIS SESSION TO DO SO.** It accepts only modules
+> its detector finds, so declaring `api.ts` beside `scope.ts` was OVER-declaration — the same
+> both-directions strictness that blocked a `FOLD_SITES` declaration at W252, working the other
+> way. And `scope.ts` reaches that register by exporting a `Refusal` union rather than by anything
+> about patients; the entry says so, because a classification that implied a detection it did not
+> make is the sort of thing that reads as coverage later.
+> **Five seeded failures**: an unscoped read (Y4-1 exactly), the writer literal restored, a
+> resolver that ignores what was requested, an endpoint defined but left out of the census, and a
+> patient id in an output.
+> Verification: `pnpm verify` green (248 files, 4003 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W252 (vertical scaling: the registers at N verticals) — claimed 2026-08-21T11:52Z by
 > loop-0821a.** Order-independence and a stated time budget over 20 synthetic verticals, with the
@@ -7030,7 +7073,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W250 | done | loop-0821a | 2026-08-21T11:35Z | 8a52c57 | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
 | W252 | done | loop-0821a | 2026-08-21T11:52Z | 6ac2051 | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
-| W253 | claimed | loop-0821a | 2026-08-21T12:02Z | — | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
+| W253 | done | loop-0821a | 2026-08-21T12:02Z | 023440c | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | available | — | — | — | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | available | — | — | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | available | — | — | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
