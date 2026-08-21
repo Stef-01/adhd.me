@@ -1293,3 +1293,57 @@ does not actually break the thing proves nothing about the gate. The second seed
 real.
 
 Captures: qa/touch-o145/ (join form, footer, stepper at 390).
+
+## O146 — the range slider O145 recorded rather than fixed (2026-08-21)
+
+O145 swept 61 controls under the 44px floor down to one and named the survivor inside the gate:
+`/clinicians`'s "Target practice mix" range at `306×16`. It was left because a range's target is
+its *thumb*, whose geometry is engine-specific and not reachable by the padding trick the other
+twelve fixes used.
+
+### Fixed, and the surroundings are pixel-identical
+
+No custom track or thumb pseudo-elements — a native range centres its track inside the element's
+height, so growing the box renders the same thin bar with the same thumb and gains a full-height
+drag area. That keeps this a hit-area change rather than a restyle.
+
+| landmark | before | after |
+|---|---|---|
+| the input | `886..902` (16px) | `872..916` (**44px**) |
+| track centre | 894 | **894** |
+| `10% / 100%` labels | `913..926` | `913..926` |
+| the mix card | `790..943` | `790..943` |
+| "Build my pathway" | `969..1027` | `969..1027` |
+
+- [x] Getting there took two corrections, both found by measuring instead of looking. A bare
+  `input` is **inline-level**, so the negative bottom margin meant to pay for the extra height did
+  nothing — vertical margins do not shrink a line box — and everything below the slider moved
+  down 14px. `display: block` fixed that and then overshot by 6px, because block layout drops the
+  inline descender space the input had been sitting on. `margin-bottom: -8px` is that 6px
+  returned. The eye called the first attempt "looks the same"; the numbers did not.
+- [x] Worth the trouble beyond compliance: it is a slider on a phone, the input where a thin
+  target is hardest to hit and where missing it means dragging the page instead.
+
+### Deliberately not touched
+
+- [ ] **The join hero's range stays `sr-only`.** Its visible affordance is the tappable
+  percentage chips beside it, so the input is a screen-reader control and the floor does not
+  apply to it. The gate's `.sr-only` exclusion already covers this and the exclusion stands.
+
+### The gate was flaky, and that is the more important finding
+
+`ACCEPTED` is now empty — the test asserts every accepted exception *still fires*, so fixing this
+one failed the test until the entry was deleted. That mechanism worked exactly as designed.
+
+But emptying it surfaced something worse: **the sweep O145 shipped was measuring before the web
+font applied.** On one run `/about`'s "Final-year MD candidate, Bond University" link reported
+`265×44` as an offender and on the next it did not — a link whose isolated height is exactly 44,
+sitting a fraction under whenever it was measured with fallback metrics. `waitUntil: "networkidle"`
+does not cover font application; `await document.fonts.ready` does. O145's green run was luck.
+
+A gate that fails at random is worse than no gate, because the first response to a random red is
+to stop believing it — and this one guards an accessibility floor. Now green on two consecutive
+runs with the allowlist empty.
+
+Captures: qa/touch-o146/clinicians-slider-after.png; the before is
+qa/touch-o145/clinicians-stepper-mobile.png, captured one change ago.

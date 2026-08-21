@@ -162,6 +162,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `e2e/touch-floor.spec.ts` (the test asserts the exception still fires, so fixing it fails until
 > the entry goes — which is the mechanism working as designed), the sweep green at ZERO under the
 > floor, a before/after capture proving the bar looks identical, `pnpm verify` green.
+> DONE 2026-08-21. The control is 44px tall and its surroundings are PIXEL-IDENTICAL, which is
+> the whole claim and it is measured rather than asserted: track centre 894 before and after,
+> the 10%/100% labels at 913..926 both ways, the mix card at 790..943 both ways, the "Build my
+> pathway" button at 969..1027 both ways. Only the input's own box changed, 16px to 44px.
+> Getting there took two corrections and both came from measuring instead of looking, which is
+> worth recording because the eye passed the first attempt. A bare `input` is INLINE-level, so
+> the negative bottom margin meant to pay for the extra height did nothing — vertical margins do
+> not shrink a line box — and everything below the slider dropped 14px. `display: block` fixed
+> that and then overshot by 6px, because block layout drops the inline descender space the input
+> had been sitting on; `margin-bottom: -8px` is that 6px handed back. A capture "looking the
+> same" is not the same as the geometry being the same.
+> THE GATE WAS FLAKY AND THAT IS THE BIGGER FINDING. Emptying `ACCEPTED` — which the test forced,
+> by asserting every accepted exception still fires — surfaced that the sweep O145 shipped
+> measures before the web font applies. `/about`'s "Final-year MD candidate" link reported 265x44
+> as an offender on one run and not the next: a link whose isolated height is exactly 44, sitting
+> a fraction under whenever it was measured with fallback metrics. `waitUntil: "networkidle"` does
+> not cover font application; `await document.fonts.ready` does. **O145's green run was luck**, and
+> a gate that fails at random is worse than no gate, because the first response to a random red is
+> to stop believing it — and this one guards an accessibility floor. Fixed in this unit and green
+> on two consecutive runs with the allowlist empty.
+> The join hero's range is deliberately untouched: `sr-only`, with the tappable percentage chips
+> as its visible affordance, so it is a screen-reader control and the floor does not apply. The
+> gate's existing `.sr-only` exclusion covers it and stands.
+> Gate met: ZERO controls under the floor across fifteen public routes with an EMPTY allowlist,
+> the geometry pinned both ways in the DESIGN-QA table, `pnpm verify` green (219 files, 3607
+> passed), the sweep green twice running, capture in qa/touch-o146/.
 
 > **O145 (the 44px floor was enforced by memory; now it is swept) — claimed 2026-08-21T04:55Z
 > by loop-0820s.** O14 set a 44px touch floor and `adhdme-taste` carries it as law. Nothing

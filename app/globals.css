@@ -3268,9 +3268,20 @@ textarea:focus-visible {
   letter-spacing: -0.04em;
 }
 
+/* O146: the last control under O145's 44px floor, at 306x16.
+   A native range centres its track inside the element's height, so growing the box to 44 renders
+   the SAME thin bar with the same thumb and gains a full-height drag area — no custom track or
+   thumb pseudo-elements, which is what keeps this a hit-area change rather than a restyle. The
+   18px top margin pays for 14 of the extra height and a negative bottom margin pays for the rest,
+   so the bar and the 10%/100% labels under it sit exactly where they sat.
+   This one is worth the trouble beyond compliance: it is a slider on a phone, the input where a
+   thin target is hardest to hit and where missing means dragging the page instead. */
 .cv2-mix-card input {
+  display: block;
   width: 100%;
-  margin-top: 18px;
+  height: 44px;
+  margin-top: 4px;
+  margin-bottom: -8px;
   accent-color: var(--cv2-accent);
   cursor: pointer;
 }

@@ -18,7 +18,10 @@ const PUBLIC_ROUTES = [
  * failure mode W53's audit gate was built to avoid.
  */
 const ACCEPTED: ReadonlyArray<{ route: string; name: string }> = [
-  { route: "/clinicians", name: "Target practice mix" },
+  // Empty, and that is the point: O145 recorded `/clinicians`'s "Target practice mix" range here
+  // at 306x16, and O146 fixed it, so the entry had to go. The test below asserts every accepted
+  // exception STILL FIRES, which is what forced this deletion rather than leaving a stale
+  // allowlist entry describing a defect that no longer exists.
 ];
 
 test.describe("O14's 44px touch floor", () => {
@@ -29,6 +32,13 @@ test.describe("O14's 44px touch floor", () => {
 
     for (const route of PUBLIC_ROUTES) {
       await page.goto(route, { waitUntil: "networkidle" });
+      // WAIT FOR THE WEB FONT, NOT JUST THE NETWORK. Measured before the font applies, a link's
+      // line-height is the fallback's and its box can sit a fraction under the floor: this test
+      // shipped in O145 without this line and reported `/about`'s "Final-year MD candidate" link
+      // at 265x44 as an offender on one run and not the next, purely on font-load timing. A gate
+      // that fails at random is worse than no gate, because the first response to a random red is
+      // to stop believing it.
+      await page.evaluate(() => document.fonts.ready);
       const found = await page.evaluate(() => {
         const out: string[] = [];
         let seen = 0;
