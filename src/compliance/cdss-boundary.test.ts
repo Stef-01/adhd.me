@@ -107,6 +107,7 @@ const NAMESPACES: Record<string, () => Promise<Record<string, unknown>>> = {
   "src/console/capacity.ts": () => import("@/console/capacity"),
   "src/capacity/coupling.ts": () => import("@/capacity/coupling"),
   "src/capacity/drift.ts": () => import("@/capacity/drift"),
+  "src/interop/terminology.ts": () => import("@/interop/terminology"),
   "src/interop/contract.ts": () => import("@/interop/contract"),
   "src/interop/referral-profile.ts": () => import("@/interop/referral-profile"),
   "src/interop/fhir.ts": () => import("@/interop/fhir"),

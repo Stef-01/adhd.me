@@ -169,6 +169,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > refused with the code NAMED; the set of codes needing binding derived from the lane's own emitted
 > codings, both directions; nothing guessed — asserted by the absence of any fallback or nearest-match
 > path; `pnpm verify` green.
+> DONE 2026-08-21. `src/interop/terminology.ts` + 10 tests, and the bindings ship EMPTY as claimed.
+> **THE REFUSAL NAMES THE CODE, and the test checks the name is in the sentence rather than that a
+> refusal happened.** Eleven local codes the lane emits, each refused individually, each sentence
+> containing its own code in quotes and its system, and each carrying `emittedBy` so the person who
+> has to find the concept knows which file to open. Seeding an anonymous "some codes have no binding
+> recorded" fails two tests. "Some codes are unbound" passes a careless reading and leaves nobody
+> able to act, which is why the row asked for the sharper form.
+> **THE WORK ORDER IS DERIVED FROM WHAT THE LANE ACTUALLY EMITS**, checked against the codings W235
+> and W236 really produce over 200 appointments and every reason × request combination. Removing one
+> vocabulary from it fails three tests. A hand-listed version would have gone stale the first time a
+> code was added — the same silence W235 spent a unit ending, one level up.
+> **AND THE OPEN SYSTEMS ARE NAMED RATHER THAN OMITTED.** The condition code and the W120 fact codes
+> come from a practice's own registers, so there is no fixed list to bind — and "this system has no
+> fixed vocabulary" is a different fact from "nobody has listed this system's vocabulary yet". A
+> reader of the work order would otherwise have to guess which applied. Every system the referral
+> emits is asserted to be either enumerated or declared open: no third category.
+> Nothing is guessed: no nearest match, no default terminology, no "unknown" concept, and no options
+> bag with a fallback (`@ts-expect-error`). An unbound code is a gap somebody fills; a wrongly bound
+> one is a fact a clinician acts on.
+> `releaseVersion` is required and its refusal says why — SNOMED CT-AU is re-released and concepts
+> are inactivated between releases, so a binding without the release it was read from cannot be
+> re-checked by anybody. That is the field that distinguishes this provenance from W227's calendar.
+> **AND A TEST FILE PASSED VITEST WHILE FAILING TYPECHECK, FOR THE SECOND TIME THIS SESSION.**
+> `bindCode(...).bound ? "" : bindCode(...).copy` cannot narrow across two calls; vitest ran it
+> happily and `pnpm verify` caught it. The spec run is not the gate, and this is the second unit
+> where believing it would have shipped a file that does not compile.
+> Non-vacuity, five breaks: fill the shipped bindings from memory (2 tests); refuse the code
+> anonymously (2); accept a binding with no release version (1); leave an emitted vocabulary out of
+> the work order (3); let a duplicate local code overwrite the earlier binding (1).
+> Gate: `pnpm verify` green — 238 files, 3865 tests, build, audit:gate PASS.
+> **REMAINING (a data change, no code change): the eleven bindings.** Filling them means opening a
+> SNOMED CT-AU release and a LOINC one and recording what they say, with the release version. The
+> work order is `codesNeedingBinding()` and it cannot go stale.
 
 > **W237 (the interop conformance harness) — claimed 2026-08-21T09:35Z by loop-0821a.** W235 and
 > W236 each ship a mapping with its own tests. The harness is the thing that says what a
@@ -6248,7 +6281,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | done | loop-0821a | 2026-08-21T09:35Z | aa27c65 | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
-| W238 | claimed | loop-0821a | 2026-08-21T09:44Z | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
+| W238 | done | loop-0821a | 2026-08-21T09:44Z | PENDING | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |

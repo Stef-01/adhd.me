@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/terminology.ts",
+    operatorCopy: [],
+    notCopy:
+      "Declared with an EMPTY `operatorCopy` deliberately. The prose this module holds is written to whoever is doing an integration, never to a practice or a patient: the sentence naming an unbound code, the reasons a binding row was refused, and the two systems whose vocabularies are open because they come from a practice's own registers. The refusal sentence is composed per call and names the code — that is the row's own requirement, and its point is that somebody can act on it. Nothing here describes a patient, a condition or a next clinical step, and the bindings themselves ship EMPTY: a SNOMED CT-AU concept id written from memory would look exactly as authoritative as a correct one and bind a referral to the wrong concept, so the loader ships and the values wait for a release file somebody has opened.",
+  },
+  {
     module: "src/interop/contract.ts",
     operatorCopy: [],
     notCopy:
