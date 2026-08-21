@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { TEAM_PAGE_PUBLIC } from "./about/founders";
 import {
   motion,
   useReducedMotion,
@@ -400,7 +401,8 @@ export function StoryLanding() {
             <Link href="/examples">Worked examples</Link>
             <Link href="/faq">Questions</Link>
             <Link href="/approach">The approach</Link>
-            <Link href="/about">About us</Link>
+            {/* O155: the About us door is gated with the route — see TEAM_PAGE_PUBLIC. */}
+            {TEAM_PAGE_PUBLIC && <Link href="/about">About us</Link>}
             <Link href="/practices">For practices</Link>
             <a href="mailto:stefan.thottunkal@gmail.com">Contact</a>
             <Link href="/privacy">Privacy</Link>

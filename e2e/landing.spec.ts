@@ -22,38 +22,33 @@ test("landing page renders the B2B positioning and CTAs", async ({ page }) => {
   await expect(page).toHaveURL(/\/practices$/);
 });
 
-test("About us is its own door: the footer button opens /about, titled Team (O90)", async ({ page }) => {
-  // Founder-directed move: the founders chapter left the landing page for /about, reached
-  // from the "About us" button at the bottom of every page. The title is the founder's exact
-  // spec — "Team", nothing else.
+test("the team page is gated shut, with no door and no crawl (O155)", async ({ page }) => {
+  // Founder-directed 2026-08-21: "make team hidden at the moment… we are still building and we
+  // dont know who will be on it finally". This test used to assert the opposite — that the About
+  // us door opened /about — and it is INVERTED rather than deleted, so the gate cannot be removed
+  // by accident and the day it reopens somebody has to change this file on purpose.
+  //
+  // Hiding a page is four things, and missing any one leaves it half-hidden.
   await page.goto("/");
-  await page.locator(".story-footer").getByRole("link", { name: "About us" }).click();
-  await expect(page).toHaveURL(/\/about$/);
-  await expect(page.getByRole("heading", { level: 1, name: "Team" })).toBeVisible();
-  // And the chapter genuinely moved: the landing no longer carries it.
+
+  // 1. No door, in either footer.
+  await expect(page.locator(".story-footer").getByRole("link", { name: "About us" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "About us" })).toHaveCount(0);
+
+  // 2. The route does not serve. Unlinking alone would hide the door and leave the room open —
+  //    /about publishes named individuals' faces, roles and affiliations to anybody with the URL.
+  const response = await page.goto("/about");
+  expect(response?.status(), "/about still serves while the team is gated").toBe(404);
+  await expect(page.locator(".story-founders")).toHaveCount(0);
+
+  // 3. Not advertised to crawlers. A gated route still listed in the sitemap is hidden from
+  //    readers and announced to robots.
+  const sitemap = await (await page.request.get("/sitemap.xml")).text();
+  expect(sitemap).not.toContain("/about");
+
+  // 4. The landing never got the chapter back when the page went away.
   await page.goto("/");
   await expect(page.locator("#about")).toHaveCount(0);
-
-  // The team, Dr Anusha's plate among them with her real portrait. Five since O152 added
-  // Saif Tareen; the count is asserted so a plate cannot vanish silently.
-  await page.goto("/about");
-  const plates = page.locator(".story-founders > li");
-  await expect(plates).toHaveCount(5);
-  await expect(page.getByText("Dr Anusha Saxena")).toBeVisible();
-  // O152: a portrait's alt is the person's name. It used to append "co-founder of ADHD.ME",
-  // which asserts a role the page cannot promise for everybody on it.
-  await expect(page.getByAltText("Dr Anusha Saxena")).toBeVisible();
-  // The new plate carries only what the founder supplied: a name and two affiliations, no
-  // invented role or remit, and a monogram until a photograph exists.
-  await expect(page.getByText("Saif Tareen")).toBeVisible();
-  await expect(page.getByLabel("Bachelor of Commerce student, Macquarie University")).toBeVisible();
-  await expect(page.getByLabel("Parliament of Australia")).toBeVisible();
-
-  await page.waitForLoadState("networkidle");
-  await page.screenshot({ path: "qa/_runs/about-o90/about-desktop.png", fullPage: true });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.waitForLoadState("networkidle");
-  await page.screenshot({ path: "qa/_runs/about-o90/about-mobile.png", fullPage: true });
 });
 
 test("primary CTA goes to the demo; sign-in goes to the console", async ({ page }) => {

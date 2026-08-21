@@ -87,7 +87,7 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
   {
     path: "/about",
     audience: "patient",
-    why: "The founders, on their own page (the landing chapter moved here when About us became its own door). Same reader as the landing, same rules: roles and affiliations are the founders' own record, portraits are supplied, and nothing on it makes a clinical claim.",
+    why: "The team, on their own page — GATED SHUT since O155 (founder-directed 2026-08-21: \"make team hidden at the moment… we are still building and we dont know who will be on it finally\"). `TEAM_PAGE_PUBLIC` is false, so the route calls `notFound()`, carries `robots: noindex`, is absent from the sitemap and has no door in either footer. The entry stays here rather than being deleted because the page is one word from returning, and a surface that can come back needs its compliance reasoning kept with it: same reader as the landing, same rules, roles and affiliations are each person's own record, portraits are supplied, and nothing on it makes a clinical claim.",
   },
   {
     path: "/clinicians",

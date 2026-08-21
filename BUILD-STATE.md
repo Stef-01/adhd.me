@@ -167,6 +167,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: `/about` 404s, no link to it anywhere, absent from the sitemap, census and dossier updated,
 > the gate flipped back locally once to prove the page still renders correctly behind it, `pnpm
 > verify` green and the public sweeps green.
+> DONE 2026-08-21. `/about` returns 404, has no door in either footer, is absent from the sitemap
+> and carries `robots: noindex`. All four read the SAME flag, so the route and its advertising
+> cannot drift apart — which is the failure mode of hiding a page by hand.
+> The founder's REASON is what made this a gate on the route rather than a removed link, and it is
+> worth keeping: "we dont know who will be on it finally" is a question about PEOPLE, and a live
+> page answers it publicly for five named individuals — one of whom was added the same day with no
+> photograph and no role. Unlinking would have hidden the door and left the room open to anybody
+> with the URL.
+> Proved intact behind the gate rather than assumed: flipped to `true` once and measured — 200,
+> five plates, Saif present, sitemap entry back, footer door back — then flipped down. A gate that
+> hides a BROKEN page is a trap for whoever reopens it, and this one is now known not to be.
+> The e2e was INVERTED rather than deleted: it used to assert the About us door opens /about, and
+> now pins that the door is gone, the route 404s and the sitemap is clean. Deleting it would have
+> left the gate unguarded; inverting it means reopening the team is a deliberate edit to a test
+> that says why it exists. O152's assertions about Saif's plate moved into the ungate probe rather
+> than being lost — they are the proof the plate is right for the day it comes back.
+> Gate met: `pnpm verify` green (219 files, 3607 passed); landing + public-sweep + party-to-care +
+> touch-floor + keyboard-focus + mobile-fit green (28); compliance census and dossier row marked
+> gated rather than deleted.
+
 
 > **O154 (FOUNDER-DIRECTED — the word "co-founder" comes out, and the disclosure survives it) —
 > claimed 2026-08-21T11:25Z by loop-0820s.** "remove term cofounder everywhere, as its a team".

@@ -1672,3 +1672,38 @@ overstates a test is how a hole gets believed shut.
   assert one line — it asserts every row is the *same height as its neighbours*, which is
   satisfied equally by all items wrapping to two lines. Uniformity is precisely the property O150
   fixed, so the assertion is the intended one and stays.
+
+## O155 — the team page goes behind a gate (2026-08-21)
+
+Founder-directed: *"also make team hidden at the moment"* … *"as we are still building and we dont
+know who will be on it finally"*.
+
+### The reason changed the implementation
+
+"Hidden" could have meant unlinking the door and leaving the route up. The stated reason rules
+that out: if the question is **who is finally on the team**, a live `/about` still publishes five
+named individuals' faces, roles and affiliations to anybody with the URL — and one of them was
+added the same day with no photograph and no role. Unlinking hides the door and leaves the room
+open.
+
+### Hiding a page is four things, and missing one leaves it half-hidden
+
+| | done |
+|---|---|
+| No door | removed from `site-footer` **and** the landing's own footer, both read the flag |
+| Route does not serve | `notFound()` → **404** |
+| Not advertised to crawlers | absent from `sitemap.ts`, plus `robots: { index: false }` |
+| Landing didn't reabsorb it | `#about` still absent from `/` |
+
+- [x] **A gate, not a deletion** — one exported `TEAM_PAGE_PUBLIC = false` with the founder's own
+  words and date beside it. The page, the data and every plate stay exactly where they are, and
+  the route, the sitemap entry and both footer doors all read that one flag, so they cannot
+  disagree with each other. Turning the team back on is one word.
+- [x] **Proved intact behind the gate.** Flipped to `true` once: `/about` returns 200, five
+  plates, Saif present, sitemap entry back, footer door back — then flipped down. A gate that
+  hides a broken page is a trap for whoever reopens it.
+- [x] **The e2e was inverted, not deleted.** It used to assert "About us is its own door"; it now
+  pins that the door is gone, the route 404s and the sitemap is clean. The gate cannot be removed
+  by accident, and reopening the team means changing this file on purpose.
+- [x] **Compliance census and dossier updated** rather than having the row deleted — the page is
+  one word from returning, so its compliance reasoning is kept with it and marked gated.

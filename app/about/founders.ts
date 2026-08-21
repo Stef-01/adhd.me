@@ -11,6 +11,21 @@
 // the entry falls back to the institution's name set as a wordmark — a university mark is
 // trademarked and not ours to copy off a website.
 
+/**
+ * O155, founder-directed 2026-08-21: "also make team hidden at the moment" … "as we are still
+ * building and we dont know who will be on it finally".
+ *
+ * A GATE RATHER THAN A DELETION. Unlinking the door would have hidden the door and left the room
+ * open: `/about` publishes four named individuals' faces, roles and affiliations, and one of them
+ * was added the same day with no photograph and no role. If the question is WHO IS FINALLY ON THE
+ * TEAM, then a live page with the URL guessable is exactly what should not exist yet. So the route
+ * stops serving while the page, the data and every plate stay precisely where they are.
+ *
+ * Flip this to `true` and the team is back — the footer door and the sitemap entry read it too, so
+ * one word restores all three. That is what "at the moment" asks for.
+ */
+export const TEAM_PAGE_PUBLIC = false;
+
 export interface Affiliation {
   name: string;
   logo: string | null;
