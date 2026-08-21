@@ -2,20 +2,16 @@
 
 import { expect, test, type Page } from "@playwright/test";
 
-const PUBLIC_ROUTES = [
-  "/", "/about", "/approach", "/clinicians", "/clinicians/join", "/demo", "/examples", "/faq",
-  "/finder", "/practices", "/privacy", "/terms", "/thanks", "/privacy/automated-decisions",
-  "/privacy/counsel-review",
-];
-
-// O148: the console was never swept, because O145 scoped itself to what a patient sees. It is
-// where practice staff work, sometimes on a phone between patients.
-const CONSOLE_ROUTES = [
-  "/console", "/console/dashboard", "/console/matching", "/console/interview",
-  "/console/applications", "/console/allocation", "/console/rules", "/console/registers",
-  "/console/privacy", "/console/ops", "/console/outcomes", "/console/referrals",
-  "/console/complaints", "/console/reporting", "/console/usefulness", "/console/case-mix",
-];
+// O170: the routes are derived from `app/` now, not listed here.
+//
+// This sweep covered all 15 public routes and 16 of the 28 console screens. The twelve never
+// measured for touch target size were the SAME twelve `contrast` was missing — both arrays were
+// copied from one list on one day and neither grew afterwards, which is the whole argument O168
+// made for deriving rather than extending.
+//
+// O148's note below still holds and is why the console half exists at all: it is where practice
+// staff work, sometimes on a phone between patients.
+import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 
 /**
  * Every control on `route` whose HIT AREA is under 44px, with the population it was drawn from.
@@ -92,6 +88,10 @@ async function signInAsPracticeOwner(page: Page) {
 
 test.describe("O14's 44px touch floor", () => {
   test("no control on a public route is under the floor", async ({ page }) => {
+    // O170: predicted before it was hit, not diagnosed after. O169 found `contrast` sitting under
+    // Playwright's 30s default, survivable only because its route list was short. This spec had
+    // the same shape and the same short list.
+    test.setTimeout(180_000);
     await page.setViewportSize({ width: 390, height: 844 });
     const offenders: string[] = [];
     let population = 0;
@@ -111,11 +111,14 @@ test.describe("O14's 44px touch floor", () => {
     for (const entry of populated.out) offenders.push(`/demo (populated) ${entry}`);
 
     // Non-vacuity: a selector that stopped matching would report a perfectly clean sweep.
-    expect(population).toBeGreaterThan(150);
+    // Unchanged: the public list was already complete at 15 routes, and 160 is what it draws.
+    console.log(`POP_PUBLIC ${population} (floor 150, observed 160)`);
+    expect(population, "the public sweep collapsed").toBeGreaterThan(150);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 
   test("no control in the console is under the floor", async ({ page, request }) => {
+    test.setTimeout(300_000);
     // O159: SEED EVERY FIXTURE FIRST, and that is the whole point of this line.
     //
     // The sweep measures whichever state it happens to find, not the set of controls the product
@@ -138,7 +141,11 @@ test.describe("O14's 44px touch floor", () => {
       population += seen;
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
-    expect(population).toBeGreaterThan(120);
+    // O170: the floor was 120, set when this sweep visited 16 console routes. It now visits 28 and
+    // the observed population is 196, so 120 would no longer notice the sweep collapsing back to
+    // roughly the list it replaced. Measured first, then stated beside the ceiling — W48's rule.
+    console.log(`POP_CONSOLE ${population} (floor 170, observed 196 at 28 routes)`);
+    expect(population, "the console sweep collapsed — a clean pass here would mean nothing").toBeGreaterThan(170);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 });

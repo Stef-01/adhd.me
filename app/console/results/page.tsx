@@ -207,7 +207,10 @@ export default async function ResultsPage() {
       </section>
 
       <details className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
-        <summary className="cursor-pointer font-medium text-stone-900">{C.method.heading}</summary>
+        {/* O170: 44px hit floor (O14). This was 292x24 — the line box and nothing else — on a page
+            the touch sweep had never visited. Padding rather than `flex items-center`, which would
+            drop `display: list-item` and take the disclosure triangle with it. */}
+        <summary className="cursor-pointer py-[10px] font-medium text-stone-900">{C.method.heading}</summary>
         {C.method.body.map((paragraph) => (
           <p key={paragraph} className="mt-3 max-w-2xl text-sm text-stone-600">
             {paragraph}
@@ -232,13 +235,18 @@ export default async function ResultsPage() {
       </details>
 
       <p className="mt-6 text-xs text-stone-500">{C.footer}</p>
+      {/* O170: both were 20px tall. They are standalone navigation, not links inside a sentence —
+          the sweep exempts the latter under WCAG 2.5.8 and did not exempt these, correctly. */}
       <div className="mt-4 flex gap-4">
-        <Link href="/console" className="text-sm font-medium text-stone-700 underline hover:text-stone-900">
+        <Link
+          href="/console"
+          className="inline-flex min-h-[44px] items-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+        >
           Back to the console
         </Link>
         <Link
           href="/console/dashboard"
-          className="text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="inline-flex min-h-[44px] items-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Detailed measurement view
         </Link>

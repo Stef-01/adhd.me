@@ -2165,3 +2165,59 @@ under a name implying completeness, and the first two compliance-bearing. Conver
 mechanical: axe runs per page, `keyboard-focus` drives interactions, and each needs a decision about
 what a sensible per-route assertion is. That is a unit, not an appendix to this one. The figures are
 here so the next one starts from a measurement.
+
+---
+
+## O170 — the touch floor gets the derived route list (2026-08-21)
+
+Third of the six sweeps O168 measured, and **the first one where the coverage gap was hiding real
+defects.**
+
+`e2e/touch-floor.spec.ts` covered all 15 public routes and 16 of the 28 console screens. The twelve
+it never measured were the *same twelve* `contrast` was missing — both arrays were copied from one
+list on one day and neither grew afterwards.
+
+### I said before running it that this one would find something
+
+O169's two sweeps came back zero twice, and that was the honest result there. Predicting zero a
+third time would have been assuming the tree is tidy rather than checking. O148's own row records 61
+findings when it first swept the console, and a 44px floor is the rule a new screen breaks most
+easily: **a control can look finished at 32px, and only a measurement disagrees.**
+
+Three real findings, all on `/console/results`, a page nothing had ever measured:
+
+| Control | Measured | Fix |
+|---|---|---|
+| `<summary>` "How this is measured" | 292×**24** | `py-[10px]` |
+| `<a>` "Back to the console" | 131×**20** | `inline-flex min-h-[44px] items-center` |
+| `<a>` "Detailed measurement view" | 186×**20** | same |
+
+**Every fix is in the component, none in the sweep.** The sweep has three exclusions — inline links
+inside a sentence (WCAG 2.5.8 exempts them), controls out of the tab order, `.sr-only` inputs — and
+all three are principled and already written. These two links are standalone navigation, not links
+inside prose, so the sweep was right not to exempt them; widening an exclusion to absorb them would
+have been tuning the detector to green.
+
+The `<summary>` fix is padding rather than `flex items-center`, which would have dropped
+`display: list-item` and taken the disclosure triangle with it — a fix that trades a touch-target
+defect for a missing affordance is not a fix.
+
+### The timeout was predicted, not discovered
+
+O169 found `contrast` sitting under Playwright's 30s default, survivable only because its route list
+was short. This spec had the same shape and the same short list, so the same latent failure was
+named in the claim before it was hit. 180s public, 300s console.
+
+### The floor was stale in the way floors go stale
+
+`population > 120` was set when this sweep visited 16 console routes. It now visits 28 and draws
+**196**, so 120 would no longer notice the sweep collapsing back to roughly the list it replaced. Now
+170, with the observed 196 recorded beside it — measure first, then state the figure next to the
+ceiling. Both floors were seeded by narrowing the derivation, and both fired.
+
+### Guards
+
+Two seeds, watched failing: a 60×28 button planted on a route neither array named (caught), and a
+collapsed derivation (both floors caught it). Remaining unconverted: `semantics` 27/45,
+`mobile-fit` 25, `keyboard-focus` 15 — the three that need a per-route decision about what the
+assertion means, rather than a mechanical swap.

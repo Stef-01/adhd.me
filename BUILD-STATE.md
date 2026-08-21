@@ -169,6 +169,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > by measuring nothing; every finding on the twelve new routes FIXED, with the fix in the component
 > rather than in the sweep's exclusions, and any finding I cannot fix named in this row with its
 > route and its measured size; a seeded undersized control caught; `pnpm verify` green.
+>
+> **DONE 2026-08-21T18:02Z, AND THE PREDICTION HELD: THIS ONE FOUND THREE REAL DEFECTS.** All on
+> `/console/results`, a page no touch sweep had ever visited — `<summary>` "How this is measured" at
+> 292x**24**, `<a>` "Back to the console" at 131x**20**, `<a>` "Detailed measurement view" at
+> 186x**20**. Against a 44px floor, two of them at under half it. The other eleven new routes were
+> clean.
+> **EVERY FIX IS IN THE COMPONENT AND NONE IS IN THE SWEEP.** The two links are standalone
+> navigation rather than links inside prose, so the WCAG 2.5.8 exemption correctly did not apply and
+> widening it would have been tuning the detector. The `<summary>` took padding rather than
+> `flex items-center`, which would have dropped `display: list-item` and the disclosure triangle with
+> it — trading a touch-target defect for a missing affordance is not a fix.
+> **THE TIMEOUT WAS NAMED IN THE CLAIM BEFORE IT WAS HIT**, on the strength of O169 finding the same
+> latent 30s default in `contrast`. Same shape, same short list, same failure. 180s/300s.
+> **AND THE POPULATION FLOOR WAS STALE IN THE WAY FLOORS GO STALE.** `> 120` was set for 16 console
+> routes; the sweep now visits 28 and draws **196**, so 120 would no longer notice a collapse back to
+> roughly the list it replaced. Raised to 170 with the observed figure recorded beside it (W48's
+> rule). Both floors seeded by narrowing the derivation; both fired.
+> **THREE SWEEPS DERIVED, THREE TO GO**, and the remaining three are the ones that are not a
+> mechanical swap: `semantics` 27/45, `mobile-fit` 25, `keyboard-focus` 15 — each needs a per-route
+> decision about what the assertion means before its list can be widened safely.
+> Verification: `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted);
+> 26/26 across touch-floor, contrast, a11y, results, dashboard and mobile-fit.
 
 > **O169 (the two compliance-bearing sweeps get the derived route list) — claimed 2026-08-21T16:41Z
 > by loop-0821a.** O168 measured six sweeps with hardcoded route arrays and fixed none of them,
