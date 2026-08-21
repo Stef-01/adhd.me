@@ -6477,7 +6477,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
-| W243 | done | loop-0821a | 2026-08-21T10:06Z | PENDING | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
+| W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
