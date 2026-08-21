@@ -143,6 +143,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O167 (the finder against the whole guidelines checklist) — claimed 2026-08-21T14:23Z by
+> loop-0821a.** Continues the founder's *"do through design audit … learn a bout best practices
+> onlnei"*. O166 fixed the screen they screenshotted; this is the *thorough* half.
+> **FIRST, WHAT THE SWEEP SAYS IS ALREADY FINE, BECAUSE NOT INVENTING WORK IS PART OF THE JOB.** A
+> canvas sweep of accent load across every finder screen: scenarios **0**, results **2**, welcome
+> **4**, profile **2** after O166. The profile was the outlier and it is fixed. The results list
+> reads well — one eyebrow, one serif statement, one accent on one meaning, three even cards. The
+> compare screen's narrow left column is a 390px constraint, not a mistake. **A second pass that
+> "improved" those would be churn**, and this row is not going to produce any.
+> **WHAT THE FULL CHECKLIST FOUND IS DIFFERENT FROM WHAT I FOUND BY LOOKING**, which is the argument
+> for fetching it rather than working from the rules I happened to remember. Four findings, all
+> mechanical, three of them invisible to an eye and one of them the exact complaint:
+> **(1) THE RESULTS HEADLINE HAS A WIDOW, ON THE SCREEN THE FOUNDER CALLED TERRIBLE.** *"The
+> baseline done before / the prescription, not / after."* — **"after." alone on a line**, at display
+> scale, in the serif, as the first thing anybody reads. `text-wrap: balance` is the guidelines' rule
+> for headings and O166 applied it to the profile name while this one sat one screen away.
+> **(2) NO `<meta name="theme-color">`.** The browser chrome does not match the paper on mobile, so
+> the page ends in a seam above the address bar. Invisible in every desktop capture and the first
+> thing a phone shows.
+> **(3) `ADHD.ME` IS NOT MARKED `translate="no"`** — six nodes. Auto-translation garbles brand names
+> and identifiers, and this one is a domain as well as a name.
+> **(4) AN `<img>` WITHOUT `width`/`height`** on the profile: layout shift, the guidelines' named
+> CLS anti-pattern.
+> Gate: each of the four fixed and each pinned by an assertion over the RENDERED page rather than
+> the source; the headline's widow checked by measuring the rendered line boxes, not by trusting the
+> property; `theme-color` asserted to match the paper token through a canvas so a palette change
+> cannot leave it stale; the accent discipline O166 established still holding on every screen; every
+> existing finder, a11y, contrast and keyboard e2e green; seeded failures; `docs/DESIGN-QA.md`
+> entry; `pnpm verify` green.
+
 > **O166 (the clinician profile: a design audit) — claimed 2026-08-21T13:40Z by loop-0821a.**
 > Founder-directed, 2026-08-21: *"visually looks terrible, do through design audit to make it much
 > more visually coherent, learn a bout best practices onlnei"* — with a screenshot of Dr Anubhav
