@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/fhir.ts",
+    operatorCopy: ["FHIR_READ_REFUSAL_COPY"],
+    notCopy:
+      "The remaining exports are the resource and refusal types, three declared maps (status, appointment type, and the fields deliberately not sent) and two pure functions. `FHIR_READ_REFUSAL_COPY` is written to whoever is integrating a system, not to a practice or a patient: it says why a resource could not be read — not an Appointment, a status this mapping does not recognise, no practitioner, no readable start, or an appointment type coded under a system it does not know. Each says what was wrong rather than what anybody should do, and each states what a guess would have cost: a status read as the nearest familiar one silently changes what the record says happened, and a long appointment received as a standard one tells the diary the day has more room than it does. Nothing here describes a patient, a condition or a next clinical step — the resource carries a reference to a patient, which is an identifier rather than a statement about anybody.",
+  },
+  {
     module: "src/capacity/attribution.ts",
     operatorCopy: ["CAPACITY_ATTRIBUTION_WITHHELD_COPY"],
     notCopy:

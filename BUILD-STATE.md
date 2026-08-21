@@ -166,6 +166,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > domain type so a new field cannot be silently unmapped; round-trip over every synthetic record;
 > unmapped fields named WITH a reason in both directions; nothing transmits, asserted by absence;
 > `pnpm verify` green.
+> DONE 2026-08-21. `src/interop/fhir.ts` + 12 tests. Round-tripped over **all 8,393 synthetic
+> appointments**, every one compared by value against the original — not a sample, because the
+> records that break a mapper are the odd ones and a sample is chosen by whoever already believes
+> it works. Statuses the sim never produces (`cancelled` among them) are round-tripped from
+> fixtures, so no member of the map is untested.
+> **THE BOTH-DIRECTIONS FIELD CHECK CAUGHT A SILENT DROP ON ITS FIRST RUN, IN THIS UNIT'S OWN
+> MAPPING.** `appointmentType` was neither mapped nor named — a long consultation would have been
+> sent as an ordinary one, telling a receiving diary the day has more room than it does. Exactly
+> the silence the unit exists to end, in the unit ending it. Now mapped under a code system named
+> as this product's OWN: R4 wants a system URI, there is no national code set this tree has a
+> citation for (W56's rule), and borrowing a real terminology URI to look conformant would be a
+> lie. W238 is where binding gets done properly.
+> **AND THE CHECK ITSELF WAS FOOLED BY A FABRICATED DEFAULT, WHICH A SEEDED BREAK FOUND.** Setting
+> `unmapped: []` left it GREEN: it asked whether the field REAPPEARED on the round-tripped object,
+> and `generatedByInvitation` always reappears, invented as `false`. A field that comes back as a
+> default is not carried. It now MUTATES each field and checks the change survives — which cannot
+> be fooled that way — with the mutation table itself pinned both directions so a new domain field
+> cannot slip past by having no mutation written for it. **Sixth vacuous guard this session, and the
+> first one a seed caught rather than a reviewer.**
+> Fixing it exposed a second real gap: **`practiceId` is not carried by the resource at all.** R4
+> references the organisation from a separate resource; this mapping takes the practice from the
+> CALLER, which means a resource read in the wrong practice's context is attributed to that
+> practice. Now named in `APPOINTMENT_UNMAPPED` with that consequence spelled out, so a caller
+> learns it is their responsibility rather than the mapping's.
+> Refusals rather than guesses: an unknown status, an appointment type from another system or one
+> this mapping does not carry, no practitioner, no readable start. Each says what a guess would have
+> COST — a status read as the nearest familiar one silently changes what the record says happened.
+> **THIS IS THE FIRST INTEROP MODULE THAT CAN CARRY A PATIENT IDENTIFIER and it says so.** A FHIR
+> Appointment's participant IS the patient; dropping it would be a mapping of nothing useful with
+> the drop hidden in the same silence. Classified `derived` in W106 — nothing is retained, the
+> functions are pure, `SHIPPED_MAPPINGS` is pinned empty — with the trigger written down: the first
+> code path that TRANSMITS or PERSISTS a mapped resource makes G8 apply, the handling becomes
+> `stored`, and W239's disclosure ledger becomes the thing that records what left. A test asserts
+> the module contains no fetch, client, endpoint or socket of any kind.
+> Non-vacuity, five breaks: drop the appointment type again (3 tests); collapse two domain statuses
+> onto one FHIR status (2); read an unknown type as ordinary (1); stop naming the unsent fields (1,
+> after the check was made behavioural — it passed before); ship a mapping (1).
+> Gate: `pnpm verify` green — 235 files, 3812 tests, build, audit:gate PASS.
 
 > **W234 (Q18 hardening) — claimed 2026-08-21T09:07Z by loop-0821a.** Law 5: a hardening week
 > without the review skills is not done. `code-review` was RUN over the whole lane — nine source
@@ -6063,7 +6101,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W232 | done | loop-0821a | 2026-08-21T08:44Z | 6f29060 | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | done | loop-0821a | 2026-08-21T08:52Z | 3727570 | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
-| W235 | claimed | loop-0821a | 2026-08-21T09:20Z | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
+| W235 | done | loop-0821a | 2026-08-21T09:20Z | PENDING | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |

@@ -238,6 +238,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W225's refusal is structural and checked at three doors: no exported signature takes a patient, no field of `SessionRecommendation` can hold one, and the module's import list is pinned so nothing that holds patients can be reached from it. That third check is the one that matters — MATCH-1 arrived through a reasonable-looking line in a module that already had the data to hand.",
   },
   {
+    module: "src/interop/fhir.ts",
+    what: "Appointments translated to and from FHIR R4, in memory only",
+    handling: "derived",
+    rationale:
+      "W235 is the FIRST module in the interop lane that can carry a patient identifier, and classifying it as anything else would be a convenient fiction: a FHIR Appointment\'s participant IS the patient, and a mapping that dropped it would be a mapping of nothing useful with the drop hidden in exactly the silence that unit exists to end. `derived` rather than `stored`: nothing is retained — the functions are pure, `SHIPPED_MAPPINGS` is pinned empty, and erasing the source appointment erases everything reachable here, because there is nowhere else for it to be. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first code path that TRANSMITS or PERSISTS a mapped resource. At that point G8 applies (no patient-derived content to a third-party API until the founder has signed off vendor, data flow and retention), the handling becomes `stored`, and W239\'s outbound disclosure ledger becomes the thing that records what left. A test asserts this module contains no client, endpoint or fetch of any kind.",
+  },
+  {
     module: "src/capacity/attribution.ts",
     what: "The difference between two arms of a capacity experiment, and the arm assignments themselves",
     handling: "no_patient_identity",
