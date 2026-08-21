@@ -119,6 +119,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O136 (the join form's accent, and a correction to O135's own record) — claimed
+> 2026-08-21T00:33Z by loop-0820s.** O135's sweep found /clinicians/join carrying NINE
+> accent-coloured elements against 0–2 everywhere else, and left them with a written reason:
+> that they were "a form's error and hint affordances rather than decoration", which under
+> O130's rule — accent marks the value that changes — would make them correct.
+> **THAT REASON WAS A GUESS AND IT IS WRONG.** Measuring the nine: one is the eyebrow, two are
+> the mix hero's genuinely live tokens (`mix-percent` "30%" and `mix-condition` "ADHD" — the
+> values that rotate, which is textbook), and SIX ARE FIELDSET LEGENDS: "You", "Your practice",
+> "What you see often", "How you work", "Languages other than English", "Declarations". Section
+> headings, not values. `.join-form legend` sets `color: var(--accent)` with no rationale
+> comment — the same undocumented-fossil shape O130 found on `.row-availability`.
+> So this unit does two things. It takes the legends to `--muted`, keeping the uppercase and
+> letter-spacing that mark them as structural labels, leaving the page with three accent
+> elements: one section marker and two live values, which is what the token is for. And it
+> CORRECTS THE LEDGER AND DESIGN-QA ENTRY THAT RECORDED THE FALSE REASON, because a register
+> that carries a confident wrong explanation is worse than one that says "not looked at" — the
+> next reader would have trusted it and moved on, which is exactly what I did for one unit.
+> Gate: accent re-measured at 9→3 with the three named, the legends still legible as headings
+> (they carry weight and letter-spacing, not colour, so the hierarchy survives), O135's record
+> corrected in both places, e2e green, full `pnpm verify` green.
+
 > **O135 (the site-wide measure and accent sweep the founder actually asked for) — claimed
 > 2026-08-20T23:56Z by loop-0820s.** The founder's design brief was "visually coherent ACROSS
 > SITE". O129 audited the profile, O130 the accent across the finder flow, O134 the new /about —
