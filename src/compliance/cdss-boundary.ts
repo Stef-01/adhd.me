@@ -463,6 +463,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the reason union, the candidate projection and the floor check. `MATCH_REASON_COPY` is the sentence a practice manager reads about one appointment offer and `MATCH_FLOOR_BREACH_COPY` tells a reviewer why a plan was refused. Both are about capacity, recorded availability and practice-set limits; a test asserts neither can name a condition, a symptom or an urgency, because a reason is the one place a matcher gets to say WHY in words somebody reads.",
   },
   {
+    module: "src/capacity/recommendation.ts",
+    operatorCopy: ["RECOMMENDATION_WITHHELD_COPY"],
+    notCopy:
+      "The remaining exports are the scope union, the recommendation type and the two functions that build one or withhold it. `RECOMMENDATION_WITHHELD_COPY` is what a practice manager reads where a conditional about opening slots would otherwise be: there is no range for this session, or the ranges have not been checked against the record yet. The recommendation SENTENCE it composes is a conditional about a diary — \"if N more slots were opened on Thursday, between X and Y filled\" — with the practice's own number echoed back rather than chosen, and the linter is run over it in the module's test. Nothing here names a patient, a condition or a next clinical step: no patient can enter the type, and the module imports nothing that holds one.",
+  },
+  {
     module: "src/capacity/score.ts",
     operatorCopy: ["SCORE_WITHHELD_COPY"],
     notCopy:

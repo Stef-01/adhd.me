@@ -171,6 +171,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > score; nothing is emitted where the score is withheld; the copy passes the advice linter as a
 > conditional rather than by wording around it; W201's ADM register updated in the same commit;
 > `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/recommendation.ts` + 13 tests. Over the sim: **70 sessions, 70
+> recommendations**, e.g. *"If 2 more slots were opened on Sunday: between 1 and 2 filled, going by
+> the 6 Sundays recorded for this session. Across this practice's sessions, ranges like this one
+> contained what happened 85 per cent of the time."* The advice linter is clean on every sentence
+> and on every demand-evidence line, without a word being chosen to get past it — the conditional
+> IS the honest form, because the product does not know the practice's staffing, costs or appetite.
+> **THE PATIENT-ABSENCE IS CHECKED AT THREE DOORS, BECAUSE THE DRIFT HAS THREE.** A patient could
+> arrive as a PARAMETER (every exported signature, checked on params not names — `sizeFor(patient)`
+> passes a name check), as a FIELD (a whole serialised run of 70 recommendations searched for 100
+> real synthetic patient ids), or through an IMPORT (the import list is pinned to exactly four
+> modules). **The third is the door MATCH-1 came through**: a reasonable-looking line in a module
+> that already had the data to hand. Pinning imports is the only one of the three that would have
+> caught it.
+> W201's entry states the TRIGGER that reclassifies this module rather than leaving it to be
+> rediscovered (W145): the first version that sizes a recommendation from who is waiting, or names
+> any group of patients it would be for, is a decision about people and must move to
+> `AUTOMATED_DECISIONS` in the same unit.
+> **NOTHING IS OFFERED WHERE THE FORECASTER IS UNSCORED — and not a hedged version**, because a
+> hedge is still a claim somebody acts on. Reached: one session with six weeks forecasts fine and
+> yields two scored predictions against W224's floor of five, so the recommendation is withheld
+> whole. The score that DOES ride a recommendation is the method's across this practice's sessions,
+> not this session's own — named in the value as `scoreScope`, a one-member union pinned by value,
+> because a second reading of "scored" must arrive as a visible widening rather than as the same
+> word quietly meaning something else.
+> The demand evidence is descriptive and both its readings occur in the sim (**6 sessions have
+> never once filled every slot; 64 have**). The never-full sentence is required to carry "which is
+> not the same as there being none" — deleting that clause fails a test, because a record showing
+> no unmet demand is not a record showing there is none.
+> **A TEST OF MINE WAS VACUOUS AND I CAUGHT IT BY READING ITS BRANCH, NOT ITS RESULT.** The
+> cancelled-week check pooled two sessions, which gives four predictions against a floor of five —
+> so it took the refusal branch and never checked the counts it exists to check, while passing.
+> Now four sessions, and the offered branch is asserted rather than tolerated.
+> Non-vacuity, six breaks: speak where unscored (2 tests); turn the conditional into an instruction
+> (2); drop the hit rate from the sentence (1); count an empty week as one that did not run full
+> (1); delete the "not the same as there being none" clause (1); paraphrase W223's refusal (1).
+> The fifth break's first run was itself a false pass — a shell-quoting slip left the file
+> unmutated and it reported 13 green; re-run with a correct anchor, it fails as it should.
+> Gate: `pnpm verify` green — 226 files, 3705 tests, build, audit:gate PASS.
 
 > **W224 (forecast honesty: every forecast scored against what actually happened) — claimed
 > 2026-08-21T07:28Z by loop-0821a.** W223 ships a forecaster and nothing yet knows whether it is
@@ -5410,7 +5448,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W222 | done | loop-0821a | 2026-08-21T07:14Z | e9c5e39 | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | done | loop-0821a | 2026-08-21T07:21Z | e0b1ebb | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | done | loop-0821a | 2026-08-21T07:28Z | a41da93 | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
-| W225 | claimed | loop-0821a | 2026-08-21T07:34Z | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
+| W225 | done | loop-0821a | 2026-08-21T07:34Z | PENDING | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
