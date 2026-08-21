@@ -143,6 +143,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O139 (the last of the unblocked queue, worked with the registers on) — claimed
+> 2026-08-21T00:55Z by loop-0820s.** O138 made the queue countable and it is TWELVE — the first
+> time this number has meant anything, since it now excludes both founder-blocked entries and
+> aspirations a refusal already accounted for. This works that twelve with all three registers
+> live, which is the first unit that can: every candidate checked against REFUSED_CUES before
+> writing it, against the corpus's `never` pins after, and against O119's precision probe.
+> Measured up front, five are clean and the rest are not: "prescription continued" fires on "my
+> prescription continued to cost more each month" (a cost complaint read as shared care);
+> "someone patient" turns on the word PATIENT, which on this product means the reader;
+> "transplant" fires on "my transplant team wants a GP closer to home", which is not a
+> telehealth ask; "we can build" strips to [build] and O125 already refused it; "reads it"
+> strips to [read]. And "white coat" cannot go to `manner:steadying` at all — O124 gave it to
+> `care:anxiety` and first-claim dedup means one phrase belongs to ONE facet, so the steadying
+> aspiration is refused by a mechanism rather than by a measurement, which is a distinct reason
+> worth recording as such.
+> Gate: the five cued and promoted; the six refusals REGISTERED with `leavesStanding` linking
+> each to the aspiration it accounts for, so O138's count stays honest rather than quietly
+> reinflating; zero `never` pins broken; floors and tie-quality moved; full `pnpm verify` green.
+
 > **O138 (the lexicon's remaining queue, made countable) — claimed 2026-08-21T00:45Z by
 > loop-0820s.** Trying to answer "is there real lexicon work left?" from the tree, the number
 > came out 25 open aspirations across 18 facets — and I can see it is WRONG. "I need more than
