@@ -172,6 +172,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > from memory; the "no mechanism to fill" finding stated first and checked against W231's shipped
 > state and the G1/G2/G3 rows rather than asserted; both ends of the range priced; `_LAST_UNIT`
 > bound present; `pnpm verify` green.
+> DONE 2026-08-21. `docs/CAPACITY-DOSSIER-Q18.md` + `src/quality/capacity-dossier-q18.test.ts`
+> (10 tests). Every figure is RECOMPUTED in the test rather than transcribed: **8,393 slots offered,
+> 260 unfilled (3.1%)**, priced through W46's register at **$69.56** all-in
+> (`mbs.bulk-billed-level-b-metro`, published, effective 2025-11-01) for a headline of
+> **$18,085.60** — which is the size of the prize and the size of the exposure, the same number in
+> both directions. The width distribution the staffing argument rests on is recomputed too: **21
+> sessions at width 0, 46 at width 1, 3 at width 2**, with "width 2 is the widest" checked rather
+> than assumed. A dollar-set assertion pins that exactly four money figures appear and no fifth
+> slipped in.
+> **THE LEAD FINDING IS A FACT ABOUT THE TREE, AND THE TEST TREATS IT AS ONE.** A practice acting on
+> a forecast opens capacity, and then **nothing in this product fills it** — W231's coupling ships
+> off, the invitation rail has never sent, W174 is blocked. Checked against `SHIPPED_COUPLING` and
+> against W174's ledger row, so switching the coupling on FAILS this test: the document would need
+> rewriting rather than quietly keeping. Its position is pinned too — the finding must appear before
+> the pricing, because it is the one that changes a decision.
+> Both ends of the range are priced and neither is recommended: staffing for 6 and filling 4 costs
+> two idle slots ($139.12); staffing for 4 and filling 6 turns two people away at no cost on the
+> ledger and a real one to them. Seeding a recommendation fails.
+> **A SEEDED BREAK THAT LOOKED CAUGHT WAS ONLY PARTLY SEEDED.** Replacing the headline total fired
+> one test, and I nearly recorded it as caught by the recompute guard — it was not: the figure
+> appears TWICE in the document and my mutation replaced one occurrence, so `toContain` still found
+> the other. Re-seeded across both, the recompute guard fires as designed. Checking which test
+> failed rather than that one did is the difference between a proof and a coincidence.
+> **AND W231's IMPORTER SWEEP, ONE UNIT OLD, FIRED ON THIS UNIT'S OWN TEST** — correctly on its own
+> terms, since the dossier test imports `SHIPPED_COUPLING` to assert the switch is off. Narrowed to
+> PRODUCTION code with the reason stated (a test that checks a switch is off ships nothing, and is
+> the opposite of the risk), a non-vacuity pin added so an empty result means something, and the
+> pool-import seed re-run afterwards to prove the narrowing did not blunt it.
+> Bounded by `Q18_LAST_UNIT`, DOSSIER-1's rule, with the test asserting its own bound is present.
+> Non-vacuity, five breaks: type a plausible total (2 tests, once re-seeded properly); misstate the
+> width distribution (1); switch the coupling on (1); take a position on which end to staff for (1);
+> move the finding below the pricing (1).
+> Gate: `pnpm verify` green — 233 files, 3779 tests, build, audit:gate PASS.
 
 > **W231 (forecast → invitation-volume coupling, shipped explicitly OFF) — claimed
 > 2026-08-21T08:36Z by loop-0821a.** This is the unit where Q18 would reach into the live rail. The
@@ -5870,7 +5903,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | done | loop-0821a | 2026-08-21T08:30Z | 1560038 | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | done | loop-0821a | 2026-08-21T08:36Z | 3e8b4bf | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
-| W232 | claimed | loop-0821a | 2026-08-21T08:44Z | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
+| W232 | done | loop-0821a | 2026-08-21T08:44Z | PENDING | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |

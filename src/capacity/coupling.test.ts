@@ -121,6 +121,7 @@ describe("W231 it does not reach the rail, and that is checked on the tree", () 
     // module note, and names the engine explicitly because that is where it would land.
     const roots = ["src", "app"];
     const importers: string[] = [];
+    let walked = 0;
     const walk = (dir: string) => {
       for (const entry of readdirSync(dir)) {
         const full = path.join(dir, entry);
@@ -129,14 +130,22 @@ describe("W231 it does not reach the rail, and that is checked on the tree", () 
         // its copy. "Outside" means outside `src/capacity/`, and saying so precisely is the
         // difference between a check that passes for the right reason and one that fails for the
         // wrong one: the first run flagged this file's own neighbours.
-        else if (/\.tsx?$/.test(entry) && !full.includes(`${path.sep}src${path.sep}capacity${path.sep}`)) {
+        // Test files are excluded, and the reason is worth stating rather than assuming: W232's
+        // dossier test imports `SHIPPED_COUPLING` to assert the switch is OFF, which is the
+        // opposite of the risk this sweep exists for. The risk is PRODUCTION code reaching the
+        // coupling; a test that checks it is off ships nothing. Found by the sweep firing on that
+        // import — correctly, on its own terms — one unit after it was written.
+        else if (/\.tsx?$/.test(entry) && !/\.test\.tsx?$/.test(entry) && !full.includes(`${path.sep}src${path.sep}capacity${path.sep}`)) {
+          walked += 1;
           const code = readFileSync(full, "utf8").replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
           if (/from "[^"]*capacity\/coupling"|from "\.\/coupling"/.test(code)) importers.push(full);
         }
       }
     };
     for (const root of roots) walk(path.join(process.cwd(), root));
-    expect(importers, "something outside this lane imports the coupling").toEqual([]);
+    expect(importers, "production code outside this lane imports the coupling").toEqual([]);
+    // Non-vacuity: the walk must actually have read the tree, or an empty result means nothing.
+    expect(walked, "the tree walk read no files").toBeGreaterThan(200);
 
     // And the engine specifically, stated rather than left implied by the sweep above.
     const engine = readFileSync(path.join(process.cwd(), "src/engine/pool.ts"), "utf8");
