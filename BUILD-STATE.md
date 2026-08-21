@@ -143,6 +143,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O169 (the two compliance-bearing sweeps get the derived route list) — claimed 2026-08-21T16:41Z
+> by loop-0821a.** O168 measured six sweeps with hardcoded route arrays and fixed none of them,
+> because converting them is not mechanical and swallowing them into that row would have been
+> speculative scope. This row takes the two that carry compliance: `a11y` (W49's automated WCAG
+> 2.1 A/AA gate) and `contrast`.
+> **THE MEASUREMENT, AND THE PART OF IT I DID NOT EXPECT.** Against the 45 static routes: `a11y`
+> covers 35, `contrast` 33 — and **they miss different routes**. Neither gap is a subset of the
+> other, so the union unscanned by at least one of the two is larger than either figure suggests.
+> `a11y` never scans `/about`, `/examples`, `/faq`, `/terms`, `/thanks`, `/privacy/counsel-review`,
+> `/console/allocation`, `/applications`, `/interview`, `/matching`. `contrast` never scans
+> `/console/capability`, `/capacity`, `/credentials`, `/education`, `/interest`, `/interop`,
+> `/outreach`, `/pathways`, `/responses`, `/results`, `/roi`, `/verticals`.
+> **SIX OF THE TEN `a11y` MISSES ARE PUBLIC PAGES**, and two of those — `/terms` and
+> `/privacy/counsel-review` — are the legal notices. A published legal notice that has never been
+> scanned for WCAG A/AA, under a suite whose header says "over every console surface" and whose bar
+> is "zero violations … fixed or explicitly ruled, never ignored", is the gap worth this row on its
+> own.
+> **WHAT I DO NOT KNOW AND WILL NOT PROMISE: WHETHER THEY PASS.** The honest shape of this claim is
+> that the scan runs on 22 route-scans nobody has run, and the finding count is whatever it produces.
+> W49's bar is already written and this row inherits it unchanged — **every finding is fixed or
+> explicitly ruled, never suppressed to get the suite green**. If a genuine violation on a public
+> legal notice turns up, fixing it is inside this row; if the fix needs a decision above my level it
+> is recorded as a finding with the route named, not quietly excluded. A row that promised green
+> before scanning would be promising to tune the detector.
+> **WHY THE OTHER FOUR ARE STILL NOT IN SCOPE.** `semantics` (27), `mobile-fit` (25) and
+> `keyboard-focus` (15) need a per-route decision about what the assertion even means — keyboard
+> focus drives interactions that differ per screen — and `touch-floor` (33) is a third compliance
+> sweep whose conversion is mechanical but whose findings would double this row's unknown. Two
+> sweeps, measured findings, one row.
+> Gate: both specs taking their routes from `e2e/site-routes.ts` with no hardcoded path array
+> remaining in either; the public/console partition still derived rather than transcribed; every
+> finding on the newly-scanned routes fixed or ruled in writing with the route named; a non-vacuity
+> floor on each so a collapsed derivation cannot pass by scanning nothing; the seeds O168 established
+> still firing; `pnpm verify` green; the observed finding count reported in this row whatever it is.
+
 > **O168 (the site-wide sweeps stop hardcoding what "site-wide" means) — claimed 2026-08-21T15:52Z
 > by loop-0821a.** Third instance of one fault in one guard, so this row fixes the shape rather than
 > the symptom.
