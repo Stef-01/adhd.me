@@ -186,6 +186,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > visible; `pnpm gate` added and RUN, green end to end, with the observed figures reported; the
 > Actions block recorded as a founder item with its measured evidence and no invented cause; no
 > change to `pnpm verify` or to `ci.yml`'s job split.
+>
+> **DONE 2026-08-21T20:41Z.** `pnpm gate` added and RUN: **exit 0**, `verify` green (255 files, 4067
+> tests, audit gate 2 accepted / 0 unaccepted) then **283/283 e2e in 11.7 minutes**. `pnpm verify`
+> and `ci.yml` are untouched.
+> **THE SEQUENCE, MEASURED FROM THE ACTIONS API.** Run 473 (`1f99a18`) last green. Runs **474-481**
+> ran 609-759s and failed on exactly one test - `e2e/landing.spec.ts:74`, `getByText('Why we founded
+> ADHD.ME')`, `Expected: 1 Received: 0`, `1 failed, 272 passed`. `verify` passed on every one; only
+> `e2e` failed. Runs **482-485** failed in 4-5s with `total_ms: 0` on both jobs.
+> **THE CORRECTION IS THE POINT OF THIS ROW.** O172 concluded "nothing else was going to catch it".
+> The `e2e` job caught it on the FIRST push after the copy change and on seven more after that. I had
+> the diagnosis backwards - not a missing gate, an unread one - and that is worse, because a missing
+> gate is a thing to build and an unread gate is a thing I was already being told. Debt 11 is amended
+> from CLOSED to reopened-in-a-new-form; O172's sentence is left standing with the correction beneath
+> it.
+> **WHAT THE FIX IS AND IS NOT.** `pnpm gate` does not make anything safer on its own - it removes
+> the excuse. The batch-from-memory habit that carried O167's red through four units had a real cost
+> (one command, eleven minutes) and now has a name. The habit was the defect; the script only makes
+> the alternative cheap.
+> **AND THE PART I CANNOT CLOSE.** Runs 482-485 never executed - zero billable milliseconds, no
+> downloadable logs, on both jobs, including a ledger-only commit and this row's own claim push.
+> Cutover between 16:17 (481, 682s) and 16:29 (482, 4s) with no CI-related change in the tree, and
+> concurrency cancellation ruled out (`ci.yml` has no `concurrency:` block; the conclusion is
+> `failure`, not `cancelled`). That is an account-level Actions block. **FOUNDER: check GitHub
+> Actions billing / minutes.** I cannot read billing endpoints and am not naming a cause I cannot
+> verify - debt 9's lesson is that a stale premise gets used to explain away real defects, and
+> guessing here would manufacture one.
+> **SO THIS ROW'S GREEN IS LOCAL AND SAYS SO.** O172 fixed the landing assertion and this gate run
+> confirms the tree is clean end to end, but **no CI run has confirmed it and none can until the
+> block clears.** Until then `pnpm gate` is the only real verification any push receives, which is
+> exactly the state debt 11 was written to end.
+> **AND THE GATE RUN CORROBORATED O169's RECORDED OBSERVATION, WITH A BIGGER NUMBER.** O169 logged one
+> `TypeError` from `/api/mock/education`. Both this run and the CI logs show **three** - `credentials`
+> and `capability` reading `.practice`, `education` reading `.clinicians`, all through non-null
+> assertions on an empty `console_.practices`. Still failing no test, still silent. The count is
+> updated here; the unit that sizes it is still owed.
+> Verification: `pnpm gate` exit 0 - `pnpm verify` green (255 files, 4067 tests, audit gate 2
+> accepted / 0 unaccepted) and the full e2e suite **283/283 across all 55 spec files, 11.7 min**.
 
 > **O172 (mobile-fit gets the derived route list, keeping its two different assertions) — claimed
 > 2026-08-21T18:52Z by loop-0821a.** Fifth of O168's six.
@@ -247,6 +284,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > lists while choosing my own test lists the old way, and wrote "16/16", "26/26", "11/11" in four
 > ledger rows as though those figures meant the suite was green. They meant the subset I remembered
 > was green. `pnpm verify` does not run e2e, so nothing else was going to catch it.
+> **[CORRECTED BY O173, 2026-08-21T20:14Z — THE SENTENCE ABOVE IS WRONG AND IS LEFT STANDING SO THE
+> CORRECTION IS LEGIBLE.]** `pnpm verify` indeed does not run e2e, but `ci.yml` does: standing debt
+> 11 records O98 adding an `e2e` job for exactly this reason, and it fired on the FIRST push after
+> the copy change and on seven more after that — `1 failed, 272 passed`, the landing eyebrow, every
+> time. The control existed and worked. **Nobody read it.** Diagnosing a missing gate when the real
+> defect was an unread one is the worse error of the two.
 > **THE CORRECTION IS TO THE PRACTICE, NOT JUST THE ASSERTION.** This row ran the **full 55-spec,
 > 283-test suite: 283 passed in 11.7 minutes**. Eleven minutes is the whole cost, and it is what a
 > unit touching shared route lists — or shipped copy — needs. The four earlier rows' e2e figures

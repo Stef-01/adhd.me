@@ -572,7 +572,28 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
     stage-keyed width list and its 280ms tween are deleted (nothing changes width mid-flow
     any more, so the motion had no meaning left), and the intro stages' seamless borderless
     paper now holds end to end. Phone and 600–819px unchanged; captures in qa/desktop-o63/.
-11. **The e2e suite runs nowhere automatically — CLOSED by O98 (2026-08-20).** ci.yml now
+11. **The e2e suite runs nowhere automatically — CLOSED by O98 (2026-08-20). REOPENED IN A NEW
+    FORM by O173 (2026-08-21): the gate O98 built went UNREAD for eight consecutive runs.**
+    O167 turned `main` red on 2026-08-21 (`e2e/landing.spec.ts:74`, the hero eyebrow, after that
+    unit changed the copy and not the assertion). CI caught it on the very first push and reported
+    `1 failed, 272 passed` on runs 474 through 481 — while O168, O169, O170 and O171 were each
+    built, verified locally and pushed onto that red `main`. The `verify` job passed throughout;
+    only `e2e` failed, exactly as this debt intended.
+    **The lesson is not the one O98 closed.** A gate nobody reads is worth what a gate that does not
+    exist is worth, and the failure is more embarrassing here because the loop protocol has a step
+    for pulling and a step for pushing and none for looking at what the last push did. O173 added
+    `pnpm gate` (`verify` then `e2e` — the same two things CI runs) so a firing can run the whole
+    gate in one command rather than a batch chosen from memory; `pnpm verify` is deliberately
+    unchanged, because O98's reason for keeping e2e off the fast gate still holds.
+    **What is still open, and it is a founder item:** from run 482 (2026-08-21T16:29Z) onward, CI
+    jobs fail in ~4 seconds with `total_ms: 0` billable and no downloadable logs — including on a
+    ledger-only commit. Zero billable time means the jobs never ran. No CI-related change is in the
+    tree across that cutover. That signature points to an account-level Actions block (exhausted
+    minutes or a spending limit); billing endpoints are not visible from here, so the cause is
+    recorded as unverified rather than asserted. **Until it clears, CI proves nothing about any
+    push, and the local `pnpm gate` is the only real gate.**
+    Original closure text follows.
+    **CLOSED by O98 (2026-08-20).** ci.yml now
     has a second job, `e2e`, beside `verify`: chromium only, the config's own `webServer`
     doing the build, the HTML report and `test-results/` uploaded on failure so a red gate
     is diagnosable from the run that caught it. Separate job on purpose — the suite measures
