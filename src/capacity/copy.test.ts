@@ -14,6 +14,9 @@ import { NO_HISTORY_COPY } from "./model";
 import { FORECAST_REFUSAL_COPY } from "./forecast";
 import { SCORE_WITHHELD_COPY } from "./score";
 import { RECOMMENDATION_WITHHELD_COPY } from "./recommendation";
+import { DRIFT_REFUSAL_COPY, DRIFT_VERDICT_COPY } from "./drift";
+import { CALENDAR_UNKNOWN_COPY } from "./calendar";
+import { OPERATOR_COPY_SURFACES } from "@/compliance/cdss-boundary";
 import { CAPACITY_SENTENCE_KINDS, capacityCopySweep, capacityCopyOverDiary } from "./copy";
 
 const sim = runSim({ ...DEFAULT_SIM_CONFIG, weeks: 6 });
@@ -28,7 +31,7 @@ describe("W226 the register and the lane cannot disagree", () => {
     const declared = new Set(CAPACITY_SENTENCE_KINDS.map((k) => k.id));
     expect([...declared].filter((d) => !produced.has(d)), "declared but never produced").toEqual([]);
     expect([...produced].filter((p) => !declared.has(p)), "produced but not declared").toEqual([]);
-    expect(declared.size).toBe(15);
+    expect(declared.size).toBe(22);
   });
 
   it("binds each id to text only that kind contains", () => {
@@ -65,6 +68,9 @@ describe("W226 the register and the lane cannot disagree", () => {
       ...Object.values(FORECAST_REFUSAL_COPY),
       ...Object.values(SCORE_WITHHELD_COPY),
       ...Object.values(RECOMMENDATION_WITHHELD_COPY),
+      ...Object.values(DRIFT_REFUSAL_COPY),
+      ...Object.values(DRIFT_VERDICT_COPY),
+      CALENDAR_UNKNOWN_COPY,
     ];
     const byId = new Map(swept().map((s) => [s.id, s.text]));
     for (const kind of CAPACITY_SENTENCE_KINDS) {
@@ -75,6 +81,24 @@ describe("W226 the register and the lane cannot disagree", () => {
     // And the hole is the majority of the lane's prose, which is the unit's whole premise.
     const composed = CAPACITY_SENTENCE_KINDS.filter((k) => k.composed);
     expect(composed.length).toBeGreaterThan(CAPACITY_SENTENCE_KINDS.length / 2);
+  });
+});
+
+describe("W226 the register covers the LANE, not just the sweep somebody wrote", () => {
+  it("names every capacity module that W200 says authors copy", () => {
+    // W228 EXPOSED THIS HOLE, one unit after W226 shipped. The register was both-directions
+    // against its own hand-written sweep, so a NEW module in this lane could ship prose and every
+    // check stayed green — nothing tied the sweep to the lane. That is the same class of gap W226
+    // was built to close, one level up. Reuses W200's register rather than inventing a detector:
+    // if a capacity module declares operator copy there, a sentence kind here must name it.
+    const authored = OPERATOR_COPY_SURFACES.filter(
+      (surface) => surface.module.startsWith("src/capacity/") && surface.operatorCopy.length > 0,
+    ).map((surface) => surface.module);
+    const named = new Set(CAPACITY_SENTENCE_KINDS.map((k) => k.module));
+    expect(authored.length).toBeGreaterThan(4);
+    expect(authored.filter((m) => !named.has(m)), "authors copy but no sentence kind names it").toEqual([]);
+    // And the other direction: a kind may not name a module that authors nothing.
+    expect([...named].filter((m) => !authored.includes(m)), "named but authors no declared copy").toEqual([]);
   });
 });
 

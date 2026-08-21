@@ -169,6 +169,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > below it; no recalibration anywhere — asserted by absence, with a seeded break proving the
 > assertion bites; the copy states that drift does not say which side moved; W226's register
 > extended AND its lane-coverage hole closed; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/drift.ts` + 13 tests, plus W226's register extended by 7 kinds and
+> its coverage hole closed. **Over the sim: 131 predictions split 65/66, hit rate 87.7% earlier and
+> 81.8% lately — a fall of 5.9 points, verdict `tracking`,** which is the useful case to have
+> measured because it sits close enough to the ten-point threshold that the threshold does work.
+> **A FLOATING-POINT DEFECT AT EXACTLY THE THRESHOLD, FOUND BY TESTING THE BOUNDARY FROM BOTH
+> SIDES.** 100% → 90% is a fall a reader calls exactly ten points; both rates come from integer
+> division, so it arrives as `-0.09999999999999998` and a bare `<=` reported it as TRACKING. The one
+> input anybody would check by hand was the one input that failed. Fixed with a stated epsilon;
+> removing it fails the boundary test.
+> **THE SOURCE SCAN FIRED ON THE MODULE'S OWN PROSE, WHICH IS THE GUARD BEING WRONG RATHER THAN THE
+> CODE.** The note has to USE the word "recalibration" to explain why there is none; a scan that
+> cannot tell prose from code would force the explanation out of the file to satisfy itself. Now it
+> strips comments first — and asserts the stripper left the code behind, so a stripper that ate
+> everything cannot pass.
+> No recalibration, checked three ways because "we did not add that" stays true only until somebody
+> adds it, and the line that adds it looks like a fix for a red monitor: the namespace holds ONE
+> function, the stripped source holds no adjusting identifier, and nothing the module returns has a
+> shape a forecaster could be fed. Seeded `widenToFit` fails two of the three.
+> The split is at the midpoint and takes no parameter (a split somebody can move is a split moved
+> until the answer changes); the odd prediction goes to the RECENT half so newer evidence is never
+> the thinner side — giving it to the earlier half fails three tests. `improved` is reported the
+> same way `drifted` is, because a monitor that only reports bad news is grading rather than
+> observing. The drift copy states outright that it cannot say which side moved, and `tracking`
+> states that agreement between halves is not a claim the ranges are good.
+> **W228 EXPOSED A HOLE IN W226, ONE UNIT OLD, AND IT IS THE SAME CLASS W226 WAS BUILT TO CLOSE.**
+> That register was both-directions against its own HAND-WRITTEN sweep, so a new module in this
+> lane could ship prose with every check green — nothing tied the sweep to the lane. Closed by
+> reusing W200's register rather than inventing a detector: every `src/capacity/` module that
+> declares operator copy must be named by a sentence kind, and both directions. It earned its keep
+> immediately — it failed on `drift.ts` before W200's own test did, because I had added the kinds
+> before the surface entry.
+> Declaring the carrying chain to its ROOT fell out of the same work: `model.never_run` is now a
+> declared kind, and the two carriers name it, so the register shows W222's sentence travelling
+> through W223 into W225 rather than appearing to be three unrelated strings.
+> W167's fold register caught the last-index read in `windowOf` and was extended with a rationale —
+> the array is sorted by date in the same function, so "last" is a total order on the date.
+> Non-vacuity, five breaks: report rates without counts (1 test); drop the epsilon (1); give the
+> extra prediction to the earlier half (3); add the recalibration (2); let a new module's sentence
+> go undeclared (1).
+> Gate: `pnpm verify` green — 229 files, 3737 tests, build, audit:gate PASS.
 
 > **W227 (seasonality and public holidays as declared data with a source) — claimed
 > 2026-08-21T07:50Z by loop-0821a.** The row has two halves and I am saying up front which one
@@ -5606,7 +5646,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W225 | done | loop-0821a | 2026-08-21T07:34Z | 95da32b | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
-| W228 | claimed | loop-0821a | 2026-08-21T07:56Z | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
+| W228 | done | loop-0821a | 2026-08-21T07:56Z | PENDING | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |

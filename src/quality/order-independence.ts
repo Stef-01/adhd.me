@@ -71,6 +71,14 @@ export interface FoldSite {
  */
 export const FOLD_SITES: readonly FoldSite[] = [
   {
+    module: "src/capacity/drift.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "Reads the last element of a window to stamp its end date. The array is sorted by `dayIso` immediately before, in the same function, so \"last\" is a total order on the date rather than on however the predictions arrived — and the first element is read the same way for the start date. It aggregates nothing: the value it produces is a label on the window, not a figure anybody compares.",
+    },
+  },
+  {
     module: "src/demo/clinicians.ts",
     folds: 1,
     disposition: {

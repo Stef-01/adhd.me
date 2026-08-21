@@ -32,6 +32,9 @@ import { occurrencesFrom, type SessionKey, type SessionOccurrence, type Weekday 
 import { forecastFill } from "./forecast";
 import { backTest, scorePredictions } from "./score";
 import { sessionRecommendation } from "./recommendation";
+import { driftReport } from "./drift";
+import { CALENDAR_UNKNOWN_COPY } from "./calendar";
+import { NO_HISTORY_COPY } from "./model";
 
 /** One kind of sentence this lane can put in front of a practice. */
 export interface SentenceKind {
@@ -67,6 +70,20 @@ export interface SentenceKind {
 
 export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
   {
+    id: "model.never_run",
+    module: "src/capacity/model.ts",
+    when: "A session the diary has never recorded. The root of the lane's carrying chain.",
+    composed: false,
+    mustContain: "not a session that runs empty",
+  },
+  {
+    id: "model.no_slots_offered",
+    module: "src/capacity/model.ts",
+    when: "A session that ran and offered nothing, so there is no denominator for a rate.",
+    composed: false,
+    mustContain: "nought per cent",
+  },
+  {
     id: "forecast.sentence.plural",
     module: "src/capacity/forecast.ts",
     when: "A session with enough recorded weeks, asked about more than one slot.",
@@ -86,6 +103,7 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
     when: "A session with nothing recorded. Carries W222's own sentence after its own.",
     composed: true,
     mustContain: "not a forecast that nothing will fill",
+    carries: ["model.never_run"],
   },
   {
     id: "forecast.withheld.too_few_recorded_weeks",
@@ -165,8 +183,43 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
     module: "src/capacity/recommendation.ts",
     when: "No forecast for the session. Carries W223's sentence, which carries W222's.",
     composed: true,
-    carries: ["forecast.withheld.no_recorded_history"],
+    carries: ["forecast.withheld.no_recorded_history", "model.never_run"],
     mustContain: "nothing to say about opening more of it",
+  },
+  {
+    id: "drift.verdict.tracking",
+    module: "src/capacity/drift.ts",
+    when: "Two halves of the scored record that agree within W228's threshold.",
+    composed: true,
+    mustContain: "about as often lately as they did earlier",
+  },
+  {
+    id: "drift.verdict.drifted",
+    module: "src/capacity/drift.ts",
+    when: "A recent half worse than the earlier one by more than the threshold.",
+    composed: true,
+    mustContain: "does not say which side moved",
+  },
+  {
+    id: "drift.verdict.improved",
+    module: "src/capacity/drift.ts",
+    when: "A recent half better by more than the threshold. Reported, not celebrated.",
+    composed: true,
+    mustContain: "more often lately than they did earlier",
+  },
+  {
+    id: "drift.withheld.too_few_in_a_window",
+    module: "src/capacity/drift.ts",
+    when: "Fewer scored weeks on one side of the split than W224's floor.",
+    composed: false,
+    mustContain: "not enough scored weeks on both sides",
+  },
+  {
+    id: "calendar.unknown",
+    module: "src/capacity/calendar.ts",
+    when: "No holiday calendar has been loaded, which today is always.",
+    composed: false,
+    mustContain: "gap in what has been recorded rather than a finding",
   },
   {
     id: "recommendation.withheld.forecaster_unscored",
@@ -272,6 +325,27 @@ export function capacityCopySweep(): SweptSentence[] {
     push("recommendation.sentence.singular", one.recommendation.sentence);
     push("recommendation.demand.sometimes_full", one.recommendation.demandEvidence);
   }
+  const made = (n: number, hits: number, startDay: number) =>
+    Array.from({ length: n }, (_, i) => ({
+      dayIso: `2026-06-${String(startDay + i).padStart(2, "0")}`,
+      slotsOffered: 6,
+      range: { low: 2, high: 4 },
+      actualFilled: i < hits ? 3 : 6,
+      hit: i < hits,
+      widthSlots: 2,
+    }));
+  const steady = driftReport([...made(10, 9, 1), ...made(10, 9, 11)], PERIOD);
+  if (steady.compared) push("drift.verdict.tracking", steady.copy);
+  const worse = driftReport([...made(10, 10, 1), ...made(10, 4, 11)], PERIOD);
+  if (worse.compared) push("drift.verdict.drifted", worse.copy);
+  const better = driftReport([...made(10, 4, 1), ...made(10, 10, 11)], PERIOD);
+  if (better.compared) push("drift.verdict.improved", better.copy);
+  const tooFew = driftReport(made(4, 4, 1), PERIOD);
+  if (!tooFew.compared) push("drift.withheld.too_few_in_a_window", tooFew.copy);
+  push("calendar.unknown", CALENDAR_UNKNOWN_COPY);
+  push("model.never_run", NO_HISTORY_COPY.never_run);
+  push("model.no_slots_offered", NO_HISTORY_COPY.no_slots_offered);
+
   const noRec = sessionRecommendation(practice([]), KEY, 3, PERIOD);
   if (!noRec.offered) push("recommendation.withheld.no_forecast", noRec.copy);
   const unscoredRec = sessionRecommendation(varied, KEY, 3, PERIOD);
