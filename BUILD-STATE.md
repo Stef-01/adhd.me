@@ -189,6 +189,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > in its place; a third vertical carried with NO new machinery, and no condition named; the
 > by-kind collapse fixed so two members of one kind waiting on different acts are not reported as
 > waiting on the same thing; `pnpm verify` green.
+>
+> **DONE 2026-08-21T11:51Z at `8a52c57`.** Third vertical is `vert-undecided-3` in
+> `src/verticals/third.ts` — two members, the sparsest of the three, so the report's coverage
+> statement is exercised on a bundle whose kinds are a strict subset. It cost one declaration and
+> no machinery, which was the point of building it after W248 rather than before.
+> **THE RECONCILIATION IS THE UNIT, AND W158's OWN SENTENCE IS WHAT NEEDED CORRECTING.** It read:
+> the chain is named per kind, "true of every member of that kind and cannot drift". First half
+> right and kept. Second half wrong, and wrong in a way worth keeping on the record: **static is
+> not the same as unable to drift.** `REMAINING_CHAIN` could not drift from itself. It drifted from
+> the declaration layer that grew up beside it — and had already: the report told a founder an
+> education item needs *"a signed-off source for it to cite"* while every declared education member
+> says no founder gate applies to it at all. The declared act now wins where there is one and is
+> CARRIED rather than restated, and the grouping key moves from the kind to the act, which also
+> fixes the collapse W248's own second vertical exposed.
+> **AND THE "SPECIALIST" HALF IS A CORRECTION TO MY OWN CLAIM, WHICH IS THE PART WORTH READING.**
+> I wrote that the tree "had already ruled on that", implying an oversight. It had not been an
+> oversight: **W200 holds an ACCEPTED finding for exactly this string**, reasoned — the rule bundles
+> the word because a clinician CLAIMING the title is a prohibited claim, and someone reviewing our
+> own content is the opposite direction of the same word — with a review date in 2027. So the tree
+> ruled TWICE, in opposite directions: W191 removed it from the declarations, W200 accepted it in
+> the report. The inconsistency was real and my account of how it got there was not.
+> **What justifies the change is the ACCURACY argument, which stands whatever one thinks of the
+> compliance one**: W119's chain is a reviewer and then a signatory who is not the reviewer, and it
+> does not require the reviewer to hold a protected title. The report told a founder that it did.
+> Retiring the acceptance is a side effect rather than the reason — and the thing that surfaced it
+> was **W200's own rule that every acceptance must still be live**, which fired the moment the
+> string it accepted stopped existing. A register catching a stale exemption is exactly what W247
+> was arguing for one unit earlier.
+> **THEN THE FIRST REWRITE TRADED ONE BANNED PHRASE FOR ANOTHER.** Replacing "whether a specialist
+> has looked" with "whether a reviewer has looked" walked straight into W158's own ban on stage
+> vocabulary — `reviewer has` is on the list. Two rules over one sentence, and satisfying one is
+> not satisfying the other. The footer now says how far along W119's chain a member has got, and
+> the ban list carries BOTH words so the next edit cannot pick either.
+> **Three seeded failures**: the declared acts not carried through, the protected title restored to
+> one chain, and a regrouping that loses members (caught by the totals check, the golden report and
+> the per-act count independently).
+> Verification: `pnpm verify` green (246 files, 3976 tests, audit gate 2 accepted / 0 unaccepted);
+> `e2e/verticals.spec.ts` 9/9 — one assertion had pinned the old wording and was updated to carry
+> W119's roles instead, so it fails if the overstatement returns. Vault log skipped — Stefan-Brain
+> unreachable.
 
 > **W248 (vertical assembly, machinery only) — claimed 2026-08-21T11:20Z by loop-0821a.**
 > **THE ROW NAMES A DOMAIN THIS TREE WAS REORIENTED AWAY FROM, AND THE LEDGER ALREADY SAYS SO
@@ -6877,7 +6917,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W247 | done | loop-0821a | 2026-08-21T11:00Z | b9aa0c1 | Q19 hardening → 8 findings (6 fixed, 2 carried with triggers); consent withdrawal failed open AND broke W243's monotonicity; Y4-1's cross-tenant shape in `disclosuresTo`; disclosure ledger classified in W106, lane rule added after measuring why the tree-wide one is not worth writing. `docs/HARDENING-Q19.md`. |
 | W248 | done | loop-0821a | 2026-08-21T11:20Z | c929551 | [P] Vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. **[TITLE CONTESTED: row says "Women's health" — the pre-reorientation domain; W186's row says W248/W249 hold autism. Founder item, see claim.]** |
 | W249 | blocked | — | — | — | Pathway content for the second care area → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W248: this row was titled "Women's health", the pre-reorientation domain, while W186's row states W248/W249 hold autism. **[FOUNDER: VERTICAL UNDECIDED.]** Title corrected by W248 2026-08-21; the care area itself is a founder decision and was not made by the loop. |
-| W250 | claimed | loop-0821a | 2026-08-21T11:35Z | — | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
+| W250 | done | loop-0821a | 2026-08-21T11:35Z | 8a52c57 | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
 | W252 | available | — | — | — | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
 | W253 | available | — | — | — | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
