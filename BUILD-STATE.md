@@ -143,6 +143,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O166 (the clinician profile: a design audit) — claimed 2026-08-21T13:40Z by loop-0821a.**
+> Founder-directed, 2026-08-21: *"visually looks terrible, do through design audit to make it much
+> more visually coherent, learn a bout best practices onlnei"* — with a screenshot of Dr Anubhav
+> Saxena's profile.
+> **FIRST, THE SCREENSHOT SHOWS "Co-founder of ADHD.ME" AND THE TREE DOES NOT.** The same message
+> batch said *"remove all mentions of founder on entire site"* and *"Dr Saxena only owns the clinic,
+> he is the first clinic partner. Do not hallucinate and interpret him as cofounding the entity."*
+> That correction has already landed: O158 renamed `ownershipInterest` to `disclosedInterest`
+> precisely because the old name presumed a shape and produced a false sentence about a named
+> doctor, his label reads **"First clinic partner"**, and `finder-flow.spec.ts` asserts the
+> disclosure line matches neither `/founder/i` nor an ownership claim about ADHD.ME. **Verified by
+> running the app rather than by reading the code** — the capture is in `qa/_runs/w261/`. The
+> screenshot is a build predating O158. Nothing to remove; the guard that keeps it removed exists.
+> Same for the rest of that batch: `TEAM_PAGE_PUBLIC = false` already hides the team (O155), and
+> Saif Tareen is already on it with both affiliations (O152).
+> **THE ONE THING I CANNOT DO IS THE PHOTOGRAPH.** It arrived as a chat image, and there is no tool
+> here that writes an attached image to disk. `public/saif-tareen.png` at 3:4 remains the founder's
+> to drop in; the plate renders a monogram until it exists, which is what the entry already says.
+> **SO THE ACTUAL WORK IS THE DESIGN AUDIT, AND TWO OF THE FAULTS ARE LAYOUT BUGS RATHER THAN
+> TASTE.** From the captures: the `h1` is **clipped by the sticky header** at both widths, and the
+> sticky booking bar **overlays live content** — "About" renders sliced in half behind it and a
+> paragraph is cut mid-sentence. Vercel's guidelines put the second in one line: *"Sticky
+> headers/footers/overlays must not cover the focused element."* Neither is a matter of preference.
+> **THE TASTE FAULTS ARE REAL TOO, AND THE BIGGEST IS THE ACCENT.** `adhdme-taste` says the accent
+> is reserved for **live tokens** — the value that changes, the word that matters — and *"if
+> everything is accented, nothing is."* On this one screen amber currently carries five unrelated
+> jobs: the interest disclosure, the matched-cue pills, the map link, "Live on Healthengine", and
+> the dashes bulleting Focus and experience. Beside that: the meta line breaks mid-phrase
+> ("Beecroft & / Double Bay") where `text-pretty` belongs, two pill styles sit adjacent doing
+> different jobs, and the three-row block under the chips reads as three unrelated rows because
+> nothing contains it.
+> Gate: the two layout bugs fixed and asserted — no element clipped by either sticky region, at 390
+> and desktop, checked against rendered geometry rather than by eye; the accent reduced to ONE
+> meaning on this screen with the others restated in the neutral palette, asserted through a canvas
+> (W229's technique) so a token change cannot reintroduce it; heading hierarchy and vertical rhythm
+> on a single scale; `text-pretty` on the display and meta lines; every existing finder e2e still
+> green, including the disclosure guard; before/after captures in `qa/` and an entry in
+> `docs/DESIGN-QA.md` (adhdme-taste's review procedure); `pnpm verify` green.
+
 > **W260 (YEAR 5 CLOSE — Y6 horizon plan + expansion-rule renewal) — claimed 2026-08-21T13:23Z by
 > loop-0821a.** **The last available row in the plan.** Every other unit is done or blocked.
 > **THE EXPANSION RULE HAS RUN OUT OF INPUT, WHICH IS WHAT "THE ARC IS SPENT" MEANS MECHANICALLY.**
