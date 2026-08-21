@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W222 (Q18 capacity model: sessions, slots and recorded utilisation) — claimed
+> 2026-08-21T07:58Z by loop-0821a.** Q17 is finished except W217, which is a founder decision, so
+> Q18 opens here. The tree has session CONTROLS (W17: who participates, which types are fillable,
+> protected capacity, the scheduling window) and no session MODEL — nothing in it can answer "how
+> full does Dr X's Thursday usually run". Everything Q18 plans to forecast rests on that answer, so
+> the model lands before the forecaster, which is W213's ordering argument applied to a second
+> lane: the floor goes in first, because v2 is always where the fallback arrives.
+> The row's gate is one sentence and it is the whole unit: **a session with no recorded history
+> yields no forecast rather than a default.** So the history type is a discriminated union whose
+> no-history arm has NO NUMERIC FIELD AT ALL — not a zero, not a null, nothing a forecaster could
+> read a number out of. A `{ utilisation: 0 }` for a session that has never run is a confident
+> claim about a diary nobody has observed, and it is the exact shape of the defect W215 found live
+> on the incrementality dashboard, where `(incrementalAttended ?? 0).toFixed(0)` printed a measured
+> zero for a practice that simply had no comparison group.
+> Two conflations to refuse while defining the terms, both of which produce a plausible number:
+> **(1) A session that has not happened yet is not a session that went unfilled.** Its open slots
+> are unoffered, not rejected. Utilisation counts PAST occurrences only, and a future one is
+> excluded by construction rather than filtered afterwards.
+> **(2) A session that offered no slots has no utilisation, not 0%.** `filled / offered` with
+> `offered` at zero is NaN or, worse, a zero somebody rounds into a percentage — a full-looking
+> or empty-looking diary invented from a division that never had an answer.
+> Founder gate: a session is a fact about a DIARY, so no patient identity may enter the model —
+> asserted on the type, since a slot's occupant is exactly what a slot record is tempted to carry.
+> Gate: over the synthetic practice (W3/W12), with the population pinned so the sweep is not
+> vacuous; both refusals reached by construction; W200/W201 registers extended; `pnpm verify` green.
+
 > **W220 (Q17 console: the response graph as a practice reads it) — claimed 2026-08-21T07:15Z by
 > loop-0821a.** W212 built the graph, W218 gave it a disclosure floor, W219 settled what may and
 > may not be claimed from it. Nothing renders any of it. A response graph nobody reads is a
@@ -5183,7 +5209,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W219 | done | loop-0821a | 2026-08-21T06:52Z | a476f16 | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
 | W220 | done | loop-0821a | 2026-08-21T07:15Z | ecdb1af | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
-| W222 | available | — | — | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
+| W222 | claimed | loop-0821a | 2026-08-21T07:58Z | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | available | — | — | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | available | — | — | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
