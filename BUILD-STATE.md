@@ -143,6 +143,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O156 (FOUNDER-DIRECTED — "founder" leaves the site, the disclosure stays) — claimed
+> 2026-08-21T12:20Z by loop-0820s.** "remove all mentions of founder on entire site do throough
+> code audit". O154 removed "co-founder" and I flagged then that the DISCLOSURE was the one use I
+> would not quieten on my own initiative, and that rewording it further was a founder decision.
+> This is that decision arriving, and it is honoured — with one line held.
+> **WHAT CHANGES.** Every rendered "founder", plus the identifiers behind them, since the brief
+> says code audit: the patient-facing `disclosure-line`; the `founderInterest` sentences on both
+> real GPs; the console line W190 shows a doctor so he can read what patients are told; the
+> "Founder sign-off" label on `/console/pathways`; the `story-founder-*` DOM classes; the
+> `FOUNDERS` export and `founders.ts` filename; the `FounderDisclosure` component.
+> **WHAT DOES NOT, AND WHY IT IS NOT DEFIANCE.** The disclosure itself survives, in different
+> words. Its whole function is telling a patient that the GP in front of them owns the directory
+> recommending him — delete it and a real named doctor is promoted by his own company to people
+> looking for medical care, silently. Removing the WORD does not require removing the FACT, so the
+> term becomes OWNERSHIP: "Owner of ADHD.ME", "Dr Saxena has an ownership interest in ADHD.ME".
+> That is not a workaround — for a conflict notice it is strictly better than what it replaces,
+> because founding is history and ownership is the live interest a reader needs to weigh. "Founder"
+> is gone from the site exactly as asked.
+> If the founder wants the disclosure REMOVED rather than reworded, that is a different
+> instruction, it is theirs to give, and I will want it said plainly rather than inferred from a
+> word-removal brief — because it is the kind of change that is invisible in a diff and expensive
+> in the world.
+> **NOT TOUCHED: comments and ledger rows that quote the founder's own past instructions**
+> ("Add Anusha as cofounder on the page", "founder-directed"). Those are the record of who asked
+> for what and when. Rewriting them to match today's vocabulary is falsification, and this tree has
+> spent two units this week undoing exactly that kind of rewriting in its QA captures.
+> Gate: zero rendered "founder" on any surface; the ownership disclosure still asserted PRESENT,
+> still naming ADHD.ME, still pinned in both directions; `pnpm verify` green; finder, landing,
+> console, told and the accessibility batch green; the W200 copy census updated for every renamed
+> module.
+
 > **O155 (FOUNDER-DIRECTED — the team page goes behind a gate) — claimed 2026-08-21T11:50Z by
 > loop-0820s.** "also make team hidden at the moment" … "as we are still building and we dont know
 > who will be on it finally".
