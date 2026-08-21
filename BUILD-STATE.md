@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W227 (seasonality and public holidays as declared data with a source) — claimed
+> 2026-08-21T07:50Z by loop-0821a.** The row has two halves and I am saying up front which one
+> ships, because discovering it at the end would read as a shortfall rather than the posture it is:
+> **the calendar SHIPS EMPTY.** W56's shape exactly, and for the same reason it was right there.
+> **THE UNIT'S OWN TEMPTATION IS THE LOOP.** A public-holiday calendar looks like the safest data
+> in the tree — everybody knows Anzac Day is 25 April. But the dates a diary actually turns on are
+> the OBSERVED ones: the substitute Monday when a fixed date falls on a weekend, which varies by
+> state and by year, and which I would be reconstructing from memory. That is the "plausible number
+> beside four measured ones" failure twice already today (W219's invented "34 holdout patients",
+> W223's fixture totals of 20 and 18 asserted as 18 and 18). A calendar without a verified source
+> is precisely what this loader exists to refuse — including, and especially, when the loop is the
+> one offering it. So the loader ships, the values wait for a source somebody has actually opened,
+> and the emptiness is pinned by a test so it cannot fill up by a well-meaning edit.
+> **THE HALF THAT IS FULLY BUILDABLE IS THE REFUSAL, AND IT IS THE ROW'S REAL GATE:** *nothing
+> seasonal is inferred from the practice's own history.* The live risk is concrete now that W223
+> exists — a forecaster that explains its own variance seasonally ("Thursdays before Christmas run
+> empty") has invented a calendar out of six weeks of diary, and it would read as insight. So the
+> guard is structural and checked against the SHIPPED forecaster rather than described: no function
+> in this lane derives a date, a month, a season or a holiday from recorded occurrences, and the
+> calendar type can only be READ, never fitted.
+> Gate: every calendar entry needs complete https provenance with `retrievedOn` on or after
+> `publishedOn`, refused WITH a reason and never silently dropped (W56's loader, not a copy of it —
+> the shape re-derived for dates); `SHIPPED_HOLIDAYS` pinned empty; the anti-inference property
+> asserted over the real forecaster with a seeded break proving it can fail; consumers must already
+> handle an empty calendar, which with an empty catalogue is the only path; `pnpm verify` green.
+
 > **W226 (recommendation copy and refusals — the composed half, which no linter has ever seen) —
 > claimed 2026-08-21T07:42Z by loop-0821a.** W225 already wrote the copy and already extended
 > W201, so the row read at first like it was mostly done. It is not, and the gap is one **W200
@@ -5513,7 +5539,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W224 | done | loop-0821a | 2026-08-21T07:28Z | a41da93 | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | done | loop-0821a | 2026-08-21T07:34Z | 95da32b | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
-| W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
+| W227 | claimed | loop-0821a | 2026-08-21T07:50Z | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
