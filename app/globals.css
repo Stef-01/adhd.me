@@ -390,9 +390,15 @@ textarea:focus-visible {
   width: 42px;
 }
 
+/* O166: MUTED, not accent. `adhdme-taste` reserves the accent for LIVE TOKENS — the value that
+   changes, the word that matters — and a canvas sweep of the profile found the accent painting
+   SIX elements in FOUR unrelated meanings: this label, a material-interest disclosure, the matched
+   cue pills, a map link and a booking-source note. "If everything is accented, nothing is." The
+   cue pills keep it, because they are the only thing on the screen that changes with what the
+   reader typed. An eyebrow is a signpost and reads as one in muted. */
 .eyebrow {
   margin: 0;
-  color: var(--accent);
+  color: var(--muted);
   font-size: 0.8125rem;
   font-weight: 650;
   letter-spacing: 0.015em;
@@ -635,7 +641,12 @@ textarea:focus-visible {
 .fit-evidence {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  /* O166: 14px, up from 6px, and the reason is the change directly above. Stacking each row put a
+     3px gap INSIDE an item; at 6px between items the two distances were nearly equal, so a pill and
+     the phrase under it grouped no more strongly than two unrelated cues did. That is O150's own
+     finding on this screen — "every gap was between 6 and 13px, so nine semantically different
+     blocks looked like one list" — reintroduced by a fix to something else. Within 3, between 14. */
+  gap: 14px;
   /* O129: separated from the disclosure line above it. Butted together, "Co-founder of ADHD.ME"
      read as the first item of the evidence list — a material-interest disclosure being mistaken
      for a reason this GP was matched, which is the one adjacency on this screen worth spending
@@ -648,11 +659,15 @@ textarea:focus-visible {
   list-style: none;
 }
 
+/* O166: ONE LAYOUT PER ROW, ALWAYS. `flex-wrap: wrap` made the layout depend on how wide the pill
+   happened to be: "ADHD assessment" left room for its phrase beside it, "A structured, measured
+   approach" did not, so two rows of identical content rendered two different ways on the same
+   screen — the single most incoherent thing on it. Stacked, every row is the same shape whatever
+   the cue is called, and a longer lexicon label cannot reflow the list. */
 .fit-evidence li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 8px;
+  display: grid;
+  justify-items: start;
+  gap: 3px;
 }
 
 .fit-evidence-label {
@@ -1344,6 +1359,10 @@ textarea:focus-visible {
   font-size: 2.125rem;
   line-height: 1.05;
   letter-spacing: -0.04em;
+  /* O166: a display-scale name is where a widow is most visible — one word of somebody's name
+     alone on a second line. `balance` is the Vercel guidelines' rule for headings and it costs
+     nothing at two or three words. */
+  text-wrap: balance;
 }
 
 .profile-fit-signals {
@@ -1500,8 +1519,10 @@ textarea:focus-visible {
   color: var(--muted);
 }
 
+/* O166: ink. "Live on Healthengine" is a statement of fact about where booking happens, not a
+   value that changes — the weight already separates it from the label beside it. */
 .profile-footer strong {
-  color: var(--accent);
+  color: var(--ink);
   font-weight: 630;
 }
 
@@ -5471,9 +5492,13 @@ textarea:focus-visible {
   color: var(--muted);
   font-size: 0.78125rem;
 }
+/* O166: INK, and the direction matters. This is a material-interest disclosure about a named real
+   person, sited exactly where the listing is read (O89/O129) — so taking it OFF the accent must not
+   make it quieter. Ink on paper is the highest-contrast pair in the palette; amber is not. This
+   moves the disclosure UP in prominence while freeing the accent for the one thing that changes. */
 .disclosure-line {
   margin: 4px 0 0;
-  color: var(--accent);
+  color: var(--ink);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -6471,7 +6496,18 @@ textarea:focus-visible {
 }
 
 /* Directions (item 14), on the profile's fit list. */
-.profile-directions { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+/* O166: ink. A link is a link; underline already says so, and an amber one was the fourth
+   meaning the accent carried on this screen. */
+.profile-directions { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* O166: the map link's own row, outside `.fit-list`. No divider, because it is not another item in
+   a list of facts — it is the one thing on this block a reader can act on. The margin is the gap
+   the list's bottom rule used to provide. */
+.profile-directions-row {
+  margin: 14px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
 
 /* O16: the privacy agreement bar and its pop-out. */
 .consent-bar {

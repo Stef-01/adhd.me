@@ -1930,3 +1930,110 @@ pinned by example.
 
 The now-stale `no-ratings` acceptance was deleted from the profile sweep — its own
 stale-acceptance check forced it, rather than a comfortable entry being left behind.
+
+## O166 — the clinician profile: a design audit (2026-08-21)
+
+Founder-directed: *"visually looks terrible, do through design audit to make it much more visually
+coherent, learn a bout best practices onlnei"*, with a screenshot of Dr Anubhav Saxena's profile.
+Captures in `qa/_runs/o166/`.
+
+### The screenshot showed a claim the tree no longer makes
+
+It read **"Co-founder of ADHD.ME"** under his name. The same message batch said *"remove all
+mentions of founder on entire site"* and *"Dr Saxena only owns the clinic, he is the first clinic
+partner. Do not hallucinate and interpret him as cofounding the entity."*
+
+That correction had already landed. O158 renamed `ownershipInterest` to `disclosedInterest`
+*because* the old name presumed a shape and produced a false sentence about a named doctor; his
+label reads **"First clinic partner"**; and `finder-flow.spec.ts` asserts the disclosure line
+matches neither `/founder/i` nor an ownership claim about ADHD.ME. **Verified by running the app,
+not by reading the code** — `qa/_runs/o166/before-390-top.png` is the profile as it actually
+rendered before this unit, and it says "First clinic partner". The screenshot is a build predating
+O158. Nothing to remove; the guard that keeps it removed already exists.
+
+Same for the rest of that batch: `TEAM_PAGE_PUBLIC = false` already hides the team (O155), and Saif
+Tareen is already on it with both affiliations (O152). **The one thing outstanding is the
+photograph**, which arrived as a chat image — there is no tool here that writes an attached image to
+disk, so `public/saif-tareen.png` at 3:4 stays the founder's to drop in.
+
+### Two "layout bugs" I reported from the screenshots were not real
+
+My first pass through the captures found the `h1` clipped under the sticky header and the booking
+bar slicing through the About section. Both looked obvious. **Both were artifacts of screenshotting
+an element**: Playwright scrolls the target into view, so a sticky header paints over the top of
+whatever you asked it to capture.
+
+Measured instead of looked at: at rest the header ends at 64px and the `h1` starts at 484px. Scrolled
+to the foot of the page, the number of text leaves intersecting the booking bar's band is **0** at
+both 390 and desktop — the bar is sticky inside a container and parks above the page footer rather
+than floating over copy. Recorded because the fix I nearly wrote would have added padding nothing
+needed, and called it a repair.
+
+### The real fault: the accent carried four meanings on one screen
+
+`adhdme-taste` reserves the accent for **live tokens** — "the value that changes, the word that
+matters" — and says outright: *"If everything is accented, nothing is."*
+
+A canvas sweep of the rendered profile (W229's technique — the stylesheet emits `oklch()` and the
+token reaches elements through `color-mix`, so grepping for `var(--accent)` finds declarations
+rather than painted colour) found **six elements in four unrelated meanings**:
+
+| element | what it is | now |
+|---|---|---|
+| `.eyebrow` "Why this fit" | a section label | muted |
+| `.disclosure-line` "First clinic partner" | a material-interest disclosure | **ink** |
+| `.fit-evidence-label` ×2 | the matched cue — the live token | **keeps the accent** |
+| `.profile-directions` | a link | ink |
+| `.profile-footer strong` "Live on Healthengine" | a source note | ink |
+
+After: **two sites, one meaning.**
+
+**The disclosure went to ink, and the direction is the point.** It is a statement about a real named
+person's material interest, sited exactly where the listing is read (O89/O129). Taking it off the
+accent had to make it *louder*, not quieter — ink on paper is the highest-contrast pair in the
+palette and amber is not. A test asserts its contrast ratio now exceeds the accent's and clears
+WCAG AA on its own, so a future tidy cannot demote a compliance-bearing line while improving a
+palette.
+
+### The second fault: identical content rendering two different ways
+
+`.fit-evidence li` was `flex-wrap: wrap`. "ADHD assessment" left room for its phrase beside it; "A
+structured, measured approach" did not, so the phrase dropped to the next line. **Two rows of the
+same kind of fact, two layouts, decided by how many characters the lexicon happened to use for a
+label.** That is the thing that most made the screen read as broken, and it is what the founder's
+screenshot showed as a ragged two-column block.
+
+Now a grid: pill, phrase beneath, every row the same shape whatever the cue is called.
+
+That fix then introduced a smaller one of its own. Stacking put a 3px gap *inside* an item while the
+gap *between* items was 6px — nearly equal, so a pill and its phrase grouped no more strongly than
+two unrelated cues did. This is O150's own finding on this same screen ("every gap was between 6 and
+13px, so nine semantically different blocks looked like one list"), reintroduced by a fix to
+something else. Within 3, between 14.
+
+### Smaller things
+
+- **A separator was starting a line.** `text-wrap: pretty` (O150) stops a two-word widow; it cannot
+  stop a lone "·" beginning a line, which is what the meta rendered at 390 — "… he/him" / "· Beecroft
+  & Double Bay". A separator that begins a line reads as a bullet for the line under it. Bound to the
+  token before it with `&nbsp;`.
+- **`text-wrap: balance` on the display name.** The Vercel guidelines' rule for headings; at display
+  scale a widow is one word of somebody's name alone on a second line.
+- **An action was a peer of two facts.** `.fit-list` is a divider-separated stack giving every row
+  identical treatment, and it held two facts about an appointment, a link that leaves the site, and a
+  caveat — three kinds of thing, one visual language, no label on the group. The list now holds the
+  parallel pair; the map link sits after it as an action.
+
+### What I deliberately did not change
+
+"Have you been treated for anxiety before?" and "Compare with Dr Yadav" sit adjacent with different
+weights and both underlined. It looks like an inconsistency and is not one: the first reorders the
+list, the second navigates to a comparison. Different jobs, different weights. Changing everything
+that looks uniform-able is how an audit removes information.
+
+### Guards
+
+`e2e/profile-accent.spec.ts`, three tests, each watched failing: the eyebrow re-accented, the
+disclosure demoted to muted instead of ink, and the wrap restored. The accent sweep also asserts it
+finds *something* — a detector that matched nothing would pass the "only one meaning" check while
+proving the live token had lost its own accent.

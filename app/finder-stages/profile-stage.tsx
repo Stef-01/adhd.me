@@ -80,7 +80,15 @@ export function ProfileStage({
           {personalizedSignals.length > 0 ? "Why this fit" : "About this GP"}
         </p>
         <h1>{clinician.name}</h1>
-        <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {locationLabel(clinician)}</p>
+        {/* O166: the separator is bound to the token before it with a non-breaking space.
+            `text-wrap: pretty` (O150) stops a two-word widow; it cannot stop a lone "·" STARTING a
+            line, which is what this rendered at 390 — "… he/him" then "· Beecroft & Double Bay".
+            A separator that begins a line reads as a bullet for the line under it. adhdme-taste
+            asks for non-breaking spaces inside names and units, and this is the same rule for the
+            thing joining them. */}
+        <p className="clinician-meta">
+          {clinician.title}, {clinician.pronouns}&nbsp;· {locationLabel(clinician)}
+        </p>
         <NswTraining clinician={clinician} />
         <OwnershipDisclosure clinician={clinician} />
         {personalizedSignals.length > 0 ? (
@@ -164,23 +172,30 @@ export function ProfileStage({
             NOT repeated here: printing the same list twice on one screen, once as pills and
             once as a sentence, is the same content in two visual languages. The match screen
             has no pills, so it keeps the sentence. */}
+        {/* O166: THE LINK CAME OUT OF THE LIST. `.fit-list` is a divider-separated stack where every
+            row gets identical treatment, and it was holding two FACTS about an appointment here
+            ("long first appointment, scheduled reviews", "by telehealth, wherever you are") beside
+            an ACTION that leaves the site and a CAVEAT about the books being closed. Three kinds of
+            thing, one visual language, no label on the group — so it read as three unrelated
+            sentences with rules between them, which is what it looked like.
+            The list now holds only the parallel pair, and the action sits after it as an action. */}
         <div className="fit-list">
           <p>{clinician.appointmentLength}</p>
           <p>{distanceTo(clinician, origin) ?? clinician.reach}</p>
-          {/* Launch item 14: the practice on a map, from the practice's own name and
-              suburb — no API key, no location asked of the reader. */}
-          <p>
-            <a
-              className="profile-directions"
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}, Australia`)}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Map and directions to {clinician.practice}
-            </a>
-          </p>
           {closedBooksNote(clinician, request) && <p>{closedBooksNote(clinician, request)}</p>}
         </div>
+        {/* Launch item 14: the practice on a map, from the practice's own name and
+            suburb — no API key, no location asked of the reader. */}
+        <p className="profile-directions-row">
+          <a
+            className="profile-directions"
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}, Australia`)}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Map and directions to {clinician.practice}
+          </a>
+        </p>
 
         <section>
           <h2>About</h2>
