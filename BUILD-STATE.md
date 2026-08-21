@@ -143,6 +143,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W232 (Q18 dossier: what a forecast implies operationally, priced) — claimed 2026-08-21T08:44Z
+> by loop-0821a.** The row's gate is one clause and it is the useful one: *states what changes the
+> day a practice acts on one.* Not what the forecast is — Q18 has seven modules saying that — but
+> what a practice has actually committed to the moment it believes one.
+> **THE SHARPEST OPERATIONAL FINDING IS ONE THIS LANE MAKES ABOUT ITSELF, AND IT SHOULD LEAD.** A
+> practice acting on "between 4 and 6 of 6 will fill" opens capacity. Nothing in this product then
+> fills it: W231's coupling ships off, and underneath it G1/G2/G3 are shut and nothing has ever
+> been sent, so the invitation rail cannot help either. **Opening slots you have no mechanism to
+> fill is worse than not opening them** — the practice carries the roster cost and this product
+> supplied the confidence. That is the sentence a founder needs before anybody demos this lane, and
+> it is not a criticism of the forecaster: the forecaster is honest, and the gap is between what it
+> says and what the product can do about it.
+> **PRICED IN UNITS THAT ARE CHECKABLE.** No invented dollars. W46's figures register already holds
+> `mbs.bulk-billed-level-b-metro` — $69.56 all-in, published, effective 2025-11-01 — so the cost of
+> an unfilled slot is cited through the register rather than asserted, and the test pins the
+> dossier's numbers against the register and against the sim rather than against my memory. Twice
+> today a plausible figure went in beside measured ones (W219's "34 holdout patients", W223's
+> fixture totals), which is exactly why this dossier's arithmetic is derived rather than typed.
+> **AND THE RANGE'S WIDTH IS THE OPERATIONAL QUESTION, not its midpoint.** "4 to 6" is a decision
+> about which end you staff for. Staffing for 6 and filling 4 costs two idle slots; staffing for 4
+> and filling 6 turns two people away. The dossier prices both ends rather than recommending one,
+> because which error a practice prefers is a fact about that practice.
+> Bounded like W216's: a `_LAST_UNIT` constant, because DOSSIER-1's rule is that a point-in-time
+> document pinned against a live ledger is pinned against a moving target — and its trigger fires
+> on any dossier test that reads BUILD-STATE unbounded.
+> Gate: every figure derived from the figures register or from the sim, pinned by test, none typed
+> from memory; the "no mechanism to fill" finding stated first and checked against W231's shipped
+> state and the G1/G2/G3 rows rather than asserted; both ends of the range priced; `_LAST_UNIT`
+> bound present; `pnpm verify` green.
+
 > **W231 (forecast → invitation-volume coupling, shipped explicitly OFF) — claimed
 > 2026-08-21T08:36Z by loop-0821a.** This is the unit where Q18 would reach into the live rail. The
 > forecast says between four and six of six slots will fill; the coupling says send more
@@ -5840,7 +5870,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | done | loop-0821a | 2026-08-21T08:30Z | 1560038 | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | done | loop-0821a | 2026-08-21T08:36Z | 3e8b4bf | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
-| W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
+| W232 | claimed | loop-0821a | 2026-08-21T08:44Z | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
