@@ -169,6 +169,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (a field with no entry fails, an entry naming nothing rendered fails); a seeded failure proving
 > each direction; `pnpm verify` green. NOT in scope: changing any attribute's value — this unit
 > records where each already comes from and refuses to guess where it cannot tell.
+> DONE 2026-08-21. `src/demo/real-person-fields.ts` holds one entry per field a real clinician's
+> record carries — 31 of them — each naming its BASIS (checkable / declared / founder-stated /
+> derived / identifier) and a source specific enough to check. Both directions are enforced against
+> the live roster: a field on a real person with no entry fails, an entry naming a field nobody
+> carries fails.
+> **THE DIRECTION THAT MATTERS WAS PROVED BY SEEDING THE EXACT SHAPE OF MY OWN ERROR.** Adding
+> `yearsOfExperience: 14` to Dr Saxena's record now fails with "these are claims about a named
+> doctor with no stated basis: anubhav-saxena.yearsOfExperience". That is what O158 was — an
+> attribute about a named doctor entered from an inference, with nowhere to record that it had no
+> source, published, and caught only because the founder read it.
+> The register caught its own author twice while being written, which is the best evidence it
+> works: it rejected an entry for `mannerPending` (a valid optional field that no real clinician
+> actually carries — a register describing fiction) and two sources too thin to check. Both are
+> fixed, and `mannerPending`'s absence is documented in place, because re-adding that field must
+> now fail the build until somebody writes its basis.
+> W200's census fired on the new module, for the fifth time this week, and its declaration is
+> longer than most because the module's reason for existing is a failure worth stating in full.
+> Gate met: 31 fields with a stated basis, both-directions check, a seeded failure reproducing the
+> O158 shape, `pnpm verify` green (3611 passed).
+> WHAT THIS DOES NOT DO, stated so nobody reads more into it: it changes no attribute's VALUE. It
+> records where each already comes from. Where the tree could not tell — Dr Anusha Saxena's exact
+> relationship — the entry says the founder's statement is the source and the roster still carries
+> the note asking for it. A register cannot manufacture a fact that was never supplied.
+
 
 > **O161 (the correction reached the copy and not the reasoning) — claimed 2026-08-21T14:55Z by
 > loop-0820s.** O158 fixed the sentence a patient reads. It did not fix the prose that GOVERNS
