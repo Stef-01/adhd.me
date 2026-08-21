@@ -175,6 +175,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > first; zero clinical content COMPUTED rather than claimed (W158's rule), and no condition named
 > anywhere in the unit — checked against the tree's own linters; W250's precedent cited in the
 > module; the ledger contradiction recorded and raised, not resolved; `pnpm verify` green.
+>
+> **DONE 2026-08-21T11:33Z at `c929551`.** The vertical is `vert-undecided-2`, "Second care area
+> (undecided)", in `src/verticals/undecided.ts`. It names no condition.
+> **THE CONTRADICTION IS RAISED, NOT RESOLVED, AND THE PLAN BANNER WAS WRONG ABOUT ITS OWN SCOPE.**
+> The banner said THREE unbuilt units name a vertical that is a product decision (W186, W250,
+> W251). It is five: W248 and W249 are titled with the pre-reorientation domain and were never
+> reached. Corrected there and in W249's row — **and neither correction picks a care area**, which
+> is the line the loop does not cross. Recorded as the SEVENTH outstanding founder item.
+> **"REUSED, NOT RE-IMPLEMENTED" WAS THE CLAUSE WITH A TRAP IN IT.** Copying `dermatology.ts` and
+> changing the ids *does* reuse W157's model — and duplicates the four functions around it: two
+> evidence assemblers reading the same registries, two outstanding-work wrappers, two gate lists.
+> A second instance is when an abstraction stops being speculative, so `declareVertical` is now the
+> one door and both verticals go through it; dermatology's 96 tests pass unchanged, which is what
+> makes it a refactor rather than a rewrite. Evidence moved with it, on an argument worth keeping:
+> **what is signed off is a property of the TREE, not of a bundle**, and giving each vertical a
+> place to hold its own answer would invent a distinction that does not exist.
+> **THE SHARING IS ASSERTED STRUCTURALLY, BECAUSE A COMMENT CLAIMING IT PROVES NOTHING.** The
+> second vertical rebuilds from its declaration alone and matches; both expose the same shape; the
+> module's source is scanned for a second assembly path. And its membership differs from
+> dermatology's on purpose — six members, a different mix, and the case dermatology lacks (two
+> members of one kind waiting on DIFFERENT acts) — because a second bundle of the same shape would
+> prove only that the machinery works twice on one shape.
+> **A SEEDED FAILURE CAUGHT MY OWN TEST BEING WEAKER THAN ITS NAME.** It was called *"would become
+> usable if the evidence existed"* and never supplied any: it compared member counts between the
+> two verticals, which catches a hardcoded refusal and sails straight past an assembly that IGNORES
+> the evidence handed to it. I seeded exactly that — and **W191's dermatology suite caught it while
+> this unit's did not.** The test now supplies one member's evidence and requires the refusal to
+> move. Third time this session a guard has turned out weaker than the sentence standing over it,
+> and the first time an older unit's suite was the thing that noticed.
+> **ZERO CLINICAL CONTENT IS READ, NOT RE-ASSERTED.** W158 already computes
+> `noSignedOffClinicalContent`; a fresh assertion here would be a second claim about the same fact,
+> and the second claim is the one that drifts. Its non-vacuity probe THREW before it reported, on a
+> fake too fake to survive the report's own field reads — worth recording because a probe that
+> crashes proves nothing either, and this one came close to being abandoned as unwritable.
+> **Five seeded failures**: a second assembly path in the module, a member ref naming the domain,
+> an assembly ignoring its evidence, a refusal naming only the first missing member, and that same
+> seed re-run against the strengthened test.
+> Verification: `pnpm verify` green (245 files, 3963 tests, audit gate 2 accepted / 0 unaccepted);
+> `src/verticals/declare.ts` and `undecided.ts` both registered in W200. Vault log skipped —
+> Stefan-Brain unreachable.
 
 > **W247 (Q19 hardening) — claimed 2026-08-21T11:00Z by loop-0821a.** Twelve units of interop
 > shipped since W235 and the law is explicit that a hardening week without the review skills is not
@@ -6788,7 +6828,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W245 | done | loop-0821a | 2026-08-21T10:26Z | 5ec7878 | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | done | loop-0821a | 2026-08-21T10:31Z | eb5a603 | [P] Interop console → three kinds of zero, derived; absences above counts; six seeded failures; W200 export-coverage gap measured (111) and recorded, not closed. |
 | W247 | done | loop-0821a | 2026-08-21T11:00Z | b9aa0c1 | Q19 hardening → 8 findings (6 fixed, 2 carried with triggers); consent withdrawal failed open AND broke W243's monotonicity; Y4-1's cross-tenant shape in `disclosuresTo`; disclosure ledger classified in W106, lane rule added after measuring why the tree-wide one is not worth writing. `docs/HARDENING-Q19.md`. |
-| W248 | claimed | loop-0821a | 2026-08-21T11:20Z | — | [P] Vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. **[TITLE CONTESTED: row says "Women's health" — the pre-reorientation domain; W186's row says W248/W249 hold autism. Founder item, see claim.]** |
+| W248 | done | loop-0821a | 2026-08-21T11:20Z | c929551 | [P] Vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. **[TITLE CONTESTED: row says "Women's health" — the pre-reorientation domain; W186's row says W248/W249 hold autism. Founder item, see claim.]** |
 | W249 | blocked | — | — | — | Pathway content for the second care area → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W248: this row was titled "Women's health", the pre-reorientation domain, while W186's row states W248/W249 hold autism. **[FOUNDER: VERTICAL UNDECIDED.]** Title corrected by W248 2026-08-21; the care area itself is a founder decision and was not made by the loop. |
 | W250 | available | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
