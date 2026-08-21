@@ -143,6 +143,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O160 (semantic structure, the last unmeasured a11y property — and it is sound) — claimed
+> 2026-08-21T14:20Z by loop-0820s.** Touch targets, focus, keyboard reachability, overflow and
+> contrast have all been swept this week. The one left is what a screen reader actually navigates
+> by: heading hierarchy, the `<main>` landmark, and whether every form field has an accessible
+> name. The Vercel guidelines name the first two explicitly and nothing in this tree had ever
+> checked them.
+> **Measured first, and it comes back clean: ZERO findings over a population of 152 headings and
+> 101 form fields across 25 routes** — fifteen public and ten console, the console seeded so the
+> populated states are the ones measured (O159's lesson). One `h1` per page, no skipped heading
+> level anywhere, a `<main>` on every route, and every visible input, select and textarea carrying
+> a label, `aria-label` or `aria-labelledby`.
+> So this is PREVENTIVE and the row says so plainly rather than dressing a null as a discovery.
+> That is now the third such unit this week, which is a real signal about yield and belongs in the
+> ledger: the audit lane has moved from finding defects to holding ground. The gate is still worth
+> the few minutes — semantic structure is exactly what rots silently as pages are edited, and it
+> is invisible to every other sweep already standing.
+> Gate: the sweep over both surfaces with a POPULATION PIN so a selector that stopped matching
+> cannot report a flawless sweep of nothing, a seeded failure proving each of the three checks can
+> fail, and `pnpm verify` green.
+
 > **O159 (the sweep measured whichever state it found) — claimed AND done 2026-08-21 by
 > loop-0820s. The claim is late and this row says so:** the work was done before the blockquote
 > went in, which is not the protocol. Recording it rather than back-dating it.
