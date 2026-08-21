@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W220 (Q17 console: the response graph as a practice reads it) — claimed 2026-08-21T07:15Z by
+> loop-0821a.** W212 built the graph, W218 gave it a disclosure floor, W219 settled what may and
+> may not be claimed from it. Nothing renders any of it. A response graph nobody reads is a
+> comment, and — worse for this particular graph — every honesty device those three units built
+> (the caveat, the withheld split, the unanswered pile, the unobserved kinds) only does its work
+> at the point somebody reads a number. This is that point.
+> The route is `/console/responses`, practice-scoped like every other console surface.
+> Four rendering decisions, each of which is where the honesty gets lost if it is lost:
+> **(1) Every number goes through W218's `discloseResponseGraph` before it reaches the page.** Not
+> the raw graph with a floor applied in the template — the floor is a function and the page must
+> call it, because a template that formats raw counts is one refactor from formatting them again.
+> **(2) `RESPONSE_RATE_CAVEAT` renders beside the rates, not in a footnote.** W219 attached it to
+> the value precisely so a surface could not print the number without the sentence; a page that
+> puts it at the bottom has technically complied and actually failed.
+> **(3) The unanswered pile is not styled as a problem** — W173's decision, inherited rather than
+> re-argued: no warning colour, no exclamation. And an UNOBSERVED kind is not a zero row; it gets
+> its own section with W212's sentence, because "referrals: 0%" describes a referral rail that
+> answered nobody rather than one that was never used.
+> **(4) The empty state distinguishes nothing happened from nothing recorded** — the row's own
+> gate, W179's distinction. Three states, not two: no interventions at all (the graph REFUSES,
+> `nothing_recorded`), interventions with nothing recorded against any of them, and a graph whose
+> every kind fell below the disclosure floor. Each gets a different sentence.
+> Gate: e2e + axe; no clinical claim (the public/console sweep); the three empty states each
+> reached by a test rather than reasoned about; `pnpm verify` green.
+
 > **W219 (intervention attribution v2 over the response graph) — reclaimed 2026-08-21T06:52Z by
 > loop-0821a**, from interactive-0814's seven-day-old claim with nothing pushed against it (W54:
 > 90 minutes for a holder that has pushed nothing). Row edited, not stolen — the original claim
@@ -5122,7 +5147,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W217 | blocked | — | — | — | Learned ranking of patients → verify: n/a until ruled. **Blocked. FOUNDER DECISION — Q17 action 1, recorded in docs/GATE-DOSSIER-Q17.md: whether the product may order patients by anything a model learns, which would require changing the published ADM notice.** |
 | W218 | done | interactive-0814 | 2026-08-14T06:24Z | 9913da5 | [P] Response-graph privacy classification. Settled W212's deferred floor question IN `src/outcomes/response-graph.ts` (rather than a new module, to avoid re-registering across the W106/W200/W201/W116 registers a `// W≥157` file would trip): `RESPONSE_GRAPH_CELL_FLOOR` (5, declared data, no parameter — W196), `discloseResponseGraph` withholds any intervention kind holding a sub-floor cell WHOLE and recomputes the top-level total over disclosed kinds so a withheld count cannot be recovered by subtraction (W197's differencing rule; whole-kind because a kind's cells share one basis). `RESPONSE_GRAPH_DISCLOSURE_COPY` added to W200's linted copy surface (advice-free; `lintOperatorCopy` runs only the 4 advice patterns). Record-class entry for response-graph.ts updated: deferral removed, states erasure is COMPOSED (nothing stored, `SHIPPED_RESPONSE_GRAPHS` empty). Test `src/outcomes/response-graph-disclosure.test.ts`: floor-is-data (arity guard), whole-kind suppression hunted in the render ("2 of 9" absent, "20 of 38" present), total recomputed to 38 not 47, statement always present, no patient identity by type (`@ts-expect-error`) and by value (key list), erasure composed. W167's fold register caught the `.reduce` in `discloseResponseGraph` on its first run (commutative sum, declared with a rationale) — the mechanism working as designed. Verify green: 191 files, 2565 tests, build, audit:gate PASS. |
 | W219 | done | loop-0821a | 2026-08-21T06:52Z | a476f16 | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
-| W220 | available | — | — | — | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
+| W220 | claimed | loop-0821a | 2026-08-21T07:15Z | — | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | available | — | — | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | available | — | — | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
