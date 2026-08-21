@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W230 (the Q18 privacy pass) — claimed 2026-08-21T08:30Z by loop-0821a. Premise MEASURED before
+> the claim was written**, which is the O165 correction being applied rather than restated.
+> The row's standard is precise and it rules something out: *no figure can identify a patient, **by
+> type rather than by scrubbing***. A disclosure floor IS scrubbing — it is what W218 had to reach
+> for because a response-graph edge counts people who answered. So the question this unit has to
+> answer honestly is whether the capacity lane needs one, and the answer comes from counting rather
+> than from reasoning.
+> **MEASURED OVER THE SIM.** The figures the console actually renders are per-session aggregates
+> across the whole period, and their **minimum filled cell is 10** — no small cell anywhere in what
+> a reader sees. Twenty-seven sessions have between one and four UNFILLED slots, and an unfilled
+> slot is nobody, so that is not a re-identification surface at all. **But the per-OCCURRENCE
+> figures are a different story: 411 of them, 94 below five, and the minimum is one filled slot of
+> one offered** — a single person's appointment, with a named clinician, on a named day.
+> **NOTHING RENDERS THOSE, and `SessionOccurrence` is exported and `occurrencesFrom` is public.** So
+> the honest position is two-part rather than one: the TYPE guarantee holds lane-wide and is what
+> this unit asserts — no exported type in `src/capacity/` has a field a patient could occupy and no
+> exported function takes one, checked across all seven modules the way W225 checked one — and the
+> small-cell INFERENCE risk is real, measured, currently undisclosed, and gets a NAMED TRIGGER
+> rather than a speculative floor. Building a floor for a disclosure nothing performs would be
+> guessing at the shape of a surface nobody has designed, and W145's rule is to record the
+> condition so it cannot be rediscovered instead.
+> Gate: every capacity module classified in W106's record register with a rationale; the type
+> guarantee asserted across the whole lane, on signatures and on values, not on names; the measured
+> cell sizes recorded with the numbers rather than the impression; the trigger stated in the
+> register where a reader of that register will meet it; `pnpm verify` green.
+
 > **W229 (the capacity console — where the whole lane gets read) — claimed 2026-08-21T08:06Z by
 > loop-0821a.** Seven modules and nothing renders any of them. W220 made the argument for this
 > lane's twin and it holds here harder: every refusal W222–W228 built only does its work at the
@@ -5708,7 +5734,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
-| W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
+| W230 | claimed | loop-0821a | 2026-08-21T08:30Z | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
