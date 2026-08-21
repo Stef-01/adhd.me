@@ -632,7 +632,10 @@ textarea:focus-visible {
      read as the first item of the evidence list — a material-interest disclosure being mistaken
      for a reason this GP was matched, which is the one adjacency on this screen worth spending
      10px to prevent. */
-  margin: 10px 0 0;
+  /* O150: 24px opens the "why this fit" group; the identity lines above it now sit 4px apart so
+     they read as one block. Proximity is the whole mechanism — before this, every gap on the
+     screen was between 6 and 13px, so nine semantically different blocks looked like one list. */
+  margin: 24px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -680,7 +683,7 @@ textarea:focus-visible {
 /* O66: the reorder question, in the missed-asks register — context, not a headline. The
    question itself is the control (related facts share a row), padded to the touch floor. */
 .profile-clarify {
-  margin: 10px 0 0;
+  margin: 24px 0 0;
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.45;
@@ -1154,7 +1157,11 @@ textarea:focus-visible {
 
 
 .clinician-meta {
-  margin: 7px 0 0;
+  /* O150: `pretty` stops the orphan. At the 62ch cap this line broke as "… Beecroft &" /
+     "Double Bay", leaving two words alone under a full line — the widow the Vercel guidelines
+     name text-pretty for. */
+  text-wrap: pretty;
+  margin: 4px 0 0;
   /* O129: ~103 characters per line before this — the longest line on the screen was also the
      smallest type on it, which is the worst pairing available. */
   max-width: 62ch;
@@ -1336,7 +1343,7 @@ textarea:focus-visible {
 }
 
 .profile-practical-signals {
-  margin-top: 8px;
+  margin-top: 24px;
 }
 
 .profile-content section {
@@ -1392,10 +1399,18 @@ textarea:focus-visible {
 
    The experience list is the only `ul` inside a `<section>` here, which is what makes the
    scoping exact rather than a guess. */
+/* O150 (founder-reported, second time): ONE COLUMN. This was `1fr 1fr`, which measured 289px per
+   column on the desktop shell and 164px on a phone — about 34 and 19 characters. Nineteen
+   characters is two words a line, and because the items are of unequal length the rows came out
+   ragged (43px beside 21px on desktop, 64 beside 43 on a phone), so the list read as debris
+   rather than as a list. The tree's own measure law is 45-75 characters; a second column was
+   buying density on the one screen where scanning matters more than fitting. One column measures
+   ~70 characters on desktop and ~40 on a phone, and every row is the same height as its
+   neighbours. */
 .profile-content section ul {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px 18px;
+  grid-template-columns: 1fr;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1429,7 +1444,7 @@ textarea:focus-visible {
 }
 
 .fit-list {
-  margin: 26px 0 12px;
+  margin: 32px 0 12px;
   border-top: 1px solid var(--line);
 }
 
@@ -5437,12 +5452,12 @@ textarea:focus-visible {
 
 /* The two one-line notes that replaced paragraphs of hedging. */
 .credential-line {
-  margin: 8px 0 0;
+  margin: 4px 0 0;
   color: var(--muted);
   font-size: 0.78125rem;
 }
 .disclosure-line {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   color: var(--accent);
   font-size: 0.75rem;
   font-weight: 600;

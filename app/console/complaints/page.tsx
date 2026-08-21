@@ -83,7 +83,7 @@ export default async function ComplaintsPage({
               <span className="text-sm font-medium text-stone-700">Patient identifier (if known)</span>
               <input name="patientId" className={inputClass} placeholder="pat-1" />
             </label>
-            <label className="flex items-center gap-2 pb-2.5 text-sm text-stone-600">
+            <label className="flex min-h-11 items-center gap-2 pb-2.5 text-sm text-stone-600">
               <input type="checkbox" name="wantsOptOut" /> They want no further contact
             </label>
             <button type="submit" className={primaryButtonClass}>

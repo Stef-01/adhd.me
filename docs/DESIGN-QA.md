@@ -1492,3 +1492,74 @@ the gate, because the outer row still wrapped and that alone prevents the overfl
 outer `flex-wrap` and the email's `truncate` failed it properly: `467px of content in a 390px
 viewport`, named per route. Fourth time in five units that a first seed has failed to break the
 thing it targeted.
+
+## O150 — the profile, audited after the founder said it looked terrible a second time (2026-08-21)
+
+Founder-directed: *"visually looks terrible, do thorough design audit to make it much more
+visually coherent, learn about best practices online."* Second time this exact screen has drawn
+this exact complaint — O129 answered the first — so the repeat was treated as evidence that O129
+asked the wrong question, not that the founder was mistaken.
+
+### First finding: the screenshot predates the fix, but the complaint still stands
+
+The screenshot shows the missed-asks in two cramped columns and a stray accent dash floating
+beside the "Hindi-speaking" chip. Both are **already fixed on `main`** — `globals.css:1383`
+records the specificity bug that made `.fit-evidence` and `.fit-missed` render as two-column
+grids, and O129 scoped the `::before` that painted the dash. Measured on current `main`,
+`.fit-missed` is a single column and the dash is gone.
+
+So the image is stale. The screen is still incoherent for *other* reasons, which is what this
+unit fixed. Saying "already fixed" and stopping would have been technically true and useless.
+
+### Measured, at the 640px desktop shell and a 390px phone
+
+| | before | after |
+|---|---|---|
+| Focus-and-experience list | **2 columns** | 1 column |
+| … column width, desktop | **289px ≈ 34 chars** | 596px ≈ 70 chars |
+| … column width, phone | **164px ≈ 19 chars** | 346px ≈ 40 chars |
+| … distinct row heights | **43 / 21** desktop, **64 / 43** phone | **21** — every row identical |
+| gaps between the 9 blocks | **6, 8, 6, 10, 8, 10, 8, 13, 24** | 6, 4, 4, **24**, 8, **24**, 8, 25, 32 |
+
+- [x] **The two-column list was the worst thing on the page.** Nineteen characters per column on
+  a phone is two words a line, and because the items are of unequal length the rows came out
+  ragged — so the list read as debris rather than as a list. The second column was buying density
+  on the one screen where scanning matters more than fitting. The tree's own measure law is
+  45–75 characters and this was a third of it.
+- [x] **Nothing was grouped, because every gap was the same.** Nine semantically different blocks
+  — identity, credential, disclosure, evidence, missed asks, clarifier, compare, chips, practical
+  list — all sat 6–13px apart. That is "proximity tells the reader what belongs together" with
+  the proximity switched off. Now: 4px inside the identity block, 24px between groups, 32px at
+  the major break, on an 8pt scale.
+- [x] `text-wrap: pretty` on the meta line, which was orphaning "Double Bay" onto its own line.
+
+### Checked and deliberately not changed
+
+- [ ] **The `h1` looked clipped under the sticky header in the capture.** Measured: header bottom
+  64px, `h1` top 485px — no overlap at all. It is an element-screenshot boundary artifact. Not a
+  defect, not "fixed".
+
+### A regression of mine that this unit's gate caught, one commit late
+
+Running the O145–O149 accessibility gates before committing turned up two console checkbox labels
+at `212×30` — *"I confirm permanent deletion"* and *"They want no further contact"*. Verified
+against `HEAD` with this unit's CSS reverted: **they fail there too**, so O149's `flex-wrap` on
+those form rows stopped the labels stretching and collapsed them under the 44px floor. O149's own
+run of `touch-floor` did not show it. Fixed here with `min-h-11`.
+
+The gate worked — it just caught its author a commit later than it should have. That is the
+argument for running the whole accessibility set before every UI commit, not only the specs a
+unit thinks it touched.
+
+### Pinned
+
+`e2e/profile-layout.spec.ts` pins one column, uniform row heights, and — the point of the whole
+unit — that a within-group gap stays at most half a between-group gap, whatever the exact values
+become later. Proved by seeding `1fr 1fr` back and watching it fail.
+
+Best practice consulted as asked: an 8pt spacing scale, proximity grouping, one alignment spine
+([Design Work Life on vertical rhythm](https://designworklife.com/how-to-master-vertical-rhythm-for-consistent-typographical-design/),
+[IxDF on visual hierarchy](https://ixdf.org/literature/topics/visual-hierarchy)), plus the Vercel
+web interface guidelines' `text-wrap: pretty` rule for widows.
+
+Captures: qa/profile-o150/ (desktop and phone, after).

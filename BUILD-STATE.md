@@ -168,6 +168,42 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > framing must not move — this is a real person's listing), `pnpm verify` green, and the touch,
 > focus and overflow gates from O145-O149 still green so this unit cannot pay for looks with
 > accessibility.
+> DONE 2026-08-21. **The founder's screenshot is stale, and the complaint is still right.** Both
+> defects visible in the image — the missed-asks in two cramped columns, the accent dash floating
+> beside the "Hindi-speaking" chip — are already fixed on main; globals.css:1383 records the
+> specificity bug behind the first and O129 scoped the `::before` behind the second. Measured on
+> current main, `.fit-missed` is a single column and the dash is gone. Saying "already fixed" and
+> stopping would have been technically true and useless, so the unit audited what the screen
+> actually looks like NOW.
+> THE WORST THING ON THE PAGE WAS A DIFFERENT TWO-COLUMN LIST. `.profile-content section ul` — the
+> focus-and-experience list — was `1fr 1fr`, measuring 289px per column on the desktop shell and
+> **164px on a phone: about nineteen characters, two words a line**, against this tree's own
+> 45-75 measure law. Because the items are unequal lengths the rows came out ragged too (43 beside
+> 21 on desktop, 64 beside 43 on a phone), so it read as debris rather than a list. One column now:
+> ~70 characters on desktop, ~40 on a phone, and every row identical at 21px.
+> AND NOTHING WAS GROUPED, BECAUSE EVERY GAP WAS THE SAME. Nine semantically different blocks sat
+> 6-13px apart — proximity with the proximity switched off. Now 4px inside the identity block,
+> 24px between groups, 32px at the major break, on an 8pt scale. That is the measurable form of
+> "visually coherent" and it is pinned as a ratio rather than as pixels, so the numbers can move
+> without the law moving.
+> CHECKED AND NOT CHANGED: the h1 looked clipped under the sticky header in the capture. Measured,
+> header bottom 64 against h1 top 485 — no overlap, an element-screenshot artifact. Seventh time
+> in this tree a probe's first impression was wrong, and the first one I caught before it became a
+> "fix" of nothing.
+> **A REGRESSION OF MINE, CAUGHT BY MY OWN GATE ONE COMMIT LATE.** Running the O145-O149 gates
+> before committing turned up two console checkbox labels at 212x30. Verified against HEAD with
+> this unit's CSS reverted: they fail there too, so O149's `flex-wrap` stopped those labels
+> stretching and dropped them under the floor, and O149's own touch-floor run did not show it.
+> Fixed here with `min-h-11`. The gate worked; it just caught its author later than it should
+> have, which is the argument for running the WHOLE accessibility set before any UI commit rather
+> than the specs a unit thinks it touched.
+> Gate met: measured before/after at both widths with the table in DESIGN-QA, `e2e/profile-layout.spec.ts`
+> pinning one column, uniform rows and the grouping RATIO (seeded `1fr 1fr` back and watched it
+> fail), captures in qa/profile-o150/, `pnpm verify` green (219 files, 3607 passed), and finder +
+> touch-floor + keyboard-focus + mobile-fit + a11y + compare + privacy + complaints e2e green (40),
+> so the looks were not paid for out of the accessibility work. Copy and the W193 declaration
+> framing are untouched — this is a real person's listing.
+
 
 > **O149 (the console scrolls sideways on a phone) — claimed 2026-08-21T08:10Z by loop-0820s.**
 > Found by probing a different property than the last four units, after noticing that four of five
