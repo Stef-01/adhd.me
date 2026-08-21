@@ -925,7 +925,14 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my psychologist suggested I ask about the non-drug options", aspires: ["care:non-medication"] },
   { text: "the diet advice was useless, I want the actual assessment", reaches: ["care:adhd-assessment"] },
   { text: "I already do exercise and sleep hygiene, that is not the question", never: ["care:non-medication"] },
-  { text: "skills first, then we can discuss whether a script helps", aspires: ["care:non-medication"] },
+  { text: "skills first, then we can discuss whether a script helps", reaches: ["care:non-medication"] },
+  /* O177: the new cue's adversary, pinned rather than measured once. "skills first" is the cue;
+     this sentence contains `skill` and `first` in that order and means the OPPOSITE — medication
+     first, skills as the fallback. It stays silent because `skill`@0 to `first`@4 is a gap of
+     three and MAX_GAP is 2, which is a real property of the matcher and therefore a real thing to
+     regress: raising MAX_GAP, or shortening this sentence, would fire it. A cue added without its
+     negative pin is a measurement somebody took once. */
+  { text: "skills are fine but I want medication first", never: ["care:non-medication"] },
   { text: "last resort is fine, I just want to know the order", reaches: ["care:non-medication"] },
   { text: "walk me through what the assessment actually involves", reaches: ["care:adhd-assessment"] },
   { text: "tell me straight if I do not have it", reaches: ["manner:sense_making"] },
@@ -1053,7 +1060,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // eleven standing aspirations promoted when the SEQUENCE and ALTERNATIVE registers were
   // cued (see needs.ts) — the three that remain are the ones whose cues were refused for
   // measured precision, and their reason is written at the cue list rather than here.
-  "care:non-medication": 18,
+  // O177: 18 -> 19, raised in the same commit as the "skills first" cue, per the promotion loop.
+  "care:non-medication": 19,
   // O139 raised 24→25: "clinic discharged me" and "scripts kept going", the two registers this
   // facet actually arrives in. "prescription continued" was refused — it fires on a cost complaint.
   "care:shared-care": 25,

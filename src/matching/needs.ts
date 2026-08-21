@@ -414,6 +414,14 @@ const LEXICON: readonly Entry[] = [
 
        Each keeps two content tokens (O25). */
     "strategies first", "tablets later", "last resort",
+    /* O177: "skills first" — the SEQUENCE register O103 named, in the word the corpus actually
+       uses. O103 cued "strategies first" and "skills and strategies" but not this pair, and the
+       corpus asks it directly ("skills first, then we can discuss whether a script helps").
+       Measured before adding, both directions: it reaches three same-register sentences that are
+       NOT in the corpus, and it stays silent on "skills are fine but I want medication first"
+       (`skill`@0 to `first`@4 is a gap of three, past MAX_GAP=2) and on "first I need my skills
+       assessed for work". */
+    "skills first",
     "psychological approaches", "skills and strategies", "lifestyle changes",
     "diet and exercise", "besides medication", "not ready for medication",
     /* FOUR CUES REFUSED, AND THE REASON IS MEASURED RATHER THAN ASSERTED (the O65 pattern).
@@ -425,7 +433,29 @@ const LEXICON: readonly Entry[] = [
          "before any script"     fires on "before my script ran out" — titration
          "another way"           fires on "explain it another way" — sense-making
        Their corpus sentences stay aspirations with this note as their reason. Precision here
-       is worth more than recall: three of the four would mislabel the ask as its opposite. */
+       is worth more than recall: three of the four would mislabel the ask as its opposite.
+
+       O177 RE-MEASURED ALL FOUR AND EVERY ONE STILL HOLDS, then tried to get round them and
+       could not. The remaining four aspirations on this facet are not "not yet cued" — they are
+       MEASURED AND RESISTANT, which is a different fact and worth the distinction, because the
+       next unit to work this gap list would otherwise repeat the whole exercise:
+
+         "I want to try the non-drug route first"  — `non drug route` reaches it and every
+           same-register variant, and also fires on "the non-stimulant drug route", which is a
+           natural sentence asking for MEDICATION. `MAX_GAP = 2` is what lets `non`…`drug` skip
+           `stimulant`. Same for `non drug option` and "the non-stimulant drug option", which
+           kills the psychologist sentence too.
+         "I would rather not take medication if there is another way" — `rather not take
+           medication` reaches it and three variants, and fires on "rather not have to take time
+           off for my medication": `take`@2 to `medication`@5 is a gap of two, exactly at the
+           limit.
+         "I want a plan that is more than a prescription" — `plan more` fires on "we should plan
+           more appointments" and "I want to plan more of my titration"; `more prescription` is
+           O103's own refusal, unchanged.
+
+       Roughly twenty candidate forms were measured this way. One survived, above. A cue that
+       reached only its own corpus sentence was refused as well, whatever its collision count —
+       `reach.test.ts`'s law is that a corpus copied into the lexicon measures nothing. */
   ]),
 
   /**

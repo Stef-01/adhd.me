@@ -86,9 +86,12 @@ export const REFUSED_CUES: readonly RefusedCue[] = [
     refusedBy: "we talked before my script ran out",
     because: "a titration sentence — the reader is asking about a prescription, not asking to avoid one",
     unit: "O103",
-    leavesStanding: [
-      "skills first, then we can discuss whether a script helps",
-    ],
+    /* O177: this list was ["skills first, then we can discuss whether a script helps"] and is now
+       empty, because that sentence reaches through the "skills first" cue O177 added — a DIFFERENT
+       cue, so O103's refusal of "before any script" is untouched and stays refused for its own
+       measured reason. The register caught the staleness itself: a refusal that still names a
+       sentence somebody else has since reached is a refusal claiming a cost it no longer imposes. */
+    leavesStanding: [],
   },
   {
     phrase: "non drug",

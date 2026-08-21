@@ -33,9 +33,14 @@ non-rankings.
    (2026-08-20): the pin's analysis measured TRUE over the 500-entry corpus ("without" was
    excluded to protect a cue-initial-negator sentence the check never touches); "without"
    joined BARE_NEGATORS with a double-negative guard ("can't … without X" keeps the want),
-   the pin retagged, shared-care floor moved by sanctioned reclassification.** The standing gap list (~60
-   aspirations) is the lexicon's work queue; growth continues opportunistically but the
-   CI-gate deliverable is DONE. **O103 (2026-08-20) worked the top of that queue**: measured
+   the pin retagged, shared-care floor moved by sanctioned reclassification.** The standing gap list is the lexicon's work
+   queue; growth continues opportunistically but the CI-gate deliverable is DONE. **The size was
+   "~60 aspirations" here until O177 (2026-08-22) measured it: 556 corpus entries, 33 unheard
+   aspirations across 19 facets — stale by roughly half.** O177 also measured which of them are
+   workable at all, and the answer reframes the queue: **11 of the 33 are `awaitingFounder`** —
+   `care:trauma-informed` (5), `care:emotional-regulation` (4) and `manner:attuned` (2) are blocked
+   to the last entry by the G7 question, so the two LOUDEST gaps cannot be built at all. A unit that
+   simply "worked the loudest gap" would walk into the gate. **O103 (2026-08-20) worked the top of that queue**: measured
    across the aspiration list, `care:non-medication` was the loudest gap on record at ELEVEN
    unheard phrasings, and the cause was REGISTER — every existing cue heard a refusal
    ("without medication", "not a script") while the corpus had collected two registers

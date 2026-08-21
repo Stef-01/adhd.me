@@ -149,7 +149,12 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 446, separated: 248, partialTie: 66, unseparated: 132 };
+/* O177: 446/248 -> 447/249, re-pinned in the same commit as the "skills first" cue. The run grew
+   by exactly one because one more corpus sentence now reaches, and the new request SEPARATES — the
+   separation rate moves 0.556 -> 0.557. Both halves matter: a promotion that grew `total` without
+   growing `separated` would mean the reader had learned to hear an ask it then could not act on,
+   and this baseline is pinned in BOTH directions so either would have to be faced deliberately. */
+const PINNED = { total: 447, separated: 249, partialTie: 66, unseparated: 132 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -182,6 +182,55 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > as the reach — "the script worked first time" and similar must NOT fire; `known-fps` consulted and
 > extended if the widening creates one; the 11 G7-blocked aspirations left exactly as they are; the
 > plan's stale "~60" corrected to the measured figure; `pnpm gate` exit 0.
+>
+> **DONE 2026-08-22T03:26Z. THE CLAIM'S PREMISE WAS WRONG AND CORRECTING IT IS THE UNIT.** I claimed
+> the five unheard sentences "share a register O103's fix does not cover". **Three of them correspond
+> to cues O103 had already measured and deliberately refused.** I re-measured all four of its
+> refusals against the current matcher and **every one still holds**, then spent roughly twenty
+> candidate formulations trying to get round them. One survived.
+> **WHAT `MAX_GAP = 2` MEANS FOR THIS FACET**, which is the mechanism nobody had written down:
+> `findCue` matches in order across up to two unmatched tokens, so `non`…`drug`…`route` matches **"the
+> non-stimulant drug route"** — a natural sentence asking for MEDICATION, the opposite ask. Same for
+> `non drug option` against "the non-stimulant drug option". `rather not take medication` fires on
+> "rather not have to **take** time off for my **medication**" (gap of exactly two). `plan more` fires
+> on "we should plan more appointments". Each was measured, not reasoned about — O103's own standard.
+> **SO THE REMAINING FOUR ARE MEASURED-AND-RESISTANT, NOT UNCUED**, and that distinction is now
+> written into the cue file with the colliding sentences named. It is the durable output of this row:
+> the next unit to reach for this facet does not repeat twenty measurements to arrive where O103 was.
+> **ONE CUE ADDED: `"skills first"`** — 3/3 on same-register sentences that are NOT in the corpus,
+> 0/2 on adversarial ones. Promoted from `aspires` to `reaches`, floor **18 → 19** in the same
+> commit per the promotion loop. **And it ships with a standing negative pin**, because my own gate
+> demanded the false-positive direction be tested as hard as the reach: *"skills are fine but I want
+> medication first"* contains both cue words in that order and means the opposite, and stays silent
+> only because `skill`@0 to `first`@4 is a gap of three. That is a real property of the matcher and
+> therefore a real thing to regress — a cue added without its negative pin is a measurement somebody
+> took once.
+> **TWO GATES CAUGHT CONSEQUENCES I WOULD OTHERWISE HAVE SHIPPED.** `refused-cues.test.ts` flagged
+> that O103's refusal still named a sentence since reached — *a refusal claiming a cost it no longer
+> imposes* — so its `leavesStanding` is now empty while the refusal itself stands untouched, since a
+> DIFFERENT cue did the reaching. And W234's tie-quality KPI moved **446/248 → 447/249**, rate 0.556
+> → 0.557, re-pinned in both directions: a promotion that grew `total` without growing `separated`
+> would mean the reader had learned to hear an ask it could not act on.
+> **THE METHOD ERROR, KEPT BECAUSE IT NEARLY DECIDED THE UNIT.** My first candidate round was
+> garbage: `findCue` takes token ARRAYS and I passed raw strings, so JS compared characters. Ten
+> candidates were scored against nonsense. I caught it only because `non drug route` reported zero
+> reach on a sentence I could see contained those tokens — **a result too wrong to believe rather
+> than a check that fired.**
+> **AND THE WAIT I WROTE TO SEQUENCE THE GATES DEADLOCKED ON ITSELF**: `pgrep -f "playwright"`
+> matches full command lines, and the monitor's own command line contained "playwright", so the
+> until-loop could never exit. A check that includes itself in what it checks always reports the
+> condition it is waiting for. Same shape as this session's register findings, in my own tooling.
+> **TWO CORRECTIONS TO THE PLAN.** The gap list was described as "~60 aspirations"; measured, it is
+> **33 across 19 facets** — stale by roughly half. And **11 of the 33 are `awaitingFounder`**:
+> `care:trauma-informed` (5), `care:emotional-regulation` (4) and `manner:attuned` (2) are blocked
+> to the last entry, so **the two loudest facets cannot be built at all**. A unit that worked "the
+> loudest gap" without checking would walk straight into G7.
+> **PROCESS CORRECTION CARRIED FROM THE CLAIM: O176 WAS OUT OF ORDER.** The firing instruction puts
+> the current quarter ahead of UI refinement, and I took a UI unit without checking Q1 first.
+> Verification: **`pnpm gate` exit 0** — `pnpm verify` green (255 files, **4069 tests**, audit gate 2
+> accepted / 0 unaccepted) and the full e2e suite **287/287 in 12.5 min**. An earlier gate run went
+> green too and is NOT the one cited: it predates the negative pin, and citing it would attach a
+> result to code it never tested. CI remains founder-gated.
 
 > **O176 (accent discipline stops being a one-screen finding) — claimed 2026-08-22T00:12Z by
 > loop-0821a.** A UI refinement unit, per the plan's continuous track and its cadence requirement of
