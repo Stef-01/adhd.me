@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O163 (the compliance sweep cannot reach the surface with the most clinical text on it) —
+> claimed 2026-08-21T16:05Z by loop-0820s.** O162's pattern, generalised: rigorous machinery
+> pointed at a gated surface while the live one runs unguarded. Second instance, and worse.
+> **THE STRUCTURAL FINDING.** `public-sweep.spec.ts` and `party-to-care.spec.ts` lint every public
+> ROUTE. The clinician profile is not a route — it is reached by typing a query, getting results
+> and clicking a row. So the patient surface carrying the most clinical free text about real named
+> doctors (`about`, `experience`, `focus`, `matchLine`, `fitSignals`) is the one surface no
+> compliance sweep has ever read. Verified: neither spec so much as mentions `.clinician-row`.
+> **WHAT WAS HIDING THERE.** The word "prescriber" renders TWICE on Dr Anusha Saxena's patient
+> profile — in her `about` and in her `experience` list. `no-clinical-claims` bans `prescrib\w*`
+> on patient-facing copy (exempt only for professional audiences, per `PROFESSIONAL_EXEMPT_RULES`),
+> and `roster.ts:373` asserts in prose that "the word 'prescriber' itself never renders on a
+> patient surface, per the no-clinical-claims register". Measured on the rendered page: it does.
+> The tree states a compliance property about a real named doctor that is false, and the reason
+> nobody noticed is the structural gap above.
+> **WHAT I WILL AND WILL NOT DECIDE.** The gate is unambiguous and gets built: the sweeps must
+> reach the profile. The provably false comment gets corrected — that is the tree's claim about
+> itself, not a claim about her. The COPY is a different matter and I am not deciding it alone.
+> "She has completed an endorsed ADHD prescriber course" is a founder-relayed credential about a
+> real person, and the two available readings — the rule is right and the copy must change, or the
+> regex over-matches a course TITLE and the rule needs the exemption — change either what is said
+> about a named doctor or a compliance rule. I got exactly this class of judgement wrong four units
+> ago by inferring instead of asking. It goes to the founder with both options and the measurement.
+> Gate: the compliance sweep reaching the profile for every real clinician, the finding it produces
+> recorded rather than silently fixed, the false comment corrected, a seeded failure proving the
+> new sweep can fail, `pnpm verify` green.
+
 > **O162 (the sourcing discipline guards the surface that is switched OFF) — claimed
 > 2026-08-21T15:25Z by loop-0820s.** Found by asking O161's question of my own audits: a clean bill
 > from the wrong question is not a clean bill, so what question have I never asked?
