@@ -46,17 +46,26 @@ describe("clinician roster and matching", () => {
   });
 
   /**
-   * A founder in his own company's directory is a conflict whether or not the ranking favours him,
-   * because the reader cannot see the ranking. The disclosure is required to exist on the record
-   * and to name the interest — not merely to be a non-empty string.
+   * A clinician with a commercial interest in this product, listed in its own directory, is a
+   * conflict whether or not the ranking favours them — because the reader cannot see the ranking.
+   * The disclosure must exist on the record AND name the interest, not merely be a non-empty
+   * string.
+   *
+   * O161: this comment used to read "A founder in his own company's directory", and the test was
+   * named "on every founder's own listing". Both were false and both survived O158, which fixed
+   * the sentence a patient reads and left the prose that GOVERNS that sentence saying the wrong
+   * thing. Dr Saxena owns his CLINIC and is ADHD.ME's first clinic partner; he did not found the
+   * entity. A rationale is where the next author learns what the copy is for, so a wrong one
+   * regenerates wrong copy — the same shape as fixing a QA capture and leaving the script that
+   * overwrites it.
    */
-  it("discloses the founder interest on every founder's own listing, and nobody else's", () => {
-    // O89: two founders on the roster now, both directed onto the record by the founder
+  it("discloses the declared interest on the listing of every clinician who has one, and nobody else's", () => {
+    // O89: two entries carry a declared interest, both put on the record by the founder
     // (Dr Anubhav from the start; Dr Anusha 2026-08-20). The register carries exactly what
     // was directed — Dr Yadav carries no interest because none was declared for him.
-    const FOUNDERS = ["anubhav-saxena", "anusha-saxena"];
-    for (const id of FOUNDERS) {
-      const founder = clinicians.find((clinician) => clinician.id === id)!;
+    const WITH_INTEREST = ["anubhav-saxena", "anusha-saxena"];
+    for (const id of WITH_INTEREST) {
+      const listed = clinicians.find((clinician) => clinician.id === id)!;
       // O156: the term is "ownership interest" since the founder asked for "founder" to go from
       // the site. The pin MOVED with the wording rather than being loosened — the disclosure must
       // still NAME the interest, because a conflict notice that stops saying what the conflict is
@@ -66,16 +75,16 @@ describe("clinician roster and matching", () => {
       // relationships and demanding "ownership" is what let a false claim pass review. It demands
       // the two things a conflict notice must have: it names ADHD.ME, and it says WHY it is being
       // disclosed. And it forbids the specific false claim the founder corrected.
-      expect(founder.disclosedInterest, id).toMatch(/Disclosed because/i);
-      expect(founder.disclosedInterest, id).not.toMatch(/founder|co-?found/i);
+      expect(listed.disclosedInterest, id).toMatch(/Disclosed because/i);
+      expect(listed.disclosedInterest, id).not.toMatch(/founder|co-?found/i);
       expect(
-        founder.disclosedInterest,
+        listed.disclosedInterest,
         `${id}: claims ownership of the entity — Dr Saxena owns his clinic, not ADHD.ME (O158)`,
       ).not.toMatch(/(owns|ownership (interest )?(in|of)) ADHD\.ME/i);
-      expect(founder.disclosedInterestLabel, id).toBeTruthy();
-      expect(founder.disclosedInterest, id).toMatch(/ADHD\.ME/);
+      expect(listed.disclosedInterestLabel, id).toBeTruthy();
+      expect(listed.disclosedInterest, id).toMatch(/ADHD\.ME/);
     }
-    for (const clinician of clinicians.filter((c) => !FOUNDERS.includes(c.id))) {
+    for (const clinician of clinicians.filter((c) => !WITH_INTEREST.includes(c.id))) {
       expect(clinician.disclosedInterest).toBeUndefined();
     }
   });

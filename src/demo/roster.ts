@@ -213,10 +213,18 @@ export type Clinician = {
   /**
    * A material interest the reader would want disclosed — carried BESIDE the listing, always.
    *
-   * A founder of this product appearing in its own directory is a conflict whether or not the
-   * ranking favours them, because the reader cannot see the ranking. The disclosure is a field on
-   * the record rather than a sentence in someone's `about`, so it cannot be edited out of the copy
-   * while the interest remains, and so the finder renders it without having to know who is who.
+   * A clinician with a commercial interest in this product, appearing in its own directory, is a
+   * conflict whether or not the ranking favours them, because the reader cannot see the ranking.
+   * The disclosure is a field on the record rather than a sentence in someone's `about`, so it
+   * cannot be edited out of the copy while the interest remains, and so the finder renders it
+   * without having to know who is who.
+   *
+   * O161: this said "A founder of this product appearing in its own directory", which is false and
+   * is the belief the founder corrected — Dr Saxena owns his CLINIC and is ADHD.ME's first clinic
+   * partner. O158 fixed the sentence a patient reads and left this one, which is the worse place
+   * to leave it: a rationale is where the next author learns what the copy is FOR, so a wrong one
+   * quietly regenerates wrong copy. The interest here is deliberately unnamed in the abstract —
+   * the entries say what each relationship actually is.
    *
    * The public directory (src/directory/profile.ts) has no equivalent field yet and does not need
    * one while `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6. It WILL need one

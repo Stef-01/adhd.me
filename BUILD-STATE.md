@@ -164,6 +164,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: no prose anywhere asserting either doctor founded or owns ADHD.ME; the disclosure rule's
 > rationale states the real relationship; the test NAME (which is operator-visible in every run)
 > no longer says "founder's own listing"; `pnpm verify` green.
+> DONE 2026-08-21. Two rationales corrected, and they are the two places that MATTER more than the
+> copy: `clinicians.test.ts`'s doc comment and test name, and `roster.ts`'s comment on the field
+> itself. Both said these doctors founded ADHD.ME. Both survived O158 untouched.
+> **Fixing the artefact and leaving what generates it is the shape this tree keeps finding in
+> itself.** O143 restored 26 falsified captures and left the guard that let them be falsified; O146
+> fixed a slider and left the gate that had passed it on luck; O158 fixed the sentence a patient
+> reads and left the two comments that tell the next author what that sentence is FOR. A wrong
+> rationale has a longer half-life than wrong copy, because copy gets read by everybody and a
+> rationale gets read by whoever writes the replacement.
+> The audit that found it is the transferable part. O156 swept for the WORD "founder" and honestly
+> reported zero rendered mentions. The founder's correction was about a CLASS of claim — "do not
+> interpret him as cofounding the entity" — so sweeping for the claim instead ("his own company",
+> "owns ADHD", "started ADHD", "behind ADHD.ME") found what a word-sweep structurally cannot. A
+> clean bill from the wrong question is not a clean bill.
+> The test NAME changed too, which is not cosmetic: it prints on every run, so "discloses the
+> founder interest on every founder's own listing" was operator-visible and asserted the false
+> thing in the same breath as checking the true one.
+> Gate met: no prose anywhere asserting either doctor founded or owns ADHD.ME (only this unit's own
+> comments, quoting the old wording as the record), `pnpm verify` green (219 files, 3607 passed),
+> the rendered disclosure audit still 0 hits with the disclosure present.
+
 
 > **O160 (semantic structure, the last unmeasured a11y property — and it is sound) — claimed
 > 2026-08-21T14:20Z by loop-0820s.** Touch targets, focus, keyboard reachability, overflow and
