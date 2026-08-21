@@ -136,7 +136,7 @@ test("no console route scrolls sideways on a phone (O149)", async ({ browser, re
   await signInAsPracticeOwner(page);
 
   const sideways: string[] = [];
-  // O172: 28 routes with a fonts-ready wait each does not fit Playwright's 30s default. Fourth
+  // O172: 30 routes with a fonts-ready wait each does not fit Playwright's 30s default. Fourth
   // instance in four rows (contrast O169, touch-floor O170, semantics O171). Every one of these
   // specs was written with a short route list and inherited a timeout nobody chose.
   test.setTimeout(300_000);

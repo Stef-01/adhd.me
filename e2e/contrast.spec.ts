@@ -5,7 +5,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 // O169: the routes are derived from `app/` now, not listed here.
 //
-// This sweep covered all 15 public routes and 16 of the 28 console screens — `/console/capability`,
+// This sweep covered all 15 public routes and 16 of the 30 console screens — `/console/capability`,
 // `/capacity`, `/credentials`, `/education`, `/interest`, `/interop`, `/outreach`, `/pathways`,
 // `/responses`, `/results`, `/roi` and `/verticals` were never measured for contrast at all. The
 // audience this product names first is "tired, possibly older, possibly low-vision", so a console

@@ -4,7 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 // O170: the routes are derived from `app/` now, not listed here.
 //
-// This sweep covered all 15 public routes and 16 of the 28 console screens. The twelve never
+// This sweep covered all 15 public routes and 16 of the 30 console screens. The fourteen never
 // measured for touch target size were the SAME twelve `contrast` was missing — both arrays were
 // copied from one list on one day and neither grew afterwards, which is the whole argument O168
 // made for deriving rather than extending.
@@ -172,14 +172,14 @@ test.describe("O14's 44px touch floor", () => {
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
     // O170: the floor was 120, set when this sweep visited 16 console routes. It now visits 28 and
-    // the observed population is 207, so 120 would no longer notice the sweep collapsing back to
+    // the observed population is 207 across 30 routes, so 120 would no longer notice it collapsing to
     // roughly the list it replaced. Measured first, then stated beside the ceiling — W48's rule.
     //
     // O174 RE-MEASURED IT RATHER THAN INHERITING IT, which is the same discipline one row later:
     // fixing the fixture seeding moved this from 196 to 207, because eleven controls on
     // `/console/credentials` had never been in the population at all. A figure written beside a
     // floor is a claim about a run, and it goes stale the moment the run changes.
-    console.log(`POP_CONSOLE ${population} (floor 170, observed 207 at 28 routes)`);
+    console.log(`POP_CONSOLE ${population} (floor 170, observed 207 at 30 routes)`);
     expect(population, "the console sweep collapsed — a clean pass here would mean nothing").toBeGreaterThan(170);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });

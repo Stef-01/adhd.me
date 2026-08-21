@@ -1,12 +1,47 @@
 // O147: the taste law's two keyboard rules, made executable.
 
-import { expect, test } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 
-const PUBLIC_ROUTES = [
-  "/", "/about", "/approach", "/clinicians", "/clinicians/join", "/demo", "/examples", "/faq",
-  "/finder", "/practices", "/privacy", "/terms", "/thanks", "/privacy/automated-decisions",
-  "/privacy/counsel-review",
-];
+// O175: the routes are derived from `app/`, and the console half exists at all.
+//
+// Until this unit the sweep covered the 15 public routes and ZERO console routes. That is not a
+// partial list like the other five sweeps O168 measured — it is a missing half. Every screen
+// practice staff work on had never been checked for keyboard reachability or a visible focus
+// indicator, and the console is where the FORMS are: O174 found a withdraw-reason input and a Save
+// button under O14's touch floor on `/console/credentials` and `/console/case-mix`, both of them
+// controls no keyboard test had ever tabbed through.
+import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+
+/** Signed-in setup plus O174's corrected fixture seeding. */
+async function signInAndSeed(page: Page, request: APIRequestContext) {
+  // O174: `POST /api/mock/console` RESETS the console store, so it goes FIRST and the practice is
+  // created straight after; anything that reads `practices[0]` comes later. Posting it mid-list is
+  // what made three fixtures return 500 and left the touch sweep measuring unlinked refusal pages.
+  await request.post("/api/mock/console");
+  await page.goto("/console/signin");
+  await page.getByLabel("Work email").fill("owner@demo.practice.example");
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.waitForURL(/\/console(\/onboarding)?$/);
+  await page.goto("/console/onboarding");
+  await page.getByLabel("Practice name").fill("Demo Family Practice");
+  await page.getByLabel("Holdout share (%)").fill("10");
+  await page.getByRole("button", { name: "Create practice" }).click();
+  await page.waitForURL(/\/console$/);
+
+  const LINKED = new Set(["credentials", "education"]);
+  const failed: string[] = [];
+  for (const fixture of [
+    "referrals", "registers", "usefulness", "ops", "credentials",
+    "capability", "case-mix", "education", "pathways", "verticals", "state",
+  ]) {
+    const query = LINKED.has(fixture) ? "?linkEmail=owner@demo.practice.example" : "";
+    const response = await request.post(`/api/mock/${fixture}${query}`);
+    if (!response.ok()) failed.push(`${fixture} -> ${response.status()}`);
+  }
+  // O174's rule, inherited rather than re-learned: a fixture that does not seed leaves this sweep
+  // tabbing through an empty page while reporting it covered.
+  expect(failed, `a fixture did not seed, so this walk is measuring a page it did not populate: ${failed.join(", ")}`).toEqual([]);
+}
 
 test.describe("keyboard focus", () => {
   /**
@@ -22,13 +57,17 @@ test.describe("keyboard focus", () => {
    * in-tab-order controls. A page can honour the ring rule perfectly and still strand a control
    * nobody can tab to.
    */
-  test("every control is reachable by keyboard and shows where it is", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  /**
+   * O175: the walk, extracted so the console gets the SAME assertions rather than a lighter
+   * variant. Sharing the body is the point — a console-only copy would drift, and the first thing
+   * to drift out of a copy is the resting-style comparison that keeps this test able to fail.
+   */
+  async function walk(page: Page, routes: readonly string[]) {
     const ringless: string[] = [];
     const unreachable: string[] = [];
     let totalStops = 0;
 
-    for (const route of PUBLIC_ROUTES) {
+    for (const route of routes) {
       await page.goto(route, { waitUntil: "networkidle" });
       // Fonts change metrics and therefore layout; O146 was bitten by measuring before them.
       await page.evaluate(() => document.fonts.ready);
@@ -106,8 +145,37 @@ test.describe("keyboard focus", () => {
       if (stops < controls) unreachable.push(`${route}: ${stops} tab stops for ${controls} controls`);
     }
 
+    return { ringless, unreachable, totalStops };
+  }
+
+  test("every public control is reachable by keyboard and shows where it is", async ({ page }) => {
+    test.setTimeout(240_000);
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(PUBLIC_ROUTES.length, "the derived public list collapsed").toBeGreaterThan(12);
+    const { ringless, unreachable, totalStops } = await walk(page, PUBLIC_ROUTES);
+
     // Non-vacuity: a walk that stopped tabbing would report a flawless sweep of nothing.
+    console.log(`KEYBOARD_PUBLIC ${PUBLIC_ROUTES.length} routes, ${totalStops} stops`);
     expect(totalStops).toBeGreaterThan(100);
+    expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
+    expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
+  });
+
+  test("every console control is reachable by keyboard and shows where it is", async ({ page, request }) => {
+    // O175: THE HALF THAT DID NOT EXIST. Its own test rather than more routes in the one above, for
+    // two reasons: a failure names which half without reading the route out of a message, and the
+    // console needs a signed-in session with seeded fixtures that the public walk must not carry.
+    test.setTimeout(600_000);
+    await signInAndSeed(page, request);
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(CONSOLE_ROUTES.length, "the derived console list collapsed").toBeGreaterThan(26);
+    const { ringless, unreachable, totalStops } = await walk(page, CONSOLE_ROUTES);
+
+    // The floor is MEASURED for this walk rather than borrowed from the public one — O170, O171 and
+    // O174 each found a non-vacuity floor that had gone stale when the thing it bounded grew, and
+    // inheriting `> 100` here would have been the same mistake made deliberately.
+    console.log(`KEYBOARD_CONSOLE ${CONSOLE_ROUTES.length} routes, ${totalStops} stops`);
+    expect(totalStops, "the console walk stopped tabbing — a clean result here would mean nothing").toBeGreaterThan(150);
     expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
     expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
   });

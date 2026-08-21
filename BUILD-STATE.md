@@ -162,7 +162,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > already-underlined link cannot pass as focused, and walks up to 200 stops per route. Adding the
 > console means sign-in plus O174's corrected fixture seeding, and a per-Tab round trip on pages far
 > denser than the public ones. **The obstacle is cost and setup, not the assertion.**
-> **THE COST IS THE OPEN QUESTION AND I WILL MEASURE IT, NOT ESTIMATE IT.** 28 console routes at up
+> **THE COST IS THE OPEN QUESTION AND I WILL MEASURE IT, NOT ESTIMATE IT.** 30 console routes at up
 > to 200 tab presses each, one `page.evaluate` per press, could be minutes per route. If the measured
 > cost makes the suite unusable, the honest answers are to split the console keyboard walk into its
 > own test or to bound it — and **whichever I do will be stated with the observed timing beside it**,
@@ -177,6 +177,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > non-vacuity stop floor re-measured against the larger walk rather than inherited, since O170, O171
 > and O174 all found stale floors; every finding fixed in the component; a seeded ringless control
 > and a seeded unreachable control both caught; the wall-clock cost reported; `pnpm gate` exit 0.
+>
+> **DONE 2026-08-21T23:34Z. ALL SIX SWEEPS NOW DERIVE THEIR ROUTES; THE ARC O168 OPENED IS CLOSED.**
+> **ZERO FINDINGS: 30 console routes, 247 tab stops**, every control reachable and every one showing
+> an indicator attributable to focus. Public unchanged at 15 routes / 171 stops.
+> **THE COST OBJECTION WAS MINE AND IT WAS WRONG, WHICH IS WHY THE CLAIM PROMISED TO MEASURE IT.** I
+> reasoned that 30 routes at up to 200 tab presses with a round trip each "could be minutes per
+> route" and might force splitting or bounding the walk. A density probe answered it instead — **240
+> controls across the console**, concentrated in two pages (`/console/interview` 68,
+> `/console/usefulness` 32) — and the whole spec, both halves, runs in **1m45s**. No bounding, no
+> dropped routes, nothing chosen quietly.
+> **THE WALK IS SHARED, NOT COPIED.** The console gets the same function as the public half. A
+> console-only variant would drift, and the first thing to drift out of a copy is the resting-style
+> comparison that keeps this test able to fail at all — O153 measured 14 controls that satisfied the
+> old "has an indicator" predicate WITHOUT BEING FOCUSED, because they are permanently underlined
+> links. Seeding is inherited from O174 rather than re-derived.
+> **AND A FIGURE I HAD WRONG IN FIVE UNITS, CORRECTED HERE.** `CONSOLE_ROUTES` is **30, not 28**. I
+> wrote "28 console routes" in O169, O170, O172 and O174 and in four spec comments — **eleven places**
+> — and every one is fixed with a verified count (`a11y`'s array covered 24 of 30, not 25 of 28;
+> `contrast` and `touch-floor` covered 16 of 30, missing fourteen, not twelve). The error came from
+> adding a sweep's array length to its missing-list length instead of counting the derived list.
+> **I have spent this session correcting figures in other registers while carrying a wrong one of my
+> own**, which is the same fault at one remove and belongs in the record at full size.
+> **FOUR SEEDS, EACH WATCHED FAILING INDEPENDENTLY**, and the independence was the finding: run
+> together, the ringless seed threw before the unreachable assertion was evaluated, so a combined
+> seed would have demonstrated ONE guard while appearing to demonstrate two. Run apart: a ringless
+> `<button>` reported by route, a visible `role="button"` with no tabindex reported as `1 tab stops
+> for 2 controls`, and both collapse floors. The console stop floor is **measured for this walk** at
+> `> 150` against an observed 247, not borrowed from the public `> 100` — O170, O171 and O174 each
+> found a floor gone stale when the thing it bounded grew, and inheriting one here would have been
+> that mistake made on purpose.
+> Verification: **`pnpm gate` exit 0** — `pnpm verify` green (255 files, 4067 tests, audit gate 2
+> accepted / 0 unaccepted) and the full e2e suite **286/286 in 12.3 min**. CI still cannot confirm
+> it; the Actions block remains founder-gated.
 
 > **O174 (three mock fixtures fail silently, and a compliance sweep measures the empty pages) —
 > claimed 2026-08-21T21:06Z by loop-0821a.** The debt I recorded in O169, re-counted in O173, and
@@ -371,7 +404,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > is not worth much, so this row states the population it will measure and reports the count.
 > Gate: routes from `e2e/site-routes.ts` with the public/console split preserved and the reason for
 > the split kept in the file, not summarised away; the strict per-element assertion applied to all 15
-> public routes and the document-width assertion to all 28 console routes; the `hidden` cause-check
+> public routes and the document-width assertion to all 30 console routes; the `hidden` cause-check
 > kept; non-vacuity floors re-measured against the derived list rather than inherited, since O170 and
 > O171 both found stale ones; every finding fixed in the page, or — if a public page turns out to hold
 > legitimately-wide content in its own scroll container — the exception named with its route and
@@ -381,7 +414,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > **DONE 2026-08-21T19:47Z. THE ROUTE CHANGE FOUND NOTHING; THE RUN FOUND THAT O167 SHIPPED A RED
 > TEST.** That is the finding of this row and it is about my own process, not the tree's.
 > **THE ROUTE WORK, BRIEFLY.** All 15 public routes now get the strict per-element assertion (was 7)
-> and all 28 console routes the document-width one (was 16). The split is preserved with O149's
+> and all 30 console routes the document-width one (was 16). The split is preserved with O149's
 > reason kept in the file rather than summarised away. **Zero overflow findings** on the eight new
 > public pages and twelve new console screens.
 > **A GENERATED-TEST LOOP HAS A VACUITY SHAPE THE OTHER FIVE DO NOT.** Every other derived sweep
@@ -569,7 +602,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > **DONE 2026-08-21T17:18Z.** Both specs take their routes from `e2e/site-routes.ts`; no hardcoded
 > path array remains in either. `a11y` now scans **15 public + 27 console + the setup sample**, up
-> from 9 + 25; `contrast` scans **15 public + 28 console**, up from 15 + 16.
+> from 9 + 25; `contrast` scans **15 public + 30 console**, up from 15 + 16.
 > **THE OBSERVED FINDING COUNT IS ZERO, ACROSS ALL 22 NEWLY-SCANNED ROUTE-SCANS**, and the row says
 > so because the row measured it. The six unscanned public pages — `/terms` and
 > `/privacy/counsel-review` among them — came back clean on the first scan anybody has ever run over

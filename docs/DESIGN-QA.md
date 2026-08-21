@@ -2173,7 +2173,7 @@ here so the next one starts from a measurement.
 Third of the six sweeps O168 measured, and **the first one where the coverage gap was hiding real
 defects.**
 
-`e2e/touch-floor.spec.ts` covered all 15 public routes and 16 of the 28 console screens. The twelve
+`e2e/touch-floor.spec.ts` covered all 15 public routes and 16 of the 30 console screens. The fourteen
 it never measured were the *same twelve* `contrast` was missing — both arrays were copied from one
 list on one day and neither grew afterwards.
 
@@ -2245,7 +2245,7 @@ assertion. W216 exists because exactly that went wrong once: a tap-target rule r
 `hidden sm:inline` links, `/practices` measured 453px in a 390px viewport, and every existing spec
 passed while it was true.
 
-All 15 public and 28 console routes now, per-element and per-document respectively. Zero findings.
+All 15 public and 30 console routes now, per-element and per-document respectively. Zero findings.
 
 ### A generated-test loop has a vacuity shape the other sweeps don't
 
@@ -2348,3 +2348,61 @@ page asserted **populated** rather than merely 200. The touch sweep's own seeded
 `credentials -> 409, capability -> 409, education -> 409` instead of passing over three empty pages.
 The stale `observed 196` beside the population floor is re-measured to 207, one row after O170 found
 the same figure stale for the same reason.
+
+---
+
+## O175 — the keyboard sweep reaches the console (2026-08-21)
+
+Sixth and last of the sweeps O168 measured. **All six now derive their routes from `app/`.**
+
+### This gap was not a partial list, it was a missing half
+
+`a11y`, `contrast`, `touch-floor`, `semantics` and `mobile-fit` each covered the console partially.
+`keyboard-focus` covered the 15 public routes and **zero console routes** — its 15/45 was 15 public
+and nothing else. Every screen practice staff work on had never been checked for keyboard
+reachability or a visible focus indicator.
+
+O174 made the case concrete rather than theoretical: one unit earlier, the touch sweep — once its
+fixtures actually seeded — found a withdraw-reason input and a Save button under the 44px floor on
+`/console/credentials` and `/console/case-mix`. Both are **form controls on screens no keyboard test
+had ever tabbed through.**
+
+### Findings: none, and the cost objection was mine and wrong
+
+**30 console routes, 247 tab stops, zero findings.** Every console control is reachable and every
+one shows an indicator attributable to focus.
+
+The claim said the wall-clock cost was the open question and would be measured rather than
+estimated. Measured: **the whole spec, both halves, runs in 1m45s.** I had reasoned that 30 routes ×
+up to 200 tab presses with a round-trip each "could be minutes per route", and a density probe
+settled it instead — 240 controls across the console, concentrated in two pages
+(`/console/interview` 68, `/console/usefulness` 32). No bounding, no splitting, no dropped routes.
+
+### The walk is shared, not copied
+
+The console gets the *same* function as the public half, not a lighter variant. A console-only copy
+would drift, and the first thing to drift out of a copy is the resting-style comparison that keeps
+this test able to fail at all — O153 found 14 controls that satisfied the old "has an indicator"
+predicate **without being focused**, because they are permanently underlined links.
+
+Seeding is inherited from O174 rather than re-learned: `console` first, practice second, everything
+that reads `practices[0]` after, and every fixture response asserted ok.
+
+### A figure I had wrong in five units
+
+`CONSOLE_ROUTES` is **30**, not 28. I wrote "28 console routes" in O169, O170, O172 and O174 and in
+four spec comments — eleven places, all corrected here with verified counts (`a11y`'s array covered
+24 of 30, not 25 of 28; `contrast` and `touch-floor` covered 16 of 30, missing fourteen, not twelve).
+The error came from adding a sweep's array length to its missing-list length instead of counting the
+derived list. Correcting figures in other people's registers all session while carrying a wrong one
+of my own is worth recording plainly.
+
+### Guards
+
+Four seeds, each watched failing **independently** — the ringless and unreachable seeds were run
+separately, because the first assertion throws before the second is evaluated and running them
+together would have demonstrated only one. A ringless `<button>` (caught by class and route), a
+visible `role="button"` with no tabindex (`1 tab stops for 2 controls`), and both collapse floors.
+The console stop floor is **measured for this walk** at `> 150` against an observed 247, not borrowed
+from the public half's `> 100` — O170, O171 and O174 each found a floor that had gone stale when the
+thing it bounded grew, and inheriting one here would have been that mistake made deliberately.

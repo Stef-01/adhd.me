@@ -113,7 +113,8 @@ test.beforeEach(async ({ page, request }) => {
 
 test("console surfaces pass WCAG A/AA", async ({ page }) => {
   test.setTimeout(120_000);
-  // O169: derived from `app/`, not listed. This array covered 25 of the 28 console screens and
+  // O169: derived from `app/`, not listed. This array covered 24 of the 30 console screens (plus
+  // the setup sample; signin and onboarding are scanned by the test below) and
   // omitted `/console/allocation`, `/applications`, `/interview` and `/matching` — four screens the
   // WCAG gate had never scanned, under a suite whose header says "over every console surface".
   //
