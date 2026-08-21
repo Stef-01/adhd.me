@@ -143,6 +143,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W237 (the interop conformance harness) — claimed 2026-08-21T09:35Z by loop-0821a.** W235 and
+> W236 each ship a mapping with its own tests. The harness is the thing that says what a
+> CONFORMANT mapping is, so the next one is held to the same bar without anybody remembering the
+> bar — W27's shape exactly: an exported `describe…Contract(label, fixture)` a mapping's own test
+> file imports, whose green run IS the definition.
+> **THE HARNESS EARNS ITS PLACE ONLY IF IT ENFORCES WHAT THE UNITS LEARNED, NOT WHAT THEY BUILT.**
+> Both mappings this session were written by the same session in the same hour, so a harness derived
+> from what they do would encode my habits and pass anything I would have written anyway. It has to
+> encode the FINDINGS: the silent drop W235's field check caught in its own mapping, the fabricated
+> default that fooled that check until a seed exposed it, the lossy round trip W236 found while
+> writing its reader, the `display` field where clinical wording would go, and the narrative that
+> must not be tidied. Five properties, each of which was a real defect in this tree within the last
+> hour and none of which a mapping's author thinks about unprompted.
+> **AND IT MUST BE VACUITY-PROOF BY CONSTRUCTION.** A contract suite is the easiest place in a tree
+> to write a test that passes over an empty fixture list — W27's own suite takes a `populatedRange`
+> AND an `emptyRange` for exactly this reason. This one takes a corpus of records and asserts it is
+> non-empty and that its members differ, so "every record round-trips" cannot be true because there
+> are no records.
+> **NO LIVE ENDPOINT EXISTS TO CALL, and the harness is where that becomes checkable across the
+> lane rather than per module.** W235 and W236 each assert their own file contains no fetch; the
+> harness asserts it of every module in `src/interop/`, so a third mapping cannot arrive with a
+> client attached and its own test quietly not looking.
+> Gate: the contract exported in W27's shape and CONSUMED by both existing mappings' tests; each of
+> the five properties traceable to the finding that produced it; a vacuity guard on the corpus; the
+> no-endpoint check applied lane-wide by directory walk rather than per file; a deliberately
+> non-conformant mapping shown failing the contract, or the contract proves nothing; `pnpm verify`
+> green.
+
 > **W236 (the e-referral document profile) — claimed 2026-08-21T09:28Z by loop-0821a.** W131 built
 > the structured referral; this renders it to a FHIR profile, and the row's gate is the hard part:
 > **no clinical text is authored, generated or edited by this tree — G7's fourth property
@@ -6166,7 +6194,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
-| W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
+| W237 | claimed | loop-0821a | 2026-08-21T09:35Z | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
