@@ -120,15 +120,22 @@ function countArm(
   keys: readonly SessionKey[],
 ): CapacityArmCount {
   const wanted = new Set(keys.map(sessionKeyOf));
+  const seen = new Set<string>();
   let slotsOffered = 0;
   let slotsFilled = 0;
   for (const occurrence of occurrences) {
-    if (!wanted.has(sessionKeyOf(occurrence))) continue;
+    const key = sessionKeyOf(occurrence);
+    if (!wanted.has(key)) continue;
+    seen.add(key);
     slotsOffered += occurrence.slotsOffered;
     slotsFilled += occurrence.slotsFilled;
   }
   return {
-    sessions: wanted.size,
+    // The sessions that CONTRIBUTED, not the sessions assigned. W234's review found the first
+    // version counting `wanted.size`, so an arm holding three assigned sessions of which one never
+    // ran reported three sessions beside two sessions' worth of slots — a count and a total
+    // describing different sets, which is how an arm looks better powered than it is.
+    sessions: seen.size,
     slotsOffered,
     slotsFilled,
     utilisation: slotsOffered === 0 ? null : slotsFilled / slotsOffered,

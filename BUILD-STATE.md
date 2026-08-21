@@ -176,6 +176,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > reason for not fixing — no finding closed by inspection; registers checked both directions; the
 > hit-rate overclaim removed from the rendered sentence, not softened; `pnpm verify` green plus the
 > lane's e2e and the axe sweep.
+> DONE 2026-08-21. **All nine findings fixed, and every one of the nine has a test that FAILS when
+> the fix is reverted** — proved by reverting each in turn, one at a time, and recording which test
+> caught it. No finding was closed by inspection.
+> The two that mattered:
+> **(2) THE OVERCLAIM IS GONE FROM THE SENTENCE, NOT SOFTENED IN IT.** "Ranges like this one
+> contained what happened 85 per cent of the time" now reads "the weekly ranges this is worked out
+> from contained what happened 85 per cent of the time" — which is what `backTest` actually scored.
+> The rate was always real; the noun phrase attached it to a different question. Reverting the
+> wording fails a test that asserts the old phrase is absent.
+> **(3) THE VIEW STOPPED FABRICATING ZEROS.** `occurrences`, `slotsOffered` and `slotsFilled` are
+> now `number | null`, the page prints an em dash, and W230's small-cell sweep was corrected in the
+> same commit — a null slipping into `Math.min` would have read as a small cell that is not there.
+> **(4) WAS NOT ACTUALLY FIXED WHEN I FIRST WROTE THAT IT WAS.** I put a comment in the view saying
+> the recommendation "now takes the score it needs rather than deriving its own" while it still
+> derived its own, 70 times. A comment claiming a fix that does not exist is worse than the defect,
+> because it stops the next reader looking. Really fixed now: `sessionRecommendations` computes the
+> pooled score ONCE, and two tests hold it honest — every session's result compared BY VALUE against
+> the single-session function, and a ratio assertion that the batch is materially cheaper (a ratio
+> rather than a wall-clock bound, which would be flaky on a shared runner).
+> The rest: `calendarGap` asked `calendarKnowsNothing` for the empty-string jurisdiction and so
+> could never clear — and my first attempt to pin the fix RE-IMPLEMENTED the rule in the test file,
+> which would have passed whatever the view did (the fifth vacuous guard this session), so the rule
+> is exported and the test exercises the real one; `capacityCopyOverDiary` now derives a skip's id
+> from its text; an empty `decidedBy` gets its own `no_decider` refusal instead of being told its
+> reason is too short; `sessions` counts what contributed rather than what was assigned;
+> `occurrencesFrom` keys on practice as well as clinician and day; `meanWidthShare` divides by the
+> predictions that HAVE a share.
+> **AND MY OWN FIXTURE FOR FINDING 5 WAS BROKEN, caught by its own assertion**: day arithmetic
+> produced `2026-06-32`, the ISO check silently dropped those appointments, and the cancelled week
+> the test existed to reach never existed. `isoDaysFrom` now, with the non-vacuity line that caught
+> it kept.
+> W225's three-door patient check caught the new export before I remembered to declare it.
+> Gate: `pnpm verify` green — 234 files, 3800 tests, build, audit:gate PASS; the capacity console
+> e2e 5 passed; the axe console sweep green.
+> **STANDING NOTE FOR THE NEXT HARDENING WEEK: `code-review` IS AVAILABLE AND IT EARNED ITS PLACE.**
+> Nine findings over a lane whose every unit shipped with seeded-failure proofs and both-directions
+> registers. Two were honesty defects of exactly the kind this tree's machinery exists to catch, in
+> code that machinery had already passed. `ListSkills` does NOT list it — that tool returns the
+> claude.ai skills, and the project skills are elsewhere; checking there and concluding it was
+> absent would have been O144's mistake exactly. Invoke it by name.
 
 > **W233 (capacity attribution: did opening slots help?) — claimed 2026-08-21T08:52Z by
 > loop-0821a. Premise CHECKED first:** the only arm anywhere in this tree is patient-level —
@@ -5998,7 +6038,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W231 | done | loop-0821a | 2026-08-21T08:36Z | 3e8b4bf | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | done | loop-0821a | 2026-08-21T08:44Z | 6f29060 | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | done | loop-0821a | 2026-08-21T08:52Z | 3727570 | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
-| W234 | claimed | loop-0821a | 2026-08-21T09:07Z | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
+| W234 | done | loop-0821a | 2026-08-21T09:07Z | PENDING | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |

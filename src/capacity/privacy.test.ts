@@ -126,7 +126,10 @@ describe("W230 the small-cell question is answered by counting", () => {
     // with the number, not the impression: if the sim's diary thins out, this fails rather than
     // quietly becoming untrue.
     const view = capacityView(sim.appointments, AS_OF, PERIOD);
-    const filled = view.sessions.map((row) => row.slotsFilled);
+    // Filtered to the rows that HAVE a figure — W234 made the no-history arm carry null rather
+    // than a fabricated zero, and a null slipping into `Math.min` would have read as a small cell
+    // that is not there. The count is asserted so the filter cannot quietly empty the sweep.
+    const filled = view.sessions.map((row) => row.slotsFilled).filter((n): n is number => n !== null);
     expect(filled).toHaveLength(70);
     expect(Math.min(...filled)).toBe(10);
     expect(filled.filter((n) => n < 5)).toEqual([]);
@@ -207,5 +210,24 @@ describe("W230 every module in the lane is classified", () => {
     // returns their prose. Classifying it would declare a record class for a module with no
     // records — and W106's own staleness check would not catch that, because the file exists.
     expect(RECORD_CLASSES.find((c) => c.module === "src/capacity/copy.ts")).toBeUndefined();
+  });
+});
+
+describe("W234 the review findings stay fixed", () => {
+  it("keeps two practices' sessions apart, even when they share a clinician id", () => {
+    // Finding 8. Latent when found — every caller feeds one practice — so it is pinned here rather
+    // than left as "the input happens to be narrow", which is not a property of the function.
+    const at = (practiceId: string, dayIso: string) => ({
+      id: `w234-${practiceId}-${dayIso}` as never,
+      practiceId: practiceId as never,
+      clinicianId: "shared-id" as never,
+      startsAt: `${dayIso}T09:00:00+10:00`,
+      status: "booked" as const,
+      patientId: null,
+      generatedByInvitation: false,
+    });
+    const merged = occurrencesFrom([at("p1", "2026-06-04"), at("p2", "2026-06-04")], "2026-07-01");
+    expect(merged, "two practices' sessions merged into one occurrence").toHaveLength(2);
+    expect(merged.every((o) => o.slotsOffered === 1)).toBe(true);
   });
 });

@@ -107,6 +107,23 @@ describe("W224 a wider guess is right more often, and the score says so", () => 
     expect(real.meanWidthShare).toBeLessThan(0.2);
   });
 
+  it("does not dilute the width share with predictions over no slots", () => {
+    // Finding 9 of W234's review. Adding 0 for a zero-slot prediction and dividing by the full
+    // count understates the width — and the width is the one number in this module whose job is to
+    // stop a forecaster looking better than it is.
+    const real = { dayIso: "2026-06-01", slotsOffered: 4, range: { low: 0, high: 4 }, actualFilled: 2, hit: true, widthSlots: 4 };
+    const empty = { ...real, dayIso: "2026-06-08", slotsOffered: 0, widthSlots: 0 };
+    const withEmpties = scorePredictions(
+      [real, { ...real, dayIso: "2026-06-15" }, { ...real, dayIso: "2026-06-22" },
+       empty, { ...empty, dayIso: "2026-06-29" }, { ...empty, dayIso: "2026-07-06" }],
+      PERIOD,
+    );
+    expect(withEmpties.scored).toBe(true);
+    if (!withEmpties.scored) return;
+    // Three real predictions, each 4 of 4 wide: the share is 1, not 0.5.
+    expect(withEmpties.meanWidthShare).toBe(1);
+  });
+
   it("puts both numbers in one sentence, since either alone misleads", () => {
     const score = scorePredictions(keys.flatMap((key) => backTest(occurrences, key, PERIOD).predictions), PERIOD);
     expect(score.scored).toBe(true);

@@ -453,7 +453,16 @@ export function capacityCopyOverDiary(
       out.push({ id: `recommendation.withheld.${recommendation.why}`, text: recommendation.copy });
     }
     for (const skip of backTest(occurrences, key, period).skipped) {
-      out.push({ id: "score.skipped.no_history_yet", text: skip.why });
+      // The id is DERIVED from the text's own shape rather than assumed. The first version
+      // hard-coded `no_history_yet` for every skip, so a zero-slot week bound the wrong text to a
+      // declared id — the exact mislabel `mustContain` was added to catch, occurring in the other
+      // function while that check watched this one. W234's review found it.
+      out.push({
+        id: skip.why.includes("offered no slots")
+          ? "score.skipped.offered_nothing"
+          : "score.skipped.no_history_yet",
+        text: skip.why,
+      });
     }
   }
   return out;

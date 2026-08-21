@@ -66,11 +66,13 @@ export const COUPLING_OFF_COPY =
  * the register's both-directions check report a module it could not see as a stale declaration —
  * the register was right and the module was inconsistent.
  */
-export type CouplingRefusal = "no_decision" | "reason_too_thin" | "date_unreadable";
+export type CouplingRefusal = "no_decision" | "no_decider" | "reason_too_thin" | "date_unreadable";
 
 export const COUPLING_REJECTION_COPY: Record<CouplingRefusal, string> = {
   no_decision:
     "The coupling can only be switched on by recording who decided it and why. There is no setting that turns it on without that, because a setting is something somebody flips and a decision is something somebody can be asked about later.",
+  no_decider:
+    "The decision does not say who took it. Switching this on changes how many people are contacted, and a record of that choice with nobody's name on it cannot be asked about later.",
   reason_too_thin:
     "The recorded reason is too short to be a reason. Switching this on changes how many people are contacted, and the record of that choice has to say something a reader could disagree with.",
   date_unreadable: "The decision needs a readable date, so the record says when it was taken.",
@@ -101,7 +103,14 @@ export function couplingState(
   if (!ISO_DATE.test(decision.decidedOnIso)) {
     return { enabled: false, refused: "date_unreadable", why: COUPLING_REJECTION_COPY.date_unreadable };
   }
-  if (decision.decidedBy.trim().length === 0 || decision.reason.trim().length < MIN_REASON) {
+  // TWO FIELDS, TWO REFUSALS. The first version folded a missing decider into the thin-reason
+  // refusal, so somebody who left the name blank was told their reason was too short and went and
+  // rewrote a perfectly good reason. W234's review found it; a refusal that names the wrong field
+  // is worse than a generic one, because it is confidently wrong about what to do next.
+  if (decision.decidedBy.trim().length === 0) {
+    return { enabled: false, refused: "no_decider", why: COUPLING_REJECTION_COPY.no_decider };
+  }
+  if (decision.reason.trim().length < MIN_REASON) {
     return { enabled: false, refused: "reason_too_thin", why: COUPLING_REJECTION_COPY.reason_too_thin };
   }
   return { enabled: true, decision };

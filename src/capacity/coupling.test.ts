@@ -86,7 +86,9 @@ describe("W231 it cannot be switched on by accident", () => {
     const cases: Array<[string, CouplingDecision | null, CouplingRefusal]> = [
       ["nothing recorded", null, "no_decision"],
       ["thin reason", { ...GOOD, reason: "agreed" }, "reason_too_thin"],
-      ["no decider", { ...GOOD, decidedBy: "  " }, "reason_too_thin"],
+      // Finding 6: the first version folded this into the thin-reason refusal, so somebody who
+      // left the name blank was told their reason was too short and went and rewrote a good one.
+      ["no decider", { ...GOOD, decidedBy: "  " }, "no_decider"],
       ["unreadable date", { ...GOOD, decidedOnIso: "August" }, "date_unreadable"],
     ];
     for (const [label, decision, expected] of cases) {

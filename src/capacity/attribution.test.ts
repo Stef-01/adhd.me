@@ -116,6 +116,27 @@ describe("W233 the trend does not exist here, checked three ways", () => {
 });
 
 describe("W233 every refusal is reachable, and the overlap one especially", () => {
+  it("counts the sessions that contributed, not the ones that were assigned", () => {
+    // Finding 7 of W234's review. An arm holding an assigned session that never ran reported a
+    // session count and a slot total describing different sets — which is how an arm looks better
+    // powered than it is.
+    const ghost: SessionKey = { clinicianId: "never-ran", weekday: 3 };
+    const half = Math.floor(keys.length / 2);
+    const result = capacityAttribution(
+      [
+        ...keys.slice(0, half).map((key) => assign(key, "opened")),
+        assign(ghost, "opened"),
+        ...keys.slice(half).map((key) => assign(key, "held_back")),
+      ],
+      occurrences,
+      PERIOD,
+    );
+    expect(result.attributed).toBe(true);
+    if (!result.attributed) return;
+    // The ghost is assigned and contributes nothing, so it must not be counted.
+    expect(result.figure.opened.sessions).toBe(half);
+  });
+
   it("refuses an empty arm rather than describing the one that has sessions", () => {
     const result = capacityAttribution([assign(keys[0]!, "opened")], occurrences, PERIOD);
     expect(result.attributed).toBe(false);

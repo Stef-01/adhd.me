@@ -9,9 +9,9 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
 import { isoDaysFrom } from "@/lib/dates";
 import { lintEducationCopy } from "@/education/advice-lint";
-import { CALENDAR_UNKNOWN_COPY } from "@/capacity/calendar";
+import { CALENDAR_UNKNOWN_COPY, loadCalendar } from "@/capacity/calendar";
 import type { Appointment, AppointmentId, AppointmentStatus, ClinicianId, PracticeId } from "@/domain/types";
-import { CAPACITY_EMPTY_COPY, capacityView } from "./capacity";
+import { CAPACITY_EMPTY_COPY, calendarGapFor, capacityView } from "./capacity";
 
 const sim = runSim({ ...DEFAULT_SIM_CONFIG, weeks: 6 });
 const AS_OF = isoDaysFrom(sim.config.todayIso, 6 * 7 + 1);
@@ -102,6 +102,12 @@ describe("W229 the view decides nothing the lane has already decided", () => {
     const view = capacityView(cancelled, AS_OF, PERIOD);
     expect(view.sessions).toHaveLength(1);
     expect(view.sessions[0]!.utilisation).toBeNull();
+    // Finding 3. The row must carry null for EVERY figure it has no history for — the first
+    // version wrote a zero back in and the table printed "Weeks recorded 0" for a session that ran
+    // twice, undoing the guarantee W222's no-numeric-field arm exists to give.
+    expect(view.sessions[0]!.occurrences).toBeNull();
+    expect(view.sessions[0]!.slotsOffered).toBeNull();
+    expect(view.sessions[0]!.slotsFilled).toBeNull();
     expect(view.sessions[0]!.noHistoryCopy).toMatch(/nought per cent/);
     // The rendered label, checked HERE because this is where the branch is reachable. The e2e that
     // was supposed to guard it passed when seeded with `pct(x ?? 0)`, since no session in the sim
@@ -118,10 +124,37 @@ describe("W229 the view decides nothing the lane has already decided", () => {
     ]);
   });
 
-  it("always states the calendar gap, because W227 ships empty", () => {
+  it("states the calendar gap while W227 ships empty, and stops the day it does not", () => {
     const view = capacityView(sim.appointments, AS_OF, PERIOD);
     expect(view.calendarGap).toBe(CALENDAR_UNKNOWN_COPY);
     expect(capacityView([], AS_OF, PERIOD).calendarGap).toBe(CALENDAR_UNKNOWN_COPY);
+  });
+
+  it("clears the gap once a calendar is loaded, which the first version could never do", () => {
+    // Finding 1. The first version also asked `calendarKnowsNothing(calendar, "")` — the
+    // empty-string jurisdiction, which no real entry can carry — so the notice would have kept
+    // rendering forever after W227's calendar was populated, and the test only pinned the empty
+    // case. Checked here through the same loader a real calendar would come through.
+    const loaded = loadCalendar([
+      {
+        id: "nsw-2026-anzac",
+        jurisdiction: "NSW",
+        name: "Anzac Day",
+        fallsOn: "2026-04-25",
+        observedOn: "2026-04-27",
+        provenance: {
+          citation: "Fixture only — this exercises the loader, and is not a real citation.",
+          url: "https://example.test/fixture",
+          publishedOn: "2026-01-01",
+          retrievedOn: "2026-01-02",
+        },
+      },
+    ]);
+    expect(loaded.days).toHaveLength(1);
+    // The view's OWN rule, not a copy of it in this file — a re-implemented rule passes whatever
+    // the view does, which is the shape of four vacuous guards already this session.
+    expect(calendarGapFor(loaded)).toBeNull();
+    expect(calendarGapFor(loadCalendar([]))).toBe(CALENDAR_UNKNOWN_COPY);
   });
 
   it("labels every rate it does have as a percentage, and only those", () => {

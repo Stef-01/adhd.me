@@ -165,7 +165,13 @@ export function occurrencesFrom(
     if (!ISO_DAY.test(dayIso)) continue;
     if (dayIso >= asOfIso) continue;
 
-    const key = `${appointment.clinicianId}::${dayIso}`;
+    // KEYED ON PRACTICE TOO. W234's review found this grouping on clinician and day alone, so a
+    // diary holding two practices would merge sessions that happen to share a clinician id into
+    // one. Latent rather than live — every caller feeds a single practice's diary — but a caller
+    // had no way to scope it, and "the input happens to be narrow" is not a property of this
+    // function. The practice id is dropped from the OCCURRENCE itself: a session is a fact about a
+    // diary, and every occurrence in one report comes from the same practice by construction.
+    const key = `${appointment.practiceId}::${appointment.clinicianId}::${dayIso}`;
     const existing = byDay.get(key) ?? {
       clinicianId: String(appointment.clinicianId),
       dayIso,

@@ -136,9 +136,12 @@ export default async function CapacityPage() {
                   {view.sessions.map((row) => (
                     <tr key={row.label} data-testid="capacity-row" className="border-b border-stone-100">
                       <th scope="row" className="py-2 pr-4 font-normal text-stone-900">{row.label}</th>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.occurrences}</td>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.slotsOffered}</td>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.slotsFilled}</td>
+                      {/* An em dash where the view holds no figure — W234 made these null rather
+                          than a fabricated zero, and a zero here would say a session that ran
+                          twice ran no weeks at all. */}
+                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.occurrences ?? "—"}</td>
+                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.slotsOffered ?? "—"}</td>
+                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.slotsFilled ?? "—"}</td>
                       {/* The label is composed in the view, where the no-rate branch is reachable
                           by a fixture. An em dash, never a nought — W215's live defect. */}
                       <td className="py-2 pr-4 tabular-nums text-stone-900">{row.utilisationLabel}</td>

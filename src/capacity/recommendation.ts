@@ -18,6 +18,15 @@
 // advice linter is a consequence rather than a constraint worked around — the honest form of this
 // output is already the conditional form.
 //
+// THE HIT RATE IS ABOUT THE WEEKLY RANGES, NOT ABOUT THIS ONE — a distinction W234's code review
+// found being blurred in the sentence this module composes. `backTest` only ever forecasts
+// `week.slotsOffered`, the slots a week actually had; this function forecasts EXTRA slots. Both
+// ranges come from the same recorded rates, so the track record is relevant, but it is not a track
+// record OF THIS RANGE and the first draft said "ranges like this one contained what happened 85
+// per cent of the time" — a real rate attached to a different question, which is precisely the
+// overclaim this lane exists to prevent, in the sentence written to prevent it. The wording now
+// says what was actually scored: the weekly ranges this is worked out from.
+//
 // IT MAY ONLY SPEAK WHERE THE FORECASTER HAS BEEN SCORED. W224 exists so a forecaster that is
 // usually wrong cannot present as one that is usually right; a recommendation resting on an
 // UNSCORED forecast is exactly that presentation. Below W224's floor there is no recommendation at
@@ -100,15 +109,6 @@ export function sessionRecommendation(
   slotsConsidered: number,
   period: { fromIso: string; toIso: string },
 ): RecommendationResult {
-  const forecast = forecastFill(practiceOccurrences, key, slotsConsidered, period);
-  if (!forecast.forecast) {
-    return {
-      offered: false,
-      why: "no_forecast",
-      copy: `${RECOMMENDATION_WITHHELD_COPY.no_forecast} ${forecast.copy}`,
-    };
-  }
-
   // The method's record across this practice's sessions, not this session's own — named in the
   // value rather than glossed, because the two are different claims.
   const everyKey = new Map<string, SessionKey>();
@@ -121,7 +121,26 @@ export function sessionRecommendation(
   const predictions = [...everyKey.values()].flatMap(
     (each) => backTest(practiceOccurrences, each, period).predictions,
   );
-  const score = scorePredictions(predictions, period);
+  return recommendationFrom(practiceOccurrences, key, slotsConsidered, period, scorePredictions(predictions, period));
+}
+
+/** The body, given a score. Shared by the single-session and many-session entry points. */
+function recommendationFrom(
+  practiceOccurrences: readonly SessionOccurrence[],
+  key: SessionKey,
+  slotsConsidered: number,
+  period: { fromIso: string; toIso: string },
+  score: ForecastScore,
+): RecommendationResult {
+  const forecast = forecastFill(practiceOccurrences, key, slotsConsidered, period);
+  if (!forecast.forecast) {
+    return {
+      offered: false,
+      why: "no_forecast",
+      copy: `${RECOMMENDATION_WITHHELD_COPY.no_forecast} ${forecast.copy}`,
+    };
+  }
+
   if (!score.scored) {
     return {
       offered: false,
@@ -160,11 +179,45 @@ export function sessionRecommendation(
         `If ${slotsConsidered} more slot${slotsConsidered === 1 ? "" : "s"} were opened on ${weekday}: ` +
         `between ${forecast.range.low} and ${forecast.range.high} filled, going by the ` +
         `${forecast.observed.recordedWeeks} ${weekday}s recorded for this session. ` +
-        `Across this practice's sessions, ranges like this one contained what happened ` +
-        `${Math.round(score.hitRate * 100)} per cent of the time.`,
+        `Across this practice's sessions, the weekly ranges this is worked out from contained ` +
+        `what happened ${Math.round(score.hitRate * 100)} per cent of the time.`,
       demandEvidence,
     },
   };
+}
+
+/**
+ * Recommendations for many sessions, with the practice-wide score computed ONCE.
+ *
+ * `sessionRecommendation` back-tests every session in the practice to work out the method's track
+ * record, which is correct for one call and quadratic for a page: W234's review measured the
+ * capacity console doing 70 × 70 = 4,900 back-tests per render. This does the shared half once.
+ *
+ * NOT an optimisation with a different answer: a test asserts this and `sessionRecommendation`
+ * agree for every session, because two paths to one number is exactly how a fast path comes to say
+ * something the slow path never would.
+ */
+export function sessionRecommendations(
+  practiceOccurrences: readonly SessionOccurrence[],
+  keys: readonly SessionKey[],
+  slotsConsidered: number,
+  period: { fromIso: string; toIso: string },
+): { key: SessionKey; result: RecommendationResult }[] {
+  const everyKey = new Map<string, SessionKey>();
+  for (const occurrence of practiceOccurrences) {
+    everyKey.set(`${occurrence.clinicianId}::${occurrence.weekday}`, {
+      clinicianId: occurrence.clinicianId,
+      weekday: occurrence.weekday,
+    });
+  }
+  const score = scorePredictions(
+    [...everyKey.values()].flatMap((each) => backTest(practiceOccurrences, each, period).predictions),
+    period,
+  );
+  return keys.map((key) => ({
+    key,
+    result: recommendationFrom(practiceOccurrences, key, slotsConsidered, period, score),
+  }));
 }
 
 /** The sentence to render when nothing is offered. Exported so every surface says the same thing. */

@@ -20,6 +20,7 @@ import { MIN_SCORED_PREDICTIONS } from "./score";
 import * as mod from "./recommendation";
 import {
   ALL_SCORE_SCOPES,
+  sessionRecommendations,
   RECOMMENDATION_WITHHELD_COPY,
   sessionRecommendation,
   withheldRecommendationCopy,
@@ -56,9 +57,15 @@ describe("W225 no patient can enter the recommendation, by three doors", () => {
       );
     }
     // Non-vacuity: the regex must have found the functions it claims to have checked.
-    expect(seen.sort()).toEqual(["sessionRecommendation", "withheldRecommendationCopy"]);
+    // W234 added `sessionRecommendations`; the three-door check caught it before I remembered to,
+    // which is the register doing its job rather than a list I keep in step by hand.
+    expect(seen.sort()).toEqual([
+      "sessionRecommendation",
+      "sessionRecommendations",
+      "withheldRecommendationCopy",
+    ]);
     expect(Object.keys(mod).filter((k) => typeof (mod as Record<string, unknown>)[k] === "function").sort()).toEqual(
-      ["sessionRecommendation", "withheldRecommendationCopy"],
+      ["sessionRecommendation", "sessionRecommendations", "withheldRecommendationCopy"],
     );
   });
 
@@ -111,12 +118,53 @@ describe("W225 it is a conditional, and the practice supplies the number", () =>
     expect(one.offered && one.recommendation.sentence).toContain("If 1 more slot were opened");
   });
 
+  it("says the hit rate is about the WEEKLY ranges, not about this one", () => {
+    // Finding 2 of W234's review, and the most serious of the nine. `backTest` only ever forecasts
+    // `week.slotsOffered`; this function forecasts EXTRA slots. The first draft read "ranges like
+    // this one contained what happened 85 per cent of the time" — a real, honestly-earned rate
+    // attached to a range answering a different question, which is the exact overclaim this lane
+    // exists to prevent, in the sentence written to prevent it.
+    const result = sessionRecommendation(occurrences, keys[0]!, 2, PERIOD);
+    expect(result.offered).toBe(true);
+    if (!result.offered) return;
+    expect(result.recommendation.sentence).toContain(
+      "the weekly ranges this is worked out from contained what happened",
+    );
+    expect(result.recommendation.sentence).not.toMatch(/ranges like this one/);
+  });
+
   it("carries the hit rate into the sentence, so the range is never read unqualified", () => {
     const result = sessionRecommendation(occurrences, keys[0]!, 2, PERIOD);
     expect(result.offered).toBe(true);
     if (!result.offered) return;
     expect(result.recommendation.sentence).toMatch(/contained what happened \d+ per cent of the time/);
     expect(result.recommendation.score.scored).toBe(true);
+  });
+});
+
+describe("W234 the many-session path agrees with the one-session path", () => {
+  it("returns exactly what sessionRecommendation returns, for every session", () => {
+    // Finding 4's fix shares one practice-wide score across the rows instead of each deriving its
+    // own — 70 × 70 back-tests per page render, measured. Two paths to one number is how a fast
+    // path comes to say something the slow path never would, so they are compared by VALUE over
+    // the whole practice rather than spot-checked.
+    const batch = sessionRecommendations(occurrences, keys, 2, PERIOD);
+    expect(batch).toHaveLength(70);
+    for (const { key, result } of batch) {
+      expect(result).toEqual(sessionRecommendation(occurrences, key, 2, PERIOD));
+    }
+  });
+
+  it("is materially cheaper, which is the only reason it exists", () => {
+    // Asserted as a ratio rather than a wall-clock threshold — a timing bound is a flaky test on a
+    // shared runner. The batch does one pooled back-test; the loop does one per session.
+    const started = process.hrtime.bigint();
+    sessionRecommendations(occurrences, keys, 2, PERIOD);
+    const batched = Number(process.hrtime.bigint() - started);
+    const loopStart = process.hrtime.bigint();
+    for (const key of keys) sessionRecommendation(occurrences, key, 2, PERIOD);
+    const looped = Number(process.hrtime.bigint() - loopStart);
+    expect(looped / batched, "the batch is not meaningfully cheaper than the loop").toBeGreaterThan(5);
   });
 });
 

@@ -24,16 +24,22 @@
 // allows for the days a practice was shut. That absence is a property of the numbers being read
 // and belongs beside them.
 
-import { CALENDAR_UNKNOWN_COPY, calendarKnowsNothing, loadCalendar, SHIPPED_HOLIDAYS } from "@/capacity/calendar";
+import {
+  CALENDAR_UNKNOWN_COPY,
+  loadCalendar,
+  SHIPPED_HOLIDAYS,
+  type HolidayCalendar,
+} from "@/capacity/calendar";
 import {
   capacityReport,
   occurrencesFrom,
+  sessionKeyOf,
   type CapacityReport,
   type SessionOccurrence,
 } from "@/capacity/model";
 import { backTest, scorePredictions, type ForecastScore } from "@/capacity/score";
 import { driftReport, type DriftReport } from "@/capacity/drift";
-import { sessionRecommendation, type RecommendationResult } from "@/capacity/recommendation";
+import { sessionRecommendations, type RecommendationResult } from "@/capacity/recommendation";
 import type { Appointment } from "@/domain/types";
 
 /** Why the page has no capacity picture to show. Three different facts, three sentences. */
@@ -50,9 +56,10 @@ export const CAPACITY_EMPTY_COPY: Record<CapacityEmptyReason, string> = {
 
 export interface CapacitySessionRow {
   label: string;
-  occurrences: number;
-  slotsOffered: number;
-  slotsFilled: number;
+  /** Null where W222 recorded no history — never a fabricated zero. See the mapping below. */
+  occurrences: number | null;
+  slotsOffered: number | null;
+  slotsFilled: number | null;
   /** Null where W222 refused a rate — never rendered as nought per cent. */
   utilisation: number | null;
   /**
@@ -68,6 +75,19 @@ export interface CapacitySessionRow {
   /** W222's own sentence when there is no rate. Null when there is one. */
   noHistoryCopy: string | null;
   recommendation: RecommendationResult;
+}
+
+/**
+ * Whether to show W227's "no calendar loaded" notice.
+ *
+ * EXPORTED so a test can exercise the real rule rather than a copy of it. The first attempt at
+ * pinning finding 1 re-implemented this line in the test file, which would have passed whatever
+ * the view did — the same shape as the vacuous guards this session has already produced four
+ * times. The jurisdiction is genuinely not known to this view, so the question is about the
+ * calendar as a whole and nothing narrower.
+ */
+export function calendarGapFor(calendar: HolidayCalendar): string | null {
+  return calendar.days.length === 0 ? CALENDAR_UNKNOWN_COPY : null;
 }
 
 export interface CapacityView {
@@ -97,17 +117,31 @@ export function capacityView(
   const occurrences: SessionOccurrence[] = occurrencesFrom(appointments, asOfIso);
   const report = capacityReport(appointments, asOfIso, period);
 
+  // W234 finding 4: the recommendations share one practice-wide score instead of each deriving its
+  // own. The first version had 70 rows each back-testing 70 sessions — 4,900 per render of a
+  // `force-dynamic` page, growing quadratically. `sessionRecommendations` is asserted to agree with
+  // the single-session function for every session, so this is not a fast path with its own answer.
+  const recommendations = new Map(
+    sessionRecommendations(occurrences, report.sessions.map((s) => s.key), slotsConsidered, period)
+      .map((row) => [sessionKeyOf(row.key), row.result]),
+  );
+
   const sessions: CapacitySessionRow[] = report.sessions.map((session) => ({
     label: session.label,
-    occurrences: session.history.recorded ? session.history.occurrences : 0,
-    slotsOffered: session.history.recorded ? session.history.slotsOffered : 0,
-    slotsFilled: session.history.recorded ? session.history.slotsFilled : 0,
+    // NULL, NOT ZERO — W234's review found this fabricating `occurrences: 0` for a session with no
+    // recorded history, so the table printed "Weeks recorded 0" for a session that ran twice.
+    // W222's no-history arm holds no numeric field precisely so a reader cannot take a number out
+    // of it; the guarantee survived the module and died here. The row now carries null and the page
+    // prints an em dash, the same way it already did for the rate.
+    occurrences: session.history.recorded ? session.history.occurrences : null,
+    slotsOffered: session.history.recorded ? session.history.slotsOffered : null,
+    slotsFilled: session.history.recorded ? session.history.slotsFilled : null,
     utilisation: session.history.recorded ? session.history.utilisation : null,
     utilisationLabel: session.history.recorded
       ? `${Math.round(session.history.utilisation * 100)}%`
       : "—",
     noHistoryCopy: session.history.recorded ? null : session.history.copy,
-    recommendation: sessionRecommendation(occurrences, session.key, slotsConsidered, period),
+    recommendation: recommendations.get(sessionKeyOf(session.key))!,
   }));
 
   const predictions = report.sessions.flatMap((session) => backTest(occurrences, session.key, period).predictions);
@@ -132,9 +166,12 @@ export function capacityView(
     sessions,
     score,
     drift,
-    // The jurisdiction is not known to this view, so the question asked is whether ANY calendar has
-    // been loaded. With W227 shipping empty the answer is always no, and saying so is the point.
-    calendarGap: calendar.days.length === 0 || calendarKnowsNothing(calendar, "") ? CALENDAR_UNKNOWN_COPY : null,
+    // ASKS WHETHER ANY CALENDAR IS LOADED, and nothing else. The first version also called
+    // `calendarKnowsNothing(calendar, "")` — the empty-string jurisdiction, which no real entry can
+    // carry — so the notice would have kept rendering forever after W227's calendar was populated,
+    // and the test only pinned the empty case. W234's review found it. The jurisdiction is genuinely
+    // not known to this view, so the honest question is the one about the calendar as a whole.
+    calendarGap: calendarGapFor(calendar),
     report,
   };
 }

@@ -170,6 +170,33 @@ describe("W226 the fixtures are checked against a real diary", () => {
     expect(reached.has("score.skipped.offered_nothing")).toBe(false);
   });
 
+  it("binds a skipped week's id from the text, not from an assumption", () => {
+    // Finding 5 of W234's review: `capacityCopyOverDiary` hard-coded `no_history_yet` for every
+    // skip, so a zero-slot week bound the wrong text to a declared id — the exact mislabel
+    // `mustContain` was added to catch, happening in the other function while that check watched
+    // this one. Checked here by feeding a diary that contains a cancelled week.
+    const cancelled = Array.from({ length: 7 }, (_, i) => ({
+      id: `w234-copy-${i}` as never,
+      practiceId: "p1" as never,
+      clinicianId: "c1" as never,
+      // `isoDaysFrom`, not day arithmetic — the first version wrote `2026-06-32` for the fifth
+      // week and those appointments were silently dropped by the ISO check, so the cancelled week
+      // never existed and the test failed on its own fixture.
+      startsAt: `${isoDaysFrom("2026-06-04", i * 7)}T09:00:00+10:00`,
+      status: (i === 6 ? "cancelled" : "booked") as "cancelled" | "booked",
+      patientId: null,
+      generatedByInvitation: false,
+    }));
+    const swept = capacityCopyOverDiary(cancelled, "2026-08-01", { fromIso: "2026-06-01", toIso: "2026-08-01" });
+    const byId = new Map(CAPACITY_SENTENCE_KINDS.map((k) => [k.id, k.mustContain]));
+    for (const { id, text } of swept) {
+      const phrase = byId.get(id);
+      if (phrase === undefined) continue;
+      expect(text, `${id} bound to text belonging to another kind`).toContain(phrase);
+    }
+    expect(swept.some((s) => s.id === "score.skipped.offered_nothing"), "the cancelled week was not reached").toBe(true);
+  });
+
   it("finds no advice in anything the real diary produces either", () => {
     for (const { id, text } of capacityCopyOverDiary(sim.appointments, AS_OF, PERIOD)) {
       expect(lintEducationCopy(text).map((f) => f.rule), `${id}: ${text}`).toEqual([]);

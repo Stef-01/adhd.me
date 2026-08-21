@@ -174,10 +174,18 @@ export function scorePredictions(
   let hits = 0;
   let widthSlots = 0;
   let widthShare = 0;
+  let shareable = 0;
   for (const prediction of predictions) {
     if (prediction.hit) hits += 1;
     widthSlots += prediction.widthSlots;
-    widthShare += prediction.slotsOffered === 0 ? 0 : prediction.widthSlots / prediction.slotsOffered;
+    // A prediction over no slots has no share to contribute and must not be divided into the mean
+    // either: the first version added 0 and divided by the full count, quietly understating the
+    // width and making a forecaster look tighter than it is — the one number in this module whose
+    // job is to stop a forecaster looking better than it is. W234's review found it.
+    if (prediction.slotsOffered > 0) {
+      widthShare += prediction.widthSlots / prediction.slotsOffered;
+      shareable += 1;
+    }
   }
 
   if (predictions.length < MIN_SCORED_PREDICTIONS.predictions) {
@@ -192,7 +200,7 @@ export function scorePredictions(
   }
 
   const meanWidthSlots = widthSlots / predictions.length;
-  const meanWidthShare = widthShare / predictions.length;
+  const meanWidthShare = shareable === 0 ? 0 : widthShare / shareable;
   return {
     scored: true,
     predictions: predictions.length,
