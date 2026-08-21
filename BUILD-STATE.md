@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W236 (the e-referral document profile) — claimed 2026-08-21T09:28Z by loop-0821a.** W131 built
+> the structured referral; this renders it to a FHIR profile, and the row's gate is the hard part:
+> **no clinical text is authored, generated or edited by this tree — G7's fourth property
+> re-derived AT THE BOUNDARY.**
+> **RE-DERIVED, NOT INHERITED, AND THE DIFFERENCE IS THE WHOLE UNIT.** W131 holds that property
+> inside the document: exactly one field carries prose, it is attributed to a named clinician at a
+> stated time, and no function in that module produces narrative. None of that survives being
+> restated as a claim about a MAPPER unless the mapper is checked on its own terms — because the
+> three ways a mapper breaks it are ways W131 never had to think about.
+> **(1) A PROFILE HAS SLOTS W131 HAS NOTHING FOR.** R4's `ServiceRequest` wants `note`, `reasonCode`,
+> `orderDetail`. The tempting fill for an empty required-ish slot is a sentence composed from the
+> structured fields — "Referred for shared care of ADHD" reads like bookkeeping and IS a clinical
+> sentence this tree authored, travelling under a GP's name to another practice.
+> **(2) A CODE IS NOT PROSE UNTIL SOMEBODY DISPLAYS IT.** R4 codings carry an optional `display`.
+> Filling it means writing the human-readable clinical wording for a code — authoring the sentence
+> a receiving clinician reads. W235 already refused to borrow a terminology URI; this refuses to
+> author the label that goes with it, and leaves `display` out entirely.
+> **(3) A NARRATIVE MUST NOT BE EDITED IN TRANSIT.** Not trimmed, not normalised, not
+> re-punctuated — the GP is professionally responsible for those words and they must arrive as a
+> character-identical copy. Round-tripped and asserted `===`, not "equivalent".
+> Gate: the profile is declared data with every slot either mapped from a structured field or
+> declared empty WITH a reason; no function composes prose — asserted on the namespace and the
+> source; no `display` on any coding; the narrative survives the round trip byte-identical; the
+> unmapped register from W235 extended for this resource; `pnpm verify` green.
+
 > **W235 (FHIR R4 resource mapping as data) — claimed 2026-08-21T09:20Z by loop-0821a.** Q19 opens.
 > The row's gate has a clause that decides the design: **an unmapped field is NAMED in the output
 > rather than dropped silently.**
@@ -6102,7 +6127,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W233 | done | loop-0821a | 2026-08-21T08:52Z | 3727570 | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
-| W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
+| W236 | claimed | loop-0821a | 2026-08-21T09:28Z | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
