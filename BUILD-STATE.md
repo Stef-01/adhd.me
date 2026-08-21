@@ -143,6 +143,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O168 (the site-wide sweeps stop hardcoding what "site-wide" means) — claimed 2026-08-21T15:52Z
+> by loop-0821a.** Third instance of one fault in one guard, so this row fixes the shape rather than
+> the symptom.
+> **THE MEASUREMENT FIRST.** `app/` holds **47** `page.tsx` routes, **45** of them static. The
+> founder sweep in `e2e/ownership-disclosure.spec.ts` hardcodes two arrays covering **34**. So
+> **11 static routes are in neither list** — `/console/capability`, `/capacity`, `/credentials`,
+> `/interest`, `/interop`, `/onboarding`, `/outreach`, `/responses`, `/results`, `/roi`, `/signin` —
+> about a quarter of the site, swept by nothing, while the test's name says "every surface".
+> **WHY THIS IS THE SAME FAULT AND NOT A NEW ONE.** O167 found the sweep could not see the `<head>`
+> and could not see `/console/verticals` unless another spec had seeded it. Both were the check
+> running in the direction its author was facing. A hardcoded route array is that fault one level up:
+> it sweeps the pages somebody remembered on the day, and it goes green forever afterwards no matter
+> how many pages get added beside them. Adding 11 strings would fix today's gap and leave the shape
+> that produced it — the twelfth route would escape the same way.
+> **SO THE ROUTES ARE DERIVED, NOT LISTED.** The sweep reads `app/**/page.tsx` from disk and visits
+> what it finds. A new page is swept because it exists, not because somebody remembered it.
+> **AND DYNAMIC ROUTES ARE FORCED TO A DECISION RATHER THAN DROPPED.** Two routes take params
+> (`/book/[token]`, `/console/setup/[step]`). A derived sweep that silently skips anything with a
+> bracket in it has just reinvented the hole in a new place. Each dynamic route needs either a sample
+> param the sweep actually visits, or a named exclusion with a reason, and an unlisted one fails the
+> test — so adding a dynamic route forces the author to say which.
+> **WHAT I DO NOT YET KNOW, AND WILL NOT GUESS.** A source scan of the 11 unswept page files finds no
+> founder word outside comments. That settles nothing: O156's own row records that the source grep
+> preceding it "missed four rendered sentences … because they were prose rather than labels", and
+> these pages render components whose copy the page file never names. The count of live hits is
+> whatever rendering them produces, and this row reports the observed figure rather than the one I
+> expect.
+> Gate: the route list derived from disk with no hardcoded array of paths; every static route
+> reachable by the sweep actually visited (auth-gated ones behind the sign-in the spec already
+> performs, and a route that redirects recorded as redirected rather than counted as swept); both
+> dynamic routes either visited with a sample param or excluded by name with a stated reason, and an
+> undeclared dynamic route failing; a non-vacuity assertion that the derived list is at least as
+> large as the 34 the arrays covered, so a broken derivation cannot pass by sweeping nothing; the
+> `<head>` read as well as the body, per O167; seeded failures for the derivation itself (a planted
+> page in an unswept directory must be caught); whatever live hits it finds fixed; `pnpm verify`
+> green.
+
 > **O167 (the finder against the whole guidelines checklist) — claimed 2026-08-21T14:23Z by
 > loop-0821a.** Continues the founder's *"do through design audit … learn a bout best practices
 > onlnei"*. O166 fixed the screen they screenshotted; this is the *thorough* half.
