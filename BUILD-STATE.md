@@ -143,6 +143,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O147 (the focus law, made executable — and it is already being kept) — claimed
+> 2026-08-21T06:30Z by loop-0820s.** `adhdme-taste` carries two keyboard rules — "visible
+> `:focus-visible` ring, never `outline: none` without a replacement" — and, like the 44px floor
+> before O145, nothing enforces them. O145 found that shape of law broken in 61 places. This one
+> is measured FIRST and is being kept: zero `outline: none` in globals.css against 38
+> `focus-visible` rules, and driven with REAL keyboard focus (`:focus-visible` does not match a
+> programmatic `.focus()`, so the probe tabs), every stop on `/`, `/finder`, `/clinicians/join`,
+> `/about` and `/faq` shows a ring. Zero findings.
+> The adjacent property is the more interesting one and also holds: tab stops MATCH the count of
+> visible, enabled, in-tab-order controls exactly on four of five routes (43 and 43 on the join
+> form), with `/` two ahead — extra stops are focusable elements outside the selector, not a
+> defect. So every control a person can see, a person can reach, and knows when they have.
+> So this unit is PREVENTIVE and says so rather than dressing a null up as a discovery. The
+> deliverable is the gate across all fifteen public routes, because the law is currently kept by
+> the same thing that kept the 44px floor — whoever happened to remember — and that held until it
+> did not. Gate: ring + reachability asserted per route, a non-vacuity pin so a probe that stops
+> tabbing cannot report a clean sweep, a seeded failure proving it fails, `pnpm verify` green.
+> The probe was wrong once and it is recorded because it is the fifth time: it first broke the tab
+> loop on a REPEATED element key, so forty identical checkboxes ended the walk after four stops
+> and `/clinicians/join` reported 4 where the truth is 43. Terminating on a return to the FIRST
+> stop is what made the numbers real.
+
 > **O146 (the range slider, which O145 recorded rather than fixed) — claimed 2026-08-21T05:40Z
 > by loop-0820s.** O145 swept 61 controls under the 44px floor down to one and named the
 > survivor inside the gate: `/clinicians`'s "Target practice mix" range input at 306x16. It was
