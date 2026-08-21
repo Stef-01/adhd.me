@@ -119,6 +119,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > directions in reach.test.ts §O40, every prior reach pin green with no ratchet movement, full
 > `pnpm verify` green (205 files, 2804 tests). Year plan Q1 item 4 marked done.
 
+> **O137 (founder-directed — design-motion-principles installed, the motion critique, and
+> the two gaps it found) — claimed and DONE 2026-08-21, interactive session (not a loop
+> firing).** `npx skills add kylezantos/design-motion-principles` vendored to .agents/skills
+> with the Claude Code symlink, and bound into CLAUDE.md law 5 (Jakub-primary/Emil-secondary
+> weighting for patient surfaces; tree laws win conflicts). The critique's verdict on the
+> existing system: strong — one shared ease, the O52 re-rank glide and O67 travelling
+> portrait are exactly the meaning-carrying motion both laws want, the O44 static booking
+> bar and the mic's live-state pulse both justified. Two gaps, fixed: the results-head
+> status lines (count, quality banner, tie note, clarifier block, unserved note) teleported
+> in the same frame the rows glided — each now enters with the standard small rise, exits
+> subtler than it enters, swaps when its text swaps, static under reduced motion; and the
+> Team page's plates rise once on view (the landing's reveal language, no hover lift, no
+> loops). Deliberately not animated, per the frequency gate: the suburb input, the show-all
+> expansion, the booking bar. Gate: pnpm verify green; matching + finder-flow + landing +
+> a11y e2e 34/34; DESIGN-QA entry. Loop firings: O137 is taken — next free number is O138.
+
 > **O136 (the join form's accent, and a correction to O135's own record) — claimed
 > 2026-08-21T00:33Z by loop-0820s.** O135's sweep found /clinicians/join carrying NINE
 > accent-coloured elements against 0–2 everywhere else, and left them with a written reason:

@@ -144,7 +144,18 @@ export function ResultsStage({
                 : claimsFullFit
                   ? "We do not cover that one yet, so these are ordered on what you asked for."
                   : "We do not cover that one yet.";
-            return countLine ? <p className="place-status" role="status">{countLine}</p> : null;
+            return countLine ? (
+              <motion.p
+                key={countLine}
+                className="place-status"
+                role="status"
+                initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {countLine}
+              </motion.p>
+            ) : null;
           })()}
 
           {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
@@ -154,19 +165,42 @@ export function ResultsStage({
               rendered as a ranked list whose order came from the tie-break: from nothing,
               presented as from something. This is one line and it only appears when the
               order means nothing, which is the only time it has anything to add. */}
+          {/* O52's story, finished (design-motion-principles pass): when a clarifier answer
+              or a suburb re-ranks the list, the rows below GLIDE — but these status lines
+              used to teleport in the same frame, the one region changing state with no
+              acknowledgment of it. Each now enters with the product's standard small rise
+              (0.2s, the house ease, exit subtler than enter) and swaps when its text swaps
+              (the key). Under prefers-reduced-motion every line renders in place. */}
+          <AnimatePresence initial={false}>
           {quality !== "informed" && (
-            <p className="place-status match-quality" role="status">
+            <motion.p
+              key={`quality-${quality}`}
+              className="place-status match-quality"
+              role="status"
+              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
               {MATCH_QUALITY_COPY[quality]}
-            </p>
+            </motion.p>
           )}
 
           {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). "Informed" means an order
               exists somewhere in the list — not necessarily at the top, which is the one
               boundary the reader acts on. When the first band is a tie, say so there. */}
           {tieNote && (
-            <p className="place-status match-quality" role="status">
+            <motion.p
+              key="tie-note"
+              className="place-status match-quality"
+              role="status"
+              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
               {tieNote}
-            </p>
+            </motion.p>
           )}
 
           {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY.
@@ -179,7 +213,14 @@ export function ResultsStage({
               words and the whole sentence is re-read, so the finder can still say "you said
               this" about a signal it prompted. */}
           {quality !== "informed" && clarifierList.length > 0 && (
-            <div className="clarify">
+            <motion.div
+              key="clarify"
+              className="clarify"
+              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
               <p className="clarify-lead">One answer would narrow it:</p>
               <ul className="clarify-row">
                 {clarifierList.map((clarifier) => (
@@ -194,19 +235,28 @@ export function ResultsStage({
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           )}
 
           {/* A care area nobody on the roster declares is a gap in the LISTING, and the
               reader should not be left to conclude it is a gap in their question. */}
           {unserved.length > 0 && (
-            <p className="place-status match-quality" role="status">
+            <motion.p
+              key={`unserved-${unserved[0]}`}
+              className="place-status match-quality"
+              role="status"
+              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
               {/* O110: the sentence is composed in the matching module now, where it can be
                   unit-tested — and where it covers preferences and manner, not only care
                   areas. The screen prints what the reader is owed; it does not decide it. */}
               {unserved[0]}
-            </p>
+            </motion.p>
           )}
+          </AnimatePresence>
 
           {/* Only when the answer is no. "We do not cover that one" raises the question of
               what IS covered, and this answers it in place instead of leaving somebody to
