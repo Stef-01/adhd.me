@@ -222,7 +222,20 @@ export type Clinician = {
    * one while `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6. It WILL need one
    * before that gate lifts, and adding it there means an entry in W193's `DISCLOSED_FIELDS` too.
    */
-  ownershipInterest?: string;
+  /**
+   * O158 (founder-correction): RENAMED from `ownershipInterest`, and the rename is the point. That
+   * name presumed the SHAPE of the interest, and presuming is what produced a false sentence about
+   * a named doctor: O156 read "co-founder" as a synonym for ownership and published "Dr Saxena has
+   * an ownership interest in ADHD.ME". He owns his CLINIC and is ADHD.ME's first clinic partner —
+   * he has no ownership of the entity. `disclosedInterest` presumes nothing, which is what a field
+   * holding a factual claim about a real person has to do.
+   *
+   * `disclosedInterestLabel` is the short form rendered beside the listing. It is per-person
+   * because the two entries describe DIFFERENT relationships, and a single hardcoded badge is what
+   * let one wrong word stand for both.
+   */
+  disclosedInterest?: string;
+  disclosedInterestLabel?: string;
 };
 
 export const clinicians: Clinician[] = [
@@ -280,8 +293,9 @@ export const clinicians: Clinician[] = [
       url: "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
     },
     realPerson: true,
-    ownershipInterest:
-      "Dr Saxena has an ownership interest in ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",
+    disclosedInterestLabel: "First clinic partner",
+    disclosedInterest:
+      "Dr Saxena owns Beecroft Family & Skin Cancer Clinic, which is ADHD.ME's first clinic partner. Disclosed because he appears in a directory run by a company his clinic has a commercial relationship with, and a reader cannot see the ranking that put him there.",
   },
   {
     id: "tushar-yadav",
@@ -452,7 +466,10 @@ export const clinicians: Clinician[] = [
     // a reader cannot see the ranking, and it carries the standing ranking COST — at an
     // exact tie she now sorts behind an undisclosed clinician, and that cost is not
     // waived for being the second founder to carry it.
-    ownershipInterest:
-      "Dr Anusha Saxena has an ownership interest in ADHD.ME. Disclosed because she appears in a directory her own company operates, and a reader cannot see the ranking that put her there.",
+    // FOUNDER: her exact relationship has not been stated. This is the minimum that is certainly
+    // true; replace it with her actual role rather than letting a general word stand in.
+    disclosedInterestLabel: "Declared interest in ADHD.ME",
+    disclosedInterest:
+      "Dr Anusha Saxena has a declared interest in ADHD.ME. Disclosed because she appears in a directory run by a company she is connected with, and a reader cannot see the ranking that put her there.",
   },
 ];

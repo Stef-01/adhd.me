@@ -62,11 +62,21 @@ describe("clinician roster and matching", () => {
       // still NAME the interest, because a conflict notice that stops saying what the conflict is
       // has stopped working. A pin relaxed to something like /interest|team/ would let exactly
       // that happen silently, on a health surface, about a real named doctor.
-      expect(founder.ownershipInterest, id).toMatch(/ownership interest/i);
-      expect(founder.ownershipInterest, id).toMatch(/ADHD\.ME/);
+      // O158: the pin cannot demand a WORD any more, because the two entries describe different
+      // relationships and demanding "ownership" is what let a false claim pass review. It demands
+      // the two things a conflict notice must have: it names ADHD.ME, and it says WHY it is being
+      // disclosed. And it forbids the specific false claim the founder corrected.
+      expect(founder.disclosedInterest, id).toMatch(/Disclosed because/i);
+      expect(founder.disclosedInterest, id).not.toMatch(/founder|co-?found/i);
+      expect(
+        founder.disclosedInterest,
+        `${id}: claims ownership of the entity — Dr Saxena owns his clinic, not ADHD.ME (O158)`,
+      ).not.toMatch(/(owns|ownership (interest )?(in|of)) ADHD\.ME/i);
+      expect(founder.disclosedInterestLabel, id).toBeTruthy();
+      expect(founder.disclosedInterest, id).toMatch(/ADHD\.ME/);
     }
     for (const clinician of clinicians.filter((c) => !FOUNDERS.includes(c.id))) {
-      expect(clinician.ownershipInterest).toBeUndefined();
+      expect(clinician.disclosedInterest).toBeUndefined();
     }
   });
 
@@ -86,7 +96,7 @@ describe("clinician roster and matching", () => {
     // interest in this product, because the tie-break exists to spend ties against the
     // house, never for it.
     const first = rankClinicians(generic)[0]!;
-    expect(first.ownershipInterest, first.id).toBeUndefined();
+    expect(first.disclosedInterest, first.id).toBeUndefined();
   });
 
   /**
@@ -463,7 +473,7 @@ describe("O56 capacity truthfulness: a declaration ages, and the tie-break price
 
   it("keeps the founder-behind rule intact within a grade", () => {
     const saxena = clinicians.find((c) => c.id === "anubhav-saxena")!;
-    expect(saxena.ownershipInterest).toBeTruthy();
+    expect(saxena.disclosedInterest).toBeTruthy();
     const tied = [
       { ...saxena, capacityDeclaredAt: "2026-08-01" },
       { ...yadav(), careAreas: saxena.careAreas, careAreasSometimes: saxena.careAreasSometimes, manner: saxena.manner, languages: saxena.languages, capacityDeclaredAt: "2026-08-01" },
@@ -522,7 +532,7 @@ describe("O8 review findings, pinned", () => {
   });
 
   it("reorders by distance without a pairwise comparator, so a telehealth row cannot make the order cyclic", () => {
-    const t = { ...clinicians.find((c) => c.id === "anubhav-saxena")!, id: "tele", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"], ownershipInterest: undefined };
+    const t = { ...clinicians.find((c) => c.id === "anubhav-saxena")!, id: "tele", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"], disclosedInterest: undefined };
     const near = { ...yadav(), id: "near", suburb: "Epping", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     const far = { ...yadav(), id: "far", suburb: "Southport", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     // File order: far, tele, near — all tied on score and capacity from Beecroft.

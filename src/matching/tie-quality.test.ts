@@ -184,7 +184,7 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     // number that would need editing the day the roster grows.
     const doubled = [
       ...clinicians,
-      ...clinicians.map((c) => ({ ...c, id: `${c.id}-b`, ownershipInterest: undefined })),
+      ...clinicians.map((c) => ({ ...c, id: `${c.id}-b`, disclosedInterest: undefined })),
     ];
     expect(tieOutcome("zzz qqq", doubled)).toBe("unseparated");
     expect(["separated", "partialTie"]).toContain(

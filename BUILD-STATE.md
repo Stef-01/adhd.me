@@ -166,6 +166,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > present and still naming a real interest; the pin moved to the new wording rather than loosened;
 > `pnpm verify` green. Heavy e2e batches are OOM-killing this container, so verification is unit +
 > targeted single specs and the ledger says so rather than implying a full sweep ran.
+> DONE 2026-08-21. The false claim is gone from every surface. His badge reads "First clinic
+> partner" and his sentence says he owns Beecroft Family & Skin Cancer Clinic, which is ADHD.ME's
+> first clinic partner — no ownership of the entity anywhere.
+> **What produced the error is worth more than the fix.** Asked to remove a word, I substituted a
+> synonym I had inferred rather than a fact I had checked. "Co-founder" → "owner" felt like
+> vocabulary; it was a claim about a named doctor's commercial relationship, and it went to
+> production. The tree's law is that a real person's entry carries only published or
+> founder-supplied attributes; a REWORDING is subject to that law exactly as a new field is, and I
+> treated it as beneath it.
+> Two structural changes so the shape cannot recur. The field is `disclosedInterest`, not
+> `ownershipInterest` — the old name presumed what the interest WAS and steered the wording. And
+> the badge is per-person data rather than a hardcoded string: one fixed label spoke for two people
+> whose relationships differ, which is how a single wrong word rendered under both names.
+> DR ANUSHA SAXENA IS FLAGGED, NOT GUESSED. The founder corrected one person. Her entry carried the
+> same false wording so it could not stand, but swapping one inference for another is the error
+> repeating — her line now says only what is certainly true and the data carries a FOUNDER note
+> asking for her actual relationship.
+> The pins stopped demanding a WORD and now demand the PROPERTY: the disclosure names ADHD.ME, says
+> why it is disclosed, and may not claim either doctor owns or founded the entity. The old pin
+> asserted the literal string "Owner of ADHD.ME" — a green suite carrying a false claim, which is
+> the failure mode this tree has now found in its own guards four times this week.
+> Gate met: `pnpm verify` green (219 files, 3607 passed), finder e2e green (14), the O156
+> word-audit pairing green with its fixed-string assertion replaced by the property. Heavy e2e
+> batches are OOM-killing this container, so the accessibility batch was NOT re-run as one sweep
+> and this row says so rather than implying it was.
 
 > **O157 (colour contrast, the last unexamined property — and it fails on exactly one background)
 > — claimed 2026-08-21T13:10Z by loop-0820s.** Contrast has never been checked anywhere in this
@@ -187,6 +212,14 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > resolver (a regex reading rgb() silently skips every oklch background — it reported white text on
 > a dark button as 1.00:1 against the page behind it), a seeded failure proving it fails, the
 > before/after ratios recorded, `pnpm verify` green and the accessibility batch green.
+> DONE 2026-08-21. Public 0/591, console 30/869 → **0**, from a two-token change. The finding is
+> that `--muted` and `--faint` were never wrong on the two backgrounds anybody had checked (white
+> 5.01, paper 4.80) and failed on the third: `--stone`, the console's card and tag surface, at
+> 4.24. Darkened by the smallest COMPUTED amount that clears 4.5 on all three, not by eye.
+> The probe had to resolve colour through a canvas: Tailwind v4 emits oklch, and a regex reading
+> only rgb() skipped every button background and reported white-on-dark as 1.00:1 — six confident
+> false findings before a single true one. Gate: both legs green, seeded failure (reverting
+> `--muted` reproduces the 18 `.mc-weight` offenders), `pnpm verify` green.
 
 > **O156 (FOUNDER-DIRECTED — "founder" leaves the site, the disclosure stays) — claimed
 > 2026-08-21T12:20Z by loop-0820s.** "remove all mentions of founder on entire site do throough

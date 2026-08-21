@@ -25,7 +25,7 @@ test.beforeEach(async ({ request }) => { await request.post("/api/mock/console")
  * TWO ASSERTIONS THAT ONLY MEAN SOMETHING TOGETHER. The word must be gone from every rendered
  * surface — and the DISCLOSURE it used to sit inside must still be there, in its new words.
  *
- * Removing the word alone would have been easy and wrong: `ownershipInterest` exists to tell a
+ * Removing the word alone would have been easy and wrong: `disclosedInterest` exists to tell a
  * patient that the GP in front of them owns the directory recommending him, and a conflict notice
  * that stops naming the conflict has stopped working. So the sweep proves the absence and the
  * profile check proves the presence, in one test, because a later unit deleting the disclosure to
@@ -54,7 +54,12 @@ test("the word is gone from every surface, and the ownership disclosure is not",
   const prof = await page.evaluate(() => document.body.innerText);
   for (const line of prof.split("\n")) if (/founder/i.test(line)) hits.push(`profile: ${line.trim().slice(0, 90)}`);
   // And the disclosure is genuinely THERE, not merely wordless.
-  expect(prof, "the ownership disclosure vanished from the profile").toContain("Owner of ADHD.ME");
+  // O158: the disclosure must be PRESENT and must not claim ownership of the entity. Asserting a
+  // fixed string here is what carried a false one — "Owner of ADHD.ME" — through a green suite.
+  const line = await page.locator(".disclosure-line").innerText();
+  expect(line.trim().length, "the disclosure vanished from the profile").toBeGreaterThan(0);
+  expect(line, "the disclosure claims ownership of ADHD.ME; he owns his clinic (O158)")
+    .not.toMatch(/(owns|owner of|ownership (interest )?(in|of)) ADHD\.ME/i);
   await signIn(page);
   for (const r of CONSOLE) await scan(r);
   console.log(`FOUNDER_HITS ${hits.length}`);

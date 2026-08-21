@@ -249,8 +249,15 @@ export function NswTraining({ clinician }: { clinician: Clinician }) {
   return <p className="credential-line">NSW ADHD training</p>;
 }
 
-/** A material interest, stated beside the listing it concerns. One line, not an essay. */
+/**
+ * A material interest, stated beside the listing it concerns. One line, not an essay.
+ *
+ * O158: the label comes FROM THE ENTRY now. It was hardcoded — first "Co-founder of ADHD.ME", then
+ * "Owner of ADHD.ME" — and a single fixed string spoke for two people whose relationships are not
+ * the same. Dr Saxena owns his clinic and is ADHD.ME's first clinic partner; he does not own the
+ * entity, and the hardcoded badge is what let that error render under his name.
+ */
 export function OwnershipDisclosure({ clinician }: { clinician: Clinician }) {
-  if (!clinician.ownershipInterest) return null;
-  return <p className="disclosure-line">Owner of ADHD.ME</p>;
+  if (!clinician.disclosedInterest || !clinician.disclosedInterestLabel) return null;
+  return <p className="disclosure-line">{clinician.disclosedInterestLabel}</p>;
 }

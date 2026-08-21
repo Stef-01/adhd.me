@@ -53,9 +53,17 @@
   color-scheme: light;
 
   --ink: #191a17;
-  --muted: #6e706a;
+  /* O157: #6e706a → #696b65. Contrast was never checked in this tree until now, and these two
+     tokens were not wrong on the two backgrounds anybody had looked at — muted measured 5.01 on
+     white and 4.80 on --paper. On --stone, the console's card and tag background, it measured
+     4.24 against a 4.5 floor, which put 18 of the console's 30 failures on this one line. Five
+     steps darker is the smallest change that clears AA on all THREE backgrounds at once
+     (paper 5.17, stone 4.56, white 5.40) — computed rather than eyeballed. */
+  --muted: #696b65;
   /* Has to clear AA at 11px, the smallest size this token is used at. 5.1:1 on --paper. */
-  --faint: #6b6c67;
+  /* O157: 4.48 on --stone, one hundredth under the floor and still under. One step darker
+     (paper 5.15, stone 4.55, white 5.37). */
+  --faint: #6a6b66;
   --paper: #fbfaf7;
   --stone: #eeece5;
   --line: #dfddd6;

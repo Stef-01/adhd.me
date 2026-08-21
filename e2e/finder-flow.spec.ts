@@ -74,7 +74,14 @@ test("a second consulting location is a fact the reader sees, with the distance 
   // disclosure beside it: a material interest stated exactly where the listing is read.
   await anushaRow.click();
   await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();
-  await expect(page.getByText("Owner of ADHD.ME")).toBeVisible();
+  // O158: assert the DISCLOSURE, not a particular word. It has been "Co-founder of ADHD.ME", then
+  // "Owner of ADHD.ME" — which was false, Dr Saxena owns his clinic and not the entity — and now a
+  // per-person label. What must never change is that a line is there and that it does not claim
+  // either doctor owns ADHD.ME.
+  const disclosure = page.locator(".disclosure-line");
+  await expect(disclosure).toBeVisible();
+  await expect(disclosure).not.toHaveText(/(owns|owner of|ownership (interest )?(in|of)) ADHD\.ME/i);
+  await expect(disclosure).not.toHaveText(/founder/i);
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/founder-o89/profile-disclosure.png" });
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });

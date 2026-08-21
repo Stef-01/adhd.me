@@ -1756,3 +1756,46 @@ surface, **and** "Owner of ADHD.ME" is still on the profile. Separately, either 
 the wrong fix — a later unit could satisfy the first by deleting the disclosure. Together they
 cannot. The roster pin moved with the wording (`/ownership interest/i`) rather than being loosened
 to something like `/interest|team/`, which would have let the disclosure rot quietly.
+
+## O157 — colour contrast, and the one background nobody checked (2026-08-21)
+
+Contrast had never been measured anywhere in this tree, and `adhdme-taste` opens by naming the
+audience as "tired, possibly older, possibly low-vision".
+
+| | population | failures |
+|---|---|---|
+| Public routes | 591 | **0** |
+| Console routes | 869 | **30** |
+
+- [x] **One background caused all 30.** `--muted` (#6e706a) measures 5.01:1 on white and 4.80 on
+  `--paper` — and **4.24 on `--stone`**, the console's card and tag background. `--faint` measures
+  5.29 and 5.07, and **4.48** on stone. The tokens were never wrong on the two surfaces anybody had
+  looked at, which is exactly why the public sweep came back spotless.
+- [x] Fixed with the **smallest computed** nudge, not an eyeballed one: `--muted` → `#696b65`,
+  `--faint` → `#6a6b66`, the least darkening that clears 4.5:1 on all three backgrounds
+  (paper 5.17/5.15, stone 4.56/4.55, white 5.40/5.37).
+- [x] **Colours are resolved through a canvas.** Tailwind v4 emits `oklch()`, and the first probe
+  parsed only `rgb()` — so it skipped every button background, walked up to the page behind it, and
+  reported white text on a dark button as **1.00:1**. Six confident false findings.
+
+## O158 — I got a fact wrong about a real doctor (2026-08-21)
+
+Founder-correction: *"Dr Saxena only owns the clinic, he is the first clinic partner. Do not
+hallucinate and interpret him as cofounding the entity."*
+
+- [x] **The error was mine and it shipped.** O156 reworded his disclosure to "Owner of ADHD.ME"
+  and "has an ownership interest in ADHD.ME". Both false. He owns his **clinic** and is ADHD.ME's
+  **first clinic partner**. I reached "owner" by treating "co-founder" as a synonym for ownership
+  while removing the word — an inference about a named real person on a health directory, deployed.
+- [x] **The field name was part of the cause.** `ownershipInterest` presumed the *shape* of the
+  interest. It is now `disclosedInterest`, which presumes nothing, plus a per-person
+  `disclosedInterestLabel` — because a single hardcoded badge spoke for two people whose
+  relationships are not the same, and that is what let one wrong word render under both names.
+- [x] **Not extended by inference to Dr Anusha Saxena.** The founder spoke about one person. Her
+  entry carried the same false wording so it could not stand, but replacing one guess with another
+  is the same error repeating. Her line is reduced to what is certainly true and flagged in the
+  data for the founder to state exactly.
+- [x] **The pins stopped demanding a word.** They now require what a conflict notice actually needs
+  — that it names ADHD.ME and says *why* it is disclosed — and explicitly **forbid** claiming
+  either doctor owns or founded the entity. Asserting the fixed string "Owner of ADHD.ME" is what
+  carried a false claim through a green suite.

@@ -87,7 +87,7 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
      * only move the accident, so the rule is stated: where the stated preference does not separate
      * them, a clinician with a disclosed interest in this product sorts BEHIND one without.
      */
-    const conflicted = (clinician: Clinician) => (clinician.ownershipInterest ? 1 : 0);
+    const conflicted = (clinician: Clinician) => (clinician.disclosedInterest ? 1 : 0);
     return conflicted(a) - conflicted(b);
   });
 }
