@@ -143,6 +143,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W223 (the forecast, stated as an interval and never as a point) — claimed 2026-08-21T07:21Z by
+> loop-0821a.** (Clock read as its own step before this row was written, which is the correction
+> W222's row records.) W222 built the history; this is the thing that reads it. The row's example
+> is the whole specification: **"open 6 slots Thursday → 4 to 6 fill"**, never "5 will fill".
+> A point estimate is the lie of omission this lane exists to avoid. "5 slots will fill" and "4 to
+> 6 slots will fill" rest on identical arithmetic and say completely different things to somebody
+> deciding whether to open a list — and the first is what every forecasting API returns by default,
+> because a single number is what a function signature wants to give back. So the return TYPE has
+> no point in it: `low` and `high` and no `expected` field, ever. A caller that wants a midpoint
+> can compute one and own the claim; this module will not hand one over.
+> **The floor is on RECORDED WEEKS, not on slots.** One Thursday with 200 slots is one observation
+> of one Thursday, and a rate computed from it carries the confidence of 200 measurements while
+> holding the information of one. W222 already separates `occurrences` (distinct past days) from
+> `slotsOffered` precisely so this floor can be applied to the right one — applying it to the
+> denominator would be the same class of error W215 found, a claim scaled from data it does not
+> have. Below the floor: refuse, and say the number of weeks that would settle it.
+> **W196's zero argument, inherited:** a forecast withheld is not a forecast of zero, and a session
+> that has never run gets W222's `never_run` carried through rather than a fresh sentence — two
+> phrasings of one refusal drift, and the drift is invisible (W177).
+> The interval's WIDTH has to come from the observed spread, not from a constant: a session that
+> has run 5/6, 6/6, 5/6, 6/6 is genuinely more predictable than one that has run 1/6, 6/6, 2/6,
+> 6/6, and an interval that ignores that is decoration. No distribution is fitted and nothing is
+> smoothed — the range is read off what was recorded, which is the only thing this tree lets a
+> figure rest on (W215's posture).
+> Gate: every forecast carries its basis and its uncertainty; the floor is on recorded weeks and
+> refuses below it with the shortfall named; no point estimate exists as a field — asserted on the
+> TYPE, since a `expected` added later is a one-line change nobody would flag; W196's zero argument
+> re-derived; `pnpm verify` green.
+
 > **W222 (Q18 capacity model: sessions, slots and recorded utilisation) — claimed 2026-08-21T07:14Z by
 > loop-0821a.** TIMESTAMP CORRECTED IN THE SAME FIRING, under rule 3b: first written as `07:58Z`
 > against a clock reading `07:13Z`, a 45-minute future-date on a LIVE claim, which is the one that
@@ -5259,7 +5288,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W220 | done | loop-0821a | 2026-08-21T07:15Z | ecdb1af | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | done | loop-0821a | 2026-08-21T07:14Z | e9c5e39 | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
-| W223 | available | — | — | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
+| W223 | claimed | loop-0821a | 2026-08-21T07:21Z | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | available | — | — | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
