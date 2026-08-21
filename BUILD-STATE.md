@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W238 (terminology binding as declared data) — claimed 2026-08-21T09:44Z by loop-0821a.
+> SAYING UP FRONT WHICH HALF SHIPS: the bindings are EMPTY.** W227's posture, and the reason is
+> sharper here than it was for a holiday calendar.
+> **A SNOMED CT-AU CONCEPT ID IS AN EIGHTEEN-DIGIT NUMBER I WOULD BE RECONSTRUCTING FROM MEMORY.**
+> It would look exactly as authoritative as a correct one, it would pass every structural check a
+> reviewer could write, and it would be wrong — binding this product's "shared care" to whatever
+> concept my recollection produced. That is the failure this session has already hit three times in
+> smaller ways (W219's invented count, W223's fixture totals, W227's substitute holiday dates), and
+> it is the one place in the tree where getting it wrong means a receiving clinical system files a
+> referral under the wrong concept. So the loader ships, the values wait for somebody who has opened
+> a release file, and the emptiness is pinned.
+> **THE HALF THAT IS FULLY BUILDABLE IS THE REFUSAL, AND THE ROW ASKS FOR ITS SHARPEST FORM: the
+> refusal NAMES THE CODE.** Not "some codes are unbound" — the specific local code, so the person who
+> has to go and find the concept knows which one. An unbound code refused anonymously is a task
+> nobody can pick up.
+> **AND THE UNIT IS USEFUL NOW RATHER THAN AN EMPTY SHELL, because the set of codes needing a binding
+> is DERIVED from what the lane actually emits** — W235's appointment types, W236's reasons, requests,
+> condition and fact codes — rather than listed by hand. That list is the work order: it says exactly
+> what a terminology binding would have to cover, it cannot go stale, and it is checked both
+> directions so a new local code shows up as unbound the day it is added rather than the day somebody
+> notices.
+> Gate: every binding requires complete provenance including a release version, refused WITH a reason
+> and never silently dropped (W56's loader shape); `SHIPPED_BINDINGS` pinned empty; an unbound code
+> refused with the code NAMED; the set of codes needing binding derived from the lane's own emitted
+> codings, both directions; nothing guessed — asserted by the absence of any fallback or nearest-match
+> path; `pnpm verify` green.
+
 > **W237 (the interop conformance harness) — claimed 2026-08-21T09:35Z by loop-0821a.** W235 and
 > W236 each ship a mapping with its own tests. The harness is the thing that says what a
 > CONFORMANT mapping is, so the next one is held to the same bar without anybody remembering the
@@ -6221,7 +6248,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | done | loop-0821a | 2026-08-21T09:35Z | aa27c65 | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
-| W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
+| W238 | claimed | loop-0821a | 2026-08-21T09:44Z | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
