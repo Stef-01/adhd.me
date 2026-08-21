@@ -181,6 +181,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > muted in the COMPONENT, with the direction of each move justified (O166 moved the disclosure to
 > ink, not muted, because a compliance-bearing line must get louder when it comes off the accent);
 > `qa/` capture and `docs/DESIGN-QA.md` entry per the track's cadence; `pnpm gate` exit 0.
+>
+> **DONE 2026-08-22T01:47Z.** Three accent demotions; `/clinicians` **4 → 2** and `/finder` **4 → 2**;
+> nothing on any public surface now carries more than two.
+> **THE `qa/` CAPTURE EARNED ITS PLACE IN THE PROTOCOL, AND I NEARLY FILED IT WITHOUT OPENING IT.**
+> The track's cadence requires a screenshot. Opening it showed the step rail on `/clinicians` filled
+> in accent while the canvas sweep reported ONE site — because `getComputedStyle(el)` returns an
+> element's own styles and says nothing about `::before`/`::after`, and
+> `.cv2-progress button.is-current::after` paints the accent.
+> **THREE BLIND SPOTS IN ONE PROBE IN ONE UNIT, AND ALL THREE UNDER-REPORTED.** (1) `className` is an
+> `SVGAnimatedString` on SVG elements, so `String()` collapsed every SVG into one bogus meaning and
+> hid the accented toggle icon on `/finder`. (2) Pseudo-elements were never queried. (3) The rule's
+> first design was an allow-list, which hides everything by construction. **My instinct that a broken
+> detector OVER-reports was wrong three times running.**
+> **AND THE FIGURES WERE RE-DERIVED RATHER THAN LEFT STANDING.** The first distribution came from the
+> narrow probe: `/clinicians` measured 3 before and 1 after, when the truth is **4 before and 2
+> after**. The cap happens to be unchanged at 2; the figures behind it are not, and **a cap justified
+> by wrong figures is a number somebody made up**. The ledger, the spec comment, the DESIGN-QA table
+> and the seed narrative are all corrected to the widened probe's measurements.
+> **THE LESSON IS NOT "TRUST THE EYE" — IT IS THAT THE TWO FAIL DIFFERENTLY.** Nine units of this
+> session established that measurement beats inspection, and over-learning that is how this defect
+> survived: a canvas cannot see what it does not query, and an eye cannot resolve `oklch()` through a
+> `color-mix`. The screenshot is what made the canvas's blind spot visible; the canvas is what made
+> O166's four-meaning finding possible in the first place.
+> **A CAP, NOT AN ALLOW-LIST**, and the distinction is the design. Listing every accent site that
+> exists today across fifteen surfaces would be the current state wearing a rule's clothes — the
+> detector tuned until it agrees with the code, refused four times this session. A cap cannot be
+> satisfied that way. It is **2** rather than 1 because "meaning" is counted by CLASS and class is a
+> rough proxy: `/finder` paints `dual-input-field` and `dual-input-action` — two classes, one meaning
+> to anybody looking — and `/clinicians/join` paints the two halves of the mix hero, the taste law's
+> own example of a live token. Stated, not hidden.
+> **ONE JUDGEMENT KEPT RATHER THAN FIXED:** the step rail stays on the accent. It shows where the
+> reader is in a four-step form and changes as they advance, which is precisely "the value that
+> changes". `/clinicians` settles at two defensible live tokens — progress and selection.
+> **SEEDS.** The exact pre-O176 state fails with *"4 distinct accent meanings — is-current::after,
+> cv2-eyebrow, cv2-checkbox, cv2-join-link"*. An intermediate seed of only ONE demotion was run first
+> and correctly **passed at 2** — the more useful check, because it proves the cap is a threshold
+> rather than a tripwire firing on any change. Non-vacuity is load-bearing here more than anywhere: a
+> cap is satisfied perfectly by a detector that finds nothing, and nothing would also mean the live
+> tokens had lost their own accent.
+> Verification: **`pnpm gate` exit 0** — `pnpm verify` green (255 files, 4067 tests, audit gate 2
+> accepted / 0 unaccepted) and the full e2e suite **287/287 in 12.6 min**. Captures in
+> `qa/accent-o176/`. CI still cannot confirm it; the Actions block remains founder-gated at nine
+> consecutive instant failures.
 
 > **O175 (the keyboard sweep reaches the console — the last of O168's six) — claimed
 > 2026-08-21T22:41Z by loop-0821a.** Sixth and final sweep. Closes the arc O168 opened.

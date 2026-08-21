@@ -2406,3 +2406,90 @@ visible `role="button"` with no tabindex (`1 tab stops for 2 controls`), and bot
 The console stop floor is **measured for this walk** at `> 150` against an observed 247, not borrowed
 from the public half's `> 100` — O170, O171 and O174 each found a floor that had gone stale when the
 thing it bounded grew, and inheriting one here would have been that mistake made deliberately.
+
+---
+
+## O176 — accent discipline stops being a one-screen finding (2026-08-22)
+
+Nine units made the *mechanical* properties measurable everywhere — contrast, touch floor, keyboard,
+semantics, overflow and axe now sweep all 45 routes and all pass. **None of them can see whether a
+screen is legible as a composition**, which is the half the founder actually complained about:
+*"visually looks terrible … make it much more visually coherent"*.
+
+`adhdme-taste` reserves the accent for **live tokens** — "the value that changes, the word that
+matters" — and says outright: *"If everything is accented, nothing is."* O166 enforced that on the
+clinician profile, where a canvas sweep found the accent painting six elements in four unrelated
+meanings. It was then enforced on exactly one screen and nowhere else.
+
+### Measured first, capped afterwards
+
+| Surface | Before | After |
+|---|---|---|
+| `/clinicians` | **4** — eyebrow, checkbox, join-link, step rail | **2** |
+| `/finder` | **4** — input field, action, toggle icon (×2 nodes) | **2** |
+| `/clinicians/join` | 2 — mix-percent, mix-condition | 2 |
+| 7 other surfaces | 0 | 0 |
+| 5 other surfaces | 1 | 1 |
+
+Three demotions, each with a stated direction:
+
+The step rail is **kept** on the accent, and that is a judgement rather than an oversight: it shows
+where the reader is in a four-step form and it changes as they advance, which is precisely "the value
+that changes". So `/clinicians` settles at two defensible live tokens — progress and selection — not
+one.
+
+- **`.cv2-eyebrow` → `--muted`.** An eyebrow is a label; it never changes with what the reader did,
+  so it is not a live token. O166 made exactly this demotion to `.eyebrow` on the profile.
+- **`.cv2-join-link` → `--ink`, not muted.** O166's *direction* rule: taking something off the
+  accent must not make it quieter when it is something the reader may want to act on.
+- **`.scenario-toggle svg` → `inherit`.** The icon was accented while the control's own label is
+  `--muted` and its hover is `--ink`. An icon louder than the words it belongs to is decoration
+  drawing the eye — the one thing the founder's directive excludes by name.
+
+### Three blind spots in one probe, in one unit, and all three UNDER-reported
+
+1. **SVG `className` is an `SVGAnimatedString`**, so `String(el.className)` yields
+   `"[object SVGAnimatedString]"` and collapses every SVG on a page into one bogus meaning. The
+   finder read 3 where the truth was 4, and the concealed one was the accented toggle icon — an
+   actual defect.
+2. **`getComputedStyle(el)` does not see pseudo-elements.** `.cv2-progress button.is-current::after`
+   paints the accent, so the step rail on `/clinicians` was invisible to the sweep: it reported 1
+   site on a screen that had 2, and reported 3 before the fix where the truth was 4.
+3. And the first design of the rule would have been an **allow-list**, which hides everything by
+   construction.
+
+**A `qa/` capture caught the second one** — the cadence requirement I nearly satisfied by filing a
+screenshot without opening it. The rail is plainly accent-coloured in the image while the canvas
+reported one site.
+
+That is worth stating precisely, because this session spent nine units establishing that measurement
+beats inspection and it would be easy to over-learn: the eye and the instrument fail *differently*.
+The canvas cannot see what it does not query; the eye cannot resolve `oklch()` through a
+`color-mix`. Here the screenshot is what made the canvas's blind spot visible, and the instinct to
+assume a broken probe **over**-reports was wrong three times in a row.
+
+### A cap, not an allow-list
+
+O166 could name its one permitted site because it audited one screen. Listing every accent site that
+exists today across fifteen surfaces would be a transcription of the current state wearing a rule's
+clothes — the detector tuned until it agrees with the code, which this session has refused four
+times. **A cap cannot be satisfied that way: adding a fourth accented thing fails whatever it is
+called.**
+
+The cap is **2**, and the reason it is not 1 is stated rather than hidden. "Meaning" is counted by
+class, and class is a rough proxy: `/finder` paints `dual-input-field` and `dual-input-action` — two
+classes, one meaning to anybody looking ("the thing you are doing right now") — and
+`/clinicians/join` paints the two halves of the mix hero, the taste law's own example of a live
+token. So the cap permits one meaning expressed as a pair and refuses a genuine third.
+
+### Guards
+
+`e2e/accent-discipline.spec.ts`. Seeded by restoring the exact pre-O176 state, which fails with
+*"4 distinct accent meanings — is-current::after, cv2-eyebrow, cv2-checkbox, cv2-join-link"* on
+`/clinicians` and four on `/finder`. An intermediate seed of only **one** demotion was run first and
+correctly **passed at 2**, which is the more useful check: it proves the cap is a threshold rather
+than a tripwire that fires on any change.
+Non-vacuity is load-bearing here more than anywhere — a cap is satisfied perfectly by a detector
+that finds nothing, and nothing would also mean the live tokens had lost their own accent.
+
+Captures in `qa/accent-o176/`.

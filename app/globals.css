@@ -2987,7 +2987,10 @@ textarea:focus-visible {
 
 .cv2-eyebrow {
   margin: 0;
-  color: var(--cv2-accent);
+  /* O176: was `--cv2-accent`. An eyebrow is a LABEL — it never changes with what the reader did,
+     so it is not a live token, and O166 made exactly this demotion to `.eyebrow` on the profile.
+     The rule it answers to is the taste law's: "if everything is accented, nothing is." */
+  color: var(--muted);
   font-size: 0.6875rem;
   font-weight: 720;
   letter-spacing: 0.01em;
@@ -4331,7 +4334,14 @@ textarea:focus-visible {
 }
 
 .patient-v2 .scenario-toggle svg {
-  color: var(--accent);
+  /* O176: was `--accent`, on the icon of a control whose LABEL is `--muted` and whose hover is
+     `--ink`. An icon louder than the words it belongs to is decoration drawing the eye, which is
+     the one thing the founder's motion-and-clutter directive excludes by name. Inheriting makes
+     the icon part of the control instead of a second signal, hover included.
+     Found only because the probe's SVG blind spot was fixed: `className` is an SVGAnimatedString,
+     so `String(el.className)` gave "[object SVGAnimatedString]" and collapsed every SVG into one
+     bogus meaning — the finder read 3 when the truth was 4. */
+  color: inherit;
 }
 
 .patient-v2 .scenario-screen {
@@ -5281,7 +5291,11 @@ textarea:focus-visible {
 .cv2-join-link {
   display: inline-block;
   margin-top: 14px;
-  color: var(--cv2-accent);
+  /* O176: was `--cv2-accent`. An action is not a live token either — but it moves to INK, not
+     muted, because O166's direction rule applies: taking something off the accent must not make
+     it quieter when it is something the reader may want to act on. Ink on paper is the palette's
+     highest-contrast pair, and the underline still says "link". */
+  color: var(--ink);
   font-size: 0.8125rem;
   font-weight: 600;
   text-underline-offset: 3px;
