@@ -135,6 +135,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > expansion, the booking bar. Gate: pnpm verify green; matching + finder-flow + landing +
 > a11y e2e 34/34; DESIGN-QA entry. Loop firings: O137 is taken — next free number is O138.
 
+> **O-NUMBER COLLISION AGAIN, 2026-08-21: their O137 stands, mine became O138.** The second
+> today. An interactive session merged PR #19 ("The motion critique, and the two gaps it found
+> (O137)") while this loop was claiming the same number. The law is that the REBASING party
+> renumbers and never relabels somebody else's — I was rebasing, so mine moved. Recorded here
+> because two collisions in one evening is the ledger doing its job as the tiebreak, not a
+> problem: overlapping sessions are normal and the number space is only legible if each
+> collision leaves a trace.
+
+> **O138 (the lexicon's remaining queue, made countable) — claimed 2026-08-21T00:45Z by
+> loop-0820s.** Trying to answer "is there real lexicon work left?" from the tree, the number
+> came out 25 open aspirations across 18 facets — and I can see it is WRONG. "I need more than
+> fifteen minutes to get through this" is in it, and O65 refused a cue for it with a written
+> measurement. So is "a she not a he, if that makes sense", refused by O125 for stripping to the
+> single token [not]. Both were reasoned about; both still count as open.
+> The cause is a gap in O125's register design: `REFUSED_CUES` keys on the SENTENCE THAT REFUSED
+> a cue, which is the right key for "do not re-add this phrase" and the wrong one for "what is
+> still unheard". A refusal usually leaves an aspiration standing — that is the point of the O65
+> pattern, where the reason is written down instead of the cue being forced — and nothing
+> records that link, so every reasoned refusal reappears as unfinished work.
+> This is the same shape as O131's discovery that the false-positive register needed an
+> ACCEPTED status distinct from open: a register that cannot distinguish "examined and left" from
+> "nobody has looked" makes a backlog out of finished thinking. Third register today to need the
+> distinction, which is worth naming as a pattern rather than fixing quietly a third time.
+> Design: `leavesStanding` on a refused cue — the aspiration(s) that refusal accounted for —
+> with a test that each named sentence exists in the corpus AND still aspires (a refusal whose
+> aspiration got promoted is stale and should say so), plus `openAspirations()` computing the
+> genuine queue by subtraction. Gate: the queue recomputed and the difference explained entry by
+> entry, every `leavesStanding` sentence verified against the corpus, full `pnpm verify` green.
+
 > **O136 (the join form's accent, and a correction to O135's own record) — claimed
 > 2026-08-21T00:33Z by loop-0820s.** O135's sweep found /clinicians/join carrying NINE
 > accent-coloured elements against 0–2 everywhere else, and left them with a written reason:
