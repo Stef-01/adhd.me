@@ -29,7 +29,7 @@ export default function ApproachPage() {
     <main className="story approach-page">
       <header className="story-header">
         <div className="story-wrap story-header-inner">
-          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home">ADHD.ME</Link>
+          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
           <Link href="/finder" className="story-demo-link">Find a GP</Link>
         </div>
       </header>
@@ -72,7 +72,7 @@ export default function ApproachPage() {
 
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
-          <Link href="/" className="story-footer-wordmark">ADHD.ME</Link>
+          <Link href="/" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
           <div className="story-footer-links">
             <a href="mailto:stefan.thottunkal@gmail.com">Contact</a>
             <Link href="/privacy">Privacy</Link>

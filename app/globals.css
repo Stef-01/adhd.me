@@ -2703,6 +2703,12 @@ textarea:focus-visible {
 .results-head h1 {
   margin: 10px 0 0;
   max-width: 18ch;
+  /* O167: the widow the founder was looking at. At 390 this broke as "The baseline done before /
+     the prescription, not / after." — one word alone on a third line, at display scale, in the
+     serif, as the first thing anybody reads on the results screen. `balance` is the guidelines'
+     rule for headings; O166 applied it to the profile name and this one sat a screen away.
+     Found by running the whole checklist rather than the rules I remembered. */
+  text-wrap: balance;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: clamp(1.625rem, 7vw, 2.25rem);
   font-weight: 430;

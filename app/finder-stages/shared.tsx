@@ -157,7 +157,15 @@ export function getRequestHeadline(value: string, fallback: string) {
 }
 
 export function Wordmark() {
-  return <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home">ADHD.ME</Link>;
+  /* O167: `translate="no"`. The guidelines ask for it on brand names, code tokens and identifiers,
+     and this one is all three — a name, a wordmark and a domain. Auto-translation renders "ADHD"
+     into the target language in several locales, so a reader who has their browser translating
+     sees a product whose name is not the address they typed. */
+  return (
+    <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home" translate="no">
+      ADHD.ME
+    </Link>
+  );
 }
 
 export function FinderContext() {

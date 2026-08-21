@@ -146,7 +146,7 @@ export function StoryLanding() {
         transition={{ duration: 0.5, ease: EASE }}
       >
         <div className="story-wrap story-header-inner">
-          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home">ADHD.ME</Link>
+          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
           <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={PRESS}>
             <Link href="/finder" className="story-demo-link">Find a GP</Link>
           </motion.div>
@@ -167,7 +167,16 @@ export function StoryLanding() {
             animate="show"
             variants={stagger}
           >
-            <motion.p className="story-eyebrow" variants={item}>Why we founded ADHD.ME</motion.p>
+            {/* O167, founder-directed: "remove all mentions of founder on entire site do thorough code
+                audit". This read "Why we founded ADHD.ME" — the only founder-family word left in
+                RENDERED copy anywhere on the site. It is first-person plural about the company's
+                origin rather than a role claim about any named person, so it did not carry the
+                error the instruction was aimed at ("Dr Saxena only owns the clinic … do not
+                interpret him as cofounding the entity"). Changed anyway, because the instruction
+                was to remove the mentions and this loses nothing: "built" is the same length, the
+                same claim, and truer while the product is still being built. Flagged in the ledger
+                rather than done silently, so it can go back if "founded" was wanted here. */}
+            <motion.p className="story-eyebrow" variants={item}>Why we built ADHD.ME</motion.p>
             <motion.h1 id="story-hero-title" variants={item}>
               ADHD care, start to finish, <span className="story-claim">with one GP</span>.
             </motion.h1>
@@ -394,7 +403,7 @@ export function StoryLanding() {
 
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
-          <Link href="/" className="story-footer-wordmark">ADHD.ME</Link>
+          <Link href="/" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
           {/* Launch item 3: the whole site, reachable from its front door. */}
           <div className="story-footer-links">
             <Link href="/finder">Find a GP</Link>

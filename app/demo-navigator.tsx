@@ -74,7 +74,7 @@ export function DemoNavigator() {
         aria-controls="adhd-me-demo-navigation"
         onClick={() => setOpen((current) => !current)}
       >
-        <span>ADHD.ME</span>
+        <span translate="no">ADHD.ME</span>
         <CaretDown size={13} weight="bold" aria-hidden="true" />
       </button>
 

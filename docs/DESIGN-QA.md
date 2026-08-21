@@ -2037,3 +2037,74 @@ that looks uniform-able is how an audit removes information.
 disclosure demoted to muted instead of ink, and the wrap restored. The accent sweep also asserts it
 finds *something* — a detector that matched nothing would pass the "only one meaning" check while
 proving the live token had lost its own accent.
+
+---
+
+## O167 — the finder against the whole guidelines checklist (2026-08-21)
+
+O166 audited the profile by eye and by canvas and fixed real faults on the screen the founder had
+screenshotted. Fetching the Web Interface Guidelines afterwards and walking them found more, on
+screens I had already decided were fine. **That is the argument for the checklist: it does not get
+bored, and it does not agree with the person who wrote the CSS.** Two of the four are invisible in
+any desktop capture.
+
+### Fixed
+
+- **A widow in the results headline.** At 390 it read "…the prescription, not / after." — one word
+  alone on the final line of a display-scale serif statement. `text-wrap: balance` on
+  `.results-head h1`. O150 established this rule for headings and O166 applied it to the profile
+  name while this screen sat one route away.
+- **No `theme-color`.** The browser chrome rendered its own default against a paper page, so the
+  address bar showed a seam above the design on every mobile visit. Now declared in `viewport`.
+- **The wordmark was translatable.** ADHD.ME is a name, a wordmark and the address somebody typed to
+  get here; several locales will translate "ADHD" given the chance, and a reader with translation on
+  then sees a product whose name is not the address they used. `translate="no"` on every wordmark.
+
+### One finding was a false positive, recorded rather than quietly dropped
+
+The probe flagged an `<img>` with no `width`/`height` on the profile — the guidelines' named CLS
+anti-pattern. It is Next's `fill` variant, whose parent `.profile-portrait` carries an explicit
+`height: 388px`, so no shift is possible; the rule's **intent** is met by a different mechanism.
+Adding the attributes would have been redundant markup Next ignores, dressed up as a fix.
+
+### And the checklist found the founder sweep was not sweeping the site
+
+The founder's instruction was *"remove all mentions of founder on entire site do thorough code
+audit"*, and O156 built a guard over rendered text to enforce it. Writing this unit's guard against
+the same instruction turned up two ways that one was passing over live copy.
+
+- **The head is part of the site.** The sweeps read `document.body.innerText`, so they structurally
+  could not reach `app/page.tsx`'s exported title and description — both still reading "Why we
+  founded ADHD.ME". A reader meets the tab before the page, and a shared link shows the description
+  instead of the page. Title, description and `og:title` are now swept as text a reader meets.
+- **A sweep whose coverage depended on test ordering.** `/console/verticals` has two zero states,
+  and the one carrying "each item needs a specialist to review it and **the founder** to sign it
+  off" only renders when vertical specs exist in a process-global store that
+  `/api/mock/console` does not reset. Run alone the sweep saw the *other* zero state and passed; run
+  after `verticals.spec.ts` it failed. `a11y.spec.ts` had already drawn this line for this exact
+  route ("scanned POPULATED, not on its zero state"); the ownership sweep now seeds too.
+
+Both are the same fault this session found in four registers: **the check ran in the direction its
+author was facing.**
+
+The copy replacing it corrects a second, older error in the same sentence. "A specialist to review
+it" overstates the gate: W119's chain is a reviewer and then a signatory who is not that reviewer,
+and `completeness.ts` says outright that it "does not require the reviewer to be a specialist". The
+page now names the chain the operator actually has to satisfy.
+
+### Guards
+
+`e2e/guidelines-sweep.spec.ts`, four tests, each watched failing. The widow is **measured** — line
+boxes via `Range.getClientRects()`, then the words falling in the last one — because asserting
+`text-wrap: balance` is set would pass on a heading the browser then broke anyway; the property is a
+request, and what matters is the lines it produced. `theme-color` is compared to `--paper` through a
+canvas rather than string-compared, so a palette change to an `oklch()` or a `color-mix` cannot
+leave it stale and green.
+
+The founder sweep is scoped deliberately, and the reasoning is the interesting part. The first
+wordmark version swept every leaf node containing "ADHD.ME" and caught three things the rule is not
+for: `<title>`, JSON inside `<script>`, and the brand's name **inside a sentence**. A wordmark is an
+identifier displayed as itself and must survive translation intact; a brand name inside prose is a
+word in a sentence the reader has asked to be translated, and wrapping each one would fragment copy
+this tree's compliance linters scan as text. Considered and declined, rather than swept up because
+the pattern matched.

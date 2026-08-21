@@ -23,7 +23,7 @@ const VISIBLE_DOORS = TEAM_PAGE_PUBLIC
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <Link href="/" className="site-footer-wordmark">ADHD.ME</Link>
+      <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
       <nav aria-label="Site">
         <ul>
           {VISIBLE_DOORS.map((door) => (

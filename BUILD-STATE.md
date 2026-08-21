@@ -172,6 +172,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > cannot leave it stale; the accent discipline O166 established still holding on every screen; every
 > existing finder, a11y, contrast and keyboard e2e green; seeded failures; `docs/DESIGN-QA.md`
 > entry; `pnpm verify` green.
+>
+> **DONE 2026-08-21T15:31Z.** Three of the four fixed; the fourth was my own false positive and is
+> recorded as one. `text-wrap: balance` on `.results-head h1`; `viewport.themeColor` matching
+> `--paper`; `translate="no"` on all six wordmarks. The `<img>` finding was Next's `fill` variant
+> inside a parent with an explicit `height: 388px` — no shift is possible and the rule's intent is
+> met by another mechanism, so adding the attributes would have been redundant markup dressed up as
+> a fix. `e2e/guidelines-sweep.spec.ts`, 4 tests, each watched failing; 35/35 across the six-spec
+> batch; `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted).
+>
+> **AND THE UNIT FOUND THE FOUNDER SWEEP WAS NOT SWEEPING THE SITE — TWO WAYS, BOTH THE SESSION'S
+> RECURRING FAULT.** Writing this row's site-wide guard against the founder's *"remove all mentions
+> of founder on entire site do throough code audit"* turned up live copy O156's guard was passing
+> over.
+> **(a) THE HEAD IS PART OF THE SITE.** Both sweeps read `document.body.innerText` and so
+> structurally could not reach `app/page.tsx`'s exported `title` and `description`, which still read
+> *"Why we founded ADHD.ME"*. A reader meets the tab before the page and a shared link shows the
+> description instead of it. Fixed to "built"; title, description and `og:title` now swept. The seed
+> proves the widening is what catches it: the failure is reported against `title`, and the old
+> body-only version stays green on the same tree.
+> **(b) A SWEEP WHOSE COVERAGE DEPENDED ON TEST ORDERING.** `e2e/ownership-disclosure.spec.ts` failed
+> in a batch and passed alone, which I first read as a session-cookie artefact and was wrong — the
+> spec signs in explicitly. The real cause: `/console/verticals` has two zero states, and the one
+> reading *"each item needs a specialist to review it and the founder to sign it off"* renders only
+> when vertical specs exist in a process-global store `/api/mock/console` does not reset. Alone, the
+> sweep saw the other zero state and passed over the founder word. `a11y.spec.ts` had already drawn
+> this line for this exact route ("scanned POPULATED, not on its zero state"); the ownership sweep
+> now seeds too, and the seeded copy is caught running alone.
+> Both are the fault this session already named four times in registers: **the check ran in the
+> direction its author was facing.** A sweep whose coverage is decided by test ordering is not a
+> sweep, and one that cannot see the head is not site-wide.
+> **THE REPLACEMENT COPY CORRECTS A SECOND, OLDER ERROR IN THE SAME SENTENCE.** "A specialist to
+> review it" overstates the gate to the operator who has to satisfy it: W119's chain is a reviewer
+> and then a signatory who is not that reviewer, and `src/verticals/completeness.ts` says outright
+> that it "does not require the reviewer to be a specialist". The page now names the actual chain —
+> the same correction W191 and W250 already applied elsewhere in this tree.
 
 > **O166 (the clinician profile: a design audit) — claimed 2026-08-21T13:40Z by loop-0821a.**
 > Founder-directed, 2026-08-21: *"visually looks terrible, do through design audit to make it much

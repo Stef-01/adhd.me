@@ -18,7 +18,18 @@ async function signIn(page: Page) {
   await page.getByRole("button", { name: "Create practice" }).click();
   await page.waitForURL(/\/console$/);
 }
-test.beforeEach(async ({ request }) => { await request.post("/api/mock/console"); });
+test.beforeEach(async ({ request }) => {
+  await request.post("/api/mock/console");
+  // O167: SEEDED, BECAUSE THIS SWEEP WAS ORDER-DEPENDENT AND ONLY SOMETIMES SAW WHAT IT AUDITS.
+  // The vertical specs live in a process-global store that `/api/mock/console` does not touch, so
+  // whether `/console/verticals` rendered its populated branch or its "nothing declared" zero state
+  // depended on whether `verticals.spec.ts` had already run in the same worker. Run alone, this
+  // test passed over a page reading "the founder to sign it off"; run after that spec, it failed.
+  // A sweep whose coverage is decided by test ordering is not a sweep. `a11y.spec.ts` had already
+  // drawn this exact line for the same route ("scanned POPULATED, not on its zero state"); this
+  // inherits it.
+  await request.post("/api/mock/verticals");
+});
 /**
  * O156 (founder-directed): "remove all mentions of founder on entire site do throough code audit".
  *

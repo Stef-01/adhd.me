@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
@@ -12,6 +12,21 @@ import { SITE_URL } from "./site";
  * unfurl with the generated card in app/opengraph-image.tsx; metadataBase makes every relative
  * URL absolute from the one place the site's address is decided.
  */
+/**
+ * O167: the browser chrome matches the paper.
+ *
+ * Without this the address bar and the pull-to-refresh gutter render in the browser's own default
+ * — white on iOS, grey on Android — against a page whose background is a warm off-white. On a phone
+ * that is a visible seam at the top of every screen, and it is invisible in every desktop capture,
+ * which is why a checklist found it and looking did not.
+ *
+ * The value is `--paper` from `globals.css`, and a test asserts the two still agree by resolving
+ * both through a canvas: a palette change that left this stale would put the seam back silently.
+ */
+export const viewport: Viewport = {
+  themeColor: "#fbfaf7",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {

@@ -8,8 +8,15 @@
 //   That is a piece of work, and it is work the loop can do.
 //
 //   VERTICALS ARE DECLARED AND NOTHING IN THEM IS READY — every member is waiting on a gate. The
-//   assembly is done; what is missing is a specialist, a founder signature, and the G5 ruling on
-//   guideline values. No amount of building changes it.
+//   assembly is done; what is missing is W119's chain — a reviewer, then a signatory who is not
+//   that reviewer — and the G5 ruling on guideline values. No amount of building changes it.
+//
+// O167 CORRECTED THIS PAGE'S ZERO-STATE COPY ON BOTH COUNTS, and the second was the older error.
+// It read "each item needs a specialist to review it and the founder to sign it off". The founder
+// word is what the site-wide sweep caught; the "specialist" was wrong before that and for a
+// different reason. W119's chain requires a reviewer and a separate signatory, and
+// `completeness.ts` says outright that it "does not require the reviewer to be a specialist" — so
+// the sentence was overstating the gate to an operator who has to satisfy it.
 //
 // A blank grid reads as neither. Worse, the two lead to opposite next actions — one says "keep
 // going", the other says "the ruling is now the only thing left" — so the page names which it is.
@@ -113,7 +120,7 @@ export default async function VerticalsPage() {
                 <p>
                   Nothing listed below has cleared a clinical sign-off. ADHD.ME ships with no
                   pathway content, no monitoring intervals and no education material of its own —
-                  each item needs a specialist to review it and the founder to sign it off, and
+                  each item needs a reviewer, and then a signatory who is not that reviewer, and
                   the interval values additionally wait on a decision that has not been taken.
                 </p>
                 <p>
