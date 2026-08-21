@@ -143,6 +143,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W255 (API refusal semantics) — claimed 2026-08-21T12:23Z by loop-0821a.** No patient data on
+> any error path, asserted over EVERY refusal branch rather than sampled.
+> **"RATHER THAN SAMPLED" IS THE WHOLE GATE, AND IT MAKES ENUMERATION THE HARD PART.** Checking
+> three refusals by hand is a sample whatever it is called; the property has to hold for branches
+> nobody has written yet. So the branches are DISCOVERED — every refusal the lane can actually
+> produce, obtained by exercising the code rather than by listing the strings I remember writing —
+> and the register is checked both directions, because three registers in this session failed in
+> exactly the direction their author was not facing.
+> **AND THE PROPERTY WORTH ASSERTING IS STRONGER THAN "NO PATIENT DATA", WHICH IS THE EASY ONE TO
+> PASS.** A refusal that never mentions a patient can still leak: it can ECHO what the caller sent.
+> That is the classic error-path leak — "no such record: pat-88213" — and it leaks whatever the
+> caller put in the field, which on a public API is whatever an attacker chose to put there. The
+> strong form is that **a refusal carries NOTHING from the request at all**: the copy for a reason
+> is the same bytes whatever it was called with. That is checkable by exercising each branch with
+> wildly different inputs, including patient-shaped and attacker-shaped ones, and requiring the
+> answers to be byte-identical.
+> **THE THIRD THING AN ERROR PATH LEAKS IS EXISTENCE, AND W253 ALREADY TOOK A POSITION ON IT.** Its
+> `not_a_member` copy says the same thing whether the practice exists or not, because a refusal
+> that distinguished them would answer questions about other practices to anybody willing to ask
+> repeatedly. That is one branch with the property; this unit makes it the rule and checks it
+> across the lane — including the pairs where it is easy to get wrong, like a caller who holds
+> nothing versus one who holds something else.
+> **WHAT THIS UNIT MUST NOT BECOME IS A LIST OF STRINGS I ASSERT ABOUT MYSELF.** A test reading the
+> copy constants and checking they contain no patient id proves the constants are clean; it proves
+> nothing about the path that renders them, which is where an echo would be added. So the sweep
+> goes through the real functions with real refusals coming out.
+> Gate: every refusal branch in `src/platform/` discovered by exercising the code, with a
+> both-directions check that the discovered set matches the declared one; each swept for patient
+> identity, for any echo of the request, and for existence disclosure; the byte-identical property
+> asserted per reason across adversarial inputs; a seeded echo, a seeded patient id and a seeded
+> existence tell each caught; `pnpm verify` green.
+
 > **W254 (API scope model) — claimed 2026-08-21T12:15Z by loop-0821a.** Scopes as declared data,
 > checked against W253's endpoint census in both directions, and no production credential in the
 > tree.
@@ -7145,7 +7177,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W252 | done | loop-0821a | 2026-08-21T11:52Z | 6ac2051 | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
 | W253 | done | loop-0821a | 2026-08-21T12:02Z | 023440c | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
-| W255 | available | — | — | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
+| W255 | claimed | loop-0821a | 2026-08-21T12:23Z | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | available | — | — | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | available | — | — | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
