@@ -166,6 +166,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > nothing here changes the reasoning). Gate: the reduced-motion defect fixed at the hook and
 > re-measured under both preferences, the three refusals recorded with reasons, a DESIGN-QA
 > entry, e2e green, full `pnpm verify` green.
+> DONE 2026-08-21. The defect is fixed at the hook and re-measured: `none` throughout under
+> `reduce`, the tween unchanged otherwise. Worth stating plainly what it was, because it is the
+> most useful kind of finding — **the reduced-motion reader was getting a WORSE experience than
+> the animated one.** Not a missing animation, not a janky one: an instant 9px displacement held
+> for a quarter second, produced by a config that disables tweens while keeping transform
+> values. Every other motion in the finder checks the hook; this one trusted the wrapper, and
+> the wrapper's guarantee is narrower than it looks.
+> Three motion gaps found and all three REFUSED, which audit mode is equally for. The listening
+> screen's prompt→transcript swap is a genuine untransitioned ternary and stays that way: a
+> delayed transcript on a microphone screen means a person doubts the mic works, which is the
+> O44 argument arriving on the one screen where immediacy IS the feedback. The mic-failure retry
+> button stays instant by tree law (no motion on patient error paths). The compare screen keeps
+> none, as O102 decided, and nothing in this audit changes that reasoning.
+> Gate met: DESIGN-QA entry with the measurements, finder + a11y + compare e2e green (24),
+> `pnpm verify` green 3597.
 
 > **O140 (the queue's last four, and the two that stay) — claimed 2026-08-21T01:05Z by
 > loop-0820s.** Four sentences remain genuinely open after O139. Measured, two are cueable and

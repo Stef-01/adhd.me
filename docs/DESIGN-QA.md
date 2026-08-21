@@ -1150,3 +1150,40 @@ pulse is a justified live-state indicator with an end. Two gaps, both fixed:
 - [x] Deliberately NOT animated, per the frequency gate: the suburb input (typed,
   high-frequency), Show-the-others expansion (instant is honest), and the booking bar (O44
   law stands).
+
+## O141 — motion audit of the uncovered finder stages (2026-08-21)
+
+Law 5 binds `design-motion-principles`; O137's audit covered the results-head and the Team page.
+This covers what it did not — compare, welcome, scenarios, listening, booking, type — weighted
+Jakub-primary/Emil-secondary as the law directs for patient surfaces.
+
+### Found and fixed: one real accessibility defect
+
+- [x] **The scenarios quote snapped instead of fading, for exactly the readers who asked it not
+  to.** Its `initial`/`exit` set `x: matchDirection * 9` with no reduced-motion gate — the only
+  motion in the finder that does not check the hook. Measured under
+  `prefers-reduced-motion: reduce`: the element jumps to x=-9 and **holds there ~240ms** before
+  landing, where under no-preference it tweens smoothly (-2.4 → -6.7 → -8.9). `MotionConfig
+  reducedMotion="user"` disables the TWEEN and keeps the transform VALUES, so a reader who asked
+  for less motion got an *instant* 9px displacement instead of a smooth one — strictly worse
+  than the animation.
+- [x] This is precisely what "every effect has a static equal, **checked at the hook**" is for,
+  and it hid because the enclosing config *looks* like it handles this. Now gated with
+  `useReducedMotion()`; re-measured `none` throughout under reduce, tween unchanged otherwise.
+
+### Found and deliberately refused
+
+- [ ] **The listening screen's prompt → transcript swap stays instant.** It is a real motion gap
+  (a ternary with no transition) and animating it would be wrong: a delayed transcript on a
+  microphone screen means a person doubts the mic is working. That is the O44 argument, on the
+  one screen where immediacy IS the feedback.
+- [ ] **The retry button after a mic failure stays instant** — tree law, no motion on patient
+  error paths.
+- [ ] **The compare screen keeps no motion of its own** (O102's decision). Nothing in this audit
+  changes the reasoning: its content is a static table, and the stage transition already carries
+  the arrival.
+
+### Clean
+
+- [x] Welcome, listening and booking gate correctly at the hook. The mic pulse, the intro
+  stagger and the booking bar's deliberate stillness (O44) all hold up under both preferences.

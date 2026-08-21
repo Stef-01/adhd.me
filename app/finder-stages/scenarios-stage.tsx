@@ -3,7 +3,7 @@
 // O95: the demo-scenario browser, verbatim from care-finder.tsx.
 
 import { ArrowLeft, CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { careArchetypes, type CareArchetype } from "@/demo/care-archetypes";
 import { MotionScreen, Pressable, Wordmark } from "./shared";
 
@@ -22,6 +22,17 @@ export function ScenariosStage({
   onCycle: (direction: 1 | -1) => void;
   onTry: () => void;
 }) {
+  /* O141: CHECKED AT THE HOOK, not left to the enclosing MotionConfig.
+     `MotionConfig reducedMotion="user"` disables the TWEEN and keeps the transform VALUES, so
+     with an ungated `x` the quote SNAPPED to a 9px offset and held there ~240ms before landing —
+     measured, under `prefers-reduced-motion: reduce`. That is strictly worse than the animation:
+     the reader who asked for less motion got an instant displacement instead of a smooth one.
+     The taste law says every effect needs a static equal checked AT THE HOOK, and the enclosing
+     config looking like it handles this is exactly why nobody noticed. The static equal here is
+     no displacement at all — the quote simply swaps. */
+  const reduce = useReducedMotion();
+  const slide = reduce ? 0 : matchDirection * 9;
+
   return (
     <MotionScreen key="scenarios" className="scenario-screen">
       <header className="minimal-header">
@@ -42,9 +53,9 @@ export function ScenariosStage({
             <motion.blockquote
               className="scenario-quote"
               key={archetype.id}
-              initial={{ opacity: 0, x: matchDirection * 9 }}
+              initial={{ opacity: 0, x: slide }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: matchDirection * -9 }}
+              exit={{ opacity: 0, x: -slide }}
               transition={{ duration: 0.22 }}
             >
               <q>{archetype.example}</q>
