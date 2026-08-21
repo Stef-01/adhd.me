@@ -143,6 +143,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O177 (the loudest gap the founder gates do not block) — claimed 2026-08-22T02:09Z by
+> loop-0821a.** A CURRENT-QUARTER unit — Q1's standing gap list, worked the way O103 worked it.
+> **AND A PROCESS CORRECTION FIRST: O176 SHOULD NOT HAVE BEEN NEXT.** The firing instruction orders
+> the work red gates → standing debts → **current quarter** → UI refinement, and O176 was a UI
+> refinement unit taken while a current-quarter item was claimable. It was a good unit and it found
+> real defects, but it was out of order, and I did not check Q1 before claiming it. Recorded because
+> the ordering exists to stop the loop drifting into whichever track is most legible to whoever is
+> looking — which is exactly what happened.
+> **RED GATE RE-CHECKED: still founder-gated**, nine consecutive 4–7 second failures with
+> `total_ms: 0`. Standing debts: nothing buildable — 11 is founder-gated on billing, 12 needs no
+> action, the rest are CLOSED or FOUNDER.
+> **THE GAP LIST, MEASURED.** Corpus **556 entries, 33 unheard aspirations across 19 facets** —
+> and the plan's own text says "~60 aspirations", so **that figure is stale by roughly half** and is
+> corrected in this row. The measurement also settles which gaps are workable at all:
+> **THE TWO LOUDEST ARE ENTIRELY BLOCKED BY G7**, which is the finding that chose this unit's
+> target. `care:trauma-informed` (5) and `care:emotional-regulation` (4) are `awaitingFounder` to the
+> last entry, as are both of `manner:attuned` — **11 of the 33 sit behind the founder's open
+> question** about whether the reader may hear an experience or a self-state. Not buildable, and a
+> unit that "worked the loudest gap" without checking would have walked straight into the gate.
+> **SO THE TARGET IS `care:non-medication`, AT 5 — THE LOUDEST UNBLOCKED GAP**, and the same facet
+> O103 took from eleven to five. The five that remain share a register O103's fix does not cover:
+> *"I would rather not take medication if there is another way"*, *"I want to try the non-drug route
+> first"*, *"I want a plan that is more than a prescription"*, *"my psychologist suggested I ask
+> about the non-drug options"*, *"skills first, then we can discuss whether a script helps"*.
+> **O103 taught the facet to hear a REFUSAL in a non-refusing register. None of these five is a
+> refusal at all** — they are sequencing and openness ("first", "before", "more than", "rather …
+> if there is another way", "ask about"). A person saying "skills first, then we can discuss whether
+> a script helps" is not declining medication; they are stating an order of preference, and the
+> lexicon currently hears nothing.
+> **WHY THIS IS NOT A G7 PROBLEM AND THE TRAUMA ONES ARE.** A stated preference about the SHAPE of
+> care is what this product matches on by design. An experience or a self-state is the founder's open
+> question. The line is the entry's own kind, not the facet's name, and this row does not go near it.
+> Gate: the register named and cued rather than the five sentences pattern-matched — a cue set that
+> only reaches these exact strings is the corpus copied into the lexicon, which `reach.test.ts`'s own
+> law forbids; every one of the five promoted from `aspires` to `reaches` in the same commit with the
+> facet's floor raised, per the corpus's promotion loop; the false-positive direction tested as hard
+> as the reach — "the script worked first time" and similar must NOT fire; `known-fps` consulted and
+> extended if the widening creates one; the 11 G7-blocked aspirations left exactly as they are; the
+> plan's stale "~60" corrected to the measured figure; `pnpm gate` exit 0.
+
 > **O176 (accent discipline stops being a one-screen finding) — claimed 2026-08-22T00:12Z by
 > loop-0821a.** A UI refinement unit, per the plan's continuous track and its cadence requirement of
 > a `qa/` capture plus a `docs/DESIGN-QA.md` entry.
