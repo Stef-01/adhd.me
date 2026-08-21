@@ -143,6 +143,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
+> loop-0821a.** Current-quarter unit. Red gate re-checked first: still founder-gated, ten
+> consecutive instant failures.
+> **THE FINDING THAT CHOSE THIS UNIT, ARRIVED AT BY DOING THE WORK TWICE.** The plan calls the
+> standing aspiration list "the lexicon's work queue". O177 took its loudest unblocked facet and
+> found four of five entries were **measured and refused by O103**, not uncued. Picking the next
+> facet down, I found the same thing again: `care:child-adolescent-adhd`'s two entries were refused
+> by **O122** — `"year old"` fires on *"I am forty years old and finally asking"*, an adult stating
+> an age, and the `our son`/`our boy` forms were refused because *"our daughter cries over homework
+> every single night"* is a **G7 `never` pin** the cue would have broken. `pref:woman-gp`'s two were
+> refused by **O114**, reaffirmed when **O125 re-added the cue and the suite reversed it**.
+> **THREE FACETS, THREE TIMES, THE SAME DISCOVERY.** The top of the queue is not work. It is a list
+> of decisions already taken, and every unit that picks from it re-derives that by hand — I have now
+> done it twice in two rows and O125 did it once by shipping a cue the suite had to reverse.
+> **SO THE LIST CONFLATES THREE KINDS AND NAMES ONE.** An aspiration is either (a) genuinely
+> **uncued** — real work, somebody should write a cue; (b) **measured-and-resistant** — a cue was
+> tried, it collided, the refusal is recorded with its colliding sentence; or (c) **founder-gated**,
+> the 11 `awaitingFounder` entries O177 counted. Only (a) is a queue. The other two are answers, and
+> reading them as work is how O125 shipped a reversal.
+> **THE MECHANISM ALREADY EXISTS AND IS HALF-WIRED.** `REFUSED_CUES` records refusals with
+> `leavesStanding` — the corpus sentences a refusal leaves unreached — and O177 has just proved that
+> register catches its own staleness when a sentence is later reached by another route. What is
+> missing is the other direction: nothing asserts that every resistant aspiration IS named by a
+> refusal, so a refusal can be taken in a comment (O122's are) and the aspiration goes on looking
+> like work.
+> **WHAT I DO NOT KNOW AND WILL MEASURE.** How the 33 actually divide. My guess from three samples is
+> that (a) is much smaller than the list's size implies — but three facets are not 19, and the row
+> reports the partition it measures. **If most entries turn out genuinely uncued, this unit's premise
+> is wrong and the row will say so**, exactly as O177's premise was wrong and O171's prediction was.
+> Gate: every aspiration classified into exactly one of the three kinds, computed rather than
+> transcribed; the partition asserted TOTAL, so a new aspiration cannot be added without falling into
+> a kind; O122's refusals — currently prose in a cue comment — moved into `REFUSED_CUES` with their
+> measured colliding sentences, so the register is the single place a refusal lives; each migrated
+> refusal's collision RE-MEASURED against the current matcher before it is recorded, because copying
+> a refusal forward without re-running it is how a stale one survives (O177's `leavesStanding` find);
+> a seeded aspiration that is neither gated nor refused must show up as genuine work; the plan's
+> "work queue" wording corrected to whatever the measurement supports; `pnpm gate` exit 0.
+
 > **O177 (the loudest gap the founder gates do not block) — claimed 2026-08-22T02:09Z by
 > loop-0821a.** A CURRENT-QUARTER unit — Q1's standing gap list, worked the way O103 worked it.
 > **AND A PROCESS CORRECTION FIRST: O176 SHOULD NOT HAVE BEEN NEXT.** The firing instruction orders
