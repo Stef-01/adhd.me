@@ -143,6 +143,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W234 (Q18 hardening) — claimed 2026-08-21T09:07Z by loop-0821a.** Law 5: a hardening week
+> without the review skills is not done. `code-review` was RUN over the whole lane — nine source
+> modules, the console view, the page, the tests and the e2e — and **returned nine findings, every
+> one of which I confirmed at source before claiming this unit.** Two are serious enough to name
+> here.
+> **(1) THE RECOMMENDATION ATTACHES A HIT RATE TO A CLAIM THE BACK-TEST NEVER SCORED.** `backTest`
+> only ever forecasts `week.slotsOffered` — the slots that week actually had. `sessionRecommendation`
+> forecasts `slotsConsidered`, which is EXTRA slots. So "Across this practice's sessions, ranges like
+> this one contained what happened 85 per cent of the time" attaches a real, honestly-earned rate to
+> a range answering a different question. **This is the exact overclaim the whole lane was built to
+> prevent, and it is in the sentence W225 composed to prevent it.** It renders live: one session
+> shows that hit rate directly above "this session has never filled every slot it offered".
+> **(2) THE CONSOLE FABRICATES `occurrences: 0` FOR THE NO-HISTORY ARM.** W222's `SessionHistory`
+> holds NO numeric field on that arm precisely so a reader cannot take a number out of it; W229's
+> view then wrote a zero back in, and the table prints "Weeks recorded 0" for a session that ran
+> twice. **The guarantee survived the module and died in the view** — which is the shape this
+> session has hit four times now, and the first time it undid a structural guarantee rather than a
+> test.
+> The other seven: `calendarGap` can never become null (it asks `calendarKnowsNothing` for the
+> empty-string jurisdiction, so W227's notice would keep rendering after a real calendar is loaded
+> — my test only pinned the empty case); the pooled score is recomputed once per row, 70 × 70 =
+> 4,900 back-tests per page render; `capacityCopyOverDiary` hard-codes one skip id, binding the
+> wrong text to a declared kind — the very mislabel `mustContain` was added to catch, in the other
+> function; an empty `decidedBy` is refused with the `reason_too_thin` copy, naming the wrong field;
+> `sessions: wanted.size` counts assigned keys with no occurrences, so the session count and the
+> slot totals describe different sets; `occurrencesFrom` groups without `practiceId`, so a
+> multi-practice diary would merge sessions sharing a clinician id; and `meanWidthShare` adds 0 for
+> zero-slot predictions while dividing by the full count, making a forecaster look tighter than it
+> is.
+> Gate: every finding either FIXED with a test that fails without the fix, or recorded with a
+> reason for not fixing — no finding closed by inspection; registers checked both directions; the
+> hit-rate overclaim removed from the rendered sentence, not softened; `pnpm verify` green plus the
+> lane's e2e and the axe sweep.
+
 > **W233 (capacity attribution: did opening slots help?) — claimed 2026-08-21T08:52Z by
 > loop-0821a. Premise CHECKED first:** the only arm anywhere in this tree is patient-level —
 > `Arm = "holdout" | "invite"`, keyed on (practice, patient) by W8 — and **no session carries an arm
@@ -5964,7 +5998,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W231 | done | loop-0821a | 2026-08-21T08:36Z | 3e8b4bf | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | done | loop-0821a | 2026-08-21T08:44Z | 6f29060 | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | done | loop-0821a | 2026-08-21T08:52Z | 3727570 | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
-| W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
+| W234 | claimed | loop-0821a | 2026-08-21T09:07Z | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
