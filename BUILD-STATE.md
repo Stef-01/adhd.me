@@ -179,6 +179,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `<head>` read as well as the body, per O167; seeded failures for the derivation itself (a planted
 > page in an unswept directory must be caught); whatever live hits it finds fixed; `pnpm verify`
 > green.
+>
+> **DONE 2026-08-21T16:24Z.** The sweep now visits **45 static routes**, up from the 34 the two
+> arrays covered, and the route list is derived rather than written down.
+> **AND THE ANSWER TO THE OPEN QUESTION IS ZERO, WHICH THE ROW REPORTS BECAUSE IT MEASURED IT.**
+> Rendering all eleven previously-unswept console screens produced **no founder hits**. I had said I
+> would not guess, and the guess would have been wrong in the interesting direction: the source scan
+> and the rendered sweep agreed this time. That does not make the gap harmless — the sweep spent
+> eleven routes' worth of coverage on nothing for as long as those arrays existed, and it would not
+> have reported that either.
+> **NO SECOND DISCOVERY MECHANISM WAS BUILT.** W102's `discoverSurfaces` already walks the App
+> Router's conventions, strips route groups, skips `_private` folders and keeps dynamic segments
+> verbatim, and `public-surfaces.test.ts` already pins its output against a register in both
+> directions. `e2e/site-routes.ts` is an adapter over it, not a reimplementation — the gap was never
+> that the tree could not enumerate its routes, only that this sweep was not asking.
+> **FIVE SEEDS, EACH WATCHED FAILING.** (1) A page planted in a directory no array named:
+> caught, route count 45→46 with nothing edited. (2) An undeclared dynamic route: caught. (3) A plan
+> entry for a route no longer on disk — W102's stale direction: caught. (4) A collapsed derivation:
+> caught by the floor, and this is the seed worth keeping, because it printed `FOUNDER_HITS 0 over 4
+> routes` and would otherwise have read as a clean sweep. (5) O167's head sweep, carried into this
+> spec. A route that redirects is now recorded as redirected rather than counted as swept, since a
+> guarded screen bouncing to `/console` is a screen the sweep did not read.
+> **MEASURED, NOT FIXED, AND THEREFORE STATED: SIX MORE SWEEPS HAVE THE SAME SHAPE.** Against the 45
+> static routes on disk: `a11y` covers 35, `contrast` 33, `touch-floor` 33, `semantics` 27,
+> `mobile-fit` 25, `keyboard-focus` 15. Every one is a hardcoded array under a name implying
+> completeness, and `a11y`'s and `contrast`'s are compliance-bearing. Converting them is not
+> mechanical — axe runs per page, `keyboard-focus` drives interactions, and each needs a decision
+> about what a sensible per-route assertion is — so it is a unit rather than an appendix to this one,
+> and widening this row to swallow it would be exactly the speculative scope the laws forbid. The
+> figures are recorded here so O169 claims a measured gap instead of rediscovering it.
+> Verification: `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted);
+> 19/19 across ownership-disclosure, guidelines-sweep, public-sweep, a11y, booking and console.
 
 > **O167 (the finder against the whole guidelines checklist) — claimed 2026-08-21T14:23Z by
 > loop-0821a.** Continues the founder's *"do through design audit … learn a bout best practices

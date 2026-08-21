@@ -2108,3 +2108,60 @@ identifier displayed as itself and must survive translation intact; a brand name
 word in a sentence the reader has asked to be translated, and wrapping each one would fragment copy
 this tree's compliance linters scan as text. Considered and declined, rather than swept up because
 the pattern matched.
+
+---
+
+## O168 — the site-wide sweeps stop hardcoding what "site-wide" means (2026-08-21)
+
+Not a design change. It is the guard behind three of them, and it had the same fault they did.
+
+`e2e/ownership-disclosure.spec.ts` enforced the founder's *"remove all mentions of founder on entire
+site"* by sweeping two hardcoded route arrays. Those arrays covered **34 of the 45 static routes in
+`app/`**. Eleven console screens — about a quarter of the site — were swept by nothing, under a test
+named *"the word is gone from every surface"*.
+
+**This is the O167 fault one level up.** O167 found the same sweep could not see the `<head>`, and
+could not see `/console/verticals` unless an unrelated spec had happened to seed it first. Both were
+the check running in the direction its author was facing. A hardcoded route array is that applied to
+the route list itself: it covers the pages somebody remembered on the day and stays green beside
+everything added afterwards. **Adding the eleven missing strings would have fixed the gap and kept
+the shape that produced it**, so the twelfth route would escape identically.
+
+So the routes are derived from the filesystem. `discoverSurfaces` (W102) already did this — it walks
+the App Router's conventions, strips route groups, skips `_private` folders — and
+`public-surfaces.test.ts` already pins its output against a register in both directions. Nothing new
+was built; `e2e/site-routes.ts` is an adapter. The tree could always enumerate its routes. This sweep
+just was not asking.
+
+### The hole a derived list opens, and closing it
+
+Filter out everything with a bracket and the *dynamic* routes silently become the new unswept set.
+`DYNAMIC_ROUTE_PLAN` gives each one a sample to visit or a named exclusion with a reason, and a route
+missing from it fails the test — so adding a dynamic route forces its author to decide which.
+Checked in both directions, W102's own rule: a plan entry naming a route that has moved is the
+failure that makes a register actively misleading rather than merely incomplete.
+
+### What the sweep found on the eleven
+
+**Nothing.** Rendering them produced zero founder hits, and the row reports that because it measured
+it rather than assuming. The gap was still real: the sweep spent eleven routes' worth of coverage on
+nothing, and it would not have reported *that* either.
+
+### Guards
+
+Five seeds, each watched failing. A page planted in a directory no array named (caught; count went
+45→46 with nothing edited). An undeclared dynamic route. A stale plan entry. O167's head sweep. And
+a **collapsed derivation**, which is the one worth keeping — it printed `FOUNDER_HITS 0 over 4
+routes` and would otherwise have read as a clean sweep, so the floor asserts the derived list is at
+least as large as the arrays it replaced. A route that redirects is now recorded as redirected
+rather than counted as swept, because a guarded screen bouncing to `/console` is a screen nobody
+read.
+
+### Measured, not fixed
+
+Six more sweeps have the same shape. Against the 45 static routes: `a11y` covers 35, `contrast` 33,
+`touch-floor` 33, `semantics` 27, `mobile-fit` 25, `keyboard-focus` 15 — every one a hardcoded array
+under a name implying completeness, and the first two compliance-bearing. Converting them is not
+mechanical: axe runs per page, `keyboard-focus` drives interactions, and each needs a decision about
+what a sensible per-route assertion is. That is a unit, not an appendix to this one. The figures are
+here so the next one starts from a measurement.
