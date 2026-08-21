@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O162 (the sourcing discipline guards the surface that is switched OFF) — claimed
+> 2026-08-21T15:25Z by loop-0820s.** Found by asking O161's question of my own audits: a clean bill
+> from the wrong question is not a clean bill, so what question have I never asked?
+> **This one.** W193's `DISCLOSED_FIELDS` in `src/directory/disclosure.ts` is exemplary — one entry
+> per publishable field, each stating its BASIS (`checkable` on a public register / `declared` by
+> the clinician / `identifier`) and WHY disclosing it is justified, tree-checked in both directions
+> so a field added without an entry fails. It governs the public directory. **The public directory
+> is empty behind gate G6 and renders to nobody.**
+> The LIVE surface — `/finder`, which today renders three real named doctors — has no such
+> register. Eighteen fields reach a patient about a real person (`about`, `experience`, `focus`,
+> `practice`, `title`, `languages`, `nswAdhdTrained`, `disclosedInterest`…) and not one of them can
+> state its basis in data. The sourcing exists only as prose comments in roster.ts, which is to say
+> it exists only while somebody remembers to read them.
+> **THIS IS THE CLASS MY OWN O158 ERROR BELONGS TO.** I published "Dr Saxena has an ownership
+> interest in ADHD.ME" — a disclosed field about a real person whose basis nobody could state,
+> because there was nowhere to state it. A register that required a basis and a source per field
+> would have made that sentence unwritable: there is no public register to check it against and no
+> founder statement to cite, so it could only have been entered as an invention, which is the point
+> at which a person notices.
+> The unit: bring the W193 discipline to the live roster — a per-field basis register for the
+> attributes that reach a patient about a `realPerson`, checked BOTH directions against what the
+> profile actually renders, so a new rendered field without a stated basis fails the build.
+> Gate: every rendered real-person field carries a basis and a source; both-directions check
+> (a field with no entry fails, an entry naming nothing rendered fails); a seeded failure proving
+> each direction; `pnpm verify` green. NOT in scope: changing any attribute's value — this unit
+> records where each already comes from and refuses to guess where it cannot tell.
+
 > **O161 (the correction reached the copy and not the reasoning) — claimed 2026-08-21T14:55Z by
 > loop-0820s.** O158 fixed the sentence a patient reads. It did not fix the prose that GOVERNS
 > that sentence, and that is a worse place to leave a false belief.
