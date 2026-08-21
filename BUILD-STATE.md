@@ -143,6 +143,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O141 (motion audit of the uncovered finder stages — one real accessibility defect, three
+> refusals) — claimed 2026-08-21T01:15Z by loop-0820s.** Law 5 now binds
+> `design-motion-principles`, and O137's audit covered the results-head and the Team page. This
+> covers what it did not: compare, welcome, scenarios, listening, booking, type. Patient
+> surfaces, so Jakub-primary/Emil-secondary per the law.
+> **The finding is in the scenarios stage and it is an accessibility one.** The quote's
+> `initial`/`exit` set `x: matchDirection * 9` with no reduced-motion gate — the only motion in
+> the finder that does not check the hook. Measured under `prefers-reduced-motion: reduce`, the
+> element does not fade in place: it SNAPS to x=-9 and holds there ~240ms before landing. Under
+> no-preference it tweens smoothly through -2.4 → -6.7 → -8.9. So `MotionConfig
+> reducedMotion="user"` disables the TWEEN and keeps the transform VALUES, which means the
+> reduced-motion reader gets an instant 9px displacement instead of a smooth one — strictly
+> worse than the animation, and the precise failure the taste law's "every effect has a static
+> equal, checked at the hook" exists to prevent. It was invisible because the enclosing config
+> looks like it handles this and does not.
+> Three motion GAPS found and all three refused, which the audit mode is equally for: the
+> listening screen's prompt→transcript swap stays instant (a delayed transcript on a mic screen
+> means a person doubts the microphone works — the O44 argument, on the one screen where
+> immediacy IS the feedback); the retry button after a mic failure stays instant (tree law: no
+> motion on patient error paths); and the compare screen keeps none (O102 decided that, and
+> nothing here changes the reasoning). Gate: the reduced-motion defect fixed at the hook and
+> re-measured under both preferences, the three refusals recorded with reasons, a DESIGN-QA
+> entry, e2e green, full `pnpm verify` green.
+
 > **O140 (the queue's last four, and the two that stay) — claimed 2026-08-21T01:05Z by
 > loop-0820s.** Four sentences remain genuinely open after O139. Measured, two are cueable and
 > two are not, and the two refusals are the more interesting half.
