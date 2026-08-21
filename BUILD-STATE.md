@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O153 (the guards I built this week, held to their own claims) — claimed 2026-08-21T10:50Z by
+> loop-0820s.** O152 ran `code-review` over O145-O151 and recorded seven findings rather than
+> losing them; this firing acts on them. The theme is one sentence: **several of the guards this
+> session added are weaker than the doc comments standing over them**, which is worse than no
+> guard, because a comment that overstates a test is how a hole gets believed shut.
+> Two are already CONFIRMED before claiming, and neither is theoretical.
+> (1) O143's `qa-record.test.ts` matches only double-quoted `path: "qa/…"`. Two specs write with
+> TEMPLATE LITERALS — `e2e/ui-audit.spec.ts` to `qa/ui-o24/` and `e2e/matching-verification.spec.ts`
+> to `qa/matching-o10/` — and both directories are git-tracked design record. So O143's stated
+> purpose, that a test run can no longer rewrite the evidence earlier units recorded, is NOT
+> achieved for those two sites, and the test passes green while it is untrue.
+> (2) O146's range slider overlaps its own labels by 3px, and I closed that unit calling the
+> surroundings pixel-identical. My own recorded numbers say it: input `872..916`, labels
+> `913..926`. I checked that the labels had not MOVED — they had not — and never checked that the
+> input had grown INTO them. The labels come later in the DOM, so they win hit-testing over the
+> bottom 3px of a 44px slider that exists to be easier to hit.
+> The rest to be verified rather than trusted, because a review is a hypothesis too: the
+> focus-ring predicate reading RESTING computed style (a link with `outline: none` and no
+> `:focus-visible` rule would pass); both new sweeps filtering `tabIndex < 0` out of the
+> denominator, which is exactly the state of an unreachable clickable div; `profile-layout`
+> demanding every experience item fit one line at 390px with 46 characters against a ~40 budget,
+> plus non-null assertions on two conditionally-rendered blocks; and `scale-fixture` hand-copying
+> the CareArea and EIQuality unions with no exhaustiveness check, so a new member silently narrows
+> the measured space while the pins stay green — which defeats that module's own stated law.
+> Gate: every finding either fixed with a seeded failure proving the fix, or dismissed in writing
+> with the measurement that dismissed it; `pnpm verify` green; the full accessibility batch green.
+
 > **O152 (FOUNDER-DIRECTED — Saif Tareen joins the team page) — claimed 2026-08-21T10:10Z by
 > loop-0820s.** "add to team Saif Tareen, bachelor of commerce student at Macquarie university and
 > works at Parliament of australia so have those logos in similarly", with a photograph attached.
