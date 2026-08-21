@@ -195,6 +195,60 @@ describe("W237 the contract fails a mapping that breaks each property", () => {
   });
 });
 
+describe("W247 a violation detail carries no record contents", () => {
+  // Found by the Q19 security review. The round-trip details used to read
+  // `a record did not survive: ${JSON.stringify(value).slice(0, 60)}` — the first sixty characters
+  // of the record itself. Over the synthetic corpora in this file that is harmless, and this is a
+  // GENERAL conformance tool: the day somebody points it at real records to find out why a real
+  // integration is dropping them — which is what a conformance check is FOR — those sixty
+  // characters are patient data on an error path, in whatever reads violations.
+  const identifying = (): MappingFixture<Toy, unknown> => ({
+    ...good(),
+    // Every record fails to round-trip, and each carries a distinctive string. If any of them
+    // reaches a detail, the assertions below find it.
+    corpus: [
+      { id: "1", kind: "a", extra: "keep", note: "MRN-8811-SECRET", tags: ["t1"] },
+      { id: "2", kind: "b", extra: "keep", note: "Sharon Kowalczyk", tags: [] },
+      { id: "3", kind: "a", extra: "other", note: "0412 998 776", tags: ["t3"] },
+    ],
+    fromResource: () => ({ ok: false as const }),
+  });
+
+  it("produces the failure at all, so the assertion below is looking at something", () => {
+    // Non-vacuity first: a detail sweep over an empty violation list passes trivially.
+    const violations = contractViolations(identifying());
+    expect(violations.filter((v) => v.failure === "round_trip").length).toBe(3);
+  });
+
+  it("names the record by index and never by its contents", () => {
+    const details = contractViolations(identifying()).map((v) => v.detail);
+    for (const secret of ["MRN-8811-SECRET", "Sharon Kowalczyk", "0412 998 776"]) {
+      expect(details.join(" | "), `a record's contents reached a violation detail`).not.toContain(secret);
+    }
+    // And an index is still there, so the detail remains useful to somebody holding the corpus.
+    expect(details.some((d) => /record \d+/.test(d)), "no detail identifies which record").toBe(true);
+  });
+
+  it("keeps record contents out of every detail the contract can produce, not just round_trip", () => {
+    // The sweep rather than the one case: run every failing fixture this file builds and check no
+    // detail contains a value from the corpus. A guard on one branch is a guard on one branch.
+    const corpusStrings = ["MRN-8811-SECRET", "Sharon Kowalczyk", "0412 998 776"];
+    const fixtures: MappingFixture<Toy, unknown>[] = [
+      identifying(),
+      { ...identifying(), mutations: {} },
+      { ...identifying(), humanText: () => "MRN-8811-SECRET" },
+      { ...identifying(), corpus: [] },
+    ];
+    for (const fixture of fixtures) {
+      for (const violation of contractViolations(fixture)) {
+        for (const secret of corpusStrings) {
+          expect(violation.detail, `${violation.failure} carries record contents`).not.toContain(secret);
+        }
+      }
+    }
+  });
+});
+
 describe("W237 the contract refuses a corpus that cannot fail", () => {
   it("finds code systems at any depth", () => {
     expect(codeSystemsIn({ a: [{ coding: [{ system: "s1", code: "c" }] }], b: { system: "s2", code: "d" } }).sort())

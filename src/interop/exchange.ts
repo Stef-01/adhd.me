@@ -60,7 +60,21 @@ export const UNKNOWN_REASON_COPY: Record<UnknownReason, string> = {
   never_attempted: "Nothing was sent, so nothing came back. Recorded rather than left blank.",
 };
 
-/** One recorded exchange. `unknown` carries its reason; the other two carry the other side's words. */
+/**
+ * One recorded exchange. `unknown` carries its reason; the other two carry the other side's words.
+ *
+ * W247 CARRIED FINDING — NOT FIXED HERE, AND THE REASON IS THAT THE FIX BELONGS AT THE RENDERER.
+ * `theirReason`, `acknowledgedBy` and `theirReference` are free text from SOMEBODY ELSE'S SYSTEM.
+ * Every other sentence this product shows an operator passes the advice linter, because this tree
+ * wrote it. These do not and cannot: they are the other side's words, and refusing to show them
+ * would throw away the one piece of information that says what to fix. So a receiving system whose
+ * refusal reason reads "start this patient on a stimulant trial" would put clinical advice on an
+ * ADHD.ME surface, through the one door in the product that the G7 rails do not cover.
+ * THE TRIGGER: the first surface that renders one of these fields. At that point the rule is that
+ * carried text is shown as ATTRIBUTED QUOTATION — marked as the other system's words, never
+ * rendered as this product's own sentence — and W200's register grows a case for copy this tree
+ * did not author. Nothing renders these today, which is the only reason this is a note.
+ */
 export type ExchangeRecord =
   | { outcome: "acknowledged"; acknowledgedBy: string; theirReference: string; atIso: string }
   | { outcome: "refused"; refusedBy: string; theirReason: string; atIso: string }

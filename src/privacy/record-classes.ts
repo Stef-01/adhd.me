@@ -33,6 +33,48 @@ export interface RecordClass {
   rationale: string;
 }
 
+/**
+ * Modules examined for patient linkage and found to hold none — the other half of an answer.
+ *
+ * W247 ADDED THIS BECAUSE "NOT IN THE REGISTER" MEANT TWO THINGS AT ONCE: somebody looked and it
+ * holds nothing, or nobody looked. `src/interop/disclosure-ledger.ts` sat in the second state for
+ * four units while being the module that records what left this tree about a named patient, and
+ * nothing anywhere said so — the detector scoped it out, so the silence read as a clean result.
+ *
+ * Scoped to the interop lane on purpose. The tree-wide version of this rule is a unit of its own:
+ * 39 modules outside the lane name a patient id in code, nearly all of them pure functions that
+ * pass one through without holding it, and a rule carrying 39 exceptions is weaker than the prose
+ * it replaces. What is bounded here is the lane where the miss actually happened.
+ */
+export interface NoPatientLinkage {
+  module: string;
+  /** Why this module cannot hold patient identity. Held to the same bar as a rationale. */
+  why: string;
+}
+
+export const NO_PATIENT_LINKAGE: readonly NoPatientLinkage[] = [
+  {
+    module: "src/interop/credentials.ts",
+    why: "W242 holds integration names, gate definitions and refusal copy. `CredentialRequest.value` is a secret rather than a patient identifier, and the module neither stores it nor returns it — a refusal carries the integration name and the reason, never the value. There is no patient-shaped field anywhere in it, and no import that reaches one.",
+  },
+  {
+    module: "src/interop/terminology.ts",
+    why: "W238 binds this product's local codes to published concepts. Everything it holds is vocabulary — code systems, concept ids, release provenance, and the work order of what is still unbound. A code describes a KIND of thing, never a person, and the module has no import that reaches a patient record.",
+  },
+  {
+    module: "src/interop/exchange.ts",
+    why: "W244 records what a receiving system said about an exchange: the outcome, who said it, their reference and their reason. Those are facts about a MESSAGE and the system that answered for it. No `ExchangeRecord` variant has a patient field, and the module cannot see the payload an exchange carried — which is precisely why it can say nothing more than whether the other side acknowledged it. Worth noting for a reviewer rather than leaving implicit: an exchange record is ABOUT a disclosure that may concern a patient, so it is evidence for an audit even though it identifies nobody.",
+  },
+  {
+    module: "src/interop/contract.ts",
+    why: "W237 is a conformance harness. It is generic over the domain type, so the records flowing through it may hold patient identity while the module itself declares no field, retains no corpus and returns only violations. That distinction is exactly what W247's security review found it getting wrong in one place: two round-trip diagnostics embedded the first sixty characters of the record. Those now name the record by index, and a test asserts no detail carries record contents on any branch. The classification holds BECAUSE of that fix, not despite it.",
+  },
+  {
+    module: "src/console/interop.ts",
+    why: "W246 assembles the interop console from module-level declarations in the lane — counts of pinned-empty collections, absences carried from the registers that own them, and the credential refusal. It reads no record of any kind and takes no arguments, so there is nothing patient-shaped for it to reach. Listed here rather than left out because it is the SURFACE over the lane, and a reader checking whether anything renders a patient identifier should find the answer written down rather than inferred from the absence of an entry.",
+  },
+];
+
 export const RECORD_CLASSES: readonly RecordClass[] = [
   {
     module: "src/booking/store.ts",
@@ -243,6 +285,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     handling: "derived",
     rationale:
       "W243 holds a patient id, a recipient, the statement put to the patient and their decision — identifying by construction, because a consent record that could not say whose it is would be worthless. `derived` rather than `stored`: there is no store in this module, the functions are pure, and the record lives wherever its caller keeps it. On an access request the patient\'s own consent record is among the first things they are entitled to see, and on erasure it goes with the rest of their record — with one caveat worth writing down rather than discovering: a RECORDED REFUSAL is the instruction not to disclose, so erasing it removes the reason a future disclosure would be blocked. That is a genuine tension between erasure and the protection the refusal provides, and it is the practice\'s call under its own retention obligations rather than this product\'s. THE TRIGGER: the first store that persists these records needs its own entry and its own answer to that question.",
+  },
+  {
+    module: "src/interop/disclosure-ledger.ts",
+    what: "The record of what left the practice about a patient, to whom, when and under what authority",
+    handling: "derived",
+    rationale:
+      "W247 CLASSIFIED THIS BECAUSE THE DETECTOR NEVER WOULD HAVE. W106 finds a record class by looking for `globalThis as {` — a module that can retain data across requests — and W239 has none, so it sat undeclared through its own unit and three units after it. It is the module whose entire subject is WHAT LEFT THIS TREE ABOUT A NAMED PATIENT: every `DisclosureEntry` carries a `DisclosureConsent`, and that consent carries a patient id, so an entry is patient-identifying by construction even though the module holds none of them. A register that decides what holds patient identity by looking for a store keyword decides on a PROXY, and this is the module the proxy misses. `derived` rather than `stored`, on the same reading as the three interop modules beside it: `appendDisclosure` takes a ledger and returns a new one, there is no module-level store and no write side effect, and the entries live wherever their caller keeps them. On an access request a patient is entitled to know what was disclosed about them — this ledger is the only thing that could answer, which is the argument for keeping it rather than for erasing it. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first store that persists a ledger. G9 is unratified and the module says outright that a store which exists is a store something can be written to; when G9 opens, that store is a separate unit, its handling is `stored`, and it inherits the tension already written down under `disclosure-consent.ts` — erasing the record of a disclosure destroys the evidence that it happened, which is the one thing an audit afterwards needs.",
   },
   {
     module: "src/interop/referral-profile.ts",

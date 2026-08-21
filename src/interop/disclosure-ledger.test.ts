@@ -128,6 +128,14 @@ describe("W239 it records what left, to whom and when — and refuses what it ca
       ["no recipient", entry({ recipient: "" }), "no_recipient"],
       ["no basis", entry({ basis: "" }), "no_basis"],
       ["unreadable time", entry({ disclosedAtIso: "last Tuesday" }), "unreadable_timestamp"],
+      // W247: the pattern was anchored only at the start, so anything appended to a valid
+      // timestamp came along — into the entry, and into the comparison that orders the ledger.
+      [
+        "a valid time with text after it",
+        entry({ disclosedAtIso: "2026-08-20T09:15:00+10:00 and also whatever else" }),
+        "unreadable_timestamp",
+      ],
+      ["a date with no time at all", entry({ disclosedAtIso: "2026-08-20" }), "unreadable_timestamp"],
     ];
     const produced = new Set<string>();
     for (const [label, candidate, expected] of cases) {
@@ -160,24 +168,43 @@ describe("W239 it records what left, to whom and when — and refuses what it ca
     expect(first.ledger[0]!.recipient).toBe("Example PHN");
   });
 
-  it("answers what one recipient was told, in the order it left", () => {
+  it("answers what one recipient was told, in the order it left — for ONE practice", () => {
     let ledger: readonly DisclosureEntry[] = [];
-    for (const [id, at, to] of [
-      ["d3", "2026-08-22T09:00:00+10:00", "Example PHN"],
-      ["d1", "2026-08-20T09:00:00+10:00", "Example PHN"],
-      ["d2", "2026-08-21T09:00:00+10:00", "Another Recipient"],
+    // TWO PRACTICES, and that is the whole point of the fixture. W247 found this read filtering on
+    // recipient alone: with every entry under one practice it passed identically before and after
+    // the fix, which is a guard that cannot see the bug it exists for. `prac-b` sends to the SAME
+    // recipient, so a read that forgets the practice returns another practice's disclosure — Y4-1's
+    // shape, and the assertion below is the only thing standing between the two.
+    for (const [id, at, to, practice] of [
+      ["d3", "2026-08-22T09:00:00+10:00", "Example PHN", "prac-a"],
+      ["d1", "2026-08-20T09:00:00+10:00", "Example PHN", "prac-a"],
+      ["d2", "2026-08-21T09:00:00+10:00", "Another Recipient", "prac-a"],
+      ["d4", "2026-08-21T09:00:00+10:00", "Example PHN", "prac-b"],
     ] as const) {
       // Consent per RECIPIENT — the fixture that used one consent for both was refused for the
       // second, which is the model working: consent to one recipient is not consent to another.
       const result = appendDisclosure(
         ledger,
-        entry({ disclosureId: id, disclosedAtIso: at, recipient: to, consent: consentFor(to) }),
+        entry({
+          disclosureId: id,
+          disclosedAtIso: at,
+          recipient: to,
+          practiceId: practice,
+          consent: consentFor(to),
+        }),
       );
       if (result.appended) ledger = result.ledger;
     }
-    expect(disclosuresTo(ledger, "Example PHN").map((e) => e.disclosureId)).toEqual(["d1", "d3"]);
-    expect(disclosuresTo(ledger, "Another Recipient")).toHaveLength(1);
-    expect(disclosuresTo(ledger, "Nobody")).toEqual([]);
+    expect(ledger, "the fixture did not build — nothing below is being tested").toHaveLength(4);
+    expect(disclosuresTo(ledger, "prac-a", "Example PHN").map((e) => e.disclosureId)).toEqual(["d1", "d3"]);
+    expect(disclosuresTo(ledger, "prac-a", "Another Recipient")).toHaveLength(1);
+    expect(disclosuresTo(ledger, "prac-a", "Nobody")).toEqual([]);
+    // The other practice's entry to the same recipient, which the pre-W247 read returned.
+    expect(disclosuresTo(ledger, "prac-b", "Example PHN").map((e) => e.disclosureId)).toEqual(["d4"]);
+    expect(
+      disclosuresTo(ledger, "prac-a", "Example PHN").map((e) => e.practiceId),
+      "a read scoped to one practice returned another practice's disclosure",
+    ).toEqual(["prac-a", "prac-a"]);
   });
 });
 
@@ -192,7 +219,9 @@ describe("W243 the ledger cannot record a disclosure that was not permitted", ()
   });
 
   it("refuses an entry whose consent had been withdrawn before the disclosure", () => {
-    const withdrawn = withdrawDisclosureConsent(consentFor(), "2026-08-10");
+    const withdrawnResult = withdrawDisclosureConsent(consentFor(), "2026-08-10");
+    if (!withdrawnResult.withdrawn) throw new Error("fixture withdrawal refused");
+    const withdrawn = withdrawnResult.consent;
     const result = appendDisclosure([], entry({ consent: withdrawn }));
     expect(result.appended).toBe(false);
     if (!result.appended) expect(result.why).toBe("consent_not_current");

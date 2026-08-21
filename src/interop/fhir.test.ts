@@ -173,6 +173,31 @@ describe("W235 it refuses rather than guessing, and it sends nothing", () => {
         { ...good, appointmentType: { coding: [{ system: APPOINTMENT_TYPE_SYSTEM, code: "home-visit" }] } },
         "unknown_appointment_type",
       ],
+      // W247. Two patients on one Appointment used to READ, and read as the first one — a booking
+      // attributed to a named person on the strength of array order. R4 allows several
+      // participants; what this mapping will not do is choose.
+      [
+        "two patients on one appointment",
+        {
+          ...good,
+          participant: [
+            ...(good.participant ?? []),
+            { actor: { reference: "Patient/someone-else" }, status: "accepted" },
+          ],
+        },
+        "ambiguous_participant",
+      ],
+      [
+        "two practitioners on one appointment",
+        {
+          ...good,
+          participant: [
+            ...(good.participant ?? []),
+            { actor: { reference: "Practitioner/someone-else" }, status: "accepted" },
+          ],
+        },
+        "ambiguous_participant",
+      ],
     ];
     const produced = new Set<string>();
     for (const [label, resource, expected] of cases) {

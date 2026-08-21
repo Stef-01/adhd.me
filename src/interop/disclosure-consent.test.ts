@@ -36,6 +36,13 @@ const mint = (over: Partial<DisclosureConsentInput> = {}): DisclosureConsent => 
   return result.consent;
 };
 
+/** Unwraps a withdrawal the fixture expects to succeed. W247 made withdrawal refusable. */
+const withdrawn = (consent: DisclosureConsent, atIso: string): DisclosureConsent => {
+  const result = withdrawDisclosureConsent(consent, atIso);
+  if (!result.withdrawn) throw new Error(`fixture withdrawal refused: ${result.why}`);
+  return result.consent;
+};
+
 describe("W243 a disclosure without recorded consent cannot be constructed", () => {
   it("cannot be forged: the brand is not exported", () => {
     // The row's "refused by type". A caller with no consent has nothing to pass — and cannot write
@@ -84,8 +91,8 @@ describe("W243 time can only remove consent, never create it", () => {
       { label: "given, no expiry", consent: mint() },
       { label: "refused", consent: mint({ decision: "refused" }) },
       { label: "refused with an expiry", consent: mint({ decision: "refused", expiresOnIso: "2026-09-01" }) },
-      { label: "withdrawn", consent: withdrawDisclosureConsent(mint(), "2026-08-10") },
-      { label: "withdrawn and expired", consent: withdrawDisclosureConsent(mint({ expiresOnIso: "2026-08-05" }), "2026-08-10") },
+      { label: "withdrawn", consent: withdrawn(mint(), "2026-08-10") },
+      { label: "withdrawn and expired", consent: withdrawn(mint({ expiresOnIso: "2026-08-05" }), "2026-08-10") },
       { label: "for another recipient", consent: mint({ recipient: "Somebody Else" }) },
       { label: "expired", consent: mint({ expiresOnIso: "2026-08-05" }) },
     ];
@@ -124,7 +131,7 @@ describe("W243 time can only remove consent, never create it", () => {
     // "given" a year before anybody was asked — time creating consent, backwards. Found by the
     // sweep reading moments before the record date, which a test written against "now" never does.
     for (const at of ["2020-01-01", "2026-07-31"]) {
-      for (const consent of [mint(), mint({ decision: "refused" }), withdrawDisclosureConsent(mint(), "2026-08-10")]) {
+      for (const consent of [mint(), mint({ decision: "refused" }), withdrawn(mint(), "2026-08-10")]) {
         expect(disclosureConsentAt(consent, "Example PHN", at), at).toBe("not_recorded");
       }
     }
@@ -151,6 +158,73 @@ describe("W243 time can only remove consent, never create it", () => {
     // run out, and the distinction lives in the record rather than in a default this module made up.
     expect(mint().expiresOnIso).toBeNull();
     expect(disclosureConsentAt(mint(), "Example PHN", "2099-12-31")).toBe("given");
+  });
+});
+
+describe("W247 the one function that writes a withdrawal cannot break the property", () => {
+  // W243's whole claim is that time can only ever REMOVE consent. Every test above reads that
+  // property off `disclosureConsentAt`, which is the reader. `withdrawDisclosureConsent` is the
+  // WRITER, and it was the one thing in the module able to falsify the claim the module makes.
+
+  it("refuses a withdrawal it cannot date, rather than storing one that never takes effect", () => {
+    // The failure this closes fails OPEN, and only for some inputs, which is why nothing caught it.
+    // Effect is decided by `withdrawnAtIso <= asOfIso` — a STRING comparison. A withdrawal dated
+    // "not a date" compares greater than any ISO date, so it never takes effect and the consent
+    // reads `given` for ever: a patient who withdrew, recorded as having withdrawn, disclosed about
+    // anyway. Garbage that happens to sort low ("") would have failed safe, so a test that tried
+    // one empty string would have called it fine.
+    for (const bad of ["not a date", "", "2026-8-1", "2026-08-01T09:00:00+10:00", "zzz"]) {
+      const result = withdrawDisclosureConsent(mint(), bad);
+      expect(result.withdrawn, `withdrawal accepted an unreadable date: ${JSON.stringify(bad)}`).toBe(false);
+    }
+    // And the one that fails open is genuinely worse than the one that fails safe, which is the
+    // reason this is refused at the writer rather than defended at the reader.
+    expect("not a date" <= "2026-08-21").toBe(false);
+    expect("" <= "2026-08-21").toBe(true);
+  });
+
+  it("takes the earliest withdrawal, so a later one cannot re-grant the days between", () => {
+    const first = withdrawDisclosureConsent(mint(), "2026-08-05");
+    expect(first.withdrawn).toBe(true);
+    if (!first.withdrawn) return;
+    const again = withdrawDisclosureConsent(first.consent, "2026-09-01");
+    expect(again.withdrawn).toBe(true);
+    if (!again.withdrawn) return;
+
+    expect(again.consent.withdrawnAtIso, "a later withdrawal moved the earlier one").toBe("2026-08-05");
+    // Read at a date between the two: before the fix this said `given`, which is consent created by
+    // a second withdrawal — the property inverted by the function that enforces it.
+    expect(disclosureConsentAt(again.consent, INPUT.recipient, "2026-08-20")).toBe("withdrawn");
+    // Withdrawing twice is not an error. A patient repeating themselves has done nothing wrong.
+    expect(again.withdrawn).toBe(true);
+  });
+
+  it("lets an earlier withdrawal replace a later one, because that removes consent sooner", () => {
+    // The property is directional, not "the first call wins": a correction saying the patient
+    // actually withdrew a week earlier takes MORE consent away, which the property permits.
+    const late = withdrawDisclosureConsent(mint(), "2026-09-01");
+    if (!late.withdrawn) throw new Error("fixture refused");
+    const corrected = withdrawDisclosureConsent(late.consent, "2026-08-05");
+    if (!corrected.withdrawn) throw new Error("fixture refused");
+    expect(corrected.consent.withdrawnAtIso).toBe("2026-08-05");
+    expect(disclosureConsentAt(corrected.consent, INPUT.recipient, "2026-08-20")).toBe("withdrawn");
+  });
+
+  it("never turns a withdrawn consent back into a given one, over every pair of dates", () => {
+    // The property itself, swept rather than sampled: for any two withdrawal dates in either order,
+    // the consent that results is withdrawn no later than the earlier of them.
+    const dates = ["2026-08-02", "2026-08-05", "2026-08-20", "2026-09-01"];
+    for (const a of dates) {
+      for (const b of dates) {
+        const one = withdrawDisclosureConsent(mint(), a);
+        if (!one.withdrawn) throw new Error("fixture refused");
+        const two = withdrawDisclosureConsent(one.consent, b);
+        if (!two.withdrawn) throw new Error("fixture refused");
+        const earliest = a < b ? a : b;
+        expect(two.consent.withdrawnAtIso, `${a} then ${b}`).toBe(earliest);
+        expect(disclosureConsentAt(two.consent, INPUT.recipient, earliest)).toBe("withdrawn");
+      }
+    }
   });
 });
 
@@ -186,7 +260,7 @@ describe("W243 expiry, refusal and absence are three different answers", () => {
       mint({ decision: "refused" }),
       mint({ expiresOnIso: "2026-08-05" }),
       mint({ recipient: "Somebody Else" }),
-      withdrawDisclosureConsent(mint(), "2026-08-10"),
+      withdrawn(mint(), "2026-08-10"),
     ]) {
       statuses.add(disclosureConsentAt(consent, "Example PHN", "2026-08-20"));
     }

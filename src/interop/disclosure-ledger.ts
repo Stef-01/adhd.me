@@ -128,7 +128,10 @@ export type AppendResult =
   | { appended: true; ledger: readonly DisclosureEntry[] }
   | { appended: false; why: DisclosureRejection; copy: string };
 
-const ISO_DATETIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
+// W247: anchored at BOTH ends. Unanchored, this accepted "2026-08-20T09:15 whatever else you like"
+// — the trailing text carried into the ledger and into the `localeCompare` that orders it. Seconds
+// and an offset are optional because both are optional in the timestamps the tree already stamps.
+const ISO_DATETIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})?$/;
 
 /**
  * Append one disclosure to a ledger — or refuse it, with a reason.
@@ -172,6 +175,18 @@ export function appendDisclosure(
   // current when the report left and lapsed before somebody wrote it down was a lawful disclosure,
   // and refusing it here would lose the record of a thing that actually happened. The date the
   // entry itself carries is the one that matters.
+  //
+  // W247 CARRIED FINDING. That makes the permission check read a value the CALLER supplies, which
+  // is an authority decision resting on the caller being honest about when it sent the thing. The
+  // exposure is narrower than it first looks — a disclosure backdated to before the consent existed
+  // is already refused, because `disclosureConsentAt` returns `not_recorded` for any moment earlier
+  // than the record — so what remains is backdating INTO a window where consent was live, to slip
+  // past a later withdrawal or expiry. Not fixed here, because the alternative is worse: stamping
+  // the time in this function would make the ledger record when somebody got around to writing the
+  // entry rather than when the disclosure happened, which is the one fact it exists to hold.
+  // THE TRIGGER: the first code path that actually sends something. The timestamp must come from
+  // that send path, stamped where the transmission happens, rather than from a field a caller fills
+  // in afterwards — and at that point this check reads a value no caller chose.
   const permission = mayDisclose(entry.consent, entry.recipient, entry.disclosedAtIso.slice(0, 10));
   if (!permission.permitted) {
     return {
@@ -184,13 +199,28 @@ export function appendDisclosure(
   return { appended: true, ledger: [...ledger, entry] };
 }
 
-/** What the ledger says about one recipient, in the order things left. */
+/**
+ * What the ledger says about one recipient, in the order things left.
+ *
+ * W247 ADDED THE PRACTICE, AND IT IS NOT A CONVENIENCE PARAMETER. This read filtered on recipient
+ * alone across whatever ledger it was handed. Every entry carries a `practiceId` and this was the
+ * one function that ignored it, so the moment a ledger holds two practices' entries — which is what
+ * a ledger is FOR — a caller asking "what did we send to this PHN" gets another practice's
+ * disclosures back. That is Y4-1's shape exactly: the tree's own HIGH finding, a cross-tenant read
+ * created not by a missing check but by a query that never took the tenant. W123's rule is that a
+ * read takes the practice AS THE QUERY rather than filtering after the fact, so it is the first
+ * parameter and there is no overload without it.
+ *
+ * Fixed while the ledger is still empty and the only callers are tests, which is the cheapest this
+ * fix will ever be — and the only reason it is cheap is that nobody has written the store yet.
+ */
 export function disclosuresTo(
   ledger: readonly DisclosureEntry[],
+  practiceId: string,
   recipient: string,
 ): readonly DisclosureEntry[] {
   return ledger
-    .filter((entry) => entry.recipient === recipient)
+    .filter((entry) => entry.practiceId === practiceId && entry.recipient === recipient)
     .sort((a, b) => a.disclosedAtIso.localeCompare(b.disclosedAtIso));
 }
 

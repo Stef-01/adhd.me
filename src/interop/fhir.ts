@@ -168,7 +168,8 @@ export type FhirReadRefusal =
   | "unknown_status"
   | "no_practitioner"
   | "missing_start"
-  | "unknown_appointment_type";
+  | "unknown_appointment_type"
+  | "ambiguous_participant";
 
 export const FHIR_READ_REFUSAL_COPY: Record<FhirReadRefusal, string> = {
   not_an_appointment: "The resource is not an R4 Appointment, so there is nothing here to read as one.",
@@ -179,6 +180,8 @@ export const FHIR_READ_REFUSAL_COPY: Record<FhirReadRefusal, string> = {
   missing_start: "The resource has no readable start time, so it cannot be placed on any day.",
   unknown_appointment_type:
     "The resource codes an appointment type this mapping does not recognise, or codes one under a system it does not know. It is refused rather than read as an ordinary consultation: a long appointment received as a standard one tells the diary the day has more room than it does.",
+  ambiguous_participant:
+    "The resource names more than one patient, or more than one practitioner, and this mapping will not choose between them. R4 permits several participants and a group session is a real thing; what is not real is a single-patient appointment silently attributed to whichever reference happened to come first in the array. Refused rather than resolved: picking one would put a booking in a named person\'s record on the strength of array order.",
 };
 
 export type FhirReadResult =
@@ -232,11 +235,21 @@ export function appointmentFromFhir(resource: unknown, practiceId: string): Fhir
   }
 
   const references = (candidate.participant ?? []).map((p) => p.actor.reference);
-  const practitioner = references.find((r) => r.startsWith("Practitioner/"));
+  // W247: `find` took the FIRST match and said nothing about the rest. A resource carrying two
+  // Patient participants mapped to one appointment attributed to whichever came first in the
+  // array — a wrong-patient attribution decided by array order, with no refusal and no record that
+  // a choice had been made. Every other ambiguity in this mapping is refused by name; this one was
+  // resolved silently. Counted rather than found, and refused when there is more than one.
+  const practitioners = references.filter((r) => r.startsWith("Practitioner/"));
+  const patients = references.filter((r) => r.startsWith("Patient/"));
+  if (practitioners.length > 1 || patients.length > 1) {
+    return { read: false, why: "ambiguous_participant", copy: FHIR_READ_REFUSAL_COPY.ambiguous_participant };
+  }
+  const practitioner = practitioners[0];
   if (practitioner === undefined) {
     return { read: false, why: "no_practitioner", copy: FHIR_READ_REFUSAL_COPY.no_practitioner };
   }
-  const patient = references.find((r) => r.startsWith("Patient/"));
+  const patient = patients[0];
 
   return {
     read: true,

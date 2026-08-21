@@ -116,9 +116,42 @@ export function recordDisclosureConsent(input: DisclosureConsentInput): ConsentR
   };
 }
 
-/** Withdrawal is a patient decision and takes effect from when they made it. */
-export function withdrawDisclosureConsent(consent: DisclosureConsent, atIso: string): DisclosureConsent {
-  return { ...consent, withdrawnAtIso: atIso } as DisclosureConsent;
+/**
+ * Withdrawal is a patient decision and takes effect from when they made it.
+ *
+ * W247 FOUND TWO WAYS THIS FAILED OPEN, both of them the kind that leaves no trace.
+ *
+ * FIRST, THE DATE WAS NEVER CHECKED. `recordDisclosureConsent` validates every date it is given and
+ * this took whatever it was handed. The comparison downstream is a STRING comparison, so a
+ * withdrawal stamped `"not a date"` yields `"not a date" <= "2026-08-21"` === false — the
+ * withdrawal simply does not take effect, silently, and the consent reads `given` forever. A
+ * patient who withdrew is recorded as having withdrawn and disclosed about anyway. Note which way
+ * it fails: garbage that sorts LOW (`""`) would have failed safe, so the bug only shows up for
+ * some malformed inputs, which is how it survives a test that tries one.
+ *
+ * SECOND, IT COULD MOVE A WITHDRAWAL LATER. The function set `withdrawnAtIso` unconditionally, so
+ * calling it again on an already-withdrawn consent with a later date re-granted permission for
+ * everything in between. W243's stated property is MONOTONICITY — time can only ever remove
+ * consent — and the one function that writes the field was the one thing able to break it. The
+ * earliest withdrawal now wins, and a later one is a no-op rather than an error: a patient saying
+ * "I withdraw" twice has not done anything wrong.
+ */
+export type WithdrawalResult =
+  | { withdrawn: true; consent: DisclosureConsent }
+  | { withdrawn: false; why: "unreadable_date"; copy: string };
+
+export function withdrawDisclosureConsent(consent: DisclosureConsent, atIso: string): WithdrawalResult {
+  if (!ISO_DATE.test(atIso)) {
+    return {
+      withdrawn: false,
+      why: "unreadable_date",
+      copy: `${CONSENT_RECORD_REJECTION_COPY.unreadable_date} A withdrawal with an unreadable date is refused rather than stored: the comparison that decides whether it has taken effect is a string comparison, so an unreadable date would leave the withdrawal recorded and inert.`,
+    };
+  }
+  // Monotonic: the earliest withdrawal stands. A second, later withdrawal changes nothing.
+  const effective =
+    consent.withdrawnAtIso !== null && consent.withdrawnAtIso <= atIso ? consent.withdrawnAtIso : atIso;
+  return { withdrawn: true, consent: { ...consent, withdrawnAtIso: effective } as DisclosureConsent };
 }
 
 export type DisclosureConsentStatus =

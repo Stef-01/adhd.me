@@ -123,16 +123,21 @@ export function contractViolations<Domain, Resource>(
   const same = (a: unknown, b: unknown) =>
     a === b || (typeof a === "object" && typeof b === "object" && JSON.stringify(a) === JSON.stringify(b));
 
-  for (const value of corpus) {
+  // W247: these two details used to carry `JSON.stringify(value).slice(0, 60)` — the first sixty
+  // characters of the record itself. Harmless over the synthetic corpora this runs against today,
+  // and a patient-data leak onto an error path the first time a conformance check is pointed at
+  // real records, which is exactly what a conformance check is for. The index identifies the record
+  // for anybody holding the corpus and tells anybody who is not holding it nothing at all.
+  corpus.forEach((value, index) => {
     const back = fromResource(toResource(value).resource);
     if (!back.ok) {
-      add("round_trip", `a record did not survive: ${JSON.stringify(value).slice(0, 60)}`);
-      continue;
+      add("round_trip", `record ${index} did not survive the round trip`);
+      return;
     }
     if (strip(back.value) !== strip(value)) {
-      add("round_trip", `a record changed: ${JSON.stringify(value).slice(0, 60)}`);
+      add("round_trip", `record ${index} changed across the round trip`);
     }
-  }
+  });
 
   const fields = Object.keys(first as Record<string, unknown>);
   for (const field of fields) {

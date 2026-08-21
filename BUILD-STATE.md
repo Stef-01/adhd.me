@@ -6696,7 +6696,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | done | loop-0821a | 2026-08-21T10:26Z | 5ec7878 | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
-| W246 | DONE | loop-0821a | 2026-08-21T10:31Z | 2026-08-21T10:58Z `eb5a603` | [P] Interop console → three kinds of zero, derived; absences above counts; six seeded failures; W200 export-coverage gap measured (111) and recorded, not closed. |
+| W246 | done | loop-0821a | 2026-08-21T10:31Z | eb5a603 | [P] Interop console → three kinds of zero, derived; absences above counts; six seeded failures; W200 export-coverage gap measured (111) and recorded, not closed. |
 | W247 | claimed | loop-0821a | 2026-08-21T11:00Z | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
 | W249 | blocked | — | — | — | Women's health pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.** |
