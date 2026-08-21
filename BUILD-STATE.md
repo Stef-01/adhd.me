@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O170 (the touch floor gets the derived route list) — claimed 2026-08-21T17:29Z by loop-0821a.**
+> Third of the six sweeps O168 measured, and the last of the mechanical ones. O169 took `a11y` and
+> `contrast`; this takes `touch-floor` (O14's 44px hit-area floor, swept since O145/O148).
+> **THE GAP, AND IT IS EXACTLY `contrast`'s.** All 15 public routes are covered; the console array
+> holds 16 of 28. The twelve never swept for touch target size are `/console/capability`,
+> `/capacity`, `/credentials`, `/education`, `/interest`, `/interop`, `/outreach`, `/pathways`,
+> `/responses`, `/results`, `/roi`, `/verticals` — the same twelve `contrast` was missing, because
+> both arrays were copied from the same list on the same day and neither grew afterwards.
+> **THIS IS THE ONE I EXPECT TO FIND SOMETHING**, and saying so before running it is the point of
+> saying it. O148's own row records 61 findings when it first swept the console, all of them real;
+> a 44px floor is the rule a new screen breaks most easily, because a control can look finished at
+> 32px and only a measurement disagrees. O169's two sweeps came back zero twice and that was the
+> honest result there; predicting zero a third time would be assuming the tree is tidy rather than
+> checking. **Whatever the count is, this row reports it, and every finding is fixed rather than
+> excluded** — the sweep's three exclusions (inline links per WCAG 2.5.8, controls out of the tab
+> order, `.sr-only` inputs) are already written and principled, and widening them to absorb a real
+> finding would be tuning the detector to green, which W256 already refused once in this tree.
+> **AND `touch-floor`'s TIMEOUT WILL BE WRONG TOO.** O169 found `contrast` sitting under
+> Playwright's 30s default, survivable only because its console list was short; this spec has the
+> same shape and the same short list, so the same latent failure. Named here in advance rather than
+> discovered as a mystery timeout.
+> Gate: routes taken from `e2e/site-routes.ts` with no hardcoded path array left in the spec; the
+> population floors kept and raised to match the larger sweep so a collapsed derivation cannot pass
+> by measuring nothing; every finding on the twelve new routes FIXED, with the fix in the component
+> rather than in the sweep's exclusions, and any finding I cannot fix named in this row with its
+> route and its measured size; a seeded undersized control caught; `pnpm verify` green.
+
 > **O169 (the two compliance-bearing sweeps get the derived route list) — claimed 2026-08-21T16:41Z
 > by loop-0821a.** O168 measured six sweeps with hardcoded route arrays and fixed none of them,
 > because converting them is not mechanical and swallowing them into that row would have been
