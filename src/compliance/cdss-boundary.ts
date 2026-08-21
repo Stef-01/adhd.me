@@ -492,6 +492,18 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/verticals/declare.ts",
+    operatorCopy: [],
+    notCopy:
+      "W248's declaration path exports two types, an evidence reader and the `declareVertical` factory. It authors NO sentences at all: every string a vertical carries — its name, its member refs, the gate each member waits on — is supplied by the vertical that declares it and passed through untouched, which is why the copy tests live with the declarations rather than here. The one thing worth flagging for a reviewer is what the factory refuses to give a vertical: there is no field for what a member is FOR, because for a clinical pathway that sentence is the content G5 gates, and a shared factory that offered one would have offered it to every vertical at once.",
+  },
+  {
+    module: "src/verticals/undecided.ts",
+    operatorCopy: ["UNDECIDED_NAME_QUESTION"],
+    notCopy:
+      "The remaining exports are the declared membership and the vertical itself. `UNDECIDED_NAME_QUESTION` is the sentence a founder reads about why this vertical has no care area — it describes a CONTRADICTION BETWEEN TWO LEDGER ROWS and a decision that belongs to the company, and it names no patient, no condition and no clinical step. The `waitsOn` sentences on each member describe governance acts: which gate, whose signature, in what order. Nothing here says what any member would contain, and the module's own tests scan it for the care areas the ledger disputes and for any field that could hold what a member says.",
+  },
+  {
     module: "src/console/interop.ts",
     operatorCopy: [
       "INTEROP_HEADLINE",

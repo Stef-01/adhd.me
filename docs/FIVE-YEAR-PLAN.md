@@ -19,9 +19,22 @@
 > - **Units not yet built have been reoriented to ADHD assessment.** Rewriting the future is
 >   planning; rewriting the past would be forgery. Each reoriented unit is marked `[REORIENTED
 >   2026-08-14]` and keeps its ID, its `[P]` marker, its verify gate and its founder gate.
-> - **Three unbuilt units name a clinical vertical that is a product decision, not a translation**
->   (W186, W250, W251). They are marked `[FOUNDER: VERTICAL UNDECIDED]` rather than reassigned to a
->   condition nobody chose. Picking ADHD.ME's second and third care areas is §4 work, not loop work.
+> - **Five unbuilt units name a clinical vertical that is a product decision, not a translation**
+>   (W186, W248, W249, W250, W251). They are marked `[FOUNDER: VERTICAL UNDECIDED]` rather than
+>   reassigned to a condition nobody chose. Picking ADHD.ME's second and third care areas is §4
+>   work, not loop work.
+>
+>   **W248 and W249 were added to this list by W248 on 2026-08-21, and the correction is worth
+>   stating rather than making quietly.** This banner said THREE, and W248/W249 are titled
+>   "Women's health" — which is not a care area awaiting a decision but the pre-reorientation
+>   domain named two paragraphs above, in rows the 2026-08-14 pass did not reach. Worse, the
+>   ledger already contradicts itself about them: W186's row, arguing why it cannot take
+>   `autism-adhd` for itself, says *"W248/W249 already hold autism and taking it here would leave
+>   this unit doing nothing."* So the reorientation reasoned about these two rows as autism, wrote
+>   that reasoning into a neighbouring row, and left the rows themselves naming the old product.
+>   **Which of the two is right is a founder decision and was NOT made here.** W248 shipped its
+>   machinery against a vertical with no name at all, on the precedent W250's own row sets for
+>   exactly this case.
 
 ---
 
