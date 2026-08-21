@@ -586,7 +586,37 @@ expansion unit proposes the gate for the year it is expanding.
 
 ## 6. Years 2–5 — quarterly themes + expansion rule
 
-**Expansion rule:** the last week of each year (W52/W104/W156/W208) — and the first firing of each quarter if the ledger runs dry — expands the next quarter's theme into 13 concrete week-units with verify gates, appended to this plan (§5 extension) with matching rows in `BUILD-STATE.md`. Plans stay accurate because detail is derived just-in-time, informed by everything already built. Founder gates are inherited, never expanded away.
+**Expansion rule (original, W1–W260):** the last week of each year (W52/W104/W156/W208) — and the
+first firing of each quarter if the ledger runs dry — expands the next quarter's theme into 13
+concrete week-units with verify gates, appended to this plan (§5 extension) with matching rows in
+`BUILD-STATE.md`. Plans stay accurate because detail is derived just-in-time, informed by everything
+already built. Founder gates are inherited, never expanded away.
+
+**Expansion rule (renewed by W260, 2026-08-21).** The original rule is kept above rather than
+edited, because it governed everything from W1 to W260 and rewriting it would make the ledger's
+first five years look as though they were built under a rule that did not exist.
+
+It ran out of input rather than decaying: it expands *the next quarter's theme*, and the theme list
+below ends at Y5 Q20. That is what "the five-year arc is spent" means mechanically.
+
+Its successor changes one thing, and the change is the point:
+
+> **The rule asks why the ledger is dry before it makes more work.** Expansion appends a quarter
+> only when the number of `blocked` rows in `BUILD-STATE.md` is **fewer than the 13 units a quarter
+> would add**. Otherwise the expansion unit's output is the *decision*, not another thirteen rows:
+> it names the gates and decisions holding the blocked rows, and appends nothing.
+>
+> Everything else is inherited unchanged — themes expanded just-in-time, verify gates on every
+> unit, matching ledger rows, and **founder gates inherited, never expanded away**.
+
+**Why the change.** The original rule treats a dry ledger as a signal to make more, and dryness has
+two causes it cannot tell apart: everything is built, or everything left is *blocked*. At Y5 close
+those look identical from inside the rule and mean opposite things. A rule that expands regardless
+hides the constraint it should be surfacing — and hides it in the most flattering direction,
+because a full ledger reads as progress while the queue grows at the end nobody is working on.
+
+**What it says today, applied to itself.** 18 blocked rows against a quarter of 13. The rule does
+not expand. See §8.
 
 - **Y2 Q5** Care-gap registers: guideline interval tables as data (diabetes annual cycle, KHA CKD monitoring, GPCCMP quarterly reviews); register-driven eligibility. **Q6** Condition-targeted invitation modules + clinical-safety rails (never diagnostic language; G3 templates per condition). **Q7** Capability graph v1: per-GP case-mix + usefulness telemetry → interest/experience profiles; in-panel routing (right GP for the condition inside the practice). **Q8** Referral-leakage detection + group/multisite reporting + Y2 hardening.
 - **Y3 Q9** Credential registry: evidence vault, verification workflow, Ahpra register checks, expiry tracking. **Q10** Pathway definition engine: inclusion/exclusion/escalation as versioned data + authoring UI for specialist reviewers (content itself = G5). **Q11** GP-to-GP referral rails: structured referral + return-report documents, escalation tracking. **Q12** Education engine v1: case-triggered curation (Claude API), CPD trail, pre-consult pathway updates — informs the GP, never replaces judgement (G7 boundary).
@@ -596,3 +626,62 @@ expansion unit proposes the gate for the year it is expanding.
 ## 7. Definition of done (every unit)
 
 `pnpm verify` green (typecheck · test · build · audit:gate) · verify gate stated in the unit passes · BUILD-STATE updated (done + SHA, or in-progress + continuation notes) · commit message references the unit ID · no founder gate crossed · one-line session log in Stefan-Brain `wiki/_log/` (skip-note in commit message if vault unavailable).
+
+## 8. Year 6 horizon (W260, 2026-08-21) — and why no units are appended
+
+Written from `docs/AUDIT-Y5.md` and `docs/GATE-DOSSIER-Y5.md`, as W260's row requires. Derived
+figures are pinned by `src/quality/year-six-horizon.test.ts`; none is counted by hand.
+
+### The ledger at Y5 close
+
+**246 done · 18 blocked · 0 available.** W260 is the last buildable row in the plan, and when it
+lands the ledger holds no unblocked work at all.
+
+The 18 break down as: **G5** ×8, **G6** ×2, **G8** ×2, **G9** ×2, **G10** ×2, **G3** ×1, and one
+row (W217) blocked on a decision no gate covers, because what stands in its way is a published
+legal notice.
+
+### The renewed rule, applied to itself
+
+18 blocked against a quarter of 13. **The rule does not expand**, and this section is its output.
+
+That is not a judgement that ADHD.ME should stop building. It is the arithmetic the rule was
+renewed to make visible: appending thirteen speculative units in front of eighteen already waiting
+would lengthen the queue at the end nobody is working on, and it would do it while reading as
+progress.
+
+### What the next horizon actually depends on
+
+**The constraint stopped being engineering.** W257's dossier reached the finding that decides this
+section, and it is worth quoting rather than paraphrasing: of G5's eight rows, *"every one of the
+eight rows is a person doing a thing, not a builder writing code."* Y3 shipped the authoring
+workspace (W69), the two-person sign-off (W119) and the branding (W152). Q13 built the vertical
+assembly against synthetic verticals. W248 and W250 built the second and third against verticals
+with **no name at all**, because the ledger contradicted itself about which care area they hold.
+
+There is no mechanism gap left in front of the largest gate in the tree. The same is true, at
+smaller scale, of G8, G9 and G10: each releases exactly two units, and each of those two was
+written to be buildable the day the ruling lands.
+
+### Candidate Y6 quarters, held rather than appended
+
+Named so the horizon is a plan rather than a shrug — and deliberately **not** written as `- **Wn**`
+rows, because a unit that exists in the plan and not in the ledger is the drift `plan-ledger`
+exists to catch. They enter the ledger when the renewed rule permits expansion, and each is stated
+with what it waits on:
+
+| Candidate quarter | Waits on | Why it is not appended now |
+|---|---|---|
+| **Q21** Content authoring at scale — the workspace used, not built | **G5** | Eight rows already wait on this ruling. A ninth would be built against the same absence. |
+| **Q22** Live integration — the first real PMS credential and what breaks | **G1** | No named gate covers a credential for this product's own API either (W254); both arrive together or neither does. |
+| **Q23** First pilot practice — the holdout consent design, live | **G4**, and **G3** for anything sent | W174 already waits on G3. A pilot before a send path is a pilot of the console. |
+| **Q24** Public network launch — directory, referrals, the outside world | **G6** | W185 is the launch and W133 the credential-disclosure question; both are one ruling away and neither is one unit away. |
+
+### The document's own title
+
+This is the **Five-Year** plan, and a Y6 section makes the title inaccurate. **Not renamed here.**
+Retitling a document silently is the class of edit this tree refuses everywhere else — the
+provenance banner at the top of this file exists because a build history edited to claim it was
+always about ADHD would be a fabrication. The same rule applies to a plan edited to claim it was
+always longer than five years. When the horizon is ratified, the title changes in the same commit
+as the ratification, and the change is recorded.
