@@ -143,6 +143,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O146 (the range slider, which O145 recorded rather than fixed) — claimed 2026-08-21T05:40Z
+> by loop-0820s.** O145 swept 61 controls under the 44px floor down to one and named the
+> survivor inside the gate: `/clinicians`'s "Target practice mix" range input at 306x16. It was
+> left because a range's target is its THUMB, whose geometry is engine-specific and not reachable
+> by the padding trick the other twelve fixes used — that needed a visual judgement and a
+> capture, which is a unit rather than a line. This is that unit.
+> The approach is the same one that made O145 change five surfaces without moving anything: grow
+> the control to 44px and pull it back with an equal negative block margin. A native range centres
+> its track within the element's height, so a 44px-tall input renders the SAME thin bar with the
+> same thumb and gains a full-height drag area. That matters more than it sounds on this control
+> specifically: it is a slider on a phone, the one input where a thin target is hardest to hit and
+> where missing it means dragging the page instead.
+> Deliberately NOT touched: the join hero's range, which is `sr-only`. Its visible affordance is
+> the tappable percentage chips beside it, so the input is a screen-reader control and the floor
+> does not apply — the gate already excludes `.sr-only` for that reason and the exclusion stands.
+> Gate: the control measured at 44 both ways, the `ACCEPTED` entry DELETED from
+> `e2e/touch-floor.spec.ts` (the test asserts the exception still fires, so fixing it fails until
+> the entry goes — which is the mechanism working as designed), the sweep green at ZERO under the
+> floor, a before/after capture proving the bar looks identical, `pnpm verify` green.
+
 > **O145 (the 44px floor was enforced by memory; now it is swept) — claimed 2026-08-21T04:55Z
 > by loop-0820s.** O14 set a 44px touch floor and `adhdme-taste` carries it as law. Nothing
 > enforces it: DESIGN-QA shows it asserted per-unit, wherever the unit's author remembered
