@@ -143,6 +143,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W224 (forecast honesty: every forecast scored against what actually happened) — claimed
+> 2026-08-21T07:28Z by loop-0821a.** W223 ships a forecaster and nothing yet knows whether it is
+> any good. The row's sentence is the requirement: *a forecaster that is usually wrong cannot
+> present as one that is usually right.*
+> **THE SCORE IS EASY TO GAME AND THE GAMING IS INVISIBLE, WHICH IS WHY THIS UNIT EXISTS.** W223
+> returns a RANGE, and a range's hit rate is trivially improved by widening it: "between 0 and 6
+> will fill" is right every single time and says nothing. So a hit rate alone would reward the
+> useless forecaster over the useful one, and it would do so while looking like rigour. The score
+> therefore has to carry the WIDTH beside the hit rate, and neither number may be reported without
+> the other — the same move W219 made with the caveat, for the same reason.
+> **BACK-TEST DESIGN, and the trap in it.** Scoring a forecast against the weeks that produced it
+> is not a test, it is a restatement: W223's range is the min and max of the observed rates, so it
+> contains every week it was built from BY CONSTRUCTION and would score 100%. The forecast must be
+> built from weeks 1..k and scored against week k+1, walking forward — and the first prediction can
+> only be made once k reaches W223's floor. Anything else measures the arithmetic against itself.
+> **A HIT IS A CONTAINMENT, NOT A CLOSENESS.** The forecast is a span, so the honest question is
+> whether what happened fell inside it. No distance metric, no MAE, no "how close were we" — those
+> are point-estimate scores, and reaching for one here would smuggle the point estimate W223
+> deliberately refuses back in through the evaluation.
+> **A SCORE OVER TOO FEW PREDICTIONS IS ITSELF A CLAIM** (W196, W215, W222, W223: the same argument
+> a fourth time). Three predictions, two hits, is not "67% accurate". Below a declared floor the
+> score reports its counts and withholds the RATE, which is W72's exact shape.
+> Gate: back-test over the sim, walking forward with no week scored against a forecast that saw it;
+> the width reported beside the hit rate and neither obtainable without the other; the score
+> refuses a rate below its floor; a deliberately useless always-wide forecaster is shown scoring
+> WORSE than the real one on the width, or the score is not measuring what it claims; `pnpm verify`
+> green.
+
 > **W223 (the forecast, stated as an interval and never as a point) — claimed 2026-08-21T07:21Z by
 > loop-0821a.** (Clock read as its own step before this row was written, which is the correction
 > W222's row records.) W222 built the history; this is the thing that reads it. The row's example
@@ -5322,7 +5350,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | done | loop-0821a | 2026-08-21T07:14Z | e9c5e39 | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | done | loop-0821a | 2026-08-21T07:21Z | e0b1ebb | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
-| W224 | available | — | — | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
+| W224 | claimed | loop-0821a | 2026-08-21T07:28Z | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
