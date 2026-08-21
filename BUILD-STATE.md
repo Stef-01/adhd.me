@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W245 (Q19 dossier: G10 priced) — claimed 2026-08-21T10:26Z by loop-0821a.** W216 priced the
+> learned-ranking question and W232 priced what a forecast implies operationally. This prices G10 —
+> **payer and insurer data flows** — which is PROPOSED at W208 and has never been put to the founder
+> as a decision with its cost attached.
+> **THE HONEST HEADLINE IS THAT G10 IS CHEAP TO LEAVE SHUT AND THAT IS NOT THE ARGUMENT FOR SHUTTING
+> IT.** Derived from the ledger rather than asserted: G10 blocks exactly TWO units, W240 and W241,
+> and both are Q19 rows nothing else depends on. So the cost of leaving it unratified is two units
+> of a five-year plan — small, and a dossier that stopped there would be making the founder's
+> decision look easier than it is by measuring only what is convenient to measure.
+> **THE THING WORTH PRICING IS WHAT RATIFYING IT WOULD LET IN, and the plan already says why a payer
+> is different**: it has a financial interest in the individual patient's care AND in whether that
+> care happens at all. G9 covers a body that COMMISSIONS services; that body wants the service
+> delivered. A payer's interest can run the other way on the same patient, and no gate in this tree
+> currently distinguishes those two relationships — which is precisely why G10 was proposed rather
+> than folded into G9.
+> **AND WHAT G10 DOES NOT COVER IS THE HALF A GATE DOSSIER USUALLY OMITS.** Ratifying it would not
+> open credentials (G1), would not permit real patient data (G2), would not settle model vendors
+> (G8), and would not answer W133's cross-boundary credential question (Q9 action 1). A founder who
+> reads "payer flows are approved" and expects an integration would be four gates short of one, and
+> the dossier says so with each gate named.
+> Bounded by a `_LAST_UNIT` constant like W216's and W232's — DOSSIER-1's rule, because a
+> point-in-time document pinned against a live ledger is pinned against a moving target.
+> Gate: the blocked count derived from the ledger and pinned, not typed; the four gates G10 does NOT
+> release each named and each checked against the plan's own text; the "payer differs from
+> commissioner" argument quoted from the plan rather than paraphrased; `_LAST_UNIT` bound present;
+> the dossier takes no position, asserted; `pnpm verify` green.
+
 > **W244 (interop error semantics) — claimed 2026-08-21T10:17Z by loop-0821a.** W170's rule at the
 > one boundary where this tree genuinely cannot see the other side: **a failed or unacknowledged
 > exchange is `unknown`, never "delivered".**
@@ -6534,7 +6561,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
-| W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
+| W245 | claimed | loop-0821a | 2026-08-21T10:26Z | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
 | W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
