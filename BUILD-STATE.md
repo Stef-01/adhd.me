@@ -143,6 +143,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W252 (vertical scaling: the registers at N verticals) — claimed 2026-08-21T11:52Z by
+> loop-0821a.** Order-independence and a stated time budget over 20 synthetic verticals, with the
+> budget asserted in the test body — W48's shape, which measured first and wrote the observed
+> figure next to the ceiling rather than picking a round number and hoping.
+> **THE UNIT ARRIVES ONE UNIT AFTER I CHANGED A FOLD IN THIS EXACT MACHINERY, WHICH IS EITHER
+> LUCKY OR THE POINT.** W250 moved the completeness report's grouping key from the member's KIND to
+> the ACT it waits on, and grouping is where order-dependence hides: a `Map` iterates in insertion
+> order, insertion order here is declaration order, and the sort that follows tie-breaks on the
+> group key. I believe that is a total order. **W167's whole existence is the argument that
+> believing is not the control** — eight historical instances, and the register was built because a
+> rule depending on the next reviewer remembering it is the control this tree has watched fail. So
+> the new fold gets swept rather than reasoned about.
+> **WHAT ORDER-INDEPENDENCE MEANS HERE IS FOUR ORDERS, NOT ONE.** A vertical's answer must not
+> depend on: the order its MEMBERS were declared in; the order the VERTICALS themselves arrive in;
+> the order the EVIDENCE arrives in (which pathway cleared its gate first); or the order of the
+> optional `known` pool. Testing one and calling it order-independence is the shape of a guard that
+> passes while the defect lives in a different argument — and W157 already stakes a specific claim
+> in this space that is worth checking rather than trusting: reordering the same members is the
+> SAME vertical, because identity is membership and the hash sorts. That is a property with a test
+> at N=1; this is the same property at N=20 with everything shuffled.
+> **AND A TIME BUDGET IS A CLAIM ABOUT THE FUTURE, SO THE HONEST FORM STATES ITS BASIS.** W48's row
+> reads "p95 week 37ms (budget 150)" — the measurement and the ceiling side by side, so a reader
+> can see the headroom rather than infer it, and so a later slowdown is legible as "we spent the
+> headroom" rather than as a mysterious red test. W196's rule (a basis with every figure) is the
+> same instinct one lane over. A budget with no observed figure beside it is a number somebody
+> picked.
+> **THE ONE THING THIS UNIT MUST NOT DO IS PASS BY MEASURING NOTHING.** Twenty synthetic verticals
+> that are twenty copies of one bundle would run fast, shuffle identically and prove nothing. They
+> differ in size, in member mix, in how much evidence they have, and the population is pinned so a
+> future edit cannot quietly shrink it.
+> Gate: 20 synthetic verticals differing in shape, pinned non-vacuously; every answer the machinery
+> gives — assembly, refusal membership, the completeness report, the act grouping, the hash —
+> identical under shuffled members, shuffled verticals, shuffled evidence and shuffled pool;
+> W167's register consulted for the fold W250 added and its disposition recorded there rather than
+> argued in a comment; a time budget for the whole 20-vertical sweep asserted IN THE TEST BODY with
+> the observed figure beside it, W48's shape; `pnpm verify` green.
+
 > **W250 (third-vertical assembly, machinery only) — claimed 2026-08-21T11:35Z by loop-0821a.**
 > Same undecided-vertical posture as W248, and the row already states it: the machinery half is
 > domain-neutral, *"a builder claiming this must not name a condition."* So a third vertical, named
@@ -6919,7 +6956,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W249 | blocked | — | — | — | Pathway content for the second care area → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W248: this row was titled "Women's health", the pre-reorientation domain, while W186's row states W248/W249 hold autism. **[FOUNDER: VERTICAL UNDECIDED.]** Title corrected by W248 2026-08-21; the care area itself is a founder decision and was not made by the loop. |
 | W250 | done | loop-0821a | 2026-08-21T11:35Z | 8a52c57 | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
-| W252 | available | — | — | — | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
+| W252 | claimed | loop-0821a | 2026-08-21T11:52Z | — | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
 | W253 | available | — | — | — | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | available | — | — | — | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | available | — | — | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
