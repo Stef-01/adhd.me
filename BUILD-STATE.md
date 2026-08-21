@@ -179,6 +179,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > reader meets it; the detector extended if and only if a measurement supports it rather than tuned
 > until it agrees with me (W256's rule); the notice regenerated and asserted to render what the
 > register holds; seeded failures; `pnpm verify` green.
+>
+> **DONE 2026-08-21T13:13Z at `c7ee386`.**
+> **THE NOTICE HALF NEEDED NOTHING, AND SAYING SO IS BETTER THAN ADDING A TEST TO LOOK BUSY.** W201
+> already renders the page from the register and already asserts it with a MUTATION check — its own
+> comment records that asserting the import alone passed with the list replaced by `[].map`. That
+> holds; I checked rather than assumed, and changed nothing.
+> **THE DETECTOR WAS DECIDING WHAT MAY BE ANSWERED, NOT ONLY WHAT MUST BE — AND THAT IS THE DEEPEST
+> VERSION OF THIS SESSION'S PATTERN.** Probing the complement of W201's two proxies found **eleven
+> modules neither catches, eight with no entry in EITHER direction.** Then the register's
+> both-directions rule bit: declaring a module the detector does not find is rejected as
+> OVER-declaration — the same strictness that corrected me at W253 — so **a module the proxy missed
+> could not even be written down as considered.** Fourth register this session to fail in the
+> direction its author was not facing (W200, W106, W167, now W201), and the first where the blind
+> spot also silenced the record.
+> **THE MODULE THE WIDENING WAS FOR IS THE FINDER'S RANKING.** `rankClinicians` takes a person's
+> free-text request on `/finder` — a public patient-facing surface — and returns an ordered list of
+> **named clinicians**. It names no `patientId` because **the searcher is not a patient of ours
+> yet**, which is precisely the case a patient-id proxy cannot see.
+> **I CLASSIFIED IT AS NOT-A-DECISION AND WROTE THE ARGUMENT RATHER THAN THE CONCLUSION**, because
+> the reading is genuinely arguable and the value of writing it down is that the next reader can
+> disagree. It orders CLINICIANS rather than people, concludes nothing about the searcher, retains
+> nothing, and its entire input is words typed seconds earlier. The line it sits nearest is the
+> notice's *"No inference about you. Nothing is concluded from your details that you or your
+> practice did not record"* — and the honest reading is that a query IS something the person just
+> recorded. **The module already knew it was near that line**: its own comment refuses a general
+> relevance model because that would be *"a quality ranking of named clinicians derived from
+> inference"*. So the tree had reasoned about this and never written the conclusion into the
+> register that governs a published legal notice. Three triggers move it, and if any fires **the
+> notice gains an entry — a founder decision under W217's precedent, not a builder's.**
+> **AND THE WIDENING PAYS FOR ITSELF IN A TEST RATHER THAN IN A COMMENT.** The original four nouns
+> and the eleven added ones are run SEPARATELY, and the added ones must find modules the originals
+> do not. Eleven genuinely decision-shaped modules, each now carrying a rationale — **contrast
+> W247's measurement of W106**, where a blanket rule would have carried 39 exceptions and the rule
+> itself was wrong. W256's rule applied: extend where a measurement supports it, never tune until
+> the pattern agrees with you.
+> **Two seeded failures**: the detector narrowed back to W201's four nouns, and the finder ranking
+> left unclassified. A third test pins that the entry carries the TENSION — the line, the notice's
+> stake, the deferral — rather than only the verdict.
+> Verification: `pnpm verify` green (253 files, 4048 tests, audit gate 2 accepted / 0 unaccepted);
+> `e2e/ownership-disclosure` 1/1. Vault log skipped — Stefan-Brain unreachable.
 
 > **W257 (five-year gate dossier) — claimed 2026-08-21T12:53Z by loop-0821a.** Every decision still
 > outstanding, priced, with counts derived from the ledger and pinned row-by-row — W207's shape.
@@ -7398,7 +7438,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | done | loop-0821a | 2026-08-21T12:53Z | 2e60862 | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
-| W258 | claimed | loop-0821a | 2026-08-21T13:02Z | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
+| W258 | done | loop-0821a | 2026-08-21T13:02Z | c7ee386 | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
 | W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
 
