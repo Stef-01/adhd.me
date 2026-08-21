@@ -143,6 +143,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W258 (the ADM register at five years) — claimed 2026-08-21T13:02Z by loop-0821a.** W201's
+> decision register RE-DERIVED against everything Y5 added, **not assumed to have survived**, and
+> the published notice regenerated from it.
+> **THE NOTICE IS ALREADY GENERATED, SO THE UNIT IS THE RE-DERIVATION.** `app/privacy/
+> automated-decisions/page.tsx` renders `AUTOMATED_DECISIONS` and `NEVER_AUTOMATED` directly —
+> W201 built it that way and it has held. What has NOT been checked is whether the register still
+> finds everything, and "not assumed to have survived" is the row telling me not to take a green
+> suite as an answer.
+> **W201's DETECTOR IS TWO PROXIES, AND THIS SESSION HAS FOUND THREE REGISTERS WRONG IN EXACTLY
+> THAT WAY.** It flags a module that names `patientId` OR exports `^export type *(Reason|Refusal|
+> Exclusion|Verdict)`. Probing the complement — decision-shaped exports under any other noun —
+> finds **eleven modules neither proxy catches**, and **eight of them have no entry in the register
+> in EITHER direction**: not in `AUTOMATED_DECISIONS`, not in `NOT_A_DECISION`. The register is
+> internally consistent. Nobody has ever answered the question about them.
+> **AND ONE OF THE EIGHT IS SQUARELY THE NOTICE'S SUBJECT MATTER.** `src/demo/clinicians.ts`
+> exports `RankBand`, `MatchQuality` and `CapacityGrade`, and `rankClinicians(query, roster)` takes
+> **a person's free-text request** and returns an ordered list of **named clinicians**. That is
+> software deciding, from what somebody said about themselves, which clinicians they see and in what
+> order — on `/finder`, a public patient-facing surface. It names no `patientId` because the person
+> is not a patient of ours yet, which is precisely why the proxy misses it.
+> **WHETHER IT BELONGS IN THE NOTICE IS A REAL QUESTION AND I AM NOT ASSUMING THE ANSWER.** The
+> never-automated list says *"No inference about you. Nothing is concluded from your details that
+> you or your practice did not record."* `readNeeds` parses free text into need signals and
+> `scoreAgainst` scores clinicians on them — inference in the ordinary sense, from details the
+> person did record, in the moment they typed them. The module already knows it is near a line:
+> its own comment refuses to build a general relevance model because that would be *"a quality
+> ranking of named clinicians derived from inference, which W83 refused internally and which is
+> worse in public."* **So the tree has reasoned about this and never written the conclusion into
+> the register that governs a published legal notice.** It may be correctly out of scope — but that
+> scoping is nowhere, and an unwritten scope is indistinguishable from an oversight.
+> Gate: the detector's complement measured and recorded, not just the register re-run; every one of
+> the eight given an answer in one direction or the other, with a rationale held to the register's
+> own bar; `src/demo/clinicians.ts` decided explicitly and the reasoning written where the next
+> reader meets it; the detector extended if and only if a measurement supports it rather than tuned
+> until it agrees with me (W256's rule); the notice regenerated and asserted to render what the
+> register holds; seeded failures; `pnpm verify` green.
+
 > **W257 (five-year gate dossier) — claimed 2026-08-21T12:53Z by loop-0821a.** Every decision still
 > outstanding, priced, with counts derived from the ledger and pinned row-by-row — W207's shape.
 > **AND W207's SHAPE INCLUDES W207's BUG, WHICH IS ALREADY WAITING FOR THIS UNIT WITH A TRIGGER
@@ -7361,7 +7398,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | done | loop-0821a | 2026-08-21T12:53Z | 2e60862 | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
-| W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
+| W258 | claimed | loop-0821a | 2026-08-21T13:02Z | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
 | W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
 
