@@ -6408,7 +6408,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W239 | done | loop-0821a | 2026-08-21T09:51Z | e08ba06 | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
-| W242 | done | loop-0821a | 2026-08-21T09:58Z | PENDING | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
+| W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | available | — | — | — | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
