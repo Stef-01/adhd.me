@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O155 (FOUNDER-DIRECTED — the team page goes behind a gate) — claimed 2026-08-21T11:50Z by
+> loop-0820s.** "also make team hidden at the moment" … "as we are still building and we dont know
+> who will be on it finally".
+> **The reason changes the implementation, so it is worth stating.** "Hidden" could have meant
+> unlinking the door and leaving the route up. It cannot mean that here: if the roster of PEOPLE is
+> not settled, then a live `/about` still publishes four named individuals' faces, roles and
+> affiliations to anybody with the URL — and one of them was added an hour ago with no photograph
+> and no role. Unlinking would hide the door and leave the room open. So the route itself stops
+> serving.
+> Built as a GATE RATHER THAN A DELETION, the shape this tree already uses for `SHIPPED_DIRECTORY_PROFILES`
+> behind G6: one exported boolean with the founder's own reason and date beside it, `notFound()`
+> when it is false, and the page, the data and every plate left exactly where they are. Turning the
+> team back on is one word, not a rebuild — which is what "at the moment" asks for.
+> Four things move with it, and missing any one leaves the page half-hidden: the footer's "About us"
+> door, the landing's own link, `/about` in `sitemap.ts` (a hidden page that still advertises itself
+> to crawlers is not hidden), and the W102 surface census plus the compliance dossier row, which
+> must say the route is gated rather than describe a page nobody can reach.
+> The e2e that asserts "About us is its own door" inverts: it now pins that the door is GONE and
+> the route 404s, so the gate cannot be removed by accident. The O152 assertions about Saif's plate
+> move behind the same gate rather than being deleted, because they are the proof the plate is
+> right for the day it comes back.
+> Gate: `/about` 404s, no link to it anywhere, absent from the sitemap, census and dossier updated,
+> the gate flipped back locally once to prove the page still renders correctly behind it, `pnpm
+> verify` green and the public sweeps green.
+
 > **O154 (FOUNDER-DIRECTED — the word "co-founder" comes out, and the disclosure survives it) —
 > claimed 2026-08-21T11:25Z by loop-0820s.** "remove term cofounder everywhere, as its a team".
 > The word appears in TWO PLACES THAT ARE NOT THE SAME THING, and treating them alike would be a
