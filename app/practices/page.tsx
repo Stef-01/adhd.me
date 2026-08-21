@@ -43,7 +43,7 @@ export default function PracticesPage() {
 
         <section className="border-t border-stone-100 py-16">
           <h2 className="max-w-2xl text-2xl font-semibold tracking-tight">{C.problem.heading}</h2>
-          <p className="mt-4 max-w-2xl text-stone-600">{C.problem.body}</p>
+          <p className="mt-4 max-w-xl text-stone-600">{C.problem.body}</p>
         </section>
 
         <section id="practice-story" className="border-t border-stone-100 py-20 sm:py-24">
@@ -123,7 +123,7 @@ export default function PracticesPage() {
               ))}
             </div>
 
-            <p className="mt-4 text-xs leading-5 text-stone-500">
+            <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
               {C.practiceStory.evidenceNote}{" "}
               <a className="underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/fampra/cmu028">
                 Gibson-Helm et al.
@@ -145,7 +145,7 @@ export default function PracticesPage() {
             <div>
               <p className="leading-7 text-stone-600">{C.practiceStory.pathwayBody}</p>
               <p className="mt-4 text-sm font-medium text-stone-800">{C.practiceStory.pathwayNote}</p>
-              <p className="mt-4 text-xs leading-5 text-stone-500">
+              <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
                 Current pathways:{" "}
                 <a className="underline underline-offset-2 hover:text-stone-900" href="https://www.racgp.org.au/FSDEDEV/media/documents/Faculties/SI/2026-RACGP-Specific-Interests-groups.pdf">
                   RACGP Specific Interests 2026
@@ -174,7 +174,7 @@ export default function PracticesPage() {
 
         <section id="measurement" className="border-t border-stone-100 py-16">
           <h2 className="max-w-2xl text-2xl font-semibold tracking-tight">{C.measurement.heading}</h2>
-          <p className="mt-4 max-w-2xl text-stone-600">{C.measurement.body}</p>
+          <p className="mt-4 max-w-xl text-stone-600">{C.measurement.body}</p>
           <ul className="mt-6 flex flex-col gap-2">
             {C.measurement.points.map((point) => (
               <li key={point} className="flex items-start gap-2 text-sm text-stone-700">
@@ -187,7 +187,7 @@ export default function PracticesPage() {
 
         <section className="border-t border-stone-100 py-16">
           <h2 className="max-w-2xl text-2xl font-semibold tracking-tight">{C.compliance.heading}</h2>
-          <p className="mt-4 max-w-2xl text-stone-600">{C.compliance.body}</p>
+          <p className="mt-4 max-w-xl text-stone-600">{C.compliance.body}</p>
         </section>
 
         <section className="border-t border-stone-100 py-20">

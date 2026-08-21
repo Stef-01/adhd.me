@@ -4038,7 +4038,11 @@ textarea:focus-visible {
 }
 
 .community-form-privacy {
-  margin: 12px 0 0;
+  /* O135: 58ch. A centred line at 98 characters is the hardest kind to read — the eye has to
+     find a new start position that moves on every line — and this one is the consent sentence
+     under a form, which is exactly the text a person is entitled to actually read. */
+  max-width: 58ch;
+  margin: 12px auto 0;
   color: var(--community-muted);
   font-size: 0.625rem;
   line-height: 1.5;
@@ -5109,7 +5113,16 @@ textarea:focus-visible {
 .join-form input[aria-invalid="true"] { border-color: var(--accent); }
 .join-form small { display: block; margin-top: 6px; font-size: 0.78125rem; line-height: 1.5; }
 .join-form small[role="alert"] { color: var(--accent); }
-.join-hint { margin: 10px 0 0; color: var(--faint); font-size: 0.78125rem; line-height: 1.55; }
+/* O135: 62ch, measured. These hints ran 110 characters per line on a desktop viewport — the
+   widest text on the page and the smallest type on it, which is the pairing O129 found on the
+   profile and fixed there. A hint nobody finishes reading is a hint that did not need writing. */
+.join-hint {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  color: var(--faint);
+  font-size: 0.78125rem;
+  line-height: 1.55;
+}
 .join-field-error { color: var(--accent); font-size: 0.78125rem; }
 
 /* The care areas sit under three headings — ADHD, depression & anxiety, other mental health — so a

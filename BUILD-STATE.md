@@ -139,6 +139,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > number becomes a change. Gate: every public route measured at both viewports with the numbers
 > written down, fixes only where provable, a DESIGN-QA entry carrying the whole table so the
 > next sweep has a baseline, e2e green, full `pnpm verify` green.
+> DONE 2026-08-21. Fourteen public routes measured at both viewports. **Mobile was clean
+> everywhere** — 0 blocks over 75 characters per line, no broken images — so every defect was
+> desktop-only, which is what a mobile-first stylesheet plus an unconstrained desktop container
+> produces.
+> **The cluster was the four policy pages**, which share the identical container `mx-auto
+> max-w-2xl px-6 py-16`: 62 of their 74 substantial blocks ran at 85 cpl. One decision, repeated
+> in four files, applied to the densest text in the product read by the most tired people. All
+> four now measure 72. Three strays fixed with them: /practices' evidence footnote at **155 cpl,
+> the worst number on the site** — the smallest type on the page carrying a citation — plus the
+> join form's hints at 110 and the community consent line at 98.
+> **THE CAPS ARE PER FONT SIZE, NOT PER CONTAINER, and the measurements forced that.**
+> `max-w-2xl` is 85 cpl at `text-sm` and 107 at `text-xs`: the same class is a different measure
+> depending on what sits in it, so /practices needed `max-w-md` for footnotes and `max-w-xl` for
+> prose. A width is not a measure until you know the type size — which is the same lesson O129
+> learned from `ch` measuring 79 actual characters at 66ch, arriving from the other direction.
+> The consent line under the community form was 98 cpl AND CENTRED, the hardest combination to
+> read because the eye must find a new start position that moves every line — and it is the one
+> sentence on that page a person is most entitled to actually read.
+> Restraint held where the claim promised it: accent counts were 0–2 everywhere except
+> /clinicians/join at 9, and those nine are a form's error and hint affordances rather than
+> decoration. Left alone with the measurement recorded, because O130's rule is that accent marks
+> the value that changes, and on a form that is the field needing attention. It would need the
+> form's own unit.
+> Gate met: the full before/after table in DESIGN-QA as a baseline for the next sweep, **the
+> whole e2e suite green (238 tests)**, `pnpm verify` green 3591.
 
 > **O134 (the capture harness lies, twice in one day) — claimed 2026-08-20T23:48Z by
 > loop-0820s.** Auditing the new `/about` route, my capture showed Stefan Thottunkal's plate as

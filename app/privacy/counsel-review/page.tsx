@@ -17,7 +17,7 @@ export const metadata = {
 
 export default function CounselReviewPage() {
   return (
-    <main className="mx-auto max-w-2xl px-6 py-16">
+    <main className="mx-auto max-w-xl px-6 py-16">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Privacy", href: "/privacy" }, { label: "Legal check", href: "/privacy/counsel-review" }]} />
       <h1 className="mt-6 text-3xl font-semibold tracking-tight">The legal check</h1>
       <div className="prose prose-stone mt-8 space-y-6 text-stone-700">

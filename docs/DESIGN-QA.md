@@ -1050,3 +1050,49 @@ Captures: qa/about-o134/ (the new /about route at 390 and 1280, taken through th
   page with nothing wrong with it, which is the same shape as O127's reveal probe reporting 24
   false findings from a guessed population. Two measurement harnesses lying in one day is a
   pattern, not bad luck.
+
+## O135 — the site-wide measure sweep, and its baseline table (2026-08-21)
+
+The founder's brief was "visually coherent across site". O129 audited the profile, O130 the
+accent across the finder flow, O134 the new /about — three surfaces out of fifteen. This measured
+the rest, and it was worth waiting for O134: before that unit the tooling produced confident
+false findings, and a fourteen-route sweep of those would have been unusable.
+
+**Measured per route at 390 and 1280:** characters per line on every block over 90 characters,
+elements carrying the accent token, and images that fail to render once the page is walked.
+
+### The result
+
+- **Mobile was clean everywhere** — 0 blocks over 75 cpl on all fourteen routes, no broken
+  images. Every defect below was desktop-only, which is what a mobile-first stylesheet plus an
+  unconstrained desktop container produces.
+- **Desktop had one cluster and three strays.** The four policy pages — /privacy, /terms,
+  /privacy/automated-decisions, /privacy/counsel-review — share the identical container
+  `mx-auto max-w-2xl px-6 py-16`, which at `text-sm` measures 85 cpl. 62 of their 74 substantial
+  blocks were over the range. One decision, repeated in four files, on the densest text in the
+  product read by the most tired people.
+
+| Route | before (blocks over 75 cpl) | after |
+|---|---|---|
+| /privacy | 18 of 20 (85 cpl) | 0 of 18 (72 worst) |
+| /privacy/automated-decisions | 23 of 29 (85) | 0 of 23 (72) |
+| /terms | 12 of 25 (85) | 0 of 12 (72) |
+| /privacy/counsel-review | 9 of 23 (85) | 0 of 9 (72) |
+| /practices | 4 of 42 (155 worst) | 0 of 21 (71) |
+| /clinicians/join | 2 of 12 (110) | 0 of 5 (74) |
+| / | 1 of 25 (98) | 0 of 11 (72) |
+
+- [x] **The caps are per font size, not per container**, which the measurements forced.
+  `max-w-2xl` gives 85 cpl at `text-sm` and 107 at `text-xs` — the same class is a different
+  measure depending on what sits in it, so /practices' footnotes needed `max-w-md` where its
+  prose needed `max-w-xl`. A width is not a measure until you know the type size.
+- [x] **The worst number on the site was 155 cpl** — a full-width `text-xs` evidence footnote on
+  /practices, the smallest type on the page carrying a citation. Now 71.
+- [x] **`.community-form-privacy` was 98 cpl and CENTRED**, which is the hardest combination to
+  read: the eye has to find a new start position that moves on every line. It is the consent
+  sentence under a form — the text a person is most entitled to actually read. 58ch and still
+  centred.
+- [x] Accent counts were low everywhere (0–2) except /clinicians/join at 9. Left alone and
+  recorded: it is a form, its nine are field-level error and hint affordances rather than
+  decoration, and O130's rule is that accent marks the value that changes — which on a form is
+  the field that needs attention. Changing it would need the form's own unit.
