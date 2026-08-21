@@ -219,9 +219,9 @@ test("choosing a roster language restarts listening in it, with the honesty line
   await expect(note).toContainText(/reads English/i);
 
   // The design record: the listening screen with the picker and the honesty line.
-  await page.screenshot({ path: "qa/voice-o59/listening-hindi-desktop.png" });
+  await page.screenshot({ path: "qa/_runs/voice-o59/listening-hindi-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.screenshot({ path: "qa/voice-o59/listening-hindi-mobile.png" });
+  await page.screenshot({ path: "qa/_runs/voice-o59/listening-hindi-mobile.png" });
 
   // Spoken words still land in the box and still search — no dead end behind the picker.
   await page.evaluate(() => (window as any).__speech.say("मुझे ADHD जांच चाहिए", true));

@@ -108,11 +108,11 @@ test("a psychographic ask ranks, explains, and shows its provenance on screen (O
   await searchFor(page, "explain things in plain language and someone who respects my faith");
   const rows = page.locator(".clinician-row");
   await expect(rows.first().getByText("Helps it make sense").or(rows.first().getByText("Understands your background"))).toBeVisible();
-  await page.screenshot({ path: "qa/matching-o30/01-psychographic-ask-ranked.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/matching-o30/01-psychographic-ask-ranked.png", fullPage: true });
 
   await rows.first().click();
   await expect(page.getByText(/from your words/).first()).toBeVisible();
-  await page.screenshot({ path: "qa/matching-o30/02-psychographic-provenance.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/matching-o30/02-psychographic-provenance.png", fullPage: true });
 });
 
 test("the neurodiversity ask is read, and unanswered honestly while nobody declares it (O30)", async ({ page }) => {
@@ -122,7 +122,7 @@ test("the neurodiversity ask is read, and unanswered honestly while nobody decla
   await searchFor(page, "a neurodiversity affirming doctor who explains in plain language");
   await expect(page.locator(".clinician-list")).toBeVisible();
   await expect(page.locator(".clinician-row").getByText("Strengths-focused")).toHaveCount(0);
-  await page.screenshot({ path: "qa/matching-o30/03-neurodiversity-honest-nondeclaration.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/matching-o30/03-neurodiversity-honest-nondeclaration.png", fullPage: true });
 });
 
 test("a triple ask — language, psychographic, care — reads all three families at once (O33)", async ({ page }) => {
@@ -134,7 +134,7 @@ test("a triple ask — language, psychographic, care — reads all three familie
   await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
   await page.locator(".clinician-row").first().click();
   await expect(page.getByText("Urdu-speaking").first()).toBeVisible();
-  await page.screenshot({ path: "qa/matching-o30/04-triple-ask-language-psychographic-care.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/matching-o30/04-triple-ask-language-psychographic-care.png", fullPage: true });
 });
 
 test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena first (O34)", async ({ page }) => {
@@ -148,12 +148,12 @@ test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena 
   await expect(
     page.locator(".clinician-row").first().locator(`img[src*="anusha-saxena"]`),
   ).toBeVisible();
-  await page.screenshot({ path: "qa/matching-o34/01-woman-gp-ranked-first.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/matching-o34/01-woman-gp-ranked-first.png", fullPage: true });
   await page.locator(".clinician-row").first().click();
   await expect(page.getByText("Dr Anusha Saxena").first()).toBeVisible();
   await expect(page.getByText(/from your words/).first()).toBeVisible();
   await expect(page.locator(`.profile-screen img[src*="anusha-saxena"], img[src*="anusha-saxena"]`).first()).toBeVisible();
-  await page.screenshot({ path: "qa/matching-o34/02-anusha-profile.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/matching-o34/02-anusha-profile.png", fullPage: true });
 
   // O44: her booking path, walked to the handoff. The bar is a fixed overlay, so the evidence
   // here is a viewport shot — fullPage screenshots drop fixed elements, which is how the last
@@ -161,7 +161,7 @@ test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena 
   // screen once said "held by his practice" to a she/her clinician.
   const bookingBar = page.locator(".profile-footer");
   await expect(bookingBar).toBeVisible();
-  await page.screenshot({ path: "qa/matching-o34/03-anusha-booking-bar.png" });
+  await page.screenshot({ path: "qa/_runs/matching-o34/03-anusha-booking-bar.png" });
   await bookingBar.getByRole("button", { name: "See available times" }).click();
   const bookingCopy = await page.locator(".booking-content").textContent();
   expect(bookingCopy).toContain("held by the practice");
@@ -170,5 +170,5 @@ test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena 
     "href",
     "/go/anusha-saxena?src=finder",
   );
-  await page.screenshot({ path: "qa/matching-o34/04-anusha-booking-screen.png" });
+  await page.screenshot({ path: "qa/_runs/matching-o34/04-anusha-booking-screen.png" });
 });

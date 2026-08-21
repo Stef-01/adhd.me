@@ -46,9 +46,9 @@ test.describe("the join page opens with the mix, not the form", () => {
   test("screenshots for the design record", async ({ page }) => {
     await page.goto("/clinicians/join");
     await page.waitForTimeout(400);
-    await page.screenshot({ path: "qa/join-o24/join-hero-desktop.png", fullPage: false });
+    await page.screenshot({ path: "qa/_runs/join-o24/join-hero-desktop.png", fullPage: false });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.waitForTimeout(300);
-    await page.screenshot({ path: "qa/join-o24/join-hero-mobile.png", fullPage: false });
+    await page.screenshot({ path: "qa/_runs/join-o24/join-hero-mobile.png", fullPage: false });
   });
 });

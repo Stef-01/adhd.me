@@ -37,7 +37,7 @@ test("every asked facet on the console names the words that reached it (O126)", 
   }
 
   await page.locator("section[aria-labelledby='audit-h']").screenshot({
-    path: "qa/provenance-o126/asked-desktop.png",
+    path: "qa/_runs/provenance-o126/asked-desktop.png",
   });
 });
 

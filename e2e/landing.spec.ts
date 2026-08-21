@@ -42,10 +42,10 @@ test("About us is its own door: the footer button opens /about, titled Team (O90
   await expect(page.getByAltText(/Dr Anusha Saxena, co-founder of ADHD\.ME/)).toBeVisible();
 
   await page.waitForLoadState("networkidle");
-  await page.screenshot({ path: "qa/about-o90/about-desktop.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/about-o90/about-desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForLoadState("networkidle");
-  await page.screenshot({ path: "qa/about-o90/about-mobile.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/about-o90/about-mobile.png", fullPage: true });
 });
 
 test("primary CTA goes to the demo; sign-in goes to the console", async ({ page }) => {

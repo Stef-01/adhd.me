@@ -65,7 +65,7 @@ test("capture: the panel as a doctor reads it", async ({ page }) => {
   await expect(panel).toBeVisible();
   await panel.scrollIntoViewIfNeeded();
   await page.setViewportSize({ width: 1280, height: 1000 });
-  await panel.screenshot({ path: "qa/told-o117/panel-desktop.png" });
+  await panel.screenshot({ path: "qa/_runs/told-o117/panel-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
-  await panel.screenshot({ path: "qa/told-o117/panel-mobile.png" });
+  await panel.screenshot({ path: "qa/_runs/told-o117/panel-mobile.png" });
 });

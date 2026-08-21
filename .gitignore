@@ -23,3 +23,7 @@ reports/adhd-me-sales-deck.pptx
 
 # macOS
 .DS_Store
+
+# O143: e2e runs write their captures here. The unit-named qa/ directories are the
+# design record and a test run may not mutate them — see src/quality/qa-record.test.ts.
+qa/_runs/

@@ -68,7 +68,7 @@ test("a practice owner sees the refusal, and not one byte of a stored applicatio
   expect(body).not.toContain("applications received");
 
   // The design record: what this surface ships looking like today — present, and closed.
-  await page.screenshot({ path: "qa/applications-o57/refusal-desktop.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/applications-o57/refusal-desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.screenshot({ path: "qa/applications-o57/refusal-mobile.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/applications-o57/refusal-mobile.png", fullPage: true });
 });

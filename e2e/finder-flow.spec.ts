@@ -62,24 +62,24 @@ test("a second consulting location is a fact the reader sees, with the distance 
   await page.getByLabel(/Where are you/i).fill("Hornsby");
   await expect(page.getByText(/nearest to Hornsby first/i)).toBeVisible();
   await expect(anushaRow.getByText(/in your suburb \(their Hornsby rooms\)/)).toBeVisible();
-  await anushaRow.screenshot({ path: "qa/location-o85/row-hornsby-origin.png" });
+  await anushaRow.screenshot({ path: "qa/_runs/location-o85/row-hornsby-origin.png" });
 
   // O86: Dr Anubhav's pair renders the same way — and being telehealth-first, his line
   // says telehealth rather than a kilometre figure, second location or not.
   const anubhavRow = page.locator(".clinician-row", { hasText: "Dr Anubhav Saxena" });
   await expect(anubhavRow.getByText(/Beecroft & Double Bay, by telehealth/)).toBeVisible();
-  await anubhavRow.screenshot({ path: "qa/location-o86/row-telehealth-pair.png" });
+  await anubhavRow.screenshot({ path: "qa/_runs/location-o86/row-telehealth-pair.png" });
 
   // The profile carries the same pair on its meta line — and, since O89, her co-founder
   // disclosure beside it: a material interest stated exactly where the listing is read.
   await anushaRow.click();
   await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();
   await expect(page.getByText("Co-founder of ADHD.ME")).toBeVisible();
-  await page.locator(".profile-content").screenshot({ path: "qa/founder-o89/profile-disclosure.png" });
-  await page.locator(".profile-content").screenshot({ path: "qa/location-o85/profile-desktop.png" });
+  await page.locator(".profile-content").screenshot({ path: "qa/_runs/founder-o89/profile-disclosure.png" });
+  await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(300);
-  await page.locator(".profile-content").screenshot({ path: "qa/location-o85/profile-mobile.png" });
+  await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-mobile.png" });
 });
 
 test("changing the suburb re-ranks in place instead of losing the search", async ({ page }) => {
@@ -183,7 +183,7 @@ test("the chosen GP's portrait is one object from row to profile (O67)", async (
   // mode="wait", so the shared element's travel starts after it — aim ~150ms into the 420ms
   // tween. Best-effort timing; the settled shot below is the hard record.
   await page.waitForTimeout(410);
-  await page.screenshot({ path: "qa/motion-o67/portrait-mid-flight.png", fullPage: false });
+  await page.screenshot({ path: "qa/_runs/motion-o67/portrait-mid-flight.png", fullPage: false });
 
   // THE WIRING CONTRACT the tween hangs off: the profile's portrait frame declares itself
   // the same object (same id) the tapped row declared. If either side loses its layoutId
@@ -192,7 +192,7 @@ test("the chosen GP's portrait is one object from row to profile (O67)", async (
   await expect(profilePortrait).toBeVisible();
   await expect(profilePortrait).toHaveAttribute("data-portrait-of", chosenId!);
   await page.waitForTimeout(500);
-  await page.screenshot({ path: "qa/motion-o67/portrait-settled.png", fullPage: false });
+  await page.screenshot({ path: "qa/_runs/motion-o67/portrait-settled.png", fullPage: false });
 });
 
 test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
@@ -224,11 +224,11 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
       expect(evidence).not.toContain(missedLabel);
       // The design record: both halves of the account in one frame, desktop and phone widths.
       await missed.first().scrollIntoViewIfNeeded();
-      await page.screenshot({ path: "qa/profile-o51/profile-missed-desktop.png", fullPage: false });
+      await page.screenshot({ path: "qa/_runs/profile-o51/profile-missed-desktop.png", fullPage: false });
       await page.setViewportSize({ width: 390, height: 844 });
       await missed.first().scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
-      await page.screenshot({ path: "qa/profile-o51/profile-missed-mobile.png", fullPage: false });
+      await page.screenshot({ path: "qa/_runs/profile-o51/profile-missed-mobile.png", fullPage: false });
       break;
     }
     await page.getByRole("button", { name: /Back to results/i }).click();
@@ -251,7 +251,7 @@ test("the profile says what would change this order, and tapping it returns to a
   // The design record before the tap: the whole profile column, question in context —
   // an element shot, because the profile scrolls inside its own shell.
   await page.waitForTimeout(450);
-  await page.locator(".profile-content").screenshot({ path: "qa/profile-o66/clarify-on-profile-desktop.png" });
+  await page.locator(".profile-content").screenshot({ path: "qa/_runs/profile-o66/clarify-on-profile-desktop.png" });
 
   // Tapping does what the results chips do — answer appended, whole sentence re-read — and
   // LANDS ON RESULTS, where the O52 layout animation is what shows the order changing.
@@ -268,7 +268,7 @@ test("the profile says what would change this order, and tapping it returns to a
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(450);
-  await page.locator(".profile-content").screenshot({ path: "qa/profile-o66/clarify-on-profile-mobile.png" });
+  await page.locator(".profile-content").screenshot({ path: "qa/_runs/profile-o66/clarify-on-profile-mobile.png" });
 });
 
 test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
@@ -283,7 +283,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
 
   const before = await page.locator(".clinician-row strong").allInnerTexts();
-  await page.screenshot({ path: "qa/motion-o52/results-before-clarifier.png", fullPage: false });
+  await page.screenshot({ path: "qa/_runs/motion-o52/results-before-clarifier.png", fullPage: false });
 
   // A single answer may legitimately CONFIRM the current order; clarify.ts's contract is that
   // the offered questions can reorder, so walk the chips until one does. The rows glide rather
@@ -306,7 +306,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
     for (const name of after) expect(before).toContain(name);
     if (after.join("|") !== before.join("|")) {
       reordered = true;
-      await page.screenshot({ path: "qa/motion-o52/results-after-clarifier.png", fullPage: false });
+      await page.screenshot({ path: "qa/_runs/motion-o52/results-after-clarifier.png", fullPage: false });
     }
   }
   expect(reordered, "no clarifier answer reordered a tied roster").toBe(true);

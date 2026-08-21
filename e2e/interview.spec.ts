@@ -112,9 +112,9 @@ test("a saved interview's unheard sentences land in the reach-gap feed (O38)", a
   await expect(entry.getByText(/saved \d{4}-\d{2}-\d{2} by Console interviewer/)).toBeVisible();
 
   // The design record: the feed as shipped, desktop and phone widths.
-  await feed.screenshot({ path: "qa/reach-o38/reach-feed-desktop.png" });
+  await feed.screenshot({ path: "qa/_runs/reach-o38/reach-feed-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
-  await feed.screenshot({ path: "qa/reach-o38/reach-feed-mobile.png" });
+  await feed.screenshot({ path: "qa/_runs/reach-o38/reach-feed-mobile.png" });
 });
 
 test("the matching console prices capacity age: a freshness row and a reconfirm date per declaration (O56)", async ({ page }) => {
@@ -135,9 +135,9 @@ test("the matching console prices capacity age: a freshness row and a reconfirm 
   }
 
   // The design record for the panel.
-  await panel.screenshot({ path: "qa/capacity-o56/freshness-panel-desktop.png" });
+  await panel.screenshot({ path: "qa/_runs/capacity-o56/freshness-panel-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
-  await panel.screenshot({ path: "qa/capacity-o56/freshness-panel-mobile.png" });
+  await panel.screenshot({ path: "qa/_runs/capacity-o56/freshness-panel-mobile.png" });
 });
 
 test("the tie-quality KPI renders from the gated function, counts partitioning the run (O62)", async ({ page }) => {
@@ -159,9 +159,9 @@ test("the tie-quality KPI renders from the gated function, counts partitioning t
   expect(counts.reduce((a, b) => a + b, 0)).toBe(total);
   expect(total).toBeGreaterThan(100);
 
-  await panel.screenshot({ path: "qa/tie-o62/tie-quality-desktop.png" });
+  await panel.screenshot({ path: "qa/_runs/tie-o62/tie-quality-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
-  await panel.screenshot({ path: "qa/tie-o62/tie-quality-mobile.png" });
+  await panel.screenshot({ path: "qa/_runs/tie-o62/tie-quality-mobile.png" });
 });
 
 test("a booking handoff lands one countable row on the console (O74)", async ({ page }) => {
@@ -179,7 +179,7 @@ test("a booking handoff lands one countable row on the console (O74)", async ({ 
   expect(total, `a handoff at ${before} did not land a row`).toBeGreaterThanOrEqual(1);
   await expect(anubhav.getByText("finder")).toBeVisible();
 
-  await panel.screenshot({ path: "qa/attribution-o74/handoffs-desktop.png" });
+  await panel.screenshot({ path: "qa/_runs/attribution-o74/handoffs-desktop.png" });
 });
 
 test("screenshots for the design record", async ({ page }) => {
@@ -188,8 +188,8 @@ test("screenshots for the design record", async ({ page }) => {
     "i: How does a first appointment usually go?\nI book a longer first appointment, you cannot take a proper history in fifteen minutes.\nTitration is mine, I do not hand that back.\nI run a walking group on Thursdays for my older patients.",
   );
   await page.locator(".iv-proposal").first().waitFor();
-  await page.screenshot({ path: "qa/interview-o36/interview-desktop.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/interview-o36/interview-desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(300);
-  await page.screenshot({ path: "qa/interview-o36/interview-mobile.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/interview-o36/interview-mobile.png", fullPage: true });
 });

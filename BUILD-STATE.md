@@ -170,6 +170,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > earns, a DESIGN-QA entry naming every affected file and what was done with it, `pnpm verify`
 > green and the finder e2e green with the qa/ tree unchanged afterwards — which is the real
 > proof, because today it is dirty after every run.
+> DONE 2026-08-21. **The claim underestimated this by six times and that is the first thing to
+> record.** It said seven files in one spec. The real number is 42 capture paths across TEN specs
+> writing into 21 unit-named directories, and 26 captures across 17 units were unfaithful to the
+> runs that recorded them. Every one was a by-product of a test run; not one was a deliberate
+> re-capture. Scoping a unit from the symptom I happened to notice while committing something
+> else is what produced the undercount, and widening it was the unit rather than a distraction
+> from it.
+> The restoration rule was evidence and not inference, which mattered because inference here
+> would have been the same falsification pointing backwards. A capture is restored from the
+> commit that ADDED it only where its directory is cited in DESIGN-QA by its origin unit AND by
+> no later one. Seventeen directories met that and were restored. FOUR were deliberately left
+> alone and each is written down: `qa/about-o90` is cited by O133 as well as O90 and
+> `qa/matching-o34` by O58 and O71 — later entries rest on those, so "restoring" them would
+> destroy a real citation — while `qa/allocation-o133` and `qa/matching-o30` are cited by no
+> entry at all, so nothing rests on them either way. All four stop drifting from here regardless,
+> which is the part that actually needed fixing.
+> A method error caught mid-unit, worth keeping because it nearly corrupted the repair itself:
+> the first pass took each capture's origin from the last line of `git log --follow`, and
+> `--follow` walks through renames — for `qa/motion-o67/portrait-settled.png` it kept going into
+> O63, where that path did not exist, and returned empty. Origins came from `--diff-filter=A`
+> instead, and every file was confirmed to have exactly ONE add-commit before a single byte was
+> overwritten. A restoration derived from the wrong commit would have been indistinguishable from
+> the problem it was fixing.
+> The fix separates two things that had been sharing a directory and quietly overwriting each
+> other: captures a RUN produces are a by-product and now go to `qa/_runs/` (gitignored);
+> captures a UNIT records are testimony, written deliberately by `scripts/qa-capture.mjs` when
+> the unit measures something. `src/quality/qa-record.test.ts` makes that executable, with a
+> non-vacuity pin — a redirect that quietly ended the screenshots would pass a "nothing writes
+> the record" check perfectly — and the guard was proved by seeding a violation and watching it
+> fail.
+> Gate met: `pnpm verify` green (219 files, 3607 passed), finder + landing e2e green (19), and
+> the real proof — `qa/` was 27 files dirty before that run and 27 after, where before this unit
+> every run moved it. DESIGN-QA entry names every affected directory and what was done with it.
 
 > **O142 (Q3 item 10's premise, measured — a fixture-only roster at scale) — claimed
 > 2026-08-21T02:05Z by loop-0820s.** The plan's remaining lanes are founder-blocked on roster

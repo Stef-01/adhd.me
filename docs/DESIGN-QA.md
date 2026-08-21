@@ -1187,3 +1187,50 @@ Jakub-primary/Emil-secondary as the law directs for patient surfaces.
 
 - [x] Welcome, listening and booking gate correctly at the hook. The mic pulse, the intro
   stagger and the booking bar's deliberate stillness (O44) all hold up under both preferences.
+
+## O143 — the design record had been silently falsified (2026-08-21)
+
+Found while committing O142, when four captures turned up dirty in the working tree for the
+second time in a day. The cause is not a stray script: `e2e/*.spec.ts` wrote **42 screenshots
+directly into 21 unit-named `qa/` directories**, so every run of the suite re-rendered the
+evidence earlier units had recorded, under whatever CSS was current that day.
+
+### What it did
+
+- [x] **The clearest case is a file with "before" in its name.** O52's proof is a before/after
+  pair showing rows gliding when a clarifier answer reorders them.
+  `qa/motion-o52/results-before-clarifier.png` has been rewritten in **eleven commits after
+  O52** — O74, O85, O93, O102, O105, O118, O127, O129, O130, O135, O137 — none of which had
+  anything to do with it. A before/after pair where both frames are "after" proves nothing, and
+  nothing in the tree said so.
+- [x] Measured across the whole record: **26 captures across 17 units** were unfaithful to the
+  runs that recorded them. Not one was a deliberate re-capture; every one was a by-product of a
+  test run.
+
+### What was done
+
+- [x] **Restored, 26 files.** The rule was evidence, not inference: a capture is restored from
+  the commit that ADDED it only where its directory is cited in `docs/DESIGN-QA.md` by its
+  origin unit *and by no later one*. 17 directories met that; every restored file had exactly
+  one add-commit, checked rather than assumed.
+- [x] **Left alone, deliberately, 4 directories.** `qa/about-o90` (cited by O133 as well as
+  O90) and `qa/matching-o34` (cited by O58 and O71) have later entries resting on them, so
+  restoring would be the same falsification pointing backwards. `qa/allocation-o133` and
+  `qa/matching-o30` are cited by no entry at all — nothing rests on them either way. All four
+  stop drifting from here regardless.
+- [x] **Runs now write to `qa/_runs/`** (gitignored). The captures a run produces are a
+  by-product; the captures a unit records are testimony, written deliberately by
+  `scripts/qa-capture.mjs` when the unit measures something. Keeping them in one directory
+  meant one kept overwriting the other.
+- [x] **Guarded** in `src/quality/qa-record.test.ts`, with the non-vacuity pin that specs still
+  capture *something* — a redirect that quietly ended the screenshots would pass a
+  "nothing writes the record" check perfectly. Proved by seeding a violation and watching it
+  fail, not by assertion.
+
+### A note on `git log --follow`
+
+The first pass derived each capture's origin from the last line of `git log --follow`, which is
+wrong in a way worth writing down: `--follow` walks through renames, so for
+`qa/motion-o67/portrait-settled.png` it kept going into O63's commit, where that path did not
+exist. Origins are taken from `--diff-filter=A` instead, and every file was confirmed to have
+exactly one add-commit before anything was overwritten.

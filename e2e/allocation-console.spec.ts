@@ -82,5 +82,5 @@ test("every excluded prescriber carries a reason — a refusal is never silent",
   // The unit's capture, taken here because the console's session cannot be established outside
   // this harness — which also means the capture can never drift from a passing run.
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.screenshot({ path: "qa/allocation-o133/breakdown.png", fullPage: true });
+  await page.screenshot({ path: "qa/_runs/allocation-o133/breakdown.png", fullPage: true });
 });
