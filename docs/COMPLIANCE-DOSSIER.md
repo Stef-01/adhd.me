@@ -112,6 +112,7 @@ unmapped surfaces" and been wrong within a day; that claim is now checked rather
 /console/outreach — Outreach console
 /console/outcomes — Weekly/pilot reports
 /console/responses — Weekly/pilot reports
+/console/capacity — Weekly/pilot reports
 /console/reporting — Reporting summary
 /console/privacy — Privacy page
 /console/registers — Register console

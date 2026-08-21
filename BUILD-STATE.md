@@ -168,6 +168,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: e2e + axe; the three empty states each REACHED by a test; no drift verdict styled as a
 > grade, asserted on the rendered classes rather than by eye; the calendar gap visible; W226's
 > register extended if the page composes anything new; `pnpm verify` green.
+> DONE 2026-08-21. `src/console/capacity.ts` + 11 tests, `app/console/capacity/page.tsx`,
+> `e2e/capacity-console.spec.ts` (5), route added to W49's axe sweep. Over the sim: 70 sessions,
+> score green, drift `tracking`, 70 recommendations, calendar gap stated.
+> **THE UNIT'S REAL FINDING IS THAT TWO OF MY OWN HEADLINE GUARDS WERE VACUOUS, AND I ONLY KNOW
+> BECAUSE I SEEDED THEM.** Both e2e assertions passed while the thing they forbid was in the file.
+> The cause is one thing said twice: **a guard over a branch the data cannot reach is not a guard.**
+> The sim's verdict is `tracking`, so a red-for-`drifted` branch never renders and the colour check
+> measured a colour nobody had changed; no session in the sim has a null rate, so `pct(x ?? 0)`
+> never fired and the "never prints 0%" regex saw seventy percentages either way.
+> Both are fixed by moving the guard to where the branch is reachable rather than by strengthening
+> the assertion in place. `utilisationLabel` is composed in the VIEW, where a two-line cancelled
+> diary reaches the em-dash branch and a unit test pins it; the page prints the label and chooses
+> nothing. The drift styling is a CONSTANT with no verdict in scope, and the e2e asserts the
+> opening tag contains `className={DRIFT_BLOCK_CLASS}` verbatim.
+> **AND THE FIRST FIX WAS ITSELF TOO WEAK — third instrument this session weaker than the sentence
+> над it.** My scan was `/className=\{[^}]*verdict/`, and `[^}]*` stops at the first closing brace,
+> so a seeded `` className={`${DRIFT_BLOCK_CLASS} ${…verdict === "drifted" ? …}`} `` walked past it
+> and the test stayed green a second time. An exact match cannot be evaded by rearranging the
+> expression. Three attempts to make one guard bite, each failure recorded rather than the seed
+> quietly adjusted until it passed.
+> Colours are resolved through a CANVAS, not a regex: the first version parsed digits out of
+> `oklch(0.444 0.011 73.639)` and got a channel spread of 444 on a colour that is very nearly grey.
+> The tree learned this once already in the contrast probe, and reaching for the regex again is how
+> a lesson stays unlearned. Text, background AND border are each checked, since a verdict could be
+> graded through any of the three.
+> The three empty states are each CONSTRUCTED: no data (an empty diary), no capacity (six weeks of
+> 6-of-6), and forecaster-unscored (one session, two predictions against a floor of five). The
+> middle one is the reason they are three sentences and not one — a fully booked practice rendered
+> as "no capacity information" would read as having room nobody recorded, and the ordering test
+> pins that a practice which is BOTH full and unscored is reported as full.
+> Registers: W102's census (the new route), W200's copy surface + namespace loader, W201's ADM
+> register. Gate: `pnpm verify` green (230 files, 3748 tests, build, audit:gate PASS); axe console
+> sweep green with the route in it; `party-to-care` swept the new page (7 passed); the unit's own
+> e2e 5 passed.
 
 > **W228 (the forecast drift monitor) — claimed 2026-08-21T07:56Z by loop-0821a.** W224 scores the
 > forecaster over its whole history, which is exactly the shape that hides a forecaster that WAS
@@ -5673,7 +5707,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
-| W229 | claimed | loop-0821a | 2026-08-21T08:06Z | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
+| W229 | done | loop-0821a | 2026-08-21T08:06Z | PENDING | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
