@@ -143,6 +143,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O157 (colour contrast, the last unexamined property — and it fails on exactly one background)
+> — claimed 2026-08-21T13:10Z by loop-0820s.** Contrast has never been checked anywhere in this
+> tree, and `adhdme-taste` opens by naming the audience as "tired, possibly older, possibly
+> low-vision". Measured against WCAG AA (4.5:1 normal, 3:1 large), resolving every colour through a
+> canvas so oklch parses.
+> Public routes: **0 failures out of 591 text elements.** Console: **30 out of 869**, and the shape
+> is the finding — `.mc-weight` (18), `.mc-cue` (4), `.be-state` (4) and four `<code>` spans, every
+> one a NEAR MISS at 4.24 or 4.48 against 4.5.
+> **The cause is one background nobody checked.** `--muted` (#6e706a) measures 5.01 on white and
+> 4.80 on `--paper`, and **4.24 on `--stone`**; `--faint` measures 5.29 and 5.07, and **4.48 on
+> stone**. The tokens were never wrong on the two surfaces anybody looked at. `--stone` is the
+> console's card and tag background, which is why the public sweep came back perfectly clean and
+> the console did not — the same shape as O148, where the console had never been swept at all.
+> The fix is therefore a token nudge rather than 30 edits: `--muted` darkens 5 steps to #696b65 and
+> `--faint` 1 step to #6a6b66, the smallest change that clears 4.5 on ALL THREE backgrounds
+> (paper 5.17/5.15, stone 4.56/4.55, white 5.40/5.37). Computed, not eyeballed.
+> Gate: 0 contrast failures on public AND console, a sweep added covering both with the canvas
+> resolver (a regex reading rgb() silently skips every oklch background — it reported white text on
+> a dark button as 1.00:1 against the page behind it), a seeded failure proving it fails, the
+> before/after ratios recorded, `pnpm verify` green and the accessibility batch green.
+
 > **O156 (FOUNDER-DIRECTED — "founder" leaves the site, the disclosure stays) — claimed
 > 2026-08-21T12:20Z by loop-0820s.** "remove all mentions of founder on entire site do throough
 > code audit". O154 removed "co-founder" and I flagged then that the DISCLOSURE was the one use I
