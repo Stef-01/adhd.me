@@ -163,6 +163,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > aspiration got promoted is stale and should say so), plus `openAspirations()` computing the
 > genuine queue by subtraction. Gate: the queue recomputed and the difference explained entry by
 > entry, every `leavesStanding` sentence verified against the corpus, full `pnpm verify` green.
+> DONE 2026-08-21. **The queue was 26 and is 12.** `leavesStanding` links each refusal to the
+> aspiration(s) it accounted for, and `openAspirations()` computes the genuine remainder by
+> subtracting founder-blocked entries (O123) and reasoned refusals from the corpus's standing
+> aspirations. Before this the number could not be computed at all.
+> **TWO LINKS WERE MISSING BECAUSE THE REGISTER WAS BORN MID-HISTORY.** O125's own "put a name
+> to" entry had no link, and O65's refusal — the oldest still doing work, two months older than
+> the register — was not in it at all. A register created part-way through a project only knows
+> what somebody remembers to put in it, and the way I found both was the number refusing to
+> match what I knew: "I need more than fifteen minutes to get through this" cannot be open work
+> when O65 wrote a measurement explaining why it stays unheard.
+> The staleness check matters as much as the count: a refusal naming an aspiration that has
+> since been PROMOTED is stale, and would keep subtracting finished work while hiding that the
+> refusal itself may now be reversible. Every named sentence is asserted to exist in the corpus
+> and still aspire.
+> **THIRD REGISTER IN ONE DAY TO NEED THE SAME DISTINCTION** — O123's `awaitingFounder`, O131's
+> `accepted`, now `leavesStanding`. Each was built to record something; each needed a way to say
+> "examined and deliberately left" as distinct from "nobody has looked". Without it a register
+> turns finished thinking into a backlog, and the backlog is what a later reader believes.
+>
+> TWO LEDGER NOTES, BOTH ABOUT MY OWN PROCESS RATHER THAN THE CODE.
+> (1) This unit is O138 while its CLAIM COMMIT is titled O137: the claim was pushed before an
+> interactive session's PR #19 took that number, and a pushed commit cannot be rewritten. Theirs
+> stands untouched per the law that the rebasing party renumbers; the ledger row is the tiebreak
+> and reads O138.
+> (2) **This close landed a commit late for the FOURTH time today** — O124, O126, O127 and now
+> O138 — and the fourth is the one worth admitting, because O127 diagnosed the cause exactly
+> (the heredoc ends the statement, so the `git commit` on the next line runs even when the
+> script's assertion stops it) and wrote down the fix: run the ledger edit in its own call and
+> confirm it before committing. I then did not follow it here. Knowing the failure mode and
+> recording the remedy is not the same as changing the habit, which is the more useful half of
+> this note.
+> Gate met: queue recomputed 26→12 with every subtraction traceable to a written reason, all
+> `leavesStanding` sentences verified against the corpus, `pnpm verify` green 3594.
 
 > **O136 (the join form's accent, and a correction to O135's own record) — claimed
 > 2026-08-21T00:33Z by loop-0820s.** O135's sweep found /clinicians/join carrying NINE
