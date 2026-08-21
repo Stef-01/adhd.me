@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O145 (the 44px floor was enforced by memory; now it is swept) — claimed 2026-08-21T04:55Z
+> by loop-0820s.** O14 set a 44px touch floor and `adhdme-taste` carries it as law. Nothing
+> enforces it: DESIGN-QA shows it asserted per-unit, wherever the unit's author remembered
+> ("44px floor on answer pills", "no new touch targets"), which is the completeness-by-luck
+> pattern W102 and W200 both exist to replace. Swept at 390px across all fifteen public routes:
+> **61 controls under the floor out of a population of 180.**
+> The probe was wrong twice before it was right, and the rule O144 just wrote down is why it did
+> not get reported that way. Raw, it said 70 — because it measured the INPUT rather than the hit
+> area, so every styled checkbox in the tree looked like a defect when the taste law explicitly
+> allows a small visual inside a large clickable label. Measuring the effective box (the element
+> or its label, whichever is larger) is what made the number mean anything.
+> The 61 collapse into four causes, not 61 problems. **/clinicians/join is 32 of them** — every
+> care-area, manner, language and availability checkbox row is 342x30 or 342x41, so the entire
+> onboarding form a real GP fills in sits 3-14px under the floor. The shared footer is another
+> 18 across six routes (the `66x21` wordmark link is the real one; `39x44` "Home" and `41x44`
+> "Terms" miss on width only). `/clinicians` has four 71x24 buttons and a 306x16 slider, and the
+> landing's interest radios are 43px — one pixel under, which is still under.
+> THE UNIT: build the sweep as a gate, fix the two causes that matter most — the join form and
+> the shared footer wordmark — and pin the REST as a measured per-route queue that ratchets, the
+> REACH_FLOORS idiom, so the remainder comes down in later units instead of being quietly
+> forgotten. A gate cannot be added green against 61 findings, and pretending otherwise by
+> weakening the floor would be worse than the defect. Gate: the sweep pinned both directions,
+> /clinicians/join measured to zero, before/after captures in qa/, a DESIGN-QA entry, `pnpm
+> verify` green and the join e2e green.
+
 > **O144 (a hardening pass that found nothing, and the environment gap that found it) —
 > claimed 2026-08-21T04:10Z by loop-0820s.** Law 5 says a hardening week without the review
 > skills is not done. This firing tried to meet that and hit a wall worth recording: the loop
