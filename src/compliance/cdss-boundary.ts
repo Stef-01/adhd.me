@@ -498,6 +498,18 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W248's declaration path exports two types, an evidence reader and the `declareVertical` factory. It authors NO sentences at all: every string a vertical carries — its name, its member refs, the gate each member waits on — is supplied by the vertical that declares it and passed through untouched, which is why the copy tests live with the declarations rather than here. The one thing worth flagging for a reviewer is what the factory refuses to give a vertical: there is no field for what a member is FOR, because for a clinical pathway that sentence is the content G5 gates, and a shared factory that offered one would have offered it to every vertical at once.",
   },
   {
+    module: "src/platform/scope.ts",
+    operatorCopy: ["SCOPE_REFUSAL_COPY"],
+    notCopy:
+      "The remaining exports are the branded scope type, the refusal union and the one function that resolves a practice against a caller's memberships. `SCOPE_REFUSAL_COPY` is what an integrator is told when a read is refused: no practice named, the caller holds none, or the caller holds others and not this one. All three are about ACCESS to a practice's own configuration — no patient, no condition, no clinical step — and the third deliberately says the same thing whether the practice exists or not, because a refusal that distinguished them would answer questions about other practices to anyone willing to ask repeatedly.",
+  },
+  {
+    module: "src/platform/api.ts",
+    operatorCopy: [],
+    notCopy:
+      "The endpoint census and the list of reads it refuses. Each endpoint's `summary` describes what a practice can read about ITSELF — roster size, setup state, complaint counts — and each entry in `REFUSED_READS` says what the surface will not answer and why, naming G2 and G8 where they apply. No sentence here describes a patient, a condition or a next clinical step, and the surface returns no row about any person: a test seeds a patient id into the data and sweeps every endpoint's output for it.",
+  },
+  {
     module: "src/verticals/third.ts",
     operatorCopy: [],
     notCopy:
