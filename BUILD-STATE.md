@@ -143,6 +143,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O148 (the console was never swept, and it is 38 under the floor) — claimed 2026-08-21T07:15Z
+> by loop-0820s.** O145 and O146 took the fifteen PUBLIC routes to zero controls under the 44px
+> floor. The console — twenty-eight routes that practice staff actually work in — was never
+> swept at all, because O145 scoped itself to what a patient sees. Measured now at 390px across
+> sixteen console routes: **38 controls under the floor out of 158.**
+> This is defect-finding rather than the preventive work of the last two units, and the numbers
+> say so. They collapse into a handful of shared components, which is why one unit can carry them:
+> `Sign out` is 33x48 — too NARROW, on every console route at once, so it alone is sixteen of the
+> 38; the `Console` back-link is 50x20 on every inner route; `/console`'s own navigation grid is
+> ten links at 40-45px tall; and `/console/rules`, `/console/registers` and `/console/usefulness`
+> carry another fifteen between them, mostly form controls at 20-40px.
+> Staff-facing is not a reason to leave it: the console is where somebody reconfirms capacity on a
+> phone between patients, and a 20px back-link is the same defect as a 20px back-link anywhere.
+> Nothing here is a patient surface, so no compliance copy is in scope and no gate is touched.
+> THE UNIT: fix the shared components first (they are most of the count), then the per-route
+> stragglers, and extend `e2e/touch-floor.spec.ts` to cover the console behind the existing
+> sign-in helper so it cannot drift back. Same technique as O145 wherever it applies — grow the
+> hit area with padding, pay it back with an equal negative margin, change no layout — and where
+> it does not apply, measure the geometry before and after rather than trusting a capture, which
+> is O146's lesson. Gate: console sweep to zero, geometry unchanged on the shared shell proved by
+> measurement, the extended gate green with a seeded failure, `pnpm verify` green, console e2e
+> green.
+
 > **O147 (the focus law, made executable — and it is already being kept) — claimed
 > 2026-08-21T06:30Z by loop-0820s.** `adhdme-taste` carries two keyboard rules — "visible
 > `:focus-visible` ring, never `outline: none` without a replacement" — and, like the 44px floor
