@@ -143,6 +143,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O161 (the correction reached the copy and not the reasoning) — claimed 2026-08-21T14:55Z by
+> loop-0820s.** O158 fixed the sentence a patient reads. It did not fix the prose that GOVERNS
+> that sentence, and that is a worse place to leave a false belief.
+> `src/demo/clinicians.test.ts` — the file that defines what the disclosure must contain — still
+> opens "A founder in his own company's directory is a conflict…", and names its own test
+> "discloses the founder interest on every founder's own listing". `src/demo/roster.ts:216`, the
+> comment on the field itself, still says "A founder of this product appearing in its own
+> directory". Both encode exactly the belief the founder corrected: that these doctors founded
+> ADHD.ME. Dr Saxena owns his CLINIC and is its first clinic partner.
+> **Why this is not cosmetic.** These are the two places a future author reads to learn WHY the
+> disclosure exists and what it must say. Leave the rationale wrong and the next person re-derives
+> the wrong copy from it — the correction would have a shelf life measured in one unit. It is the
+> same failure the QA-capture work found twice: fixing the artefact and leaving the thing that
+> generates it.
+> The audit that found it is worth recording too. O156 swept for the WORD "founder" and reported
+> zero rendered mentions, which was true. The founder's correction was about a CLASS of claim, not
+> a string, so this firing swept for the claim instead — "his own company", "owns ADHD", "started
+> ADHD", "behind ADHD.ME" — and the word-audit's clean bill did not cover it.
+> Gate: no prose anywhere asserting either doctor founded or owns ADHD.ME; the disclosure rule's
+> rationale states the real relationship; the test NAME (which is operator-visible in every run)
+> no longer says "founder's own listing"; `pnpm verify` green.
+
 > **O160 (semantic structure, the last unmeasured a11y property — and it is sound) — claimed
 > 2026-08-21T14:20Z by loop-0820s.** Touch targets, focus, keyboard reachability, overflow and
 > contrast have all been swept this week. The one left is what a screen reader actually navigates
