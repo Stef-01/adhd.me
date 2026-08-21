@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W239 (the outbound disclosure ledger) — claimed 2026-08-21T09:51Z by loop-0821a.** W204 declared
+> what would have to exist the day G9 opens and deliberately did not build it. This builds it, and
+> the row's own gate says how: **W204's open question — whether the log holds the FIGURES sent or
+> only the FACT of sending — is named in the module and left to the founder, with the model built so
+> either answer is a one-line change.**
+> **"EITHER ANSWER IS A ONE-LINE CHANGE" IS THE HARD PART AND IT IS NOT A COMMENT.** A model that
+> merely has an optional `figures` field does not satisfy it: the field would default to absent, the
+> first caller would omit it, and by the time anybody chose, the choice would have been made by
+> whoever wrote the first call site. So the payload posture is a DECLARED CONSTANT with two possible
+> values, the entry type is derived from it, and choosing the other value is editing that constant —
+> one line, and every consequence follows from the type rather than from remembering to pass a field.
+> **AND THE STORE STAYS SHUT, WHICH IS W204's ARGUMENT AND NOT MINE TO OVERRIDE.** A store that
+> exists is a store something can be written to, and G9 is unratified. So the ledger is a MODEL and
+> an APPEND function that takes its store as an argument — there is no module-level store, no
+> `globalThis` handle, nothing W106's detector would find, and nothing has ever been appended.
+> `SHIPPED_DISCLOSURES` is pinned empty.
+> **THE ONE THING THE LEDGER MUST NOT BE IS RECOMPUTABLE.** W204's whole argument is that a product
+> which recomputes cannot answer "what did we tell them in Q2" because the rails have moved on. An
+> entry is therefore a record of what LEFT, stamped at the moment of leaving, and the type has no
+> path back to a live rail — asserted by absence, since a ledger that fetched anything would answer
+> today's question with today's data and look right doing it.
+> Gate: the figures-or-fact question named in the module and settled by a single declared constant,
+> with both settings exercised by test; the entry type derived from that constant so the choice
+> cannot be made at a call site; no store, no `globalThis`, nothing appended — asserted by absence;
+> W204's proposed seven-year life carried rather than restated, so the two cannot drift; `pnpm
+> verify` green.
+
 > **W238 (terminology binding as declared data) — claimed 2026-08-21T09:44Z by loop-0821a.
 > SAYING UP FRONT WHICH HALF SHIPS: the bindings are EMPTY.** W227's posture, and the reason is
 > sharper here than it was for a holiday calendar.
@@ -6282,7 +6309,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | done | loop-0821a | 2026-08-21T09:35Z | aa27c65 | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | done | loop-0821a | 2026-08-21T09:44Z | 8f4cb2c | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
-| W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
+| W239 | claimed | loop-0821a | 2026-08-21T09:51Z | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | available | — | — | — | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
