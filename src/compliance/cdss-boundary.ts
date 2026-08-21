@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/capacity/attribution.ts",
+    operatorCopy: ["CAPACITY_ATTRIBUTION_WITHHELD_COPY"],
+    notCopy:
+      "The remaining exports are the comparator and arm types, the refusal union, an EMPTY shipped set of arm assignments and the single function that produces a difference or withholds one. `CAPACITY_ATTRIBUTION_WITHHELD_COPY` is what a practice manager reads instead of an answer to \"did opening slots help\": no sessions set aside for comparison, one side empty, a session on both sides, or an assignment that cannot be shown to precede the results. Each names the wrong answer it is refusing rather than only declining — the first says outright that comparing these weeks with earlier ones would credit the decision with everything else that changed. None describes a patient, a condition or a next clinical step; the module's inputs are session keys and counts.",
+  },
+  {
     module: "src/capacity/calendar.ts",
     operatorCopy: ["CALENDAR_UNKNOWN_COPY"],
     notCopy:

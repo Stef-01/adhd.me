@@ -238,6 +238,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W225's refusal is structural and checked at three doors: no exported signature takes a patient, no field of `SessionRecommendation` can hold one, and the module's import list is pinned so nothing that holds patients can be reached from it. That third check is the one that matters — MATCH-1 arrived through a reasonable-looking line in a module that already had the data to hand.",
   },
   {
+    module: "src/capacity/attribution.ts",
+    what: "The difference between two arms of a capacity experiment, and the arm assignments themselves",
+    handling: "no_patient_identity",
+    rationale:
+      "W233's arm assignment names a SESSION — a clinician and a weekday — not a person, and the counts it produces are slots offered and filled. No patient can enter it: it imports only W222's model and the reporting basis type, and deliberately NOT `@/engine/holdout`, which is the tree's patient-level arm and answers a different question. `SHIPPED_CAPACITY_ARMS` is empty and pinned empty, so today it holds nothing at all. The small-cell reasoning in the W222 entry above applies unchanged: these are aggregates over arms, and an arm with a single session would be refused for being too thin to compare long before it were small enough to identify anybody.",
+  },
+  {
     module: "src/capacity/calendar.ts",
     what: "Declared non-working days, with provenance",
     handling: "no_patient_identity",

@@ -169,6 +169,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > patient-level arm is not imported; `SHIPPED_CAPACITY_ARMS` pinned empty; refusals reached by
 > construction including the overlap case, since a session in both arms is the failure that looks
 > like a bigger sample; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/attribution.ts` + 13 tests. **It refuses over all 70 sessions of
+> the simulated practice, because not one of them carries an arm** — the honest answer to "did
+> opening slots help" today, checked rather than asserted. The other direction is pinned too: split
+> the 70 into two arms and it answers, so the refusal is about the record and not about the code.
+> **THE TREND IS PROVED ABSENT THREE WAYS, because it could arrive three ways.** As a FUNCTION —
+> namespace plus a comment-stripped source scan, since `improvementSince(date)` passes any name
+> check a reviewer would write; seeding exactly that function, with a real before/after body, fails.
+> As a PARAMETER — a `comparedWith` period and a `comparator` choice are both `@ts-expect-error`,
+> because a second period to compare against IS the trend wearing an argument name. And as an
+> IMPORT: **W9's patient-level holdout is real randomisation, populated, and about messaging** —
+> the most persuasive wrong answer available in this repository — so the import list is pinned to
+> exactly `./model` and `@/reporting/model`, and seeding `assignHoldout` fails.
+> Four refusals, each reached: no arm recorded, an empty arm, an OVERLAP, and an assignment with no
+> readable date. The overlap one is refused rather than deduplicated: the same session compared
+> with itself is not a larger sample, and deduplicating would silently change the experiment the
+> practice thinks it ran. The undated one exists because an arm chosen after the results are in is
+> not an arm, it is a description of which sessions went well — and the copy says exactly that.
+> **THE LANE'S OWN REGISTERS CAUGHT TWO REAL PROBLEMS IN W226, both introduced by growth rather
+> than by error.** (1) `"readable date"` stopped being distinctive once this module said "no
+> readable date" too — two kinds matched one phrase, and the binding was tightened rather than the
+> check loosened. (2) The assertion that composed sentences are a MAJORITY of the lane's prose
+> stopped being true at 14 of 30, because W231 and W233 added modules whose copy is all exported
+> constants. **The proportion was never the claim.** The claim is that a double-digit number of
+> sentences a practice reads were reachable by no linter, so it is now a count with the drift
+> explained in the test — a proportion that moves with unrelated growth is a check that fails for a
+> reason nobody wants to act on.
+> Registers: W200's copy surface + loader, W201's ADM register, W106's record class, W230's lane
+> sweep and W226's coverage guard — five, all extended in the same commit.
+> Non-vacuity, five breaks: a before-and-after function with an innocent name (1 test); borrow the
+> patient-level holdout (1); let a session sit in both arms (3); accept an arm assigned after the
+> results (3); ship an arm nobody ran (2).
+> Gate: `pnpm verify` green — 234 files, 3792 tests, build, audit:gate PASS.
 
 > **W232 (Q18 dossier: what a forecast implies operationally, priced) — claimed 2026-08-21T08:44Z
 > by loop-0821a.** The row's gate is one clause and it is the useful one: *states what changes the
@@ -5931,7 +5963,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W230 | done | loop-0821a | 2026-08-21T08:30Z | 1560038 | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | done | loop-0821a | 2026-08-21T08:36Z | 3e8b4bf | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | done | loop-0821a | 2026-08-21T08:44Z | 6f29060 | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
-| W233 | claimed | loop-0821a | 2026-08-21T08:52Z | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
+| W233 | done | loop-0821a | 2026-08-21T08:52Z | PENDING | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |

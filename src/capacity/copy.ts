@@ -36,6 +36,7 @@ import { driftReport } from "./drift";
 import { CALENDAR_UNKNOWN_COPY } from "./calendar";
 import { NO_HISTORY_COPY } from "./model";
 import { COUPLING_OFF_COPY, COUPLING_REJECTION_COPY } from "./coupling";
+import { CAPACITY_ATTRIBUTION_WITHHELD_COPY } from "./attribution";
 
 /** One kind of sentence this lane can put in front of a practice. */
 export interface SentenceKind {
@@ -216,6 +217,34 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
     mustContain: "not enough scored weeks on both sides",
   },
   {
+    id: "attribution.withheld.no_arm_recorded",
+    module: "src/capacity/attribution.ts",
+    when: "No sessions set aside for comparison — the state of every practice today.",
+    composed: false,
+    mustContain: "credit the decision with everything else that changed",
+  },
+  {
+    id: "attribution.withheld.arm_empty",
+    module: "src/capacity/attribution.ts",
+    when: "One side of the comparison holds no sessions.",
+    composed: false,
+    mustContain: "A difference needs two groups",
+  },
+  {
+    id: "attribution.withheld.arms_overlap",
+    module: "src/capacity/attribution.ts",
+    when: "A session appears on both sides — the failure that presents as a bigger sample.",
+    composed: false,
+    mustContain: "not a larger sample",
+  },
+  {
+    id: "attribution.withheld.assignment_undated",
+    module: "src/capacity/attribution.ts",
+    when: "An assignment that cannot be shown to precede the results.",
+    composed: false,
+    mustContain: "An arm chosen afterwards is not an arm",
+  },
+  {
     id: "coupling.off",
     module: "src/capacity/coupling.ts",
     when: "Always, while W231's coupling ships off — which today is always.",
@@ -241,7 +270,7 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
     module: "src/capacity/coupling.ts",
     when: "A recorded decision without a readable date.",
     composed: false,
-    mustContain: "readable date",
+    mustContain: "so the record says when it was taken",
   },
   {
     id: "calendar.unknown",
@@ -373,6 +402,9 @@ export function capacityCopySweep(): SweptSentence[] {
   if (!tooFew.compared) push("drift.withheld.too_few_in_a_window", tooFew.copy);
   push("calendar.unknown", CALENDAR_UNKNOWN_COPY);
   push("coupling.off", COUPLING_OFF_COPY);
+  for (const [reason, text] of Object.entries(CAPACITY_ATTRIBUTION_WITHHELD_COPY)) {
+    push(`attribution.withheld.${reason}`, text);
+  }
   push("coupling.refused.no_decision", COUPLING_REJECTION_COPY.no_decision);
   push("coupling.refused.reason_too_thin", COUPLING_REJECTION_COPY.reason_too_thin);
   push("coupling.refused.date_unreadable", COUPLING_REJECTION_COPY.date_unreadable);
