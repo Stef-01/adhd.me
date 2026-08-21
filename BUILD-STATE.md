@@ -143,6 +143,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O151 (the hardening pass law 5 actually asks for — and O144 was wrong that it could not be
+> done) — claimed 2026-08-21T09:40Z by loop-0820s.** O144 concluded that `code-review`,
+> `security-review` and `simplify` are absent from this container and filed standing debt 12
+> saying law 5's hardening requirement "cannot be met by a loop firing". **That was wrong, and
+> the error is instructive: I ran `ls .claude/skills/` and reported what the directory did not
+> contain.** The directory listing was true; the conclusion was not. All three are available as
+> SKILLS — the vendored `.claude/skills/` entries are one way a skill reaches a session, not the
+> only one. A null result from the wrong instrument is still a null result, and O144 dressed it
+> up as an environment gap in the year plan.
+> So this firing runs the review that O144 said it could not. `security-review` needed
+> `origin/HEAD`, unset in a fresh clone (`git remote set-head origin -a` fixes it) and worth
+> recording because every future firing hits it. It then resolves an EMPTY diff, because it
+> reviews the branch against origin/HEAD and this tree commits straight to main — so the review
+> was run against the session's real range instead, `O141~1..HEAD`, 66 files.
+> ONE REAL FINDING, and it is mine from O142. `src/matching/scale-fixture.ts` carries the
+> strongest law in this tree — twenty fabricated doctors that "may never reach a patient", because
+> publishing an invented clinician on a health directory is what W193 exists to prevent — and says
+> the guard makes it executable. The guard walks `app/` ONLY. `app/` imports dozens of `src/`
+> modules, so any `src/` module importing the fixture carries it to a patient surface with the
+> test silent. The law is absolute and its enforcement has a hole the width of `src/`.
+> Gate: the guard widened to `src/` and proved by seeding a violation THERE (not in `app/`, which
+> already fails); standing debt 12 rewritten with the correction rather than deleted, since a
+> wrong finding that is quietly removed teaches nobody; `pnpm verify` green.
+
 > **O150 (FOUNDER-DIRECTED — the profile still looks incoherent, second time of asking) —
 > claimed 2026-08-21T09:00Z by loop-0820s.** The founder sent Dr Anubhav Saxena's profile again
 > with "visually looks terrible, do thorough design audit to make it much more visually coherent,
