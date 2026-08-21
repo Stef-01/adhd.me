@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W231 (forecast → invitation-volume coupling, shipped explicitly OFF) — claimed
+> 2026-08-21T08:36Z by loop-0821a.** This is the unit where Q18 would reach into the live rail. The
+> forecast says between four and six of six slots will fill; the coupling says send more
+> invitations to cover the gap. It is the obvious next step and it is the first thing in this lane
+> that would change **who gets contacted**.
+> **SHIPPING IT OFF IS THE UNIT, NOT A CAVEAT ON IT.** Three reasons, and the third is the one that
+> would be missed. (1) G1/G2/G3 are all shut and nothing has ever been sent, so a coupling that
+> ran would drive a rail that does not exist. (2) Volume is a practice's decision about its own
+> capacity and staffing, which this product does not know — W225 already refused to choose the
+> number of slots for exactly that reason, and choosing the number of INVITATIONS is the same
+> refusal one step further along. (3) **MATCH-1 is live in this neighbourhood.** `rankCandidates`
+> has ordered the invitation pool by `chronicCare` since W5, contradicting a published ADM notice,
+> and it is unresolved. Sending MORE through that ranker sends more through the contradiction —
+> volume is not ordering, but a coupling that increases volume increases whatever the ordering is
+> doing, and the honest thing is to say so in the module rather than to note that they are
+> technically different concerns.
+> **THE DISABLED STATE HAS TO BE UNFAKEABLE, WHICH MEANS NO DEFAULT ANYWHERE.** A boolean defaulting
+> to false is one edit from defaulting to true and the edit looks like configuration. So enabling
+> takes a recorded decision VALUE — who decided, when, and a reason long enough to be an argument —
+> and there is no other constructor. A control that cannot be switched on by passing `true` is a
+> control nobody switches on by accident.
+> Gate: the coupling exists as declared, disabled data with the shipped state pinned by its own
+> test; enabling requires a recorded practice decision carrying a reason, with no default and no
+> boolean parameter — asserted at the type level; the live invitation rail does not import it,
+> checked on `src/engine/pool.ts` rather than promised; W201's ADM register records it as
+> `built_not_in_use` with the trigger that reclassifies it; `pnpm verify` green.
+
 > **W230 (the Q18 privacy pass) — claimed 2026-08-21T08:30Z by loop-0821a. Premise MEASURED before
 > the claim was written**, which is the O165 correction being applied rather than restated.
 > The row's standard is precise and it rules something out: *no figure can identify a patient, **by
@@ -5773,7 +5800,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | done | loop-0821a | 2026-08-21T08:30Z | 1560038 | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
-| W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
+| W231 | claimed | loop-0821a | 2026-08-21T08:36Z | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
