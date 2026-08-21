@@ -143,6 +143,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O175 (the keyboard sweep reaches the console — the last of O168's six) — claimed
+> 2026-08-21T22:41Z by loop-0821a.** Sixth and final sweep. Closes the arc O168 opened.
+> **THE GAP IS NOT A PARTIAL LIST, IT IS A MISSING HALF.** `a11y`, `contrast`, `touch-floor`,
+> `semantics` and `mobile-fit` each covered the console partially. `keyboard-focus` covers the 15
+> public routes and **zero console routes** — its 15/45 is 15 public and nothing else. Every console
+> screen practice staff use has never been checked for keyboard reachability or a visible focus
+> indicator.
+> **AND O174 MAKES THE CASE CONCRETE RATHER THAN THEORETICAL.** One row ago the touch sweep, once its
+> fixtures actually seeded, found a withdraw-reason input and a Save button under the 44px floor on
+> `/console/credentials` and `/console/case-mix`. Those are FORM controls on screens no keyboard test
+> has ever tabbed through. The console is where the forms are; it is also where somebody
+> reconfirming capacity between patients is most likely to be on a keyboard.
+> **THIS ONE IS GENUINELY NOT A MECHANICAL SWAP, AND O171 IS WHY I SAY THAT CAREFULLY.** In O171 I
+> corrected myself for having twice called `semantics` non-mechanical on the strength of its coverage
+> number rather than its probe. So, having read this probe: it presses REAL TABS (`:focus-visible`
+> does not match a programmatic `.focus()`), records each control's resting style first so an
+> already-underlined link cannot pass as focused, and walks up to 200 stops per route. Adding the
+> console means sign-in plus O174's corrected fixture seeding, and a per-Tab round trip on pages far
+> denser than the public ones. **The obstacle is cost and setup, not the assertion.**
+> **THE COST IS THE OPEN QUESTION AND I WILL MEASURE IT, NOT ESTIMATE IT.** 28 console routes at up
+> to 200 tab presses each, one `page.evaluate` per press, could be minutes per route. If the measured
+> cost makes the suite unusable, the honest answers are to split the console keyboard walk into its
+> own test or to bound it — and **whichever I do will be stated with the observed timing beside it**,
+> not chosen quietly. What I will not do is drop routes to make the number look acceptable.
+> **NO PREDICTION ABOUT FINDINGS.** O170 predicted and was right, O171 predicted and was wrong, O174
+> predicted a direction and the figure went the other way. My prior about which sweep hides what has
+> now been wrong as often as right, so this row states the population it will measure and reports
+> whatever it finds.
+> Gate: routes from `e2e/site-routes.ts`, no hardcoded path array left in the spec; the console
+> walked signed-in with O174's seeding — fixtures posted in the order that actually lands and every
+> response asserted ok, so this sweep cannot repeat the empty-page measurement O174 just fixed; the
+> non-vacuity stop floor re-measured against the larger walk rather than inherited, since O170, O171
+> and O174 all found stale floors; every finding fixed in the component; a seeded ringless control
+> and a seeded unreachable control both caught; the wall-clock cost reported; `pnpm gate` exit 0.
+
 > **O174 (three mock fixtures fail silently, and a compliance sweep measures the empty pages) —
 > claimed 2026-08-21T21:06Z by loop-0821a.** The debt I recorded in O169, re-counted in O173, and
 > twice wrote "the unit that sizes it is still owed" about. Sizing it is this row.
