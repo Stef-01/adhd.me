@@ -463,6 +463,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the reason union, the candidate projection and the floor check. `MATCH_REASON_COPY` is the sentence a practice manager reads about one appointment offer and `MATCH_FLOOR_BREACH_COPY` tells a reviewer why a plan was refused. Both are about capacity, recorded availability and practice-set limits; a test asserts neither can name a condition, a symptom or an urgency, because a reason is the one place a matcher gets to say WHY in words somebody reads.",
   },
   {
+    module: "src/console/responses.ts",
+    operatorCopy: ["RESPONSES_EMPTY_COPY", "RESPONSES_REFUSAL_COPY"],
+    notCopy:
+      "The remaining exports are the view type and the function that builds it. `RESPONSES_EMPTY_COPY` holds the three sentences a practice reads when there is nothing to show — nothing sent, nothing recorded against what was sent, and every group too small to disclose — and `RESPONSES_REFUSAL_COPY` covers the two ways the graph itself refuses. All five describe the record and its limits. None names a patient, a condition or a next clinical step, and none can be read as a zero: each says in words that a missing number is not the number zero.",
+  },
+  {
     module: "src/outcomes/attribution-v2.ts",
     operatorCopy: ["KIND_CLAIM_WITHHELD_COPY", "RESPONSE_RATE_CAVEAT"],
     notCopy:

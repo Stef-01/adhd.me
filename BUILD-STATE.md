@@ -167,6 +167,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > every kind fell below the disclosure floor. Each gets a different sentence.
 > Gate: e2e + axe; no clinical claim (the public/console sweep); the three empty states each
 > reached by a test rather than reasoned about; `pnpm verify` green.
+> DONE 2026-08-21. `src/console/responses.ts` (the view) + `app/console/responses/page.tsx` (a
+> renderer over it) + 14 unit tests + `e2e/responses-console.spec.ts` (5) + the route added to
+> W49's axe sweep. All four rendering decisions held.
+> **AND THE UNIT FOUND A CRASHING BUG IN W219, ONE UNIT OLD, WHICH W219's OWN TESTS COULD NOT
+> REACH.** W218's floor can withhold EVERY kind of a small graph, leaving a graph with no rates
+> and a perfectly claimable practice-wide figure with nowhere to put it. `attributeByKind` read
+> `rates[0]!` and threw on the non-null assertion. The crash is the GOOD outcome of that bug: the
+> bad one is a figure attributed to whichever kind happened to be first. Fixed at source with a
+> fourth refusal, `no_kind_to_attribute`, the assertion replaced by a checked read — and W219's
+> both-directions refusal register then failed until the new reason had a producer in W219's own
+> tests, which is the register doing exactly the job it was built for. Every fixture in W219 had a
+> kind in it; it took a surface that disclosure could empty to find the case.
+> The three empty states are each CONSTRUCTED, not reasoned about: no interventions (the graph
+> refuses), 40 interventions with nothing recorded against any of them, and a graph of 4 whose
+> every cell sits under the floor of 5. Each asserts its own false reading is negated in words —
+> "not a response rate of zero", "not everybody declining", "not a zero and not a silence" — after
+> a first draft checked all three against ONE generic "does not say zero" regex, which passed for
+> one state and left the other two misreadings standing.
+> **The fourth combination gets no fallback.** "No rates and nothing withheld" is unreachable (a
+> built graph always holds an intervention, so always yields a kind); the test asserts it is
+> unreachable across four sizes rather than the code defending it, because a fallback returns
+> plausible copy for a state nobody has reasoned about (W213).
+> The caveat's POSITION is pinned, not its presence: `compareDocumentPosition` requires the table
+> to follow it. Seeded proof — moving the caveat under the table fails with "the caveat is not
+> above the rates it qualifies", expected 4, received 0. A footnote satisfies W219's type and
+> loses its point, and that is the only shape of this failure worth testing for.
+> No undisclosed count can leave the view: the raw graph goes no further than the
+> `discloseResponseGraph` call and the view type has no field to reach one through — asserted on
+> the value, at depth, over a graph whose only kind is withheld.
+> Registers: W102's surface census (the new route), W200's copy surface + namespace loader, and
+> W201's ADM register all failed correctly and were extended in the same commit.
+> Gate: `pnpm verify` green (222 files, 3646 tests, build, audit:gate PASS); axe console sweep
+> passed with the route in it; `party-to-care` swept the new page (7 passed, route discovered
+> rather than listed); the unit's own e2e 5 passed.
 
 > **W219 (intervention attribution v2 over the response graph) — reclaimed 2026-08-21T06:52Z by
 > loop-0821a**, from interactive-0814's seven-day-old claim with nothing pushed against it (W54:
@@ -5147,7 +5181,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W217 | blocked | — | — | — | Learned ranking of patients → verify: n/a until ruled. **Blocked. FOUNDER DECISION — Q17 action 1, recorded in docs/GATE-DOSSIER-Q17.md: whether the product may order patients by anything a model learns, which would require changing the published ADM notice.** |
 | W218 | done | interactive-0814 | 2026-08-14T06:24Z | 9913da5 | [P] Response-graph privacy classification. Settled W212's deferred floor question IN `src/outcomes/response-graph.ts` (rather than a new module, to avoid re-registering across the W106/W200/W201/W116 registers a `// W≥157` file would trip): `RESPONSE_GRAPH_CELL_FLOOR` (5, declared data, no parameter — W196), `discloseResponseGraph` withholds any intervention kind holding a sub-floor cell WHOLE and recomputes the top-level total over disclosed kinds so a withheld count cannot be recovered by subtraction (W197's differencing rule; whole-kind because a kind's cells share one basis). `RESPONSE_GRAPH_DISCLOSURE_COPY` added to W200's linted copy surface (advice-free; `lintOperatorCopy` runs only the 4 advice patterns). Record-class entry for response-graph.ts updated: deferral removed, states erasure is COMPOSED (nothing stored, `SHIPPED_RESPONSE_GRAPHS` empty). Test `src/outcomes/response-graph-disclosure.test.ts`: floor-is-data (arity guard), whole-kind suppression hunted in the render ("2 of 9" absent, "20 of 38" present), total recomputed to 38 not 47, statement always present, no patient identity by type (`@ts-expect-error`) and by value (key list), erasure composed. W167's fold register caught the `.reduce` in `discloseResponseGraph` on its first run (commutative sum, declared with a rationale) — the mechanism working as designed. Verify green: 191 files, 2565 tests, build, audit:gate PASS. |
 | W219 | done | loop-0821a | 2026-08-21T06:52Z | a476f16 | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
-| W220 | claimed | loop-0821a | 2026-08-21T07:15Z | — | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
+| W220 | done | loop-0821a | 2026-08-21T07:15Z | PENDING | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | available | — | — | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | available | — | — | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |

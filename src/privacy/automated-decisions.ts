@@ -276,6 +276,7 @@ export const NOT_A_DECISION: Readonly<Record<string, string>> = {
   "src/registers/analytics.ts": "Gap-closure rates by condition across a cohort. Group arithmetic.",
   "src/registers/attribution.ts": "Incrementality per register cohort, including when the cohort is too small to claim anything. Group arithmetic.",
   "src/registers/sim-registers.ts": "The register layer as the simulator sees it. Synthetic.",
+  "src/console/responses.ts": "W220 is the view model for the page that shows how messages were answered. It arranges already-computed counts for a reader and decides nothing about anybody: its three empty states are statements about the record, not about a person.",
   "src/outcomes/attribution-v2.ts": "W219 reports how each kind of intervention was answered and, when the holdout arm allows a claim at all, carries W215's practice-wide figure through unchanged. It decides nothing about anybody: its refusals are about whether a figure may be split between kinds of message, and no function in it takes a patient.",
   "src/outcomes/response-graph.ts": "W212 counts how interventions were answered, over the synthetic loop only. It aggregates facts already recorded and decides nothing about anybody; its `GraphRefusal` union is about whether a graph may be built at all, not about a patient.",
   "src/reporting/model.ts": "Figures about a practice that a commissioner could be told. Nothing is disclosed, and no figure can name a patient.",

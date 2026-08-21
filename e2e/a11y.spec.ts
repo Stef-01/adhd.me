@@ -134,6 +134,7 @@ test("console surfaces pass WCAG A/AA", async ({ page }) => {
     "/console/verticals", // W164
     "/console/outcomes", // W173 — scanned POPULATED via the referral seed below
     "/console/reporting", // W199 — same referral seed populates it
+    "/console/responses", // W220 — scanned POPULATED: the sim graph always has rates
     "/console/setup/practice",
   ];
   for (const path of surfaces) {

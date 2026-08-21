@@ -57,16 +57,30 @@ export type KindClaimRefusal =
   /** W215 refused the practice-wide figure, so there is nothing to attribute to any kind. */
   | "counterfactual_withheld"
   /** More than one intervention kind was performed against a single practice-wide holdout arm. */
-  | "kinds_share_one_comparator";
+  | "kinds_share_one_comparator"
+  /**
+   * No intervention kind survived to be attributed to.
+   *
+   * FOUND BY W220, not by this module's own tests, which only ever fed it the sim's graph or a
+   * fixture with a kind in it. W218's disclosure floor can withhold every kind of a small graph,
+   * leaving a graph with no rates — and a claimable practice-wide figure with nowhere to put it.
+   * The first version read `rates[0]!` and threw on the non-null assertion; a crash is the good
+   * outcome of that bug and the bad one is the figure being attributed to whatever kind happened
+   * to be first. There is nothing to attribute a figure to, so the claim is refused.
+   */
+  | "no_kind_to_attribute";
 
 export const ALL_KIND_CLAIM_REFUSALS: readonly KindClaimRefusal[] = [
   "counterfactual_withheld",
   "kinds_share_one_comparator",
+  "no_kind_to_attribute",
 ];
 
 export const KIND_CLAIM_WITHHELD_COPY: Record<KindClaimRefusal, string> = {
   counterfactual_withheld:
     "The practice-wide impact figure is withheld, so there is nothing to attribute to any one kind of message. The counts below are still what was recorded.",
+  no_kind_to_attribute:
+    "There is no kind of message left to attribute a figure to. Either nothing was sent, or every group of answers was too small to show — and a practice-wide figure with nothing to attach it to would be a claim about a rail this page cannot show you.",
   kinds_share_one_comparator:
     "More than one kind of message went out, and there is only one comparison group covering all of them. Splitting one figure between several kinds would mean assuming how much each contributed, which is a guess rather than a measurement, so the split is not offered. The counts for each kind are below.",
 };
@@ -196,6 +210,7 @@ export function attributeByKind(
   const withheld: KindClaimRefusal[] = [];
 
   if (!counterfactual.claimed) withheld.push("counterfactual_withheld");
+  if (rates.length === 0) withheld.push("no_kind_to_attribute");
   if (rates.length > 1) withheld.push("kinds_share_one_comparator");
 
   // Both reasons when both apply — a caller shown one of two is shown half the refusal. Split in
@@ -215,8 +230,18 @@ export function attributeByKind(
   }
 
   // Exactly one observed kind and a claimable practice-wide figure. The figure is carried, not
-  // divided — there is nothing to divide it between.
-  const only = rates[0]!;
+  // divided — there is nothing to divide it between. Read without a non-null assertion: the empty
+  // case is a refusal above, and an assertion here is what hid it in the first place.
+  const only = rates[0];
+  if (only === undefined) {
+    return {
+      version: ATTRIBUTION_V2_VERSION,
+      claimed: false,
+      withheld: ["no_kind_to_attribute"],
+      counterfactualWithheld: [],
+      rates,
+    };
+  }
   return {
     version: ATTRIBUTION_V2_VERSION,
     claimed: true,

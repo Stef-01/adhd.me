@@ -74,6 +74,13 @@ const HEALTHY = counterfactual(arms(400, 80, 100, 10));
 /** No comparison group at all — W215's original refusal. */
 const NO_HOLDOUT = counterfactual(arms(400, 80, 0, 0));
 
+/**
+ * A graph with every kind gone — the shape W218's disclosure produces when the floor withholds
+ * them all. W220 hit this in the console and this module threw on a non-null assertion; the
+ * fixture exists so the refusal has a producer here rather than only downstream.
+ */
+const noKinds = (base: ResponseGraph): ResponseGraph => ({ ...base, edges: [], unanswered: [] });
+
 /** A second observed kind, which the sim never produces and which the refusal turns on. */
 const twoKinds = (base: ResponseGraph): ResponseGraph => ({
   ...base,
@@ -193,6 +200,17 @@ describe("W219 the claim is carried, never apportioned", () => {
     expect(result.rates.map((r) => r.kind).sort()).toEqual(["invitation_offered", "reminder_offered"]);
   });
 
+  it("refuses when the disclosure floor has left no kind to attribute a figure to", () => {
+    // A claimable practice-wide figure with nowhere to put it. Found by W220 rather than here:
+    // every fixture in this file had a kind in it, so `rates[0]!` was never empty and the
+    // assertion that hid the bug never fired.
+    const result = attributeByKind(noKinds(graph()), HEALTHY);
+    expect(result.claimed).toBe(false);
+    if (result.claimed) return;
+    expect(result.withheld).toEqual(["no_kind_to_attribute"]);
+    expect(result.rates).toEqual([]);
+  });
+
   it("carries W215's own reasons rather than summarising them away", () => {
     const result = attributeByKind(graph(), NO_HOLDOUT);
     expect(result.claimed).toBe(false);
@@ -221,7 +239,7 @@ describe("W219 the claim is carried, never apportioned", () => {
   it("declares every refusal it can produce, both directions", () => {
     const produced = new Set<string>();
     for (const c of [HEALTHY, NO_HOLDOUT]) {
-      for (const g of [graph(), twoKinds(graph())]) {
+      for (const g of [graph(), twoKinds(graph()), noKinds(graph())]) {
         const r = attributeByKind(g, c);
         if (!r.claimed) for (const reason of r.withheld) produced.add(reason);
       }
