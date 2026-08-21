@@ -33,6 +33,27 @@ test.describe("keyboard focus", () => {
       // Fonts change metrics and therefore layout; O146 was bitten by measuring before them.
       await page.evaluate(() => document.fonts.ready);
 
+      // O153: TAG AND RECORD EVERY CONTROL'S RESTING STYLE FIRST.
+      //
+      // The predicate this replaces read the focused element's computed style and accepted any
+      // outline, box-shadow or underline. Measured, 14 controls across `/practices`, `/privacy`,
+      // `/terms` and `/privacy/counsel-review` satisfied it WITHOUT BEING FOCUSED AT ALL — they
+      // are permanently underlined links. For those the test could not fail, which is the one
+      // thing an accessibility gate must never be. The property that actually matters is not
+      // "has an indicator" but "looks different once you tab to it", so the resting style is
+      // recorded up front and the focused style is compared against it.
+      await page.evaluate(() => {
+        const selector = 'a[href], button, input:not([type=hidden]), select, summary, textarea, [role="button"]';
+        document.querySelectorAll(selector).forEach((el, i) => {
+          const cs = getComputedStyle(el);
+          el.setAttribute("data-focus-probe", String(i));
+          el.setAttribute(
+            "data-focus-rest",
+            `${cs.outlineStyle} ${cs.outlineWidth}|${cs.boxShadow}|${cs.textDecorationLine}|${cs.backgroundColor}|${cs.color}`,
+          );
+        });
+      });
+
       let stops = 0;
       let first = "";
       for (let i = 0; i < 200; i += 1) {
@@ -41,14 +62,14 @@ test.describe("keyboard focus", () => {
           const el = document.activeElement as HTMLElement | null;
           if (!el || el === document.body) return null;
           const cs = getComputedStyle(el);
+          const now = `${cs.outlineStyle} ${cs.outlineWidth}|${cs.boxShadow}|${cs.textDecorationLine}|${cs.backgroundColor}|${cs.color}`;
+          const rest = el.getAttribute("data-focus-rest");
           return {
             key: `${el.tagName}.${el.className}|${(el.textContent || "").trim().slice(0, 20)}`,
-            // Any of the three is a legitimate indicator; the law asks for a visible one, not a
-            // particular technique.
-            ring:
-              (parseFloat(cs.outlineWidth) > 0 && cs.outlineStyle !== "none") ||
-              cs.boxShadow !== "none" ||
-              cs.textDecorationLine.includes("underline"),
+            // The indicator must be ATTRIBUTABLE TO FOCUS. An element with no recorded resting
+            // style appeared after tagging (a skip link revealed on focus is the usual case), and
+            // for those, appearing at all is the change.
+            ring: rest === null ? true : now !== rest,
             tag: el.tagName.toLowerCase(),
             text: (el.textContent || "").trim().slice(0, 32),
           };
@@ -69,7 +90,10 @@ test.describe("keyboard focus", () => {
         for (const el of Array.from(document.querySelectorAll(selector))) {
           const r = el.getBoundingClientRect();
           if (!r.width || !r.height) continue;
-          if ((el as HTMLElement).tabIndex < 0) continue;
+          // O153: see touch-floor.spec.ts — an absent tabindex on a role=button is the defect,
+          // not an exemption from being counted.
+          const tabAttr = el.getAttribute("tabindex");
+          if (tabAttr !== null && Number(tabAttr) < 0) continue;
           if ((el as HTMLInputElement).disabled) continue;
           n += 1;
         }

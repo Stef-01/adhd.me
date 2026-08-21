@@ -169,6 +169,47 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > the measured space while the pins stay green — which defeats that module's own stated law.
 > Gate: every finding either fixed with a seeded failure proving the fix, or dismissed in writing
 > with the measurement that dismissed it; `pnpm verify` green; the full accessibility batch green.
+> DONE 2026-08-21. Six of the seven fixed, one dismissed in writing, and the two confirmed before
+> claiming both turned out to be worse than the review described.
+> **O143's guard had been lying, and it cost seven more captures.** Widening it to template
+> literals caught the two spec sites immediately — and `qa/ui-o24/`, which is cited only by O24 so
+> restoration was earned, had ALL SEVEN of its files drifted. That directory is the one
+> `adhdme-taste` names as "the baseline record" for the whole declutter audit. So the true count of
+> falsified captures is **33 across 18 units**, not the 26 across 17 that O143 reported and closed
+> on. A guard written to stop a falsification became the reason the last seven went unnoticed for
+> another day.
+> **O146's slider overlapped its labels by 3px** and my own recorded numbers said so: input
+> 872..916, labels 913..926. I verified that the labels had not MOVED — they had not — and never
+> asked whether the input had grown INTO them. The labels are later in the DOM, so they won
+> hit-testing over the bottom of a 44px control whose entire reason for existing is being easier
+> to hit. Fixed at -4px; track and thumb unmoved, labels 4px lower than before O146, which is the
+> honest trade and is now written where the rule lives.
+> **The focus gate could not fail for the class it most needed to check**, and this is the finding
+> I would least have found by reading. It accepted any outline, shadow or underline on the focused
+> element — so a permanently underlined link passed whether or not focus changed anything.
+> Measured: 14 controls across four public routes satisfied it WITHOUT BEING FOCUSED AT ALL. It now
+> records every control's resting style first and demands the focused style DIFFER, proved by
+> seeding a link with `outline: none` on `:focus-visible` that fails now and passed before. The
+> tree itself was clean throughout — every control really does change on focus — which is exactly
+> why nobody would have caught this without measuring.
+> Two closed prospectively rather than reactively: both sweeps filtered `tabIndex < 0`, which is
+> the state of a `[role="button"]` div with no tabindex — the accidental-unreachability case they
+> exist to catch. Measured zero today, so latent, and now filtered on an EXPLICIT negative
+> attribute so a deliberate honeypot is still excused and an oversight is not. And `scale-fixture`
+> hand-copied both vocabularies; `MANNER_TRAITS` now derives from `EI_QUALITY_KEYS` and `CareArea`
+> is compiler-enforced via `Record<CareArea, true>`, so a new member is a type error instead of a
+> silent narrowing under green pins.
+> ONE DISMISSED, with the reading: `profile-layout`'s `heights.length === 1` does not demand one
+> LINE per item, it demands every row be its neighbour's height — satisfied equally by all items
+> wrapping. Uniformity is the property O150 fixed, so the assertion is the intended one.
+> The pattern across the week is now unmistakable and belongs in the ledger rather than in my
+> head: **eight probe or guard corrections, and every one was the instrument, not the tree.** The
+> tree keeps measuring clean; what keeps being wrong is what I pointed at it.
+> Gate met: `pnpm verify` green (219 files, 3607 passed), touch-floor + keyboard-focus + mobile-fit
+> + profile-layout + a11y + landing green (24), seeded failures proving the record guard, the focus
+> predicate and the fixture guard, and a DESIGN-QA entry listing all seven findings with their
+> outcomes.
+
 
 > **O152 (FOUNDER-DIRECTED — Saif Tareen joins the team page) — claimed 2026-08-21T10:10Z by
 > loop-0820s.** "add to team Saif Tareen, bachelor of commerce student at Macquarie university and

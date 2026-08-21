@@ -33,35 +33,40 @@
 import { clarifiers, declaredKeys } from "./clarify";
 import { clinicians } from "@/demo/clinicians";
 import type { CareArea, Clinician } from "@/demo/roster";
-import type { EIQuality } from "@/demo/emotional-fit";
+import { EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
 
-/** Every care area a clinician can declare. Closed vocabulary, so the fixture cannot outgrow it. */
-const CARE_AREAS: readonly CareArea[] = [
-  "adhd-assessment",
-  "child-adolescent-adhd",
-  "titration",
-  "shared-care",
-  "depression",
-  "anxiety",
-  "trauma-informed",
-  "complex-mental-health",
-  "autism-adhd",
-  "substance-history",
-  "emotional-regulation",
-  "non-medication",
-];
+/**
+ * Every care area a clinician can declare.
+ *
+ * O153: `CareArea` has no derived key list the way `EIQuality` does, so exhaustiveness is enforced
+ * by the COMPILER instead. This is a `Record<CareArea, true>`, so adding a member to the union
+ * without adding it here is a type error rather than a silent narrowing of the measured facet
+ * space — which is what the hand-written array this replaces would have allowed, with the pins
+ * below staying green while measuring less than they claim.
+ */
+const EVERY_CARE_AREA: Record<CareArea, true> = {
+  "adhd-assessment": true,
+  "child-adolescent-adhd": true,
+  titration: true,
+  "shared-care": true,
+  depression: true,
+  anxiety: true,
+  "trauma-informed": true,
+  "complex-mental-health": true,
+  "autism-adhd": true,
+  "substance-history": true,
+  "emotional-regulation": true,
+  "non-medication": true,
+};
+const CARE_AREAS: readonly CareArea[] = Object.keys(EVERY_CARE_AREA) as CareArea[];
 
-const MANNER_TRAITS: readonly EIQuality[] = [
-  "attuned",
-  "steadying",
-  "sense_making",
-  "motivating",
-  "unhurried",
-  "non_judgmental",
-  "collaborative",
-  "culturally_attuned",
-  "structured",
-];
+/**
+ * O153: DERIVED, not hand-copied. This was a nine-item literal, and a tenth trait would have
+ * narrowed the measured facet space in silence while the `[1, 4, 7, 9]` and `[16, 16]` pins stayed
+ * green — defeating this module's own stated law that a vocabulary change must move the
+ * measurement and fail the pin.
+ */
+const MANNER_TRAITS: readonly EIQuality[] = EI_QUALITY_KEYS;
 
 /**
  * A deterministic draw in [0, 1) from a seed string.

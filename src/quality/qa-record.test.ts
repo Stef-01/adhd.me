@@ -13,7 +13,15 @@ function capturePathsInSpecs(): { spec: string; target: string }[] {
     .filter((name) => name.endsWith(".spec.ts"))
     .flatMap((name) => {
       const text = readFileSync(path.join(E2E, name), "utf8");
-      return [...text.matchAll(/path:\s*"(qa\/[^"]+)"/g)].map((m) => ({ spec: `e2e/${name}`, target: m[1]! }));
+      // O153: BOTH quoting styles. This matched only double quotes, so `path: `qa/ui-o24/${slug}…``
+      // and `path: `qa/matching-o10/${name}…`` sailed past it and went on overwriting git-tracked
+      // design record on every run — the exact thing O143 was written to stop, with a green test
+      // standing over it. A guard that inspects source text has to cover the ways the source can
+      // actually be written.
+      return [...text.matchAll(/path:\s*["'`](qa\/[^"'`]+)["'`]/g)].map((m) => ({
+        spec: `e2e/${name}`,
+        target: m[1]!,
+      }));
     });
 }
 

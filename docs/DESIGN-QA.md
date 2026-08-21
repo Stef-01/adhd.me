@@ -1620,3 +1620,55 @@ mock data in the same batch to expose them. Fixed here because a red gate blocks
   surprise.
 
 Capture: qa/team-o152/team-mobile.png.
+
+## O153 — the guards I built this week, held to their own claims (2026-08-21)
+
+O152 ran `code-review` over O145–O151 and recorded seven findings rather than losing them. This
+acts on all seven. The theme is one sentence: **several guards added this session were weaker
+than the doc comments standing over them** — which is worse than no guard, because a comment that
+overstates a test is how a hole gets believed shut.
+
+### Confirmed and fixed
+
+- [x] **O143's record guard matched only double-quoted paths.** Two specs write with template
+  literals — `ui-audit.spec.ts` → `qa/ui-o24/`, `matching-verification.spec.ts` →
+  `qa/matching-o10/` — and both are git-tracked design record. So O143's stated purpose was not
+  achieved for those sites, and the test passed green while it was untrue. Widened to all three
+  quoting styles; both offenders caught immediately, then redirected to `qa/_runs/`.
+- [x] **Seven more falsified captures, found by the widened guard.** `qa/ui-o24/` is cited only by
+  O24, so restoration was earned by the same rule O143 used — and **all seven had drifted**. That
+  directory is the one `adhdme-taste` names as *"the baseline record"*. The true count of
+  falsified captures is **33 across 18 units**, not O143's 26 across 17. `qa/matching-o10/` is
+  cited by O46 and O48, so it stays as it is; it just stops drifting.
+- [x] **O146's slider overlapped its own labels by 3px.** Input `872..916`, labels `913..926` —
+  and the labels, later in the DOM, won hit-testing over the bottom of a 44px slider that exists
+  to be easier to hit. I closed O146 calling the surroundings pixel-identical because I checked
+  the labels had not *moved*; I never checked the input had grown *into* them. `margin-bottom`
+  −8px → −4px. The track and thumb stay exactly where they were; the labels sit 4px lower than
+  before O146, which is the honest trade.
+- [x] **The focus predicate could not fail for the class it most needed to check.** It read the
+  focused element's computed style and accepted any outline, shadow or underline. Measured: **14
+  controls across `/practices`, `/privacy`, `/terms` and `/privacy/counsel-review` satisfied it
+  without being focused at all** — permanently underlined links. It now records every control's
+  *resting* style up front and requires the focused style to **differ**. Proved by seeding a
+  permanently-underlined link with `outline: none` on `:focus-visible`: it fails now and would
+  have passed before.
+- [x] **Both sweeps filtered `tabIndex < 0` out of the denominator**, which is exactly the state
+  of a `[role="button"]` div with no tabindex — the accidentally-unreachable control. Measured
+  zero such elements today, so this was latent rather than live; closed prospectively by
+  filtering on an *explicit* negative `tabindex` attribute, so a deliberate honeypot is still
+  excused and an oversight is not.
+- [x] **`scale-fixture` hand-copied both vocabularies.** `MANNER_TRAITS` now derives from
+  `EI_QUALITY_KEYS`; `CareArea` has no derived list, so exhaustiveness is enforced by the
+  compiler via `Record<CareArea, true>`. Adding a union member is now a type error instead of a
+  silent narrowing with the `[1, 4, 7, 9]` pins staying green.
+- [x] **Non-null assertions** on two conditionally-rendered blocks in `profile-layout.spec.ts`
+  now throw a sentence naming the missing block, rather than `Cannot read properties of null`
+  from inside `page.evaluate`.
+
+### Dismissed in writing, with the reading that dismissed it
+
+- [ ] **"`heights` must have length 1, i.e. every item must fit one line at 390px."** It does not
+  assert one line — it asserts every row is the *same height as its neighbours*, which is
+  satisfied equally by all items wrapping to two lines. Uniformity is precisely the property O150
+  fixed, so the assertion is the intended one and stays.

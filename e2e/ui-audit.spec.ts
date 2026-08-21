@@ -9,6 +9,6 @@ test("capture public surfaces at phone width", async ({ page }) => {
     await page.goto(path);
     await page.waitForTimeout(500);
     const slug = path === "/" ? "home" : path.slice(1).replace(/\//g, "-");
-    await page.screenshot({ path: `qa/ui-o24/${slug}-mobile.png`, fullPage: true });
+    await page.screenshot({ path: `qa/_runs/ui-o24/${slug}-mobile.png`, fullPage: true });
   }
 });

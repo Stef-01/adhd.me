@@ -10,7 +10,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { clinicians } from "../src/demo/clinicians";
 import { clarifiers } from "../src/matching/clarify";
 
-const shot = (name: string) => ({ path: `qa/matching-o10/${name}.png`, fullPage: true as const });
+const shot = (name: string) => ({ path: `qa/_runs/matching-o10/${name}.png`, fullPage: true as const });
 
 async function searchFor(page: Page, query: string) {
   await page.goto("/finder");

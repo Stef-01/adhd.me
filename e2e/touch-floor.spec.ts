@@ -53,7 +53,12 @@ async function sweep(page: Page, route: string) {
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) continue;
       if (inlineInProse(el)) continue;
-      if ((el as HTMLElement).tabIndex < 0) continue;
+      // O153: EXPLICIT negative tabindex only. `el.tabIndex` is -1 for a `[role="button"]` div
+      // that simply has no tabindex — precisely the accidentally-unreachable control this should
+      // catch — so filtering on it excused the defect. A deliberate `tabindex="-1"` (the
+      // honeypot) is still excused, because that is a decision rather than an oversight.
+      const tabAttr = el.getAttribute("tabindex");
+      if (tabAttr !== null && Number(tabAttr) < 0) continue;
       if (el.classList.contains("sr-only")) continue;
 
       let box = rect;

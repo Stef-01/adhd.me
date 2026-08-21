@@ -60,7 +60,14 @@ test("the profile groups its blocks instead of spacing them all alike", async ({
   await toProfile(page);
 
   const gaps = await page.evaluate(() => {
-    const at = (s: string) => document.querySelector(`.profile-content ${s}`)!.getBoundingClientRect();
+    // O153: no non-null assertion. These blocks render conditionally, so a roster or lexicon
+    // change used to surface as `Cannot read properties of null` from inside page.evaluate —
+    // a failure that says nothing about what broke.
+    const at = (s: string) => {
+      const el = document.querySelector(`.profile-content ${s}`);
+      if (!el) throw new Error(`the profile did not render ${s}; this query no longer exercises it`);
+      return el.getBoundingClientRect();
+    };
     return {
       // Inside the identity block: tight, so name/meta/credential/disclosure read as one thing.
       metaToCredential: Math.round(at(".credential-line").top - at(".clinician-meta").bottom),
