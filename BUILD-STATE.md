@@ -172,6 +172,48 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > assertions, registers checked in only one direction); independence stated plainly and the method's
 > compensation for it described; findings filed with severity and either fixed in this unit or
 > recorded with what would make them live; `docs/AUDIT-Y5.md`; `pnpm verify` green.
+>
+> **DONE 2026-08-21T12:53Z at `88ebea3`.** `docs/AUDIT-Y5.md`. **Two findings, both fixed.**
+> **Y5-1 — MEDIUM: `app/console/results/page.tsx` computed its guardrail alerts from
+> `getComplaints().complaints`, THE ENTIRE STORE, and resolved no practice at all.** Y4-1's shape in
+> a THIRD place: W206 fixed the complaints page and the console home and did not reach this one —
+> which is exactly how Y4-1 itself survived from Year 1, and what W206's own row predicted about
+> `src/audit/store.ts`. Severity is MEDIUM not HIGH because no complaint ROW renders here, so
+> nothing patient-linked reached a screen; what crossed was the existence and count of another
+> practice's open complaints, plus W206's false call to action — **a practice with none of its own
+> shown a guardrail alert about somebody else's.** Reproduced BEFORE fixing (Alice 0, Bob 1: the
+> page's expression raises the alert on Alice's screen), then scoped as the query per W123.
+> **Y5-2 — MEDIUM: four source-scan guards passed on an empty string.** Sixteen files scan their own
+> source with comments stripped; four never checked the stripper left anything. **Demonstrated, not
+> argued**: replacing `model.test.ts`'s stripper with one returning `""` left **all 21 tests
+> passing**, including the guard W157's row calls load-bearing for the G5 boundary. An empty
+> haystack satisfies every negative assertion, so the guard does not error — **it reports success.**
+> **AND I ABANDONED THE REGISTER THAT WOULD HAVE GENERALISED IT, WHICH IS THE ENTRY I MOST WANT
+> READ.** I wrote the discovery that finds unchecked strippers. It produced FOUR FALSE POSITIVES —
+> two files check with no assertion message, one checks a COUNTER rather than the stripped text, two
+> modules check from their companion tests. It was matching assertion MESSAGES: a proxy, and every
+> proxy this session has been wrong in the direction its author was not facing. The next move was to
+> widen the pattern until it went green, which is **tuning a regex until it agrees with me** — and a
+> register tuned that way reports coverage it does not have. So there is no general control, on
+> purpose, and the abandoned attempt is recorded where the next person will meet it. **The real fix
+> is a different shape**: one shared helper that THROWS when it strips everything makes the failure
+> impossible rather than detectable. W254's `codeOf` already is it; consolidating is a unit.
+> **THREE OF MY OWN MEASUREMENTS WERE WRONG AND ALL THREE CORRECTIONS ARE IN THE DOCUMENT.** Seven
+> unchecked strippers became four. Twelve stripping files became sixteen. And the gate figure now
+> states what it was BEFORE this unit's own additions, because an audit's count that silently
+> includes the audit's own tests is a number nobody can reconcile.
+> **Sweeps re-derived rather than carried**: 22 `SHIPPED_*` registries against AUDIT-Y4's 13 — the
+> tree grew nine — 21 empty and pinned, the one non-empty re-READ rather than trusted (four
+> triggers, every `conditionCode` null). No frozen clocks: 17 hardcoded dates, every one a fixture
+> record. Three store reads with no practice in the signature, all correct — including
+> `complaintsForPatient`, which W206 deliberately left unscoped so erasure reaches every practice a
+> patient has touched. 62 app surfaces, 15 routes, **all gated**.
+> **AND I LOOKED FOR A FOURTH REGISTER GAP.** W102's census filters routes out of the copy sweep,
+> which is right for copy — so the question was whether those routes leak, and they do not.
+> **Recording the negative result**, because *"I looked and found nothing"* and *"I did not look"*
+> are the two things this session keeps proving are different.
+> Verification: `pnpm verify` green (252 files, 4039 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W255 (API refusal semantics) — claimed 2026-08-21T12:23Z by loop-0821a.** No patient data on
 > any error path, asserted over EVERY refusal branch rather than sampled.
@@ -7246,7 +7288,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W253 | done | loop-0821a | 2026-08-21T12:02Z | 023440c | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
-| W256 | claimed | loop-0821a | 2026-08-21T12:34Z | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
+| W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | available | — | — | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
