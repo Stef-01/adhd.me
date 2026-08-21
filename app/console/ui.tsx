@@ -74,7 +74,14 @@ export function ConsoleShell({
                 <Link href="/console/interest" className="text-sm text-stone-500 underline hover:text-stone-800">Interest</Link>
               )}
               <span className="text-sm text-stone-500">{email}</span>
-              <button type="submit" className="text-sm text-stone-500 underline hover:text-stone-800">
+              {/* O148: measured 33x48 — tall enough, too narrow, on every console route at once,
+                  so this one control was sixteen of the sweep's thirty-eight findings. Padding
+                  carries it past 44 and an equal negative margin gives the width back, so the
+                  header row is unchanged. */}
+              <button
+                type="submit"
+                className="-mx-1.5 inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 text-sm text-stone-500 underline hover:text-stone-800"
+              >
                 Sign out
               </button>
             </form>
@@ -105,12 +112,17 @@ export function Field({
   );
 }
 
+// O148: `min-h-11` is the 44px touch floor (O14), added here rather than at each call site —
+// these two constants dress most of the console's form controls, so the console sweep found
+// them as `342x40`, `215x40` and `77x40` on rules, usefulness and elsewhere at once.
+// `focus:outline-none` is legitimate in both because a ring replaces it, which is what the
+// taste law asks for and what O147's gate checks.
 export const inputClass =
-  "rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 " +
+  "min-h-11 rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 " +
   "focus:border-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-200";
 
 export const primaryButtonClass =
-  "rounded-lg bg-stone-900 px-5 py-2.5 font-medium text-white hover:bg-stone-700 " +
+  "min-h-11 rounded-lg bg-stone-900 px-5 py-2.5 font-medium text-white hover:bg-stone-700 " +
   "focus:outline-none focus:ring-2 focus:ring-stone-400";
 
 export function ErrorNote({ show }: { show: boolean }) {

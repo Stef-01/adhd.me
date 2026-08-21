@@ -61,7 +61,7 @@ export default async function RulesPage({
               className={inputClass}
             />
           </Field>
-          <label className="flex items-center gap-3">
+          <label className="flex min-h-11 items-center gap-3">
             <input
               name="usualClinicianOnly"
               type="checkbox"
@@ -70,7 +70,7 @@ export default async function RulesPage({
             />
             <span className="text-sm text-stone-700">Only invite patients of the clinician with availability</span>
           </label>
-          <label className="flex items-center gap-3">
+          <label className="flex min-h-11 items-center gap-3">
             <input
               name="chronicCareOnly"
               type="checkbox"

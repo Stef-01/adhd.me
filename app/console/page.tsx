@@ -51,55 +51,55 @@ export default async function ConsoleHome() {
       <div className="mt-4 flex gap-4">
         <Link
           href="/console/results"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Your results
         </Link>
         <Link
           href="/console/dashboard"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Incrementality dashboard
         </Link>
         <Link
           href="/console/usefulness"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Usefulness audit
         </Link>
         <Link
           href="/console/outreach"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Outreach
         </Link>
         <Link
           href="/console/ops"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Admin ops
         </Link>
         <Link
           href="/console/roi"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           ROI calculator
         </Link>
         <Link
           href="/console/privacy"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Privacy
         </Link>
         <Link
           href="/console/complaints"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Complaints
         </Link>
         <Link
           href="/console/setup/practice"
-          className="inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           {record.setupCompletedAt ? "Setup" : "Finish setup"}
         </Link>
@@ -120,7 +120,7 @@ export default async function ConsoleHome() {
         </dl>
         <Link
           href="/console/rules"
-          className="mt-4 inline-block text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="mt-4 -mb-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
         >
           Edit rules
         </Link>

@@ -165,6 +165,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > is O146's lesson. Gate: console sweep to zero, geometry unchanged on the shared shell proved by
 > measurement, the extended gate green with a seeded failure, `pnpm verify` green, console e2e
 > green.
+> DONE 2026-08-21. **38 to 0 across sixteen console routes**, and the shape of the finding is the
+> useful part: ONE control was sixteen of the thirty-eight. `Sign out` lives in the shared shell
+> at 33x48 — tall enough and too narrow — so it was under the floor on every console route at
+> once. Fixing shared components before per-route ones took the count 38 -> 25 -> 7 in three
+> passes, and `min-h-11` went on `inputClass` and `primaryButtonClass` rather than at each call
+> site because those two constants dress most of the console's form controls.
+> TWO OF THE 38 WERE NOT DEFECTS, and this is the sixth probe correction in this tree. The
+> `/console/registers` findings at 292x37 are citation links — "Source: {citation} · last reviewed
+> …" — sitting inline inside a sentence, which WCAG 2.5.8 exempts and which the sweep already
+> meant to skip. The exclusion was `el.closest("p")` and this prose lives in a `<div>`. A link
+> inline in a sentence is inline in a sentence whatever element wraps it, so the rule is now
+> computed-display plus text on either side. Widening it dropped the count 2 -> 0 with no product
+> change at all, which is what a false finding looks like when it is corrected rather than
+> "fixed" — and had I not looked, this unit would have shipped two pointless CSS changes and
+> called them accessibility work.
+> The gate now sweeps public and console from ONE `sweep()` function, so the two cannot drift
+> apart, and the console leg signs in with the same helper the console specs use. Proved by
+> seeding: reverting the `Sign out` fix fails it with the offender named on every route.
+> Gate met: console 38 -> 0, public still 0, both legs green from one shared rule, seeded failure,
+> `pnpm verify` green (219 files, 3607 passed), console + registers + usefulness + keyboard-focus
+> e2e green (13), DESIGN-QA entry with the per-cause table.
+
 
 > **O147 (the focus law, made executable — and it is already being kept) — claimed
 > 2026-08-21T06:30Z by loop-0820s.** `adhdme-taste` carries two keyboard rules — "visible

@@ -88,7 +88,7 @@ export default async function UsefulnessPage({
                 ))}
               </fieldset>
               <div className="mt-4 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm text-stone-700">
+                <label className="flex min-h-11 items-center gap-2 text-sm text-stone-700">
                   <input
                     type="checkbox"
                     name="clinicianJudgedReasonable"
@@ -99,7 +99,7 @@ export default async function UsefulnessPage({
                 </label>
                 <button
                   type="submit"
-                  className="rounded-lg bg-stone-900 px-5 py-2 font-medium text-white hover:bg-stone-700"
+                  className="min-h-11 rounded-lg bg-stone-900 px-5 py-2 font-medium text-white hover:bg-stone-700"
                 >
                   Save
                 </button>

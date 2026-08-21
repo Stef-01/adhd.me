@@ -1392,3 +1392,47 @@ The first version terminated the tab walk on a **repeated** element key, so fort
 checkboxes ended the walk after four stops and `/clinicians/join` reported 4 where the truth is
 43. Identical controls legitimately share a key; the ring ends when focus returns to the **first**
 stop, not to a seen one. Every route's number was wrong and all of them looked plausible.
+
+## O148 — the console was never swept (2026-08-21)
+
+O145 and O146 took the fifteen public routes to zero controls under the 44px floor. The console
+— where practice staff actually work, sometimes on a phone between patients — was never swept
+at all, because O145 scoped itself to what a patient sees. Measured at 390×844 across sixteen
+console routes: **38 under the floor out of 158.**
+
+### Measured
+
+| cause | count | fix |
+|---|---|---|
+| `Sign out` at `33×48` — tall enough, **too narrow** | 16 (every route) | padding + equal negative margin in `ConsoleShell` |
+| `/console` navigation grid at `40–45px` tall | 10 | one repeated className, `min-h-11 min-w-11` |
+| `Console` back-link at `50×20` | 3 | `.mc-back` grown, paid out of its own bottom margin |
+| `/console/usefulness` inputs and Save at `40px` | 6 | `min-h-11` on `inputClass`, `primaryButtonClass`, the row label |
+| `/console/rules` checkbox rows | 2 | `min-h-11` on the label |
+| `/console/registers` toggle at `217×42` | 1 | `min-h-11` |
+| **`/console/registers` citation links at `292×37`** | 2 | **not a defect — see below** |
+
+- [x] One control was 16 of the 38: `Sign out` lives in the shared shell, so it was under the
+  floor on every console route at once. Fixing shared components first took 38 → 25 → 7 in three
+  passes.
+- [x] `min-h-11` went on `inputClass` and `primaryButtonClass` rather than at each call site,
+  because those two constants dress most of the console's form controls.
+
+### The probe was wrong again, and this is the sixth time
+
+Two `/console/registers` findings were **not defects**. They are citation links —
+"Source: {citation} · last reviewed …" — sitting inline inside a sentence, which WCAG 2.5.8
+exempts and which the sweep already meant to skip. The exclusion was `el.closest("p")`, and this
+prose lives in a `<div>`. A link inline in a sentence is inline in a sentence whatever element
+wraps it, so the rule is now: an `<a>` whose computed display is `inline` and whose parent holds
+text either side of it. Widening the rule dropped the population 158 → 156 and the count 2 → 0
+without touching a line of product CSS, which is what a false finding looks like when it is
+corrected rather than "fixed".
+
+### The gate
+
+`e2e/touch-floor.spec.ts` now sweeps both, sharing one `sweep()` so the public and console rules
+cannot drift apart. Proved by seeding: reverting the `Sign out` fix fails it with the offender
+named on every route. The console sweep signs in with the same helper the console specs use.
+
+Nothing patient-facing changed, so no compliance copy is in scope.

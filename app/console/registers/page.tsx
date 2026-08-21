@@ -152,7 +152,7 @@ export default async function RegistersPage({
                     <input type="hidden" name="enable" value={enabled ? "0" : "1"} />
                     <button
                       type="submit"
-                      className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-800 hover:bg-stone-50"
+                      className="min-h-11 rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-800 hover:bg-stone-50"
                     >
                       {enabled ? "Turn off for this practice" : "Turn on for this practice"}
                     </button>
