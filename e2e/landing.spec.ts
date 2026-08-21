@@ -88,7 +88,10 @@ test("the storybook's copy is legible with JavaScript disabled", async ({ browse
   };
 
   await legible(page.getByRole("heading", { level: 1 }), "the hero headline");
-  await legible(page.getByText("Why we founded ADHD.ME"), "the hero eyebrow");
+  // O172: was "Why we founded ADHD.ME". O167 changed the eyebrow under the founder's instruction to
+  // remove every founder-family word from the site, and missed this assertion — see that unit's
+  // correction in the ledger. The string is the copy, so it has to move with it.
+  await legible(page.getByText("Why we built ADHD.ME"), "the hero eyebrow");
   await legible(page.getByRole("heading", { name: /NSW and QLD/i }), "the NSW section");
   await legible(page.getByRole("heading", { name: /How it works/i }).first(), "the steps section");
 

@@ -178,6 +178,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > legitimately-wide content in its own scroll container — the exception named with its route and
 > measured width rather than the assertion weakened globally; a seeded overflowing element caught;
 > `pnpm verify` green.
+>
+> **DONE 2026-08-21T19:47Z. THE ROUTE CHANGE FOUND NOTHING; THE RUN FOUND THAT O167 SHIPPED A RED
+> TEST.** That is the finding of this row and it is about my own process, not the tree's.
+> **THE ROUTE WORK, BRIEFLY.** All 15 public routes now get the strict per-element assertion (was 7)
+> and all 28 console routes the document-width one (was 16). The split is preserved with O149's
+> reason kept in the file rather than summarised away. **Zero overflow findings** on the eight new
+> public pages and twelve new console screens.
+> **A GENERATED-TEST LOOP HAS A VACUITY SHAPE THE OTHER FIVE DO NOT.** Every other derived sweep
+> loops over routes INSIDE one test, so a collapsed derivation trips a population floor. Here the
+> loop generates the tests themselves: an empty `PUBLIC_ROUTES` would produce a clean run with
+> nothing red, because **the assertions cannot fire if the tests do not exist**, and no floor placed
+> inside a generated test can catch that. The count is asserted in a test of its own. The seed was
+> the most convincing of the session — a page planted at `/o172-seed` with a 900px div **generated
+> its own test** and failed on it.
+> **NOW THE REAL ONE. `e2e/landing.spec.ts:91` ASSERTED `getByText("Why we founded ADHD.ME")`.** O167
+> changed that eyebrow under the founder's instruction to remove every founder-family word and did
+> not update the assertion. **It fails alone, not only in a batch.** O167 was pushed to `main` red and
+> stayed red through O168, O169, O170 and O171.
+> **IT SURVIVED BECAUSE I CHOSE THE VERIFICATION BATCH BY HAND, FIVE ROWS RUNNING.** Each time I
+> picked "the affected specs" from memory and ran those. That is a hardcoded list, selected by
+> whoever happened to be looking, staying green beside everything it does not name — **the exact
+> fault these five rows have been fixing in the sweeps.** I have spent five units deriving route
+> lists while choosing my own test lists the old way, and wrote "16/16", "26/26", "11/11" in four
+> ledger rows as though those figures meant the suite was green. They meant the subset I remembered
+> was green. `pnpm verify` does not run e2e, so nothing else was going to catch it.
+> **THE CORRECTION IS TO THE PRACTICE, NOT JUST THE ASSERTION.** This row ran the **full 55-spec,
+> 283-test suite: 283 passed in 11.7 minutes**. Eleven minutes is the whole cost, and it is what a
+> unit touching shared route lists — or shipped copy — needs. The four earlier rows' e2e figures
+> stand as written but should be read as subsets; this row is the first in the sequence whose e2e
+> claim is the whole suite.
+> **AND ONE GOTCHA WORTH THE LINE.** Removing a seeded route does not clear `.next/types`: three
+> stale `TS2307`s survived the delete and failed the typecheck. `rm -rf .next` after any route seed.
+> **NO `qa/` CAPTURE AND NO DESIGN CHANGE**: this unit alters two spec files and nothing a reader
+> sees, so the taste law's capture requirement does not attach. `docs/DESIGN-QA.md` carries the entry
+> because the sweep it fixes is a design gate.
+> **FIVE SWEEPS DERIVED, ONE TO GO**: `keyboard-focus` 15/45, the only one left and the one that
+> genuinely drives per-screen interactions.
+> Verification: `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted);
+> **the full e2e suite green, 283/283 across all 55 spec files**.
 
 > **O171 (the semantics sweep gets the derived route list) — claimed 2026-08-21T18:11Z by
 > loop-0821a.** Fourth of O168's six.

@@ -16,30 +16,27 @@
 
 import { expect, test, type Page } from "@playwright/test";
 
-/** Public surfaces. */
-const SURFACES = ["/", "/approach", "/finder", "/clinicians", "/clinicians/join", "/practices", "/privacy"];
-
-/**
- * O149: the console, whose absence here used to be justified in this file with "the console is
- * behind sign-in and is not a phone surface". That premise was wrong and the cost was measurable:
- * EVERY console route scrolled sideways at 390px — `/console` at 548px of content in a 390px
- * viewport, `/console/rules` at 468 — because the shell's header row could not wrap and the
- * signed-in email dragged the document with it. Sign-in is not a statement about screen size; the
- * console is where somebody reconfirms capacity on a phone between patients.
- *
- * These assert the DOCUMENT's scrollWidth only, not the per-element check the public surfaces
- * get, and the difference is deliberate. `/console/matching` and `/console/allocation` render wide
- * tables that reach x=745 inside their own `overflow-x` container — which is exactly what the web
- * guidelines require of wide content, and is why the document does not move. An element-rect
- * assertion would call those tables a defect and "fixing" them would mean squeezing a data table
- * that is correct as it stands.
- */
-const CONSOLE_SURFACES = [
-  "/console", "/console/dashboard", "/console/matching", "/console/interview",
-  "/console/applications", "/console/allocation", "/console/rules", "/console/registers",
-  "/console/privacy", "/console/ops", "/console/outcomes", "/console/referrals",
-  "/console/complaints", "/console/reporting", "/console/usefulness", "/console/case-mix",
-];
+// O172: the routes are derived from `app/` now, not listed here — BUT THE SPLIT IS KEPT, and the
+// split is the whole reason this file was the last mechanical one.
+//
+// Public surfaces get the strict PER-ELEMENT check: nothing may extend past the viewport's right
+// edge. The console gets the DOCUMENT's `scrollWidth` only. That difference is deliberate and O149
+// wrote the reason down: `/console/matching` and `/console/allocation` render wide tables reaching
+// x=745 inside their own `overflow-x` container, which is exactly what the web guidelines require
+// of wide content, and is why the document does not move. A per-element assertion would call those
+// tables a defect, and "fixing" them would mean squeezing a data table that is correct as it stands.
+//
+// THE PUBLIC LIST HELD 7 OF 15, WHICH I HAD MIS-READ IN AGGREGATE. O168 reported this sweep at
+// 25/45 and I took that for a console gap, as it was for every other sweep. Eight public pages —
+// /about, /demo, /examples, /faq, /terms, /thanks, /privacy/automated-decisions,
+// /privacy/counsel-review — had never been checked for horizontal overflow at 390px, and they are
+// the ones that get the STRICT assertion.
+//
+// W216's own history is the argument for caring: that row exists because a tap-target rule revived
+// three `hidden sm:inline` links and /practices measured 453px inside a 390px viewport — and every
+// existing spec passed while that was true, because a11y does not measure layout, the public sweep
+// reads copy, and no unit test can see a viewport.
+import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 
 async function signInAsPracticeOwner(page: Page) {
   await page.goto("/console/signin");
@@ -81,7 +78,17 @@ async function measure(page: Page) {
   });
 }
 
-for (const path of SURFACES) {
+// O172: A GENERATED-TEST LOOP HAS A VACUITY SHAPE THE OTHER SWEEPS DO NOT, and it needs its own
+// guard. Every other derived sweep in this suite loops over routes INSIDE one test, so a collapsed
+// derivation shows up as a population floor failing. Here the loop generates the tests themselves:
+// if `PUBLIC_ROUTES` came back empty, Playwright would report a clean run of the remaining specs and
+// nothing would be red — the assertions cannot fire because the tests do not exist. No floor placed
+// inside a generated test can catch that, so the count is asserted in a test of its own.
+test("the public sweep generated a test per route, and there are 15 of them", () => {
+  expect(PUBLIC_ROUTES.length, "the derived public list collapsed — the per-route tests above do not exist").toBeGreaterThan(12);
+});
+
+for (const path of PUBLIC_ROUTES) {
   test(`${path} fits a 390px phone`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: PHONE, reducedMotion: "reduce" });
     const page = await context.newPage();
@@ -129,7 +136,12 @@ test("no console route scrolls sideways on a phone (O149)", async ({ browser, re
   await signInAsPracticeOwner(page);
 
   const sideways: string[] = [];
-  for (const path of CONSOLE_SURFACES) {
+  // O172: 28 routes with a fonts-ready wait each does not fit Playwright's 30s default. Fourth
+  // instance in four rows (contrast O169, touch-floor O170, semantics O171). Every one of these
+  // specs was written with a short route list and inherited a timeout nobody chose.
+  test.setTimeout(300_000);
+  expect(CONSOLE_ROUTES.length, "the derived console list collapsed").toBeGreaterThan(24);
+  for (const path of CONSOLE_ROUTES) {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
     await page.evaluate(() => document.fonts.ready);

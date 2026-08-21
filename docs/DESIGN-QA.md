@@ -2221,3 +2221,60 @@ Two seeds, watched failing: a 60×28 button planted on a route neither array nam
 collapsed derivation (both floors caught it). Remaining unconverted: `semantics` 27/45,
 `mobile-fit` 25, `keyboard-focus` 15 — the three that need a per-route decision about what the
 assertion means, rather than a mechanical swap.
+
+---
+
+## O172 — mobile-fit gets the derived route list (2026-08-21)
+
+Fifth of the six sweeps O168 measured. The route change found nothing; **the run found that O167
+shipped a red test**, which is the part of this entry worth reading.
+
+### The route change
+
+`mobile-fit` applies two different assertions and that is deliberate. Public surfaces get a strict
+**per-element** check — nothing may extend past the 390px viewport's right edge. The console gets the
+**document's `scrollWidth`** only, because `/console/matching` and `/console/allocation` render wide
+tables reaching x=745 inside their own `overflow-x` container, which is what the guidelines require
+of wide content. A per-element assertion would call those tables a defect, and "fixing" them would
+mean squeezing a data table that is correct as it stands.
+
+**I had mis-read this gap in aggregate.** O168 reported the sweep at 25/45 and I took that for a
+console problem, as it was for every other sweep. The public list held **7 of 15** — eight public
+pages never checked for horizontal overflow at 390px, and those are the ones under the strict
+assertion. W216 exists because exactly that went wrong once: a tap-target rule revived three
+`hidden sm:inline` links, `/practices` measured 453px in a 390px viewport, and every existing spec
+passed while it was true.
+
+All 15 public and 28 console routes now, per-element and per-document respectively. Zero findings.
+
+### A generated-test loop has a vacuity shape the other sweeps don't
+
+Every other derived sweep loops over routes *inside* one test, so a collapsed derivation trips a
+population floor. Here the loop generates the tests themselves — if `PUBLIC_ROUTES` came back empty,
+Playwright would report a clean run and nothing would be red, because **the assertions cannot fire
+if the tests do not exist**. No floor placed inside a generated test can catch that, so the count is
+asserted in a test of its own.
+
+The seed for this was the most convincing of the session: a page planted at `/o172-seed` with a
+900px div **generated its own test** and failed on it.
+
+### O167 shipped a red test, and my batch selection is why
+
+`e2e/landing.spec.ts:91` asserted `getByText("Why we founded ADHD.ME")`. O167 changed that eyebrow
+under the founder's instruction to remove every founder-family word, and did not update the
+assertion. It fails alone, not only in a batch — this was not subtle.
+
+**It survived because I chose the verification batch by hand.** Five units in a row I picked "the
+affected specs" from memory and ran those. That is a hardcoded list, selected by whoever was looking,
+going green beside everything it does not name — **the exact fault these five units have been fixing
+in the sweeps.** I have been deriving route lists all session while choosing my own test lists the
+old way.
+
+The fix here is the assertion. The correction to the practice is that `pnpm verify` does not include
+e2e, so "green" has meant "green on what I remembered"; this unit ran the **full 55-spec suite**
+instead, and that is what a unit touching shared route lists needs.
+
+### One gotcha worth recording
+
+Removing a seeded route does not clear `.next/types` — three stale `TS2307`s survived the delete and
+failed the typecheck. `rm -rf .next` before re-verifying after any route seed.
