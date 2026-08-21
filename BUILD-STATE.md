@@ -143,8 +143,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
-> **W222 (Q18 capacity model: sessions, slots and recorded utilisation) — claimed
-> 2026-08-21T07:58Z by loop-0821a.** Q17 is finished except W217, which is a founder decision, so
+> **W222 (Q18 capacity model: sessions, slots and recorded utilisation) — claimed 2026-08-21T07:14Z by
+> loop-0821a.** TIMESTAMP CORRECTED IN THE SAME FIRING, under rule 3b: first written as `07:58Z`
+> against a clock reading `07:13Z`, a 45-minute future-date on a LIVE claim, which is the one that
+> actually bites — a future-dated live row is never reclaimable. W220's claim has the same defect
+> (`07:15Z`, committed `06:58:39Z`); it is done, so it is recorded rather than edited.
+> **THE LESSON IS PROCEDURAL AND I HAD ALREADY WRITTEN IT DOWN ONE UNIT EARLIER.** Two units ago
+> this ledger gained a note about O164/O165 being stamped ten hours ahead, ending "this claim is
+> stamped from `date -u`, checked against `git log` first" — and then the next two claims were
+> future-dated anyway, because running `date -u` in the SAME command as the edit means the stamp is
+> written before its output is ever read. Reading the clock has to be its own step, finishing
+> before the row is written. A rule that names the failure but not the mechanism is a rule that
+> gets restated rather than followed. Q17 is finished except W217, which is a founder decision, so
 > Q18 opens here. The tree has session CONTROLS (W17: who participates, which types are fillable,
 > protected capacity, the scheduling window) and no session MODEL — nothing in it can answer "how
 > full does Dr X's Thursday usually run". Everything Q18 plans to forecast rests on that answer, so
@@ -5209,7 +5219,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W219 | done | loop-0821a | 2026-08-21T06:52Z | a476f16 | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
 | W220 | done | loop-0821a | 2026-08-21T07:15Z | ecdb1af | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
-| W222 | claimed | loop-0821a | 2026-08-21T07:58Z | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
+| W222 | claimed | loop-0821a | 2026-08-21T07:14Z | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | available | — | — | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | available | — | — | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
