@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W246 (the interop console) — claimed 2026-08-21T10:31Z by loop-0821a.** The row's gate has a
+> clause with the emphasis already in it: *shows what was exchanged and, **more importantly**, what
+> was not.*
+> **AND WHAT WAS EXCHANGED IS NOTHING, WHICH MAKES THIS THE HARDEST PAGE IN THE LANE TO WRITE
+> HONESTLY.** Eight interop modules ship and not one byte has left this tree: no endpoint exists,
+> `SHIPPED_MAPPINGS`, `SHIPPED_REFERRAL_PROFILES`, `SHIPPED_BINDINGS`, `SHIPPED_DISCLOSURES` and
+> `CONFIGURED_INTEGRATIONS` are all pinned empty, and G1 is shut. A console over that could render
+> as a clean dashboard with zeroes in it — every count correct, every gauge green, and a reader
+> concluding the integrations are working and quiet. **A zero that means "nothing has ever been
+> attempted" and a zero that means "everything succeeded" are the same character**, and this page
+> exists to keep them apart.
+> **SO THE ABSENCES ARE THE CONTENT, DERIVED RATHER THAN LISTED.** The eleven unbound codes come from
+> W238's own work order; the unsent fields from W235's and W236's registers; the empty R4 slots from
+> W236's; the ledger's emptiness from W239; the gate from W242. Each is a real absence with a reason
+> already attached, and the page's job is to show them as the substance rather than as a footer under
+> a table of zeroes.
+> **THE ONE THING THIS PAGE MUST NEVER DO IS SHOW A GREEN STATE.** No tick, no "connected", no
+> "healthy" — W229 already had to keep a drift verdict from being graded in CSS, and this is the same
+> argument where the stakes are higher: a practice that believes its referrals are flowing will stop
+> chasing them.
+> Gate: e2e + axe; the absences derived from the lane's own registers, not listed in the page; a zero
+> never rendered without the sentence saying which kind of zero it is; no green or success styling
+> anywhere — asserted on the rendered colour through a canvas, W229's technique; W102's census and
+> the compliance sweeps extended; `pnpm verify` green.
+
 > **W245 (Q19 dossier: G10 priced) — claimed 2026-08-21T10:26Z by loop-0821a.** W216 priced the
 > learned-ranking question and W232 priced what a forecast implies operationally. This prices G10 —
 > **payer and insurer data flows** — which is PROPOSED at W208 and has never been put to the founder
@@ -6596,7 +6621,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | done | loop-0821a | 2026-08-21T10:26Z | 5ec7878 | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
-| W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
+| W246 | claimed | loop-0821a | 2026-08-21T10:31Z | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
 | W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
 | W249 | blocked | — | — | — | Women's health pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.** |
