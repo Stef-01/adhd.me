@@ -175,6 +175,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > running the trigger, not by assuming; the IN-SOURCE half derived from the markers that carry it,
 > so answering one in code turns this document red; counts pinned row-by-row; the distinction
 > between the two sensitivities stated in the test rather than in prose; `pnpm verify` green.
+>
+> **DONE 2026-08-21T13:01Z at `2e60862`.** `docs/GATE-DOSSIER-Y5.md` + 7 pinning tests.
+> **W210's MACHINERY CAUGHT ME, WHICH IS THE ENTRY WORTH READING.** Seeding the `_LAST_UNIT` bound
+> away fires `DOSSIER-1` — a latent finding recorded by W208, carrying the exact condition that
+> would make it live, sitting dormant until the unit that could trip it arrived. **Third time this
+> session the machinery has got ahead of me** (W231, W235's refusal register, now this). W210's row
+> claimed a recorded finding should carry the condition that makes it live rather than be a note
+> somebody re-reads; this is that claim being cashed.
+> **AND THE BOUND IS NOT THE WHOLE ANSWER — SEPARATING THE TWO SENSITIVITIES IS THE UNIT.** A
+> year-close arithmetic dossier is point-in-time and must be bounded. **A dossier of OUTSTANDING
+> DECISIONS is not**: its subject IS the live state, and if somebody rules on G10 tomorrow this
+> document should go red, because it has become wrong and going red is how anybody finds out.
+> Bounding that half too would produce a document that keeps agreeing with itself after the world
+> moved — the exact staleness the row forbids. So: gate half bounded, decision half not.
+> **ONLY THREE OF THE SEVEN DECISIONS ARE LEDGER ROWS.** Four live in SOURCE — a `FOUNDER:` marker
+> on Dr Anusha Saxena's roster entry, two accepted findings in the profile sweep, and one that
+> resolves **by a file existing** (`public/saif-tareen.png`). A dossier deriving from the ledger
+> alone prices three and lists four from memory, **and the four from memory are exactly the ones
+> that go stale**, because answering one is a source edit nobody would think to reflect in a
+> document. Seeding an answer to D5 fails with a message naming which decision moved.
+> **READING THE EXTRACTED ROWS BEFORE WRITING THE DOCUMENT FROM THEM CAUGHT TWO THINGS.** My first
+> gate extraction matched a bare `Gn` and attributed G1 and G3 to W147 and W203 — rows that MENTION
+> those gates while being blocked on G8 and G9. And **the ledger holds 18 blocked rows, not the 16
+> AUDIT-Y5 reported an hour ago**: that count came from a numbered-only grep which silently excluded
+> `SUP-1` and `SUP-2`, both G5. So AUDIT-Y5's "G5 ×6" was really G5 ×8. **Corrected in place with
+> the correction left VISIBLE** — an audit that quietly fixes its own figures is asking to be
+> trusted on the ones nobody checked. It is also the third measurement of mine this session that
+> deriving caught and remembering would not have.
+> **The verdict**: 18 blocked rows, seven outstanding decisions, six load-bearing gates. **G5 is 8
+> units and every one is a person doing a thing rather than a builder writing code** — Y3 shipped
+> the mechanisms and Q13/W248/W250 built the assembly in front of the ruling, so there is no
+> mechanism gap left. G8, G9 and G10 release two units each, and the headline is the one W245
+> reached for G10 alone: **cheap to leave shut is not the argument for shutting it.** W217 is the
+> only blocked row naming no gate, because what stands in its way is a published legal notice.
+> **Three seeded failures**: the bound removed (DOSSIER-1 fires), the document's count drifting from
+> the ledger, and a decision answered in source.
+> Verification: `pnpm verify` green (253 files, 4046 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W256 (five-year full-system audit) — claimed 2026-08-21T12:34Z by loop-0821a.** W51's method:
 > the whole tree, not a diff. Every sweep RE-RUN from source rather than carried from AUDIT-Y4.
@@ -7322,7 +7360,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
-| W257 | claimed | loop-0821a | 2026-08-21T12:53Z | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
+| W257 | done | loop-0821a | 2026-08-21T12:53Z | 2e60862 | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
 | W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
