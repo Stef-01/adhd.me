@@ -143,6 +143,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O158 (FOUNDER-CORRECTION — I got a fact wrong about a real doctor, and it is live) — claimed
+> 2026-08-21T13:40Z by loop-0820s.** "Dr Saxena only owns the clinic, he is the first clinic
+> partner. Do not hallucinate and interpret him as cofounding the entity."
+> **THE CORRECTION IS MINE TO OWN.** O156 reworded his disclosure to "Owner of ADHD.ME" and "Dr
+> Saxena has an ownership interest in ADHD.ME". Both are FALSE. He owns his CLINIC and is ADHD.ME's
+> first clinic partner; he has no ownership of the entity. I reached "owner" by treating
+> "co-founder" as a synonym for ownership when the brief asked me to drop the word — an inference,
+> about a named real person, on a health directory, deployed to production. W193 exists precisely
+> to stop this and I walked around it by rewording rather than re-checking.
+> The fix is the stated truth: the badge reads what the relationship IS, the sentence says his
+> clinic is ADHD.ME's first clinic partner, and the field stops being called `ownershipInterest`
+> — a name that PRESUMES the shape of the interest and is exactly what steered the wording wrong.
+> `disclosedInterest` presumes nothing.
+> **DR ANUSHA SAXENA IS NOT COVERED BY THIS CORRECTION AND I WILL NOT EXTEND IT BY INFERENCE.** The
+> founder spoke about one person. Her entry currently carries the same false "ownership interest in
+> ADHD.ME" wording, so it cannot stand either — but replacing one guess with another is the error
+> repeating. Her line is reduced to what is certainly true (a declared interest exists, disclosed
+> because she appears in a directory operated by a company she is connected with) and FLAGGED for
+> the founder to state exactly. The disclosure keeps working while being honest about its limit.
+> Gate: no claim anywhere that either doctor owns or founded ADHD.ME; both disclosures still
+> present and still naming a real interest; the pin moved to the new wording rather than loosened;
+> `pnpm verify` green. Heavy e2e batches are OOM-killing this container, so verification is unit +
+> targeted single specs and the ledger says so rather than implying a full sweep ran.
+
 > **O157 (colour contrast, the last unexamined property — and it fails on exactly one background)
 > — claimed 2026-08-21T13:10Z by loop-0820s.** Contrast has never been checked anywhere in this
 > tree, and `adhdme-taste` opens by naming the audience as "tired, possibly older, possibly
