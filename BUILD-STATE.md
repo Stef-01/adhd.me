@@ -161,6 +161,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: the five cued and promoted; the six refusals REGISTERED with `leavesStanding` linking
 > each to the aspiration it accounts for, so O138's count stays honest rather than quietly
 > reinflating; zero `never` pins broken; floors and tie-quality moved; full `pnpm verify` green.
+> DONE 2026-08-21. **The queue is 12 → 4.** Three promotions — shared-care 24→25 ("clinic
+> discharged me", "scripts kept going"), titration 29→30, culturally_attuned 17→18 — and SIX
+> refusals registered with `leavesStanding`, so the count stays honest instead of quietly
+> reinflating next time somebody asks. Tie-quality 444/248/64/132 → 445/249/65/131, separation
+> 55.9%→56.0%: barely moving, which is what the end of a queue looks like.
+>
+> **THE PINS REVERSED ONE OF MY CUES AND IT WAS SPAN THEFT — THE THIRD TIME.** "what adhd
+> actually is" strips to [adhd, actually] and CONSUMES the token `adhd`, so two pinned sentences
+> stopped reaching `care:adhd-assessment`, including "um so I think I might have ADHD and I want
+> to actually get tested" — the commonest thing anybody types. O123 caught this class with "more
+> than one diagnosis", O125 with "put a name to", and I wrote it anyway. Now in the register with
+> `protects`, which is the only reason the next author meets it before the pins do.
+>
+> **AND THE REGISTER'S OWN TEST CAUGHT A FLAW IN MY REFUSAL.** I registered "white coat" as
+> refused for `manner:steadying`, and the check that no refused phrase appears in the lexicon
+> fired — correctly, because "white coat" IS live, on `care:anxiety` since O124. The refusal is
+> only that steadying cannot ALSO have it: first-claim dedup means a phrase belongs to exactly
+> one facet, so there is nothing to measure — the phrase is spoken for. A distinct KIND of
+> refusal, and the register was conflating it with a measurement refusal, which would have had it
+> demand the deletion of a working cue. New `ownedBy` field, plus a check that an owned phrase
+> really is live on the facet claiming it, so the exemption cannot become a hole.
+> **FOURTH REGISTER IN ONE DAY to discover it was recording two things and could only see one** —
+> after `awaitingFounder` (O123), `accepted` (O131) and `leavesStanding` (O138). The pattern is
+> worth more than any of them individually: a register built to record one thing almost always
+> turns out to be recording two, and the second kind stays invisible until something counts them.
+> Gate met: zero `never` pins broken, O119's precision probe green, six refusals linked to what
+> they leave standing, `pnpm verify` green 3596.
 
 > **O138 (the lexicon's remaining queue, made countable) — claimed 2026-08-21T00:45Z by
 > loop-0820s.** Trying to answer "is there real lexicon work left?" from the tree, the number

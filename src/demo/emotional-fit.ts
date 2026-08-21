@@ -131,6 +131,15 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Helps it make sense",
     matchLine: "helps you make sense of what is going on",
     cues: [
+      /* O139 WROTE "what adhd actually is" HERE AND THE PINS REVERSED IT — SPAN THEFT, the third
+         instance of this exact failure. The cue strips to [adhd, actually] and CONSUMES the
+         token `adhd`, which `care:adhd-assessment` needs, so two pinned sentences stopped
+         reaching assessment — including "um so I think I might have ADHD and I want to actually
+         get tested", which is the commonest thing anybody types.
+         O123 caught it with "more than one diagnosis", O125 with "put a name to", and I wrote
+         the cue anyway. A cue that reads its own facet by taking a word another facet needs is
+         never a gain; it is now in REFUSED_CUES with `protects` so the next author meets it. */
+      
       /* O113: the CONCRETE ways this is asked for. The facet knew abstract nouns for itself and
          none of the phrasings people use — being walked through something in order, being told
          straight, wanting the mechanism rather than the instruction. */
@@ -252,7 +261,10 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Understands your background",
     matchLine: "understands your background and family",
     // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
-    cues: ["culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
+    cues: [
+      /* O139: naming English as a second language is how the ask arrives when somebody is not
+         asking for an interpreter but for the pace and patience that go with it. */
+      "second language", "culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
       // O25: "in the room with me" stopword-stripped down to the single token [room], so
       // "my rooms are above the pharmacy" claimed this facet (found by the W227 reach-gap

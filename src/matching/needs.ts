@@ -204,6 +204,9 @@ const LEXICON: readonly Entry[] = [
     "paediatric",
   ]),
   care("titration", "Titration and dose review", 28, [
+    /* O139: the review question in the words people use for it. Three tokens keep it clear of
+       "the right medication took two years to find", which is a history, not a request. */
+    "still the right medication",
     /* O116: the register a dose review is actually asked in — the script needing adjusting,
        the generic brand, the afternoon rebound, and "medication management" as the thing
        being asked FOR rather than therapy. */
@@ -211,6 +214,11 @@ const LEXICON: readonly Entry[] = [
     "titration", "dose", "wearing off", "wears off", "side effects", "not working", "adjust the dose",
   ]),
   care("shared-care", "Shared care with a psychiatrist", 18, [
+    /* O139: the two registers this facet arrives in — the script that must not lapse, and the
+       specialist service that has finished with somebody. "prescription continued" was REFUSED
+       on measurement: it fires on "my prescription continued to cost more each month", a cost
+       complaint read as a continuity ask. */
+    "scripts kept going", "clinic discharged me",
     /* O116: continuity language. Somebody discharged from a clinic, or newly moved, asks for
        their prescribing to be CONTINUED or HANDED BACK — none of which the facet could hear. */
     "hand the prescribing back", "scripts managed", "continue my prescriptions", "between pharmacies",

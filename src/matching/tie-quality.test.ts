@@ -40,6 +40,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  (consume-once negation promoted the audit's two waiting aspirations into the run; both
  *  land unseparated — the recovered asks are facets the whole roster answers, so hearing
  *  them was the reader's win and ordering them is now the clarifier's queue, correctly);
+ *  445/249/65/131 at O139 (the last of the unblocked queue: three promotions, separation
+ *  55.9%→56.0%. The number barely moves because these are single sentences on facets already
+ *  well covered — which is what the end of a queue looks like, and is the honest shape rather
+ *  than a disappointment);
  *  444/248/64/132 at O128 (tranche seven, fifty entries written to attack the day's own
  *  additions: 33 of them reach, separation 55.2%→55.9%. The rate holding across a 12% corpus
  *  growth is the result worth reading — a tranche is the one place the number can move for a
@@ -141,7 +145,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  declaration made more requests genuinely answerable by more of the roster — the KPI
  *  measuring the roster converging, not the ranking worsening; the clarifier's queue grew by
  *  exactly the asks her declarations joined). */
-const PINNED = { total: 444, separated: 248, partialTie: 64, unseparated: 132 };
+const PINNED = { total: 445, separated: 249, partialTie: 65, unseparated: 131 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

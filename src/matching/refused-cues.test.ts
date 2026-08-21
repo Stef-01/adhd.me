@@ -8,7 +8,9 @@ import { openAspirations, REFUSED_CUES } from "./refused-cues";
 describe("O125 a cue refused once is not re-added by accident", () => {
   it("no refused phrase appears in the lexicon", () => {
     const live = new Set(LEXICON_CUES.map((cue) => cue.phrase));
-    const readded = REFUSED_CUES.filter((r) => live.has(r.phrase)).map(
+    // `ownedBy` entries are refused BECAUSE the phrase is live on another facet, so their
+    // presence in the lexicon is the point rather than a violation.
+    const readded = REFUSED_CUES.filter((r) => !r.ownedBy && live.has(r.phrase)).map(
       (r) => `"${r.phrase}" was refused by ${r.unit} because "${r.refusedBy}" is ${r.because}`,
     );
     expect(readded).toEqual([]);
@@ -29,6 +31,17 @@ describe("O125 a cue refused once is not re-added by accident", () => {
       } else {
         expect(facets, `${r.unit}: "${r.refusedBy}" now reaches ${r.facet}`).not.toContain(r.facet);
       }
+    }
+  });
+
+  it("an owned phrase really is live on the facet that owns it", () => {
+    // Otherwise the exemption above would hide a genuine re-add: an entry claiming somebody
+    // else owns a phrase, when nobody does, is a hole in the check rather than a refusal.
+    const live = new Set(LEXICON_CUES.map((cue) => cue.phrase));
+    for (const r of REFUSED_CUES.filter((x) => x.ownedBy)) {
+      expect(live.has(r.phrase), `${r.phrase} claims to be owned by ${r.ownedBy} but is not a live cue`).toBe(true);
+      expect(LEXICON_CUES.some((c) => c.phrase === r.phrase && c.key === r.ownedBy),
+        `${r.phrase} is live but not on ${r.ownedBy}`).toBe(true);
     }
   });
 

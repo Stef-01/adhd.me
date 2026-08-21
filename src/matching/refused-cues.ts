@@ -48,6 +48,24 @@ export type RefusedCue = {
    */
   leavesStanding?: readonly string[];
   /**
+   * Set when the phrase is refused because ANOTHER FACET ALREADY OWNS IT, not because it
+   * measured badly. Names the owning facet.
+   *
+   * The register's own test taught me this field, the same way O131's bar taught that one its
+   * `accepted` status. It asserts no refused phrase appears in the lexicon — correct for a
+   * measurement refusal, wrong here: "white coat" IS a live cue, on `care:anxiety` since O124,
+   * and the refusal is only that `manner:steadying` cannot have it too. First-claim dedup
+   * (O7/F10) means a phrase belongs to exactly one facet, so there is nothing to measure — the
+   * phrase is spoken for. Conflating "never use this" with "already used elsewhere" would have
+   * made the register demand the deletion of a working cue.
+   *
+   * FOURTH REGISTER IN ONE DAY to discover it was conflating two kinds of entry, after
+   * `awaitingFounder`, `accepted` and `leavesStanding`. The pattern is worth more than any of
+   * them individually: a register built to record one thing almost always turns out to be
+   * recording two, and the second one is invisible until something counts them.
+   */
+  ownedBy?: string;
+  /**
    * Set when the refusal is SPAN THEFT rather than a false positive.
    *
    * The register's liveness check assumes a refusal means "this sentence must not reach this
@@ -118,6 +136,51 @@ export const REFUSED_CUES: readonly RefusedCue[] = [
       "it strips to [fifteen, minute], which is also how distance talk reads — the precision is not worth the recall, and O65 wrote that down rather than forcing the cue",
     unit: "O65",
     leavesStanding: ["I need more than fifteen minutes to get through this"],
+  },
+  {
+    phrase: "what adhd actually is",
+    facet: "manner:sense_making",
+    refusedBy: "um so I think I might have ADHD and I want to actually get tested",
+    because:
+      "it strips to [adhd, actually] and CONSUMES the token `adhd`, so the commonest sentence anybody types stopped reaching care:adhd-assessment — the third span theft caught by pins after O123 and O125",
+    unit: "O139",
+    protects: "care:adhd-assessment",
+    leavesStanding: ["explain what ADHD actually is, properly"],
+  },
+  {
+    phrase: "prescription continued",
+    facet: "care:shared-care",
+    refusedBy: "my prescription continued to cost more each month",
+    because: "a cost complaint read as a continuity ask — the words are identical and the request is not",
+    unit: "O139",
+    leavesStanding: ["I need my prescription continued after moving from Perth"],
+  },
+  {
+    phrase: "someone patient",
+    facet: "manner:unhurried",
+    refusedBy: "the patient is waiting in room three",
+    because:
+      "it turns on the word PATIENT, which on this product means the reader — a cue that fires on the name for the person using it cannot stay narrow",
+    unit: "O139",
+    leavesStanding: ["bulk billed titration review with someone patient"],
+  },
+  {
+    phrase: "transplant",
+    facet: "pref:telehealth-first",
+    refusedBy: "my transplant team wants a GP closer to home",
+    because: "a referral context, not a telehealth ask — the word names a circumstance, not a preference",
+    unit: "O139",
+    leavesStanding: ["the practice is a risk for me, I have a transplant"],
+  },
+  {
+    phrase: "white coat",
+    facet: "manner:steadying",
+    refusedBy: "white coat panic is real for me",
+    because:
+      "REFUSED BY A MECHANISM RATHER THAN A MEASUREMENT, which is a distinct reason worth recording as such: O124 gave this phrase to care:anxiety, and first-claim dedup (O7/F10) means a phrase belongs to exactly ONE facet. There is nothing to measure here — the phrase is spoken for",
+    unit: "O139",
+    ownedBy: "care:anxiety",
+    leavesStanding: ["white coat panic is real for me"],
   },
   {
     phrase: "know better",

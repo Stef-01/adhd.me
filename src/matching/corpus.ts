@@ -630,8 +630,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // half (taken seriously) is the ask; the mood word stays the reader's silence.
   { text: "burnt out and flat, and I want both taken seriously", reaches: ["manner:attuned"] },
   { text: "the generic brand hits different and nobody will discuss it", reaches: ["care:titration"] },
-  { text: "review whether this is still the right medication for me", aspires: ["care:titration"] },
-  { text: "the ADHD clinic discharged me and I need my scripts kept going", reaches: ["care:adhd-assessment"], aspires: ["care:shared-care"] },
+  { text: "review whether this is still the right medication for me", reaches: ["care:titration"] },
+  { text: "the ADHD clinic discharged me and I need my scripts kept going", reaches: ["care:adhd-assessment", "care:shared-care"] },
   { text: "hand the prescribing back to a GP near home", reaches: ["care:shared-care"] },
   { text: "lifestyle changes before we talk prescriptions", reaches: ["care:non-medication"] },
   { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
@@ -654,7 +654,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      `attuned` reads not-being-believed BY THE DOCTOR. Here the family is the disbeliever, and
      the ask is help navigating them. */
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned", "manner:attuned", "care:adhd-assessment"] },
-  { text: "English is my second language and appointments move too fast", reaches: ["manner:unhurried"], aspires: ["manner:culturally_attuned"] },
+  { text: "English is my second language and appointments move too fast", reaches: ["manner:unhurried", "manner:culturally_attuned"] },
   { text: "I rehearse what to say and still leave unheard", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", reaches: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", reaches: ["manner:steadying"] },
@@ -1057,16 +1057,16 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // cued (see needs.ts) — the three that remain are the ones whose cues were refused for
   // measured precision, and their reason is written at the cue list rather than here.
   "care:non-medication": 18,
-  // O116 raised 19→23: continuity language — prescribing handed back, scripts managed,
-  // prescriptions continued after a move.
-  "care:shared-care": 24,
+  // O139 raised 24→25: "clinic discharged me" and "scripts kept going", the two registers this
+  // facet actually arrives in. "prescription continued" was refused — it fires on a cost complaint.
+  "care:shared-care": 25,
   // O123 raised 16→18. Same argument: this facet has read disclosure since it was written
   // ("drinking", "cannabis", "in recovery"), and the year plan's own worked example of the G7
   // line is "I drink more than I should" read as a want.
   "care:substance-history": 19,
-  // O116 raised 24→28: the register a dose review is asked in — the script needing adjusting,
-  // the generic brand, the afternoon rebound, medication management as the thing asked FOR.
-  "care:titration": 29,
+  // O139 raised 29→30 with "still the right medication" — three tokens, which keeps it clear of
+  // "the right medication took two years to find", a history rather than a request.
+  "care:titration": 30,
   // O104 raised 9→12 (the pace-and-consent register); O106 raised 12→13 by freeing the word
   // a spanning cue had swallowed. The facet's other four aspirations are NOT a vocabulary
   // gap — they name what happened to the person, and whether this product may read that is a
@@ -1080,7 +1080,9 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // O122 raised 11→20: the SHARED-DECISION phrasings. The facet's label is "Explains and
   // decides with you" and it had no cue for anybody asking to be decided WITH.
   "manner:collaborative": 22,
-  "manner:culturally_attuned": 17,
+  // O139 raised 17→18 with "second language": the ask as it arrives when somebody wants pace and
+  // patience rather than an interpreter.
+  "manner:culturally_attuned": 18,
   // O125 raised 13→14 with strengths language in the reader's own words ("works with my
   // chaos"). "what we can build" was refused: it strips to [build] alone.
   "manner:motivating": 14,
