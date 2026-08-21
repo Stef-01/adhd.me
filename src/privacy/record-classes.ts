@@ -203,6 +203,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W222's `SessionOccurrence` is a clinician id, a date, a weekday and two counts. There is no field a patient could occupy, so nothing is de-identified here — the identity never enters. MEASURED FOR SMALL CELLS RATHER THAN ASSUMED (W230): the per-session aggregates the console renders have a minimum FILLED cell of 10 over the synthetic practice, so no rendered figure is a count of a handful of people. The per-OCCURRENCE figures are smaller — 411 of them, 94 below five, minimum one filled slot of one offered, which is one person's appointment with a named clinician on a named day. Nothing discloses those today: `capacityView` carries per-session rows only. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first surface that renders per-occurrence figures, or exports them to a recipient, needs W196's aggregation floor applied the way W218 applied it to the response graph — and it must be a floor on FILLED cells only, because an unfilled slot is nobody and withholding it would suppress the one figure that identifies no one.",
   },
   {
+    module: "src/capacity/coupling.ts",
+    what: "A switch, and the record of a practice's decision to turn it on",
+    handling: "no_patient_identity",
+    rationale:
+      "W231 holds the forecast-to-invitation-volume coupling, shipped OFF. What it stores about a person is nothing: a `CouplingDecision` names whoever at the PRACTICE took the decision, a date and a reason, and the arithmetic takes two integers. It reaches no patient and no rail — a test walks src/ and app/ and asserts nothing outside this lane imports it. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: switching it on does not make this module hold patient data, but it does make it an automated decision in use rather than built-and-idle, and W201's entry must move from `built_not_in_use` in the same commit.",
+  },
+  {
     module: "src/capacity/forecast.ts",
     what: "The range a session has run at, applied to slots being opened",
     handling: "no_patient_identity",

@@ -173,6 +173,14 @@ export const AUTOMATED_DECISIONS: readonly AutomatedDecision[] = [
     registry: null,
   },
   {
+    id: "invitation-volume-coupling",
+    title: "Whether how full a session looks changes how many people are messaged.",
+    what: "SWITCHED OFF, and nothing has ever been sent from here in any case. If it were switched on, a session that looked like it would run under-full would mean more invitations went out to cover the gap — so it would change how many people are contacted, though never which people or in what order. Your practice can only switch it on by recording who decided and why; there is no setting that turns it on quietly. It is written down while it is off so the shape of the decision can be argued with before anybody is affected by it. One thing your practice should know when weighing it: the order invitations go out in is the subject of an open contradiction in this product's own published notice (recorded as MATCH-1), and sending more of them sends more through whatever that ordering is doing.",
+    decidedBy: ["src/capacity/coupling.ts"],
+    status: "built_not_in_use",
+    registry: null,
+  },
+  {
     id: "referral-outcome-verdict",
     title: "What the record shows happened to your referral.",
     what: "The software forms a verdict on each referral — whether the record contains an appointment, a completion, or nothing yet — so a practice can see what has not closed. The verdict is a statement about which facts were recorded, never about whether the care was right, and \"nothing recorded\" is kept distinct from \"nothing happened\" because they are different.",

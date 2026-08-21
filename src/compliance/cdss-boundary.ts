@@ -469,6 +469,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the view types and the function that assembles one. `CAPACITY_EMPTY_COPY` holds the three sentences a practice reads when the page has no capacity picture: no diary recorded, every session already full, or ranges without a track record yet. The middle one is the reason these are three sentences rather than one — a fully booked practice reported as \"no capacity information\" would read as having room nobody recorded. Each names the wrong reading it must not be given. None describes a patient, a condition or a next clinical step, and the view computes no rate, range or verdict of its own: it arranges what W222 to W228 already decided.",
   },
   {
+    module: "src/capacity/coupling.ts",
+    operatorCopy: ["COUPLING_OFF_COPY", "COUPLING_REJECTION_COPY"],
+    notCopy:
+      "The remaining exports are the decision and state types, the refusal union, the shipped OFF state and three pure functions. `COUPLING_OFF_COPY` is what a practice reads where a control would be: sending more invitations when a session looks like it will run under-full is switched off, because how many people to contact is a decision about this practice's own capacity. `COUPLING_REJECTION_COPY` explains why an attempt to switch it on was refused — no recorded decision, a reason too short to be a reason, or an unreadable date. All four sentences describe a switch and the record of a choice about it. None names a patient, a condition or a next clinical step, and none advises: the module states what is off and what would be required to turn it on, and takes no view on whether it should be.",
+  },
+  {
     module: "src/capacity/drift.ts",
     operatorCopy: ["DRIFT_VERDICT_COPY", "DRIFT_REFUSAL_COPY"],
     notCopy:

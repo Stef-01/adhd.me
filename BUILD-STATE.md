@@ -169,6 +169,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > boolean parameter — asserted at the type level; the live invitation rail does not import it,
 > checked on `src/engine/pool.ts` rather than promised; W201's ADM register records it as
 > `built_not_in_use` with the trigger that reclassifies it; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/coupling.ts` + 10 tests. **Off is pinned over the whole simulated
+> practice, not over one call**: all 70 sessions forecast, `extraInvitations` returns null for every
+> one, and the sweep asserts it asked 70 times so it cannot pass by asking none. The other direction
+> is asserted too — with a recorded decision the same inputs produce numbers on more than ten
+> sessions — because "nothing happens" is only a fact about the SWITCH if something would otherwise
+> happen.
+> No boolean route in: `couplingState(true)` and an `{ enabled: true }` options bag are both
+> `@ts-expect-error`. A refusal is distinguishable from the shipped off state (both are
+> `enabled: false`, but only a refusal carries `refused`) — otherwise somebody spends an afternoon
+> debugging a switch that is working.
+> **THE ARITHMETIC SIZES FROM THE LOW END OF THE RANGE, and that is a judgement written down while
+> it is off rather than made under deadline the day a gate opens.** Sizing from the high end assumes
+> the good week and contacts nobody on the bad one; the low end is conservative for the practice and
+> the aggressive direction for the patient, which is exactly why it should be arguable now.
+> No shortfall returns null, never 0 — "send none of the invitations you were going to send" is a
+> different sentence, and it is W179's distinction in the one place where getting it wrong reaches
+> people.
+> **IT DOES NOT REACH THE RAIL, CHECKED ON THE TREE RATHER THAN PROMISED.** A walk of `src/` and
+> `app/` asserts nothing outside `src/capacity/` imports it, plus a named check on
+> `src/engine/pool.ts`. Seeding an import into the pool fails. The first run of that sweep flagged
+> the lane's OWN files — W226's register imports the module to enumerate its copy — and the fix was
+> to say precisely what "outside" means rather than to loosen the pattern.
+> **MATCH-1 IS NAMED IN THE PATIENT-FACING REGISTER ENTRY, not just in the module.** W201 now
+> carries: the order invitations go out in is the subject of an open contradiction in this product's
+> own published notice, and sending more of them sends more through whatever that ordering is doing.
+> Volume is not ordering; noting only that they are technically separate concerns would be true and
+> useless.
+> **THREE REGISTERS FROM THIS SESSION'S OWN EARLIER UNITS CAUGHT THE NEW MODULE BEFORE I DID**, which
+> is the first time this week the machinery got ahead of me rather than the other way round: W230's
+> lane sweep (module count AND missing record class), W226's lane-coverage guard — built one unit
+> ago precisely for this — and W200's copy surface.
+> **AND W201's DETECTOR WAS RIGHT WHILE MY MODULE WAS INCONSISTENT.** The register reported
+> `coupling.ts` as a stale declaration because the detector finds decision sites by looking for an
+> exported `*Refusal` union, and this module alone in the lane had left its refusals as
+> `keyof typeof`. Fixed by declaring `CouplingRefusal` the way W215, W219, W223 and W228 all do —
+> the register was pointing at a real inconsistency, not at a gap in itself.
+> Non-vacuity, five breaks: ship it on by default (2 tests); size from the high end (2); return 0
+> instead of null (1); accept a one-word reason (1); let the invitation pool import it (1).
+> Gate: `pnpm verify` green — 232 files, 3769 tests, build, audit:gate PASS.
 
 > **W230 (the Q18 privacy pass) — claimed 2026-08-21T08:30Z by loop-0821a. Premise MEASURED before
 > the claim was written**, which is the O165 correction being applied rather than restated.
@@ -5800,7 +5839,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | done | loop-0821a | 2026-08-21T08:30Z | 1560038 | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
-| W231 | claimed | loop-0821a | 2026-08-21T08:36Z | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
+| W231 | done | loop-0821a | 2026-08-21T08:36Z | PENDING | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |

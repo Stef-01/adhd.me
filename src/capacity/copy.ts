@@ -35,6 +35,7 @@ import { sessionRecommendation } from "./recommendation";
 import { driftReport } from "./drift";
 import { CALENDAR_UNKNOWN_COPY } from "./calendar";
 import { NO_HISTORY_COPY } from "./model";
+import { COUPLING_OFF_COPY, COUPLING_REJECTION_COPY } from "./coupling";
 
 /** One kind of sentence this lane can put in front of a practice. */
 export interface SentenceKind {
@@ -215,6 +216,34 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
     mustContain: "not enough scored weeks on both sides",
   },
   {
+    id: "coupling.off",
+    module: "src/capacity/coupling.ts",
+    when: "Always, while W231's coupling ships off — which today is always.",
+    composed: false,
+    mustContain: "switched off",
+  },
+  {
+    id: "coupling.refused.no_decision",
+    module: "src/capacity/coupling.ts",
+    when: "An attempt to switch the coupling on with nothing recorded about who decided.",
+    composed: false,
+    mustContain: "a setting is something somebody flips",
+  },
+  {
+    id: "coupling.refused.reason_too_thin",
+    module: "src/capacity/coupling.ts",
+    when: "A recorded decision whose reason is too short to be an argument.",
+    composed: false,
+    mustContain: "too short to be a reason",
+  },
+  {
+    id: "coupling.refused.date_unreadable",
+    module: "src/capacity/coupling.ts",
+    when: "A recorded decision without a readable date.",
+    composed: false,
+    mustContain: "readable date",
+  },
+  {
     id: "calendar.unknown",
     module: "src/capacity/calendar.ts",
     when: "No holiday calendar has been loaded, which today is always.",
@@ -343,6 +372,10 @@ export function capacityCopySweep(): SweptSentence[] {
   const tooFew = driftReport(made(4, 4, 1), PERIOD);
   if (!tooFew.compared) push("drift.withheld.too_few_in_a_window", tooFew.copy);
   push("calendar.unknown", CALENDAR_UNKNOWN_COPY);
+  push("coupling.off", COUPLING_OFF_COPY);
+  push("coupling.refused.no_decision", COUPLING_REJECTION_COPY.no_decision);
+  push("coupling.refused.reason_too_thin", COUPLING_REJECTION_COPY.reason_too_thin);
+  push("coupling.refused.date_unreadable", COUPLING_REJECTION_COPY.date_unreadable);
   push("model.never_run", NO_HISTORY_COPY.never_run);
   push("model.no_slots_offered", NO_HISTORY_COPY.no_slots_offered);
 

@@ -28,12 +28,13 @@ const AS_OF = isoDaysFrom(sim.config.todayIso, 6 * 7 + 1);
 const PERIOD = { fromIso: sim.config.todayIso, toIso: AS_OF };
 
 describe("W230 the identity never enters, across the whole lane", () => {
-  it("has seven modules and checks all of them, so no file is quietly out of scope", () => {
+  it("has eight modules and checks all of them, so no file is quietly out of scope", () => {
     // Non-vacuity for everything below: a directory read that returned two files would make the
     // sweeps trivially green.
     expect(laneFiles()).toEqual([
       "calendar.ts",
       "copy.ts",
+      "coupling.ts",
       "drift.ts",
       "forecast.ts",
       "model.ts",
@@ -82,8 +83,8 @@ describe("W230 the identity never enters, across the whole lane", () => {
     // already had the data to hand. The lane may reach its own files, the reporting basis type and
     // the domain types — nothing that carries people.
     const allowed = new Set([
-      "./calendar", "./copy", "./drift", "./forecast", "./model", "./recommendation", "./score",
-      "@/reporting/model", "@/domain/types",
+      "./calendar", "./copy", "./coupling", "./drift", "./forecast", "./model", "./recommendation",
+      "./score", "@/reporting/model", "@/domain/types",
     ]);
     // COMMENTS STRIPPED FIRST, and this file learned it the same way W228 did an hour earlier:
     // `calendar.ts`'s own prose explains that a caller can tell "no holiday that day" from
@@ -184,7 +185,7 @@ describe("W230 the small-cell question is answered by counting", () => {
 });
 
 describe("W230 every module in the lane is classified", () => {
-  it("has a record class for all seven, plus the console view", () => {
+  it("has a record class for all eight, plus the console view", () => {
     const declared = new Set(RECORD_CLASSES.map((c) => c.module));
     const expected = [
       ...laneFiles()

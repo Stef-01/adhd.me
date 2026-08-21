@@ -15,6 +15,7 @@ import { FORECAST_REFUSAL_COPY } from "./forecast";
 import { SCORE_WITHHELD_COPY } from "./score";
 import { RECOMMENDATION_WITHHELD_COPY } from "./recommendation";
 import { DRIFT_REFUSAL_COPY, DRIFT_VERDICT_COPY } from "./drift";
+import { COUPLING_OFF_COPY, COUPLING_REJECTION_COPY } from "./coupling";
 import { CALENDAR_UNKNOWN_COPY } from "./calendar";
 import { OPERATOR_COPY_SURFACES } from "@/compliance/cdss-boundary";
 import { CAPACITY_SENTENCE_KINDS, capacityCopySweep, capacityCopyOverDiary } from "./copy";
@@ -31,7 +32,7 @@ describe("W226 the register and the lane cannot disagree", () => {
     const declared = new Set(CAPACITY_SENTENCE_KINDS.map((k) => k.id));
     expect([...declared].filter((d) => !produced.has(d)), "declared but never produced").toEqual([]);
     expect([...produced].filter((p) => !declared.has(p)), "produced but not declared").toEqual([]);
-    expect(declared.size).toBe(22);
+    expect(declared.size).toBe(26);
   });
 
   it("binds each id to text only that kind contains", () => {
@@ -71,6 +72,8 @@ describe("W226 the register and the lane cannot disagree", () => {
       ...Object.values(DRIFT_REFUSAL_COPY),
       ...Object.values(DRIFT_VERDICT_COPY),
       CALENDAR_UNKNOWN_COPY,
+      COUPLING_OFF_COPY,
+      ...Object.values(COUPLING_REJECTION_COPY),
     ];
     const byId = new Map(swept().map((s) => [s.id, s.text]));
     for (const kind of CAPACITY_SENTENCE_KINDS) {
