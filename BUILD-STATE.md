@@ -170,6 +170,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > refuses a rate below its floor; a deliberately useless always-wide forecaster is shown scoring
 > WORSE than the real one on the width, or the score is not measuring what it claims; `pnpm verify`
 > green.
+> DONE 2026-08-21. `src/capacity/score.ts` + 13 tests. **Measured over the sim: 131 predictions,
+> 111 hits — an 84.7% hit rate at a mean range width of 1.5 slots, 5.7% of the slots on offer.**
+> A forecaster that is both narrow and usually right, which is the result worth having and is only
+> legible because both numbers are reported together.
+> **THE DECISIVE TEST IS THE USELESS FORECASTER, AND IT WAS RUN.** The same instrument scores an
+> always-`[0, slotsOffered]` predictor over the same 131 weeks: **hit rate 100%, width share 100%.**
+> It beats the real forecaster on the number a naive score would report, and the test asserts both
+> halves of that — `scored.hitRate > real.hitRate` AND `real.meanWidthShare < 0.2`. Without that
+> comparison every other assertion in the file would pass over a score that rewards width.
+> **THE WALK-FORWARD IS PROVED BY A WEEK THAT WOULD OTHERWISE BE A HIT.** Four full weeks then an
+> empty one: the forecast for week five is built from [1,1,1,1] and is 6–6, so an empty week MISSES.
+> If week five reached its own forecast the range would be 0–6 and it would hit — and nothing else
+> here would notice. Seeding `mine.slice(0, i + 1)` fails five tests.
+> The restatement contrast is computed rather than argued: self-scoring W223 against its own inputs
+> is **100% for every one of the 70 sessions** (asserted, so the contrast is not moot), and the
+> honest back-test is not.
+> **A REAL RESULT FROM THE FLOOR: THE SIM CANNOT SCORE ANY SINGLE SESSION.** Each yields about two
+> predictions against a floor of five, so all 70 per-session scores REFUSE and only the pooled score
+> answers. Stated in the module rather than papered over: pooling asks "is this METHOD usually
+> right" and per-session asks "is this SESSION predictable" — different questions, neither borrowing
+> the other's evidence. The counts are reported either way; it is the percentage that waits.
+> Nothing leaves the denominator silently: every one of the 411 recorded weeks is either a
+> prediction (131) or a NAMED skip (280), asserted per session and in total. A week that offered no
+> slots is "nothing for a forecast to be right or wrong about" — not a miss, because counting it
+> would punish the forecaster for a week nobody could have forecast.
+> Registers: W200's copy surface + namespace loader and W201's ADM register both extended.
+> Non-vacuity, five breaks: let each week into its own forecast (5 tests); report the hit rate with
+> a zero width (1); drop the untestable weeks instead of naming them (3); treat an empty week as a
+> forecastable one (1); report a rate below the floor (4).
+> Gate: `pnpm verify` green — 225 files, 3692 tests, build, audit:gate PASS.
 
 > **W223 (the forecast, stated as an interval and never as a point) — claimed 2026-08-21T07:21Z by
 > loop-0821a.** (Clock read as its own step before this row was written, which is the correction
@@ -5350,7 +5380,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | done | loop-0821a | 2026-08-21T07:14Z | e9c5e39 | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | done | loop-0821a | 2026-08-21T07:21Z | e0b1ebb | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
-| W224 | claimed | loop-0821a | 2026-08-21T07:28Z | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
+| W224 | done | loop-0821a | 2026-08-21T07:28Z | PENDING | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
