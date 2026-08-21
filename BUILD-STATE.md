@@ -143,6 +143,42 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O172 (mobile-fit gets the derived route list, keeping its two different assertions) — claimed
+> 2026-08-21T18:52Z by loop-0821a.** Fifth of O168's six.
+> **THE "NOT MECHANICAL" CLAIM IS HALF RIGHT THIS TIME, WHICH IS WHY O171's CORRECTION MATTERS.**
+> `mobile-fit` genuinely does apply two different assertions: public surfaces get a PER-ELEMENT check
+> (nothing wider than the 390px viewport), the console gets the DOCUMENT's `scrollWidth` only. W216
+> and O149 both state the reason and it is a good one — `/console/matching` and `/console/allocation`
+> render wide tables reaching x=745 inside their own `overflow-x` container, which is exactly what
+> the web guidelines require of wide content, and a per-element assertion would call those tables a
+> defect and "fixing" them would mean squeezing a data table that is correct as it stands.
+> **BUT THE DECISION IS ALREADY MADE AND WRITTEN DOWN.** What is not mechanical is that the two
+> halves differ; deriving is still mechanical once the split is preserved, and `site-routes` already
+> partitions public from console on the path. So this is closer to O171's correction than to a real
+> obstacle, and I am recording that before building rather than discovering it after.
+> **THE PUBLIC GAP IS THE BIG ONE AND I HAD IT WRONG IN AGGREGATE.** O168 reported `mobile-fit` at
+> 25/45 and I read that as a console problem, as it was for every other sweep. It is not: the public
+> list holds **7 of 15**. Eight public pages — `/about`, `/demo`, `/examples`, `/faq`, `/terms`,
+> `/thanks`, `/privacy/automated-decisions`, `/privacy/counsel-review` — have never been checked for
+> horizontal overflow at 390px, and they are the ones that get the STRICT per-element assertion. The
+> console holds 16 of 28.
+> **W216's OWN HISTORY IS THE ARGUMENT.** That row exists because a tap-target rule revived three
+> `hidden sm:inline` links and `/practices` measured 453px inside a 390px viewport — and "every
+> existing spec passed while that was true", because a11y does not measure layout, the public sweep
+> reads copy, and no unit test can see a viewport. The failure was visible only in a screenshot. Eight
+> public pages currently sit exactly where `/practices` sat.
+> **NO PREDICTION THIS TIME.** O170 predicted findings and was right; O171 predicted findings and was
+> wrong. Both are in the ledger. The useful lesson is that my prior about which sweep is hiding what
+> is not worth much, so this row states the population it will measure and reports the count.
+> Gate: routes from `e2e/site-routes.ts` with the public/console split preserved and the reason for
+> the split kept in the file, not summarised away; the strict per-element assertion applied to all 15
+> public routes and the document-width assertion to all 28 console routes; the `hidden` cause-check
+> kept; non-vacuity floors re-measured against the derived list rather than inherited, since O170 and
+> O171 both found stale ones; every finding fixed in the page, or — if a public page turns out to hold
+> legitimately-wide content in its own scroll container — the exception named with its route and
+> measured width rather than the assertion weakened globally; a seeded overflowing element caught;
+> `pnpm verify` green.
+
 > **O171 (the semantics sweep gets the derived route list) — claimed 2026-08-21T18:11Z by
 > loop-0821a.** Fourth of O168's six.
 > **FIRST, A CORRECTION TO MY OWN TWO PREVIOUS ROWS.** O168 and O170 both classified `semantics` as
