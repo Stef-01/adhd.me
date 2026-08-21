@@ -167,6 +167,53 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > never rendered without the sentence saying which kind of zero it is; no green or success styling
 > anywhere — asserted on the rendered colour through a canvas, W229's technique; W102's census and
 > the compliance sweeps extended; `pnpm verify` green.
+>
+> **DONE 2026-08-21T10:58Z at `eb5a603`.** The gate above held, and two things in it were harder than
+> the claim made them sound.
+> **THE CLAIM SAID "A ZERO NEVER RENDERED WITHOUT THE SENTENCE SAYING WHICH KIND OF ZERO IT IS", AND
+> THE FIRST BUILD SHIPPED ONE SENTENCE.** Every count carried `NOTHING_ATTEMPTED` — nothing was
+> attempted, this is not a count of successful exchanges — which is true of the lane today and
+> becomes a lie the moment any collection fills, printed directly above a number saying otherwise.
+> The page built to keep two zeroes apart had hard-coded one of them. There are THREE: nothing
+> attempted at all; nothing of this kind though other exchanges were, which is a fault worth chasing
+> rather than a state; and a count above zero, which still is not a delivery confirmation, because
+> W244 records an unacknowledged exchange as unknown. `meaningFor(count, anythingExchanged)` derives
+> it, and the headline and the outcome absence are derived the same way. `anythingExchanged` now
+> comes from the counts themselves rather than restating the same disjunction beside them, so the
+> two cannot disagree.
+> **AND THE TEST THAT WAS SUPPOSED TO PROVE THE EMPTINESS WAS NOT THE CODE PROVED NOTHING.** It read
+> `expect(populated.length > 0 || SHIPPED_REFERRAL_PROFILES.length > 0 || ...)`, where `populated`
+> was an array built two lines above — the first term short-circuits, the view is never called, and
+> the assertion cannot fail. This is W56's shape again from the other side: there the loader was the
+> guarantee and the emptiness was not; here I wrote the guarantee as an expression that never touched
+> the loader. It now `vi.doMock`s one interop module with a member in it, runs `interopView()`
+> against that lane, and asserts the page stops saying nothing was exchanged.
+> **Six seeded failures**, each watched: the meaning sentence dropped; a green count card (caught
+> TWICE and independently — the rendered colour through a canvas, and the class in source, which the
+> canvas would miss on a state that does not currently render); a tick character; counts reordered
+> above the absences; the three sentences collapsed back to one; the headline re-pinned.
+> **The absolute word-ban fired on my own heading.** "Why nothing is connected" reads correctly to a
+> human and matches `/\bconnected\b/` all the same. The page was reworded rather than the rule
+> taught about negation: a reader skimming headings sees the word and not the "nothing", and a guard
+> that accepts "not connected" accepts every sentence that can be bent into that shape.
+> **Two defects outside this unit's own files.** The e2e colour parser returned `number[]` where it
+> meant a tuple, making every destructured channel `number | undefined` — the spec run executed it
+> happily and only `tsc` objected, which is the third time this session the spec run has passed
+> something the gate rejects. And the count cards keyed `data-testid` on the count VALUE: four
+> elements all called `interop-count-0` today, each renaming itself the day its number changes.
+> **KNOWN GAP, MEASURED AND NOT CLOSED — recorded in `src/compliance/cdss-boundary.ts` where the next
+> reader of the register will meet it.** W200 enforces module coverage: every Y4 module with a
+> `// W<n>` header must appear. It does not enforce the other direction. A module can export a new
+> sentence and, until somebody adds it to `operatorCopy`, that sentence is never linted — which is
+> exactly what happened here: I added three and caught it by hand, not by machine. A sweep counted
+> **111 undeclared string-bearing exports** across the declared modules. Most are data — suburb
+> names, language lists, field-name registers — so the fix is not "declare every string": a rule with
+> 111 exceptions is weaker than the `notCopy` prose it would replace. Closing it properly means
+> classifying each export as copy or data AT the export, which is a unit of its own. Until then the
+> thing standing between a new sentence and an unlinted one is prose, and prose does not execute.
+> Verification: `pnpm verify` green (244 files, 3935 tests, audit gate 2 accepted / 0 unaccepted);
+> `e2e/interop-console.spec.ts` 6/6; a11y + party-to-care 17/17, with `/console/interop` in both
+> censuses non-vacuously. Vault log skipped — Stefan-Brain unreachable.
 
 > **W245 (Q19 dossier: G10 priced) — claimed 2026-08-21T10:26Z by loop-0821a.** W216 priced the
 > learned-ranking question and W232 priced what a forecast implies operationally. This prices G10 —
@@ -6621,7 +6668,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | done | loop-0821a | 2026-08-21T10:26Z | 5ec7878 | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
-| W246 | claimed | loop-0821a | 2026-08-21T10:31Z | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
+| W246 | DONE | loop-0821a | 2026-08-21T10:31Z | 2026-08-21T10:58Z `eb5a603` | [P] Interop console → three kinds of zero, derived; absences above counts; six seeded failures; W200 export-coverage gap measured (111) and recorded, not closed. |
 | W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
 | W249 | blocked | — | — | — | Women's health pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.** |
