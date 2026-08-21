@@ -169,6 +169,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > cannot be made at a call site; no store, no `globalThis`, nothing appended — asserted by absence;
 > W204's proposed seven-year life carried rather than restated, so the two cannot drift; `pnpm
 > verify` green.
+> DONE 2026-08-21. `src/interop/disclosure-ledger.ts` + 12 tests. **The one-line change is real and
+> both answers are exercised at the TYPE level**, which is the only way that claim can be proved: an
+> optional `figures?` field would also look like a one-line change and would in fact leave the
+> decision to whichever call site was written first. `EntryUnder<"fact_only">` has no `figures`
+> member at all — not optional, absent, with a `@ts-expect-error` on reaching for it — and
+> `EntryUnder<"figures_included">` REQUIRES it, with a `@ts-expect-error` on an entry that omits it.
+> **`as const` on the posture constant is load-bearing rather than style, and I got it wrong first.**
+> Annotated with the union, `typeof` is the union and the entry type resolves to the same shape
+> whichever value is set — the derivation would be decorative and the choice would fall back to call
+> sites, which is exactly the failure the design exists to prevent. Caught by the typecheck on the
+> first build.
+> The posture is enforced at the RUNTIME boundary as well, and refuses rather than trims: a value
+> crossing a module edge is `unknown` whatever the type said, and silently dropping smuggled figures
+> would leave the caller believing they were recorded.
+> **BOTH CONSEQUENCES ARE STATED, INCLUDING THE ANSWER NOT CHOSEN** — `fact_only` "cannot answer what
+> they were told", `figures_included` "is a lasting copy of practice-identifiable data with a life of
+> its own" — because a founder deciding between them should not have to infer the cost of the option
+> the code did not take.
+> W204's question and W204's seven-year life are CARRIED, not paraphrased: `toBe` against the
+> originals, so two phrasings of one open question cannot drift (W177).
+> **AND THE FIFTH SEEDED BREAK PASSED, WHICH WAS THE MOST USEFUL ONE.** Restating the life as its own
+> `2555` left both assertions green, because 2555 equals 2555 — the drift they exist to prevent would
+> only surface the day W204's number changed, which is the day nobody is looking at this file. The
+> test now checks HOW the value got there: the module must contain the reference and no bare literal.
+> Fifth shape-versus-content correction this session, and the pattern is stable enough to state
+> plainly: **a test on a value cannot see how the value arrived.**
+> The store stays shut, which is W204's argument and not this unit's to override: no module-level
+> store, no `globalThis`, no fetch, no await, one import (the retention posture it carries from), and
+> `SHIPPED_DISCLOSURES` pinned empty. `appendDisclosure` returns a NEW ledger and the input is
+> asserted untouched — an append-only record checkable rather than a claim about discipline.
+> Non-vacuity, five breaks: let figures through into a fact-only ledger (2 tests); let a later entry
+> overwrite an earlier one (2); accept a disclosure with no recorded basis (1); paraphrase W204's
+> open question (1); restate the retention life (1, after the check was strengthened — it passed
+> before).
+> Gate: `pnpm verify` green — 239 files, 3877 tests, build, audit:gate PASS.
+> **FOUNDER: the open question is now sitting behind one constant.** `DISCLOSURE_PAYLOAD_POSTURE` is
+> `"fact_only"`. Changing it to `"figures_included"` is the whole change; both consequences are
+> written beside it in `DISCLOSURE_POSTURE_COPY`.
 
 > **W238 (terminology binding as declared data) — claimed 2026-08-21T09:44Z by loop-0821a.
 > SAYING UP FRONT WHICH HALF SHIPS: the bindings are EMPTY.** W227's posture, and the reason is
@@ -6309,7 +6347,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | done | loop-0821a | 2026-08-21T09:35Z | aa27c65 | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | done | loop-0821a | 2026-08-21T09:44Z | 8f4cb2c | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
-| W239 | claimed | loop-0821a | 2026-08-21T09:51Z | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
+| W239 | done | loop-0821a | 2026-08-21T09:51Z | PENDING | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | available | — | — | — | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
