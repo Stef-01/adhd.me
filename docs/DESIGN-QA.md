@@ -1347,3 +1347,48 @@ runs with the allowlist empty.
 
 Captures: qa/touch-o146/clinicians-slider-after.png; the before is
 qa/touch-o145/clinicians-stepper-mobile.png, captured one change ago.
+
+## O147 — the focus law, made executable (2026-08-21)
+
+`adhdme-taste` carries two keyboard rules: a visible `:focus-visible` ring, and never
+`outline: none` without a replacement. Like the 44px floor before O145, nothing enforced them.
+Unlike the 44px floor, **this one is already being kept** — and the unit says that rather than
+dressing a null result up as a discovery.
+
+### Measured first, across `/`, `/finder`, `/clinicians/join`, `/about`, `/faq`
+
+- [x] Zero `outline: none` in `globals.css`, against 38 `focus-visible` rules.
+- [x] Every tab stop shows a visible indicator. **Zero findings.**
+- [x] The adjacent property holds too, and it is the more interesting one: tab stops **match**
+  the count of visible, enabled, in-tab-order controls exactly on four of five routes — 43 and 43
+  on the join form — with `/` two ahead, which is skip links and `[tabindex="0"]` wrappers sitting
+  outside the selector rather than a defect. So every control a person can see, a person can
+  reach, and knows when they have got there.
+
+### The gate
+
+`e2e/keyboard-focus.spec.ts`, over all fifteen public routes. It presses **Tab** rather than
+calling `.focus()`, because `:focus-visible` does not match programmatic focus — it is the
+browser's judgement about whether focus came from a keyboard, and a probe that called `.focus()`
+would measure the `:focus` styles and report a ring the keyboard user never sees. It also waits
+on `document.fonts.ready`, which is O146's lesson carried forward.
+
+Both assertions were proved by seeding, and the seeds are worth recording because two of the
+three were useless first:
+
+| seed | result |
+|---|---|
+| `outline/box-shadow/underline: none` on crumb links | **fails** — 4 ringless stops |
+| `display: none` on a footer link | passes, *correctly* — removed from the tab ring **and** the control count, so the two stay balanced |
+| `visibility: hidden` on a footer link | **fails** — keeps a layout box while leaving the tab order: `18 tab stops for 19 controls` |
+
+That middle row is the same mistake as O145's `min-width` seed and O146's eyeballed capture: a
+seed that does not actually break the thing proves nothing about the gate. `visibility: hidden`
+is the real defect class here — visible to the eye, unreachable by keyboard.
+
+### The probe was wrong once, for the fifth time in this tree
+
+The first version terminated the tab walk on a **repeated** element key, so forty identical
+checkboxes ended the walk after four stops and `/clinicians/join` reported 4 where the truth is
+43. Identical controls legitimately share a key; the ring ends when focus returns to the **first**
+stop, not to a seen one. Every route's number was wrong and all of them looked plausible.

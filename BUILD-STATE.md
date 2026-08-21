@@ -164,6 +164,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > loop on a REPEATED element key, so forty identical checkboxes ended the walk after four stops
 > and `/clinicians/join` reported 4 where the truth is 43. Terminating on a return to the FIRST
 > stop is what made the numbers real.
+> DONE 2026-08-21. The gate is `e2e/keyboard-focus.spec.ts` over all fifteen public routes, and
+> the result stands as measured: the law is being kept, zero findings, and this unit is
+> PREVENTIVE. Saying so plainly matters — two of my last four units found nothing, and a loop
+> that cannot report a null without inflating it will eventually invent one.
+> Both assertions were proved by seeding, and the seeds are the useful part. Killing the ring on
+> the crumb links failed the test with four ringless stops. `display: none` on a footer link
+> PASSED — correctly, because it leaves both the tab ring and the control count, so the two stay
+> balanced — and that is the third time in three units I have written a seed that does not break
+> the thing it is meant to break (O145's `min-width`, O146's eyeballed capture, this). The seed
+> that works is `visibility: hidden`: a layout box the eye sees, absent from the tab order.
+> `18 tab stops for 19 controls`. That is also the real defect class this assertion guards.
+> The probe was wrong once and it is the fifth time in this tree: it terminated the tab walk on a
+> REPEATED element key, so forty identical checkboxes ended the walk after four stops and the
+> join form reported 4 where the truth is 43. Every route's number was wrong and every one looked
+> plausible, which is what makes this class of error worth a standing rule rather than a note.
+> Gate met: ring and reachability asserted per route with a non-vacuity pin on total stops, two
+> genuine seeded failures, `pnpm verify` green (219 files, 3607 passed), the sweep green before
+> and after every seed.
+
 
 > **O146 (the range slider, which O145 recorded rather than fixed) — claimed 2026-08-21T05:40Z
 > by loop-0820s.** O145 swept 61 controls under the 44px floor down to one and named the
