@@ -168,6 +168,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > linted, not the parts; the linter shown still firing on advice so a clean sweep means something;
 > plural and singular variants both reached; W201's register updated in the same commit; `pnpm
 > verify` green.
+> DONE 2026-08-21. `src/capacity/copy.ts` + 10 tests. **Fifteen sentence kinds declared and
+> produced, and eleven of them — the majority, asserted — are composed per call and had never been
+> seen by any linter.** They are produced rather than transcribed: a transcript defeats the point
+> twice, since a copy of a sentence cannot go stale loudly and a linter over a transcript is a
+> linter over whatever was last pasted.
+> **THE REGISTER CAUGHT TWO DEFECTS IN ITSELF ON ITS FIRST RUN, WHICH IS THE ONLY REASON TO
+> BELIEVE IT.**
+> (1) **A MISLABEL AN ID-ONLY CHECK PASSED.** My `never_full` fixture ran full on three of six
+> weeks, so it produced the SOMETIMES-full sentence under the never-full id — and the
+> both-directions check was green, because it compared the labels the sweep's author chose against
+> the labels the register's author chose, who is the same person. Fixed by adding `mustContain`, a
+> phrase binding each id to its text, and a fixture that genuinely never fills. **This is the
+> tree's recurring defect one more time: the register was weaker than the comment standing over
+> it.** Seeded proof: pointing the kind back at the wrong fixture fails two tests.
+> (2) **A WRONG `composed` FLAG.** `score.skipped.offered_nothing` was declared as already visible
+> to W200; its text is a string literal inside `backTest`, not an exported constant, so the census
+> cannot reach it either. Caught by the test that checks the flag against the actual exported
+> values rather than trusting it — a wrong flag there would have understated the hole this unit
+> exists to close.
+> **THE UNIQUENESS CHECK FORCED THE CARRYING TO BE DECLARED, which is a better outcome than the
+> check I set out to write.** "not a forecast that nothing will fill" legitimately matches two
+> kinds, because W225 carries W223's refusal whole and W223 carries W222's. The choice was to
+> loosen the check until it caught nothing or to declare the chain; `carries` declares it, and
+> `recommendation.withheld.no_forecast` now states in the register that it is three modules' prose
+> in one sentence. Undeclaring it fails.
+> **W201 SCOPED THIS MODULE OUT AND I TOOK THAT ANSWER.** Declaring `copy.ts` in `NOT_A_DECISION`
+> failed the both-directions check: the detector flags modules that name a patient identifier or
+> export a `*Reason|Refusal|Verdict` union, and this authors nothing and exports neither. The entry
+> was removed rather than the detector widened to accommodate a declaration I had already written.
+> W200 does declare it, with an EMPTY `operatorCopy` (told.ts's posture) — the module authors no
+> prose of its own.
+> Non-vacuity, five breaks: mislabel the never-full kind (2 tests); delete a declared kind (1);
+> stop producing a declared kind (3); undeclare the carrying (1); claim a composed sentence is
+> already visible to W200 (1). The second break's first attempt left the file syntactically
+> invalid — vitest reported "no tests", which is not a passing guard — and was redone by removing
+> the whole entry.
+> Gate: `pnpm verify` green — 227 files, 3715 tests, build, audit:gate PASS.
 
 > **W225 (the session-opening recommendation, addressed to the practice about its own diary) —
 > claimed 2026-08-21T07:34Z by loop-0821a.** W222 counts, W223 forecasts, W224 scores. This is the
@@ -5475,7 +5512,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W223 | done | loop-0821a | 2026-08-21T07:21Z | e0b1ebb | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | done | loop-0821a | 2026-08-21T07:28Z | a41da93 | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | done | loop-0821a | 2026-08-21T07:34Z | 95da32b | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
-| W226 | claimed | loop-0821a | 2026-08-21T07:42Z | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
+| W226 | done | loop-0821a | 2026-08-21T07:42Z | PENDING | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |

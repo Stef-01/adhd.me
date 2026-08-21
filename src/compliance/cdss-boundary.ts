@@ -463,6 +463,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the reason union, the candidate projection and the floor check. `MATCH_REASON_COPY` is the sentence a practice manager reads about one appointment offer and `MATCH_FLOOR_BREACH_COPY` tells a reviewer why a plan was refused. Both are about capacity, recorded availability and practice-set limits; a test asserts neither can name a condition, a symptom or an urgency, because a reason is the one place a matcher gets to say WHY in words somebody reads.",
   },
   {
+    module: "src/capacity/copy.ts",
+    operatorCopy: [],
+    notCopy:
+      "This module AUTHORS NOTHING, and is declared with an empty `operatorCopy` deliberately — the `told.ts` posture. It exists to close the bound this register states about itself: the census reaches EXPORTED copy, and the capacity lane's sentences are assembled per call, so about eleven of them were prose a practice reads that no linter had ever run over. `CAPACITY_SENTENCE_KINDS` holds identifiers, the circumstance each sentence appears in, a phrase that binds the identifier to the text, and which kinds carry which others' words; `capacityCopySweep` and `capacityCopyOverDiary` PRODUCE the sentences from the four modules rather than transcribing them, and the module's own test lints every one of them joined. A transcript here would defeat the point twice: a copy of a sentence cannot go stale loudly, and a linter run over a transcript is a linter run over whatever was last pasted.",
+  },
+  {
     module: "src/capacity/recommendation.ts",
     operatorCopy: ["RECOMMENDATION_WITHHELD_COPY"],
     notCopy:
