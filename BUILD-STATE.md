@@ -143,6 +143,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W243 (the consent-to-disclose model) — claimed 2026-08-21T10:06Z by loop-0821a.** W125 already
+> holds consent to a PATHWAY, with a branded record no caller can fabricate. Consent to DISCLOSE is
+> a different act — the patient is agreeing that something about them leaves the practice — and it
+> gets its own model rather than a reused one, because a consent to be treated is not a consent to
+> be reported on and collapsing them would be the most consequential synonym-substitution available
+> in this tree.
+> **"REFUSED BY TYPE" IS THE GATE AND IT HAS TO REACH W239.** A model that merely returns
+> `not_recorded` is refused by a CHECK somebody has to remember to make. So the consent is a branded
+> value only its recorder can mint, and **W239's ledger entry is changed to require one** — meaning
+> a disclosure cannot be recorded as having happened without the thing that made it allowed. Wiring
+> it is what makes the refusal structural; leaving W239 alone would have made this unit a model
+> nobody is obliged to consult.
+> **SILENCE IS NEVER CONSENT (W135) AND NO TIMEOUT GRANTS IT (W134), and both are asserted as a
+> PROPERTY rather than as two missing functions.** The property: passage of time can only ever
+> REMOVE consent, never create it. That is checkable over every state and every clock reading —
+> for any record and any later moment, if consent was not `given` when recorded it is not `given`
+> later — and it catches the shapes a name-based check misses, including an expiry that wraps into
+> renewal and a "pending" state that ages into acceptance.
+> **AND EXPIRY IS NOT REFUSAL.** A consent that has run out is not a patient who said no, and not a
+> patient who said nothing. Three states where a careless model has one, for W125's own reason:
+> "they said no", "nobody asked" and "they agreed and it lapsed" are opposite instructions to
+> whoever picks the record up next.
+> Gate: a disclosure without recorded consent cannot be CONSTRUCTED — asserted with
+> `@ts-expect-error`, not by a runtime check alone; W239's entry requires it, so the ledger and the
+> permission cannot come apart; the time-can-only-remove property asserted over a generated sweep of
+> states and clock readings rather than by example; expiry, refusal and absence kept distinct with
+> their own copy; `pnpm verify` green.
+
 > **W242 (the interop credentials posture) — claimed 2026-08-21T09:58Z by loop-0821a.** The row's
 > gate has a clause that decides everything: **the LOADER enforces the gate, not the values.**
 > **THE DIFFERENCE IS THE WHOLE UNIT, AND IT IS EASY TO MISS.** "There are no credentials in the
@@ -6409,7 +6437,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
-| W243 | available | — | — | — | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
+| W243 | claimed | loop-0821a | 2026-08-21T10:06Z | — | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
