@@ -179,6 +179,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > W167's register consulted for the fold W250 added and its disposition recorded there rather than
 > argued in a comment; a time budget for the whole 20-vertical sweep asserted IN THE TEST BODY with
 > the observed figure beside it, W48's shape; `pnpm verify` green.
+>
+> **DONE 2026-08-21T12:01Z at `6ac2051`.** `src/verticals/scaling.test.ts`: 20 synthetic verticals,
+> four shuffles × three seeded permutations each, a measured budget, two seeded failures.
+> **THE SWEEP FOUND SOMETHING, AND NOT THE THING IT LOOKED LIKE.** Comparing everything the
+> machinery says about a vertical failed under member reordering. The ANSWERS were identical; what
+> moved was the ROW ORDER of the rendered member table, which follows declaration order. So the
+> same vertical — identity unmoved, because W157's hash is over sorted refs — renders two
+> byte-different documents. **The consequence is real**: a founder comparing this quarter's report
+> to last quarter's, after somebody tidied the member list, sees every row move and no substantive
+> change. **Kept rather than changed**: the order is the AUTHOR'S, nothing in the tree reads meaning
+> from the sequence, and sorting it would be this unit rewriting another unit's pinned output to
+> make its own sweep tidier. Pinned by its own test now, so the next person meets a decision instead
+> of an accident. **The tempting move was worse than either option** — fold presentation into the
+> answer comparison, watch it go red, and "fix" the machinery to make my test green.
+> **W167 COULD NOT SEE THE FOLD I ADDED LAST UNIT.** Its detector matches `.reduce(`, `.at(-1)` and
+> `[x.length - 1]`. W250's grouping is a `Map` accumulated in a `for` loop and emitted through a
+> sort: none of the three, and a fold by every meaning that matters. A sweep found **20 modules that
+> group-then-emit, 16 undeclared**. **THE DIFFERENCE FROM W247's W106 GAP IS THE WHOLE POINT AND
+> THEY WANT OPPOSITE TREATMENT**: there a blanket rule carried 39 exceptions, so the RULE was wrong.
+> Here the rule is right and all 16 genuinely need dispositions — what makes it a unit of its own is
+> the 16 pieces of analysis, each needing somebody to establish that a sort is total. Recorded in
+> the register; this unit's sweep is the disposition for the one fold W250 added. **Not added to
+> `FOLD_SITES`, because declaring a module the detector cannot find registers as STALE** — the
+> register working correctly, and the reason the gap cannot be papered over one entry at a time.
+> **THIRD REGISTER THIS SESSION TO MISS IN THE DIRECTION ITS AUTHOR WASN'T FACING** (W200's
+> undeclared copy exports, W106's store proxy, now W167's fold patterns). That is no longer a
+> coincidence worth noting once — it is the shape of every register this tree has.
+> **AND I INVENTED THE BUDGET FIGURES BEFORE MEASURING.** The first draft of the comment cited
+> "11ms observed" against a 400ms ceiling. I had not run it. Both numbers were made up and the
+> ceiling was chosen to sit comfortably above an imagined measurement — **precisely what W48's
+> shape exists to prevent**, and the same error as W219 writing a holdout figure it had not read.
+> Measured: **1.02–1.16ms over three runs** for 20 verticals / 130 members. Budget now **100ms**,
+> an ~80× margin still tight enough to catch a quadratic report (~150ms at this size), which 400ms
+> was not — a ceiling nothing can reach is not a budget. Linearity checked separately and directly:
+> **11.8×, 12.2×, 13.5× observed** for a tenfold increase in members, threshold 40×, sitting between
+> the real cost and the ~100× a quadratic would cost.
+> **Two seeded failures**: a grouping emitted in insertion order rather than through a total sort
+> (caught by two independent tests), and a cubic report.
+> Verification: `pnpm verify` green (247 files, 3987 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W250 (third-vertical assembly, machinery only) — claimed 2026-08-21T11:35Z by loop-0821a.**
 > Same undecided-vertical posture as W248, and the row already states it: the machinery half is
@@ -6956,7 +6996,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W249 | blocked | — | — | — | Pathway content for the second care area → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W248: this row was titled "Women's health", the pre-reorientation domain, while W186's row states W248/W249 hold autism. **[FOUNDER: VERTICAL UNDECIDED.]** Title corrected by W248 2026-08-21; the care area itself is a founder decision and was not made by the loop. |
 | W250 | done | loop-0821a | 2026-08-21T11:35Z | 8a52c57 | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
-| W252 | claimed | loop-0821a | 2026-08-21T11:52Z | — | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
+| W252 | done | loop-0821a | 2026-08-21T11:52Z | 6ac2051 | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
 | W253 | available | — | — | — | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | available | — | — | — | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | available | — | — | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
