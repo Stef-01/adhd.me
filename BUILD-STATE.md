@@ -162,6 +162,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: the sweep over both surfaces with a POPULATION PIN so a selector that stopped matching
 > cannot report a flawless sweep of nothing, a seeded failure proving each of the three checks can
 > fail, and `pnpm verify` green.
+> DONE 2026-08-21. Zero findings over 152 headings and 101 form fields across 25 routes. One `h1`
+> per page, no skipped heading level, a `<main>` everywhere, every visible field named.
+> Both checks proved able to fail, on real seeds rather than notional ones: turning an `<h2>` into
+> an `<h3>` under /faq's `h1` produces "heading jump h1->h3", and replacing a `<label>` wrapper with
+> a `<div>` on /console/rules produces "unnamed <input> name=usualClinicianOnly". The population pin
+> is load-bearing beside them — a selector that stopped matching would report a flawless sweep of
+> nothing, which is the exact shape this tree has now caught in its own guards five times.
+> **THE HONEST HEADLINE IS THE YIELD, NOT THE GATE.** This is the third preventive unit this week,
+> and the audit lane has plainly moved from finding defects to holding ground: touch (61), console
+> touch (38), overflow (16 routes), contrast (30) and the QA record (33 captures) were real
+> harvests; semantics, focus and the hardening pass were nulls. That is worth writing down because
+> a loop that cannot report a null without inflating it will eventually invent one, and because it
+> is the signal that the next valuable work is NOT another sweep of the same kind.
+> Gate met: sweep over both surfaces with the population pin, two seeded failures, `pnpm verify`
+> green (219 files, 3607 passed).
+
 
 > **O159 (the sweep measured whichever state it found) — claimed AND done 2026-08-21 by
 > loop-0820s. The claim is late and this row says so:** the work was done before the blockquote

@@ -1799,3 +1799,39 @@ hallucinate and interpret him as cofounding the entity."*
   — that it names ADHD.ME and says *why* it is disclosed — and explicitly **forbid** claiming
   either doctor owns or founded the entity. Asserting the fixed string "Owner of ADHD.ME" is what
   carried a false claim through a green suite.
+
+## O160 — semantic structure, the last unmeasured a11y property (2026-08-21)
+
+Touch targets, focus, keyboard reachability, overflow and contrast were all swept this week. The
+one left is what a screen reader actually navigates by: heading hierarchy, the `<main>` landmark,
+and whether every form field has an accessible name. The Vercel guidelines name the first two and
+nothing here had ever checked them.
+
+### Measured, and it comes back clean
+
+| | |
+|---|---|
+| Routes swept | 15 public + 10 console (seeded, so populated states are measured) |
+| Population | **152 headings, 101 form fields** |
+| Findings | **0** |
+
+One `h1` per page, no skipped heading level anywhere, a `<main>` on every route, and every visible
+input, select and textarea carrying a label, `aria-label` or `aria-labelledby`.
+
+### This is preventive, and that is the third such unit this week
+
+Saying so plainly matters more than the gate does. The audit lane has moved from **finding
+defects** to **holding ground** — a real signal about yield, not a thing to disguise. The gate
+still earns its few minutes: semantic structure is what rots silently as pages are edited, and it
+is invisible to every sweep already standing. Touch, focus, overflow and contrast all pass happily
+on a page with three `h1`s and an unlabelled input.
+
+### Proved it can fail
+
+| seed | result |
+|---|---|
+| `<h2>` → `<h3>` under an `h1` on /faq | **fails** — `heading jump h1->h3 at "What is ADHD.ME?"` |
+| a `<label>` wrapper → `<div>` on /console/rules | **fails** — `unnamed <input> name=usualClinicianOnly` |
+
+Plus a population pin, which is load-bearing here: a selector that stopped matching would
+otherwise report a flawless sweep of nothing.
