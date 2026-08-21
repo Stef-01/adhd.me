@@ -143,6 +143,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W247 (Q19 hardening) — claimed 2026-08-21T11:00Z by loop-0821a.** Twelve units of interop
+> shipped since W235 and the law is explicit that a hardening week without the review skills is not
+> done. So: `security-review` over every boundary Q19 added, and the disclosure ledger's own W106
+> classification.
+> **THE LEDGER'S CLASSIFICATION IS THE HALF THAT ALREADY LOOKS WRONG.** W106's detector finds a
+> record class by looking for `globalThis as {` — a module that can retain data across requests.
+> `src/interop/disclosure-ledger.ts` has none, so the detector has never fired on it, and it is
+> undeclared. But it is the module whose entire subject is WHAT LEFT THE TREE ABOUT A NAMED PATIENT.
+> A register that decides what holds patient identity by looking for a store keyword is deciding on
+> a PROXY, and the proxy is exactly what W239 does not match.
+> **WHICH IS THE SAME SHAPE AS THE GAP W246 MEASURED AN HOUR AGO**, in a different register: W200
+> enforces that every module appears and never that every sentence in one is declared. Both
+> registers check the direction their author was thinking about. That is worth saying out loud in
+> the tree rather than fixing quietly in one place, because the next register will have a direction
+> too.
+> **AND THE SECURITY REVIEW GOES OVER A LANE WITH NO ATTACK SURFACE, WHICH IS ITS OWN RISK.** No
+> endpoint, no client, no credential, every `SHIPPED_*` pinned empty, G1 shut. A review of that
+> finds nothing and says so, and "we reviewed it and it was clean" is the most misleading true
+> sentence available — the lane is clean because it is inert, and every finding worth having is
+> about what happens the day it stops being. So the review must separate what is safe from what is
+> merely not yet reachable, and the second list is the deliverable.
+> Gate: `security-review` run over every Q19 boundary with its findings recorded and each one either
+> fixed or carried with a reason; the disclosure ledger classified in W106 with a rationale and the
+> trigger that changes it; W106's detector extended so a module of this shape cannot go undeclared
+> again, with the extension watched failing; the review's own non-vacuity — a seeded vulnerability
+> the sweep catches — since a clean result over an inert lane is worth nothing otherwise;
+> `pnpm verify` green.
+
 > **W246 (the interop console) — claimed 2026-08-21T10:31Z by loop-0821a.** The row's gate has a
 > clause with the emphasis already in it: *shows what was exchanged and, **more importantly**, what
 > was not.*
@@ -6669,7 +6697,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | done | loop-0821a | 2026-08-21T10:26Z | 5ec7878 | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | DONE | loop-0821a | 2026-08-21T10:31Z | 2026-08-21T10:58Z `eb5a603` | [P] Interop console → three kinds of zero, derived; absences above counts; six seeded failures; W200 export-coverage gap measured (111) and recorded, not closed. |
-| W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
+| W247 | claimed | loop-0821a | 2026-08-21T11:00Z | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
 | W249 | blocked | — | — | — | Women's health pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.** |
 | W250 | available | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
