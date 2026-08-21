@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W242 (the interop credentials posture) — claimed 2026-08-21T09:58Z by loop-0821a.** The row's
+> gate has a clause that decides everything: **the LOADER enforces the gate, not the values.**
+> **THE DIFFERENCE IS THE WHOLE UNIT, AND IT IS EASY TO MISS.** "There are no credentials in the
+> tree" is a fact about today's contents, and it stops being true the first time somebody adds one —
+> quietly, in a commit that looks like configuration. "Nothing can be constructed while G1 is shut"
+> is a property of the code, and it holds whatever the contents become. W56 made exactly this
+> distinction for clinical intervals: the emptiness is not the guarantee, the refusal is. So the
+> refusal must fire even when a credential IS present — which means the test has to supply one, and
+> watch the loader refuse it anyway.
+> **AND THE SCAN MUST NOT BE THE GUARANTEE EITHER.** A regex looking for secrets in `src/` is worth
+> having and is not a gate: it finds what it knows to look for, and a credential in a shape nobody
+> anticipated passes it. The scan is a second line; the first is that no code path exists to USE one.
+> **G1 IS NAMED, NOT ALLUDED TO.** The plan's own words — *real PMS/booking API credentials
+> (Halo/Best Practice, HotDoc partner access)* — carried rather than paraphrased, so a reader of the
+> refusal knows which gate they are looking at and where it is defined. Two phrasings of one gate
+> drift (W177), and a gate somebody has to go and look up is a gate they will guess at.
+> The lane this covers is the interop one, but the credentials question is not interop's alone: W28's
+> PMS adapter skeleton has the same posture and the same gate. So the check walks BOTH, and the
+> module says which gate covers which — G1 for PMS and booking, and it names G8 and G10 as the ones
+> that do NOT cover credentials, because a reader who assumes one gate covers everything is the
+> reader who ships behind the wrong one.
+> Gate: no credential value anywhere — asserted by a scan that is explicitly the second line, not the
+> gate; the loader refuses to produce a usable configuration EVEN WHEN a credential is supplied,
+> proved by supplying one; G1 named with the plan's own words, carried not paraphrased; the check
+> applied across `src/interop/` and `src/pms/` rather than one directory; `pnpm verify` green.
+
 > **W239 (the outbound disclosure ledger) — claimed 2026-08-21T09:51Z by loop-0821a.** W204 declared
 > what would have to exist the day G9 opens and deliberately did not build it. This builds it, and
 > the row's own gate says how: **W204's open question — whether the log holds the FIGURES sent or
@@ -6350,7 +6376,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W239 | done | loop-0821a | 2026-08-21T09:51Z | e08ba06 | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
-| W242 | available | — | — | — | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
+| W242 | claimed | loop-0821a | 2026-08-21T09:58Z | — | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | available | — | — | — | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
