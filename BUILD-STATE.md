@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W229 (the capacity console — where the whole lane gets read) — claimed 2026-08-21T08:06Z by
+> loop-0821a.** Seven modules and nothing renders any of them. W220 made the argument for this
+> lane's twin and it holds here harder: every refusal W222–W228 built only does its work at the
+> moment somebody reads a number, and this is that moment.
+> **THE ROW'S GATE IS A DISTINCTION THAT IS EASY TO STATE AND EASY TO LOSE: empty states
+> distinguish NO DATA from NO CAPACITY.** They are opposite facts wearing the same blank screen. A
+> practice whose diary holds nothing has told this page nothing; a practice whose every session
+> runs full has told it something quite definite — that there is no room. Rendering either as "no
+> capacity information" would state the wrong one half the time, and the half it gets wrong is the
+> one where a practice concludes it has spare room it does not have.
+> There is a third, and it is the one the sim actually produces: a practice with a diary whose
+> forecaster is not yet SCORED, so ranges exist and nothing may be recommended from them (W225's
+> refusal). Three states, three sentences, each reached by construction rather than reasoned about
+> — W220's rule, which found a fourth state there.
+> **AND THE DRIFT VERDICT MUST NOT RENDER AS A GRADE.** W228 reports that two halves of the record
+> disagree and refuses to say which side moved. A page that colours `drifted` red has resolved the
+> disagreement in CSS — W173's argument about the unknown pile, which W220 inherited and this
+> inherits again. Same weight, no warning colour, and `improved` gets the same treatment for the
+> same reason.
+> The calendar gap is stated on the page, not omitted: W227 ships empty, so nothing here allows for
+> closures, and `CALENDAR_UNKNOWN_COPY` exists precisely so that absence is visible rather than
+> silently folded into the numbers.
+> Gate: e2e + axe; the three empty states each REACHED by a test; no drift verdict styled as a
+> grade, asserted on the rendered classes rather than by eye; the calendar gap visible; W226's
+> register extended if the page composes anything new; `pnpm verify` green.
+
 > **W228 (the forecast drift monitor) — claimed 2026-08-21T07:56Z by loop-0821a.** W224 scores the
 > forecaster over its whole history, which is exactly the shape that hides a forecaster that WAS
 > right and has stopped being right: eighty-five per cent over a year can be ninety-five then
@@ -5647,7 +5673,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
-| W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
+| W229 | claimed | loop-0821a | 2026-08-21T08:06Z | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
