@@ -143,6 +143,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O144 (a hardening pass that found nothing, and the environment gap that found it) —
+> claimed 2026-08-21T04:10Z by loop-0820s.** Law 5 says a hardening week without the review
+> skills is not done. This firing tried to meet that and hit a wall worth recording: the loop
+> container vendors only the DESIGN skills (`adhdme-taste`, `design-motion-principles`, the four
+> Vercel ones). `code-review`, `security-review` and `simplify` — named in plan §2 and required
+> by law 5 — are not present. The law cannot be satisfied in this environment, which is a gap
+> between what the tree requires and what the loop can do, and the tree's habit is to write those
+> down rather than let each session rediscover them.
+> So the review was done by reading, and the unit records the RESULT INCLUDING THE NULLS, because
+> four checks that came back clean are four things the next session need not redo. Checked: every
+> DESIGN-QA citation against the qa/ tree in both directions; the thirteen skipped tests; the
+> W102 route census against `app/`; and every console route for a session guard — the last
+> chosen because O117 found exactly that defect once already, on `/console/matching`.
+> Two of the four produced a FALSE finding first, and both are worth the ledger: the census probe
+> reported "0 routes listed" (its regex looked for a literal the module does not contain — the
+> census reads the dossier's block), and the guard probe reported seven unguarded console routes
+> (it grepped for `requireSession` and the console uses `requirePractice`). Neither was reported
+> as a finding, because both were checked before being believed. That is the same failure mode
+> O127 and O134 hit with their probes, now three times in this tree, which is a signal about
+> probes rather than about any of the three.
+> Gate: the four results recorded, the missing skills filed as a FOUNDER standing debt with the
+> remedy named (they vendor the way `design-motion-principles` did), `pnpm verify` green. No code
+> changes — if this unit produced a fix it would mean the audit found something, and it did not.
+
 > **O143 (the QA record has been silently falsified, eleven times) — claimed 2026-08-21T03:05Z
 > by loop-0820s.** Found while committing O142, and it is worse than the passing note I gave it.
 > `e2e/finder-flow.spec.ts` writes SEVEN screenshots directly into unit-named historical
