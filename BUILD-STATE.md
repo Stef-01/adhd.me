@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W233 (capacity attribution: did opening slots help?) — claimed 2026-08-21T08:52Z by
+> loop-0821a. Premise CHECKED first:** the only arm anywhere in this tree is patient-level —
+> `Arm = "holdout" | "invite"`, keyed on (practice, patient) by W8 — and **no session carries an arm
+> at all.** So this module refuses over everything the tree currently holds, and saying that up
+> front is the unit rather than a shortfall discovered at the end.
+> **THE WRONG ANSWER IS THE ONE EVERYBODY REACHES FOR, AND IT IS A TREND.** "We opened two extra
+> Thursday slots in June; June filled better than May; the slots helped." That comparison attributes
+> to the decision every seasonal change, every staffing change and every shift in demand that
+> happened in between — and it will usually agree with whoever opened the slots, which is what makes
+> it dangerous rather than merely weak. W215 settled this for messaging with a one-member comparator
+> union; the same settlement has to hold here or the lane acquires a back door.
+> **SO THE REFUSAL IS BY ABSENCE, NOT BY POLICY.** No function computes a before-and-after, no
+> parameter selects a baseline, and the test checks the namespace AND the source, because
+> `improvementSince(date)` passes any name check a reviewer would think to write.
+> **AND THE PATIENT-LEVEL ARM MAY NOT BE BORROWED.** W9's holdout answers "did MESSAGING help" — it
+> is right there, populated, and it is the wrong question. Using it would produce a confident number
+> from real randomisation about an intervention that randomisation never touched. This module
+> imports neither `@/engine/holdout` nor `@/engine/attribution`, pinned.
+> The arm this DOES need is a session-level one a practice would have to run deliberately: some
+> sessions get the extra slots, comparable ones do not, and which is which is recorded before the
+> fact. That type ships, empty, so the shape of the experiment is arguable now — W56's posture.
+> Gate: the comparator is a session-level arm and nothing else, asserted as a one-member union by
+> value; no trend, baseline or pre/post function exists — on the namespace and on the source; the
+> patient-level arm is not imported; `SHIPPED_CAPACITY_ARMS` pinned empty; refusals reached by
+> construction including the overlap case, since a session in both arms is the failure that looks
+> like a bigger sample; `pnpm verify` green.
+
 > **W232 (Q18 dossier: what a forecast implies operationally, priced) — claimed 2026-08-21T08:44Z
 > by loop-0821a.** The row's gate is one clause and it is the useful one: *states what changes the
 > day a practice acts on one.* Not what the forecast is — Q18 has seven modules saying that — but
@@ -5904,7 +5931,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W230 | done | loop-0821a | 2026-08-21T08:30Z | 1560038 | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | done | loop-0821a | 2026-08-21T08:36Z | 3e8b4bf | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | done | loop-0821a | 2026-08-21T08:44Z | 6f29060 | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
-| W233 | available | — | — | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
+| W233 | claimed | loop-0821a | 2026-08-21T08:52Z | — | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | available | — | — | — | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
