@@ -318,10 +318,27 @@ non-rankings.
    (reciprocal recommendation literature), and Hinge's published Gale–Shapley "Most
    Compatible" write-ups; our Hopcroft–Karp oracle (O6) already gives the assignment
    upper bound to evaluate against.
-10. **Clarifier policy at scale.** With twenty clinicians the evenness sort (clarify.ts) has
-    real choices; evaluate question order by expected order-change (information gain over the
-    band structure), not just split evenness. This stays explainable: the question shown is
-    still one of the fixed prompts.
+10. **Clarifier policy at scale. PREMISE MEASURED AND EARNED — O142 (2026-08-21); the build
+    stays blocked on a real roster.** This item asserted "with twenty clinicians the evenness
+    sort has real choices". Nobody had checked, and `clarify.ts` carried the same guess in its
+    own doc comment. O142 checked it against a SYNTHETIC roster — fixture only, never rendered,
+    guarded by a test that fails if it is ever imported from `app/`, and drawing each facet at
+    the marginal rate the three real clinicians declare it, so the distribution is derived rather
+    than chosen. Both halves came out, and one came out stronger than written: at today's size
+    the evenness sort is not "barely" mattering, it is **provably inert** — every splitting facet
+    on three clinicians is held by one or two, |1/3-0.5| === |2/3-0.5|, so all sixteen askable
+    questions share one evenness value and the sort decides nothing at all. Everything ordering
+    the questions today is O33's greedy holder-signature dedup. At scale it wakes up: distinct
+    evenness values go 1 → 4 → 7 → 9 across rosters of 3, 8, 20 and 40, and the sixteen questions
+    that collapse into just FIVE distinct reorderings at three are all sixteen distinct at twenty.
+    That second number is the more useful one — at three, most questions are the same question.
+    So the premise is earned and the item is real. What it still cannot have is the comparison it
+    asks for: whether information gain beats evenness is a question about a real roster's facet
+    CORRELATIONS, and a fixture drawing facets independently models none. The item stays blocked
+    on roster growth (G6) — now for a measured reason instead of an assumed one. Numbers pinned
+    both directions in `src/matching/scale-fixture.test.ts`; the day the roster grows they fail
+    and demand re-measurement. This stays explainable either way: the question shown is still one
+    of the fixed prompts.
 11. **Semantic assist, behind the explainability floor.** Embedding similarity (MiniLM-class
     sentence-transformers, or pgvector on the existing Supabase stack) as a CANDIDATE
     GENERATOR ONLY: it may suggest which lexicon facets a sentence is near, for the console

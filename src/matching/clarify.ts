@@ -191,8 +191,14 @@ function promptFor(key: string): { prompt: string; answer: string } | null {
   return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? PREF_PROMPTS[key] ?? null;
 }
 
-/** Every facet a clinician declares or verifiably holds, as keys. */
-function declaredKeys(clinician: Clinician): Set<string> {
+/**
+ * Every facet a clinician declares or verifiably holds, as keys.
+ *
+ * Exported for W234's scale report (O142), which needs each clinician's holder signature to count
+ * how many genuinely different reorderings the selector has available. It reads this rather than
+ * re-deriving it, so the report cannot describe a selector different from the one that runs.
+ */
+export function declaredKeys(clinician: Clinician): Set<string> {
   return new Set<string>([
     ...clinician.careAreas.map((area) => facetKey({ kind: "care", area } as Facet)),
     // A "sometimes" declaration answers an ask at half weight (O2), so a question about it can
@@ -213,9 +219,19 @@ function declaredKeys(clinician: Clinician): Set<string> {
  * Up to `limit` questions whose answers would actually reorder this roster.
  *
  * Ordered by how evenly the roster splits on them: a facet one of two clinicians holds separates
- * them completely, and that is worth more than one that seven of eight hold. With two clinicians
- * every disagreement is an even split, so the order barely matters today and will matter a lot at
- * twenty.
+ * them completely, and that is worth more than one that seven of eight hold.
+ *
+ * THE EVENNESS SORT IS INERT AT TODAY'S ROSTER SIZE, and this comment used to guess at that
+ * ("barely matters today") rather than know it. O142 measured it: on three clinicians every
+ * splitting facet is held by one or by two, and |1/3 - 0.5| === |2/3 - 0.5|, so ALL sixteen
+ * askable questions carry the same evenness and this sort decides nothing whatever. Every bit of
+ * real ordering today is done by the greedy holder-signature dedup below (O33).
+ *
+ * The other half of the old guess — "will matter a lot at twenty" — is earned: over a synthetic
+ * roster with the real one's marginal rates, the number of distinct evenness values goes 1 at
+ * three, 4 at eight, 7 at twenty, 9 at forty, and the sixteen questions that collapse into five
+ * distinct reorderings at three are all sixteen distinct at twenty. Both numbers are pinned in
+ * scale-fixture.test.ts, so the day the roster grows, the pin fails and says so.
  */
 export function clarifiers(query: string, roster: readonly Clinician[], limit = 3): Clarifier[] {
   // THE ROSTER ARGUMENT MUST BE THE LIST THE READER IS LOOKING AT (O7/F10). `heldBy` and the

@@ -162,6 +162,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > and item 10 gets a written refusal instead of a build. Gate: the guard test, the measurement
 > pinned both directions, a `pnpm verify` green, and the year plan updated with whichever way it
 > came out.
+> DONE 2026-08-21. Both halves of the premise came out, and the first came out STRONGER than the
+> plan or the code had it. At today's roster the evenness sort is not "barely" mattering — it is
+> **provably inert**. Every splitting facet on three clinicians is held by one or by two, and
+> |1/3-0.5| === |2/3-0.5|, so all sixteen askable questions carry ONE evenness value and the sort
+> decides nothing whatever. Everything ordering the clarifier's questions today is O33's greedy
+> holder-signature dedup underneath it. That was worth measuring precisely because it had been
+> written down twice as a guess — in the year plan and in clarify.ts's own doc comment — and both
+> now say the measured thing instead.
+> The second half is EARNED: distinct evenness values go 1 → 4 → 7 → 9 over rosters of 3, 8, 20
+> and 40. The more useful number is the other one, though: the sixteen questions that collapse
+> into just FIVE distinct reorderings at three are all sixteen distinct at twenty. At three, most
+> of the questions are the same question wearing different words.
+> WHAT THE UNIT REFUSED TO CLAIM. This does not build Q3 item 10 and does not pretend to. The
+> item wants information gain compared against evenness, and that comparison is about a real
+> roster's facet CORRELATIONS — which GPs who declare titration also declare shared care — while
+> a fixture drawing each facet independently models exactly none of that. The limitation is
+> written into the module head rather than left for somebody to discover: marginal rates from
+> THREE people are a weak estimate, and the fixture answers a structural question, not a
+> predictive one. Item 10 stays blocked on roster growth, now for a measured reason.
+> The fixture's law is executable, which is the part worth keeping. Twenty fabricated doctors is
+> the exact thing W193 forbids, so they live in a test-only module that `app/` may never import —
+> and the guard was proved by SEEDING a violation (a one-line import under app/) and watching it
+> fail, then removing it. A guard nobody has seen fail is a guard nobody has tested. The entries
+> are also unusable as people by construction: no image, no booking route, a practice that says
+> it does not exist, `realPerson` absent.
+> Two things corrected me in-unit, both by working exactly as designed. `tsc` failed on an
+> indexed access while vitest passed 8/8 — the O132 lesson repeating, and the reason the gate is
+> four commands and not one. And W200's copy census caught the new module the moment it landed,
+> for the fourth time; its declaration is deliberately longer than its siblings' because unlike
+> them this module really does hold strings shaped like clinician copy, and an empty
+> `operatorCopy` there needs to argue for itself rather than assert.
+> Gate met: guard test with a seeded failure, six measurements pinned both directions in
+> scale-fixture.test.ts, `pnpm verify` green (218 files, 3605 passed), finder e2e green (14),
+> clarify.ts's doc comment and year plan item 10 both rewritten to the measured numbers.
+
 
 > **O141 (motion audit of the uncovered finder stages — one real accessibility defect, three
 > refusals) — claimed 2026-08-21T01:15Z by loop-0820s.** Law 5 now binds
