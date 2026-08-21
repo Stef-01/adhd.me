@@ -143,6 +143,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O154 (FOUNDER-DIRECTED — the word "co-founder" comes out, and the disclosure survives it) —
+> claimed 2026-08-21T11:25Z by loop-0820s.** "remove term cofounder everywhere, as its a team".
+> The word appears in TWO PLACES THAT ARE NOT THE SAME THING, and treating them alike would be a
+> compliance regression dressed as a copy edit.
+> (A) **Role labels on the team page** — "Co-founder", "Co-founder, MBBS, FRACGP", "Co-founder,
+> MD, FRACGP". This is what the founder means: the page is the TEAM. The bare ones come out
+> entirely, using the optional-`role` machinery O152 built two units ago; the two carrying
+> credentials keep the credentials, because "MBBS, FRACGP" is a fact about a doctor and not a
+> claim about the company.
+> (B) **The material-interest disclosure on a patient-facing clinician listing** — `founderInterest`
+> in the roster ("Dr Saxena is a co-founder of ADHD.ME. Disclosed because he appears in a directory
+> his own company operates, and a reader cannot see the ranking that put him there."), the
+> `disclosure-line` the finder renders beside his name, and the line W190's console panel shows a
+> doctor so he can read what patients are told about him. **This one exists precisely to tell a
+> patient that the GP they are being shown owns the directory showing him.** Deleting the word
+> would leave a disclosure that discloses nothing, on a health surface, about a real named person —
+> which is the exact conflict the field was created for.
+> So the instruction is honoured LITERALLY without breaking it: the term becomes "founder" — "a
+> founder of ADHD.ME", "Founder of ADHD.ME". "Co-founder" is gone from the tree, the disclosure
+> still names the interest, and nothing about who owns what becomes vaguer. If the founder wants
+> the disclosure itself reworded further that is a founder decision and I will take it, but I am
+> not making a conflict-of-interest notice quieter on my own initiative.
+> Four pins move with it: `clinicians.test.ts` matches `/co-founder/i` on both founders' interest,
+> `finder-flow.spec.ts` asserts the rendered disclosure text, and two comments. Every one is
+> updated to the new wording rather than loosened, so the disclosure stays pinned in both
+> directions.
+> Gate: no "co-founder" anywhere in app/, src/ or e2e/; the disclosure still asserted present and
+> still naming ADHD.ME; `pnpm verify` green; finder + landing + a11y e2e green; a capture of the
+> team page and of the profile disclosure.
+
 > **O153 (the guards I built this week, held to their own claims) — claimed 2026-08-21T10:50Z by
 > loop-0820s.** O152 ran `code-review` over O145-O151 and recorded seven findings rather than
 > losing them; this firing acts on them. The theme is one sentence: **several of the guards this
