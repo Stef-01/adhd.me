@@ -5,6 +5,7 @@
 
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 
 // Scan the settled page, not a frame of its entrance animation. The care finder's
 // `.screen` fades opacity 0→1 over 260ms; caught mid-fade, axe measures the composited
@@ -112,33 +113,27 @@ test.beforeEach(async ({ page, request }) => {
 
 test("console surfaces pass WCAG A/AA", async ({ page }) => {
   test.setTimeout(120_000);
+  // O169: derived from `app/`, not listed. This array covered 25 of the 28 console screens and
+  // omitted `/console/allocation`, `/applications`, `/interview` and `/matching` — four screens the
+  // WCAG gate had never scanned, under a suite whose header says "over every console surface".
+  //
+  // THE PER-ROUTE COMMENTS THAT USED TO LIVE HERE WERE UNIT NUMBERS, and unit numbers are git
+  // history. The ones carrying real information said "scanned POPULATED", and that reasoning is
+  // about SEEDING rather than about listing — it lives in the `beforeEach` above, beside the seeds
+  // it explains, where it was always half-living anyway.
+  //
+  // Two console routes are excluded by name rather than dropped, because a derived list that
+  // quietly skips things has reinvented the hardcoded array. Both are scanned by the test below
+  // this one, which is the only place that can reach them: they need session states this test does
+  // not have — signed out for one, signed in with no practice yet for the other.
+  const OWN_TEST = new Set(["/console/signin", "/console/onboarding"]);
   const surfaces = [
-    "/console",
-    "/console/rules",
-    "/console/dashboard",
-    "/console/results",
-    "/console/usefulness",
-    "/console/ops",
-    "/console/roi",
-    "/console/privacy",
-    "/console/complaints",
-    "/console/registers", // W60
-    "/console/capability", // W83
-    "/console/interest",
-    "/console/case-mix", // W81
-    "/console/outreach", // W95 — landed after the W101 sweep was claimed
-    "/console/credentials", // W113
-    "/console/pathways", // W127
-    "/console/referrals", // W137
-    "/console/education", // W151
-    "/console/verticals", // W164
-    "/console/outcomes", // W173 — scanned POPULATED via the referral seed below
-    "/console/reporting", // W199 — same referral seed populates it
-    "/console/responses", // W220 — scanned POPULATED: the sim graph always has rates
-    "/console/capacity", // W229 — scanned POPULATED: the sim diary always has sessions
-    "/console/interop", // W246 — its content IS the absences, so it is never empty
+    ...CONSOLE_ROUTES.filter((r) => !OWN_TEST.has(r)),
+    // The one dynamic console route, at a real step. `DYNAMIC_ROUTE_PLAN` records why the rest of
+    // the wizard is covered by `console.spec.ts` rather than enumerated twice.
     "/console/setup/practice",
   ];
+  expect(surfaces.length, "the derived console list collapsed — this scan would pass over nothing").toBeGreaterThan(24);
   for (const path of surfaces) {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
@@ -180,12 +175,17 @@ test("patient booking states pass WCAG A/AA", async ({ page, request }) => {
   await expectNoViolations(page, "invalid-link page");
 });
 
-const PUBLIC_PATHS = ["/", "/approach", "/finder", "/practices", "/clinicians", "/clinicians/join", "/privacy", "/privacy/automated-decisions", "/demo"];
+// O169: derived, not listed. This array held 9 of the 15 public routes; `/about`, `/examples`,
+// `/faq`, `/terms`, `/thanks` and `/privacy/counsel-review` were never scanned for WCAG A/AA —
+// and two of those are the published legal notices. All six were clean when first scanned, which
+// is the good outcome and not the point: nothing had ever asked.
 
 test("public pages pass WCAG A/AA", async ({ page }) => {
+  test.setTimeout(180_000);
+  expect(PUBLIC_ROUTES.length, "the derived public list collapsed").toBeGreaterThan(8);
   // The public root is the community program; the synthetic finder lives separately.
   // Every public surface remains on the same zero-violation rule.
-  for (const path of PUBLIC_PATHS) {
+  for (const path of PUBLIC_ROUTES) {
     await page.goto(path);
     await expectNoViolations(page, path);
   }

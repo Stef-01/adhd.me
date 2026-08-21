@@ -177,6 +177,47 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > finding on the newly-scanned routes fixed or ruled in writing with the route named; a non-vacuity
 > floor on each so a collapsed derivation cannot pass by scanning nothing; the seeds O168 established
 > still firing; `pnpm verify` green; the observed finding count reported in this row whatever it is.
+>
+> **DONE 2026-08-21T17:18Z.** Both specs take their routes from `e2e/site-routes.ts`; no hardcoded
+> path array remains in either. `a11y` now scans **15 public + 27 console + the setup sample**, up
+> from 9 + 25; `contrast` scans **15 public + 28 console**, up from 15 + 16.
+> **THE OBSERVED FINDING COUNT IS ZERO, ACROSS ALL 22 NEWLY-SCANNED ROUTE-SCANS**, and the row says
+> so because the row measured it. The six unscanned public pages — `/terms` and
+> `/privacy/counsel-review` among them — came back clean on the first scan anybody has ever run over
+> them. **That is the good outcome and not the point.** A published legal notice being accessible is
+> worth nothing as a fact about this tree until something checks it every run, and until this row
+> nothing did.
+> **THE FOUR NEW `a11y` CONSOLE SCREENS AND THE TWELVE NEW `contrast` ONES WERE ALSO CLEAN.** Two
+> units running, two measurements, and both came back zero — which is worth stating plainly rather
+> than dressing up, because the value delivered here is coverage, not a defect count.
+> **FOUR SEEDS, EACH WATCHED FAILING.** A page planted in a directory neither array named was picked
+> up by BOTH gates from the same derivation — `image-alt (critical)` from axe, `1.36:1 (needs 4.5)`
+> from the contrast sweep. And both collapse floors fired when the derivation was narrowed, which is
+> the seed that matters here: without them "zero violations" and "scanned nothing" are the same
+> green.
+> **ONE REAL FIX THAT WAS NOT A ROUTE.** `contrast`'s two tests ran under Playwright's 30s default
+> and timed out at `/console/roi` the moment the console list grew past ~20 routes. The default was
+> never chosen; it was survivable only because the list was short. Raised to 180s/240s, matching what
+> `a11y` had already set for the same reason.
+> **TWO CONSOLE ROUTES ARE EXCLUDED BY NAME, NOT DROPPED** — `/console/signin` and
+> `/console/onboarding` need session states the console scan does not have (signed out; signed in
+> with no practice), and the test below it is the only place that can reach them. A derived list that
+> quietly skips things has reinvented the array it replaced.
+> **OBSERVED AND NOT DIAGNOSED, RECORDED SO IT IS NOT LOST.** Running the six-spec batch, the dev
+> server logged `TypeError: Cannot read properties of undefined (reading 'clinicians')` from
+> `app/api/mock/education/route.ts`. `const record = console_.practices[0]` is then read as
+> `record!.clinicians`, and the `!` is false whenever no practice is seeded. **No test failed**, which
+> is the interesting half: nothing checks that POST's status, so the seed can fail silently and the
+> education page would then be scanned on its unlinked refusal — one paragraph and no list — which
+> is precisely the vacuity W151 wrote that seed to prevent. It does NOT reproduce with `a11y` and
+> `contrast` alone, so it is cross-spec and order-dependent. I did not determine the trigger and am
+> not going to guess one; the fixture bug, the silent-POST hole and the possible scan vacuity are
+> three separate things and each is checkable. Left for a unit that can size them.
+> **THE OTHER FOUR SWEEPS ARE STILL UNCONVERTED**, per O168's figures: `touch-floor` 33/45,
+> `semantics` 27, `mobile-fit` 25, `keyboard-focus` 15. `touch-floor` is the mechanical one and is
+> the obvious next.
+> Verification: `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted);
+> 16/16 across a11y, contrast, ownership-disclosure, guidelines-sweep, touch-floor and console.
 
 > **O168 (the site-wide sweeps stop hardcoding what "site-wide" means) — claimed 2026-08-21T15:52Z
 > by loop-0821a.** Third instance of one fault in one guard, so this row fixes the shape rather than

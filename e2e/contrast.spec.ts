@@ -3,18 +3,18 @@
 
 import { expect, test, type Page } from "@playwright/test";
 
-const PUBLIC_ROUTES = [
-  "/", "/about", "/approach", "/clinicians", "/clinicians/join", "/demo", "/examples", "/faq",
-  "/finder", "/practices", "/privacy", "/terms", "/thanks", "/privacy/automated-decisions",
-  "/privacy/counsel-review",
-];
-
-const CONSOLE_ROUTES = [
-  "/console", "/console/dashboard", "/console/matching", "/console/interview",
-  "/console/applications", "/console/allocation", "/console/rules", "/console/registers",
-  "/console/privacy", "/console/ops", "/console/outcomes", "/console/referrals",
-  "/console/complaints", "/console/reporting", "/console/usefulness", "/console/case-mix",
-];
+// O169: the routes are derived from `app/` now, not listed here.
+//
+// This sweep covered all 15 public routes and 16 of the 28 console screens — `/console/capability`,
+// `/capacity`, `/credentials`, `/education`, `/interest`, `/interop`, `/outreach`, `/pathways`,
+// `/responses`, `/results`, `/roi` and `/verticals` were never measured for contrast at all. The
+// audience this product names first is "tired, possibly older, possibly low-vision", so a console
+// screen nobody has measured is exactly the gap O157 was written to close.
+//
+// O168 has the argument for deriving rather than extending: a hardcoded array covers the pages
+// somebody remembered on the day and stays green beside every one added afterwards. Twelve routes
+// is what "afterwards" came to here.
+import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 
 /**
  * Every text element whose contrast is under its WCAG AA floor, with the population it came from.
@@ -97,6 +97,10 @@ async function signInAsPracticeOwner(page: Page) {
 
 test.describe("WCAG AA contrast", () => {
   test("no text on a public route is under its floor", async ({ page }) => {
+    // O169: the derived list is 15 public routes, and the sweep resolves every text element through
+    // a canvas. That does not fit the 30s default, and the default is what this suite silently sat
+    // under while its route list was short.
+    test.setTimeout(180_000);
     await page.setViewportSize({ width: 390, height: 844 });
     const offenders: string[] = [];
     let population = 0;
@@ -117,6 +121,7 @@ test.describe("WCAG AA contrast", () => {
    * console elements sat under the floor.
    */
   test("no text in the console is under its floor", async ({ page, request }) => {
+    test.setTimeout(240_000);
     await request.post("/api/mock/console");
     await page.setViewportSize({ width: 390, height: 844 });
     await signInAsPracticeOwner(page);
