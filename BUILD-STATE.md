@@ -143,6 +143,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W244 (interop error semantics) — claimed 2026-08-21T10:17Z by loop-0821a.** W170's rule at the
+> one boundary where this tree genuinely cannot see the other side: **a failed or unacknowledged
+> exchange is `unknown`, never "delivered".**
+> **THE SHARP POINT IS THAT A 200 IS NOT AN ACKNOWLEDGEMENT.** It says a request reached something
+> that was willing to answer — a load balancer, a gateway, a queue that will drop it. Every
+> integration in the world reads it as success, and it is the single most common way "we sent it"
+> becomes "they got it" without anybody deciding to lie. An acknowledgement is the OTHER SIDE saying
+> what it did with the thing, in the payload, and a status code is not that.
+> **UNKNOWN CAN ONLY BE RESOLVED BY THE OTHER SIDE.** Not by a retry that also times out, not by
+> time passing, not by nobody complaining. That is the same monotonicity W243 needed and pointed the
+> other way — there, time could only remove; here, silence can only leave the question open. Asserted
+> as a property over a swept cross-product rather than by example, because the shapes that break it
+> are the ones nobody writes a case for: a retry whose second failure clears the first, a "no news is
+> good news" window, a reconciliation that treats absence from an error report as confirmation.
+> **AND A REFUSAL IS NOT A FAILURE.** The other side saying "no, that patient is not ours" is a
+> successful exchange with a negative answer, and folding it into the error bucket loses the one
+> piece of information that would tell somebody what to fix. Three outcomes where a careless model
+> has two, W170's shape exactly.
+> Gate: `unknown` is unreachable from any success-looking signal — a 200 with no payload
+> acknowledgement is `unknown`, asserted; the resolution property swept over statuses, retries and
+> clock readings with non-vacuity both ways; refusal kept distinct from failure with its own copy;
+> nothing in the module can turn an unknown into a delivery — asserted on the namespace and the
+> source; `pnpm verify` green.
+
 > **W243 (the consent-to-disclose model) — claimed 2026-08-21T10:06Z by loop-0821a.** W125 already
 > holds consent to a PATHWAY, with a branded record no caller can fabricate. Consent to DISCLOSE is
 > a different act — the patient is agreeing that something about them leaves the practice — and it
@@ -6478,7 +6502,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
-| W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
+| W244 | claimed | loop-0821a | 2026-08-21T10:17Z | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
 | W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
