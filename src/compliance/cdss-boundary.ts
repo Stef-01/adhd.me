@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/contract.ts",
+    operatorCopy: [],
+    notCopy:
+      "This module AUTHORS NOTHING and is declared with an empty `operatorCopy` deliberately — the `told.ts` posture. It is the interop lane's conformance contract: a fixture type, a pure checker returning what a mapping failed, a `describe` wrapper a mapping's own test imports, and a lane-wide walk asserting no interop module reaches a network. The only strings it holds are failure identifiers and the detail lines a developer reads in a failing assertion. Nothing here is shown to a practice, a clinician or a patient.",
+  },
+  {
     module: "src/interop/referral-profile.ts",
     operatorCopy: ["PROFILE_READ_REFUSAL_COPY"],
     notCopy:

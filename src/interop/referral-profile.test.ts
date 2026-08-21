@@ -14,6 +14,7 @@ import path from "node:path";
 import { lintEducationCopy } from "@/education/advice-lint";
 import { ALL_REFERRAL_REASONS, ALL_REFERRAL_REQUESTS, type ReferralDocument } from "@/referrals/document";
 import * as mod from "./referral-profile";
+import { describeMappingContract } from "./contract";
 import {
   CONDITION_CODE_SYSTEM,
   PROFILE_READ_REFUSAL_COPY,
@@ -196,4 +197,38 @@ describe("W236 it refuses rather than approximating, and it sends nothing", () =
       expect(lintEducationCopy(text).map((f) => f.rule), text.slice(0, 40)).toEqual([]);
     }
   });
+});
+
+// W237: the same contract, consumed by the second mapping in the lane. Two mappings held to one
+// definition is the point — a bar each module states for itself is a habit, not a bar.
+describeMappingContract("e-referrals (W236)", {
+  corpus: [
+    doc(),
+    doc({ narrative: null }),
+    doc({ conditionCode: null, recordedFactCodes: [] }),
+    doc({ reason: "capacity", request: "advice_only" }),
+  ],
+  toResource: (d) => {
+    const profiled = referralToProfile(d);
+    return { resource: profiled.resource, unmapped: profiled.emptySlots };
+  },
+  fromResource: (resource) => {
+    const back = referralFromProfile(resource, "prac-a");
+    return back.read ? { ok: true as const, value: back.document, unmapped: back.emptySlots } : { ok: false as const };
+  },
+  mutations: {
+    referralId: (d) => ({ ...d, referralId: "ref-changed" }),
+    fromPracticeId: (d) => ({ ...d, fromPracticeId: "prac-z" }),
+    toPracticeId: (d) => ({ ...d, toPracticeId: "prac-z" }),
+    patientId: (d) => ({ ...d, patientId: "pat-99" }),
+    createdAt: (d) => ({ ...d, createdAt: "2027-02-02T08:00:00+10:00" }),
+    createdBy: (d) => ({ ...d, createdBy: "cli-9" }),
+    reason: (d) => ({ ...d, reason: (d.reason === "capacity" ? "extended_scope" : "capacity") as ReferralDocument["reason"] }),
+    request: (d) => ({ ...d, request: (d.request === "advice_only" ? "shared_care" : "advice_only") as ReferralDocument["request"] }),
+    conditionCode: (d) => ({ ...d, conditionCode: d.conditionCode === null ? "adhd-child" : null }),
+    recordedFactCodes: (d) => ({ ...d, recordedFactCodes: ["fact-9"] }),
+    narrative: (d) => ({ ...d, narrative: d.narrative === null ? { text: "x", authoredBy: "y", authoredAt: "2026-08-20T09:00:00+10:00" } : null }),
+  },
+  suppliedByCaller: ["fromPracticeId"],
+  humanText: (d) => d.narrative?.text ?? null,
 });

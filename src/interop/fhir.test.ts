@@ -14,6 +14,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
 import { lintEducationCopy } from "@/education/advice-lint";
 import type { Appointment } from "@/domain/types";
+import { describeMappingContract, describeNoLiveEndpoint } from "./contract";
 import {
   APPOINTMENT_STATUS_MAP,
   APPOINTMENT_TYPE_MAP,
@@ -99,7 +100,7 @@ describe("W235 an unmapped field is named, in both directions", () => {
       practiceId: (a) => ({ ...a, practiceId: "other-practice" as Appointment["practiceId"] }),
       clinicianId: (a) => ({ ...a, clinicianId: "other-clinician" as Appointment["clinicianId"] }),
       startsAt: (a) => ({ ...a, startsAt: "2027-01-02T11:30:00+10:00" }),
-      status: (a) => ({ ...a, status: a.status === "booked" ? "cancelled" : "booked" }),
+      status: (a) => ({ ...a, status: (a.status === "booked" ? "cancelled" : "booked") as Appointment["status"] }),
       patientId: (a) => ({ ...a, patientId: a.patientId === null ? ("pat-999" as Appointment["patientId"]) : null }),
       generatedByInvitation: (a) => ({ ...a, generatedByInvitation: !a.generatedByInvitation }),
       appointmentType: (a) => ({ ...a, appointmentType: a.appointmentType === "long" ? "telehealth" : "long" }),
@@ -240,3 +241,38 @@ describe("W235 it refuses rather than guessing, and it sends nothing", () => {
     }
   });
 });
+
+// W237: the lane's conformance contract, consumed here. Its green run is what makes this a
+// conformant mapping — the five properties it checks were each a real defect in this tree within
+// the hour before the contract existed, including two in this very file.
+describeMappingContract("appointments (W235)", {
+  corpus: [
+    sim.appointments[0]!,
+    sim.appointments.find((a) => a.patientId === null)!,
+    { ...sim.appointments[0]!, status: "cancelled" as const },
+    { ...sim.appointments[0]!, appointmentType: undefined },
+    { ...sim.appointments[0]!, status: "dna" as const, appointmentType: "telehealth" as const },
+  ],
+  toResource: (a) => appointmentToFhir(a),
+  fromResource: (resource) => {
+    const back = appointmentFromFhir(resource, PRACTICE);
+    return back.read ? { ok: true as const, value: back.appointment, unmapped: back.unmapped } : { ok: false as const };
+  },
+  mutations: {
+    id: (a) => ({ ...a, id: "w237-changed" as Appointment["id"] }),
+    practiceId: (a) => ({ ...a, practiceId: "other-practice" as Appointment["practiceId"] }),
+    clinicianId: (a) => ({ ...a, clinicianId: "other-clinician" as Appointment["clinicianId"] }),
+    startsAt: (a) => ({ ...a, startsAt: "2027-01-02T11:30:00+10:00" }),
+    status: (a) => ({ ...a, status: (a.status === "booked" ? "cancelled" : "booked") as Appointment["status"] }),
+    patientId: (a) => ({ ...a, patientId: a.patientId === null ? ("pat-999" as Appointment["patientId"]) : null }),
+    generatedByInvitation: (a) => ({ ...a, generatedByInvitation: !a.generatedByInvitation }),
+    appointmentType: (a) => ({
+      ...a,
+      appointmentType: (a.appointmentType === "long" ? "telehealth" : "long") as Appointment["appointmentType"],
+    }),
+  },
+  suppliedByCaller: ["practiceId"],
+  humanText: null,
+});
+
+describeNoLiveEndpoint();

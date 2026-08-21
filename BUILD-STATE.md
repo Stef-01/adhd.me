@@ -170,6 +170,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > no-endpoint check applied lane-wide by directory walk rather than per file; a deliberately
 > non-conformant mapping shown failing the contract, or the contract proves nothing; `pnpm verify`
 > green.
+> DONE 2026-08-21. `src/interop/contract.ts` + 17 tests of its own, CONSUMED by both mappings —
+> `describeMappingContract("appointments (W235)")` and `("e-referrals (W236)")` — so two mappings
+> are held to one definition rather than each stating its own bar. The five properties are the five
+> findings from the last two units, each reconstructed as a broken toy mapping the contract is
+> watched failing: a silently dropped field, a fabricated default, two code kinds collapsed into one
+> system, an authored `display`, and text tidied in transit.
+> **THE CONTRACT FOUND A LIMITATION IN ITSELF ON THE SECOND MAPPING THAT USED IT.** Its carried-check
+> compared with `===`, so `recordedFactCodes` — an array whose contents round-trip perfectly — was
+> reported "neither carried nor named". Left alone, it would have pushed the next author to either
+> declare a carried field as unmapped (a lie in the register) or drop it (the silent loss the lane
+> exists to stop). Compared structurally now.
+> **AND THE CONTRACT'S OWN TEST RE-IMPLEMENTED ALL FIVE PROPERTIES BESIDE IT** — the same shape as
+> three other guards corrected this session, and it would have drifted from the real contract the
+> first time either was edited. The checks now live in ONE pure function, `contractViolations`, which
+> both `describeMappingContract` and the contract's test call.
+> **TWO SEEDED BREAKS PASSED, AND BOTH WERE WORTH THE TIME.** Removing the corpus-size guard left the
+> whole lane green — no fixture in it has a corpus below three, so a vacuity guard nobody had watched
+> work. Three more properties turned out to be in the same position (a uniform corpus, a named field
+> that is actually carried, a reason too thin, a field with no mutation written), and all four now
+> have their own failing case. The other pass was a NO-OP MUTATION: my anchor did not match the
+> file's formatting, so nothing changed and the green run meant nothing — the second quoting slip of
+> this kind today. Re-seeded against the real text, the display break fails as it should.
+> The no-endpoint check is applied LANE-WIDE by directory walk, so a third mapping cannot arrive
+> with a client attached and its own test quietly not looking; seeding a `fetch` into the appointment
+> mapping fails both that check and W235's own.
+> Gate: `pnpm verify` green — 237 files, 3855 tests, build, audit:gate PASS.
 
 > **W236 (the e-referral document profile) — claimed 2026-08-21T09:28Z by loop-0821a.** W131 built
 > the structured referral; this renders it to a FHIR profile, and the row's gate is the hard part:
@@ -6194,7 +6220,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
 | W235 | done | loop-0821a | 2026-08-21T09:20Z | c6f20ae | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | done | loop-0821a | 2026-08-21T09:28Z | 7fec036 | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
-| W237 | claimed | loop-0821a | 2026-08-21T09:35Z | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
+| W237 | done | loop-0821a | 2026-08-21T09:35Z | PENDING | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
 | W239 | available | — | — | — | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
