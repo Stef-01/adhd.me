@@ -143,6 +143,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W228 (the forecast drift monitor) — claimed 2026-08-21T07:56Z by loop-0821a.** W224 scores the
+> forecaster over its whole history, which is exactly the shape that hides a forecaster that WAS
+> right and has stopped being right: eighty-five per cent over a year can be ninety-five then
+> seventy, and the average reports neither. This splits the record and compares.
+> **W120'S RULE IS THE GATE AND IT IS THE HARD PART: report the disagreement, do not resolve it.**
+> The obvious next line after detecting drift is to widen the ranges until the hit rate recovers,
+> and it is wrong twice over — it destroys the only evidence that something changed, and a range
+> widened to fit its own misses is W224's useless forecaster arriving through the back door with a
+> reason. So there is NO recalibration here, asserted as an absence on the namespace and the
+> source: no function adjusts a range, a floor or a rate.
+> **AND DRIFT DOES NOT SAY WHICH SIDE MOVED.** A hit rate that falls can mean the method has gone
+> stale or that the practice's world changed — a clinician left, a second location opened, a season
+> the record has never seen. This monitor cannot tell those apart and must not appear to: it reports
+> that the record and the method have parted company, with both windows' counts, and stops there.
+> Thresholds are declared data with a reason and no parameter (W196), because a drift threshold
+> passed per call is a threshold somebody raises after seeing the alert.
+> **AND A GAP IN W226, ONE UNIT OLD, THAT ADDING THIS MODULE EXPOSES.** W226's sentence register is
+> both-directions against its own hand-written sweep — so a NEW module in this lane can ship prose
+> and the register stays green, because nothing checks that the sweep covers the lane. That is the
+> same class of hole W226 itself was built to close, one level up. Closing it here, since this unit
+> is the thing that would have walked through it: every module in `src/capacity/` that authors copy
+> must be named by at least one declared kind.
+> Gate: both windows' counts reported, never only the rates; a floor per window with a refusal
+> below it; no recalibration anywhere — asserted by absence, with a seeded break proving the
+> assertion bites; the copy states that drift does not say which side moved; W226's register
+> extended AND its lane-coverage hole closed; `pnpm verify` green.
+
 > **W227 (seasonality and public holidays as declared data with a source) — claimed
 > 2026-08-21T07:50Z by loop-0821a.** The row has two halves and I am saying up front which one
 > ships, because discovering it at the end would read as a shortfall rather than the posture it is:
@@ -5579,7 +5606,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W225 | done | loop-0821a | 2026-08-21T07:34Z | 95da32b | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
-| W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
+| W228 | claimed | loop-0821a | 2026-08-21T07:56Z | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
