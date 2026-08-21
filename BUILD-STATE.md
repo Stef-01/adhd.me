@@ -143,6 +143,50 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O173 (the CI gate was red for five units and nothing told the loop) — claimed 2026-08-21T20:14Z
+> by loop-0821a.** RED GATE, which the loop protocol puts first. Claimed after reading
+> `docs/MATCHING-YEAR-PLAN.md`, which I had not opened this session — five units chosen off the
+> O-track without once consulting the plan the firing instruction names as the source.
+> **THE GATE HAS BEEN RED ON `main` SINCE O167, AND CI SAID SO EIGHT TIMES.** Measured from the
+> Actions API rather than assumed: run **473** (`1f99a18`, O167's claim) is the last green;
+> **474–484 all failed**. Runs 474–481 ran 9–12 minutes and failed on exactly one test —
+> `e2e/landing.spec.ts:74 › the storybook's copy is legible with JavaScript disabled`,
+> `getByText('Why we founded ADHD.ME')`, `Expected: 1 Received: 0`, **272 passed, 1 failed**. The
+> `verify` job passed every time; only `e2e` failed. **O167 turned it red and O168, O169, O170 and
+> O171 were each built, verified and pushed onto a red `main`.**
+> **AND O172's ACCOUNT OF WHY IS WRONG — CORRECTED HERE RATHER THAN QUIETLY.** That row says *"`pnpm
+> verify` does not run e2e, so nothing else was going to catch it."* The first clause is true and the
+> second is false. Standing debt 11 records O98 adding an `e2e` job to `ci.yml` for precisely this
+> reason, and `.github/workflows/ci.yml:54` runs `pnpm e2e`. **The control existed, fired on the very
+> first push after the copy change, and kept firing for eight consecutive runs. Nobody read it.** I
+> diagnosed a missing gate when the actual defect was an unread one, which is a worse error than the
+> one I was writing up.
+> **A SECOND, UNRELATED FAILURE MODE STARTED AT RUN 482 AND IS NOT MINE TO FIX.** Runs 482, 483 and
+> 484 failed in **4 seconds with `total_ms: 0` billable on both jobs** and no downloadable logs —
+> including run 483, a ledger-only commit. Zero billable time means the jobs never executed. The
+> cutover is between 16:17 (481, ran 682s) and 16:29 (482, 4s), with no CI-related change in the
+> tree. That signature — instant failure, no logs, no code correlation — is an account-level Actions
+> block, most plausibly exhausted minutes or a spending limit. **FOUNDER:** this needs checking in
+> GitHub billing; I cannot see billing endpoints and will not guess a cause I cannot verify. **Until
+> it clears, CI proves nothing about any push, including this one.**
+> **WHAT I WILL NOT DO IS CALL THE GATE FIXED BECAUSE THE TEST IS.** O172 fixed the landing
+> assertion and ran the full suite green locally (283/283). That should make 474–481's cause gone,
+> but runs 482+ never executed, so **no CI run has confirmed it.** The row will say the local
+> evidence and the unconfirmed status separately.
+> **THE BUILD, AND IT IS SMALL BECAUSE THE DIAGNOSIS SAYS IT SHOULD BE.** The gap is not a missing
+> gate; it is that a loop firing has no mechanical way to run what CI runs, and `pnpm verify` — the
+> thing the protocol names — deliberately excludes e2e (O98 kept it separate so nobody would trim the
+> fast gate, and that reasoning still holds). So: a `pnpm gate` script that is `verify` then `e2e`,
+> the same two things CI does, named so a unit touching shared surfaces or shipped copy can run the
+> whole gate in one command instead of a batch chosen from memory. `pnpm verify` is left exactly as
+> it is.
+> Gate: standing debt 11 in `docs/MATCHING-YEAR-PLAN.md` amended to record that the gate it built
+> went unread for eight runs, because a debt marked CLOSED that then fails silently is the same
+> failure it was written about; O172's ledger row corrected in place with the wrong sentence left
+> visible; `pnpm gate` added and RUN, green end to end, with the observed figures reported; the
+> Actions block recorded as a founder item with its measured evidence and no invented cause; no
+> change to `pnpm verify` or to `ci.yml`'s job split.
+
 > **O172 (mobile-fit gets the derived route list, keeping its two different assertions) — claimed
 > 2026-08-21T18:52Z by loop-0821a.** Fifth of O168's six.
 > **THE "NOT MECHANICAL" CLAIM IS HALF RIGHT THIS TIME, WHICH IS WHY O171's CORRECTION MATTERS.**
