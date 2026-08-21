@@ -170,6 +170,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > permission cannot come apart; the time-can-only-remove property asserted over a generated sweep of
 > states and clock readings rather than by example; expiry, refusal and absence kept distinct with
 > their own copy; `pnpm verify` green.
+> DONE 2026-08-21. `src/interop/disclosure-consent.ts` + 13 tests, and **W239's ledger entry now
+> REQUIRES a consent** — the typecheck is what told me so, because W239's own test fixture stopped
+> compiling the moment the field landed. That is "refused by type" reaching something rather than
+> being asserted about a module nobody is obliged to consult.
+> **THE PROPERTY SWEEP FOUND A REAL BUG I HAD WRITTEN, IN THE DIRECTION NOBODY TESTS.** Reading a
+> withdrawn consent at a moment a YEAR BEFORE it was recorded returned `given` — time creating
+> consent, backwards. A test written against "now" never looks there; the sweep reads every state at
+> every moment including moments before the record exists. A record now reads `not_recorded` before
+> the date it was made.
+> **AND MY FIRST STATEMENT OF THE PROPERTY WAS WRONG.** I asserted no state ever reads `given`, and
+> the sweep failed on a withdrawn consent read before its withdrawal — rightly, because that consent
+> genuinely WAS given then. "Never given" is not the property; **monotonicity** is: once a status is
+> not `given` at some moment, it is not `given` at any later moment. That is what "time can only
+> remove consent, never create it" actually means, it subsumes W134 and W135, and it admits the
+> histories that really happen. Asserted over 80 readings with non-vacuity BOTH ways — some state
+> must actually lose consent during the sweep, and some must actually hold it, or monotonicity is
+> true of a sweep where nothing moved.
+> Six states where a careless model has two: given, refused, expired, withdrawn, for-another-recipient
+> and not-recorded — each with copy naming the wrong reading it must not be given. Ordering matters
+> and is pinned: a patient who said no and then let it lapse still said no, and reporting that as
+> "expired" would invite somebody to ask again.
+> The ledger checks permission AT THE MOMENT OF DISCLOSURE rather than of appending: a consent
+> current when the report left and lapsed before somebody wrote it down was a lawful disclosure, and
+> refusing it there would lose the record of a thing that actually happened. Both directions pinned.
+> **THE ADVICE LINTER CAUGHT MY OWN COPY AND I REWORDED RATHER THAN ACCEPTED.** "Asking again is the
+> right next step" hit `no-action-framing` — unlike W242's vendor name that was a REAL hit, the
+> sentence genuinely told a reader what to do, and the fix is the wording. The distinction it had to
+> carry survives: a lapsed permission can be sought again where a refusal cannot.
+> W106's entry records a tension rather than hiding it: **erasing a recorded REFUSAL removes the
+> reason a future disclosure would be blocked.** That is a genuine conflict between erasure and the
+> protection the refusal provides, it is the practice's call under its own retention obligations
+> rather than this product's, and it is written where an auditor will meet it.
+> **PROCESS SLIP, RECORDED: I ran `git checkout` on the ledger while restoring a seeded break** and
+> reverted it to W239's version, silently undoing this unit's own edit. Caught by the typecheck
+> immediately; restored from the backup. `git checkout` and "restore my scratch copy" are not the
+> same operation, and using the first to do the second discards uncommitted work.
+> Non-vacuity, five breaks: renew an expired consent after long enough (2 tests); read a record as
+> given before it was made (1); report a refusal that also lapsed as an expiry (1); treat consent for
+> one recipient as consent for any (4); ledger a disclosure that was not permitted (4).
+> Gate: `pnpm verify` green — 241 files, 3904 tests, build, audit:gate PASS.
 
 > **W242 (the interop credentials posture) — claimed 2026-08-21T09:58Z by loop-0821a.** The row's
 > gate has a clause that decides everything: **the LOADER enforces the gate, not the values.**
@@ -6437,7 +6477,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
-| W243 | claimed | loop-0821a | 2026-08-21T10:06Z | — | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
+| W243 | done | loop-0821a | 2026-08-21T10:06Z | PENDING | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |

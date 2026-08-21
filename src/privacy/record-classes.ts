@@ -238,6 +238,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W225's refusal is structural and checked at three doors: no exported signature takes a patient, no field of `SessionRecommendation` can hold one, and the module's import list is pinned so nothing that holds patients can be reached from it. That third check is the one that matters — MATCH-1 arrived through a reasonable-looking line in a module that already had the data to hand.",
   },
   {
+    module: "src/interop/disclosure-consent.ts",
+    what: "A patient\'s recorded decision about their information leaving the practice",
+    handling: "derived",
+    rationale:
+      "W243 holds a patient id, a recipient, the statement put to the patient and their decision — identifying by construction, because a consent record that could not say whose it is would be worthless. `derived` rather than `stored`: there is no store in this module, the functions are pure, and the record lives wherever its caller keeps it. On an access request the patient\'s own consent record is among the first things they are entitled to see, and on erasure it goes with the rest of their record — with one caveat worth writing down rather than discovering: a RECORDED REFUSAL is the instruction not to disclose, so erasing it removes the reason a future disclosure would be blocked. That is a genuine tension between erasure and the protection the refusal provides, and it is the practice\'s call under its own retention obligations rather than this product\'s. THE TRIGGER: the first store that persists these records needs its own entry and its own answer to that question.",
+  },
+  {
     module: "src/interop/referral-profile.ts",
     what: "Referrals rendered to and from a FHIR ServiceRequest profile, in memory only",
     handling: "derived",

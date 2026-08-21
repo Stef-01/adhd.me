@@ -23,6 +23,28 @@ import {
   type EntryUnder,
 } from "./disclosure-ledger";
 import * as mod from "./disclosure-ledger";
+import { recordDisclosureConsent, withdrawDisclosureConsent, type DisclosureConsent } from "./disclosure-consent";
+
+/**
+ * A recorded permission, minted through W243's only door.
+ *
+ * W243 REQUIRED THIS FIXTURE TO CHANGE, and the typecheck is what said so: the entry type gained a
+ * `consent` member and this file stopped compiling. That is the gate working — a disclosure cannot
+ * be recorded as having happened without the thing that made it allowed, and the compiler is what
+ * enforces it rather than a reviewer noticing.
+ */
+const consentFor = (recipient = "Example PHN", expiresOnIso: string | null = null): DisclosureConsent => {
+  const result = recordDisclosureConsent({
+    patientId: "pat-7",
+    recipient,
+    statement: "Agreed that the practice may send quarterly activity figures about their care to this recipient.",
+    recordedAtIso: "2026-08-01",
+    expiresOnIso,
+    decision: "given",
+  });
+  if (!result.recorded) throw new Error("fixture consent was refused");
+  return result.consent;
+};
 
 const entry = (over: Partial<DisclosureEntry> = {}): DisclosureEntry => ({
   disclosureId: "disc-1",
@@ -31,6 +53,7 @@ const entry = (over: Partial<DisclosureEntry> = {}): DisclosureEntry => ({
   what: "quarterly-reporting-summary",
   disclosedAtIso: "2026-08-20T09:15:00+10:00",
   basis: "Requested under the PHN's commissioning agreement, approved by the practice principal.",
+  consent: consentFor(),
   ...over,
 });
 
@@ -120,6 +143,8 @@ describe("W239 it records what left, to whom and when — and refuses what it ca
     if (!dup.appended) produced.add(dup.why);
     const smuggled = appendDisclosure([], { ...entry(), figures: {} } as DisclosureEntry);
     if (!smuggled.appended) produced.add(smuggled.why);
+    const withoutPermission = appendDisclosure([], entry({ consent: consentFor("Somebody Else") }));
+    if (!withoutPermission.appended) produced.add(withoutPermission.why);
     // Both directions: every declared rejection is reachable, and nothing reachable is undeclared.
     expect([...produced].sort()).toEqual(Object.keys(DISCLOSURE_REJECTION_COPY).sort());
   });
@@ -142,12 +167,50 @@ describe("W239 it records what left, to whom and when — and refuses what it ca
       ["d1", "2026-08-20T09:00:00+10:00", "Example PHN"],
       ["d2", "2026-08-21T09:00:00+10:00", "Another Recipient"],
     ] as const) {
-      const result = appendDisclosure(ledger, entry({ disclosureId: id, disclosedAtIso: at, recipient: to }));
+      // Consent per RECIPIENT — the fixture that used one consent for both was refused for the
+      // second, which is the model working: consent to one recipient is not consent to another.
+      const result = appendDisclosure(
+        ledger,
+        entry({ disclosureId: id, disclosedAtIso: at, recipient: to, consent: consentFor(to) }),
+      );
       if (result.appended) ledger = result.ledger;
     }
     expect(disclosuresTo(ledger, "Example PHN").map((e) => e.disclosureId)).toEqual(["d1", "d3"]);
     expect(disclosuresTo(ledger, "Another Recipient")).toHaveLength(1);
     expect(disclosuresTo(ledger, "Nobody")).toEqual([]);
+  });
+});
+
+describe("W243 the ledger cannot record a disclosure that was not permitted", () => {
+  it("refuses an entry whose consent was for a different recipient", () => {
+    const result = appendDisclosure([], entry({ consent: consentFor("Somebody Else") }));
+    expect(result.appended).toBe(false);
+    if (result.appended) return;
+    expect(result.why).toBe("consent_not_current");
+    expect(result.copy).toMatch(/evidence that nobody checked/);
+    expect(result.copy).toMatch(/Consent to one recipient is not consent to another/);
+  });
+
+  it("refuses an entry whose consent had been withdrawn before the disclosure", () => {
+    const withdrawn = withdrawDisclosureConsent(consentFor(), "2026-08-10");
+    const result = appendDisclosure([], entry({ consent: withdrawn }));
+    expect(result.appended).toBe(false);
+    if (!result.appended) expect(result.why).toBe("consent_not_current");
+  });
+
+  it("accepts a disclosure whose consent lapsed AFTER it left, because it happened lawfully", () => {
+    // Checked at the moment of disclosure rather than of appending. A consent that was current when
+    // the report left and lapsed before somebody wrote it down was a lawful disclosure, and refusing
+    // it here would lose the record of a thing that actually happened.
+    const lapsing = consentFor("Example PHN", "2026-08-21");
+    const result = appendDisclosure([], entry({ consent: lapsing, disclosedAtIso: "2026-08-20T09:15:00+10:00" }));
+    expect(result.appended).toBe(true);
+    const later = appendDisclosure([], entry({
+      disclosureId: "disc-late",
+      consent: lapsing,
+      disclosedAtIso: "2026-08-25T09:15:00+10:00",
+    }));
+    expect(later.appended).toBe(false);
   });
 });
 
@@ -171,7 +234,9 @@ describe("W239 the store stays shut, and the ledger cannot recompute", () => {
     expect(code, "the stripper removed the code too").toContain("export function appendDisclosure");
     expect(code).not.toMatch(/globalThis|\bfetch\s*\(|localStorage|\.query\(|\bawait\b/);
     // One import, and it is the retention posture it carries from.
-    expect([...code.matchAll(/from "([^"]+)"/g)].map((m) => m[1])).toEqual(["@/reporting/retention"]);
+    expect([...code.matchAll(/from "([^"]+)"/g)].map((m) => m[1]).sort()).toEqual(
+      ["./disclosure-consent", "@/reporting/retention"].sort(),
+    );
   });
 
   it("carries W204's proposed life rather than restating it", () => {

@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/disclosure-consent.ts",
+    operatorCopy: ["DISCLOSURE_CONSENT_COPY", "CONSENT_RECORD_REJECTION_COPY"],
+    notCopy:
+      "The remaining exports are the branded consent type, the status union, the recorder, the withdrawal and the two readers. `DISCLOSURE_CONSENT_COPY` is what somebody handling a disclosure reads about the patient's own decision — agreed, said no, lapsed, withdrawn, agreed for a different recipient, or never asked — and each sentence names the wrong reading it must not be given: a refusal is not a gap to be filled by asking again, a lapse is not a refusal, and an absence is never turned into agreement by time passing. `CONSENT_RECORD_REJECTION_COPY` says why a consent record could not be made. All of it is ABOUT a patient's decision and none of it is a statement about their health: no condition, no symptom, no next clinical step. The one sentence that told a reader what to do was reworded rather than accepted after the advice linter caught it.",
+  },
+  {
     module: "src/interop/credentials.ts",
     operatorCopy: ["CREDENTIAL_REFUSAL_COPY"],
     notCopy:

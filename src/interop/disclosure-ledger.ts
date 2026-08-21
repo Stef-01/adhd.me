@@ -24,6 +24,7 @@
 // and the drift is invisible — W177's rule, and the reason W223 carries W222's sentences verbatim.
 
 import { PROPOSED_DISCLOSURE_LOG } from "@/reporting/retention";
+import { mayDisclose, type DisclosureConsent } from "./disclosure-consent";
 
 /**
  * Whether an entry records the figures that were sent, or only that a disclosure happened.
@@ -69,6 +70,15 @@ interface DisclosureEntryBase {
   disclosedAtIso: string;
   /** Under what authority. A disclosure with no recorded basis is the one nobody can defend. */
   basis: string;
+  /**
+   * The patient's own permission, as a branded value only W243's recorder can mint.
+   *
+   * REQUIRED, and that is W243's gate reaching this type. An entry that could be written without
+   * one would record that a disclosure happened while saying nothing about whether it was allowed —
+   * and the ledger exists to answer exactly that question afterwards. There is no `consent?` here
+   * and no overload without it: a caller with no consent has nothing to pass.
+   */
+  consent: DisclosureConsent;
 }
 
 /**
@@ -96,7 +106,8 @@ export type DisclosureRejection =
   | "no_recipient"
   | "no_basis"
   | "unreadable_timestamp"
-  | "figures_under_fact_only";
+  | "figures_under_fact_only"
+  | "consent_not_current";
 
 export const DISCLOSURE_REJECTION_COPY: Record<DisclosureRejection, string> = {
   no_disclosure_id: "The entry has no identifier, so there is no way to refer to this disclosure later.",
@@ -107,6 +118,8 @@ export const DISCLOSURE_REJECTION_COPY: Record<DisclosureRejection, string> = {
     "The entry records no basis for the disclosure. A disclosure with no recorded authority is the one nobody can defend afterwards, and leaving the field blank makes that indistinguishable from a disclosure nobody thought about.",
   unreadable_timestamp:
     "The entry has no readable time of disclosure. When something left is half the record, and a ledger that cannot order its own entries cannot answer what was told first.",
+  consent_not_current:
+    "The patient's permission is not current for this recipient at the moment of disclosure. The entry is refused: a ledger that recorded the disclosure anyway would be evidence that it happened and evidence that nobody checked, which is worse than no record at all.",
   figures_under_fact_only:
     "The entry carries figures while this ledger is set to record only the fact of a disclosure. It is refused rather than trimmed: silently dropping the figures would leave a caller believing they were recorded.",
 };
@@ -153,6 +166,19 @@ export function appendDisclosure(
     Object.prototype.hasOwnProperty.call(entry, "figures")
   ) {
     return refuse("figures_under_fact_only");
+  }
+
+  // Checked AT THE MOMENT OF DISCLOSURE rather than at the moment of appending: a consent that was
+  // current when the report left and lapsed before somebody wrote it down was a lawful disclosure,
+  // and refusing it here would lose the record of a thing that actually happened. The date the
+  // entry itself carries is the one that matters.
+  const permission = mayDisclose(entry.consent, entry.recipient, entry.disclosedAtIso.slice(0, 10));
+  if (!permission.permitted) {
+    return {
+      appended: false,
+      why: "consent_not_current",
+      copy: `${DISCLOSURE_REJECTION_COPY.consent_not_current} ${permission.copy}`,
+    };
   }
 
   return { appended: true, ledger: [...ledger, entry] };
