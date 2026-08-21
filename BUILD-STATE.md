@@ -164,6 +164,29 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > pair of units is about.
 > Gate: the booking page swept with a genuine token, a per-page vacuity guard (a blank render
 > satisfies every rule ever written), a seeded failure proving it can fail, `pnpm verify` green.
+> **DONE 2026-08-21 — AND THE CLAIM ABOVE IS WRONG. `/book/[token]` WAS ALREADY SWEPT.**
+> `e2e/public-sweep.spec.ts:66` has held `test("the patient booking page serves no clinical claim
+> either")` for units: it mints a real token through `/api/mock/state` and applies the full patient
+> rule set — quoting, in its own comment, the same census sentence I quoted above as evidence of
+> neglect. The filter drops the route from the LOOP; a dedicated test covers it deliberately. I
+> read one line, inferred a gap from it, and wrote a claim asserting the suite had a hole without
+> reading the ninety lines under it. **Seventh probe correction this week, and the only one where
+> the instrument was fine and the reading was not** — the other six were guards weaker than their
+> comments; this was a guard stronger than my claim.
+> Re-scoped to what was actually missing, which is smaller and real: the booking test HARDCODES its
+> path, so the dynamic half of the register had no coverage guard. A second dynamic public route
+> could be added, swept by nothing, with all four tests green. `DYNAMIC_SURFACES` is now asserted
+> to be exactly `["/book/[token]"]` inside that test. Seeded failure run before it was believed: a
+> fake `/invite/[code]` in `PUBLIC_SURFACES` fails it at line 89 with the added path named in the
+> diff, restored after.
+> **The chain now closes end to end**, which is the only claim this unit is entitled to make.
+> `public-surfaces.test.ts` pins the register against the filesystem both directions (a new page
+> cannot exist unclassified); the loop covers every static entry; this covers every dynamic one.
+> `/go/[clinician]` is outside the register correctly — `discoverSurfaces` keeps `kind === "page"`,
+> and a 302 redirect handler renders no copy for a copy linter to read.
+> Measured: the booking page is CLEAN — 473 characters, zero findings — so the sweep half of the
+> claim was preventive as stated, and now it is preventive AND already-existing, which is worth
+> less than I said it was. Gate: `pnpm verify` green, public-sweep 4 passed, seeded failure proved.
 
 > **O164 (a compliance rule that cries wolf gets switched off) — claimed 2026-08-21T16:45Z by
 > loop-0820s.** O163 raised this at source rather than accepting it forever, and this is the fix.

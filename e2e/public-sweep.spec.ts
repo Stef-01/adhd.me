@@ -18,6 +18,25 @@ import {
 /** The booking page needs a token, so it is swept through a seeded invitation below. */
 const STATIC_SURFACES = PUBLIC_SURFACES.filter((s) => !s.path.includes("["));
 
+/**
+ * O165: the dynamic public routes the filter above skips.
+ *
+ * They are NOT unswept — `/book/[token]` has its own test below, which mints a real token and
+ * applies the full patient rule set. I claimed otherwise on the strength of reading the filter
+ * line alone, and the unit is recorded in the ledger as the correction it turned into.
+ *
+ * What was genuinely missing is this: the booking test hardcodes one path, so a SECOND dynamic
+ * public surface could be added and swept by nothing, with every test still green. This list is
+ * asserted to be exactly what the suite covers, so that cannot happen quietly.
+ *
+ * That closes the last link in the chain. `public-surfaces.test.ts` already pins the register
+ * against the filesystem in both directions, so a new page cannot exist unclassified; the loop
+ * above covers every static entry; this covers every dynamic one. Route handlers that render no
+ * copy (`/go/[clinician]` is the only one) are outside the register by design — `discoverSurfaces`
+ * keeps `kind === "page"` — and there is nothing on them for a copy linter to read.
+ */
+const DYNAMIC_SURFACES = PUBLIC_SURFACES.filter((s) => s.path.includes("["));
+
 test("every public surface serves copy its audience's rules allow", async ({ page }) => {
   test.setTimeout(90_000);
   expect(STATIC_SURFACES.length).toBeGreaterThan(5);
@@ -66,6 +85,14 @@ test("the patient booking page serves no clinical claim either", async ({ page, 
   expect(
     unaccepted(sweepSurface("/book/[token]", "patient", text)).map((f) => `${f.rule}: "${f.match}"`),
   ).toEqual([]);
+
+  // O165: and this test is the WHOLE of the dynamic-surface coverage, so say so. The path above is
+  // hardcoded; a second dynamic public route could otherwise be added, swept by nothing, with the
+  // suite still green — the filter at the top of this file drops it from the loop by construction.
+  expect(
+    DYNAMIC_SURFACES.map((surface) => surface.path),
+    "a dynamic public surface exists that no test sweeps",
+  ).toEqual(["/book/[token]"]);
 });
 
 test("the sweep would notice a violation, so a clean run means something", async ({ page }) => {
