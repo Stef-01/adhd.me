@@ -178,6 +178,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > asserted on the type, since a slot's occupant is exactly what a slot record is tempted to carry.
 > Gate: over the synthetic practice (W3/W12), with the population pinned so the sweep is not
 > vacuous; both refusals reached by construction; W200/W201 registers extended; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/model.ts` + 17 tests. The gate holds on the SHAPE of the value:
+> the no-history arm's keys are exactly `copy`, `recorded`, `why` — asserted on the object, not
+> read off the type, because the type is what a later `utilisation?: number` would widen quietly.
+> Seeded proof: defaulting that arm to `utilisation: 0` fails three tests.
+> **THE SYNTHETIC PRACTICE HAS NO PAST, AND THAT IS THE GATE'S BEST WITNESS.** `generatePractice`
+> writes only a FORWARD schedule (`todayIso + 1` onward), so at its own as-of date every one of its
+> sessions is `never_run` and the model can say nothing about any of them — `capacityReport` returns
+> an EMPTY session list over a diary of hundreds of appointments. The row asked for the refusal to
+> hold "over the synthetic practice"; over the synthetic practice the refusal is the ONLY thing that
+> happens, which is a stronger result than a fixture and was not something I expected before
+> measuring it.
+> Population pinned from the SIM instead, which does run weeks forward: **411 past occurrences, 70
+> recurring sessions, all 70 recorded**, first one at 185/188 slots. Statuses the sim actually
+> produces: booked 6,629 · attended 1,484 · open 260 · dna 20.
+> **THE SECOND REFUSAL WAS UNREACHABLE UNTIL THE DEFINITION WAS FIXED.** First draft counted every
+> appointment record as an offered slot, which makes `offered === 0` impossible whenever an
+> occurrence exists — a declared refusal no input could ever produce. `SLOT_STATUS` now separates
+> `offered` from `filled`, and a `cancelled` slot is NEITHER: withdrawn before it ran, so never
+> capacity on offer. A clinician off sick has the whole list cancelled, that session offered
+> nothing, and `filled / offered` has no answer rather than the answer nought. Stated plainly in
+> the test: the sim records **no cancellations at all**, so this refusal is reachable only from a
+> fixture — which is precisely why it is pinned rather than assumed.
+> Two judgements are named rather than labelled: a `dna` OCCUPIED the slot (the practice could not
+> have given it to anybody else, and counting it empty would report capacity that never existed),
+> a `cancelled` did not. The test bars a one-line gloss on those two specifically — after a first
+> draft applied one length rule to all five statuses and failed on "The appointment happened in
+> this slot", which needs no argument. Padding the obvious entry or lowering the bar for the
+> arguable ones were both wrong; the bar belongs where a reader could disagree.
+> Future exclusion is in the GROUPING, not a later filter (W123): same-day is out too, since a
+> session part-way through has not finished being filled. An unreadable as-of date THROWS rather
+> than defaulting, because a silent default there counts the entire future as unfilled history.
+> No patient identity by type and by value: the occurrence's keys are pinned, `patientId` is a
+> `@ts-expect-error`, and a whole serialised report is searched for 50 real synthetic patient ids.
+> Registers: W200's copy surface + namespace loader and W201's ADM register both failed correctly
+> and were extended in the same commit.
+> Non-vacuity, five breaks: default the no-history arm to zero (3 tests); let the future count as
+> unfilled history (2); report nought per cent instead of refusing (2); count a no-show as empty
+> (1); count a cancellation as capacity on offer (3).
+> Gate: `pnpm verify` green — 223 files, 3663 tests, build, audit:gate PASS.
 
 > **W220 (Q17 console: the response graph as a practice reads it) — claimed 2026-08-21T07:15Z by
 > loop-0821a.** W212 built the graph, W218 gave it a disclosure floor, W219 settled what may and
@@ -5219,7 +5258,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W219 | done | loop-0821a | 2026-08-21T06:52Z | a476f16 | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
 | W220 | done | loop-0821a | 2026-08-21T07:15Z | ecdb1af | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
-| W222 | claimed | loop-0821a | 2026-08-21T07:14Z | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
+| W222 | done | loop-0821a | 2026-08-21T07:14Z | PENDING | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | available | — | — | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | available | — | — | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
