@@ -171,6 +171,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > refuses below it with the shortfall named; no point estimate exists as a field — asserted on the
 > TYPE, since a `expected` added later is a one-line change nobody would flag; W196's zero argument
 > re-derived; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/forecast.ts` + 16 tests. **The row's example comes out of the real
+> diary, not a fixture:** over the sim's 70 recurring sessions the forecaster produces, among
+> others, *"Opening 6 slots on Monday: between 4 and 6 filled, going by the 6 Mondays recorded for
+> this session."* 70 forecasts, 0 refusals — every session has 6 occurrences against a floor of 4.
+> No point estimate: `FilledRange` is `low`/`high`, its keys asserted by value, and `range.expected`
+> is a `@ts-expect-error`. Seeded proof that the WIDTH is load-bearing: replacing min/max with
+> mean ± 0.1 fails three tests.
+> **THE FLOOR'S DISCRIMINATION IS THE TEST, NOT THE FLOOR.** A check that only asserts "thin data
+> refuses" passes with the floor on the wrong quantity, so the test runs both sides at once: three
+> weeks × 200 slots (600 recorded slots) must REFUSE, four weeks × 2 slots (8 recorded slots) must
+> FORECAST. Seeding the floor onto `slotsOffered` fails four tests. This is the error W215 found in
+> another lane — a claim scaled from data it does not have — caught here by making the two
+> quantities disagree in the fixture rather than by reasoning about them.
+> **THE WIDTH MEANS SOMETHING, PROVED THE ONLY WAY AN AGGREGATE CANNOT.** Two sessions that each
+> filled 24 of 32 slots over four weeks: steady (0.75 × 4) gets 4–5, swinging (0.5, 1, 0.5, 1) gets
+> 3–6. Same total, different answer. **The fixture's own equality caught me first:** the first draft
+> used six-slot weeks and the totals were 20 and 18, so the comparison would have been between two
+> different sessions while reading as a controlled one. Asserted to 24 both sides now, by value.
+> Rounded OUTWARDS (floor the low, ceil the high) because a range narrowed by rounding claims more
+> than the record holds — pinned at rates 0.5/0.9 over 7 slots giving 3–7, and rounding inwards
+> fails three tests.
+> W222's refusals are carried, not restated: the no-history arm returns W222's `why` AND W222's
+> exact sentence, asserted with `toContain(NO_HISTORY_COPY.never_run)`, because two phrasings of one
+> refusal drift and the drift is invisible (W177). And W222's zero-denominator rule is applied one
+> level DOWN: a week that offered nothing contributes no rate, so four weeks with one cancelled list
+> is three weeks of evidence and refuses — the single most tempting place to quietly gain an
+> observation.
+> Registers: W200's copy surface + namespace loader and W201's ADM register both failed correctly
+> and were extended in the same commit.
+> Non-vacuity, six breaks: floor onto slots (4 tests); round inwards (3); constant-width interval
+> (3); count an empty week as a zero-fill week (1); paraphrase W222's refusal (1); answer nought to
+> nought instead of refusing an empty question (2).
+> Gate: `pnpm verify` green — 224 files, 3679 tests, build, audit:gate PASS.
 
 > **W222 (Q18 capacity model: sessions, slots and recorded utilisation) — claimed 2026-08-21T07:14Z by
 > loop-0821a.** TIMESTAMP CORRECTED IN THE SAME FIRING, under rule 3b: first written as `07:58Z`
@@ -5288,7 +5321,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W220 | done | loop-0821a | 2026-08-21T07:15Z | ecdb1af | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | done | loop-0821a | 2026-08-21T07:14Z | e9c5e39 | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
-| W223 | claimed | loop-0821a | 2026-08-21T07:21Z | — | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
+| W223 | done | loop-0821a | 2026-08-21T07:21Z | PENDING | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | available | — | — | — | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |

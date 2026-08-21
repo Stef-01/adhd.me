@@ -463,6 +463,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the reason union, the candidate projection and the floor check. `MATCH_REASON_COPY` is the sentence a practice manager reads about one appointment offer and `MATCH_FLOOR_BREACH_COPY` tells a reviewer why a plan was refused. Both are about capacity, recorded availability and practice-set limits; a test asserts neither can name a condition, a symptom or an urgency, because a reason is the one place a matcher gets to say WHY in words somebody reads.",
   },
   {
+    module: "src/capacity/forecast.ts",
+    operatorCopy: ["FORECAST_REFUSAL_COPY"],
+    notCopy:
+      "The remaining exports are the range and refusal types, the declared floor, and the two functions that compute a forecast or withhold one. `FORECAST_REFUSAL_COPY` is what a practice manager reads instead of a range: nothing recorded, not enough weeks recorded for a range to describe anything, or no slots in the question. All three describe the practice's own diary and the limits of what can be said from it. None names a patient, a condition or a next clinical step — a session here is a clinician, a weekday and two counts — and none can read as a range of zero, since the first says in words that it is not a forecast of nothing filling. The forecast SENTENCE is composed per call from the same vocabulary and is asserted to state a span rather than a single number.",
+  },
+  {
     module: "src/capacity/model.ts",
     operatorCopy: ["NO_HISTORY_COPY"],
     notCopy:
