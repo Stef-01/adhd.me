@@ -167,6 +167,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: ratings language still caught (pinned by example), clinical review no longer caught (pinned
 > by example), O163's now-stale `no-ratings` acceptance DELETED — its own both-directions check
 > will fail if I leave it — and `pnpm verify` plus the profile and public sweeps green.
+> DONE 2026-08-21. `no-ratings` keeps every ratings phrase and drops clinical review. Both
+> directions pinned by example in landing.test.ts, because narrowing a compliance regex is only
+> honest if the narrowing is proved not to open a hole.
+> **MY NARROWING INTRODUCED ITS OWN FALSE POSITIVE AND O163's SWEEP CAUGHT IT ON THE FIRST RUN.**
+> The first draft used `\s+`, which matches a NEWLINE — and the rendered profile reads "…scheduled
+> reviews\nby telehealth, wherever you are", so "reviews by telehealth" matched across the line
+> break. A rule scanning RENDERED text has to know that a line break is not a space, and only
+> something that reads rendered text can tell you when you have forgotten it. That is the whole
+> argument for having built the profile sweep one unit earlier, arriving one day later.
+> The alternatives now use `[ \t]`, the newline case is pinned by example, and O163's `no-ratings`
+> acceptance was DELETED — its own stale-acceptance check forced it rather than leaving a
+> comfortable entry behind. That is the mechanism working in the direction that is easy to skip.
+> Gate met: ratings still caught and clinical review not, both pinned; the newline case pinned;
+> stale acceptance removed; `pnpm verify` green (3613 passed); profile, public and party-to-care
+> sweeps green (11).
+>
+> LEDGER NOTE: this DONE row landed one commit after the unit, because the insertion script's
+> marker did not match and the commit ran anyway — the same heredoc-ordering slip O127 diagnosed
+> and O138 repeated. Recording it rather than back-dating it.
 
 > **O163 (the compliance sweep cannot reach the surface with the most clinical text on it) —
 > claimed 2026-08-21T16:05Z by loop-0820s.** O162's pattern, generalised: rigorous machinery
