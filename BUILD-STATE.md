@@ -143,6 +143,48 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O174 (three mock fixtures fail silently, and a compliance sweep measures the empty pages) —
+> claimed 2026-08-21T21:06Z by loop-0821a.** The debt I recorded in O169, re-counted in O173, and
+> twice wrote "the unit that sizes it is still owed" about. Sizing it is this row.
+> **NO BUILDABLE RED GATE FIRST, AND I CHECKED RATHER THAN ASSUMED** — O173's whole lesson. Run 486
+> (O173's own push) failed in 4s with `total_ms: 0`, the fifth consecutive instant failure. The
+> Actions block is founder-gated; the test-level red O173 fixed stays fixed locally. Nothing
+> buildable there, so this row moves to standing debts.
+> **WHAT I LOGGED, AND WHY IT IS WORSE THAN I LOGGED IT.** O169 saw one `TypeError` and recorded it
+> as a fixture nuisance failing no test. O173's gate run showed **three** — `credentials` and
+> `capability` reading `.practice`, `education` reading `.clinicians`, each a non-null assertion on
+> `console_.practices[0]`. Reading the code rather than the log gives the mechanism:
+> `e2e/touch-floor.spec.ts:129` posts its fixtures in a fixed order beginning with `console`, and
+> `POST /api/mock/console` RESETS the console store. The three routes that follow then read
+> `practices[0]` on an empty list and throw. **Nothing checks the POST's status, so all three
+> fixtures silently do not seed.**
+> **AND THAT MAKES THE SWEEP MEASURE THE WRONG PAGES.** W113 and W151 both wrote those seeds so
+> `/console/credentials` and `/console/education` would be scanned POPULATED rather than on their
+> unlinked refusal — "one paragraph and no form". If the seeds never land, O148's 44px sweep is
+> measuring the refusal page for three console screens while reporting them covered. **The comment
+> directly above the offending loop says it in its own words: "A gate whose population depends on
+> run order is a gate that gives false assurance."** O159 wrote that line and the ordering beneath it
+> reintroduced the fault.
+> **WHAT I DO NOT YET KNOW AND WILL MEASURE RATHER THAN ASSERT.** Whether the three pages actually
+> render empty under this spec, and whether any control on their populated forms is under 44px. The
+> mechanism is established from the source; the CONSEQUENCE is a measurement, and the honest outcome
+> may be that the populated pages are also clean. **If so the sweep was still lying about its
+> coverage**, and that is the defect either way — but the row will report the finding count it
+> observes, not the one the mechanism suggests.
+> **THE FIX IS ORDERING AND LOUDNESS, NOT A WIDER ASSERTION.** Seed `console` first and then the
+> practice, or post the resetting fixture before the dependent ones — whichever the spec's own flow
+> allows; and make a mock route that cannot act say so with a status a caller can see, rather than
+> throwing a `TypeError` into a server log nobody reads. A non-null assertion that is false is a lie
+> the type system was told; replacing `!` with a refusal is the same correction W201 and W253 made in
+> product code.
+> Gate: the mechanism demonstrated by a failing assertion BEFORE the fix (the POST's status checked,
+> or the page's populated state asserted, so the seed's absence is visible); all three routes
+> returning a stated refusal instead of throwing, with the practice-less case covered by a test; the
+> spec ordered so the fixtures actually land; the touch-floor population figure reported BEFORE and
+> AFTER, since a rise is the proof the pages were empty and no rise would mean my mechanism is wrong
+> and must be said so; any control found under the floor on the newly-populated pages fixed in the
+> component; `pnpm gate` green end to end.
+
 > **O173 (the CI gate was red for five units and nothing told the loop) — claimed 2026-08-21T20:14Z
 > by loop-0821a.** RED GATE, which the loop protocol puts first. Claimed after reading
 > `docs/MATCHING-YEAR-PLAN.md`, which I had not opened this session — five units chosen off the
