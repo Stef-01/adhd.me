@@ -370,8 +370,16 @@ export const clinicians: Clinician[] = [
      * O58 (2026-08-19): the founder supplied her professional background in this session, and
      * everything it added below is sourced to that message: the endorsed ADHD prescriber
      * course completed (relayed as `nswAdhdTrained` — the field is a declaration relayed from
-     * the founders, and this is that relay; the word "prescriber" itself never renders on a
-     * patient surface, per the no-clinical-claims register), Focused Psychological Strategies
+     * the founders, and this is that relay). O163 CORRECTION: this used to claim the word
+     * "prescriber" itself "never renders on a patient surface, per the no-clinical-claims
+     * register". That was false and had been since it was written — it renders TWICE on her
+     * profile, in `about` and in the experience list, measured on the live page. The reason
+     * nobody noticed is structural and is the finding O163 was really about: the compliance
+     * sweeps lint public ROUTES, and a clinician profile is reached by an interaction, so no
+     * sweep had ever read this surface. `e2e/profile-sweep.spec.ts` now does, and the finding
+     * is carried there as an OPEN founder decision rather than quietly reworded — the sentence
+     * is a founder-relayed credential about a named doctor, and the regex matches inside a
+     * course title. Focused Psychological Strategies
      * training UNDERWAY, functional medicine / nutrition / lifestyle nutrition / health
      * coaching qualifications UNDERWAY (in-progress study renders as in progress, never as
      * held), and her interest in functional and lifestyle medicine recorded as

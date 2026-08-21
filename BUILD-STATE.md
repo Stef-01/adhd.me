@@ -169,6 +169,33 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: the compliance sweep reaching the profile for every real clinician, the finding it produces
 > recorded rather than silently fixed, the false comment corrected, a seeded failure proving the
 > new sweep can fail, `pnpm verify` green.
+> DONE 2026-08-21. `e2e/profile-sweep.spec.ts` drives the finder to each real clinician's profile
+> and lints it with `sweepSurface` — the existing rules applied, not re-implemented (W139).
+> **Six findings on a surface no sweep had ever read.** Four are regex over-matches on ordinary
+> clinical language and are accepted with reasoning EACH, not as a blanket: "treats" as the
+> ordinary verb ("treats a substance history as a safety question"), "Cancer" twice inside the
+> practice's own registered name, and "reviews" meaning clinical review. Two are genuinely
+> undecided and are marked FOUNDER DECISION OUTSTANDING rather than resolved by me — "prescriber"
+> inside a course title, and "mental health" in her own declared interests. Both change either what
+> is said about a named doctor or a compliance rule, and I got exactly that class wrong five units
+> ago by inferring instead of asking.
+> The false comment is corrected: roster.ts claimed the word "prescriber" never renders on a
+> patient surface. It renders twice, measured on the live page, and had done since the line was
+> written. The comment now carries the correction and points at the gate.
+> **A RULE DEFECT WORTH RAISING AT SOURCE:** `no-ratings` matches /review/, and scheduled review is
+> core language this product uses on every surface. That rule will keep producing this finding
+> wherever the product describes what it actually does — it is the rule that needs narrowing, not
+> the copy.
+> Seeded twice for each direction, and the FIRST SEED MISSED AGAIN — the fifth time this week.
+> Putting "we cure ADHD" in `focus` did not fail, because `focus` only renders in the no-match
+> fallback the demo scenario never reaches; the same words in `about` failed correctly. The pattern
+> is identical every time: I seed the field I am thinking about rather than the one that is
+> load-bearing, which is precisely the error a seeded proof exists to prevent me making about the
+> gate itself.
+> Gate met: the sweep reaching all three real profiles, six findings recorded rather than silently
+> fixed, both-directions acceptances (a stale one fails, proved), two genuine seeded failures,
+> `pnpm verify` green (3611 passed).
+
 
 > **O162 (the sourcing discipline guards the surface that is switched OFF) — claimed
 > 2026-08-21T15:25Z by loop-0820s.** Found by asking O161's question of my own audits: a clean bill

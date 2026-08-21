@@ -1835,3 +1835,57 @@ on a page with three `h1`s and an unlabelled input.
 
 Plus a population pin, which is load-bearing here: a selector that stopped matching would
 otherwise report a flawless sweep of nothing.
+
+## O163 — the compliance sweep could not reach the surface with the most clinical text on it (2026-08-21)
+
+O162's pattern, generalised: rigorous machinery pointed at a gated surface while the live one runs
+unguarded. Second instance, and worse.
+
+### The structural finding
+
+`public-sweep.spec.ts` and `party-to-care.spec.ts` lint every public **route**. A clinician profile
+is not a route — it is reached by typing a query, getting results, and clicking a row. So the
+patient surface carrying the most clinical free text about real named doctors (`about`,
+`experience`, `focus`, `matchLine`, `fitSignals`) is the one surface **no compliance sweep had ever
+read**. Verified: neither spec so much as mentions `.clinician-row`.
+
+### What was hiding there
+
+Running the existing rules over the rendered profiles found **six** findings across three real
+doctors. Four are regex over-matches on ordinary clinical language, named individually rather than
+waved through:
+
+| finding | reading |
+|---|---|
+| `"treats"` — *"treats a substance history as a safety question"* | the ordinary verb, not a claim to treat a condition |
+| `"Cancer"` ×2 — *"Beecroft Family & Skin Cancer Clinic"* | the practice's registered name; rewriting it would be the worse problem |
+| `"reviews"` — *"scheduled reviews"* | clinical review, not a patient rating |
+
+Two are genuinely undecided and are **marked as founder decisions, not resolved by me**:
+
+- **`"prescriber"`** — *"She has completed an endorsed ADHD prescriber course."* A founder-relayed
+  credential about a named doctor, and the regex matches inside a **course title**. And
+  `roster.ts` asserted in prose that this word *"never renders on a patient surface"* — it renders
+  **twice**, measured on the live page. That comment is corrected here.
+- **`"mental health"`** — her own declared clinical interests. The rule's rationale is that naming
+  a condition *to a patient* targets them; naming what a GP does on their own listing is what a
+  directory is for. The closest of the six to the rule's actual intent.
+
+### Worth raising at source
+
+`no-ratings` matches `/review/`. **Scheduled review is core language this product uses on every
+surface** — the rule will keep producing this finding wherever the product describes what it
+actually does. That is a rule defect, not a copy defect.
+
+### The gate
+
+`e2e/profile-sweep.spec.ts` drives the finder to each real clinician's profile and reuses
+`sweepSurface` rather than re-implementing the rules (W139's law: a second copy drifts silently).
+Acceptances are both-directions checked — a stale one fails, so a finding cannot be quietly
+outlived.
+
+Proved by seeding, on the second attempt each time. Seeding *"we cure ADHD"* into `focus` did
+**not** fail, because `focus` only renders in the no-match fallback the demo scenario never hits;
+seeding it into `about`, which does render, failed correctly. That is the fifth time this week a
+first seed missed its target, always the same way: **I seed the field I am thinking about rather
+than the one that is load-bearing.**
