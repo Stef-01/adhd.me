@@ -143,6 +143,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O176 (accent discipline stops being a one-screen finding) — claimed 2026-08-22T00:12Z by
+> loop-0821a.** A UI refinement unit, per the plan's continuous track and its cadence requirement of
+> a `qa/` capture plus a `docs/DESIGN-QA.md` entry.
+> **RED GATE CHECKED FIRST, AS O173 REQUIRES: still founder-gated.** Runs 487–490 were the sixth
+> through ninth consecutive 4–7 second failures with `total_ms: 0`. Nothing buildable there.
+> **WHY THIS AND NOT MORE COVERAGE.** Nine units have made the mechanical properties measurable
+> everywhere — contrast, touch floor, keyboard, semantics, overflow and axe now all sweep 45 routes
+> and all pass. **What none of them can see is whether a screen is legible as a composition**, and
+> that is the half the founder actually complained about: *"visually looks terrible … make it much
+> more visually coherent"*. O166 answered it for ONE screen and the technique is the reusable part —
+> a canvas sweep counting how many distinct MEANINGS the accent carries, because
+> `adhdme-taste` says outright: **"Accent colour is reserved for live tokens — the value that
+> changes, the word that matters. If everything is accented, nothing is."** That rule has been
+> enforced on the clinician profile and nowhere else.
+> **THE DESIGN PROBLEM IS REAL AND I WILL NOT SOLVE IT BY WHITELISTING.** O166 could name its one
+> allowed site (`fit-evidence-label`) because it audited one screen. A site-wide version tempts an
+> allow-list of every accent site that exists today, which would be a transcription of the current
+> state dressed as a rule — **tuning the detector to green, which this session has refused four
+> times** (W256's abandoned register, O167's scoped brand rule, O170's exclusions, O174's component
+> fixes). So the rule is a CAP on distinct accent meanings per screen, not a list of permitted ones.
+> **AND THE CAP IS MEASURED BEFORE IT IS SET.** I do not know today's distribution across the 15
+> public surfaces; O166 measured the finder screens only (scenarios 0, results 2, welcome 4, profile
+> 2 after the fix). This row sweeps all 15, reports the per-screen figure, and sets the cap from what
+> it observes — W48's rule, and the one I have broken twice this session by writing a figure before
+> measuring it.
+> **WHAT COUNTS AS A "MEANING" IS THE HARD PART AND IT IS NOT MECHANICAL.** Two accented elements of
+> the same class on one screen are one meaning; two of different classes are two. Class is a proxy
+> and a rough one, so the row will say where the proxy disagrees with a reader's judgement rather
+> than pretending it does not.
+> Gate: the canvas technique from O166 reused, not reimplemented — colours resolved through a canvas
+> because the stylesheet emits `oklch()` and the accent reaches elements via `color-mix`, so grepping
+> `var(--accent)` finds declarations rather than painted pixels; routes from `e2e/site-routes.ts`;
+> the per-screen accent-meaning count REPORTED for all 15 public surfaces before any cap is chosen;
+> a non-vacuity assertion that the sweep finds the accent somewhere, since a detector matching
+> nothing would pass a cap trivially; every screen over the cap fixed by demoting accents to ink or
+> muted in the COMPONENT, with the direction of each move justified (O166 moved the disclosure to
+> ink, not muted, because a compliance-bearing line must get louder when it comes off the accent);
+> `qa/` capture and `docs/DESIGN-QA.md` entry per the track's cadence; `pnpm gate` exit 0.
+
 > **O175 (the keyboard sweep reaches the console — the last of O168's six) — claimed
 > 2026-08-21T22:41Z by loop-0821a.** Sixth and final sweep. Closes the arc O168 opened.
 > **THE GAP IS NOT A PARTIAL LIST, IT IS A MISSING HALF.** `a11y`, `contrast`, `touch-floor`,
