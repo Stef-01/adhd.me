@@ -203,6 +203,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > touch-floor + keyboard-focus + mobile-fit + a11y + compare + privacy + complaints e2e green (40),
 > so the looks were not paid for out of the accessibility work. Copy and the W193 declaration
 > framing are untouched — this is a real person's listing.
+> POST-HOC, same firing: I ended O150 speculating that the founder might be looking at a stale
+> production deploy. **That was wrong and it is corrected here rather than left standing.** The
+> Vercel deployment list shows the twenty most recent deployments all READY and all production,
+> one per unit from O117 to O150, each landing about two minutes after its push — no quota
+> failures at all. Then the live CSS was read back to settle it beyond the deploy state:
+> production serves `.profile-content section ul{grid-template-columns:1fr;gap:8px;…}` and
+> `.fit-evidence{…margin:24px 0 0;…}`, which are O150's own rules. Production is current.
+> So the founder's screenshot is from their own history or cache, not from a stale build, and a
+> hard refresh is the whole remedy. Year-plan standing debt 9 ("the quota keeps blocking
+> previews/production for hours at a time") is corrected in the same commit: the batching
+> discipline stays, the belief that deploys are unreliable goes. A stale premise is worth
+> deleting precisely because it is the comfortable explanation for a real defect — it nearly was
+> here.
+
 
 
 > **O149 (the console scrolls sideways on a phone) — claimed 2026-08-21T08:10Z by loop-0820s.**

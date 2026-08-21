@@ -552,9 +552,20 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
    deliberately stay px — they are not type; reopen only if a low-vision finding names them.
 8. **MATCH-1/F9 reciprocity finding** stays open until Q3's reciprocal-matching work closes
    it in the latent-findings register, not just in prose.
-9. **Vercel free-tier deploy quota** keeps blocking previews/production for hours at a time.
-   FOUNDER: either upgrade the plan or accept batched deploys; the loop should batch pushes
-   (one push per verified unit, no pixel-only pushes between) either way.
+9. **Vercel free-tier deploy quota — the claim no longer holds, measured 2026-08-21 (O150).**
+   This said the quota "keeps blocking previews/production for hours at a time". Checked against
+   the actual deployment list rather than from memory: the twenty most recent deployments are
+   ALL `state: READY`, `target: production`, one per unit, from O117 through O150, each landing
+   within about two minutes of its push. Not one quota failure among them. The live production
+   CSS was then read back and carries O150's rules verbatim
+   (`.profile-content section ul{grid-template-columns:1fr…}`), so production is current, not
+   stale. The `ignoreCommand` in vercel.json — which skips builds for every ref except `main`,
+   so previews do not exist — is what made the quota sufficient, and the batching advice below
+   is what kept it that way. KEEP the discipline (one push per verified unit, no pixel-only
+   pushes between); DROP the belief that deploys are unreliable, because a stale premise gets
+   used to explain away real defects. It nearly did here: when the founder reported the profile
+   still looked wrong, "probably a stale deploy" was the comfortable answer and it was false.
+   FOUNDER: no action needed unless previews are wanted, which would need the plan upgraded.
 10. **Finder desktop composition — CLOSED by O63 (2026-08-19), the shell way D1's revert
     prescribed.** One `--shell-w` token (520px; 640px at ≥820px) drives the shell, the
     ≥600px block and the fixed booking bar's centring, for every stage at once; the
