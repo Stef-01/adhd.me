@@ -504,6 +504,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the branded scope type, the refusal union and the one function that resolves a practice against a caller's memberships. `SCOPE_REFUSAL_COPY` is what an integrator is told when a read is refused: no practice named, the caller holds none, or the caller holds others and not this one. All three are about ACCESS to a practice's own configuration — no patient, no condition, no clinical step — and the third deliberately says the same thing whether the practice exists or not, because a refusal that distinguished them would answer questions about other practices to anyone willing to ask repeatedly.",
   },
   {
+    module: "src/platform/scopes.ts",
+    operatorCopy: ["SCOPE_GRANTS", "SCOPE_DENIAL_COPY", "CALLER_MISMATCH_COPY"],
+    notCopy:
+      "The remaining exports are the scope union, the grant type, the empty grant registry and the one function that authorises a read. `SCOPE_GRANTS` says what each scope grants and why it is not folded into another — the sentences a practice would read before agreeing an integrator may hold one. `SCOPE_DENIAL_COPY` and `CALLER_MISMATCH_COPY` are what a refused caller is told. Every sentence is about ACCESS to a practice's own configuration and complaint counts: no patient, no condition, no clinical step, and no advice — the copy states what was refused and why, and proposes nothing.",
+  },
+  {
     module: "src/platform/api.ts",
     operatorCopy: [],
     notCopy:

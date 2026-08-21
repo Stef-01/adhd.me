@@ -28,6 +28,7 @@
 
 import { complaintsFor } from "@/complaints/store";
 import { practiceRecord } from "@/console/store";
+import type { ApiScope } from "./scopes";
 import type { ScopedPractice } from "./scope";
 
 /**
@@ -42,6 +43,12 @@ export interface PlatformEndpoint {
   path: string;
   /** What it answers, in a sentence. Linted like any other operator copy. */
   summary: string;
+  /**
+   * The grant this read needs (W254). Required, not optional — an endpoint whose scope could be
+   * omitted is an endpoint that is readable by anybody holding any grant the day somebody forgets
+   * it, and "we always remember" is the control this tree has watched fail.
+   */
+  requires: ApiScope;
   read(scope: ScopedPractice): Readonly<Record<string, number | string | boolean | null>>;
 }
 
@@ -55,6 +62,7 @@ export interface PlatformEndpoint {
  */
 const practiceProfile: PlatformEndpoint = {
   path: "/v1/practice",
+  requires: "practice:read",
   summary:
     "The practice's own configuration: how many clinicians are on its roster, and whether it has finished setting up.",
   read: (scope) => {
@@ -81,6 +89,7 @@ const practiceProfile: PlatformEndpoint = {
  */
 const complaintSummary: PlatformEndpoint = {
   path: "/v1/complaints/summary",
+  requires: "complaints:read",
   summary:
     "How many complaints this practice holds and how many are still open. Counts only — no complaint text and nothing about who made one.",
   read: (scope) => {
