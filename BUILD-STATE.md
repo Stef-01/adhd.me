@@ -143,6 +143,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O159 (the sweep measured whichever state it found) — claimed AND done 2026-08-21 by
+> loop-0820s. The claim is late and this row says so:** the work was done before the blockquote
+> went in, which is not the protocol. Recording it rather than back-dating it.
+> O152 found the touch sweep reporting a clean pass while three controls sat under the floor —
+> `/demo`'s booking links at 115x40 and `/console/referrals`' reason input and Decline button at
+> 236x38 and 91x42. All three render only in POPULATED states, so run standalone the sweep saw
+> those routes empty and said nothing; it took another spec seeding mock data in the same batch to
+> expose them. That was recorded as a named follow-up and this is it.
+> **The sweep's population was never the set of controls the product can render — only the set that
+> happened to be on screen.** A gate whose coverage depends on run order gives false assurance, and
+> the earlier green runs were exactly that. The console leg now POSTs all thirteen mock fixtures
+> before measuring, and the public leg makes a second pass over `/demo` after launching it, so the
+> booking links are measured in the state a reader actually meets.
+> Proved by seeding: reverting O152's `min-h-11` on the demo link now fails the sweep on its own,
+> naming "/demo (populated) <a> \"Open booking link\" 115x40" three times, where before it needed a
+> whole batch to surface. Both legs green afterwards.
+> VERIFICATION WAS CONSTRAINED AND THE ROW SAYS SO. This container is OOM-killing Playwright
+> batches and killed `pnpm verify` mid-run twice, so the gate here is: `tsc --noEmit` clean, the
+> touch-floor spec green twice on its own, and a seeded failure. The full suite was NOT re-run.
+> The change is e2e-only — no product code — which is what makes that acceptable rather than a
+> corner cut, and the next firing on a healthy container should run the whole batch once.
+
 > **O158 (FOUNDER-CORRECTION — I got a fact wrong about a real doctor, and it is live) — claimed
 > 2026-08-21T13:40Z by loop-0820s.** "Dr Saxena only owns the clinic, he is the first clinic
 > partner. Do not hallucinate and interpret him as cofounding the entity."

@@ -100,13 +100,35 @@ test.describe("O14's 44px touch floor", () => {
       population += seen;
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
+    // O159: /demo again, POPULATED. Its "Open booking link" anchors render only once invitations
+    // exist, so the pass above measures an empty page and says nothing about them — they were
+    // 115x40 and went unnoticed until another spec seeded state in the same batch (O152).
+    await page.goto("/demo");
+    await page.getByRole("button", { name: /Launch demo|Reset demo to the start/ }).click();
+    await page.waitForURL(/\/console$/);
+    const populated = await sweep(page, "/demo");
+    population += populated.seen;
+    for (const entry of populated.out) offenders.push(`/demo (populated) ${entry}`);
+
     // Non-vacuity: a selector that stopped matching would report a perfectly clean sweep.
     expect(population).toBeGreaterThan(150);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 
   test("no control in the console is under the floor", async ({ page, request }) => {
-    await request.post("/api/mock/console");
+    // O159: SEED EVERY FIXTURE FIRST, and that is the whole point of this line.
+    //
+    // The sweep measures whichever state it happens to find, not the set of controls the product
+    // can render. Run with only the console fixture, `/console/referrals` shows no decline form and
+    // `/demo` shows no booking links — so the sweep reported a clean pass while three controls sat
+    // under the floor, and it took another spec seeding data in the same batch to expose them
+    // (O152). A gate whose population depends on run order is a gate that gives false assurance.
+    for (const fixture of [
+      "console", "referrals", "registers", "usefulness", "ops", "credentials",
+      "capability", "case-mix", "education", "preferences", "pathways", "verticals", "state",
+    ]) {
+      await request.post(`/api/mock/${fixture}`);
+    }
     await page.setViewportSize({ width: 390, height: 844 });
     await signInAsPracticeOwner(page);
     const offenders: string[] = [];
