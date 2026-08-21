@@ -169,6 +169,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > release each named and each checked against the plan's own text; the "payer differs from
 > commissioner" argument quoted from the plan rather than paraphrased; `_LAST_UNIT` bound present;
 > the dossier takes no position, asserted; `pnpm verify` green.
+> DONE 2026-08-21. `docs/GATE-DOSSIER-Q19.md` + `src/quality/gate-dossier-q19.test.ts` (10 tests).
+> **THE CHEAP HALF IS STATED FIRST AND THEN UNDERCUT, WHICH IS THE POINT OF THE DOCUMENT.** Derived
+> from the ledger: G10 blocks exactly TWO units, W240 and W241, and nothing depends on either. So
+> leaving it shut costs two units of a five-year plan — and a dossier that stopped there would be
+> making the decision look easier than it is by measuring only what is convenient to measure. The
+> interesting number is not what a shut gate costs; it is what an open one admits.
+> The substance is quoted, not paraphrased: *"a payer differs from that in the way that matters: it
+> has a financial interest in the individual patient's care and in whether that care happens at
+> all"*. A commissioner wants the service delivered; a payer's interest can run the other way on the
+> same patient, on the same day, about the same appointment, and no gate in this tree distinguishes
+> those two relationships. Paraphrasing it fails a containment check against the plan file.
+> **THE LOAD-BEARING HALF IS WHAT G10 DOES NOT RELEASE, because nothing would fail if that list went
+> stale.** Four still shut — G1 (credentials), G2 (real patient data), G8 (model vendors) and Q9
+> action 1 (cross-boundary credential detail) — each checked against the plan's own definition AND,
+> for G1, against the CODE that enforces it: W242's loader refuses on G1 alone, which is what makes
+> "four gates short of an integration" true rather than rhetorical. Deleting the section fails two
+> tests, one of them the code check.
+> The fourth thing the founder decides — the patient's own consent to that specific exchange — has
+> machinery already waiting: W243's model, where consent is to a NAMED recipient and consent to one
+> is not consent to another. Asserted of the code, not just of the document.
+> **NO FIGURE IS INVENTED, and the dossier says why rather than leaving the absence to be read as an
+> oversight.** W232 could price its finding because W46's register held `mbs.bulk-billed-level-b-metro`;
+> this one has no cited figure for payer integration, so producing one to make the decision feel
+> quantified would be worse than leaving it qualitative. A test asserts no dollar figure appears at
+> all; seeding one fails.
+> Bounded by `Q19_LAST_UNIT` (DOSSIER-1), with the test asserting its own bound is present.
+> **AND A QUOTING SLIP WAS FIXED AT SOURCE RATHER THAN WORKED AROUND, THIRD TIME THIS SESSION.** A
+> typographic apostrophe inside a shell heredoc broke the seeding script mid-sweep. The remaining
+> four seeds were run from a Python FILE instead of inline — which removes the shell from the loop
+> entirely and is what should have happened after the first slip, not the third.
+> Non-vacuity, five breaks: overstate what the gate blocks (1 test); paraphrase the plan's argument
+> (1); drop the does-not-release section (2); take a position on the ruling (1); invent a revenue
+> figure (1).
+> Gate: `pnpm verify` green — 243 files, 3926 tests, build, audit:gate PASS.
 
 > **W244 (interop error semantics) — claimed 2026-08-21T10:17Z by loop-0821a.** W170's rule at the
 > one boundary where this tree genuinely cannot see the other side: **a failed or unacknowledged
@@ -6561,7 +6595,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
-| W245 | claimed | loop-0821a | 2026-08-21T10:26Z | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
+| W245 | done | loop-0821a | 2026-08-21T10:26Z | PENDING | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
 | W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
