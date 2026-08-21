@@ -143,6 +143,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O140 (the queue's last four, and the two that stay) — claimed 2026-08-21T01:05Z by
+> loop-0820s.** Four sentences remain genuinely open after O139. Measured, two are cueable and
+> two are not, and the two refusals are the more interesting half.
+> `"file is thick"` reaches `care:complex-mental-health` cleanly. `"every decision"` reaches
+> `manner:collaborative` and fires on my own distractor ("a say in every decision the practice
+> makes about billing") — which I am NOT treating as a refusal, because the facet is "explains
+> and decides with you" and somebody asking for a say in decisions IS asking for that. A weak
+> distractor is not a measurement; the honest test is whether the reading is wrong, and it is not.
+> Refused: `"things are predictable"` fires on "I like it when things are predictable at work",
+> a self-description rather than a request about how a GP runs an appointment — and this facet
+> is about the CLINICIAN's routine, which is exactly the subject-blind confusion O119 found four
+> instances of. And `"what is wrong with you"` strips to the single token [wrong] AND fires on
+> "the doctor asked what is wrong with you", a report of something said to the reader.
+> That leaves `manner:motivating` and the autism/structured pair standing with written reasons,
+> which is the correct end state rather than a failure: the O65 pattern exists precisely so a
+> queue can end in reasons instead of forced cues. Gate: two promotions, two refusals registered
+> with `leavesStanding`, zero `never` pins broken, floors and tie-quality moved, full
+> `pnpm verify` green.
+
 > **O139 (the last of the unblocked queue, worked with the registers on) — claimed
 > 2026-08-21T00:55Z by loop-0820s.** O138 made the queue countable and it is TWELVE — the first
 > time this number has meant anything, since it now excludes both founder-blocked entries and
