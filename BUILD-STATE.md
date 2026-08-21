@@ -181,6 +181,56 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > on a single scale; `text-pretty` on the display and meta lines; every existing finder e2e still
 > green, including the disclosure guard; before/after captures in `qa/` and an entry in
 > `docs/DESIGN-QA.md` (adhdme-taste's review procedure); `pnpm verify` green.
+>
+> **DONE 2026-08-21T14:14Z at `155e426`** (+ `dcb1382`, a stray capture removed).
+> **THE TWO LAYOUT BUGS IN MY OWN CLAIM WERE NOT REAL, AND THAT IS THE FIRST THING TO RECORD.** I
+> claimed the `h1` was clipped by the sticky header and the booking bar sliced through the About
+> section. Both were plainly visible. **Both were artifacts of screenshotting an ELEMENT** —
+> Playwright scrolls the target into view, so a sticky header paints over the top of whatever you
+> asked it to capture. Measured: at rest the header ends at **64px** and the `h1` starts at
+> **484px**; at the foot of the scroll the number of text leaves intersecting the bar's band is
+> **0** at 390 and at desktop. The fix I was about to write would have added padding nothing needed
+> and called it a repair. **Fourth time this session that measuring beat looking**, and the first
+> where what it corrected was my own claim rather than my own guard.
+> **THE REAL FAULT WAS THE ACCENT, AND IT MEASURED WORSE THAN IT LOOKED.** A canvas sweep found it
+> painting **six elements in four unrelated meanings** on one screen: a section eyebrow, a
+> material-interest disclosure, the matched-cue pills, a map link, a booking-source note.
+> `adhdme-taste` is unambiguous — the accent is for LIVE TOKENS, and *"if everything is accented,
+> nothing is."* The only live token here is the matched cue: the one thing that changes with what
+> the reader typed. **Six sites → two, one meaning.** Canvas rather than grep because the stylesheet
+> emits `oklch()` and the token reaches elements through `color-mix` — grepping finds declarations
+> somebody wrote, not the colour an element paints (W229's line, and the reason it exists).
+> **THE DISCLOSURE WENT TO INK, AND THE DIRECTION IS THE WHOLE POINT.** It is a statement about a
+> real named person's material interest, sited exactly where the listing is read (O89/O129). Taking
+> it off the accent had to make it LOUDER. Ink on paper is the highest-contrast pair in the palette
+> and amber is not, so a test asserts its ratio now **exceeds the accent's** and clears WCAG AA on
+> its own — a future palette tidy cannot demote a compliance-bearing line while improving the
+> screen.
+> **AND THE SECOND FAULT IS WHAT ACTUALLY MADE IT LOOK BROKEN.** `.fit-evidence li` was
+> `flex-wrap: wrap`, so "ADHD assessment" kept its phrase beside it and "A structured, measured
+> approach" pushed it to the next line — **two rows of identical content rendering two different
+> ways, decided by how many characters the lexicon happened to use for a label.** That is exactly
+> the ragged block in the founder's screenshot. Now a grid: same shape every row.
+> **THAT FIX THEN REINTRODUCED O150's OWN FINDING ON THIS SAME SCREEN.** Stacking put 3px INSIDE an
+> item against 6px BETWEEN items — nearly equal, so a pill and its phrase grouped no more strongly
+> than two unrelated cues. O150's note reads *"every gap was between 6 and 13px, so nine
+> semantically different blocks looked like one list."* Within 3, between 14.
+> **AND ONE THING DELIBERATELY LEFT ALONE**: the two adjacent underlined actions have different
+> weights and different jobs — one reorders the list, one navigates to a comparison. Changing
+> everything that looks uniform-able is how an audit removes information.
+> **THE FOUNDER'S OTHER FOUR INSTRUCTIONS WERE ALREADY DONE**, verified by running the app rather
+> than reading the code: the screenshot's *"Co-founder of ADHD.ME"* is a build predating O158 — his
+> label reads **"First clinic partner"** and an e2e assertion already forbids `/founder/i` on that
+> line; `TEAM_PAGE_PUBLIC = false` hides the team (O155); Saif Tareen is on it with both
+> affiliations (O152). **The one genuinely outstanding item is his photograph** — it arrived as a
+> chat image and no tool here writes an attached image to disk, so `public/saif-tareen.png` at 3:4
+> remains the founder's to supply. This also means **gate-dossier D2 is unresolved and D1 unchanged**.
+> **Three seeded failures**: the eyebrow re-accented, the disclosure demoted to muted, the wrap
+> restored. The accent sweep also asserts it finds SOMETHING — a broken detector would otherwise
+> pass the one-meaning check while the live token had silently lost its accent.
+> Verification: `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted);
+> finder-flow + a11y + contrast 20/20; `profile-accent` 3/3. `docs/DESIGN-QA.md` entry; captures in
+> `qa/_runs/o166/`. Vault log skipped — Stefan-Brain unreachable.
 
 > **W260 (YEAR 5 CLOSE — Y6 horizon plan + expansion-rule renewal) — claimed 2026-08-21T13:23Z by
 > loop-0821a.** **The last available row in the plan.** Every other unit is done or blocked.
