@@ -143,6 +143,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W259 (the G7 boundary at five years) — claimed 2026-08-21T13:13Z by loop-0821a.** W200's five
+> rail properties RE-DERIVED against Y5, with Q17's matching optimisation tested against them
+> explicitly — *"since it is the first Y5 work that could have moved the line."*
+> **THE ROW NAMES Q17 AND IT IS RIGHT, BUT W258 FOUND THE HARDER CASE AN HOUR AGO.** Property one
+> reads: *"The product never selects a clinician … a yes/no per clinician, DELIBERATELY NOT A
+> RANKING, because an ordered list of clinicians for a clinical pathway is a recommendation about
+> who is better."* And `rankClinicians` in `src/demo/clinicians.ts` returns **an ordered list of
+> clinicians**, on `/finder`, from a person's free text. W258 classified it out of the ADM
+> register's scope; **that is a different question from whether it sits inside this rail**, and a
+> re-derivation that quietly reused yesterday's answer would be the carrying-forward the row
+> forbids. It gets addressed head-on: the property says "for a clinical pathway", the finder ranks
+> against what a person SAID they want rather than against a pathway, and W83's refusal keeps the
+> score from being a quality judgement of clinicians — but stating that is the work, not assuming it.
+> **THE FIELD NAME IS PART OF THE PROBLEM.** `RailProperty.y4Rederivation` encodes a year, so
+> re-deriving at five years means either overwriting Y4's answer — rewriting history, which this
+> tree refuses — or adding `y5Rederivation` and renaming the schema every year forever. It becomes
+> a LIST of re-derivations by year, with Y4's text **carried verbatim** rather than paraphrased
+> (W177's rule, and the reason W223 carries W222's sentences unchanged).
+> **AND FOUR OF THE FIVE WILL BE "STRENGTHENED", WHICH IS THE ANSWER I SHOULD TRUST LEAST.** Y5's
+> interop lane looks like it reinforces three of them — W244's `unknown`-never-`delivered` IS
+> property three at an integration boundary, W236 carries a clinician's narrative character-
+> identical rather than editing it, W248/W250 name no condition at all. A re-derivation that
+> reports four strengthenings and one tension is the shape of an author agreeing with himself, so
+> each one gets a test that could fail rather than a sentence that sounds right.
+> Gate: the schema carrying re-derivations per year with Y4's carried verbatim, asserted; a Y5
+> re-derivation for each of the five naming what Y5 added that could have broken it; **Q17's
+> matching machinery tested against all five explicitly**, not described; property one's tension
+> with the finder ranking stated and tested rather than resolved by assertion; every claim of
+> "strengthened" backed by a test that fails if the strengthening is removed; seeded failures;
+> `pnpm verify` green.
+
 > **W258 (the ADM register at five years) — claimed 2026-08-21T13:02Z by loop-0821a.** W201's
 > decision register RE-DERIVED against everything Y5 added, **not assumed to have survived**, and
 > the published notice regenerated from it.
@@ -7439,7 +7470,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | done | loop-0821a | 2026-08-21T12:53Z | 2e60862 | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | done | loop-0821a | 2026-08-21T13:02Z | c7ee386 | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
-| W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
+| W259 | claimed | loop-0821a | 2026-08-21T13:13Z | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
 | W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
 
 | SUP-1 | blocked | — | — | — | Cohort-level specialist review (W89 hook 2) — FOUNDER GATE G5. Buildable only as a de-identified aggregate view whose output is register content; not buildable as anything patient-linked. See docs/SUPERVISION-HOOKS-W89.md |
