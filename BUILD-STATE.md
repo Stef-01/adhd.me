@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O150 (FOUNDER-DIRECTED — the profile still looks incoherent, second time of asking) —
+> claimed 2026-08-21T09:00Z by loop-0820s.** The founder sent Dr Anubhav Saxena's profile again
+> with "visually looks terrible, do thorough design audit to make it much more visually coherent,
+> learn about best practices online". This is the SECOND time this exact screen has drawn this
+> exact complaint — O129 answered the first one — so the honest reading is that O129 fixed what it
+> measured (measure, list flattening, evidence spacing) and left the thing the founder is actually
+> looking at. Taking the repeat as evidence my previous audit asked the wrong question.
+> From the screenshot, at the desktop shell width, the visible problems are structural rather than
+> stylistic: the missed-asks register renders as TWO CRAMPED COLUMNS of ~30 characters that break
+> mid-sentence ("not something they declare. Another listing" / "may."); the language row opens
+> with a stray floating em-dash and a gap before the chip; and the screen has at least five
+> different left offsets and no consistent vertical rhythm, so nothing reads as grouped — the
+> declaration lines, the provenance chip, the missed asks, the clarifier and the practical chips
+> all sit at different indents with near-identical spacing between them, which is exactly the
+> "proximity tells users which elements belong together" rule inverted.
+> Best practice consulted online as asked (8pt spacing scale, proximity grouping, one alignment
+> spine, isolate the key message) plus this tree's own `adhdme-taste` and the Vercel web
+> guidelines, whose relevant rules here are text-wrap balance/pretty on headings, `min-w-0` for
+> truncation, and never rendering broken UI for empty content.
+> Gate: measured before/after at BOTH the 390 phone and the desktop shell, captures of each in
+> qa/, the missed-asks column collapse fixed and pinned so it cannot come back, a DESIGN-QA entry
+> with the measurements, every existing profile e2e green (the copy and the W193 declaration
+> framing must not move — this is a real person's listing), `pnpm verify` green, and the touch,
+> focus and overflow gates from O145-O149 still green so this unit cannot pay for looks with
+> accessibility.
+
 > **O149 (the console scrolls sideways on a phone) — claimed 2026-08-21T08:10Z by loop-0820s.**
 > Found by probing a different property than the last four units, after noticing that four of five
 > had been touch/focus sweeps and were starting to return nulls. This one is not a null: at 390px
