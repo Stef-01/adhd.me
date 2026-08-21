@@ -143,6 +143,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O142 (Q3 item 10's premise, measured — a fixture-only roster at scale) — claimed
+> 2026-08-21T02:05Z by loop-0820s.** The plan's remaining lanes are founder-blocked on roster
+> size, and this is the one part of that blockage the loop can honestly remove. Q3 item 10 rests
+> on a premise `clarify.ts` states in its own doc comment and has never checked: "with two
+> clinicians every disagreement is an even split, so the order barely matters today and will
+> matter a lot at twenty." Nobody has measured whether it does.
+> The unit builds a SYNTHETIC EVALUATION ROSTER — fixture only, never rendered, never reachable
+> from `app/`, guarded by a test that fails if it ever is — and measures the clarifier selector
+> over it at 3 and at 20. Founder gates are respected exactly: synthetic data is permitted, and
+> the three REAL clinicians (W193) are untouched by this file, which is why the roster grows in
+> a fixture rather than in `src/demo/roster.ts`. Nothing patient-facing changes; `clarifiers()`
+> already takes its roster as an argument, so no product code needs to move.
+> The deliverable is a number, both-directions pinned like W234's, that either EARNS Q3 item 10
+> or refuses it: how many facets split the roster, how many distinct holder signatures exist,
+> and whether the evenness sort's choice actually differs from the alphabetical tie-break it
+> replaced. If the sort turns out to have no real choices at twenty either, that is the finding
+> and item 10 gets a written refusal instead of a build. Gate: the guard test, the measurement
+> pinned both directions, a `pnpm verify` green, and the year plan updated with whichever way it
+> came out.
+
 > **O141 (motion audit of the uncovered finder stages — one real accessibility defect, three
 > refusals) — claimed 2026-08-21T01:15Z by loop-0820s.** Law 5 now binds
 > `design-motion-principles`, and O137's audit covered the results-head and the Team page. This
