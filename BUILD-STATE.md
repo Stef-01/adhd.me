@@ -167,6 +167,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > header measured before and after, the wide table still scrolling inside its own container and
 > pinned as such, a sweep added to the gate with a seeded failure, `pnpm verify` green and the
 > console e2e green.
+> DONE 2026-08-21. **Every console route now measures 390 in a 390 viewport**, from 548 on
+> `/console`, 514 on privacy, 497 on complaints and 468 on the other twelve. One cause wearing
+> three hats, and all three are a flex row that could not wrap: the shared shell's header (the
+> signed-in email neither wrapping nor truncating, so it dragged the document sideways on every
+> route at once), `/console`'s nine-link navigation row, and the privacy and complaints form rows.
+> `min-w-0` is the load-bearing part of the header fix and worth naming — a flex child refuses to
+> shrink below its content width without it, so `truncate` alone would have done nothing at all.
+> The 6px I added yesterday is confirmed rather than assumed: `/console/rules` measured 462 at
+> `bc28c2b~1` and 468 after O148. The defect predates that unit by far, but the lesson stands —
+> a touch-target sweep with no overflow gate beside it will let a fix quietly worsen a layout
+> defect, which is why both sweeps now live in the same suite.
+> THE NOT-A-DEFECT IS PINNED so a later unit does not chase it: `/console/matching` and
+> `/console/allocation` render tables reaching x=745 while the document's scrollWidth stays 390.
+> That is a wide table scrolling inside its own `overflow-x` container, which is what the
+> guidelines require. So the console assertions read the DOCUMENT's scrollWidth only, not the
+> per-element rects the public surfaces get — an element-rect assertion would call those tables a
+> defect, and squeezing a correct data table is a regression dressed as a fix.
+> The gate went into `e2e/mobile-fit.spec.ts` (W216) because the law already lives there, and it
+> had to correct that file's own premise: its route list carried the comment "the console is
+> behind sign-in and is not a phone surface". Sign-in is not a statement about screen size.
+> Seeded twice, because the first seed failed to break anything — reverting the INNER row's
+> `flex-wrap` left the outer row wrapping, which alone prevents the overflow. Removing the outer
+> wrap and the email's truncate failed it properly at "467px of content in a 390px viewport",
+> named per route. That is the fourth time in five units a first seed has not broken its target,
+> and the pattern is always the same: I seed the change I remember making rather than the one
+> doing the work.
+> Gate met: 16/16 console routes at 390, public routes measured and already clean, seeded failure,
+> `pnpm verify` green (219 files, 3607 passed), mobile-fit 9 green, touch-floor + console +
+> privacy + complaints e2e green (8), DESIGN-QA entry with the per-route table.
+
 
 > **O148 (the console was never swept, and it is 38 under the floor) — claimed 2026-08-21T07:15Z
 > by loop-0820s.** O145 and O146 took the fifteen PUBLIC routes to zero controls under the 44px

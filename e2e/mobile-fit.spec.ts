@@ -16,8 +16,42 @@
 
 import { expect, test, type Page } from "@playwright/test";
 
-/** Public surfaces. The console is behind sign-in and is not a phone surface. */
+/** Public surfaces. */
 const SURFACES = ["/", "/approach", "/finder", "/clinicians", "/clinicians/join", "/practices", "/privacy"];
+
+/**
+ * O149: the console, whose absence here used to be justified in this file with "the console is
+ * behind sign-in and is not a phone surface". That premise was wrong and the cost was measurable:
+ * EVERY console route scrolled sideways at 390px — `/console` at 548px of content in a 390px
+ * viewport, `/console/rules` at 468 — because the shell's header row could not wrap and the
+ * signed-in email dragged the document with it. Sign-in is not a statement about screen size; the
+ * console is where somebody reconfirms capacity on a phone between patients.
+ *
+ * These assert the DOCUMENT's scrollWidth only, not the per-element check the public surfaces
+ * get, and the difference is deliberate. `/console/matching` and `/console/allocation` render wide
+ * tables that reach x=745 inside their own `overflow-x` container — which is exactly what the web
+ * guidelines require of wide content, and is why the document does not move. An element-rect
+ * assertion would call those tables a defect and "fixing" them would mean squeezing a data table
+ * that is correct as it stands.
+ */
+const CONSOLE_SURFACES = [
+  "/console", "/console/dashboard", "/console/matching", "/console/interview",
+  "/console/applications", "/console/allocation", "/console/rules", "/console/registers",
+  "/console/privacy", "/console/ops", "/console/outcomes", "/console/referrals",
+  "/console/complaints", "/console/reporting", "/console/usefulness", "/console/case-mix",
+];
+
+async function signInAsPracticeOwner(page: Page) {
+  await page.goto("/console/signin");
+  await page.getByLabel("Work email").fill("owner@demo.practice.example");
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.waitForURL(/\/console(\/onboarding)?$/);
+  await page.goto("/console/onboarding");
+  await page.getByLabel("Practice name").fill("Demo Family Practice");
+  await page.getByLabel("Holdout share (%)").fill("10");
+  await page.getByRole("button", { name: "Create practice" }).click();
+  await page.waitForURL(/\/console$/);
+}
 
 /** iPhone 12/13/14 logical width - the narrowest mainstream phone still in wide use. */
 const PHONE = { width: 390, height: 844 };
@@ -84,5 +118,30 @@ test("the results list fits a 390px phone", async ({ browser }) => {
   expect(result.offenders).toEqual([]);
   expect(result.scrollWidth).toBeLessThanOrEqual(result.clientWidth);
 
+  await context.close();
+});
+
+
+test("no console route scrolls sideways on a phone (O149)", async ({ browser, request }) => {
+  await request.post("/api/mock/console");
+  const context = await browser.newContext({ viewport: PHONE, reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await signInAsPracticeOwner(page);
+
+  const sideways: string[] = [];
+  for (const path of CONSOLE_SURFACES) {
+    await page.goto(path);
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => document.fonts.ready);
+    const result = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    if (result.scrollWidth > result.clientWidth) {
+      sideways.push(`${path}: ${result.scrollWidth}px of content in a ${result.clientWidth}px viewport`);
+    }
+  }
+
+  expect(sideways, `console routes scrolling sideways:\n${sideways.join("\n")}`).toEqual([]);
   await context.close();
 });

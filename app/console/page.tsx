@@ -48,7 +48,9 @@ export default async function ConsoleHome() {
         </Link>
       )}
 
-      <div className="mt-4 flex gap-4">
+      {/* O149: wraps. Nine links in a non-wrapping row reached x=548 in a 390px viewport and took
+          the whole document sideways with them. */}
+      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
         <Link
           href="/console/results"
           className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"

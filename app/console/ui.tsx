@@ -57,23 +57,27 @@ export function ConsoleShell({
   return (
     <div className="min-h-screen bg-stone-50">
       <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-6 py-4">
           <div className="flex items-baseline gap-3">
             <DemoNavigator />
             <span className="text-sm text-stone-500">practice console</span>
           </div>
           {email && (
-            <div className="flex items-center gap-3">
+            // O149: `min-w-0` and `flex-wrap` are what let the email truncate instead of pushing
+            // the header past the viewport. Without min-w-0 a flex child refuses to shrink below
+            // its content, which is why `owner@demo.practice.example` was dragging the whole
+            // document sideways on a phone.
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-3 gap-y-2">
               {practices && activeId && (
                 <PracticeSwitcher practices={practices} activeId={activeId} />
               )}
-            <form action={signOut} className="flex items-center gap-3">
+            <form action={signOut} className="flex min-w-0 items-center gap-3">
               {/* W105: ADHD.ME-internal, so it is not offered to practice accounts. The
                   route still gates itself — hiding a link is navigation, not access control. */}
               {isAdhdMeStaff(email) && (
                 <Link href="/console/interest" className="text-sm text-stone-500 underline hover:text-stone-800">Interest</Link>
               )}
-              <span className="text-sm text-stone-500">{email}</span>
+              <span className="min-w-0 truncate text-sm text-stone-500">{email}</span>
               {/* O148: measured 33x48 — tall enough, too narrow, on every console route at once,
                   so this one control was sixteen of the sweep's thirty-eight findings. Padding
                   carries it past 44 and an equal negative margin gives the width back, so the

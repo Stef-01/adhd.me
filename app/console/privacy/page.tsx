@@ -55,7 +55,7 @@ export default async function PrivacyPage({
 
       <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
         <h2 className="font-medium text-stone-900">Export a patient&apos;s data</h2>
-        <form action={exportPatient} className="mt-4 flex items-end gap-3">
+        <form action={exportPatient} className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-2">
           <label className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-stone-700">Patient identifier</span>
             <input name="patientId" className={inputClass} placeholder="pat-1" />
@@ -97,7 +97,7 @@ export default async function PrivacyPage({
           on any complaint held about them. A hashed deletion record is kept as proof, and the
           identifier is suppressed from all future contact.
         </p>
-        <form action={erasePatient} className="mt-4 flex items-end gap-3">
+        <form action={erasePatient} className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-2">
           <label className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-stone-700">Patient identifier</span>
             <input name="patientId" className={inputClass} placeholder="pat-1" />

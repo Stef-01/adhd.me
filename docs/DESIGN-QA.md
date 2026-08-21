@@ -1436,3 +1436,59 @@ cannot drift apart. Proved by seeding: reverting the `Sign out` fix fails it wit
 named on every route. The console sweep signs in with the same helper the console specs use.
 
 Nothing patient-facing changed, so no compliance copy is in scope.
+
+## O149 — the console scrolled sideways on a phone (2026-08-21)
+
+Found by deliberately probing a *different* property, after noticing four of the previous five
+units were touch/focus sweeps and had started returning nulls. This one is not a null: at 390px
+**every console route overflowed its viewport horizontally.** Not a container — the page.
+
+| route | before | after |
+|---|---|---|
+| `/console` | **548px** in a 390px viewport | 390 |
+| `/console/rules`, `/dashboard`, `/registers`, … | **468px** | 390 |
+| `/console/privacy` | **514px** | 390 |
+| `/console/complaints` | **497px** | 390 |
+
+### Cause, and it is one cause wearing three hats
+
+Every instance is a flex row that could not wrap.
+
+- [x] **The shared shell header.** `flex items-center justify-between` holding the signed-in
+  email, which neither wrapped nor truncated, so `owner@demo.practice.example` pushed the row
+  past the viewport and dragged the document with it — on every console route at once. Fixed with
+  `flex-wrap` on the row and `min-w-0 truncate` on the email. `min-w-0` is the load-bearing part:
+  a flex child refuses to shrink below its content width without it, so `truncate` alone would
+  have done nothing.
+- [x] **`/console`'s navigation row** — nine links in a non-wrapping `flex gap-4`, reaching x=548.
+- [x] **The privacy and complaints form rows** — `flex items-end gap-3` with an input and a
+  button that could not fall onto a second line.
+
+### I made it 6px worse the day before, and the claim recorded that before the fix
+
+Measured against `bc28c2b~1`: `/console/rules` was 462px before O148's `Sign out` widening and
+468px after. The 72px of overflow predates O148 entirely — but O148 pushed a row that was already
+too wide, and **a touch-target fix that quietly worsens a layout defect is exactly what a sweep
+with no overflow gate lets you do.** The two sweeps now sit in the same suite.
+
+### Not a defect, pinned so a later unit does not "fix" it
+
+`/console/matching` and `/console/allocation` render tables reaching x=745 while the document's
+`scrollWidth` stays 390. That is a wide table scrolling inside its own `overflow-x` container —
+exactly what the guidelines require of wide content. The console assertions therefore check the
+**document's** scrollWidth only, not the per-element rects the public surfaces get. An
+element-rect assertion would call those tables a defect, and squeezing a data table that is
+correct as it stands would be a real regression dressed as a fix.
+
+### The gate, and a premise it had to correct
+
+The check went into `e2e/mobile-fit.spec.ts` (W216) rather than a new file, because that is where
+this law already lives. Its route list carried the comment *"the console is behind sign-in and is
+not a phone surface"* — the assumption this unit disproves. Sign-in is not a statement about
+screen size; the console is where somebody reconfirms capacity on a phone between patients.
+
+Proved by seeding — on the second attempt. Reverting the inner row's `flex-wrap` did **not** fail
+the gate, because the outer row still wrapped and that alone prevents the overflow. Removing the
+outer `flex-wrap` and the email's `truncate` failed it properly: `467px of content in a 390px
+viewport`, named per route. Fourth time in five units that a first seed has failed to break the
+thing it targeted.
