@@ -143,6 +143,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O164 (a compliance rule that cries wolf gets switched off) — claimed 2026-08-21T16:45Z by
+> loop-0820s.** O163 raised this at source rather than accepting it forever, and this is the fix.
+> `no-ratings` matches a bare `\breviews?\b`. **Scheduled review is core language this product uses
+> on every surface** — "Long first appointment, scheduled reviews", "review at set intervals",
+> "titration reviewed on a schedule", `/privacy/counsel-review`. The rule has already produced two
+> documented false positives: `public-surfaces.ts` records one where a source scan hit the
+> className `is-reviewed`, and O163 had to write an acceptance for the profile sweep yesterday.
+> **THE DANGER IS NOT THE FALSE POSITIVE, IT IS THE ACCEPTANCE IT FORCES.** Every surface that
+> describes what this product actually does will trip this rule, and each trip buys an acceptance
+> entry. A register full of acceptances reads as coverage while permitting the thing it was
+> written to stop — and CLAUDE.md law 6 ("no testimonials/ratings anywhere") is one of the laws
+> that must not rot.
+> The narrowing keeps the law and drops the noise: ratings語 stays (`4.8/5`, `5-star`, `★`,
+> `rated`), and bare "review" is replaced by review-AS-RATING contexts — "patient reviews", "read
+> our reviews", "127 reviews", "reviews from patients". Clinical review, peer review and counsel
+> review stop firing.
+> **A NARROWED COMPLIANCE REGEX IS A RISK AND IS PINNED AS ONE.** The unit is worthless unless it
+> proves the rule still catches what it exists for, so both directions get explicit pins: every
+> genuine ratings phrase must still fail, every clinical-review phrase must not. Widening a hole in
+> a compliance rule to make a gate green is the failure this tree has caught in its own guards
+> repeatedly, and the difference between that and this is the both-directions pin.
+> Gate: ratings language still caught (pinned by example), clinical review no longer caught (pinned
+> by example), O163's now-stale `no-ratings` acceptance DELETED — its own both-directions check
+> will fail if I leave it — and `pnpm verify` plus the profile and public sweeps green.
+
 > **O163 (the compliance sweep cannot reach the surface with the most clinical text on it) —
 > claimed 2026-08-21T16:05Z by loop-0820s.** O162's pattern, generalised: rigorous machinery
 > pointed at a gated surface while the live one runs unguarded. Second instance, and worse.
