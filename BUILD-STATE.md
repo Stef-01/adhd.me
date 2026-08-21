@@ -167,6 +167,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > weakening the floor would be worse than the defect. Gate: the sweep pinned both directions,
 > /clinicians/join measured to zero, before/after captures in qa/, a DESIGN-QA entry, `pnpm
 > verify` green and the join e2e green.
+> DONE 2026-08-21. **61 controls under the floor, now 1 — and the one is recorded rather than
+> tolerated.** The sweep is `e2e/touch-floor.spec.ts`, proved by seeding a real regression and
+> watching it fail.
+> The unit went further than the claim, and correctly: the claim said fix the join form and the
+> footer wordmark and RATCHET the rest, but once the two shared components were done the
+> remaining causes were the same one-line padding trick, so leaving a ratchet at 17 would have
+> been bookkeeping standing in for work. Fixed: the join form (32, every checkbox row a real GP
+> touches), the shared footer (18 across six routes), the breadcrumb trail (6 across six), the
+> `/clinicians` stepper (4), and the landing's interest options, which measured 43px — one pixel
+> under is still under.
+> The fixes share a shape worth naming: the hit area grows with PADDING and is pulled back with
+> an equal negative margin, so every target clears 44 and nothing moves on screen. That is the
+> taste law's own clause — a small visual is fine, a small hit area is not — and it is why this
+> unit changes no layout despite touching five surfaces. Captures confirm it: the stepper's four
+> bars still sit on one line and the join form is not taller.
+> ONE REFUSAL, NAMED IN THE GATE: `/clinicians`'s "Target practice mix" range input at 306x16. A
+> range's target is its thumb, whose geometry is engine-specific and not reachable by padding;
+> raising it needs a visual judgement and a capture, which is a unit. It sits in the gate's
+> `ACCEPTED` list, and the test asserts the exception STILL FIRES — so fixing it fails the test
+> and forces the entry to be deleted. An allowlist that outlives its reason is exactly what W53's
+> audit gate exists to prevent.
+> Two probe corrections, both caught before they became findings, which is now the third and
+> fourth time in this tree: the raw sweep said 70 because it measured the INPUT rather than the
+> hit area, so every styled checkbox looked like a defect when the taste law explicitly allows an
+> 18px box inside a 44px label; and the first seeded failure was WORTHLESS — I lowered `min-width`
+> on the crumb links and the gate stayed green, correctly, because the padding alone had already
+> carried them past 44 and `min-width` was never the operative change. A seed that does not
+> actually break the thing proves nothing about the gate. The second seed broke it for real.
+> Gate met: 61 -> 1 measured both ways, gate with a genuine seeded failure, `pnpm verify` green
+> (219 files, 3607 passed), join-hero + landing + a11y e2e green (21), captures in qa/touch-o145/
+> and a DESIGN-QA entry with the before/after table.
+
 
 > **O144 (a hardening pass that found nothing, and the environment gap that found it) —
 > claimed 2026-08-21T04:10Z by loop-0820s.** Law 5 says a hardening week without the review

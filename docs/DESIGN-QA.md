@@ -1234,3 +1234,62 @@ wrong in a way worth writing down: `--follow` walks through renames, so for
 `qa/motion-o67/portrait-settled.png` it kept going into O63's commit, where that path did not
 exist. Origins are taken from `--diff-filter=A` instead, and every file was confirmed to have
 exactly one add-commit before anything was overwritten.
+
+## O145 — the 44px floor was enforced by memory (2026-08-21)
+
+O14 set a 44px touch floor and `adhdme-taste` carries it as law. Nothing enforced it. Every
+prior entry asserts it by hand — "44px floor on answer pills", "no new touch targets" — which
+is completeness by luck, the pattern W102 and W200 both exist to replace. Swept at 390×844
+across all fifteen public routes.
+
+### Measured
+
+| | before | after |
+|---|---|---|
+| Controls under the floor | **61** | **1** (recorded, not tolerated) |
+| Population measured | 180 | 178 |
+| `/clinicians/join` | 32 | 0 |
+| Shared footer (× 6 routes) | 18 | 0 |
+| Breadcrumb "Home" (× 6 routes) | 6 | 0 |
+
+- [x] **The join form was 32 of the 61.** Every care-area, manner, language and availability
+  checkbox row was `342×30` or `342×41` — the entire onboarding form a real GP fills in, sitting
+  3–14px under. Fixed with padding rather than a bare `min-height`: `align-items: flex-start` has
+  to stay, because the manner labels wrap to two lines and must align to the *first* one, so
+  centring a 30px row inside a 44px box would have left 14px of dead space under every
+  single-line label. The row gap drops to compensate, so the form is not taller.
+- [x] **The shared footer and the breadcrumb trail** were one component each, so each was six
+  findings at once. Both grown with padding and pulled back with an equal negative margin: every
+  link clears 44×44 and *nothing moves* — the baseline row is unchanged and the text sits where
+  it sat.
+- [x] **The `/clinicians` stepper** was four `71×24` controls. The bar is decorative and stays
+  4px; the button behind it grows to 44 and is pulled back with `margin-block: -10px`, so the
+  progress row keeps its height. This is the taste law's own clause — a small visual is fine, a
+  small hit area is not.
+- [x] **The landing's interest options** measured `43px`. One pixel under is still under.
+
+### Recorded, not fixed
+
+- [ ] **`/clinicians` "Target practice mix" range input, `306×16`.** A range's target is its
+  thumb, whose geometry is engine-specific and not settable by the padding trick the other
+  twelve fixes used. Raising it needs a visual judgement and a capture, which is a unit rather
+  than a line in this one. It is named in the gate's `ACCEPTED` list, so **fixing it fails the
+  test** and forces the exception to be deleted — an allowlist that outlives its reason is the
+  failure mode W53's audit gate was built to avoid.
+
+### The gate
+
+`e2e/touch-floor.spec.ts`, proved by seeding a real regression (the join rule back to 30px) and
+watching it fail. Three exclusions, each principled rather than convenient: inline links inside
+`<p>` (WCAG 2.5.8 exempts them), controls out of the tab order (the honeypot is a spam trap, not
+a control), and `.sr-only` inputs (the visible affordance is elsewhere). It measures the **hit
+area, not the glyph** — an 18px checkbox inside a 44px label is compliant, and measuring the
+input reported 70 findings where there were 61.
+
+A note on the seeding, because the first attempt was useless: I first "seeded" by lowering
+`min-width` on the crumb links, and the gate stayed green — correctly, because the padding alone
+had already carried them past 44 and `min-width` was never the operative change. A seed that
+does not actually break the thing proves nothing about the gate. The second seed broke it for
+real.
+
+Captures: qa/touch-o145/ (join form, footer, stepper at 390).

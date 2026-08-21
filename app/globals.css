@@ -2896,9 +2896,14 @@ textarea:focus-visible {
   gap: 6px;
 }
 
+/* O145: the four step controls were 71x24. The BAR is decorative and stays 4px; the button
+   behind it grows to the 44px floor and is pulled back with a negative block margin so the
+   progress row keeps its 24px height. This is the taste law's own clause — a small visual is
+   fine so long as the hit area is not. */
 .cv2-progress button {
   position: relative;
-  height: 24px;
+  height: 44px;
+  margin-block: -10px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -2907,7 +2912,7 @@ textarea:focus-visible {
 
 .cv2-progress button::after {
   position: absolute;
-  top: 10px;
+  top: 20px;
   right: 0;
   left: 0;
   height: 4px;
@@ -3946,8 +3951,13 @@ textarea:focus-visible {
   gap: 8px;
 }
 
+/* O145: these measured 43px — one pixel under the floor, which is still under. The span
+   carries the visible pill; the label is the hit area, so the floor goes here. */
 .community-interest-options label {
   position: relative;
+  display: flex;
+  align-items: stretch;
+  min-height: 44px;
 }
 
 .community-interest-options input {
@@ -5144,11 +5154,19 @@ textarea:focus-visible {
 
 /* Checkboxes are a two-column list rather than a grid of cards: seventeen care areas as cards
    would be a wall, and the question is only "which of these". */
-.join-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin-top: 18px; }
+.join-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin-top: 18px; }
 /* Qualified with .join-form deliberately. `.join-form label` is 0,1,1 and a bare `.join-check` is
    0,1,0, so the generic block rule above won every checkbox on the page: the box stacked ABOVE its
    own label and the form ran to about 4200px on a phone. */
-.join-form .join-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; min-height: 30px; }
+/* O145: 44px hit area, met by PADDING rather than by centring a 30px row in a 44px box.
+   `align-items: flex-start` has to stay — the manner labels wrap to two lines and their box must
+   align to the FIRST line — so a bare `min-height` would have left single-line rows top-aligned
+   with 14px of dead space under the text. Padding grows the clickable area around the text
+   instead, which is what the floor is actually asking for, and the row gap drops to compensate
+   so the form does not get taller. The 30px this replaces was the reason /clinicians/join held
+   32 of the 61 controls under the floor: every care-area, manner, language and availability
+   checkbox on the page a real GP fills in. */
+.join-form .join-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; min-height: 44px; padding: 11px 0; }
 .join-form .join-check input { width: 18px; height: 18px; margin: 1px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
 .join-form .join-check > span { display: inline; margin-bottom: 0; color: var(--muted); font-size: 0.875rem; font-weight: 400; line-height: 1.45; }
 .join-form .join-declaration > span { color: var(--ink); }
@@ -6037,11 +6055,17 @@ textarea:focus-visible {
   gap: 18px 26px;
   margin-top: 30px;
 }
+/* O145: measured 152x22. Grown to the 44px floor and pulled back by the same amount, so the
+   link sits exactly where it did. */
 .approach-back {
   color: var(--s-muted);
   font-size: 0.90625rem;
   text-decoration: none;
   text-underline-offset: 3px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -11px;
 }
 .approach-back:hover { color: var(--s-ink); text-decoration: underline; }
 /* On its own page the sequence opens against the page rather than under a rule
@@ -6351,7 +6375,14 @@ textarea:focus-visible {
 .crumbs ol { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .crumbs li { display: flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--faint); }
 .crumbs li + li::before { content: "/"; color: var(--line); }
-.crumbs a { color: var(--accent); text-decoration: none; }
+/* O145: "Home" measured 39x44 on six routes — the height was already there, the width was not.
+   Padding grows the box and an equal negative margin puts the text back where it was, so the
+   crumb trail is pixel-identical and the target clears 44. */
+.crumbs a {
+  color: var(--accent); text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; min-width: 44px; padding-inline: 4px; margin-inline: -4px;
+}
 .crumbs a:hover { text-decoration: underline; }
 .crumbs [aria-current="page"] { color: var(--muted); }
 
@@ -6363,7 +6394,17 @@ textarea:focus-visible {
 }
 .site-footer-wordmark { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
 .site-footer ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
-.site-footer a { color: var(--muted); font-size: 0.875rem; text-decoration: none; }
+/* O145: the footer is the one component on six public routes, so its links were six of the
+   sweep's findings at once — the wordmark measured 66x21 and the list links 39x44 and 41x44,
+   short on height and on width respectively. The hit area is grown with padding and pulled back
+   with an equal negative margin, so every link clears 44x44 while the footer LOOKS identical:
+   nothing moves, the baseline row is unchanged, and the text sits where it always sat. */
+.site-footer a {
+  color: var(--muted); font-size: 0.875rem; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; min-width: 44px;
+  padding-inline: 5px; margin-inline: -5px;
+}
 .site-footer a:hover { color: var(--ink); text-decoration: underline; }
 
 /* Sticky mobile CTA on the landing page (item 9). */
