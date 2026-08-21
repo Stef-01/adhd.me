@@ -143,6 +143,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O152 (FOUNDER-DIRECTED — Saif Tareen joins the team page) — claimed 2026-08-21T10:10Z by
+> loop-0820s.** "add to team Saif Tareen, bachelor of commerce student at Macquarie university and
+> works at Parliament of australia so have those logos in similarly", with a photograph attached.
+> **HE IS A REAL PERSON, so W193 governs every field.** The founder supplied exactly three facts —
+> his name, that he studies a Bachelor of Commerce at Macquarie, and that he works at the
+> Parliament of Australia — and those three are the whole of what may appear. Every other entry on
+> the page carries a `role` and a `remit`; both are characterisations, and inventing either for a
+> named person is precisely what the real-person law forbids. So the type gains optional `role`
+> and `remit`, the plate learns to render without them (the web guidelines' "handle empty states"
+> rule — a blank `<p>` is broken UI), and Saif ships with the two supplied affiliations carrying
+> the facts. FOUNDER: send a role and a one-line remit and they go straight in.
+> **THE LOGOS ARE THE INTERESTING PART AND THE ANSWER IS THE ONE ALREADY IN THE FILE.** founders.ts
+> states the law: a logo file ships only "when there is one licensed to use", otherwise the entry
+> falls back to the institution's name as a wordmark, "a university mark is trademarked and not
+> ours to copy off a website". Bond, USyd and ANU all render as wordmarks for that reason. So
+> "similarly" is satisfied EXACTLY by wordmarks — that is how every university on this page
+> already looks. Parliament is stronger still: its identifier is the Commonwealth Coat of Arms,
+> whose use is restricted under Commonwealth guidelines and is not something a private company
+> puts on its own site. Copying either mark would have been the one reading of "logos" that breaks
+> the law the file already carries.
+> **THE PHOTOGRAPH IS BLOCKED and must not be worked around.** It arrived as a chat image, not a
+> file, and there is no path from those bytes to `public/`. The tree's hardest rule is that
+> nothing here generates a face for a real person, so there is no substitute, no crop of something
+> similar, and no placeholder that looks like him. `portrait: null` renders the monogram fallback
+> the data model documents for exactly this case. FOUNDER: drop the file at
+> `public/saif-tareen.png`, 3:4 centre-crop like the others, and the entry is one line from done.
+> Gate: `pnpm verify` green, the /about e2e and the touch/focus/overflow gates green, a capture of
+> the new plate, and no invented attribute anywhere in the entry.
+
 > **O151 (the hardening pass law 5 actually asks for — and O144 was wrong that it could not be
 > done) — claimed 2026-08-21T09:40Z by loop-0820s.** O144 concluded that `code-review`,
 > `security-review` and `simplify` are absent from this container and filed standing debt 12
