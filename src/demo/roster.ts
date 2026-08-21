@@ -39,7 +39,7 @@ import { type EIQuality } from "./emotional-fit";
  * performed, and the surfaces say so.
  *
  * A NOTE ON WHAT IS STILL OWED. Dr Yadav's biography is written from his public record and his
- * co-founders' account of how he works, not from his own words. That is a stopgap: a biography is
+ * fellow founders' account of how he works, not from his own words. That is a stopgap: a biography is
  * the one field a clinician should write himself, and this one should be replaced with his copy
  * before the directory gate (G6) lifts.
  *
@@ -281,7 +281,7 @@ export const clinicians: Clinician[] = [
     },
     realPerson: true,
     founderInterest:
-      "Dr Saxena is a co-founder of ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",
+      "Dr Saxena is a founder of ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",
   },
   {
     id: "tushar-yadav",
@@ -447,12 +447,12 @@ export const clinicians: Clinician[] = [
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
     realPerson: true,
-    // O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page"). The same
-    // law that governs her co-founder's entry governs hers: the disclosure exists because
+    // O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page" [their words]). The same
+    // law that governs the other founder's entry governs hers: the disclosure exists because
     // a reader cannot see the ranking, and it carries the standing ranking COST — at an
     // exact tie she now sorts behind an undisclosed clinician, and that cost is not
     // waived for being the second founder to carry it.
     founderInterest:
-      "Dr Anusha Saxena is a co-founder of ADHD.ME. Disclosed because she appears in a directory her own company operates, and a reader cannot see the ranking that put her there.",
+      "Dr Anusha Saxena is a founder of ADHD.ME. Disclosed because she appears in a directory her own company operates, and a reader cannot see the ranking that put her there.",
   },
 ];

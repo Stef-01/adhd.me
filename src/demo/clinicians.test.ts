@@ -57,7 +57,10 @@ describe("clinician roster and matching", () => {
     const FOUNDERS = ["anubhav-saxena", "anusha-saxena"];
     for (const id of FOUNDERS) {
       const founder = clinicians.find((clinician) => clinician.id === id)!;
-      expect(founder.founderInterest, id).toMatch(/co-founder/i);
+      // O154: the term is "founder" since the founder asked for "co-founder" to go. The pin moved
+      // with the wording rather than being loosened — the disclosure must still NAME the interest,
+      // because a conflict notice that stops saying what the conflict is has stopped working.
+      expect(founder.founderInterest, id).toMatch(/\bfounder\b/i);
       expect(founder.founderInterest, id).toMatch(/ADHD\.ME/);
     }
     for (const clinician of clinicians.filter((c) => !FOUNDERS.includes(c.id))) {

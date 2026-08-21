@@ -129,7 +129,7 @@ export function sentencesPatientsSee(clinician: Clinician): ToldLine[] {
     });
   }
   if (clinician.founderInterest) {
-    lines.push({ said: "Co-founder of ADHD.ME", from: "founderInterest — a material interest, stated beside the listing" });
+    lines.push({ said: "Founder of ADHD.ME", from: "founderInterest — a material interest, stated beside the listing" });
   }
 
   const distance = distanceTo(clinician, null);

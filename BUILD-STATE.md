@@ -172,6 +172,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: no "co-founder" anywhere in app/, src/ or e2e/; the disclosure still asserted present and
 > still naming ADHD.ME; `pnpm verify` green; finder + landing + a11y e2e green; a capture of the
 > team page and of the profile disclosure.
+> DONE 2026-08-21. "Co-founder" is gone from every rendered surface, and the disclosure it appears
+> inside still works — which needed the two uses to be told apart rather than swept together.
+> The team page keeps the credentials and loses the company title: Vikram and Stefan have no role
+> line at all now (the optional-`role` machinery O152 built two units ago), and the two doctors
+> read "MBBS, FRACGP" and "MD, FRACGP", because a medical credential is a fact about a doctor and
+> not a claim about the company.
+> **THE DISCLOSURE WAS THE PART THAT NEEDED CARE.** `founderInterest` exists to tell a patient that
+> the GP they are being shown owns the directory showing him; the finder renders it beside his name
+> and W190's console panel shows him the same line. Deleting the word there would have left a
+> conflict notice that no longer names the conflict, on a health surface, about a real named
+> person. So the term went to "founder" — "Dr Saxena is a founder of ADHD.ME", "Founder of
+> ADHD.ME" — which satisfies the instruction literally, keeps the disclosure doing its job, and
+> makes nothing about who owns what vaguer.
+> The pins MOVED rather than loosened: `clinicians.test.ts` now matches `/\bfounder\b/i` on both
+> founders' interest and still requires it to name ADHD.ME, and the finder e2e asserts the new
+> rendered string. A pin that had been relaxed to `/founder|team/` would have let the disclosure
+> rot quietly, which is the failure this tree keeps finding in its own guards.
+> LEFT ALONE DELIBERATELY: three comments that quote the founder's own past instruction ("Add
+> Anusha as cofounder on the page") or record what an earlier unit changed. Those are the tree's
+> memory, and rewriting a quote of somebody's words to match today's vocabulary is falsification —
+> the same class of error as re-rendering a QA capture. One present-tense description ("the fourth
+> co-founder") was reworded, because that is prose rather than a record.
+> Gate met: no "co-founder" on any rendered surface, the disclosure still asserted present and
+> still naming ADHD.ME, `pnpm verify` green (219 files, 3607 passed), finder + landing + told e2e
+> green (23).
+
 
 > **O153 (the guards I built this week, held to their own claims) — claimed 2026-08-21T10:50Z by
 > loop-0820s.** O152 ran `code-review` over O145-O151 and recorded seven findings rather than

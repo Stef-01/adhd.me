@@ -252,5 +252,5 @@ export function NswTraining({ clinician }: { clinician: Clinician }) {
 /** A material interest, stated beside the listing it concerns. One line, not an essay. */
 export function FounderDisclosure({ clinician }: { clinician: Clinician }) {
   if (!clinician.founderInterest) return null;
-  return <p className="disclosure-line">Co-founder of ADHD.ME</p>;
+  return <p className="disclosure-line">Founder of ADHD.ME</p>;
 }

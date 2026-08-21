@@ -43,7 +43,8 @@ export const FOUNDERS: ReadonlyArray<{
 }> = [
   {
     name: "Vikram Ganeshalingam",
-    role: "Co-founder",
+    // O154 (founder-directed): "remove term cofounder everywhere, as its a team". The bare role
+    // line goes; the remit still says what he does.
     remit: "What a person meets when they first look for help.",
     portrait: "/vikram.png",
     affiliations: [
@@ -52,7 +53,9 @@ export const FOUNDERS: ReadonlyArray<{
   },
   {
     name: "Dr Anubhav Saxena",
-    role: "Co-founder, MBBS, FRACGP",
+    // O154: the company title goes, the medical credentials stay — they are facts about a
+    // doctor, not a claim about the company.
+    role: "MBBS, FRACGP",
     remit: "A documented baseline before anything starts, then follow-up on a schedule.",
     portrait: "/anubhav-saxena.png",
     affiliations: [
@@ -61,14 +64,15 @@ export const FOUNDERS: ReadonlyArray<{
     ],
   },
   {
-    // O90 (founder-directed 2026-08-20): the fourth co-founder. Role and affiliations from
+    // O90 (founder-directed 2026-08-20): the fourth member. Role and affiliations from
     // her published record (the O58/O71/O88 sourcing in the roster entry); portrait is the
     // founder-supplied O82 photo, centre-cropped to this row's 3:4 convention.
     name: "Dr Anusha Saxena",
     // Founder consistency pass (2026-08-20): her degrees named the way Dr Anubhav's are —
     // the MD in the role line, and both universities (medicine at ANU, B.Psych (Hons) at
     // USyd) in the affiliations.
-    role: "Co-founder, MD, FRACGP",
+    // O154: as above.
+    role: "MD, FRACGP",
     remit: "Psychology before medicine, and assessment that sees the whole person.",
     portrait: "/anusha-saxena.png",
     affiliations: [
@@ -79,7 +83,7 @@ export const FOUNDERS: ReadonlyArray<{
   },
   {
     name: "Stefan Thottunkal",
-    role: "Co-founder",
+    // O154: bare role line removed.
     remit: "Physician-in-training and health-systems researcher, Stanford Medicine.",
     portrait: "/stefan.png",
     affiliations: [
