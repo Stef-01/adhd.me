@@ -174,6 +174,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > identity, for any echo of the request, and for existence disclosure; the byte-identical property
 > asserted per reason across adversarial inputs; a seeded echo, a seeded patient id and a seeded
 > existence tell each caught; `pnpm verify` green.
+>
+> **DONE 2026-08-21T12:34Z at `9de54dd`.** `src/platform/refusals.ts`, 12 tests — **and the sweep
+> failed its own gate on the first attempt, which is the entry worth reading.**
+> **I SEEDED AN EXISTENCE ORACLE AND ALL TWELVE TESTS STAYED GREEN.** A `no_such_practice` branch
+> that distinguished ids by SHAPE, in a file whose stated purpose is finding exactly that. Two
+> causes, both mine. (1) The existence test compared `prac-2` against `prac-99999` — **two ids of
+> the same shape**, so the seeded branch never fired at all. (2) **Discovery is only as good as its
+> drivers**: every driver supplied a tidy practice id, so a branch reachable only by an ugly one was
+> invisible to a sweep whose entire claim is that it discovers branches rather than listing them.
+> The gate said "rather than sampled" and what I built was a sample with a better name.
+> **Also worth recording: the TYPECHECK would have caught that seed where vitest did not** — adding
+> a union member leaves `PLATFORM_REFUSALS` missing a key. Third time this session the spec run has
+> passed something the gate rejects. The spec run is not the gate.
+> **BOTH FIXED, AND THE FIX IS THE UNIT.** The existence test now compares FIVE ids differing in
+> every way an implementation might branch on — held by another practice, well-formed and
+> nonexistent, wrong shape entirely, the bare prefix, right id wrong case — and requires **one
+> distinct answer across all of them** rather than pairwise equality. The discovery drivers take the
+> hostile corpus. Re-seeded, the oracle is caught by **three** independent tests, including the
+> both-directions check that had been blind to it.
+> **THE PROPERTY ITSELF IS STRONGER THAN THE ROW ASKED FOR, DELIBERATELY.** "No patient data on any
+> error path" is the easy one to pass and misses the failure that matters: **a refusal that ECHOES
+> the request** leaks whatever the caller put in the field, which on a public API is whatever an
+> attacker chose. That is not stopped by "we never put patient data in errors" — the product did not
+> put it there, the caller did, and the product handed it back. So the assertion is that a refusal
+> is **byte-identical for a reason whatever it was called with**, which subsumes patient data and
+> echo both and holds against inputs nobody thought of. The structural half: `refuse` takes a reason
+> and has NO second parameter — no `detail`, no `field` — so there is no request in scope to
+> interpolate, which is stronger than remembering not to.
+> **AND THE THIRD LEAK IS EXISTENCE**, where W253 had already taken the position for one branch;
+> this makes it the rule, with `MUST_NOT_DISCLOSE_EXISTENCE` naming what each pair would otherwise
+> reveal. `caller_holds_nothing` and `not_a_member` are deliberately DISTINCT and the entry says
+> why: both concern the caller's own access, neither says anything about another practice, and
+> merging them would cost a real support answer for no disclosure gain.
+> **Five seeded failures**: a refusal echoing the requested id (caught by four guards), the
+> existence oracle before the fix (**caught by none**), the same oracle after (caught by three), and
+> both register directions.
+> Verification: `pnpm verify` green (250 files, 4032 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W254 (API scope model) — claimed 2026-08-21T12:15Z by loop-0821a.** Scopes as declared data,
 > checked against W253's endpoint census in both directions, and no production credential in the
@@ -7177,7 +7215,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W252 | done | loop-0821a | 2026-08-21T11:52Z | 6ac2051 | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
 | W253 | done | loop-0821a | 2026-08-21T12:02Z | 023440c | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
-| W255 | claimed | loop-0821a | 2026-08-21T12:23Z | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
+| W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | available | — | — | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | available | — | — | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
