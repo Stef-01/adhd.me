@@ -183,7 +183,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > nothing. The drift styling is a CONSTANT with no verdict in scope, and the e2e asserts the
 > opening tag contains `className={DRIFT_BLOCK_CLASS}` verbatim.
 > **AND THE FIRST FIX WAS ITSELF TOO WEAK — third instrument this session weaker than the sentence
-> над it.** My scan was `/className=\{[^}]*verdict/`, and `[^}]*` stops at the first closing brace,
+> over it.** My scan was `/className=\{[^}]*verdict/`, and `[^}]*` stops at the first closing brace,
 > so a seeded `` className={`${DRIFT_BLOCK_CLASS} ${…verdict === "drifted" ? …}`} `` walked past it
 > and the test stayed green a second time. An exact match cannot be evaded by rearranging the
 > expression. Three attempts to make one guard bite, each failure recorded rather than the seed
@@ -5707,7 +5707,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | done | loop-0821a | 2026-08-21T07:50Z | 67e9165 | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | done | loop-0821a | 2026-08-21T07:56Z | 317e120 | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
-| W229 | done | loop-0821a | 2026-08-21T08:06Z | PENDING | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
+| W229 | done | loop-0821a | 2026-08-21T08:06Z | d5fd52c | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
 | W231 | available | — | — | — | Forecast → invitation-volume coupling, shipped explicitly OFF → verify: the coupling exists as a declared, disabled control; enabling it is a practice decision recorded with a reason, and the disabled state is pinned by its own test. |
 | W232 | available | — | — | — | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
