@@ -110,6 +110,7 @@ const NAMESPACES: Record<string, () => Promise<Record<string, unknown>>> = {
   "src/console/interop.ts": () => import("@/console/interop"),
   "src/verticals/declare.ts": () => import("@/verticals/declare"),
   "src/verticals/undecided.ts": () => import("@/verticals/undecided"),
+  "src/verticals/third.ts": () => import("@/verticals/third"),
   "src/interop/exchange.ts": () => import("@/interop/exchange"),
   "src/interop/disclosure-consent.ts": () => import("@/interop/disclosure-consent"),
   "src/interop/credentials.ts": () => import("@/interop/credentials"),

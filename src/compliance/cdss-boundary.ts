@@ -498,6 +498,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W248's declaration path exports two types, an evidence reader and the `declareVertical` factory. It authors NO sentences at all: every string a vertical carries — its name, its member refs, the gate each member waits on — is supplied by the vertical that declares it and passed through untouched, which is why the copy tests live with the declarations rather than here. The one thing worth flagging for a reviewer is what the factory refuses to give a vertical: there is no field for what a member is FOR, because for a clinical pathway that sentence is the content G5 gates, and a shared factory that offered one would have offered it to every vertical at once.",
   },
   {
+    module: "src/verticals/third.ts",
+    operatorCopy: [],
+    notCopy:
+      "W250's third vertical, which like the second names no care area: two declared members, an id and a name. Its only sentences are the `waitsOn` acts, which name a gate and the roles W119 requires — a reviewer, then a signatory who is not the reviewer — and say nothing about what either member would contain. No patient, no condition, no clinical step, and a test scans it for every care area the ledger has ever named in these rows.",
+  },
+  {
     module: "src/verticals/undecided.ts",
     operatorCopy: ["UNDECIDED_NAME_QUESTION"],
     notCopy:
@@ -705,14 +711,6 @@ export const ACCEPTED_COPY_FINDINGS: readonly AcceptedCopyFinding[] = [
     match: "Best",
     why: "The match is inside 'Halo/Best Practice', which is a practice-management vendor's PRODUCT NAME, quoted from the plan's own definition of G1. The rule bans benefit claims because 'our best doctors' is marketing a patient reads; naming the software a practice already runs is neither a claim nor patient-facing. Not fixed by rewording: the whole point of carrying the plan's words verbatim is that a reader of the refusal knows exactly which gate they are behind, and paraphrasing a vendor's name to satisfy a regex would make the gate text wrong to make a scan quiet. Not fixed by narrowing the rule either — 'best' really is the word that catches 'the best care in the area', and W164 already showed what happens when a compliance rule is loosened to stop it crying wolf.",
     reviewBy: "2027-08-21",
-  },
-  {
-    module: "src/verticals/completeness.ts",
-    exportName: "REMAINING_CHAIN",
-    rule: "no-benefit-claims",
-    match: "specialist",
-    why: "'a specialist review and then a founder sign-off (G5)' describes ADHD.ME's own content governance chain to whoever is watching a vertical fill up. The rule bundles 'specialist' because a clinician claiming to be one is a prohibited title claim (W6, W184); a specialist reviewing our pathway content is the opposite direction of the same word.",
-    reviewBy: "2027-02-11",
   },
   {
     module: "src/verticals/consistency.ts",

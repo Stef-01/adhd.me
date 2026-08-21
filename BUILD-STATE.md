@@ -162,7 +162,16 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > for one of them. **The irony worth writing down: W158 chose static-per-kind so the sentence would
 > be "unable to drift", and being static is exactly what let it drift from the layer that grew
 > beside it.**
-> **SECOND, THE REPORT SAYS "SPECIALIST", TWICE, AND THIS TREE HAS ALREADY RULED ON THAT.**
+> **SECOND, THE REPORT SAYS "SPECIALIST", TWICE.** *(Correction, written during the build: the
+> claim below said "this tree has already ruled on that", implying the word was an oversight
+> nobody had looked at. It was not. W200 holds an ACCEPTED finding for exactly this string, with a
+> rationale — the rule bundles "specialist" because a clinician claiming the title is a prohibited
+> claim, and someone reviewing OUR content is the opposite direction of the same word — and a
+> review date of 2027-02-11. So the tree ruled TWICE, in opposite directions: W191 removed the word
+> from the declaration layer, W200 accepted it in the report layer. The inconsistency is real; my
+> framing of it was not. What survives is the ACCURACY argument below, which stands independently
+> of the compliance question, and the change retires the acceptance as a side effect rather than as
+> its justification.)*
 > `REMAINING_CHAIN.pathway` and `.content` both read "a specialist review and then a founder
 > sign-off (G5)" — pinned into the golden report string, so it is expected output rather than an
 > oversight nobody looked at. W191 hit the same sentence in its own copy and changed it, recording

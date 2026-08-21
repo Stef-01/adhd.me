@@ -61,7 +61,14 @@ test("a vertical names what is outstanding and who has to act", async ({ page, r
   await request.post("/api/mock/verticals");
   await page.goto("/console/verticals");
   await expect(page.getByTestId("vertical-vert-example")).toContainText("0 of 3 parts ready");
-  await expect(page.getByTestId("outstanding-vert-example")).toContainText("specialist review");
+  // W250 corrected this sentence: it said "a specialist review and then a founder sign-off", which
+  // overstated W119 — the chain is a reviewer and then a separate signatory, with no title
+  // required — and used a word W114 refuses. The assertion carries the roles W119 actually
+  // enforces, so it fails if the overstatement comes back.
+  await expect(page.getByTestId("outstanding-vert-example")).toContainText(
+    "a reviewer, then a signatory who is not the reviewer",
+  );
+  await expect(page.getByTestId("outstanding-vert-example")).not.toContainText("specialist");
   // The interval blocker names the ruling rather than a person, because nobody can act first.
   await expect(page.getByTestId("outstanding-vert-example")).toContainText("nobody can act before it");
 });

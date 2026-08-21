@@ -103,6 +103,9 @@ export function treeEvidence(): VerticalEvidence {
  * separately, which is the thing this unit exists to stop.
  */
 export function declareVertical(declaration: VerticalDeclaration): DeclaredVertical {
+  const declaredActs = Object.fromEntries(
+    declaration.members.map((member) => [member.ref, member.waitsOn]),
+  );
   const spec: VerticalSpec = {
     verticalId: declaration.verticalId,
     name: declaration.name,
@@ -115,8 +118,12 @@ export function declareVertical(declaration: VerticalDeclaration): DeclaredVerti
     members: declaration.members,
     evidence: treeEvidence,
     assemble: (evidence = treeEvidence()) => usableVertical(spec, evidence),
+    // The declared acts travel to the report, so "who must act" has ONE answer. W250 found two:
+    // this layer's per-member `waitsOn` and W158's per-kind `REMAINING_CHAIN`, already disagreeing
+    // about whether an education item needs a founder gate. The report CARRIES the sentence
+    // declared here rather than composing a second wording of it (W177).
     outstanding: (evidence = treeEvidence(), known?: KnownMembers) =>
-      assessCompleteness(spec, evidence, known),
+      assessCompleteness(spec, evidence, known, declaredActs),
     gates: () => [...new Set(declaration.members.map((member) => member.waitsOn))],
   };
 }

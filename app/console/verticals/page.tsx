@@ -162,9 +162,14 @@ export default async function VerticalsPage() {
                       data-testid={`outstanding-${spec.verticalId}`}
                       className="mt-3 flex flex-col gap-1 text-sm text-stone-600"
                     >
+                      {/* W250: keyed and labelled by the ACT, not the kind — one act can be
+                          waited on by members of several kinds, and two members of ONE kind can
+                          wait on different acts. Keying by kind produced duplicate React keys the
+                          moment that second case existed. */}
                       {report.outstanding.map((row) => (
-                        <li key={row.kind}>
-                          {row.count} × {row.kind.replace(/_/g, " ")} — needs {row.chain}.
+                        <li key={row.chain}>
+                          {row.count} × {row.kinds.map((k) => k.replace(/_/g, " ")).join(", ")} — needs{" "}
+                          {row.chain}.
                         </li>
                       ))}
                     </ul>

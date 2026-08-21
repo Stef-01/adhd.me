@@ -6,7 +6,8 @@
 //
 // So this report decomposes by OUTSTANDING ACT rather than by member, because the blockers have
 // different owners and a flat list of member ids hides that. An unsigned pathway needs two people
-// in order — a specialist, then the founder. Content already reviewed needs the founder alone. A
+// in order — a reviewer, then a signatory who is not the reviewer. Content already reviewed needs
+// the signature alone. A
 // missing interval needs the G5 values ruling, so nobody can act at all until it lands. A broken
 // education reference needs an author and no gate whatsoever. Reading "4 members not usable" tells
 // you none of that; reading "3 of these are waiting on one ruling and the fourth is a typo" is a
@@ -21,10 +22,34 @@
 //      exists at all, signed off or not. It is optional, and when it is absent the report says
 //      the blocker is indeterminate rather than assuming.
 //   2. It never says which STAGE of a gate a member is stuck at. Knowing a pathway exists and is
-//      not usable does not tell you whether the specialist has looked; W119 holds that, and
-//      asking here would mean a second implementation of the sign-off vocabulary that W157 went
-//      out of its way to avoid. The report names the whole remaining chain for the kind, which is
-//      true of every member of that kind and cannot drift.
+//      not usable does not tell you whether a reviewer has looked; W119 holds that, and asking
+//      here would mean a second implementation of the sign-off vocabulary that W157 went out of
+//      its way to avoid.
+//
+// W250 CORRECTED THE SENTENCE THAT USED TO FOLLOW, AND THE CORRECTION IS THE INTERESTING PART.
+// It read: "the report names the whole remaining chain for the kind, which is true of every member
+// of that kind and cannot drift." The first half was a real design decision and stands. The second
+// half was wrong, and wrong in a way worth keeping on the record: STATIC IS NOT THE SAME AS
+// UNABLE TO DRIFT. `REMAINING_CHAIN` could not drift from itself; what it drifted from was the
+// declaration layer that grew up beside it, where W191 and W248 record a `waitsOn` act PER MEMBER.
+// Two answers to "who must act" — W177's rule — and by the time W250 looked they already
+// disagreed: this file told a founder an education item needs "a signed-off source for it to
+// cite", while every declared education member says no founder gate applies to it at all.
+//
+// SO THE DECLARED ACT WINS WHERE THERE IS ONE, AND IS CARRIED RATHER THAN RESTATED. A vertical
+// that declares what each member waits on is the authority on its own members; `REMAINING_CHAIN`
+// remains for a bare `VerticalSpec` with no declaration behind it. That also fixes a collapse
+// W248's second vertical exposed: two members of one KIND can wait on genuinely different acts —
+// one needs a signature, one needs an author first — and grouping by kind reported them as
+// waiting on the same thing, which was false for one of them.
+//
+// AND THE CHAIN NO LONGER SAYS "SPECIALIST". W114 refuses the protected title everywhere rather
+// than only on patient surfaces; W191 hit the same sentence in its own copy, changed it, and
+// recorded that the fix made the sentence MORE accurate rather than less, because W119's roles are
+// reviewer and signatory and it does not require the reviewer to be a specialist. This file said
+// it did, in a document a founder reads, with the wording pinned into a golden string so it was
+// expected output rather than an oversight. The declaration layer had banned the word since W191;
+// the report had not.
 //
 // The coverage statement is not a footnote. W94 learned it on barriers and W96 put it next to the
 // chart: a completeness figure whose basis is invisible gets read as a measurement. This one says
@@ -59,11 +84,18 @@ export type MemberStatus =
   /** No pool was supplied, so the two above cannot be told apart. */
   | "indeterminate";
 
-/** Who has to act, per member kind. Static, because it is a property of the kind. */
+/**
+ * Who has to act, per member kind — the FALLBACK, used when no declaration says otherwise.
+ *
+ * W119's chain is a reviewer and then a signatory who is not the reviewer. It does not require the
+ * reviewer to hold a protected title, and the previous wording ("a specialist review…") claimed it
+ * did while also using a word W114 refuses everywhere. W191 made this same correction in the
+ * declaration layer and found the result more accurate, not less.
+ */
 export const REMAINING_CHAIN: Record<VerticalMemberKind, string> = {
-  pathway: "a specialist review and then a founder sign-off (G5)",
-  content: "a specialist review and then a founder sign-off (G5)",
-  education_item: "an author, and a signed-off source for it to cite",
+  pathway: "a reviewer, then a signatory who is not the reviewer (G5)",
+  content: "a reviewer, then a signatory who is not the reviewer (G5)",
+  education_item: "an author. No founder gate applies to material that makes no clinical claim (W151)",
   interval: "the G5 ruling on guideline values — nobody can act before it",
 };
 
@@ -79,8 +111,16 @@ export interface CompletenessReport {
   totalMembers: number;
   readyMembers: number;
   members: MemberAssessment[];
-  /** Blockers grouped by what has to happen, worst-populated first. */
-  outstanding: Array<{ kind: VerticalMemberKind; count: number; chain: string }>;
+  /**
+   * Blockers grouped by WHAT HAS TO HAPPEN, worst-populated first.
+   *
+   * W250 changed the grouping key from the member's kind to the act itself. Two members of one
+   * kind can wait on genuinely different acts — W248's second vertical declares a content member
+   * needing only a signature beside one that has not been drafted at all — and grouping by kind
+   * reported them under one chain that was false for one of them. `kinds` names which kinds are in
+   * a group, because the act is now the thing a group is about and a group may span kinds.
+   */
+  outstanding: Array<{ kinds: VerticalMemberKind[]; count: number; chain: string }>;
   /** True when nothing in this vertical has cleared a clinical sign-off. */
   noSignedOffClinicalContent: boolean;
   coverage: {
@@ -117,10 +157,20 @@ function intervalsOf(catalogue: IntervalCatalogue): string[] {
   return catalogue.intervals.map((row) => (row as { id?: string }).id ?? "");
 }
 
+/**
+ * What each member is declared to be waiting on, by ref.
+ *
+ * Supplied by `declareVertical`, which holds the declaration. Optional so a bare `VerticalSpec`
+ * still gets a report — with `REMAINING_CHAIN` standing in, which is the coarser answer and now
+ * says so rather than pretending to be the only one.
+ */
+export type DeclaredActs = Readonly<Record<string, string>>;
+
 export function assessCompleteness(
   spec: VerticalSpec,
   evidence: VerticalEvidence,
   known?: KnownMembers,
+  declaredActs?: DeclaredActs,
 ): CompletenessReport {
   const ready = readyRefs(evidence);
 
@@ -136,8 +186,19 @@ export function assessCompleteness(
   });
 
   const blocked = members.filter((m) => m.status !== "ready");
-  const byKind = new Map<VerticalMemberKind, number>();
-  for (const m of blocked) byKind.set(m.member.kind, (byKind.get(m.member.kind) ?? 0) + 1);
+  // The act a member waits on: its own declared sentence where the vertical supplied one, and the
+  // per-kind fallback otherwise. CARRIED, never paraphrased — a second wording of one act is the
+  // drift this change exists to close (W177).
+  const actFor = (member: VerticalMemberRef): string =>
+    declaredActs?.[member.ref] ?? REMAINING_CHAIN[member.kind];
+  const byAct = new Map<string, { kinds: Set<VerticalMemberKind>; count: number }>();
+  for (const m of blocked) {
+    const act = actFor(m.member);
+    const group = byAct.get(act) ?? { kinds: new Set<VerticalMemberKind>(), count: 0 };
+    group.kinds.add(m.member.kind);
+    group.count += 1;
+    byAct.set(act, group);
+  }
 
   const readyMembers = members.length - blocked.length;
 
@@ -150,9 +211,9 @@ export function assessCompleteness(
     totalMembers: members.length,
     readyMembers,
     members,
-    outstanding: [...byKind.entries()]
-      .map(([kind, count]) => ({ kind, count, chain: REMAINING_CHAIN[kind] }))
-      .sort((a, b) => b.count - a.count || a.kind.localeCompare(b.kind)),
+    outstanding: [...byAct.entries()]
+      .map(([chain, group]) => ({ kinds: [...group.kinds].sort(), count: group.count, chain }))
+      .sort((a, b) => b.count - a.count || a.chain.localeCompare(b.chain)),
     // Computed, not asserted. The claim is only worth making if something checked it.
     noSignedOffClinicalContent: readyMembers === 0,
     coverage: {
@@ -189,7 +250,9 @@ export function renderCompletenessReport(report: CompletenessReport): string {
       ``,
       `| Members | Kind | What it needs |`,
       `|---|---|---|`,
-      ...report.outstanding.map((o) => `| ${o.count} | ${o.kind} | ${o.chain} |`),
+      // `kinds` since W250: a group is about an ACT, and one act can be waited on by members of
+      // more than one kind.
+      ...report.outstanding.map((o) => `| ${o.count} | ${o.kinds.join(", ")} | ${o.chain} |`),
       ``,
     );
   }
@@ -217,7 +280,7 @@ export function renderCompletenessReport(report: CompletenessReport): string {
     ``,
     `"Usable" is a weaker word for intervals than for the other three kinds: pathways, content and education items are gated by a type that cannot be forged, while intervals are gated by validation and could in principle be constructed by hand (W157's own note).`,
     ``,
-    `This report never says which stage of a gate a member is stuck at. Knowing a pathway is not usable does not say whether a specialist has looked, and asking here would mean a second copy of the sign-off rules.`,
+    `This report never says which stage of a gate a member is stuck at. Knowing a pathway is not usable does not say how far along W119's chain it has got, and asking here would mean a second copy of the sign-off rules.`,
     ``,
   );
 

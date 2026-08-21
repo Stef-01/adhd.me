@@ -88,26 +88,62 @@ const KNOWN: KnownMembers = {
 };
 
 describe("W158 it groups by what has to happen, not by member", () => {
-  it("counts blockers per kind, worst-populated first", () => {
+  it("counts blockers per ACT, worst-populated first", () => {
+    // W250 changed the grouping key from kind to act. With no declaration supplied every member
+    // falls back to its per-kind chain, and pathway and content share one — so they group
+    // together, which is the point: they are waiting on the same thing and always were.
     const report = assessCompleteness(spec(), PARTIAL, KNOWN);
     expect(report.shippable).toBe(false);
     expect(report.readyMembers).toBe(1);
-    expect(report.outstanding.map((o) => [o.kind, o.count])).toEqual([
-      ["content", 1],
-      ["education_item", 1],
-      ["interval", 1],
-      ["pathway", 1],
+    expect(report.outstanding.map((o) => [o.kinds, o.count])).toEqual([
+      [["content", "pathway"], 2],
+      [["education_item"], 1],
+      [["interval"], 1],
     ]);
+    // Every blocked member is in exactly one group, whatever the grouping key.
+    expect(report.outstanding.reduce((n, o) => n + o.count, 0)).toBe(
+      report.totalMembers - report.readyMembers,
+    );
   });
 
-  it("names the remaining chain, which is a property of the kind", () => {
-    // Static per kind rather than inferred per member: true of every member of that kind, so it
-    // cannot drift out of step with one member's state.
+  it("falls back to the per-kind chain when no declaration says otherwise", () => {
     const report = assessCompleteness(spec(), PARTIAL, KNOWN);
     for (const group of report.outstanding) {
-      expect(group.chain).toBe(REMAINING_CHAIN[group.kind]);
+      for (const kind of group.kinds) {
+        expect(group.chain).toBe(REMAINING_CHAIN[kind]);
+      }
     }
     expect(REMAINING_CHAIN.interval).toContain("nobody can act before it");
+  });
+
+  it("carries a declared act instead, when the vertical declares one", () => {
+    // The reconciliation W250 exists for. Where a vertical says what a member waits on, the report
+    // carries THAT SENTENCE rather than a second wording of the same act.
+    // `hash-b`, not `hash-a`: PARTIAL has hash-a through its gate, so it is not blocked and
+    // would never appear in `outstanding` at all — a declared act on a READY member is invisible
+    // by construction, which is correct and cost me a wrong first fixture.
+    const declared = { "hash-b": "a very specific act only this member is waiting on" };
+    const report = assessCompleteness(spec(), PARTIAL, KNOWN, declared);
+    const group = report.outstanding.find((o) => o.chain === declared["hash-b"]);
+    expect(group, "the declared act did not reach the report").toBeDefined();
+    expect(group!.count).toBe(1);
+    expect(group!.kinds).toEqual(["pathway"]);
+    // And the member that declared it is no longer grouped with the one that did not.
+    const fallback = report.outstanding.find((o) => o.chain === REMAINING_CHAIN.content);
+    expect(fallback!.kinds).toEqual(["content"]);
+  });
+
+  it("separates two members of ONE kind that wait on different acts", () => {
+    // The collapse W248's second vertical exposed: grouping by kind reported a content member
+    // needing only a signature and one not yet drafted as waiting on the same thing, which was
+    // false for one of them.
+    const report = assessCompleteness(spec(), PARTIAL, KNOWN, {
+      "hash-b": "act A",
+      "content-1": "act B",
+    });
+    const acts = report.outstanding.filter((o) => o.chain === "act A" || o.chain === "act B");
+    expect(acts.length).toBe(2);
+    expect(acts.every((o) => o.count === 1)).toBe(true);
   });
 
   it("an empty vertical is not shippable, which is why shippability is delegated", () => {
@@ -156,7 +192,9 @@ describe("W158 it refuses to guess", () => {
   it("never reports which stage of a gate a member is stuck at", () => {
     // Asking would mean a second copy of the sign-off vocabulary W157 avoided.
     const rendered = renderCompletenessReport(assessCompleteness(spec(), PARTIAL, KNOWN));
-    for (const banned of ["reviewed by", "awaiting review", "signed off by", "reviewer has"]) {
+    // "reviewer has" caught W250's first rewrite of the footer, which swapped the protected title
+    // for the banned stage phrase — two rules, and satisfying one is not satisfying the other.
+    for (const banned of ["reviewed by", "awaiting review", "signed off by", "reviewer has", "specialist"]) {
       expect(rendered.toLowerCase()).not.toContain(banned);
     }
   });
@@ -225,10 +263,9 @@ on the same act, and several of these groups are waiting on the same person.
 
 | Members | Kind | What it needs |
 |---|---|---|
-| 1 | content | a specialist review and then a founder sign-off (G5) |
-| 1 | education_item | an author, and a signed-off source for it to cite |
+| 2 | content, pathway | a reviewer, then a signatory who is not the reviewer (G5) |
+| 1 | education_item | an author. No founder gate applies to material that makes no clinical claim (W151) |
 | 1 | interval | the G5 ruling on guideline values — nobody can act before it |
-| 1 | pathway | a specialist review and then a founder sign-off (G5) |
 
 ## Members
 
@@ -252,7 +289,7 @@ Kinds assessed: content, education_item, interval, pathway. Nothing is said abou
 
 "Usable" is a weaker word for intervals than for the other three kinds: pathways, content and education items are gated by a type that cannot be forged, while intervals are gated by validation and could in principle be constructed by hand (W157's own note).
 
-This report never says which stage of a gate a member is stuck at. Knowing a pathway is not usable does not say whether a specialist has looked, and asking here would mean a second copy of the sign-off rules.
+This report never says which stage of a gate a member is stuck at. Knowing a pathway is not usable does not say how far along W119's chain it has got, and asking here would mean a second copy of the sign-off rules.
 `,
     );
   });
