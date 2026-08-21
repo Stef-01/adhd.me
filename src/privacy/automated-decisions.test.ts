@@ -48,7 +48,18 @@ function sourceFiles(): Array<{ module: string; text: string }> {
  */
 function patientTouchingModules(): string[] {
   const namesAPatient = /\bPatientId\b|\bpatientId\b/;
-  const decidesAnOutcome = /^export type [A-Za-z]*(Reason|Refusal|Exclusion|Verdict)\b/m;
+  // W258 WIDENED THIS, AND THE MEASUREMENT CAME FIRST. The original four nouns are the ones W201's
+  // own decisions happened to use. Probing the complement — decision-shaped exports under any
+  // other noun — found ELEVEN modules neither proxy caught, and eight of them had no entry in this
+  // register in EITHER direction. That is worse than an under-count: the both-directions rule
+  // below means a module this detector misses cannot even be WRITTEN DOWN as considered, so the
+  // proxy was deciding not just what must be answered but what may be.
+  //
+  // Eleven is a supported widening rather than a tuned one (W256's rule): every one of the eleven
+  // is genuinely decision-shaped and every one now carries a rationale. Contrast W247's measurement
+  // of W106, where a blanket rule would have carried 39 exceptions and the rule itself was wrong.
+  const decidesAnOutcome =
+    /^export type [A-Za-z]*(Reason|Refusal|Exclusion|Verdict|Outcome|Decision|Status|Eligibility|Disposition|Band|Tier|Priority|Rank|Judgement|Grade)\b/m;
   return sourceFiles()
     .filter(({ module, text }) => {
       // This register and its own machinery are excluded by PATH, which is the only exclusion
@@ -72,6 +83,46 @@ describe("W201 every decision the tree makes is accounted for", () => {
     expect(found, "the outcome-union scan is what finds the eligibility engine").toContain(
       "src/engine/eligibility.ts",
     );
+  });
+
+  it("earns the nouns W258 added, rather than having them tuned in", () => {
+    // THE WIDENING HAS TO PAY FOR ITSELF. W256's rule: extend a detector only where a measurement
+    // supports it, never widen a pattern until it agrees with you. So the original four nouns and
+    // the eleven added ones are run separately, and the added ones must find modules the originals
+    // do not — otherwise they are decoration on a register that reads as coverage.
+    const original = /^export type [A-Za-z]*(Reason|Refusal|Exclusion|Verdict)\b/m;
+    const namesAPatient = /\bPatientId\b|\bpatientId\b/;
+    const onlyWidened = sourceFiles().filter(
+      ({ module, text }) =>
+        module !== "src/privacy/automated-decisions.ts" &&
+        !namesAPatient.test(text) &&
+        !original.test(text) &&
+        /^export type [A-Za-z]*(Outcome|Decision|Status|Eligibility|Disposition|Band|Tier|Priority|Rank|Judgement|Grade)\b/m.test(text),
+    );
+    expect(
+      onlyWidened.length,
+      "the added nouns find nothing the original four did not — they are not earning their place",
+    ).toBeGreaterThan(8);
+    // And the module the widening was FOR: the finder's ranking, which orders named clinicians
+    // from a person's free text and names no patient id because the searcher is not yet a patient.
+    expect(onlyWidened.map((f) => f.module)).toContain("src/demo/clinicians.ts");
+    // Every one of them is now answered, in one direction or the other.
+    const declared = new Set(declaredModules());
+    for (const { module } of onlyWidened) {
+      expect(declared.has(module), `${module} is found by the widening and has no answer`).toBe(true);
+    }
+  });
+
+  it("keeps the finder ranking's classification arguable in writing, not just decided", () => {
+    // The entry for `src/demo/clinicians.ts` is a judgement, and the whole value of writing it down
+    // is that the next reader can disagree with it. So it must carry the tension rather than only
+    // the conclusion: the line it sits nearest, and what would move it.
+    const entry = NOT_A_DECISION["src/demo/clinicians.ts"]!;
+    expect(entry).toMatch(/TRIGGER/);
+    expect(entry, "the entry does not say what line it sits nearest").toMatch(/inference/i);
+    expect(entry, "the entry does not name the published notice's stake in it").toMatch(/notice/i);
+    // And it defers the consequence rather than taking it: changing the notice is W217's precedent.
+    expect(entry).toMatch(/founder decision/i);
   });
 
   it("classifies every one of them, exactly once, in both directions", () => {
