@@ -143,6 +143,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O143 (the QA record has been silently falsified, eleven times) — claimed 2026-08-21T03:05Z
+> by loop-0820s.** Found while committing O142, and it is worse than the passing note I gave it.
+> `e2e/finder-flow.spec.ts` writes SEVEN screenshots directly into unit-named historical
+> directories — `qa/profile-o51/`, `qa/motion-o52/`, `qa/motion-o67/`, `qa/founder-o89/` — so
+> every run of the finder suite overwrites the captures that four earlier units recorded as their
+> evidence. This is not a hypothesis: `git log --follow` on `qa/motion-o52/results-before-clarifier.png`
+> shows it rewritten in ELEVEN commits after O52, by units with nothing to do with it (O74, O85,
+> O93, O102, O105, O118, O127, O129, O130, O135, O137).
+> **The one that matters most is the word "before".** O52's proof is a before/after pair showing
+> rows gliding when a clarifier reorders them, and its BEFORE frame has been re-rendered under
+> every CSS change since — O99's banner merge, O129's profile audit, O130's accent fix. A
+> before/after pair where both frames are "after" proves nothing, and nothing in the tree said so.
+> The taste law names `qa/` and `docs/DESIGN-QA.md` as the record the design work rests on; this
+> makes that record executable rather than assumed.
+> The unit: point the e2e suite's captures at a run-scoped, gitignored directory so a test run
+> stops mutating the record, and add a GUARD that fails if any spec writes a screenshot into a
+> unit-named `qa/` directory — proved by seeding a violation, as O142's guard was. Then the
+> restoration question, answered by evidence rather than by inference: for each of the seven
+> files, check whether any DESIGN-QA entry written AFTER the capture's origin unit cites it as
+> that entry's own evidence. Where nothing does, the overwrite was incidental and the file is
+> restored from the commit that introduced it. Where something does, the later citation stands
+> and the file is left alone with the ambiguity written down — a guess dressed as a restoration
+> would be the same falsification in the other direction.
+> Gate: the guard with a seeded failure, the redirect, whatever restoration the citation check
+> earns, a DESIGN-QA entry naming every affected file and what was done with it, `pnpm verify`
+> green and the finder e2e green with the qa/ tree unchanged afterwards — which is the real
+> proof, because today it is dirty after every run.
+
 > **O142 (Q3 item 10's premise, measured — a fixture-only roster at scale) — claimed
 > 2026-08-21T02:05Z by loop-0820s.** The plan's remaining lanes are founder-blocked on roster
 > size, and this is the one part of that blockage the loop can honestly remove. Q3 item 10 rests
