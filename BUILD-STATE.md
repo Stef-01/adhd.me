@@ -173,6 +173,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > with the finder ranking stated and tested rather than resolved by assertion; every claim of
 > "strengthened" backed by a test that fails if the strengthening is removed; seeded failures;
 > `pnpm verify` green.
+>
+> **DONE 2026-08-21T13:22Z at `ffdd627`.** `src/compliance/g7-at-five-years.test.ts`, 13 tests.
+> **THE FIELD NAME WAS PART OF THE PROBLEM AND IS FIXED FIRST.** `y4Rederivation` has a year in it,
+> which forces every later re-derivation to overwrite the earlier answer — rewriting history — or
+> rename the schema annually. It is a LIST now, Y4's five notes **carried verbatim** (W177: a
+> re-derivation is evidence about a particular year, and summarising it later loses what made it
+> evidence). And each year's note must cite a unit FROM that year, or **a Y4 answer with a new
+> label passes as a re-derivation**, which is the exact carrying-forward the gate forbids.
+> **Q17 IS CLEAN AND IS NOT THE HARD CASE.** W214's candidate type has nowhere to put a clinical
+> attribute, W209 counts what came back rather than scoring anybody, W217 is blocked from day one.
+> **THE HARD CASE IS OLDER, AND W258 SURFACED IT AN HOUR AGO.** Rail 1 refuses an ordered list of
+> clinicians — *"because an ordered list of clinicians for a clinical pathway is a recommendation
+> about who is better"* — and `rankClinicians` returns exactly that, on `/finder`. The distinction
+> is real but NARROW: the property refuses such a list *for a clinical pathway*, and the finder
+> orders against what a person said they want, with no clinical scoring and no pathway. **The
+> residue is stated rather than resolved**: this property and that function have coexisted since
+> Year 1 and no re-derivation before this one wrote them down together. A test requires the note to
+> keep naming it, so the next re-derivation cannot skate past its hardest case.
+> **AND A SEEDED FAILURE CAUGHT MY RAIL-1 TEST CHECKING ITS OWN FIXTURE.** It read `Object.keys` of
+> a literal constructed three lines above, so adding `chronicCare?: boolean` to `MatchCandidate`
+> changed nothing and **all thirteen tests stayed green.** The claim is about the TYPE, which a
+> runtime value cannot see — **an optional field is absent from every object that does not set it,
+> which is exactly how a widened type looks from inside a test.** It extracts the interface body
+> and scans the declaration now (W183's technique for the same problem on directory profiles), with
+> the extraction itself checked for non-vacuity. **Third time this session one of my guards has been
+> weaker than its name**, and the second where only a seed revealed it.
+> **Q17 tested against all five rather than described**: the result names no clinician; the reason
+> vocabulary is closed and contains nothing about care moving; every candidate gets a decision, so
+> nobody is concluded about by omission; an empty availability list is not read as unrestricted;
+> and every sentence the lane can produce passes the advice linter, with the linter's own
+> non-vacuity checked beside it.
+> **Three seeded failures**: a clinical attribute added to the candidate type, a condition named in
+> the reason copy, and a Y5 re-derivation with its hardest case removed.
+> Verification: `pnpm verify` green (254 files, 4062 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W258 (the ADM register at five years) — claimed 2026-08-21T13:02Z by loop-0821a.** W201's
 > decision register RE-DERIVED against everything Y5 added, **not assumed to have survived**, and
@@ -7470,7 +7505,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W256 | done | loop-0821a | 2026-08-21T12:34Z | 88ebea3 | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | done | loop-0821a | 2026-08-21T12:53Z | 2e60862 | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | done | loop-0821a | 2026-08-21T13:02Z | c7ee386 | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
-| W259 | claimed | loop-0821a | 2026-08-21T13:13Z | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
+| W259 | done | loop-0821a | 2026-08-21T13:13Z | ffdd627 | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
 | W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
 
 | SUP-1 | blocked | — | — | — | Cohort-level specialist review (W89 hook 2) — FOUNDER GATE G5. Buildable only as a de-identified aggregate view whose output is register content; not buildable as anything patient-linked. See docs/SUPERVISION-HOOKS-W89.md |
