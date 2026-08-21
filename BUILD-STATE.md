@@ -174,6 +174,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > fails if either alone admits a read; a caller granted nothing reads nothing, over the whole
 > census; no credential, token or secret literal in the lane, and the grant registry pinned empty;
 > seeded failures for each, including a scope that widens tenancy; `pnpm verify` green.
+>
+> **DONE 2026-08-21T12:23Z at `a4b1b84`.** `src/platform/scopes.ts`, 17 tests.
+> **THE GRANTS ARE DELIBERATELY NOT HUNG OFF THE RESOLVED PRACTICE**, and that is the whole design.
+> It would have been the convenient shape and it would have made the two axes one: every caller who
+> could reach a practice would carry that practice's grants, and a widening on either side would
+> silently widen the other. A test reads `scope.ts` for any mention of grants IN CODE, so the
+> collapse cannot be reintroduced quietly.
+> **A SCOPE MODEL FAILS MORE QUIETLY THAN A TENANCY MODEL, WHICH DECIDED WHAT TO ASSERT.** An
+> unscoped tenancy read returns somebody else's rows and a two-practice fixture sees it at once. A
+> scope granting too much returns **exactly the right practice's data through the wrong door** —
+> every tenancy assertion still green, nothing looking wrong. So the load-bearing test is the one
+> about nothing: **a caller granted nothing, swept over EVERY endpoint, refused every time.** Every
+> test about a granted caller passes equally against a model that authorises everybody.
+> **AND THE DIRECTION A SCOPE MODEL FORGETS IS THE SECOND ONE**: a scope no endpoint requires. It is
+> worse than dead code — it is a promise to an integrator this product cannot keep, and nobody finds
+> out until somebody asks why the data never arrives. Scopes therefore name a KIND OF DATA rather
+> than a path: one scope per endpoint is the endpoint list under a second name, and it forces every
+> integrator's grant to be revisited whenever a path is added over data they already had.
+> **ON CREDENTIALS, W242'S LINE WITH ONE DIFFERENCE STATED RATHER THAN GLOSSED.** "No credentials in
+> the tree" is a fact about today's contents that stops being true in a commit that looks like
+> configuration; the absence of a minting path is a property of the code. **The difference: G1
+> covers PMS and booking credentials, and a credential for THIS product's own API is covered by no
+> named gate at all.** Implying one protects it would be the comfortable answer rather than the true
+> one, and a test pins that the module says so.
+> **TWO THINGS CAUGHT THAT WERE MINE.** (1) Two source scans here were written against RAW source
+> and fired on this lane's own prose — a comment reading "there is no `mintGrant`" contains
+> `mintGrant`. **Fifth occurrence in this session's work** (W228, W230, W236, W247's W106 detector,
+> and twice here). Every scan in the file now goes through one stripper that removes comments and
+> literals and THROWS if it emptied the file; the pattern is not that comments are tricky, it is
+> that a guard written against raw source punishes documenting the thing it guards. (2) Registering
+> with W200 surfaced a name collision: `scope.ts` and `scopes.ts` both exported `ScopeRefusal`,
+> meaning *why a tenancy was refused* and *why a grant was*. Renamed to `GrantRefusal` — and the
+> reason is not compiler confusion: **two meanings under one word is how the two axes this unit
+> exists to keep apart start looking like one thing in a reader's head.**
+> **Four seeded failures**: an empty grant admitting a read, a grant from another caller accepted,
+> a scope no endpoint requires, and two endpoints collapsed onto one scope.
+> Verification: `pnpm verify` green (249 files, 4020 tests, audit gate 2 accepted / 0 unaccepted).
+> Vault log skipped — Stefan-Brain unreachable.
 
 > **W253 (platform API surface, read-only and practice-scoped) — claimed 2026-08-21T12:02Z by
 > loop-0821a.** The row's gate ends *"no endpoint can return cross-practice data, asserted the way
@@ -7106,7 +7144,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
 | W252 | done | loop-0821a | 2026-08-21T11:52Z | 6ac2051 | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
 | W253 | done | loop-0821a | 2026-08-21T12:02Z | 023440c | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
-| W254 | claimed | loop-0821a | 2026-08-21T12:15Z | — | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
+| W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | available | — | — | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | available | — | — | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | available | — | — | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
