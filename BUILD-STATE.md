@@ -143,6 +143,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W253 (platform API surface, read-only and practice-scoped) — claimed 2026-08-21T12:02Z by
+> loop-0821a.** The row's gate ends *"no endpoint can return cross-practice data, asserted the way
+> Y4-1 should have been"* — a named past failure as the standard, which makes the interesting
+> question what Y4-1's assertion should have been rather than what this one should assert.
+> **AND Y4-1's LESSON IS NOT "SCOPE YOUR READS".** W206's row is explicit: `Complaint.practiceId`
+> had existed since W43, and **the WRITER ignored it** — intake stamped the literal `"prac-console"`,
+> an id no console has ever minted, so every complaint belonged to nobody and a scoped read would
+> have returned NOTHING. *"The readers were unscoped BECAUSE the writer was."* The field was there
+> the whole time. A test asserting "the read takes a practice" would have passed throughout.
+> **SO THE PARAMETER IS NOT THE PROPERTY, AND FOR AN API THE GAP IS WIDER STILL.** An endpoint
+> taking `?practiceId=` satisfies W123's letter perfectly and is worth nothing: any caller can name
+> any practice. **A practice id supplied by the caller is a request, not an authorisation.** That
+> distinction is the unit. The id has to be RESOLVED from who is asking — through the memberships
+> `practicesFor` already derives — and the resolved value has to be the only thing a read will
+> accept, W243's shape applied to tenancy: a brand no caller can mint, so an unscoped read is not
+> refused by a check somebody remembered to write, it cannot be CALLED.
+> **NO ROUTE HANDLERS IN THIS UNIT, AND THAT IS A DECISION RATHER THAN A DEFERRAL.** W254 is the
+> scope model and W255 is the refusal semantics — what an error path may say, asserted over every
+> branch. Shipping live HTTP now would put a surface in front of both: a real endpoint whose scopes
+> are undefined and whose error paths have never been swept for patient data. The surface ships as
+> a VALUE first — a declared census of endpoints, each with its resolver and its read — and the
+> transport goes on top once the two units that make it safe exist.
+> **READ-ONLY IS ALSO A STRUCTURAL CLAIM, NOT A NAMING CONVENTION.** "It only has getters" is true
+> until somebody adds one. The endpoints return values and reach no writer, and that is checked
+> against the tree rather than promised.
+> Gate: an endpoint census checked BOTH directions (nothing exported that is undeclared, nothing
+> declared that has gone); every endpoint takes a resolved practice that only the resolver can
+> mint, so a raw id does not typecheck; the resolution derived from memberships and refused where
+> the caller holds none; two practices seeded with real data and EVERY endpoint in the census swept
+> for the other's rows — Y4-1's assertion as it should have been, over the census rather than a
+> sample; the writer half too, so a literal or caller-supplied practice fails the suite; read-only
+> asserted structurally; seeded failures for each; `pnpm verify` green.
+
 > **W252 (vertical scaling: the registers at N verticals) — claimed 2026-08-21T11:52Z by
 > loop-0821a.** Order-independence and a stated time budget over 20 synthetic verticals, with the
 > budget asserted in the test body — W48's shape, which measured first and wrote the observed
@@ -6997,7 +7030,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W250 | done | loop-0821a | 2026-08-21T11:35Z | 8a52c57 | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
 | W251 | blocked | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory pathway content" — now FOUNDER: VERTICAL UNDECIDED.]** Third-vertical pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5**, and behind the same undecided-vertical question as W186. |
 | W252 | done | loop-0821a | 2026-08-21T11:52Z | 6ac2051 | [P] Vertical scaling: the registers at N verticals → verify: order-independence and a stated time budget over 20 synthetic verticals; the budget is asserted in the test body, W48's shape. |
-| W253 | available | — | — | — | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
+| W253 | claimed | loop-0821a | 2026-08-21T12:02Z | — | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | available | — | — | — | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | available | — | — | — | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
 | W256 | available | — | — | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
