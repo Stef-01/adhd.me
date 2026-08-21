@@ -170,6 +170,63 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > again, with the extension watched failing; the review's own non-vacuity — a seeded vulnerability
 > the sweep catches — since a clean result over an inert lane is worth nothing otherwise;
 > `pnpm verify` green.
+>
+> **DONE 2026-08-21T11:18Z at `b9aa0c1`.** Eight findings: six fixed, two carried with the trigger
+> that makes them live. Recorded in `docs/HARDENING-Q19.md`.
+> **THE TWO WORST WERE THE SAME FUNCTION, AND IT WAS THE ONE ENFORCING THE PROPERTY.**
+> `withdrawDisclosureConsent` is the only writer of `withdrawnAtIso`, and W243's whole claim is that
+> time can only ever REMOVE consent. It stored a date it never validated — while every read decides
+> effect by STRING comparison, so `"not a date" <= "2026-08-21"` is false and an unreadable date left
+> the withdrawal recorded and inert, the consent reading `given` for ever. **It failed open for some
+> malformed inputs and safe for others** (`""` sorts low and works), which is exactly why nothing
+> caught it: one empty-string test would have called the function fine. And it set the field
+> unconditionally, so a later second withdrawal moved the first one forward and re-granted consent
+> for the interval. Every test W243 shipped read the property off `disclosureConsentAt`, the READER.
+> Nothing tested the writer against the property at all.
+> **THE OTHER FOUR.** A FHIR Appointment carrying two Patient participants read as the first one —
+> a booking in a named person's record decided by array order, in a mapping where every other
+> ambiguity is refused by name. Conformance diagnostics carried the first sixty characters of the
+> record, which is patient data on an error path the day somebody points the check at real records,
+> which is what a conformance check is FOR. `disclosuresTo` filtered on recipient alone across a
+> ledger whose every entry carries a `practiceId` — **Y4-1's shape**, a cross-tenant read created
+> not by a missing check but by a query that never took the tenant. And the timestamp pattern was
+> anchored at one end.
+> **THE TWO CARRIED ARE CARRIED FOR REASONS, NOT FOR EFFORT.** `appendDisclosure` checks permission
+> at a timestamp the CALLER supplies; stamping a clock inside it would make the ledger record when
+> somebody got around to writing the entry rather than when the disclosure happened, which is the
+> one fact it exists to hold — so the fix belongs at the send path that does not exist yet. And
+> `ExchangeRecord` carries free text from another system into a product where every other operator
+> sentence passes the advice linter: a refusal reason reading *"start this patient on a stimulant
+> trial"* is clinical advice on our surface, through the one door the G7 rails do not cover.
+> **THE W106 HALF, WHICH IS THE HALF THE CLAIM CALLED ALREADY-WRONG AND WAS.**
+> `src/interop/disclosure-ledger.ts` sat undeclared through its own unit and the four after it. The
+> detector scans for a store keyword; W239 has no store, and is the module whose entire subject is
+> what left this tree about a named patient. Now `derived`, with the trigger that makes it `stored`.
+> **AND THE REPAIR IS LANE-SCOPED BECAUSE THAT WAS MEASURED FIRST.** The obvious fix is a tree-wide
+> rule on modules naming a patient id: **39 undeclared modules do**, nearly all pure functions
+> passing one through. A rule with 39 exceptions is exceptions with a rule attached. So every module
+> in `src/interop/` is now a declared class or a listed no-linkage answer held to the same bar —
+> "not in the register" stops meaning both *somebody looked* and *nobody looked*. The test pins the
+> ARGUMENT rather than the number: pinning 39 against a live tree is W207's bug, and would teach the
+> next builder to edit the figure rather than read the reasoning. It fires when the tree-wide
+> version becomes worth writing.
+> **THIS IS THE SAME SHAPE W246 RECORDED IN W200 AN HOUR EARLIER** — a register enforcing the
+> direction its author had in mind and not the other one. Two registers, two directions, one day.
+> The thing worth carrying forward is not either fix: it is that the next register should be asked,
+> while it is being written, which direction it checks.
+> **AND THE DETECTOR MATCHED ITS OWN EXPLANATION.** Writing the rationale broke W106 on the spot:
+> the sentence naming the keyword contains the keyword, so the register reported itself as an
+> undeclared store. **Fourth time in this tree.** The scan strips comments and literals now, and a
+> test asserts the stripper left the code — one that removes too much turns the detector into a
+> check that reads nothing and goes green.
+> **W168 caught W246's ledger row here rather than there** — `DONE` where the protocol defines
+> `done`. Fixed in this commit, and the sequencing is the lesson: the row is written AFTER the gate
+> runs, so ledger-format regressions cannot be caught by the gate of the unit that introduces them.
+> **Nine seeded failures**, each watched: both withdrawal defects, the participant ambiguity, the
+> diagnostics leak, the unscoped read, the unclassified ledger, an over-aggressive stripper, an
+> exemption with no reason, and the lane rule with the ledger removed.
+> Verification: `pnpm verify` green (244 files, 3947 tests, audit gate 2 accepted / 0 unaccepted);
+> e2e interop-console + party-to-care 13/13. Vault log skipped — Stefan-Brain unreachable.
 
 > **W246 (the interop console) — claimed 2026-08-21T10:31Z by loop-0821a.** The row's gate has a
 > clause with the emphasis already in it: *shows what was exchanged and, **more importantly**, what
@@ -6697,7 +6754,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W244 | done | loop-0821a | 2026-08-21T10:17Z | ec7921c | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | done | loop-0821a | 2026-08-21T10:26Z | 5ec7878 | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | done | loop-0821a | 2026-08-21T10:31Z | eb5a603 | [P] Interop console → three kinds of zero, derived; absences above counts; six seeded failures; W200 export-coverage gap measured (111) and recorded, not closed. |
-| W247 | claimed | loop-0821a | 2026-08-21T11:00Z | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |
+| W247 | done | loop-0821a | 2026-08-21T11:00Z | b9aa0c1 | Q19 hardening → 8 findings (6 fixed, 2 carried with triggers); consent withdrawal failed open AND broke W243's monotonicity; Y4-1's cross-tenant shape in `disclosuresTo`; disclosure ledger classified in W106, lane rule added after measuring why the tree-wide one is not worth writing. `docs/HARDENING-Q19.md`. |
 | W248 | available | — | — | — | [P] Women's health vertical assembly, machinery only → verify: W157's model reused, not re-implemented; the vertical is refused with each missing member named; asserts zero clinical content present. |
 | W249 | blocked | — | — | — | Women's health pathway content → verify: two-person sign-off recorded per W119. **Blocked. FOUNDER GATE G5.** |
 | W250 | available | — | — | — | **[REORIENTED 2026-08-14: was "Respiratory vertical assembly" — now FOUNDER: VERTICAL UNDECIDED.]** [P] Third-vertical assembly, machinery only → verify: same machinery; W158's completeness report states exactly which members are missing and who must act. Still `available`: the machinery half is domain-neutral and builds against a synthetic placeholder vertical, exactly as W157/W158 did — only the vertical's NAME is undecided, and the unit was always "machinery only". A builder claiming this must not name a condition. Respiratory was inherited from the PMOS tree and is not an ADHD.ME care area. |
