@@ -168,6 +168,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > gate; the loader refuses to produce a usable configuration EVEN WHEN a credential is supplied,
 > proved by supplying one; G1 named with the plan's own words, carried not paraphrased; the check
 > applied across `src/interop/` and `src/pms/` rather than one directory; `pnpm verify` green.
+> DONE 2026-08-21. `src/interop/credentials.ts` + 10 tests. **The load-bearing test supplies a
+> plausible credential and watches it be refused** — `hk_live_9f2c41ab77e04d5e8b6f0c3a1e7d2b95`, a
+> perfectly well-formed secret — and asserts the reason names the GATE rather than a missing value,
+> so nobody goes hunting for an environment variable that is not the problem. Deleting the gate check
+> fails three tests: with it gone, the emptiness would be doing the work and the module would pass
+> every test that only ever supplied `undefined`. That is W56's distinction, and it is the row's.
+> A credential written into the TREE is refused first and independently of the gate, because a secret
+> committed to a repository is disclosed the moment it is written and no later ruling undoes that.
+> `no_credential_supplied` is kept as its own refusal although it is unreachable today — asserted
+> unreachable, so it reads as deliberate rather than as a gap somebody removes — because "the gate is
+> shut" and "nobody passed anything" send a reader to different places.
+> **THE GATES THAT DO NOT COVER THIS ARE NAMED TOO.** G8 (model vendors) and G10 (payer flows) both
+> say nothing about credentials, and both are recorded with `isTheBlocker: false` and a sentence
+> saying so. Exactly one gate is the blocker, asserted, so "which one" is never a judgement call — a
+> reader who assumes one gate covers everything is the reader who ships behind the wrong one.
+> G1's wording is CARRIED from the plan and checked against the plan file itself, so the two cannot
+> drift (W177). Paraphrasing it fails two tests.
+> **AND THE COMPLIANCE LINTER FIRED ON A VENDOR'S PRODUCT NAME**, which is worth recording rather
+> than working around: `no-benefit-claims` matches `\bbest\b` inside "Halo/Best Practice". Rewording
+> would make the gate text wrong to make a scan quiet; narrowing the rule is what W164 already showed
+> the cost of. It goes through the tree's OWN acceptance mechanism — per module, per export, per
+> matched string, with a review date — and the test asserts the UNACCEPTED findings are zero AND that
+> the acceptance is covering a real finding rather than sitting over nothing.
+> The credential scan runs across `src/interop/` and `src/pms/` and is explicitly the SECOND line:
+> it finds what it knows to look for, and the first line is that no code path exists to use one. Its
+> own patterns are shown firing, so a clean scan means something. This test file is excluded by name
+> and the exclusion is argued: a scan weakened to accommodate its own fixture is weaker for every
+> other file too.
+> Non-vacuity, five breaks: delete the gate check (3 tests); stop refusing a credential in the tree
+> (2); name the wrong gate as the blocker (2); paraphrase G1 (2); commit a credential-shaped literal
+> and configure an integration (2).
+> Gate: `pnpm verify` green — 240 files, 3887 tests, build, audit:gate PASS.
 
 > **W239 (the outbound disclosure ledger) — claimed 2026-08-21T09:51Z by loop-0821a.** W204 declared
 > what would have to exist the day G9 opens and deliberately did not build it. This builds it, and
@@ -6376,7 +6408,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W239 | done | loop-0821a | 2026-08-21T09:51Z | e08ba06 | [P] Outbound disclosure ledger → verify: what left, to whom and when; W204's unresolved question — whether the log holds the FIGURES or only the fact of sending — is named in the module and left to the founder, with the model built so either answer is a one-line change. |
 | W240 | blocked | — | — | — | Payer/insurer integration model → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
-| W242 | claimed | loop-0821a | 2026-08-21T09:58Z | — | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
+| W242 | done | loop-0821a | 2026-08-21T09:58Z | PENDING | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | available | — | — | — | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
 | W244 | available | — | — | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |

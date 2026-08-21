@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/credentials.ts",
+    operatorCopy: ["CREDENTIAL_REFUSAL_COPY"],
+    notCopy:
+      "The remaining exports are the gate register, the G1-open constant, the source union and the one function that refuses. `CREDENTIAL_REFUSAL_COPY` is written to whoever is trying to configure an integration: the gate is shut, nothing was supplied, or the credential came from a literal in the tree. It names a gate and a vendor and describes nothing about any person — no patient, no condition, no next clinical step. The gate sentence quotes the plan's own words for G1, which is why it carries a vendor's product name and needs the acceptance recorded below.",
+  },
+  {
     module: "src/interop/disclosure-ledger.ts",
     operatorCopy: ["DISCLOSURE_REJECTION_COPY", "DISCLOSURE_POSTURE_COPY"],
     notCopy:
@@ -644,6 +650,14 @@ export const ACCEPTED_COPY_FINDINGS: readonly AcceptedCopyFinding[] = [
     match: "action needed",
     why: "W179's copy says 'No action needed' about an APPOINTMENT FEED — the connection is fine, the book is empty. The rule bans action framing because a task list implies somebody decided the task was warranted, and that reasoning is about patients; here the subject is a data connection and the sentence is the single most useful thing a practice manager can be told. Not fixed by teaching the rule about negation: in education copy 'this pathway changed, no action needed' WOULD be a clinical judgement, so the same words are acceptable here and unacceptable there, and the difference is the surface rather than the string.",
     reviewBy: "2027-02-11",
+  },
+  {
+    module: "src/interop/credentials.ts",
+    exportName: "CREDENTIAL_REFUSAL_COPY",
+    rule: "no-benefit-claims",
+    match: "Best",
+    why: "The match is inside 'Halo/Best Practice', which is a practice-management vendor's PRODUCT NAME, quoted from the plan's own definition of G1. The rule bans benefit claims because 'our best doctors' is marketing a patient reads; naming the software a practice already runs is neither a claim nor patient-facing. Not fixed by rewording: the whole point of carrying the plan's words verbatim is that a reader of the refusal knows exactly which gate they are behind, and paraphrasing a vendor's name to satisfy a regex would make the gate text wrong to make a scan quiet. Not fixed by narrowing the rule either — 'best' really is the word that catches 'the best care in the area', and W164 already showed what happens when a compliance rule is loosened to stop it crying wolf.",
+    reviewBy: "2027-08-21",
   },
   {
     module: "src/verticals/completeness.ts",
