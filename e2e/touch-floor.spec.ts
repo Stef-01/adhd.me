@@ -111,29 +111,59 @@ test.describe("O14's 44px touch floor", () => {
     for (const entry of populated.out) offenders.push(`/demo (populated) ${entry}`);
 
     // Non-vacuity: a selector that stopped matching would report a perfectly clean sweep.
-    // Unchanged: the public list was already complete at 15 routes, and 160 is what it draws.
-    console.log(`POP_PUBLIC ${population} (floor 150, observed 160)`);
+    // O174: the public list was already complete at 15 routes. The figure is stated as a RANGE
+    // because it is not run-order independent — 160 with this spec alone, 163 inside the full
+    // suite, since `/demo` is swept populated and what earlier specs seeded moves the count. Pinning
+    // the standalone number would have been a figure that goes stale on a full run, which is the
+    // exact staleness O170 found in the console floor and O174 found again one row later.
+    console.log(`POP_PUBLIC ${population} (floor 150, observed 160-163 by run order)`);
     expect(population, "the public sweep collapsed").toBeGreaterThan(150);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 
   test("no control in the console is under the floor", async ({ page, request }) => {
     test.setTimeout(300_000);
-    // O159: SEED EVERY FIXTURE FIRST, and that is the whole point of this line.
+    // O159: SEED EVERY FIXTURE, and that is the whole point of these lines.
     //
     // The sweep measures whichever state it happens to find, not the set of controls the product
     // can render. Run with only the console fixture, `/console/referrals` shows no decline form and
     // `/demo` shows no booking links — so the sweep reported a clean pass while three controls sat
     // under the floor, and it took another spec seeding data in the same batch to expose them
     // (O152). A gate whose population depends on run order is a gate that gives false assurance.
-    for (const fixture of [
-      "console", "referrals", "registers", "usefulness", "ops", "credentials",
-      "capability", "case-mix", "education", "preferences", "pathways", "verticals", "state",
-    ]) {
-      await request.post(`/api/mock/${fixture}`);
-    }
+    //
+    // O174: AND THE ORDER BENEATH THAT COMMENT REINTRODUCED THE FAULT THE COMMENT DESCRIBES.
+    // `console` led the list and `POST /api/mock/console` RESETS the console store, so the three
+    // fixtures that read `practices[0]` — credentials, capability, education — threw and returned
+    // 500. Nothing checked the status, so they silently did not seed and this sweep measured their
+    // unlinked refusal pages: `/console/credentials` rendered 3 controls where 11 exist.
+    // `preferences` was a fourth no-op for a different reason — that route has no POST handler at
+    // all and answered 405 to every run of this list.
+    //
+    // Three changes, and the third is the one that makes the other two stay true:
+    //   * `console` is posted FIRST and the practice created straight after, so the resetting
+    //     fixture still runs (it seeds the demo memberships and clinicians the console pages read)
+    //     but nothing afterwards reads an emptied store. Dropping it instead cost six controls —
+    //     measured, not assumed;
+    //   * credentials and education carry `linkEmail`, without which they render the refusal even
+    //     when they seed — a11y already did this and this spec did not;
+    //   * every response is ASSERTED ok, so a fixture that stops seeding fails the test instead of
+    //     quietly shrinking what the sweep covers.
     await page.setViewportSize({ width: 390, height: 844 });
+    // The resetting fixture, then the practice, then everything that depends on the practice.
+    await request.post("/api/mock/console");
     await signInAsPracticeOwner(page);
+
+    const LINKED = new Set(["credentials", "education"]);
+    const failed: string[] = [];
+    for (const fixture of [
+      "referrals", "registers", "usefulness", "ops", "credentials",
+      "capability", "case-mix", "education", "pathways", "verticals", "state",
+    ]) {
+      const query = LINKED.has(fixture) ? "?linkEmail=owner@demo.practice.example" : "";
+      const response = await request.post(`/api/mock/${fixture}${query}`);
+      if (!response.ok()) failed.push(`${fixture} -> ${response.status()}`);
+    }
+    expect(failed, `a fixture did not seed, so this sweep is measuring a page it did not populate: ${failed.join(", ")}`).toEqual([]);
     const offenders: string[] = [];
     let population = 0;
     for (const route of CONSOLE_ROUTES) {
@@ -142,9 +172,14 @@ test.describe("O14's 44px touch floor", () => {
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
     // O170: the floor was 120, set when this sweep visited 16 console routes. It now visits 28 and
-    // the observed population is 196, so 120 would no longer notice the sweep collapsing back to
+    // the observed population is 207, so 120 would no longer notice the sweep collapsing back to
     // roughly the list it replaced. Measured first, then stated beside the ceiling — W48's rule.
-    console.log(`POP_CONSOLE ${population} (floor 170, observed 196 at 28 routes)`);
+    //
+    // O174 RE-MEASURED IT RATHER THAN INHERITING IT, which is the same discipline one row later:
+    // fixing the fixture seeding moved this from 196 to 207, because eleven controls on
+    // `/console/credentials` had never been in the population at all. A figure written beside a
+    // floor is a claim about a run, and it goes stale the moment the run changes.
+    console.log(`POP_CONSOLE ${population} (floor 170, observed 207 at 28 routes)`);
     expect(population, "the console sweep collapsed — a clean pass here would mean nothing").toBeGreaterThan(170);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });

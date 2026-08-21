@@ -213,11 +213,15 @@ export default async function CredentialsPage({
                           >
                             Why are you withdrawing this?
                           </label>
+                          {/* O174: 44px hit floor (O14). This measured 236x38 and had never been
+                              swept: the touch sweep's `credentials` fixture was returning 500, so
+                              the page rendered its unlinked refusal — 3 controls where 11 exist —
+                              and this input was not among them. */}
                           <input
                             id={`reason-${credential.credentialId}`}
                             name="reason"
                             required
-                            className="rounded border border-stone-300 px-3 py-2 text-sm"
+                            className="min-h-[44px] rounded border border-stone-300 px-3 py-2 text-sm"
                           />
                         </div>
                         <button type="submit" className={primaryButtonClass}>

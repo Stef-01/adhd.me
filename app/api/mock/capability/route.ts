@@ -37,10 +37,21 @@ export async function POST() {
   const console_ = getConsole();
   // W166: a mock route acts for the seeded practice — the first one, deterministically.
   const record = console_.practices[0];
-  const practiceId = record!.practice.id as PracticeId | undefined;
+  if (!record) {
+    // O174: a stated refusal instead of a `!` that is false. This used to be `record!`, which threw
+    // a TypeError into the server log and returned a 500 nobody checked — so the fixture silently
+    // did not seed and the sweep that depended on it measured an unpopulated page while reporting
+    // it covered. `POST /api/mock/console` RESETS this store, so posting it before this route is
+    // exactly how the list gets emptied.
+    return NextResponse.json(
+      { error: "no seeded practice — POST /api/mock/console resets the store, so seed a practice before this fixture" },
+      { status: 409 },
+    );
+  }
+  const practiceId = record.practice.id as PracticeId | undefined;
   // Onboarding does not create a roster, so fall back to the same id the page falls back
   // to. Keeps the e2e exercising the real accessors rather than a special-cased path.
-  const me = (record!.clinicians[0]?.id ?? "clin-1") as ClinicianId;
+  const me = (record.clinicians[0]?.id ?? "clin-1") as ClinicianId;
   if (practiceId) {
     stateInterest({
       practiceId, clinicianId: me, conditionCode: COND, strength: 4,

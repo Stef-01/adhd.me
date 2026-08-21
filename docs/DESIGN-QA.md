@@ -2278,3 +2278,73 @@ instead, and that is what a unit touching shared route lists needs.
 
 Removing a seeded route does not clear `.next/types` — three stale `TS2307`s survived the delete and
 failed the typecheck. `rm -rf .next` before re-verifying after any route seed.
+
+---
+
+## O174 — three mock fixtures failed silently, and the touch sweep measured the empty pages (2026-08-21)
+
+The debt I recorded in O169, re-counted in O173, and twice wrote *"the unit that sizes it is still
+owed"* about. Sized here, and it was worse than logged: **four controls under O14's 44px floor that
+no sweep could see.**
+
+### The mechanism
+
+`POST /api/mock/console` **resets** the console store. `e2e/touch-floor.spec.ts` posted its fixtures
+in a fixed order beginning with `console`, so the three that read `console_.practices[0]` —
+`credentials`, `capability`, `education` — then read an empty list through a **non-null assertion**,
+threw a `TypeError`, and returned 500. Nothing checked the status, so all three silently did not
+seed.
+
+W113 and W151 wrote those seeds precisely so `/console/credentials` and `/console/education` would
+be scanned **populated** rather than on their unlinked refusal — "one paragraph and no form". The
+comment directly above the offending loop says it outright: *"A gate whose population depends on run
+order is a gate that gives false assurance."* O159 wrote that line, and the ordering beneath it
+reintroduced the fault it describes.
+
+A probe measured it rather than inferring it: `credentials=500 capability=500 education=500`, and
+`/console/credentials` rendering **3 controls where 11 exist**. It also turned up a fourth silent
+no-op I had not predicted — **`preferences` answered 405 to every run**, because that route has no
+POST handler at all.
+
+### What the sweep had never measured
+
+| Route | Control | Measured |
+|---|---|---|
+| `/console/credentials` | `<input>` "Why are you withdrawing this?" ×2 | 236×**38** |
+| `/console/case-mix` | `<button>` "Save" ×2 | 71×**42** |
+
+Both fixed in the component (`min-h-[44px]`), never in the sweep. The case-mix button at 42px is the
+size a control reaches when nobody measures it — two pixels under, invisible to the eye, and exactly
+what a mechanical floor exists to catch.
+
+### Where my prediction was wrong, and the measurement that caught it
+
+The claim said the population figure would **rise** if the mechanism was real. My first restructure
+dropped `console` from the fixture list entirely and the population went **196 → 190** — *down*.
+That fixture is not only a reset: it seeds the demo memberships and clinicians the console pages
+read. Posting it **first**, creating the practice, then seeding everything practice-dependent gives
+**196 → 207**, and the four findings appeared with it.
+
+Had I trusted the mechanism instead of the figure, I would have shipped a sweep covering *less* than
+before while reporting a fix.
+
+### The fix, and why it is not about mocks
+
+All three routes now return **409 with a stated reason** instead of throwing; 23 false non-null
+assertions went with them. A `!` is a claim to the type system that a value cannot be absent, and
+when the claim is false the failure surfaces as far as possible from the decision that caused it —
+here, as a silently shrunken compliance sweep two files away. W201 and W253 made the same correction
+in product code.
+
+The spec now posts `console` first, creates the practice, passes `linkEmail` on the two fixtures
+that need it (a11y already did; this spec did not), and **asserts every response is ok** — so a
+fixture that stops seeding fails the test instead of quietly shrinking what the sweep covers.
+
+### Guards
+
+`e2e/mock-fixtures.spec.ts`, two tests: the practice-less case refuses with 409 and a reason, and —
+the non-vacuity half — the same fixtures seed normally once a practice exists, with the credentials
+page asserted **populated** rather than merely 200. The touch sweep's own seeded failure reports
+`credentials -> 409, capability -> 409, education -> 409` instead of passing over three empty pages.
+The stale `observed 196` beside the population floor is re-measured to 207, one row after O170 found
+the same figure stale for the same reason.

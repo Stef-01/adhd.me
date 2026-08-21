@@ -32,17 +32,28 @@ export async function POST(request: NextRequest) {
   const console_ = getConsole();
   // W166: a mock route acts for the seeded practice — the first one, deterministically.
   const record = console_.practices[0];
-  const practiceId = record!.practice.id;
+  if (!record) {
+    // O174: a stated refusal instead of a `!` that is false. This used to be `record!`, which threw
+    // a TypeError into the server log and returned a 500 nobody checked — so the fixture silently
+    // did not seed and the sweep that depended on it measured an unpopulated page while reporting
+    // it covered. `POST /api/mock/console` RESETS this store, so posting it before this route is
+    // exactly how the list gets emptied.
+    return NextResponse.json(
+      { error: "no seeded practice — POST /api/mock/console resets the store, so seed a practice before this fixture" },
+      { status: 409 },
+    );
+  }
+  const practiceId = record.practice.id;
   const email = request.nextUrl.searchParams.get("linkEmail");
 
-  if (record!.clinicians.length < 2) {
-    record!.clinicians.length = 0;
-    record!.clinicians.push(
+  if (record.clinicians.length < 2) {
+    record.clinicians.length = 0;
+    record.clinicians.push(
       { id: "clin-1" as ClinicianId, displayName: "Dr Demo One", participating: true, email: null },
       { id: "clin-2" as ClinicianId, displayName: "Dr Demo Two", participating: true, email: null },
     );
   }
-  const mine = record!.clinicians[0];
+  const mine = record.clinicians[0];
   if (mine && email) mine.email = email;
 
   if (practiceId && mine) {
@@ -65,7 +76,7 @@ export async function POST(request: NextRequest) {
       subjectClinicianId: mine.id, submittedBy: "manager@demo.practice.example",
     });
     // A colleague's, which must never appear on this clinician's page.
-    const other = record!.clinicians[1];
+    const other = record.clinicians[1];
     if (other) {
       recordEvent(practiceId, {
         kind: "submitted", at: "2026-02-01", credentialId: "cred-colleague",
@@ -75,7 +86,7 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({
-    clinicians: record!.clinicians,
+    clinicians: record.clinicians,
     credentials: practiceId ? practiceCredentials(practiceId, TODAY) : [],
   });
 }

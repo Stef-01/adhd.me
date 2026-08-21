@@ -184,6 +184,47 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > AFTER, since a rise is the proof the pages were empty and no rise would mean my mechanism is wrong
 > and must be said so; any control found under the floor on the newly-populated pages fixed in the
 > component; `pnpm gate` green end to end.
+>
+> **DONE 2026-08-21T22:19Z. FOUR CONTROLS UNDER O14's 44px FLOOR THAT NO SWEEP COULD SEE.**
+> `/console/credentials` `<input>` "Why are you withdrawing this?" at 236x**38** (x2), and
+> `/console/case-mix` `<button>` "Save" at 71x**42** (x2). Both fixed in the component, neither in
+> the sweep. The case-mix button is the size a control reaches when nobody measures it: two pixels
+> under, invisible to an eye, exactly what a mechanical floor is for.
+> **THE MECHANISM, MEASURED BEFORE IT WAS FIXED.** A probe returned `credentials=500 capability=500
+> education=500` and `/console/credentials` rendering **3 controls where 11 exist**. `POST
+> /api/mock/console` resets the store; the three routes that follow read `practices[0]` through a
+> non-null assertion, threw, and returned 500; nothing checked the status. **And it found a fourth
+> silent no-op I had not predicted: `preferences` answers 405 to every run — that route has no POST
+> handler at all.**
+> **WHERE MY PREDICTION WAS WRONG, AND THE FIGURE THAT CAUGHT IT.** This claim said the population
+> would RISE if the mechanism was real. My first restructure dropped `console` from the fixture list
+> and the population went **196 → 190 — DOWN**. That fixture is not only a reset: it seeds the demo
+> memberships and clinicians the console pages read. Posting it FIRST, then the practice, then
+> everything practice-dependent gives **196 → 207**, and the four findings arrived with it. **Had I
+> trusted the mechanism over the figure I would have shipped a sweep covering LESS than before while
+> reporting a fix** — which is the failure this row is about, committed by the row itself.
+> **THE FIX IS NOT ABOUT MOCKS.** Three routes now return **409 with a stated reason**; **23 false
+> non-null assertions** went with them. A `!` is a claim to the type system that a value cannot be
+> absent, and when the claim is false the failure surfaces as far as possible from the decision that
+> caused it — here as a silently shrunken compliance sweep two files away. W201 and W253 made the
+> same correction in product code.
+> **AND THE COMMENT ABOVE THE OFFENDING LOOP HAD ALREADY SAID IT.** O159 wrote *"A gate whose
+> population depends on run order is a gate that gives false assurance"* and the ordering beneath it
+> reintroduced the fault. Writing the rule down is not the same as the rule holding.
+> **A SECOND STALE FIGURE, ONE ROW AFTER THE FIRST.** O170 re-measured the console floor's `observed
+> 196`; this row moves it to 207. The PUBLIC figure is now stated as a RANGE — `observed 160-163 by
+> run order` — because it genuinely is not run-order independent, and pinning the standalone number
+> would have gone stale on a full run. Two rows, three stale figures: a number written beside a
+> floor is a claim about one run.
+> **GUARDS.** `e2e/mock-fixtures.spec.ts`, two tests: the practice-less case refuses 409 with a
+> reason, and — the non-vacuity half — the same fixtures seed normally once a practice exists, with
+> the credentials page asserted POPULATED rather than merely 200. The touch sweep now asserts every
+> fixture response is ok; seeded, it reports `credentials -> 409, capability -> 409, education ->
+> 409` instead of passing over three empty pages.
+> Verification: **`pnpm gate` exit 0** — `pnpm verify` green (255 files, 4067 tests, audit gate 2
+> accepted / 0 unaccepted) and the full e2e suite **285/285 in 11.8 min** (283 + the two new fixture
+> tests). CI still cannot confirm it: run 486 was the fifth consecutive 4-second failure with
+> `total_ms: 0`. The Actions block remains founder-gated.
 
 > **O173 (the CI gate was red for five units and nothing told the loop) — claimed 2026-08-21T20:14Z
 > by loop-0821a.** RED GATE, which the loop protocol puts first. Claimed after reading

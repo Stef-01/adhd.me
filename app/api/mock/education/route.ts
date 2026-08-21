@@ -113,16 +113,27 @@ export async function POST(request: NextRequest) {
   const console_ = getConsole();
   // W166: a mock route acts for the seeded practice — the first one, deterministically.
   const record = console_.practices[0];
+  if (!record) {
+    // O174: a stated refusal instead of a `!` that is false. This used to be `record!`, which threw
+    // a TypeError into the server log and returned a 500 nobody checked — so the fixture silently
+    // did not seed and the sweep that depended on it measured an unpopulated page while reporting
+    // it covered. `POST /api/mock/console` RESETS this store, so posting it before this route is
+    // exactly how the list gets emptied.
+    return NextResponse.json(
+      { error: "no seeded practice — POST /api/mock/console resets the store, so seed a practice before this fixture" },
+      { status: 409 },
+    );
+  }
   const email = request.nextUrl.searchParams.get("linkEmail");
 
-  if (record!.clinicians.length < 2) {
-    record!.clinicians.length = 0;
-    record!.clinicians.push(
+  if (record.clinicians.length < 2) {
+    record.clinicians.length = 0;
+    record.clinicians.push(
       { id: "clin-1" as ClinicianId, displayName: "Dr Demo One", participating: true, email: null },
       { id: "clin-2" as ClinicianId, displayName: "Dr Demo Two", participating: true, email: null },
     );
   }
-  const mine = record!.clinicians[0];
+  const mine = record.clinicians[0];
   if (mine && email) mine.email = email;
 
   if (request.nextUrl.searchParams.get("empty") === "1") {
@@ -131,7 +142,7 @@ export async function POST(request: NextRequest) {
 
   // Register B is switched off for this practice, so its material is out of scope — a statement
   // about the PRACTICE, which the page names rather than hides (W145).
-  const practiceId = record!.practice.id;
+  const practiceId = record.practice.id;
   if (practiceId) setRegisterEnabled(practiceId, "placeholder_register_b" as ConditionCode, false);
 
   // Sign off the sources a1/a2 cite, before the items that cite them. item-b1's ref is
@@ -154,11 +165,11 @@ export async function POST(request: NextRequest) {
   }
 
   if (mine) {
-    const own = cpd("cpd-1", record!.practice.id, mine.id, "2026-03-01", "item-a1");
-    const correctable = cpd("cpd-2", record!.practice.id, mine.id, "2026-03-02", "item-a2");
+    const own = cpd("cpd-1", record.practice.id, mine.id, "2026-03-01", "item-a1");
+    const correctable = cpd("cpd-2", record.practice.id, mine.id, "2026-03-02", "item-a2");
     const correction = recordCpdEntry(
       {
-        entryId: "cpd-3", practiceId: record!.practice.id, clinicianId: mine.id, kind: "corrected", itemId: "item-a2",
+        entryId: "cpd-3", practiceId: record.practice.id, clinicianId: mine.id, kind: "corrected", itemId: "item-a2",
         sourceRef: "signed-off-source-a2", itemTitle: correctable.itemTitle, at: "2026-03-04",
         correctsEntryId: "cpd-2", note: "Opened by accident on a shared screen.",
       },
@@ -167,10 +178,10 @@ export async function POST(request: NextRequest) {
     const entries = [own, correctable];
     if (correction.ok) entries.push(correction.entry);
     // A colleague's entry, which must never reach the signed-in clinician's record.
-    const other = record!.clinicians[1];
-    if (other) entries.push(cpd("cpd-colleague", record!.practice.id, other.id, "2026-03-03", "item-a1"));
+    const other = record.clinicians[1];
+    if (other) entries.push(cpd("cpd-colleague", record.practice.id, other.id, "2026-03-03", "item-a1"));
     addCpdEntries(entries);
   }
 
-  return NextResponse.json({ library: getLibrary(), clinicians: record!.clinicians });
+  return NextResponse.json({ library: getLibrary(), clinicians: record.clinicians });
 }
