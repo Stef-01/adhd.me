@@ -143,6 +143,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W225 (the session-opening recommendation, addressed to the practice about its own diary) —
+> claimed 2026-08-21T07:34Z by loop-0821a.** W222 counts, W223 forecasts, W224 scores. This is the
+> first thing in the lane that says a practice might DO something, and the row's gate is where it
+> could go wrong: *no patient id can enter the recommendation type; asserted as an absence, not a
+> filter.*
+> **THE DANGER IS THE SENTENCE ONE STEP AWAY FROM THIS ONE.** "Open two more slots on Thursday" is
+> a statement about a diary. "Open two more slots on Thursday for the patients who are overdue" is
+> a triage, and it is one join away — the tree already holds a recall register and a matcher, and
+> nothing structural stops a later unit passing patients in to size the recommendation. MATCH-1 is
+> the worked example of exactly that drift: `rankCandidates` has ordered the live invitation pool
+> by `chronicCare` since W5, in a reasonable-looking line of code, contradicting a published ADM
+> notice for eight quarters. So the refusal is a TYPE with nowhere to put a patient rather than a
+> filter somebody remembers to apply, checked on the namespace and on every exported signature —
+> W215's technique, which W219 reused and which caught nothing only because nothing had drifted yet.
+> **A RECOMMENDATION IS A CONDITIONAL, NOT AN INSTRUCTION.** It has to pass W200's advice linter,
+> which bans `you should`, `consider`, `we recommend`, `next steps`. That is not an obstacle to
+> route around: the honest form of this output IS the conditional — "if you open 2 more slots on
+> Thursday, between 1 and 2 filled in the weeks recorded" — because the product does not know the
+> practice's staffing, costs or appetite, and a recommendation that skips the "if" is claiming to.
+> **AND IT MAY ONLY SPEAK WHERE THE FORECASTER HAS BEEN SCORED.** W224 exists so a forecaster that
+> is usually wrong cannot present as one that is usually right; a recommendation built on an
+> UNSCORED forecast would be exactly that presentation. So the score rides the recommendation, and
+> below W224's floor there is no recommendation at all — not a hedged one.
+> Gate: no patient id can enter the type — asserted on the namespace AND on every exported
+> signature, not by a filter; every recommendation carries its forecast, its basis and W224's
+> score; nothing is emitted where the score is withheld; the copy passes the advice linter as a
+> conditional rather than by wording around it; W201's ADM register updated in the same commit;
+> `pnpm verify` green.
+
 > **W224 (forecast honesty: every forecast scored against what actually happened) — claimed
 > 2026-08-21T07:28Z by loop-0821a.** W223 ships a forecaster and nothing yet knows whether it is
 > any good. The row's sentence is the requirement: *a forecaster that is usually wrong cannot
@@ -5381,7 +5410,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W222 | done | loop-0821a | 2026-08-21T07:14Z | e9c5e39 | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
 | W223 | done | loop-0821a | 2026-08-21T07:21Z | e0b1ebb | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | done | loop-0821a | 2026-08-21T07:28Z | a41da93 | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
-| W225 | available | — | — | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
+| W225 | claimed | loop-0821a | 2026-08-21T07:34Z | — | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
