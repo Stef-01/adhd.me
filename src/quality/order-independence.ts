@@ -69,6 +69,33 @@ export interface FoldSite {
  * with every edit above them, and a register that fails on unrelated edits gets its numbers
  * bumped without anyone reading the code.
  */
+/*
+ * KNOWN GAP, MEASURED UNDER W252 AND NOT CLOSED THERE.
+ *
+ * `discoverFoldSites` finds a fold by matching `.reduce(`, `.at(-1)` and `[x.length - 1]`. Those
+ * are the shapes the eight historical instances had, and they are a PROXY. A collection
+ * accumulated into a `Map` in a `for` loop and emitted through a sort is a fold by every meaning
+ * that matters here — a collection collapsed to grouped answers, with an emission order somebody
+ * chose — and it matches none of the three patterns.
+ *
+ * W250 added exactly such a fold to `src/verticals/completeness.ts` (grouping blockers by the act
+ * they wait on) and this register said nothing. A sweep for W252 found TWENTY modules in `src/`
+ * that group-then-emit, SIXTEEN of them undeclared here.
+ *
+ * The difference from the gap W247 recorded in W106 is worth stating, because the two look alike
+ * and want opposite treatment. There, a blanket rule would have carried 39 exceptions, so the rule
+ * itself was wrong. Here the rule is RIGHT: every one of those sixteen genuinely needs a
+ * disposition, because every one of them chooses an emission order. What makes it a unit of its
+ * own is the sixteen pieces of analysis — each needs somebody to establish whether its sort is a
+ * total order, which is the same work this register demands of every entry below and cannot be
+ * done sixteen times in passing.
+ *
+ * Until then: W252's `src/verticals/scaling.test.ts` is the disposition for the one fold W250
+ * added, pinning it order-independent over twenty verticals under four separate shuffles, with a
+ * seeded order-dependent grouping proving the sweep can fail. It is not in `FOLD_SITES` because a
+ * declaration for a module the detector cannot find registers as STALE, which is the register
+ * working correctly and is also why the gap cannot be papered over one entry at a time.
+ */
 export const FOLD_SITES: readonly FoldSite[] = [
   {
     module: "src/capacity/drift.ts",
