@@ -143,6 +143,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W260 (YEAR 5 CLOSE — Y6 horizon plan + expansion-rule renewal) — claimed 2026-08-21T13:23Z by
+> loop-0821a.** **The last available row in the plan.** Every other unit is done or blocked.
+> **THE EXPANSION RULE HAS RUN OUT OF INPUT, WHICH IS WHAT "THE ARC IS SPENT" MEANS MECHANICALLY.**
+> §6 reads: *"the last week of each year (W52/W104/W156/W208) … expands the next quarter's theme
+> into 13 concrete week-units."* It expands a THEME, and §6's theme list ends at Y5 Q20. There is
+> nothing for it to expand. The rule did not decay; it consumed its last argument.
+> **AND THE ROW SAYS TO WRITE THE HORIZON FROM W256's AUDIT AND W257's DOSSIER, WHICH BOTH SAY THE
+> SAME THING.** 18 blocked rows. **Eight on G5 alone.** Seven founder decisions outstanding. And
+> W257's finding about G5 is the one that decides this unit's shape: *"every one of the eight rows
+> is a person doing a thing, not a builder writing code"* — Y3 shipped the mechanisms, Q13 built
+> the assembly, W248 and W250 built the second and third verticals against verticals with no name.
+> **There is no mechanism gap left in front of the largest gate in the tree.**
+> **SO THE HONEST HORIZON IS NOT 52 MORE UNITS OF MACHINERY.** W156 and W208 each expanded a whole
+> year, and copying that here would append fifty-two units in front of eighteen already waiting —
+> building more of the thing that is already built and blocked. **That is not a judgement I am
+> entitled to make about the company's direction**, and it is not one I am making: what I can do is
+> derive the ratio, make it visible, and put the choice where it belongs rather than answering it
+> by writing more rows.
+> **WHICH MAKES THE RULE'S SUCCESSOR THE REAL DELIVERABLE.** An expansion rule that generates work
+> at a fixed cadence regardless of how much is blocked is a rule that HIDES the constraint it
+> should be surfacing — and it hides it in the most flattering direction, because a full ledger
+> looks like progress. The renewal teaches it to notice: expansion is conditional on the blocked
+> ratio, and when the ratio says the constraint is rulings rather than engineering, the rule's
+> output is the decision rather than another thirteen rows. Mechanical and checkable, not a
+> sentence somebody re-reads.
+> **AND THE DOCUMENT'S OWN TITLE IS AT STAKE.** It is the *Five-Year* plan. A Y6 quarter appended
+> to it makes the title wrong, and silently retitling a plan is the kind of quiet edit this tree
+> refuses. Stated rather than done.
+> Gate: §6's expansion rule renewed with a stated successor and the condition under which it stops
+> expanding, derived and checkable rather than asserted; the Y6 horizon written from W256 and W257
+> with its own ratio derived from the ledger by a test; **exactly one quarter expanded, not a
+> year**, with the reason for the difference from W156/W208 stated; `plan-ledger` green over the
+> WHOLE ledger; the title question raised rather than answered unilaterally; `pnpm verify` green.
+
 > **W259 (the G7 boundary at five years) — claimed 2026-08-21T13:13Z by loop-0821a.** W200's five
 > rail properties RE-DERIVED against Y5, with Q17's matching optimisation tested against them
 > explicitly — *"since it is the first Y5 work that could have moved the line."*
@@ -7506,7 +7540,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W257 | done | loop-0821a | 2026-08-21T12:53Z | 2e60862 | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | done | loop-0821a | 2026-08-21T13:02Z | c7ee386 | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | done | loop-0821a | 2026-08-21T13:13Z | ffdd627 | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
-| W260 | available | — | — | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
+| W260 | claimed | loop-0821a | 2026-08-21T13:23Z | — | **YEAR 5 CLOSE.** Y6 horizon plan + expansion-rule renewal → verify: next-horizon plan written from the W256 audit and the W257 dossier; §6's expansion rule states what succeeds it now the five-year arc is spent; `plan-ledger` green over the whole ledger. |
 
 | SUP-1 | blocked | — | — | — | Cohort-level specialist review (W89 hook 2) — FOUNDER GATE G5. Buildable only as a de-identified aggregate view whose output is register content; not buildable as anything patient-linked. See docs/SUPERVISION-HOOKS-W89.md |
 | SUP-2 | blocked | — | — | — | Named-patient specialist consultation (W89 hook 3) — FOUNDER GATE G5 **plus** a company-direction decision: whether ADHD.ME is willing to become a party to individual clinical care. Not a clinical-content question and should not be answered as one. See docs/SUPERVISION-HOOKS-W89.md |
