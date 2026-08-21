@@ -63,7 +63,7 @@ test("a signed-off pathway shows who reviewed it and who signed it", async ({ pa
   await expect(list).toContainText("placeholder-pathway-1");
   await expect(list).toContainText("Signed off and in use");
   await expect(list).toContainText("reviewer@demo.example on 2026-01-03");
-  await expect(list).toContainText("founder@demo.example on 2026-01-04");
+  await expect(list).toContainText("owner@demo.example on 2026-01-04");
   await expect(page.getByTestId("signed-count")).toContainText("1");
 });
 

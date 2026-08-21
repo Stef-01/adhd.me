@@ -163,7 +163,7 @@ export function Wordmark() {
 export function FinderContext() {
   return (
     <aside className="finder-context">
-      {/* "All profiles are synthetic" stopped being true when a founder joined the roster, and a
+      {/* "All profiles are synthetic" stopped being true when an owner joined the roster, and a
           disclaimer that is nearly true is worse than none: it is the sentence a reader relies on. */}
       <p>
         Early demo in Beecroft and on the Gold Coast. Availability is synthetic, and every profile except
@@ -250,7 +250,7 @@ export function NswTraining({ clinician }: { clinician: Clinician }) {
 }
 
 /** A material interest, stated beside the listing it concerns. One line, not an essay. */
-export function FounderDisclosure({ clinician }: { clinician: Clinician }) {
-  if (!clinician.founderInterest) return null;
-  return <p className="disclosure-line">Founder of ADHD.ME</p>;
+export function OwnershipDisclosure({ clinician }: { clinician: Clinician }) {
+  if (!clinician.ownershipInterest) return null;
+  return <p className="disclosure-line">Owner of ADHD.ME</p>;
 }

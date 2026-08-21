@@ -173,6 +173,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > still naming ADHD.ME, still pinned in both directions; `pnpm verify` green; finder, landing,
 > console, told and the accessibility batch green; the W200 copy census updated for every renamed
 > module.
+> DONE 2026-08-21. **Zero rendered "founder" across 15 public routes, 19 console routes and the
+> finder profile — and the disclosure is still there**, both asserted by the same test.
+> THE SOURCE GREP WAS NOT ENOUGH, which is what "thorough" had to mean. Grepping for the word in
+> `app/` and `src/` found the labels and identifiers; a sweep of the RENDERED TEXT then found FOUR
+> MORE that no label search surfaces — prose sentences in `/privacy` ("Access is limited to the
+> founders"), `/console/interview`, `/console/matching` and `/console/pathways`. A word audit done
+> only against source would have reported success with four sentences still on screen.
+> The disclosure survives in different words, and this is the part I want on the record. Its
+> function is telling a patient that the GP in front of them owns the directory recommending him.
+> Removing the WORD never required removing the FACT, so it reads "Owner of ADHD.ME" and "Dr Saxena
+> has an ownership interest in ADHD.ME". For a conflict notice that is strictly BETTER than what it
+> replaced: founding is history, ownership is the live interest a reader has to weigh. If the
+> founder wants the disclosure gone rather than reworded, that is a different instruction and
+> theirs to give — but it should be said plainly, not inferred from a word-removal brief, because
+> it is invisible in a diff and expensive in the world.
+> Also untouched: the ranking rule that sorts a conflicted clinician BEHIND an unconflicted one
+> when stated preference does not separate them (W221's "a tie must never be broken in an owner's
+> favour"). Its prose was reconciled to the new vocabulary; its mechanism was not, because a
+> word-removal brief is not a licence to change who appears first on a health directory.
+> PINNED AS A PAIR, deliberately. `e2e/ownership-disclosure.spec.ts` asserts the absence of the
+> word AND the presence of the disclosure in ONE test. Separately, either half invites the wrong
+> fix — a later unit could satisfy "no founder anywhere" by deleting the disclosure and go green.
+> Together they cannot. The roster pin moved with the wording (`/ownership interest/i`) rather than
+> being loosened to `/interest|team/`, which is the quiet-rot failure this tree has now caught in
+> its own guards three times this week.
+> Left alone: comments and ledger rows quoting the founder's own past instructions, and the
+> internal sense of "founder" meaning THE PERSON WHO DECIDES (`NEEDS_FOUNDER_VERIFICATION`, "a
+> founder call", "founder gate G6" in code comments). Those are not mentions on the site; they name
+> the human whose decision a gate is waiting on, and erasing that would make the gates unreadable.
+> Gate met: 0 rendered mentions measured across 34 routes plus the profile, disclosure asserted
+> present, `pnpm verify` green (219 files, 3607 passed), finder + landing + touch-floor +
+> keyboard-focus + mobile-fit + a11y + pathways + console + privacy e2e green (47).
 
 > **O155 (FOUNDER-DIRECTED — the team page goes behind a gate) — claimed 2026-08-21T11:50Z by
 > loop-0820s.** "also make team hidden at the moment" … "as we are still building and we dont know

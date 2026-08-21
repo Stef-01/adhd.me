@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { TEAM_PAGE_PUBLIC } from "./about/founders";
+import { TEAM_PAGE_PUBLIC } from "./about/team";
 import {
   motion,
   useReducedMotion,

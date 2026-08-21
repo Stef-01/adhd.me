@@ -6,7 +6,7 @@
 //
 // THE CONTRADICTION CASE NEEDS SIGNED-OFF MEMBERS, and that is not an accident of the fixture —
 // W159 compares members only once they all resolve, because a vertical missing a member has a
-// different problem first. So this route seeds `specialist_review` and `founder_sign_off`
+// different problem first. So this route seeds `specialist_review` and `owner_sign_off`
 // attestations for that mode. That follows the posture W127 already established in
 // /api/mock/pathways: synthetic attestations behind `assertMockRoutesEnabled()`, naming
 // obviously-fake reviewers, while `SHIPPED_ATTESTATIONS` stays empty and no real content is
@@ -87,8 +87,8 @@ export async function POST(request: NextRequest) {
         finding: "Placeholder review finding — synthetic fixture.", revokedAt: null,
       },
       {
-        pathwayId: "path-broken", versionHash: hashBroken, kind: "founder_sign_off",
-        byEmail: "founder@demo.example", at: "2026-03-05",
+        pathwayId: "path-broken", versionHash: hashBroken, kind: "owner_sign_off",
+        byEmail: "owner@demo.example", at: "2026-03-05",
         finding: "Placeholder sign-off finding — synthetic fixture.", revokedAt: null,
       },
     ]);

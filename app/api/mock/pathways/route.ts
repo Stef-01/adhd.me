@@ -75,8 +75,8 @@ export async function POST(request: NextRequest) {
       finding: "Placeholder review finding — synthetic fixture.", revokedAt: null,
     },
     {
-      pathwayId: "placeholder-pathway-1", versionHash: signedHash, kind: "founder_sign_off",
-      byEmail: "founder@demo.example", at: "2026-01-04",
+      pathwayId: "placeholder-pathway-1", versionHash: signedHash, kind: "owner_sign_off",
+      byEmail: "owner@demo.example", at: "2026-01-04",
       finding: "Placeholder sign-off finding — synthetic fixture.", revokedAt: null,
     },
     {

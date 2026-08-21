@@ -79,15 +79,15 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
     if (byCapacity !== 0) return byCapacity;
 
     /**
-     * A TIE MUST NEVER BE BROKEN IN THE FOUNDER'S FAVOUR, AND UNTIL W221 IT SILENTLY WAS.
+     * A TIE MUST NEVER BE BROKEN IN AN OWNER'S FAVOUR, AND UNTIL W221 IT SILENTLY WAS.
      *
      * `Array.prototype.sort` is stable, so equal scores kept source order — and Dr Saxena is the
      * first record in the file. On a request that names nothing either GP is declared for, both
-     * score identically and the founder took first place every time. Reordering the file would
+     * score identically and the owner took first place every time. Reordering the file would
      * only move the accident, so the rule is stated: where the stated preference does not separate
      * them, a clinician with a disclosed interest in this product sorts BEHIND one without.
      */
-    const conflicted = (clinician: Clinician) => (clinician.founderInterest ? 1 : 0);
+    const conflicted = (clinician: Clinician) => (clinician.ownershipInterest ? 1 : 0);
     return conflicted(a) - conflicted(b);
   });
 }
@@ -277,7 +277,7 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
  * first-person queries found the lexicon reached NOTHING on nine of them and that ten produced an
  * exact score tie — including "I think I might have ADHD", which is the single most likely thing
  * anybody types. In every one of those cases the list still rendered as a ranked list, and the
- * order was decided by the founder-behind tie-break: by nothing, presented as by something.
+ * order was decided by the owner-behind tie-break: by nothing, presented as by something.
  *
  * That is the same class of defect as the fabricated `nextAvailable` this file deleted. A ranking
  * nobody can act on is worse than no ranking, because the reader spends their trust on it. So the
@@ -580,7 +580,7 @@ export function rankCliniciansNear(
    * somebody you do not travel to is equally near from everywhere, and an unknown location is
    * our missing row, not their penalty. Total, deterministic, and every guarantee holds by
    * construction: distance never crosses a score or capacity boundary, and equal kilometres
-   * keep the fit order (which carries the founder-behind rule).
+   * keep the fit order (which carries the owner-behind rule).
    */
   const out = [...byFit];
   const tieKey = (c: Clinician) => `${scoreAgainst(c, needs)}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;

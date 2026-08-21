@@ -167,7 +167,7 @@ export function BackgroundEditor({
 
         <p className="be-persist">
           Saving writes a DRAFT, never a profile. <code>SHIPPED_DIRECTORY_PROFILES</code> is empty
-          behind founder gate G6 and nothing here changes that — what is stored is which facets were
+          behind gate G6 and nothing here changes that — what is stored is which facets were
           accepted, by whom, and whether the clinician confirmed the read-back, which is the
           material that gate would be opened on. Every save is kept, so “who changed it and when”
           has an answer.

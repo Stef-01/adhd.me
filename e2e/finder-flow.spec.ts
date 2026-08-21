@@ -70,11 +70,11 @@ test("a second consulting location is a fact the reader sees, with the distance 
   await expect(anubhavRow.getByText(/Beecroft & Double Bay, by telehealth/)).toBeVisible();
   await anubhavRow.screenshot({ path: "qa/_runs/location-o86/row-telehealth-pair.png" });
 
-  // The profile carries the same pair on its meta line — and, since O89, her founder
+  // The profile carries the same pair on its meta line — and, since O89, her ownership
   // disclosure beside it: a material interest stated exactly where the listing is read.
   await anushaRow.click();
   await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();
-  await expect(page.getByText("Founder of ADHD.ME")).toBeVisible();
+  await expect(page.getByText("Owner of ADHD.ME")).toBeVisible();
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/founder-o89/profile-disclosure.png" });
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });

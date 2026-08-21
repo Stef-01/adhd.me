@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-medium text-stone-900">How information is held</h2>
           <p className="mt-2 text-sm leading-6">
             The service runs on Vercel&apos;s hosting platform, and information it holds may be
-            stored on infrastructure in the United States. Access is limited to the founders,
+            stored on infrastructure in the United States. Access is limited to the owners,
             transport is encrypted, and no production credentials live in the codebase — the
             product&apos;s own build gates enforce that.
           </p>

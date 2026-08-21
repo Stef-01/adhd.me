@@ -33,7 +33,7 @@ const EVENTS: PathwayAuditEvent[] = [
   },
   {
     ...base, kind: "attestation_recorded", at: "2026-01-04", by: "founder@x.example",
-    attestation: "founder_sign_off", finding: "Placeholder sign-off finding — fixture only.",
+    attestation: "owner_sign_off", finding: "Placeholder sign-off finding — fixture only.",
   },
   { ...base, kind: "version_published", at: "2026-01-05", by: "author@x.example" },
   {
@@ -75,7 +75,7 @@ describe("W126 replay reproduces every state transition", () => {
     });
     expect(version.attestations.map((a) => a.kind)).toEqual([
       "specialist_review",
-      "founder_sign_off",
+      "owner_sign_off",
     ]);
     expect(version.binding).toEqual({
       conditionCode: "placeholder_register_a",
@@ -200,11 +200,11 @@ describe("W126 revocation and withdrawal are transitions, not deletions", () => 
     // answer why a pathway stopped being usable.
     const log = build(...EVENTS, {
       ...base, kind: "attestation_revoked", at: "2026-03-01", by: "founder@x.example",
-      attestation: "founder_sign_off", reason: "Placeholder revocation reason.",
+      attestation: "owner_sign_off", reason: "Placeholder revocation reason.",
     });
     const version = only(log);
     expect(version.attestations).toHaveLength(2);
-    const signOff = version.attestations.find((a) => a.kind === "founder_sign_off");
+    const signOff = version.attestations.find((a) => a.kind === "owner_sign_off");
     expect(signOff).toMatchObject({
       revokedAt: "2026-03-01",
       revokedReason: "Placeholder revocation reason.",
@@ -215,11 +215,11 @@ describe("W126 revocation and withdrawal are transitions, not deletions", () => 
   it("revokes the live attestation of that kind, not the first ever recorded", () => {
     const log = build(
       ...EVENTS,
-      { ...base, kind: "attestation_revoked", at: "2026-03-01", by: "founder@x.example", attestation: "founder_sign_off", reason: "First revocation." },
-      { ...base, kind: "attestation_recorded", at: "2026-03-02", by: "founder@x.example", attestation: "founder_sign_off", finding: "Re-signed after review." },
-      { ...base, kind: "attestation_revoked", at: "2026-03-03", by: "founder@x.example", attestation: "founder_sign_off", reason: "Second revocation." },
+      { ...base, kind: "attestation_revoked", at: "2026-03-01", by: "founder@x.example", attestation: "owner_sign_off", reason: "First revocation." },
+      { ...base, kind: "attestation_recorded", at: "2026-03-02", by: "founder@x.example", attestation: "owner_sign_off", finding: "Re-signed after review." },
+      { ...base, kind: "attestation_revoked", at: "2026-03-03", by: "founder@x.example", attestation: "owner_sign_off", reason: "Second revocation." },
     );
-    const signOffs = only(log).attestations.filter((a) => a.kind === "founder_sign_off");
+    const signOffs = only(log).attestations.filter((a) => a.kind === "owner_sign_off");
     expect(signOffs.map((a) => a.revokedReason)).toEqual(["First revocation.", "Second revocation."]);
   });
 

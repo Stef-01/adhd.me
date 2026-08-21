@@ -49,7 +49,7 @@ export function monogram(name: string): string {
  * their name is supplied and gain a role and a remit when they supply those too; what is never
  * acceptable is a plausible sentence about a real person that nobody said.
  */
-export const FOUNDERS: ReadonlyArray<{
+export const TEAM: ReadonlyArray<{
   name: string;
   role?: string;
   remit?: string;

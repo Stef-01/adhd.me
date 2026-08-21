@@ -6,7 +6,7 @@
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
-import { TEAM_PAGE_PUBLIC } from "./founders";
+import { TEAM_PAGE_PUBLIC } from "./team";
 import { TeamPlates } from "./team-plates";
 
 export const metadata = {

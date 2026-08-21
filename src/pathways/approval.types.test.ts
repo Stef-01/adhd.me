@@ -75,7 +75,7 @@ describe("W119 the brand cannot be bypassed", () => {
     const version = published();
     const attestations = [
       { pathwayId: "p", versionHash: version.versionHash, kind: "specialist_review" as const, byEmail: "s@x.test", at: "2026-03-03T00:00:00Z", finding: "checked" },
-      { pathwayId: "p", versionHash: version.versionHash, kind: "founder_sign_off" as const, byEmail: "f@x.test", at: "2026-03-04T00:00:00Z", finding: "accepted" },
+      { pathwayId: "p", versionHash: version.versionHash, kind: "owner_sign_off" as const, byEmail: "f@x.test", at: "2026-03-04T00:00:00Z", finding: "accepted" },
     ];
     const result = usablePathway(version, attestations);
     expect(result.usable).toBe(true);

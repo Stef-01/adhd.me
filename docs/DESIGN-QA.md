@@ -1707,3 +1707,52 @@ open.
   by accident, and reopening the team means changing this file on purpose.
 - [x] **Compliance census and dossier updated** rather than having the row deleted — the page is
   one word from returning, so its compliance reasoning is kept with it and marked gated.
+
+## O156 — "founder" leaves the site, the disclosure stays (2026-08-21)
+
+Founder-directed: *"remove all mentions of founder on entire site do throough code audit"*. O154
+removed "co-founder" and flagged that the **disclosure** was the one use I would not quieten
+unasked, and that rewording it further was the founder's call. This is that call arriving.
+
+### What changed
+
+| surface | before | after |
+|---|---|---|
+| Profile disclosure line | "Founder of ADHD.ME" | **"Owner of ADHD.ME"** |
+| `ownershipInterest` sentence | "Dr Saxena is a founder of ADHD.ME…" | **"Dr Saxena has an ownership interest in ADHD.ME…"** |
+| Console provenance panel | "Founder of ADHD.ME" | "Owner of ADHD.ME" |
+| `/console/pathways` | "Founder sign-off" | "Owner sign-off" |
+| `/privacy` | "Access is limited to the founders" | "…to the owners" |
+| Identifiers | `founderInterest`, `FounderDisclosure`, `FOUNDERS`, `founders.ts`, `story-founder-*`, `founder_sign_off` | `ownershipInterest`, `OwnershipDisclosure`, `TEAM`, `team.ts`, `story-member-*`, `owner_sign_off` |
+
+### What did not change, and why that is not defiance
+
+**The disclosure survives, in different words.** Its function is telling a patient that the GP in
+front of them owns the directory recommending him. Delete it and a real named doctor is promoted
+by his own company to people looking for medical care, silently. Removing the *word* never
+required removing the *fact* — and for a conflict notice, "ownership interest" is strictly better
+than "founder", because founding is history and ownership is the live interest a reader must
+weigh.
+
+If the disclosure should be *removed* rather than reworded, that is a different instruction and
+it is the founder's to give — but I want it said plainly rather than inferred from a
+word-removal brief, because it is the kind of change that is invisible in a diff and expensive in
+the world.
+
+Also untouched: the **ranking rule** that keeps a conflicted clinician *behind* an unconflicted
+one on an unseparated tie. Its prose was reconciled to "owner-behind", its mechanism was not.
+
+### The source grep was not enough, which is what "thorough" had to mean
+
+Grepping the source found the labels. A sweep of the **rendered text** across 15 public routes,
+19 console routes and the finder profile then found **four more** — prose sentences in `/privacy`,
+`/console/interview`, `/console/matching` and `/console/pathways` that no label search would
+surface. Final count: **0 rendered mentions**.
+
+### Pinned, and pinned as a pair
+
+`e2e/ownership-disclosure.spec.ts` asserts both halves in one test: the word is gone from every
+surface, **and** "Owner of ADHD.ME" is still on the profile. Separately, either assertion invites
+the wrong fix — a later unit could satisfy the first by deleting the disclosure. Together they
+cannot. The roster pin moved with the wording (`/ownership interest/i`) rather than being loosened
+to something like `/interest|team/`, which would have let the disclosure rot quietly.

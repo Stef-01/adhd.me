@@ -1,7 +1,7 @@
 // Launch item 3: every public page ends with the same set of doors. One list, one component,
 // so a page added tomorrow cannot ship with a different idea of what this site contains.
 import Link from "next/link";
-import { TEAM_PAGE_PUBLIC } from "./about/founders";
+import { TEAM_PAGE_PUBLIC } from "./about/team";
 
 const DOORS: ReadonlyArray<{ label: string; href: string }> = [
   { label: "Find a GP", href: "/finder" },

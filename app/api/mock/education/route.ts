@@ -89,7 +89,7 @@ function seedSignedOffSources(ids: readonly string[]): void {
     for (const step of [
       () => submitForReview(record, "author@demo.practice.example", "2026-03-02T00:00:00Z"),
       () => review(record, "specialist@demo.practice.example", "2026-03-03T00:00:00Z"),
-      () => signOff(record, "founder@demo.practice.example", "2026-03-04T00:00:00Z"),
+      () => signOff(record, "owner@demo.practice.example", "2026-03-04T00:00:00Z"),
     ]) {
       const result = step();
       if (!result.ok) throw new Error(`education seed could not sign off ${id}: ${result.error}`);

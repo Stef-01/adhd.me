@@ -27,7 +27,7 @@
 
 import type { PathwayVersion } from "./versioning";
 
-export type PathwayAttestationKind = "specialist_review" | "founder_sign_off";
+export type PathwayAttestationKind = "specialist_review" | "owner_sign_off";
 
 export interface PathwayAttestation {
   pathwayId: string;
@@ -160,9 +160,9 @@ export function usablePathway(
     return { usable: false, reason: "reviewer_was_the_author" };
   }
 
-  const signOff = live(attestations, version, "founder_sign_off", since);
+  const signOff = live(attestations, version, "owner_sign_off", since);
   if (!signOff.found) {
-    if (since !== null && hasAny(attestations, version, "founder_sign_off")) {
+    if (since !== null && hasAny(attestations, version, "owner_sign_off")) {
       return { usable: false, reason: "attested_before_withdrawal" };
     }
     return { usable: false, reason: signOff.revoked ? "sign_off_revoked" : "not_signed_off" };

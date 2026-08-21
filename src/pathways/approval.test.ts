@@ -58,7 +58,7 @@ function attest(over: Partial<PathwayAttestation> = {}): PathwayAttestation {
 }
 
 const REVIEW = attest();
-const SIGN_OFF = attest({ kind: "founder_sign_off", byEmail: FOUNDER, at: "2026-03-04T00:00:00Z", finding: "Accepted for release." });
+const SIGN_OFF = attest({ kind: "owner_sign_off", byEmail: FOUNDER, at: "2026-03-04T00:00:00Z", finding: "Accepted for release." });
 
 describe("W119 G5: nothing ships signed", () => {
   it("no attestation is shipped, so no pathway is usable", () => {
@@ -101,7 +101,7 @@ describe("W119 the gate", () => {
     ["the review was withdrawn", [attest({ revokedAt: "2026-03-05T00:00:00Z" }), SIGN_OFF], "review_revoked"],
     [
       "the sign-off was withdrawn",
-      [REVIEW, attest({ kind: "founder_sign_off", byEmail: FOUNDER, at: "2026-03-04T00:00:00Z", revokedAt: "2026-03-06T00:00:00Z" })],
+      [REVIEW, attest({ kind: "owner_sign_off", byEmail: FOUNDER, at: "2026-03-04T00:00:00Z", revokedAt: "2026-03-06T00:00:00Z" })],
       "sign_off_revoked",
     ],
   ];
@@ -120,7 +120,7 @@ describe("W119 the gate", () => {
     const result = usablePathway(publishedVersion(), [
       attest({ revokedAt: "2026-03-05T00:00:00Z" }),
       again,
-      attest({ kind: "founder_sign_off", byEmail: FOUNDER, at: "2026-03-08T00:00:00Z", finding: "Accepted." }),
+      attest({ kind: "owner_sign_off", byEmail: FOUNDER, at: "2026-03-08T00:00:00Z", finding: "Accepted." }),
     ]);
     expect(result.usable).toBe(true);
   });
@@ -144,7 +144,7 @@ describe("W119 an edit is a different version, so sign-off does not carry", () =
   it("another pathway's attestation does not sign this one off", () => {
     const foreign = [
       attest({ pathwayId: "other-pathway" }),
-      attest({ pathwayId: "other-pathway", kind: "founder_sign_off", byEmail: FOUNDER, at: "2026-03-04T00:00:00Z" }),
+      attest({ pathwayId: "other-pathway", kind: "owner_sign_off", byEmail: FOUNDER, at: "2026-03-04T00:00:00Z" }),
     ];
     expect(usablePathway(publishedVersion(), foreign)).toEqual({
       usable: false,

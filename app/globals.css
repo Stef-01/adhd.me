@@ -4972,9 +4972,9 @@ textarea:focus-visible {
   .story-pull p { max-width: 24ch; }
   .story-pillars li { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
   /* The founders grid on its own page: same plates, breathing room under the one-word title. */
-.about-founders { margin-top: 48px; }
+.about-team { margin-top: 48px; }
 
-.story-founders { grid-template-columns: 1fr; gap: 56px; }
+.story-team { grid-template-columns: 1fr; gap: 56px; }
   .story-register-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
@@ -5332,7 +5332,7 @@ textarea:focus-visible {
    monograms at the same aspect and the same optical weight — an honest treatment, not an empty
    slot, and nothing in this tree generates a face for a real person. Drop a cut-out into
    public/, set `portrait` in app/story-landing.tsx, and the plate swaps without a layout change. */
-.story-founders {
+.story-team {
   display: grid;
   grid-template-columns: 1fr;
   gap: 56px;
@@ -5340,25 +5340,25 @@ textarea:focus-visible {
   padding: 0;
   list-style: none;
 }
-.story-founders > li { display: grid; justify-items: center; }
+.story-team > li { display: grid; justify-items: center; }
 /* The plate is wrapped so the hover lift and the stagger entrance own one transform each. Two
    `y` animations on a single element fight over `transform` and the loser is dropped silently. */
-.story-founder-plate { display: grid; justify-items: center; width: 100%; will-change: transform; }
+.story-member-plate { display: grid; justify-items: center; width: 100%; will-change: transform; }
 
 /* The plate. A fixed 3:4 frame so three cards share one baseline regardless of what fills them. */
-.story-founder-photo,
-.story-founder-monogram {
+.story-member-photo,
+.story-member-monogram {
   width: min(100%, 260px);
   aspect-ratio: 3 / 4;
 }
-.story-founder-photo { height: auto; object-fit: contain; object-position: center bottom; }
+.story-member-photo { height: auto; object-fit: contain; object-position: center bottom; }
 /* THE MONOGRAM IS NOT A PLACEHOLDER AND MUST NOT LOOK LIKE ONE. A filled rectangle with faint
    initials inside it is exactly what a broken image looks like, and the first draft of this rule
    was one: #e0ddd2 initials on an #f1ece1 fill, which read as "photo still loading" beside a real
    photograph. So the fill is gone. The initials sit on the same bare paper the cut-out does, at a
    weight that is clearly deliberate, and the hairline underneath is what aligns the three plates
    rather than the edge of a box. */
-.story-founder-monogram {
+.story-member-monogram {
   display: grid;
   place-items: end center;
   padding-bottom: 14px;
@@ -5377,18 +5377,18 @@ textarea:focus-visible {
   user-select: none;
 }
 /* The photograph gets the same baseline rule, so a mixed row reads as one row. */
-.story-founder-photo { padding-bottom: 14px; border-bottom: 1px solid var(--s-line); }
+.story-member-photo { padding-bottom: 14px; border-bottom: 1px solid var(--s-line); }
 
-.story-founder-id { display: grid; justify-items: center; gap: 4px; margin-top: 18px; text-align: center; }
-.story-founders strong {
+.story-member-id { display: grid; justify-items: center; gap: 4px; margin-top: 18px; text-align: center; }
+.story-team strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.4375rem;
   font-weight: 480;
   letter-spacing: -0.02em;
   color: var(--s-ink);
 }
-.story-founder-role { color: var(--s-muted); font-size: 0.84375rem; }
-.story-founder-remit {
+.story-member-role { color: var(--s-muted); font-size: 0.84375rem; }
+.story-member-remit {
   max-width: 34ch;
   margin: 14px 0 0;
   color: var(--s-muted);
@@ -5445,7 +5445,7 @@ textarea:focus-visible {
 @media (min-width: 900px) {
   /* O90: four plates since Dr Anusha joined the row. 2x2 rather than four across - four
      abreast squeezes each portrait under the 260px the row was designed around. */
-  .story-founders { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px clamp(32px, 4vw, 64px); }
+  .story-team { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px clamp(32px, 4vw, 64px); }
 }
 
 /* O90: the wayfinding label above a chapter heading whose sentence stays the idea. */

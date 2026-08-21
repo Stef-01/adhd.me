@@ -325,7 +325,7 @@ export function InterviewScreen() {
         <p className="be-persist">
           Saving writes the same draft record the review editor writes — which answers were
           recorded, by whom, and whether they were read back. Never a profile:{" "}
-          <code>SHIPPED_DIRECTORY_PROFILES</code> stays empty behind founder gate G6.
+          <code>SHIPPED_DIRECTORY_PROFILES</code> stays empty behind gate G6.
         </p>
       </section>
     </div>

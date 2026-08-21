@@ -222,7 +222,7 @@ export type Clinician = {
    * one while `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6. It WILL need one
    * before that gate lifts, and adding it there means an entry in W193's `DISCLOSED_FIELDS` too.
    */
-  founderInterest?: string;
+  ownershipInterest?: string;
 };
 
 export const clinicians: Clinician[] = [
@@ -280,8 +280,8 @@ export const clinicians: Clinician[] = [
       url: "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
     },
     realPerson: true,
-    founderInterest:
-      "Dr Saxena is a founder of ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",
+    ownershipInterest:
+      "Dr Saxena has an ownership interest in ADHD.ME. Disclosed because he appears in a directory his own company operates, and a reader cannot see the ranking that put him there.",
   },
   {
     id: "tushar-yadav",
@@ -452,7 +452,7 @@ export const clinicians: Clinician[] = [
     // a reader cannot see the ranking, and it carries the standing ranking COST — at an
     // exact tie she now sorts behind an undisclosed clinician, and that cost is not
     // waived for being the second founder to carry it.
-    founderInterest:
-      "Dr Anusha Saxena is a founder of ADHD.ME. Disclosed because she appears in a directory her own company operates, and a reader cannot see the ranking that put her there.",
+    ownershipInterest:
+      "Dr Anusha Saxena has an ownership interest in ADHD.ME. Disclosed because she appears in a directory her own company operates, and a reader cannot see the ranking that put her there.",
   },
 ];

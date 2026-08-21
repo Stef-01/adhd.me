@@ -58,7 +58,7 @@ export default async function PathwaysPage() {
     );
     const signOff = attestations.find(
       (a) =>
-        a.versionHash === version.versionHash && a.kind === "founder_sign_off" && !a.revokedAt,
+        a.versionHash === version.versionHash && a.kind === "owner_sign_off" && !a.revokedAt,
     );
     return { version, usable: result.usable, refusal: result.usable ? null : result.reason, review, signOff };
   });
@@ -100,7 +100,7 @@ export default async function PathwaysPage() {
             </p>
             <p>
               Adding one takes two people and two separate steps: a specialist reviews the
-              content, and then the founder signs it off. Neither has happened, so there is
+              content, and then an owner signs it off. Neither has happened, so there is
               nothing here to show and nothing in the product is using a pathway.
             </p>
           </section>
@@ -139,7 +139,7 @@ export default async function PathwaysPage() {
                     </dd>
                   </div>
                   <div className="flex gap-2">
-                    <dt className="text-stone-500">Founder sign-off</dt>
+                    <dt className="text-stone-500">Owner sign-off</dt>
                     <dd data-testid={`signoff-${row.version.versionHash.slice(0, 12)}`}>
                       {row.signOff ? `${row.signOff.byEmail} on ${row.signOff.at}` : "Not yet signed off"}
                     </dd>

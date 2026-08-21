@@ -214,7 +214,7 @@ describe("W157 the gates are composed, never re-implemented", () => {
       "reviewedBy",
       "reviewedAt",
       "specialist_review",
-      "founder_sign_off",
+      "owner_sign_off",
       "revokedAt",
       "contentHash(",
       "state ===",

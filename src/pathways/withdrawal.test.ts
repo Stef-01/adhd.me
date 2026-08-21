@@ -192,7 +192,7 @@ describe("W128 attestations do not survive a withdrawal", () => {
     pathwayId: PATHWAY, versionHash: versionHash(V1), kind: "specialist_review", byEmail: REVIEWER, at, finding: "Checked.",
   });
   const signOff = (at: string): PathwayAttestation => ({
-    pathwayId: PATHWAY, versionHash: versionHash(V1), kind: "founder_sign_off", byEmail: FOUNDER, at, finding: "Accepted.",
+    pathwayId: PATHWAY, versionHash: versionHash(V1), kind: "owner_sign_off", byEmail: FOUNDER, at, finding: "Accepted.",
   });
 
   const republished = replayPathway(

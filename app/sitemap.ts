@@ -1,7 +1,7 @@
 // Launch items 10–12 (supporting): the public routes, one entry each. Console, API and tokened
 // booking pages are deliberately absent — same set robots.ts disallows.
 import type { MetadataRoute } from "next";
-import { TEAM_PAGE_PUBLIC } from "./about/founders";
+import { TEAM_PAGE_PUBLIC } from "./about/team";
 import { SITE_URL } from "./site";
 
 // O155: /about is listed only while the team is public. A gated route that still advertises

@@ -69,7 +69,7 @@ function signedPathway(c: PathwayCriteria = criteria()): UsablePathway {
     {
       pathwayId: "path-1",
       versionHash: version.versionHash,
-      kind: "founder_sign_off",
+      kind: "owner_sign_off",
       byEmail: "founder@x.example",
       at: "2026-01-04",
       finding: "Placeholder sign-off finding — fixture only.",

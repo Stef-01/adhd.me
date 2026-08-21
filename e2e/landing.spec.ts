@@ -39,7 +39,7 @@ test("the team page is gated shut, with no door and no crawl (O155)", async ({ p
   //    /about publishes named individuals' faces, roles and affiliations to anybody with the URL.
   const response = await page.goto("/about");
   expect(response?.status(), "/about still serves while the team is gated").toBe(404);
-  await expect(page.locator(".story-founders")).toHaveCount(0);
+  await expect(page.locator(".story-team")).toHaveCount(0);
 
   // 3. Not advertised to crawlers. A gated route still listed in the sitemap is hidden from
   //    readers and announced to robots.

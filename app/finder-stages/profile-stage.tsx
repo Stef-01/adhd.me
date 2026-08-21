@@ -14,7 +14,7 @@ import {
 import { type NeedSignal } from "@/matching/needs";
 import { type Clarifier } from "@/matching/clarify";
 import { type SuburbPoint } from "@/geo/suburbs";
-import { ClinicianPortrait, FounderDisclosure, MotionScreen, NswTraining, Pressable, Wordmark } from "./shared";
+import { ClinicianPortrait, OwnershipDisclosure, MotionScreen, NswTraining, Pressable, Wordmark } from "./shared";
 
 export function ProfileStage({
   clinician,
@@ -82,7 +82,7 @@ export function ProfileStage({
         <h1>{clinician.name}</h1>
         <p className="clinician-meta">{clinician.title}, {clinician.pronouns} · {locationLabel(clinician)}</p>
         <NswTraining clinician={clinician} />
-        <FounderDisclosure clinician={clinician} />
+        <OwnershipDisclosure clinician={clinician} />
         {personalizedSignals.length > 0 ? (
           /* Each reason now shows its provenance (O21): the closed-vocabulary label the
              ranking scored, and the phrase that reached it. `matched` is the lexicon's cue

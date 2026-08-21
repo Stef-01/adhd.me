@@ -125,11 +125,11 @@ export function sentencesPatientsSee(clinician: Clinician): ToldLine[] {
   if (clinician.nswAdhdTrained) {
     lines.push({
       said: "NSW ADHD training",
-      from: "nswAdhdTrained — a declaration relayed from the founders, not a check ADHD.ME performed",
+      from: "nswAdhdTrained — a declaration relayed to us, not a check ADHD.ME performed",
     });
   }
-  if (clinician.founderInterest) {
-    lines.push({ said: "Founder of ADHD.ME", from: "founderInterest — a material interest, stated beside the listing" });
+  if (clinician.ownershipInterest) {
+    lines.push({ said: "Owner of ADHD.ME", from: "ownershipInterest — a material interest, stated beside the listing" });
   }
 
   const distance = distanceTo(clinician, null);

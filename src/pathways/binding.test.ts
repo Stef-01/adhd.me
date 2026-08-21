@@ -55,7 +55,7 @@ function signedPathway(): UsablePathway {
       finding: "Placeholder review finding — fixture only.", revokedAt: null,
     },
     {
-      pathwayId: "path-1", versionHash: version.versionHash, kind: "founder_sign_off",
+      pathwayId: "path-1", versionHash: version.versionHash, kind: "owner_sign_off",
       byEmail: "founder@x.example", at: "2026-01-04",
       finding: "Placeholder sign-off finding — fixture only.", revokedAt: null,
     },
