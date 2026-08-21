@@ -17,19 +17,43 @@ describe("the fixture never reaches a patient", () => {
    * thing W193's real-person law exists to prevent and the thing the founder gates forbid outright.
    * A comment saying so decays; this fails.
    */
-  it("is imported from nowhere under app/", () => {
+  /**
+   * O151: THIS WALKS `src/` TOO, AND THAT IS THE WHOLE POINT OF THE WIDENING.
+   *
+   * O142 shipped this guard walking `app/` only, which left a hole the width of `src/`: `app/`
+   * imports dozens of `src/` modules, so any one of them importing the fixture would carry twenty
+   * fabricated doctors to a patient surface with this test silent. The law it enforces is the
+   * strongest in the tree — publishing an invented clinician on a health directory is precisely
+   * what W193 exists to prevent — and an absolute law with a scoped guard is a guard that has
+   * only ever checked the easy half.
+   *
+   * It matches IMPORTS, not mentions, and that distinction was earned: the first version of this
+   * widening flagged three files that are all correct — `cdss-boundary.ts` NAMES the module in a
+   * W200 census declaration, `cdss-boundary.test.ts` dynamically imports it because the census has
+   * to load every module it lints, and `clarify.ts` mentions the scale report in a comment. A
+   * guard that cannot tell a citation from a dependency reports the tree's own bookkeeping as a
+   * breach, and would have been switched off within a week.
+   *
+   * Test files may import it — that is what the fixture is for. A NON-TEST module under `app/` or
+   * `src/` may not, because `app/` imports `src/` freely and that is the whole path to a patient.
+   */
+  it("is imported by no non-test module under app/ or src/", () => {
+    const IMPORTS_IT = /(?:from\s*["'][^"']*scale-fixture["']|import\s*\(\s*["'][^"']*scale-fixture["'])/;
     const offenders: string[] = [];
     const walk = (dir: string) => {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
         const full = path.join(dir, entry.name);
-        if (entry.isDirectory()) walk(full);
-        else if (/\.(ts|tsx)$/.test(entry.name) && readFileSync(full, "utf8").includes("scale-fixture")) {
-          offenders.push(path.relative(ROOT, full));
+        if (entry.isDirectory()) {
+          walk(full);
+          continue;
         }
+        if (!/\.(ts|tsx)$/.test(entry.name) || /\.test\.tsx?$/.test(entry.name)) continue;
+        if (IMPORTS_IT.test(readFileSync(full, "utf8"))) offenders.push(path.relative(ROOT, full));
       }
     };
     walk(path.join(ROOT, "app"));
-    expect(offenders).toEqual([]);
+    walk(path.join(ROOT, "src"));
+    expect(offenders, `these would carry fabricated clinicians to a patient:\n${offenders.join("\n")}`).toEqual([]);
   });
 
   it("carries no entry that could be mistaken for a real clinician", () => {

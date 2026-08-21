@@ -166,6 +166,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: the guard widened to `src/` and proved by seeding a violation THERE (not in `app/`, which
 > already fails); standing debt 12 rewritten with the correction rather than deleted, since a
 > wrong finding that is quietly removed teaches nobody; `pnpm verify` green.
+> DONE 2026-08-21. The guard is widened and the hole is proved shut: a seeded
+> `src/directory/__leak-probe.ts` importing `syntheticRoster` now fails the test, where the O142
+> guard walking `app/` only would have passed it without a word. That is the finding end to end —
+> an absolute law whose enforcement had only ever checked the easy half.
+> **The widening was wrong on its first pass, which is the eighth probe correction in this tree
+> and the most instructive.** Matching any file that MENTIONS "scale-fixture" flagged three, all
+> correct: `cdss-boundary.ts` names the module in a W200 census declaration, `cdss-boundary.test.ts`
+> dynamically imports it because the census must load every module it lints, and `clarify.ts`
+> mentions the scale report in a comment. A guard that cannot tell a CITATION from a DEPENDENCY
+> reports the tree's own bookkeeping as a breach — and a guard that cries wolf on the census gets
+> switched off inside a week, which would have left the real hole open with a test standing over
+> it. It now matches import syntax, and test files may import the fixture because that is what it
+> is for.
+> O144's error is corrected in the plan rather than deleted. The reusable lesson: **a null result
+> from the wrong instrument is still a null result.** O144 ran `ls .claude/skills/`, saw only the
+> vendored entries, and reported a capability gap to the founder. Two operational notes went into
+> debt 12 with it, both earned by actually running the thing: `security-review` needs
+> `origin/HEAD` (unset in a fresh clone; `git remote set-head origin -a`), and it diffs the branch
+> against origin/HEAD, so on a tree committing straight to main it resolves an EMPTY diff and has
+> to be pointed at an explicit range — here `O141~1..HEAD`, 66 files.
+> The rest of the review came back clean and that is worth stating: every console change in this
+> session is presentational Tailwind, `action={exportPatient}`, `erasePatient` and `signOut` are
+> untouched, no auth or tenancy logic moved, and `declaredKeys` is a pure read over declarations.
+> One finding from 66 files, and it was mine.
+> Gate met: guard widened to `src/` and proved by a seeded violation THERE, the citation/dependency
+> distinction pinned in the test's own comment, debt 12 rewritten with the correction, `pnpm verify`
+> green (219 files, 3607 passed).
+
 
 > **O150 (FOUNDER-DIRECTED — the profile still looks incoherent, second time of asking) —
 > claimed 2026-08-21T09:00Z by loop-0820s.** The founder sent Dr Anubhav Saxena's profile again

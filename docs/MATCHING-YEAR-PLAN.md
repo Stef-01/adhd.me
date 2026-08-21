@@ -593,18 +593,22 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
     ci.yml (its own job, so a slow browser run never blocks the fast verify job), or, if the
     minutes are not there, split the compliance sweeps into a shorter suite that does run.
     Not merely a debt — a red gate can hide here again tomorrow.
-12. **The review skills law 5 requires are not in the loop container. FOUNDER — O144
-    (2026-08-21).** Law 5 names supabase, impeccable/taste-skill, dataviz, **code-review**,
-    **security-review**, **simplify**, run and the docx/pptx/xlsx skills, and states that a
-    hardening week without the review skills is not done. The loop container vendors only the
-    DESIGN skills: `adhdme-taste`, `design-motion-principles` and the Vercel set
-    (react-best-practices, composition-patterns, web-design-guidelines, react-view-transitions,
-    vercel-optimize). The three review skills are absent, so law 5's hardening requirement
-    cannot be met by a loop firing — only approximated by reading, which is what O144 did.
-    Not a build unit: the remedy is to vendor them the way `design-motion-principles` was
-    vendored, which is a founder action. Until then every hardening unit should say in its
-    ledger row that it reviewed by reading rather than with the skills, so the difference stays
-    visible rather than being quietly assumed away.
+12. **The review skills ARE available — O144 was wrong, corrected by O151 (2026-08-21).**
+    O144 filed this as a founder debt, claiming `code-review`, `security-review` and `simplify`
+    are absent from the loop container and that law 5's hardening requirement "cannot be met by a
+    loop firing". It reached that from `ls .claude/skills/`, which lists only the VENDORED
+    skills. The listing was true and the conclusion was false: all three are available to a
+    session as skills, and vendoring is one delivery route rather than the only one. O151 ran
+    `security-review` and it worked.
+    The entry is corrected rather than deleted, because a wrong finding that quietly disappears
+    teaches nobody, and this one has a reusable lesson: **a null result from the wrong instrument
+    is still a null result.** O144 checked a directory and reported a capability.
+    Two practical notes for future firings, both earned by running it: `security-review` needs
+    `origin/HEAD`, which is unset in a fresh clone — `git remote set-head origin -a` fixes it —
+    and it reviews the current branch against `origin/HEAD`, so on a tree that commits straight
+    to `main` it resolves an EMPTY diff and must be pointed at an explicit range instead.
+    FOUNDER: no action needed. Vendoring them into `.claude/skills/` would still be worth doing
+    so the tooling is legible from the repo, but nothing is blocked.
 
 ## Explaining the fit, continuously (runs all year)
 
