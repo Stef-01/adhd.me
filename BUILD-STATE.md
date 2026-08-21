@@ -143,6 +143,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W226 (recommendation copy and refusals — the composed half, which no linter has ever seen) —
+> claimed 2026-08-21T07:42Z by loop-0821a.** W225 already wrote the copy and already extended
+> W201, so the row read at first like it was mostly done. It is not, and the gap is one **W200
+> states about itself in its own module note**, quoted rather than inferred (the O165 lesson):
+> *"KNOWN BOUND, stated rather than filed quietly: this register reaches EXPORTED copy. Prose
+> composed inline inside a render function … is not reachable by export name … until a later unit
+> lints rendered output against fixtures."* This is that later unit, scoped to the capacity lane.
+> **THE HOLE IS REAL AND IT IS THE HALF A PRACTICE ACTUALLY READS.** W200's census walks exported
+> values, so it lints `FORECAST_REFUSAL_COPY` and never sees the sentence a forecast actually
+> carries — that one is assembled per call from a template. The same is true of W224's score
+> sentence, its skipped-week reasons, W225's recommendation sentence and its demand evidence: about
+> eleven distinct sentences the lane can emit, none of which any linter has ever run over except
+> the two or three a test happened to construct.
+> **AND FRAGMENTS PASSING IS NOT THE SENTENCE PASSING.** The advice rules match phrases, and a join
+> can produce one that neither part contained — W200's own worked example is "no action needed",
+> six characters whose meaning flips with the surface. Linting the pieces and calling the whole
+> clean is the mistake this unit exists to stop.
+> The shape: a declared register of every sentence KIND the lane can produce, and an enumerator
+> that drives the four modules over fixtures reaching each one. Both directions — a new sentence
+> fails until it is declared, a declared sentence that no longer exists fails too — which is the
+> only version of this that survives the next unit.
+> Gate: every declared kind produced by the sweep and every produced kind declared; the JOINED text
+> linted, not the parts; the linter shown still firing on advice so a clean sweep means something;
+> plural and singular variants both reached; W201's register updated in the same commit; `pnpm
+> verify` green.
+
 > **W225 (the session-opening recommendation, addressed to the practice about its own diary) —
 > claimed 2026-08-21T07:34Z by loop-0821a.** W222 counts, W223 forecasts, W224 scores. This is the
 > first thing in the lane that says a practice might DO something, and the row's gate is where it
@@ -5449,7 +5475,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W223 | done | loop-0821a | 2026-08-21T07:21Z | e0b1ebb | Forecast as a stated interval, never a point — "open 6 slots Thursday → 4 to 6 fill" → verify: every forecast carries its basis and its uncertainty, and refuses below a floor of recorded weeks rather than emitting a confident number over thin data (W196's zero argument). |
 | W224 | done | loop-0821a | 2026-08-21T07:28Z | a41da93 | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | done | loop-0821a | 2026-08-21T07:34Z | 95da32b | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
-| W226 | available | — | — | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
+| W226 | claimed | loop-0821a | 2026-08-21T07:42Z | — | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
 | W227 | available | — | — | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
