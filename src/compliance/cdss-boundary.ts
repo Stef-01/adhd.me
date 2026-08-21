@@ -504,6 +504,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the branded scope type, the refusal union and the one function that resolves a practice against a caller's memberships. `SCOPE_REFUSAL_COPY` is what an integrator is told when a read is refused: no practice named, the caller holds none, or the caller holds others and not this one. All three are about ACCESS to a practice's own configuration — no patient, no condition, no clinical step — and the third deliberately says the same thing whether the practice exists or not, because a refusal that distinguished them would answer questions about other practices to anyone willing to ask repeatedly.",
   },
   {
+    module: "src/platform/refusals.ts",
+    operatorCopy: ["PLATFORM_REFUSALS", "MUST_NOT_DISCLOSE_EXISTENCE"],
+    notCopy:
+      "The remaining exports are the refusal union, the list of all of them and the one function that renders one. `PLATFORM_REFUSALS` is CARRIED from the modules that own each refusal rather than restated, so a reviewer reading it is reading the sentences the lane actually produces. `MUST_NOT_DISCLOSE_EXISTENCE` says which refusals must be indistinguishable from one another and what a caller could otherwise learn by comparing them. Every sentence is about ACCESS — no practice named, no patient, no condition, no clinical step — and none is a template: a refusal here takes a reason and nothing else, so there is no request in scope for it to echo.",
+  },
+  {
     module: "src/platform/scopes.ts",
     operatorCopy: ["SCOPE_GRANTS", "SCOPE_DENIAL_COPY", "CALLER_MISMATCH_COPY"],
     notCopy:
