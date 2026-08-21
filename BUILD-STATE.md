@@ -143,6 +143,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W256 (five-year full-system audit) — claimed 2026-08-21T12:34Z by loop-0821a.** W51's method:
+> the whole tree, not a diff. Every sweep RE-RUN from source rather than carried from AUDIT-Y4.
+> **REVIEWER'S INDEPENDENCE, AND IT IS WORSE THAN ANY PREVIOUS AUDIT'S.** W206 could say "most of
+> Q15 and Q16 is my own work". I have built **eight of the units this audit covers, today**, in the
+> hours immediately before running it — W246, W247, W248, W250, W252, W253, W254, W255 — and I
+> wrote the registers several of the others rely on. This is the weakest form of review there is:
+> I will be rereading code I believe is correct because I wrote it an hour ago, and belief is
+> exactly what an audit is supposed to not run on. Stating it is the minimum; **the method has to
+> compensate for it**, which means mechanical sweeps and hunting known bug classes rather than
+> judgement, and every count re-derived by running something rather than read from a document.
+> **AND CARRYING FORWARD IS THE FAILURE MODE THE ROW NAMES.** "Every sweep re-run from source
+> rather than carried from AUDIT-Y4" exists because a carried finding reads as coverage: AUDIT-Y4
+> says thirteen `SHIPPED_*` registries were re-derived and twelve were empty, and repeating that
+> sentence a year later is a claim about a tree that has since grown eleven units of interop, a
+> capacity lane and a platform API. Every number in the document has to come from a command run
+> today, and where a Y4 figure and a Y5 figure differ, the difference is the finding.
+> **THE THREE THINGS I ALREADY KNOW AND MUST NOT LET STAND AS "RECORDED".** This session found the
+> same defect shape in three registers — W200 checks modules and not their exports, W106 finds
+> stores by a keyword that missed the module that mattered, W167 matches three fold shapes and
+> missed a fourth. Each was recorded in its own register with a measurement. **A recorded finding is
+> not a closed one** — that is W210's whole argument and PRIV-3's two-year history — so the audit's
+> job is to say what those three have in common and whether the pattern implies a fourth nobody has
+> looked for yet.
+> Gate: every sweep re-run by a command in this session with its output recorded, not carried;
+> counts that differ from AUDIT-Y4 explained rather than restated; the known bug classes hunted
+> specifically (cross-tenant reads, patient identity on error paths, frozen clocks, vacuous
+> assertions, registers checked in only one direction); independence stated plainly and the method's
+> compensation for it described; findings filed with severity and either fixed in this unit or
+> recorded with what would make them live; `docs/AUDIT-Y5.md`; `pnpm verify` green.
+
 > **W255 (API refusal semantics) — claimed 2026-08-21T12:23Z by loop-0821a.** No patient data on
 > any error path, asserted over EVERY refusal branch rather than sampled.
 > **"RATHER THAN SAMPLED" IS THE WHOLE GATE, AND IT MAKES ENUMERATION THE HARD PART.** Checking
@@ -7216,7 +7246,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W253 | done | loop-0821a | 2026-08-21T12:02Z | 023440c | Platform API surface, read-only and practice-scoped → verify: every endpoint takes a practice as the QUERY (W123's rule); no endpoint can return cross-practice data, asserted the way Y4-1 should have been. |
 | W254 | done | loop-0821a | 2026-08-21T12:15Z | a4b1b84 | [P] API scope model → verify: scopes are declared data checked against the endpoint census in both directions; no production credential enters the tree. |
 | W255 | done | loop-0821a | 2026-08-21T12:23Z | 9de54dd | API refusal semantics → verify: no patient data on any error path, asserted over every refusal branch rather than sampled. |
-| W256 | available | — | — | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
+| W256 | claimed | loop-0821a | 2026-08-21T12:34Z | — | [P] Five-year full-system audit (W51 method: the whole tree, not a diff) → verify: every sweep re-run from source rather than carried from AUDIT-Y4; independence of the reviewer stated plainly. |
 | W257 | available | — | — | — | Five-year gate dossier: every decision still outstanding, priced → verify: counts derived from the ledger and pinned row-by-row by a test, W207's shape, so the document cannot go stale. |
 | W258 | available | — | — | — | [P] The ADM register at five years → verify: W201's decision register re-derived against everything Y5 added, not assumed to have survived; the published notice regenerated from it. |
 | W259 | available | — | — | — | The G7 boundary at five years → verify: W200's five rail properties re-derived; Q17's matching optimisation tested against them explicitly, since it is the first Y5 work that could have moved the line. |
