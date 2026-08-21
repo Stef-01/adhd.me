@@ -196,6 +196,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
       "W211 builds a `Response` from W170's `RecordedEvent { chainId, kind, at }` and an `Intervention { interventionId, practiceId, chainId, kind, at }`. Neither type has a field a patient identifier could go in, and the constructor copies only from those two, so the link is a statement about a chain and a practice. Erasure is COMPOSED for the same reason W180 gave: scrub the source rail and the events these rest on are gone, with nothing here to remember to scrub. W218 classifies the GRAPH built over this, which is a different question because a graph can hold shape a single link cannot.",
   },
   {
+    module: "src/outcomes/attribution-v2.ts",
+    what: "Per-kind response rates and, when the holdout arm allows one, the practice-wide incremental figure",
+    handling: "no_patient_identity",
+    rationale:
+      "W219 reads W212's graph, which has already aggregated every chain id away, and W215's counterfactual, which counts arms rather than people. The types it produces hold an intervention kind, counts, a rate and a basis; there is nowhere in them a patient id could sit, and no exported signature takes a patient. Declared voluntarily — this module holds no globalThis store, so W106's discovery does not require an entry — because the outcomes modules are where a reader looks for what the product knows about a person, and an absence is only legible if it is written down. The small-cell question W218 settled for the graph is inherited rather than reopened: a rate here is computed from the graph's own per-kind denominators, and any disclosure of it runs through `discloseResponseGraph` first.",
+  },
+  {
     module: "src/outcomes/response-graph.ts",
     what: "Counts of how each kind of intervention was answered, over the synthetic loop",
     handling: "no_patient_identity",

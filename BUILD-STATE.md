@@ -167,6 +167,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > a name check). Plus: the registers this module trips — W200's copy surface, W201's ADM register,
 > W106/W180's record classes, W167's fold register — extended in the same commit, and non-vacuity
 > breaks recorded, since a refusal nobody has watched fail is a refusal nobody has tested.
+> DONE 2026-08-21. `src/outcomes/attribution-v2.ts` + 18 tests. The design held: `attributeByKind`
+> takes the graph AND W215's `CounterfactualResult`, and a call with the graph alone fails to
+> typecheck — proved by making the parameter optional and watching the `@ts-expect-error` go unused
+> (TS2578), which is the break that shows the signature is the refusal rather than a comment over it.
+> **THE ONE-ARM CLAIM IS MEASURED, NOT ASSERTED.** Over a six-week sim run: **746 holdout patients,
+> 0 invitations reaching any of them**, so zero interventions and no comparator anywhere in a graph
+> built from 1,552 of them — while that same holdout arm attended **216** appointments the graph
+> knows nothing about. (First draft of this row said "34 holdout patients". Nobody measured it; I
+> wrote a plausible number beside four measured ones and caught it re-checking before pushing. The
+> numbers here are now the ones a script printed.) Written as a test
+> because it is a fact about what the SIM can produce, not about this module's arithmetic: if a
+> holdout patient ever reached an intervention, every other assertion here would still pass while
+> the thing the module exists to prevent had already happened.
+> Refusals both-directions and both-at-once: `counterfactual_withheld` carries W215's own reason
+> list through rather than summarising it, and when two kinds share one holdout arm BOTH reasons are
+> reported — a caller shown one of two is shown half a refusal. The apportionment is refused, not
+> solved: one observed kind takes the whole figure unchanged (asserted to the digit against W215's
+> `difference`), two or more get the sentence instead.
+> **A NUMERATOR THAT COULD EXCEED ITS OWN DENOMINATOR WAS FOUND WHILE WRITING THE RATES.** One
+> intervention can draw more than one recorded response, so a rate summed from edge counts can
+> report more people answering than were offered. `answeredAtLeastOnce` is derived from the
+> unanswered node instead, pinned against a fixture whose edges deliberately over-sum — and the
+> fixture asserts it over-sums first, or the check would be vacuous.
+> `RESPONSE_RATE_CAVEAT` rides the VALUE, not the surface: a within-arm rate rendered without the
+> sentence saying it is not an effect is the naive figure W9 already refuses, wearing a graph.
+> Registers: W200's copy surface + namespace loader and W201's ADM register (`NOT_A_DECISION`) both
+> failed correctly on the new module and were extended in the same commit. W106/W180's record class
+> was added VOLUNTARILY — this module holds no globalThis store so discovery does not require it —
+> because an absence is only legible if it is written down. W167's fold register was deliberately
+> NOT touched: the module contains no fold, and an entry of zero would fail the register's own
+> both-directions check (W214's precedent).
+> **AND A GREEN TEST RUN IS NOT A GREEN GATE.** `vitest` passed 18/18 on a test file that did not
+> typecheck — the two-kind fixture used `"referral_made"`, which is not one of the four declared
+> `InterventionKind`s. `pnpm verify` caught it; my own spec run never would have, because vitest
+> does not typecheck. Recorded because I ran the spec and believed it.
+> Non-vacuity, six breaks: sum edge counts into the numerator (1); apportion instead of refusing
+> (4); report only the first reason (1); drop the caveat from the value (1); withhold the counts
+> along with the claim (1); make the comparator optional (**typecheck**, TS2578).
+> Gate: `pnpm verify` green — 221 files, 3631 tests, build, audit:gate PASS.
 
 > LEDGER NOTE (loop-0821a, 2026-08-21): **O164 and O165 were stamped ~10.5 hours in the FUTURE**
 > — 16:45Z and 17:20Z against a container clock reading 06:2xZ, which is what `git log` shows for
@@ -5082,7 +5121,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W216 | done | interactive-0814 | 2026-08-14T05:50Z | b5a8ba0 | Q17 dossier: the learned-ranking question, priced. `docs/GATE-DOSSIER-Q17.md` + `src/quality/gate-dossier-q17.test.ts` (W207's shape: derives counts from the ledger, pins the dossier's quotes against live source). Verify green (191 files / 2565 tests / build / audit:gate PASS) run after a node/pnpm toolchain became available. **The collision is already live, not hypothetical:** `rankCandidates` (src/engine/pool.ts) has ordered the live invitation pool by `chronicCare` then overdue since W5; W201's published ADM notice says "No ordering of patients by need or by how unwell they are" — that is `MATCH-1` (open, recorded by W214), and the only thing keeping it a contradiction rather than a harm is that nothing has ever been sent (G1/G2/G3 shut). The dossier prices the distinction the notice itself draws (order of offers vs who is more unwell), names the two costs — change the published notice (option a) or change who gets invited (option b) — and takes no position. **Releases exactly one blocked unit, W217** (derived from the ledger, pinned by the test with a `Q17_LAST_UNIT` bound so it does not trip `DOSSIER-1`) and resolves `MATCH-1`. Ledger-integrity checked by hand against W168's rules (in-progress needs owner+timestamp: present). **REMAINING:** run `pnpm verify` (typecheck·test·build·audit:gate); if green, set status `done` + the commit SHA. Verify not runnable in this session. |
 | W217 | blocked | — | — | — | Learned ranking of patients → verify: n/a until ruled. **Blocked. FOUNDER DECISION — Q17 action 1, recorded in docs/GATE-DOSSIER-Q17.md: whether the product may order patients by anything a model learns, which would require changing the published ADM notice.** |
 | W218 | done | interactive-0814 | 2026-08-14T06:24Z | 9913da5 | [P] Response-graph privacy classification. Settled W212's deferred floor question IN `src/outcomes/response-graph.ts` (rather than a new module, to avoid re-registering across the W106/W200/W201/W116 registers a `// W≥157` file would trip): `RESPONSE_GRAPH_CELL_FLOOR` (5, declared data, no parameter — W196), `discloseResponseGraph` withholds any intervention kind holding a sub-floor cell WHOLE and recomputes the top-level total over disclosed kinds so a withheld count cannot be recovered by subtraction (W197's differencing rule; whole-kind because a kind's cells share one basis). `RESPONSE_GRAPH_DISCLOSURE_COPY` added to W200's linted copy surface (advice-free; `lintOperatorCopy` runs only the 4 advice patterns). Record-class entry for response-graph.ts updated: deferral removed, states erasure is COMPOSED (nothing stored, `SHIPPED_RESPONSE_GRAPHS` empty). Test `src/outcomes/response-graph-disclosure.test.ts`: floor-is-data (arity guard), whole-kind suppression hunted in the render ("2 of 9" absent, "20 of 38" present), total recomputed to 38 not 47, statement always present, no patient identity by type (`@ts-expect-error`) and by value (key list), erasure composed. W167's fold register caught the `.reduce` in `discloseResponseGraph` on its first run (commutative sum, declared with a rationale) — the mechanism working as designed. Verify green: 191 files, 2565 tests, build, audit:gate PASS. |
-| W219 | claimed | loop-0821a | 2026-08-21T06:52Z | — | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
+| W219 | done | loop-0821a | 2026-08-21T06:52Z | PENDING | **RECLAIMED from interactive-0814 (claimed 2026-08-14T11:08Z, seven days, nothing pushed against the row) under W54's staleness rule — the 90-minute window for a holder that has pushed nothing.** Intervention attribution v2 over the response graph → verify: cohort-level only; per-patient effect estimates are refused BY ABSENCE — no function exists, asserted on the module namespace. |
 | W220 | available | — | — | — | [P] Q17 console: the response graph as a practice reads it → verify: e2e + axe; no clinical claim; the empty state distinguishes nothing happened from nothing recorded (W179). |
 | W221 | done | interactive-0816 | 2026-08-16T21:30Z | e3d60da | Q17 hardening, realised as the deterministic-matcher rebuild → verify: code-review + security-review skills; every new register checked both directions; the G7 boundary re-derived. Spans src/matching/needs.ts (one central phrase→facet lexicon, replacing the per-clinician focusSignals weight map; ranking and explanation are one computation and a test asserts they cannot disagree), src/matching/read.ts (stemmed ordered-subsequence cue matching), src/demo/emotional-fit.ts (the single manner vocabulary), src/matching/reach.test.ts (reach ratchet, lowered 0.15→0.12), the onboarding interview→background pipeline and app/console/matching. G7: removed symptom cues ("never finish anything" and siblings) that had mapped DSM inattention text to Adult-ADHD — the product was concluding a diagnosis from a symptom — and pinned them as reach.test.ts SYMPTOM_NONREACH; three G7-safe recall gaps closed. RECONCILIATION: the code had mis-tagged parts of this as // W222 and // W223, which are the Q18 Capacity-model (held by another session) and Forecast-interval rows; those are freed and every matcher file now carries // W221, its correct Q17 home. Also: language now drives ranking + matchQuality (matchEvidence), the clinician scope is streamlined across all mental health, and the landing cost/map/CTA copy was refreshed. Committed at e3d60da; verified green (199 files, 2633 tests, build, audit PASS, compliance sweep + e2e). |
 | W222 | available | — | — | — | [P] Capacity model: sessions, slots and recorded utilisation → verify: over the synthetic practice; a session with no recorded history yields no forecast rather than a default. |
