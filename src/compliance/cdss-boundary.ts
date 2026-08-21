@@ -463,6 +463,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the reason union, the candidate projection and the floor check. `MATCH_REASON_COPY` is the sentence a practice manager reads about one appointment offer and `MATCH_FLOOR_BREACH_COPY` tells a reviewer why a plan was refused. Both are about capacity, recorded availability and practice-set limits; a test asserts neither can name a condition, a symptom or an urgency, because a reason is the one place a matcher gets to say WHY in words somebody reads.",
   },
   {
+    module: "src/capacity/calendar.ts",
+    operatorCopy: ["CALENDAR_UNKNOWN_COPY"],
+    notCopy:
+      "The remaining exports are the calendar types, the loader, its two readers and an EMPTY shipped catalogue. `CALENDAR_UNKNOWN_COPY` is what a practice manager reads where a closure allowance would be: no calendar has been loaded, so nothing here allows for the days the practice was shut, and it says outright that this is a gap in what has been recorded rather than a finding about the diary. It describes the record's limits and names no patient, condition or next clinical step. The loader authors the rejection REASONS, which are written to whoever is loading a calendar rather than to a practice, and each one says what was wrong with a row rather than what anybody should do about it.",
+  },
+  {
     module: "src/capacity/copy.ts",
     operatorCopy: [],
     notCopy:

@@ -168,6 +168,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > the shape re-derived for dates); `SHIPPED_HOLIDAYS` pinned empty; the anti-inference property
 > asserted over the real forecaster with a seeded break proving it can fail; consumers must already
 > handle an empty calendar, which with an empty catalogue is the only path; `pnpm verify` green.
+> DONE 2026-08-21. `src/capacity/calendar.ts` + 8 tests, and the calendar ships EMPTY as claimed.
+> **THE ANTI-INFERENCE GUARD IS A BEHAVIOURAL INVARIANT, NOT A RULE IN A COMMENT, and that turned
+> out to be the right shape.** Every recorded date is shifted by whole weeks — same weekday, same
+> order, same fill numbers, only the calendar position moves from July to December — and every
+> number the lane produces must be identical: the forecast range, the observed spread, the score's
+> hit rate and width, the recommendation sentence and its demand evidence. Anything reading a
+> month, a school term or a distance from Christmas answers differently. Seeded proof: an
+> eight-line "December effect" derived from the practice's own dates fails **three** tests,
+> including the source scan.
+> The source scan is the backstop, because an invariant can be satisfied today by a function
+> nobody calls yet: across the four computing modules the ONLY date method permitted is
+> `.getUTCDay(` in `model.ts` — the weekday IS the session's identity — and the assertion is
+> written as an exact set, so a second date call fails whatever it reads. `calendar.ts` is excluded
+> by PATH and stated rather than pattern-matched (W201's posture): it is the one place holidays may
+> be named, because it declares them rather than deriving them.
+> **THE UNIT'S OWN TEMPTATION WAS THE LOOP, AND THE CLAIM SAID SO BEFORE THE WORK RATHER THAN
+> AFTER.** A holiday calendar looks like the safest data in the tree; the dates a diary turns on
+> are the OBSERVED ones — the substitute Monday when a fixed date falls on a weekend, varying by
+> state and year — and I would have been reconstructing those from memory. That is the failure
+> already hit twice today (W219's invented "34 holdout patients", W223's fixture totals asserted
+> wrong). `fallsOn` and `observedOn` are therefore separate fields, `isDeclaredHoliday` reads only
+> the observed one, and reading the nominal one instead fails a test.
+> Loader refusals, each reached by a fixture breaking exactly one thing: not an object, no id,
+> duplicate id, no jurisdiction ("a holiday without one applies nowhere"), no name, malformed
+> `fallsOn`, missing `observedOn`, missing provenance, thin citation, http url, malformed
+> `publishedOn`, and `retrievedOn` before `publishedOn` — which is what a fabricated provenance
+> looks like when the fields are filled from memory. Duplicates are REFUSED rather than
+> last-one-wins: a silently overwritten holiday is a day the practice thinks it is closed.
+> `calendarKnowsNothing` sits beside `isDeclaredHoliday` so a caller can tell "no holiday that day"
+> from "no calendar" — W179's distinction, and the reason a `false` here must never render as "open
+> as usual".
+> Non-vacuity, five breaks: infer a December effect from the practice's own dates (3 tests); fill
+> the shipped calendar from memory (2); accept a source retrieved before it was published (1); read
+> the nominal date instead of the observed one (1); let a duplicate id overwrite (1).
+> Gate: `pnpm verify` green — 228 files, 3723 tests, build, audit:gate PASS.
+> **REMAINING (a data change, no code change): the values.** Loading a real calendar means opening
+> a published source, recording what it says, and stamping `retrievedOn`. Nothing is blocked on it
+> — every consumer already handles a calendar that knows nothing, because that is the only path
+> there is today.
 
 > **W226 (recommendation copy and refusals — the composed half, which no linter has ever seen) —
 > claimed 2026-08-21T07:42Z by loop-0821a.** W225 already wrote the copy and already extended
@@ -5539,7 +5578,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W224 | done | loop-0821a | 2026-08-21T07:28Z | a41da93 | [P] Forecast honesty: every forecast is scored against what actually happened → verify: back-test over the sim; the score is recorded and rendered beside the forecast, so a forecaster that is usually wrong cannot present as one that is usually right. |
 | W225 | done | loop-0821a | 2026-08-21T07:34Z | 95da32b | Session-opening recommendation, addressed to the PRACTICE about its own diary → verify: no patient id can enter the recommendation type; asserted as an absence, not a filter. |
 | W226 | done | loop-0821a | 2026-08-21T07:42Z | 0cf4d2e | [P] Recommendation copy and refusals → verify: compliance linter; W201's ADM register updated in the same commit, which is the rule W201 made mechanical rather than hopeful. |
-| W227 | claimed | loop-0821a | 2026-08-21T07:50Z | — | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
+| W227 | done | loop-0821a | 2026-08-21T07:50Z | PENDING | Seasonality and public holidays as declared data with a source → verify: nothing seasonal is inferred from the practice's own history; the calendar is data with provenance, W56's shape. |
 | W228 | available | — | — | — | [P] Forecast drift monitor → verify: a forecaster that has stopped tracking reality is REPORTED, never silently recalibrated (W120's rule: report the disagreement, do not resolve it). |
 | W229 | available | — | — | — | Capacity console → verify: e2e + axe; empty states distinguish no data from no capacity. |
 | W230 | available | — | — | — | [P] Q18 privacy pass → verify: W106 classification; a forecast is practice-level and no figure can identify a patient, by type rather than by scrubbing. |
