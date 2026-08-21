@@ -143,6 +143,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **W235 (FHIR R4 resource mapping as data) — claimed 2026-08-21T09:20Z by loop-0821a.** Q19 opens.
+> The row's gate has a clause that decides the design: **an unmapped field is NAMED in the output
+> rather than dropped silently.**
+> **A MAPPER'S CHARACTERISTIC FAILURE IS SILENCE, NOT ERROR.** It does not crash on a field it has
+> no home for; it returns a resource that looks complete, and the field is gone. The receiving
+> system cannot know what it was not told, and neither can the sender — so the honest output is a
+> pair: the resource, and the list of everything that did not fit, each with a reason. That makes
+> the mapping's incompleteness a value somebody can read rather than a property somebody has to
+> notice.
+> **AND THE ROUND TRIP IS THE ONLY HONEST TEST OF A MAPPING.** Asserting that `toFhir` produces the
+> right shape checks that I wrote what I meant; asserting that `fromFhir(toFhir(x))` returns `x`
+> checks that the mapping did not quietly lose something in a corner neither assertion looks at.
+> Over the synthetic practice, every record, both directions.
+> **THIS IS THE FIRST MODULE IN THE INTEROP LANE THAT CAN CARRY A PATIENT IDENTIFIER**, and pretending
+> otherwise would be the worse choice: a FHIR Appointment's participant IS the patient, and a
+> mapping that dropped it would be a mapping of nothing useful, with the drop hidden in exactly the
+> silence this unit is about. So it maps, the record class says so, and the trigger is written down:
+> the day anything TRANSMITS a mapped resource, G8 applies and this stops being a pure function.
+> Nothing transmits — there is no endpoint in this tree — and `SHIPPED_MAPPINGS` is pinned empty.
+> Gate: the field map is declared DATA with a reason per entry, checked both directions against the
+> domain type so a new field cannot be silently unmapped; round-trip over every synthetic record;
+> unmapped fields named WITH a reason in both directions; nothing transmits, asserted by absence;
+> `pnpm verify` green.
+
 > **W234 (Q18 hardening) — claimed 2026-08-21T09:07Z by loop-0821a.** Law 5: a hardening week
 > without the review skills is not done. `code-review` was RUN over the whole lane — nine source
 > modules, the console view, the page, the tests and the e2e — and **returned nine findings, every
@@ -6039,7 +6063,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W232 | done | loop-0821a | 2026-08-21T08:44Z | 6f29060 | [P] Q18 dossier: what a forecast implies operationally, priced → verify: states what changes the day a practice acts on one. |
 | W233 | done | loop-0821a | 2026-08-21T08:52Z | 3727570 | Capacity attribution: did opening slots help? → verify: holdout-based only; refuses to answer without an arm rather than answering from the trend. |
 | W234 | done | loop-0821a | 2026-08-21T09:07Z | d9671c0 | Q18 hardening → verify: review skills; registers both directions; zero criticals. |
-| W235 | available | — | — | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
+| W235 | claimed | loop-0821a | 2026-08-21T09:20Z | — | [P] FHIR R4 resource mapping as data → verify: round-trip over synthetic records; an unmapped field is NAMED in the output rather than dropped silently. |
 | W236 | available | — | — | — | e-referral document profile → verify: W131's structured referral rendered to the profile; no clinical text is authored, generated or edited by this tree (G7's fourth property re-derived at the boundary). |
 | W237 | available | — | — | — | [P] Interop conformance harness → verify: contract tests against recorded synthetic fixtures in W27/W28's shape; no live endpoint exists to call. |
 | W238 | available | — | — | — | Terminology binding (SNOMED CT-AU, LOINC) as declared data → verify: every code carries provenance; an unbound code is refused rather than guessed, and the refusal names the code. |
