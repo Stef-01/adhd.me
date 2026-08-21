@@ -121,6 +121,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/interop/exchange.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "Reads the last attempt of an exchange history when the other side never spoke. The attempts are a RECORD OF A SEQUENCE — attempt two happened after attempt one — so \"last\" is the order the events occurred in rather than an order a store imposed, and reordering them would be reordering history rather than presenting it differently. It aggregates nothing: every attempt in that case has the same outcome (`unknown`), so the fold picks a representative rather than combining values, and which one it picks changes only the recorded reason and timestamp.",
+    },
+  },
+  {
     module: "src/matching/allocation.ts",
     folds: 2,
     disposition: {

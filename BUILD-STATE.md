@@ -166,6 +166,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > clock readings with non-vacuity both ways; refusal kept distinct from failure with its own copy;
 > nothing in the module can turn an unknown into a delivery — asserted on the namespace and the
 > source; `pnpm verify` green.
+> DONE 2026-08-21. `src/interop/exchange.ts` + 12 tests. **Every success-looking status with an
+> empty payload reads as `unknown`** — 200, 201, 202, 203, 204, 299 — and the module consults the
+> status for NOTHING, checked by a source scan for any comparison on it. That is the one branch
+> which, added six months from now in a commit that looks like handling an edge case, turns "we sent
+> it" into "they got it" without anybody deciding to lie. Seeding a 2xx-means-acknowledged branch
+> fails three tests.
+> The only route to `acknowledged` is the other side's own words in its payload — proved with a
+> response carrying NO status at all, which still acknowledges when the receiving system spoke. The
+> transport is not the witness.
+> **SILENCE CAN ONLY LEAVE THE QUESTION OPEN, swept rather than sampled**: every run length from 1
+> to 12 × every unknown reason, in rotating order, none of them resolving to a delivery. Non-vacuity
+> both ways — the same histories DO resolve the moment an acknowledgement appears, at the start,
+> middle or end of the run, so "always unknown" is a fact about silence rather than about the
+> function. Seeding "three retries means it arrived" fails.
+> **A REFUSAL SPOKEN ONCE IS NOT WITHDRAWN BY A LATER SILENCE.** They told us; a subsequent timeout
+> does not un-tell it, and reporting the exchange as unknown would lose a reason somebody could act
+> on. And a refusal is kept out of the failure bucket entirely: the other side saying "that patient
+> is not ours" is a working exchange with a negative answer, and folding it into the errors makes a
+> working integration look broken while losing the one thing worth reading.
+> Five kinds of not-knowing, each with its own sentence, because "unknown" as one undifferentiated
+> bucket tells nobody what to do next. The timeout copy refuses the obvious wrong inference in words:
+> waiting longer "would change the wait rather than the answer".
+> W167's fold register caught the last-attempt read and was extended with a rationale — the attempts
+> are a record of a SEQUENCE, so "last" is the order events occurred in rather than one a store
+> imposed, and every attempt in that branch has the same outcome, so the fold picks a representative
+> rather than combining values. Its sorted-order check then caught my entry being in the wrong place,
+> which is the register doing the smaller half of its job.
+> Non-vacuity, five breaks: let a 2xx stand in for an acknowledgement (3 tests); treat enough retries
+> as confidence (1); fold a refusal into unknown (1); let a later silence withdraw a spoken refusal
+> (2); read a half-parsed response as an acknowledgement (1).
+> Gate: `pnpm verify` green — 242 files, 3916 tests, build, audit:gate PASS.
 
 > **W243 (the consent-to-disclose model) — claimed 2026-08-21T10:06Z by loop-0821a.** W125 already
 > holds consent to a PATHWAY, with a branded record no caller can fabricate. Consent to DISCLOSE is
@@ -6502,7 +6533,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | W241 | blocked | — | — | — | Payer claim-status read → verify: n/a until ratified. **Blocked. FOUNDER GATE G10.** |
 | W242 | done | loop-0821a | 2026-08-21T09:58Z | 2100266 | [P] Interop credentials posture → verify: no credential in the tree; the loader enforces the gate rather than the values doing it (W56's shape); G1 named as the blocker for anything live. |
 | W243 | done | loop-0821a | 2026-08-21T10:06Z | a538158 | Consent-to-disclose model → verify: a disclosure without a recorded patient consent is refused BY TYPE; silence is never consent (W135), and no timeout grants it (W134). |
-| W244 | claimed | loop-0821a | 2026-08-21T10:17Z | — | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
+| W244 | done | loop-0821a | 2026-08-21T10:17Z | PENDING | [P] Interop error semantics → verify: a failed or unacknowledged exchange is `unknown`, never "delivered" — W170's rule applied at the one boundary where the tree cannot see the other side. |
 | W245 | available | — | — | — | Q19 dossier: G10 priced → verify: what G10 releases, what it costs, and what it does not cover; counts pinned by a test. |
 | W246 | available | — | — | — | [P] Interop console → verify: e2e + axe; shows what was exchanged and, more importantly, what was not. |
 | W247 | available | — | — | — | Q19 hardening → verify: security-review skill over every new boundary; the disclosure ledger's own W106 classification. |

@@ -481,6 +481,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
   },
   {
+    module: "src/interop/exchange.ts",
+    operatorCopy: ["EXCHANGE_OUTCOME_COPY", "UNKNOWN_REASON_COPY"],
+    notCopy:
+      "The remaining exports are the outcome and reason unions, the response and record types, and three pure functions. `EXCHANGE_OUTCOME_COPY` says what an exchange with another system came to — the receiving system confirmed it, said no with a reason, or said nothing that tells us either way — and `UNKNOWN_REASON_COPY` says which kind of not-knowing it was. Every sentence describes a MESSAGE and a SYSTEM, never a patient: no condition, no symptom, no next clinical step. The one thing worth flagging for a reviewer is what the copy refuses to say — that a request which completed without an error was received — which is W170's rule at the boundary where this tree cannot see the other side.",
+  },
+  {
     module: "src/interop/disclosure-consent.ts",
     operatorCopy: ["DISCLOSURE_CONSENT_COPY", "CONSENT_RECORD_REJECTION_COPY"],
     notCopy:
