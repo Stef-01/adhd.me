@@ -144,6 +144,7 @@ it is here for comparison, not as evidence.
 | Store reads with no practice in the signature | — | **3** | All correct: two are test resets; `complaintsForPatient` is **deliberately** unscoped, and W206 says why — erasure must reach every practice a patient has touched, and adding a filter there is the change that would break erasure silently. |
 | App surfaces (census, run now) | — | **62** (47 pages, 15 routes) | |
 | Route handlers reachable in production | — | **15, all gated** | 13 `/api/mock/*` routes call `assertMockRoutesEnabled` and 404 outside a build that opts in; `/api/interest/export` checks `verifySession` **and** `isAdhdMeStaff`, gated at the route as well as the page because a route handler is independently invocable (W13). |
+| Blocked ledger rows | — | **18** (17 gated, 1 decision-blocked) | First reported here as 16; see the correction under Founder gates. |
 | Constant-on-both-sides assertions | 0 | **4, all legitimate** | Each is a compile-time test: the real assertion is a `@ts-expect-error` that fails `tsc` with TS2578 if the call starts typechecking. `expect(true).toBe(true)` exists so vitest sees an assertion. Noted below. |
 
 ---
@@ -218,8 +219,15 @@ that was not.
 
 ## Founder gates
 
-No gate is unenforced. 16 blocked rows, each naming its gate: **G5** ×6, **G10** ×2, **G6** ×2,
-**G8** ×2, **G9** ×2, **G3** ×1.
+No gate is unenforced. **18 blocked rows** — 17 naming a gate (**G5** ×8, **G6** ×2, **G8** ×2,
+**G9** ×2, **G10** ×2, **G3** ×1) and one, W217, blocked on a decision no gate covers.
+
+*(Corrected by W257, one unit later. This section originally read "16 blocked rows … G5 ×6",
+because the count came from a `^| W[0-9]* | blocked` grep that silently excluded the two
+un-numbered `SUP-` rows — both of them G5. The arithmetic was internally consistent and wrong, and
+it is exactly the failure this audit spends two findings on: a proxy that answers confidently about
+what it can see. Left visible rather than overwritten, because an audit that quietly fixes its own
+figures is asking to be trusted on the ones nobody checked.)*
 
 **Seven decisions remain outstanding**, unchanged by this audit and none of them blocking it:
 
