@@ -174,6 +174,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > stopped matching can pass as clean; every finding fixed in the page, or the probe corrected with
 > its reasoning stated; a seeded second `h1` and a seeded unlabelled field both caught; the observed
 > finding count reported whatever it is; `pnpm verify` green.
+>
+> **DONE 2026-08-21T18:44Z. THE OBSERVED FINDING COUNT IS ZERO, AND MY PREDICTION WAS WRONG.** I
+> said in this claim that `semantics` was "the sweep most likely to find something", gave a stated
+> reason, and eighteen previously-unswept console screens came back clean. **The prediction being
+> wrong is worth as much as O170's being right**, and both belong in the record: a claim that only
+> ever predicted what it later found would be a claim written afterwards. The console list went
+> 10 → 28, the sweep now covers all 45 static routes, and the population confirms the new routes are
+> real — **214 headings and 108 fields**, up from the 152 and 101 O160 measured over 25.
+> **THE FLOORS WERE STALE, THE SAME WAY O170's WAS, ONE ROW APART.** O160 set `headings > 100` and
+> `fields > 60` against 152/101. At 45 routes drawing 214/108, a floor of 100 would no longer notice
+> the sweep collapsing back to roughly the list it replaced. Raised to 180/90 with the observed
+> figures written beside them. **Twice in two rows is a pattern, not a coincidence**: every
+> non-vacuity floor in this suite was calibrated against whatever the route list happened to be that
+> day, and widening a list silently loosens its own floor. The three sweeps derived so far all had it.
+> **FOUR SEEDS, EACH WATCHED FAILING.** A page planted where no array named it, carrying three
+> distinct defect classes — a second `h1`, an `h1→h4` jump, an unnamed `<input>` — and all three were
+> reported by route. Then the collapse, caught by the route-count floor.
+> **THE PROBE WAS NOT RELAXED**, because nothing asked it to be: no finding arrived, so the question
+> of page-fix versus probe-fix never came up. Recorded because the claim promised to say which it
+> was.
+> **AND THE 30s DEFAULT WAS HERE TOO — THIRD INSTANCE IN THREE ROWS** (`contrast` at O169,
+> `touch-floor` at O170, `semantics` here). Every one of these specs was written with a short route
+> list and inherited a timeout nobody chose. `mobile-fit` and `keyboard-focus` will have it as well.
+> **FOUR SWEEPS DERIVED, TWO TO GO**: `mobile-fit` 25/45 and `keyboard-focus` 15/45. Those two are
+> genuinely not mechanical — `keyboard-focus` drives interactions that differ per screen — and this
+> row's opening correction is the reason to say that carefully rather than confidently.
+> Verification: `pnpm verify` green (255 files, 4067 tests, audit gate 2 accepted / 0 unaccepted);
+> 11/11 across semantics, a11y, touch-floor, contrast and ownership-disclosure.
 
 > **O170 (the touch floor gets the derived route list) — claimed 2026-08-21T17:29Z by loop-0821a.**
 > Third of the six sweeps O168 measured, and the last of the mechanical ones. O169 took `a11y` and
