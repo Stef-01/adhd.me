@@ -119,6 +119,17 @@ export const RAIL_PROPERTIES: readonly RailProperty[] = [
  *
  * Every Y4 module appears, including the ones with no copy at all — the test enumerates Y4 from
  * the tree and fails on a module that is missing here, so "no copy" has to be SAID. An empty
+ * KNOWN GAP, measured under W246 and NOT closed there. This register enforces module coverage —
+ * every Y4 module with a `// W<n>` header must appear — and it checks that each DECLARED export
+ * exists and yields text. It does NOT check the other direction: a module can export a new sentence
+ * and, as long as nobody adds it to `operatorCopy`, that sentence is never linted. W246 added three
+ * and found this by hand. A sweep at the time counted 111 undeclared string-bearing exports across
+ * the declared modules, so the fix is not a blanket "declare every string": most of those 111 are
+ * data — suburb names, language lists, field-name registers — and a rule with 111 exceptions is
+ * weaker than the `notCopy` prose it would replace. Closing it properly means classifying each
+ * export as copy or data at the export, which is a unit of its own. Until then the prose is what
+ * stands between a new sentence and an unlinted one, and the prose is not executable.
+ *
  * `operatorCopy` with a reason is a declaration; an absent module is an oversight, and the two are
  * indistinguishable in a register that only lists what it covers.
  */
@@ -479,6 +490,18 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     operatorCopy: ["DRIFT_VERDICT_COPY", "DRIFT_REFUSAL_COPY"],
     notCopy:
       "The remaining exports are the verdict and refusal unions, the declared threshold, the window type and the single function that produces a report. `DRIFT_VERDICT_COPY` is what a practice manager reads about whether the ranges have matched what happened as often lately as they did earlier, and `DRIFT_REFUSAL_COPY` is what they read when there are too few scored weeks on one side of the split to compare at all. Every one of them describes the record and says outright what it does NOT establish — the drift sentence states that it cannot say which side moved, and the tracking sentence states that agreement between the halves is not a claim that the ranges are good. Nothing names a patient, a condition or a next clinical step, and nothing here proposes an action: the module reports a disagreement and, by design, resolves nothing.",
+  },
+  {
+    module: "src/console/interop.ts",
+    operatorCopy: [
+      "INTEROP_HEADLINE",
+      "SOMETHING_EXCHANGED_HEADLINE",
+      "NOTHING_ATTEMPTED",
+      "NONE_OF_THIS_KIND",
+      "ATTEMPTED_NOT_CONFIRMED",
+    ],
+    notCopy:
+      "The remaining exports are the view types, the gate-open constant, the function that assembles the page and `meaningFor`, which chooses between three of the sentences above and authors none. The five declared sentences exist to keep three zeroes apart: a zero because nothing was ever attempted, a zero because nothing of THIS kind was sent though other exchanges were, and a count above zero that still is not a delivery confirmation. The two headlines are the same distinction at the top of the page, and which one renders is derived from the counts rather than chosen. All five are about connections between systems; none describes a patient, a condition or a next clinical step. Every other sentence on the page is CARRIED from the interop module that owns the absence it describes, so this view authors no reason of its own.",
   },
   {
     module: "src/interop/exchange.ts",

@@ -136,6 +136,7 @@ test("console surfaces pass WCAG A/AA", async ({ page }) => {
     "/console/reporting", // W199 — same referral seed populates it
     "/console/responses", // W220 — scanned POPULATED: the sim graph always has rates
     "/console/capacity", // W229 — scanned POPULATED: the sim diary always has sessions
+    "/console/interop", // W246 — its content IS the absences, so it is never empty
     "/console/setup/practice",
   ];
   for (const path of surfaces) {
