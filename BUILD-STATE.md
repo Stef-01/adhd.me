@@ -139,6 +139,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Gate: accent re-measured at 9→3 with the three named, the legends still legible as headings
 > (they carry weight and letter-spacing, not colour, so the hierarchy survives), O135's record
 > corrected in both places, e2e green, full `pnpm verify` green.
+> DONE 2026-08-21. Accent on /clinicians/join 9 → 3, and the three are exactly what the token is
+> for: one section marker and the mix hero's two rotating values. The legends took `--muted` and
+> lost nothing, because their hierarchy was never carried by colour — uppercase, 0.12em
+> letter-spacing and weight 600 do that work and all three stay.
+> **THE CORRECTION IS THE MORE IMPORTANT HALF.** O135's DESIGN-QA entry is amended IN PLACE
+> rather than overwritten, so both the wrong reason and its correction stay readable. What I
+> wrote there — that the nine were "field-level error and hint affordances rather than
+> decoration" — was a guess dressed as a finding, produced in the middle of a unit whose entire
+> method was measurement, and under O130's rule it would have justified leaving six section
+> headings in the accent indefinitely. A register carrying a confident wrong explanation is
+> worse than one saying "not looked at": the next reader trusts it and moves on, which is
+> exactly what I did for one unit before catching it.
+> Worth naming the shape, because it is now three-for-three today: `.availability` (O130),
+> `.profile-content li::before` (O129) and `.join-form legend` were all undocumented accent or
+> emphasis declarations with no rationale comment, and all three were wrong. In this tree a
+> style rule without a reason beside it is not neutral — it is a rule nobody has justified, and
+> the odds it is a fossil are apparently even.
+> Gate met: qa/join-o136/ at both viewports through O134's helper, O135's record corrected in
+> DESIGN-QA and here, join-hero and a11y e2e green, `pnpm verify` green 3591.
 
 > **O135 (the site-wide measure and accent sweep the founder actually asked for) — claimed
 > 2026-08-20T23:56Z by loop-0820s.** The founder's design brief was "visually coherent ACROSS

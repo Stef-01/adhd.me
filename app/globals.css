@@ -5087,9 +5087,17 @@ textarea:focus-visible {
 
 .join-form { display: grid; gap: 40px; }
 .join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }
+/* O136: legends are SECTION HEADINGS, not values that change. Six of them sat in the accent
+   here — "You", "Your practice", "What you see often" — which made a form of structural labels
+   the loudest thing on a page whose two genuinely live tokens (the mix hero's rotating percent
+   and condition) are what the colour is for. Same undocumented fossil O130 found on
+   `.row-availability`: an accent with no rationale comment anywhere near it.
+
+   The hierarchy survives the change because it was never carried by colour: uppercase, 0.12em
+   letter-spacing and weight 600 are what mark these as labels, and all three stay. */
 .join-form legend {
   padding: 0;
-  color: var(--accent);
+  color: var(--muted);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;

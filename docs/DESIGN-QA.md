@@ -1092,7 +1092,33 @@ elements carrying the accent token, and images that fail to render once the page
   read: the eye has to find a new start position that moves on every line. It is the consent
   sentence under a form — the text a person is most entitled to actually read. 58ch and still
   centred.
-- [x] Accent counts were low everywhere (0–2) except /clinicians/join at 9. Left alone and
-  recorded: it is a form, its nine are field-level error and hint affordances rather than
-  decoration, and O130's rule is that accent marks the value that changes — which on a form is
-  the field that needs attention. Changing it would need the form's own unit.
+- [x] Accent counts were low everywhere (0–2) except /clinicians/join at 9. Left alone for the
+  form's own unit — **and the reason recorded here was WRONG, corrected by O136 the same night.**
+  I wrote that the nine were "field-level error and hint affordances rather than decoration",
+  which under O130's rule would have made them correct. Measured, they are not: one is the
+  eyebrow, two are the mix hero's genuinely live tokens, and six are FIELDSET LEGENDS — section
+  headings. I guessed at a reason instead of measuring one, in the middle of a unit whose whole
+  method was measurement. See O136 below.
+
+## O136 — the join form's accent, and a correction to O135's own record (2026-08-21)
+
+Captures: qa/join-o136/ (both viewports, taken through O134's helper).
+
+- [x] O135 found /clinicians/join carrying nine accent-coloured elements against 0–2 everywhere
+  else, and left them with a reason. **The reason was a guess and it was wrong.** Measured, the
+  nine are: the eyebrow (a section marker, consistent with every other page), `mix-percent`
+  "30%" and `mix-condition` "ADHD" — the mix hero's rotating values, which is textbook accent
+  use — and **six fieldset legends**: "You", "Your practice", "What you see often", "How you
+  work", "Languages other than English", "Declarations".
+- [x] Six section headings in the accent, on a page whose two genuinely live tokens are sitting
+  right there doing the job properly. `.join-form legend` set `color: var(--accent)` with no
+  rationale comment anywhere near it — the same undocumented-fossil shape O130 found on
+  `.row-availability`.
+- [x] Legends now take `--muted`. **The hierarchy survives because it was never carried by
+  colour**: uppercase, 0.12em letter-spacing and weight 600 are what mark these as structural
+  labels, and all three stay. Accent on the page: 9 → 3, and the three are one section marker
+  plus two live values.
+- [x] **The correction matters more than the fix.** A register carrying a confident wrong
+  explanation is worse than one saying "not looked at" — the next reader trusts it and moves on,
+  which is precisely what I did for one unit. O135's entry above is corrected in place rather
+  than quietly overwritten, so the mistake and its correction are both readable.
