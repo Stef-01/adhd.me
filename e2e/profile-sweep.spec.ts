@@ -44,13 +44,10 @@ const ACCEPTED: ReadonlyArray<{ clinician: string; rule: string; match: string; 
     match: "Cancer",
     why: "The same practice name, on the second doctor who works there.",
   },
-  {
-    clinician: "anubhav-saxena",
-    rule: "no-ratings",
-    match: "reviews",
-    why:
-      "'Long first appointment, scheduled reviews' and 'review at set intervals'. A clinical review, not a patient rating. WORTH RAISING AT SOURCE: `no-ratings` matching /review/ is very broad, and scheduled review is core language this product uses on every surface — the rule will keep producing this finding wherever the product describes what it actually does.",
-  },
+
+  // O164 deleted the `no-ratings` "reviews" acceptance from here: the rule was narrowed at source
+  // so clinical review no longer trips it, and this list's own stale-acceptance check is what
+  // forced the deletion rather than leaving a comfortable entry behind.
 
   // ── Genuinely undecided, and marked so rather than resolved by me.
   {

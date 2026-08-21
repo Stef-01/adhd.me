@@ -1889,3 +1889,44 @@ Proved by seeding, on the second attempt each time. Seeding *"we cure ADHD"* int
 seeding it into `about`, which does render, failed correctly. That is the fifth time this week a
 first seed missed its target, always the same way: **I seed the field I am thinking about rather
 than the one that is load-bearing.**
+
+## O164 — a compliance rule that cries wolf gets switched off (2026-08-21)
+
+O163 raised this at source rather than accepting it forever. `no-ratings` matched a bare
+`\breviews?\b`, and **scheduled review is core language this product uses on every surface** —
+*"Long first appointment, scheduled reviews"*, *"review at set intervals"*, *"titration reviewed on
+a schedule"*, the `/privacy/counsel-review` route. It had already produced two documented false
+positives.
+
+### The danger is not the false positive, it is the acceptance it forces
+
+Every surface describing what this product actually does trips the rule, and each trip buys an
+acceptance entry. **A register full of acceptances reads as coverage while permitting the thing it
+was written to stop** — and law 6 (no testimonials or ratings anywhere) is not a law that may rot.
+
+### Narrowed, and pinned both directions because that is the risk
+
+Ratings language is untouched (`4.8/5`, `5-star`, `★`, `rated`). "Review" now has to appear **as a
+rating** — whose, or how many.
+
+| still caught | no longer caught |
+|---|---|
+| `patient reviews`, `read our reviews`, `127 reviews`, `reviews from patients`, `Google reviews` | `scheduled reviews`, `review at set intervals`, `titration reviewed on a schedule`, `peer review`, `counsel review` |
+
+Widening a hole in a compliance rule to make a gate green is a failure this tree has caught in its
+own guards repeatedly. The difference between that and this is the both-directions pin.
+
+### My narrowing introduced its own false positive, and the new gate caught it
+
+The first draft used `\s+`, which **matches a newline**. The rendered profile reads *"…scheduled
+reviews\nby telehealth, wherever you are"* — so `reviews by telehealth` matched across the line
+break, and the narrowed rule invented a defect of its own. O163's profile sweep failed on the very
+first run after the change.
+
+That is the whole argument for having built that sweep a unit earlier: **a rule scanning rendered
+text has to know that a line break is not a space**, and only something reading rendered text can
+tell you when you have forgotten it. The alternatives now use `[ \t]`, and the newline case is
+pinned by example.
+
+The now-stale `no-ratings` acceptance was deleted from the profile sweep — its own
+stale-acceptance check forced it, rather than a comfortable entry being left behind.
