@@ -176,11 +176,32 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > unaccepted). No e2e required by this unit's own scope (pure computation refactor, no route or
 > UI touched).
 
-> **M2 (decide the polarity of F5, in public) — claimed 2026-08-22T23:42Z by loop-0822e.**
-> Q-M item 2. Alternating lanes per the loop's own rule — the prior firing (loop-0822d) took AR2,
-> so this one takes an O-lane unit; O-series Q1/Q2 are done/blocked, so the lowest-numbered
-> available work is Q-M's M2, which M1 left open by design ("the threshold is chosen deliberately
-> and written down, not inherited... see M2"). IN PROGRESS.
+> **M2 (decide the polarity of F5, in public) — claimed 2026-08-22T23:42Z by loop-0822e.
+> DONE @ 6a58cf6.** Q-M item 2. Alternating lanes per the loop's own rule — the prior firing
+> (loop-0822d) took AR2, so this one takes an O-lane unit; O-series Q1/Q2 are done/blocked, so
+> the lowest-numbered available work is Q-M's M2, which M1 left open by design ("the threshold is
+> chosen deliberately and written down, not inherited... see M2").
+> **DECIDED: WIDEN, staying at `0.5` — MEASURED, NOT ARGUED.** `cliniciansMatchingArchetype` grew
+> an optional `careThreshold` parameter (default unchanged, every production caller unaffected)
+> so the decision could be measured through the SAME function every other archetype test uses,
+> not a shadow reimplementation. Narrowing to `1` (a "sometimes" declaration formally ineligible,
+> scoring zero instead of half) empties `anxiety-differential-hindi` and `sleep-and-family-context`
+> to NO eligible clinician at all — a third of the demo's six journeys — because both route to
+> Dr Anusha Saxena on an area (`anxiety`, `non-medication`) she holds only at the "sometimes"
+> grade. That is exactly the "leads somewhere real" failure `care-archetypes.test.ts` already
+> guards against for the current threshold; narrowing would fail it. Widening keeps all six
+> servable and pays the interest-grade declaration exactly the half-weight it earned — never
+> rendered as a full match, per W213's explain module — rather than a directory that either
+> advertises care it cannot reach (narrowing) or inflates "sometimes" into "often" (F5's bug).
+> New test in `care-archetypes.test.ts` computes the partition (narrow-empties vs
+> current-empties) from `careArchetypes` and pins it by id, plus a non-vacuity check: a
+> threshold above the maximum possible `facetStrength` (1) must empty every journey, proving the
+> measurement counts real eligibility rather than a helper that always returns non-empty.
+> `ELIGIBILITY_CARE_THRESHOLD`'s doc comment rewritten to record the decision and cite the test,
+> replacing M1's "Q-M item 2's call" placeholder.
+> Gate: `pnpm verify` green — 257 files, 4098 tests (+1 over AR2's 4097), build clean, audit gate
+> PASS (2 accepted advisories, 0 unaccepted). No e2e required by this unit's own scope (parameter
+> default + test + doc comment, no route or UI logic touched).
 
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing
