@@ -1,11 +1,32 @@
 {
   "version": 1,
   "skills": {
+    "adhd": {
+      "source": "UditAkhourii/adhd",
+      "sourceType": "github",
+      "sourceCommit": "001a29d246fe140665a03ed387a7a30c56f089ed",
+      "skillPath": "skills/adhd/SKILL.md",
+      "computedHash": "06debe68a370206acd93e0b2ee54d6395bc367fdfbc079f2348e3ce2966dac0a"
+    },
     "design-motion-principles": {
       "source": "kylezantos/design-motion-principles",
       "sourceType": "github",
       "skillPath": "skills/design-motion-principles/SKILL.md",
       "computedHash": "6410c1844f511249f11f38d30d217cfecf7f595f45a868d74284b6380bab47d7"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceCommit": "3b3fad96af16a10759d930941b4520ba0c40edae",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "1608ea77fbb6fc30d13a97d12cfa8ebf31358d40f0dd97beed24829d6b3f45dd"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "sourceCommit": "56f44523f76efdcec813e67b38ee550e49b16f48",
+      "skillPath": "plugin/skills/impeccable/SKILL.md",
+      "computedHash": "bf8781e00c1e180aed3d9f0a9670025f6542a88fd01e6e9ae8052f7554d99086"
     }
   }
 }
