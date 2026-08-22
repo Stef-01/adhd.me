@@ -144,7 +144,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > collision leaves a trace.
 
 > **M1 (one weight function, and everything downstream consumes it) — claimed 2026-08-22T19:39Z
-> by loop-0822c. DONE.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating
+> by loop-0822c. DONE @ 0a7430f.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating
 > lanes per the loop's own rule — the prior firing (loop-0822b) took AR1, so this one takes an
 > O-lane unit; the O-series' own Q1/Q2 items are all done or blocked, so the lowest-numbered
 > available work is Q-M's M1.
