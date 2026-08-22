@@ -257,7 +257,7 @@ describe("W239 the store stays shut, and the ledger cannot recompute", () => {
     // something can be written to, and G9 is unratified. And a ledger that could recompute would
     // answer today's question with today's figures and look right doing it.
     const code = require("node:fs")
-      .readFileSync(new URL("./disclosure-ledger.ts", import.meta.url).pathname, "utf8")
+      .readFileSync(new URL("./disclosure-ledger.ts", import.meta.url), "utf8")
       .replace(/\/\*[\s\S]*?\*\//g, " ")
       .replace(/\/\/[^\n]*/g, " ");
     expect(code, "the stripper removed the code too").toContain("export function appendDisclosure");
@@ -278,7 +278,7 @@ describe("W239 the store stays shut, and the ledger cannot recompute", () => {
     // day nobody is looking at this file. The same shape-versus-content mistake as four other
     // guards corrected this session.
     const code = require("node:fs")
-      .readFileSync(new URL("./disclosure-ledger.ts", import.meta.url).pathname, "utf8")
+      .readFileSync(new URL("./disclosure-ledger.ts", import.meta.url), "utf8")
       .replace(/\/\*[\s\S]*?\*\//g, " ")
       .replace(/\/\/[^\n]*/g, " ");
     expect(code).toContain("PROPOSED_DISCLOSURE_LOG.proposedLifeDays");

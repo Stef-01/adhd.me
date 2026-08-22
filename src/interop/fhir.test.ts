@@ -248,7 +248,7 @@ describe("W235 it refuses rather than guessing, and it sends nothing", () => {
     expect(SHIPPED_MAPPINGS).toEqual([]);
     // No client, no endpoint, no serialiser that reaches a network. W237 builds the conformance
     // harness against recorded fixtures; W242 holds the credentials posture.
-    const source = new URL("./fhir.ts", import.meta.url).pathname;
+    const source = new URL("./fhir.ts", import.meta.url);
     const code = require("node:fs").readFileSync(source, "utf8")
       .replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
     expect(code).toContain("export function appointmentToFhir");
