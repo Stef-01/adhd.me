@@ -674,6 +674,58 @@ describe("O8 review findings, pinned", () => {
     expect(unservedAsks("I need help with my sleep")).toEqual([]);
   });
 
+  /**
+   * O182 (F2): DECLARING "SOMETIMES" USED TO HALVE A RIVAL'S FACET AT HALF THE PRICE.
+   *
+   * `heldBy` counted a boolean — `answers()` is true for "often" and equally true for "sometimes" —
+   * while scoring paid `declarationFactor`, which is 1 and 0.5. Two halves of one idea disagreeing,
+   * and the gap between them was a strategy: measured on this exact fixture, A's facet fell from 24
+   * to 12 the moment B declared it "sometimes", so B took 12 points off A for a claim B is paid 6
+   * for. 2:1 leverage, handed to the least committed declarer, on the rare facets where a false
+   * claim hurts a patient most.
+   *
+   * Rarity now sums the same quantity scoring pays out, so dilution costs exactly what it buys.
+   */
+  it("makes a 'sometimes' declaration cost the diluter exactly what it buys", () => {
+    const often = syntheticClinician({ id: "often", careAreas: ["adhd-assessment", "anxiety"] as CareArea[] });
+    const silent = syntheticClinician({ id: "silent", careAreas: ["adhd-assessment"] as CareArea[] });
+    const sometimes = syntheticClinician({
+      id: "sometimes",
+      careAreas: ["adhd-assessment"] as CareArea[],
+      careAreasSometimes: ["anxiety"] as CareArea[],
+    });
+    const ask = "I was treated for anxiety and think it was the wrong answer";
+
+    const alone = scoreAgainst(often, needsFor(ask, [often, silent]));
+    const diluted = scoreAgainst(often, needsFor(ask, [often, sometimes]));
+    const diluterGains = scoreAgainst(sometimes, needsFor(ask, [often, sometimes]));
+
+    // The honest declarer is still diluted — a facet two people answer does separate them less —
+    // but no longer by MORE than the diluter's own claim is worth.
+    const takenFromRival = alone - diluted;
+    expect(takenFromRival, "the diluter still takes more than they claim").toBeLessThanOrEqual(diluterGains);
+    // And the ordering the reader actually sees is unchanged: often still beats sometimes.
+    expect(rankClinicians(ask, [sometimes, often])[0]!.id).toBe("often");
+  });
+
+  /**
+   * O182 (F3): the terminal tie-break is arbitrary, total, and NOT a function of position.
+   */
+  it("breaks a dead tie without reading file order", () => {
+    const a = syntheticClinician({ id: "aaa" });
+    const b = syntheticClinician({ id: "bbb" });
+    const ask = "hello";
+
+    // Order-independent: the same SET produces the same ranking whichever way it was written down.
+    expect(rankClinicians(ask, [a, b]).map((c) => c.id)).toEqual(rankClinicians(ask, [b, a]).map((c) => c.id));
+    // Total: never returns 0 for two distinct clinicians, so the sort cannot fall back to stable.
+    expect(new Set(rankClinicians(ask, [a, b]).map((c) => c.id)).size).toBe(2);
+    // And it is not a permanent winner — some request puts the other one first.
+    const asks = ["hello", "hi there", "I need help", "an appointment", "someone to talk to", "zzz qqq"];
+    const firsts = new Set(asks.map((request) => rankClinicians(request, [a, b])[0]!.id));
+    expect(firsts.size, "one id wins every dead tie — the hash is behaving like file order").toBe(2);
+  });
+
   it("keeps scores === across float-hostile rosters of three", () => {
     // (N−heldBy+1)/N is not dyadic at N=3: 30 × 2/3 vs 20 × 2/3 + 10 × 2/3 must still band
     // together when they are mathematically equal, which is what roundScore guarantees.
@@ -689,10 +741,29 @@ describe("O8 review findings, pinned", () => {
     const t = { ...clinicians.find((c) => c.id === "anubhav-saxena")!, id: "tele", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"], disclosedInterest: undefined };
     const near = { ...syntheticClinician(), id: "near", suburb: "Epping", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     const far = { ...syntheticClinician(), id: "far", suburb: "Southport", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    // File order: far, tele, near — all tied on score and capacity from Beecroft.
-    const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), [far, t, near]);
-    // In-rooms clinicians swap among their own positions by distance; telehealth keeps its slot.
-    expect(out.map((c) => c.id)).toEqual(["near", "tele", "far"]);
+    /**
+     * O182: ASSERTED AS THE PROPERTY, NOT AS AN ARRANGEMENT.
+     *
+     * This used to pin the literal `["near", "tele", "far"]`, which was only ever true because the
+     * fit sort ended in FILE ORDER and the fixture was written in a particular order. O182 replaced
+     * that terminal tie-break with a request-seeded hash, the literal moved, and the test failed
+     * while the behaviour it exists to protect was completely intact.
+     *
+     * That is the same mistake as F3 one level down: pinning the arrangement a rule happens to
+     * produce rather than the rule. The property is that the distance pass permutes the in-rooms
+     * clinicians AMONG THEIR OWN POSITIONS and leaves every telehealth row exactly where the fit
+     * sort put it — which is what stops a telehealth row making the order cyclic, and which is true
+     * whatever the fit sort's own tie-break decides.
+     */
+    const roster = [far, t, near];
+    const byFit = rankClinicians("hello", roster).map((c) => c.id);
+    const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster).map((c) => c.id);
+
+    // The telehealth row never moves.
+    expect(out.indexOf("tele")).toBe(byFit.indexOf("tele"));
+    // The in-rooms rows occupy exactly the same set of positions, now ordered near-before-far.
+    const inRoomsSlots = byFit.map((id, index) => (id === "tele" ? -1 : index)).filter((index) => index >= 0);
+    expect(inRoomsSlots.map((index) => out[index])).toEqual(["near", "far"]);
   });
 });
 

@@ -143,6 +143,110 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O182 (the matching system, appraised — and the arithmetic that disagreed with itself) —
+> founder-directed 2026-08-22, session goal-0822a. DONE.** "An extremely thorough critical
+> appraisal on the matching system, advance it so that it is actually much more effective."
+> **METHOD: the pipeline read end to end, every claim measured against the tree, and five
+> independent appraisals run under distorted frames — regulator, mechanism design, information
+> retrieval, the patient at 11pm, strict-minimalist — with no shared context, then reconciled.**
+> Ten findings in `docs/MATCHING-APPRAISAL-O182.md`; three shipped, six specified as Q-M items, one
+> carried to the founder.
+> **THE FINDING THAT REORGANISED THE REST, AND IT WAS A COMMENT.** `separation()` claimed in its own
+> doc comment that without it "ticking every interview box is the dominant strategy". FALSE: it
+> discounts POPULAR FACETS and does not penalise BROAD DECLARERS — nothing in the formula reads how
+> many facets a clinician declared, so ticking a RARE box still costs nothing and collects full
+> weight. The discount is weakest exactly where box-ticking pays best, and a false claim on a rare
+> facet is the one nobody else can cover. Comment corrected, mechanism deliberately NOT changed: the
+> instrument that prices breadth is a declaration budget, which changes what the onboarding
+> interview ASKS a real doctor, and that is founder-gated (G-A4, Q-M item M11).
+> **SHIPPED 1 — the dilution exploit, measured then closed.** `heldBy` counted a boolean while
+> scoring paid 1.0/0.5. Measured: A declaring anxiety "often" was worth 24 alone and 12 once B
+> declared it "sometimes" — B took 12 from A for a claim B is paid 6 for, 2:1 leverage to the least
+> committed declarer. `declaredMass` now sums the quantity scoring pays out.
+> **SHIPPED 2 — file order stops deciding.** W221 sorted a disclosed interest behind an undisclosed
+> one; after O179 BOTH clinicians are disclosed, the comparator returns 0 for every pair, and the
+> stable sort handed first place to the first record in roster.ts — the owner of the partner clinic.
+> The defect W221 killed came back BY SUBTRACTION and no test saw it, because every test asserted
+> the rule instead of the outcome. The chain now ends in a request-seeded hash of the clinician id:
+> arbitrary, total, order-independent, and not editable into a favour. **Pinned as an outcome over
+> many requests — no clinician may take first place on every unseparated request.**
+> **NOT FIXED, ON PURPOSE, AND THE REFUSALS ARE THE POINT.** Ranking a disclosed interest last is a
+> TAX ON DISCLOSURE whose rational answer is to stop disclosing (G-A1, founder). A disclosure
+> severity taxonomy was refused — it is a policy judgement adjudicated by the party who owns the
+> partner clinic. Learned or panel-fitted weights refused under W213's floor. Proper scoring rules
+> refused over attribute declarations (nothing resolves) and kept for capacity claims. Deferred
+> acceptance recorded as NOT APPLICABLE so it is not proposed again.
+> Gate: `pnpm verify` green — 255 files, 4070 tests, audit PASS. Plan: Q-M (M1–M12) added to
+> `docs/MATCHING-YEAR-PLAN.md`, with an audit of how the year plan has actually been executed.
+
+> **O181 (the join form learns to be read two ways) — founder-directed 2026-08-22, session
+> goal-0822a. DONE.** "Make the Dr onboarding much more intuitive on phone and laptop, toggle to see
+> the whole form versus one section at a time, quicker navigation with dropdowns, learning from
+> REDCap survey design."
+> **THE HEADER OF join-form.tsx ARGUED AGAINST THIS, AND IT WAS HALF RIGHT.** It said a wizard means
+> "four chances to lose them and no way to see how long it is". Both objections are real. Neither is
+> answered by a wall of six fieldsets, which is its own way of losing a GP between patients. So this
+> is not a wizard: it is ONE form that can be read two ways, sectioned by default with "Show the
+> whole form" one tap away, and the second objection is answered head-on — a section counter and a
+> progress bar make the sectioned view MORE honest about its length than a scroll ever was.
+> **THE MECHANIC THAT MAKES IT SAFE: every section stays mounted and is hidden, never unmounted.**
+> Nothing typed can be lost by moving or switching views; the server action still receives ONE
+> native submit carrying every field, so `submitApplication` is untouched; and with JavaScript
+> unavailable the form renders exactly as before, because `mode` starts at "all" on the server and
+> only becomes "steps" after mount. A GP with a hardened browser gets the long form that works
+> rather than a Next button that does nothing.
+> **TAILWIND V4 TRAP, WHICH IS WHY THE HIDING RULE IS WRITTEN EXPLICITLY.** Utilities live in
+> `@layer utilities`; every hand-written rule in globals.css is UNLAYERED and beats them regardless
+> of specificity. `.join-form fieldset` sets a border and padding in that same file, so trusting
+> `[hidden]`'s user-agent rule would have painted a hidden section's border. `e2e/join-form.spec.ts`
+> asserts the COMPUTED display, never the attribute.
+> **AND THE SWEEPS WERE MEASURING THE SMALLER PAGE.** Hiding five fieldsets took ~30 controls out of
+> view and `touch-floor` and `semantics` both went under their non-vacuity floors — the only reason
+> it was caught. `a11y`, `contrast` and `keyboard-focus` had no floor low enough to notice and would
+> have swept the collapsed page indefinitely. `revealCollapsedSurfaces` in `e2e/site-routes.ts` now
+> opens progressive disclosure before a sweep measures, and the rule is written down: a sweep
+> measures the page a reader can REACH, not the page as first painted.
+> Gate: `pnpm verify` green; 7 new e2e in join-form.spec.ts; join-hero, applications, and the
+> control sweeps green.
+
+> **O180 (the profile loses a badge, a map and a competing action, and keeps the facts) —
+> founder-directed 2026-08-22, session goal-0822a. DONE.** Four directed changes.
+> "NSW ADHD training" comes off every listing — it is the MINIMUM to be listed, so as a badge it
+> distinguished nobody; the field stays as the eligibility fact it always was. The map-and-directions
+> row is gone. "Books online" is retired and Dr Anubhav's "Phone consultations" becomes "Telehealth".
+> Compare is kept and moved after the sections, in the page's quietest register.
+> **THE ONE SUBSTITUTION THAT WAS REFUSED.** The directive was to replace "Books online" with
+> "Telehealth". Done for Dr Anubhav, who declares `telehealthFirstAppointment`. NOT done for Dr
+> Anusha: "Books online" was true and evidenced by a live Healthengine route, while telehealth is a
+> different claim — that she will CONSULT remotely — which her entry explicitly records her as not
+> having made. The unclear word is gone as directed and nothing is asserted in its place; a test now
+> enforces the general rule both ways.
+> **TWO CONSEQUENCES THAT WERE NOT ASKED FOR.** The map link's text was "Map and directions to
+> <practice>" — the ONLY place the practice name rendered on a profile — so removing the row silently
+> stopped the page saying where a GP works. Caught by `profile-sweep`'s stale-acceptance check, and
+> the name returns as a FACT beside the appointment length. And `practicalSignals` was pinned at
+> exactly 3; three was never a requirement, only the count every entry happened to have, while the
+> surface renders `slice(0, 2)` — the pin moved to a floor measured against that slice.
+
+> **O179 (Dr Tushar Yadav leaves, and fifty tests that were not about him go red) —
+> founder-directed 2026-08-22, session goal-0822a. DONE.** He left the platform; his entry was 49
+> lines. The rest was what removing it exposed.
+> **FIFTY TESTS FAILED AND ALMOST NONE WERE ABOUT HIM** — they were the ranking laws, every one
+> building its fixtures as `{ ...yadav(), id: "closed" }`. A roster edit broke the laws of the
+> matcher, which is exactly backwards. `src/demo/synthetic-clinician.ts` is the other half of W193's
+> seam: W193 stopped a roster edit touching a ranking line; this stops a ranking TEST touching a
+> roster entry.
+> **FOUR FINDINGS SURFACED AND NONE FIXED HERE** (all carried to O182's appraisal): W221's tie-break
+> ran out of material and file order took over; eligibility and scoring disagree about
+> `careAreasSometimes`; the tie-quality KPI ROSE when the roster shrank and `partialTie` became
+> structurally impossible; and a profile displays "Long first appointment" while the matcher grades
+> that request `unserved`.
+> **TWO DEMO JOURNEYS DELETED RATHER THAN RE-POINTED.** `anxiety-differential-hindi` and
+> `sleep-and-family-context` went to ZERO eligible clinicians. They could have been kept by teaching
+> eligibility to accept interest grade — which is exactly why they were not: that would be tuning
+> the definition of "eligible" until the demo passed. Also found: `matchQuality` has four grades and
+> `reach.test.ts` enumerated three, passing only because no corpus query had ever reached `unserved`.
+
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a.** Current-quarter unit. Red gate re-checked first: still founder-gated, ten
 > consecutive instant failures.

@@ -147,10 +147,32 @@ describe("W221 what the roster declares", () => {
    * decision (what breaks a tie when every candidate is conflicted?) and it is carried, priced,
    * to docs/MATCHING-APPRAISAL-O180.md and the founder gate list.
    */
-  it("records that W221's tie-break can no longer separate anybody", () => {
-    expect(clinicians.every((clinician) => clinician.disclosedInterest)).toBe(true);
-    expect(rankClinicians("I think I might have ADHD and I would like an assessment")[0]!.id)
-      .toBe("anubhav-saxena");
+  it("no longer hands an unseparated request to whoever is first in the file", () => {
+    /**
+     * O182 CLOSES WHAT O179 RECORDED. The row above still holds — every listed clinician is
+     * disclosed, so W221's comparator returns 0 for every pair and cannot protect anybody. What has
+     * changed is what happens NEXT: the chain no longer ends in a stable sort over file order, so
+     * the owner of the partner clinic is no longer structurally first.
+     *
+     * ASSERTED AS AN OUTCOME OVER MANY REQUESTS, NOT AS A RULE. Every test of W221 asserted the
+     * rule, which is exactly why nobody noticed when the rule stopped having anything to act on.
+     * This asserts the thing a reader would actually be harmed by: one clinician taking first place
+     * on every unseparated request. Across requests that separate nobody, both clinicians must
+     * appear first at least once.
+     */
+    const unseparating = [
+      "I think I might have ADHD and I would like an assessment",
+      "I would like an assessment please",
+      "can someone look at whether I have ADHD",
+      "I want to get assessed for ADHD",
+      "looking for an ADHD assessment",
+      "I need an assessment for ADHD",
+    ];
+    const tied = unseparating.filter((request) => matchQuality(request) === "tied");
+    expect(tied.length, "these requests were supposed to separate nobody").toBeGreaterThan(3);
+
+    const winners = new Set(tied.map((request) => rankClinicians(request)[0]!.id));
+    expect(winners.size, `one clinician took every unseparated request: ${[...winners]}`).toBeGreaterThan(1);
   });
 });
 

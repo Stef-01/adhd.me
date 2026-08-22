@@ -73,3 +73,34 @@ export function staleDynamicPlanEntries(): string[] {
   const onDisk = new Set(ALL_PAGE_ROUTES);
   return Object.keys(DYNAMIC_ROUTE_PLAN).filter((p) => !onDisk.has(p));
 }
+
+/**
+ * O181: reveal anything a page keeps behind progressive disclosure, before a sweep measures it.
+ *
+ * WHY EVERY CONTROL SWEEP NEEDS THIS. The join form gained a sectioned view, which hides five of
+ * its six fieldsets by default. Nothing about those fields changed — they are still in the DOM,
+ * still submitted, still need a label, a 44px hit area and a focus ring — but a sweep that only
+ * measures what is VISIBLE stopped seeing about thirty controls and carried on passing. Two
+ * non-vacuity floors caught it (`touch-floor` and `semantics` both went under their minimum
+ * population), which is the only reason it was not a silent loss of coverage; `a11y`, `contrast`
+ * and `keyboard-focus` had no floor low enough to notice and would have measured the smaller page
+ * indefinitely.
+ *
+ * THE RULE THIS ENCODES: a sweep must measure the page a reader can reach, not the page as first
+ * painted. Progressive disclosure is a legitimate design choice and it is not a reason for the
+ * quality gates to look away — so the sweeps open it, deliberately, and any future collapsed
+ * surface must add its opener here rather than quietly shrinking the population.
+ */
+export async function revealCollapsedSurfaces(page: {
+  locator: (selector: string) => {
+    count: () => Promise<number>;
+    first: () => { click: (options?: { timeout?: number }) => Promise<void> };
+  };
+}): Promise<void> {
+  // The join form's "whole form" view. Matched on the accessible name so a restyle cannot silently
+  // stop the sweeps opening it.
+  const wholeForm = page.locator('button:has-text("Show the whole form")');
+  if ((await wholeForm.count()) > 0) {
+    await wholeForm.first().click({ timeout: 5000 });
+  }
+}

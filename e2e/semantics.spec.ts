@@ -19,7 +19,7 @@ import { test, expect, type Page } from "@playwright/test";
 // `PROBE` below is entirely route-independent — one visible h1, no level jump, a `<main>`, a name on
 // every visible field. Nothing in it is tuned to a screen. Recorded here because "this one is hard"
 // was the reason it waited through two rows.
-import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 
 async function signIn(page: Page) {
   await page.goto("/console/signin");
@@ -70,6 +70,7 @@ test("headings, landmarks and field names hold across the site", async ({ page, 
   let headings = 0, fields = 0;
   const scan = async (route: string) => {
     const res = await page.goto(route);
+  await revealCollapsedSurfaces(page);
     if (res && res.status() === 404) return;
     await page.evaluate(() => document.fonts.ready);
     const r = await page.evaluate(PROBE);

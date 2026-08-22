@@ -35,6 +35,11 @@ test.describe("the join page opens with the mix, not the form", () => {
     // The GP sets 50% through the accessible control…
     await page.getByLabel(/Percentage of your patients/i).fill("50");
     // …and the form now restates it and will submit it with the application.
+    // O181: the echo lives in "What you see often", which is section 3 — the contextually right
+    // home for a caseload statement, and hidden in the sectioned default. The whole-form view is
+    // one tap away and is what this assertion looks at; the echo's own test-id is unchanged, so
+    // this is a navigation step, not a weakened assertion.
+    await page.getByRole("button", { name: "Show the whole form" }).click();
     const echo = page.getByTestId("mix-echo");
     await expect(echo).toBeVisible();
     await expect(echo).toContainText("50%");

@@ -11,7 +11,7 @@ import { expect, test, type Page } from "@playwright/test";
 //
 // O148's note below still holds and is why the console half exists at all: it is where practice
 // staff work, sometimes on a phone between patients.
-import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 
 /**
  * Every control on `route` whose HIT AREA is under 44px, with the population it was drawn from.
@@ -30,6 +30,7 @@ import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
  */
 async function sweep(page: Page, route: string) {
   await page.goto(route, { waitUntil: "networkidle" });
+  await revealCollapsedSurfaces(page);
   // Fonts change metrics and so layout. Without this the sweep reported /about's "Final-year MD
   // candidate" link at 265x44 as an offender on one run and not the next (O146).
   await page.evaluate(() => document.fonts.ready);
