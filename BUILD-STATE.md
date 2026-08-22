@@ -143,6 +143,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **M1 (one weight function, and everything downstream consumes it) — claimed 2026-08-22T19:39Z
+> by loop-0822c.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating lanes
+> per the loop's own rule — the prior firing (loop-0822b) took AR1, so this one takes an O-lane
+> unit; the O-series' own Q1/Q2 items are all done or blocked, so the lowest-numbered available
+> work is Q-M's M1. Building now.
+
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing
 > since the claim commit, 8bea4cd — 11+ hours, well past the 90-minute window; loop-0821a's
