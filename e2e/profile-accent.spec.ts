@@ -1,3 +1,5 @@
+// taste-rule: type.accent-live-tokens
+
 import { expect, test, type Page } from "@playwright/test";
 
 async function intoProfile(page: Page) {

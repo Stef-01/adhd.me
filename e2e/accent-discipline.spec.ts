@@ -24,6 +24,8 @@
 // hero — the taste law's own example of a live token. So the cap is 2 rather than 1: it permits one
 // meaning expressed in a pair of classes, and refuses a genuine third.
 
+// taste-rule: type.accent-live-tokens
+
 import { expect, test } from "@playwright/test";
 import { PUBLIC_ROUTES } from "./site-routes";
 

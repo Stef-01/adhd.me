@@ -5,6 +5,7 @@
 // source of /clinicians reports a `no-ratings` hit on the word "review", which turns out to be the
 // identifier `is-reviewed` in a className. A source scan measures the code. Only a rendered scan
 // measures what a stranger reads, and the stranger is who the rules are about.
+// taste-rule: honesty.no-testimonials
 
 import { expect, test } from "@playwright/test";
 import {

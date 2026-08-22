@@ -8,6 +8,7 @@
 // It asserts the SHAPE of the flow rather than its copy: which screen follows which, that every
 // back route lands somewhere real, and that a booking can still be completed. Copy is asserted by
 // the compliance sweeps, and duplicating it here would mean every wording change broke two files.
+// taste-rule: honesty.claim-earned
 
 import { expect, test, type Page } from "@playwright/test";
 

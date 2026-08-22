@@ -4,6 +4,7 @@
 // That is worth being explicit about: this asserts THIS MODULE'S behaviour (feature detection, the
 // interim/final split, teardown, error mapping) and not that Chrome transcribes correctly. The
 // half a fake cannot cover is the half a browser owns.
+// taste-rule: interaction.errors-plain
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {

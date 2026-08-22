@@ -15,6 +15,8 @@
 //   preserve. A runtime assertion for this is a race — whether an animation is still in flight
 //   at any given moment is timing — so it is pinned here instead, W175's pattern.
 
+// taste-rule: motion.reduced-motion
+
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";

@@ -1,4 +1,5 @@
 // O145/O148: the 44px touch floor (O14), swept mechanically instead of remembered per unit.
+// taste-rule: interaction.touch-44
 
 import { expect, test, type Page } from "@playwright/test";
 

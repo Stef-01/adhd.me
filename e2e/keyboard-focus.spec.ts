@@ -1,4 +1,5 @@
 // O147: the taste law's two keyboard rules, made executable.
+// taste-rule: interaction.hover-focus
 
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 

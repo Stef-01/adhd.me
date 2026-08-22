@@ -10,6 +10,23 @@
 // (`taste-register.test.ts`) parses that file and pins agreement in BOTH directions against the
 // list below — a rule in the file and not the register fails the build, and so does the reverse.
 // Neither this list nor the prose is the sole source; drift between them is a build error.
+//
+// AR2: every rule also names its enforcement, or names its absence.
+//
+// A register that only lists rules restates the prose problem one level down — a rule can sit in
+// TASTE_RULES forever without anything that checks it, and nothing would say so. Each entry below
+// carries either `enforcedBy` (real spec/test files, each tagged `// taste-rule: <id>` so the claim
+// is checked against the file rather than typed once and trusted) or `unenforced` (a reason, not a
+// placeholder — several below are the honest finding that a rule's own cited incident does not mean
+// a standing check exists: `layout.fold-governed` cites W167, but W167's fold register catches a
+// different kind of fold — order-independent reduces in ranking code — not visual above-the-fold
+// content, so the citation is a false friend and the rule is unenforced today).
+//
+// MEASURED 2026-08-22, when this was written: 22 rules, 7 enforced, 15 unenforced. `UNENFORCED_COUNT`
+// pins the second number so it can only fall on purpose (O177's rule: a queue must distinguish
+// "not done" from "decided") — a PR that adds a rule without deciding its enforcement, or silently
+// drops a tag a rule's `enforcedBy` still claims, fails the build rather than quietly changing the
+// count.
 
 export type TasteSection =
   | "layout"
@@ -34,6 +51,14 @@ export interface TasteRule {
    * disagreement" law, `docs/AESTHETIC-REVIEW-PLAN.md` §Standing constraints).
    */
   incident: string;
+  /**
+   * Real enforcement, as `"<repo-relative file> :: <test name>"` entries. Every file named here
+   * must carry a `// taste-rule: <id>` comment (checked by `diffEnforcement` against the actual
+   * tree) — the citation is only as good as its cross-check.
+   */
+  enforcedBy?: readonly string[];
+  /** Why no check exists yet. Exactly one of `enforcedBy`/`unenforced` is set, never both, never neither. */
+  unenforced?: string;
 }
 
 export const TASTE_RULES: readonly TasteRule[] = [
@@ -43,6 +68,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "A screen states one thing; controls live inside the statement (the mix hero pattern), never beside it competing.",
     incident: "O24 — GP join landing (patient-mix hero) + whole-surface declutter audit",
+    unenforced: "a composition judgement with no assertion form yet; AR3/AR15 add per-route visual coverage, not this",
   },
   {
     id: "layout.fold-governed",
@@ -50,6 +76,10 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "Nothing above the fold that is not the idea; a fold may never cut a tied band or separate a claim from its qualifier.",
     incident: "W167 — the order-independence fold register (cited directly in the rule)",
+    unenforced:
+      "the rule's own citation is a false friend: W167's fold register (src/quality/order-independence.ts) catches a " +
+      "different kind of fold — order-independent reduces in ranking code — not visual above-the-fold content; no " +
+      "check asserts the latter today. AR19 plans the visual-fold check this rule actually needs",
   },
   {
     id: "layout.shared-row",
@@ -57,6 +87,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "Related facts share a row — a label and its evidence, a name and its distance — rather than requiring the reader to scan two regions to join one fact.",
     incident: "O24 — GP join landing (patient-mix hero) + whole-surface declutter audit",
+    unenforced: "a composition judgement with no assertion form yet",
   },
   {
     id: "layout.five-then-rest",
@@ -65,6 +96,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "Long lists show a chooseable few with the remainder one tap away; never render an unbounded list as the default state.",
     incident:
       "predates this tree's per-unit design record — no single fix traced; carried from the initial design baseline",
+    unenforced: "no check asserts a long list renders a bounded default with a reveal-more affordance",
   },
   {
     id: "type.serif-display",
@@ -72,12 +104,17 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement: "Serif (Newsreader) at display scale for statements; the sans carries controls and body.",
     incident:
       "predates this tree's per-unit design record — the original typographic choice (CLAUDE.md: this tree chose Newsreader on paper deliberately)",
+    unenforced: "no check asserts Newsreader (or any serif) renders at display scale; a font-choice audit, not a gate",
   },
   {
     id: "type.accent-live-tokens",
     section: "type-colour",
     statement: "Accent colour is reserved for live tokens — the value that changes, the word that matters.",
     incident: "O130 — the accent pointed at the wrong thing, and it was a fossil; generalised by O176",
+    enforcedBy: [
+      "e2e/accent-discipline.spec.ts :: no public surface lets the accent carry more than one meaning",
+      "e2e/profile-accent.spec.ts :: profile highlights are a quiet text line, not dated colored bubbles",
+    ],
   },
   {
     id: "type.numeric-typography",
@@ -85,12 +122,16 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "tabular-nums wherever numbers change or align; curly quotes, real ellipses, non-breaking spaces inside names and units.",
     incident: "W42 — practice-facing results page (first 'numbers use tabular-nums so columns align' record)",
+    unenforced: "no check greps for tabular-nums, curly quotes or real ellipses; a typography-detail sweep not yet built",
   },
   {
     id: "type.palette-tokens",
     section: "type-colour",
     statement: "Palette tokens only; no raw hex in components.",
     incident: "O96 — globals.css sectioned, with a machine-checked proof",
+    unenforced:
+      "O96's proof was a one-time computed-style diff for one refactor, not a standing gate against raw hex in " +
+      "components; AR17/AR18 plan the ongoing check",
   },
   {
     id: "interaction.touch-44",
@@ -98,6 +139,10 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "44px minimum touch target; decorative smaller visuals may render smaller but the hit area meets the floor.",
     incident: "O14 (cited directly in the rule); enforcement generalised by O145 and O170",
+    enforcedBy: [
+      "e2e/touch-floor.spec.ts :: no control on a public route is under the floor",
+      "e2e/touch-floor.spec.ts :: no control in the console is under the floor",
+    ],
   },
   {
     id: "interaction.hover-focus",
@@ -105,12 +150,20 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "Hover styles gated behind @media (hover: hover); touch-action: manipulation on controls; visible :focus-visible ring, never outline: none without a replacement.",
     incident: "O147 — the focus law, made executable",
+    enforcedBy: [
+      "e2e/keyboard-focus.spec.ts :: every public control is reachable by keyboard and shows where it is",
+      "e2e/keyboard-focus.spec.ts :: every console control is reachable by keyboard and shows where it is",
+    ],
   },
   {
     id: "interaction.errors-plain",
     section: "interaction",
     statement: "Errors are plain sentences with a way out, never error-code language on a patient surface.",
     incident: "O46 — the unearned headline and the mic that stops on its own",
+    enforcedBy: [
+      "src/voice/speech.test.ts :: says nothing to a patient in error-code language",
+      "src/voice/speech.test.ts :: offers typing in every error message, since that is always the way out",
+    ],
   },
   {
     id: "motion.carries-meaning",
@@ -118,6 +171,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "Motion must carry meaning: a value resolving, an order re-sorting, an object staying itself across screens. Nothing that merely draws the eye.",
     incident: "O127 — the motion queue, closed honestly",
+    unenforced: "a design judgement (does this motion carry meaning) with no mechanical test; AR9-AR12's mutation probes are the planned enforcement",
   },
   {
     id: "motion.reduced-motion",
@@ -125,12 +179,19 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "prefers-reduced-motion is fully honoured — every effect has a static equal, checked at the hook, not just in CSS.",
     incident: "O127 — the motion queue, closed honestly; gaps found later by O141",
+    enforcedBy: [
+      "src/quality/landing-motion.test.ts :: keeps the reduced-motion gate, which is still right even though it was not the fix",
+    ],
   },
   {
     id: "motion.autoplay-stop",
     section: "motion",
     statement: "Indefinite autoplay needs a stop: pause on hover, stop on engagement.",
     incident: "O29 — web-guidelines audit + micro-polish",
+    unenforced:
+      "app/clinicians/join/mix-hero.tsx implements the O29 fix (onMouseEnter pauses the rotation, and engagement stops " +
+      "it — see its own comment citing O29), but no test asserts either behaviour; e2e/join-hero.spec.ts covers the " +
+      "same component without touching hover or engagement",
   },
   {
     id: "motion.consult-view-transitions",
@@ -138,48 +199,69 @@ export const TASTE_RULES: readonly TasteRule[] = [
     statement:
       "Consult react-view-transitions for shared-element and route transitions before reaching for bespoke animation.",
     incident: "process recommendation, not a fix — points at the vendored react-view-transitions skill",
+    unenforced: "a process instruction for the author to follow before writing code, not a property of shipped code",
   },
   {
     id: "honesty.claim-earned",
     section: "honesty",
     statement: "A claim renders only when it is earned; counts stand alone otherwise.",
     incident: "O46 — the unearned headline and the mic that stops on its own",
+    enforcedBy: [
+      "e2e/finder-flow.spec.ts :: collective roster coverage is never presented as one doctor's complete fit (O178)",
+      "e2e/finder-flow.spec.ts :: and still says it when the fit really is complete (O121 non-vacuity)",
+    ],
   },
   {
     id: "honesty.no-testimonials",
     section: "honesty",
     statement: 'No testimonials, ratings, or "specialist/specialise" anywhere a patient reads.',
     incident: "W11 — the first design-QA checklist pass (2026-08-08); CLAUDE.md law 6",
+    enforcedBy: [
+      "src/compliance/public-surfaces.test.ts :: flags a testimonial on a professional surface, because that exemption does not exist",
+      "src/compliance/public-surfaces.test.ts :: holds a patient surface to all of them",
+      "e2e/public-sweep.spec.ts :: every public surface serves copy its audience's rules allow",
+    ],
   },
   {
     id: "honesty.clinician-declaration",
     section: "honesty",
     statement: "Copy about a clinician is their declaration, never our characterisation.",
     incident: "O58 — Dr Anusha Saxena's background, in her own supply",
+    unenforced:
+      "O58 rewrote one clinician's bio as a one-time content fix; no standing check distinguishes self-declared " +
+      "clinician copy from platform narrative anywhere in the roster",
   },
   {
     id: "honesty.qa-capture",
     section: "honesty",
     statement: "Every new/changed screen ships with a qa/ capture and a docs/DESIGN-QA.md entry.",
     incident: "O143 — the design record had been silently falsified",
+    unenforced:
+      "no check asserts a changed screen shipped with a qa/ capture and a DESIGN-QA.md entry; O143 found this record " +
+      "silently falsified once already, which argues for a check rather than against one existing — none exists yet",
   },
   {
     id: "review.screenshot-both-viewports",
     section: "review-procedure",
     statement: "Screenshot the surface at 390x844 and desktop (Playwright against the prod build).",
     incident: "W11 — the first design-QA checklist pass (2026-08-08)",
+    unenforced:
+      "e2e/ui-audit.spec.ts captures 7 hardcoded routes at phone width only, with no assertion — it cannot fail, so " +
+      "it is a capture step rather than a gate; a human procedure, not yet checked",
   },
   {
     id: "review.walk-fix-smallest",
     section: "review-procedure",
     statement: "Walk the checklists above; fix in place, smallest diff.",
     incident: "W11 — the first design-QA checklist pass (2026-08-08)",
+    unenforced: "a human review-procedure instruction, not a property of shipped code",
   },
   {
     id: "review.recapture-record",
     section: "review-procedure",
     statement: "Re-capture, record the before/after in docs/DESIGN-QA.md, keep captures in qa/.",
     incident: "W11 — the first design-QA checklist pass (2026-08-08)",
+    unenforced: "a human review-procedure instruction; docs/DESIGN-QA.md entries are written by hand, not verified against captures",
   },
 ];
 
@@ -285,5 +367,98 @@ export function diffTasteRegister(skillMarkdown: string, register: readonly Tast
       .filter((r) => skillSectionById.has(r.id) && skillSectionById.get(r.id) !== r.section)
       .map((r) => r.id)
       .sort(),
+  };
+}
+
+/**
+ * AR2: the count of rules with no standing check, pinned so it can only fall on purpose. Adding a
+ * rule, or a future edit that quietly drops one's `enforcedBy`, must choose a new number here
+ * rather than let the count drift unnoticed (O177's rule: a queue must distinguish "not done" from
+ * "decided").
+ */
+export const UNENFORCED_COUNT = 15;
+
+export interface EnforcementTag {
+  /** The rule id named in a `// taste-rule: <id>` comment. */
+  id: string;
+  /** Repo-relative path of the file carrying the tag. */
+  file: string;
+}
+
+/**
+ * Find every `// taste-rule: <id>` tag in one file's source. Takes content directly (like
+ * `parseSkillRules` takes markdown directly) so this is testable against a fabricated string
+ * without touching the filesystem; the real tree is walked by the caller (`taste-register.test.ts`,
+ * matching this module's own choice to stay filesystem-free).
+ */
+export function parseEnforcementTags(source: string, file: string): EnforcementTag[] {
+  const tags: EnforcementTag[] = [];
+  const re = /\/\/\s*taste-rule:\s*([a-z0-9.-]+)/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(source))) tags.push({ id: match[1]!, file });
+  return tags;
+}
+
+export interface EnforcementDiff {
+  /** Rule ids with neither `enforcedBy` nor `unenforced` set. */
+  missingBoth: string[];
+  /** Rule ids with both set — ambiguous, so refused rather than silently preferring one. */
+  bothPresent: string[];
+  /** Tag ids found in the tree that name no rule in the register — a spec claiming an unknown rule. */
+  unknownTagIds: string[];
+  /** `"<ruleId> -> <file>"`: a rule's `enforcedBy` names a file that carries no matching tag. */
+  enforcedWithoutTag: string[];
+  /** `"<id> -> <file>"`: a tag exists but no rule's `enforcedBy` claims that file for that id. */
+  orphanTags: string[];
+  /** The register's actual unenforced count, to compare against `UNENFORCED_COUNT`. */
+  unenforcedCount: number;
+}
+
+/** Cross-check the register's enforcement claims against tags actually found in the tree. */
+export function diffEnforcement(register: readonly TasteRule[], tags: readonly EnforcementTag[]): EnforcementDiff {
+  const registerIds = new Set(register.map((r) => r.id));
+  const tagsById = new Map<string, Set<string>>();
+  for (const tag of tags) {
+    if (!tagsById.has(tag.id)) tagsById.set(tag.id, new Set());
+    tagsById.get(tag.id)!.add(tag.file);
+  }
+
+  const missingBoth: string[] = [];
+  const bothPresent: string[] = [];
+  const enforcedWithoutTag: string[] = [];
+  let unenforcedCount = 0;
+
+  for (const rule of register) {
+    const hasEnforced = (rule.enforcedBy?.length ?? 0) > 0;
+    const hasUnenforced = (rule.unenforced?.length ?? 0) > 0;
+    if (!hasEnforced && !hasUnenforced) missingBoth.push(rule.id);
+    if (hasEnforced && hasUnenforced) bothPresent.push(rule.id);
+    if (hasUnenforced) unenforcedCount++;
+    if (hasEnforced) {
+      const files = tagsById.get(rule.id) ?? new Set<string>();
+      for (const entry of rule.enforcedBy!) {
+        const file = entry.split(" :: ")[0]!;
+        if (!files.has(file)) enforcedWithoutTag.push(`${rule.id} -> ${file}`);
+      }
+    }
+  }
+
+  const unknownTagIds = [...new Set(tags.filter((t) => !registerIds.has(t.id)).map((t) => t.id))].sort();
+
+  const orphanTags: string[] = [];
+  for (const tag of tags) {
+    if (!registerIds.has(tag.id)) continue;
+    const rule = register.find((r) => r.id === tag.id)!;
+    const claimed = (rule.enforcedBy ?? []).some((entry) => entry.split(" :: ")[0] === tag.file);
+    if (!claimed) orphanTags.push(`${tag.id} -> ${tag.file}`);
+  }
+
+  return {
+    missingBoth: missingBoth.sort(),
+    bothPresent: bothPresent.sort(),
+    unknownTagIds,
+    enforcedWithoutTag: [...new Set(enforcedWithoutTag)].sort(),
+    orphanTags: [...new Set(orphanTags)].sort(),
+    unenforcedCount,
   };
 }

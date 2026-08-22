@@ -1,6 +1,7 @@
 // W192 verify gate (unit half): every public surface classified, checked against the tree. The
 // rendered-copy sweep and the axe scan are the e2e half — e2e/public-sweep.spec.ts and
 // e2e/a11y.spec.ts.
+// taste-rule: honesty.no-testimonials
 
 import { describe, expect, it } from "vitest";
 import { LANDING_RULES, lintLandingCopy } from "./landing";
