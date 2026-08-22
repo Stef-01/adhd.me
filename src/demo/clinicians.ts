@@ -103,9 +103,12 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
     const byCapacity = CAPACITY_ORDER[capacityGrade(a, today)] - CAPACITY_ORDER[capacityGrade(b, today)];
     if (byCapacity !== 0) return byCapacity;
 
-    // Exact ties remain peers. Modern JavaScript sorting is stable, and the UI explicitly labels
-    // tied bands instead of pretending this final source order was earned by the request.
-    return 0;
+    // Exact ties remain peers in the UI's rank band, but source-file position must not decide
+    // which named clinician appears first inside that band. Mix the request with the stable id so
+    // the arbitrary display order is deterministic, independent of roster order, and not a
+    // permanent advantage for whichever record happens to be written first.
+    const shuffle = (clinician: Clinician) => tieHash(`${query}|${clinician.id}`);
+    return shuffle(a) - shuffle(b) || a.id.localeCompare(b.id);
   });
 }
 

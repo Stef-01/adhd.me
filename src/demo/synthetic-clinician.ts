@@ -62,6 +62,7 @@ export function syntheticClinician(overrides: Partial<Clinician> = {}): Clinicia
     matchLine: "Synthetic fixture.",
     fitSignals: [],
     practicalSignals: [],
+    summary: "Synthetic fixture used by engine tests.",
     about: "Synthetic fixture used by engine tests. Not a person.",
     experience: [],
     languages: ["English"],

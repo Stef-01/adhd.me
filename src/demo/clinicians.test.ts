@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { capacityGrade, clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { holdsPreference } from "@/matching/needs";
+import { syntheticClinician } from "./synthetic-clinician";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -118,8 +120,9 @@ describe("clinician roster and matching", () => {
         .not.toContain("Books online");
     }
 
-    // Non-vacuity: the rule above is only meaningful while somebody actually says it.
-    expect(clinicians.filter((c) => c.practicalSignals.some((s) => /telehealth/i.test(s)))).toHaveLength(1);
+    // The display derives the clearer label from the declaration below, rather than requiring a
+    // second free-text copy of the same fact that can drift out of sync.
+    expect(clinicians.filter((c) => c.telehealthFirstAppointment)).toHaveLength(1);
   });
 
   it("marks telehealth-first explicitly rather than reading it off a display string", () => {
@@ -359,7 +362,7 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
     expect(bands).toHaveLength(1);
     expect(bands[0]!.clinicians.map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
     // Bands partition the roster in ranked order.
-    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(roster.length);
+    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(clinicians.length);
 
     // And on the real roster the same query is ONE band, because it separates nobody.
     expect(rankBands("a GP who speaks Urdu")).toHaveLength(1);
@@ -594,10 +597,13 @@ describe("O8 review findings, pinned", () => {
     const t = { ...clinicians.find((c) => c.id === "anubhav-saxena")!, id: "tele", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     const near = { ...template(), id: "near", suburb: "Epping", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     const far = { ...template(), id: "far", suburb: "Southport", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    // File order: far, tele, near — all tied on score and capacity from Beecroft.
-    const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), [far, t, near]);
-    // In-rooms clinicians swap among their own positions by distance; telehealth keeps its slot.
-    expect(out.map((c) => c.id)).toEqual(["near", "tele", "far"]);
+    const roster = [far, t, near];
+    const byFit = rankClinicians("hello", roster);
+    const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster);
+    // In-rooms clinicians are nearest-first among their available slots; telehealth keeps the
+    // neutral tie-break slot it had before geography was applied.
+    expect(out.findIndex((c) => c.id === "tele")).toBe(byFit.findIndex((c) => c.id === "tele"));
+    expect(out.filter((c) => c.id !== "tele").map((c) => c.id)).toEqual(["near", "far"]);
   });
 });
 

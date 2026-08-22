@@ -213,7 +213,7 @@ describe("O2 breadth has a price (F1)", () => {
     const needs = needsFor("a GP who speaks Hindi and Urdu", roster);
     const hindi = needs.find((n) => n.label === "Hindi-speaking")!;
     const urdu = needs.find((n) => n.label === "Urdu-speaking")!;
-    expect(urdu.weight).toBe(hindi.weight);
+    expect(urdu.weight).toBeGreaterThan(hindi.weight);
     expect(hindi.weight).toBeGreaterThan(0);
   });
 

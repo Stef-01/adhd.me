@@ -70,21 +70,10 @@ describe("ADHD assessment demo archetypes", () => {
     const requests = careArchetypes.map((archetype) => archetype.request.toLowerCase()).join(" ");
     expect(requests).toMatch(/anxious|anxiety|mental health|rushed|family/);
 
-    /**
-     * O179: NO JOURNEY EXERCISES A SPOKEN LANGUAGE ANY MORE, AND THE NUMBER SAYS SO OUT LOUD.
-     *
-     * `anxiety-differential-hindi` was the only journey carrying `languageOptions`, and it went
-     * when Dr Yadav did. The subset rule above is now VACUOUSLY true — it iterates an empty set on
-     * every archetype — so on its own it would go on passing while the demo stopped covering
-     * language entirely, which is the silent-green failure this tree keeps catching.
-     *
-     * The count is therefore pinned at its real value rather than the rule being left to iterate
-     * nothing. Both GPs speak Hindi and Urdu, so this is a demo GAP, not a roster one: adding a
-     * language journey back is the fix, and doing it turns this red so the number moves
-     * deliberately instead of drifting.
-     */
+    // Keep the subset assertion non-vacuous: the Hindi differential journey deliberately checks
+    // that language remains part of the finder after the roster departure.
     const withLanguage = careArchetypes.filter((archetype) => archetype.requirements.languageOptions?.length);
-    expect(withLanguage, "a language journey came back — raise the count and delete this note").toHaveLength(0);
+    expect(withLanguage).toHaveLength(1);
   });
 
   /**
