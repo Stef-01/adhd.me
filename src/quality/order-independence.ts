@@ -107,10 +107,10 @@ export const FOLD_SITES: readonly FoldSite[] = [
   },
   {
     module: "src/demo/clinicians.ts",
-    folds: 1,
+    folds: 2,
     disposition: {
       kind: "rationale",
-      why: "`rankBands` reads the last band accumulated so far to decide whether the next clinician's score extends it or opens a new one. The input is `rankClinicians`' output, whose order is total and already carries its own declared tie-break (score, then owner-behind, then file order) — the fold walks a sequence that cannot arrive reordered, and grouping adjacent equal scores is the same partition whichever member of a tie is seen first.",
+      why: "TWO folds, both order-independent, and the second is the reason the first's rationale had to be edited. (1) `rankBands` reads the last band accumulated so far to decide whether the next clinician's score extends it or opens a new one. The input is `rankClinicians`' output, whose order is total and already carries its own declared tie-break — score, then capacity grade, then declared-interest-behind, then O182's request-seeded hash of the clinician id. The phrase \"then file order\" is deliberately GONE from this sentence: O182 removed file order as the terminal tie-break precisely because it was not a tie-break at all but a hand-off to whoever edits roster.ts, so a rationale still naming it would be describing a mechanism the tree no longer has. The fold walks a sequence that cannot arrive reordered, and grouping adjacent equal scores is the same partition whichever member of a tie is seen first. (2) `declaredMass` (O182) sums each clinician\u2019s declaration strength for one facet across the roster. Addition is commutative, every term is read from the clinician\u2019s own record rather than from its position, and the fold produces a scalar the whole roster shares \u2014 it cannot prefer anybody, because its output is not per-clinician at all.",
     },
   },
   {

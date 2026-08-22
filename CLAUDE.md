@@ -27,6 +27,28 @@ ledger: `BUILD-STATE.md`).
    npx skills, founder-directed 2026-08-21) governs motion work specifically — weight it
    Jakub-primary/Emil-secondary for this product's patient surfaces; where it conflicts with
    adhdme-taste or the compliance laws, the tree's laws win.
+   **Three more installed founder-directed 2026-08-22** (vendored to `.agents/skills/` with the
+   `.claude/skills/` symlink and recorded in `skills-lock.json`, same as above):
+   - `frontend-design` (anthropics/skills) — the aesthetic-direction law for any NEW surface or any
+     reshaping of an existing one. Its brief-first method (name the subject, build a token system,
+     critique the plan against the brief BEFORE writing code) is how a UI unit should start. Its
+     warning about the three default AI looks — cream/serif/terracotta, near-black with one acid
+     accent, hairline broadsheet — is binding here: this tree chose Newsreader on paper
+     deliberately and must not drift into a default because a default was easier.
+   - `impeccable` (pbakaus/impeccable) — the craft floor and the audit/critique playbooks. Use its
+     MODE vocabulary when deciding what a surface is for: the finder, the profiles and the console
+     are **Operate** (the visitor completes a task; scanability and the real usage scene outrank
+     expression), the story landing and the GP join page are **Persuade**. Load
+     `reference/craft-floor.md` before editing UI, per its own setup rule.
+   - `adhd` (UditAkhourii/adhd) — parallel divergent ideation, NOT an implementation skill. Use it
+     on open-ended, high-stakes questions where the first three answers would be the textbook ones:
+     matching-model changes, ranking semantics, information architecture, naming. Its own pre-flight
+     gate applies — skip it wherever there is a canonical answer.
+
+   **Precedence is unchanged and absolute: `adhdme-taste` and the compliance/copy laws in §6 beat
+   all four.** A more distinctive screen that makes a clinical claim, carries a testimonial or puts
+   "specialist" beside a niche scope is a defect, not a bold choice. `frontend-design` says to take
+   one real aesthetic risk; §6 says where it may not be taken, and §6 wins.
 6. **Compliance is code.** Message templates pass the compliance linter; UI copy makes no
    clinical claims; no testimonials/ratings anywhere; "specialist" never appears next to a
    niche scope.

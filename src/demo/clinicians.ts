@@ -152,6 +152,21 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
 }
 
 /**
+ * FNV-1a over a string, as a stable arbitrary number. Not a security hash and not trying to be:
+ * it needs to be deterministic, cheap, dependency-free, and to have no relationship to anything a
+ * reader or a clinician could care about — which is the whole requirement for an arbitrary
+ * tie-break that must not be editable into a favour.
+ */
+function tieHash(input: string): number {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < input.length; index += 1) {
+    hash ^= input.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash;
+}
+
+/**
  * How well one clinician answers what was asked for.
  *
  * THE WHOLE SCORE IS OVERLAP BETWEEN TWO DECLARED SETS. A facet the reader asked for and the
@@ -511,7 +526,7 @@ export function needsFor(query: string, roster: readonly Clinician[] = clinician
       weight: roundScore(
         need.weight *
           (confirmed ? STATED_IMPORTANCE_LIFT : 1) *
-          separation(roster.filter((c) => answers(c, need)).length, roster.length),
+          separation(declaredMass(roster, need), roster.length),
       ),
     };
   });
@@ -566,12 +581,67 @@ const STATED_IMPORTANCE_LIFT = 1.5;
  * still counts, but it cannot decide an order between people it does not separate. The quantity
  * is the same `heldBy / roster` the clarifier already ranks its questions by, and it is sayable
  * within W213's floor: "declared by most of the GPs listed, so it separates them less" or "few
- * of the GPs listed say they do this". Without this, `scoreAgainst` is monotone in declarations
- * and ticking every interview box is the dominant strategy the day the roster self-declares.
+ * of the GPs listed say they do this".
+ *
+ * O182 — THE SENTENCE THAT USED TO END THIS COMMENT WAS FALSE, AND IS CORRECTED RATHER THAN
+ * DELETED. It read: "Without this, `scoreAgainst` is monotone in declarations and ticking every
+ * interview box is the dominant strategy the day the roster self-declares." That is not what this
+ * function does. It discounts POPULAR FACETS; it does not penalise BROAD DECLARERS. Nothing in the
+ * formula reads how many facets a clinician declared, and the two are different axes — a clinician
+ * who ticks a RARE box pays nothing for the breadth and collects the facet at full weight.
+ *
+ * So `scoreAgainst` is still monotone in declarations, and box-ticking is still profitable; it is
+ * merely profitable on rare facets instead of common ones, which is the worse of the two for a
+ * patient, because rare facets are the ones nobody else can serve if the claim is false. The
+ * discount is weakest exactly where box-ticking pays best.
+ *
+ * This is recorded here, unfixed, on purpose. The instrument that would actually price breadth is a
+ * DECLARATION BUDGET — a fixed allocation each clinician spends across facets, so breadth has a
+ * self-enforced opportunity cost and no coupling between clinicians at all — and that is a change
+ * to what the onboarding interview ASKS, not to how an answer is weighed. It is the first item of
+ * the Q-A quarter in docs/MATCHING-YEAR-PLAN.md. What must not happen in the meantime is this
+ * comment going on claiming a property the code does not have, because the next reader would build
+ * on it: an overstated justification is worse than none, which is a rule this tree already wrote
+ * for itself in `src/matching/match.ts`.
  */
 function separation(heldBy: number, rosterSize: number): number {
   if (rosterSize === 0) return 1;
   return Math.min(1, (rosterSize - heldBy + 1) / rosterSize);
+}
+
+/**
+ * How much of the roster's DECLARED CAPABILITY covers this facet — O182.
+ *
+ * THE EXPLOIT THIS CLOSES, MEASURED BEFORE IT WAS FIXED. `heldBy` used to be
+ * `roster.filter((c) => answers(c, need)).length` — a count of booleans, where `answers()` is true
+ * for an "often" declaration and equally true for a "sometimes" one. Scoring does not agree with
+ * that: `declarationFactor` pays a "sometimes" declarer HALF. So the two halves of the same idea
+ * disagreed, and the gap between them was a strategy.
+ *
+ * Measured on a two-clinician roster, one facet, one request:
+ *   A declares anxiety OFTEN, B declares nothing      -> the facet is worth 24, A scores 24.
+ *   A declares anxiety OFTEN, B declares it SOMETIMES -> the facet is worth 12, A scores 12, B 6.
+ * B halved A's facet by making a claim B is only paid half for. Diluting a rival cost half what
+ * matching them would have, so the cheapest way to compete on a facet you do not really do was to
+ * say you sometimes do it — which is precisely the box-ticking the rarity discount was introduced
+ * to prevent, arriving through the discount itself.
+ *
+ * The fix is to make the two halves agree: rarity now counts the SAME quantity scoring pays out,
+ * summed across the roster. A "sometimes" declarer contributes 0.5 to the facet's coverage and is
+ * paid 0.5 for it, so dilution costs exactly what it buys and the strategy disappears.
+ *
+ * WHAT THIS IS NOT. Not a per-clinician weight (C2) — the number comes from the roster's own
+ * declarations, and no clinician's identity enters it. Still sayable inside W213's floor: "one of
+ * the two GPs listed says they do this often and the other sometimes, so it separates them less
+ * than if only one of them did it at all."
+ *
+ * KNOWN AND ACCEPTED: on a roster where EVERY clinician declares a facet at "sometimes", coverage
+ * is N/2 rather than N, so the facet keeps more weight than one everybody declares "often". That is
+ * the arithmetic being consistent rather than a defect — those clinicians are each claiming half —
+ * and it cannot change an ORDER, because every score in that case is scaled by the same factor.
+ */
+function declaredMass(roster: readonly Clinician[], need: NeedSignal): number {
+  return roster.reduce((mass, clinician) => (answers(clinician, need) ? mass + declarationFactor(clinician, need) : mass), 0);
 }
 
 /**

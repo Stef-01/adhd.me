@@ -5089,6 +5089,109 @@ textarea:focus-visible {
   .mix-cta:hover { background: var(--accent); }
 }
 
+/* ── O181: the two ways to read the join form ───────────────────────────────────────────────
+   The controls above the form, the progress it reports, and the step buttons inside it.
+
+   THE ONE RULE THIS BLOCK CANNOT GET WRONG. `.join-form fieldset` (below) sets `padding-top` and
+   a `border-top`, and every rule in this file is UNLAYERED while Tailwind's utilities sit in
+   `@layer utilities` — unlayered beats layered whatever the specificity, so a hidden section that
+   relied on `[hidden]`'s user-agent rule would still paint its border and its padding. The hiding
+   rule is therefore written here, explicitly, at a specificity that cannot lose to its neighbour.
+   `e2e/join-form.spec.ts` asserts the COMPUTED display rather than the attribute, because the
+   attribute was never the thing at risk. */
+.join-form fieldset[hidden],
+.join-form > button[hidden] { display: none; }
+
+.join-viewbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-bottom: 24px;
+}
+
+/* A segmented pair, not two buttons: they are one question with two answers, and `aria-pressed`
+   is what says which is current — the fill is the same fact drawn. */
+.join-viewtoggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.join-viewtoggle button {
+  min-height: 44px; /* O14 floor */
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 550;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.join-viewtoggle button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.join-viewtoggle button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) {
+  .join-viewtoggle button[aria-pressed="false"]:hover { color: var(--ink); }
+}
+
+.join-jump { display: inline-flex; align-items: center; gap: 8px; }
+.join-jump label { color: var(--muted); font-size: 0.8125rem; }
+.join-jump select {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.875rem;
+  touch-action: manipulation;
+}
+.join-jump select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.join-progress-wrap { margin-bottom: 28px; }
+.join-progress-text { margin: 0 0 10px; color: var(--ink); font-size: 0.875rem; font-weight: 550; }
+.join-progress-text:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+/* The bar is the counter drawn. INK, not accent — and the reason is a rule this page already
+   spends: `e2e/accent-discipline.spec.ts` allows one accent MEANING per surface, and
+   /clinicians/join already spends its on the mix hero's live percent and condition. A progress bar
+   in amber would have made it three meanings on one page, which is O136's finding exactly ("if
+   everything is accented, nothing is"). The bar is a position, not a live value the reader set. */
+.join-progress { height: 3px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.join-progress span { display: block; height: 100%; background: var(--ink); transition: width 200ms ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .join-progress span { transition: none; }
+}
+
+.join-steps { display: flex; gap: 12px; }
+.join-steps button {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.join-steps button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.join-steps button:disabled { opacity: 0.45; cursor: default; }
+/* Next carries the flow, so it is filled; Back is an escape and stays quiet. One primary action
+   per screen, and on the last section the submit button is it. */
+.join-steps .join-step-next { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.join-advisory { margin: 0; }
+
+@media (max-width: 560px) {
+  .join-viewbar { align-items: stretch; }
+  .join-viewtoggle { width: 100%; }
+  .join-viewtoggle button { flex: 1 1 0; padding: 0 10px; }
+  .join-jump { width: 100%; }
+  .join-jump select { flex: 1 1 auto; min-width: 0; }
+  .join-steps button { flex: 1 1 0; padding: 0 12px; }
+}
+
 .join-form { display: grid; gap: 40px; }
 .join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }
 /* O136: legends are SECTION HEADINGS, not values that change. Six of them sat in the accent

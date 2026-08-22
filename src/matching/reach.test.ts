@@ -183,6 +183,14 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
       "A longer first appointment is not something any GP listed today declares",
     );
     expect(unservedAsks("I need help with my sleep")).toEqual([]);
+
+    // O179: "I need a longer first appointment" MOVED SIDES. It belonged here while Dr Yadav
+    // declared `unhurried`; with him gone no GP holds the preference, so the honest sentence is
+    // now the unserved one — and it is asserted in its new place rather than dropped, because the
+    // property under test is the CONTRADICTION (never say "nobody declares this" beside a facet
+    // the ranking is scoring), and that property is only meaningful if both sides are pinned.
+    expect(unservedAsks("I need a longer first appointment")[0])
+      .toContain("A longer first appointment is not something any GP listed today declares");
   });
 
   it("stays a fact about a declaration, never a claim about ability (W193)", () => {

@@ -9,6 +9,7 @@ import {
   getPersonalizedMatch,
 } from "@/demo/clinicians";
 import { MANNER_TRAITS, NEED_LABELS, facetKey, languageNeeds, readNeeds } from "./needs";
+import { syntheticClinician } from "@/demo/synthetic-clinician";
 
 describe("W221 reading what somebody said into the closed vocabulary", () => {
   it("reads a preference about care, and reaches nothing on text that names none", () => {
@@ -212,7 +213,7 @@ describe("O2 breadth has a price (F1)", () => {
     const needs = needsFor("a GP who speaks Hindi and Urdu", roster);
     const hindi = needs.find((n) => n.label === "Hindi-speaking")!;
     const urdu = needs.find((n) => n.label === "Urdu-speaking")!;
-    expect(urdu.weight).toBeGreaterThan(hindi.weight);
+    expect(urdu.weight).toBe(hindi.weight);
     expect(hindi.weight).toBeGreaterThan(0);
   });
 

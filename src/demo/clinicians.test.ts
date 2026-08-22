@@ -28,6 +28,27 @@ describe("clinician roster and matching", () => {
     expect(rankClinicians(request)[0]!.id).toBe(expectedId);
   });
 
+  /**
+   * O179: THE LONGER-APPOINTMENT REQUEST NOW REACHES NOBODY, AND THAT IS THE ASSERTION.
+   *
+   * It used to rank Dr Yadav first — "Longer first appointment" was his declared signal and the
+   * only one on the roster. He left, and the honest consequence is not that somebody else inherits
+   * the request: it is that the finder has nobody to offer and must say so. `unserved` is the
+   * grade that says it.
+   *
+   * Pinned as a POSITIVE assertion rather than deleted with the clinician, because the failure this
+   * guards is the tempting one — quietly re-pointing the row at whoever now sorts first and letting
+   * a reader who asked for an unhurried appointment believe they got one. The day a GP declares
+   * `longer-appointment`, this test goes red and is meant to: that is the day the row becomes a
+   * ranking assertion again.
+   */
+  it("says nobody serves a longer first appointment, rather than offering a substitute", () => {
+    const request = "I get rushed every time, I want a longer first appointment to tell the whole story";
+
+    expect(matchQuality(request)).toBe("unserved");
+    expect(clinicians.some((clinician) => holdsPreference(clinician, "longer-appointment"))).toBe(false);
+  });
+
   it("keeps the full roster available", () => {
     expect(clinicians).toHaveLength(2);
     expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(2);
@@ -68,6 +89,37 @@ describe("clinician roster and matching", () => {
     expect(distanceTo(saxena, origin)).not.toMatch(/km/);
     // And a clinician you DO travel to still gets a distance.
     expect(distanceTo(inRooms, origin)).toMatch(/km|in your suburb/);
+  });
+
+  /**
+   * O180: THE TRAIT VOCABULARY, GUARDED IN BOTH DIRECTIONS.
+   *
+   * Two founder-directed changes on 2026-08-22, and the second is why this test exists rather than
+   * just the edit. "Books online" was removed as unclear language. "Telehealth" replaced "Phone
+   * consultations" on Dr Anubhav's listing — the same declared fact in clearer words.
+   *
+   * The risk the directive creates is that "Telehealth" reads as a *better* word for any remote-ish
+   * signal, and gets typed onto a listing whose doctor never claimed it. Dr Anusha is the live case:
+   * she had "Books online", which was TRUE and evidenced by a Healthengine booking route, and she
+   * has deliberately not declared telehealth. Substituting one for the other would have turned the
+   * removal of a vague word into the assertion of an undeclared service, on a real doctor's listing.
+   *
+   * So the display string may not run ahead of the declaration: a listing may only SAY telehealth if
+   * `telehealthFirstAppointment` says it too. The field stays the authority (see roster.ts), and
+   * this is the check that the words agree with it.
+   */
+  it("never says telehealth on a listing that has not declared it, and has retired 'Books online'", () => {
+    for (const clinician of clinicians) {
+      const saysTelehealth = clinician.practicalSignals.some((signal) => /telehealth/i.test(signal));
+      if (saysTelehealth) {
+        expect(clinician.telehealthFirstAppointment, `${clinician.id} says telehealth without declaring it`).toBe(true);
+      }
+      expect(clinician.practicalSignals, `${clinician.id} still carries the retired "Books online" trait`)
+        .not.toContain("Books online");
+    }
+
+    // Non-vacuity: the rule above is only meaningful while somebody actually says it.
+    expect(clinicians.filter((c) => c.practicalSignals.some((s) => /telehealth/i.test(s)))).toHaveLength(1);
   });
 
   it("marks telehealth-first explicitly rather than reading it off a display string", () => {
@@ -173,10 +225,16 @@ describe("clinician roster and matching", () => {
     expect(matchQuality("I need a GP who speaks Hindi")).not.toBe("unmatched");
   });
 
+  /**
+   * O179: `anxiety` LEFT THIS TABLE WITH DR YADAV, AND ITS ABSENCE IS PINNED BELOW RATHER THAN
+   * SIMPLY DELETED. He was the only clinician declaring it at full grade; Dr Anusha carries it at
+   * INTEREST grade, which `careAreas.includes` does not see. Leaving the row here would fail on an
+   * empty `matches` array and say nothing useful; removing it silently would let the roster stop
+   * covering an entire care area with no test noticing.
+   */
   it.each([
     ["titration", "Titration and dose review"],
     ["substance-history", "Substance history held safely"],
-    ["anxiety", "Anxiety"],
   ] satisfies Array<[CareArea, string]>)(
     "gives a grounded explanation for %s",
     (careArea, expectedSignal) => {
@@ -195,6 +253,12 @@ describe("clinician roster and matching", () => {
       expect(getPersonalizedMatch(matches[0]!, queryByArea[careArea]!).signals).toContain(expectedSignal);
     },
   );
+
+  it("records that anxiety is declared at interest grade only, by nobody at full grade", () => {
+    // The trigger: a GP declaring `anxiety` in `careAreas` puts the row back in the table above.
+    expect(clinicians.filter((clinician) => clinician.careAreas.includes("anxiety"))).toHaveLength(0);
+    expect(clinicians.filter((clinician) => (clinician.careAreasSometimes ?? []).includes("anxiety"))).toHaveLength(1);
+  });
 
   /**
    * Every archetype requires `adhd-assessment`, so a clinician without it can never be matched by
@@ -295,7 +359,10 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
     expect(bands).toHaveLength(1);
     expect(bands[0]!.clinicians.map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
     // Bands partition the roster in ranked order.
-    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(clinicians.length);
+    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(roster.length);
+
+    // And on the real roster the same query is ONE band, because it separates nobody.
+    expect(rankBands("a GP who speaks Urdu")).toHaveLength(1);
   });
 
   it("says when the top of an informed list is itself a tie", () => {
@@ -458,6 +525,58 @@ describe("O8 review findings, pinned", () => {
       expect(label).toBeDefined();
     }
     expect(unservedAsks("I need help with my sleep")).toEqual([]);
+  });
+
+  /**
+   * O182 (F2): DECLARING "SOMETIMES" USED TO HALVE A RIVAL'S FACET AT HALF THE PRICE.
+   *
+   * `heldBy` counted a boolean — `answers()` is true for "often" and equally true for "sometimes" —
+   * while scoring paid `declarationFactor`, which is 1 and 0.5. Two halves of one idea disagreeing,
+   * and the gap between them was a strategy: measured on this exact fixture, A's facet fell from 24
+   * to 12 the moment B declared it "sometimes", so B took 12 points off A for a claim B is paid 6
+   * for. 2:1 leverage, handed to the least committed declarer, on the rare facets where a false
+   * claim hurts a patient most.
+   *
+   * Rarity now sums the same quantity scoring pays out, so dilution costs exactly what it buys.
+   */
+  it("makes a 'sometimes' declaration cost the diluter exactly what it buys", () => {
+    const often = syntheticClinician({ id: "often", careAreas: ["adhd-assessment", "anxiety"] as CareArea[] });
+    const silent = syntheticClinician({ id: "silent", careAreas: ["adhd-assessment"] as CareArea[] });
+    const sometimes = syntheticClinician({
+      id: "sometimes",
+      careAreas: ["adhd-assessment"] as CareArea[],
+      careAreasSometimes: ["anxiety"] as CareArea[],
+    });
+    const ask = "I was treated for anxiety and think it was the wrong answer";
+
+    const alone = scoreAgainst(often, needsFor(ask, [often, silent]));
+    const diluted = scoreAgainst(often, needsFor(ask, [often, sometimes]));
+    const diluterGains = scoreAgainst(sometimes, needsFor(ask, [often, sometimes]));
+
+    // The honest declarer is still diluted — a facet two people answer does separate them less —
+    // but no longer by MORE than the diluter's own claim is worth.
+    const takenFromRival = alone - diluted;
+    expect(takenFromRival, "the diluter still takes more than they claim").toBeLessThanOrEqual(diluterGains);
+    // And the ordering the reader actually sees is unchanged: often still beats sometimes.
+    expect(rankClinicians(ask, [sometimes, often])[0]!.id).toBe("often");
+  });
+
+  /**
+   * O182 (F3): the terminal tie-break is arbitrary, total, and NOT a function of position.
+   */
+  it("breaks a dead tie without reading file order", () => {
+    const a = syntheticClinician({ id: "aaa" });
+    const b = syntheticClinician({ id: "bbb" });
+    const ask = "hello";
+
+    // Order-independent: the same SET produces the same ranking whichever way it was written down.
+    expect(rankClinicians(ask, [a, b]).map((c) => c.id)).toEqual(rankClinicians(ask, [b, a]).map((c) => c.id));
+    // Total: never returns 0 for two distinct clinicians, so the sort cannot fall back to stable.
+    expect(new Set(rankClinicians(ask, [a, b]).map((c) => c.id)).size).toBe(2);
+    // And it is not a permanent winner — some request puts the other one first.
+    const asks = ["hello", "hi there", "I need help", "an appointment", "someone to talk to", "zzz qqq"];
+    const firsts = new Set(asks.map((request) => rankClinicians(request, [a, b])[0]!.id));
+    expect(firsts.size, "one id wins every dead tie — the hash is behaving like file order").toBe(2);
   });
 
   it("keeps scores === across float-hostile rosters of three", () => {

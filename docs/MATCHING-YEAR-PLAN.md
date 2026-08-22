@@ -394,6 +394,168 @@ measured claim rather than a code-review opinion.
 15. **Year-end appraisal.** Re-run the F1–F10 appraisal against the year's state; publish
     MATCHING-APPRAISAL-2027 with the same severity honesty.
 
+## Q-M (Sep–Nov 2026): the arithmetic, made honest — a three-month plan (O182)
+
+**Founder-directed 2026-08-22:** advance the matching algorithm extensively. This quarter runs
+ALONGSIDE Q1 above — Q1 makes the reader HEARD, Q-M makes what is heard COUNT correctly — and it
+exists because the appraisal in `docs/MATCHING-APPRAISAL-O182.md` found that the pipeline's
+structure is sound and its arithmetic is not. Items are `M1`–`M12` so they cannot collide with the
+O-series, the AR lane or the historical `A11Y-*` rows.
+
+**The finding that organises the whole quarter.** Three of the ten findings have the same shape:
+**the same idea is computed differently in two places, and the gap between the computations is
+where the harm lives.** `answers()` counts a "sometimes" declaration at half weight while the rarity
+count counted it as a whole (F2, fixed); scoring counts it at half while ELIGIBILITY ignores it
+entirely (F5, open); the ranker reads a manner facet for "longer appointment" while the profile
+displays a free-text field that says something else (F6, open). None is a bug in a formula. Each is
+two formulas that were never introduced to each other.
+
+**Standing constraints, unchanged and not negotiable by any item here.** W213's explainability floor
+(every point of score sayable in closed vocabulary — which rules out learned weights, fitted panels
+and any opaque model); no per-clinician hand weights (C2); no symptom-based triage (TGA, G7);
+synthetic data until the founder gates lift; and honesty about non-rankings.
+
+### Phase 1 (weeks 1–4) — one definition per idea
+
+9. **M1 — one weight function, and everything downstream consumes it.** A single
+   `facetStrength(clinician, facet) -> 0 | 0.5 | 1`. Scoring multiplies by it (it already does, under
+   another name); rarity sums it (shipped as `declaredMass` in O182); eligibility asks it a THRESHOLD
+   question rather than keeping a second predicate.
+   → verify: the three call sites are derived from one function, asserted by a test that fails if any
+   of them computes strength independently. **The threshold is chosen deliberately and written down,
+   not inherited from whatever the refactor happens to produce** — see M2.
+10. **M2 — decide the polarity of F5, in public.** Either eligibility widens to admit interest-grade
+   declarations, or scoring is zeroed on facets a clinician is formally ineligible for. These fix the
+   same defect in OPPOSITE directions and doing both leaves whichever ran second plus dead code.
+   → verify: the decision is recorded with the journeys it empties or fills, MEASURED both ways before
+   it is taken. O179 refused to take it inside a roster edit precisely so it could be taken on
+   evidence here.
+11. **M3 — one source of truth for appointment length (F6).** The profile displays
+   `appointmentLength`; the matcher reads the `unhurried` manner facet; they disagree on a real
+   listing today.
+   → verify: a test asserts no clinician can display a claim the matcher does not hold, over every
+   facet with a display twin — the general rule, not a patch for this one field. **The display is not
+   deleted to resolve the disagreement**: deleting it would remove the only evidence the matcher is
+   wrong, and nobody would notice again.
+12. **M4 — the contradiction linter, warn-then-fail.** A load-time pass asserting the invariants this
+   quarter establishes, including the one F3 broke silently: *at least one listed clinician has no
+   declared interest, or the disclosure comparator is vacuous and must say so out loud.*
+   → verify: lands warn-only, and is upgraded to a hard failure in the same commit that fixes the
+   invariant it guards — a linter that fails on today's data by construction blocks its own ship.
+
+### Phase 2 (weeks 5–8) — measurement that cannot flatter itself
+
+13. **M5 — a roster-size-invariant quality metric (F7).** Tie-quality separation rose 0.557 → 0.622
+   when the roster shrank from three to two, and `partialTie` became structurally impossible. Replace
+   the scalar with an effect size against a permuted null: shuffle declarations across the roster K
+   times and report observed separation minus null separation.
+   → verify: **the metric must be DISQUALIFIED BY ITS OWN TEST if it rises as the roster shrinks.**
+   Report the curve over simulated rosters of 2, 3, 5, 10, 25 and assert monotonicity, rather than
+   reporting one number that has to be interpreted. Name the known weakness in the row: at N=2 the
+   permutation space is tiny and the null is nearly degenerate, so the variance is real and the
+   number is reported with it rather than without.
+14. **M6 — grade the parser and the ranker separately (F8).** `unmatched`/`unserved`/`tied`/`informed`
+   is one ladder collapsing an NLU failure and a ranking failure, so a lexicon improvement and a
+   weighting improvement move the same number and neither can be attributed.
+   → verify: hand-label gold facet sets for a sample of the corpus; report extractor precision and
+   recall as their own number; compute ranking quality only over correctly-parsed requests. State the
+   structural blindness in the row: gold labels drawn from the closed vocabulary cannot see a need
+   the vocabulary has no facet for, which is exactly the coverage gap that matters most.
+15. **M7 — `informed` earns its name.** A grade that means "this order was earned" must not be
+   satisfiable by one facet at N=2.
+   → verify: separation is graded on the SIZE of the gap relative to what was asked, not on the
+   existence of any difference; the boundary is pinned in both directions.
+
+### Phase 3 (weeks 9–12) — the model itself
+
+16. **M8 — express "we cannot tell" (F10).** Undeclared and declared-no both contribute 0, so the
+   ranker cannot distinguish *they are equal* from *we do not know about one of them*. Give each
+   clinician a score INTERVAL — declared-yes `[w, w]`, declared-no `[0, 0]`, undeclared `[0, w]` — and
+   separate only on disjoint intervals.
+   → verify: the three states are distinguishable in the output and each has its own sentence. Named
+   risk, to be measured before it ships: with sparse profiles most pairs overlap, so the product may
+   mostly say "we cannot tell" — true, and possibly unshippable. **If the measurement says that, the
+   row reports it and the item is refused**, the way O127 refused the score-line animation.
+17. **M9 — stop manner traits outvoting language (F9).** Score-sum is fully compensatory: three
+   manner facets outrank one language. Partition the vocabulary into tiers — language and an
+   explicitly-confirmed preference are near-requirements; care areas are strong; manner is
+   contributory — and compare tiers before summing within them.
+   → verify: pinned against corpus cases where the compensatory sum currently produces an answer a
+   reader would call wrong. Named cost: a lexicographic order is harder to explain than a number, and
+   W213's floor applies to the EXPLANATION as much as the score — if the tiering cannot be said in a
+   sentence, it does not ship.
+18. **M10 — clarifiers chosen by expected separation.** The 1.5× stated-importance lift currently
+   applies to whatever the clarifier happened to ask. Ask instead about the facet where the roster is
+   most split AND the request suggests it matters.
+   → verify: measured against the unseparated queue the tie-quality report already counts. **Named
+   trap, and the reason this item is gated on M5:** optimising questions for roster-splitting means
+   interrogating a reader about the one axis two doctors happen to differ on, which is a fair
+   description of manipulation. The relevance gate is not optional.
+
+### Founder-gated, specified but not startable
+
+19. **M11 — the declaration budget (F1).** The rarity discount does not penalise breadth, which its
+   own comment claimed it did until O182 corrected it. A fixed allocation each clinician spends
+   across facets prices breadth on the correct axis with ZERO coupling between clinicians — which
+   removes the jamming and sybil surface outright instead of patching it. **Blocked: it changes what
+   the onboarding interview asks a real doctor, and the cap is a product decision (G-A4).**
+20. **M12 — verification tiers (G-A5).** Unverified "often" floored to interest-grade weight.
+   **Blocked, and carries a hard boundary that any implementation must keep: it applies only to
+   VERIFIABLE facets.** There is no certificate for "non-judgemental", and extending it to manner
+   would privilege credentialed, well-resourced private practice and suppress exactly the clinicians
+   this directory exists to surface.
+
+### Explicitly NOT in this quarter
+
+- **Removing commercial interest from the ranking** (F4). It is the appraisal's sharpest finding and
+  it is a founder decision (G-A1), not a quarter item. O182 shipped the FLOOR — a tie-break that is
+  no longer file order — and stopped there deliberately.
+- **A disclosure severity taxonomy.** Refused with reasons in the appraisal, Part 5.
+- **Anything learned, fitted or panel-elicited.** W213's floor forbids it, and the floor is not a
+  quarter item's to move.
+
+---
+
+## How well the year plan has actually been executed — audited 2026-08-22 (O182)
+
+Recorded because a plan that is never scored against its own delivery is a wish list, and because
+the founder asked. Counted from the ledger and the plan text, not from memory.
+
+| Measure | Value | How counted |
+|---|---|---|
+| O-units with a ledger row | **143** | blockquote rows in `BUILD-STATE.md` |
+| Highest unit number reached | **O178** | ledger |
+| Plan items marked shipped/done/reached | **29** | `SHIPPED`/`DONE`/`TARGET REACHED`/`FIXED by` in this file |
+| Plan items explicitly REFUSED with a reason | **1** | the O127 score-line animation |
+| Elapsed | **4 days** (2026-08-18 → 2026-08-22) | the plan's own dates |
+
+**What that says, and it is not only flattering.**
+
+- **Q1 and Q2 are substantially delivered, and delivered with evidence.** The reach corpus hit its
+  500-entry target (O87); property-based testing, fuzzing, capacity truthfulness and the tie-quality
+  metric all landed with measured numbers pinned in both directions. Items 5–8 are done in four
+  days against a plan that budgeted a quarter for them.
+- **THE PACE IS THE FINDING, NOT THE ACHIEVEMENT.** Four days for two quarters means the quarters
+  were mis-sized, not that the work was fast. The units that took the longest — O168–O178's
+  nine-unit sweep arc — were the ones that found real defects, and the ones that flew were the ones
+  with a clear spec. A plan whose quarters are consumed in days is a plan that will run out, and the
+  expansion rule in `BUILD-STATE.md` should be applied to THIS file before Q3 is reached.
+- **The one REFUSAL is the healthiest row in the plan** and there should be more. O127 refused the
+  match-evidence animation and wrote down why (patients never see a score, so animating one would be
+  decoration wearing the word "meaning"). One refusal in twenty items is a low rate for a plan
+  written before the work; it more likely means refusals were not recorded than that nineteen items
+  were all correct on first specification.
+- **Execution quality is high where the plan gave a VERIFY GATE, and drifted where it gave a goal.**
+  Every item with a stated gate has a number attached to it in this file. The continuous lanes — "UI
+  refinement, at least one unit per week" — have no gate and no count, and correspondingly nobody can
+  say whether that cadence was met. Q-M's items all carry gates for this reason.
+- **The plan did not catch its own biggest defects.** F1, F3 and F7 were all live while every Q1/Q2
+  item was being marked done, and two of them (F3, F7) were CREATED by an event the plan had no row
+  for — a clinician leaving. **No quarter of this plan contains an item about the roster shrinking**,
+  and the appraisal exists because a departure exposed three defects in one afternoon. That is the
+  strongest argument for M4's contradiction linter: the plan cannot enumerate the events, so the
+  invariants have to be checked continuously instead.
+
 ## UI refinement & motion, continuously (runs all year)
 
 The founder's standing directive (2026-08-18): every surface a minimalist, modern 2026-grade

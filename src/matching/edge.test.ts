@@ -8,6 +8,7 @@
 // in the closed vocabulary, and every stated ordering guarantee holding at the edge.
 
 import { describe, expect, it } from "vitest";
+import { syntheticClinician } from "@/demo/synthetic-clinician";
 import {
   clinicians,
   matchEvidence,
@@ -183,10 +184,12 @@ describe("O9 degenerate rosters", () => {
       { ...bare("x"), telehealthFirstAppointment: true as const },
       { ...bare("y"), telehealthFirstAppointment: true as const },
     ];
-    expect(rankCliniciansNear("hello", resolvePlace("Beecroft"), phones).map((c) => c.id)).toEqual([
-      "x",
-      "y",
-    ]);
+    // O182: the property is that the ORIGIN changes nothing when nobody is travelled to — so it is
+    // asserted against the fit order itself rather than against a literal, which was only ever the
+    // file order the terminal tie-break used to fall back on.
+    expect(rankCliniciansNear("hello", resolvePlace("Beecroft"), phones).map((c) => c.id)).toEqual(
+      rankClinicians("hello", phones).map((c) => c.id),
+    );
   });
 
   it("a clinician who declares nothing at all still renders, at the bottom", () => {

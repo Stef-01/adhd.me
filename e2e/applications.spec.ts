@@ -12,6 +12,10 @@ type Page = import("@playwright/test").Page;
 /** A synthetic application, submitted through the real join form, mix deliberately set. */
 async function submitApplication(page: Page) {
   await page.goto("/clinicians/join");
+  // O181: the form opens sectioned, so filling fields across five fieldsets needs the whole-form
+  // view. Switching is a reader-reachable control, not a test back door — and it is the same view
+  // this spec always drove, now asked for explicitly.
+  await page.getByRole("button", { name: "Show the whole form" }).click();
   // Setting the hero's control is what makes the mix ride the application (O26).
   await page.getByLabel(/Percentage of your patients/i).fill("40");
   await page.locator('input[name="fullName"]').fill("Dr Applications Spec");
