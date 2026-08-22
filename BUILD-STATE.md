@@ -144,10 +144,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > collision leaves a trace.
 
 > **M1 (one weight function, and everything downstream consumes it) — claimed 2026-08-22T19:39Z
-> by loop-0822c.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating lanes
-> per the loop's own rule — the prior firing (loop-0822b) took AR1, so this one takes an O-lane
-> unit; the O-series' own Q1/Q2 items are all done or blocked, so the lowest-numbered available
-> work is Q-M's M1. Building now.
+> by loop-0822c. DONE.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating
+> lanes per the loop's own rule — the prior firing (loop-0822b) took AR1, so this one takes an
+> O-lane unit; the O-series' own Q1/Q2 items are all done or blocked, so the lowest-numbered
+> available work is Q-M's M1.
+> **THE THIRD PREDICATE WAS THE UNTESTED ONE.** F5 (O182's appraisal) found `answers()`+
+> `declarationFactor()` (scoring) paying a "sometimes" care declaration half weight while
+> `cliniciansMatchingArchetype` (eligibility) kept its OWN inline copy of "does this clinician
+> hold this area" — a boolean OR that read "sometimes" as a full match. Two computations of one
+> idea, and the drift was found only because Dr Yadav's departure (O179) forced every archetype
+> to be re-measured against a smaller roster. `facetStrength(clinician, facet) -> 0 | 0.5 | 1` is
+> now the single function; `rankingProfile`, `matchEvidence` and `declaredMass` (rarity) all
+> multiply/sum it directly, and `cliniciansMatchingArchetype`'s care-area check now asks it a
+> THRESHOLD question (`ELIGIBILITY_CARE_THRESHOLD = 0.5`, exported and named) rather than keeping
+> its own predicate. **The threshold reproduces today's behaviour exactly and decides nothing new
+> — M2 is where the polarity of F5 gets decided, in public, on evidence; this unit only ends the
+> situation where the two disagreed about a fact neither said out loud.**
+> **NON-VACUITY, SOURCE-CHECKED AND MUTATION-TESTED.** `.careAreasSometimes` now appears in
+> exactly two places in the module — `facetStrength`'s own definition, and `unservedAsks`'s
+> different roster-wide question ("has ANYONE declared this", not one clinician's strength,
+> deliberately exempt) — asserted by counting real code accesses (not prose) and by slicing each
+> of the four call sites' own source between its signature and its balanced closing brace.
+> Reverted `cliniciansMatchingArchetype` to its pre-unit inline OR by hand and confirmed three
+> tests go red naming the exact regression before reverting back; also asserts `declarationFactor(`
+> and `careAreasSometimes` are absent from all four call sites, so a future edit recomputing
+> strength independently fails the same way F5 was found. `declarationFactor` deleted (fully
+> subsumed by `facetStrength`); `answers()` kept as a thin `facetStrength(...) > 0` wrapper for
+> its three boolean call sites (`missedAsks` plus the two now-refactored ones).
+> Gate: `pnpm verify` green — 257 files, 4089 tests (+13 skipped unchanged) + 7 new (60 in
+> `clinicians.test.ts`, up from 53), build clean, audit gate PASS (2 accepted advisories, 0
+> unaccepted). No e2e required by this unit's own scope (pure computation refactor, no route or
+> UI touched).
 
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing

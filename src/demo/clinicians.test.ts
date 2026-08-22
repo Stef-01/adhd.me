@@ -1,5 +1,7 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { capacityGrade, clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { capacityGrade, clinicians, closedBooksNote, distanceTo, facetStrength, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, ELIGIBILITY_CARE_THRESHOLD, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { holdsPreference } from "@/matching/needs";
 import { syntheticClinician } from "./synthetic-clinician";
 import { resolvePlace } from "@/geo/suburbs";
@@ -678,5 +680,86 @@ describe("O51 missed asks are the exact complement of the evidence", () => {
   it("is empty when a clinician answers everything asked", () => {
     const answered = clinicians.find((clinician) => missedAsks(clinician, "titration").length === 0);
     expect(answered, "somebody on the roster declares titration").toBeDefined();
+  });
+});
+
+/**
+ * M1 (Q-M item 1, docs/MATCHING-YEAR-PLAN.md) — non-vacuity gate.
+ *
+ * F5 (O182's appraisal) found `cliniciansMatchingArchetype` (eligibility) reading
+ * `careAreasSometimes` as a full match while `answers`/`declarationFactor` (scoring) paid it
+ * half — two independent computations of the same idea, disagreeing. `facetStrength` is now the
+ * one function all three (scoring, rarity, eligibility) read; this section asserts that by
+ * SOURCE, so a future edit that quietly reintroduces an independent copy fails the build rather
+ * than waiting for another roster departure to surface it, F5-style.
+ */
+describe("M1: facetStrength is the one function every call site reads", () => {
+  const SOURCE = readFileSync(path.join(process.cwd(), "src/demo/clinicians.ts"), "utf8");
+
+  /** Slices one function's full source (signature through its balanced closing brace). */
+  function extractFunctionSource(signature: string): string {
+    const start = SOURCE.indexOf(signature);
+    if (start === -1) throw new Error(`signature not found in clinicians.ts: ${signature}`);
+    const braceStart = SOURCE.indexOf("{", start);
+    let depth = 0;
+    let end = braceStart;
+    for (; end < SOURCE.length; end += 1) {
+      if (SOURCE[end] === "{") depth += 1;
+      else if (SOURCE[end] === "}") {
+        depth -= 1;
+        if (depth === 0) {
+          end += 1;
+          break;
+        }
+      }
+    }
+    return SOURCE.slice(start, end);
+  }
+
+  it("careAreasSometimes is read by facetStrength, and by unservedAsks' different roster-wide question, only", () => {
+    // unservedAsks asks "has ANYONE on the roster declared this" — a different question from one
+    // clinician's strength — so it is deliberately exempt. Any other occurrence is a call site
+    // computing declaration strength independently again, which is exactly what F5 found.
+    const codeAccesses = SOURCE.match(/\.careAreasSometimes\b/g) ?? [];
+    expect(codeAccesses.length).toBe(2);
+    expect(extractFunctionSource("export function facetStrength(")).toContain(".careAreasSometimes");
+    expect(extractFunctionSource("export function unservedAsks(")).toContain(".careAreasSometimes");
+  });
+
+  it.each([
+    "export function rankingProfile(",
+    "function declaredMass(",
+    "export function matchEvidence(",
+    "export function cliniciansMatchingArchetype(",
+  ])("%s calls facetStrength and does not recompute declaration strength itself", (signature) => {
+    const body = extractFunctionSource(signature);
+    expect(body).toContain("facetStrength(");
+    expect(body).not.toContain("careAreasSometimes");
+    expect(body).not.toContain("declarationFactor(");
+  });
+
+  it("cliniciansMatchingArchetype's old independent care-area predicate cannot come back unnoticed", () => {
+    // The exact shape F5 found: eligibility's own boolean OR, disagreeing with scoring's half
+    // weight for "sometimes". Pinned dead rather than merely absent today.
+    const body = extractFunctionSource("export function cliniciansMatchingArchetype(");
+    expect(body).not.toContain("clinician.careAreas.includes(area) ||");
+  });
+
+  it("F5 regression: the number eligibility thresholds against is the same number scoring pays out", () => {
+    const sometimesOnly = syntheticClinician({ careAreas: [], careAreasSometimes: ["depression"] });
+    const oftenOnly = syntheticClinician({ id: "often-gp", careAreas: ["depression"], careAreasSometimes: [] });
+    const undeclared = syntheticClinician({ id: "undeclared-gp", careAreas: [], careAreasSometimes: [] });
+    const facet = { kind: "care" as const, area: "depression" as CareArea };
+
+    expect(facetStrength(sometimesOnly, facet)).toBe(0.5);
+    expect(facetStrength(oftenOnly, facet)).toBe(1);
+    expect(facetStrength(undeclared, facet)).toBe(0);
+
+    // Eligibility (>= ELIGIBILITY_CARE_THRESHOLD) and scoring (weight * strength) now read the
+    // one number `facetStrength` returns: a "sometimes" declarer clears the eligibility
+    // threshold AND scores at exactly the 0.5 that cleared it — never a full weight for a
+    // partial answer, F5's exact gap.
+    expect(facetStrength(sometimesOnly, facet)).toBeGreaterThanOrEqual(ELIGIBILITY_CARE_THRESHOLD);
+    expect(facetStrength(undeclared, facet)).toBeLessThan(ELIGIBILITY_CARE_THRESHOLD);
   });
 });

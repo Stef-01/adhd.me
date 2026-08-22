@@ -136,8 +136,9 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
   let weightedScore = 0;
   let coverage = 0;
   for (const need of needs) {
-    if (!answers(clinician, need)) continue;
-    const contribution = roundScore(need.weight * declarationFactor(clinician, need));
+    const strength = facetStrength(clinician, need.facet);
+    if (strength === 0) continue;
+    const contribution = roundScore(need.weight * strength);
     const isConstraint = need.facet.kind === "preference" || need.facet.kind === "language";
     coverage += 1;
     weightedScore += contribution;
@@ -186,31 +187,38 @@ export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[])
 }
 
 /**
- * What one declared answer is worth: everything for "often", half for "sometimes".
+ * How strongly one clinician's declared record answers one facet — M1 (Q-M item 1).
  *
- * NOT A PER-CLINICIAN COEFFICIENT. C2 forbids an engineered number keyed to a named person;
- * this is the clinician's OWN interview answer given its stated price, the same way the
- * declaration itself is their own datum. Half is a judgement, and a sayable one: "they see
- * this sometimes rather than often" is a sentence, where a tuned 0.63 would not be.
+ * THE ONE PLACE THAT READS `careAreasSometimes`. Scoring, rarity and eligibility used to compute
+ * this quantity three separate ways: `declarationFactor` below (weight for scoring, once
+ * `answers` had filtered), `declaredMass` for rarity, and a fourth, independent copy inline in
+ * `cliniciansMatchingArchetype`. F5 (O182's appraisal) found the fourth had drifted — it read
+ * `careAreasSometimes` as a FULL match while scoring paid it HALF, so a clinician could rank
+ * FIRST for a journey they were formally ineligible for. This function is now the only place any
+ * of the three reads that field; every caller below asks IT rather than recomputing.
+ *
+ * `0` undeclared, `0.5` declared "sometimes" (care facets only), `1` declared "often" or held at
+ * all (manner/language/preference are boolean, so they are never `0.5`). NOT A PER-CLINICIAN
+ * COEFFICIENT — C2 forbids an engineered number keyed to a named person; this is the clinician's
+ * OWN interview answer given its stated price, the same way the declaration itself is their own
+ * datum. Half is a judgement, and a sayable one: "they see this sometimes rather than often" is a
+ * sentence, where a tuned 0.63 would not be.
  */
-function declarationFactor(clinician: Clinician, need: NeedSignal): number {
-  const facet = need.facet;
-  if (facet.kind !== "care") return 1;
-  if (clinician.careAreas.includes(facet.area)) return 1;
-  return (clinician.careAreasSometimes ?? []).includes(facet.area) ? 0.5 : 1;
+export function facetStrength(clinician: Clinician, facet: NeedSignal["facet"]): 0 | 0.5 | 1 {
+  if (facet.kind === "care") {
+    if (clinician.careAreas.includes(facet.area)) return 1;
+    return (clinician.careAreasSometimes ?? []).includes(facet.area) ? 0.5 : 0;
+  }
+  if (facet.kind === "manner") return clinician.manner.includes(facet.trait) ? 1 : 0;
+  if (facet.kind === "language") {
+    return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase()) ? 1 : 0;
+  }
+  return holdsPreference(clinician, facet.preference) ? 1 : 0;
 }
 
-/** Whether this clinician answers one stated need. Declared facets only. */
+/** Whether this clinician answers one stated need at all. Derived from `facetStrength`. */
 function answers(clinician: Clinician, need: NeedSignal): boolean {
-  const facet = need.facet;
-  if (facet.kind === "care") {
-    return clinician.careAreas.includes(facet.area) || (clinician.careAreasSometimes ?? []).includes(facet.area);
-  }
-  if (facet.kind === "manner") return clinician.manner.includes(facet.trait);
-  if (facet.kind === "language") {
-    return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase());
-  }
-  return holdsPreference(clinician, facet.preference);
+  return facetStrength(clinician, need.facet) > 0;
 }
 
 /**
@@ -644,7 +652,7 @@ function separation(heldBy: number, rosterSize: number): number {
  * and it cannot change an ORDER, because every score in that case is scaled by the same factor.
  */
 function declaredMass(roster: readonly Clinician[], need: NeedSignal): number {
-  return roster.reduce((mass, clinician) => (answers(clinician, need) ? mass + declarationFactor(clinician, need) : mass), 0);
+  return roster.reduce((mass, clinician) => mass + facetStrength(clinician, need.facet), 0);
 }
 
 /**
@@ -665,7 +673,7 @@ export function matchEvidence(
     // The weight the card's evidence carries is the weight this clinician's answer actually
     // earned - halved where they declared "sometimes" - so the audit and the unity test can
     // hold score === sum of evidence with no carve-outs.
-    .map((need) => ({ ...need, weight: roundScore(need.weight * declarationFactor(clinician, need)) }));
+    .map((need) => ({ ...need, weight: roundScore(need.weight * facetStrength(clinician, need.facet)) }));
 }
 
 /**
@@ -851,6 +859,17 @@ export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): st
   return nearest.suburb === clinician.suburb ? said : `${said} (their ${nearest.suburb} rooms)`;
 }
 
+/**
+ * F5's threshold, stated rather than left to fall out of the refactor (M1). `0.5` reproduces
+ * exactly what this predicate did before this unit — a "sometimes" declaration was already
+ * enough to be eligible, via the boolean OR it used to spell out inline. M1 does not decide
+ * whether that stays the right answer: whether eligibility should WIDEN further (to admit
+ * interest-grade declarations that today score but do not qualify) or should NARROW to require
+ * `1` (formal ineligibility zeroing the score instead) is Q-M item 2's call, in public, on
+ * evidence — not a side effect of this unit consolidating the plumbing.
+ */
+export const ELIGIBILITY_CARE_THRESHOLD = 0.5;
+
 export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician[] {
   const { requirements } = archetype;
 
@@ -860,7 +879,7 @@ export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician
       clinician.languages.some((spoken) => spoken.toLowerCase() === language.toLowerCase()),
     );
     const matchesCareAreas = requirements.careAreas.every(
-      (area) => clinician.careAreas.includes(area) || (clinician.careAreasSometimes ?? []).includes(area),
+      (area) => facetStrength(clinician, { kind: "care", area }) >= ELIGIBILITY_CARE_THRESHOLD,
     );
     const matchesAccess = !requirements.wheelchairAccessible || clinician.wheelchairAccessible;
 
