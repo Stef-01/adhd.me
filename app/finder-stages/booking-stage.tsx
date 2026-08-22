@@ -27,7 +27,7 @@ export function BookingStage({
       {/* PHASE 1 IS A HANDOFF, NOT A SLOT PICKER, AND THE SCREEN SAYS SO IN PLAIN WORDS.
           This used to render three times — one from the record, two written into this
           component — behind a "Send request" button that set a state variable and sent
-          nothing. Against invented personas that was a mock. Against Dr Saxena and Dr Yadav
+          nothing. Against invented personas that was a mock. Against named real clinicians
           it would be fabricated appointments under a named doctor's photograph.
 
           ADHD.ME does not hold availability and does not pretend to: Healthengine's API is

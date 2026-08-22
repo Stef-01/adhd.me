@@ -134,9 +134,9 @@ describe("O9 hostile and accidental input", () => {
 });
 
 describe("O9 degenerate rosters", () => {
-  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+  const template = () => clinicians.find((c) => c.id === "anusha-saxena")!;
   const bare = (id: string) => ({
-    ...yadav(),
+    ...template(),
     id,
     careAreas: [] as CareArea[],
     manner: [] as (typeof clinicians)[number]["manner"],

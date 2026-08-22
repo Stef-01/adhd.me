@@ -122,19 +122,17 @@ export function sentencesPatientsSee(clinician: Clinician): ToldLine[] {
     from: "title, pronouns, suburb and alsoConsultsAt",
   });
 
+  lines.push({
+    said: clinician.summary,
+    from: "summary — a concise edit of the declared profile text",
+  });
+
   if (clinician.nswAdhdTrained) {
     lines.push({
       said: "NSW ADHD training",
       from: "nswAdhdTrained — a declaration relayed to us, not a check ADHD.ME performed",
     });
   }
-  if (clinician.disclosedInterest) {
-    lines.push({
-      said: clinician.disclosedInterestLabel ?? "",
-      from: "disclosedInterest — a material interest, stated beside the listing",
-    });
-  }
-
   const distance = distanceTo(clinician, null);
   lines.push({ said: distance ?? clinician.reach, from: "reach (the distance line reads from the suburb a patient gives)" });
 

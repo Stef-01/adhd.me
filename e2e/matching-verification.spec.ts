@@ -32,16 +32,15 @@ test("a separating ask ranks the declared clinician first, on screen", async ({ 
 
 test("a language ask is ranked on and explained, not just printed (O1)", async ({ page }) => {
   await searchFor(page, "an Urdu-speaking GP please, for an ADHD assessment");
-  // O88: BOTH Saxenas declare Urdu now, so the earned order puts the speakers on top — and
-  // their internal tie is SAID (the O3 law), not dressed as a ranking. The banner this used
-  // to forbid was the roster-level one; the top-band tie note is the honesty the roster's
-  // new shape requires.
+  // Both current clinicians declare Urdu, so language evidence is computed and shown while the
+  // full-list tie is said plainly rather than dressed as an earned order.
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
   await expect(page.getByText(/everyone we list/)).toHaveCount(0);
-  await expect(page.getByText(/read them as a group/)).toBeVisible();
+  await expect(page.getByText(/answer what you asked for equally well/)).toBeVisible();
   await page.screenshot(shot("02-urdu-ranked-and-earned"));
   // And the profile says the reason in the closed vocabulary.
   await page.locator(".clinician-row").first().click();
+  await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
   await expect(page.getByText(/Urdu-speaking/).first()).toBeVisible();
   await page.screenshot(shot("03-urdu-evidence-on-profile"));
 });
@@ -59,6 +58,7 @@ test("a request the lexicon cannot read says so instead of faking an order", asy
 
 test("answering the one question visibly turns a non-order into an order (W225+O5)", async ({ page }) => {
   await searchFor(page, "hello there");
+  await page.getByText("Improve my matches", { exact: true }).click();
   await expect(page.getByText(/One answer would narrow it/)).toBeVisible();
   await page.screenshot(shot("05-clarifier-offered"));
 
@@ -84,7 +84,7 @@ test("pasted junk is never echoed back from the closed vocabulary", async ({ pag
 test("a suburb re-ranks with distance said per row, telehealth exempt (O3/O4)", async ({ page }) => {
   await searchFor(page, "I need an ADHD assessment");
   await page.getByLabel(/Where are you/i).fill("Beecroft");
-  await expect(page.getByText(/nearest to Beecroft first/i)).toBeVisible();
+  await expect(page.getByText(/otherwise equal matches, nearer to Beecroft comes first/i)).toBeVisible();
   // The telehealth-first clinician carries the telehealth sentence, never a kilometre figure.
   await expect(page.getByText(/by telehealth, wherever you are/).first()).toBeVisible();
   await page.screenshot(shot("08-geo-reranks-with-honest-distance"));
@@ -102,8 +102,8 @@ test("the query that failed in production now reads both halves (O13)", async ({
 
 test("a psychographic ask ranks, explains, and shows its provenance on screen (O30)", async ({ page }) => {
   // Values-level language on both sides of the roster's manner split: plain-language reaches
-  // sense_making (Dr Saxena declares it), faith-in-the-room reaches culturally_attuned
-  // (Dr Yadav declares it). Both rows must carry their reason, and the profile must quote
+  // sense_making (Dr Anubhav declares it), faith-in-the-room reaches culturally_attuned
+  // (Dr Anusha declares it). Both rows must carry their reason, and the profile must quote
   // the provenance — the O21 "from your words" line — for a phrase added in O30.
   await searchFor(page, "explain things in plain language and someone who respects my faith");
   const rows = page.locator(".clinician-row");
@@ -111,7 +111,8 @@ test("a psychographic ask ranks, explains, and shows its provenance on screen (O
   await page.screenshot({ path: "qa/_runs/matching-o30/01-psychographic-ask-ranked.png", fullPage: true });
 
   await rows.first().click();
-  await expect(page.getByText(/from your words/).first()).toBeVisible();
+  await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
+  await expect(page.getByText(/from your words/i).first()).toBeVisible();
   await page.screenshot({ path: "qa/_runs/matching-o30/02-psychographic-provenance.png", fullPage: true });
 });
 
@@ -133,6 +134,7 @@ test("a triple ask — language, psychographic, care — reads all three familie
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
   await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
   await page.locator(".clinician-row").first().click();
+  await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
   await expect(page.getByText("Urdu-speaking").first()).toBeVisible();
   await page.screenshot({ path: "qa/_runs/matching-o30/04-triple-ask-language-psychographic-care.png", fullPage: true });
 });
@@ -151,7 +153,8 @@ test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena 
   await page.screenshot({ path: "qa/_runs/matching-o34/01-woman-gp-ranked-first.png", fullPage: true });
   await page.locator(".clinician-row").first().click();
   await expect(page.getByText("Dr Anusha Saxena").first()).toBeVisible();
-  await expect(page.getByText(/from your words/).first()).toBeVisible();
+  await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
+  await expect(page.getByText(/from your words/i).first()).toBeVisible();
   await expect(page.locator(`.profile-screen img[src*="anusha-saxena"], img[src*="anusha-saxena"]`).first()).toBeVisible();
   await page.screenshot({ path: "qa/_runs/matching-o34/02-anusha-profile.png", fullPage: true });
 

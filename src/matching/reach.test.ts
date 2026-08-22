@@ -129,7 +129,7 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
           .toBeGreaterThan(1);
       } else {
         // Tied or unmatched: the finder must have copy for it, so the reader is told.
-        expect(quality === "tied" || quality === "unmatched").toBe(true);
+        expect(quality === "tied" || quality === "unmatched" || quality === "unserved").toBe(true);
       }
     }
   });
@@ -152,7 +152,7 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // Nine of the seventeen care areas are declared by neither GP while the roster is two people.
     const asks = unservedAsks("I need trauma-informed care, I have a difficult childhood");
     expect(asks.length).toBeGreaterThan(0);
-    expect(unservedAsks("titration and a longer appointment")).toEqual([]);
+    expect(unservedAsks("titration and telehealth")).toEqual([]);
   });
 
   /**
@@ -179,7 +179,9 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // appear beside a facet the ranking is simultaneously scoring.
     expect(unservedAsks("a woman GP please")).toEqual([]);
     expect(unservedAsks("can we do it over the phone")).toEqual([]);
-    expect(unservedAsks("I need a longer first appointment")).toEqual([]);
+    expect(unservedAsks("I need a longer first appointment")[0]).toContain(
+      "A longer first appointment is not something any GP listed today declares",
+    );
     expect(unservedAsks("I need help with my sleep")).toEqual([]);
   });
 

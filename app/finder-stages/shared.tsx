@@ -171,11 +171,9 @@ export function Wordmark() {
 export function FinderContext() {
   return (
     <aside className="finder-context">
-      {/* "All profiles are synthetic" stopped being true when an owner joined the roster, and a
-          disclaimer that is nearly true is worse than none: it is the sentence a reader relies on. */}
       <p>
-        Early demo in Beecroft and on the Gold Coast. Availability is synthetic, and every profile except
-        Dr Saxena’s describes an invented clinician.
+        Early Sydney demo. Doctor profiles describe real clinicians. Live appointment times and
+        directions are provided by the booking destination.
       </p>
     </aside>
   );
@@ -237,7 +235,7 @@ export function ClinicianPortrait({
   if (clinician.image) {
     return variant === "fill"
       ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 520px) 100vw, 440px" priority />
-      : <Image src={clinician.image} alt="" width={72} height={72} />;
+      : <Image src={clinician.image} alt="" width={76} height={76} />;
   }
 
   return (
@@ -249,23 +247,4 @@ export function ClinicianPortrait({
       {initialsOf(clinician.name)}
     </span>
   );
-}
-
-/** The NSW training, as a credential line. Self-reported, which the profile notes once. */
-export function NswTraining({ clinician }: { clinician: Clinician }) {
-  if (!clinician.nswAdhdTrained) return null;
-  return <p className="credential-line">NSW ADHD training</p>;
-}
-
-/**
- * A material interest, stated beside the listing it concerns. One line, not an essay.
- *
- * O158: the label comes FROM THE ENTRY now. It was hardcoded — first "Co-founder of ADHD.ME", then
- * "Owner of ADHD.ME" — and a single fixed string spoke for two people whose relationships are not
- * the same. Dr Saxena owns his clinic and is ADHD.ME's first clinic partner; he does not own the
- * entity, and the hardcoded badge is what let that error render under his name.
- */
-export function OwnershipDisclosure({ clinician }: { clinician: Clinician }) {
-  if (!clinician.disclosedInterest || !clinician.disclosedInterestLabel) return null;
-  return <p className="disclosure-line">{clinician.disclosedInterestLabel}</p>;
 }

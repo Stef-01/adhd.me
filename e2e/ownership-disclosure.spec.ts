@@ -40,20 +40,14 @@ test.beforeEach(async ({ request }) => {
 /**
  * O156 (founder-directed): "remove all mentions of founder on entire site do throough code audit".
  *
- * TWO ASSERTIONS THAT ONLY MEAN SOMETHING TOGETHER. The word must be gone from every rendered
- * surface — and the DISCLOSURE it used to sit inside must still be there, in its new words.
- *
- * Removing the word alone would have been easy and wrong: `disclosedInterest` exists to tell a
- * patient that the GP in front of them owns the directory recommending him, and a conflict notice
- * that stops naming the conflict has stopped working. So the sweep proves the absence and the
- * profile check proves the presence, in one test, because a later unit deleting the disclosure to
- * satisfy the first assertion is exactly the failure this pairing prevents.
+ * The word and the old relationship disclosure are now both intentionally absent from the public
+ * product. This sweep keeps that removal true across every rendered route.
  *
  * The source grep that preceded this missed four rendered sentences — in /privacy, two console
  * screens and a pathways note — because they were prose rather than labels. Reading the rendered
  * text is what "thorough" had to mean.
  */
-test("the word is gone from every surface, and the ownership disclosure is not", async ({ page }) => {
+test("the word and the old relationship disclosure are gone from every surface", async ({ page }) => {
   const hits: string[] = [];
   /** Routes that answered with something other than themselves, so the sweep did not read them. */
   const redirected: string[] = [];
@@ -86,13 +80,7 @@ test("the word is gone from every surface, and the ownership disclosure is not",
   await expect(page.locator(".profile-content")).toBeVisible();
   const prof = await page.evaluate(() => document.body.innerText);
   for (const line of prof.split("\n")) if (/founder/i.test(line)) hits.push(`profile: ${line.trim().slice(0, 90)}`);
-  // And the disclosure is genuinely THERE, not merely wordless.
-  // O158: the disclosure must be PRESENT and must not claim ownership of the entity. Asserting a
-  // fixed string here is what carried a false one — "Owner of ADHD.ME" — through a green suite.
-  const line = await page.locator(".disclosure-line").innerText();
-  expect(line.trim().length, "the disclosure vanished from the profile").toBeGreaterThan(0);
-  expect(line, "the disclosure claims ownership of ADHD.ME; he owns his clinic (O158)")
-    .not.toMatch(/(owns|owner of|ownership (interest )?(in|of)) ADHD\.ME/i);
+  await expect(page.locator(".disclosure-line")).toHaveCount(0);
   await signIn(page);
   for (const r of CONSOLE_ROUTES) await scan(r);
   console.log(`FOUNDER_HITS ${hits.length} over ${STATIC_ROUTES.length} routes`);

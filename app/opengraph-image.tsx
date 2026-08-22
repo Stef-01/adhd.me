@@ -28,7 +28,7 @@ export default function OpengraphImage() {
           Assessment you can actually reach.
         </div>
         <div style={{ fontSize: 32, marginTop: 44, color: "#6e706a", fontFamily: "Arial, sans-serif" }}>
-          GPs who do ADHD assessment, in Beecroft and on the Gold Coast.
+          Listed Sydney GPs who do ADHD assessment, with reasons you can inspect.
         </div>
       </div>
     ),

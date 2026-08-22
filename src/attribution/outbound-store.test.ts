@@ -44,7 +44,7 @@ describe("W235 tallying", () => {
     recordOutbound("anubhav-saxena", "finder", { filePath });
     recordOutbound("anubhav-saxena", "finder", { filePath });
     recordOutbound("anubhav-saxena", "profile", { filePath });
-    recordOutbound("tushar-yadav", "examples", { filePath });
+    recordOutbound("clinician-a", "examples", { filePath });
 
     const tally = tallyOutbound(filePath);
     expect(tally.map((t) => t.clinicianId)).toEqual(clinicians.map((c) => c.id));
@@ -62,8 +62,8 @@ describe("W235 tallying", () => {
 
   it("survives a torn tail line and rows of the wrong shape", () => {
     const filePath = freshPath();
-    recordOutbound("tushar-yadav", "finder", { filePath });
-    writeFileSync(filePath, `${JSON.stringify({ clinicianId: "tushar-yadav", surface: "finder", day: "2026-08-19" })}\n{"clinicianId": 42}\n{"torn`, "utf8");
+    recordOutbound("clinician-a", "finder", { filePath });
+    writeFileSync(filePath, `${JSON.stringify({ clinicianId: "clinician-a", surface: "finder", day: "2026-08-19" })}\n{"clinicianId": 42}\n{"torn`, "utf8");
     expect(listOutbound(filePath)).toHaveLength(1);
   });
 });

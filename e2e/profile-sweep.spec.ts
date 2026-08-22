@@ -31,20 +31,9 @@ const ACCEPTED: ReadonlyArray<{ clinician: string; rule: string; match: string; 
     why:
       "'He treats a substance history as a safety question rather than a character one.' Here 'treats' is the ordinary English verb — regards, handles — not a claim to treat a condition. The rule's own rationale is that naming a TREATMENT to a patient is therapeutic advertising; this names an attitude.",
   },
-  {
-    clinician: "anubhav-saxena",
-    rule: "no-condition-targeting",
-    match: "Cancer",
-    why:
-      "'Beecroft Family & Skin Cancer Clinic' is the practice's own registered name. The rule exists to stop targeting patients by condition, not to ban a business's legal name — and rewriting a real practice's name on a listing would be a worse problem than the one it solved.",
-  },
-  {
-    clinician: "tushar-yadav",
-    rule: "no-condition-targeting",
-    match: "Cancer",
-    why: "The same practice name, on the second doctor who works there.",
-  },
-
+  // O178 removed the practice name from the patient profile's visible identity block. The former
+  // "Cancer" acceptance was deleted with it; the both-directions check below guards against stale
+  // exceptions surviving after their text no longer renders.
   // O164 deleted the `no-ratings` "reviews" acceptance from here: the rule was narrowed at source
   // so clinical review no longer trips it, and this list's own stale-acceptance check is what
   // forced the deletion rather than leaving a comfortable entry behind.
@@ -83,6 +72,11 @@ test("no clinician profile serves copy the patient rules refuse", async ({ page 
     await page.locator(".clinician-row").filter({ hasText: clinician.name }).first().click();
     await expect(page.locator(".profile-content")).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
+    // Progressive disclosure changes what is initially visible, not what the product can serve.
+    // Sweep every open state so a prohibited claim cannot hide behind a collapsed row.
+    await page.locator(".profile-content details").evaluateAll((items) => {
+      for (const item of items) (item as HTMLDetailsElement).open = true;
+    });
 
     const text = await page.locator(".profile-content").innerText();
     // Per-profile vacuity guard: a blank profile satisfies every rule ever written.

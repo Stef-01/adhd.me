@@ -13,7 +13,7 @@
 // stated ONCE beneath the table instead of per cell, because "not something they declare"
 // eight times is a drumbeat, and the reader needs the fact once.
 
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeft, CheckCircle, Minus } from "@phosphor-icons/react";
 import { type Clinician } from "@/demo/clinicians";
 import { ClinicianPortrait, MotionScreen, Wordmark } from "./shared";
 
@@ -58,7 +58,9 @@ function Cell({ answered, who, ask }: { answered: boolean; who: string; ask: str
     <span className={answered ? "compare-cell is-listed" : "compare-cell"}>
       {/* The mark is decorative: the state is in the words beside it, so a screen reader and
           a person who cannot separate the two colours get the same sentence. */}
-      <span aria-hidden="true">{answered ? "●" : "—"}</span>
+      {answered
+        ? <CheckCircle size={15} weight="fill" aria-hidden="true" />
+        : <Minus size={15} weight="regular" aria-hidden="true" />}
       <span className="sr-only">{`${who}: ${answered ? "declares" : "does not declare"} ${ask.toLowerCase()}`}</span>
       <span aria-hidden="true">{answered ? "Declared" : "Not declared"}</span>
     </span>
@@ -81,7 +83,7 @@ export function CompareStage({
   return (
     <MotionScreen key="compare" className="compare-screen">
       <header className="minimal-header">
-        <button className="icon-button" type="button" onClick={onBack} aria-label="Back to profile">
+        <button className="icon-button" type="button" onClick={onBack} aria-label="Back to results">
           <ArrowLeft size={25} weight="light" aria-hidden="true" />
         </button>
         <Wordmark />

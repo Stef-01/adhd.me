@@ -34,6 +34,7 @@ export function ResultsStage({
   tieNote,
   clarifierList,
   unserved,
+  fitCopy,
   place,
   origin,
   matches,
@@ -54,6 +55,7 @@ export function ResultsStage({
   tieNote: string | null;
   clarifierList: readonly Clarifier[];
   unserved: readonly string[];
+  fitCopy: string | null;
   place: string;
   origin: SuburbPoint | null;
   matches: readonly Clinician[];
@@ -110,53 +112,28 @@ export function ResultsStage({
           <datalist id="covered-suburbs">
             {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
           </datalist>
-          {/* Says how many are SHOWN, not how many exist. "16 GPs" above a list of five
-              is a number that describes something the reader cannot see. And it only
-              claims "ranked on what you asked for" when that is TRUE (O11): on an
-              unmatched or tied query this line used to assert a ranking two lines above
-              the banner saying there is no ranking — two sentences about the same fact,
-              one of them false. When the order is not earned the quality banner owns the
-              whole explanation — and when everyone is shown anyway, the bare count ("3 of
-              3.") said nothing at all and is dropped (O46). */}
-          {(() => {
-            /* O121: THE COMPLETENESS CLAIM STANDS DOWN WHEN PART OF THE ASK IS SERVED BY
-               NOBODY. Walking the whole flow found "These 3 GPs do what you asked for."
-               rendering directly above "Bulk billing is not something any GP listed today
-               declares" — two adjacent sentences flatly contradicting each other, and the
-               louder one false. It is the same shape O111 fixed on the banner: a claim
-               rendering that was not fully earned, beside the line that disproves it.
-               `unserved` is exactly the test — it is non-empty only when something the reader
-               asked for is declared by nobody — and the rule is the inverse of the one this
-               block already follows: when the claim is not earned, the line that explains why
-               owns the space. The reader loses nothing, because everyone is shown anyway and
-               the count said so redundantly (O46's finding about the bare count). */
-            const claimsFullFit = quality === "informed" && unserved.length === 0;
-            const countLine = place.trim() === ""
-              ? claimsFullFit
-                ? shown.length === 1
-                  ? "This GP does what you asked for."
-                  : `These ${shown.length} GPs do what you asked for.`
-                : shown.length === matches.length
-                  ? null
-                  : `Showing ${shown.length} of ${matches.length}.`
-              : origin
-                ? `Nearest to ${origin.suburb} first.`
-                : claimsFullFit
-                  ? "We do not cover that one yet, so these are ordered on what you asked for."
-                  : "We do not cover that one yet.";
-            return countLine ? (
+          {quality === "informed" && fitCopy && (
               <motion.p
-                key={countLine}
+                key={fitCopy}
                 className="place-status"
                 role="status"
                 initial={reducedMotion ? false : { opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               >
-                {countLine}
+                {fitCopy}
               </motion.p>
-            ) : null;
-          })()}
+          )}
+          {matches.length > shown.length && (
+            <p className="place-status">Showing {shown.length} of {matches.length}.</p>
+          )}
+          {place.trim() !== "" && (
+            <p className="place-status" role="status">
+              {origin
+                ? `Among otherwise equal matches, nearer to ${origin.suburb} comes first.`
+                : "We do not cover that location yet."}
+            </p>
+          )}
 
           {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
               A probe over realistic first-person queries found the lexicon reached nothing
@@ -213,29 +190,32 @@ export function ResultsStage({
               words and the whole sentence is re-read, so the finder can still say "you said
               this" about a signal it prompted. */}
           {quality !== "informed" && clarifierList.length > 0 && (
-            <motion.div
+            <motion.details
               key="clarify"
-              className="clarify"
+              className="results-refine-details"
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
-              <p className="clarify-lead">One answer would narrow it:</p>
-              <ul className="clarify-row">
-                {clarifierList.map((clarifier) => (
-                  <li key={clarifier.facetKey}>
-                    <button
-                      type="button"
-                      className="clarify-chip"
-                      onClick={() => onClarify(clarifier.answer)}
-                    >
-                      {clarifier.prompt}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+              <summary>Improve my matches</summary>
+              <div className="clarify">
+                <p className="clarify-lead">One answer would narrow it:</p>
+                <ul className="clarify-row">
+                  {clarifierList.map((clarifier) => (
+                    <li key={clarifier.facetKey}>
+                      <button
+                        type="button"
+                        className="clarify-chip"
+                        onClick={() => onClarify(clarifier.answer)}
+                      >
+                        {clarifier.prompt}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.details>
           )}
 
           {/* A care area nobody on the roster declares is a gap in the LISTING, and the
@@ -266,6 +246,10 @@ export function ResultsStage({
             <CoverageMap highlight={null} />
           )}
         </div>
+      </div>
+
+      <div className="results-list-head">
+        <h2>Matches</h2>
       </div>
 
       <div className="clinician-list">

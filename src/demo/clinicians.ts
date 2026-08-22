@@ -1,6 +1,7 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal } from "@/matching/needs";
+import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 // Value import of copy tables only. `clarify.ts` imports nothing but TYPES from this module, so
 // this direction is the one that keeps the graph acyclic at runtime.
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "@/matching/clarify";
@@ -55,8 +56,32 @@ export const CAPACITY_ORDER: Record<CapacityGrade, number> = { "fresh-open": 0, 
 export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date()): Clinician[] {
   const needs = needsFor(query, roster);
   return [...roster].sort((a, b) => {
-    const byScore = scoreAgainst(b, needs) - scoreAgainst(a, needs);
+    const aProfile = rankingProfile(a, needs);
+    const bProfile = rankingProfile(b, needs);
+
+    /*
+     * ACCESS BEFORE ACCUMULATION (2026-08-22 audit).
+     *
+     * A language or access request is not one more keyword in a health-directory query. If a
+     * reader asks for Urdu or telehealth, a clinician who does not answer that constraint must
+     * not leapfrog one who does by accumulating several lower-stakes care-area overlaps. This is
+     * still the reader's stated preference, not an inferred clinical rule, and every point remains
+     * explainable through the same evidence shown on the profile.
+     */
+    const byConstraintCoverage = bProfile.constraintCoverage - aProfile.constraintCoverage;
+    if (byConstraintCoverage !== 0) return byConstraintCoverage;
+
+    const byConstraint = bProfile.constraintScore - aProfile.constraintScore;
+    if (byConstraint !== 0) return byConstraint;
+
+    const byScore = bProfile.weightedScore - aProfile.weightedScore;
     if (byScore !== 0) return byScore;
+
+    /* Equal weighted evidence is resolved by completeness: the clinician answering more of the
+       distinct things the reader named comes first. This only breaks a numerical tie; it never
+       overrides importance weights or access constraints. */
+    const byCoverage = bProfile.coverage - aProfile.coverage;
+    if (byCoverage !== 0) return byCoverage;
 
     /**
      * WITHIN EQUAL FIT, SOMEBODY WHO CAN ACTUALLY SEE YOU COMES FIRST (O4/F5).
@@ -78,18 +103,52 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
     const byCapacity = CAPACITY_ORDER[capacityGrade(a, today)] - CAPACITY_ORDER[capacityGrade(b, today)];
     if (byCapacity !== 0) return byCapacity;
 
-    /**
-     * A TIE MUST NEVER BE BROKEN IN AN OWNER'S FAVOUR, AND UNTIL W221 IT SILENTLY WAS.
-     *
-     * `Array.prototype.sort` is stable, so equal scores kept source order — and Dr Saxena is the
-     * first record in the file. On a request that names nothing either GP is declared for, both
-     * score identically and the owner took first place every time. Reordering the file would
-     * only move the accident, so the rule is stated: where the stated preference does not separate
-     * them, a clinician with a disclosed interest in this product sorts BEHIND one without.
-     */
-    const conflicted = (clinician: Clinician) => (clinician.disclosedInterest ? 1 : 0);
-    return conflicted(a) - conflicted(b);
+    // Exact ties remain peers. Modern JavaScript sorting is stable, and the UI explicitly labels
+    // tied bands instead of pretending this final source order was earned by the request.
+    return 0;
   });
+}
+
+export type RankingProfile = {
+  /** Number of distinct language and access constraints this clinician answers. */
+  constraintCoverage: number;
+  /** Weight of explicitly requested language and access constraints this clinician answers. */
+  constraintScore: number;
+  /** The existing explainable weighted-overlap score. */
+  weightedScore: number;
+  /** Number of distinct requested needs answered, used only after an exact score tie. */
+  coverage: number;
+};
+
+/**
+ * The full, auditable ranking vector for one clinician.
+ *
+ * Keeping this vector public gives tests, the matching console and future outcome evaluation one
+ * definition of the order. It deliberately contains no opaque quality estimate, popularity,
+ * symptom severity, or clinician-specific coefficient.
+ */
+export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[]): RankingProfile {
+  let constraintCoverage = 0;
+  let constraintScore = 0;
+  let weightedScore = 0;
+  let coverage = 0;
+  for (const need of needs) {
+    if (!answers(clinician, need)) continue;
+    const contribution = roundScore(need.weight * declarationFactor(clinician, need));
+    const isConstraint = need.facet.kind === "preference" || need.facet.kind === "language";
+    coverage += 1;
+    weightedScore += contribution;
+    if (isConstraint) {
+      constraintCoverage += 1;
+      constraintScore += contribution;
+    }
+  }
+  return {
+    constraintCoverage,
+    constraintScore: roundScore(constraintScore),
+    weightedScore: roundScore(weightedScore),
+    coverage,
+  };
 }
 
 /**
@@ -105,17 +164,7 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
  * page then declines to give.
  */
 export function scoreAgainst(clinician: Clinician, needs: readonly NeedSignal[]): number {
-  let total = 0;
-  for (const need of needs) {
-    if (!answers(clinician, need)) continue;
-    // Each contribution is rounded EXACTLY as `matchEvidence` rounds it, then the total is
-    // rounded again — the same arithmetic in the same order, so the audit's sum of evidence
-    // can never differ from the score by a thousandth (Codex review on PR #1 constructed the
-    // counterexample: per-item rounding on one path, total-only rounding on the other).
-    total += roundScore(need.weight * declarationFactor(clinician, need));
-  }
-  // Rounded so equal-by-arithmetic totals are equal-by-===; see `roundScore`.
-  return roundScore(total);
+  return rankingProfile(clinician, needs).weightedScore;
 }
 
 /**
@@ -214,10 +263,23 @@ export function labelInSentence(need: NeedSignal): string {
  * want the sentence, so there is still exactly one place the words live.
  */
 export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
+  const facet = need.facet;
+  let after = " — not something they declare. Another listing may.";
+  if (facet.kind === "language") {
+    after = " — not listed among the languages they consult in. Another listing may.";
+  } else if (facet.kind === "preference") {
+    const detail: Record<typeof facet.preference, string> = {
+      "woman-gp": "this GP does not match that preference",
+      "telehealth-first": "this listing does not show a telehealth first appointment",
+      "bulk-billing": "this listing does not show bulk billing",
+      "longer-appointment": "this listing does not show a longer first appointment",
+    };
+    after = ` — ${detail[facet.preference]}. Another listing may.`;
+  }
   return {
     before: "You also asked for ",
     label: labelInSentence(need),
-    after: " — not something they declare. Another listing may.",
+    after,
   };
 }
 
@@ -240,9 +302,8 @@ export function unservedCopy(label: string): string {
  * was heard by the lexicon, ranked against a roster that could not answer them, and told
  * nothing at all. The line built for exactly that case could not see them.
  *
- * Languages are deliberately absent: `languageNeeds` only creates a need for a language the
- * roster SPEAKS, so an unspoken language never becomes a silent miss and has nothing to
- * report here.
+ * Language asks use the same closed vocabulary as onboarding. That lets the directory name a
+ * known coverage gap even before a clinician who speaks that language joins the roster.
  */
 export function unservedAsks(query: string, roster: readonly Clinician[] = clinicians): string[] {
   // A "sometimes" declaration is still a declaration (O2): a clinician the ranking scores for
@@ -253,7 +314,7 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
   const declared = new Set(
     roster.flatMap((clinician) => [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]),
   );
-  return readNeeds(query)
+  return needsFor(query, roster)
     .filter((need) => {
       const facet = need.facet;
       if (facet.kind === "care") return !declared.has(facet.area);
@@ -264,6 +325,11 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
       // The preference kinds are where a three-GP roster's real gaps are — billing above all.
       if (facet.kind === "preference") {
         return !roster.some((clinician) => holdsPreference(clinician, facet.preference));
+      }
+      if (facet.kind === "language") {
+        return !roster.some((clinician) =>
+          clinician.languages.some((language) => language.toLowerCase() === facet.language.toLowerCase()),
+        );
       }
       return false;
     })
@@ -306,14 +372,18 @@ export type MatchQuality = "informed" | "tied" | "unmatched" | "unserved";
 export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
   const needs = needsFor(query, roster);
   if (needs.length === 0) return "unmatched";
-  const scores = roster.map((clinician) => scoreAgainst(clinician, needs));
+  const profiles = roster.map((clinician) => rankingProfile(clinician, needs));
+  const scores = profiles.map((profile) => profile.weightedScore);
   // Words that were READ but that nobody on the roster answers are not a tie — "both of these
   // answer what you asked for equally well" would be false. O111: they are not `unmatched`
   // either, which is the claim that the request could not be read. This branch always knew the
   // difference (the note said "`unservedAsks` names whose gap it is") and said it out loud only
   // in a comment; now it says it to the reader.
   if (scores.every((score) => score === 0)) return "unserved";
-  return new Set(scores).size > 1 ? "informed" : "tied";
+  const keys = profiles.map((profile) =>
+    `${profile.constraintCoverage}|${profile.constraintScore}|${profile.weightedScore}|${profile.coverage}`,
+  );
+  return new Set(keys).size > 1 ? "informed" : "tied";
 }
 
 /**
@@ -365,16 +435,37 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  * only when it is true everywhere. Same closed-vocabulary posture as everything else — a band
  * is a fact about equal numbers, not an estimate.
  */
-export type RankBand = { score: number; clinicians: Clinician[] };
+export type RankBand = {
+  score: number;
+  constraintCoverage: number;
+  constraintScore: number;
+  coverage: number;
+  clinicians: Clinician[];
+};
 
 export function rankBands(query: string, roster: readonly Clinician[] = clinicians): RankBand[] {
   const needs = needsFor(query, roster);
   const bands: RankBand[] = [];
   for (const clinician of rankClinicians(query, roster)) {
-    const score = scoreAgainst(clinician, needs);
+    const profile = rankingProfile(clinician, needs);
     const last = bands.at(-1);
-    if (last && last.score === score) last.clinicians.push(clinician);
-    else bands.push({ score, clinicians: [clinician] });
+    if (
+      last &&
+      last.score === profile.weightedScore &&
+      last.constraintCoverage === profile.constraintCoverage &&
+      last.constraintScore === profile.constraintScore &&
+      last.coverage === profile.coverage
+    ) {
+      last.clinicians.push(clinician);
+    } else {
+      bands.push({
+        score: profile.weightedScore,
+        constraintCoverage: profile.constraintCoverage,
+        constraintScore: profile.constraintScore,
+        coverage: profile.coverage,
+        clinicians: [clinician],
+      });
+    }
   }
   return bands;
 }
@@ -409,7 +500,7 @@ export function needsFor(query: string, roster: readonly Clinician[] = clinician
   // ranked — the O8 review caught the first draft reading the global roster here while every
   // ranking entry point accepted an injectable one, which scored a custom roster against a
   // different roster's statistics (clarify.ts states the rule: the list the reader is looking at).
-  const spoken = [...new Set(roster.flatMap((c) => c.languages))];
+  const spoken = [...new Set([...MATCHABLE_LANGUAGES, ...roster.flatMap((c) => c.languages)])];
   const signals = [...readNeeds(query), ...languageNeeds(query, spoken)];
   const said = query.toLowerCase();
   return signals.map((need) => {
@@ -513,22 +604,56 @@ export function matchEvidence(
  * `needsFor` pass, so the profile's two lists partition the reader's asks exactly and can
  * never disagree with the ranking or with each other.
  *
- * CARE AND MANNER ONLY, because the surface copy frames these as DECLARATIONS ("not something
- * they declare", W193's posture): a care area or a way of working is a thing a clinician
- * declares or does not. A preference like "a woman GP" or a language is a fact about who they
- * are, and "they have not declared being a woman" is not a sentence this product should put
- * beside a name — those asks keep their existing surfaces (the preference ordering itself,
- * and the language line).
+ * Every recognised ask is included. The copy helper uses declaration language only for care and
+ * manner; language and access constraints get literal, facet-specific wording.
  */
 export function missedAsks(
   clinician: Clinician,
   query: string,
   roster: readonly Clinician[] = clinicians,
 ): NeedSignal[] {
-  return needsFor(query, roster).filter(
-    (need) =>
-      (need.facet.kind === "care" || need.facet.kind === "manner") && !answers(clinician, need),
-  );
+  return needsFor(query, roster).filter((need) => !answers(clinician, need));
+}
+
+export type RequestFitSummary = {
+  recognizedNeedCount: number;
+  constraintCount: number;
+  fullMatchCount: number;
+  bestCoverage: number;
+  bestConstraintCoverage: number;
+};
+
+/** Roster-level fit without conflating collective coverage with one clinician meeting every ask. */
+export function requestFitSummary(
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+): RequestFitSummary {
+  const needs = needsFor(query, roster);
+  const profiles = roster.map((clinician) => rankingProfile(clinician, needs));
+  const constraintCount = needs.filter(
+    (need) => need.facet.kind === "preference" || need.facet.kind === "language",
+  ).length;
+  return {
+    recognizedNeedCount: needs.length,
+    constraintCount,
+    fullMatchCount: needs.length === 0 ? 0 : profiles.filter((profile) => profile.coverage === needs.length).length,
+    bestCoverage: Math.max(0, ...profiles.map((profile) => profile.coverage)),
+    bestConstraintCoverage: Math.max(0, ...profiles.map((profile) => profile.constraintCoverage)),
+  };
+}
+
+/** Honest results copy for how many individual listings, if any, answer the complete request. */
+export function requestFitCopy(summary: RequestFitSummary, rosterSize: number): string | null {
+  if (summary.recognizedNeedCount === 0 || rosterSize === 0) return null;
+  if (summary.fullMatchCount === rosterSize) {
+    if (rosterSize === 1) return "This listed GP matches every part of your request we understood.";
+    if (rosterSize === 2) return "Both listed GPs match every part of your request we understood.";
+    return `All ${rosterSize} listed GPs match every part of your request we understood.`;
+  }
+  if (summary.fullMatchCount > 0) {
+    return `${summary.fullMatchCount} of ${rosterSize} listed GPs ${summary.fullMatchCount === 1 ? "matches" : "match"} every part of your request we understood.`;
+  }
+  return "No listed GP matches every part of your request we understood. Showing the strongest declared matches.";
 }
 
 /**
@@ -583,7 +708,10 @@ export function rankCliniciansNear(
    * keep the fit order (which carries the owner-behind rule).
    */
   const out = [...byFit];
-  const tieKey = (c: Clinician) => `${scoreAgainst(c, needs)}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;
+  const tieKey = (c: Clinician) => {
+    const profile = rankingProfile(c, needs);
+    return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.weightedScore}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;
+  };
   let start = 0;
   while (start < out.length) {
     let end = start;
@@ -658,7 +786,9 @@ export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician
     const matchesLanguage = !requirements.languageOptions?.length || requirements.languageOptions.some((language) =>
       clinician.languages.some((spoken) => spoken.toLowerCase() === language.toLowerCase()),
     );
-    const matchesCareAreas = requirements.careAreas.every((area) => clinician.careAreas.includes(area));
+    const matchesCareAreas = requirements.careAreas.every(
+      (area) => clinician.careAreas.includes(area) || (clinician.careAreasSometimes ?? []).includes(area),
+    );
     const matchesAccess = !requirements.wheelchairAccessible || clinician.wheelchairAccessible;
 
     return matchesGender && matchesLanguage && matchesCareAreas && matchesAccess;

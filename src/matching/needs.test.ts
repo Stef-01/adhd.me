@@ -131,10 +131,6 @@ describe("W221 what the roster declares", () => {
     }
   });
 
-  it("still does not float the founder on a request that separates nobody", () => {
-    expect(rankClinicians("I think I might have ADHD and I would like an assessment")[0]!.id)
-      .not.toBe("anubhav-saxena");
-  });
 });
 
 describe("O1 languages go through the one pipeline (F2)", () => {
@@ -146,13 +142,11 @@ describe("O1 languages go through the one pipeline (F2)", () => {
    * drift W221 removed (ranked for a reason not given; here, given a reason not ranked on), and
    * these tests hold the guarantee in both directions.
    */
-  it("ranks the speakers first on a language-only request, and calls the order informed", () => {
-    // Urdu separates the roster: both Saxenas declare it (O88), Dr Yadav does not — so the
-    // speakers rank above the non-speaker and the order is earned, with their internal tie
-    // the banding layer's to say.
+  it("hears a language-only request and calls the shared answer a tie", () => {
+    // Both active clinicians declare Urdu, so the ask is heard and the list remains honestly tied.
     const query = "a GP who speaks Urdu";
     expect(rankClinicians(query).slice(0, 2).map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
-    expect(matchQuality(query)).toBe("informed");
+    expect(matchQuality(query)).toBe("tied");
   });
 
   it("reads an inflected language mention the substring matcher was never tested on", () => {
@@ -177,19 +171,17 @@ describe("O1 languages go through the one pipeline (F2)", () => {
   });
 
   it("a language shared by the whole roster ties rather than separates, and says so", () => {
-    // Since O88 the whole-roster case is real again: Dr Anusha's supplied bio declared Hindi,
-    // so all three clinicians share it and a Hindi-only ask separates nobody — tied, said out
-    // loud, never dressed as an order. The Beecroft pair pins the same property on a
-    // sub-roster, so this test would survive a future roster member who does not speak Hindi.
-    const beecroft = clinicians.filter((c) => c.suburb === "Beecroft");
+    // Both active clinicians speak Hindi, so the ask separates nobody — tied and said aloud.
+    const beecroft = clinicians;
     expect(matchQuality("a GP who speaks Hindi", beecroft)).toBe("tied");
     expect(matchQuality("a GP who speaks Hindi")).toBe("tied");
   });
 
-  it("reaches nothing on a language nobody on the roster declares", () => {
-    // Only declared data is matchable: an undeclared language must not invent a signal.
-    expect(needsFor("a GP who speaks Tamil").filter((n) => n.facet.kind === "language")).toEqual([]);
-    expect(matchQuality("a GP who speaks Tamil")).toBe("unmatched");
+  it("recognises a governed language nobody declares and reports an unserved request", () => {
+    // The shared onboarding/matching vocabulary lets the product name its own roster gap.
+    expect(needsFor("a GP who speaks Tamil").filter((n) => n.facet.kind === "language"))
+      .toHaveLength(1);
+    expect(matchQuality("a GP who speaks Tamil")).toBe("unserved");
   });
 
   it("never treats English as a match reason", () => {
@@ -211,8 +203,13 @@ describe("O2 breadth has a price (F1)", () => {
    * half of an "often" one. Both are the clinician's or the roster's own data, both sayable.
    */
   it("discounts a facet by how much of the roster declares it, but never to zero", () => {
-    // Hindi is declared by both GPs; Urdu by one. Equal authored weight, unequal separation.
-    const needs = needsFor("a GP who speaks Hindi and Urdu");
+    // Synthetic holder split: Hindi is declared by both, Urdu by one. Equal authored weight,
+    // unequal separation, without adding a fictitious clinician to the public roster.
+    const roster = [
+      clinicians[0]!,
+      { ...clinicians[1]!, id: "hindi-only", languages: ["English", "Hindi"] },
+    ];
+    const needs = needsFor("a GP who speaks Hindi and Urdu", roster);
     const hindi = needs.find((n) => n.label === "Hindi-speaking")!;
     const urdu = needs.find((n) => n.label === "Urdu-speaking")!;
     expect(urdu.weight).toBeGreaterThan(hindi.weight);

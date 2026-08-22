@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   {
     q: "What is ADHD.ME?",
-    a: "A finder. You describe what you are looking for in your own words, and it shows you GPs in Beecroft and on the Gold Coast who say they do that work — with the reason each one is shown, printed next to them. It is not a clinic, and it does not give medical advice.",
+    a: "A finder. You describe what you are looking for in your own words, and it shows you listed Sydney GPs who say they do that work — with the reason each one is shown. It is not a clinic, and it does not give medical advice.",
   },
   {
     q: "Is ADHD.ME a medical service?",
@@ -32,7 +32,7 @@ const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: "Where does it operate?",
-    a: "Beecroft in Sydney's north-west, and the Gold Coast. If you name a suburb we do not cover yet, the finder says so rather than pretending.",
+    a: "The current listed doctors consult in Sydney. You can still enter another suburb to see honest distance context; the finder does not imply a local doctor is listed where none is.",
   },
   {
     q: "How is the order of GPs decided?",

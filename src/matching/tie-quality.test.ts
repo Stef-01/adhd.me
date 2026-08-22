@@ -154,7 +154,10 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
    separation rate moves 0.556 -> 0.557. Both halves matter: a promotion that grew `total` without
    growing `separated` would mean the reader had learned to hear an ask it then could not act on,
    and this baseline is pinned in BOTH directions so either would have to be faced deliberately. */
-const PINNED = { total: 447, separated: 249, partialTie: 66, unseparated: 132 };
+/* O178: Dr Yadav's departure leaves a two-person roster. A partial top tie is impossible with
+   two candidates: a reached request either separates them or leaves both together. Re-measured,
+   not backfilled, so the KPI describes the directory that now exists. */
+const PINNED = { total: 447, separated: 278, partialTie: 0, unseparated: 169 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
@@ -180,7 +183,7 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     // unseparated here only when the reader HEARD the request (corpusRun excludes unheard).
     expect(tieOutcome("my dose wears off and needs titration reviewed")).toBe("separated");
     expect(tieOutcome("zzz qqq")).toBe("unseparated");
-    expect(clinicians.length).toBe(3);
+    expect(clinicians.length).toBe(2);
   });
 
   it("survives roster growth without redefinition: outcomes are relative to roster size", () => {
@@ -189,7 +192,7 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     // number that would need editing the day the roster grows.
     const doubled = [
       ...clinicians,
-      ...clinicians.map((c) => ({ ...c, id: `${c.id}-b`, disclosedInterest: undefined })),
+      ...clinicians.map((c) => ({ ...c, id: `${c.id}-b` })),
     ];
     expect(tieOutcome("zzz qqq", doubled)).toBe("unseparated");
     expect(["separated", "partialTie"]).toContain(

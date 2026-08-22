@@ -28,8 +28,8 @@ import { type EIQuality } from "./emotional-fit";
  * EVERY ENTRY IS NOW A REAL PERSON, WHICH INVERTS WHAT THIS FILE USED TO BE. It held fifteen
  * invented personas — invented people, invented availability, invented suburbs — with Dr Saxena
  * as the single marked exception, and that is what let the finder be shown to anybody without a
- * practice agreement in place. The personas are gone. Two real GPs at Beecroft Family & Skin
- * Cancer Clinic remain, and `realPerson` is set on both.
+ * practice agreement in place. The personas are gone. Every current entry is a real GP and
+ * `realPerson` is set on each one.
  *
  * THE COST OF THAT IS THAT NOTHING HERE MAY BE INVENTED ANY MORE, and several fields did not
  * survive the change. `nextAvailable` held a written-in time and is deleted (see `booking`).
@@ -37,11 +37,6 @@ import { type EIQuality } from "./emotional-fit";
  * doctor publishes about himself; where this file says something neither of them has published —
  * `nswAdhdTrained` above all — it is a DECLARATION relayed from the founders, not a check ADHD.ME
  * performed, and the surfaces say so.
- *
- * A NOTE ON WHAT IS STILL OWED. Dr Yadav's biography is written from his public record and his
- * fellow founders' account of how he works, not from his own words. That is a stopgap: a biography is
- * the one field a clinician should write himself, and this one should be replaced with his copy
- * before the directory gate (G6) lifts.
  *
  * WHY `careAreas` IS A CLOSED VOCABULARY AND NOT FREE TEXT. Matching reads these, and a free
  * string would let a demo persona claim an area the archetypes cannot express, which produces
@@ -124,6 +119,8 @@ export type Clinician = {
   matchLine: string;
   fitSignals: string[];
   practicalSignals: string[];
+  /** A concise, first-viewport introduction; the full biography stays in `about`. */
+  summary: string;
   about: string;
   experience: string[];
   languages: string[];
@@ -210,40 +207,6 @@ export type Clinician = {
    * later mistakes a real person's record for one they may freely edit.
    */
   realPerson?: true;
-  /**
-   * A material interest the reader would want disclosed — carried BESIDE the listing, always.
-   *
-   * A clinician with a commercial interest in this product, appearing in its own directory, is a
-   * conflict whether or not the ranking favours them, because the reader cannot see the ranking.
-   * The disclosure is a field on the record rather than a sentence in someone's `about`, so it
-   * cannot be edited out of the copy while the interest remains, and so the finder renders it
-   * without having to know who is who.
-   *
-   * O161: this said "A founder of this product appearing in its own directory", which is false and
-   * is the belief the founder corrected — Dr Saxena owns his CLINIC and is ADHD.ME's first clinic
-   * partner. O158 fixed the sentence a patient reads and left this one, which is the worse place
-   * to leave it: a rationale is where the next author learns what the copy is FOR, so a wrong one
-   * quietly regenerates wrong copy. The interest here is deliberately unnamed in the abstract —
-   * the entries say what each relationship actually is.
-   *
-   * The public directory (src/directory/profile.ts) has no equivalent field yet and does not need
-   * one while `SHIPPED_DIRECTORY_PROFILES` is empty behind founder gate G6. It WILL need one
-   * before that gate lifts, and adding it there means an entry in W193's `DISCLOSED_FIELDS` too.
-   */
-  /**
-   * O158 (founder-correction): RENAMED from `ownershipInterest`, and the rename is the point. That
-   * name presumed the SHAPE of the interest, and presuming is what produced a false sentence about
-   * a named doctor: O156 read "co-founder" as a synonym for ownership and published "Dr Saxena has
-   * an ownership interest in ADHD.ME". He owns his CLINIC and is ADHD.ME's first clinic partner —
-   * he has no ownership of the entity. `disclosedInterest` presumes nothing, which is what a field
-   * holding a factual claim about a real person has to do.
-   *
-   * `disclosedInterestLabel` is the short form rendered beside the listing. It is per-person
-   * because the two entries describe DIFFERENT relationships, and a single hardcoded badge is what
-   * let one wrong word stand for both.
-   */
-  disclosedInterest?: string;
-  disclosedInterestLabel?: string;
 };
 
 export const clinicians: Clinician[] = [
@@ -275,6 +238,8 @@ export const clinicians: Clinician[] = [
     matchLine: "A measured assessment with the physical baseline done properly, then titration reviewed on a schedule.",
     fitSignals: ["ADHD assessment", "Baseline physical screening", "Titration", "Phone consultations"],
     practicalSignals: ["Mixed billing", "Phone consultations", "Structured review schedule"],
+    summary:
+      "Anubhav takes a measured approach to ADHD care, with a documented physical baseline and scheduled reviews during titration. He also covers cardiovascular and sleep screening, and approaches substance history as a safety question rather than a judgement.",
     about:
       "Anubhav trained at the University of Sydney and has worked in general practice right across Sydney — Seven Hills, Double Bay, Hoxton Park, Hornsby — before settling at Beecroft. He works from measurement rather than impression: a documented baseline before anything starts, then review at set intervals instead of whenever a problem gets loud enough to prompt a call. He covers cardiovascular and sleep screening before a stimulant is considered, and treats a substance history as a safety question rather than a character one. He also does aged-care and home visits, and gives a good deal of his spare time to the long-suffering cause of the Parramatta Eels.",
     experience: [
@@ -299,58 +264,6 @@ export const clinicians: Clinician[] = [
       via: "healthengine",
       practitionerId: "123180",
       url: "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
-    },
-    realPerson: true,
-    disclosedInterestLabel: "First clinic partner",
-    disclosedInterest:
-      "Dr Saxena owns Beecroft Family & Skin Cancer Clinic, which is ADHD.ME's first clinic partner. Disclosed because he appears in a directory run by a company his clinic has a commercial relationship with, and a reader cannot see the ranking that put him there.",
-  },
-  {
-    id: "tushar-yadav",
-    name: "Dr Tushar Yadav",
-    shortName: "Dr Yadav",
-    gender: "man",
-    pronouns: "he/him",
-    title: "General practitioner, MBBS",
-    suburb: "Beecroft",
-    practice: "Beecroft Family & Skin Cancer Clinic",
-    reach: "Practice appointments",
-    // No portrait supplied. Renders as a monogram; nothing here generates a face for a real person.
-    image: null,
-    acceptingNewPatients: true,
-    capacityDeclaredAt: "2026-08-14",
-    focus: "Unhurried first appointments & ADHD care alongside the rest of general practice",
-    matchLine: "A longer first appointment with a GP who will take the whole history before reaching for a conclusion.",
-    fitSignals: ["ADHD assessment", "Longer first appointment", "Hindi", "Family context"],
-    practicalSignals: ["Mixed billing", "Beecroft rooms", "Longer first appointment"],
-    about:
-      "Tushar qualified in medicine at Monash and has worked across Western Sydney and the North Shore — Royal North Shore, Western Sydney Local Health District, North Sydney — before joining the Beecroft practice. He sees ADHD the way he sees the rest of general practice: as something that arrives in the middle of a whole life, usually alongside sleep that has never been right, a job that has become hard to hold, or a family who have their own view about what is going on. He would rather spend a long first appointment getting the history straight than reach a conclusion quickly, and he speaks Hindi, which for a good number of families in this part of Sydney is the difference between explaining something and explaining it properly.",
-    experience: [
-      "Adult ADHD assessment",
-      "Longer first appointments",
-      "Sleep and mood alongside ADHD",
-      "Family and cultural context",
-    ],
-    languages: ["English", "Hindi"],
-    careAreas: [
-      "adhd-assessment",
-      "anxiety",
-      "depression",
-      "non-medication",
-      "shared-care",
-    ],
-    manner: ["unhurried", "collaborative", "culturally_attuned", "attuned"],
-    nswAdhdTrained: true,
-    wheelchairAccessible: true,
-    appointmentLength: "Longer first appointments available",
-    // NOT BOOKABLE ONLINE, AND THIS IS A FACT RATHER THAN A GAP. Healthengine lists Dr Yadav at
-    // this practice as "Not Available" with no Book control, because his column is not synced to
-    // their platform. Inventing a slot picker for him would be inventing appointments for a real
-    // clinician, so the surface sends the reader to the practice instead and says why.
-    booking: {
-      via: "practice",
-      url: "https://healthengine.com.au/medical-centre/nsw/beecroft/beecroft-family-and-skin-cancer-clinic/s15072",
-      note: "Dr Yadav's appointments are not online yet — the practice books him by phone.",
     },
     realPerson: true,
   },
@@ -430,7 +343,9 @@ export const clinicians: Clinician[] = [
     fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Hindi & Urdu", "Lifestyle & preventative care"],
     // Billing leads by roster convention; hers is stated by the practice until her interview
     // supplies the specifics — a fact about where the fact lives, not a guess at it.
-    practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
+    practicalSignals: ["Billing set by the practice", "New patients welcome"],
+    summary:
+      "Anusha is an experienced GP with a background in psychology, psychiatry and general medicine. She has completed endorsed ADHD prescriber training and values culturally sensitive, holistic care. She speaks English, Hindi and Urdu.",
     // O88: her official bio, supplied through the founder (2026-08-20), merged with the
     // already-verified detail from O58 — nothing below is authored for her.
     about:
@@ -477,15 +392,5 @@ export const clinicians: Clinician[] = [
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
     realPerson: true,
-    // O89 (founder-directed 2026-08-20: "Add Anusha as cofounder on the page" [their words]). The same
-    // law that governs the other founder's entry governs hers: the disclosure exists because
-    // a reader cannot see the ranking, and it carries the standing ranking COST — at an
-    // exact tie she now sorts behind an undisclosed clinician, and that cost is not
-    // waived for being the second founder to carry it.
-    // FOUNDER: her exact relationship has not been stated. This is the minimum that is certainly
-    // true; replace it with her actual role rather than letting a general word stand in.
-    disclosedInterestLabel: "Declared interest in ADHD.ME",
-    disclosedInterest:
-      "Dr Anusha Saxena has a declared interest in ADHD.ME. Disclosed because she appears in a directory run by a company she is connected with, and a reader cannot see the ranking that put her there.",
   },
 ];

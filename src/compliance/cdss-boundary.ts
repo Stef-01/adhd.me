@@ -494,7 +494,7 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     module: "src/demo/real-person-fields.ts",
     operatorCopy: [],
     notCopy:
-      "Exports the basis register for every field this tree holds about a real, named clinician, plus its type and a name list. It is declared with an empty `operatorCopy` because nothing in it renders: each entry is a build-time note saying whose claim a field is (checkable on a public register, declared by the clinician, relayed by the founder, derived by this tree, or plain plumbing) and where specifically it came from. What it is FOR is the failure it was written after. `src/directory/disclosure.ts` has done exactly this for the PUBLIC directory since W193 — and the public directory is empty behind gate G6 and renders to nobody, while `/finder` puts three real named doctors in front of patients with their sourcing recorded only in prose comments. O156 then published \"Dr Saxena has an ownership interest in ADHD.ME\", a disclosed field about a named doctor whose basis nobody could state because there was nowhere to state it, and it took the founder to catch it. The register makes that sentence unwritable by accident: `disclosedInterest` is `founder-stated`, so entering one means citing what was actually said. Checked both directions against the live roster — a field on a real person with no entry fails, an entry naming a field nobody carries fails — so this cannot decay into a list of what somebody remembered.",
+      "Exports the basis register for every field this tree holds about a real, named clinician, plus its type and a name list. It is declared with an empty `operatorCopy` because nothing in it renders: each entry is a build-time note saying whose claim a field is (checkable on a public register, declared by the clinician, relayed by the founder, derived by this tree, or plain plumbing) and where specifically it came from. What it is FOR is the failure it was written after. `src/directory/disclosure.ts` has done exactly this for the PUBLIC directory since W193 — and the public directory is empty behind gate G6 and renders to nobody, while `/finder` puts three real named doctors in front of patients with their sourcing recorded only in prose comments. O156 then published an unsupported relationship claim about a named doctor whose basis nobody could state because there was nowhere to state it, and it took the founder to catch it. That claim is no longer a product field. Checked both directions against the live roster — a field on a real person with no entry fails, an entry naming a field nobody carries fails — so this cannot decay into a list of what somebody remembered.",
   },
   {
     module: "src/matching/scale-fixture.ts",
@@ -525,6 +525,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     operatorCopy: ["NEED_LABELS"],
     notCopy:
       "The remaining exports are the facet unions, the reader and the key helper. `NEED_LABELS` is the closed vocabulary a match reason is composed from — the phrases a PATIENT reads back as why this GP was shown. Every one is written as a description of CARE rather than a finding about a person, which is the distinction this file exists to hold: \"a substance history held safely\" is a way of working, where \"substance use\" would be a clinical statement about somebody. The lexicon that reaches these labels reads a preference about care and never classifies a symptom, so the finder stays on the clinician-attribute side of G7.",
+  },
+  {
+    module: "src/matching/languages.ts",
+    operatorCopy: ["MATCHABLE_LANGUAGES"],
+    notCopy:
+      "The one export is a closed list of consultation-language names shared by clinician onboarding and patient matching. Each string may render as a checkbox label or inside a literal language match/gap label. It contains no clinical claim, advice, symptom inference or patient classification; its job is to make a known roster gap explicit instead of treating the reader's language request as unreadable.",
   },
   {
     module: "src/matching/explain.ts",

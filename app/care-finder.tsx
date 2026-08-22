@@ -12,6 +12,8 @@ import {
   rankBands,
   rankCliniciansNear,
   rankClinicians,
+  requestFitCopy,
+  requestFitSummary,
   topTieNote,
   unservedAsks,
   missedAsks,
@@ -164,6 +166,10 @@ export function CareFinder() {
   const tieNote = useMemo(() => topTieNote(request), [request]);
   const clarifierList = useMemo(() => clarifiers(request, matches), [request, matches]);
   const unserved = useMemo(() => unservedAsks(request), [request]);
+  const fitCopy = useMemo(
+    () => requestFitCopy(requestFitSummary(request, matches), matches.length),
+    [request, matches],
+  );
 
   /**
    * The fold never cuts a tied band (O8 review): topTieNote says "the first N answered equally
@@ -434,6 +440,7 @@ export function CareFinder() {
             tieNote={tieNote}
             clarifierList={clarifierList}
             unserved={unserved}
+            fitCopy={fitCopy}
             place={place}
             origin={origin}
             matches={matches}
@@ -467,19 +474,11 @@ export function CareFinder() {
             personalizedSignals={personalizedMatch.signals}
             profileEvidence={profileEvidence}
             profileMissed={profileMissed}
-            clarifierList={clarifierList}
             request={request}
             origin={origin}
-            compareWith={compareRows.length > 0 ? compareWith : null}
-            onCompare={() => setStage("compare")}
+            compareName={compareRows.length > 0 && compareWith ? compareWith.shortName : null}
             onBack={() => setStage("results")}
-            onClarifyTop={() => {
-              const next = `${request}, ${clarifierList[0]!.answer}`;
-              setRequest(next);
-              setMatches(rankCliniciansNear(next, origin));
-              setMatchIndex(0);
-              setStage("results");
-            }}
+            onCompare={() => setStage("compare")}
             onBook={() => setStage("booking")}
           />
         )}
@@ -490,7 +489,7 @@ export function CareFinder() {
             left={clinician}
             right={compareWith}
             rows={compareRows}
-            onBack={() => setStage("profile")}
+            onBack={() => setStage("results")}
             onOpenRight={() => {
               chooseClinician(compareWith);
             }}

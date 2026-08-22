@@ -5,6 +5,7 @@
 // sentences rather than copy written for the console.
 
 import { expect, test, type Page } from "@playwright/test";
+import { clinicians } from "../src/demo/clinicians";
 
 async function signInAsPracticeOwner(page: Page) {
   await page.goto("/console/signin");
@@ -33,7 +34,7 @@ test("every listed GP has a panel, and each line names the declaration behind it
 
   const panels = page.locator('[data-testid^="told-"]');
   await expect(panels.first()).toBeVisible();
-  expect(await panels.count()).toBeGreaterThanOrEqual(3);
+  expect(await panels.count()).toBe(clinicians.length);
 
   // Every row is a sentence AND its source: a line with no source cannot be corrected (W190).
   const rows = page.locator(".mc-told li");

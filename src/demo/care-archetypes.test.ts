@@ -3,10 +3,9 @@ import { careArchetypes } from "./care-archetypes";
 import { cliniciansMatchingArchetype, clinicians, rankClinicians } from "./clinicians";
 
 describe("ADHD assessment demo archetypes", () => {
-  it("includes seven distinct qualitative journeys", () => {
-    // Seven since O34: the woman-GP journey arrived with Dr Anusha Saxena.
-    expect(careArchetypes).toHaveLength(7);
-    expect(new Set(careArchetypes.map((archetype) => archetype.id)).size).toBe(7);
+  it("includes six distinct qualitative journeys", () => {
+    expect(careArchetypes).toHaveLength(6);
+    expect(new Set(careArchetypes.map((archetype) => archetype.id)).size).toBe(6);
   });
 
   it.each(careArchetypes)("ranks the intended first match for $title", (archetype) => {
@@ -21,7 +20,7 @@ describe("ADHD assessment demo archetypes", () => {
    * cost nothing. Against two real ones it would mean every scenario must be servable by BOTH of
    * them — which is only satisfiable if the two are interchangeable, and the whole point of the
    * finder is that they are not. "Do the physical checks properly first" goes to Dr Saxena because
-   * he does the cardiac baseline; forcing Dr Yadav to be an equally valid answer would mean
+   * he does the cardiac baseline; forcing every active doctor to be an equally valid answer would mean
    * deleting the distinction rather than describing it.
    *
    * So the invariant is re-aimed at the failure it was really guarding: a journey that leads
@@ -37,7 +36,7 @@ describe("ADHD assessment demo archetypes", () => {
     expect(eligibleIds.has(rankClinicians(archetype.request)[0]!.id)).toBe(true);
   });
 
-  /** Both GPs must be reachable by some journey, or the roster is carrying a name nothing routes to. */
+  /** Every active GP must be reachable by some journey, or the roster carries a name nothing routes to. */
   it("routes to every clinician on the roster", () => {
     const reached = new Set(careArchetypes.map((archetype) => archetype.expectedFirstMatch));
 
@@ -82,7 +81,6 @@ describe("ADHD assessment demo archetypes", () => {
     const byId = new Map(careArchetypes.map((archetype) => [archetype.id, archetype.request.toLowerCase()]));
 
     expect(byId.get("anxiety-differential-hindi")).toMatch(/wrong answer|differential/);
-    expect(byId.get("unhurried-first-appointment")).toMatch(/before deciding anything|whole story/);
     expect(byId.get("sleep-and-family-context")).toMatch(/sleep/);
   });
 });

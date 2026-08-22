@@ -10,14 +10,14 @@ Written at the close of Year 5 by `loop-0821a`. Every figure is derived from the
   ledger and went red the moment W208 planned Year 5 — the document had not become wrong, the check
   had. W210 recorded that as `DOSSIER-1` with a mechanical trigger, and this file's test is the one
   that trigger was set for.
-- The **seven decisions** are deliberately *not* bounded. A dossier of outstanding decisions is
+- The **six decisions** are deliberately *not* bounded. A dossier of outstanding decisions is
   about the live state: the moment somebody answers one, this document is wrong, and going red is
-  how anybody finds out. Four of the seven are answered in **source**, not in the ledger, and the
+  how anybody finds out. Three of the six are answered in **source**, not in the ledger, and the
   test reads those files.
 
 ## Verdict
 
-**18 blocked rows and seven outstanding decisions.** Seventeen of the rows name a founder gate;
+**18 blocked rows and six outstanding decisions.** Seventeen of the rows name a founder gate;
 one (W217) is blocked on a decision that no gate covers. Six gates are load-bearing:
 
 - **G5** — 8 units. Clinical pathway content sign-off. Far and away the most expensive thing shut.
@@ -93,20 +93,10 @@ sentence. Ruling on it means changing a published notice, not a config.
 
 ---
 
-## The seven decisions
+## The six decisions
 
 Each says where its answer would appear. The test reads that place, so answering any of them turns
 this document red.
-
-### D1 — Dr Anusha Saxena's relationship to ADHD.ME
-
-**Where:** `src/demo/roster.ts` — a `FOUNDER:` marker on her entry.
-
-Her disclosure currently reads "Dr Anusha Saxena has a declared interest in ADHD.ME", which is the
-minimum that is **certainly** true. The founder direction was "add Anusha as cofounder on the page";
-the tree did not write "cofounder" into a disclosure about a real named person without that being
-stated as her role. **Cost of leaving it:** a real person's public entry describes her with a general
-word rather than her actual relationship. **Cost of answering it:** one line.
 
 ### D2 — Saif Tareen's photo, role and remit
 
@@ -176,6 +166,6 @@ well as behind G5.
 
 **A credential for this product's own API.** G1 covers real PMS and booking credentials; W254 ships
 the scope model with no minting path and an empty grant registry, and says outright that no named
-gate protects it. Not listed among the seven because nobody is waiting on it — nothing is blocked —
+gate protects it. Not listed among the six because nobody is waiting on it — nothing is blocked —
 but when an integrator is to hold a credential, that ruling and the minting path arrive together
 rather than the second arriving first.

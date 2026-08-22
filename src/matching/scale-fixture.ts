@@ -131,6 +131,7 @@ export function syntheticRoster(size: number): Clinician[] {
       matchLine: "Fixture entry; carries no claim about anybody.",
       fitSignals: [],
       practicalSignals: bulkBills ? ["Bulk billing"] : ["Private fee"],
+      summary: "Generated for matching scale measurement. This is not a real clinician.",
       about: "Generated for measurement. Not a person, and not a description of one.",
       experience: [],
       languages: ["English"],

@@ -60,7 +60,7 @@ test("a second consulting location is a fact the reader sees, with the distance 
   // From Hornsby, the distance is measured to her Hornsby rooms and SAYS so — a kilometre
   // figure to one location never renders as though it were the other.
   await page.getByLabel(/Where are you/i).fill("Hornsby");
-  await expect(page.getByText(/nearest to Hornsby first/i)).toBeVisible();
+  await expect(page.getByText(/otherwise equal matches, nearer to Hornsby comes first/i)).toBeVisible();
   await expect(anushaRow.getByText(/in your suburb \(their Hornsby rooms\)/)).toBeVisible();
   await anushaRow.screenshot({ path: "qa/_runs/location-o85/row-hornsby-origin.png" });
 
@@ -70,19 +70,10 @@ test("a second consulting location is a fact the reader sees, with the distance 
   await expect(anubhavRow.getByText(/Beecroft & Double Bay, by telehealth/)).toBeVisible();
   await anubhavRow.screenshot({ path: "qa/_runs/location-o86/row-telehealth-pair.png" });
 
-  // The profile carries the same pair on its meta line — and, since O89, her ownership
-  // disclosure beside it: a material interest stated exactly where the listing is read.
+  // The profile carries the same pair on its compact identity block.
   await anushaRow.click();
   await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();
-  // O158: assert the DISCLOSURE, not a particular word. It has been "Co-founder of ADHD.ME", then
-  // "Owner of ADHD.ME" — which was false, Dr Saxena owns his clinic and not the entity — and now a
-  // per-person label. What must never change is that a line is there and that it does not claim
-  // either doctor owns ADHD.ME.
-  const disclosure = page.locator(".disclosure-line");
-  await expect(disclosure).toBeVisible();
-  await expect(disclosure).not.toHaveText(/(owns|owner of|ownership (interest )?(in|of)) ADHD\.ME/i);
-  await expect(disclosure).not.toHaveText(/founder/i);
-  await page.locator(".profile-content").screenshot({ path: "qa/_runs/founder-o89/profile-disclosure.png" });
+  await expect(page.locator(".disclosure-line")).toHaveCount(0);
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(300);
@@ -94,7 +85,7 @@ test("changing the suburb re-ranks in place instead of losing the search", async
   const before = await page.locator(".clinician-row strong").allInnerTexts();
 
   await page.getByLabel(/Where are you/i).fill("Beecroft");
-  await expect(page.getByText(/nearest to Beecroft first/i)).toBeVisible();
+  await expect(page.getByText(/otherwise equal matches, nearer to Beecroft comes first/i)).toBeVisible();
 
   const after = await page.locator(".clinician-row strong").allInnerTexts();
   // Re-ranked in place, still on the same screen — editing this field does not send anybody back a
@@ -110,7 +101,7 @@ test("changing the suburb re-ranks in place instead of losing the search", async
 test("an uncovered suburb says so rather than silently ranking on nothing", async ({ page }) => {
   await intoResults(page);
   await page.getByLabel(/Where are you/i).fill("Bondi");
-  await expect(page.getByText(/do not cover that one yet/i)).toBeVisible();
+  await expect(page.getByText(/do not cover that location yet/i)).toBeVisible();
   await expect(page.locator(".clinician-row")).not.toHaveCount(0);
 });
 
@@ -163,18 +154,16 @@ test("refine returns to typing with the words already there", async ({ page }) =
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 2500 });
 });
 
-test("no screen the collapse removed is still reachable", async ({ page }) => {
+test("profile back returns to the populated results screen", async ({ page }) => {
   // A button left pointing at a deleted stage renders NOTHING, because every screen is gated on a
   // stage equality check. An empty main is the signature of that bug, so it is asserted directly.
   await intoResults(page);
-  for (const click of [
-    () => page.locator(".clinician-row").first().click(),
-    () => page.getByRole("button", { name: /All results/i }).click(),
-  ]) {
-    await click();
-    const text = await page.locator("main").innerText();
-    expect(text.trim().length, "a stage rendered nothing").toBeGreaterThan(40);
-  }
+  await page.locator(".clinician-row").first().click();
+  await expect(page.locator(".profile-screen")).toBeVisible();
+  await page.getByRole("button", { name: /Back to results/i }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible();
+  const text = await page.locator("main").innerText();
+  expect(text.trim().length, "a stage rendered nothing").toBeGreaterThan(40);
 });
 
 test("the chosen GP's portrait is one object from row to profile (O67)", async ({ page }) => {
@@ -221,13 +210,14 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
   for (let index = 0; index < count; index++) {
     await rows.nth(index).click();
     await expect(page.locator(".profile-content")).toBeVisible();
+    await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
     const missed = page.locator(".fit-missed li");
     if ((await missed.count()) > 0) {
       found = true;
       // Declaration-framed, never a deficiency claim; and never contradicting the evidence list.
       await expect(missed.first()).toContainText("not something they declare");
-      const missedLabel = (await missed.first().locator(".fit-missed-label").innerText()).toLowerCase();
-      const evidence = (await page.locator(".fit-evidence-label").allInnerTexts()).map((t) => t.toLowerCase());
+      const missedLabel = (await missed.first().locator("strong").innerText()).toLowerCase();
+      const evidence = (await page.locator(".fit-evidence strong").allInnerTexts()).map((t) => t.toLowerCase());
       expect(evidence).not.toContain(missedLabel);
       // The design record: both halves of the account in one frame, desktop and phone widths.
       await missed.first().scrollIntoViewIfNeeded();
@@ -243,39 +233,13 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
   expect(found, "no profile showed a missed ask for a three-ask query").toBe(true);
 });
 
-test("the profile says what would change this order, and tapping it returns to a re-read list (O66)", async ({ page }) => {
+test("refinement stays with results while the profile leads with the bio", async ({ page }) => {
   await intoResults(page);
   await page.locator(".clinician-row").first().click();
   await expect(page.locator(".profile-content")).toBeVisible();
-
-  // One quiet line, one question — the top clarifier only, never a chip row on a profile.
-  const line = page.locator(".profile-clarify");
-  await expect(line).toBeVisible();
-  await expect(line).toContainText("What would change this order");
-  const question = line.locator(".profile-clarify-question");
-  await expect(question).toHaveCount(1);
-
-  // The design record before the tap: the whole profile column, question in context —
-  // an element shot, because the profile scrolls inside its own shell.
-  await page.waitForTimeout(450);
-  await page.locator(".profile-content").screenshot({ path: "qa/_runs/profile-o66/clarify-on-profile-desktop.png" });
-
-  // Tapping does what the results chips do — answer appended, whole sentence re-read — and
-  // LANDS ON RESULTS, where the O52 layout animation is what shows the order changing.
-  const askedPrompt = ((await question.textContent()) ?? "").trim();
-  await question.click();
-  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  // The re-read is real: the answered facet is no longer an open question, so the profile's
-  // question can never be a dead tap that changes nothing and says nothing.
-  await page.locator(".clinician-row").first().click();
-  await expect(page.locator(".profile-content")).toBeVisible();
-  const after = page.locator(".profile-clarify .profile-clarify-question");
-  if (await after.count()) {
-    expect(((await after.textContent()) ?? "").trim()).not.toBe(askedPrompt);
-  }
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.waitForTimeout(450);
-  await page.locator(".profile-content").screenshot({ path: "qa/_runs/profile-o66/clarify-on-profile-mobile.png" });
+  await expect(page.getByRole("heading", { name: "About" })).toBeVisible();
+  await expect(page.locator(".profile-clarify")).toHaveCount(0);
+  await expect(page.locator(".clarify-chip")).toHaveCount(0);
 });
 
 test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
@@ -287,6 +251,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   // Every listing declares assessment, so this ties the roster and the clarifier renders.
   await page.getByRole("textbox").fill("I need an ADHD assessment");
   await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByText("Improve my matches", { exact: true }).click();
   await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
 
   const before = await page.locator(".clinician-row strong").allInnerTexts();
@@ -303,6 +268,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
       await page.getByRole("button", { name: /Change what you said/i }).click();
       await page.getByRole("textbox").fill("I need an ADHD assessment");
       await page.getByRole("button", { name: "Find a GP" }).click();
+      await page.getByText("Improve my matches", { exact: true }).click();
       await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
     }
     await page.locator(".clarify-chip").nth(chip).click();
@@ -344,6 +310,24 @@ test("the finder never claims a full fit beside a gap it just admitted (O121)", 
   expect(head).not.toContain("does what you asked for");
 });
 
+test("collective roster coverage is never presented as one doctor's complete fit (O178)", async ({ page }) => {
+  await page.goto("/finder");
+  await page.locator("#welcome-request").fill(
+    "I need a woman GP who speaks Urdu and offers telehealth",
+  );
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  await expect(page.getByText(
+    "No listed GP matches every part of your request we understood. Showing the strongest declared matches.",
+  )).toBeVisible();
+
+  await page.locator(".clinician-row").filter({ hasText: "Dr Anusha Saxena" }).click();
+  const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
+  await why.locator("summary").click();
+  await expect(why).toContainText("this listing does not show a telehealth first appointment");
+});
+
 test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {
   await page.goto("/finder");
   // Deliberately a query the roster SEPARATES on and serves completely: "adult ADHD
@@ -357,5 +341,5 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
   // Nothing unserved here, so the claim is earned and must still render — otherwise the fix
   // above would have been a deletion rather than a condition.
   expect(head).not.toContain("not something any GP listed today declares");
-  expect(head).toMatch(/do(es)? what you asked for/);
+  expect(head).toMatch(/1 of 2 listed GPs matches every part of your request we understood/);
 });

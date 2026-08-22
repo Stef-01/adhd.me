@@ -15,7 +15,7 @@
 // how anybody finds out. Bounding that half too would produce a document that keeps agreeing with
 // itself after the world has moved, which is precisely what the row forbids.
 //
-// ONLY THREE OF THE SEVEN DECISIONS ARE LEDGER ROWS. Four live in source and one of those resolves
+// ONLY THREE OF THE SIX DECISIONS ARE LEDGER ROWS. Three live in source and one of those resolves
 // by a FILE EXISTING. A dossier deriving from the ledger alone would price three and list four from
 // memory — and the four from memory are exactly the ones that go stale, because answering one is a
 // source edit nobody would think to reflect in a document. Both halves are derived here.
@@ -106,21 +106,13 @@ describe("W257 the ledger half is derived, and bounded so a later year cannot br
 });
 
 /**
- * The seven decisions, and where each one's answer would appear.
+ * The six decisions, and where each one's answer would appear.
  *
  * `resolved` is the point: it asks the SOURCE whether the decision has been made. Every one of
  * these turns this dossier red when somebody answers it — which is correct, because at that moment
  * the document is wrong and nothing else would say so.
  */
 const DECISIONS: readonly { id: string; where: string; resolved: () => boolean }[] = [
-  {
-    id: "D1",
-    where: "src/demo/roster.ts — a FOUNDER: marker on Dr Anusha Saxena's entry",
-    resolved: () =>
-      !readFileSync(path.join(ROOT, "src/demo/roster.ts"), "utf8").includes(
-        "FOUNDER: her exact relationship has not been stated",
-      ),
-  },
   {
     id: "D2",
     where: "public/saif-tareen.png — the decision resolves by the file existing",
@@ -160,7 +152,7 @@ const DECISIONS: readonly { id: string; where: string; resolved: () => boolean }
 ];
 
 describe("W257 the decision half is derived from source, and deliberately NOT bounded", () => {
-  it("finds all seven still outstanding, asked of the source rather than of this file", () => {
+  it("finds all six still outstanding, asked of the source rather than of this file", () => {
     // The assertion that makes the document self-invalidating. When one of these is answered, this
     // fails — which is the intended behaviour and is why the decision half carries no bound. A
     // dossier of outstanding decisions that kept agreeing with itself after a decision was made
@@ -169,8 +161,8 @@ describe("W257 the decision half is derived from source, and deliberately NOT bo
     expect(
       open.length,
       `a decision has been answered — update docs/GATE-DOSSIER-Y5.md. Resolved: ${DECISIONS.filter((d) => d.resolved()).map((d) => d.id).join(", ")}`,
-    ).toBe(7);
-    expect(DOSSIER).toContain("seven decisions");
+    ).toBe(6);
+    expect(DOSSIER).toContain("six decisions");
   });
 
   it("prices each one in the dossier, with where its answer would appear", () => {
@@ -188,9 +180,6 @@ describe("W257 the decision half is derived from source, and deliberately NOT bo
     expect(existsSync(path.join(ROOT, "public"))).toBe(true); // D2 reads a real directory
     expect(DISCLOSURE_PAYLOAD_POSTURE).toBe("fact_only"); // D5's other value flips it
     expect(LEDGER).toContain("[FOUNDER: VERTICAL UNDECIDED.]"); // D7's marker is really there
-    expect(
-      readFileSync(path.join(ROOT, "src/demo/roster.ts"), "utf8"),
-    ).toContain("FOUNDER: her exact relationship has not been stated"); // D1's marker
     const spec = readFileSync(path.join(ROOT, "e2e/profile-sweep.spec.ts"), "utf8");
     expect(spec).toContain("FOUNDER DECISION OUTSTANDING"); // D3/D4's marker
     expect(blockedRows().some((row) => row.gates.includes("G10"))).toBe(true); // D6's rows

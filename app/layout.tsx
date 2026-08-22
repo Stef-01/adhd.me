@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s · ADHD.ME",
   },
   description:
-    "Find a GP in Beecroft or on the Gold Coast who does ADHD assessment, in your language, at a practice you can get to.",
+    "Find a listed Sydney GP who does ADHD assessment, in your language, with the access details you asked for.",
   openGraph: {
     siteName: "ADHD.ME",
     type: "website",
@@ -60,10 +60,7 @@ const ORGANIZATION_JSONLD = {
       name: "ADHD.ME",
       url: SITE_URL,
       email: "stefan.thottunkal@gmail.com",
-      areaServed: [
-        { "@type": "Place", name: "Beecroft, NSW, Australia" },
-        { "@type": "Place", name: "Gold Coast, QLD, Australia" },
-      ],
+      areaServed: [{ "@type": "Place", name: "Sydney, NSW, Australia" }],
     },
     {
       "@type": "WebSite",

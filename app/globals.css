@@ -647,10 +647,6 @@ textarea:focus-visible {
      finding on this screen — "every gap was between 6 and 13px, so nine semantically different
      blocks looked like one list" — reintroduced by a fix to something else. Within 3, between 14. */
   gap: 14px;
-  /* O129: separated from the disclosure line above it. Butted together, "Co-founder of ADHD.ME"
-     read as the first item of the evidence list — a material-interest disclosure being mistaken
-     for a reason this GP was matched, which is the one adjacency on this screen worth spending
-     10px to prevent. */
   /* O150: 24px opens the "why this fit" group; the identity lines above it now sit 4px apart so
      they read as one block. Proximity is the whole mechanism — before this, every gap on the
      screen was between 6 and 13px, so nine semantically different blocks looked like one list. */
@@ -670,22 +666,6 @@ textarea:focus-visible {
   gap: 3px;
 }
 
-.fit-evidence-label {
-  padding: 5px 8px;
-  border-radius: 3px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  font-size: 0.6875rem;
-  font-weight: 620;
-  line-height: 1.25;
-}
-
-.fit-evidence-said {
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.4;
-}
-
 /* O51: the asks this GP does not answer — quieter than the evidence above on purpose (it is
    context, not the headline), but the same visual language, so the two read as one account. */
 .fit-missed {
@@ -699,57 +679,6 @@ textarea:focus-visible {
   font-size: 0.75rem;
   line-height: 1.45;
   max-width: 52ch;
-}
-
-.fit-missed-label { color: var(--ink); font-weight: 600; }
-
-/* O66: the reorder question, in the missed-asks register — context, not a headline. The
-   question itself is the control (related facts share a row), padded to the touch floor. */
-.profile-clarify {
-  margin: 24px 0 0;
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.45;
-  max-width: 52ch;
-}
-
-.profile-clarify-question {
-  border: 0;
-  padding: 12px 2px; /* quiet type, full-height hit area (O14 floor) */
-  margin: -12px 0;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-/* O102: the way to the side-by-side, in the same quiet register as the reorder question
-   above it — both are offers to understand the order, not calls to action, and giving one
-   of them a button would make the profile argue with its own booking bar. */
-.profile-compare {
-  margin: 8px 0 0;
-  max-width: 52ch;
-}
-.profile-compare-action {
-  border: 0;
-  padding: 12px 2px; /* O14 floor: quiet type, full-height hit area */
-  margin: -12px 0;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-@media (hover: hover) {
-  .profile-compare-action:hover { color: var(--ink); }
 }
 
 /* ── O102: two clinicians, side by side ─────────────────────────────────────────────────
@@ -1506,24 +1435,6 @@ textarea:focus-visible {
   border-top: 1px solid var(--line);
   background: color-mix(in srgb, var(--paper) 96%, transparent);
   backdrop-filter: blur(16px);
-}
-
-.profile-footer > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  font-size: 0.75rem;
-}
-
-.profile-footer span {
-  color: var(--muted);
-}
-
-/* O166: ink. "Live on Healthengine" is a statement of fact about where booking happens, not a
-   value that changes — the weight already separates it from the label beside it. */
-.profile-footer strong {
-  color: var(--ink);
-  font-weight: 630;
 }
 
 .booking-content > p:not(.eyebrow) {
@@ -2669,6 +2580,11 @@ textarea:focus-visible {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 18px;
+}
+
+.patient-v2 .row-portrait-anchor {
+  width: 76px;
+  height: 76px;
 }
 
 .patient-v2 .clinician-row img {
@@ -5506,23 +5422,6 @@ textarea:focus-visible {
   color: var(--muted);
 }
 
-/* The two one-line notes that replaced paragraphs of hedging. */
-.credential-line {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 0.78125rem;
-}
-/* O166: INK, and the direction matters. This is a material-interest disclosure about a named real
-   person, sited exactly where the listing is read (O89/O129) — so taking it OFF the accent must not
-   make it quieter. Ink on paper is the highest-contrast pair in the palette; amber is not. This
-   moves the disclosure UP in prominence while freeing the accent for the one thing that changes. */
-.disclosure-line {
-  margin: 4px 0 0;
-  color: var(--ink);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
 /* ===========================================================================
    REGION 13 — MOBILE TAP TARGETS (O14). CROSS-SURFACE AND ORDER-DEPENDENT.
 
@@ -6515,20 +6414,6 @@ textarea:focus-visible {
   .story-footer { padding-bottom: 86px; }
 }
 
-/* Directions (item 14), on the profile's fit list. */
-/* O166: ink. A link is a link; underline already says so, and an amber one was the fourth
-   meaning the accent carried on this screen. */
-.profile-directions { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-
-/* O166: the map link's own row, outside `.fit-list`. No divider, because it is not another item in
-   a list of facts — it is the one thing on this block a reader can act on. The margin is the gap
-   the list's bottom rule used to provide. */
-.profile-directions-row {
-  margin: 14px 0 0;
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
 /* O16: the privacy agreement bar and its pop-out. */
 .consent-bar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
@@ -6565,3 +6450,388 @@ textarea:focus-visible {
 .consent-dialog .consent-read { border-color: var(--line); color: var(--ink); }
 .consent-dialog .consent-agree { background: var(--ink); color: var(--paper); }
 .consent-dialog .consent-agree:focus-visible, .consent-dialog .consent-read:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Minimal doctor profile — selected direction, implemented in the existing visual system. */
+.patient-v2 .profile-screen {
+  min-height: 100svh;
+  scroll-padding-bottom: 104px;
+}
+
+.patient-v2 .profile-header {
+  min-height: 64px;
+  padding-inline: 20px;
+}
+
+.profile-header .header-spacer {
+  width: 44px;
+  height: 44px;
+}
+
+.patient-v2 .profile-content {
+  width: min(100%, 860px);
+  margin: 0 auto;
+  padding: 28px 22px 30px;
+}
+
+.profile-intro {
+  display: grid;
+  grid-template-columns: 126px minmax(0, 1fr);
+  gap: 21px;
+  align-items: center;
+}
+
+.patient-v2 .profile-portrait,
+.profile-portrait {
+  width: 126px;
+  height: 144px;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  background: var(--stone);
+}
+
+.patient-v2 .profile-portrait img,
+.profile-portrait img {
+  object-fit: cover;
+  object-position: center 26%;
+}
+
+.profile-identity {
+  min-width: 0;
+}
+
+.patient-v2 .profile-content .profile-identity h1 {
+  margin: 0 0 12px;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(1.625rem, 6.7vw, 2.75rem);
+  font-weight: 480;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.patient-v2 .profile-content .profile-identity p,
+.profile-location {
+  display: block;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.profile-location {
+  margin-top: 2px;
+}
+
+.profile-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  margin: 22px 0 0;
+  padding: 12px 0;
+  border-block: 1px solid var(--line);
+  color: var(--muted);
+  list-style: none;
+  font-size: 0.8125rem;
+  font-weight: 560;
+  line-height: 1.35;
+}
+
+.profile-facts li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 13px;
+}
+
+.profile-facts li:first-child {
+  padding-left: 0;
+}
+
+.profile-facts li + li {
+  border-left: 1px solid var(--line);
+}
+
+.profile-fact-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.patient-v2 .profile-content .profile-about {
+  margin: 34px 0 0;
+  padding: 0 0 30px;
+  border: 0;
+}
+
+.patient-v2 .profile-content .profile-about h2 {
+  margin: 0 0 12px;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.patient-v2 .profile-content .profile-about > p,
+.profile-more > p {
+  display: block;
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.56;
+}
+
+.profile-more {
+  margin-top: 16px;
+}
+
+.profile-more summary,
+.profile-disclosure summary,
+.results-refine-details summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.profile-more summary::-webkit-details-marker,
+.profile-disclosure summary::-webkit-details-marker,
+.results-refine-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.profile-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: var(--accent);
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.profile-more[open] summary svg,
+.profile-disclosure[open] summary svg {
+  transform: rotate(90deg);
+}
+
+.profile-more summary svg,
+.profile-disclosure summary svg {
+  flex: 0 0 auto;
+  transition: transform 160ms ease;
+}
+
+.profile-more > p {
+  margin-top: 10px;
+}
+
+.profile-disclosures {
+  border-top: 1px solid var(--line);
+}
+
+.profile-disclosure {
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-disclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 66px;
+  padding: 0 4px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 520;
+  scroll-margin-bottom: 110px;
+}
+
+.profile-disclosure-body {
+  padding: 0 4px 24px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.profile-disclosure-body > p {
+  display: block;
+  margin: 0 0 10px;
+}
+
+.profile-disclosure .fit-evidence,
+.profile-disclosure .fit-missed,
+.profile-detail-list {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-disclosure .fit-evidence li,
+.profile-disclosure .fit-missed li,
+.profile-detail-list li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-disclosure .fit-evidence li {
+  display: grid;
+  gap: 2px;
+}
+
+.profile-disclosure .fit-evidence strong,
+.profile-disclosure .fit-missed strong {
+  color: var(--ink);
+  font-weight: 620;
+}
+
+.profile-disclosure .fit-evidence span {
+  font-size: 0.875rem;
+}
+
+.profile-detail-list li::before {
+  content: none;
+}
+
+.profile-compare {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 590;
+  cursor: pointer;
+}
+
+.profile-compare:hover,
+.profile-compare:focus-visible {
+  color: var(--ink);
+}
+
+.profile-compare:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.patient-v2 .profile-footer {
+  position: sticky;
+  inset: auto 0 0;
+  z-index: 30;
+  display: block;
+  width: 100%;
+  margin: auto 0 0;
+  padding: 12px 22px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.patient-v2 .profile-footer .primary-button {
+  width: min(100%, 816px);
+  min-height: 52px;
+  margin: 0 auto;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+/* Secondary result controls stay available without sitting between the request and first doctor. */
+.results-refine-details {
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.results-refine-details summary {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 620;
+}
+
+.results-refine-details .clarify {
+  margin: 0;
+  padding: 2px 0 16px;
+}
+
+.results-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 24px 4px;
+}
+
+.results-list-head h2 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+@media (min-width: 680px) {
+  .patient-v2 .profile-content {
+    padding: 40px 32px 42px;
+  }
+
+  .profile-intro {
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .patient-v2 .profile-portrait,
+  .profile-portrait {
+    width: 170px;
+    height: 196px;
+    border-radius: 22px;
+  }
+
+  .patient-v2 .profile-content .profile-identity h1 {
+    font-size: 3rem;
+  }
+
+  .profile-facts {
+    margin-top: 28px;
+    font-size: 0.875rem;
+  }
+
+  .patient-v2 .profile-content .profile-about {
+    margin-top: 38px;
+  }
+}
+
+@media (max-width: 460px) {
+  .profile-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-facts li,
+  .profile-facts li:first-child {
+    padding: 5px 0;
+  }
+
+  .profile-facts li + li {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-more summary svg,
+  .profile-disclosure summary svg {
+    transition: none;
+  }
+}

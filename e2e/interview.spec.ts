@@ -128,7 +128,7 @@ test("the matching console prices capacity age: a freshness row and a reconfirm 
   // so the nudge is the reconfirm-by date; the stale wording is pinned by the unit tests with
   // an injected clock, because a real stale entry on this page would mean the date had actually
   // lapsed for a real practice.
-  for (const clinician of ["Dr Anubhav Saxena", "Dr Tushar Yadav", "Dr Anusha Saxena"]) {
+  for (const clinician of ["Dr Anubhav Saxena", "Dr Anusha Saxena"]) {
     const row = panel.locator(".mc-clinician", { hasText: clinician });
     await expect(row.getByText(/declared \d{4}-\d{2}-\d{2}/)).toBeVisible();
     await expect(row.getByText(/Reconfirm (by \d{4}-\d{2}-\d{2}|needed)/)).toBeVisible();

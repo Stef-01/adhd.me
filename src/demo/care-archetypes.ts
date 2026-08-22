@@ -72,10 +72,10 @@ export type CareArchetype = {
 };
 
 /**
- * THE JOURNEYS, CUT FROM FIFTEEN TO SIX WHEN THE ROSTER BECAME TWO REAL PEOPLE.
+ * THE JOURNEYS, CUT FROM FIFTEEN WHEN THE ROSTER BECAME A SMALL REAL-PERSON DIRECTORY.
  *
  * The fifteen were built against fifteen invented clinicians, and nine of them asked for something
- * neither Dr Saxena nor Dr Yadav offers: a woman GP, Tamil, Spanish, Arabic, Vietnamese, paediatric
+ * the active roster does not offer: Tamil, Spanish, Arabic, Vietnamese, paediatric
  * and adolescent care, a disability-rights specialism. Keeping them would have meant a demo whose
  * scenarios lead somewhere the directory cannot go, which is a worse failure than a shorter list —
  * it advertises coverage that does not exist, on a health product, to somebody looking for care.
@@ -125,19 +125,6 @@ export const careArchetypes: CareArchetype[] = [
     },
   },
   {
-    id: "unhurried-first-appointment",
-    title: "Somewhere that won't rush you",
-    eyebrow: "Time to say it properly",
-    example: "A GP who books a longer first appointment and takes the whole history before reaching a conclusion.",
-    request:
-      "Every time I have raised this I have been rushed, and I lose my thread when I am rushed. I want a longer first appointment with a GP who will listen to the whole story before deciding anything.",
-    headline: "A first appointment long enough to say the whole thing.",
-    expectedFirstMatch: "tushar-yadav",
-    requirements: {
-      careAreas: ["adhd-assessment"],
-    },
-  },
-  {
     id: "anxiety-differential-hindi",
     title: "Treated for anxiety for years",
     eyebrow: "Which one is it",
@@ -145,7 +132,7 @@ export const careArchetypes: CareArchetype[] = [
     request:
       "I have been treated for anxiety and put on an antidepressant for years and I am anxious it was the wrong answer. I want a calm GP who speaks Hindi, will go back to what school was actually like, and explain the differential slowly.",
     headline: "Anxiety, ADHD, or both: worked out properly.",
-    expectedFirstMatch: "tushar-yadav",
+    expectedFirstMatch: "anusha-saxena",
     requirements: {
       careAreas: ["adhd-assessment", "anxiety"],
       languageOptions: ["Hindi"],
@@ -159,7 +146,7 @@ export const careArchetypes: CareArchetype[] = [
     request:
       "My sleep has never been right and my family think I am just disorganised and always have been. I want a GP who will take the sleep seriously and understands the family context I am explaining this inside.",
     headline: "The sleep and the family, treated as part of the picture.",
-    expectedFirstMatch: "tushar-yadav",
+    expectedFirstMatch: "anusha-saxena",
     requirements: {
       careAreas: ["adhd-assessment", "non-medication"],
     },

@@ -7,6 +7,91 @@ underlying algorithms. Written as a review document: it changes no code, and whe
 defect it names the file and line rather than fixing it, because several findings touch decisions
 (weights, capacity, published copy) that are not a reviewer's to make unilaterally.
 
+## 2026-08-22 execution audit: current system, critical defects, and repairs
+
+This section supersedes the implementation-status claims in the older appraisal below. The earlier
+review is kept as the decision history; many of its findings have since shipped.
+
+### Current mechanism
+
+The patient-to-clinician finder is deterministic and declaration-based. It reads a request into a
+closed set of care, manner, access, and consultation-language needs; ranks only on overlap with
+clinician-declared facts; exposes ties and roster gaps; and derives explanations from the same
+evidence as the score. It contains no patient diagnosis inference, clinician popularity score,
+engagement objective, per-doctor editorial weight, or learned patient profile.
+
+The ranking vector is now, in order:
+
+1. number of explicitly requested language/access constraints answered;
+2. weighted value of those constraints;
+3. total weighted declared overlap;
+4. number of distinct recognised needs answered;
+5. fresh capacity, stale capacity, then closed books;
+6. distance only inside a complete tie on all prior facts.
+
+That order is intentionally lexicographic. A request for Urdu or telehealth is not allowed to be
+outvoted by accumulating unrelated care-area matches, and matching more distinct constraints wins
+before the platform's coarse weights can decide otherwise.
+
+### Critical findings and disposition
+
+| Severity | Finding | Consequence | Disposition |
+|---|---|---|---|
+| P0 | Results copy treated roster-wide coverage as an individual full match. For “woman GP + Urdu + telehealth”, the two doctors collectively covered all three but neither covered all three; the screen said both did. | A reader could choose on a false completeness claim. | Fixed with `requestFitSummary`: full match is computed per clinician; the screen now says no listed GP matches every understood part and shows the strongest declared matches. |
+| P1 | Aggregate constraint weight could obscure how many distinct constraints a clinician met. | One heavily weighted constraint could outrank two separate access needs. | Fixed: `constraintCoverage` is the first ranking key and is included in bands, quality, geo tie keys, tests, and audit output. |
+| P1 | Language recognition was limited to languages already present on the roster. | Asking for a known service language with no current speaker looked unreadable rather than exposing a directory gap. | Fixed: onboarding and matching share one closed language vocabulary; Punjabi now produces an explicit listing-gap message. |
+| P1 | Per-clinician explanations omitted missed language and access constraints. | The reader had to discover important misses only by opening comparison. | Fixed with facet-specific, literal copy; identity is never described as an “undeclared” trait. |
+| P1 | Location copy claimed “nearest first” even though distance only breaks exact fit/capacity ties. | The UI overstated the role of geography. | Fixed: it now says nearer comes first only among otherwise equal matches. |
+| P1 | Removing the third doctor left three-person quality and clarifier baselines in CI. | Red tests described a departed roster rather than a regression. | Re-measured and repinned as an explicit two-doctor baseline; no historical number was silently preserved. |
+| P2 | Removing status-like pills left profile facts visually ungrouped. | Languages and access text appeared to float without a hierarchy. | Fixed as a compact divider list with familiar adjacent icons; no card, chip, or badge semantics. |
+| P2 | Demo disclosure still described invented profiles and synthetic availability. | The disclaimer contradicted the live two-person real roster. | Fixed to identify real profiles and delegate live times/directions to the booking destination. |
+
+### Why the profile treatment changed
+
+The GOV.UK Design System advises using tags for status and using fewer of them because multiple tags
+are hard to scan and can be mistaken for controls. W3C advises that icons have a familiar single
+meaning and sit adjacent to the content they label, while related information should be visually
+grouped. The replacement therefore uses a short, divider-separated list with icon + text rows. It
+uses the literal term **Telehealth** only when a first telehealth appointment is verified; it does
+not turn “online booking” into an unsupported clinical-access claim.
+
+- [GOV.UK tag guidance](https://design-system.service.gov.uk/components/tag/)
+- [W3C icon guidance](https://www.w3.org/WAI/WCAG2/supplemental/patterns/o1p07-icons-used/)
+- [W3C grouping guidance](https://www.w3.org/WAI/tutorials/forms/grouping/)
+- [Australian Department of Health telehealth definition](https://www.health.gov.au/topics/health-technologies-and-digital-health/about/telehealth)
+
+### Governance appraisal
+
+The design now satisfies the immediately testable parts of the current governance baseline:
+plain-language match reasons, explicit negative capability, deterministic tests before release,
+and no hidden patient classification. It remains an early directory matcher, not a clinically
+validated recommendation system. NIST's AI RMF calls for pre-deployment and ongoing testing,
+uncertainty, fairness, monitoring, explanation, and feedback; WHO similarly requires autonomy,
+safety, transparency, accountability, inclusiveness, and continuous assessment. Australian
+person-centred-care guidance adds patient values and circumstances plus user-reported experience
+and outcome measures. Those requirements shape the three-month plan and are not claimed complete.
+
+- [NIST AI RMF core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)
+- [WHO ethics and governance principles for AI in health](https://www.who.int/news/item/28-06-2021-who-issues-first-global-report-on-ai-in-health-and-six-guiding-principles-for-its-design-and-use)
+- [Australian Commission on Safety and Quality in Health Care: shared decisions](https://www.safetyandquality.gov.au/supporting-your-health-care/being-involved-decisions-about-your-care)
+- [AHPRA advertising guidance](https://www.ahpra.gov.au/Resources/Advertising-hub/Advertising-guidelines-and-other-guidance/Advertising-guidelines.aspx)
+
+### Residual risks
+
+- The roster is two doctors. Offline relevance metrics will have wide uncertainty and cannot prove
+  clinical quality or fit.
+- The language vocabulary is deliberately closed. A language outside it remains unread until the
+  governed vocabulary is extended; the UI must not imply universal language understanding.
+- Weights are policy judgements, not learned estimates. They are intentionally coarse and must not
+  be tuned on booking conversion alone.
+- Capacity is self-declared and freshness only changes ordering inside equal fit. Booking providers
+  remain the source of live appointment truth.
+- Real-person qualification, title, and advertising copy needs continued source review; directory
+  entries are advertising for AHPRA purposes.
+- There is no prospective evidence yet that the shortlist improves patient-reported usefulness,
+  equitable access, attended appointments, or outcomes. Month 2 and Month 3 are designed to answer
+  that before any learned ranking is considered.
+
 Companion to `docs/MATCHING-PLAN.md` §6a, which appraised the finder against its own probe corpus.
 This document appraises the *architecture* against the outside world.
 

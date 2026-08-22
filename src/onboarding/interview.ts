@@ -146,10 +146,9 @@ export const INTERVIEW: readonly Question[] = [
   { id: "billing", ask: "Billing for a first appointment, and who is bulk billed if anyone?", answer: "short-text", target: { kind: "access", field: "billing" }, minutes: 1 },
   { id: "access", ask: "Is the practice wheelchair accessible?", answer: "yes-no", target: { kind: "access", field: "wheelchairAccessible" }, minutes: 1 },
 
-  // ── Declarations (4 min) ─────────────────────────────────────────────────────────────────
+  // ── Declarations (3 min) ─────────────────────────────────────────────────────────────────
   { id: "training", ask: "Have you completed the NSW or Queensland ADHD training?", answer: "yes-no", target: { kind: "declaration", field: "nswAdhdTrained" }, minutes: 2,
     saidAloud: "We record this as something you have told us. There is no public register to check it against, so every page that shows it says you declared it. We do not want a copy of the certificate." },
-  { id: "interests", ask: "Any interest a patient would want disclosed beside your name?", answer: "short-text", target: { kind: "declaration", field: "disclosedInterest" }, minutes: 1 },
   { id: "agreement", ask: "Are you happy for this to be published as your directory profile?", answer: "yes-no", target: { kind: "declaration", field: "publicationAgreement" }, minutes: 1,
     saidAloud: "Nothing is published until the Ahpra advertising review is done, and you can withdraw at any time." },
 

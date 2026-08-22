@@ -87,8 +87,8 @@ describe("Q3 item 10's premise", () => {
   /**
    * THE FINDING, PINNED BOTH DIRECTIONS.
    *
-   * `clarifiers()` sorts candidates by `|heldBy/size - 0.5|`. On a three-clinician roster every
-   * splitting facet is held by one or by two, and |1/3 - 0.5| === |2/3 - 0.5| — so EVERY candidate
+   * `clarifiers()` sorts candidates by `|heldBy/size - 0.5|`. On a two-clinician roster every
+   * splitting facet is held by one, so EVERY candidate
    * has the same evenness and the sort decides nothing at all. The selector's real work today is
    * done entirely by O33's greedy holder-signature dedup underneath it.
    *
@@ -98,7 +98,7 @@ describe("Q3 item 10's premise", () => {
    */
   it("is inert on the real roster: one evenness value across every question", () => {
     const report = clarifierScaleReport(ASK, clinicians);
-    expect(report.rosterSize).toBe(3);
+    expect(report.rosterSize).toBe(2);
     expect(report.distinctEvenness).toBe(1);
   });
 
@@ -108,7 +108,7 @@ describe("Q3 item 10's premise", () => {
    */
   it("acquires real choices as the roster grows", () => {
     const measured = [3, 8, 20, 40].map((size) => clarifierScaleReport(ASK, syntheticRoster(size)));
-    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 7, 9]);
+    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 6, 8]);
     // Monotone by construction of the evenness function, but pinned because the CLAIM is that it
     // grows — a change that made it non-monotone would falsify the claim while passing the above.
     const evenness = measured.map((r) => r.distinctEvenness);
@@ -116,15 +116,15 @@ describe("Q3 item 10's premise", () => {
   });
 
   /**
-   * The second half of what scale buys, and the more useful half. At three, sixteen askable
-   * questions collapse into five distinct reorderings: most of the questions are, in effect,
+   * The second half of what scale buys, and the more useful half. At two, fourteen askable
+   * questions collapse into two distinct reorderings: most of the questions are, in effect,
    * the same question. At twenty every one is distinct.
    */
   it("turns duplicate questions into distinct ones", () => {
     const real = clarifierScaleReport(ASK, clinicians);
-    expect([real.candidates, real.distinctSignatures]).toEqual([16, 5]);
+    expect([real.candidates, real.distinctSignatures]).toEqual([14, 2]);
     const atTwenty = clarifierScaleReport(ASK, syntheticRoster(20));
-    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([16, 16]);
+    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([14, 14]);
   });
 
   /** Non-vacuity for the whole report: the selector's order is not the tie-break's order. */

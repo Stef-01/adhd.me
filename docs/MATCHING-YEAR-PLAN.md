@@ -13,6 +13,35 @@ score sayable in closed vocabulary), no per-clinician hand weights, no symptom-b
 (TGA boundary, Q17 dossier), synthetic data until the founder gates lift, and honesty about
 non-rankings.
 
+## Three-month execution plan — 23 August to 22 November 2026
+
+This is the operating slice of the year plan. It turns broad quarterly intentions into named
+gates, evidence, and stop conditions. “Complete” below means evidence exists in this repository;
+future work is not marked done because its code path has been sketched.
+
+| Month | Outcome | Work and verification | Stop condition |
+|---|---|---|---|
+| 1 — correctness and negative capability | Every displayed ordering and explanation is literally supported by one clinician's declared record. | Ship constraint-count-first ranking; per-clinician full/partial fit summaries; language-gap recognition; missed access/language explanations; complete-vector tie bands; two-doctor baseline repins. Add adversarial cases for mutually exclusive requirements and verify full type, unit, build, audit-gate, and browser flows. | Stop release for any claim that collective roster coverage is an individual match, any unexplained ranking key, or any red deterministic gate. |
+| 2 — evaluation and co-design | Establish whether the matcher is useful and equitable before tuning weights. | Create at least 200 de-identified or synthetic, real-shaped requests sampled across care, manner, language, access, multi-constraint, negation, and no-fit cases. Have two independent clinical reviewers and a small consumer panel label recognised needs and acceptable shortlist sets. Report inter-reviewer agreement, facet precision/recall, full-match-claim accuracy, no-fit accuracy, top-set recall, and slices by language/access request. Record disagreements; do not optimise against a single reviewer. | No prospective pilot until full-match-claim accuracy is 100% on the governed set, every critical false positive is closed, and subgroup slices are reported with sample-size/uncertainty warnings. |
+| 3 — guarded pilot and learning loop | Measure whether the shortlist helps people reach an appropriate booking door without converting engagement into a quality proxy. | Run an opt-in, time-boxed pilot only after applicable founder/privacy/advertising gates. Collect minimal events: recognised facets shown, shortlist opened, compare used, booking handoff, “none fit”, correction/override, and a short usefulness rating. Add monthly clinician record/freshness review, incident register, subgroup monitoring, and rollback rule. Use patient-reported experience and correction data to find defects; do not train per-doctor weights or infer symptoms. | Roll back on a material misleading-match incident, unexplained subgroup gap, stale named-person fact, privacy breach, or any ranking/explanation divergence. Learned ranking remains prohibited without a separate governance decision. |
+
+### Execution scorecard at plan creation
+
+| Foundation gate | Status on 22 Aug 2026 | Evidence | Execution quality |
+|---|---|---|---|
+| Individual full-match truth | Complete | `requestFitSummary`/`requestFitCopy`, adversarial woman + Urdu + telehealth test, corrected browser flow | Strong: the production wording and logic share one tested computation. |
+| Constraint preservation | Complete | `constraintCoverage` precedes constraint weight and total overlap in every ranking/tie key | Strong: deterministic and explainable; no hidden veto or per-clinician coefficient. |
+| Known language gaps | Complete | Shared onboarding/matching vocabulary and Punjabi no-roster test | Good with a declared limit: still a closed vocabulary, not universal language detection. |
+| Per-clinician negative explanation | Complete | `missedAsks` now partitions every recognised ask with facet-specific copy | Strong: the profile no longer leaves access misses implied. |
+| Roster change hygiene | Complete | Tushar removed from runtime roster; two-doctor scale and tie-quality baselines re-measured | Strong: old metrics were not cosmetically forced to pass. |
+| Independent labelled evaluation | Scheduled for Month 2 | No governed labelled set yet | Not executed; this is the largest evidence gap. |
+| Prospective pilot outcomes | Scheduled for Month 3, gate-dependent | No live patient outcome claim | Not executed; correctly blocked until evaluation and governance gates clear. |
+
+**Foundation execution assessment: 5 of 5 Month-1 correctness gates implemented in this unit;
+0 of 2 future evidence gates complete.** This is meaningful algorithmic progress, but it is not
+evidence of clinical effectiveness. Month 2 is the point at which “more effective” becomes a
+measured claim rather than a code-review opinion.
+
 ## Q1 (Sep–Nov 2026): reach and evidence — make the reader hear more, provably
 
 1. **Reach corpus at scale. TARGET REACHED — 500 entries, O87 (2026-08-20).** *Tranche six

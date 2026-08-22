@@ -21,6 +21,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
+import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 
 /** What a GP is asked. Ordered as the form asks it, so the two cannot drift apart. */
 export interface ClinicianApplication {
@@ -109,22 +110,10 @@ export function isDeclarableMixPercent(value: number): boolean {
 }
 
 /**
- * The languages offered, matching the demo roster so the finder can actually match on them.
- *
- * A free-text language box would let somebody write "a bit of Hindi", which the matcher cannot use
- * and a patient would reasonably rely on.
+ * One language vocabulary for onboarding and matching. A language may be offered here before a
+ * listed GP speaks it: that is how the finder can name a roster gap rather than ignore the ask.
  */
-export const OFFERED_LANGUAGES = [
-  "Arabic",
-  "Hindi",
-  "Igbo",
-  "Malayalam",
-  "Mandarin",
-  "Punjabi",
-  "Spanish",
-  "Tamil",
-  "Vietnamese",
-] as const;
+export const OFFERED_LANGUAGES = MATCHABLE_LANGUAGES;
 
 /** The three headings the care areas sit under, in display order. Mental health, streamlined. */
 export type CareAreaGroup = "ADHD" | "Depression and anxiety" | "Other mental health";
