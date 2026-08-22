@@ -3,10 +3,14 @@ import { careArchetypes } from "./care-archetypes";
 import { cliniciansMatchingArchetype, clinicians, rankClinicians } from "./clinicians";
 
 describe("ADHD assessment demo archetypes", () => {
-  it("includes seven distinct qualitative journeys", () => {
-    // Seven since O34: the woman-GP journey arrived with Dr Anusha Saxena.
-    expect(careArchetypes).toHaveLength(7);
-    expect(new Set(careArchetypes.map((archetype) => archetype.id)).size).toBe(7);
+  it("includes five distinct qualitative journeys", () => {
+    // Seven at O34, when the woman-GP journey arrived with Dr Anusha Saxena. FIVE since O179:
+    // Dr Tushar Yadav left and took `anxiety-differential-hindi` and `sleep-and-family-context`
+    // with him — he was the only full-grade declarer of `anxiety` and `non-medication`, so both
+    // journeys had zero eligible clinicians the moment he was removed. Deleted rather than kept
+    // on a loosened definition of eligible; see the header of care-archetypes.ts.
+    expect(careArchetypes).toHaveLength(5);
+    expect(new Set(careArchetypes.map((archetype) => archetype.id)).size).toBe(5);
   });
 
   it.each(careArchetypes)("ranks the intended first match for $title", (archetype) => {
@@ -69,8 +73,23 @@ describe("ADHD assessment demo archetypes", () => {
     }
 
     const requests = careArchetypes.map((archetype) => archetype.request.toLowerCase()).join(" ");
-    expect(requests).toMatch(/hindi/);
-    expect(requests).toMatch(/anxious|mental health|rushed|family/);
+    expect(requests).toMatch(/anxious|anxiety|mental health|rushed|family/);
+
+    /**
+     * O179: NO JOURNEY EXERCISES A SPOKEN LANGUAGE ANY MORE, AND THE NUMBER SAYS SO OUT LOUD.
+     *
+     * `anxiety-differential-hindi` was the only journey carrying `languageOptions`, and it went
+     * when Dr Yadav did. The subset rule above is now VACUOUSLY true — it iterates an empty set on
+     * every archetype — so on its own it would go on passing while the demo stopped covering
+     * language entirely, which is the silent-green failure this tree keeps catching.
+     *
+     * The count is therefore pinned at its real value rather than the rule being left to iterate
+     * nothing. Both GPs speak Hindi and Urdu, so this is a demo GAP, not a roster one: adding a
+     * language journey back is the fix, and doing it turns this red so the number moves
+     * deliberately instead of drifting.
+     */
+    const withLanguage = careArchetypes.filter((archetype) => archetype.requirements.languageOptions?.length);
+    expect(withLanguage, "a language journey came back — raise the count and delete this note").toHaveLength(0);
   });
 
   /**
@@ -81,8 +100,14 @@ describe("ADHD assessment demo archetypes", () => {
   it("keeps journeys where the answer may be no", () => {
     const byId = new Map(careArchetypes.map((archetype) => [archetype.id, archetype.request.toLowerCase()]));
 
-    expect(byId.get("anxiety-differential-hindi")).toMatch(/wrong answer|differential/);
+    // O179: `anxiety-differential-hindi` and `sleep-and-family-context` carried this property and
+    // left with Dr Yadav. It is not lost — `woman-gp` says "it never quite fitted", which is the
+    // same may-not-be-ADHD framing — but it now rests on ONE journey where it rested on three, and
+    // that is worth seeing in the test rather than only in the diff.
     expect(byId.get("unhurried-first-appointment")).toMatch(/before deciding anything|whole story/);
-    expect(byId.get("sleep-and-family-context")).toMatch(/sleep/);
+    expect(byId.get("woman-gp")).toMatch(/never quite fitted|wrong answer|differential/);
+
+    const openEnded = [...byId.values()].filter((request) => /never quite fitted|wrong answer|differential|before deciding anything/.test(request));
+    expect(openEnded.length, "the demo stopped showing a case that might not be ADHD").toBeGreaterThanOrEqual(2);
   });
 });

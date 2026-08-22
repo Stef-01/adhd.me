@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { capacityGrade, clinicians, closedBooksNote, distanceTo, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { holdsPreference } from "@/matching/needs";
+import { syntheticClinician } from "./synthetic-clinician";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "./care-archetypes";
 
@@ -23,17 +25,41 @@ describe("clinician roster and matching", () => {
     ["a thorough structured assessment with the physical baseline and heart checked first", "anubhav-saxena"],
     ["I drink too much and need that handled as a safety question, by phone", "anubhav-saxena"],
     ["my dose wears off by the afternoon and needs titration reviewed", "anubhav-saxena"],
-    ["I get rushed every time, I want a longer first appointment to tell the whole story", "tushar-yadav"],
-    ["a calm GP who speaks Hindi, I was treated for anxiety for years", "tushar-yadav"],
-    ["my sleep has never been right and my family think I am just disorganised", "tushar-yadav"],
+    // O179: these two moved from Dr Yadav to Dr Anusha Saxena when he left. Neither is a
+    // re-tuning — the same evidence now lands on the remaining declarer: she speaks Hindi and
+    // carries anxiety and non-medication at interest grade, which is what these requests reach.
+    ["a calm GP who speaks Hindi, I was treated for anxiety for years", "anusha-saxena"],
+    ["my sleep has never been right and my family think I am just disorganised", "anusha-saxena"],
   ])("ranks %s first", (request, expectedId) => {
     expect(rankClinicians(request)[0]!.id).toBe(expectedId);
   });
 
+  /**
+   * O179: THE LONGER-APPOINTMENT REQUEST NOW REACHES NOBODY, AND THAT IS THE ASSERTION.
+   *
+   * It used to rank Dr Yadav first — "Longer first appointment" was his declared signal and the
+   * only one on the roster. He left, and the honest consequence is not that somebody else inherits
+   * the request: it is that the finder has nobody to offer and must say so. `unserved` is the
+   * grade that says it.
+   *
+   * Pinned as a POSITIVE assertion rather than deleted with the clinician, because the failure this
+   * guards is the tempting one — quietly re-pointing the row at whoever now sorts first and letting
+   * a reader who asked for an unhurried appointment believe they got one. The day a GP declares
+   * `longer-appointment`, this test goes red and is meant to: that is the day the row becomes a
+   * ranking assertion again.
+   */
+  it("says nobody serves a longer first appointment, rather than offering a substitute", () => {
+    const request = "I get rushed every time, I want a longer first appointment to tell the whole story";
+
+    expect(matchQuality(request)).toBe("unserved");
+    expect(clinicians.some((clinician) => holdsPreference(clinician, "longer-appointment"))).toBe(false);
+  });
+
   it("keeps the full roster available", () => {
-    // Three since O34: the Beecroft pair plus Dr Anusha Saxena in Double Bay.
-    expect(clinicians).toHaveLength(3);
-    expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(3);
+    // Two since O179: Dr Anubhav Saxena (Beecroft) and Dr Anusha Saxena (Double Bay & Hornsby).
+    // Dr Tushar Yadav's entry was removed when he left the platform on 2026-08-22.
+    expect(clinicians).toHaveLength(2);
+    expect(new Set(clinicians.map((clinician) => clinician.id)).size).toBe(2);
   });
 
   /**
@@ -97,15 +123,45 @@ describe("clinician roster and matching", () => {
    * that names nothing either of them is weighted for, the tie has to break somewhere other than
    * the founder.
    */
-  it("does not float any disclosed founder to the top of an unspecific request", () => {
+  it("has nobody left to spend a tie on — EVERY listed clinician is now conflicted", () => {
     const generic = "I think I might have ADHD and I would like an assessment";
 
-    // O89: with two of three roster entries now disclosed, the property tightens — on a
-    // request that separates nobody, the top spot must go to a clinician WITHOUT an
-    // interest in this product, because the tie-break exists to spend ties against the
-    // house, never for it.
-    const first = rankClinicians(generic)[0]!;
-    expect(first.disclosedInterest, first.id).toBeUndefined();
+    /**
+     * O179: THIS TEST INVERTED, AND THE INVERSION IS THE FINDING.
+     *
+     * It used to assert that the top of a generic list carries no declared interest — the
+     * tie-break spending ties against the house. That was satisfiable because Dr Yadav was on the
+     * roster and had no interest to declare. He left, and BOTH remaining clinicians are disclosed:
+     * Dr Anubhav (his clinic is ADHD.ME's first partner) and Dr Anusha (declared interest, O89).
+     *
+     * So the protection did not weaken — it ran out of material. There is no unconflicted
+     * clinician for the rule to promote, and on any request that separates nobody a reader now
+     * sees a conflicted listing first because that is the only kind of listing there is.
+     *
+     * Asserted as the REAL STATE with the reason attached, rather than deleted or softened to
+     * something that still passes. A directory in which 100% of listings carry a declared interest
+     * in the directory's owner is a founder-level fact about the product, not a test detail; it is
+     * carried to the gate list in docs/MATCHING-APPRAISAL-O180.md. The day an unconflicted GP is
+     * listed, this test goes red and the stronger assertion above comes back with them.
+     */
+    expect(clinicians.every((clinician) => clinician.disclosedInterest)).toBe(true);
+    expect(rankClinicians(generic)[0]!.disclosedInterest).toBeTruthy();
+  });
+
+  /**
+   * THE LAW ITSELF STILL HOLDS AND IS STILL CHECKED — on a roster that can express it.
+   *
+   * The rule is a property of `rankClinicians`, not of who happens to be listed this month, so it
+   * is asserted where it can be: an unconflicted clinician and a conflicted one, identical in
+   * every field the ranker reads, on a request that separates nobody.
+   */
+  it("spends a tie against the house whenever there is an unconflicted clinician to spend it on", () => {
+    const roster = [
+      syntheticClinician({ id: "conflicted", disclosedInterest: "Declared interest in ADHD.ME.", disclosedInterestLabel: "Declared interest" }),
+      syntheticClinician({ id: "unconflicted" }),
+    ];
+
+    expect(rankClinicians("I think I might have ADHD and I would like an assessment", roster)[0]!.id).toBe("unconflicted");
   });
 
   /**
@@ -127,7 +183,9 @@ describe("clinician roster and matching", () => {
 
   it("says telehealth instead of a kilometre figure that answers no question", () => {
     const saxena = clinicians.find((c) => c.id === "anubhav-saxena")!;
-    const inRooms = clinicians.find((c) => c.id === "tushar-yadav")!;
+    // O179: a synthetic travel-to clinician. Dr Yadav was the roster's only non-telehealth
+    // entry; with him gone the contrast this test draws has to be built rather than borrowed.
+    const inRooms = syntheticClinician({ suburb: "Beecroft" });
     const origin = resolvePlace("Beecroft");
 
     expect(distanceTo(saxena, origin)).toMatch(/telehealth/i);
@@ -183,7 +241,7 @@ describe("clinician roster and matching", () => {
     it("the label shows every place she consults", () => {
       expect(locationLabel(anusha)).toBe("Double Bay & Hornsby");
       // Single-location clinicians are untouched.
-      expect(locationLabel(clinicians.find((c) => c.id === "tushar-yadav")!)).toBe("Beecroft");
+      expect(locationLabel(syntheticClinician({ suburb: "Beecroft" }))).toBe("Beecroft");
     });
 
     /**
@@ -204,21 +262,30 @@ describe("clinician roster and matching", () => {
 
     it("the near-sort reads the nearest location: a Hornsby reader finds her adjacent, not 25 km away", () => {
       // An unmatched query with an origin is fully distance-sorted within the tie (O3/F4),
-      // and Dr Anubhav is telehealth-first (keeps fit position) — so between the two
-      // travel-to clinicians, Anusha's Hornsby rooms must beat Beecroft from Hornsby.
-      const near = rankCliniciansNear("zzz qqq", resolvePlace("Hornsby"));
+      // and Dr Anubhav is telehealth-first (keeps fit position) — so between two travel-to
+      // clinicians, Anusha's Hornsby rooms must beat Beecroft from Hornsby.
+      //
+      // O179: the Beecroft half of that contrast was Dr Yadav and is now synthetic. The property
+      // needs TWO travel-to clinicians and the real roster has one, so building the second is the
+      // only way to keep asserting it — the alternative was deleting the test with the colleague,
+      // which would have retired a live geo rule for a staffing reason.
+      const roster = [clinicians.find((c) => c.id === "anusha-saxena")!, syntheticClinician({ id: "beecroft-rooms", suburb: "Beecroft" })];
+      const near = rankCliniciansNear("zzz qqq", resolvePlace("Hornsby"), roster);
       const anushaAt = near.findIndex((c) => c.id === "anusha-saxena");
-      const yadavAt = near.findIndex((c) => c.id === "tushar-yadav");
-      expect(anushaAt).toBeLessThan(yadavAt);
+      const beecroftAt = near.findIndex((c) => c.id === "beecroft-rooms");
+      expect(anushaAt).toBeLessThan(beecroftAt);
     });
   });
 
   it("only presents language as a match reason when the patient requested it", () => {
-    const yadav = clinicians.find((clinician) => clinician.id === "tushar-yadav")!;
+    // O179: synthetic, because the rule under test is "a language is surfaced only when it was
+    // asked for" — a property of `matchEvidence`, not of any doctor. Pinning it to a real Hindi
+    // speaker is what made a departure look like a ranking regression.
+    const speaker = syntheticClinician({ languages: ["English", "Hindi"] });
 
-    expect(getPersonalizedMatch(yadav, "I would like an ADHD assessment").reason)
+    expect(getPersonalizedMatch(speaker, "I would like an ADHD assessment").reason)
       .not.toContain("Hindi");
-    expect(getPersonalizedMatch(yadav, "I need a Hindi-speaking GP for an ADHD assessment").reason)
+    expect(getPersonalizedMatch(speaker, "I need a Hindi-speaking GP for an ADHD assessment").reason)
       .toContain("Hindi-speaking");
   });
 
@@ -230,19 +297,38 @@ describe("clinician roster and matching", () => {
    * finder could not tell what they wanted. The finder now ranks and grades on the evidence it shows.
    */
   it("ranks and grades on a spoken language, not only as a signal", () => {
-    // O88: BOTH Saxenas declare Urdu now (Dr Anusha's supplied bio), so the earned order puts
-    // the two speakers — either order within their tie — above Dr Yadav, and stays informed.
-    const ranked = rankClinicians("a GP who speaks Urdu");
-    expect(ranked.slice(0, 2).map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
-    expect(matchQuality("a GP who speaks Urdu")).toBe("informed");
-    // The whole roster speaks Hindi, so it is a real match that separates nobody: tied, never unmatched.
+    /**
+     * O179: THE LAW MOVED TO A ROSTER THAT CAN STILL EXPRESS IT.
+     *
+     * Dr Yadav was the roster's only non-Urdu speaker, so "a GP who speaks Urdu" used to separate
+     * two speakers from one non-speaker and graded `informed`. Both remaining GPs speak Urdu AND
+     * Hindi, so no language question can separate them any more and every language query is now
+     * correctly `tied`. Asserting `informed` against the real roster would be asserting a
+     * separation that no longer exists.
+     */
+    const speaks = syntheticClinician({ id: "speaks-urdu", languages: ["English", "Urdu"] });
+    const silent = syntheticClinician({ id: "no-urdu", languages: ["English"] });
+    const roster = [silent, speaks];
+
+    expect(rankClinicians("a GP who speaks Urdu", roster)[0]!.id).toBe("speaks-urdu");
+    expect(matchQuality("a GP who speaks Urdu", roster)).toBe("informed");
+
+    // And against the REAL roster the honest grade is `tied`: a genuine match that separates
+    // nobody, which is a different statement from "we could not tell what you wanted".
+    expect(matchQuality("a GP who speaks Urdu")).toBe("tied");
     expect(matchQuality("I need a GP who speaks Hindi")).not.toBe("unmatched");
   });
 
+  /**
+   * O179: `anxiety` LEFT THIS TABLE WITH DR YADAV, AND ITS ABSENCE IS PINNED BELOW RATHER THAN
+   * SIMPLY DELETED. He was the only clinician declaring it at full grade; Dr Anusha carries it at
+   * INTEREST grade, which `careAreas.includes` does not see. Leaving the row here would fail on an
+   * empty `matches` array and say nothing useful; removing it silently would let the roster stop
+   * covering an entire care area with no test noticing.
+   */
   it.each([
     ["titration", "Titration and dose review"],
     ["substance-history", "Substance history held safely"],
-    ["anxiety", "Anxiety"],
   ] satisfies Array<[CareArea, string]>)(
     "gives a grounded explanation for %s",
     (careArea, expectedSignal) => {
@@ -257,6 +343,12 @@ describe("clinician roster and matching", () => {
       expect(getPersonalizedMatch(matches[0]!, queryByArea[careArea]!).signals).toContain(expectedSignal);
     },
   );
+
+  it("records that anxiety is declared at interest grade only, by nobody at full grade", () => {
+    // The trigger: a GP declaring `anxiety` in `careAreas` puts the row back in the table above.
+    expect(clinicians.filter((clinician) => clinician.careAreas.includes("anxiety"))).toHaveLength(0);
+    expect(clinicians.filter((clinician) => (clinician.careAreasSometimes ?? []).includes("anxiety"))).toHaveLength(1);
+  });
 
   /**
    * Every archetype requires `adhd-assessment`, so a clinician without it can never be matched by
@@ -323,7 +415,7 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
    * equal scores; comparable fit for the distance sort IS the band, not an index difference.
    */
   const inRooms = (id: string, suburb: string) => ({
-    ...clinicians.find((c) => c.id === "tushar-yadav")!,
+    ...syntheticClinician(),
     id,
     suburb,
     careAreas: [] as CareArea[],
@@ -347,13 +439,24 @@ describe("O3 ties are visible at every boundary (F3+F4)", () => {
   });
 
   it("groups the ranked roster into bands of exactly equal score", () => {
-    const bands = rankBands("a GP who speaks Urdu");
-    // Urdu separates the real roster: two speakers, banded together, above one non-speaker (O88).
+    // O179: the two-band example needs a roster where something separates, and Urdu no longer
+    // does — both remaining GPs speak it. Built rather than borrowed, for the same reason as the
+    // other engine laws in this file.
+    const roster = [
+      syntheticClinician({ id: "speaks-a", languages: ["English", "Urdu"] }),
+      syntheticClinician({ id: "speaks-b", languages: ["English", "Urdu"] }),
+      syntheticClinician({ id: "silent", languages: ["English"] }),
+    ];
+    const bands = rankBands("a GP who speaks Urdu", roster);
+
     expect(bands).toHaveLength(2);
-    expect(bands[0]!.clinicians.map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
+    expect(bands[0]!.clinicians.map((c) => c.id).sort()).toEqual(["speaks-a", "speaks-b"]);
     expect(bands[0]!.score).toBeGreaterThan(bands[1]!.score);
     // Bands partition the roster in ranked order.
-    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(clinicians.length);
+    expect(bands.flatMap((b) => b.clinicians)).toHaveLength(roster.length);
+
+    // And on the real roster the same query is ONE band, because it separates nobody.
+    expect(rankBands("a GP who speaks Urdu")).toHaveLength(1);
   });
 
   it("says when the top of an informed list is itself a tie", () => {
@@ -380,20 +483,20 @@ describe("O4 reciprocity as capacity (F5)", () => {
    * (never scores): closed books cannot outrank open ones at equal fit, cost no fit when the
    * fit is real, and are said on the card rather than silently filtered.
    */
-  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
 
   it("never lets closed books outrank open ones at equal fit, whatever the file order", () => {
     const closedFirst = [
-      { ...yadav(), id: "closed", acceptingNewPatients: false },
-      { ...yadav(), id: "open", acceptingNewPatients: true },
+      { ...syntheticClinician(), id: "closed", acceptingNewPatients: false },
+      { ...syntheticClinician(), id: "open", acceptingNewPatients: true },
     ];
     expect(rankClinicians("hello", closedFirst).map((c) => c.id)).toEqual(["open", "closed"]);
   });
 
   it("never charges a single point of fit for closed books", () => {
     const roster = [
-      { ...yadav(), id: "open-no-fit", careAreas: [] as CareArea[], acceptingNewPatients: true },
-      { ...yadav(), id: "closed-fits", careAreas: ["titration"] as CareArea[], acceptingNewPatients: false },
+      { ...syntheticClinician(), id: "open-no-fit", careAreas: [] as CareArea[], acceptingNewPatients: true },
+      { ...syntheticClinician(), id: "closed-fits", careAreas: ["titration"] as CareArea[], acceptingNewPatients: false },
     ];
     // The reader may want exactly this GP and their waitlist; the card carries the sentence.
     expect(rankClinicians("my dose needs titration", roster)[0]!.id).toBe("closed-fits");
@@ -401,8 +504,8 @@ describe("O4 reciprocity as capacity (F5)", () => {
 
   it("puts capacity before kilometres inside a tie", () => {
     const roster = [
-      { ...yadav(), id: "near-closed", suburb: "Epping", acceptingNewPatients: false },
-      { ...yadav(), id: "far-open", suburb: "Southport", acceptingNewPatients: true },
+      { ...syntheticClinician(), id: "near-closed", suburb: "Epping", acceptingNewPatients: false },
+      { ...syntheticClinician(), id: "far-open", suburb: "Southport", acceptingNewPatients: true },
     ];
     const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster);
     expect(near[0]!.id).toBe("far-open");
@@ -410,8 +513,8 @@ describe("O4 reciprocity as capacity (F5)", () => {
 
   it("keeps the whole roster on the page: capacity annotates, it does not filter", () => {
     const roster = [
-      { ...yadav(), id: "closed", acceptingNewPatients: false },
-      { ...yadav(), id: "open", acceptingNewPatients: true },
+      { ...syntheticClinician(), id: "closed", acceptingNewPatients: false },
+      { ...syntheticClinician(), id: "open", acceptingNewPatients: true },
     ];
     expect(rankClinicians("hello", roster)).toHaveLength(2);
     expect(CLOSED_BOOKS_COPY).toMatch(/shown because they fit what you asked/);
@@ -428,11 +531,11 @@ describe("O56 capacity truthfulness: a declaration ages, and the tie-break price
    * confirmed this quarter. Grading never scores and never filters — order within a tie only,
    * exactly like O4 before it.
    */
-  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
   const on = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
   it("grades the boundary exactly: fresh at 90 days, stale at 91", () => {
-    const declared = { ...yadav(), capacityDeclaredAt: "2026-08-19" };
+    const declared = { ...syntheticClinician(), capacityDeclaredAt: "2026-08-19" };
     expect(capacityGrade(declared, on("2026-08-19"))).toBe("fresh-open");
     // Day CAPACITY_FRESH_DAYS is the last fresh day; one more and the claim has lapsed.
     expect(capacityGrade(declared, on("2026-11-17"))).toBe("fresh-open"); // +90
@@ -441,20 +544,20 @@ describe("O56 capacity truthfulness: a declaration ages, and the tie-break price
   });
 
   it("never lets an undated open declaration claim freshness", () => {
-    const undated = { ...yadav(), capacityDeclaredAt: undefined };
+    const undated = { ...syntheticClinician(), capacityDeclaredAt: undefined };
     expect(capacityGrade(undated, on("2026-08-19"))).toBe("stale-open");
   });
 
   it("grades closed books closed regardless of any date on record", () => {
-    const closed = { ...yadav(), acceptingNewPatients: false, capacityDeclaredAt: "2026-08-19" };
+    const closed = { ...syntheticClinician(), acceptingNewPatients: false, capacityDeclaredAt: "2026-08-19" };
     expect(capacityGrade(closed, on("2026-08-19"))).toBe("closed");
   });
 
   it("breaks an equal-fit tie fresh over stale over closed, whatever the file order", () => {
     const roster = [
-      { ...yadav(), id: "closed", acceptingNewPatients: false },
-      { ...yadav(), id: "stale", capacityDeclaredAt: "2026-01-01" },
-      { ...yadav(), id: "fresh", capacityDeclaredAt: "2026-08-01" },
+      { ...syntheticClinician(), id: "closed", acceptingNewPatients: false },
+      { ...syntheticClinician(), id: "stale", capacityDeclaredAt: "2026-01-01" },
+      { ...syntheticClinician(), id: "fresh", capacityDeclaredAt: "2026-08-01" },
     ];
     expect(rankClinicians("hello", roster, on("2026-08-19")).map((c) => c.id)).toEqual([
       "fresh",
@@ -465,16 +568,16 @@ describe("O56 capacity truthfulness: a declaration ages, and the tie-break price
 
   it("never charges a point of fit for staleness — grade orders ties only", () => {
     const roster = [
-      { ...yadav(), id: "fresh-no-fit", careAreas: [] as CareArea[], capacityDeclaredAt: "2026-08-01" },
-      { ...yadav(), id: "stale-fits", careAreas: ["titration"] as CareArea[], capacityDeclaredAt: "2025-01-01" },
+      { ...syntheticClinician(), id: "fresh-no-fit", careAreas: [] as CareArea[], capacityDeclaredAt: "2026-08-01" },
+      { ...syntheticClinician(), id: "stale-fits", careAreas: ["titration"] as CareArea[], capacityDeclaredAt: "2025-01-01" },
     ];
     expect(rankClinicians("my dose needs titration", roster, on("2026-08-19"))[0]!.id).toBe("stale-fits");
   });
 
   it("keeps distance inside the grade boundary: near-stale never crosses far-fresh", () => {
     const roster = [
-      { ...yadav(), id: "near-stale", suburb: "Epping", capacityDeclaredAt: "2025-01-01" },
-      { ...yadav(), id: "far-fresh", suburb: "Southport", capacityDeclaredAt: "2026-08-01" },
+      { ...syntheticClinician(), id: "near-stale", suburb: "Epping", capacityDeclaredAt: "2025-01-01" },
+      { ...syntheticClinician(), id: "far-fresh", suburb: "Southport", capacityDeclaredAt: "2026-08-01" },
     ];
     const near = rankCliniciansNear("hello", resolvePlace("Beecroft"), roster, on("2026-08-19"));
     expect(near[0]!.id).toBe("far-fresh");
@@ -485,10 +588,10 @@ describe("O56 capacity truthfulness: a declaration ages, and the tie-break price
     expect(saxena.disclosedInterest).toBeTruthy();
     const tied = [
       { ...saxena, capacityDeclaredAt: "2026-08-01" },
-      { ...yadav(), careAreas: saxena.careAreas, careAreasSometimes: saxena.careAreasSometimes, manner: saxena.manner, languages: saxena.languages, capacityDeclaredAt: "2026-08-01" },
+      { ...syntheticClinician(), careAreas: saxena.careAreas, careAreasSometimes: saxena.careAreasSometimes, manner: saxena.manner, languages: saxena.languages, capacityDeclaredAt: "2026-08-01" },
     ];
     // Same grade, same declarations: the disclosed interest still sorts behind (W221).
-    expect(rankClinicians("hello", tied, on("2026-08-19"))[0]!.id).toBe("tushar-yadav");
+    expect(rankClinicians("hello", tied, on("2026-08-19"))[0]!.id).toBe("synthetic-gp");
   });
 
   it("dates every live roster declaration, so nothing on the record is undated", () => {
@@ -501,13 +604,13 @@ describe("O56 capacity truthfulness: a declaration ages, and the tie-break price
 });
 
 describe("O8 review findings, pinned", () => {
-  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
 
   it("scores a custom roster against its own statistics, not the global roster's", () => {
     // The review's counterexample: a Tamil speaker in a passed roster. The global roster has no
     // Tamil, so a roster-blind needsFor produced no language signal at all.
-    const speaks = { ...yadav(), id: "speaks-tamil", languages: ["English", "Tamil"] };
-    const silent = { ...yadav(), id: "no-tamil", languages: ["English"] };
+    const speaks = { ...syntheticClinician(), id: "speaks-tamil", languages: ["English", "Tamil"] };
+    const silent = { ...syntheticClinician(), id: "no-tamil", languages: ["English"] };
     const roster = [silent, speaks];
     expect(rankClinicians("a GP who speaks Tamil", roster)[0]!.id).toBe("speaks-tamil");
     expect(matchQuality("a GP who speaks Tamil", roster)).toBe("informed");
@@ -532,9 +635,9 @@ describe("O8 review findings, pinned", () => {
   it("keeps scores === across float-hostile rosters of three", () => {
     // (N−heldBy+1)/N is not dyadic at N=3: 30 × 2/3 vs 20 × 2/3 + 10 × 2/3 must still band
     // together when they are mathematically equal, which is what roundScore guarantees.
-    const a = { ...yadav(), id: "a", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    const b = { ...yadav(), id: "b", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    const c = { ...yadav(), id: "c", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const a = { ...syntheticClinician(), id: "a", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const b = { ...syntheticClinician(), id: "b", careAreas: ["titration"] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const c = { ...syntheticClinician(), id: "c", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     const bands = rankBands("my dose needs titration", [a, b, c]);
     expect(bands[0]!.clinicians).toHaveLength(2);
     expect(Number.isInteger(bands[0]!.score * 1000)).toBe(true);
@@ -542,8 +645,8 @@ describe("O8 review findings, pinned", () => {
 
   it("reorders by distance without a pairwise comparator, so a telehealth row cannot make the order cyclic", () => {
     const t = { ...clinicians.find((c) => c.id === "anubhav-saxena")!, id: "tele", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"], disclosedInterest: undefined };
-    const near = { ...yadav(), id: "near", suburb: "Epping", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
-    const far = { ...yadav(), id: "far", suburb: "Southport", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const near = { ...syntheticClinician(), id: "near", suburb: "Epping", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
+    const far = { ...syntheticClinician(), id: "far", suburb: "Southport", careAreas: [] as CareArea[], manner: [] as (typeof clinicians)[number]["manner"] };
     // File order: far, tele, near — all tied on score and capacity from Beecroft.
     const out = rankCliniciansNear("hello", resolvePlace("Beecroft"), [far, t, near]);
     // In-rooms clinicians swap among their own positions by distance; telehealth keeps its slot.
@@ -552,9 +655,9 @@ describe("O8 review findings, pinned", () => {
 });
 
 describe("Codex review on PR #1, pinned", () => {
-  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
   const bare = (id: string) => ({
-    ...yadav(),
+    ...syntheticClinician(),
     id,
     careAreas: [] as CareArea[],
     manner: [] as (typeof clinicians)[number]["manner"],

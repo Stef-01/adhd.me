@@ -72,10 +72,28 @@ export type CareArchetype = {
 };
 
 /**
- * THE JOURNEYS, CUT FROM FIFTEEN TO SIX WHEN THE ROSTER BECAME TWO REAL PEOPLE.
+ * THE JOURNEYS, CUT FROM FIFTEEN TO SIX WHEN THE ROSTER BECAME TWO REAL PEOPLE, AND TO FIVE WHEN
+ * ONE OF THOSE TWO LEFT (O179, 2026-08-22).
+ *
+ * Dr Tushar Yadav's departure took two journeys with it, under the rule this file already had.
+ * `anxiety-differential-hindi` demanded a declared `anxiety` care area alongside Hindi, and
+ * `sleep-and-family-context` demanded `non-medication`; he was the only declarer of either at
+ * full grade, so both journeys went from "one eligible clinician" to ZERO the moment he was
+ * removed — the exact dead-end the paragraph below exists to forbid. They are deleted on the same
+ * reasoning as the original nine, and they come back the day a GP declares those facets.
+ *
+ * NOT DONE, AND THE REFUSAL IS THE POINT: Dr Anusha Saxena carries `anxiety` and `non-medication`
+ * at INTEREST grade and speaks Hindi, so both journeys could have been kept alive by teaching
+ * `cliniciansMatchingArchetype` to accept `careAreasSometimes`. That change may well be right —
+ * it is recorded as a real finding, because eligibility and SCORING already disagree about this
+ * (`answers()` counts interest grade at half weight; eligibility ignores it entirely, so a
+ * clinician can rank FIRST for a journey they are not eligible for). But making it here, to avoid
+ * deleting two rows, would be tuning the definition of "eligible" until the demo passed. The
+ * inconsistency gets fixed on its own evidence, in its own unit, or not at all.
+ *
  *
  * The fifteen were built against fifteen invented clinicians, and nine of them asked for something
- * neither Dr Saxena nor Dr Yadav offers: a woman GP, Tamil, Spanish, Arabic, Vietnamese, paediatric
+ * neither Beecroft GP offered at the time: a woman GP, Tamil, Spanish, Arabic, Vietnamese, paediatric
  * and adolescent care, a disability-rights specialism. Keeping them would have meant a demo whose
  * scenarios lead somewhere the directory cannot go, which is a worse failure than a shorter list —
  * it advertises coverage that does not exist, on a health product, to somebody looking for care.
@@ -125,43 +143,27 @@ export const careArchetypes: CareArchetype[] = [
     },
   },
   {
+    /* O179: THE COPY CAME DOWN TO WHAT IS DECLARED, RATHER THAN THE JOURNEY BEING DELETED.
+       This row survived Dr Yadav's departure because its requirements are satisfiable — but its
+       copy did not survive intact, and should not have. "Books a longer first appointment" was
+       HIS declaration (`manner: unhurried`, which is what `holdsPreference(…, "longer-appointment")`
+       actually reads), and nobody left on the roster holds it. Kept as written, this journey would
+       have gone on promising a booked longer appointment while the matcher correctly grades that
+       exact request `unserved` — the surface and the ranker saying different things about the same
+       fact, which is the failure class this tree keeps finding.
+       So the ask is unchanged (readers really do arrive saying they get rushed) and the PROMISE is
+       now the one the roster can keep: being heard properly, which is the `attuned` facet Dr Anusha
+       declares. If a GP declares `unhurried`, the older, stronger copy comes back with them. */
     id: "unhurried-first-appointment",
     title: "Somewhere that won't rush you",
     eyebrow: "Time to say it properly",
-    example: "A GP who books a longer first appointment and takes the whole history before reaching a conclusion.",
+    example: "A GP who takes the whole history before reaching a conclusion.",
     request:
       "Every time I have raised this I have been rushed, and I lose my thread when I am rushed. I want a longer first appointment with a GP who will listen to the whole story before deciding anything.",
-    headline: "A first appointment long enough to say the whole thing.",
-    expectedFirstMatch: "tushar-yadav",
+    headline: "The whole story heard before anything is decided.",
+    expectedFirstMatch: "anusha-saxena",
     requirements: {
       careAreas: ["adhd-assessment"],
-    },
-  },
-  {
-    id: "anxiety-differential-hindi",
-    title: "Treated for anxiety for years",
-    eyebrow: "Which one is it",
-    example: "A Hindi-speaking GP who can work out whether years of anxiety treatment missed something.",
-    request:
-      "I have been treated for anxiety and put on an antidepressant for years and I am anxious it was the wrong answer. I want a calm GP who speaks Hindi, will go back to what school was actually like, and explain the differential slowly.",
-    headline: "Anxiety, ADHD, or both: worked out properly.",
-    expectedFirstMatch: "tushar-yadav",
-    requirements: {
-      careAreas: ["adhd-assessment", "anxiety"],
-      languageOptions: ["Hindi"],
-    },
-  },
-  {
-    id: "sleep-and-family-context",
-    title: "Sleep that has never been right",
-    eyebrow: "The rest of the picture",
-    example: "A GP who takes sleep and family context seriously rather than treating them as background noise.",
-    request:
-      "My sleep has never been right and my family think I am just disorganised and always have been. I want a GP who will take the sleep seriously and understands the family context I am explaining this inside.",
-    headline: "The sleep and the family, treated as part of the picture.",
-    expectedFirstMatch: "tushar-yadav",
-    requirements: {
-      careAreas: ["adhd-assessment", "non-medication"],
     },
   },
   {

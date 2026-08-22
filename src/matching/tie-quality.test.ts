@@ -154,7 +154,20 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
    separation rate moves 0.556 -> 0.557. Both halves matter: a promotion that grew `total` without
    growing `separated` would mean the reader had learned to hear an ask it then could not act on,
    and this baseline is pinned in BOTH directions so either would have to be faced deliberately. */
-const PINNED = { total: 447, separated: 249, partialTie: 66, unseparated: 132 };
+/* O179: 447/249/66/132 -> 447/278/0/169 when Dr Tushar Yadav left and the roster became two.
+   THE ZERO IS STRUCTURAL, NOT AN IMPROVEMENT, AND IT IS THE MOST IMPORTANT NUMBER HERE. A partial
+   tie is "some of the roster separated, some tied" — a category that cannot exist with two
+   clinicians, because any request either separates the pair or does not. All 66 partial ties were
+   redistributed by arithmetic rather than by anything getting better: 29 became `separated` (the
+   pair genuinely splits) and 37 became `unseparated`.
+   SO THE RATE ROSE 0.557 -> 0.622 AND THE FINDER GOT WORSE, WHICH IS WHY THIS COMMENT EXISTS. On a
+   two-person roster "separated" means one GP was put above one other GP; it is the easiest possible
+   separation and the least useful one to a reader, who now has a choice of two. A KPI that improves
+   when the roster shrinks is measuring the wrong thing at this size — recorded here rather than
+   quietly re-pinned, and carried to docs/MATCHING-APPRAISAL-O180.md as a live finding about the
+   metric itself. `total` is unchanged at 447 because the corpus run is what the READER hears, and
+   that does not depend on how many GPs are listed. */
+const PINNED = { total: 447, separated: 278, partialTie: 0, unseparated: 169 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
@@ -180,7 +193,12 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     // unseparated here only when the reader HEARD the request (corpusRun excludes unheard).
     expect(tieOutcome("my dose wears off and needs titration reviewed")).toBe("separated");
     expect(tieOutcome("zzz qqq")).toBe("unseparated");
-    expect(clinicians.length).toBe(3);
+    expect(clinicians.length).toBe(2);
+
+    // O179: and the third outcome is now UNREACHABLE against the real roster, which the partition
+    // test above cannot see (0 + 278 + 169 still sums to 447). Pinned explicitly so the category
+    // is known to be dead at this roster size rather than assumed to be merely empty.
+    expect(report.partialTie).toBe(0);
   });
 
   it("survives roster growth without redefinition: outcomes are relative to roster size", () => {

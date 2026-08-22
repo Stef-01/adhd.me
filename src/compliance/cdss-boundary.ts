@@ -473,6 +473,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "The remaining export is the `Clinician` type. `clinicians` is the roster itself, and it is the one entry in this census whose copy is about NAMED REAL PEOPLE — which is why O100 split it into its own module and why it is filed under W193. Every reader-facing string in it (`focus`, `about`, `experience`, `manner`, the practice and suburb) is a DECLARATION relayed from a doctor or taken from what they publish, never a characterisation this product wrote about them and never a competence claim: the module's header carries that law in full, beside the entries it governs, rather than in a document somebody would have to know to look for. The distinction the census exists to draw is unusually sharp here — an edit to this module is a factual claim about a person who can be harmed by it being wrong, so it is reviewed against their published record, while an edit to src/demo/clinicians.ts next door is a ranking change reviewed against the corpus.",
   },
   {
+    module: "src/demo/synthetic-clinician.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports one factory, `syntheticClinician`, and is declared with an empty `operatorCopy` because every string in it is a placeholder that must never be read by anybody: the name says \"Synthetic Example\", the practice says \"Synthetic Test Practice\", the booking URL is `example.invalid`, and `about` says in full that it is a fixture and not a person. It is the deliberate opposite of `src/demo/roster.ts` next door — that module's every string is a factual claim about a named real doctor, and this one's every string is guaranteed to be about nobody. It exists so the ranking LAWS (closed books never outrank open ones at equal fit, a disclosed interest never wins a tie, staleness orders ties but costs no fit) can be tested without borrowing a real person's record as a blank, which is what made Dr Yadav's departure break fifty tests that were not about him. `realPerson` is deliberately absent, so if this ever leaked into a rendered surface the real-person checks would refuse it rather than quietly display it.",
+  },
+  {
     module: "src/demo/emotional-fit.ts",
     operatorCopy: ["EI_QUALITIES"],
     notCopy:

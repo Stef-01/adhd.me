@@ -98,7 +98,9 @@ describe("Q3 item 10's premise", () => {
    */
   it("is inert on the real roster: one evenness value across every question", () => {
     const report = clarifierScaleReport(ASK, clinicians);
-    expect(report.rosterSize).toBe(3);
+    // O179: two since Dr Yadav left. The premise is unchanged and if anything stronger — a
+    // two-person roster gives the clarifier sort even less to do than a three-person one.
+    expect(report.rosterSize).toBe(2);
     expect(report.distinctEvenness).toBe(1);
   });
 
@@ -108,7 +110,12 @@ describe("Q3 item 10's premise", () => {
    */
   it("acquires real choices as the roster grows", () => {
     const measured = [3, 8, 20, 40].map((size) => clarifierScaleReport(ASK, syntheticRoster(size)));
-    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 7, 9]);
+    // O179: re-measured at [1, 4, 6, 8], down from [1, 4, 7, 9]. NOT a regression in the sort —
+    // `syntheticRoster` draws its facet rates from the REAL roster (`rateAmongReal`), so removing a
+    // clinician changes the distribution the synthetic entries are sampled from, and a two-person
+    // base is a slightly narrower world to grow out of. The CLAIM being pinned is unchanged and
+    // still holds: the number rises with roster size, so scale really does buy distinct questions.
+    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 6, 8]);
     // Monotone by construction of the evenness function, but pinned because the CLAIM is that it
     // grows — a change that made it non-monotone would falsify the claim while passing the above.
     const evenness = measured.map((r) => r.distinctEvenness);
@@ -122,9 +129,14 @@ describe("Q3 item 10's premise", () => {
    */
   it("turns duplicate questions into distinct ones", () => {
     const real = clarifierScaleReport(ASK, clinicians);
-    expect([real.candidates, real.distinctSignatures]).toEqual([16, 5]);
+    // O179: fourteen askable questions collapse into TWO distinct reorderings, where sixteen used
+    // to collapse into five. Both halves moved for the same reason: the askable set is built from
+    // what the roster declares, and Dr Yadav's declarations (`unhurried` above all) left with him,
+    // so there are two fewer questions to ask AND far less for any of them to separate. At two
+    // clinicians almost every question is the same question, which is the premise stated sharply.
+    expect([real.candidates, real.distinctSignatures]).toEqual([14, 2]);
     const atTwenty = clarifierScaleReport(ASK, syntheticRoster(20));
-    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([16, 16]);
+    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([14, 14]);
   });
 
   /** Non-vacuity for the whole report: the selector's order is not the tie-break's order. */

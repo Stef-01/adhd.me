@@ -306,55 +306,6 @@ export const clinicians: Clinician[] = [
       "Dr Saxena owns Beecroft Family & Skin Cancer Clinic, which is ADHD.ME's first clinic partner. Disclosed because he appears in a directory run by a company his clinic has a commercial relationship with, and a reader cannot see the ranking that put him there.",
   },
   {
-    id: "tushar-yadav",
-    name: "Dr Tushar Yadav",
-    shortName: "Dr Yadav",
-    gender: "man",
-    pronouns: "he/him",
-    title: "General practitioner, MBBS",
-    suburb: "Beecroft",
-    practice: "Beecroft Family & Skin Cancer Clinic",
-    reach: "Practice appointments",
-    // No portrait supplied. Renders as a monogram; nothing here generates a face for a real person.
-    image: null,
-    acceptingNewPatients: true,
-    capacityDeclaredAt: "2026-08-14",
-    focus: "Unhurried first appointments & ADHD care alongside the rest of general practice",
-    matchLine: "A longer first appointment with a GP who will take the whole history before reaching for a conclusion.",
-    fitSignals: ["ADHD assessment", "Longer first appointment", "Hindi", "Family context"],
-    practicalSignals: ["Mixed billing", "Beecroft rooms", "Longer first appointment"],
-    about:
-      "Tushar qualified in medicine at Monash and has worked across Western Sydney and the North Shore — Royal North Shore, Western Sydney Local Health District, North Sydney — before joining the Beecroft practice. He sees ADHD the way he sees the rest of general practice: as something that arrives in the middle of a whole life, usually alongside sleep that has never been right, a job that has become hard to hold, or a family who have their own view about what is going on. He would rather spend a long first appointment getting the history straight than reach a conclusion quickly, and he speaks Hindi, which for a good number of families in this part of Sydney is the difference between explaining something and explaining it properly.",
-    experience: [
-      "Adult ADHD assessment",
-      "Longer first appointments",
-      "Sleep and mood alongside ADHD",
-      "Family and cultural context",
-    ],
-    languages: ["English", "Hindi"],
-    careAreas: [
-      "adhd-assessment",
-      "anxiety",
-      "depression",
-      "non-medication",
-      "shared-care",
-    ],
-    manner: ["unhurried", "collaborative", "culturally_attuned", "attuned"],
-    nswAdhdTrained: true,
-    wheelchairAccessible: true,
-    appointmentLength: "Longer first appointments available",
-    // NOT BOOKABLE ONLINE, AND THIS IS A FACT RATHER THAN A GAP. Healthengine lists Dr Yadav at
-    // this practice as "Not Available" with no Book control, because his column is not synced to
-    // their platform. Inventing a slot picker for him would be inventing appointments for a real
-    // clinician, so the surface sends the reader to the practice instead and says why.
-    booking: {
-      via: "practice",
-      url: "https://healthengine.com.au/medical-centre/nsw/beecroft/beecroft-family-and-skin-cancer-clinic/s15072",
-      note: "Dr Yadav's appointments are not online yet — the practice books him by phone.",
-    },
-    realPerson: true,
-  },
-  {
     /**
      * O34: LISTED AT HER OWN REQUEST, relayed by the founder (2026-08-18: "she has asked us
      * to upload it ASAP"), which is the consent the W228 checklist required. Every claim

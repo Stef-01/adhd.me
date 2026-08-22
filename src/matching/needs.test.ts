@@ -9,6 +9,7 @@ import {
   getPersonalizedMatch,
 } from "@/demo/clinicians";
 import { MANNER_TRAITS, NEED_LABELS, facetKey, languageNeeds, readNeeds } from "./needs";
+import { syntheticClinician } from "@/demo/synthetic-clinician";
 
 describe("W221 reading what somebody said into the closed vocabulary", () => {
   it("reads a preference about care, and reaches nothing on text that names none", () => {
@@ -131,9 +132,25 @@ describe("W221 what the roster declares", () => {
     }
   });
 
-  it("still does not float the founder on a request that separates nobody", () => {
+  /**
+   * O179: THE W221 PROTECTION HAS RUN OUT OF MATERIAL, AND THIS ROW IS WHERE THAT IS RECORDED.
+   *
+   * W221's rule is that a clinician with a disclosed interest sorts BEHIND one without, so a
+   * request separating nobody cannot hand the top spot to the house. It worked because Dr Yadav
+   * had no interest to declare. He left on 2026-08-22, and the two remaining clinicians are BOTH
+   * disclosed — so `conflicted(a) - conflicted(b)` is 0 for every pair, the sort falls back to
+   * being stable, and the first record in the file takes first place on every unspecific request.
+   *
+   * That is the exact defect W221 was written to kill, alive again by subtraction rather than by
+   * anybody editing the rule. The assertion is INVERTED to state the true position rather than
+   * left red or quietly deleted, and the fix is not attempted here: it is a ranking-semantics
+   * decision (what breaks a tie when every candidate is conflicted?) and it is carried, priced,
+   * to docs/MATCHING-APPRAISAL-O180.md and the founder gate list.
+   */
+  it("records that W221's tie-break can no longer separate anybody", () => {
+    expect(clinicians.every((clinician) => clinician.disclosedInterest)).toBe(true);
     expect(rankClinicians("I think I might have ADHD and I would like an assessment")[0]!.id)
-      .not.toBe("anubhav-saxena");
+      .toBe("anubhav-saxena");
   });
 });
 
@@ -147,12 +164,20 @@ describe("O1 languages go through the one pipeline (F2)", () => {
    * these tests hold the guarantee in both directions.
    */
   it("ranks the speakers first on a language-only request, and calls the order informed", () => {
-    // Urdu separates the roster: both Saxenas declare it (O88), Dr Yadav does not — so the
-    // speakers rank above the non-speaker and the order is earned, with their internal tie
-    // the banding layer's to say.
+    // O179: Dr Yadav was the non-speaker this contrast needed. Both remaining GPs speak Urdu, so
+    // the roster can no longer produce a language separation and the guarantee is asserted over a
+    // roster that can. The pipeline is what is under test, not the staffing.
     const query = "a GP who speaks Urdu";
-    expect(rankClinicians(query).slice(0, 2).map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
-    expect(matchQuality(query)).toBe("informed");
+    const roster = [
+      syntheticClinician({ id: "speaks-a", languages: ["English", "Urdu"] }),
+      syntheticClinician({ id: "speaks-b", languages: ["English", "Urdu"] }),
+      syntheticClinician({ id: "silent", languages: ["English"] }),
+    ];
+    expect(rankClinicians(query, roster).slice(0, 2).map((c) => c.id).sort()).toEqual(["speaks-a", "speaks-b"]);
+    expect(matchQuality(query, roster)).toBe("informed");
+
+    // The real roster grades the same query `tied`: understood, and separating nobody.
+    expect(matchQuality(query)).toBe("tied");
   });
 
   it("reads an inflected language mention the substring matcher was never tested on", () => {
@@ -211,11 +236,33 @@ describe("O2 breadth has a price (F1)", () => {
    * half of an "often" one. Both are the clinician's or the roster's own data, both sayable.
    */
   it("discounts a facet by how much of the roster declares it, but never to zero", () => {
-    // Hindi is declared by both GPs; Urdu by one. Equal authored weight, unequal separation.
+    /**
+     * O179: HINDI AND URDU STOPPED BEING A CONTRAST WHEN DR YADAV LEFT.
+     *
+     * He spoke Hindi and not Urdu, which made Urdu the rarer facet on a three-person roster and
+     * gave this test its unequal pair. Both remaining GPs speak both, so the discount now returns
+     * the SAME weight for each — which is the rule working, not failing: a facet the whole roster
+     * declares separates nobody, whichever facet it is.
+     *
+     * The rarity rule is therefore asserted where it can still be seen — over a roster built to
+     * contain a rare facet and a universal one — and the real roster's equality is pinned beside
+     * it, so this reads as a measured fact about a two-person listing rather than a missing test.
+     */
+    const roster = [
+      syntheticClinician({ id: "both", languages: ["English", "Hindi", "Urdu"] }),
+      syntheticClinician({ id: "hindi-only", languages: ["English", "Hindi"] }),
+    ];
+    const scarce = needsFor("a GP who speaks Hindi and Urdu", roster);
+    const hindiRare = scarce.find((n) => n.label === "Hindi-speaking")!;
+    const urduRare = scarce.find((n) => n.label === "Urdu-speaking")!;
+    expect(urduRare.weight).toBeGreaterThan(hindiRare.weight);
+    expect(hindiRare.weight).toBeGreaterThan(0);
+
+    // The real roster: both GPs speak both languages, so neither separates and the weights match.
     const needs = needsFor("a GP who speaks Hindi and Urdu");
     const hindi = needs.find((n) => n.label === "Hindi-speaking")!;
     const urdu = needs.find((n) => n.label === "Urdu-speaking")!;
-    expect(urdu.weight).toBeGreaterThan(hindi.weight);
+    expect(urdu.weight).toBe(hindi.weight);
     expect(hindi.weight).toBeGreaterThan(0);
   });
 

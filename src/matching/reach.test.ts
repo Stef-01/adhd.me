@@ -128,8 +128,13 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
         expect(new Set(scores).size, `${query} is "informed" but every clinician scores the same`)
           .toBeGreaterThan(1);
       } else {
-        // Tied or unmatched: the finder must have copy for it, so the reader is told.
-        expect(quality === "tied" || quality === "unmatched").toBe(true);
+        // O179: THIS BRANCH LISTED TWO OF THE THREE NON-INFORMED GRADES AND PASSED ANYWAY.
+        // `MatchQuality` has four values; `unserved` was missing here and nothing noticed, because
+        // no corpus query reached it while Dr Yadav's `unhurried` declaration covered the only
+        // preference the corpus asks for. He left, "longer first appointment" became genuinely
+        // unserved, and the gap in the enumeration surfaced as a failure. Enumerated in full now,
+        // so a fifth grade would fail here rather than fall through this branch unmentioned.
+        expect(["tied", "unmatched", "unserved"], `${query} graded ${quality}`).toContain(quality);
       }
     }
   });
@@ -152,7 +157,11 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // Nine of the seventeen care areas are declared by neither GP while the roster is two people.
     const asks = unservedAsks("I need trauma-informed care, I have a difficult childhood");
     expect(asks.length).toBeGreaterThan(0);
-    expect(unservedAsks("titration and a longer appointment")).toEqual([]);
+    // O179: the served half of this contrast used to be "titration and a longer appointment".
+    // Titration is still declared (Dr Anubhav); the longer appointment is not, since Dr Yadav was
+    // the only `unhurried` declaration on the roster — so the ask is narrowed to the part that is
+    // still true rather than the assertion being deleted.
+    expect(unservedAsks("titration please")).toEqual([]);
   });
 
   /**
@@ -179,8 +188,15 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // appear beside a facet the ranking is simultaneously scoring.
     expect(unservedAsks("a woman GP please")).toEqual([]);
     expect(unservedAsks("can we do it over the phone")).toEqual([]);
-    expect(unservedAsks("I need a longer first appointment")).toEqual([]);
     expect(unservedAsks("I need help with my sleep")).toEqual([]);
+
+    // O179: "I need a longer first appointment" MOVED SIDES. It belonged here while Dr Yadav
+    // declared `unhurried`; with him gone no GP holds the preference, so the honest sentence is
+    // now the unserved one — and it is asserted in its new place rather than dropped, because the
+    // property under test is the CONTRADICTION (never say "nobody declares this" beside a facet
+    // the ranking is scoring), and that property is only meaningful if both sides are pinned.
+    expect(unservedAsks("I need a longer first appointment")[0])
+      .toContain("A longer first appointment is not something any GP listed today declares");
   });
 
   it("stays a fact about a declaration, never a claim about ability (W193)", () => {

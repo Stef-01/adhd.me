@@ -8,6 +8,7 @@
 // in the closed vocabulary, and every stated ordering guarantee holding at the edge.
 
 import { describe, expect, it } from "vitest";
+import { syntheticClinician } from "@/demo/synthetic-clinician";
 import {
   clinicians,
   matchEvidence,
@@ -134,9 +135,9 @@ describe("O9 hostile and accidental input", () => {
 });
 
 describe("O9 degenerate rosters", () => {
-  const yadav = () => clinicians.find((c) => c.id === "tushar-yadav")!;
+
   const bare = (id: string) => ({
-    ...yadav(),
+    ...syntheticClinician(),
     id,
     careAreas: [] as CareArea[],
     manner: [] as (typeof clinicians)[number]["manner"],

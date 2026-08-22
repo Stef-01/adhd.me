@@ -38,12 +38,6 @@ const ACCEPTED: ReadonlyArray<{ clinician: string; rule: string; match: string; 
     why:
       "'Beecroft Family & Skin Cancer Clinic' is the practice's own registered name. The rule exists to stop targeting patients by condition, not to ban a business's legal name — and rewriting a real practice's name on a listing would be a worse problem than the one it solved.",
   },
-  {
-    clinician: "tushar-yadav",
-    rule: "no-condition-targeting",
-    match: "Cancer",
-    why: "The same practice name, on the second doctor who works there.",
-  },
 
   // O164 deleted the `no-ratings` "reviews" acceptance from here: the rule was narrowed at source
   // so clinical review no longer trips it, and this list's own stale-acceptance check is what
