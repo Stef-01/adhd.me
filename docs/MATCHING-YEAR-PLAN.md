@@ -62,8 +62,17 @@ measured claim rather than a code-review opinion.
    (2026-08-20): the pin's analysis measured TRUE over the 500-entry corpus ("without" was
    excluded to protect a cue-initial-negator sentence the check never touches); "without"
    joined BARE_NEGATORS with a double-negative guard ("can't … without X" keeps the want),
-   the pin retagged, shared-care floor moved by sanctioned reclassification.** The standing gap list is the lexicon's work
-   queue; growth continues opportunistically but the CI-gate deliverable is DONE. **The size was
+   the pin retagged, shared-care floor moved by sanctioned reclassification.** **CORRECTED by O178
+   (2026-08-22): "the standing gap list is the lexicon's work queue" was wrong — it is not a
+   single queue, it is three different lists wearing one name, and `classifyAspirations` in
+   `src/matching/refused-cues.ts` now computes the partition instead of anyone eyeballing it.
+   Of the 31 corpus entries still `aspires`-only, 11 are `founder-gated` (blocked on the G7
+   ruling) and 20 are `measured-and-resistant` (a cue was tried, `REFUSED_CUES` records why) —
+   leaving ZERO genuinely open. The premise that led to this correction (a growing authoring
+   backlog) was itself wrong; the register just had no way to say so before now, because a
+   facet examined only in prose (O122's comments in needs.ts) was indistinguishable from one
+   nobody had looked at.** growth continues opportunistically but the CI-gate deliverable is
+   DONE. **The size was
    "~60 aspirations" here until O177 (2026-08-22) measured it: 556 corpus entries, 33 unheard
    aspirations across 19 facets — stale by roughly half.** O177 also measured which of them are
    workable at all, and the answer reframes the queue: **11 of the 33 are `awaitingFounder`** —

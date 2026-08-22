@@ -143,6 +143,48 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
+> loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing
+> since the claim commit, 8bea4cd — 11+ hours, well past the 90-minute window; loop-0821a's
+> session evidently died mid-investigation). DONE.**
+> **THE INVESTIGATION loop-0821a LEFT BEHIND WAS RIGHT, AND STILL WORTH KEEPING**: three facets
+> checked by hand, three times the same discovery — every top-of-queue aspiration it sampled had
+> already been measured and refused (by O103, O122, O114/O125), not left uncued. **MEASURED IN
+> FULL RATHER THAN BY SAMPLE: all 31 of the corpus's standing `aspires`-only entries partition
+> into 11 `founder-gated` and 20 `measured-and-resistant` — ZERO are genuinely open.** The premise
+> that sent loop-0821a looking (a growing authoring backlog) was wrong in the other direction from
+> what it guessed: not "smaller than the list implies" but empty.
+> **THE GAP THE INVESTIGATION NAMED AND DID NOT YET CLOSE**: `openAspirations` (O138) only ever
+> showed the ONE kind that is real work, so a facet examined in PROSE ONLY (O122's comments in
+> `needs.ts`, three paragraphs of reasoning that never became a `REFUSED_CUES` entry at the time)
+> was indistinguishable from one nobody had looked at — both are simply absent from its output.
+> Turned out, on inspection, O177's own commit (3e16d05) had already migrated O122's two refusals
+> into `REFUSED_CUES` with `leavesStanding` — so the specific instance was already fixed by the
+> time I reclaimed the row. **What was still missing was the MECHANISM, not the data**: nothing
+> asserted the partition was total, so a *future* prose-only refusal could reintroduce exactly the
+> same hole and nothing would fail.
+> **SHIPPED: `classifyAspirations` in `src/matching/refused-cues.ts`** — computes all three kinds
+> (`founder-gated` / `measured-and-resistant` / `open`) from the same `accountedFor` set
+> `openAspirations` already used, so the two functions cannot disagree (`openAspirations` is now
+> `classifyAspirations(...).filter(open)`, one source of truth instead of two). Three new tests in
+> `refused-cues.test.ts` §O178: a pinned-total partition test (`{total:31, gated:11, resistant:20,
+> open:0}`, sum asserted equal to the whole so a leftover or a double-count both fail loudly); a
+> non-vacuity probe — a fixture aspiration with neither `awaitingFounder` nor a `leavesStanding`
+> match MUST classify `open`, proving the partition cannot silently swallow a genuinely new one;
+> and a three-way fixture proving the same function tells all three kinds apart on one input.
+> **DOCS CORRECTED, NOT JUST CODE**: `docs/MATCHING-YEAR-PLAN.md`'s "the standing gap list is the
+> lexicon's work queue" replaced with the measured partition and a pointer to `classifyAspirations`
+> — the wording now says what the register can prove, not what looked true by eye.
+> **NOT DONE, AND WHY**: O122's needs.ts prose comments were left in place rather than deleted —
+> they are the human-readable rationale next to the lexicon a future cue-author reads FIRST, and
+> `REFUSED_CUES` is the machine-checked source of truth; the two are complementary, not a
+> duplication to clean up, matching every other prose+register pair already in that file (O103,
+> O113, O114, O139, O140 all have both).
+> Gate: `pnpm verify` green — 256 files, 4077 tests (+7 over O182's 4070: 3 new O178 tests plus
+> tests already added by the concurrent goal-0822a session's O179–O182 work), audit gate PASS
+> (2 accepted advisories, 0 unaccepted), build clean. No e2e required by this unit's own scope
+> (pure computation + a doc correction, no route or UI touched).
+
 > **O182 (the matching system, appraised — and the arithmetic that disagreed with itself) —
 > founder-directed 2026-08-22, session goal-0822a. DONE.** "An extremely thorough critical
 > appraisal on the matching system, advance it so that it is actually much more effective."

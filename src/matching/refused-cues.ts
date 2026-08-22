@@ -277,11 +277,43 @@ export const REFUSED_CUES: readonly RefusedCue[] = [
 ];
 
 /**
+ * O178: the three kinds a standing aspiration can be, and nothing else.
+ *
+ * `openAspirations` (below) only ever showed the ONE kind that is real work, which is right for
+ * "what should I build next" but wrong for "did anything fall through a crack" — a facet
+ * examined in prose (O122's comments in needs.ts) rather than recorded in `REFUSED_CUES` would
+ * look identical to an aspiration nobody had looked at, because both are simply absent from
+ * `openAspirations`'s output. `classifyAspirations` names all three kinds so a fourth,
+ * unaccounted-for state has nowhere to hide: every aspiration in the corpus is exactly one of
+ * `founder-gated` (blocked on the G7 ruling), `measured-and-resistant` (a cue was tried and
+ * `REFUSED_CUES` records why), or `open` (nobody has looked — the only kind that is a to-do).
+ */
+export type AspirationKind = "founder-gated" | "measured-and-resistant" | "open";
+
+export function classifyAspirations(
+  corpus: ReadonlyArray<{ text: string; aspires?: readonly string[]; awaitingFounder?: string }>,
+  refusals: readonly RefusedCue[] = REFUSED_CUES,
+): Array<{ text: string; aspires: readonly string[]; kind: AspirationKind }> {
+  const accountedFor = new Set(refusals.flatMap((r) => r.leavesStanding ?? []));
+  return corpus
+    .filter((e): e is typeof e & { aspires: readonly string[] } => !!e.aspires?.length)
+    .map((e) => ({
+      text: e.text,
+      aspires: e.aspires,
+      kind: e.awaitingFounder
+        ? ("founder-gated" as const)
+        : accountedFor.has(e.text)
+          ? ("measured-and-resistant" as const)
+          : ("open" as const),
+    }));
+}
+
+/**
  * The lexicon's GENUINE remaining queue: aspirations nobody has examined.
  *
- * Subtracts the two kinds of finished thinking from the corpus's standing aspirations — those
- * waiting on the founder's G7 call (`awaitingFounder`, O123) and those a refusal already
- * accounted for (`leavesStanding`, above). What is left is work somebody could pick up.
+ * The `open` slice of `classifyAspirations` — what is left once the two kinds of finished
+ * thinking (founder-gated, measured-and-resistant) are set aside. What remains is work
+ * somebody could pick up.
  *
  * The number this returns is the only honest answer to "is there lexicon work left?", and
  * before O138 it could not be computed at all: the raw aspiration count read 25 while including
@@ -291,8 +323,7 @@ export function openAspirations(
   corpus: ReadonlyArray<{ text: string; aspires?: readonly string[]; awaitingFounder?: string }>,
   refusals: readonly RefusedCue[] = REFUSED_CUES,
 ): Array<{ text: string; aspires: readonly string[] }> {
-  const accountedFor = new Set(refusals.flatMap((r) => r.leavesStanding ?? []));
-  return corpus
-    .filter((e) => e.aspires?.length && !e.awaitingFounder && !accountedFor.has(e.text))
-    .map((e) => ({ text: e.text, aspires: e.aspires! }));
+  return classifyAspirations(corpus, refusals)
+    .filter((e) => e.kind === "open")
+    .map((e) => ({ text: e.text, aspires: e.aspires }));
 }
