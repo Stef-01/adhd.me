@@ -251,12 +251,6 @@ export function ClinicianPortrait({
   );
 }
 
-/** The NSW training, as a credential line. Self-reported, which the profile notes once. */
-export function NswTraining({ clinician }: { clinician: Clinician }) {
-  if (!clinician.nswAdhdTrained) return null;
-  return <p className="credential-line">NSW ADHD training</p>;
-}
-
 /**
  * A material interest, stated beside the listing it concerns. One line, not an essay.
  *

@@ -69,9 +69,12 @@ test("the profile groups its blocks instead of spacing them all alike", async ({
       return el.getBoundingClientRect();
     };
     return {
-      // Inside the identity block: tight, so name/meta/credential/disclosure read as one thing.
-      metaToCredential: Math.round(at(".credential-line").top - at(".clinician-meta").bottom),
-      credentialToDisclosure: Math.round(at(".disclosure-line").top - at(".credential-line").bottom),
+      // Inside the identity block: tight, so name/meta/disclosure read as one thing.
+      // O180: `.credential-line` was the NSW-training badge and is gone from every listing — the
+      // training is a listing REQUIREMENT, not a distinguishing trait, so it stopped being drawn.
+      // The identity block is therefore one gap shorter, and the within-group measurement moves to
+      // the pair that is still there rather than the test being deleted with the element.
+      metaToDisclosure: Math.round(at(".disclosure-line").top - at(".clinician-meta").bottom),
       // Between groups: open, so the eye knows a new idea has started.
       disclosureToEvidence: Math.round(at(".fit-evidence").top - at(".disclosure-line").bottom),
       missedToClarify: Math.round(at(".profile-clarify").top - at(".fit-missed").bottom),
@@ -82,7 +85,7 @@ test("the profile groups its blocks instead of spacing them all alike", async ({
   // so nine semantically different blocks looked like one undifferentiated list — "proximity tells
   // you what belongs together" with the proximity switched off. A within-group gap must stay
   // clearly tighter than a between-group one, whatever the exact values become later.
-  const withinGroup = Math.max(gaps.metaToCredential, gaps.credentialToDisclosure);
+  const withinGroup = gaps.metaToDisclosure;
   const betweenGroups = Math.min(gaps.disclosureToEvidence, gaps.missedToClarify);
   expect(
     betweenGroups,

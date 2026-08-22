@@ -274,7 +274,10 @@ export const clinicians: Clinician[] = [
     focus: "Structured assessment, baseline physical screening & titration",
     matchLine: "A measured assessment with the physical baseline done properly, then titration reviewed on a schedule.",
     fitSignals: ["ADHD assessment", "Baseline physical screening", "Titration", "Phone consultations"],
-    practicalSignals: ["Mixed billing", "Phone consultations", "Structured review schedule"],
+    // O180 (founder-directed 2026-08-22): "Telehealth" replaces "Phone consultations". Clearer
+    // language for the same declared fact, and it is the fact `telehealthFirstAppointment: true`
+    // already carries below — a first appointment, not only follow-ups.
+    practicalSignals: ["Mixed billing", "Telehealth", "Structured review schedule"],
     about:
       "Anubhav trained at the University of Sydney and has worked in general practice right across Sydney — Seven Hills, Double Bay, Hoxton Park, Hornsby — before settling at Beecroft. He works from measurement rather than impression: a documented baseline before anything starts, then review at set intervals instead of whenever a problem gets loud enough to prompt a call. He covers cardiovascular and sleep screening before a stimulant is considered, and treats a substance history as a safety question rather than a character one. He also does aged-care and home visits, and gives a good deal of his spare time to the long-suffering cause of the Parramatta Eels.",
     experience: [
@@ -381,7 +384,18 @@ export const clinicians: Clinician[] = [
     fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Hindi & Urdu", "Lifestyle & preventative care"],
     // Billing leads by roster convention; hers is stated by the practice until her interview
     // supplies the specifics — a fact about where the fact lives, not a guess at it.
-    practicalSignals: ["Billing set by the practice", "Books online", "New patients welcome"],
+    //
+    // O180 (founder-directed 2026-08-22): "Books online" removed. The directive was to replace it
+    // with "Telehealth" as the clearer word, and for Dr Anubhav that is exactly what happened —
+    // he declares `telehealthFirstAppointment`. HERS IS NOT THE SAME FACT AND IS NOT SUBSTITUTED.
+    // "Books online" was true and evidenced: she has a live Healthengine booking route, recorded
+    // below. Telehealth is a different claim — that she will CONSULT remotely — and she has not
+    // made it; the note on `nswAdhdTrained` below already says `telehealthFirstAppointment` stays
+    // omitted because it was "not claimed, and omission is exactly what that means".
+    // So the unclear word is gone, as directed, and nothing is asserted in its place. If she does
+    // offer telehealth, one declaration from her or the founder adds it here and on the field.
+    // FOUNDER ITEM: docs/MATCHING-APPRAISAL-O180.md §gates.
+    practicalSignals: ["Billing set by the practice", "New patients welcome"],
     // O88: her official bio, supplied through the founder (2026-08-20), merged with the
     // already-verified detail from O58 — nothing below is authored for her.
     about:

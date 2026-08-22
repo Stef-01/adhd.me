@@ -727,11 +727,15 @@ textarea:focus-visible {
   touch-action: manipulation;
 }
 
-/* O102: the way to the side-by-side, in the same quiet register as the reorder question
-   above it — both are offers to understand the order, not calls to action, and giving one
-   of them a button would make the profile argue with its own booking bar. */
+/* O102: the way to the side-by-side, in the same quiet register as the reorder question —
+   an offer to understand the order, not a call to action; giving it a button would make the
+   profile argue with its own booking bar.
+   O180: it now sits AFTER the profile's sections rather than above them, so the margin has to
+   do the work the old adjacency did — a clear break from the last section, and no rule, because
+   a divider would promote it back into the page's structure. Type drops to the smallest step the
+   palette uses for actions; the 44px hit area is unchanged and non-negotiable (O14). */
 .profile-compare {
-  margin: 8px 0 0;
+  margin: 28px 0 0;
   max-width: 52ch;
 }
 .profile-compare-action {
@@ -5506,12 +5510,6 @@ textarea:focus-visible {
   color: var(--muted);
 }
 
-/* The two one-line notes that replaced paragraphs of hedging. */
-.credential-line {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 0.78125rem;
-}
 /* O166: INK, and the direction matters. This is a material-interest disclosure about a named real
    person, sited exactly where the listing is read (O89/O129) — so taking it OFF the accent must not
    make it quieter. Ink on paper is the highest-contrast pair in the palette; amber is not. This
@@ -6513,20 +6511,6 @@ textarea:focus-visible {
   .story-sticky-cta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   /* The page's own footer must outlive the bar. */
   .story-footer { padding-bottom: 86px; }
-}
-
-/* Directions (item 14), on the profile's fit list. */
-/* O166: ink. A link is a link; underline already says so, and an amber one was the fourth
-   meaning the accent carried on this screen. */
-.profile-directions { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-
-/* O166: the map link's own row, outside `.fit-list`. No divider, because it is not another item in
-   a list of facts — it is the one thing on this block a reader can act on. The margin is the gap
-   the list's bottom rule used to provide. */
-.profile-directions-row {
-  margin: 14px 0 0;
-  font-size: 0.875rem;
-  line-height: 1.45;
 }
 
 /* O16: the privacy agreement bar and its pop-out. */

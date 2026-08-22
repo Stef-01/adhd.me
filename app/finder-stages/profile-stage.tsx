@@ -14,7 +14,7 @@ import {
 import { type NeedSignal } from "@/matching/needs";
 import { type Clarifier } from "@/matching/clarify";
 import { type SuburbPoint } from "@/geo/suburbs";
-import { ClinicianPortrait, OwnershipDisclosure, MotionScreen, NswTraining, Pressable, Wordmark } from "./shared";
+import { ClinicianPortrait, OwnershipDisclosure, MotionScreen, Pressable, Wordmark } from "./shared";
 
 export function ProfileStage({
   clinician,
@@ -89,7 +89,6 @@ export function ProfileStage({
         <p className="clinician-meta">
           {clinician.title}, {clinician.pronouns}&nbsp;· {locationLabel(clinician)}
         </p>
-        <NswTraining clinician={clinician} />
         <OwnershipDisclosure clinician={clinician} />
         {personalizedSignals.length > 0 ? (
           /* Each reason now shows its provenance (O21): the closed-vocabulary label the
@@ -152,18 +151,6 @@ export function ProfileStage({
             </button>
           </p>
         )}
-        {/* O102 (explaining the fit, Q3): the other GP, one tap away, in the same quiet
-            register as the reorder question above it. It renders ONLY when there is a second
-            clinician AND the reader's words reached at least one ask — a compare table with
-            no rows would be a claim of thoroughness with nothing behind it, and the caller
-            passes null in exactly that case. */}
-        {compareWith && (
-          <p className="profile-compare">
-            <button type="button" className="profile-compare-action" onClick={onCompare}>
-              Compare with {compareWith.shortName}
-            </button>
-          </p>
-        )}
         <div className="practical-signal-row profile-practical-signals" aria-label="Practical appointment details">
           {clinician.practicalSignals.slice(0, 2).map((signal) => <span key={signal}>{signal}</span>)}
         </div>
@@ -181,22 +168,18 @@ export function ProfileStage({
             The list now holds only the parallel pair, and the action sits after it as an action. */}
         <div className="fit-list">
           <p>{clinician.appointmentLength}</p>
+          {/* O180: THE PRACTICE NAME STAYED WHEN THE MAP WENT.
+              The directive was to remove the map-and-directions row, because a booking page shows
+              the address anyway. Removing it also removed the ONLY place `clinician.practice`
+              rendered on a profile — the link text was "Map and directions to <practice>" — so the
+              page silently stopped saying where a GP works at all, which was not what was asked for
+              and is a real thing a reader needs before they book. It comes back here as a FACT in
+              the list of facts, beside the appointment length and the distance, rather than as an
+              action that leaves the site. */}
+          <p>{clinician.practice}</p>
           <p>{distanceTo(clinician, origin) ?? clinician.reach}</p>
           {closedBooksNote(clinician, request) && <p>{closedBooksNote(clinician, request)}</p>}
         </div>
-        {/* Launch item 14: the practice on a map, from the practice's own name and
-            suburb — no API key, no location asked of the reader. */}
-        <p className="profile-directions-row">
-          <a
-            className="profile-directions"
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinician.practice}, ${clinician.suburb}, Australia`)}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Map and directions to {clinician.practice}
-          </a>
-        </p>
-
         <section>
           <h2>About</h2>
           <p>{clinician.about}</p>
@@ -213,6 +196,24 @@ export function ProfileStage({
           <h2>Languages</h2>
           <p>{clinician.languages.join(", ")}</p>
         </section>
+
+        {/* O180: COMPARE IS KEPT AND PUT AWAY (founder-directed 2026-08-22).
+            O102 built it and put it near the top, between the clarifier question and the
+            practical signals — three actions stacked above the fit content, all competing for
+            the same reader in the same moment. The finder is an Operate surface: the visitor is
+            completing a task, and the task on this screen is deciding about THIS GP. Comparing is
+            what you reach for once that has failed, so it now sits after the content, in the
+            quietest register the page has.
+            The render condition is O102's and unchanged: only when there IS a second clinician and
+            the reader's words reached at least one ask, because a compare table with no rows would
+            be a claim of thoroughness with nothing behind it. */}
+        {compareWith && (
+          <p className="profile-compare">
+            <button type="button" className="profile-compare-action" onClick={onCompare}>
+              Compare with {compareWith.shortName}
+            </button>
+          </p>
+        )}
       </div>
 
       {/* O44: no entrance animation on the booking bar. It is the screen's primary action

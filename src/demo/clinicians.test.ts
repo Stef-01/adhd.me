@@ -194,6 +194,37 @@ describe("clinician roster and matching", () => {
     expect(distanceTo(inRooms, origin)).toMatch(/km|in your suburb/);
   });
 
+  /**
+   * O180: THE TRAIT VOCABULARY, GUARDED IN BOTH DIRECTIONS.
+   *
+   * Two founder-directed changes on 2026-08-22, and the second is why this test exists rather than
+   * just the edit. "Books online" was removed as unclear language. "Telehealth" replaced "Phone
+   * consultations" on Dr Anubhav's listing — the same declared fact in clearer words.
+   *
+   * The risk the directive creates is that "Telehealth" reads as a *better* word for any remote-ish
+   * signal, and gets typed onto a listing whose doctor never claimed it. Dr Anusha is the live case:
+   * she had "Books online", which was TRUE and evidenced by a Healthengine booking route, and she
+   * has deliberately not declared telehealth. Substituting one for the other would have turned the
+   * removal of a vague word into the assertion of an undeclared service, on a real doctor's listing.
+   *
+   * So the display string may not run ahead of the declaration: a listing may only SAY telehealth if
+   * `telehealthFirstAppointment` says it too. The field stays the authority (see roster.ts), and
+   * this is the check that the words agree with it.
+   */
+  it("never says telehealth on a listing that has not declared it, and has retired 'Books online'", () => {
+    for (const clinician of clinicians) {
+      const saysTelehealth = clinician.practicalSignals.some((signal) => /telehealth/i.test(signal));
+      if (saysTelehealth) {
+        expect(clinician.telehealthFirstAppointment, `${clinician.id} says telehealth without declaring it`).toBe(true);
+      }
+      expect(clinician.practicalSignals, `${clinician.id} still carries the retired "Books online" trait`)
+        .not.toContain("Books online");
+    }
+
+    // Non-vacuity: the rule above is only meaningful while somebody actually says it.
+    expect(clinicians.filter((c) => c.practicalSignals.some((s) => /telehealth/i.test(s)))).toHaveLength(1);
+  });
+
   it("marks telehealth-first explicitly rather than reading it off a display string", () => {
     const flagged = clinicians.filter((c) => c.telehealthFirstAppointment).map((c) => c.id);
 
@@ -363,7 +394,18 @@ describe("clinician roster and matching", () => {
 
   it("includes useful billing and access details for every clinician", () => {
     for (const clinician of clinicians) {
-      expect(clinician.practicalSignals).toHaveLength(3);
+      /**
+       * O180: WAS `toHaveLength(3)`, NOW A FLOOR OF TWO, AND THE FLOOR IS THE HONEST NUMBER.
+       *
+       * Three was never a requirement — it was the count every entry happened to have, pinned as
+       * though it meant something. What the product actually needs is that the profile's signal row
+       * is full, and that row renders `practicalSignals.slice(0, 2)`. Dr Anusha has two since
+       * "Books online" was retired, and her listing is complete: the exact count was carrying no
+       * information while blocking a truthful edit, which is the worst combination for a pin.
+       * The floor is asserted against the SLICE the surface takes, so if that widens to three this
+       * goes red rather than silently rendering a gap.
+       */
+      expect(clinician.practicalSignals.length, clinician.id).toBeGreaterThanOrEqual(2);
       expect(clinician.practicalSignals[0]).toMatch(/billing|bills/i);
       expect(clinician.practice).toBeTruthy();
     }
