@@ -176,6 +176,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > unaccepted). No e2e required by this unit's own scope (pure computation refactor, no route or
 > UI touched).
 
+> **M2 (decide the polarity of F5, in public) — claimed 2026-08-22T23:42Z by loop-0822e.**
+> Q-M item 2. Alternating lanes per the loop's own rule — the prior firing (loop-0822d) took AR2,
+> so this one takes an O-lane unit; O-series Q1/Q2 are done/blocked, so the lowest-numbered
+> available work is Q-M's M2, which M1 left open by design ("the threshold is chosen deliberately
+> and written down, not inherited... see M2"). IN PROGRESS.
+
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing
 > since the claim commit, 8bea4cd — 11+ hours, well past the 90-minute window; loop-0821a's
