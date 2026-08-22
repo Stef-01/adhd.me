@@ -860,17 +860,30 @@ export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): st
 }
 
 /**
- * F5's threshold, stated rather than left to fall out of the refactor (M1). `0.5` reproduces
- * exactly what this predicate did before this unit — a "sometimes" declaration was already
- * enough to be eligible, via the boolean OR it used to spell out inline. M1 does not decide
- * whether that stays the right answer: whether eligibility should WIDEN further (to admit
- * interest-grade declarations that today score but do not qualify) or should NARROW to require
- * `1` (formal ineligibility zeroing the score instead) is Q-M item 2's call, in public, on
- * evidence — not a side effect of this unit consolidating the plumbing.
+ * F5's threshold — M1 stated it rather than letting it fall out of the refactor; M2 (this unit)
+ * is where its polarity gets DECIDED, in public, on evidence rather than left open.
+ *
+ * DECIDED: WIDEN, staying at `0.5`. `care-archetypes.test.ts`'s M2 test measures both ways —
+ * narrowing to `1` (only a formal "often" declaration is eligible; a "sometimes" declaration
+ * scores ZERO instead of half) empties `anxiety-differential-hindi` and
+ * `sleep-and-family-context` to NO eligible clinician at all, a third of the demo's six
+ * journeys, because both route to a clinician who holds exactly one of the archetype's required
+ * areas at the "sometimes" grade and nowhere stronger. Widening keeps all six servable and pays
+ * the interest-grade declaration exactly the half-weight it earned — never rendered as a full
+ * match, per W213's explain module — rather than a directory that either advertises care it
+ * cannot reach (narrowing) or inflates a "sometimes" into an "often" (the bug F5 named).
  */
 export const ELIGIBILITY_CARE_THRESHOLD = 0.5;
 
-export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician[] {
+/**
+ * `careThreshold` defaults to the decided value and exists so M2's measurement can call this
+ * SAME function at the narrow threshold (`1`) rather than a shadow reimplementation — every
+ * production caller keeps the default and is unaffected.
+ */
+export function cliniciansMatchingArchetype(
+  archetype: CareArchetype,
+  careThreshold: number = ELIGIBILITY_CARE_THRESHOLD,
+): Clinician[] {
   const { requirements } = archetype;
 
   return clinicians.filter((clinician) => {
@@ -879,7 +892,7 @@ export function cliniciansMatchingArchetype(archetype: CareArchetype): Clinician
       clinician.languages.some((spoken) => spoken.toLowerCase() === language.toLowerCase()),
     );
     const matchesCareAreas = requirements.careAreas.every(
-      (area) => facetStrength(clinician, { kind: "care", area }) >= ELIGIBILITY_CARE_THRESHOLD,
+      (area) => facetStrength(clinician, { kind: "care", area }) >= careThreshold,
     );
     const matchesAccess = !requirements.wheelchairAccessible || clinician.wheelchairAccessible;
 

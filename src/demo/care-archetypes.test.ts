@@ -87,4 +87,34 @@ describe("ADHD assessment demo archetypes", () => {
     expect(byId.get("anxiety-differential-hindi")).toMatch(/wrong answer|differential/);
     expect(byId.get("sleep-and-family-context")).toMatch(/sleep/);
   });
+
+  /**
+   * M2 — F5's eligibility polarity, MEASURED both ways rather than argued in prose. This is the
+   * evidence `ELIGIBILITY_CARE_THRESHOLD`'s doc comment in clinicians.ts cites for DECIDING to
+   * widen (stay at `0.5`) rather than narrow (move to `1`).
+   *
+   * Narrowing treats a "sometimes" declaration as formally ineligible (zero, not half) for the
+   * archetype gate. Both `anxiety-differential-hindi` and `sleep-and-family-context` route to a
+   * clinician who holds exactly one required area at "sometimes" and nowhere stronger — narrowing
+   * empties both to no eligible clinician at all, which is precisely the "leads somewhere real"
+   * failure this file's other test exists to catch, for a third of the six journeys.
+   *
+   * Called through the SAME `cliniciansMatchingArchetype` every other test in this file uses, at
+   * a different threshold — not a shadow reimplementation of the eligibility rule.
+   */
+  it("M2 — measured both ways: narrowing to a formal-only threshold empties two of six journeys", () => {
+    const narrow = careArchetypes.filter((archetype) => cliniciansMatchingArchetype(archetype, 1).length === 0);
+    const decided = careArchetypes.filter((archetype) => cliniciansMatchingArchetype(archetype).length === 0);
+
+    expect(narrow.map((archetype) => archetype.id).sort()).toEqual(
+      ["anxiety-differential-hindi", "sleep-and-family-context"].sort(),
+    );
+    expect(decided).toHaveLength(0);
+
+    // Non-vacuity: a threshold above the maximum possible facetStrength (1) must empty every
+    // journey, proving this counts real eligibility rather than a helper that always returns
+    // non-empty regardless of the threshold it is given.
+    const impossible = careArchetypes.filter((archetype) => cliniciansMatchingArchetype(archetype, 1.01).length === 0);
+    expect(impossible).toHaveLength(careArchetypes.length);
+  });
 });
