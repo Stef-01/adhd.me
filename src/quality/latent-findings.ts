@@ -101,10 +101,17 @@ function sourceFiles(): Array<{ module: string; text: string }> {
   return out;
 }
 
-/** Modules with no `// W<n>` header. W200's Y4 census cannot see them. */
+/**
+ * Modules with no `// W<n>` / `// O<n>` / `// AR<n>` header. W200's Y4 census cannot see them.
+ *
+ * W200 only knew the W-series; the pattern widened (surgically, for AR1) once the O-series and
+ * AR-series started landing standalone modules under their own numbering — `src/design/
+ * taste-register.ts` is the first. Narrowing this back to `W\d+` would make every future O/AR
+ * module invisible to the census, which is exactly the failure mode CENSUS-1 exists to catch.
+ */
 export function modulesWithNoUnitHeader(): string[] {
   return sourceFiles()
-    .filter(({ text }) => !/^\/\/ W\d+/.test(text.split("\n")[0] ?? ""))
+    .filter(({ text }) => !/^\/\/ (?:W|O|AR)\d+/.test(text.split("\n")[0] ?? ""))
     .map((f) => f.module)
     .sort();
 }
