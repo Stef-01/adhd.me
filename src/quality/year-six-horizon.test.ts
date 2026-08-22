@@ -22,10 +22,27 @@ const Y5_LAST_UNIT = 260;
 /** How many units a quarter adds, and therefore the threshold the renewed rule compares against. */
 const QUARTER = 13;
 
+/**
+ * The AR-series is a different plan's lane and was never in this check's scope.
+ *
+ * WHY THIS EXCLUSION IS A NARROWING AND NOT A WEAKENING. Every assertion in this file is about
+ * `docs/FIVE-YEAR-PLAN.md` — §8 prices ITS ledger at Y5 close, and "no buildable row left" is the
+ * claim that the five-year arc is spent. The AR-series (`docs/AESTHETIC-REVIEW-PLAN.md`, opened
+ * 2026-08-22) is a three-month lane of the MATCHING year plan. Its rows are `available` by
+ * design and on the day they were written; counting them here would not make this check stronger,
+ * it would make it report a different plan's backlog under this plan's name — which is the exact
+ * fault O168 found in a sweep called "every surface".
+ *
+ * WHAT WOULD BE A WEAKENING, AND IS NOT DONE: excluding a W-row, or excluding a lane because it
+ * happens to be red. The W-filter below is unchanged, and nothing here can hide a five-year unit.
+ */
+const isOtherPlansLane = (id: string): boolean => /^AR\d+$/.test(id);
+
 const rowsWithStatus = (status: string): string[] =>
   LEDGER.split("\n")
     .filter((line) => new RegExp(`^\\| [A-Z0-9-]+ \\| ${status} \\|`).test(line))
     .map((line) => line.split("|")[1]!.trim())
+    .filter((id) => !isOtherPlansLane(id))
     .filter((id) => {
       const numbered = /^W(\d+)$/.exec(id);
       return numbered === null || Number(numbered[1]) <= Y5_LAST_UNIT;
@@ -42,6 +59,18 @@ describe("W260 the horizon's figures come from the ledger", () => {
     // The claim that makes §8 more than an opinion: W260 is the last available row in the plan.
     const open = [...rowsWithStatus("available"), ...rowsWithStatus("claimed")];
     expect(open.filter((id) => id !== "W260"), `still buildable: ${open.join(", ")}`).toEqual([]);
+  });
+
+  it("excludes the AR lane on purpose, and the exclusion is not silently doing nothing", () => {
+    // A filter nobody checks is how a sweep starts measuring the wrong set. Both directions:
+    // the lane must really be there (or this exclusion is dead code pretending to be a decision),
+    // and it must really be excluded (or the scope claim above is false).
+    const arRows = LEDGER.split("\n").filter((line) => /^\| AR\d+ \|/.test(line));
+    expect(arRows.length, "the AR lane is gone — delete this exclusion rather than leaving it").toBeGreaterThan(0);
+    expect(
+      [...rowsWithStatus("available"), ...rowsWithStatus("claimed")].filter((id) => /^AR\d+$/.test(id)),
+      "an AR row reached a five-year-plan count",
+    ).toEqual([]);
   });
 
   it("shows the renewed rule declining to expand, by its own arithmetic", () => {

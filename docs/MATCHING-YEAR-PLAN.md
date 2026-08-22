@@ -408,6 +408,45 @@ order re-sorting, a proposal arriving) and nothing that merely draws the eye.
   error paths, and the taste rules recorded in `docs/DESIGN-QA.md` stand in for the
   taste-skill wherever the loop session lacks it.
 
+## Aesthetic review & working-truth, continuously (founder-directed 2026-08-22)
+
+**The full three-month plan is `docs/AESTHETIC-REVIEW-PLAN.md` (AR-series, AR1–AR36).** It is a lane
+of this plan, not a replacement for one: the UI lane above keeps *changing* the design, and this
+lane builds the system that *reviews* it — plus the proof that the site actually works, which is
+the same problem wearing a different name.
+
+**Why it was opened, measured 2026-08-22.** The tree has 47 page routes, 57 e2e specs and 21 rules
+in its own taste law (`.claude/skills/adhdme-taste`). **Zero of those rules are mapped to the check
+that enforces them**, and 49 of the 57 specs still sweep hardcoded route arrays rather than the
+derived list O168 built. So the honest statement of coverage today is that nobody can state it.
+
+**The failure mode it exists to close.** Four rows in this tree's own record say the same thing:
+O168 (a sweep named "every surface" missed eleven console screens and stayed green), O170 and O171
+(non-vacuity floors found stale in two sweeps, one row apart), O174 (three fixtures failed silently
+and a sweep measured the empty pages), O173 (the CI gate was red for five units and nothing told
+the loop). **The checks here fail by going quietly green.** The AR-series' central commitment is
+therefore not more assertions but the mutation probe: every sweep must prove it can go red, and a
+sweep whose probe cannot make it fail is reported as vacuous and fails the build.
+
+- Phase 1 (wks 1–3): the taste law becomes a register — rule → enforcing check → routes covered,
+  pinned in both directions, with a coverage document that regenerates itself.
+- Phase 2 (wks 4–6): vacuity work — one non-vacuity harness, floors derived rather than
+  transcribed, fixture liveness, the mutation probes, and O173's gate signal reaching the loop.
+- Phase 3 (wks 7–10): visual truth — per-route baselines at two widths × two themes × two motion
+  settings, stability gated before any baseline is accepted, theme parity, fold, reduced-motion
+  equality, type scale, touch floor, focus order.
+- Phase 4 (wks 11–13): "it is all working" — three kinds of zero everywhere, the working-truth
+  sweep, the three journeys asserted on outcomes rather than page loads, cross-tenant truth at the
+  UI layer, performance floors, WCAG 2.2 AA across all 47 routes.
+
+- Interaction with the UI lane: a UI-refinement unit keeps its `qa/` capture and its
+  `docs/DESIGN-QA.md` entry — those records are the reasoning behind the rules and are cited by the
+  register, never replaced by it. What changes is that from AR2 onward a UI unit that introduces a
+  rule must also say which check enforces it, or declare it `unenforced` with a reason.
+- Standing constraints unchanged: the tree's compliance and founder gates outrank every aesthetic
+  rule; synthetic data only, including in every visual baseline; and **no unit weakens a gate to go
+  green** — a vacuous sweep is fixed, never its probe deleted.
+
 ## Allocation machinery (W236 — founder-directed 2026-08-20, O79)
 
 Beside the finder, not inside it: `src/matching/allocation.ts` scores synthetic patient
