@@ -99,10 +99,57 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **M7 (`informed` earns its name, F8) — claimed 2026-08-23T23:58Z by loop-0823h.** Q-M item 7,
-> `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's own rule — the prior
-> firing (loop-0823g) took AR6, an AR-lane unit, so this firing takes the lowest-numbered
-> available O-lane work; M1–M6 are done and M7 has no unmet dependency. Building now.
+> **M7 (`informed` earns its name, F8) — claimed 2026-08-23T23:58Z by loop-0823h. DONE @
+> 10e6943.** Q-M item 7, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's
+> own rule — the prior firing (loop-0823g) took AR6, an AR-lane unit, so this firing takes the
+> lowest-numbered available O-lane work; M1–M6 are done and M7 has no unmet dependency.
+> **THE DEFECT, EXACTLY AS THE APPRAISAL NAMED IT (F8).** `matchQuality` called the order
+> `informed` — "this order was earned" — the instant ANY two scores differed at all. At this
+> roster's real size (two GPs) that bar is trivial: one differing facet always clears it, because
+> there is no partial-tie middle ground at N=2 (M5's `partialTie` finding). The grade that was
+> supposed to be the strongest claim the finder makes was satisfiable by the thinnest possible
+> difference.
+> **THE FIX IS A RATIO, MEASURED AGAINST THE REAL EXAMPLES RATHER THAN GUESSED.** `informed` now
+> requires that at least half of the DISTINCT facets a query reached (`facetKey`-deduped, so one
+> facet reached by two phrasings in the same query counts once) actually separate the roster —
+> `INFORMED_SEPARATION_RATIO = 0.5` in `src/demo/clinicians.ts`, computed by the new
+> `separationRatio`/`separationRatioForNeeds`. **The boundary was chosen by checking it against
+> every already-pinned case, not by picking a number and hoping**: a query asking about exactly
+> one thing (the appraisal's own worked example, weight 24 vs 0) differs on the WHOLE ask — ratio
+> 1, stays informed; a query asking about two things where one ties and one does not differs on
+> HALF the ask — ratio 0.5 — and every existing ratio-0.5 case this tree already calls earned
+> (O13's Hindi-plus-non_judgemental worked example, and all three live clarifier answers in
+> `clarify.test.ts`) sits exactly there, so the boundary is inclusive (`>=`) rather than strict.
+> What stops qualifying is a query asking about three or four things where a single thin facet
+> decides it while the rest tie uninformatively.
+> **MEASURED ON THE REAL CORPUS, NOT ASSUMED.** Diffing `matchQuality` over the exact 447-sentence
+> M6 population before and after: three sentences move from `informed` to `tied` — "a gentle GP
+> who takes trauma seriously and bulk bills" (ratio 0.25), "telehealth assessment and I speak
+> Hindi at home" and "a calm doctor for my anxious mum, she speaks Hindi" (both 0.33) — each one
+> where a single thin facet used to carry the verdict past two or three others that tied.
+> `extractor-quality.test.ts`'s M6 ladder re-pins both directions: informed 300 → 297, tied 54 →
+> 57; W234's own `separated`/`unseparated` tally (band-size based, not `matchQuality`-based) is
+> unaffected and still reads 300/147.
+> **A SECOND, GENUINE DEFECT FOUND WHILE MEASURING THE FIRST.** The same diff surfaced one
+> sentence moving the OTHER way — "English is my second language and appointments move too
+> fast" flipped `tied` → `informed` under the facet-ratio rule alone, because enough facets
+> differ to clear the ratio while their individual gains and losses cancel to an EXACT
+> `weightedScore` tie. A ratio-only rule would have called an actual dead heat "earned". Fixed
+> with a guard in `matchQuality`: an exact score tie across the roster returns `tied` regardless
+> of the facet ratio, checked BEFORE the ratio is computed. Pinned as its own regression case
+> (`clinicians.test.ts`), so this exact cancellation cannot come back unnoticed.
+> **THE BOUNDARY, PINNED IN BOTH DIRECTIONS ON A SYNTHETIC ROSTER**, per the unit's own verify
+> clause — real corpus text is a fact about today's lexicon and could drift; the synthetic case
+> is not. Two `syntheticClinician`s differing on exactly one care area: asking about that one
+> area plus one they both share (ratio 1/2) stays `informed`; asking about that one area plus TWO
+> they both share (ratio 1/3, the identical underlying difference) becomes `tied` —
+> `clinicians.test.ts`'s new `describe("M7 …")` block.
+> Gate: `pnpm verify` green — typecheck clean, 265 files, 4169 tests (4169 passed, 13 skipped; +6
+> new in `clinicians.test.ts`'s M7 block), build clean, audit gate PASS (2 accepted advisories, 0
+> unaccepted). Touched `src/demo/clinicians.ts` (outside `app/`/`src/demo/`/`src/matching/`'s
+> route surface but inside `src/demo/`, so per CLAUDE.md's post-O183 rule): `e2e/finder-flow.spec.ts`
+> (15/15 including the O178/O121 informed-copy assertions) and `e2e/profile-sweep.spec.ts` (1/1),
+> both green.
 
 > **O185 (the join form shows one question and almost nothing else) — founder-directed 2026-08-23,
 > session goal-0823b. DONE.** Founder directive, with an Airtable form as the reference: "make the
