@@ -204,7 +204,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > default + test + doc comment, no route or UI logic touched).
 
 > **M3 (one source of truth for appointment length, F6) — claimed 2026-08-23T03:38Z by
-> loop-0823b. DONE.** Q-M item 3, `docs/MATCHING-YEAR-PLAN.md`. Alternating lanes per the loop's
+> loop-0823b. DONE @ acbb625.** Q-M item 3, `docs/MATCHING-YEAR-PLAN.md`. Alternating lanes per the loop's
 > own rule — the prior firing (loop-0823a) took AR3 (AR-lane), so this one takes the lowest-
 > numbered available O-lane unit; M1 and M2 are done, so that is M3.
 > **THE DISAGREEMENT WAS REAL, AND IT WAS `anubhav-saxena`'s OWN LISTING.** His `appointmentLength`
