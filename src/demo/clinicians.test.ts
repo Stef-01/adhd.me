@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { capacityGrade, clinicians, closedBooksNote, distanceTo, facetStrength, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, ELIGIBILITY_CARE_THRESHOLD, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { capacityGrade, clinicians, closedBooksNote, distanceTo, facetStrength, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, unheldDisplayClaims, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, ELIGIBILITY_CARE_THRESHOLD, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { holdsPreference } from "@/matching/needs";
 import { syntheticClinician } from "./synthetic-clinician";
 import { resolvePlace } from "@/geo/suburbs";
@@ -33,24 +33,26 @@ describe("clinician roster and matching", () => {
   });
 
   /**
-   * O179: THE LONGER-APPOINTMENT REQUEST NOW REACHES NOBODY, AND THAT IS THE ASSERTION.
+   * O179 PINNED THIS AS "unserved" AND SAID EXACTLY WHEN IT SHOULD STOP BEING TRUE: "the day a GP
+   * declares `longer-appointment`, this test goes red and is meant to... that is the day the row
+   * becomes a ranking assertion again." M3 (F6) is that day — not a new declaration typed in to
+   * chase a query, but the discovery that `anubhav-saxena` had ALREADY answered this: his
+   * `appointmentLength` ("Long first appointment, scheduled reviews") is a sourced answer to the
+   * exact question `manner:unhurried`'s own interview item asks, just carried into one field and
+   * not the other until now (roster.ts's M3 comment).
    *
-   * It used to rank Dr Yadav first — "Longer first appointment" was his declared signal and the
-   * only one on the roster. He left, and the honest consequence is not that somebody else inherits
-   * the request: it is that the finder has nobody to offer and must say so. `unserved` is the
-   * grade that says it.
-   *
-   * Pinned as a POSITIVE assertion rather than deleted with the clinician, because the failure this
-   * guards is the tempting one — quietly re-pointing the row at whoever now sorts first and letting
-   * a reader who asked for an unhurried appointment believe they got one. The day a GP declares
-   * `longer-appointment`, this test goes red and is meant to: that is the day the row becomes a
-   * ranking assertion again.
+   * The property under test moves rather than disappears: it is no longer "nobody holds this
+   * preference", it is "the one clinician who holds it is the one whose own wording claims it" —
+   * still a statement about the DECLARATION, not about who happens to sort first.
    */
-  it("says nobody serves a longer first appointment, rather than offering a substitute", () => {
+  it("serves a longer first appointment through the one clinician who actually declares it", () => {
     const request = "I get rushed every time, I want a longer first appointment to tell the whole story";
 
-    expect(matchQuality(request)).toBe("unserved");
-    expect(clinicians.some((clinician) => holdsPreference(clinician, "longer-appointment"))).toBe(false);
+    expect(matchQuality(request)).toBe("informed");
+    expect(rankClinicians(request)[0]!.id).toBe("anubhav-saxena");
+    expect(clinicians.filter((clinician) => holdsPreference(clinician, "longer-appointment")).map((c) => c.id)).toEqual([
+      "anubhav-saxena",
+    ]);
   });
 
   it("keeps the full roster available", () => {
@@ -282,10 +284,60 @@ describe("clinician roster and matching", () => {
 
   it("includes useful billing and access details for every clinician", () => {
     for (const clinician of clinicians) {
-      expect(clinician.practicalSignals.length).toBeGreaterThanOrEqual(2);
+      /**
+       * O183: THE COUNT MOVED FROM TWO TO ONE, AND IT IS NOT A LOOSENED GATE — IT IS A PIN THAT
+       * STOPPED POINTING AT ANYTHING.
+       *
+       * The floor of two was set (O180) against the profile rendering `practicalSignals.slice(0, 2)`:
+       * two was what it took to fill the row. M3 removed that slice. The row is now `accessFacts`,
+       * assembled from the useful practical signals PLUS the derived telehealth/languages/availability
+       * facts, the appointment length, the distance and the closed-books note, deduped and rendered
+       * in full. So `practicalSignals.length` no longer decides whether anything renders, and a
+       * floor of two was requiring a second string for its own sake — which is what pushed two
+       * clinicians into restating a derived fact in vaguer words (O183 removed both).
+       *
+       * What is actually owed to a reader is the ONE fact nothing derives: where this GP stands on
+       * billing. That is asserted below and is unchanged. The rendered row has its own guard in
+       * `e2e/profile-layout.spec.ts`; a count on a raw array was never that guard.
+       */
+      expect(clinician.practicalSignals.length).toBeGreaterThanOrEqual(1);
       expect(clinician.practicalSignals[0]).toMatch(/billing|bills/i);
       expect(clinician.practice).toBeTruthy();
     }
+  });
+
+  /**
+   * O183: A FREE-TEXT SIGNAL MAY NOT RESTATE A FACT THE PAGE DERIVES.
+   *
+   * M3's fix for F6 made the profile derive its highlight facts from declarations —
+   * `telehealthFirstAppointment` renders "Telehealth", `acceptingNewPatients` renders "Accepting
+   * new patients". It did not sweep the free text those derivations replaced, so Dr Anubhav's
+   * listing said "Telehealth" and "Phone consultations", and Dr Anusha's said "Accepting new
+   * patients" and "New patients welcome" — each pair a few millimetres apart on one screen.
+   *
+   * This is F6's own class arriving from the other direction. F6 was a display and a matcher
+   * disagreeing about one fact; this is a display disagreeing with ITSELF about one fact, in two
+   * vocabularies, one of them the vaguer wording the founder asked to retire. The rule is general
+   * so the next derivation cannot leave its predecessor behind.
+   */
+  it("never restates a derived fact in free text", () => {
+    const derived: Array<{ holds: (clinician: (typeof clinicians)[number]) => boolean; restates: RegExp; label: string }> = [
+      { holds: (c) => c.telehealthFirstAppointment === true, restates: /phone consultation|by phone|video call/i, label: "Telehealth" },
+      { holds: (c) => c.acceptingNewPatients, restates: /new patients (welcome|accepted)/i, label: "Accepting new patients" },
+    ];
+
+    for (const clinician of clinicians) {
+      for (const fact of derived) {
+        if (!fact.holds(clinician)) continue;
+        const restated = clinician.practicalSignals.filter((signal) => fact.restates.test(signal));
+        expect(restated, `${clinician.id} restates the derived "${fact.label}" as ${restated.join(", ")}`).toEqual([]);
+      }
+    }
+
+    // Non-vacuous: both rules must have something to be true OF, or this passes by describing
+    // nobody — which is exactly how the duplication survived M3 in the first place.
+    expect(clinicians.filter((c) => c.telehealthFirstAppointment).length).toBeGreaterThan(0);
+    expect(clinicians.filter((c) => c.acceptingNewPatients).length).toBeGreaterThan(0);
   });
 
   /**
@@ -761,5 +813,42 @@ describe("M1: facetStrength is the one function every call site reads", () => {
     // partial answer, F5's exact gap.
     expect(facetStrength(sometimesOnly, facet)).toBeGreaterThanOrEqual(ELIGIBILITY_CARE_THRESHOLD);
     expect(facetStrength(undeclared, facet)).toBeLessThan(ELIGIBILITY_CARE_THRESHOLD);
+  });
+});
+
+describe("M3: no clinician can display a claim the matcher does not hold (F6)", () => {
+  it("is non-vacuous: a fixture whose wording implies the claim without holding it IS caught", () => {
+    // Proves the detector can fail before trusting it to pass — the AR-series' own non-vacuity
+    // law applied to a matching-side check rather than an e2e sweep.
+    const saysLongerButUndeclared = syntheticClinician({
+      appointmentLength: "Longer first appointment on request",
+      manner: [],
+    });
+    expect(unheldDisplayClaims(saysLongerButUndeclared)).toEqual([
+      expect.objectContaining({ field: "appointmentLength", preference: "longer-appointment" }),
+    ]);
+  });
+
+  it("does not fire on wording that never claims the twin (no false positive)", () => {
+    const declaresNothing = syntheticClinician({ appointmentLength: "Appointment lengths set with the practice" });
+    expect(unheldDisplayClaims(declaresNothing)).toEqual([]);
+  });
+
+  it("clears the moment the matcher is given the matching declaration", () => {
+    const saysLongerAndDeclares = syntheticClinician({
+      appointmentLength: "Long first appointment, scheduled reviews",
+      manner: ["unhurried"],
+    });
+    expect(unheldDisplayClaims(saysLongerAndDeclares)).toEqual([]);
+  });
+
+  it("the real roster: every listed clinician's own wording is backed by what the matcher holds", () => {
+    // The general rule, run for real. anubhav-saxena is the instance F6 found — his
+    // appointmentLength ("Long first appointment, scheduled reviews") outran his manner
+    // declaration until this unit; see roster.ts's M3 comment for why adding `unhurried` there
+    // is a consolidation of his own existing answer, not a new characterisation.
+    for (const clinician of clinicians) {
+      expect(unheldDisplayClaims(clinician), clinician.id).toEqual([]);
+    }
   });
 });

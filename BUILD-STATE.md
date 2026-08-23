@@ -203,10 +203,101 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > PASS (2 accepted advisories, 0 unaccepted). No e2e required by this unit's own scope (parameter
 > default + test + doc comment, no route or UI logic touched).
 
+> **O183 (a derivation left its predecessor behind) — founder-directed follow-up 2026-08-23,
+> session goal-0822a. DONE.** Found while auditing what the loop had landed, not by a failing test.
+> **M3 DID THE RIGHT THING AND DID NOT SWEEP UP AFTER IT.** Its fix for F6 made the profile DERIVE
+> its highlight facts from declarations — `telehealthFirstAppointment` renders "Telehealth",
+> `acceptingNewPatients` renders "Accepting new patients" — which is the correct shape and better
+> than the hand-typed string O180 put there. What it did not do is remove the free text those
+> derivations replaced. So Dr Anubhav's profile said **"Telehealth" AND "Phone consultations"**, and
+> Dr Anusha's said **"Accepting new patients" AND "New patients welcome"** — each pair a few
+> millimetres apart on one screen, in two vocabularies, one of them the vaguer wording the founder
+> had explicitly asked to retire. `accessFacts` dedupes by string equality, so it could not see it.
+> **THIS IS F6's OWN CLASS FROM THE OTHER DIRECTION.** F6 was a display and a MATCHER disagreeing
+> about one fact. This is a display disagreeing with ITSELF about one fact. Both are the appraisal's
+> organising finding — the same idea computed in two places — so the guard is written as a general
+> rule (`never restates a derived fact in free text`) with its own non-vacuity check, rather than as
+> two deletions. The next derivation cannot leave its predecessor behind quietly.
+> **AND A PIN WAS RE-AIMED, WHICH IS ARGUED RATHER THAN ASSUMED.** `practicalSignals.length >= 2`
+> was set by O180 against the profile rendering `slice(0, 2)`. M3 removed that slice; the row is now
+> `accessFacts`, assembled from several sources and rendered in full. The floor had stopped guarding
+> anything that renders, and was requiring a second string for its own sake — which is part of why
+> the restatements were there. It is now a floor of ONE plus the unchanged billing-first rule: the
+> one fact nothing derives. **Not a loosened gate — a pin that had stopped pointing at anything**,
+> the same correction O180 made to the same test for the same reason one day earlier.
+> **AND IT FOUND A RED E2E THE LOOP HAD ALREADY PUSHED.** `finder-flow.spec.ts`'s O51 test was
+> failing on `main` before this unit touched anything — confirmed by stashing and re-running against
+> the loop's own HEAD. `pnpm verify` was green, so the loop met the gate as written and pushed;
+> nothing runs the e2e unless a unit's row demands it. **That is O173's finding alive again in a
+> second form** — not "the gate was red and nothing told the loop", but "the gate does not cover
+> this and nothing says so" — and it is the argument for M4's contradiction linter and AR14's
+> gate-state signal, both still `available`.
+> **THE O51 FAILURE ITSELF WAS A STALE TEST, NOT A DEFECT, AND THE DIFFERENCE WAS ESTABLISHED
+> RATHER THAN ASSUMED.** Its query asked for titration + unhurried + substance history and needed
+> somebody to answer SOME of it. Dr Yadav was the roster's `unhurried` declarer; he left (O179), and
+> M3 then carried Dr Anubhav's own appointment-length answer into the `unhurried` facet it also
+> answers. So that query now splits into all-four and none-of-four, and a profile with no evidence
+> correctly renders "nothing in what you said pointed here specifically" rather than a missed list —
+> a missed list beside no evidence would account for a match nobody claimed. The query is replaced
+> with one that still produces a partial fit, and a non-vacuity assertion added: `found` alone was
+> also false on a finder that rendered NOTHING, which is a different failure wearing the same
+> message.
+> **M3 AUDITED AND FOUND SOUND.** Its `unhurried` addition to a real doctor's record is detection
+> plus a hand correction with a citation, not a regex granting a facet: the matcher still reads only
+> the closed-vocabulary field, and the citation argues that `interview.ts` asks the same real-world
+> fact through two items, so his own answer was carried into the second field it answers rather than
+> a characterisation being authored. `DISPLAY_TWINS` is explicitly detection-only.
+> Gate: `pnpm verify` green — 257 files, 4110 tests, audit PASS; profile-sweep, profile-layout,
+> compare and all 15 finder-flow e2e green.
+
 > **M3 (one source of truth for appointment length, F6) — claimed 2026-08-23T03:38Z by
-> loop-0823b.** Q-M item 3, `docs/MATCHING-YEAR-PLAN.md`. Alternating lanes per the loop's own
-> rule — the prior firing (loop-0823a) took AR3 (AR-lane), so this one takes the lowest-numbered
-> available O-lane unit; M1 and M2 are done, so that is M3. *(claim stub — build in progress)*
+> loop-0823b. DONE @ acbb625.** Q-M item 3, `docs/MATCHING-YEAR-PLAN.md`. Alternating lanes per the loop's
+> own rule — the prior firing (loop-0823a) took AR3 (AR-lane), so this one takes the lowest-
+> numbered available O-lane unit; M1 and M2 are done, so that is M3.
+> **THE DISAGREEMENT WAS REAL, AND IT WAS `anubhav-saxena`'s OWN LISTING.** His `appointmentLength`
+> ("Long first appointment, scheduled reviews") and the `manner:unhurried` facet the matcher reads
+> are two authored answers to the SAME real-world question — `interview.ts` asks it twice,
+> `unhurried`'s item ("Do you book a longer first appointment for this...") and `appointmentLength`'s
+> item ("How long is a first appointment... is a longer one bookable?") — and nothing before this
+> forced them to agree. His `appointmentLength` had the answer; his `manner` array did not.
+> **DETECTION, GENERAL: `DISPLAY_TWINS` + `unheldDisplayClaims` (`src/demo/clinicians.ts`).** A
+> registry of (free-text field, pattern, preference) triples, checked by a function that flags any
+> clinician whose own wording asserts a claim `holdsPreference` does not hold for them — one entry
+> today (`appointmentLength` → `longer-appointment`), written so a second twin joins by registering,
+> not by another one-off test. **Detection only, never decision**: `holdsPreference` is UNCHANGED
+> and still reads the closed-vocabulary `manner` field exclusively — the display's wording never
+> itself decides a ranking, the exact inference `telehealthFirstAppointment`'s own doc comment in
+> roster.ts already refuses for a different field. A hit is surfaced to a person; nothing here
+> auto-corrects a record.
+> **THE FIX, SPECIFIC AND BY HAND: `unhurried` added to `anubhav-saxena`'s `manner`.** Not a new
+> characterisation authored by this tree — `real-person-fields.ts`'s "declared... never
+> characterised by us" rule is unbroken because the source is still HIS OWN answer; this carries
+> it into the second field it always also answered, exactly the F5/M1 shape ("two computations of
+> one idea disagreeing") applied to a declaration pair instead of a scoring pair.
+> **THE RIPPLE, FOUND AND RESOLVED, NOT HIDDEN.** O179 pinned "nobody serves a longer first
+> appointment" as a POSITIVE assertion after Dr Yadav left, and said so itself: "the day a GP
+> declares `longer-appointment`, this test goes red and is meant to." That day is this unit.
+> Updated with full reasoning rather than loosened: `clinicians.test.ts`'s O179 pin now asserts
+> `anubhav-saxena` is the one clinician who holds it and ranks first for it; `reach.test.ts`'s
+> W221 contradiction pin moves the same sentence to the "roster DOES declare it" side;
+> `scale-fixture.test.ts`'s Q3 item 10 pin moves 14→15 candidates (a real new splitting question)
+> for BOTH the real roster and the size-20 synthetic fixture — the synthetic one moves too because
+> its manner rates are drawn from the real roster's marginals (unhurried 0/2 → 1/2), exactly the
+> module's own stated law ("a roster edit moves the rates, which moves the measurement, which
+> fails the pin — deliberately"); `tie-quality.test.ts`'s W234 baseline moves 278/169 (62.2%) →
+> 300/147 (67.1%) on an unchanged total of 447 — no sentence joined or left the corpus, every
+> request reaching `manner:unhurried` or `pref:longer-appointment` now separates instead of tying
+> a two-person roster, the same shape O88 named in the other direction.
+> **NOT RUN: e2e.** Not demanded by this unit's own verify scope. Reasoned rather than assumed
+> safe: `e2e/finder-flow.spec.ts`'s O121 test, `e2e/compare.spec.ts` and `e2e/interview.spec.ts`'s
+> literal "longer appointment" query text are all MULTI-ask or unrelated-flow tests whose pinned
+> assertions are about a DIFFERENT gap (bulk-billing, woman-GP, or a console screenshot) — none
+> assert specifically on longer-appointment being unserved. Flagged here rather than silently
+> assumed: a future e2e run is the actual check.
+> Gate: `pnpm verify` green — typecheck clean, 257 files, 4122 total (4109 passed, 13 skipped
+> unchanged; +4 over AR3's 4118: the M3 describe block's 4 new tests in `clinicians.test.ts`, no
+> other test added or removed — every other file's movement above is a PINNED VALUE changing,
+> not a test count changing), build clean, audit gate PASS (2 accepted advisories, 0 unaccepted).
 
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing

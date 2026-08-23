@@ -1,6 +1,6 @@
 import type { CareArchetype, CareArea } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
-import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal } from "@/matching/needs";
+import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 // Value import of copy tables only. `clarify.ts` imports nothing but TYPES from this module, so
 // this direction is the one that keeps the graph acyclic at runtime.
@@ -214,6 +214,45 @@ export function facetStrength(clinician: Clinician, facet: NeedSignal["facet"]):
     return clinician.languages.some((spoken) => spoken.toLowerCase() === facet.language.toLowerCase()) ? 1 : 0;
   }
   return holdsPreference(clinician, facet.preference) ? 1 : 0;
+}
+
+/**
+ * A free-text field a patient reads whose wording can assert the same real-world fact a
+ * structured, closed-vocabulary field answers separately — and can therefore drift from it
+ * silently (M3, F6). `appointmentLength` and the `unhurried` manner trait are one instance:
+ * `interview.ts`'s "length" question and its "unhurried" question ask the same thing in two
+ * places, and nothing before this forced their answers to agree.
+ *
+ * Detection only. Nothing here changes what the matcher reads — `holdsPreference` still reads
+ * the closed-vocabulary field exclusively, so a display twin's wording can never itself decide a
+ * ranking, the exact inference `telehealthFirstAppointment`'s own doc comment (above) already
+ * refuses for a different field. A hit here is surfaced to a person, and the record is corrected
+ * by hand with its own citation, the way M3 corrected `anubhav-saxena`'s.
+ */
+export type DisplayTwin = {
+  /** The clinician field a patient reads as prose. */
+  field: "appointmentLength";
+  /** Whether THIS clinician's own wording, as written, asserts the claim. */
+  impliesClaim: (clinician: Clinician) => boolean;
+  /** The preference the matcher must then hold true. */
+  preference: Preference;
+};
+
+export const DISPLAY_TWINS: readonly DisplayTwin[] = [
+  {
+    field: "appointmentLength",
+    impliesClaim: (clinician) => /\blonger?\s+(?:first\s+)?appointment/i.test(clinician.appointmentLength),
+    preference: "longer-appointment",
+  },
+];
+
+/**
+ * Every display twin whose wording asserts a claim on this clinician that the matcher does not
+ * hold. Empty is the healthy state; a non-empty result is the F6 shape — a promise on the page
+ * the ranker cannot act on.
+ */
+export function unheldDisplayClaims(clinician: Clinician): DisplayTwin[] {
+  return DISPLAY_TWINS.filter((twin) => twin.impliesClaim(clinician) && !holdsPreference(clinician, twin.preference));
 }
 
 /** Whether this clinician answers one stated need at all. Derived from `facetStrength`. */

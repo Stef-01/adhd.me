@@ -116,15 +116,25 @@ describe("Q3 item 10's premise", () => {
   });
 
   /**
-   * The second half of what scale buys, and the more useful half. At two, fourteen askable
+   * The second half of what scale buys, and the more useful half. At two, fifteen askable
    * questions collapse into two distinct reorderings: most of the questions are, in effect,
    * the same question. At twenty every one is distinct.
+   *
+   * Fourteen until M3 (F6): anubhav-saxena's `unhurried` declaration was the missing half of his
+   * own appointmentLength answer, and adding it makes "a longer first appointment" a real
+   * splitting question on this roster again (one holds it, one does not) — one more candidate,
+   * same two-signature shape (roster.ts's M3 comment; O179's "the day a GP declares
+   * longer-appointment" has arrived).
    */
   it("turns duplicate questions into distinct ones", () => {
     const real = clarifierScaleReport(ASK, clinicians);
-    expect([real.candidates, real.distinctSignatures]).toEqual([14, 2]);
+    expect([real.candidates, real.distinctSignatures]).toEqual([15, 2]);
+    // atTwenty moves too, and by the module's own design (see the header: "a roster edit moves
+    // the rates, which moves the measurement, which fails the pin — deliberately"). unhurried's
+    // marginal rate among the real roster went 0/2 -> 1/2, so the synthetic draw now clears the
+    // threshold for some of the twenty fixture entries where it never could before.
     const atTwenty = clarifierScaleReport(ASK, syntheticRoster(20));
-    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([14, 14]);
+    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([15, 15]);
   });
 
   /** Non-vacuity for the whole report: the selector's order is not the tie-break's order. */
