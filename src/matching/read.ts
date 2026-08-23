@@ -761,8 +761,11 @@ export function onBehalfBefore(
  * the reader's OWN standing refusal, so the suppression stands. The subject search walks
  * BACK from the verb over stopwords — auxiliaries ride between subject and verb ("I have
  * said no", "I would have just said no") — and settles on the first thing that is not
- * one: "i"/"ive" means self; any content word ("my GP said no"), a clause boundary, or
- * the sentence start means somebody else. If the two streams have diverged under the O55
+ * one: "i"/"ive"/"we"/"weve" means self; any content word ("my GP said no"), a clause
+ * boundary, or the sentence start means somebody else. "we" is in the set because it is a
+ * STOPWORD — without it the walk steps straight over "we said no to titration" to the
+ * sentence start and reads a couple's own standing refusal as a request for the thing they
+ * refused, which is the one direction this rule must never fail in. If the two streams have diverged under the O55
  * caps the check bails toward keeping the suppression — the conservative side here is
  * the one that refuses, since the veto widens reach.
  *
@@ -771,7 +774,7 @@ export function onBehalfBefore(
  * their own sentences.
  */
 const REPORTING_VERBS = new Set(["said", "told"]);
-const SELF_REPORTERS = new Set(["i", "ive"]);
+const SELF_REPORTERS = new Set(["i", "ive", "we", "weve"]);
 
 export function reportedRefusal(
   sentence: readonly string[],

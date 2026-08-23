@@ -726,6 +726,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // The self-report boundary: "I said no" is a standing refusal however it is tensed —
   // the subject walk crosses auxiliaries ("I have said no"), so neither of these reaches.
   { text: "I said no to titration and I still mean it", never: ["care:titration"] },
+  // The same boundary for the first-person PLURAL. "we" is a stopword, so without it in
+  // SELF_REPORTERS the subject walk steps over it to the sentence start and reads a couple's
+  // own standing refusal as a request for the thing they refused.
+  { text: "we said no to titration and we still mean it", never: ["care:titration"] },
+  { text: "we told them no titration", never: ["care:titration"] },
   { text: "I have said no to the dose before and nothing has changed", never: ["care:titration"] },
   // 3) presence phrasing — INVESTIGATED BY O84 AND REFUSED, the O65 pattern: this stays a
   //    STANDING aspiration because both candidate cues were built and measured into leaks.

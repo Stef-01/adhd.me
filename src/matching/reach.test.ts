@@ -654,6 +654,15 @@ describe("§O83 somebody else's 'no' is a complaint, not the reader's refusal", 
     expect(facets("I said no to titration and I still mean it")).not.toContain("care:titration");
     // The subject walk crosses "have": still the reader speaking.
     expect(facets("I have said no to the dose before and nothing has changed")).not.toContain("care:titration");
+    // FIRST-PERSON PLURAL, the hole this pin closes. "we" is a stopword, so before it joined
+    // SELF_REPORTERS the walk stepped over it to the sentence start — which the rule reads as
+    // somebody else — and a couple's own standing refusal came back as a request for the very
+    // thing they had refused. The one direction this rule must never fail in.
+    expect(facets("we said no to titration and we still mean it")).not.toContain("care:titration");
+    expect(facets("we told them no titration")).not.toContain("care:titration");
+    expect(facets("we've said no to titration")).not.toContain("care:titration");
+    // Still somebody else when the plural possessive fronts a named refuser.
+    expect(facets("our GP said no to titration and I want it")).toContain("care:titration");
   });
 
   it("a bare negator with no reporting verb is untouched — every §O72 suppression stands", () => {
