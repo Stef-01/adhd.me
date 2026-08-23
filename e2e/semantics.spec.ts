@@ -20,6 +20,7 @@ import { test, expect, type Page } from "@playwright/test";
 // every visible field. Nothing in it is tuned to a screen. Recorded here because "this one is hard"
 // was the reason it waited through two rows.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+import { measured } from "./support/measured";
 
 async function signIn(page: Page) {
   await page.goto("/console/signin");
@@ -88,6 +89,10 @@ test("headings, landmarks and field names hold across the site", async ({ page, 
   // Non-vacuity, and it is load-bearing: a selector that stopped matching would otherwise report a
   // flawless sweep of nothing. Measured at 152 headings and 101 fields when this was written.
   console.log(`SEMANTICS ${PUBLIC_ROUTES.length + CONSOLE_ROUTES.length} routes, ${headings} headings, ${fields} fields, ${findings.length} findings`);
+  // AR6: the two runtime-measured populations (not the route-list-collapse guards below, which
+  // are a different check) declared through the shared harness alongside the existing log line.
+  measured("semantics.headings", headings);
+  measured("semantics.fields", fields);
   // NON-VACUITY, LOAD-BEARING, AND RE-MEASURED — a selector that stopped matching would otherwise
   // report a flawless sweep of nothing. O160 set these at 100/60 against 152 headings and 101 fields
   // over 25 routes. The derived list is 45 routes and draws **214 headings and 108 fields**, so a

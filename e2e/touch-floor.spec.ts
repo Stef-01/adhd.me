@@ -13,6 +13,7 @@ import { expect, test, type Page } from "@playwright/test";
 // O148's note below still holds and is why the console half exists at all: it is where practice
 // staff work, sometimes on a phone between patients.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+import { measured } from "./support/measured";
 
 /**
  * Every control on `route` whose HIT AREA is under 44px, with the population it was drawn from.
@@ -118,7 +119,10 @@ test.describe("O14's 44px touch floor", () => {
     // suite, since `/demo` is swept populated and what earlier specs seeded moves the count. Pinning
     // the standalone number would have been a figure that goes stale on a full run, which is the
     // exact staleness O170 found in the console floor and O174 found again one row later.
-    console.log(`POP_PUBLIC ${population} (floor 150, observed 160-163 by run order)`);
+    // AR6: `measured()` is the shared non-vacuity harness — the console.log was this exact line,
+    // hand-written once per sweep. The floor below stays a transcribed number on purpose; deriving
+    // it from the route list is AR7's job, not this one's.
+    measured("touch-floor.public", population);
     expect(population, "the public sweep collapsed").toBeGreaterThan(150);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
@@ -181,7 +185,8 @@ test.describe("O14's 44px touch floor", () => {
     // fixing the fixture seeding moved this from 196 to 207, because eleven controls on
     // `/console/credentials` had never been in the population at all. A figure written beside a
     // floor is a claim about a run, and it goes stale the moment the run changes.
-    console.log(`POP_CONSOLE ${population} (floor 170, observed 207 at 30 routes)`);
+    // AR6: same replacement as the public sweep above.
+    measured("touch-floor.console", population);
     expect(population, "the console sweep collapsed — a clean pass here would mean nothing").toBeGreaterThan(170);
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });

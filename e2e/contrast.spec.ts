@@ -15,6 +15,7 @@ import { expect, test, type Page } from "@playwright/test";
 // somebody remembered on the day and stays green beside every one added afterwards. Twelve routes
 // is what "afterwards" came to here.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { measured } from "./support/measured";
 
 /**
  * Every text element whose contrast is under its WCAG AA floor, with the population it came from.
@@ -109,6 +110,9 @@ test.describe("WCAG AA contrast", () => {
       population += seen;
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
+    // AR6: declares + reports the population through the shared harness, in addition to the
+    // transcribed floor below (AR7's job to derive, not this one's).
+    measured("contrast.public", population);
     expect(population).toBeGreaterThan(400);
     expect(offenders, `under the contrast floor:\n${offenders.join("\n")}`).toEqual([]);
   });
@@ -132,6 +136,8 @@ test.describe("WCAG AA contrast", () => {
       population += seen;
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
+    // AR6: same replacement as the public test above.
+    measured("contrast.console", population);
     expect(population).toBeGreaterThan(600);
     expect(offenders, `under the contrast floor:\n${offenders.join("\n")}`).toEqual([]);
   });

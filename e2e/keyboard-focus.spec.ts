@@ -12,6 +12,7 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
 // button under O14's touch floor on `/console/credentials` and `/console/case-mix`, both of them
 // controls no keyboard test had ever tabbed through.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { measured } from "./support/measured";
 
 /** Signed-in setup plus O174's corrected fixture seeding. */
 async function signInAndSeed(page: Page, request: APIRequestContext) {
@@ -157,6 +158,9 @@ test.describe("keyboard focus", () => {
 
     // Non-vacuity: a walk that stopped tabbing would report a flawless sweep of nothing.
     console.log(`KEYBOARD_PUBLIC ${PUBLIC_ROUTES.length} routes, ${totalStops} stops`);
+    // AR6: the runtime-measured population declared through the shared harness; the floor below
+    // stays a transcribed number (AR7's job to derive).
+    measured("keyboard-focus.public-stops", totalStops);
     expect(totalStops).toBeGreaterThan(100);
     expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
     expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
@@ -176,6 +180,8 @@ test.describe("keyboard focus", () => {
     // O174 each found a non-vacuity floor that had gone stale when the thing it bounded grew, and
     // inheriting `> 100` here would have been the same mistake made deliberately.
     console.log(`KEYBOARD_CONSOLE ${CONSOLE_ROUTES.length} routes, ${totalStops} stops`);
+    // AR6: same replacement as the public walk above.
+    measured("keyboard-focus.console-stops", totalStops);
     expect(totalStops, "the console walk stopped tabbing — a clean result here would mean nothing").toBeGreaterThan(150);
     expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
     expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);

@@ -11,6 +11,7 @@
 // taste-rule: honesty.claim-earned
 
 import { expect, test, type Page } from "@playwright/test";
+import { measured } from "./support/measured";
 
 async function intoResults(page: Page) {
   await page.goto("/finder");
@@ -38,8 +39,9 @@ test("every result is reachable and opens a profile", async ({ page }) => {
   // reachability. The roster is now two real GPs rather than fifteen invented ones, and the
   // property this test is actually for — every row that renders can be opened — holds at any
   // size. Asserting a floor of three again would be asserting that the directory must contain
-  // people it does not contain.
-  expect(count).toBeGreaterThan(0);
+  // people it does not contain. AR6: the "not zero" half is `measured()` now, not a bespoke
+  // `toBeGreaterThan(0)` — this was the exact shape it was built to replace.
+  measured("finder-flow.reachable-results", count);
 
   // The first and the last, because an index bug usually shows at an end.
   for (const index of [0, count - 1]) {
