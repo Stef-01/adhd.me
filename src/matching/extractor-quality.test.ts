@@ -7,10 +7,20 @@
 // sentences correctly parsed. THAT IS WHY `rankingLadderAll` AND `rankingLadderCorrectlyParsed`
 // ARE IDENTICAL BELOW: with zero parser misses in the population, excluding parser misses from the
 // denominator excludes nothing. This is not the split failing to do anything — it is the split
-// reporting, correctly, that on today's corpus the entire tied/unserved population (147 of 447) is
+// reporting, correctly, that on today's corpus the entire tied/unserved population is
 // ranker/roster-side, not parser-side. The non-vacuity tests below prove the split DOES move
 // (`rankingLadderCorrectlyParsed` excludes a sentence `rankingLadderAll` counts) the moment a
 // parser defect exists — it is the corpus, not the code, that currently reports zero.
+//
+// RE-MEASURED, 2026-08-23, after M7 (F8): `matchQuality`'s `informed` grade tightened from "any
+// difference at all" to "at least half of the distinct facets asked actually separate the
+// roster" (`src/demo/clinicians.ts`'s `INFORMED_SEPARATION_RATIO`). informed 300 -> 297, tied
+// 54 -> 57 — three real sentences move ("a gentle GP who takes trauma seriously and bulk bills",
+// "telehealth assessment and I speak Hindi at home", "a calm doctor for my anxious mum, she
+// speaks Hindi"), each one where a single thin facet used to carry an `informed` verdict past
+// two or three others that tied. This is the parser doing nothing different — `extractorReport`
+// above is untouched — so it is exactly the M6 split's own claim: a number moved, and it was the
+// ranker's definition of "earned" that moved it, not the lexicon.
 import { describe, expect, it } from "vitest";
 import type { CorpusEntry } from "./corpus";
 import {
@@ -47,12 +57,13 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
   it("the ranking ladder split is IDENTICAL today, and that identity is itself the finding", () => {
     const all = rankingLadderAll();
     const parsed = rankingLadderCorrectlyParsed();
-    expect(all).toEqual({ total: 447, informed: 300, tied: 54, unmatched: 0, unserved: 93 });
+    expect(all).toEqual({ total: 447, informed: 297, tied: 57, unmatched: 0, unserved: 93 });
     expect(parsed).toEqual(all);
-    // Cross-checked against W234's own tally: informed lines up with `separated` (300) and
-    // tied+unmatched+unserved lines up with `unseparated` (147) on this two-person roster.
-    expect(parsed.informed + 0).toBe(300);
-    expect(parsed.tied + parsed.unmatched + parsed.unserved).toBe(147);
+    // W234's own tally (`separated`/`unseparated`) is unaffected by M7 — it classifies by RANK
+    // BAND size, not by `matchQuality`'s stricter `informed` grade, so it still reads 300/147
+    // (`tie-quality.test.ts`) even though this ladder's informed/tied split moved beneath it.
+    expect(parsed.informed).toBe(297);
+    expect(parsed.tied + parsed.unmatched + parsed.unserved).toBe(150);
   });
 });
 

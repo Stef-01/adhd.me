@@ -434,6 +434,52 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
  */
 export type MatchQuality = "informed" | "tied" | "unmatched" | "unserved";
 
+/**
+ * The smallest share of the DISTINCT facets a query reached that must actually separate the
+ * roster before the order earns `informed` — M7 (F8, Q-M Phase 2).
+ *
+ * THE DEFECT THIS FIXES. `matchQuality` used to call the order `informed` the moment ANY two
+ * scores differed AT ALL — the appraisal's own diagnosis (F8): at this roster's real size (two
+ * GPs) one differing facet always clears that bar, because there is no partial-tie middle
+ * ground at N=2 (M5's `partialTie` finding). "This order was earned" was thereby the weakest
+ * claim the grade could make.
+ *
+ * WHY HALF, MEASURED RATHER THAN GUESSED. A query asking about exactly one thing (the
+ * appraisal's own worked example, weight 24 vs 0) differs on the WHOLE ask — ratio 1, correctly
+ * `informed`. A query asking about two things where one ties and one does not differs on HALF
+ * the ask — ratio 0.5 — and every existing pinned case at that ratio (O13's Hindi-plus-
+ * non_judgemental example, and all three live clarifier answers in `clarify.test.ts`) is one
+ * this tree already calls earned, so the boundary is inclusive rather than strict. What stops
+ * qualifying: a query asking about three or four things where a single thin facet decides it
+ * while the rest tie uninformatively. Measured on the real 447-sentence corpus, exactly three
+ * sentences move from `informed` to `tied` — "a gentle GP who takes trauma seriously and bulk
+ * bills" (ratio 0.25), "telehealth assessment and I speak Hindi at home" and "a calm doctor for
+ * my anxious mum, she speaks Hindi" (both 0.33) — and the M6 ladder tally moves with them
+ * (`extractor-quality.test.ts` re-pins both `informed`/`tied`).
+ */
+export const INFORMED_SEPARATION_RATIO = 0.5;
+
+/** `separationRatio`'s computation, given needs already resolved — the shared inner step. */
+function separationRatioForNeeds(needs: readonly NeedSignal[], roster: readonly Clinician[]): number | null {
+  if (needs.length === 0) return null;
+  const askedFacets = new Map<string, NeedSignal["facet"]>();
+  for (const need of needs) askedFacets.set(facetKey(need.facet), need.facet);
+  const differing = [...askedFacets.values()].filter(
+    (facet) => new Set(roster.map((clinician) => facetStrength(clinician, facet))).size > 1,
+  ).length;
+  return differing / askedFacets.size;
+}
+
+/**
+ * The fraction of distinct facets a query reached on which the roster's declared strength
+ * actually differs — the measure `matchQuality` grades `informed` against. `null` when the
+ * query reached nothing. Exported so the boundary can be asserted directly rather than only
+ * through the four-way label.
+ */
+export function separationRatio(query: string, roster: readonly Clinician[] = clinicians): number | null {
+  return separationRatioForNeeds(needsFor(query, roster), roster);
+}
+
 export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
   const needs = needsFor(query, roster);
   if (needs.length === 0) return "unmatched";
@@ -445,10 +491,14 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
   // difference (the note said "`unservedAsks` names whose gap it is") and said it out loud only
   // in a comment; now it says it to the reader.
   if (scores.every((score) => score === 0)) return "unserved";
-  const keys = profiles.map((profile) =>
-    `${profile.constraintCoverage}|${profile.constraintScore}|${profile.weightedScore}|${profile.coverage}`,
-  );
-  return new Set(keys).size > 1 ? "informed" : "tied";
+  // The facet-count ratio alone is not sufficient: on "English is my second language and
+  // appointments move too fast" enough facets differ to clear the ratio while their individual
+  // gains and losses cancel to an EXACT weightedScore tie — the ratio said informed on a query
+  // where the actual order the reader would see is a dead heat. `informed` must still imply a
+  // real score gap, never just a real facet-count gap.
+  if (new Set(scores).size === 1) return "tied";
+  const ratio = separationRatioForNeeds(needs, roster)!;
+  return ratio >= INFORMED_SEPARATION_RATIO ? "informed" : "tied";
 }
 
 /**

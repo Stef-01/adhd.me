@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { capacityGrade, clinicians, closedBooksNote, distanceTo, facetStrength, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, unheldDisplayClaims, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, ELIGIBILITY_CARE_THRESHOLD, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
+import { capacityGrade, clinicians, closedBooksNote, distanceTo, facetStrength, getPersonalizedMatch, locationLabel, matchEvidence, matchQuality, missedAskCopy, missedAsks, needsFor, roundScore, scoreAgainst, separationRatio, unheldDisplayClaims, unservedAsks, CAPACITY_FRESH_DAYS, CLOSED_BOOKS_COPY, ELIGIBILITY_CARE_THRESHOLD, INFORMED_SEPARATION_RATIO, rankBands, rankClinicians, rankCliniciansNear, topTieNote } from "./clinicians";
 import { holdsPreference } from "@/matching/needs";
 import { syntheticClinician } from "./synthetic-clinician";
 import { resolvePlace } from "@/geo/suburbs";
@@ -850,5 +850,64 @@ describe("M3: no clinician can display a claim the matcher does not hold (F6)", 
     for (const clinician of clinicians) {
       expect(unheldDisplayClaims(clinician), clinician.id).toEqual([]);
     }
+  });
+});
+
+describe("M7 `informed` earns its name (F8) — the boundary, pinned in both directions", () => {
+  // A synthetic two-person roster where the only variable is which care areas each declares, so
+  // the facet count asked and the facet count that differs are both under the test's control —
+  // the real roster cannot isolate this, because it only ever offers whatever combination the
+  // real clinicians happen to have declared.
+  const both = syntheticClinician({ id: "both", careAreas: ["adhd-assessment", "depression", "anxiety"] as CareArea[] });
+  const missingAnxiety = syntheticClinician({ id: "missing-anxiety", careAreas: ["adhd-assessment", "depression"] as CareArea[] });
+  const roster = [missingAnxiety, both];
+
+  it("ratio 1/2 (one of two asked facets differs) clears the boundary — informed", () => {
+    const query = "an ADHD assessment and anxiety";
+    expect(separationRatio(query, roster)).toBe(0.5);
+    expect(INFORMED_SEPARATION_RATIO).toBe(0.5);
+    expect(matchQuality(query, roster)).toBe("informed");
+  });
+
+  it("ratio 1/3 (the same single differing facet, with two more tied ones added to the ask) falls short — tied", () => {
+    // The identical anxiety difference as the case above; the only change is that the query now
+    // also asks about two facets both clinicians answer alike, diluting the share of the ask
+    // that actually separates them below half. This is the exact shape F8 named: one thin facet
+    // must not carry the whole verdict once there is more to compare on.
+    const query = "an ADHD assessment and low mood and anxiety";
+    expect(separationRatio(query, roster)).toBeCloseTo(1 / 3);
+    expect(matchQuality(query, roster)).toBe("tied");
+  });
+
+  it("a query reaching nothing this roster differs on stays tied regardless of facet count", () => {
+    const query = "an ADHD assessment and low mood";
+    expect(separationRatio(query, roster)).toBe(0);
+    expect(matchQuality(query, roster)).toBe("tied");
+  });
+
+  describe("real corpus sentences the tightened boundary moves, measured 2026-08-23", () => {
+    it("three sentences move from informed to tied — a single thin facet no longer carries the verdict", () => {
+      // Each of these asks about 3-4 facets and only ONE differs, so the old "any difference at
+      // all" rule called them earned; under the >= 1/2 boundary they are not.
+      expect(matchQuality("a gentle GP who takes trauma seriously and bulk bills")).toBe("tied");
+      expect(matchQuality("telehealth assessment and I speak Hindi at home")).toBe("tied");
+      expect(matchQuality("a calm doctor for my anxious mum, she speaks Hindi")).toBe("tied");
+    });
+
+    it("does not move a sentence whose facets happen to differ in a way that cancels to an exact score tie", () => {
+      // Found while measuring the three moves above: enough facets differ here to clear the
+      // ratio, but the gains and losses net to an EXACT weightedScore tie — `matchQuality` must
+      // still say `tied`, because the order the reader would actually see is a dead heat, not an
+      // earned one. `separationRatio` alone would have called this informed; the score-tie guard
+      // in `matchQuality` is what catches it.
+      const query = "English is my second language and appointments move too fast";
+      expect(new Set(clinicians.map((c) => scoreAgainst(c, needsFor(query)))).size).toBe(1);
+      expect(matchQuality(query)).toBe("tied");
+    });
+
+    it("O13's own worked example still earns its order — one of two asked facets, ratio exactly 1/2", () => {
+      expect(separationRatio("Kind Hindi speaking and non judgemental")).toBe(0.5);
+      expect(matchQuality("Kind Hindi speaking and non judgemental")).toBe("informed");
+    });
   });
 });
