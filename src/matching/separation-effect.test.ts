@@ -1,0 +1,146 @@
+// M5 (F7) verify gate: the effect-size metric, measured against a permuted null, PROVEN to
+// resist the exact defect it replaces rather than merely trusted to.
+//
+// THE NUMBERS BELOW ARE MEASURED, 2026-08-23, k=50 shuffles, the full 447-sentence reaching
+// corpus (`corpusRun()`), against `syntheticRoster`'s deterministic draw. Move them ONLY with a
+// re-measured run in the commit that moves them, same law as `tie-quality.test.ts`'s own pin.
+import { describe, expect, it } from "vitest";
+import { clinicians } from "@/demo/clinicians";
+import { corpusRun, tieQualityReport } from "./tie-quality";
+import { syntheticRoster } from "./scale-fixture";
+import {
+  isMonotonicNonDecreasing,
+  realRosterSeparationEffect,
+  separationEffect,
+  type SeparationEffectReport,
+} from "./separation-effect";
+
+const SIZES = [2, 3, 5, 10, 25] as const;
+const K = 50;
+
+/**
+ * The curve M5 asks for: the same corpus against synthetic rosters of increasing size. Built
+ * HERE rather than in `separation-effect.ts` because `scale-fixture.ts`'s own hard law
+ * (`scale-fixture.test.ts`) is that no non-test module under `app/` or `src/` may import it —
+ * a synthetic clinician must never be one import away from a patient screen. Test files may.
+ */
+function separationEffectCurve(sizes: readonly number[], sentences: readonly string[], k: number): SeparationEffectReport[] {
+  return sizes.map((size) => separationEffect(sentences, syntheticRoster(size), k));
+}
+
+const PINNED_CURVE: SeparationEffectReport[] = [
+  { rosterSize: 2, k: K, total: 447, observedSeparationRate: 0.342, nullMeanSeparationRate: 0.342, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 447, observedSeparationRate: 0.136, nullMeanSeparationRate: 0.136, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 5, k: K, total: 447, observedSeparationRate: 0.148, nullMeanSeparationRate: 0.148, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 10, k: K, total: 447, observedSeparationRate: 0.004, nullMeanSeparationRate: 0.015, nullStdSeparationRate: 0.006, effect: -0.011 },
+  { rosterSize: 25, k: K, total: 447, observedSeparationRate: 0.002, nullMeanSeparationRate: 0.004, nullStdSeparationRate: 0.003, effect: -0.002 },
+];
+
+const PINNED_REAL: SeparationEffectReport = {
+  rosterSize: 2,
+  k: K,
+  total: 447,
+  observedSeparationRate: 0.671,
+  nullMeanSeparationRate: 0.671,
+  nullStdSeparationRate: 0,
+  effect: 0,
+};
+
+describe("M5 the separation effect size, over synthetic rosters", () => {
+  const curve = separationEffectCurve(SIZES, corpusRun(), K);
+
+  it("holds the measured curve exactly, in both directions", () => {
+    expect(curve).toEqual(PINNED_CURVE);
+  });
+
+  it(
+    "REPRODUCES THE DEFECT ON THE RAW SCALAR, using nothing but the fixture already in the tree: " +
+      "shrinking the synthetic roster 3 -> 2 (zero real declaration change — `syntheticRoster` " +
+      "draws every facet independently, no correlation is planted) more than doubles the naive " +
+      "separationRate, 0.136 -> 0.342, exactly the shape W234/M3's real 62.2% -> 67.1% jump had " +
+      "when Dr Yadav's departure shrank the real roster the same way",
+    () => {
+      const naive3 = tieQualityReport(corpusRun(), syntheticRoster(3)).separationRate;
+      const naive2 = tieQualityReport(corpusRun(), syntheticRoster(2)).separationRate;
+      expect(naive3).toBe(0.136);
+      expect(naive2).toBe(0.342);
+      expect(naive2).toBeGreaterThan(naive3);
+    },
+  );
+
+  it(
+    "AND THE EFFECT SIZE DOES NOT: netted against a permuted null computed at the SAME size, " +
+      "the same 3 -> 2 shrink shows zero movement — the naive jump was entirely the size " +
+      "artefact this metric exists to remove, not a signal in the (absent, in this fixture) " +
+      "declarations",
+    () => {
+      const size3 = curve.find((point) => point.rosterSize === 3)!;
+      const size2 = curve.find((point) => point.rosterSize === 2)!;
+      expect(size3.effect).toBe(0);
+      expect(size2.effect).toBe(0);
+    },
+  );
+
+  it("is monotonic non-decreasing in roster size within the null's own noise floor", () => {
+    expect(isMonotonicNonDecreasing(curve)).toBe(true);
+  });
+
+  it(
+    "NON-VACUOUS, FIRST WAY: the tolerance is doing real work, not passing by construction. " +
+      "This exact measured curve dips 0.011 from N=5 to N=10 (a single synthetic roster's own " +
+      "sampling noise, not a defect) — a ZERO-tolerance check on this SAME curve fails, so the " +
+      "default's `true` above is the tolerance correctly absorbing named noise, not a check that " +
+      "cannot fail",
+    () => {
+      const size5 = curve.find((point) => point.rosterSize === 5)!;
+      const size10 = curve.find((point) => point.rosterSize === 10)!;
+      expect(size10.effect).toBeLessThan(size5.effect);
+      expect(isMonotonicNonDecreasing(curve, 0)).toBe(false);
+    },
+  );
+
+  it(
+    "NON-VACUOUS, SECOND WAY: a real disqualifying regression — a drop far larger than any " +
+      "measured null std — still fails at the default tolerance. Mutates ONE point of the real " +
+      "curve to reproduce the raw scalar's own magnitude of jump (naive 0.136 -> 0.342, i.e. a " +
+      "drop of 0.206 if read in the shrinking direction) and confirms the checker catches it",
+    () => {
+      const mutated = curve.map((point, index) => (index === 3 ? { ...point, effect: point.effect - 0.206 } : point));
+      expect(isMonotonicNonDecreasing(mutated)).toBe(false);
+    },
+  );
+
+  it("reports the named weakness rather than hiding it: the null is degenerate at N=2 and N=3", () => {
+    // At these sizes every one of the K shuffles reproduced the SAME separationRate as the
+    // unshuffled roster (std 0) — the permutation space is genuinely this thin, not a bug that
+    // happens to look clean. Asserted so a future corpus/roster change that quietly fixes this
+    // (a nonzero std appearing) is visible rather than silently accepted either way.
+    const size2 = curve.find((point) => point.rosterSize === 2)!;
+    const size3 = curve.find((point) => point.rosterSize === 3)!;
+    expect(size2.nullStdSeparationRate).toBe(0);
+    expect(size3.nullStdSeparationRate).toBe(0);
+  });
+});
+
+describe("M5 the real roster's own effect (post-O179, two clinicians)", () => {
+  it("holds the measured baseline exactly", () => {
+    expect(realRosterSeparationEffect(K)).toEqual(PINNED_REAL);
+  });
+
+  it(
+    "reads as: the M3 declaration (F6) separates through a SINGLE dimension (manner), which a " +
+      "permutation of that same dimension cannot un-separate at N=2 — exactly one of two people " +
+      "holds it either way — so this permutation test correctly reports zero EXTRA, cross-" +
+      "dimension synergy beyond what a single true fact already earns. It is not saying the " +
+      "declaration is worthless; it is saying this specific test measures a different thing " +
+      "(compound cross-dimension correlation) than M3 supplied, and says so rather than " +
+      "reporting a number that would be read as disagreeing with M3",
+    () => {
+      expect(realRosterSeparationEffect(K).effect).toBe(0);
+    },
+  );
+
+  it("is deterministic: two independent calls at the same k and seed agree exactly", () => {
+    expect(realRosterSeparationEffect(K)).toEqual(separationEffect(corpusRun(), clinicians, K, "M5-real"));
+  });
+});

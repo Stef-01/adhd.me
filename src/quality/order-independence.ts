@@ -172,6 +172,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/matching/separation-effect.ts",
+    folds: 2,
+    disposition: {
+      kind: "rationale",
+      why: "TWO folds (M5), both order-independent for the same reason `emotional-fit.ts`'s is: `separationEffect` sums a FIXED-length array of K null-shuffle separation rates to a mean, then sums squared deviations from that mean to a variance. Both are addition over a total (a mean and a variance are scalars nobody is ranked by), not a selection of a winner — `nullRates[i]` is one shuffle's own measured rate, not a position-dependent read, so permuting which index holds which shuffle's result changes nothing either sum accumulates. The array itself is built by `Array.from({length: k}, (_, i) => ...)`, a fixed 0..k-1 walk with a seeded, index-keyed shuffle per `i` — the SAME index order every run, which is what makes the whole report a pin rather than a flake, but is a determinism property of the seed, not of this fold.",
+    },
+  },
+  {
     module: "src/messaging/approval.ts",
     folds: 1,
     disposition: {
