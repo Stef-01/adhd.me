@@ -143,11 +143,64 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
-> **M5 (a roster-size-invariant quality metric, F7) — claimed 2026-08-23T07:40Z by loop-0823d.**
-> Q-M item 5, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's own rule — the
-> last loop firing to touch this ledger (loop-0823c) took AR4, an AR-lane unit; the O-series' own
-> Q1/Q2 items remain done/blocked, so the lowest-numbered available O-lane work is Q-M's M5 (M1–M4
-> are done). IN PROGRESS.
+> **M5 (a roster-size-invariant quality metric, F7) — claimed 2026-08-23T07:40Z by loop-0823d.
+> DONE @ 3bd989d.** Q-M item 5, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the
+> loop's own rule — the last loop firing to touch this ledger (loop-0823c) took AR4, an AR-lane
+> unit; the O-series' own Q1/Q2 items remain done/blocked, so the lowest-numbered available
+> O-lane work is Q-M's M5 (M1–M4 are done).
+> **THE DEFECT, REPRODUCED ON DEMAND RATHER THAN JUST CITED.** `tieQualityReport`'s
+> `separationRate` rose 62.2% -> 67.1% (M3's own note) purely because Dr Yadav's departure
+> (O179) shrank the real roster from three to two and `partialTie` became structurally
+> impossible at N=2 — nobody's declarations moved. `separation-effect.test.ts` reproduces the
+> SAME shape on `syntheticRoster` (zero real correlation planted — every facet is drawn
+> independently, per that fixture's own doc comment) purely by shrinking 3 -> 2: naive
+> separationRate 0.136 -> 0.342, more than double, on data engineered to carry no signal.
+> **THE METRIC: AN EFFECT SIZE AGAINST A PERMUTED NULL** (`src/matching/separation-effect.ts`).
+> For K=50 shuffles, every declaration DIMENSION `facetStrength`/`holdsPreference` read (gender,
+> telehealth, bulk billing, languages, manner, the paired careAreas/careAreasSometimes) is
+> independently reassigned across the roster's N clinicians, one whole block per clinician per
+> dimension — so a dimension's own internal shape and marginal rate survive exactly (reshuffling
+> changes WHO has what, never HOW MANY, so roster-wide aggregates like rarity's `declaredMass`
+> are provably unaffected), and what breaks is the CROSS-dimension correlation a compound
+> query's tie depends on. `separationRate` against that shuffled roster is what chance alone
+> produces at this exact size and these exact rates; `effect = observed - mean(null)`.
+> **MEASURED, NOT ASSUMED FLAT: on the same 3 -> 2 shrink the effect is 0 -> 0** — the naive
+> jump was entirely the size artefact this metric exists to remove. The real two-person roster's
+> own effect is also exactly 0 (k=50): M3's `unhurried` declaration separates through a SINGLE
+> dimension, which this permutation cannot un-separate at N=2 (exactly one of two people holds
+> it either way), so the test reads correctly as "no EXTRA cross-dimension synergy detected", not
+> as a disagreement with M3.
+> **DISQUALIFICATION IS EXECUTABLE, PER THE SPEC'S OWN DEMAND, AND CHECKED NON-VACUOUS BOTH
+> WAYS.** `isMonotonicNonDecreasing` asserts the curve over synthetic sizes [2,3,5,10,25] does
+> not rise as the roster shrinks, with a tolerance of 3× the larger adjacent `nullStd` (floor
+> 0.005) — NOT an escape hatch: a zero-tolerance check on this unit's own measured curve fails
+> (N=5->N=10 dips 0.011 against a std of 0.006, one synthetic roster's own sampling noise, not a
+> defect), proven in the test by calling the checker with `stdMultiplier=0` and confirming it
+> returns false; a MUTATED curve reproducing the raw scalar's own magnitude of jump (0.206) still
+> fails at the real, non-zero tolerance, proving the tolerance does not swallow a genuine
+> regression either.
+> **NAMED WEAKNESS, PINNED RATHER THAN HIDDEN.** At N=2 and N=3 every one of the 50 shuffles
+> reproduced the exact unshuffled rate — `nullStdSeparationRate: 0`, asserted directly — because
+> the permutation space is genuinely this thin at those sizes (per-dimension swap-or-not only).
+> Reported alongside the effect rather than divided through (a z-score here would blow up exactly
+> where the null is thinnest) so a reader can see how much of a small-roster effect to trust.
+> **ONE MODULE, TWO UNRELATED GATE FIXES, BOTH SURGICAL AND BOTH PRECEDENTED.** (1) CENSUS-1
+> (W210, widened for AR1) only recognised `// W<n>` / `// O<n>` / `// AR<n>` headers; Q-M's own
+> `M<n>` numbering had never shipped a standalone module before, so `separation-effect.ts`
+> counted as a twelfth header-less module. Widened to `(?:W|O|AR|M)\d+`, exactly AR1's own fix
+> repeated for the family that hit the gap this time; `HEADERLESS_AT_W210` stays 11 once the new
+> file carries a real header, not raised. (2) `order-independence.ts`'s W167 fold register does
+> not know this module's two folds (a mean and a variance over a fixed-length, seed-ordered
+> array of K null-shuffle rates — both plain commutative sums to a scalar nobody is ranked by,
+> same shape as `emotional-fit.ts`'s own entry); declared with a rationale rather than silenced.
+> **SCALE-FIXTURE'S HARD LAW RESPECTED, NOT WORKED AROUND.** The synthetic-roster curve builder
+> lives in `separation-effect.test.ts`, not in the source module — `scale-fixture.ts` may be
+> imported by test files only (its own guard, W193), and the source module never imports it.
+> Gate: `pnpm verify` green — typecheck clean, 262 files, 4151 tests (4138 passed, 13 skipped;
+> +10 new in `separation-effect.test.ts`), build clean, audit gate PASS (2 accepted advisories, 0
+> unaccepted). Touched `src/matching/`, so per CLAUDE.md's post-O183 rule: `e2e/finder-flow.spec.ts`
+> (15/15) and `e2e/profile-sweep.spec.ts` (1/1) both green, run explicitly rather than inferred
+> from the unchanged production matching code.
 
 > **M1 (one weight function, and everything downstream consumes it) — claimed 2026-08-22T19:39Z
 > by loop-0822c. DONE @ 0a7430f.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating
