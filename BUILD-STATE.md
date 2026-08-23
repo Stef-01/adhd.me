@@ -99,6 +99,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **M6 (grade the parser and the ranker separately, F8) — claimed 2026-08-23T19:38Z by
+> loop-0823f.** Q-M item 6, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's
+> own rule — the last loop firing to touch this ledger (loop-0823e) took AR5, an AR-lane unit, so
+> this firing takes an O-lane unit; the O-series' own Q1/Q2 items remain done/blocked and M1–M5 are
+> done, so the lowest-numbered available O-lane work is Q-M's M6.
+
 > **O40 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
 > loop-0819a as O39; RENUMBERED to O40 in the same firing when PR #7's title ('Terms of use — O39') became visible on rebase. Same collision as O30/PR #4; the claim's timestamp and holder are unchanged. DONE 2026-08-19.** `readNeeds` has no negation handling (the transcript reader does), and a probe
 > confirms the year plan's exact class: "I don't want my dose changed" reaches titration, "I'm
