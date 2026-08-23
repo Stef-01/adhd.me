@@ -5192,6 +5192,20 @@ textarea:focus-visible {
   .join-steps button { flex: 1 1 0; padding: 0 12px; }
 }
 
+/* O184: the material-interest disclosure on a clinician listing.
+   INK, and the direction matters. This is a disclosure about a named real person, sited exactly
+   where the listing is read — so taking it OFF the accent (O166) must not make it quieter. Ink on
+   paper is the highest-contrast pair in the palette; amber is reserved for the one value that
+   changes. The measure is kept short so it reads as a statement rather than as body prose a reader
+   scrolls past. */
+.disclosure-line {
+  max-width: 52ch;
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
 .join-form { display: grid; gap: 40px; }
 .join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }
 /* O136: legends are SECTION HEADINGS, not values that change. Six of them sat in the accent

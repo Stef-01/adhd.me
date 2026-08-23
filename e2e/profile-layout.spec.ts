@@ -48,7 +48,12 @@ for (const [name, viewport] of [
       expect(layout.aboutTop).toBeLessThan(layout.viewportHeight / 2);
     }
 
-    await expect(page.getByText(/Declared interest in ADHD\.ME/i)).toHaveCount(0);
+    // O184: WAS `toHaveCount(0)` — a third guard that had been turned around to enforce the
+    // disclosure's removal. This spec is about LAYOUT, so it should never have had an opinion about
+    // whether a compliance notice exists; the count is asserted here only because the assertion was
+    // already present and pointing the wrong way. The disclosure belongs in the identity block and
+    // that is what this now checks.
+    await expect(page.locator(".disclosure-line")).toHaveCount(1);
     await expect(page.getByText("Live on Healthengine", { exact: true })).toHaveCount(0);
     await expect(page.locator(".profile-footer").getByRole("button")).toHaveCount(1);
     await context.close();

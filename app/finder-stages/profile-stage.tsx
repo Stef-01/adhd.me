@@ -107,6 +107,24 @@ export function ProfileStage({
             <h1>{clinician.name}</h1>
             <p className="clinician-meta">{shortTitle(clinician.title)}</p>
             <p className="profile-location">{locationLabel(clinician)}</p>
+            {/* O184: the material-interest disclosure, back on the listing it concerns.
+                SITED IN THE IDENTITY BLOCK, because that is where a reader is deciding who this
+                person is — a conflict notice met AFTER a view has formed has already failed. Ink at
+                the same weight as the rest of the identity: O166 established that taking this off
+                the accent must not make it quieter.
+                THE SHORT LABEL RENDERS, NOT THE FULL SENTENCE — restored exactly as
+                `OwnershipDisclosure` had it. The long form is a factual claim about a named person
+                held in the roster and reviewed there; the label is what O158 built for rendering
+                "beside the listing", and the two are not interchangeable. Putting the paragraph
+                here instead pushed the bio below the half-viewport line at 390px, which
+                `profile-layout.spec.ts` caught — the fold rule and the disclosure both hold with
+                the field each was designed for. Whether a patient should ALSO meet the full
+                sentence, and where, is a design question this unit does not answer: it was never
+                on the profile, and inventing a placement while restoring a control is how a
+                restoration turns into a redesign nobody reviewed. */}
+            {clinician.disclosedInterest && clinician.disclosedInterestLabel && (
+              <p className="disclosure-line">{clinician.disclosedInterestLabel}</p>
+            )}
           </div>
         </div>
 

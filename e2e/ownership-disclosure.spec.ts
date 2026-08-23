@@ -40,8 +40,14 @@ test.beforeEach(async ({ request }) => {
 /**
  * O156 (founder-directed): "remove all mentions of founder on entire site do throough code audit".
  *
- * The word and the old relationship disclosure are now both intentionally absent from the public
- * product. This sweep keeps that removal true across every rendered route.
+ * The WORD is intentionally absent from the public product, and this sweep keeps that true across
+ * every rendered route.
+ *
+ * O184: this paragraph used to say the relationship DISCLOSURE was intentionally absent too. That
+ * was never the directive and is corrected here rather than left standing — O158 removed the word
+ * by rewording the disclosure, not by deleting it, and a later commit deleted it with no argument
+ * recorded. A sweep's own prose is where the next reader learns what the rule is, so a wrong
+ * sentence here regenerates the wrong removal.
  *
  * The source grep that preceded this missed four rendered sentences — in /privacy, two console
  * screens and a pathways note — because they were prose rather than labels. Reading the rendered
@@ -80,7 +86,20 @@ test("the word and the old relationship disclosure are gone from every surface",
   await expect(page.locator(".profile-content")).toBeVisible();
   const prof = await page.evaluate(() => document.body.innerText);
   for (const line of prof.split("\n")) if (/founder/i.test(line)) hits.push(`profile: ${line.trim().slice(0, 90)}`);
-  await expect(page.locator(".disclosure-line")).toHaveCount(0);
+  // O184: THIS ASSERTION WAS INVERTED, AND THE INVERSION IS THE POINT.
+  //
+  // It read `toHaveCount(0)` — the disclosure must be ABSENT — which is what turned a removal
+  // nobody argued for into an enforced rule. O156's directive was to remove the WORD "founder";
+  // O158 answered it by REWORDING the disclosure so neither string says it, and pinned that. A
+  // later commit removed the disclosure itself and rewrote this line to require its absence, so
+  // the guard came to enforce the regression.
+  //
+  // Both halves of the rule now hold together on this page: the word stays gone (asserted above,
+  // over every rendered surface), and the disclosure stays present on the listing it concerns.
+  await expect(page.locator(".disclosure-line")).toHaveCount(1);
+  // The LABEL renders, not the long sentence — see profile-stage.tsx. Asserted on the specific
+  // wording so a future edit cannot satisfy this with an empty element.
+  await expect(page.locator(".disclosure-line")).toContainText(/clinic partner|declared interest/i);
   await signIn(page);
   for (const r of CONSOLE_ROUTES) await scan(r);
   console.log(`FOUNDER_HITS ${hits.length} over ${STATIC_ROUTES.length} routes`);

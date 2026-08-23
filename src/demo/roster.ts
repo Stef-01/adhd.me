@@ -200,6 +200,37 @@ export type Clinician = {
    */
   nswAdhdTrained?: true;
   /**
+   * A material interest this clinician has in ADHD.ME, and the short form rendered beside their
+   * listing — RESTORED by O184 after being removed without an argument.
+   *
+   * WHY IT CAME BACK. O156 was founder-directed: "remove all mentions of founder on entire site".
+   * O158 answered that correctly — it removed the WORD and kept the DISCLOSURE, rewording it so
+   * neither string says "founder", and pinned that with a test. A later commit ("feat: strengthen
+   * matching and simplify clinician profiles" — one line, no reasoning) removed the disclosure
+   * itself along with its component and its unit guard, leaving two real GPs with a commercial
+   * interest listed in a directory run by the company they are connected with, and no disclosure
+   * anywhere on the product.
+   *
+   * That was an extrapolation from the directive, not the directive. The strings below contain no
+   * "founder" and never did, so keeping them was always compatible with O156. Restored VERBATIM as
+   * the founder reviewed them rather than reworded here: these are factual claims about named real
+   * people and this file is not entitled to author them.
+   *
+   * `disclosedInterest` presumes nothing — Dr Saxena owns his CLINIC and is ADHD.ME's first clinic
+   * partner; he does not own the entity, and a field holding a factual claim about a real person
+   * has to be able to say the narrower thing. `disclosedInterestLabel` is per-person because the
+   * two entries describe DIFFERENT relationships, and one hardcoded badge is what let a single
+   * wrong word stand for both (O158).
+   *
+   * IT DOES NOT TOUCH THE RANKING, AND THAT IS DELIBERATE. W221 sorted a disclosed interest behind
+   * an undisclosed one; O182's appraisal found that rule is a TAX ON DISCLOSURE whose rational
+   * answer is to stop disclosing. Whether interest belongs in the comparator at all is founder
+   * decision G-A1 and is not taken here. Disclosure itself is a different question, and not
+   * optional.
+   */
+  disclosedInterest?: string;
+  disclosedInterestLabel?: string;
+  /**
    * Set when the entry describes a real, identifiable clinician rather than a demo persona.
    *
    * The finder shows synthetic and real entries side by side, and a reader cannot tell them apart
@@ -278,6 +309,9 @@ export const clinicians: Clinician[] = [
       practitionerId: "123180",
       url: "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
     },
+    disclosedInterestLabel: "First clinic partner",
+    disclosedInterest:
+      "Dr Saxena owns Beecroft Family & Skin Cancer Clinic, which is ADHD.ME's first clinic partner. Disclosed because he appears in a directory run by a company his clinic has a commercial relationship with, and a reader cannot see the ranking that put him there.",
     realPerson: true,
   },
   {
@@ -409,6 +443,9 @@ export const clinicians: Clinician[] = [
       practitionerId: "160121",
       url: "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     },
+    disclosedInterestLabel: "Declared interest in ADHD.ME",
+    disclosedInterest:
+      "Dr Anusha Saxena has a declared interest in ADHD.ME. Disclosed because she appears in a directory run by a company she is connected with, and a reader cannot see the ranking that put her there.",
     realPerson: true,
   },
 ];

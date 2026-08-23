@@ -203,6 +203,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > PASS (2 accepted advisories, 0 unaccepted). No e2e required by this unit's own scope (parameter
 > default + test + doc comment, no route or UI logic touched).
 
+> **O184 + M4 (the conflict disclosure came back, and the guard that would have kept it) —
+> founder-directed 2026-08-23, session goal-0823a. DONE.** Found by auditing what had landed, not by
+> a failing gate — because the failing gate had been deleted in the same commit as the feature.
+> **TWO REAL GPs WITH A COMMERCIAL INTEREST IN THIS DIRECTORY WERE LISTED WITH NO DISCLOSURE
+> ANYWHERE.** `4b9c9ab` ("feat: strengthen matching and simplify clinician profiles" — one line, no
+> reasoning) removed `disclosedInterest` from both entries, deleted `OwnershipDisclosure`, deleted
+> its provenance rows, deleted the unit test that required it, and rewrote THREE e2e assertions to
+> require its ABSENCE. The suite stayed green because every guard went with the thing it guarded.
+> **IT WAS AN EXTRAPOLATION FROM A DIRECTIVE, NOT THE DIRECTIVE.** O156 was founder-directed:
+> "remove all mentions of founder on entire site". O158 had already answered that correctly — it
+> removed the WORD and kept the DISCLOSURE, rewording both strings so neither says "founder", and
+> pinned that with a test. The strings contain no "founder" and never did, so keeping them was
+> always compatible with O156. Restored VERBATIM as the founder reviewed them, because these are
+> factual claims about named real people and no unit is entitled to author them.
+> **WHAT WAS NOT RESTORED, DELIBERATELY.** W221's ranking penalty stays gone. O182's appraisal found
+> that sorting a disclosed interest last is a TAX ON DISCLOSURE whose rational answer is to stop
+> disclosing; whether interest belongs in the comparator is founder decision G-A1. Disclosure itself
+> is a different question and is not optional. **The label renders, not the long sentence** — exactly
+> as `OwnershipDisclosure` had it; putting the paragraph in the identity block pushed the bio below
+> the half-viewport line at 390px and `profile-layout.spec.ts` caught it. Whether a patient should
+> also meet the full sentence, and where, is left open rather than invented while restoring a
+> control.
+> **M4 IS THE OTHER HALF, AND THE INCIDENT SHARPENED ITS SPEC.** Q-M asked for a contradiction
+> linter. What this incident showed is that the gap is STRUCTURAL, not a missing test: every guard
+> lived beside the thing it guarded, so deleting the feature and its guard was one coherent-looking
+> edit. `src/quality/contradictions.ts` is therefore deliberately sited elsewhere and is a LIST
+> before it is a check — removing an implementation turns an entry red rather than removing it, and
+> deleting an entry is its own visible act in a file whose only purpose is to hold them.
+> Five invariants: three on disclosure (including the named-clinician one, because a COUNT is
+> satisfied by an empty roster and this is exactly the property that vanished), F6's display-twin
+> rule, and W221's `CONFLICT-1` as the single `accepted` row with its reason and trigger. Checked in
+> BOTH directions: required entries must hold, and an ACCEPTED entry that has quietly started
+> holding fails too, so an acceptance cannot become the resting state. Every entry is run against a
+> deliberately broken world and must report the breakage — an invariant that cannot fail is the
+> thing this file replaces. **Proved on the real regression: stripping the disclosure back out turns
+> `DISCLOSE-2` red and flips `CONFLICT-1` to a stale acceptance.**
+> Gate: `pnpm verify` green — 260 files, 4124 tests, audit PASS; ownership-disclosure, profile-sweep
+> and profile-layout e2e green.
+
 > **O183 (a derivation left its predecessor behind) — founder-directed follow-up 2026-08-23,
 > session goal-0822a. DONE.** Found while auditing what the loop had landed, not by a failing test.
 > **M3 DID THE RIGHT THING AND DID NOT SWEEP UP AFTER IT.** Its fix for F6 made the profile DERIVE

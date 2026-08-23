@@ -479,6 +479,12 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports one factory, `syntheticClinician`, and is declared with an empty `operatorCopy` because every string in it is a placeholder that must never be read by anybody: the name says \"Synthetic Example\", the practice says \"Synthetic Test Practice\", the booking URL is `example.invalid`, and `about` says in full that it is a fixture and not a person. It is the deliberate opposite of `src/demo/roster.ts` next door — that module's every string is a factual claim about a named real doctor, and this one's every string is guaranteed to be about nobody. It exists so the ranking LAWS (closed books never outrank open ones at equal fit, a disclosed interest never wins a tie, staleness orders ties but costs no fit) can be tested without borrowing a real person's record as a blank, which is what made Dr Yadav's departure break fifty tests that were not about him. `realPerson` is deliberately absent, so if this ever leaked into a rendered surface the real-person checks would refuse it rather than quietly display it.",
   },
   {
+    module: "src/quality/contradictions.ts",
+    operatorCopy: [],
+    notCopy:
+      "Exports the contradiction register, two selectors over it and a pinned count. Declared with an empty `operatorCopy` because nothing here is read by an operator or a patient: every string is an INVARIANT stated in prose so a reviewer can check it against the product without reading the code, plus the reason an acceptance is accepted. It is deliberately sited away from the modules it guards — M4 exists because a guard living beside the thing it guards was deleted in the same commit as that thing, and the suite stayed green because the test had gone with the feature. A register in its own file makes removing an invariant a visible act rather than a side effect of simplifying something else.",
+  },
+  {
     module: "src/demo/emotional-fit.ts",
     operatorCopy: ["EI_QUALITIES"],
     notCopy:

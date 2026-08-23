@@ -75,6 +75,12 @@ export const REAL_PERSON_FIELDS: Readonly<Record<string, RealPersonField>> = {
   appointmentLength: { basis: "declared", source: "The practice's stated appointment length." },
   booking: { basis: "checkable", source: "The practice's own live booking page (Healthengine profile or practice site)." },
   telehealthFirstAppointment: { basis: "declared", source: "Whether the FIRST appointment may be by telehealth, as the practice states." },
+  disclosedInterest: {
+    basis: "founder-stated",
+    source:
+      "The founder's own statement of the relationship. O158 is why this entry is explicit: O156 wrote 'has an ownership interest in ADHD.ME' from an inference, and the founder corrected it — Dr Saxena owns his CLINIC and is ADHD.ME's first clinic partner. Entering a value here means citing what was actually said. RESTORED by O184 with the field, having been deleted alongside it.",
+  },
+  disclosedInterestLabel: { basis: "founder-stated", source: "The short form of the same statement, rendered beside the listing." },
   nswAdhdTrained: { basis: "founder-stated", source: "Relayed from the founders. There is no public register of who has completed it, so ADHD.ME cannot confirm it and the surfaces say 'declared, not checked'." },
   realPerson: { basis: "identifier", source: "Marks the entry as describing an identifiable person, so surfaces can treat it accordingly." },
 };
