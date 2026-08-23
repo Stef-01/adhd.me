@@ -157,7 +157,13 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
 /* O178: Dr Yadav's departure leaves a two-person roster. A partial top tie is impossible with
    two candidates: a reached request either separates them or leaves both together. Re-measured,
    not backfilled, so the KPI describes the directory that now exists. */
-const PINNED = { total: 447, separated: 278, partialTie: 0, unseparated: 169 };
+/* M3 (F6): 278/169 -> 300/147, total unchanged at 447 — no sentence joined or left the run;
+   anubhav-saxena's own appointmentLength answer was carried into his manner declaration
+   (`unhurried`, roster.ts's M3 comment), so every corpus request that reaches manner:unhurried or
+   pref:longer-appointment now separates the two-person roster instead of tying it. Separation
+   62.2% -> 67.1%, the same shape O88 named the other direction: a REAL declaration changing how
+   answerable the roster already was, not the matcher improving. */
+const PINNED = { total: 447, separated: 300, partialTie: 0, unseparated: 147 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

@@ -255,7 +255,15 @@ export const clinicians: Clinician[] = [
       "substance-history",
       "shared-care",
     ],
-    manner: ["structured", "non_judgmental", "sense_making"],
+    // M3 (F6): `unhurried`'s own interview question ("Do you book a longer first appointment
+    // for this, and roughly how long?", interview.ts) and appointmentLength's question ("How
+    // long is a first appointment... and is a longer one bookable?") ask the SAME real-world
+    // fact through two separate interview items. His appointmentLength answer below already
+    // settles it — "Long first appointment" is exactly what the unhurried question asks — so
+    // this is the missing half of one declaration, not a new characterisation authored by this
+    // tree (real-person-fields.ts's "declared... never characterised by us" rule is unbroken:
+    // the source is still his own answer, just carried into both fields it answers).
+    manner: ["structured", "non_judgmental", "sense_making", "unhurried"],
     nswAdhdTrained: true,
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",

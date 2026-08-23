@@ -179,18 +179,14 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // appear beside a facet the ranking is simultaneously scoring.
     expect(unservedAsks("a woman GP please")).toEqual([]);
     expect(unservedAsks("can we do it over the phone")).toEqual([]);
-    expect(unservedAsks("I need a longer first appointment")[0]).toContain(
-      "A longer first appointment is not something any GP listed today declares",
-    );
     expect(unservedAsks("I need help with my sleep")).toEqual([]);
 
-    // O179: "I need a longer first appointment" MOVED SIDES. It belonged here while Dr Yadav
-    // declared `unhurried`; with him gone no GP holds the preference, so the honest sentence is
-    // now the unserved one — and it is asserted in its new place rather than dropped, because the
-    // property under test is the CONTRADICTION (never say "nobody declares this" beside a facet
-    // the ranking is scoring), and that property is only meaningful if both sides are pinned.
-    expect(unservedAsks("I need a longer first appointment")[0])
-      .toContain("A longer first appointment is not something any GP listed today declares");
+    // O179 pinned "I need a longer first appointment" as the unserved side, and said so itself:
+    // "the day a GP declares longer-appointment... [it] becomes a ranking assertion again." M3
+    // (F6) is that day — anubhav-saxena's own appointmentLength wording already answered this
+    // question (roster.ts's M3 comment) — so the sentence MOVES SIDES again, to the roster that
+    // DOES declare it, which is exactly the case this test exists to keep pinned.
+    expect(unservedAsks("I need a longer first appointment")).toEqual([]);
   });
 
   it("stays a fact about a declaration, never a claim about ability (W193)", () => {
