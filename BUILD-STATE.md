@@ -99,6 +99,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **M7 (`informed` earns its name, F8) — claimed 2026-08-23T23:58Z by loop-0823h.** Q-M item 7,
+> `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's own rule — the prior
+> firing (loop-0823g) took AR6, an AR-lane unit, so this firing takes the lowest-numbered
+> available O-lane work; M1–M6 are done and M7 has no unmet dependency. Building now.
+
 > **O185 (the join form shows one question and almost nothing else) — founder-directed 2026-08-23,
 > session goal-0823b. DONE.** Founder directive, with an Airtable form as the reference: "make the
 > short dr onboarding form system drastically show less at once … minimalist amount of things per
