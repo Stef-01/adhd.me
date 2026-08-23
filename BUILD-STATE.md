@@ -203,6 +203,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > PASS (2 accepted advisories, 0 unaccepted). No e2e required by this unit's own scope (parameter
 > default + test + doc comment, no route or UI logic touched).
 
+> **M3 (one source of truth for appointment length, F6) — claimed 2026-08-23T03:38Z by
+> loop-0823b.** Q-M item 3, `docs/MATCHING-YEAR-PLAN.md`. Alternating lanes per the loop's own
+> rule — the prior firing (loop-0823a) took AR3 (AR-lane), so this one takes the lowest-numbered
+> available O-lane unit; M1 and M2 are done, so that is M3. *(claim stub — build in progress)*
+
 > **O178 (the gap list is three different lists wearing one name) — claimed 2026-08-22T03:52Z by
 > loop-0821a; RECLAIMED 2026-08-22T15:44Z by loop-0822a under the staleness rule (pushed nothing
 > since the claim commit, 8bea4cd — 11+ hours, well past the 90-minute window; loop-0821a's
