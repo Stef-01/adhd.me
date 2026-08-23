@@ -199,7 +199,23 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await page.getByRole("button", { name: /Change what you said/i }).click();
   const box = page.getByRole("textbox");
-  await box.fill("I need titration and I don't want to feel rushed, somewhere I can be honest about drinking");
+  /**
+   * O183: THE QUERY CHANGED BECAUSE THE ROSTER STOPPED PRODUCING A PARTIAL FIT FOR THE OLD ONE.
+   *
+   * This asked for titration + unhurried + substance history. Dr Yadav used to be the roster's
+   * `unhurried` declarer, so somebody always answered some of it and missed the rest. Two things
+   * then happened: he left (O179), and M3 carried Dr Anubhav's own appointment-length answer into
+   * the `unhurried` facet it also answers (F6). Against today's roster that query splits into
+   * all-four and none-of-four — Dr Anubhav answers everything, Dr Anusha answers nothing — and a
+   * profile with NO evidence correctly renders "nothing in what you said pointed here
+   * specifically" instead of a missed list, because a missed list beside no evidence would be an
+   * account of a match that was never claimed.
+   *
+   * So the rendering under test was never broken; the query stopped exercising it. The property
+   * needs a PARTIAL fit and this query produces one: Dr Anusha answers the assessment and the
+   * Hindi, and does not declare titration.
+   */
+  await box.fill("I want an ADHD assessment with a GP who speaks Hindi and can review my titration");
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
@@ -232,6 +248,10 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
     await page.getByRole("button", { name: /Back to results/i }).click();
   }
   expect(found, "no profile showed a missed ask for a three-ask query").toBe(true);
+  // O183 non-vacuity: the walk must have had rows to walk. `found` alone would also be false on a
+  // finder that rendered nothing at all, which is a different failure wearing the same message —
+  // and it is how this assertion would go quietly wrong the next time the roster changes shape.
+  expect(count, "the finder returned no rows, so nothing was exercised").toBeGreaterThan(1);
 });
 
 test("refinement stays with results while the profile leads with the bio", async ({ page }) => {

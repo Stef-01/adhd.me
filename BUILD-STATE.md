@@ -203,6 +203,53 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > PASS (2 accepted advisories, 0 unaccepted). No e2e required by this unit's own scope (parameter
 > default + test + doc comment, no route or UI logic touched).
 
+> **O183 (a derivation left its predecessor behind) — founder-directed follow-up 2026-08-23,
+> session goal-0822a. DONE.** Found while auditing what the loop had landed, not by a failing test.
+> **M3 DID THE RIGHT THING AND DID NOT SWEEP UP AFTER IT.** Its fix for F6 made the profile DERIVE
+> its highlight facts from declarations — `telehealthFirstAppointment` renders "Telehealth",
+> `acceptingNewPatients` renders "Accepting new patients" — which is the correct shape and better
+> than the hand-typed string O180 put there. What it did not do is remove the free text those
+> derivations replaced. So Dr Anubhav's profile said **"Telehealth" AND "Phone consultations"**, and
+> Dr Anusha's said **"Accepting new patients" AND "New patients welcome"** — each pair a few
+> millimetres apart on one screen, in two vocabularies, one of them the vaguer wording the founder
+> had explicitly asked to retire. `accessFacts` dedupes by string equality, so it could not see it.
+> **THIS IS F6's OWN CLASS FROM THE OTHER DIRECTION.** F6 was a display and a MATCHER disagreeing
+> about one fact. This is a display disagreeing with ITSELF about one fact. Both are the appraisal's
+> organising finding — the same idea computed in two places — so the guard is written as a general
+> rule (`never restates a derived fact in free text`) with its own non-vacuity check, rather than as
+> two deletions. The next derivation cannot leave its predecessor behind quietly.
+> **AND A PIN WAS RE-AIMED, WHICH IS ARGUED RATHER THAN ASSUMED.** `practicalSignals.length >= 2`
+> was set by O180 against the profile rendering `slice(0, 2)`. M3 removed that slice; the row is now
+> `accessFacts`, assembled from several sources and rendered in full. The floor had stopped guarding
+> anything that renders, and was requiring a second string for its own sake — which is part of why
+> the restatements were there. It is now a floor of ONE plus the unchanged billing-first rule: the
+> one fact nothing derives. **Not a loosened gate — a pin that had stopped pointing at anything**,
+> the same correction O180 made to the same test for the same reason one day earlier.
+> **AND IT FOUND A RED E2E THE LOOP HAD ALREADY PUSHED.** `finder-flow.spec.ts`'s O51 test was
+> failing on `main` before this unit touched anything — confirmed by stashing and re-running against
+> the loop's own HEAD. `pnpm verify` was green, so the loop met the gate as written and pushed;
+> nothing runs the e2e unless a unit's row demands it. **That is O173's finding alive again in a
+> second form** — not "the gate was red and nothing told the loop", but "the gate does not cover
+> this and nothing says so" — and it is the argument for M4's contradiction linter and AR14's
+> gate-state signal, both still `available`.
+> **THE O51 FAILURE ITSELF WAS A STALE TEST, NOT A DEFECT, AND THE DIFFERENCE WAS ESTABLISHED
+> RATHER THAN ASSUMED.** Its query asked for titration + unhurried + substance history and needed
+> somebody to answer SOME of it. Dr Yadav was the roster's `unhurried` declarer; he left (O179), and
+> M3 then carried Dr Anubhav's own appointment-length answer into the `unhurried` facet it also
+> answers. So that query now splits into all-four and none-of-four, and a profile with no evidence
+> correctly renders "nothing in what you said pointed here specifically" rather than a missed list —
+> a missed list beside no evidence would account for a match nobody claimed. The query is replaced
+> with one that still produces a partial fit, and a non-vacuity assertion added: `found` alone was
+> also false on a finder that rendered NOTHING, which is a different failure wearing the same
+> message.
+> **M3 AUDITED AND FOUND SOUND.** Its `unhurried` addition to a real doctor's record is detection
+> plus a hand correction with a citation, not a regex granting a facet: the matcher still reads only
+> the closed-vocabulary field, and the citation argues that `interview.ts` asks the same real-world
+> fact through two items, so his own answer was carried into the second field it answers rather than
+> a characterisation being authored. `DISPLAY_TWINS` is explicitly detection-only.
+> Gate: `pnpm verify` green — 257 files, 4110 tests, audit PASS; profile-sweep, profile-layout,
+> compare and all 15 finder-flow e2e green.
+
 > **M3 (one source of truth for appointment length, F6) — claimed 2026-08-23T03:38Z by
 > loop-0823b. DONE @ acbb625.** Q-M item 3, `docs/MATCHING-YEAR-PLAN.md`. Alternating lanes per the loop's
 > own rule — the prior firing (loop-0823a) took AR3 (AR-lane), so this one takes the lowest-

@@ -284,10 +284,60 @@ describe("clinician roster and matching", () => {
 
   it("includes useful billing and access details for every clinician", () => {
     for (const clinician of clinicians) {
-      expect(clinician.practicalSignals.length).toBeGreaterThanOrEqual(2);
+      /**
+       * O183: THE COUNT MOVED FROM TWO TO ONE, AND IT IS NOT A LOOSENED GATE — IT IS A PIN THAT
+       * STOPPED POINTING AT ANYTHING.
+       *
+       * The floor of two was set (O180) against the profile rendering `practicalSignals.slice(0, 2)`:
+       * two was what it took to fill the row. M3 removed that slice. The row is now `accessFacts`,
+       * assembled from the useful practical signals PLUS the derived telehealth/languages/availability
+       * facts, the appointment length, the distance and the closed-books note, deduped and rendered
+       * in full. So `practicalSignals.length` no longer decides whether anything renders, and a
+       * floor of two was requiring a second string for its own sake — which is what pushed two
+       * clinicians into restating a derived fact in vaguer words (O183 removed both).
+       *
+       * What is actually owed to a reader is the ONE fact nothing derives: where this GP stands on
+       * billing. That is asserted below and is unchanged. The rendered row has its own guard in
+       * `e2e/profile-layout.spec.ts`; a count on a raw array was never that guard.
+       */
+      expect(clinician.practicalSignals.length).toBeGreaterThanOrEqual(1);
       expect(clinician.practicalSignals[0]).toMatch(/billing|bills/i);
       expect(clinician.practice).toBeTruthy();
     }
+  });
+
+  /**
+   * O183: A FREE-TEXT SIGNAL MAY NOT RESTATE A FACT THE PAGE DERIVES.
+   *
+   * M3's fix for F6 made the profile derive its highlight facts from declarations —
+   * `telehealthFirstAppointment` renders "Telehealth", `acceptingNewPatients` renders "Accepting
+   * new patients". It did not sweep the free text those derivations replaced, so Dr Anubhav's
+   * listing said "Telehealth" and "Phone consultations", and Dr Anusha's said "Accepting new
+   * patients" and "New patients welcome" — each pair a few millimetres apart on one screen.
+   *
+   * This is F6's own class arriving from the other direction. F6 was a display and a matcher
+   * disagreeing about one fact; this is a display disagreeing with ITSELF about one fact, in two
+   * vocabularies, one of them the vaguer wording the founder asked to retire. The rule is general
+   * so the next derivation cannot leave its predecessor behind.
+   */
+  it("never restates a derived fact in free text", () => {
+    const derived: Array<{ holds: (clinician: (typeof clinicians)[number]) => boolean; restates: RegExp; label: string }> = [
+      { holds: (c) => c.telehealthFirstAppointment === true, restates: /phone consultation|by phone|video call/i, label: "Telehealth" },
+      { holds: (c) => c.acceptingNewPatients, restates: /new patients (welcome|accepted)/i, label: "Accepting new patients" },
+    ];
+
+    for (const clinician of clinicians) {
+      for (const fact of derived) {
+        if (!fact.holds(clinician)) continue;
+        const restated = clinician.practicalSignals.filter((signal) => fact.restates.test(signal));
+        expect(restated, `${clinician.id} restates the derived "${fact.label}" as ${restated.join(", ")}`).toEqual([]);
+      }
+    }
+
+    // Non-vacuous: both rules must have something to be true OF, or this passes by describing
+    // nobody — which is exactly how the duplication survived M3 in the first place.
+    expect(clinicians.filter((c) => c.telehealthFirstAppointment).length).toBeGreaterThan(0);
+    expect(clinicians.filter((c) => c.acceptingNewPatients).length).toBeGreaterThan(0);
   });
 
   /**

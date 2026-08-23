@@ -237,7 +237,12 @@ export const clinicians: Clinician[] = [
     focus: "Structured assessment, baseline physical screening & titration",
     matchLine: "A measured assessment with the physical baseline done properly, then titration reviewed on a schedule.",
     fitSignals: ["ADHD assessment", "Baseline physical screening", "Titration", "Phone consultations"],
-    practicalSignals: ["Mixed billing", "Phone consultations", "Structured review schedule"],
+    // O183: "Phone consultations" removed. M3 made the profile DERIVE the telehealth label from
+    // `telehealthFirstAppointment` below, so this free-text string had become a second, vaguer name
+    // for a fact the page already states as "Telehealth" — both rendered, on the same screen. The
+    // founder's directive was that telehealth is the clearer word; leaving the older phrasing
+    // beside the derived one puts the ambiguity back and doubles the row.
+    practicalSignals: ["Mixed billing", "Structured review schedule"],
     summary:
       "Anubhav takes a measured approach to ADHD care, with a documented physical baseline and scheduled reviews during titration. He also covers cardiovascular and sleep screening, and approaches substance history as a safety question rather than a judgement.",
     about:
@@ -351,7 +356,12 @@ export const clinicians: Clinician[] = [
     fitSignals: ["ADHD assessment", "Mental health focus", "Women's health", "Hindi & Urdu", "Lifestyle & preventative care"],
     // Billing leads by roster convention; hers is stated by the practice until her interview
     // supplies the specifics — a fact about where the fact lives, not a guess at it.
-    practicalSignals: ["Billing set by the practice", "New patients welcome"],
+    // O183: "New patients welcome" removed for the same reason as Dr Anubhav's phone line — the
+    // profile derives "Accepting new patients" from `acceptingNewPatients` below, so this restated
+    // it in different words a few millimetres away. What remains is the one fact nothing derives:
+    // where her billing position is stated. The row a reader sees is not shorter, because the
+    // derivation was always supplying that line.
+    practicalSignals: ["Billing set by the practice"],
     summary:
       "Anusha is an experienced GP with a background in psychology, psychiatry and general medicine. She has completed endorsed ADHD prescriber training and values culturally sensitive, holistic care. She speaks English, Hindi and Urdu.",
     // O88: her official bio, supplied through the founder (2026-08-20), merged with the
