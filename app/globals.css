@@ -6175,9 +6175,14 @@ textarea:focus-visible {
    one tint apart, so the foot of the page has two doors and one rhythm. */
 .story-join {
   border-top: 1px solid var(--s-line);
-  background: var(--s-accent-soft);
+  /* Deep-rose band: the GP call-to-action set in the signature accent so it reads as its own beat
+     rather than another soft tile. Text and the link flip to light for contrast (scoped here, so
+     the shared .story-heading / .story-eyebrow elsewhere are unaffected). */
+  background: var(--s-accent);
   padding-block: clamp(48px, 6vw, 84px);
 }
+.story-join .story-heading { color: var(--s-paper); }
+.story-join .story-eyebrow { color: var(--s-accent-soft); }
 .story-join-inner {
   display: flex;
   align-items: center;
@@ -6188,7 +6193,7 @@ textarea:focus-visible {
 .story-join-copy {
   max-width: 54ch;
   margin: 14px 0 0;
-  color: var(--s-muted);
+  color: var(--s-accent-soft);
   font-size: 0.96875rem;
   line-height: 1.65;
   text-wrap: pretty;
@@ -6199,8 +6204,10 @@ textarea:focus-visible {
   min-height: 52px;
   padding: 0 26px;
   border-radius: 999px;
-  background: var(--s-accent);
-  color: #fff;
+  /* Light button on the deep-rose band — the inverse of the buttons on paper sections, so the
+     call-to-action still reads as the brightest thing in its own beat. */
+  background: var(--s-paper);
+  color: var(--s-accent);
   font-size: 0.9375rem;
   font-weight: 640;
   text-decoration: none;
@@ -6208,7 +6215,7 @@ textarea:focus-visible {
   transition: background-color 0.2s ease;
 }
 .story-join-link .arrow { display: inline-block; margin-left: 10px; transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
-.story-join-link:hover, .story-join-link:focus-visible { background: #711d31; }
+.story-join-link:hover, .story-join-link:focus-visible { background: #ffffff; }
 .story-join-link:hover .arrow, .story-join-link:focus-visible .arrow { transform: translateX(5px); }
 .story-join-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
