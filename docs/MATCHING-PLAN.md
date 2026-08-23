@@ -1,5 +1,7 @@
 # Patient → clinician matching: options, choice, and the road out
 
+> **REFERENCE.** Architecture options and the clinician-interview spec. It holds no units — consult it, do not execute it. Index: [`PLAN.md`](PLAN.md).
+
 The finder's job is to take what somebody said, in their words, and put the GP who fits it in
 front of them. This prices the ways of doing that, picks one for MVP, and says what replaces it
 later and on what trigger. It also specifies the clinician interview, because **the interview is

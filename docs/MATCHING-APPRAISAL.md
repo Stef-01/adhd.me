@@ -1,5 +1,7 @@
 # Matching architecture: critical appraisal against the established field
 
+> **REFERENCE.** The earlier appraisal, executed by `MATCHING-OVERHAUL-PLAN.md` (closed). Kept because the O-series' reasoning cites its F-numbers. Index: [`PLAN.md`](PLAN.md).
+
 A review of every matching surface in the tree, appraised against the published techniques the
 matching industry actually runs on — dating apps foremost, because they are the largest deployed
 two-sided preference matchers in existence — and against the open-source implementations of the

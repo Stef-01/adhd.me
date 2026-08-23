@@ -1,5 +1,7 @@
 # Matching overhaul — week-by-week execution plan
 
+> **CLOSED.** O1–O8, executed and merged. Index: [`PLAN.md`](PLAN.md).
+
 Executes the findings of `docs/MATCHING-APPRAISAL.md` (F1–F10) as eight one-week units,
 O1–O8, on the branch `claude/matching-algorithm-review-wy2z5f`. Companion to
 `docs/MATCHING-PLAN.md`, which owns the finder's architecture options; this document only

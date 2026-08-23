@@ -1,5 +1,7 @@
 # The aesthetic review system, and the proof that it all works — a three-month plan (AR-series)
 
+> **ACTIVE.** One of two live backlogs — `AR1`–`AR36`. The index of every plan in this tree is [`PLAN.md`](PLAN.md).
+
 **Goal (founder, 2026-08-22):** an aesthetic review system for the whole site, which also
 thoroughly checks that everything is actually working.
 

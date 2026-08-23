@@ -1,5 +1,7 @@
 # ADHD.ME — Five-Year Vibecoded Build Plan (v1, 2026-08-08)
 
+> **CLOSED at W260 (Year 5).** Do not reopen: its Y6 horizon section says what succeeds it, and the live backlogs are in [`PLAN.md`](PLAN.md). Kept whole because its rows are the reasoning behind most of the engine and several tests read it.
+
 > Canonical build plan. Executed by the `adhd-me-build-loop` (two offset hourly Claude Routines =
 > one firing every 30 minutes, each firing = one build session = one week-unit advanced).
 > Venture brief: `Stefan-Brain/wiki/entrepreneurship/startups/adhd-me.md`.

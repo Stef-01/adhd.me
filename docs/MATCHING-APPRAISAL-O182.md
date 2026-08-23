@@ -1,5 +1,7 @@
 # The matching system, appraised — O182 (2026-08-22)
 
+> **REFERENCE, not a schedule.** Findings F1–F10 and the founder gates; Q-M in [`MATCHING-YEAR-PLAN.md`](MATCHING-YEAR-PLAN.md) is what schedules them. Index: [`PLAN.md`](PLAN.md).
+
 **Commissioned by the founder:** "an extremely thorough critical appraisal on the matching system,
 and advance it so that it is actually much more effective."
 

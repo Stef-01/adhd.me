@@ -1,5 +1,7 @@
 # Matching: the next twelve months (O20)
 
+> **ACTIVE.** One of two live backlogs — carries the O-series and Q-M (`M1`–`M12`). The index of every plan in this tree, and which are closed, is [`PLAN.md`](PLAN.md).
+
 **Goal (founder, 2026-08-18):** a year-long refinement plan that makes matching much more
 powerful and robust, learning from established open-source work, with continued refinement of
 how visibly a doctor's fit is explained.

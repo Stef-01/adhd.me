@@ -1,5 +1,7 @@
 # Launch checklist — 20 items, executed (O15, 2026-08-18)
 
+> **CLOSED.** Executed at O15. Index: [`PLAN.md`](PLAN.md).
+
 Every item on the founder's launch list, with what shipped and where. One item is a recorded
 refusal rather than a build, because an absolute founder gate and Australian law both forbid
 it — the argument is in its row. Everything else is live on the branch.
