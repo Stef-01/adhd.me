@@ -11,16 +11,31 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { ALL_PAGE_ROUTES, CONSOLE_ROUTES, PUBLIC_ROUTES } from "../../e2e/site-routes";
+import { PUBLIC_SURFACES } from "../compliance/public-surfaces";
 import {
+  checkRouteCoverage,
   diffEnforcement,
+  diffRouteScopePresence,
   diffTasteRegister,
   parseEnforcementTags,
   parseSkillRules,
+  resolveRouteScope,
+  ROUTE_COVERAGE_EXEMPTIONS,
   TASTE_RULES,
   UNENFORCED_COUNT,
   type EnforcementTag,
+  type RouteLists,
   type TasteRule,
 } from "./taste-register";
+
+/** The real derived lists AR3's coverage check runs against — the same imports the enforced
+ * rules' own spec files use, so a rule cannot claim coverage of a list nobody actually swept. */
+const REAL_ROUTE_LISTS: RouteLists = {
+  publicStatic: PUBLIC_ROUTES,
+  consoleStatic: CONSOLE_ROUTES,
+  publicAll: PUBLIC_SURFACES.map((s) => s.path),
+};
 
 const SKILL_FILE = ".claude/skills/adhdme-taste/SKILL.md";
 const skillMarkdown = () => readFileSync(SKILL_FILE, "utf8");
@@ -177,5 +192,73 @@ describe("AR2 every rule names its enforcement, or names its absence", () => {
     for (const rule of TASTE_RULES) {
       if (rule.unenforced) expect(rule.unenforced.length, rule.id).toBeGreaterThan(20);
     }
+  });
+});
+
+describe("AR3 every enforced rule names the routes it is asserted over", () => {
+  it("routeScope is set exactly where enforcedBy is set", () => {
+    const diff = diffRouteScopePresence(TASTE_RULES);
+    expect(diff.missingRouteScope, "enforced rule with no routeScope").toEqual([]);
+    expect(diff.unexpectedRouteScope, "unenforced rule with a routeScope set anyway").toEqual([]);
+  });
+
+  it("resolves each rule's scope to a non-empty route list, or explicitly not-route-based", () => {
+    for (const rule of TASTE_RULES) {
+      if (!rule.routeScope) continue;
+      const routes = resolveRouteScope(rule.routeScope, REAL_ROUTE_LISTS);
+      if (rule.routeScope.kind === "not-route-based") {
+        expect(routes, rule.id).toBeNull();
+        expect(rule.routeScope.reason.length, rule.id).toBeGreaterThan(20);
+      } else {
+        expect(routes, rule.id).not.toBeNull();
+        expect(routes!.length, `${rule.id} resolved to zero routes`).toBeGreaterThan(0);
+        for (const r of routes!) expect(ALL_PAGE_ROUTES, `${rule.id} -> ${r}`).toContain(r);
+      }
+    }
+  });
+
+  it("the real tree's route coverage is clean: no uncovered route, no stale exemption", () => {
+    const diff = checkRouteCoverage(TASTE_RULES, ALL_PAGE_ROUTES, REAL_ROUTE_LISTS, ROUTE_COVERAGE_EXEMPTIONS);
+    expect(diff.uncoveredRoutes, "route in ALL_PAGE_ROUTES with no enforced rule and no exemption").toEqual([]);
+    expect(diff.staleExemptions, "exemption naming a route that is now covered or no longer exists").toEqual([]);
+  });
+
+  it("every exemption reason is a real sentence, not a placeholder", () => {
+    for (const reason of Object.values(ROUTE_COVERAGE_EXEMPTIONS)) {
+      expect(reason.length).toBeGreaterThan(20);
+    }
+  });
+
+  it("finds a real, non-collapsed route list — guards against a vacuous pass", () => {
+    // A collapsed ALL_PAGE_ROUTES (e.g. discoverSurfaces silently returning nothing) would make
+    // the coverage check above pass by finding zero routes to cover, exactly the failure mode
+    // AR1/AR2's own non-vacuity tests guard against one level up.
+    expect(ALL_PAGE_ROUTES.length).toBeGreaterThan(20);
+  });
+
+  it("is a non-vacuous check: an uncovered route is caught, and a stale exemption is caught", () => {
+    const withExtraRoute = [...ALL_PAGE_ROUTES, "/a-route-nothing-sweeps"];
+    const introduced = checkRouteCoverage(TASTE_RULES, withExtraRoute, REAL_ROUTE_LISTS, ROUTE_COVERAGE_EXEMPTIONS);
+    expect(introduced.uncoveredRoutes).toContain("/a-route-nothing-sweeps");
+
+    const staleExemptions = { ...ROUTE_COVERAGE_EXEMPTIONS, "/finder": "this route is actually covered" };
+    const stale = checkRouteCoverage(TASTE_RULES, ALL_PAGE_ROUTES, REAL_ROUTE_LISTS, staleExemptions);
+    expect(stale.staleExemptions).toContain("/finder");
+
+    const missingRoute = { ...ROUTE_COVERAGE_EXEMPTIONS, "/route-that-does-not-exist": "made up for the test" };
+    const gone = checkRouteCoverage(TASTE_RULES, ALL_PAGE_ROUTES, REAL_ROUTE_LISTS, missingRoute);
+    expect(gone.staleExemptions).toContain("/route-that-does-not-exist");
+
+    // Dropping the one real exemption reintroduces the exact gap it names.
+    const withoutExemption = checkRouteCoverage(TASTE_RULES, ALL_PAGE_ROUTES, REAL_ROUTE_LISTS, {});
+    expect(withoutExemption.uncoveredRoutes).toContain("/console/setup/[step]");
+  });
+
+  it("route-sweep scopes resolve to the same lists their own spec files import, not a copy", () => {
+    // touch-44 and hover-focus both claim public-and-console-static; their union must be exactly
+    // PUBLIC_ROUTES + CONSOLE_ROUTES with no drift introduced by resolveRouteScope's spread.
+    const touch44 = TASTE_RULES.find((r) => r.id === "interaction.touch-44")!;
+    const resolved = resolveRouteScope(touch44.routeScope!, REAL_ROUTE_LISTS)!;
+    expect(new Set(resolved)).toEqual(new Set([...PUBLIC_ROUTES, ...CONSOLE_ROUTES]));
   });
 });

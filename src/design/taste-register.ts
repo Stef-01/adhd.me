@@ -27,6 +27,18 @@
 // "not done" from "decided") — a PR that adds a rule without deciding its enforcement, or silently
 // drops a tag a rule's `enforcedBy` still claims, fails the build rather than quietly changing the
 // count.
+//
+// AR3: every enforced rule names the routes it is asserted over, resolved from the SAME derived
+// lists its own spec imports (`e2e/site-routes.ts`'s `PUBLIC_ROUTES`/`CONSOLE_ROUTES`, and
+// `src/compliance/public-surfaces.ts`'s `PUBLIC_SURFACES`, itself pinned against the filesystem by
+// `public-surfaces.test.ts`) — never a hand-typed path array, which is the exact fault O168 fixed
+// for one sweep and this generalises to every route-sweeping taste rule. `checkRouteCoverage`
+// unions every enforced rule's resolved routes and diffs the result against `ALL_PAGE_ROUTES`
+// (also from `e2e/site-routes.ts`): a route reachable by nobody's enforcement must be named in
+// `ROUTE_COVERAGE_EXEMPTIONS` with a real reason, or the build fails. Not every enforced rule is a
+// route sweep — `interaction.errors-plain` tests a module against a faked recogniser with no page
+// navigated at all — so `routeScope` also accepts `not-route-based` for those, distinct from
+// `unenforced` (a real check exists; it just is not organised by route).
 
 export type TasteSection =
   | "layout"
@@ -59,7 +71,123 @@ export interface TasteRule {
   enforcedBy?: readonly string[];
   /** Why no check exists yet. Exactly one of `enforcedBy`/`unenforced` is set, never both, never neither. */
   unenforced?: string;
+  /**
+   * AR3: which routes `enforcedBy`'s checks actually visit, as a reference to a derived list —
+   * never a literal path array, which is the register re-acquiring the exact staleness risk AR1/AR2
+   * already refused for rules and enforcement. Required exactly when `enforcedBy` is set; absent
+   * when `unenforced` is set (nothing checks the rule, so there is nothing to name routes for).
+   */
+  routeScope?: RouteScope;
 }
+
+/**
+ * AR3: the shape of "which routes does this rule's enforcement cover", closed so a new rule cannot
+ * invent a fifth kind that `resolveRouteScope`/`checkRouteCoverage` silently ignore.
+ */
+export type RouteScope =
+  | { kind: "route-sweep"; sweep: "public-static" | "console-static" | "public-and-console-static" | "public-all" }
+  | { kind: "single-route"; route: string }
+  | { kind: "not-route-based"; reason: string };
+
+/**
+ * The derived route lists `resolveRouteScope` reads from — passed in rather than imported at the
+ * top of this file, so `taste-register.ts` itself stays filesystem-free (AR1/AR2's own choice) and
+ * the caller (the test, which already walks the tree) supplies real data.
+ */
+export interface RouteLists {
+  publicStatic: readonly string[];
+  consoleStatic: readonly string[];
+  publicAll: readonly string[];
+}
+
+/**
+ * Resolve a `RouteScope` against the real derived lists. `not-route-based` resolves to `null`,
+ * distinct from an empty sweep, so a coverage check can tell "nothing to union" from "swept zero
+ * routes", which would itself be a collapsed-list bug worth failing loudly on.
+ */
+export function resolveRouteScope(scope: RouteScope, lists: RouteLists): readonly string[] | null {
+  if (scope.kind === "single-route") return [scope.route];
+  if (scope.kind === "not-route-based") return null;
+  switch (scope.sweep) {
+    case "public-static":
+      return lists.publicStatic;
+    case "console-static":
+      return lists.consoleStatic;
+    case "public-and-console-static":
+      return [...lists.publicStatic, ...lists.consoleStatic];
+    case "public-all":
+      return lists.publicAll;
+  }
+}
+
+export interface RouteScopePresenceDiff {
+  /** Enforced rules with no `routeScope` — the omission AR3 exists to close. */
+  missingRouteScope: string[];
+  /** Unenforced rules that set `routeScope` anyway — nothing checks them, so nothing visits a route. */
+  unexpectedRouteScope: string[];
+}
+
+/** `routeScope` is required exactly where `enforcedBy` is set, mirroring `diffEnforcement`'s
+ * `enforcedBy`/`unenforced` exclusivity check one field over. */
+export function diffRouteScopePresence(register: readonly TasteRule[]): RouteScopePresenceDiff {
+  const missingRouteScope: string[] = [];
+  const unexpectedRouteScope: string[] = [];
+  for (const rule of register) {
+    const hasEnforced = (rule.enforcedBy?.length ?? 0) > 0;
+    if (hasEnforced && !rule.routeScope) missingRouteScope.push(rule.id);
+    if (!hasEnforced && rule.routeScope) unexpectedRouteScope.push(rule.id);
+  }
+  return { missingRouteScope: missingRouteScope.sort(), unexpectedRouteScope: unexpectedRouteScope.sort() };
+}
+
+export interface RouteCoverageDiff {
+  /** In `allPageRoutes`, covered by no enforced rule's resolved scope, and not exempted. */
+  uncoveredRoutes: string[];
+  /** Exemption entries naming a route that is either already covered or no longer exists. */
+  staleExemptions: string[];
+}
+
+/**
+ * Union every enforced rule's resolved routes and diff against the real route list. An uncovered
+ * route must be named in `exemptions` with a reason, or it is reported so the build can fail on it
+ * — O168's "a third option that quietly skips" rule, applied to the taste register rather than one
+ * sweep's dynamic-route plan.
+ */
+export function checkRouteCoverage(
+  register: readonly TasteRule[],
+  allPageRoutes: readonly string[],
+  lists: RouteLists,
+  exemptions: Readonly<Record<string, string>>,
+): RouteCoverageDiff {
+  const covered = new Set<string>();
+  for (const rule of register) {
+    if (!rule.routeScope) continue;
+    const routes = resolveRouteScope(rule.routeScope, lists);
+    if (routes) for (const r of routes) covered.add(r);
+  }
+
+  const uncoveredRoutes = allPageRoutes.filter((r) => !covered.has(r) && !(r in exemptions)).sort();
+  const staleExemptions = Object.keys(exemptions)
+    .filter((r) => covered.has(r) || !allPageRoutes.includes(r))
+    .sort();
+
+  return { uncoveredRoutes, staleExemptions };
+}
+
+/**
+ * AR3: routes no enforced rule's `routeScope` reaches, named with a real reason rather than
+ * silently passing as "covered". `/console/setup/[step]` is the one route O168 already found and
+ * declared excluded from `e2e/site-routes.ts`'s own dynamic-route plan (walked instead by
+ * `e2e/console.spec.ts`'s wizard test) — that test carries no `taste-rule` tag, so from the
+ * register's point of view the gap is real and reported here rather than assumed closed by proxy.
+ */
+export const ROUTE_COVERAGE_EXEMPTIONS: Readonly<Record<string, string>> = {
+  "/console/setup/[step]":
+    "no enforced taste rule sweeps this route: it is dynamic (excluded from CONSOLE_ROUTES) and " +
+    "under /console (excluded from every honesty.* public sweep). Its steps are walked by " +
+    "e2e/console.spec.ts's onboarding wizard test, which asserts the flow completes but carries no " +
+    "taste-rule tag and checks no taste property — an honest gap, not yet closed.",
+};
 
 export const TASTE_RULES: readonly TasteRule[] = [
   {
@@ -115,6 +243,9 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "e2e/accent-discipline.spec.ts :: no public surface lets the accent carry more than one meaning",
       "e2e/profile-accent.spec.ts :: profile highlights are a quiet text line, not dated colored bubbles",
     ],
+    // accent-discipline.spec.ts sweeps every PUBLIC_ROUTES entry; profile-accent.spec.ts checks one
+    // page inside that same sweep more deeply, so it adds depth rather than a wider route scope.
+    routeScope: { kind: "route-sweep", sweep: "public-static" },
   },
   {
     id: "type.numeric-typography",
@@ -143,6 +274,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "e2e/touch-floor.spec.ts :: no control on a public route is under the floor",
       "e2e/touch-floor.spec.ts :: no control in the console is under the floor",
     ],
+    routeScope: { kind: "route-sweep", sweep: "public-and-console-static" },
   },
   {
     id: "interaction.hover-focus",
@@ -154,6 +286,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "e2e/keyboard-focus.spec.ts :: every public control is reachable by keyboard and shows where it is",
       "e2e/keyboard-focus.spec.ts :: every console control is reachable by keyboard and shows where it is",
     ],
+    routeScope: { kind: "route-sweep", sweep: "public-and-console-static" },
   },
   {
     id: "interaction.errors-plain",
@@ -164,6 +297,11 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "src/voice/speech.test.ts :: says nothing to a patient in error-code language",
       "src/voice/speech.test.ts :: offers typing in every error message, since that is always the way out",
     ],
+    routeScope: {
+      kind: "not-route-based",
+      reason:
+        "speech.test.ts drives the voice module directly against a faked SpeechRecognition; no page is navigated, so there is no route to name",
+    },
   },
   {
     id: "motion.carries-meaning",
@@ -182,6 +320,8 @@ export const TASTE_RULES: readonly TasteRule[] = [
     enforcedBy: [
       "src/quality/landing-motion.test.ts :: keeps the reduced-motion gate, which is still right even though it was not the fix",
     ],
+    // landing-motion.test.ts pins app/story-landing.tsx's own source, which app/page.tsx renders at "/".
+    routeScope: { kind: "single-route", route: "/" },
   },
   {
     id: "motion.autoplay-stop",
@@ -210,6 +350,9 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "e2e/finder-flow.spec.ts :: collective roster coverage is never presented as one doctor's complete fit (O178)",
       "e2e/finder-flow.spec.ts :: and still says it when the fit really is complete (O121 non-vacuity)",
     ],
+    // The whole flow (results, profile, booking) plays out as client state inside "/finder" — it is
+    // one route, walked deeply, not several routes navigated between.
+    routeScope: { kind: "single-route", route: "/finder" },
   },
   {
     id: "honesty.no-testimonials",
@@ -221,6 +364,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "src/compliance/public-surfaces.test.ts :: holds a patient surface to all of them",
       "e2e/public-sweep.spec.ts :: every public surface serves copy its audience's rules allow",
     ],
+    routeScope: { kind: "route-sweep", sweep: "public-all" },
   },
   {
     id: "honesty.clinician-declaration",
