@@ -143,6 +143,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > problem: overlapping sessions are normal and the number space is only legible if each
 > collision leaves a trace.
 
+> **M5 (a roster-size-invariant quality metric, F7) — claimed 2026-08-23T07:40Z by loop-0823d.**
+> Q-M item 5, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's own rule — the
+> last loop firing to touch this ledger (loop-0823c) took AR4, an AR-lane unit; the O-series' own
+> Q1/Q2 items remain done/blocked, so the lowest-numbered available O-lane work is Q-M's M5 (M1–M4
+> are done). IN PROGRESS.
+
 > **M1 (one weight function, and everything downstream consumes it) — claimed 2026-08-22T19:39Z
 > by loop-0822c. DONE @ 0a7430f.** Q-M item 1, `docs/MATCHING-YEAR-PLAN.md` (added by O182). Alternating
 > lanes per the loop's own rule — the prior firing (loop-0822b) took AR1, so this one takes an
