@@ -5100,16 +5100,53 @@ textarea:focus-visible {
    `e2e/join-form.spec.ts` asserts the COMPUTED display rather than the attribute, because the
    attribute was never the thing at risk. */
 .join-form fieldset[hidden],
-.join-form > button[hidden] { display: none; }
+.join-form .join-actions button[hidden] { display: none; }
 
-.join-viewbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px 20px;
-  margin-bottom: 24px;
+/* ── O185: the card, and the chrome that left the top of it ─────────────────────────────────
+   The sectioned view showed one fieldset and stacked four pieces of navigation above it — a view
+   toggle, a "Go to" select, a progress sentence and a bar — so a GP met eight controls before the
+   first question and five of them were about the form rather than in it. What is left above the
+   first question now is a 2px rail and four characters of counter. */
+.join-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  overflow: hidden;
+  /* Offset and a soft blur, not a zero-offset halo. Mixed from --ink so the shadow belongs to the
+     palette rather than being a hex nobody chose. */
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--ink) 5%, transparent),
+    0 14px 32px -14px color-mix(in srgb, var(--ink) 16%, transparent);
 }
+
+/* The counter and the rail share a row: the same fact in words and drawn, which is
+   {#layout.shared-row}, and one row of chrome instead of two.
+
+   The rail is aria-hidden because the counter says the same thing in words. INK, not accent —
+   `e2e/accent-discipline.spec.ts` allows one accent MEANING per surface and /clinicians/join
+   already spends its on the mix hero's live percent and condition. Position is not a live value
+   the reader set. */
+.join-progress-row { display: flex; align-items: center; gap: 16px; }
+.join-rail { flex: 1 1 auto; height: 2px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.join-rail span { display: block; height: 100%; border-radius: 999px; background: var(--ink); transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .join-rail span { transition: none; }
+}
+
+.join-count {
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--faint);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.join-count:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* The escape hatch, under the card where something about the form belongs. */
+.join-underbar { display: grid; justify-items: start; gap: 18px; margin-top: 22px; }
 
 /* A segmented pair, not two buttons: they are one question with two answers, and `aria-pressed`
    is what says which is current — the fill is the same fact drawn. */
@@ -5133,63 +5170,52 @@ textarea:focus-visible {
   .join-viewtoggle button[aria-pressed="false"]:hover { color: var(--ink); }
 }
 
-.join-jump { display: inline-flex; align-items: center; gap: 8px; }
-.join-jump label { color: var(--muted); font-size: 0.8125rem; }
-.join-jump select {
+/* ONE ROW, ONE PRIMARY ACTION. Back is an escape and stays a quiet text control on the left; the
+   button carrying the flow — Next, or Send on the last step — is the only filled thing on screen.
+   `margin-right: auto` on Back is what pushes it apart, so the row needs no justify-content and
+   the whole-form view (submit alone) still sits left exactly as it did before O185. */
+.join-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.join-step-back {
+  margin-right: auto;
   min-height: 44px;
-  padding: 0 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--paper);
-  color: var(--ink);
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
   font: inherit;
   font-size: 0.875rem;
-  touch-action: manipulation;
-}
-.join-jump select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.join-progress-wrap { margin-bottom: 28px; }
-.join-progress-text { margin: 0 0 10px; color: var(--ink); font-size: 0.875rem; font-weight: 550; }
-.join-progress-text:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-/* The bar is the counter drawn. INK, not accent — and the reason is a rule this page already
-   spends: `e2e/accent-discipline.spec.ts` allows one accent MEANING per surface, and
-   /clinicians/join already spends its on the mix hero's live percent and condition. A progress bar
-   in amber would have made it three meanings on one page, which is O136's finding exactly ("if
-   everything is accented, nothing is"). The bar is a position, not a live value the reader set. */
-.join-progress { height: 3px; border-radius: 999px; background: var(--line); overflow: hidden; }
-.join-progress span { display: block; height: 100%; background: var(--ink); transition: width 200ms ease-out; }
-@media (prefers-reduced-motion: reduce) {
-  .join-progress span { transition: none; }
-}
-
-.join-steps { display: flex; gap: 12px; }
-.join-steps button {
-  min-height: 44px;
-  padding: 0 20px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  font-size: 0.9375rem;
   font-weight: 550;
   cursor: pointer;
   touch-action: manipulation;
 }
-.join-steps button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.join-steps button:disabled { opacity: 0.45; cursor: default; }
-/* Next carries the flow, so it is filled; Back is an escape and stays quiet. One primary action
-   per screen, and on the last section the submit button is it. */
-.join-steps .join-step-next { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.join-step-back:disabled { opacity: 0.4; cursor: default; }
+@media (hover: hover) {
+  .join-step-back:not(:disabled):hover { color: var(--ink); }
+}
+.join-form .join-step-next,
+.join-form .join-submit {
+  min-height: 48px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--on-ground);
+  background: var(--ground);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.join-form .join-submit:disabled { opacity: 0.6; cursor: default; }
+.join-actions button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .join-advisory { margin: 0; }
 
 @media (max-width: 560px) {
-  .join-viewbar { align-items: stretch; }
   .join-viewtoggle { width: 100%; }
   .join-viewtoggle button { flex: 1 1 0; padding: 0 10px; }
-  .join-jump { width: 100%; }
-  .join-jump select { flex: 1 1 auto; min-width: 0; }
-  .join-steps button { flex: 1 1 0; padding: 0 12px; }
+  /* The flow button takes the width on a phone; Back stays a small text control beside it. */
+  .join-form .join-step-next,
+  .join-form .join-submit { flex: 1 1 auto; padding: 0 18px; }
 }
 
 /* O184: the material-interest disclosure on a clinician listing.
@@ -5206,8 +5232,28 @@ textarea:focus-visible {
   line-height: 1.5;
 }
 
-.join-form { display: grid; gap: 40px; }
+.join-form { display: grid; gap: 40px; padding: clamp(26px, 4.2vw, 40px); }
 .join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }
+/* O185: in the sectioned view exactly one fieldset is on screen, so the rule that separated it
+   from its neighbours has no neighbour to separate it from — it renders as a stray line under the
+   counter. The whole-form view still stacks all eight and still needs them. */
+.join-form[data-mode="steps"] { gap: 26px; }
+.join-form[data-mode="steps"] fieldset { border-top: 0; padding-top: 0; }
+/* THE STEP TITLE IS THE STATEMENT OF THE SCREEN, so it takes the serif at display scale —
+   `adhdme-taste` {#type.serif-display}. Only in the sectioned view: stacking eight serif headings
+   in the whole-form view would make a scannable list of labels into eight competing statements,
+   which is the opposite of what that view is for. O136's ruling is untouched either way — these
+   were taken OFF the accent because a structural label is not a live token, and this changes the
+   size and the face, never the colour. */
+.join-form[data-mode="steps"] legend {
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(1.5rem, 3.6vw, 1.9375rem);
+  font-weight: 440;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--ink);
+}
 /* O136: legends are SECTION HEADINGS, not values that change. Six of them sat in the accent
    here — "You", "Your practice", "What you see often" — which made a form of structural labels
    the loudest thing on a page whose two genuinely live tokens (the mix hero's rotating percent
@@ -5254,11 +5300,10 @@ textarea:focus-visible {
 }
 .join-field-error { color: var(--accent); font-size: 0.78125rem; }
 
-/* The care areas sit under three headings — ADHD, depression & anxiety, other mental health — so a
-   GP reads them as conditions rather than one long list. */
-.join-check-group { margin-top: 20px; }
-.join-check-group-title { margin: 0; color: var(--faint); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-.join-check-group .join-checks { margin-top: 10px; }
+/* O185: `.join-check-group` and its title are gone. The three care headings — ADHD, depression &
+   anxiety, other mental health — used to be sub-headings inside one twelve-box fieldset; they are
+   now the legends of three separate steps, so the markup that drew them as sub-headings has no
+   remaining caller. */
 .join-other-languages { display: block; margin-top: 18px; }
 .join-other-languages > span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.875rem; }
 .join-other-languages input { width: 100%; }
@@ -5266,6 +5311,10 @@ textarea:focus-visible {
 /* Checkboxes are a two-column list rather than a grid of cards: seventeen care areas as cards
    would be a wall, and the question is only "which of these". */
 .join-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin-top: 18px; }
+/* The manner statements are whole sentences, not one-word labels. Two columns of them inside the
+   card measured 28–34 characters per line, which is below the readable floor for prose; one
+   column costs vertical space on a screen that has nothing else competing for it. */
+.join-checks-wide { grid-template-columns: 1fr; }
 /* Qualified with .join-form deliberately. `.join-form label` is 0,1,1 and a bare `.join-check` is
    0,1,0, so the generic block rule above won every checkbox on the page: the box stacked ABOVE its
    own label and the form ran to about 4200px on a phone. */
@@ -5283,21 +5332,7 @@ textarea:focus-visible {
 .join-form .join-declaration > span { color: var(--ink); }
 .join-declaration { margin-top: 18px; }
 
-.join-form > button {
-  justify-self: start;
-  min-height: 50px;
-  padding: 0 30px;
-  border: 0;
-  border-radius: 999px;
-  color: var(--on-ground);
-  background: var(--ground);
-  font: inherit;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-.join-form > button:disabled { opacity: 0.6; cursor: default; }
-.join-footnote { max-width: 52ch; }
+.join-footnote { max-width: 52ch; margin-top: 0; }
 
 .join-error {
   margin: 0;

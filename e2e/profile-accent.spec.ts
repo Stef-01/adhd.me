@@ -38,10 +38,36 @@ test("profile highlights are a quiet text line, not dated colored bubbles", asyn
   }
 });
 
-test("relationship copy and booking-source clutter stay absent", async ({ page }) => {
+/**
+ * O185 FOUND THIS RED ON `main` AND FIXED THE ASSERTION, NOT THE PRODUCT — and established which
+ * of the two it was rather than assuming, by stashing O185's own diff and re-running against
+ * `origin/main`, where it fails identically.
+ *
+ * IT IS THE FOURTH FOSSIL FROM THE SAME COMMIT. `4b9c9ab` ("feat: strengthen matching and simplify
+ * clinician profiles") deleted the ownership disclosure and rewrote THREE e2e assertions to require
+ * its ABSENCE; O184 restored the disclosure and swept ownership-disclosure, profile-sweep and
+ * profile-layout — this is a fourth assertion of the same kind, in a spec about accent discipline,
+ * which nothing in that sweep had reason to open. `pnpm verify` is green either way because it does
+ * not run the browser, so nothing said so. That is O183's finding in a THIRD form, and it is the
+ * standing argument for AR14's gate-state signal, still `available`.
+ *
+ * THE DISCLOSURE IS SUPPOSED TO BE THERE. It is a factual claim about a named real person with a
+ * commercial interest in this directory; `src/quality/contradictions.ts`'s `DISCLOSE-2` requires it
+ * by name, and a test demanding its absence contradicts the register that guards it. Asserted
+ * POSITIVELY and by its text, so it cannot pass on an empty profile the way `toHaveCount(0)` could.
+ *
+ * WHAT THE TEST IS STILL FOR IS UNCHANGED: the SHORT LABEL renders beside the listing and the long
+ * sentence does not (O184's own distinction, and the one `profile-layout.spec.ts` measures the fold
+ * against), and no booking-source clutter comes back.
+ */
+test("the disclosure label renders, and relationship prose and booking-source clutter stay absent", async ({ page }) => {
   await intoProfile(page);
-  await expect(page.locator(".disclosure-line")).toHaveCount(0);
-  await expect(page.getByText(/Declared interest in ADHD\.ME/i)).toHaveCount(0);
+  // Dr Anubhav Saxena's own declared label (`src/demo/roster.ts`), not a characterisation of ours.
+  await expect(page.locator(".disclosure-line")).toHaveText("First clinic partner");
+  // The LONG form of the same statement stays off the profile — the label is what renders here.
+  // Anchored to a clause that appears ONLY in `disclosedInterest`: "first clinic partner" occurs in
+  // the label too, so a regex built on it would pass whether or not the paragraph were present.
+  await expect(page.getByText(/Disclosed because he appears in a directory/i)).toHaveCount(0);
   await expect(page.getByText("Live on Healthengine", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "See available times" })).toBeVisible();
 });

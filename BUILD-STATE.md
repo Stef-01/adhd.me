@@ -99,6 +99,64 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O185 (the join form shows one question and almost nothing else) — founder-directed 2026-08-23,
+> session goal-0823b. DONE.** Founder directive, with an Airtable form as the reference: "make the
+> short dr onboarding form system drastically show less at once … minimalist amount of things per
+> page." Full reasoning and before/after captures in `docs/DESIGN-QA.md` §O185 and `qa/join-o185/`.
+> **THE CHROME WAS MOST OF WHAT "AT ONCE" MEANT, COUNTED RATHER THAN FELT.** O181 sectioned the
+> form and the founder's report is that it was still a wall. Step one carried a two-button view
+> toggle, a `Go to` select naming every section, a progress sentence and a progress bar before the
+> legend and the first field — **eight interactive controls before the first question, five of them
+> about the form rather than in it.** The counter is now four characters sharing a row with a
+> hairline rail ({#layout.shared-row}, one row not two), the toggle moved BELOW the card, and the
+> `Go to` select is gone outright: a second navigation model for a form that already has "Show the
+> whole form", which reaches any question in one tap.
+> **AND ONE SCREEN WAS A WALL ON ITS OWN TERMS.** "What you see often" was twelve checkboxes under
+> three sub-headings plus a framing paragraph and the mix echo. `CARE_AREA_GROUPS` was already the
+> seam a GP reads by, so each group became its own step — 4, 2 and 6 boxes; six sections became
+> eight and `.join-check-group`'s markup went with the sub-headings it drew.
+> **THE REFUSAL IS THE PART WORTH READING.** "How you work" (9 statements) and "Languages" (10) are
+> longer than any care group and {#layout.five-then-rest} would have them show five with the rest
+> one tap away. Both left whole, deliberately: **splitting a FLAT set needs a principle for which
+> items come first and neither has one that is ours to invent** — ranking the manner statements is
+> this tree deciding which way of working matters most, ranking the languages is deciding whose
+> language is primary. The care split was honest because its seam already existed. A rule applied
+> where it has no honest cut produces an arbitrary order wearing the authority of a design law.
+> **THE RAIL WAS BUILT WRONG FIRST AND THE MEASUREMENT IS WHY IT MOVED.** Full-bleed across the
+> card head, a 2px bar inside `overflow: hidden` with a 14px radius has both ends eaten by the
+> corner curve — at step 1 the 12.5% fill rendered as a detached dash floating near the corner
+> rather than the start of a track. Caught by reading the rendered geometry, not by eye. Inset
+> beside the counter it is a full-width line beginning where the content begins.
+> **EVERY O181 SAFETY PROPERTY INTACT**: sections hidden and never unmounted (nothing typed is lost
+> across a step or a view switch), ONE native submit still carrying every field so
+> `submitApplication` is untouched, the whole form still rendering without JavaScript, and a server
+> error still pulling the reader to the section holding it. **No new accent** — the sweep still
+> reports `/clinicians/join sites=2 meanings=2 [mix-percent, mix-condition]`; the rail is ink for
+> the same reason O181's bar was.
+> **A RED E2E FOUND ON `main`, AND IT WAS NOT THIS UNIT'S — ESTABLISHED, NOT ASSUMED.** The full
+> suite surfaced `profile-accent.spec.ts` red on `.disclosure-line`; stashing this unit's diff and
+> re-running against `origin/main` fails identically. It is a **FOURTH FOSSIL** from `4b9c9ab`,
+> which deleted the ownership disclosure and rewrote three e2e assertions to require its ABSENCE —
+> O184 restored the disclosure and swept ownership-disclosure, profile-sweep and profile-layout,
+> and this fourth assertion sits in a spec about accent discipline that nothing in that sweep had
+> reason to open. `pnpm verify` is green either way because it does not run a browser. **O183's
+> finding in a THIRD form**, and the standing argument for AR14's gate-state signal, still
+> `available`. Fixed as a STALE ASSERTION, not a product change: `contradictions.ts`'s `DISCLOSE-2`
+> requires the disclosure by name, so a test demanding its absence contradicted the register that
+> guards it. Rewritten POSITIVELY against the label's text so it cannot pass on an empty profile the
+> way `toHaveCount(0)` could, and its negative half re-anchored to a clause occurring only in the
+> long form — the phrase it used before occurs in the short label too and would have passed either
+> way.
+> **GUARDS**: `e2e/join-form.spec.ts` rebuilt around the new shape, with two assertions pinning this
+> unit's own claim rather than describing it — "shows one question and almost nothing else above it"
+> (no select inside the card; the toggle's top edge below the card's bottom edge, measured from the
+> rendered rectangles) and a CAP, `no single step carries more than ten checkboxes`, asserted over
+> every step so a future step that quietly grows past the wall fails whatever it is called.
+> Gate: `pnpm verify` green — typecheck clean, 264 files, 4168 tests (4155 passed, 13 skipped),
+> build clean, audit gate PASS (2 accepted advisories, 0 unaccepted). Touched `app/`, so the FULL
+> e2e suite was run: 294 specs, all green (the one failure was the pre-existing `profile-accent`
+> fossil above, red before this unit and green after it).
+
 > **M6 (grade the parser and the ranker separately, F8) — claimed 2026-08-23T19:38Z by
 > loop-0823f. DONE @ 135cf94.** Q-M item 6, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes
 > per the loop's own rule — the last loop firing to touch this ledger (loop-0823e) took AR5, an

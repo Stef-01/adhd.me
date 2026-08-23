@@ -2493,3 +2493,85 @@ Non-vacuity is load-bearing here more than anywhere — a cap is satisfied perfe
 that finds nothing, and nothing would also mean the live tokens had lost their own accent.
 
 Captures in `qa/accent-o176/`.
+
+## O185 — the join form shows one question and almost nothing else (2026-08-23)
+
+Founder-directed, with an Airtable form as the reference: *"make the short dr onboarding form
+system drastically show less at once … minimalist amount of things per page."*
+
+### What was actually on screen, counted rather than felt
+
+O181 gave the form a sectioned view and the founder's report is that it was still a wall. Counting
+step one before this unit: a two-button view toggle, a `Go to` select carrying every section name,
+a progress sentence, a progress bar, then the legend and three fields. **Eight interactive controls
+before the first question, five of them about the form rather than in it.** The chrome had become
+most of what "at once" meant.
+
+And one screen was a wall on its own terms: **"What you see often" was twelve checkboxes under
+three sub-headings**, plus a framing paragraph and the mix echo — by some distance the busiest
+thing in the form, and it stayed busy in sectioned mode because sectioning stopped at the fieldset.
+`before-mobile-section3-care-wall.png` is it running past the viewport.
+
+### Two subtractions, and one refusal
+
+**The chrome left the top.** The counter is four characters (`Step 3 of 8`), tabular so digits do
+not shuffle the line, sharing a row with a hairline rail — {#layout.shared-row}, one row instead of
+two stacked. The view toggle moved BELOW the card, where something about the form belongs. The
+`Go to` select is gone outright: it was a second navigation model for a form that already has
+"Show the whole form", which reaches any question in one tap.
+
+**The wall was split.** `CARE_AREA_GROUPS` was already the seam a GP reads by, so each group became
+its own step — 4, 2 and 6 boxes. Six sections became eight. The sub-heading markup
+(`.join-check-group`) went with them; the headings are legends now.
+
+**What was NOT split, which is the part worth arguing.** "How you work" (9 statements) and
+"Languages" (10) are longer than any care group, and {#layout.five-then-rest} would have them show
+five with the rest one tap away. Both were left whole. **Splitting a flat set needs a principle for
+which items come first, and neither set has one that is ours to invent**: ranking the manner
+statements is this tree deciding which way of working matters most, and ranking the languages is
+deciding whose language is primary. The care areas split cleanly because their seam already
+existed. A rule applied where it has no honest cut produces an arbitrary order wearing the
+authority of a design law, which is worse than a slightly longer screen.
+
+### The rail was wrong first, and the measurement is why it moved
+
+It was built full-bleed across the head of the card. A 2px bar inside a box with `overflow: hidden`
+and a 14px radius **has both ends eaten by the corner curve**, so at step 1 the 12.5% fill rendered
+as a detached dash floating near the corner rather than the start of a track. Inset inside the card
+padding, beside the counter, it is a full-width line that begins where the content begins.
+
+### What did not change
+
+Every O181 safety property. Sections are hidden, never unmounted, so nothing typed is lost across
+steps or a view switch; the server action still receives ONE native submit carrying every field, so
+`submitApplication` is untouched; without JavaScript the whole form renders as it always did; a
+server error still pulls the reader to the section holding it. **No new accent** — the sweep still
+reports `/clinicians/join sites=2 meanings=2 [mix-percent, mix-condition]`, and the rail is ink for
+the reason the old bar was.
+
+### Guards
+
+`e2e/join-form.spec.ts`, rewritten around the new shape and carrying two new assertions that pin
+this unit's own claim rather than describing it: *"shows one question and almost nothing else above
+it"* (no select in the card; the toggle's top edge is below the card's bottom edge, measured from
+the rendered rectangles) and a **cap** — `no single step carries more than ten checkboxes` —
+asserted over every step, so a future step that quietly grows past the wall fails whatever it is
+called.
+
+### A red e2e found on `main`, and it was not this unit's
+
+The full suite surfaced `profile-accent.spec.ts` failing on `.disclosure-line`. **Established rather
+than assumed**: stashing this unit's diff and re-running against `origin/main` fails identically.
+It is a **fourth fossil** from `4b9c9ab`, which deleted the ownership disclosure and rewrote three
+e2e assertions to require its absence — O184 restored the disclosure and swept
+ownership-disclosure, profile-sweep and profile-layout, and this fourth assertion lives in a spec
+about accent discipline that nothing in that sweep had reason to open. `pnpm verify` is green
+either way because it does not run a browser. **That is O183's finding in a third form**, and the
+standing argument for AR14's gate-state signal, still `available`. Fixed as a stale assertion, not
+a product change: `contradictions.ts`'s `DISCLOSE-2` requires the disclosure by name, so a test
+demanding its absence contradicted the register guarding it. Rewritten POSITIVELY, asserting the
+label's text, so it cannot pass on an empty profile the way `toHaveCount(0)` could — and its
+negative half re-anchored to a clause appearing only in the long form, because the phrase it used
+before occurs in the short label too and would have passed either way.
+
+Captures in `qa/join-o185/` — before and after, mobile and desktop.
