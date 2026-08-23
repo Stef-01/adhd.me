@@ -10,6 +10,7 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "audit:gate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/audit-gate.mts",
+    "generate:aesthetic-coverage": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-aesthetic-coverage.mts",
     "verify": "pnpm typecheck && pnpm test && pnpm build && pnpm audit:gate",
     "gate": "pnpm verify && pnpm e2e"
   },
