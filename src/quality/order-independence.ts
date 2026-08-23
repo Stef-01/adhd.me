@@ -164,6 +164,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/matching/extractor-quality.ts",
+    folds: 4,
+    disposition: {
+      kind: "rationale",
+      why: "FOUR folds (M6), all the same shape as `emotional-fit.ts`'s and `separation-effect.ts`'s: `extractorReport` sums `gold.length`, `hits.length`, `extracted.length` and `extras.length` across `results = entries.map(gradeExtraction)` to four scalar totals (goldFacetCount, hitCount, extractedCount, extraCount). Addition is commutative and every term is read from its own entry's own extraction result, never from its position in the array — permuting `entries` permutes which term contributes which addend, not the sum. None of the four selects a winner or reads a specific index; all four are counts.",
+    },
+  },
+  {
     module: "src/matching/read.ts",
     folds: 1,
     disposition: {
