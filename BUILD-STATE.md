@@ -100,10 +100,53 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **M6 (grade the parser and the ranker separately, F8) — claimed 2026-08-23T19:38Z by
-> loop-0823f.** Q-M item 6, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's
-> own rule — the last loop firing to touch this ledger (loop-0823e) took AR5, an AR-lane unit, so
-> this firing takes an O-lane unit; the O-series' own Q1/Q2 items remain done/blocked and M1–M5 are
-> done, so the lowest-numbered available O-lane work is Q-M's M6.
+> loop-0823f. DONE @ 135cf94.** Q-M item 6, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes
+> per the loop's own rule — the last loop firing to touch this ledger (loop-0823e) took AR5, an
+> AR-lane unit, so this firing takes an O-lane unit; the O-series' own Q1/Q2 items remain
+> done/blocked and M1–M5 are done, so the lowest-numbered available O-lane work is Q-M's M6.
+> **THE GOLD SET ALREADY EXISTED; NOTHING WAS HAND-LABELED FROM SCRATCH.** W231's reach corpus
+> (`corpus.ts`) already hard-pins, per sentence, the facets it MUST reach — `corpus.test.ts` fails
+> the build on a miss today. `src/matching/extractor-quality.ts` computes an AGGREGATE precision/
+> recall number from those same labels (nothing before this unit reported one), and re-tallies the
+> informed/tied/unmatched/unserved ladder restricted to sentences the parser parsed exactly right —
+> the split M6's spec asked for, so a lexicon fix and a weighting fix can no longer move the same
+> collapsed number with nobody able to say which moved it.
+> **MEASURED, NOT ASSUMED FLAT: recall 1.0, precision 1.0 (a lower bound — `never` only names SOME
+> forbidden facets per sentence, not all, so a clean sentence is unproven-dirty rather than
+> proven-clean; recall rests on the same hard pins `corpus.test.ts` already enforces, so it is
+> exact), correctlyParsedRate 1.0 over the 447-entry population `tie-quality.test.ts` already pins
+> (559 gold facets, 0 misses, 0 extras).** `rankingLadderAll` and `rankingLadderCorrectlyParsed` are
+> IDENTICAL today (300 informed / 54 tied / 0 unmatched / 93 unserved) — not the split failing to
+> do anything, but the split correctly reporting that on today's corpus the entire tied+unserved
+> population (147 of 447) is ranker/roster-side, not parser-side, because zero corpus sentences
+> currently carry a live parser defect. Cross-checked against W234's own tally: informed(300) lines
+> up with `separated`(300), tied+unmatched+unserved(147) with `unseparated`(147).
+> **NON-VACUITY, PROVEN WITH SYNTHETIC MISMATCHED GOLD, NOT ASSUMED FROM THE REAL CORPUS ALONE.**
+> Six tests construct entries whose `reaches` disagrees with what the real lexicon actually reaches
+> for the same real sentence — a wrong gold set registers as a miss AND an extra, an empty gold set
+> on a reaching sentence registers the reach as an extra, a mixed two-entry sample drags both
+> recall and precision to 0.5 and `correctlyParsedRate` to 0.5, and a parser-defect entry is proven
+> EXCLUDED from `rankingLadderCorrectlyParsed`'s population (not merely mis-scored within it) by
+> checking the tally's own `total` shrinks. An `aspires`-only entry (no hard-pinned gold) is proven
+> excluded from grading entirely rather than counted as a free, trivially-correct pass — `withGold`
+> filters defensively inside every exported function rather than trusting the caller pre-filtered,
+> closing exactly that loophole (a synthetic `aspires`-only entry passed to `extractorReport`
+> directly caught the gap in review before it shipped).
+> **STRUCTURAL BLINDNESS, NAMED RATHER THAN FIXED** (module header): every gold facet here, and
+> every facet an extraction can be scored an "extra" against, is drawn from the SAME closed
+> vocabulary `corpus.test.ts`'s `VALID_KEYS` enumerates — so a real need for which the vocabulary
+> has no facet at all cannot appear in `gold`, cannot register as a miss, and if the parser
+> (reasonably) extracts nothing for it, reads as a correctly-parsed, fully-recalled success. No
+> amount of corpus growth closes this, because the corpus is written in the same vocabulary the
+> facets are — the appraisal (`docs/MATCHING-APPRAISAL-O182.md`) already named this exact ceiling.
+> **ONE FOLD-REGISTER DECLARATION, PRECEDENTED.** `order-independence.ts`'s W167 register does not
+> know this module's four folds (all sums of per-entry counts over `entries.map(gradeExtraction)`,
+> same commutative-addition shape as `emotional-fit.ts`'s and M5's `separation-effect.ts`'s);
+> declared with a rationale, not silenced.
+> Gate: `pnpm verify` green — typecheck clean, 264 files, 4168 tests (4155 passed, 13 skipped; +9
+> over AR5's 4159), build clean, audit gate PASS (2 accepted advisories, 0 unaccepted). Touched
+> `src/matching/`, so per CLAUDE.md's post-O183 rule: `e2e/finder-flow.spec.ts` (15/15) and
+> `e2e/profile-sweep.spec.ts` (1/1) both run explicitly and green.
 
 > **O40 (Q1 item 4 — negation clauses in the patient reader) — claimed 2026-08-19T00:47Z by
 > loop-0819a as O39; RENUMBERED to O40 in the same firing when PR #7's title ('Terms of use — O39') became visible on rebase. Same collision as O30/PR #4; the claim's timestamp and holder are unchanged. DONE 2026-08-19.** `readNeeds` has no negation handling (the transcript reader does), and a probe
