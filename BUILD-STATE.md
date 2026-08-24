@@ -100,7 +100,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **O186 (founder-directed: conduct code refactor — the copied sign-in flow gets one home) —
-> claimed 2026-08-24T09:04Z by loop-0824e.** Direct founder instruction this session ("conduct
+> claimed 2026-08-24T08:56Z by loop-0824e.** Direct founder instruction this session ("conduct
 > code refactor"), scoped by measurement to the tree's largest live duplication: 18 e2e spec
 > files carry a hand-copied sign-in-and-onboard flow in at least 8 textual variants of the same
 > semantic action — AR8's fixture shape, one layer up. Building now: `e2e/support/session.ts`
