@@ -13,70 +13,24 @@ import { expect, test, type Page } from "@playwright/test";
 // O148's note below still holds and is why the console half exists at all: it is where practice
 // staff work, sometimes on a phone between patients.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+import { floorFinding, underFloorControls } from "./support/touch-load";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
 
 /**
- * Every control on `route` whose HIT AREA is under 44px, with the population it was drawn from.
- *
- * Three exclusions, each principled rather than convenient:
- *   * a link sitting inline inside a sentence — WCAG 2.5.8 exempts these explicitly, and counting
- *     them drowns the real findings. O148 had to widen this past `closest("p")`: a citation link
- *     inside a `<div>` of prose on /console/registers is the same thing and was being reported as
- *     a defect;
- *   * anything out of the tab order, which is honeypots and the like — not a control a person
- *     reaches for;
- *   * `.sr-only` inputs, where the visible affordance is somewhere else.
- *
- * And it measures the hit area, NOT the glyph: an 18px checkbox inside a 44px label is compliant.
- * Measuring the input reported 70 findings where there were 61, all of them styled checkboxes.
+ * AR10: the measurement itself now lives in `e2e/support/touch-load.ts`, so the mutation probe in
+ * `e2e/support/touch-probe.spec.ts` drives THIS detector rather than a copy of it. What stays here
+ * is the sweep's own job: navigation, revealing collapsed surfaces, waiting out font metrics
+ * (O146: /about's "Final-year MD candidate" link flapped 265x44 without it), and the route loops.
+ * The exclusions and the label hit-area rule — O148's and O153's lessons — moved with the
+ * detector, comments and all.
  */
 async function sweep(page: Page, route: string) {
   await page.goto(route, { waitUntil: "networkidle" });
   await revealCollapsedSurfaces(page);
-  // Fonts change metrics and so layout. Without this the sweep reported /about's "Final-year MD
-  // candidate" link at 265x44 as an offender on one run and not the next (O146).
   await page.evaluate(() => document.fonts.ready);
-  return page.evaluate(() => {
-    const out: string[] = [];
-    let seen = 0;
-    const inlineInProse = (el: Element) => {
-      if (el.tagName !== "A") return false;
-      if (el.closest("p")) return true;
-      const parent = el.parentElement;
-      if (!parent) return false;
-      if (getComputedStyle(el).display !== "inline") return false;
-      return (parent.textContent || "").replace(el.textContent || "", "").trim().length > 0;
-    };
-    const selector = 'a, button, input:not([type=hidden]), select, summary, [role="button"]';
-    for (const el of Array.from(document.querySelectorAll(selector))) {
-      const rect = el.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) continue;
-      if (inlineInProse(el)) continue;
-      // O153: EXPLICIT negative tabindex only. `el.tabIndex` is -1 for a `[role="button"]` div
-      // that simply has no tabindex — precisely the accidentally-unreachable control this should
-      // catch — so filtering on it excused the defect. A deliberate `tabindex="-1"` (the
-      // honeypot) is still excused, because that is a decision rather than an oversight.
-      const tabAttr = el.getAttribute("tabindex");
-      if (tabAttr !== null && Number(tabAttr) < 0) continue;
-      if (el.classList.contains("sr-only")) continue;
-
-      let box = rect;
-      const label =
-        el.closest("label") ?? (el.id ? document.querySelector(`label[for="${el.id}"]`) : null);
-      if (label) {
-        const lr = (label as HTMLElement).getBoundingClientRect();
-        if (lr.width * lr.height > box.width * box.height) box = lr;
-      }
-      seen += 1;
-      if (box.height < 44 || box.width < 44) {
-        const name = (el.getAttribute("aria-label") || el.textContent || (label && label.textContent) || "").trim().slice(0, 40);
-        out.push(`<${el.tagName.toLowerCase()}> "${name}" ${Math.round(box.width)}x${Math.round(box.height)}`);
-      }
-    }
-    return { out, seen };
-  });
+  return underFloorControls(page);
 }
 
 async function signInAsPracticeOwner(page: Page) {
@@ -103,7 +57,10 @@ test.describe("O14's 44px touch floor", () => {
     for (const route of PUBLIC_ROUTES) {
       const { out, seen } = await sweep(page, route);
       population += seen;
-      for (const entry of out) offenders.push(`${route} ${entry}`);
+      // AR10: the per-route verdict names the route AND the rule id, which the old per-offender
+      // prefix did not — a reader had to find this spec to learn which register rule had broken.
+      const finding = floorFinding(route, out);
+      if (finding) offenders.push(finding);
     }
     // O159: /demo again, POPULATED. Its "Open booking link" anchors render only once invitations
     // exist, so the pass above measures an empty page and says nothing about them — they were
@@ -113,7 +70,8 @@ test.describe("O14's 44px touch floor", () => {
     await page.waitForURL(/\/console$/);
     const populated = await sweep(page, "/demo");
     population += populated.seen;
-    for (const entry of populated.out) offenders.push(`/demo (populated) ${entry}`);
+    const demoFinding = floorFinding("/demo (populated)", populated.out);
+    if (demoFinding) offenders.push(demoFinding);
 
     // Non-vacuity: a selector that stopped matching would report a perfectly clean sweep.
     // O174: the public list was already complete at 15 routes. The figure is stated as a RANGE
@@ -174,7 +132,10 @@ test.describe("O14's 44px touch floor", () => {
     for (const route of CONSOLE_ROUTES) {
       const { out, seen } = await sweep(page, route);
       population += seen;
-      for (const entry of out) offenders.push(`${route} ${entry}`);
+      // AR10: the per-route verdict names the route AND the rule id, which the old per-offender
+      // prefix did not — a reader had to find this spec to learn which register rule had broken.
+      const finding = floorFinding(route, out);
+      if (finding) offenders.push(finding);
     }
     // O170: the floor was 120, set when this sweep visited 16 console routes. It now visits 28 and
     // the observed population is 207 across 30 routes, so 120 would no longer notice it collapsing to

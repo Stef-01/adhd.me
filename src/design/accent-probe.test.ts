@@ -10,8 +10,8 @@ import {
   MEANINGS_CAP,
   meaningsOf,
   overCapFinding,
-  probeVerdict,
 } from "../../e2e/support/accent-load";
+import { probeVerdict } from "../../e2e/support/probe";
 
 describe("overCapFinding()", () => {
   it("returns null at and below the cap", () => {

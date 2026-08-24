@@ -21,6 +21,9 @@
 
 import type { Page } from "@playwright/test";
 
+// AR10: ProbeVerdict/probeVerdict moved to ./probe — the verdict was never accent-specific and
+// the touch probe is its second caller. Importers now take it from there.
+
 /** The register id this sweep enforces (`src/design/taste-register.ts`). */
 export const ACCENT_RULE_ID = "type.accent-live-tokens";
 
@@ -164,38 +167,4 @@ export async function injectAccentMeanings(page: Page, count: number): Promise<s
     },
     { n: count, prefix: PROBE_CLASS_PREFIX },
   );
-}
-
-/**
- * What one probe run established about the detector it drove.
- *
- * `vacuous` is the outcome AR9 exists to make impossible to report as a note: a sweep that stayed
- * green while the rule was being broken in front of it is not a passing sweep, it is an absent one.
- * `fires-when-clean` is its mirror and is just as disqualifying — a detector that reports a finding
- * on the unmutated page would have made the `vacuous` check pass for the wrong reason.
- */
-export type ProbeVerdict =
-  | { readonly kind: "discriminates"; readonly finding: string }
-  | { readonly kind: "vacuous"; readonly reason: string }
-  | { readonly kind: "fires-when-clean"; readonly reason: string };
-
-export function probeVerdict(
-  ruleId: string,
-  route: string,
-  withProbe: string | null,
-  withoutProbe: string | null,
-): ProbeVerdict {
-  if (withoutProbe !== null) {
-    return {
-      kind: "fires-when-clean",
-      reason: `${ruleId} reported a finding on ${route} with no probe active, so a red run proves nothing: ${withoutProbe}`,
-    };
-  }
-  if (withProbe === null) {
-    return {
-      kind: "vacuous",
-      reason: `${ruleId} stayed green on ${route} while the probe painted more accent meanings than the cap allows — the sweep cannot fail, so it is not a check`,
-    };
-  }
-  return { kind: "discriminates", finding: withProbe };
 }

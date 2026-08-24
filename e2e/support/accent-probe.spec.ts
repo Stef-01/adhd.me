@@ -28,8 +28,8 @@ import {
   injectAccentMeanings,
   meaningsOf,
   overCapFinding,
-  probeVerdict,
 } from "./accent-load";
+import { probeVerdict } from "./probe";
 
 /**
  * TWO ROUTES, EACH CHOSEN FOR WHAT IT CAN PROVE, AND BOTH FOUND AT RUN TIME.
