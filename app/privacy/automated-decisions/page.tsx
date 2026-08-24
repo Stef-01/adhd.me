@@ -12,6 +12,7 @@
 // is written here, because a sentence written here is a sentence that can drift from the code.
 // Add a decision to the register, not to this page.
 
+import { PublicHeader } from "../../public-header";
 import {
   AUTOMATED_DECISIONS,
   HUMAN_CONTROLS,
@@ -27,6 +28,8 @@ export const metadata = {
 
 export default function AutomatedDecisionsPage() {
   return (
+    <>
+    <PublicHeader />
     <main className="mx-auto max-w-xl px-6 py-16">
       <h1 className="text-3xl font-semibold tracking-tight">
         How ADHD.ME uses automated decision-making
@@ -77,5 +80,6 @@ export default function AutomatedDecisionsPage() {
         </section>
       </div>
     </main>
+    </>
   );
 }

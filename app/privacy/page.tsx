@@ -17,6 +17,7 @@
 import Link from "next/link";
 import { GA_ID } from "../analytics";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
+import { PublicHeader } from "../public-header";
 
 export const metadata = {
   alternates: { canonical: "/privacy" },
@@ -26,6 +27,8 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
+    <>
+    <PublicHeader />
     <main className="mx-auto max-w-xl px-6 py-16">
       <p className="mb-2 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
         Draft — not yet in force
@@ -208,5 +211,6 @@ export default function PrivacyPolicyPage() {
         )}
       </div>
     </main>
+    </>
   );
 }

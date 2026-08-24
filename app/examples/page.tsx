@@ -16,6 +16,7 @@ import { careArchetypes } from "@/demo/care-archetypes";
 import { matchQuality, needsFor, rankClinicians } from "@/demo/clinicians";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
+import { PublicHeader } from "../public-header";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/examples" },
@@ -49,6 +50,8 @@ export default function ExamplesPage() {
   });
 
   return (
+    <>
+    <PublicHeader />
     <main className="prose-screen">
       <div className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
@@ -79,5 +82,6 @@ export default function ExamplesPage() {
       </div>
       <SiteFooter />
     </main>
+    </>
   );
 }

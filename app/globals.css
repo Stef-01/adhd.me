@@ -3299,6 +3299,45 @@ textarea:focus-visible {
   transform: translateY(-1px);
 }
 
+/* O189: the funnel CTA takes the stage's primary-button shape (it IS the primary act now),
+   and restart demotes to a quiet text control beneath it. */
+.cv2-action > .cv2-start-cta {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 24px;
+  border-radius: 999px;
+  color: white;
+  background: var(--cv2-ground);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+.cv2-action > .cv2-start-cta:hover { background: #2a2a22; transform: translateY(-1px); }
+.cv2-action > .cv2-start-cta:focus-visible { outline: 2px solid var(--cv2-accent); outline-offset: 3px; }
+.cv2-action > .cv2-restart {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cv2-muted);
+  font-size: 0.8125rem;
+  font-weight: 550;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.cv2-action > .cv2-restart:hover { color: var(--cv2-ground); }
+.cv2-action > .cv2-restart:focus-visible { outline: 2px solid var(--cv2-accent); outline-offset: 3px; }
+
 .cv2-action > p {
   margin: 11px 0 0;
   color: var(--cv2-muted);
@@ -4976,17 +5015,64 @@ textarea:focus-visible {
 */
 /* Clinician joining ----------------------------------------------------------
    O188: the application form is retired; the page is a pitch and one email address. */
-.join-page { min-height: 100dvh; padding: 0 24px 96px; background: var(--paper); }
-.join-wrap { width: min(720px, 100%); margin: 0 auto; }
-.join-header { padding-block: 72px 44px; }
-.join-back {
-  display: inline-block;
-  margin-bottom: 28px;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  text-decoration: none;
+.join-page { min-height: 100dvh; padding: 0 0 96px; background: var(--paper); }
+/* O189: the public spine — the same sticky wordmark-plus-one-link shape /approach carries,
+   in the base palette (the story tokens are .story-scoped on purpose). Shared by every public
+   page that had no mark of its own; app/public-header.tsx is the one place it is written. */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--paper) 85%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
 }
-.join-back:hover { color: var(--ink); }
+.site-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 0 24px;
+  min-height: 66px;
+}
+.site-nav-wordmark {
+  /* O14's floor on the mark itself — the touch sweep caught the first draft at 113x36 within
+     the hour of it shipping, on all nine pages at once. Same hit-area treatment as the
+     story-wordmark group: the glyphs stay this size, the target does not. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+/* Pressable, visibly: a bordered pill, not a bare word — the founder's exact complaint about
+   the old floating "For clinicians" text. */
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 550;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+@media (hover: hover) {
+  .site-nav-link:hover { border-color: var(--ink); }
+}
+.site-nav-link:focus-visible,
+.site-nav-wordmark:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.join-wrap { width: min(720px, 100%); margin: 0 auto; padding: 0 24px; }
+.join-header { padding-block: 56px 36px; }
 .join-header h1 {
   margin: 12px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
@@ -5002,6 +5088,14 @@ textarea:focus-visible {
    (serif statement above, sans note below), the accent is NOT used (an email address is a way
    in, not a live token), and the CTA meets the 44px floor as a real block, not a hairline link. */
 .join-email { padding: 8px 0 0; }
+.join-email-heading {
+  margin: 0 0 18px;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
 .join-email-cta {
   display: inline-flex;
   align-items: center;
@@ -5263,7 +5357,6 @@ textarea:focus-visible {
 .refine-compact,
 .finder-home-link,
 .cv2-join-link,
-.join-back,
 .story-demo-link,
 .story-footer-links a,
 .wordmark,

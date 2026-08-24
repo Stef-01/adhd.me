@@ -2597,3 +2597,42 @@ invitation. Captures: `qa/_runs/join-o188/email-{mobile,desktop}.png` (390×844 
   non-breaking spaces where they appear elsewhere; `tabular-nums` n/a (no changing numbers).
 - The absence is pinned, not assumed: the spec asserts the form's furniture at count 0 —
   hidden-but-rendered would fail it.
+
+## Join funnel & public navigation (O189) — logo, one journey, nine headerless pages fixed
+
+Founder-directed 2026-08-24, verdict quoted in the ledger ("looks ugly … obviously disconnected,
+there is no logo, noone can navigate clearly, the clinicians text looks weird and not obviously
+clickable … do thorough design audit deploy impeccable design, rectify"), plus the follow-up to
+double-check navigation consistency against published best practice. Audited under impeccable
+(craft-floor loaded) with the Vercel web-interface-guidelines fetched as the online source
+(navigation is real links, visible hover states, no dead zones, sticky headers must not cover
+focus).
+
+**The census finding**: the join page's missing logo was not a one-page defect — eight more
+public pages (examples, faq, practices, terms, thanks, privacy ×3, about) carried breadcrumbs
+but no wordmark and nothing shaped like a control. `app/public-header.tsx` is the one fix: the
+sticky serif-wordmark-plus-one-pill-link shape /approach already carried, in the base palette
+(story tokens are deliberately .story-scoped), on all nine pages; the join page uses it with
+"For clinicians" as its right link, replacing the floating text the founder called out.
+
+**The funnel**: /clinicians' four-stage journey used to end at "Restart pathway" — persuasion
+with no destination. Its final stage now ends in the founder's phrase, "Start your journey
+today", as the stage's primary act (58px pill, the stage's own button shape), landing on the
+join page's email invitation, whose CTA section now opens with the same phrase in serif —
+funnel language end-to-end. Restart demoted to a quiet underlined text control. The mid-journey
+aside uses the same phrase.
+
+**The sweeps policed the unit as it was built**: the first draft's wordmark shipped at 113×36
+and the touch sweep went red on all nine pages at once; fixed with the story-wordmark group's
+hit-area treatment (glyphs unchanged, target ≥44px). /about is founder-gated (O155) and the new
+public-nav sweep skips a 404 by name rather than judging it headerless.
+
+Pins: `e2e/public-nav.spec.ts` (every public route shows the mark and reaches home from it —
+route-derived, 404-aware, non-vacuous) and the funnel walk in `e2e/join-page.spec.ts` (twelve
+actions max, must meet the funnel, restart must survive demoted). Captures:
+`qa/_runs/join-o188/` now shows the connected page (same path, current state).
+
+**Copy correction (founder, same day)**: "For GPs who have completed the NSW training" removed
+from the join lead and metadata — the product covers Queensland too, and the story pages already
+said "NSW and Queensland" correctly. The lead now opens at the email itself; no state-scoped
+training claim remains anywhere on the public surfaces (swept, not spot-fixed).

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
+import { PublicHeader } from "../public-header";
 
 export const metadata = {
   alternates: { canonical: "/terms" },
@@ -20,6 +21,8 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
+    <>
+    <PublicHeader />
     <main className="mx-auto max-w-xl px-6 py-16">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Terms", href: "/terms" }]} />
       <p className="mb-2 mt-6 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
@@ -145,5 +148,6 @@ export default function TermsPage() {
       </div>
       <SiteFooter />
     </main>
+    </>
   );
 }

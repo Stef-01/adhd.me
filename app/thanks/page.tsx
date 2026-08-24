@@ -7,6 +7,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
+import { PublicHeader } from "../public-header";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/thanks" },
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
 
 export default function ThanksPage() {
   return (
+    <>
+    <PublicHeader />
     <main className="prose-screen">
       <div className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Registered", href: "/thanks" }]} />
@@ -36,5 +39,6 @@ export default function ThanksPage() {
       </div>
       <SiteFooter />
     </main>
+    </>
   );
 }

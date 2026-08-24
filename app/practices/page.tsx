@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PublicHeader } from "../public-header";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,6 +26,10 @@ export default function PracticesPage() {
           </div>
         </nav>
       </header>
+
+      <>
+
+      <PublicHeader />
 
       <main className="mx-auto max-w-5xl px-6">
         <section className="py-20 sm:py-28">
@@ -198,6 +203,8 @@ export default function PracticesPage() {
           </Link>
         </section>
       </main>
+
+      </>
 
       <footer className="border-t border-stone-100">
         <div className="mx-auto flex max-w-5xl flex-col gap-1 px-6 py-8 text-sm text-stone-500">

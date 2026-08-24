@@ -8,6 +8,7 @@ import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { TEAM_PAGE_PUBLIC } from "./team";
 import { TeamPlates } from "./team-plates";
+import { PublicHeader } from "../public-header";
 
 export const metadata = {
   alternates: { canonical: "/about" },
@@ -23,11 +24,14 @@ export default function AboutPage() {
   if (!TEAM_PAGE_PUBLIC) notFound();
 
   return (
+    <>
+    <PublicHeader />
     <main className="mx-auto max-w-4xl px-6 py-16">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Team", href: "/about" }]} />
       <h1 className="mt-6 text-3xl font-semibold tracking-tight">Team</h1>
       <TeamPlates />
       <SiteFooter />
     </main>
+    </>
   );
 }

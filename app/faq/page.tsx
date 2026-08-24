@@ -5,6 +5,7 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
+import { PublicHeader } from "../public-header";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
@@ -59,6 +60,8 @@ export default function FaqPage() {
     })),
   };
   return (
+    <>
+    <PublicHeader />
     <main className="prose-screen">
       <div className="prose-wrap">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -73,5 +76,6 @@ export default function FaqPage() {
       </div>
       <SiteFooter />
     </main>
+    </>
   );
 }

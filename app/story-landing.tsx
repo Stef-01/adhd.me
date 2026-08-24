@@ -21,7 +21,7 @@ import { CoverageMap } from "./coverage-map";
 
 const STEPS: ReadonlyArray<{ title: string; body: string }> = [
   { title: "Say what you need", body: "In your words. Not a quiz, and not a score." },
-  { title: "See who is near you", body: "GPs who have done the training, by suburb, care area and language." },
+  { title: "See who is near you", body: "GPs who carry ADHD care, by suburb, care area and language." },
   { title: "Book the first appointment", body: "Assessment, baseline checks and follow-up with one clinician." },
 ];
 
@@ -42,7 +42,7 @@ const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = 
   // landing-copy.ts can say it because /practices is addressed to practice managers; this page
   // is addressed to patients, where the same word reads as a claim about what care somebody
   // needs. Same fact, phrased for the audience that is actually reading it.
-  { value: "Now in-practice", label: "NSW and Queensland now let a GP with the right training carry the whole pathway", accent: true },
+  { value: "Now in-practice", label: "NSW and Queensland now let a GP carry the whole pathway", accent: true },
 ];
 
 const COST_NOTE =
@@ -241,7 +241,7 @@ export function StoryLanding() {
           <Reveal delay={0.06} className="story-prose story-prose-lead">
             <p>
               For years, an ADHD assessment meant a long, costly wait for a psychiatrist. In New
-              South Wales and Queensland, GPs with the right training can now do it themselves — so
+              South Wales and Queensland, GPs can now do it themselves — so
               the wait is no longer the only way in.
             </p>
             <p>
@@ -249,7 +249,7 @@ export function StoryLanding() {
               and follow-up start with one clinician near you — not at the back of a referral queue.
             </p>
             <p className="story-note">
-              Every clinician here is a GP with dedicated training in ADHD assessment and care,
+              Every clinician here is a GP focused on ADHD assessment and care,
               working to Australia's national clinical guideline.
             </p>
           </Reveal>
@@ -370,9 +370,8 @@ export function StoryLanding() {
             <p className="story-eyebrow">Join us</p>
             <h2 id="join-title" className="story-heading">Are you a GP who does this work?</h2>
             <p className="story-join-copy">
-              Done the NSW or Queensland training? Get found. One sitting — what you see, how you
-              work, how to reach you. A person reads every application, and nothing goes live until
-              you have read it back.
+              Carrying ADHD care? Get found. Tell us what you see, how you work, how to reach you.
+              A person reads every note, and nothing goes live until you have read it back.
             </p>
           </div>
           <Link className="story-join-link" href="/clinicians/join">

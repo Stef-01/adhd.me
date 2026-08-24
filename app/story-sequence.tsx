@@ -78,7 +78,7 @@ const SCENES: readonly Scene[] = [
     detail: [
       "Practice pages list doctors, not what they do",
       "Reception often cannot say either",
-      "There is no public register of who has done the training",
+      "There is no public register of who actually does this work",
       "The one GP who does it is not taking new patients",
     ],
   },
@@ -134,10 +134,10 @@ const SCENES: readonly Scene[] = [
     eyebrow: "What changed",
     heading: "The rule is changing in NSW and QLD.",
     body:
-      "GPs with the right training can now carry the whole pathway rather than only refer it " +
+      "GPs can now carry the whole pathway rather than only refer it " +
       "onward. Psychiatry stays available for the complex cases. The queue stops being the default.",
     foot:
-      "ADHD.ME lists the GPs who have done that training. Every one of them is a GP; ADHD is not " +
+      "ADHD.ME lists the GPs who do this work. Every one of them is a GP; ADHD is not " +
       "a specialty on the register, and nobody here claims otherwise.",
   },
   {

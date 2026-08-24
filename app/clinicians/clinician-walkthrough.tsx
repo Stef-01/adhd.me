@@ -234,7 +234,7 @@ export function ClinicianWalkthrough() {
               <button type="button" onClick={() => move(1)}>
                 Build my pathway <ArrowRight size={18} weight="bold" aria-hidden="true" />
               </button>
-              <a className="cv2-join-link" href="/clinicians/join">Or join the directory</a>
+              <a className="cv2-join-link" href="/clinicians/join">Or start your journey today</a>
               <p>Demo pathway only. Scope and credentialing remain practice-led.</p>
             </div>
           </section>
@@ -366,8 +366,15 @@ export function ClinicianWalkthrough() {
               <p>Focused skin-cancer GPs improved through the same operating idea: concentrated exposure, pattern recognition and deliberate learning.</p>
             </div>
 
+            {/* O189: the journey's destination, not a cul-de-sac. This stage used to end at
+                "Restart pathway" — the only exit from four stages of persuasion was to run them
+                again, and the join link lived three screens back as an aside. The funnel phrase
+                is the founder's, and it lands on the join page's email invitation. */}
             <div className="cv2-action">
-              <button type="button" onClick={restart}>Restart pathway</button>
+              <a className="cv2-start-cta" href="/clinicians/join">
+                Start your journey today <ArrowRight size={18} weight="bold" aria-hidden="true" />
+              </a>
+              <button type="button" className="cv2-restart" onClick={restart}>Restart pathway</button>
               <p>Exposure and learning activity are not a competence score.</p>
             </div>
           </section>

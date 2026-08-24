@@ -45,3 +45,27 @@ test.describe("the join page after O188", () => {
     expect(body).not.toContain("send application");
   });
 });
+
+test.describe("the funnel from /clinicians (O189)", () => {
+  test("the journey's last stage ends at 'Start your journey today', not a cul-de-sac", async ({ page }) => {
+    await page.goto("/clinicians");
+    // Walk the four stages the way a GP does — the funnel must be reachable, not just present
+    // in the source of a stage nobody gets to.
+    await page.getByRole("button", { name: /Build my pathway/ }).click();
+    // Case-mix feed -> briefing -> practice, each stage's forward action in turn.
+    for (let hops = 0; hops < 12; hops += 1) {
+      const funnel = page.getByRole("link", { name: /Start your journey today/ });
+      if (await funnel.count()) {
+        await expect(funnel.first()).toBeVisible();
+        await expect(funnel.first()).toHaveAttribute("href", "/clinicians/join");
+        // And the old dead end is demoted, not gone: restarting stays possible, quietly.
+        await expect(page.getByRole("button", { name: "Restart pathway" })).toBeVisible();
+        return;
+      }
+      const next = page.locator(".cv2-action > button, .cv2-learning-card > button").first();
+      await expect(next).toBeVisible();
+      await next.click();
+    }
+    throw new Error("walked twelve actions and never met the funnel — the journey still ends nowhere");
+  });
+});
