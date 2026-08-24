@@ -2575,3 +2575,25 @@ negative half re-anchored to a clause appearing only in the long form, because t
 before occurs in the short label too and would have passed either way.
 
 Captures in `qa/join-o185/` — before and after, mobile and desktop.
+
+## Join page (O188) — the form retired, joining is one email (`/clinicians/join`)
+
+Founder-directed 2026-08-24 ("retire whole onboarding form for now as we want things to be
+simple, make it instead send email"). The eight-section application form (O181/O185), the mix
+hero (O24/O26) and the server action are gone; the page is the pitch header and one email
+invitation. Captures: `qa/_runs/join-o188/email-{mobile,desktop}.png` (390×844 and 1280).
+
+- One idea per screen: the serif statement, then a single bordered CTA — nothing competes.
+- The CTA is the page's only control: 52px tall (44px floor cleared), `touch-action:
+  manipulation`, hover inversion gated behind `@media (hover: hover)`, visible
+  `:focus-visible` ring in accent.
+- Accent discipline: ZERO accent sites on this page now (the hero's two live tokens left with
+  it) — the address is a way in, not a live token, so it renders in ink. Site-wide accent
+  distribution re-measured: 10 sites, cap 2 nowhere exceeded.
+- Copy makes no process promise the page cannot keep: "five minutes" and every form word are
+  gone (pinned in `e2e/join-page.spec.ts`), registration details are named as collected later,
+  and no clinical claim, testimonial or "specialist" appears.
+- Real ellipses/dashes: the em-dashes in the lead and note are typographic, names carry
+  non-breaking spaces where they appear elsewhere; `tabular-nums` n/a (no changing numbers).
+- The absence is pinned, not assumed: the spec asserts the form's furniture at count 0 —
+  hidden-but-rendered would fail it.

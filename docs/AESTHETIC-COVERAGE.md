@@ -117,7 +117,7 @@ Hover styles gated behind @media (hover: hover); touch-action: manipulation on c
 Indefinite autoplay needs a stop: pause on hover, stop on engagement.
 
 - **Incident:** O29 — web-guidelines audit + micro-polish
-- **Unenforced:** app/clinicians/join/mix-hero.tsx implements the O29 fix (onMouseEnter pauses the rotation, and engagement stops it — see its own comment citing O29), but no test asserts either behaviour; e2e/join-hero.spec.ts covers the same component without touching hover or engagement
+- **Unenforced:** O29's worked example (mix-hero.tsx's paused-on-hover rotation) was retired with the join form (O188), so the rule currently has NO autoplaying surface to bind — no component in app/ runs an indefinite animation outside the reduced-motion-governed story sequence. The rule stands for the next autoplay that ships; a check for it is written against that surface on the day it exists, not against nothing
 - **Route scope:** —
 
 ### `motion.carries-meaning`

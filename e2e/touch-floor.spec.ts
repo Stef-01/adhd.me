@@ -73,10 +73,14 @@ test.describe("O14's 44px touch floor", () => {
     measured("touch-floor.public", population);
     // AR7: derived from the route list instead of transcribed. The sweep visits every public route
     // plus one extra populated pass over /demo (above), so the basis is PUBLIC_ROUTES.length + 1.
-    // 9/route was chosen below the observed rate (~160-163 over 16 sweeps, ~10/route) so ordinary
-    // per-route variance cannot trip it, while a collapse — a selector that stopped matching, or a
-    // surface that stopped rendering its controls — still falls under it.
-    expect(population, "the public sweep collapsed").toBeGreaterThan(derivedFloor(PUBLIC_ROUTES.length + 1, 9));
+    // O188 RE-DERIVED THE RATE DOWNWARD, AND THE FLOOR FIRING IS WHY IT COULD BE DONE HONESTLY:
+    // retiring the join form removed ~40 controls from the public population (163 -> 123 measured),
+    // and this floor — built by AR7 precisely so a collapse cannot pass silently — went red on the
+    // first full run rather than letting the shrink slide. That is the machinery's first fire in
+    // anger, and in the direction nobody had tested (population loss, not route growth). 7/route
+    // stays below the new observed rate (~123 over 16 sweeps, ~7.7/route) with the same margin
+    // discipline as before; a further collapse still falls under it.
+    expect(population, "the public sweep collapsed").toBeGreaterThan(derivedFloor(PUBLIC_ROUTES.length + 1, 7));
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 

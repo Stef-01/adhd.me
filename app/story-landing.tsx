@@ -376,7 +376,7 @@ export function StoryLanding() {
             </p>
           </div>
           <Link className="story-join-link" href="/clinicians/join">
-            Start onboarding<span className="arrow" aria-hidden="true">→</span>
+            Join the directory<span className="arrow" aria-hidden="true">→</span>
           </Link>
         </div>
       </section>

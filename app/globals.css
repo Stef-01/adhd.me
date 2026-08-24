@@ -4974,8 +4974,8 @@ textarea:focus-visible {
 
    NO PURE BLACK, NO PURE WHITE (Section 8.B). #15160f and #f4f1e9 respectively.
 */
-/* Clinician onboarding ------------------------------------------------------
-   One page, four groups, no wizard. See the note in app/clinicians/join/join-form.tsx. */
+/* Clinician joining ----------------------------------------------------------
+   O188: the application form is retired; the page is a pitch and one email address. */
 .join-page { min-height: 100dvh; padding: 0 24px 96px; background: var(--paper); }
 .join-wrap { width: min(720px, 100%); margin: 0 auto; }
 .join-header { padding-block: 72px 44px; }
@@ -4998,363 +4998,29 @@ textarea:focus-visible {
 }
 .join-lead { max-width: 46ch; margin: 18px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.6; }
 
-/* O24: the patient-mix hero. One sentence at display scale; every control lives inside the
-   sentence itself so nothing on screen competes with the idea. Same serif and tracking as the
-   page's h1 family, accent reserved for the two live tokens (the percent, the condition). */
-.mix-hero {
-  margin: 8px 0 56px;
-  padding-bottom: 44px;
-  border-bottom: 1px solid var(--line);
-}
-
-.mix-line {
-  margin: 20px 0 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(2.125rem, 5.4vw, 3.375rem);
-  font-weight: 430;
-  line-height: 1.14;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-}
-
-.mix-percent-group {
+/* O188: the form is retired — joining is one email. The block keeps the page's own type scale
+   (serif statement above, sans note below), the accent is NOT used (an email address is a way
+   in, not a live token), and the CTA meets the 44px floor as a real block, not a hairline link. */
+.join-email { padding: 8px 0 0; }
+.join-email-cta {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  white-space: nowrap;
-}
-
-.mix-percent {
-  min-width: 2.2ch;
-  text-align: center;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-
-.mix-step {
-  inline-size: 44px;
-  block-size: 44px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--muted);
-  font-size: 1.1875rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: color 120ms ease, border-color 120ms ease;
-}
-@media (hover: hover) {
-  .mix-step:hover:not(:disabled) { color: var(--accent); border-color: var(--accent-mid); }
-}
-.mix-step:disabled { opacity: 0.35; cursor: default; }
-
-.mix-condition-slot {
-  display: block;
-  min-height: 1.2em;
-}
-
-.mix-condition {
-  font-style: italic;
-  color: var(--accent);
-}
-
-.mix-result {
-  margin: 22px 0 0;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 1px solid var(--ink);
+  border-radius: 10px;
   color: var(--ink);
-  font-size: 1.0625rem;
-  line-height: 1.55;
-}
-.mix-result strong { font-weight: 640; }
-
-.mix-honesty {
-  max-width: 52ch;
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
-}
-
-.mix-cta {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 12px 22px;
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--paper);
-  font-size: 0.9375rem;
-  font-weight: 560;
+  font-size: 1.125rem;
+  font-weight: 550;
+  letter-spacing: 0.01em;
   text-decoration: none;
-}
-@media (hover: hover) {
-  .mix-cta:hover { background: var(--accent); }
-}
-
-/* ── O181: the two ways to read the join form ───────────────────────────────────────────────
-   The controls above the form, the progress it reports, and the step buttons inside it.
-
-   THE ONE RULE THIS BLOCK CANNOT GET WRONG. `.join-form fieldset` (below) sets `padding-top` and
-   a `border-top`, and every rule in this file is UNLAYERED while Tailwind's utilities sit in
-   `@layer utilities` — unlayered beats layered whatever the specificity, so a hidden section that
-   relied on `[hidden]`'s user-agent rule would still paint its border and its padding. The hiding
-   rule is therefore written here, explicitly, at a specificity that cannot lose to its neighbour.
-   `e2e/join-form.spec.ts` asserts the COMPUTED display rather than the attribute, because the
-   attribute was never the thing at risk. */
-.join-form fieldset[hidden],
-.join-form .join-actions button[hidden] { display: none; }
-
-/* ── O185: the card, and the chrome that left the top of it ─────────────────────────────────
-   The sectioned view showed one fieldset and stacked four pieces of navigation above it — a view
-   toggle, a "Go to" select, a progress sentence and a bar — so a GP met eight controls before the
-   first question and five of them were about the form rather than in it. What is left above the
-   first question now is a 2px rail and four characters of counter. */
-.join-card {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--paper);
-  overflow: hidden;
-  /* Offset and a soft blur, not a zero-offset halo. Mixed from --ink so the shadow belongs to the
-     palette rather than being a hex nobody chose. */
-  box-shadow:
-    0 1px 2px color-mix(in srgb, var(--ink) 5%, transparent),
-    0 14px 32px -14px color-mix(in srgb, var(--ink) 16%, transparent);
-}
-
-/* The counter and the rail share a row: the same fact in words and drawn, which is
-   {#layout.shared-row}, and one row of chrome instead of two.
-
-   The rail is aria-hidden because the counter says the same thing in words. INK, not accent —
-   `e2e/accent-discipline.spec.ts` allows one accent MEANING per surface and /clinicians/join
-   already spends its on the mix hero's live percent and condition. Position is not a live value
-   the reader set. */
-.join-progress-row { display: flex; align-items: center; gap: 16px; }
-.join-rail { flex: 1 1 auto; height: 2px; border-radius: 999px; background: var(--line); overflow: hidden; }
-.join-rail span { display: block; height: 100%; border-radius: 999px; background: var(--ink); transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-@media (prefers-reduced-motion: reduce) {
-  .join-rail span { transition: none; }
-}
-
-.join-count {
-  flex: 0 0 auto;
-  margin: 0;
-  color: var(--faint);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-}
-.join-count:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-
-/* The escape hatch, under the card where something about the form belongs. */
-.join-underbar { display: grid; justify-items: start; gap: 18px; margin-top: 22px; }
-
-/* A segmented pair, not two buttons: they are one question with two answers, and `aria-pressed`
-   is what says which is current — the fill is the same fact drawn. */
-.join-viewtoggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
-.join-viewtoggle button {
-  min-height: 44px; /* O14 floor */
-  padding: 0 16px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 550;
-  cursor: pointer;
   touch-action: manipulation;
 }
-.join-viewtoggle button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.join-viewtoggle button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) {
-  .join-viewtoggle button[aria-pressed="false"]:hover { color: var(--ink); }
+  .join-email-cta:hover { background: var(--ink); color: var(--paper); }
 }
-
-/* ONE ROW, ONE PRIMARY ACTION. Back is an escape and stays a quiet text control on the left; the
-   button carrying the flow — Next, or Send on the last step — is the only filled thing on screen.
-   `margin-right: auto` on Back is what pushes it apart, so the row needs no justify-content and
-   the whole-form view (submit alone) still sits left exactly as it did before O185. */
-.join-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
-.join-step-back {
-  margin-right: auto;
-  min-height: 44px;
-  padding: 0 6px;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 550;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.join-step-back:disabled { opacity: 0.4; cursor: default; }
-@media (hover: hover) {
-  .join-step-back:not(:disabled):hover { color: var(--ink); }
-}
-.join-form .join-step-next,
-.join-form .join-submit {
-  min-height: 48px;
-  padding: 0 26px;
-  border: 0;
-  border-radius: 999px;
-  color: var(--on-ground);
-  background: var(--ground);
-  font: inherit;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.join-form .join-submit:disabled { opacity: 0.6; cursor: default; }
-.join-actions button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.join-advisory { margin: 0; }
-
-@media (max-width: 560px) {
-  .join-viewtoggle { width: 100%; }
-  .join-viewtoggle button { flex: 1 1 0; padding: 0 10px; }
-  /* The flow button takes the width on a phone; Back stays a small text control beside it. */
-  .join-form .join-step-next,
-  .join-form .join-submit { flex: 1 1 auto; padding: 0 18px; }
-}
-
-/* O184: the material-interest disclosure on a clinician listing.
-   INK, and the direction matters. This is a disclosure about a named real person, sited exactly
-   where the listing is read — so taking it OFF the accent (O166) must not make it quieter. Ink on
-   paper is the highest-contrast pair in the palette; amber is reserved for the one value that
-   changes. The measure is kept short so it reads as a statement rather than as body prose a reader
-   scrolls past. */
-.disclosure-line {
-  max-width: 52ch;
-  margin: 10px 0 0;
-  color: var(--ink);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
-.join-form { display: grid; gap: 40px; padding: clamp(26px, 4.2vw, 40px); }
-.join-form fieldset { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); padding-top: 28px; }
-/* O185: in the sectioned view exactly one fieldset is on screen, so the rule that separated it
-   from its neighbours has no neighbour to separate it from — it renders as a stray line under the
-   counter. The whole-form view still stacks all eight and still needs them. */
-.join-form[data-mode="steps"] { gap: 26px; }
-.join-form[data-mode="steps"] fieldset { border-top: 0; padding-top: 0; }
-/* THE STEP TITLE IS THE STATEMENT OF THE SCREEN, so it takes the serif at display scale —
-   `adhdme-taste` {#type.serif-display}. Only in the sectioned view: stacking eight serif headings
-   in the whole-form view would make a scannable list of labels into eight competing statements,
-   which is the opposite of what that view is for. O136's ruling is untouched either way — these
-   were taken OFF the accent because a structural label is not a live token, and this changes the
-   size and the face, never the colour. */
-.join-form[data-mode="steps"] legend {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.5rem, 3.6vw, 1.9375rem);
-  font-weight: 440;
-  line-height: 1.14;
-  letter-spacing: -0.02em;
-  text-transform: none;
-  color: var(--ink);
-}
-/* O136: legends are SECTION HEADINGS, not values that change. Six of them sat in the accent
-   here — "You", "Your practice", "What you see often" — which made a form of structural labels
-   the loudest thing on a page whose two genuinely live tokens (the mix hero's rotating percent
-   and condition) are what the colour is for. Same undocumented fossil O130 found on
-   `.row-availability`: an accent with no rationale comment anywhere near it.
-
-   The hierarchy survives the change because it was never carried by colour: uppercase, 0.12em
-   letter-spacing and weight 600 are what mark these as labels, and all three stay. */
-.join-form legend {
-  padding: 0;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.join-form label { display: block; margin-top: 20px; }
-.join-form label > span { display: block; margin-bottom: 7px; color: var(--ink); font-size: 0.875rem; font-weight: 550; }
-.join-form input[type="text"],
-.join-form input[type="email"] {
-  width: 100%;
-  min-height: 46px;
-  padding: 0 13px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--ink);
-  background: var(--stone);
-  font: inherit;
-  font-size: 0.9375rem;
-}
-.join-form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.join-form input[aria-invalid="true"] { border-color: var(--accent); }
-.join-form small { display: block; margin-top: 6px; font-size: 0.78125rem; line-height: 1.5; }
-.join-form small[role="alert"] { color: var(--accent); }
-/* O135: 62ch, measured. These hints ran 110 characters per line on a desktop viewport — the
-   widest text on the page and the smallest type on it, which is the pairing O129 found on the
-   profile and fixed there. A hint nobody finishes reading is a hint that did not need writing. */
-.join-hint {
-  margin: 10px 0 0;
-  max-width: 62ch;
-  color: var(--faint);
-  font-size: 0.78125rem;
-  line-height: 1.55;
-}
-.join-field-error { color: var(--accent); font-size: 0.78125rem; }
-
-/* O185: `.join-check-group` and its title are gone. The three care headings — ADHD, depression &
-   anxiety, other mental health — used to be sub-headings inside one twelve-box fieldset; they are
-   now the legends of three separate steps, so the markup that drew them as sub-headings has no
-   remaining caller. */
-.join-other-languages { display: block; margin-top: 18px; }
-.join-other-languages > span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.875rem; }
-.join-other-languages input { width: 100%; }
-
-/* Checkboxes are a two-column list rather than a grid of cards: seventeen care areas as cards
-   would be a wall, and the question is only "which of these". */
-.join-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin-top: 18px; }
-/* The manner statements are whole sentences, not one-word labels. Two columns of them inside the
-   card measured 28–34 characters per line, which is below the readable floor for prose; one
-   column costs vertical space on a screen that has nothing else competing for it. */
-.join-checks-wide { grid-template-columns: 1fr; }
-/* Qualified with .join-form deliberately. `.join-form label` is 0,1,1 and a bare `.join-check` is
-   0,1,0, so the generic block rule above won every checkbox on the page: the box stacked ABOVE its
-   own label and the form ran to about 4200px on a phone. */
-/* O145: 44px hit area, met by PADDING rather than by centring a 30px row in a 44px box.
-   `align-items: flex-start` has to stay — the manner labels wrap to two lines and their box must
-   align to the FIRST line — so a bare `min-height` would have left single-line rows top-aligned
-   with 14px of dead space under the text. Padding grows the clickable area around the text
-   instead, which is what the floor is actually asking for, and the row gap drops to compensate
-   so the form does not get taller. The 30px this replaces was the reason /clinicians/join held
-   32 of the 61 controls under the floor: every care-area, manner, language and availability
-   checkbox on the page a real GP fills in. */
-.join-form .join-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; min-height: 44px; padding: 11px 0; }
-.join-form .join-check input { width: 18px; height: 18px; margin: 1px 0 0; flex: 0 0 auto; accent-color: var(--accent); }
-.join-form .join-check > span { display: inline; margin-bottom: 0; color: var(--muted); font-size: 0.875rem; font-weight: 400; line-height: 1.45; }
-.join-form .join-declaration > span { color: var(--ink); }
-.join-declaration { margin-top: 18px; }
-
-.join-footnote { max-width: 52ch; margin-top: 0; }
-
-.join-error {
-  margin: 0;
-  padding: 12px 14px;
-  border-left: 2px solid var(--accent);
-  background: var(--accent-soft);
-  color: var(--ink);
-  font-size: 0.875rem;
-}
-.join-success { padding: 32px 0 0; }
-.join-success h2 {
-  margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.875rem;
-  font-weight: 450;
-  color: var(--ink);
-}
-.join-success p { max-width: 52ch; margin: 14px 0 0; color: var(--muted); font-size: 0.96875rem; line-height: 1.6; }
-
-@media (max-width: 620px) {
-  .join-checks { grid-template-columns: 1fr; }
-}
+.join-email-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.join-email-note { max-width: 52ch; margin: 18px 0 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
 
 .cv2-join-link {
   display: inline-block;

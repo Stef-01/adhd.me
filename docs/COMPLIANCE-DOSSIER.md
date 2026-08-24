@@ -78,6 +78,7 @@ unmapped surfaces" and been wrong within a day; that claim is now checked rather
 ```surface-census
 / — Community landing
 /api/interest/export — Community interest export
+/api/mock/applications — Mock introspection routes
 /api/mock/capability — Mock introspection routes
 /api/mock/case-mix — Mock introspection routes
 /api/mock/credentials — Mock introspection routes

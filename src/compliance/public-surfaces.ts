@@ -97,7 +97,7 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
   {
     path: "/clinicians/join",
     audience: "professional",
-    why: "The application form for GPs who want to be listed. Addressed to clinicians, asks a clinician about their own practice, and asks nothing about any patient. Public because a GP has to be able to reach it without an account, which is also why it is swept.",
+    why: "The invitation for GPs who want to be listed — O188 retired the application form, so the page is a pitch and one email address; it collects nothing on-page and asks nothing about any patient. Public because a GP has to be able to reach it without an account, which is also why it is swept.",
   },
   {
     path: "/demo",

@@ -8,27 +8,9 @@
 import { expect, test } from "@playwright/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
-type Page = import("@playwright/test").Page;
-
-/** A synthetic application, submitted through the real join form, mix deliberately set. */
-async function submitApplication(page: Page) {
-  await page.goto("/clinicians/join");
-  // O181: the form opens sectioned, so filling fields across five fieldsets needs the whole-form
-  // view. Switching is a reader-reachable control, not a test back door — and it is the same view
-  // this spec always drove, now asked for explicitly.
-  await page.getByRole("button", { name: "Show the whole form" }).click();
-  // Setting the hero's control is what makes the mix ride the application (O26).
-  await page.getByLabel(/Percentage of your patients/i).fill("40");
-  await page.locator('input[name="fullName"]').fill("Dr Applications Spec");
-  await page.locator('input[name="ahpraRegistrationNumber"]').fill("MED0009990057");
-  await page.locator('input[name="email"]').fill("applications-spec@example.practice");
-  await page.locator('input[name="practiceName"]').fill("Spec Family Practice");
-  await page.locator('input[name="practiceSuburb"]').fill("Beecroft");
-  await page.locator('input[name="manner"][value="unhurried"]').check();
-  await page.locator('input[name="consent"]').check();
-  await page.getByRole("button", { name: "Send application" }).click();
-  await expect(page.getByText(/A person reads every application|already have an application/)).toBeVisible();
-}
+// O188: the join form is retired, so the row this spec guards arrives through the synthetic
+// fixture instead of a walked form. The boundary under test is unchanged — an application holds
+// a person's name and email, and no console account may see one byte of it.
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -39,9 +21,11 @@ test("a signed-out visitor is sent to sign-in", async ({ page }) => {
   await expect(page).toHaveURL(/\/console\/signin$/);
 });
 
-test("a practice owner sees the refusal, and not one byte of a stored application", async ({ page }) => {
-  // Non-vacuous by construction: the store genuinely holds this row while we look.
-  await submitApplication(page);
+test("a practice owner sees the refusal, and not one byte of a stored application", async ({ page, request }) => {
+  // Non-vacuous by construction: the store genuinely holds this row while we look — the fixture
+  // response says so, and the assertions below then prove none of it reaches this account.
+  const seeded = await request.post("/api/mock/applications");
+  expect(seeded.ok()).toBe(true);
 
   await signInAsPracticeOwner(page);
   await page.goto("/console/applications");
@@ -53,9 +37,9 @@ test("a practice owner sees the refusal, and not one byte of a stored applicatio
   // The gate sits above the read, so nothing about any application reaches the response —
   // not the applicant's details, not the count, not the mix sentence.
   const body = (await page.content()).toLowerCase();
-  expect(body).not.toContain("applications spec");
+  expect(body).not.toContain("applications fixture");
   expect(body).not.toContain("med0009990057");
-  expect(body).not.toContain("applications-spec@example.practice");
+  expect(body).not.toContain("applications-fixture@example.practice");
   expect(body).not.toContain("mailto:");
   expect(body).not.toContain("stated preference");
   expect(body).not.toContain("applications received");

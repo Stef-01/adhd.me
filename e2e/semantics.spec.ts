@@ -81,6 +81,10 @@ test("headings, landmarks and field names hold across the site", async ({ page, 
   // the 25-route list they replaced. 4/route and 2/route stay below those observed rates
   // (~4.8 headings/route, ~2.4 fields/route).
   expect(headings, "the heading probe stopped matching").toBeGreaterThan(derivedFloor(totalRoutes, 4));
-  expect(fields, "the form-field probe stopped matching").toBeGreaterThan(derivedFloor(totalRoutes, 2));
+  // O188: the join form was ~41 of the site's ~113 visible fields; retiring it dropped the
+  // measured population to 72 over 45 routes (~1.6/route) and AR7's floor at 2/route fired —
+  // correctly, its first fire in anger, in the untested direction (population loss). Re-derived
+  // at 1.4/route (floor 63) below the new observed rate, same margin discipline as the rest.
+  expect(fields, "the form-field probe stopped matching").toBeGreaterThan(derivedFloor(totalRoutes, 1.4));
   expect(findings, `semantic defects:\n${findings.join("\n")}`).toEqual([]);
 });
