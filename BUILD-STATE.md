@@ -23,9 +23,29 @@
 > W251) and are marked `[FOUNDER: VERTICAL UNDECIDED]` instead of being reassigned to a condition
 > nobody chose. No unit was unblocked, no gate was weakened, and no clinical value was authored.
 
+## Gate state (AR14 — the gate reaches the loop)
+
+`gate: green @ 31e25e3 (2026-08-24T09:52Z) — pnpm verify 273 files / 4247 tests, build, audit PASS; full e2e 304/304 last run @ dcda9f4`
+
+> One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
+> gate as part of finishing its unit (protocol step 6), read by every session at claim time
+> (step 1b). O173 is why it exists: the e2e gate went red at O167 and O168–O171 were each built,
+> verified and pushed onto the red base, because the only places the redness lived — a CI tab
+> nobody read, and a suite `pnpm verify` does not run — were not on the path a firing actually
+> walks. This line is on that path. RED here blocks new claims (`claimGuard` names the failure
+> and makes fixing it the firing's unit, which is what the loop's own "red gates first" order
+> already says); `red` without a named failing check is refused by the parser outright, so the
+> state cannot rot into "red, see elsewhere". The sha is the commit the verdict was EARNED on —
+> a later claim-push moving HEAD does not falsify a gate run, and wipe-detection already guards
+> the history this line sits in.
+
 ## Claim protocol (every loop session follows this exactly)
 
 1. `git pull --rebase` the working branch (see **Home resolution** below) so this file is current.
+1b. **Read the Gate state line above (AR14).** Green: proceed. Red: do NOT claim new work — the
+   failure it names IS this firing's unit; claim the fix (a red-gate row, O173's shape), and only
+   a session whose own gate run comes back green may flip the line back. A malformed or missing
+   line is treated as red with "gate state unreadable" as the failure.
 2. Pick ONE unit, in this priority order:
    a. an `in-progress` unit whose continuation notes you can finish;
    b. a `claimed`/`in-progress` unit that the **staleness rule** below says you may reclaim;
@@ -42,7 +62,7 @@
    long, push something at least every 90 minutes** — a green WIP commit, or a heartbeat edit to
    your own row. That push is what tells other sessions you are alive; without it your row is
    reclaimable after 90 minutes (see the staleness rule).
-6. Finish: set status `done` + commit SHA, or `in-progress` + concrete continuation notes (what's left, where, how to verify), or `blocked` + reason (e.g. founder gate). Push with rebase-retry (up to 4 attempts).
+6. Finish: set status `done` + commit SHA, or `in-progress` + concrete continuation notes (what's left, where, how to verify), or `blocked` + reason (e.g. founder gate). **Update the Gate state line (AR14) to what your own gate run proved — green with the figures, or red naming the failing check.** Push with rebase-retry (up to 4 attempts).
 7. Parallelisation is expected: overlapping sessions hold different rows. Never edit another session's non-stale claimed row.
 
 ## Staleness — when you may reclaim someone else's row (W54)
