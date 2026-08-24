@@ -85,7 +85,9 @@ describe("ADHD assessment demo archetypes", () => {
     const byId = new Map(careArchetypes.map((archetype) => [archetype.id, archetype.request.toLowerCase()]));
 
     expect(byId.get("anxiety-differential-hindi")).toMatch(/wrong answer|differential/);
-    expect(byId.get("sleep-and-family-context")).toMatch(/sleep/);
+    // O191: the refugee journey replaced the sleep journey and keeps this property — "whether
+    // this is adhd at all" is the may-be-no register in the reader's own words.
+    expect(byId.get("childhood-in-another-country")).toMatch(/whether this is adhd at all/);
   });
 
   /**
@@ -94,21 +96,23 @@ describe("ADHD assessment demo archetypes", () => {
    * widen (stay at `0.5`) rather than narrow (move to `1`).
    *
    * Narrowing treats a "sometimes" declaration as formally ineligible (zero, not half) for the
-   * archetype gate. Both `anxiety-differential-hindi` and `sleep-and-family-context` route to a
-   * clinician who holds exactly one required area at "sometimes" and nowhere stronger — narrowing
-   * empties both to no eligible clinician at all, which is precisely the "leads somewhere real"
-   * failure this file's other test exists to catch, for a third of the six journeys.
+   * archetype gate. `anxiety-differential-hindi` routes to a clinician who holds its required
+   * `anxiety` area at "sometimes" and nowhere stronger — narrowing empties it to no eligible
+   * clinician at all, which is precisely the "leads somewhere real" failure this file's other
+   * test exists to catch. (O191 re-measured: it used to be two of six — the sleep journey
+   * required `non-medication`, also held at "sometimes" — until that journey was replaced by
+   * the refugee journey, which requires only the formally-held anchor area. One journey
+   * emptying is still the whole argument: the threshold decides whether a real journey leads
+   * anywhere.)
    *
    * Called through the SAME `cliniciansMatchingArchetype` every other test in this file uses, at
    * a different threshold — not a shadow reimplementation of the eligibility rule.
    */
-  it("M2 — measured both ways: narrowing to a formal-only threshold empties two of six journeys", () => {
+  it("M2 — measured both ways: narrowing to a formal-only threshold empties a real journey", () => {
     const narrow = careArchetypes.filter((archetype) => cliniciansMatchingArchetype(archetype, 1).length === 0);
     const decided = careArchetypes.filter((archetype) => cliniciansMatchingArchetype(archetype).length === 0);
 
-    expect(narrow.map((archetype) => archetype.id).sort()).toEqual(
-      ["anxiety-differential-hindi", "sleep-and-family-context"].sort(),
-    );
+    expect(narrow.map((archetype) => archetype.id)).toEqual(["anxiety-differential-hindi"]);
     expect(decided).toHaveLength(0);
 
     // Non-vacuity: a threshold above the maximum possible facetStrength (1) must empty every

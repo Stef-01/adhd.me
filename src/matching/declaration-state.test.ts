@@ -146,9 +146,10 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
     // `anusha-saxena`, woman) and the full 447-sentence reach corpus. Re-earned, not inherited:
     // a roster or corpus change that moves these numbers is real news about what this schema can
     // and cannot tell a reader, and the pin exists so that news cannot pass silently.
-    expect(result.valueDiffers).toBe(332);
+    // O191 re-pinned: the refugee-register corpus line grew the run 447 -> 448; culturally_attuned differs between the two, so valueDiffers 332 -> 333.
+    expect(result.valueDiffers).toBe(333);
     expect(result.intervalSeparates).toBe(25);
-    expect(result.ambiguous).toBe(307);
+    expect(result.ambiguous).toBe(308);
     // The named risk, checkable rather than merely asserted: every genuine, uncertainty-free
     // separation this roster's declarations support traces to the one exempt field.
     expect(result.separatingFacetKeys).toEqual(["pref:woman-gp"]);

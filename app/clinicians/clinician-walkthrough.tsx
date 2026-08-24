@@ -348,22 +348,17 @@ export function ClinicianWalkthrough() {
               </div>
             </div>
 
-            <div className="cv2-loop">
-              {[
-                ["Choose", "Make the clinical direction explicit."],
-                ["Concentrate", "See enough similar cases to recognise patterns."],
-                ["Learn", "Read only what tomorrow’s work makes useful."],
-                ["Repeat", "Let exposure and reflection compound."],
-              ].map(([title, detail], index) => (
-                <div key={title}>
+            {/* O191: the founder's clutter verdict. The four sub-sentences restated the stage
+                lead ("Relevant cases and deliberate learning, repeated over time") in smaller
+                type, and the skin-cancer analogy band was unrelated clinical content on an ADHD
+                funnel — both gone. Four words carry the loop; the freed height is whitespace. */}
+            <div className="cv2-loop" role="list">
+              {["Choose", "Concentrate", "Learn", "Repeat"].map((title, index) => (
+                <div key={title} role="listitem">
                   <span>{index + 1}</span>
-                  <div><strong>{title}</strong><p>{detail}</p></div>
+                  <strong>{title}</strong>
                 </div>
               ))}
-            </div>
-
-            <div className="cv2-note">
-              <p>Focused skin-cancer GPs improved through the same operating idea: concentrated exposure, pattern recognition and deliberate learning.</p>
             </div>
 
             {/* O189: the journey's destination, not a cul-de-sac. This stage used to end at

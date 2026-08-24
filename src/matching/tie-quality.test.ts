@@ -163,7 +163,9 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
    pref:longer-appointment now separates the two-person roster instead of tying it. Separation
    62.2% -> 67.1%, the same shape O88 named the other direction: a REAL declaration changing how
    answerable the roster already was, not the matcher improving. */
-const PINNED = { total: 447, separated: 300, partialTie: 0, unseparated: 147 };
+/* O191 re-pinned: the refugee-register corpus line grew the run 447 -> 448; the new sentence reaches culturally_attuned, which only one clinician
+   declares, so it lands separated: 300 -> 301, unseparated unchanged. */
+const PINNED = { total: 448, separated: 301, partialTie: 0, unseparated: 147 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

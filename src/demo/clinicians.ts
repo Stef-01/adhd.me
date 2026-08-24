@@ -1001,10 +1001,10 @@ export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): st
  *
  * DECIDED: WIDEN, staying at `0.5`. `care-archetypes.test.ts`'s M2 test measures both ways —
  * narrowing to `1` (only a formal "often" declaration is eligible; a "sometimes" declaration
- * scores ZERO instead of half) empties `anxiety-differential-hindi` and
- * `sleep-and-family-context` to NO eligible clinician at all, a third of the demo's six
- * journeys, because both route to a clinician who holds exactly one of the archetype's required
- * areas at the "sometimes" grade and nowhere stronger. Widening keeps all six servable and pays
+ * scores ZERO instead of half) empties `anxiety-differential-hindi` to NO eligible clinician at
+ * all, because it routes to a clinician who holds its required area at the "sometimes" grade
+ * and nowhere stronger. (O191: the evidence was two journeys of six until the sleep journey —
+ * the other "sometimes"-dependent one — was replaced; the argument is unchanged.) Widening keeps all six servable and pays
  * the interest-grade declaration exactly the half-weight it earned — never rendered as a full
  * match, per W213's explain module — rather than a directory that either advertises care it
  * cannot reach (narrowing) or inflates a "sometimes" into an "often" (the bug F5 named).

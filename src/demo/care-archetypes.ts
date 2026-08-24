@@ -86,16 +86,22 @@ export type CareArchetype = {
  */
 export const careArchetypes: CareArchetype[] = [
   {
-    id: "structured-baseline",
-    title: "Do the physical checks properly first",
-    eyebrow: "Before anything is started",
-    example: "A GP who will check the heart, the blood pressure and the sleep before a stimulant is on the table.",
+    /* O191: replaced "Do the physical checks properly first" at the founder's verdict — a
+       pre-stimulant physical baseline is what ANY competent GP does, so a scenario built on it
+       differentiates nobody. What actually differentiates is the appointment itself: ADHD is a
+       working-memory condition, and the commonest unmet ask is walking out still holding what
+       was said. The notetaker is the patient's own tool; the match is on what Dr Saxena
+       DECLARES — sense-making, unhurried, plain explanation — never on tools nobody declared. */
+    id: "notetaker-and-understanding",
+    title: "Help me actually hold on to what was said",
+    eyebrow: "The appointment I can keep",
+    example: "A GP who is fine with an AI notetaker in the room and works with you until the condition makes sense.",
     request:
-      "I want a thorough, structured assessment. Before anyone talks about a stimulant I want the physical baseline done properly — heart, blood pressure, sleep — and I want to know what gets monitored afterwards and how often.",
-    headline: "The baseline done before the prescription, not after.",
+      "Appointments vanish on me — I forget half of what was said before I reach the car. I want a GP who is fine with me bringing my AI notetaker, will go step by step, explain the plan in plain language, and give me enough time to understand what is going on with my own brain.",
+    headline: "Walk out knowing what was decided, and why.",
     expectedFirstMatch: "anubhav-saxena",
     requirements: {
-      careAreas: ["adhd-assessment", "titration"],
+      careAreas: ["adhd-assessment"],
     },
   },
   {
@@ -139,16 +145,24 @@ export const careArchetypes: CareArchetype[] = [
     },
   },
   {
-    id: "sleep-and-family-context",
-    title: "Sleep that has never been right",
-    eyebrow: "The rest of the picture",
-    example: "A GP who takes sleep and family context seriously rather than treating them as background noise.",
+    /* O191: replaced "Sleep that has never been right" at the founder's verdict — "takes sleep
+       seriously" is another thing no GP would disclaim. The founder's example was a GP who
+       understands the challenges of being a refugee; the roster's honest answer is Dr Anusha
+       Saxena's OWN declarations — culturally sensitive care, Hindi and Urdu, understands your
+       background — so the journey is built on those, told from the patient's side: an ADHD
+       assessment leans on childhood evidence, and a childhood lived in another country, in
+       another language, has none of the usual paper. If the founder wants refugee-health
+       expertise CLAIMED, that needs a clinician who declares it, not copy. */
+    id: "childhood-in-another-country",
+    title: "My childhood happened in another country",
+    eyebrow: "Assessment without the paper trail",
+    example: "A GP who understands what assessment means when you arrived as a refugee — no Australian school reports, a childhood lived in another language.",
     request:
-      "My sleep has never been right and my family think I am just disorganised and always have been. I want a GP who will take the sleep seriously and understands the family context I am explaining this inside.",
-    headline: "The sleep and the family, treated as part of the picture.",
+      "I came here as a refugee and my whole childhood happened in another country, in another language — there are no school reports to point to. I want a GP who is culturally sensitive, understands my background and my family, and will still work out whether this is ADHD at all.",
+    headline: "Your background understood, your history still taken seriously.",
     expectedFirstMatch: "anusha-saxena",
     requirements: {
-      careAreas: ["adhd-assessment", "non-medication"],
+      careAreas: ["adhd-assessment"],
     },
   },
   {

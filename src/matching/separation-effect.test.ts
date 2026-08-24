@@ -32,19 +32,19 @@ function separationEffectCurve(sizes: readonly number[], sentences: readonly str
 }
 
 const PINNED_CURVE: SeparationEffectReport[] = [
-  { rosterSize: 2, k: K, total: 447, observedSeparationRate: 0.342, nullMeanSeparationRate: 0.342, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 447, observedSeparationRate: 0.134, nullMeanSeparationRate: 0.135, nullStdSeparationRate: 0.001, effect: -0.001 },
-  { rosterSize: 5, k: K, total: 447, observedSeparationRate: 0.148, nullMeanSeparationRate: 0.143, nullStdSeparationRate: 0.005, effect: 0.005 },
-  { rosterSize: 10, k: K, total: 447, observedSeparationRate: 0.004, nullMeanSeparationRate: 0.015, nullStdSeparationRate: 0.006, effect: -0.011 },
-  { rosterSize: 25, k: K, total: 447, observedSeparationRate: 0.002, nullMeanSeparationRate: 0.004, nullStdSeparationRate: 0.003, effect: -0.002 },
+  { rosterSize: 2, k: K, total: 448, observedSeparationRate: 0.344, nullMeanSeparationRate: 0.344, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 448, observedSeparationRate: 0.134, nullMeanSeparationRate: 0.135, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 448, observedSeparationRate: 0.147, nullMeanSeparationRate: 0.142, nullStdSeparationRate: 0.005, effect: 0.005 },
+  { rosterSize: 10, k: K, total: 448, observedSeparationRate: 0.004, nullMeanSeparationRate: 0.015, nullStdSeparationRate: 0.006, effect: -0.011 },
+  { rosterSize: 25, k: K, total: 448, observedSeparationRate: 0.002, nullMeanSeparationRate: 0.004, nullStdSeparationRate: 0.003, effect: -0.002 },
 ];
 
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 2,
   k: K,
-  total: 447,
-  observedSeparationRate: 0.671,
-  nullMeanSeparationRate: 0.671,
+  total: 448,
+  observedSeparationRate: 0.672,
+  nullMeanSeparationRate: 0.672,
   nullStdSeparationRate: 0,
   effect: 0,
 };
@@ -60,13 +60,13 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     "REPRODUCES THE DEFECT ON THE RAW SCALAR, using nothing but the fixture already in the tree: " +
       "shrinking the synthetic roster 3 -> 2 (zero real declaration change — `syntheticRoster` " +
       "draws every facet independently, no correlation is planted) more than doubles the naive " +
-      "separationRate, 0.134 -> 0.342, exactly the shape W234/M3's real 62.2% -> 67.1% jump had " +
+      "separationRate, 0.134 -> 0.344, exactly the shape W234/M3's real 62.2% -> 67.1% jump had " +
       "when Dr Yadav's departure shrank the real roster the same way",
     () => {
       const naive3 = tieQualityReport(corpusRun(), syntheticRoster(3)).separationRate;
       const naive2 = tieQualityReport(corpusRun(), syntheticRoster(2)).separationRate;
       expect(naive3).toBe(0.134);
-      expect(naive2).toBe(0.342);
+      expect(naive2).toBe(0.344);
       expect(naive2).toBeGreaterThan(naive3);
     },
   );
@@ -107,7 +107,7 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
   it(
     "NON-VACUOUS, SECOND WAY: a real disqualifying regression — a drop far larger than any " +
       "measured null std — still fails at the default tolerance. Mutates ONE point of the real " +
-      "curve to reproduce the raw scalar's own magnitude of jump (naive 0.134 -> 0.342, i.e. a " +
+      "curve to reproduce the raw scalar's own magnitude of jump (naive 0.134 -> 0.344, i.e. a " +
       "drop of 0.208 if read in the shrinking direction) and confirms the checker catches it",
     () => {
       const mutated = curve.map((point, index) => (index === 3 ? { ...point, effect: point.effect - 0.208 } : point));

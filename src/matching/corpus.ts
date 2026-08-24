@@ -166,6 +166,9 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my mum thinks this is nonsense and she'll be in the room", reaches: ["manner:culturally_attuned"] },
   { text: "family will be involved whether anyone likes it or not", reaches: ["manner:culturally_attuned"] },
   { text: "someone who respects my faith", reaches: ["manner:culturally_attuned"] },
+  // O191: the refugee register — childhood in another country, none of the usual assessment
+  // paper. The word is precise enough to carry the facet alone (the "neuroaffirming" shape).
+  { text: "I came here as a refugee and my childhood was in another language", reaches: ["manner:culturally_attuned"] },
   { text: "my rooms are above the pharmacy", never: ["manner:culturally_attuned"] },
 
   // ── manner:structured ────────────────────────────────────────────────────────────────────

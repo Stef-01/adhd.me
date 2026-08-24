@@ -270,6 +270,12 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       /* O139: naming English as a second language is how the ask arrives when somebody is not
          asking for an interpreter but for the pace and patience that go with it. */
       "second language", "culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
+      // O191 (founder-directed): the refugee register. A single precise word (the
+      // "neuroaffirming" precedent — no pair needed, nothing else says it), because an ADHD
+      // assessment leans on childhood evidence and a refugee childhood carries none of the
+      // usual paper; the ask is cultural attunement plus that understanding, which is exactly
+      // this facet's territory. Pinned in corpus.ts beside the other culturally_attuned lines.
+      "refugee",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
       // O25: "in the room with me" stopword-stripped down to the single token [room], so
       // "my rooms are above the pharmacy" claimed this facet (found by the W227 reach-gap
