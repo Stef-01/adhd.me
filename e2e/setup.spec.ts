@@ -9,19 +9,12 @@
 // blocking (a slow sim build behind a page, say).
 
 import { expect, test } from "@playwright/test";
+import { signInAsPracticeOwner as signIn } from "./support/session";
 
 /** Wall-clock ceiling for the whole wizard. Generous: it guards against blocking, not slowness. */
 const CEILING_MS = 120_000;
 /** A practice manager should not face more steps than this in one sitting. */
 const MAX_STEPS = 5;
-
-async function signIn(page: import("@playwright/test").Page, email: string) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill(email);
-  await page.getByRole("button", { name: "Sign in" }).click();
-  // Must not match /console/signin itself, which also contains "/console".
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-}
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");

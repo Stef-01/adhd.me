@@ -13,24 +13,10 @@
 // they would test is unit-tested instead.
 
 import { expect, test } from "@playwright/test";
+import { createPractice, signInAsPracticeOwner as signIn } from "./support/session";
 
 const OWNER = "owner@demo.practice.example";
 const OUTSIDER = "stranger@elsewhere.example";
-
-async function signIn(page: import("@playwright/test").Page, email: string) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill(email);
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-}
-
-async function onboard(page: import("@playwright/test").Page, name: string, holdout: string) {
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill(name);
-  await page.getByLabel("Holdout share (%)").fill(holdout);
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -38,8 +24,8 @@ test.beforeEach(async ({ request }) => {
 
 test("one owner, two practices: both are offered and the console says which it is on", async ({ page }) => {
   await signIn(page, OWNER);
-  await onboard(page, "Harbour Family Practice", "10");
-  await onboard(page, "Riverside Medical", "20");
+  await createPractice(page, { name: "Harbour Family Practice", holdout: "10" });
+  await createPractice(page, { name: "Riverside Medical", holdout: "20" });
 
   await page.goto("/console");
   await expect(page.getByTestId("practice-switcher")).toBeVisible();
@@ -51,8 +37,8 @@ test("switching practice changes what the console shows, and holds across pages"
   // The rules config is per practice now. Two practices with different holdouts prove the
   // console is reading the active one rather than the only one.
   await signIn(page, OWNER);
-  await onboard(page, "Harbour Family Practice", "10");
-  await onboard(page, "Riverside Medical", "20");
+  await createPractice(page, { name: "Harbour Family Practice", holdout: "10" });
+  await createPractice(page, { name: "Riverside Medical", holdout: "20" });
 
   await page.goto("/console");
   await page.getByRole("combobox", { name: "Practice" }).selectOption({ label: "Harbour Family Practice" });
@@ -70,7 +56,7 @@ test("a single-practice user is offered no switcher", async ({ page }) => {
   // A control offering one choice is furniture. Also the non-vacuity guard for the test above:
   // without this, the switcher assertions could be passing on a component that always renders.
   await signIn(page, OWNER);
-  await onboard(page, "Harbour Family Practice", "10");
+  await createPractice(page, { name: "Harbour Family Practice", holdout: "10" });
   await page.goto("/console");
   await expect(page.getByTestId("practice-switcher")).toHaveCount(0);
 });
@@ -80,7 +66,7 @@ test("a user who belongs to no practice cannot reach another's console", async (
   // membership anywhere, so every console surface sends them to onboarding rather than showing
   // somebody else's practice.
   await signIn(page, OWNER);
-  await onboard(page, "Harbour Family Practice", "10");
+  await createPractice(page, { name: "Harbour Family Practice", holdout: "10" });
 
   await context.clearCookies();
   await signIn(page, OUTSIDER);
@@ -98,7 +84,7 @@ test("a user who belongs to no practice cannot reach another's console", async (
 test("asking for a practice you do not belong to is refused, not honoured", async ({ page, context }) => {
   // The cookie is a PREFERENCE, never a grant. Forging it must pick nothing.
   await signIn(page, OWNER);
-  await onboard(page, "Harbour Family Practice", "10");
+  await createPractice(page, { name: "Harbour Family Practice", holdout: "10" });
   const owned = await page.getByRole("heading", { level: 1 }).first().textContent();
   expect(owned).toBeTruthy();
 

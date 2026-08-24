@@ -29,6 +29,7 @@
 // real findings would look identical to this one from the outside.
 
 import { expect, test, type Page } from "@playwright/test";
+import { signInAndOnboard } from "./support/session";
 import { discoverSurfaces } from "../src/compliance/surfaces";
 import { lintPartyToCare } from "../src/compliance/party-to-care";
 
@@ -65,18 +66,6 @@ async function lintRendered(page: Page, label: string) {
     findings.map((f) => `${f.rule}: "${f.match}" — ${f.explanation}`),
     `${label} implies ADHD.ME is a party to clinical care`,
   ).toEqual([]);
-}
-
-async function signInAndOnboard(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
 }
 
 test.beforeEach(async ({ request }) => {

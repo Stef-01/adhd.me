@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { signInAndOnboard as signIn } from "./support/session";
 import {
   CONSOLE_ROUTES,
   DYNAMIC_ROUTE_PLAN,
@@ -14,17 +15,6 @@ import {
 // swept by nothing, under a test named "the word is gone from every surface". `./site-routes` has
 // the reasoning; the short version is that a hardcoded list sweeps what somebody remembered and
 // stays green beside everything added afterwards.
-async function signIn(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
   // O167: SEEDED, BECAUSE THIS SWEEP WAS ORDER-DEPENDENT AND ONLY SOMETIMES SAW WHAT IT AUDITS.

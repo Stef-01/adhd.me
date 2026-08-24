@@ -2,19 +2,7 @@
 // per-practice pause, and the auth guard.
 
 import { expect, test } from "@playwright/test";
-
-async function signInAndOnboard(page: import("@playwright/test").Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  // Onboard so the signed-in user becomes owner (pause_sending grant).
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
+import { signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/ops"); // resets ops + booking rail

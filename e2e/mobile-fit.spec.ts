@@ -37,18 +37,7 @@ import { expect, test, type Page } from "@playwright/test";
 // existing spec passed while that was true, because a11y does not measure layout, the public sweep
 // reads copy, and no unit test can see a viewport.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
-
-async function signInAsPracticeOwner(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
+import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 /** iPhone 12/13/14 logical width - the narrowest mainstream phone still in wide use. */
 const PHONE = { width: 390, height: 844 };

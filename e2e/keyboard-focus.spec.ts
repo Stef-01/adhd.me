@@ -15,6 +15,7 @@ import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
+import { signInAndOnboard } from "./support/session";
 
 /**
  * Signed-in setup plus O174's corrected fixture seeding.
@@ -28,15 +29,7 @@ async function signInAndSeed(page: Page, request: APIRequestContext) {
   // created straight after; anything that reads `practices[0]` comes later. Posting it mid-list is
   // what made three fixtures return 500 and left the touch sweep measuring unlinked refusal pages.
   await request.post("/api/mock/console");
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page);
 
   await seedFixtures(request);
 }

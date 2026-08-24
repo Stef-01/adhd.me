@@ -17,6 +17,7 @@ import { floorFinding, underFloorControls } from "./support/touch-load";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
+import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 /**
  * AR10: the measurement itself now lives in `e2e/support/touch-load.ts`, so the mutation probe in
@@ -31,18 +32,6 @@ async function sweep(page: Page, route: string) {
   await revealCollapsedSurfaces(page);
   await page.evaluate(() => document.fonts.ready);
   return underFloorControls(page);
-}
-
-async function signInAsPracticeOwner(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
 }
 
 test.describe("O14's 44px touch floor", () => {

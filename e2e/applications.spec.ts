@@ -6,6 +6,7 @@
 // application actually exists in the store, and neither a signed-out visitor nor a practice
 // account can see one byte of it.
 import { expect, test } from "@playwright/test";
+import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 type Page = import("@playwright/test").Page;
 
@@ -27,18 +28,6 @@ async function submitApplication(page: Page) {
   await page.locator('input[name="consent"]').check();
   await page.getByRole("button", { name: "Send application" }).click();
   await expect(page.getByText(/A person reads every application|already have an application/)).toBeVisible();
-}
-
-async function signInAsPracticeOwner(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
 }
 
 test.beforeEach(async ({ request }) => {

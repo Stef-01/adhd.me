@@ -14,6 +14,7 @@
 // correction in product code: replace the assertion with a refusal that states its reason.
 
 import { expect, test } from "@playwright/test";
+import { signInAndOnboard } from "./support/session";
 
 /** The routes that act for the first seeded practice, and therefore need one to exist. */
 const PRACTICE_DEPENDENT = ["credentials", "capability", "education"];
@@ -40,15 +41,7 @@ test("the same fixtures seed normally once a practice exists", async ({ page, re
   // Non-vacuity, and it is the half that matters: a route that returned 409 to EVERYTHING would
   // satisfy the test above while breaking every sweep that depends on these fixtures.
   await request.post("/api/mock/console");
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page);
 
   for (const fixture of PRACTICE_DEPENDENT) {
     const response = await request.post(`/api/mock/${fixture}`);

@@ -18,6 +18,7 @@ import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
+import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 /**
  * Every text element whose contrast is under its WCAG AA floor, with the population it came from.
@@ -84,18 +85,6 @@ async function sweep(page: Page, route: string) {
     }
     return { out, seen };
   });
-}
-
-async function signInAsPracticeOwner(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
 }
 
 test.describe("WCAG AA contrast", () => {

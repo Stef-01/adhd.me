@@ -4,6 +4,7 @@
 // one practice, so isolation is not observable from the browser).
 
 import { expect, test } from "@playwright/test";
+import { signInAndOnboard } from "./support/session";
 
 type Page = import("@playwright/test").Page;
 type Request = import("@playwright/test").APIRequestContext;
@@ -14,16 +15,7 @@ type Request = import("@playwright/test").APIRequestContext;
  * completes. Seeding earlier silently attaches them to nothing.
  */
 async function signInOnboardAndSeed(page: Page, request: Request) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("owner@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-
-  await page.goto("/console/onboarding");
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page);
 
   await request.post("/api/mock/registers");
 }
