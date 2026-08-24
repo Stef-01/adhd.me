@@ -119,7 +119,26 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **AR15 (per-route visual baselines, deterministic) — claimed 2026-08-24T10:32Z by loop-0824e.**
+> **O189 (founder-directed: the clinician funnel gets a spine — logo, navigation, one journey
+> to the email) — claimed 2026-08-24T10:44Z by loop-0824e.** The founder's design verdict on
+> the live join page, in their words: it "looks ugly … and obviously disconnected, there is no
+> logo, noone can navigate clearly, the clinicians text looks weird and not obviously
+> clickable"; /clinicians must "funnel to say start your journey today and lead to the email to
+> register interest"; "do thorough design audit deploy impeccable design, rectify". Building
+> under impeccable (loaded, per CLAUDE.md law 5) with adhdme-taste as law: a shared public
+> header (wordmark home-link + clear nav) on the clinician surfaces, the join page reconnected
+> to the site's visual world, the /clinicians walkthrough ending in a "Start your journey
+> today" funnel to the email invitation, and the back-link that read as plain text replaced by
+> navigation that looks like navigation. Persuade surfaces, craft-floor loaded before edits.
+> UI unit: qa/ captures, DESIGN-QA entry, full gate.
+
+> **AR15 (per-route visual baselines, deterministic) — claimed 2026-08-24T10:32Z by loop-0824e IN-PROGRESS — PARKED FOR A FOUNDER INSTRUCTION, with the reason recorded: the harness
+> (`e2e/support/visual.ts`, `visual-stability.spec.ts`, `src/design/visual-baselines.test.ts`,
+> 5 vitest green) is built and the first stability run was CAPTURING when the founder ordered
+> the clinician funnel reshaped (O189) — baselines accepted on a tree already ordered changed
+> would be dead on arrival, so the three-run protocol runs AFTER O189 lands, on the settled
+> tree. Continuation: run the spec 3× with VISUAL_RUN_OUT, diff manifests via `manifestDiff`,
+> accept `qa/baselines/manifest.json` only on three-way zero diff, then the spec gates.**
 > `docs/AESTHETIC-REVIEW-PLAN.md` Phase 3 opens. Lanes: O-lane founder-gated past M10; the
 > founder's O188 shipped; lowest available AR unit. ONE DISAGREEMENT WITH THE PLAN, REPORTED
 > BEFORE BUILDING (this lane's law): the plan's matrix says 47 routes × 2 themes — the tree has
