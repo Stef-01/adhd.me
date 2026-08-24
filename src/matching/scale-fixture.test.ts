@@ -107,8 +107,14 @@ describe("Q3 item 10's premise", () => {
    * ways: a regression fails, and an improvement has to move the number deliberately.
    */
   it("acquires real choices as the roster grows", () => {
+    // M10 REDREW THIS CURVE, AND THE PLATEAU IS THE GATE. Pre-gate the figures were 1/4/6/8 and
+    // kept climbing, because every splitting facet was a candidate and more clinicians meant
+    // more distinct split ratios. The relevance gate bounds candidates to the nine facets this
+    // ASK's corpus evidence suggests, so distinct evenness saturates once every suggested facet
+    // is a candidate — growth in the roster no longer manufactures questions the request never
+    // suggested, which is the gate doing at scale exactly what it does at three.
     const measured = [3, 8, 20, 40].map((size) => clarifierScaleReport(ASK, syntheticRoster(size)));
-    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 6, 8]);
+    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 5, 5]);
     // Monotone by construction of the evenness function, but pinned because the CLAIM is that it
     // grows — a change that made it non-monotone would falsify the claim while passing the above.
     const evenness = measured.map((r) => r.distinctEvenness);
@@ -116,7 +122,7 @@ describe("Q3 item 10's premise", () => {
   });
 
   /**
-   * The second half of what scale buys, and the more useful half. At two, fifteen askable
+   * The second half of what scale buys, and the more useful half. At today's size, the askable
    * questions collapse into two distinct reorderings: most of the questions are, in effect,
    * the same question. At twenty every one is distinct.
    *
@@ -128,13 +134,12 @@ describe("Q3 item 10's premise", () => {
    */
   it("turns duplicate questions into distinct ones", () => {
     const real = clarifierScaleReport(ASK, clinicians);
-    expect([real.candidates, real.distinctSignatures]).toEqual([15, 2]);
-    // atTwenty moves too, and by the module's own design (see the header: "a roster edit moves
-    // the rates, which moves the measurement, which fails the pin — deliberately"). unhurried's
-    // marginal rate among the real roster went 0/2 -> 1/2, so the synthetic draw now clears the
-    // threshold for some of the twenty fixture entries where it never could before.
+    // Nine candidates, not the fifteen this pin held before M10: the relevance gate admits only
+    // the facets this ASK's corpus co-occurrence suggests. The signature story is unchanged —
+    // at this roster size the nine still collapse into two distinct reorderings.
+    expect([real.candidates, real.distinctSignatures]).toEqual([9, 2]);
     const atTwenty = clarifierScaleReport(ASK, syntheticRoster(20));
-    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([15, 15]);
+    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([9, 9]);
   });
 
   /** Non-vacuity for the whole report: the selector's order is not the tie-break's order. */

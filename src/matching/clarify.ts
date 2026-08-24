@@ -30,6 +30,7 @@
 import type { Clinician } from "@/demo/clinicians";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
+import { requestSuggests } from "./clarifier-relevance";
 import { facetKey, holdsPreference, readNeeds, type Facet, type Preference } from "./needs";
 
 /**
@@ -223,15 +224,16 @@ export function declaredKeys(clinician: Clinician): Set<string> {
  *
  * THE EVENNESS SORT IS INERT AT TODAY'S ROSTER SIZE, and this comment used to guess at that
  * ("barely matters today") rather than know it. O142 measured it: on three clinicians every
- * splitting facet is held by one or by two, and |1/3 - 0.5| === |2/3 - 0.5|, so ALL sixteen
- * askable questions carry the same evenness and this sort decides nothing whatever. Every bit of
+ * splitting facet is held by one or by two, and |1/3 - 0.5| === |2/3 - 0.5|, so every askable
+ * question carries the same evenness and this sort decides nothing whatever. Every bit of
  * real ordering today is done by the greedy holder-signature dedup below (O33).
  *
- * The other half of the old guess — "will matter a lot at twenty" — is earned: over a synthetic
- * roster with the real one's marginal rates, the number of distinct evenness values goes 1 at
- * three, 4 at eight, 7 at twenty, 9 at forty, and the sixteen questions that collapse into five
- * distinct reorderings at three are all sixteen distinct at twenty. Both numbers are pinned in
- * scale-fixture.test.ts, so the day the roster grows, the pin fails and says so.
+ * The other half of the old guess — "will matter a lot at twenty" — is earned, and M10 redrew
+ * the curve: over a synthetic roster with the real one's marginal rates, distinct evenness goes
+ * 1 at three, 4 at eight, then saturates at 5 from twenty on, because the relevance gate bounds
+ * the candidates to what the request suggests — roster growth stops manufacturing questions the
+ * reader never hinted at. The figures are pinned in scale-fixture.test.ts, so the day the roster
+ * or the corpus grows, the pin fails and says so.
  */
 export function clarifiers(query: string, roster: readonly Clinician[], limit = 3): Clarifier[] {
   // THE ROSTER ARGUMENT MUST BE THE LIST THE READER IS LOOKING AT (O7/F10). `heldBy` and the
@@ -243,8 +245,28 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
   const declared = roster.map(declaredKeys);
   const keys = new Set(declared.flatMap((set) => [...set]));
 
+  /* M10: THE RELEVANCE GATE, AND IT IS NOT OPTIONAL. Splitting the roster earns a facet its
+     CANDIDACY; only the request can earn it the QUESTION. A candidate must co-occur with
+     something the reader actually said (clarifier-relevance.ts, corpus-derived) — otherwise
+     this function is choosing the axis two doctors happen to differ on and asking the reader
+     to care about it, which the year plan names as manipulation, and the 1.5× lift then
+     rewards the answer as if the reader had raised it themselves.
+
+     THE ONE CARVE-OUT, STATED WITH ITS REASON: a request that reached NOTHING is ungated.
+     There is no stated interest to divert from, W225 exists precisely for the reader whose
+     words reached nothing, and gating on an empty set would return zero questions for the
+     product's commonest dead end. The moment one facet is heard, the gate is live.
+
+     ZERO QUESTIONS IS A DESIGNED OUTCOME, not a failure state. Measured on the real roster:
+     "English is my second language and appointments move too fast" reaches unhurried and
+     culturally-attuned — everything it suggests is already heard — and the only splitting
+     facets left are anxiety, shared care and child assessment. Before this gate the reader
+     got those three; now they get none, and none is correct. */
+  const reachedKeys = [...alreadyAsked];
+
   const ranked = [...keys]
     .filter((key) => !alreadyAsked.has(key))
+    .filter((key) => reachedKeys.length === 0 || requestSuggests(reachedKeys, key))
     .map((key) => ({ key, heldBy: declared.filter((set) => set.has(key)).length }))
     // Splits the roster: somebody has it, somebody does not. Anything else cannot reorder.
     .filter((entry) => entry.heldBy > 0 && entry.heldBy < roster.length)
@@ -253,6 +275,16 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
       return copy ? { facetKey: entry.key, heldBy: entry.heldBy, ...copy } : null;
     })
     .filter((entry): entry is Clarifier => entry !== null)
+    /* M10 FOUND THIS LATENT, THE GATE DID NOT CAUSE IT. An answer is re-read by readNeeds, and
+       some answers reach more than their own facet: manner:unhurried's answer contains "a longer
+       first appointment", which is pref:longer-appointment's own phrase — the file already calls
+       those two questions twins where PREF_PROMPTS declines to duplicate the prompt. The key-level
+       alreadyAsked check above cannot see that, so "never asks about something the reader already
+       said" (the W225 pin) held only because three roster-split questions happened to outrank the
+       twin. The relevance gate removed them and the twin rose into the offer. The rule the pin
+       always meant is enforced here at the level the pin checks: a candidate whose ANSWER re-reads
+       to any facet the reader already stated is a repeat wearing different words. */
+    .filter((entry) => readNeeds(entry.answer).every((need) => !alreadyAsked.has(facetKey(need.facet))))
     .sort((a, b) => {
       // Closest to an even split first.
       const evenness = (n: number) => Math.abs(n / roster.length - 0.5);
