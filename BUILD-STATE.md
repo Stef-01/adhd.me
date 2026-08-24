@@ -119,6 +119,23 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O191 (founder-directed: the practice stage broke the minimalism law — unrelated skin-cancer
+> copy out, one idea per screen restored) — claimed 2026-08-24T12:24Z by loop-0824e.** The
+> founder's verdict on the compressed practice stage, in their words: "why did you put unrelated
+> content like GP skin test and make it look so cluttered and ugly and betrayed the minimalism
+> principle and impeccable design no AI slop design rules, this is a huge regression
+> aesthetically." Diagnosis owned in the claim: the skin-cancer sentence is ORIGINAL walkthrough
+> copy (pre-O188), but O190's one-screen compression restyled it into a tinted band stacked
+> between the stat card, a 2x2 numbered grid and three CTA elements — six bands, no air, on one
+> 390x844 screen. Scope: (1) the skin-cancer note DELETED — unrelated clinical content on an
+> ADHD funnel, whatever its age; (2) the loop's four sub-paragraphs cut — the stage lead
+> ("Relevant cases and deliberate learning, repeated over time") already says what they restate;
+> the four steps become one quiet row; (3) the freed height returns as whitespace, not more
+> content. One-screen pin (stage-heights.spec.ts) must stay green at both widths; adhdme-taste
+> review + captures + DESIGN-QA entry. AR15's protocol restarts AFTER this lands (runs 1-2 of
+> the stopped attempt disagreed on 6/180 captures — console/outreach x4 and home under
+> no-preference — recorded here so the determinism debt is named, not lost).
+
 > **O190 (founder-directed: SEO + micro-refinements from the fetched guidance) — claimed 2026-08-24T11:29Z
 > by loop-0824e. DONE @ 4043ea8.** The /goal instruction plus the founder's mid-build follow-up ("fix all the scaling for the join flow, make it always fit on one screen … no weird scrolling after clicking each time and make it instead have fades"), built from the fetched Vercel web-interface-guidelines and measured probes, never taste. **SEO**: the sitemap was hand-typed and MISSING /demo — O168's disease in the SEO layer — and now derives from the compliance census (a page cannot join W102's census and miss the sitemap), pinned BOTH directions in `src/quality/sitemap.test.ts` with O155's /about gating and the dynamic-path exclusions kept; `theme-color` was scoped as missing and found ALREADY PRESENT (the viewport export — the census grepped the wrong spelling), recorded as such rather than rebuilt. **GUIDELINE ITEMS LANDED**: a skip link ("include skip link for main content") as the first tab stop on every page, hidden until focused, targeting `id="main-content"` stamped on all 21 `<main>` landmarks; `scroll-margin-top` on `[id]` (the guideline's anchor rule — /practices' #how/#measurement/#practice-story scrolled under its own sticky bar); explicit-property transitions on the new nav controls (the guidance's own ban on `transition: all`); reduced-motion-gated `:active` press feedback on the three primary CTAs. **THE WALKTHROUGH, MEASURED TO ONE SCREEN IN FOUR RECORDED ROUNDS**: the founder's "weird scrolling" was the smooth `scrollTo` travelling against the already-existing `cv2-stage-in` fade — stage changes now reset instantly and the fade carries the transition alone. The fit was probe-driven end to end: stages overflowed 390×844 by 539/436/409/367px and 1280×900 by 375/543/416/416; a height-chain probe then found the real poles — a ~260px band below a 100svh shell (the Acknowledgement of Country, which DELIBERATELY STAYS, one scroll below the fold: fitting the flow is not a licence to remove the acknowledgement), the mobile condition list collapsed to ONE column (six rows where three fit — the goal stage's whole overflow), and the practice stage's single-file loop (983 measured; now a 2×2 grid). Round two's own pin caught round one's fix making 390 WORSE (two columns wrapping labels) before it shipped. **PINNED FOREVER** in `e2e/support/stage-heights.spec.ts`: after each stage change every stage's full extent sits inside the viewport at 390×844 AND 1280×900, non-vacuous (the walk must cross all four stages), with the briefing stage's resource-cycling honoured rather than flattened. Captures `qa/_runs/walkthrough-o190/`, DESIGN-QA entry appended. Gate: pnpm gate green — verify 276 files / 4262 tests (13 skipped), build clean, audit PASS (2 accepted, 0 unaccepted); full e2e 300 passed / 1 named skip (AR15 baseline pending) in 15.8m.
 > Original claim text follows. The /goal instruction: "implement more SEO and online learnings for
