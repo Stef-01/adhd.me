@@ -10,6 +10,7 @@ import {
   needsFor,
   type Clinician,
 } from "@/demo/clinicians";
+import { syntheticClinician } from "@/demo/synthetic-clinician";
 import type { CareArea } from "@/demo/care-archetypes";
 import type { EIQuality } from "@/demo/emotional-fit";
 
@@ -130,5 +131,77 @@ describe("2026-08-22 constraint-first ranking audit", () => {
     expect(bands).toHaveLength(2);
     expect(bands[0]!.clinicians[0]!.id).toBe("language-match");
     expect(bands[0]!.constraintScore).toBeGreaterThan(bands[1]!.constraintScore);
+  });
+});
+
+describe("2026-08-24 M9 — tiers before summing, past the constraint tier (F9)", () => {
+  /**
+   * THE PINNED DEFECT, MEASURED ON THE REAL LEXICON BEFORE THIS UNIT'S FIX. A GP who declares
+   * exactly the one care area asked for (`adhd-assessment`, weight 12) lost to a GP who
+   * declares three manner traits the same request happens to reach (24 each, weight 72) —
+   * `weightedScore` summed them into one number and 72 > 12, so three style adjectives outranked
+   * a real clinical-scope match. O185 (2026-08-22) already stops this shape for a language or
+   * preference constraint (`constraintScore`, compared above); it never reached care vs manner,
+   * which is the gap this unit closes. Before the fix `rankClinicians` returned
+   * `["manner-match", "care-match"]` for this exact pair and request — a reader would call that
+   * wrong, which is the unit's own verify criterion.
+   */
+  it("does not let three manner traits outrank a real care-area match", () => {
+    const careMatch = syntheticClinician({
+      id: "care-match",
+      careAreas: ["adhd-assessment"],
+      manner: [],
+    });
+    const mannerMatch = syntheticClinician({
+      id: "manner-match",
+      careAreas: [],
+      manner: ["structured", "non_judgmental", "sense_making"] as EIQuality[],
+    });
+    const request =
+      "I need adhd assessment. I want a structured, non judgmental doctor who helps me make sense of things.";
+    const needs = needsFor(request, [careMatch, mannerMatch]);
+
+    expect(rankingProfile(mannerMatch, needs).weightedScore).toBeGreaterThan(
+      rankingProfile(careMatch, needs).weightedScore,
+    );
+    expect(rankingProfile(careMatch, needs).careScore).toBeGreaterThan(0);
+    expect(rankingProfile(mannerMatch, needs).mannerScore).toBeGreaterThan(
+      rankingProfile(careMatch, needs).careScore,
+    );
+
+    expect(rankClinicians(request, [mannerMatch, careMatch])[0]!.id).toBe("care-match");
+  });
+
+  /**
+   * The mirror case, so the tier is a real comparison and not "care always wins": with no care
+   * ask in the request, a manner match still separates the field on its own — the contributory
+   * tier is compared, not skipped, once the strong tier ties (both zero here).
+   */
+  it("still separates on manner when no care area was asked for", () => {
+    const mannerRich = syntheticClinician({ id: "manner-rich", careAreas: [], manner: ["structured"] as EIQuality[] });
+    const mannerNone = syntheticClinician({ id: "manner-none", careAreas: [], manner: [] });
+    const request = "I want a structured doctor.";
+
+    expect(rankClinicians(request, [mannerNone, mannerRich])[0]!.id).toBe("manner-rich");
+  });
+
+  /**
+   * The tier already fixed by O185 stays fixed: a language constraint still cannot be
+   * outvoted by manner, now that `weightedScore` no longer decides ties directly — it is the
+   * pre-existing `constraintCoverage`/`constraintScore` steps above the new ones that hold this,
+   * and this is the regression guard that the reordering did not disturb them.
+   */
+  it("still never lets manner traits outvote a language constraint (O185, unchanged by M9)", () => {
+    const languageMatch = syntheticClinician({ id: "lang-match", languages: ["English", "Hindi"], careAreas: [], manner: [] });
+    const mannerMatch = syntheticClinician({
+      id: "manner-match",
+      languages: ["English"],
+      careAreas: [],
+      manner: ["structured", "non_judgmental", "sense_making"] as EIQuality[],
+    });
+    const request =
+      "I speak Hindi and want a structured, non judgmental doctor who helps me make sense of things.";
+
+    expect(rankClinicians(request, [mannerMatch, languageMatch])[0]!.id).toBe("lang-match");
   });
 });

@@ -135,6 +135,13 @@ describe("W232 the invariants, for all inputs", () => {
   });
 
   it("band coherence: bands partition the ranking, equal within, strictly descending across", () => {
+    // M9: bands are no longer ordered by raw `score` alone (two bands can now share a total
+    // while differing in the care/manner split that decided their order — that split IS the
+    // fix). The tier vector `rankClinicians` actually sorts on — constraintCoverage,
+    // constraintScore, careScore, mannerScore, coverage — is what must be strictly descending
+    // across band boundaries; `score` (the sum) is asserted equal WITHIN a band only.
+    const tierVector = (band: { constraintCoverage: number; constraintScore: number; careScore: number; mannerScore: number; coverage: number }) =>
+      [band.constraintCoverage, band.constraintScore, band.careScore, band.mannerScore, band.coverage] as const;
     fc.assert(
       fc.property(sentence, (text) => {
         const bands = rankBands(text, clinicians);
@@ -147,7 +154,11 @@ describe("W232 the invariants, for all inputs", () => {
           }
         }
         for (let i = 1; i < bands.length; i++) {
-          expect(bands[i]!.score).toBeLessThan(bands[i - 1]!.score);
+          const current = tierVector(bands[i]!);
+          const previous = tierVector(bands[i - 1]!);
+          const firstDifference = current.findIndex((value, index) => value !== previous[index]);
+          expect(firstDifference).toBeGreaterThanOrEqual(0);
+          expect(current[firstDifference]!).toBeLessThan(previous[firstDifference]!);
         }
       }),
       { seed: SEED, numRuns: 200 },

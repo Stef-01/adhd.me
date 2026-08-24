@@ -1,9 +1,12 @@
 // M5 (F7) verify gate: the effect-size metric, measured against a permuted null, PROVEN to
 // resist the exact defect it replaces rather than merely trusted to.
 //
-// THE NUMBERS BELOW ARE MEASURED, 2026-08-23, k=50 shuffles, the full 447-sentence reaching
-// corpus (`corpusRun()`), against `syntheticRoster`'s deterministic draw. Move them ONLY with a
-// re-measured run in the commit that moves them, same law as `tie-quality.test.ts`'s own pin.
+// THE NUMBERS BELOW ARE MEASURED, 2026-08-24 (re-measured by M9 — the tiered comparator changes
+// how ties resolve at N=3 and N=5, moving the pin exactly where the ranking semantics changed and
+// nowhere else; N=2, N=10, N=25 and the real roster are untouched), k=50 shuffles, the full
+// 447-sentence reaching corpus (`corpusRun()`), against `syntheticRoster`'s deterministic draw.
+// Move them ONLY with a re-measured run in the commit that moves them, same law as
+// `tie-quality.test.ts`'s own pin.
 import { describe, expect, it } from "vitest";
 import { clinicians } from "@/demo/clinicians";
 import { corpusRun, tieQualityReport } from "./tie-quality";
@@ -30,8 +33,8 @@ function separationEffectCurve(sizes: readonly number[], sentences: readonly str
 
 const PINNED_CURVE: SeparationEffectReport[] = [
   { rosterSize: 2, k: K, total: 447, observedSeparationRate: 0.342, nullMeanSeparationRate: 0.342, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 447, observedSeparationRate: 0.136, nullMeanSeparationRate: 0.136, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 5, k: K, total: 447, observedSeparationRate: 0.148, nullMeanSeparationRate: 0.148, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 447, observedSeparationRate: 0.134, nullMeanSeparationRate: 0.135, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 447, observedSeparationRate: 0.148, nullMeanSeparationRate: 0.143, nullStdSeparationRate: 0.005, effect: 0.005 },
   { rosterSize: 10, k: K, total: 447, observedSeparationRate: 0.004, nullMeanSeparationRate: 0.015, nullStdSeparationRate: 0.006, effect: -0.011 },
   { rosterSize: 25, k: K, total: 447, observedSeparationRate: 0.002, nullMeanSeparationRate: 0.004, nullStdSeparationRate: 0.003, effect: -0.002 },
 ];
@@ -57,27 +60,29 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     "REPRODUCES THE DEFECT ON THE RAW SCALAR, using nothing but the fixture already in the tree: " +
       "shrinking the synthetic roster 3 -> 2 (zero real declaration change — `syntheticRoster` " +
       "draws every facet independently, no correlation is planted) more than doubles the naive " +
-      "separationRate, 0.136 -> 0.342, exactly the shape W234/M3's real 62.2% -> 67.1% jump had " +
+      "separationRate, 0.134 -> 0.342, exactly the shape W234/M3's real 62.2% -> 67.1% jump had " +
       "when Dr Yadav's departure shrank the real roster the same way",
     () => {
       const naive3 = tieQualityReport(corpusRun(), syntheticRoster(3)).separationRate;
       const naive2 = tieQualityReport(corpusRun(), syntheticRoster(2)).separationRate;
-      expect(naive3).toBe(0.136);
+      expect(naive3).toBe(0.134);
       expect(naive2).toBe(0.342);
       expect(naive2).toBeGreaterThan(naive3);
     },
   );
 
   it(
-    "AND THE EFFECT SIZE DOES NOT: netted against a permuted null computed at the SAME size, " +
-      "the same 3 -> 2 shrink shows zero movement — the naive jump was entirely the size " +
-      "artefact this metric exists to remove, not a signal in the (absent, in this fixture) " +
-      "declarations",
+    "AND THE EFFECT SIZE MOSTLY DOES NOT: netted against a permuted null computed at the SAME " +
+      "size, the same 3 -> 2 shrink shows the naive jump was almost entirely the size artefact " +
+      "this metric exists to remove — N=2's null is exactly degenerate (effect exactly 0) and " +
+      "N=3's own effect is -0.001, an order of magnitude below the 0.206 naive jump this metric " +
+      "was built to see through, not a revival of the size artefact it removes",
     () => {
       const size3 = curve.find((point) => point.rosterSize === 3)!;
       const size2 = curve.find((point) => point.rosterSize === 2)!;
-      expect(size3.effect).toBe(0);
+      expect(size3.effect).toBe(-0.001);
       expect(size2.effect).toBe(0);
+      expect(Math.abs(size3.effect)).toBeLessThan(0.01);
     },
   );
 
@@ -102,23 +107,26 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
   it(
     "NON-VACUOUS, SECOND WAY: a real disqualifying regression — a drop far larger than any " +
       "measured null std — still fails at the default tolerance. Mutates ONE point of the real " +
-      "curve to reproduce the raw scalar's own magnitude of jump (naive 0.136 -> 0.342, i.e. a " +
-      "drop of 0.206 if read in the shrinking direction) and confirms the checker catches it",
+      "curve to reproduce the raw scalar's own magnitude of jump (naive 0.134 -> 0.342, i.e. a " +
+      "drop of 0.208 if read in the shrinking direction) and confirms the checker catches it",
     () => {
-      const mutated = curve.map((point, index) => (index === 3 ? { ...point, effect: point.effect - 0.206 } : point));
+      const mutated = curve.map((point, index) => (index === 3 ? { ...point, effect: point.effect - 0.208 } : point));
       expect(isMonotonicNonDecreasing(mutated)).toBe(false);
     },
   );
 
-  it("reports the named weakness rather than hiding it: the null is degenerate at N=2 and N=3", () => {
-    // At these sizes every one of the K shuffles reproduced the SAME separationRate as the
-    // unshuffled roster (std 0) — the permutation space is genuinely this thin, not a bug that
-    // happens to look clean. Asserted so a future corpus/roster change that quietly fixes this
-    // (a nonzero std appearing) is visible rather than silently accepted either way.
+  it("reports the named weakness rather than hiding it: the null is degenerate at N=2, and thin at N=3", () => {
+    // At N=2 every one of the K shuffles reproduced the SAME separationRate as the unshuffled
+    // roster (std 0) — the permutation space is genuinely this thin, not a bug that happens to
+    // look clean. M9's tiered comparator (care and manner compared as separate steps rather than
+    // summed) resolves a handful of the corpus's N=3 ties differently across shuffles that used
+    // to land identically, so N=3 is no longer perfectly degenerate — its std moved from exactly
+    // 0 to 0.001, still small enough to change nothing this metric concludes, and asserted at its
+    // new value rather than re-widened to "roughly zero" so a further drift is still visible.
     const size2 = curve.find((point) => point.rosterSize === 2)!;
     const size3 = curve.find((point) => point.rosterSize === 3)!;
     expect(size2.nullStdSeparationRate).toBe(0);
-    expect(size3.nullStdSeparationRate).toBe(0);
+    expect(size3.nullStdSeparationRate).toBe(0.001);
   });
 });
 

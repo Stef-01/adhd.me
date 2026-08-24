@@ -74,8 +74,24 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
     const byConstraint = bProfile.constraintScore - aProfile.constraintScore;
     if (byConstraint !== 0) return byConstraint;
 
-    const byScore = bProfile.weightedScore - aProfile.weightedScore;
-    if (byScore !== 0) return byScore;
+    /*
+     * TIERS BEFORE ACCUMULATION, WITHIN THE REMAINING SCORE TOO (M9/F9).
+     *
+     * The two lines above already stop a language or preference constraint from being
+     * outvoted by anything else. But everything past that point used to fall into ONE
+     * compensatory sum — `weightedScore`, care and manner added together — so three soft
+     * manner traits (structured, non-judgmental, helps-it-make-sense) could still outrank one
+     * real care-area match, because 24+24+24 is more than 12. A care-area declaration is a
+     * clinical scope claim; a manner trait is a style preference. Comparing care before manner,
+     * as its own step, is the same "constraint before accumulation" idea one rung down: care
+     * is STRONG, manner is CONTRIBUTORY, and a contributory tier is never allowed to buy its
+     * way past a strong one by piling up.
+     */
+    const byCare = bProfile.careScore - aProfile.careScore;
+    if (byCare !== 0) return byCare;
+
+    const byManner = bProfile.mannerScore - aProfile.mannerScore;
+    if (byManner !== 0) return byManner;
 
     /* Equal weighted evidence is resolved by completeness: the clinician answering more of the
        distinct things the reader named comes first. This only breaks a numerical tie; it never
@@ -117,7 +133,14 @@ export type RankingProfile = {
   constraintCoverage: number;
   /** Weight of explicitly requested language and access constraints this clinician answers. */
   constraintScore: number;
-  /** The existing explainable weighted-overlap score. */
+  /** Weighted overlap on care-area facets alone — the STRONG tier (M9/F9). */
+  careScore: number;
+  /** Weighted overlap on manner facets alone — the CONTRIBUTORY tier (M9/F9). */
+  mannerScore: number;
+  /** The full explainable weighted-overlap score, across every tier — kept for `scoreAgainst`
+   *  and `matchQuality`'s "did anything at all differ" check. NOT used to compare two
+   *  clinicians directly any more: `rankClinicians` compares `careScore` and `mannerScore` as
+   *  their own steps so a contributory tier can never outvote a strong one by summing. */
   weightedScore: number;
   /** Number of distinct requested needs answered, used only after an exact score tie. */
   coverage: number;
@@ -129,27 +152,42 @@ export type RankingProfile = {
  * Keeping this vector public gives tests, the matching console and future outcome evaluation one
  * definition of the order. It deliberately contains no opaque quality estimate, popularity,
  * symptom severity, or clinician-specific coefficient.
+ *
+ * M9 (F9) SPLITS THE OLD SINGLE SUM INTO TIERS. Language and preference facets were already
+ * pulled out ahead of everything else by O185 (`constraintCoverage`/`constraintScore`) — a
+ * language ask can no longer be outvoted by anything. What O185 left alone is everything
+ * PAST that point: care and manner facets were still added into one `weightedScore`, so three
+ * manner traits could still outrank one care-area match. `careScore` and `mannerScore` give
+ * each its own sum, so `rankClinicians` can compare them as separate steps — strong before
+ * contributory — instead of letting a contributory tier buy its way past a strong one.
  */
 export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[]): RankingProfile {
   let constraintCoverage = 0;
   let constraintScore = 0;
+  let careScore = 0;
+  let mannerScore = 0;
   let weightedScore = 0;
   let coverage = 0;
   for (const need of needs) {
     const strength = facetStrength(clinician, need.facet);
     if (strength === 0) continue;
     const contribution = roundScore(need.weight * strength);
-    const isConstraint = need.facet.kind === "preference" || need.facet.kind === "language";
     coverage += 1;
     weightedScore += contribution;
-    if (isConstraint) {
+    if (need.facet.kind === "preference" || need.facet.kind === "language") {
       constraintCoverage += 1;
       constraintScore += contribution;
+    } else if (need.facet.kind === "care") {
+      careScore += contribution;
+    } else {
+      mannerScore += contribution;
     }
   }
   return {
     constraintCoverage,
     constraintScore: roundScore(constraintScore),
+    careScore: roundScore(careScore),
+    mannerScore: roundScore(mannerScore),
     weightedScore: roundScore(weightedScore),
     coverage,
   };
@@ -554,6 +592,11 @@ export type RankBand = {
   score: number;
   constraintCoverage: number;
   constraintScore: number;
+  /** Care-tier score (M9). Part of the band key: a care-score difference is a real tie-break,
+   *  not the arbitrary kind bands are meant to absorb. */
+  careScore: number;
+  /** Manner-tier score (M9). Same reasoning as `careScore`. */
+  mannerScore: number;
   coverage: number;
   clinicians: Clinician[];
 };
@@ -569,6 +612,8 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
       last.score === profile.weightedScore &&
       last.constraintCoverage === profile.constraintCoverage &&
       last.constraintScore === profile.constraintScore &&
+      last.careScore === profile.careScore &&
+      last.mannerScore === profile.mannerScore &&
       last.coverage === profile.coverage
     ) {
       last.clinicians.push(clinician);
@@ -577,6 +622,8 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
         score: profile.weightedScore,
         constraintCoverage: profile.constraintCoverage,
         constraintScore: profile.constraintScore,
+        careScore: profile.careScore,
+        mannerScore: profile.mannerScore,
         coverage: profile.coverage,
         clinicians: [clinician],
       });
