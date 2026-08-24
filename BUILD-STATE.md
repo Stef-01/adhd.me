@@ -99,6 +99,15 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **M10 (clarifiers chosen by expected separation) — claimed 2026-08-24T08:22Z by loop-0824e.**
+> Q-M item 18, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the loop's own rule —
+> this ledger's previous unit (AR9, same session) was AR-lane, so this one takes the lowest-
+> numbered available O-lane work; M1–M9 are done, M10's gate (M5) is done, M11/M12 stay
+> founder-gated. Building now: the clarifier asks about the facet where the roster is most split
+> AND the request suggests it matters — with the item's own named trap held as law: the relevance
+> gate is NOT optional, because roster-splitting alone is a fair description of manipulation.
+> Verify: measured against the unseparated queue the tie-quality report already counts.
+
 > **AR9 (mutation probe — accent discipline) — claimed 2026-08-24T07:50Z by loop-0824e. DONE @ 1688a52.**
 > `docs/AESTHETIC-REVIEW-PLAN.md` Phase 2. Alternating lanes per the loop's own rule — the prior
 > firing (loop-0824d) took M9, an O-lane unit, so this firing takes the lowest-numbered available
