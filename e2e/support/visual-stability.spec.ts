@@ -7,7 +7,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
-import { captureAll, captureMatrix, manifestDiff } from "./visual";
+import { captureAll, captureMatrix, FIXED_CLOCK_ISO, manifestDiff } from "./visual";
 import { measured } from "./measured";
 
 const BASELINE = path.resolve(__dirname, "../../qa/baselines/manifest.json");
@@ -15,6 +15,18 @@ const RUN_OUT = process.env.VISUAL_RUN_OUT; // stability mode: write here, compa
 
 test("the visual matrix is stable against the accepted baseline", async ({ page, request }) => {
   test.setTimeout(1_500_000);
+  // AR15: this spec runs ONLY under its own invocation (`pnpm e2e:visual`), which starts the
+  // web server with the SERVER clock pinned to the same instant page.clock pins the browser —
+  // four server components render "now", and the synthetic outreach fixtures derive from
+  // todayIso, so a baseline captured under the real server clock could never match tomorrow's
+  // run. Inside the full suite the env is absent and the spec skips BY NAME rather than
+  // comparing hashes that shift daily; the gate runs the dedicated invocation instead. The
+  // constant is asserted, not trusted, so the script and the harness cannot drift apart.
+  test.skip(
+    process.env.ADHDME_FIXED_CLOCK === undefined,
+    "AR15 visual capture runs only under pnpm e2e:visual (server clock pinned)",
+  );
+  expect(process.env.ADHDME_FIXED_CLOCK).toBe(FIXED_CLOCK_ISO);
   const manifest = await captureAll(page, request);
   measured("visual.captures", Object.keys(manifest).length);
   expect(Object.keys(manifest).length).toBe(captureMatrix().length);

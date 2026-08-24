@@ -29,6 +29,7 @@ import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
 import { reachReport } from "@/onboarding/reach-report";
 import { notDeclaredFrames, reasonsPatientsCanSee, sentencesPatientsSee } from "@/matching/provenance";
 import { BackgroundEditor, type VocabularyEntry } from "./background-editor";
+import { serverNow } from "@/lib/server-clock";
 
 export const metadata = { title: "Matching console — ADHD.ME" };
 // O38: the page now reads the saved-onboarding store for the reach-gap feed, so it renders
@@ -67,7 +68,8 @@ export default async function MatchingConsolePage() {
   await requireSession();
   // One clock per render, threaded everywhere a grade is computed, so the audit table and the
   // freshness panel cannot disagree about what "today" is (O56).
-  const today = new Date();
+  // AR15: serverNow() — rendered dates pin under capture, real everywhere else.
+  const today = serverNow();
   const audit = matchAudit(EXAMPLE_QUERY, clinicians, today);
   // O38: the reach-gap feed — real saved onboardings, not the worked example below.
   const reach = reachReport();

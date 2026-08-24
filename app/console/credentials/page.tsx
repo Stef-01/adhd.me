@@ -33,6 +33,7 @@ import { replayVerification } from "@/credentials/verification";
 import { authorize } from "@/tenancy/tenancy";
 import { requirePractice } from "../guard";
 import { ConsoleShell, primaryButtonClass } from "../ui";
+import { serverNow } from "@/lib/server-clock";
 import { withdrawOwnCredential } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -73,7 +74,8 @@ export default async function CredentialsPage({
   // W81's rule, unchanged: unlinked means unlinked. Showing "probably you" on a page about
   // someone's qualifications is the one failure this lookup exists to avoid.
   const identity = clinicianForEmail(record.clinicians, email);
-  const today = new Date().toISOString().slice(0, 10);
+  // AR15: serverNow() — rendered dates pin under capture, real everywhere else.
+  const today = serverNow().toISOString().slice(0, 10);
 
   const mine = identity.linked
     ? ownCredentials(record.practice.id, identity.clinician.id, today)

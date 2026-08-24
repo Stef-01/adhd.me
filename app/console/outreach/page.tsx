@@ -28,6 +28,7 @@ import { syntheticReferrals } from "@/synthetic/referrals";
 import { authorize } from "@/tenancy/tenancy";
 import { requirePractice } from "../guard";
 import { ConsoleShell } from "../ui";
+import { serverNow } from "@/lib/server-clock";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,9 @@ export default async function OutreachPage() {
     redirect("/console");
   }
 
-  const now = new Date();
+  // AR15: rendered time comes from serverNow() so a capture run is reproducible — the
+  // sendAt column below is minute-granular and the synthetic fixtures derive from todayIso.
+  const now = serverNow();
   const todayIso = now.toISOString().slice(0, 10);
   // Synthetic-phase data source: no referral persistence exists yet, and G0 keeps it that way
   // until real ingest is authorised. Deterministic seed so the page is stable to look at.

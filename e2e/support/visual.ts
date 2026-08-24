@@ -79,13 +79,91 @@ export async function captureAll(
   const manifest: Record<string, string> = {};
   await page.clock.install({ time: new Date(FIXED_CLOCK_ISO) });
 
+  // The pause below is per-shot: the clock must RESUME before the next navigation (a paused
+  // clock stops rAF, and a page that hydrates under a stopped clock never runs its entrances),
+  // and pauseAt demands a monotonically later instant each time — hence the counter.
+  let shot = 0;
   const shoot = async (key: CaptureKey) => {
+    shot += 1;
+    await page.clock.resume();
     await page.setViewportSize({ width: key.width, height: key.width === 390 ? 844 : 900 });
     await page.emulateMedia({ reducedMotion: key.motion === "reduce" ? "reduce" : "no-preference" });
     await page.goto(key.route, { waitUntil: "networkidle" });
+    // AR15's third measured instability, pinned by pixel diff: the map label's entrance
+    // animation promotes its text to a compositor layer, and whether that layer is torn down
+    // by shoot time differs per run — the SAME glyphs raster with different antialiasing
+    // (identical ink extents, 295 large per-pixel deltas between two settled runs). Both
+    // states pass a settle proof, so the fix is to make the state impossible: capture mode
+    // strips CSS animations/transitions entirely. End states equal base states (every
+    // entrance here finishes at identity), no animation ever forces a layer, and the
+    // reduce/no-preference axis keeps its meaning — it captures what the PRODUCT's media
+    // queries change, which was always the axis's point; transient animation frames were
+    // never baseline material.
+    // will-change joins the strip: motion/react promotes its animated elements to compositor
+    // layers via will-change, and whether that layer is torn down by shoot time is the last
+    // measured bistability — two runs with BYTE-IDENTICAL snapped DOM still rastered the
+    // figure's text with different antialiasing (composited grayscale vs non-composited
+    // subpixel). With will-change dead, text never rasters on an animation-owned layer.
+    await page.addStyleTag({ content: "*, *::before, *::after { animation: none !important; transition: none !important; will-change: auto !important; }" });
     await page.evaluate(() => document.fonts.ready);
-    const png = await page.screenshot({ fullPage: true, animations: "disabled", caret: "hide" });
-    const hash = createHash("sha256").update(png).digest("hex");
+    // AR15's second measured instability: `animations: "disabled"` pins CSS and WAAPI, but
+    // motion/react drives its springs on the main thread with requestAnimationFrame, which no
+    // screenshot option can pause — home under no-preference hashed differently between two
+    // same-day runs because the capture landed mid-entrance. And a two-frame proof alone had a
+    // measured hole: the story landing's mount-gated parallax is a DELAYED one-shot (hydration
+    // lands after networkidle), so two identical pre-hydration frames passed the proof in one
+    // run of three while the other two captured post-hydration. Two barriers close it: an
+    // idle-callback wait (hydration has run once the main thread goes idle), then quiescence
+    // PROVEN over three identical frames spanning ~800ms. A route that never settles has
+    // indefinite motion without a stop — the taste register's own ban — so the harness fails
+    // loudly naming the route instead of committing a coin flip to the baseline.
+    await page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          "requestIdleCallback" in window
+            ? requestIdleCallback(() => resolve(null), { timeout: 3_000 })
+            : setTimeout(resolve, 500),
+        ),
+    );
+    let png = await page.screenshot({ fullPage: true, animations: "disabled", caret: "hide" });
+    let hash = createHash("sha256").update(png).digest("hex");
+    for (let attempt = 0, stableRuns = 0; ; attempt += 1) {
+      await page.waitForTimeout(400);
+      const next = await page.screenshot({ fullPage: true, animations: "disabled", caret: "hide" });
+      const nextHash = createHash("sha256").update(next).digest("hex");
+      if (nextHash === hash) {
+        stableRuns += 1;
+        if (stableRuns >= 2) break;
+      } else {
+        stableRuns = 0;
+        if (attempt >= 15) throw new Error(`capture never settled on ${key.route} @${key.width}·${key.motion} — indefinite motion without a stop`);
+        png = next;
+        hash = nextHash;
+      }
+    }
+    // AR15's fourth measured instability, run to ground across three probe rounds: the hero's
+    // scroll-linked spring (story-portrait-drift) is PERTURBED BY THE CAPTURE ITSELF — a
+    // fullPage screenshot expands the viewport, the scroll-linked target shifts, the spring
+    // chases, and the freeze lands mid-chase-back, anywhere along a ~0.2px decay curve. Two
+    // moves close it, in order: the page's clock is PAUSED (rAF stops, so motion can never
+    // re-render — a quantize attempt without the pause lost a race to motion's own frame loop),
+    // then fractional translations are snapped to a CANONICAL value. Rounding was measured
+    // insufficient (frozen values straddle the round boundary between runs, shifting the whole
+    // figure 1px); sub-8px fractional translations are decorative spring residue by
+    // construction — real offsets in this tree are whole pixels (entrance y:20/26) — so they
+    // snap to ZERO, which every possible freeze point agrees on. Larger fractionals round.
+    await page.clock.pauseAt(new Date(new Date(FIXED_CLOCK_ISO).getTime() + 30 * 60_000 + shot * 60_000));
+    await page.evaluate(() => {
+      for (const el of document.querySelectorAll<HTMLElement>("[style*='transform']")) {
+        const m = new DOMMatrixReadOnly(getComputedStyle(el).transform === "none" ? undefined : getComputedStyle(el).transform);
+        if (m.is2D && (!Number.isInteger(m.e) || !Number.isInteger(m.f))) {
+          const snap = (v: number) => (Math.abs(v) < 8 ? 0 : Math.round(v));
+          el.style.transform = `matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${snap(m.e)}, ${snap(m.f)})`;
+        }
+      }
+    });
+    const settled = await page.screenshot({ fullPage: true, animations: "disabled", caret: "hide" });
+    hash = createHash("sha256").update(settled).digest("hex");
     const id = captureId(key);
     manifest[id] = hash;
     options.onCapture?.(id, hash);

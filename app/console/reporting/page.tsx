@@ -33,6 +33,7 @@ import { sentBy, sentEventsFor } from "@/referrals/store";
 import { authorize } from "@/tenancy/tenancy";
 import { requirePractice } from "../guard";
 import { ConsoleShell } from "../ui";
+import { serverNow } from "@/lib/server-clock";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,8 @@ export default async function ReportingPage() {
   const practiceId = record.practice.id;
   // The document says when it was made. Stamping the period's end date claimed every render was
   // produced on 30 June, on a page that recomputes on every request (W205).
-  const generatedAt = new Date().toISOString().slice(0, 10);
+  // AR15: serverNow() — rendered dates pin under capture, real everywhere else.
+  const generatedAt = serverNow().toISOString().slice(0, 10);
   if (!authorize(console_.memberships, email, practiceId, "view_dashboard").allowed) {
     redirect("/console");
   }
