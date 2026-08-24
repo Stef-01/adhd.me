@@ -120,7 +120,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **O189 (founder-directed: the clinician funnel gets a spine — logo, navigation, one journey
-> to the email) — claimed 2026-08-24T10:44Z by loop-0824e.** The founder's design verdict on
+> to the email) — claimed 2026-08-24T10:37Z by loop-0824e.** The founder's design verdict on
 > the live join page, in their words: it "looks ugly … and obviously disconnected, there is no
 > logo, noone can navigate clearly, the clinicians text looks weird and not obviously
 > clickable"; /clinicians must "funnel to say start your journey today and lead to the email to
