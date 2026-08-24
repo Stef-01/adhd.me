@@ -203,11 +203,16 @@ export const TASTE_RULES: readonly TasteRule[] = [
     section: "layout",
     statement:
       "Nothing above the fold that is not the idea; a fold may never cut a tied band or separate a claim from its qualifier.",
-    incident: "W167 — the order-independence fold register (cited directly in the rule)",
-    unenforced:
-      "the rule's own citation is a false friend: W167's fold register (src/quality/order-independence.ts) catches a " +
-      "different kind of fold — order-independent reduces in ranking code — not visual above-the-fold content; no " +
-      "check asserts the latter today. AR19 plans the visual-fold check this rule actually needs",
+    // AR19 closed the false-friend gap this entry used to record: the rule cited W167, whose
+    // fold register governs order-independent REDUCES, while nothing checked visual folds. Now
+    // e2e/fold.spec.ts asserts both halves at 390×844 and 1280×900 — every public route's h1
+    // fully inside the initial viewport, and every declared claim+qualifier pair
+    // (src/design/fold-bands.ts's TIED_BANDS) uncut by the fold — with a planted straddling
+    // band driven through the same `bandCut` predicate each run so the detector cannot die
+    // silently.
+    incident: "W167 — the order-independence fold register (the rule's original, false-friend citation; AR19 built the visual check)",
+    enforcedBy: ["e2e/fold.spec.ts :: the idea sits above the fold and no tied band is cut, at both widths"],
+    routeScope: { kind: "route-sweep", sweep: "public-static" },
   },
   {
     id: "layout.shared-row",
@@ -521,7 +526,7 @@ export function diffTasteRegister(skillMarkdown: string, register: readonly Tast
  * rather than let the count drift unnoticed (O177's rule: a queue must distinguish "not done" from
  * "decided").
  */
-export const UNENFORCED_COUNT = 15;
+export const UNENFORCED_COUNT = 14; // AR19 enforced layout.fold-governed (was 15)
 
 export interface EnforcementTag {
   /** The rule id named in a `// taste-rule: <id>` comment. */

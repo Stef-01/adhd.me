@@ -5,7 +5,7 @@
 ## Summary
 
 - **22 rules** across 6 sections
-- **7 enforced**, **15 unenforced**
+- **8 enforced**, **14 unenforced**
 - **1 route exemption** declared (routes no enforced rule's declared scope reaches; see below)
 
 ## Layout
@@ -22,9 +22,10 @@ Long lists show a chooseable few with the remainder one tap away; never render a
 
 Nothing above the fold that is not the idea; a fold may never cut a tied band or separate a claim from its qualifier.
 
-- **Incident:** W167 — the order-independence fold register (cited directly in the rule)
-- **Unenforced:** the rule's own citation is a false friend: W167's fold register (src/quality/order-independence.ts) catches a different kind of fold — order-independent reduces in ranking code — not visual above-the-fold content; no check asserts the latter today. AR19 plans the visual-fold check this rule actually needs
-- **Route scope:** —
+- **Incident:** W167 — the order-independence fold register (the rule's original, false-friend citation; AR19 built the visual check)
+- **Enforced by:**
+  - `e2e/fold.spec.ts :: the idea sits above the fold and no tied band is cut, at both widths`
+- **Route scope:** route sweep: `public-static`
 
 ### `layout.one-idea`
 

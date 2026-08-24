@@ -94,6 +94,16 @@ export const ENFORCED_WITHOUT_PROBE: ReadonlyArray<{
   readonly whatAProbeWouldMutate: string;
 }> = [
   {
+    // AR19: partially probed already, and the entry says exactly where the line sits. The pure
+    // predicate (bandCut, src/design/fold-bands.ts) is exercised in both directions by vitest
+    // AND by a straddling band planted in the sweep each run — the predicate cannot die
+    // silently. What has NO probe is the sweep's plumbing around it: selector resolution,
+    // per-route accumulation, the h1 half. That is what the full architecture would add.
+    ruleId: "layout.fold-governed",
+    whatAProbeWouldMutate:
+      "Extract the fold walk to e2e/support/fold-load.ts and add a probe spec that injects a straddling claim+qualifier pair into a real route's DOM (and moves a page's h1 below the fold), asserting e2e/fold.spec.ts's own accumulation goes red naming the route — the bandCut predicate is already probed inline; the plumbing around it is not.",
+  },
+  {
     ruleId: "honesty.claim-earned",
     whatAProbeWouldMutate:
       "Render the finder's results stage with an uninformed order and assert the 'ranked on what you asked for' claim is absent; probe on = inject the claim while the order is uninformed and the check must go red. Client-state mutation inside /finder, not a route sweep.",
