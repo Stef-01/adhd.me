@@ -20,6 +20,10 @@ import { test, expect, type Page } from "@playwright/test";
 // every visible field. Nothing in it is tuned to a screen. Recorded here because "this one is hard"
 // was the reason it waited through two rows.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+// AR11: the probe itself now lives in `e2e/support/semantics-load.ts`, so the mutation probe in
+// `e2e/support/semantics-probe.spec.ts` drives THIS detector rather than a copy. What stays here
+// is the sweep's own job: navigation, sign-in, fixture seeding, the route loops and the floors.
+import { semanticFindings, semanticsFinding } from "./support/semantics-load";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
@@ -36,32 +40,6 @@ async function signIn(page: Page) {
   await page.waitForURL(/\/console$/);
 }
 
-const PROBE = () => {
-  const out: string[] = [];
-  const hs = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"))
-    .filter((h) => { const b = h.getBoundingClientRect(); return b.width > 0 && b.height > 0; });
-  const levels = hs.map((h) => Number(h.tagName[1]));
-  const h1s = levels.filter((l) => l === 1).length;
-  if (h1s !== 1) out.push(`h1 count = ${h1s}`);
-  for (let i = 1; i < levels.length; i += 1) {
-    if (levels[i]! - levels[i - 1]! > 1) {
-      out.push(`heading jump h${levels[i - 1]}->h${levels[i]} at "${(hs[i]!.textContent || "").trim().slice(0, 26)}"`);
-    }
-  }
-  if (!document.querySelector("main")) out.push("no <main> landmark");
-  let fields = 0;
-  for (const el of Array.from(document.querySelectorAll("input:not([type=hidden]),select,textarea"))) {
-    const b = el.getBoundingClientRect();
-    if (!b.width || !b.height) continue;
-    fields += 1;
-    const id = el.getAttribute("id");
-    const named = el.getAttribute("aria-label") || el.getAttribute("aria-labelledby")
-      || (id && document.querySelector(`label[for="${id}"]`)) || el.closest("label");
-    if (!named) out.push(`unnamed <${el.tagName.toLowerCase()}> name=${el.getAttribute("name") ?? "?"}`);
-  }
-  return { out, headings: hs.length, fields };
-};
-
 test.beforeEach(async ({ request }) => { await request.post("/api/mock/console"); });
 
 test("headings, landmarks and field names hold across the site", async ({ page, request }) => {
@@ -76,8 +54,10 @@ test("headings, landmarks and field names hold across the site", async ({ page, 
   await revealCollapsedSurfaces(page);
     if (res && res.status() === 404) return;
     await page.evaluate(() => document.fonts.ready);
-    const r = await page.evaluate(PROBE);
-    for (const f of r.out) findings.push(`${route}: ${f}`);
+    const r = await semanticFindings(page);
+    // AR11: the per-route verdict names the route AND the rule id (AR9/AR10's change, third time).
+    const finding = semanticsFinding(route, r.out);
+    if (finding) findings.push(finding);
     headings += r.headings; fields += r.fields;
   };
   for (const route of PUBLIC_ROUTES) await scan(route);
