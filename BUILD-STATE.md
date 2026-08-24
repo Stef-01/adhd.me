@@ -108,13 +108,51 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > into one route at run time and asserts the REAL detector — shared, not a copy — reports over-cap
 > naming the route and the rule id; probe off, the same route is green.
 
-> **M9 (stop manner traits outvoting language, F9) — claimed 2026-08-24T07:45Z by loop-0824d.**
-> Q-M item 9, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the loop's own rule —
-> the prior firing (loop-0824c) took AR8, an AR-lane unit, so this firing takes the lowest-
-> numbered available O-lane work; M1–M8 are done and M9 has no unmet dependency (M10 remains
-> available, gated on M5 which is done; M11/M12 stay founder-gated). Building now: partitioning
-> `rankingProfile`'s comparator into tiers (language/preference near-requirement, care strong,
-> manner contributory) instead of one compensatory sum, per the unit's own spec.
+> **M9 (stop manner traits outvoting language, F9) — claimed 2026-08-24T07:45Z by loop-0824d.
+> DONE @ f9cdeed.** Q-M item 9, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the
+> loop's own rule — the prior firing (loop-0824c) took AR8, an AR-lane unit, so this firing takes
+> the lowest-numbered available O-lane work; M1–M8 are done and M9 has no unmet dependency (M10
+> remains available, gated on M5 which is done; M11/M12 stay founder-gated).
+> **THE GAP O185 LEFT, NAMED EXACTLY.** O185 (2026-08-22) already stopped a language or preference
+> constraint from being outvoted by accumulation — `constraintCoverage`/`constraintScore`, compared
+> ahead of everything else. It never reached the tier below: care and manner facets still landed in
+> one compensatory `weightedScore` sum, so three manner traits (24 each in the real lexicon) could
+> still outrank one real care-area match (12) — the literal "manner outvotes language" shape F9
+> named, one rung lower than where the appraisal happened to place its example.
+> **MEASURED THE DEFECT BEFORE TOUCHING THE COMPARATOR, NOT ASSUMED.** A throwaway exploratory
+> test against the real lexicon confirmed `rankClinicians` returned `["manner-match", "care-match"]`
+> for a GP declaring one asked-for care area vs. one declaring three manner traits the same request
+> reaches — wrong, by the unit's own verify criterion — while the equivalent language-vs-manner
+> pairing already ranked correctly (O185's fix holding). Only the care/manner boundary needed work.
+> **THE FIX.** `rankingProfile` gained `careScore` (strong) and `mannerScore` (contributory),
+> summed separately by facet kind instead of into one `weightedScore`. `rankClinicians` compares
+> them as their own steps, after `constraintScore` and before the `coverage` tie-break — strong
+> before contributory, tier before summing within it, same shape as O185's own fix one level up.
+> `weightedScore` is UNCHANGED in what it computes (still the full sum) and still backs
+> `scoreAgainst`/`matchQuality`'s "did anything at all differ" check; only the comparator stopped
+> reading it directly. `RankBand` gained the same two fields so a band split only where the split
+> is real (a care/manner difference is a genuine tie-break, not the arbitrary kind bands absorb).
+> **THE EXPLANATION, IN ONE SENTENCE (W213's floor, held).** "A language or access request is
+> compared first, then how well a GP's declared care areas match, then their declared manner —
+> each tier settles the order before the next is even looked at." Named cost, as the unit itself
+> flagged: two bands can now share a raw total while differing in the care/manner split that
+> actually decided their order — `properties.test.ts`'s band-coherence property, which used to
+> assert `score` was strictly descending band-to-band, now asserts the TIER VECTOR is (the sum was
+> never the true order past this unit; asserting it was monotone was asserting the wrong thing).
+> **PINNED, BOTH DIRECTIONS.** `ranking-profile.test.ts` gained three cases: the care-vs-manner
+> defect fixed (care wins), manner still separates the field alone once care ties (the tier is a
+> real comparison, not "care always wins"), and language still beats manner unchanged (regression
+> guard on O185's own fix, proving the reordering did not disturb it). Synthetic fixtures only
+> (`syntheticClinician`), never the two-person real roster — same law `edge.test.ts` already follows.
+> **RE-MEASURED, NOT RE-DERIVED.** M5's separation-effect pins move exactly where the ranking
+> semantics changed and nowhere else: N=3's naive separationRate 0.136 → 0.134 (its null std moved
+> off a perfect 0 to 0.001 — the tiered comparator resolves a handful of synthetic-roster ties
+> differently across permutations that used to land identically), N=5's effect 0 → 0.005. N=2, N=10,
+> N=25 and the real two-clinician roster's own effect are byte-identical to before.
+> Gate: `pnpm verify` green — 267 files, 4200 tests (4200 passed, 13 skipped), build clean, audit
+> gate PASS (2 accepted advisories, 0 unaccepted). Touches `src/matching/` (via `src/demo/clinicians.ts`,
+> the module `rankingProfile`/`facetStrength` actually live in), so the post-O183 e2e rule applied:
+> `e2e/finder-flow.spec.ts` + `e2e/profile-sweep.spec.ts`, 16/16 green.
 
 > **M8 (express "we cannot tell", F10) — claimed 2026-08-24T03:38Z by loop-0824b. DONE @
 > 5aaafea.** Q-M item 8, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the loop's
