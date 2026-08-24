@@ -119,6 +119,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O188 (founder-directed: retire the join form — the page asks for an email instead) —
+> claimed 2026-08-24T09:58Z by loop-0824e.** Two founder instructions arrived minutes apart this
+> session; the second supersedes the first before it was claimed, and both are recorded here so
+> neither is silently lost. FIRST (superseded, not built): remove the Ahpra number from the join
+> form ("we get that information later") and move name, email and physician type to the end
+> ("scare people less"). SECOND (this unit): "retire whole onboarding form for now as we want
+> things to be simple, make it instead send email to info.adhdme.au". Building the second: the
+> `/clinicians/join` application form is retired — the page keeps its pitch and the mix hero and
+> ends in a plain email invitation instead of eight sections of questions. INTERPRETATION STATED:
+> "info.adhdme.au" is not a deliverable email address as written (no @); implementing
+> `info@adhdme.au` on the strength of the instruction's own domain — a one-line change if the
+> founder meant otherwise. The application machinery (store, console page) stays — retiring a
+> surface is not deleting the record system it fed; the form components and server action go,
+> because O186/O187 just established that kept-but-unused code is the tree's named disease.
+> UI unit: adhdme-taste review, qa/ capture, DESIGN-QA entry, full gate.
+
 > **AR14 (the gate reaches the loop, O173) — claimed 2026-08-24T09:49Z by loop-0824e. DONE @ 3b7ddab.**
 > `docs/AESTHETIC-REVIEW-PLAN.md` Phase 2's last row. Lanes: O-lane founder-gated past M10, so
 > the firing takes the lowest available AR unit. Building now: a machine-readable Gate state
