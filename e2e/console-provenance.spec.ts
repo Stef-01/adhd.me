@@ -4,7 +4,7 @@
 // character). This asserts the console actually RENDERS it — a field carried through the audit
 // and never printed would satisfy every unit test and show the doctor nothing.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 test.beforeEach(async ({ request }) => {

@@ -3,6 +3,7 @@
 // public privacy/ADM pages render.
 
 import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 import { AUTOMATED_DECISIONS } from "../src/privacy/automated-decisions";
 
 interface MockState {
@@ -12,13 +13,7 @@ interface MockState {
 test.beforeEach(async ({ page, request }) => {
   await request.post("/api/mock/state");
   await request.post("/api/mock/console");
-  await page.goto("/console");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page, MANAGER_EMAIL);
 });
 
 test("export → delete → suppressed export, and the dead booking link", async ({ page, request }) => {
@@ -58,7 +53,7 @@ test("export → delete → suppressed export, and the dead booking link", async
   await expect(page.getByRole("heading", { name: "This booking link isn't valid" })).toBeVisible();
 });
 
-test("privacy operations are refused without the stewardship grant", async ({ page, request }) => {
+test("privacy operations are refused without the stewardship grant", async ({ page }) => {
   // Signed out entirely → guard redirects.
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/console\/signin$/);

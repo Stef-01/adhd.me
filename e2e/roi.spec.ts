@@ -3,13 +3,7 @@
 // is unit-tested in src/economics/roi.test.ts.
 
 import { expect, test } from "@playwright/test";
-
-async function signIn(page: import("@playwright/test").Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-}
+import { MANAGER_EMAIL, signIn } from "./support/session";
 
 // Reset clears the W37 sign-in rate limiter too, so a long suite cannot trip it.
 test.beforeEach(async ({ request }) => {
@@ -22,7 +16,7 @@ test("signed-out access to the ROI calculator redirects to sign-in", async ({ pa
 });
 
 test("renders the brief figures and recalculates from inputs", async ({ page }) => {
-  await signIn(page);
+  await signIn(page, MANAGER_EMAIL);
 
   // Brief defaults: net annual benefit $45,029, 4.8× return.
   await page.goto("/console/roi");

@@ -4,7 +4,6 @@
 import { expect, test } from "@playwright/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
-type Page = import("@playwright/test").Page;
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");

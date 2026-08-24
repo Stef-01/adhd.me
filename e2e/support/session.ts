@@ -1,4 +1,4 @@
-// O186 (founder-directed: conduct code refactor): the sign-in-and-onboard flow, in one place.
+// O186/O187 (founder-directed: conduct code refactor): the sign-in-and-onboard flow, in one place.
 //
 // MEASURED BEFORE IT WAS MOVED: eighteen spec files carried a hand-copied version of this flow,
 // in at least eight textual variants of the same semantic action — sign in as the demo practice
@@ -15,15 +15,23 @@
 
 import type { Page } from "@playwright/test";
 
-/** The demo practice owner every console spec signs in as. */
+/** The demo practice owner the owner-side console specs sign in as. */
 export const OWNER_EMAIL = "owner@demo.practice.example";
 
+/** The demo practice member the manager-side specs sign in as (O187's family, 18 more files). */
+export const MANAGER_EMAIL = "manager@demo.practice.example";
+
 /**
- * Signs in and lands wherever the console sends a signed-in owner: `/console`, or
+ * Signs in and lands wherever the console sends a signed-in user: `/console`, or
  * `/console/onboarding` when no practice exists yet. Callers that need a practice next call
  * `createPractice`; callers testing the signed-in-without-practice state stop here.
+ *
+ * O187 RENAMED THIS from `signInAsPracticeOwner`, one unit after O186 named it: the manager
+ * family signs in through the identical steps with a different email, so the old name asserted
+ * something about the caller that was only ever true of the first family migrated. A name that
+ * has to be aliased away by its second caller is the wrong name.
  */
-export async function signInAsPracticeOwner(page: Page, email: string = OWNER_EMAIL): Promise<void> {
+export async function signIn(page: Page, email: string = OWNER_EMAIL): Promise<void> {
   await page.goto("/console/signin");
   await page.getByLabel("Work email").fill(email);
   await page.getByRole("button", { name: "Sign in" }).click();
@@ -47,8 +55,8 @@ export async function createPractice(
   await page.waitForURL(waitFor);
 }
 
-/** The composite fifteen specs were each hand-writing: sign in, create the demo practice. */
-export async function signInAndOnboard(page: Page): Promise<void> {
-  await signInAsPracticeOwner(page);
+/** The composite most console specs were each hand-writing: sign in, create the demo practice. */
+export async function signInAndOnboard(page: Page, email: string = OWNER_EMAIL): Promise<void> {
+  await signIn(page, email);
   await createPractice(page);
 }

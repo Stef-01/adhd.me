@@ -3,6 +3,7 @@
 // the patient's outstanding booking link.
 
 import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 interface MockState {
   invitations: Array<{ id: string; status: string; token: string }>;
@@ -11,13 +12,7 @@ interface MockState {
 test.beforeEach(async ({ page, request }) => {
   await request.post("/api/mock/state");
   await request.post("/api/mock/console");
-  await page.goto("/console");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page, MANAGER_EMAIL);
 });
 
 test("intake with opt-out → banner → triage → resolve → banner clears", async ({ page, request }) => {

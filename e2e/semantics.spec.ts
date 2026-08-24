@@ -6,7 +6,7 @@
 // pages are edited, and it is invisible to every other sweep already standing — touch, focus,
 // overflow and contrast all pass happily on a page with three h1s and an unlabelled input.
 
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 // O171: the routes are derived from `app/` now, not listed here.
 //

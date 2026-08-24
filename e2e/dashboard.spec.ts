@@ -2,17 +2,11 @@
 // tiles, the two-arm weekly chart with its hover layer, and the table view.
 
 import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {
   await request.post("/api/mock/console");
-  await page.goto("/console");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  // Wait for the onboarding redirect to settle before the test navigates.
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page, MANAGER_EMAIL);
 });
 
 test("dashboard renders the north star and both arms from sim data", async ({ page }) => {

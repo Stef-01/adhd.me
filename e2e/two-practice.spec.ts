@@ -13,7 +13,7 @@
 // they would test is unit-tested instead.
 
 import { expect, test } from "@playwright/test";
-import { createPractice, signInAsPracticeOwner as signIn } from "./support/session";
+import { createPractice, signIn } from "./support/session";
 
 const OWNER = "owner@demo.practice.example";
 const OUTSIDER = "stranger@elsewhere.example";

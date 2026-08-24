@@ -6,6 +6,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { MANAGER_EMAIL, signIn, signInAndOnboard } from "./support/session";
 
 // Scan the settled page, not a frame of its entrance animation. The care finder's
 // `.screen` fades opacity 0→1 over 260ms; caught mid-fade, axe measures the composited
@@ -92,13 +93,7 @@ test.beforeEach(async ({ page, request }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await request.post("/api/mock/state");
   await request.post("/api/mock/console");
-  await page.goto("/console");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   // W113: seed and link, so the credentials page is scanned POPULATED. The unlinked refusal
   // renders one paragraph and no form — scanning that instead would pass while leaving the
   // list, the status chips and the withdraw forms untested.
@@ -153,9 +148,7 @@ test("sign-in and onboarding pass WCAG A/AA", async ({ page, request }) => {
   // sign-in. Onboarding is the first authenticated form a practice ever meets, so it is
   // scanned properly now — reaching it needs a signed-in session with NO practice yet.
   await request.post("/api/mock/console");
-  await page.goto("/console");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await signIn(page, MANAGER_EMAIL);
   await page.waitForURL(/\/console\/onboarding$/);
   await page.waitForLoadState("networkidle");
   await expectNoViolations(page, "/console/onboarding");

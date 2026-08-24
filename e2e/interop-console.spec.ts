@@ -9,18 +9,8 @@
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { expect, test, type Page } from "@playwright/test";
-
-async function signInAsMember(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
+import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -32,7 +22,7 @@ test("signed-out access redirects to sign-in", async ({ page }) => {
 });
 
 test("leads with the fact that nothing was attempted", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/interop");
   await expect(page.getByTestId("interop-headline")).toContainText(
     "because nothing was attempted, not because everything succeeded",
@@ -41,7 +31,7 @@ test("leads with the fact that nothing was attempted", async ({ page }) => {
 });
 
 test("puts the absences above the counts", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/interop");
 
   const items = page.getByTestId("interop-not-exchanged").locator("li");
@@ -59,7 +49,7 @@ test("puts the absences above the counts", async ({ page }) => {
 });
 
 test("shows no success styling anywhere on the page", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/interop");
   await page.evaluate(() => document.fonts.ready);
 
@@ -101,7 +91,7 @@ test("shows no success styling anywhere on the page", async ({ page }) => {
 });
 
 test("renders no tick, badge or status word", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/interop");
   const body = await page.locator("main").innerText();
   // Words a reader would take as a working integration. "connected" and "healthy" especially: this
@@ -122,7 +112,7 @@ test("renders no tick, badge or status word", async ({ page }) => {
 });
 
 test("every count carries the sentence saying which kind of zero it is", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/interop");
   const cells = await page.evaluate(() =>
     [...document.querySelectorAll('[data-testid="interop-counts"] > div')].map((el) => el.textContent ?? ""),

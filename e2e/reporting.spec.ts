@@ -5,18 +5,8 @@
 // the caveats have to survive on. A module can carry a coverage statement and a page can render
 // three numbers without it.
 
-import { expect, test, type Page } from "@playwright/test";
-
-async function signInAsMember(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
+import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -28,7 +18,7 @@ test("signed-out access redirects to sign-in", async ({ page }) => {
 });
 
 test("every figure on the page carries its denominator and its period", async ({ page, request }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   // Seeded ABOVE the floor on purpose. The default rail has three referrals, so every figure is
   // suppressed and the denominator rendering — the thing W196 and W199 both exist for — would
   // never be exercised. A test that only ever sees the withheld path is not testing the page.
@@ -60,7 +50,7 @@ test("the coverage section separates our gap from the practice's record", async 
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/reporting");
 
@@ -78,7 +68,7 @@ test("an attempted kind with nothing recorded reads differently from one we neve
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   // An empty rail: the page LOOKED for referral figures and found nothing, which is the other
   // silence and the one that is genuinely about the practice's record.
   await request.post("/api/mock/referrals?empty=1");
@@ -98,7 +88,7 @@ test("a withheld figure appears as a named withholding, never as a gap", async (
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/reporting");
 
@@ -116,7 +106,7 @@ test("the page says nothing has been sent, and offers no control that would", as
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/reporting");
 
@@ -136,7 +126,7 @@ test("the document on the page carries the caveats, so a copied figure keeps the
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/reporting");
 

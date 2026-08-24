@@ -9,18 +9,8 @@
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { expect, test, type Page } from "@playwright/test";
-
-async function signInAsMember(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
+import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -32,7 +22,7 @@ test("signed-out access redirects to sign-in", async ({ page }) => {
 });
 
 test("renders the sessions, the score and the ranges", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/capacity");
 
   const table = page.getByTestId("capacity-sessions");
@@ -45,7 +35,7 @@ test("renders the sessions, the score and the ranges", async ({ page }) => {
 });
 
 test("does not style the drift verdict as a grade", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/capacity");
 
   const drift = page.getByTestId("capacity-drift");
@@ -113,7 +103,7 @@ test("does not style the drift verdict as a grade", async ({ page }) => {
 });
 
 test("states the calendar gap rather than folding it into the numbers", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/capacity");
   await expect(page.getByTestId("capacity-calendar-gap")).toContainText(
     "gap in what has been recorded rather than a finding",
@@ -121,7 +111,7 @@ test("states the calendar gap rather than folding it into the numbers", async ({
 });
 
 test("prints the view's own label, so no branch lives in the template", async ({ page }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await page.goto("/console/capacity");
   // This ASSERTS WHAT IT CAN. Every rendered cell is a percentage or an em dash — but no session
   // in the simulation has a null rate, so this test cannot reach the em dash and could not catch

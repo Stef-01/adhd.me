@@ -9,7 +9,7 @@
 // blocking (a slow sim build behind a page, say).
 
 import { expect, test } from "@playwright/test";
-import { signInAsPracticeOwner as signIn } from "./support/session";
+import { signIn } from "./support/session";
 
 /** Wall-clock ceiling for the whole wizard. Generous: it guards against blocking, not slowness. */
 const CEILING_MS = 120_000;

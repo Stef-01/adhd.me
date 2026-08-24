@@ -1,18 +1,8 @@
 // W173 verify gate (e2e half): the outcome dashboard states its own denominator and ranks no
 // clinician. The unit half is src/outcomes/dashboard.test.ts; the axe scan is in a11y.spec.ts.
 
-import { expect, test, type Page } from "@playwright/test";
-
-async function signInAsMember(page: Page) {
-  await page.goto("/console/signin");
-  await page.getByLabel("Work email").fill("manager@demo.practice.example");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/console(\/onboarding)?$/);
-  await page.getByLabel("Practice name").fill("Demo Family Practice");
-  await page.getByLabel("Holdout share (%)").fill("10");
-  await page.getByRole("button", { name: "Create practice" }).click();
-  await page.waitForURL(/\/console$/);
-}
+import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -27,7 +17,7 @@ test("the zero state says the rail is empty, not that every outcome is unknown",
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?empty=1");
   await page.goto("/console/outcomes");
 
@@ -42,7 +32,7 @@ test("counts the rail, states both denominators, and lists what would settle it"
   page,
   request,
 }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/outcomes");
 
@@ -71,7 +61,7 @@ test("counts the rail, states both denominators, and lists what would settle it"
 });
 
 test("the unknown bucket is not styled as a failure", async ({ page, request }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/outcomes");
 
@@ -85,7 +75,7 @@ test("the unknown bucket is not styled as a failure", async ({ page, request }) 
 });
 
 test("ranks no clinician and shows no single success figure", async ({ page, request }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals?cancelled=1");
   await page.goto("/console/outcomes");
 
@@ -123,7 +113,7 @@ test("ranks no clinician and shows no single success figure", async ({ page, req
 });
 
 test("one practice's rail is not visible from another", async ({ page, request }) => {
-  await signInAsMember(page);
+  await signInAndOnboard(page, MANAGER_EMAIL);
   await request.post("/api/mock/referrals");
   await page.goto("/console/outcomes");
   // ref-elsewhere belongs to a third practice and is seeded precisely so it can be looked for.

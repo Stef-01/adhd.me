@@ -4,7 +4,7 @@
 // shows a line for every declaration on the record, and that its lines are the finder's own
 // sentences rather than copy written for the console.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 import { clinicians } from "../src/demo/clinicians";
 

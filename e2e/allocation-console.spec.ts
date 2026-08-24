@@ -1,6 +1,6 @@
 // W236 (O133): the allocator's first surface, and the two facts it must say on itself.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
