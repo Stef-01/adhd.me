@@ -99,6 +99,62 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **M8 (express "we cannot tell", F10) — claimed 2026-08-24T03:38Z by loop-0824b. DONE @
+> 5aaafea.** Q-M item 8, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the loop's
+> own rule — the prior firing (loop-0824a) took AR7, an AR-lane unit, so this firing takes the
+> lowest-numbered available O-lane work; M1–M7 are done and M8 has no unmet dependency (M9/M10
+> remain available, M10 gated on M5 which is done; M11/M12 stay founder-gated).
+> **THE DEFECT, EXACTLY AS THE APPRAISAL NAMED IT (F10).** `facetStrength` returns `0` for two
+> situations a reader experiences as opposites: a clinician who was asked and said no, and a
+> clinician nobody has ever asked. Both looked identical to `matchQuality`'s comparison, and
+> nothing ever told a reader which one happened.
+> **THE FIX, AS SPECIFIED, IN `src/matching/declaration-state.ts`.** A `DeclarationState`
+> (`declared`/`declared-no`/`undeclared`) and a `ScoreInterval` per facet: declared (whether
+> "often" or "sometimes" — both are certain, not uncertain) is an exact point `[value, value]`;
+> a real negative is `[0, 0]`; undeclared is `[0, weight]`. `intervalsDisjoint`/`intervalsSeparate`
+> replace "values differ" with "no interval-consistent assignment of the unknowns could make
+> these equal" — the only honest separation test — and every state gets its own sentence,
+> never the same words for "no" as for "we don't know".
+> **THE SCHEMA WAS AUDITED FIELD BY FIELD BEFORE THE THIRD STATE WAS EVER WRITTEN, NOT ASSUMED
+> TO EXIST EVERYWHERE.** Every field `facetStrength`/`holdsPreference` reads — `careAreas`,
+> `careAreasSometimes`, `manner`, `languages`, `telehealthFirstAppointment`, `practicalSignals` —
+> is presence-in-a-list or an optional `true` flag: a clinician has no way to say "I do not do
+> trauma-informed care", only a way to stay silent about it, and the two are indistinguishable
+> in the data as it exists today. Exactly ONE field is exempt: `gender`, required and
+> three-valued, every clinician has an answer — so failing to hold `woman-gp` is a real,
+> always-present negative, never a gap. `declarationState` encodes exactly this asymmetry
+> rather than inventing a "no" the onboarding interview has never asked a clinician to give.
+> **MEASURED ON THE REAL CORPUS AND ROSTER, NOT ASSUMED — AND THE PLAN'S OWN NAMED RISK LANDED
+> EXACTLY AS WRITTEN.** `auditSeparation` run over the full 447-sentence reach corpus against
+> the real two-clinician roster (`anubhav-saxena`, man; `anusha-saxena`, woman), pinned in
+> `declaration-state.test.ts`: of 332 facet-asks today's `matchQuality` already treats the
+> roster as differing on, disjoint-interval separation — the property this unit was asked to
+> build — holds for exactly 25, and every one of those 25 traces to `pref:woman-gp`. The other
+> 307 are a declared value sitting inside an undeclared clinician's `[0, weight]` range, which
+> touches that range's own upper bound and can never be disjoint from it. This is
+> `docs/MATCHING-YEAR-PLAN.md` item 16's own text — "with sparse profiles most pairs overlap, so
+> the product may mostly say 'we cannot tell' — true, and possibly unshippable" — arriving as a
+> measured fact rather than a guess.
+> **THE CALL, PER THE ITEM'S OWN ESCAPE CLAUSE.** Wiring disjoint-interval separation into the
+> live `matchQuality` grade this unit would flip 307 of 332 currently-"informed"-contributing
+> facet-asks to "we cannot tell" — accurate about what this roster's declarations actually
+> support, and an unshippable regression of the one number the product has always reported, on a
+> measurement that is honest rather than a defect in this unit's arithmetic. So `matchQuality` is
+> untouched, nothing downstream of it moves, and this unit ships the three-state machinery, the
+> per-state sentences and the measurement that proves the risk real — the same refusal shape
+> O127 used once ITS measurement said not to ship, and the Q-M lane's own "report the
+> disagreement, do not resolve it" law (W120, cited by M8's own risk clause).
+> **NON-VACUITY, BOTH DIRECTIONS.** A synthetic roster with no real negative anywhere (two
+> clinicians, one silent) measures zero interval separation despite a real value difference; a
+> synthetic gender split measures a real one and names `pref:woman-gp` as the cause — proving
+> `auditSeparation` can report a nonzero count and not just a zero one, and that the zero case is
+> not `intervalsSeparate` failing to look.
+> Gate: `pnpm verify` green — typecheck clean, 267 files, 4197 tests (+15 over AR7's 4195, all
+> new in `declaration-state.test.ts`), build clean, audit gate PASS (2 accepted advisories, 0
+> unaccepted). Touched `src/matching/`, so per CLAUDE.md's post-O183 rule:
+> `e2e/finder-flow.spec.ts` (15/15) and `e2e/profile-sweep.spec.ts` (1/1) both run explicitly and
+> green.
+
 > **M7 (`informed` earns its name, F8) — claimed 2026-08-23T23:58Z by loop-0823h. DONE @
 > 10e6943.** Q-M item 7, `docs/MATCHING-YEAR-PLAN.md` Phase 2. Alternating lanes per the loop's
 > own rule — the prior firing (loop-0823g) took AR6, an AR-lane unit, so this firing takes the
