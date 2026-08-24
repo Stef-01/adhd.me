@@ -17,6 +17,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
+import { seedFixtures } from "./support/fixtures";
 
 /**
  * Every text element whose contrast is under its WCAG AA floor, with the population it came from.
@@ -131,6 +132,11 @@ test.describe("WCAG AA contrast", () => {
     await request.post("/api/mock/console");
     await page.setViewportSize({ width: 390, height: 844 });
     await signInAsPracticeOwner(page);
+    // AR8: O174's class of gap, still open here until now — this test reset the console store but
+    // never seeded the fixtures `/console/credentials`, `/console/capability`, `/console/education`
+    // and eight other screens read, so it has always measured their unlinked refusal pages, not the
+    // populated ones `touch-floor`/`keyboard-focus` sweep. `seedFixtures` closes it the same way.
+    await seedFixtures(request);
     const offenders: string[] = [];
     let population = 0;
     for (const route of CONSOLE_ROUTES) {

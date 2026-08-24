@@ -22,6 +22,7 @@ import { test, expect, type Page } from "@playwright/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
+import { seedFixtures } from "./support/fixtures";
 
 async function signIn(page: Page) {
   await page.goto("/console/signin");
@@ -81,7 +82,12 @@ test("headings, landmarks and field names hold across the site", async ({ page, 
   };
   for (const route of PUBLIC_ROUTES) await scan(route);
   await signIn(page);
-  for (const f of ["referrals", "registers", "usefulness", "ops", "pathways"]) await request.post(`/api/mock/${f}`);
+  // AR8: O174's exact silent-failure shape, still live here until now — five of the eleven
+  // practice-dependent fixtures posted with no status check at all, and `credentials`,
+  // `capability` and `education` (O174's own three) never posted here, so this sweep has always
+  // scanned their unlinked refusal pages while reporting them covered. `seedFixtures` seeds the
+  // full set and throws naming any fixture that fails, instead of posting and hoping.
+  await seedFixtures(request);
   // `/console/signin` and `/console/onboarding` are visited signed IN, which is a real state for
   // both — signin renders, onboarding redirects to `/console` once a practice exists. A redirect
   // re-probes `/console`, which is harmless here (the probe is idempotent and route-independent)

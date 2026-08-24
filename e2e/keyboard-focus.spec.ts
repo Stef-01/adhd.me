@@ -14,8 +14,15 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
+import { seedFixtures } from "./support/fixtures";
 
-/** Signed-in setup plus O174's corrected fixture seeding. */
+/**
+ * Signed-in setup plus O174's corrected fixture seeding.
+ *
+ * AR8: the eleven-fixture list and the post/check/collect loop are now `seedFixtures` (one place
+ * both are written, shared with `touch-floor.spec.ts`); it throws naming every fixture that failed
+ * to seed instead of this function asserting an empty `failed` array by hand.
+ */
 async function signInAndSeed(page: Page, request: APIRequestContext) {
   // O174: `POST /api/mock/console` RESETS the console store, so it goes FIRST and the practice is
   // created straight after; anything that reads `practices[0]` comes later. Posting it mid-list is
@@ -31,19 +38,7 @@ async function signInAndSeed(page: Page, request: APIRequestContext) {
   await page.getByRole("button", { name: "Create practice" }).click();
   await page.waitForURL(/\/console$/);
 
-  const LINKED = new Set(["credentials", "education"]);
-  const failed: string[] = [];
-  for (const fixture of [
-    "referrals", "registers", "usefulness", "ops", "credentials",
-    "capability", "case-mix", "education", "pathways", "verticals", "state",
-  ]) {
-    const query = LINKED.has(fixture) ? "?linkEmail=owner@demo.practice.example" : "";
-    const response = await request.post(`/api/mock/${fixture}${query}`);
-    if (!response.ok()) failed.push(`${fixture} -> ${response.status()}`);
-  }
-  // O174's rule, inherited rather than re-learned: a fixture that does not seed leaves this sweep
-  // tabbing through an empty page while reporting it covered.
-  expect(failed, `a fixture did not seed, so this walk is measuring a page it did not populate: ${failed.join(", ")}`).toEqual([]);
+  await seedFixtures(request);
 }
 
 test.describe("keyboard focus", () => {

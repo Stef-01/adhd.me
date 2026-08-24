@@ -15,6 +15,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
+import { seedFixtures } from "./support/fixtures";
 
 /**
  * Every control on `route` whose HIT AREA is under 44px, with the population it was drawn from.
@@ -159,22 +160,15 @@ test.describe("O14's 44px touch floor", () => {
     //     when they seed — a11y already did this and this spec did not;
     //   * every response is ASSERTED ok, so a fixture that stops seeding fails the test instead of
     //     quietly shrinking what the sweep covers.
+    //
+    // AR8: the eleven-fixture list and the post/check/collect loop are now `seedFixtures` (one
+    // place both are written); it throws naming every fixture that failed to seed instead of this
+    // spec asserting an empty `failed` array by hand.
     await page.setViewportSize({ width: 390, height: 844 });
     // The resetting fixture, then the practice, then everything that depends on the practice.
     await request.post("/api/mock/console");
     await signInAsPracticeOwner(page);
-
-    const LINKED = new Set(["credentials", "education"]);
-    const failed: string[] = [];
-    for (const fixture of [
-      "referrals", "registers", "usefulness", "ops", "credentials",
-      "capability", "case-mix", "education", "pathways", "verticals", "state",
-    ]) {
-      const query = LINKED.has(fixture) ? "?linkEmail=owner@demo.practice.example" : "";
-      const response = await request.post(`/api/mock/${fixture}${query}`);
-      if (!response.ok()) failed.push(`${fixture} -> ${response.status()}`);
-    }
-    expect(failed, `a fixture did not seed, so this sweep is measuring a page it did not populate: ${failed.join(", ")}`).toEqual([]);
+    await seedFixtures(request);
     const offenders: string[] = [];
     let population = 0;
     for (const route of CONSOLE_ROUTES) {
