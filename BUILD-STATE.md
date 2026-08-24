@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 3b7ddab (2026-08-24T10:04Z) — pnpm verify 274 files / 4255 tests, build, audit PASS; full e2e 304/304 last run @ dcda9f4`
+`gate: green @ 3b7ddab (2026-08-24T09:57Z) — pnpm verify 274 files / 4255 tests, build, audit PASS; full e2e 304/304 last run @ dcda9f4`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
