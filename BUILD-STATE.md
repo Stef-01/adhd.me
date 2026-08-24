@@ -99,6 +99,14 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **M9 (stop manner traits outvoting language, F9) — claimed 2026-08-24T07:45Z by loop-0824d.**
+> Q-M item 9, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the loop's own rule —
+> the prior firing (loop-0824c) took AR8, an AR-lane unit, so this firing takes the lowest-
+> numbered available O-lane work; M1–M8 are done and M9 has no unmet dependency (M10 remains
+> available, gated on M5 which is done; M11/M12 stay founder-gated). Building now: partitioning
+> `rankingProfile`'s comparator into tiers (language/preference near-requirement, care strong,
+> manner contributory) instead of one compensatory sum, per the unit's own spec.
+
 > **M8 (express "we cannot tell", F10) — claimed 2026-08-24T03:38Z by loop-0824b. DONE @
 > 5aaafea.** Q-M item 8, `docs/MATCHING-YEAR-PLAN.md` Phase 3. Alternating lanes per the loop's
 > own rule — the prior firing (loop-0824a) took AR7, an AR-lane unit, so this firing takes the
