@@ -23,7 +23,7 @@ export default function TermsPage() {
   return (
     <>
     <PublicHeader />
-    <main className="mx-auto max-w-xl px-6 py-16">
+    <main id="main-content" className="mx-auto max-w-xl px-6 py-16">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Terms", href: "/terms" }]} />
       <p className="mb-2 mt-6 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
         Draft — not yet in force

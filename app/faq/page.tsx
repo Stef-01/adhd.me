@@ -62,7 +62,7 @@ export default function FaqPage() {
   return (
     <>
     <PublicHeader />
-    <main className="prose-screen">
+    <main id="main-content" className="prose-screen">
       <div className="prose-wrap">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Questions", href: "/faq" }]} />

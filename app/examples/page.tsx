@@ -52,7 +52,7 @@ export default function ExamplesPage() {
   return (
     <>
     <PublicHeader />
-    <main className="prose-screen">
+    <main id="main-content" className="prose-screen">
       <div className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
         <h1>Worked examples</h1>

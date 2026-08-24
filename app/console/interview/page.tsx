@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export default async function InterviewPage() {
   await requireSession();
   return (
-    <main className="mc">
+    <main id="main-content" className="mc">
       <header className="mc-head">
         <Link href="/console" className="mc-back">Console</Link>
         <h1>Onboarding interview</h1>

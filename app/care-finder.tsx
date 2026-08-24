@@ -368,7 +368,7 @@ export function CareFinder() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="care-app patient-v2" data-stage={stage}>
+      <main id="main-content" className="care-app patient-v2" data-stage={stage}>
         <section className="care-shell" aria-live="polite">
           <AnimatePresence mode="wait" initial={false}>
 

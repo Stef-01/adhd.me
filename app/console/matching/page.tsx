@@ -81,7 +81,7 @@ export default async function MatchingConsolePage() {
   const patientUnheard = reachGaps(clinicianSpeech);
 
   return (
-    <main className="mc">
+    <main id="main-content" className="mc">
       <header className="mc-head">
         <Link href="/console" className="mc-back">Console</Link>
         <h1>Matching</h1>

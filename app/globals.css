@@ -3726,7 +3726,12 @@ textarea:focus-visible {
   }
 
   .cv2-condition-list {
-    grid-template-columns: 1fr;
+    /* O190: STAYS two columns. The 1fr collapse made the goal stage six rows tall and was,
+       measured, the whole reason that stage overflowed 390×844 by ~90px (height-chain probe in
+       the O190 row). The labels are two or three short words; two ~160px columns carry them,
+       and each row keeps the 44px floor through its padding. */
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
   }
 
   .cv2-coming-section > div:first-child small {
@@ -5016,6 +5021,32 @@ textarea:focus-visible {
 /* Clinician joining ----------------------------------------------------------
    O188: the application form is retired; the page is a pitch and one email address. */
 .join-page { min-height: 100dvh; padding: 0 0 96px; background: var(--paper); }
+/* O190: the skip link (guideline: "include skip link for main content") — the first tab stop
+   on every page, invisible until it is exactly what a keyboard reader needs. */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 160ms ease;
+}
+.skip-link:focus-visible { top: 12px; outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* O190: anchored headings and sections settle clear of sticky headers (guideline:
+   "scroll-margin-top on heading anchors"; /practices' #how, #measurement and #practice-story
+   scrolled under its own bar before this). */
+[id] { scroll-margin-top: 84px; }
+
 /* O189: the public spine — the same sticky wordmark-plus-one-link shape /approach carries,
    in the base palette (the story tokens are .story-scoped on purpose). Shared by every public
    page that had no mark of its own; app/public-header.tsx is the one place it is written. */
@@ -5054,6 +5085,9 @@ textarea:focus-visible {
 /* Pressable, visibly: a bordered pill, not a bare word — the founder's exact complaint about
    the old floating "For clinicians" text. */
 .site-nav-link {
+  /* O190: explicit-property transitions (never `transition: all`) and a reduced-motion-gated
+     press state — the fetched guidance's micro-interaction floor. */
+  transition: border-color 160ms ease, color 160ms ease;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -5097,6 +5131,7 @@ textarea:focus-visible {
   color: var(--ink);
 }
 .join-email-cta {
+  transition: background-color 160ms ease, color 160ms ease;
   display: inline-flex;
   align-items: center;
   min-height: 52px;
@@ -5114,6 +5149,11 @@ textarea:focus-visible {
   .join-email-cta:hover { background: var(--ink); color: var(--paper); }
 }
 .join-email-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .join-email-cta:active,
+  .site-nav-link:active,
+  .cv2-action > .cv2-start-cta:active { transform: translateY(1px); }
+}
 .join-email-note { max-width: 52ch; margin: 18px 0 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
 
 .cv2-join-link {
@@ -6753,3 +6793,78 @@ textarea:focus-visible {
     transition: none;
   }
 }
+
+/* ── O190: the walkthrough fits one screen ─────────────────────────────────────────────────────
+   Founder: "make it always fit on one screen, no weird scrolling after clicking each time and
+   make it instead have fades". The fade already existed (cv2-stage-in); the smooth scrollTo
+   travelling against it was the "weird scrolling" and is now an instant reset in the component.
+   This block is the FIT half, written from measurement, not taste: at 390×844 the four stages
+   overflowed by 539/436/409/367px and at 1280×900 by 375/543/416/416 (probe run recorded in the
+   O190 ledger row). Every override below keeps the 44px touch floor and the type scale's shape —
+   it compresses rhythm, never legibility: body sizes stay, display headings clamp down, dead
+   vertical space does the paying. Overrides live in one block, appended, so the compression is
+   one visible decision instead of thirty edits scattered through the cv2 system. */
+.cv2-header { min-height: 56px; }
+.cv2-progress { padding-top: 10px; }
+.cv2-stage { padding: 18px 44px 24px; }
+.cv2-intro h1 { font-size: clamp(1.75rem, 4.5vw, 2.375rem); line-height: 1.04; margin-top: 8px; }
+.cv2-intro > p:last-child { margin-top: 8px; font-size: 0.9375rem; }
+.cv2-eyebrow { margin-bottom: 0; }
+.cv2-back { margin-bottom: 6px; }
+.cv2-mix-card { margin-top: 14px; padding: 14px 18px; }
+.cv2-conditions { margin-top: 12px; }
+.cv2-condition-row { min-height: 44px; }
+.cv2-action { margin-top: 14px; }
+.cv2-action > button, .cv2-learning-card > button, .cv2-action > .cv2-start-cta { min-height: 48px; }
+.cv2-action > p { margin-top: 8px; }
+.cv2-case-hero { margin-top: 12px; padding: 12px 16px; }
+.cv2-case-list { margin-top: 10px; }
+.cv2-case-list article { min-height: 48px; padding: 6px 14px; gap: 10px; }
+.cv2-learning-card { margin-top: 12px; padding: 14px 18px; }
+.cv2-practice-hero { margin-top: 12px; padding: 14px 18px; }
+.cv2-practice-hero div strong { font-size: 1.75rem; }
+.cv2-loop { margin-top: 12px; gap: 8px; }
+.cv2-loop > div { padding: 8px 0; }
+.cv2-note { margin-top: 10px; padding: 10px 14px; }
+@media (max-width: 640px) {
+  .cv2-stage { padding: 14px 22px 20px; }
+  .cv2-intro h1 { font-size: clamp(1.5rem, 6.5vw, 1.875rem); }
+}
+
+/* O190 round two, from the named walk (HOP7): the PRACTICE stage measured 983 at 390×844 —
+   its four single-file loop rows and the hero's 36px approach were the pole. The loop becomes
+   a 2×2 grid (four short title+line pairs read fine side by side), the hero and note tighten.
+   Desktop had 116px of slack, so these hold at both widths. */
+.cv2-loop { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; margin-top: 12px; }
+.cv2-loop > div { padding: 10px 0; gap: 10px; grid-template-columns: 24px 1fr; }
+.cv2-loop > div > span { font-size: 1.0625rem; }
+.cv2-practice-hero { margin-top: 12px; padding: 12px 16px; }
+.cv2-note { margin-top: 8px; padding: 8px 12px; }
+.cv2-note p { font-size: 0.8125rem; }
+
+/* O190 round three (pin: practice@390 at 909, 65 over). The action stack folds: restart and
+   the honesty line share one row under the funnel CTA; the loop and hero give up their last
+   loose pixels. Nothing leaves the screen — it sits closer. */
+.cv2-practice .cv2-action { display: grid; grid-template-columns: 1fr; }
+.cv2-practice .cv2-action > .cv2-restart { margin-top: 4px; justify-self: start; }
+.cv2-practice .cv2-action > p { margin-top: 0; align-self: center; }
+@media (min-width: 480px) {
+  .cv2-practice .cv2-action { grid-template-columns: auto 1fr; gap: 0 14px; align-items: center; }
+  .cv2-practice .cv2-action > .cv2-start-cta { grid-column: 1 / -1; }
+}
+.cv2-loop > div { padding: 7px 0; }
+.cv2-practice-hero div strong { font-size: 1.5rem; }
+.cv2-practice-hero { padding: 10px 14px; }
+.cv2-intro > p:last-child { margin-top: 4px; }
+.cv2-intro h1 { margin-top: 6px; }
+@media (max-width: 640px) {
+  .cv2-stage { padding-bottom: 14px; }
+}
+
+/* O190 round four (pin: 865, 21 over). Six last rhythm pixels; the pin's next run decides. */
+.cv2-loop > div { padding: 5px 0; }
+.cv2-practice-hero { margin-top: 8px; }
+.cv2-note { margin-top: 6px; padding: 6px 12px; }
+.cv2-progress { padding-top: 6px; }
+.cv2-back { margin-bottom: 2px; }
+.cv2-action > button, .cv2-learning-card > button, .cv2-action > .cv2-start-cta { min-height: 44px; }

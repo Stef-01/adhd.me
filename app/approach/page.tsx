@@ -26,7 +26,7 @@ export const metadata = {
 
 export default function ApproachPage() {
   return (
-    <main className="story approach-page">
+    <main id="main-content" className="story approach-page">
       <header className="story-header">
         <div className="story-wrap story-header-inner">
           <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>

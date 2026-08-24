@@ -30,7 +30,7 @@ export default function AutomatedDecisionsPage() {
   return (
     <>
     <PublicHeader />
-    <main className="mx-auto max-w-xl px-6 py-16">
+    <main id="main-content" className="mx-auto max-w-xl px-6 py-16">
       <h1 className="text-3xl font-semibold tracking-tight">
         How ADHD.ME uses automated decision-making
       </h1>

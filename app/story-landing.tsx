@@ -138,7 +138,7 @@ export function StoryLanding() {
   const readProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
 
   return (
-    <main className="story">
+    <main id="main-content" className="story">
       <motion.header
         className="story-header"
         initial={reduce ? false : { y: -10 }}

@@ -31,7 +31,7 @@ export default function PracticesPage() {
 
       <PublicHeader />
 
-      <main className="mx-auto max-w-5xl px-6">
+      <main id="main-content" className="mx-auto max-w-5xl px-6">
         <section className="py-20 sm:py-28">
           <p className="text-sm font-medium uppercase tracking-wide text-stone-500">{C.hero.eyebrow}</p>
           <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">{C.hero.heading}</h1>

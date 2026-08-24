@@ -34,7 +34,7 @@ export default function DemoPage() {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <main className="mx-auto max-w-3xl px-6 py-16">
+      <main id="main-content" className="mx-auto max-w-3xl px-6 py-16">
         <div className="mb-10">
           <DemoNavigator />
         </div>

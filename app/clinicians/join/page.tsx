@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function JoinPage() {
   return (
-    <main className="join-page">
+    <main id="main-content" className="join-page">
       {/* O189: the page joins the site. The founder's verdict on the shipped version — no logo,
           no clear navigation, a back-link that read as plain text — and the fix is the pattern
           /approach already carries: a sticky header with the serif wordmark linking home and one

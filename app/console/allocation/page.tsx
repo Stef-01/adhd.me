@@ -89,7 +89,7 @@ export default async function AllocationConsolePage() {
   const derived = readNeeds(PATIENT_WORDS);
 
   return (
-    <main className="mc">
+    <main id="main-content" className="mc">
       <header className="mc-head">
         <Link href="/console" className="mc-back">Console</Link>
         <h1>One allocation, worked through</h1>

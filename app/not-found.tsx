@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="notfound-screen">
+    <main id="main-content" className="notfound-screen">
       <p className="notfound-code" aria-hidden="true">404</p>
       <h1>That page does not exist.</h1>
       <p className="notfound-copy">

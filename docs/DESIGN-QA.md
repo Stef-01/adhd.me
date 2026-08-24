@@ -2636,3 +2636,31 @@ actions max, must meet the funnel, restart must survive demoted). Captures:
 from the join lead and metadata — the product covers Queensland too, and the story pages already
 said "NSW and Queensland" correctly. The lead now opens at the email itself; no state-scoped
 training claim remains anywhere on the public surfaces (swept, not spot-fixed).
+
+## SEO, micro-refinements & the one-screen walkthrough (O190)
+
+Founder /goal ("implement more SEO and online learnings for optimising the site ui with
+microinforments…") plus the follow-up: the /clinicians flow must "always fit on one screen, no
+weird scrolling after clicking each time and make it instead have fades". Sources fetched: the
+Vercel web-interface-guidelines (micro-interaction, scroll and semantic-HTML sections quoted in
+the ledger row).
+
+**SEO**: the sitemap now derives from the compliance census (it was hand-typed and missing
+/demo), pinned both directions in `src/quality/sitemap.test.ts`; `theme-color` was checked and
+found already present (viewport export). **Guideline items landed**: a skip link (first tab stop
+on every page, hidden until focused, targeting the `id="main-content"` now on all 21 `<main>`
+landmarks); `scroll-margin-top: 84px` on `[id]` so /practices' in-page anchors settle clear of
+its sticky bar; explicit-property transitions on the new nav controls (never `transition: all`);
+reduced-motion-gated `:active` press states on the three primary CTAs.
+
+**The walkthrough**: the smooth scroll that travelled against the stage fade was the "weird
+scrolling" — stage changes now reset instantly and the existing `cv2-stage-in` fade carries the
+transition alone. The fit was measured, not assumed: stages overflowed 390×844 by up to 539px;
+four measured compression rounds (height-chain probes recorded in the ledger) brought every
+stage inside the viewport at 390×844 AND 1280×900 — the decisive causes were the condition list
+collapsing to one column on mobile (six rows where three fit) and the practice stage's
+single-file loop (now 2×2). The Acknowledgement of Country band DELIBERATELY stays on the page,
+one scroll below the fold — fitting the flow is not a licence to remove the acknowledgement.
+Pinned forever in `e2e/support/stage-heights.spec.ts`: every stage's bottom within the viewport
+at both widths, non-vacuous (walk must cross all four stages). Captures:
+`qa/_runs/walkthrough-o190/{goal,practice}-{390,1280}.png`.

@@ -87,6 +87,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="min-h-screen antialiased app-body">
+        {/* O190: the skip link the guidelines require ("include skip link for main content").
+            First tabbable thing on every page; visually hidden until focused. Every page's
+            <main> carries id="main-content" for it. */}
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}

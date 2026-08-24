@@ -26,7 +26,7 @@ export default function AboutPage() {
   return (
     <>
     <PublicHeader />
-    <main className="mx-auto max-w-4xl px-6 py-16">
+    <main id="main-content" className="mx-auto max-w-4xl px-6 py-16">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Team", href: "/about" }]} />
       <h1 className="mt-6 text-3xl font-semibold tracking-tight">Team</h1>
       <TeamPlates />

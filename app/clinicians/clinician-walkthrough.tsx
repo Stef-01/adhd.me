@@ -109,7 +109,7 @@ export function ClinicianWalkthrough() {
 
   function goToStage(next: Stage) {
     setStage(next);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0); // O190: instant — the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
   }
 
   function move(direction: 1 | -1) {
@@ -126,7 +126,7 @@ export function ClinicianWalkthrough() {
     }
 
     setResourceIndex((current) => current + 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0); // O190: instant — the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
   }
 
   function toggleCondition(id: string) {
@@ -142,11 +142,11 @@ export function ClinicianWalkthrough() {
     setSelectedConditions(["adhd-assessment"]);
     setResourceIndex(0);
     setReviewed([]);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0); // O190: instant — the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
   }
 
   return (
-    <main className="clinician-app clinician-v2">
+    <main id="main-content" className="clinician-app clinician-v2">
       <div className="cv2-shell">
         <header className="cv2-header">
           <div className="cv2-brand">

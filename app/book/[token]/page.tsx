@@ -19,7 +19,7 @@ export const metadata = { title: "Your appointment — ADHD.ME", robots: { index
 
 function Panel({ heading, children }: { heading: string; children: React.ReactNode }) {
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-4 px-6">
+    <main id="main-content" className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-4 px-6">
       <h1 className="text-2xl font-semibold tracking-tight">{heading}</h1>
       {children}
     </main>
