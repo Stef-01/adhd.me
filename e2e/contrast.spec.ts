@@ -16,6 +16,7 @@ import { expect, test, type Page } from "@playwright/test";
 // is what "afterwards" came to here.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { measured } from "./support/measured";
+import { derivedFloor } from "./support/floors";
 
 /**
  * Every text element whose contrast is under its WCAG AA floor, with the population it came from.
@@ -110,10 +111,11 @@ test.describe("WCAG AA contrast", () => {
       population += seen;
       for (const entry of out) offenders.push(`${route} ${entry}`);
     }
-    // AR6: declares + reports the population through the shared harness, in addition to the
-    // transcribed floor below (AR7's job to derive, not this one's).
+    // AR6: declares + reports the population through the shared harness.
     measured("contrast.public", population);
-    expect(population).toBeGreaterThan(400);
+    // AR7: derived from PUBLIC_ROUTES.length instead of transcribed. 26/route stays below the
+    // observed rate (515 over 15 routes, ~34/route).
+    expect(population).toBeGreaterThan(derivedFloor(PUBLIC_ROUTES.length, 26));
     expect(offenders, `under the contrast floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 
@@ -138,7 +140,9 @@ test.describe("WCAG AA contrast", () => {
     }
     // AR6: same replacement as the public test above.
     measured("contrast.console", population);
-    expect(population).toBeGreaterThan(600);
+    // AR7: derived from CONSOLE_ROUTES.length instead of transcribed. 20/route stays below the
+    // observed rate (1733 over 30 routes, ~58/route).
+    expect(population).toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 20));
     expect(offenders, `under the contrast floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 });

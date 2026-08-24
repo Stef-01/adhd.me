@@ -21,6 +21,7 @@ import { test, expect, type Page } from "@playwright/test";
 // was the reason it waited through two rows.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 import { measured } from "./support/measured";
+import { derivedFloor } from "./support/floors";
 
 async function signIn(page: Page) {
   await page.goto("/console/signin");
@@ -93,15 +94,18 @@ test("headings, landmarks and field names hold across the site", async ({ page, 
   // are a different check) declared through the shared harness alongside the existing log line.
   measured("semantics.headings", headings);
   measured("semantics.fields", fields);
-  // NON-VACUITY, LOAD-BEARING, AND RE-MEASURED — a selector that stopped matching would otherwise
-  // report a flawless sweep of nothing. O160 set these at 100/60 against 152 headings and 101 fields
-  // over 25 routes. The derived list is 45 routes and draws **214 headings and 108 fields**, so a
-  // floor of 100 would no longer notice the sweep collapsing back to roughly the list it replaced.
-  // Raised with the observed figures stated beside them, which is the same staleness O170 found in
-  // `touch-floor`'s population floor an hour earlier — floors go stale silently whenever the thing
-  // they bound grows.
+  // NON-VACUITY, LOAD-BEARING — a selector that stopped matching would otherwise report a flawless
+  // sweep of nothing. This guard is the route-list-collapse check (a different thing from the two
+  // below): O160 set it at 40 and it stays transcribed, per AR6's note, because a route COUNT this
+  // low is itself the failure, not a rate that should track the count.
   expect(PUBLIC_ROUTES.length + CONSOLE_ROUTES.length, "the derived route list collapsed").toBeGreaterThan(40);
-  expect(headings, "the heading probe stopped matching (observed 214)").toBeGreaterThan(180);
-  expect(fields, "the form-field probe stopped matching (observed 108)").toBeGreaterThan(90);
+  const totalRoutes = PUBLIC_ROUTES.length + CONSOLE_ROUTES.length;
+  // AR7: the heading/field floors are derived from the route count instead of transcribed. O170
+  // found `touch-floor`'s population floor stale for the same reason: 180/90 were set against 214
+  // headings and 108 fields over 45 routes, and would not notice the sweep collapsing back toward
+  // the 25-route list they replaced. 4/route and 2/route stay below those observed rates
+  // (~4.8 headings/route, ~2.4 fields/route).
+  expect(headings, "the heading probe stopped matching").toBeGreaterThan(derivedFloor(totalRoutes, 4));
+  expect(fields, "the form-field probe stopped matching").toBeGreaterThan(derivedFloor(totalRoutes, 2));
   expect(findings, `semantic defects:\n${findings.join("\n")}`).toEqual([]);
 });

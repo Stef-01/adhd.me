@@ -14,6 +14,7 @@ import { expect, test, type Page } from "@playwright/test";
 // staff work, sometimes on a phone between patients.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 import { measured } from "./support/measured";
+import { derivedFloor } from "./support/floors";
 
 /**
  * Every control on `route` whose HIT AREA is under 44px, with the population it was drawn from.
@@ -120,10 +121,14 @@ test.describe("O14's 44px touch floor", () => {
     // the standalone number would have been a figure that goes stale on a full run, which is the
     // exact staleness O170 found in the console floor and O174 found again one row later.
     // AR6: `measured()` is the shared non-vacuity harness — the console.log was this exact line,
-    // hand-written once per sweep. The floor below stays a transcribed number on purpose; deriving
-    // it from the route list is AR7's job, not this one's.
+    // hand-written once per sweep.
     measured("touch-floor.public", population);
-    expect(population, "the public sweep collapsed").toBeGreaterThan(150);
+    // AR7: derived from the route list instead of transcribed. The sweep visits every public route
+    // plus one extra populated pass over /demo (above), so the basis is PUBLIC_ROUTES.length + 1.
+    // 9/route was chosen below the observed rate (~160-163 over 16 sweeps, ~10/route) so ordinary
+    // per-route variance cannot trip it, while a collapse — a selector that stopped matching, or a
+    // surface that stopped rendering its controls — still falls under it.
+    expect(population, "the public sweep collapsed").toBeGreaterThan(derivedFloor(PUBLIC_ROUTES.length + 1, 9));
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 
@@ -187,7 +192,13 @@ test.describe("O14's 44px touch floor", () => {
     // floor is a claim about a run, and it goes stale the moment the run changes.
     // AR6: same replacement as the public sweep above.
     measured("touch-floor.console", population);
-    expect(population, "the console sweep collapsed — a clean pass here would mean nothing").toBeGreaterThan(170);
+    // AR7: derived from CONSOLE_ROUTES.length instead of the transcribed 170 that O170 set for a
+    // 16-route sweep and that had already gone stale twice by the time AR6 measured 207 over 30
+    // routes. 5/route stays below that observed rate (~6.9/route).
+    expect(
+      population,
+      "the console sweep collapsed — a clean pass here would mean nothing",
+    ).toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 5));
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 });

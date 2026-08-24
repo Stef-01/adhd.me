@@ -13,6 +13,7 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
 // controls no keyboard test had ever tabbed through.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { measured } from "./support/measured";
+import { derivedFloor } from "./support/floors";
 
 /** Signed-in setup plus O174's corrected fixture seeding. */
 async function signInAndSeed(page: Page, request: APIRequestContext) {
@@ -158,10 +159,11 @@ test.describe("keyboard focus", () => {
 
     // Non-vacuity: a walk that stopped tabbing would report a flawless sweep of nothing.
     console.log(`KEYBOARD_PUBLIC ${PUBLIC_ROUTES.length} routes, ${totalStops} stops`);
-    // AR6: the runtime-measured population declared through the shared harness; the floor below
-    // stays a transcribed number (AR7's job to derive).
+    // AR6: the runtime-measured population declared through the shared harness.
     measured("keyboard-focus.public-stops", totalStops);
-    expect(totalStops).toBeGreaterThan(100);
+    // AR7: derived from PUBLIC_ROUTES.length instead of transcribed. 6/route stays below the
+    // observed rate (145 over 15 routes, ~9.7/route).
+    expect(totalStops).toBeGreaterThan(derivedFloor(PUBLIC_ROUTES.length, 6));
     expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
     expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
   });
@@ -182,7 +184,12 @@ test.describe("keyboard focus", () => {
     console.log(`KEYBOARD_CONSOLE ${CONSOLE_ROUTES.length} routes, ${totalStops} stops`);
     // AR6: same replacement as the public walk above.
     measured("keyboard-focus.console-stops", totalStops);
-    expect(totalStops, "the console walk stopped tabbing — a clean result here would mean nothing").toBeGreaterThan(150);
+    // AR7: derived from CONSOLE_ROUTES.length instead of transcribed. 5/route stays below the
+    // observed rate (247 over 30 routes, ~8.2/route).
+    expect(
+      totalStops,
+      "the console walk stopped tabbing — a clean result here would mean nothing",
+    ).toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 5));
     expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
     expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
   });
