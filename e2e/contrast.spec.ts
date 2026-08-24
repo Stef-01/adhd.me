@@ -19,72 +19,18 @@ import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
+import { contrastFinding, contrastFindings } from "./support/contrast-load";
 
 /**
- * Every text element whose contrast is under its WCAG AA floor, with the population it came from.
- *
- * COLOURS ARE RESOLVED THROUGH A CANVAS, and that is not incidental. Tailwind v4 emits `oklch()`,
- * and the first version of this probe parsed only `rgb()` — so it skipped every button background,
- * walked up to the page behind it, and reported WHITE TEXT ON A DARK BUTTON as 1.00:1. Six
- * confident false findings. `ctx.fillStyle` resolves any CSS colour the browser can parse.
- *
- * It measures elements holding their own text, against the nearest opaque background above them,
- * which is what a reader actually sees.
+ * AR12: the measurement itself now lives in `e2e/support/contrast-load.ts`, so the mutation probe
+ * in `e2e/support/contrast-probe.spec.ts` drives THIS detector rather than a copy. The canvas
+ * colour story (oklch, the six confident false findings) moved with it, comments and all; what
+ * stays here is the sweep's own job — navigation, fonts, sign-in, fixtures, loops and floors.
  */
 async function sweep(page: Page, route: string) {
   await page.goto(route, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
-  return page.evaluate(() => {
-    const ctx = document.createElement("canvas").getContext("2d")!;
-    const parse = (c: string) => {
-      if (!c || c === "transparent") return null;
-      ctx.clearRect(0, 0, 1, 1);
-      ctx.fillStyle = "#000";
-      ctx.fillStyle = c;
-      ctx.fillRect(0, 0, 1, 1);
-      const d = ctx.getImageData(0, 0, 1, 1).data;
-      return { r: d[0]!, g: d[1]!, b: d[2]!, a: d[3]! / 255 };
-    };
-    const lum = (c: { r: number; g: number; b: number }) => {
-      const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
-      return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
-    };
-    const backgroundBehind = (el: Element) => {
-      let node: Element | null = el;
-      while (node) {
-        const c = parse(getComputedStyle(node).backgroundColor);
-        if (c && c.a > 0.95) return c;
-        node = node.parentElement;
-      }
-      return { r: 255, g: 255, b: 255 };
-    };
-
-    const out: string[] = [];
-    let seen = 0;
-    for (const el of Array.from(document.querySelectorAll("body *"))) {
-      const ownsText = Array.from(el.childNodes).some(
-        (n) => n.nodeType === 3 && (n.textContent || "").trim().length > 1,
-      );
-      if (!ownsText) continue;
-      const cs = getComputedStyle(el);
-      if (cs.visibility === "hidden" || cs.display === "none" || parseFloat(cs.opacity) < 0.95) continue;
-      const rect = el.getBoundingClientRect();
-      if (!rect.width || !rect.height) continue;
-      const fg = parse(cs.color);
-      if (!fg) continue;
-
-      const ratio = (Math.max(lum(fg), lum(backgroundBehind(el))) + 0.05)
-        / (Math.min(lum(fg), lum(backgroundBehind(el))) + 0.05);
-      const size = parseFloat(cs.fontSize);
-      const large = size >= 24 || (size >= 18.66 && parseInt(cs.fontWeight) >= 700);
-      const floor = large ? 3 : 4.5;
-      seen += 1;
-      if (ratio < floor) {
-        out.push(`${ratio.toFixed(2)}:1 (needs ${floor}) <${el.tagName.toLowerCase()}> ${size}px "${(el.textContent || "").trim().slice(0, 30)}"`);
-      }
-    }
-    return { out, seen };
-  });
+  return contrastFindings(page);
 }
 
 test.describe("WCAG AA contrast", () => {
@@ -99,7 +45,9 @@ test.describe("WCAG AA contrast", () => {
     for (const route of PUBLIC_ROUTES) {
       const { out, seen } = await sweep(page, route);
       population += seen;
-      for (const entry of out) offenders.push(`${route} ${entry}`);
+      // AR12: the per-route verdict names the route AND the rule id (AR9-AR11's change, last family).
+      const finding = contrastFinding(route, out);
+      if (finding) offenders.push(finding);
     }
     // AR6: declares + reports the population through the shared harness.
     measured("contrast.public", population);
@@ -131,7 +79,9 @@ test.describe("WCAG AA contrast", () => {
     for (const route of CONSOLE_ROUTES) {
       const { out, seen } = await sweep(page, route);
       population += seen;
-      for (const entry of out) offenders.push(`${route} ${entry}`);
+      // AR12: the per-route verdict names the route AND the rule id (AR9-AR11's change, last family).
+      const finding = contrastFinding(route, out);
+      if (finding) offenders.push(finding);
     }
     // AR6: same replacement as the public test above.
     measured("contrast.console", population);
