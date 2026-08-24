@@ -122,6 +122,18 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    // AR16: latestAccepted's [length - 1] is a fold to the last entry. Position IS the meaning
+    // here — the register is an append-only chain and "latest" is defined as the most recently
+    // appended entry, so there is no tie to break: two entries cannot both be last, and the
+    // duplicate-hash test keeps two entries from claiming the same manifest state.
+    module: "src/design/accepted-diffs.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "The fold selects the LAST element of an append-only register, where recency is the definition of the answer, not an accident of iteration order; duplicate manifest hashes are separately pinned impossible, so no two entries can compete for latest.",
+    },
+  },
+  {
     // W188: a same-day join/leave pair is a real tie on a day-granular date, and the tie-break
     // is a safety decision rather than a guess — see the test.
     module: "src/directory/membership.ts",
