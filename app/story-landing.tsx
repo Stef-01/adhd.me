@@ -102,12 +102,17 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
   return (
     <motion.div
       className={className}
+      // AR20's sweep caught the half-gate here: gating only `initial` leaves the SSR-rendered
+      // offset in place for reduce users (the server cannot know the preference), who then got
+      // the very slide this gate exists to prevent when whileInView fired. Under reduce the
+      // element now snaps to rest at duration 0 and never watches the viewport at all.
       initial={reduce ? false : { y: 20 }}
-      whileInView={{ y: 0 }}
+      animate={reduce ? { y: 0 } : undefined}
+      whileInView={reduce ? undefined : { y: 0 }}
       // `margin` fires the entrance slightly BEFORE the element reaches the read line, so the
       // movement has finished by the time it is being read rather than starting under the eye.
       viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
-      transition={{ duration: 0.6, delay, ease: EASE }}
+      transition={reduce ? { duration: 0 } : { duration: 0.6, delay, ease: EASE }}
     >
       {children}
     </motion.div>

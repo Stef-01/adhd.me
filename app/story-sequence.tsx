@@ -233,10 +233,13 @@ function Rise({ children, delay = 0, className }: { children: ReactNode; delay?:
   return (
     <motion.div
       className={className}
+      // AR20: same half-gate as story-landing's Reveal (the constraint this duplication makes
+      // visible) — under reduce, snap to rest at duration 0; never a viewport-fired slide.
       initial={reduce ? false : { y: 18 }}
-      whileInView={{ y: 0 }}
+      animate={reduce ? { y: 0 } : undefined}
+      whileInView={reduce ? undefined : { y: 0 }}
       viewport={{ once: true, amount: 0.3, margin: "0px 0px -6% 0px" }}
-      transition={{ duration: 0.6, delay, ease: EASE }}
+      transition={reduce ? { duration: 0 } : { duration: 0.6, delay, ease: EASE }}
     >
       {children}
     </motion.div>

@@ -144,7 +144,9 @@ prefers-reduced-motion is fully honoured — every effect has a static equal, ch
 - **Incident:** O127 — the motion queue, closed honestly; gaps found later by O141
 - **Enforced by:**
   - `src/quality/landing-motion.test.ts :: keeps the reduced-motion gate, which is still right even though it was not the fix`
-- **Route scope:** single route: `/`
+  - `src/design/reduced-motion.test.ts :: every motion-importing file is covered: hook, drilled prop, or a declared boundary`
+  - `e2e/reduced-motion.spec.ts :: under reduced motion, no element rests transformed and every reveal's content is present`
+- **Route scope:** route sweep: `public-static`
 
 ## Honesty gates
 

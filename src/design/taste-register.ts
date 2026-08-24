@@ -324,9 +324,16 @@ export const TASTE_RULES: readonly TasteRule[] = [
     incident: "O127 — the motion queue, closed honestly; gaps found later by O141",
     enforcedBy: [
       "src/quality/landing-motion.test.ts :: keeps the reduced-motion gate, which is still right even though it was not the fix",
+      // AR20 widened this rule from one file's source pin to the whole public surface: the
+      // census proves every motion-importing file CHECKS the preference (hook, drilled prop,
+      // or a declared MotionConfig boundary — the state a hook-grep cannot see), and the sweep
+      // proves the RESULT under emulated reduce: nothing rests transformed, no reveal's
+      // content is missing. Probe-backed (reduced-motion-probe.spec.ts drives the sweep's own
+      // detector with planted violations of both kinds).
+      "src/design/reduced-motion.test.ts :: every motion-importing file is covered: hook, drilled prop, or a declared boundary",
+      "e2e/reduced-motion.spec.ts :: under reduced motion, no element rests transformed and every reveal's content is present",
     ],
-    // landing-motion.test.ts pins app/story-landing.tsx's own source, which app/page.tsx renders at "/".
-    routeScope: { kind: "single-route", route: "/" },
+    routeScope: { kind: "route-sweep", sweep: "public-static" },
   },
   {
     id: "motion.autoplay-stop",

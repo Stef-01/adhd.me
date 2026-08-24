@@ -42,6 +42,14 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     reason:
       "Initial acceptance: 45 routes × 2 widths × 1 theme × 2 motion settings, three consecutive full-matrix runs with zero pairwise diff on the deterministic harness (pinned server clock, settle proof, capture strip, canonical snap).",
   },
+  {
+    unitId: "AR20",
+    acceptedAt: "2026-08-24",
+    manifestSha256: "ca3e77ea278d88b289b40b1b65ff7d7884d47f87ead91ee0c240970dafc74b2e",
+    captures: 180,
+    reason:
+      "Exactly four cells moved — home and approach under reduce, both widths — because AR20's sweep caught the Reveal/Rise half-gate: initial={false} under reduce left the SERVER-rendered entrance offset uncleaned, so reduce users rested 20px/18px displaced. The fix snaps to rest at duration 0; the no-preference cells are untouched, and a fresh three-run protocol agreed before this acceptance.",
+  },
 ];
 
 export type AcceptedDiffVerdict =
