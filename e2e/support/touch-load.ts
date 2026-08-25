@@ -8,6 +8,7 @@
 // this module owns what a control under the floor IS.
 
 import type { Page } from "@playwright/test";
+import { TOUCH_EXEMPTIONS } from "../../src/design/touch-exemptions";
 
 /** The register id this sweep enforces (`src/design/taste-register.ts`). */
 export const TOUCH_RULE_ID = "interaction.touch-44";
@@ -30,11 +31,19 @@ export const TOUCH_FLOOR_PX = 44;
  *   * `.sr-only` inputs, where the visible affordance is somewhere else.
  * And the hit area is the LABEL's when a label wraps or references the control: an 18px checkbox
  * inside a 44px label is compliant (measuring the input reported 70 findings where there were 61).
+ *
+ * AR22 adds the fourth path: a PER-ELEMENT exemption from src/design/touch-exemptions.ts —
+ * declared, never inferred, and never silent: an exempted control is COUNTED, so a register
+ * entry matching nothing (or everything) shows in the numbers rather than disappearing.
  */
-export async function underFloorControls(page: Page): Promise<{ out: string[]; seen: number }> {
-  return page.evaluate((floor) => {
+export async function underFloorControls(
+  page: Page,
+  exemptions: readonly string[] = TOUCH_EXEMPTIONS.map((entry) => entry.selector),
+): Promise<{ out: string[]; seen: number; exempted: number }> {
+  return page.evaluate(({ floor, exemptSelectors }) => {
     const out: string[] = [];
     let seen = 0;
+    let exempted = 0;
     const inlineInProse = (el: Element) => {
       if (el.tagName !== "A") return false;
       if (el.closest("p")) return true;
@@ -60,13 +69,17 @@ export async function underFloorControls(page: Page): Promise<{ out: string[]; s
         if (lr.width * lr.height > box.width * box.height) box = lr;
       }
       seen += 1;
+      if (exemptSelectors.some((selector: string) => el.matches(selector))) {
+        exempted += 1;
+        continue;
+      }
       if (box.height < floor || box.width < floor) {
         const name = (el.getAttribute("aria-label") || el.textContent || (label && label.textContent) || "").trim().slice(0, 40);
         out.push(`<${el.tagName.toLowerCase()}> "${name}" ${Math.round(box.width)}x${Math.round(box.height)}`);
       }
     }
-    return { out, seen };
-  }, TOUCH_FLOOR_PX);
+    return { out, seen, exempted };
+  }, { floor: TOUCH_FLOOR_PX, exemptSelectors: [...exemptions] });
 }
 
 /**

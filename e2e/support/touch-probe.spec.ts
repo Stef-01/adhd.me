@@ -121,3 +121,24 @@ test("the hit-area rule survives the probe: a small input inside a big label sta
     "the 18px input inside a 44px label was flagged — the detector is measuring the glyph, not the hit area",
   ).toEqual([]);
 });
+
+test("AR22: a per-element exemption is honoured AND counted — declared, never inferred, never silent", async ({
+  page,
+}) => {
+  await openProbedRoute(page);
+  const [label] = await injectControls(page, 1, { width: 30, height: 30 });
+
+  // Without an entry, the planted under-floor control is reported — the default register is
+  // EMPTY, and this is the shape a violation takes.
+  const without = await underFloorControls(page);
+  expect(without.out.join("\n")).toContain(label);
+  expect(without.exempted).toBe(0);
+
+  // With a per-element selector, the same control is skipped AND counted — never silent. The
+  // register ships empty (src/design/touch-exemptions.ts pins it), so this path runs only here
+  // until a real entry argues its way in; the probe keeps the mechanism from dying meanwhile.
+  const withEntry = await underFloorControls(page, [`[aria-label="${label}"]`]);
+  expect(withEntry.out.join("\n")).not.toContain(label);
+  expect(withEntry.exempted).toBe(1);
+  expect(withEntry.seen).toBe(without.seen);
+});
