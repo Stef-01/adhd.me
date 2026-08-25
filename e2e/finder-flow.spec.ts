@@ -12,6 +12,7 @@
 
 import { expect, test, type Page } from "@playwright/test";
 import { measured } from "./support/measured";
+import { rankClinicians } from "../src/demo/clinicians";
 
 async function intoResults(page: Page) {
   await page.goto("/finder");
@@ -365,4 +366,41 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
   // above would have been a deletion rather than a condition.
   expect(head).not.toContain("not something any GP listed today declares");
   expect(head).toMatch(/1 of 2 listed GPs matches every part of your request we understood/);
+});
+
+test("the typed journey ends in the engine's own ranking, both ways round (AR38)", async ({ page }) => {
+  // AR38: the outcome, not the shape. Every walk above enters via the demo scenario or asserts
+  // structure — a results screen that rendered the roster in a FIXED order would pass all of
+  // them. This drives the typed path from the welcome stage twice, with two queries the engine
+  // itself ranks in opposite orders, and asserts the rendered order IS `rankClinicians`' answer
+  // for the exact string typed — the same function `app/care-finder.tsx` calls. Two opposite
+  // orders kill the fixed-order failure class outright: the UI must FOLLOW the engine.
+  //
+  // Suburb-free queries on purpose: naming a place would route through `rankCliniciansNear`,
+  // which is the suburb test's subject above, not this one's.
+  const QUERIES = ["I need an ADHD assessment", "a woman GP for ADHD assessment"];
+  const expected = QUERIES.map((q) => rankClinicians(q).map((c) => c.name));
+
+  // The guard that keeps this non-vacuous: the pair must genuinely separate. If a roster change
+  // ever makes both queries agree, this fails HERE, demanding a new pair rather than silently
+  // asserting half as much.
+  expect(expected[0], "the two queries no longer rank oppositely — pick a separating pair").not.toEqual(
+    expected[1],
+  );
+
+  for (const [i, query] of QUERIES.entries()) {
+    await page.goto("/finder");
+    await page.locator("#welcome-request").fill(query);
+    await page.getByRole("button", { name: "Find a GP" }).click();
+    await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+    const rendered = await page.locator(".clinician-row strong").allInnerTexts();
+    expect(rendered.map((n) => n.trim()), `"${query}" rendered an order the engine did not produce`).toEqual(
+      expected[i],
+    );
+
+    // And the journey's end: the top row opens the profile of the engine's #1, by name.
+    await page.locator(".clinician-row").first().click();
+    await expect(page.getByRole("heading", { name: expected[i]![0]!, level: 1 })).toBeVisible();
+  }
 });
