@@ -1,10 +1,13 @@
-// W49 verify gate (automated half): axe-core WCAG 2.1 A/AA scans over every console
-// surface and the patient-facing booking states. Zero violations is the bar — a
-// finding is fixed or explicitly ruled, never ignored. The manual half lives in
-// docs/A11Y-W49.md.
+// W49 verify gate (automated half): axe-core WCAG 2.2 AA scans (AR33: raised from 2.1 — axe-core
+// 4.12.1's only additional rule under the 2.2 tag is `target-size`, 2.5.8's 24x24px floor) over
+// every console surface, every public route and the patient-facing booking states — all 47 page
+// routes the app serves. Zero UNEXEMPTED violations is the bar: a finding is fixed, or named and
+// dated in `src/quality/a11y-exemptions.ts` with a reason, never silently ignored. The manual
+// half lives in docs/A11Y-W49.md.
 
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { filterExemptViolations } from "../src/quality/a11y-exemptions";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { MANAGER_EMAIL, signIn, signInAndOnboard } from "./support/session";
 
@@ -77,12 +80,18 @@ async function expectNoViolations(page: Page, label: string) {
   await expect(page, `${label} must have a document title`).toHaveTitle(/.+/);
   await settle(page);
   const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
     .analyze();
-  const summary = results.violations.map(
-    (v) => `${v.id} (${v.impact}): ${v.nodes.length} node(s) — ${v.help}`,
-  );
-  expect(summary, `${label} must have no WCAG A/AA violations`).toEqual([]);
+  const { unexempted, unusedExemptions } = filterExemptViolations(label, results.violations);
+  const unexemptedIds = new Set(unexempted.map((v) => v.id));
+  const summary = results.violations
+    .filter((v) => unexemptedIds.has(v.id))
+    .map((v) => `${v.id} (${v.impact}): ${v.nodes.length} node(s) — ${v.help}`);
+  expect(summary, `${label} must have no unexempted WCAG 2.2 AA violations`).toEqual([]);
+  expect(
+    unusedExemptions,
+    `${label}'s a11y-exemptions.ts entries must match a real, current finding — a stale exemption hides nothing`,
+  ).toEqual([]);
 }
 
 test.beforeEach(async ({ page, request }) => {
