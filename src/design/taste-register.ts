@@ -290,6 +290,11 @@ export const TASTE_RULES: readonly TasteRule[] = [
     enforcedBy: [
       "e2e/keyboard-focus.spec.ts :: every public control is reachable by keyboard and shows where it is",
       "e2e/keyboard-focus.spec.ts :: every console control is reachable by keyboard and shows where it is",
+      // AR23: the statement's last clause ("never outline: none without a replacement") gets its
+      // STATIC half — the tab-walks above prove focus is visible where the walker lands; the
+      // census proves no source anywhere suppresses the ring without a paired replacement, which
+      // covers states and elements no finite walk visits.
+      "src/design/focus-ring.test.ts :: every component suppression pairs its ring in the same class string, at the pinned counts",
     ],
     routeScope: { kind: "route-sweep", sweep: "public-and-console-static" },
   },
