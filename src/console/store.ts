@@ -264,6 +264,26 @@ function audit(
   state.auditEvents.push({ practiceId, kind: "config_changed", at, subjectId, detail });
 }
 
+/**
+ * AR40: the audit writer, exported for config changes whose STATE lives in another store.
+ *
+ * The register on/off switch is this store's own class of change — the toggle action's comment
+ * says outright that it is rules-level, because it changes who the practice will contact — but
+ * its state lives in src/registers/store, which cannot reach this trail. Until this export the
+ * toggle was the one config change the audit record never saw, against the stated law above
+ * ("Every change is audited, like every other config change in this store"). Callers remain
+ * responsible for authorization and for validating anything interpolated into `detail` (W41):
+ * this writes the event, it does not vouch for it.
+ */
+export function recordConfigChange(
+  practiceId: PracticeId,
+  at: string,
+  subjectId: string,
+  detail: string,
+): void {
+  audit(getConsole(), practiceId, at, subjectId, detail);
+}
+
 export interface ClinicianInput {
   /** Existing clinician id when this row edits a saved clinician; absent for new rows. */
   id?: ClinicianId;

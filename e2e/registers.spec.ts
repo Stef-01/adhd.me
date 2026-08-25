@@ -101,12 +101,34 @@ test("a register can be switched off and back on for this practice", async ({ pa
   );
   expect(disabled.enabled).toBe(false);
 
+  // AR40: and it is AUDITED, like every other rules-level change — the toggle changes who the
+  // practice will contact (the action's own words), and until AR40 it was the one config change
+  // the practice's audit trail never saw.
+  const offState = await (await request.get("/api/mock/console")).json();
+  const offAudit = offState.auditEvents.at(-1);
+  expect(offAudit.kind).toBe("config_changed");
+  expect(offAudit.detail).toBe("register placeholder_register_a turned off");
+
   await page
     .getByTestId("register-placeholder_register_a")
     .getByRole("button", { name: "Turn on for this practice" })
     .click();
 
   await expect(page.getByTestId("status-placeholder_register_a")).toHaveText("On");
+
+  // AR40: the return arm held to the same standard as the off arm — store and audit, not the
+  // badge. The row's law is "asserts the register changed, not that the screen rendered", and
+  // until this the on arm was exactly the screen-only assertion the law bans.
+  const restored = await (await request.get("/api/mock/registers")).json();
+  const reenabled = restored.forPractice.find(
+    (r: { condition: { code: string }; enabled: boolean }) =>
+      r.condition.code === "placeholder_register_a",
+  );
+  expect(reenabled.enabled).toBe(true);
+  const onState = await (await request.get("/api/mock/console")).json();
+  const onAudit = onState.auditEvents.at(-1);
+  expect(onAudit.kind).toBe("config_changed");
+  expect(onAudit.detail).toBe("register placeholder_register_a turned on");
 });
 
 test("the page makes no clinical claim about any patient", async ({ page, request }) => {

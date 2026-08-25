@@ -225,6 +225,13 @@ export const STORE_READS: readonly StoreRead[] = [
   },
   {
     module: "src/console/store.ts",
+    fn: "recordConfigChange",
+    kind: "practice_scoped",
+    reason:
+      "AR40: a write, not a read — appends one audit event stamped with the practiceId the caller passes. The caller must have resolved that id through requirePractice/authorize first (the register toggle does); this function adds no query surface over other practices' data.",
+  },
+  {
+    module: "src/console/store.ts",
     fn: "validateOnboarding",
     kind: "no_practice_data",
     reason: "Pure validation of a form input; touches no store.",
