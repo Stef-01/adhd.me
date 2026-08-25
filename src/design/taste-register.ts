@@ -381,6 +381,9 @@ export const TASTE_RULES: readonly TasteRule[] = [
       "src/compliance/public-surfaces.test.ts :: flags a testimonial on a professional surface, because that exemption does not exist",
       "src/compliance/public-surfaces.test.ts :: holds a patient surface to all of them",
       "e2e/public-sweep.spec.ts :: every public surface serves copy its audience's rules allow",
+      // AR30: "anywhere" stopped meaning "anywhere public" — the console half, signed in and
+      // seeded, under the same rules via the same sweepSurface.
+      "e2e/console-honesty.spec.ts :: every console screen serves copy the professional marketing rules allow",
     ],
     routeScope: { kind: "route-sweep", sweep: "public-all" },
   },

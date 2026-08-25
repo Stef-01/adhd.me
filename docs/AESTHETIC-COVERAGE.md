@@ -178,6 +178,7 @@ No testimonials, ratings, or "specialist/specialise" anywhere a patient reads.
   - `src/compliance/public-surfaces.test.ts :: flags a testimonial on a professional surface, because that exemption does not exist`
   - `src/compliance/public-surfaces.test.ts :: holds a patient surface to all of them`
   - `e2e/public-sweep.spec.ts :: every public surface serves copy its audience's rules allow`
+  - `e2e/console-honesty.spec.ts :: every console screen serves copy the professional marketing rules allow`
 - **Route scope:** route sweep: `public-all`
 
 ### `honesty.qa-capture`
