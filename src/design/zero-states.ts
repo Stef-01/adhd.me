@@ -19,12 +19,26 @@
 export type ZeroKind = "no-data" | "no-results" | "broken";
 
 export type ZeroState = {
+  /** The file whose empty BRANCH this classifies (coverage counts by this). */
   readonly file: string;
   readonly kind: ZeroKind;
-  /** The exact rendered sentence — asserted present in the file's source. */
+  /** The exact rendered sentence — asserted present in `sentenceFile ?? file`'s source. */
   readonly sentence: string;
+  /** Where the sentence literal lives, when that is not the branch's file (education's COPY). */
+  readonly sentenceFile?: string;
   /** Why this zero is the kind it is. */
   readonly why: string;
+};
+
+/**
+ * A `length === 0` branch whose zero arm renders NOTHING a reader meets — a section simply
+ * absent, a caption suppressed. Not an empty state, and manufacturing a sentence for it would
+ * be paperwork; but it must be DECLARED, or the coverage law below could not tell an absent
+ * section from an unclassified zero.
+ */
+export type NotAZeroState = {
+  readonly file: string;
+  readonly reason: string;
 };
 
 export const ZERO_STATES: readonly ZeroState[] = [
@@ -76,36 +90,176 @@ export const ZERO_STATES: readonly ZeroState[] = [
     sentence: "That page does not exist.",
     why: "The one shipped broken-state page: the reader's path failed, and the copy says so with a way out — never an emptiness dressed as content.",
   },
+  // ── AR25: the ceiling, burned to nothing — every remaining branch read and classified ──────
+  {
+    file: "app/console/allocation/page.tsx",
+    kind: "no-results",
+    sentence: "Nobody was filtered out of this run.",
+    why: "The allocation run RAN and its exclusion rails excluded nobody — a result about this run, not an absence of the system.",
+  },
+  {
+    file: "app/console/applications/page.tsx",
+    kind: "no-data",
+    sentence: "No applications yet.",
+    why: "The store holds nothing; no application has arrived. 'Yet' marks a starting state.",
+  },
+  {
+    file: "app/console/capability/page.tsx",
+    kind: "no-data",
+    sentence: "Nothing recorded yet.",
+    why: "The signed-in clinician's own capability list before anything has been recorded — a starting state, sibling of the panel's entry below.",
+  },
+  {
+    file: "app/console/case-mix/page.tsx",
+    kind: "no-data",
+    sentence: "No registers are available yet.",
+    why: "No register exists to build a case mix over. The same sentence legitimately renders on /console/registers for the same reason — one fact, two doors.",
+  },
+  {
+    file: "app/console/complaints/page.tsx",
+    kind: "no-results",
+    sentence: "None open.",
+    why: "The OPEN filter of a tracked set is empty right now — complaints as a system exist; none are currently open. Weak words for a kind-carrying zero; noted, not rewritten, because copy edits move baseline cells and are their own unit.",
+  },
+  {
+    file: "app/console/complaints/page.tsx",
+    kind: "no-data",
+    sentence: "None yet.",
+    why: "No complaint has ever been resolved — 'yet' marks the starting state. Same weakness note as its sibling.",
+  },
+  {
+    file: "app/console/credentials/page.tsx",
+    kind: "no-data",
+    sentence: "The practice does not hold any credentials for you yet. Credentialing starts with\n            the practice, because they hold the documents to check.",
+    why: "Nothing recorded for this clinician, and the copy says whose move it is — a model kind-carrying zero.",
+  },
+  {
+    file: "app/console/education/page.tsx",
+    kind: "no-data",
+    sentenceFile: "src/education/console-copy.ts",
+    sentence: "There is no material in the library. ADHD.ME ships with none of its own: every item has to trace back to content that cleared sign-off, and nothing has cleared it. That is the state of the product rather than a page that failed to load.",
+    why: "W127's rule executed: the library is empty because nothing cleared sign-off, and the copy names the gate rather than rendering a blank list.",
+  },
+  {
+    file: "app/console/education/page.tsx",
+    kind: "no-results",
+    sentenceFile: "src/education/console-copy.ts",
+    sentence: "ADHD.ME does not shorten this list. Every item about a register this practice runs is above, in full. A list that quietly dropped its weaker entries would be making a judgement on your behalf and hiding that it had made one.",
+    why: "The withheld-check RAN and withheld nothing — a positive zero about this pass, rendered so the reader knows the check exists.",
+  },
+  {
+    file: "app/console/education/page.tsx",
+    kind: "no-data",
+    sentenceFile: "src/education/console-copy.ts",
+    sentence: "No teaching triggers ship with ADHD.ME. Deciding that something written on a record is a moment to put material in front of a clinician is a clinical judgement about that condition, and nobody has made it. The library above does not depend on that — it is offered in full either way.",
+    why: "None exist by G5 posture — the zero names the clinical judgement nobody has made.",
+  },
+  {
+    file: "app/console/education/page.tsx",
+    kind: "no-data",
+    sentenceFile: "src/education/console-copy.ts",
+    sentence: "No entries. ADHD.ME draws no conclusion from that.",
+    why: "The CPD trail is empty and the copy refuses the inference an empty trail invites.",
+  },
+  {
+    file: "app/console/interest/page.tsx",
+    kind: "no-data",
+    sentence: "No registrations yet.",
+    why: "The interest register before anyone has signed up — a starting state.",
+  },
+  {
+    file: "app/console/interview/interview-screen.tsx",
+    kind: "no-data",
+    sentence: "Nothing yet. Proposals appear here as the doctor talks.",
+    why: "The transcript has not produced a proposal yet — the copy says where they will come from.",
+  },
+  {
+    file: "app/console/interview/interview-screen.tsx",
+    kind: "no-results",
+    sentence: "Nothing left. The conversation reached every facet.",
+    why: "The gap sweep RAN and found no unreached facet — the best zero on the console: work finished, and the sentence says so.",
+  },
+  {
+    file: "app/console/matching/page.tsx",
+    kind: "no-results",
+    sentence: "Every saved onboarding was fully heard. Nothing is waiting for lexicon review.",
+    why: "The reach report ran over every saved onboarding and none carries an unheard sentence — a completed-work zero.",
+  },
+  {
+    file: "app/console/outcomes/page.tsx",
+    kind: "no-results",
+    sentence: "Every referral here has something recorded either way, so there is nothing",
+    why: "The outstanding-asks pass ran and every referral already carries an outcome — the registered fragment is the sentence's first line because the JSX wraps it; the thought completes 'outstanding to write down' on the next source line.",
+  },
+  {
+    file: "app/console/outcomes/page.tsx",
+    kind: "no-data",
+    sentence: "No event",
+    why: "A per-row cell label: this referral has no recorded event yet. Row-scoped rather than page-scoped, but a reader meets it, so it is classified rather than waved off.",
+  },
+  {
+    file: "app/console/pathways/page.tsx",
+    kind: "no-data",
+    sentence: "No pathway has been signed off yet.",
+    why: "G5's gate, on screen — and the body copy states outright that this is the product's state, not a loading error: the exemplar this register's kinds are named after.",
+  },
+  {
+    file: "app/console/privacy/page.tsx",
+    kind: "no-data",
+    sentence: "None.",
+    why: "No deletion has ever been recorded. The weakest sentence in the register — one word carrying a kind only by context; noted for the copy successor, classified as found.",
+  },
+  {
+    file: "app/console/referrals/page.tsx",
+    kind: "no-data",
+    sentence: "No other practice has referred a patient here.",
+    why: "The received side before anything has ever arrived.",
+  },
+  {
+    file: "app/console/referrals/page.tsx",
+    kind: "no-data",
+    sentence: "This practice has not referred anyone yet.",
+    why: "The sent side before anything has ever been sent.",
+  },
+  {
+    file: "app/console/registers/page.tsx",
+    kind: "no-data",
+    sentence: "No registers are available yet.",
+    why: "No register exists — the same fact and sentence as case-mix's door to it.",
+  },
+  {
+    file: "app/console/usefulness/page.tsx",
+    kind: "no-results",
+    sentence: "No visits waiting for audit. New attended appointments appear here.",
+    why: "The audit queue is empty right now and the copy says how it refills — a current-state zero over a live pipeline.",
+  },
+  {
+    file: "app/console/verticals/page.tsx",
+    kind: "no-data",
+    sentence: "No vertical has been put together yet.",
+    why: "Nothing assembled yet, with the body copy naming it as the product's state and doable work — pathways' sibling exemplar.",
+  },
+];
+
+/** Branches whose zero arm renders nothing a reader meets — declared, so coverage can count them. */
+export const NOT_A_ZERO_STATES: readonly NotAZeroState[] = [
+  {
+    file: "app/console/referrals/page.tsx",
+    reason: "The leakage caption toggle: on zero it renders the empty string — the LIST above is the content, and a caption about nothing is correctly nothing.",
+  },
+  {
+    file: "app/finder-stages/compare-stage.tsx",
+    reason: "A comparison group with no members returns null — the section is simply absent from a screen that renders only the groups that exist; there is no empty state for a reader to meet.",
+  },
 ];
 
 /**
- * Every `length === 0` empty branch NOT yet read and classified above, per file — the ratchet.
- * Movement is by CLASSIFICATION (an entry lands in ZERO_STATES and the count here drops in the
- * same commit); growth fails naming the file. Measured 2026-08-25: 30 branches total across 19
- * files; the classified files' counted branches remain here because a file can hold both a
- * classified zero and an unread one — the counts below are raw branch counts per file.
+ * AR25 emptied AR24's unclassified ceiling: every `length === 0` branch is now classified,
+ * either as a ZERO_STATES entry or as a declared NOT_A_ZERO_STATES absence. The coverage law
+ * in zero-states.test.ts holds it there: a file's branch count may not exceed its
+ * classifications, so a NEW branch anywhere fails until its author says which kind of zero it
+ * renders — or declares, with a reason, that it renders none.
  */
-export const UNCLASSIFIED_EMPTY_BRANCHES: ReadonlyArray<{ readonly file: string; readonly branches: number }> = [
-  { file: "app/console/allocation/page.tsx", branches: 1 },
-  { file: "app/console/applications/page.tsx", branches: 1 },
-  { file: "app/console/capability/page.tsx", branches: 2 },
-  { file: "app/console/case-mix/page.tsx", branches: 1 },
-  { file: "app/console/complaints/page.tsx", branches: 2 },
-  { file: "app/console/credentials/page.tsx", branches: 1 },
-  { file: "app/console/education/page.tsx", branches: 4 },
-  { file: "app/console/interest/page.tsx", branches: 1 },
-  { file: "app/console/interview/interview-screen.tsx", branches: 2 },
-  { file: "app/console/matching/page.tsx", branches: 3 },
-  { file: "app/console/outcomes/page.tsx", branches: 2 },
-  { file: "app/console/outreach/page.tsx", branches: 1 },
-  { file: "app/console/pathways/page.tsx", branches: 1 },
-  { file: "app/console/privacy/page.tsx", branches: 1 },
-  { file: "app/console/referrals/page.tsx", branches: 3 },
-  { file: "app/console/registers/page.tsx", branches: 1 },
-  { file: "app/console/usefulness/page.tsx", branches: 1 },
-  { file: "app/console/verticals/page.tsx", branches: 1 },
-  { file: "app/finder-stages/compare-stage.tsx", branches: 1 },
-];
 
 /** Raw `length === 0` branch count in one source — the ratchet's measuring stick. */
 export function emptyBranchCount(source: string): number {
