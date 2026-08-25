@@ -32,10 +32,10 @@ Every row below is asserted against the live source by `ar-audit.test.ts`.
 | what | derived value |
 |---|---|
 | taste rules in the register | 22 |
-| …enforced (non-empty `enforcedBy`) | 8 |
-| …unenforced, pinned (`UNENFORCED_COUNT`) | 14 |
+| …enforced (non-empty `enforcedBy`) | 9 |
+| …unenforced, pinned (`UNENFORCED_COUNT`) | 13 |
 | mutation-probe families | 5 |
-| enforced rules without a probe (pinned) | 5 |
+| enforced rules without a probe (pinned) | 6 |
 | accepted-diff entries (AR15 initial + 3 attributed changes) | 4 |
 | baseline captures in the manifest | 180 |
 | manifest sha256 == newest acceptance | **true, checked live** |
@@ -56,8 +56,8 @@ Every row below is asserted against the live source by `ar-audit.test.ts`.
 - **The baseline chain held through the whole Phase-4 run.** Nine consecutive units (AR29–AR33,
   AR37–AR40) each claimed "no baseline movement"; the manifest's sha256 still equals AR26's
   acceptance, which is those nine claims proven at once rather than trusted nine times.
-- **The pins agree with the things they pin.** `UNENFORCED_COUNT` (14) equals the derived
-  unenforced remainder (22−8); `PROBED_FAMILY_COUNT` (5) equals the register's family count.
+- **The pins agree with the things they pin.** `UNENFORCED_COUNT` (13) equals the derived
+  unenforced remainder (22−9); `PROBED_FAMILY_COUNT` (5) equals the register's family count.
 - **Every acceptance register that could go stale has a stale-check** (public sweep, console
   sweep, accepted-diffs, working-truth proofs, route budgets, store-reads, a11y) — verified by
   reading each test, not by convention.
@@ -73,14 +73,20 @@ The 404 *surface* is still proof-swept: `/about` is founder-gated behind `notFou
 working-truth proof IS the 404 copy. Recorded as a seam, not a defect; it becomes one only if a
 third "every route" derivation appears without naming which census it follows.
 
-**AR34-S2 — the taste register is 8/22 enforced, and that bound belongs in the dossier.** The
-14 unenforced rules are pinned and can only shrink deliberately, but a green verify today
-enforces 36% of the written taste law mechanically; the rest is review discipline. This is the
+**AR34-S2 — the taste register is 9/22 enforced, and that bound belongs in the dossier.** The
+13 unenforced rules are pinned and can only shrink deliberately, but a green verify today
+enforces 41% of the written taste law mechanically; the rest is review discipline. This is the
 honest input to AR35 ("what the review system guarantees, what it explicitly does not").
+**AR18 update:** `type.palette-tokens` moved from unenforced to enforced in the same unit that
+wired it — AR17 had already shipped the check (`theme-parity.ts`/`.test.ts`) but never wired it
+into the register, so this is a bookkeeping close, not new coverage; the 8/22 → 9/22 and
+36% → 41% movement above is that one rule.
 
-**AR34-S3 — five enforced rules have no mutation probe**, pinned in `ENFORCED_WITHOUT_PROBE`:
+**AR34-S3 — six enforced rules have no mutation probe**, pinned in `ENFORCED_WITHOUT_PROBE`:
 `honesty.claim-earned`, `honesty.no-testimonials`, `interaction.errors-plain`,
-`interaction.hover-focus`, `motion.reduced-motion`. Each carries its recorded reason; the
+`interaction.hover-focus`, `motion.reduced-motion`, `type.palette-tokens` (AR18: newly enforced,
+its `whatAProbeWouldMutate` asks for a probe against the LIVE ceiling constants, not just the
+fixture-string test theme-parity.test.ts already runs). Each carries its recorded reason; the
 honesty pair is the strongest candidate for a future probe (a planted testimonial on a real
 route), costed in AR35 rather than built here.
 
