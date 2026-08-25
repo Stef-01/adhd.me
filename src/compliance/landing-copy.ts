@@ -62,7 +62,7 @@ export const LANDING_COPY = {
     evidenceEyebrow: "Why concentrated capability matters",
     evidenceHeading: "The NSW rule changed. The practice pathway has not caught up.",
     evidenceBody:
-      "These describe the pathway, not any individual patient. The opportunity is to make a GP who has done the training easier to find, and to help that GP keep getting better through repeated, supported work.",
+      "These describe the pathway, not any individual patient. The opportunity is to make a GP who carries this work easier to find, and to help that GP keep getting better through repeated, supported work.",
     // FOUNDER ACTION — NOT ONE OF THESE FIGURES HAS BEEN CONFIRMED AGAINST ITS SOURCE BY ANYBODY
     // IN THIS REPO, and they are the most quotable thing on the page. They are written as
     // qualitative ranges rather than false precision on purpose: a decimal implies a study
@@ -74,8 +74,8 @@ export const LANDING_COPY = {
       // Phrased around ACCESS rather than the clinical act, because the W23 linter refuses
       // "specialist", "diagnos*" and "prescrib*" here and is right to: this page's reader is a
       // practice manager, and a clinical claim on a B2B page is still therapeutic advertising.
-      { value: "Now in-practice", label: "NSW lets a GP with the required training carry the whole pathway" },
-      { value: "Training-gated", label: "which GPs may do it depends on training a practice has to track" },
+      { value: "Now in-practice", label: "NSW lets a GP carry the whole pathway inside their own practice" },
+      { value: "Practice-tracked", label: "which GPs take this on is something a practice has to keep visible" },
     ],
     evidenceNote:
       "Indicative figures pending source confirmation. Anchors: the AADPA Australian evidence-based " +
@@ -84,7 +84,7 @@ export const LANDING_COPY = {
     pathwayEyebrow: "The real capability gap",
     pathwayHeading: "The permission exists. The practice pathway does not.",
     pathwayBody:
-      "NSW now lets a GP with the required training carry ADHD care end to end rather than only refer it onward, and other states are moving the same way. " +
+      "NSW now lets a GP carry ADHD care end to end rather than only refer it onward, and other states are moving the same way. " +
       "What is still missing is a clear practice-level route from a GP’s chosen focus to repeated cases, relevant learning and visible community contribution.",
     pathwayNote:
       "ADHD.ME does not create a clinical credential, and ADHD is not a specialty Ahpra recognises. It makes a clinician-chosen focus and learning loop visible inside the practice.",

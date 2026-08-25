@@ -2709,3 +2709,18 @@ through a fresh three-run zero-diff protocol with AR20's entry in the accepted-d
 Captures: the visual matrix's reduce cells ARE the record (`qa/baselines/manifest.json`, AR16
 entry AR20). Probe-backed: planted transformed/hidden elements are reported by the sweep's own
 detector each run.
+
+## AR21 — type from the tokens, and the training copy /practices was still carrying (2026-08-25)
+
+The px floor O60 earned is now a law: globals.css holds zero px font-sizes (325 rem sites) and
+the census fails the first one to land; inline px type is confined to the two files that already
+carry AR17 exceptions for the same reason (Satori render, SVG chart debt). `tabular-nums` added
+to the walkthrough's CHANGING numbers — the live mix percentage and the practice-stage figures —
+and a TABULAR_SITES register asserts every declared selector's rule carries it. Honest
+measurement: the tabular glyphs moved NO baseline cells (Newsreader's figures render at identical
+widths in both variants at these sizes) — the rule is protection for future digits, recorded as
+such. Deliberately NOT on the story stat rail: its values are phrases, not aligned numerals.
+**Folded founder correction**: /practices still carried four training references O189's sweep
+missed ("GP who has done the training", "required training" ×2, "Training-gated") — reworded to
+say what GPs do, inside the W23 linter's constraints; its four baseline cells moved and were
+accepted with AR21's register entry.

@@ -3235,6 +3235,10 @@ textarea:focus-visible {
   font-size: 2.375rem;
   font-weight: 470;
   letter-spacing: -0.04em;
+  /* AR21: this is the LIVE slider value — the taste register's "tabular-nums wherever numbers
+     change" applies exactly here: without it, 31% is narrower than 30% and the label breathes
+     as the reader drags. */
+  font-variant-numeric: tabular-nums;
 }
 
 /* O146: the last control under O145's 44px floor, at 306x16.
@@ -3629,6 +3633,12 @@ textarea:focus-visible {
   margin-right: 4px;
   color: var(--cv2-ink);
   font-size: 0.9375rem;
+}
+
+/* AR21: the practice stage's stat figures (184 / 46 / 31%) — changing numbers, tabular per the
+   taste register, one rule covering the hero's large figure and the mini pair alike. */
+.cv2-practice-hero strong {
+  font-variant-numeric: tabular-nums;
 }
 
 /* O191: the loop is four words in one quiet band — the founder's clutter verdict retired the

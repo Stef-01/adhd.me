@@ -49,6 +49,13 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     captures: 180,
     reason:
       "Exactly four cells moved — home and approach under reduce, both widths — because AR20's sweep caught the Reveal/Rise half-gate: initial={false} under reduce left the SERVER-rendered entrance offset uncleaned, so reduce users rested 20px/18px displaced. The fix snaps to rest at duration 0; the no-preference cells are untouched, and a fresh three-run protocol agreed before this acceptance.",
+  },  {
+    unitId: "AR21",
+    acceptedAt: "2026-08-25",
+    manifestSha256: "4a27c7178b77d5f5297545e7c1a8243dbcb62a3c162049e8c78600d56036b3bd",
+    captures: 180,
+    reason:
+      "Exactly four cells moved — practices, both widths and motions — from the founder-directed training-copy correction O189's sweep had missed on that page (four references reworded). AR21's tabular-nums on the walkthrough's changing numbers moved NOTHING: Newsreader's figures render at identical widths in both variants at these sizes, so the rule is protection for future digits, not a visible change. Three-run protocol agreed before this acceptance.",
   },
 ];
 
