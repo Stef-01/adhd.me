@@ -12,7 +12,7 @@
 // scope for Playwright here (W83's rule against theatre), and the cross-practice write isolation
 // they would test is unit-tested instead.
 
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { createPractice, signIn } from "./support/session";
 
 const OWNER = "owner@demo.practice.example";
@@ -96,4 +96,62 @@ test("asking for a practice you do not belong to is refused, not honoured", asyn
   await page.goto("/console");
   // Membership is the grant, so the forged selection resolves to nothing at all.
   await expect(page).toHaveURL(/\/console\/onboarding$/);
+});
+
+/** Selects a practice in the switcher and waits for the console to be on it. */
+async function switchTo(page: Page, name: string) {
+  await page.goto("/console");
+  await page.getByRole("combobox", { name: "Practice" }).selectOption({ label: name });
+  await page.getByRole("button", { name: "Switch" }).click();
+  await expect(page.getByRole("heading", { name })).toBeVisible();
+}
+
+test("a complaint filed under one practice is invisible on the other, at every screen that renders it (AR31)", async ({ page }) => {
+  // AR31: Y4-1's class asserted from the BROWSER. The class — a console screen showing another
+  // practice's data — has been fixed at the store layer three times (W206: the complaints page
+  // and the console-home banner; Y5-1/W256: the results monitor reading the whole store), and
+  // each fix is unit-tested. But every test above proves ROUTING: who is offered a practice, who
+  // is refused one. None proves the thing Y4-1 was actually about, end to end: that a screen
+  // carrying per-practice data omits the other tenant's rows. So: one owner, two practices, one
+  // complaint filed through the real intake form, and all three fixed sites asserted from the
+  // rendered page — positive on the practice that owns the complaint, absent on the one that
+  // does not, and positive again after switching back, so the absence proves scoping rather
+  // than a broken form or a dead store.
+  const MARKER = "Cross-tenant marker: the Riverside-only complaint";
+  await signIn(page, OWNER);
+  await createPractice(page, { name: "Harbour Family Practice", holdout: "10" });
+  await createPractice(page, { name: "Riverside Medical", holdout: "20" });
+
+  await switchTo(page, "Riverside Medical");
+  await page.goto("/console/complaints");
+  await page.getByLabel("What happened").fill(MARKER);
+  await page.getByRole("button", { name: "Record" }).click();
+  await expect(page.getByText("Complaint recorded", { exact: false })).toBeVisible();
+
+  // The three fixed sites, positive arm: the practice the complaint belongs to sees it.
+  await expect(page.getByTestId("open-count")).toHaveText("1 open");
+  await expect(page.getByText(MARKER)).toBeVisible();
+  await page.goto("/console");
+  await expect(page.getByTestId("complaint-banner")).toBeVisible();
+  await page.goto("/console/results");
+  // The complaints alert specifically, not `allClear` — the sim-driven monitors (opt-out, DNA)
+  // are not this test's subject and must not be able to mask or fake the assertion.
+  await expect(page.getByText(/open complaint\(s\)/)).toBeVisible();
+
+  // The same three sites on the other practice: nothing. This is the Y4-1 assertion itself.
+  await switchTo(page, "Harbour Family Practice");
+  await page.goto("/console/complaints");
+  await expect(page.getByTestId("open-count")).toHaveText("0 open");
+  await expect(page.getByText("No complaint is open right now.")).toBeVisible();
+  await expect(page.getByText(MARKER)).toHaveCount(0);
+  await page.goto("/console");
+  await expect(page.getByTestId("complaint-banner")).toHaveCount(0);
+  await page.goto("/console/results");
+  await expect(page.getByText(/open complaint\(s\)/)).toHaveCount(0);
+
+  // And back: the complaint still exists — Harbour's blank screens were scoping, not deletion.
+  await switchTo(page, "Riverside Medical");
+  await page.goto("/console/complaints");
+  await expect(page.getByTestId("open-count")).toHaveText("1 open");
+  await expect(page.getByText(MARKER)).toBeVisible();
 });
