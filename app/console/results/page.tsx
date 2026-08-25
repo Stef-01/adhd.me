@@ -121,7 +121,7 @@ export default async function ResultsPage() {
           {num(r.bookedFromMessage)} appointments were booked from a ADHD.ME message and attended.
         </p>
         <div aria-hidden className="mt-2 flex h-6 w-full overflow-hidden rounded-lg border border-stone-200">
-          <div className="h-full bg-[#2a78d6]" style={{ width: `${extraShare}%` }} />
+          <div className="h-full bg-[var(--chart-invite)]" style={{ width: `${extraShare}%` }} />
           <div className="ml-0.5 h-full flex-1 bg-stone-200" />
         </div>
         <p className="mt-2 text-sm text-stone-600">

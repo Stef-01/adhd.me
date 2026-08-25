@@ -13,8 +13,9 @@ import type { WeeklyPoint } from "@/sim/dashboard-data";
 // plain-English series names. Colours are fixed — identity follows the entity, and
 // these two slots are the validated categorical pair (never repick per page).
 const SERIES = {
-  invite: { label: "Invite arm", color: "#2a78d6" }, // categorical slot 1
-  holdout: { label: "Holdout arm", color: "#eb6834" }, // categorical slot 2
+  // AR27: values live in :root as --chart-invite/--chart-holdout — same colours, tokenised.
+  invite: { label: "Invite arm", color: "var(--chart-invite)" }, // categorical slot 1
+  holdout: { label: "Holdout arm", color: "var(--chart-holdout)" }, // categorical slot 2
 } as const;
 
 export interface ChartLabels {
@@ -117,10 +118,10 @@ export function WeeklyArmsChart({
                 x2={W - M.right}
                 y1={yFor(t)}
                 y2={yFor(t)}
-                stroke={t === 0 ? "#c3c2b7" : "#e1e0d9"}
+                stroke={t === 0 ? "var(--chart-axis)" : "var(--chart-grid)"}
                 strokeWidth={1}
               />
-              <text x={M.left - 8} y={yFor(t) + 3.5} textAnchor="end" fontSize={11} fill="#898781">
+              <text x={M.left - 8} y={yFor(t) + 3.5} textAnchor="end" className="chart-label-text" fill="var(--chart-tick)">
                 {scale === 1 ? t : +(t / scale).toFixed(1)}
               </text>
             </g>
@@ -133,8 +134,8 @@ export function WeeklyArmsChart({
               x={xFor(w)}
               y={H - M.bottom + 18}
               textAnchor="middle"
-              fontSize={11}
-              fill="#898781"
+              className="chart-label-text"
+              fill="var(--chart-tick)"
             >
               W{w}
             </text>
@@ -143,10 +144,10 @@ export function WeeklyArmsChart({
           <path d={invitePath} fill="none" stroke={SERIES.invite.color} strokeWidth={2} data-series="invite" />
           {last && (
             <>
-              <text x={W - M.right + 8} y={yFor(last.invitePer1000) + 3.5} fontSize={11} fill="#52514e">
+              <text x={W - M.right + 8} y={yFor(last.invitePer1000) + 3.5} className="chart-label-text" fill="var(--chart-end-label)">
                 {labels.invite.split(" ")[0]}
               </text>
-              <text x={W - M.right + 8} y={yFor(last.holdoutPer1000) + 3.5} fontSize={11} fill="#52514e">
+              <text x={W - M.right + 8} y={yFor(last.holdoutPer1000) + 3.5} className="chart-label-text" fill="var(--chart-end-label)">
                 {labels.holdout.split(" ")[0]}
               </text>
             </>
@@ -158,11 +159,11 @@ export function WeeklyArmsChart({
                 x2={xFor(hovered.week)}
                 y1={M.top}
                 y2={H - M.bottom}
-                stroke="#c3c2b7"
+                stroke="var(--chart-axis)"
                 strokeWidth={1}
               />
-              <circle cx={xFor(hovered.week)} cy={yFor(hovered.invitePer1000)} r={4} fill={SERIES.invite.color} stroke="#ffffff" strokeWidth={2} />
-              <circle cx={xFor(hovered.week)} cy={yFor(hovered.holdoutPer1000)} r={4} fill={SERIES.holdout.color} stroke="#ffffff" strokeWidth={2} />
+              <circle cx={xFor(hovered.week)} cy={yFor(hovered.invitePer1000)} r={4} fill={SERIES.invite.color} stroke="var(--chart-point-ring)" strokeWidth={2} />
+              <circle cx={xFor(hovered.week)} cy={yFor(hovered.holdoutPer1000)} r={4} fill={SERIES.holdout.color} stroke="var(--chart-point-ring)" strokeWidth={2} />
             </g>
           )}
         </svg>

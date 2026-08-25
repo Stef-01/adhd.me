@@ -23,10 +23,6 @@ export const COMPONENT_PX_TYPE_EXCEPTIONS: ReadonlyArray<{
   readonly why: string;
 }> = [
   {
-    file: "app/console/dashboard/chart.tsx",
-    why: "SVG <text> fontSize attributes inside the hand-drawn chart — the same chart-local debt AR17's palette entry names, sharing its successor (migrate the chart to tokens and rem together).",
-  },
-  {
     file: "app/opengraph-image.tsx",
     why: "Satori renders the OG card to a PNG with no stylesheet and no rem context — px is the only unit that means anything there.",
   },

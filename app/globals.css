@@ -68,6 +68,18 @@
   --stone: #eeece5;
   --line: #dfddd6;
 
+  /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
+     validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
+     chart.tsx's own header), so these are the SAME colours moved to where hex belongs.
+     Identity follows the entity: never repick the categorical slots per page. */
+  --chart-invite: #2a78d6;
+  --chart-holdout: #eb6834;
+  --chart-axis: #c3c2b7;
+  --chart-grid: #e1e0d9;
+  --chart-tick: #898781;
+  --chart-end-label: #52514e;
+  --chart-point-ring: #ffffff;
+
   --accent: #8A5A16;
   --on-accent: #ffffff;
   --accent-soft: #f7efe3;
@@ -6853,3 +6865,9 @@ textarea:focus-visible {
   .cv2-stage { padding-bottom: 14px; }
 }
 .cv2-action > button, .cv2-learning-card > button, .cv2-action > .cv2-start-cta { min-height: 44px; }
+
+/* AR27: the chart's SVG text, sized in rem (the 11px equivalent at the default root) instead of
+   per-element fontSize attributes — AR21's px law now reaches the chart. */
+.chart-label-text {
+  font-size: 0.6875rem;
+}

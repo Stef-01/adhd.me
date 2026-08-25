@@ -36,18 +36,6 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
       "The Acknowledgement of Country artwork: ochre and earth tones that MEAN something in the illustration and deliberately do not participate in the UI palette — retinting the acknowledgement to match the brand would be exactly backwards.",
   },
   {
-    file: "app/console/dashboard/chart.tsx",
-    sites: 11,
-    rationale:
-      "The dashboard chart's series colours and furniture greys, a chart-local palette from before the token system reached data-viz. DEBT, not design: migrating chart colour to tokens (with the dataviz contrast discipline) is this unit's named successor, and this entry's count is the ratchet holding it from growing meanwhile.",
-  },
-  {
-    file: "app/console/results/page.tsx",
-    sites: 1,
-    rationale:
-      "One legend swatch matching the dashboard chart's first series colour — the same chart-local palette debt as chart.tsx, counted where it lives.",
-  },
-  {
     file: "app/layout.tsx",
     sites: 1,
     rationale:
@@ -71,7 +59,9 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
 export const CSS_RAW_HEX_SITES = 82;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
-export const CSS_TOKEN_DEFINITION_SITES = 31;
+/* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the
+   direction this census exists to encourage; its two component exceptions deleted above. */
+export const CSS_TOKEN_DEFINITION_SITES = 38;
 
 export type HexSite = { readonly file: string; readonly line: number; readonly hex: string };
 
