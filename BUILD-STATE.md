@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ f639f27 (2026-08-25T07:53Z) — pnpm verify 285 files / 4294 tests, build, audit PASS; fold sweep + probe 2/2 (fifth probed family)`
+`gate: green @ 084328f (2026-08-25T08:00Z) — pnpm verify 285 files / 4296 tests, build, audit PASS; ledger-integrity widened to the AR-series (12 tests), no app/matching code touched so no e2e required`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
