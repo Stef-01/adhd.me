@@ -56,6 +56,13 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     captures: 180,
     reason:
       "Exactly four cells moved — practices, both widths and motions — from the founder-directed training-copy correction O189's sweep had missed on that page (four references reworded). AR21's tabular-nums on the walkthrough's changing numbers moved NOTHING: Newsreader's figures render at identical widths in both variants at these sizes, so the rule is protection for future digits, not a visible change. Three-run protocol agreed before this acceptance.",
+  },  {
+    unitId: "AR26",
+    acceptedAt: "2026-08-25",
+    manifestSha256: "8fd55c07e68daf0f70032708cc2ce53c6b33ae07c435356c70789e073e4b864b",
+    captures: 180,
+    reason:
+      "Exactly eight cells moved — the complaints and privacy console pages, both widths and motions — because AR26 strengthened the register's three weakest zeros to carry their kinds in words ('None open.' -> 'No complaint is open right now.'; 'None yet.' -> 'No complaint has been resolved yet.'; 'None.' -> 'No deletion has been recorded yet — the retention policy has not removed anything.'), the copy successor AR25's entries recorded. Three-run protocol agreed before this acceptance.",
   },
 ];
 

@@ -131,7 +131,7 @@ export default async function PrivacyPage({
           </span>
         </form>
         {privacy.deletions.length === 0 ? (
-          <p className="mt-3 text-sm text-stone-500">None.</p>
+          <p className="mt-3 text-sm text-stone-500">No deletion has been recorded yet — the retention policy has not removed anything.</p>
         ) : (
           <ul className="mt-3 divide-y divide-stone-100 text-sm">
             {privacy.deletions.map((d) => (

@@ -118,14 +118,14 @@ export const ZERO_STATES: readonly ZeroState[] = [
   {
     file: "app/console/complaints/page.tsx",
     kind: "no-results",
-    sentence: "None open.",
-    why: "The OPEN filter of a tracked set is empty right now — complaints as a system exist; none are currently open. Weak words for a kind-carrying zero; noted, not rewritten, because copy edits move baseline cells and are their own unit.",
+    sentence: "No complaint is open right now.",
+    why: "The OPEN filter of a tracked set is empty right now — complaints as a system exist; none are currently open. AR26 strengthened the words to carry the kind (was: 'None open.').",
   },
   {
     file: "app/console/complaints/page.tsx",
     kind: "no-data",
-    sentence: "None yet.",
-    why: "No complaint has ever been resolved — 'yet' marks the starting state. Same weakness note as its sibling.",
+    sentence: "No complaint has been resolved yet.",
+    why: "No complaint has ever been resolved — 'yet' marks the starting state. AR26 strengthened the words to carry the kind (was: 'None yet.').",
   },
   {
     file: "app/console/credentials/page.tsx",
@@ -206,8 +206,8 @@ export const ZERO_STATES: readonly ZeroState[] = [
   {
     file: "app/console/privacy/page.tsx",
     kind: "no-data",
-    sentence: "None.",
-    why: "No deletion has ever been recorded. The weakest sentence in the register — one word carrying a kind only by context; noted for the copy successor, classified as found.",
+    sentence: "No deletion has been recorded yet — the retention policy has not removed anything.",
+    why: "No deletion has ever been recorded, and the sentence now names the mechanism whose output the list is. AR26 strengthened it (was the register's weakest: one word, 'None.').",
   },
   {
     file: "app/console/referrals/page.tsx",

@@ -96,7 +96,7 @@ export default async function ComplaintsPage({
       <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
         <h2 className="font-medium text-stone-900">Open</h2>
         {open.length === 0 ? (
-          <p className="mt-3 text-sm text-stone-500">None open.</p>
+          <p className="mt-3 text-sm text-stone-500">No complaint is open right now.</p>
         ) : (
           <ul className="mt-3 divide-y divide-stone-100">
             {open.map((c) => (
@@ -154,7 +154,7 @@ export default async function ComplaintsPage({
       <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
         <h2 className="font-medium text-stone-900">Resolved</h2>
         {resolved.length === 0 ? (
-          <p className="mt-3 text-sm text-stone-500">None yet.</p>
+          <p className="mt-3 text-sm text-stone-500">No complaint has been resolved yet.</p>
         ) : (
           <ul className="mt-3 divide-y divide-stone-100 text-sm">
             {resolved.map((c) => (

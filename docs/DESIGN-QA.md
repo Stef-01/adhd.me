@@ -2724,3 +2724,14 @@ such. Deliberately NOT on the story stat rail: its values are phrases, not align
 missed ("GP who has done the training", "required training" ×2, "Training-gated") — reworded to
 say what GPs do, inside the W23 linter's constraints; its four baseline cells moved and were
 accepted with AR21's register entry.
+
+## AR26 — the three weakest zeros, strengthened to carry their kinds (2026-08-25)
+
+AR25 classified the register's weak sentences as found; AR26 is the copy unit their entries
+called for. "None open." → "No complaint is open right now." (no-results); "None yet." → "No
+complaint has been resolved yet." (no-data); the register's weakest — privacy's one-word
+"None." — → "No deletion has been recorded yet — the retention policy has not removed anything."
+(no-data, naming the mechanism whose output the list is). Register entries updated in the same
+commit (the contains-assert forces it); exactly the eight predicted baseline cells moved
+(complaints + privacy × both widths × both motions), accepted with AR26's entry after a
+three-run zero-diff protocol. The visual matrix's console cells are the capture record.
