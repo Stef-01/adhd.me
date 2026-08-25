@@ -21,6 +21,15 @@
 // SHA is the right SHA, whether a blocked unit is genuinely blocked — none of that is mechanical,
 // and pretending otherwise would be the "green scan on text nobody read" failure W153 refused.
 // These are the structural properties only, which is exactly why they can be trusted.
+//
+// WIDENED 2026-08-25 (loop-0825b): this file only ever matched `W\d+`, so when the AR-series
+// table (opened 2026-08-22) got its own duplicate-id collision — `loop-0825a` reused
+// `AR25`/`AR26`/`AR27` for different work without clearing the original template rows — the
+// exact defect this file exists to catch sat in `main` for a day, invisible to a suite that
+// never looked at that table. Gaps and numeric order are properties of ONE series' own numbering
+// (AR1 and W1 sharing `n=1` is not a collision), so those two checks now run PER SERIES; the rest
+// (duplicate id, done-has-sha, blocked-names-gate, owner+timestamp, valid statuses,
+// no-orphaned-done) were already keyed off the full id string and needed no change to cover AR.
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -30,6 +39,7 @@ const LEDGER = readFileSync(path.resolve(__dirname, "../../BUILD-STATE.md"), "ut
 
 interface Row {
   id: string;
+  series: string;
   n: number;
   status: string;
   owner: string;
@@ -39,51 +49,70 @@ interface Row {
   line: number;
 }
 
-const ROW = /^\| (W\d+) \| ([\w-]+) \| ([^|]*) \| ([^|]*) \| ([^|]*) \| (.*) \|\s*$/;
+const ROW = /^\| ((W|AR)(\d+)) \| ([\w-]+) \| ([^|]*) \| ([^|]*) \| ([^|]*) \| (.*) \|\s*$/;
 
 const ROWS: Row[] = LEDGER.split("\n").flatMap((line, index) => {
   const m = ROW.exec(line);
   if (!m) return [];
   return [{
     id: m[1]!,
-    n: Number(m[1]!.slice(1)),
-    status: m[2]!,
-    owner: m[3]!.trim(),
-    claimedAt: m[4]!.trim(),
-    sha: m[5]!.trim(),
-    note: m[6]!,
+    series: m[2]!,
+    n: Number(m[3]!),
+    status: m[4]!,
+    owner: m[5]!.trim(),
+    claimedAt: m[6]!.trim(),
+    sha: m[7]!.trim(),
+    note: m[8]!,
     line: index + 1,
   }];
 });
 
+const SERIES_NAMES = [...new Set(ROWS.map((r) => r.series))];
+
 describe("W168 the ledger is a usable lock", () => {
   it("parses as a table at all", () => {
     // Non-vacuity: every assertion below is over ROWS, so an unparseable ledger would make the
-    // whole suite pass by having nothing to check.
+    // whole suite pass by having nothing to check. Both series are asserted present so a regex
+    // change that silently stopped matching one of them (W168's own 2026-08-25 near-miss) fails
+    // here rather than by omission.
     expect(ROWS.length).toBeGreaterThan(200);
-    expect(ROWS[0]?.id).toBe("W1");
+    expect(ROWS.filter((r) => r.series === "W")[0]?.id).toBe("W1");
+    expect(ROWS.filter((r) => r.series === "AR").length).toBeGreaterThan(30);
   });
 
   it("has no duplicate unit id — the failure this file was written for", () => {
     // A duplicate `available` row next to a completed one is an invitation to redo finished work,
-    // and the claim protocol cannot see the difference.
+    // and the claim protocol cannot see the difference. Checked over the full id (e.g. "AR25"),
+    // so W12 and AR12 are correctly distinct and never flagged against each other.
     const seen = new Map<string, number[]>();
     for (const row of ROWS) seen.set(row.id, [...(seen.get(row.id) ?? []), row.line]);
     const duplicated = [...seen.entries()].filter(([, lines]) => lines.length > 1);
     expect(duplicated.map(([id, lines]) => `${id} at lines ${lines.join(", ")}`)).toEqual([]);
   });
 
-  it("has no gaps: every unit from W1 to the last one exists", () => {
-    const present = new Set(ROWS.map((r) => r.n));
-    const last = Math.max(...present);
-    expect([...Array(last).keys()].map((i) => i + 1).filter((n) => !present.has(n))).toEqual([]);
+  it("has no gaps, within each series: every unit from 1 to the last one exists", () => {
+    // Per-series, not global: AR1 and W1 legitimately share n=1 in different numbering families
+    // (the AR-series table's own header states this — ids exist so they cannot collide with the
+    // loop's O-numbers — and the same reasoning applies to gap-checking their numbers).
+    const gaps: string[] = [];
+    for (const series of SERIES_NAMES) {
+      const present = new Set(ROWS.filter((r) => r.series === series).map((r) => r.n));
+      const last = Math.max(...present);
+      for (let n = 1; n <= last; n++) if (!present.has(n)) gaps.push(`${series}${n}`);
+    }
+    expect(gaps).toEqual([]);
   });
 
-  it("runs in numeric order, because an out-of-order row is where a duplicate hides", () => {
-    const out = ROWS.slice(1)
-      .map((row, i) => ({ row, prev: ROWS[i]! }))
-      .filter(({ row, prev }) => row.n < prev.n)
-      .map(({ row, prev }) => `${prev.id} then ${row.id} (line ${row.line})`);
+  it("runs in numeric order within each series, because an out-of-order row is where a duplicate hides", () => {
+    const out: string[] = [];
+    for (const series of SERIES_NAMES) {
+      const rows = ROWS.filter((r) => r.series === series);
+      for (let i = 1; i < rows.length; i++) {
+        if (rows[i]!.n < rows[i - 1]!.n) {
+          out.push(`${rows[i - 1]!.id} then ${rows[i]!.id} (line ${rows[i]!.line})`);
+        }
+      }
+    }
     expect(out).toEqual([]);
   });
 
@@ -146,5 +175,34 @@ describe("W168 the ledger is a usable lock", () => {
   it("leaves no unit both unowned and finished", () => {
     const orphaned = ROWS.filter((r) => r.status === "done" && (r.owner === "—" || r.owner === ""));
     expect(orphaned.map((r) => r.id)).toEqual([]);
+  });
+
+  it("regression: the 2026-08-25 AR25/AR26/AR27 collision stays fixed", () => {
+    // The concrete incident this widening exists for: loop-0825a reused these three ids for
+    // zero-state hardening work without clearing the original Phase-4 template rows, so each id
+    // named two different rows for a day. loop-0825b renumbered the never-claimed originals to
+    // AR37/AR38/AR39 (docs/AESTHETIC-REVIEW-PLAN.md updated to match). Pinned by id and status,
+    // not just by count, so a future edit cannot silently reintroduce the exact collision.
+    for (const id of ["AR25", "AR26", "AR27"]) {
+      const rows = ROWS.filter((r) => r.id === id);
+      expect(rows, `${id} should exist exactly once`).toHaveLength(1);
+      expect(rows[0]?.status, `${id} should still be the completed row, not a reverted duplicate`).toBe("done");
+    }
+    for (const id of ["AR37", "AR38", "AR39"]) {
+      const rows = ROWS.filter((r) => r.id === id);
+      expect(rows, `${id} (renumbered original) should exist exactly once`).toHaveLength(1);
+    }
+  });
+
+  it("regression: the same-day AR28 collision, found mid-rebase, stays fixed too", () => {
+    // Fetching to push the fix above found loop-0825a had, in the interim, claimed and finished
+    // AR28 for unrelated fold-probe work over the same never-claimed Phase-4 placeholder ("the
+    // console's practice flow") — the identical collision shape happening again before the
+    // widened check had even landed. AR28's done row is untouched; the original moved to AR40.
+    const ar28 = ROWS.filter((r) => r.id === "AR28");
+    expect(ar28, "AR28 should exist exactly once").toHaveLength(1);
+    expect(ar28[0]?.status, "AR28 should be the completed fold-probe unit, not a reverted duplicate").toBe("done");
+    const ar40 = ROWS.filter((r) => r.id === "AR40");
+    expect(ar40, "AR40 (renumbered original AR28) should exist exactly once").toHaveLength(1);
   });
 });

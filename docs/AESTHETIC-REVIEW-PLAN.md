@@ -1,6 +1,15 @@
 # The aesthetic review system, and the proof that it all works — a three-month plan (AR-series)
 
-> **ACTIVE.** One of two live backlogs — `AR1`–`AR36`. The index of every plan in this tree is [`PLAN.md`](PLAN.md).
+> **ACTIVE.** One of two live backlogs — `AR1`–`AR40`. The index of every plan in this tree is [`PLAN.md`](PLAN.md).
+>
+> **RENUMBERED 2026-08-25, twice** (`BUILD-STATE.md`, loop-0825b's incident notes): `loop-0825a`
+> reused ids `AR25`–`AR27` for three zero-state hardening units (successors to AR24), then — in the
+> same session, discovered mid-rebase — claimed `AR28` for unrelated fold-probe work, in both cases
+> without clearing the original Phase 4 template row(s) below, so those ids briefly named two
+> things each. The built/claimed units keep `AR25`–`AR28` (real work, real sessions); the
+> never-claimed originals described just below — the working-truth sweep, the finder journey, the
+> booking journey, and the console's practice-flow journey — moved to `AR37`–`AR40` so the ledger's
+> ids are unique again. Content unchanged, ids only.
 
 **Goal (founder, 2026-08-22):** an aesthetic review system for the whole site, which also
 thoroughly checks that everything is actually working.
@@ -9,9 +18,10 @@ Two halves, and they are the same problem. A design rule nobody checks is a pref
 that cannot fail is decoration. This quarter turns the tree's taste law into a register the build
 enforces, and turns the sweeps that enforce it into checks that have proved they can go red.
 
-**Runs as its own lane, alongside `docs/MATCHING-YEAR-PLAN.md`.** Unit ids are `AR1…AR36` so they
-cannot collide with the loop's O-numbers. Claiming follows `BUILD-STATE.md`'s protocol unchanged —
-these rows live in the same ledger and take the same lock.
+**Runs as its own lane, alongside `docs/MATCHING-YEAR-PLAN.md`.** Unit ids are `AR1…AR40` (see the
+2026-08-25 renumbering note above) so they cannot collide with the loop's O-numbers. Claiming
+follows `BUILD-STATE.md`'s protocol unchanged — these rows live in the same ledger and take the
+same lock.
 
 ---
 
@@ -149,13 +159,16 @@ nothing.
 - **AR24 — three kinds of zero, everywhere** (W246's rule, generalised from the interop console to
   all 47 routes): no data, no results, and broken must be visually and semantically distinct. A
   route that cannot tell them apart fails.
-- **AR25 — the working-truth sweep.** Every route renders real content from a seeded fixture — not
-  an empty state, not an error, not a skeleton that never resolves.
+- **AR37 (was AR25 — see the renumbering note) — the working-truth sweep.** Every route renders
+  real content from a seeded fixture — not an empty state, not an error, not a skeleton that never
+  resolves.
   → verify: derived from the route list; each route declares the assertion that proves it worked.
-- **AR26–AR28 — the three journeys, asserted on outcomes not page loads**: the finder end-to-end
-  (O121's walk, made permanent), booking through to a confirmed appointment, and the console's
-  practice flow. Each asserts the *result* — a match ranked, an invitation minted, a register
-  changed — never merely that a page responded 200.
+- **AR38–AR40 (were AR26–AR28) — the three journeys, asserted on outcomes not page loads**: the
+  finder end-to-end (O121's walk, made permanent, AR38), booking through to a confirmed appointment
+  (AR39), and the console's practice flow (AR40 — AR28 itself is now the fold family joining the
+  AR9-AR12 probe architecture, a second, unrelated collision recorded in the same renumbering
+  note). Each asserts the *result* — a match ranked, an invitation minted, a register changed —
+  never merely that a page responded 200.
 - **AR29 — voice input, still working** (the finder has it; O59/O46 both found it broken in ways a
   render check could not see).
 - **AR30 — the honesty surfaces, checked as behaviour.** No testimonials, no ratings, no clinical
