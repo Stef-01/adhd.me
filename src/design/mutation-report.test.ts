@@ -33,13 +33,13 @@ describe("AR13 the mutation report holds against the real tree", () => {
     expect(diff.staleUnprobed, "an ENFORCED_WITHOUT_PROBE row is stale").toEqual([]);
   });
 
-  it("pins the count: four probed families, six enforced rules awaiting a probe", () => {
+  it("pins the count: five probed families, five enforced rules awaiting a probe", () => {
     expect(MUTATION_PROBES.length).toBe(PROBED_FAMILY_COUNT);
-    expect(PROBED_FAMILY_COUNT).toBe(4);
-    // AR19 re-pinned 5 -> 6: layout.fold-governed joined enforced with its predicate probed
-    // inline (vitest + planted band) but no extracted-detector architecture — its entry names
-    // what a full probe would add.
-    expect(ENFORCED_WITHOUT_PROBE.length).toBe(6);
+    // AR28 re-pinned 4 -> 5 and 6 -> 5: layout.fold-governed graduated from
+    // enforced-without-probe to the full architecture, exactly as its own
+    // whatAProbeWouldMutate specified when AR19 parked it there.
+    expect(PROBED_FAMILY_COUNT).toBe(5);
+    expect(ENFORCED_WITHOUT_PROBE.length).toBe(5);
   });
 
   it("the two out-of-register families are exactly semantics and contrast", () => {

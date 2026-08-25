@@ -29,7 +29,7 @@ import { TASTE_RULES } from "./taste-register";
 
 export interface ProbeEntry {
   /** Sweep-family name, matching the AR unit that built the probe. */
-  readonly family: "accent" | "touch-floor" | "semantics" | "contrast";
+  readonly family: "accent" | "touch-floor" | "semantics" | "contrast" | "fold";
   /** The id a red run names; must equal the detector module's exported *_RULE_ID. */
   readonly ruleId: string;
   /** The shared detector module the sweep AND the probe both drive. */
@@ -75,6 +75,18 @@ export const MUTATION_PROBES: readonly ProbeEntry[] = [
     sweepSpec: "e2e/contrast.spec.ts",
     registerRule: null,
   },
+  {
+    // AR28: the fifth family — AR19 shipped the sweep with only its pure predicate probed;
+    // this entry's own whatAProbeWouldMutate (recorded while it sat in ENFORCED_WITHOUT_PROBE)
+    // became the spec: the walk extracted to fold-load.ts, and the probe plants a straddling
+    // band AND a sunk h1 on a clean route, demanding the real accumulation report both by kind.
+    family: "fold",
+    ruleId: "layout.fold-governed",
+    detectorModule: "e2e/support/fold-load.ts",
+    probeSpec: "e2e/support/fold-probe.spec.ts",
+    sweepSpec: "e2e/fold.spec.ts",
+    registerRule: "layout.fold-governed",
+  },
 ];
 
 /**
@@ -82,7 +94,7 @@ export const MUTATION_PROBES: readonly ProbeEntry[] = [
  * somebody deletes a probe (which the diff below reports by name first), and a fifth probe is a
  * deliberate edit to this file, never a silent arrival.
  */
-export const PROBED_FAMILY_COUNT = 4;
+export const PROBED_FAMILY_COUNT = 5; // AR28: fold joined (was 4)
 
 /**
  * Register rules that carry `enforcedBy` and no mutation probe — the report's other half.
@@ -93,16 +105,6 @@ export const ENFORCED_WITHOUT_PROBE: ReadonlyArray<{
   readonly ruleId: string;
   readonly whatAProbeWouldMutate: string;
 }> = [
-  {
-    // AR19: partially probed already, and the entry says exactly where the line sits. The pure
-    // predicate (bandCut, src/design/fold-bands.ts) is exercised in both directions by vitest
-    // AND by a straddling band planted in the sweep each run — the predicate cannot die
-    // silently. What has NO probe is the sweep's plumbing around it: selector resolution,
-    // per-route accumulation, the h1 half. That is what the full architecture would add.
-    ruleId: "layout.fold-governed",
-    whatAProbeWouldMutate:
-      "Extract the fold walk to e2e/support/fold-load.ts and add a probe spec that injects a straddling claim+qualifier pair into a real route's DOM (and moves a page's h1 below the fold), asserting e2e/fold.spec.ts's own accumulation goes red naming the route — the bandCut predicate is already probed inline; the plumbing around it is not.",
-  },
   {
     ruleId: "honesty.claim-earned",
     whatAProbeWouldMutate:
