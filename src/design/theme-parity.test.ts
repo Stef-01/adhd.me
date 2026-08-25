@@ -1,3 +1,7 @@
+// taste-rule: type.palette-tokens
+// AR18: wired into the register (this rule sat marked `unenforced` even after this ratchet
+// shipped in AR17 — a bookkeeping gap, not a missing capability, closed in the same commit as
+// AR18's own dark-ground work rather than filed as a separate unit for one register edit).
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";

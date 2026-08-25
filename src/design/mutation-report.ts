@@ -130,6 +130,15 @@ export const ENFORCED_WITHOUT_PROBE: ReadonlyArray<{
     whatAProbeWouldMutate:
       "Under emulated prefers-reduced-motion, inject an element animating without a static equal and assert the landing-motion check reports it; today's check pins source, so the probe needs the rendered-behaviour half first.",
   },
+  {
+    // AR18: newly enforced (theme-parity.ts's raw-hex ratchet, wired into the register in the
+    // same unit). theme-parity.test.ts already drives its scanner functions against planted
+    // fixture strings, which proves the matcher/classifier but not the live ceiling constants —
+    // a real probe needs the second half.
+    ruleId: "type.palette-tokens",
+    whatAProbeWouldMutate:
+      "Plant a raw-hex literal in a real app/ component (or a raw-hex colour rule in globals.css outside a token definition) and assert theme-parity.test.ts's census goes red against the LIVE ceiling constants, not just against a fixture string passed directly to scanComponents/scanCss.",
+  },
 ];
 
 export interface MutationReportDiff {

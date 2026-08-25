@@ -264,10 +264,17 @@ export const TASTE_RULES: readonly TasteRule[] = [
     id: "type.palette-tokens",
     section: "type-colour",
     statement: "Palette tokens only; no raw hex in components.",
-    incident: "O96 — globals.css sectioned, with a machine-checked proof",
-    unenforced:
-      "O96's proof was a one-time computed-style diff for one refactor, not a standing gate against raw hex in " +
-      "components; AR17/AR18 plan the ongoing check",
+    incident: "O96 — globals.css sectioned, with a machine-checked proof; AR17 — the ongoing ratchet",
+    // AR18: AR17 shipped the ratchet (src/design/theme-parity.ts/.test.ts) but never wired it here
+    // — this rule stayed marked unenforced beside a check that had already started passing every
+    // run, the same "quietly wrong record" class W154/AR2 both found elsewhere in this tree.
+    enforcedBy: [
+      "src/design/theme-parity.test.ts :: raw hex in a component is a build failure unless declared with its rationale",
+      "src/design/theme-parity.test.ts :: globals.css raw-hex rules hold at the measured ceiling",
+    ],
+    // Not a route sweep: a vitest census over committed source (globals.css, app/), the same
+    // shape AR3 gave interaction.errors-plain for a spec with no page navigation at all.
+    routeScope: { kind: "not-route-based", reason: "source-file census (globals.css + app/), not a rendered route" },
   },
   {
     id: "interaction.touch-44",
@@ -541,7 +548,7 @@ export function diffTasteRegister(skillMarkdown: string, register: readonly Tast
  * rather than let the count drift unnoticed (O177's rule: a queue must distinguish "not done" from
  * "decided").
  */
-export const UNENFORCED_COUNT = 14; // AR19 enforced layout.fold-governed (was 15)
+export const UNENFORCED_COUNT = 13; // AR18 enforced type.palette-tokens (was 14, AR19's count)
 
 export interface EnforcementTag {
   /** The rule id named in a `// taste-rule: <id>` comment. */

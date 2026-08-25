@@ -5,7 +5,7 @@
 ## Summary
 
 - **22 rules** across 6 sections
-- **8 enforced**, **14 unenforced**
+- **9 enforced**, **13 unenforced**
 - **1 route exemption** declared (routes no enforced rule's declared scope reaches; see below)
 
 ## Layout
@@ -67,9 +67,11 @@ tabular-nums wherever numbers change or align; curly quotes, real ellipses, non-
 
 Palette tokens only; no raw hex in components.
 
-- **Incident:** O96 — globals.css sectioned, with a machine-checked proof
-- **Unenforced:** O96's proof was a one-time computed-style diff for one refactor, not a standing gate against raw hex in components; AR17/AR18 plan the ongoing check
-- **Route scope:** —
+- **Incident:** O96 — globals.css sectioned, with a machine-checked proof; AR17 — the ongoing ratchet
+- **Enforced by:**
+  - `src/design/theme-parity.test.ts :: raw hex in a component is a build failure unless declared with its rationale`
+  - `src/design/theme-parity.test.ts :: globals.css raw-hex rules hold at the measured ceiling`
+- **Route scope:** not route-based — source-file census (globals.css + app/), not a rendered route
 
 ### `type.serif-display`
 

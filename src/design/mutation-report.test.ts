@@ -33,13 +33,15 @@ describe("AR13 the mutation report holds against the real tree", () => {
     expect(diff.staleUnprobed, "an ENFORCED_WITHOUT_PROBE row is stale").toEqual([]);
   });
 
-  it("pins the count: five probed families, five enforced rules awaiting a probe", () => {
+  it("pins the count: five probed families, six enforced rules awaiting a probe", () => {
     expect(MUTATION_PROBES.length).toBe(PROBED_FAMILY_COUNT);
     // AR28 re-pinned 4 -> 5 and 6 -> 5: layout.fold-governed graduated from
     // enforced-without-probe to the full architecture, exactly as its own
     // whatAProbeWouldMutate specified when AR19 parked it there.
+    // AR18 re-pinned 5 -> 6: type.palette-tokens moved from unenforced (taste-register.ts) to
+    // enforced-without-probe (theme-parity.ts's ratchet exists but is not yet a kill/restore probe).
     expect(PROBED_FAMILY_COUNT).toBe(5);
-    expect(ENFORCED_WITHOUT_PROBE.length).toBe(5);
+    expect(ENFORCED_WITHOUT_PROBE.length).toBe(6);
   });
 
   it("the two out-of-register families are exactly semantics and contrast", () => {
