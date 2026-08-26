@@ -129,13 +129,11 @@ export function StoryLanding() {
 
   const heroRef = useRef<HTMLElement>(null);
   const throughlineRef = useRef<HTMLElement>(null);
-  const pullRef = useRef<HTMLElement>(null);
 
   // The hero figure drifts UP against the copy — the classic depth cue, at a magnitude small
   // enough that it reads as depth rather than as an effect.
   const heroFigureY = useSectionParallax(heroRef, 44);
   const throughlineY = useSectionParallax(throughlineRef, 34);
-  const pullY = useSectionParallax(pullRef, 26);
 
   // Read progress, drawn as a hairline under the sticky header. Decorative and aria-hidden: it
   // repeats what a scrollbar already says, and a screen reader has better ways to ask.
@@ -172,21 +170,15 @@ export function StoryLanding() {
             animate="show"
             variants={stagger}
           >
-            {/* O167, founder-directed: "remove all mentions of founder on entire site do thorough code
-                audit". This read "Why we founded ADHD.ME" — the only founder-family word left in
-                RENDERED copy anywhere on the site. It is first-person plural about the company's
-                origin rather than a role claim about any named person, so it did not carry the
-                error the instruction was aimed at ("Dr Saxena only owns the clinic … do not
-                interpret him as cofounding the entity"). Changed anyway, because the instruction
-                was to remove the mentions and this loses nothing: "built" is the same length, the
-                same claim, and truer while the product is still being built. Flagged in the ledger
-                rather than done silently, so it can go back if "founded" was wanted here. */}
-            <motion.p className="story-eyebrow" variants={item}>Why we built ADHD.ME</motion.p>
+            {/* The eyebrow orients the patient — what this page is for and who it serves — rather
+                than opening with the company's own story. This also keeps the site clear of the
+                founder/origin framing O167 asked to remove: no first-person-plural origin claim. */}
+            <motion.p className="story-eyebrow" variants={item}>Adult ADHD care in Australia</motion.p>
             <motion.h1 id="story-hero-title" variants={item}>
               ADHD care, start to finish, <span className="story-claim">with one GP</span>.
             </motion.h1>
             <motion.p className="story-hero-sub" variants={item}>
-              Everything from assessment to follow-up, all with one GP. No psychiatrist queue to clear first.
+              No psychiatrist queue to clear first.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
@@ -212,27 +204,19 @@ export function StoryLanding() {
         </div>
       </section>
 
-      {/* 2. The shape of the alternative, against a pull-line. */}
-      <section className="story-chapter story-chapter-country" aria-labelledby="shape-title" ref={pullRef}>
-        <div className="story-wrap story-split story-split-reverse">
-          <div className="story-split-lead">
-            <Reveal>
-              <h2 id="shape-title" className="story-heading">
-                One GP, from the first appointment to the follow-up.
-              </h2>
-            </Reveal>
-            <Reveal delay={0.06} className="story-prose">
-              <p>
-                Nobody should have to tell their story twice to get through a door. One clinician
-                holds the assessment, the medication and the follow-up, and what they wrote down
-                in the first appointment is still there in the fourth.
-              </p>
-            </Reveal>
-          </div>
-          <Reveal delay={0.12} className="story-pull">
-            <motion.p style={live ? { y: pullY } : undefined}>
-              Care that fits the person in front of it.
-            </motion.p>
+      {/* 2. The shape of the alternative. */}
+      <section className="story-chapter story-chapter-country" aria-labelledby="shape-title">
+        <div className="story-wrap">
+          <Reveal>
+            <h2 id="shape-title" className="story-heading">
+              Tell your story once.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.06} className="story-prose">
+            <p>
+              You tell your story once. The same GP holds your assessment, medication and
+              follow-up — and what they noted at the first visit is still there at the fourth.
+            </p>
           </Reveal>
         </div>
       </section>
@@ -250,8 +234,7 @@ export function StoryLanding() {
               the wait is no longer the only way in.
             </p>
             <p>
-              That gap is what ADHD.ME closes. We connect you straight to those GPs, so assessment
-              and follow-up start with one clinician near you — not at the back of a referral queue.
+              ADHD.ME connects you straight to those GPs — near you, not at the back of a referral queue.
             </p>
             <p className="story-note">
               Every clinician here is a GP focused on ADHD assessment and care,
@@ -270,12 +253,8 @@ export function StoryLanding() {
             </Reveal>
             <Reveal delay={0.06} className="story-prose">
               <p>
-                The old route ran through a queue with no visible end and a cost most people
-                could not plan for. Some waited it out. Most of them paid for it twice, in time
-                and then again at the door.
-              </p>
-              <p>
-                None of that waiting made the care better. It only made it later.
+                The old route ran through a queue with no visible end and a cost most people could
+                not plan for — paid twice, in time and then again at the door.
               </p>
             </Reveal>
           </div>
@@ -305,12 +284,6 @@ export function StoryLanding() {
               The permission already changed. <em>Now the appointment has to be findable.</em>
             </p>
           </Reveal>
-          <Reveal delay={0.08} className="story-throughline-sub">
-            <p>
-              A rule that nobody can act on is a rule that did not change anything. ADHD.ME exists
-              to close that last gap: from the change on paper to a GP near you, with a date.
-            </p>
-          </Reveal>
         </motion.div>
       </section>
 
@@ -321,7 +294,7 @@ export function StoryLanding() {
             <p className="story-eyebrow">What ADHD.ME is</p>
           </Reveal>
           <Reveal delay={0.04}>
-            <h2 id="steps-title" className="story-heading story-heading-wide">How it works, end to end.</h2>
+            <h2 id="steps-title" className="story-heading story-heading-wide">How it works.</h2>
           </Reveal>
           <motion.ol
             className="story-pillars"
