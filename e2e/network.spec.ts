@@ -12,7 +12,7 @@
 // have been testing a design decision that had been reversed.
 
 import { expect, test } from "@playwright/test";
-import { NETWORK_CLINICIANS } from "../src/network/gallery";
+import { NETWORK_CLINICIANS, possessiveFor } from "../src/network/gallery";
 
 /**
  * A clinician's name without the honorific.
@@ -67,8 +67,10 @@ test("a profile leads with the person and discloses an interest before offering 
   const first = NETWORK_CLINICIANS[0]!;
   await page.goto(`/network/${first.id}`);
 
-  // The voice label — the rendered half of honesty.clinician-declaration.
-  await expect(page.getByText("In their words")).toBeVisible();
+  // The voice label — the rendered half of honesty.clinician-declaration. Round 7 made it agree
+  // with the person it is about ("In HIS words" for a he/him doctor), so the assertion is derived
+  // from their declared pronoun rather than pinned to the plural the deck correctly uses.
+  await expect(page.getByText(`In ${possessiveFor(first)} words`)).toBeVisible();
   await expect(page.locator(".gp-summary")).toContainText(first.summary);
   await expect(page.locator(".gp-line")).toContainText(first.matchLine);
 

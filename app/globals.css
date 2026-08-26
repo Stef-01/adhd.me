@@ -4213,6 +4213,19 @@ textarea:focus-visible {
   line-height: 1.5;
 }
 
+/* ROUND 7c: the corner control must not sit on top of the demo disclaimer.
+   At 1280 the note is centred and the control clears it to the right; at 390 the note runs the
+   full width and the pill lands on its last line, hiding part of a sentence that exists to tell a
+   reader what this demo is. Reserving the control's own height (44px + its 20px offset, plus air)
+   moves the words up rather than shrinking them — a disclaimer nobody can finish reading is not a
+   disclaimer. Scoped to `.patient-v2`, which is the finder and nothing else, and to the widths
+   where the collision actually happens. */
+@media (max-width: 700px) {
+  .patient-v2 .finder-context {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .patient-v2 .type-content h1 span,
 .patient-v2 .type-content h1 em {
   display: block;

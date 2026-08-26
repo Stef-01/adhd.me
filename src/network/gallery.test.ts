@@ -16,8 +16,10 @@ import {
   neighbours,
   networkCopyStrings,
   networkSizeInWords,
+  possessiveFor,
   seesVerb,
   subjectPronoun,
+  verbFor,
 } from "./gallery";
 
 describe("O192 network gallery", () => {
@@ -97,6 +99,33 @@ describe("O192 network gallery", () => {
     expect(subjectPronoun(as(""))).toBe("they");
     expect(subjectPronoun(as("ze/hir"))).toBe("they");
     expect(seesVerb(as("ze/hir"))).toBe("see");
+  });
+
+  it("agrees any present-tense verb, not just the one round 3 happened to need", () => {
+    // Round 7. Round 3 fixed a heading and left "How THEY consult" and "as at the date THEY told
+    // us" on the same page for a he/him doctor — a helper per verb keeps inviting exactly that.
+    const as = (pronouns: string) => ({ pronouns }) as Clinician;
+
+    expect(verbFor(as("he/him"), "consult")).toBe("consults");
+    expect(verbFor(as("she/her"), "consult")).toBe("consults");
+    expect(verbFor(as("they/them"), "consult")).toBe("consult");
+    expect(verbFor(as("ze/hir"), "work")).toBe("work");
+    // And the round-3 function is now this one, so the two can never disagree.
+    for (const pronouns of ["he/him", "she/her", "they/them", ""]) {
+      expect(seesVerb(as(pronouns))).toBe(verbFor(as(pronouns), "see"));
+    }
+  });
+
+  it("gives the possessive the page's voice label needs", () => {
+    const as = (pronouns: string) => ({ pronouns }) as Clinician;
+    expect(possessiveFor(as("he/him"))).toBe("his");
+    expect(possessiveFor(as("she/her"))).toBe("her");
+    expect(possessiveFor(as("they/them"))).toBe("their");
+    expect(possessiveFor(as("ze/hir"))).toBe("their");
+    // Every real roster entry yields one of the three, so no profile can render "In undefined words".
+    for (const clinician of NETWORK_CLINICIANS) {
+      expect(["his", "her", "their"]).toContain(possessiveFor(clinician));
+    }
   });
 
   it("every clinician in the roster yields a usable pronoun and verb", () => {

@@ -103,9 +103,39 @@ export function subjectPronoun(clinician: Clinician): string {
   return first === "he" || first === "she" || first === "they" ? first : "they";
 }
 
+/**
+ * A present-tense verb agreeing with the pronoun above: `verbFor(c, "see")` → "sees" or "see".
+ *
+ * ROUND 7 GENERALISED ROUND 3, because round 3 fixed one heading and left the same mistake in two
+ * more places. The profile's fact list said "How THEY consult" and "as at the date THEY told us"
+ * for a doctor whose roster entry declares he/him — the same small wrongness as the heading, in
+ * smaller type, on the same page. A helper per verb would have kept inviting that; one helper
+ * makes the agreement the default thing to reach for.
+ *
+ * Deliberately naive (append "s"), because the vocabulary a profile needs is small and regular —
+ * see, consult, work. A verb that needs more than this should be reworded rather than smuggled
+ * through a conjugation table nobody maintains.
+ */
+export function verbFor(clinician: Clinician, base: string): string {
+  return subjectPronoun(clinician) === "they" ? base : `${base}s`;
+}
+
+/**
+ * The possessive determiner: "his" / "her" / "their".
+ *
+ * ROUND 7, and it is the last of round 3's family. The profile's own voice label read "In their
+ * words" on a page about ONE person whose pronoun the page already knows — the deck says "in their
+ * own words" correctly, because the deck is about everybody, and the label was inherited from it
+ * without noticing that the subject had changed from a roster to a man.
+ */
+export function possessiveFor(clinician: Clinician): string {
+  const subject = subjectPronoun(clinician);
+  return subject === "he" ? "his" : subject === "she" ? "her" : "their";
+}
+
 /** "he sees" / "they see" — the verb has to agree with the pronoun above. */
 export function seesVerb(clinician: Clinician): string {
-  return subjectPronoun(clinician) === "they" ? "see" : "sees";
+  return verbFor(clinician, "see");
 }
 
 /**

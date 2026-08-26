@@ -2878,3 +2878,35 @@ test now, so the case the original rule existed for cannot be lost while the rul
 The accent stayed inside its cap through both: the bridge link is ink with an underline, because
 `/network` already spends its two permitted meanings on the card's way-in, and putting one colour
 on "open this doctor" and "go use the other interface" would say they are the same invitation.
+
+## O192 round 7b — round 3's fix, finished (2026-08-26)
+
+Round 3 taught the profile heading to use the pronoun a clinician declared, and stopped there. A
+re-read of the same page found the same mistake twice more in smaller type: the fact list said
+"How **they** consult" and "Yes, as at the date **they** told us" for a doctor whose roster entry
+declares he/him, and the voice label read "In **their** words" on a page about one man. That last
+one was inherited from the deck, where "in their own words" is correct because the deck is about
+everybody — the subject changed from a roster to a person and the sentence did not.
+
+The cause was shape, not oversight: round 3 shipped a `seesVerb()` helper, one function for the
+one verb it happened to need, which makes the next verb somebody else's problem. It is now
+`verbFor(clinician, base)` — `seesVerb` is defined in terms of it, so the two can never disagree —
+plus `possessiveFor()` for his/her/their. Both fall back to the form that is correct for anybody
+and wrong for nobody, and a test walks the real roster so no profile can render "In undefined
+words".
+
+Small, and worth the round: a page whose whole claim is that these people will pay attention to
+you cannot be the thing that gets somebody's pronoun wrong three times.
+
+## O192 round 7c — the corner control was sitting on the disclaimer (2026-08-26)
+
+Found in the mobile capture of `/finder`, not on the network's own screens: the return control
+("‹ The network") is fixed bottom-right, and at 390px the demo disclaimer runs the full width, so
+the pill landed on its last line — "…are p[rovided by the] destination." A sentence that exists to
+tell a reader what this demo is was the one thing on the page you could not finish reading. At
+1280 the note is centred and the control clears it entirely, which is why four rounds of desktop-
+first looking never showed it.
+
+Fixed by reserving the control's own height (44px plus its 20px offset, plus air) at the widths
+where the collision happens, scoped to `.patient-v2` — the finder's wrapper and nothing else. The
+words move up rather than shrinking: a disclaimer nobody can finish is not a disclaimer.

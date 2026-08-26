@@ -25,8 +25,10 @@ import {
   NETWORK_CLINICIANS,
   consultingSuburbs,
   neighbours,
+  possessiveFor,
   seesVerb,
   subjectPronoun,
+  verbFor,
 } from "@/network/gallery";
 import { ClinicianPortrait } from "../../finder-stages/shared";
 import { InterfaceLaunch } from "../../interface-launch";
@@ -132,7 +134,8 @@ export default async function ClinicianPage({
         </section>
 
         <section className="gp-section gp-words">
-          <h2 className="gp-label">In their words</h2>
+          {/* Round 7: "In HIS words" on a page about one man. See `possessiveFor`. */}
+          <h2 className="gp-label">In {possessiveFor(clinician)} words</h2>
           <p className="gp-summary">{clinician.summary}</p>
           <p className="gp-about">{clinician.about}</p>
         </section>
@@ -149,7 +152,14 @@ export default async function ClinicianPage({
               <dd>{clinician.appointmentLength}</dd>
             </div>
             <div>
-              <dt>How they consult</dt>
+              {/*
+                ROUND 7: their pronoun here too. Round 3 fixed the section heading and left this
+                label and the one below saying "they" about a he/him doctor — the same wrongness,
+                smaller type, same page.
+              */}
+              <dt>
+                How {subjectPronoun(clinician)} {verbFor(clinician, "consult")}
+              </dt>
               <dd>{clinician.reach}</dd>
             </div>
             <div>
@@ -162,7 +172,11 @@ export default async function ClinicianPage({
             </div>
             <div>
               <dt>Taking new patients</dt>
-              <dd>{clinician.acceptingNewPatients ? "Yes, as at the date they told us" : "Not right now"}</dd>
+              <dd>
+                {clinician.acceptingNewPatients
+                  ? `Yes, as at the date ${subjectPronoun(clinician)} told us`
+                  : "Not right now"}
+              </dd>
             </div>
           </dl>
         </section>
