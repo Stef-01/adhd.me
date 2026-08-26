@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ d846ae9 (2026-08-26T23:10Z) — pnpm verify 293 files / 4351 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, six audit rounds)`
+`gate: green @ 0a5f8a9 (2026-08-26T23:30Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, six audit rounds)`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -237,10 +237,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `.interface-launch-link`), and AUDIT-AR.md's inventory table re-derived (its "all 47 routes" a11y
 > label was a TRANSCRIBED count inside a label and is now computed, which is how it went stale).
 >
-> Gate: `pnpm verify` green — 293 files / 4351 tests (13 skipped), build clean, audit PASS (2
+> **ROUND 7, AFTER THE FIRST PUSH, and all three findings are the same shape — work that exists in
+> the source, passes every check around it, and reaches no reader.** (a) `NETWORK_COPY.finderBridge`
+> was written in round 1, linted, counted by `networkCopyStrings()` and RENDERED NOWHERE — the
+> quietest form of this tree's named disease (O186/O187), since every test around a copy constant
+> passes while the sentence is invisible. It now closes the purpose band with a link, so a reader
+> who has read everybody and is still unsure has a next step in the prose rather than only in a
+> floating corner control. The link reads "Open the finder", deliberately near-identical to the
+> control's "Launch the finder" rather than identical: the first attempt matched it exactly and the
+> e2e caught two links sharing one accessible name. That spec is now scoped to `.interface-launch`,
+> so it tests the control it names. (b) **Every GP's page was missing from the sitemap.** The
+> dynamic-path filter was right while `/book/[token]` was the only one — a tokened page reached by
+> invitation, prefix-disallowed in robots.ts — and wrong for `/network/[clinician]`, which is
+> statically generated from a build-time roster, linked, crawlable, and exactly the pages whose
+> indexing hold the founder lifted. That decision was half-implemented: findable by following a link
+> and by nothing else. `EXPANDED_DYNAMIC_PATHS` makes a dynamic census path either expand into real
+> URLs or be deliberately absent; the invariants hold unchanged (no path template advertised, every
+> URL traces to a census entry) and the booking exclusion has its own test so the case the original
+> rule existed for survives the generalisation. (c) **Round 3's fix was unfinished.** The same
+> profile still said "How THEY consult" and "as at the date THEY told us" for a he/him doctor, and
+> labelled his bio "In THEIR words" — inherited from the deck, where the plural is right because the
+> deck is about everybody. The cause was shape rather than oversight: `seesVerb()`, one helper for
+> the one verb round 3 needed, makes the next verb somebody else's problem. Now `verbFor(clinician,
+> base)` with `seesVerb` defined in terms of it, plus `possessiveFor()`, both falling back to the
+> form correct for anybody, with a test walking the real roster so no profile can render "In
+> undefined words". (d) And from the mobile capture of /finder: the fixed return control was sitting
+> on the last line of the demo disclaimer at 390px — the sentence telling a reader what the demo is
+> was the one thing on the page you could not finish. At 1280 the note is centred and the control
+> clears it, which is why four desktop-first rounds never showed it.
+>
+> Gate: `pnpm verify` green — 293 files / 4356 tests (13 skipped), build clean, audit PASS (2
 > accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB). Full `pnpm e2e`
-> green. New suites: `e2e/network.spec.ts` (10), `src/network/gallery.test.ts` (10),
-> `e2e/support/network-capture.spec.ts` (opt-in captures).
+> green at the round-6 head (324 passed, 2 skipped); rounds 7–7c re-ran the affected suites (network,
+> public-sweep, working-truth, mobile-fit, finder-flow, a11y, touch-floor, accent-discipline,
+> contrast — 59 + 24 passed). New suites: `e2e/network.spec.ts` (10), `src/network/gallery.test.ts`
+> (12), `e2e/support/network-capture.spec.ts` (opt-in captures).
+>
+> Landed as PR #21 (`claude/o192-network`) rather than a direct push to main, per this session's
+> harness rule; the ledger claim above is on main and remains the lock.
 
 
 > **O191 (founder-directed: the practice stage broke the minimalism law — unrelated skin-cancer
