@@ -56,7 +56,12 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
 ];
 
 /** globals.css raw-hex colour values outside `--token:` definitions and comments, measured 2026-08-24. */
-export const CSS_RAW_HEX_SITES = 82;
+/* 82 -> 87: the "One GP" chapter (.story-chapter-country) grounds itself in the
+   Acknowledgement-of-Country earth tones — five raw-hex sites (a two-stop gradient, plus the
+   heading/pull and prose type). Same precedent as .aoc-band and .story-chapter-tint: Country and
+   band colours that deliberately are not palette tokens, so they live as hex in the rule, not
+   as `--token:` definitions. Re-derived in the commit that earns it, per the ratchet's law. */
+export const CSS_RAW_HEX_SITES = 87;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the

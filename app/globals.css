@@ -4766,6 +4766,25 @@ textarea:focus-visible {
    palette, apart from the blush register and the dark throughline, and light enough to keep the
    muted note legible. Full-bleed like the other coloured sections; padding evened out for a band. */
 .story-chapter-tint { background: #efe6d3; padding-block: clamp(72px, 9vw, 132px); }
+
+/* THE ACKNOWLEDGEMENT COLOURWAY, ONE CHAPTER ONLY. The "One GP" beat is lifted onto the earth
+   tones of the Acknowledgement-of-Country horizon (app/acknowledgement-of-country.tsx) so the
+   payoff of the pathway reads apart from the paper chapters around it. It INVERTS the band rather
+   than copying it: the band is a pale sky carrying dark text, which set as a background would read
+   as the warm-parchment rule-beat tint two chapters up. So this takes the band's deep hill tones
+   as the ground and its sky colour as the type — same palette, opposite value, which is what makes
+   it stand out. Cream on this ground clears AA at both gradient stops. Earth COLOURS only, not
+   iconography — see that component's own note on why the artwork is a landscape, not dot-work.
+   Raw hex, like .aoc-band and .story-chapter-tint: Country colours that are not palette tokens. */
+.story-chapter-country {
+  background: linear-gradient(180deg, #8a4f24 0%, #6d3f1f 100%);
+  border-top: 0;
+  color: #f6ecdd;
+}
+.story-chapter-country .story-heading,
+.story-chapter-country .story-pull p { color: #f6ecdd; }
+.story-chapter-country .story-prose p { color: #f1e2c8; }
+
 .story-heading-wide { max-width: 20ch; }
 .story-prose-lead { max-width: 720px; }
 /* The first paragraph of an opening chapter carries ink weight; the rest recede to --s-muted.

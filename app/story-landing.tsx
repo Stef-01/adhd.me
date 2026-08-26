@@ -213,7 +213,7 @@ export function StoryLanding() {
       </section>
 
       {/* 2. The shape of the alternative, against a pull-line. */}
-      <section className="story-chapter" aria-labelledby="shape-title" ref={pullRef}>
+      <section className="story-chapter story-chapter-country" aria-labelledby="shape-title" ref={pullRef}>
         <div className="story-wrap story-split story-split-reverse">
           <div className="story-split-lead">
             <Reveal>
