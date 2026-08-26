@@ -24,9 +24,8 @@
     "impeccable": {
       "source": "pbakaus/impeccable",
       "sourceType": "github",
-      "sourceCommit": "56f44523f76efdcec813e67b38ee550e49b16f48",
-      "skillPath": "plugin/skills/impeccable/SKILL.md",
-      "computedHash": "bf8781e00c1e180aed3d9f0a9670025f6542a88fd01e6e9ae8052f7554d99086"
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "fc9106b2b240a4abdbe9abf1e5d026ab06c3315f3b79b7e029383e17abb341b2"
     }
   }
 }
