@@ -10,7 +10,7 @@
 // measurement rather than a scavenger hunt.
 
 import { expect, test } from "@playwright/test";
-import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+import { CONSOLE_ROUTES, DYNAMIC_ROUTE_PLAN, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
 import { seedFixtures } from "./support/fixtures";
 import { signInAndOnboard } from "./support/session";
 import { ROUTE_PROOFS } from "./support/working-truth";
@@ -55,6 +55,21 @@ test("every route renders the content that proves it worked", async ({ page, req
   await page.goto(`/book/${seeded.invitations[0]!.token}`);
   await page.waitForLoadState("networkidle");
   judge("/book/[token]", await page.locator("body").innerText(), missing, failed, seen);
+
+  // Every OTHER dynamic public route that declares a sample, read from the plan rather than
+  // written out here. O192 is why: `/network/[clinician]` declared its sample in
+  // DYNAMIC_ROUTE_PLAN, the specs that read the plan picked it up, and this one — which listed its
+  // dynamic visits by hand — did not, so the route arrived with a proof nothing could reach and
+  // failed as STALE. A sweep that hardcodes what the plan already knows is a second census.
+  const sampled = Object.entries(DYNAMIC_ROUTE_PLAN).filter(
+    (entry): entry is [string, { sample: string }] => "sample" in entry[1],
+  );
+  expect(sampled.length, "no dynamic route declares a sample — this loop went vacuous").toBeGreaterThan(0);
+  for (const [route, { sample }] of sampled) {
+    await page.goto(sample);
+    await page.waitForLoadState("networkidle");
+    judge(route, await page.locator("body").innerText(), missing, failed, seen);
+  }
 
   // Console: reset, sign in, onboard, seed everything — O174's order via the shared helpers.
   await request.post("/api/mock/console");

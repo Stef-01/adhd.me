@@ -27,6 +27,38 @@ export interface FounderGate {
   openAt: string;
 }
 
+/**
+ * Decisions the founder has actually made, with the date and the words they made them in.
+ *
+ * The register's whole point is that the loop may not answer a gate's question. The converse duty
+ * is this list: when the founder DOES answer one, the answer gets written down where the question
+ * was, rather than disappearing into a diff. A gate that leaves `FOUNDER_GATES` without landing
+ * here has been closed by somebody who was not entitled to close it.
+ */
+export interface FounderDecision {
+  id: string;
+  question: string;
+  /** What the founder decided, and — where they said it — in their own words. */
+  decision: string;
+  /** ISO date the founder made the call. */
+  decidedAt: string;
+  /** What changed in the tree as a result. */
+  effect: string;
+}
+
+export const FOUNDER_DECISIONS: readonly FounderDecision[] = [
+  {
+    id: "network-gallery-ahpra-hold",
+    question:
+      "Does the browsable network gallery at /network ship indexed, or stay noindex pending an Ahpra advertising review of the profile copy (gate G6)?",
+    decision:
+      "Ships indexed. The founder lifted the review hold directly: “remove all Ahpra review, we have experts that will do this, do not apply your limited thinking.” The advertising review is theirs to commission and is out of this loop's hands — which is the point of the gate, in both directions.",
+    decidedAt: "2026-08-26",
+    effect:
+      "app/network/page.tsx no longer sets robots:index:false. Unchanged by the decision: /network still renders only fields /finder already served publicly, every clinician sentence is still that clinician's own declaration from the roster, and the W23 rendered honesty sweep still runs over the page — the founder lifted a review hold, not the copy law.",
+  },
+];
+
 export const FOUNDER_GATES: readonly FounderGate[] = [
   {
     id: "prescriber-on-profile",
@@ -41,7 +73,7 @@ export const FOUNDER_GATES: readonly FounderGate[] = [
     question:
       "May a profile list 'mental health' among a GP's own clinical interests on a patient surface, where the condition-targeting rule would otherwise refuse it?",
     price:
-      "The same ruling class as prescriber, and O163 called it the closest to the rule's actual intent — naming a condition TO a patient versus a directory stating what a GP does. One acceptance kept or one interest reworded.",
+      "The same ruling class as prescriber, and O163 called it the closest to the rule's actual intent — naming a condition TO a patient versus a directory stating what a GP does. One acceptance kept or one interest reworded. O192 RAISED THE STAKES WITHOUT ANSWERING IT: /network now serves the same declared interest in the server HTML of a statically-generated, indexable page, where /finder only ever served it in client state after a query. The ruling is unchanged in kind and now costs a second acceptance (`/network` in ACCEPTED_FINDINGS) as well as the profile-sweep one, so a decision either way now deletes two entries rather than one.",
     openAt: "e2e/profile-sweep.spec.ts",
   },
   {

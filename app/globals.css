@@ -705,7 +705,7 @@ textarea:focus-visible {
 }
 .compare-content h1 {
   margin: 2px 0 0;
-  font-family: var(--font-display), Georgia, serif;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.625rem;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -6889,4 +6889,709 @@ textarea:focus-visible {
    per-element fontSize attributes — AR21's px law now reaches the chart. */
 .chart-label-text {
   font-size: 0.6875rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────────────────────
+   O192 (founder-directed): the network gallery — the browse-first interface.
+
+   The design problem, stated so a later reader can judge whether this still solves it: a person
+   arrives not knowing whether anybody here will understand them. They are not ready to type a
+   query. They want to look at faces and read, the way you would before choosing a doctor a friend
+   mentioned. So the page is quiet, wide-margined and portrait-led, and it never hurries: no
+   sticky call to action competing with the reading, no ratings to compare people by, no chrome
+   that implies a shortlist. Warm paper, one accent, and the faces doing the work.
+
+   Tokens only (`type.palette-tokens`). Hover gated (`interaction.hover-focus`). Every control
+   clears 44px (`interaction.touch-44`).
+   ─────────────────────────────────────────────────────────────────────────────────────────── */
+
+.network {
+  /* One measure for the whole route. 760px puts two cards at ~366px — a portrait you can read a
+     face in, not one that stares the page down — and lines the deck up with the 720px reading
+     column on a GP's own page. Round 1 used 1080px and the audit called the result portrait-
+     dominated rather than person-led. */
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px 96px;
+}
+
+/* ── The statement ─────────────────────────────────────────────────────────────────────────── */
+
+.network-hero {
+  padding: 56px 0 40px;
+  max-width: 44rem;
+}
+
+/* ROUND 5, and the sweep found it before a reader did: this deck painted the accent in THREE
+   meanings — the eyebrow, the card's way-in, and the arrow inside it — against O176's cap of two.
+   `type.accent-live-tokens` reserves the colour for the value that changes and the word that
+   matters, and on a deck of people the word that matters is the one that opens somebody's page.
+   An eyebrow is a category label sitting directly above a heading that already says "network", so
+   it gives the colour up. */
+.network-eyebrow {
+  margin: 0 0 14px;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.network-heading {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 6.2vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.network-declaration {
+  margin: 20px 0 0;
+  max-width: 40rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.network-empty {
+  margin: 0;
+  padding: 40px 0;
+  color: var(--muted);
+}
+
+/* ── The deck ──────────────────────────────────────────────────────────────────────────────── */
+
+.network-deck {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.network-card {
+  min-width: 0;
+  display: flex;
+}
+
+/* ROUND 4 WROTE THIS AND ROUND 5 FOUND IT HAD NEVER RUN. The rule below was appended as a SECOND
+   `.network-card-open` block while the original — `display: block` — still sat further down the
+   file, so at equal specificity the later declaration won and the flex column was dead CSS. The
+   screenshots said so plainly: the two "Read what … says" lines still sat 24px apart. One rule
+   now, which is also why the duplicate cannot come back unnoticed.
+
+   What it does: bios differ in length, so the card body grows and the call to action is pinned to
+   the bottom — the cards end level on a page whose argument is that somebody here pays attention. */
+.network-card-open {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-decoration: none;
+  width: 100%;
+  padding: 0 0 20px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 180ms ease;
+}
+
+.network-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-top: 18px;
+}
+
+/* ROUND 5: the frame. Dr Anubhav's headshot has a grey backdrop and Dr Anusha's is near-white, so
+   on paper one read as a photograph and the other as a cutout floating loose on the page — the
+   same two people, presented unequally, by an accident of who their photographer was. A hairline
+   gives every portrait an edge of its own regardless of what is behind the person in it. */
+.network-card-portrait {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--stone);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.network-card-portrait img {
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.network-card-name {
+  display: block;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: 1.375rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.network-card-where {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--faint);
+}
+
+/* Their own line. The only place on the card where a doctor speaks, so it gets the room. */
+.network-card-line {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ROUND 2: what a doctor says they see often, on the card. The audit found these two clicks
+   away while the card carried a generic "Read more" — they are the lines a reader recognises
+   themselves in, so they surface where the choosing happens. */
+.network-card-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.network-card-signal {
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+  background: var(--paper);
+}
+
+.network-card-langs {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  color: var(--faint);
+}
+
+/* The way in to a person, and the one thing on this deck that keeps the accent (see the eyebrow
+   above). `margin-top: auto` is what makes the cards end level whatever length a bio runs. */
+.network-card-more {
+  display: block;
+  margin-top: auto;
+  padding-top: 14px;
+  font-size: 0.8125rem;
+  color: var(--accent);
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease;
+}
+
+@media (hover: hover) {
+  .network-card-open:hover .network-card-portrait img {
+    transform: scale(1.03);
+  }
+
+  .network-card-open:hover .network-card-more {
+    border-bottom-color: var(--accent);
+  }
+}
+
+.network-card-open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+/* ── Why the network is open to read ───────────────────────────────────────────────────────── */
+
+.network-purpose {
+  margin-top: 72px;
+  padding: 40px 32px;
+  background: var(--accent-soft);
+  border-radius: 4px;
+}
+
+.network-purpose-heading {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.network-purpose-body {
+  margin: 14px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ── One GP, on their own page (O192 round 2) ──────────────────────────────────────────────────
+   The round-1 modal shrank a portrait to 132px the moment a reader chose somebody. Here the
+   portrait is the largest thing on the page, because a face is why they clicked, and the reading
+   column is narrow enough to actually read — the bio is the point of the page, not a field in it.
+   ─────────────────────────────────────────────────────────────────────────────────────────────── */
+
+.gp {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px 110px;
+}
+
+.gp-back {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0 8px;
+}
+
+.gp-back a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.gp-back a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .gp-back a:hover { color: var(--ink); }
+}
+
+.gp-position {
+  font-size: 0.8125rem;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Who this is ──────────────────────────────────────────────────────────────────────────── */
+
+/* ROUND 6: the identity sits at the FOOT of the portrait, not its head. Once round 5 moved their
+   sentence out to full measure, this column held only a name, a pronoun and a practice against a
+   375px photograph — top-aligned, that is a third of a column of nothing, and a gap at the bottom
+   of a composition reads as unfinished rather than as space. Set against the base of the image it
+   reads the way a caption under a plate does: deliberate. */
+.gp-head {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  align-items: end;
+  padding: 12px 0 8px;
+}
+
+.gp-portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--stone);
+  /* ROUND 5, same reason as the deck's cards: a near-white headshot needs an edge of its own. */
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.gp-portrait img {
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.gp-name {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 4.4vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.gp-pronouns {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  color: var(--faint);
+}
+
+/* Their sentence, at the size and measure of a statement rather than a caption. ROUND 5 moved it
+   out of the header's right-hand column: at 300px of portrait inside a 720px page it had a 348px
+   measure while the bio below ran 680px, so the page's most important sentence was also its
+   narrowest text. Full measure, up a step in size, and it now reads as the one idea. */
+.gp-line {
+  margin: 30px 0 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+  line-height: 1.45;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.gp-where {
+  margin: 14px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--faint);
+}
+
+.gp-where-sep { opacity: 0.6; }
+
+/* ── Sections ─────────────────────────────────────────────────────────────────────────────── */
+
+.gp-section {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.gp-label {
+  margin: 0 0 14px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.gp-signals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gp-signals li {
+  padding: 8px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+
+.gp-summary {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.1875rem;
+  line-height: 1.6;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ROUND 3 — HIERARCHY INVERSION, FOUND BY LOOKING AT THE PAGE. This paragraph is the warmest
+   content the product has (it is where a doctor mentions the Parramatta Eels), and it was
+   rendering in --muted: the faintest text on the page was the most human thing on it. A bio is
+   primary content on a profile, so it reads as primary content. */
+.gp-about {
+  margin: 18px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.gp-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 20px 28px;
+}
+
+.gp-facts dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.gp-facts dd {
+  margin: 5px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* ── Disclosure, then booking. Never the other way round (W193). ──────────────────────────── */
+
+.gp-disclosure {
+  margin-top: 36px;
+  padding: 18px 20px;
+  border-left: 2px solid var(--accent-mid);
+  background: var(--accent-soft);
+  border-radius: 0 4px 4px 0;
+}
+
+.gp-disclosure-label {
+  margin: 0 0 8px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.gp-disclosure p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.gp-book {
+  display: block;
+  margin-top: 32px;
+  min-height: 44px;
+  padding: 18px 22px;
+  border-radius: 4px;
+  background: var(--ground);
+  color: var(--on-ground);
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.gp-book-label {
+  display: block;
+  font-size: 1rem;
+}
+
+.gp-book-note {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.8125rem;
+  opacity: 0.72;
+}
+
+.gp-book:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── On to the next person ────────────────────────────────────────────────────────────────── */
+
+.gp-slide {
+  display: flex;
+  gap: 14px;
+  margin-top: 44px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.gp-slide-link {
+  flex: 1;
+  display: block;
+  min-height: 44px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  text-decoration: none;
+  background: var(--paper);
+  transition: background 160ms ease;
+}
+
+/* With one onward link there is room for a face, and a gallery that sends you to the next person
+   by name alone is a list. The portrait is the invitation. */
+.gp-slide-only {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px 14px 14px;
+}
+
+/* ROUND 5: 64px was an avatar. This page exists because round 1 found that choosing somebody
+   made them smaller; the invitation to the NEXT person deserves the same respect — a face you can
+   read, not a favicon of a doctor. */
+.gp-slide-face {
+  position: relative;
+  flex: none;
+  width: 96px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--stone);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.gp-slide-face img {
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+.gp-slide-text { min-width: 0; }
+
+.gp-slide-line {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.gp-slide-next { text-align: right; }
+
+.gp-slide-hint {
+  display: block;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.gp-slide-name {
+  display: block;
+  margin-top: 6px;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.0625rem;
+  color: var(--ink);
+}
+
+.gp-slide-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .gp-slide-link:hover { background: var(--stone); }
+}
+
+@media (max-width: 700px) {
+  .gp-head {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .gp-portrait {
+    max-width: 300px;
+  }
+
+  .gp-line { margin-top: 24px; }
+  .gp-slide-face { width: 80px; }
+
+  .gp-slide { flex-direction: column; }
+
+  .gp-slide-next { text-align: left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gp-slide-link { transition: none; }
+}
+
+/* ── The launch control (bottom right, both interfaces) ────────────────────────────────────── */
+
+.interface-launch {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+}
+
+.interface-launch-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--ground);
+  color: var(--on-ground);
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgb(25 26 23 / 0.18);
+  touch-action: manipulation;
+  transition: transform 160ms ease;
+}
+
+.interface-launch-glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.interface-launch-text {
+  display: block;
+  min-width: 0;
+}
+
+.interface-launch-label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+.interface-launch-hint {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  opacity: 0.68;
+}
+
+.interface-launch-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .interface-launch-link:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Returning to the network is a quieter act than launching a tool — see interface-launch.tsx. */
+.interface-launch-return .interface-launch-link {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 14px rgb(25 26 23 / 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-card-open,
+  .network-card-portrait img,
+  .interface-launch-link {
+    transition: none;
+  }
+
+  .network-card-open:hover .network-card-portrait img {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .network-hero {
+    padding: 36px 0 28px;
+  }
+
+  .network-deck {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .network-purpose {
+    margin-top: 52px;
+    padding: 28px 22px;
+  }
+
+  /* The hint is the first thing to go when the corner is tight — the label carries the meaning. */
+  .interface-launch-hint {
+    display: none;
+  }
 }

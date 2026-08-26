@@ -149,6 +149,98 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Compliance: no testimonials, no ratings, no "specialist", counts stand alone, clinician copy stays
 > their declaration. adhdme-taste review + qa/ capture + DESIGN-QA entry per law 5. Verify: pnpm
 > verify green plus the new route's e2e.
+>
+> **DONE 2026-08-26T22:5xZ.** Built as claimed, then refined over six audit rounds at the founder's
+> instruction ("keep building and refining the network interface until it is perfect, do thorough
+> edge testing with playwright audits and aesthetic screenshot based analyses for several rounds").
+>
+> **THE SHAPE THAT SHIPPED.** `/network` is the deck — the whole roster, each GP's own declared
+> line, their fit signals, their languages — and `/network/[clinician]` is a statically-generated
+> page per GP with its own metadata and canonical URL. `src/network/gallery.ts` holds the data
+> selection and the page's OWN framing sentences as constants, linted at unit speed by the W23
+> landing linter (`gallery.test.ts`, 10 tests) rather than only in a browser after a build; it
+> deliberately does not import `@/directory/`, and a source scan over its IMPORT LINES enforces
+> that, so the G6 line in the claim above is mechanical rather than a promise. **The founder's
+> asymmetry, not a toggle**: `/network` LAUNCHES the finder (dark pill, magnifier), `/finder`
+> RETURNS to the network (quiet, paper, chevron) — their correction mid-unit, "instead of toggle
+> make it, launch finder which has a different URL, this will help differentiate the two
+> experiences".
+>
+> **FOUNDER DECISION RECORDED, NOT MADE** (`FOUNDER_DECISIONS` / `network-gallery-ahpra-hold`,
+> `src/design/founder-gates.ts`). The route first shipped `robots: index:false` pending an Ahpra
+> advertising review; the founder lifted that hold directly — "remove all Ahpra review, we have
+> experts that will do this, do not apply your limited thinking" — so the noindex came off and the
+> decision is written down with their words in it rather than the flag being flipped silently. What
+> did NOT move: /network still renders only fields /finder already served publicly, every clinician
+> sentence is still that clinician's own declaration, and the rendered honesty sweep still reads the
+> page. **And the sweep found four flags on the new routes, every one of them argued rather than
+> waved through**: two are the standing open gates `prescriber-on-profile` and
+> `mental-health-on-profile`, accepted in the FOUNDER DECISION OUTSTANDING form (O163's shape) at
+> both `/network` (ACCEPTED_FINDINGS, which was empty and is now a pinned set of one) and
+> `/network/[clinician]` (a local list in public-sweep.spec.ts, because the register's stale-check
+> collects static surfaces only); the other two are a registered business name ("Beecroft Family &
+> Skin Cancer Clinic") and ordinary English ("treats a substance history as a safety question").
+> O192's actual contribution to those gates is recorded at the gate itself: the question is
+> unchanged in kind and the answer is now worth more, because /finder served these strings in
+> client state behind a query and /network serves them in the HTML of an indexable page.
+>
+> **SIX ROUNDS, AND EACH ONE FOUND SOMETHING THE ONE BEFORE HAD BEEN LOOKING AT** (full record with
+> before/after in `docs/DESIGN-QA.md`; captures in `qa/_runs/o192/`, both viewports).
+> R1→R2: the modal became routes — it was taller than a laptop viewport, its `layoutId` flight ran
+> the portrait from a large card to a 132px thumbnail (choosing somebody made them SMALLER), and no
+> profile had a URL. The portrait demotion is now a MEASURED regression test, and fixing it honestly
+> moved both ends (deck 1080→760px, profile portrait 260→300px).
+> R3: the heading read "What Dr Saxena says THEY see often" for a he/him doctor — `subjectPronoun`/
+> `seesVerb` derive it from the pronoun the clinician DECLARED, never the gender field; and
+> `.gp-about`, the warmest copy in the dataset, was rendering in the faintest colour on the page.
+> R4: the deck never said how many GPs there are — the count is now spelled from `NETWORK_SIZE`, so
+> a third GP rewrites the sentence instead of leaving it quietly wrong.
+> R5: **the serif was never loading.** Eight `font-family` declarations named an undefined CSS
+> variable (seven mine, one `var(--font-display)` older than this unit, on the finder's compare
+> screen); an undefined `var()` in a font stack falls through, and the next name, bare `Newsreader`,
+> is not installed either — fontsource registers **"Newsreader Variable"**. Every statement on these
+> pages had been rendering in Georgia while the source said serif, through four screenshot rounds,
+> because a serif fallback still looks deliberate. Also R5: the accent carried THREE meanings on the
+> deck against O176's cap of two (the eyebrow gave it up); round 4's "cards end level" fix had never
+> run, because it was appended as a second `.network-card-open` rule while the original
+> `display: block` sat below it in the file; and the statement — the sentence a doctor leads with —
+> had a 348px measure beside the portrait while the bio below ran 680px, round 3's inversion again
+> in space instead of colour.
+> R6: the identity block bottom-aligned to the foot of the portrait, every portrait given a hairline
+> (one headshot is near-white and read as a cutout while the other read as a photograph — two people
+> presented unequally by an accident of photographers), the deck's call to action switched from
+> `shortName` to the full name (the roster disambiguates HERS and leaves HIS bare, which side by
+> side makes him the default Saxena), and the onward portrait 64→96px.
+>
+> **FOUR MECHANICAL DEFECTS FOUND OFF THIS UNIT'S OWN SURFACES, FIXED RATHER THAN EXCEPTED.**
+> (1) The **contrast detector** read `backgroundColor` only, so a `linear-gradient` ground computed
+> as transparent and the walk climbed to the body's cream — it reported the landing page's
+> deliberately cream-on-brown text at 1.06:1. The false PASS is the worse half and the reason this
+> is a fix: dark text on a dark gradient would have been measured against the light body and waved
+> through. `contrast-load.ts` now reads gradient stops and takes the worst case against the
+> foreground; both mutation probes still go red on genuinely bad text.
+> (2) The **working-truth sweep listed its dynamic visits by hand** instead of reading
+> `DYNAMIC_ROUTE_PLAN`, so `/network/[clinician]` arrived with a proof nothing could reach — which
+> also hid that the proof was wrong (`innerText` returns RENDERED text and the heading is
+> `text-transform: uppercase`). The sweep now derives its sampled routes from the plan.
+> (3) The **font stacks** above, now pinned: `DECLARED_FONT_STACKS` in `src/design/type-scale.ts`
+> holds the closed set the stylesheet may name, checked both directions with a probe test.
+> (4) `public-surfaces.test.ts` pinned `ACCEPTED_FINDINGS` at EMPTY ("accepts nothing today"), which
+> was the right pin while it was true and could not survive the list going non-empty for a good
+> reason without being deleted. It is now the exact set, named — a new acceptance cannot appear
+> without somebody writing what it is, and one whose gate is answered cannot be left behind.
+>
+> **CENSUSES MOVED, ALL DERIVED RATHER THAN TRANSCRIBED**: W102 surface census (+2 routes, +1
+> dossier row), PUBLIC_SURFACES (16→18), route budgets (48→50, regenerated — /network measured 604→
+> 499 KB once the modal-era motion import went), working-truth proofs (47→49), zero-states (32→33),
+> AR5 spec triage (+network.spec.ts), AR18 dark-ground selectors (+`.gp-book`,
+> `.interface-launch-link`), and AUDIT-AR.md's inventory table re-derived (its "all 47 routes" a11y
+> label was a TRANSCRIBED count inside a label and is now computed, which is how it went stale).
+>
+> Gate: `pnpm verify` green — 293 files / 4351 tests (13 skipped), build clean, audit PASS (2
+> accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB). Full `pnpm e2e`
+> green. New suites: `e2e/network.spec.ts` (10), `src/network/gallery.test.ts` (10),
+> `e2e/support/network-capture.spec.ts` (opt-in captures).
 
 
 > **O191 (founder-directed: the practice stage broke the minimalism law — unrelated skin-cancer

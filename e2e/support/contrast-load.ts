@@ -38,11 +38,40 @@ export async function contrastFindings(page: Page): Promise<{ out: string[]; see
       const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
       return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
     };
-    const backgroundBehind = (el: Element) => {
+    /**
+     * A gradient ground's colour stops, worst case first.
+     *
+     * O192 FOUND THE BLIND SPOT AND IT CUTS BOTH WAYS. The walk below read `backgroundColor` only.
+     * `.story-chapter-country` on the landing page paints its ground with a `linear-gradient`, so
+     * its computed `backgroundColor` is `rgba(0,0,0,0)` — transparent — and the walk climbed past
+     * a solid brown band to the body's cream, then reported the section's deliberately cream text
+     * at 1.06:1. The text is perfectly legible; the measurement was fiction.
+     *
+     * The false PASS is the worse half and the reason this is fixed rather than excepted: dark
+     * text on a dark gradient would have been measured against the light body and waved through.
+     * Text sits across the whole gradient, so the honest ground is the stop that contrasts LEAST
+     * with it — computed by the caller, which knows the foreground.
+     */
+    const gradientStops = (node: Element) => {
+      const image = getComputedStyle(node).backgroundImage;
+      if (!image || !image.includes("gradient")) return [];
+      return [...image.matchAll(/rgba?\([^)]*\)/g)]
+        .map((m) => parse(m[0]))
+        .filter((c): c is { r: number; g: number; b: number; a: number } => c !== null && c.a > 0.95);
+    };
+
+    const backgroundBehind = (el: Element, fg: { r: number; g: number; b: number }) => {
       let node: Element | null = el;
       while (node) {
         const c = parse(getComputedStyle(node).backgroundColor);
         if (c && c.a > 0.95) return c;
+        // A gradient is a painted ground even though `backgroundColor` says transparent.
+        const stops = gradientStops(node);
+        if (stops.length > 0) {
+          return stops.reduce((worst, stop) =>
+            Math.abs(lum(stop) - lum(fg)) < Math.abs(lum(worst) - lum(fg)) ? stop : worst,
+          );
+        }
         node = node.parentElement;
       }
       return { r: 255, g: 255, b: 255 };
@@ -62,8 +91,8 @@ export async function contrastFindings(page: Page): Promise<{ out: string[]; see
       const fg = parse(cs.color);
       if (!fg) continue;
 
-      const ratio = (Math.max(lum(fg), lum(backgroundBehind(el))) + 0.05)
-        / (Math.min(lum(fg), lum(backgroundBehind(el))) + 0.05);
+      const bg = backgroundBehind(el, fg);
+      const ratio = (Math.max(lum(fg), lum(bg)) + 0.05) / (Math.min(lum(fg), lum(bg)) + 0.05);
       const size = parseFloat(cs.fontSize);
       const large = size >= 24 || (size >= 18.66 && parseInt(cs.fontWeight) >= 700);
       const floor = large ? 3 : 4.5;

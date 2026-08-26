@@ -128,7 +128,8 @@ export const DARK_TOKENS_DECLARED: readonly TokenDefinition[] = [
 
 export type DarkGroundSelector = { readonly selector: string; readonly token: string };
 
-/** Declared, MEASURED 2026-08-25 — every leaf-rule selector painting a dark token as its own
+/** Declared, MEASURED 2026-08-25 and re-derived 2026-08-26 when O192's network added two
+ * (`.gp-book`, `.interface-launch-link`) — every leaf-rule selector painting a dark token as its own
  * background, pinned exactly (AR17's shape): a NEW site painting an existing dark token, or a new
  * dark token appearing anywhere, fails until this list is re-derived and read. */
 export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
@@ -142,6 +143,8 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: ".cv2-coming-tooltip", token: "cv2-ground" },
   { selector: ".cv2-learning-card", token: "cv2-ground" },
   { selector: ".demo-nav-next", token: "ground" },
+  { selector: ".gp-book", token: "ground" },
+  { selector: ".interface-launch-link", token: "ground" },
   { selector: '.iv-answer[aria-pressed="true"]', token: "ground" },
   { selector: ".join-email-cta:hover", token: "ink" },
   { selector: ".mic-button", token: "ground" },

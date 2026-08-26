@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CareFinder } from "../care-finder";
+import { InterfaceLaunch } from "../interface-launch";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/finder" },
@@ -8,5 +9,15 @@ export const metadata: Metadata = {
 };
 
 export default function FinderPage() {
-  return <CareFinder />;
+  return (
+    <>
+      <CareFinder />
+      {/*
+        O192: the way back out to `/network`. Rendered beside the finder rather than inside it,
+        because the finder is a stage machine that owns its own screen and a persistent chrome
+        element is not one of its stages — the same reason the privacy bar lives outside it.
+      */}
+      <InterfaceLaunch />
+    </>
+  );
 }

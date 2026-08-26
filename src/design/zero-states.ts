@@ -239,6 +239,13 @@ export const ZERO_STATES: readonly ZeroState[] = [
     sentence: "No vertical has been put together yet.",
     why: "Nothing assembled yet, with the body copy naming it as the product's state and doable work — pathways' sibling exemplar.",
   },
+  {
+    file: "app/network/page.tsx",
+    kind: "no-data",
+    sentence: "No GP is listed in the network right now.",
+    sentenceFile: "src/network/gallery.ts",
+    why: "O192's deck shows the WHOLE roster — `gallery.ts` refuses to filter, because quietly dropping a named doctor would be an editorial judgement about them. So an empty deck can only mean nobody is listed, never 'your question matched nobody': that second kind of zero belongs to /finder and keeps /finder's sentence. The distinctness law is what makes the difference say itself.",
+  },
 ];
 
 /** Branches whose zero arm renders nothing a reader meets — declared, so coverage can count them. */

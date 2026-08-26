@@ -4,10 +4,12 @@ import { describe, expect, it } from "vitest";
 import {
   COMPONENT_PX_TYPE_EXCEPTIONS,
   CSS_PX_TYPE_FLOOR,
+  DECLARED_FONT_STACKS,
+  TABULAR_SITES,
   cssPxTypeCount,
+  fontFamilyStacks,
   readGlobalsCss,
   selectorHasTabularNums,
-  TABULAR_SITES,
 } from "./type-scale";
 
 const ROOT = path.resolve(__dirname, "../..");
@@ -47,6 +49,42 @@ describe("AR21 — type scale from the tokens, asserted rather than remembered",
       expect(site.why.length).toBeGreaterThanOrEqual(20);
     }
     expect(TABULAR_SITES.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it("every font stack the stylesheet names is one this tree actually loads", () => {
+    // O192. Eight declarations named an undefined CSS variable — `var(--font-newsreader)` and one
+    // older `var(--font-display)` — and an undefined var in a font stack does not fail, it falls
+    // through. The next name, bare `Newsreader`, is not installed either (fontsource registers the
+    // family as "Newsreader Variable"), so those headings had been rendering in Georgia while the
+    // source said serif. `type.serif-display` is a law about WHICH FACE carries a statement, and a
+    // stack that cannot reach that face breaks it no matter what the declaration claims.
+    const declared = new Set(DECLARED_FONT_STACKS);
+    const stacks = fontFamilyStacks(css);
+    expect(stacks.length, "no font-family in the stylesheet — this census went vacuous").toBeGreaterThan(20);
+    const unknown = [...new Set(stacks)].filter((stack) => !declared.has(stack));
+    expect(unknown, "font stacks nobody declared — check each resolves before adding it").toEqual([]);
+    // The other direction: a declared stack nothing uses is a register describing the past.
+    const used = new Set(stacks);
+    expect(
+      DECLARED_FONT_STACKS.filter((stack) => !used.has(stack)),
+      "declared stacks the stylesheet no longer names — delete them",
+    ).toEqual([]);
+  });
+
+  it("the font-stack census would catch the defect that produced it", () => {
+    // Non-vacuity by fixture: the exact shape O192 found must be reported, and a valid stack
+    // must not be.
+    expect(fontFamilyStacks(".a { font-family: var(--font-newsreader), Newsreader, Georgia, serif; }")).toEqual([
+      "var(--font-newsreader), Newsreader, Georgia, serif",
+    ]);
+    expect(
+      fontFamilyStacks(".a { font-family: var(--font-newsreader), serif; }").every((s) =>
+        DECLARED_FONT_STACKS.includes(s),
+      ),
+    ).toBe(false);
+    expect(fontFamilyStacks('.a { font-family: "Inter Variable", Inter, system-ui, sans-serif; }')).toEqual([
+      DECLARED_FONT_STACKS[1]!,
+    ]);
   });
 
   /** Both predicates driven on fixtures — the probe rule at vitest scale. */

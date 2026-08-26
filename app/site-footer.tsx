@@ -5,6 +5,7 @@ import { TEAM_PAGE_PUBLIC } from "./about/team";
 
 const DOORS: ReadonlyArray<{ label: string; href: string }> = [
   { label: "Find a GP", href: "/finder" },
+  { label: "The network", href: "/network" },
   { label: "Worked examples", href: "/examples" },
   { label: "Questions", href: "/faq" },
   { label: "The approach", href: "/approach" },

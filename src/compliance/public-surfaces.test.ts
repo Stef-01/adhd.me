@@ -228,8 +228,31 @@ describe("W192 an accepted finding is data with a date on it", () => {
     expect(unaccepted(elsewhere, FIXTURE).length).toBeGreaterThan(0);
   });
 
-  it("accepts nothing today, so the sweep is passing on its own merits", () => {
-    expect(ACCEPTED_FINDINGS).toEqual([]);
+  it("accepts exactly what it declares, and each acceptance carries its argument", () => {
+    // THIS TEST USED TO READ `expect(ACCEPTED_FINDINGS).toEqual([])` — "accepts nothing today, so
+    // the sweep is passing on its own merits". That was true for as long as it was true, and it
+    // was the right pin while the list was empty; what it could not do is survive the list being
+    // non-empty for a GOOD reason without being deleted outright, which is how a ratchet turns
+    // into a speed bump.
+    //
+    // O192 was that reason: /network serves a real GP's own declared interest, and the string it
+    // trips is an OPEN FOUNDER GATE (`mental-health-on-profile`) rather than a defect the loop may
+    // fix. So the pin becomes the shape it should always have had — the exact set, named — which
+    // keeps both directions: a new acceptance cannot appear without somebody editing this line and
+    // saying what it is, and an acceptance whose gate is answered cannot be left behind, because
+    // deleting it from the register fails here until it is deleted from here too.
+    expect(ACCEPTED_FINDINGS.map((a) => `${a.path} ${a.rule} "${a.match}"`)).toEqual([
+      '/network no-condition-targeting "Mental health"',
+    ]);
+    for (const accepted of ACCEPTED_FINDINGS) {
+      // An acceptance is an argument with a date on it, per this describe block's own name.
+      expect(accepted.why.length, `${accepted.path} accepts without arguing it`).toBeGreaterThan(80);
+      expect(accepted.reviewBy).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(
+        new Date(accepted.reviewBy).getTime(),
+        `${accepted.path}'s review date is already in the past`,
+      ).toBeGreaterThan(new Date("2026-08-26").getTime());
+    }
   });
 });
 

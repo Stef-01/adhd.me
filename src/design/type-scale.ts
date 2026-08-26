@@ -53,3 +53,36 @@ export function cssPxTypeCount(css: string): number {
 export function readGlobalsCss(repoRoot: string): string {
   return readFileSync(path.join(repoRoot, "app/globals.css"), "utf8");
 }
+
+/**
+ * O192: the two font stacks this stylesheet is allowed to name, and the reason the list exists.
+ *
+ * THE DEFECT THAT EARNED IT. Eight `font-family` declarations named a CSS variable that is not
+ * defined anywhere — seven `var(--font-newsreader)` written by O192 and one `var(--font-display)`
+ * on `.compare-content h1` that had been in the tree far longer. The fonts arrive through
+ * `@import "@fontsource-variable/newsreader"`, which registers the family as **"Newsreader
+ * Variable"**; an undefined `var()` in a font stack does not fail loudly, it just drops through to
+ * the next name, and the next name — bare `Newsreader` — is not installed either. So every one of
+ * those headings had been quietly rendering in Georgia (or the sans, wherever Georgia is absent)
+ * while the source said serif. Nothing failed. It is only visible by looking at the page, and it
+ * survived a screenshot round because a serif fallback still LOOKS deliberate.
+ *
+ * `type.serif-display` is a taste law about which face carries a statement, so a stack that cannot
+ * resolve to that face breaks the law no matter what the source claims. Pinned as a closed set:
+ * a new stack must be added here deliberately, which is the moment somebody checks it resolves.
+ */
+export const DECLARED_FONT_STACKS: readonly string[] = [
+  '"Newsreader Variable", Newsreader, Georgia, serif',
+  '"Inter Variable", Inter, system-ui, sans-serif',
+  // `body`'s own stack, one name longer: `ui-sans-serif` ahead of `system-ui` for the platform UI
+  // face. Deliberately not collapsed into the line above — this is the document default and the
+  // one place the extra fallback is worth having.
+  '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif',
+];
+
+/** Every `font-family` value in the stylesheet, in source order, whitespace normalised. */
+export function fontFamilyStacks(css: string): string[] {
+  return [...css.matchAll(/font-family:\s*([^;}]+)/g)].map((m) =>
+    m[1]!.replace(/\s+/g, " ").trim(),
+  );
+}

@@ -73,6 +73,22 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     source: "copy",
     why: "The finder's welcome-stage prompt — it renders only when the interactive stage machine mounted, which is the work this route does.",
   },
+  "/network": {
+    proof: /The GPs who make[\s\u00A0]up this network\./,
+    source: "copy",
+    why: "The gallery's one stated idea, in its own words. An error shell or an empty deck cannot carry it, and the roster cards below it are proven separately by the honesty sweep reading the same page.",
+  },
+  "/network/[clinician]": {
+    // CASE-INSENSITIVE ON PURPOSE, and the reason is the bug this proof was written with. The
+    // heading is styled `text-transform: uppercase`, and `innerText` returns RENDERED text — so
+    // the page serves "WHAT DR SAXENA SAYS HE SEES OFTEN" and a case-sensitive proof could never
+    // match it. It went unnoticed because the sweep listed its dynamic visits by hand and had
+    // never actually opened this route; wiring it to DYNAMIC_ROUTE_PLAN is what exposed it. Case
+    // is a presentation choice here, so the proof stops asserting one.
+    proof: /What .* says (?:he|she|they) sees? often/i,
+    source: "fixture",
+    why: "The roster-driven heading on a GP's own page, which names the clinician being read AND agrees with the pronoun they declared. It renders only once a real roster entry resolved from the route parameter — a 404 shell or an unresolved param cannot produce it, and a hardcoded 'they' would fail the agreement half.",
+  },
   "/practices": {
     proof: /Turn unused appointment capacity into measured continuity of care/,
     source: "copy",

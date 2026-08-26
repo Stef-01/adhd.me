@@ -2735,3 +2735,113 @@ complaint has been resolved yet." (no-data); the register's weakest — privacy'
 commit (the contains-assert forces it); exactly the eight predicted baseline cells moved
 (complaints + privacy × both widths × both motions), accepted with AR26's entry after a
 three-run zero-diff protocol. The visual matrix's console cells are the capture record.
+
+## O192 — the network: two interfaces over one roster, audited in rounds (2026-08-26)
+
+Founder-directed. `/finder` asks you to describe what you need and ranks the roster against it;
+`/network` shows the same people and lets you read them. Same entries, same declared strings,
+same disclosure — query-first versus browse-first. The design work was four screenshot rounds
+against the production build at 390×844 and 1280×900, and each round is here because each round
+found something the round before had been looking straight at.
+
+**Round 1 → 2: the dialog became routes.** The first build opened a person in a `layoutId` modal.
+Three findings, one direction: the sheet was taller than a laptop viewport, so a reader scrolled
+inside a scrim with the deck greyed out behind them; the shared-element flight ran the portrait
+from a large card to a 132px thumbnail, so *choosing somebody made them smaller*; and no profile
+had a URL, which for a surface whose job is introducing people is a missing feature rather than a
+missing nicety — you could not send a friend the doctor you had just read. `/network/[clinician]`
+is the fix, statically generated per GP with its own metadata. The portrait demotion is pinned as
+a measured regression test (`e2e/network.spec.ts`: the profile portrait may never be smaller than
+the card that led to it), and fixing it honestly moved BOTH ends — the deck narrowed 1080→760px
+and the profile portrait grew 260→300px, because only widening the profile would have left the
+deck's cards too wide to read.
+
+**Round 3: the page did not know who he was.** The section heading read "What Dr Saxena says
+**they** see often" for a doctor whose roster entry declares `he/him`. Singular they is not
+ungrammatical; it is the sentence a reader notices, and what they notice is inattention on a
+surface whose entire claim is "these are people who will understand you". `subjectPronoun()` and
+`seesVerb()` derive it from the pronoun the clinician DECLARED, never from the gender field, with
+"they" as the fallback that is correct for anybody. The same round found a hierarchy inversion:
+`.gp-about` — the warmest content in the dataset, including the line about giving spare time to
+the long-suffering cause of the Parramatta Eels — rendered in `--muted`, the faintest colour on
+the page. Moved to `--ink`.
+
+**Round 4: the deck never said how many.** "Sydney GPs today" let a reader assume a directory and
+then meet two people. `honesty.claim-earned` says a count stands alone, and the honest form of a
+small network is to say it is small — so the count is spelled from `NETWORK_SIZE` ("Two Sydney
+GPs today"), which means a third GP joining rewrites the sentence instead of leaving it quietly
+wrong. Also: the heading's "make up" is held together with a NBSP so it never wraps apart, and
+the cards became flex columns with `margin-top: auto` on the last line so a short bio and a long
+one still end level.
+
+**What the compliance sweep found when the route went in**, recorded because a green gate that
+was green for the wrong reason is worse than a red one. `/network` and `/network/[clinician]`
+serve, in indexable server HTML, four strings the patient linters flag — and every one of them is
+a real GP's own declaration that `/finder` has served since O163 behind a query. Two are the open
+founder gates `prescriber-on-profile` and `mental-health-on-profile`, accepted here in the
+FOUNDER DECISION OUTSTANDING form rather than answered; the other two are proper nouns ("Beecroft
+Family & Skin Cancer Clinic") and ordinary English ("treats a substance history as a safety
+question"). O192's contribution to those gates is recorded in the gate register itself: the
+question is unchanged in kind, and the answer is now worth more, because client state behind a
+query and the served HTML of a statically-generated page are not the same audience.
+
+Captures: `qa/_runs/o192/` (deck, profile and the finder launch control, both viewports).
+
+## O192 rounds 5–6 — the round where the audits found what the eye had been excusing (2026-08-26)
+
+Rounds 1–4 were about arrangement. Round 5 ran the tree's own sweeps over the new routes for the
+first time, and every one of them found something the screenshots had been looking straight at.
+
+**The serif was never loading.** Eight `font-family` declarations named a CSS variable that does
+not exist — seven `var(--font-newsreader)` written by this unit and one `var(--font-display)` on
+`.compare-content h1` that had been in the tree far longer. An undefined `var()` in a font stack
+does not fail; it falls through, and the next name (bare `Newsreader`) is not installed either —
+the fonts arrive as **"Newsreader Variable"** via `@fontsource-variable/newsreader`. So every
+statement on these pages, and one heading on the finder's compare screen, had been rendering in
+Georgia while the source said serif. It survived four screenshot rounds because a serif fallback
+still looks deliberate. Fixed at all eight sites, and `DECLARED_FONT_STACKS` in
+`src/design/type-scale.ts` now pins the closed set of stacks the stylesheet may name, both
+directions, so the next invented stack fails at unit speed instead of being read as a design
+choice.
+
+**The accent carried three meanings on the deck** (`type.accent-live-tokens`, cap 2, caught by
+`accent-discipline.spec.ts`): the eyebrow, the card's way-in, and the arrow inside it. The eyebrow
+gave the colour up — it is a category label sitting directly above a heading that already says
+"network", and on a deck of people the word that matters is the one that opens somebody's page.
+
+**Round 4's "cards end level" fix had never run.** It was appended as a second
+`.network-card-open` rule while the original `display: block` sat further down the file, so at
+equal specificity the later declaration won and the flex column was dead CSS — visible in the
+captures as the two "Read what … says" lines still sitting 24px apart. Merged into one rule.
+
+**The statement was the narrowest text on the profile.** Beside a 300px portrait inside a 720px
+page, the sentence a doctor leads with had a 348px measure — about four words a line — while the
+bio two sections below ran the full 680px. Round 3's hierarchy inversion again, in space instead
+of colour. It now runs across the measure at `clamp(1.25rem, 2.6vw, 1.5rem)`, which is what
+`type.serif-display` asks a statement to be. Round 6 then bottom-aligned the identity block to the
+foot of the portrait: with the sentence gone from that column it held a name, a pronoun and a
+practice against a 375px photograph, and a gap at the bottom of a composition reads as unfinished
+rather than as air.
+
+**Two people, presented unequally, by accidents.** Dr Anubhav's headshot has a grey backdrop and
+Dr Anusha's is near-white, so on paper one read as a photograph and the other as a cutout floating
+loose — every portrait now carries a hairline of its own. And the deck's call to action used
+`shortName`, which the roster disambiguates for her ("Dr Anusha Saxena") and leaves bare for him
+("Dr Saxena") — correct in a result row read one at a time, and side by side it quietly makes him
+the default Saxena. Both cards use the full name. The onward "also in the network" portrait went
+from 64px to 96px for the same reason round 1 exists: a face is why somebody clicks, and a 64px
+face is an avatar.
+
+**Two gate defects found off this unit's own surfaces, fixed rather than excepted.** The contrast
+detector (`e2e/support/contrast-load.ts`) read `backgroundColor` only, so a `linear-gradient`
+ground — the landing page's `.story-chapter-country` — computed as transparent and the walk
+climbed past a solid brown band to the body's cream, reporting that section's deliberately cream
+text at 1.06:1. The false PASS is the worse half and the reason it is fixed: dark text on a dark
+gradient would have been measured against the light body and waved through. The detector now
+reads gradient colour stops and takes the worst case against the foreground; both mutation probes
+still go red on genuinely bad text. And the working-truth sweep listed its dynamic visits by hand
+rather than reading `DYNAMIC_ROUTE_PLAN`, so `/network/[clinician]` arrived with a proof no test
+could reach — which also hid that the proof itself was wrong (`innerText` returns RENDERED text,
+and the heading is `text-transform: uppercase`).
+
+Captures: `qa/_runs/o192/`, re-taken after each round at 390×844 and 1280×900.

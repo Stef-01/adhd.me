@@ -96,6 +96,12 @@ describe("AR34 the audit's inventory is derived, not transcribed", () => {
       `${STORE_READS.length} across ${STORE_MODULES.length} modules`,
     );
     pinRow("touch-floor exemptions", String(TOUCH_EXEMPTIONS.length));
-    pinRow("a11y exemptions (WCAG 2.2 AA, all 47 routes)", String(A11Y_EXEMPTIONS.length));
+    // The route count inside the LABEL was transcribed, and O192 caught it going stale: two new
+    // routes moved every derived number in this table while the label still said 47. Derived now,
+    // so the sentence describing the sweep cannot drift from the sweep.
+    pinRow(
+      `a11y exemptions (WCAG 2.2 AA, all ${Object.keys(ROUTE_PROOFS).length} routes)`,
+      String(A11Y_EXEMPTIONS.length),
+    );
   });
 });
