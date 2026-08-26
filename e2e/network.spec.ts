@@ -134,12 +134,16 @@ test("an unknown GP is a 404 rather than an empty profile", async ({ page }) => 
 test("the two interfaces launch into each other from the bottom-right corner", async ({ page }) => {
   // The founder's asymmetry: the network LAUNCHES the finder, the finder RETURNS to the network.
   await page.goto("/network");
-  const launch = page.getByRole("link", { name: "Launch the finder" });
+  // Scoped to the CORNER CONTROL, which is what this test is about. Unscoped, it matched any link
+  // with that name — and round 7's in-prose bridge to the finder made that two, which is the test
+  // failing for a reason that had nothing to do with the corner. (The bridge reads "Open the
+  // finder" now, deliberately near-identical rather than identical; the scope is the real fix.)
+  const launch = page.locator(".interface-launch").getByRole("link", { name: "Launch the finder" });
   await expect(launch).toBeVisible();
   await launch.click();
   await expect(page).toHaveURL(/\/finder$/);
 
-  const back = page.getByRole("link", { name: "Back to the network" });
+  const back = page.locator(".interface-launch").getByRole("link", { name: "Back to the network" });
   await expect(back).toBeVisible();
   await back.click();
   await expect(page).toHaveURL(/\/network$/);
@@ -147,7 +151,9 @@ test("the two interfaces launch into each other from the bottom-right corner", a
 
 test("the launch control reaches a GP's own page too, so it is never a dead end", async ({ page }) => {
   await page.goto(`/network/${NETWORK_CLINICIANS[0]!.id}`);
-  await expect(page.getByRole("link", { name: "Launch the finder" })).toBeVisible();
+  await expect(
+    page.locator(".interface-launch").getByRole("link", { name: "Launch the finder" }),
+  ).toBeVisible();
 });
 
 test("the network is a door the site's own navigation opens", async ({ page }) => {

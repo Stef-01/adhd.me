@@ -2845,3 +2845,36 @@ could reach — which also hid that the proof itself was wrong (`innerText` retu
 and the heading is `text-transform: uppercase`).
 
 Captures: `qa/_runs/o192/`, re-taken after each round at 390×844 and 1280×900.
+
+## O192 round 7 — the two things that were written but not published (2026-08-26)
+
+Both findings are the same shape: work that exists in the source, passes every check around it,
+and reaches no reader.
+
+**A copy constant nobody could see.** `NETWORK_COPY.finderBridge` — "Would rather describe what
+you are looking for and have the list ordered around it?" — was written in round 1, linted by
+`gallery.test.ts`, counted by `networkCopyStrings()`, and rendered nowhere. Kept-but-unused code
+is this tree's own named disease (O186/O187) and a copy constant is its quietest form: every test
+around it goes green while the sentence is invisible. Rendered rather than deleted, at the end of
+the purpose band, because a reader who has read everybody and is still unsure needs a next step in
+the prose and not only in a floating corner control — and stating the relationship between the two
+interfaces in a sentence is the differentiation the founder asked the two URLs to carry. The link
+reads "Open the finder", deliberately near-identical to the corner control's "Launch the finder"
+rather than identical: the e2e caught the first attempt, where matching the label exactly put two
+links with one accessible name on the same page. The spec was scoped to `.interface-launch` in the
+same change, so it tests the corner control it names instead of any link with that text.
+
+**Every GP's page was missing from the sitemap.** `app/sitemap.ts` dropped all dynamic paths — the
+right rule while `/book/[token]` was the only one, since a tokened page is reached by invitation
+and robots.ts disallows the whole prefix. `/network/[clinician]` is its opposite in every respect:
+statically generated from a build-time roster, linked from `/network`, crawlable, and precisely
+the pages whose indexing hold the founder lifted. Caught by the same filter, they were findable by
+following a link and by nothing else, which left that decision half-implemented. A dynamic census
+path now either declares an expansion into real URLs (`EXPANDED_DYNAMIC_PATHS`) or is deliberately
+absent, and the invariant that mattered is unchanged and still asserted: no path template is ever
+advertised, and every URL traces back to a census entry. The booking page's exclusion has its own
+test now, so the case the original rule existed for cannot be lost while the rule is generalised.
+
+The accent stayed inside its cap through both: the bridge link is ink with an underline, because
+`/network` already spends its two permitted meanings on the card's way-in, and putting one colour
+on "open this doctor" and "go use the other interface" would say they are the same invitation.

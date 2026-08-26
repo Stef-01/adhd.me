@@ -117,6 +117,29 @@ export default function NetworkPage() {
         <section className="network-purpose">
           <h2 className="network-purpose-heading">{NETWORK_COPY.purposeHeading}</h2>
           <p className="network-purpose-body">{NETWORK_COPY.purposeBody}</p>
+
+          {/*
+            ROUND 7. `finderBridge` was written in round 1, linted by the gallery test, counted by
+            `networkCopyStrings()` — and rendered nowhere. Kept-but-unused code is this tree's own
+            named disease (O186/O187), and a copy constant is the quietest form of it: every check
+            around it passes while no reader ever sees the sentence.
+            Rendered rather than deleted, because a reader who has read everybody and is still not
+            sure needs a next step IN THE PROSE, not only in a floating corner control — and saying
+            the relationship between the two interfaces in a sentence is the differentiation the
+            founder asked the two URLs to carry.
+          */}
+          <p className="network-bridge">
+            {NETWORK_COPY.finderBridge}{" "}
+            {/*
+              "Open", not "Launch" — and the e2e caught why. Matching the corner control's label
+              exactly put TWO links named "Launch the finder" on one page, which is an ambiguity
+              for anybody reading by accessible name rather than by position. Near-identical
+              wording keeps one vocabulary for one destination; identical wording makes two things
+              indistinguishable. Also not "Describe what you need", which the sentence in front of
+              it already says.
+            */}
+            <Link href="/finder">Open the finder</Link>
+          </p>
         </section>
       </main>
 

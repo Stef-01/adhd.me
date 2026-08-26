@@ -7140,6 +7140,43 @@ textarea:focus-visible {
   text-wrap: pretty;
 }
 
+/* The way out to the other interface, said in prose. Same size as the body above it and one tier
+   up in colour, so it reads as the paragraph's last thought rather than as a button bolted on. */
+.network-bridge {
+  margin: 18px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* INK, NOT ACCENT, and the sweep is why rather than taste alone: /network already spends its two
+   permitted accent meanings on the card's way-in (O176's cap, and round 5 already made the eyebrow
+   give the colour up for it). A third accented thing here would break the cap and, worse, would
+   put the same colour on "open this doctor" and "go use the other interface" — two different
+   invitations. An underline says link without spending the scarce colour. */
+.network-bridge a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--muted);
+  padding-bottom: 1px;
+  transition: border-color 160ms ease;
+}
+
+.network-bridge a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (hover: hover) {
+  .network-bridge a:hover { border-bottom-color: var(--ink); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-bridge a { transition: none; }
+}
+
 /* ── One GP, on their own page (O192 round 2) ──────────────────────────────────────────────────
    The round-1 modal shrank a portrait to 132px the moment a reader chose somebody. Here the
    portrait is the largest thing on the page, because a face is why they clicked, and the reading
