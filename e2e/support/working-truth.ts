@@ -29,9 +29,9 @@ export interface RouteProof {
 export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
   // ── Public, signed out. Copy proofs carry the sentence the page exists to say.
   "/": {
-    proof: /Everything from assessment to follow-up, all with one GP/,
+    proof: /ADHD care, start to finish, with one GP/,
     source: "copy",
-    why: "The landing page's one idea in its own words; an error shell or a skeleton says nothing about one GP carrying the whole pathway.",
+    why: "The landing page's one idea in its own words; an error shell or a skeleton says nothing about one GP carrying the whole pathway. Anchored on the H1 after the hero sub was trimmed of its restatement.",
   },
   "/about": {
     proof: /That page does not exist/,
