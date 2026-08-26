@@ -119,6 +119,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O192 (founder-directed: two interfaces — the speech/text pairing finder stays, and a browsable
+> NETWORK gallery of the GPs in the network gets its own URL, with a bottom-right toggle between
+> them) — claimed 2026-08-26T21:03Z by loop-0826a.** Founder brief, in their words: "have Two
+> interfaces. One is the current doctor pairing through speech text, and the other is a sort of
+> gallery of physicians that advertises the doctors that are in the network... browse their
+> profiles and slide through in a very fluid way. Make it so this network is the network finder
+> URL. and make sure navigation for everything works. including a toggle at the bottom right
+> corner that will switch it to the other interface. The vibe of this network finder is this for
+> good social impact. minded thinking." Follow-up: install impeccable, critical design audit,
+> then a plan to make it "very engaging, interesting, wholesome and the vibe that these drs will
+> be ones I will get along with and they will understand me through subtlety."
+>
+> **THE GATE LINE THIS UNIT DOES NOT CROSS, STATED BEFORE ANY CODE.** `src/directory/profile.ts`
+> holds `SHIPPED_DIRECTORY_PROFILES`, pinned empty behind **founder gate G6** (network/directory
+> public launch — Ahpra advertising review of all profile copy, plan §4/§87), and CLAUDE.md law 4
+> names "no public directory copy" absolute. This unit does NOT touch that register, does not mint
+> a `DirectoryProfile`, and does not publish a field the tree is not already publishing. It renders
+> the SAME `src/demo/roster.ts` entries `/finder` already serves publicly — same two real GPs, same
+> declared strings, same disclosed-interest notice — rearranged browse-first instead of query-first.
+> A browse arrangement of an already-public disclosure crosses no new gate; minting directory copy
+> would, and is left for the founder and their Ahpra reviewer. AR36's register governs: the loop may
+> build a gate's plumbing, never answer its question.
+>
+> Scope: `/network` (the gallery, its own URL) rendering the roster with each clinician's own
+> declarations; fluid profile browsing; a bottom-right toggle present on BOTH interfaces; header and
+> footer navigation updated so every door works; `/network` classified in W192's PUBLIC_SURFACES,
+> given an AR37 working-truth proof and an AR32 route budget (all three censuses fail until it is).
+> Compliance: no testimonials, no ratings, no "specialist", counts stand alone, clinician copy stays
+> their declaration. adhdme-taste review + qa/ capture + DESIGN-QA entry per law 5. Verify: pnpm
+> verify green plus the new route's e2e.
+
+
 > **O191 (founder-directed: the practice stage broke the minimalism law — unrelated skin-cancer
 > copy out, one idea per screen restored) — claimed 2026-08-24T12:24Z by loop-0824e. DONE @ f56c7b7.** Two founder verdicts, minutes apart, one unit. **THE CLUTTER VERDICT** ("unrelated content like GP skin test… cluttered and ugly… betrayed the minimalism principle… huge regression aesthetically"): diagnosis owned in the claim — the skin-cancer sentence was ORIGINAL walkthrough copy, but O190's compression restyled it into a tinted band stacked between the stat card, a 2×2 grid-with-sub-sentences and three CTA elements; six bands, no air. **The fix is deletion, not rearrangement**: the analogy band GONE (unrelated clinical content on an ADHD funnel, whatever its age), the loop's four sub-sentences GONE (they restated the stage lead in smaller type — the loop is now four words in one quiet bordered band), and the freed height RETURNED AS RHYTHM — the compression rounds' tightest squeezes relaxed and O190's four appended CSS rounds CONSOLIDATED into one block with the dead `.cv2-note` rules deleted (kept-but-unused code is this tree's named disease, O186/O187). One-screen pin re-ran green at both widths on the loosened rhythm. **THE SCENARIO VERDICT, folded in mid-unit at the founder's word** ("GP that wil check blood pressure before stimulants is so poor. what GP would not do that… like a GP that will allow me to bring an AI notetaker… A GP who understands the challenges of being a refugee, ETC think of what tryky matters"): the founder is right, and "takes sleep seriously" carried the same disease — a scenario built on what ANY competent GP does differentiates nobody. Both replaced with journeys that differentiate on what the roster DECLARES: (1) `notetaker-and-understanding` — ADHD is a working-memory condition and the commonest unmet ask is walking out still holding what was said; the AI notetaker is the patient's own tool, the match is Dr Anubhav Saxena's declared sense-making/unhurried/plain-explanation manner, never a tool nobody declared; (2) `childhood-in-another-country` — the founder's refugee example built to the honesty gate: an assessment leans on childhood evidence and a refugee childhood has none of the usual paper; the match is Dr Anusha Saxena's OWN declarations (culturally sensitive care, Hindi/Urdu, understands your background). **Stated plainly in the file: this journey claims cultural attunement the roster declares, never refugee-health expertise nobody has — if the founder wants that CLAIMED, it needs a clinician who declares it.** The matcher now HEARS the ask: `refugee` cue added to `culturally_attuned` (single-precise-word, the "neuroaffirming" precedent) with its corpus pin. **THE KPI PINS ALL FIRED AND WERE RE-DERIVED, NOT SILENCED**: one corpus sentence (447→448) moved six exact-baseline registers — W234 tie-quality (separated 300→301), M5 separation curve + real-roster rate (0.671→0.672), M6 extractor report (559→560 gold facets, informed 297→298), M8 declaration-state census (valueDiffers 332→333, ambiguous 307→308) — each re-pinned with the cause named at the constant; M2's measured-both-ways evidence re-measured (the sleep journey was one of its two narrow-threshold examples; now one of six, argument unchanged, comment says so) and clinicians.ts's ELIGIBILITY doc updated to match. Archetype tests: both new journeys rank their intended first match through the REAL ranker on first run; may-be-no pin moved to the refugee journey's "whether this is adhd at all". DESIGN-QA entry appended; captures regenerated by the pin. Gate: composite on a settled tree, stated: `pnpm verify` green on the finished tree (276 files / 4263 passed / 13 skipped, build clean, audit PASS — 2 accepted, 0 unaccepted); affected e2e in two batches on the same app tree — 48 (finder-flow, matching-verification, mobile-fit, guidelines-sweep) + 28 (join-page, public-nav, accent, landing, public-sweep, told, profile-sweep, setup, touch-floor at population 156, semantics) — plus the one-screen stage-heights pin, all green; the only edits between batches were test-file prose constants, app-disjoint
 > Original claim text follows. The
