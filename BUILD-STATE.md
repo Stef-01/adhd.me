@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 369c30a (2026-08-25T14:44Z) — pnpm verify 292 files / 4339 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (48 routes, heaviest /finder 653 KB); AR18 done (dark-ground census + contrast, register bookkeeping closed); no rendered file touched, no baseline movement`
+`gate: green @ d846ae9 (2026-08-26T23:10Z) — pnpm verify 293 files / 4351 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, six audit rounds)`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -150,7 +150,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > their declaration. adhdme-taste review + qa/ capture + DESIGN-QA entry per law 5. Verify: pnpm
 > verify green plus the new route's e2e.
 >
-> **DONE 2026-08-26T22:5xZ.** Built as claimed, then refined over six audit rounds at the founder's
+> **DONE 2026-08-26T23:10Z @ d846ae9.** Built as claimed, then refined over six audit rounds at the founder's
 > instruction ("keep building and refining the network interface until it is perfect, do thorough
 > edge testing with playwright audits and aesthetic screenshot based analyses for several rounds").
 >
