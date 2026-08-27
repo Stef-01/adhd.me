@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 07edbef (2026-08-27T21:40Z) — pnpm verify 298 files / 4398 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 16.6m). O211 done (vacuity debt paid down in src/compliance — chosen before the larger src/matching on O196's own stakes criterion; 123 → 112, eight guarded and three declared, and the census caught the pass being ONE SHORT, which led to a nested loop that could go empty independently. A stale clone was reconciled first: the container had reset to d136355 while origin/main carried O209/O210 — nothing lost, wipe detection clean). O210 done (three plain phrasings reached nothing; two cues shipped, the most natural REFUSED because it degenerated to [take time]). O209 done (the vacuity census did not recognise its OWN guard). O208 done (every public surface has a decided stance on the two interfaces). O207 done (three prose pages had zero footer elements). O206 done (/practices stacked two site bars). O205/O204/O203 done (the privacy notice, the FAQ and /examples each described a one-interface product). O202 done (founder-directed: the network deck became a gallery). O201/O200/O199/O198/O197/O196/O195/O194 done. Seventeenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ 4e958ee (2026-08-27T23:05Z) — pnpm verify 298 files / 4398 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (342 passed, 2 skipped, 19.2m, exit code 0 read from the command itself, not from a pipe). **O213 done — `main` WAS RED AND FOUR GATE LINES SAID OTHERWISE, and the mechanism is a gate defect: `pnpm e2e | tail -N` returns TAIL's exit status, so a failing run reports 0. Proven by arithmetic — the suite is 344 tests and O211's gate line reports 342. Rule for every future firing: never pipe the gate through tail; redirect to a file and capture $? on the command.** Three assertions broke when the copy under them changed (O202's restructured denial vs a case-sensitive `None`; O201's correctly-relabelled heading vs a proof pinning the deleted one; O204's FAQ rewrite vs a proof pinning a removed sentence). Found because O212 was test-only and its e2e had no business failing. Stale-build ruled out: playwright rebuilds every run. Assertions moved, copy untouched, no mechanism added (O84 bar wants a second instance). O212 done (vacuity debt in src/matching 112 → 92; sixteen guarded, four counted, three declared — one declaration PROVED by measurement, matchEvidence returning 0 for a real clinician; the census caught the hand pass being ONE SHORT for the second firing running). O211/O210/O209/O208/O207/O206 done. O205/O204/O203/O202/O201/O200/O199/O198/O197/O196/O195/O194 done. Eighteenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -165,6 +165,82 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > **VERIFICATION.** `pnpm verify` plus a full `pnpm e2e` that must come back with zero failures — the
 > point of the unit is that the gate line stops lying, so a partial run does not close it.
 
+>
+> **DONE 2026-08-27T23:05Z — `main` was red and is green again. Three assertions, three units, one shape.** Gate:
+> `pnpm verify` green (exit 0; 298 files / 4398 tests, 13 skipped; build; audit PASS; perf PASS) and
+> **full `pnpm e2e` green with zero failures (342 passed, 2 skipped, 19.2m)**, which is the whole point of the unit — a
+> partial run could not close it.
+>
+> **HOW IT WAS FOUND MATTERS MORE THAN WHAT IT WAS.** Nobody went looking. O212 is test-only — nine
+> `*.test.ts` files and `src/quality/non-vacuous.ts`, which no `app/` or `src/` module imports — so
+> its e2e run had no business failing, and it came back **2 failed / 340 passed / 2 skipped**. Had
+> O212 been a UI unit, the two failures would have looked like its own and been "fixed" by changing
+> the wrong thing.
+>
+> **THE THREE, EACH TRACED TO THE UNIT THAT BROKE IT, by reading those commits rather than inferring:**
+>
+>   * `e2e/network.spec.ts:67` expected `"None of it is our description of them"`. **O202** (4b0622e)
+>     restructured `declarationNote` so the denial follows an em-dash mid-sentence — `"— none of it
+>     is our description of them."` `toContainText` matches a string case-sensitively, so a capital
+>     `N` could never match. O202 edited the copy and this spec in the SAME commit and updated one.
+>   * `/network/[clinician]`'s proof pinned `/What .* says (?:he|she|they) sees? often/i`. **O201**
+>     (038653e) is titled "the profile said a doctor's degrees were what she sees often" — it fixed
+>     exactly that by relabelling the heading "Credentials and experience" and deleting the `seesVerb`
+>     helper that built the old string. The rename was right; the proof pinning the deleted heading
+>     was left behind.
+>   * `/faq`'s proof pinned `/You describe what you are looking for in your own words/`. Present at
+>     13c8322, 038653e and 4b0622e; **absent at 2cb39f2** — removed when the FAQ was rewritten to
+>     describe two interfaces (O204).
+>
+> **THE STALE-BUILD EXCUSE WAS CHECKED AND RULED OUT** — `playwright.config.ts` sets
+> `webServer.command` to `next build && next start` with `reuseExistingServer: false`, so every run
+> builds fresh. **AND THEN THE REAL MECHANISM TURNED UP, WHICH IS WORSE AND IS THE THING TO FIX.**
+> These three never passed. The failures were hidden by HOW THE GATE WAS READ:
+>
+>   * `pnpm e2e 2>&1 | tail -N` returns **tail's** exit status, not Playwright's. A failing run
+>     reports `0`. Verified directly: `(exit 1) | tail -3; echo $?` prints `0`.
+>   * A short tail can also cut the failure list out of the summary entirely.
+>   * **The arithmetic proves it happened.** The suite is 344 tests. This firing's confirming run:
+>     342 passed + 2 skipped = 344. This firing's FIRST run: 340 passed + 2 failed + 2 skipped = 344.
+>     O211's gate line reports "340 passed, 2 skipped" — **342, two short**, and those two are
+>     exactly the two that fail. O211's run had these failures and the summary it read did not
+>     carry them.
+>   * **This firing hit the same trap on its own first run**, which reported "exit code 0" over 2
+>     failures. It was caught only because a test-only unit failing e2e was implausible enough to
+>     look at twice. That is luck, not method.
+>
+> **THE PROCEDURAL RULE THIS BUYS, stated so the next firing inherits it: never pipe the gate
+> through `tail`. Redirect to a file, capture `$?` on the command itself, and read the exit code —
+> not the prettiest fifteen lines.** Every run in this firing after the first did exactly that, which
+> is why `E2E EXIT CODE: 0` appears above rather than a number of passing tests. **Four consecutive
+> gate lines asserted a green e2e over a red one**, and the gate line is machine-parsed by
+> `src/quality/gate-state.ts` — it is the tree's own claim about itself, so a reporting hole that
+> makes it lie is a gate defect, not a style note.
+>
+> **THE FIX MOVED THE ASSERTIONS, NEVER THE COPY.** The copy is correct in all three cases. Each
+> replacement keeps the property the original existed for: `/faq` pins the first answer's opening
+> definition of itself ("Two ways to find a GP"), and `/network/[clinician]` pins a heading built
+> from the clinician's OWN declared pronoun ("In his words"), so it still renders only once a roster
+> entry resolves from the route parameter. The half of that proof which named the doctor moves to
+> `network.spec.ts`, which already asserts the h1 carries their name. The case-insensitivity comment
+> was refreshed too — `.gp-label` is still `text-transform: uppercase`, so the reason holds and only
+> its example was stale.
+>
+> **NO MECHANISM WAS ADDED, ON PURPOSE.** The shape is nameable — *a unit changed patient-visible
+> copy and did not update the check pinning that copy*, and two of the three checks live in
+> `e2e/support/working-truth.ts`, a file no copy-changing unit thinks to open. Whether that deserves
+> a mechanism is a real question and is NOT answered here: this tree's own O84 bar wants a second
+> instance, and this is the first time the failure mode has been named. Recorded for whoever meets
+> it again.
+>
+> **ONE PROCESS DEVIATION, DISCLOSED.** O212's work commit was already made locally when the red was
+> found, so it rode along with O213's claim-push instead of preceding it. The claim still went to
+> `main` before any O213 work was written. The O213 fix was then pushed as soon as `pnpm verify` and
+> the two repaired specs were green rather than held for the full run, because `main` was carrying
+> the red in the meantime and the fix strictly improved it; the full green run above is the
+> confirmation, and it came back clean.
+
+
 > **O212 (paying down the vacuity debt: `src/matching`, 20 sites) — claimed 2026-08-27T22:05Z by
 > loop-0827a.** Gate read before claiming: green @ 07edbef.
 >
@@ -201,6 +277,69 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > number paid, in the same commit, per the ratchet's both-directions rule. The census failing at
 > "the remainder fell to N" is the check that the pin was lowered honestly, and O211's lesson is
 > that being ONE SHORT is the normal outcome of a hand pass — the census is trusted over my count.
+
+>
+> **DONE 2026-08-27T23:05Z — `src/matching`'s vacuity debt is paid: 112 → 92, twenty sites — AND THE GATE RUN
+> THAT SHOULD HAVE BEEN A FORMALITY FOUND `main` RED (see O213 below, which is the more important
+> half of this firing).** Gate: `pnpm verify` green (298 files / 4398 tests, 13 skipped; build; audit
+> PASS 2 accepted / 0 unaccepted; perf PASS 51 routes) and full `pnpm e2e` green (342 passed, 2 skipped, 19.2m) — the e2e
+> green only AFTER O213 fixed three assertions this unit did not break.
+>
+> **THE TREATMENT WAS DECIDED BY MEASUREMENT, NOT BY A BLANKET WRAP — the only thing that makes this
+> a payment rather than a lie.** Every register was sized before anything was guarded, because a
+> floor on a collection that is legitimately empty asserts something false, which is O196's own
+> warning. Measured: `clinicians` 2, `REACH_CORPUS` 563, `REFUSED_CUES` 19,
+> `KNOWN_FALSE_POSITIVES` 6, `ALL_MATCH_REASONS` 6, `clarifiers("help", roster)` 3. The twenty split:
+>
+>   * **Sixteen guarded with `eachOf`** — the roster loops in `needs` ×3, `provenance` ×3,
+>     `properties` and `ranking-profile`; the register loops in `corpus`, `explain`, `known-fps` ×2
+>     and `refused-cues` ×2; and `clarifiers("help", clinicians)` in `clarify`, floored because a
+>     full roster that earns NO clarifying question is the finder going silent — a regression, not a
+>     state. The neighbouring test asserting `clarifiers()` IS empty for a one-clinician roster is
+>     untouched; that emptiness is the designed answer to a different input.
+>   * **Four counted with `tally()`, three of them inside a loop `eachOf` already guards** — O211's
+>     lesson applied deliberately: a nested loop can go empty independently of the outer one guarding
+>     it. `provenance`'s declaration lines, `refused-cues`'s optional `leavesStanding`, and `needs`'s
+>     closed-vocabulary evidence all run inside a guarded roster loop and can still read nothing.
+>   * **Three declared in `LEGITIMATELY_EMPTY`, and ONE WAS PROVED RATHER THAN ARGUED.**
+>     `matchEvidence(clinician, "titration and a longer first appointment")` returns **2 needs for
+>     the first clinician and 0 for the second**. That zero is the matcher scoring only what a
+>     clinician declared — the exact property the test asserts — so `eachOf` there would have failed
+>     the suite on correct behaviour. The other two: `acceptedFalsePositives()`, whose emptiness is
+>     the desired end state (every known false positive fixed rather than accepted), and `edge`'s
+>     junk-query evidence, where a floor would assert that gibberish and pasted script tags DO reach
+>     facets.
+>
+> **ONE SHORT AGAIN, AND THE CENSUS FOUND IT AGAIN.** The hand pass measured 92; the census read 93.
+> Same shape as O211's miss: the edit pattern `for (const reason of ALL_MATCH_REASONS)` matched the
+> FIRST of two identical loops in `explain.test.ts`, and that first one was a test the census never
+> flagged (it carries an assertion outside its loop). A guard landed where none was needed and the
+> flagged site kept its debt. **Two firings running, a hand pass has been exactly one short and the
+> ratchet is what noticed** — the pin failing at "the remainder fell to N" is not a formality. The
+> stray guard on the already-covered test is KEPT and disclosed rather than reverted: an explicit
+> `eachOf` beats relying on an assertion happening to sit at the right indent.
+>
+> **THE NEW FLOORS WERE PROVED ABLE TO FAIL.** A guard nobody has seen fail is a guard nobody has
+> tested. The `needs` closed-vocabulary tally was re-run with its query replaced by gibberish and
+> failed with "the whole roster returned no evidence — no label was read: expected 0 to be greater
+> than 0"; the file was then restored. Non-vacuity applied to the non-vacuity work.
+>
+> **WHAT REMAINS: 92, and the shape has changed.** `src/matching` was the largest share and is now
+> six sites, all six declared. The new head is `src/design` 11, `src/demo` 10, `src/platform` 8,
+> `src/quality` 8, then `src/collateral`/`src/directory`/`src/domain`/`src/onboarding`/
+> `src/outcomes`/`src/privacy`/`src/tenancy` at five apiece. Ordinary work, a directory at a time.
+>
+> **A SCANNER LIMITATION RECORDED, NOT FIXED HERE.** The census keys a site by `file :: title`, and
+> its title regex expects a quote straight after `it(`. An `it.each(QUERIES)("…")` block therefore
+> keys as `(untitled)` — `needs.test.ts` had one, now guarded. Harmless while at most one such block
+> per file is flagged; it would silently collide if two ever were. Left for whoever pays down the
+> next directory.
+>
+> **SECOND CONSECUTIVE FIRING TO OPEN ON A RESET CONTAINER.** Local clone at `d136355`, `origin/main`
+> at `2cb39f2`, behind by 9. Fast-forwarded, wipe detection clean (O211's DONE row present on
+> `main`), nothing lost. The plan owner should know the working copy is not durable between firings;
+> the opening fetch is the only thing catching it.
+
 
 > **O211 (paying down the vacuity debt: `src/compliance`, 11 sites) — claimed 2026-08-27T21:00Z by
 > loop-0827a.** Gate read before claiming: green @ f06d99b.
