@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 95dc780 (2026-08-27T04:05Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O193 done (the compare screen verified after O192's font correction; the record corrected — an undefined var() invalidates the declaration, it does not fall through)`
+`gate: green @ b84e119 (2026-08-27T05:20Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -146,6 +146,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > No feature work, no refactor: this unit changes nothing unless the gate says something is broken.
 >
 > Verify: the gate itself is the verification. The count of what ran is recorded, not summarised.
+>
+> **DONE 2026-08-27T05:20Z. THE GATE WAS RED, AND THE RED TEST WAS A COIN TOSS.**
+>
+> `pnpm gate` on `main` at e366c0a: verify FAILED — `src/verticals/scaling.test.ts` > "stays linear
+> in members rather than quadratic", measuring **59.9×** against its 40× threshold. The e2e half
+> never ran, because `gate` is `verify && e2e`.
+>
+> **DIAGNOSED RATHER THAN RE-RUN.** Five runs in isolation: 5/5 green. It fails only under
+> full-suite load, and the mechanism was printed in its own failure message — `small=0.55ms`. A
+> sub-millisecond denominator on a shared, loaded container is not a measurement: one scheduler
+> slice landing on the small case doubles the ratio, and the assertion then says nothing about the
+> code. The W252 comment had already half-seen this ("timing at this scale is dominated by noise")
+> and answered it with a wide threshold, which does not help when the NOISE IS IN THE DENOMINATOR.
+>
+> **THE CLAIM WAS NEVER WRONG; THE INSTRUMENT WAS.** Tenfold members should cost about tenfold, not
+> a hundredfold — unchanged, threshold untouched, nothing weakened to make it pass. What changed is
+> how it is measured: 200 iterations per sample instead of 20, so the small case clears the noise
+> floor rather than sitting in it, and BEST OF 5, because an interrupted run can only ever be
+> slower, so the fastest sample is the honest estimate of the code's cost rather than the
+> container's. **And a steadier test is worth nothing if it can no longer fail**, so the unit adds
+> the probe that proves it still discriminates: a deliberately quadratic workload, timed through the
+> identical harness at identical sizes, asserted to land PAST the same 40× line the real report
+> clears. Best-of-N could in principle have smoothed away the very difference the threshold exists
+> to catch; now that cannot happen unnoticed.
+>
+> **WHAT THIS COST, STATED PLAINLY.** Debt 11 has recorded since 2026-08-21 that CI proves nothing
+> and the local gate is the only real one. Nobody had run that gate on the resulting tree. So a test
+> that fails at random sat on `main` for some part of 231 commits, and the lesson it teaches a
+> future firing is "re-run it" — which is exactly how a real regression gets waved through. The
+> outage is a founder item (account-level Actions); reading the gate is not, and this unit is the
+> first time it was read on `main` rather than on a branch.
+>
+> Gate, re-run end to end on the fix: `pnpm gate` **EXIT 0** — verify green (293 files / 4357 tests,
+> 13 skipped; build clean; audit PASS 2 accepted, 0 unaccepted; perf PASS 50 routes, heaviest
+> /finder 655 KB) and the FULL e2e suite green (326 passed, 2 skipped, 16.1m). Plus 3 isolated and 2
+> full-unit-suite runs of the changed file under load before the gate was trusted. No app code
+> touched: this unit changes one test's measurement method and adds one probe.
 
 > **O193 (the compare screen, verified after O192's font correction — the one changed site nobody
 > looked at) — claimed 2026-08-27T03:50Z by loop-0827a.** UI-refinement lane (plan §"UI refinement
