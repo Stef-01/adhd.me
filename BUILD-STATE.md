@@ -161,6 +161,54 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > Verify: `pnpm gate` end to end on the tree the push produces; the census proven non-vacuous by
 > planting an ungated rule and watching it fail; a qa/ capture with a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T10:25Z, AND ALL 37 WERE FIXED RATHER THAN A REMAINDER PINNED.**
+>
+> **WHY NO RATCHET HERE, WHEN O196 PINNED 133.** That unit's 146 vacuous assertions each needed a
+> judgement about whether emptiness was legitimate, which is not one unit's work. These 37 were
+> mechanical and fully classified BEFORE the first edit, so a pin above zero would only have invited
+> somebody to satisfy the census by editing a number. `HOVER_EXCEPTIONS` ships empty and is declared
+> in `LEGITIMATELY_EMPTY` for the reason that register exists: a check that needs a violation to
+> exist in order to be non-vacuous is the wrong check.
+>
+> **THE 14 PAIRED RULES WERE SPLIT, NOT WRAPPED, AND THAT DISTINCTION IS THE UNIT'S REAL CONTENT.**
+> Wrapping a `:hover, :focus-visible` pair in a hover gate deletes the focus style on touch — a
+> regression worse than the unenforced law it fixes. The focus half stays ungated; the hover half
+> moves inside. Every rule kept its declarations, and each was wrapped IN PLACE, because a media
+> query adds no specificity and moving rules to the end of the sheet would have changed the cascade
+> silently. Verified: 0 of the 37 sat inside another `@media`, so no nesting was introduced.
+>
+> **AR17'S RAW-HEX RATCHET ROSE 87 → 91 WITH NOT ONE NEW RAW HEX AUTHORED**, and it is recorded that
+> way at the constant rather than as a bare number. A split copies the declarations, so four rules
+> that already carried a hex now carry it twice. MEASURED rather than assumed: the multiset
+> difference between the sheet before and after this unit is exactly `#ffffff`, `#fff`, `#6f1e31`,
+> `#000` and nothing else. This is the one way that census can rise while the amount of untokenised
+> colour in the tree is unchanged, and a future reader should not read it as four new hexes.
+>
+> **THE ENFORCER IS NOW REGISTERED, WHICH IS THE HALF THAT STOPS THIS RECURRING.** AR1's register
+> listed three enforcers against `interaction.hover-focus` and all three enforced the FOCUS clause;
+> the hover clause was reported as covered and read by nothing. `src/design/hover-gate.test.ts` is
+> named there now, deliberately as a SOURCE census rather than a route sweep: a hover state only
+> exists under a cursor, so no screenshot, no axe pass and no tab-walk can see one — reading the
+> stylesheet is the only instrument that covers every rule rather than the ones a walk lands on.
+>
+> **THE CLAIM'S HONESTY HELD: NO VISIBLE DEFECT IS CLAIMED, BECAUSE NONE WAS REPRODUCED.** The
+> capture is the pair that shows what actually changed — `(hover: hover)` true on a pointer device
+> with the hover style applying as it always did, false on an emulated phone with the same rule no
+> longer applying at all. At rest nothing changed, which is the point: this unit changes WHEN a hover
+> style applies, not what it looks like.
+>
+> One thing the transform surfaced and did not touch, noted for whoever wants it: `.quiet-link` and
+> `.text-action` set `color: var(--ink)` at rest AND on hover in the same rule — a hover that does
+> nothing for those two selectors, while the `.match-count`/`.icon-button` halves of the same list
+> are real. The split preserved the behaviour exactly rather than tidying it; deleting a dead hover
+> is a different unit's call.
+>
+> Gate: `pnpm verify` green (296 files / 4378 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 17.2m**. Census proven non-vacuous against the real tree by planting `.o199-probe:hover` and
+> watching it fail, then removing it. Fifth consecutive firing to read the whole gate on the tree it
+> pushes.
 
 > **O198 (the network now argues its purpose twice — one idea per screen, restored) — claimed
 > 2026-08-27T08:15Z by loop-0827a.** UI-refinement lane (plan §"UI refinement & motion,

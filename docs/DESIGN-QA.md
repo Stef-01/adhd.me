@@ -3100,3 +3100,51 @@ and O192 round 8 already ruled on where the compact pill may sit.
 Captures: `qa/_runs/o198/{network,mission}-{390,1280}.png` — the network shots taken WITH the first
 card hovered, so the state that was wrong is the state on the record. They also replace the O197
 captures, which were shot before the footer door landed and so never showed what shipped.
+
+## O199 — the hover clause nobody was keeping (2026-08-27)
+
+**A rule the register reported as covered, that no check had ever read.** `adhdme-taste`
+`interaction.hover-focus` says hover styles are gated behind `@media (hover: hover)`. The AR1
+register named three enforcers against it — the two keyboard-focus tab-walks and AR23's focus-ring
+census — and every one of them enforces the FOCUS half of that sentence. **37 of the stylesheet's 53
+`:hover` rules broke the hover half.**
+
+The question came from O198, which found its defect by luck: a hover underline running 110px past
+its own text, latent since O192 and invisible to nine screenshot rounds, because a hover state only
+exists under a cursor and every capture in this tree is taken without one. Luck is not a control.
+
+**Measured before building, and the first two measurements were wrong.** A crude scan said 42 of
+54 — one of the 42 was a sentence of PROSE inside a comment that quoted a deleted selector, and four
+more were `prefers-reduced-motion` blocks, which are legitimately outside a hover gate because they
+override an already-gated rule. Masking comments and classifying the overrides gives the real
+figures: **53 rules, 12 gated, 4 reduced-motion overrides, 37 ungated.**
+
+**What this unit does not claim.** The obvious harm is sticky hover on a phone, and it was probed
+rather than asserted. `(hover: hover)` is indeed false under device emulation, so ungated rules do
+apply there — but after tapping a card and navigating back, nothing matched `:hover`. The first
+probe reported a stuck style and that was the instrument, not the product: the tap navigated, so the
+element it re-read was null. Emulated Chromium is not iOS Safari and this does not clear the rule;
+it does mean the record says **a law nobody was keeping**, not a bug anybody has seen.
+
+**The trap that makes a mechanical fix worse than the violation.** 14 of the 37 paired `:hover` with
+`:focus-visible` (or `:focus-within`) in one selector list. Wrapping those whole would have deleted
+the FOCUS style on touch devices — a real regression, and a worse one than the unenforced law it
+fixes. They were **split**: the focus half stays ungated, the hover half moves inside the gate. Every
+rule kept the declarations it had; nothing was restyled, and nothing moved position — a media query
+adds no specificity, so wrapping in place preserves the cascade exactly.
+
+**All 37 fixed rather than a remainder pinned**, unlike O196's 146 vacuous assertions: these were
+mechanical and fully classified before the first edit, so a ratchet above zero would only have
+invited somebody to satisfy the census by editing a number. `HOVER_EXCEPTIONS` ships empty and is
+declared in `LEGITIMATELY_EMPTY` for exactly that reason — a check that needs a violation to exist
+in order to be non-vacuous is the wrong check.
+
+**One ratchet rose, and it is worth reading carefully: AR17's raw-hex census, 87 → 91, with not one
+new raw hex authored.** Four of the split rules already carried a hex in their declarations, and a
+split necessarily copies the declarations, so each appears twice where it appeared once. Verified
+rather than assumed — the multiset difference between the sheet before and after this unit is
+exactly `#ffffff`, `#fff`, `#6f1e31`, `#000` and nothing else.
+
+Captures: `qa/_runs/o199/` — the same control on a pointer device and on an emulated touch device.
+At rest nothing changed, which is the point: this unit changes *when* a hover style applies, not
+what it looks like.

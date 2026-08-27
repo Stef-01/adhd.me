@@ -61,7 +61,17 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
    heading/pull and prose type). Same precedent as .aoc-band and .story-chapter-tint: Country and
    band colours that deliberately are not palette tokens, so they live as hex in the rule, not
    as `--token:` definitions. Re-derived in the commit that earns it, per the ratchet's law. */
-export const CSS_RAW_HEX_SITES = 87;
+/* 87 -> 91 (O199): FOUR MORE SITES AND NOT ONE NEW RAW HEX. The hover-gate unit split 14 selector
+   lists that paired `:hover` with `:focus-visible` — wrapping such a pair whole would delete the
+   focus style on touch devices, so the focus half stays ungated and the hover half moves inside
+   `@media (hover: hover)`. Four of those rules already carried a raw hex in their declarations
+   (`#ffffff`, `#fff`, `#6f1e31`, `#000`), and a split necessarily copies the declarations, so each
+   appears twice where it appeared once. Verified as exactly that rather than assumed: the multiset
+   difference between the sheet before and after this unit is those four values and nothing else.
+   The ratchet measures SITES, and this is the one way the number can rise while the amount of
+   untokenised colour in the tree stays identical — recorded here so a future reader does not read
+   it as four new hexes somebody authored. Re-derived in the commit that earns it, per the law. */
+export const CSS_RAW_HEX_SITES = 91;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the

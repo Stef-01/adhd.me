@@ -134,6 +134,11 @@ export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
     why: "Iterates RECORD_CLASSES.filter(x => x.handling === 'derived'). A privacy register in which no class is derived — every one erased at its source — is a stricter register, not a broken one, and the day that happens this check correctly has nothing to say. The claim is about what a derived class must explain, not that any must exist.",
   },
   {
+    file: "src/design/hover-gate.test.ts",
+    test: "declares no exception for a selector the sheet no longer carries",
+    why: "Iterates HOVER_EXCEPTIONS, which O199 left EMPTY on purpose: all 37 ungated hover rules were fixed rather than pinned as a remainder, because unlike this module's own 146 vacuous assertions they were mechanical and fully classified before the first edit. Empty is the desired end state, and a floor here would mean the census could only pass while at least one rule was still excepted — a check that requires a violation to exist in order to be non-vacuous. The register is kept so a future genuine exception has somewhere to be ARGUED, and the sibling assertion that the count of ungated rules is zero is the one carrying the real claim.",
+  },
+  {
     file: "src/audit/store.test.ts",
     test: "holds no visit under a practice id no console mints",
     why: "Iterates getAudit().visits on a store the test does not seed. It is an anti-regression pin whose subject is a SHAPE — any id outside the console's `prac-${n}` minting — and an empty audit store trivially holds no such id. Recorded here rather than floored because seeding the store to satisfy the counter would test the seed rather than the defect, and W26 makes minting a privileged path this test must not exercise.",

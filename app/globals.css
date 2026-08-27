@@ -254,9 +254,10 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
-.demo-nav-home:hover,
-.demo-nav-home:focus-visible {
-  color: var(--accent);
+.demo-nav-home:focus-visible { color: var(--accent); }
+
+@media (hover: hover) {
+  .demo-nav-home:hover { color: var(--accent); }
 }
 
 .demo-nav-heading {
@@ -293,9 +294,10 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
-.demo-nav-stops > a:hover,
-.demo-nav-stops > a.is-active {
-  background: var(--stone);
+.demo-nav-stops > a.is-active { background: var(--stone); }
+
+@media (hover: hover) {
+  .demo-nav-stops > a:hover { background: var(--stone); }
 }
 
 .demo-nav-stops > a.is-active {
@@ -386,14 +388,10 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
-.quiet-link,
-.text-action,
+.quiet-link, .text-action { color: var(--ink); }
 
-.quiet-link:hover,
-.text-action:hover,
-.match-count:hover,
-.icon-button:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .quiet-link:hover, .text-action:hover, .match-count:hover, .icon-button:hover { color: var(--ink); }
 }
 
 .icon-button {
@@ -489,9 +487,11 @@ textarea:focus-visible {
   transition: transform 180ms ease, background 180ms ease;
 }
 
-.mic-button:hover {
-  transform: translateY(-2px);
-  background: #282923;
+@media (hover: hover) {
+  .mic-button:hover {
+    transform: translateY(-2px);
+    background: #282923;
+  }
 }
 
 .mic-button:active {
@@ -609,9 +609,11 @@ textarea:focus-visible {
   transition: transform 150ms ease, background 150ms ease;
 }
 
-.primary-button:hover:not(:disabled) {
-  background: #2b2c26;
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .primary-button:hover:not(:disabled) {
+    background: #2b2c26;
+    transform: translateY(-1px);
+  }
 }
 
 .primary-button:active:not(:disabled) {
@@ -1120,13 +1122,6 @@ textarea:focus-visible {
 }
 
 
-.match-portrait:hover .portrait-nav,
-
-
-
-
-
-
 .clinician-meta {
   /* O150: `pretty` stops the orphan. At the 62ch cap this line broke as "… Beecroft &" /
      "Double Bay", leaving two words alone under a full line — the widow the Vercel guidelines
@@ -1139,6 +1134,22 @@ textarea:focus-visible {
   color: var(--muted);
   font-size: 0.875rem;
   line-height: 1.45;
+}
+
+@media (hover: hover) {
+  .match-portrait:hover .portrait-nav {
+    /* O150: `pretty` stops the orphan. At the 62ch cap this line broke as "… Beecroft &" /
+       "Double Bay", leaving two words alone under a full line — the widow the Vercel guidelines
+       name text-pretty for. */
+    text-wrap: pretty;
+    margin: 4px 0 0;
+    /* O129: ~103 characters per line before this — the longest line on the screen was also the
+       smallest type on it, which is the worst pairing available. */
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
 }
 
 .match-line {
@@ -1481,10 +1492,16 @@ textarea:focus-visible {
   cursor: pointer;
 }
 
-.time-list button:hover,
 .time-list button.selected {
   border-color: var(--accent);
   background: var(--accent-soft);
+}
+
+@media (hover: hover) {
+  .time-list button:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
 }
 
 .confirmed-screen > div {
@@ -2270,7 +2287,9 @@ textarea:focus-visible {
   color: var(--on-ground);
   box-shadow: 0 10px 24px rgb(138 90 22 / 22%);
 }
-.patient-v2 .voice-screen .mic-button:hover { background: #744910; }
+@media (hover: hover) {
+  .patient-v2 .voice-screen .mic-button:hover { background: #744910; }
+}
 
 .patient-v2 .voice-screen .mic-button span {
   font-size: 0.8125rem;
@@ -2321,7 +2340,9 @@ textarea:focus-visible {
   cursor: pointer;
   transition: background 160ms ease, transform 160ms ease;
 }
-.patient-v2 .voice-actions .dual-input-action:hover { background: #744910; }
+@media (hover: hover) {
+  .patient-v2 .voice-actions .dual-input-action:hover { background: #744910; }
+}
 .patient-v2 .voice-actions .dual-input-action:active { transform: scale(0.93); }
 
 /* The written option, layered below the microphone. Same aesthetic as the /type screen's box,
@@ -2367,7 +2388,9 @@ textarea:focus-visible {
 /* The written option's submit joins the amber system, so talk / write / find read as one panel.
    Disabled stays the default grey until there is something to search on. */
 .patient-v2 .voice-actions .voice-type .primary-button { background: var(--accent); color: var(--on-ground); }
-.patient-v2 .voice-actions .voice-type .primary-button:hover:not(:disabled) { background: #744910; }
+@media (hover: hover) {
+  .patient-v2 .voice-actions .voice-type .primary-button:hover:not(:disabled) { background: #744910; }
+}
 .patient-v2 .voice-actions .scenario-toggle { margin-top: 14px; }
 
 .patient-v2 .micro-footer {
@@ -2966,9 +2989,11 @@ textarea:focus-visible {
   transition: border-color 160ms ease, background-color 160ms ease;
 }
 
-.cv2-focus-card:hover {
-  border-color: var(--accent-tint);
-  background: var(--accent-soft);
+@media (hover: hover) {
+  .cv2-focus-card:hover {
+    border-color: var(--accent-tint);
+    background: var(--accent-soft);
+  }
 }
 
 /* O29: keyboard focus gets a real ring, not a tint swap — a border-colour change alone is
@@ -3090,11 +3115,16 @@ textarea:focus-visible {
   transition: border-color 150ms ease, background-color 150ms ease;
 }
 
-.cv2-condition-list label:hover,
-.cv2-condition-list label:focus-within,
-.cv2-condition-list label.is-checked {
+.cv2-condition-list label:focus-within, .cv2-condition-list label.is-checked {
   border-color: var(--accent-tint);
   background: var(--stone);
+}
+
+@media (hover: hover) {
+  .cv2-condition-list label:hover {
+    border-color: var(--accent-tint);
+    background: var(--stone);
+  }
 }
 
 .cv2-condition-list label:has(input:disabled) {
@@ -3223,10 +3253,16 @@ textarea:focus-visible {
   content: "";
 }
 
-.cv2-coming-grid button:hover .cv2-coming-tooltip,
 .cv2-coming-grid button:focus-visible .cv2-coming-tooltip {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (hover: hover) {
+  .cv2-coming-grid button:hover .cv2-coming-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .cv2-mix-card {
@@ -3316,10 +3352,11 @@ textarea:focus-visible {
   transition: transform 160ms ease, background-color 160ms ease;
 }
 
-.cv2-action > button:hover,
-.cv2-learning-card > button:hover {
-  background: #2a2a22;
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .cv2-action > button:hover, .cv2-learning-card > button:hover {
+    background: #2a2a22;
+    transform: translateY(-1px);
+  }
 }
 
 /* O189: the funnel CTA takes the stage's primary-button shape (it IS the primary act now),
@@ -3341,7 +3378,9 @@ textarea:focus-visible {
   touch-action: manipulation;
   transition: transform 160ms ease, background-color 160ms ease;
 }
-.cv2-action > .cv2-start-cta:hover { background: #2a2a22; transform: translateY(-1px); }
+@media (hover: hover) {
+  .cv2-action > .cv2-start-cta:hover { background: #2a2a22; transform: translateY(-1px); }
+}
 .cv2-action > .cv2-start-cta:focus-visible { outline: 2px solid var(--cv2-accent); outline-offset: 3px; }
 .cv2-action > .cv2-restart {
   display: inline-flex;
@@ -3358,7 +3397,9 @@ textarea:focus-visible {
   text-underline-offset: 4px;
   cursor: pointer;
 }
-.cv2-action > .cv2-restart:hover { color: var(--cv2-ground); }
+@media (hover: hover) {
+  .cv2-action > .cv2-restart:hover { color: var(--cv2-ground); }
+}
 .cv2-action > .cv2-restart:focus-visible { outline: 2px solid var(--cv2-accent); outline-offset: 3px; }
 
 .cv2-action > p {
@@ -3544,9 +3585,11 @@ textarea:focus-visible {
   background: white;
 }
 
-.cv2-learning-card > button:hover {
-  color: var(--on-accent);
-  background: var(--cv2-accent);
+@media (hover: hover) {
+  .cv2-learning-card > button:hover {
+    color: var(--on-accent);
+    background: var(--cv2-accent);
+  }
 }
 
 .cv2-resource-progress {
@@ -4090,11 +4133,18 @@ textarea:focus-visible {
   cursor: pointer;
 }
 
-.community-interest-form > button:hover,
 .community-interest-form > button:focus-visible {
   background: #6f1e31;
   outline: 3px solid var(--community-accent);
   outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .community-interest-form > button:hover {
+    background: #6f1e31;
+    outline: 3px solid var(--community-accent);
+    outline-offset: 2px;
+  }
 }
 
 .community-interest-form > button:disabled {
@@ -4326,8 +4376,8 @@ textarea:focus-visible {
   transition: color 160ms ease;
 }
 
-.patient-v2 .scenario-toggle:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .patient-v2 .scenario-toggle:hover { color: var(--ink); }
 }
 
 .patient-v2 .scenario-toggle svg {
@@ -4538,10 +4588,16 @@ textarea:focus-visible {
 /* Hover DARKENS. It used to reach for --accent-soft, which was a dark brown while the palette
    was dark and became a near-white cream when the palette went back to light, putting white text
    on cream and erasing the only header button on the site. */
-.story-demo-link:hover,
 .story-demo-link:focus-visible {
   background: color-mix(in srgb, var(--s-accent) 82%, #000);
   animation-play-state: paused;
+}
+
+@media (hover: hover) {
+  .story-demo-link:hover {
+    background: color-mix(in srgb, var(--s-accent) 82%, #000);
+    animation-play-state: paused;
+  }
 }
 .story-demo-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 .story-demo-link:active { transform: translateY(1px); }
@@ -4616,7 +4672,9 @@ textarea:focus-visible {
   text-decoration: none;
   transition: transform 0.15s ease, background 0.2s ease;
 }
-.story-primary-link:hover { background: #6f1e31; }
+@media (hover: hover) {
+  .story-primary-link:hover { background: #6f1e31; }
+}
 .story-primary-link:active { transform: translateY(1px); }
 .story-primary-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 
@@ -4948,8 +5006,11 @@ textarea:focus-visible {
   background: #fff;
 }
 .story .community-interest-options input:focus-visible + span { outline-color: var(--s-accent-mid); }
-.story .community-interest-form > button:hover,
 .story .community-interest-form > button:focus-visible { outline-color: var(--s-accent-mid); }
+
+@media (hover: hover) {
+  .story .community-interest-form > button:hover { outline-color: var(--s-accent-mid); }
+}
 .story .community-form-success { border-color: #3a3325; }
 
 /* Footer ------------------------------------------------------------------ */
@@ -4978,7 +5039,9 @@ textarea:focus-visible {
   text-decoration: none;
   text-underline-offset: 3px;
 }
-.story-footer-links a:hover { color: var(--s-ink); text-decoration: underline; }
+@media (hover: hover) {
+  .story-footer-links a:hover { color: var(--s-ink); text-decoration: underline; }
+}
 
 /* Acknowledgement of Country — a full-width band closing every page: the words on a warm sky, an
    abstract earth-toned horizon along the bottom. */
@@ -5404,16 +5467,22 @@ textarea:focus-visible {
   transition: color 0.2s ease;
 }
 .story-affiliations li:last-child a { padding-right: 0; }
-.story-affiliations a:hover,
 .story-affiliations a:focus-visible { color: var(--s-ink); outline-offset: 4px; }
+
+@media (hover: hover) {
+  .story-affiliations a:hover { color: var(--s-ink); outline-offset: 4px; }
+}
 /* THE OPACITY IS ON THE MARK, NOT ON THE LINK. It used to sit on the `a`, which was fine for the
    two founders whose affiliation is a logo and wrong for the three whose affiliation is a
    wordmark: --s-muted at 0.85 composites to #797b72 and reads 3.87:1 at this size, under the
    4.5:1 that body-sized text owes. Text now runs at the token's own 5.28:1; only the images are
    softened, and an image has no contrast requirement to fail. */
 .story-affiliations img { width: auto; height: 22px; opacity: 0.85; transition: opacity 0.2s ease; }
-.story-affiliations a:hover img,
 .story-affiliations a:focus-visible img { opacity: 1; }
+
+@media (hover: hover) {
+  .story-affiliations a:hover img { opacity: 1; }
+}
 
 @media (min-width: 900px) {
   /* O90: four plates since Dr Anusha joined the row. 2x2 rather than four across - four
@@ -5480,7 +5549,9 @@ textarea:focus-visible {
   font-weight: 560;
   cursor: pointer;
 }
-.show-all:hover { background: var(--stone); }
+@media (hover: hover) {
+  .show-all:hover { background: var(--stone); }
+}
 
 @media (max-width: 720px) {
   /* Height only, and never `display`. This rule previously set `display: inline-flex` on every
@@ -5885,8 +5956,11 @@ textarea:focus-visible {
   margin-left: 10px;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.story-primary-link:hover .arrow,
 .story-primary-link:focus-visible .arrow { transform: translateX(5px); }
+
+@media (hover: hover) {
+  .story-primary-link:hover .arrow { transform: translateX(5px); }
+}
 @media (prefers-reduced-motion: reduce) {
   .story-primary-link .arrow { transition: none; }
   .story-primary-link:hover .arrow { transform: none; }
@@ -6012,10 +6086,16 @@ textarea:focus-visible {
   margin-left: 9px;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.story-approach-link:hover,
 .story-approach-link:focus-visible { background: var(--s-accent); color: #fff; }
-.story-approach-link:hover .arrow,
+
+@media (hover: hover) {
+  .story-approach-link:hover { background: var(--s-accent); color: #fff; }
+}
 .story-approach-link:focus-visible .arrow { transform: translateX(5px); }
+
+@media (hover: hover) {
+  .story-approach-link:hover .arrow { transform: translateX(5px); }
+}
 .story-approach-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   .story-approach-link, .story-approach-link .arrow { transition: none; }
@@ -6059,7 +6139,9 @@ textarea:focus-visible {
   min-height: 44px;
   margin-block: -11px;
 }
-.approach-back:hover { color: var(--s-ink); text-decoration: underline; }
+@media (hover: hover) {
+  .approach-back:hover { color: var(--s-ink); text-decoration: underline; }
+}
 /* On its own page the sequence opens against the page rather than under a rule
    it shares with a section above it. */
 .approach-page .seq { border-top: 0; }
@@ -6119,8 +6201,16 @@ textarea:focus-visible {
   transition: background-color 0.2s ease;
 }
 .story-join-link .arrow { display: inline-block; margin-left: 10px; transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
-.story-join-link:hover, .story-join-link:focus-visible { background: #ffffff; }
-.story-join-link:hover .arrow, .story-join-link:focus-visible .arrow { transform: translateX(5px); }
+.story-join-link:focus-visible { background: #ffffff; }
+
+@media (hover: hover) {
+  .story-join-link:hover { background: #ffffff; }
+}
+.story-join-link:focus-visible .arrow { transform: translateX(5px); }
+
+@media (hover: hover) {
+  .story-join-link:hover .arrow { transform: translateX(5px); }
+}
 .story-join-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   .story-join-link, .story-join-link .arrow { transition: none; }
@@ -6158,7 +6248,9 @@ textarea:focus-visible {
 /* O148: measured 50x20 on every inner console route. Grown to the 44px floor and paid for out
    of its own bottom margin plus a negative top one, so the heading below it does not move. */
 .mc-back { display: inline-flex; align-items: center; min-height: 44px; margin-top: -12px; margin-bottom: 8px; color: var(--muted); font-size: 0.8125rem; text-decoration: none; }
-.mc-back:hover { color: var(--ink); text-decoration: underline; }
+@media (hover: hover) {
+  .mc-back:hover { color: var(--ink); text-decoration: underline; }
+}
 .mc h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 2.125rem; font-weight: 450; letter-spacing: -0.03em; }
 .mc-lead { max-width: 62ch; margin: 12px 0 0; color: var(--muted); font-size: 0.90625rem; line-height: 1.6; }
 .mc-section { margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); }
@@ -6237,7 +6329,9 @@ textarea:focus-visible {
 .be-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
 .be-chip { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
   background: #fff; color: var(--muted); font: inherit; font-size: 0.8125rem; cursor: pointer; }
-.be-chip:hover { border-color: var(--accent); color: var(--ink); }
+@media (hover: hover) {
+  .be-chip:hover { border-color: var(--accent); color: var(--ink); }
+}
 .be-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .be-chip.be-accepted { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 .be-chip.be-rejected { text-decoration: line-through; opacity: 0.55; }
@@ -6384,7 +6478,9 @@ textarea:focus-visible {
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 44px; min-width: 44px; padding-inline: 4px; margin-inline: -4px;
 }
-.crumbs a:hover { text-decoration: underline; }
+@media (hover: hover) {
+  .crumbs a:hover { text-decoration: underline; }
+}
 .crumbs [aria-current="page"] { color: var(--muted); }
 
 /* The shared footer (item 3). */
@@ -6406,7 +6502,9 @@ textarea:focus-visible {
   min-height: 44px; min-width: 44px;
   padding-inline: 5px; margin-inline: -5px;
 }
-.site-footer a:hover { color: var(--ink); text-decoration: underline; }
+@media (hover: hover) {
+  .site-footer a:hover { color: var(--ink); text-decoration: underline; }
+}
 
 /* Sticky mobile CTA on the landing page (item 9). */
 .story-sticky-cta { display: none; }
@@ -6726,9 +6824,10 @@ textarea:focus-visible {
   cursor: pointer;
 }
 
-.profile-compare:hover,
-.profile-compare:focus-visible {
-  color: var(--ink);
+.profile-compare:focus-visible { color: var(--ink); }
+
+@media (hover: hover) {
+  .profile-compare:hover { color: var(--ink); }
 }
 
 .profile-compare:focus-visible {

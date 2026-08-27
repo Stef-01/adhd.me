@@ -302,6 +302,14 @@ export const TASTE_RULES: readonly TasteRule[] = [
       // census proves no source anywhere suppresses the ring without a paired replacement, which
       // covers states and elements no finite walk visits.
       "src/design/focus-ring.test.ts :: every component suppression pairs its ring in the same class string, at the pinned counts",
+      // O199: THE FIRST CLAUSE FINALLY GETS AN ENFORCER. Every entry above enforces the FOCUS half
+      // of this statement. The hover clause — "gated behind @media (hover: hover)" — was listed as
+      // covered by this register and read by no check in the tree, and 37 of the stylesheet's 53
+      // `:hover` rules broke it. The census below is static rather than a route sweep for the
+      // reason the AR lane keeps re-learning: a hover state only exists under a cursor, so no
+      // screenshot, no axe pass and no tab-walk can see one. Reading the source is the only
+      // instrument that covers every rule rather than the ones a walk happens to land on.
+      "src/design/hover-gate.test.ts :: lets no hover rule apply on a device that cannot hover",
     ],
     routeScope: { kind: "route-sweep", sweep: "public-and-console-static" },
   },

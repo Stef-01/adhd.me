@@ -102,6 +102,7 @@ Hover styles gated behind @media (hover: hover); touch-action: manipulation on c
   - `e2e/keyboard-focus.spec.ts :: every public control is reachable by keyboard and shows where it is`
   - `e2e/keyboard-focus.spec.ts :: every console control is reachable by keyboard and shows where it is`
   - `src/design/focus-ring.test.ts :: every component suppression pairs its ring in the same class string, at the pinned counts`
+  - `src/design/hover-gate.test.ts :: lets no hover rule apply on a device that cannot hover`
 - **Route scope:** route sweep: `public-and-console-static`
 
 ### `interaction.touch-44`
