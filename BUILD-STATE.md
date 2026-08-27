@@ -119,6 +119,52 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O211 (paying down the vacuity debt: `src/compliance`, 11 sites) — claimed 2026-08-27T21:00Z by
+> loop-0827a.** Gate read before claiming: green @ f06d99b.
+>
+> **A STALE CLONE WAS FOUND AND RECONCILED BEFORE ANY WORK STARTED, which is the concurrency law
+> doing its job.** This firing opened on a working copy at `d136355` — the end of O208 — while
+> `origin/main` carried O209 and O210. The container had been reset to an older snapshot with no
+> restart notice; `git status` reporting "behind by 6 commits" is what surfaced it. **Nothing was
+> lost**: the six commits are this session's own O209 and O210, pushed and intact. Fast-forwarded,
+> and wipe detection run per the law — O210's DONE row is present on `main`, so this was a stale
+> local rather than a wiped history. The measurement below was then re-run on the reconciled tree,
+> because the first pass had been taken against the stale one.
+>
+> **THE PREVIOUS FIRING ENDED QUIETLY AND SHOULD NOT HAVE.** It concluded nothing was claimable while
+> O196's own row said the opposite: "Paying it down is ordinary future work, best done a directory at
+> a time; `src/matching` carries much the largest share, then `src/compliance`, `src/quality` and
+> `src/demo`." Recorded, unblocked, non-founder work. Judging it thin was a misjudgement, and this
+> unit is the correction rather than a note about one.
+>
+> **MEASURED ON THE RECONCILED TREE, AND THE DISTRIBUTION MATCHES O196's PREDICTION.** Pin 123,
+> measured 123 — they agree, which is the census being trustworthy after O209 corrected it.
+> `src/matching` 20, **`src/compliance` 11**, `src/demo` 10, `src/design` 9, `src/quality` 8,
+> `src/platform` 8, then a long tail.
+>
+> **COMPLIANCE IS TAKEN BEFORE MATCHING, ON O196's OWN CRITERION — STAKES, NOT CONVENIENCE.** These
+> are the checks standing behind the product's honesty claims, and a vacuous pass there is a
+> compliance control reporting success over an empty register. The eleven: `console-honesty.test.ts`
+> (the console acceptances), `cdss-boundary.test.ts` ×5 (G7 rail properties, operator-copy surfaces,
+> accepted copy findings), `g7-at-five-years.test.ts` ×2 (the Y5 and Y4 re-derivations),
+> `public-surfaces.test.ts` ×3 (audience classifications, the professional rule set, the exact-match
+> acceptances).
+>
+> **EACH IS A JUDGEMENT, NOT A WRAP, AND THAT IS THE WHOLE COST OF THIS WORK.** O196's law: a loop
+> over a register is one of two things and must say which — guarded by `eachOf`, or declared in
+> `LEGITIMATELY_EMPTY` with the reason its emptiness is CORRECT. Wrapping all eleven mechanically
+> would be worse than leaving them: an acceptance register is DESIRABLY empty once every finding is
+> resolved, and forcing it non-empty would make the suite require a violation to exist. Some of these
+> are exactly that shape.
+>
+> Scope: the eleven, each classified and either guarded or declared with an argument;
+> `UNGUARDED_REMAINDER` lowered by exactly what is paid, no more. NO change to what any check
+> asserts — a guard makes an existing claim honest about its population, it does not add a claim.
+>
+> Verify: `pnpm gate` end to end; the remainder re-derived and the drop matching the count actually
+> paid; every new `LEGITIMATELY_EMPTY` entry checked in both directions by the census that already
+> exists. No qa/ capture: this unit renders nothing.
+
 > **O210 (three plain ways of asking reach a facet the roster already has) — claimed
 > 2026-08-27T18:55Z by loop-0827a.** UI/aesthetic-review lane; the loop's own numbered queue is
 > exhausted. Gate read before claiming: green @ b50db4d.
