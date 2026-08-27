@@ -119,6 +119,50 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O200 (10% of the stylesheet styles markup that does not exist) — claimed 2026-08-27T10:40Z by
+> loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted (M1–M10 done, M11/M12
+> founder-gated; AR1–AR40 complete). Gate read before claiming: green @ a0b9a01, run end to end by
+> the previous firing on the tree it pushed.
+>
+> **FOUND THE SAME WAY THE LAST TWO WERE — BY ACCIDENT, WHICH IS THE ARGUMENT FOR ASKING THE GENERAL
+> QUESTION.** O199 ended by checking whether it had broken two hover-reveal affordances
+> (`.match-portrait:hover .portrait-nav`, `.cv2-coming-grid button:hover .cv2-coming-tooltip`). It
+> had not — because NEITHER SELECTOR MATCHES ANY MARKUP. Both style elements the application never
+> renders. That is twice in two units that a dead selector turned up while looking for something
+> else, and kept-but-unused code is this tree's own named disease (O186/O187).
+>
+> **MEASURED BEFORE CLAIMING, AND THE CLASSIFIER WAS WRONG TWICE FIRST.** (1) A bare "class never
+> appears in source" scan said 122 of 594 — but classes built as `` `seq-w-${i}` `` are live and
+> never appear as literals. (2) Crediting every `prefix-${` in the source rescued 46 — and most of
+> those prefixes were DATA IDS, not class names: `iv-${code}` is an interval id, `row-${index}` a
+> record id, `clinician-${i}` an error key. Only 9 template prefixes are ever used inside a
+> `className`. Corrected on both, the honest figure is **92 of 594 styled classes (15%) confirmed
+> dead**, by three independent criteria: never written as a literal in any source file, never
+> emitted by any built server or client chunk, and not producible by any className template actually
+> in use.
+>
+> **WHAT IT COSTS, MEASURED IN THE SHEET RATHER THAN ASSERTED: 209 rules are entirely dead —
+> 24,571 bytes of globals.css's 240,579, about 10% of the stylesheet every visitor downloads.**
+>
+> **THE 10 THAT NEED SURGERY RATHER THAN DELETION.** Ten rules pair a dead selector with a live one
+> in the same list (`.quiet-link, .text-action, .match-count, .icon-button`; `.match-portrait > img,
+> .profile-portrait > img`). Deleting those rules would take live styling with them. The dead
+> SELECTOR is removed from the list; the rule stays.
+>
+> **TWO CROSS-CHECKS RUN BEFORE CLAIMING, both clean:** no e2e spec anywhere selects one of the 92
+> (a spec that did would mean either the scan is wrong or that spec is vacuous — both worth knowing),
+> and `app/globals.css` is the only non-TypeScript file under `app/` or `src/`, so there is no
+> markup source the scan could have missed.
+>
+> Scope: delete the 209 dead rules, prune the 10 mixed selector lists, and land the census as a test
+> in both directions so the next dead class fails the build rather than waiting to be found by
+> accident a third time. NO restyling and no renaming — every surviving rule keeps its declarations
+> and its selector.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces; the census proven non-vacuous by
+> planting a dead class and watching it fail; visual confirmation that nothing moved, since a
+> deletion that changes a screen is a deletion that was wrong.
+
 > **O199 (the taste law's hover clause is enforced by nothing, and 37 of 53 sites break it) —
 > claimed 2026-08-27T09:50Z by loop-0827a.** UI/aesthetic-review lane: numbered lanes exhausted
 > (M1–M10 done, M11/M12 founder-gated; AR1–AR40 complete), gate read before claiming — green @
