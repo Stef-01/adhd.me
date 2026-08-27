@@ -110,7 +110,27 @@ export interface LegitimatelyEmpty {
  * Paying it down is ordinary future work, best done a directory at a time; `src/matching` carries
  * much the largest share, then `src/compliance`, `src/quality` and `src/demo`.
  */
-export const UNGUARDED_REMAINDER = 133;
+/*
+ * 133 -> 123 (O209): THE NUMBER FELL BY TEN BECAUSE IT WAS MEASURED WRONG, NOT BECAUSE ANYTHING WAS
+ * FIXED — and that distinction is the whole reason this comment exists rather than a bare edit.
+ *
+ * The census read a loop's collection by capturing the expression after `of`, and that capture
+ * swallows a call: `for (const x of eachOf(REG, "…"))` captured `eachOf(REG, "…"`, whose root is
+ * `eachOf`. In any file using the guard that root is an imported name, so the site counted as a
+ * register loop — and the guard check then looked for `eachOf(eachOf(…` and never found it. A
+ * correctly guarded site read as unguarded, from the day this module landed.
+ *
+ * TEN SITES, AND THEY WERE THIS UNIT'S OWN BEST WORK. O196's ledger row names the 13 it guarded "by
+ * stakes": the W55 provenance intervals, the W148 advice linter, the directory renderer, the
+ * finder's patient-visible labels, the sitemap-to-census trace. `registers/store.test.ts` (twice),
+ * `quality/sitemap.test.ts` and `matching/clarify.test.ts` were among the ten being reported back as
+ * debt. The census was refusing to credit the work it was written to record.
+ *
+ * O196's own law is that an untracked DROP is progress nobody recorded. An untracked CORRECTION is
+ * worse, because it reads as progress: nothing was guarded here, ten things stopped being described
+ * wrongly. The real debt was always 123.
+ */
+export const UNGUARDED_REMAINDER = 123;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
   {

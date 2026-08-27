@@ -3561,3 +3561,44 @@ which is what the census recognises. Worth its own unit: the pinned 133 may incl
 already-guarded sites for the same reason.
 
 No `qa/` capture: this unit renders nothing and changes no copy.
+
+## O209 — the vacuity census did not recognise its own guard (2026-08-27)
+
+**O196's census has overstated its debt by ten since the day it landed**, and the ten are the sites
+that unit was proudest of.
+
+The scan reads a loop's collection by capturing the expression after `of`, and that capture swallows
+a call. So `for (const x of eachOf(REG, "…"))` captured `eachOf(REG, "…"` — whose **root is
+`eachOf`**. In any file that uses the guard, that root is an imported name, so the site counted as a
+register loop; the guard check then looked for `eachOf(eachOf(…` and never found it. **A correctly
+guarded site read as unguarded.**
+
+**Measured both ways before anything was changed.** Current scan: 140 sites, minus 7 declared, pins
+at 133. With `eachOf(` recognised as the guard it is: 130 sites, 123 undeclared. Ten sites recorded
+as debt while properly guarded.
+
+**And the ten were that unit's central achievement.** O196's ledger row names the 13 it guarded
+"chosen by STAKES rather than convenience: the W55 provenance intervals, the W148 advice linter, the
+directory renderer, the finder's patient-visible labels, the sitemap-to-census trace." Among the
+miscounted: `registers/store.test.ts` twice ("every placeholder interval says outright that it is
+not guidance" — W55 provenance), `quality/sitemap.test.ts` (the sitemap-to-census trace),
+`matching/clarify.test.ts`. The census was refusing to credit the work it was written to record.
+
+**The number fell because it was measured wrong, not because anything was fixed**, and the constant
+says exactly that. O196's own law is that an untracked *drop* is progress nobody recorded — an
+untracked *correction* is worse, because it reads as progress. Nothing was guarded by this unit; ten
+things stopped being described wrongly. The real debt was always 123.
+
+**Found by walking into it.** O208 wrapped a register loop in `eachOf`, watched the census count it
+as debt anyway, and worked around it by also asserting above the loop rather than bumping the pin to
+hide the discrepancy. That workaround is now belt-and-braces rather than required, and it is kept:
+the assertion it adds — that the register is non-empty — is worth making on its own.
+
+The fix is pinned in both directions on fixtures rather than on the tree, so it cannot pass by the
+tree happening to be clean: the raw capture is asserted to still root at `eachOf` (which is *why*
+filtering on the prefix is the fix rather than tightening the regex), the guarded fixture is
+credited, and an unguarded sibling in the same shape is still caught. The `LEGITIMATELY_EMPTY`
+register was re-checked in both directions after the fix — all 7 entries still match live unguarded
+sites, so none of them was only matching because of the bug.
+
+No `qa/` capture: this unit renders nothing and changes no product code.

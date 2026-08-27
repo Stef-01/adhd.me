@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ a76dd4d (2026-08-27T17:45Z) — pnpm verify 298 files / 4390 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 17.9m). O208 done (O203/O204/O205 were the SAME defect three times and left no check behind; every public surface now carries a decided stance on the product's two interfaces, checked both directions, with / and /approach recorded as dated founder debt rather than a note in a ledger row. First non-vacuity probe FAILED to reproduce and the row says so). O207 done (three prose pages had zero footer elements; the census found a fourth). O206 done (/practices stacked two site bars). O205 done (the privacy notice described one of two interfaces). O204 done (the FAQ still called ADHD.ME "a finder"). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Fourteenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T18:35Z) — pnpm verify 298 files / 4391 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 16.4m). O209 done (O196's census did not recognise its OWN guard — `of eachOf(REG, …)` captured a root of `eachOf`, so a guarded site read as unguarded and the debt was overstated by TEN from the day it landed, including the W55 provenance intervals and the sitemap-to-census trace that unit guarded by stakes; 133 → 123, and the constant says the number fell because it was measured wrong, not because anything was fixed). O208 done (every public surface has a decided stance on the two interfaces; / and /approach recorded as dated founder debt). O207 done (three prose pages had zero footer elements; the census found a fourth). O206 done (/practices stacked two site bars). O205/O204/O203 done (the privacy notice, the FAQ and /examples each described a product with one interface). O202 done (founder-directed: the network deck became a gallery). O201/O200/O199/O198/O197/O196/O195/O194 done. Fifteenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -158,6 +158,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end; the corrected scan proven to still catch a genuinely unguarded loop
 > (the planted fixture) AND to now credit a genuinely guarded one; both directions of the
 > `LEGITIMATELY_EMPTY` register re-checked. No qa/ capture: this unit renders nothing.
+>
+> **DONE 2026-08-27T18:35Z. 133 → 123, AND THE CONSTANT SAYS WHY IT FELL.** Nothing was guarded by
+> this unit; ten sites stopped being described wrongly. The real debt was always 123, and the comment
+> at the constant states that in those terms — an untracked DROP is progress nobody recorded, and an
+> untracked CORRECTION is worse because it reads as progress.
+>
+> **THE FIX IS ONE FILTER, AND THE REASON IT IS A FILTER RATHER THAN A TIGHTER REGEX IS PINNED.** A
+> collection expression beginning `eachOf(` is guarded BY CONSTRUCTION — the helper throws on empty —
+> so it leaves the register-loop list entirely. The new test asserts the raw capture STILL roots at
+> `eachOf`, which is the fact that makes tightening the regex the wrong fix: the capture is doing
+> what it should, and the classification on top of it was wrong.
+>
+> **PINNED ON FIXTURES, BOTH DIRECTIONS**, so it cannot pass by the tree happening to be clean: the
+> guarded fixture is credited, and an unguarded sibling in the same shape — identical but for the
+> wrapper — is still caught.
+>
+> **THE EXEMPTION REGISTER WAS RE-CHECKED RATHER THAN ASSUMED.** All 7 `LEGITIMATELY_EMPTY` entries
+> still match live unguarded sites after the fix, so none was only matching because of the bug. That
+> direction was already tested; the point is that it was run and read, not that it exists.
+>
+> **AND THE WORKAROUND O208 LEFT IS KEPT.** That unit wrapped a loop, watched the census count it as
+> debt anyway, and added an assertion above the loop rather than bumping the pin to hide the
+> discrepancy — which is how this defect surfaced at all. The assertion is now belt-and-braces rather
+> than required, and it stays: "the register is non-empty" is worth asserting on its own.
+>
+> Gate: `pnpm verify` green (298 files / 4391 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **340 passed, 2 skipped,
+> 16.4m**. Fifteenth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O208 (three units fixed the same defect and left no check behind) — claimed 2026-08-27T17:05Z by
 > loop-0827a.** UI/aesthetic-review lane; the loop's own queue is genuinely exhausted (M11/M12

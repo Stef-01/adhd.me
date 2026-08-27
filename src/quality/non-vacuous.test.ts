@@ -47,10 +47,26 @@ function unguardedRegisterLoops(): string[] {
       const block = lines.slice(from, to).join("\n");
       if (!block.includes("expect(")) continue;
 
-      const looped = [
+      const captured = [
         ...[...block.matchAll(/for\s*\(\s*const\s+\w+\s+of\s+([A-Za-z_$][\w$.]*(?:\([^)]*\))*)/g)].map((m) => m[1]!),
         ...[...block.matchAll(/([A-Za-z_$][\w$.]*)\s*\.forEach\(/g)].map((m) => m[1]!),
       ];
+
+      // O209: THE SCAN DID NOT RECOGNISE ITS OWN GUARD, and had overstated the debt by 10 since the
+      // day it landed. The capture above swallows a call, so `for (const x of eachOf(REG, "…"))`
+      // captures `eachOf(REG, "…"` — whose ROOT is `eachOf`. In any file that uses the guard, that
+      // root is an imported name, so the site counted as a register loop; the `wrapped` check below
+      // then looked for `eachOf(eachOf(…` and never found it. A correctly guarded site read as
+      // unguarded.
+      //
+      // Ten sites were miscounted, and they were the ones O196 was proudest of — its DONE row names
+      // the W55 provenance intervals and the sitemap-to-census trace among the 13 it guarded "by
+      // stakes", and both were being reported back as debt.
+      //
+      // A collection that begins `eachOf(` is guarded BY CONSTRUCTION: the helper throws on empty.
+      // So it is removed from the register-loop list rather than tested against the string check,
+      // which is what the string check was trying and failing to express.
+      const looped = captured.filter((x) => !x.startsWith("eachOf("));
       // Only loops whose ROOT identifier is imported: a literal array written in the test cannot
       // go empty by any product state, and 484 of the suite's 527 loop blocks are exactly that.
       const overRegister = looped.filter((x) => imported.has(x.split(/[.(]/)[0]!));
@@ -143,6 +159,38 @@ describe("O196 no assertion runs over an empty register without saying so", () =
     expect(looped.some((x) => imported.has(x.split(/[.(]/)[0]!))).toBe(true);
     expect(planted.includes("eachOf(")).toBe(false);
     expect(planted.includes("tally()")).toBe(false);
+  });
+
+  it("recognises its own guard, which it did not for the first thirteen units of its life", () => {
+    // O209's regression pin. The scan captures the expression after `of`, and that capture swallows
+    // a call — so a guarded loop presented as `eachOf(REG, "…")` used to be counted as a register
+    // loop rooted at `eachOf`, and then failed the `eachOf(<collection>` string check it could never
+    // satisfy. Ten real sites were reported as debt because of it, including the W55 provenance
+    // intervals and the sitemap-to-census trace that O196 guarded by stakes.
+    //
+    // Driven on fixtures rather than the tree, so this cannot pass by the tree happening to be
+    // clean, and stated in BOTH directions: the guard is credited, and an unguarded sibling in the
+    // same shape is still caught.
+    const guarded = [
+      'import { eachOf } from "@/quality/non-vacuous";',
+      'import { SOME_REGISTER } from "@/somewhere";',
+      'it("asserts over a guarded register", () => {',
+      '  for (const x of eachOf(SOME_REGISTER, "the register")) {',
+      "    expect(x.ok).toBe(true);",
+      "  }",
+      "});",
+    ].join("\n");
+    const bare = guarded.replace('eachOf(SOME_REGISTER, "the register")', "SOME_REGISTER");
+
+    // The predicate the scan uses, applied to both fixtures.
+    const capture = (src: string) =>
+      [...src.matchAll(/for\s*\(\s*const\s+\w+\s+of\s+([A-Za-z_$][\w$.]*(?:\([^)]*\))*)/g)].map((m) => m[1]!);
+
+    // The bug, preserved as a fact: the raw capture DOES root at `eachOf`, which is why filtering
+    // on the prefix is the fix rather than tightening the regex.
+    expect(capture(guarded)[0]).toMatch(/^eachOf\(/);
+    expect(capture(guarded).filter((x) => !x.startsWith("eachOf("))).toEqual([]);
+    expect(capture(bare).filter((x) => !x.startsWith("eachOf("))).toEqual(["SOME_REGISTER"]);
   });
 
   it("eachOf refuses an empty collection and passes a populated one straight through", () => {
