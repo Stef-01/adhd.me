@@ -18,6 +18,7 @@ import {
   unaccepted,
   sweepSurface,
 } from "./public-surfaces";
+import { eachOf } from "@/quality/non-vacuous";
 
 const ALL_RULES = [...LANDING_RULES, ...MESSAGE_BANNED_RULES];
 
@@ -40,7 +41,7 @@ describe("W192 every public surface is classified", () => {
   });
 
   it("argues every classification in a sentence somebody can disagree with", () => {
-    for (const surface of PUBLIC_SURFACES) {
+    for (const surface of eachOf(PUBLIC_SURFACES, "the public-surface register")) {
       expect(surface.why.length, `${surface.path} is classified without a reason`).toBeGreaterThan(60);
       expect(["patient", "professional", "patient_notice"]).toContain(surface.audience);
     }
@@ -92,7 +93,7 @@ describe("W192 the exemption is an audience distinction, not a hole", () => {
 
   it("holds a professional surface to every other W23 rule", () => {
     const professional = rulesFor("professional", LANDING_RULES, MESSAGE_BANNED_RULES);
-    for (const rule of LANDING_RULES) {
+    for (const rule of eachOf(LANDING_RULES, "the W23 landing rules")) {
       if (rule in PROFESSIONAL_EXEMPT_RULES) continue;
       expect(professional, `${rule} stopped applying to professional copy`).toContain(rule);
     }

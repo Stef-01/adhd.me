@@ -130,7 +130,29 @@ export interface LegitimatelyEmpty {
  * worse, because it reads as progress: nothing was guarded here, ten things stopped being described
  * wrongly. The real debt was always 123.
  */
-export const UNGUARDED_REMAINDER = 123;
+/*
+ * 123 -> 112 (O211): ELEVEN SITES PAID DOWN IN `src/compliance`, AND THE DIRECTORY WAS CHOSEN ON
+ * O196's OWN CRITERION — stakes, not convenience. `src/matching` is larger (20), but these are the
+ * checks standing behind the product's honesty claims, where an assertion running over nothing is a
+ * compliance control reporting success over an empty register.
+ *
+ * EIGHT GUARDED, THREE DECLARED, and the split is the work. Guarded (`eachOf`), because emptiness
+ * would be a failure nobody would see: the G7 rail properties (×4, across cdss-boundary and
+ * g7-at-five-years — a rail with no properties is the silent catastrophe this register exists
+ * against), the operator-copy surfaces (×2 — one of those tests is *itself* about vacuity, its own
+ * comment reading "a lint that reaches no string cannot fail"), `PUBLIC_SURFACES`, and W23's
+ * `LANDING_RULES`.
+ *
+ * Declared legitimately empty, because emptiness is the DESIRED state: the three acceptance
+ * registers. Each says what an acceptance must carry, which over zero acceptances is vacuously true
+ * and correct — and `CONSOLE_ACCEPTED_FINDINGS` has a founder gate whose answer empties it, so a
+ * floor there would make answering a gate break the suite. Wrapping all eleven mechanically would
+ * have been worse than leaving them, which is exactly why O196 refused to do that at scale.
+ *
+ * The remaining 112 are the same ordinary work: `src/matching` 20, `src/demo` 10, `src/design` 9,
+ * `src/quality` 8, `src/platform` 8, then a long tail.
+ */
+export const UNGUARDED_REMAINDER = 112;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
   {
@@ -152,6 +174,21 @@ export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
     file: "src/privacy/record-classes.test.ts",
     test: "treats 'derived' as a reviewed answer, not an exemption",
     why: "Iterates RECORD_CLASSES.filter(x => x.handling === 'derived'). A privacy register in which no class is derived — every one erased at its source — is a stricter register, not a broken one, and the day that happens this check correctly has nothing to say. The claim is about what a derived class must explain, not that any must exist.",
+  },
+  {
+    file: "src/compliance/console-honesty.test.ts",
+    test: "every entry names a console screen that exists, a rule the sweep applies, and both arguments",
+    why: "Iterates CONSOLE_ACCEPTED_FINDINGS. Empty is the DESIRED end state, and there is a founder gate whose whole purpose is to produce it: `console-honesty-wording-review` asks whether 'Best Practice' and 'specialist' remain the right words on staff screens, and answering it either way empties this register. Forcing it non-empty would mean answering a founder gate breaks the suite — the exact inversion O196 named when it declared REACH_CORPUS.awaitingFounder legitimate. The claim here is what an acceptance must carry, which over zero acceptances is vacuously true AND correct.",
+  },
+  {
+    file: "src/compliance/cdss-boundary.test.ts",
+    test: "keeps the acceptances narrow — no rule is switched off anywhere",
+    why: "Iterates ACCEPTED_COPY_FINDINGS. Its claim is that no acceptance is a wildcard — a property OF acceptances, not a claim that any exist. An education-copy linter with nothing accepted is a stricter linter, not a broken one, and it is what this register looks like on the day every accepted string has been reworded. A floor would require a live acceptance to exist before the narrowness check could be non-vacuous, which is the wrong shape: the check exists to stop a rule being switched off, and zero acceptances switches nothing off.",
+  },
+  {
+    file: "src/compliance/public-surfaces.test.ts",
+    test: "accepts by exact path, rule AND matched text — never a rule in general",
+    why: "Iterates ACCEPTED_FINDINGS, and the same argument as its console and education siblings applies: the claim is about the SHAPE an acceptance must take, which zero acceptances satisfy correctly. This register also cannot go empty unnoticed — the sibling test in this file pins its exact contents as a named set, so emptiness fails there loudly — which makes a floor here redundant as well as wrong.",
   },
   {
     file: "src/design/dead-css.test.ts",

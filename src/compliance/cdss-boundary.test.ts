@@ -15,6 +15,7 @@ import {
   lintOperatorCopy,
   unacceptedCopy,
 } from "./cdss-boundary";
+import { eachOf } from "@/quality/non-vacuous";
 
 const SRC = path.join(__dirname, "..");
 
@@ -183,7 +184,7 @@ describe("W200 the four rail properties plus the fifth, re-derived", () => {
   it("re-derives every property against every year that has closed", () => {
     // W259 made this a list so a later year cannot overwrite an earlier answer. The years are
     // checked rather than counted: a property carrying only Y4 has not been re-derived at five.
-    for (const property of RAIL_PROPERTIES) {
+    for (const property of eachOf(RAIL_PROPERTIES, "the G7 rail properties")) {
       const years = property.rederivations.map((r) => r.year);
       expect(years, `${property.id} is missing a year`).toEqual(["Y4", "Y5"]);
       expect(new Set(years).size, `${property.id} re-derives one year twice`).toBe(years.length);
@@ -194,8 +195,14 @@ describe("W200 the four rail properties plus the fifth, re-derived", () => {
     // Y4's re-derivations must cite a Y4 unit; Y5's must cite one from Y5, or it is a Y4 answer
     // with a new label — the exact carrying-forward the gate forbids.
     const FIRST_OF = { Y4: Y4_FIRST_UNIT, Y5: 209 } as const;
-    for (const property of RAIL_PROPERTIES) {
-      for (const { year, note } of property.rederivations) {
+    // O211: BOTH loops are guarded, because they can go empty independently. An empty
+    // RAIL_PROPERTIES is the silent catastrophe the rail register exists against; a property whose
+    // `rederivations` is empty would skip this check for that property alone while the suite stayed
+    // green — and the sibling test above only catches that because it happens to assert the year
+    // list, which is a different claim that could be relaxed without anybody noticing this one lost
+    // its subject.
+    for (const property of eachOf(RAIL_PROPERTIES, "the G7 rail properties")) {
+      for (const { year, note } of eachOf(property.rederivations, `${property.id}'s re-derivations`)) {
         const units = [...note.matchAll(/\bW(\d+)\b/g)].map((m) => Number(m[1]));
         expect(units.length, `${property.id} ${year} cites no unit at all`).toBeGreaterThan(0);
         const floor = FIRST_OF[year as keyof typeof FIRST_OF];
@@ -230,7 +237,7 @@ describe("W200 the declared copy surface is checked against the tree", () => {
   });
 
   it("says why the rest of a module is not operator copy, especially when nothing is", () => {
-    for (const surface of OPERATOR_COPY_SURFACES) {
+    for (const surface of eachOf(OPERATOR_COPY_SURFACES, "the operator-copy surfaces")) {
       expect(surface.notCopy.length, `${surface.module} declares no reason`).toBeGreaterThan(60);
     }
   });
@@ -239,7 +246,7 @@ describe("W200 the declared copy surface is checked against the tree", () => {
     // The vacuity guard. `SILENCE_COPY` is a record of OBJECTS, and the first version of
     // `lintOperatorCopy` walked one level and returned zero texts for it — a clean result over
     // nothing. A lint that reaches no string cannot fail.
-    for (const surface of OPERATOR_COPY_SURFACES) {
+    for (const surface of eachOf(OPERATOR_COPY_SURFACES, "the operator-copy surfaces")) {
       const namespace = await NAMESPACES[surface.module]!();
       for (const exportName of surface.operatorCopy) {
         expect(namespace, `${surface.module} has no export ${exportName}`).toHaveProperty(exportName);

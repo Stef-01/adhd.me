@@ -3655,3 +3655,48 @@ right shape for a two-person roster where one has answered and one has not. `int
 genuinely unmoved at 25.
 
 No `qa/` capture: this unit renders nothing.
+
+## O211 — paying down the vacuity debt: src/compliance (2026-08-27)
+
+**The previous firing ended quietly and should not have.** It concluded nothing was claimable while
+O196's own row said the opposite: *"Paying it down is ordinary future work, best done a directory at
+a time; `src/matching` carries much the largest share, then `src/compliance`, `src/quality` and
+`src/demo`."* Recorded, unblocked, non-founder work. Judging it thin was a misjudgement.
+
+**A stale clone was found and reconciled before any work started.** This firing opened on a working
+copy at `d136355` — the end of O208 — while `origin/main` carried O209 and O210. The container had
+been reset to an older snapshot with no restart notice, and `git status` reporting "behind by 6
+commits" is what surfaced it. Nothing was lost: those six commits are this session's own, pushed and
+intact. Fast-forwarded, wipe detection run per the concurrency law (O210's DONE row is present on
+`main`), and the measurement re-run on the reconciled tree — the first pass had been taken against
+the stale one.
+
+**Compliance before matching, on O196's own criterion — stakes, not convenience.** `src/matching` is
+larger at 20 sites, but these eleven are the checks standing behind the product's honesty claims,
+where an assertion running over nothing is a compliance control reporting success over an empty
+register.
+
+**Eight guarded, three declared, and the split is the work.** Guarded with `eachOf`, because
+emptiness would be a failure nobody would see: the G7 rail properties (×4, across `cdss-boundary` and
+`g7-at-five-years` — a rail with no properties is the silent catastrophe that register exists
+against), the operator-copy surfaces (×2 — one of those tests is *itself* about vacuity, its own
+comment reading "a lint that reaches no string cannot fail"), `PUBLIC_SURFACES`, and W23's
+`LANDING_RULES`.
+
+Declared legitimately empty, because emptiness is the *desired* state: the three acceptance
+registers. Each says what an acceptance must carry, which over zero acceptances is vacuously true and
+correct — and `CONSOLE_ACCEPTED_FINDINGS` has a founder gate (`console-honesty-wording-review`) whose
+answer empties it, so a floor there would make answering a gate break the suite. That is the exact
+inversion O196 named when it declared `REACH_CORPUS.awaitingFounder` legitimate.
+
+**The count caught me being one short.** After the first pass the census read 113, not the 112 that
+eleven paid sites would give. One guard had not taken: my edit pattern matched only the first of two
+`RAIL_PROPERTIES` loops in `cdss-boundary`. Finding it also found something better — that block has a
+**nested** loop over `property.rederivations` which can go empty independently, skipping the check for
+one property while the suite stays green. Both are now guarded. The number was the check, and
+adjusting it to fit would have hidden a real site.
+
+**112 remain**, and the shape is unchanged: `src/matching` 20, `src/demo` 10, `src/design` 9,
+`src/quality` 8, `src/platform` 8, then a long tail.
+
+No `qa/` capture: this unit renders nothing and changes no product code.

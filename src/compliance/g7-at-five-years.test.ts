@@ -24,6 +24,7 @@ import { RAIL_PROPERTIES } from "@/compliance/cdss-boundary";
 import { DEFAULT_MATCH_CONFIG, REASONS_THIS_MATCHER_PRODUCES, matchSlots } from "@/matching/match";
 import type { MatchCandidate, MatchSlot } from "@/matching/explain";
 import { MATCH_REASON_COPY } from "@/matching/explain";
+import { eachOf } from "@/quality/non-vacuous";
 
 const SRC = path.resolve(__dirname, "..");
 
@@ -192,7 +193,7 @@ describe("W259 rail 5 — the matching lane informs and never advises", () => {
 
 describe("W259 the re-derivations are about Y5, and say what could have broken each property", () => {
   it("gives every property a Y5 re-derivation that names a Y5 unit", () => {
-    for (const property of RAIL_PROPERTIES) {
+    for (const property of eachOf(RAIL_PROPERTIES, "the G7 rail properties")) {
       const y5 = property.rederivations.find((r) => r.year === "Y5");
       expect(y5, `${property.id} has no Y5 re-derivation`).toBeDefined();
       const units = [...y5!.note.matchAll(/\bW(\d+)\b/g)].map((m) => Number(m[1]));
@@ -204,7 +205,7 @@ describe("W259 the re-derivations are about Y5, and say what could have broken e
     // W177's rule at the level of a document: the Y4 notes are evidence about Y4, and summarising
     // them later loses the thing that made them evidence. Each still cites a Y4 unit and each is
     // still long enough to be a derivation rather than a "still true".
-    for (const property of RAIL_PROPERTIES) {
+    for (const property of eachOf(RAIL_PROPERTIES, "the G7 rail properties")) {
       const y4 = property.rederivations.find((r) => r.year === "Y4");
       expect(y4, `${property.id} lost its Y4 re-derivation`).toBeDefined();
       expect(y4!.note.length).toBeGreaterThan(200);

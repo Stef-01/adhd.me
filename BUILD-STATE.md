@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ f06d99b (2026-08-27T19:30Z) — pnpm verify 298 files / 4398 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 16.4m). O210 done (a probe of 18 plain phrasings found 3 reaching NOTHING for facets the roster already holds; two cues shipped, the most natural one REFUSED because "their" is a stopword and the cue degenerated to [take time], reading "an ADHD assessment takes time" as an unhurried ask; six KPI registers re-derived, and a wrong note of my own corrected in place). O209 done (the vacuity census did not recognise its OWN guard; debt overstated by ten from the day it landed). O208 done (every public surface has a decided stance on the two interfaces). O207 done (three prose pages had zero footer elements). O206 done (/practices stacked two site bars). O205/O204/O203 done (the privacy notice, the FAQ and /examples each described a one-interface product). O202 done (founder-directed: the network deck became a gallery). O201/O200/O199/O198/O197/O196/O195/O194 done. Sixteenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T21:40Z) — pnpm verify 298 files / 4398 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 16.6m). O211 done (vacuity debt paid down in src/compliance — chosen before the larger src/matching on O196's own stakes criterion; 123 → 112, eight guarded and three declared, and the census caught the pass being ONE SHORT, which led to a nested loop that could go empty independently. A stale clone was reconciled first: the container had reset to d136355 while origin/main carried O209/O210 — nothing lost, wipe detection clean). O210 done (three plain phrasings reached nothing; two cues shipped, the most natural REFUSED because it degenerated to [take time]). O209 done (the vacuity census did not recognise its OWN guard). O208 done (every public surface has a decided stance on the two interfaces). O207 done (three prose pages had zero footer elements). O206 done (/practices stacked two site bars). O205/O204/O203 done (the privacy notice, the FAQ and /examples each described a one-interface product). O202 done (founder-directed: the network deck became a gallery). O201/O200/O199/O198/O197/O196/O195/O194 done. Seventeenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -164,6 +164,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end; the remainder re-derived and the drop matching the count actually
 > paid; every new `LEGITIMATELY_EMPTY` entry checked in both directions by the census that already
 > exists. No qa/ capture: this unit renders nothing.
+>
+> **DONE 2026-08-27T21:40Z. 123 → 112, ELEVEN PAID: EIGHT GUARDED, THREE DECLARED.**
+>
+> Guarded with `eachOf`, because emptiness would be a failure nobody would see: the G7 rail
+> properties (×4), the operator-copy surfaces (×2 — one of those tests is ITSELF about vacuity, its
+> own comment reading "a lint that reaches no string cannot fail"), `PUBLIC_SURFACES`, and W23's
+> `LANDING_RULES`. Declared legitimately empty, because emptiness is the DESIRED state: the three
+> acceptance registers, each saying what an acceptance must carry — vacuously true and correct over
+> zero — and `CONSOLE_ACCEPTED_FINDINGS` has a founder gate whose answer empties it, so a floor there
+> would make answering a gate break the suite.
+>
+> **THE COUNT CAUGHT ME BEING ONE SHORT, AND THE MISS WAS WORTH MORE THAN THE ELEVENTH SITE.** After
+> the first pass the census read 113, not the 112 eleven paid sites would give. One guard had not
+> taken — my edit pattern matched only the first of two `RAIL_PROPERTIES` loops in `cdss-boundary`.
+> Chasing it found something better: that block has a NESTED loop over `property.rederivations` which
+> can go empty independently, skipping the check for one property while the suite stays green. Both
+> are guarded now, with the reason at the site. **The number was the check; adjusting it to fit would
+> have hidden a real site**, which is precisely what a ratchet is for.
+>
+> **A STALE CLONE WAS RECONCILED BEFORE ANY OF THIS**, recorded in the claim above: the container had
+> been reset to `d136355` with no restart notice while `origin/main` carried O209 and O210. Nothing
+> lost, fast-forwarded, wipe detection clean, and the measurement re-run on the reconciled tree
+> because the first pass had been taken against the stale one.
+>
+> 112 remain and the shape is unchanged: `src/matching` 20, `src/demo` 10, `src/design` 9,
+> `src/quality` 8, `src/platform` 8, then a long tail. Ordinary work, a directory at a time.
+>
+> Gate: `pnpm verify` green (298 files / 4398 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **340 passed, 2 skipped,
+> 16.6m**. Seventeenth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O210 (three plain ways of asking reach a facet the roster already has) — claimed
 > 2026-08-27T18:55Z by loop-0827a.** UI/aesthetic-review lane; the loop's own numbered queue is
