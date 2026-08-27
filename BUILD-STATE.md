@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 0a5f8a9 (2026-08-26T23:30Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, six audit rounds)`
+`gate: green @ 8027ec3 (2026-08-27T02:10Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, eight audit rounds)`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -266,11 +266,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > was the one thing on the page you could not finish. At 1280 the note is centred and the control
 > clears it, which is why four desktop-first rounds never showed it.
 >
+> **ROUND 8 — the states 390-and-1280 misses.** Tablet width, `prefers-reduced-motion`, the keyboard
+> path, and the page a reader meets when a `/network/…` link is wrong; two of the four produced
+> findings. (1) At 768 the deck's column runs full width and the wide launch pill landed ON Dr
+> Anusha's card, covering her own declared sentence and her first chip — and at 1280 the 760px
+> column ends exactly where the pill starts, touching rather than clear. A fixed control on a
+> scrolling page cannot be padded clear of content, so the control goes compact wherever content
+> passes beneath it: the hint hides below 1300px rather than below 700px. Round 7 had already put
+> that sentence in the purpose band as prose, where it cannot cover anybody. (2) The 404 for an
+> unknown GP pointed a reader AWAY from the network: `network.spec.ts` asserted the status code and
+> stopped, so nobody had looked at the page — the site 404, offering "Find a GP" and "Start from the
+> beginning" and unable to offer the list they were reaching for. `app/network/not-found.tsx` is the
+> scoped boundary Next renders instead, deriving the count from the roster and deliberately NOT
+> guessing a clinician ("did you mean Dr X?" would be recommending a named doctor to somebody who
+> described nothing — the finder's job, and only on what a reader asked for). The test widened from
+> a status check to status + heading + the door back working. Checked and recorded CLEAN so the next
+> round does not re-check them: the keyboard path (skip-link → wordmark → Questions → card → card →
+> the in-prose finder link → footer, every stop with a visible 2px ring — and round 7's bridge turns
+> out to give a keyboard user the finder well before the corner control, which sits last in DOM
+> order), reduced motion (static, no residual transform), and the two-column tablet deck.
+>
 > Gate: `pnpm verify` green — 293 files / 4356 tests (13 skipped), build clean, audit PASS (2
 > accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB). Full `pnpm e2e`
-> green at the round-6 head (324 passed, 2 skipped); rounds 7–7c re-ran the affected suites (network,
+> green at the round-6 head (324 passed, 2 skipped); rounds 7–8 re-ran the affected suites (network,
 > public-sweep, working-truth, mobile-fit, finder-flow, a11y, touch-floor, accent-discipline,
-> contrast — 59 + 24 passed). New suites: `e2e/network.spec.ts` (10), `src/network/gallery.test.ts`
+> contrast — 59 + 24 + 26 passed). New suites: `e2e/network.spec.ts` (10), `src/network/gallery.test.ts`
 > (12), `e2e/support/network-capture.spec.ts` (opt-in captures).
 >
 > Landed as PR #21 (`claude/o192-network`) rather than a direct push to main, per this session's
