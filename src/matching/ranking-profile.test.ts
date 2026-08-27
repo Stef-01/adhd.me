@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import {
   clinicians,
   rankBands,
@@ -105,7 +106,7 @@ describe("2026-08-22 constraint-first ranking audit", () => {
 
   it("does not invent a constraint when the reader only names care preferences", () => {
     const needs = needsFor("my dose needs titration and I want it explained without jargon");
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       expect(rankingProfile(clinician, needs).constraintScore).toBe(0);
     }
   });

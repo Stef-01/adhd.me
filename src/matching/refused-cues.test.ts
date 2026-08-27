@@ -1,6 +1,7 @@
 // W231 (O125): the refusal register, checked against the lexicon in both directions.
 
 import { describe, expect, it } from "vitest";
+import { eachOf, tally } from "@/quality/non-vacuous";
 import { LEXICON_CUES, readNeeds, facetKey } from "./needs";
 import { REACH_CORPUS } from "./corpus";
 import { classifyAspirations, openAspirations, REFUSED_CUES } from "./refused-cues";
@@ -22,7 +23,7 @@ describe("O125 a cue refused once is not re-added by accident", () => {
    * later author away from a cue that is now safe, which is the opposite of the point.
    */
   it("every refusing sentence still fails to reach the facet it refused", () => {
-    for (const r of REFUSED_CUES) {
+    for (const r of eachOf(REFUSED_CUES, "the refusal register")) {
       const facets = readNeeds(r.refusedBy).map((n) => facetKey(n.facet));
       if (r.protects) {
         // Span theft: the sentence still reaches the proposed facet through an older cue, and
@@ -46,7 +47,7 @@ describe("O125 a cue refused once is not re-added by accident", () => {
   });
 
   it("each entry carries its measurement, not an opinion", () => {
-    for (const r of REFUSED_CUES) {
+    for (const r of eachOf(REFUSED_CUES, "the refusal register")) {
       expect(r.phrase.length, `${r.unit} entry has no phrase`).toBeGreaterThan(0);
       expect(r.refusedBy.length, `${r.phrase} names no refusing sentence`).toBeGreaterThan(0);
       expect(r.because.length, `${r.phrase} gives no reason`).toBeGreaterThan(0);
@@ -66,9 +67,15 @@ describe("O138 the register can say what is genuinely still open", () => {
   it("names only real corpus sentences that are still aspiring", () => {
     // A refusal whose aspiration has since been promoted is STALE: it would keep subtracting
     // work that is finished, hiding the fact that the refusal itself may now be reversible.
+    // O212: `leavesStanding` is OPTIONAL on an entry, so the inner loop is the one that can go
+    // empty while the register is full — a register of nineteen refusals none of which names a
+    // sentence left standing would pass this without checking a single one. Counted rather than
+    // floored per entry, because an individual refusal legitimately leaves nothing standing.
+    const checked = tally();
     const byText = new Map(REACH_CORPUS.map((e) => [e.text, e]));
-    for (const r of REFUSED_CUES) {
+    for (const r of eachOf(REFUSED_CUES, "the refusal register")) {
       for (const text of r.leavesStanding ?? []) {
+        checked.saw();
         const entry = byText.get(text);
         expect(entry, `${r.unit}: "${text}" is named as left standing but is not in the corpus`).toBeDefined();
         expect(entry!.aspires?.length ?? 0,
@@ -76,6 +83,7 @@ describe("O138 the register can say what is genuinely still open", () => {
         ).toBeGreaterThan(0);
       }
     }
+    expect(checked.count(), "no refusal names a sentence left standing — the check read nothing").toBeGreaterThan(0);
   });
 
   it("subtracts finished thinking from the queue", () => {

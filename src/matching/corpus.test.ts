@@ -1,6 +1,7 @@
 // W231 (O47) verify gate: the standing corpus IS the CI gate the year plan asked for.
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { EI_QUALITY_KEYS } from "@/demo/emotional-fit";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { corpusReachByFacet, REACH_CORPUS, REACH_FLOORS } from "./corpus";
@@ -16,7 +17,7 @@ describe("the corpus is well-formed", () => {
   ]);
 
   it("every entry expects something, and every key names a real facet", () => {
-    for (const entry of REACH_CORPUS) {
+    for (const entry of eachOf(REACH_CORPUS, "the reach corpus")) {
       const keys = [...(entry.reaches ?? []), ...(entry.never ?? []), ...(entry.aspires ?? [])];
       expect(keys.length, `"${entry.text}" pins nothing`).toBeGreaterThan(0);
       for (const key of keys) expect(VALID_KEYS.has(key), `"${entry.text}" names unknown facet ${key}`).toBe(true);

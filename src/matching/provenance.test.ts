@@ -8,7 +8,7 @@ import { notDeclaredFrames, reasonsPatientsCanSee, sentencesPatientsSee } from "
 
 describe("O117 what patients are told, enumerated for the clinician", () => {
   it("lists a line for every declaration, and nothing that is not a declaration", () => {
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       const keys = reasonsPatientsCanSee(clinician).map((line) => line.key);
       for (const area of clinician.careAreas) expect(keys).toContain(`care:${area}`);
       for (const trait of clinician.manner) expect(keys).toContain(`manner:${trait}`);
@@ -54,7 +54,7 @@ describe("O117 what patients are told, enumerated for the clinician", () => {
   });
 
   it("the reason sentence is the finder's own, not a copy of it", () => {
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       const first = reasonsPatientsCanSee(clinician)[0]!;
       const said = sentencesPatientsSee(clinician).map((line) => line.said);
       expect(said).toContain(getPersonalizedMatch(clinician, first.said.toLowerCase()).reason);
@@ -62,12 +62,20 @@ describe("O117 what patients are told, enumerated for the clinician", () => {
   });
 
   it("names the declaration behind every line, because W190 needs it to be correctable", () => {
-    for (const clinician of clinicians) {
+    // O212: guarded on BOTH loops, because they can go empty independently. A non-empty roster
+    // does not mean a line was checked — the three sources concatenated below are all derived
+    // from what a clinician DECLARED, so a record with nothing on it contributes nothing and
+    // this body would run over zero lines while the roster loop looked healthy. Measured at the
+    // time of writing: 19 and 17 lines for the two clinicians.
+    const checked = tally();
+    for (const clinician of eachOf(clinicians, "the roster")) {
       for (const line of [...reasonsPatientsCanSee(clinician), ...sentencesPatientsSee(clinician), ...notDeclaredFrames(clinician)]) {
+        checked.saw();
         expect(line.from.length).toBeGreaterThan(0);
         expect(line.said.length).toBeGreaterThan(0);
       }
     }
+    expect(checked.count(), "no line was checked — every clinician contributed nothing").toBeGreaterThan(0);
   });
 
   it("the not-declared frames stay facts about a declaration, never claims about ability", () => {

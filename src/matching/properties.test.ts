@@ -12,6 +12,7 @@
 // below keeps CI deterministic — change it deliberately, never to make a failure go away.
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import fc from "fast-check";
 import {
   clinicians,
@@ -123,7 +124,7 @@ describe("W232 the invariants, for all inputs", () => {
   it("rounding stability: a score IS the sum of its own printed evidence (the W213 unity)", () => {
     fc.assert(
       fc.property(sentence, (text) => {
-        for (const clinician of clinicians) {
+        for (const clinician of eachOf(clinicians, "the roster")) {
           const evidence = matchEvidence(clinician, text, clinicians);
           expect(scoreAgainst(clinician, needsFor(text, clinicians))).toBe(
             roundScore(evidence.reduce((sum, need) => sum + need.weight, 0)),

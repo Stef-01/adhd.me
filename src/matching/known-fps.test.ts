@@ -1,6 +1,7 @@
 // W231 (O131): the false-positive register, checked in both directions, and the O84 bar.
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { facetKey, readNeeds } from "./needs";
 import { REACH_CORPUS } from "./corpus";
 import {
@@ -34,13 +35,13 @@ describe("O131 the false-positive register knows what is still true", () => {
 
   it("names a real corpus sentence, so the register cannot drift from the thing it describes", () => {
     const corpus = new Set(REACH_CORPUS.map((e) => e.text));
-    for (const fp of KNOWN_FALSE_POSITIVES) {
+    for (const fp of eachOf(KNOWN_FALSE_POSITIVES, "the known-false-positive register")) {
       expect(corpus.has(fp.text), `"${fp.text}" is registered but is not in the corpus`).toBe(true);
     }
   });
 
   it("carries a family and a pinning unit on every entry", () => {
-    for (const fp of KNOWN_FALSE_POSITIVES) {
+    for (const fp of eachOf(KNOWN_FALSE_POSITIVES, "the known-false-positive register")) {
       expect(fp.family.length, `${fp.text} has no family`).toBeGreaterThan(0);
       expect(fp.pinnedBy).toMatch(/^O\d+$/);
     }

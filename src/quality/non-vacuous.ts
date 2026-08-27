@@ -152,7 +152,7 @@ export interface LegitimatelyEmpty {
  * The remaining 112 are the same ordinary work: `src/matching` 20, `src/demo` 10, `src/design` 9,
  * `src/quality` 8, `src/platform` 8, then a long tail.
  */
-export const UNGUARDED_REMAINDER = 112;
+export const UNGUARDED_REMAINDER = 92;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
   {
@@ -169,6 +169,21 @@ export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
     file: "src/matching/refused-cues.test.ts",
     test: "never counts a founder-blocked aspiration as open work",
     why: "Iterates REACH_CORPUS.filter(x => x.awaitingFounder). Zero is the DESIRED end state — it is what the corpus looks like on the day the founder answers the last gated aspiration. A floor here would make answering a founder gate break the suite, which would be this tree's own founder-gate protocol turned upside down.",
+  },
+  {
+    file: "src/matching/known-fps.test.ts",
+    test: "gives every acceptance a reason, because one without is indistinguishable from not looking",
+    why: "O212. Iterates acceptedFalsePositives() — the false positives somebody has decided to live with rather than fix. Empty is the DESIRED end state: it is what the register looks like on the day every known false positive has been fixed instead of accepted. A floor here would mean the suite breaks when the matcher gets better, which inverts the register's purpose. Four are accepted today; the check is that each carries a rationale, and over zero acceptances that is both vacuous and correct.",
+  },
+  {
+    file: "src/matching/needs.test.ts",
+    test: "scores a clinician only on facets they declared",
+    why: "O212, and MEASURED rather than argued. The roster loop is guarded; the inner loop is over matchEvidence(clinician, 'titration and a longer first appointment'), which returned 2 needs for the first clinician and 0 for the second when this was written. A clinician who declares neither titration nor longer appointments producing no evidence is the matcher scoring only what was declared — precisely the property this test asserts — so eachOf here would fail the suite on correct behaviour. The guarded outer loop still asserts scoreAgainst() >= 0 for every clinician, so the test is not vacuous overall.",
+  },
+  {
+    file: "src/matching/edge.test.ts",
+    test: "never says anything back that is not in the closed vocabulary, whatever comes in",
+    why: "O212. Both outer loops (the junk queries, the roster) are guarded; the inner loop is over the evidence junk produces, and junk producing NO evidence is the whole point of the test's subject. A floor would assert that gibberish, markup and pasted script tags DO reach facets. The block's other assertions — that the composed reason contains no '<script>' and no '{{' — run once per query per clinician over the two guarded loops, so the case that matters is checked whether or not any evidence comes back.",
   },
   {
     file: "src/privacy/record-classes.test.ts",

@@ -40,7 +40,7 @@ describe("W225 a question only earns its place if the answer changes the order",
    * nobody declares cannot either. Both would be questions asked for their own sake.
    */
   it("never asks about a facet the whole roster shares or none of it does", () => {
-    for (const clarifier of clarifiers("help", clinicians)) {
+    for (const clarifier of eachOf(clarifiers("help", clinicians), "the clarifiers the full roster earns")) {
       expect(clarifier.heldBy).toBeGreaterThan(0);
       expect(clarifier.heldBy).toBeLessThan(clinicians.length);
     }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { eachOf } from "@/quality/non-vacuous";
+import { eachOf, tally } from "@/quality/non-vacuous";
 import {
   clinicians,
   matchEvidence,
@@ -45,13 +45,21 @@ describe("W221 reading what somebody said into the closed vocabulary", () => {
    * cannot be introduced by templating a reader's own words into the sentence.
    */
   it("says nothing back that is not in the closed vocabulary", () => {
+    // O212: COUNTED, not floored per clinician. A clinician who declares none of the six facets
+    // named below legitimately produces no evidence — that is the matcher being honest, not a
+    // fault — so `eachOf` on the inner loop would assert something false. What may NOT happen is
+    // the whole roster returning nothing, because then this test proves the vocabulary is closed
+    // without having read a single label. Measured when written: 4 and 1.
     const labels = new Set<string>(NEED_LABELS);
+    const checked = tally();
     for (const clinician of eachOf(clinicians, "the roster")) {
       for (const need of matchEvidence(clinician, "hindi, titration, rushed, heart, sleep, drinking")) {
+        checked.saw();
         const allowed = labels.has(need.label) || /-speaking$/.test(need.label);
         expect(allowed, `${need.label} is not in the closed vocabulary`).toBe(true);
       }
     }
+    expect(checked.count(), "the whole roster returned no evidence — no label was read").toBeGreaterThan(0);
   });
 });
 
@@ -76,7 +84,7 @@ describe("W221 the ranking and the explanation are one computation", () => {
   ];
 
   it.each(QUERIES)("every point of score is sayable, and every reason scored: %s", (query) => {
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       const evidence = matchEvidence(clinician, query);
       const said = getPersonalizedMatch(clinician, query).signals;
 
@@ -124,7 +132,7 @@ describe("W221 what the roster declares", () => {
     // half of what somebody is asking. The onboarding interview must not be able to finish
     // without one — and a clinician listed AHEAD of their interview (O34) carries a dated
     // `mannerPending` note instead, so the gap is visible state rather than a silent hole.
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       if (clinician.manner.length === 0) {
         expect(clinician.mannerPending, `${clinician.id} declares no manner and no pending note`).toBeTruthy();
         expect(clinician.mannerPending).toMatch(/^\d{4}-\d{2}-\d{2}/);
@@ -158,7 +166,7 @@ describe("O1 languages go through the one pipeline (F2)", () => {
 
   it("scores what the card says: language evidence is never explanation-only", () => {
     const query = "a GP who speaks Urdu";
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       const evidence = matchEvidence(clinician, query);
       const spoken = evidence.filter((n) => n.facet.kind === "language");
       // Every language on the card contributed to the score...
