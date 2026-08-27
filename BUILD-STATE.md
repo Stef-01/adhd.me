@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 597a04b (2026-08-27T06:25Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O195 done (O194's sibling: the rollout linearity test COULD NOT FAIL — a 1ms vacuity floor dominated its bound by 125×; instrument fixed, threshold chosen from measured linear-vs-quadratic populations, probe added). O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
+`gate: green @ a83ea11 (2026-08-27T07:40Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O196 done (the vacuity sweep: claimed on 23 sites, MEASURED 146 after three scanner bugs the census itself caught; 13 guarded by stakes, 5 declared legitimately empty, 133 pinned as a both-directions ratchet). O195 done (O194's sibling: the rollout linearity test COULD NOT FAIL — a 1ms vacuity floor dominated its bound by 125×; instrument fixed, threshold chosen from measured linear-vs-quadratic populations, probe added). O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -157,6 +157,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > Verify: `pnpm gate` end to end on the tree the push produces, plus the census test failing when
 > pointed at a planted unguarded loop.
+>
+> **DONE 2026-08-27T07:40Z, AND THE CLAIM'S CENTRAL NUMBER WAS WRONG.** This was claimed on a
+> population of **23**. The truth is **146** — a six-fold undercount — and the corrections are the
+> unit's most useful output, because each one was found by the census test failing on something the
+> throwaway scan had never reported:
+>   * the scanner's capture class included `)`, so a bare `for (const x of REGISTER)` captured
+>     `REGISTER)`, matched no import and was dropped. Only loops that happened to end in a call
+>     (`of thing()`) were ever counted — which is why the first list looked so tractable;
+>   * the title regex `["'`](.*?)["'`]` stopped at the first apostrophe, so a test named
+>     `treats 'derived' as a reviewed answer` was keyed as `treats ` and no register entry could
+>     ever match it.
+>
+> **THE LESSON, AND IT IS THE THIRD TIME IN THREE UNITS.** O194's mechanism was wrong until measured
+> (an undefined `var()` invalidates a declaration, it does not fall through — O193), O195's first
+> threshold was wrong until measured (a quadratic is 4× at this step, so a 4× bound sat under the
+> population it was meant to catch), and O196's population was wrong until the census disagreed with
+> me twice. A script answers the question you asked it. A test in the tree keeps disagreeing until
+> the question is right, which is the whole argument for landing the scan as a test rather than
+> running it once and writing the number down.
+>
+> **DELIVERED, AND SMALLER THAN CLAIMED — SAID PLAINLY.** 13 sites guarded via `eachOf`/`tally`,
+> chosen by STAKES rather than convenience: W55 provenance intervals (×2), the W148 advice linter,
+> the directory renderer's "adds no prose of its own" (G6 territory), the finder's patient-visible
+> labels and not-declared frames, the sitemap-to-census trace, the collateral figure register, the
+> synthetic-roster fixture, referral obligations, the dermatology vertical, the outcomes rail, the
+> junk-query sweep, the clarifier repeat check. 5 declared `LEGITIMATELY_EMPTY` with reasons — a
+> `.filter()` empty exactly when nothing has been fixed yet, or on the day a founder gate is
+> ANSWERED, must not be forced non-empty; doing so asserts a false thing and would make answering a
+> gate break the suite. **The remaining 133 are pinned** in the tree's own ratchet idiom (AR2's
+> `UNENFORCED_COUNT`, AR25's `UNCLASSIFIED_EMPTY_BRANCHES`), failing in BOTH directions so the debt
+> cannot grow quietly or shrink unrecorded. The claim said "all 23 classified"; 18 are classified
+> and 133 are named debt, because the 23 did not exist.
+>
+> Gate, on the tree this push produces: `pnpm gate` **EXIT 0** — verify green (294 files / 4364
+> tests, 13 skipped; build clean; audit PASS; perf PASS 50 routes) and the FULL e2e suite green
+> (326 passed, 2 skipped, 17.4m). No production code touched: this unit changes test guards, adds
+> one helper module and one census.
 
 > **O195 (O194's sibling: the OTHER timing assertions, and one of them cannot fail) — claimed
 > 2026-08-27T05:55Z by loop-0827a.** Earned directly by O194. Having found one wall-clock assertion
