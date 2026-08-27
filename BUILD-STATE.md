@@ -119,6 +119,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O204 (the FAQ says ADHD.ME is "a finder" — it has been two interfaces since O192) — claimed
+> 2026-08-27T13:45Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
+> before claiming: green @ 30fd2f4, run end to end by the previous firing.
+>
+> **FOUND THE SAME WAY O203 WAS — by reading another of O200's captures for its own sake rather than
+> as a deletion proof.** `/faq` answers the product's most basic question with "A finder. You
+> describe what you are looking for in your own words, and it shows you listed Sydney GPs who say
+> they do that work." That was true until O192. The product has had TWO interfaces since: `/finder`
+> asks you to describe what you need and ranks the roster against it, `/network` shows you the same
+> people and lets you read them. The FAQ mentions the network nowhere — the word does not appear on
+> the page.
+>
+> **THREE THINGS MAKE THIS WORSE THAN AN OUT-OF-DATE SENTENCE.**
+>   1. **`/network`'s own header sends readers here.** O192 chose `/faq` as the network's top-right
+>      door precisely because it "offers the door the network does not: the questions a reader has
+>      before they read anybody". So the network routes its readers to a page that does not describe
+>      the network.
+>   2. **"How is the order of GPs decided?" answers "only by matching what you asked for."** On
+>      `/network` nothing is matched and there is no order beyond the roster's. A reader who browsed
+>      the network is told their experience was ranked when it was not — and this page is the one the
+>      compliance register calls the likeliest in the product to be quoted back to somebody.
+>   3. **The FAQPage JSON-LD is generated from the same list**, so "ADHD.ME is a finder" is published
+>      to search engines as structured data, not merely rendered as prose.
+>
+> **AND THE FOUNDER'S OWN PLAN MAKES IT SHARPER.** O197 parked the finder on
+> `finder/standalone-deployment` for a separate domain later. On the network's own domain, "A
+> finder" would not be out of date — it would be describing a product that is not there.
+>
+> Scope, three answers rather than a rewrite: what ADHD.ME is, said as the two interfaces it has;
+> how the order is decided, made true of both (the network has no order to decide); and the
+> difference between the two, which is the founder's own differentiation question and the one a
+> reader arriving at either URL actually has. Existing answers not about this stay untouched.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces; the rendered honesty sweep green on
+> `/faq` (patient surface, full rule set) and the new copy linted BEFORE it is written into the page;
+> the JSON-LD checked to carry the corrected answers, since it is generated from the same list;
+> captures at 390 and 1280 in `qa/_runs/o204/` and a DESIGN-QA entry per law 5.
+
 > **O203 (/examples promises "what the product actually does" and renders a template three times) —
 > claimed 2026-08-27T12:55Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted.
 > Gate read before claiming: green @ 4b0622e, run end to end by the previous firing.
