@@ -119,6 +119,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O197 (founder-directed: Emil motion pass on the network, a mission landing page, and the finder
+> parked on a parallel branch) — claimed 2026-08-27T08:05Z by loop-0827a.** Founder brief, in their
+> words: "apply emiil design skills to the network page and also create a seperate landing page to
+> accompany this new interface that talks about the mission of this site is to find the best drs in
+> each state and document their cultural and personal qualities to best connect them with patients,
+> helping patients feel more connected and comfortable. The old interface and regular view is to be
+> paired and in a parallel branch to later be set out as a different deployment on a different
+> domain."
+>
+> **THE COPY IS THE FOUNDER'S AND SHIPS AS GIVEN.** The mission sentence contains "best", which W23's
+> `no-superlatives` pattern matches literally, so the gate would go red on the founder's own words.
+> That is a machine problem, not a wording problem: the founder ruled on 2026-08-26 that advertising
+> review belongs to their reviewers and not to this loop, and O192 recorded that ruling. The same
+> mechanism is used again — the sentence ships verbatim, a `FOUNDER_DECISIONS` entry records that it
+> is the founder's copy and whose desk the review sits on, and an `ACCEPTED_FINDINGS` entry makes the
+> sweep REPORT it rather than block it. The reviewer gets a page that names the finding; the founder
+> gets their words. The loop decides nothing here.
+>
+> Scope, three parts:
+>   1. **Emil-weighted motion pass on `/network` and `/network/[clinician]`.** The founder named Emil
+>      specifically, which overrides CLAUDE.md law 5's usual Jakub-primary weighting for patient
+>      surfaces — a founder instruction outranks the tree's default, and the override is recorded here
+>      rather than applied silently. Emil's frequency gate decides what animates AT ALL; nothing is
+>      added for polish. `prefers-reduced-motion` keeps a static equal for every effect.
+>   2. **A mission landing page** accompanying the network interface, carrying the founder's mission
+>      statement.
+>   3. **The finder parked on a parallel branch** for a later separate deployment on its own domain.
+>      "Later" is load-bearing: the branch is prepared now and NOTHING is removed from `main`, because
+>      cutting the finder out is a deployment decision with a census-wide cascade and the founder said
+>      later, not now.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces, plus the new route's own e2e and a
+> qa/ capture with a DESIGN-QA entry per law 5.
+
 > **O196 (the vacuity sweep the last two units earned: loops that assert over an empty register) —
 > claimed 2026-08-27T06:55Z by loop-0827a.** O194 found a timing check that failed at random; O195
 > found its sibling that could not fail at all. Both were single sites found by accident. This asks
