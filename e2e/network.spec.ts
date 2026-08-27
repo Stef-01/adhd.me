@@ -12,7 +12,7 @@
 // have been testing a design decision that had been reversed.
 
 import { expect, test } from "@playwright/test";
-import { NETWORK_CLINICIANS, possessiveFor } from "../src/network/gallery";
+import { NETWORK_CLINICIANS, consultingSuburbs, possessiveFor } from "../src/network/gallery";
 
 /**
  * A clinician's name without the honorific.
@@ -35,11 +35,29 @@ test("the network shows every GP in the roster, each in their own words", async 
   for (const clinician of NETWORK_CLINICIANS) {
     const card = page.locator(".network-card", { hasText: clinician.name });
     await expect(card, `${clinician.name} is missing from the deck`).toBeVisible();
-    // Their declared line, and the concrete signals round 2 moved onto the card.
-    await expect(card).toContainText(clinician.matchLine);
+    // O202: a gallery card carries what tells one doctor from another — the name, where they
+    // consult, and the areas as chips. The declared sentence and the languages moved to the
+    // profile, which the next assertion proves is one tap away rather than gone.
     await expect(card).toContainText(clinician.fitSignals[0]!);
-    await expect(card).toContainText(clinician.languages[0]!);
+    await expect(card).toContainText(consultingSuburbs(clinician)[0]!);
   }
+});
+
+test("what the gallery leaves off is one tap away, not gone", async ({ page }) => {
+  // O202 removed the declared sentence and the languages line from the card because the founder
+  // called the deck too wordy. That is only defensible if the reader can still reach them — a
+  // gallery that drops a doctor's own words rather than relocating them would be a different and
+  // worse change, so the relocation is pinned rather than assumed.
+  const first = NETWORK_CLINICIANS[0]!;
+
+  await page.goto("/network");
+  const card = page.locator(".network-card", { hasText: first.name });
+  await expect(card, "the deck should no longer carry the declared sentence").not.toContainText(first.matchLine);
+
+  await card.getByRole("link").click();
+  await expect(page).toHaveURL(new RegExp(`/network/${first.id}$`));
+  await expect(page.locator("main")).toContainText(first.matchLine);
+  await expect(page.locator("main")).toContainText(first.languages[0]!);
 });
 
 test("the page says whose words these are before a reader reads any of them", async ({ page }) => {
@@ -207,36 +225,36 @@ test("no section on a profile describes a field it does not render", async ({ pa
   }
 });
 
-test("the card's way-in underlines its own words, not the whole card", async ({ page }) => {
-  // O198, and it was latent since O192 through nine audit rounds. `.network-card-more` is the last
-  // item in a column flex container, so it stretched to the card's full width and its hover
-  // `border-bottom` ran ~110px past the end of its text — at that ratio a link underline reads as a
-  // rule drawn across the card, which is the more emphatic thing and the wrong one.
-  //
-  // INVISIBLE TO EVERY EXISTING SWEEP AND TO EVERY SCREENSHOT, because a hover state only exists
-  // under a cursor and full-page captures are taken without one. So it is pinned as a measurement
-  // rather than left to the next person who happens to park a pointer on a card.
+test("the card's way-in is a glyph on the name row, not a sentence", async ({ page }) => {
+  // O198 pinned this element when it was a six-word link whose hover underline ran 110px past its
+  // own text. O202 replaced the sentence with an arrow at the founder's word ("too wordy to
+  // navigate"), so the measurement that made sense for a text link no longer describes anything —
+  // and a pin that outlives its subject reads as coverage. What is worth keeping is the property
+  // underneath it: the way-in must sit ON the name row rather than adding a line of its own,
+  // because a line of chrome per card is exactly what was removed.
   for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/network");
-    const measured = await page.evaluate(() =>
-      [...document.querySelectorAll(".network-card-more")].map((el) => {
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        return {
-          box: Math.round(el.getBoundingClientRect().width),
-          text: Math.round(range.getBoundingClientRect().width),
-        };
+
+    const arrows = page.locator(".network-card-go");
+    expect(await arrows.count(), "no way-in on the deck").toBeGreaterThan(0);
+
+    // Same row as the name: their vertical centres agree to within a couple of pixels.
+    const rows = await page.evaluate(() =>
+      [...document.querySelectorAll(".network-card-head")].map((head) => {
+        const name = head.querySelector(".network-card-name")!.getBoundingClientRect();
+        const go = head.querySelector(".network-card-go")!.getBoundingClientRect();
+        return Math.abs((name.top + name.bottom) / 2 - (go.top + go.bottom) / 2);
       }),
     );
-    expect(measured.length, "no way-in links on the deck — this test is measuring nothing").toBeGreaterThan(0);
-    for (const { box, text } of measured) {
-      expect(text, "the way-in link has no text").toBeGreaterThan(50);
-      expect(
-        box - text,
-        `at ${width}px the way-in underline runs ${box - text}px past its own words`,
-      ).toBeLessThanOrEqual(2);
+    expect(rows.length).toBeGreaterThan(0);
+    for (const offset of rows) {
+      expect(offset, `at ${width}px the way-in is off the name's row by ${offset}px`).toBeLessThan(4);
     }
+
+    // And the sentence it replaced is really gone, not merely restyled.
+    await expect(page.locator(".network-card-more")).toHaveCount(0);
+    await expect(page.locator(".network-deck")).not.toContainText("Read what");
   }
 });
 

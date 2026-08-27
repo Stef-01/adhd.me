@@ -66,9 +66,22 @@ export const NETWORK_COPY = {
   eyebrow: "The network",
   /** The one idea this screen states. */
   heading: "The GPs who make\u00A0up this network.",
-  /** Sets the count and hands the voice to the clinicians in the same breath. */
+  /**
+   * Sets the count and hands the voice to the clinicians in the same breath.
+   *
+   * O202 CUT THE ENUMERATION, NOT THE HONESTY. The sentence used to list what the pages carry —
+   * "their languages, where they consult, and what they say they see often" — which is 16 of its 44
+   * words and is now the mission page's own paragraph, word for word in places. That is the O198
+   * duplication in the hero, and the founder's "too wordy" verdict landed on it.
+   *
+   * The three things this sentence exists to do all survive, and each is pinned by
+   * `gallery.test.ts`: it states the count derived from the roster (`honesty.claim-earned` — a
+   * two-GP network may not read as a directory), it says the pages are the doctors' own words, and
+   * it denies that any of it is ours (`honesty.clinician-declaration`). A shorter hero is a trim of
+   * the part that repeated another page; the compliance load is not what got cut.
+   */
   declarationNote:
-    `${networkSizeInWords()[0]!.toUpperCase()}${networkSizeInWords().slice(1)} Sydney GPs today, in their own words. Everything on these pages is what each doctor says about how they work — their languages, where they consult, and what they say they see often. None of it is our description of them.`,
+    `${networkSizeInWords()[0]!.toUpperCase()}${networkSizeInWords().slice(1)} Sydney GPs today, in their own words. Everything on these pages is what each doctor says about how they work — none of it is our description of them.`,
   /**
    * O198: THE BAND STOPPED ARGUING AND BECAME A PAIR OF DOORS, and the reason is a defect O197
    * introduced.

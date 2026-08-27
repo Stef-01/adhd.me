@@ -3248,3 +3248,51 @@ production caller was that sentence. Keeping it for a section that may return un
 kept-but-unused code O200 spent a whole unit deleting.
 
 Captures: `qa/_runs/o201/` — the profile at 390 and 1280, before and after.
+
+## O202 — the network became a gallery (2026-08-27, founder-directed)
+
+Founder verdict, verbatim: *"network section it does not look aesthetic enough and is too wordy to
+navigate, make it a more modern gallery."*
+
+**Measured, because "too wordy" is checkable.** Each card stacked six things under the portrait:
+name, suburbs, a full declared sentence, three chips, a languages line, and a way-in naming the
+doctor a second time. **74 words across two cards.** Every fact in it is repeated on the profile one
+tap away. The gallery card carries three: name, where they consult, and the areas as chips — **27
+words, 64% less.** Page height at 390px fell from 2,893px to 2,556px.
+
+**What went, and where it went.** The declared sentence (`matchLine`) and the languages line are on
+the profile, and an e2e pins that they are one tap away rather than gone — a gallery that dropped a
+doctor's own words would be a different and worse change than one that relocated them. The six-word
+way-in became an arrow: on a card whose whole surface is already a link, *"Read what Dr Anubhav
+Saxena says →"* was a button drawn on a door.
+
+**This supersedes O192 rounds 2 and 5 rather than forgetting them.** Round 2 put the signal chips on
+the card because it said too little; round 5 spelled the way-in with the full name so two Saxenas
+were addressed identically. Both were right answers to the question being asked then. The founder
+has now looked at the built thing and asked the opposite question, which is better evidence than
+either round had. Round 5's equality survives where it now lives — the name itself, which is the
+card's heading.
+
+**The first arrow placement was wrong and the capture killed it.** `justify-content: space-between`
+pinned it to the card's right edge, about 150px from a short name — floating rather than belonging.
+A far-edge arrow is a common gallery pattern and it is the wrong one here: `layout.shared-row` is
+about joining two things in one glance. Set directly after the name, the pair reads as one phrase:
+"Dr Anubhav Saxena →".
+
+**The hero lost 14 words and none of its honesty.** Its middle clause enumerated what the pages
+carry — "their languages, where they consult, and what they say they see often" — which is now the
+mission page's own paragraph, near word for word. That is the O198 duplication in the hero. All
+three things the sentence exists to do survive and are each pinned: the count derived from the
+roster (`honesty.claim-earned` — a two-GP network may not read as a directory), that the pages are
+the doctors' own words, and the denial that any of it is ours
+(`honesty.clinician-declaration`). What got cut is the part that repeated another page.
+
+**Section rhythm.** `.network-purpose`'s 72px top margin was measured against cards that stretched to
+level themselves against a bio. A gallery card ends at its chips, so the same margin read as a hole
+between the people and the doors — 56px now.
+
+Kept throughout: every string is the roster's, the 44px card target, palette tokens, hover gated
+behind `@media (hover: hover)` (O199), press feedback (O197), and a static equal under
+`prefers-reduced-motion` — the arrow stays accented and pointing, it just does not travel.
+
+Captures: `qa/_runs/o202/{before,after}-{390,1280}.png`.

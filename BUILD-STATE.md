@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 038653e (2026-08-27T12:00Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 16.8m). O201 done (the network profile told a patient a doctor's degrees were what she sees often — the heading is OURS and was relabelled to /finder's own wording; not one clinician string changed, and a properly-framed sees-often section stays G6's to authorise). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet — deleted with ZERO computed-style change on any rendering element; the scanner was wrong four times first). O199 done (the taste law's hover clause had NO enforcer; 37 of 53 rules applied on devices that cannot hover). O198 done (the network argued its purpose twice — O197's own duplication). O197 done (founder-directed: Emil motion pass, /mission carrying the founder's mission sentence VERBATIM, finder parked). O196/O195/O194 done. Seventh consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T12:45Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.2m). O202 done (founder-directed: the network deck became a gallery — 74 words to 27, 64% less, the six-word way-in now an arrow on the name row, the declared sentence and languages RELOCATED to the profile and pinned as one tap away rather than gone; the hero's enumeration cut as O198-style duplication with all three honesty clauses kept). O201 done (the network profile told a patient a doctor's degrees were what she sees often — the heading is OURS and was relabelled to /finder's own wording). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet — deleted with ZERO computed-style change on any rendering element). O199 done (the taste law's hover clause had NO enforcer; 37 of 53 rules fixed). O198 done (the network argued its purpose twice). O197 done (founder-directed: Emil motion pass, /mission carrying the founder's mission sentence VERBATIM, finder parked). O196/O195/O194 done. Eighth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -156,6 +156,42 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end on the tree the push produces, the network e2e including the new
 > heading-agreement and underline pins, before/after captures at 390 and 1280 in `qa/_runs/o202/`,
 > and a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T12:45Z. THE DECK WENT FROM 74 WORDS TO 27 — 64% LESS — WITH EVERY STRING STILL
+> THE ROSTER'S.** Measured from the roster rather than estimated: name + suburbs + declared sentence
+> + three chips + languages line + a six-word way-in, per card, across two cards. The gallery card
+> carries name, suburbs, chips. Page height at 390px fell 2,893 → 2,556.
+>
+> **THE SIX-WORD WAY-IN BECAME AN ARROW**, and the first placement was wrong. `space-between` pinned
+> it to the card's right edge — about 150px from a short name, floating rather than belonging to
+> anything. A far-edge arrow is a common gallery pattern and it is the wrong one here, because
+> `layout.shared-row` is about joining two things in ONE GLANCE. Set directly after the name it reads
+> as one phrase. The capture found this; the markup looked fine.
+>
+> **WHAT LEFT THE CARD IS PINNED AS RELOCATED, NOT REMOVED.** A new e2e clicks through and asserts
+> the declared sentence and the languages are on the profile — a gallery that dropped a doctor's own
+> words would be a different and worse change than one that moved them, and "it's on the profile" is
+> the kind of claim that rots without a test.
+>
+> **THE HERO LOST 14 WORDS AND NONE OF ITS HONESTY.** Its middle clause enumerated what the pages
+> carry — "their languages, where they consult, and what they say they see often" — which is now the
+> mission page's own paragraph almost word for word: the O198 duplication, in the hero, and exactly
+> what the founder's verdict landed on. All three things the sentence exists to do survive and are
+> each already pinned by `gallery.test.ts`: the roster-derived count, that the pages are the doctors'
+> own words, and the denial that any of it is ours. The compliance load is not what got cut.
+>
+> **O198'S UNDERLINE PIN WAS REPLACED RATHER THAN DELETED.** Its subject was a text link that no
+> longer exists, and a pin that outlives its subject reads as coverage. The property worth keeping
+> was underneath it — the way-in must sit ON the name row rather than adding a line of its own — so
+> that is what is now measured, at both widths, plus an assertion that the sentence is really gone
+> rather than restyled.
+>
+> Also retired with their markup: `.network-card-line`, `.network-card-langs`, `.network-card-more`.
+> A CSS rule outliving its markup by one commit is how O200's disease starts.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 17.2m**. Eighth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O201 (the network profile tells a patient a doctor's degrees are what she sees often) — claimed
 > 2026-08-27T11:35Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read

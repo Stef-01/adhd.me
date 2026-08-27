@@ -70,42 +70,56 @@ export default function NetworkPage() {
                     <ClinicianPortrait clinician={clinician} variant="fill" />
                   </span>
 
+                  {/*
+                    O202 (founder-directed): "network section it does not look aesthetic enough and
+                    is too wordy to navigate, make it a more modern gallery."
+
+                    THE CARD LOST THREE BLOCKS AND KEPT WHAT DISTINGUISHES ONE PERSON FROM ANOTHER.
+                    It used to stack six things under the portrait — name, suburbs, a full declared
+                    sentence, three chips, a languages line, and a way-in naming the doctor a second
+                    time. On a deck of two people that is around sixty words of chrome around two
+                    faces, and every fact in it is repeated on the profile one tap away. A gallery
+                    is a thing you SCAN; a card that has to be read is not one.
+
+                    Gone from the card, still on the profile: the declared sentence (`matchLine`)
+                    and the languages line. Kept: the name, where they consult, and the areas as
+                    chips — chips scan, sentences do not, and these are what tell one doctor from
+                    another at a glance.
+
+                    THIS SUPERSEDES O192 ROUNDS 2 AND 5 RATHER THAN FORGETTING THEM. Round 2 put the
+                    signals on the card because it said too little; round 5 spelled the way-in with
+                    the full name so two Saxenas were addressed identically. Both were right answers
+                    to the question being asked then. The founder has now looked at the built thing
+                    and asked the opposite question, which is better evidence than either round had.
+                    The full-name equality round 5 protected is preserved where it now lives — the
+                    name itself, which is the card's heading.
+
+                    Every string is still the roster's. A shorter card is a SELECTION of their
+                    declarations, never a summary we wrote (`honesty.clinician-declaration`).
+                  */}
                   <span className="network-card-body">
-                    <strong className="network-card-name">{nameNoBreak(clinician.name)}</strong>
+                    {/*
+                      `layout.shared-row`: the name and its way-in on one row. The arrow replaces
+                      six words of chrome — on a card whose whole surface is already a link, "Read
+                      what Dr X says →" was a button drawn on a door.
+                    */}
+                    <span className="network-card-head">
+                      <strong className="network-card-name">{nameNoBreak(clinician.name)}</strong>
+                      <span className="network-card-go" aria-hidden="true">
+                        →
+                      </span>
+                    </span>
+
                     <span className="network-card-where">
                       {consultingSuburbs(clinician).join(" & ")}
                     </span>
-                    {/* Their line, not ours — the one sentence each doctor leads with. */}
-                    <span className="network-card-line">{clinician.matchLine}</span>
 
-                    {/*
-                      ROUND 2: the signals moved onto the card. The audit found the concrete,
-                      humanising facts — what someone actually says they see often — sitting two
-                      clicks away behind credentials, while the card carried a generic "Read more".
-                      These are the lines a reader recognises themselves in, so they come first.
-                    */}
                     <span className="network-card-signals">
                       {clinician.fitSignals.slice(0, 3).map((signal) => (
                         <span key={signal} className="network-card-signal">
                           {signal}
                         </span>
                       ))}
-                    </span>
-
-                    <span className="network-card-langs">
-                      Speaks {clinician.languages.join(", ")}
-                    </span>
-
-                    {/*
-                      ROUND 5: the FULL name, not `shortName`. Both GPs on this roster are Saxena,
-                      so the roster disambiguates hers ("Dr Anusha Saxena") and leaves his as the
-                      bare surname ("Dr Saxena") — correct in a result row read one at a time, and
-                      side by side on a deck it quietly makes him the default Saxena and her the
-                      qualified one. Two people presented as equals get the same form of address.
-                    */}
-                    <span className="network-card-more">
-                      Read what {nameNoBreak(clinician.name)} says
-                      <span aria-hidden="true"> →</span>
                     </span>
                   </span>
                 </Link>
