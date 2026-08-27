@@ -119,6 +119,53 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O210 (three plain ways of asking reach a facet the roster already has) — claimed
+> 2026-08-27T18:55Z by loop-0827a.** UI/aesthetic-review lane; the loop's own numbered queue is
+> exhausted. Gate read before claiming: green @ b50db4d.
+>
+> **FOUND BY DRIVING THE FINDER, AND TWO OTHER CANDIDATES WERE MEASURED AND DISMISSED FIRST.** The
+> stitched capture appeared to show the launch control sitting on the finder's privacy disclaimer;
+> measured in a live viewport at 360, 390, 768 and 1280 it overlaps NOTHING — a stitching artefact,
+> the class O198 already recorded. The mic-blocked banner above the heading is the O18/O46/O48 error
+> ladder working as designed, not a fold violation. Both dismissed on evidence rather than fixed on
+> appearance.
+>
+> **WHAT IS REAL IS A LEXICON GAP, AND THE PROBE PUT A NUMBER ON IT.** Eighteen plain-English
+> phrasings for facets the roster ALREADY holds: **15 reach the right facet, 3 reach nothing.**
+>   * `manner:unhurried` — "a GP who takes their time", "a doctor with patience"
+>   * `manner:attuned` — "a doctor who hears me out"
+>
+> Everything around them works: "rushing", "not rushed", "won't rush", "watch the clock", "not just
+> a number", "someone who actually listens", "doesn't dismiss me", "no jargon" all reach correctly.
+> This is a narrow hole in a lexicon that is mostly right, which is what makes it worth closing
+> rather than redesigning.
+>
+> **WHY IT MATTERS TO A READER RATHER THAN TO A METRIC.** A reader who types the most natural
+> phrasing gets nothing read — and the finder then HONESTLY tells them the order means nothing,
+> because by its own rules it does. The product is truthful and useless in the same breath, while
+> holding exactly the facet they asked for. That is worse than a wrong answer, because nothing on
+> screen suggests anything went missing.
+>
+> **THE MECHANISM IS THE TREE'S OWN, NOT A NEW ONE.** `EI_QUALITIES[quality].cues` is where W221 put
+> cues found by exactly this kind of probe — its comment reads "none of these reached `unhurried`,
+> and every one of them is somebody describing being rushed without using the word." Each new cue
+> gets a corpus entry pinning it, per O190's precedent.
+>
+> **ONE OF THE THREE MAY NOT BE SAFE, AND THAT IS DECIDED BY MEASUREMENT, NOT BY ME.** "patience" is
+> one stemmer step from "patient" — the single most overloaded word in this product ("I am a
+> patient", "new patients welcome", "accepting new patients"). If `stem()` collapses the two, that
+> cue would fire on half the roster's own copy and it will be DROPPED with the collision recorded,
+> not weakened into a regex that happens to pass. Two safe cues and a written-down refusal is a
+> better outcome than three cues and a latent false positive.
+>
+> Scope: the cues that survive the stemmer check, a corpus entry each, and the KPI pins they move
+> re-derived with the cause named at the constant (O190's precedent: one corpus sentence moved six
+> exact-baseline registers). NO change to weights, ranking, or any facet's meaning.
+>
+> Verify: `pnpm gate` end to end; the three phrasings asserted to reach their facet and the refused
+> one asserted NOT to collide; every moved KPI pin re-derived and named. No qa/ capture: this unit
+> renders nothing.
+
 > **O209 (O196's vacuity census does not recognise its own guard, and has overstated its debt by 10
 > since the day it landed) — claimed 2026-08-27T18:00Z by loop-0827a.** UI/aesthetic-review lane;
 > the loop's own queue is exhausted (M11/M12 founder-gated, AR1–AR40 complete). Gate read before
