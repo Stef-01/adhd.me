@@ -119,6 +119,52 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O203 (/examples promises "what the product actually does" and renders a template three times) —
+> claimed 2026-08-27T12:55Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted.
+> Gate read before claiming: green @ 4b0622e, run end to end by the previous firing.
+>
+> **FOUND BY READING A CAPTURE I ALREADY HAD.** O200 shot fifteen public routes to prove its
+> deletions changed nothing; the proof passed and the pictures were never read for their own sake.
+> `/examples` opens with "this page shows what the product actually does, not what a brochure says
+> it does" — and then renders, three times:
+>   * "From that request, the finder read **2** things the person asked for — the order was earned,
+>     and the reason is printed on the card. Shown first: Dr Saxena."
+>   * the same sentence again, **2** again, Dr Saxena again;
+>   * the same sentence, **3**, Dr Saxena.
+>
+> Three worked examples differing by one digit. The page's own opening sentence is the standard it
+> fails.
+>
+> **THREE DEFECTS, AND THE FIRST IS THE ONE O192 ALREADY RULED ON.** `firstName` renders
+> `clinician.shortName`, which for this roster is "Dr Saxena" for BOTH GPs — round 5 fixed exactly
+> this on the deck ("side by side it quietly makes him the default Saxena and her the qualified
+> one"). Here it is worse: three examples all reading "Shown first: Dr Saxena" leave a reader unable
+> to tell whether that is one doctor three times or two different people, which quietly erases the
+> difference the page exists to show.
+>
+> Second: **"From that request" has no antecedent.** No request appears anywhere on the page. The
+> reader sees a headline — patient copy, not a request — and then a sentence referring to "that
+> request" as though they had read one.
+>
+> Third: the pipeline computes per-scenario detail and the page discards all of it but a count.
+>
+> **THE CONSTRAINT THAT CAUSED THIS IS REAL AND MUST NOT BE BROKEN.** The page's header records that
+> a first draft rendered the demo requests verbatim and the rendered-copy sweep REFUSED the page:
+> those sentences carry clinical vocabulary a patient marketing page may not repeat. That control is
+> working and this unit does not touch it. The fix is not to print the request — it is to stop the
+> page implying it did.
+>
+> Scope: the full name instead of the ambiguous short one; the dangling reference replaced with a
+> disclosed constraint, in our own words, saying plainly that the scenario's words are not printed
+> and why — which is more honest than the sentence it replaces, not less; and whatever per-example
+> distinction can be shown from ALREADY-LINTED strings, with anything that would need new vocabulary
+> left alone and said so. NO patient story, no testimonial, no clinical words — the reasons this
+> page exists in this shape are unchanged.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces, the rendered honesty sweep green on
+> `/examples` specifically (it is the check that refused the first draft), captures at 390 and 1280
+> in `qa/_runs/o203/`, and a DESIGN-QA entry per law 5.
+
 > **O202 (founder-directed: the network deck is not aesthetic enough and too wordy — make it a
 > modern gallery) — claimed 2026-08-27T12:05Z by loop-0827a.** Founder brief, verbatim: "network
 > section it does not look aesthetic enough and is too wordy to navigate, make it a more modern
