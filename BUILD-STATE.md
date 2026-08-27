@@ -119,6 +119,48 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O201 (the network profile tells a patient a doctor's degrees are what she sees often) — claimed
+> 2026-08-27T11:35Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
+> before claiming: green @ f2b6da5, run end to end by the previous firing on the tree it pushed.
+>
+> **THE DEFECT, STATED EXACTLY.** `/network/[clinician]` renders a heading — "What Dr Anusha Saxena
+> says she sees often" — over `clinician.experience`, and that field is career history and
+> qualifications: "Medical degree, Australian National University", "Diploma of Child Health",
+> "Fellow of the Royal Australian College of General Practitioners", "Hospital training across NSW".
+> A patient deciding whether this GP handles their situation is told that list is her caseload. The
+> roster's own field register calls `experience` "prior posts and areas the doctor publishes about
+> themselves"; what she says she sees often is `fitSignals` — "ADHD assessment", "Mental health
+> focus", "Women's health" — which the deck card already renders correctly.
+>
+> **THIS IS NOT A TASTE CALL, AND TWO OTHER SURFACES PROVE IT.** `/finder`'s profile renders the SAME
+> field under `<summary>Credentials and experience</summary>` — correct. And `src/directory/render.ts`
+> holds the tree's canonical heading for the other concept, `SCOPE_FRAMING.heading = "Areas this
+> clinician sees often"`, shipped with an attribution ("Told to us by the clinician…") and an explicit
+> DENIAL: "This is not a specialty and not a qualification." The network profile is the only surface
+> in the tree that puts that heading over that field — and it does so while the tree's own framing for
+> the concept exists specifically to deny that these are qualifications.
+>
+> **WHOSE SENTENCE IS BEING FIXED MATTERS.** `honesty.clinician-declaration` forbids characterising a
+> doctor, and every string in that list is hers. The HEADING is ours — the page says so in its own
+> header ("The headings are ours and they say so") — so this changes our sentence and not one word of
+> hers. Introduced by O192 and survived nine audit rounds, because every round read the list as a
+> credentials list and never read it against the heading above it.
+>
+> **THE FIX IS TO RELABEL, NOT TO ADD A SEES-OFTEN SECTION, AND THE REASON IS A GATE.** The obvious
+> richer fix — render `fitSignals` under the existing heading — would owe the reader `SCOPE_FRAMING`'s
+> attribution and denial, and that constant lives in `src/directory/`, which this surface deliberately
+> does not import: `gallery.test.ts` enforces the absence on the import lines because minting
+> directory copy is **G6**, a founder gate. So the section is relabelled to say what it actually
+> shows, matching `/finder`'s wording. Adding a properly-framed sees-often section to the network
+> profile is a real follow-on and it is G6's to authorise, not this unit's to take.
+>
+> Scope: the heading, the two derivation helpers it uses if they fall out of use, and a test that
+> pins heading-to-field agreement so a section cannot again describe a field it does not render. NO
+> reordering of the page and no change to any clinician string.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces; the pin proven non-vacuous against
+> the pre-fix pairing; a qa/ capture with a DESIGN-QA entry per law 5.
+
 > **O200 (10% of the stylesheet styles markup that does not exist) — claimed 2026-08-27T10:40Z by
 > loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted (M1–M10 done, M11/M12
 > founder-gated; AR1–AR40 complete). Gate read before claiming: green @ a0b9a01, run end to end by
