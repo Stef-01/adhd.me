@@ -3422,3 +3422,46 @@ sentences were linted **before** being written into the page, and `/privacy` is 
 than a legal notice, and rewriting the front door's argument is a bigger unit that should be its own.
 
 Captures: `qa/_runs/o205/{before,after}-{390,1280}.png`.
+
+## O206 — /practices stacked two site bars, and the top one was presenter chrome (2026-08-27)
+
+**Visible in the first 133 pixels of the B2B landing page.** `/practices` rendered its own
+`<header>` — a 66px bar — and then `PublicHeader` beneath it, another 67px. Two bars, two wordmarks,
+before a single word of content. Measured across every public route: it was the **only** one where
+the site header did not start at y=0. Everywhere else 0; here 66, pushed down by the bar above it.
+
+**Two scanner corrections on the way to that number, both worth recording.** A first pass counting
+`<header>` elements and "ADHD.ME" links flagged nine routes — because every page has a wordmark in
+the header *and* one in the footer, and because `/network` and `/mission` use a semantic `<header>`
+for their hero block. A second pass counting top-of-page bars flagged `/examples`, `/faq`, `/thanks`
+and `/terms` — those are **breadcrumbs**, which is what they are supposed to be. Only measuring the
+site bar's own `top` offset isolated the real case.
+
+**The top bar was the wrong component entirely, which is the more interesting half.**
+`DemoNavigator` is a demo *tour* switcher: a dropdown of four "demo stops" — Patient finder,
+Clinician pathway, Practice story, Operations demo — for walking somebody through the product. It is
+presenter chrome, and it sat on a public B2B landing page addressed to practice owners who are not
+on a guided tour. It is the page W23's copy linter was written for.
+
+**How both came to be there — a census with a blind spot, again.** O189's own comment records adding
+`PublicHeader` to eight surfaces that "carried breadcrumbs but NO wordmark", listing `practices`
+among them. This page *did* have a wordmark — inside `DemoNavigator`, which renders it as a dropdown
+trigger rather than as the plain home link the census looked for. So a fix for "no wordmark
+anywhere" put a second one on the one page in its list that already had one. The stray empty `<>`
+fragment left beside the inserted `PublicHeader` — with its `</>` 200 lines below — was the
+fingerprint of that edit, and removing the opening half is how the dangling other half surfaced.
+
+Now one bar: `PublicHeader` carries the wordmark and the patient door O189 wanted, and the page's
+own section nav keeps its in-page anchors and its sign-in directly beneath, where a B2B landing's
+section nav belongs. `DemoNavigator` is untouched on `/demo`, `/console` and the clinician
+walkthrough — the presenter and staff contexts it was built for.
+
+**The perf gate caught the improvement and refused to let it go unbanked.** Removing a
+`"use client"` dropdown from an otherwise static page cut `/practices` from 359 KB to 351 KB, and
+the gate failed with `stale-budget` until the budget was re-derived — "an untracked drop is progress
+nobody recorded", the same law AR17's raw-hex ratchet applies to colour. Exactly one line moved.
+
+**Named and deliberately not swept along:** whether `DemoNavigator` belongs on `/clinicians` — also
+a public professional surface — is the same question one page over, and deserves its own claim.
+
+Captures: `qa/_runs/o206/{before,after}-{390,1280}.png`.

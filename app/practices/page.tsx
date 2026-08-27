@@ -7,29 +7,45 @@ export const metadata: Metadata = {
   title: "For practices",
   description: "What ADHD.ME does for a general practice: patients who arrive already matched to the clinician who declared that work.",
 };
-import { DemoNavigator } from "../demo-navigator";
 import { LANDING_COPY as C } from "@/compliance/landing-copy";
 
 export default function PracticesPage() {
   return (
     <div className="min-h-screen bg-white text-stone-900">
-      <header className="border-b border-stone-100">
-        <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <DemoNavigator />
-          <div className="flex items-center gap-6 text-sm text-stone-600">
-            <a href="#practice-story" className="hidden hover:text-stone-900 sm:inline">{C.nav.story}</a>
-            <a href="#how" className="hidden hover:text-stone-900 sm:inline">{C.nav.product}</a>
-            <a href="#measurement" className="hidden hover:text-stone-900 sm:inline">{C.nav.measurement}</a>
-            <Link href="/console/signin" className="font-medium text-stone-900 hover:underline">
-              {C.nav.cta}
-            </Link>
-          </div>
-        </nav>
-      </header>
+      {/*
+        O206: THIS PAGE CARRIED TWO SITE BARS, 133px OF CHROME BEFORE A WORD OF CONTENT — the only
+        public route where the site header did not start at y=0.
 
-      <>
+        The top one was `DemoNavigator`, which is a demo TOUR switcher: a dropdown of four "demo
+        stops" for walking somebody through the product. Presenter chrome, on a public B2B landing
+        page addressed to practice owners who are not on a guided tour. It stays exactly as it is on
+        /demo, /console and the clinician walkthrough — the contexts it was built for.
 
+        HOW BOTH CAME TO BE HERE. O189 added `PublicHeader` to eight surfaces its census found
+        "carried breadcrumbs but NO wordmark", and listed practices among them. This page DID have
+        one — inside `DemoNavigator`, which renders it as a dropdown trigger rather than as the plain
+        home link the census looked for. So a fix for "no wordmark anywhere" put a second one on the
+        one page in its list that already had one, and left a stray empty fragment beside it.
+
+        Now one bar. `PublicHeader` carries the wordmark and the patient door O189 wanted; the
+        page's own section nav keeps its in-page anchors and its sign-in, directly beneath, where a
+        B2B landing's section nav belongs.
+      */}
       <PublicHeader />
+
+      <nav
+        aria-label="On this page"
+        className="border-b border-stone-100"
+      >
+        <div className="mx-auto flex max-w-5xl items-center justify-end gap-6 px-6 py-3 text-sm text-stone-600">
+          <a href="#practice-story" className="hidden hover:text-stone-900 sm:inline">{C.nav.story}</a>
+          <a href="#how" className="hidden hover:text-stone-900 sm:inline">{C.nav.product}</a>
+          <a href="#measurement" className="hidden hover:text-stone-900 sm:inline">{C.nav.measurement}</a>
+          <Link href="/console/signin" className="font-medium text-stone-900 hover:underline">
+            {C.nav.cta}
+          </Link>
+        </div>
+      </nav>
 
       <main id="main-content" className="mx-auto max-w-5xl px-6">
         <section className="py-20 sm:py-28">
@@ -203,8 +219,6 @@ export default function PracticesPage() {
           </Link>
         </section>
       </main>
-
-      </>
 
       <footer className="border-t border-stone-100">
         <div className="mx-auto flex max-w-5xl flex-col gap-1 px-6 py-8 text-sm text-stone-500">

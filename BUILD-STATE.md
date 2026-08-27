@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 3c305c9 (2026-08-27T15:15Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.9m). O205 done (the privacy notice described one of two interfaces — the SAME defect its own header records fixing once before, one interface later; the network now has a section saying it holds nothing and decides nothing, rendered balance 7/0 to 16/8). O204 done (the FAQ still called ADHD.ME "a finder"; the stale answer was in the FAQPage JSON-LD too). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Eleventh consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T16:05Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 18.3m). O206 done (/practices stacked TWO site bars — 133px of chrome before a word of content, the only public route whose site header did not start at y=0; the top one was DemoNavigator, a demo TOUR switcher, on a public B2B page. O189's census missed the wordmark because it lives in a dropdown trigger. Removing a use-client dropdown cut 8 KB and the perf gate refused to leave it unbanked). O205 done (the privacy notice described one of two interfaces — the same defect its own header records fixing once before). O204 done (the FAQ still called ADHD.ME "a finder"). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Twelfth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -158,6 +158,41 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end; the bar census re-run to show `/practices` joining every other
 > route at y=0; `e2e/public-nav.spec.ts` and `guidelines-sweep.spec.ts` green; before/after captures
 > at 390 and 1280 in `qa/_runs/o206/` and a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T16:05Z. ONE BAR, AND THE PERF GATE PROVED THE FIX DID SOMETHING REAL.**
+>
+> `/practices` now starts its site bar at y=0 like every other `PublicHeader` route. The page keeps
+> its section nav — in-page anchors and sign-in — directly beneath, and `DemoNavigator` is untouched
+> on `/demo`, `/console` and the clinician walkthrough.
+>
+> **REMOVING A `"use client"` DROPDOWN FROM AN OTHERWISE STATIC PAGE CUT 8 KB OF SHIPPED JS**, and
+> `pnpm verify` FAILED on it: `stale-budget /practices: ships 351 KB under a 395 KB budget — bank the
+> improvement before it becomes room to regress into`. That is the ratchet doing the job AR17's
+> raw-hex census does for colour — an untracked drop is progress nobody recorded. Re-derived; exactly
+> one line moved, 359 → 351 KB measured.
+>
+> **TWO SCANNER CORRECTIONS ON THE WAY TO THE NUMBER, both recorded because the pattern is now
+> familiar.** Counting `<header>` elements and "ADHD.ME" links flagged NINE routes — every page has a
+> wordmark in the header and another in the footer, and `/network` and `/mission` use a semantic
+> `<header>` for their hero. Counting top-of-page bars flagged four more — those are BREADCRUMBS,
+> which is what they are supposed to be. Only measuring the site bar's own `top` offset isolated the
+> one real case. Three scans, two of them wrong, before a one-route answer.
+>
+> **THE CAUSE WAS A CENSUS WITH A BLIND SPOT, and O189's own comment is the evidence.** It added
+> `PublicHeader` to eight surfaces that "carried breadcrumbs but NO wordmark" and listed `practices`
+> among them; this page DID have one, inside `DemoNavigator`, which renders it as a dropdown trigger
+> rather than the plain home link the census looked for. The stray empty `<>` fragment beside the
+> inserted header — with its `</>` two hundred lines below — was the fingerprint, and removing the
+> opening half is how the dangling other half surfaced.
+>
+> **LEFT ALONE AND NAMED**: whether `DemoNavigator` belongs on `/clinicians`, also a public
+> professional surface, is the same question one page over and deserves its own claim rather than
+> being swept along by this one.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 18.3m**, including `public-nav`, `semantics` (47 routes, 227 headings, 0 findings), `a11y` and
+> `guidelines-sweep`. Twelfth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O205 (the privacy notice describes one of two interfaces — the same defect it records having
 > fixed once already) — claimed 2026-08-27T14:35Z by loop-0827a.** UI/aesthetic-review lane;
