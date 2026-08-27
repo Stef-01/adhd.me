@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { clarifiers, PREF_PROMPTS } from "./clarify";
 import { clinicians, matchQuality, rankClinicians } from "@/demo/clinicians";
 import { facetKey, readNeeds } from "./needs";
@@ -28,7 +29,7 @@ describe("W225 a question only earns its place if the answer changes the order",
   it("never asks about something the reader already said", () => {
     const query = "I want a longer first appointment and my dose needs titration";
     const asked = new Set(readNeeds(query).map((need) => need.label));
-    for (const clarifier of clarifiers(query, clinicians)) {
+    for (const clarifier of eachOf(clarifiers(query, clinicians), "the clarifiers this query earns")) {
       // The facet is not one already reached, so the question cannot be a repeat.
       expect(readNeeds(clarifier.answer).every((need) => !asked.has(need.label))).toBe(true);
     }

@@ -6,6 +6,7 @@
 // joins fields and the join is where the claim appears.
 
 import { describe, expect, it } from "vitest";
+import { tally } from "@/quality/non-vacuous";
 import {
   PROFESSION_COPY,
   REGISTRATION_FRAMING,
@@ -250,10 +251,15 @@ describe("W187 the rendered document keeps the structure it was checked in", () 
     // from the structured object it was handed.
     const rendered = ok(GP);
     const known = new Set(renderedLines(rendered).map(({ text }) => text));
+    // O196: COUNTED. Every blank line is skipped, so a renderer that emitted nothing but newlines
+    // — or nothing at all — would satisfy this loop without making a single comparison.
+    const checked = tally();
     for (const line of renderProfileText(rendered).split("\n")) {
       const stripped = line.replace(/^#+\s*/, "").trim();
       if (stripped === "") continue;
+      checked.saw();
       expect(known, `renderer introduced unlinted copy: ${stripped}`).toContain(stripped);
     }
+    expect(checked.count(), "the rendered document had no non-empty line to check").toBeGreaterThan(0);
   });
 });

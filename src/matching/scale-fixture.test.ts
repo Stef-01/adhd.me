@@ -3,6 +3,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { clinicians } from "@/demo/clinicians";
 import { clarifierScaleReport, syntheticRoster } from "@/matching/scale-fixture";
 
@@ -57,7 +58,7 @@ describe("the fixture never reaches a patient", () => {
   });
 
   it("carries no entry that could be mistaken for a real clinician", () => {
-    for (const entry of syntheticRoster(20)) {
+    for (const entry of eachOf(syntheticRoster(20), "the synthetic roster")) {
       expect(entry.realPerson).toBeUndefined();
       expect(entry.image).toBeNull();
       expect(entry.id).toMatch(/^synthetic-/);

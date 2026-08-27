@@ -8,6 +8,7 @@
 // in the closed vocabulary, and every stated ordering guarantee holding at the edge.
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { syntheticClinician } from "@/demo/synthetic-clinician";
 import {
   clinicians,
@@ -64,8 +65,8 @@ describe("O9 hostile and accidental input", () => {
 
   it("never says anything back that is not in the closed vocabulary, whatever comes in", () => {
     const allowed = new Set<string>(NEED_LABELS);
-    for (const query of JUNK) {
-      for (const clinician of clinicians) {
+    for (const query of eachOf(JUNK, "the junk queries")) {
+      for (const clinician of eachOf(clinicians, "the roster")) {
         for (const need of matchEvidence(clinician, query)) {
           expect(allowed.has(need.label) || /-speaking$/.test(need.label), `${need.label}`).toBe(true);
         }

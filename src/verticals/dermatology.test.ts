@@ -9,6 +9,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import {
   DERMATOLOGY_MEMBERS,
   DERMATOLOGY_SPEC,
@@ -116,7 +117,7 @@ describe("W191 the outstanding work is decomposed by who has to act", () => {
   it("says indeterminate rather than guessing, with no pool of what exists", () => {
     // W158's first refusal: without a second input, "exists but unsigned" and "never authored"
     // are the same absence. Nothing here exists, so indeterminate is also the true answer.
-    for (const assessment of dermatologyOutstanding().members) {
+    for (const assessment of eachOf(dermatologyOutstanding().members, "the dermatology vertical's members")) {
       expect(assessment.status).toBe("indeterminate");
     }
   });

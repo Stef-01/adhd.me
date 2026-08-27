@@ -10,6 +10,7 @@
 // The invariant that matters is unchanged and asserted below: every URL in the sitemap traces back
 // to a census entry, and no literal `[…]` template is ever advertised.
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { censusPathFor, sitemapPaths } from "../../app/sitemap";
 import { PUBLIC_SURFACES } from "@/compliance/public-surfaces";
 import { NETWORK_CLINICIANS } from "@/network/gallery";
@@ -34,7 +35,7 @@ describe("O190 the sitemap is the census, filtered by stated rules only", () => 
 
   it("traces every URL back to the census — no second source of truth", () => {
     const census = new Set(PUBLIC_SURFACES.map((s) => s.path));
-    for (const p of sitemapPaths()) {
+    for (const p of eachOf(sitemapPaths(), "the sitemap's URLs")) {
       expect(census.has(censusPathFor(p)), `${p} is in the sitemap but not the census`).toBe(true);
     }
   });

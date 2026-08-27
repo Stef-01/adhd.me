@@ -1,6 +1,7 @@
 // O117: the console panel and the finder cannot disagree about what a patient is told.
 
 import { describe, expect, it } from "vitest";
+import { eachOf, tally } from "@/quality/non-vacuous";
 import { clinicians, getPersonalizedMatch, matchEvidence } from "@/demo/clinicians";
 import { facetKey } from "@/matching/needs";
 import { notDeclaredFrames, reasonsPatientsCanSee, sentencesPatientsSee } from "@/matching/provenance";
@@ -34,16 +35,22 @@ describe("O117 what patients are told, enumerated for the clinician", () => {
    * it — same function, same evidence.
    */
   it("every label it shows is one the finder would really print", () => {
-    for (const clinician of clinicians) {
+    // O196: COUNTED, because this body skips twice — past labels that are not care/manner, and
+    // past labels whose own words are not their cue. A non-empty roster is not enough to know the
+    // assertion ran, so the number that actually reached `expect` is the thing with a floor on it.
+    const checked = tally();
+    for (const clinician of eachOf(clinicians, "the roster")) {
       for (const line of reasonsPatientsCanSee(clinician)) {
         if (!line.key?.startsWith("care:") && !line.key?.startsWith("manner:")) continue;
         // Ask the finder, in the reader's own register, for exactly this thing.
         const evidence = matchEvidence(clinician, line.said.toLowerCase());
         const printed = evidence.map((need) => facetKey(need.facet));
         if (printed.length === 0) continue; // the label's words may not be its own cue
+        checked.saw();
         expect(printed).toContain(line.key);
       }
     }
+    expect(checked.count(), "no label reached the assertion — the two skips swallowed them all").toBeGreaterThan(0);
   });
 
   it("the reason sentence is the finder's own, not a copy of it", () => {
@@ -64,14 +71,18 @@ describe("O117 what patients are told, enumerated for the clinician", () => {
   });
 
   it("the not-declared frames stay facts about a declaration, never claims about ability", () => {
-    for (const clinician of clinicians) {
+    const checked = tally();
+    for (const clinician of eachOf(clinicians, "the roster")) {
       for (const line of notDeclaredFrames(clinician)) {
+        checked.saw();
         expect(line.said.toLowerCase()).toContain("declare");
         for (const forbidden of ["cannot", "unable", "does not do", "not qualified", "no good"]) {
           expect(line.said.toLowerCase()).not.toContain(forbidden);
         }
       }
     }
+    // O196: a roster where nobody has an undeclared facet would run this over nothing.
+    expect(checked.count(), "no not-declared frame was checked").toBeGreaterThan(0);
   });
 
   it("says when a sometimes-declaration answers at half weight, because the clinician chose", () => {

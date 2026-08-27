@@ -6,6 +6,7 @@
 // array position loses exactly this kind of fact).
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import type { PatientId, PracticeId } from "@/domain/types";
 import {
   ACCEPTANCE_STATE_COPY,
@@ -88,7 +89,7 @@ describe("W134 no patient-linked obligation without a recorded acceptance", () =
 
   it("obligations name the RECEIVING practice, since they are the ones who took it on", () => {
     const proof = acceptedReferral(status(REACHABLE.accepted))!;
-    for (const obligation of obligationsFor(proof)) {
+    for (const obligation of eachOf(obligationsFor(proof), "the obligations an accepted referral creates")) {
       expect(obligation.practiceId).toBe(TO);
       expect(obligation.patientId).toBe(PATIENT);
       expect(obligation.since).toBe("2026-02-03");

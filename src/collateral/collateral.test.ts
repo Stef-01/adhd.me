@@ -2,6 +2,7 @@
 // registered, sourced, and still equal to what the code computes.
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import { DECK, ONE_PAGER } from "@/collateral/content";
 import { FIGURES, NEEDS_FOUNDER_VERIFICATION, figure } from "@/collateral/figures";
 import { literalNumbersIn, referencedFigureIds, resolveFigures } from "@/collateral/render";
@@ -62,7 +63,7 @@ describe("W46 figure register", () => {
 
 describe("W46 asset copy traceability", () => {
   it("every figure referenced by the assets is registered", () => {
-    for (const text of allCopy()) {
+    for (const text of eachOf(allCopy(), "every string the collateral renders")) {
       for (const id of referencedFigureIds(text)) {
         expect(() => figure(id), `unregistered figure "${id}" in: ${text}`).not.toThrow();
       }
@@ -153,7 +154,7 @@ describe("W46 deck layout invariants", () => {
   it("every bullet on a stat-card slide leads with a registered figure", () => {
     // The card renderer promotes the leading token to the big number, so a bullet
     // starting with prose would render a word ("A") where a figure belongs.
-    for (const slide of DECK.slides.filter((s) => s.layout === "cards")) {
+    for (const slide of eachOf(DECK.slides.filter((s) => s.layout === "cards"), "the deck's stat-card slides")) {
       for (const bullet of slide.bullets) {
         expect(bullet, `card bullet must start with a figure: ${bullet}`).toMatch(/^\{\{[a-z0-9.-]+\}\}/i);
       }

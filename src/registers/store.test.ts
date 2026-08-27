@@ -2,6 +2,7 @@
 // real clinical content out of the placeholder catalogue until W56 is unblocked.
 
 import { beforeEach, describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import type { ConditionCode, PracticeId } from "@/domain/types";
 import {
   getRegisters,
@@ -104,7 +105,7 @@ describe("W60 G5 boundary", () => {
   });
 
   it("every placeholder interval says outright that it is not guidance", () => {
-    for (const interval of getRegisters().intervals) {
+    for (const interval of eachOf(getRegisters().intervals, "the shipped register intervals")) {
       expect(interval.provenance.citation.toLowerCase()).toContain("not clinical guidance");
       // A placeholder must not masquerade as a citable source.
       expect(interval.provenance.url).toContain("example.invalid");
@@ -114,7 +115,7 @@ describe("W60 G5 boundary", () => {
   it("placeholder intervals still satisfy the W55 provenance contract", () => {
     // The container's guarantees hold even for placeholders: no interval without a
     // source, an https URL, and a retrieval no earlier than publication.
-    for (const interval of getRegisters().intervals) {
+    for (const interval of eachOf(getRegisters().intervals, "the shipped register intervals")) {
       const { citation, url, publishedOn, retrievedOn } = interval.provenance;
       expect(citation.trim()).not.toBe("");
       expect(url.startsWith("https://")).toBe(true);

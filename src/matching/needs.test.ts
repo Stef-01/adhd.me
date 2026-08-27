@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import {
   clinicians,
   matchEvidence,
@@ -45,7 +46,7 @@ describe("W221 reading what somebody said into the closed vocabulary", () => {
    */
   it("says nothing back that is not in the closed vocabulary", () => {
     const labels = new Set<string>(NEED_LABELS);
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       for (const need of matchEvidence(clinician, "hindi, titration, rushed, heart, sleep, drinking")) {
         const allowed = labels.has(need.label) || /-speaking$/.test(need.label);
         expect(allowed, `${need.label} is not in the closed vocabulary`).toBe(true);
@@ -107,7 +108,7 @@ describe("W221 the ranking and the explanation are one computation", () => {
 
   it("scores a clinician only on facets they declared", () => {
     const needs = readNeeds("titration and a longer first appointment");
-    for (const clinician of clinicians) {
+    for (const clinician of eachOf(clinicians, "the roster")) {
       for (const need of matchEvidence(clinician, "titration and a longer first appointment")) {
         if (need.facet.kind === "care") expect(clinician.careAreas).toContain(need.facet.area);
         if (need.facet.kind === "manner") expect(clinician.manner).toContain(need.facet.trait);

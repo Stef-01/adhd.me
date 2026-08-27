@@ -2,6 +2,7 @@
 // clinician. The e2e half is e2e/outcomes.spec.ts.
 
 import { describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
 import type { PatientId, PracticeId } from "@/domain/types";
 import type { ReferralEvent, ReferralEventKind } from "@/referrals/leakage";
 import * as mod from "./dashboard";
@@ -172,7 +173,7 @@ describe("W173 it ranks nobody", () => {
   it("carries no clinician through to a verdict", () => {
     // The input has a clinician nowhere to begin with, and the output does not acquire one.
     const withPeople = RAIL.map((e) => ({ ...e, clinicianId: "clin-1" }));
-    for (const outcome of referralChainOutcomes(withPeople)) {
+    for (const outcome of eachOf(referralChainOutcomes(withPeople), "the referral-chain outcomes")) {
       expect(JSON.stringify(outcome)).not.toContain("clin-1");
     }
   });
