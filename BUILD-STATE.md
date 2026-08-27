@@ -119,6 +119,48 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O205 (the privacy notice describes one of two interfaces — the same defect it records having
+> fixed once already) — claimed 2026-08-27T14:35Z by loop-0827a.** UI/aesthetic-review lane;
+> numbered lanes exhausted. Gate read before claiming: green @ eab4f97.
+>
+> **ASKED AS THE GENERAL QUESTION THIS TIME, RATHER THAN READING ONE MORE CAPTURE.** O203 and O204
+> were the same shape — copy that went stale when O192 added a second interface — so the whole
+> public surface was scanned for it: rendered text of fourteen routes, counting mentions of the
+> finder against mentions of the network. Three surfaces name the finder and never the network: `/`
+> (1/0), `/approach` (2/0), and **`/privacy` (7/0)**.
+>
+> **`/privacy` IS THE ONE THAT MATTERS, AND ITS OWN HEADER IS THE ARGUMENT.** `app/privacy/page.tsx`
+> line 6 records the O35 restructure: the draft "led with the B2B practice-software story — a
+> product that is NOT YET RUNNING — while the product people actually use today, the public finder,
+> appeared nowhere. That inverted the reader's risk." The page has the SAME DEFECT AGAIN, one
+> interface later. A notice that has already been fixed once for describing part of the product is
+> the strongest possible evidence that this is a recurring failure rather than an oversight.
+>
+> **WHAT IS ACTUALLY MISSING, AND IT IS GOOD NEWS THE NOTICE IS NOT TELLING.** Every privacy claim
+> on the page is scoped to the finder — "the whole finder runs in your browser", "you can use every
+> part of the finder without telling us who you are". `/network` and `/network/[clinician]` are
+> statically generated pages with no input at all: there is nothing to type, so there is nothing to
+> hold. A reader browsing named doctors has no statement covering the page they are on, and the
+> honest statement is the reassuring one.
+>
+> **AND THE ADM SECTION OVERSTATES ITS OWN SCOPE.** "Two things are automated. The finder orders
+> clinicians…" reads as a complete list for the product. On the network nothing is automated —
+> the roster is listed in roster order, unranked — which is a fact worth stating on a page whose job
+> is saying what decides things about you. The linked `/privacy/automated-decisions` notice mentions
+> neither interface by name (0 and 0), so it neither helps nor contradicts.
+>
+> Scope: name the network where the notice scopes a claim to the finder, and say what the network
+> holds (nothing) and decides (nothing). NO new claim about the finder, no restructure, and the
+> draft/counsel-gate framing untouched — this is a notice being made complete about a surface that
+> already exists, not a policy change. `/` and `/approach` are recorded here as the same class and
+> left: they are marketing copy rather than a legal notice, and rewriting the front door's argument
+> is a bigger unit that should be its own.
+>
+> Verify: `pnpm gate` end to end; the new copy linted BEFORE it is written into the page and the
+> rendered sweep green on `/privacy` (classified `patient_notice` — every marketing rule applies);
+> `e2e/privacy.spec.ts` and the automated-decisions tests green; captures at 390 and 1280 in
+> `qa/_runs/o205/` and a DESIGN-QA entry per law 5.
+
 > **O204 (the FAQ says ADHD.ME is "a finder" — it has been two interfaces since O192) — claimed
 > 2026-08-27T13:45Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
 > before claiming: green @ 30fd2f4, run end to end by the previous firing.
