@@ -379,7 +379,6 @@ textarea:focus-visible {
 
 .quiet-link,
 .text-action,
-.match-count,
 .icon-button {
   border: 0;
   color: var(--muted);
@@ -391,7 +390,9 @@ textarea:focus-visible {
 .quiet-link, .text-action { color: var(--ink); }
 
 @media (hover: hover) {
-  .quiet-link:hover, .text-action:hover, .match-count:hover, .icon-button:hover { color: var(--ink); }
+  .quiet-link:hover,
+.text-action:hover,
+.icon-button:hover { color: var(--ink); }
 }
 
 .icon-button {
@@ -423,7 +424,6 @@ textarea:focus-visible {
 
 .voice-screen,
 .listening-screen,
-.review-screen,
 .type-screen,
 .booking-screen {
   display: flex;
@@ -438,9 +438,7 @@ textarea:focus-visible {
   text-align: center;
 }
 
-.voice-prompt h1,
-.review-content h1,
-.request-banner h1 {
+.voice-prompt h1 {
   margin: 13px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-weight: 430;
@@ -503,16 +501,6 @@ textarea:focus-visible {
   box-shadow: 0 0 0 9px var(--accent-soft), 0 14px 30px rgb(28 29 25 / 12%);
 }
 
-.micro-footer {
-  position: absolute;
-  right: 0;
-  bottom: 18px;
-  left: 0;
-  color: var(--faint);
-  font-size: 0.6875rem;
-  text-align: center;
-}
-
 .listening-copy {
   padding-bottom: 40px;
 }
@@ -540,20 +528,13 @@ textarea:focus-visible {
   margin-top: 22px;
 }
 
-.voice-actions .listening-time {
-  margin-top: 7px;
-  color: var(--ink);
-}
-
 .type-content,
 .booking-content {
   padding: 42px 24px 20px;
 }
 
 .type-content h1,
-.booking-content h1,
-.all-heading h1,
-.confirmed-screen h1 {
+.booking-content h1 {
   margin: 10px 0 0;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 2.6875rem;
@@ -635,26 +616,6 @@ textarea:focus-visible {
 
 
 
-
-.priority-list,
-.fit-signal-row,
-.practical-signal-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-
-.priority-list span,
-.fit-signal-row span {
-  padding: 5px 8px;
-  border-radius: 3px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  font-size: 0.6875rem;
-  font-weight: 620;
-  line-height: 1.25;
-}
 
 /* O21: the profile's match reasons with provenance. Same accent language as the pills the
    list replaced, one reason per line so the label and its "from your words" pair read as a
@@ -850,63 +811,6 @@ textarea:focus-visible {
   .compare-content h1 { font-size: 1.875rem; }
 }
 
-.practical-signal-row {
-  margin-top: 7px;
-}
-
-.practical-signal-row span {
-  padding: 4px 7px;
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  color: var(--muted);
-  background: transparent;
-  font-size: 0.6875rem;
-  font-weight: 560;
-  line-height: 1.25;
-}
-
-.refine-line {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 22px;
-  padding: 0;
-  border: 0;
-  color: var(--accent);
-  background: transparent;
-  font-size: 0.875rem;
-  font-weight: 620;
-  cursor: pointer;
-}
-
-.matching-screen,
-.confirmed-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 28px 24px 34px;
-}
-
-
-
-
-
-
-
-.request-banner {
-  padding: 22px 30px 14px;
-}
-
-.request-banner h1 {
-  display: -webkit-box;
-  overflow: hidden;
-  max-width: 350px;
-  font-size: 2.25rem;
-  line-height: 1.02;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
 .refine-compact {
   display: flex;
   align-items: center;
@@ -927,7 +831,6 @@ textarea:focus-visible {
 }
 
 
-.match-portrait > img,
 .profile-portrait > img {
   object-fit: cover;
 }
@@ -1006,8 +909,6 @@ textarea:focus-visible {
 }
 
 /* The computed distance, on its own line so it does not join the metadata dot chain. */
-.clinician-distance { display: block; margin-top: 3px; color: var(--faint); }
-
 /* The live transcript. Serif and large, because it is the person's own words being read back. */
 .listening-transcript {
   margin: 18px 0 0;
@@ -1090,38 +991,8 @@ textarea:focus-visible {
 
 /* A claim the clinician made about themselves, styled so it does not read as a verified badge.
    No accent, no icon, no pill: the point is that it is unconfirmed. */
-.declared-claim {
-  margin: 10px 0 0;
-  color: var(--faint);
-  font-size: 0.78125rem;
-  line-height: 1.5;
-}
-
 /* A disclosure a reader has to open is one most people never see, so this is always expanded and
    sits directly after the clinician's name in the reading order. */
-.founder-disclosure {
-  margin: 12px 0 4px;
-  padding: 11px 13px;
-  border-left: 2px solid var(--ink);
-  background: #f6f4ee;
-}
-
-.founder-disclosure strong {
-  display: block;
-  margin-bottom: 3px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.founder-disclosure p {
-  margin: 0;
-  font-size: 0.83rem;
-  line-height: 1.5;
-}
-
-
 .clinician-meta {
   /* O150: `pretty` stops the orphan. At the 62ch cap this line broke as "… Beecroft &" /
      "Double Bay", leaving two words alone under a full line — the widow the Vercel guidelines
@@ -1134,28 +1005,6 @@ textarea:focus-visible {
   color: var(--muted);
   font-size: 0.875rem;
   line-height: 1.45;
-}
-
-@media (hover: hover) {
-  .match-portrait:hover .portrait-nav {
-    /* O150: `pretty` stops the orphan. At the 62ch cap this line broke as "… Beecroft &" /
-       "Double Bay", leaving two words alone under a full line — the widow the Vercel guidelines
-       name text-pretty for. */
-    text-wrap: pretty;
-    margin: 4px 0 0;
-    /* O129: ~103 characters per line before this — the longest line on the screen was also the
-       smallest type on it, which is the worst pairing available. */
-    max-width: 62ch;
-    color: var(--muted);
-    font-size: 0.875rem;
-    line-height: 1.45;
-  }
-}
-
-.match-line {
-  margin: 10px 0 0;
-  font-size: 0.9375rem;
-  line-height: 1.38;
 }
 
 /* O130: `.availability` is deleted, not re-coloured. It had NO CONSUMER in the tree — it styled
@@ -1177,11 +1026,6 @@ textarea:focus-visible {
    matched — the line directly above it, in plain muted grey. */
 .row-location {
   color: var(--muted);
-}
-
-.all-screen {
-  min-height: 100svh;
-  overflow-y: auto;
 }
 
 .profile-screen {
@@ -1281,11 +1125,6 @@ textarea:focus-visible {
   color: var(--faint);
 }
 
-.clinician-row .row-practical {
-  margin-top: 2px;
-  color: var(--muted);
-}
-
 .profile-header {
   position: sticky;
   top: 0;
@@ -1322,14 +1161,6 @@ textarea:focus-visible {
      alone on a second line. `balance` is the Vercel guidelines' rule for headings and it costs
      nothing at two or three words. */
   text-wrap: balance;
-}
-
-.profile-fit-signals {
-  margin-top: 18px;
-}
-
-.profile-practical-signals {
-  margin-top: 24px;
 }
 
 .profile-content section {
@@ -1429,27 +1260,10 @@ textarea:focus-visible {
   color: var(--accent);
 }
 
-.fit-list {
-  margin: 32px 0 12px;
-  border-top: 1px solid var(--line);
-}
-
 /* O129: the last row drops its rule. With a border-bottom on every row, the final one landed
    ~15px above the next section's border-top and the page showed TWO hairlines with nothing
    between them — the kind of doubled line that reads as a rendering fault rather than a
    divider. */
-.fit-list p:last-child {
-  border-bottom: 0;
-}
-
-.fit-list p {
-  margin: 0;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
 .profile-footer {
   /* O93: sticky, not fixed. Fixed floated this bar over the acknowledgement-of-country
      band once the reader reached the end of the page — a bar that belongs to the profile
@@ -1474,92 +1288,10 @@ textarea:focus-visible {
   line-height: 1.55;
 }
 
-.time-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 40px;
-}
-
-.time-list button {
-  min-height: 58px;
-  padding: 15px 17px;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  color: var(--ink);
-  background: transparent;
-  font-size: 0.875rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-.time-list button.selected {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-@media (hover: hover) {
-  .time-list button:hover {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-}
-
-.confirmed-screen > div {
-  margin: auto 0;
-  text-align: center;
-}
-
-.confirmed-screen svg {
-  color: var(--accent);
-}
-
-.confirmed-screen h1 {
-  font-size: 2.625rem;
-}
-
-.confirmed-screen div > p:last-child {
-  max-width: 330px;
-  margin: 18px auto 0;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.55;
-}
-
 .clinician-app {
   min-height: 100svh;
   padding: 28px;
   background: var(--stone);
-}
-
-.clinician-shell {
-  width: min(920px, 100%);
-  min-height: calc(100svh - 56px);
-  margin: 0 auto;
-  overflow: hidden;
-  border: 1px solid #d8d6cf;
-  border-radius: 14px;
-  background: var(--paper);
-}
-
-.clinician-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 72px;
-  padding: 0 38px;
-  border-bottom: 1px solid var(--line);
-}
-
-.clinician-header > div {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-.clinician-product-name {
-  color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 520;
 }
 
 /* ===========================================================================
@@ -1571,387 +1303,6 @@ textarea:focus-visible {
    compliance copy rules that govern the regions above do not repeat here — but
    the palette does, so these surfaces still move when region 1 moves.
    =========================================================================== */
-.walkthrough-progress {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 0 38px;
-  border-bottom: 1px solid var(--line);
-}
-
-.walkthrough-progress button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 52px;
-  padding: 0;
-  border: 0;
-  color: var(--faint);
-  background: transparent;
-  font-size: 0.75rem;
-  font-weight: 570;
-  text-align: left;
-  cursor: pointer;
-}
-
-.walkthrough-progress button span {
-  display: grid;
-  width: 21px;
-  height: 21px;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  font-size: 0.625rem;
-}
-
-.walkthrough-progress button.is-reached {
-  color: var(--ink);
-}
-
-.walkthrough-progress button.is-reached span {
-  border-color: var(--accent);
-  color: var(--on-accent);
-  background: var(--accent);
-}
-
-.clinician-stage {
-  padding: 42px 52px 44px;
-  animation: screen-in 240ms ease both;
-}
-
-.clinician-stage-heading {
-  max-width: 690px;
-}
-
-.clinician-stage-heading h1 {
-  margin: 10px 0 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(2.625rem, 5vw, 3.625rem);
-  font-weight: 430;
-  line-height: 1.01;
-  letter-spacing: -0.035em;
-}
-
-.clinician-stage-heading > p:last-child {
-  max-width: 620px;
-  margin: 16px 0 0;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-.direction-panel,
-.tomorrow-panel {
-  margin-top: 36px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: #fdfcf9;
-}
-
-.direction-panel {
-  padding: 26px;
-}
-
-.direction-label,
-.panel-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-}
-
-.direction-label {
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 620;
-}
-
-.direction-label svg,
-.panel-heading > svg {
-  color: var(--accent);
-}
-
-.focus-options {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.focus-options button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  min-height: 72px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  color: var(--muted);
-  background: var(--paper);
-  font-size: 0.75rem;
-  line-height: 1.35;
-  text-align: left;
-  cursor: pointer;
-}
-
-.focus-options button.selected {
-  border-color: var(--accent);
-  color: var(--ink);
-  background: var(--accent-soft);
-}
-
-.focus-options button svg {
-  flex: 0 0 auto;
-  color: var(--accent);
-}
-
-.target-control {
-  margin-top: 27px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-
-.target-control > div:first-child {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.target-control label {
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 620;
-}
-
-.target-control strong {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 2.0625rem;
-  font-weight: 460;
-}
-
-.target-control input {
-  width: 100%;
-  margin: 18px 0 0;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-
-.range-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 4px;
-  color: var(--faint);
-  font-size: 0.625rem;
-}
-
-.clinician-stage-action {
-  max-width: 470px;
-  margin-top: 28px;
-}
-
-.clinician-stage-action .primary-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.clinician-stage-action > p {
-  margin: 10px 0 0;
-  color: var(--faint);
-  font-size: 0.625rem;
-  line-height: 1.45;
-}
-
-.stage-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin: -12px 0 28px;
-  padding: 0;
-  border: 0;
-  color: var(--muted);
-  background: transparent;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-.feed-summary,
-.practice-metrics {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 28px;
-}
-
-.feed-summary > div,
-.practice-metrics > div {
-  padding: 18px 20px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-}
-
-.feed-summary span,
-.feed-summary strong,
-.practice-metrics span,
-.practice-metrics strong {
-  display: block;
-}
-
-.feed-summary span,
-.practice-metrics span {
-  color: var(--muted);
-  font-size: 0.6875rem;
-}
-
-.feed-summary strong {
-  margin-top: 5px;
-  font-size: 0.9375rem;
-}
-
-.panel-heading {
-  padding: 20px 22px;
-  border-bottom: 1px solid var(--line);
-}
-
-.panel-heading h2 {
-  margin: 5px 0 0;
-  font-size: 1.1875rem;
-  letter-spacing: -0.025em;
-}
-
-.case-list {
-  padding: 0 22px;
-}
-
-.case-row {
-  display: grid;
-  grid-template-columns: 78px 1fr;
-  gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.case-row:last-child {
-  border-bottom: 0;
-}
-
-.case-row time {
-  color: var(--accent);
-  font-size: 0.75rem;
-  font-weight: 620;
-}
-
-.case-row strong,
-.case-row span {
-  display: block;
-}
-
-.case-row strong {
-  font-size: 0.8125rem;
-}
-
-.case-row span {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.6875rem;
-}
-
-.inline-action {
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.briefing-heading h1 {
-  max-width: 650px;
-}
-
-.resource-list {
-  margin-top: 30px;
-  border-top: 1px solid var(--line);
-}
-
-.resource-row {
-  display: grid;
-  grid-template-columns: 34px 1fr auto;
-  gap: 14px;
-  align-items: center;
-  padding: 16px 2px;
-  border-bottom: 1px solid var(--line);
-}
-
-.resource-row > button {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-}
-
-.resource-check {
-  display: grid;
-  width: 20px;
-  height: 20px;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: white;
-}
-
-.resource-row.is-reviewed .resource-check {
-  border-color: var(--accent);
-  color: var(--on-accent);
-  background: var(--accent);
-}
-
-.resource-row > div:nth-child(2) > * {
-  display: block;
-}
-
-.resource-eyebrow {
-  color: var(--accent);
-  font-size: 0.625rem;
-  font-weight: 650;
-}
-
-.resource-row strong {
-  margin-top: 4px;
-  font-size: 0.875rem;
-}
-
-.resource-row small {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  line-height: 1.4;
-}
-
-.resource-meta {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
-
-.resource-meta > span {
-  color: var(--faint);
-  font-size: 0.625rem;
-}
-
-.resource-meta a {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: var(--ink);
-}
-
 .briefing-footer {
   display: flex;
   align-items: center;
@@ -1984,152 +1335,13 @@ textarea:focus-visible {
   cursor: pointer;
 }
 
-.practice-metrics {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.practice-metrics strong {
-  margin-top: 7px;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.875rem;
-  font-weight: 450;
-}
-
-.practice-loop {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.practice-loop > div {
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  gap: 12px;
-  padding: 17px;
-  border-top: 1px solid var(--line);
-}
-
-.practice-loop > div > span {
-  color: var(--accent);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.375rem;
-}
-
-.practice-loop strong {
-  font-size: 0.8125rem;
-}
-
-.practice-loop p {
-  margin: 5px 0 0;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  line-height: 1.45;
-}
-
-.skin-cancer-note {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  margin-top: 23px;
-  padding: 17px 18px;
-  border-radius: 7px;
-  background: var(--accent-soft);
-}
-
-.skin-cancer-note svg {
-  flex: 0 0 auto;
-  color: var(--accent);
-}
-
-.skin-cancer-note p {
-  margin: 0;
-  color: #4f5942;
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
-
 @media (max-width: 680px) {
   .clinician-app {
     padding: 0;
     background: var(--paper);
   }
 
-  .clinician-shell {
-    min-height: 100svh;
-    border: 0;
-    border-radius: 0;
-  }
-
-  .clinician-header {
-    min-height: 66px;
-    padding: 0 20px;
-  }
-
-  .walkthrough-progress {
-    padding: 0 20px;
-  }
-
-  .walkthrough-progress button {
-    min-height: 48px;
-    gap: 5px;
-    font-size: 0.5625rem;
-  }
-
-  .walkthrough-progress button span {
-    width: 18px;
-    height: 18px;
-    font-size: 0.5625rem;
-  }
-
-  .clinician-stage {
-    padding: 30px 22px 38px;
-  }
-
-  .clinician-stage-heading h1 {
-    font-size: 2.5625rem;
-  }
-
-  .direction-panel,
-  .tomorrow-panel {
-    margin-top: 28px;
-  }
-
-  .direction-panel {
-    padding: 20px;
-  }
-
-  .focus-options {
-    grid-template-columns: 1fr;
-  }
-
-  .focus-options button {
-    min-height: 52px;
-  }
-
-  .feed-summary {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .feed-summary > div,
-  .practice-metrics > div {
-    padding: 15px;
-  }
-
-  .case-row {
-    grid-template-columns: 68px 1fr;
-  }
-
-  .resource-row {
-    grid-template-columns: 30px 1fr auto;
-    gap: 10px;
-  }
-
-  .resource-meta > span {
-    display: none;
-  }
-
-  .briefing-footer {
+                                  .briefing-footer {
     align-items: stretch;
     flex-direction: column;
   }
@@ -2138,18 +1350,7 @@ textarea:focus-visible {
     justify-content: center;
   }
 
-  .practice-metrics {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .practice-metrics strong {
-    font-size: 1.5625rem;
-  }
-
-  .practice-loop {
-    grid-template-columns: 1fr;
-  }
-}
+      }
 
 /* Patient pathway v2 — intimate, portrait-led and intentionally low-friction. */
 .care-app.patient-v2 {
@@ -2186,24 +1387,6 @@ textarea:focus-visible {
   animation: none;
 }
 
-.patient-v2 .match-result-motion {
-  width: 100%;
-}
-
-.patient-v2 .matching-core {
-  width: 100%;
-  min-height: 150px;
-}
-
-.patient-v2 .matching-wave {
-  display: inline-flex;
-  transform-origin: center;
-}
-
-.patient-v2 .confirmation-icon {
-  display: inline-flex;
-}
-
 .patient-v2 .minimal-header {
   min-height: 68px;
   padding: 0 22px;
@@ -2216,8 +1399,7 @@ textarea:focus-visible {
 }
 
 .patient-v2 .quiet-link,
-.patient-v2 .text-action,
-.patient-v2 .match-count {
+.patient-v2 .text-action {
   font-size: 0.6875rem;
   font-weight: 650;
 }
@@ -2347,56 +1529,9 @@ textarea:focus-visible {
 
 /* The written option, layered below the microphone. Same aesthetic as the /type screen's box,
    sized compact so both input paths sit on the one panel. */
-.patient-v2 .voice-actions .voice-or {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 16px 0 4px;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-.patient-v2 .voice-actions .voice-or::before,
-.patient-v2 .voice-actions .voice-or::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--line);
-}
-.patient-v2 .voice-actions .voice-type {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 12px;
-}
-.patient-v2 .voice-actions .voice-type-input {
-  width: 100%;
-  height: 60px;
-  padding: 0 24px;
-  border: 1.5px solid var(--accent);
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--ink);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 0.875rem;
-  letter-spacing: -0.01em;
-  text-align: center;
-}
-.patient-v2 .voice-actions .voice-type-input::placeholder { color: #9c7b45; }
 /* The written option's submit joins the amber system, so talk / write / find read as one panel.
    Disabled stays the default grey until there is something to search on. */
-.patient-v2 .voice-actions .voice-type .primary-button { background: var(--accent); color: var(--on-ground); }
-@media (hover: hover) {
-  .patient-v2 .voice-actions .voice-type .primary-button:hover:not(:disabled) { background: #744910; }
-}
 .patient-v2 .voice-actions .scenario-toggle { margin-top: 14px; }
-
-.patient-v2 .micro-footer {
-  bottom: 13px;
-  font-size: 0.625rem;
-}
 
 .patient-v2 .listening-copy {
   padding-top: 50px;
@@ -2422,9 +1557,7 @@ textarea:focus-visible {
 }
 
 .patient-v2 .type-content h1,
-.patient-v2 .booking-content h1,
-.patient-v2 .all-heading h1,
-.patient-v2 .confirmed-screen h1 {
+.patient-v2 .booking-content h1 {
   font-size: 3rem;
   line-height: 0.99;
   letter-spacing: -0.045em;
@@ -2460,86 +1593,6 @@ textarea:focus-visible {
   font-size: 0.625rem;
 }
 
-.patient-v2 .review-content {
-  margin: 0;
-  padding: 50px 26px 28px;
-}
-
-.patient-v2 .review-content h1 {
-  max-width: 455px;
-  font-size: 3.1875rem;
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-}
-
-.patient-v2 .review-transcript {
-  display: -webkit-box;
-  overflow: hidden;
-  max-width: 430px;
-  margin-top: 18px;
-  font-size: 0.75rem;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-
-.patient-v2 .priority-list {
-  display: grid;
-  gap: 0;
-  margin-top: 24px;
-  border-top: 1px solid var(--line);
-}
-
-.patient-v2 .priority-list span {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  color: var(--ink);
-  background: transparent;
-  font-size: 0.6875rem;
-  font-weight: 650;
-}
-
-.patient-v2 .refine-line {
-  min-height: 44px;
-  margin-top: 16px;
-  padding: 0 16px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-}
-
-.patient-v2 .refine-line > svg:first-child {
-  width: 28px;
-}
-
-.patient-v2 .matching-screen,
-.patient-v2 .confirmed-screen {
-  padding: 25px 22px 30px;
-}
-
-.patient-v2 .matching-screen h1 {
-  font-size: 3rem;
-  line-height: 0.98;
-}
-
-.patient-v2 .match-header {
-  min-height: 64px;
-}
-
-.patient-v2 .match-count {
-  min-height: 44px;
-}
-
-.patient-v2 .request-banner {
-  padding: 20px 22px 16px;
-}
-
-.patient-v2 .request-banner h1 {
-  max-width: 430px;
-  font-size: 2.1875rem;
-  line-height: 1;
-  letter-spacing: -0.045em;
-}
-
 .patient-v2 .refine-compact {
   min-height: 40px;
   margin-top: 7px;
@@ -2551,63 +1604,15 @@ textarea:focus-visible {
   height: 22px;
 }
 
-.patient-v2 .match-portrait {
-  width: calc(100% - 36px);
-  height: min(82vw, 390px);
-  margin: 0 18px;
-  border-radius: 24px;
-}
-
-.patient-v2 .portrait-nav {
-  width: 44px;
-  height: 44px;
-  box-shadow: none;
-}
-
-.patient-v2 .match-details {
-  padding: 17px 22px 10px;
-}
-
-.patient-v2 .match-details h2 {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 2.3125rem;
-  font-weight: 470;
-  line-height: 1;
-  letter-spacing: -0.045em;
-}
-
 .patient-v2 .clinician-meta {
   margin-top: 6px;
   font-size: 0.6875rem;
-}
-
-.patient-v2 .match-reason {
-  max-width: 440px;
-  margin: 14px 0 0;
-  font-size: 0.8125rem;
-  font-weight: 570;
-  line-height: 1.45;
-}
-
-.patient-v2 .practical-signal-row {
-  gap: 7px;
-  margin-top: 13px;
-}
-
-.patient-v2 .practical-signal-row span {
-  padding: 6px 9px;
-  border-radius: 999px;
-  font-size: 0.625rem;
 }
 
 .patient-v2 .availability {
   margin: 12px 0 14px;
   font-size: 0.6875rem;
   font-weight: 650;
-}
-
-.patient-v2 .all-heading {
-  padding: 34px 22px 22px;
 }
 
 .patient-v2 .clinician-list {
@@ -2723,16 +1728,6 @@ textarea:focus-visible {
   font-weight: 470;
 }
 
-.patient-v2 .profile-fit-signals {
-  margin-top: 16px;
-}
-
-.patient-v2 .fit-signal-row span {
-  padding: 6px 9px;
-  border-radius: 999px;
-  font-size: 0.625rem;
-}
-
 /* O129: THE PRACTICAL FACTS ARE A LIST, NOT A CARD. A 1px box with an 18px radius and ruled
    rows read as a data table dropped into a page built from editorial hairlines — it was the
    heaviest object on the screen while carrying the lightest facts (appointment length, reach,
@@ -2740,15 +1735,6 @@ textarea:focus-visible {
    the eye reads a list and the page keeps one visual language. The horizontal padding goes with
    it: the box was the only thing that made the rows indent from the column everything else on
    the screen shares, which is what made the left edge look ragged in the founder's capture. */
-.patient-v2 .fit-list {
-  margin-top: 24px;
-  border-top: 1px solid var(--line);
-}
-
-.patient-v2 .fit-list p {
-  padding: 13px 0;
-}
-
 .patient-v2 .profile-content section {
   padding: 23px 0;
 }
@@ -2761,24 +1747,6 @@ textarea:focus-visible {
 .patient-v2 .profile-footer {
   gap: 11px;
   padding: 13px 22px max(18px, env(safe-area-inset-bottom));
-}
-
-.patient-v2 .time-list {
-  gap: 9px;
-  margin-top: 34px;
-}
-
-.patient-v2 .time-list button {
-  min-height: 64px;
-  padding: 15px 18px;
-  border-radius: 18px;
-  font-size: 0.8125rem;
-}
-
-.patient-v2 .confirmed-screen > div {
-  max-width: 420px;
-  margin-right: auto;
-  margin-left: auto;
 }
 
 @media (max-width: 599px) {
@@ -2794,14 +1762,8 @@ textarea:focus-visible {
     font-size: 3.25rem;
   }
 
-  .patient-v2 .review-content h1 {
-    font-size: 3rem;
-  }
-
-  .patient-v2 .type-content h1,
-  .patient-v2 .booking-content h1,
-  .patient-v2 .all-heading h1,
-  .patient-v2 .confirmed-screen h1 {
+    .patient-v2 .type-content h1,
+.patient-v2 .booking-content h1 {
     font-size: 2.75rem;
   }
 }
@@ -2972,99 +1934,9 @@ textarea:focus-visible {
   line-height: 1.55;
 }
 
-.cv2-focus-card {
-  display: grid;
-  width: 100%;
-  grid-template-columns: 44px 1fr 28px;
-  gap: 14px;
-  align-items: center;
-  margin-top: 38px;
-  padding: 19px;
-  border: 1px solid #cfd3c5;
-  border-radius: 18px;
-  color: var(--cv2-ink);
-  background: var(--stone);
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 160ms ease, background-color 160ms ease;
-}
-
-@media (hover: hover) {
-  .cv2-focus-card:hover {
-    border-color: var(--accent-tint);
-    background: var(--accent-soft);
-  }
-}
-
 /* O29: keyboard focus gets a real ring, not a tint swap — a border-colour change alone is
    below the contrast a keyboard user needs to find their place (web-interface-guidelines:
    never outline:none without a visible replacement). */
-.cv2-focus-card:focus-visible {
-  border-color: var(--accent-tint);
-  background: var(--accent-soft);
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.cv2-icon,
-.cv2-selected,
-.cv2-focus-caret {
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-}
-
-.cv2-icon {
-  width: 44px;
-  height: 44px;
-  color: var(--cv2-accent);
-  background: var(--paper);
-}
-
-.cv2-selected {
-  width: 27px;
-  height: 27px;
-  color: white;
-  background: var(--cv2-accent);
-}
-
-.cv2-focus-caret {
-  width: 27px;
-  height: 27px;
-  color: var(--cv2-accent);
-  transition: transform 180ms ease;
-}
-
-.cv2-focus-caret.is-open {
-  transform: rotate(180deg);
-}
-
-.cv2-focus-card small,
-.cv2-focus-card strong,
-.cv2-focus-card em {
-  display: block;
-}
-
-.cv2-focus-card small {
-  color: var(--cv2-accent);
-  font-size: 0.625rem;
-  font-weight: 700;
-}
-
-.cv2-focus-card strong {
-  margin-top: 4px;
-  font-size: 0.875rem;
-  line-height: 1.3;
-}
-
-.cv2-focus-card em {
-  margin-top: 5px;
-  color: var(--cv2-muted);
-  font-size: 0.625rem;
-  font-style: normal;
-  line-height: 1.4;
-}
-
 .cv2-condition-panel {
   margin: 10px 0 0;
   padding: 21px 20px 20px;
@@ -3173,58 +2045,6 @@ textarea:focus-visible {
   line-height: 1.35;
 }
 
-.cv2-coming-section {
-  margin-top: 20px;
-}
-
-.cv2-coming-section > div:first-child {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.cv2-coming-section > div:first-child span {
-  font-size: 0.6875rem;
-  font-weight: 680;
-}
-
-.cv2-coming-section > div:first-child small {
-  color: var(--cv2-muted);
-  font-size: 0.5625rem;
-}
-
-.cv2-coming-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 7px;
-  margin-top: 10px;
-}
-
-.cv2-coming-grid button {
-  position: relative;
-  display: flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 0 11px;
-  border: 1px solid var(--cv2-line);
-  border-radius: 11px;
-  color: #6f716b;
-  background: #f7f6f2;
-  font-size: 0.5625rem;
-  text-align: left;
-  cursor: not-allowed;
-}
-
-.cv2-coming-grid button > small {
-  color: #92948e;
-  font-size: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
 .cv2-coming-tooltip {
   position: absolute;
   z-index: 5;
@@ -3251,18 +2071,6 @@ textarea:focus-visible {
   border: 5px solid transparent;
   border-top-color: var(--cv2-ground);
   content: "";
-}
-
-.cv2-coming-grid button:focus-visible .cv2-coming-tooltip {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (hover: hover) {
-  .cv2-coming-grid button:hover .cv2-coming-tooltip {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .cv2-mix-card {
@@ -3771,24 +2579,7 @@ textarea:focus-visible {
     font-size: 3rem;
   }
 
-  .cv2-focus-card {
-    grid-template-columns: 40px 1fr 25px;
-    gap: 12px;
-    margin-top: 31px;
-    padding: 16px;
-  }
-
-  .cv2-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .cv2-selected {
-    width: 25px;
-    height: 25px;
-  }
-
-  .cv2-condition-panel {
+        .cv2-condition-panel {
     padding: 18px 16px 16px;
   }
 
@@ -3801,15 +2592,7 @@ textarea:focus-visible {
     gap: 6px;
   }
 
-  .cv2-coming-section > div:first-child small {
-    display: none;
-  }
-
-  .cv2-coming-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .cv2-case-number strong {
+      .cv2-case-number strong {
     font-size: 4.625rem;
   }
 
@@ -3843,10 +2626,7 @@ textarea:focus-visible {
     font-size: 2.6875rem;
   }
 
-  .cv2-focus-card em {
-    display: none;
   }
-}
 
 @keyframes cv2-stage-in {
   from { opacity: 0; transform: translateY(8px); }
@@ -3923,8 +2703,6 @@ textarea:focus-visible {
     height: min(852px, calc(100dvh - 48px));
   }
 
-  .match-screen,
-  .all-screen,
   .profile-screen {
     overflow-y: auto;
   }
@@ -3956,9 +2734,6 @@ textarea:focus-visible {
     width: 94px;
     height: 94px;
   }
-}
-
-@media (hover: none) {
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4859,8 +3634,7 @@ textarea:focus-visible {
   border-top: 0;
   color: #f6ecdd;
 }
-.story-chapter-country .story-heading,
-.story-chapter-country .story-pull p { color: #f6ecdd; }
+.story-chapter-country .story-heading { color: #f6ecdd; }
 .story-chapter-country .story-prose p { color: #f1e2c8; }
 
 .story-heading-wide { max-width: 20ch; }
@@ -4878,9 +3652,6 @@ textarea:focus-visible {
   align-items: center;
   gap: clamp(40px, 6vw, 96px);
 }
-.story-split-reverse .story-split-lead { order: 2; }
-.story-split-reverse .story-pull { order: 1; }
-
 /* Stat rail. No boxes and no cards: hairlines only, numerals set in the display face one tier
    below the chapter heading, so the figures read as part of the prose rather than as a widget. */
 .story-stats dl { display: grid; gap: 0; margin: 0; }
@@ -4901,19 +3672,6 @@ textarea:focus-visible {
 .story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.6875rem; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
-.story-pull p {
-  max-width: 16ch;
-  margin: 0;
-  padding-bottom: 4px;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.125rem);
-  font-style: italic;
-  font-weight: 430;
-  line-height: 1.14;
-  letter-spacing: -0.02em;
-  color: var(--s-ink);
-}
-
 /* The one dark beat. The accent cannot carry text here (2.4:1 on --s-dark), so the emphasis
    inside the line lifts to the palette's own tint at 5.2:1 rather than being invented. */
 .story-throughline {
@@ -4932,15 +3690,6 @@ textarea:focus-visible {
   text-wrap: balance;
 }
 .story-throughline-line em { color: #e0aeba; font-style: italic; }
-.story-throughline-sub { margin-top: 40px; }
-.story-throughline-sub p {
-  max-width: 54ch;
-  margin: 0;
-  color: #c3c4ba;
-  font-size: clamp(1rem, 1.3vw, 1.1875rem);
-  line-height: 1.7;
-}
-
 /* Pillars. A hairline-ruled list where the title and the body sit on one baseline, not a 3-up
    card row: three cards would give equal weight to three things read in sequence. */
 .story-pillars {
@@ -5091,10 +3840,7 @@ textarea:focus-visible {
   .story-hero-sub { max-width: 40ch; }
   .story-portrait { order: 2; justify-self: center; max-width: 380px; margin-top: 20px; }
   .story-split { grid-template-columns: 1fr; align-items: start; gap: 40px; }
-  .story-split-reverse .story-split-lead { order: 1; }
-  .story-split-reverse .story-pull { order: 2; }
-  .story-pull p { max-width: 24ch; }
-  .story-pillars li { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
+        .story-pillars li { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
   /* The founders grid on its own page: same plates, breathing room under the one-word title. */
 .about-team { margin-top: 48px; }
 
@@ -5320,7 +4066,6 @@ textarea:focus-visible {
    at r=1.35 on a 100-unit box a mid-grey reads as dust. */
 .coverage-dot { fill: var(--s-accent); opacity: 1; }
 .coverage-dot.is-here { fill: var(--s-accent); opacity: 1; }
-.coverage-halo { fill: none; stroke: var(--s-accent); stroke-width: 0.7; opacity: 0.55; }
 /* A soft rose halo behind each marker, so the two covered areas read as pins the eye lands on. */
 .coverage-pin-halo { fill: var(--s-accent-soft); }
 /* The Australia silhouette the two markers sit on: a subtle filled landmass with a hairline edge,
@@ -5340,8 +4085,7 @@ textarea:focus-visible {
 @media (max-width: 720px) {
   .coverage-map { grid-template-columns: 1fr; }
   .coverage-map svg { max-width: 220px; }
-  .story-affiliations-row { flex-wrap: wrap; gap: 18px; }
-}
+  }
 
 /* The coverage diagram inside the finder, where it appears only for an uncovered suburb. */
 .results-head .coverage-map {
@@ -5491,14 +4235,6 @@ textarea:focus-visible {
 }
 
 /* O90: the wayfinding label above a chapter heading whose sentence stays the idea. */
-.story-kicker {
-  margin: 0 0 12px;
-  font-size: 0.8125rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 /* ===========================================================================
    REGION 13 — MOBILE TAP TARGETS (O14). CROSS-SURFACE AND ORDER-DEPENDENT.
 
@@ -5574,16 +4310,10 @@ textarea:focus-visible {
    columns of about 100px each. Section 4.7's rule is that every multi-column layout declares its
    own fallback rather than assuming one. */
 @media (max-width: 760px) {
-  .story-change-grid { grid-template-columns: 1fr; gap: 18px; }
-  .story-steps { grid-template-columns: 1fr; gap: 0; margin-top: 34px; }
-  .story-steps li { padding: 22px 0; }
-  .story-step-n { margin-bottom: 12px; }
-  .story-hero-copy h1 { max-width: none; }
+          .story-hero-copy h1 { max-width: none; }
   .story-hero { min-height: auto; }
   .story-hero-copy { padding-block: 56px 0; }
-  .story-change,
-  .story-steps-section { padding-block: 56px; }
-}
+  }
 
 /* ===========================================================================
    THE SCROLL SEQUENCE (app/story-sequence.tsx)
@@ -6300,10 +5030,6 @@ textarea:focus-visible {
 .mc-missed { color: var(--muted); }
 
 .mc-clinician { margin-top: 18px; }
-.mc-proposals { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-.mc-proposal { padding: 14px 16px; border: 1px solid var(--line); border-radius: 4px; background: var(--stone); }
-.mc-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.mc-status { font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
 .mc-quote { margin: 10px 0 0; padding: 0; color: var(--ink); font-size: 0.875rem; line-height: 1.55; font-style: italic; }
 .mc-cue { margin: 6px 0 0; color: var(--faint); font-size: 0.75rem; }
 .mc-unread { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.84375rem; line-height: 1.7; }
@@ -6393,8 +5119,6 @@ textarea:focus-visible {
 .iv-proposals { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 720px; }
 .iv-proposal { padding: 14px 16px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 4px;
   background: var(--stone); }
-.iv-proposal.iv-often, .iv-proposal.iv-sometimes { border-left-color: var(--accent); background: var(--accent-soft); }
-.iv-proposal.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
 .iv-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 /* The cross-check note is quiet on purpose: it informs which question to ask first, and a
    louder treatment would read as the machine grading the doctor. */
@@ -6413,8 +5137,6 @@ textarea:focus-visible {
 .iv-sweep { margin: 14px 0 0; padding: 0; list-style: none; max-width: 720px; }
 .iv-sweep-row { padding: 14px 0 14px 14px; border-left: 3px solid transparent; border-bottom: 1px solid var(--line); }
 .iv-sweep-row:last-child { border-bottom: 0; }
-.iv-sweep-row.iv-often, .iv-sweep-row.iv-sometimes { border-left-color: var(--accent); }
-.iv-sweep-row.iv-not-me { border-left-color: var(--line); opacity: 0.68; }
 .iv-sweep-question { margin: 0; max-width: 62ch; color: var(--ink); font-size: 0.875rem; line-height: 1.55; font-weight: 600; }
 .iv-sweep-label { display: block; margin-top: 3px; color: var(--faint); font-size: 0.71875rem; font-weight: 400;
   letter-spacing: 0.04em; text-transform: uppercase; }
@@ -6967,8 +5689,6 @@ textarea:focus-visible {
 .cv2-eyebrow { margin-bottom: 0; }
 .cv2-back { margin-bottom: 6px; }
 .cv2-mix-card { margin-top: 14px; padding: 14px 18px; }
-.cv2-conditions { margin-top: 12px; }
-.cv2-condition-row { min-height: 44px; }
 .cv2-action { margin-top: 14px; }
 .cv2-action > button, .cv2-learning-card > button, .cv2-action > .cv2-start-cta { min-height: 48px; }
 .cv2-action > p { margin-top: 8px; }

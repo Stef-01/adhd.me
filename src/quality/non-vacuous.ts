@@ -134,6 +134,11 @@ export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
     why: "Iterates RECORD_CLASSES.filter(x => x.handling === 'derived'). A privacy register in which no class is derived — every one erased at its source — is a stricter register, not a broken one, and the day that happens this check correctly has nothing to say. The claim is about what a derived class must explain, not that any must exist.",
   },
   {
+    file: "src/design/dead-css.test.ts",
+    test: "declares no exception for a class the sheet no longer styles",
+    why: "Iterates DEAD_CSS_EXCEPTIONS, which O200 left EMPTY because it deleted all 92 dead classes rather than excepting any. Empty is the desired end state: an entry here means a class styled deliberately without appearing in this tree's source, which today is nothing. A floor would require such a class to EXIST before the census could be non-vacuous, which is the wrong shape — the sibling assertion that the dead list is empty carries the real claim, and it is proven non-vacuous by a planted fixture instead.",
+  },
+  {
     file: "src/design/hover-gate.test.ts",
     test: "declares no exception for a selector the sheet no longer carries",
     why: "Iterates HOVER_EXCEPTIONS, which O199 left EMPTY on purpose: all 37 ungated hover rules were fixed rather than pinned as a remainder, because unlike this module's own 146 vacuous assertions they were mechanical and fully classified before the first edit. Empty is the desired end state, and a floor here would mean the census could only pass while at least one rule was still excepted — a check that requires a violation to exist in order to be non-vacuous. The register is kept so a future genuine exception has somewhere to be ARGUED, and the sibling assertion that the count of ungated rules is zero is the one carrying the real claim.",

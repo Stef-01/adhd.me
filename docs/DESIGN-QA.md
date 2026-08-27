@@ -3148,3 +3148,58 @@ exactly `#ffffff`, `#fff`, `#6f1e31`, `#000` and nothing else.
 Captures: `qa/_runs/o199/` — the same control on a pointer device and on an emulated touch device.
 At rest nothing changed, which is the point: this unit changes *when* a hover style applies, not
 what it looks like.
+
+## O200 — a tenth of the stylesheet styled nothing (2026-08-27)
+
+**Found by accident, for the second unit running.** O199 ended by checking whether gating hover had
+broken two reveal-on-hover affordances — `.match-portrait:hover .portrait-nav` and
+`.cv2-coming-grid button:hover .cv2-coming-tooltip`. It had not, and the reason was worse than the
+bug being looked for: **neither selector matches any markup.** Both style elements the application
+never renders. Kept-but-unused code is this tree's named disease (O186/O187), and twice in two units
+a dead selector turned up while looking for something else. That is the argument for asking the
+general question instead of waiting for a third.
+
+**95 of 596 styled classes — 16% — were dead.** Measured as the sheet's own before/after rather than
+as a sum of the two passes, because seven of the eight the second pass caught were already in the
+first pass's 92 and adding the lists would have double-counted them. The removal is **23,358 bytes
+and 1,280 lines: 9.7% of the stylesheet every visitor downloads.** Ten more rules paired a dead selector with a live one, so
+those had the dead *selector* pruned rather than the rule deleted; one `@media` block was left empty
+and went with them.
+
+**The first deletion pass missed 8, and the census agreed with it — because both shared a blind
+spot.** The selector pattern matched a rule only when it followed a closing brace or the start of
+the file, which skips **the first rule inside every `@media` block**. So `.match-count:hover,
+.icon-button:hover`, sitting first inside a hover gate, survived a deletion pass AND a census that
+reported the sheet clean. One of the eight — `story-change-grid` — had never even been counted as
+*styled*. The pattern now matches after `{` as well; a media prelude cannot be swept up by accident
+because it contains `@`, which the selector class excludes. This is the third scanner bug in three
+units, and the reason each was caught is the same: the check was landed in the tree, where it keeps
+disagreeing, rather than run once from a script.
+
+**The classifier was wrong three times before it was right, and the third one is the good one.**
+A bare "never appears in source" scan said 122 — but `` `seq-w-${i}` `` builds a live class that
+never appears as a literal. Crediting every `prefix-${` rescued 46 — but most of those prefixes were
+**data ids**, not class names: `iv-${code}` is an interval id, `row-${index}` a record id,
+`clinician-${i}` an error key. Only nine template prefixes are ever used inside a `className`.
+
+Then the corrected classifier reported **89 where the unit had measured 92**, and the three it lost
+were `match-portrait`, `portrait-nav` and `cv2-coming-grid` — **the very selectors named in the new
+module's own header comment as examples of dead code.** Writing the documentation made the classes
+look alive. It is O199's scanner bug in the mirror: that one read a CSS comment as a rule, this one
+read a TypeScript comment as a usage. With comments stripped, two independent implementations — one
+Python, one TypeScript — agree exactly on 92.
+
+**The verification is that nothing moved, and it took two instruments because one was not sound.**
+Fifteen public routes captured at 390 and 1280 on the pre-deletion sheet and again on the
+post-deletion sheet: **28 of 30 byte-identical.** The two that differed were both `/` — and before
+reading anything into that, the page was captured twice against the *same* sheet and differed from
+itself. The story landing is not deterministic; its scroll-linked reveals are mid-flight and it even
+mounts a different number of DOM nodes between runs, so pixels cannot decide it.
+
+So `/` was decided by computed style instead: every rendering element identity present in both
+builds, across 23 properties, at both widths. **100 element identities compared, zero non-transform
+differences.** The only differences anywhere were `transform` on six scroll-animated elements
+(sub-micron mid-flight values like `matrix(1,0,0,1,0,3.46e-05)`) and three properties on `<script>`
+elements, which never render.
+
+Captures: `qa/_runs/o200/{before,after}/` — 15 routes × 2 widths × 2 sheets.

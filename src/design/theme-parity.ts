@@ -71,7 +71,13 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
    The ratchet measures SITES, and this is the one way the number can rise while the amount of
    untokenised colour in the tree stays identical — recorded here so a future reader does not read
    it as four new hexes somebody authored. Re-derived in the commit that earns it, per the law. */
-export const CSS_RAW_HEX_SITES = 91;
+/* 91 -> 80 (O200): THE RATCHET FELL, WHICH IS THE DIRECTION IT EXISTS TO ENCOURAGE, and it fell
+   without a single colour being tokenised. Deleting the 209 rules that styled markup the
+   application never renders took eleven raw-hex sites with them — they were untokenised colour on
+   screens that do not exist. Re-derived in the commit that earned it, per the ratchet's law; an
+   untracked DROP is progress nobody recorded, which this census refuses in the same breath as it
+   refuses an untracked rise. */
+export const CSS_RAW_HEX_SITES = 80;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the

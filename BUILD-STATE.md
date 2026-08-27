@@ -162,6 +162,59 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end on the tree the push produces; the census proven non-vacuous by
 > planting a dead class and watching it fail; visual confirmation that nothing moved, since a
 > deletion that changes a screen is a deletion that was wrong.
+>
+> **DONE 2026-08-27T11:20Z. 95 CLASSES, 216 RULES, 23,358 BYTES AND 1,280 LINES GONE — 9.7% OF THE
+> STYLESHEET — WITH NOTHING ON ANY SCREEN CHANGED.**
+>
+> **THE COUNT IS THE SHEET'S OWN BEFORE/AFTER, NOT THE SUM OF THE PASSES.** 596 styled classes
+> before, 501 after. The claim said 92; a second pass found 8 more, but SEVEN of those eight were
+> already in the 92 and adding the lists would have double-counted them. Derived rather than
+> remembered, because "92 + 8" is exactly the kind of arithmetic that reads as thoroughness and is
+> wrong.
+>
+> **THE SCANNER WAS WRONG A THIRD TIME, AND THIS ONE REPORTED CLEAN — THE WORST FAILURE THIS LANE
+> HAS.** The selector pattern matched a rule only when it followed `}` or the start of the file,
+> which skips **the first rule inside every `@media` block**. `.match-count:hover,
+> .icon-button:hover`, sitting first inside a hover gate, survived a full deletion pass AND a census
+> that then declared the sheet clean. One class, `story-change-grid`, had never even been counted as
+> STYLED. Caught by reading the pruned sheet rather than trusting the green — the pattern now matches
+> after `{` too, and a media prelude cannot be captured by accident because it contains `@`, which
+> the selector class excludes.
+>
+> **AND THE SCANNER FORGAVE ITSELF BEFORE THAT.** The TypeScript classifier first reported 89 where
+> the unit had measured 92, and the three it lost — `match-portrait`, `portrait-nav`,
+> `cv2-coming-grid` — are the selectors named in ITS OWN HEADER as examples of dead code. Writing the
+> documentation made the classes look alive. It is O199's bug in the mirror (that one read a CSS
+> comment as a rule); `stripComments` is now the first thing `deadClasses` does, and both directions
+> are pinned. With it, two independent implementations — one Python, one TypeScript — agree exactly.
+>
+> **THE CLASSIFIER'S REAL CONTENT IS THE PREFIX RULE.** A class built as `` `seq-w-${i}` `` is live
+> and never appears as a literal; but crediting every `prefix-${` in the tree forgave 25 genuinely
+> dead classes, because most of those prefixes are DATA IDS — `iv-${code}` is an interval id,
+> `row-${index}` a record id, `clinician-${i}` an error key. A prefix counts only inside a
+> `className` value. Nine do, and the test pins both halves: `seq-w-` credits, `iv-` and `row-` do
+> not.
+>
+> **THE VERIFICATION TOOK TWO INSTRUMENTS BECAUSE ONE WAS NOT SOUND.** Fifteen public routes at 390
+> and 1280, on the pre-deletion sheet and the post-deletion sheet: **28 of 30 byte-identical.** Both
+> differing captures were `/` — and before reading anything into that, the page was captured twice
+> against the SAME sheet and differed from itself. The story landing is not deterministic: its
+> scroll-linked reveals are mid-flight and it mounts a different number of DOM nodes between runs, so
+> pixels cannot decide it and an index-keyed style diff cannot either. Decided by computed style
+> keyed on element identity instead — **100 rendering identities at each width, 23 properties, ZERO
+> non-transform differences.** The only differences anywhere were `transform` on six scroll-animated
+> elements (sub-micron values like `matrix(1,0,0,1,0,3.46e-05)`) and three properties on `<script>`
+> elements, which never render.
+>
+> **AR17'S RAW-HEX RATCHET FELL 91 → 80**, the direction it exists to encourage, without a single
+> colour being tokenised: eleven raw-hex sites were untokenised colour on screens that do not exist.
+> Re-derived in the commit that earned it, per the ratchet's own law that an untracked DROP is
+> progress nobody recorded.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 17.1m**. Census proven non-vacuous on planted fixtures in both directions. Sixth consecutive firing
+> to read the whole gate on the tree it pushes.
 
 > **O199 (the taste law's hover clause is enforced by nothing, and 37 of 53 sites break it) —
 > claimed 2026-08-27T09:50Z by loop-0827a.** UI/aesthetic-review lane: numbered lanes exhausted
