@@ -166,25 +166,96 @@ describe("W98 timing", () => {
     const elapsedMs = performance.now() - started;
 
     expect(applied.applied).toHaveLength(50);
-    // Generous by two orders of magnitude: this is a guard against an accidental O(n^2),
-    // not a benchmark. Duplicate detection is the only cross-site check and it is a Set.
+    // A guard against an accidental O(n^2), not a benchmark. Duplicate detection is the only
+    // cross-site check and it is a Set.
+    //
+    // O195 CORRECTED THE HEADROOM CLAIM RATHER THAN THE BOUND. This said "generous by two orders
+    // of magnitude"; measured, the 50-site rollout costs **0.06ms** against a 1000ms bound, which
+    // is four orders, not two. The bound stays — an absolute ceiling this slack cannot flake, and
+    // the sibling test below is where linearity is actually asserted — but the comment now says
+    // what the number is, because a stated margin that is wrong by 100× is how somebody later
+    // concludes this test guards something it does not.
     expect(elapsedMs).toBeLessThan(1_000);
   });
 
   it("stays linear — 200 sites is not dramatically worse than 50 per site", () => {
+    // O195 REWROTE THIS BECAUSE IT COULD NOT FAIL, WHICH IS WORSE THAN FAILING AT RANDOM.
+    //
+    // It used to assert `per200 < Math.max(per50 * 10, 1)`. Measured: `per50` is 0.0008ms, so
+    // `per50 * 10` is 0.008ms and the `Math.max(…, 1)` FLOOR dominated the bound by 125×. The
+    // assertion was effectively `0.0009 < 1`. A genuinely quadratic implementation would cost about
+    // 0.0032ms per site at 200 — still 312× under the bound — so this read as a linearity guard and
+    // passed on quadratic, cubic, and anything short of a millisecond per site.
+    //
+    // The floor was there for a real reason: at 0.0008ms per site the ratio of two wall-clock
+    // numbers is noise, and a bare ratio would flake. That is the SAME defect O194 found in
+    // `src/verticals/scaling.test.ts`, and the two tests answered it in opposite directions —
+    // O194's widened threshold left a coin toss, this one's floor left a hole. Neither is fixed by
+    // choosing a different number; both are fixed by measuring properly.
+    //
+    // So the instrument changes, and the floor goes: enough work per sample that the small case
+    // clears the noise floor honestly, and best-of-N, because an interrupted run can only ever be
+    // slower and the fastest sample is the cost of the code rather than the cost of the box.
+    const SAMPLES = 5;
+    const REPEATS = 40;
     const build = (n: number) =>
       Array.from({ length: n }, (_, i) => site({ practiceId: `s-${i}`, name: `P ${i}` }));
-    const time = (n: number) => {
+    const perSite = (n: number) => {
       const sites = build(n);
-      const t0 = performance.now();
-      applyRollout(planRollout(config(sites)), () => {});
-      return performance.now() - t0;
+      let best = Infinity;
+      for (let sample = 0; sample < SAMPLES; sample += 1) {
+        const t0 = performance.now();
+        for (let r = 0; r < REPEATS; r += 1) applyRollout(planRollout(config(sites)), () => {});
+        best = Math.min(best, performance.now() - t0);
+      }
+      return best / (REPEATS * n);
     };
-    time(50); // warm
-    const per50 = time(50) / 50;
-    const per200 = time(200) / 200;
-    // Per-site cost must not blow up with batch size; a wide band keeps this from being a
-    // flaky timing test on a loaded box while still catching quadratic behaviour.
-    expect(per200).toBeLessThan(Math.max(per50 * 10, 1));
+    perSite(50); // warm
+    const per50 = perSite(50);
+    const per200 = perSite(200);
+    // A real bound now, with no floor to hide behind, AND CHOSEN FROM TWO MEASURED POPULATIONS
+    // rather than picked. Across isolated and full-suite-loaded runs the real rollout measures
+    // 0.72–0.91× per site at 200 vs 50 (sub-1: the larger batch amortises setup), and the quadratic
+    // probe below measures 4.34–4.74×. 2.5 sits between them with margin on both sides — 2.7× above
+    // the linear maximum and 1.7× below the quadratic minimum.
+    //
+    // The first draft of this used 4×, and it was wrong for a reason worth keeping: per-item cost
+    // of a quadratic grows LINEARLY, so 200-vs-50 is 4× in theory, and a bound of 4 sat 8% under
+    // the thing it was supposed to catch. A threshold that close to the failure population is a
+    // coin toss wearing a number, which is precisely the defect this unit came from.
+    expect(
+      per200 / per50,
+      `200 sites cost ${(per200 / per50).toFixed(2)}× per site what 50 did (per50=${per50.toFixed(5)}ms per200=${per200.toFixed(5)}ms)`,
+    ).toBeLessThan(2.5);
+  });
+
+  it("the linearity check can still tell linear from quadratic, on the same harness", () => {
+    // NON-VACUITY, AND THIS UNIT EXISTS BECAUSE ITS ABSENCE HID A HOLE FOR AS LONG AS THE TEST HAS
+    // EXISTED. The bound above is only worth its comment if something can cross it, so a
+    // deliberately quadratic workload is timed through the identical harness at the identical
+    // sizes and must land past the same 2.5× line the real rollout clears (measured 4.34–4.74×).
+    const SAMPLES = 5;
+    const REPEATS = 40;
+    const quadratic = (n: number) => {
+      let sink = 0;
+      for (let a = 0; a < n; a += 1) for (let b = 0; b < n; b += 1) sink += (a ^ b) & 1;
+      return sink;
+    };
+    const perItem = (n: number) => {
+      let best = Infinity;
+      for (let sample = 0; sample < SAMPLES; sample += 1) {
+        const t0 = performance.now();
+        for (let r = 0; r < REPEATS; r += 1) quadratic(n);
+        best = Math.min(best, performance.now() - t0);
+      }
+      return best / (REPEATS * n);
+    };
+    perItem(50);
+    const per50 = perItem(50);
+    const per200 = perItem(200);
+    expect(
+      per200 / per50,
+      `a genuinely quadratic workload measured ${(per200 / per50).toFixed(2)}× per item — if this is under 2.5 the linearity check above has stopped discriminating`,
+    ).toBeGreaterThan(2.5);
   });
 });
