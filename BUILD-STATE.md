@@ -119,6 +119,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O212 (paying down the vacuity debt: `src/matching`, 20 sites) — claimed 2026-08-27T22:05Z by
+> loop-0827a.** Gate read before claiming: green @ 07edbef.
+>
+> **A STALE CLONE AGAIN, AND THE SAME RECONCILIATION.** This firing opened at `d136355` — the same
+> snapshot O211 opened on — while `origin/main` carried O209, O210 and O211. `git status` reported
+> "behind by 9". Fast-forwarded to `2cb39f2`; wipe detection run per the law and clean: O211's DONE
+> row is present on `main`. This is the second consecutive firing to open on a reset container, which
+> is worth the plan owner knowing: **the local clone is not durable between firings, and the fetch
+> that opens every firing is the only thing catching it.** Nothing has been lost either time.
+>
+> **MEASURED ON THE RECONCILED TREE BEFORE CLAIMING. Pin 112, measured 112 — they agree.** Raw scan
+> hits 122, less the 10 declared in `LEGITIMATELY_EMPTY`. The distribution: **`src/matching` 20**,
+> `src/design` 9, `src/demo` 10, `src/platform` 8, `src/quality` 8, then a long tail of five-and-fewer.
+>
+> **MATCHING IS NOW THE LARGEST AND THE HIGHEST-STAKES, so it is taken on O196's own criterion.**
+> This directory is the ranking engine: the code that decides which GP a patient is shown first and
+> what evidence is printed beside them. An assertion here that runs over an empty roster reports that
+> the matcher is honest without having looked at a single clinician. The 20 fall into three shapes,
+> and the shapes decide the treatment rather than a blanket wrap:
+>
+>   * **Loops over `clinicians`** (9 sites across `needs`, `provenance`, `properties`,
+>     `ranking-profile`) — the roster. Empty means the product has no GPs at all; there is nothing
+>     legitimate about it and every one should be guarded.
+>   * **Loops over a register** (`REACH_CORPUS`, `ALL_MATCH_REASONS`, `KNOWN_FALSE_POSITIVES`,
+>     `REFUSED_CUES`) — guard unless emptiness is a real end state, in which case declare it with the
+>     reason, as O211 did for the three acceptance registers.
+>   * **Loops over a CALL result** (`clarifiers(…)`, `matchEvidence(…)`, `acceptedFalsePositives()`)
+>     — these need thought, not a wrapper. Some are legitimately empty by design: `clarifiers()`
+>     returns nothing when the roster shares every facet, and that is the behaviour the test is
+>     asserting. Wrapping those in `eachOf` would assert something false and would be a defect, not a
+>     payment. Expect some of the 20 to end as declarations rather than guards.
+>
+> **VERIFICATION.** `pnpm verify` plus full `pnpm e2e`; `UNGUARDED_REMAINDER` lowered by exactly the
+> number paid, in the same commit, per the ratchet's both-directions rule. The census failing at
+> "the remainder fell to N" is the check that the pin was lowered honestly, and O211's lesson is
+> that being ONE SHORT is the normal outcome of a hand pass — the census is trusted over my count.
+
 > **O211 (paying down the vacuity debt: `src/compliance`, 11 sites) — claimed 2026-08-27T21:00Z by
 > loop-0827a.** Gate read before claiming: green @ f06d99b.
 >
