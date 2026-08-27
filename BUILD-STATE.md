@@ -119,6 +119,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O193 (the compare screen, verified after O192's font correction — the one changed site nobody
+> looked at) — claimed 2026-08-27T03:50Z by loop-0827a.** UI-refinement lane (plan §"UI refinement
+> & motion, continuously": at least one unit per week, before/after capture in `qa/`, DESIGN-QA
+> entry). The numbered lanes are exhausted — M1–M10 done with M11/M12 founder-gated, AR1–AR40
+> complete through the aesthetic plan's closing — so this takes the standing lane.
+>
+> **WHY THIS UNIT EXISTS, AND IT IS MY OWN LOOSE END.** O192 found eight `font-family` declarations
+> naming an undefined CSS variable, falling through to a face that is not installed and landing on
+> Georgia while the source said serif. Seven were on `/network*` and were verified by screenshot in
+> that unit's own rounds. The eighth — `.compare-content h1`, on the finder's compare screen — was
+> `var(--font-display)`, predates O192 by a long way, and was corrected in the same sweep WITHOUT
+> ANYBODY LOOKING AT THE SCREEN. That is the exact shape of the defect O192 was about: a change that
+> every test accepts and no eye has checked. A heading whose size, weight and letter-spacing were
+> tuned while it silently rendered in Georgia may not be tuned for Newsreader, whose metrics differ.
+>
+> Scope: capture the compare screen at 390 and 1280, read the heading against the screen it heads,
+> and correct whatever the face change exposed — or record it as clean and pin it, which is a real
+> outcome and not a failure to find something. NO redesign of the compare screen: O192's own note
+> stands that this screen deliberately carries no score, no total and no accent, because an accent
+> here would read as a recommendation. Nothing in this unit may add one.
+>
+> Verify: `pnpm verify` green plus `e2e/compare.spec.ts` and the visual-baseline discipline — if the
+> heading's rendering moves, the affected baseline cells are re-accepted through AR16's register
+> with the cause named, never re-accepted silently.
+
 > **O192 (founder-directed: two interfaces — the speech/text pairing finder stays, and a browsable
 > NETWORK gallery of the GPs in the network gets its own URL, with a bottom-right toggle between
 > them) — claimed 2026-08-26T21:03Z by loop-0826a.** Founder brief, in their words: "have Two
