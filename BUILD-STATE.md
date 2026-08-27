@@ -119,6 +119,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O199 (the taste law's hover clause is enforced by nothing, and 37 of 53 sites break it) —
+> claimed 2026-08-27T09:50Z by loop-0827a.** UI/aesthetic-review lane: numbered lanes exhausted
+> (M1–M10 done, M11/M12 founder-gated; AR1–AR40 complete), gate read before claiming — green @
+> 17cb44f, run end to end by the previous firing on the tree it pushed.
+>
+> **WHERE IT CAME FROM: O198 FOUND ITS DEFECT BY LUCK, AND LUCK IS NOT A CONTROL.** That unit's
+> hover underline ran 110px past its own text, latent since O192, invisible to nine audit rounds
+> because a hover state only exists under a cursor and every capture in this tree is taken without
+> one. This is the general question that raised: what does the tree actually guarantee about hover
+> at all? `adhdme-taste` `interaction.hover-focus` says hover styles are gated behind
+> `@media (hover: hover)`. The register names its enforcers — the two keyboard-focus tab-walks and
+> the AR23 focus-ring census — and **every one of them enforces the FOCUS half of that sentence.
+> The hover clause has no enforcer.**
+>
+> **MEASURED BEFORE CLAIMING, AND THE FIRST TWO MEASUREMENTS WERE WRONG.** A crude scan said 42 of
+> 54; stripping comments first and separating the `prefers-reduced-motion` overrides (which are
+> legitimately outside a hover gate — they override an already-gated rule) gives the real figures:
+> **53 `:hover` rules — 12 gated, 4 reduced-motion overrides, 37 ungated.**
+>
+> **AND I COULD NOT REPRODUCE A VISIBLE DEFECT, WHICH THE CLAIM SAYS RATHER THAN OMITS.** The
+> obvious harm is sticky hover on a phone. `(hover: hover)` is indeed FALSE under emulation, so the
+> 12 gated rules correctly do not apply there and the 37 do — but after tapping a card and coming
+> back, nothing matched `:hover`. My first probe reported "stuck = true" and that was my instrument,
+> not the product: the tap navigated, so the element it re-read was null. **So this unit is about a
+> law nobody is keeping and no check notices — NOT about a bug I have seen.** Emulated Chromium is
+> not iOS Safari and this does not clear the rule; it does mean the row may not claim a defect it
+> did not observe.
+>
+> **THE TRAP THAT MAKES A MECHANICAL FIX WORSE THAN NOTHING, and why the number is not "wrap 37".**
+> 14 of the 37 pair `:hover` with `:focus-visible` (or `:focus-within`) in one selector. Wrapping
+> those in a hover gate would delete the FOCUS style on touch devices — a real regression, and a
+> worse one than the unenforced law it fixes. They must be SPLIT, never wrapped. 23 are plain.
+>
+> Scope, and it is a stakes cut rather than a completeness one: split-or-wrap the rules on the
+> surfaces a patient reaches, land the census as a test in BOTH directions (a new ungated rule
+> fails; paying one down below the pin also fails, the `UNENFORCED_COUNT`/`UNGUARDED_REMAINDER`
+> shape this tree already uses twice), pin the remainder as named debt, and record the enforcer
+> against `interaction.hover-focus` in the taste register so the law stops claiming coverage it
+> does not have. NO restyling: every rule keeps the declarations it has.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces; the census proven non-vacuous by
+> planting an ungated rule and watching it fail; a qa/ capture with a DESIGN-QA entry per law 5.
+
 > **O198 (the network now argues its purpose twice — one idea per screen, restored) — claimed
 > 2026-08-27T08:15Z by loop-0827a.** UI-refinement lane (plan §"UI refinement & motion,
 > continuously"): the numbered lanes are exhausted — M1–M10 done with M11/M12 founder-gated,
