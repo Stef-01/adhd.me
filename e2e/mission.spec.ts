@@ -87,6 +87,23 @@ test("the mission page is a door the site's own navigation opens", async ({ page
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Care starts with feeling understood.");
 });
 
+test("the deck offers the argument rather than repeating it", async ({ page }) => {
+  // O198's rendered half. The unit test pins the COPY BUNDLES; this pins what a reader actually
+  // gets — the band under the deck names both doors and argues neither, and the mission door is
+  // the first of the two because a reader who has just met two people has the bigger question.
+  await page.goto("/network");
+
+  const band = page.locator(".network-purpose");
+  await expect(band.getByRole("heading")).toHaveText("Two other ways to go from here.");
+  // "Two", stated on the page, must be true on the page (`honesty.claim-earned`).
+  await expect(band.getByRole("link")).toHaveCount(2);
+  await expect(band.getByRole("link").first()).toHaveText("Why this exists");
+
+  await band.getByRole("link", { name: "Why this exists" }).click();
+  await expect(page).toHaveURL(/\/mission$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Care starts with feeling understood.");
+});
+
 test("nothing on the mission page overflows sideways at the narrowest phone still in use", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/mission");

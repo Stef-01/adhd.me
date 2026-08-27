@@ -7122,8 +7122,19 @@ textarea:focus-visible {
 
 /* The way in to a person, and the one thing on this deck that keeps the accent (see the eyebrow
    above). `margin-top: auto` is what makes the cards end level whatever length a bio runs. */
+/* O198: `align-self: flex-start` IS THE WHOLE FIX, AND THE CAPTURE IS WHAT FOUND IT. As the last
+   item in a column flex container this span stretched to the card's full width, so the hover
+   `border-bottom` below ran 110px (desktop) and 114px (mobile) past the end of its own text —
+   measured, not eyeballed: box 346 against text 236. At that ratio it stops reading as a link
+   underline and starts reading as a rule drawn across the card, which is the more emphatic thing
+   and the wrong one: it is a hover affordance on one word-group, not a divider. Shrinking the box
+   to its content changes nothing else, because `margin-top: auto` still does the pushing. Latent
+   since O192 and invisible in nine audit rounds, because a hover state only exists under a cursor
+   and full-page captures are taken without one — this unit's re-capture happened to land the
+   pointer on a card. */
 .network-card-more {
   display: block;
+  align-self: flex-start;
   margin-top: auto;
   padding-top: 14px;
   font-size: 0.8125rem;
@@ -7165,16 +7176,13 @@ textarea:focus-visible {
   color: var(--ink);
 }
 
-.network-purpose-body {
-  margin: 14px 0 0;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: var(--muted);
-  text-wrap: pretty;
-}
+/* O198 DELETED `.network-purpose-body` WITH THE PARAGRAPH IT STYLED. Kept-but-unused CSS is this
+   tree's own named disease (O186/O187) and the quietest form of it: nothing fails, and the next
+   reader has to work out whether the rule is dead or the markup is broken. The argument it dressed
+   now lives on /mission. */
 
-/* The way out to the other interface, said in prose. Same size as the body above it and one tier
-   up in colour, so it reads as the paragraph's last thought rather than as a button bolted on. */
+/* The doors out, said in prose rather than as buttons bolted on. Both bridges share this: one tier
+   up in colour from body copy, ordinary sentence size, so they read as the band's own thoughts. */
 .network-bridge {
   margin: 18px 0 0;
   font-size: 0.9375rem;

@@ -169,6 +169,39 @@ test("the launch control reaches a GP's own page too, so it is never a dead end"
   ).toBeVisible();
 });
 
+test("the card's way-in underlines its own words, not the whole card", async ({ page }) => {
+  // O198, and it was latent since O192 through nine audit rounds. `.network-card-more` is the last
+  // item in a column flex container, so it stretched to the card's full width and its hover
+  // `border-bottom` ran ~110px past the end of its text — at that ratio a link underline reads as a
+  // rule drawn across the card, which is the more emphatic thing and the wrong one.
+  //
+  // INVISIBLE TO EVERY EXISTING SWEEP AND TO EVERY SCREENSHOT, because a hover state only exists
+  // under a cursor and full-page captures are taken without one. So it is pinned as a measurement
+  // rather than left to the next person who happens to park a pointer on a card.
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/network");
+    const measured = await page.evaluate(() =>
+      [...document.querySelectorAll(".network-card-more")].map((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return {
+          box: Math.round(el.getBoundingClientRect().width),
+          text: Math.round(range.getBoundingClientRect().width),
+        };
+      }),
+    );
+    expect(measured.length, "no way-in links on the deck — this test is measuring nothing").toBeGreaterThan(0);
+    for (const { box, text } of measured) {
+      expect(text, "the way-in link has no text").toBeGreaterThan(50);
+      expect(
+        box - text,
+        `at ${width}px the way-in underline runs ${box - text}px past its own words`,
+      ).toBeLessThanOrEqual(2);
+    }
+  }
+});
+
 test("neither network page overflows sideways at the narrowest phone still in use", async ({ page }) => {
   // ROUND 9. Rounds 1-8 measured 390, 768 and 1280; 320 is the width where a fixed minimum finally
   // exceeds the room available, and the deck's `minmax(280px, 1fr)` plus 20px of padding either

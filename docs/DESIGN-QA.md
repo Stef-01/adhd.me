@@ -3052,3 +3052,51 @@ now a lookup on `/faq`'s position. A dead branch that quietly means something di
 than one that is simply dead: the day the founder ungates the team page, nobody re-derives the four.
 
 Captures: `qa/_runs/o197/{mission,network}-{390,1280}.png`.
+
+## O198 — the network argued its purpose twice, and a hover found a rule (2026-08-27)
+
+**The duplication was mine, one unit old.** O197 built `/mission` to argue why the network exists.
+`/network` has argued the same thing since O192 in its purpose band, and the mission page's `howBody`
+was written without reading the paragraph it was about to duplicate. Side by side they carried the
+same facts (languages, where they consult, how long a first appointment runs), the same two claims
+(their own words, not ranked) and the same closing move (you decide who sounds like a fit / like
+somebody you could talk to). Two copies of one idea in two files, which drift the first time either
+is edited.
+
+`layout.one-idea` decides which half survives and it is not a coin toss: the mission page's one idea
+IS the argument — that is why a separate page was asked for — and the deck's one idea is the people.
+So the band gave the argument up and became what it now says it is: **"Two other ways to go from
+here."**, the mission door first, the finder door second. The mission door leads because a reader who
+has just read two people has the bigger question, and because ending the page on the finder would
+end it on the thing that leaves this interface entirely. `finderBridge` stays rendered for the reason
+round 7 restored it: the corner control is not prose, and this sentence is what says what the two
+interfaces are to each other. `.network-purpose-body` was deleted with the paragraph it styled —
+kept-but-unused CSS is this tree's named disease (O186/O187).
+
+**"Two" is a claim, so it is checked.** The band says two and the e2e asserts the band holds exactly
+two links (`honesty.claim-earned`). And the duplication itself is pinned as a phrase-overlap test
+rather than a string equality, because the defect was never two identical strings — it was two
+paraphrases. Proven non-vacuous by restoring the old copy and watching it fail.
+
+**The re-capture found a defect nine audit rounds had missed, and the reason it hid is the
+interesting part.** `.network-card-more` — a card's "Read what Dr X says →" — is the last item in a
+column flex container, so it stretched to the card's full width and its hover `border-bottom` ran
+**110px past the end of its own text at 1280 and 114px at 390** (measured: box 346, text 236). At
+that ratio it stops reading as a link underline and starts reading as a rule drawn across the card,
+which is the more emphatic thing and the wrong one.
+
+It hid because **a hover state only exists under a cursor, and full-page captures are taken without
+one.** O192's nine rounds all captured at rest; this unit's re-capture happened to leave the pointer
+on a card after dismissing the consent bar. `align-self: flex-start` is the whole fix — `margin-top:
+auto` still does the pushing — and the box now equals its text to the pixel at both widths, pinned in
+`e2e/network.spec.ts` as a measurement so the next person does not have to park a pointer to find it.
+
+**Two things in these captures are stitching artefacts, not defects**, recorded so the next reader
+does not chase them: the sticky site header appears mid-page at 390 (Chromium's full-page capture
+stitches scroll positions, and a `position: sticky` element lands where the viewport was), and the
+fixed launch control appears over a card for the same reason. Both are correct in a live viewport,
+and O192 round 8 already ruled on where the compact pill may sit.
+
+Captures: `qa/_runs/o198/{network,mission}-{390,1280}.png` — the network shots taken WITH the first
+card hovered, so the state that was wrong is the state on the record. They also replace the O197
+captures, which were shot before the footer door landed and so never showed what shipped.

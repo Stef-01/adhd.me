@@ -69,10 +69,25 @@ export const NETWORK_COPY = {
   /** Sets the count and hands the voice to the clinicians in the same breath. */
   declarationNote:
     `${networkSizeInWords()[0]!.toUpperCase()}${networkSizeInWords().slice(1)} Sydney GPs today, in their own words. Everything on these pages is what each doctor says about how they work — their languages, where they consult, and what they say they see often. None of it is our description of them.`,
-  /** The social-impact frame: why a browsable network exists at all. */
-  purposeHeading: "Why the network is open to read.",
-  purposeBody:
-    "Finding a GP who understands you should not depend on who you happen to know. So the people here are listed to be read, not ranked: what each one says they do, in the words they chose, with the practical things — languages, rooms, how long a first appointment runs — on the same page rather than three clicks away. You decide who sounds like a fit.",
+  /**
+   * O198: THE BAND STOPPED ARGUING AND BECAME A PAIR OF DOORS, and the reason is a defect O197
+   * introduced.
+   *
+   * `purposeBody` used to live here — "Finding a GP who understands you should not depend on who
+   * you happen to know…" — and it was good copy. O197 then built `/mission` to make that argument
+   * at length, and its `howBody` was written without reading the paragraph it was about to
+   * duplicate: same facts (languages, where they consult, how long a first appointment runs), same
+   * two claims (their own words, not ranked), same closing move. Two copies of one idea in two
+   * files, which drift the first time either is edited.
+   *
+   * `layout.one-idea` decides which copy survives, and it is not a coin toss: the mission page's
+   * one idea IS the argument — that is why the founder asked for a separate page — and the deck's
+   * one idea is the people. So the deck stops restating it and offers the door instead. The
+   * paragraph is not preserved here in a comment: it is alive on /mission, which is the point.
+   */
+  onwardHeading: "Two other ways to go from here.",
+  /** The door to the argument, now that a page carries it. Both halves are on /mission. */
+  missionBridge: "Want the longer answer — why this exists, and how big the network actually is?",
   /** The bridge to the other interface, stated as a choice rather than a redirect. */
   finderBridge: "Would rather describe what you are looking for and have the list ordered around it?",
   galleryEmpty: "No GP is listed in the network right now.",

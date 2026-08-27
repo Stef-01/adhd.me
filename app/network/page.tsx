@@ -114,9 +114,26 @@ export default function NetworkPage() {
           </ul>
         )}
 
+        {/*
+          O198: THE BAND ARGUED THE NETWORK'S PURPOSE UNTIL /mission EXISTED TO DO IT PROPERLY.
+          `purposeBody` said the same thing as the mission page's `howBody` in different words —
+          my own duplication, introduced one unit earlier — so the deck gave the argument up and
+          kept the doors. `layout.one-idea`: this screen is the people, and the reasoning is one
+          tap away rather than compressed underneath the faces.
+        */}
         <section className="network-purpose">
-          <h2 className="network-purpose-heading">{NETWORK_COPY.purposeHeading}</h2>
-          <p className="network-purpose-body">{NETWORK_COPY.purposeBody}</p>
+          <h2 className="network-purpose-heading">{NETWORK_COPY.onwardHeading}</h2>
+
+          {/*
+            THE MISSION DOOR COMES FIRST, and the order is the argument. A reader who has just read
+            two people and wants to know what this is has a bigger question than a reader who wants
+            a different tool; and putting the finder last leaves the page ending on the thing that
+            takes you off this interface entirely.
+          */}
+          <p className="network-bridge">
+            {NETWORK_COPY.missionBridge}{" "}
+            <Link href="/mission">Why this exists</Link>
+          </p>
 
           {/*
             ROUND 7. `finderBridge` was written in round 1, linted by the gallery test, counted by
@@ -126,7 +143,9 @@ export default function NetworkPage() {
             Rendered rather than deleted, because a reader who has read everybody and is still not
             sure needs a next step IN THE PROSE, not only in a floating corner control — and saying
             the relationship between the two interfaces in a sentence is the differentiation the
-            founder asked the two URLs to carry.
+            founder asked the two URLs to carry. O198 kept it for the same reason it was restored:
+            the corner control alone is not prose, and this is the sentence that says what the two
+            interfaces are to each other.
           */}
           <p className="network-bridge">
             {NETWORK_COPY.finderBridge}{" "}

@@ -154,6 +154,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end on the tree the push produces, plus an e2e pin that the two pages do
 > not both carry the argument — a duplication test, so this cannot come back by somebody re-adding a
 > paragraph — and a qa/ capture with a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T09:35Z. BUILT AS CLAIMED, AND THE REQUIRED CAPTURE FOUND A SECOND DEFECT.**
+>
+> **THE DUPLICATION, RESOLVED THE WAY `layout.one-idea` SAYS.** `purposeBody` retired from
+> `NETWORK_COPY` with the reason recorded at the constant rather than dropped silently, and
+> `.network-purpose-body` deleted with the paragraph it styled — kept-but-unused CSS is this tree's
+> named disease (O186/O187) and the quietest form of it. The band is now what it says it is: **"Two
+> other ways to go from here."**, mission door first, finder door second. Mission first because a
+> reader who has just read two people has the bigger question, and because ending the page on the
+> finder would end it on the thing that leaves this interface entirely. `finderBridge` stays rendered
+> for round 7's reason: the corner control is not prose.
+>
+> **"TWO" IS A CLAIM, SO IT IS CHECKED** (`honesty.claim-earned`) — the e2e asserts the band holds
+> exactly two links, so a third door added later fails the sentence above it rather than quietly
+> making it false.
+>
+> **THE DUPLICATION TEST IS A PHRASE OVERLAP, NOT A STRING EQUALITY, AND IT WAS PROVEN.** The defect
+> was never two identical strings; it was two paraphrases. The test refuses the four phrases the two
+> paragraphs actually shared, and it was verified by stashing only `gallery.ts` and watching it fail
+> on the old copy — a duplication test that has never seen the duplication is a test nobody has run.
+>
+> **THE CAPTURE FOUND WHAT NINE AUDIT ROUNDS COULD NOT, AND WHY IT HID IS THE USEFUL PART.**
+> `.network-card-more` — a card's "Read what Dr X says →" — is the last item in a column flex
+> container, so it stretched to the card's full width and its hover `border-bottom` ran **110px past
+> the end of its own text at 1280 and 114px at 390** (measured: box 346, text 236). At that ratio a
+> link underline reads as a rule drawn across the card, which is the more emphatic thing and the wrong
+> one. It hid because **a hover state only exists under a cursor and full-page captures are taken
+> without one** — O192's nine rounds all captured at rest, and this unit's re-capture happened to
+> leave the pointer on a card after dismissing the consent bar. `align-self: flex-start` is the whole
+> fix (`margin-top: auto` still does the pushing); box now equals text to the pixel at both widths,
+> pinned in `e2e/network.spec.ts` as a MEASUREMENT so nobody has to park a pointer to find it again.
+> Latent since O192 — not a regression from O197's motion pass, which only changed that rule's easing.
+>
+> **AND THE O197 CAPTURES WERE WRONG, WHICH IS WHY RE-CAPTURING WAS IN SCOPE.** They were shot before
+> the footer's mission door landed, so the record showed a state that never shipped. `qa/_runs/o198/`
+> replaces them, with the network taken WITH the first card hovered so the state that was wrong is the
+> state on the record. Two artefacts named in the DESIGN-QA entry so the next reader does not chase
+> them: Chromium's full-page stitching puts the sticky header and the fixed launch control at their
+> scroll positions, and both are correct in a live viewport.
+>
+> Gate: `pnpm verify` green (295 files / 4372 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 17.3m**. Second consecutive firing to read the whole gate on the tree it pushes.
 
 > **O197 (founder-directed: Emil motion pass on the network, a mission landing page, and the finder
 > parked on a parallel branch) — claimed 2026-08-27T08:05Z by loop-0827a.** Founder brief, in their

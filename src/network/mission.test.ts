@@ -17,7 +17,7 @@ import { describe, expect, it } from "vitest";
 import { lintLandingCopy } from "@/compliance/landing";
 import { ACCEPTED_FINDINGS, sweepSurface } from "@/compliance/public-surfaces";
 import { eachOf } from "@/quality/non-vacuous";
-import { NETWORK_SIZE } from "./gallery";
+import { NETWORK_COPY, NETWORK_SIZE, networkCopyStrings } from "./gallery";
 import { FOUNDER_AUTHORED, MISSION_COPY, missionCopyStrings, statesCovered } from "./mission";
 
 /** Everything on the page that is the loop's own prose. */
@@ -97,6 +97,37 @@ describe("O197 the mission page's copy", () => {
           `delete the entry rather than leaving a reassurance about a finding nobody has`,
       ).toBe(true);
     }
+  });
+
+  it("does not argue what /network's own band argues, because one idea lives on one screen", () => {
+    // O198, AND THIS TEST EXISTS BECAUSE THE DUPLICATION WAS REAL AND I WROTE IT. O197 gave the
+    // mission page a `howBody` without reading `/network`'s purpose band, and the two carried the
+    // same facts, the same two claims and the same closing move in different words. The band gave
+    // the argument up; this stops it coming back as a paragraph somebody re-adds to the deck
+    // "for context", which is how one idea quietly becomes two drifting copies.
+    //
+    // CHECKED AS A PHRASE OVERLAP RATHER THAN A STRING EQUALITY, because the defect was never two
+    // identical strings — it was two paraphrases. The distinctive phrases below are the ones the
+    // two paragraphs actually shared; a rewrite that reintroduces the idea will reintroduce them,
+    // and a rewrite that genuinely says something new will not.
+    const deckCopy = networkCopyStrings().join("\n").toLowerCase();
+    const shared = [
+      "how long a first appointment runs",
+      "in the words they chose",
+      "not ranked",
+      "who sounds like a fit",
+    ];
+    for (const phrase of eachOf(shared, "the phrases the duplicated paragraphs shared")) {
+      expect(
+        deckCopy,
+        `/network's copy is arguing the mission again ("${phrase}"). That argument lives on ` +
+          `/mission — the deck's one idea is the people. Link to it rather than restating it.`,
+      ).not.toContain(phrase);
+    }
+
+    // And the door that replaced it must actually be there, or this test just deleted a paragraph.
+    expect(NETWORK_COPY.missionBridge.length).toBeGreaterThan(20);
+    expect(networkCopyStrings()).toContain(NETWORK_COPY.missionBridge);
   });
 
   it("states the network's reach from the roster, so the page cannot outrun it", () => {
