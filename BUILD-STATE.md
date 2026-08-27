@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ a23a017 (2026-08-27T04:05Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O193 done (the compare screen verified after O192's font correction; the record corrected — an undefined var() invalidates the declaration, it does not fall through)`
+`gate: green @ 95dc780 (2026-08-27T04:05Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O193 done (the compare screen verified after O192's font correction; the record corrected — an undefined var() invalidates the declaration, it does not fall through)`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
