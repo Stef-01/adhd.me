@@ -128,9 +128,20 @@ test("you can move from one GP to the next, and back to the deck", async ({ page
   await expect(page).toHaveURL(/\/network$/);
 });
 
-test("an unknown GP is a 404 rather than an empty profile", async ({ page }) => {
+test("an unknown GP is a 404 that still knows which list you were reading", async ({ page }) => {
+  // ROUND 8 WIDENED THIS TEST, and the reason is what the old version did NOT check. It asserted
+  // the status code and stopped, so nobody had looked at the page a reader actually met: the SITE
+  // 404, offering "Find a GP" and "Start from the beginning" and unable to offer the one thing
+  // they were reaching for. Somebody following a stale link to a doctor was told the link was dead
+  // and then pointed away from the network entirely. `app/network/not-found.tsx` catches it now.
   const response = await page.goto("/network/nobody-by-that-name");
   expect(response?.status()).toBe(404);
+
+  await expect(page.getByRole("heading", { name: /not in the network/i })).toBeVisible();
+  // The door back to the list they were reading — the whole point of a scoped 404.
+  await page.getByRole("link", { name: "The network" }).first().click();
+  await expect(page).toHaveURL(/\/network$/);
+  await expect(page.locator(".network-card")).toHaveCount(NETWORK_CLINICIANS.length);
 });
 
 test("the two interfaces launch into each other from the bottom-right corner", async ({ page }) => {

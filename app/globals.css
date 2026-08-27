@@ -7639,8 +7639,19 @@ textarea:focus-visible {
     margin-top: 52px;
     padding: 28px 22px;
   }
+}
 
-  /* The hint is the first thing to go when the corner is tight — the label carries the meaning. */
+/* ROUND 8, AND THE BREAKPOINT MOVED A LONG WAY FOR A REASON THE SCREENSHOTS MADE PLAIN.
+   The hint used to hide only below 700px. At 768 the deck's content column runs the full width,
+   so the two-line pill landed ON Dr Anusha's card — covering her own declared sentence and her
+   first signal chip. A floating control overlapping generic chrome is an accepted convention; one
+   covering a named doctor's own words on a page whose entire premise is "these are their words"
+   is not, and no amount of bottom padding fixes it, because the page scrolls underneath.
+   So the pill goes compact wherever the content column would otherwise pass beneath it. At 1280
+   the 760px column ends at x≈1020 and the wide pill starts there — touching, not clear — so the
+   threshold is above that, not at it. The sentence the hint carried is not lost: round 7 put it
+   in the purpose band as prose, where it cannot cover anybody. */
+@media (max-width: 1299px) {
   .interface-launch-hint {
     display: none;
   }

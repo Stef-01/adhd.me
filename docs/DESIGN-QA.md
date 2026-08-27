@@ -2910,3 +2910,37 @@ first looking never showed it.
 Fixed by reserving the control's own height (44px plus its 20px offset, plus air) at the widths
 where the collision happens, scoped to `.patient-v2` — the finder's wrapper and nothing else. The
 words move up rather than shrinking: a disclaimer nobody can finish is not a disclaimer.
+
+## O192 round 8 — the states nobody had looked at (2026-08-27)
+
+Rounds 1–7 audited the deck and a profile at 390 and 1280. This round went after what that misses:
+tablet width, `prefers-reduced-motion`, the keyboard path, and the page a reader meets when a
+`/network/…` link is wrong. Two of the four produced findings.
+
+**The launch control sat on a doctor's own sentence at 768px.** At 1280 the 760px content column
+ends at x≈1020 and the wide two-line pill starts there — touching, not clear. At 768 the column
+runs the full width, so the pill landed on Dr Anusha's card, covering her declared line and her
+first signal chip. No amount of bottom padding fixes this, because the page scrolls underneath a
+fixed control; the honest fix is to make the control smaller wherever content passes beneath it.
+The hint line now hides below 1300px rather than below 700px. A floating control overlapping
+generic chrome is an accepted convention; one covering a named doctor's own words on a page whose
+premise is "these are their words" is not. The sentence the hint carried was not lost — round 7
+had already put it in the purpose band as prose, where it cannot cover anybody.
+
+**The 404 for an unknown GP pointed away from the network.** `network.spec.ts` asserted the status
+code and stopped, so nobody had looked at the page: a reader following a stale link to a doctor got
+the site 404, was told the link was dead, and was offered "Find a GP" and "Start from the
+beginning" — everything except the list they were reaching for. `app/network/not-found.tsx` is the
+scoped boundary Next renders instead: same manners as the site page (plain sentence, nothing
+blamed on the reader), and it can now say which list this was and how many GPs are in it, derived
+from the roster. It deliberately does not guess a clinician — "did you mean Dr X?" would be this
+product recommending a named doctor to somebody who described nothing, which is the finder's job
+and only ever on what a reader asked for. The test was widened from a status check to the status,
+the heading, and the door back working.
+
+**Clean, and recorded as clean so the next round does not re-check them.** The keyboard path is
+skip-link → wordmark → Questions → card → card → the in-prose finder link → footer, every stop with
+a visible 2px ring; round 7's bridge link turns out to also give a keyboard user a route to the
+finder well before the fixed corner control, which sits last in DOM order. Reduced motion renders
+the deck static with no residual transform, as `motion.reduced-motion` requires. The deck at 768
+keeps two columns and stays readable.
