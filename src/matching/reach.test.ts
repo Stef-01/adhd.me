@@ -272,6 +272,10 @@ describe("O13 every manner facet is reachable by its plain name", () => {
     ["manner:non_judgmental", "without judgement"],
     ["manner:unhurried", "unhurried"],
     ["manner:unhurried", "not rushed"],
+    // O210: three plain phrasings a probe of eighteen found reaching NOTHING, now cued.
+    ["manner:unhurried", "a doctor with patience"],
+    ["manner:attuned", "a doctor who hears me out"],
+    ["manner:attuned", "I want someone who will hear me out"],
     ["manner:structured", "structured"],
     ["manner:structured", "methodical"],
     ["manner:collaborative", "a collaborative GP"],
@@ -360,7 +364,15 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // "I watched a video about ADHD"; authored as a pair, the collapse rule demands "by video"
     // / "over video" in the raw stream and the innocent sentence is refused.
     "by video", "diagnose me", "figure out",
-    "get a word in", "get checked", "honest about", "hurry me",
+    "get a word in", "get checked",
+    // O210: reviewed and DELIBERATE, the same device as "in recovery" and "by video" above. Both
+    // tenses collapse to [hear] — `stem("hears")` is "hear" — and bare [hear] would fire on "I hear
+    // the wait is long" and "from what I hear the clinic is busy". Authored as pairs, the O45
+    // collapse rule demands "hear me out" / "hears me out" in the raw stream, and both innocent
+    // sentences are refused. Verified against exactly those, plus "I have heard good things", which
+    // stays unread for a second reason: `stem("heard")` is "heard", so the past tense never collapses
+    // into this cue at all.
+    "hear me out", "hears me out", "honest about", "hurry me",
     // O107: reviewed and DELIBERATE. Bare "recovery" fires on "recovery time after surgery",
     // so the cue is authored as the pair — the collapse rule then demands "in recovery" in
     // the raw stream, which is exactly the precision the bare word could not give.
@@ -379,7 +391,42 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // O108: see "by video" above — same phrase, other preposition.
     "over video", "really listen", "right with me", "the mechanism",
     "understand what", "what is going on",
+    // O210: collapses to [patience], and reviewed as safe on BOTH sides. Bare [patience] fires on
+    // "she ran out of patience" and "waiting rooms test your patience", so the pair demand is what
+    // makes it precise. And the word it does NOT collide with is the one that matters most here:
+    // `stem("patience")` is "patience" while `stem("patient")` is "patient", so this cue cannot
+    // reach "new patients welcome" or any of the roster's own copy — checked before it was written,
+    // because a cue that collided with "patient" in THIS product would have been unrecoverable.
+    "with patience",
   ];
+
+  it("keeps the phrasings O210 refused unread, so the reason survives the sentence", () => {
+    // O210 closed three lexicon holes and REFUSED a fourth, and the refusal is the part most likely
+    // to be undone by somebody who has not measured it. "takes their time" is the most natural way
+    // of all to ask for an unhurried appointment — which is exactly why it will be proposed again.
+    //
+    // It cannot ship: "their" is a stopword, so the cue degenerates to [take time], and the phrase
+    // then matches a reader STATING A FACT about the process rather than asking for anything. Being
+    // read as asking for an unhurried doctor because you said an assessment takes time is a false
+    // read of a patient's words, which is worse than not reading them at all.
+    //
+    // Pinned as behaviour rather than as prose: these three sentences must stay unread by
+    // `manner:unhurried` until somebody finds a form that survives tokenisation.
+    const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+    for (const sentence of [
+      "the wait takes time",
+      "an ADHD assessment takes time",
+      "getting a diagnosis takes time",
+    ]) {
+      expect(
+        facets(sentence),
+        `"${sentence}" now reaches unhurried — a cue that collapses to [take time] has been added ` +
+          `back. See the refusal recorded in src/demo/emotional-fit.ts.`,
+      ).not.toContain("manner:unhurried");
+    }
+    // And the phrasing that motivated the refusal is still unread, which is the honest cost of it.
+    expect(facets("a GP who takes their time")).not.toContain("manner:unhurried");
+  });
 
   it("freezes the set of phrases that ship as one token", () => {
     const collapsed = LEXICON_CUES

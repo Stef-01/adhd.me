@@ -668,6 +668,14 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "someone who sees what is right with me too", reaches: ["manner:motivating"] },
   { text: "less what is wrong with you, more what we can build", aspires: ["manner:motivating"] },
   { text: "the good doctors never make you watch the clock", reaches: ["manner:unhurried"] },
+  // O210: three plain phrasings a probe found reaching NOTHING, each now cued and pinned here so the
+  // cue cannot be removed without a corpus entry going red. The fourth and most natural phrasing —
+  // "a GP who takes their time" — is deliberately absent: "their" is a stopword, so the cue would
+  // degenerate to [take time] and read "an ADHD assessment takes time" as an unhurried ask. That
+  // phrasing stays unread until somebody finds a form that survives tokenisation.
+  { text: "I just want a doctor with patience", reaches: ["manner:unhurried"] },
+  { text: "a GP who hears me out", reaches: ["manner:attuned"] },
+  { text: "someone who will hear me out about all of it", reaches: ["manner:attuned"] },
   { text: "give me the full appointment, not the doorway version", reaches: ["manner:unhurried"] },
   { text: "a female GP for personal reasons", reaches: ["pref:woman-gp"] },
   { text: "medicare only, I cannot pay extra", reaches: ["pref:bulk-billing"] },

@@ -147,9 +147,17 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
     // a roster or corpus change that moves these numbers is real news about what this schema can
     // and cannot tell a reader, and the pin exists so that news cannot pass silently.
     // O191 re-pinned: the refugee-register corpus line grew the run 447 -> 448; culturally_attuned differs between the two, so valueDiffers 332 -> 333.
-    expect(result.valueDiffers).toBe(333);
+    // O210: valueDiffers 333 -> 336 AND ambiguous 308 -> 311, from three corpus sentences (one per
+    // cue that unit closed). A first draft of this note claimed `ambiguous` was unmoved; it is not,
+    // and the corrected reading is the more interesting one. Each new sentence reaches a manner
+    // facet that exactly one clinician declares — so the pair's SCORES differ (valueDiffers +3) —
+    // while the other clinician is UNDECLARED rather than declared-no, which is precisely M8's
+    // "we cannot tell": the intervals overlap, so it is ambiguous too (+3). Both counters moving
+    // together is the correct shape for a two-person roster where one has answered and one has not.
+    // `intervalSeparates` is genuinely unmoved at 25, which is the part worth checking.
+    expect(result.valueDiffers).toBe(336);
     expect(result.intervalSeparates).toBe(25);
-    expect(result.ambiguous).toBe(308);
+    expect(result.ambiguous).toBe(311);
     // The named risk, checkable rather than merely asserted: every genuine, uncertainty-free
     // separation this roster's declarations support traces to the one exempt field.
     expect(result.separatingFacetKeys).toEqual(["pref:woman-gp"]);

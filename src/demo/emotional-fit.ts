@@ -87,6 +87,14 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
          and unfiling it carelessly are the same error. The argument is recorded for the unit
          that takes it deliberately, with the founder question attached. */
       "seen women like me", "feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed",
+      /* O210: "a doctor who hears me out" reached nothing. Both tenses are cued because
+         `stem("hears")` is "hear" but `stem("heard")` is "heard" — so the present forms collapse
+         together and the past does not, and "I heard about this from a friend" stays correctly
+         unread. Verified against that sentence and "I have heard good things", which are the two
+         ways this could have gone wrong. Conduct of the clinician, which is what this facet is —
+         see O112's rule above that every cue here names the clinician's conduct rather than the
+         reader's own state. */
+      "hears me out", "hear me out",
       /* O112: the plain WANTS in this facet's corpus register — each names the clinician's
          CONDUCT, which is what this quality is, and none states anything about the reader.
 
@@ -178,6 +186,22 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     cues: [
       /* O116: the clock, and the full appointment as opposed to the doorway version. */
       "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
+      /* O210: "a doctor with patience" reached NOTHING, which a probe of eighteen plain phrasings
+         found alongside two others. Safe because `stem("patience")` is "patience" and
+         `stem("patient")` is "patient" — checked before the cue was written, because "patient" is
+         the most overloaded word in this product and a cue that collided with it would fire on
+         "new patients welcome" and half the roster's own copy. Verified clean against exactly that.
+
+         TWO CUES WERE REFUSED HERE AND THE REFUSAL IS THE MORE USEFUL RECORD. "takes their time" and
+         "take their time" are the most natural phrasings of all, and both are UNSAFE: "their" is a
+         stopword, so the phrase degenerates to "take time" and matched "the wait takes time", "an
+         ADHD assessment takes time" and "getting a diagnosis takes time" — a reader stating a fact
+         about how long the process takes, read as asking for an unhurried doctor. That is a false
+         read of a patient's words, which is worse than not reading them. Same shape as O7's
+         self-reach finding, where "in and out" tokenised to nothing because every word was a
+         stopword: this facet's cue list is where stopword collapse keeps biting. Measured, not
+         guessed — the phrasing stays unread until somebody finds a form that survives tokenisation. */
+      "with patience",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
       // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it

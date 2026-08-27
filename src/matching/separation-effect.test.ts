@@ -32,19 +32,25 @@ function separationEffectCurve(sizes: readonly number[], sentences: readonly str
 }
 
 const PINNED_CURVE: SeparationEffectReport[] = [
-  { rosterSize: 2, k: K, total: 448, observedSeparationRate: 0.344, nullMeanSeparationRate: 0.344, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 448, observedSeparationRate: 0.134, nullMeanSeparationRate: 0.135, nullStdSeparationRate: 0.001, effect: -0.001 },
-  { rosterSize: 5, k: K, total: 448, observedSeparationRate: 0.147, nullMeanSeparationRate: 0.142, nullStdSeparationRate: 0.005, effect: 0.005 },
-  { rosterSize: 10, k: K, total: 448, observedSeparationRate: 0.004, nullMeanSeparationRate: 0.015, nullStdSeparationRate: 0.006, effect: -0.011 },
-  { rosterSize: 25, k: K, total: 448, observedSeparationRate: 0.002, nullMeanSeparationRate: 0.004, nullStdSeparationRate: 0.003, effect: -0.002 },
+// O210: every `total` below moves 448 -> 451 and three rates move with it, because that unit added
+// three corpus sentences (one per cue it closed: "with patience", "hears me out", "hear me out").
+// The SHAPE is untouched — N=2's null is still exactly degenerate, N=3's effect is still -0.001, the
+// N=5 -> N=10 dip is still 0.011 — which is the point of re-pinning rather than relaxing: the metric
+// is supposed to move when the corpus grows and to keep its shape when nothing about the model
+// changed. Re-derived in the commit that earned it.
+  { rosterSize: 2, k: K, total: 451, observedSeparationRate: 0.348, nullMeanSeparationRate: 0.348, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 451, observedSeparationRate: 0.135, nullMeanSeparationRate: 0.136, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 451, observedSeparationRate: 0.146, nullMeanSeparationRate: 0.141, nullStdSeparationRate: 0.005, effect: 0.005 },
+  { rosterSize: 10, k: K, total: 451, observedSeparationRate: 0.004, nullMeanSeparationRate: 0.015, nullStdSeparationRate: 0.006, effect: -0.011 },
+  { rosterSize: 25, k: K, total: 451, observedSeparationRate: 0.002, nullMeanSeparationRate: 0.004, nullStdSeparationRate: 0.003, effect: -0.002 },
 ];
 
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 2,
   k: K,
-  total: 448,
-  observedSeparationRate: 0.672,
-  nullMeanSeparationRate: 0.672,
+  total: 451, // O210
+  observedSeparationRate: 0.674,
+  nullMeanSeparationRate: 0.674,
   nullStdSeparationRate: 0,
   effect: 0,
 };
@@ -65,8 +71,8 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     () => {
       const naive3 = tieQualityReport(corpusRun(), syntheticRoster(3)).separationRate;
       const naive2 = tieQualityReport(corpusRun(), syntheticRoster(2)).separationRate;
-      expect(naive3).toBe(0.134);
-      expect(naive2).toBe(0.344);
+      expect(naive3).toBe(0.135); // O210: +3 corpus sentences
+      expect(naive2).toBe(0.348); // O210
       expect(naive2).toBeGreaterThan(naive3);
     },
   );

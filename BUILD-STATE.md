@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ b50db4d (2026-08-27T18:35Z) — pnpm verify 298 files / 4391 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 16.4m). O209 done (O196's census did not recognise its OWN guard — `of eachOf(REG, …)` captured a root of `eachOf`, so a guarded site read as unguarded and the debt was overstated by TEN from the day it landed, including the W55 provenance intervals and the sitemap-to-census trace that unit guarded by stakes; 133 → 123, and the constant says the number fell because it was measured wrong, not because anything was fixed). O208 done (every public surface has a decided stance on the two interfaces; / and /approach recorded as dated founder debt). O207 done (three prose pages had zero footer elements; the census found a fourth). O206 done (/practices stacked two site bars). O205/O204/O203 done (the privacy notice, the FAQ and /examples each described a product with one interface). O202 done (founder-directed: the network deck became a gallery). O201/O200/O199/O198/O197/O196/O195/O194 done. Fifteenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T19:30Z) — pnpm verify 298 files / 4398 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 16.4m). O210 done (a probe of 18 plain phrasings found 3 reaching NOTHING for facets the roster already holds; two cues shipped, the most natural one REFUSED because "their" is a stopword and the cue degenerated to [take time], reading "an ADHD assessment takes time" as an unhurried ask; six KPI registers re-derived, and a wrong note of my own corrected in place). O209 done (the vacuity census did not recognise its OWN guard; debt overstated by ten from the day it landed). O208 done (every public surface has a decided stance on the two interfaces). O207 done (three prose pages had zero footer elements). O206 done (/practices stacked two site bars). O205/O204/O203 done (the privacy notice, the FAQ and /examples each described a one-interface product). O202 done (founder-directed: the network deck became a gallery). O201/O200/O199/O198/O197/O196/O195/O194 done. Sixteenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -165,6 +165,47 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end; the three phrasings asserted to reach their facet and the refused
 > one asserted NOT to collide; every moved KPI pin re-derived and named. No qa/ capture: this unit
 > renders nothing.
+>
+> **DONE 2026-08-27T19:30Z. TWO CUES SHIPPED, ONE PAIR REFUSED ON EVIDENCE, AND THE REFUSAL IS THE
+> BETTER RECORD.** `"with patience"` closes `manner:unhurried`; `"hears me out"` and `"hear me out"`
+> close `manner:attuned`. `"takes their time"` — the most natural phrasing of the three, and the one
+> most likely to be proposed again — is refused: "their" is a stopword, the cue degenerates to
+> `[take time]`, and it matched "the wait takes time", "an ADHD assessment takes time" and "getting a
+> diagnosis takes time". A reader stating a fact about how long the process takes, read as asking for
+> an unhurried doctor, is a FALSE READ of a patient's words — worse than not reading them. Pinned as
+> behaviour so the reason survives the sentence.
+>
+> **"patience" WAS CHECKED BEFORE IT WAS WRITTEN**, because "patient" is the most overloaded word in
+> this product. `stem("patience")` is "patience", `stem("patient")` is "patient" — distinct, so the
+> cue cannot reach "new patients welcome" or any of the roster's own copy.
+>
+> **THE TREE'S OWN PIN CAUGHT WHAT MY PROBE MISSED, AND THEN VALIDATED THE CUES.** All three collapse
+> to a single token, and O25's "a multi-word cue must not quietly become a one-word cue" refused them
+> until each was reviewed and listed. Reading that check's own reasoning showed WHY they are safe: the
+> O45 collapse rule means a one-token phrase can only fire beside its authored adjacent pair in the
+> raw stream, which is exactly why "I hear the wait is long" stayed clean. Registered with the
+> sentences each was verified against, in sort order, per the list's "must never grow silently".
+>
+> **SIX EXACT-BASELINE REGISTERS MOVED, EACH RE-DERIVED WITH THE CAUSE AT THE CONSTANT** (O190's
+> precedent): M6's extractor report (448 → 451 sample, 560 → 563 gold facets, 298 → 301 informed),
+> M5's synthetic curve and real-roster baseline (0.672 → 0.674), W234's tie-quality (301 → 304
+> separated, `unseparated` and `partialTie` unmoved), M8's declaration-state audit.
+>
+> **AND ONE OF MY OWN NOTES WAS WRONG, CORRECTED IN PLACE RATHER THAN QUIETLY.** I wrote that M8's
+> `ambiguous` was unmoved; it moves 308 → 311, and the corrected reading is the more interesting one:
+> each new sentence reaches a manner facet exactly ONE clinician declares, so the pair's scores differ
+> (+3 `valueDiffers`) while the other is UNDECLARED rather than declared-no — precisely M8's "we
+> cannot tell", so it is ambiguous too (+3). Both counters moving together is the right shape for a
+> two-person roster where one has answered and one has not. `intervalSeparates` is genuinely unmoved.
+>
+> **TWO CANDIDATES WERE MEASURED AND DISMISSED BEFORE THIS ONE WAS FOUND**: the launch control
+> appeared to sit on the finder's privacy disclaimer in a stitched capture and overlaps NOTHING at
+> 360/390/768/1280; the mic banner above the heading is the O18/O46/O48 error ladder working. Neither
+> was "fixed".
+>
+> Gate: `pnpm verify` green (298 files / 4398 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **340 passed, 2 skipped,
+> 16.4m**. Sixteenth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O209 (O196's vacuity census does not recognise its own guard, and has overstated its debt by 10
 > since the day it landed) — claimed 2026-08-27T18:00Z by loop-0827a.** UI/aesthetic-review lane;

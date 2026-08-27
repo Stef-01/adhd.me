@@ -165,7 +165,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
    answerable the roster already was, not the matcher improving. */
 /* O191 re-pinned: the refugee-register corpus line grew the run 447 -> 448; the new sentence reaches culturally_attuned, which only one clinician
    declares, so it lands separated: 300 -> 301, unseparated unchanged. */
-const PINNED = { total: 448, separated: 301, partialTie: 0, unseparated: 147 };
+const PINNED = { total: 451, separated: 304, partialTie: 0, unseparated: 147 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

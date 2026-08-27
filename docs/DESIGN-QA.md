@@ -3602,3 +3602,56 @@ register was re-checked in both directions after the fix — all 7 entries still
 sites, so none of them was only matching because of the bug.
 
 No `qa/` capture: this unit renders nothing and changes no product code.
+
+## O210 — three plain ways of asking reached nothing (2026-08-27)
+
+**Two candidates were measured and dismissed before the real one was found.** Driving the finder, a
+stitched capture appeared to show the launch control sitting on the privacy disclaimer; measured in a
+live viewport at 360, 390, 768 and 1280 it overlaps **nothing** — a stitching artefact, the class
+O198 already recorded. The mic-blocked banner above the heading is the O18/O46/O48 error ladder
+working as designed. Both dismissed on evidence rather than fixed on appearance.
+
+**The real finding, with a number.** Eighteen plain-English phrasings for facets the roster already
+holds: **15 reach the right facet, 3 reach nothing** — "a GP who takes their time", "a doctor with
+patience" (`manner:unhurried`) and "a doctor who hears me out" (`manner:attuned`). Everything around
+them works. A narrow hole in a lexicon that is mostly right.
+
+**Why it matters to a reader rather than to a metric.** Someone who types the most natural phrasing
+gets nothing read — and the finder then *honestly* tells them the order means nothing, because by its
+own rules it does. The product is truthful and useless in the same breath, while holding exactly the
+facet they asked for. Nothing on screen suggests anything went missing.
+
+**One of the three was refused, and the refusal is the better record.** "takes their time" is the
+most natural phrasing of all, and it cannot ship: "their" is a stopword, so the cue degenerates to
+`[take time]` and matched "the wait takes time", "an ADHD assessment takes time" and "getting a
+diagnosis takes time" — a reader stating a fact about how long the process takes, read as asking for
+an unhurried doctor. That is a false read of a patient's words, which is worse than not reading them.
+Same shape as O7's finding that "in and out" tokenised to nothing. Pinned as behaviour: those three
+sentences must stay unread, and so must the phrasing that motivated the refusal.
+
+**"patience" was checked before it was written**, because "patient" is the most overloaded word in
+this product. `stem("patience")` is `patience` and `stem("patient")` is `patient` — distinct, so the
+cue cannot reach "new patients welcome" or any of the roster's own copy. Verified against exactly
+that.
+
+**The tree's own pin caught what my probe missed.** All three cues collapse to a single token, and
+O25's "a multi-word cue must not quietly become a one-word cue" refused them until each was reviewed
+and listed. That check turned out to *validate* them: the O45 collapse rule means a one-token phrase
+can only fire beside its authored adjacent pair in the raw stream, which is precisely why "I hear the
+wait is long" stays clean. Each is now registered with the sentences it was verified against.
+
+**Six exact-baseline registers moved, each re-derived with the cause named** — O190's precedent, that
+one corpus sentence moves the KPI chain. M6's extractor report (448 → 451 sample, 560 → 563 gold
+facets, 298 → 301 informed), M5's separation curve and real-roster baseline (0.672 → 0.674), W234's
+tie-quality (301 → 304 separated, `unseparated` and `partialTie` unmoved), and M8's declaration-state
+audit.
+
+**And one of my own notes was wrong and is corrected in place.** I wrote that M8's `ambiguous` count
+was unmoved; it moves 308 → 311. The corrected reading is the more interesting one: each new sentence
+reaches a manner facet exactly one clinician declares, so the pair's scores differ (+3
+`valueDiffers`) while the other clinician is *undeclared* rather than declared-no — which is
+precisely M8's "we cannot tell", so it is ambiguous too (+3). Both counters moving together is the
+right shape for a two-person roster where one has answered and one has not. `intervalSeparates` is
+genuinely unmoved at 25.
+
+No `qa/` capture: this unit renders nothing.

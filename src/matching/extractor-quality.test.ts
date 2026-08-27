@@ -36,14 +36,18 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
   it("holds the measured baseline exactly, in both directions", () => {
     expect(extractorReport()).toEqual({
       // O191 re-pinned: refugee corpus line — one sentence, one gold facet (culturally_attuned).
-      sampleSize: 448,
-      goldFacetCount: 560,
-      hitCount: 560,
+    // O210: 448 -> 451 and 560 -> 563. Three corpus sentences were added, one per cue that unit
+    // closed ("with patience", "hears me out", "hear me out"), each carrying exactly one gold facet.
+    // All three grade as `informed` (298 -> 301) and none becomes a tie, which is the outcome the
+    // cues were added for: a phrasing that used to reach nothing now separates the roster.
+      sampleSize: 451,
+      goldFacetCount: 563,
+      hitCount: 563,
       recall: 1,
-      extractedCount: 560,
+      extractedCount: 563,
       extraCount: 0,
       precision: 1,
-      correctlyParsedCount: 448,
+      correctlyParsedCount: 451,
       correctlyParsedRate: 1,
     });
   });
@@ -52,18 +56,18 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
     // Same filter as `tie-quality.ts`'s `corpusRun` (any entry with a non-empty `reaches`), so a
     // reader comparing the two reports is comparing the same denominator, not two silently
     // different corpora wearing the same "447".
-    expect(gradedEntries().length).toBe(448);
+    expect(gradedEntries().length).toBe(451); // O210: +3 corpus sentences
   });
 
   it("the ranking ladder split is IDENTICAL today, and that identity is itself the finding", () => {
     const all = rankingLadderAll();
     const parsed = rankingLadderCorrectlyParsed();
-    expect(all).toEqual({ total: 448, informed: 298, tied: 57, unmatched: 0, unserved: 93 });
+    expect(all).toEqual({ total: 451, informed: 301, tied: 57, unmatched: 0, unserved: 93 }); // O210: +3 informed
     expect(parsed).toEqual(all);
     // W234's own tally (`separated`/`unseparated`) is unaffected by M7 — it classifies by RANK
     // BAND size, not by `matchQuality`'s stricter `informed` grade, so it still reads 300/147
     // (`tie-quality.test.ts`) even though this ladder's informed/tied split moved beneath it.
-    expect(parsed.informed).toBe(298);
+    expect(parsed.informed).toBe(301); // O210
     expect(parsed.tied + parsed.unmatched + parsed.unserved).toBe(150);
   });
 });
