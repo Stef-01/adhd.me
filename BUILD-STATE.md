@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ cfe12ca (2026-08-27T03:00Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, nine audit rounds — the last found nothing)`
+`gate: green @ a23a017 (2026-08-27T04:05Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O193 done (the compare screen verified after O192's font correction; the record corrected — an undefined var() invalidates the declaration, it does not fall through)`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -127,12 +127,14 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > **WHY THIS UNIT EXISTS, AND IT IS MY OWN LOOSE END.** O192 found eight `font-family` declarations
 > naming an undefined CSS variable, falling through to a face that is not installed and landing on
-> Georgia while the source said serif. Seven were on `/network*` and were verified by screenshot in
+> another face while the source said serif. Seven were on `/network*` and were verified by
+> screenshot in
 > that unit's own rounds. The eighth — `.compare-content h1`, on the finder's compare screen — was
 > `var(--font-display)`, predates O192 by a long way, and was corrected in the same sweep WITHOUT
 > ANYBODY LOOKING AT THE SCREEN. That is the exact shape of the defect O192 was about: a change that
 > every test accepts and no eye has checked. A heading whose size, weight and letter-spacing were
-> tuned while it silently rendered in Georgia may not be tuned for Newsreader, whose metrics differ.
+> tuned while it silently rendered in another face may not be tuned for Newsreader, whose metrics
+> differ.
 >
 > Scope: capture the compare screen at 390 and 1280, read the heading against the screen it heads,
 > and correct whatever the face change exposed — or record it as clean and pin it, which is a real
@@ -143,6 +145,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm verify` green plus `e2e/compare.spec.ts` and the visual-baseline discipline — if the
 > heading's rendering moves, the affected baseline cells are re-accepted through AR16's register
 > with the cause named, never re-accepted silently.
+>
+> **DONE 2026-08-27T04:05Z.** **THE SCREEN IS FINE, AND CONFIRMING THAT WAS THE POINT.** Captured at
+> 390 and 1280 with the pre-fix stack RESTORED for a true before/after rather than a remembered one.
+> "What each of them answers" renders in Newsreader at the same 30px / 400 / −0.3px it always
+> declared — identical box (45 × 572 desktop), one line at mobile — so nothing had been tuned around
+> the wrong face and no change was needed.
+>
+> **THE MEASUREMENT CORRECTED THE RECORD, AND THAT IS THE UNIT'S REAL FINDING.** O192 wrote — in
+> `docs/DESIGN-QA.md`, in `src/design/type-scale.ts`, in this ledger and in the merged PR — that an
+> undefined `var()` "falls through" to the next name, leaving those headings in **Georgia**. It does
+> not, and they were not. An undefined `var()` makes the whole declaration INVALID AT
+> COMPUTED-VALUE TIME; `font-family` is inherited, so the element computes to its PARENT's stack —
+> the body's Inter. The Georgia sitting in the same declaration never gets a chance, and neither
+> does the bare `Newsreader`. Measured directly: the pre-fix computed family on this heading was
+> `"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif`, the body's. So the headings were
+> rendering in the BODY FACE, indistinguishable from the paragraphs beneath them — a worse defect
+> than the one recorded, and a more useful lesson, because the wrong version implies a fallback
+> after a `var()` buys you something and it buys you nothing. It also explains what O192's round-5
+> screenshot actually showed: the network heading looked sans because it WAS sans. All three copies
+> of the explanation are corrected in this commit.
+>
+> **THE PIN.** `e2e/compare.spec.ts` asserts the computed family on `.compare-content h1` contains
+> Newsreader, so the one site that shipped unverified is the one site that cannot regress silently.
+> No baseline movement: the visual matrix does not capture the finder's compare stage (it is reached
+> through client state, not a route), which is itself why this heading went unwatched for so long.
+>
+> Gate: `pnpm verify` green — 293 files / 4356 tests (13 skipped), build clean, audit PASS (2
+> accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); `e2e/compare.spec.ts`
+> 6/6 green. Captures in `qa/_runs/o193/`.
 
 > **O192 (founder-directed: two interfaces — the speech/text pairing finder stays, and a browsable
 > NETWORK gallery of the GPs in the network gets its own URL, with a bottom-right toggle between
@@ -222,10 +253,12 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > a third GP rewrites the sentence instead of leaving it quietly wrong.
 > R5: **the serif was never loading.** Eight `font-family` declarations named an undefined CSS
 > variable (seven mine, one `var(--font-display)` older than this unit, on the finder's compare
-> screen); an undefined `var()` in a font stack falls through, and the next name, bare `Newsreader`,
-> is not installed either — fontsource registers **"Newsreader Variable"**. Every statement on these
-> pages had been rendering in Georgia while the source said serif, through four screenshot rounds,
-> because a serif fallback still looks deliberate. Also R5: the accent carried THREE meanings on the
+> screen); the next name, bare `Newsreader`, is not installed either — fontsource registers **"Newsreader Variable"**. **CORRECTED BY O193,
+> which measured it rather than reasoning about it:** an undefined `var()` does not fall through to
+> the rest of the stack. It makes the whole declaration invalid at computed-value time, and
+> `font-family` is inherited, so the element computes to its PARENT's stack — the body's Inter. The
+> Georgia sitting in the same declaration never gets a chance. These headings were rendering in the
+> BODY FACE, indistinguishable from the paragraphs under them, not in a serif fallback. Also R5: the accent carried THREE meanings on the
 > deck against O176's cap of two (the eyebrow gave it up); round 4's "cards end level" fix had never
 > run, because it was appended as a second `.network-card-open` rule while the original
 > `display: block` sat below it in the file; and the statement — the sentence a doctor leads with —

@@ -61,11 +61,16 @@ export function readGlobalsCss(repoRoot: string): string {
  * defined anywhere — seven `var(--font-newsreader)` written by O192 and one `var(--font-display)`
  * on `.compare-content h1` that had been in the tree far longer. The fonts arrive through
  * `@import "@fontsource-variable/newsreader"`, which registers the family as **"Newsreader
- * Variable"**; an undefined `var()` in a font stack does not fail loudly, it just drops through to
- * the next name, and the next name — bare `Newsreader` — is not installed either. So every one of
- * those headings had been quietly rendering in Georgia (or the sans, wherever Georgia is absent)
- * while the source said serif. Nothing failed. It is only visible by looking at the page, and it
- * survived a screenshot round because a serif fallback still LOOKS deliberate.
+ * Variable"**, so even the bare `Newsreader` sitting later in those stacks is not installed.
+ *
+ * WHAT ACTUALLY HAPPENS, MEASURED IN O193 AFTER THIS COMMENT FIRST GOT IT WRONG. An undefined
+ * `var()` does NOT drop through to the next name in the list. It makes the whole declaration
+ * invalid at computed-value time, and because `font-family` is inherited, the element computes to
+ * its PARENT's stack — the body's Inter. The Georgia sitting right there in the same declaration
+ * never gets a chance. So these headings were not rendering in a serif fallback that still looks
+ * deliberate; they were rendering in the body face, indistinguishable from the paragraphs beneath
+ * them. Worth stating precisely, because the wrong version of this story implies a fallback in a
+ * font stack buys you something after a `var()`, and it buys you nothing.
  *
  * `type.serif-display` is a taste law about which face carries a statement, so a stack that cannot
  * resolve to that face breaks the law no matter what the source claims. Pinned as a closed set:

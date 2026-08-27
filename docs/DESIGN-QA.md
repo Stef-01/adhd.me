@@ -2795,11 +2795,13 @@ first time, and every one of them found something the screenshots had been looki
 **The serif was never loading.** Eight `font-family` declarations named a CSS variable that does
 not exist — seven `var(--font-newsreader)` written by this unit and one `var(--font-display)` on
 `.compare-content h1` that had been in the tree far longer. An undefined `var()` in a font stack
-does not fail; it falls through, and the next name (bare `Newsreader`) is not installed either —
-the fonts arrive as **"Newsreader Variable"** via `@fontsource-variable/newsreader`. So every
-statement on these pages, and one heading on the finder's compare screen, had been rendering in
-Georgia while the source said serif. It survived four screenshot rounds because a serif fallback
-still looks deliberate. Fixed at all eight sites, and `DECLARED_FONT_STACKS` in
+does not fail; and — corrected by O193, which measured it — it does not fall through to the rest of
+the stack either. It makes the whole declaration invalid at computed-value time, and `font-family`
+is inherited, so the element computes to its parent's stack: the body's Inter. The Georgia sitting
+in the same declaration never gets a chance, and neither does the bare `Newsreader` (the fonts
+arrive as **"Newsreader Variable"** via `@fontsource-variable/newsreader`). So every statement on
+these pages, and one heading on the finder's compare screen, had been rendering in the BODY FACE —
+indistinguishable from the paragraphs beneath it — not in a serif fallback. Fixed at all eight sites, and `DECLARED_FONT_STACKS` in
 `src/design/type-scale.ts` now pins the closed set of stacks the stylesheet may name, both
 directions, so the next invented stack fails at unit speed instead of being read as a design
 choice.
@@ -2973,3 +2975,33 @@ What is deliberately still open, so the next reader does not mistake silence for
 founder gates (`prescriber-on-profile`, `mental-health-on-profile`) recorded rather than answered,
 and the CI blocker on PR #21, which is an account-level GitHub Actions problem predating this
 branch by weeks.
+
+## O193 — the one site O192 changed and nobody looked at (2026-08-27)
+
+O192 corrected eight `font-family` declarations naming an undefined CSS variable. Seven were on
+`/network*` and its own rounds verified them by screenshot. The eighth — `.compare-content h1`, on
+the finder's compare screen, and older than O192 by a long way — was corrected in the same sweep
+and shipped **unverified**, which is precisely the shape of the defect O192 existed to catch: a
+change every test accepts and no eye has checked.
+
+**The screen is fine, and that was worth confirming rather than assuming.** Captured at 390 and
+1280 with the pre-fix stack restored for a true before/after, not a remembered one. "What each of
+them answers" now renders in Newsreader at the same 30px / 400 / −0.3px it always declared —
+identical box (45 × 572 at desktop), one line at mobile — so nothing had been tuned around the
+wrong face. No change needed.
+
+**The measurement corrected the record, and that is this unit's real finding.** O192 wrote — here,
+in `type-scale.ts`, and in the ledger — that the undefined `var()` "falls through" to the next name
+and left those headings in **Georgia**. It does not, and they were not. An undefined `var()` makes
+the whole declaration *invalid at computed-value time*; `font-family` is inherited, so the element
+computes to its **parent's** stack — the body's Inter. The Georgia sitting in the same declaration
+never gets a chance, and neither does the bare `Newsreader`. So the headings were rendering in the
+**body face**, indistinguishable from the paragraphs beneath them.
+
+That is a worse defect than the one recorded, and a more useful lesson: a fallback placed after a
+`var()` in a font stack buys nothing. The wrong version implied the stack degrades gracefully. All
+three copies of the explanation are corrected, and `e2e/compare.spec.ts` now pins the computed
+family on this heading, so the one site that shipped unverified is the one site that can no longer
+regress silently.
+
+Captures: `qa/_runs/o193/` (before and after, both viewports).
