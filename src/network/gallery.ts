@@ -148,10 +148,12 @@ export function possessiveFor(clinician: Clinician): string {
   return subject === "he" ? "his" : subject === "she" ? "her" : "their";
 }
 
-/** "he sees" / "they see" — the verb has to agree with the pronoun above. */
-export function seesVerb(clinician: Clinician): string {
-  return verbFor(clinician, "see");
-}
+/* O201 DELETED `seesVerb`. It was a one-line wrapper over `verbFor(clinician, "see")` whose only
+   production caller was the network profile's "what {they} {see} often" heading — a heading that
+   turned out to describe a field it did not render (career history, not caseload) and was
+   relabelled. `verbFor` still agrees any present-tense verb, so nothing is lost; keeping a helper
+   for a section that may return under G6 would be the kept-but-unused code O200 spent a unit
+   deleting. */
 
 /**
  * The suburbs a clinician consults in, primary first, as one readable list.

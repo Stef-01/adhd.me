@@ -169,6 +169,44 @@ test("the launch control reaches a GP's own page too, so it is never a dead end"
   ).toBeVisible();
 });
 
+test("no section on a profile describes a field it does not render", async ({ page }) => {
+  // O201. The profile carried "What Dr Anusha Saxena says she sees often" over
+  // `clinician.experience` — career history and qualifications. A patient deciding whether this GP
+  // handles their situation was told a CV was her caseload. The heading is OURS (the page says so),
+  // so relabelling it changed our sentence and not one word of hers.
+  //
+  // PINNED AS A CONTENT AGREEMENT rather than as a string, because the string is not the property.
+  // The property is that a heading claiming caseload must not sit over qualifications, and the
+  // roster gives us the vocabulary to check it: `experience` entries name degrees, colleges and
+  // posts; `fitSignals` name areas.
+  const { NETWORK_CLINICIANS } = await import("../src/network/gallery");
+  expect(NETWORK_CLINICIANS.length).toBeGreaterThan(0);
+
+  for (const clinician of NETWORK_CLINICIANS) {
+    await page.goto(`/network/${clinician.id}`);
+    const headings = await page.locator(".gp-label").allInnerTexts();
+    expect(headings.length, `${clinician.id} renders no section headings`).toBeGreaterThan(2);
+
+    // The concept heading may only appear if the list under it is the areas list, and the tree's
+    // framing for that concept lives behind G6 in src/directory — so on this surface it may not
+    // appear at all.
+    for (const heading of headings) {
+      expect(
+        heading.toLowerCase(),
+        `"${heading}" claims a caseload on a page whose list is credentials. The tree's framed ` +
+          `heading for that concept ("Areas this clinician sees often") ships with an attribution ` +
+          `and a denial that the areas are qualifications, and that constant is G6-gated.`,
+      ).not.toMatch(/sees? often/);
+    }
+
+    // And the credentials list is still labelled, still rendered, and still theirs.
+    const credentials = page.locator(".gp-section", { hasText: "Credentials and experience" });
+    await expect(credentials).toBeVisible();
+    await expect(credentials.locator(".gp-signals li")).toHaveCount(clinician.experience.length);
+    await expect(credentials).toContainText(clinician.experience[0]!);
+  }
+});
+
 test("the card's way-in underlines its own words, not the whole card", async ({ page }) => {
   // O198, and it was latent since O192 through nine audit rounds. `.network-card-more` is the last
   // item in a column flex container, so it stretched to the card's full width and its hover

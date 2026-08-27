@@ -26,7 +26,6 @@ import {
   consultingSuburbs,
   neighbours,
   possessiveFor,
-  seesVerb,
   subjectPronoun,
   verbFor,
 } from "@/network/gallery";
@@ -117,15 +116,31 @@ export default async function ClinicianPage({
         */}
         <p className="gp-line">{clinician.matchLine}</p>
 
+        {/*
+          O201: THE HEADING DESCRIBED A FIELD IT DOES NOT RENDER, AND IT SAID SO TO A PATIENT.
+          It read "What {name} says {they} {see} often" over `clinician.experience` — which is career
+          history and qualifications: "Medical degree, Australian National University", "Diploma of
+          Child Health", "Fellow of the Royal Australian College of General Practitioners". A reader
+          deciding whether this GP handles their situation was being told a CV was her caseload.
+
+          What she says she sees often is `fitSignals`, and the deck card already renders it
+          correctly. Two other surfaces label THIS field correctly too: `/finder`'s profile calls it
+          "Credentials and experience", and `src/directory/render.ts` holds the tree's canonical
+          heading for the other concept — "Areas this clinician sees often" — shipped with an
+          attribution and an explicit denial that those areas are qualifications. This page was the
+          only one in the tree pairing that heading with this field.
+
+          RELABELLED RATHER THAN REWIRED, and the reason is a founder gate. Rendering `fitSignals`
+          under a sees-often heading would owe the reader `SCOPE_FRAMING`'s attribution and denial,
+          and that constant lives in `src/directory/` — which this surface deliberately does not
+          import, because minting directory copy is G6 and `gallery.test.ts` enforces the absence on
+          the import lines. A properly-framed sees-often section here is real follow-on work and it
+          is the founder's to authorise.
+
+          Only OUR sentence changed. Every string in the list is still hers.
+        */}
         <section className="gp-section">
-          {/*
-            Round 3: the heading uses THEIR pronoun. It read "says they see often" for a he/him
-            doctor — grammatical, and exactly the small wrongness a reader notices on a page
-            claiming these people will understand them.
-          */}
-          <h2 className="gp-label">
-            What {clinician.shortName} says {subjectPronoun(clinician)} {seesVerb(clinician)} often
-          </h2>
+          <h2 className="gp-label">Credentials and experience</h2>
           <ul className="gp-signals">
             {clinician.experience.map((item) => (
               <li key={item}>{item}</li>

@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ f2b6da5 (2026-08-27T11:20Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.1m). O200 done (95 of 596 styled classes were dead — 216 rules, 23,358 bytes, 1,280 lines, 9.7% of the stylesheet, deleted with ZERO computed-style change on any rendering element; the scanner was wrong four times first, including once where it read its own header comment as usage and once where it skipped the first rule inside every @media block and then reported the sheet clean). O199 done (the taste law's hover clause had NO enforcer; 37 of 53 rules applied on devices that cannot hover, all fixed, the 14 paired with `:focus-visible` SPLIT rather than wrapped). O198 done (the network argued its purpose twice — O197's own duplication; the required re-capture then found a hover underline running 110px past its own text). O197 done (founder-directed: Emil motion pass on /network, /mission carrying the founder's mission sentence VERBATIM with ACCEPTED_FINDINGS entries so the sweep reports it to their reviewers rather than blocking their words, finder parked on `finder/standalone-deployment`). O196/O195/O194 done (the vacuity sweep, a test that could not fail, and one that was a coin toss). Sixth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T12:00Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 16.8m). O201 done (the network profile told a patient a doctor's degrees were what she sees often — the heading is OURS and was relabelled to /finder's own wording; not one clinician string changed, and a properly-framed sees-often section stays G6's to authorise). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet — deleted with ZERO computed-style change on any rendering element; the scanner was wrong four times first). O199 done (the taste law's hover clause had NO enforcer; 37 of 53 rules applied on devices that cannot hover). O198 done (the network argued its purpose twice — O197's own duplication). O197 done (founder-directed: Emil motion pass, /mission carrying the founder's mission sentence VERBATIM, finder parked). O196/O195/O194 done. Seventh consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -160,6 +160,28 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > Verify: `pnpm gate` end to end on the tree the push produces; the pin proven non-vacuous against
 > the pre-fix pairing; a qa/ capture with a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T12:00Z. THE HEADING WAS OURS, SO ONLY OUR SENTENCE CHANGED.** The section reads
+> "Credentials and experience" — `/finder`'s own wording for the same field — and every string in the
+> list is still hers. `seesVerb` went with the old heading: a one-line wrapper over
+> `verbFor(clinician, "see")` whose only production caller was that sentence, and keeping it for a
+> section that may return under G6 would be the kept-but-unused code O200 spent a unit deleting. Its
+> tests were repointed at `verbFor` rather than deleted, so the pronoun agreement they proved is
+> still proven.
+>
+> **THE PIN IS A CONTENT AGREEMENT, NOT A STRING MATCH**, because the string is not the property: no
+> `.gp-label` on any profile may claim a caseload, checked over every clinician in the roster, with
+> the credentials section still required to render every entry. Proven non-vacuous by restoring the
+> pre-fix heading, rebuilding and watching it fail with the right message.
+>
+> **WHY NINE AUDIT ROUNDS MISSED IT, recorded because it is the reusable part:** every round read the
+> list as a credentials list — which is what it is — and none read it against the heading above it. A
+> screenshot audit checks whether a thing looks right; it does not check whether the label and the
+> data are about the same subject.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 16.8m**. Seventh consecutive firing to read the whole gate on the tree it pushes.
 
 > **O200 (10% of the stylesheet styles markup that does not exist) — claimed 2026-08-27T10:40Z by
 > loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted (M1–M10 done, M11/M12

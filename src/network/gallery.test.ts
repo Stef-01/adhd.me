@@ -17,7 +17,6 @@ import {
   networkCopyStrings,
   networkSizeInWords,
   possessiveFor,
-  seesVerb,
   subjectPronoun,
   verbFor,
 } from "./gallery";
@@ -89,16 +88,16 @@ describe("O192 network gallery", () => {
     const as = (pronouns: string) => ({ pronouns }) as Clinician;
 
     expect(subjectPronoun(as("he/him"))).toBe("he");
-    expect(seesVerb(as("he/him"))).toBe("sees");
+    expect(verbFor(as("he/him"), "see")).toBe("sees");
     expect(subjectPronoun(as("she/her"))).toBe("she");
-    expect(seesVerb(as("she/her"))).toBe("sees");
+    expect(verbFor(as("she/her"), "see")).toBe("sees");
     expect(subjectPronoun(as("they/them"))).toBe("they");
-    expect(seesVerb(as("they/them"))).toBe("see");
+    expect(verbFor(as("they/them"), "see")).toBe("see");
 
     // Anything unparseable falls back to the form that is correct for anybody.
     expect(subjectPronoun(as(""))).toBe("they");
     expect(subjectPronoun(as("ze/hir"))).toBe("they");
-    expect(seesVerb(as("ze/hir"))).toBe("see");
+    expect(verbFor(as("ze/hir"), "see")).toBe("see");
   });
 
   it("agrees any present-tense verb, not just the one round 3 happened to need", () => {
@@ -110,10 +109,6 @@ describe("O192 network gallery", () => {
     expect(verbFor(as("she/her"), "consult")).toBe("consults");
     expect(verbFor(as("they/them"), "consult")).toBe("consult");
     expect(verbFor(as("ze/hir"), "work")).toBe("work");
-    // And the round-3 function is now this one, so the two can never disagree.
-    for (const pronouns of ["he/him", "she/her", "they/them", ""]) {
-      expect(seesVerb(as(pronouns))).toBe(verbFor(as(pronouns), "see"));
-    }
   });
 
   it("gives the possessive the page's voice label needs", () => {
@@ -131,7 +126,7 @@ describe("O192 network gallery", () => {
   it("every clinician in the roster yields a usable pronoun and verb", () => {
     for (const clinician of NETWORK_CLINICIANS) {
       expect(["he", "she", "they"]).toContain(subjectPronoun(clinician));
-      expect(["sees", "see"]).toContain(seesVerb(clinician));
+      expect(["sees", "see"]).toContain(verbFor(clinician, "see"));
     }
   });
 

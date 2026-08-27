@@ -3203,3 +3203,48 @@ differences.** The only differences anywhere were `transform` on six scroll-anim
 elements, which never render.
 
 Captures: `qa/_runs/o200/{before,after}/` — 15 routes × 2 widths × 2 sheets.
+
+## O201 — the profile said a doctor's degrees were what she sees often (2026-08-27)
+
+**The heading described a field it did not render, and it said so to a patient.**
+`/network/[clinician]` carried *"What Dr Anusha Saxena says she sees often"* over
+`clinician.experience` — which is career history and qualifications: "Medical degree, Australian
+National University", "Diploma of Child Health", "Fellow of the Royal Australian College of General
+Practitioners", "Hospital training across NSW". A reader deciding whether this GP handles their
+situation was being told a CV was her caseload.
+
+What she says she sees often is `fitSignals` — "ADHD assessment", "Mental health focus", "Women's
+health" — and the deck card already renders it correctly.
+
+**Not a taste call: two other surfaces in this tree label the same things correctly.** `/finder`'s
+profile renders `clinician.experience` under `Credentials and experience`. And
+`src/directory/render.ts` holds the canonical heading for the *other* concept — "Areas this
+clinician sees often" — shipped with an attribution ("Told to us by the clinician…") and an explicit
+denial: *"This is not a specialty and not a qualification."* The network profile was the only
+surface pairing that heading with that field, while the tree's own framing for the concept exists
+specifically to deny that those entries are qualifications.
+
+**Whose sentence was fixed matters.** `honesty.clinician-declaration` forbids characterising a
+doctor, and every string in that list is hers. The heading is ours — the page's own header says "the
+headings are ours and they say so" — so this changed our sentence and not one word of hers. The
+section now reads **"Credentials and experience"**, matching `/finder`'s wording, and the list under
+it is unchanged.
+
+**Relabelled rather than rewired, and the reason is a founder gate.** The richer fix — render
+`fitSignals` under the existing heading — would owe the reader `SCOPE_FRAMING`'s attribution and
+denial, and that constant lives in `src/directory/`, which this surface deliberately does not
+import: `gallery.test.ts` enforces the absence on the import lines because minting directory copy is
+**G6**. A properly framed sees-often section on the network profile is real follow-on work and it is
+the founder's to authorise, not this unit's to take.
+
+**Why nine audit rounds missed it.** Every round read the list as a credentials list — which is what
+it is — and none read it against the heading above it. The pin added here is a content agreement
+rather than a string match: no `.gp-label` on any profile may claim a caseload, on every clinician
+in the roster, and the credentials section must still render every entry. Proven by restoring the
+pre-fix heading and watching it fail.
+
+`seesVerb` went with the heading — a one-line wrapper over `verbFor(clinician, "see")` whose only
+production caller was that sentence. Keeping it for a section that may return under G6 would be the
+kept-but-unused code O200 spent a whole unit deleting.
+
+Captures: `qa/_runs/o201/` — the profile at 390 and 1280, before and after.
