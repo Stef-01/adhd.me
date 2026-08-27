@@ -119,6 +119,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O202 (founder-directed: the network deck is not aesthetic enough and too wordy — make it a
+> modern gallery) — claimed 2026-08-27T12:05Z by loop-0827a.** Founder brief, verbatim: "network
+> section it does not look aesthetic enough and is too wordy to navigate, make it a more modern
+> gallery." Direct founder instruction, so it takes precedence over the lane's own queue.
+>
+> **THE FOUNDER IS OVERRIDING EARLIER FOUNDER-ERA DECISIONS, AND THAT IS THEIR CALL TO MAKE.** O192
+> round 2 moved the fit-signal chips onto the card deliberately ("the concrete, humanising facts…
+> These are the lines a reader recognises themselves in"), and round 4 added the count sentence.
+> Those were right answers to "the card says too little". The founder is now answering the opposite
+> question, on the built thing, which is the better evidence. Recorded here rather than quietly
+> reversed so the next reader knows the rounds were not forgotten — they were superseded.
+>
+> **MEASURED, NOT ASSERTED.** Each card currently stacks SIX blocks beneath the portrait: name,
+> suburbs, a full declared sentence, three signal chips, a languages line, and a way-in link naming
+> the doctor again. On a deck of two people that is roughly 60 words of chrome around two faces, and
+> every one of those facts is repeated on the profile one tap away.
+>
+> Scope — a gallery is a place you SCAN, so the card carries what distinguishes one person from
+> another and nothing that merely describes them:
+>   1. The portrait leads and gets more of the card. A gallery of people is looked at before it is
+>      read.
+>   2. Beneath it, the minimum that tells one doctor from another: name, where they consult, and the
+>      areas — as chips, which scan — with the declared sentence and the languages line retiring to
+>      the profile that already carries both.
+>   3. The way-in stops being a labelled link. On a card whose whole surface is already a link, "Read
+>      what Dr X says →" is a button drawn on a door.
+>
+> **WHAT MAY NOT CHANGE, and the founder's own laws are why.** Every string still comes from the
+> roster — a shorter card is a SELECTION of their declarations, never a summary we author
+> (`honesty.clinician-declaration`). The count sentence stays: a two-GP network that reads as a
+> directory is the fault round 4 fixed, and "prettier" is not a reason to reopen it
+> (`honesty.claim-earned`). 44px touch floor, palette tokens, hover gated (O199), press feedback kept
+> (O197), and no clinical claim.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces, the network e2e including the new
+> heading-agreement and underline pins, before/after captures at 390 and 1280 in `qa/_runs/o202/`,
+> and a DESIGN-QA entry per law 5.
+
 > **O201 (the network profile tells a patient a doctor's degrees are what she sees often) — claimed
 > 2026-08-27T11:35Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
 > before claiming: green @ f2b6da5, run end to end by the previous firing on the tree it pushed.
