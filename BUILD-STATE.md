@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ eab4f97 (2026-08-27T14:25Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 18.3m). O204 done (the FAQ still called ADHD.ME "a finder" five units after O192 gave it a second interface — and said the order is decided "only by matching", which is false of the network; the FAQPage JSON-LD is generated from the same list, so the stale answer was published to search engines as structured data too). O203 done (/examples rendered a template three times; the claim's third defect was wrong and the row says so). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the network profile told a patient a doctor's degrees were what she sees often). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet). O199 done (the taste law's hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Tenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T15:15Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.9m). O205 done (the privacy notice described one of two interfaces — the SAME defect its own header records fixing once before, one interface later; the network now has a section saying it holds nothing and decides nothing, rendered balance 7/0 to 16/8). O204 done (the FAQ still called ADHD.ME "a finder"; the stale answer was in the FAQPage JSON-LD too). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Eleventh consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -160,6 +160,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > rendered sweep green on `/privacy` (classified `patient_notice` — every marketing rule applies);
 > `e2e/privacy.spec.ts` and the automated-decisions tests green; captures at 390 and 1280 in
 > `qa/_runs/o205/` and a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T15:15Z. BUILT AS CLAIMED — three changes, no policy moved.**
+>
+> A section of its own ("The network, and what it does not hold"): the pages are built ahead of time
+> and served the same for everybody, so reading them tells us nothing beyond the ordinary web request
+> any page makes. The anonymity sentence widened to cover both interfaces. And the automated-decisions
+> scope line, which read as a complete list for the whole product, now says the network is neither of
+> the two automated things — it lists every GP in roster order and decides nothing.
+>
+> **THE RENDERED BALANCE WENT 7/0 TO 16/8**, measured the same way the defect was found rather than
+> by reading the diff and calling it done.
+>
+> **WHAT THIS UNIT DID NOT DO.** No new claim about the finder, no restructure, and the draft marking
+> and counsel gate untouched — a notice made complete about a surface that already exists is not a
+> policy change, and the difference matters on a page that is explicitly awaiting legal review. All
+> three sentences were linted BEFORE being written into the page; `/privacy` is classified
+> `patient_notice`, so every marketing rule applies to it, and the rendered sweep, `privacy.spec.ts`
+> and `party-to-care.spec.ts` are green.
+>
+> **TWO SURFACES IN THE SAME CLASS WERE LEFT, ON PURPOSE AND ON THE RECORD.** `/` (1/0) and
+> `/approach` (2/0) name the finder and never the network. They are marketing copy rather than a
+> legal notice, and rewriting the front door's argument is a bigger unit that deserves its own claim
+> — but the founder should know the front door does not currently mention the thing they have spent
+> the day building.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 17.9m**. Eleventh consecutive firing to read the whole gate on the tree it pushes.
 
 > **O204 (the FAQ says ADHD.ME is "a finder" — it has been two interfaces since O192) — claimed
 > 2026-08-27T13:45Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read

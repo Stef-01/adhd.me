@@ -48,13 +48,35 @@ export default function PrivacyPolicyPage() {
             invites you. Everything below is the detail of those two sentences.
           </p>
         </section>
+        {/*
+          O205: THE NETWORK GOT A SECTION BECAUSE THIS PAGE HAS MADE THIS EXACT MISTAKE BEFORE. The
+          header above records the O35 restructure: the draft led with a product that was not yet
+          running "while the product people actually use today, the public finder, appeared
+          nowhere. That inverted the reader's risk." O192 added a second interface and every privacy
+          claim on this page stayed scoped to the first — the word "network" appeared seven-to-nil
+          against "finder" on the rendered page.
+
+          The honest statement here is the reassuring one, which is exactly why leaving it unsaid
+          was a loss rather than a neutral omission: these pages are built ahead of time and hold
+          nothing, because there is nothing on them to type.
+        */}
+        <section>
+          <h2 className="text-lg font-medium text-stone-900">The network, and what it does not hold</h2>
+          <p className="mt-2 text-sm leading-6">
+            The network pages hold nothing at all. There is nothing to type on them: the list of GPs
+            and each doctor&apos;s own page are built ahead of time and served as they are, the same
+            for everybody, so reading them tells us nothing about you beyond the ordinary web
+            request your browser makes for any page.
+          </p>
+        </section>
         <section>
           <h2 className="text-lg font-medium text-stone-900">The finder, and what you type into it</h2>
           <p className="mt-2 text-sm leading-6">
             The whole finder runs in your browser. The words you type about what you are looking
             for are matched against the clinicians&apos; declared information on your own device:
             they are not sent to ADHD.ME, not stored anywhere, and are gone when you close the
-            tab. You can use every part of the finder without telling us who you are.
+            tab. You can read every page of the network, and use every part of the finder, without
+            telling us who you are.
           </p>
           <p className="mt-2 text-sm leading-6">
             If you type a suburb, that word is looked up on your device too — the site never asks
@@ -134,8 +156,14 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="text-lg font-medium text-stone-900">Automated decision-making</h2>
           <p className="mt-2 text-sm leading-6">
-            Two things are automated. The finder orders clinicians using nothing but the words
-            of your current request and what each clinician has declared — no history, no
+            {/*
+              O205: THE SCOPE LINE READ AS A COMPLETE LIST FOR THE PRODUCT and did not mention the
+              interface where nothing is automated at all. On a page whose job is saying what
+              decides things about you, "the network decides nothing" is a fact, not a filler.
+            */}
+            Two things are automated, and the network is neither of them — it lists every GP in
+            roster order and decides nothing. The finder orders clinicians using nothing but the
+            words of your current request and what each clinician has declared — no history, no
             profile of you. And when appointment invitations run, automation will decide which
             patients are offered available times. Our{" "}
             <Link href="/privacy/automated-decisions" className="underline">

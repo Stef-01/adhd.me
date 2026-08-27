@@ -3379,3 +3379,46 @@ All three answers were run through the W23 and W6 linters **before** either was 
 page — the order that made O203 safe — and `e2e/public-sweep.spec.ts` is green on the rendered page.
 
 Captures: `qa/_runs/o204/{before,after}-{390,1280}.png`.
+
+## O205 — the privacy notice described one of two interfaces (2026-08-27)
+
+**Asked as the general question this time.** O203 and O204 were the same shape — copy that went
+stale when O192 added a second interface — so instead of reading one more capture, the whole public
+surface was scanned for it: rendered text of fourteen routes, counting mentions of the finder against
+mentions of the network. Three surfaces named the finder and never the network: `/` (1/0),
+`/approach` (2/0), and **`/privacy` (7/0)**.
+
+**The privacy notice is the one that mattered, and its own header is the argument.**
+`app/privacy/page.tsx` line 6 records the O35 restructure: the draft "led with the B2B
+practice-software story — a product that is NOT YET RUNNING — while the product people actually use
+today, the public finder, appeared nowhere. That inverted the reader's risk." **The page had the same
+defect again, one interface later.** A notice already fixed once for describing part of the product
+is the strongest evidence available that this is a recurring failure, not an oversight.
+
+**What was missing is good news the notice was not telling.** Every privacy claim was scoped to the
+finder — "the whole finder runs in your browser", "you can use every part of the finder without
+telling us who you are". `/network` and `/network/[clinician]` are statically generated with no
+input at all: nothing to type, so nothing to hold. A reader browsing named doctors had no statement
+covering the page they were on, and the honest statement is the reassuring one — which is exactly
+why leaving it unsaid was a loss rather than a neutral omission.
+
+Three changes. A section of its own — *"The network, and what it does not hold"* — saying the pages
+are built ahead of time and served the same for everybody. The anonymity sentence widened to cover
+both ("you can read every page of the network, and use every part of the finder, without telling us
+who you are"). And the automated-decisions scope line, which read as a complete list for the whole
+product: it now says the network is neither of the two automated things — it lists every GP in
+roster order and decides nothing. On a page whose job is saying what decides things about you, that
+is a fact rather than filler.
+
+Balance after: 16 finder / 8 network on the rendered page, from 7/0.
+
+No new claim about the finder, no restructure, and the draft/counsel-gate framing untouched — this
+is a notice made complete about a surface that already exists, not a policy change. All three
+sentences were linted **before** being written into the page, and `/privacy` is classified
+`patient_notice`, so every marketing rule applies to it; the rendered sweep, `privacy.spec.ts` and
+`party-to-care.spec.ts` are all green.
+
+`/` and `/approach` are the same class and were deliberately left: they are marketing copy rather
+than a legal notice, and rewriting the front door's argument is a bigger unit that should be its own.
+
+Captures: `qa/_runs/o205/{before,after}-{390,1280}.png`.
