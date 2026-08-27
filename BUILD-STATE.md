@@ -119,6 +119,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O194 (the gate CI has not run since 2026-08-21, run on `main`'s actual head) — claimed
+> 2026-08-27T04:50Z by loop-0827a.** Standing debt 11 (`docs/MATCHING-YEAR-PLAN.md`), executing the
+> consequence that debt already states rather than adding a new one: *"Until it clears, CI proves
+> nothing about any push, and the local `pnpm gate` is the only real gate."*
+>
+> **THE MEASURED SITUATION.** O173 recorded on 2026-08-21 that CI jobs began failing in ~4 seconds
+> with zero billable time and no logs, pointing at an account-level Actions block. Independently
+> re-measured this session on PR #21: jobs complete in 2–3 seconds with no step records and no log
+> artifact, on every run in the repo from #619 through #648, across two actors, on `main` and on
+> branches. The signature is identical and the outage is six days old. **231 commits have landed on
+> `main` in that window.**
+>
+> **WHY THIS IS A UNIT AND NOT A NOTE.** Every one of those pushes was gated locally by the firing
+> that made it — but always on ITS OWN tree, never on the tree that resulted. `pnpm verify` has been
+> run on `main`'s head repeatedly; the FULL suite has not. This session's own e2e run was on the
+> O192 branch at its round-6 head, three rounds and one unit ago. So the honest statement about
+> `main` today is that nobody has machine-verified it end to end, and O173's lesson — a gate nobody
+> reads is worth what a gate that does not exist is worth — applies to a gate nobody RUNS just as
+> exactly.
+>
+> Scope: `pnpm gate` (verify then the full e2e suite) on `main` at 2844d8c, and the result recorded
+> here as a dated fact whichever way it goes. **If it is red, that red gate becomes this firing's
+> unit and is fixed before anything else** — the loop's own priority order. If it is green, that is
+> the first end-to-end machine statement about `main` in six days, and worth having written down.
+> No feature work, no refactor: this unit changes nothing unless the gate says something is broken.
+>
+> Verify: the gate itself is the verification. The count of what ran is recorded, not summarised.
+
 > **O193 (the compare screen, verified after O192's font correction — the one changed site nobody
 > looked at) — claimed 2026-08-27T03:50Z by loop-0827a.** UI-refinement lane (plan §"UI refinement
 > & motion, continuously": at least one unit per week, before/after capture in `qa/`, DESIGN-QA
