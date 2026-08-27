@@ -358,11 +358,35 @@ describe("W252 what twenty verticals cost", () => {
           waitsOn: `act ${i}`,
         })),
       });
+    //
+    // O194 REWROTE THE MEASUREMENT, NOT THE CLAIM, AND THE REASON IS THAT THIS TEST WENT RED ON
+    // `main`. The first full `pnpm gate` run on main's head in six days (CI has been dead since
+    // 2026-08-21, standing debt 11) failed here at 59.9× — then passed five times out of five in
+    // isolation. It fails only under full-suite load, and the mechanism is visible in its own
+    // failure message: `small=0.55ms`. A sub-millisecond denominator on a shared, loaded container
+    // is not a measurement, it is a coin toss — one scheduler slice lands on the small case and the
+    // ratio doubles. The claim ("tenfold members costs about tenfold, not a hundredfold") was never
+    // wrong; the instrument could not hold it steady.
+    //
+    // Two changes, both standard for timing and neither weakening the assertion:
+    //   * MORE WORK PER SAMPLE, so the small case clears the noise floor instead of sitting in it;
+    //   * BEST OF N, because the minimum of several samples is the one least contaminated by other
+    //     work on the machine. An interrupted run can only ever be slower, so taking the fastest is
+    //     the honest estimate of the cost of the code rather than the cost of the container.
+    //
+    // A test that fails at random on `main` teaches a reader to re-run rather than to look, which
+    // is how a real regression gets waved through. Making it steady is what keeps it a gate.
+    const ITERATIONS = 200;
+    const SAMPLES = 5;
     const time = (count: number) => {
       const vertical = build(count);
-      const started = performance.now();
-      for (let i = 0; i < 20; i += 1) vertical.outstanding(NOTHING);
-      return performance.now() - started;
+      let best = Infinity;
+      for (let sample = 0; sample < SAMPLES; sample += 1) {
+        const started = performance.now();
+        for (let i = 0; i < ITERATIONS; i += 1) vertical.outstanding(NOTHING);
+        best = Math.min(best, performance.now() - started);
+      }
+      return best;
     };
     time(20); // warm-up, so the first measurement is not paying for JIT
     const small = Math.max(time(20), 0.01);
@@ -371,5 +395,36 @@ describe("W252 what twenty verticals cost", () => {
       large / small,
       `200 members cost ${(large / small).toFixed(1)}× what 20 did (small=${small.toFixed(2)}ms large=${large.toFixed(2)}ms) — quadratic would be ~100×`,
     ).toBeLessThan(40);
+  });
+
+  it("the shape check can still tell linear from quadratic, measured on the same harness", () => {
+    // NON-VACUITY, AND O194 ADDED IT BECAUSE THE FIX ABOVE MAKES THE TEST STEADIER AND A STEADIER
+    // TEST IS WORTH NOTHING IF IT CAN NO LONGER FAIL. Best-of-N could in principle smooth away the
+    // very difference the threshold exists to catch, so the difference is measured rather than
+    // assumed: a deliberately quadratic workload, timed through the identical harness at the
+    // identical sizes, must land past the 40× line that the real report clears.
+    const ITERATIONS = 200;
+    const SAMPLES = 5;
+    const quadratic = (count: number) => {
+      let sink = 0;
+      for (let a = 0; a < count; a += 1) for (let b = 0; b < count; b += 1) sink += (a ^ b) & 1;
+      return sink;
+    };
+    const time = (count: number) => {
+      let best = Infinity;
+      for (let sample = 0; sample < SAMPLES; sample += 1) {
+        const started = performance.now();
+        for (let i = 0; i < ITERATIONS; i += 1) quadratic(count);
+        best = Math.min(best, performance.now() - started);
+      }
+      return best;
+    };
+    time(20);
+    const small = Math.max(time(20), 0.01);
+    const large = time(200);
+    expect(
+      large / small,
+      `a genuinely quadratic workload measured ${(large / small).toFixed(1)}× — if this is under 40 the shape check above has stopped discriminating`,
+    ).toBeGreaterThan(40);
   });
 });
