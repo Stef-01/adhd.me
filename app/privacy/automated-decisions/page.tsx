@@ -13,6 +13,7 @@
 // Add a decision to the register, not to this page.
 
 import { PublicHeader } from "../../public-header";
+import { SiteFooter } from "../../site-footer";
 import {
   AUTOMATED_DECISIONS,
   HUMAN_CONTROLS,
@@ -80,6 +81,13 @@ export default function AutomatedDecisionsPage() {
         </section>
       </div>
     </main>
+
+    {/*
+      O207: this page carried no footer at all — see the note on /clinicians/join. A legal notice
+      that ends with no way back to the site it governs is the same defect as a marketing page that
+      does, and arguably worse: a reader sent here from a privacy link had no route onward.
+    */}
+    <SiteFooter />
     </>
   );
 }

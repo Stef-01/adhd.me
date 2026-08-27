@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PublicHeader } from "../public-header";
+import { SiteFooter } from "../site-footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -220,12 +221,24 @@ export default function PracticesPage() {
         </section>
       </main>
 
-      <footer className="border-t border-stone-100">
+      {/*
+        O207: THIS PAGE HAD A `<footer>` AND NO WAY OUT OF IT. The element held two spans — the B2B
+        tagline and the not-medical-advice note — and zero links, so a practice owner who read to the
+        bottom was as stranded as on the three pages that had no footer at all. O206 worked on this
+        page one unit earlier and did not notice, because it was measuring the top.
+
+        The colophon is kept, because those two lines are a disclaimer rather than decoration; it is
+        now a plain block above the shared footer instead of a `<footer>` of its own, so the page has
+        ONE footer and it is the one carrying the doors.
+      */}
+      <div className="border-t border-stone-100">
         <div className="mx-auto flex max-w-5xl flex-col gap-1 px-6 py-8 text-sm text-stone-500">
           <span>{C.footer.tagline}</span>
           <span>{C.footer.note}</span>
         </div>
-      </footer>
+      </div>
+
+      <SiteFooter />
     </div>
   );
 }

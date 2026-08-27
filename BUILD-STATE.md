@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 9c59857 (2026-08-27T16:05Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 18.3m). O206 done (/practices stacked TWO site bars — 133px of chrome before a word of content, the only public route whose site header did not start at y=0; the top one was DemoNavigator, a demo TOUR switcher, on a public B2B page. O189's census missed the wordmark because it lives in a dropdown trigger. Removing a use-client dropdown cut 8 KB and the perf gate refused to leave it unbanked). O205 done (the privacy notice described one of two interfaces — the same defect its own header records fixing once before). O204 done (the FAQ still called ADHD.ME "a finder"). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Twelfth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T16:55Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (338 passed, 2 skipped, 18.0m). O207 done (O189 gave every public page a spine at the TOP and nobody checked the bottom: three prose pages had ZERO footer elements — including the join page the founder called "disconnected from the site" — and the new census found a fourth, /practices, whose footer held two spans and no links. Exemptions named and argued; AR2 refused a false taste tag on the way). O206 done (/practices stacked two site bars, the top one a demo tour switcher). O205 done (the privacy notice described one of two interfaces). O204 done (the FAQ still called ADHD.ME "a finder"). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Thirteenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -156,6 +156,37 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end; the footer census proven non-vacuous by pointing it at a page with
 > the footer removed; `e2e/public-nav.spec.ts`, `a11y` and `semantics` green; before/after captures
 > at 390 and 1280 in `qa/_runs/o207/` and a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T16:55Z, AND THE CENSUS FOUND A FOURTH CASE THE CLAIM DID NOT KNOW ABOUT.**
+> `/practices` HAD a `<footer>` — holding two spans, the B2B tagline and the not-medical-advice
+> note, and **zero links**. A practice owner who read to the bottom was as stranded as on the three
+> pages with no footer at all. O206 worked on that page ONE UNIT EARLIER and missed it, because it
+> was measuring the top. The colophon is kept — those lines are a disclaimer, not decoration — as a
+> plain block above the shared footer, so the page has one `<footer>` and it is the one with doors.
+>
+> **THE CLAIM SAID THREE; THE ANSWER IS FOUR**, and the difference is the whole argument for landing
+> a census rather than fixing what you noticed. Every public page now ends with a way onward:
+> 11 doors on the prose pages, 8 on the story landing, 3 on `/approach`, and four surfaces exempt
+> with their reasons written down.
+>
+> **THE PROXY THAT NEARLY MISLED ME, RECORDED BECAUSE IT IS THE FOURTH THIS SESSION.** "Links in the
+> bottom quarter" flagged six routes and `/thanks` was among them — it carries the full footer, and
+> the Acknowledgement band simply occupies that quarter and pushes the doors above the line. The
+> finding rests on counting `<footer>` elements and their links instead.
+>
+> **AR2 REFUSED MY FIRST TAG, WHICH IS THE REGISTER WORKING.** The new spec carried
+> `// taste-rule: interaction.hover-focus`, and no register entry claims that file for that rule —
+> nor should one: "every page has a way out" is navigation completeness, not one of the 21 taste
+> rules, and `public-nav.spec.ts` (the sweep this mirrors) carries no tag either. Tagging the
+> nearest-looking rule would have put a false claim into the generated coverage document. The spec
+> now says so in place of the tag.
+>
+> Proven non-vacuous by deleting `/faq`'s footer, rebuilding, and watching the sweep name it.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **338 passed, 2 skipped,
+> 18.0m** (336 + the two new census tests). Thirteenth consecutive firing to read the whole gate on
+> the tree it pushes.
 
 > **O206 (/practices stacks two site bars, and the top one is presenter chrome) — claimed
 > 2026-08-27T15:25Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read

@@ -3465,3 +3465,47 @@ nobody recorded", the same law AR17's raw-hex ratchet applies to colour. Exactly
 a public professional surface — is the same question one page over, and deserves its own claim.
 
 Captures: `qa/_runs/o206/{before,after}-{390,1280}.png`.
+
+## O207 — O189 gave every public page a spine at the top; nobody checked the bottom (2026-08-27)
+
+**Three public prose pages had no footer at all** — not a different footer, zero `<footer>`
+elements: `/clinicians/join`, `/privacy` and `/privacy/automated-decisions`. Each carried
+`PublicHeader` and then simply stopped, with the Acknowledgement-of-Country band abutting the copy.
+On the join page that left about 350px of dead space and no way onward. It is the page the founder
+said *"feels disconnected from the site"* — and it was: there was no site navigation on it below the
+header.
+
+**This is O189's own census run in one direction.** That unit found eight surfaces that "carried
+breadcrumbs but NO wordmark and nothing shaped like a control", gave them all `PublicHeader`, and
+made the top permanent with `public-nav.spec.ts` — derived from the route list so a new page cannot
+ship headerless. Nobody asked the same question about the foot of the page, so the same class of
+defect survived at the other end.
+
+**The census then found a fourth case the claim did not know about.** `/practices` *had* a
+`<footer>` — holding two spans, the B2B tagline and the not-medical-advice note, and **zero links**.
+A practice owner who read to the bottom was as stranded as on the three pages with no footer at all.
+O206 worked on that page one unit earlier and missed it, because it was measuring the top. The
+colophon is kept — those two lines are a disclaimer, not decoration — but it is now a plain block
+above the shared footer, so the page has one `<footer>` and it is the one carrying the doors.
+
+**Measured carefully, because this session's first scans keep being wrong.** A "links in the bottom
+quarter" proxy flagged six routes, and `/thanks` was among them — it carries the full footer, and the
+Acknowledgement band simply occupies that quarter and pushes the doors above the line. The fourth
+crude scan of the session to mis-report, which is why the finding rests on counting `<footer>`
+elements and their links rather than on link positions.
+
+**The exceptions are named and argued, which is the difference between a census and an allowlist.**
+`/finder` and `/clinicians` are stage machines with their own controls and exits; `/demo` is the
+presenter view; `/book/[token]` is a tokened flow reached by invitation. Each entry states why, a
+second test checks the register against the derived routes in both directions, and the sweep refuses
+to pass if everything was skipped or exempt. A page with a footer of its **own** satisfies the rule —
+it is "the reader can leave from the bottom", not "this component is present".
+
+The new spec carries **no** `taste-rule:` tag, deliberately: a first draft tagged
+`interaction.hover-focus` and AR2 refused it, because the register checks that every tag is claimed
+by an entry and tagging the nearest-looking rule would put a false claim into the coverage document.
+`public-nav.spec.ts`, the sweep this mirrors, carries none either.
+
+Proven non-vacuous by deleting `/faq`'s footer, rebuilding, and watching the sweep name it.
+
+Captures: `qa/_runs/o207/`.

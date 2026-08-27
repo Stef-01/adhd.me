@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PublicHeader } from "../../public-header";
+import { SiteFooter } from "../../site-footer";
 
 // O188 (founder-directed): the application form is retired — "we want things to be simple" —
 // and joining is an email. The eight-section form (O181/O185), the mix hero (O24/O26) and the
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 
 export default function JoinPage() {
   return (
+    <>
     <main id="main-content" className="join-page">
       {/* O189: the page joins the site. The founder's verdict on the shipped version — no logo,
           no clear navigation, a back-link that read as plain text — and the fix is the pattern
@@ -49,5 +51,16 @@ export default function JoinPage() {
         </section>
       </div>
     </main>
+
+      {/*
+        O207: THIS PAGE HAD NO FOOTER AT ALL — not a different one, zero `<footer>` elements. O189
+        found eight public surfaces with no wordmark and gave every one of them `PublicHeader`, and
+        `e2e/public-nav.spec.ts` made the top permanent. Nobody asked the same question about the
+        foot of the page, so the same class of defect survived at the other end: a reader reached
+        the bottom and the site simply stopped. On this page — the one the founder said "feels
+        disconnected from the site" — that left about 350px of dead space and no way onward at all.
+      */}
+      <SiteFooter />
+    </>
   );
 }

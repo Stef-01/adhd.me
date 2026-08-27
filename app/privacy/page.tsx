@@ -18,6 +18,7 @@ import Link from "next/link";
 import { GA_ID } from "../analytics";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
 import { PublicHeader } from "../public-header";
+import { SiteFooter } from "../site-footer";
 
 export const metadata = {
   alternates: { canonical: "/privacy" },
@@ -239,6 +240,13 @@ export default function PrivacyPolicyPage() {
         )}
       </div>
     </main>
+
+    {/*
+      O207: this page carried no footer at all — see the note on /clinicians/join. A legal notice
+      that ends with no way back to the site it governs is the same defect as a marketing page that
+      does, and arguably worse: a reader sent here from a privacy link had no route onward.
+    */}
+    <SiteFooter />
     </>
   );
 }
