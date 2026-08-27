@@ -119,6 +119,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O209 (O196's vacuity census does not recognise its own guard, and has overstated its debt by 10
+> since the day it landed) — claimed 2026-08-27T18:00Z by loop-0827a.** UI/aesthetic-review lane;
+> the loop's own queue is exhausted (M11/M12 founder-gated, AR1–AR40 complete). Gate read before
+> claiming: green @ a76dd4d.
+>
+> **FOUND BY O208 RUNNING INTO IT, AND MEASURED BEFORE CLAIMING.** `non-vacuous.test.ts` reads a
+> loop's collection by capturing the expression after `of`, and `(?:\([^)]*\))*` swallows a call —
+> so `for (const x of eachOf(REG, "…"))` captures `eachOf(REG, "…"`, whose ROOT is `eachOf`. In any
+> file that imports `eachOf` — which is every file that uses the guard — that root is an imported
+> name, so the site is counted as a register loop, and the guard check then looks for
+> `eachOf(eachOf(…` and never finds it. **A correctly guarded site reads as unguarded.**
+>
+> **THE NUMBERS, DERIVED BOTH WAYS.** Current scan: 140 sites, minus 7 declared, pins at 133.
+> Recognising `eachOf(` as the guard it is: 130 sites, 123 undeclared. **Ten sites are recorded as
+> debt while being properly guarded.**
+>
+> **AND THE TEN ARE THE WORK O196 IS PROUDEST OF.** Its DONE row lists the 13 sites it guarded
+> "chosen by STAKES rather than convenience: the W55 provenance intervals, the W148 advice linter,
+> the directory renderer, the finder's patient-visible labels, the sitemap-to-census trace." Among
+> the ten miscounted: `registers/store.test.ts` ("every placeholder interval says outright that it
+> is not guidance" — W55 provenance, twice), `quality/sitemap.test.ts` (the sitemap-to-census
+> trace), `matching/clarify.test.ts`. **The census has been failing to credit its own unit's central
+> achievement since the commit that created it**, and the ratchet's stated purpose is that a debt's
+> size stays a measured fact.
+>
+> Scope: teach the scanner that a collection expression beginning `eachOf(` is guarded — which is
+> true by construction, since `eachOf` throws on empty — re-derive the pin to what the corrected
+> scan measures, and pin the fix itself so the blind spot cannot return. The 5 `LEGITIMATELY_EMPTY`
+> entries and the two added since are re-checked, not assumed: an entry that only matched because of
+> the bug would be a stale exemption.
+>
+> **NOT A LICENCE TO LOWER THE NUMBER.** The remainder falls because it was measured wrong, not
+> because anything was fixed, and the constant will say exactly that — O196's own law is that an
+> untracked drop is progress nobody recorded, and an untracked CORRECTION is worse: it looks like
+> progress. No site's guard status changes; ten sites stop being described wrongly.
+>
+> Verify: `pnpm gate` end to end; the corrected scan proven to still catch a genuinely unguarded loop
+> (the planted fixture) AND to now credit a genuinely guarded one; both directions of the
+> `LEGITIMATELY_EMPTY` register re-checked. No qa/ capture: this unit renders nothing.
+
 > **O208 (three units fixed the same defect and left no check behind) — claimed 2026-08-27T17:05Z by
 > loop-0827a.** UI/aesthetic-review lane; the loop's own queue is genuinely exhausted (M11/M12
 > founder-gated, AR1–AR40 complete). Gate read before claiming: green @ a67da96.
