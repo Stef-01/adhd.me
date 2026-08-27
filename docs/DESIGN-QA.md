@@ -3340,3 +3340,42 @@ first draft of this page — is green on the new copy, and both candidate senten
 the W23 and W6 linters before either was written into the page.
 
 Captures: `qa/_runs/o203/{before,after}-{390,1280}.png`.
+
+## O204 — the FAQ said ADHD.ME was "a finder" (2026-08-27)
+
+**Found the same way O203 was: by reading another of O200's captures for its own sake** rather than
+as a deletion proof. `/faq` answered the product's most basic question with *"A finder. You describe
+what you are looking for in your own words…"* — true until O192, which gave the product a second
+interface. The word "network" appeared nowhere on the page for five units afterwards.
+
+**Three things made this worse than a stale sentence.**
+
+**`/network`'s own header sends readers here.** O192 chose `/faq` as the network's top-right door
+precisely because it "offers the door the network does not: the questions a reader has before they
+read anybody". The network was routing its readers to a page that did not describe the network.
+
+**"How is the order of GPs decided?" answered "only by matching what you asked for."** On `/network`
+nothing is matched and there is no order beyond the roster's — so a reader who had just browsed the
+network was told their experience had been ranked when it had not. On the page the compliance
+register calls the likeliest in the product to be quoted back to somebody.
+
+**The FAQPage JSON-LD is generated from the same list.** So the out-of-date answer was published to
+search engines as structured data, not merely rendered as prose. Verified after the fix by parsing
+the served HTML: three `ld+json` blocks, the FAQPage one now carries all three corrected answers and
+no longer contains the old sentence anywhere.
+
+**And the founder's own plan sharpens it.** O197 parked the finder on `finder/standalone-deployment`
+for a separate domain. On the network's own domain, "A finder" would not be out of date — it would
+describe a product that is not there.
+
+Three answers changed, not a rewrite. What ADHD.ME is, said as the two interfaces it has. How the
+order is decided, made true of both. And a new question — *"What is the difference between the
+network and the finder?"* — which is the founder's own differentiation question and the one a reader
+arriving at either URL actually has. It is answered in the same terms the launch control is built
+on: the network is a place you arrive at, the finder is a tool you start; nobody is added or removed
+by the choice.
+
+All three answers were run through the W23 and W6 linters **before** either was written into the
+page — the order that made O203 safe — and `e2e/public-sweep.spec.ts` is green on the rendered page.
+
+Captures: `qa/_runs/o204/{before,after}-{390,1280}.png`.

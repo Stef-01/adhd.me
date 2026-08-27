@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 30fd2f4 (2026-08-27T13:35Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.2m). O203 done (/examples promised "what the product actually does" and rendered a template three times, every line "Shown first: Dr Saxena" for two different GPs; full names now, the unprintable request DISCLOSED rather than dangled, and the sameness stated because measuring showed all three scenarios genuinely rank the same — the claim's third defect was wrong and the row says so). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the network profile told a patient a doctor's degrees were what she sees often). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet). O199 done (the taste law's hover clause had NO enforcer). O198 done (the network argued its purpose twice). O197 done (founder-directed: Emil motion pass, /mission, finder parked). O196/O195/O194 done. Ninth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T14:25Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 18.3m). O204 done (the FAQ still called ADHD.ME "a finder" five units after O192 gave it a second interface — and said the order is decided "only by matching", which is false of the network; the FAQPage JSON-LD is generated from the same list, so the stale answer was published to search engines as structured data too). O203 done (/examples rendered a template three times; the claim's third defect was wrong and the row says so). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the network profile told a patient a doctor's degrees were what she sees often). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet). O199 done (the taste law's hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Tenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -156,6 +156,30 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `/faq` (patient surface, full rule set) and the new copy linted BEFORE it is written into the page;
 > the JSON-LD checked to carry the corrected answers, since it is generated from the same list;
 > captures at 390 and 1280 in `qa/_runs/o204/` and a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T14:25Z. BUILT AS CLAIMED — three answers, not a rewrite.**
+>
+> "What is ADHD.ME?" now says what it is: two ways to find a GP, the same doctors either way. "How
+> is the order of GPs decided?" now says which of the two it is talking about, and states plainly
+> that the network is NOT ordered — the correction that matters most, because the old answer told a
+> reader who had browsed the network that their experience had been ranked when it had not. And a
+> new question answers the founder's own differentiation, in the same terms the launch control is
+> built on: the network is a place you arrive at, the finder is a tool you start, and nobody is added
+> or removed by the choice.
+>
+> **THE STRUCTURED DATA WAS THE PART WORTH CHECKING RATHER THAN ASSUMING**, since it is what made
+> this more than a stale sentence. Verified by parsing the SERVED HTML rather than the source: three
+> `ld+json` blocks, and the FAQPage one now carries all three corrected answers with the old
+> sentence absent from the whole document. A page whose markup is generated from its own copy is
+> only as current as the copy, and the failure mode is invisible on screen.
+>
+> **THE ORDER THAT MADE O203 SAFE WAS FOLLOWED AGAIN**: all three answers went through the W23 and
+> W6 linters BEFORE any of them was written into the page, and the rendered sweep is green on the
+> result. Writing first and linting after is how the original draft of `/examples` got refused.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 18.3m**. Tenth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O203 (/examples promises "what the product actually does" and renders a template three times) —
 > claimed 2026-08-27T12:55Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted.
