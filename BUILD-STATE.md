@@ -119,6 +119,51 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O214 (AR14 makes the gate's verdict impossible NOT to read; nothing makes it TRUE) — claimed
+> 2026-08-27T23:50Z by loop-0827a.** Gate read before claiming: green @ 4e958ee, verified end to end
+> by O213 on this exact head.
+>
+> **THIS IS THE SECOND INSTANCE OF THE SHAPE AR14 WAS BUILT FOR, WHICH IS WHAT EARNS THE MECHANISM
+> UNDER THIS TREE'S OWN O84 BAR.** `gate-state.ts`'s header tells case one in its own words: O167
+> turned the e2e red, CI said so for eight consecutive runs, and O168–O171 were each built, verified
+> with `pnpm verify` (which does not run e2e) and pushed onto the red base. O173 called it "an UNREAD
+> gate, not a missing one" and fixed it by moving the verdict onto the one path every firing walks —
+> a machine-parsed line at the head of this ledger.
+>
+> **Case two is O213, found last firing: the line was read every time and it was WRONG.** Four
+> consecutive gate lines claimed a green e2e over a red tree. AR14 guarantees the verdict is read.
+> It does not, and cannot, check that the verdict is true — `parseGateState` validates the line's
+> SHAPE (status, sha, timestamp, a non-empty note, exactly one line) and never its CONTENT. A session
+> that misreads its own run writes a confident green and every later firing trusts it.
+>
+> **THE CHEAP, AUTHORITATIVE CHECK THAT WOULD HAVE CAUGHT IT — measured before claiming.**
+> `npx playwright test --list` reports `Total: 344 tests in 76 files` in **8.4 seconds** with no
+> browser launched and no dev server. O211's gate line reports "340 passed, 2 skipped" — **342, two
+> short of the suite it claims to have run green.** The two missing are exactly the two that fail.
+> A green gate line that accounts for fewer e2e tests than the suite contains is not a green gate,
+> and that is decidable statically, in seconds, from the line itself.
+>
+> **SCOPE — ONE PROPERTY, NOT A GATE RUNNER.** This unit adds the arithmetic and nothing else:
+> parse the e2e figures out of the note, compare `passed + skipped` against the suite's real size,
+> refuse a green line that does not account for every test. It does NOT run the gate, re-run e2e,
+> or change what `pnpm verify` does. `claimGuard`'s existing contract is untouched.
+>
+> **FAIL-CLOSED, CONSISTENT WITH THE MODULE'S OWN LAW.** `parseGateState` already throws rather than
+> defaulting to green on a missing or malformed line, on the stated reasoning that "an unreadable
+> state and a red state must fail the same way, or malforming the line becomes a way past the guard."
+> A green line whose e2e figures cannot be parsed gets the same treatment, for the same reason —
+> otherwise dropping the figures becomes the way past this check.
+>
+> **WHAT THIS UNIT IS NOT.** It is NOT the copy-drift mechanism O213 deferred — that one is about a
+> unit changing copy without updating the check pinning it, and it stays deferred, because the e2e
+> DID catch every one of those three; only the reading failed. This is the reading. Naming the
+> difference so the deferral is not quietly reversed.
+>
+> **VERIFICATION.** `pnpm verify` green plus a planted-fixture proof that the new check FAILS on
+> O211's actual gate line and PASSES on O213's — a guard nobody has seen fail is a guard nobody has
+> tested. Full `pnpm e2e`, its exit code captured from the command itself and not through a pipe,
+> per the rule O213 wrote.
+
 > **O213 (`main` IS RED, AND HAS BEEN FOR FOUR UNITS — three assertions broke when the copy under
 > them changed) — claimed 2026-08-27T22:35Z by loop-0827a.** Gate read before claiming: the gate line
 > at `2cb39f2` says "full pnpm e2e green (340 passed, 2 skipped)". **That is not true of the tree it
