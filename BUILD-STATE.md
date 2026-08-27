@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 7fee94a (2026-08-27T05:20Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
+`gate: green @ fc5a3b3 (2026-08-27T06:25Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O195 done (O194's sibling: the rollout linearity test COULD NOT FAIL — a 1ms vacuity floor dominated its bound by 125×; instrument fixed, threshold chosen from measured linear-vs-quadratic populations, probe added). O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -150,6 +150,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > Verify: `pnpm gate` end to end (O194's lesson — on the tree the push produces, not on a branch),
 > plus the new probe failing when pointed at a quadratic workload.
+>
+> **DONE 2026-08-27T06:25Z.** Built as claimed. The linearity test's floor is gone and the reason it
+> existed is gone with it: 40 repeats per sample and best-of-5 make the small case a measurement
+> rather than a coin toss, so no vacuity guard is needed to keep it steady.
+>
+> **THE THRESHOLD IS CHOSEN FROM TWO MEASURED POPULATIONS, NOT PICKED.** Real rollout, across
+> isolated and full-suite-loaded runs: **0.72–0.91×** per site at 200 vs 50 (sub-1, because the
+> larger batch amortises setup). Quadratic probe through the identical harness: **4.34–4.74×**. The
+> bound is 2.5 — 2.7× above the linear maximum, 1.7× below the quadratic minimum, margin on both
+> sides. Both figures are written at the assertion so the next reader can disagree with the number
+> rather than guess at it.
+>
+> **A CORRECTION INSIDE THE UNIT, KEPT BECAUSE IT IS THE SAME MISTAKE ONE LEVEL UP.** The first
+> draft used 4×. Per-item cost of a quadratic grows LINEARLY, so 200-vs-50 is 4× in theory — the
+> bound sat 8% under the very population it was meant to catch, which is a coin toss wearing a
+> number. It only surfaced because the probe was measured instead of assumed; a probe asserted from
+> reasoning would have shipped that bound.
+>
+> **THE OTHER TWO, MEASURED AND REPORTED HONESTLY.** `src/matching/properties.test.ts` (10k-word
+> essay under 2000ms) measures 20.5ms isolated and 21.6ms loaded — ~97× headroom, an absolute bound,
+> sound. **Unchanged, and named here so it is on record as checked rather than skipped.** The
+> 50-site rollout bound (0.06ms against 1000ms) is likewise not flaky, but its comment claimed
+> "generous by two orders of magnitude" where the measurement says four; the CLAIM is corrected and
+> the bound left alone, because a stated margin wrong by 100× is how somebody later concludes a test
+> guards something it does not.
+>
+> Gate, run on the tree this push produces per O194's lesson: `pnpm gate` **EXIT 0** — verify green
+> (293 files / 4358 tests, 13 skipped; build clean; audit PASS 2 accepted, 0 unaccepted; perf PASS
+> 50 routes) and the FULL e2e suite green (326 passed, 2 skipped, 16.0m). Plus 3 isolated and 1
+> full-unit-suite run of the changed file before the gate was trusted. No app code touched.
 
 > **O194 (the gate CI has not run since 2026-08-21, run on `main`'s actual head) — claimed
 > 2026-08-27T04:50Z by loop-0827a.** Standing debt 11 (`docs/MATCHING-YEAR-PLAN.md`), executing the
