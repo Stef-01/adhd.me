@@ -152,6 +152,72 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 >
 > Verify: `pnpm gate` end to end on the tree the push produces, plus the new route's own e2e and a
 > qa/ capture with a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T08:55Z. ALL THREE PARTS BUILT; THE FOUNDER'S WORDS SHIP UNEDITED.**
+>
+> **Part 1 — the Emil pass, and the inventory found less motion than expected and worse motion than
+> expected.** Five transitions on the network used a bare `ease`, which nobody chooses — it is what
+> is left when a curve is not replaced. One ran 420ms on the portrait hover, well past Emil's 300ms
+> ceiling. One was DEAD: `.network-card-open` declared `transition: transform 180ms ease` and
+> nothing in the sheet ever transformed that element. And there was **no press feedback anywhere on
+> the route** — cards, launch control and profile links all changed nothing at the moment of the tap,
+> which on a touch screen is the one moment feedback is load-bearing. Fixed as one named curve and
+> one honest use of it: `--ease-ui: cubic-bezier(0.32, 0.72, 0, 1)` is now the tree's single UI curve;
+> the portrait hover came to 240ms and its scale from 1.03 to 1.02; the dead transition became a real
+> one behind a new `:active`. Press feedback is `scale(0.99)` on postcard-sized cards and Emil's
+> canonical `scale(0.97)` on the pill-sized control. **Nothing was added for polish** — Emil's
+> frequency gate is a gate in both directions and the answer to "should this animate at all" was no
+> more often than yes.
+>
+> **Reduced motion keeps the press states and drops the hover, and those are different static
+> equals.** Feedback's static equal is INSTANT feedback, not absence, so `:active` still applies with
+> the transition removed; a decorative hover flourish's static equal is genuinely nothing, so the
+> portrait scale becomes `transform: none`. Killing both is the common mistake and it makes a
+> reduced-motion user's interface feel broken rather than calm.
+>
+> **Part 2 — `/mission`, one idea and one door.** The founder's sentence set in the serif under the
+> heading, then how the network works in the present tense, then how big it actually is — two GPs,
+> one state, DERIVED from the roster so the page cannot outrun it — then a single door to `/network`.
+> The scope paragraph sits ABOVE the door deliberately: somebody about to meet two doctors should
+> learn there are two on the screen that told them what the network is aiming at, not after the click.
+> No launch control in the corner and the header's door is `/network`, because a landing page with
+> exits to two products makes the reader choose before it has told them anything.
+>
+> **The founder's copy ships verbatim and the machinery REPORTS rather than blocks.** The word `best`
+> trips two rules — W23 `no-superlatives` and W6 `no-benefit-claims` — so there are two
+> `ACCEPTED_FINDINGS` entries against `/mission`, keyed on (path, rule, match) and dated 2026-11-26,
+> the same date as the `/network` entry so the copy reaches the reviewer together. `FOUNDER_DECISIONS`
+> gained `mission-copy-authored-by-founder`. `FOUNDER_AUTHORED` holds the sentence apart so
+> `src/network/mission.test.ts` lints **every other sentence on the page with nothing behind it**, and
+> asserts the exclusion is exactly one named sentence rather than a filter that can widen. The word
+> stays refused on every other surface. **The loop decided nothing about the wording and is not
+> entitled to** — that review is the founder's reviewers', by their instruction.
+>
+> **Part 3 — the finder parked, and nothing removed.** `finder/standalone-deployment` pushed at
+> `bb6fd17`. "Later" was load-bearing: cutting the finder out of `main` is a deployment decision with
+> a census-wide cascade (PUBLIC_SURFACES, the dossier census, route budgets, working-truth, sitemap,
+> the launch control's whole reason for existing), and the founder said later.
+>
+> **THE CASCADE ONE NEW PUBLIC ROUTE COSTS, RECORDED BECAUSE IT IS THE HONEST PRICE.** `/mission`
+> joined nine registers, every one of which failed the build until it did: `PUBLIC_SURFACES` with an
+> argued audience, the dossier's surface census AND its governing row, `ROUTE_PROOFS` with a proof
+> that can only render from the roster, `ROUTE_BUDGETS` (51 routes now), `SPEC_TRIAGE` for the new
+> spec, the AUDIT-AR inventory's five derived counts, the footer's door list, and the sitemap (which
+> derived itself — the one register that cost nothing, which is the argument for deriving them).
+> W102's both-directions shape did exactly its job: at no point was the choice "remember to add it".
+>
+> **ONE THING THE FOOTER EDIT FOUND ON ITS WAY PAST.** The gated About-us door was spliced in at
+> `slice(0, 4)` — "after Questions", written as a number. Adding a door above it moved About up a slot
+> without failing anything, because `TEAM_PAGE_PUBLIC` is false and the branch is dead. Now a lookup
+> on `/faq`'s position. A dead branch that quietly means something different is worse than one that is
+> simply dead: the day the founder ungates the team page, nobody re-derives the four.
+>
+> Gate: `pnpm verify` green (295 files / 4371 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — 334 passed, 2 skipped,
+> 17.1m, including the six new `e2e/mission.spec.ts` tests. Captures `qa/_runs/o197/`, DESIGN-QA entry
+> filed. One e2e bug found and fixed in the writing: `.mission-section:last-of-type` matched nothing,
+> because the door is a `<section>` too — "last section carrying this class" is not a thing that
+> selector can express.
 
 > **O196 (the vacuity sweep the last two units earned: loops that assert over an empty register) —
 > claimed 2026-08-27T06:55Z by loop-0827a.** O194 found a timing check that failed at random; O195

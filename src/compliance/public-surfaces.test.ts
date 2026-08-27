@@ -241,8 +241,18 @@ describe("W192 an accepted finding is data with a date on it", () => {
     // keeps both directions: a new acceptance cannot appear without somebody editing this line and
     // saying what it is, and an acceptance whose gate is answered cannot be left behind, because
     // deleting it from the register fails here until it is deleted from here too.
+    //
+    // O197 ADDED TWO, AND THEY ARE THE SECOND KIND OF GOOD REASON. /mission carries the founder's
+    // own mission sentence, verbatim by their instruction, and one word in it trips two rules —
+    // W23's superlative pattern and W6's benefit-claims pattern. The founder ruled the advertising
+    // review out of this loop's hands (`mission-copy-authored-by-founder` in FOUNDER_DECISIONS),
+    // so the entries exist to REPORT both findings to the reviewers who own that call. Two lines
+    // rather than one because the acceptance key is (path, rule, match): a word waved through in
+    // general would be a rule switched off, and it is still refused everywhere else.
     expect(ACCEPTED_FINDINGS.map((a) => `${a.path} ${a.rule} "${a.match}"`)).toEqual([
       '/network no-condition-targeting "Mental health"',
+      '/mission no-superlatives "best"',
+      '/mission no-benefit-claims "best"',
     ]);
     for (const accepted of ACCEPTED_FINDINGS) {
       // An acceptance is an argument with a date on it, per this describe block's own name.

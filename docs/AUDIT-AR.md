@@ -39,17 +39,17 @@ Every row below is asserted against the live source by `ar-audit.test.ts`.
 | accepted-diff entries (AR15 initial + 3 attributed changes) | 4 |
 | baseline captures in the manifest | 180 |
 | manifest sha256 == newest acceptance | **true, checked live** |
-| per-route shipped-JS budgets | 50 |
-| working-truth route proofs | 49 |
-| …fixture-derived / copy proofs | 21 / 28 |
-| public surfaces classified by audience | 18 |
-| public accepted findings | 1 |
+| per-route shipped-JS budgets | 51 |
+| working-truth route proofs | 50 |
+| …fixture-derived / copy proofs | 22 / 28 |
+| public surfaces classified by audience | 19 |
+| public accepted findings | 3 |
 | console accepted findings (data-vs-copy argued) | 2 |
 | standing flags / product flags | 2 / 1 |
 | zero-states classified | 33 (+2 not-a-zero) |
 | store functions tenancy-classified (W209) | 87 across 12 modules |
 | touch-floor exemptions | 0 |
-| a11y exemptions (WCAG 2.2 AA, all 49 routes) | 0 |
+| a11y exemptions (WCAG 2.2 AA, all 50 routes) | 0 |
 
 ## 3. Cross-checks performed at audit time
 
@@ -103,7 +103,7 @@ register toggle, fixed).
 
 - Hash-equality baselines prove **sameness**, not beauty: a wrong design that never changes
   stays green. Taste stays with the founder and the review skills.
-- The working-truth copy proofs (28 of 49) prove the page *rendered its sentence*, not that the
+- The working-truth copy proofs (28 of 50) prove the page *rendered its sentence*, not that the
   sentence is the best one.
 - The honesty linters hold a short vocabulary (recorded in `public-surfaces.ts`): drug names and
   instrument names pass unexamined.

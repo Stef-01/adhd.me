@@ -87,6 +87,13 @@
   --accent-tint: #E9D6B4;
 
   /* The primary button: dark pill, light label. */
+  /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
+     retyped. Emil's fourth rule is that easing matters more than duration and that the built-in
+     `ease`/`ease-in-out` lack strength — this tree had five separate `160ms ease` declarations,
+     which is the browser default curve wearing a number. This is the Vaul curve: a hard out-ramp
+     that settles without the soft mush of `ease`. */
+  --ease-ui: cubic-bezier(0.32, 0.72, 0, 1);
+
   --ground: #191a17;
   --on-ground: #ffffff;
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
@@ -6626,7 +6633,7 @@ textarea:focus-visible {
 .profile-more summary svg,
 .profile-disclosure summary svg {
   flex: 0 0 auto;
-  transition: transform 160ms ease;
+  transition: transform 160ms var(--ease-ui);
 }
 
 .profile-more > p {
@@ -7013,7 +7020,17 @@ textarea:focus-visible {
   color: var(--ink);
   cursor: pointer;
   touch-action: manipulation;
-  transition: transform 180ms ease;
+  /* EMIL'S FIRST TIP, AND THE ONE REAL GAP THIS PASS FOUND. This declared a transform transition
+     while nothing ever transformed the card — dead motion that cost a compositor hint and bought
+     nothing. It now does the job it was pretending to: on a phone, tapping a card produced NO
+     acknowledgement until the next page painted, which on a slow connection is a second of
+     wondering whether the tap landed. 0.99 rather than Emil's canonical 0.97 because this element
+     is the size of a postcard, and scale reads proportionally — a large surface needs less of it. */
+  transition: transform 150ms var(--ease-ui);
+}
+
+.network-card-open:active {
+  transform: scale(0.99);
 }
 
 .network-card-body {
@@ -7042,7 +7059,10 @@ textarea:focus-visible {
 .network-card-portrait img {
   object-fit: cover;
   object-position: center 30%;
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* 420ms was over Emil's 300ms ceiling for interface motion — long enough to notice, which is the
+     definition he uses for too long. Halved, and the travel reduced with it: the scale is there to
+     say "this opens", and 1.02 says it. */
+  transition: transform 240ms var(--ease-ui);
 }
 
 
@@ -7109,12 +7129,12 @@ textarea:focus-visible {
   font-size: 0.8125rem;
   color: var(--accent);
   border-bottom: 1px solid transparent;
-  transition: border-color 160ms ease;
+  transition: border-color 160ms var(--ease-ui);
 }
 
 @media (hover: hover) {
   .network-card-open:hover .network-card-portrait img {
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 
   .network-card-open:hover .network-card-more {
@@ -7173,7 +7193,7 @@ textarea:focus-visible {
   text-decoration: none;
   border-bottom: 1px solid var(--muted);
   padding-bottom: 1px;
-  transition: border-color 160ms ease;
+  transition: border-color 160ms var(--ease-ui);
 }
 
 .network-bridge a:focus-visible {
@@ -7455,7 +7475,7 @@ textarea:focus-visible {
   border-radius: 4px;
   text-decoration: none;
   background: var(--paper);
-  transition: background 160ms ease;
+  transition: background 160ms var(--ease-ui), transform 150ms var(--ease-ui);
 }
 
 /* With one onward link there is room for a face, and a gallery that sends you to the next person
@@ -7515,6 +7535,10 @@ textarea:focus-visible {
   color: var(--ink);
 }
 
+.gp-slide-link:active {
+  transform: scale(0.99);
+}
+
 .gp-slide-link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -7544,6 +7568,10 @@ textarea:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .gp-slide-link { transition: none; }
+  /* The static equal is not "no feedback" — it is instant feedback. Reduced motion asks for no
+     ANIMATION, not for a control that stops acknowledging a press, so the scale still applies and
+     simply arrives without a tween. */
+  .gp-slide-link:active { transform: scale(0.99); }
 }
 
 /* ── The launch control (bottom right, both interfaces) ────────────────────────────────────── */
@@ -7567,7 +7595,15 @@ textarea:focus-visible {
   text-decoration: none;
   box-shadow: 0 6px 20px rgb(25 26 23 / 0.18);
   touch-action: manipulation;
-  transition: transform 160ms ease;
+  transition: transform 160ms var(--ease-ui);
+}
+
+/* Emil's canonical 0.97 here, where the card above takes 0.99 — this control is pill-sized, and
+   the same scale reads much larger on a small element than on a postcard. Press feedback on the
+   one persistent control in the product matters more than anywhere else: it is the thing a reader
+   reaches for when they are not sure what to do next. */
+.interface-launch-link:active {
+  transform: scale(0.97);
 }
 
 .interface-launch-glyph {
@@ -7620,9 +7656,15 @@ textarea:focus-visible {
     transition: none;
   }
 
+  /* The hover flourish is the only effect with no static equal, because it HAS no job beyond the
+     movement — under reduce it simply does not happen, which is the correct static equal for
+     decoration. The press states below are different and are kept. */
   .network-card-open:hover .network-card-portrait img {
     transform: none;
   }
+
+  .network-card-open:active { transform: scale(0.99); }
+  .interface-launch-link:active { transform: scale(0.97); }
 }
 
 @media (max-width: 640px) {
@@ -7654,5 +7696,168 @@ textarea:focus-visible {
 @media (max-width: 1299px) {
   .interface-launch-hint {
     display: none;
+  }
+}
+
+/* ─── /mission — the network's landing page (O197, founder-directed) ─────────────────────────
+   ONE IDEA, AND THE IDEA IS A SENTENCE. `layout.one-idea`: this screen states why the network
+   exists and does nothing else — no deck, no search box, no floating control offering a second
+   product. The founder's mission sentence is set at reading size in the serif, directly under the
+   heading, because it is the largest thing this page has to say and burying it in body copy would
+   make it look like an aside.
+
+   The measure matches `/network` at 760px so a reader moving between the two pages keeps the same
+   column, and the accent is spent exactly once — on the single door out.
+   ─────────────────────────────────────────────────────────────────────────────────────────── */
+
+.mission {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px 96px;
+}
+
+.mission-hero {
+  padding: 56px 0 8px;
+}
+
+/* Faint rather than accent, for the same reason `/network`'s eyebrow gives the colour up: a
+   category label sitting on top of the heading that already says it is not the word that matters
+   (`type.accent-live-tokens`). */
+.mission-eyebrow {
+  margin: 0 0 14px;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.mission-heading {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 6.2vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* The founder's sentence. Serif and one tier down from the heading — big enough to read as the
+   page's statement, small enough that the heading still leads. `--ink`, not `--muted`: this is
+   not supporting text. */
+.mission-statement {
+  margin: 24px 0 0;
+  max-width: 34rem;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 3.2vw, 1.5rem);
+  line-height: 1.45;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.mission-section {
+  margin-top: 56px;
+  max-width: 38rem;
+}
+
+.mission-section-heading {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.mission-section-body {
+  margin: 14px 0 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ── The one door ──────────────────────────────────────────────────────────────────────────── */
+
+.mission-door {
+  margin-top: 72px;
+  padding: 40px 32px;
+  background: var(--accent-soft);
+  border-radius: 4px;
+}
+
+.mission-door-heading {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.mission-door-body {
+  margin: 10px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* 44px through padding rather than through a glyph (`interaction.touch-44`): 14px + 1rem line at
+   1.2 + 14px clears the floor at every clamp size. `--ease-ui` is the tree's one UI curve; the
+   press state is the Emil pass's canonical `scale(0.97)` for a pill-sized control, and it survives
+   reduced motion because a static equal for feedback is INSTANT feedback, not none. */
+.mission-door-link {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+  font-size: 0.9375rem;
+  line-height: 1.2;
+  font-weight: 500;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: transform 150ms var(--ease-ui), opacity 150ms var(--ease-ui);
+}
+
+.mission-door-link:active {
+  transform: scale(0.97);
+}
+
+.mission-door-link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .mission-door-link:hover {
+    opacity: 0.88;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mission-door-link {
+    transition: none;
+  }
+
+  .mission-door-link:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (max-width: 640px) {
+  .mission-hero {
+    padding: 36px 0 4px;
+  }
+
+  .mission-section {
+    margin-top: 40px;
+  }
+
+  .mission-door {
+    margin-top: 52px;
+    padding: 28px 22px;
   }
 }

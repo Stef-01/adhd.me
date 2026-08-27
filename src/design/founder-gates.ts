@@ -57,6 +57,16 @@ export const FOUNDER_DECISIONS: readonly FounderDecision[] = [
     effect:
       "app/network/page.tsx no longer sets robots:index:false. Unchanged by the decision: /network still renders only fields /finder already served publicly, every clinician sentence is still that clinician's own declaration from the roster, and the W23 rendered honesty sweep still runs over the page — the founder lifted a review hold, not the copy law.",
   },
+  {
+    id: "mission-copy-authored-by-founder",
+    question:
+      "Who writes the mission statement on /mission, and who reviews the wording it uses — the loop, or the founder and the reviewers they have engaged?",
+    decision:
+      "The founder writes it and their reviewers review it. The mission was given as the brief for the page: \u201cthe mission of this site is to find the best drs in each state and document their cultural and personal qualities to best connect them with patients, helping patients feel more connected and comfortable\u201d. When the loop raised the wording against the copy rules, the founder restated the 2026-08-26 ruling in plain terms \u2014 the advertising review belongs to the experts they have engaged, and the loop is to stay out of that phase. So the sentence ships as they wrote it.",
+    decidedAt: "2026-08-27",
+    effect:
+      "MISSION_COPY.statement carries the founder's sentence verbatim and `FOUNDER_AUTHORED` keeps it separable, so `src/network/mission.test.ts` can lint every OTHER sentence on the page with nothing behind it. The two findings the sentence produces (`no-superlatives` and `no-benefit-claims`, both on the word `best`) are entered in ACCEPTED_FINDINGS against /mission with a review date, so the rendered sweep reports them to the reviewer who owns the call instead of blocking the page or rewording it. Unchanged: every other sentence on /mission is the loop's own and is held to the full patient rule set with no acceptance, and the acceptance is keyed to this one path and this one match, so the word stays refused everywhere else.",
+  },
 ];
 
 export const FOUNDER_GATES: readonly FounderGate[] = [

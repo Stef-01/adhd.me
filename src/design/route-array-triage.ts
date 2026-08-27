@@ -61,7 +61,7 @@ export interface SpecTriage {
 
 /**
  * Every spec that does not import `e2e/site-routes.ts` — 49 of them when this was first measured
- * on 2026-08-23, and 50 since O192 added `network.spec.ts`. The number is deliberately not pinned
+ * on 2026-08-23, 50 since O192 added `network.spec.ts` and 51 since O197 added `mission.spec.ts`. The number is deliberately not pinned
  * here: `diffSpecTriage` compares this list against the real filesystem in both directions, so a
  * transcribed count would be a second, weaker claim that could only go stale.
  * Read in full before classifying, not inferred from an import check alone — `diffSpecTriage`'s
@@ -153,6 +153,7 @@ export const SPEC_TRIAGE: readonly SpecTriage[] = [
   { file: "join-page.spec.ts", category: "single-route-feature", routes: ["/clinicians/join"], reason: "single public feature under test — O188 retired the form (and join-form/join-hero.spec with it); this pins the email invitation and the form's absence." },
   { file: "matching-verification.spec.ts", category: "single-route-feature", routes: ["/finder"], reason: "single patient feature under test." },
   { file: "mock-fixtures.spec.ts", category: "single-route-feature", routes: ["/console/credentials"], reason: "fixture-liveness probe (O174) on one console screen." },
+  { file: "mission.spec.ts", category: "single-route-feature", routes: ["/mission", "/network"], reason: "O197's landing page for the network, and the one route it hands a reader on to. Both doors on the page — the header link and the door at the foot — go to /network by design, so /network is named because this spec follows them rather than because it sweeps anything. Not a coverage claim: the rendered honesty sweep, the a11y sweep and the working-truth proof all reach /mission through the derived route list." },
   { file: "network.spec.ts", category: "single-route-feature", routes: ["/network", "/network/[clinician]", "/finder", "/faq"], reason: "O192's browse-first interface: the deck, a GP's own page, and the two routes the interface must reach — /finder because the launch control is the founder's asymmetric bridge between the two interfaces, /faq because the footer door is how a reader who is on neither interface finds the network. Named for those reasons, not swept for coverage." },
   { file: "ops.spec.ts", category: "single-route-feature", routes: ["/console/ops"], reason: "single console feature under test." },
   { file: "outcomes.spec.ts", category: "single-route-feature", routes: ["/console/outcomes"], reason: "single console feature under test." },

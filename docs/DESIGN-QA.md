@@ -3005,3 +3005,50 @@ family on this heading, so the one site that shipped unverified is the one site 
 regress silently.
 
 Captures: `qa/_runs/o193/` (before and after, both viewports).
+
+## O197 — an Emil pass on the network, and a landing page for it (2026-08-27)
+
+Two founder instructions in one unit: apply Emil Kowalski's motion lens to the network, and give
+the network a landing page of its own that says what it is for. The finder was parked on
+`finder/standalone-deployment` at the same time, unchanged, for the separate domain the founder
+wants it on later.
+
+**The motion inventory found less motion than expected and worse motion than expected.** Five
+transitions on the network used a bare `ease` — the browser default, which nobody chooses, they
+just fail to replace. One ran at 420ms, well past Emil's 300ms ceiling, on the portrait hover. One
+was dead: `.network-card-open` declared `transition: transform 180ms ease` and nothing in the sheet
+ever transformed that element. And there was **no press feedback anywhere on the route** — the
+deck's cards, the launch control and the profile links all changed nothing at the moment of the
+tap, which on a touch screen is the one moment feedback is actually load-bearing.
+
+Fixed as one named curve and one honest use of it. `--ease-ui: cubic-bezier(0.32, 0.72, 0, 1)` is
+now the tree's single UI curve; the portrait hover came down to 240ms and its scale from 1.03 to
+1.02; the dead transform transition became a real one behind a new `:active` state. Press feedback
+is `scale(0.99)` on postcard-sized cards and Emil's canonical `scale(0.97)` on the pill-sized
+launch control — the smaller the control, the larger the proportional squeeze needed to read.
+
+**Reduced motion keeps the press states and drops the hover.** Both are "static equals" and they
+are not the same static equal: feedback's is INSTANT feedback, not absence, so `:active` still
+applies with the transition removed; a decorative hover flourish's is genuinely nothing, so the
+portrait scale becomes `transform: none`. Getting this backwards — killing both — is the common
+mistake and it makes a reduced-motion user's interface feel broken rather than calm.
+
+**`/mission` is the landing page.** One idea, one door. The founder's mission sentence is set in
+the serif directly under the heading, then how the network works in the present tense, then how big
+it actually is — two GPs, one state, derived from the roster — and then a single door to
+`/network`. The scope paragraph sits **above** the door deliberately: somebody about to meet two
+doctors should learn there are two on the screen that told them what the network is aiming at, not
+after the click.
+
+The header's right-hand door is `/network` rather than `/finder`, and there is no launch control in
+the corner, because a landing page with exits to two products makes the reader choose before it has
+told them anything. The footer gained a "Why this exists" door directly after "The network" — a
+public route nobody can navigate to is reachable only by somebody who already knows the URL.
+
+**One thing the footer edit found on its way past.** The gated About-us door was spliced in at
+`slice(0, 4)` — "after Questions", written as a number. Adding a door above it moved About up a
+slot without failing anything, because `TEAM_PAGE_PUBLIC` is false and the branch is dead. It is
+now a lookup on `/faq`'s position. A dead branch that quietly means something different is worse
+than one that is simply dead: the day the founder ungates the team page, nobody re-derives the four.
+
+Captures: `qa/_runs/o197/{mission,network}-{390,1280}.png`.

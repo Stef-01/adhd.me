@@ -73,6 +73,16 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     source: "copy",
     why: "The finder's welcome-stage prompt — it renders only when the interactive stage machine mounted, which is the work this route does.",
   },
+  "/mission": {
+    // THE REACH SENTENCE RATHER THAN THE MISSION SENTENCE, deliberately. The founder's statement
+    // is a committed string that a static shell could in principle carry; this one is assembled at
+    // render time from the roster — the count in words and the state — so it can only appear once
+    // the roster resolved. It is also the sentence this page would most damagingly lose: a mission
+    // about every state, rendered without the line saying how many there actually are today.
+    proof: /Today the network is \w+ GPs consulting in New South Wales/,
+    source: "fixture",
+    why: "Derived from NETWORK_CLINICIANS at render time rather than transcribed, so it proves the roster resolved on this route and not merely that a page painted. It is also the page's honesty line — the scope stated before the reader is handed on to the people — which makes losing it a real regression rather than a cosmetic one.",
+  },
   "/network": {
     proof: /The GPs who make[\s\u00A0]up this network\./,
     source: "copy",

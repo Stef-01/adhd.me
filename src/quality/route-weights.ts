@@ -91,7 +91,7 @@ export function routeWeightVerdicts(
  * `pnpm generate:route-budgets` rewrites everything between the GENERATED markers.
  */
 // BEGIN GENERATED BUDGETS
-// Derived 2026-08-26 from .next/app-build-manifest.json: ceil(measured KB × HEADROOM) per route.
+// Derived 2026-08-27 from .next/app-build-manifest.json: ceil(measured KB × HEADROOM) per route.
 export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
   "/": 557, // measured 506 KB
   "/_not-found": 378, // measured 343 KB
@@ -135,6 +135,7 @@ export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
   "/examples": 387, // measured 351 KB
   "/faq": 387, // measured 351 KB
   "/finder": 721, // measured 655 KB
+  "/mission": 387, // measured 351 KB
   "/network": 549, // measured 499 KB
   "/network/[clinician]": 549, // measured 499 KB
   "/practices": 395, // measured 359 KB
