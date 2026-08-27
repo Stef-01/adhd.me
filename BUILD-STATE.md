@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ b84e119 (2026-08-27T05:20Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
+`gate: green @ 7fee94a (2026-08-27T05:20Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O194 done (main was RED — the W252 scaling test was a coin toss on a sub-ms denominator; instrument fixed, claim untouched, discrimination probed). FULL `pnpm gate` EXIT 0 end to end: verify + 326 e2e — the first time the whole gate has been read on main since CI died 2026-08-21`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
