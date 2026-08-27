@@ -119,6 +119,38 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O195 (O194's sibling: the OTHER timing assertions, and one of them cannot fail) — claimed
+> 2026-08-27T05:55Z by loop-0827a.** Earned directly by O194. Having found one wall-clock assertion
+> that was a coin toss, the honest next question is whether it was alone — a timing test that fails
+> at random is a latent red gate, and one that CANNOT fail is a latent hole.
+>
+> **MEASURED BEFORE CLAIMING, isolated and under full-suite load.** Three tests in the tree assert
+> on `performance.now()`:
+>   * `src/matching/properties.test.ts` — a ten-thousand-word essay under 2000ms. Measures 20.5ms
+>     isolated, 21.6ms loaded: an absolute bound with ~97× headroom. Sound. No change.
+>   * `src/tenancy/rollout.test.ts` — 50 sites under 1000ms. Measures **0.06ms**: ~16,000× headroom.
+>     Not flaky, but its own comment claims "generous by two orders of magnitude" when it is four.
+>   * `src/tenancy/rollout.test.ts` — "stays linear": `per200 < Math.max(per50 * 10, 1)`. **THIS ONE
+>     CANNOT FAIL.** Measured `per50 = 0.0008ms`, so `per50 * 10 = 0.008ms` and the `Math.max(…, 1)`
+>     floor dominates the bound by 125×. The assertion is effectively `0.0009 < 1`. A genuinely
+>     QUADRATIC implementation would cost about `0.0032ms` per site at 200 — still **312× under the
+>     bound**. A test that reads as a linearity guard passes on quadratic, cubic, and anything short
+>     of a millisecond per site.
+>
+> **THIS IS THE MIRROR OF O194 AND THE SAME ROOT CAUSE.** Both tests met noise with a wider band
+> instead of a better measurement. O194's widened threshold still left the ratio a coin toss; this
+> one's floor was widened until nothing could trip it — the aesthetic plan's own Phase 2 title, "a
+> check that cannot fail is not a check", arriving in the matching lane.
+>
+> Scope: apply O194's instrument here — more work per sample, best-of-N so an interrupted run cannot
+> decide the result — which removes the REASON the floor was added, then assert a real ratio with no
+> vacuity floor, and prove discrimination with a quadratic probe through the identical harness, as
+> O194 did. Correct the 50-site comment's headroom claim to the measured figure. `properties.test.ts`
+> is measured and left alone: reporting a sound test as a finding would be padding.
+>
+> Verify: `pnpm gate` end to end (O194's lesson — on the tree the push produces, not on a branch),
+> plus the new probe failing when pointed at a quadratic workload.
+
 > **O194 (the gate CI has not run since 2026-08-21, run on `main`'s actual head) — claimed
 > 2026-08-27T04:50Z by loop-0827a.** Standing debt 11 (`docs/MATCHING-YEAR-PLAN.md`), executing the
 > consequence that debt already states rather than adding a new one: *"Until it clears, CI proves
