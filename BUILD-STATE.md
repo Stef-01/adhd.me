@@ -119,6 +119,52 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O213 (`main` IS RED, AND HAS BEEN FOR FOUR UNITS — three assertions broke when the copy under
+> them changed) — claimed 2026-08-27T22:35Z by loop-0827a.** Gate read before claiming: the gate line
+> at `2cb39f2` says "full pnpm e2e green (340 passed, 2 skipped)". **That is not true of the tree it
+> names.**
+>
+> **FOUND BY RUNNING THE GATE, NOT BY LOOKING FOR IT.** O212 is test-only — it touches nine
+> `*.test.ts` files and `src/quality/non-vacuous.ts`, which no `app/` or `src/` module imports — so
+> its e2e run was expected to be a formality. It came back **2 failed, 340 passed, 2 skipped**. The
+> failures are not O212's: they are deterministic string mismatches that exist at `2cb39f2`
+> unchanged, verified by reading that commit directly rather than by inference.
+>
+> **THE THREE, EACH TRACED TO THE UNIT THAT BROKE IT:**
+>
+>   * `e2e/network.spec.ts:67` expects `"None of it is our description of them"`. **O202** (4b0622e)
+>     restructured `NETWORK_COPY.declarationNote` so the clause now follows an em-dash and reads
+>     `"— none of it is our description of them."` Playwright's `toContainText` takes a string
+>     case-sensitively, so a capital `N` can never match. O202 edited `gallery.ts` and
+>     `network.spec.ts` in the same commit and updated one of them.
+>   * `/network/[clinician]`'s route proof `/What .* says (?:he|she|they) sees? often/i`. **O201**
+>     (038653e) is titled "the profile said a doctor's degrees were what she sees often" — it fixed
+>     that by RENAMING the heading to "Credentials and experience". The rename was correct; the proof
+>     that pinned the old heading was left behind in `e2e/support/working-truth.ts`.
+>   * `/faq`'s route proof `/You describe what you are looking for in your own words/`. The sentence
+>     is present at 13c8322, 038653e and 4b0622e and **absent at 2cb39f2** — removed when the FAQ was
+>     rewritten to describe two interfaces (O204).
+>
+> **THE STALE-BUILD EXPLANATION WAS CHECKED AND RULED OUT.** The obvious excuse would be that e2e ran
+> against a `.next` from before the copy changed. It cannot: `playwright.config.ts` sets
+> `webServer.command` to `next build && next start` with `reuseExistingServer: false`, so every run
+> builds fresh. There is no mechanism by which these three passed on this tree.
+>
+> **WHAT THIS COSTS, STATED PLAINLY.** The gate line is machine-parsed by `src/quality/gate-state.ts`
+> and is the tree's own claim about itself. Four consecutive gate lines have asserted a green e2e over
+> a red one. The shape is the same in all three cases and is worth naming: **a unit changed patient-
+> visible copy and did not update the check that pinned that copy.** Two of the three checks live in
+> `e2e/support/working-truth.ts`, a file no copy-changing unit thinks to open.
+>
+> **SCOPE — SURGICAL, AND NO COPY IS TOUCHED.** The copy is right in all three cases; the assertions
+> are stale. So the assertions move, not the product. No new checks, no re-litigating O201/O202/O204's
+> decisions. Whether a mechanism should stop copy drifting from its proof is a real question and is
+> NOT taken here: it needs a second instance to earn a mechanism under this tree's own O84 bar, and
+> this is the first time the failure mode has been named. Recorded for whoever meets it again.
+>
+> **VERIFICATION.** `pnpm verify` plus a full `pnpm e2e` that must come back with zero failures — the
+> point of the unit is that the gate line stops lying, so a partial run does not close it.
+
 > **O212 (paying down the vacuity debt: `src/matching`, 20 sites) — claimed 2026-08-27T22:05Z by
 > loop-0827a.** Gate read before claiming: green @ 07edbef.
 >
