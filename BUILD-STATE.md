@@ -119,6 +119,48 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O208 (three units fixed the same defect and left no check behind) — claimed 2026-08-27T17:05Z by
+> loop-0827a.** UI/aesthetic-review lane; the loop's own queue is genuinely exhausted (M11/M12
+> founder-gated, AR1–AR40 complete). Gate read before claiming: green @ a67da96.
+>
+> **THE PATTERN, STATED AS A COUNT.** O203 (`/examples`), O204 (`/faq`) and O205 (`/privacy`) were
+> the SAME defect three times: a surface describing the product as it was before O192 added a second
+> interface. Each was found by a person reading a page. Each was fixed as a one-off. **None left a
+> check behind**, so the next time the product's shape changes the same three pages — and every page
+> like them — go stale again silently. O199, O200 and O207 each turned their finding into a census;
+> these three did not, and that asymmetry is the debt this unit pays.
+>
+> **AND THE CHANGE THAT WILL TRIGGER IT IS ALREADY PLANNED.** O197 parked the finder on
+> `finder/standalone-deployment` for a separate domain at the founder's instruction. On the day that
+> lands, every surface describing "the product" needs revisiting — and today the only record of which
+> those are is three ledger rows and a note in my own prose.
+>
+> **WHAT THIS BUILDS, AND WHAT IT DELIBERATELY IS NOT.** A register of how each public surface relates
+> to the product's two interfaces: describes both, is one of them, describes neither because it is
+> about something else, or is DECLARED DEBT. Checked against the derived route list in both
+> directions, so a new public page forces the decision rather than inheriting one.
+>
+> **THE GOODHART RISK IS REAL AND IS NAMED RATHER THAN DESIGNED AROUND.** The mechanical part — does
+> the rendered text name each interface — is a weak proxy: a page could satisfy it by saying
+> "network" once, meaninglessly. That is why the REGISTER carries the weight and the word check is
+> only a backstop that catches the specific failure that actually happened three times (a page that
+> mentions one interface and has never heard of the other). The AR dossier's own warning applies and
+> the module will say so: this must not be mistaken for a copy-quality detector, and it does not
+> replace reading the page.
+>
+> **AND IT TURNS TWO DEFERRED PROSE NOTES INTO DATED DEBT.** `/` (1 finder / 0 network) and
+> `/approach` (2/0) are the last one-sided surfaces. I raised both with the founder and deferred them
+> as a scope call — rewriting the front door's argument is not a loop unit. A sentence in a ledger row
+> nobody re-reads is not a record; a register entry the suite reads every run is.
+>
+> Scope: the register, its both-directions check, the two debt entries, and nothing else. NO copy
+> change on any surface — the pages that are correct stay untouched, and the two that are not stay
+> untouched because they are the founder's call.
+>
+> Verify: `pnpm gate` end to end; the census proven non-vacuous by planting a one-sided fixture; the
+> register's route list checked against `PUBLIC_ROUTES` in both directions; a DESIGN-QA entry per
+> law 5. No qa/ capture: this unit renders nothing.
+
 > **O207 (O189 gave every public page a spine at the top; nobody checked the bottom) — claimed
 > 2026-08-27T16:15Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
 > before claiming: green @ 9c59857.
