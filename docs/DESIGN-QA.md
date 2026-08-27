@@ -2944,3 +2944,32 @@ a visible 2px ring; round 7's bridge link turns out to also give a keyboard user
 finder well before the fixed corner control, which sits last in DOM order. Reduced motion renders
 the deck static with no residual transform, as `motion.reduced-motion` requires. The deck at 768
 keeps two columns and stays readable.
+
+## O192 round 9 — the round that found nothing, and why that ends it (2026-08-27)
+
+320px: the width where the deck's `minmax(280px, 1fr)` plus 20px of padding either side finally
+meets the room available, and the last one the earlier rounds had not measured. Deck and profile
+both render at `scrollWidth == innerWidth` — no sideways scroll — in one readable column, with the
+compact launch control landing over a portrait rather than over anybody's words.
+
+Nothing was wrong, so nothing changed. What the round produced instead is a **pinned guarantee**:
+`e2e/network.spec.ts` now asserts no horizontal overflow on both routes at 320, with a vacuity
+guard on the viewport itself. A card gaining one padding step is all it would take to break this,
+and a page that scrolls sideways on a small phone is discovered by the reader rather than by a
+screenshot taken at a comfortable width.
+
+**This closes the audit.** Nine rounds, and every one before this produced a finding: the modal
+that made people smaller, the pronoun a heading got wrong, the warmest copy in the faintest colour,
+the count the deck never stated, the serif that was never loading, the accent spending three
+meanings, dead CSS from a duplicate selector, a statement narrower than the prose beneath it, two
+things written and never rendered, a control sitting on a doctor's own sentence, a 404 pointing
+away from the network. Round 9 is the first to come back empty, and an audit that stops finding
+things is finished rather than in need of a tenth pass. The surface is now as warm as the roster's
+own declarations allow — going further would mean writing sentences about real doctors that they
+did not say, which `honesty.clinician-declaration` refuses and which no amount of design polish
+would make acceptable.
+
+What is deliberately still open, so the next reader does not mistake silence for resolution: two
+founder gates (`prescriber-on-profile`, `mental-health-on-profile`) recorded rather than answered,
+and the CI blocker on PR #21, which is an account-level GitHub Actions problem predating this
+branch by weeks.

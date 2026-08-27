@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 8027ec3 (2026-08-27T02:10Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, eight audit rounds)`
+`gate: green @ cd0d219 (2026-08-27T03:00Z) — pnpm verify 293 files / 4356 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB); full pnpm e2e green (324 passed, 2 skipped, 13.5m); O192 done (the network: /network + /network/[clinician], asymmetric launch control, nine audit rounds — the last found nothing)`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -286,11 +286,22 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > out to give a keyboard user the finder well before the corner control, which sits last in DOM
 > order), reduced motion (static, no residual transform), and the two-column tablet deck.
 >
+> **ROUND 9 FOUND NOTHING, AND THAT IS WHAT CLOSES THE AUDIT.** 320px — the width where the deck's
+> `minmax(280px, 1fr)` plus 20px of padding either side finally meets the room available, and the
+> last one earlier rounds had not measured. Both routes render at `scrollWidth == innerWidth` in one
+> readable column. Nothing changed; what the round produced is a PINNED GUARANTEE instead, because a
+> card gaining one padding step is all it would take and a page that scrolls sideways on a small
+> phone is found by the reader rather than by a screenshot taken at a comfortable width. Every round
+> before this produced a finding; an audit that stops finding things is finished rather than owed a
+> tenth pass. The surface is as warm as the roster's own declarations allow — going further would
+> mean writing sentences about real doctors that they did not say, which
+> `honesty.clinician-declaration` refuses.
+>
 > Gate: `pnpm verify` green — 293 files / 4356 tests (13 skipped), build clean, audit PASS (2
 > accepted, 0 unaccepted), perf gate PASS (50 routes, heaviest /finder 655 KB). Full `pnpm e2e`
 > green at the round-6 head (324 passed, 2 skipped); rounds 7–8 re-ran the affected suites (network,
 > public-sweep, working-truth, mobile-fit, finder-flow, a11y, touch-floor, accent-discipline,
-> contrast — 59 + 24 + 26 passed). New suites: `e2e/network.spec.ts` (10), `src/network/gallery.test.ts`
+> contrast — 59 + 24 + 26 passed). New suites: `e2e/network.spec.ts` (11), `src/network/gallery.test.ts`
 > (12), `e2e/support/network-capture.spec.ts` (opt-in captures).
 >
 > Landed as PR #21 (`claude/o192-network`) rather than a direct push to main, per this session's

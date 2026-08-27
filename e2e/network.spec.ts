@@ -169,6 +169,26 @@ test("the launch control reaches a GP's own page too, so it is never a dead end"
   ).toBeVisible();
 });
 
+test("neither network page overflows sideways at the narrowest phone still in use", async ({ page }) => {
+  // ROUND 9. Rounds 1-8 measured 390, 768 and 1280; 320 is the width where a fixed minimum finally
+  // exceeds the room available, and the deck's `minmax(280px, 1fr)` plus 20px of padding either
+  // side lands exactly on it. Nothing was wrong when this was written — which is the reason to pin
+  // it rather than to note it, because a card gaining one padding step is all it would take, and a
+  // page that scrolls sideways on a small phone is discovered by the reader, not by a screenshot
+  // taken at a comfortable width.
+  await page.setViewportSize({ width: 320, height: 568 });
+  const overflow = () =>
+    page.evaluate(() => ({ doc: document.documentElement.scrollWidth, win: window.innerWidth }));
+
+  for (const route of ["/network", `/network/${NETWORK_CLINICIANS[0]!.id}`]) {
+    await page.goto(route);
+    await page.waitForLoadState("networkidle");
+    const { doc, win } = await overflow();
+    expect(win, "the viewport did not apply — this check would pass vacuously").toBe(320);
+    expect(doc, `${route} scrolls sideways at 320px`).toBeLessThanOrEqual(win);
+  }
+});
+
 test("the network is a door the site's own navigation opens", async ({ page }) => {
   // "make sure navigation for everything works" — the footer door is the one a reader finds when
   // they are not already on either interface.
