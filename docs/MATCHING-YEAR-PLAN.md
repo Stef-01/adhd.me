@@ -838,6 +838,16 @@ so the loop cannot lose it. Build-loop units unless marked FOUNDER:
     minutes or a spending limit); billing endpoints are not visible from here, so the cause is
     recorded as unverified rather than asserted. **Until it clears, CI proves nothing about any
     push, and the local `pnpm gate` is the only real gate.**
+    **AND THE COST OF THAT WAS MEASURED ON 2026-08-27 BY O194, SO THIS ENTRY NOW CARRIES A SECOND
+    LESSON.** Six days and 231 commits after the outage began, nobody had actually RUN `pnpm gate`
+    on `main`'s resulting head — every firing gated its own tree and pushed. O194 ran it and `main`
+    was RED: `src/verticals/scaling.test.ts` failing at 59.9× against a 40× threshold, passing 5/5
+    in isolation, failing only under full-suite load, on a sub-millisecond denominator that made the
+    ratio a coin toss. Fixed at the instrument (best-of-N, more work per sample) with the claim and
+    threshold untouched, and a quadratic probe added to prove it still discriminates. **The lesson
+    is O173's, one turn further on:** it is not enough to build the gate, or even to read CI's
+    answer — somebody has to run it on the tree the pushes actually produced. A firing that verifies
+    its own branch and pushes has verified a tree nobody will ever visit.
     Original closure text follows.
     **CLOSED by O98 (2026-08-20).** ci.yml now
     has a second job, `e2e`, beside `verify`: chromium only, the config's own `webServer`
