@@ -3509,3 +3509,55 @@ by an entry and tagging the nearest-looking rule would put a false claim into th
 Proven non-vacuous by deleting `/faq`'s footer, rebuilding, and watching the sweep name it.
 
 Captures: `qa/_runs/o207/`.
+
+## O208 — three units fixed the same defect and left no check behind (2026-08-27)
+
+**The pattern, as a count.** O203 (`/examples`), O204 (`/faq`) and O205 (`/privacy`) were the same
+defect three times: a surface describing the product as it was before O192 added a second interface.
+`/faq` answered "What is ADHD.ME?" with *"A finder"* five units after that stopped being true — and
+that answer was in its FAQPage JSON-LD too, so it reached search engines as structured data.
+`/privacy` scoped every claim to the finder, which is the defect its own header records fixing once
+before, one interface earlier.
+
+Each was found by a person reading a page. Each was fixed as a one-off. **None left a check behind.**
+O199, O200 and O207 each turned their finding into a census; these three did not, and that asymmetry
+is what this unit pays off. The trigger is already planned: O197 parked the finder for a separate
+domain at the founder's instruction, and on the day that lands every surface describing "the product"
+needs revisiting.
+
+**A register, not a lint.** Every public surface now has a decided stance: *describes-both* (it
+describes the product, so it owes an account of both interfaces), *is-one* (it IS an interface, or
+that interface's landing page), *describes-neither* (it is about something else — a GP funnel, the
+B2B product, a presenter view), or *declared-debt*. Checked against the derived route list in both
+directions, so a new public page forces the decision rather than inheriting one, and every entry
+argues itself in a sentence somebody can disagree with.
+
+**The Goodhart risk is named rather than designed around.** The mechanical half — does the rendered
+text name each interface — is a weak proxy: a page could satisfy it by saying "network" once,
+meaninglessly. `docs/AR-DOSSIER.md` warns in its own words that a proxy can become the rule, and the
+module says so at the top. The register carries the weight; the word check is a backstop for the one
+failure that actually happened three times, and a green run is **not** evidence that any surface
+describes the product well.
+
+**Two deferred prose notes became dated debt.** `/` (1 finder / 0 network) and `/approach` (2/0) are
+the last one-sided surfaces. I raised both with the founder and deferred them — rewriting the front
+door's argument is a scope call, not a loop unit. A sentence in a ledger row nobody re-reads is not a
+record; a register entry the suite reads every run is, and each carries an owner and the date it was
+raised. A second sweep checks the *other* direction: if somebody answers that decision and fixes a
+page, the stale debt entry fails rather than sitting there looking considered.
+
+**My first non-vacuity probe did not work, and that is worth recording.** I reverted `/faq`'s three
+answers to their pre-O204 shape expecting the sweep to catch it; it passed, because the page names
+the network elsewhere and reverting three answers was not enough to make it one-sided. Proven
+properly instead by temporarily marking `/mission` — which genuinely names one interface — as
+`describes-both` and watching the sweep name it, and by marking `/faq` as debt and watching the other
+direction fail.
+
+**And O196's scanner has a small blind spot this unit ran into.** It reads a loop's collection by
+capturing the expression after `of`, so in a file that imports `eachOf` the captured root *is*
+`eachOf` and the guard it looks for never matches — a properly wrapped site can still read as
+unguarded. Rather than bump that unit's pinned remainder, the block here also asserts above the loop,
+which is what the census recognises. Worth its own unit: the pinned 133 may include other
+already-guarded sites for the same reason.
+
+No `qa/` capture: this unit renders nothing and changes no copy.

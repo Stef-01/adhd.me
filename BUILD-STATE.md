@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ a67da96 (2026-08-27T16:55Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (338 passed, 2 skipped, 18.0m). O207 done (O189 gave every public page a spine at the TOP and nobody checked the bottom: three prose pages had ZERO footer elements — including the join page the founder called "disconnected from the site" — and the new census found a fourth, /practices, whose footer held two spans and no links. Exemptions named and argued; AR2 refused a false taste tag on the way). O206 done (/practices stacked two site bars, the top one a demo tour switcher). O205 done (the privacy notice described one of two interfaces). O204 done (the FAQ still called ADHD.ME "a finder"). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Thirteenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T17:45Z) — pnpm verify 298 files / 4390 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (340 passed, 2 skipped, 17.9m). O208 done (O203/O204/O205 were the SAME defect three times and left no check behind; every public surface now carries a decided stance on the product's two interfaces, checked both directions, with / and /approach recorded as dated founder debt rather than a note in a ledger row. First non-vacuity probe FAILED to reproduce and the row says so). O207 done (three prose pages had zero footer elements; the census found a fourth). O206 done (/practices stacked two site bars). O205 done (the privacy notice described one of two interfaces). O204 done (the FAQ still called ADHD.ME "a finder"). O203 done (/examples rendered a template three times). O202 done (founder-directed: the network deck became a gallery). O201 done (the profile called a CV a caseload). O200 done (95 of 596 styled classes were dead). O199 done (the hover clause had NO enforcer). O198/O197/O196/O195/O194 done. Fourteenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -160,6 +160,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end; the census proven non-vacuous by planting a one-sided fixture; the
 > register's route list checked against `PUBLIC_ROUTES` in both directions; a DESIGN-QA entry per
 > law 5. No qa/ capture: this unit renders nothing.
+>
+> **DONE 2026-08-27T17:45Z. A REGISTER, TWO SWEEPS, AND TWO DEFERRED NOTES TURNED INTO DATED DEBT.**
+> Every public surface now carries a decided stance — `describes-both`, `is-one`, `describes-neither`
+> or `declared-debt` — argued in a sentence and checked against the derived route list in both
+> directions, so a new page forces the decision rather than inheriting one.
+>
+> **MY FIRST NON-VACUITY PROBE DID NOT WORK, AND SAYING SO IS THE POINT.** I reverted `/faq`'s three
+> answers to their pre-O204 shape expecting the sweep to catch it. IT PASSED — the page names the
+> network elsewhere, so reverting three answers never made it one-sided. A probe that fails to
+> reproduce the defect proves nothing, and reporting it as proof would have been the exact
+> self-deception this lane exists to stop. Proven properly instead: `/mission` temporarily marked
+> `describes-both` (it genuinely names one interface) fails with the right message, and `/faq`
+> temporarily marked `declared-debt` fails the OTHER direction — so a paid-off debt entry cannot sit
+> in the register looking considered.
+>
+> **THE GOODHART LIMIT IS WRITTEN INTO THE MODULE, NOT LEFT FOR SOMEBODY TO DISCOVER.** Naming a
+> thing is not describing it well; a page could satisfy the word check by saying "network" once. The
+> REGISTER carries the weight and the word check is a backstop for the one failure that happened
+> three times. A green run here is not evidence that any surface describes the product well, and the
+> file says so.
+>
+> **AND IT FOUND A BLIND SPOT IN O196's SCANNER ON THE WAY.** That census reads a loop's collection
+> by capturing the expression after `of`, so in a file importing `eachOf` the captured root IS
+> `eachOf` and the guard it looks for never matches — a properly wrapped site still reads as
+> unguarded. Rather than bump O196's pinned remainder to hide it, this file also asserts above the
+> loop, which is what the census recognises, and the reason is written at the site. **Worth its own
+> unit: the pinned 133 may include other already-guarded sites for the same reason**, which would
+> mean that debt is smaller than recorded.
+>
+> **TWO CASCADES, BOTH CENSUSES DOING THEIR JOB**: AR5 required the new spec to be triaged (it
+> derives its routes through a register rather than through `e2e/site-routes.ts` — same shape as
+> `public-sweep.spec.ts`), and O196 required the register loop to be guarded.
+>
+> Gate: `pnpm verify` green (298 files / 4390 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **340 passed, 2 skipped,
+> 17.9m** (338 + the two new coverage sweeps). Fourteenth consecutive firing to read the whole gate
+> on the tree it pushes.
 
 > **O207 (O189 gave every public page a spine at the top; nobody checked the bottom) — claimed
 > 2026-08-27T16:15Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
