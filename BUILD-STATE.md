@@ -119,6 +119,46 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O206 (/practices stacks two site bars, and the top one is presenter chrome) — claimed
+> 2026-08-27T15:25Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
+> before claiming: green @ 3c305c9.
+>
+> **VISIBLE IN THE FIRST 133 PIXELS OF THE B2B LANDING PAGE.** `/practices` renders its own
+> `<header>` — a 66px bar — and then `PublicHeader` beneath it, another 67px. Two bars, two
+> wordmarks, before a single word of content. Measured across every public route: this is the ONLY
+> one where the site header does not start at y=0. Everywhere else it is at 0; here it is at 66,
+> pushed down by the bar above it. (`/examples`, `/faq`, `/thanks` and `/terms` also showed two
+> top-of-page bars in the first scan and are NOT defects — those are breadcrumbs, which is what they
+> are supposed to be.)
+>
+> **AND THE TOP BAR IS THE WRONG COMPONENT ENTIRELY, WHICH IS THE MORE INTERESTING HALF.**
+> `DemoNavigator` is a demo TOUR switcher: a dropdown listing four "demo stops" — Patient finder,
+> Clinician pathway, Practice story, Operations demo — for walking somebody through the product. It
+> is presenter chrome. `/practices` is a public B2B landing page addressed to practice owners, who
+> are not on a guided tour, and it is the page W23's copy linter was written for.
+>
+> **HOW IT GOT THERE, and it is a census with a blind spot again.** O189's comment records adding
+> `PublicHeader` to eight surfaces that "carried breadcrumbs but NO wordmark", and lists `practices`
+> among them. `/practices` DID have a wordmark — inside `DemoNavigator`, which renders it as a
+> dropdown trigger rather than as the plain home link the census looked for. So the fix for
+> "no wordmark anywhere" added a second one to the one page in its list that already had one. The
+> stray empty `<>` fragment still sitting beside the inserted `PublicHeader` is the fingerprint of
+> that edit.
+>
+> Scope: one bar on `/practices`. The page keeps its own section nav — a B2B landing legitimately
+> has in-page anchors and a sign-in — and gains the patient door `PublicHeader` was added to provide,
+> so nothing O189 wanted is lost. The demo-tour dropdown comes off this surface; it stays exactly as
+> it is on `/demo`, `/console` and the clinician walkthrough, which are the presenter and staff
+> contexts it was built for. The dead `<>` fragment goes with it.
+>
+> NOT IN SCOPE, and named so it is not mistaken for an oversight: whether `DemoNavigator` belongs on
+> `/clinicians` — a public professional surface — is the same question one page over, and it deserves
+> its own claim rather than being swept along by this one.
+>
+> Verify: `pnpm gate` end to end; the bar census re-run to show `/practices` joining every other
+> route at y=0; `e2e/public-nav.spec.ts` and `guidelines-sweep.spec.ts` green; before/after captures
+> at 390 and 1280 in `qa/_runs/o206/` and a DESIGN-QA entry per law 5.
+
 > **O205 (the privacy notice describes one of two interfaces — the same defect it records having
 > fixed once already) — claimed 2026-08-27T14:35Z by loop-0827a.** UI/aesthetic-review lane;
 > numbered lanes exhausted. Gate read before claiming: green @ eab4f97.
