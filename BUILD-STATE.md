@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 4b0622e (2026-08-27T12:45Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.2m). O202 done (founder-directed: the network deck became a gallery — 74 words to 27, 64% less, the six-word way-in now an arrow on the name row, the declared sentence and languages RELOCATED to the profile and pinned as one tap away rather than gone; the hero's enumeration cut as O198-style duplication with all three honesty clauses kept). O201 done (the network profile told a patient a doctor's degrees were what she sees often — the heading is OURS and was relabelled to /finder's own wording). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet — deleted with ZERO computed-style change on any rendering element). O199 done (the taste law's hover clause had NO enforcer; 37 of 53 rules fixed). O198 done (the network argued its purpose twice). O197 done (founder-directed: Emil motion pass, /mission carrying the founder's mission sentence VERBATIM, finder parked). O196/O195/O194 done. Eighth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ PLACEHOLDER (2026-08-27T13:35Z) — pnpm verify 297 files / 4384 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (336 passed, 2 skipped, 17.2m). O203 done (/examples promised "what the product actually does" and rendered a template three times, every line "Shown first: Dr Saxena" for two different GPs; full names now, the unprintable request DISCLOSED rather than dangled, and the sameness stated because measuring showed all three scenarios genuinely rank the same — the claim's third defect was wrong and the row says so). O202 done (founder-directed: the network deck became a gallery — 74 words to 27). O201 done (the network profile told a patient a doctor's degrees were what she sees often). O200 done (95 of 596 styled classes were dead — 9.7% of the stylesheet). O199 done (the taste law's hover clause had NO enforcer). O198 done (the network argued its purpose twice). O197 done (founder-directed: Emil motion pass, /mission, finder parked). O196/O195/O194 done. Ninth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -164,6 +164,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Verify: `pnpm gate` end to end on the tree the push produces, the rendered honesty sweep green on
 > `/examples` specifically (it is the check that refused the first draft), captures at 390 and 1280
 > in `qa/_runs/o203/`, and a DESIGN-QA entry per law 5.
+>
+> **DONE 2026-08-27T13:35Z, AND THE CLAIM'S THIRD DEFECT WAS WRONG — CORRECTED HERE RATHER THAN
+> QUIETLY DROPPED.** The claim said "the pipeline computes per-scenario detail and the page discards
+> all of it but a count". Measured: all three archetypes rank the SAME GP first and produce the same
+> order. The only thing that genuinely differs is how many asks the finder read (2, 2, 3). The page
+> was not discarding variation; there is none to discard, because a two-GP roster does not have many
+> orders available.
+>
+> **SO THE SAMENESS IS STATED INSTEAD OF DRESSED AS VARIETY**, which is `honesty.claim-earned`
+> applied to this page: three sections that look like three demonstrations, when they are one
+> demonstration run three times, is a page overstating itself. The new sentence is DERIVED from the
+> results and the roster count, so the day a third GP joins and the orders diverge it stops appearing
+> on its own rather than becoming a stale claim.
+>
+> **THE OTHER TWO WERE AS CLAIMED.** `shortName` rendered "Dr Saxena" for both GPs — three lines all
+> reading "Shown first: Dr Saxena", which erased the very difference the page exists to show; full
+> names now, applying O192 round 5's ruling to a second surface. And "From that request" pointed at
+> something no reader could see: the request cannot be printed (the sweep refused a first draft that
+> tried, because those sentences carry clinical vocabulary a patient page may not repeat), so the
+> CONSTRAINT is disclosed in our own words and the dangling phrase deleted. Disclosing why a page
+> cannot show something is more honest than implying it did.
+>
+> **THE CONTROL THAT CAUSED THE DEFECT WAS NOT WEAKENED, AND THAT WAS CHECKED FIRST.** Both candidate
+> sentences were run through the W23 and W6 linters BEFORE either was written into the page, and
+> `e2e/public-sweep.spec.ts` — the rendered sweep that refused the original draft — is green on the
+> new copy.
+>
+> Gate: `pnpm verify` green (297 files / 4384 tests, 13 skipped; build; audit PASS 2 accepted, 0
+> unaccepted; perf PASS 51 routes) and the FULL e2e suite green end to end — **336 passed, 2 skipped,
+> 17.2m**. Ninth consecutive firing to read the whole gate on the tree it pushes.
 
 > **O202 (founder-directed: the network deck is not aesthetic enough and too wordy — make it a
 > modern gallery) — claimed 2026-08-27T12:05Z by loop-0827a.** Founder brief, verbatim: "network

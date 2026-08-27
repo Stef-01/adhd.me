@@ -3296,3 +3296,47 @@ behind `@media (hover: hover)` (O199), press feedback (O197), and a static equal
 `prefers-reduced-motion` — the arrow stays accented and pointing, it just does not travel.
 
 Captures: `qa/_runs/o202/{before,after}-{390,1280}.png`.
+
+## O203 — the worked examples were a template run three times (2026-08-27)
+
+**Found by reading a capture I already had.** O200 shot fifteen public routes to prove its deletions
+changed nothing; the proof passed and the pictures were never read for their own sake. `/examples`
+opens with *"this page shows what the product actually does, not what a brochure says it does"* — and
+then rendered, three times over, the same sentence differing by one digit, every one ending "Shown
+first: Dr Saxena". The page's own opening sentence was the standard it failed.
+
+**Three defects, and the measurement corrected my reading of the third.**
+
+**One — the name was ambiguous, and O192 already ruled on it.** `shortName` is "Dr Saxena" for BOTH
+GPs on this roster; the roster disambiguates hers and leaves his bare. Round 5 fixed exactly this on
+the network deck. Here it was worse: three examples all reading "Shown first: Dr Saxena" left a
+reader unable to tell whether that was one doctor three times or two different people — quietly
+erasing the difference the page exists to show. Full names now.
+
+**Two — "From that request" had no antecedent.** No request appears anywhere on the page, and none
+can: the page's own header records that a first draft rendered the demo requests verbatim and the
+rendered-copy sweep REFUSED the page, because those sentences carry clinical vocabulary a
+patient-facing page may not repeat. That control is working and this unit does not touch it. So the
+constraint is disclosed rather than hidden — *"The scenarios themselves are not printed here: they
+are written as somebody would really say them, and a public page may not repeat that language. What
+is printed is what the finder made of them."* — and the dangling phrase is simply deleted. That is
+the more honest version of the page, not a softer one.
+
+**Three — I claimed the page discarded per-scenario detail. It does not, and measuring said so.**
+All three archetypes genuinely rank the same GP first and produce the same order; the only thing
+that differs is how many asks the finder read (2, 2, 3). The sameness is not a rendering failure,
+it is the true answer. So it is now stated rather than left looking like variety: *"All three land
+on the same GP first, and that is what a network this size looks like rather than a finding about
+anybody: with two listed GPs there are not many orders available."* Derived from the results and
+from the roster count, so the day a third GP joins and the orders diverge, the sentence stops
+appearing on its own.
+
+`honesty.claim-earned` is what makes that a defect rather than a nitpick: three sections that look
+like three demonstrations, when they are one demonstration run three times, is a page overstating
+itself.
+
+Verified where it matters: `e2e/public-sweep.spec.ts` — the rendered honesty sweep that refused the
+first draft of this page — is green on the new copy, and both candidate sentences were run through
+the W23 and W6 linters before either was written into the page.
+
+Captures: `qa/_runs/o203/{before,after}-{390,1280}.png`.
