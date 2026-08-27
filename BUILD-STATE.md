@@ -119,6 +119,44 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O207 (O189 gave every public page a spine at the top; nobody checked the bottom) — claimed
+> 2026-08-27T16:15Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
+> before claiming: green @ 9c59857.
+>
+> **THREE PUBLIC PROSE PAGES HAVE NO FOOTER AT ALL — not a different footer, zero `<footer>`
+> elements:** `/clinicians/join`, `/privacy` and `/privacy/automated-decisions`. Each carries
+> `PublicHeader` at the top and then simply stops, with the Acknowledgement-of-Country band abutting
+> the copy and nothing between. On `/clinicians/join` that leaves about 350px of dead space and no
+> way onward at all — and it is the page the founder said "feels disconnected from the site". It is
+> literally disconnected: there is no site navigation on it below the header.
+>
+> **THIS IS O189'S OWN CENSUS, RUN IN ONE DIRECTION.** That unit found eight public surfaces
+> "carried breadcrumbs but NO wordmark and nothing shaped like a control", and gave every one of them
+> `PublicHeader`. `e2e/public-nav.spec.ts` made the top permanent — "EVERY public route must show the
+> ADHD.ME mark and give the reader a way home from it", derived from the route list so a new page
+> cannot ship headerless. Nobody asked the same question about the foot of the page, so the same
+> eight-surface class of defect survived at the other end.
+>
+> **MEASURED CAREFULLY, BECAUSE THIS SESSION'S FIRST SCANS KEEP BEING WRONG.** A "links in the
+> bottom quarter" proxy flagged six routes; `/thanks` was among them and is FINE — it carries the
+> full site footer, and the Acknowledgement band simply occupies that quarter and pushes the doors
+> above the line. The fourth crude scan of the session to mis-report, and the reason the claim rests
+> on counting `<footer>` elements and site-footer presence rather than on link positions.
+>
+> Scope: `SiteFooter` on the three, and a census that keeps the bottom honest the way
+> `public-nav.spec.ts` keeps the top honest — derived from the route list, both directions, with the
+> surfaces that legitimately have no site footer NAMED AND ARGUED rather than skipped. Those
+> exceptions are real and must not be flattened: `/finder` is a tool with its own controls, `/demo`
+> is a presenter view, `/clinicians` is a stage machine with its own exit, `/book/[token]` is a
+> tokened flow, and `/` and `/practices` carry footers of their own.
+>
+> NO redesign of any of the three pages and no copy change — this is navigation that is missing,
+> not navigation that is wrong.
+>
+> Verify: `pnpm gate` end to end; the footer census proven non-vacuous by pointing it at a page with
+> the footer removed; `e2e/public-nav.spec.ts`, `a11y` and `semantics` green; before/after captures
+> at 390 and 1280 in `qa/_runs/o207/` and a DESIGN-QA entry per law 5.
+
 > **O206 (/practices stacks two site bars, and the top one is presenter chrome) — claimed
 > 2026-08-27T15:25Z by loop-0827a.** UI/aesthetic-review lane; numbered lanes exhausted. Gate read
 > before claiming: green @ 3c305c9.
