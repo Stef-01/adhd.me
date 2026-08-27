@@ -119,6 +119,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O196 (the vacuity sweep the last two units earned: loops that assert over an empty register) —
+> claimed 2026-08-27T06:55Z by loop-0827a.** O194 found a timing check that failed at random; O195
+> found its sibling that could not fail at all. Both were single sites found by accident. This asks
+> the general question they raise — **how many assertions in this suite pass when there is nothing
+> to assert over?** — and answers it by measurement before proposing any change.
+>
+> **MEASURED FIRST, AND THE FIRST MEASUREMENT WAS THROWN AWAY.** A crude scan reported 340 suspect
+> `it` blocks out of 3427. Hand-checking a sample killed it: `fhir.test.ts:238` loops over the
+> literal `["proposed","pending","waitlist","entered-in-error"]`, which cannot be empty, and most
+> hits were that shape. Reporting 340 would have been O144's mistake — a directory listing presented
+> as a capability. Refined to loops whose collection is an IMPORTED product register rather than a
+> test-local value, and the honest figures are:
+>   * 527 `it` blocks contain a loop plus an assertion;
+>   * 484 loop only over test-local values — cannot go empty by any product state;
+>   * 20 are already guarded (an assertion outside the loop, or an explicit size/non-vacuity check);
+>   * **23 loop over an imported register with no guard at all.**
+>
+> **WHY THE 23 MATTER MORE THAN THE COUNT SUGGESTS.** Several sit on compliance properties, where a
+> vacuous pass is the failure mode that hurts: `registers/store.test.ts` ("every placeholder interval
+> says outright that it is not guidance" — W55 provenance), `education/advice-lint.test.ts` ("passes
+> every string", W148), `directory/render.test.ts` ("adds no prose of its own to the document" — G6
+> territory), `privacy/record-classes.test.ts`, `matching/provenance.test.ts` ("every label it shows
+> is one the finder would really print"). Each reads as a guarantee about everything in a register
+> and would report success over nothing.
+>
+> **THE TRAP THIS UNIT MUST NOT FALL INTO, STATED BEFORE BUILDING.** Not every empty loop is a
+> defect. Several of the 23 iterate a `.filter(...)` that may legitimately yield nothing —
+> `KNOWN_FALSE_POSITIVES.filter(FIXED)` is empty exactly when nothing has been fixed yet, and
+> forcing it non-empty would assert a false thing. So the unit classifies rather than patches: a
+> non-vacuity floor where emptiness would be a real failure, and a DECLARED entry with a reason
+> where emptiness is legitimate — the both-directions register shape this tree uses everywhere.
+>
+> Scope: all 23 classified by hand and by reading what each collection is; the register; and a test
+> that keeps the census honest in both directions, so a new unguarded loop over a register fails
+> until somebody says which kind it is. No production code touched.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces, plus the census test failing when
+> pointed at a planted unguarded loop.
+
 > **O195 (O194's sibling: the OTHER timing assertions, and one of them cannot fail) — claimed
 > 2026-08-27T05:55Z by loop-0827a.** Earned directly by O194. Having found one wall-clock assertion
 > that was a coin toss, the honest next question is whether it was alone — a timing test that fails
