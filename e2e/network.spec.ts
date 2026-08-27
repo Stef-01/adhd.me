@@ -64,7 +64,12 @@ test("the page says whose words these are before a reader reads any of them", as
   await page.goto("/network");
   const declaration = page.locator(".network-declaration");
   await expect(declaration).toContainText("their own words");
-  await expect(declaration).toContainText("None of it is our description of them");
+  // O213: LOWERCASE, because the clause is mid-sentence. O202 restructured this note so the denial
+  // follows an em-dash — "…what each doctor says about how they work — none of it is our
+  // description of them." — and `toContainText` matches a string case-sensitively, so the capital
+  // "N" this line carried from the pre-O202 wording could never match. The denial itself is what is
+  // being asserted and it is intact; only the sentence position moved.
+  await expect(declaration).toContainText("none of it is our description of them");
 });
 
 test("every GP has a page of their own, reachable from the deck and by URL", async ({ page }) => {

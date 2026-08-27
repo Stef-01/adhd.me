@@ -64,7 +64,12 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     why: "The worked-examples page's claim about itself — the sentence introduces the computed results the page exists to show.",
   },
   "/faq": {
-    proof: /You describe what you are looking for in your own words/,
+    // O213: REPINNED. This held the pre-O204 answer, which opened "A finder. You describe what you
+    // are looking for in your own words…". O204 rewrote it because the product had gained a second
+    // interface and this page's answer still described one — the sentence pinned here stopped
+    // existing and the proof failed. The replacement is the same THING: the first answer's opening
+    // definition, now "Two ways to find a GP."
+    proof: /Two ways to find a GP/,
     source: "copy",
     why: "The first answer's own definition of the product; a FAQ that rendered no answers cannot carry it.",
   },
@@ -91,13 +96,23 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
   "/network/[clinician]": {
     // CASE-INSENSITIVE ON PURPOSE, and the reason is the bug this proof was written with. The
     // heading is styled `text-transform: uppercase`, and `innerText` returns RENDERED text — so
-    // the page serves "WHAT DR SAXENA SAYS HE SEES OFTEN" and a case-sensitive proof could never
-    // match it. It went unnoticed because the sweep listed its dynamic visits by hand and had
+    // the page serves "IN HIS WORDS" (and, before O213, "WHAT DR SAXENA SAYS HE SEES OFTEN") and a
+    // case-sensitive proof could never match it. It went unnoticed because the sweep listed its dynamic visits by hand and had
     // never actually opened this route; wiring it to DYNAMIC_ROUTE_PLAN is what exposed it. Case
     // is a presentation choice here, so the proof stops asserting one.
-    proof: /What .* says (?:he|she|they) sees? often/i,
+    //
+    // O213: REPINNED, AND THE HEADING IT NAMED NO LONGER EXISTS. O201 is titled "the profile said a
+    // doctor's degrees were what she sees often" — the sees-often heading sat above `experience`,
+    // which is career history rather than caseload, so O201 relabelled it "Credentials and
+    // experience" and deleted the `seesVerb` helper that built the old string. That was the right
+    // fix; this proof was left pinning the deleted heading and has failed ever since. The
+    // replacement keeps the property that mattered — a heading built from the clinician's OWN
+    // declared pronoun, so it renders only once a real roster entry resolved from the route
+    // parameter. The half about naming the clinician moves to `network.spec.ts`, which already
+    // asserts the h1 carries their name (lines 83 and 86).
+    proof: /In (?:his|her|their) words/i,
     source: "fixture",
-    why: "The roster-driven heading on a GP's own page, which names the clinician being read AND agrees with the pronoun they declared. It renders only once a real roster entry resolved from the route parameter — a 404 shell or an unresolved param cannot produce it, and a hardcoded 'they' would fail the agreement half.",
+    why: "The roster-driven heading on a GP's own page, built from the pronoun the clinician declared. It renders only once a real roster entry resolved from the route parameter — a 404 shell or an unresolved param cannot produce it.",
   },
   "/practices": {
     proof: /Turn unused appointment capacity into measured continuity of care/,
