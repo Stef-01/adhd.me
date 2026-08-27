@@ -119,6 +119,42 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O198 (the network now argues its purpose twice — one idea per screen, restored) — claimed
+> 2026-08-27T08:15Z by loop-0827a.** UI-refinement lane (plan §"UI refinement & motion,
+> continuously"): the numbered lanes are exhausted — M1–M10 done with M11/M12 founder-gated,
+> AR1–AR40 complete — so this firing takes the standing lane. Gate read before claiming: green @
+> 13c8322, run end to end by the previous firing on the tree it pushed.
+>
+> **THIS IS MY OWN DEFECT, INTRODUCED YESTERDAY, AND IT IS WORTH NAMING AS THAT.** O197 built
+> `/mission` to argue why the network exists. `/network` has argued the same thing since O192 in its
+> `network-purpose` band, and I wrote the mission page's `howBody` without reading the band it was
+> going to duplicate. Set side by side they carry the same facts (languages, where they consult, how
+> long a first appointment runs), the same two claims (their own words, not ranked) and the same
+> closing move (you decide who sounds like a fit / like somebody you could talk to). Two copies of
+> one idea, in two files, that will drift the first time either is edited.
+>
+> **`layout.one-idea` DECIDES WHICH HALF SURVIVES, and it is not a coin toss.** The mission page's
+> ONE idea is the argument — that is the whole reason the founder asked for a separate page. The
+> deck's one idea is the people. So the deck stops restating the argument and gains a door to the
+> page that now carries it: a reader on `/network` reaches the reasoning in one tap instead of
+> reading a compressed version of it beneath the faces.
+>
+> **WHAT IS NOT DELETED, because round 7 of O192 earned it.** `finderBridge` — the sentence offering
+> the other interface — was written in round 1, linted, counted, and rendered NOWHERE until round 7
+> found it. It stays rendered. The band loses its restatement, not its job: the way out to the finder
+> is prose a reader who has read everybody actually needs, and the corner control alone is not that.
+>
+> Scope, deliberately small: `purposeBody` retires from `NETWORK_COPY` (with the reason recorded at
+> the constant, not silently dropped), the band re-headed and re-pointed at `/mission`, the
+> `/network` → `/mission` door added, and the O197 captures re-taken — they were shot before the
+> footer door landed, so the record does not currently show what shipped. NO redesign of the deck:
+> O192's nine-round audit closed, and re-opening it because a neighbouring page changed would be
+> exactly the churn that lane warns about.
+>
+> Verify: `pnpm gate` end to end on the tree the push produces, plus an e2e pin that the two pages do
+> not both carry the argument — a duplication test, so this cannot come back by somebody re-adding a
+> paragraph — and a qa/ capture with a DESIGN-QA entry per law 5.
+
 > **O197 (founder-directed: Emil motion pass on the network, a mission landing page, and the finder
 > parked on a parallel branch) — claimed 2026-08-27T08:05Z by loop-0827a.** Founder brief, in their
 > words: "apply emiil design skills to the network page and also create a seperate landing page to
