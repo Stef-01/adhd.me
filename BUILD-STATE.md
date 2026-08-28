@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 4e958ee (2026-08-27T23:05Z) — pnpm verify 298 files / 4398 tests (13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB); full pnpm e2e green (342 passed, 2 skipped, 19.2m, exit code 0 read from the command itself, not from a pipe). **O213 done — `main` WAS RED AND FOUR GATE LINES SAID OTHERWISE, and the mechanism is a gate defect: `pnpm e2e | tail -N` returns TAIL's exit status, so a failing run reports 0. Proven by arithmetic — the suite is 344 tests and O211's gate line reports 342. Rule for every future firing: never pipe the gate through tail; redirect to a file and capture $? on the command.** Three assertions broke when the copy under them changed (O202's restructured denial vs a case-sensitive `None`; O201's correctly-relabelled heading vs a proof pinning the deleted one; O204's FAQ rewrite vs a proof pinning a removed sentence). Found because O212 was test-only and its e2e had no business failing. Stale-build ruled out: playwright rebuilds every run. Assertions moved, copy untouched, no mechanism added (O84 bar wants a second instance). O212 done (vacuity debt in src/matching 112 → 92; sixteen guarded, four counted, three declared — one declaration PROVED by measurement, matchEvidence returning 0 for a real clinician; the census caught the hand pass being ONE SHORT for the second firing running). O211/O210/O209/O208/O207/O206 done. O205/O204/O203/O202/O201/O200/O199/O198/O197/O196/O195/O194 done. Eighteenth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ 1644f82 (2026-08-28T00:15Z) — pnpm verify EXIT 0 (299 files / 4406 tests, 13 skipped), build, audit PASS (2 accepted, 0 unaccepted), perf gate PASS (51 routes, heaviest /finder 655 KB), gate accounting PASS (all 344 e2e tests accounted for); full pnpm e2e green (342 passed, 2 skipped, 16.2m), exit code 0 read from the command itself, not through a pipe. **O214 done — a green gate line must now ACCOUNT for every test in the suite it claims to have run.** AR14 made the verdict impossible not to read; nothing made it true, and O213 showed what that cost. New `pnpm gate:accounting` step refuses a green line that covers fewer e2e tests than Playwright can find (O211's line: 342 of 344). Suite size from `playwright test --list`, never a grep (a static count reads 324 — five sites generate tests in loops, and undercounting would let a dishonest line look honest). A script rather than a unit test because spawning Playwright inside vitest turned `src/tenancy/rollout.test.ts` red — that risk was REMOVED, not diagnosed. O213 done (main was red; three assertions broke when the copy under them changed). O212 done (vacuity debt in src/matching 112 → 92). O211/O210/O209/O208/O207/O206 done. O205/O204/O203/O202/O201/O200/O199/O198/O197/O196/O195/O194 done. Nineteenth consecutive firing to read the WHOLE gate on the tree it pushes`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -163,6 +163,66 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > O211's actual gate line and PASSES on O213's — a guard nobody has seen fail is a guard nobody has
 > tested. Full `pnpm e2e`, its exit code captured from the command itself and not through a pipe,
 > per the rule O213 wrote.
+
+>
+> **DONE 2026-08-28T00:15Z — a green gate line must now account for every test in the suite it
+> claims to have run.** Gate: `pnpm verify` **exit 0** (299 files / 4406 tests, 13 skipped; build;
+> audit PASS; perf PASS; **gate accounting PASS — the green line @ 4e958ee accounts for all 344 e2e
+> tests**) and full `pnpm e2e` **exit code 0**, 342 passed / 2 skipped, 16.2m — the exit code read
+> from the command itself, per O213's rule.
+>
+> **THE MECHANISM, AND WHY IT IS EARNED RATHER THAN INVENTED.** AR14's own header tells case one:
+> O167 turned the e2e red, CI said so for eight runs, and O168–O171 were each built, `pnpm verify`'d
+> and pushed onto the red base. O173 called it "an UNREAD gate, not a missing one". O213 is case two
+> and the opposite failure: the line was read every time and was WRONG. `parseGateState` validates
+> the line's SHAPE and never its CONTENT, so a session that misreads its own run writes a confident
+> green and every later firing trusts it. Two instances of one shape is this tree's O84 bar.
+>
+> **THE ARITHMETIC.** A green e2e claim names what passed and what was skipped, and those must
+> account for the whole suite — a test that neither passed nor was skipped failed or never ran.
+> O211's line: 340 + 2 = **342 against a suite of 344**, and the two unaccounted for are exactly the
+> two that were failing.
+>
+> **THREE DECISIONS WORTH THE LEDGER'S SPACE, each measured rather than assumed:**
+>
+>   * **The suite size comes from Playwright, not a grep.** `playwright test --list` reports 344 in
+>     ~8s with no browser. A static count of `test(` reads **324** — twenty short, because five sites
+>     generate tests in loops. Undercounting is the ONE error this check must not make: it would let
+>     a dishonest line look fully accounted for.
+>   * **The figures regex is anchored on `pnpm e2e green (`.** The note also carries vitest's
+>     "4398 tests (13 skipped)" and the audit's "2 accepted, 0 unaccepted". A loose `(\d+) passed`
+>     would read the wrong pair — worse than absent, because it would look like coverage while
+>     measuring nothing. There is a test that pins exactly this.
+>   * **It is a SCRIPT, not a unit test, and that was forced by a real failure.** The first cut put
+>     the measurement in vitest; `pnpm verify` came back RED on
+>     `src/tenancy/rollout.test.ts` — "a genuinely quadratic workload measured 1.84× per item",
+>     needing >2.5×. It passed 3/3 in isolation and failed under full-suite load. Vitest runs files
+>     in parallel and that test times CPU cost against a fixed ratio; spawning Playwright beside it
+>     adds load to a run that measures load. **I did not prove my subprocess caused it — I removed
+>     the possibility**, moving the measurement to `scripts/gate-accounting.mts`, sequential in the
+>     verify chain beside `audit:gate` and `perf:gate` (AR32's shape: logic in `src/quality`,
+>     unit-tested; the script only measures and sets the exit code). Verify then went green with the
+>     timing test passing. Recorded honestly because "I removed the risk" and "I found the cause" are
+>     different claims and only the first one is true.
+>
+> **PROVEN END TO END, NOT ONLY IN FIXTURES.** The unit tests pin the guard against O211's real
+> (wrong) line and O213's real (right) one. Beyond that, planting O211's figures in the LIVE ledger
+> makes `pnpm gate:accounting` exit 1 naming the shortfall and pointing at the `tail` cause; a green
+> line with the figures deleted exits 1 as "no readable e2e figures" (fail-closed, the same reasoning
+> `parseGateState` already gives — otherwise dropping the figures becomes the way past the check);
+> and restoring the line returns PASS. A guard nobody has seen fail is a guard nobody has tested.
+>
+> **WHAT THIS UNIT IS NOT.** Not the copy-drift mechanism O213 deferred. That one is about a unit
+> changing copy without updating the check pinning it, and it STAYS deferred — the e2e caught all
+> three of those; only the reading failed. This is the reading. Naming the difference so a deferral
+> is not quietly reversed.
+>
+> **THIRD CONSECUTIVE FIRING TO OPEN ON A RESET CONTAINER** (clone at `d136355`, `origin/main` 14
+> ahead; fast-forwarded, wipe detection clean, nothing lost). The scratchpad is wiped with it — the
+> vacuity census scanner had to be rewritten from scratch this firing. Three for three is a pattern
+> the plan owner should treat as the norm, not an incident.
+
+
 
 > **O213 (`main` IS RED, AND HAS BEEN FOR FOUR UNITS — three assertions broke when the copy under
 > them changed) — claimed 2026-08-27T22:35Z by loop-0827a.** Gate read before claiming: the gate line
