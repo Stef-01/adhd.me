@@ -119,6 +119,69 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O215 (FOUNDER-DIRECTED: the two interfaces become two deployments — THIS TREE IS THE FINDER
+> HALF) — 2026-08-28.** Founder brief, in their own words, given as two messages:
+> *"https://github.com/Stef-01/adhd.me make this one the old finder and landing page version of the
+> site, the non network version"* and *"now conversely make the repo ADHD the one that has the new
+> set up, with the new network version and new landing page"*.
+>
+> **THE PARKED BRANCH WAS NOT WHAT ITS NAME PROMISED, AND THAT IS WORTH RECORDING BEFORE ANYTHING
+> ELSE.** O197 was asked to park the finder "in a parallel branch to later be set out as a different
+> deployment on a different domain", and left `finder/standalone-deployment`. Measured before it was
+> used: it is a plain ANCESTOR of `main` — 0 commits of its own, 50 behind — and it still contains
+> `app/network`. It was a bookmark, not a branch. **No non-network version of this product existed
+> anywhere**, so this one was built rather than checked out. A deployment pointed at that branch
+> would have shipped both interfaces.
+>
+> **THE FOUNDER CHOSE THE BASE, ASKED RATHER THAN ASSUMED.** Two readings were possible and they
+> lead to materially different products: the pre-network snapshot (`42c66ff`, literally "the old
+> version") or today's `main` with the network removed. The first loses fifty commits — the matching
+> fixes, the compliance sweeps, the security and audit gates, O196's vacuity work, O213's and O214's
+> gate repairs. **The founder chose current-main-minus-network**, so the finder ships on the current
+> engine. They also confirmed the converse half: the finder is REMOVED from `Stef-01/ADHD` rather
+> than duplicated, which makes the split real.
+>
+> **WHAT CAME OUT, AND WHAT THE TREE ITSELF DEMANDED IN RETURN.** Removed: `app/network`,
+> `app/mission`, `src/network`, `app/interface-launch.tsx` (the corner control that bridged the two),
+> `src/compliance/interface-coverage.*` (O208's register exists ONLY to record each surface's stance
+> on two interfaces and is meaningless with one), and four e2e specs. **The registers then did the
+> job they were built for**: ten failures across the surface census, the compliance dossier, route
+> budgets, zero-states, the a11y and audit inventories and the dead-CSS census, each NAMING what it
+> wanted. That is a both-directions register working exactly as designed — the deletion could not be
+> half-done quietly.
+>
+> **A DEFECT I INTRODUCED AND CAUGHT, recorded because the near-miss is the lesson.** The first pass
+> at deleting the 64 orphaned CSS classes matched selector-like text INSIDE COMMENTS and corrupted
+> `globals.css` — and the brace-balance check I had written still passed, so it looked clean. Found
+> by reading the output rather than trusting the check; reverted; rewritten comment-aware (comments
+> tokenised as opaque spans, never scanned for braces or selectors). The second pass removed 113
+> rules, 218,022 → 194,259 bytes, balanced braces, no unterminated comments. **A self-written check
+> that passes over corrupt output is worth less than reading the output once.**
+>
+> **O213's LESSON APPLIED RATHER THAN REPEATED.** `/faq`'s opening answer had to change — it said
+> "Two ways to find a GP", and one of those ways is not on this deployment — and that answer is
+> pinned by `/faq`'s working-truth proof. **The copy and the proof moved in the same commit**, with
+> a note left at the copy for whoever edits it next. That is precisely the failure that had `main`
+> red for four units. The correct answer here turns out to be the ORIGINAL pre-O204 sentence, so the
+> proof went back to what it pinned before the network existed.
+>
+> **THREE FLOORS LOWERED, EACH WITH ITS REASON AT THE SITE, none quietly edited**: hover rules
+> (>40 → >30, measures 40), rem type sizes (>300 → >200, measures 294), and the dark-ground census
+> lost `.interface-launch-link`. All three dropped because the tree is SMALLER, not less covered,
+> and each comment says so. `.gp-book` deliberately STAYS — it is the booking control on a profile,
+> which the finder renders too.
+>
+> **WHAT IS SHARED AND HAS NO AUTOMATION KEEPING IT IN STEP.** Both deployments carry the same
+> roster (`src/demo/clinicians.ts`, imported by 51 files) and the whole matching engine, compliance
+> linter, security and audit machinery. A change to shared code that matters to both must be made in
+> both, by hand. The plan owner should know this is now a standing cost of the split.
+>
+> **VERIFICATION.** `pnpm verify` green and full `pnpm e2e` green on the stripped tree, exit code
+> read from the command itself per O213's rule. The e2e suite is 316 tests in 72 files here (344 in
+> 76 before the split), and **O214's `gate:accounting` correctly refused the inherited gate line
+> until it was re-earned against this suite** — the check earning its keep on the day after it
+> landed.
+
 > **O214 (AR14 makes the gate's verdict impossible NOT to read; nothing makes it TRUE) — claimed
 > 2026-08-27T23:50Z by loop-0827a.** Gate read before claiming: green @ 4e958ee, verified end to end
 > by O213 on this exact head.

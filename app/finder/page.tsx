@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CareFinder } from "../care-finder";
-import { InterfaceLaunch } from "../interface-launch";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/finder" },
@@ -17,7 +16,6 @@ export default function FinderPage() {
         because the finder is a stage machine that owns its own screen and a persistent chrome
         element is not one of its stages — the same reason the privacy bar lives outside it.
       */}
-      <InterfaceLaunch />
     </>
   );
 }

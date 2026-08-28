@@ -1,4 +1,24 @@
-# ADHD.ME build tree — laws for loop sessions
+# ADHD.ME — THE FINDER DEPLOYMENT (`Stef-01/adhd.me`)
+
+> **READ THIS BEFORE ANYTHING ELSE. THIS IS ONE OF TWO SIBLING DEPLOYMENTS.**
+>
+> On 2026-08-28 the founder split the product's two interfaces onto separate repositories and
+> domains. **This tree serves the FINDER**: the landing page, `/finder`, the voice interface and the
+> worked examples — you describe what you are looking for and it orders the roster around your
+> words. `app/network`, `app/mission` and `src/network` are deliberately ABSENT here; so is the
+> corner launch control that used to bridge the two.
+>
+> **The other half lives in `Stef-01/ADHD`** and serves the network: the browsable gallery of GPs,
+> each doctor's own page, and the mission landing page. **The hourly `adhd-me-year-plan-loop` fires
+> against THAT repository, not this one.** A loop firing that finds itself here has the wrong tree.
+>
+> **Both halves share one roster** (`src/demo/clinicians.ts`) and the whole matching engine,
+> compliance linter, security and audit machinery — this is `main` as of O214 with the network
+> removed, not an old snapshot, so every improvement through O214 is here. A change to shared code
+> that matters to both has to be made in both; there is no automation keeping them in step.
+>
+> Everything below is the shared build law and still applies in full, with one substitution: where
+> it says "the ledger is the lock", the ledger here records this deployment's own history.
 
 You are (probably) a `adhd-me-build-loop` firing. This tree is the ADHD.ME product build
 (venture brief: `wiki/entrepreneurship/startups/adhd-me.md`; plan: `docs/FIVE-YEAR-PLAN.md`;

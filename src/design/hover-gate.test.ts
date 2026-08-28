@@ -38,8 +38,13 @@ describe("O199 every hover style is gated behind a pointer", () => {
     // measuring anything. If the scanner broke, or the sheet lost its hover styles wholesale, the
     // check above would pass perfectly.
     const rules = hoverRules(CSS());
-    expect(rules.length, "no hover rules found at all — the scanner is looking at nothing").toBeGreaterThan(40);
-    expect(rules.filter((r) => r.gated).length).toBeGreaterThan(40);
+    // FLOOR LOWERED, AND THE REASON IS RECORDED RATHER THAN THE NUMBER QUIETLY EDITED. It was 40,
+    // measured when the tree served both interfaces. Splitting the network onto its own deployment
+    // took its hover rules with it, and the population measures 40 exactly — so the old strict
+    // `> 40` now fails on a tree that is simply smaller, not less covered. The floor exists to catch
+    // a scanner reading nothing, so it is set well below the measurement and left there.
+    expect(rules.length, "no hover rules found at all — the scanner is looking at nothing").toBeGreaterThan(30);
+    expect(rules.filter((r) => r.gated).length).toBeGreaterThan(30);
   });
 
   it("classifies a reduced-motion override as legitimately ungated, and still counts it", () => {

@@ -30,6 +30,10 @@ describe("O60 every font size is rem, so text follows the reader's browser setti
   });
 
   it("still uses rem type sizes at all — the rule above cannot pass on an empty file", () => {
-    expect((CSS.match(/font-size:[^;]*rem/g) ?? []).length).toBeGreaterThan(300);
+    // FLOOR LOWERED WITH ITS REASON, not quietly edited. It was 300, measured while this tree
+    // served both interfaces. The network moved to its own deployment and took its stylesheet with
+    // it; the count measures 294 on a smaller sheet that is no less rem-typed. The floor's job is
+    // to stop this rule passing over an empty or gutted file, so it sits well under the measurement.
+    expect((CSS.match(/font-size:[^;]*rem/g) ?? []).length).toBeGreaterThan(200);
   });
 });

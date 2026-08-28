@@ -64,12 +64,13 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     why: "The worked-examples page's claim about itself — the sentence introduces the computed results the page exists to show.",
   },
   "/faq": {
-    // O213: REPINNED. This held the pre-O204 answer, which opened "A finder. You describe what you
-    // are looking for in your own words…". O204 rewrote it because the product had gained a second
-    // interface and this page's answer still described one — the sentence pinned here stopped
-    // existing and the proof failed. The replacement is the same THING: the first answer's opening
-    // definition, now "Two ways to find a GP."
-    proof: /Two ways to find a GP/,
+    // O213 REPINNED THIS ONCE ALREADY, AND O215 MOVED IT BACK — with the copy, in the same commit,
+    // which is the whole point. It held the pre-O204 answer ("A finder. You describe what you are
+    // looking for in your own words…"); O204 rewrote the answer for two interfaces and left this
+    // pinning a sentence that no longer existed, which is one of the three failures O213 found.
+    // O215 split the interfaces onto separate deployments, so the finder answer is the true one
+    // here again and this proof follows it in the same change rather than a firing later.
+    proof: /You describe what you are looking for in your own words/,
     source: "copy",
     why: "The first answer's own definition of the product; a FAQ that rendered no answers cannot carry it.",
   },
@@ -77,42 +78,6 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     proof: /Describe the GP you are looking for, or use the microphone to talk/,
     source: "copy",
     why: "The finder's welcome-stage prompt — it renders only when the interactive stage machine mounted, which is the work this route does.",
-  },
-  "/mission": {
-    // THE REACH SENTENCE RATHER THAN THE MISSION SENTENCE, deliberately. The founder's statement
-    // is a committed string that a static shell could in principle carry; this one is assembled at
-    // render time from the roster — the count in words and the state — so it can only appear once
-    // the roster resolved. It is also the sentence this page would most damagingly lose: a mission
-    // about every state, rendered without the line saying how many there actually are today.
-    proof: /Today the network is \w+ GPs consulting in New South Wales/,
-    source: "fixture",
-    why: "Derived from NETWORK_CLINICIANS at render time rather than transcribed, so it proves the roster resolved on this route and not merely that a page painted. It is also the page's honesty line — the scope stated before the reader is handed on to the people — which makes losing it a real regression rather than a cosmetic one.",
-  },
-  "/network": {
-    proof: /The GPs who make[\s\u00A0]up this network\./,
-    source: "copy",
-    why: "The gallery's one stated idea, in its own words. An error shell or an empty deck cannot carry it, and the roster cards below it are proven separately by the honesty sweep reading the same page.",
-  },
-  "/network/[clinician]": {
-    // CASE-INSENSITIVE ON PURPOSE, and the reason is the bug this proof was written with. The
-    // heading is styled `text-transform: uppercase`, and `innerText` returns RENDERED text — so
-    // the page serves "IN HIS WORDS" (and, before O213, "WHAT DR SAXENA SAYS HE SEES OFTEN") and a
-    // case-sensitive proof could never match it. It went unnoticed because the sweep listed its dynamic visits by hand and had
-    // never actually opened this route; wiring it to DYNAMIC_ROUTE_PLAN is what exposed it. Case
-    // is a presentation choice here, so the proof stops asserting one.
-    //
-    // O213: REPINNED, AND THE HEADING IT NAMED NO LONGER EXISTS. O201 is titled "the profile said a
-    // doctor's degrees were what she sees often" — the sees-often heading sat above `experience`,
-    // which is career history rather than caseload, so O201 relabelled it "Credentials and
-    // experience" and deleted the `seesVerb` helper that built the old string. That was the right
-    // fix; this proof was left pinning the deleted heading and has failed ever since. The
-    // replacement keeps the property that mattered — a heading built from the clinician's OWN
-    // declared pronoun, so it renders only once a real roster entry resolved from the route
-    // parameter. The half about naming the clinician moves to `network.spec.ts`, which already
-    // asserts the h1 carries their name (lines 83 and 86).
-    proof: /In (?:his|her|their) words/i,
-    source: "fixture",
-    why: "The roster-driven heading on a GP's own page, built from the pronoun the clinician declared. It renders only once a real roster entry resolved from the route parameter — a 404 shell or an unresolved param cannot produce it.",
   },
   "/practices": {
     proof: /Turn unused appointment capacity into measured continuity of care/,

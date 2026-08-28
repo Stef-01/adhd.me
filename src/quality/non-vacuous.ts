@@ -152,7 +152,7 @@ export interface LegitimatelyEmpty {
  * The remaining 112 are the same ordinary work: `src/matching` 20, `src/demo` 10, `src/design` 9,
  * `src/quality` 8, `src/platform` 8, then a long tail.
  */
-export const UNGUARDED_REMAINDER = 92;
+export const UNGUARDED_REMAINDER = 91;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
   {

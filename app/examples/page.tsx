@@ -14,7 +14,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { careArchetypes } from "@/demo/care-archetypes";
 import { matchQuality, needsFor, rankClinicians } from "@/demo/clinicians";
-import { networkSizeInWords } from "@/network/gallery";
+import { rosterSizeInWords } from "@/demo/roster-size";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
@@ -116,8 +116,8 @@ export default function ExamplesPage() {
         */}
         {sameFirstForAll ? (
           <p>
-            All three land on the same GP first, and that is what a network this size looks like
-            rather than a finding about anybody: with {networkSizeInWords()} listed GPs there are
+            All three land on the same GP first, and that is what a roster this size looks like
+            rather than a finding about anybody: with {rosterSizeInWords()} listed GPs there are
             not many orders available. What differs above is how much of each request the finder
             read.
           </p>

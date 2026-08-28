@@ -5,12 +5,10 @@ import { TEAM_PAGE_PUBLIC } from "./about/team";
 
 const DOORS: ReadonlyArray<{ label: string; href: string }> = [
   { label: "Find a GP", href: "/finder" },
-  { label: "The network", href: "/network" },
-  // O197: the mission page sits directly after the network it introduces, because that is the
-  // relationship — one is the argument, the other is the people. A public route with no door in
-  // this list is reachable only by somebody who already knows the URL, which is the fault O189
-  // named on the join page and O155's gated /about deliberately avoids.
-  { label: "Why this exists", href: "/mission" },
+  // The network's door and the mission page that introduced it are not in this list on this
+  // deployment: they belong to the other one. The rule they were added under still holds for
+  // everything below — a public route with no door here is reachable only by somebody who already
+  // knows the URL, the fault O189 named on the join page and O155's gated /about avoids.
   { label: "Worked examples", href: "/examples" },
   { label: "Questions", href: "/faq" },
   { label: "The approach", href: "/approach" },

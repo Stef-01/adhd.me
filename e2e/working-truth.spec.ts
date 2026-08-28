@@ -10,7 +10,7 @@
 // measurement rather than a scavenger hunt.
 
 import { expect, test } from "@playwright/test";
-import { CONSOLE_ROUTES, DYNAMIC_ROUTE_PLAN, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+import { CONSOLE_ROUTES, DYNAMIC_ROUTE_PLAN, PUBLIC_ROUTES, revealCollapsedSurfaces, undeclaredDynamicRoutes } from "./site-routes";
 import { seedFixtures } from "./support/fixtures";
 import { signInAndOnboard } from "./support/session";
 import { ROUTE_PROOFS } from "./support/working-truth";
@@ -64,7 +64,27 @@ test("every route renders the content that proves it worked", async ({ page, req
   const sampled = Object.entries(DYNAMIC_ROUTE_PLAN).filter(
     (entry): entry is [string, { sample: string }] => "sample" in entry[1],
   );
-  expect(sampled.length, "no dynamic route declares a sample — this loop went vacuous").toBeGreaterThan(0);
+
+  // O215: THE GUARD HERE USED TO BE `sampled.length > 0`, AND IT FIRED ON A TREE THAT WAS CORRECT.
+  //
+  // `/network/[clinician]` was the only dynamic route that declared a SAMPLE. When the network moved
+  // to its own deployment the remaining two — `/book/[token]` and `/console/setup/[step]` — are both
+  // deliberate exclusions with argued reasons, so zero samples became the honest state and a floor
+  // of one turned into a demand that some dynamic route exist to be sampled.
+  //
+  // What the guard was actually protecting is kept, and stated more precisely: every dynamic route
+  // on disk must be ACCOUNTED FOR by the plan, and a plan that declares nothing at all is still a
+  // plan that went empty. `/book/[token]` is visited immediately above with a real seeded token, so
+  // this sweep reaches a dynamic route either way — which is why the loop below going zero times is
+  // not the sweep going blind.
+  expect(
+    undeclaredDynamicRoutes(),
+    "a dynamic route exists that the plan neither samples nor excludes",
+  ).toEqual([]);
+  expect(
+    Object.keys(DYNAMIC_ROUTE_PLAN).length,
+    "the dynamic route plan is empty — it declares neither a sample nor an exclusion for anything",
+  ).toBeGreaterThan(0);
   for (const [route, { sample }] of sampled) {
     await page.goto(sample);
     await page.waitForLoadState("networkidle");

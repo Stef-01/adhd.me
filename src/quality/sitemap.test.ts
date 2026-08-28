@@ -4,7 +4,7 @@
 //
 // O192 ROUND 7 CHANGED ONE RULE AND KEPT THE INVARIANT. "No dynamic path" used to mean "drop
 // them", which was right while `/book/[token]` was the only one: a tokened page is reached by
-// invitation and robots.ts disallows the whole prefix. `/network/[clinician]` is its opposite —
+// invitation and robots.ts disallows the whole prefix. `/network/[clinician]` WAS its opposite —
 // statically generated from a build-time roster, linked from `/network`, crawlable, and the pages
 // whose indexing hold the founder specifically lifted — so it EXPANDS into its real URLs instead.
 // The invariant that matters is unchanged and asserted below: every URL in the sitemap traces back
@@ -13,7 +13,6 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { censusPathFor, sitemapPaths } from "../../app/sitemap";
 import { PUBLIC_SURFACES } from "@/compliance/public-surfaces";
-import { NETWORK_CLINICIANS } from "@/network/gallery";
 import { TEAM_PAGE_PUBLIC } from "../../app/about/team";
 
 describe("O190 the sitemap is the census, filtered by stated rules only", () => {
@@ -40,17 +39,15 @@ describe("O190 the sitemap is the census, filtered by stated rules only", () => 
     }
   });
 
-  it("expands every GP's own page, so the network is announced and not only linked", () => {
-    // O192 round 7. The founder lifted the indexing hold on these pages; a sitemap that dropped
-    // them left that decision half-implemented — findable by following a link and by nothing else.
+  it("announces no dynamic page on this deployment, because none of them expand here", () => {
+    // THE INVERSE OF THE TEST THAT STOOD HERE. O192 round 7 asserted that every GP's own page
+    // reached the sitemap, because the founder had lifted the indexing hold on `/network/[clinician]`
+    // and a sitemap that dropped them left that decision half-implemented. The network moved to its
+    // own deployment, so the expansion register is empty here and this asserts the emptiness is real
+    // rather than a filter quietly swallowing a path that should have been announced.
     const paths = sitemapPaths();
-    expect(NETWORK_CLINICIANS.length, "an empty roster would make this assertion vacuous").toBeGreaterThan(0);
-    for (const clinician of NETWORK_CLINICIANS) {
-      expect(paths, `${clinician.name}'s page is missing from the sitemap`).toContain(
-        `/network/${clinician.id}`,
-      );
-    }
-    expect(censusPathFor(`/network/${NETWORK_CLINICIANS[0]!.id}`)).toBe("/network/[clinician]");
+    expect(paths.every((p) => !p.includes("[")), "a census path reached the sitemap unexpanded").toBe(true);
+    expect(paths.length, "an empty sitemap would make every assertion here vacuous").toBeGreaterThan(0);
   });
 
   it("still drops a dynamic path that declares no expansion", () => {

@@ -250,11 +250,18 @@ describe("W192 an accepted finding is data with a date on it", () => {
     // so the entries exist to REPORT both findings to the reviewers who own that call. Two lines
     // rather than one because the acceptance key is (path, rule, match): a word waved through in
     // general would be a rule switched off, and it is still refused everywhere else.
-    expect(ACCEPTED_FINDINGS.map((a) => `${a.path} ${a.rule} "${a.match}"`)).toEqual([
-      '/network no-condition-targeting "Mental health"',
-      '/mission no-superlatives "best"',
-      '/mission no-benefit-claims "best"',
-    ]);
+    //
+    // ALL THREE LEFT WITH THEIR SURFACES when the finder and the network were split into separate
+    // deployments, and the list is EMPTY here again — back to the state the paragraph above opens
+    // by describing. That is not the gates being answered and must not be read as it: the
+    // `/network` entry's open founder gate and the two on `/mission` moved to the deployment that
+    // still serves those pages, and the reviewer who owns that call will find them there. The
+    // equivalent finder-road gates are unchanged and still live in e2e/profile-sweep.spec.ts.
+    //
+    // The pin stays the exact set rather than reverting to a length check, for the reason the
+    // paragraph above gives: an empty list pinned as an exact set still fails the moment somebody
+    // adds an acceptance without saying what it is.
+    expect(ACCEPTED_FINDINGS.map((a) => `${a.path} ${a.rule} "${a.match}"`)).toEqual([]);
     for (const accepted of ACCEPTED_FINDINGS) {
       // An acceptance is an argument with a date on it, per this describe block's own name.
       expect(accepted.why.length, `${accepted.path} accepts without arguing it`).toBeGreaterThan(80);

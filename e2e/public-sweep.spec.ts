@@ -15,7 +15,6 @@ import {
   sweepSurface,
   unaccepted,
 } from "../src/compliance/public-surfaces";
-import { NETWORK_CLINICIANS } from "../src/network/gallery";
 
 /** The booking page needs a token, so it is swept through a seeded invitation below. */
 const STATIC_SURFACES = PUBLIC_SURFACES.filter((s) => !s.path.includes("["));
@@ -89,104 +88,28 @@ test("the patient booking page serves no clinical claim either", async ({ page, 
   ).toEqual([]);
 
   // O165: the dynamic surfaces are swept by NAMED tests rather than by the loop above, so the list
-  // of them is pinned here. A third dynamic public route would otherwise be added, swept by
+  // of them is pinned here. A second dynamic public route would otherwise be added, swept by
   // nothing, with the suite still green — the filter at the top of this file drops it from the loop
-  // by construction. O192 added the second entry and the test below that earns it.
+  // by construction. `/network/[clinician]` was the second entry until the two interfaces were
+  // split into separate deployments; the sweep that earned it went with the route.
   expect(
     DYNAMIC_SURFACES.map((surface) => surface.path),
     "a dynamic public surface exists that no test sweeps",
-  ).toEqual(["/book/[token]", "/network/[clinician]"]);
+  ).toEqual(["/book/[token]"]);
 });
 
-/**
- * Findings accepted on a GP's own network page, held HERE rather than in `ACCEPTED_FINDINGS`.
+/*
+ * THE NETWORK'S PROFILE SWEEP LEFT WITH ITS ROUTE. `/network/[clinician]` was swept here, over the
+ * whole roster, with four findings accepted locally (a business name inside a proper noun, an
+ * ordinary-English "treats", and the two open founder gates reached by the network road). The route
+ * does not exist on this deployment, so the sweep and its acceptances moved with it.
  *
- * Not squeamishness about the register — arithmetic. The first test's both-directions check
- * collects `seen` from the STATIC surfaces only, so an acceptance naming a dynamic path could
- * never be found and would fail as stale on every run. `profile-sweep.spec.ts` hit the same wall
- * and answered it the same way: a local list with its own stale check, immediately below.
+ * NO COVERAGE WAS LOST HERE. `profile-sweep.spec.ts` sweeps the same clinician-declared strings by
+ * the finder road and always did; the network sweep existed because the SAME words reached a reader
+ * differently — in the server HTML of an indexable page rather than in client state behind a query.
+ * That distinction belongs to the deployment that still serves those pages, and the two open founder
+ * gates are unchanged and still recorded against the finder road.
  */
-const ACCEPTED_ON_PROFILE: ReadonlyArray<{ clinician: string; rule: string; match: string; why: string }> = [
-  {
-    clinician: "anubhav-saxena",
-    rule: "no-clinical-claims",
-    match: "treats",
-    why:
-      "The same sentence profile-sweep.spec.ts already argues, reaching a reader by the network road instead of the finder one: 'He treats a substance history as a safety question rather than a character one.' Ordinary English — regards, handles — not a claim to treat a condition; the rule's rationale is that naming a TREATMENT to a patient is therapeutic advertising, and this names an attitude.",
-  },
-  {
-    clinician: "anubhav-saxena",
-    rule: "no-condition-targeting",
-    match: "Cancer",
-    why:
-      "'Beecroft Family & Skin Cancer Clinic' — a registered business name, matched inside a proper noun. Worth stating why it is not simply deleted from the identity block: the same words also appear in his DECLARED INTEREST ('Dr Saxena owns Beecroft Family & Skin Cancer Clinic, which is ADHD.ME's first clinic partner'), which is the one paragraph on this page that exists to be read before booking. Removing the practice name from the header would leave the finding standing and cost a reader the plainest answer to 'where would I be going', so the honest move is to accept the match and say what it is.",
-  },
-  // ── The two open founder gates, reached by the network road. NOT decided here: `openAt` for both
-  //    is e2e/profile-sweep.spec.ts, and O192's only contribution to them is stated in the gate
-  //    register — the same declarations now reach a reader in the server HTML of an indexable page
-  //    rather than in client state behind a query, which is the version worth ruling on.
-  {
-    clinician: "anusha-saxena",
-    rule: "no-clinical-claims",
-    match: "prescriber",
-    why:
-      "FOUNDER DECISION OUTSTANDING — gate `prescriber-on-profile`, unchanged in kind since O163. 'She has completed an endorsed ADHD prescriber course' is a founder-relayed credential about a real named doctor, and the regex matches `prescrib\\w*` inside a COURSE TITLE rather than a claim to prescribe for anybody. Accepted so the sweep reports what it found; NOT a judgement that the copy is fine.",
-  },
-  {
-    clinician: "anusha-saxena",
-    rule: "no-condition-targeting",
-    match: "mental health",
-    why:
-      "FOUNDER DECISION OUTSTANDING — gate `mental-health-on-profile`, unchanged in kind since O163. 'Her clinical interests are ADHD, mental health, women's health…' is her own declaration, and the rule's rationale is that naming a condition TO A PATIENT targets them, where naming what a GP does on their own listing is what a directory is for. Accepted so the finding cannot be lost; NOT a judgement that the copy is fine.",
-  },
-];
-
-test("every GP's own page in the network serves copy the patient rules allow", async ({ page }) => {
-  // O192's half of the dynamic-surface coverage. `/network/[clinician]` is one route and N pages,
-  // and the interesting text — everything a doctor says about how they work — differs on every one
-  // of them, so sweeping the route means sweeping the roster rather than sampling it.
-  //
-  // Deliberately NOT delegated to profile-sweep.spec.ts, which reads the same strings through
-  // /finder. That spec proves the FINDER renders them acceptably; this one proves the network does.
-  // Same words reaching a reader by a different road is the whole reason this unit exists, and
-  // O192 already found the roads differ in a way that matters: on /finder these sentences live in
-  // client state behind a query, and here they are in the served HTML of an indexable page.
-  test.setTimeout(90_000);
-  expect(NETWORK_CLINICIANS.length, "an empty roster would sweep nothing").toBeGreaterThan(0);
-  const seen: Array<{ clinician: string; rule: string; match: string }> = [];
-
-  for (const clinician of NETWORK_CLINICIANS) {
-    await page.goto(`/network/${clinician.id}`);
-    await page.waitForLoadState("networkidle");
-    const text = await page.locator("body").innerText();
-    expect(text.length, `/network/${clinician.id} rendered nothing`).toBeGreaterThan(200);
-
-    // Their own name is the vacuity guard with teeth: a 404 shell would clear the length check.
-    expect(text).toContain(clinician.shortName);
-
-    const findings = sweepSurface("/network/[clinician]", "patient", text);
-    const excused = ACCEPTED_ON_PROFILE.filter((a) => a.clinician === clinician.id);
-    expect(
-      findings
-        .filter((f) => !excused.some((a) => a.rule === f.rule && a.match === f.match))
-        .map((f) => `${f.rule}: "${f.match}"`),
-      `/network/${clinician.id} serves copy the patient rules refuse`,
-    ).toEqual([]);
-    seen.push(...findings.map((f) => ({ clinician: clinician.id, rule: f.rule, match: f.match })));
-  }
-
-  // Both directions, W102's shape: an acceptance for a finding the page no longer produces reads
-  // as coverage while silently permitting something else, so it fails rather than lingering.
-  for (const accepted of ACCEPTED_ON_PROFILE) {
-    expect(
-      seen.some(
-        (f) => f.clinician === accepted.clinician && f.rule === accepted.rule && f.match === accepted.match,
-      ),
-      `/network/${accepted.clinician} no longer serves "${accepted.match}" — delete the acceptance`,
-    ).toBe(true);
-    expect(accepted.why.length).toBeGreaterThan(80);
-  }
-});
 
 test("the sweep would notice a violation, so a clean run means something", async ({ page }) => {
   // Non-vacuous end to end: the same function, over text that should fail, on a real page's

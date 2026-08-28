@@ -16,27 +16,26 @@ export const metadata: Metadata = {
 
 const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   /*
-    O204: THIS ANSWERED "A finder" UNTIL O192 GAVE THE PRODUCT A SECOND INTERFACE, and the word
-    "network" appeared nowhere on this page for five units afterwards. Two things made that worse
-    than a stale sentence: `/network`'s own header sends its readers here (O192 chose /faq as the
-    network's top-right door), and the FAQPage JSON-LD below is generated from this same list, so
-    the out-of-date answer was published to search engines as structured data rather than only
-    rendered as prose. O197 sharpened it again by parking the finder for a separate domain: on the
-    network's own domain, "A finder" would describe a product that is not there.
+    O215: BACK TO ONE INTERFACE, AND THE ANSWER GOES BACK WITH IT.
+ 
+    The history is worth keeping because it is the same mistake twice. O204 rewrote this answer
+    from "A finder" to "Two ways to find a GP" because O192 had given the product a second
+    interface and this page had gone five units without mentioning it — which mattered more than a
+    stale sentence, since the FAQPage JSON-LD below is generated from this same list and published
+    the out-of-date answer to search engines as structured data.
+ 
+    The two interfaces now live on separate deployments, so on THIS one the network is the product
+    that is not there, and "two ways" would be the same defect pointing the other way. The
+    differentiation question O204 added ("what is the difference between the network and the
+    finder?") went with it: a reader here has no choice to make.
+ 
+    NOTE FOR WHOEVER EDITS THIS ANSWER NEXT. `/faq`'s working-truth proof pins the opening
+    sentence, and O213 exists because three units changed copy without moving the check that pinned
+    it. The proof moved in the same commit as this rewrite. Keep doing that.
   */
   {
     q: "What is ADHD.ME?",
-    a: "Two ways to find a GP. The network lists the doctors who are part of it and lets you read what each one says about how they work. The finder asks you to describe what you are looking for and orders the same list around it. Same doctors either way. It is not a clinic, and it does not give medical advice.",
-  },
-  /*
-    The founder's own differentiation question, which is the one a reader arriving at either URL
-    actually has — and the reason the two got separate URLs rather than a toggle (see
-    `app/interface-launch.tsx`). Answered in the same terms that control is built on: a place you
-    arrive at, versus a tool you start.
-  */
-  {
-    q: "What is the difference between the network and the finder?",
-    a: "The network is a place: you arrive, you read the doctors who are listed, and you leave when you have read enough. The finder is a tool: you tell it what you are looking for and it orders the same doctors around your answer. Nobody is added or removed by the choice — it is the same people, read two ways.",
+    a: "A finder. You describe what you are looking for in your own words, and it shows you listed Sydney GPs who say they do that work — with the reason each one is shown. It is not a clinic, and it does not give medical advice.",
   },
   {
     q: "Is ADHD.ME a medical service?",
@@ -55,14 +54,16 @@ const FAQS: ReadonlyArray<{ q: string; a: string }> = [
     a: "The current listed doctors consult in Sydney. You can still enter another suburb to see honest distance context; the finder does not imply a local doctor is listed where none is.",
   },
   /*
-    O204: THIS SAID "only by matching what you asked for", WHICH IS FALSE OF THE NETWORK. There is
-    no order there beyond the roster's, and nothing is matched — so a reader who had browsed the
-    network was told their experience had been ranked when it had not. On the page the compliance
-    register calls the likeliest in the product to be quoted back to somebody.
+    O204 widened this answer to cover both interfaces, because "only by matching what you asked for"
+    was FALSE of the network — nothing is matched there and a reader who had browsed it was told
+    their experience had been ranked when it had not. With the network on its own deployment the
+    narrow answer is true again, and it is the accurate one here. The qualifier that survives both
+    versions is the one that matters: when your words do not separate the list, the page says so
+    rather than dressing the order up.
   */
   {
     q: "How is the order of GPs decided?",
-    a: "It depends which of the two you are using. The network is not ordered — it lists everyone, and reading them is the point. The finder orders the list only by matching what you asked for against what each clinician declares about their own work; when your words do not separate the list, the page says the order means nothing rather than dressing it up. No GP can pay to rank higher, on either.",
+    a: "The finder orders the list only by matching what you asked for against what each clinician declares about their own work; when your words do not separate the list, the page says the order means nothing rather than dressing it up. No GP can pay to rank higher.",
   },
   {
     q: "What happens to what I type or say?",

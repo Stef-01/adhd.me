@@ -128,8 +128,11 @@ export const DARK_TOKENS_DECLARED: readonly TokenDefinition[] = [
 
 export type DarkGroundSelector = { readonly selector: string; readonly token: string };
 
-/** Declared, MEASURED 2026-08-25 and re-derived 2026-08-26 when O192's network added two
- * (`.gp-book`, `.interface-launch-link`) — every leaf-rule selector painting a dark token as its own
+/** Declared, MEASURED 2026-08-25, re-derived 2026-08-26 when O192's network added two
+ * (`.gp-book`, `.interface-launch-link`), and re-derived again when the finder and the network were
+ * split into separate deployments: `.interface-launch-link` painted the control that crossed between
+ * the two interfaces, so it left with the network. `.gp-book` STAYS — it is the booking control on a
+ * profile, which the finder renders too. Every leaf-rule selector painting a dark token as its own
  * background, pinned exactly (AR17's shape): a NEW site painting an existing dark token, or a new
  * dark token appearing anywhere, fails until this list is re-derived and read. */
 export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
@@ -144,7 +147,6 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: ".cv2-learning-card", token: "cv2-ground" },
   { selector: ".demo-nav-next", token: "ground" },
   { selector: ".gp-book", token: "ground" },
-  { selector: ".interface-launch-link", token: "ground" },
   { selector: '.iv-answer[aria-pressed="true"]', token: "ground" },
   { selector: ".join-email-cta:hover", token: "ink" },
   { selector: ".mic-button", token: "ground" },

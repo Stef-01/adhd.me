@@ -130,21 +130,6 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The page after the interest form. Whoever registered reads it, and it makes one operational promise (a person replies within two business days), which is exactly the kind of sentence the sweep exists to hold to account.",
   },
   {
-    path: "/network",
-    audience: "patient",
-    why: "O192's browsable gallery of the GPs in the network. Anybody can reach it and it is read by patients deciding who to approach, so it answers to the full patient rule set — the same classification /finder carries, which is the point: the two interfaces publish the same roster and must not be held to different standards because one of them is browsable.",
-  },
-  {
-    path: "/mission",
-    audience: "patient",
-    why: "O197's landing page for the network — why the network exists, what it does today, and how many GPs are actually in it, ending in one door to /network. Read by somebody deciding whether this is worth their time while they look for care, which makes them a patient regardless of what the page is addressed to; and it carries the founder's own mission sentence, the most claim-shaped copy on any surface here. Both reasons point the same way, so it answers to the full patient rule set with the two findings that sentence produces accepted individually rather than the classification being softened to suit it.",
-  },
-  {
-    path: "/network/[clinician]",
-    audience: "patient",
-    why: "O192 round 2: one GP's own page, reached from the network deck. It carries the longest run of clinician-declared prose the product publishes anywhere, so it answers to the full patient rule set — and it is the surface where a wrongly-worded framing sentence would sit closest to a named doctor.",
-  },
-  {
     path: "/terms",
     audience: "patient_notice",
     why: "Terms of use are read by the same person the privacy policy addresses, and carry the same duty: administrative fact in plain words, no clinical claims, the canonical responsibility statement rendered from its constant. Draft-marked and counsel-gated alongside the privacy policy (O39).",
@@ -270,51 +255,15 @@ export const ACCEPTED_FINDINGS: readonly AcceptedFinding[] = [
   // Deleted rather than kept "in case it comes back". If the wording returns, so does the finding,
   // and it can be argued again then with a fresh review date.
   //
-  // O192 REOPENED IT, and with the one entry the founder-gate protocol requires rather than the
-  // silence that would have been easier. See below.
-  {
-    path: "/network",
-    rule: "no-condition-targeting",
-    match: "Mental health",
-    why:
-      "FOUNDER DECISION OUTSTANDING — the SAME open gate as `mental-health-on-profile`, reached by a new road. 'Mental health focus' is one of Dr Anusha Saxena's own declared fit signals; /finder has served it to patients since O163 and accepts it in e2e/profile-sweep.spec.ts on the argument that naming what a GP does on their own listing is what a directory is for, as against naming a condition TO a patient. Nothing about that argument changed here and this entry does not decide it. What DID change is worth the founder knowing before they rule: on /finder the string renders only after somebody types a query and opens a profile, so it lives in client state; on /network it is in the server HTML of a statically-generated, indexable page. Same words, same declaration, wider audience — which makes this the version of the question that actually needs answering. Accepted so the sweep reports what it found rather than passing quietly; NOT a judgement that the copy is fine.",
-    reviewBy: "2026-11-26",
-  },
+  // THE NETWORK'S AND THE MISSION PAGE'S ACCEPTANCES LEFT WITH THEIR SURFACES when the two
+  // interfaces were split into separate deployments. Three entries went: the open founder gate on
+  // `/network` ("Mental health", the same question `mental-health-on-profile` asks by the finder
+  // road) and the two the founder's own mission sentence produced on `/mission`. None of them was
+  // decided here — they moved to the deployment that still serves those pages, which is where the
+  // reviewer who owns that call will find them. The equivalent finder-road gate is UNCHANGED and
+  // still open below.
+  //
 
-  // ── O197: the founder's mission sentence, on the landing page they asked for. ──────────────
-  //
-  // THE SAME WORD TRIPS TWO RULES, SO IT TAKES TWO ENTRIES. The acceptance key is (path, rule,
-  // match) precisely so a word cannot be waved through in general: "best" is accepted here for
-  // `no-superlatives` and for `no-benefit-claims` separately, and it stays refused everywhere
-  // else on every surface.
-  //
-  // WHY THEY ARE ACCEPTANCES RATHER THAN AN EDIT. The founder wrote the mission and instructed on
-  // 2026-08-26 that advertising review sits with their reviewers rather than with this loop —
-  // recorded in `FOUNDER_DECISIONS` (`network-gallery-ahpra-hold`, restated by
-  // `mission-copy-authored-by-founder`). An acceptance is the mechanism this register exists for
-  // in exactly that situation: the sweep still runs, still matches, and still REPORTS the finding
-  // with a date on it, to the people who own the review. What an acceptance is not is a judgement
-  // that the words are fine. Nobody in this loop made that judgement and nobody in this loop is
-  // entitled to.
-  //
-  // The review date is deliberately the same as the /network entry's, so the mission copy and the
-  // network copy come back to the reviewer together rather than a quarter apart.
-  {
-    path: "/mission",
-    rule: "no-superlatives",
-    match: "best",
-    why:
-      "FOUNDER-AUTHORED COPY, VERBATIM. The mission sentence at `MISSION_COPY.statement` is the founder's own, given as the brief for this page: \"the mission of this site is to find the best drs in each state and document their cultural and personal qualities to best connect them with patients\". W23's superlative pattern matches the literal word twice in it. The sentence ships as written because the founder wrote it and because they ruled the advertising review out of this loop's hands on 2026-08-26; this entry exists so the sweep REPORTS the match to the reviewer who owns that call rather than passing quietly or blocking the founder's words. Held to one path and one match: the word remains refused on every other surface, and every other sentence on /mission is the loop's own and is linted with no acceptance behind it (`src/network/mission.test.ts` enforces exactly that split).",
-    reviewBy: "2026-11-26",
-  },
-  {
-    path: "/mission",
-    rule: "no-benefit-claims",
-    match: "best",
-    why:
-      "The same founder-authored sentence, reaching a second rule. W6's benefit-claims pattern shares the word with W23's superlative pattern, so one sentence produces two findings — and they are accepted separately rather than by a rule-level exemption, because (path, rule, match) is what keeps an acceptance from becoming a hole. The argument is the one above and is not repeated by reference on purpose: an entry that cannot state its own reason is an entry a reviewer has to chase. NOTE FOR THE REVIEW that this rule reaches the page at all only because /mission is classified patient-facing, which it is and should be — a landing page written for somebody looking for care is read by patients whatever else it is.",
-    reviewBy: "2026-11-26",
-  },
 ];
 
 

@@ -57,9 +57,6 @@ export const DYNAMIC_ROUTE_PLAN: Readonly<Record<string, { sample: string } | { 
     excluded:
       "A booking page renders only for a token minted against a seeded invitation, and `e2e/booking.spec.ts` mints one and drives the whole flow. Visiting it with a made-up token sweeps an error state, which is a page this rule has nothing to say about. Covered there, deliberately not here.",
   },
-  "/network/[clinician]": {
-    sample: "/network/anubhav-saxena",
-  },
   "/console/setup/[step]": {
     excluded:
       "Each step renders inside the onboarding wizard `e2e/console.spec.ts` walks end to end. The steps are enumerated by that spec from the wizard itself, so a new step is covered by being reachable rather than by being listed twice.",
