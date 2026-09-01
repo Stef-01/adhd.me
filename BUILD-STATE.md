@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 98562ac (2026-09-01T06:55Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4391 tests, 13 skipped), build, audit PASS (2 accepted advisories), perf gate PASS (48 routes within budget; heaviest /finder at 681 KB), gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.5m), exit code 0 read from the command itself, not through a pipe. AR15/AR16 visual baseline re-accepted twice under the three-run zero-diff protocol (180 captures; shas in ACCEPTED_DIFFS under O218 and O219). **O216 through O221 done — the founder-directed reskin session**: the network's brand scheme on every page's chrome (O216), twenty synthetic example profiles behind the finder's opt-in tickbox with real-only counts preserved (O217), the motion vocabulary and the finder's band hairline (O218), the accent-law pass the first full e2e demanded (O219), the standalone-app appraisal with Phase 1a shipped — manifest and generated icons, the finder installs (O220), and the engine-purity law, the app plan's Phase 2 (O221). O215 done. The sha is the last code commit the runs covered; the ledger and acceptance edits land beside this line in the same push`
+`gate: green @ 090dc20 (2026-09-01T08:20Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS (2 accepted advisories), perf gate PASS (48 routes within budget), gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.8m), exit code 0 read from the command itself. AR15/AR16 baseline re-accepted under the three-run zero-diff protocol on PINNED stores (180 captures; sha in ACCEPTED_DIFFS under O222, whose entry closes the console/matching drift question — the harness read accumulating stores, and now cannot). **O216 through O223 done — the founder-directed reskin/refactor session**: brand scheme (O216), twenty synthetic profiles behind the tickbox (O217), motion vocabulary + finder hairline (O218), the accent-law pass (O219), the standalone-app plan with Phase 1a shipped (O220), the engine-purity law (O221), the simplify pass that also fixed the roster-seam leak and the harness's accumulating-store drift (O222), DESIGN.md re-captured (O223). O215 done. The sha is the last code commit the full e2e covered; the harness pin, DESIGN.md and this ledger land beside this line, re-verified in the same push`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -146,6 +146,61 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (register re-sorted), two type-scale exceptions under the OG card's Satori law, PLAN.md canon
 > row ACTIVE. The unit also repaired the accent probe's green case (BARE_ROUTE was a blind index;
 > it now walks for a route with room below the cap, as the spec's own header always demanded).
+>
+> **O222 (FOUNDER-DIRECTED: "Refactor everything keeping as minimal code as possible") —
+> 2026-09-01.** Run as the tree's own simplify lane over the session diff: four parallel review
+> agents (reuse, simplification, efficiency, altitude), findings deduped, applied behind the
+> full gate. Net −34 lines while ADDING three laws — minimal is what survived review, not what
+> got deleted.
+>
+> **The sharpest finding was a leak, not bloat.** The profile's evidence, its "does not answer"
+> list, the compare table and every row's printed reason read the engine with a DEFAULTED
+> roster: tickbox on, the ranking ran over 22 entries while the explanations derived from the 2
+> real ones — precisely what O217's seam comment promised could not happen, and the defect class
+> `clinicians.ts` itself names ("scored a custom roster against a different roster's
+> statistics"). Threaded everywhere, `getPersonalizedMatch` included (its internal read had the
+> same hole; additive optional param, so the sibling tree is untouched), and the seam is now a
+> PIN: `engine-purity.test.ts` refuses the defaulted shape in `care-finder.tsx` outright — a
+> defaulted parameter is a seam with no enforcement, so the enforcement was built.
+>
+> **The dedup set**: `example()` makes the persona file's four defences structural (~80
+> information-free lines gone; the census now proves the constructor, a stronger claim than 20
+> hand-copies agreeing); `brand-mark.tsx` holds the icon art once (declared hex 12 → 6, one
+> census entry, both stale px-type exceptions deleted); engine-purity's scanner was the
+> reachability walker's PRE-HARDENING twin, so the hardened one is exported and reused —
+> single-quoted and bare imports now enter the closure, prose can neither vouch for nor hide a
+> dependency, and each previously missed shape has a probe assertion; its test walks once
+> instead of three times (~2 MB of re-reads gone); the finder computes one personalized-match
+> pass indexed by rows, one rankBands per tie, a plain ternary through `rosterFor()`, and one
+> `ExampleProfileTag` replaces three guards with drifting copy; the accent probe's two route
+> walkers become `firstRouteWhere` with two predicates.
+>
+> **Skipped, with reasons**: lazy-loading the 31 KB persona chunk (an async first tick is a
+> behavior trade, recorded as accepted cost, not a defect); a `topTieNoteFrom` engine overload
+> (sibling-shared engine for a micro-win); collapsing the place/clarify handlers (each resets
+> different state on purpose); deriving persona ids/practices (the review's own caveat:
+> identity facts should be readable off the page). The reviews' one out-of-diff note — `matches`
+> as derived state, deleting all eight setters — is claimed as O224 rather than smuggled in
+> here.
+>
+> **The gate then paid for itself twice.** O222's visual comparison failed on console/matching's
+> four cells — the same cells that moved unexplained at the last acceptance — and the mover was
+> the HARNESS: the matching console renders `tallyOutbound()` and the background audit, both
+> file-backed stores the full e2e suite APPENDS to on every run, so the cells re-hashed at every
+> cross-commit comparison while agreeing within every same-tree protocol. `pnpm e2e:visual` now
+> pins all four `ADHDME_*_PATH` stores to a fresh `.data-visual/` per invocation; the accepted
+> baseline is the pinned-empty rendering and those cells cannot move again unless the page does.
+> The comparison that exposed the drift simultaneously proved the refactor pixel-identical
+> everywhere else.
+>
+> **O223 (DESIGN.md re-captured from today's code) — 2026-09-01.** The 2026-08-10 capture still
+> documented the sage accent — two accents and one brand system ago, with no brand gradient, no
+> motion vocabulary, no accent law, no app surface. Re-written in the document's own
+> written-from-code register: the two-layer color system (base palette + the ported brand scheme
+> and where each band definition may paint), the enforced accent law with its cap, the named
+> motion vocabulary and its one spring rule, the shell/measure/tabular constraints, and the
+> installable app surface. The stale capture was itself the argument: a DESIGN.md units cannot
+> trust is one they stop reading.
 >
 > **O219 (the story landing joins the accent law; the finder hairline stops lying to the sweep) —
 > 2026-09-01.** The first full e2e run on the reskinned tree failed exactly where it should have:
