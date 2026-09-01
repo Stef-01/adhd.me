@@ -47,7 +47,22 @@ import { probeVerdict } from "./probe";
  * `richestReachable` walks the derived list until it finds one, so demoting an accent on
  * `/clinicians` moves the probe to the next painting route instead of quietly making it vacuous.
  */
-const BARE_ROUTE = PUBLIC_ROUTES[0]!;
+/* O220: WAS `PUBLIC_ROUTES[0]!` — a blind index that happened to have room for as long as the
+ * landing painted nothing near the accent. The header comment above already states the real
+ * requirement ("the AT-CAP case runs on a route that paints none, because proving the comparison
+ * is `>` and not `>=` needs room below the cap to fill"), and `richestReachable` already walks
+ * for the red case's requirement — the green case just never got the same treatment, so O219
+ * legitimately filling `/` to the cap broke the instrument rather than the product. The walk
+ * below is the green case's `richestReachable`: the first route with room to fill. */
+async function bareReachable(page: Page): Promise<{ route: string; baseline: string[] }> {
+  for (const route of PUBLIC_ROUTES) {
+    const baseline = await meaningsOnFreshLoad(page, route);
+    if (baseline.length < MEANINGS_CAP) return { route, baseline };
+  }
+  throw new Error(
+    "every public route is at the accent cap — no room anywhere to prove the boundary, which is a product finding, not a probe configuration",
+  );
+}
 
 /** Measures a route as the sweep would: fresh load, fonts settled, real detector. */
 async function meaningsOnFreshLoad(page: Page, route: string): Promise<string[]> {
@@ -117,7 +132,7 @@ test("the accent sweep goes red when the rule is broken, and names the route and
 });
 
 test("a route stays green with the probe off, and green at exactly the cap", async ({ page }) => {
-  const baseline = await meaningsOnFreshLoad(page, BARE_ROUTE);
+  const { route: BARE_ROUTE, baseline } = await bareReachable(page);
   expect(overCapFinding(BARE_ROUTE, baseline)).toBeNull();
 
   // THE BOUNDARY IS LIVE, NOT JUST "ANY CHANGE FAILS". Filling the route up TO the cap must stay
