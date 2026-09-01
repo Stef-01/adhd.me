@@ -3700,3 +3700,48 @@ adjusting it to fit would have hidden a real site.
 `src/quality` 8, `src/platform` 8, then a long tail.
 
 No `qa/` capture: this unit renders nothing and changes no product code.
+
+## O216 — the reskin: the finder deployment joins the network's colour scheme (2026-09-01)
+
+**Founder-directed:** make the adhdme.au deployment carry the `Stef-01/ADHD` (network) repo's
+colour scheme. Since the 2026-08-28 split the two deployments had drifted into two products: the
+network tree's O271–O304 landing redesign gave it a warm-orange-to-periwinkle brand gradient,
+carried by the header of every page (its O290), the closing footer/Acknowledgement band
+(O293/O300) and the landing hero — while this tree kept the pre-split chrome: a translucent paper
+header, a cream footer strip, a beige Acknowledgement band, and a landing in a third colourway
+(the story page's scoped deep rose). One product on two domains read as two.
+
+**What moved, and from where.** The seven brand hues (`--hero-glow` … `--hero-dusk`) and the four
+band definitions (`--band-gradient`, `--band-scrim`, `--band-fall-upper`, `--band-fall-lower`)
+are copied VERBATIM from the network tree's `:root` — a re-derivation here would be exactly the
+drift the split's own banner warns about. They land on:
+
+- `.site-nav` — the shared public header carries the across band (opaque `--ground` base under
+  the scrim and gradient, the arrangement the network derived so a contrast sweep measures the
+  real ground), white wordmark, paper-pill link, `--on-ground` focus rings.
+- `.story-header` — the landing's own header gets the identical treatment, so the most-seen page
+  and every page one click away are one continuous scheme. Its demo pill becomes a paper pill
+  (an accent-filled pill fought the gradient), its read-progress hairline moves to `--on-ground`.
+- `.site-footer` and `.story-footer` — the top of the closing band (`--band-fall-upper`), full
+  `--on-ground` links per the network's O300 measurement (a dimmed white fails where full white
+  clears), with `.site-footer-inner` keeping the links on their 640px measure.
+- `.aoc-band` — the Acknowledgement sits on the closing fall (`--band-fall-lower`), footnote-size
+  left-set text in a paper tint; the artwork is UNTOUCHED — retinting an Acknowledgement to match
+  a brand palette would be exactly backwards, and its transparent-sky SVG composites straight
+  onto the band.
+
+**The story landing's rose is retired.** `--s-accent` and family now resolve to the tree's own
+amber (#8A5A16 / #f7efe3 / #E9D6B4), `--community-accent` likewise; the three hand-written rose
+darkening stops (#6f1e31) became `color-mix(… 82%, #000)` derived from the token they darken; the
+throughline's rose tint (#e0aeba) became `--on-band`, the palette's own dark-band accent.
+
+**Contrast, measured, not assumed.** #8A5A16 as text: 5.36:1 on `--s-paper`, 4.77:1 on the
+chapter tint, 5.91:1 under white (all ≥ 4.5). White on amber: 5.91:1. `--on-band` on `--s-dark`:
+7.2:1. The band's own type sits on the network-derived scrim over an opaque `--ground` base —
+the same values the network tree measured against its rendered-pixel sweep, re-verified here by
+this tree's own e2e contrast sweep. All five new dark chrome surfaces are declared in the
+dark-ground census (AR18) with same-rule foregrounds.
+
+**Captures:** `qa/o216-landing-390.png`, `qa/o216-landing-1280.png`, `qa/o216-faq-390.png`,
+`qa/o216-faq-1280.png` (the band header on a PublicHeader page), and `qa/o216-footer-aoc-1280.png`
+(the footer→Acknowledgement seam reading as one continuous fall).
