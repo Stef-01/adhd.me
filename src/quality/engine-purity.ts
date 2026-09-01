@@ -23,6 +23,11 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
+/** Stable repository path for comparisons and declared registers, independent of host OS. */
+function repoPath(value: string): string {
+  return value.replaceAll(path.sep, "/");
+}
+
 /** Where the core starts: the four directories the app plan names, plus the onboarding types. */
 export const CORE_ENTRY_DIRS = ["src/matching", "src/demo", "src/geo", "src/compliance"] as const;
 export const CORE_ENTRY_FILES = ["src/onboarding/types.ts"] as const;
@@ -66,7 +71,7 @@ function resolveInternal(fromFile: string, spec: string, root: string): string |
   else if (spec.startsWith(".")) base = path.join(path.dirname(path.join(root, fromFile)), spec);
   else return null;
   for (const candidate of [`${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")]) {
-    if (existsSync(candidate)) return path.relative(root, candidate);
+    if (existsSync(candidate)) return repoPath(path.relative(root, candidate));
   }
   return null;
 }
@@ -80,7 +85,7 @@ export function walkCore(root: string, listDir: (dir: string) => string[]): {
   const queue: string[] = [...CORE_ENTRY_FILES];
   for (const dir of CORE_ENTRY_DIRS) {
     for (const file of listDir(path.join(root, dir))) {
-      if (file.endsWith(".ts") && !file.endsWith(".test.ts")) queue.push(path.join(dir, file));
+      if (file.endsWith(".ts") && !file.endsWith(".test.ts")) queue.push(repoPath(path.join(dir, file)));
     }
   }
   const seen = new Set<string>();

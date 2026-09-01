@@ -5,8 +5,8 @@
 // made recently. Plus the AR lane's mutation probe — the classifier is driven on a planted fixture,
 // so a clean census cannot mean a broken scanner.
 
-import { readFileSync } from "node:fs";
-import { execSync } from "node:child_process";
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   DEAD_CSS_EXCEPTIONS,
@@ -17,12 +17,23 @@ import {
 } from "./dead-css";
 
 const CSS = () => readFileSync("app/globals.css", "utf8");
+
+function sourceFiles(dir: string): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === "node_modules") continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) files.push(...sourceFiles(full));
+    else if (/\.tsx?$/.test(entry.name)) files.push(full);
+  }
+  return files.sort();
+}
+
+// Node's directory walk replaces the former Unix `find | grep` pipeline. Besides working on
+// Windows, it avoids shell quoting becoming part of a CSS-census test's correctness boundary.
 const SOURCE = () =>
-  execSync("find app src -name '*.tsx' -o -name '*.ts' | grep -v node_modules")
-    .toString()
-    .trim()
-    .split("\n")
-    .map((f) => readFileSync(f, "utf8"))
+  [...sourceFiles("app"), ...sourceFiles("src")]
+    .map((file) => readFileSync(file, "utf8"))
     .join("\n");
 
 describe("O200 the stylesheet styles only markup that exists", () => {

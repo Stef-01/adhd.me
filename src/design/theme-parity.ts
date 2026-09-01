@@ -61,9 +61,9 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
   },
   {
     file: "app/opengraph-image.tsx",
-    sites: 3,
+    sites: 6,
     rationale:
-      "Rendered server-side to a PNG by Satori — no stylesheet exists at render time, so var(--ink) is not expressible. The literals mirror the palette tokens by eye and by the guidelines sweep's chrome test at the page level.",
+      "Rendered server-side to a PNG by Satori — no stylesheet exists at render time, so the six literals mirror paper, ink, muted, route, on-route and action tokens in the daylight-wayfinding share card.",
   },
   {
     file: "app/story-sequence.tsx",

@@ -30,6 +30,7 @@ import { reachReport } from "@/onboarding/reach-report";
 import { notDeclaredFrames, reasonsPatientsCanSee, sentencesPatientsSee } from "@/matching/provenance";
 import { BackgroundEditor, type VocabularyEntry } from "./background-editor";
 import { serverNow } from "@/lib/server-clock";
+import { ConsoleShell } from "../ui";
 
 export const metadata = { title: "Matching console — ADHD.ME" };
 // O38: the page now reads the saved-onboarding store for the reach-gap feed, so it renders
@@ -65,7 +66,7 @@ export default async function MatchingConsolePage() {
      the door. Nothing here was patient data and nothing was secret, but the handoff tallies
      and the reach report are the practice's business rather than the public's, and a file
      whose first line is a claim about access should be right about it. */
-  await requireSession();
+  const email = await requireSession();
   // One clock per render, threaded everywhere a grade is computed, so the audit table and the
   // freshness panel cannot disagree about what "today" is (O56).
   // AR15: serverNow() — rendered dates pin under capture, real everywhere else.
@@ -83,7 +84,8 @@ export default async function MatchingConsolePage() {
   const patientUnheard = reachGaps(clinicianSpeech);
 
   return (
-    <main id="main-content" className="mc">
+    <ConsoleShell email={email}>
+    <div className="mc">
       <header className="mc-head">
         <Link href="/console" className="mc-back">Console</Link>
         <h1>Matching</h1>
@@ -417,6 +419,7 @@ export default async function MatchingConsolePage() {
         )}
       </section>
 
-    </main>
+    </div>
+    </ConsoleShell>
   );
 }

@@ -20,6 +20,11 @@ export function PublicHeader({
     <header className="site-nav">
       <div className="site-nav-inner">
         <Link href="/" className="site-nav-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
+        <nav className="site-nav-links" aria-label="Primary navigation">
+          <Link href="/examples">Worked examples</Link>
+          <Link href="/faq">Questions</Link>
+          <Link href="/practices">For practices</Link>
+        </nav>
         <Link href={rightHref} className="site-nav-link">{rightLabel}</Link>
       </div>
     </header>

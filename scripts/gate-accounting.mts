@@ -17,6 +17,7 @@
 // after the suite, exactly like audit:gate and perf:gate.
 
 import { execFileSync } from "node:child_process";
+import path from "node:path";
 import { currentGateState, e2eAccountingGuard } from "../src/quality/gate-state.ts";
 
 /**
@@ -27,7 +28,12 @@ import { currentGateState, e2eAccountingGuard } from "../src/quality/gate-state.
  * dishonest gate line look fully accounted for.
  */
 function suiteSize(): number {
-  const out = execFileSync("npx", ["playwright", "test", "--list"], {
+  // Invoke the installed CLI through Node instead of asking the operating system to resolve
+  // `npx`. The latter works on Unix, but Windows exposes npx as a .cmd shim and `execFileSync`
+  // does not run command scripts through a shell. The package entry is the same Playwright CLI,
+  // now reached identically on every host and without a shell interpolation boundary.
+  const playwrightCli = path.resolve("node_modules/@playwright/test/cli.js");
+  const out = execFileSync(process.execPath, [playwrightCli, "test", "--list"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "ignore"],
     timeout: 180_000,

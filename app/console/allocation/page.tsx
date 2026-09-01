@@ -25,6 +25,7 @@ import {
 } from "@/matching/allocation";
 import { facetKey, readNeeds } from "@/matching/needs";
 import { requireSession } from "../guard";
+import { ConsoleShell } from "../ui";
 
 /** The words a synthetic patient wrote. Everything below is derived from these. */
 const PATIENT_WORDS =
@@ -84,12 +85,13 @@ const REFUSAL_COPY: Record<string, string> = {
 };
 
 export default async function AllocationConsolePage() {
-  await requireSession();
+  const email = await requireSession();
   const [result] = matchPatientsToPrescribers([PATIENT], DOCTORS);
   const derived = readNeeds(PATIENT_WORDS);
 
   return (
-    <main id="main-content" className="mc">
+    <ConsoleShell email={email}>
+    <div className="mc">
       <header className="mc-head">
         <Link href="/console" className="mc-back">Console</Link>
         <h1>One allocation, worked through</h1>
@@ -174,6 +176,7 @@ export default async function AllocationConsolePage() {
           </ul>
         )}
       </section>
-    </main>
+    </div>
+    </ConsoleShell>
   );
 }

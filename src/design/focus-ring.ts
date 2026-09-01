@@ -7,12 +7,13 @@
 // law the taste register states ("never `outline: none` without a replacement"): nothing
 // stopped a rule or a class string from suppressing the ring and shipping.
 //
-// Measured at claim time: globals.css carries ZERO real suppression sites (its one textual
-// match is the comment stating this law), and components carry exactly three tailwind
-// `focus:outline-none` sites — the demo CTA and the console field/button styles — each pairing
-// its suppression with `focus:ring` in the SAME class string. Those numbers are pinned; a
-// suppression whose replacement is not in the same string or rule block fails with the file
-// named.
+// Re-measured 2026-09-01: globals.css carries ZERO real suppression sites (its one textual
+// match is the comment stating this law), and components carry one Tailwind
+// `focus:outline-none` site — the demo CTA — paired with `focus:ring` in the SAME class string.
+// The redesigned console primitives rely on the global `:focus-visible` outline instead of
+// suppressing it, so their two former component sites correctly left this census. These numbers
+// are pinned; a suppression whose replacement is not in the same string or rule block fails
+// with the file named.
 
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -22,7 +23,6 @@ export const CSS_SUPPRESSION_SITES = 0;
 
 /** Component `focus:outline-none` sites, per file — every one must pair a ring in-string. */
 export const COMPONENT_SUPPRESSION_SITES: ReadonlyArray<{ readonly file: string; readonly sites: number }> = [
-  { file: "app/console/ui.tsx", sites: 2 },
   { file: "app/demo/page.tsx", sites: 1 },
 ];
 

@@ -3797,3 +3797,58 @@ Home link against the band's worst stop (the ancestor walk treats any gradient o
 the painted ground and cannot know a 2px strip at the far edge — 4.01:1 of fiction; the
 pseudo-element renders identically and owns no text). Both fixes verified by re-running the
 sweeps that caught them.
+
+## Product-wide daylight-wayfinding redesign (2026-09-01)
+
+**Direction.** The redesign was re-derived from the live product rather than the retired sage
+document: a calm daylight route-planning instrument. Concept seed `f009e50c` selected the
+wayfinding direction from five product-grounded candidates. The resulting contract is embedded
+in `app/layout.tsx` and documented in `DESIGN.md`: porcelain and ink establish the working
+ground; periwinkle carries route, selection, and progress; orange marks the next consequential
+decision. The redesign-existing-projects and frontend-design passes set the system; the motion
+pass was Jakub-primary / Emil-secondary, with spatial continuity taking priority over flourish.
+
+**What changed.** This is one migration layer over the order-sensitive stylesheet rather than a
+partial component demo:
+
+- `/` now opens as an inspectable departure field: geographic context, one claim, one action,
+  three route stops, and the existing map used as a product instrument. The long story alternates
+  fields and rules instead of repeating cream cards. Public header/footer navigation is shared
+  and direct.
+- `/finder` keeps its eight-stage state machine and fixed shell, but gains a clear progress route,
+  action/state colour roles, quieter result comparison, and standalone safe-area handling.
+- `/clinicians` uses the same roles while preserving its four-step practice-pathway model and
+  learning/case behavior.
+- All 31 console screens now sit inside one route-aware application shell. Five direct routes
+  stay visible; “All tools” exposes the full workspace in five groups. Matching, allocation, and
+  interview no longer break out into isolated pages. Home shortcuts became scannable actions
+  without changing their routes or test-visible names.
+- Manifest, browser chrome, generated icon, Apple icon, and Open Graph artwork were brought into
+  palette parity. Standalone mode respects safe-area insets.
+
+**Accessibility and truthfulness.** The first rendered sweep found four real issues: one
+light-on-light GP-directory action, three secondary-text contrast sites, hidden menu links counted
+as visible controls, and a geographic context string removed from the JavaScript-off contract.
+All four were fixed in the product. The complete unit suite is green (4,391 passed, 13 skipped),
+the production build compiles all 48 budgeted routes, the public/console WCAG 2.2 AA scans pass,
+595 public and 2,024 console text samples clear their contrast floors, 662 keyboard stops show a
+focus change, and every route fits a 390px phone without horizontal document scroll.
+
+**Captured record.** Every image below is Playwright against the production build with reduced
+motion, after fonts and network settled:
+
+- `qa/redesign-2026-09-01/01-home-desktop.png`
+- `qa/redesign-2026-09-01/02-home-phone.png`
+- `qa/redesign-2026-09-01/03-finder-welcome-phone.png`
+- `qa/redesign-2026-09-01/04-finder-results-phone.png`
+- `qa/redesign-2026-09-01/05-clinician-path-desktop.png`
+- `qa/redesign-2026-09-01/06-practices-desktop.png`
+- `qa/redesign-2026-09-01/07-console-signin-desktop.png`
+- `qa/redesign-2026-09-01/08-console-home-desktop.png`
+- `qa/redesign-2026-09-01/09-console-workspace-desktop.png`
+- `qa/redesign-2026-09-01/10-console-home-phone.png`
+- `qa/redesign-2026-09-01/11-console-workspace-phone.png`
+
+**Boundary.** The interface is app-ready; the runtime is not represented as launch-ready.
+Authentication is still a synthetic flow, stores are process-memory fixtures, live SMS and real
+patient operation remain founder-gated, and no service worker promises offline behavior.

@@ -16,8 +16,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "A finder. Describe the GP you are looking for in your own words, and it shows you listed Sydney GPs who say they do that work — with the reason each one is shown.",
     start_url: "/finder",
     display: "standalone",
-    background_color: "#fbfaf7",
-    theme_color: "#fbfaf7",
+    background_color: "#f7f8fc",
+    theme_color: "#f7f8fc",
     icons: [
       { src: "/icon", sizes: "512x512", type: "image/png" },
       { src: "/apple-icon", sizes: "180x180", type: "image/png" },

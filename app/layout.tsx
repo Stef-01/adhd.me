@@ -24,7 +24,7 @@ import { SITE_URL } from "./site";
  * both through a canvas: a palette change that left this stale would put the seam back silently.
  */
 export const viewport: Viewport = {
-  themeColor: "#fbfaf7",
+  themeColor: "#f7f8fc",
 };
 
 export const metadata: Metadata = {
@@ -73,6 +73,26 @@ const ORGANIZATION_JSONLD = {
 };
 
 /**
+ * The replacement-world contract, emitted into the document so a production artifact carries
+ * the same direction its source was built against. React does not preserve JSX comments, so an
+ * inert JSON script is the closest auditable HTML primitive: it has no runtime behavior and the
+ * seed can be grepped from the built output.
+ */
+const DESIGN_DIRECTION = {
+  thesis:
+    "A daylight wayfinding instrument that turns a person's words into an inspectable route; it refuses the cream editorial health-page and generic card-dashboard defaults.",
+  world:
+    "Cool porcelain, navigation ink and periwinkle route fields, with orange reserved for the next consequential action; route lines, stops and open bands replace ornamental cards.",
+  story:
+    "A visitor understands the GP finder, sees how their words affect the order, and can move from search to a booking handoff without losing context.",
+  firstViewport:
+    "A crisp navigation bar opens into a cobalt route field: the claim and primary action lead on the left, while a live coverage instrument and three finder stops prove the mechanism.",
+  form: "Daylight departures board / route-finding system; grounded candidate 4; seed f009e50c.",
+  finish:
+    "unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance",
+} as const;
+
+/**
  * ONE COLOUR STRATEGY, NOT TWO.
  *
  * The body carried `bg-stone-50 text-stone-900` — Tailwind's own palette, hardcoded — while every
@@ -87,6 +107,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="min-h-screen antialiased app-body">
+        <script
+          id="adhdme-design-direction"
+          type="application/json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(DESIGN_DIRECTION) }}
+        />
         {/* O190: the skip link the guidelines require ("include skip link for main content").
             First tabbable thing on every page; visually hidden until focused. Every page's
             <main> carries id="main-content" for it. */}

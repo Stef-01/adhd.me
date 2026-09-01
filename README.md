@@ -37,9 +37,10 @@ These are recorded in the suite as well as here, because a note in a README gets
 4. **The learning links need checking.** `app/clinicians/clinician-walkthrough.tsx` links out to
    AADPA, NICE and the TGA rather than restating their content. The URLs are landing pages rather
    than deep links, and none has been opened from this tree.
-5. **No portraits of either founder exist here.** Nothing in this tree generates a face for a real
-   person, so the founders and Dr Saxena's listing render typographic monograms until they supply
-   photographs.
+5. **Only subject-supplied portraits are used for real people.** The roster includes supplied
+   portraits for Dr Anubhav Saxena and Dr Anusha Saxena, and the gated team register holds supplied
+   founder portraits. Synthetic profiles always use typographic monograms; nothing in this tree
+   generates or substitutes a face for a real person.
 
 ## Layout
 
@@ -52,5 +53,5 @@ These are recorded in the suite as well as here, because a note in a README gets
 Synthetic data only, except where marked: `realPerson` in `src/demo/clinicians.ts` flags the one
 entry that describes an actual clinician. Founder gates G1–G7 per plan §4.
 
-Verify gate: `pnpm verify` (`typecheck && test && build && audit:gate`). End-to-end:
+Verify gate: `pnpm verify` (`typecheck && test && build && audit:gate && perf:gate && gate:accounting`). End-to-end:
 `pnpm e2e`, or `E2E_PORT=<port> pnpm e2e` if 3100 is busy.

@@ -9,9 +9,10 @@
 // defined right beside `--ink`/`--paper` as "the primary button: dark pill, light label"). That
 // family is this unit's "dark" — the site's actual second surface, not an unbuilt third theme.
 //
-// MEASURED 2026-08-25: 7 custom properties resolve under the dark ceiling by luminance, but only 4
-// of those 7 are ever used as a `background`/`background-color` (the other 3 — `cv2-ink`, `s-ink`,
-// `community-ink` — are foreground-only "ink" colours that happen to be dark, exactly as `--ink`
+// RE-MEASURED 2026-09-01: 8 custom properties resolve under the dark ceiling by luminance, but
+// only the declared ground tokens are used directly as a `background`/`background-color` (the
+// other ink and dusk tokens are foreground or composed-background colours that happen to be dark,
+// exactly as `--ink`
 // itself is; luminance alone cannot tell "used as background" from "used as text", so both halves
 // of the census are kept and the second is what actually matters). Those 4 tokens back 18 leaf
 // rules across app/globals.css. Every one of the 18 declares its own `color:` in the SAME rule
@@ -113,17 +114,18 @@ export function leafRules(css: string): LeafRule[] {
   return out;
 }
 
-/** Declared, MEASURED 2026-08-25 — the 7 dark-by-luminance tokens, pinned exactly (not just a
+/** Declared, RE-MEASURED 2026-09-01 — the 8 dark-by-luminance tokens, pinned exactly (not just a
  * count) so a renamed or redefined token is visible in the diff rather than hidden behind a
  * number that happened not to move. Growth or shrink each re-derive this in the same commit. */
 export const DARK_TOKENS_DECLARED: readonly TokenDefinition[] = [
-  { name: "community-ink", hex: "#1f221c" },
+  { name: "community-ink", hex: "#172033" },
   { name: "cv2-ground", hex: "#1d2019" },
   { name: "cv2-ink", hex: "#1d2019" },
-  { name: "ground", hex: "#191a17" },
-  { name: "ink", hex: "#191a17" },
-  { name: "s-dark", hex: "#292800" },
-  { name: "s-ink", hex: "#1f221c" },
+  { name: "ground", hex: "#172033" },
+  { name: "hero-dusk", hex: "#172033" },
+  { name: "ink", hex: "#172033" },
+  { name: "s-dark", hex: "#172033" },
+  { name: "s-ink", hex: "#172033" },
 ];
 
 export type DarkGroundSelector = { readonly selector: string; readonly token: string };

@@ -37,7 +37,10 @@ export function SiteFooter() {
       {/* O216 (network O293's shape): the band is full-width so the gradient can run edge to edge;
           this inner wrapper keeps the links on the same 640px measure they always sat on. */}
       <div className="site-footer-inner">
-        <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
+        <div className="site-footer-brand">
+          <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
+          <p>A GP finder built around the words you use.</p>
+        </div>
         <nav aria-label="Site">
           <ul>
             {VISIBLE_DOORS.map((door) => (

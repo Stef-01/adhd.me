@@ -1,79 +1,144 @@
 # ADHD.ME — DESIGN.md
 
-The visual system as it actually exists in `app/globals.css`, captured 2026-08-10 so units
-built by the loop extend one language instead of inventing a ninth. Register: **product**
-(design serves the task). Written from the code, not aspiration — where the code is
-inconsistent this says so rather than papering over it.
+This is the visual system that ships from `app/globals.css`, re-derived on 2026-09-01 after the
+product-wide redesign. It is a contract for extending the product, not a moodboard. The source
+direction is also embedded as inert JSON in `app/layout.tsx` under
+`#adhdme-design-direction`; the reproducible concept seed is `f009e50c`.
 
-## Theme
+## Direction: daylight wayfinding
 
-Light, warm-neutral, editorial. The physical scene that justifies it: a patient on a phone,
-often at night, deciding whether a stranger will understand them; and a practice manager on a
-desktop mid-shift. Both need calm and legibility, neither needs drama. Dark mode is not
-implemented and should not be added casually — every token below is single-theme today.
+ADHD.ME should feel like a calm route-planning instrument: a person describes the GP they are
+looking for, sees how the listed routes relate to those words, and chooses the next handoff. It
+should not look like a generic health dashboard, a cream editorial template, or an assessment
+scorecard.
 
-## Color
+The visual world is daylight on porcelain with a deep-blue route system. Orange identifies the
+next consequential decision. Periwinkle carries progress, selection, and navigational state.
+Ink and hairlines do the rest. The landing page may use a large inverted route field; working
+surfaces remain light and quiet.
+
+There is one literal light theme. The dark-blue bands are intentional inverted surfaces, not a
+second theme. Do not add a cosmetic dark-mode toggle without deriving and testing a complete
+token set.
+
+## Colour roles
 
 | Token | Value | Role |
 |---|---|---|
-| `--ink` | `#191a17` | Primary text, primary button fill |
-| `--muted` | `#6e706a` | Secondary text, quoted examples |
-| `--faint` | `#6b6c67` | Smallest labels (darkened in W49 from `#a3a49f`, which failed AA at 11px) |
-| `--paper` | `#fbfaf7` | Page ground |
-| `--stone` | `#eeece5` | Raised/inset surfaces |
-| `--line` | `#dfddd6` | Hairlines and dividers |
-| `--sage` | `#66774a` | The single accent: counters, eyebrows, affirmative states (darkened in W49 from `#728356`, which failed AA as body text) |
-| `--sage-soft` | `#eef1e8` | Sage-tinted surface wash |
+| `--ink` / `--ground` | `#172033` | Primary type and deepest inverted ground |
+| `--muted` | `#565f70` | Secondary prose and operational context |
+| `--faint` | `#626b7b` | Small labels that still clear the AA floor |
+| `--paper` | `#f7f8fc` | Main porcelain page ground and browser theme colour |
+| `--stone` | `#edf0f6` | Recessed workspace and inset surfaces |
+| `--line` | `#d8deea` | Hairlines, table rules, and neutral boundaries |
+| `--accent` | `#a14f19` | Consequential action and current decision |
+| `--accent-soft` | `#faebe0` | Quiet action/error context, never a decorative wash |
+| `--route` | `#5065a6` | Route and selection state |
+| `--route-strong` | `#334679` | Inverted route fields, persistent app state |
+| `--hero-blue` | `#6679b9` | Supporting route geometry and progress |
 
-**Strategy: restrained** — tinted neutrals plus one accent well under 10% of surface. Do not
-introduce a second accent hue without a stated reason; the calm is the point.
+Colour is functional:
 
-**Contrast is a hard gate, not a preference.** W49 ships an axe sweep at WCAG 2.1 AA with zero
-violations enforced over every public route, and two of the tokens above exist in their current
-form *because* the sweep failed them. Never lighten `--muted`, `--faint` or `--sage` for
-elegance; fix contrast at the token, since each is a text colour in many places and the sweep
-only reaches routes it knows about.
+- Orange means “act here” or marks the current departure point. It does not decorate every
+  eyebrow, number, and border.
+- Periwinkle means route, selection, progress, or active workspace state.
+- Dark blue is an inverted field, not a default button colour.
+- Status meaning must also be written in text. No result, alert, or identity depends on colour
+  alone.
+- Use tokens or `color-mix()` from tokens. Raw component hex remains a failing design gate except
+  for the explicitly registered generated-image surfaces.
 
-**Known tension, stated honestly:** warm near-white + sage + serif display is a saturated
-"calm healthtech" family — the first-order category reflex. It is the founder's selected
-direction (`design/adhd-me-selected-direction.png`), so identity preservation wins over
-novelty. If the aesthetic is ever revisited, the move is a committed ground (a saturated brand
-surface or a true off-white at chroma 0), not another warm-neutral variant.
+Contrast is mechanical: the source token census, rendered contrast sweep, and axe WCAG 2.2 AA
+suite must all stay green. Never lighten muted text by eye.
 
 ## Typography
 
-- **Display:** Newsreader Variable (serif), weight ~430, `letter-spacing: -0.035em`,
-  `line-height: 0.99` on the finder's h1. Used for questions asked *of* the patient.
-- **UI/body:** Inter Variable. Everything functional.
-- Pairing is on a genuine contrast axis (serif display + geometric-humanist sans). Do not add a
-  third family.
-- Display clamp ceiling in use: `clamp(42px, 11vw, 54px)`. Stay at or under ~96px anywhere.
-- Use `text-wrap: balance` on headings, `pretty` on prose.
+- **Inter Variable** is the product voice: navigation, actions, data, console headings, and most
+  public-page structure. Use deliberate weight and spacing before adding a container.
+- **Newsreader Variable** is reserved for reflective care language, patient questions, and short
+  human claims. It is not the default style for every marketing heading.
+- The pairing is the full family count. Do not add a third font.
+- Large headings use tight tracking and short line lengths; body copy uses `text-wrap: pretty`.
+  Avoid six-line display headlines and centred paragraphs longer than two lines.
+- Small text still carries normal readable contrast. A tiny label is not permission to make it
+  faint.
 
-## Layout & composition
+## Composition by surface
 
-- The patient finder renders inside a **fixed ~520px app shell** shared by every stage
-  (welcome → listening → review → type → booking). This is the single most important layout
-  constraint in the codebase and it is easy to miss: **viewport-keyed media queries do not
-  describe this component's available width.** A two-column desktop layout was attempted in D1
-  and reverted for exactly this reason. Use container queries; widening the shell is a
-  cross-stage change deserving its own unit.
-- Group related content so free space falls *around* a composition, never *inside* it. The D1
-  defect was `margin: auto` on one child claiming all slack and splitting one idea in two.
-- Cards are not the default. The finder uses hairline-bounded bands, which suit it better.
+### Public story and practice pages
 
-## Motion
+Public chrome is one thin, translucent porcelain bar with direct routes to examples, questions,
+practices, and the finder. The home hero is a two-column departure field: the claim and three
+route stops on the left, an inspectable map/instrument on the right. Long pages alternate fields,
+rules, and type scale; cards are used only for discrete objects.
 
-`motion` (v13) drives stage transitions and the archetype switcher. Entrances are short
-(~0.2s) opacity+offset crossfades, directional on the switcher so it reads as travel through a
-list. Reveals enhance already-visible content — never gate visibility on a transition, since
-the a11y sweep screenshots settled frames and a gated reveal ships blank. Reduced-motion
-alternatives are required.
+The content width is approximately 1160–1280px. Mobile collapses to one reading order with the
+action before the map. The footer is a dark route terminus shared across public surfaces.
+
+### Patient finder
+
+The finder is one state machine inside a **fixed ~520px content shell / ~640px outer frame**. Its
+eight stages must not resize the shell per stage. Viewport media queries do not describe the
+component's actual width; use the existing shell/container boundary.
+
+The persistent top rule communicates progress. Orange marks the available next action; route
+blue marks the current stage and selected state. Results remain a comparison list, not a card
+gallery. Profile and row portraits are the same motion object.
+
+### Clinician pathway
+
+The clinician walkthrough is a focused practice instrument, not another marketing page. It keeps
+its four-step shell, declaration-first language, and fixed reading width. Selectable care areas,
+range controls, case material, and progress all use the same route/action roles as the finder.
+
+### Practice console
+
+The console uses a persistent application shell across every `/console/*` route:
+
+- a 1440px header field with session controls;
+- five direct destinations (Home, Queue, Referrals, Results, Setup);
+- one route-aware “All tools” map exposing the complete workspace;
+- an 1180px working area with compact operational cards, tables, and forms.
+
+Do not reintroduce isolated console pages. Diagnostic surfaces such as matching, allocation, and
+interview live inside the same shell. On phones the primary destinations scroll horizontally and
+the workspace map becomes a bounded, vertically scrollable panel.
+
+## Interaction and motion
+
+Motion follows a Jakub-primary / Emil-secondary standard: spatial continuity first, polish
+second. It must explain where an object or state went.
+
+- `--dur-tap` acknowledges a press; `--dur-move` handles a short reversible move;
+  `--dur-enter` handles an arriving state.
+- Use the shared strong out-ramp or spring token. Do not scatter default `ease` transitions.
+- Do not animate more than two major regions at once, and do not add ambient loops.
+- Server-rendered content starts legible. Motion may enhance visible content but never gate it.
+- `prefers-reduced-motion: reduce` removes travel, parallax, and non-essential transitions.
+
+## Accessibility and installed display
+
+- Every interactive target has a 44px minimum hit area.
+- Keyboard focus must visibly differ from the resting state; do not suppress the outline without
+  a same-site replacement.
+- All public and console routes must fit a 390px viewport without horizontal document scroll.
+- The safe-area tokens protect sticky actions and chrome in standalone display mode.
+- Manifest, browser theme colour, generated icons, Apple icon, and Open Graph art must stay in
+  palette parity.
+- The app is installable through its manifest, but it does not promise offline operation; there
+  is no service worker.
 
 ## Copy constraints (design-relevant, non-negotiable)
 
-Patient-facing surfaces carry **no clinical language**: the compliance linter blocks "overdue",
-urgency, deterioration, diagnosis, test-result bait, benefit claims and check-up prompting; the
-register console additionally bans "needs", "at risk", "requires", "should be seen". No
-testimonials or ratings anywhere. Copy is scheduling language about availability, never advice.
-`docs/COMPLIANCE-DOSSIER.md` maps every surface to the rule that governs it.
+Patient-facing surfaces carry no clinical judgement: the compliance linters block urgency,
+deterioration, diagnosis/test-result bait, benefit claims, and check-up prompting. No testimonials,
+ratings, or invented credentials. Finder explanations say what words reached a declared fact;
+they do not grade a person or claim a complete clinical fit. `docs/COMPLIANCE-DOSSIER.md` maps
+every surface to its governing rule.
+
+## Readiness boundary
+
+The interface, responsive shell, manifest assets, navigation, accessibility, and production build
+are app-ready. The runtime is still a synthetic demonstration: console authentication is a demo
+flow, stores are process-memory fixtures, live SMS is founder-gated, and practice SSO/persistence
+are not wired. Visual readiness must never be described as clinical or operational launch approval.

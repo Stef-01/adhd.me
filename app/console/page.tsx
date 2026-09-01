@@ -30,7 +30,7 @@ export default async function ConsoleHome() {
       practices={practicesFor(email).map((r) => ({ id: r.practice.id as string, name: r.practice.name }))}
       activeId={record.practice.id as string}
     >
-      <div className="flex items-baseline justify-between">
+      <div className="console-home-heading">
         <h1 className="text-2xl font-semibold tracking-tight">{record.practice.name}</h1>
         <span className="text-sm text-stone-500">
           {record.practice.timezone} · holdout {Math.round(record.practice.holdoutRate * 100)}%
@@ -50,62 +50,62 @@ export default async function ConsoleHome() {
 
       {/* O149: wraps. Nine links in a non-wrapping row reached x=548 in a 390px viewport and took
           the whole document sideways with them. */}
-      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+      <nav className="console-quick-actions" aria-label="Practice shortcuts">
         <Link
           href="/console/results"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Your results
         </Link>
         <Link
           href="/console/dashboard"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Incrementality dashboard
         </Link>
         <Link
           href="/console/usefulness"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Usefulness audit
         </Link>
         <Link
           href="/console/outreach"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Outreach
         </Link>
         <Link
           href="/console/ops"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Admin ops
         </Link>
         <Link
           href="/console/roi"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           ROI calculator
         </Link>
         <Link
           href="/console/privacy"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Privacy
         </Link>
         <Link
           href="/console/complaints"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           Complaints
         </Link>
         <Link
           href="/console/setup/practice"
-          className="-my-0.5 inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium text-stone-700 underline hover:text-stone-900"
+          className="console-quick-link"
         >
           {record.setupCompletedAt ? "Setup" : "Finish setup"}
         </Link>
-      </div>
+      </nav>
 
       <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
         <div className="mb-4 flex items-baseline justify-between">

@@ -15,17 +15,30 @@
 // answered, and the guarantee has to hold across both. Source is also the only place the
 // distinction lives — `eachOf(...)` versus a bare `for…of` is the declaration.
 
-import { readFileSync } from "node:fs";
-import { execSync } from "node:child_process";
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { LEGITIMATELY_EMPTY, UNGUARDED_REMAINDER, eachOf, tally } from "./non-vacuous";
 
+function unitTestFiles(dir: string): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) files.push(...unitTestFiles(full));
+    else if (entry.name.endsWith(".test.ts")) files.push(full);
+  }
+  return files.sort();
+}
+
 /** Every `it` block in the unit suite that loops over an IMPORTED value and asserts inside it. */
 function unguardedRegisterLoops(): string[] {
-  const files = execSync("find src -name '*.test.ts'").toString().trim().split("\n");
+  // A direct tree walk keeps the census host-independent. The old shell `find` invocation
+  // silently returned no files on Windows, turning a non-vacuity law into an unrunnable test.
+  const files = unitTestFiles(path.resolve("src"));
   const found: string[] = [];
 
   for (const file of files) {
+    const repoFile = path.relative(process.cwd(), file).replaceAll(path.sep, "/");
     const src = readFileSync(file, "utf8");
     const imported = new Set<string>();
     for (const m of src.matchAll(/import\s*\{([^}]*)\}\s*from/g)) {
@@ -87,7 +100,7 @@ function unguardedRegisterLoops(): string[] {
       // became `treats ` and a register entry keyed on the full title stopped matching anything.
       const title =
         /it(?:\.\w+)?\(\s*(["'`])((?:\\.|(?!\1).)*)\1/.exec(lines[from]!)?.[2] ?? "(untitled)";
-      found.push(`${file} :: ${title}`);
+      found.push(`${repoFile} :: ${title}`);
     }
   }
   return found.sort();

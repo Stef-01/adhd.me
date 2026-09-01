@@ -8,14 +8,16 @@
 import Link from "next/link";
 import { requireSession } from "../guard";
 import { InterviewScreen } from "./interview-screen";
+import { ConsoleShell } from "../ui";
 
 export const metadata = { title: "Onboarding interview — ADHD.ME" };
 export const dynamic = "force-dynamic";
 
 export default async function InterviewPage() {
-  await requireSession();
+  const email = await requireSession();
   return (
-    <main id="main-content" className="mc">
+    <ConsoleShell email={email}>
+    <div className="mc">
       <header className="mc-head">
         <Link href="/console" className="mc-back">Console</Link>
         <h1>Onboarding interview</h1>
@@ -26,6 +28,7 @@ export default async function InterviewPage() {
         </p>
       </header>
       <InterviewScreen />
-    </main>
+    </div>
+    </ConsoleShell>
   );
 }

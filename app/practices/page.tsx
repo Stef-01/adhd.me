@@ -88,10 +88,10 @@ export default function PracticesPage() {
                 <strong className="font-serif text-7xl font-medium leading-none tracking-[-0.06em] sm:text-8xl">
                   {C.practiceStory.goalValue}
                 </strong>
-                <span className="pb-2 text-sm text-stone-400">of clinical work</span>
+                <span className="pb-2 text-sm text-stone-200">of clinical work</span>
               </div>
               <h3 className="mt-7 text-xl font-medium leading-snug">{C.practiceStory.goalTitle}</h3>
-              <p className="mt-3 text-sm leading-6 text-stone-400">{C.practiceStory.goalBody}</p>
+              <p className="mt-3 text-sm leading-6 text-stone-200">{C.practiceStory.goalBody}</p>
             </div>
           </div>
 

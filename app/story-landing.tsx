@@ -106,13 +106,13 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
       // offset in place for reduce users (the server cannot know the preference), who then got
       // the very slide this gate exists to prevent when whileInView fired. Under reduce the
       // element now snaps to rest at duration 0 and never watches the viewport at all.
-      initial={reduce ? false : { y: 20 }}
+      initial={reduce ? false : { y: 12 }}
       animate={reduce ? { y: 0 } : undefined}
       whileInView={reduce ? undefined : { y: 0 }}
       // `margin` fires the entrance slightly BEFORE the element reaches the read line, so the
       // movement has finished by the time it is being read rather than starting under the eye.
       viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
-      transition={reduce ? { duration: 0 } : { duration: 0.6, delay, ease: EASE }}
+      transition={reduce ? { duration: 0 } : { duration: 0.38, delay, ease: EASE }}
     >
       {children}
     </motion.div>
@@ -120,7 +120,7 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
 }
 
 const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
-const item: Variants = { hidden: { y: 16 }, show: { y: 0, transition: { duration: 0.55, ease: EASE } } };
+const item: Variants = { hidden: { y: 10 }, show: { y: 0, transition: { duration: 0.36, ease: EASE } } };
 
 export function StoryLanding() {
   const reduce = useReducedMotion();
@@ -132,8 +132,8 @@ export function StoryLanding() {
 
   // The hero figure drifts UP against the copy — the classic depth cue, at a magnitude small
   // enough that it reads as depth rather than as an effect.
-  const heroFigureY = useSectionParallax(heroRef, 44);
-  const throughlineY = useSectionParallax(throughlineRef, 34);
+  const heroFigureY = useSectionParallax(heroRef, 18);
+  const throughlineY = useSectionParallax(throughlineRef, 12);
 
   // Read progress, drawn as a hairline under the sticky header. Decorative and aria-hidden: it
   // repeats what a scrollbar already says, and a screen reader has better ways to ask.
@@ -146,13 +146,17 @@ export function StoryLanding() {
         className="story-header"
         initial={reduce ? false : { y: -10 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: EASE }}
+        transition={{ duration: 0.32, ease: EASE }}
       >
         <div className="story-wrap story-header-inner">
           <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
-          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={PRESS}>
-            <Link href="/finder" className="story-demo-link">Find a GP</Link>
-          </motion.div>
+          <nav className="story-nav" aria-label="Primary navigation">
+            <Link href="/examples" className="story-nav-link">Worked examples</Link>
+            <Link href="/practices" className="story-nav-link">For practices</Link>
+            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={PRESS}>
+              <Link href="/finder" className="story-demo-link">Find a GP</Link>
+            </motion.div>
+          </nav>
         </div>
         <motion.span
           className="story-progress"
@@ -161,7 +165,9 @@ export function StoryLanding() {
         />
       </motion.header>
 
-      {/* 1. The claim, beside the only honest figure this page has. */}
+      {/* 1. The claim and the route. The three stops demonstrate the product's mechanism before
+          the visitor has to trust a marketing sentence: their words, the declared fit, then a
+          booking handoff. */}
       <section className="story-hero" aria-labelledby="story-hero-title" ref={heroRef}>
         <div className="story-wrap story-hero-grid">
           <motion.div
@@ -170,15 +176,16 @@ export function StoryLanding() {
             animate="show"
             variants={stagger}
           >
-            {/* The eyebrow orients the patient — what this page is for and who it serves — rather
-                than opening with the company's own story. This also keeps the site clear of the
-                founder/origin framing O167 asked to remove: no first-person-plural origin claim. */}
-            <motion.p className="story-eyebrow" variants={item}>Adult ADHD care in Australia</motion.p>
+            <p className="story-hero-context">Adult ADHD care in Australia</p>
             <motion.h1 id="story-hero-title" variants={item}>
               ADHD care, start to finish, <span className="story-claim">with one GP</span>.
             </motion.h1>
             <motion.p className="story-hero-sub" variants={item}>
               No psychiatrist queue to clear first.
+            </motion.p>
+            <motion.p className="story-hero-explainer" variants={item}>
+              Describe the GP you are looking for in your own words. The finder shows why each
+              listed GP appears, so the route stays inspectable from search to booking.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
@@ -187,6 +194,15 @@ export function StoryLanding() {
                 </Link>
               </motion.div>
             </motion.div>
+
+            <motion.ol className="story-intent-route" variants={item} aria-label="How the finder works">
+              {STEPS.map((step, index) => (
+                <li key={step.title}>
+                  <span className="story-route-stop" aria-hidden="true">{index + 1}</span>
+                  <span>{step.title}</span>
+                </li>
+              ))}
+            </motion.ol>
           </motion.div>
 
           {/* The entrance and the parallax are on two different elements on purpose: one `y` per
@@ -195,7 +211,7 @@ export function StoryLanding() {
             className="story-portrait"
             initial={reduce ? false : { y: 24 }}
             animate={{ y: 0 }}
-            transition={{ duration: 0.7, delay: 0.12, ease: EASE }}
+            transition={{ duration: 0.46, delay: 0.08, ease: EASE }}
           >
             <motion.div className="story-portrait-drift" style={live ? { y: heroFigureY } : undefined}>
               <CoverageMap />
@@ -290,10 +306,7 @@ export function StoryLanding() {
       {/* 6. What you actually do. */}
       <section className="story-chapter" aria-labelledby="steps-title">
         <div className="story-wrap">
-          <Reveal className="story-eyebrow-block">
-            <p className="story-eyebrow">What ADHD.ME is</p>
-          </Reveal>
-          <Reveal delay={0.04}>
+          <Reveal>
             <h2 id="steps-title" className="story-heading story-heading-wide">How it works.</h2>
           </Reveal>
           <motion.ol
@@ -345,7 +358,6 @@ export function StoryLanding() {
       <section className="story-join" aria-labelledby="join-title">
         <div className="story-wrap story-join-inner">
           <div>
-            <p className="story-eyebrow">Join us</p>
             <h2 id="join-title" className="story-heading">Are you a GP who does this work?</h2>
             <p className="story-join-copy">
               Carrying ADHD care? Get found. Tell us what you see, how you work, how to reach you.
