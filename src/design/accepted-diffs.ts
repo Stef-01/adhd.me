@@ -63,6 +63,13 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     captures: 180,
     reason:
       "Exactly eight cells moved — the complaints and privacy console pages, both widths and motions — because AR26 strengthened the register's three weakest zeros to carry their kinds in words ('None open.' -> 'No complaint is open right now.'; 'None yet.' -> 'No complaint has been resolved yet.'; 'None.' -> 'No deletion has been recorded yet — the retention policy has not removed anything.'), the copy successor AR25's entries recorded. Three-run protocol agreed before this acceptance.",
+  },  {
+    unitId: "O218",
+    acceptedAt: "2026-09-01",
+    manifestSha256: "7e3ec0ef7344be769857b432b99bbb74cc4af84d370ebaba78ecde4ab8d9644e",
+    captures: 180,
+    reason:
+      "The founder-directed reskin session, accepted under the session's last unit id because its three units (O216/O217/O218) land together: O216 put the network deployment's brand scheme on every page's chrome (band-gradient header, band-fall footers and Acknowledgement, the story landing's rose retired to amber), O217 added the finder's example-profiles tickbox to the results screen (default OFF, so most finder cells move only by the new control), and O218 ported the network's motion vocabulary (pixel-neutral at rest; animations are disabled in the capture harness) and drew the 2px band hairline under the finder's header. Broad by design — a colour scheme is the one change that legitimately moves most of the matrix. Three-run protocol agreed (zero pairwise diff across all 180 captures, runs at 05:0x on 2026-09-01) before this acceptance.",
   },
 ];
 
