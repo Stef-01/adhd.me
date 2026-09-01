@@ -36,10 +36,28 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
       "The Acknowledgement of Country artwork: ochre and earth tones that MEAN something in the illustration and deliberately do not participate in the UI palette — retinting the acknowledgement to match the brand would be exactly backwards.",
   },
   {
+    file: "app/apple-icon.tsx",
+    sites: 6,
+    rationale:
+      "O220: the same art at Apple's 180px, in its own route because iOS reads apple-touch-icon specifically — the same six token-mirroring literals as app/icon.tsx.",
+  },
+  {
+    file: "app/icon.tsx",
+    sites: 6,
+    rationale:
+      "O220: the app icon, Satori-rendered at build like the OG image (opengraph-image.tsx's own rationale applies verbatim). Five gradient stops mirror the --hero-* band tokens and the label mirrors --on-ground.",
+  },
+  {
     file: "app/layout.tsx",
     sites: 1,
     rationale:
       "viewport.themeColor is a meta value serialized into HTML — a CSS variable cannot reach it, so the literal is the only way to state it. It must EQUAL --paper's value; the day the palette moves, this literal moves in the same commit or the O157 contrast sweep and the browser chrome disagree about the page.",
+  },
+  {
+    file: "app/manifest.ts",
+    sites: 2,
+    rationale:
+      "O220: theme_color and background_color in the web app manifest — serialized JSON a CSS variable cannot reach, the exact law app/layout.tsx's viewport.themeColor entry states. Both must EQUAL --paper so the standalone window launches on paper, not a white flash; the day the palette moves, these move in the same commit.",
   },
   {
     file: "app/opengraph-image.tsx",
