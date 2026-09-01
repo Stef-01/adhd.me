@@ -77,12 +77,27 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
    screens that do not exist. Re-derived in the commit that earned it, per the ratchet's law; an
    untracked DROP is progress nobody recorded, which this census refuses in the same breath as it
    refuses an untracked rise. */
-export const CSS_RAW_HEX_SITES = 80;
+/* 80 -> 73 (O216, the brand-scheme reskin): THE RATCHET FELL BY SEVEN, all of them colours the
+   reskin retired rather than restated. Three went with the Acknowledgement band's own beige strip
+   (#f6ecdd, #f3ddbe, #4a3420 — the band now carries the scheme's closing fall from tokens); three
+   went with the story header's demo pill moving onto the band as a paper pill (its #fff label is
+   var(--ink) now, and its two `color-mix(… #000)` darkening states are var(--on-ground)); one was
+   the throughline's rose tint (#e0aeba), now var(--on-band). The three hand-written rose-dark
+   stops (#6f1e31) became `color-mix(… 82%, #000)` derived from the accent they darken — a
+   site-neutral swap (#6f1e31 out, #000 in), counted as exactly that by the census. Re-derived in
+   the commit that earned it, per the ratchet's law. */
+export const CSS_RAW_HEX_SITES = 73;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the
    direction this census exists to encourage; its two component exceptions deleted above. */
-export const CSS_TOKEN_DEFINITION_SITES = 38;
+/* 38 -> 44 (O216): +7 for the brand-gradient hues ported from the network deployment
+   (--hero-glow through --hero-dusk) — new colour arriving AS token definitions, the only door
+   this census wants colour to arrive through — and -1 that was never a definition at all: the
+   old story-palette comment's prose contained a literal \`--accent: #8A5A16\` and this line-based
+   classifier cannot tell prose citing a definition from a definition, so it had counted a comment
+   here since the day it was written. The rewritten comment no longer quotes one. */
+export const CSS_TOKEN_DEFINITION_SITES = 44;
 
 export type HexSite = { readonly file: string; readonly line: number; readonly hex: string };
 

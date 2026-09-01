@@ -135,7 +135,14 @@ export type DarkGroundSelector = { readonly selector: string; readonly token: st
  * profile, which the finder renders too. Every leaf-rule selector painting a dark token as its own
  * background, pinned exactly (AR17's shape): a NEW site painting an existing dark token, or a new
  * dark token appearing anywhere, fails until this list is re-derived and read. */
+/* Re-derived 2026-09-01 (O216, the brand-scheme reskin): five new sites, all `ground`, all the
+ * page chrome the reskin moved onto the network deployment's band — the shared header and the
+ * landing's own (`.site-nav`, `.story-header`), the two footers (`.site-footer`, `.story-footer`)
+ * and the Acknowledgement band (`.aoc-band`). Each paints `--ground` as the opaque base under a
+ * `background-image` gradient and declares `color: var(--on-ground)` in the same rule, which is
+ * exactly the pairing this census exists to require. */
 export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
+  { selector: ".aoc-band", token: "ground" },
   { selector: ".be-save-button", token: "ground" },
   { selector: ".briefing-footer > button", token: "ground" },
   { selector: ".consent-bar", token: "ink" },
@@ -152,7 +159,11 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: ".mic-button", token: "ground" },
   { selector: ".notfound-primary", token: "ink" },
   { selector: ".primary-button", token: "ground" },
+  { selector: ".site-footer", token: "ground" },
+  { selector: ".site-nav", token: "ground" },
   { selector: ".skip-link", token: "ink" },
+  { selector: ".story-footer", token: "ground" },
+  { selector: ".story-header", token: "ground" },
   { selector: ".story-sticky-cta a", token: "ink" },
   { selector: ".story-throughline", token: "s-dark" },
 ];

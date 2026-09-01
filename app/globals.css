@@ -98,6 +98,41 @@
   --on-ground: #ffffff;
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
   --on-band: #E0A458;
+
+  /* THE BRAND SCHEME (ported from the network deployment, Stef-01/ADHD O271/O282/O296/O300,
+     founder-directed reskin 2026-09-01): warm golden orange to soft periwinkle blue. The network
+     tree carries this on its header, hero, footer and Acknowledgement band; the two deployments
+     are one product on two domains, so the finder carries the same scheme from the same tokens.
+     Values are copied VERBATIM — a re-derivation here would be the drift the split's own banner
+     warns about ("a change to shared code that matters to both has to be made in both"). */
+  --hero-glow: #f4a862;
+  --hero-orange: #e08c42;
+  --hero-orange-deep: #d07a35;
+  --hero-blue: #6f89c3;
+  --hero-blue-deep: #5c78b6;
+  --hero-blue-night: #4a5f97;
+  --hero-dusk: #3a4a78;
+  /* THE BRAND GRADIENT, DEFINED ONCE (network O296). Every surface that carries it — the header,
+     the footer, the Acknowledgement band — references this, so they cannot drift apart by being
+     written out per surface. Purely left-to-right on purpose: the footer and the Acknowledgement
+     are STACKED elements, and any layer whose geometry depends on element height renders
+     differently in each and shows a join. */
+  /* ACROSS: the header and any mid-page band. */
+  --band-gradient:
+    linear-gradient(100deg, var(--hero-orange-deep) 0%, var(--hero-orange) 34%, var(--hero-glow) 52%, var(--hero-blue) 86%, var(--hero-blue-deep) 100%);
+  /* THE LEGIBILITY SCRIM FOR THE ACROSS BAND (network O300). Sits over the ramp and evens out its
+     luminance where it peaks, so white type on the band clears the WCAG floor without the brand
+     colours being restated as something duller. Alphas are per stop and derived in the network
+     tree against its rendered-pixel sweep; same 100deg as the band, painted on the same box, so
+     the two stay aligned at every width. */
+  --band-scrim:
+    linear-gradient(100deg, rgba(16, 12, 9, .04) 0%, rgba(16, 12, 9, .14) 34%, rgba(16, 12, 9, .24) 52%, rgba(16, 12, 9, .02) 86%, rgba(16, 12, 9, 0) 100%);
+  /* DOWN: the closing band. Two stacked elements, so the stops meet exactly at the boundary —
+     the footer hands --hero-blue-night to the acknowledgement, which carries it into the dusk. */
+  --band-fall-upper:
+    linear-gradient(180deg, var(--hero-blue-deep) 0%, var(--hero-blue-night) 100%);
+  --band-fall-lower:
+    linear-gradient(180deg, var(--hero-blue-night) 0%, var(--hero-dusk) 100%);
 }
 
 
@@ -2905,14 +2940,14 @@ textarea:focus-visible {
 }
 
 .community-interest-form > button:focus-visible {
-  background: #6f1e31;
+  background: color-mix(in srgb, var(--community-accent) 82%, #000);
   outline: 3px solid var(--community-accent);
   outline-offset: 2px;
 }
 
 @media (hover: hover) {
   .community-interest-form > button:hover {
-    background: #6f1e31;
+    background: color-mix(in srgb, var(--community-accent) 82%, #000);
     outline: 3px solid var(--community-accent);
     outline-offset: 2px;
   }
@@ -3269,28 +3304,31 @@ textarea:focus-visible {
    Minimalist: paper ground, one sage accent, Newsreader display, generous air,
    three disciplined display tiers. Extends DESIGN.md rather than inventing anew.
    =========================================================================== */
-/* THE LANDING'S PALETTE IS SCOPED TO `.story` AND NO LONGER INHERITS `--accent`.
-   The rest of the tree stays amber (`:root --accent: #8A5A16`); this one page carries the deep
-   rose the founders asked for after the Meherr build. Scoping it rather than moving `:root` is
-   deliberate — /finder, /practices and /clinicians are a different audience with their own
-   contrast budget, and a global hue swap would silently re-rate every one of them.
+/* THE LANDING'S PALETTE IS SCOPED TO `.story`, AND O216 RETIRED ITS ROSE. The deep rose was the
+   one surface still carrying a colour the product no longer has anywhere else: the network
+   deployment's scheme (whose header, footer and closing band this tree now shares) is the brand
+   gradient over the paper-and-amber base, and a landing in a third colourway read as a different
+   product than the pages one click away. The scoped tokens stay — /finder and /practices have
+   their own contrast budget and a global hue swap would silently re-rate them — but they now
+   resolve to the tree's own amber family, so the whole deployment is one scheme.
 
-   CONTRAST, MEASURED, NOT ASSUMED. #8b263e is 7.75:1 as text on --s-paper and 8.58:1 under white,
-   so it works as a colour and as a ground; #e0aeba is the focus ring only, never text. */
+   CONTRAST, MEASURED, NOT ASSUMED. #8A5A16 is 5.36:1 as text on --s-paper, 4.77:1 on the
+   .story-chapter-tint ground and 5.91:1 under white, so it works as a colour and as a ground;
+   #E9D6B4 is the focus ring only, never text. */
 .story {
   --s-paper: #f7f3ea;
   --s-paper-2: #f1ece1;
   --s-ink: #1f221c;
   --s-muted: #63665d;
-  --s-accent: #8b263e;
-  --s-accent-soft: #f3e2e6;
-  --s-accent-mid: #e0aeba;
+  --s-accent: #8A5A16;
+  --s-accent-soft: #f7efe3;
+  --s-accent-mid: #E9D6B4;
   --s-line: #e0ddd2;
   /* The one dark beat on the page. Olive-black, not neutral: the paper is warm. */
   --s-dark: #292800;
   --community-ink: #1f221c;
   --community-muted: #63665d;
-  --community-accent: #8b263e;
+  --community-accent: #8A5A16;
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
@@ -3305,12 +3343,18 @@ textarea:focus-visible {
 .story-wrap { width: min(1280px, calc(100% - 80px)); margin-inline: auto; }
 
 /* Header ------------------------------------------------------------------ */
+/* O216 (founder-directed reskin): the landing's header carries the same band as .site-nav, so the
+   most-seen page and every page one click away are one continuous scheme — the network tree's
+   O290 rationale, applied at this deployment's front door. Opaque --ground base under the
+   gradient, same as .site-nav: it is what the contrast sweep reads, declared in the dark-ground
+   census (AR18). */
 .story-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--s-paper) 85%, transparent);
-  backdrop-filter: blur(10px);
+  background-color: var(--ground);
+  color: var(--on-ground);
+  background-image: var(--band-scrim), var(--band-gradient);
 }
 .story-header-inner {
   display: flex;
@@ -3327,19 +3371,24 @@ textarea:focus-visible {
   bottom: 0;
   display: block;
   height: 2px;
-  background: var(--s-accent);
+  /* O216: the band's own text colour — the amber accent has no contrast against the gradient's
+     warm stops. Decorative and aria-hidden, but a progress bar nobody can see is not decoration. */
+  background: var(--on-ground);
   transform: scaleX(0);
   transform-origin: 0 50%;
   will-change: transform;
 }
 .story-wordmark {
-  color: var(--s-ink);
+  color: var(--on-ground);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.03em;
   text-decoration: none;
 }
+/* O216: a paper pill on the band — the same treatment as .site-nav-link, because on the gradient
+   an accent-filled pill fights the ground it sits on. Hover BRIGHTENS to full white, the network
+   tree's own idiom for a paper pill on the band. */
 .story-demo-link {
   display: inline-flex;
   align-items: center;
@@ -3347,8 +3396,8 @@ textarea:focus-visible {
   padding: 0 19px;
   border: 0;
   border-radius: 999px;
-  color: #fff;
-  background: var(--s-accent);
+  color: var(--ink);
+  background: var(--paper);
   font-size: 0.8125rem;
   font-weight: 640;
   letter-spacing: 0.01em;
@@ -3356,21 +3405,20 @@ textarea:focus-visible {
   transition: background 0.2s ease, transform 0.15s ease;
   animation: story-demo-nudge 5s ease-in-out infinite;
 }
-/* Hover DARKENS. It used to reach for --accent-soft, which was a dark brown while the palette
-   was dark and became a near-white cream when the palette went back to light, putting white text
-   on cream and erasing the only header button on the site. */
 .story-demo-link:focus-visible {
-  background: color-mix(in srgb, var(--s-accent) 82%, #000);
+  background: var(--on-ground);
   animation-play-state: paused;
 }
 
 @media (hover: hover) {
   .story-demo-link:hover {
-    background: color-mix(in srgb, var(--s-accent) 82%, #000);
+    background: var(--on-ground);
     animation-play-state: paused;
   }
 }
-.story-demo-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
+/* O216: the ring is the band's own text colour — a tint ring on the band's warm stops would be
+   a ring the reader cannot find. */
+.story-demo-link:focus-visible { outline: 3px solid var(--on-ground); outline-offset: 3px; }
 .story-demo-link:active { transform: translateY(1px); }
 
 /* One soft double-hop every 5s, then rest. */
@@ -3444,7 +3492,8 @@ textarea:focus-visible {
   transition: transform 0.15s ease, background 0.2s ease;
 }
 @media (hover: hover) {
-  .story-primary-link:hover { background: #6f1e31; }
+  /* O216: derived from the accent rather than a second hex — the rose this used to darken is gone. */
+  .story-primary-link:hover { background: color-mix(in srgb, var(--s-accent) 82%, #000); }
 }
 .story-primary-link:active { transform: translateY(1px); }
 .story-primary-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
@@ -3668,8 +3717,9 @@ textarea:focus-visible {
 .story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.6875rem; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
-/* The one dark beat. The accent cannot carry text here (2.4:1 on --s-dark), so the emphasis
-   inside the line lifts to the palette's own tint at 5.2:1 rather than being invented. */
+/* The one dark beat. The accent cannot carry text here (2.6:1 on --s-dark), so the emphasis
+   inside the line lifts to --on-band — the palette's own accent for dark bands, 7.2:1 here —
+   rather than being invented. */
 .story-throughline {
   padding-block: clamp(104px, 13vw, 200px);
   background: var(--s-dark);
@@ -3685,7 +3735,7 @@ textarea:focus-visible {
   letter-spacing: -0.04em;
   text-wrap: balance;
 }
-.story-throughline-line em { color: #e0aeba; font-style: italic; }
+.story-throughline-line em { color: var(--on-band); font-style: italic; }
 /* Pillars. A hairline-ruled list where the title and the body sit on one baseline, not a 3-up
    card row: three cards would give equal weight to three things read in sequence. */
 .story-pillars {
@@ -3759,9 +3809,15 @@ textarea:focus-visible {
 .story .community-form-success { border-color: #3a3325; }
 
 /* Footer ------------------------------------------------------------------ */
+/* O216: the footer is the TOP of the closing band (network O293/O300) — its last stop is the
+   Acknowledgement band's first stop, so the landing ends on one continuous surface instead of a
+   cream strip between two colour changes. Declared in the dark-ground census (AR18). */
 .story-footer {
   padding-block: 44px;
-  border-top: 1px solid var(--s-line);
+  border-top: 0;
+  background-color: var(--ground);
+  color: var(--on-ground);
+  background-image: var(--band-fall-upper);
 }
 .story-footer-inner {
   display: flex;
@@ -3770,7 +3826,7 @@ textarea:focus-visible {
   gap: 20px;
 }
 .story-footer-wordmark {
-  color: var(--s-ink);
+  color: var(--on-ground);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.25rem;
   font-weight: 500;
@@ -3778,35 +3834,47 @@ textarea:focus-visible {
   text-decoration: none;
 }
 .story-footer-links { display: flex; flex-wrap: wrap; gap: 10px 26px; }
+/* O216: full --on-ground on the closing band — the network's O300 measured a dimmed white at
+   4.05:1 where full white is 5.08:1, and these are among the smallest links on the site. */
 .story-footer-links a {
-  color: var(--s-muted);
+  color: var(--on-ground);
   font-size: 0.875rem;
   text-decoration: none;
   text-underline-offset: 3px;
 }
 @media (hover: hover) {
-  .story-footer-links a:hover { color: var(--s-ink); text-decoration: underline; }
+  .story-footer-links a:hover { text-decoration: underline; }
 }
 
-/* Acknowledgement of Country — a full-width band closing every page: the words on a warm sky, an
-   abstract earth-toned horizon along the bottom. */
+/* Acknowledgement of Country — a full-width band closing every page, and the ART IS UNTOUCHED.
+   O216 (founder-directed reskin, the network tree's O293/O296 arrangement): the band carries the
+   scheme's closing fall rather than its own beige strip — land against sky, one continuous surface
+   with the footer above it. Not one colour of the artwork changed: retinting an Acknowledgement to
+   match a brand palette would be exactly backwards. Because the artwork's SVG is TRANSPARENT above
+   its ridges, the ridges composite straight onto the band's gradient. */
 .aoc-band {
   position: relative;
   width: 100%;
-  padding-top: 34px;
-  background: linear-gradient(180deg, #f6ecdd 0%, #f3ddbe 100%);
+  padding-top: clamp(72px, 10vw, 132px);
   overflow: hidden;
+  background-color: var(--ground);
+  color: var(--on-ground);
+  background-image: var(--band-fall-lower);
 }
+/* O216 (network O296): smaller, set to the left, in a tone that belongs to the band rather than
+   sitting on top of it. Australian practice puts the Acknowledgement in the footer at footnote
+   size; what matters is that it stays READABLE rather than decorative, so the colour is a paper
+   tint at high enough opacity to clear the AA floor over the band's ground, not a whisper. */
 .aoc-text {
   position: relative;
   z-index: 1;
-  max-width: 60ch;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 24px 26px;
-  text-align: center;
-  color: #4a3420;
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  text-align: left;
+  color: rgba(251, 250, 247, .84);
+  font-size: 0.78rem;
+  line-height: 1.6;
 }
 .aoc-art {
   display: block;
@@ -3815,7 +3883,7 @@ textarea:focus-visible {
 }
 @media (max-width: 640px) {
   .aoc-art { height: 60px; }
-  .aoc-text { font-size: 0.875rem; }
+  .aoc-text { font-size: 0.75rem; }
 }
 
 /* Tablet ------------------------------------------------------------------ */
@@ -3911,13 +3979,21 @@ textarea:focus-visible {
 /* O189: the public spine — the same sticky wordmark-plus-one-link shape /approach carries,
    in the base palette (the story tokens are .story-scoped on purpose). Shared by every public
    page that had no mark of its own; app/public-header.tsx is the one place it is written. */
+/* O216 (founder-directed reskin): ONE HEADER, ONE COLOUR SCHEME, BOTH DEPLOYMENTS. The network
+   tree's O290 put its landing mesh on the header of every public page so moving between pages is
+   one continuous scheme; this deployment kept the translucent paper bar it had at the split, so
+   moving between the two DOMAINS was two different products. The header now carries the same band
+   from the same tokens. The opaque --ground base under the gradient is what the contrast sweep
+   reads (it walks ancestors and stops at the first opaque background), so the light type on it is
+   measured against a real dark ground: declared in the dark-ground census (AR18). */
 .site-nav {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--paper) 85%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+  background-color: var(--ground);
+  color: var(--on-ground);
+  background-image: var(--band-scrim), var(--band-gradient);
+  border-bottom: 0;
 }
 .site-nav-inner {
   display: flex;
@@ -3935,7 +4011,7 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--ink);
+  color: var(--on-ground);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.5rem;
   font-weight: 500;
@@ -3948,13 +4024,16 @@ textarea:focus-visible {
 .site-nav-link {
   /* O190: explicit-property transitions (never `transition: all`) and a reduced-motion-gated
      press state — the fetched guidance's micro-interaction floor. */
-  transition: border-color 160ms ease, color 160ms ease;
+  /* O216: a paper pill on the band, the network tree's own treatment — a bordered transparent
+     pill has no border colour that survives every stop of the gradient behind it. */
+  transition: background-color 160ms ease, color 160ms ease;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 16px;
-  border: 1px solid var(--line);
+  padding: 0 18px;
+  border: 0;
   border-radius: 999px;
+  background: var(--paper);
   color: var(--ink);
   font-size: 0.875rem;
   font-weight: 550;
@@ -3962,10 +4041,12 @@ textarea:focus-visible {
   touch-action: manipulation;
 }
 @media (hover: hover) {
-  .site-nav-link:hover { border-color: var(--ink); }
+  .site-nav-link:hover { background: var(--on-ground); }
 }
+/* O216: the ring is the band's own text colour now — an amber ring on the band's orange stops
+   would be a ring the reader cannot find. */
 .site-nav-link:focus-visible,
-.site-nav-wordmark:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.site-nav-wordmark:focus-visible { outline: 2px solid var(--on-ground); outline-offset: 3px; }
 .join-wrap { width: min(720px, 100%); margin: 0 auto; padding: 0 24px; }
 .join-header { padding-block: 56px 36px; }
 .join-header h1 {
@@ -5202,26 +5283,36 @@ textarea:focus-visible {
 .crumbs [aria-current="page"] { color: var(--muted); }
 
 /* The shared footer (item 3). */
+/* O216 (founder-directed reskin): the footer is the TOP of the closing band rather than a cream
+   strip before it — the network tree's O293/O300 arrangement. Its last stop is the Acknowledgement
+   band's first stop, so the two elements read as one continuous surface instead of three colour
+   changes in ninety pixels. Full-width so the band runs edge to edge; .site-footer-inner keeps
+   the links on the 640px measure they always sat on. */
 .site-footer {
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px 22px;
-  max-width: 640px; margin: 0 auto; padding: 22px 24px 30px; width: 100%;
-  border-top: 1px solid var(--line);
+  width: 100%; padding: 40px 24px 34px; border-top: 0;
+  background-color: var(--ground); color: var(--on-ground);
+  background-image: var(--band-fall-upper);
 }
-.site-footer-wordmark { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
+.site-footer-inner { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px 22px; max-width: 640px; margin: 0 auto; width: 100%; }
+.site-footer-wordmark { color: var(--on-ground); font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
 .site-footer ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
 /* O145: the footer is the one component on six public routes, so its links were six of the
    sweep's findings at once — the wordmark measured 66x21 and the list links 39x44 and 41x44,
    short on height and on width respectively. The hit area is grown with padding and pulled back
    with an equal negative margin, so every link clears 44x44 while the footer LOOKS identical:
    nothing moves, the baseline row is unchanged, and the text sits where it always sat. */
+/* O216: full --on-ground, not a muted grey — the network's O300 measured an rgba(255,255,255,.88)
+   at 4.05:1 on the closing band where full white is 5.08:1; the smallest links on the site get the
+   colour that clears the floor. */
 .site-footer a {
-  color: var(--muted); font-size: 0.875rem; text-decoration: none;
+  color: var(--on-ground); font-size: 0.875rem; text-decoration: none;
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 44px; min-width: 44px;
   padding-inline: 5px; margin-inline: -5px;
 }
 @media (hover: hover) {
-  .site-footer a:hover { color: var(--ink); text-decoration: underline; }
+  .site-footer a:hover { text-decoration: underline; }
 }
 
 /* Sticky mobile CTA on the landing page (item 9). */

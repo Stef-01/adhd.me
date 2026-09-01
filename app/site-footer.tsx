@@ -34,14 +34,18 @@ const VISIBLE_DOORS = TEAM_PAGE_PUBLIC
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
-      <nav aria-label="Site">
-        <ul>
-          {VISIBLE_DOORS.map((door) => (
-            <li key={door.href}><Link href={door.href}>{door.label}</Link></li>
-          ))}
-        </ul>
-      </nav>
+      {/* O216 (network O293's shape): the band is full-width so the gradient can run edge to edge;
+          this inner wrapper keeps the links on the same 640px measure they always sat on. */}
+      <div className="site-footer-inner">
+        <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
+        <nav aria-label="Site">
+          <ul>
+            {VISIBLE_DOORS.map((door) => (
+              <li key={door.href}><Link href={door.href}>{door.label}</Link></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </footer>
   );
 }
