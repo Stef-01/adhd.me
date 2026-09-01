@@ -3745,3 +3745,55 @@ dark-ground census (AR18) with same-rule foregrounds.
 **Captures:** `qa/o216-landing-390.png`, `qa/o216-landing-1280.png`, `qa/o216-faq-390.png`,
 `qa/o216-faq-1280.png` (the band header on a PublicHeader page), and `qa/o216-footer-aoc-1280.png`
 (the footer→Acknowledgement seam reading as one continuous fall).
+
+## O217 — twenty example profiles behind a tickbox, labeled everywhere they render (2026-09-01)
+
+**Founder-directed** (decision `synthetic-roster-tickbox`, all three messages recorded verbatim in
+`founder-gates.ts`): invented example GP profiles return for testing — a controlled reversal of
+the persona purge, with every defence against "invented presented as real" now machinery in
+`synthetic-roster.test.ts`. The results screen carries the opt-in tickbox (default OFF) as a
+bordered control whose label and meaning share a row: **Include example profiles** / "Fictional
+GPs for trying the finder — not real people, and not bookable." The 44px floor is met by the
+wrapping label, the sweep's own measurement rule.
+
+Everywhere a persona renders it says so: a quiet bordered tag on the result row (muted on stone —
+a signpost, never the accent), the same tag on a compare column head, a plain sentence directly
+under the profile name (the O184 siting logic: a notice met after a view has formed has already
+failed), and the booking bar renders "There is nobody to book" where the control would be — an
+explanation, not a disabled button that reads as a real doctor with a broken page. Portraits are
+the roster's own monogram state; nothing generates a face.
+
+**Captures:** `qa/o217-results-off-{390,1280}.png`, `qa/o217-results-on-{390,1280}.png`,
+`qa/o217-results-on-list-{390,1280}.png`, `qa/o217-profile-synthetic-390.png`,
+`qa/o217-profile-booking-390.png`.
+
+## O218 — the motion vocabulary arrives, and the brand enters the finder at 2px (2026-09-01)
+
+The network tree's named motion system (its O197/O239/O252) ported verbatim: `--ease-spring` (a
+sampled `linear()` spring), `--ease-soft`, and the three named durations. Twelve literal-motion
+sites snapped to the vocabulary — presses acknowledge at `--dur-tap`, nudges at `--dur-move`,
+screens arrive on the soft ramp at `--dur-enter`, and the demo-scenario popover, the one RELEASED
+element, alone gets the spring. Largest single duration move: 20ms. The cv2 console's own tokens
+and the story page's choreographed timelines are deliberately untouched.
+
+The finder's header hairline becomes the band itself at 2px — the brand present inside the
+Operate surface without a gradient field shouting over a task screen. **Captures:**
+`qa/o218-finder-hairline-{390,1280}.png`.
+
+## O219 — the story landing joins the accent law (2026-09-01)
+
+The full e2e run caught what the reskin had actually done: retiring the rose to amber made the
+landing's scoped palette the PRODUCT accent by value, and the accent-discipline sweep counted the
+page for the first time — ten meanings on `/` against a cap of two, four on `/approach`. The
+answer is O166's, applied rather than evaded: the accent keeps its two earned meanings on the
+landing — the claim's drawn underline (the word that matters) and the "Now in-practice" stat (the
+value that changed) — and everything else moves to the tree's own idioms. Eyebrows and step
+numbers to muted; the primary CTA and the approach door to the dark-pill treatment; the
+clinician-door band to the page's own dark beat with `--on-band` as its sanctioned accent; the
+community submit to ink. `/approach` now spends zero accent.
+
+The finder hairline also moved to a `::after` after the contrast sweep measured the header's
+Home link against the band's worst stop (the ancestor walk treats any gradient on an ancestor as
+the painted ground and cannot know a 2px strip at the far edge — 4.01:1 of fiction; the
+pseudo-element renders identically and owns no text). Both fixes verified by re-running the
+sweeps that caught them.
