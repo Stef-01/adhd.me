@@ -70,6 +70,13 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     captures: 180,
     reason:
       "The founder-directed reskin session, accepted under the session's last unit id because its three units (O216/O217/O218) land together: O216 put the network deployment's brand scheme on every page's chrome (band-gradient header, band-fall footers and Acknowledgement, the story landing's rose retired to amber), O217 added the finder's example-profiles tickbox to the results screen (default OFF, so most finder cells move only by the new control), and O218 ported the network's motion vocabulary (pixel-neutral at rest; animations are disabled in the capture harness) and drew the 2px band hairline under the finder's header. Broad by design — a colour scheme is the one change that legitimately moves most of the matrix. Three-run protocol agreed (zero pairwise diff across all 180 captures, runs at 05:0x on 2026-09-01) before this acceptance.",
+  },  {
+    unitId: "O219",
+    acceptedAt: "2026-09-01",
+    manifestSha256: "2fe56bec3379f956450efb860b96838c0a3086da35bdc916cfaf829d26fa93e0",
+    captures: 180,
+    reason:
+      "Exactly twelve cells moved — /, /approach and /console/matching, both widths and motions — from the accent-law pass the full e2e run demanded of the reskin: the landing keeps the accent's two earned meanings (the claim's underline, the live stat) and its other eight accent classes moved to muted/ink/dark-band idioms; /approach dropped to zero; the console page moves under the same commit set through the shared chrome the O218 token substitutions reach. The accent-discipline, contrast and honesty sweeps are all green on the same tree (full suite 315 passed / 1 skipped), which bounds what the moved pixels can be. Three-run protocol agreed (zero pairwise diff) before this acceptance.",
   },
 ];
 

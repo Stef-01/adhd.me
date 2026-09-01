@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 5c41a94 (2026-08-28T01:30Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me), not the network tree. pnpm verify green (296 files / 4380 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS (all 316 e2e tests accounted for); full pnpm e2e green (315 passed, 1 skipped, 15.8m), exit code 0 read from the command itself, not through a pipe. **O215 done — founder-directed: the two interfaces became two deployments and this tree is the finder half.** The network, the mission page, the cross-interface launch control and O208's two-interface register were removed; the both-directions registers named the other ten things that had to move. O214's gate:accounting correctly REFUSED the inherited 344-test line until it was re-earned against this 316-test suite — the check earning its keep the day after it landed. O214/O213/O212/O211/O210/O209/O208/O207/O206 done. O205 through O194 done. Twentieth consecutive firing to read the WHOLE gate on the tree it pushes`
+`gate: green @ 98562ac (2026-09-01T06:55Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4391 tests, 13 skipped), build, audit PASS (2 accepted advisories), perf gate PASS (48 routes within budget; heaviest /finder at 681 KB), gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.5m), exit code 0 read from the command itself, not through a pipe. AR15/AR16 visual baseline re-accepted twice under the three-run zero-diff protocol (180 captures; shas in ACCEPTED_DIFFS under O218 and O219). **O216 through O221 done — the founder-directed reskin session**: the network's brand scheme on every page's chrome (O216), twenty synthetic example profiles behind the finder's opt-in tickbox with real-only counts preserved (O217), the motion vocabulary and the finder's band hairline (O218), the accent-law pass the first full e2e demanded (O219), the standalone-app appraisal with Phase 1a shipped — manifest and generated icons, the finder installs (O220), and the engine-purity law, the app plan's Phase 2 (O221). O215 done. The sha is the last code commit the runs covered; the ledger and acceptance edits land beside this line in the same push`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -119,6 +119,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O221 (the engine seam made law — STANDALONE-APP-PLAN.md Phase 2, cheap-correct-first) —
+> 2026-09-01.** The appraisal measured the core's purity; this unit makes it law.
+> `engine-purity.ts` walks the TRANSITIVE import closure from src/matching, src/demo, src/geo,
+> src/compliance and src/onboarding/types (a directory list would let impurity hide one hop away
+> — the closure genuinely reaches @/domain/types, @/messaging/templates, @/education/advice-lint).
+> LAW A, zero exceptions: no framework import, no client boundary, no DOM global on comment- and
+> string-stripped source. LAW B: node: builtins only behind a declared exception — exactly one,
+> compliance/surfaces.ts, the repo-tree census an app port takes the core WITHOUT — with a
+> both-directions liveness check so the register cannot rot into paperwork. The scanner proves it
+> can go red before its green is trusted; the first draft's liveness check stripped the very
+> import strings it was checking, recorded in the test. Two deliberate-decision pins moved:
+> plan-canon's ACTIVE lanes grew to three (the founder commissioned the app lane in their own
+> words) and AUDIT-AR's accepted-diff row advanced with the register.
+>
+> **O220 (FOUNDER-DIRECTED: "Critically appraise and commence plan to convert this into a
+> standalone app") — 2026-09-01.** docs/STANDALONE-APP-PLAN.md is the appraisal and the phased
+> plan; its verdict in one line: the felt goal is reachable as an installable PWA at near-zero
+> compliance cost; the pure-TS engine seam gets formalised regardless (O221); native is
+> founder-gated G-APP-1..3 — public store distribution contradicts the recorded testing posture,
+> both stores apply health-app review, store metadata is itself a patient-readable surface owed
+> the same linters, and NO native patient surface ships before the honesty sweeps cover it.
+> Phase 1a shipped with the plan: app/manifest.ts (standalone display, paper launch frame under
+> layout.tsx's own one-literal law) and build-generated band-mark icons (Satori, like the OG
+> image — never binaries, never faces). Censuses: three component-hex exceptions with rationales
+> (register re-sorted), two type-scale exceptions under the OG card's Satori law, PLAN.md canon
+> row ACTIVE. The unit also repaired the accent probe's green case (BARE_ROUTE was a blind index;
+> it now walks for a route with room below the cap, as the spec's own header always demanded).
+>
 > **O219 (the story landing joins the accent law; the finder hairline stops lying to the sweep) —
 > 2026-09-01.** The first full e2e run on the reskinned tree failed exactly where it should have:
 > retiring the story rose to amber (O216) made the landing's scoped palette the PRODUCT accent by
@@ -187,6 +215,11 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > it was written). AR15/AR16: the manifest re-accepted under the three-run zero-diff protocol
 > (180 captures, sha in `ACCEPTED_DIFFS` under O218); O219's pixel moves re-run the protocol
 > next, recorded there when accepted.
+>
+> **MERGE STATE — DISCHARGED.** The promise below was kept the same day: the full e2e re-run came
+> back green (315 passed / 1 skipped after the O219/O220 instrument repairs), the visual baseline
+> was re-accepted under the three-run protocol, and the gate line above now carries the earned
+> figures. The row is kept as written because the ledger does not rewrite its past.
 >
 > **MERGE STATE, WRITTEN AT MERGE TIME (2026-09-01, founder-directed: "Commit merge push to
 > main").** `pnpm verify` green on this tree repeatedly through the session (last full: 297
