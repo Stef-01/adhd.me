@@ -351,6 +351,12 @@ describe("clinician roster and matching", () => {
   it("routes every booking outward instead of holding availability", () => {
     for (const clinician of clinicians) {
       expect(clinician).not.toHaveProperty("nextAvailable");
+      // O217: the union now carries `synthetic-none` (no url, nobody to book), but that variant
+      // belongs to the example roster and its own census — a REAL entry reaching it would mean
+      // a real doctor with no way to be booked, which is exactly what this test refuses.
+      if (clinician.booking.via === "synthetic-none") {
+        throw new Error(`${clinician.id}: a real roster entry may not carry a synthetic booking`);
+      }
       expect(clinician.booking.url).toMatch(/^https:\/\/healthengine\.com\.au\//);
 
       if (clinician.booking.via === "healthengine") {

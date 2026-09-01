@@ -25,6 +25,12 @@ export async function GET(request: Request, context: { params: Promise<{ clinici
   // An unknown or retired id lands on the finder rather than a 404: the person holding a
   // stale link is a person looking for a GP, not a person owed an error page.
   if (!clinician) return NextResponse.redirect(new URL("/finder", request.url), 302);
+  // O217: `clinicians` is real-only so no synthetic entry can reach here, but the type union
+  // now contains a booking variant with nobody behind it and NO url — the narrow is what lets
+  // `booking.url` below typecheck, and the redirect is what an example id would deserve anyway.
+  if (clinician.booking.via === "synthetic-none") {
+    return NextResponse.redirect(new URL("/finder", request.url), 302);
+  }
 
   // O29: which surface sent them — finder, profile, examples — so the counts segment by
   // where booking intent actually forms. Allow-listed, never echoed: an arbitrary query

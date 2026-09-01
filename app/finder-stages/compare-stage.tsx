@@ -105,6 +105,8 @@ export function CompareStage({
               <ClinicianPortrait clinician={left} variant="thumb" />
             </span>
             <strong>{left.shortName}</strong>
+            {/* O217: a column belonging to an invented profile says so in its own head. */}
+            {left.synthetic && <small className="compare-example">Example profile</small>}
           </div>
           <div className="compare-head">
             <span className="compare-portrait">
@@ -116,6 +118,7 @@ export function CompareStage({
             <button type="button" className="compare-open" onClick={onOpenRight}>
               {right.shortName}
             </button>
+            {right.synthetic && <small className="compare-example">Example profile</small>}
           </div>
         </div>
 

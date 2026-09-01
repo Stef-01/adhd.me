@@ -19,6 +19,7 @@ import {
   missedAsks,
   type Clinician,
 } from "@/demo/clinicians";
+import { demoRoster } from "@/demo/synthetic-roster";
 import { clarifiers } from "@/matching/clarify";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
@@ -61,6 +62,15 @@ export function CareFinder() {
   const reducedMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
+  /**
+   * O217 (founder decision `synthetic-roster-tickbox`): whether the ranking includes the
+   * invented example profiles. Default OFF — the real roster is the product; the personas are
+   * an explicit opt-in for testing, and every derived read (quality, bands, tie notes, the
+   * compare table) threads the SAME roster so no sentence on the screen describes a list the
+   * ranking did not run over.
+   */
+  const [includeSynthetic, setIncludeSynthetic] = useState(false);
+  const roster = useMemo(() => (includeSynthetic ? demoRoster : clinicians), [includeSynthetic]);
   const [matches, setMatches] = useState(() => rankClinicians(exampleRequest));
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
@@ -139,10 +149,10 @@ export function CareFinder() {
     if (stage !== "scenarios" || !autoCycle) return;
     const current = careArchetypes[archetypeIndex] ?? defaultArchetype;
     setRequest(current.request);
-    setMatches(rankClinicians(current.request));
+    setMatches(rankClinicians(current.request, roster));
     setMatchIndex(0);
     setMatchDirection(1);
-  }, [stage, autoCycle, archetypeIndex]);
+  }, [stage, autoCycle, archetypeIndex, roster]);
 
   const requestSummary = useMemo(() => {
     const cleaned = request.trim().replace(/[.!?]+$/, "");
@@ -162,10 +172,10 @@ export function CareFinder() {
    * some more than once, and every call re-runs the full lexicon read over the request — a
    * dozen redundant scans per keystroke once the geo field re-renders the results stage.
    */
-  const quality = useMemo(() => matchQuality(request), [request]);
-  const tieNote = useMemo(() => topTieNote(request), [request]);
+  const quality = useMemo(() => matchQuality(request, roster), [request, roster]);
+  const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
   const clarifierList = useMemo(() => clarifiers(request, matches), [request, matches]);
-  const unserved = useMemo(() => unservedAsks(request), [request]);
+  const unserved = useMemo(() => unservedAsks(request, roster), [request, roster]);
   const fitCopy = useMemo(
     () => requestFitCopy(requestFitSummary(request, matches), matches.length),
     [request, matches],
@@ -179,9 +189,9 @@ export function CareFinder() {
    */
   const visibleCount = useMemo(() => {
     if (!tieNote) return 5;
-    const topBand = rankBands(request)[0];
+    const topBand = rankBands(request, roster)[0];
     return Math.max(5, topBand ? topBand.clinicians.length : 5);
-  }, [request, tieNote]);
+  }, [request, tieNote, roster]);
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
   const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
@@ -231,13 +241,13 @@ export function CareFinder() {
     const right = declaredBy(compareWith);
     const seen = new Set<string>();
     const rows: CompareRow[] = [];
-    for (const ask of needsFor(request)) {
+    for (const ask of needsFor(request, roster)) {
       if (seen.has(ask.label)) continue;
       seen.add(ask.label);
       rows.push({ label: ask.label, left: left.has(ask.label), right: right.has(ask.label) });
     }
     return rows;
-  }, [clinician, compareWith, request]);
+  }, [clinician, compareWith, request, roster]);
 
   function startListening(language = speechLang) {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
@@ -332,7 +342,7 @@ export function CareFinder() {
   function findMatches(value = request) {
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
-    setMatches(rankCliniciansNear(nextRequest, origin));
+    setMatches(rankCliniciansNear(nextRequest, origin, roster));
     setMatchIndex(0);
     setShowAll(false);
     // Straight to the results. The sort is synchronous and already done; the screen that used to
@@ -350,9 +360,22 @@ export function CareFinder() {
     setStage("welcome");
     setDraft("");
     setRequest(archetype.request);
-    setMatches(rankClinicians(archetype.request));
+    setMatches(rankClinicians(archetype.request, roster));
     setMatchIndex(0);
     setMatchDirection(1);
+  }
+
+  /**
+   * O217: the tickbox's own handler — re-ranks in place with the roster the choice implies, the
+   * same shape as a suburb edit or a clarifier answer: the list changes where the reader is
+   * looking, nobody is sent back a step.
+   */
+  function toggleSynthetic(next: boolean) {
+    setIncludeSynthetic(next);
+    const nextRoster = next ? demoRoster : clinicians;
+    setMatches(rankCliniciansNear(request, origin, nextRoster));
+    setMatchIndex(0);
+    setShowAll(false);
   }
 
   function cycleArchetype(direction: 1 | -1) {
@@ -361,7 +384,7 @@ export function CareFinder() {
     setArchetypeIndex(nextIndex);
     setRequest(nextArchetype.request);
     setDraft("");
-    setMatches(rankClinicians(nextArchetype.request));
+    setMatches(rankClinicians(nextArchetype.request, roster));
     setMatchIndex(0);
     setMatchDirection(direction);
   }
@@ -455,15 +478,17 @@ export function CareFinder() {
             }}
             onPlaceChange={(value) => {
               setPlace(value);
-              setMatches(rankCliniciansNear(request, resolvePlace(value)));
+              setMatches(rankCliniciansNear(request, resolvePlace(value), roster));
             }}
             onClarify={(answer) => {
               const next = `${request}, ${answer}`;
               setRequest(next);
-              setMatches(rankCliniciansNear(next, origin));
+              setMatches(rankCliniciansNear(next, origin, roster));
             }}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}
+            includeSynthetic={includeSynthetic}
+            onToggleSynthetic={toggleSynthetic}
           />
         )}
 

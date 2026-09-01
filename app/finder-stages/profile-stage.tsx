@@ -105,6 +105,12 @@ export function ProfileStage({
 
           <div className="profile-identity">
             <h1>{clinician.name}</h1>
+            {/* O217: on an invented profile the FIRST fact after the name is that it is one.
+                Same siting logic as the O184 disclosure below — a notice met after a view has
+                formed has already failed. */}
+            {clinician.synthetic && (
+              <p className="profile-example-note">Example profile — a fictional GP for trying the finder, not a real person.</p>
+            )}
             <p className="clinician-meta">{shortTitle(clinician.title)}</p>
             <p className="profile-location">{locationLabel(clinician)}</p>
             {/* O184: the material-interest disclosure, back on the listing it concerns.
@@ -225,9 +231,16 @@ export function ProfileStage({
       </div>
 
       <div className="profile-footer">
-        <Pressable className="primary-button" type="button" onClick={onBook}>
-          {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
-        </Pressable>
+        {/* O217: an invented profile gets NO booking control — not a disabled one, which would
+            read as a real doctor whose button is broken. The explanation stands where the
+            action would, so the bar keeps its job of answering "what now". */}
+        {clinician.booking.via === "synthetic-none" ? (
+          <p className="profile-example-booking">{clinician.booking.note}</p>
+        ) : (
+          <Pressable className="primary-button" type="button" onClick={onBook}>
+            {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
+          </Pressable>
+        )}
       </div>
     </MotionScreen>
   );

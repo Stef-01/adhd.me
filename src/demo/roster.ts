@@ -105,6 +105,16 @@ export type Clinician = {
         via: "practice";
         url: string;
         note: string;
+      }
+    | {
+        /**
+         * O217: a synthetic example profile — there is nobody to book, and the variant says so
+         * in the type. Deliberately carries NO url: a fabricated booking route under an invented
+         * doctor is exactly the mock the persona purge removed, so a surface holding one of
+         * these renders an explanation instead of a control, and `/go/` has nothing to read.
+         */
+        via: "synthetic-none";
+        note: string;
       };
   acceptingNewPatients: boolean;
   /**
@@ -238,6 +248,16 @@ export type Clinician = {
    * later mistakes a real person's record for one they may freely edit.
    */
   realPerson?: true;
+  /**
+   * O217 (founder decision `synthetic-roster-tickbox`): set on an invented example profile.
+   *
+   * Exactly one of `realPerson`/`synthetic` must be set on any entry a surface renders —
+   * `synthetic-roster.test.ts` enforces the exclusivity, and every surface that can show a
+   * synthetic entry labels it out loud ("Example profile"). The `clinicians` export stays
+   * real-only; synthetic entries live in `synthetic-roster.ts` and reach a ranking only through
+   * the finder's own opt-in tickbox.
+   */
+  synthetic?: true;
 };
 
 export const clinicians: Clinician[] = [

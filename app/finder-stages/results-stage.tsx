@@ -48,6 +48,8 @@ export function ResultsStage({
   onClarify,
   onShowAll,
   onChoose,
+  includeSynthetic,
+  onToggleSynthetic,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -69,6 +71,9 @@ export function ResultsStage({
   onClarify: (answer: string) => void;
   onShowAll: () => void;
   onChoose: (clinician: Clinician) => void;
+  /** O217: whether the invented example profiles are in the ranking (founder tickbox). */
+  includeSynthetic: boolean;
+  onToggleSynthetic: (next: boolean) => void;
 }) {
   return (
     <MotionScreen key="results" className="results-screen">
@@ -245,6 +250,23 @@ export function ResultsStage({
           {place.trim() !== "" && !origin && (
             <CoverageMap highlight={null} />
           )}
+
+          {/* O217 (founder decision `synthetic-roster-tickbox`): the opt-in to the invented
+              example roster. A real control with its own plain sentence — the reader is told
+              in the same breath what ticking it adds and that none of it is bookable, so the
+              choice and its meaning share a row (layout.shared-row). Default off: the real
+              roster is the product. */}
+          <label className="results-demo-toggle">
+            <input
+              type="checkbox"
+              checked={includeSynthetic}
+              onChange={(event) => onToggleSynthetic(event.target.checked)}
+            />
+            <span>
+              <strong>Include example profiles</strong>
+              <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
+            </span>
+          </label>
         </div>
       </div>
 
@@ -291,6 +313,9 @@ export function ResultsStage({
               </motion.span>
               <span>
                 <strong>{item.name}</strong>
+                {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
+                    the label is the disclosure mechanism, not the name or the copy. */}
+                {item.synthetic && <small className="row-example">Example profile</small>}
                 <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
