@@ -15,6 +15,7 @@
 import { expect, test } from "@playwright/test";
 import { sweepSurface } from "../src/compliance/public-surfaces";
 import { clinicians } from "../src/demo/clinicians";
+import { demoResultsRealRosterOnly } from "./support/real-roster";
 
 /**
  * Findings accepted with a reason, in the shape `public-sweep.spec.ts` uses. Both directions: a
@@ -65,10 +66,9 @@ test("no clinician profile serves copy the patient rules refuse", async ({ page 
   const seen: Array<{ clinician: string; rule: string; match: string }> = [];
 
   for (const clinician of REAL) {
-    await page.goto("/finder");
-    await page.getByRole("button", { name: "Try a demo scenario" }).click();
-    await page.getByRole("button", { name: "Try this scenario" }).click();
-    await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+    // O226: rows are clicked by real name, and the shipped default shows the example roster —
+    // a real GP can sit below the five-row fold, so the examples go off at the door.
+    await demoResultsRealRosterOnly(page);
     await page.locator(".clinician-row").filter({ hasText: clinician.name }).first().click();
     await expect(page.locator(".profile-content")).toBeVisible();
     await page.evaluate(() => document.fonts.ready);

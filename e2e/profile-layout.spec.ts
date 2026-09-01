@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
+import { demoResultsRealRosterOnly } from "./support/real-roster";
 
 async function toProfile(page: Page) {
-  await page.goto("/finder");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
-  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  // O226: the row this clicks is found by name, and with the example roster ON (the shipped
+  // default) a real GP can sit below the five-row fold — so the examples go off at the door.
+  await demoResultsRealRosterOnly(page);
   await page.locator(".clinician-row").filter({ hasText: "Dr Anusha Saxena" }).click();
   await expect(page.locator(".profile-content")).toBeVisible();
   await page.evaluate(() => document.fonts.ready);

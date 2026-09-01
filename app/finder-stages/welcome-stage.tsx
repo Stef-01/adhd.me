@@ -15,6 +15,8 @@ export function WelcomeStage({
   onSearch,
   onTalk,
   onScenarios,
+  includeSynthetic,
+  onToggleSynthetic,
 }: {
   draft: string;
   setDraft: (value: string) => void;
@@ -22,6 +24,11 @@ export function WelcomeStage({
   onSearch: (value: string) => void;
   onTalk: () => void;
   onScenarios: () => void;
+  /** O226: the example-roster switch lives HERE now, folded away — configuration belongs at the
+   * door, not between a reader and their results (founder-directed; the harmony review agreed:
+   * the toggle card was the loudest block on a screen whose one job is the list). */
+  includeSynthetic: boolean;
+  onToggleSynthetic: (next: boolean) => void;
 }) {
   return (
     <MotionScreen key="welcome" className="voice-screen">
@@ -79,6 +86,24 @@ export function WelcomeStage({
           Try a demo scenario
           <CaretRight size={14} weight="bold" aria-hidden="true" />
         </button>
+
+        {/* O226: hidden away by default — a closed disclosure, not a card. The example roster
+            ships ON for this testing deployment (founder decision synthetic-roster-tickbox,
+            amended), so what this holds is the way OFF, for reading the real network alone. */}
+        <details className="finder-demo-tools">
+          <summary>Testing options</summary>
+          <label className="finder-demo-toggle">
+            <input
+              type="checkbox"
+              checked={includeSynthetic}
+              onChange={(event) => onToggleSynthetic(event.target.checked)}
+            />
+            <span>
+              <strong>Include example profiles</strong>
+              <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
+            </span>
+          </label>
+        </details>
       </motion.div>
 
       <FinderContext />

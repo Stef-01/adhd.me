@@ -120,6 +120,13 @@ test.describe("keyboard focus", () => {
         for (const el of Array.from(document.querySelectorAll(selector))) {
           const r = el.getBoundingClientRect();
           if (!r.width || !r.height) continue;
+          // O226: a control inside a CLOSED details keeps a laid-out box in Chromium
+          // (content-visibility, not display:none), so the zero-rect check above does not
+          // catch it — but the HTML spec makes it unfocusable until the disclosure opens,
+          // so the tab walk can never reach it and must not be asked to. The summary itself
+          // stays counted: it is the visible, focusable way in.
+          const closedDetails = el.closest("details:not([open])");
+          if (closedDetails && !el.closest("summary")) continue;
           // O153: see touch-floor.spec.ts — an absent tabindex on a role=button is the defect,
           // not an exemption from being counted.
           const tabAttr = el.getAttribute("tabindex");
