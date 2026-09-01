@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { lintLandingCopy } from "@/compliance/landing";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
+import { eachOf } from "@/quality/non-vacuous";
 import { resolvePlace } from "@/geo/suburbs";
 import { clinicians } from "./roster";
 import { ROSTER_SIZE } from "./roster-size";
@@ -56,7 +57,7 @@ describe("O217 — synthetic example roster census", () => {
   });
 
   it("every persona is marked, faceless, and unbookable — exactly one of realPerson/synthetic", () => {
-    for (const entry of SYNTHETIC_CLINICIANS) {
+    for (const entry of eachOf(SYNTHETIC_CLINICIANS, "the synthetic roster")) {
       expect(entry.synthetic, entry.id).toBe(true);
       expect(entry.realPerson, entry.id).toBeUndefined();
       // No face: a generated portrait is a fabricated person presented as genuine.
@@ -86,7 +87,7 @@ describe("O217 — synthetic example roster census", () => {
     const realNames = new Set(clinicians.map((c) => c.name.toLowerCase()));
     const realIds = new Set(clinicians.map((c) => c.id));
     const seenIds = new Set<string>();
-    for (const entry of SYNTHETIC_CLINICIANS) {
+    for (const entry of eachOf(SYNTHETIC_CLINICIANS, "the synthetic roster")) {
       expect(realNames.has(entry.name.toLowerCase()), entry.id).toBe(false);
       expect(realIds.has(entry.id), entry.id).toBe(false);
       expect(seenIds.has(entry.id), entry.id).toBe(false);
@@ -95,7 +96,7 @@ describe("O217 — synthetic example roster census", () => {
   });
 
   it("suburbs are real gazetteer rows, so computed distance works", () => {
-    for (const entry of SYNTHETIC_CLINICIANS) {
+    for (const entry of eachOf(SYNTHETIC_CLINICIANS, "the synthetic roster")) {
       expect(resolvePlace(entry.suburb), `${entry.id}: ${entry.suburb}`).not.toBeNull();
       for (const extra of entry.alsoConsultsAt ?? []) {
         expect(resolvePlace(extra), `${entry.id}: ${extra}`).not.toBeNull();
@@ -110,7 +111,7 @@ describe("O217 — synthetic example roster census", () => {
     const held = new Set(
       demoRoster.flatMap((c) => [...c.careAreas, ...(c.careAreasSometimes ?? [])]),
     );
-    for (const area of CARE_AREA_LABELS) {
+    for (const area of eachOf(CARE_AREA_LABELS, "the care-area vocabulary")) {
       expect(held.has(area.id), `no demo-roster entry declares ${area.id}`).toBe(true);
     }
   });
@@ -129,7 +130,7 @@ describe("O217 — synthetic example roster census", () => {
     // EVERY matchable language is held somewhere on the demo roster, so any consultation-
     // language ask the finder can recognise has at least one row to move.
     const languages = new Set(demoRoster.flatMap((c) => c.languages));
-    for (const language of MATCHABLE_LANGUAGES) {
+    for (const language of eachOf(MATCHABLE_LANGUAGES, "the matchable-language vocabulary")) {
       expect(languages.has(language), language).toBe(true);
     }
     // All three genders the roster can express.
@@ -142,7 +143,7 @@ describe("O217 — synthetic example roster census", () => {
     // copy — real profiles included — is held to. W6's message rules stay out for the same
     // reason `sweepSurface`'s own header gives: they lint a message SENT to a patient, and
     // running them over page copy asks the wrong question of every line.
-    for (const entry of SYNTHETIC_CLINICIANS) {
+    for (const entry of eachOf(SYNTHETIC_CLINICIANS, "the synthetic roster")) {
       for (const text of renderedStrings(entry)) {
         const findings = lintLandingCopy(text);
         expect(findings, `${entry.id}: "${text}" -> ${findings.map((f) => f.rule).join(", ")}`).toEqual([]);

@@ -49,6 +49,7 @@ accumulated without anybody deciding to have eight.
 | `MATCHING-PLAN.md` | **REFERENCE** | Architecture options for the finder and the clinician interview spec. It prices the ways of matching and names the road out; it holds no units and is consulted, not executed. |
 | `FIVE-YEAR-PLAN.md` | **CLOSED** | W1–W260, closed at Year 5 by W260. Kept whole: its rows are the reasoning behind most of the engine, and `plan-ledger`, `year-six-horizon` and the credentials tests all read it. Do NOT reopen it — the Y6 horizon section says what succeeds it. |
 | `MATCHING-OVERHAUL-PLAN.md` | **CLOSED** | O1–O8, executed and merged. The schedule that repaired `MATCHING-APPRAISAL.md`'s findings. |
+| `SYNTHETIC-ROSTER-PLAN.md` | **CLOSED** | Executed same-day as O217, collapsed from its five-unit breakdown once the founder answered all three gates (decision `synthetic-roster-tickbox`, which also overrode its recommended eight to twenty). Kept because the non-negotiables in its §3 are the reasoning behind the synthetic-roster census. |
 | `LAUNCH-CHECKLIST.md` | **CLOSED** | Executed at O15, 20 items, one a recorded refusal. |
 
 ---
