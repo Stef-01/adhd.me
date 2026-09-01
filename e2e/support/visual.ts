@@ -25,6 +25,12 @@
 //     screenshot layer AND the media layer, because either alone leaves the other's timing in
 //     the pixels;
 //   * `caret: "hide"` — a blinking caret is a coin flip in any capture with a focused field.
+//   * O222: the FILE-BACKED STORES pinned to a fresh `.data-visual/` per invocation (the
+//     `pnpm e2e:visual` script sets all four ADHDME_*_PATH envs) — found the hard way: the
+//     matching console renders `tallyOutbound()` and the background audit, the FULL e2e suite
+//     appends to both stores every run, so `console/matching`'s four cells re-hashed at every
+//     cross-commit comparison while agreeing within every same-tree protocol. A deterministic
+//     harness that reads an accumulating store is deterministic only until something else runs.
 
 import { createHash } from "node:crypto";
 import type { APIRequestContext, Page } from "@playwright/test";
