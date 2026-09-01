@@ -877,10 +877,14 @@ textarea:focus-visible {
   margin-top: 10px;
   padding: 0;
   border: 0;
-  color: var(--accent);
+  /* O226: ink, underlined — O176's ruling (an action is not a live token), applied the day the
+     quote above it was demoted and this became the loudest thing in the head. */
+  color: var(--ink);
   background: transparent;
   font-size: 0.875rem;
   font-weight: 620;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
 }
 
@@ -921,6 +925,13 @@ textarea:focus-visible {
   font-size: 1.5rem;
 }
 
+/* O226: the monogram thumb obeys the same concentric rule inside the v2 card. */
+.patient-v2 .clinician-monogram-thumb {
+  width: 76px;
+  height: 76px;
+  border-radius: 6px;
+}
+
 /* Where are you. A label above the input, never a placeholder-as-label. */
 .place-field { margin-top: 22px; }
 .place-field label {
@@ -938,7 +949,8 @@ textarea:focus-visible {
   border: 1px solid var(--line);
   border-radius: 8px;
   color: var(--ink);
-  background: var(--stone);
+  /* O226: paper, not stone — the filled grey slab read as a disabled control. */
+  background: var(--paper);
   font: inherit;
   font-size: 1rem;
 }
@@ -1717,7 +1729,9 @@ textarea:focus-visible {
 .patient-v2 .clinician-row img {
   width: 76px;
   height: 76px;
-  border-radius: 15px;
+  /* O226: CONCENTRIC — inner radius = card radius (18) minus card padding (12). Nested corners
+     that do not share a centre read as two components glued together; these now curve as one. */
+  border-radius: 6px;
 }
 
 .patient-v2 .clinician-row strong {
@@ -1777,12 +1791,13 @@ textarea:focus-visible {
   color: var(--muted);
 }
 .results-head .refine-compact {
-  /* O226: tight to the quote it acts on — one group (within 8). */
+  /* O226: tight to the quote it acts on — one group (within 8) — and INK, like the base rule
+     above: this later-cascade twin was quietly re-accenting the action (O176's exact defect). */
   margin-top: 8px;
   padding: 0;
   border: 0;
   background: none;
-  color: var(--accent);
+  color: var(--ink);
   font: inherit;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -5244,11 +5259,13 @@ textarea:focus-visible {
    for this testing deployment. Muted, not accent: a signpost. Tokens only — the ratchet holds. */
 .finder-demo-tools {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 16px;
+  text-align: center;
 }
 .finder-demo-tools summary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
   color: var(--faint);
   font-size: 0.78125rem;
@@ -5262,6 +5279,9 @@ textarea:focus-visible {
   grid-template-columns: 22px 1fr;
   gap: 10px;
   align-items: start;
+  max-width: 340px;
+  margin: 0 auto;
+  text-align: left;
   padding: 4px 2px 8px;
   cursor: pointer;
   touch-action: manipulation;
@@ -5860,6 +5880,14 @@ textarea:focus-visible {
   /* O226: up a step — with the misread quote demoted, the list heading leads the screen. */
   font-size: 1.0625rem;
   font-weight: 680;
+}
+
+/* O226: the count describes the LIST, so it sits on the list's own header row — it was a stray
+   grey sentence under the place field, two groups away from the thing it counts. */
+.results-count {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (min-width: 680px) {

@@ -126,9 +126,6 @@ export function ResultsStage({
                 {fitCopy}
               </motion.p>
           )}
-          {matches.length > shown.length && (
-            <p className="place-status">Showing {shown.length} of {matches.length}.</p>
-          )}
           {place.trim() !== "" && (
             <p className="place-status" role="status">
               {origin
@@ -253,6 +250,10 @@ export function ResultsStage({
 
       <div className="results-list-head">
         <h2>Matches</h2>
+        {/* O226: the count sits with the list it describes, not two groups up the page. */}
+        {matches.length > shown.length && (
+          <span className="results-count">{shown.length} of {matches.length}</span>
+        )}
       </div>
 
       <div className="clinician-list">
