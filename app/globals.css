@@ -1452,13 +1452,23 @@ textarea:focus-visible {
      header is the band itself, at 2px. The finder stays paper (a gradient field here would shout
      over a task surface, which impeccable's MODE rule forbids), but the product no longer changes
      brand at the door: the same ramp that carries the public chrome closes this header's edge.
-     A background strip, not a border-image: it composites on the header's own paper and costs
-     no layout. */
+     ON A PSEUDO-ELEMENT, NOT THE HEADER'S OWN BACKGROUND, and the contrast sweep is why: the
+     ancestor walk treats any gradient on an ancestor as the painted ground (O192's rule, which
+     cannot know this one is a 2px strip at the far edge), so a background-image here measured the
+     header's 11px Home link against the band's worst stop — 4.01:1 of pure fiction. The ::after
+     owns no text and is nobody's ancestor, so the strip renders identically and the instrument
+     keeps measuring the paper the text actually sits on. */
   border-bottom: 0;
+  position: relative;
+}
+
+.patient-v2 .minimal-header::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
   background-image: var(--band-gradient);
-  background-repeat: no-repeat;
-  background-size: 100% 2px;
-  background-position: bottom;
 }
 
 .patient-v2 .wordmark {
@@ -2970,21 +2980,21 @@ textarea:focus-visible {
   border: 0;
   border-radius: 999px;
   color: #fff;
-  background: var(--community-accent);
+  background: var(--community-ink);
   font-size: 0.8125rem;
   font-weight: 720;
   cursor: pointer;
 }
 
 .community-interest-form > button:focus-visible {
-  background: color-mix(in srgb, var(--community-accent) 82%, #000);
+  background: color-mix(in srgb, var(--community-ink) 82%, #fff);
   outline: 3px solid var(--community-accent);
   outline-offset: 2px;
 }
 
 @media (hover: hover) {
   .community-interest-form > button:hover {
-    background: color-mix(in srgb, var(--community-accent) 82%, #000);
+    background: color-mix(in srgb, var(--community-ink) 82%, #fff);
     outline: 3px solid var(--community-accent);
     outline-offset: 2px;
   }
@@ -3472,9 +3482,12 @@ textarea:focus-visible {
 }
 
 /* Shared eyebrow ---------------------------------------------------------- */
+/* O219: MUTED, not accent — O166's ruling ("an eyebrow is a signpost and reads as one in muted"),
+   applied to the story page the day its scoped palette became the product accent by value and the
+   accent-discipline sweep started counting it. */
 .story-eyebrow {
   margin: 0;
-  color: var(--s-accent);
+  color: var(--s-muted);
   font-size: 0.75rem;
   font-weight: 680;
   letter-spacing: 0.14em;
@@ -3521,16 +3534,18 @@ textarea:focus-visible {
   min-height: 54px;
   padding: 0 30px;
   border-radius: 999px;
-  color: #fff;
-  background: var(--s-accent);
+  /* O219: the dark pill, light label — the tree's primary-action idiom (O176: an action is not a
+     live token, and taking it off the accent must not make it quieter; ink on paper is louder). */
+  color: var(--s-paper);
+  background: var(--s-ink);
   font-size: 0.90625rem;
   font-weight: 640;
   text-decoration: none;
   transition: transform var(--dur-tap) var(--ease-ui), background var(--dur-move) var(--ease-ui);
 }
 @media (hover: hover) {
-  /* O216: derived from the accent rather than a second hex — the rose this used to darken is gone. */
-  .story-primary-link:hover { background: color-mix(in srgb, var(--s-accent) 82%, #000); }
+  /* O219: the hover moves to the page's own dark beat — a visible shift with no second hex. */
+  .story-primary-link:hover { background: var(--s-dark); color: var(--s-paper); }
 }
 .story-primary-link:active { transform: translateY(1px); }
 .story-primary-link:focus-visible { outline: 3px solid var(--s-accent-mid); outline-offset: 3px; }
@@ -4188,7 +4203,8 @@ textarea:focus-visible {
 .coverage-pin-label { fill: var(--s-ink); font-size: 0.2625rem; font-weight: 500; letter-spacing: 0.01em; }
 .coverage-map figcaption { display: grid; gap: 10px; }
 .coverage-count {
-  color: var(--s-accent);
+  /* O219: a count is metadata; the map's own markers carry the eye. */
+  color: var(--s-muted);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -4469,7 +4485,8 @@ textarea:focus-visible {
 
 .seq-n {
   margin: 0 0 14px;
-  color: var(--s-accent);
+  /* O219: a step number is a signpost (O166), and /approach keeps its accent budget at zero. */
+  color: var(--s-muted);
   font-size: 0.75rem;
   font-weight: 640;
   letter-spacing: 0.14em;
@@ -4500,7 +4517,7 @@ textarea:focus-visible {
   content: "";
   position: absolute; left: 0; top: 0.66em;
   width: 7px; height: 1px;
-  background: var(--s-accent);
+  background: var(--s-muted);
 }
 .seq-foot { margin: 20px 0 0; max-width: 46ch; color: var(--s-muted); font-size: 0.8125rem; line-height: 1.6; }
 
@@ -4916,9 +4933,10 @@ textarea:focus-visible {
   align-items: center;
   min-height: 48px;
   padding: 0 22px;
-  border: 1px solid var(--s-accent);
+  /* O219: the ink treatment — a door is an action, not a live token. */
+  border: 1px solid var(--s-ink);
   border-radius: 999px;
-  color: var(--s-accent);
+  color: var(--s-ink);
   font-size: 0.90625rem;
   font-weight: 620;
   text-decoration: none;
@@ -4930,10 +4948,10 @@ textarea:focus-visible {
   margin-left: 9px;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.story-approach-link:focus-visible { background: var(--s-accent); color: #fff; }
+.story-approach-link:focus-visible { background: var(--s-ink); color: #fff; }
 
 @media (hover: hover) {
-  .story-approach-link:hover { background: var(--s-accent); color: #fff; }
+  .story-approach-link:hover { background: var(--s-ink); color: #fff; }
 }
 .story-approach-link:focus-visible .arrow { transform: translateX(5px); }
 
@@ -5005,14 +5023,17 @@ textarea:focus-visible {
    one tint apart, so the foot of the page has two doors and one rhythm. */
 .story-join {
   border-top: 1px solid var(--s-line);
-  /* Deep-rose band: the GP call-to-action set in the signature accent so it reads as its own beat
-     rather than another soft tile. Text and the link flip to light for contrast (scoped here, so
-     the shared .story-heading / .story-eyebrow elsewhere are unaffected). */
-  background: var(--s-accent);
+  /* O219: the GP door sits on the page's own dark beat — the throughline's ground — so the foot
+     still reads as its own register without spending the accent on a whole band (the sweep counts
+     an accent field as a meaning per class it paints, and this one paints four). Declared in the
+     dark-ground census (AR18). */
+  background: var(--s-dark);
+  color: var(--s-paper);
   padding-block: clamp(48px, 6vw, 84px);
 }
 .story-join .story-heading { color: var(--s-paper); }
-.story-join .story-eyebrow { color: var(--s-accent-soft); }
+/* --on-band is the palette's sanctioned accent for dark bands (7.2:1 on --s-dark). */
+.story-join .story-eyebrow { color: var(--on-band); }
 .story-join-inner {
   display: flex;
   align-items: center;
@@ -5023,7 +5044,7 @@ textarea:focus-visible {
 .story-join-copy {
   max-width: 54ch;
   margin: 14px 0 0;
-  color: var(--s-accent-soft);
+  color: var(--s-paper-2);
   font-size: 0.96875rem;
   line-height: 1.65;
   text-wrap: pretty;
@@ -5034,10 +5055,10 @@ textarea:focus-visible {
   min-height: 52px;
   padding: 0 26px;
   border-radius: 999px;
-  /* Light button on the deep-rose band — the inverse of the buttons on paper sections, so the
+  /* Light button on the dark band — the inverse of the buttons on paper sections, so the
      call-to-action still reads as the brightest thing in its own beat. */
   background: var(--s-paper);
-  color: var(--s-accent);
+  color: var(--s-ink);
   font-size: 0.9375rem;
   font-weight: 640;
   text-decoration: none;

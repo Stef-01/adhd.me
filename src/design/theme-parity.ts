@@ -86,7 +86,10 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
    stops (#6f1e31) became `color-mix(… 82%, #000)` derived from the accent they darken — a
    site-neutral swap (#6f1e31 out, #000 in), counted as exactly that by the census. Re-derived in
    the commit that earned it, per the ratchet's law. */
-export const CSS_RAW_HEX_SITES = 73;
+/* 73 -> 71 (O219, the accent-law pass): the story CTA's #fff label became var(--s-paper) on the
+   ink pill, and its hover's color-mix dark stop became var(--s-dark) outright — two more
+   untokenised colours retired, none restated. Re-derived in the commit that earned it. */
+export const CSS_RAW_HEX_SITES = 71;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the

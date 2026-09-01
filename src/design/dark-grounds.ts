@@ -140,11 +140,19 @@ export type DarkGroundSelector = { readonly selector: string; readonly token: st
  * landing's own (`.site-nav`, `.story-header`), the two footers (`.site-footer`, `.story-footer`)
  * and the Acknowledgement band (`.aoc-band`). Each paints `--ground` as the opaque base under a
  * `background-image` gradient and declares `color: var(--on-ground)` in the same rule, which is
- * exactly the pairing this census exists to require. */
+ * exactly the pairing this census exists to require.
+ *
+ * Re-derived again the same day (O219, the accent-law pass): six more sites, all the story
+ * landing's controls moving OFF the accent onto the tree's dark-pill idiom once the scoped
+ * palette became the product accent by value and the accent-discipline sweep started counting
+ * the page — the primary CTA and its hover (`s-ink`/`s-dark`), the approach door's filled
+ * states (`s-ink`), the clinician-door band (`s-dark`) and the community submit
+ * (`community-ink`). Every one declares its light foreground in the same rule. */
 export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: ".aoc-band", token: "ground" },
   { selector: ".be-save-button", token: "ground" },
   { selector: ".briefing-footer > button", token: "ground" },
+  { selector: ".community-interest-form > button", token: "community-ink" },
   { selector: ".consent-bar", token: "ink" },
   { selector: ".consent-dialog .consent-agree", token: "ink" },
   { selector: ".cv2-action > .cv2-start-cta", token: "cv2-ground" },
@@ -162,8 +170,13 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: ".site-footer", token: "ground" },
   { selector: ".site-nav", token: "ground" },
   { selector: ".skip-link", token: "ink" },
+  { selector: ".story-approach-link:focus-visible", token: "s-ink" },
+  { selector: ".story-approach-link:hover", token: "s-ink" },
   { selector: ".story-footer", token: "ground" },
   { selector: ".story-header", token: "ground" },
+  { selector: ".story-join", token: "s-dark" },
+  { selector: ".story-primary-link", token: "s-ink" },
+  { selector: ".story-primary-link:hover", token: "s-dark" },
   { selector: ".story-sticky-cta a", token: "ink" },
   { selector: ".story-throughline", token: "s-dark" },
 ];
