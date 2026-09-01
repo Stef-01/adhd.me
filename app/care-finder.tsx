@@ -68,7 +68,9 @@ export function CareFinder() {
    * compare table) threads the SAME roster so no sentence on the screen describes a list the
    * ranking did not run over.
    */
-  const [includeSynthetic, setIncludeSynthetic] = useState(false);
+  /** O226 (founder-amended): the example roster ships ON — this is a testing deployment, and the
+   * switch (relocated to the welcome screen's folded testing options) is the way OFF. */
+  const [includeSynthetic, setIncludeSynthetic] = useState(true);
   // O222: a plain ternary — both branches are stable module references, so this is already
   // referentially stable across renders and the memo bought a hook slot for nothing.
   const roster = rosterFor(includeSynthetic);
@@ -417,6 +419,8 @@ export function CareFinder() {
             setDraft={setDraft}
             reducedMotion={reducedMotion}
             onSearch={findMatches}
+            includeSynthetic={includeSynthetic}
+            onToggleSynthetic={toggleSynthetic}
             onTalk={() => startListening()}
             onScenarios={() => {
               setAutoCycle(true);
@@ -496,8 +500,6 @@ export function CareFinder() {
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}
-            includeSynthetic={includeSynthetic}
-            onToggleSynthetic={toggleSynthetic}
           />
         )}
 

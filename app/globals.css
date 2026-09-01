@@ -1742,7 +1742,12 @@ textarea:focus-visible {
    ────────────────────────────────────────────────────────────────────────── */
 /* Results, the one screen that replaced four ---------------------------------- */
 .results-screen { display: flex; flex-direction: column; }
-.results-head { padding: 8px 24px 26px; border-bottom: 1px solid var(--line); }
+/* O226 (harmony pass, founder-directed): the v2 rows are CARDS, i.e. common-region grouping —
+   so the head stops speaking the other language. Its hairline edge (and the details block's two
+   below) made the screen argue with itself: enclosure and separation at once, which is exactly
+   where the disharmony the founder saw came from. Space is the separator now, and the spacing
+   carries the hierarchy: tight inside a group, wide between groups (within 8, between 28). */
+.results-head { padding: 8px 24px 10px; }
 .results-head h1 {
   margin: 10px 0 0;
   max-width: 18ch;
@@ -1761,16 +1766,19 @@ textarea:focus-visible {
 }
 /* O46: the person's own words when they earned no headline — quiet, quoted, theirs. */
 .results-head .results-request-quote {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   max-width: 34ch;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-style: italic;
-  font-size: 1.1875rem;
-  line-height: 1.35;
+  /* O226: down from 1.1875rem — this renders a FAILED reading ("Kind and nicr."), and it was the
+     largest type on the screen. The honest quote stays; the proclamation goes. */
+  font-size: 1rem;
+  line-height: 1.4;
   color: var(--muted);
 }
 .results-head .refine-compact {
-  margin-top: 14px;
+  /* O226: tight to the quote it acts on — one group (within 8). */
+  margin-top: 8px;
   padding: 0;
   border: 0;
   background: none;
@@ -1782,7 +1790,8 @@ textarea:focus-visible {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.results-head .place-field { margin-top: 22px; }
+/* O226: a between-group gap (the quote+edit pair above is one group; this is the next). */
+.results-head .place-field { margin-top: 28px; }
 
 .patient-v2 .profile-header {
   min-height: 64px;
@@ -5229,35 +5238,46 @@ textarea:focus-visible {
 .clarify-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .clarify-chip { transition: none; } }
 
-/* ── O217: the example-profile machinery (founder decision `synthetic-roster-tickbox`) ──────
-   The tickbox that opts the ranking into the invented example roster, and the labels every
-   surface showing one must carry. Muted, not accent: an "Example profile" mark is a signpost,
-   and the accent stays reserved for live tokens. Tokens only — the AR17 ratchet holds. */
-.results-demo-toggle {
+/* ── O217/O226: the example-profile machinery (founder decision `synthetic-roster-tickbox`,
+   amended) ── The switch lives on the WELCOME screen now, folded away — configuration belongs at
+   the door, not between a reader and their results, and the roster ships with the examples ON
+   for this testing deployment. Muted, not accent: a signpost. Tokens only — the ratchet holds. */
+.finder-demo-tools {
+  width: 100%;
+  margin-top: 14px;
+}
+.finder-demo-tools summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--faint);
+  font-size: 0.78125rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.finder-demo-tools summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.finder-demo-toggle {
   display: grid;
   grid-template-columns: 22px 1fr;
   gap: 10px;
   align-items: start;
-  margin-top: 16px;
-  padding: 12px 13px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
+  padding: 4px 2px 8px;
   cursor: pointer;
   touch-action: manipulation;
 }
-.results-demo-toggle input {
+.finder-demo-toggle input {
   width: 18px;
   height: 18px;
   margin: 2px 0 0;
-  flex: 0 0 auto;
   accent-color: var(--accent);
   cursor: pointer;
 }
-.results-demo-toggle input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.results-demo-toggle strong,
-.results-demo-toggle small { display: block; }
-.results-demo-toggle strong { color: var(--ink); font-size: 0.875rem; font-weight: 600; }
-.results-demo-toggle small { margin-top: 3px; color: var(--muted); font-size: 0.78125rem; line-height: 1.5; }
+.finder-demo-toggle input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.finder-demo-toggle strong,
+.finder-demo-toggle small { display: block; }
+.finder-demo-toggle strong { color: var(--ink); font-size: 0.875rem; font-weight: 600; }
+.finder-demo-toggle small { margin-top: 3px; color: var(--muted); font-size: 0.78125rem; line-height: 1.5; }
 
 /* The row and compare-column marks: a quiet bordered tag, same visual language as the stone
    surfaces, so it reads as metadata about the listing rather than a quality of the doctor. */
@@ -5801,19 +5821,21 @@ textarea:focus-visible {
 }
 
 /* Secondary result controls stay available without sitting between the request and first doctor. */
+/* O226: no hairlines — see .results-head. A quiet underlined control, not a bar pretending to be
+   a section: it reads as the tertiary thing it is. */
 .results-refine-details {
-  margin-top: 10px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  margin-top: 18px;
 }
 
 .results-refine-details summary {
   display: flex;
   align-items: center;
   min-height: 46px;
-  color: var(--ink);
+  color: var(--muted);
   font-size: 0.875rem;
   font-weight: 620;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .results-refine-details .clarify {
@@ -5829,13 +5851,15 @@ textarea:focus-visible {
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
-  padding: 12px 24px 4px;
+  /* O226: the widest between-group gap on the screen belongs at its most important boundary. */
+  padding: 26px 24px 8px;
 }
 
 .results-list-head h2 {
   margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 650;
+  /* O226: up a step — with the misread quote demoted, the list heading leads the screen. */
+  font-size: 1.0625rem;
+  font-weight: 680;
 }
 
 @media (min-width: 680px) {

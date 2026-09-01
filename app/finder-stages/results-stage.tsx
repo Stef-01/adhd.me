@@ -48,8 +48,6 @@ export function ResultsStage({
   onClarify,
   onShowAll,
   onChoose,
-  includeSynthetic,
-  onToggleSynthetic,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -73,9 +71,6 @@ export function ResultsStage({
   onClarify: (answer: string) => void;
   onShowAll: () => void;
   onChoose: (clinician: Clinician) => void;
-  /** O217: whether the invented example profiles are in the ranking (founder tickbox). */
-  includeSynthetic: boolean;
-  onToggleSynthetic: (next: boolean) => void;
 }) {
   return (
     <MotionScreen key="results" className="results-screen">
@@ -253,22 +248,6 @@ export function ResultsStage({
             <CoverageMap highlight={null} />
           )}
 
-          {/* O217 (founder decision `synthetic-roster-tickbox`): the opt-in to the invented
-              example roster. A real control with its own plain sentence — the reader is told
-              in the same breath what ticking it adds and that none of it is bookable, so the
-              choice and its meaning share a row (layout.shared-row). Default off: the real
-              roster is the product. */}
-          <label className="results-demo-toggle">
-            <input
-              type="checkbox"
-              checked={includeSynthetic}
-              onChange={(event) => onToggleSynthetic(event.target.checked)}
-            />
-            <span>
-              <strong>Include example profiles</strong>
-              <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
-            </span>
-          </label>
         </div>
       </div>
 
