@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 9b9558b (2026-09-01T10:45Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.8m), exit code 0 read from the command itself; AR15 visual comparison PASSED against the accepted baseline (zero moved cells). **O216 through O225 done — the founder-directed reskin/refactor session**: brand scheme, twenty synthetic profiles behind the tickbox, motion vocabulary + finder hairline, the accent-law pass, the standalone-app plan with Phases 1a AND 1b's safe-area half shipped, the engine-purity law, the simplify pass with the roster-seam and harness-determinism fixes, DESIGN.md re-captured, matches derived. O215 done. Still owed to the app plan: 1b's mic-B2 reproduction, 1c's offline shell (priced), Phase 2's workspace-package form, the G-APP gates`
+`gate: green @ 1d8067f (2026-09-01T15:10Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 16.7m), exit code 0 read from the command itself, run serially with nothing else building; AR15 visual comparison PASSED against the O226-accepted baseline (zero moved cells, 9.0m). **O216 through O226 done — the founder-directed reskin/refactor/harmony session**: brand scheme, twenty synthetic profiles (now shipping ON behind the welcome screen's folded switch, founder amendment recorded), motion vocabulary + finder hairline, the accent-law pass, the standalone-app plan with Phases 1a AND 1b's safe-area half shipped, the engine-purity law, the simplify pass with the roster-seam and harness-determinism fixes, DESIGN.md re-captured, matches derived, the results-screen harmony pass with the real-roster e2e door. O215 done. Still owed to the app plan: 1b's mic-B2 reproduction, 1c's offline shell (priced), Phase 2's workspace-package form, the G-APP gates`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -146,6 +146,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (register re-sorted), two type-scale exceptions under the OG card's Satori law, PLAN.md canon
 > row ACTIVE. The unit also repaired the accent probe's green case (BARE_ROUTE was a blind index;
 > it now walks for a route with room below the cap, as the spec's own header always demanded).
+>
+> **O226 (FOUNDER-DIRECTED: the results-screen harmony pass; the example switch to the door,
+> default ON) — 2026-09-01.** A production iPhone capture, appraised against the Gestalt
+> literature: the screen had five self-announcing bordered regions in the first viewport, an
+> amber edit action louder than the brand, and the example-roster switch sitting between the
+> reader and their results. The head and refine details lose their boxes (proximity groups,
+> enclosure demoted to the one list-head hairline), the edit action goes ink+underline (its
+> late cascade twin too), the place input sits on paper, the count moves beside the Matches
+> heading as tabular "5 of 22", thumbnails go concentric (18−12=6px, monogram included), and —
+> the founder's amendment, recorded verbatim in the gate register — the examples ship ON with
+> the switch folded into a closed "Testing options" disclosure under the welcome screen's voice
+> entry. The default flip re-taught the e2e suite honestly: real-roster ranking laws now enter
+> through `e2e/support/real-roster.ts`, switching the examples off through that disclosure the
+> way a person would; the keyboard walk's control census learned that closed-details content is
+> boxed but unfocusable (its checkbox was the one "unreachable" control). Visual baseline
+> re-accepted under the AR15 protocol: three runs, zero pairwise diff, exactly four moved cells
+> (the finder, both widths and motions — the disclosure), register row 8. A METHOD INCIDENT is
+> on the record in the commits: the first enumeration run was contaminated by a concurrent
+> `pnpm build` swapping `.next` under the suite's running server — 38 apparent failures, 34 of
+> them asset-starvation artifacts; the clean re-run isolated the real four. Do not build while
+> a suite is running; the gate below is from serial runs only.
 >
 > **O225 (STANDALONE-APP-PLAN.md Phase 1b, the safe-area half) — 2026-09-01.** `viewport-fit:
 > cover`, with the four top bars padding themselves back out of the notch via
