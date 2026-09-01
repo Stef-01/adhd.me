@@ -63,11 +63,13 @@ describe("O185 the plan canon", () => {
   });
 
   it("keeps exactly the lanes that are actually claimable", () => {
-    // ACTIVE is the claim this index makes to a reader in a hurry, so it is pinned. Two lanes:
-    // the matching year plan (which carries Q-M) and the AR series. A third ACTIVE row means a
-    // third backlog exists, and that is a decision worth making deliberately rather than drifting
-    // into — the exact drift this whole unit is about.
+    // ACTIVE is the claim this index makes to a reader in a hurry, so it is pinned. A new ACTIVE
+    // row means a new backlog exists, and that is a decision worth making deliberately rather
+    // than drifting into — the exact drift this whole unit is about. Three lanes, each decided:
+    // the matching year plan (Q-M), the AR series, and — O220, founder-commissioned 2026-09-01
+    // ("commence plan to convert this into a standalone app") — the standalone-app lane, whose
+    // claimable units are Phase 1b/1c and Phase 2, with Phase 3 founder-gated.
     const active = [...CANON.matchAll(/^\| `([A-Z0-9-]+\.md)` \| \*\*ACTIVE\*\* \|/gm)].map((m) => m[1]!);
-    expect(active.sort()).toEqual(["AESTHETIC-REVIEW-PLAN.md", "MATCHING-YEAR-PLAN.md"]);
+    expect(active.sort()).toEqual(["AESTHETIC-REVIEW-PLAN.md", "MATCHING-YEAR-PLAN.md", "STANDALONE-APP-PLAN.md"]);
   });
 });

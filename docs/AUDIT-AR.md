@@ -36,7 +36,7 @@ Every row below is asserted against the live source by `ar-audit.test.ts`.
 | …unenforced, pinned (`UNENFORCED_COUNT`) | 13 |
 | mutation-probe families | 5 |
 | enforced rules without a probe (pinned) | 6 |
-| accepted-diff entries (AR15 initial + 3 attributed changes) | 4 |
+| accepted-diff entries (AR15 initial + 4 attributed changes) | 5 |
 | baseline captures in the manifest | 180 |
 | manifest sha256 == newest acceptance | **true, checked live** |
 | per-route shipped-JS budgets | 48 |

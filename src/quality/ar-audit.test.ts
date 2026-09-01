@@ -55,7 +55,7 @@ describe("AR34 the audit's inventory is derived, not transcribed", () => {
   });
 
   it("baseline chain, checked live exactly as section 3 claims", () => {
-    pinRow("accepted-diff entries (AR15 initial + 3 attributed changes)", String(ACCEPTED_DIFFS.length));
+    pinRow("accepted-diff entries (AR15 initial + 4 attributed changes)", String(ACCEPTED_DIFFS.length));
     const manifest = readFileSync("qa/baselines/manifest.json");
     const captures = Object.keys(JSON.parse(manifest.toString()) as Record<string, unknown>).length;
     pinRow("baseline captures in the manifest", String(captures));
