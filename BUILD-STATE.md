@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 04d073f (2026-09-01T09:35Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.9m), exit code 0 read from the command itself; AR15 visual comparison PASSED against the accepted baseline (zero moved cells — O224 proven pixel-identical by the pinned harness). **O216 through O224 done — the founder-directed reskin/refactor session**: brand scheme, twenty synthetic profiles behind the tickbox, motion vocabulary + finder hairline, the accent-law pass, the standalone-app plan with Phase 1a shipped, the engine-purity law, the simplify pass with the roster-seam and harness-determinism fixes, DESIGN.md re-captured, and matches derived (eight setters deleted). O215 done`
+`gate: green @ 9b9558b (2026-09-01T10:45Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.8m), exit code 0 read from the command itself; AR15 visual comparison PASSED against the accepted baseline (zero moved cells). **O216 through O225 done — the founder-directed reskin/refactor session**: brand scheme, twenty synthetic profiles behind the tickbox, motion vocabulary + finder hairline, the accent-law pass, the standalone-app plan with Phases 1a AND 1b's safe-area half shipped, the engine-purity law, the simplify pass with the roster-seam and harness-determinism fixes, DESIGN.md re-captured, matches derived. O215 done. Still owed to the app plan: 1b's mic-B2 reproduction, 1c's offline shell (priced), Phase 2's workspace-package form, the G-APP gates`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -146,6 +146,16 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (register re-sorted), two type-scale exceptions under the OG card's Satori law, PLAN.md canon
 > row ACTIVE. The unit also repaired the accent probe's green case (BARE_ROUTE was a blind index;
 > it now walks for a route with room below the cap, as the spec's own header always demanded).
+>
+> **O225 (STANDALONE-APP-PLAN.md Phase 1b, the safe-area half) — 2026-09-01.** `viewport-fit:
+> cover`, with the four top bars padding themselves back out of the notch via
+> `env(safe-area-inset-top)` while their grounds paint to the device edge, and the chrome inners
+> taking `max(24px, env(inset))` for landscape's corners — the installed app no longer shows a
+> paper seam above the brand band. Every inset rule collapses to the old values where insets are
+> zero, and the gate's visual comparison passing unchanged against the standing baseline is the
+> unit's own proof and capture: the change is DESIGNED to be invisible in a browser tab and to
+> exist only on device. The plan's other 1b half (reproducing the MIC B2 standalone-flag failure)
+> stays owed to the plan, not silently claimed.
 >
 > **O224 (matches becomes derived state — the reviews' out-of-diff note, claimed) — 2026-09-01.**
 > `matches` is fully determined by (request, origin, roster); it was imperative state with eight
