@@ -9,6 +9,7 @@
 import { describe, expect, it } from "vitest";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { lintLandingCopy } from "@/compliance/landing";
+import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { resolvePlace } from "@/geo/suburbs";
 import { clinicians } from "./roster";
 import { ROSTER_SIZE } from "./roster-size";
@@ -39,9 +40,10 @@ function renderedStrings(entry: (typeof SYNTHETIC_CLINICIANS)[number]): string[]
 }
 
 describe("O217 — synthetic example roster census", () => {
-  it("is the founder's eight, and the live exports stay real-only", () => {
-    // G-SYN-3: the plan's recommended eight, as decided. A different count is a new decision.
-    expect(SYNTHETIC_CLINICIANS).toHaveLength(8);
+  it("is the founder's twenty, and the live exports stay real-only", () => {
+    // G-SYN-3, as decided in the founder's follow-up ("Let's put in 20 synthetic profiles").
+    // A different count is a new decision.
+    expect(SYNTHETIC_CLINICIANS).toHaveLength(20);
     // The purge's core invariant survives the reversal: `clinicians` (and therefore
     // ROSTER_SIZE, the coverage map and every public count derived from it) holds real
     // people only. The tickbox roster is a separate export.
@@ -73,7 +75,7 @@ describe("O217 — synthetic example roster census", () => {
       // copy itself must say what it is, because copy travels (compare tables, screenshots).
       expect(entry.about, entry.id).toContain(SYNTHETIC_ABOUT_NOTICE);
       // Practice names self-mark, so no invented practice can collide with a real business.
-      expect(entry.practice, entry.id).toMatch(/Example Practice$/);
+      expect(entry.practice, entry.id).toMatch(/Example (Practice|Clinic)$/);
       // Ids are namespaced, so /go, analytics and portrait layoutIds can never collide with a
       // real clinician's, and a stray synthetic id in a log reads as what it is.
       expect(entry.id, entry.id).toMatch(/^example-/);
@@ -114,8 +116,8 @@ describe("O217 — synthetic example roster census", () => {
   });
 
   it("the set exercises the ranking's distinguishing states by construction", () => {
-    // Two closed books: the closed-never-outranks-open law is visible to a tester.
-    expect(SYNTHETIC_CLINICIANS.filter((c) => !c.acceptingNewPatients)).toHaveLength(2);
+    // Four closed books: the closed-never-outranks-open law is visible, in more than one suburb.
+    expect(SYNTHETIC_CLINICIANS.filter((c) => !c.acceptingNewPatients)).toHaveLength(4);
     // Telehealth-first exists: the distance law's exception is exercised.
     expect(SYNTHETIC_CLINICIANS.some((c) => c.telehealthFirstAppointment)).toBe(true);
     // A stale-open declaration exists (past the 90-day window against any plausible today).
@@ -124,9 +126,10 @@ describe("O217 — synthetic example roster census", () => {
         (c) => c.acceptingNewPatients && c.capacityDeclaredAt !== undefined && c.capacityDeclaredAt < "2026-06-01",
       ),
     ).toBe(true);
-    // Languages beyond the real roster's, so a language ask can separate personas from people.
-    const languages = new Set(SYNTHETIC_CLINICIANS.flatMap((c) => c.languages));
-    for (const language of ["Mandarin", "Spanish", "Vietnamese"]) {
+    // EVERY matchable language is held somewhere on the demo roster, so any consultation-
+    // language ask the finder can recognise has at least one row to move.
+    const languages = new Set(demoRoster.flatMap((c) => c.languages));
+    for (const language of MATCHABLE_LANGUAGES) {
       expect(languages.has(language), language).toBe(true);
     }
     // All three genders the roster can express.
