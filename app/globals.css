@@ -94,6 +94,33 @@
      that settles without the soft mush of `ease`. */
   --ease-ui: cubic-bezier(0.32, 0.72, 0, 1);
 
+  /* O218: THE MOTION VOCABULARY, PORTED FROM THE NETWORK TREE (its O239/O252, verbatim — the
+     same ported-not-re-derived rule the O216 brand tokens follow). A SPRING, IN CSS, AT ZERO
+     BYTES: `linear()` takes a sampled curve, so it encodes motion that passes its destination
+     and settles — the overshoot a cubic-bezier cannot express, and the entire felt difference
+     between "this animated" and "this has weight". `--ease-spring` is for something ARRIVING or
+     being RELEASED; `--ease-ui` stays for something being PRESSED, where overshoot would read
+     as a mis-tap. */
+  --ease-spring: linear(
+    0, 0.006, 0.025, 0.056, 0.1, 0.157, 0.227, 0.309, 0.401, 0.503, 0.61, 0.719,
+    0.825, 0.919, 0.998, 1.036, 1.049, 1.045, 1.033, 1.02, 1.009, 1.003, 1
+  );
+
+  /* A long, soft out-ramp for anything large and slow — screens arriving. At that size a fast
+     curve reads as a jolt: scale reads relative to the object. */
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* THE DURATIONS, NAMED (network O252): motion is how an interface says WHAT KIND OF THING just
+     happened, and three kinds happen here. Existing values snap to the nearest step (the largest
+     single move in this tree is 20ms); the cv2 console keeps its own tokens and the story page's
+     choreographed sequences are timelines, not vocabulary. */
+  /** Feedback under the finger: a colour, a border, a control acknowledging a press. */
+  --dur-tap: 150ms;
+  /** Something moving a short distance it will move back from — a hover lift, a nudge. */
+  --dur-move: 180ms;
+  /** Something arriving on screen or leaving it. */
+  --dur-enter: 240ms;
+
   --ground: #191a17;
   --on-ground: #ffffff;
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
@@ -219,7 +246,7 @@ textarea:focus-visible {
   width: 100%;
   min-height: 100svh;
   background: var(--paper);
-  animation: screen-in 260ms ease both;
+  animation: screen-in var(--dur-enter) var(--ease-soft) both;
 }
 
 .minimal-header {
@@ -255,7 +282,7 @@ textarea:focus-visible {
 
 .demo-nav-trigger svg {
   color: var(--muted);
-  transition: transform 180ms ease;
+  transition: transform var(--dur-move) var(--ease-ui);
 }
 
 .demo-nav-trigger[aria-expanded="true"] svg {
@@ -274,7 +301,7 @@ textarea:focus-visible {
   border-radius: 20px;
   background: var(--paper);
   box-shadow: 0 24px 70px rgb(25 26 23 / 16%);
-  animation: demo-nav-in 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: demo-nav-in var(--dur-enter) var(--ease-spring) both;
 }
 
 .demo-nav-home {
@@ -516,7 +543,7 @@ textarea:focus-visible {
   background: var(--ground);
   box-shadow: 0 14px 30px rgb(28 29 25 / 12%);
   cursor: pointer;
-  transition: transform 180ms ease, background 180ms ease;
+  transition: transform var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
 }
 
 @media (hover: hover) {
@@ -621,7 +648,7 @@ textarea:focus-visible {
   font-size: 1rem;
   font-weight: 650;
   cursor: pointer;
-  transition: transform 150ms ease, background 150ms ease;
+  transition: transform var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
 }
 
 @media (hover: hover) {
@@ -1165,7 +1192,7 @@ textarea:focus-visible {
 }
 
 .profile-screen {
-  animation: fade-in 260ms ease both;
+  animation: fade-in var(--dur-enter) var(--ease-soft) both;
 }
 
 .profile-portrait {
@@ -1421,7 +1448,17 @@ textarea:focus-visible {
 .patient-v2 .minimal-header {
   min-height: 68px;
   padding: 0 22px;
-  border-bottom: 1px solid var(--line);
+  /* O218: the brand's one appearance inside the Operate surface — the hairline under the finder's
+     header is the band itself, at 2px. The finder stays paper (a gradient field here would shout
+     over a task surface, which impeccable's MODE rule forbids), but the product no longer changes
+     brand at the door: the same ramp that carries the public chrome closes this header's edge.
+     A background strip, not a border-image: it composites on the header's own paper and costs
+     no layout. */
+  border-bottom: 0;
+  background-image: var(--band-gradient);
+  background-repeat: no-repeat;
+  background-size: 100% 2px;
+  background-position: bottom;
 }
 
 .patient-v2 .wordmark {
@@ -3402,7 +3439,7 @@ textarea:focus-visible {
   font-weight: 640;
   letter-spacing: 0.01em;
   text-decoration: none;
-  transition: background 0.2s ease, transform 0.15s ease;
+  transition: background var(--dur-move) var(--ease-ui), transform var(--dur-tap) var(--ease-ui);
   animation: story-demo-nudge 5s ease-in-out infinite;
 }
 .story-demo-link:focus-visible {
@@ -3489,7 +3526,7 @@ textarea:focus-visible {
   font-size: 0.90625rem;
   font-weight: 640;
   text-decoration: none;
-  transition: transform 0.15s ease, background 0.2s ease;
+  transition: transform var(--dur-tap) var(--ease-ui), background var(--dur-move) var(--ease-ui);
 }
 @media (hover: hover) {
   /* O216: derived from the accent rather than a second hex — the rose this used to darken is gone. */
@@ -3967,7 +4004,7 @@ textarea:focus-visible {
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
-  transition: top 160ms ease;
+  transition: top var(--dur-tap) var(--ease-ui);
 }
 .skip-link:focus-visible { top: 12px; outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -4026,7 +4063,7 @@ textarea:focus-visible {
      press state — the fetched guidance's micro-interaction floor. */
   /* O216: a paper pill on the band, the network tree's own treatment — a bordered transparent
      pill has no border colour that survives every stop of the gradient behind it. */
-  transition: background-color 160ms ease, color 160ms ease;
+  transition: background-color var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui);
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -4073,7 +4110,7 @@ textarea:focus-visible {
   color: var(--ink);
 }
 .join-email-cta {
-  transition: background-color 160ms ease, color 160ms ease;
+  transition: background-color var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui);
   display: inline-flex;
   align-items: center;
   min-height: 52px;
@@ -5157,7 +5194,7 @@ textarea:focus-visible {
 .clarify-chip {
   min-height: 44px; padding: 9px 15px; border: 1px solid var(--accent-tint); border-radius: 999px;
   background: var(--accent-soft); color: var(--ink); font: inherit; font-size: 0.9375rem;
-  text-align: left; cursor: pointer; transition: background-color .18s ease, border-color .18s ease;
+  text-align: left; cursor: pointer; transition: background-color var(--dur-move) var(--ease-ui), border-color var(--dur-move) var(--ease-ui);
 }
 @media (hover: hover) { .clarify-chip:hover { background: #fff; border-color: var(--accent); } }
 .clarify-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
