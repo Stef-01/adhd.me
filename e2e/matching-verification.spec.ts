@@ -9,11 +9,13 @@
 import { expect, test, type Page } from "@playwright/test";
 import { clinicians } from "../src/demo/clinicians";
 import { clarifiers } from "../src/matching/clarify";
+import { gotoFinderRealRosterOnly } from "./support/real-roster";
 
 const shot = (name: string) => ({ path: `qa/_runs/matching-o10/${name}.png`, fullPage: true as const });
 
 async function searchFor(page: Page, query: string) {
-  await page.goto("/finder");
+  // O226: these are REAL-roster ranking laws, so the examples are switched off at the door.
+  await gotoFinderRealRosterOnly(page);
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
