@@ -11,7 +11,6 @@ import {
   needsFor,
   rankBands,
   rankCliniciansNear,
-  rankClinicians,
   requestFitCopy,
   requestFitSummary,
   topTieNote,
@@ -73,7 +72,6 @@ export function CareFinder() {
   // O222: a plain ternary — both branches are stable module references, so this is already
   // referentially stable across renders and the memo bought a hook slot for nothing.
   const roster = rosterFor(includeSynthetic);
-  const [matches, setMatches] = useState(() => rankClinicians(exampleRequest, clinicians));
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
@@ -82,6 +80,15 @@ export function CareFinder() {
   // permission prompt, and no coordinate leaves the browser.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
+  /**
+   * O224: DERIVED, NOT SET. `matches` is fully determined by (request, origin, roster); it was
+   * imperative state with EIGHT setter sites, each recomputing the rank by hand — the O222
+   * stale-roster hazard in the tickbox handler existed only because of that shape, and the seam
+   * pin polices call sites that a derivation simply does not have. `rankCliniciansNear` with a
+   * null origin IS `rankClinicians`, so one expression covers every former site; the scenarios
+   * stage never displays matches, so its priming setters carried no behavior at all.
+   */
+  const matches = useMemo(() => rankCliniciansNear(request, origin, roster), [request, origin, roster]);
   // Round 2: sixteen near-identical rows is the "long list" anti-pattern. Five is enough to choose
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
@@ -151,10 +158,9 @@ export function CareFinder() {
     if (stage !== "scenarios" || !autoCycle) return;
     const current = careArchetypes[archetypeIndex] ?? defaultArchetype;
     setRequest(current.request);
-    setMatches(rankClinicians(current.request, roster));
     setMatchIndex(0);
     setMatchDirection(1);
-  }, [stage, autoCycle, archetypeIndex, roster]);
+  }, [stage, autoCycle, archetypeIndex]);
 
   const requestSummary = useMemo(() => {
     const cleaned = request.trim().replace(/[.!?]+$/, "");
@@ -354,7 +360,6 @@ export function CareFinder() {
   function findMatches(value = request) {
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
-    setMatches(rankCliniciansNear(nextRequest, origin, roster));
     setMatchIndex(0);
     setShowAll(false);
     // Straight to the results. The sort is synchronous and already done; the screen that used to
@@ -372,7 +377,6 @@ export function CareFinder() {
     setStage("welcome");
     setDraft("");
     setRequest(archetype.request);
-    setMatches(rankClinicians(archetype.request, roster));
     setMatchIndex(0);
     setMatchDirection(1);
   }
@@ -384,9 +388,8 @@ export function CareFinder() {
    */
   function toggleSynthetic(next: boolean) {
     setIncludeSynthetic(next);
-    // rosterFor, not a re-stated ternary: state is stale in this handler, so the roster is
-    // recomputed — but the CHOICE lives in one place.
-    setMatches(rankCliniciansNear(request, origin, rosterFor(next)));
+    // The list re-ranks by derivation the moment the state lands — the stale-state hazard this
+    // handler used to work around is gone with the setter.
     setMatchIndex(0);
     setShowAll(false);
   }
@@ -397,7 +400,6 @@ export function CareFinder() {
     setArchetypeIndex(nextIndex);
     setRequest(nextArchetype.request);
     setDraft("");
-    setMatches(rankClinicians(nextArchetype.request, roster));
     setMatchIndex(0);
     setMatchDirection(direction);
   }
@@ -490,15 +492,8 @@ export function CareFinder() {
               setDraft(request);
               setStage("type");
             }}
-            onPlaceChange={(value) => {
-              setPlace(value);
-              setMatches(rankCliniciansNear(request, resolvePlace(value), roster));
-            }}
-            onClarify={(answer) => {
-              const next = `${request}, ${answer}`;
-              setRequest(next);
-              setMatches(rankCliniciansNear(next, origin, roster));
-            }}
+            onPlaceChange={(value) => setPlace(value)}
+            onClarify={(answer) => setRequest(`${request}, ${answer}`)}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}
             includeSynthetic={includeSynthetic}

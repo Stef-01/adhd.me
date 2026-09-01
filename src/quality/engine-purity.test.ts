@@ -57,9 +57,12 @@ describe("O221 — the engine core is host-agnostic, as the app plan claims", ()
     // enforcement, and the 13th call site would have failed the same way. This pin refuses the
     // shape itself: in care-finder.tsx, no roster-defaulting engine call may end at `request)`.
     const source = readFileSync(path.join(ROOT, "app/care-finder.tsx"), "utf8");
+    // O224 dropped `rankClinicians` from this list WITH the code: matches became derived state,
+    // so the finder ranks through exactly one `rankCliniciansNear` expression and the plain form
+    // has no call site left to police.
     const rosterDefaulting = [
       "matchQuality", "topTieNote", "unservedAsks", "rankBands", "needsFor",
-      "matchEvidence", "missedAsks", "getPersonalizedMatch", "rankClinicians", "rankCliniciansNear",
+      "matchEvidence", "missedAsks", "getPersonalizedMatch", "rankCliniciansNear",
     ];
     for (const fn of eachOf(rosterDefaulting, "the roster-defaulting engine reads")) {
       // Non-vacuous per function: the finder genuinely calls each of these.
@@ -75,7 +78,7 @@ describe("O221 — the engine core is host-agnostic, as the app plan claims", ()
     // known short forms are refused by name. (A call spanning lines or a new short form is
     // outside this source pin's reach — it is a ratchet on the shapes that have actually
     // occurred, not a parser.)
-    for (const short of [/\brankClinicians\(\s*[\w.]+\s*\)/g, /\brankCliniciansNear\(\s*[\w.]+\s*,\s*[\w.]+\s*\)/g]) {
+    for (const short of [/\brankCliniciansNear\(\s*[\w.]+\s*,\s*[\w.]+\s*\)/g]) {
       const hits = source.match(short) ?? [];
       expect(hits, `a ranking call defaults its roster:\n${hits.join("\n")}`).toEqual([]);
     }
