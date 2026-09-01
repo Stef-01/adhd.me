@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 090dc20 (2026-09-01T08:20Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS (2 accepted advisories), perf gate PASS (48 routes within budget), gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.8m), exit code 0 read from the command itself. AR15/AR16 baseline re-accepted under the three-run zero-diff protocol on PINNED stores (180 captures; sha in ACCEPTED_DIFFS under O222, whose entry closes the console/matching drift question — the harness read accumulating stores, and now cannot). **O216 through O223 done — the founder-directed reskin/refactor session**: brand scheme (O216), twenty synthetic profiles behind the tickbox (O217), motion vocabulary + finder hairline (O218), the accent-law pass (O219), the standalone-app plan with Phase 1a shipped (O220), the engine-purity law (O221), the simplify pass that also fixed the roster-seam leak and the harness's accumulating-store drift (O222), DESIGN.md re-captured (O223). O215 done. The sha is the last code commit the full e2e covered; the harness pin, DESIGN.md and this ledger land beside this line, re-verified in the same push`
+`gate: green @ 04d073f (2026-09-01T09:35Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.9m), exit code 0 read from the command itself; AR15 visual comparison PASSED against the accepted baseline (zero moved cells — O224 proven pixel-identical by the pinned harness). **O216 through O224 done — the founder-directed reskin/refactor session**: brand scheme, twenty synthetic profiles behind the tickbox, motion vocabulary + finder hairline, the accent-law pass, the standalone-app plan with Phase 1a shipped, the engine-purity law, the simplify pass with the roster-seam and harness-determinism fixes, DESIGN.md re-captured, and matches derived (eight setters deleted). O215 done`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -146,6 +146,18 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (register re-sorted), two type-scale exceptions under the OG card's Satori law, PLAN.md canon
 > row ACTIVE. The unit also repaired the accent probe's green case (BARE_ROUTE was a blind index;
 > it now walks for a route with room below the cap, as the spec's own header always demanded).
+>
+> **O224 (matches becomes derived state — the reviews' out-of-diff note, claimed) — 2026-09-01.**
+> `matches` is fully determined by (request, origin, roster); it was imperative state with eight
+> setter sites each recomputing the rank by hand, and the O222 stale-roster hazard existed only
+> because of that shape. One `useMemo` derives it now (`rankCliniciansNear` with a null origin IS
+> `rankClinicians`, so one expression covers every former site); each former setter site keeps
+> only the state it actually meant to write, and the scenarios stage's priming setters carried no
+> behavior at all — that stage never displays matches. The seam pin drops `rankClinicians` WITH
+> the code, the ratchet working in both directions. **Proven pixel-identical by the pinned
+> harness**: the full gate's visual comparison PASSED against the standing baseline — zero moved
+> cells — which is the first time a code change could be verified that way, and is O222's
+> store-pinning paying out one unit later.
 >
 > **O222 (FOUNDER-DIRECTED: "Refactor everything keeping as minimal code as possible") —
 > 2026-09-01.** Run as the tree's own simplify lane over the session diff: four parallel review
