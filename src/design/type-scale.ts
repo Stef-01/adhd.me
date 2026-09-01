@@ -26,14 +26,6 @@ export const COMPONENT_PX_TYPE_EXCEPTIONS: ReadonlyArray<{
     file: "app/opengraph-image.tsx",
     why: "Satori renders the OG card to a PNG with no stylesheet and no rem context — px is the only unit that means anything there.",
   },
-  {
-    file: "app/apple-icon.tsx",
-    why: "O220: the same Satori law as the OG card — the 180px home-screen icon renders with no stylesheet and no rem context.",
-  },
-  {
-    file: "app/icon.tsx",
-    why: "O220: the same Satori law as the OG card — the 512px app icon renders with no stylesheet and no rem context.",
-  },
 ];
 
 /** Selectors whose numbers change or align — each rule must carry font-variant-numeric: tabular-nums. */

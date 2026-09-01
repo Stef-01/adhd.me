@@ -19,7 +19,7 @@ import {
   missedAsks,
   type Clinician,
 } from "@/demo/clinicians";
-import { demoRoster } from "@/demo/synthetic-roster";
+import { rosterFor } from "@/demo/synthetic-roster";
 import { clarifiers } from "@/matching/clarify";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
@@ -70,8 +70,10 @@ export function CareFinder() {
    * ranking did not run over.
    */
   const [includeSynthetic, setIncludeSynthetic] = useState(false);
-  const roster = useMemo(() => (includeSynthetic ? demoRoster : clinicians), [includeSynthetic]);
-  const [matches, setMatches] = useState(() => rankClinicians(exampleRequest));
+  // O222: a plain ternary — both branches are stable module references, so this is already
+  // referentially stable across renders and the memo bought a hook slot for nothing.
+  const roster = rosterFor(includeSynthetic);
+  const [matches, setMatches] = useState(() => rankClinicians(exampleRequest, clinicians));
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
@@ -163,10 +165,13 @@ export function CareFinder() {
     () => request.trim() === archetype.request ? archetype.headline : getRequestHeadline(request, requestSummary),
     [archetype.headline, archetype.request, request, requestSummary],
   );
-  const allSignals = useMemo(
-    () => matches.map((item) => getPersonalizedMatch(item, request).signals),
-    [matches, request],
+  /** O222: ONE pass — the rows index into this instead of re-running the lexicon per row,
+   * and the roster threads through so the printed reasons derive from the ranked roster. */
+  const allMatches = useMemo(
+    () => matches.map((item) => getPersonalizedMatch(item, request, roster)),
+    [matches, request, roster],
   );
+  const allSignals = useMemo(() => allMatches.map((m) => m.signals), [allMatches]);
   /**
    * ONE PIPELINE RUN PER RENDER (O8 review). These four were each computed inline in the JSX,
    * some more than once, and every call re-runs the full lexicon read over the request — a
@@ -174,6 +179,9 @@ export function CareFinder() {
    */
   const quality = useMemo(() => matchQuality(request, roster), [request, roster]);
   const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
+  /** Read only when a tie exists — unconditional, this would ADD a rankBands run to the common
+   * no-tie render; conditional, it matches the old cost exactly with the derivation named. */
+  const bands = useMemo(() => (tieNote ? rankBands(request, roster) : []), [tieNote, request, roster]);
   const clarifierList = useMemo(() => clarifiers(request, matches), [request, matches]);
   const unserved = useMemo(() => unservedAsks(request, roster), [request, roster]);
   const fitCopy = useMemo(
@@ -189,12 +197,12 @@ export function CareFinder() {
    */
   const visibleCount = useMemo(() => {
     if (!tieNote) return 5;
-    const topBand = rankBands(request, roster)[0];
+    const topBand = bands[0];
     return Math.max(5, topBand ? topBand.clinicians.length : 5);
-  }, [request, tieNote, roster]);
+  }, [tieNote, bands]);
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
-  const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request), [clinician, request]);
+  const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request, roster), [clinician, request, roster]);
   /**
    * The evidence behind the pills, with provenance (O21). `matchEvidence` already carries the
    * phrase from the reader's OWN words that reached each facet (`matched`) — the ranking has
@@ -202,7 +210,11 @@ export function CareFinder() {
    * label is attribution, not templating: the reason sentence is still composed only from the
    * fixed set (W213), and the quote is visibly the reader's text, not the product's claim.
    */
-  const profileEvidence = useMemo(() => matchEvidence(clinician, request), [clinician, request]);
+  // O222 (review finding): these two were NOT threaded, so with the tickbox on the profile's
+  // evidence and its "does not answer" list ran over the 2-entry real roster while the ranking
+  // ran over 22 — exactly what the comment on `roster` above promises cannot happen. The
+  // call-site pin in engine-seam.test.ts now refuses a defaulted roster read in this file.
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster), [clinician, request, roster]);
   /**
    * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
    * with the filter inverted, so the two lists partition what the reader asked and cannot
@@ -210,7 +222,7 @@ export function CareFinder() {
    * reader to assume the rest were hits too, which is the quiet dishonesty the console's
    * "Missed" column was built to prevent — for staff. The reader gets the same truth.
    */
-  const profileMissed = useMemo(() => missedAsks(clinician, request), [clinician, request]);
+  const profileMissed = useMemo(() => missedAsks(clinician, request, roster), [clinician, request, roster]);
 
   /**
    * O102: the other GP to hold this one against, and the table that compares them.
@@ -236,7 +248,7 @@ export function CareFinder() {
   const compareRows: readonly CompareRow[] = useMemo(() => {
     if (!compareWith) return [];
     const declaredBy = (item: Clinician) =>
-      new Set(matchEvidence(item, request).map((need) => need.label));
+      new Set(matchEvidence(item, request, roster).map((need) => need.label));
     const left = declaredBy(clinician);
     const right = declaredBy(compareWith);
     const seen = new Set<string>();
@@ -372,8 +384,9 @@ export function CareFinder() {
    */
   function toggleSynthetic(next: boolean) {
     setIncludeSynthetic(next);
-    const nextRoster = next ? demoRoster : clinicians;
-    setMatches(rankCliniciansNear(request, origin, nextRoster));
+    // rosterFor, not a re-stated ternary: state is stale in this handler, so the roster is
+    // recomputed — but the CHOICE lives in one place.
+    setMatches(rankCliniciansNear(request, origin, rosterFor(next)));
     setMatchIndex(0);
     setShowAll(false);
   }
@@ -468,6 +481,7 @@ export function CareFinder() {
             origin={origin}
             matches={matches}
             shown={shown}
+            personalized={allMatches}
             allSignals={allSignals}
             request={request}
             reducedMotion={reducedMotion}
