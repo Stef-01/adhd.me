@@ -84,6 +84,13 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     captures: 180,
     reason:
       "Exactly four cells moved — console/matching, both widths and motions — and this acceptance CLOSES the question the last two carried, because the mover was the HARNESS, not the page: the matching console renders tallyOutbound() and the background audit, both file-backed stores the full e2e suite appends to on every run, so those cells re-hashed at every cross-commit comparison while agreeing within every same-tree protocol. pnpm e2e:visual now pins all four ADHDME_*_PATH stores to a fresh .data-visual/ per invocation, this baseline is the pinned-empty rendering (the console's own AR25/AR26 zero-state copy), and the cells cannot move again unless the page does. O222's code refactor itself was proven pixel-identical everywhere else by the same comparison that exposed the store drift. Three-run protocol agreed (zero pairwise diff) before this acceptance.",
+  },  {
+    unitId: "O226",
+    acceptedAt: "2026-09-01",
+    manifestSha256: "0b0c8ffc169ac3cb531ff9fbe5e919486d6c957805adcbf54422a8316f78031e",
+    captures: 180,
+    reason:
+      "Exactly four cells moved — the finder, both widths and motions — from the harmony pass a production iPhone review demanded: the example-roster switch left the results screen for a closed 'Testing options' disclosure under the welcome screen's voice entry (founder decision synthetic-roster-tickbox, AMENDED: examples ship ON, the switch is the way off), which is the only finder-welcome pixel change the matrix can see. The same unit's results-screen work — borders dropped from the head and refine details, the ink+underline edit action, the count moved to the list head, concentric 6px thumbnails, the paper place input — sits behind a query the capture matrix does not type, so it is recorded in qa/o226-*.png and DESIGN-QA rather than here. Three-run protocol agreed (zero pairwise diff across all 180 captures) before this acceptance.",
   },
 ];
 
