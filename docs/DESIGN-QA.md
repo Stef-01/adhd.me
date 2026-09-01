@@ -3797,3 +3797,17 @@ Home link against the band's worst stop (the ancestor walk treats any gradient o
 the painted ground and cannot know a 2px strip at the far edge — 4.01:1 of fiction; the
 pseudo-element renders identically and owns no text). Both fixes verified by re-running the
 sweeps that caught them.
+
+## O225 — the installed app stops showing a paper seam at the notch (2026-09-01)
+
+STANDALONE-APP-PLAN.md Phase 1b, the safe-area half. Without `viewport-fit: cover` the installed
+app letterboxes below the status bar and the strip above the brand band renders as a paper seam —
+the exact "changes brand at the door" defect O218's hairline closed at the finder, reintroduced by
+the device. With cover set, the four top bars (`.site-nav`, `.story-header`, the finder's
+`.minimal-header`, `.profile-header`) pad themselves back out of the notch with
+`env(safe-area-inset-top)` while their grounds paint to the device edge, and the two chrome inners
+take `max(24px, env(safe-area-inset-*))` for landscape's rounded corners. Every inset rule
+collapses to the old values wherever insets are zero — proven by the gate's visual comparison
+passing unchanged against the standing baseline, which is this unit's capture: the change is
+DESIGNED to be invisible in a browser tab and only exists on device. The plan's other 1b half —
+reproducing the MIC B2 standalone-flag failure — stays owed to the plan and is not claimed here.

@@ -1187,6 +1187,8 @@ textarea:focus-visible {
   position: sticky;
   top: 0;
   z-index: 5;
+  /* O225: same inset law — this bar pins to the very top while the profile scrolls. */
+  padding-top: env(safe-area-inset-top);
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(16px);
 }
@@ -1447,7 +1449,7 @@ textarea:focus-visible {
 
 .patient-v2 .minimal-header {
   min-height: 68px;
-  padding: 0 22px;
+  padding: env(safe-area-inset-top) max(22px, env(safe-area-inset-right)) 0 max(22px, env(safe-area-inset-left));
   /* O218: the brand's one appearance inside the Operate surface — the hairline under the finder's
      header is the band itself, at 2px. The finder stays paper (a gradient field here would shout
      over a task surface, which impeccable's MODE rule forbids), but the product no longer changes
@@ -3402,6 +3404,8 @@ textarea:focus-visible {
   background-color: var(--ground);
   color: var(--on-ground);
   background-image: var(--band-scrim), var(--band-gradient);
+  /* O225: same inset law as .site-nav. */
+  padding-top: env(safe-area-inset-top);
 }
 .story-header-inner {
   display: flex;
@@ -4046,6 +4050,9 @@ textarea:focus-visible {
   color: var(--on-ground);
   background-image: var(--band-scrim), var(--band-gradient);
   border-bottom: 0;
+  /* O225: under viewport-fit cover the band paints to the device edge; the inset pushes the
+     CONTROLS back out of the notch while the gradient fills it. Zero in a browser tab. */
+  padding-top: env(safe-area-inset-top);
 }
 .site-nav-inner {
   display: flex;
@@ -4053,7 +4060,8 @@ textarea:focus-visible {
   justify-content: space-between;
   width: min(1080px, 100%);
   margin: 0 auto;
-  padding: 0 24px;
+  /* O225: landscape's rounded corners — the max() collapses to the old 24px wherever insets are zero. */
+  padding: 0 max(24px, env(safe-area-inset-right)) 0 max(24px, env(safe-area-inset-left));
   min-height: 66px;
 }
 .site-nav-wordmark {
