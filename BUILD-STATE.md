@@ -119,6 +119,86 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O219 (the story landing joins the accent law; the finder hairline stops lying to the sweep) —
+> 2026-09-01.** The first full e2e run on the reskinned tree failed exactly where it should have:
+> retiring the story rose to amber (O216) made the landing's scoped palette the PRODUCT accent by
+> value, so the accent-discipline sweep counted the page for the first time — ten meanings on `/`
+> against a cap of two, four on `/approach`. Answered with O166's ruling rather than an evasion:
+> the accent keeps its two earned meanings on the landing (the claim's drawn underline, the
+> "Now in-practice" live stat) and everything else moves to the tree's own idioms — eyebrows and
+> step numbers muted, the primary CTA and approach door on the dark-pill treatment, the
+> clinician-door band on the page's own dark beat with `--on-band` as its sanctioned accent, the
+> community submit on ink; `/approach` spends zero. The finder's O218 hairline moved to a
+> `::after` after the contrast sweep measured the header's Home link against the band's worst stop
+> (the ancestor walk treats any gradient on an ancestor as the painted ground — 4.01:1 of fiction
+> over a 2px strip the text never touches). AR18 +6 (each new dark ground with a same-rule light
+> foreground), AR17 73 → 71. The three failing specs re-run green (accent 12 sites within cap;
+> contrast 568 elements, zero under floor).
+>
+> **O218 (FOUNDER-DIRECTED: "advance aesthetics even more") — 2026-09-01.** The network tree's
+> named motion system (its O197/O239/O252) ported VERBATIM — `--ease-spring` (a sampled `linear()`
+> spring, the overshoot a cubic-bezier cannot express), `--ease-soft`, and the three named
+> durations. Twelve literal-motion sites snapped to the vocabulary; the demo-scenario popover, the
+> one RELEASED element, alone takes the spring; the cv2 console's tokens and the story page's
+> choreographed timelines deliberately untouched. The finder's header edge carries the band at 2px
+> — the brand inside the Operate surface without a gradient field shouting over a task screen.
+>
+> **O217 (FOUNDER-DIRECTED: twenty synthetic example profiles behind a finder tickbox) —
+> 2026-09-01.** Founder brief, three messages the same day, recorded verbatim in
+> `FOUNDER_DECISIONS` (`synthetic-roster-tickbox`): the plan (docs/SYNTHETIC-ROSTER-PLAN.md, now
+> CLOSED), then *"Yes and have a tikbox that will allow the synthetic profiles to follow. This
+> finder system of the adhdme repo is not public so it's ok it's just for testing"*, then *"Let's
+> put in 20 synthetic profiles"*. A CONTROLLED REVERSAL of the persona purge, with every defence
+> against "invented presented as real" now machinery (`synthetic-roster.test.ts`, both
+> directions): `synthetic: true` never beside `realPerson`; `image: null` (monograms — nothing
+> generates a face); a new `booking.via: "synthetic-none"` variant with no url (the booking bar
+> renders an explanation; `/go` narrows and redirects); self-marking practice names; `example-`
+> id namespace; no invented conflicts; every rendered string through the same W23 web-copy linter
+> real profiles are held to — three findings (treats, treating, mental health) REWORDED rather
+> than accepted, because invented copy has no "their own declaration" defence. The `clinicians`
+> export, ROSTER_SIZE, the coverage map and every public count stay REAL-ONLY. The set is
+> designed, not sampled: with the two real GPs it covers every CareArea AND every
+> MATCHABLE_LANGUAGE, all three genders, every manner facet, four closed books, five stale
+> declarations, four telehealth-first entries. The finder threads ONE roster through the ranking
+> and every derived read (quality, bands, tie notes, unserved asks, the compare table), so no
+> sentence describes a list the ranking did not run over; while the tickbox is on, personas rank
+> NATURALLY — an artificial real-first order would defeat the testing purpose the founder named,
+> and the labels do the disclosure work. The tree's own laws caught two gaps on the first full
+> run (plan-canon's missing row; five bare census loops, now eachOf-wrapped), and the first
+> verify's failure was masked by a tail pipe — O213's failure mode, relearned.
+>
+> **O216 (FOUNDER-DIRECTED: the finder deployment joins the network's colour scheme) —
+> 2026-09-01.** Founder brief: *"Make the adhdme.au platform reskinned to adhd repo Color
+> scheme"*. Since the O215 split the deployments had diverged into two products: the network
+> tree's O271–O304 redesign carries the warm-orange-to-periwinkle brand gradient on every page's
+> header (its O290), a dark closing footer/Acknowledgement band (its O293/O300) and the mesh
+> landing hero; this tree kept the pre-split chrome and the story landing's scoped rose.
+> **Ported, not re-derived**: the seven brand hues and four band definitions copied VERBATIM from
+> the network's `:root` per the split banner's own law, landing on `.site-nav`/`.story-header`
+> (across band + scrim over an opaque `--ground` base — the arrangement the network derived so a
+> contrast sweep measures the real ground), `.site-footer`/`.story-footer` (`--band-fall-upper`)
+> and `.aoc-band` (`--band-fall-lower`; the Acknowledgement ARTWORK untouched — retinting it to a
+> brand would be exactly backwards). The story rose retired to the tree's own amber family
+> (measured: 5.36:1 on `--s-paper`, 4.77:1 on the chapter tint, 5.91:1 under white); its three
+> hand-written rose darkening stops became `color-mix` derived from the token they darken; the
+> throughline's tint became `--on-band` (7.2:1 on `--s-dark`). Censuses re-derived in the same
+> commits: AR18 +5 chrome surfaces, AR17 raw-hex 80 → 73 and token definitions 38 → 44 (+7 hues
+> arriving AS definitions, −1 prose line the line-based classifier had miscounted since the day
+> it was written). AR15/AR16: the manifest re-accepted under the three-run zero-diff protocol
+> (180 captures, sha in `ACCEPTED_DIFFS` under O218); O219's pixel moves re-run the protocol
+> next, recorded there when accepted.
+>
+> **MERGE STATE, WRITTEN AT MERGE TIME (2026-09-01, founder-directed: "Commit merge push to
+> main").** `pnpm verify` green on this tree repeatedly through the session (last full: 297
+> files / 4387 tests, 13 skipped; audit PASS, perf PASS at /finder 681 KB, accounting PASS). The
+> FULL e2e suite ran once end-to-end (311 passed / 4 failed / 1 skipped, 15.2m): the four
+> failures were O219's findings, all four specs since re-run green in isolation; the full-suite
+> re-run was IN FLIGHT when the founder directed the merge, and the gate line below stays at the
+> last fully-earned verdict rather than claiming one mid-run — the next session (or this one's
+> follow-up commit) flips it with the re-run's real figures, and O219's visual re-acceptance
+> lands the same way. Recorded so the line's age reads as the deliberate choice it was, not
+> drift.
+>
 > **O215 (FOUNDER-DIRECTED: the two interfaces become two deployments — THIS TREE IS THE FINDER
 > HALF) — 2026-08-28.** Founder brief, in their own words, given as two messages:
 > *"https://github.com/Stef-01/adhd.me make this one the old finder and landing page version of the
