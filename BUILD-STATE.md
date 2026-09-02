@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: red @ 5858b9b (2026-09-02T03:22Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). FAILING CHECK: full pnpm e2e — 7 failed, 316 passed, 1 skipped (18.3m), exit code 1 read from the command itself, run serially with nothing else building, at the U3 tree rebased onto the founder's redesign (324 listed). The seven are all the redesign's, none U3's: e2e/accent-discipline.spec.ts (/ carries 8 accent meanings against the cap of 2 — story-nav-link::after, story-demo-link, story-claim::after, story-primary-link, story-route-stop, story-stat-accent, the pillars' markers; /clinicians 3; /examples and /thanks 3, the redesign's `.notfound-primary { background: var(--accent) }` override among them), e2e/support/accent-probe.spec.ts (/ is over the cap before the probe touches it), e2e/touch-floor.spec.ts (the header's "Find a GP" / "For clinicians" pill is 42px tall on ten public routes; floor 44), e2e/support/stage-heights.spec.ts (the finder's first stage overflows a 390×844 viewport by 41px), e2e/contrast.spec.ts (/console/onboarding "Create practice" button 3.21:1 against the 4.5 floor), e2e/capacity-console.spec.ts (the drift verdict is tinted: spread 26 against the 24 cap), e2e/interop-console.spec.ts (112 coloured elements on a page that must show no state — the console shell's ink `rgb(23,32,51)` now reads as a state colour to the sweep). The AR15 visual comparison was NOT run at this tree and cannot pass: the O226 baseline (accepted at 1d8067f) predates the redesign, which moved rendered pixels product-wide, and no accepted-diff entry exists for it. HOW MAIN GOT HERE: the founder's product-wide daylight-wayfinding redesign (b7629e9, with 77068c4 and 5fe0ab7 hardening two vitest files for other platforms) landed on main 2026-09-01/02 directly, outside the claim protocol — no ledger row, no gate line, no accepted-diff entry, no e2e claim (its DESIGN-QA entry claims the vitest suite, the build and its own WCAG scans, and is honest about that). Everything else is green at this tree: pnpm verify green (302 files / 4449 tests, 13 skipped), build, audit PASS (2 accepted advisories, 0 unaccepted), perf gate PASS (49 routes within budget; heaviest /finder at 679 KB; /api/mock/fault/[kind] pinned at 343 KB), gate accounting PASS; and U3's own verification passed in the same run (error-boundary.spec.ts 2/2, the fixture answering 500 with the boundary). **O216 through O228 done, U lane OPEN but claims BLOCKED until this line is green**: U1, U2 and U3 are done; O229 (fixing these seven within the tree's design laws, then the three-run visual re-acceptance) IS the next firing's unit; U4 follows`
+`gate: green @ dc3253d (2026-09-02T04:35Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at d94c798 + dc3253d (typecheck · 302 files / 4462 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget · gate accounting PASS); full pnpm e2e green (323 passed, 1 skipped, 18.3m, exit 0 read from the command itself, run serially with nothing else building, 324 listed) at the O229 tree (d94c798: the seven redesign breaches fixed in globals.css's redesign layer — accent cap on /, /clinicians, /examples, /thanks, /faq, /approach; the 44px pill; the briefing card inside 390×844; the onboarding button's hover contrast; the interop and capacity sweeps clean through scoped hue-free console neutrals). AR15 visual: three stability runs on the fixed tree byte-identical (manifest sha 25d66570), accepted under O229 in src/design/accepted-diffs.ts — the first acceptance since the founder's redesign, so it carries the redesign's pixels and the seven fixes together. **O216 through O229 done, U lane OPEN**: U1, U2, U3 done; U4 (reporter seam, onRequestError, /api/health, Web Vitals, csp-report route) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -119,8 +119,8 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
-> **O229 (CLAIMED founder-0902a, 2026-09-02T03:25Z — the red gate first: the founder's redesign
-> reconciled with the tree's own design laws, then the AR15 visual re-acceptance the redesign owes).**
+> **O229 (founder-0902a, 2026-09-02 — DONE @ d94c798 + dc3253d: the red gate first — the founder's redesign
+> reconciled with the tree's own design laws, then the AR15 visual re-acceptance the redesign owed).**
 > Scope, from the gate line's seven named failures and nothing beyond them: the accent cap on `/`,
 > `/clinicians`, `/examples`/`/thanks` (`type.accent-live-tokens`, two meanings a page); the 44px
 > touch floor on the header pill (`interaction.touch-44`); the finder's first stage inside 390×844
@@ -131,7 +131,25 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > protocol on the fixed tree, `qa/baselines/manifest.json` re-accepted under this id, and the gate
 > line rewritten green from a full `pnpm e2e` run. `pnpm verify` is red on this claim commit by
 > design — AR14's pin on the real ledger fails while the line is red — and goes green with the
-> line.
+> line. **Outcome:** every fix is a rule in the redesign's layer of `app/globals.css`, made under
+> the redesign's own colour roles (blue carries route and state; orange marks the next consequential
+> action): the accent withdrawn from the pill, the nav underline, the claim ornament, the first
+> route stop, the pillar counters, the join link and the finder's progress rail (route blue or
+> route-strong instead; `/` keeps exactly two meanings, the primary door and the live-token stat);
+> the pill at 44px; the finder's BRIEFING card — not the first stage, as the claim guessed: the
+> goal stage was inside the pin, the first learning card was 40px under it because Inter wraps the
+> longest guideline title to five lines — with its heading at 2rem under 640px and, found while
+> measuring, in the card's own light foreground rather than the ink a shared rule had put on its
+> blue ground; the primary button's hover darkened toward ink (6.56:1) rather than lightened to
+> accent-mid (3.21:1); and the console shell scoping hue-free neutrals (each site token with a
+> touch of the accent mixed in — ink spread 28 → 15, muted 10, faint 9, line 8) over a re-declared
+> stone scale, with `--line` on card borders and table rows and the shell's own `color` set (an
+> inherited colour is the body's computed ink, not the token). No gate, sweep or census floor
+> moved; the raw-hex ratchet (71 / 44), dark-ground and hover-gate censuses all hold. Verified:
+> the seven specs 32/32, full e2e 323 passed / 1 skipped, three byte-identical visual runs,
+> `pnpm verify` green with the line. Record: DESIGN-QA entry, `qa/o229-*.png` (landing at both
+> widths, the briefing card, the interop screen), AUDIT-AR row 9. The vault log is skipped
+> (unreachable) and the commits say so.
 
 > **U3 (O228-lane, the third unit of the one-year plan: error boundaries and loading states with
 > copy the linter reaches) — 2026-09-02, landed RED-inherited.** Built and gated green on the
