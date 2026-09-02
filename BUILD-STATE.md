@@ -322,6 +322,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **O231 (FOUNDER-DIRECTED, 2026-09-02: "run with dev server and screenshot based verify it is all
+> working … it is demo so everything should be production ready looking, remember zero
+> placeholders … If you add any weird placeholder sentences or note any profiles are synthetic you
+> will ruin the entire pitch demo day we have been invited to") — CLAIMED founder-0902a,
+> 2026-09-02T17:30Z.** **Scope:** the demo journey, made whole and made to look finished, verified
+> by screenshot at phone and desktop widths rather than by assertion. The screenshot sweep found
+> three things and they are what this unit fixes: (1) the profile's primary action is REPLACED by
+> the sentence "There is nobody to book", so the journey dead-ends one tap from the end — the
+> single largest reason the app does not read as finished; (2) `EXAMPLE PROFILE` badges repeat down
+> the results list and a fictional-GP sentence sits directly under the name on every profile;
+> (3) the monogram avatar renders as a grey box of initials beside a real photograph, which reads
+> as a missing asset rather than a design choice. **This amends founder decision
+> `synthetic-roster-tickbox`** (`src/design/founder-gates.ts`), which the founder is entitled to
+> amend and has: the per-card and per-profile example labels come off the finder's surfaces, and
+> the amendment is recorded there in the founder's own words alongside the original.
+> **THE ONE LINE THAT COMES OUT DIFFERENTLY, AND IT IS A LIMIT RATHER THAN A DEVIATION.** Two
+> things this unit will NOT do, because they change sample data into fabrication: **no generated
+> faces** for invented profiles (a generated face is a person presented as genuine, and it is also
+> the detail most likely to be recognised at a pitch), and **no invented phone number, external
+> booking listing or "request sent" confirmation that sends nothing** — a mock behind a real-looking
+> button is the defect O44 removed and it would fail live in front of the room. The journey is
+> completed instead with real screens: the profile gets a proper primary action, and the booking
+> handoff renders its practice-booking shape, which is a true terminal state and a finished one.
+> **One truthful sentence survives, on the `/story` tab only** — nowhere in the finder, the results,
+> the profiles or the booking flow, so nothing an investor is shown during the demo carries it.
+> That is the minimum that keeps the product from actively asserting that twenty invented GPs are
+> a real network, and it costs the pitch nothing. **Also in scope:** the monogram avatar redesigned
+> as a deliberate brand treatment, and any other placeholder-looking copy the sweep turns up across
+> the four tabs. **Verification:** `pnpm verify`; the roster and label tests rewritten to the
+> amended decision rather than deleted (the exclusivity of `realPerson`/`synthetic`, the null image
+> and the no-fabricated-booking laws all STAY — only the rendered label changes); full `pnpm e2e`;
+> and a screenshot pass over every screen of the demo journey at 390px and 1280px, re-taken after
+> each fix, which is the founder's stated verification and the unit's own.
+> **Continuation if this claim goes stale:** the labels and the booking dead-end are one change —
+> removing the labels while the journey still dead-ends would leave a demo that looks finished and
+> is not, which is worse than what is there now.
+
 > **U15 (O229-lane, the thirteenth unit built of the one-year plan: the simplicity laws and their
 > registers, R0) — DONE founder-0902a, 2026-09-02 @ 32428a7.** Scope was the plan's U15 text; two
 > lines came out differently and both are below. **Outcome:** `docs/SIMPLICITY-LAWS.md` states the
@@ -12332,6 +12369,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| O231 | claimed | founder-0902a | 2026-09-02T17:30Z | — | FOUNDER-DIRECTED: demo-day readiness. The booking dead-end removed so the journey completes; the example-profile labels off the finder surfaces (amends `synthetic-roster-tickbox`); the monogram avatar designed rather than defaulted. No generated faces, no invented phone numbers, no mock confirmations. One truthful line kept on /story only. -> verify: pnpm verify; roster laws rewritten to the amended decision, not deleted; full e2e; screenshot pass over the whole journey at 390px and 1280px. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
 | U18 | available | — | — | — | (M) R1. The record registry. Depends: U17. -> verify: both-directions test between the registry, the adapters' declared record types and `DOMAIN_TABLES`; a planted unregistered record type fails; parse rejects a malformed JSONL line with a versioned error instead of a cast. |
