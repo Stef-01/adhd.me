@@ -6,6 +6,7 @@
 // forever-credential. Legacy (pre-W37) cookie values fail closed: re-sign-in.
 
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { readEnv, type Env } from "@/lib/env";
 import { signingSecret } from "@/lib/secret";
 
 export const SESSION_COOKIE = "cy_session";
@@ -13,6 +14,25 @@ export const SESSION_COOKIE = "cy_session";
 /** Sessions expire after 7 days; small forward skew tolerated for clock drift. */
 export const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const FORWARD_SKEW_MS = 60_000;
+
+/**
+ * U2: the flags every console cookie is written with — the session and the practice preference
+ * alike. `secure` follows the build rather than the request: Chromium treats `localhost` as a
+ * secure origin, so the e2e's production build over `http://localhost` still sets and sends them
+ * (Playwright's own request model exempts `localhost` alone, which is why the suite's baseURL is
+ * that and not 127.0.0.1); `maxAge` matches the HMAC window so a cookie never outlives the
+ * credential inside it; `lax` is what the sign-in redirect needs and what a cross-site POST must
+ * not get.
+ */
+export function consoleCookieOptions(env: Env = readEnv()) {
+  return {
+    httpOnly: true,
+    secure: env.production,
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: SESSION_MAX_AGE_MS / 1000,
+  };
+}
 
 function sig(payload: string): string {
   // Domain-separated from booking tokens: distinct HMAC key prevents a booking

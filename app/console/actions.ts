@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { numberField } from "@/lib/form-numbers";
 import { redirect } from "next/navigation";
-import { SESSION_COOKIE, signSession } from "@/console/session";
+import { SESSION_COOKIE, consoleCookieOptions, signSession } from "@/console/session";
 import { rateLimit } from "@/lib/rate-limit";
 import { onboardPractice, practicesFor, updateRules } from "@/console/store";
 import type { EligibilityConfig } from "@/engine/eligibility";
@@ -19,7 +19,7 @@ export async function signIn(formData: FormData): Promise<void> {
     redirect("/console/signin?error=rate");
   }
   const jar = await cookies();
-  jar.set(SESSION_COOKIE, signSession(email), { httpOnly: true, sameSite: "lax", path: "/" });
+  jar.set(SESSION_COOKIE, signSession(email), consoleCookieOptions());
   redirect("/console");
 }
 
@@ -82,6 +82,6 @@ export async function switchPractice(formData: FormData): Promise<void> {
   const allowed = practicesFor(email).some((r) => (r.practice.id as string) === wanted);
   if (!allowed) redirect("/console?error=denied");
   const jar = await cookies();
-  jar.set(PRACTICE_COOKIE, wanted, { httpOnly: true, sameSite: "lax", path: "/" });
+  jar.set(PRACTICE_COOKIE, wanted, consoleCookieOptions());
   redirect("/console");
 }

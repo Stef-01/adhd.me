@@ -555,15 +555,22 @@ every R-lane unit re-runs `scripts/size-census.mts` and lowers the floors it mov
 - **U2** [P] (S) — Secure cookies, `.env.example`, and a boot-time posture assertion.
   `secure: process.env.NODE_ENV === "production"`, `maxAge` matching the 7-day HMAC window and
   `sameSite: "lax"` on the console and demo cookies (`app/console/actions.ts:22,85`,
-  `app/demo/actions.ts:27`). `.env.example` listing every `process.env` read in `app/`, `src/`,
-  `scripts/` and `playwright.config.ts` with one line of purpose each; `src/lib/env.ts` reads
-  them once and, in production, fails the first request loudly when `ADHDME_TOKEN_SECRET` is
-  absent or a mock/demo flag is on. `app/site.ts` derives the origin from `NEXT_PUBLIC_SITE_URL`
-  with the Vercel URL as the fallback rather than a baked hostname.
+  `app/demo/actions.ts:27`), from one `consoleCookieOptions()` in `src/console/session.ts`.
+  `.env.example` listing every `process.env` read in `app/`, `src/`, `scripts/`, `e2e/` and the
+  root configs with one line of purpose each; `src/lib/env.ts` reads the posture keys in one
+  place for the secret and the two guards, and `instrumentation.ts` (created here; U4 adds
+  `onRequestError` beside `register`) refuses to serve a production process whose posture is
+  unsound. The rule distinguishes a production BUILD from the production DEPLOYMENT, because the
+  e2e suite deliberately runs `next start` on a production build with the mock routes on: a
+  production build without `ADHDME_TOKEN_SECRET` is refused anywhere; the mock and demo flags are
+  refused only where `VERCEL_ENV=production`; and the assertion stands aside during `next build`
+  itself (`NEXT_PHASE`), which prerenders with `NODE_ENV=production` and no secret. `app/site.ts`
+  derives the origin from `NEXT_PUBLIC_SITE_URL` with the Vercel production hostname as the
+  fallback rather than a baked hostname.
   → verify: `src/lib/env.test.ts` scans the tree for `process.env.X` reads and asserts
   `.env.example` names every one and nothing else (both directions); a production-mode test proves
-  the posture assertion throws on each forbidden combination; cookie flags asserted in
-  `src/console/session.test.ts`.
+  the posture assertion throws on each forbidden combination and passes the e2e's local
+  production build and the build phase; cookie flags asserted in `src/console/session.test.ts`.
 
 - **U3** [P] (S) — Error boundaries with linted copy.
   `app/error.tsx`, `app/global-error.tsx`, `app/console/error.tsx` and a `loading.tsx` for the
