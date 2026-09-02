@@ -322,6 +322,39 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **O233 (FOUNDER-DIRECTED, 2026-09-02: "The bottom should only have the icons of find, profile and
+> learn. About, is all found in the top right corner filtered away under a settings area … Similarly
+> questions is also filtered away … Remove the [ADHD assessment that] takes you seriously (this is
+> the demo day app, we don't need a tagline, aren't you able to think about practically what a
+> person needs to see? The text box should be way bigger and that's the focus, describing what you
+> need") — CLAIMED founder-0902a, 2026-09-02T19:30Z.** The information architecture, corrected. The
+> founder is right on the substance and the reason is worth writing down: O230 built the tab bar
+> from a researched count (3–5 tabs) but filled it with the four PAGES this tree happened to have —
+> Examples, Questions and About are things the product knows, not places a person goes. A bar is
+> for destinations somebody returns to. **Scope:** (1) the bar becomes **Find · Profile · Learn**,
+> three destinations, and `src/app-shell/tabs.ts` is where that decision lives; (2) **a settings
+> control in the top right** opens a sheet holding About, Questions, privacy and the testing options
+> — the things consulted once, not returned to, which is exactly what a settings area is for;
+> (3) **`/profile` is a new route**: what this device is holding for the person — the place they
+> set, the words they last described, and the controls over both — because a Profile tab that
+> showed nothing real would be the placeholder the last two units removed; (4) **the welcome screen
+> loses its tagline.** "ADHD assessment that takes you seriously" is a marketing line on the one
+> screen whose whole job is to get a sentence out of somebody, and the founder's question — what
+> does a person practically need to see — has one answer: what to type, and a box big enough to
+> type it in. A short functional prompt replaces the claim and **the input becomes the screen**:
+> a large multi-line field, the modern compose box, sized so it reads as the point of the page
+> rather than a control beneath a headline.
+> **What holds:** the `h1` stays (a11y — `finder-a11y.spec.ts` walks focus onto it and axe needs the
+> heading), it just stops being a slogan; Enter still searches and Shift+Enter makes a line, so the
+> keyboard contract does not change; every new surface joins the five registers a route joins here
+> (public surfaces, the crawler register, the dossier census, working-truth, route budgets) rather
+> than appearing beside them. **Verification:** `pnpm verify`; the tab register's own test rewritten
+> to three destinations and still holding every href to a real page route; new e2e for the settings
+> sheet and `/profile`; the a11y, touch, contrast and axe sweeps green on the new surfaces; full
+> `pnpm e2e`; screenshots at 390px and 1280px. **Continuation if this claim goes stale:** the bar
+> and the settings sheet are one change — three tabs with nowhere for About and Questions to live
+> would strand two routes.
+
 > **O232 (FOUNDER-DIRECTED, 2026-09-02: "using relevant engineering skills you are to make it a
 > fully functioning app that is ready for the demo day, it is perfect and has zero slop text … ui
 > flow is perfectly seamless, buttons are crisp and have no weird formatting or placement, there is
@@ -12427,6 +12460,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| O233 | claimed | founder-0902a | 2026-09-02T19:30Z | — | FOUNDER-DIRECTED: the information architecture. Bar becomes Find · Profile · Learn; About and Questions move into a settings sheet behind a top-right control; /profile is a new route showing what the device holds; the welcome tagline goes and the input becomes the screen. -> verify: pnpm verify; tabs.test.ts rewritten to three destinations; new e2e for settings and /profile; a11y/touch/contrast/axe green; full e2e; shots at 390 and 1280. |
 | O232 | done | founder-0902a | 2026-09-02T19:05Z | a212d0c | FOUNDER-DIRECTED: the craft pass (adhdme-taste + impeccable, Operate mode). Browser surfaces themed (selection, caret, scrollbar, focus); the eyebrow slop removed; one button system; spring motion and shared-element continuity; glass on the two surfaces content scrolls under, nowhere else. DESIGN.md's no-ambient-loops and two-region limits hold. -> verify: pnpm verify; contrast/touch/focus/hover/reduced-motion/axe sweeps green; full e2e; two batched screenshot rounds at 390px and 1280px. |
 | O231 | done | founder-0902a | 2026-09-02T18:05Z | f362deb | FOUNDER-DIRECTED: demo-day readiness. The booking dead-end removed so the journey completes; the example-profile labels off the finder surfaces (amends `synthetic-roster-tickbox`); the monogram avatar designed rather than defaulted. No generated faces, no invented phone numbers, no mock confirmations. One truthful line kept on /story only. -> verify: pnpm verify; roster laws rewritten to the amended decision, not deleted; full e2e; screenshot pass over the whole journey at 390px and 1280px. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
