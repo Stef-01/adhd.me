@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ a90b248 (2026-09-02T13:40Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at a90b248 (typecheck · 310 files / 4524 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line); full pnpm e2e green (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) at the U13 tree (a90b248: src/privacy/consent.ts + app/use-consent.ts — one consent store on the adhdme-privacy-ack key, agreed / not-agreed / unknown, read through useSyncExternalStore by the bar, the analytics and the withdraw control; app/consent-choice.tsx — the withdraw control on /privacy, 44 px, the bar returning on withdrawal; app/analytics.tsx — the gtag loader inserted from module code only while NEXT_PUBLIC_GA_ID is set and consent is agreed, unloaded with ga-disable-<id> on withdrawal, no next/script and no inline script; src/security/headers.ts — Content-Security-Policy enforced with unchanged directives, 'unsafe-eval' for next dev only and never in production, SCRIPT_CREATORS census; e2e/analytics.spec.ts — 0 tag-host requests before Agree, 1 after, none new after Withdraw; e2e/headers.spec.ts — the planted script blocked with disposition enforce and requestfailed "csp"; e2e/results.spec.ts Q1 — the 30 s moved from the URL to the first tile since U3's loading boundary; route budgets re-pinned, +5 KB per console route, +8 /finder, +13 interview and matching). AR15 visual: unchanged — U13's only UI is the withdraw control on /privacy (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U14 (the size census and the downward ratchet, R0) is the next firing's unit`
+`gate: green @ 00d0451 (2026-09-02T14:35Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 00d0451 (typecheck · 311 files / 4539 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (349 passed, 1 skipped, 23.4m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) at the U14 tree (00d0451: src/quality/size-census-read.ts — the reader, 31 measures over app/, src/, e2e/ and scripts/ with the product's import closure from app/; src/quality/size-census.ts — the append-only register, every floor today's number with no headroom, PLAN_FIGURES beside each floor and verdicts both directions; size-census.test.ts (15) — the tree against its floors on every pnpm test, planted regressions, the plan's §1/§2.5 text held to PLAN_FIGURES; scripts/size-census.mts (pnpm census) — the table and the entries to bank; docs/ONE-YEAR-BUILD-PLAN.md — the corpus path fixed to src/matching/). AR15 visual: unchanged — U14 touches no route, UI or copy (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U15 (the simplicity laws and their registers, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -323,32 +323,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
 > **U14 (O229-lane, the twelfth unit built of the one-year plan: the size census and the
-> downward ratchet, R0) — CLAIMED founder-0902a, 2026-09-02T13:50Z.** Scope is the plan's U14
-> text and nothing beyond it: the numbers §1 and §2.5 read from the tree by hand become
-> `scripts/size-census.mts` (`pnpm census`), which re-derives them — lines by tree, the import
-> closure from `app/` and what it does not reach, modules held only by their own test, the
-> `actions.ts` and `app/console` lines, the stylesheet's lines, rule blocks, styled classes and
-> dead classes (O200's own classifier, reused rather than rewritten), `"use client"` files,
-> `page.goto` calls, the largest file, the mock routes, the stores — and `src/quality/size-census.ts`
-> pins each one as a floor. **The floor is the number, with no headroom**, and the register is
-> append-only: every measure carries a dated history, the floor is the newest entry, an entry that
-> RAISES a floor must carry a reason, and `size-census.test.ts` fails on a measured value above
-> its floor, on a raise without a reason, on a measure the register does not pin and on a pin
-> naming a measure the script no longer produces — both directions, the census shape. A measured
-> value under its floor is not a failure: `pnpm census` prints the entry to append so the
-> improvement is banked, and the stage that earns a drop appends it. **The line that will come
-> out differently, stated up front:** the plan's verify says the pinned floors equal §1/§2.5 "on
-> the day"; the tree has moved by thirteen units since the plan was laid (every one added law and
-> product), so the floors will be today's numbers, and the register carries the plan's figure
-> beside each floor with `plan-canon`-style stale-checks both ways — the figure quoted in the
-> register is the one the plan document states, so the plan's numbers are provably what the
-> register says they were and the drift from them is a recorded delta, not a rewrite of §1.
-> Separating law machinery from dormant product among the unreached modules is U30's register,
-> not a guess made here; the census reports the unreached count and the test-held count and
-> names no module law. `pnpm verify` runs the test as part of `pnpm test`; the script is the
-> reader, the module owns every decision, W53's shape. No UI, no route, no copy: the gradient
-> aesthetic is untouched by construction. Continuation if this claim goes stale: nothing is
-> behind a flag; the unit is whole or it is not landed.
+> downward ratchet, R0) — DONE founder-0902a, 2026-09-02 @ 00d0451.** Scope was the plan's U14
+> text; the one line the claim said would come out differently did, and is recorded below.
+> **Outcome:** `src/quality/size-census-read.ts` is the reader — it walks `app/`, `src/`, `e2e/`
+> and `scripts/`, builds the product's import graph with every non-test `app/` file as a root
+> (Next reaches them by convention, not by import), and measures 31 numbers: files and `wc -l`
+> lines per tree, the reached / unreached / test-held / single-importer split of `src/`, store
+> modules, `"use client"` files, the largest file with the four data files pinned apart, the
+> stylesheet's lines, rule blocks, styled classes and dead classes (O200's classifier reused),
+> `className` attributes, the vitest and e2e sizes, `page.goto` calls, `scripts/` lines. Comments
+> are counted with the code they explain, because a law that measured "lines without prose"
+> would reward deleting the reasons. `src/quality/size-census.ts` is the register: `RATCHET` is
+> append-only, the newest entry per measure is its floor, **and every floor is today's number
+> with no headroom** — `pnpm census` prints `PASS — 31 measures, 0 verdicts, 0 register
+> findings, 0 bankable` at this tree. `sizeCensusVerdicts` speaks both directions (`over-floor`,
+> `unpinned-measure`, `vanished-measure`) and `registerFindings` holds the register to its own
+> laws (`raise-without-reason`, `date-out-of-order`, `bad-date`); a value under its floor is a
+> gain, and `bankable` is the list of entries to append. `size-census.test.ts` (15) runs the tree
+> against its floors on every `pnpm test`, plants a raise without a reason, a floor crossed by one
+> line, a pin removed and a pin naming nothing, and proves the reader on fixtures and on its own
+> neighbourhood of the real graph. `scripts/size-census.mts` (`pnpm census`) is the table —
+> plan · floor · now · verdict — and the entries to bank. **The line that came out differently,
+> as the claim said it would:** the plan was laid before the redesign (`b7629e9`) and U1–U13, so
+> the day's floors sit above several of §1's figures (`globals.css` 6,087 → 7,693 lines; `src/`
+> 51,760 → 53,492; vitest 298 → 311 files). `PLAN_FIGURES` carries the figure the plan printed
+> beside each floor, and the test holds §1 and §2.5's text to those figures both ways, so the
+> plan's numbers are provably what the tree said on the day and the drift is a recorded delta,
+> not a rewrite of §1. Two measures the plan named are not re-derivable and were replaced by
+> rules: "21 stores" was a hand count, so `store-modules` counts modules named `store.ts` or
+> `*-store.ts` (15, and U19's adapters are what lower it); the largest data file is
+> `src/matching/corpus.ts`, not `src/compliance/corpus.ts` — the plan's path was wrong and is
+> fixed. **The gate bit during its own build:** the ratchet caught its own edits twice
+> (`src-lines`, `src-unreached-lines` and `vitest-lines` moved as comments were added to the
+> register) and was re-pinned each time; and a `/*` quoted inside the reader's own header comment
+> (`e2e/*.spec.ts`) opened a block that swallowed its imports until line comments were stripped
+> first, which is why the reader itself now counts as imported (test-held 98 → 97). The two
+> tree censuses that bite new modules were satisfied honestly: the bankable-gains loop is
+> declared in `LEGITIMATELY_EMPTY` (the floor IS the number, so the list is empty in the state the
+> ratchet aims for) and the reader's two folds are declared in `FOLD_SITES` as sums. No route,
+> UI or copy changed; the gradient aesthetic is untouched by construction. Founder gates
+> untouched; the finder stays unpublished. **Verification:** `pnpm verify` green at 00d0451
+> (typecheck · 311 files / 4539 tests, 13 skipped · build · audit PASS, 2 accepted, 0 unaccepted ·
+> perf PASS, 49 routes · gate accounting PASS); `pnpm census` PASS; full `pnpm e2e` green at 00d0451
+> (349 passed, 1 skipped, 23.4m). Vault log skipped: Stefan-Brain unreachable. U15 is next.
 
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
@@ -12193,7 +12210,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U11 | blocked | — | — | — | FOUNDER DECISION D-WEBKIT-RUNNER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) WebKit in the suite. Blocked 2026-09-02 by founder-0902a — the build environment refuses both Playwright CDNs (403) and pre-provisions Chromium only, so `pnpm e2e --project=webkit` cannot run where the units are built. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
-| U14 | claimed | founder-0902a | 2026-09-02T13:50Z | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
+| U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
