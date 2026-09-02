@@ -4,21 +4,27 @@ on:
     branches: [main]
   pull_request:
 jobs:
+  # U5: this job runs `pnpm verify` — the one script — and nothing of its own. Until U5 it
+  # restated four of verify's six steps by hand and had silently fallen behind: `perf:gate`
+  # (route budgets) and `gate:accounting` (the ledger's green must account for every e2e
+  # test) ran on a developer's machine and never here. A list that is copied drifts; a list
+  # that is called cannot. src/quality/ci-parity.test.ts holds the two together in both
+  # directions, so a step added to verify without reaching CI, or a step run here that
+  # verify does not know, is a failing test rather than a quiet gap.
+  #
+  # The toolchain is read from the tree's pins, not restated: pnpm/action-setup takes the
+  # version from package.json's `packageManager` (giving it a `version` here as well is an
+  # error in that action, by design), and setup-node reads `.nvmrc`. Bumping either pin is
+  # one edit, and the same test checks the pins agree with `engines`.
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+        with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm build
-      # W53: dependency advisories (moderate+). Accepted risks live in
-      # src/security/audit-allowlist.ts and expire on their reviewBy date.
-      - run: pnpm audit:gate
+      - run: pnpm verify
 
   # O98 (standing debt 11). Until this job existed, NOTHING ran `pnpm e2e` — not
   # `verify`, not CI — so every browser-level sweep guarded only whatever a person
@@ -40,9 +46,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+        with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       # Chromium only. The suite pins one engine (playwright.config.ts launches it and
       # falls back to a pre-provisioned binary when the pinned revision is missing), so
