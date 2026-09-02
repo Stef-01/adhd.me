@@ -322,6 +322,34 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **U14 (O229-lane, the twelfth unit built of the one-year plan: the size census and the
+> downward ratchet, R0) — CLAIMED founder-0902a, 2026-09-02T13:50Z.** Scope is the plan's U14
+> text and nothing beyond it: the numbers §1 and §2.5 read from the tree by hand become
+> `scripts/size-census.mts` (`pnpm census`), which re-derives them — lines by tree, the import
+> closure from `app/` and what it does not reach, modules held only by their own test, the
+> `actions.ts` and `app/console` lines, the stylesheet's lines, rule blocks, styled classes and
+> dead classes (O200's own classifier, reused rather than rewritten), `"use client"` files,
+> `page.goto` calls, the largest file, the mock routes, the stores — and `src/quality/size-census.ts`
+> pins each one as a floor. **The floor is the number, with no headroom**, and the register is
+> append-only: every measure carries a dated history, the floor is the newest entry, an entry that
+> RAISES a floor must carry a reason, and `size-census.test.ts` fails on a measured value above
+> its floor, on a raise without a reason, on a measure the register does not pin and on a pin
+> naming a measure the script no longer produces — both directions, the census shape. A measured
+> value under its floor is not a failure: `pnpm census` prints the entry to append so the
+> improvement is banked, and the stage that earns a drop appends it. **The line that will come
+> out differently, stated up front:** the plan's verify says the pinned floors equal §1/§2.5 "on
+> the day"; the tree has moved by thirteen units since the plan was laid (every one added law and
+> product), so the floors will be today's numbers, and the register carries the plan's figure
+> beside each floor with `plan-canon`-style stale-checks both ways — the figure quoted in the
+> register is the one the plan document states, so the plan's numbers are provably what the
+> register says they were and the drift from them is a recorded delta, not a rewrite of §1.
+> Separating law machinery from dormant product among the unreached modules is U30's register,
+> not a guess made here; the census reports the unreached count and the test-held count and
+> names no module law. `pnpm verify` runs the test as part of `pnpm test`; the script is the
+> reader, the module owns every decision, W53's shape. No UI, no route, no copy: the gradient
+> aesthetic is untouched by construction. Continuation if this claim goes stale: nothing is
+> behind a flag; the unit is whole or it is not landed.
+
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
 > claim came out differently and is explained below. **Outcome:** `src/finder/state.ts` owns where
@@ -12165,7 +12193,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U11 | blocked | — | — | — | FOUNDER DECISION D-WEBKIT-RUNNER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) WebKit in the suite. Blocked 2026-09-02 by founder-0902a — the build environment refuses both Playwright CDNs (403) and pre-provisions Chromium only, so `pnpm e2e --project=webkit` cannot run where the units are built. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
-| U14 | available | — | — | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
+| U14 | claimed | founder-0902a | 2026-09-02T13:50Z | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
