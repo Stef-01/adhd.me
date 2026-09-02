@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ db40bf9 (2026-09-02T08:16Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at db40bf9 (typecheck · 306 files / 4494 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 683 KB · gate accounting PASS with this line); full pnpm e2e green (338 passed, 1 skipped, 19.3m, exit 0 read from the command itself, run serially with nothing else building, 339 listed) at the U8 tree (db40bf9: src/finder/state.ts — a history entry per stage, the words in sessionStorage under a versioned key, a URL serialiser that carries `place` and nothing else; app/finder-history.ts the one bridge to window; /finder static with the place read at arrival; state.test.ts round-tripping every stage and planting a sentence that reaches nowhere but the tab; e2e/finder-history.spec.ts walking Back, Forward and a reload on the built route; real-roster.ts leaving the finder before re-entering it). AR15 visual: unchanged — U8 moves no pixels (the gradient aesthetic and the qa/ captures stay as they are, walked on the built route and the dev server), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8 done; U6 blocked on D-CI-BILLING; U9 (focus, live regions and one mic control) is the next firing's unit`
+`gate: green @ 508ac90 (2026-09-02T09:58Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at db9bcf9, the code of 508ac90 (508ac90 adds the design QA entry and captures only; typecheck · 307 files / 4501 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 686 KB · gate accounting PASS with this line); full pnpm e2e green (344 passed, 1 skipped, 20.2m, exit 0 read from the command itself, run serially with nothing else building, 345 listed) at the U9 tree (508ac90: src/finder/announce.ts — one linted sentence per arrival; one role=status line per stage and no live wrapper in the shell; focus on the stage heading, the first result or the text box after a transition the person caused; the listening screen's two stop controls one "Microphone" toggle with aria-pressed and aria-busy, the language restart announced; the breathing loop moved onto a halo so the button holds still; the finder header controls and the compare name control on the 44px floor; e2e/finder-a11y.spec.ts, e2e/support/finder-stages.ts and a11y.ts, the keyboard-focus and touch-floor sweeps over every stage — 51 stops, 53 controls). AR15 visual: unchanged — the welcome screen U9 does not touch is what the matrix captures (the gradient aesthetic and the qa/ welcome captures stay as they are; qa/u9-* added), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9 done; U6 blocked on D-CI-BILLING; U10 (stale banners, a listening timeout, and the debug clobber) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -120,19 +120,57 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **U9 (O229-lane, the eighth unit built of the one-year plan: focus, live regions and one mic
-> control) — CLAIMED founder-0902a, 2026-09-02T08:22Z.** Scope is the plan's U9 text and nothing beyond it:
-> the outer `aria-live` wrapping the whole stage machine goes; each stage owns one `role="status"`
-> region that announces exactly its change (listening started and stopped, N results for a place,
-> re-ranked after a refine); focus moves to the stage heading on every transition and to the first
-> result on results; the two microphone buttons become one toggle with `aria-pressed` and
-> `aria-busy`, and the language buttons announce the restart. The announcement script is written
-> before the code (`frontend-design`'s brief-first method) and every line of it passes the
-> compliance linter. Verification is the plan's: `e2e/finder-a11y.spec.ts` asserts the focused
-> element and the single live-region text after each transition (keyboard-only, `reduce` and
-> no-preference), axe on every stage, the `touch-floor` and `keyboard-focus` sweeps extended to the
-> finder's stages, and an AR15 acceptance entry if the single control moves pixels. The gradient
-> aesthetic stays; checked on the dev server. Continuation if this claim goes stale: nothing is
-> behind a flag; the unit is whole or it is not landed.
+> control) — DONE founder-0902a, 2026-09-02 @ 508ac90 (code at db9bcf9; 508ac90 adds the design QA
+> entry and captures only).** Scope was the plan's U9 text; nothing beyond it, and four pixels
+> that the proof itself demanded are explained below. **Outcome:** `src/finder/announce.ts` is the
+> script — written before the code, every line linted by `lintPartyToCare` in `announce.test.ts`
+> — one sentence per arrival ("Listening.", "Finishing.", "Listening stopped.", "12 matches.",
+> "Re-ranked: 9 matches near Hornsby.", "Profile: Dr …", "Comparing Dr … and Dr …", "Booking
+> Dr …", "Listening again in हिन्दी.", "Back at the start.", "Type what you are looking for.").
+> Each stage owns exactly one `role="status"` line (`StatusLine` in `finder-stages/shared.tsx`,
+> text set a beat after mount so it is read as a change) and the shell carries no live region at
+> all, so a re-rank says its count once and never re-reads the list; the transcript on the
+> listening screen is no longer live (a person hears their own words as they say them).
+> `MotionScreen` takes `focusOnArrival`: after a transition the person caused, focus lands on the
+> stage heading — the first `.clinician-row` on results, `#doctor-request` on the typing screen —
+> and never on a fresh visit, so the keyboard-focus sweep still tabs in from the body. The listening
+> screen's two stop controls ("Finish voice description" and "Done") are one toggle labelled
+> "Microphone": `aria-pressed` while listening, `aria-busy` with a "Finishing…" caption between the
+> tap and the recogniser's last phrase, the caption under it saying what a tap does; a language
+> control restarts listening and the line says so in the language's own name. **The pixels:** the
+> breathing loop moved off the microphone onto a `.mic-halo` behind it (same 9px `--accent-soft`
+> ring, same gradient stage) — the whole control used to scale on a loop, so the one tap target on
+> the screen never held still; the button holds still now and a `boundingBox` read 700ms apart is
+> identical. Two floor defects the sweeps had never reached, because they enter `/finder` by URL
+> and the welcome screen has neither control: every finder header's `.icon-button` (cancel, back)
+> was 42px and the compare screen's `.compare-open` name control 41px tall — both 44 now, with the
+> `.header-spacer` following. One hover reading on the results rows (`.row-location` on a hovered
+> row, 4.32:1) is `--muted` (5.17:1). No AR15 entry: the visual matrix captures the welcome screen,
+> which carries none of these and is byte-identical; the gradient aesthetic stays, walked on the
+> built route at 390×844 and 1280×720 (`qa/u9-listening-390.png`, `qa/u9-listening-1280.png`,
+> `qa/u9-compare-390.png`; `docs/DESIGN-QA.md`). **Verification:** `e2e/finder-a11y.spec.ts` (four
+> tests, triaged in `route-array-triage.ts`) walks all eight stages keyboard-only under `reduce`
+> and with no preference — after each transition it asserts no live wrapper anywhere in the finder,
+> exactly one status line, its text, and the focused element — plus the toggle's states, the
+> language restart, the microphone-stopped message, and axe (WCAG 2.2 AA, under `reduce` for
+> W49's reason) on every stage. `e2e/support/finder-stages.ts` is the driver every finder sweep now
+> shares (fresh visit by pointer or keyboard to any stage; `settled()` waits for the entrance to
+> finish, because `data-stage` changes the moment a transition starts and a sweep measuring then
+> attributed the OLD screen's shrinking controls to the new stage); `e2e/support/a11y.ts` is the
+> axe scan lifted out of `a11y.spec.ts` so routes and stages share one function, with the violating
+> nodes named. `keyboard-focus.spec.ts` and `touch-floor.spec.ts` each gain one finder test over
+> every stage (51 stops over 8 stages; 53 controls, none under the floor — `measured` figures, the
+> U52 sweep starts here); the walk's stop key prefers the rest-tag index, because two icon-only
+> class-less buttons (the scenario screen's previous/next pair) collided on the fallback key and
+> six controls read as one stop. `voice.spec.ts` and `finder-history.spec.ts` use the one control.
+> Both finder live-region assertions are scoped to `main[data-stage]`: Next mounts its route
+> announcer (`aria-live`) at the end of `body` on every page. **What the first full run found:**
+> nothing beyond the six specs that clicked the microphone and found it "not stable" — the pulse
+> was the defect (above), not the test. Founder gates untouched: the script carries counts, names
+> and states, never the request text. Gate: `pnpm verify` green at db9bcf9 (307 files / 4501
+> tests, 13 skipped; audit PASS, 2 accepted advisories, 0 unaccepted; perf PASS, 49 routes,
+> `/finder` 686 KB); full `pnpm e2e` green (344 passed, 1 skipped, 20.2m, exit 0 read from the command itself, run serially with nothing else building, 345 listed) at the 508ac90 tree. Vault log skipped
+> (unreachable). U10 is next.
 
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
@@ -186,7 +224,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > Founder gates untouched: nothing in the model carries patient text anywhere but the tab. Gate:
 > `pnpm verify` green at db40bf9 (306 files / 4494 tests, 13 skipped; audit PASS; perf PASS, 49
 > routes, `/finder` 683 KB); full `pnpm e2e` green (338 passed, 1 skipped, 19.3m, exit 0, 339 listed) at this tree. Vault log skipped
-> (unreachable). U9 (focus, live regions and one mic control) is next.
+> (unreachable). U9 (focus, live regions and one mic control) followed.
 
 > **U7 (O229-lane, the sixth unit built of the one-year plan; U6 stays blocked on D-CI-BILLING:
 > crawlers told the truth about the finder) — DONE founder-0902a, 2026-09-02 @ f871137.** Scope was
@@ -11972,7 +12010,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
 | U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
 | U8 | done | founder-0902a | 2026-09-02T06:52Z | db40bf9 | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
-| U9 | claimed | founder-0902a | 2026-09-02T08:22Z | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
+| U9 | done | founder-0902a | 2026-09-02T09:58Z | 508ac90 | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | available | — | — | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
