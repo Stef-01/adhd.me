@@ -44,7 +44,7 @@ async function recordViolations(page: Page): Promise<Violation[]> {
 }
 
 test.describe("U1 security headers", () => {
-  for (const path of ["/", "/finder", "/console/signin", "/faq", "/no-such-route"]) {
+  for (const path of ["/", "/story", "/console/signin", "/faq", "/no-such-route"]) {
     test(`${path} answers with every header and no X-Powered-By`, async ({ request }) => {
       const response = await request.get(path);
       const headers = response.headers();
@@ -76,7 +76,7 @@ test.describe("U1 security headers", () => {
     await expect(page.getByRole("main")).toBeVisible();
     await page.waitForLoadState("networkidle");
 
-    await page.goto("/finder");
+    await page.goto("/");
     await expect(page.getByRole("main")).toBeVisible();
     await page.waitForLoadState("networkidle");
 

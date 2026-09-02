@@ -3,7 +3,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function intoProfile(page: Page) {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

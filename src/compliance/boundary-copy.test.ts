@@ -12,7 +12,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import RouteError from "../../app/error";
 import ConsoleError from "../../app/console/error";
 import GlobalError from "../../app/global-error";
-import FinderLoading from "../../app/finder/loading";
+import AppLoading from "../../app/loading";
 import ConsoleLoading from "../../app/console/loading";
 import { BOUNDARY_COPY, boundarySentences } from "./boundary-copy";
 import { eachOf } from "@/quality/non-vacuous";
@@ -86,7 +86,7 @@ describe("U3 every boundary says what happened and offers a way out", () => {
 
 describe("U3 the loading states are one announced line, not a blank frame", () => {
   it("renders a busy main with a status line from the copy constants", () => {
-    const finder = renderToStaticMarkup(createElement(FinderLoading));
+    const finder = renderToStaticMarkup(createElement(AppLoading));
     const console_ = renderToStaticMarkup(createElement(ConsoleLoading));
     expect(finder).toContain(`<p role="status">${BOUNDARY_COPY.loading.finder}</p>`);
     expect(console_).toContain(`<p role="status">${BOUNDARY_COPY.loading.console}</p>`);
@@ -109,7 +109,7 @@ describe("U3 the copy is data the linter can reach", () => {
 
   it("is what the five app files actually render — each imports the constants, none carries a string of its own", () => {
     for (const file of eachOf(
-      ["app/error.tsx", "app/console/error.tsx", "app/global-error.tsx", "app/finder/loading.tsx", "app/console/loading.tsx"],
+      ["app/error.tsx", "app/console/error.tsx", "app/global-error.tsx", "app/loading.tsx", "app/console/loading.tsx"],
       "the boundary and loading files",
     )) {
       const source = html(file);

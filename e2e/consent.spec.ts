@@ -38,7 +38,7 @@ test("the bar appears once, pops out the policy, and agreeing ends it", async ({
 });
 
 test("agreeing from inside the pop-out ends it too", async ({ page }) => {
-  await page.goto("/finder");
+  await page.goto("/");
   const bar = page.getByRole("region", { name: "Privacy" });
   await bar.getByRole("button", { name: "Privacy policy" }).click();
   await page.locator(".consent-dialog").getByRole("button", { name: "I agree" }).click();

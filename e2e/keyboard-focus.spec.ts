@@ -231,7 +231,7 @@ test.describe("keyboard focus", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     const { ringless, unreachable, totalStops } = await walk(
       page,
-      STAGES.map((stage) => ({ name: `/finder (${stage})`, open: (p: Page) => openStage(p, stage) })),
+      STAGES.map((stage) => ({ name: `/ (${stage})`, open: (p: Page) => openStage(p, stage) })),
     );
 
     console.log(`KEYBOARD_FINDER ${STAGES.length} stages, ${totalStops} stops`);

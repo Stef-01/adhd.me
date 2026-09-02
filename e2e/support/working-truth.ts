@@ -29,9 +29,9 @@ export interface RouteProof {
 export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
   // ── Public, signed out. Copy proofs carry the sentence the page exists to say.
   "/": {
-    proof: /ADHD care, start to finish, with one GP/,
+    proof: /Describe the GP you are looking for, or use the microphone to talk/,
     source: "copy",
-    why: "The landing page's one idea in its own words; an error shell or a skeleton says nothing about one GP carrying the whole pathway. Anchored on the H1 after the hero sub was trimmed of its restatement.",
+    why: "O230: the root IS the finder now. Its welcome prompt renders only when the interactive stage machine mounted, which is the work this route does — a stronger proof of a working page than a headline, which an error shell could also paint.",
   },
   "/about": {
     proof: /That page does not exist/,
@@ -74,10 +74,10 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     source: "copy",
     why: "The first answer's own definition of the product; a FAQ that rendered no answers cannot carry it.",
   },
-  "/finder": {
-    proof: /Describe the GP you are looking for, or use the microphone to talk/,
+  "/story": {
+    proof: /ADHD care, start to finish, with one GP/,
     source: "copy",
-    why: "The finder's welcome-stage prompt — it renders only when the interactive stage machine mounted, which is the work this route does.",
+    why: "The story's one idea in its own words; an error shell or a skeleton says nothing about one GP carrying the whole pathway. Anchored on the H1, and it moved from `/` to `/story` with the page it describes (O230).",
   },
   "/practices": {
     proof: /Turn unused appointment capacity into measured continuity of care/,

@@ -169,7 +169,7 @@ test.describe("O14's 44px touch floor", () => {
       await page.evaluate(() => document.fonts.ready);
       const { out, seen } = await underFloorControls(page);
       population += seen;
-      const finding = floorFinding(`/finder (${stage})`, out);
+      const finding = floorFinding(`/ (${stage})`, out);
       if (finding) offenders.push(finding);
     }
     measured("touch-floor.finder", population);

@@ -17,7 +17,7 @@ import { installFakeClock } from "./support/fake-clock";
 import { installFakeSpeech } from "./support/fake-speech";
 
 async function openMic(page: Page) {
-  await page.goto("/finder");
+  await page.goto("/");
   // The welcome screen's one dual-function control: a microphone while the field is empty.
   // (Was "Start voice description" until the single-field collapse renamed it; this spec had
   // gone stale against that rename because e2e is outside the pnpm verify gate.)
@@ -142,7 +142,7 @@ test("a blocked microphone's message does not follow the person back to words th
 
 test("?debug=1 survives a place edit: the flag is read once at arrival, not from the address bar (U10)", async ({ page }) => {
   await installFakeSpeech(page);
-  await page.goto("/finder?place=Hornsby&debug=1");
+  await page.goto("/?place=Hornsby&debug=1");
   // A place edit rewrites the URL to `?place=…` alone — the one serialiser carries nothing else —
   // which used to switch the debug banner off between one failure and the next.
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();

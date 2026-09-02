@@ -32,7 +32,10 @@ describe("AR36 founder gates", () => {
 
   it("the finder is still hidden from crawlers (U7)", () => {
     const hidden = HIDDEN_FROM_CRAWLERS.map((route) => route.path);
-    for (const path of ["/finder", "/examples", "/demo"]) {
+    // O230: the finder is `/` now (`/finder` is a 308 in next.config.ts and not a route), so the
+    // gate's open state is read at the root. The QUESTION is unchanged and still open — this is
+    // the same three surfaces under their current addresses, not a narrowing of what is hidden.
+    for (const path of ["/", "/examples", "/demo"]) {
       expect(hidden, `${path} left the crawler register — ${DECIDED}`).toContain(path);
     }
   });

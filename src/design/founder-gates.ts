@@ -83,7 +83,7 @@ export const FOUNDER_GATES: readonly FounderGate[] = [
   {
     id: "finder-public-posture",
     question:
-      "Is the finder public — may `/finder`, `/examples` and `/demo` be indexed, announced in the sitemap and allowed by robots.txt, while this deployment is for testing and the roster defaults to invented example profiles?",
+      "Is the finder public — may `/` (the finder itself since O230), `/examples` and `/demo` be indexed, announced in the sitemap and allowed by robots.txt, while this deployment is for testing and the roster defaults to invented example profiles?",
     price:
       "D-FINDER-PUBLIC (docs/ONE-YEAR-BUILD-PLAN.md §6): B1 answered, the advertising review of every name and sentence on the profile surfaces that the founder's own reviewers run, and a posture on the examples toggle a stranger cannot mistake. Then U65 empties the crawler register in one commit — the header, the meta tag, the sitemap and robots.txt all follow it — and this entry moves to FOUNDER_DECISIONS. Until then the founder's own words hold (2026-09-01: “This finder system of the adhdme repo is not public so it’s ok it’s just for testing”), and every place a crawler is told is held to the register in both directions, so one door cannot open by accident.",
     openAt: "src/security/robots.ts",

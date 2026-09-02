@@ -105,7 +105,7 @@ for (const path of PUBLIC_ROUTES) {
 test("the results list fits a 390px phone", async ({ browser }) => {
   const context = await browser.newContext({ viewport: PHONE, reducedMotion: "reduce" });
   const page = await context.newPage();
-  await page.goto("/finder");
+  await page.goto("/");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
   await page.waitForSelector(".clinician-list");

@@ -34,7 +34,7 @@ export default function ThanksPage() {
           does with a request like yours.
         </p>
         <div className="prose-doors">
-          <Link className="notfound-primary" href="/finder">Find a GP</Link>
+          <Link className="notfound-primary" href="/">Find a GP</Link>
           <Link className="notfound-secondary" href="/examples">See a worked example</Link>
         </div>
       </div>

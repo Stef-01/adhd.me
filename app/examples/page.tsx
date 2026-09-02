@@ -19,6 +19,7 @@ import { rosterSizeInWords } from "@/demo/roster-size";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
+import { AppTabs } from "../app-tabs";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/examples" },
@@ -67,7 +68,7 @@ export default function ExamplesPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="prose-screen">
+    <main id="main-content" className="prose-screen app-page-with-tabs">
       <div className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
         <h1>Worked examples</h1>
@@ -130,11 +131,12 @@ export default function ExamplesPage() {
           not separate the list, the finder tells you that in as many words.
         </p>
         <div className="prose-doors">
-          <Link className="notfound-primary" href="/finder">Try it with your own words</Link>
+          <Link className="notfound-primary" href="/">Try it with your own words</Link>
         </div>
       </div>
       <SiteFooter />
     </main>
+    <AppTabs />
     </>
   );
 }

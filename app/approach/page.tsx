@@ -30,7 +30,7 @@ export default function ApproachPage() {
       <header className="story-header">
         <div className="story-wrap story-header-inner">
           <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
-          <Link href="/finder" className="story-demo-link">Find a GP</Link>
+          <Link href="/" className="story-demo-link">Find a GP</Link>
         </div>
       </header>
 
@@ -45,7 +45,7 @@ export default function ApproachPage() {
             rather skip it, the finder is the fastest way to a name and a date.
           </p>
           <div className="approach-actions">
-            <Link className="story-primary-link" href="/finder">
+            <Link className="story-primary-link" href="/">
               Find a GP near you<span className="arrow" aria-hidden="true">→</span>
             </Link>
           </div>
@@ -62,7 +62,7 @@ export default function ApproachPage() {
             Healthengine, where the live times are.
           </p>
           <div className="approach-actions">
-            <Link className="story-primary-link" href="/finder">
+            <Link className="story-primary-link" href="/">
               Find a GP near you<span className="arrow" aria-hidden="true">→</span>
             </Link>
             <Link className="approach-back" href="/">Back to the front page</Link>

@@ -70,7 +70,11 @@ describe("W165 the scanner reads code, not prose", () => {
     // not absorbed silently — and if this ever shrinks, the walk has stopped walking.
     // @vercel/analytics joined at O31: the cookieless pageview layer, mounted in the root
     // layout by the founder's explicit attribution instruction.
-    expect(reach().packages).toEqual(["@phosphor-icons/react", "@vercel/analytics", "motion", "next", "react"]);
+    // react-dom joined at O230: `createPortal`, which puts the bottom sheet at the top of the
+    // document so its z-index is not resolved inside the finder's transformed stage. It was
+    // already a dependency Next requires; this is the first time the app's own code imports it,
+    // which is exactly the change this pin exists to show in a diff.
+    expect(reach().packages).toEqual(["@phosphor-icons/react", "@vercel/analytics", "motion", "next", "react", "react-dom"]);
   });
 });
 

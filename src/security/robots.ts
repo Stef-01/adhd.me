@@ -35,9 +35,14 @@ export interface HiddenRoute {
 
 export const HIDDEN_FROM_CRAWLERS: readonly HiddenRoute[] = [
   {
-    path: "/finder",
-    why: "The product surface of a deployment the founder has said is not public and is for testing. It defaults to invented example profiles; an index entry would offer a stranger a fictional roster as a real one.",
+    path: "/",
+    why: "O230 moved the finder to the root: the app opens on the product, not on a story. The reason `/finder` was hidden is a fact about what the surface RENDERS — a roster of invented example profiles in a deployment the founder has said is for testing — so it moved with it. A root that is indexed while the thing it serves may not be is the inconsistency this register's both-directions test exists to catch.",
   },
+  // `/finder` is NOT here any more, and its absence is the register working rather than a gap.
+  // O230 made that address a 308 in `next.config.ts`; it is no longer a route, so it is no longer
+  // in the public-route census, and an entry naming it would be exactly the stale row this
+  // register's both-directions test exists to fail on. The reason it was hidden did not
+  // evaporate — it moved to `/` above, with the surface it was always about.
   {
     path: "/examples",
     why: "Worked examples computed from the same roster, with the same default of invented profiles. Indexed, they read as the product's record of what it does for real people.",

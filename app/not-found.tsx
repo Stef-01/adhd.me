@@ -20,7 +20,7 @@ export default function NotFound() {
         The link may be old, or mistyped. Nothing you did was wrong, and nothing was lost.
       </p>
       <div className="notfound-doors">
-        <Link className="notfound-primary" href="/finder">Find a GP</Link>
+        <Link className="notfound-primary" href="/">Find a GP</Link>
         <Link className="notfound-secondary" href="/">Start from the beginning</Link>
       </div>
     </main>

@@ -15,6 +15,7 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from "rea
 import Image from "next/image";
 import { InterestForm } from "./interest-form";
 import { CoverageMap } from "./coverage-map";
+import { AppTabs } from "./app-tabs";
 
 // The founders register moved to app/about/founders.ts when About us became its own
 // page - the landing keeps the story, /about keeps the people.
@@ -141,7 +142,7 @@ export function StoryLanding() {
   const readProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
 
   return (
-    <main id="main-content" className="story">
+    <main id="main-content" className="story app-page-with-tabs">
       <motion.header
         className="story-header"
         initial={reduce ? false : { y: -10 }}
@@ -149,12 +150,12 @@ export function StoryLanding() {
         transition={{ duration: 0.32, ease: EASE }}
       >
         <div className="story-wrap story-header-inner">
-          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
+          <Link href="/story" className="story-wordmark" aria-label="ADHD.ME, why we built it" translate="no">ADHD.ME</Link>
           <nav className="story-nav" aria-label="Primary navigation">
             <Link href="/examples" className="story-nav-link">Worked examples</Link>
             <Link href="/practices" className="story-nav-link">For practices</Link>
             <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={PRESS}>
-              <Link href="/finder" className="story-demo-link">Find a GP</Link>
+              <Link href="/" className="story-demo-link">Find a GP</Link>
             </motion.div>
           </nav>
         </div>
@@ -189,7 +190,7 @@ export function StoryLanding() {
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
-                <Link className="story-primary-link" href="/finder">
+                <Link className="story-primary-link" href="/">
                   Find a GP near you<span className="arrow" aria-hidden="true">→</span>
                 </Link>
               </motion.div>
@@ -392,10 +393,10 @@ export function StoryLanding() {
 
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
-          <Link href="/" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
+          <Link href="/story" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
           {/* Launch item 3: the whole site, reachable from its front door. */}
           <div className="story-footer-links">
-            <Link href="/finder">Find a GP</Link>
+            <Link href="/">Find a GP</Link>
             <Link href="/examples">Worked examples</Link>
             <Link href="/faq">Questions</Link>
             <Link href="/approach">The approach</Link>
@@ -408,12 +409,12 @@ export function StoryLanding() {
         </div>
       </footer>
 
-      {/* Launch item 9: on a phone, the one action this page exists for stays reachable without
-          scrolling back up. Hidden on wider screens, where the hero's own call is above the
-          fold; it carries the same words as the hero link on purpose — one action, one name. */}
-      <div className="story-sticky-cta">
-        <Link href="/finder">Find a GP near you<span className="arrow" aria-hidden="true">→</span></Link>
-      </div>
+      {/* Launch item 9 was a sticky phone CTA here — the one action this page exists for, kept
+          reachable without scrolling back up. O230 DELETED IT rather than moved it: the app's tab
+          bar now sits exactly where it sat, carrying the same action as tab one, and two fixed
+          bars stacked at the bottom of a phone is the defect the shell exists to remove. The hero
+          keeps its own call above the fold, so nothing is unreachable. */}
+      <AppTabs />
     </main>
   );
 }

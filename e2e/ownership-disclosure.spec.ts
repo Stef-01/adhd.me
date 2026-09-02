@@ -68,7 +68,7 @@ test("the word and the old relationship disclosure are gone from every surface",
   };
   for (const r of PUBLIC_ROUTES) await scan(r);
   // The finder's profile, where the ownership disclosure actually renders.
-  await page.goto("/finder");
+  await page.goto("/");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

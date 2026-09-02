@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
+import { AppTabs } from "../app-tabs";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
@@ -88,7 +89,7 @@ export default function FaqPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="prose-screen">
+    <main id="main-content" className="prose-screen app-page-with-tabs">
       <div className="prose-wrap">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Questions", href: "/faq" }]} />
@@ -102,6 +103,7 @@ export default function FaqPage() {
       </div>
       <SiteFooter />
     </main>
+    <AppTabs />
     </>
   );
 }

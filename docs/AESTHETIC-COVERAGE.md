@@ -164,7 +164,7 @@ A claim renders only when it is earned; counts stand alone otherwise.
 - **Enforced by:**
   - `e2e/finder-flow.spec.ts :: collective roster coverage is never presented as one doctor's complete fit (O178)`
   - `e2e/finder-flow.spec.ts :: and still says it when the fit really is complete (O121 non-vacuity)`
-- **Route scope:** single route: `/finder`
+- **Route scope:** single route: `/`
 
 ### `honesty.clinician-declaration`
 

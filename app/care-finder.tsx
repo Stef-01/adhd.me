@@ -32,6 +32,7 @@ import {
   type SpeechSession,
 } from "@/voice/speech";
 import { NO_BANNER, speechBanner } from "@/finder/speech-banner";
+import { AppTabs } from "./app-tabs";
 import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
@@ -512,9 +513,23 @@ export function CareFinder() {
     setMatchDirection(direction);
   }
 
+  /**
+   * O230: the tab bar belongs to the app's ROOT surfaces, and a native push hides it — the same
+   * rule every phone-shaped health app follows, because a person part-way through one task should
+   * not be one mis-tap from losing it. Welcome and results are where somebody is choosing what to
+   * do; everything else is inside a task with its own way back, and the booking screen already
+   * owns the bottom edge with a fixed bar of its own.
+   */
+  const tabsHidden = stage !== "welcome" && stage !== "results";
+
   return (
     <MotionConfig reducedMotion="user">
-      <main id="main-content" className="care-app patient-v2" data-stage={stage}>
+      <main
+        id="main-content"
+        className="care-app patient-v2"
+        data-stage={stage}
+        data-tabs={tabsHidden ? "hidden" : "visible"}
+      >
         {/* U9: no live region here. The shell used to be `aria-live="polite"`, so every stage
             change read the whole new screen aloud; each stage now owns one `role="status"` line
             (`StatusLine`) scripted in `src/finder/announce.ts`. */}
@@ -669,6 +684,7 @@ export function CareFinder() {
           </AnimatePresence>
         </section>
       </main>
+      <AppTabs hidden={tabsHidden} />
     </MotionConfig>
   );
 }

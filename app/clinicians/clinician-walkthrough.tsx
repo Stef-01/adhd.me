@@ -153,7 +153,7 @@ export function ClinicianWalkthrough() {
             <DemoNavigator />
             <span>for clinicians</span>
           </div>
-          <Link href="/finder" className="cv2-exit">
+          <Link href="/" className="cv2-exit">
             Patient view <ArrowUpRight size={15} weight="bold" aria-hidden="true" />
           </Link>
         </header>

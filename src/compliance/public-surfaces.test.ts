@@ -53,7 +53,8 @@ describe("W192 every public surface is classified", () => {
     // contacted, the other is shaped as a patient looking for care.
     const byPath = new Map(PUBLIC_SURFACES.map((s) => [s.path, s.audience]));
     expect(byPath.get("/book/[token]")).toBe("patient");
-    expect(byPath.get("/finder")).toBe("patient");
+    // O230: the finder is the root route now — the surface, and its classification, moved together.
+    expect(byPath.get("/")).toBe("patient");
     expect(byPath.get("/")).toBe("patient");
   });
 
@@ -226,7 +227,10 @@ describe("W192 an accepted finding is data with a date on it", () => {
   });
 
   it("does not carry the acceptance to another surface", () => {
-    const elsewhere = sweepSurface("/finder", "patient", "my own diagnosis led me here");
+    // The fixture accepts the word on `/`. Another surface saying it is not covered — that is the
+    // whole point of a per-path acceptance. (O230 moved the finder to `/`, so the "elsewhere" here
+    // had to become a surface that is genuinely elsewhere; `/faq` is one the fixture never names.)
+    const elsewhere = sweepSurface("/faq", "patient", "my own diagnosis led me here");
     expect(unaccepted(elsewhere, FIXTURE).length).toBeGreaterThan(0);
   });
 

@@ -72,7 +72,7 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
   {
     path: "/",
     audience: "patient",
-    why: "The community landing page. Anybody can arrive here from a search engine, so it is read by patients whether or not it is addressed to them.",
+    why: "The app itself: since O230 the root IS the clinician finder, whose whole shape is a patient looking for care, so it answers to every patient rule regardless of the roster being synthetic. It was the community landing page until that unit moved the story to `/story` and the product to the front door; the reasoning moved with each of them rather than being rewritten.",
   },
   {
     path: "/book/[token]",
@@ -115,9 +115,9 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "Questions a person searching for ADHD care arrives with, answered as administrative fact. The single likeliest page to be quoted back to somebody, so its copy is held to every patient rule including the ones about claims and conditions.",
   },
   {
-    path: "/finder",
+    path: "/story",
     audience: "patient",
-    why: "A synthetic clinician finder. Its whole shape is a patient looking for care, so it answers to the patient rules regardless of the data being synthetic.",
+    why: "Why the product exists, at length: the account that occupied `/` until O230 made the front door the app. Same reader as before — somebody deciding whether to look for a GP — and the same rules, the same linter and the same copy; only the address changed.",
   },
   {
     path: "/practices",
@@ -320,6 +320,7 @@ export const VOCABULARY_BOUND =
 export const STANDING_FLAGS: Readonly<Record<string, string>> = {
   "/clinicians":
     "Names real clinical territory (differential diagnosis, pre-stimulant cardiac screening, titration review) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether ADHD.ME should publish clinical guidance at all, and that decision is the founder's. Raised in docs/GATE-DOSSIER-Y2.md, restated in docs/GATE-DOSSIER-Q13.md, and unresolved in both. NARROWED, NOT CLOSED: the walkthrough's learning list now LINKS OUT to AADPA and NICE rather than restating their content, and a link is not a claim — but the page still names the territory.",
-  "/finder":
+  // O230 moved the finder to `/`; the flag is about what the surface RENDERS, so it moved too.
+  "/":
     "A patient-facing surface whose content is people describing what they want from a clinician, in their own words — which for this product means the rendered page carries 'diagnosis', 'medication', 'psychiatrist' and drug classes. The distinction the rules cannot see is that these are QUOTED REQUESTS rather than claims the product makes: 'I want a GP who will discuss non-stimulant options honestly' is a preference, and the same words in the product's voice would be an offer. That distinction is real and it is a judgement, so the findings it produces are accepted individually in ACCEPTED_FINDINGS with review dates rather than the patient classification being weakened.",
 };

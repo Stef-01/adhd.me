@@ -392,7 +392,7 @@ export const TASTE_RULES: readonly TasteRule[] = [
     ],
     // The whole flow (results, profile, booking) plays out as client state inside "/finder" — it is
     // one route, walked deeply, not several routes navigated between.
-    routeScope: { kind: "single-route", route: "/finder" },
+    routeScope: { kind: "single-route", route: "/" },
   },
   {
     id: "honesty.no-testimonials",

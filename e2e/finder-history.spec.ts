@@ -16,7 +16,7 @@ const stage = (page: Page) => page.locator("main[data-stage]");
 /** Speak the sentence and tap the microphone to finish: welcome → listening → results. */
 async function speakToResults(page: Page) {
   await installFakeSpeech(page);
-  await page.goto("/finder");
+  await page.goto("/");
   await expect(stage(page)).toHaveAttribute("data-stage", "welcome");
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();
   await expect(stage(page)).toHaveAttribute("data-stage", "listening");
@@ -52,7 +52,7 @@ test("Back and Forward walk the stages, and a reload resumes them with the words
   await page.goBack();
   await expect(stage(page)).toHaveAttribute("data-stage", "results");
   await expect(headline).toContainText(/school/i);
-  expect(page.url()).toContain("/finder");
+  expect(new URL(page.url()).pathname).toBe("/");
 
   // Forward is still there: nothing in-app rewrote the stack.
   await page.goForward();
@@ -93,7 +93,7 @@ test("the address bar carries the place and never the words; history entries car
 
 test("a shared link with a place ranks from it, and a fresh visit starts at the beginning", async ({ page }) => {
   await installFakeSpeech(page);
-  await page.goto("/finder?place=Hornsby");
+  await page.goto("/?place=Hornsby");
   await expect(stage(page)).toHaveAttribute("data-stage", "welcome");
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();
   await page.evaluate((text) => (window as any).__speech.say(text, true), SENTENCE);
@@ -104,14 +104,14 @@ test("a shared link with a place ranks from it, and a fresh visit starts at the 
 
   // Arriving again by address — not Back, not reload — is a fresh start: the last visit's words
   // are cleared from the tab, not resumed into a stranger's session on a shared device.
-  await page.goto("/finder");
+  await page.goto("/");
   await expect(stage(page)).toHaveAttribute("data-stage", "welcome");
   await expect(page.getByRole("textbox")).toHaveValue("");
 });
 
 test("Cancel on the listening screen is the browser's Back, not a new entry", async ({ page }) => {
   await installFakeSpeech(page);
-  await page.goto("/finder");
+  await page.goto("/");
   const before = await page.evaluate(() => window.history.length);
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();
   await expect(stage(page)).toHaveAttribute("data-stage", "listening");

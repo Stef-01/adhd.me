@@ -170,6 +170,6 @@ test("axe finds nothing on any of the eight stages", async ({ page }) => {
   await installFakeSpeech(page);
   for (const stage of STAGES) {
     await openStage(page, stage);
-    await expectNoViolations(page, `/finder (${stage})`);
+    await expectNoViolations(page, `/ (${stage})`);
   }
 });

@@ -17,7 +17,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function intoResults(page: Page) {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
@@ -64,7 +64,7 @@ test("the results headline does not end on a widow", async ({ page }) => {
 });
 
 test("the browser chrome matches the paper, and still will after a palette change", async ({ page }) => {
-  await page.goto("/finder");
+  await page.goto("/");
   const agree = await page.evaluate(() => {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) return { meta: null as string | null, paper: null as string | null, same: false };
@@ -106,7 +106,7 @@ test("the wordmark resists auto-translation everywhere it renders", async ({ pag
   // asked to be translated, and wrapping each one in a span would fragment copy that this tree's
   // compliance linters scan as text — a real cost against a benefit nobody asked for. Considered
   // and declined, rather than swept up because the pattern matched.
-  for (const path of ["/finder", "/", "/approach"]) {
+  for (const path of ["/", "/approach"]) {
     await page.goto(path);
     const wordmarks = await page.evaluate(() =>
       [...document.querySelectorAll('[class*="wordmark"]')].map((el) => ({
@@ -134,7 +134,7 @@ test("no founder-family word renders anywhere a reader can see", async ({ page }
   // can only see the body checks the direction its author was facing, which is the same fault this
   // session found in four registers. Title and description are read here as text a reader meets.
   const FOUNDER = /\bco-?founder\b|\bfounders?\b|\bfounded\b/i;
-  for (const path of ["/", "/finder", "/approach", "/clinicians", "/practices"]) {
+  for (const path of ["/", "/story", "/approach", "/clinicians", "/practices"]) {
     await page.goto(path);
     const surfaces = await page.evaluate(() => ({
       body: document.body.innerText,

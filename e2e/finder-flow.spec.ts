@@ -24,7 +24,7 @@ async function intoResults(page: Page) {
 }
 
 test("a scenario reaches results without a loading screen in between", async ({ page }) => {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
 
@@ -100,7 +100,7 @@ test("changing the suburb re-ranks in place instead of losing the search", async
   // view that overlaps the previous one rather than a fresh search from nothing.
   expect(after.length).toBe(before.length);
   expect(after.some((name) => before.includes(name)), "the search was lost, not re-ranked").toBe(true);
-  expect(page.url()).toContain("/finder");
+  expect(new URL(page.url()).pathname).toBe("/");
   await expect(page.locator(".clinician-list")).toBeVisible();
 });
 
@@ -198,7 +198,7 @@ test("the chosen GP's portrait is one object from row to profile (O67)", async (
 });
 
 test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.getByRole("button", { name: "Try a demo scenario" }).click();
   await page.getByRole("button", { name: "Try this scenario" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
@@ -318,7 +318,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
  * defect no single-surface review can see.
  */
 test("the finder never claims a full fit beside a gap it just admitted (O121)", async ({ page }) => {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.locator("#welcome-request").fill(
     "a woman GP who does adult ADHD assessment, bulk billing, and I need a longer first appointment",
   );
@@ -334,7 +334,7 @@ test("the finder never claims a full fit beside a gap it just admitted (O121)", 
 });
 
 test("collective roster coverage is never presented as one doctor's complete fit (O178)", async ({ page }) => {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.locator("#welcome-request").fill(
     "I need a woman GP who speaks Urdu and offers telehealth",
   );

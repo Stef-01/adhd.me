@@ -475,7 +475,6 @@ textarea:focus-visible {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.quiet-link,
 .text-action,
 .icon-button {
   border: 0;
@@ -485,11 +484,10 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
-.quiet-link, .text-action { color: var(--ink); }
+.text-action { color: var(--ink); }
 
 @media (hover: hover) {
-  .quiet-link:hover,
-.text-action:hover,
+  .text-action:hover,
 .icon-button:hover { color: var(--ink); }
 }
 
@@ -1559,7 +1557,6 @@ textarea:focus-visible {
   letter-spacing: -0.055em;
 }
 
-.patient-v2 .quiet-link,
 .patient-v2 .text-action {
   font-size: 0.6875rem;
   font-weight: 650;
@@ -3258,12 +3255,6 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
-.patient-v2 .finder-home-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
 /* Finder welcome (2026-08-11 overhaul) — a single centred column on the paper
    ground every other stage already uses. ADHD carries the headline; the scope
    line under the promise names the expansion quietly. */
@@ -4505,7 +4496,6 @@ textarea:focus-visible {
 .text-action,
 .show-all,
 .refine-compact,
-.finder-home-link,
 .cv2-join-link,
 .story-demo-link,
 .story-footer-links a,
@@ -5344,23 +5334,27 @@ textarea:focus-visible {
    amended) ── The switch lives on the WELCOME screen now, folded away — configuration belongs at
    the door, not between a reader and their results, and the roster ships with the examples ON
    for this testing deployment. Muted, not accent: a signpost. Tokens only — the ratchet holds. */
-.finder-demo-tools {
-  width: 100%;
-  margin-top: 16px;
-  text-align: center;
-}
-.finder-demo-tools summary {
+/* O230: the `<details>` became a button that opens a sheet. Same siting, same quiet weight, same
+   44px floor — the container changed, not the emphasis. */
+.finder-demo-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   min-height: 44px;
+  margin-top: 16px;
+  border: 0;
+  background: none;
   color: var(--faint);
   font-size: 0.78125rem;
   font-weight: 600;
   cursor: pointer;
   touch-action: manipulation;
 }
-.finder-demo-tools summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) {
+  .finder-demo-trigger:hover { color: var(--muted); }
+}
+.finder-demo-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 .finder-demo-toggle {
   display: grid;
   grid-template-columns: 22px 1fr;
@@ -5369,7 +5363,8 @@ textarea:focus-visible {
   max-width: 340px;
   margin: 0 auto;
   text-align: left;
-  padding: 4px 2px 8px;
+  padding: 8px 2px 10px;
+  min-height: 44px;
   cursor: pointer;
   touch-action: manipulation;
 }
@@ -6731,7 +6726,6 @@ select { caret-color: var(--route-strong); }
   font-weight: 760;
   letter-spacing: -0.045em;
 }
-.patient-v2 .finder-home-link { color: var(--muted); }
 
 .patient-v2 .voice-core { padding-inline: clamp(22px, 5cqw, 42px); }
 .patient-v2 .voice-screen .voice-prompt h1 {
@@ -6950,6 +6944,7 @@ select { caret-color: var(--route-strong); }
 .consent-bar {
   right: max(18px, var(--safe-right));
   bottom: max(18px, var(--safe-bottom));
+  /* O230: see the `:has(.app-tabs)` rule above — it re-states this for the tab routes. */
   left: max(18px, var(--safe-left));
   width: min(760px, calc(100% - 36px));
   margin-inline: auto;
@@ -7690,4 +7685,251 @@ select { caret-color: var(--route-strong); }
   .console-nav-link,
   .console-workspace-menu > summary span,
   .console-primary-button { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O230 — THE APP'S TAB BAR (founder-directed: "it should function exactly like an app").
+
+   The bar paints from the brand's own tokens and introduces no colour: paper ground, the band
+   gradient as the 2px lid, the accent for the tab you are on. That is the same treatment the
+   finder's header already uses (O218), for the same reason — the product is a task surface, and a
+   gradient field behind a control somebody taps forty times is noise, so the gradient states the
+   edge and the paper carries the work.
+
+   Sizes are the researched floors, not preferences: 56px minimum per tab against the 44–48px
+   fingertip floor (WCAG 2.2's 24px is a legal minimum, not a design target), the label always
+   rendered, and the safe-area inset added as PADDING so the bar's ground reaches the bottom of an
+   installed app while its controls sit above the home indicator.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+.app-tabs {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  background: var(--surface-raised);
+  padding-bottom: var(--safe-bottom);
+  padding-inline: max(0px, var(--safe-left)) max(0px, var(--safe-right));
+}
+
+/* The band, as a hairline lid. On a pseudo-element for O218's reason: the contrast sweep walks
+   ancestors for the painted ground, and a gradient on the bar itself would have it measure the
+   labels against the band's darkest stop rather than the paper they actually sit on. */
+.app-tabs::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background-image: var(--band-gradient);
+}
+
+.app-tabs-list {
+  display: flex;
+  width: min(var(--shell-w, 520px), 100%);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.app-tabs-item { flex: 1 1 0; }
+
+.app-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 56px;
+  padding: 7px 4px 9px;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  transition: color var(--dur-tap) var(--ease-ui);
+}
+
+.app-tab-label { line-height: 1.1; }
+
+/* Three signals for the current tab, never colour alone: the accent, the filled glyph weight the
+   component swaps in, and the marker above the icon. */
+.app-tab.is-current {
+  color: var(--accent);
+  position: relative;
+}
+
+/* Under the band, not behind it: the lid is painted at top:0 across the whole bar, and a marker
+   at the same offset was hidden by it — visible only in the 390px preview capture. */
+.app-tab.is-current::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  translate: -50% 0;
+  width: 26px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--accent);
+}
+
+@media (hover: hover) {
+  .app-tab:hover { color: var(--ink); }
+  .app-tab.is-current:hover { color: var(--accent); }
+}
+
+.app-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+  border-radius: 10px;
+}
+
+/* The room the bar takes, given back to the surface above it, so a fixed bar never covers the last
+   control on a screen. Only on the surfaces that show it. */
+/* The room the bar takes, given back to the surface above it. On the SCREEN rather than the shell,
+   because each stage is `min-height: 100svh` and would otherwise run its last line under the bar
+   whatever the shell's padding said — visible at 1280px in the preview, where the finder's context
+   line sat half-covered. */
+.care-app[data-tabs="visible"] .screen { padding-bottom: calc(58px + var(--safe-bottom)); }
+
+.app-page-with-tabs { padding-bottom: calc(58px + var(--safe-bottom)); }
+
+/* THE CONSENT BAR SITS ABOVE THE TAB BAR, NOT ON IT. Caught in the dev-server preview at 390px:
+   the bar is fixed to the bottom of the viewport and the tab bar arrived underneath it, so a
+   first-time visitor met an app whose navigation was covered by a notice — and the sheet, which
+   is a modal dialog, rendered BEHIND that notice because both sat at z-index 60.
+   `:has()` keeps the offset with the pages that actually have a bar under them: the console and
+   the booking handoff have no tab bar and their notice still sits on the edge. The sheet is 60
+   and the bar is now 50, so a dialog's scrim covers the notice the way it covers everything else. */
+body:has(.app-tabs) .consent-bar {
+  bottom: calc(58px + var(--safe-bottom) + 12px);
+  z-index: 50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-tab { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O230 — THE BOTTOM SHEET. Paper panel, brand hairline, nothing new in the palette.
+
+   `overscroll-behavior: contain` on the body is the load-bearing line: without it, scrolling the
+   sheet's content to its end chains into the page behind, which is the specific tell that makes a
+   web sheet feel like a div rather than a sheet. `touch-action: pan-y` keeps the vertical axis
+   with the drag while leaving the browser its own horizontal handling — and nothing here reaches
+   for the left edge, where iOS's back gesture lives.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+.sheet-layer { position: fixed; inset: 0; z-index: 60; }
+
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: color-mix(in srgb, var(--hero-dusk) 46%, transparent);
+  cursor: pointer;
+}
+
+.sheet {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--shell-w, 520px), 100%);
+  margin-inline: auto;
+  border-radius: 20px 20px 0 0;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-ambient);
+  padding-bottom: var(--safe-bottom);
+  touch-action: pan-y;
+  overflow: hidden;
+}
+
+/* The band again, as the sheet's own lid — the same 2px the finder's header and the tab bar carry,
+   so all three edges of the app are the one brand. */
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background-image: var(--band-gradient);
+  border-radius: 20px 20px 0 0;
+}
+
+.sheet-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  background: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.sheet-handle:active { cursor: grabbing; }
+
+.sheet-handle-bar {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+@media (hover: hover) {
+  .sheet-handle:hover .sheet-handle-bar { background: color-mix(in srgb, var(--muted) 60%, var(--line)); }
+}
+.sheet-handle:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 12px; }
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 18px 10px;
+}
+
+.sheet-header h2 {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.sheet-header h2:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.sheet-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .sheet-close:hover { color: var(--ink); border-color: color-mix(in srgb, var(--muted) 40%, var(--line)); }
+}
+.sheet-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 18px 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-close, .sheet-handle-bar { transition: none; }
 }

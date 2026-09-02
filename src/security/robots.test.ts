@@ -58,7 +58,9 @@ const disallowed = (): string[] => {
 describe("U7 the crawler register is one register", () => {
   it("names the three routes the plan hides, each with a reason", () => {
     const paths = HIDDEN_FROM_CRAWLERS.map((r) => r.path);
-    expect(paths).toEqual(expect.arrayContaining(["/finder", "/examples", "/demo"]));
+    // O230: `/` is the finder now, so the root carries the instruction the finder's address used
+    // to; `/finder` is a 308 in next.config.ts and no longer a route to hide.
+    expect(paths).toEqual(expect.arrayContaining(["/", "/examples", "/demo"]));
     expect(new Set(paths).size).toBe(paths.length);
     for (const route of eachOf(HIDDEN_FROM_CRAWLERS, "the crawler register")) {
       expect(route.why.length, `${route.path} owes a reason`).toBeGreaterThan(60);

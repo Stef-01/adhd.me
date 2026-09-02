@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
-import { StoryLanding } from "./story-landing";
+import { HIDDEN_ROBOTS_META } from "@/security/robots";
+import { CareFinder } from "./care-finder";
 
-// O167, founder-directed: "remove all mentions of founder on entire site do thorough code audit".
+// O230, founder-directed ("there should be no landing page, it should function exactly like an
+// app for the demo day"): the front door is the product.
 //
-// THIS IS THE HALF MY OWN SWEEP COULD NOT SEE, and that is the finding worth recording. The
-// site-wide guard in `guidelines-sweep.spec.ts` read `document.body.innerText`, so it swept every
-// rendered sentence and structurally could not reach the two strings below — a `<title>` lives in
-// the head, and a description renders in a search result and a shared link rather than on the
-// page. Both said "Why we founded ADHD.ME". A reader meets the title in their tab before they meet
-// a word of the body.
+// This route used to render the story — four sections about why ADHD.ME exists, with the reader's
+// first action a link to somewhere else. Every health app with published structure opens the other
+// way round: Zocdoc's cold open IS the search surface, the NHS App opens on its Home hub, Apple
+// Health on Summary. None of them opens on an argument. So the finder moved here whole and the
+// story moved to `/story`, where it is a tab like any other and still says everything it said.
 //
-// Same shape as this session's register findings: the check ran in the direction its author was
-// facing. The sweep now reads the head as well, so the next one cannot hide here.
+// `/finder` still resolves — it redirects here — because the address is in the ledger, in the
+// runbook, in every worked example and in fifteen e2e specs, and an app that changes its own front
+// door should not also break every link that pointed at it.
+//
+// U7 FOLLOWS THE PRODUCT. The finder is hidden from crawlers because this deployment is for
+// testing and its roster defaults to invented example profiles; moving it to `/` moves that
+// reasoning to `/`, and `src/security/robots.ts` now says so for the root. The alternative — a
+// root that is indexed while the thing it renders may not be — is the exact inconsistency U7's
+// both-directions test exists to catch.
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
-  title: "Why we built ADHD.ME",
+  robots: HIDDEN_ROBOTS_META,
+  title: "Find a GP",
   description:
-    "Why we built ADHD.ME: getting assessed for ADHD in Australia is a test of stamina rather than of need, and the front door was built for somebody with more resources than most people have.",
+    "Describe the GP you are looking for and see the listed Sydney GPs who do ADHD assessment ordered around your words, with the access details you asked for.",
 };
 
-export default function Home() {
-  return <StoryLanding />;
+export default function AppHome() {
+  return <CareFinder />;
 }

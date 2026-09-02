@@ -41,7 +41,9 @@ describe("AR32 route weight verdicts", () => {
     // deleting the block) must fail here, before the gate script ever runs.
     expect(routes.length).toBeGreaterThan(40);
     expect(routes).toContain("/");
-    expect(routes).toContain("/finder");
+    // O230: `/finder` is a 308 and not a route; the app it named is `/`, and the story it
+    // displaced is `/story`. Both are pinned, so this still names two real routes on purpose.
+    expect(routes).toContain("/story");
     for (const [route, kb] of Object.entries(ROUTE_BUDGETS)) {
       expect(route.startsWith("/"), route).toBe(true);
       expect(Number.isInteger(kb), route).toBe(true);

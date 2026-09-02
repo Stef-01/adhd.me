@@ -3,10 +3,11 @@
 // O95: the welcome screen, verbatim from care-finder.tsx. State and handlers live in the
 // orchestrator; this renders them.
 
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
+import { useState } from "react";
+import { ArrowRight, CaretRight, Microphone, Sliders } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
+import { Sheet } from "../sheet";
 import { FinderContext, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
@@ -34,14 +35,17 @@ export function WelcomeStage({
   includeSynthetic: boolean;
   onToggleSynthetic: (next: boolean) => void;
 }) {
+  const [toolsOpen, setToolsOpen] = useState(false);
+
   return (
     <MotionScreen key="welcome" className="voice-screen" focusOnArrival={focusOnArrival}>
       {focusOnArrival && <StatusLine line={FINDER_ANNOUNCEMENTS.welcome} />}
       <header className="minimal-header">
         <Wordmark />
-        <Link href="/" className="quiet-link finder-home-link">
-          <ArrowLeft size={15} weight="regular" aria-hidden="true" /> Home
-        </Link>
+        {/* O230: the "Home" link out of the finder is gone, because the finder IS home now. It
+            pointed at the story landing, which was the front door until this unit moved the app
+            to `/`; a link from the front door back to the front door is a dead control, and the
+            story has a tab of its own in the bar below. */}
       </header>
 
       <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
@@ -92,11 +96,19 @@ export function WelcomeStage({
           <CaretRight size={14} weight="bold" aria-hidden="true" />
         </button>
 
-        {/* O226: hidden away by default — a closed disclosure, not a card. The example roster
-            ships ON for this testing deployment (founder decision synthetic-roster-tickbox,
-            amended), so what this holds is the way OFF, for reading the real network alone. */}
-        <details className="finder-demo-tools">
-          <summary>Testing options</summary>
+        {/* O226 put the example-roster switch here, folded away in a `<details>` — configuration
+            at the door rather than between a reader and their results. O230 keeps the siting and
+            changes the container: a sheet is what an app opens for its settings, and this is the
+            control a presenter actually reaches for mid-demo, so it is worth the gesture. The
+            disclosure's own affordances are not lost — the trigger is still a button, the sheet
+            still closes on Escape, and the switch inside is the same checkbox with the same
+            label. The example roster ships ON for this testing deployment (founder decision
+            synthetic-roster-tickbox, amended); what this holds is the way OFF. */}
+        <button className="finder-demo-trigger" type="button" onClick={() => setToolsOpen(true)}>
+          <Sliders size={15} weight="regular" aria-hidden="true" />
+          Testing options
+        </button>
+        <Sheet open={toolsOpen} title="Testing options" onClose={() => setToolsOpen(false)}>
           <label className="finder-demo-toggle">
             <input
               type="checkbox"
@@ -108,7 +120,7 @@ export function WelcomeStage({
               <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
             </span>
           </label>
-        </details>
+        </Sheet>
       </motion.div>
 
       <FinderContext />

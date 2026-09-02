@@ -4,7 +4,7 @@ const MULTI_ASK =
   "I want a woman GP who bulk bills and can do telehealth, and I need a longer first appointment";
 
 async function intoResults(page: Page, request = MULTI_ASK) {
-  await page.goto("/finder");
+  await page.goto("/");
   await page.locator("#welcome-request").fill(request);
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

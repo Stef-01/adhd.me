@@ -44,7 +44,7 @@ async function activate(control: Locator, via: Via) {
  */
 export async function freshFinder(page: Page) {
   await page.goto("about:blank");
-  await page.goto("/finder");
+  await page.goto("/");
   await expectStage(page, "welcome");
 }
 
