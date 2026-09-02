@@ -221,6 +221,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `/finder` 687 KB); full `pnpm e2e` green (348 passed, 1 skipped, 20.4m, exit 0 read from the command itself, run serially with nothing else building, 349 listed) at the e40a88b tree. Vault log skipped
 > (unreachable). U11 is next.
 
+> **U12 (O229-lane, the tenth unit built of the one-year plan: the deploy runbook and a smoke
+> script) — CLAIMED founder-0902a, 2026-09-02T11:03Z.** Scope is the plan's U12 text and nothing
+> beyond it: `docs/DEPLOY-RUNBOOK.md` — what a push to `main` does (the only ref `vercel.json`'s
+> `ignoreCommand` lets build), how to read `/api/health` (U4's shape: `ok`, `sha`, `bootedAt`,
+> `store`, `reporter`), how to roll back (Vercel "promote previous" by SHA), what the reporter
+> shows and where (U4's console sink, the last fifty in the ring), and who is on call — the
+> founder, until the founder names a person, recorded as the founder's own item in
+> `SUPPORT-RUNBOOK.md` rather than as a gate here. `scripts/smoke.mts` takes an origin, hits `/`,
+> `/finder`, `/api/health` and one console redirect (`/console` without a session → `/console/signin`)
+> and exits non-zero on any miss; `pnpm smoke` in `package.json`. Verification is the plan's:
+> `pnpm smoke http://localhost:3100` green against `next start`, and a vitest test that greps the
+> runbook for each step the script runs, so the runbook's commands are the script's. No UI moves;
+> the gradient aesthetic is untouched by construction. Continuation if this claim goes stale:
+> nothing is behind a flag; the unit is whole or it is not landed.
+
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
 > claim came out differently and is explained below. **Outcome:** `src/finder/state.ts` owns where
@@ -12062,7 +12077,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U9 | done | founder-0902a | 2026-09-02T09:58Z | 508ac90 | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | done | founder-0902a | 2026-09-02T11:02Z | e40a88b | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | blocked | — | — | — | FOUNDER DECISION D-WEBKIT-RUNNER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) WebKit in the suite. Blocked 2026-09-02 by founder-0902a — the build environment refuses both Playwright CDNs (403) and pre-provisions Chromium only, so `pnpm e2e --project=webkit` cannot run where the units are built. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
-| U12 | available | — | — | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
+| U12 | claimed | founder-0902a | 2026-09-02T11:03Z | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | available | — | — | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | available | — | — | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
