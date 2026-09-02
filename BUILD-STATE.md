@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ dc3253d (2026-09-02T04:35Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at d94c798 + dc3253d (typecheck · 302 files / 4462 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget · gate accounting PASS); full pnpm e2e green (323 passed, 1 skipped, 18.3m, exit 0 read from the command itself, run serially with nothing else building, 324 listed) at the O229 tree (d94c798: the seven redesign breaches fixed in globals.css's redesign layer — accent cap on /, /clinicians, /examples, /thanks, /faq, /approach; the 44px pill; the briefing card inside 390×844; the onboarding button's hover contrast; the interop and capacity sweeps clean through scoped hue-free console neutrals). AR15 visual: three stability runs on the fixed tree byte-identical (manifest sha 25d66570), accepted under O229 in src/design/accepted-diffs.ts — the first acceptance since the founder's redesign, so it carries the redesign's pixels and the seven fixes together. **O216 through O229 done, U lane OPEN**: U1, U2, U3 done; U4 (reporter seam, onRequestError, /api/health, Web Vitals, csp-report route) is the next firing's unit`
+`gate: green @ 2041d30 (2026-09-02T05:50Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 2041d30 (typecheck · 303 files / 4468 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 679 KB · gate accounting PASS with this line); full pnpm e2e green (328 passed, 1 skipped, 18.9m, exit 0 read from the command itself, run serially with nothing else building, 329 listed) at the U4 tree (2041d30: the reporter seam, onRequestError through it, /api/health, Web Vitals into /api/vitals, /api/csp-report with report-uri, /api/mock/reports; the ring's globalThis key made its own after the first full run showed the ops store and the reporter resetting each other). AR15 visual: unchanged — no surface changed in U4, the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4 done; U5 (toolchain pins and CI parity) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -120,15 +120,43 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **U4 (O229-lane, the fourth unit of the one-year plan: the reporter seam, a health endpoint and
-> Web Vitals) — CLAIMED founder-0902a, 2026-09-02T04:38Z.** Scope is the plan's U4 text and nothing beyond it:
-> `src/ops/reporter.ts` (a sink interface, a console adapter by default, `ADHDME_REPORTER` selecting a
-> vendor adapter — no vendor is chosen here, the seam is); `onRequestError` in `instrumentation.ts`
-> forwarding to it with route and commit SHA and never patient text; U3's boundaries reporting
-> through the same seam instead of `console.error`; `app/api/health/route.ts` (commit SHA, boot
-> time, store adapter kind — never state); `useReportWebVitals` posting LCP/INP/CLS only;
-> `app/api/csp-report/route.ts` into the sink, at which point U1's report-only policy gains its
-> `report-uri`. Verify per the row. Continuation if this claim goes stale: nothing is behind a flag;
-> the unit is whole or it is not landed.
+> Web Vitals) — DONE founder-0902a, 2026-09-02 @ 2041d30.** Scope was the plan's U4 text and
+> nothing beyond it. **Outcome:** `src/ops/reporter.ts` is the seam — a `ReporterSink` is a name
+> and a `report()`, the console adapter is the default and the only one (one JSON line per report,
+> `console.error` for a server error), `ADHDME_REPORTER` selects an adapter by name and an unknown
+> name throws at boot, so the vendor decision is a config change and one `ADAPTERS` entry when it
+> is made and no vendor is chosen here. Three report kinds, each built from an allow-list —
+> server-error (path with its query stripped, method, the router's kind/path/type, the error's
+> name, message, digest and a 4000-character stack, the commit SHA or null), web-vital (metric,
+> value, rating, path) and csp-violation (document path, directive, blocked source, disposition);
+> a header, a body, a query string, a sample, a referrer never enter a report, and
+> `reporter.test.ts` plants a finder request in every channel and proves it absent. The last fifty
+> reports sit in a ring under `globalThis.__adhdMeReporter` — its first draft reused the ops store's
+> `__adhdMeOps` and the two resets emptied each other (`/console/ops` threw after the reporter
+> reset, the reporter after the demo reset, both green alone); found by the full e2e, fixed by the
+> key, guarded by a new W51 test that reads every `globalThis as {…}` key in `src/` and fails on
+> one owned by two modules. `instrumentation.ts`'s `register()` selects the sink after the posture
+> assertion and `onRequestError` forwards every uncaught server error through it. `/api/health`
+> answers `{ ok, sha, bootedAt, store: "jsonl-file", reporter }` with `no-store` and never state.
+> `app/web-vitals.tsx` beacons LCP, INP and CLS only with `window.location.pathname` and nothing
+> else; `/api/vitals` and `/api/csp-report` are the intakes (400 for anything not theirs; the CSP
+> route also 415 on a wrong content type and 413 over 16 KB), their parsing in `src/ops/intake.ts`
+> because a route module may export only its handlers; U1's report-only policy gains
+> `report-uri /api/csp-report` in every posture. `/api/mock/reports` exposes the ring behind the
+> mock-route guard as the e2e's window onto the sink. **One deviation from the claim text,
+> recorded:** U3's boundaries do not report through the seam. A server-render error already reaches
+> the sink through `onRequestError`; reporting from a browser-side boundary needs an error intake
+> that accepts arbitrary message text from the client, which is exactly the channel the payload law
+> keeps closed, so this unit did not invent one and `app/error.tsx`'s header says why. Registers:
+> `resetReports` in `STORE_RESETTERS`; `src/ops/reporter.ts` a declared record class
+> (`no_patient_identity`); the three operations routes in the dossier and census; `reporter.spec.ts`
+> in `SPEC_TRIAGE`; `ADHDME_REPORTER` in `.env.example` and the pinned inventory (twenty-one names).
+> Design: no surface changed — the vitals component renders nothing and the layout's markup is
+> byte-identical, so the AR15 chain ends where O229 left it; the founder's gradient aesthetic was
+> checked unchanged (no gradient rule in `globals.css` differs from the redesign commit) and the
+> landing, finder, FAQ and error boundary were previewed on a dev server at 390×844 and 1280×800.
+> Verified: `src/ops/reporter.test.ts` 17/17, `e2e/reporter.spec.ts` 5/5, full `pnpm e2e` 328 passed / 1 skipped, 18.9m, exit 0 read from the command itself,
+> `pnpm verify` green with the line. The vault log is skipped (unreachable) and the commits say so.
 
 > **O229 (founder-0902a, 2026-09-02 — DONE @ d94c798 + dc3253d: the red gate first — the founder's redesign
 > reconciled with the tree's own design laws, then the AR15 visual re-acceptance the redesign owed).**
@@ -11809,7 +11837,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U1 | done | founder-0902a | 2026-09-02T00:48Z | 6dd819f | [P] (S) Security headers and a report-only CSP. -> verify: `src/security/headers.test.ts` asserts every header and both config flags through `next.config.ts`, holds the policy to the tree in both directions (a third-party origin named only where the tree loads one, nothing the tree loads outside the policy) and proves by census that the only inline scripts in `app/` and `src/` are the inert JSON-LD blocks and the GA snippet (a planted executable inline script fails it); e2e `headers.spec.ts` reads the headers off real responses for `/`, `/finder`, `/console/signin`, `/faq` and a 404 and proves the report-only policy quiet in Chromium across the landing, the finder, sign-in, onboarding and the console shell, with a planted third-party script reported. No script hashes — O228 corrected the plan text (hydration payloads cannot be hashed statically; one hash disables `'unsafe-inline'`); `report-uri` moved to U4, enforcement stays U13. |
 | U2 | done | founder-0902a | 2026-09-02T02:25Z | 844db5e | [P] (S) Secure cookies, `.env.example`, and a boot-time posture assertion. -> verify: `src/lib/env.test.ts` scans the tree for `process.env.X` reads and asserts `.env.example` names every one and nothing else (both directions); a production-mode test proves the posture assertion throws on each forbidden combination and stands aside for the e2e's local production build and the build phase; cookie flags asserted in `src/console/session.test.ts`. Done as: `readEnv`/`postureFaults`/`assertProductionPosture` in `src/lib/env.ts`, run from `instrumentation.ts` `register()` — the refusal is a 500 on every request with the reasons at the top of the boot log, not a process exit; the rule distinguishes a production BUILD (secret required) from the production DEPLOYMENT (`VERCEL_ENV=production`: mock/demo flags refused too), so the e2e's `next start` still serves; `consoleCookieOptions()` (httpOnly · secure in production · lax · path / · 7-day maxAge) on all three cookie sets; `.env.example` with twenty variables and a duplicate `.gitignore` rule removed; `app/site.ts` origin from `NEXT_PUBLIC_SITE_URL` → Vercel hostname → local. The e2e baseURL moved to `http://localhost` because Playwright's cookie model (`Cookie.matches`) exempts only that hostname from the Secure rule — the one failing test at 127.0.0.1 was the harness, not the flag. |
 | U3 | done | founder-0902a | 2026-09-02T03:22Z | 5858b9b | [P] (S) Error boundaries with linted copy. -> verify: a vitest renders each boundary with a thrown error and asserts the copy and the action; `src/compliance/public-surfaces.test.ts` census shows the new constants reached; e2e `error-boundary.spec.ts` triggers a render error on a fixture page and asserts the boundary, not a blank screen. Done as: `app/error.tsx`, `app/console/error.tsx`, `app/global-error.tsx`, `app/finder/loading.tsx`, `app/console/loading.tsx`, all reading `src/compliance/boundary-copy.ts` (`BOUNDARY_COPY`, 14 sentences); `boundary-copy.test.ts` (8) renders each with a thrown error and holds it to heading, sentence, button, plain anchor and never the message/digest/stack, plus a no-literal-JSX-text source check; `public-surfaces.test.ts` (+2) sweeps every sentence under the patient rules; `e2e/error-boundary.spec.ts` (2) reaches the boundary through `app/api/mock/fault/[kind]` (mock-guarded; `render` throws, anything else 404s) — status 500, both doors, no framework wording; `vitest.config.ts` esbuild jsx automatic; `interaction.errors-plain` now names the two boundary tests; AR3 exemption and AR34 S1 seam gain the fixture with reasons; `qa/u3-error-{390,1280}.png` + DESIGN-QA entry. |
-| U4 | claimed | founder-0902a | 2026-09-02T04:38Z | — | [P] (M) The reporter seam, a health endpoint, and Web Vitals. -> verify: `src/ops/reporter.test.ts` proves an uncaught server error reaches the sink with route and SHA and that patient text (a finder request) never appears in a report payload — a planted request string must be absent; e2e asserts `/api/health` shape and that the console adapter logs a thrown error from a fixture route. |
+| U4 | done | founder-0902a | 2026-09-02T05:50Z | 2041d30 | [P] (M) The reporter seam, a health endpoint, and Web Vitals. -> verify: `src/ops/reporter.test.ts` proves an uncaught server error reaches the sink with route and SHA and that patient text (a finder request) never appears in a report payload — a planted request string must be absent; e2e asserts `/api/health` shape and that the console adapter logs a thrown error from a fixture route. Done as: `src/ops/reporter.ts` seam (console adapter default, `ADHDME_REPORTER` selects, unknown name throws at boot), `onRequestError` through it with route and SHA, `/api/health`, `app/web-vitals.tsx` (LCP/INP/CLS, pathname only) into `/api/vitals`, `/api/csp-report` into the sink with `report-uri` in every posture, `/api/mock/reports` as the e2e's window; the ring under its own `__adhdMeReporter` key with a W51 test that every store's globalThis key is owned by one module. Deviation: U3's boundaries stay on `console.error` — a browser-side error intake would accept arbitrary client text, which the payload law keeps closed. reporter.test.ts 17/17, reporter.spec.ts 5/5, full e2e 328 passed / 1 skipped. |
 | U5 | available | — | — | — | [P] (S) Toolchain pins and CI parity. -> verify: `src/quality/ci-parity.test.ts` parses `ci.yml` and asserts its script set equals `verify`'s step list (both directions); `pnpm verify` green locally with the pinned versions. |
 | U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
 | U7 | available | — | — | — | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
