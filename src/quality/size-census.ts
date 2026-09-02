@@ -67,6 +67,7 @@ const SET_BY_U14 = "2026-09-02";
 const SET_BY_O230 = "2026-09-02";
 const SET_BY_U15 = "2026-09-02";
 const SET_BY_O231 = "2026-09-02";
+const SET_BY_O232 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -151,6 +152,15 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'src-reached-lines', value: 30320, on: SET_BY_O231, reason: "O231: synthetic-roster.ts is in the product's import closure (the finder ranks over it), and the booking note's own account of what the unit would not fabricate is the bulk of the addition." },
   { measure: 'css-lines', value: 7962, on: SET_BY_O231, reason: "O231: the monogram's band ramp, the /story roster note and the booking screen's practice block, less the four dead label rules the dead-CSS census required be deleted with their markup." },
   { measure: 'css-rule-blocks', value: 1462, on: SET_BY_O231, reason: "O231: the monogram's ramp, the /story roster note and the booking screen's practice card, less the four dead label rules the dead-CSS census required be deleted alongside their markup." },
+
+  // O232 (founder-directed): the craft pass under adhdme-taste and impeccable. The tree grows by
+  // the browser surfaces nobody had themed, one material, and the reasoning recording which of
+  // these were defects against the tree's OWN laws rather than matters of taste.
+  { measure: 'app-lines', value: 15820, on: SET_BY_O232, reason: "O232: the scenarios screen's heading and the two removed eyebrows carry their reasoning, and shared.tsx names the out-ramp and the press spring once instead of ten times as literals." },
+  { measure: 'src-lines', value: 54211, on: SET_BY_O232, reason: "O232: theme-parity.ts records why the raw-hex ceiling FELL from 71 to 66 — four component hex values became color-mix() from the tokens they sit in, which is the ratchet turning the right way and the note is what stops a later unit reading the drop as a measurement error." },
+  { measure: 'css-lines', value: 8083, on: SET_BY_O232, reason: "O232: ::selection, caret-color and the scrollbar — the surfaces the browser draws, which shipped as defaults belonging to no design system — plus the tab bar and sheet materials behind an @supports guard, and tabular figures on the four classes that carry numbers." },
+  { measure: 'css-rule-blocks', value: 1478, on: SET_BY_O232, reason: "O232: as css-lines; the browser-surface rules and the @supports material block are most of the count." },
+  { measure: 'css-styled-classes', value: 502, on: SET_BY_O232, reason: "O232: no new component classes beyond the booking practice card's parts — the pass restyles what exists." },
 ];
 
 /** The current floor per measure: the last entry wins. */

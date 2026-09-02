@@ -98,10 +98,17 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
    stops (#6f1e31) became `color-mix(… 82%, #000)` derived from the accent they darken — a
    site-neutral swap (#6f1e31 out, #000 in), counted as exactly that by the census. Re-derived in
    the commit that earned it, per the ratchet's law. */
-/* 73 -> 71 (O219, the accent-law pass): the story CTA's #fff label became var(--s-paper) on the
+/* 71 -> 66 (O232, the craft pass): five raw-hex sites left the stylesheet in one batch — the
+   primary button's disabled pair (`#a3a39e` on `#e3e1db`, warm greys stranded from the
+   pre-redesign stone palette), the dual input's placeholder (`#9c7b45`) and the two `#744910`
+   hover fills on the microphone and the send control. All four are now `color-mix()` from the
+   accent or the neutrals they sit in, so a palette change carries them instead of leaving them
+   behind — which is exactly what had happened to the disabled pair.
+
+   73 -> 71 (O219, the accent-law pass): the story CTA's #fff label became var(--s-paper) on the
    ink pill, and its hover's color-mix dark stop became var(--s-dark) outright — two more
    untokenised colours retired, none restated. Re-derived in the commit that earned it. */
-export const CSS_RAW_HEX_SITES = 71;
+export const CSS_RAW_HEX_SITES = 66;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the

@@ -8,7 +8,7 @@ import { ArrowRight, CaretRight, Microphone, Sliders } from "@phosphor-icons/rea
 import { motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { Sheet } from "../sheet";
-import { FinderContext, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
+import { EASE_OUT, FinderContext, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
   draft,
@@ -61,7 +61,7 @@ export function WelcomeStage({
         className="voice-actions"
         initial={reducedMotion ? undefined : { opacity: 0, y: 14 }}
         animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
-        transition={{ delay: 0.24, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ delay: 0.24, duration: 0.5, ease: EASE_OUT }}
       >
         {/* ONE field, ONE dual-functional control. Empty → a microphone that talks; the
             moment there is text → a send arrow that searches. Both routes converge on the
@@ -92,7 +92,7 @@ export function WelcomeStage({
         </div>
 
         <button className="scenario-toggle" type="button" onClick={onScenarios}>
-          Try a demo scenario
+          Try an example search
           <CaretRight size={14} weight="bold" aria-hidden="true" />
         </button>
 

@@ -18,7 +18,7 @@ import { type Clarifier } from "@/matching/clarify";
 import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import { CoverageMap } from "../coverage-map";
-import { ClinicianPortrait, distinguishingSignals, MotionScreen, StatusLine, Wordmark } from "./shared";
+import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -139,7 +139,7 @@ export function ResultsStage({
                 className="place-status"
                 initial={reducedMotion ? false : { opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
               >
                 {fitCopy}
               </motion.p>
@@ -173,7 +173,7 @@ export function ResultsStage({
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
             >
               {MATCH_QUALITY_COPY[quality]}
             </motion.p>
@@ -189,7 +189,7 @@ export function ResultsStage({
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
             >
               {tieNote}
             </motion.p>
@@ -211,7 +211,7 @@ export function ResultsStage({
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
             >
               <summary>Improve my matches</summary>
               <div className="clarify">
@@ -242,7 +242,7 @@ export function ResultsStage({
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
             >
               {/* O110: the sentence is composed in the matching module now, where it can be
                   unit-tested — and where it covers preferences and manner, not only care
@@ -295,7 +295,7 @@ export function ResultsStage({
               initial={reducedMotion ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
-              transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26, layout: { duration: 0.34, ease: [0.22, 1, 0.36, 1], delay: 0 } }}
+              transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26, layout: { duration: 0.34, ease: EASE_OUT, delay: 0 } }}
               whileTap={reducedMotion ? undefined : { scale: 0.99 }}
             >
               {/* O67: the same layoutId as the profile's portrait frame, so the chosen

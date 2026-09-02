@@ -19,7 +19,7 @@ import {
 import { type NeedSignal } from "@/matching/needs";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { profileAnnouncement } from "@/finder/announce";
-import { ClinicianPortrait, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
+import { ClinicianPortrait, EASE_OUT, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 const UNKNOWN_DETAIL = /set (?:by|with) the practice/i;
 
@@ -102,7 +102,7 @@ export function ProfileStage({
             className="profile-portrait"
             layoutId={`gp-portrait-${clinician.id}`}
             data-portrait-of={clinician.id}
-            transition={{ layout: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } }}
+            transition={{ layout: { duration: 0.42, ease: EASE_OUT } }}
           >
             <ClinicianPortrait clinician={clinician} variant="fill" />
           </motion.div>

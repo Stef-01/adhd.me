@@ -95,7 +95,7 @@ export function CompareStage({
       </header>
 
       <div className="compare-content">
-        <p className="eyebrow">Side by side</p>
+        {/* O232: "Side by side" named the two-column layout the reader is already looking at. */}
         <h1 tabIndex={-1}>What each of them answers</h1>
 
         {/* The heads sit in the SAME grid as every row below, so each name is directly above

@@ -106,8 +106,8 @@ test("the results list fits a 390px phone", async ({ browser }) => {
   const context = await browser.newContext({ viewport: PHONE, reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto("/");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
   await page.waitForSelector(".clinician-list");
 
   const result = await measure(page);

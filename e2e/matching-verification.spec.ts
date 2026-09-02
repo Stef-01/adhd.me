@@ -16,8 +16,8 @@ const shot = (name: string) => ({ path: `qa/_runs/matching-o10/${name}.png`, ful
 async function searchFor(page: Page, query: string) {
   // O226: these are REAL-roster ranking laws, so the examples are switched off at the door.
   await gotoFinderRealRosterOnly(page);
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await page.getByRole("button", { name: /Change what you said/i }).click();
   const box = page.getByRole("textbox");

@@ -25,8 +25,8 @@ async function intoResults(page: Page) {
 
 test("a scenario reaches results without a loading screen in between", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
 
   // The 4.25s `matching` screen is gone, so results are there immediately. A generous timeout
   // would let it creep back without failing, which is why this one is deliberately tight.
@@ -199,8 +199,8 @@ test("the chosen GP's portrait is one object from row to profile (O67)", async (
 
 test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await page.getByRole("button", { name: /Change what you said/i }).click();
   const box = page.getByRole("textbox");

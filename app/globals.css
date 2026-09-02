@@ -214,6 +214,73 @@ label,
   background: var(--paper);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O232 — THE SURFACES THE BROWSER DRAWS.
+
+   Selection, the caret, the scrollbar and the underline offset ship as browser defaults that
+   belong to no design system: a Chrome-blue selection band over Newsreader on porcelain is the
+   one place this product looked assembled rather than built. They are cheap to theme and they are
+   the details a reader notices without being able to name.
+
+   Everything below comes from the existing tokens — the route blue for selection because
+   selection IS a state and route blue is this palette's state colour, the accent for the caret
+   because a caret marks where the next consequential thing happens, which is exactly what the
+   accent means here.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+::selection {
+  background: color-mix(in srgb, var(--route) 22%, transparent);
+  color: var(--ink);
+}
+
+/* On the inverted route fields the same 22% would disappear into the ground. */
+.site-nav ::selection,
+.story-footer ::selection,
+.aoc-band ::selection {
+  background: color-mix(in srgb, var(--hero-glow) 34%, transparent);
+  color: var(--on-ground);
+}
+
+input,
+textarea {
+  caret-color: var(--accent);
+}
+
+/* Firefox takes the two-value form; WebKit and Blink take the parts below. */
+* {
+  scrollbar-color: color-mix(in srgb, var(--muted) 38%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track { background: transparent; }
+
+*::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+  background-color: color-mix(in srgb, var(--muted) 34%, transparent);
+}
+
+@media (hover: hover) {
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--muted) 58%, transparent);
+  }
+}
+
+/* Numbers that change or align read as one column, per the taste law's numeric rule. The finder's
+   counts, distances and money were relying on the default proportional figures of Inter. */
+.results-count,
+.place-status,
+.row-location,
+.booking-practice {
+  font-variant-numeric: tabular-nums;
+}
+
 html {
   background: var(--paper);
 }
@@ -698,13 +765,17 @@ textarea:focus-visible {
   min-height: 58px;
   padding: 15px 22px;
   border: 0;
-  border-radius: 8px;
+  /* O232: was 8px. The finder's signature control is a 999px pill (the dual input) and every other
+     large control in the app is one; an 8px radius on a 58px button was the single element still
+     speaking the old system, and it read as the generic web button in an otherwise app-shaped
+     screen. Big controls are pills here, cards are 12–16px, and that is the whole radius law. */
+  border-radius: 999px;
   color: var(--on-ground);
   background: var(--ground);
   font-size: 1rem;
   font-weight: 650;
   cursor: pointer;
-  transition: transform var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
+  transition: transform var(--dur-tap) var(--ease-spring), background var(--dur-tap) var(--ease-ui);
 }
 
 @media (hover: hover) {
@@ -715,12 +786,15 @@ textarea:focus-visible {
 }
 
 .primary-button:active:not(:disabled) {
-  transform: scale(0.99);
+  /* 0.99 was below the threshold where a press registers as a press. */
+  transform: scale(0.97);
 }
 
 .primary-button:disabled {
-  color: #a3a39e;
-  background: #e3e1db;
+  /* O232: was `#a3a39e` on `#e3e1db` — warm greys left over from the pre-redesign stone palette,
+     raw hex in a component and the wrong hue for this porcelain ground. Mixed from the tokens. */
+  color: color-mix(in srgb, var(--muted) 62%, var(--stone));
+  background: var(--stone);
   cursor: not-allowed;
 }
 
@@ -1636,7 +1710,7 @@ textarea:focus-visible {
   box-shadow: 0 10px 24px rgb(138 90 22 / 22%);
 }
 @media (hover: hover) {
-  .patient-v2 .voice-screen .mic-button:hover { background: #744910; }
+  .patient-v2 .voice-screen .mic-button:hover { background: color-mix(in srgb, var(--accent) 82%, var(--ink)); }
 }
 
 .patient-v2 .voice-screen .mic-button span {
@@ -1672,7 +1746,9 @@ textarea:focus-visible {
   font-size: 1rem;
   letter-spacing: -0.01em;
 }
-.patient-v2 .voice-actions .dual-input-field::placeholder { color: #9c7b45; }
+/* O232: was `#9c7b45`, raw hex in a component. Mixed from the accent it sits inside, so a
+   palette change carries it. */
+.patient-v2 .voice-actions .dual-input-field::placeholder { color: color-mix(in srgb, var(--accent) 72%, var(--muted)); }
 .patient-v2 .voice-actions .dual-input-action {
   position: absolute;
   right: 8px;
@@ -1686,10 +1762,11 @@ textarea:focus-visible {
   background: var(--accent);
   color: var(--on-ground);
   cursor: pointer;
-  transition: background 160ms ease, transform 160ms ease;
+  /* O232: was `160ms ease` twice — a magic number and the default curve DESIGN.md forbids. */
+  transition: background var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-spring);
 }
 @media (hover: hover) {
-  .patient-v2 .voice-actions .dual-input-action:hover { background: #744910; }
+  .patient-v2 .voice-actions .dual-input-action:hover { background: color-mix(in srgb, var(--accent) 82%, var(--ink)); }
 }
 .patient-v2 .voice-actions .dual-input-action:active { transform: scale(0.93); }
 
@@ -7682,9 +7759,53 @@ select { caret-color: var(--route-strong); }
   inset-inline: 0;
   bottom: 0;
   z-index: 40;
+  /* O232 — GLASS AS A SPECIFIC EFFECT, NOT AS DECORATION. A material belongs where content passes
+     beneath a surface, which in this app is exactly two places: this bar and the sheet. The list
+     scrolling under a translucent bar is the whole reason iOS uses one, and it is why the bar reads
+     as floating above the app rather than as a strip glued to the bottom of it. Nothing else in the
+     product gets a blur.
+     The opaque `background` stays as the first declaration so a browser without backdrop-filter —
+     and the contrast sweep's ancestor walk, which resolves a painted ground — sees a real colour. */
   background: var(--surface-raised);
   padding-bottom: var(--safe-bottom);
   padding-inline: max(0px, var(--safe-left)) max(0px, var(--safe-right));
+}
+
+/* O232: ON A WIDE SCREEN THE BAR IS THE SHELL'S CHROME, NOT THE PAGE'S.
+   Caught in the batched round at 1280px: the bar painted edge to edge across the navy ground while
+   the app it belongs to is a centred 640px shell, so the product read as a phone bar stretched over
+   a desktop page. It now matches the shell it serves and lifts off the ground at its top corners,
+   which is what makes a centred app shell look like an object rather than a column of content. */
+@media (min-width: 700px) {
+  .app-tabs {
+    width: min(640px, 100%);
+    margin-inline: auto;
+    border-radius: 18px 18px 0 0;
+    box-shadow: var(--shadow-ambient);
+  }
+
+  .app-tabs::before { border-radius: 18px 18px 0 0; }
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .app-tabs {
+    background: color-mix(in srgb, var(--surface-raised) 78%, transparent);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    backdrop-filter: blur(22px) saturate(150%);
+  }
+
+  .sheet {
+    background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    backdrop-filter: blur(28px) saturate(150%);
+  }
+
+  /* The scrim gets the same treatment for the same reason: the app behind a modal should read as
+     present and out of reach, which a flat wash does not do. */
+  .sheet-scrim {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
 }
 
 /* The band, as a hairline lid. On a pseudo-element for O218's reason: the contrast sweep walks

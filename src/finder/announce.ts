@@ -16,8 +16,8 @@
 export const FINDER_ANNOUNCEMENTS = {
   /** The welcome screen, only when returned to — a fresh arrival is the page itself. */
   welcome: "Back at the start.",
-  /** The demo scenarios screen. */
-  scenarios: "Demo scenarios.",
+  /** The example-searches screen. */
+  scenarios: "Example searches.",
   /** The microphone is open. */
   listening: "Listening.",
   /** The toggle was tapped; the recogniser is finishing its last phrase. */

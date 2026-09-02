@@ -28,13 +28,28 @@ import { type Clinician } from "@/demo/clinicians";
  */
 export type { Stage } from "@/finder/state";
 
+/**
+ * O232: ONE OUT-RAMP, NAMED ONCE.
+ *
+ * `[0.22, 1, 0.36, 1]` was written as a literal ten times across four stage files. DESIGN.md's
+ * motion law says the shared strong out-ramp is the vocabulary and that default curves may not be
+ * scattered; a curve copied ten times is the same defect wearing the right numbers, because the
+ * eleventh copy is where they stop matching. This is the CSS `--ease-soft` token's JS twin — the
+ * two are the same curve deliberately, so a screen that animates in CSS and a screen that animates
+ * in motion/react decelerate identically.
+ */
+export const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+/** The press. A spring, because a press has no natural duration. */
+export const PRESS_SPRING = { type: "spring", stiffness: 420, damping: 32, mass: 0.7 } as const;
+
 export const stageVariants: Variants = {
   initial: { opacity: 0, y: 12, filter: "blur(3px)" },
   animate: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.42, ease: EASE_OUT },
   },
   exit: {
     opacity: 0,
@@ -58,7 +73,7 @@ export const introStagger: Variants = {
 
 export const introItem: Variants = {
   initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE_OUT } },
 };
 
 /**

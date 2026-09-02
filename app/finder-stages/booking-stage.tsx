@@ -39,7 +39,8 @@ export function BookingStage({
           and scraping the call their own page makes would put stale times under a real
           doctor's name. The reader is sent to the system that actually knows. */}
       <div className="booking-content">
-        <p className="eyebrow">Booking</p>
+        {/* O232: an eyebrow reading "Booking" stood directly above a heading beginning "Booking".
+            The heading carries its own weight; a label that repeats its first word is noise. */}
         <h1 tabIndex={-1}>
           {clinician.booking.via === "healthengine"
             ? `Book with ${clinician.shortName} on Healthengine`

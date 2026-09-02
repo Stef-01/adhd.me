@@ -31,7 +31,7 @@ export async function gotoFinderRealRosterOnly(page: Page): Promise<void> {
 /** The same door, walked on into the demo scenario's results — the shape most ranking specs use. */
 export async function demoResultsRealRosterOnly(page: Page): Promise<void> {
   await gotoFinderRealRosterOnly(page);
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 }

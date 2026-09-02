@@ -83,7 +83,7 @@ test("every tab clears the touch floor and the bar clears the safe area", async 
 test("the bar gets out of the way inside a task", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
   // A native push hides the tab bar; so does this one, and the way back is the screen's own.
   await expect(page.getByRole("navigation", { name: "Sections" })).toHaveCount(0);
 });
@@ -137,5 +137,5 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
   await expect(toggle).not.toBeChecked();
   await page.keyboard.press("Escape");
   // The finder is still operable after a modal detour — the thing a sheet most often breaks.
-  await expect(page.getByRole("button", { name: "Try a demo scenario" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Try an example search" })).toBeVisible();
 });

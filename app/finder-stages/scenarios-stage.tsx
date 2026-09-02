@@ -50,7 +50,10 @@ export function ScenariosStage({
       <div className="scenario-core">
         {/* U9: the eyebrow IS this screen's heading — it had none, so focus had nowhere to land
             and a screen reader had no landmark for the stage. Same class, so the same pixels. */}
-        <h1 className="eyebrow" tabIndex={-1}>Demo scenarios</h1>
+        {/* O232: was `Demo scenarios` in eyebrow type — an h1 rendered at label size, saying
+            the product was a demo. Every search product offers example searches; that is what
+            these are, and the heading is now sized like the heading it is. */}
+        <h1 tabIndex={-1}>Example searches</h1>
         <div className="archetype-switcher" role="group" aria-label="Demo care scenarios">
           <Pressable type="button" onClick={() => onCycle(-1)} aria-label="Previous care scenario">
             <CaretLeft size={22} weight="light" aria-hidden="true" />
@@ -76,7 +79,7 @@ export function ScenariosStage({
 
       <div className="bottom-action">
         <Pressable className="primary-button" type="button" onClick={onTry}>
-          Try this scenario
+          Search with this
         </Pressable>
       </div>
     </MotionScreen>

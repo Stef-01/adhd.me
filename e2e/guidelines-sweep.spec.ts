@@ -18,8 +18,8 @@ import { expect, test, type Page } from "@playwright/test";
 
 async function intoResults(page: Page) {
   await page.goto("/");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 }
 
