@@ -65,6 +65,7 @@ export const PLAN_FIGURES: Readonly<Record<string, number>> = {
 
 const SET_BY_U14 = "2026-09-02";
 const SET_BY_O230 = "2026-09-02";
+const SET_BY_U15 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -126,6 +127,18 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'e2e-support-lines', value: 2417, on: SET_BY_O230, reason: 'O230: the real-roster helper walks the new door (a sheet, dismissed with Escape) and the working-truth register moved its root proof.' },
   { measure: 'e2e-goto-calls', value: 275, on: SET_BY_O230, reason: "O230: app-shell.spec.ts walks the app's four tab routes and the redirect; the shell IS four routes." },
   { measure: 'scripts-lines', value: 668, on: SET_BY_O230, reason: "O230: scripts/perf-gate.mts learned the router's own rule — a `(group)` segment is not part of a URL, so the manifest key is stripped of it. Without that the gate reported a budget for `/(app)`, an address nobody can visit, while claiming `/` had vanished." },
+
+  // U15 (R0): the simplicity laws and their registers. Laws, not deletions — the unit names what
+  // is wrong and proves each register can fail; U16 and U30 are where the tree gets smaller. Every
+  // module it adds is `law` by its own definition, which is why the unreached and test-held counts
+  // rise with it: a law the product imported would be a law the product could bend.
+  { measure: 'src-modules', value: 299, on: SET_BY_U15, reason: "U15: module-reasons.ts, simplicity.ts and simplicity-read.ts — the register, the three shape laws, and the reader behind them." },
+  { measure: 'src-lines', value: 54167, on: SET_BY_U15, reason: "U15: the three modules above, of which module-reasons.ts is 133 one-line entries — one per module the product does not import, each quoting that module's own header." },
+  { measure: 'src-unreached-modules', value: 133, on: SET_BY_U15, reason: "U15: its own three modules, unreached by design. A register that judges the product must not be reachable from it; this is the law describing itself correctly, not an exception to it." },
+  { measure: 'src-unreached-lines', value: 23862, on: SET_BY_U15, reason: "U15: as src-unreached-modules — the register and its two law modules." },
+  { measure: 'src-test-held-modules', value: 99, on: SET_BY_U15, reason: "U15: module-reasons.ts, simplicity.ts and simplicity-read.ts are imported only by simplicity.test.ts, which is what `law` means here (W53's shape: the module decides, the test enforces, the product touches neither). This raise is the one the laws document's Law 4 qualifier exists for, and it applies ONLY to modules tagged `law`." },
+  { measure: 'vitest-files', value: 313, on: SET_BY_U15, reason: "U15: simplicity.test.ts — the four laws held to the tree, each with its planted violation." },
+  { measure: 'vitest-lines', value: 53158, on: SET_BY_U15, reason: "U15: as vitest-files; the planted-violation tests are the bulk of it, and they are the unit's actual deliverable." },
 ];
 
 /** The current floor per measure: the last entry wins. */
