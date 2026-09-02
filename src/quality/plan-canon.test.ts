@@ -65,11 +65,16 @@ describe("O185 the plan canon", () => {
   it("keeps exactly the lanes that are actually claimable", () => {
     // ACTIVE is the claim this index makes to a reader in a hurry, so it is pinned. A new ACTIVE
     // row means a new backlog exists, and that is a decision worth making deliberately rather
-    // than drifting into — the exact drift this whole unit is about. Three lanes, each decided:
-    // the matching year plan (Q-M), the AR series, and — O220, founder-commissioned 2026-09-01
-    // ("commence plan to convert this into a standalone app") — the standalone-app lane, whose
-    // claimable units are Phase 1b/1c and Phase 2, with Phase 3 founder-gated.
+    // than drifting into — the exact drift this whole unit is about.
+    //
+    // One lane, decided by the founder on 2026-09-01/02 (O227): "conduct critical appraisal using
+    // all relevant skills to understand exactly what is needed to upgrade the whole platform into a
+    // perfectly functional app and add that to a consolidated 1 year build plan", then "add to plan
+    // a complex multistage refactor for next few months". CONSOLIDATED is the operative word: the
+    // three lanes this pin held before (the matching year plan, the AR series, the standalone-app
+    // plan of O220) went to REFERENCE or CLOSED in the same commit, and the plan's own §8 says where
+    // each of their open items went. `one-year-plan.test.ts` holds that plan to its ledger lane.
     const active = [...CANON.matchAll(/^\| `([A-Z0-9-]+\.md)` \| \*\*ACTIVE\*\* \|/gm)].map((m) => m[1]!);
-    expect(active.sort()).toEqual(["AESTHETIC-REVIEW-PLAN.md", "MATCHING-YEAR-PLAN.md", "STANDALONE-APP-PLAN.md"]);
+    expect(active.sort()).toEqual(["ONE-YEAR-BUILD-PLAN.md"]);
   });
 });

@@ -63,6 +63,11 @@ function blockedRows(): BlockedRow[] {
       // later year's. THE SUP ROWS ARE THE REASON THIS FILTER IS NOT `/^W\d+$/`: AUDIT-Y5 counted
       // blocked rows with a numbered-only pattern an hour before this unit and reported 16 where
       // the ledger holds 18, which is what deriving catches and remembering does not.
+      //
+      // The U-series (O227's one-year build plan, opened 2026-09-02) is another plan's lane and
+      // would pass the un-numbered branch: its nine blocked rows name `FOUNDER DECISION D-…` ids
+      // priced in that plan's own §6, so they are excluded here by id, not by their gate field.
+      if (/^U\d+$/.test(row.id)) return false;
       const numbered = /^W(\d+)$/.exec(row.id);
       return numbered === null || Number(numbered[1]) <= Y5_LAST_UNIT;
     });

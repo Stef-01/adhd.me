@@ -30,6 +30,13 @@
 // (AR1 and W1 sharing `n=1` is not a collision), so those two checks now run PER SERIES; the rest
 // (duplicate id, done-has-sha, blocked-names-gate, owner+timestamp, valid statuses,
 // no-orphaned-done) were already keyed off the full id string and needed no change to cover AR.
+//
+// WIDENED AGAIN 2026-09-02 (O227): the one-year build plan (`docs/ONE-YEAR-BUILD-PLAN.md`) opened
+// a third table, the U-series, and the same regex gap would have left it unchecked. Its blocked
+// rows name a `FOUNDER DECISION` written in that plan's §6 rather than in a gate dossier, so the
+// blocked-names-gate matcher accepts that document too — under the same rule as before: an
+// un-numbered decision must point at where it is written down, never merely at "the founder".
+// `src/quality/one-year-plan.test.ts` holds the U rows to the plan itself in both directions.
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -49,7 +56,7 @@ interface Row {
   line: number;
 }
 
-const ROW = /^\| ((W|AR)(\d+)) \| ([\w-]+) \| ([^|]*) \| ([^|]*) \| ([^|]*) \| (.*) \|\s*$/;
+const ROW = /^\| ((W|AR|U)(\d+)) \| ([\w-]+) \| ([^|]*) \| ([^|]*) \| ([^|]*) \| (.*) \|\s*$/;
 
 const ROWS: Row[] = LEDGER.split("\n").flatMap((line, index) => {
   const m = ROW.exec(line);
@@ -69,15 +76,25 @@ const ROWS: Row[] = LEDGER.split("\n").flatMap((line, index) => {
 
 const SERIES_NAMES = [...new Set(ROWS.map((r) => r.series))];
 
+// What a blocked row must say. A numbered gate, or an un-numbered founder decision that points at
+// the document where it is written down: a gate dossier (W195) or the one-year build plan's §6
+// (O227). "FOUNDER DECISION" followed by nothing a reader can open is not a name.
+const named = (note: string): boolean =>
+  /FOUNDER GATE G\d/.test(note) ||
+  /FOUNDER DECISION[^|]*docs\/GATE-DOSSIER-[\w.-]+\.md/.test(note) ||
+  /FOUNDER DECISION[^|]*docs\/ONE-YEAR-BUILD-PLAN\.md/.test(note);
+
 describe("W168 the ledger is a usable lock", () => {
   it("parses as a table at all", () => {
     // Non-vacuity: every assertion below is over ROWS, so an unparseable ledger would make the
-    // whole suite pass by having nothing to check. Both series are asserted present so a regex
-    // change that silently stopped matching one of them (W168's own 2026-08-25 near-miss) fails
-    // here rather than by omission.
+    // whole suite pass by having nothing to check. All three series are asserted present so a
+    // regex change that silently stopped matching one of them (W168's own 2026-08-25 near-miss)
+    // fails here rather than by omission.
     expect(ROWS.length).toBeGreaterThan(200);
     expect(ROWS.filter((r) => r.series === "W")[0]?.id).toBe("W1");
     expect(ROWS.filter((r) => r.series === "AR").length).toBeGreaterThan(30);
+    expect(ROWS.filter((r) => r.series === "U")[0]?.id).toBe("U1");
+    expect(ROWS.filter((r) => r.series === "U").length).toBeGreaterThan(60);
   });
 
   it("has no duplicate unit id — the failure this file was written for", () => {
@@ -135,9 +152,10 @@ describe("W168 the ledger is a usable lock", () => {
     //
     // Deliberately not widened to "mentions a founder": an un-numbered decision must point at
     // the document where it is written down, so a reader can find the actual question.
-    const named = (note: string) =>
-      /FOUNDER GATE G\d/.test(note) ||
-      /FOUNDER DECISION[^|]*docs\/GATE-DOSSIER-[\w.-]+\.md/.test(note);
+    //
+    // O227 added the second document: the one-year build plan's §6 is where its nine
+    // `FOUNDER DECISION D-…` ids are defined, and `one-year-plan.test.ts` checks each blocked
+    // U row's id against that section — this matcher only needs to know the note points there.
     const unexplained = ROWS.filter((r) => r.status === "blocked" && !named(r.note));
     expect(unexplained.map((r) => r.id)).toEqual([]);
   });
@@ -145,13 +163,12 @@ describe("W168 the ledger is a usable lock", () => {
   it("still refuses a blocked row that names no decision at all", () => {
     // Non-vacuity for the widening above, in the suite rather than in a scratch run: the
     // loosened matcher must still reject the thing the strict one existed to catch.
-    const named = (note: string) =>
-      /FOUNDER GATE G\d/.test(note) ||
-      /FOUNDER DECISION[^|]*docs\/GATE-DOSSIER-[\w.-]+\.md/.test(note);
     expect(named("blocked because it is hard")).toBe(false);
     expect(named("FOUNDER DECISION — somebody should rule on this")).toBe(false);
+    expect(named("FOUNDER DECISION D-CI-BILLING — the plan says so")).toBe(false);
     expect(named("FOUNDER GATE G5 — not buildable")).toBe(true);
     expect(named("FOUNDER DECISION — Q9 action 1, recorded in docs/GATE-DOSSIER-Q9.md")).toBe(true);
+    expect(named("FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green run.")).toBe(true);
   });
 
   it("gives every claimed or in-progress unit an owner and a timestamp", () => {

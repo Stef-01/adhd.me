@@ -37,8 +37,12 @@ const blockedRows = (): { id: string; note: string }[] =>
       const cells = line.split("|").map((c) => c.trim());
       return { id: cells[1]!, note: cells.slice(6).join("|") };
     })
-    // Un-numbered rows (SUP-1, SUP-2) are Y2-era and stay in scope; W209+ are Year 5.
+    // Un-numbered rows (SUP-1, SUP-2) are Y2-era and stay in scope; W209+ are Year 5. The
+    // U-series (O227's one-year build plan, opened 2026-09-02) is another plan's lane: its blocked
+    // rows are priced in that plan's own §6, not in this dossier, and would otherwise pass as
+    // "un-numbered" here.
     .filter((row) => {
+      if (/^U\d+$/.test(row.id)) return false;
       const numbered = /^W(\d+)$/.exec(row.id);
       return !numbered || Number(numbered[1]) <= Y4_LAST_UNIT;
     });
