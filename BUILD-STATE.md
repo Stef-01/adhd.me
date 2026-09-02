@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ e40a88b (2026-09-02T11:02Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at e40a88b (typecheck · 308 files / 4510 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line); full pnpm e2e green (348 passed, 1 skipped, 20.4m, exit 0 read from the command itself, run serially with nothing else building, 349 listed) at the U10 tree (e40a88b: src/finder/speech-banner.ts — the typing screen's banner as a pure reducer, cleared on every path that leaves the listening stage; LISTENING_TIMEOUT_MS 60 s ending recognition through the recogniser's own stop and onend, the no-speech sentence with no retry control and never an error, words at the minute landing in the box; ?debug=1 read once into Arrival.debug at arrival so U8's place serialiser cannot clobber it; e2e/support/fake-clock.ts — page.clock plus motion on its own frameloop, because WAAPI start times read from a faked performance.now are owed to a document.timeline the clock never moves; voice.spec.ts gains four tests). AR15 visual: unchanged — the welcome screen U10 does not touch is what the matrix captures (the gradient aesthetic and the qa/ welcome captures stay as they are; not a pixel moved, walked on the built route at 1280×720 and 390×844), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U12 (the deploy runbook and a smoke script) is the next firing's unit`
+`gate: green @ 4553ac3 (2026-09-02T11:45Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 4553ac3 (typecheck · 309 files / 4519 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line); full pnpm e2e green (348 passed, 1 skipped, 20.3m, exit 0 read from the command itself, run serially with nothing else building, 349 listed) at the U12 tree (4553ac3: docs/DEPLOY-RUNBOOK.md v1 — what a push to main does, reading /api/health, what the reporter shows, rolling back by promoting the previous build by SHA, who is on call (the founder, as the founder's own item in SUPPORT-RUNBOOK.md); src/ops/smoke.ts — the four smoke steps as data, /, /finder, /api/health and a signed-out /console, accepting the guard's redirect as a 307 or as the 200 whose streamed body refreshes to /console/signin because redirect() runs inside U3's loading boundary; scripts/smoke.mts — pnpm smoke <origin>, one line per step, exit 1 on any miss, exit 2 on a bad origin, no cookie, no secret, no request text; src/ops/smoke.test.ts — every step against fake responses and the runbook's table held to the script's steps and sentences verbatim). AR15 visual: unchanged — U12 adds no UI (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U13 (analytics behind consent + CSP enforced) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -222,19 +222,49 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (unreachable). U11 is next.
 
 > **U12 (O229-lane, the tenth unit built of the one-year plan: the deploy runbook and a smoke
-> script) — CLAIMED founder-0902a, 2026-09-02T11:03Z.** Scope is the plan's U12 text and nothing
-> beyond it: `docs/DEPLOY-RUNBOOK.md` — what a push to `main` does (the only ref `vercel.json`'s
-> `ignoreCommand` lets build), how to read `/api/health` (U4's shape: `ok`, `sha`, `bootedAt`,
-> `store`, `reporter`), how to roll back (Vercel "promote previous" by SHA), what the reporter
-> shows and where (U4's console sink, the last fifty in the ring), and who is on call — the
-> founder, until the founder names a person, recorded as the founder's own item in
-> `SUPPORT-RUNBOOK.md` rather than as a gate here. `scripts/smoke.mts` takes an origin, hits `/`,
-> `/finder`, `/api/health` and one console redirect (`/console` without a session → `/console/signin`)
-> and exits non-zero on any miss; `pnpm smoke` in `package.json`. Verification is the plan's:
-> `pnpm smoke http://localhost:3100` green against `next start`, and a vitest test that greps the
-> runbook for each step the script runs, so the runbook's commands are the script's. No UI moves;
-> the gradient aesthetic is untouched by construction. Continuation if this claim goes stale:
-> nothing is behind a flag; the unit is whole or it is not landed.
+> script) — DONE founder-0902a, 2026-09-02 @ 4553ac3.** Scope was the plan's U12 text; nothing
+> beyond it, and one line of the claim came out differently and is explained below.
+> **Outcome:** `docs/DEPLOY-RUNBOOK.md` (v1) is the machine side of operating this deployment, the
+> way `SUPPORT-RUNBOOK.md` is the clinical side: §1 what a push to `main` does (the only ref
+> `vercel.json`'s `ignoreCommand` lets build, so every push to `main` is a production deploy with
+> no staging in front of it; the boot posture assertion refusing to serve on a missing secret or a
+> demo flag; `NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA` becoming `/api/health`'s `sha`; the quota), §2
+> `pnpm smoke`, §3 reading `/api/health` field by field, §4 what the reporter shows and where (the
+> three `[adhd.me <kind>]` lines, the payload law, the ring behind the mock route), §5 rolling
+> back by promoting the previous build by SHA (dashboard and CLI, confirm with the smoke and the
+> health `sha`, never a force-push of `main`), §6 who is on call — the founder, until the founder
+> names a person, recorded as the founder's own item in `SUPPORT-RUNBOOK.md`'s contact chain and
+> not as a gate here. `src/ops/smoke.ts` carries the four steps as data — path, the sentence a
+> healthy origin answers, and a check over the response — and `scripts/smoke.mts` (`pnpm smoke
+> <origin>`) walks them in order with `redirect: "manual"`, never stopping at a miss, one line per
+> step (`ok   200 GET /`, `MISS --- GET /finder — no response: fetch failed: connect
+> ECONNREFUSED …`), exit 1 on any miss and exit 2 on a bad origin or a URL with a path. The script
+> carries an origin and four paths: no cookie, no secret, no request text. **The line that came
+> out differently:** the claim said a signed-out `/console` answers a redirect to `/console/signin`;
+> against `next start` it answers **200**, because `requireSession()` calls `redirect()` inside
+> the console's loading boundary (`app/console/loading.tsx`, U3) and Next has already streamed the
+> 200 shell by then, so the redirect arrives as `<meta http-equiv="refresh"
+> content="1;url=/console/signin">` in the body. That is the guard running — the same proof —
+> so the step accepts either transport: a 307 whose `Location` is sign-in, or a 200 whose body
+> refreshes to it; a 200 with no redirect in the body ("the session guard did not run"), any other
+> status, or either transport sent anywhere else is a miss. The cause is written in `smoke.ts` and
+> in the runbook's §2. One sentence of the runbook was corrected against the tree while writing
+> it: U3's boundary shows a reader a sentence and never the digest, so §4 says the digest is the
+> one on the report line, not on screen. Founder gates untouched; no UI moved, so the gradient
+> aesthetic is untouched by construction. **Verification:** `pnpm smoke http://localhost:3100`
+> against `next start` on the built tree — four `ok`, `smoke: PASS — 4 steps answered`, exit 0; a
+> dead port — four `MISS`, exit 1; a path instead of an origin — exit 2. `src/ops/smoke.test.ts`
+> (nine tests) runs every step against fake responses — each passes on what a healthy origin gives
+> and misses on the wrong status, the wrong type, an empty body, a cached health, a non-JSON body,
+> each health field gone wrong, the guard sending a visitor anywhere else in either transport, and
+> a console page rendered for nobody — walks `runSmoke` past a thrown fetch without stopping, and
+> holds the runbook to the script: every step's `GET <path>` and its `expects` sentence verbatim in
+> §2's table with exactly as many rows as steps, the commands of §2, §3 and §5, every health field
+> in backticks, the three report kinds, and the on-call sentence in both runbooks. Gate: `pnpm
+> verify` green at 4553ac3 (309 files / 4519 tests, 13 skipped; audit PASS, 2 accepted advisories,
+> 0 unaccepted; perf PASS, 49 routes, `/finder` 687 KB); full `pnpm e2e` green (348 passed, 1
+> skipped, 20.3m, exit 0 read from the command itself, run serially with nothing else building,
+> 349 listed) at the 4553ac3 tree. Vault log skipped (unreachable). U13 is next.
 
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
@@ -12077,7 +12107,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U9 | done | founder-0902a | 2026-09-02T09:58Z | 508ac90 | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | done | founder-0902a | 2026-09-02T11:02Z | e40a88b | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | blocked | — | — | — | FOUNDER DECISION D-WEBKIT-RUNNER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) WebKit in the suite. Blocked 2026-09-02 by founder-0902a — the build environment refuses both Playwright CDNs (403) and pre-provisions Chromium only, so `pnpm e2e --project=webkit` cannot run where the units are built. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
-| U12 | claimed | founder-0902a | 2026-09-02T11:03Z | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
+| U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | available | — | — | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | available | — | — | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
