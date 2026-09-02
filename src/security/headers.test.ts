@@ -8,7 +8,7 @@
 //
 //   - the policy names a third-party origin only where the tree loads one (GA, when configured;
 //     Vercel's debug script, in development) — and nothing the tree loads is outside the policy;
-//   - the only inline scripts in `app/` and `src/` are inert JSON-LD data blocks and the GA snippet,
+//   - the only inline scripts in `app/` and `src/` are inert JSON data blocks and the GA snippet,
 //     so `'unsafe-inline'` covers Next's own payloads and nothing hand-written. A new inline script
 //     fails here before it can fail under U13's enforcement.
 //
@@ -16,7 +16,7 @@
 // on `/`, `/finder` and a console route (zero `securitypolicyviolation` events in Chromium).
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
 import {
@@ -28,6 +28,11 @@ import {
 import { stripComments } from "./reachability";
 
 const ROOT = join(__dirname, "..", "..");
+
+/** Stable repository path for assertions and diagnostics, independent of the host OS. */
+function repoPath(value: string): string {
+  return value.replaceAll(sep, "/");
+}
 
 function directive(policy: string, name: string): string[] {
   const found = policy.split("; ").find((d) => d.startsWith(`${name} `));
@@ -61,7 +66,7 @@ function runtimeFiles(): string[] {
 
 interface ScriptElement {
   file: string;
-  /** `data` — a JSON-LD block the browser never executes; `external` — a `src` on another host or
+  /** `data` — a JSON/JSON-LD block the browser never executes; `external` — a `src` on another host or
    * path; `inline` — executable inline script, the thing `'unsafe-inline'` exists for. */
   kind: "data" | "external" | "inline";
   detail: string;
@@ -79,8 +84,9 @@ export function scriptElements(file: string, rawSource: string): ScriptElement[]
   const elements = file.endsWith(".tsx") ? source.matchAll(/<(script|Script)\b([^>]*)>/g) : [];
   for (const m of elements) {
     const attrs = m[2]!;
-    if (/type=["']application\/ld\+json["']/.test(attrs)) {
-      hits.push({ file, kind: "data", detail: "application/ld+json" });
+    const dataType = /type=["'](application\/(?:ld\+)?json)["']/.exec(attrs);
+    if (dataType) {
+      hits.push({ file, kind: "data", detail: dataType[1]! });
       continue;
     }
     const src = /\bsrc=\{?["'`]([^"'`]+)/.exec(attrs);
@@ -107,7 +113,7 @@ function covers(pattern: string, url: string): boolean {
 }
 
 const CENSUS = runtimeFiles().flatMap((file) =>
-  scriptElements(relative(ROOT, file), readFileSync(file, "utf8")),
+  scriptElements(repoPath(relative(ROOT, file)), readFileSync(file, "utf8")),
 );
 
 describe("U1 the security headers", () => {
@@ -176,10 +182,11 @@ describe("U1 the report-only policy", () => {
 describe("U1 both directions: the policy against what the tree loads", () => {
   it("finds the script elements it expects to find (non-vacuity)", () => {
     expect(CENSUS.length).toBeGreaterThanOrEqual(5);
-    expect(CENSUS.filter((h) => h.kind === "data").map((h) => h.file).sort()).toEqual([
-      "app/breadcrumbs.tsx",
-      "app/faq/page.tsx",
-      "app/layout.tsx",
+    expect(CENSUS.filter((h) => h.kind === "data")).toEqual([
+      { file: "app/breadcrumbs.tsx", kind: "data", detail: "application/ld+json" },
+      { file: "app/faq/page.tsx", kind: "data", detail: "application/ld+json" },
+      { file: "app/layout.tsx", kind: "data", detail: "application/json" },
+      { file: "app/layout.tsx", kind: "data", detail: "application/ld+json" },
     ]);
   });
 
@@ -211,8 +218,8 @@ describe("U1 both directions: the policy against what the tree loads", () => {
     const offenders: string[] = [];
     for (const file of runtimeFiles()) {
       const source = stripComments(readFileSync(file, "utf8"));
-      if (/javascript:/i.test(source)) offenders.push(`${relative(ROOT, file)}: javascript: URL`);
-      if (/\son[A-Z]\w+=["']/.test(source)) offenders.push(`${relative(ROOT, file)}: string event handler`);
+      if (/javascript:/i.test(source)) offenders.push(`${repoPath(relative(ROOT, file))}: javascript: URL`);
+      if (/\son[A-Z]\w+=["']/.test(source)) offenders.push(`${repoPath(relative(ROOT, file))}: string event handler`);
     }
     expect(offenders).toEqual([]);
   });
@@ -223,6 +230,7 @@ describe("U1 both directions: the policy against what the tree loads", () => {
         return (
           <>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{}" }} />
+            <script type="application/json" dangerouslySetInnerHTML={{ __html: "{}" }} />
             <script>{"alert(1)"}</script>
             <Script id="third-party" strategy="afterInteractive">{"track()"}</Script>
             <div dangerouslySetInnerHTML={{ __html: html }} />
@@ -232,6 +240,7 @@ describe("U1 both directions: the policy against what the tree loads", () => {
       }`;
     expect(scriptElements("planted.tsx", planted)).toEqual([
       { file: "planted.tsx", kind: "data", detail: "application/ld+json" },
+      { file: "planted.tsx", kind: "data", detail: "application/json" },
       { file: "planted.tsx", kind: "inline", detail: "(no id)" },
       { file: "planted.tsx", kind: "inline", detail: "#third-party" },
       { file: "planted.tsx", kind: "external", detail: "https://cdn.example/widget.js" },
