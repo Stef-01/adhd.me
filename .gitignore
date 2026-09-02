@@ -16,10 +16,6 @@ reports/adhd-me-one-pager.docx
 reports/adhd-me-sales-deck.pptx
 
 .vercel
-.env*
-
-.vercel
-.env*
 
 # macOS
 .DS_Store

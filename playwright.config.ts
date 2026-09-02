@@ -29,7 +29,11 @@ const executablePath = chromiumExecutable();
 // The port is overridable so a stale server on the default cannot make the suite unrunnable —
 // which is exactly what happened once, and "the e2e cannot start" reads like a product failure.
 const PORT = process.env.E2E_PORT ?? "3100";
-const BASE_URL = `http://127.0.0.1:${PORT}`;
+// U2: `localhost`, not `127.0.0.1`. The console cookies are `secure` on a production build and the
+// suite serves one over http; Chromium sends Secure cookies to any loopback origin, but Playwright's
+// own cookie model (`page.request`, `context.cookies(url)`) exempts only `localhost`, so on
+// 127.0.0.1 an authenticated `page.request` silently arrived signed out.
+const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "e2e",

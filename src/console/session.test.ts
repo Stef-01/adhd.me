@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { signSession, verifySession } from "@/console/session";
+import { SESSION_MAX_AGE_MS, consoleCookieOptions, signSession, verifySession } from "@/console/session";
+import { readEnv } from "@/lib/env";
 
 describe("console session", () => {
   it("round-trips a staff email", () => {
@@ -29,3 +32,27 @@ describe("console session", () => {
     expect(verifySession(`${payload}.anything`)).toBeNull();
   });
 });
+
+describe("U2 the console cookie flags", () => {
+  it("are httpOnly, lax, site-wide, and live exactly as long as the credential they carry", () => {
+    const flags = consoleCookieOptions(readEnv({ NODE_ENV: "production" }));
+    expect(flags).toEqual({ httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 7 * 24 * 60 * 60 });
+    expect(flags.maxAge * 1000).toBe(SESSION_MAX_AGE_MS);
+  });
+
+  it("drop `secure` outside a production build, where the server is plain http", () => {
+    expect(consoleCookieOptions(readEnv({ NODE_ENV: "development" })).secure).toBe(false);
+    expect(consoleCookieOptions(readEnv({})).secure).toBe(false);
+  });
+
+  it("are the flags every cookie write in app/ uses — no literal options object remains", () => {
+    const root = path.resolve(__dirname, "../..");
+    const writers = ["app/console/actions.ts", "app/demo/actions.ts"];
+    const sets = writers.flatMap((file) =>
+      [...readFileSync(path.join(root, file), "utf8").matchAll(/jar\.set\(([^;]+)\);/g)].map((m) => `${file}: ${m[1]}`),
+    );
+    expect(sets.length).toBe(3);
+    for (const call of sets) expect(call, call).toContain("consoleCookieOptions()");
+  });
+});
+

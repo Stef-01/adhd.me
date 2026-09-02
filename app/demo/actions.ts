@@ -6,7 +6,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { SESSION_COOKIE, signSession } from "@/console/session";
+import { SESSION_COOKIE, consoleCookieOptions, signSession } from "@/console/session";
 import { onboardPractice } from "@/console/store";
 import { resetAllStores } from "@/lib/stores";
 import { assertDemoEnabled } from "@/lib/demo-guard";
@@ -24,6 +24,6 @@ export async function launchDemo(): Promise<void> {
   );
   if (Object.keys(errors).length > 0) throw new Error("demo seed failed onboarding validation");
   const jar = await cookies();
-  jar.set(SESSION_COOKIE, signSession(DEMO_EMAIL), { httpOnly: true, sameSite: "lax", path: "/" });
+  jar.set(SESSION_COOKIE, signSession(DEMO_EMAIL), consoleCookieOptions());
   redirect("/console");
 }
