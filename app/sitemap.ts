@@ -8,8 +8,12 @@
 // Console, API and tokened booking pages stay absent — the dynamic paths are filtered out and
 // robots.ts disallows the same set. O155's rule is kept: a gated /about that still advertises
 // itself in the sitemap is hidden from readers and announced to crawlers.
+//
+// U7 adds the second stated rule: the routes `src/security/robots.ts` hides from crawlers are
+// filtered out here too, so the sitemap never announces a page whose response says `noindex`.
 import type { MetadataRoute } from "next";
 import { PUBLIC_SURFACES } from "@/compliance/public-surfaces";
+import { isHiddenFromCrawlers } from "@/security/robots";
 import { TEAM_PAGE_PUBLIC } from "./about/team";
 import { SITE_URL } from "./site";
 
@@ -32,7 +36,9 @@ export function sitemapPaths(): string[] {
   return PUBLIC_SURFACES.flatMap((surface) => {
     if (surface.path.includes("[")) return EXPANDED_DYNAMIC_PATHS[surface.path]?.() ?? [];
     return [surface.path];
-  }).filter((path) => path !== "/about" || TEAM_PAGE_PUBLIC);
+  })
+    .filter((path) => path !== "/about" || TEAM_PAGE_PUBLIC)
+    .filter((path) => !isHiddenFromCrawlers(path));
 }
 
 /** The census path an expanded URL came from, or the URL itself when it is a census path. */

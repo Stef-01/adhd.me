@@ -13,15 +13,22 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { censusPathFor, sitemapPaths } from "../../app/sitemap";
 import { PUBLIC_SURFACES } from "@/compliance/public-surfaces";
+import { isHiddenFromCrawlers } from "@/security/robots";
 import { TEAM_PAGE_PUBLIC } from "../../app/about/team";
 
 describe("O190 the sitemap is the census, filtered by stated rules only", () => {
-  it("carries every static public surface, /demo included — the omission that exposed the hand list", () => {
+  it("carries every static public surface the stated rules do not hide", () => {
+    // /demo was this test's named example — the omission that exposed the hand list. U7 hides it
+    // BY RULE (the crawler register, with a written reason), which is the opposite of an omission:
+    // robots.test.ts holds its absence to the register, and here the census walk simply skips
+    // what the register names, the same way it skips the gated /about.
     const paths = sitemapPaths();
-    expect(paths).toContain("/demo");
+    expect(isHiddenFromCrawlers("/demo"), "/demo is absent by rule, not by omission").toBe(true);
+    expect(paths).not.toContain("/demo");
     for (const s of PUBLIC_SURFACES) {
       if (s.path.includes("[")) continue;
       if (s.path === "/about" && !TEAM_PAGE_PUBLIC) continue;
+      if (isHiddenFromCrawlers(s.path)) continue;
       expect(paths, `${s.path} is in the census but not the sitemap`).toContain(s.path);
     }
   });

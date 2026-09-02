@@ -168,6 +168,7 @@ export const SPEC_TRIAGE: readonly SpecTriage[] = [
   { file: "referrals.spec.ts", category: "single-route-feature", routes: ["/console/referrals"], reason: "single console feature under test." },
   { file: "registers.spec.ts", category: "single-route-feature", routes: ["/console/registers"], reason: "single console feature under test." },
   { file: "reporting.spec.ts", category: "single-route-feature", routes: ["/console/reporting"], reason: "single console feature under test." },
+  { file: "robots.spec.ts", category: "single-route-feature", routes: ["/finder", "/examples", "/demo", "/thanks", "/faq", "/robots.txt", "/sitemap.xml"], reason: "U7: the routes the crawler register hides, read from the register itself rather than typed here, plus robots.txt, the sitemap and one public page as the control; the both-directions sweep over every census path is robots.test.ts's, in source." },
   { file: "responses-console.spec.ts", category: "single-route-feature", routes: ["/console/responses"], reason: "single console feature under test." },
   { file: "results.spec.ts", category: "single-route-feature", routes: ["/console/results"], reason: "single console feature under test." },
   { file: "roi.spec.ts", category: "single-route-feature", routes: ["/console/roi"], reason: "single console feature under test." },

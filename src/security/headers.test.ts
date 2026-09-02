@@ -26,6 +26,7 @@ import {
   VERCEL_DEBUG_SCRIPT,
 } from "./headers";
 import { stripComments } from "./reachability";
+import { robotsHeaders } from "./robots";
 
 const ROOT = join(__dirname, "..", "..");
 
@@ -135,10 +136,14 @@ describe("U1 the security headers", () => {
     expect(nextConfig.poweredByHeader).toBe(false);
     expect(nextConfig.reactStrictMode).toBe(true);
     const routes = await nextConfig.headers!();
-    expect(routes.map((r) => r.source)).toEqual(["/:path*"]);
+    // The first entry is the security headers on every route; the rest are U7's per-route
+    // X-Robots-Tag entries, which robots.test.ts holds to the crawler register — nothing else
+    // may mount a header here without a test that owns it.
+    expect(routes[0]!.source).toBe("/:path*");
     expect(routes[0]!.headers).toEqual(
       securityHeaders({ gaId: process.env.NEXT_PUBLIC_GA_ID, dev: process.env.NODE_ENV !== "production" }),
     );
+    expect(routes.slice(1)).toEqual(robotsHeaders());
   });
 });
 

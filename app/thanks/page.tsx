@@ -5,6 +5,7 @@
 // URL — which is the only way item 19's analytics can ever count one without watching anybody.
 import Link from "next/link";
 import type { Metadata } from "next";
+import { HIDDEN_ROBOTS_META } from "@/security/robots";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/thanks" },
   title: "You're registered",
   description: "Your registration reached us. What happens next, in plain terms.",
-  robots: { index: false },
+  robots: HIDDEN_ROBOTS_META, // U7: from the crawler register, no longer this page's own setting
 };
 
 export default function ThanksPage() {

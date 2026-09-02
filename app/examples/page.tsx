@@ -12,6 +12,7 @@
 // the product it demonstrates.
 import Link from "next/link";
 import type { Metadata } from "next";
+import { HIDDEN_ROBOTS_META } from "@/security/robots";
 import { careArchetypes } from "@/demo/care-archetypes";
 import { matchQuality, needsFor, rankClinicians } from "@/demo/clinicians";
 import { rosterSizeInWords } from "@/demo/roster-size";
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
   title: "Worked examples",
   description:
     "Demo scenarios run through the real finder: how much it understood, whether the order was earned, and who it showed first — with the reasons printed in the product itself.",
+  robots: HIDDEN_ROBOTS_META, // U7: hidden with the finder it demonstrates; the register says why
 };
 
 export default function ExamplesPage() {

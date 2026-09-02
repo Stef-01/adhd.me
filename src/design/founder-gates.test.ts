@@ -10,6 +10,7 @@ import { TEAM_PAGE_PUBLIC } from "../../app/about/team";
 import { CONSOLE_ACCEPTED_FINDINGS } from "../compliance/console-honesty";
 import { PRODUCT_FLAGS, STANDING_FLAGS } from "../compliance/public-surfaces";
 import { FOUNDER_GATES } from "./founder-gates";
+import { HIDDEN_FROM_CRAWLERS } from "../security/robots";
 import { TASTE_RULES } from "./taste-register";
 
 const DECIDED =
@@ -26,6 +27,13 @@ describe("AR36 founder gates", () => {
       expect(gate.price.length, `${gate.id} owes a real price`).toBeGreaterThan(80);
       // The named source must exist — a gate pointing at a moved file reads as coverage.
       expect(() => readFileSync(gate.openAt, "utf8"), `${gate.id}: ${gate.openAt} missing`).not.toThrow();
+    }
+  });
+
+  it("the finder is still hidden from crawlers (U7)", () => {
+    const hidden = HIDDEN_FROM_CRAWLERS.map((route) => route.path);
+    for (const path of ["/finder", "/examples", "/demo"]) {
+      expect(hidden, `${path} left the crawler register — ${DECIDED}`).toContain(path);
     }
   });
 
