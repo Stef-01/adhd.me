@@ -92,6 +92,14 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     reason:
       "Exactly four cells moved — the finder, both widths and motions — from the harmony pass a production iPhone review demanded: the example-roster switch left the results screen for a closed 'Testing options' disclosure under the welcome screen's voice entry (founder decision synthetic-roster-tickbox, AMENDED: examples ship ON, the switch is the way off), which is the only finder-welcome pixel change the matrix can see. The same unit's results-screen work — borders dropped from the head and refine details, the ink+underline edit action, the count moved to the list head, concentric 6px thumbnails, the paper place input — sits behind a query the capture matrix does not type, so it is recorded in qa/o226-*.png and DESIGN-QA rather than here. Three-run protocol agreed (zero pairwise diff across all 180 captures) before this acceptance.",
   },
+  {
+    unitId: "O229",
+    acceptedAt: "2026-09-02",
+    manifestSha256: "25d66570bb6e902ad33a29dc132bb3e963d15db32d8903b63ec2ece6d8b70e3c",
+    captures: 180,
+    reason:
+      "All 180 cells moved, and this is the first acceptance since the founder's product-wide daylight-wayfinding redesign (b7629e9, 2026-09-01) landed on main outside the claim protocol with no accepted-diff entry of its own — so this entry carries the redesign's pixels together with O229's seven law fixes on top of it, made in the redesign's layer of app/globals.css: the accent withdrawn from the header pill, nav underline, claim ornament, route stop, pillar counters, join link and finder progress rail (route blue or route-strong instead; the landing keeps exactly two accent meanings), the pill at 44px, the finder's briefing heading at 2rem under 640px so the card sits inside 390×844 and in the card's own light foreground, the console shell's hue-free neutrals over the re-declared stone scale with line-coloured card borders and rows, and the primary button's hover darkened toward ink. The redesign's own record is its DESIGN-QA entry and qa/redesign-2026-09-01/; O229's is qa/o229-*.png. Three-run protocol agreed (zero pairwise diff across all 180 captures, three byte-identical manifests) before this acceptance.",
+  },
 ];
 
 export type AcceptedDiffVerdict =

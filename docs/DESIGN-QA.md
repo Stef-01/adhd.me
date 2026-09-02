@@ -3919,3 +3919,48 @@ status 500, framework wording absent, second door landing on the landing page.
 
 **Captures:** `qa/u3-error-390.png`, `qa/u3-error-1280.png` — taken at the tree U3 lands on, i.e.
 after the redesign, so they show the register the boundary actually ships in.
+
+## O229 — the redesign comes back inside the laws (2026-09-02)
+
+**Subject:** the seven places where the 2026-09-01 redesign, gated against unit tests and its own
+sweeps, crossed one of this tree's browser laws — laws the full e2e enforces and the redesign's
+gate had not run. The rule for the unit was the redesign's own: *blue carries route and state;
+orange marks the next consequential action.* Every fix is a rule in the redesign's layer of
+`app/globals.css`; no component changed, no gate, sweep or census floor moved.
+
+**The accent, counted (taste-rule `type.accent-live-tokens`, two meanings at 390).** The landing
+had been painting the accent on the header pill, the nav underline, the claim's ornament, the
+first route stop, the pillar counters and the join link — nine meanings for a colour the law
+reserves for live tokens. Under the redesign's own roles each of those is route (a way somewhere)
+or decoration, not a next consequential action, so the pill and the underline now paint the
+route blue and the rest sit on route-strong; the claim's ornament is gone. What the landing keeps
+is exactly two: the primary door and the live-token stat. `/clinicians` had the same colour on its
+progress rail (a route, so route-strong now), and `/examples`, `/thanks`, `/faq`, `/approach` were
+over the cap only through the pill.
+
+**The floor and the fold.** The pill was 42px at phone width; it is 44. The finder's briefing card
+at 390×844 stood 40px under the one-screen pin because Inter's wider set wraps the longest
+guideline title to five lines where Newsreader took four — its heading is 2rem under 640px, the
+one size that brings the card back inside the viewport with the title still reading as a title.
+While measuring it: a shared heading rule had put ink on the card's route-strong ground (about
+1.6:1); the heading keeps the card's light foreground.
+
+**The console's neutrals.** Two console screens (`/console/interop`, `/console/capacity`) are
+sworn to show no state colour at all — a page that reports nothing was attempted must not look
+like a success — and the sweep that holds them to it reads any channel spread of 24 or more as a
+tint. The redesign's ink (`#172033`) is a blue-cast neutral with a spread of 28; on a marketing
+page that cast is the palette's character, on an instrument reporting zero it is a colour. The
+console shell therefore scopes its own neutrals: each site token with a touch of the accent mixed
+in, which pulls the blue cast back to hue-free (ink spread 15, muted 10, faint 9, line 8) without
+leaving the palette, and the Tailwind stone scale — resolved at `:root` — is re-declared over them
+so a `text-stone-600` in a card reads the console's grey, not the site's. Card borders and table
+rows use `--line` rather than the route line. Contrast held or rose everywhere (muted 6.49:1 on
+white, faint 5.52:1). One more contrast site: the primary button's hover had lightened to
+accent-mid (3.21:1 with white); it darkens toward ink instead (6.56:1), which is also the
+direction a pressed thing should move.
+
+**Verified in a real browser:** the seven specs 32/32; the full `pnpm e2e` green; the AR15 baseline
+re-accepted after three agreeing runs (the entry in `src/design/accepted-diffs.ts` names what moved).
+
+**Captures:** `qa/o229-landing-390.png`, `qa/o229-landing-1280.png`,
+`qa/o229-clinicians-briefing-390.png`, `qa/o229-console-interop-390.png`.
