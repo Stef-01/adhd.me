@@ -322,6 +322,31 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **U15 (O229-lane, the thirteenth unit built of the one-year plan: the simplicity laws and their
+> registers, R0) — CLAIMED founder-0902a, 2026-09-02T16:20Z.** Scope is the plan's U15 text and
+> nothing beyond it. `docs/SIMPLICITY-LAWS.md` states the refactor lane's rules in this tree's
+> voice — one implementation per concept; a module is reached by the product, by the law, or by a
+> named gate, or it is deleted; a file over 600 lines carries a dated reason; a duplicated block is
+> a defect — and four registers make each rule a test that can fail:
+> `src/quality/module-reasons.ts` tags every unreached module `law | gated:<G> | delete`; a
+> file-size allowlist carries a dated reason per file over the line; a duplicate-block detector
+> reads normalised 12-line windows across `src/` and `app/`; and the single-importer census names
+> what only one module needs. Each register is proven able to go red on a planted violation — an
+> untagged unreached module, an unlisted long file, a copied block, a module only its own test
+> imports — because a register nobody can make fail is a list, not a law. **The line that will come
+> out differently, stated up front:** the plan's verify says the register covers "all 127 unreached
+> modules"; the tree measures **130** today (U14's census, at its floor), because U1–U14 and O230
+> each added law modules the product does not import. The register will cover the measured set in
+> both directions and the delta will be recorded, exactly as U14 recorded §1's drift — the plan's
+> figure is what the tree said on the day it was written, not a target to make the tree match.
+> **This unit writes laws and registers; it deletes nothing and moves nothing.** U30 is where the
+> `gated:<G>` tags are executed and U16 is where the linter lands; a module tagged `delete` here is
+> a finding for that unit, not an edit made in this one — the plan separates naming a thing from
+> doing it, and the separation is what keeps this unit reviewable. No UI, no route, no copy: the
+> gradient aesthetic and the new app shell are untouched by construction.
+> **Continuation if this claim goes stale:** nothing lands behind a flag; the laws document and its
+> four registers are one unit and land together or not at all.
+
 > **O230 (FOUNDER-DIRECTED, 2026-09-02: "there should be no landing page, it should function
 > exactly like an app for the demo day and be extremely polished, research online exactly how
 > leading health provider apps are structured with gestures, and visual design and implement") —
@@ -12282,7 +12307,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
-| U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| U15 | claimed | founder-0902a | 2026-09-02T16:20Z | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
 | U18 | available | — | — | — | (M) R1. The record registry. Depends: U17. -> verify: both-directions test between the registry, the adapters' declared record types and `DOMAIN_TABLES`; a planted unregistered record type fails; parse rejects a malformed JSONL line with a versioned error instead of a cast. |
