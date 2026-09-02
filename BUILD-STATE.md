@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 508ac90 (2026-09-02T09:58Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at db9bcf9, the code of 508ac90 (508ac90 adds the design QA entry and captures only; typecheck · 307 files / 4501 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 686 KB · gate accounting PASS with this line); full pnpm e2e green (344 passed, 1 skipped, 20.2m, exit 0 read from the command itself, run serially with nothing else building, 345 listed) at the U9 tree (508ac90: src/finder/announce.ts — one linted sentence per arrival; one role=status line per stage and no live wrapper in the shell; focus on the stage heading, the first result or the text box after a transition the person caused; the listening screen's two stop controls one "Microphone" toggle with aria-pressed and aria-busy, the language restart announced; the breathing loop moved onto a halo so the button holds still; the finder header controls and the compare name control on the 44px floor; e2e/finder-a11y.spec.ts, e2e/support/finder-stages.ts and a11y.ts, the keyboard-focus and touch-floor sweeps over every stage — 51 stops, 53 controls). AR15 visual: unchanged — the welcome screen U9 does not touch is what the matrix captures (the gradient aesthetic and the qa/ welcome captures stay as they are; qa/u9-* added), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9 done; U6 blocked on D-CI-BILLING; U10 (stale banners, a listening timeout, and the debug clobber) is the next firing's unit`
+`gate: green @ e40a88b (2026-09-02T11:02Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at e40a88b (typecheck · 308 files / 4510 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line); full pnpm e2e green (348 passed, 1 skipped, 20.4m, exit 0 read from the command itself, run serially with nothing else building, 349 listed) at the U10 tree (e40a88b: src/finder/speech-banner.ts — the typing screen's banner as a pure reducer, cleared on every path that leaves the listening stage; LISTENING_TIMEOUT_MS 60 s ending recognition through the recogniser's own stop and onend, the no-speech sentence with no retry control and never an error, words at the minute landing in the box; ?debug=1 read once into Arrival.debug at arrival so U8's place serialiser cannot clobber it; e2e/support/fake-clock.ts — page.clock plus motion on its own frameloop, because WAAPI start times read from a faked performance.now are owed to a document.timeline the clock never moves; voice.spec.ts gains four tests). AR15 visual: unchanged — the welcome screen U10 does not touch is what the matrix captures (the gradient aesthetic and the qa/ welcome captures stay as they are; not a pixel moved, walked on the built route at 1280×720 and 390×844), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10 done; U6 blocked on D-CI-BILLING; U11 (WebKit in the suite) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -174,17 +174,52 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **U10 (O229-lane, the ninth unit built of the one-year plan: stale banners, a listening timeout,
-> and the debug clobber) — CLAIMED founder-0902a, 2026-09-02T10:02Z.** Scope is the plan's U10 text
-> and nothing beyond it: `speechMessage`/`speechRetryable` cleared on every path that leaves the
-> listening stage (`findMatches`, `reset`, `onRefine`, the typed path), not only in
-> `startListening`; a listening timeout at 60 s that ends recognition through the existing
-> end-of-speech path with the existing "we did not catch that" copy — never an error; `?debug=1`
-> read once into state at arrival instead of being re-read from a URL that U8's place serialiser
-> rewrites (the clobber). Verification is the plan's: vitest on the reducer paths (the banner is
-> cleared on each exit; the timeout fires the end-of-speech path, not an error) and
-> `e2e/voice.spec.ts` gains the timeout case with the fake recogniser and a fixed clock. The
-> gradient aesthetic stays; nothing here moves a pixel, checked on the built route. Continuation
-> if this claim goes stale: nothing is behind a flag; the unit is whole or it is not landed.
+> and the debug clobber) — DONE founder-0902a, 2026-09-02 @ e40a88b.** Scope was the plan's U10
+> text; nothing beyond it, and one word of the claim came out differently and is explained below.
+> **Outcome:** `src/finder/speech-banner.ts` is the typing screen's banner as data — a pure reducer
+> over five events (`cleared`, `ended`, `failed`, `facts`, `unavailable`) in place of the two
+> setters the orchestrator used to own, which one path cleared and five wrote, so a message could
+> outlive the screen it was about (the blocked-microphone sentence followed a person back to their
+> typed words). `cleared` is dispatched on every path that leaves the listening stage — the typed
+> path, `findMatches`, `reset`, the results screen's "Change what you said" — not only when the
+> microphone starts. `LISTENING_TIMEOUT_MS` (60 s, `src/voice/speech.ts`) ends recognition through
+> the existing end-of-speech path: the timer calls the session's own `stop()`, the recogniser's
+> `onend` delivers whatever it heard, and the reducer reads `timedOut` — words in hand land in the
+> box under the microphone-stopped sentence exactly as any other end does; an empty minute shows
+> the `no-speech` sentence ("Nothing was picked up. Try again, or type instead." — the claim said
+> "we did not catch that"; the plan's phrase, the tree's own copy) with no retry control and no
+> bracket, never an error and never an abort. `?debug=1` is read once into `Arrival.debug` in
+> `src/finder/state.ts` (`arrive()`), so the raw error code and the O70 facts follow the sentence
+> in brackets for the whole visit even after U8's `place` serialiser rewrites the URL without it
+> (the clobber); `finderSearch` still carries `place` and nothing else. Late facts land nowhere: not
+> on a cleared banner, not on a later failure, never twice. Founder gates untouched: the banner
+> carries a sentence and a code, never the request text. The gradient aesthetic stays — nothing
+> here moves a pixel; the banner is the same amber `.speech-error` line the typing screen already
+> had, walked on the built route at 1280×720 and 390×844 (empty minute, words at the minute).
+> **What the first e2e run found, and the helper it earned:** `page.clock.install()` fakes
+> `performance.now` and `fastForward` jumps it, but `document.timeline` is the browser's; `motion`
+> starts a WAAPI animation with a `startTime` read from the faked clock, so a screen transition
+> begun after a 60 s jump is scheduled 60 real seconds into the document's future and holds its
+> first frame — the listening screen never leaves and `mode="wait"` never mounts the next. The app
+> path had run whole (timer fired, recogniser stopped, history advanced to `type`); only the
+> exit was owed to a timeline the clock never moved. `e2e/support/fake-clock.ts` installs the
+> clock and removes `Element.prototype.animate` so motion drives every animation on its own
+> frameloop, whose timestamps ARE the faked clock's — nothing about what is animated changes, only
+> which timeline plays it. Its header says so, for the next test that jumps time. **Verification:**
+> `src/finder/speech-banner.test.ts` (eight tests) walks every event from every standing banner —
+> cleared from any state, the timeout sentence without the error's controls, the retry offered to
+> the permission pair only, the debug bracket and the facts that join it, late facts landing
+> nowhere, both unavailable reasons — and every sentence a patient can read passes `sweepSurface`
+> under the patient rule set and `lintPartyToCare`; `state.test.ts` pins that `?debug=1` is read
+> at arrival and never written back by the one serialiser. `e2e/voice.spec.ts` gains four tests
+> under the fake recogniser and the fixed clock: a minute of silence ends listening with the
+> sentence and no retry control, the recogniser not aborted; a minute with words in hand lands
+> them in the box, said the way any other end is, and the banner is gone after "Change what you
+> said"; the blocked-microphone message does not follow a person back to their typed words;
+> `?debug=1` survives a place edit. Gate: `pnpm verify` green at e40a88b (308 files / 4510
+> tests, 13 skipped; audit PASS, 2 accepted advisories, 0 unaccepted; perf PASS, 49 routes,
+> `/finder` 687 KB); full `pnpm e2e` green (348 passed, 1 skipped, 20.4m, exit 0 read from the command itself, run serially with nothing else building, 349 listed) at the e40a88b tree. Vault log skipped
+> (unreachable). U11 is next.
 
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
@@ -12025,7 +12060,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
 | U8 | done | founder-0902a | 2026-09-02T06:52Z | db40bf9 | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
 | U9 | done | founder-0902a | 2026-09-02T09:58Z | 508ac90 | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
-| U10 | claimed | founder-0902a | 2026-09-02T10:02Z | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
+| U10 | done | founder-0902a | 2026-09-02T11:02Z | e40a88b | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | available | — | — | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | available | — | — | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
