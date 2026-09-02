@@ -1652,11 +1652,14 @@ textarea:focus-visible {
 }
 
 .patient-v2 .voice-prompt h1 {
-  max-width: 455px;
+  /* O233: was clamp(3.125rem, 12vw, 4rem) — display scale, because it used to be a tagline. It is
+     a question now, and the box under it is the subject of the screen; a heading that takes three
+     lines at 4rem makes the box look like a footnote to it. Sized to lead, not to shout. */
+  max-width: 440px;
   margin-top: 12px;
-  font-size: clamp(3.125rem, 12vw, 4rem);
-  line-height: 0.97;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.5rem, 6.2vw, 1.875rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
@@ -1735,26 +1738,33 @@ textarea:focus-visible {
    solid amber circle inside it. */
 .patient-v2 .voice-actions .dual-input { position: relative; display: flex; align-items: center; width: 100%; }
 .patient-v2 .voice-actions .dual-input-field {
+  /* O233 (founder-directed): the box IS the screen now. It was a 66px single line under a
+     tagline, showing a fifth of the sentence it asks for; it is a three-line field at reading
+     size, and the pill became a 22px radius because a pill around three lines of text is a
+     capsule with a paragraph in it. */
   width: 100%;
-  height: 66px;
-  padding: 0 70px 0 26px;
+  min-height: 132px;
+  padding: 20px 26px 56px;
   border: 1.5px solid var(--accent);
-  border-radius: 999px;
+  border-radius: 22px;
   background: var(--accent-soft);
   color: var(--ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.45;
   letter-spacing: -0.01em;
+  resize: none;
 }
 /* O232: was `#9c7b45`, raw hex in a component. Mixed from the accent it sits inside, so a
    palette change carries it. */
 .patient-v2 .voice-actions .dual-input-field::placeholder { color: color-mix(in srgb, var(--accent) 72%, var(--muted)); }
 .patient-v2 .voice-actions .dual-input-action {
   position: absolute;
-  right: 8px;
+  right: 10px;
+  bottom: 10px;
   display: flex;
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   align-items: center;
   justify-content: center;
   border: 0;
@@ -3350,34 +3360,19 @@ textarea:focus-visible {
   text-align: center;
 }
 
+/* O233: the welcome heading is a QUESTION now, not the tagline this rule was written for, and the
+   box below it is the subject of the screen. At 3.625rem it took three lines and made the box read
+   as a footnote to it. The `span`/`em` block rule went with the two-line tagline it split. */
 .patient-v2 .voice-screen .voice-prompt h1 {
-  max-width: none;
+  max-width: 15ch;
   margin-top: 0;
-  font-size: clamp(2.875rem, 11vw, 3.625rem);
+  font-size: clamp(1.5rem, 6.4vw, 1.9375rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
 }
 
-.patient-v2 .voice-screen .voice-prompt h1 span,
-.patient-v2 .voice-screen .voice-prompt h1 em {
-  display: block;
-}
-
-.patient-v2 .voice-screen .voice-prompt h1 span {
-  font-family: "Inter Variable", Inter, system-ui, sans-serif;
-  font-size: 0.8em;
-  font-weight: 420;
-  line-height: 1;
-  letter-spacing: -0.05em;
-}
-
-.patient-v2 .voice-screen .voice-prompt h1 em {
-  margin-top: 6px;
-  padding-bottom: 5px;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.06em;
-  font-weight: 390;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-}
+/* The `span`/`em` pair styled the two halves of the old tagline ("ADHD assessment" /
+   "that takes you seriously."). O233 deleted the tagline, so both rules went with it. */
 
 
 /* Demo scenarios live behind one quiet trigger on the welcome; the browser is
@@ -5419,27 +5414,10 @@ textarea:focus-visible {
    amended) ── The switch lives on the WELCOME screen now, folded away — configuration belongs at
    the door, not between a reader and their results, and the roster ships with the examples ON
    for this testing deployment. Muted, not accent: a signpost. Tokens only — the ratchet holds. */
-/* O230: the `<details>` became a button that opens a sheet. Same siting, same quiet weight, same
-   44px floor — the container changed, not the emphasis. */
-.finder-demo-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: 44px;
-  margin-top: 16px;
-  border: 0;
-  background: none;
-  color: var(--faint);
-  font-size: 0.78125rem;
-  font-weight: 600;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-@media (hover: hover) {
-  .finder-demo-trigger:hover { color: var(--muted); }
-}
-.finder-demo-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+/* O230's `.finder-demo-trigger` (a button on the welcome screen that opened its own sheet) went
+   with O233's settings sheet: the switch it opened now sits inside the one settings surface, so
+   the welcome screen has nothing on it but the question and the box. */
+
 .finder-demo-toggle {
   display: grid;
   grid-template-columns: 22px 1fr;
@@ -6782,7 +6760,7 @@ select { caret-color: var(--route-strong); }
 .patient-v2 .voice-core { padding-inline: clamp(22px, 5cqw, 42px); }
 .patient-v2 .voice-screen .voice-prompt h1 {
   color: var(--ink);
-  font-size: clamp(2.45rem, 9cqw, 4.35rem);
+  font-size: clamp(1.5rem, 4.4cqw, 1.9375rem);
   font-weight: 520;
   line-height: 0.98;
   letter-spacing: -0.04em;
@@ -6828,6 +6806,11 @@ select { caret-color: var(--route-strong); }
   border-color: var(--route-line);
   border-radius: 14px;
   background: var(--route-soft);
+  /* O233: the tinted panel used to run to the bottom of the stage, because the stage's own
+     bottom padding (the room the tab bar takes) fell INSIDE it — two lines of small print in a
+     block half a screen tall. It sizes to its sentence now and the stage keeps its clearance. */
+  margin: 0 22px;
+  padding: 14px 18px;
 }
 
 .patient-v2 .type-content h1,
@@ -8081,3 +8064,147 @@ body:has(.app-tabs) .consent-bar {
 }
 
 .booking-practice > span:last-child { color: var(--muted); font-size: 0.875rem; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O233 — THE SETTINGS CONTROL AND THE PROFILE TAB.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* The finder's header carries the wordmark centred and the settings control at the right edge; the
+   spacer keeps the wordmark optically centred rather than shifted by one icon. */
+.minimal-header.has-settings {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+}
+
+.minimal-header.has-settings > :first-child { grid-column: 2; justify-self: center; }
+.minimal-header.has-settings > :last-child { grid-column: 3; }
+
+.settings-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
+}
+
+@media (hover: hover) {
+  .settings-trigger:hover { color: var(--ink); background: var(--stone); }
+}
+
+.settings-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.settings-list { display: flex; flex-direction: column; }
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 60px;
+  padding: 12px 2px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.settings-row:last-of-type { border-bottom: 0; }
+.settings-row > span { display: flex; flex-direction: column; gap: 2px; }
+.settings-row strong { font-size: 0.9375rem; font-weight: 620; }
+.settings-row small { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
+.settings-row svg { flex-shrink: 0; color: var(--faint); }
+
+@media (hover: hover) {
+  .settings-row:hover strong { color: var(--accent); }
+}
+
+.settings-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 10px; }
+
+/* The settings sheet's one control that is not a link keeps the sheet's rhythm. */
+.settings-list .finder-demo-toggle { max-width: none; margin: 14px 0 0; padding-top: 16px; border-top: 1px solid var(--line); }
+
+/* ── Profile ──────────────────────────────────────────────────────────────────────────────── */
+
+.profile-tab {
+  width: min(640px, 100%);
+  margin-inline: auto;
+  padding: max(24px, var(--safe-top)) 22px 0;
+}
+
+.profile-tab-head h1 {
+  margin: 8px 0 6px;
+  font-size: 1.625rem;
+  font-weight: 680;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.profile-tab-head p { margin: 0 0 26px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
+
+.profile-facts { display: flex; flex-direction: column; gap: 12px; margin: 0 0 26px; padding: 0; list-style: none; }
+
+.profile-facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-raised);
+}
+
+.profile-facts svg { flex-shrink: 0; margin-top: 3px; color: var(--route); }
+.profile-facts span { display: flex; flex-direction: column; gap: 3px; }
+.profile-facts small { color: var(--muted); font-size: 0.8125rem; }
+.profile-facts strong { color: var(--ink); font-size: 1rem; font-weight: 600; line-height: 1.45; }
+
+.profile-actions { display: flex; flex-direction: column; gap: 10px; }
+
+.profile-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  color: var(--on-ground);
+  background: var(--ground);
+  font-size: 0.9375rem;
+  font-weight: 640;
+  text-decoration: none;
+  transition: transform var(--dur-tap) var(--ease-spring);
+}
+
+.profile-primary:active { transform: scale(0.97); }
+.profile-primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.profile-forget {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (hover: hover) { .profile-forget:hover { color: var(--ink); } }
+.profile-forget:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.profile-empty p { margin: 0 0 22px; max-width: 46ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
+
+.profile-privacy { margin: 30px 0 0; color: var(--faint); font-size: 0.8125rem; line-height: 1.5; }
+.profile-privacy a { color: var(--muted); text-underline-offset: 3px; }

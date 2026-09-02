@@ -15,7 +15,6 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from "rea
 import Image from "next/image";
 import { InterestForm } from "./interest-form";
 import { CoverageMap } from "./coverage-map";
-import { AppTabs } from "./app-tabs";
 
 // The founders register moved to app/about/founders.ts when About us became its own
 // page - the landing keeps the story, /about keeps the people.
@@ -142,7 +141,7 @@ export function StoryLanding() {
   const readProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
 
   return (
-    <main id="main-content" className="story app-page-with-tabs">
+    <main id="main-content" className="story">
       <motion.header
         className="story-header"
         initial={reduce ? false : { y: -10 }}
@@ -433,7 +432,6 @@ export function StoryLanding() {
           bar now sits exactly where it sat, carrying the same action as tab one, and two fixed
           bars stacked at the bottom of a phone is the defect the shell exists to remove. The hero
           keeps its own call above the fold, so nothing is unreachable. */}
-      <AppTabs />
     </main>
   );
 }

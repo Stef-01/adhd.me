@@ -115,6 +115,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "Questions a person searching for ADHD care arrives with, answered as administrative fact. The single likeliest page to be quoted back to somebody, so its copy is held to every patient rule including the ones about claims and conditions.",
   },
   {
+    path: "/profile",
+    audience: "patient",
+    why: "O233's Profile tab. It renders only what this device's own session already holds — the words the person described and the suburb they gave — so it publishes nothing and personalises nothing, but it is a patient-facing app surface and every sentence on it answers to the patient rules.",
+  },
+  {
     path: "/story",
     audience: "patient",
     why: "Why the product exists, at length: the account that occupied `/` until O230 made the front door the app. Same reader as before — somebody deciding whether to look for a GP — and the same rules, the same linter and the same copy; only the address changed.",

@@ -255,9 +255,12 @@ export function Wordmark() {
 export function FinderContext() {
   return (
     <aside className="finder-context">
+      {/* O233: was "Early Sydney demo. …". The product should not call itself a demo in its own
+          copy, and the sentence's real content — where it operates, and who holds the appointment
+          times — survives without the word. */}
       <p>
-        Early Sydney demo. Doctor profiles describe real clinicians. Live appointment times and
-        directions are provided by the booking destination.
+        Sydney. Doctor profiles describe real clinicians. Live appointment times and directions
+        are provided by the booking destination.
       </p>
     </aside>
   );

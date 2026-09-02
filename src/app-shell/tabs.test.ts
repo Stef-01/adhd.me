@@ -52,13 +52,14 @@ describe("O230 the app's tabs", () => {
 describe("O230 which tab a path belongs to", () => {
   it("matches the root only to itself, and a section to its own tab", () => {
     expect(activeTab("/")?.href).toBe("/");
-    expect(activeTab("/faq")?.href).toBe("/faq");
-    expect(activeTab("/story")?.href).toBe("/story");
-    expect(activeTab("/examples")?.href).toBe("/examples");
+    expect(activeTab("/profile")?.href).toBe("/profile");
+    expect(activeTab("/approach")?.href).toBe("/approach");
   });
 
   it("claims nothing outside the bar — a route with no tab highlights none", () => {
-    for (const path of ["/privacy", "/privacy/counsel-review", "/console", "/practices", "/terms"]) {
+    // O233: /faq, /story and /examples left the bar for the settings sheet, so they are now
+    // exactly the case this asserts — real routes the bar does not claim.
+    for (const path of ["/privacy", "/privacy/counsel-review", "/console", "/practices", "/terms", "/faq", "/story", "/examples"]) {
       expect(activeTab(path), path).toBeUndefined();
     }
   });

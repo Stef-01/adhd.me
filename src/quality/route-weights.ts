@@ -93,11 +93,11 @@ export function routeWeightVerdicts(
 // BEGIN GENERATED BUDGETS
 // Derived 2026-09-02 from .next/app-build-manifest.json: ceil(measured KB × HEADROOM) per route.
 export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
-  "/": 774, // measured 703 KB
+  "/": 782, // measured 710 KB
   "/_not-found": 378, // measured 343 KB
   "/about": 543, // measured 493 KB
   "/api/mock/fault/[kind]": 378, // measured 343 KB
-  "/approach": 548, // measured 498 KB
+  "/approach": 557, // measured 506 KB
   "/book/[token]": 378, // measured 343 KB
   "/clinicians": 414, // measured 376 KB
   "/clinicians/join": 387, // measured 351 KB
@@ -133,13 +133,14 @@ export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
   "/console/usefulness": 401, // measured 364 KB
   "/console/verticals": 401, // measured 364 KB
   "/demo": 395, // measured 359 KB
-  "/examples": 400, // measured 363 KB
-  "/faq": 400, // measured 363 KB
+  "/examples": 387, // measured 351 KB
+  "/faq": 387, // measured 351 KB
   "/practices": 387, // measured 351 KB
   "/privacy": 389, // measured 353 KB
   "/privacy/automated-decisions": 387, // measured 351 KB
   "/privacy/counsel-review": 387, // measured 351 KB
-  "/story": 569, // measured 517 KB
+  "/profile": 412, // measured 374 KB
+  "/story": 558, // measured 507 KB
   "/terms": 387, // measured 351 KB
   "/thanks": 387, // measured 351 KB
 };

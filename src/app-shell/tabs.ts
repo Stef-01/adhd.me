@@ -11,6 +11,14 @@
 // (icon-only is read as a literacy and trust failure in health contexts), so every entry here
 // carries both and the label is never hidden at any width.
 //
+// O233 (founder-directed) CORRECTED WHAT GOES IN IT, and the correction is the lesson. O230 built
+// the bar from the researched COUNT and then filled it with the four pages this tree happened to
+// have: Examples, Questions and About. Those are things the product knows, not places a person
+// goes. A bar is for destinations somebody RETURNS to — the task, their own state, the thing worth
+// reading — and everything consulted once belongs behind a settings control, which is what
+// `app/app-settings.tsx` now is. Three destinations, inside the researched 3–5 range, chosen this
+// time by what a person comes back for.
+//
 // WHY A REGISTER RATHER THAN JSX. Three things have to agree — the bar, the routes that exist, and
 // what a crawler is told about each of them — and they drifted the last three times this tree let
 // a list live inside a component (O168's route arrays, U7's robots lists, O189's spine). The test
@@ -24,7 +32,7 @@ export interface AppTab {
   /** The word under the icon. Both are always shown — see the header note. */
   readonly label: string;
   /** The Phosphor icon name the bar renders. */
-  readonly icon: "MagnifyingGlass" | "Notebook" | "Question" | "Info";
+  readonly icon: "MagnifyingGlass" | "UserCircle" | "BookOpen";
   /** What a person is going there to do. The reason the tab earns a place, in one sentence. */
   readonly purpose: string;
 }
@@ -41,22 +49,16 @@ export const APP_TABS: readonly AppTab[] = [
     purpose: "Describe the GP you are looking for, in words or out loud, and read the order the description produces.",
   },
   {
-    href: "/examples",
-    label: "Examples",
-    icon: "Notebook",
-    purpose: "See the same matching run over written scenarios, so the ordering can be checked against a request somebody else wrote.",
+    href: "/profile",
+    label: "Profile",
+    icon: "UserCircle",
+    purpose: "What this device is holding for you — where you said you are, the words you last described, and the controls over both.",
   },
   {
-    href: "/faq",
-    label: "Questions",
-    icon: "Question",
-    purpose: "What this is, what it costs, where it operates and how the order is decided — answered without clinical advice.",
-  },
-  {
-    href: "/story",
-    label: "About",
-    icon: "Info",
-    purpose: "Why the product exists and what the route through assessment costs today; the account that used to occupy the front door.",
+    href: "/approach",
+    label: "Learn",
+    icon: "BookOpen",
+    purpose: "What the search actually returns, what the old route through assessment cost, and what changed in NSW and Queensland.",
   },
 ];
 

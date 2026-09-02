@@ -169,6 +169,8 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: ".mic-button", token: "ground" },
   { selector: ".notfound-primary", token: "ink" },
   { selector: ".primary-button", token: "ground" },
+  /* O233: the Profile tab's one action, on the same inverted ground as every other primary. */
+  { selector: ".profile-primary", token: "ground" },
   { selector: ".site-footer", token: "ground" },
   { selector: ".site-nav", token: "ground" },
   { selector: ".skip-link", token: "ink" },

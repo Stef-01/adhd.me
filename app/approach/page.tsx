@@ -15,6 +15,7 @@
 
 import Link from "next/link";
 import { StorySequence } from "../story-sequence";
+import { AppTabs } from "../app-tabs";
 
 export const metadata = {
   alternates: { canonical: "/approach" },
@@ -26,7 +27,7 @@ export const metadata = {
 
 export default function ApproachPage() {
   return (
-    <main id="main-content" className="story approach-page">
+    <main id="main-content" className="story approach-page app-page-with-tabs">
       <header className="story-header">
         <div className="story-wrap story-header-inner">
           <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
@@ -79,6 +80,7 @@ export default function ApproachPage() {
           </div>
         </div>
       </footer>
+      <AppTabs />
     </main>
   );
 }

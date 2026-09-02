@@ -68,6 +68,7 @@ const SET_BY_O230 = "2026-09-02";
 const SET_BY_U15 = "2026-09-02";
 const SET_BY_O231 = "2026-09-02";
 const SET_BY_O232 = "2026-09-02";
+const SET_BY_O233 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -161,6 +162,25 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'css-lines', value: 8083, on: SET_BY_O232, reason: "O232: ::selection, caret-color and the scrollbar — the surfaces the browser draws, which shipped as defaults belonging to no design system — plus the tab bar and sheet materials behind an @supports guard, and tabular figures on the four classes that carry numbers." },
   { measure: 'css-rule-blocks', value: 1478, on: SET_BY_O232, reason: "O232: as css-lines; the browser-surface rules and the @supports material block are most of the count." },
   { measure: 'css-styled-classes', value: 502, on: SET_BY_O232, reason: "O232: no new component classes beyond the booking practice card's parts — the pass restyles what exists." },
+
+  // O233 (founder-directed): the information architecture. A bar is for destinations somebody
+  // returns to, so it became Find / Profile / Learn; About and Questions moved behind a settings
+  // control; /profile is a new route showing what the device holds; the welcome tagline went and
+  // the input became the screen.
+  { measure: 'app-files', value: 139, on: SET_BY_O233, reason: "O233: app/app-settings.tsx, app/profile-view.tsx and app/profile/page.tsx — the settings sheet and the Profile tab the bar now points at." },
+  { measure: 'app-lines', value: 16060, on: SET_BY_O233, reason: "O233: the settings sheet, the Profile tab and its empty state, and the reasoning recording why the bar's membership changed — O230 filled it with the pages the tree had rather than the places a person returns to." },
+  { measure: 'src-lines', value: 54260, on: SET_BY_O233, reason: "O233: /profile joined the public-surface, crawler and working-truth registers, and the tab register records what a bar is for." },
+  { measure: 'src-reached-lines', value: 30380, on: SET_BY_O233, reason: "O233: as src-lines; the tab register and the robots register are both in the product's closure." },
+  { measure: 'css-lines', value: 8260, on: SET_BY_O233, reason: "O233: the compose box at its new size, the settings trigger and rows, and the Profile tab — less the retired welcome-screen trigger the dead-CSS census required be deleted with its markup." },
+  { measure: 'css-rule-blocks', value: 1520, on: SET_BY_O233, reason: "O233: as css-lines — the settings rows and the Profile tab are most of the count." },
+  { measure: 'css-styled-classes', value: 520, on: SET_BY_O233, reason: "O233: the settings sheet's rows and the Profile tab's facts, actions and empty state." },
+  { measure: 'src-unreached-lines', value: 23914, on: SET_BY_O233, reason: "O233: the robots and public-surface registers gained /profile's entry and its reasoning; both are law modules the product does not import." },
+  { measure: 'use-client-files', value: 31, on: SET_BY_O233, reason: "O233: app-settings.tsx and profile-view.tsx are interactive — a sheet that traps focus and a view that reads this device's own session cannot be server components. U25 is the unit that lowers this." },
+  { measure: 'classname-attributes', value: 1788, on: SET_BY_O233, reason: "O233: the settings rows and the Profile tab's markup." },
+  { measure: 'vitest-lines', value: 53159, on: SET_BY_O233, reason: "O233: the tab register's test follows the bar to three destinations and asserts that the three routes which LEFT the bar are now claimed by no tab." },
+  { measure: 'e2e-support-lines', value: 2422, on: SET_BY_O233, reason: "O233: the working-truth register gained /profile's proof — the sentence the page renders before any session is read." },
+  { measure: 'e2e-spec-lines', value: 7748, on: SET_BY_O233, reason: "O233: app-shell.spec.ts gained four tests — the bar holding three destinations, settings reaching About with no bar on it, the Profile tab showing and forgetting what the device holds, and the welcome screen leading with the question and a box tall enough to be the subject." },
+  { measure: 'e2e-goto-calls', value: 280, on: SET_BY_O233, reason: "O233: the new tests walk /profile and the settings route out to /story, which are the two surfaces the unit added and moved." },
 ];
 
 /** The current floor per measure: the last entry wins. */

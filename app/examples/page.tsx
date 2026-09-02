@@ -19,7 +19,6 @@ import { rosterSizeInWords } from "@/demo/roster-size";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
-import { AppTabs } from "../app-tabs";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/examples" },
@@ -68,7 +67,7 @@ export default function ExamplesPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="prose-screen app-page-with-tabs">
+    <main id="main-content" className="prose-screen">
       <div className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
         <h1>Worked examples</h1>
@@ -136,7 +135,6 @@ export default function ExamplesPage() {
       </div>
       <SiteFooter />
     </main>
-    <AppTabs />
     </>
   );
 }

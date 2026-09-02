@@ -44,6 +44,10 @@ export const HIDDEN_FROM_CRAWLERS: readonly HiddenRoute[] = [
   // register's both-directions test exists to fail on. The reason it was hidden did not
   // evaporate — it moved to `/` above, with the surface it was always about.
   {
+    path: "/profile",
+    why: "O233's Profile tab — a surface of the same testing deployment as `/`, and one whose entire content comes from the visitor's own session, so an index entry would be a page about nobody. Hidden for the same reason the root is, and in the same breath.",
+  },
+  {
     path: "/examples",
     why: "Worked examples computed from the same roster, with the same default of invented profiles. Indexed, they read as the product's record of what it does for real people.",
   },

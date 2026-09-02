@@ -26,10 +26,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Info, MagnifyingGlass, Notebook, Question, type Icon } from "@phosphor-icons/react";
+import { BookOpen, MagnifyingGlass, UserCircle, type Icon } from "@phosphor-icons/react";
 import { activeTab, APP_TABS, type AppTab } from "@/app-shell/tabs";
 
-const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, Notebook, Question, Info };
+const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, UserCircle, BookOpen };
 
 export function AppTabs({ hidden = false }: { hidden?: boolean }) {
   const pathname = usePathname();

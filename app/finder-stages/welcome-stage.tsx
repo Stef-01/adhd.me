@@ -3,11 +3,10 @@
 // O95: the welcome screen, verbatim from care-finder.tsx. State and handlers live in the
 // orchestrator; this renders them.
 
-import { useState } from "react";
-import { ArrowRight, CaretRight, Microphone, Sliders } from "@phosphor-icons/react";
+import { ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
-import { Sheet } from "../sheet";
+import { AppSettings } from "../app-settings";
 import { EASE_OUT, FinderContext, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
@@ -35,25 +34,39 @@ export function WelcomeStage({
   includeSynthetic: boolean;
   onToggleSynthetic: (next: boolean) => void;
 }) {
-  const [toolsOpen, setToolsOpen] = useState(false);
-
   return (
     <MotionScreen key="welcome" className="voice-screen" focusOnArrival={focusOnArrival}>
       {focusOnArrival && <StatusLine line={FINDER_ANNOUNCEMENTS.welcome} />}
-      <header className="minimal-header">
+      <header className="minimal-header has-settings">
         <Wordmark />
-        {/* O230: the "Home" link out of the finder is gone, because the finder IS home now. It
-            pointed at the story landing, which was the front door until this unit moved the app
-            to `/`; a link from the front door back to the front door is a dead control, and the
-            story has a tab of its own in the bar below. */}
+        {/* O233 (founder-directed): the settings control, top right. About and Questions live in
+            its sheet — things consulted once do not belong in a bar meant for destinations
+            somebody returns to. The finder's own testing options ride in the same sheet, so the
+            app has one settings surface rather than two that look alike. */}
+        <AppSettings>
+          <label className="finder-demo-toggle">
+            <input
+              type="checkbox"
+              checked={includeSynthetic}
+              onChange={(event) => onToggleSynthetic(event.target.checked)}
+            />
+            <span>
+              <strong>Include example profiles</strong>
+              <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
+            </span>
+          </label>
+        </AppSettings>
       </header>
 
+      {/* O233 (founder-directed): the tagline is gone. "ADHD assessment that takes you seriously"
+          was a marketing claim on the one screen whose whole job is to get a sentence out of
+          somebody — and the founder's question, what does a person practically need to see, has one
+          answer: what to type, and a box big enough to type it in.
+          The `h1` stays because `finder-a11y.spec.ts` walks focus onto it and axe needs the heading;
+          it is now the question the box answers, at a size that leads without shouting. */}
       <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
         <motion.div className="voice-prompt" variants={reducedMotion ? undefined : introItem}>
-          <h1 tabIndex={-1}>
-            <span>ADHD assessment</span>
-            <em>that takes you seriously.</em>
-          </h1>
+          <h1 tabIndex={-1}>What kind of GP are you looking for?</h1>
         </motion.div>
       </motion.div>
 
@@ -70,13 +83,25 @@ export function WelcomeStage({
           <label className="sr-only" htmlFor="welcome-request">
             Describe the GP you are looking for, or use the microphone to talk
           </label>
-          <input
+          {/* O233: a textarea, not a one-line input. The thing a person is asked for is a
+              SENTENCE — "a woman GP near Chatswood who speaks Mandarin and can do the whole
+              assessment" — and a 66px single line showed them a fifth of it while they typed.
+              Enter still searches, so the keyboard contract is unchanged; Shift+Enter makes a line
+              for anybody who wants one. `rows` sets the resting height and the field grows no
+              further, because a box that reflows the screen under a typing hand is worse than one
+              that scrolls. */}
+          <textarea
             id="welcome-request"
-            type="text"
             className="dual-input-field"
+            rows={3}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => { if (event.key === "Enter" && draft.trim()) onSearch(draft); }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                if (draft.trim()) onSearch(draft);
+              }
+            }}
             placeholder="Describe the GP you're looking for…"
           />
           <Pressable
@@ -96,31 +121,8 @@ export function WelcomeStage({
           <CaretRight size={14} weight="bold" aria-hidden="true" />
         </button>
 
-        {/* O226 put the example-roster switch here, folded away in a `<details>` — configuration
-            at the door rather than between a reader and their results. O230 keeps the siting and
-            changes the container: a sheet is what an app opens for its settings, and this is the
-            control a presenter actually reaches for mid-demo, so it is worth the gesture. The
-            disclosure's own affordances are not lost — the trigger is still a button, the sheet
-            still closes on Escape, and the switch inside is the same checkbox with the same
-            label. The example roster ships ON for this testing deployment (founder decision
-            synthetic-roster-tickbox, amended); what this holds is the way OFF. */}
-        <button className="finder-demo-trigger" type="button" onClick={() => setToolsOpen(true)}>
-          <Sliders size={15} weight="regular" aria-hidden="true" />
-          Testing options
-        </button>
-        <Sheet open={toolsOpen} title="Testing options" onClose={() => setToolsOpen(false)}>
-          <label className="finder-demo-toggle">
-            <input
-              type="checkbox"
-              checked={includeSynthetic}
-              onChange={(event) => onToggleSynthetic(event.target.checked)}
-            />
-            <span>
-              <strong>Include example profiles</strong>
-              <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
-            </span>
-          </label>
-        </Sheet>
+        {/* O233: the testing options moved into the settings sheet (see the header above), so
+            the app has one place a person changes anything. */}
       </motion.div>
 
       <FinderContext />

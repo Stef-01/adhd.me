@@ -79,6 +79,11 @@ export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
     source: "copy",
     why: "The story's one idea in its own words; an error shell or a skeleton says nothing about one GP carrying the whole pathway. Anchored on the H1, and it moved from `/` to `/story` with the page it describes (O230).",
   },
+  "/profile": {
+    proof: /Everything below is held on this device only/,
+    source: "copy",
+    why: "O233: the Profile tab's own statement of what it is. It renders on the server before any session is read, so a page that painted nothing would still show this — which is what makes it the working truth rather than the session data below it.",
+  },
   "/practices": {
     proof: /Turn unused appointment capacity into measured continuity of care/,
     source: "copy",

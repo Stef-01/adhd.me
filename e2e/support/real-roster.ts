@@ -1,7 +1,7 @@
 // O226: the example roster ships ON (founder decision `synthetic-roster-tickbox`, amended), so a
 // spec that asserts a REAL-roster ranking law — "Dr Anusha Saxena ranks first for the woman-GP
 // ask", "the two GPs tie" — switches the examples off at the door, exactly the way a person
-// would: through the welcome screen's testing options. Through the UI, deliberately, so these
+// would: through the settings sheet the header opens. Through the UI, deliberately, so these
 // specs also keep the switch itself honest; a spec that re-navigates after calling this remounts
 // the finder and gets the default back, which is why the helper OWNS the goto.
 //
@@ -19,13 +19,13 @@ import { expect, type Page } from "@playwright/test";
 export async function gotoFinderRealRosterOnly(page: Page): Promise<void> {
   if (new URL(page.url(), "http://e2e").pathname === "/") await page.goto("about:blank");
   await page.goto("/");
-  await page.getByRole("button", { name: "Testing options" }).click();
-  await expect(page.getByRole("dialog", { name: "Testing options" })).toBeVisible();
+  await page.getByRole("button", { name: "Settings" }).click();
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
   await page.locator(".finder-demo-toggle input").uncheck();
   // A sheet is modal: it has to be dismissed before the welcome screen is operable again, and
   // Escape is the dismissal every spec after this one depends on working.
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog", { name: "Testing options" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Settings" })).toHaveCount(0);
 }
 
 /** The same door, walked on into the demo scenario's results — the shape most ranking specs use. */
