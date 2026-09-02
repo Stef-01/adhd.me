@@ -18,6 +18,7 @@
     "gate:accounting": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gate-accounting.mts",
     "audit:gate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/audit-gate.mts",
     "perf:gate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/perf-gate.mts",
+    "census": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/size-census.mts",
     "smoke": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/smoke.mts",
     "generate:aesthetic-coverage": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-aesthetic-coverage.mts",
     "generate:route-budgets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/perf-gate.mts --pin",

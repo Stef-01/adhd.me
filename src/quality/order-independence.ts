@@ -313,6 +313,14 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    module: "src/quality/size-census-read.ts",
+    folds: 2,
+    disposition: {
+      kind: "rationale",
+      why: "U14: both folds are sums — `sum` adds `wc -l` line counts over a file list, and the `goto` count adds per-spec match counts. Addition is commutative, each term is read from its own file rather than from its position, and each produces one scalar for the whole tree; no file can be preferred by the order the walk returned it.",
+    },
+  },
+  {
     module: "src/referrals/store.ts",
     folds: 1,
     disposition: {

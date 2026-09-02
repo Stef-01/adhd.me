@@ -99,7 +99,7 @@ unreached lines), `pathways` (1,251), `compliance` (1,067), `pms` (935), `tenanc
 `outcomes` (874), `capacity` (824), `referrals` (795), `capability` (744), `registers` (725),
 `credentials` (695), `verticals` (631), `security` (584), `messaging` (494), `privacy` (386).
 
-**Largest files.** `src/compliance/corpus.ts` 1,159 lines; `src/demo/clinicians.ts` 1,082;
+**Largest files.** `src/matching/corpus.ts` 1,159 lines; `src/demo/clinicians.ts` 1,082;
 `src/matching/needs.ts` 918; `src/console/read.ts` 904; `src/compliance/cdss-boundary.ts` 882;
 `src/design/taste-register.ts` 644; `src/demo/synthetic-roster.ts` 617; `app/story-sequence.tsx`
 607; `src/sim/harness.ts` 602; `app/care-finder.tsx` 544; `src/voice/speech.ts` 533;

@@ -156,6 +156,11 @@ export const UNGUARDED_REMAINDER = 91;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
   {
+    file: "src/quality/size-census.test.ts",
+    test: "lists the gains still to bank, if any, as entries the register accepts",
+    why: "Iterates bankable(measured, RATCHET) — the measures now under their floor. U14's law is that the floor IS the number, so the list is empty in the state the ratchet aims for: every floor banked to the tree's exact figure. Forcing it non-empty would assert that unbanked gains exist, which is the opposite of the register's goal; the over-floor direction is asserted separately over every measure.",
+  },
+  {
     file: "src/matching/known-fps.test.ts",
     test: "every FIXED entry no longer exhibits it, so a fix cannot silently regress",
     why: "Iterates KNOWN_FALSE_POSITIVES.filter(e => e.fixedBy) — the entries somebody has already fixed. It is empty exactly when nothing has been fixed yet, which is a real and unremarkable state of the register. Forcing it non-empty would assert that a fix exists, which is not this test's claim: its claim is that fixes do not regress, and over zero fixes that is vacuously true AND correct.",
