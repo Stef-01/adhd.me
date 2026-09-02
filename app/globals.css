@@ -5737,7 +5737,7 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   margin-top: 2px;
 }
 
-.me-facts {
+.profile-facts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 0;
@@ -5751,7 +5751,7 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   line-height: 1.35;
 }
 
-.me-facts li {
+.profile-facts li {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -5759,11 +5759,11 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   padding: 0 13px;
 }
 
-.me-facts li:first-child {
+.profile-facts li:first-child {
   padding-left: 0;
 }
 
-.me-facts li + li {
+.profile-facts li + li {
   border-left: 1px solid var(--line);
 }
 
@@ -6030,7 +6030,7 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
     font-size: 3rem;
   }
 
-  .me-facts {
+  .profile-facts {
     margin-top: 28px;
     font-size: 0.875rem;
   }
@@ -6041,16 +6041,16 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 }
 
 @media (max-width: 460px) {
-  .me-facts {
+  .profile-facts {
     grid-template-columns: 1fr;
   }
 
-  .me-facts li,
-  .me-facts li:first-child {
+  .profile-facts li,
+  .profile-facts li:first-child {
     padding: 5px 0;
   }
 
-  .me-facts li + li {
+  .profile-facts li + li {
     border-left: 0;
     border-top: 1px solid var(--line);
   }
@@ -6881,7 +6881,7 @@ select { caret-color: var(--route-strong); }
 .patient-v2 .availability { color: var(--route-strong); }
 
 .patient-v2 .profile-content section,
-.patient-v2 .me-facts li,
+.patient-v2 .profile-facts li,
 .patient-v2 .profile-footer { border-color: var(--route-line); }
 .patient-v2 .profile-footer {
   background: color-mix(in srgb, var(--paper) 94%, transparent);
