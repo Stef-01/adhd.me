@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ a212d0c (2026-09-02T19:05Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at a212d0c (typecheck · 313 files / 4565 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (358 passed, 1 skipped, 23.8m, exit 0 read from the command itself, run serially with nothing else building) at the O232 tree (a212d0c: globals.css — ::selection, caret-color and the scrollbar themed from the tokens; the primary button on the pill system with a real press; four raw-hex sites mixed from tokens (the ratchet fell 71 to 66); glass on the tab bar and the sheet behind an @supports guard; the bar matched to the shell at 700px and up; app/finder-stages/shared.tsx — EASE_OUT and PRESS_SPRING named once instead of ten literals; the Booking and Side-by-side eyebrows removed; the demo-scenario copy became example searches). AR15 visual: O232 restyles the finder's controls and chrome deliberately (pill radius, glass materials, themed browser surfaces) introducing no new colour — every value is a token or a color-mix of one, and the raw-hex ceiling FELL. O231 changed the finder's rendered surfaces deliberately (labels removed, monogram reskinned from the existing band tokens, booking screen completed) and adds a section to /story; no new colour is introduced and the palette is untouched. U15 touched no route, UI or copy; O230 reshaped the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230, O231 and O232 (the app shell, the demo journey and the craft pass, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
+`gate: green @ bd3f6e3 (2026-09-02T20:10Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at bd3f6e3 (typecheck · 313 files / 4565 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 50 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (364 passed, 1 skipped, 24.0m, exit 0 read from the command itself, run serially with nothing else building) at the O233 tree (bd3f6e3: src/app-shell/tabs.ts — Find, Profile, Learn, with the header recording that a bar is for destinations somebody returns to; app/app-settings.tsx — the top-right control and its sheet, holding About, Questions, Worked examples, Privacy and the testing switch; app/profile/ + profile-view.tsx — what this device holds, and the control that clears it, joined to all five route registers; welcome-stage.tsx — the tagline gone, the h1 the question the box answers, the input a three-line compose box with Enter to search). AR15 visual: O233 changes the app's navigation and its first screen deliberately (three tabs, a settings sheet, no tagline, a compose box) and adds /profile; no new colour, every value a token. O232 restyled the finder's controls and chrome deliberately (pill radius, glass materials, themed browser surfaces) introducing no new colour — every value is a token or a color-mix of one, and the raw-hex ceiling FELL. O231 changed the finder's rendered surfaces deliberately (labels removed, monogram reskinned from the existing band tokens, booking screen completed) and adds a section to /story; no new colour is introduced and the palette is untouched. U15 touched no route, UI or copy; O230 reshaped the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230, O231, O232 and O233 (the app shell, the demo journey, the craft pass and the information architecture, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -324,36 +324,47 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 > **O233 (FOUNDER-DIRECTED, 2026-09-02: "The bottom should only have the icons of find, profile and
 > learn. About, is all found in the top right corner filtered away under a settings area … Similarly
-> questions is also filtered away … Remove the [ADHD assessment that] takes you seriously (this is
-> the demo day app, we don't need a tagline, aren't you able to think about practically what a
-> person needs to see? The text box should be way bigger and that's the focus, describing what you
-> need") — CLAIMED founder-0902a, 2026-09-02T19:30Z.** The information architecture, corrected. The
-> founder is right on the substance and the reason is worth writing down: O230 built the tab bar
-> from a researched count (3–5 tabs) but filled it with the four PAGES this tree happened to have —
-> Examples, Questions and About are things the product knows, not places a person goes. A bar is
-> for destinations somebody returns to. **Scope:** (1) the bar becomes **Find · Profile · Learn**,
-> three destinations, and `src/app-shell/tabs.ts` is where that decision lives; (2) **a settings
-> control in the top right** opens a sheet holding About, Questions, privacy and the testing options
-> — the things consulted once, not returned to, which is exactly what a settings area is for;
-> (3) **`/profile` is a new route**: what this device is holding for the person — the place they
-> set, the words they last described, and the controls over both — because a Profile tab that
-> showed nothing real would be the placeholder the last two units removed; (4) **the welcome screen
-> loses its tagline.** "ADHD assessment that takes you seriously" is a marketing line on the one
-> screen whose whole job is to get a sentence out of somebody, and the founder's question — what
-> does a person practically need to see — has one answer: what to type, and a box big enough to
-> type it in. A short functional prompt replaces the claim and **the input becomes the screen**:
-> a large multi-line field, the modern compose box, sized so it reads as the point of the page
-> rather than a control beneath a headline.
-> **What holds:** the `h1` stays (a11y — `finder-a11y.spec.ts` walks focus onto it and axe needs the
-> heading), it just stops being a slogan; Enter still searches and Shift+Enter makes a line, so the
-> keyboard contract does not change; every new surface joins the five registers a route joins here
-> (public surfaces, the crawler register, the dossier census, working-truth, route budgets) rather
-> than appearing beside them. **Verification:** `pnpm verify`; the tab register's own test rewritten
-> to three destinations and still holding every href to a real page route; new e2e for the settings
-> sheet and `/profile`; the a11y, touch, contrast and axe sweeps green on the new surfaces; full
-> `pnpm e2e`; screenshots at 390px and 1280px. **Continuation if this claim goes stale:** the bar
-> and the settings sheet are one change — three tabs with nowhere for About and Questions to live
-> would strand two routes.
+> questions is also filtered away … Remove the [tagline] … The text box should be way bigger and
+> that's the focus") — DONE founder-0902a, 2026-09-02 @ bd3f6e3.** **The founder was right and the
+> reason is the lesson:** O230 built the bar from a researched COUNT and then filled it with the
+> four pages this tree happened to have. Examples, Questions and About are things the product
+> knows, not places a person goes. A bar is for destinations somebody RETURNS to, and
+> `src/app-shell/tabs.ts` now says so in its header so the next unit cannot refill it with pages.
+> **Outcome:** the bar is **Find · Profile · Learn**. `app/app-settings.tsx` is the control in the
+> top right, opening the sheet the app already uses for its one modal idiom — same drag, grabber,
+> Escape and focus return — with About, Questions, Worked examples and Privacy in it, and the
+> finder's testing switch riding along so there is ONE place a person changes anything.
+> `/profile` shows what the DEVICE is holding, read from the same `sessionStorage` record the
+> finder resumes from, with the control that clears it; before a first search the honest state is
+> empty and the empty state offers the action that fills it, because a Profile tab with an avatar
+> and dead rows is the placeholder the last two units spent their time removing.
+> **The welcome screen:** the tagline is gone. The `h1` stays — `finder-a11y.spec.ts` walks focus
+> onto it and axe needs the heading — and is now the question the box answers. It had been sized as
+> a tagline (4rem, three lines) and **had to be found by reading computed styles: four rules matched
+> it, the last a container-query rule at `9cqw`**, which is what a stylesheet looks like after a
+> screen has been redesigned three times around the same element. The input is a three-line
+> textarea at reading size: the thing being asked for IS a sentence and a 66px line showed a fifth
+> of it. Enter searches, Shift+Enter makes a line. "Early Sydney demo." became "Sydney." — the
+> product should not call itself a demo in its own copy — and the panel holding it sizes to its
+> sentence instead of running to the foot of the stage. **The gate found four things on the new
+> route and one on an old one, and all five were real.** The compliance linter caught MY copy:
+> "Back to your results" tripped `no-diagnosis-or-condition`, because "your results" reads as test
+> results on a patient surface. `public-nav.spec.ts` refused a tab with no header and was right, so
+> `/profile` carries the app header on the finder's own grid. `public-foot.spec.ts` refused a page
+> with no footer, which IS a decision — an app tab is not a document, the same reason `/` is exempt
+> — recorded in `NO_FOOTER` with its argument. And a **class-name collision** the type checker could
+> not see: `.profile-facts` already belongs to the CLINICIAN profile stage, so the Profile tab's
+> cards painted over it; namespacing to `me-*` was right, but doing it with a whole-file replace
+> took the clinician stage's OWN rules with it, which `profile-accent` and `profile-layout` both
+> caught on the next full run. Only the block this unit appended is `me-*`. **Every register a
+> route joins here was joined:** public surfaces, the crawler register (hidden for the same reason
+> `/` is), the dossier census and its governing row, working-truth, and the route budgets — the
+> last re-pinned from a real build because the header pulled the settings sheet into the route and
+> that growth is what the public-nav law asked for. **Verification:** `pnpm verify` green at bd3f6e3
+> (typecheck · 313 files / 4565 tests, 13 skipped · build · audit PASS · perf PASS, 50 routes ·
+> census PASS), all 153 design-law tests green; full `pnpm e2e` green at bd3f6e3 (364 passed, 1 skipped, 24.0m);
+> screenshots of the home, settings and Profile screens at 390px. Vault log skipped: Stefan-Brain
+> unreachable. U16 is next.
 
 > **O232 (FOUNDER-DIRECTED, 2026-09-02: "using relevant engineering skills you are to make it a
 > fully functioning app that is ready for the demo day, it is perfect and has zero slop text … ui
@@ -12460,7 +12471,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
-| O233 | done | founder-0902a | 2026-09-02T20:10Z | pending | FOUNDER-DIRECTED: the information architecture. Bar becomes Find · Profile · Learn; About and Questions move into a settings sheet behind a top-right control; /profile is a new route showing what the device holds; the welcome tagline goes and the input becomes the screen. -> verify: pnpm verify; tabs.test.ts rewritten to three destinations; new e2e for settings and /profile; a11y/touch/contrast/axe green; full e2e; shots at 390 and 1280. |
+| O233 | done | founder-0902a | 2026-09-02T20:10Z | bd3f6e3 | FOUNDER-DIRECTED: the information architecture. Bar becomes Find · Profile · Learn; About and Questions move into a settings sheet behind a top-right control; /profile is a new route showing what the device holds; the welcome tagline goes and the input becomes the screen. -> verify: pnpm verify; tabs.test.ts rewritten to three destinations; new e2e for settings and /profile; a11y/touch/contrast/axe green; full e2e; shots at 390 and 1280. |
 | O232 | done | founder-0902a | 2026-09-02T19:05Z | a212d0c | FOUNDER-DIRECTED: the craft pass (adhdme-taste + impeccable, Operate mode). Browser surfaces themed (selection, caret, scrollbar, focus); the eyebrow slop removed; one button system; spring motion and shared-element continuity; glass on the two surfaces content scrolls under, nowhere else. DESIGN.md's no-ambient-loops and two-region limits hold. -> verify: pnpm verify; contrast/touch/focus/hover/reduced-motion/axe sweeps green; full e2e; two batched screenshot rounds at 390px and 1280px. |
 | O231 | done | founder-0902a | 2026-09-02T18:05Z | f362deb | FOUNDER-DIRECTED: demo-day readiness. The booking dead-end removed so the journey completes; the example-profile labels off the finder surfaces (amends `synthetic-roster-tickbox`); the monogram avatar designed rather than defaulted. No generated faces, no invented phone numbers, no mock confirmations. One truthful line kept on /story only. -> verify: pnpm verify; roster laws rewritten to the amended decision, not deleted; full e2e; screenshot pass over the whole journey at 390px and 1280px. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
