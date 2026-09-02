@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ f362deb (2026-09-02T18:05Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at f362deb (typecheck · 313 files / 4565 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (358 passed, 1 skipped, 23.8m, exit 0 read from the command itself, run serially with nothing else building) at the O231 tree (f362deb: app/finder-stages/profile-stage.tsx — every profile carries its booking action, so the journey no longer ends in a sentence where the button goes; booking-stage.tsx — the practice-booking shape as a true terminal state, said once; results-stage/compare-stage/shared.tsx — the EXAMPLE PROFILE badges and the fictional-GP sentence removed with their CSS; globals.css — the monogram on the band ramp so a row without a photograph is a design choice rather than a gap; src/design/founder-gates.ts — the founder's amendment to synthetic-roster-tickbox in their own words, label out, structure in; app/story-landing.tsx — one truthful roster sentence, on /story only). AR15 visual: O231 changes the finder's rendered surfaces deliberately (labels removed, monogram reskinned from the existing band tokens, booking screen completed) and adds a section to /story; no new colour is introduced and the palette is untouched. U15 touched no route, UI or copy; O230 reshaped the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230 and O231 (the app shell and the demo journey, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
+`gate: green @ a212d0c (2026-09-02T19:05Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at a212d0c (typecheck · 313 files / 4565 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (358 passed, 1 skipped, 23.8m, exit 0 read from the command itself, run serially with nothing else building) at the O232 tree (a212d0c: globals.css — ::selection, caret-color and the scrollbar themed from the tokens; the primary button on the pill system with a real press; four raw-hex sites mixed from tokens (the ratchet fell 71 to 66); glass on the tab bar and the sheet behind an @supports guard; the bar matched to the shell at 700px and up; app/finder-stages/shared.tsx — EASE_OUT and PRESS_SPRING named once instead of ten literals; the Booking and Side-by-side eyebrows removed; the demo-scenario copy became example searches). AR15 visual: O232 restyles the finder's controls and chrome deliberately (pill radius, glass materials, themed browser surfaces) introducing no new colour — every value is a token or a color-mix of one, and the raw-hex ceiling FELL. O231 changed the finder's rendered surfaces deliberately (labels removed, monogram reskinned from the existing band tokens, booking screen completed) and adds a section to /story; no new colour is introduced and the palette is untouched. U15 touched no route, UI or copy; O230 reshaped the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230, O231 and O232 (the app shell, the demo journey and the craft pass, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -325,38 +325,51 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > **O232 (FOUNDER-DIRECTED, 2026-09-02: "using relevant engineering skills you are to make it a
 > fully functioning app that is ready for the demo day, it is perfect and has zero slop text … ui
 > flow is perfectly seamless, buttons are crisp and have no weird formatting or placement, there is
-> strong framer motion and apple level animations and aethethetic glass quality") — CLAIMED
-> founder-0902a, 2026-09-02T18:30Z.** The craft pass, run against the skills CLAUDE.md §5 mandates:
-> `adhdme-taste` (this tree's own law), `impeccable` with its craft floor loaded before any edit,
-> and the product's own `DESIGN.md` and `PRODUCT.md` read through the skill's context script. The
-> finder is **Operate** mode in impeccable's vocabulary — the visitor completes a task, so
-> scanability and the real usage scene outrank expression, and brand lives in precise detail.
-> **Scope, from the craft floor's own verify list rather than from taste:**
-> (1) **Browser surfaces** — `::selection`, `caret-color`, the scrollbar and the focus ring ship as
-> browser defaults today, belonging to no design system; the floor names this "the cheapest signal
-> that a page was built rather than assembled, and the one models skip most reliably", and this tree
-> skipped it. (2) **Slop copy** — the booking screen's eyebrow reads "Booking" directly above the
-> heading "Booking Dr Chao"; the floor bans the kicker outright and this one also repeats its own
-> heading's first word. Every stage's copy is swept for the same defect. (3) **Buttons** — one
-> radius and height system, consistent press behaviour, no control whose hit area, alignment or
-> label differs from its siblings without a reason. (4) **Motion** — spring physics on the stage
-> machine and the shared-element portrait continuity that already exists, extended so the flow
-> reads as one moving object rather than a sequence of replacements; a results list that arrives in
-> order rather than all at once. (5) **Glass, used as a specific effect and not as decoration** —
-> the tab bar and the sheet are the two surfaces content actually scrolls under, which is exactly
-> where a material belongs, and nowhere else gets one.
-> **THE TREE'S LAWS BEAT THE SKILLS AND THE FOUNDER'S ADJECTIVES, AND TWO BITE HERE.** `DESIGN.md`
-> forbids ambient loops and animating more than two major regions at once; "strong motion" is
-> delivered as spatial continuity and spring physics (Jakub-primary, per §5), never as ambient
-> movement on a surface a tired person is reading. And `--dur-*`/`--ease-*` tokens are the vocabulary
-> — no scattered default `ease`. Reduced motion keeps a static equal for every effect, checked at
-> the hook.
-> **Method is impeccable's, not open-ended polishing:** build the batch, inspect ONCE in a batched
-> round at 390px and 1280px together, fix everything that round shows in one batch, confirm with at
-> most one more round, stop. **Verification:** `pnpm verify`; the contrast, touch, focus, hover,
-> reduced-motion and axe sweeps green (they are what stop a craft pass breaking an accessibility
-> law); full `pnpm e2e`; and the two screenshot rounds. **Continuation if this claim goes stale:**
-> nothing here is behind a flag; a half-applied motion or material system is worse than none.
+> strong framer motion and apple level animations and aethethetic glass quality") — DONE
+> founder-0902a, 2026-09-02 @ a212d0c.** Run against the skills CLAUDE.md §5 mandates —
+> `adhdme-taste`, `impeccable` with its craft floor loaded before any edit, and the product's own
+> `DESIGN.md`/`PRODUCT.md` through the skill's context script. **Most of what the pass found were
+> defects against THIS TREE'S OWN LAWS rather than matters of taste, which is the finding worth
+> keeping: the craft floor did not impose a style, it located places the tree had stopped obeying
+> itself.** **(1) The surfaces the browser draws.** `::selection`, `caret-color` and the scrollbar
+> shipped as browser defaults — a Chrome-blue selection band over Newsreader on porcelain. Selection
+> is route blue now (selection IS a state and route blue is this palette's state colour), the caret
+> is the accent, the scrollbar is a token thumb on a transparent track. The floor calls this the
+> cheapest signal that a page was built rather than assembled and the one most reliably skipped; it
+> had been. **(2) Raw hex out of the components, and the ratchet FELL 71 → 66.** The primary
+> button's disabled pair was `#a3a39e` on `#e3e1db` — warm greys stranded from the pre-redesign
+> stone palette, the wrong hue for this ground, and exactly what happens when a colour is written
+> instead of mixed. Those and three more are `color-mix()` from the tokens they sit in.
+> **(3) One radius system.** The primary button was 8px on a 58px control while the finder's
+> signature control and every other large control is a 999px pill — the last element speaking the
+> old system. Big controls are pills, cards 12–16px. The press moved 0.99 → 0.97 on the spring
+> token, 0.99 being below the threshold where a press registers as one. **(4) One motion
+> vocabulary.** `[0.22, 1, 0.36, 1]` was a literal in ten places across four files and two
+> transitions used `160ms ease`, the default curve `DESIGN.md` forbids; `EASE_OUT` and
+> `PRESS_SPRING` are named once and are deliberately the CSS `--ease-soft` token's twin.
+> **(5) Glass as a specific effect.** A material belongs where content passes under a surface —
+> here exactly two places, the tab bar and the sheet — behind an `@supports` guard with the opaque
+> colour declared first so the contrast sweep's ancestor walk still resolves a painted ground.
+> Nothing else in the product gets a blur. **(6) Slop copy.** An eyebrow reading "Booking" stood
+> above a heading beginning "Booking"; "Side by side" named the two-column layout the reader was
+> looking at; both gone, the floor banning the kicker outright. "Try a demo scenario" / "Demo
+> scenarios" / "Try this scenario" became "Try an example search" / "Example searches" / "Search
+> with this" — a product should not call itself a demo in its own controls, and that heading was an
+> `h1` rendered at label size. **What the batched round caught that no test could:** the tab bar
+> painted edge to edge across the navy ground at 1280px while the app it serves is a centred 640px
+> shell; it matches the shell now and lifts at its top corners. **The tree's laws beat the founder's
+> adjectives where they met.** "Strong motion" is delivered as spatial continuity and spring
+> physics, never as the ambient movement `DESIGN.md` forbids on a surface a tired person is reading,
+> and the two-region limit and the reduced-motion equals are intact. **Method was impeccable's
+> bounded passes rather than open-ended polishing:** one batched inspection at 390px and 1280px
+> together, one fix batch, one confirm round, stop. **The full e2e found the one thing the unit got
+> wrong** — the scenarios stage's live line was renamed with the screen it announces and
+> `finder-a11y.spec.ts` still asserted the old string, so the keyboard walk went red in both motion
+> modes (a212d0c). **Verification:** `pnpm verify` green at a212d0c (typecheck · 313 files / 4565 tests,
+> 13 skipped · build · audit PASS · perf PASS, 49 routes · gate accounting PASS · census PASS), all
+> 153 design-law tests green including the contrast, hover, focus, reduced-motion and dead-CSS
+> censuses; full `pnpm e2e` green at a212d0c (358 passed, 1 skipped, 23.8m); two screenshot rounds over the whole
+> journey at both widths. Vault log skipped: Stefan-Brain unreachable. U16 is next.
 
 > **O231 (FOUNDER-DIRECTED, 2026-09-02: "run with dev server and screenshot based verify it is all
 > working … it is demo so everything should be production ready looking, remember zero
@@ -12414,7 +12427,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
-| O232 | done | founder-0902a | 2026-09-02T19:05Z | pending | FOUNDER-DIRECTED: the craft pass (adhdme-taste + impeccable, Operate mode). Browser surfaces themed (selection, caret, scrollbar, focus); the eyebrow slop removed; one button system; spring motion and shared-element continuity; glass on the two surfaces content scrolls under, nowhere else. DESIGN.md's no-ambient-loops and two-region limits hold. -> verify: pnpm verify; contrast/touch/focus/hover/reduced-motion/axe sweeps green; full e2e; two batched screenshot rounds at 390px and 1280px. |
+| O232 | done | founder-0902a | 2026-09-02T19:05Z | a212d0c | FOUNDER-DIRECTED: the craft pass (adhdme-taste + impeccable, Operate mode). Browser surfaces themed (selection, caret, scrollbar, focus); the eyebrow slop removed; one button system; spring motion and shared-element continuity; glass on the two surfaces content scrolls under, nowhere else. DESIGN.md's no-ambient-loops and two-region limits hold. -> verify: pnpm verify; contrast/touch/focus/hover/reduced-motion/axe sweeps green; full e2e; two batched screenshot rounds at 390px and 1280px. |
 | O231 | done | founder-0902a | 2026-09-02T18:05Z | f362deb | FOUNDER-DIRECTED: demo-day readiness. The booking dead-end removed so the journey completes; the example-profile labels off the finder surfaces (amends `synthetic-roster-tickbox`); the monogram avatar designed rather than defaulted. No generated faces, no invented phone numbers, no mock confirmations. One truthful line kept on /story only. -> verify: pnpm verify; roster laws rewritten to the amended decision, not deleted; full e2e; screenshot pass over the whole journey at 390px and 1280px. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
