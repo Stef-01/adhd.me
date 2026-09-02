@@ -7732,16 +7732,20 @@ select { caret-color: var(--route-strong); }
   list-style: none;
 }
 
-.app-tabs-item { flex: 1 1 0; }
+.app-tabs-item { display: flex; flex: 1 1 0; }
 
+/* The WHOLE tab is the target, not the glyph — so the anchor fills its cell. Caught by the touch
+   sweep, which measured the anchor at 31x53 while the cell around it was fine: a floor asserted on
+   the wrong box is not asserted at all. */
 .app-tab {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 3px;
-  min-height: 56px;
-  padding: 7px 4px 9px;
+  min-height: 58px;
+  padding: 8px 4px 10px;
   color: var(--muted);
   font-size: 0.6875rem;
   font-weight: 600;
@@ -7752,10 +7756,15 @@ select { caret-color: var(--route-strong); }
 
 .app-tab-label { line-height: 1.1; }
 
-/* Three signals for the current tab, never colour alone: the accent, the filled glyph weight the
-   component swaps in, and the marker above the icon. */
+/* Three signals for the current tab, never colour alone: full-strength ink against the muted rest,
+   the filled glyph weight the component swaps in, and the marker above the icon.
+   NOT THE ACCENT, and the accent sweep is what settled it. `type.accent-live-tokens` caps a surface
+   at two accent meanings, and a bar painted in the accent added a third to every route in the app —
+   the rule describing a real defect rather than a technicality. On this product the accent is
+   reserved for the next consequential action, which on the finder is the microphone; a bar that is
+   always on screen may not compete with it. */
 .app-tab.is-current {
-  color: var(--accent);
+  color: var(--ink);
   position: relative;
 }
 
@@ -7770,12 +7779,12 @@ select { caret-color: var(--route-strong); }
   width: 26px;
   height: 3px;
   border-radius: 0 0 3px 3px;
-  background: var(--accent);
+  background: var(--route-strong);
 }
 
 @media (hover: hover) {
   .app-tab:hover { color: var(--ink); }
-  .app-tab.is-current:hover { color: var(--accent); }
+  .app-tab.is-current:hover { color: var(--ink); }
 }
 
 .app-tab:focus-visible {
@@ -7825,9 +7834,6 @@ body:has(.app-tabs) .consent-bar {
 .sheet-scrim {
   position: absolute;
   inset: 0;
-  width: 100%;
-  border: 0;
-  padding: 0;
   background: color-mix(in srgb, var(--hero-dusk) 46%, transparent);
   cursor: pointer;
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { HIDDEN_ROBOTS_META } from "@/security/robots";
-import { CareFinder } from "./care-finder";
+import { CareFinder } from "../care-finder";
 
 // O230, founder-directed ("there should be no landing page, it should function exactly like an
 // app for the demo day"): the front door is the product.
@@ -20,6 +20,12 @@ import { CareFinder } from "./care-finder";
 // reasoning to `/`, and `src/security/robots.ts` now says so for the root. The alternative — a
 // root that is indexed while the thing it renders may not be — is the exact inconsistency U7's
 // both-directions test exists to catch.
+// IN A ROUTE GROUP, AND THE E2E IS WHY. `loading.tsx` beside this file is the finder's streaming
+// boundary (U3). At the ROOT it was every route's boundary, and a root Suspense boundary changes
+// what a client receives: `/about`, which calls `notFound()` while the team page is gated, began
+// streaming a 200 with the loading line instead of a 404, and the fault fixture's thrown render
+// error arrived as a 200 that hid it. Three specs caught it — the gate working exactly as it
+// should. `(app)` is not in any URL; it scopes the boundary to the route that actually streams.
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   robots: HIDDEN_ROBOTS_META,

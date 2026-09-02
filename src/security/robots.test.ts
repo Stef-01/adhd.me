@@ -14,7 +14,7 @@
 // The page-module check reads source, as headers.test.ts does for the config: importing
 // `app/finder/page.tsx` would pull the whole client tree into a node test for one metadata field.
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
@@ -34,11 +34,26 @@ const STATIC_PUBLIC = PUBLIC_SURFACES.map((s) => s.path).filter(
   (path) => !path.includes("[") && !(path === "/about" && !TEAM_PAGE_PUBLIC),
 );
 
-/** A page module's source with its comments removed, so a mention is not a setting. */
+/**
+ * A page module's source with its comments removed, so a mention is not a setting.
+ *
+ * ROUTE GROUPS ARE PART OF THE PATH ON DISK AND NOT PART OF THE URL, so a route may live one
+ * `(group)` directory deeper than its address suggests — `/` is `app/(app)/page.tsx` since O230,
+ * which put the finder's streaming boundary in a group so it would stop being every route's. The
+ * lookup tries the plain path first and then each group beside it, which is exactly what the
+ * router does; anything else would make this test a claim about directory names.
+ */
 function pageSource(path: string): string {
-  const file = join(ROOT, "app", path === "/" ? "" : path.slice(1), "page.tsx");
-  expect(existsSync(file), `${path} has no page module at ${file}`).toBe(true);
-  return stripComments(readFileSync(file, "utf8"));
+  const segments = path === "/" ? [] : path.slice(1).split("/");
+  const candidates = [join(ROOT, "app", ...segments, "page.tsx")];
+  for (const entry of readdirSync(join(ROOT, "app"), { withFileTypes: true })) {
+    if (entry.isDirectory() && entry.name.startsWith("(")) {
+      candidates.push(join(ROOT, "app", entry.name, ...segments, "page.tsx"));
+    }
+  }
+  const file = candidates.find((candidate) => existsSync(candidate));
+  expect(file !== undefined, `${path} has no page module — looked in ${candidates.join(", ")}`).toBe(true);
+  return stripComments(readFileSync(file!, "utf8"));
 }
 
 /** The paths `next.config.ts` mounts an `X-Robots-Tag` on, read from the real config. */

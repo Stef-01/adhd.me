@@ -33,7 +33,8 @@ export type TiedBand = {
 
 export const TIED_BANDS: readonly TiedBand[] = [
   {
-    route: "/",
+    // O230 moved the story to `/story`; the band is a fact about that hero, so it moved with it.
+    route: "/story",
     name: "hero claim + qualifier",
     selectors: [".story-hero h1", ".story-hero-sub"],
     why: "The hero's statement and the sentence that grounds it — the claim without its qualifier is exactly the unearned-claim shape the honesty gates exist to prevent.",

@@ -12,7 +12,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import RouteError from "../../app/error";
 import ConsoleError from "../../app/console/error";
 import GlobalError from "../../app/global-error";
-import AppLoading from "../../app/loading";
+import AppLoading from "../../app/(app)/loading";
 import ConsoleLoading from "../../app/console/loading";
 import { BOUNDARY_COPY, boundarySentences } from "./boundary-copy";
 import { eachOf } from "@/quality/non-vacuous";
@@ -109,7 +109,7 @@ describe("U3 the copy is data the linter can reach", () => {
 
   it("is what the five app files actually render — each imports the constants, none carries a string of its own", () => {
     for (const file of eachOf(
-      ["app/error.tsx", "app/console/error.tsx", "app/global-error.tsx", "app/loading.tsx", "app/console/loading.tsx"],
+      ["app/error.tsx", "app/console/error.tsx", "app/global-error.tsx", "app/(app)/loading.tsx", "app/console/loading.tsx"],
       "the boundary and loading files",
     )) {
       const source = html(file);

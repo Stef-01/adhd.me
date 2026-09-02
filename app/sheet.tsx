@@ -113,11 +113,13 @@ export function Sheet({
     <AnimatePresence>
       {open && (
         <div className="sheet-layer">
-          <motion.button
-            type="button"
+          {/* The scrim dismisses on click, but it is NOT a labelled control: it carried
+              `Close <title>` and so answered the same role query as the close button, which made
+              "the close control" ambiguous — caught by the shell spec. Keyboard and screen-reader
+              users dismiss with Escape or the close button; this is the pointer affordance only. */}
+          <motion.div
             className="sheet-scrim"
-            aria-label={`Close ${title}`}
-            tabIndex={-1}
+            aria-hidden="true"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

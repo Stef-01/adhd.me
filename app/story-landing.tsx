@@ -150,7 +150,7 @@ export function StoryLanding() {
         transition={{ duration: 0.32, ease: EASE }}
       >
         <div className="story-wrap story-header-inner">
-          <Link href="/story" className="story-wordmark" aria-label="ADHD.ME, why we built it" translate="no">ADHD.ME</Link>
+          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
           <nav className="story-nav" aria-label="Primary navigation">
             <Link href="/examples" className="story-nav-link">Worked examples</Link>
             <Link href="/practices" className="story-nav-link">For practices</Link>
@@ -393,7 +393,7 @@ export function StoryLanding() {
 
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
-          <Link href="/story" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
+          <Link href="/" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
           {/* Launch item 3: the whole site, reachable from its front door. */}
           <div className="story-footer-links">
             <Link href="/">Find a GP</Link>

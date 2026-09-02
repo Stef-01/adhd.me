@@ -29,7 +29,12 @@ function measure(): Record<string, number> {
     // Only page entries: layouts are counted through the pages that use them, and `/route`
     // handlers ship no page JS a visitor hydrates.
     if (!key.endsWith("/page")) continue;
-    const route = key.slice(0, -"/page".length) || "/";
+    // ROUTE GROUPS ARE NOT ADDRESSES. `app/(app)/page.tsx` is served at `/`, and the manifest key
+    // keeps the `(group)` segment; leaving it in reported a budget for `/(app)` — a URL nobody can
+    // visit — while claiming `/` had vanished. O230 introduced the first group in this tree and the
+    // gate caught it immediately, which is the gate working; this is the reader learning the
+    // router's own rule rather than the register learning a fiction.
+    const route = key.slice(0, -"/page".length).replace(/\/\([^/]+\)/g, "") || "/";
     let bytes = 0;
     for (const file of new Set(files)) {
       if (!file.endsWith(".js")) continue;

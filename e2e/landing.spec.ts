@@ -29,7 +29,7 @@ test("the team page is gated shut, with no door and no crawl (O155)", async ({ p
   // by accident and the day it reopens somebody has to change this file on purpose.
   //
   // Hiding a page is four things, and missing any one leaves it half-hidden.
-  await page.goto("/");
+  await page.goto("/story");
 
   // 1. No door, in either footer.
   await expect(page.locator(".story-footer").getByRole("link", { name: "About us" })).toHaveCount(0);
@@ -46,8 +46,8 @@ test("the team page is gated shut, with no door and no crawl (O155)", async ({ p
   const sitemap = await (await page.request.get("/sitemap.xml")).text();
   expect(sitemap).not.toContain("/about");
 
-  // 4. The landing never got the chapter back when the page went away.
-  await page.goto("/");
+  // 4. The story never got the chapter back when the page went away.
+  await page.goto("/story");
   await expect(page.locator("#about")).toHaveCount(0);
 });
 
@@ -69,7 +69,8 @@ test("primary CTA goes to the demo; sign-in goes to the console", async ({ page 
 // the DOM, was announced by a screen reader, and could not be read by anyone until the bundle
 // arrived — or at all, if it never did.
 
-const STORY = "/";
+// O230: the storybook moved off the front door; the app opens on the finder now.
+const STORY = "/story";
 
 test("the storybook's copy is legible with JavaScript disabled", async ({ browser }) => {
   // OPACITY IS ASSERTED EXPLICITLY, and the reason is a trap worth leaving marked: Playwright's
