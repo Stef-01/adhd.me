@@ -260,6 +260,15 @@ export async function speechDebugFacts(lang: string = DEFAULT_SPEECH_LANGUAGE.ta
  * bug (the O46 rule), which is exactly what the timer exists to prevent.
  */
 const CARRY_WINDOW_MS = 45_000;
+/**
+ * U10: how long a session may listen before the finder ends it. Until U10 nothing did: a screen
+ * left listening stayed listening — on a desktop Chrome that never ends continuous recognition
+ * on its own, with the microphone light on until someone found the control. The finder holds
+ * the timer (the session lifecycle is the orchestrator's, O69) and ends the session through
+ * `stop()`, so the words already heard arrive through `onFinal` exactly as a browser-initiated
+ * end would deliver them — never through `onError`.
+ */
+export const LISTENING_TIMEOUT_MS = 60_000;
 let carriedStream: MediaStream | null = null;
 let carriedTimer: ReturnType<typeof setTimeout> | null = null;
 

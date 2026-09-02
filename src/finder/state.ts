@@ -84,6 +84,17 @@ export function placeFrom(search: string): string {
   return (new URLSearchParams(search).get(PLACE_KEY) ?? "").trim().slice(0, 80);
 }
 
+/**
+ * U10: whether the address bar carried `?debug=1` — the founder's own phone (O18), where the mic
+ * banner appends the raw error code and the O70 environment facts. Read ONCE, here, on arrival:
+ * the orchestrator used to re-read the URL at each failure, and `finderSearch` — which carries
+ * `place` and nothing else, by the law above — had rewritten it by then, so a place edit silently
+ * switched the debug banner off. Nothing writes this key; it is honoured as it arrived.
+ */
+export function debugFrom(search: string): boolean {
+  return new URLSearchParams(search).has("debug");
+}
+
 // ---------------------------------------------------------------------------------------------
 // 3. The tab: the record.
 
@@ -163,6 +174,8 @@ export interface Arrival {
   index: number;
   /** The place the address bar carried in, "" when none — home 1, read on every arrival. */
   place: string;
+  /** Whether the address bar carried `?debug=1` (U10) — read here once, never re-read, never written. */
+  debug: boolean;
   record: FinderRecord;
   /** True when the finder resumed an entry it had left (reload, or Back into it) rather than starting. */
   resumed: boolean;
@@ -181,6 +194,7 @@ export interface Arrival {
  */
 export function arrive(host: FinderHost): Arrival {
   const place = placeFrom(host.search);
+  const debug = debugFrom(host.search);
   const entry = entryOf(host.history.state);
   if (entry) {
     const record = readRecord(host.storage) ?? emptyRecord();
@@ -188,12 +202,12 @@ export function arrive(host: FinderHost): Arrival {
     // record lost (storage cleared) is rebuilt as far as the entry so later Backs still resolve.
     while (record.trail.length <= entry.index) record.trail.push(record.trail.at(-1) ?? "welcome");
     record.trail[entry.index] = entry.stage;
-    return { stage: stageOnRevisit(entry.stage), index: entry.index, place, record, resumed: true };
+    return { stage: stageOnRevisit(entry.stage), index: entry.index, place, debug, record, resumed: true };
   }
   const start: FinderEntry = { v: STATE_VERSION, stage: "welcome", index: 0 };
   host.history.replaceState(stateFor(start), "", host.pathname + host.search);
   clearRecord(host.storage);
-  return { stage: "welcome", index: 0, place, record: emptyRecord(), resumed: false };
+  return { stage: "welcome", index: 0, place, debug, record: emptyRecord(), resumed: false };
 }
 
 /**

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
 import {
   clinicians,
@@ -24,14 +24,14 @@ import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
   DEFAULT_SPEECH_LANGUAGE,
   dropCarriedStream,
+  LISTENING_TIMEOUT_MS,
   speechDebugFacts,
-  SPEECH_ERROR_COPY,
-  SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
   type SpeechLanguage,
   type SpeechSession,
 } from "@/voice/speech";
+import { NO_BANNER, speechBanner } from "@/finder/speech-banner";
 import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
@@ -91,6 +91,7 @@ export function CareFinder() {
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
   const { stage, arrivalKey, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     setPlace(arrival.place);
+    debug.current = arrival.debug;
     arrivalStage.current = arrival.resumed ? arrival.stage : "welcome";
     if (!arrival.resumed) return;
     // A resumed tab: its words and its chosen match. The match is found by id in the ranking the
@@ -116,15 +117,32 @@ export function CareFinder() {
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
   const [heard, setHeard] = useState("");
-  const [speechMessage, setSpeechMessage] = useState<string | null>(null);
   /**
+   * U10: the sentence over the typing screen's box and whether a retry control stands beside it,
+   * as one reducer (`speech-banner.ts`) fed events from the microphone's lifecycle below — and
+   * `cleared` from EVERY route off the typing screen, which is the U10 fix: two setters used to
+   * be cleared from `startListening` alone, so a block message outlived the words it was about.
    * O48: the permission failure's way back is a BUTTON, not a sentence. WebKit only starts
    * recognition from a screen tap, so the O18 auto-retry that runs after the Allow dialog can
    * be refused no matter what the module does — the recovery that actually works on an iPhone
    * is the person tapping again, with permission now granted. The copy said "try once more";
    * this renders the once-more as a control beside it.
    */
-  const [speechRetryable, setSpeechRetryable] = useState(false);
+  const [banner, dispatchBanner] = useReducer(speechBanner, NO_BANNER);
+  /** U10: `?debug=1` as it arrived (O18, the founder's phone) — held here, never re-read from a URL a place edit rewrites. */
+  const debug = useRef(false);
+  /**
+   * U10: the listening timeout. A recogniser that hears nothing for a minute is ended THROUGH
+   * `stop()`, the same path as the person's own tap, so whatever it held arrives in `onFinal`;
+   * `timedOut` tells that handler which end it was, and the timer is keyed to its session so a
+   * restart or a cancel never stops a later one.
+   */
+  const listenTimer = useRef<number | null>(null);
+  const timedOut = useRef(false);
+  function clearListenTimer() {
+    if (listenTimer.current !== null) window.clearTimeout(listenTimer.current);
+    listenTimer.current = null;
+  }
   /**
    * O59 (Standing debt 4): which language the microphone listens in. Default English (AU),
    * as it always was; the alternatives are exactly the languages the listed GPs declare
@@ -170,6 +188,7 @@ export function CareFinder() {
     if (stage === "listening") return;
     speech.current?.cancel();
     speech.current = null;
+    clearListenTimer();
     setFinishing(false);
   }, [stage]);
 
@@ -186,6 +205,7 @@ export function CareFinder() {
   // recovery tap — the mic light must not outlive the screen the retry button lives on.
   useEffect(() => () => {
     speech.current?.cancel();
+    clearListenTimer();
     dropCarriedStream();
   }, []);
 
@@ -338,9 +358,10 @@ export function CareFinder() {
     // light stayed on over the typing screen. Cancel first, always.
     speech.current?.cancel();
     speech.current = null;
+    clearListenTimer();
+    timedOut.current = false;
     setHeard("");
-    setSpeechMessage(null);
-    setSpeechRetryable(false);
+    dispatchBanner({ type: "cleared" });
     stopRequested.current = false;
     setFinishing(false);
     setRestartedIn(restarted ? language : null);
@@ -352,8 +373,12 @@ export function CareFinder() {
         // Only release the ref this session still owns — a stale handler from a replaced
         // session must not clobber its successor's handle (O12 RCA).
         if (speech.current === session) speech.current = null;
+        clearListenTimer();
         // Nothing heard is not an error worth a red message; it is a reason to let somebody type.
+        // U10: unless it was a full minute of nothing — then the banner says so, still not as
+        // an error (no retry control, no debug suffix), and the box is one tap from the mic.
         if (!text) {
+          dispatchBanner({ type: "ended", text: "", timedOut: timedOut.current });
           goTo("type");
           return;
         }
@@ -372,31 +397,29 @@ export function CareFinder() {
           findMatches(text);
           return;
         }
-        setSpeechMessage("The microphone stopped on its own. What it heard is below — add to it, or search.");
+        dispatchBanner({ type: "ended", text, timedOut: timedOut.current });
         goTo("type");
       },
       onError: (error, raw) => {
         if (speech.current === session) speech.current = null;
+        clearListenTimer();
         // A deliberate stop is not a failure to report.
         if (error === "aborted") return;
         // ?debug=1 appends the browser's raw error code for the founder's own phone (O18).
         // The Web Speech API's code is the only diagnostic it gives, and the production RCA
         // stalled for a day because "unknown" flattened it away. Patients never see this:
-        // the default banner stays a plain sentence with no error-code language.
-        const debug = new URLSearchParams(window.location.search).has("debug");
-        setSpeechMessage(debug ? `${SPEECH_ERROR_COPY[error]} [${raw}]` : SPEECH_ERROR_COPY[error]);
+        // the default banner stays a plain sentence with no error-code language. U10: the flag
+        // is the arrival's (`debug`), not the address bar's — a place edit rewrites that.
+        dispatchBanner({ type: "failed", error, raw, debug: debug.current });
         // O70: the raw code alone could not separate the iOS failure family (B2 in
         // docs/MIC-FAILURE-MODES.md), so the debug banner now carries the environment that
         // produced it — standalone flag, mic-permission state, secure context, language.
-        // Appended when it resolves; patients never see any of this.
-        if (debug) {
-          void speechDebugFacts(language.tag).then((facts) =>
-            setSpeechMessage(`${SPEECH_ERROR_COPY[error]} [${raw} | ${facts}]`),
-          );
+        // Appended when it resolves, onto the banner it belongs to; patients never see any of this.
+        if (debug.current) {
+          void speechDebugFacts(language.tag).then((facts) => dispatchBanner({ type: "facts", error, raw, facts }));
         }
-        // O48: the permission-flavoured failures get their once-more as a button — see
-        // `speechRetryable` above. The next tap carries the gesture WebKit wants.
-        setSpeechRetryable(error === "service-not-allowed" || error === "not-allowed");
+        // O48: the permission-flavoured failures get their once-more as a button (the reducer
+        // decides which). The next tap carries the gesture WebKit wants.
         goTo("type");
       },
     }, language.tag);
@@ -405,13 +428,21 @@ export function CareFinder() {
     // why (O12 RCA) — the silent version was indistinguishable from a broken button, which is
     // exactly how it was reported.
     if (!session) {
-      setSpeechMessage(SPEECH_UNAVAILABLE_COPY[speechUnavailable() ?? "unsupported"]);
+      dispatchBanner({ type: "unavailable", reason: speechUnavailable() ?? "unsupported" });
       goTo("type");
       return;
     }
 
     speech.current = session;
     goTo("listening");
+    // U10: a minute of listening is the ceiling. Ended through `stop()` — the person's own path
+    // — so words in hand arrive via `onFinal` and land in the box; nothing ever reaches `onError`.
+    listenTimer.current = window.setTimeout(() => {
+      listenTimer.current = null;
+      if (speech.current !== session) return;
+      timedOut.current = true;
+      session.stop();
+    }, LISTENING_TIMEOUT_MS);
   }
 
   /**
@@ -436,6 +467,8 @@ export function CareFinder() {
     setRequest(nextRequest);
     setMatchIndex(0);
     setShowAll(false);
+    // U10: the typing screen is being left — its banner does not follow the person to results.
+    dispatchBanner({ type: "cleared" });
     // Straight to the results. The sort is synchronous and already done; the screen that used to
     // sit here spent 4.25 seconds saying so.
     goTo("results");
@@ -453,6 +486,7 @@ export function CareFinder() {
     setRequest(archetype.request);
     setMatchIndex(0);
     setMatchDirection(1);
+    dispatchBanner({ type: "cleared" });
   }
 
   /**
@@ -547,8 +581,8 @@ export function CareFinder() {
             micStopped={micStopped}
             draft={draft}
             setDraft={setDraft}
-            speechMessage={speechMessage}
-            speechRetryable={speechRetryable}
+            speechMessage={banner.message}
+            speechRetryable={banner.retryable}
             onRetryMic={() => startListening()}
             onBack={() => backTo("welcome")}
             onSearch={findMatches}
@@ -578,6 +612,8 @@ export function CareFinder() {
             onRefine={() => {
               setDraft(request);
               setMicStopped(false);
+              // U10: back to the box with its words — never with the last microphone message.
+              dispatchBanner({ type: "cleared" });
               goTo("type");
             }}
             onPlaceChange={(value) => {

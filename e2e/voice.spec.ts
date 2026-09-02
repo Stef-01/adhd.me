@@ -13,6 +13,7 @@
 // audio stream would be a test that passes when the feature is broken.
 
 import { expect, test, type Page } from "@playwright/test";
+import { installFakeClock } from "./support/fake-clock";
 import { installFakeSpeech } from "./support/fake-speech";
 
 async function openMic(page: Page) {
@@ -71,6 +72,98 @@ test("silence goes to typing with no error, because a quiet room is not a failur
 
   await expect(page.getByRole("textbox")).toBeVisible();
   await expect(page.locator(".speech-error")).toHaveCount(0);
+});
+
+/**
+ * U10: the listening timeout, on a fixed clock (`support/fake-clock.ts` says why it is not
+ * `page.clock` alone). A recogniser left open in a quiet room used to stay open until the browser
+ * gave up on it; a minute is the finder's own ceiling now, and it ends the session through the
+ * SAME path as the person's tap (`stop()`), so it is never an error: no retry control, no
+ * bracketed code, the recogniser stopped and not aborted.
+ */
+test("a minute of silence ends listening with a sentence, not an error", async ({ page }) => {
+  await installFakeSpeech(page);
+  await installFakeClock(page);
+  await openMic(page);
+  await expect(page.locator(".listening-screen")).toBeVisible();
+
+  await page.clock.fastForward(59_000);
+  await expect(page.locator(".listening-screen")).toBeVisible();
+  await page.clock.fastForward(1_500);
+
+  await expect(page.getByRole("textbox")).toBeVisible();
+  const message = page.locator(".speech-error");
+  await expect(message).toContainText("Nothing was picked up");
+  await expect(message).not.toContainText("[");
+  await expect(page.getByRole("button", { name: "Try the microphone again" })).toHaveCount(0);
+  expect(await page.evaluate(() => (window as any).__speech.state.aborted)).toBe(false);
+});
+
+test("a minute with words in hand lands them in the box, said the way any other end is", async ({ page }) => {
+  await installFakeSpeech(page);
+  await installFakeClock(page);
+  await openMic(page);
+  await expect(page.locator(".listening-screen")).toBeVisible();
+  await page.evaluate(() => (window as any).__speech.say("a GP who bulk bills near Hornsby", true));
+  await expect(page.locator(".listening-transcript")).toContainText("Hornsby");
+  await page.clock.fastForward(61_000);
+
+  const box = page.getByRole("textbox");
+  await expect(box).toHaveValue(/bulk bills/);
+  await expect(page.locator(".speech-error")).toContainText("stopped on its own");
+
+  // U10's other half: the banner belongs to the exit it described. Searching, then coming back to
+  // the box from the results, must not bring the sentence back over words the person owns.
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
+  await page.locator(".refine-compact").click();
+  await expect(box).toBeVisible();
+  await expect(page.locator(".speech-error")).toHaveCount(0);
+});
+
+test("a blocked microphone's message does not follow the person back to words they typed (U10)", async ({ page }) => {
+  // The reported shape: blocked, so typed, searched, then "Change what you said" — and the block
+  // message (with its retry control) stood over the typed words. Every route off the typing
+  // screen clears it now.
+  await installFakeSpeech(page);
+  await openMic(page);
+  await page.evaluate(() => (window as any).__speech.fail("not-allowed"));
+  await expect(page.locator(".speech-error")).toContainText(/blocked the microphone/i);
+  await expect(page.getByRole("button", { name: "Try the microphone again" })).toBeVisible();
+
+  await page.getByRole("textbox").fill("someone who understands adult ADHD");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
+  await page.locator(".refine-compact").click();
+  await expect(page.getByRole("textbox")).toHaveValue(/adult ADHD/);
+  await expect(page.locator(".speech-error")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Try the microphone again" })).toHaveCount(0);
+});
+
+test("?debug=1 survives a place edit: the flag is read once at arrival, not from the address bar (U10)", async ({ page }) => {
+  await installFakeSpeech(page);
+  await page.goto("/finder?place=Hornsby&debug=1");
+  // A place edit rewrites the URL to `?place=…` alone — the one serialiser carries nothing else —
+  // which used to switch the debug banner off between one failure and the next.
+  await page.getByRole("button", { name: /Talk instead of typing/i }).click();
+  await page.evaluate(() => (window as any).__speech.fail("network"));
+  await expect(page.locator(".speech-error")).toContainText("[network");
+
+  await page.getByRole("textbox").fill("a GP near me");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
+  await page.getByLabel("Where are you?").fill("Epping");
+  await expect.poll(() => page.evaluate(() => window.location.search)).toBe("?place=Epping");
+
+  // Back to the microphone the way a person gets there: the box, emptied, then the welcome
+  // screen's talk control (a microphone only while the field is empty).
+  await page.locator(".refine-compact").click();
+  await page.getByRole("textbox").fill("");
+  await page.getByRole("button", { name: "Go back" }).click();
+  await page.getByRole("button", { name: /Talk instead of typing/i }).click();
+  await expect(page.locator(".listening-screen")).toBeVisible();
+  await page.evaluate(() => (window as any).__speech.fail("network"));
+  await expect(page.locator(".speech-error")).toContainText("[network");
 });
 
 test.describe("every failure lands on the typed route, not a dead end", () => {

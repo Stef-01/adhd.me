@@ -12,6 +12,7 @@ import { eachOf } from "@/quality/non-vacuous";
 import {
   advance,
   arrive,
+  debugFrom,
   emptyRecord,
   entryOf,
   finderSearch,
@@ -131,6 +132,24 @@ describe("the finder's state model (U8)", () => {
     expect(placeFrom("?request=anything")).toBe("");
     // A place is a suburb or a postcode, not a paragraph.
     expect(placeFrom(`?place=${"x".repeat(200)}`)).toHaveLength(80);
+  });
+
+  it("U10: `?debug=1` is read once at arrival and never written back by the one serialiser", () => {
+    expect(debugFrom("?place=St+Ives&debug=1")).toBe(true);
+    expect(debugFrom("?debug")).toBe(true);
+    expect(debugFrom("?place=Hornsby")).toBe(false);
+    expect(debugFrom("")).toBe(false);
+    // Fresh and resumed arrivals both carry it: the flag is the address bar's as it arrived.
+    expect(arrive(fakeHost({ search: "?place=Hornsby&debug=1" })).debug).toBe(true);
+    expect(arrive(fakeHost({ search: "?place=Hornsby" })).debug).toBe(false);
+    const resumed = arrive(fakeHost({ search: "?debug=1", state: { finder: { v: STATE_VERSION, stage: "type", index: 1 } } }));
+    expect(resumed).toMatchObject({ resumed: true, debug: true });
+    // This is why it is read once: the place edit that follows rewrites the URL without it, so
+    // an orchestrator re-reading the address bar at each failure had the flag clobbered (U10).
+    expect(finderSearch("Hornsby")).not.toContain("debug");
+    const host = fakeHost({ search: "?place=Hornsby&debug=1" });
+    writePlace(host, "Epping");
+    expect(host.calls.at(-1)?.url).toBe("/finder?place=Epping");
   });
 
   it("reads back only its own version and shape; anything else is a fresh record", () => {
