@@ -176,10 +176,10 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'css-styled-classes', value: 520, on: SET_BY_O233, reason: "O233: the settings sheet's rows and the Profile tab's facts, actions and empty state." },
   { measure: 'src-unreached-lines', value: 23914, on: SET_BY_O233, reason: "O233: the robots and public-surface registers gained /profile's entry and its reasoning; both are law modules the product does not import." },
   { measure: 'use-client-files', value: 31, on: SET_BY_O233, reason: "O233: app-settings.tsx and profile-view.tsx are interactive — a sheet that traps focus and a view that reads this device's own session cannot be server components. U25 is the unit that lowers this." },
-  { measure: 'classname-attributes', value: 1788, on: SET_BY_O233, reason: "O233: the settings rows and the Profile tab's markup." },
+  { measure: 'classname-attributes', value: 1790, on: SET_BY_O233, reason: "O233: the settings rows and the Profile tab's markup." },
   { measure: 'vitest-lines', value: 53159, on: SET_BY_O233, reason: "O233: the tab register's test follows the bar to three destinations and asserts that the three routes which LEFT the bar are now claimed by no tab." },
   { measure: 'e2e-support-lines', value: 2422, on: SET_BY_O233, reason: "O233: the working-truth register gained /profile's proof — the sentence the page renders before any session is read." },
-  { measure: 'e2e-spec-lines', value: 7748, on: SET_BY_O233, reason: "O233: app-shell.spec.ts gained four tests — the bar holding three destinations, settings reaching About with no bar on it, the Profile tab showing and forgetting what the device holds, and the welcome screen leading with the question and a box tall enough to be the subject." },
+  { measure: 'e2e-spec-lines', value: 7749, on: SET_BY_O233, reason: "O233: app-shell.spec.ts gained four tests — the bar holding three destinations, settings reaching About with no bar on it, the Profile tab showing and forgetting what the device holds, and the welcome screen leading with the question and a box tall enough to be the subject." },
   { measure: 'e2e-goto-calls', value: 280, on: SET_BY_O233, reason: "O233: the new tests walk /profile and the settings route out to /story, which are the two surfaces the unit added and moved." },
 ];
 

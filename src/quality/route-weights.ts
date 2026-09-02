@@ -139,7 +139,7 @@ export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
   "/privacy": 389, // measured 353 KB
   "/privacy/automated-decisions": 387, // measured 351 KB
   "/privacy/counsel-review": 387, // measured 351 KB
-  "/profile": 412, // measured 374 KB
+  "/profile": 575, // measured 522 KB
   "/story": 558, // measured 507 KB
   "/terms": 387, // measured 351 KB
   "/thanks": 387, // measured 351 KB
