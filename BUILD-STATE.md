@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 4553ac3 (2026-09-02T11:45Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 4553ac3 (typecheck · 309 files / 4519 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line); full pnpm e2e green (348 passed, 1 skipped, 20.3m, exit 0 read from the command itself, run serially with nothing else building, 349 listed) at the U12 tree (4553ac3: docs/DEPLOY-RUNBOOK.md v1 — what a push to main does, reading /api/health, what the reporter shows, rolling back by promoting the previous build by SHA, who is on call (the founder, as the founder's own item in SUPPORT-RUNBOOK.md); src/ops/smoke.ts — the four smoke steps as data, /, /finder, /api/health and a signed-out /console, accepting the guard's redirect as a 307 or as the 200 whose streamed body refreshes to /console/signin because redirect() runs inside U3's loading boundary; scripts/smoke.mts — pnpm smoke <origin>, one line per step, exit 1 on any miss, exit 2 on a bad origin, no cookie, no secret, no request text; src/ops/smoke.test.ts — every step against fake responses and the runbook's table held to the script's steps and sentences verbatim). AR15 visual: unchanged — U12 adds no UI (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U13 (analytics behind consent + CSP enforced) is the next firing's unit`
+`gate: green @ a90b248 (2026-09-02T13:40Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at a90b248 (typecheck · 310 files / 4524 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line); full pnpm e2e green (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) at the U13 tree (a90b248: src/privacy/consent.ts + app/use-consent.ts — one consent store on the adhdme-privacy-ack key, agreed / not-agreed / unknown, read through useSyncExternalStore by the bar, the analytics and the withdraw control; app/consent-choice.tsx — the withdraw control on /privacy, 44 px, the bar returning on withdrawal; app/analytics.tsx — the gtag loader inserted from module code only while NEXT_PUBLIC_GA_ID is set and consent is agreed, unloaded with ga-disable-<id> on withdrawal, no next/script and no inline script; src/security/headers.ts — Content-Security-Policy enforced with unchanged directives, 'unsafe-eval' for next dev only and never in production, SCRIPT_CREATORS census; e2e/analytics.spec.ts — 0 tag-host requests before Agree, 1 after, none new after Withdraw; e2e/headers.spec.ts — the planted script blocked with disposition enforce and requestfailed "csp"; e2e/results.spec.ts Q1 — the 30 s moved from the URL to the first tile since U3's loading boundary; route budgets re-pinned, +5 KB per console route, +8 /finder, +13 interview and matching). AR15 visual: unchanged — U13's only UI is the withdraw control on /privacy (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U14 (the size census and the downward ratchet, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -267,33 +267,60 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > 349 listed) at the 4553ac3 tree. Vault log skipped (unreachable). U13 is next.
 
 > **U13 (O229-lane, the eleventh unit built of the one-year plan: analytics behind consent and
-> the CSP enforced) — CLAIMED founder-0902a, 2026-09-02T12:05Z.** Scope is the plan's U13 text and
-> nothing beyond it: GA4 loads only after the privacy bar records acceptance and is unloaded on
-> withdrawal, and U1's `Content-Security-Policy-Report-Only` becomes `Content-Security-Policy`.
-> The shape: a consent store (`src/privacy/consent.ts`, same `adhdme-privacy-ack` key so existing
-> acks and the e2e storage state stay valid; read, record, withdraw, subscribe, a
-> `useSyncExternalStore` hook), the privacy bar reading it and returning on withdrawal, a withdraw
-> control on `/privacy`, and `app/analytics.tsx` becoming a client component that inserts the
-> gtag loader from an effect only while consent holds — no `next/script`, no inline script, so
-> the tree's only hand-written inline script goes away — and on withdrawal sets the
-> `ga-disable-<id>` flag and removes what it inserted. **The line that comes out differently,
-> stated up front:** the plan's precondition is a week of U4 reports showing zero violations on
-> real routes; this deployment has no public traffic and no hosted sink, so there are no such
-> reports to read. The substitute is the full suite under enforcement — U1's own e2e already calls
-> its violation listener "the plan's week of reports, in miniature" — and the unit fixes any
-> source it finds rather than widening the policy; the policy's directives do not change, only
-> the header name (a dev-only `'unsafe-eval'` if `next dev` needs one, and nothing in
-> production). Nonces stay out: they would force every route dynamic, and the static pages are
-> the deployment. The e2e env gains `NEXT_PUBLIC_GA_ID=G-E2E0000000`, a placeholder that is not a
-> measurement ID (nothing is registered under it; the loader request is intercepted in the spec),
-> so the launch checklist's "no measurement ID lives in this repository" still holds and is
-> reworded to say so. Verification is the plan's: `e2e/analytics.spec.ts` proves no request to
-> the tag host before Agree, one after, and none after Withdraw; `headers.test.ts` asserts the
-> enforced header and the script census at zero external and zero inline; `e2e/headers.spec.ts`
-> sees the planted script blocked with `disposition: "enforce"`; the full suite under enforcement
-> is the proof that the mic and every console route still work. No UI moves beyond the withdraw
-> control on `/privacy`; the gradient aesthetic is untouched. Continuation if this claim goes
-> stale: nothing is behind a flag; the unit is whole or it is not landed.
+> the CSP enforced) — DONE founder-0902a, 2026-09-02 @ a90b248.** Scope was the plan's U13 text;
+> nothing beyond it, and the claim's stated substitution (the suite under enforcement in place of
+> a week of reports) held. **Outcome:** `src/privacy/consent.ts` is the one store for the
+> agreement — the same `adhdme-privacy-ack` key the bar has always written, so every existing
+> acknowledgement and the e2e storage state stay valid — with three answers (`agreed`,
+> `not-agreed`, `unknown` on the server and while hydrating), record, withdraw and subscribe, and
+> `app/use-consent.ts` reads it through `useSyncExternalStore` so the bar, the analytics and the
+> new control on `/privacy` never disagree within one document. `app/privacy-consent.tsx` renders
+> the bar only on `not-agreed`, so it comes back on withdrawal; `app/consent-choice.tsx` is the
+> withdraw control, inside the policy's "Cookies and local storage" section, stating what the
+> device holds and taking it back with one 44 px button under the sentence (an inline button
+> wrapped on a phone and stranded the full stop; caught in the dev-server preview). `app/analytics.tsx`
+> is a client component whose effect inserts the gtag loader from module code — no `next/script`,
+> no inline script, so the tree's only hand-written inline script is gone — only while
+> `NEXT_PUBLIC_GA_ID` is set and the store answers `agreed`; its cleanup sets `ga-disable-<id>`,
+> removes the element it inserted and drops `window.gtag`, so withdrawing stops measurement in
+> the same document without a reload. `src/privacy/measurement.ts` owns the id and the two
+> strings (loader URL, disable flag). **The header changed name, not directives:**
+> `Content-Security-Policy-Report-Only` is `Content-Security-Policy`, `report-uri` kept so an
+> enforced block still reaches the U4 sink; `headers.test.ts` (13) pins the enforced name, the
+> absence of a report-only copy, and a `SCRIPT_CREATORS` census of `["app/analytics.tsx"]` as the
+> only `createElement("script")` in the tree beside the existing zero-external / zero-inline
+> censuses. **Two findings, both measured rather than assumed.** (1) `next dev` (webpack) does not
+> run under the enforced policy without `'unsafe-eval'` — every page died on hydration with the
+> policy named in the console — so `DEV_SCRIPT_SOURCES` carries it for `dev: true` only and the
+> unit test asserts the production header never contains it. (2) Playwright fires `request` for a
+> CSP-blocked fetch: the first full run failed `headers.spec.ts` on `requested === []` because the
+> browser starts the fetch and the policy kills it; the evidence of enforcement is
+> `requestfailed` with `failure().errorText === "csp"` and no `response`, which is what the spec
+> now asserts beside `disposition: "enforce"` on the violation. **A third finding was not this
+> unit's but is fixed here because the gate found it:** `results.spec.ts` Q1 failed twice, with
+> the page on U3's loading boundary. Since U3 the URL changes at once, so the 30 s the spec had
+> put on `toHaveURL` no longer covered the sim's first render, leaving the tile with the 5 s
+> default; measured at 4.4–9.8 s on the runner, and Q2–Q5 already give their first assertion
+> 30 s. The wait moved to the tile with the measurement written beside it. The first render's
+> cost is real and is a note for the perf lane, not a change made here. **e2e env:**
+> `NEXT_PUBLIC_GA_ID=G-E2E0000000` in `playwright.config.ts`, a placeholder that is not a
+> measurement ID — nothing is registered under it and the loader is intercepted — so the launch
+> checklist's row 19 still holds and says so; `analytics.spec.ts` counts requests to the tag host
+> 0 before Agree, 1 after, 2 on navigation, still 2 after Withdraw and after a reload, 3 after
+> agreeing again, sweeps the agreed-state copy, and checks the disable flag and the element
+> count after withdrawal; `consent.spec.ts` and `analytics.spec.ts` are the two specs running
+> without the pre-set storage state, recorded in `route-array-triage.ts`. **Route budgets
+> re-pinned** (`pnpm generate:route-budgets`, the register's own law — a `stale-budget` verdict
+> on `/privacy` at 353 KB under 392 forced it): `/` 507, console routes 364 (+5 each, the consent
+> hook in the root layout), `/console/interview` 602 and `/console/matching` 462 (+13),
+> `/finder` 687 (+8), `/privacy` 353 (−3). The growth is the consent store and hook on every
+> route; U14's census starts from these figures. The gradient aesthetic is untouched — U13's
+> only UI is the withdraw control on `/privacy`, and the home and finder captures under the dev
+> server (with and without the GA id) are unchanged. Founder gates untouched; the finder stays
+> unpublished. **Verification:** `pnpm verify` green at a90b248 (typecheck · 310 files / 4524
+> tests, 13 skipped · build · audit PASS, 2 accepted, 0 unaccepted · perf PASS, 49 routes); full
+> `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
+> every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
@@ -12137,7 +12164,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U10 | done | founder-0902a | 2026-09-02T11:02Z | e40a88b | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | blocked | — | — | — | FOUNDER DECISION D-WEBKIT-RUNNER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) WebKit in the suite. Blocked 2026-09-02 by founder-0902a — the build environment refuses both Playwright CDNs (403) and pre-provisions Chromium only, so `pnpm e2e --project=webkit` cannot run where the units are built. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
-| U13 | claimed | founder-0902a | 2026-09-02T12:05Z | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
+| U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | available | — | — | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
