@@ -182,6 +182,11 @@ export function checkRouteCoverage(
  * register's point of view the gap is real and reported here rather than assumed closed by proxy.
  */
 export const ROUTE_COVERAGE_EXEMPTIONS: Readonly<Record<string, string>> = {
+  "/api/mock/fault/[kind]":
+    "U3's fault fixture, behind the mock-route guard: it throws while Next renders it so " +
+    "e2e/error-boundary.spec.ts can reach app/error.tsx in a real browser. There is no page of its " +
+    "own to sweep — the boundary it raises is what interaction.errors-plain holds to its copy, in " +
+    "src/compliance/boundary-copy.test.ts — and any kind other than `render` is a 404.",
   "/console/setup/[step]":
     "no enforced taste rule sweeps this route: it is dynamic (excluded from CONSOLE_ROUTES) and " +
     "under /console (excluded from every honesty.* public sweep). Its steps are walked by " +
@@ -321,11 +326,13 @@ export const TASTE_RULES: readonly TasteRule[] = [
     enforcedBy: [
       "src/voice/speech.test.ts :: says nothing to a patient in error-code language",
       "src/voice/speech.test.ts :: offers typing in every error message, since that is always the way out",
+      "src/compliance/boundary-copy.test.ts :: renders the heading, the sentence and both doors, and never the thrown message",
+      "src/compliance/boundary-copy.test.ts :: wears the 404's register: no eyebrow, no code, the same doors",
     ],
     routeScope: {
       kind: "not-route-based",
       reason:
-        "speech.test.ts drives the voice module directly against a faked SpeechRecognition; no page is navigated, so there is no route to name",
+        "speech.test.ts drives the voice module directly against a faked SpeechRecognition, and boundary-copy.test.ts (U3) renders the error boundaries to markup with a thrown error; no page is navigated in either, so there is no route to name",
     },
   },
   {

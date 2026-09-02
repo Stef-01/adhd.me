@@ -19,6 +19,7 @@ import {
   sweepSurface,
 } from "./public-surfaces";
 import { eachOf } from "@/quality/non-vacuous";
+import { boundarySentences } from "./boundary-copy";
 
 const ALL_RULES = [...LANDING_RULES, ...MESSAGE_BANNED_RULES];
 
@@ -305,5 +306,22 @@ describe("W192 the open question is kept in the suite, not in a document", () =>
 
     expect(PRODUCT_FLAGS["brand-is-a-condition"]).toBeDefined();
     expect(PRODUCT_FLAGS["brand-is-a-condition"]!).toMatch(/Ahpra advertising review of the NAME/);
+  });
+});
+
+describe("U3 the boundary copy answers to the patient rules", () => {
+  // The boundaries are outside the route register on purpose — they are not surfaces, they are
+  // what a surface becomes when it fails — so the sweep above never reaches them. This one does:
+  // every sentence, under the strictest audience, because any page can fail, the patient ones
+  // included.
+  it("passes every sentence under the full patient rule set", () => {
+    for (const sentence of eachOf(boundarySentences(), "the boundary sentences")) {
+      expect(sweepSurface("(boundary)", "patient", sentence.text), sentence.key).toEqual([]);
+    }
+  });
+
+  it("would catch a testimonial or a rating planted in a boundary", () => {
+    expect(sweepSurface("(boundary)", "patient", "Something went wrong. Our patients love it anyway.").length).toBeGreaterThan(0);
+    expect(sweepSurface("(boundary)", "patient", "Rated 5/5 even when it breaks.").length).toBeGreaterThan(0);
   });
 });

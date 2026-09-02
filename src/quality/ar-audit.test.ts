@@ -71,10 +71,11 @@ describe("AR34 the audit's inventory is derived, not transcribed", () => {
     const fixture = Object.values(ROUTE_PROOFS).filter((p) => p.source === "fixture").length;
     const copy = Object.values(ROUTE_PROOFS).filter((p) => p.source === "copy").length;
     pinRow("…fixture-derived / copy proofs", `${fixture} / ${copy}`);
-    // S1's whole content: the two derivations differ by exactly the synthesized 404 page.
+    // S1's whole content: the two derivations differ by exactly the synthesized 404 page and, since
+    // U3, the fault fixture — a shippable payload that exists to throw, so it has no working truth.
     const budgetOnly = Object.keys(ROUTE_BUDGETS).filter((r) => !(r in ROUTE_PROOFS));
     const proofOnly = Object.keys(ROUTE_PROOFS).filter((r) => !(r in ROUTE_BUDGETS));
-    expect(budgetOnly).toEqual(["/_not-found"]);
+    expect(budgetOnly.sort()).toEqual(["/_not-found", "/api/mock/fault/[kind]"]);
     expect(proofOnly).toEqual([]);
   });
 

@@ -61,6 +61,10 @@ export const DYNAMIC_ROUTE_PLAN: Readonly<Record<string, { sample: string } | { 
     excluded:
       "Each step renders inside the onboarding wizard `e2e/console.spec.ts` walks end to end. The steps are enumerated by that spec from the wizard itself, so a new step is covered by being reachable rather than by being listed twice.",
   },
+  "/api/mock/fault/[kind]": {
+    excluded:
+      "U3's fault fixture: `render` throws on request by design so `e2e/error-boundary.spec.ts` can reach the route error boundary in a real browser, and any other kind is a 404. Behind the mock-route guard. There is no page here to sweep; the boundary it raises is what the spec holds to its copy.",
+  },
 };
 
 /** The dynamic routes on disk, checked against the plan. Returns those with no entry. */

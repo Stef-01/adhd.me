@@ -6,7 +6,7 @@
 
 - **22 rules** across 6 sections
 - **9 enforced**, **13 unenforced**
-- **1 route exemption** declared (routes no enforced rule's declared scope reaches; see below)
+- **2 route exemptions** declared (routes no enforced rule's declared scope reaches; see below)
 
 ## Layout
 
@@ -91,7 +91,9 @@ Errors are plain sentences with a way out, never error-code language on a patien
 - **Enforced by:**
   - `src/voice/speech.test.ts :: says nothing to a patient in error-code language`
   - `src/voice/speech.test.ts :: offers typing in every error message, since that is always the way out`
-- **Route scope:** not route-based — speech.test.ts drives the voice module directly against a faked SpeechRecognition; no page is navigated, so there is no route to name
+  - `src/compliance/boundary-copy.test.ts :: renders the heading, the sentence and both doors, and never the thrown message`
+  - `src/compliance/boundary-copy.test.ts :: wears the 404's register: no eyebrow, no code, the same doors`
+- **Route scope:** not route-based — speech.test.ts drives the voice module directly against a faked SpeechRecognition, and boundary-copy.test.ts (U3) renders the error boundaries to markup with a thrown error; no page is navigated in either, so there is no route to name
 
 ### `interaction.hover-focus`
 
@@ -221,5 +223,7 @@ Walk the checklists above; fix in place, smallest diff.
 ## Route coverage exemptions
 
 Routes no enforced rule's declared scope reaches, named with a reason rather than silently passing as covered (AR3). This lists the register's own declared exemptions; the live check against the filesystem's current route list runs in `taste-register.test.ts`.
+
+- `/api/mock/fault/[kind]` — U3's fault fixture, behind the mock-route guard: it throws while Next renders it so e2e/error-boundary.spec.ts can reach app/error.tsx in a real browser. There is no page of its own to sweep — the boundary it raises is what interaction.errors-plain holds to its copy, in src/compliance/boundary-copy.test.ts — and any kind other than `render` is a 404.
 
 - `/console/setup/[step]` — no enforced taste rule sweeps this route: it is dynamic (excluded from CONSOLE_ROUTES) and under /console (excluded from every honesty.* public sweep). Its steps are walked by e2e/console.spec.ts's onboarding wizard test, which asserts the flow completes but carries no taste-rule tag and checks no taste property — an honest gap, not yet closed.

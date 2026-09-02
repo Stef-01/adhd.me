@@ -25,7 +25,9 @@
 
 import { createRequire } from "node:module";
 
-const require = createRequire("/home/user/ADHD/package.json");
+// U3: resolve from this tree, not the sibling deployment's path — this file was copied from
+// Stef-01/ADHD at the split and still pointed at a clone that need not exist beside it.
+const require = createRequire(import.meta.url);
 const { chromium } = require("@playwright/test");
 
 export const CHROMIUM = "/opt/pw-browsers/chromium";

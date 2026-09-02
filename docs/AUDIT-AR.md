@@ -39,7 +39,7 @@ Every row below is asserted against the live source by `ar-audit.test.ts`.
 | accepted-diff entries (AR15 initial + 6 attributed changes) | 8 |
 | baseline captures in the manifest | 180 |
 | manifest sha256 == newest acceptance | **true, checked live** |
-| per-route shipped-JS budgets | 48 |
+| per-route shipped-JS budgets | 49 |
 | working-truth route proofs | 47 |
 | …fixture-derived / copy proofs | 20 / 27 |
 | public surfaces classified by audience | 16 |
@@ -71,7 +71,11 @@ understood rather than papered over.** `ROUTE_BUDGETS` (50) derives from the *bu
 must budget it) but not a visitable route (so the working-truth sweep cannot goto it as itself).
 The 404 *surface* is still proof-swept: `/about` is founder-gated behind `notFound()` and its
 working-truth proof IS the 404 copy. Recorded as a seam, not a defect; it becomes one only if a
-third "every route" derivation appears without naming which census it follows.
+third "every route" derivation appears without naming which census it follows. **U3 (2026-09-02)
+adds a second named member to the seam:** `/api/mock/fault/[kind]`, the fault fixture, is a
+budgeted payload (the build ships it) with no working-truth proof, because the route exists to
+throw — the content it "renders" is `app/error.tsx`, which `e2e/error-boundary.spec.ts` holds to
+its copy and the working-truth register refuses by construction. The test pins both members.
 
 **AR34-S2 — the taste register is 9/22 enforced, and that bound belongs in the dossier.** The
 13 unenforced rules are pinned and can only shrink deliberately, but a green verify today

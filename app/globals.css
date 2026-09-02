@@ -5446,7 +5446,8 @@ textarea:focus-visible {
 
 /* ── Launch checklist surfaces (O15) ─────────────────────────────────────────────────────── */
 
-/* The 404 (item 1): the same calm register as every other dead end in the product. */
+/* The 404 (item 1): the same calm register as every other dead end in the product. U3's error
+   boundaries share it. */
 .notfound-screen {
   min-height: 100svh; display: flex; flex-direction: column; align-items: flex-start;
   justify-content: center; gap: 10px; max-width: 560px; margin: 0 auto; padding: 32px 24px;
@@ -5469,6 +5470,12 @@ textarea:focus-visible {
   font-size: 0.9375rem; text-decoration: none;
 }
 .notfound-primary:focus-visible, .notfound-secondary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* U3: the error boundaries (app/error.tsx, app/console/error.tsx, app/global-error.tsx) wear the
+   same register — the retry is a button on the primary door's shape, and the loading states are one
+   quiet line where the screen will be. */
+button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 0.9375rem; }
+.loading-screen { max-width: 560px; margin: 0 auto; padding: 32px 24px; color: var(--muted); font-size: 1rem; }
+.loading-screen p { margin: 0; }
 
 /* Prose pages: /faq, /examples, /thanks (items 4, 6, 7). */
 .prose-screen { min-height: 100svh; display: flex; flex-direction: column; }

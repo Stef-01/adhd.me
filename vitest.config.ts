@@ -5,6 +5,10 @@ export default defineConfig({
   resolve: {
     alias: { "@": path.resolve(__dirname, "src") },
   },
+  // U3: tsconfig says `jsx: "preserve"` for Next, which leaves esbuild on the classic transform
+  // and an undefined `React` the moment a test imports a component from app/. The boundary tests
+  // render app/error.tsx and its siblings to markup, so use the automatic runtime here.
+  esbuild: { jsx: "automatic" },
   test: {
     include: ["src/**/*.test.ts"],
     environment: "node",

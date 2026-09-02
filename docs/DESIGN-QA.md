@@ -3896,3 +3896,26 @@ real-roster ranking law switches the examples off the way a person would, throug
 **Captures:** `qa/o226-welcome-390.png`, `qa/o226-welcome-tools-open-390.png`,
 `qa/o226-results-390.png`, `qa/o226-results-polish-{390,1280}.png`,
 `qa/o226-welcome-polish-390.png`.
+
+## U3 — the error boundaries (2026-09-02)
+
+**Subject:** the screen nobody designs on purpose. Until U3 a render error anywhere fell through to
+Next's own "Application error" frame, in the framework's words, with a digest a reader cannot use.
+**Mode:** Operate — a person mid-task needs to know what happened and what to do, nothing more.
+**The choice:** the boundaries (`app/error.tsx`, `app/console/error.tsx`, `app/global-error.tsx`)
+wear the 404's register exactly — the same `.notfound-*` classes, so whatever the 404 wears (as of
+the founder's 2026-09-01 redesign: an Inter heading, one muted sentence, a filled primary door and
+an outlined second) the boundaries wear too, without a rule of their own — because
+a boundary is what a surface becomes when it fails, and the product already has one calm dead end;
+a second register would have been a second thing to learn at the worst moment. Three sentences and
+no more: what happened, that the reader did not cause it, and the way out. Retry is the primary
+door because it is what a boundary can actually offer; the second door is a plain anchor (`/` or
+`/console`), a full navigation out of the broken tree. No eyebrow, no code, no digest — the error
+goes to the log, the reader gets the sentence (taste-rule `interaction.errors-plain`). The loading
+states are one announced line where the screen will be. **Compliance:** every sentence is a
+`BOUNDARY_COPY` constant and sweeps clean under the full patient rule set. **Verified in a real
+browser:** `e2e/error-boundary.spec.ts` throws through the fault fixture and lands on this screen,
+status 500, framework wording absent, second door landing on the landing page.
+
+**Captures:** `qa/u3-error-390.png`, `qa/u3-error-1280.png` — taken at the tree U3 lands on, i.e.
+after the redesign, so they show the register the boundary actually ships in.
