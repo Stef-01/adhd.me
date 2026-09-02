@@ -119,6 +119,50 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O228 (U1 — security headers and a report-only CSP; the first unit of the one-year plan, under
+> the founder's `/goal`: "when finalised, for next few hours build according to this developed
+> plan") — 2026-09-02.** `next.config.mjs` became `next.config.ts` so the config can import the
+> tree's own TypeScript (Next transpiles it itself — the build no longer depends on the host Node's
+> type stripping, which only the `.mts` gate scripts use); it now sets `poweredByHeader: false`,
+> `reactStrictMode: true`, and mounts `securityHeaders()` from the new `src/security/headers.ts` on
+> `/:path*`: `Strict-Transport-Security: max-age=63072000; includeSubDomains`,
+> `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
+> `Permissions-Policy: microphone=(self), geolocation=(), camera=()`, `X-Frame-Options: DENY`, and
+> `Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline';
+> style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri
+> 'self'; form-action 'self'; frame-ancestors 'none'` — Google's gtag hosts join `script-src`,
+> `img-src` and `connect-src` only when `NEXT_PUBLIC_GA_ID` is set (it is not), Vercel's debug
+> script host only under `next dev`. **The plan's U1 text was corrected in place, and says so:** it
+> asked for per-script hashes of the three JSON-LD blocks and the GA loader, and the tree, read
+> rather than remembered, refuses them — the JSON-LD blocks are `application/ld+json` DATA that the
+> browser never executes (`script-src` does not govern them); the executable inline scripts on every
+> page are Next's own hydration payloads (`self.__next_f.push`, seven per page in `.next/server/app/
+> index.html`), whose bytes no static config can hash; and one hash in `script-src` switches
+> `'unsafe-inline'` off in every CSP3 browser, so a partial list would have broken every page rather
+> than tightened anything. Nonces (middleware, every route dynamic) versus staying static is U13's
+> decision on a week of reports; the `report-uri` route moved to U4, whose text gained the sentence,
+> so the sink exists before anything posts to it. **What is held instead:** `src/security/
+> headers.test.ts` (12 tests) asserts every header and both flags through `next.config.ts` itself,
+> that the default posture names no third-party origin at all and carries no hash or nonce, that the
+> GA and Vercel hosts appear only under their conditions and only in the directives gtag needs, and
+> — both directions — that the GA loader in `app/analytics.tsx` is the only external script the tree
+> loads and sits inside the policy, that the policy's Vercel host is the one the installed package
+> names, and by census over every `<script>`/`<Script>` and `dangerouslySetInnerHTML` in `app/` and
+> `src/` that the only inline scripts are the three inert JSON-LD blocks and the GA snippet (a
+> planted executable inline script, a bare `dangerouslySetInnerHTML` and a foreign `src` all fail the
+> census; no `javascript:` URL or string event handler anywhere). `e2e/headers.spec.ts` (6 tests)
+> reads the headers off real `next start` responses for `/`, `/finder`, `/console/signin`, `/faq`
+> and a 404 (and no `X-Powered-By`), and proves the report-only policy QUIET in Chromium — zero
+> `securitypolicyviolation` events across the landing, the finder, sign-in, onboarding and the
+> console shell — with a planted third-party script reported (`script-src-elem`, disposition
+> `report`) so the recorder and the policy are both shown live. Design: the fonts are self-hosted
+> (`@fontsource-variable`, so `font-src` stays at `default-src 'self'`); no `data:`/`blob:`, no
+> iframe, worker, media element or client-side `fetch` exists in runtime code, so none is admitted;
+> the mic (Web Speech + `getUserMedia`) needs only the `Permissions-Policy` grant. Not done, and
+> said so: `report-uri` (U4), enforcement and the nonce decision (U13), `images` config (nothing
+> remote is loaded; nothing to configure). The vault log is skipped (unreachable) and the commit
+> says so.
+
 > **O227 (FOUNDER-DIRECTED: "conduct critical appraisal using all relevant skills to understand
 > exactly what is needed to upgrade the whole platform into a perfectly functional app and add that
 > to a consolidated 1 year build plan" + "add to plan a complex multistage refactor for next few

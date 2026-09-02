@@ -527,17 +527,30 @@ every R-lane unit re-runs `scripts/size-census.mts` and lowers the floors it mov
 ### Q1 — September to November 2026: deployment readiness and the refactor's foundation
 
 - **U1** [P] (S) — Security headers and a report-only CSP.
-  `next.config.mjs` `headers()`: `Strict-Transport-Security`, `X-Content-Type-Options`,
+  `next.config.ts` `headers()` on every route: `Strict-Transport-Security`, `X-Content-Type-Options`,
   `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` granting `microphone=(self)`
   and denying geolocation/camera, `X-Frame-Options: DENY`; `poweredByHeader: false`,
-  `reactStrictMode: true`. A `Content-Security-Policy-Report-Only` whose script sources are
-  `'self'` plus per-script hashes for the three JSON-LD blocks (`app/layout.tsx:99`,
-  `app/faq/page.tsx:93`, `app/breadcrumbs.tsx:21`) and the GA loader, computed at build by a
-  small helper so a copy edit to the JSON-LD cannot silently break the policy. Enforcement is U13.
-  → verify: `src/security/headers.test.ts` asserts every header above on `/`, `/finder` and a
-  console route through `next start`, and that the report-only policy hashes equal the rendered
-  scripts (both directions: every hash in the policy matches a script, every inline script has a
-  hash); e2e `headers.spec.ts` reads them off a real response.
+  `reactStrictMode: true`. A `Content-Security-Policy-Report-Only` built by `src/security/headers.ts`:
+  `script-src 'self' 'unsafe-inline'` (Google's gtag hosts join only when `NEXT_PUBLIC_GA_ID` is
+  set, Vercel's debug script only under `next dev`), every other directive tight (`default-src`,
+  `base-uri`, `form-action` `'self'`; `object-src`, `frame-ancestors` `'none'`). **No script
+  hashes** — corrected by O228 from the text as written, which asked for per-script hashes of the
+  three JSON-LD blocks and the GA loader: the JSON-LD blocks are `application/ld+json` data the
+  browser never executes, so `script-src` does not govern them; the executable inline scripts on
+  every page are Next's own hydration payloads (seven per page in the built output), whose bytes
+  no static config can hash; and one hash in `script-src` switches `'unsafe-inline'` off in every
+  CSP3 browser, so a partial list would break every page rather than tighten anything. Nonces
+  (middleware, every route dynamic) versus staying static is U13's decision, on a week of reports
+  through the U4 sink; the `report-uri` route is U4's. Enforcement is U13.
+  → verify: `src/security/headers.test.ts` asserts every header above and both config flags
+  through `next.config.ts`, holds the policy to the tree in both directions (a third-party origin
+  is named only where the tree loads one, and nothing the tree loads is outside the policy), and
+  proves by census that the only inline scripts in `app/` and `src/` are the inert JSON-LD blocks
+  and the GA snippet — a planted executable inline script fails it; e2e `headers.spec.ts` reads
+  the headers off real responses for `/`, `/finder`, `/console/signin`, `/faq` and a 404, and
+  proves the report-only policy quiet in Chromium (zero `securitypolicyviolation` events across
+  the landing, the finder, sign-in, onboarding and the console shell, with a planted
+  third-party script reported).
 
 - **U2** [P] (S) — Secure cookies, `.env.example`, and a boot-time posture assertion.
   `secure: process.env.NODE_ENV === "production"`, `maxAge` matching the 7-day HMAC window and
@@ -567,7 +580,9 @@ every R-lane unit re-runs `scripts/size-census.mts` and lowers the floors it mov
   interface with a console adapter by default and a vendor adapter selected by `ADHDME_REPORTER`
   (no vendor is chosen by this unit; the seam is). `app/api/health/route.ts` returning commit
   SHA, boot time and store adapter kind, never state. `useReportWebVitals` posting LCP/INP/CLS to
-  the same sink, and nothing else.
+  the same sink, and nothing else. `app/api/csp-report/route.ts` receiving the browser's CSP
+  reports into the same sink, at which point U1's report-only policy gains its `report-uri`
+  (O228 moved the route here so the sink exists before anything posts to it).
   → verify: `src/ops/reporter.test.ts` proves an uncaught server error reaches the sink with route
   and SHA and that patient text (a finder request) never appears in a report payload — a
   planted request string must be absent; e2e asserts `/api/health` shape and that the console
