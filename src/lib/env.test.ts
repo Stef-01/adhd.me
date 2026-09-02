@@ -23,6 +23,11 @@ const SCANNED_ROOT_FILES = ["next.config.ts", "playwright.config.ts", "vitest.co
 const SOURCE = /\.(ts|tsx|mts|mjs)$/;
 const ENV_FILE = path.join(ROOT, ".env.example");
 
+/** Stable repository path for assertions and diagnostics, independent of the host OS. */
+function repoPath(file: string): string {
+  return path.relative(ROOT, file).replaceAll(path.sep, "/");
+}
+
 /** `src/lib/env.ts` reads its keys off an injected `source`, so those reads are counted here too. */
 const ENV_MODULE = path.join(ROOT, "src/lib/env.ts");
 
@@ -42,7 +47,7 @@ function readsIn(file: string): Set<string> {
   for (const m of text.matchAll(/process\.env\["([A-Z][A-Z0-9_]*)"\]/g)) names.add(m[1]!);
   for (const m of text.matchAll(/process\.env\[([A-Za-z_][A-Za-z0-9_]*)\]/g)) {
     const constant = new RegExp(`const ${m[1]!} = "([A-Z][A-Z0-9_]*)"`).exec(text);
-    if (!constant) throw new Error(`${path.relative(ROOT, file)} reads process.env[${m[1]}] without a string constant of that name in the file`);
+    if (!constant) throw new Error(`${repoPath(file)} reads process.env[${m[1]}] without a string constant of that name in the file`);
     names.add(constant[1]!);
   }
   if (file === ENV_MODULE) {
@@ -58,7 +63,7 @@ const FILES = [
 
 const READS = new Map<string, string[]>();
 for (const file of FILES) {
-  for (const name of readsIn(file)) READS.set(name, [...(READS.get(name) ?? []), path.relative(ROOT, file)]);
+  for (const name of readsIn(file)) READS.set(name, [...(READS.get(name) ?? []), repoPath(file)]);
 }
 
 /** The names `.env.example` declares, each on a `NAME=` line under a `#` purpose comment. */
