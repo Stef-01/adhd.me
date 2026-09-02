@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 65705df (2026-09-02T16:05Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 65705df (typecheck · 312 files / 4546 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (358 passed, 1 skipped, 24.8m, exit 0 read from the command itself, run serially with nothing else building) at the O230 tree (65705df: app/page.tsx — the finder at the root, the app opening on the product rather than a story; app/story/page.tsx — the landing moved whole; next.config.ts — /finder a 308; app/loading.tsx — the streaming boundary moved with the route it guards; src/app-shell/tabs.ts + tabs.test.ts — the four-tab register, held to real routes, to the researched 3-5 and to the compliance linter; app/app-tabs.tsx — one bottom bar, icon and label, 56px targets, aria-current, safe-area padding, hidden inside a task; app/sheet.tsx — a portalled modal bottom sheet with two detents, a dismissing drag, a 48px grabber that cycles them by tap, focus trapped and returned; e2e/app-shell.spec.ts — the front door, the redirect, the bar, the touch floor and the sheet's dialog behaviour; src/security/robots.ts — / hidden, /finder gone with its route; src/quality/size-census.ts — 19 reasoned raises). AR15 visual: O230 reshapes the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; O230 (the app shell, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U15 (the simplicity laws and their registers, R0) is the next firing's unit`
+`gate: green @ 32428a7 (2026-09-02T17:10Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 32428a7 (typecheck · 313 files / 4565 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (358 passed, 1 skipped, 24.5m, exit 0 read from the command itself, run serially with nothing else building) at the U15 tree (32428a7: docs/SIMPLICITY-LAWS.md — the refactor lane's four rules, each a register that can fail; src/quality/module-reasons.ts — 133 unreached modules tagged law (50) / gated (82) / delete (1), the gate reference a founder gate or the plan unit that reaches it, every why the module's own header line; src/quality/simplicity.ts + simplicity-read.ts — the 600-line allowlist with the length argued per file, the normalised 12-line duplicate detector (zero found across 435 files), the single-importer ceiling on U14's census; simplicity.test.ts (19) — the plan's four planted violations plus the laws document held to the registers both ways). AR15 visual: unchanged by U15, which touches no route, UI or copy; O230 reshaped the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230 (the app shell, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -323,29 +323,53 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
 > **U15 (O229-lane, the thirteenth unit built of the one-year plan: the simplicity laws and their
-> registers, R0) — CLAIMED founder-0902a, 2026-09-02T16:20Z.** Scope is the plan's U15 text and
-> nothing beyond it. `docs/SIMPLICITY-LAWS.md` states the refactor lane's rules in this tree's
-> voice — one implementation per concept; a module is reached by the product, by the law, or by a
-> named gate, or it is deleted; a file over 600 lines carries a dated reason; a duplicated block is
-> a defect — and four registers make each rule a test that can fail:
-> `src/quality/module-reasons.ts` tags every unreached module `law | gated:<G> | delete`; a
-> file-size allowlist carries a dated reason per file over the line; a duplicate-block detector
-> reads normalised 12-line windows across `src/` and `app/`; and the single-importer census names
-> what only one module needs. Each register is proven able to go red on a planted violation — an
-> untagged unreached module, an unlisted long file, a copied block, a module only its own test
-> imports — because a register nobody can make fail is a list, not a law. **The line that will come
-> out differently, stated up front:** the plan's verify says the register covers "all 127 unreached
-> modules"; the tree measures **130** today (U14's census, at its floor), because U1–U14 and O230
-> each added law modules the product does not import. The register will cover the measured set in
-> both directions and the delta will be recorded, exactly as U14 recorded §1's drift — the plan's
-> figure is what the tree said on the day it was written, not a target to make the tree match.
-> **This unit writes laws and registers; it deletes nothing and moves nothing.** U30 is where the
-> `gated:<G>` tags are executed and U16 is where the linter lands; a module tagged `delete` here is
-> a finding for that unit, not an edit made in this one — the plan separates naming a thing from
-> doing it, and the separation is what keeps this unit reviewable. No UI, no route, no copy: the
-> gradient aesthetic and the new app shell are untouched by construction.
-> **Continuation if this claim goes stale:** nothing lands behind a flag; the laws document and its
-> four registers are one unit and land together or not at all.
+> registers, R0) — DONE founder-0902a, 2026-09-02 @ 32428a7.** Scope was the plan's U15 text; two
+> lines came out differently and both are below. **Outcome:** `docs/SIMPLICITY-LAWS.md` states the
+> refactor lane's four rules and each is a register with a test that can fail.
+> `src/quality/module-reasons.ts` carries **133 entries — 50 `law`, 82 `gated`, 1 `delete`** — one
+> per module the product's import closure does not reach. The gate reference is a founder gate
+> (G1–G10) **or the plan unit whose surface will reach it** (W48, W97, W157, W214); the plan's tag
+> vocabulary said `gated:<G>` and the tree has 30-odd modules held by a unit rather than a founder
+> decision, so the reference was widened and `bad-gate` fails on anything that names neither — a
+> tag that names no gate is a shrug, not a reason. **Every `why` is the module's own first header
+> line**, not a sentence composed about it here: a reason written at register-writing time records
+> what somebody assumed on the day, and quoting the module means the reason changes when the module
+> does. The one `delete` is `src/lib/version.ts` — two exports, no importer anywhere in `src/`,
+> `app/`, `e2e/` or `scripts/`. `src/quality/simplicity.ts` holds the other three laws: the
+> **file-size allowlist** (600 lines, ten entries, each carrying the length that was argued and a
+> dated reason, failing four ways — `unlisted`, `grown`, `stale`, `no-reason` — where `stale` is the
+> one that matters, because an allowlist that never shrinks is where things go to stop being
+> measured); the **duplicate detector** (`simplicity-read.ts`, normalised 12-line windows across
+> `src/` and `app/`, indentation and spacing normalised away, comment and blank lines dropped, one
+> finding per file pair); and the **single-importer law**, deliberately a ceiling on U14's census
+> rather than a register of 63 modules nobody would read. **The tree today:** zero duplicate blocks
+> over twelve lines across 435 files, and ten files over 600 lines — four data (the compliance
+> corpus, the roster, the personas, the taste register), four the matching engine and the finder's
+> state machine, two the story's scenes and the fleet simulation. `simplicity.test.ts` (19) is the
+> plan's verify sentence made executable: the four planted violations it names, one each, plus a
+> `bad-gate` plant, a `grown` plant and a `stale` plant, and a stale-check holding the laws document
+> to the registers' real figures in both directions. The duplicate plant writes a real copy into a
+> real directory — reindented and respaced, so the normalisation has to be doing work — and runs the
+> real walk over it, because an empty register and a broken detector look identical from outside.
+> **The two lines that came out differently.** (1) The plan says 127 unreached modules; the tree
+> says 133 — U1–U14, O230 and this unit's own three registers each added law modules the product
+> does not import. The register covers the MEASURED set and records the delta, exactly as U14 did
+> for §1. (2) **Law 4's first draft said a module imported only by its own test is "always wrong",
+> and the census caught that within the hour on the three modules this very unit had just added.**
+> That is what `law` means in this tree — W53's shape: the module decides, the test enforces, the
+> product touches neither, and a law with a second caller inside the product would be a law the
+> product could bend. The law now carries the qualifier (`unless it is tagged law`) and names its
+> own author as the case that forced it; `src-test-held-modules` rose 97 → 99 with a reason saying
+> the exemption applies to `law` modules only. **This unit deleted nothing, moved nothing and
+> renamed nothing** — every finding is a name, and U16 (the linter and the junk) and U30 (the gated
+> tags executed, the deletion carried out) are where the tree gets smaller. Naming and doing are
+> separate units on purpose: this one has to be reviewable as a set of claims about the tree, and a
+> unit that also changed the tree could not be. Founder gates untouched; no route, UI or copy
+> changed, so O230's app shell and the gradient are untouched by construction.
+> **Verification:** `pnpm verify` green at 32428a7 (typecheck · 313 files / 4565 tests, 13 skipped ·
+> build · audit PASS, 2 accepted, 0 unaccepted · perf PASS, 49 routes · gate accounting PASS ·
+> `pnpm census` PASS, 31 measures, seven raises each with its reason); full `pnpm e2e` green at
+> 32428a7 (358 passed, 1 skipped, 24.5m). Vault log skipped: Stefan-Brain unreachable. U16 is next.
 
 > **O230 (FOUNDER-DIRECTED, 2026-09-02: "there should be no landing page, it should function
 > exactly like an app for the demo day and be extremely polished, research online exactly how
@@ -12307,7 +12331,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
-| U15 | claimed | founder-0902a | 2026-09-02T16:20Z | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
 | U18 | available | — | — | — | (M) R1. The record registry. Depends: U17. -> verify: both-directions test between the registry, the adapters' declared record types and `DOMAIN_TABLES`; a planted unregistered record type fails; parse rejects a malformed JSONL line with a versioned error instead of a cast. |
