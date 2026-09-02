@@ -15,8 +15,9 @@
 // handoff. Every claim below is checked against the code that makes it true.
 
 import Link from "next/link";
-import { GA_ID } from "../analytics";
+import { GA_ID } from "@/privacy/measurement";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
+import { ConsentChoice } from "../consent-choice";
 import { PublicHeader } from "../public-header";
 import { SiteFooter } from "../site-footer";
 
@@ -198,6 +199,8 @@ export default function PrivacyPolicyPage() {
             storage: a record that you have seen and agreed to this policy, which never leaves
             your device.
           </p>
+          {/* U13: what this device holds right now, and the way to take the agreement back. */}
+          <ConsentChoice />
           <p className="mt-2 text-sm leading-6">
             The hosting platform (Vercel) counts page visits without cookies: visits are
             grouped by a short-lived hash that is discarded within 24 hours, and no profile of
@@ -227,14 +230,17 @@ export default function PrivacyPolicyPage() {
         </section>
         {/* Rendered ONLY when measurement is actually switched on (the same environment switch
             that loads the script), so this notice can never describe tracking that is not
-            running, or stay silent about tracking that is. */}
+            running, or stay silent about tracking that is. U13: the switch is necessary, not
+            sufficient — the tag also waits for the agreement, and stops when it is withdrawn. */}
         {GA_ID && (
           <section>
             <h2 className="text-lg font-medium text-stone-900">Site measurement</h2>
             <p className="mt-2 text-sm leading-6">
-              This site uses Google Analytics 4 to count page visits. Advertising signals are
-              switched off, Google discards the connecting IP address on receipt, and nothing you
-              type or say into the finder is sent to it.
+              This site uses Google Analytics 4 to count page visits. It loads only after you have
+              agreed to this policy, and withdrawing your agreement (above, under cookies and local
+              storage) stops it. Advertising signals are switched off, Google discards the
+              connecting IP address on receipt, and nothing you type or say into the finder is sent
+              to it.
             </p>
           </section>
         )}

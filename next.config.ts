@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
     // cost. Next ships a default list; naming ours makes the dependency explicit.
     optimizePackageImports: ["@phosphor-icons/react", "motion"],
   },
-  // U1: the security headers and the report-only CSP on every route. Built once at `next build`
+  // U1: the security headers and the CSP (enforced since U13) on every route. Built once at `next build`
   // from the same environment the GA component reads, so the policy and the page agree.
   // U7: then `X-Robots-Tag: noindex, nofollow` on each route the crawler register hides — one
   // entry per route, derived, so the header cannot disagree with the meta tag or the sitemap.

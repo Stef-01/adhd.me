@@ -1,4 +1,4 @@
-// U1 (O228): the security headers, the report-only CSP, and the census that keeps its
+// U1 (O228): the security headers, the CSP (enforced since U13), and the census that keeps its
 // `'unsafe-inline'` honest.
 //
 // The plan's U1 text asked this test to hold per-script hashes to the rendered scripts in both
@@ -8,19 +8,23 @@
 //
 //   - the policy names a third-party origin only where the tree loads one (GA, when configured;
 //     Vercel's debug script, in development) — and nothing the tree loads is outside the policy;
-//   - the only inline scripts in `app/` and `src/` are inert JSON data blocks and the GA snippet,
-//     so `'unsafe-inline'` covers Next's own payloads and nothing hand-written. A new inline script
-//     fails here before it can fail under U13's enforcement.
+//   - the only script elements in `app/` and `src/` are inert JSON data blocks, so
+//     `'unsafe-inline'` covers Next's own payloads and nothing hand-written (U13 moved the GA
+//     bootstrap into module code; the loader is the one `createElement("script")`). A new inline
+//     script fails here before it can fail under enforcement.
 //
 // `e2e/headers.spec.ts` reads the same headers off real responses and proves the policy is quiet
-// on `/`, `/finder` and a console route (zero `securitypolicyviolation` events in Chromium).
+// on `/`, `/finder` and a console route (zero `securitypolicyviolation` events in Chromium), and
+// that a planted script is blocked outright, not merely reported.
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
+import { gaLoaderUrl } from "../privacy/measurement";
 import {
   contentSecurityPolicy,
+  DEV_SCRIPT_SOURCES,
   GA_HOSTS,
   securityHeaders,
   VERCEL_DEBUG_SCRIPT,
@@ -117,6 +121,11 @@ const CENSUS = runtimeFiles().flatMap((file) =>
   scriptElements(repoPath(relative(ROOT, file)), readFileSync(file, "utf8")),
 );
 
+/** U13: runtime files that create a script element from code — the other way to load a script. */
+const SCRIPT_CREATORS = runtimeFiles()
+  .filter((file) => /createElement\(\s*["'`]script["'`]/.test(stripComments(readFileSync(file, "utf8"))))
+  .map((file) => repoPath(relative(ROOT, file)));
+
 describe("U1 the security headers", () => {
   it("ships every header the plan names, with the values it names", () => {
     const byKey = Object.fromEntries(securityHeaders().map((h) => [h.key, h.value]));
@@ -126,10 +135,11 @@ describe("U1 the security headers", () => {
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Permissions-Policy": "microphone=(self), geolocation=(), camera=()",
       "X-Frame-Options": "DENY",
-      "Content-Security-Policy-Report-Only": contentSecurityPolicy(),
+      "Content-Security-Policy": contentSecurityPolicy(),
     });
-    // Report-only, not enforcing: enforcement is U13's, after a week of reports.
-    expect(Object.keys(byKey)).not.toContain("Content-Security-Policy");
+    // U13: enforced, not report-only — the report-only header would be a second copy that
+    // blocked nothing, and a reader of the response could not tell which one was in force.
+    expect(Object.keys(byKey)).not.toContain("Content-Security-Policy-Report-Only");
   });
 
   it("is mounted on every route by next.config, alongside the two config flags", async () => {
@@ -147,7 +157,7 @@ describe("U1 the security headers", () => {
   });
 });
 
-describe("U1 the report-only policy", () => {
+describe("U1 the policy (U13: enforced)", () => {
   it("names no third-party origin at all in the default (GA dark, production) posture", () => {
     const policy = contentSecurityPolicy();
     expect(policy).not.toMatch(/https?:/);
@@ -183,16 +193,19 @@ describe("U1 the report-only policy", () => {
     expect(strip(withGa)).toBe(contentSecurityPolicy());
   });
 
-  it("admits Vercel's debug script in development only, and nowhere but script-src", () => {
+  it("admits eval and Vercel's debug script in development only, and nowhere but script-src", () => {
     const dev = contentSecurityPolicy({ dev: true });
-    expect(directive(dev, "script-src")).toEqual(["'self'", "'unsafe-inline'", VERCEL_DEBUG_SCRIPT]);
-    expect(dev.replace(` ${VERCEL_DEBUG_SCRIPT}`, "")).toBe(contentSecurityPolicy());
+    expect(directive(dev, "script-src")).toEqual(["'self'", "'unsafe-inline'", ...DEV_SCRIPT_SOURCES]);
+    expect(DEV_SCRIPT_SOURCES).toEqual(["'unsafe-eval'", VERCEL_DEBUG_SCRIPT]);
+    expect(dev.replace(` ${DEV_SCRIPT_SOURCES.join(" ")}`, "")).toBe(contentSecurityPolicy());
+    // The production policy never evaluates: 'unsafe-eval' is `next dev`'s runtime, not the app's.
+    expect(contentSecurityPolicy({ gaId: "G-TEST" })).not.toContain("'unsafe-eval'");
   });
 });
 
 describe("U1 both directions: the policy against what the tree loads", () => {
   it("finds the script elements it expects to find (non-vacuity)", () => {
-    expect(CENSUS.length).toBeGreaterThanOrEqual(5);
+    expect(CENSUS.length).toBeGreaterThanOrEqual(4);
     expect(CENSUS.filter((h) => h.kind === "data")).toEqual([
       { file: "app/breadcrumbs.tsx", kind: "data", detail: "application/ld+json" },
       { file: "app/faq/page.tsx", kind: "data", detail: "application/ld+json" },
@@ -202,11 +215,15 @@ describe("U1 both directions: the policy against what the tree loads", () => {
   });
 
   it("loads scripts from no host the policy does not name — the GA loader is the only external one", () => {
-    const external = CENSUS.filter((h) => h.kind === "external");
-    expect(external).toEqual([{ file: "app/analytics.tsx", kind: "external", detail: expect.stringMatching(/^https:\/\/www\.googletagmanager\.com\//) }]);
-    for (const hit of external) {
-      expect(GA_HOSTS.script.some((pattern) => covers(pattern, hit.detail)), `${hit.detail} is outside script-src`).toBe(true);
-    }
+    // U13: no script ELEMENT in the tree has a `src` any more. The one external script is the GA
+    // loader, which `app/analytics.tsx` creates from module code once the agreement holds…
+    expect(CENSUS.filter((h) => h.kind === "external")).toEqual([]);
+    const loader = gaLoaderUrl("G-TEST");
+    expect(loader).toMatch(/^https:\/\/www\.googletagmanager\.com\//);
+    expect(GA_HOSTS.script.some((pattern) => covers(pattern, loader)), `${loader} is outside script-src`).toBe(true);
+    // …and it is the only place in runtime source that creates a script element at all, so a
+    // second loader cannot appear without a reviewed change here.
+    expect(SCRIPT_CREATORS).toEqual(["app/analytics.tsx"]);
   });
 
   it("names, for every host the policy can admit, the code that loads from it", () => {
@@ -220,9 +237,10 @@ describe("U1 both directions: the policy against what the tree loads", () => {
     expect(vercel).toContain('"/_vercel/insights/script.js"');
   });
 
-  it("has exactly one hand-written inline script — the GA snippet — so 'unsafe-inline' covers Next's payloads and nothing else", () => {
-    const inline = CENSUS.filter((h) => h.kind === "inline");
-    expect(inline).toEqual([{ file: "app/analytics.tsx", kind: "inline", detail: "#ga4" }]);
+  it("has no hand-written inline script at all (U13), so 'unsafe-inline' covers Next's payloads and nothing else", () => {
+    // U1 tolerated one — the GA bootstrap snippet. U13 runs that bootstrap as module code, so the
+    // count is zero and the next inline script needs a reason this test does not have.
+    expect(CENSUS.filter((h) => h.kind === "inline")).toEqual([]);
   });
 
   it("uses no javascript: URL and no string event handler anywhere in runtime source", () => {

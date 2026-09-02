@@ -5,7 +5,7 @@
 // health endpoint's shape; the fault fixture's thrown error arriving as a server-error report
 // carrying the route and no query string (a finder request is planted in the query to make that
 // absence mean something); a real browser's Web Vital beacon arriving as its own kind; and the
-// report-only policy's violation document arriving through `report-uri`.
+// enforced policy's violation document arriving through `report-uri` (U13: `disposition: "enforce"`).
 
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import type { Report } from "../src/ops/reporter";
@@ -97,7 +97,7 @@ test("a real browser's Web Vital beacon arrives as its own kind, with the pathna
   expect(JSON.stringify(entry)).not.toContain("daughter");
 });
 
-test("the report-only policy's violation document reaches the sink through report-uri", async ({ page, request }) => {
+test("the enforced policy's violation document reaches the sink through report-uri", async ({ page, request }) => {
   await page.goto("/faq");
   await expect(page.getByRole("main")).toBeVisible();
   await page.evaluate(() => {
@@ -112,7 +112,7 @@ test("the report-only policy's violation document reaches the sink through repor
     })
     .toBeDefined();
   const entry = await newest(request, "csp-violation", (r) => r.blocked.startsWith("https://planted.invalid"));
-  expect(entry).toMatchObject({ kind: "csp-violation", documentPath: "/faq", directive: expect.stringMatching(/^script-src/), disposition: "report" });
+  expect(entry).toMatchObject({ kind: "csp-violation", documentPath: "/faq", directive: expect.stringMatching(/^script-src/), disposition: "enforce" });
 });
 
 test("the intakes refuse what is not theirs", async ({ request }) => {

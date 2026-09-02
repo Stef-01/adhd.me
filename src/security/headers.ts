@@ -1,4 +1,4 @@
-// U1 (O228): the HTTP security headers and the report-only Content Security Policy.
+// U1 (O228): the HTTP security headers and the Content Security Policy — enforced since U13.
 //
 // One module builds the header list, so `next.config.ts`, `headers.test.ts` and
 // `e2e/headers.spec.ts` read the same values — a header that lived only in the config would be a
@@ -16,17 +16,25 @@
 //   - The moment ANY hash appears in `script-src`, a CSP3 browser ignores `'unsafe-inline'`. A
 //     partial hash list would therefore break every page rather than tighten anything.
 //
-// So the honest report-only posture is the one Next documents for a statically rendered app:
-// `'self' 'unsafe-inline'` for scripts, every other directive tight. Whether to move to nonces
-// (which need middleware and force every route dynamic) or stay static is U13's decision, taken
-// on a week of reports through the U4 sink. What keeps that decision possible is the census in
-// `headers.test.ts`: the only inline scripts in this tree are Next's payloads, the inert JSON-LD
-// blocks and the GA snippet — a new hand-written one fails the test.
+// So the honest posture is the one Next documents for a statically rendered app: `'self'
+// 'unsafe-inline'` for scripts, every other directive tight. U13 took the decision U1 left open —
+// stay static, no nonces — because nonces need middleware and would force every route dynamic,
+// and the directives had not changed under report-only (no public traffic reached the U4 sink, so
+// the substitute evidence was the whole suite under enforcement). What keeps the posture honest
+// is the census in `headers.test.ts`: the only inline scripts in this tree are Next's payloads and
+// the inert JSON-LD blocks, and the only external script is GA's loader, inserted by
+// `app/analytics.tsx` from module code — a hand-written `<script>` element fails the test.
+//
+// U13 changed the header's NAME, not its directives: `Content-Security-Policy-Report-Only` became
+// `Content-Security-Policy`. `report-uri` stays, so an enforced block still reaches the U4 sink.
 
 export interface PolicyInputs {
   /** `NEXT_PUBLIC_GA_ID` — when set, the GA4 loader and its beacons join the policy. Dark by default. */
   gaId?: string | undefined;
-  /** `next dev`: Vercel Analytics loads its debug script from its own host in development only. */
+  /**
+   * `next dev`: Vercel Analytics loads its debug script from its own host, and webpack's
+   * development runtime evaluates source maps and hot updates — in development only.
+   */
   dev?: boolean | undefined;
 }
 
@@ -40,11 +48,14 @@ export const GA_HOSTS = {
 /** `@vercel/analytics` in development only; in production it is same-origin `/_vercel/insights/`. */
 export const VERCEL_DEBUG_SCRIPT = "https://va.vercel-scripts.com";
 
+/** `next dev` only: the development runtime needs `eval`; the production bundle never does. */
+export const DEV_SCRIPT_SOURCES = ["'unsafe-eval'", VERCEL_DEBUG_SCRIPT] as const;
+
 export function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string {
   const ga = gaId ? GA_HOSTS : { script: [], img: [], connect: [] };
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],
-    "script-src": ["'self'", "'unsafe-inline'", ...ga.script, ...(dev ? [VERCEL_DEBUG_SCRIPT] : [])],
+    "script-src": ["'self'", "'unsafe-inline'", ...ga.script, ...(dev ? DEV_SCRIPT_SOURCES : [])],
     "style-src": ["'self'", "'unsafe-inline'"],
     "img-src": ["'self'", ...ga.img],
     "connect-src": ["'self'", ...ga.connect],
@@ -52,7 +63,7 @@ export function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string 
     "base-uri": ["'self'"],
     "form-action": ["'self'"],
     "frame-ancestors": ["'none'"],
-    // U4: violations of the report-only policy reach the reporter sink through this route.
+    // U4: what the policy blocks reaches the reporter sink through this route.
     "report-uri": ["/api/csp-report"],
   };
   return Object.entries(directives)
@@ -73,6 +84,6 @@ export function securityHeaders(inputs: PolicyInputs = {}): Header[] {
     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
     { key: "Permissions-Policy", value: "microphone=(self), geolocation=(), camera=()" },
     { key: "X-Frame-Options", value: "DENY" },
-    { key: "Content-Security-Policy-Report-Only", value: contentSecurityPolicy(inputs) },
+    { key: "Content-Security-Policy", value: contentSecurityPolicy(inputs) },
   ];
 }

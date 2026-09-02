@@ -5,39 +5,27 @@
 // device — storing it anywhere else would be collecting data to record that we try not to
 // collect data. The pop-out is a native <dialog>, which brings real modality for free: focus
 // is trapped, Escape closes, and focus returns to the button that opened it.
+//
+// U13: the agreement is read through the consent store (`app/use-consent.ts`) rather than by
+// this bar alone, because the analytics loader reads the same value, and the withdraw control on
+// /privacy can take the agreement back — at which point this bar returns, on every page.
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-
-const ACK_KEY = "adhdme-privacy-ack";
+import { useRef } from "react";
+import { agree as recordAgreement, useConsent } from "./use-consent";
 
 export function PrivacyConsent() {
-  const [open, setOpen] = useState(false);
+  const consent = useConsent();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  // Decided after mount so the server render and returning visitors agree: no flash, no
-  // hydration mismatch, and nothing rendered at all once somebody has agreed.
-  useEffect(() => {
-    try {
-      if (!window.localStorage.getItem(ACK_KEY)) setOpen(true);
-    } catch {
-      // Storage blocked (private mode with storage off): show the bar; agreeing will simply
-      // not persist, which errs on the side of saying it again rather than never.
-      setOpen(true);
-    }
-  }, []);
-
-  if (!open) return null;
+  // Nothing on the server render and nothing once somebody has agreed: the store answers
+  // `unknown` until hydration is done, so the server render and returning visitors agree.
+  if (consent !== "not-agreed") return null;
 
   const agree = () => {
-    try {
-      window.localStorage.setItem(ACK_KEY, "1");
-    } catch {
-      // Nothing to do: the bar still closes for this visit.
-    }
     dialogRef.current?.close();
-    setOpen(false);
+    recordAgreement();
   };
 
   return (

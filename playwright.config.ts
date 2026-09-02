@@ -35,6 +35,17 @@ const PORT = process.env.E2E_PORT ?? "3100";
 // 127.0.0.1 an authenticated `page.request` silently arrived signed out.
 const BASE_URL = `http://localhost:${PORT}`;
 
+// U13: the suite runs with measurement SWITCHED ON, so the consent gate, the enforced policy's
+// GA hosts and the loader's insertion are all exercised. This is a PLACEHOLDER in Google's
+// format, not a measurement ID — no measurement ID lives in this repository (launch item 19,
+// founder gate 4). Nothing real is ever reached: `e2e/analytics.spec.ts` intercepts the tag host
+// and counts, and elsewhere the loader request simply fails, which no spec listens for. It is set
+// on this process too, not only on the server, because `e2e/headers.spec.ts` computes the expected
+// header in this process.
+const E2E_GA_ID = "G-E2E0000000";
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? E2E_GA_ID;
+process.env.NEXT_PUBLIC_GA_ID = GA_ID;
+
 export default defineConfig({
   testDir: "e2e",
   /**
@@ -83,6 +94,7 @@ export default defineConfig({
       ADHDME_TOKEN_SECRET: "e2e-signing-secret",
       ADHDME_ENABLE_MOCK_ROUTES: "1",
       ADHDME_ENABLE_DEMO: "1", // W37: demo fails closed in prod builds unless opted in
+      NEXT_PUBLIC_GA_ID: GA_ID, // U13: the placeholder above, or the caller's
     },
   },
 });

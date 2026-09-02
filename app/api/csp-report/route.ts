@@ -1,4 +1,4 @@
-// U4 (O229): where the report-only Content Security Policy sends its violations. U1 wrote the
+// U4 (O229): where the Content Security Policy (enforced since U13) sends its violations. U1 wrote the
 // policy with no reporting endpoint; the plan's U13 decides whether to enforce it "on a week of
 // reports through the U4 sink", and this route is how the week is collected. The parsing is
 // `src/ops/intake.ts`; this handler keeps the door narrow — anything unparseable is a 400,

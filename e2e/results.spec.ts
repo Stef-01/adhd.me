@@ -13,12 +13,14 @@ test.beforeEach(async ({ page, request }) => {
 
 test("Q1: how many extra appointments did we get, and is anything wrong?", async ({ page }) => {
   await page.getByRole("link", { name: "Your results" }).click();
-  // First render builds the full sim (same cost as v1).
-  await expect(page).toHaveURL(/\/console\/results$/, { timeout: 30_000 });
+  await expect(page).toHaveURL(/\/console\/results$/);
 
-  // The headline is a whole number of appointments, not a rate.
+  // First render builds the full sim (same cost as v1) — measured at U13 as 4.4–9.8 s on the
+  // e2e runner. The 30 s used to sit on the URL check above, which held while the route streamed
+  // nothing until the sim was done; since U3's `console/loading.tsx` the URL changes at once and
+  // the wait belongs to the first tile, as it does in Q2–Q5.
   const tile = page.getByText("Extra appointments", { exact: true }).first().locator("..");
-  await expect(tile.locator("div").nth(1)).toHaveText(/^[\d,]+$/);
+  await expect(tile.locator("div").nth(1)).toHaveText(/^[\d,]+$/, { timeout: 30_000 });
 
   // "Is anything wrong" is answerable before any number is read.
   await expect(page.getByTestId("results-status")).toContainText(/nothing needs your attention/i);

@@ -95,7 +95,8 @@ log** (project → Logs, or `vercel logs <deployment>`), prefixed by its kind:
   the boundary itself shows the reader a sentence and never the digest.
 - `[adhd.me web-vital] {…}` on stdout: `metric` (LCP, INP or CLS), `value`, `rating`, `path`.
 - `[adhd.me csp-violation] {…}` on stdout: `documentPath`, `directive`, `blocked`,
-  `disposition` — the report-only policy (U1) saying what it would have blocked.
+  `disposition` — the enforced policy (U1, enforced since U13) saying what it blocked;
+  `disposition` is `"enforce"`, so each line is a page that lost a script, style or request.
 
 **The payload law**: a report never carries a query string, a header or a body — a finder
 request is the most personal text this product handles and it travels in exactly those places.

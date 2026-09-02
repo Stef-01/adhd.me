@@ -93,7 +93,7 @@ export function routeWeightVerdicts(
 // BEGIN GENERATED BUDGETS
 // Derived 2026-09-02 from .next/app-build-manifest.json: ceil(measured KB × HEADROOM) per route.
 export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
-  "/": 557, // measured 506 KB
+  "/": 558, // measured 507 KB
   "/_not-found": 378, // measured 343 KB
   "/about": 543, // measured 493 KB
   "/api/mock/fault/[kind]": 378, // measured 343 KB
@@ -101,43 +101,43 @@ export const ROUTE_BUDGETS: Readonly<Record<string, number>> = {
   "/book/[token]": 378, // measured 343 KB
   "/clinicians": 414, // measured 376 KB
   "/clinicians/join": 387, // measured 351 KB
-  "/console": 395, // measured 359 KB
-  "/console/allocation": 387, // measured 351 KB
-  "/console/applications": 395, // measured 359 KB
-  "/console/capability": 395, // measured 359 KB
-  "/console/capacity": 395, // measured 359 KB
-  "/console/case-mix": 395, // measured 359 KB
-  "/console/complaints": 395, // measured 359 KB
-  "/console/credentials": 395, // measured 359 KB
-  "/console/dashboard": 401, // measured 364 KB
-  "/console/education": 395, // measured 359 KB
-  "/console/interest": 395, // measured 359 KB
-  "/console/interop": 395, // measured 359 KB
-  "/console/interview": 648, // measured 589 KB
-  "/console/matching": 494, // measured 449 KB
-  "/console/onboarding": 395, // measured 359 KB
-  "/console/ops": 395, // measured 359 KB
-  "/console/outcomes": 395, // measured 359 KB
-  "/console/outreach": 395, // measured 359 KB
-  "/console/pathways": 395, // measured 359 KB
-  "/console/privacy": 395, // measured 359 KB
-  "/console/referrals": 395, // measured 359 KB
-  "/console/registers": 395, // measured 359 KB
-  "/console/reporting": 395, // measured 359 KB
-  "/console/responses": 395, // measured 359 KB
-  "/console/results": 401, // measured 364 KB
-  "/console/roi": 395, // measured 359 KB
-  "/console/rules": 395, // measured 359 KB
-  "/console/setup/[step]": 395, // measured 359 KB
-  "/console/signin": 395, // measured 359 KB
-  "/console/usefulness": 395, // measured 359 KB
-  "/console/verticals": 395, // measured 359 KB
+  "/console": 401, // measured 364 KB
+  "/console/allocation": 401, // measured 364 KB
+  "/console/applications": 401, // measured 364 KB
+  "/console/capability": 401, // measured 364 KB
+  "/console/capacity": 401, // measured 364 KB
+  "/console/case-mix": 401, // measured 364 KB
+  "/console/complaints": 401, // measured 364 KB
+  "/console/credentials": 401, // measured 364 KB
+  "/console/dashboard": 406, // measured 369 KB
+  "/console/education": 401, // measured 364 KB
+  "/console/interest": 401, // measured 364 KB
+  "/console/interop": 401, // measured 364 KB
+  "/console/interview": 663, // measured 602 KB
+  "/console/matching": 509, // measured 462 KB
+  "/console/onboarding": 401, // measured 364 KB
+  "/console/ops": 401, // measured 364 KB
+  "/console/outcomes": 401, // measured 364 KB
+  "/console/outreach": 401, // measured 364 KB
+  "/console/pathways": 401, // measured 364 KB
+  "/console/privacy": 401, // measured 364 KB
+  "/console/referrals": 401, // measured 364 KB
+  "/console/registers": 401, // measured 364 KB
+  "/console/reporting": 401, // measured 364 KB
+  "/console/responses": 401, // measured 364 KB
+  "/console/results": 406, // measured 369 KB
+  "/console/roi": 401, // measured 364 KB
+  "/console/rules": 401, // measured 364 KB
+  "/console/setup/[step]": 401, // measured 364 KB
+  "/console/signin": 401, // measured 364 KB
+  "/console/usefulness": 401, // measured 364 KB
+  "/console/verticals": 401, // measured 364 KB
   "/demo": 395, // measured 359 KB
   "/examples": 387, // measured 351 KB
   "/faq": 387, // measured 351 KB
-  "/finder": 747, // measured 679 KB
+  "/finder": 756, // measured 687 KB
   "/practices": 387, // measured 351 KB
-  "/privacy": 392, // measured 356 KB
+  "/privacy": 389, // measured 353 KB
   "/privacy/automated-decisions": 387, // measured 351 KB
   "/privacy/counsel-review": 387, // measured 351 KB
   "/terms": 387, // measured 351 KB

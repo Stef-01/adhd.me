@@ -4,7 +4,7 @@
 // boundaries U3 wrote showed the reader a sentence and `console.error`'d the rest. This module is
 // the place every report now passes through on its way out of the process: `instrumentation.ts`
 // hands uncaught server errors here through Next's `onRequestError`, `/api/vitals` hands the
-// browser's Core Web Vitals here, and `/api/csp-report` hands the report-only policy's violations
+// browser's Core Web Vitals here, and `/api/csp-report` hands the policy's violations (enforced since U13)
 // here. A sink is an adapter behind `ReporterSink`; the console adapter is the only one written,
 // and `ADHDME_REPORTER` selects by name so a hosted sink (U16's decision) slots in without a
 // caller changing. An unknown name throws from `selectSink`, which `register()` calls at boot,
