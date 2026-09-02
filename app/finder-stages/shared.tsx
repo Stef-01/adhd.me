@@ -19,18 +19,14 @@ import { type Clinician } from "@/demo/clinicians";
  *
  * `review`, `matching`, `match` and `all` collapsed into `results` in the first minimalism round:
  * a confirmation step, a fake loading animation and two competing views of the same list. See the
- * note above the results screen for what each one was and why it went.
+ * note above the results screen for what each one was and why it went. O102 added `compare`,
+ * reached from a profile and returning to it.
+ *
+ * U8: the union moved to `src/finder/state.ts` as the `STAGES` list, because the state model has
+ * to validate a stage read back from history and storage — a type alone cannot. Re-exported here
+ * so every stage file keeps its import.
  */
-export type Stage =
-  | "welcome"
-  | "scenarios"
-  | "listening"
-  | "type"
-  | "results"
-  | "profile"
-  // O102: the compare, reached from a profile and returning to it.
-  | "compare"
-  | "booking";
+export type { Stage } from "@/finder/state";
 
 export const stageVariants: Variants = {
   initial: { opacity: 0, y: 12, filter: "blur(3px)" },

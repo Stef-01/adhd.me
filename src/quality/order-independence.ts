@@ -152,6 +152,15 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
+    // U8: `arrive` pads a trail the tab lost as far as the entry's index by repeating its last stage.
+    module: "src/finder/state.ts",
+    folds: 1,
+    disposition: {
+      kind: "rationale",
+      why: "Reads the last stage of the finder's TRAIL, which is not a collection a store returned in some order — it is indexed by history position, `trail[i]` being the stage at entry i, written by `advance` one push at a time. Its order IS its meaning, the way a string's letters are, so there is no other order the same trail could arrive in. The read is a padding value for indices the record never reached; a different choice there changes which stage a lost-storage Back lands on, never a ranking.",
+    },
+  },
+  {
     module: "src/guardrails/condition-monitors.ts",
     folds: 1,
     disposition: {

@@ -31,7 +31,8 @@ import {
   startSpeech,
   type SpeechSession,
 } from "@/voice/speech";
-import { getRequestHeadline, type Stage } from "./finder-stages/shared";
+import { useFinderHistory } from "./finder-history";
+import { getRequestHeadline } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ScenariosStage } from "./finder-stages/scenarios-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
@@ -48,13 +49,17 @@ import { BookingStage } from "./finder-stages/booking-stage";
  * memo stay here; stages receive state and named handlers as props. Behaviour-identical
  * by construction, with the e2e suites (finder-flow, voice, booking, mobile-fit, a11y)
  * run unchanged as the definition of "identical".
+ *
+ * U8: the state machine is still here — which stage follows which — but WHERE a stage lives is
+ * `src/finder/state.ts`'s: a history entry per stage, the words in the tab, `place` in the URL.
+ * `useFinderHistory` is the wiring: `goTo` for a forward move, `backTo` for an in-app Back, and
+ * the browser's own Back, Forward and reload arrive as stage changes this file never sees.
  */
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
 
 export function CareFinder() {
-  const [stage, setStage] = useState<Stage>("welcome");
   const [archetypeIndex, setArchetypeIndex] = useState(0);
   // The scenario browser rotates on its own until the visitor takes over.
   const [autoCycle, setAutoCycle] = useState(true);
@@ -79,9 +84,23 @@ export function CareFinder() {
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
   // is the only reliable signal to somebody that the microphone is actually working.
   // Where the person says they are. A typed suburb or postcode, never the device's location: no
-  // permission prompt, and no coordinate leaves the browser.
+  // permission prompt, and no coordinate leaves the browser. U8: it arrives on the URL (the one
+  // thing an address carries) and is read at arrival, before the first paint.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
+  const { stage, arrivalKey, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
+    setPlace(arrival.place);
+    if (!arrival.resumed) return;
+    // A resumed tab: its words and its chosen match. The match is found by id in the ranking the
+    // restored words produce — the same expression `matches` derives from, over the roster this
+    // mount starts with.
+    const { record } = arrival;
+    const words = record.request || exampleRequest;
+    setRequest(words);
+    setDraft(record.draft);
+    const found = rankCliniciansNear(words, resolvePlace(arrival.place), roster).findIndex((item) => item.id === record.matchId);
+    setMatchIndex(Math.max(0, found));
+  });
   /**
    * O224: DERIVED, NOT SET. `matches` is fully determined by (request, origin, roster); it was
    * imperative state with EIGHT setter sites, each recomputing the rank by hand — the O222
@@ -137,6 +156,12 @@ export function CareFinder() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [stage]);
+
+  // The words are the tab's the moment they exist, not only on a move — a reload mid-sentence on
+  // the typing screen keeps the sentence. Nothing here reaches the URL or a history entry.
+  useEffect(() => {
+    remember({ request, draft, matchId: clinician.id });
+  }, [remember, request, draft, clinician.id]);
 
   /**
    * O95 audit fix: this interval used to run four sibling setState calls INSIDE the
@@ -289,7 +314,7 @@ export function CareFinder() {
         if (speech.current === session) speech.current = null;
         // Nothing heard is not an error worth a red message; it is a reason to let somebody type.
         if (!text) {
-          setStage("type");
+          goTo("type");
           return;
         }
         setHeard(text);
@@ -308,7 +333,7 @@ export function CareFinder() {
           return;
         }
         setSpeechMessage("The microphone stopped on its own. What it heard is below — add to it, or search.");
-        setStage("type");
+        goTo("type");
       },
       onError: (error, raw) => {
         if (speech.current === session) speech.current = null;
@@ -332,7 +357,7 @@ export function CareFinder() {
         // O48: the permission-flavoured failures get their once-more as a button — see
         // `speechRetryable` above. The next tap carries the gesture WebKit wants.
         setSpeechRetryable(error === "service-not-allowed" || error === "not-allowed");
-        setStage("type");
+        goTo("type");
       },
     }, language.tag);
 
@@ -341,12 +366,12 @@ export function CareFinder() {
     // exactly how it was reported.
     if (!session) {
       setSpeechMessage(SPEECH_UNAVAILABLE_COPY[speechUnavailable() ?? "unsupported"]);
-      setStage("type");
+      goTo("type");
       return;
     }
 
     speech.current = session;
-    setStage("listening");
+    goTo("listening");
   }
 
   /** "Done" asks the recogniser to finish; the final transcript arrives through onFinal. */
@@ -356,7 +381,7 @@ export function CareFinder() {
       speech.current.stop();
       return;
     }
-    setStage("type");
+    goTo("type");
   }
 
   function findMatches(value = request) {
@@ -366,17 +391,17 @@ export function CareFinder() {
     setShowAll(false);
     // Straight to the results. The sort is synchronous and already done; the screen that used to
     // sit here spent 4.25 seconds saying so.
-    setStage("results");
+    goTo("results");
   }
 
   function chooseClinician(selected: Clinician) {
     const index = matches.findIndex((item) => item.id === selected.id);
     if (index >= 0) setMatchIndex(index);
-    setStage("profile");
+    goTo("profile");
   }
 
   function reset() {
-    setStage("welcome");
+    backTo("welcome");
     setDraft("");
     setRequest(archetype.request);
     setMatchIndex(0);
@@ -410,7 +435,7 @@ export function CareFinder() {
     <MotionConfig reducedMotion="user">
       <main id="main-content" className="care-app patient-v2" data-stage={stage}>
         <section className="care-shell" aria-live="polite">
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence key={arrivalKey} mode="wait" initial={false}>
 
         {stage === "welcome" && (
           <WelcomeStage
@@ -424,7 +449,7 @@ export function CareFinder() {
             onTalk={() => startListening()}
             onScenarios={() => {
               setAutoCycle(true);
-              setStage("scenarios");
+              goTo("scenarios");
             }}
           />
         )}
@@ -435,7 +460,7 @@ export function CareFinder() {
             archetype={archetype}
             archetypeIndex={archetypeIndex}
             matchDirection={matchDirection}
-            onBack={() => setStage("welcome")}
+            onBack={() => backTo("welcome")}
             onCycle={(direction) => {
               setAutoCycle(false);
               cycleArchetype(direction);
@@ -451,8 +476,8 @@ export function CareFinder() {
             reducedMotion={reducedMotion}
             speechLang={speechLang}
             onFinish={finishListening}
-            onCancel={() => setStage("welcome")}
-            onType={() => setStage("type")}
+            onCancel={() => backTo("welcome")}
+            onType={() => goTo("type")}
             onLanguage={(language) => {
               setSpeechLang(language);
               startListening(language);
@@ -468,7 +493,7 @@ export function CareFinder() {
             speechMessage={speechMessage}
             speechRetryable={speechRetryable}
             onRetryMic={() => startListening()}
-            onBack={() => setStage("welcome")}
+            onBack={() => backTo("welcome")}
             onSearch={findMatches}
           />
         )}
@@ -494,9 +519,12 @@ export function CareFinder() {
             onReset={reset}
             onRefine={() => {
               setDraft(request);
-              setStage("type");
+              goTo("type");
             }}
-            onPlaceChange={(value) => setPlace(value)}
+            onPlaceChange={(value) => {
+              setPlace(value);
+              rememberPlace(value);
+            }}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}
@@ -513,9 +541,9 @@ export function CareFinder() {
             request={request}
             origin={origin}
             compareName={compareRows.length > 0 && compareWith ? compareWith.shortName : null}
-            onBack={() => setStage("results")}
-            onCompare={() => setStage("compare")}
-            onBook={() => setStage("booking")}
+            onBack={() => backTo("results")}
+            onCompare={() => goTo("compare")}
+            onBook={() => goTo("booking")}
           />
         )}
 
@@ -525,7 +553,7 @@ export function CareFinder() {
             left={clinician}
             right={compareWith}
             rows={compareRows}
-            onBack={() => setStage("results")}
+            onBack={() => backTo("results")}
             onOpenRight={() => {
               chooseClinician(compareWith);
             }}
@@ -533,7 +561,7 @@ export function CareFinder() {
         )}
 
         {stage === "booking" && (
-          <BookingStage key="booking" clinician={clinician} onBack={() => setStage("profile")} />
+          <BookingStage key="booking" clinician={clinician} onBack={() => backTo("profile")} />
         )}
 
           </AnimatePresence>
