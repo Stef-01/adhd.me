@@ -10,9 +10,13 @@ import { type Page } from "@playwright/test";
  * Exposes `__speech` on the page so a test can drive results and errors from the outside, and
  * records `aborted` so teardown can be asserted rather than assumed.
  */
-export async function installFakeSpeech(page: Page, opts: { present?: boolean } = {}) {
+export async function installFakeSpeech(page: Page, opts: { present?: boolean; holdStop?: boolean } = {}) {
   const present = opts.present !== false;
-  await page.addInitScript((isPresent: boolean) => {
+  // U9: `holdStop` makes `stop()` return without ending, so a test can observe the finder's
+  // "finishing" window (the toggle busy, the line "Finishing.") before it calls `finish()` itself.
+  // A real recogniser takes a beat here; the default fake ends at once, as W212 wrote it.
+  const holdStop = opts.holdStop === true;
+  await page.addInitScript(({ isPresent, hold }: { isPresent: boolean; hold: boolean }) => {
     const w = window as unknown as Record<string, unknown>;
     if (!isPresent) {
       delete w.SpeechRecognition;
@@ -28,7 +32,7 @@ export async function installFakeSpeech(page: Page, opts: { present?: boolean } 
       onstart: (() => void) | null = null;
       constructor() { state.instance = this; }
       start() { state.started += 1; }
-      stop() { this.onend?.(); }
+      stop() { if (!hold) this.onend?.(); }
       abort() { state.aborted = true; }
     }
     w.SpeechRecognition = Fake;
@@ -43,5 +47,5 @@ export async function installFakeSpeech(page: Page, opts: { present?: boolean } 
       finish() { (state.instance as Fake).onend?.(); },
       fail(error: string) { (state.instance as Fake).onerror?.({ error }); },
     };
-  }, present);
+  }, { isPresent: present, hold: holdStop });
 }

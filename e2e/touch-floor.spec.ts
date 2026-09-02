@@ -13,6 +13,8 @@ import { expect, test, type Page } from "@playwright/test";
 // O148's note below still holds and is why the console half exists at all: it is where practice
 // staff work, sometimes on a phone between patients.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES, revealCollapsedSurfaces } from "./site-routes";
+import { installFakeSpeech } from "./support/fake-speech";
+import { STAGES, openStage } from "./support/finder-stages";
 import { floorFinding, underFloorControls } from "./support/touch-load";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
@@ -147,6 +149,33 @@ test.describe("O14's 44px touch floor", () => {
       population,
       "the console sweep collapsed — a clean pass here would mean nothing",
     ).toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 5));
+    expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
+  });
+
+  test("no control on any finder stage is under the floor", async ({ page }) => {
+    // U9: the public sweep reaches `/finder` by URL and so measures the welcome screen only. The
+    // other seven stages — the microphone toggle and its language controls, the rows, the compare
+    // control inside its disclosure, the booking screen — exist only after a person acts, and
+    // are reached here the way the person reaches them (`e2e/support/finder-stages.ts`), on the
+    // 390px phone the finder is built for.
+    test.setTimeout(180_000);
+    await installFakeSpeech(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    const offenders: string[] = [];
+    let population = 0;
+    for (const stage of STAGES) {
+      await openStage(page, stage);
+      await revealCollapsedSurfaces(page);
+      await page.evaluate(() => document.fonts.ready);
+      const { out, seen } = await underFloorControls(page);
+      population += seen;
+      const finding = floorFinding(`/finder (${stage})`, out);
+      if (finding) offenders.push(finding);
+    }
+    measured("touch-floor.finder", population);
+    // Derived from STAGES.length; 3/stage stays below the observed rate (the results screen
+    // alone carries a row per match).
+    expect(population, "the finder sweep collapsed").toBeGreaterThan(derivedFloor(STAGES.length, 3));
     expect(offenders, `controls under the 44px floor:\n${offenders.join("\n")}`).toEqual([]);
   });
 });

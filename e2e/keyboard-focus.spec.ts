@@ -12,6 +12,8 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
 // button under O14's touch floor on `/console/credentials` and `/console/case-mix`, both of them
 // controls no keyboard test had ever tabbed through.
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { installFakeSpeech } from "./support/fake-speech";
+import { STAGES, openStage } from "./support/finder-stages";
 import { measured } from "./support/measured";
 import { derivedFloor } from "./support/floors";
 import { seedFixtures } from "./support/fixtures";
@@ -53,15 +55,29 @@ test.describe("keyboard focus", () => {
    * variant. Sharing the body is the point — a console-only copy would drift, and the first thing
    * to drift out of a copy is the resting-style comparison that keeps this test able to fail.
    */
-  async function walk(page: Page, routes: readonly string[]) {
+  /**
+   * U9: a surface is a name and the way to open it. A route opens by URL; a finder stage opens by
+   * driving the finder there (`e2e/support/finder-stages.ts`), because a URL reaches only the
+   * welcome screen and the other seven stages had never been tabbed through.
+   */
+  type Surface = { readonly name: string; readonly open: (page: Page) => Promise<void> };
+  const byUrl = (routes: readonly string[]): Surface[] =>
+    routes.map((route) => ({ name: route, open: (page) => page.goto(route, { waitUntil: "networkidle" }).then(() => undefined) }));
+
+  async function walk(page: Page, surfaces: readonly Surface[]) {
     const ringless: string[] = [];
     const unreachable: string[] = [];
     let totalStops = 0;
 
-    for (const route of routes) {
-      await page.goto(route, { waitUntil: "networkidle" });
+    for (const { name: route, open } of surfaces) {
+      await open(page);
       // Fonts change metrics and therefore layout; O146 was bitten by measuring before them.
       await page.evaluate(() => document.fonts.ready);
+      // U9: a stage arrives with its heading focused (that is the unit). Resting styles must be
+      // recorded at rest, and the walk below must start from the document's top as it does on a
+      // route — so focus is released first. Chromium keeps the sequential-focus starting point at
+      // the released element, which is what the body-wrap tolerance in the loop is for.
+      await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
 
       // O153: TAG AND RECORD EVERY CONTROL'S RESTING STYLE FIRST.
       //
@@ -86,6 +102,7 @@ test.describe("keyboard focus", () => {
 
       let stops = 0;
       let first = "";
+      let passedBody = false;
       for (let i = 0; i < 200; i += 1) {
         await page.keyboard.press("Tab");
         const info = await page.evaluate(() => {
@@ -95,7 +112,13 @@ test.describe("keyboard focus", () => {
           const now = `${cs.outlineStyle} ${cs.outlineWidth}|${cs.boxShadow}|${cs.textDecorationLine}|${cs.backgroundColor}|${cs.color}`;
           const rest = el.getAttribute("data-focus-rest");
           return {
-            key: `${el.tagName}.${el.className}|${(el.textContent || "").trim().slice(0, 20)}`,
+            // U9: the tag it was given at rest is the identity where there is one. Two icon-only
+            // buttons with no class and no text — the scenario screen's previous/next pair —
+            // shared a key, so a walk that started on the first read the second as "back at the
+            // first stop" and reported one stop for six controls.
+            key:
+              el.getAttribute("data-focus-probe") ??
+              `${el.tagName}.${el.className}|${(el.textContent || "").trim().slice(0, 20)}`,
             // The indicator must be ATTRIBUTABLE TO FOCUS. An element with no recorded resting
             // style appeared after tagging (a skip link revealed on focus is the usual case), and
             // for those, appearing at all is the change.
@@ -104,7 +127,16 @@ test.describe("keyboard focus", () => {
             text: (el.textContent || "").trim().slice(0, 32),
           };
         });
-        if (!info) break;
+        // U9: focus falling to the body is the end of the ring — ONCE. A stage walk starts from
+        // its heading, mid-document, so the first pass reaches the end and the ring wraps through
+        // the body to the controls before the heading; the walk ends when it returns to its first
+        // stop, exactly as a route walk does, and a second pass through the body (a page with no
+        // controls at all) still ends it.
+        if (!info) {
+          if (passedBody) break;
+          passedBody = true;
+          continue;
+        }
         // Identical controls legitimately share a key — forty checkboxes on the join form — so a
         // repeat is not the end of the tab ring. Returning to the FIRST stop is. Breaking on a
         // repeat is what made an early version of this report 4 stops where the truth was 43.
@@ -150,7 +182,7 @@ test.describe("keyboard focus", () => {
     test.setTimeout(240_000);
     await page.setViewportSize({ width: 390, height: 844 });
     expect(PUBLIC_ROUTES.length, "the derived public list collapsed").toBeGreaterThan(12);
-    const { ringless, unreachable, totalStops } = await walk(page, PUBLIC_ROUTES);
+    const { ringless, unreachable, totalStops } = await walk(page, byUrl(PUBLIC_ROUTES));
 
     // Non-vacuity: a walk that stopped tabbing would report a flawless sweep of nothing.
     console.log(`KEYBOARD_PUBLIC ${PUBLIC_ROUTES.length} routes, ${totalStops} stops`);
@@ -171,7 +203,7 @@ test.describe("keyboard focus", () => {
     await signInAndSeed(page, request);
     await page.setViewportSize({ width: 390, height: 844 });
     expect(CONSOLE_ROUTES.length, "the derived console list collapsed").toBeGreaterThan(26);
-    const { ringless, unreachable, totalStops } = await walk(page, CONSOLE_ROUTES);
+    const { ringless, unreachable, totalStops } = await walk(page, byUrl(CONSOLE_ROUTES));
 
     // The floor is MEASURED for this walk rather than borrowed from the public one — O170, O171 and
     // O174 each found a non-vacuity floor that had gone stale when the thing it bounded grew, and
@@ -185,6 +217,28 @@ test.describe("keyboard focus", () => {
       totalStops,
       "the console walk stopped tabbing — a clean result here would mean nothing",
     ).toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 5));
+    expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
+    expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
+  });
+
+  test("every finder stage is reachable by keyboard and shows where it is", async ({ page }) => {
+    // U9: THE SEVEN SCREENS A URL NEVER REACHES. `/finder` is in PUBLIC_ROUTES, so the welcome
+    // screen has been walked since O147 — and the microphone, the results, a profile, the compare
+    // screen and the booking screen never had, because each of them exists only after a person has
+    // done something. The driver does what the person does; the walk is the same walk.
+    test.setTimeout(240_000);
+    await installFakeSpeech(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    const { ringless, unreachable, totalStops } = await walk(
+      page,
+      STAGES.map((stage) => ({ name: `/finder (${stage})`, open: (p: Page) => openStage(p, stage) })),
+    );
+
+    console.log(`KEYBOARD_FINDER ${STAGES.length} stages, ${totalStops} stops`);
+    measured("keyboard-focus.finder-stops", totalStops);
+    // Derived from STAGES.length; 3/stage stays below the observed rate (see the KEYBOARD_FINDER
+    // line — the listening screen alone has five controls).
+    expect(totalStops).toBeGreaterThan(derivedFloor(STAGES.length, 3));
     expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
     expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
   });

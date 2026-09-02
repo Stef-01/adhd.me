@@ -5,6 +5,7 @@
 
 import { CaretRight } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import {
   closedBooksNote,
   distanceTo,
@@ -15,8 +16,9 @@ import {
 } from "@/demo/clinicians";
 import { type Clarifier } from "@/matching/clarify";
 import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
+import { resultsAnnouncement } from "@/finder/announce";
 import { CoverageMap } from "../coverage-map";
-import { ClinicianPortrait, distinguishingSignals, ExampleProfileTag, MotionScreen, Wordmark } from "./shared";
+import { ClinicianPortrait, distinguishingSignals, ExampleProfileTag, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -42,6 +44,7 @@ export function ResultsStage({
   allSignals,
   request,
   reducedMotion,
+  focusOnArrival,
   onReset,
   onRefine,
   onPlaceChange,
@@ -65,6 +68,7 @@ export function ResultsStage({
   allSignals: string[][];
   request: string;
   reducedMotion: boolean | null;
+  focusOnArrival: boolean;
   onReset: () => void;
   onRefine: () => void;
   onPlaceChange: (value: string) => void;
@@ -72,8 +76,23 @@ export function ResultsStage({
   onShowAll: () => void;
   onChoose: (clinician: Clinician) => void;
 }) {
+  // U9: the one live line this screen owns. The status paragraphs below used to be five separate
+  // `role="status"` regions inside a live shell, so a place edit read the fit line, the distance
+  // line, the quality verdict and the whole re-ordered list. Now the region says the count and
+  // the place, and "Re-ranked:" once the list is not the one the screen arrived with — `matches`
+  // is derived from (request, origin, roster), so a new identity IS a re-rank, and the counter
+  // re-announces a re-rank that repeats the same count.
+  const arrivalMatches = useRef(matches);
+  const [reranks, setReranks] = useState(0);
+  useEffect(() => {
+    if (matches === arrivalMatches.current) return;
+    setReranks((n) => n + 1);
+  }, [matches]);
+  const line = resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
+
   return (
-    <MotionScreen key="results" className="results-screen">
+    <MotionScreen key="results" className="results-screen" focusOnArrival={focusOnArrival} focusTarget=".clinician-row">
+      <StatusLine line={line} nonce={reranks} />
       <header className="minimal-header">
         <Wordmark />
         <button className="text-action" type="button" onClick={onReset}>Start over</button>
@@ -91,7 +110,7 @@ export function ResultsStage({
         {requestHeadline !== requestSummary || quality === "informed" ? (
           <>
             <p className="eyebrow">Based on what you told us</p>
-            <h1>{requestHeadline}</h1>
+            <h1 tabIndex={-1}>{requestHeadline}</h1>
           </>
         ) : (
           <p className="results-request-quote">&ldquo;{requestSummary}&rdquo;</p>
@@ -118,7 +137,6 @@ export function ResultsStage({
               <motion.p
                 key={fitCopy}
                 className="place-status"
-                role="status"
                 initial={reducedMotion ? false : { opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -127,7 +145,7 @@ export function ResultsStage({
               </motion.p>
           )}
           {place.trim() !== "" && (
-            <p className="place-status" role="status">
+            <p className="place-status">
               {origin
                 ? `Among otherwise equal matches, nearer to ${origin.suburb} comes first.`
                 : "We do not cover that location yet."}
@@ -152,7 +170,6 @@ export function ResultsStage({
             <motion.p
               key={`quality-${quality}`}
               className="place-status match-quality"
-              role="status"
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
@@ -169,7 +186,6 @@ export function ResultsStage({
             <motion.p
               key="tie-note"
               className="place-status match-quality"
-              role="status"
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
@@ -223,7 +239,6 @@ export function ResultsStage({
             <motion.p
               key={`unserved-${unserved[0]}`}
               className="place-status match-quality"
-              role="status"
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}

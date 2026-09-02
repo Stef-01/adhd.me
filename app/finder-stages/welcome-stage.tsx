@@ -6,12 +6,14 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { FinderContext, introItem, introStagger, MotionScreen, Pressable, Wordmark } from "./shared";
+import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
+import { FinderContext, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
   draft,
   setDraft,
   reducedMotion,
+  focusOnArrival,
   onSearch,
   onTalk,
   onScenarios,
@@ -21,6 +23,8 @@ export function WelcomeStage({
   draft: string;
   setDraft: (value: string) => void;
   reducedMotion: boolean | null;
+  /** U9: true only when the person came BACK here — a page load announces nothing and moves no focus. */
+  focusOnArrival: boolean;
   onSearch: (value: string) => void;
   onTalk: () => void;
   onScenarios: () => void;
@@ -31,7 +35,8 @@ export function WelcomeStage({
   onToggleSynthetic: (next: boolean) => void;
 }) {
   return (
-    <MotionScreen key="welcome" className="voice-screen">
+    <MotionScreen key="welcome" className="voice-screen" focusOnArrival={focusOnArrival}>
+      {focusOnArrival && <StatusLine line={FINDER_ANNOUNCEMENTS.welcome} />}
       <header className="minimal-header">
         <Wordmark />
         <Link href="/" className="quiet-link finder-home-link">
@@ -41,7 +46,7 @@ export function WelcomeStage({
 
       <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
         <motion.div className="voice-prompt" variants={reducedMotion ? undefined : introItem}>
-          <h1>
+          <h1 tabIndex={-1}>
             <span>ADHD assessment</span>
             <em>that takes you seriously.</em>
           </h1>

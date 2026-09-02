@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Waveform } from "@phosphor-icons/react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import { type ComponentProps, type ReactNode } from "react";
+import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from "react";
 import { type Clinician } from "@/demo/clinicians";
 
 /**
@@ -61,12 +61,44 @@ export const introItem: Variants = {
   animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
 };
 
-export function MotionScreen({ className, children }: { className: string; children: ReactNode }) {
+/**
+ * U9: a stage owns where focus lands when it arrives. `AnimatePresence` (mode "wait") mounts the
+ * new screen only after the old one has left, so the mount effect here runs at the moment the
+ * new screen exists and the old control the person was on is gone — the one moment a keyboard or
+ * screen-reader user is otherwise dropped back to the top of the document. The default target is
+ * the stage's heading (each carries `tabIndex={-1}` for exactly this); results pass the first
+ * row, because the row is what the person came for and the headline reads back what they said.
+ *
+ * `focusOnArrival` is false for the first render of the page — the server's welcome markup and a
+ * resumed reload — so a page load never moves focus on its own, and the keyboard-focus sweep
+ * (which tabs in from the body) still reaches the header first.
+ */
+export function MotionScreen({
+  className,
+  children,
+  focusOnArrival = false,
+  focusTarget = "h1",
+}: {
+  className: string;
+  children: ReactNode;
+  focusOnArrival?: boolean;
+  focusTarget?: string;
+}) {
   const shouldReduceMotion = useReducedMotion();
   const shouldPreserveFixedPositioning = className.includes("profile-screen");
+  const screen = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!focusOnArrival) return;
+    const root = screen.current;
+    const target = root?.querySelector<HTMLElement>(focusTarget) ?? root?.querySelector<HTMLElement>("h1");
+    target?.focus({ preventScroll: true });
+    // Arrival only: a re-render of the same stage (a re-rank, a typed letter) must not steal focus.
+  }, []);
 
   return (
     <motion.div
+      ref={screen}
       className={`screen ${className}`}
       variants={shouldReduceMotion || shouldPreserveFixedPositioning ? reducedStageVariants : stageVariants}
       initial="initial"
@@ -75,6 +107,29 @@ export function MotionScreen({ className, children }: { className: string; child
     >
       {children}
     </motion.div>
+  );
+}
+
+/**
+ * U9: the one live region a stage owns. It mounts EMPTY and takes its text a beat later: a
+ * `role="status"` element that is born with text is not an update, and most screen readers say
+ * nothing for it. A new `line` (or the same line with a new `nonce`, for a re-rank that repeats
+ * the count) is cleared and re-set the same way, so it is read again rather than de-duplicated.
+ * The script the lines come from is `src/finder/announce.ts`; nothing else in the finder is live.
+ */
+export function StatusLine({ line, nonce = 0 }: { line: string; nonce?: number }) {
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    setText("");
+    const timer = window.setTimeout(() => setText(line), 60);
+    return () => window.clearTimeout(timer);
+  }, [line, nonce]);
+
+  return (
+    <p className="sr-only" role="status">
+      {text}
+    </p>
   );
 }
 

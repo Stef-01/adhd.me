@@ -37,7 +37,7 @@ test("a spoken request reaches the results", async ({ page }) => {
    * THE END THE PERSON DID NOT ASK FOR (O46). iOS Safari closes continuous recognition on its
    * own — after a pause, or seconds in — and this used to auto-submit whatever fragment it had:
    * a results screen headlined "Cx." on the founder's phone. A browser-initiated end now lands
-   * the words in the editable box, said out loud, one tap from searching. Only Done searches
+   * the words in the editable box, said out loud, one tap from searching. Only the microphone tap searches
    * directly (the test below this one).
    */
   await page.evaluate(() => (window as any).__speech.finish());
@@ -55,11 +55,11 @@ test("a spoken request reaches the results", async ({ page }) => {
   expect(names[0]).toMatch(/Saxena/);
 });
 
-test("pressing Done mid-sentence keeps what was already said", async ({ page }) => {
+test("finishing mid-sentence from the microphone keeps what was already said", async ({ page }) => {
   await installFakeSpeech(page);
   await openMic(page);
   await page.evaluate(() => (window as any).__speech.say("my son is struggling at school", true));
-  await page.getByRole("button", { name: "Done" }).click();
+  await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   await expect(page.locator(".results-head h1")).toContainText(/school|assessment/i);
 });
@@ -184,7 +184,7 @@ test("choosing a roster language restarts listening in it, with the honesty line
 
   // Spoken words still land in the box and still search — no dead end behind the picker.
   await page.evaluate(() => (window as any).__speech.say("मुझे ADHD जांच चाहिए", true));
-  await page.getByRole("button", { name: "Done" }).click();
+  await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
 });
 

@@ -13,7 +13,7 @@ const SENTENCE = "my son Oliver cannot sit still in class and the school keeps c
 
 const stage = (page: Page) => page.locator("main[data-stage]");
 
-/** Speak the sentence and press Done: welcome → listening → results. */
+/** Speak the sentence and tap the microphone to finish: welcome → listening → results. */
 async function speakToResults(page: Page) {
   await installFakeSpeech(page);
   await page.goto("/finder");
@@ -21,7 +21,7 @@ async function speakToResults(page: Page) {
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();
   await expect(stage(page)).toHaveAttribute("data-stage", "listening");
   await page.evaluate((text) => (window as any).__speech.say(text, true), SENTENCE);
-  await page.getByRole("button", { name: "Done" }).click();
+  await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   await expect(stage(page)).toHaveAttribute("data-stage", "results");
 }
@@ -97,7 +97,7 @@ test("a shared link with a place ranks from it, and a fresh visit starts at the 
   await expect(stage(page)).toHaveAttribute("data-stage", "welcome");
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();
   await page.evaluate((text) => (window as any).__speech.say(text, true), SENTENCE);
-  await page.getByRole("button", { name: "Done" }).click();
+  await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   await expect(page.getByLabel(/Where are you/i)).toHaveValue("Hornsby");
   expect(page.url()).toContain("place=Hornsby");

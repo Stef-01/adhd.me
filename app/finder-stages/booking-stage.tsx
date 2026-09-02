@@ -5,17 +5,21 @@
 import { ArrowLeft } from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
 import { type Clinician } from "@/demo/clinicians";
-import { MotionScreen, Wordmark } from "./shared";
+import { bookingAnnouncement } from "@/finder/announce";
+import { MotionScreen, StatusLine, Wordmark } from "./shared";
 
 export function BookingStage({
   clinician,
+  focusOnArrival,
   onBack,
 }: {
   clinician: Clinician;
+  focusOnArrival: boolean;
   onBack: () => void;
 }) {
   return (
-    <MotionScreen key="booking" className="booking-screen">
+    <MotionScreen key="booking" className="booking-screen" focusOnArrival={focusOnArrival}>
+      <StatusLine line={bookingAnnouncement(clinician.shortName)} />
       <header className="minimal-header">
         <button className="icon-button" type="button" onClick={onBack} aria-label="Back to profile">
           <ArrowLeft size={25} weight="light" aria-hidden="true" />
@@ -36,7 +40,7 @@ export function BookingStage({
           doctor's name. The reader is sent to the system that actually knows. */}
       <div className="booking-content">
         <p className="eyebrow">Booking</p>
-        <h1>
+        <h1 tabIndex={-1}>
           {clinician.booking.via === "healthengine"
             ? `Book with ${clinician.shortName} on Healthengine`
             : `Booking ${clinician.shortName}`}

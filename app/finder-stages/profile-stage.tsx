@@ -18,7 +18,8 @@ import {
 } from "@/demo/clinicians";
 import { type NeedSignal } from "@/matching/needs";
 import { type SuburbPoint } from "@/geo/suburbs";
-import { ClinicianPortrait, MotionScreen, Pressable, Wordmark } from "./shared";
+import { profileAnnouncement } from "@/finder/announce";
+import { ClinicianPortrait, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 const UNKNOWN_DETAIL = /set (?:by|with) the practice/i;
 
@@ -59,6 +60,7 @@ export function ProfileStage({
   request,
   origin,
   compareName,
+  focusOnArrival,
   onBack,
   onCompare,
   onBook,
@@ -70,6 +72,7 @@ export function ProfileStage({
   request: string;
   origin: SuburbPoint | null;
   compareName: string | null;
+  focusOnArrival: boolean;
   onBack: () => void;
   onCompare: () => void;
   onBook: () => void;
@@ -83,7 +86,8 @@ export function ProfileStage({
   ].filter((fact): fact is string => Boolean(fact));
 
   return (
-    <MotionScreen key="profile" className="profile-screen">
+    <MotionScreen key="profile" className="profile-screen" focusOnArrival={focusOnArrival}>
+      <StatusLine line={profileAnnouncement(clinician.name)} />
       <header className="minimal-header profile-header">
         <button className="icon-button" type="button" onClick={onBack} aria-label="Back to results">
           <ArrowLeft size={25} weight="light" aria-hidden="true" />
@@ -104,7 +108,7 @@ export function ProfileStage({
           </motion.div>
 
           <div className="profile-identity">
-            <h1>{clinician.name}</h1>
+            <h1 tabIndex={-1}>{clinician.name}</h1>
             {/* O217: on an invented profile the FIRST fact after the name is that it is one.
                 Same siting logic as the O184 disclosure below — a notice met after a view has
                 formed has already failed. */}

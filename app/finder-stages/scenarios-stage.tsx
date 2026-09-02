@@ -5,12 +5,14 @@
 import { ArrowLeft, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { careArchetypes, type CareArchetype } from "@/demo/care-archetypes";
-import { MotionScreen, Pressable, Wordmark } from "./shared";
+import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
+import { MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 export function ScenariosStage({
   archetype,
   archetypeIndex,
   matchDirection,
+  focusOnArrival,
   onBack,
   onCycle,
   onTry,
@@ -18,6 +20,7 @@ export function ScenariosStage({
   archetype: CareArchetype;
   archetypeIndex: number;
   matchDirection: 1 | -1;
+  focusOnArrival: boolean;
   onBack: () => void;
   onCycle: (direction: 1 | -1) => void;
   onTry: () => void;
@@ -34,7 +37,8 @@ export function ScenariosStage({
   const slide = reduce ? 0 : matchDirection * 9;
 
   return (
-    <MotionScreen key="scenarios" className="scenario-screen">
+    <MotionScreen key="scenarios" className="scenario-screen" focusOnArrival={focusOnArrival}>
+      <StatusLine line={FINDER_ANNOUNCEMENTS.scenarios} />
       <header className="minimal-header">
         <button className="icon-button" type="button" onClick={onBack} aria-label="Back to start">
           <ArrowLeft size={25} weight="light" aria-hidden="true" />
@@ -44,7 +48,9 @@ export function ScenariosStage({
       </header>
 
       <div className="scenario-core">
-        <p className="eyebrow">Demo scenarios</p>
+        {/* U9: the eyebrow IS this screen's heading — it had none, so focus had nowhere to land
+            and a screen reader had no landmark for the stage. Same class, so the same pixels. */}
+        <h1 className="eyebrow" tabIndex={-1}>Demo scenarios</h1>
         <div className="archetype-switcher" role="group" aria-label="Demo care scenarios">
           <Pressable type="button" onClick={() => onCycle(-1)} aria-label="Previous care scenario">
             <CaretLeft size={22} weight="light" aria-hidden="true" />

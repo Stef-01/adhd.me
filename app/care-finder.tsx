@@ -29,10 +29,11 @@ import {
   SPEECH_UNAVAILABLE_COPY,
   speechUnavailable,
   startSpeech,
+  type SpeechLanguage,
   type SpeechSession,
 } from "@/voice/speech";
 import { useFinderHistory } from "./finder-history";
-import { getRequestHeadline } from "./finder-stages/shared";
+import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ScenariosStage } from "./finder-stages/scenarios-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
@@ -90,6 +91,7 @@ export function CareFinder() {
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
   const { stage, arrivalKey, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     setPlace(arrival.place);
+    arrivalStage.current = arrival.resumed ? arrival.stage : "welcome";
     if (!arrival.resumed) return;
     // A resumed tab: its words and its chosen match. The match is found by id in the ranking the
     // restored words produce — the same expression `matches` derives from, over the roster this
@@ -131,11 +133,35 @@ export function CareFinder() {
    */
   const [speechLang, setSpeechLang] = useState(DEFAULT_SPEECH_LANGUAGE);
   const speech = useRef<SpeechSession | null>(null);
-  /** True only between the Done tap and its onFinal — the person asked for the finish. */
+  /** True only between the microphone tap and its onFinal — the person asked for the finish. */
   const stopRequested = useRef(false);
+  /**
+   * U9: what the screen says about the microphone, as state the stages can announce. `finishing`
+   * is the same window as `stopRequested`, rendered: the one microphone control shows it as
+   * `aria-busy` and a caption. `restartedIn` is the language a restart was asked for, so the
+   * listening screen's live region says which one, and `micStopped` is whether the typing screen
+   * was reached from the microphone — by the person, by an error or by the browser ending the
+   * session — so its line says "Listening stopped" rather than an instruction to type.
+   */
+  const [finishing, setFinishing] = useState(false);
+  const [restartedIn, setRestartedIn] = useState<SpeechLanguage | null>(null);
+  const [micStopped, setMicStopped] = useState(false);
+  /**
+   * U9: focus follows a stage change the person made — never the page's own arrival. The stage
+   * the finder arrived at (the server's welcome, or a resumed reload's stage) is recorded by the
+   * arrival callback; the first stage that differs from it is a move, and from then on every
+   * stage — the arrival stage included, when returned to — takes focus on mount.
+   */
+  const arrivalStage = useRef<Stage>("welcome");
+  const moved = useRef(false);
 
   const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
+
+  const focusOnArrival = moved.current || stage !== arrivalStage.current;
+  useEffect(() => {
+    if (stage !== arrivalStage.current) moved.current = true;
+  }, [stage]);
 
   // Stop the microphone whenever this screen is left, by any route: the X, a stage change, an
   // unmount. A recogniser left running after its screen is gone keeps the mic light on, which is
@@ -144,6 +170,16 @@ export function CareFinder() {
     if (stage === "listening") return;
     speech.current?.cancel();
     speech.current = null;
+    setFinishing(false);
+  }, [stage]);
+
+  // U9: leaving the listening screen, by any route, is the microphone stopping. This cleanup runs
+  // AFTER the stage has changed, so the two ways to the typing screen that do not pass through the
+  // microphone clear it themselves at the moment of leaving: `startListening` (no session at all)
+  // and the results screen's "Change what you said" (below).
+  useEffect(() => {
+    if (stage !== "listening") return;
+    return () => setMicStopped(true);
   }, [stage]);
 
   // O69: leaving the finder also drops any stream a failed session is carrying for the
@@ -294,7 +330,8 @@ export function CareFinder() {
     return rows;
   }, [clinician, compareWith, request, roster]);
 
-  function startListening(language = speechLang) {
+  /** @param restarted U9: a language change on the listening screen, which the live region names. */
+  function startListening(language = speechLang, restarted = false) {
     // A second tap must not orphan a live recogniser (O12 RCA): without this, the first
     // session kept running with no handle — its handlers nulled the shared ref out from under
     // the new session, the stage-change cleanup found nothing to cancel, and the microphone
@@ -305,6 +342,9 @@ export function CareFinder() {
     setSpeechMessage(null);
     setSpeechRetryable(false);
     stopRequested.current = false;
+    setFinishing(false);
+    setRestartedIn(restarted ? language : null);
+    setMicStopped(false);
 
     const session = startSpeech({
       onPartial: setHeard,
@@ -374,10 +414,17 @@ export function CareFinder() {
     goTo("listening");
   }
 
-  /** "Done" asks the recogniser to finish; the final transcript arrives through onFinal. */
+  /**
+   * The microphone control, tapped while listening, asks the recogniser to finish; the final
+   * transcript arrives through onFinal. U9: one control, not two — it was a "Done" button beside
+   * a decorative mic; now the mic is the toggle (`aria-pressed`) and shows the finish it is
+   * waiting on (`aria-busy`, "Finishing…"). It stays enabled through that window: a second tap
+   * asks again, so a recogniser that never delivers cannot leave the person stuck.
+   */
   function finishListening() {
     if (speech.current) {
       stopRequested.current = true;
+      setFinishing(true);
       speech.current.stop();
       return;
     }
@@ -434,12 +481,16 @@ export function CareFinder() {
   return (
     <MotionConfig reducedMotion="user">
       <main id="main-content" className="care-app patient-v2" data-stage={stage}>
-        <section className="care-shell" aria-live="polite">
+        {/* U9: no live region here. The shell used to be `aria-live="polite"`, so every stage
+            change read the whole new screen aloud; each stage now owns one `role="status"` line
+            (`StatusLine`) scripted in `src/finder/announce.ts`. */}
+        <section className="care-shell">
           <AnimatePresence key={arrivalKey} mode="wait" initial={false}>
 
         {stage === "welcome" && (
           <WelcomeStage
             key="welcome"
+            focusOnArrival={focusOnArrival}
             draft={draft}
             setDraft={setDraft}
             reducedMotion={reducedMotion}
@@ -457,6 +508,7 @@ export function CareFinder() {
         {stage === "scenarios" && (
           <ScenariosStage
             key="scenarios"
+            focusOnArrival={focusOnArrival}
             archetype={archetype}
             archetypeIndex={archetypeIndex}
             matchDirection={matchDirection}
@@ -472,7 +524,10 @@ export function CareFinder() {
         {stage === "listening" && (
           <ListeningStage
             key="listening"
+            focusOnArrival={focusOnArrival}
             heard={heard}
+            finishing={finishing}
+            restartedIn={restartedIn}
             reducedMotion={reducedMotion}
             speechLang={speechLang}
             onFinish={finishListening}
@@ -480,7 +535,7 @@ export function CareFinder() {
             onType={() => goTo("type")}
             onLanguage={(language) => {
               setSpeechLang(language);
-              startListening(language);
+              startListening(language, true);
             }}
           />
         )}
@@ -488,6 +543,8 @@ export function CareFinder() {
         {stage === "type" && (
           <TypeStage
             key="type"
+            focusOnArrival={focusOnArrival}
+            micStopped={micStopped}
             draft={draft}
             setDraft={setDraft}
             speechMessage={speechMessage}
@@ -501,6 +558,7 @@ export function CareFinder() {
         {stage === "results" && (
           <ResultsStage
             key="results"
+            focusOnArrival={focusOnArrival}
             requestHeadline={requestHeadline}
             requestSummary={requestSummary}
             quality={quality}
@@ -519,6 +577,7 @@ export function CareFinder() {
             onReset={reset}
             onRefine={() => {
               setDraft(request);
+              setMicStopped(false);
               goTo("type");
             }}
             onPlaceChange={(value) => {
@@ -534,6 +593,7 @@ export function CareFinder() {
         {stage === "profile" && (
           <ProfileStage
             key="profile"
+            focusOnArrival={focusOnArrival}
             clinician={clinician}
             personalizedSignals={personalizedMatch.signals}
             profileEvidence={profileEvidence}
@@ -550,6 +610,7 @@ export function CareFinder() {
         {stage === "compare" && compareWith && (
           <CompareStage
             key="compare"
+            focusOnArrival={focusOnArrival}
             left={clinician}
             right={compareWith}
             rows={compareRows}
@@ -561,7 +622,12 @@ export function CareFinder() {
         )}
 
         {stage === "booking" && (
-          <BookingStage key="booking" clinician={clinician} onBack={() => backTo("profile")} />
+          <BookingStage
+            key="booking"
+            focusOnArrival={focusOnArrival}
+            clinician={clinician}
+            onBack={() => backTo("profile")}
+          />
         )}
 
           </AnimatePresence>

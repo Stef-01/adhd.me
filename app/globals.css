@@ -243,6 +243,14 @@ textarea:focus-visible {
   outline-offset: 4px;
 }
 
+/* U9: a stage's heading takes focus when the stage arrives (`MotionScreen`), so a keyboard user
+   sees where they landed. The same ring as a control's, wider so it clears the display serif's
+   descenders; a pointer tap shows nothing, as `:focus-visible` intends. */
+.screen h1:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
 /* ===========================================================================
    REGION 2 — THE FINDER, v1 BASE (app/care-finder.tsx, app/finder-stages/)
 
@@ -485,17 +493,21 @@ textarea:focus-visible {
 .icon-button:hover { color: var(--ink); }
 }
 
+/* U9: 44, not 42. Every finder header's round control (cancel, back) sat 2px under O14's floor,
+   and the touch sweep never knew — it reaches `/finder` by URL, and the welcome screen has no
+   such control. The first sweep of the other seven stages found all of them. The spacer that
+   balances the wordmark grows with it. */
 .icon-button {
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   padding: 0;
   border-radius: 50%;
 }
 
 .header-spacer {
-  width: 42px;
+  width: 44px;
 }
 
 /* O166: MUTED, not accent. `adhdme-taste` reserves the accent for LIVE TOKENS — the value that
@@ -586,9 +598,26 @@ textarea:focus-visible {
   transform: scale(0.97);
 }
 
+/* U9: the listening ring is a halo behind the button, so the breathing loop moves the halo and
+   the tap target holds still. Same 9px ring in the same colour; the button lost only its motion. */
+.mic-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.mic-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 9px var(--accent-soft);
+  pointer-events: none;
+}
+
 .mic-button.recording {
+  position: relative;
   background: #252820;
-  box-shadow: 0 0 0 9px var(--accent-soft), 0 14px 30px rgb(28 29 25 / 12%);
+  box-shadow: 0 14px 30px rgb(28 29 25 / 12%);
 }
 
 .listening-copy {
@@ -825,6 +854,8 @@ textarea:focus-visible {
    weight rather than looking like a link dropped into a table header. */
 .compare-open {
   border: 0;
+  /* U9: the floor, measured — 12px of padding around one 13px line came to 41. */
+  min-height: 44px;
   padding: 12px 2px;
   margin: -12px 0;
   background: transparent;
@@ -1021,7 +1052,16 @@ textarea:focus-visible {
   color: var(--ink);
 }
 
-.listening-done { margin-top: 6px; }
+/* U9: the caption under the one microphone control — the instruction "Done" used to carry, now
+   where the control is. Same register as the other lines under the microphone; the child
+   selector outranks `.voice-actions > p` above. */
+.voice-actions > .mic-caption {
+  margin: 4px 0 6px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+}
 
 /* Sits under the microphone. Quiet, but present before the button is pressed rather than after. */
 .speech-disclosure {
@@ -6798,6 +6838,12 @@ select { caret-color: var(--route-strong); }
   .patient-v2 .clinician-row:hover {
     background: var(--route-soft);
     transform: translateX(4px);
+  }
+  /* U9: the hovered tint costs the quietest line its margin — --faint on --route-soft is
+     4.32:1, under AA for 10px text — so the suburb steps up to --muted (5.17:1) while the
+     pointer is on the row. Found by axe on the results stage, the first time it was scanned. */
+  .patient-v2 .clinician-row:hover .row-location {
+    color: var(--muted);
   }
 }
 .patient-v2 .clinician-row img,

@@ -15,7 +15,8 @@
 
 import { ArrowLeft, CheckCircle, Minus } from "@phosphor-icons/react";
 import { type Clinician } from "@/demo/clinicians";
-import { ExampleProfileTag, ClinicianPortrait, MotionScreen, Wordmark } from "./shared";
+import { compareAnnouncement } from "@/finder/announce";
+import { ExampleProfileTag, ClinicianPortrait, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /** One ask, and whether each of the two GPs answers it. */
 export type CompareRow = { label: string; left: boolean; right: boolean };
@@ -71,17 +72,20 @@ export function CompareStage({
   left,
   right,
   rows,
+  focusOnArrival,
   onBack,
   onOpenRight,
 }: {
   left: Clinician;
   right: Clinician;
   rows: readonly CompareRow[];
+  focusOnArrival: boolean;
   onBack: () => void;
   onOpenRight: () => void;
 }) {
   return (
-    <MotionScreen key="compare" className="compare-screen">
+    <MotionScreen key="compare" className="compare-screen" focusOnArrival={focusOnArrival}>
+      <StatusLine line={compareAnnouncement(left.name, right.name)} />
       <header className="minimal-header">
         <button className="icon-button" type="button" onClick={onBack} aria-label="Back to results">
           <ArrowLeft size={25} weight="light" aria-hidden="true" />
@@ -92,7 +96,7 @@ export function CompareStage({
 
       <div className="compare-content">
         <p className="eyebrow">Side by side</p>
-        <h1>What each of them answers</h1>
+        <h1 tabIndex={-1}>What each of them answers</h1>
 
         {/* The heads sit in the SAME grid as every row below, so each name is directly above
             the column of verdicts it owns. They were a separate two-column strip first, which
