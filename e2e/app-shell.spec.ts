@@ -203,3 +203,115 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
   // The finder is still operable after a modal detour — the thing a sheet most often breaks.
   await expect(page.getByRole("button", { name: "Try an example search" })).toBeVisible();
 });
+
+// O234 (founder-directed): the profile's filters, the place it holds, and the map on results.
+
+test("the profile's filters narrow the finder, are said on the results, and clear from there", async ({ page }) => {
+  await page.goto("/profile");
+  await page.getByLabel("Suburb or postcode").fill("Beecroft");
+  await page.getByRole("switch", { name: /Woman GP/ }).check();
+  await page.getByRole("switch", { name: /Taking new patients/ }).check();
+  await expect(page.getByText("2 on", { exact: true })).toBeVisible();
+  // A language chip is a pressed button whose name stays the language — the tick is not in it.
+  await page.getByRole("button", { name: "Tamil", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Tamil", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByText("3 on", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Tamil", exact: true }).click();
+  await expect(page.getByText("2 on", { exact: true })).toBeVisible();
+
+  // The place set here is the finder's place, with no ?place= on the link.
+  await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Find", exact: true }).click();
+  await page.getByRole("textbox").fill("someone who can do the whole assessment");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await expect(page.getByLabel("Where are you?")).toHaveValue("Beecroft");
+
+  const strip = page.getByRole("group", { name: "Your filters" });
+  await expect(strip).toContainText("Woman GP");
+  await expect(strip).toContainText("Taking new patients");
+  // Every row on a narrowed list answers the filters: the roster is narrowed before ranking, so
+  // the reasons printed on the rows cannot name a GP the filters excluded.
+  const rows = page.locator(".clinician-row");
+  expect(await rows.count()).toBeGreaterThan(0);
+
+  await strip.getByRole("button", { name: "Clear", exact: true }).click();
+  await expect(page.getByRole("group", { name: "Your filters" })).toHaveCount(0);
+  // The place survives a clear — it orders, it never excluded anybody.
+  await expect(page.getByLabel("Where are you?")).toHaveValue("Beecroft");
+  // And the device agrees with the screen.
+  await page.goto("/profile");
+  await expect(page.getByText("None on", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Suburb or postcode")).toHaveValue("Beecroft");
+});
+
+test("a resolved place draws the nearby map, whose stops key the rows and find them", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await expect(page.locator(".nearby-map")).toHaveCount(0);
+
+  await page.getByLabel("Where are you?").fill("Beecroft");
+  const map = page.locator(".nearby-map");
+  await expect(map).toBeVisible();
+  await expect(map.getByRole("img")).toHaveAccessibleName(/centred on Beecroft/);
+  // Every row shown carries a key, and every stop names rows that exist.
+  const keys = page.locator(".row-key");
+  await expect(keys.first()).toHaveText("1");
+  const stops = map.getByRole("button");
+  expect(await stops.count()).toBeGreaterThan(0);
+  const label = await stops.first().getAttribute("aria-label");
+  expect(label).toMatch(/row/);
+
+  // Tapping a stop finds its row: focus lands on the row the stop names.
+  await stops.first().click();
+  const focused = page.locator(".clinician-row:focus");
+  await expect(focused).toHaveCount(1);
+  const position = await focused.locator(".row-key").textContent();
+  expect(label).toContain(`row ${position}`);
+
+  // A place outside coverage takes the map away with it rather than drawing a map of nowhere.
+  await page.getByLabel("Where are you?").fill("Nowhere");
+  await expect(page.locator(".nearby-map")).toHaveCount(0);
+  await expect(page.locator(".row-key")).toHaveCount(0);
+});
+
+test("filters nobody answers say so and give both ways out", async ({ page }) => {
+  await page.goto("/profile");
+  for (const name of [/Woman GP/, /telehealth/, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
+    await page.getByRole("switch", { name }).check();
+  }
+  for (const language of ["Arabic", "Igbo", "Urdu"]) await page.getByRole("button", { name: language, exact: true }).click();
+  await page.goto("/");
+  await page.getByRole("textbox").fill("someone who can do the whole assessment");
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main[data-stage='results']")).toBeVisible();
+  await expect(page.getByText("No listed GP answers every filter you set.")).toBeVisible();
+  await expect(page.locator(".clinician-row")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Change them" })).toHaveAttribute("href", "/profile");
+  await page.getByRole("button", { name: "Clear the filters" }).click();
+  await expect(page.locator(".clinician-list .clinician-row").first()).toBeVisible();
+  await expect(page.getByText("No listed GP answers every filter you set.")).toHaveCount(0);
+});
+
+test("the consent notice, the bar and the finder are one shell at every width", async ({ page }) => {
+  await page.context().clearCookies();
+  await page.goto("/");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  const notice = page.getByRole("region", { name: "Privacy" });
+  await expect(notice).toBeVisible();
+  const shell = await page.locator(".care-shell").boundingBox();
+  const bar = await page.getByRole("navigation", { name: "Sections" }).boundingBox();
+  const card = await notice.boundingBox();
+  // The notice never floats past the app it is talking about, and the bar is the shell's width.
+  expect(card!.x).toBeGreaterThanOrEqual(shell!.x - 1);
+  expect(card!.x + card!.width).toBeLessThanOrEqual(shell!.x + shell!.width + 1);
+  expect(Math.abs(bar!.width - shell!.width)).toBeLessThanOrEqual(2);
+  // The question, the box and the example link share one left edge.
+  const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
+  const box = await page.getByRole("textbox").boundingBox();
+  const link = await page.getByRole("button", { name: "Try an example search" }).boundingBox();
+  expect(Math.abs(h1!.x - box!.x)).toBeLessThanOrEqual(2);
+  expect(Math.abs(link!.x - box!.x)).toBeLessThanOrEqual(3);
+});

@@ -963,6 +963,25 @@ function consultingPoints(clinician: Clinician): Array<{ suburb: string; point: 
 }
 
 /** The nearest of a clinician's consulting locations to an origin, or null if none resolve. */
+/**
+ * O234: the nearest consulting location as a PLACE, for the nearby map — the suburb and its point,
+ * so a stop can be drawn where the rooms are. The same walk `nearestLocation` does; exported so
+ * the map and the ranking cannot disagree about which rooms are nearest.
+ */
+export function nearestConsultingLocation(clinician: Clinician, origin: SuburbPoint): { suburb: string; point: SuburbPoint } | null {
+  let best: { suburb: string; point: SuburbPoint; km: number } | null = null;
+  for (const { suburb, point } of consultingPoints(clinician)) {
+    const km = distanceKm(origin, point);
+    if (!best || km < best.km) best = { suburb, point, km };
+  }
+  return best ? { suburb: best.suburb, point: best.point } : null;
+}
+
+/** O234: the nearest consulting location's distance in km, or null when the clinician cannot be placed. The filters read this. */
+export function nearestKm(clinician: Clinician, origin: SuburbPoint): number | null {
+  return nearestLocation(clinician, origin)?.km ?? null;
+}
+
 function nearestLocation(clinician: Clinician, origin: SuburbPoint): { suburb: string; km: number } | null {
   let best: { suburb: string; km: number } | null = null;
   for (const { suburb, point } of consultingPoints(clinician)) {

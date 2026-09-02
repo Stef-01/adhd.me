@@ -88,6 +88,23 @@ The finder is one state machine inside a **fixed ~520px content shell / ~640px o
 eight stages must not resize the shell per stage. Viewport media queries do not describe the
 component's actual width; use the existing shell/container boundary.
 
+O234: the shell width is one token, `--shell-w` on `:root` (520px, 640px from 820px), and every
+fixed surface of the app reads it — the finder shell, the tab bar, the bottom sheet, the consent
+notice and the Profile tab — so the app's chrome is never wider than the app. `--shell-gutter`
+(22px) is the one inset text and controls sit on inside it: the welcome question, the compose box
+and the example link share that edge as one vertically centred group.
+
+The results screen carries a **nearby map** once the place resolves: an in-tree SVG projected from
+the gazetteer (no tile host, no coordinate leaves the device), with distance rings at true radius
+and one route-blue stop per consulting suburb keyed to the rows below. The keys are list positions,
+never ranks, and they render only while the map does. Pins and keys are route blue; the accent is
+still reserved for the row.
+
+The **Profile tab** holds the person's standing filters — where they are, woman GP, telehealth,
+bulk billing, longer appointments, wheelchair access, open books, languages, distance — as switch
+rows, chips and a segmented control on the same shell. They are applied to the roster before
+ranking and said on the results screen as a strip with Edit and Clear.
+
 The persistent top rule communicates progress. Orange marks the available next action; route
 blue marks the current stage and selected state. Results remain a comparison list, not a card
 gallery. Profile and row portraits are the same motion object.

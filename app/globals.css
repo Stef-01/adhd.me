@@ -1580,14 +1580,13 @@ textarea:focus-visible {
      never per-stage (the frame would jump mid-flow, which is exactly what D1's reverted
      attempt taught) and never by splitting columns inside the phone width. The fixed
      booking bar centres against the same token, so it can never disagree with the shell. */
-  --shell-w: 520px;
+  /* O234: `--shell-w` moved to `:root` (see the O234 block at the foot of the file) so the tab
+     bar, the sheet, the consent notice and the profile read the SAME width at the SAME
+     breakpoint — the bar used to widen at 700px and the shell at 820px, so between the two the
+     app's own chrome was 120px wider than the app. */
   min-height: 100svh;
   padding: 0;
   background: var(--paper);
-}
-
-@media (min-width: 820px) {
-  .care-app.patient-v2 { --shell-w: 640px; }
 }
 
 .patient-v2 .care-shell {
@@ -1610,7 +1609,7 @@ textarea:focus-visible {
 
 .patient-v2 .minimal-header {
   min-height: 68px;
-  padding: env(safe-area-inset-top) max(22px, env(safe-area-inset-right)) 0 max(22px, env(safe-area-inset-left));
+  padding: env(safe-area-inset-top) max(var(--shell-gutter), env(safe-area-inset-right)) 0 max(var(--shell-gutter), env(safe-area-inset-left));
   /* O218: the brand's one appearance inside the Operate surface — the hairline under the finder's
      header is the band itself, at 2px. The finder stays paper (a gradient field here would shout
      over a task surface, which impeccable's MODE rule forbids), but the product no longer changes
@@ -1647,7 +1646,9 @@ textarea:focus-visible {
 .patient-v2 .voice-prompt {
   max-width: none;
   margin: 0;
-  padding: 58px 30px 26px;
+  /* O234: the one gutter. The question sat 30px in and the box 22px in, so the two edges a person
+     reads first did not line up. */
+  padding: 52px var(--shell-gutter) 24px;
   text-align: left;
 }
 
@@ -1695,7 +1696,7 @@ textarea:focus-visible {
 .patient-v2 .voice-actions {
   align-items: stretch;
   margin-top: auto;
-  padding: 0 22px 58px;
+  padding: 0 var(--shell-gutter) 48px;
 }
 
 .patient-v2 .voice-screen .mic-button {
@@ -1784,7 +1785,9 @@ textarea:focus-visible {
    sized compact so both input paths sit on the one panel. */
 /* The written option's submit joins the amber system, so talk / write / find read as one panel.
    Disabled stays the default grey until there is something to search on. */
-.patient-v2 .voice-actions .scenario-toggle { margin-top: 14px; }
+/* O234: on the box's left edge, under it, where the question is — not centred under a
+   left-aligned screen. */
+.patient-v2 .voice-actions .scenario-toggle { margin-top: 12px; align-self: flex-start; padding: 0 2px; }
 
 .patient-v2 .listening-copy {
   padding-top: 50px;
@@ -1871,10 +1874,12 @@ textarea:focus-visible {
 .patient-v2 .clinician-list {
   display: grid;
   gap: 10px;
-  padding: 0 14px 30px;
+  /* O234: the cards sit 8px outside the text gutter, so their content lands on it. */
+  padding: 0 calc(var(--shell-gutter) - 8px) 30px;
 }
 
 .patient-v2 .clinician-row {
+  position: relative;
   grid-template-columns: 76px 1fr 24px;
   gap: 13px;
   padding: 12px;
@@ -1922,7 +1927,7 @@ textarea:focus-visible {
    below) made the screen argue with itself: enclosure and separation at once, which is exactly
    where the disharmony the founder saw came from. Space is the separator now, and the spacing
    carries the hierarchy: tight inside a group, wide between groups (within 8, between 28). */
-.results-head { padding: 8px 24px 10px; }
+.results-head { padding: 8px var(--shell-gutter) 10px; }
 .results-head h1 {
   margin: 10px 0 0;
   max-width: 18ch;
@@ -3294,7 +3299,7 @@ textarea:focus-visible {
 .patient-v2 .finder-context {
   display: block;
   margin: 0;
-  padding: 12px 22px max(16px, env(safe-area-inset-bottom));
+  padding: 12px var(--shell-gutter) max(16px, env(safe-area-inset-bottom));
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -3392,7 +3397,7 @@ textarea:focus-visible {
   font-size: 0.75rem;
   font-weight: 650;
   cursor: pointer;
-  transition: color 160ms ease;
+  transition: color var(--dur-tap) var(--ease-ui);
 }
 
 @media (hover: hover) {
@@ -5991,7 +5996,7 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   max-width: 760px;
   margin: 0 auto;
   /* O226: the widest between-group gap on the screen belongs at its most important boundary. */
-  padding: 26px 24px 8px;
+  padding: 26px var(--shell-gutter) 8px;
 }
 
 .results-list-head h2 {
@@ -6981,7 +6986,9 @@ select { caret-color: var(--route-strong); }
   bottom: max(18px, var(--safe-bottom));
   /* O230: see the `:has(.app-tabs)` rule above — it re-states this for the tab routes. */
   left: max(18px, var(--safe-left));
-  width: min(760px, calc(100% - 36px));
+  /* O234: the notice is a card INSIDE the shell — 12px in from each shell edge — so on a wide
+     screen it never floats past the app it is talking about. */
+  width: min(calc(var(--shell-w) - 24px), calc(100% - 36px));
   margin-inline: auto;
   padding: 14px 14px 14px 20px;
   border: 1px solid color-mix(in srgb, var(--on-ground) 14%, transparent);
@@ -7759,9 +7766,9 @@ select { caret-color: var(--route-strong); }
    the app it belongs to is a centred 640px shell, so the product read as a phone bar stretched over
    a desktop page. It now matches the shell it serves and lifts off the ground at its top corners,
    which is what makes a centred app shell look like an object rather than a column of content. */
-@media (min-width: 700px) {
+@media (min-width: 600px) {
   .app-tabs {
-    width: min(640px, 100%);
+    width: min(var(--shell-w), 100%);
     margin-inline: auto;
     border-radius: 18px 18px 0 0;
     box-shadow: var(--shadow-ambient);
@@ -8133,16 +8140,16 @@ body:has(.app-tabs) .consent-bar {
 /* ── Profile ──────────────────────────────────────────────────────────────────────────────── */
 
 .me-screen {
-  width: min(640px, 100%);
+  width: min(var(--shell-w), 100%);
   margin-inline: auto;
-  padding: 0 22px;
+  padding: 0 var(--shell-gutter);
 }
 
 /* The app header, on the Profile tab. Same grid as the finder's so the wordmark sits in the same
    place on both and the settings control never moves between screens. */
 .me-chrome {
-  margin: 0 -22px;
-  padding: max(10px, var(--safe-top)) 22px 14px;
+  margin: 0 calc(var(--shell-gutter) * -1);
+  padding: max(10px, var(--safe-top)) var(--shell-gutter) 14px;
 }
 
 .me-head h1 {
@@ -8215,3 +8222,505 @@ body:has(.app-tabs) .consent-bar {
 
 .me-privacy { margin: 30px 0 0; color: var(--faint); font-size: 0.8125rem; line-height: 1.5; }
 .me-privacy a { color: var(--muted); text-underline-offset: 3px; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O234 — THE MAP, THE FILTERS AND ONE SHELL.
+
+   ONE WIDTH, ONE GUTTER. Every fixed surface the app has — the finder shell, the tab bar, the
+   sheet, the consent notice, the profile — is the same object at the same width, decided here
+   and read everywhere; `--shell-gutter` is the one inset text and controls sit on inside it.
+   The bar used to widen at 700px and the shell at 820px; the notice was 760px wide over a
+   640px app; the profile was 640px while the finder beside it was 520px. All one number now.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --shell-w: 520px;
+  --shell-gutter: 22px;
+}
+
+@media (min-width: 820px) {
+  :root { --shell-w: 640px; }
+}
+
+@media (min-width: 600px) {
+  .me-screen {
+    min-height: 100svh;
+    border-inline: 1px solid var(--line);
+    background: var(--paper);
+  }
+}
+
+/* ── The nearby map ────────────────────────────────────────────────────────────────────────
+   Route blue, not the accent: a stop is a place on a route and a key to a row, and DESIGN.md
+   reserves the accent for the next consequential action — which on this screen is the row. */
+
+.nearby-map {
+  margin: 20px 0 0;
+  padding: 14px 14px 12px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface-raised);
+}
+
+.nearby-map svg {
+  display: block;
+  width: min(100%, 300px);
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.nearby-ring {
+  fill: none;
+  stroke: var(--route-line);
+  stroke-width: 0.5;
+  stroke-dasharray: 1.6 1.4;
+}
+
+.nearby-ring-label {
+  fill: var(--faint);
+  font-size: 0.24rem;
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+}
+
+.nearby-origin-halo { fill: color-mix(in srgb, var(--route) 16%, transparent); }
+.nearby-origin-dot { fill: var(--ink); }
+.nearby-origin-label { fill: var(--ink); font-size: 0.26rem; font-weight: 700; }
+
+.nearby-stop { cursor: pointer; }
+.nearby-stop-hit { fill: transparent; }
+.nearby-stop-pin { fill: var(--route-strong); transition: fill var(--dur-tap) var(--ease-ui); }
+.nearby-stop-key {
+  fill: var(--on-ground);
+  font-size: 0.27rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.nearby-stop-label {
+  fill: var(--ink);
+  font-size: 0.31rem;
+  font-weight: 620;
+  paint-order: stroke;
+  stroke: var(--surface-raised);
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+
+@media (hover: hover) {
+  .nearby-stop:hover .nearby-stop-pin { fill: var(--route); }
+}
+
+
+.nearby-stop:focus-visible .nearby-stop-pin { stroke: var(--accent); stroke-width: 1.1; }
+
+.nearby-map figcaption {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.nearby-caption-main { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
+.nearby-caption-note { color: var(--faint); font-size: 0.75rem; line-height: 1.45; }
+
+/* The row's key while the map shows: a position, never a rank. Over the portrait's corner,
+   concentric with the card. */
+.row-key {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 2px solid var(--surface-raised);
+  background: var(--route-strong);
+  color: var(--on-ground);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* ── The filter strip on results ───────────────────────────────────────────────────────── */
+
+.filter-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 18px var(--shell-gutter) 0;
+  padding: 8px 8px 8px 14px;
+  border-radius: 16px;
+  background: var(--stone);
+}
+
+.filter-strip-lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.filter-chips {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.filter-chip {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.filter-strip-actions { display: flex; gap: 2px; margin-left: auto; }
+
+.filter-edit,
+.filter-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--route-strong);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .filter-edit:hover,
+  .filter-clear:hover { background: var(--surface-raised); }
+}
+
+.filter-edit:focus-visible,
+.filter-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── The empty result (AR24: no-results) ───────────────────────────────────────────────── */
+
+.results-empty {
+  margin: 22px var(--shell-gutter) 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface-raised);
+}
+
+.results-empty-lead { margin: 0 0 6px; color: var(--ink); font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; }
+.results-empty-detail { margin: 0 0 14px; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+.results-empty-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.results-empty-edit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.results-empty-edit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* `.me-primary` on a <button>: the same pill the profile's link wears. */
+button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight: 640; cursor: pointer; }
+
+/* ── The profile's sections and controls ───────────────────────────────────────────────── */
+
+.me-section { margin: 0 0 30px; }
+
+.me-section h2 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 680;
+  letter-spacing: -0.01em;
+}
+
+.me-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.me-filter-count { color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+.me-section-lead { margin: 0 0 12px; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+
+.me-place label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.78125rem;
+  font-weight: 500;
+}
+
+.me-place input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.me-place input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.me-place-status { margin: 8px 0 0; color: var(--faint); font-size: 0.8125rem; line-height: 1.5; }
+
+/* Switch rows: the whole row is the control (the input covers it), the track is what a person
+   reads. State is said three ways — position, colour, and the checked semantics. */
+.me-switches {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 18px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-raised);
+  list-style: none;
+  overflow: hidden;
+}
+
+.me-switches li + li { border-top: 1px solid var(--line); }
+
+.me-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 60px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.me-switch > span:first-child { display: flex; flex-direction: column; gap: 2px; }
+.me-switch strong { color: var(--ink); font-size: 0.9375rem; font-weight: 620; }
+.me-switch small { color: var(--muted); font-size: 0.8125rem; line-height: 1.4; }
+
+.me-switch input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.me-switch-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--line);
+  transition: background var(--dur-move) var(--ease-ui);
+}
+
+.me-switch-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--surface-raised);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--hero-dusk) 24%, transparent);
+  transition: translate var(--dur-move) var(--ease-spring);
+}
+
+.me-switch input:checked ~ .me-switch-track { background: var(--route); }
+.me-switch input:checked ~ .me-switch-track::after { translate: 18px 0; }
+.me-switch input:focus-visible ~ .me-switch-track { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (hover: hover) {
+  .me-switch:hover strong { color: var(--route-strong); }
+}
+
+.me-group { margin: 0 0 18px; padding: 0; border: 0; min-inline-size: 0; }
+
+.me-group h3,
+.me-group legend {
+  margin: 0 0 10px;
+  padding: 0;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 640;
+}
+
+.me-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.me-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui);
+}
+
+/* On: a tick as well as a tint, so the state is never colour alone. */
+.me-chip.is-on {
+  border-color: var(--route-strong);
+  background: color-mix(in srgb, var(--route) 14%, var(--paper));
+  color: var(--route-strong);
+}
+
+.me-chip-tick { font-weight: 700; }
+
+@media (hover: hover) {
+  .me-chip:hover { border-color: color-mix(in srgb, var(--muted) 40%, var(--line)); }
+}
+
+.me-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.me-segments {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--stone);
+}
+
+.me-segment {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 6px;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 620;
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui);
+}
+
+.me-segment input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.me-segment.is-on {
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
+}
+
+.me-segment:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.me-group-note { margin: 8px 0 0; color: var(--faint); font-size: 0.75rem; line-height: 1.5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nearby-stop-pin,
+  .me-switch-track,
+  .me-switch-track::after,
+  .me-chip,
+  .me-segment { transition: none; }
+}
+
+/* ── The welcome screen: one edge, one group ───────────────────────────────────────────────
+   The question was centred inside a 560px column with its own 26px inset, sitting in a core
+   with a second, fluid inset; the box under it was left-aligned on the gutter. Three insets,
+   two alignments. Now: the question and the box are one group on the one gutter, vertically
+   centred as one object (the core takes the space above, the actions the space below), and the
+   example link sits on the same edge under the box. */
+.patient-v2 .voice-screen .voice-prompt {
+  max-width: none;
+  margin: 0;
+  padding: 0 0 22px;
+  text-align: left;
+}
+
+.patient-v2 .voice-screen .voice-prompt h1 { margin: 0; }
+.patient-v2 .voice-core { padding: 24px var(--shell-gutter) 0; }
+.patient-v2 .voice-screen .voice-actions { margin-top: 0; margin-bottom: auto; padding-bottom: 24px; }
+
+/* The compose box is ONE pill. Its wrapper carried a second border and a 16px radius under the
+   field's own 22px one, so the two edges showed as a double outline with mismatched corners. The
+   wrapper now only casts the shadow and the focus ring, at the field's radius. */
+.patient-v2 .voice-actions .dual-input {
+  min-height: 0;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+}
+
+.patient-v2 .voice-actions .dual-input:focus-within {
+  border-color: transparent;
+  box-shadow:
+    0 0 0 4px var(--route-soft),
+    0 16px 40px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
+}
+
+/* The results head: the "change" control sits on the heading's edge, not centred under it. */
+.results-head .refine-compact { align-self: flex-start; margin-inline: 0; }
+.nearby-map svg { width: min(100%, 250px); }
+@media (min-width: 600px) { .nearby-map svg { width: min(100%, 290px); } }
+.nearby-stop-rows {
+  fill: var(--muted);
+  font-size: 0.235rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  paint-order: stroke;
+  stroke: var(--surface-raised);
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+
+/* The profile is the finder's sibling: the same band under its header, and on a wide screen the
+   same route ground around the same shell, so switching tabs never changes the world. */
+.me-chrome::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background-image: var(--band-gradient);
+}
+
+.me-chrome { position: relative; }
+
+@media (min-width: 901px) {
+  body:has(.me-screen) { color: var(--on-ground); background: var(--route-strong); }
+  .me-screen { color: var(--ink); box-shadow: var(--shadow-ambient); }
+}

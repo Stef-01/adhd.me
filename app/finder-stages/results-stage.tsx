@@ -3,7 +3,7 @@
 // O95: the results screen, verbatim from care-finder.tsx — including the collapsed-screens
 // history note, because it explains why this one screen carries so much.
 
-import { CaretRight } from "@phosphor-icons/react";
+import { CaretRight, FunnelSimple } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -17,7 +17,9 @@ import {
 import { type Clarifier } from "@/matching/clarify";
 import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
+import Link from "next/link";
 import { CoverageMap } from "../coverage-map";
+import { NearbyMap } from "./nearby-map";
 import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
@@ -51,6 +53,8 @@ export function ResultsStage({
   onClarify,
   onShowAll,
   onChoose,
+  filterLabels,
+  onClearFilters,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -75,6 +79,9 @@ export function ResultsStage({
   onClarify: (answer: string) => void;
   onShowAll: () => void;
   onChoose: (clinician: Clinician) => void;
+  /** O234: the labels of the device's filters that are on — the strip above the list, and the empty state's reason. */
+  filterLabels: readonly string[];
+  onClearFilters: () => void;
 }) {
   // U9: the one live line this screen owns. The status paragraphs below used to be five separate
   // `role="status"` regions inside a live shell, so a place edit read the fit line, the distance
@@ -89,6 +96,22 @@ export function ResultsStage({
     setReranks((n) => n + 1);
   }, [matches]);
   const line = resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
+
+  /**
+   * O234: a stop on the map, tapped. The row is brought into view and given FOCUS — the ring is
+   * the mark, and it is the same mark a keyboard user already gets, so nothing new has to be
+   * invented to say "this one". Opening the profile from the map would take a person somewhere
+   * they did not choose from a number; finding the row lets them read it first.
+   */
+  const list = useRef<HTMLDivElement | null>(null);
+  /** O234: the filters left nobody. The verdict lines below describe a roster; with no roster they describe nothing, so they stand down. */
+  const empty = matches.length === 0;
+  const pickFromMap = (clinician: Clinician) => {
+    const row = list.current?.querySelector<HTMLElement>(`[data-clinician="${clinician.id}"]`);
+    if (!row) return;
+    row.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
+    row.focus({ preventScroll: true });
+  };
 
   return (
     <MotionScreen key="results" className="results-screen" focusOnArrival={focusOnArrival} focusTarget=".clinician-row">
@@ -133,7 +156,7 @@ export function ResultsStage({
           <datalist id="covered-suburbs">
             {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
           </datalist>
-          {quality === "informed" && fitCopy && (
+          {!empty && quality === "informed" && fitCopy && (
               <motion.p
                 key={fitCopy}
                 className="place-status"
@@ -166,7 +189,7 @@ export function ResultsStage({
               (0.2s, the house ease, exit subtler than enter) and swaps when its text swaps
               (the key). Under prefers-reduced-motion every line renders in place. */}
           <AnimatePresence initial={false}>
-          {quality !== "informed" && (
+          {!empty && quality !== "informed" && (
             <motion.p
               key={`quality-${quality}`}
               className="place-status match-quality"
@@ -182,7 +205,7 @@ export function ResultsStage({
           {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). "Informed" means an order
               exists somewhere in the list — not necessarily at the top, which is the one
               boundary the reader acts on. When the first band is a tie, say so there. */}
-          {tieNote && (
+          {!empty && tieNote && (
             <motion.p
               key="tie-note"
               className="place-status match-quality"
@@ -204,7 +227,7 @@ export function ResultsStage({
               who came here to find a GP. Tapping appends the answer in the reader's own
               words and the whole sentence is re-read, so the finder can still say "you said
               this" about a signal it prompted. */}
-          {quality !== "informed" && clarifierList.length > 0 && (
+          {!empty && quality !== "informed" && clarifierList.length > 0 && (
             <motion.details
               key="clarify"
               className="results-refine-details"
@@ -235,7 +258,7 @@ export function ResultsStage({
 
           {/* A care area nobody on the roster declares is a gap in the LISTING, and the
               reader should not be left to conclude it is a gap in their question. */}
-          {unserved.length > 0 && (
+          {!empty && unserved.length > 0 && (
             <motion.p
               key={`unserved-${unserved[0]}`}
               className="place-status match-quality"
@@ -259,10 +282,54 @@ export function ResultsStage({
           {place.trim() !== "" && !origin && (
             <CoverageMap highlight={null} />
           )}
-
         </div>
+
+        {/* O234: the nearby map — only once the place resolves, because a map of "near you" with
+            no "you" on it is the fabricated-precision mistake W211 removed, drawn. It sits with
+            the place field that governs it and above the list it keys. */}
+        {origin && shown.length > 0 && (
+          <NearbyMap origin={origin} shown={shown} onPick={pickFromMap} />
+        )}
       </div>
 
+      {/* O234: the filters the device is holding, said on the screen they narrow. A person who set
+          "wheelchair access" on Tuesday must be able to see on Thursday why the list is short —
+          and clear it here, without a trip to the profile. Edit goes there; the set lives there. */}
+      {filterLabels.length > 0 && (
+        <div className="filter-strip" role="group" aria-label="Your filters">
+          <span className="filter-strip-lead">
+            <FunnelSimple size={15} weight="bold" aria-hidden="true" />
+            Your filters
+          </span>
+          <ul className="filter-chips">
+            {filterLabels.map((label) => <li key={label} className="filter-chip">{label}</li>)}
+          </ul>
+          <span className="filter-strip-actions">
+            <Link className="filter-edit" href="/profile">Edit</Link>
+            <button className="filter-clear" type="button" onClick={onClearFilters}>Clear</button>
+          </span>
+        </div>
+      )}
+
+      {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
+          sentence names the filters as the cause, because that is the one thing the person can
+          change, and both ways out are on the screen. */}
+      {empty && (
+        <div className="results-empty">
+          <p className="results-empty-lead">No listed GP answers every filter you set.</p>
+          <p className="results-empty-detail">
+            {filterLabels.length > 0
+              ? `On right now: ${filterLabels.join(", ")}. Loosening one usually brings the list back.`
+              : "Try a different suburb, or change the filters on your profile."}
+          </p>
+          <div className="results-empty-actions">
+            <button className="me-primary" type="button" onClick={onClearFilters}>Clear the filters</button>
+            <Link className="results-empty-edit" href="/profile">Change them</Link>
+          </div>
+        </div>
+      )}
+
+      {!empty && (
       <div className="results-list-head">
         <h2>Matches</h2>
         {/* O226: the count sits with the list it describes, not two groups up the page. */}
@@ -270,8 +337,9 @@ export function ResultsStage({
           <span className="results-count">{shown.length} of {matches.length}</span>
         )}
       </div>
+      )}
 
-      <div className="clinician-list">
+      <div className="clinician-list" ref={list}>
         {/* O52: the re-sort, made visible. A clarifier answer re-ranks this list, and the
             order changing is the product's whole argument — so rows GLIDE to their new
             positions (`layout="position"`) instead of teleporting, and a row pushed out
@@ -291,6 +359,7 @@ export function ResultsStage({
               className="clinician-row"
               type="button"
               layout="position"
+              data-clinician={item.id}
               onClick={() => onChoose(item)}
               initial={reducedMotion ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -332,6 +401,9 @@ export function ResultsStage({
                 )}
               </span>
               <CaretRight size={20} weight="light" aria-hidden="true" />
+              {/* O234: the row's KEY on the map — a position, not a rank — shown only while the
+                  map is, so a number never stands over the list claiming an order it did not earn. */}
+              {origin && <span className="row-key" aria-hidden="true">{index + 1}</span>}
             </motion.button>
           );
           })}

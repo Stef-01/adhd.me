@@ -16,6 +16,7 @@ import {
   topTieNote,
   unservedAsks,
   missedAsks,
+  nearestKm,
   type Clinician,
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
@@ -32,6 +33,15 @@ import {
   type SpeechSession,
 } from "@/voice/speech";
 import { NO_BANNER, speechBanner } from "@/finder/speech-banner";
+import {
+  activeFilterCount,
+  applyFilters,
+  describeFilters,
+  emptyFilters,
+  readFilters,
+  writeFilters,
+  type Filters,
+} from "@/finder/filters";
 import { AppTabs } from "./app-tabs";
 import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
@@ -78,9 +88,12 @@ export function CareFinder() {
   /** O226 (founder-amended): the example roster ships ON — this is a testing deployment, and the
    * switch (relocated to the welcome screen's folded testing options) is the way OFF. */
   const [includeSynthetic, setIncludeSynthetic] = useState(true);
-  // O222: a plain ternary — both branches are stable module references, so this is already
-  // referentially stable across renders and the memo bought a hook slot for nothing.
-  const roster = rosterFor(includeSynthetic);
+  /**
+   * O234: the device's filters (`src/finder/filters.ts`), read on arrival and applied to the roster
+   * BEFORE ranking — a filter narrows, the sentence orders, and every derived read below threads the
+   * same narrowed roster, so no sentence on the screen describes a list the ranking did not run over.
+   */
+  const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
@@ -90,8 +103,19 @@ export function CareFinder() {
   // thing an address carries) and is read at arrival, before the first paint.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
+  const roster = useMemo(
+    () => applyFilters(rosterFor(includeSynthetic), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
+    [includeSynthetic, filters, origin],
+  );
   const { stage, arrivalKey, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
-    setPlace(arrival.place);
+    // O234: the filters the device holds, and the place it holds when the address bar carries
+    // none — a search started from the front door reads back what the profile set. A place on
+    // the URL still wins: a link that carries a suburb must re-rank the way the link says.
+    const held = readFilters(window.localStorage);
+    setFilters(held);
+    const arrivedPlace = arrival.place || held.place;
+    setPlace(arrivedPlace);
+    if (!arrival.place && held.place) rememberPlace(held.place);
     debug.current = arrival.debug;
     arrivalStage.current = arrival.resumed ? arrival.stage : "welcome";
     if (!arrival.resumed) return;
@@ -102,7 +126,9 @@ export function CareFinder() {
     const words = record.request || exampleRequest;
     setRequest(words);
     setDraft(record.draft);
-    const found = rankCliniciansNear(words, resolvePlace(arrival.place), roster).findIndex((item) => item.id === record.matchId);
+    const resumedOrigin = resolvePlace(arrivedPlace);
+    const resumedRoster = applyFilters(rosterFor(includeSynthetic), held, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null));
+    const found = rankCliniciansNear(words, resumedOrigin, resumedRoster).findIndex((item) => item.id === record.matchId);
     setMatchIndex(Math.max(0, found));
   });
   /**
@@ -503,6 +529,27 @@ export function CareFinder() {
     setShowAll(false);
   }
 
+  /** O234: the place the person types on the results screen is the profile's place too. */
+  function changePlace(value: string) {
+    setPlace(value);
+    rememberPlace(value);
+    setFilters((current) => {
+      const next = { ...current, place: value };
+      writeFilters(window.localStorage, next);
+      return next;
+    });
+    setMatchIndex(0);
+  }
+
+  /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
+  function clearNarrowingFilters() {
+    const next: Filters = { ...emptyFilters(), place: filters.place };
+    writeFilters(window.localStorage, next);
+    setFilters(next);
+    setMatchIndex(0);
+    setShowAll(false);
+  }
+
   function cycleArchetype(direction: 1 | -1) {
     const nextIndex = (archetypeIndex + direction + careArchetypes.length) % careArchetypes.length;
     const nextArchetype = careArchetypes[nextIndex] ?? defaultArchetype;
@@ -631,10 +678,9 @@ export function CareFinder() {
               dispatchBanner({ type: "cleared" });
               goTo("type");
             }}
-            onPlaceChange={(value) => {
-              setPlace(value);
-              rememberPlace(value);
-            }}
+            onPlaceChange={changePlace}
+            filterLabels={activeFilterCount(filters) > 0 ? describeFilters(filters) : []}
+            onClearFilters={clearNarrowingFilters}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}

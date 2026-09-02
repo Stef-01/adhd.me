@@ -32,6 +32,7 @@ export interface LongFile {
 }
 
 const U15 = "2026-09-02";
+const O234 = "2026-09-02";
 
 /**
  * Every file over the floor on the day the law was written. Ordered by path.
@@ -43,9 +44,9 @@ const U15 = "2026-09-02";
 export const LONG_FILES: readonly LongFile[] = [
   {
     file: "app/care-finder.tsx",
-    lines: 700,
-    on: U15,
-    why: "The finder's state machine: which stage follows which, the speech-session lifecycle (O69 established it must not split across files), and every derived memo. O95 already took the screens out to app/finder-stages/; what remains is one machine, and cutting it again would put a transition on one side of a file boundary and its guard on the other. R2's stage work is where it gets shorter, if it does.",
+    lines: 740,
+    on: O234,
+    why: "The finder's state machine: which stage follows which, the speech-session lifecycle (O69 established it must not split across files), and every derived memo. O95 already took the screens out to app/finder-stages/; what remains is one machine, and cutting it again would put a transition on one side of a file boundary and its guard on the other. R2's stage work is where it gets shorter, if it does. O234 raised the argued length by forty: the device's filters are read on arrival and applied to the roster before ranking, and the two handlers that keep the profile and the results screen writing one record belong beside the state they write.",
   },
   {
     file: "app/story-sequence.tsx",
@@ -61,9 +62,9 @@ export const LONG_FILES: readonly LongFile[] = [
   },
   {
     file: "src/demo/clinicians.ts",
-    lines: 1100,
-    on: U15,
-    why: "The roster and the ranking read over it. Mostly data — real declarations, one clinician per block — and the census pins data files separately for that reason. R1's record registry is where the data and the functions part company.",
+    lines: 1120,
+    on: O234,
+    why: "The roster and the ranking read over it. Mostly data — real declarations, one clinician per block — and the census pins data files separately for that reason. R1's record registry is where the data and the functions part company. O234 added twenty: the two exported nearest-location readers the map and the filters share with the ranking, so three surfaces measure one distance.",
   },
   {
     file: "src/design/taste-register.ts",

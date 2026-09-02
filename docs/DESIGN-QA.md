@@ -4010,3 +4010,38 @@ microphone, the caption reads under it, and the header controls sit on the floor
 header growing.
 
 **Captures:** `qa/u9-listening-390.png`, `qa/u9-listening-1280.png`, `qa/u9-compare-390.png`.
+
+## O234 — the map, the filters and one shell (2026-09-02)
+
+**Founder-directed.** "Everything must be symmetrical … the floating privacy policy is weirdly
+floating and all the text input and everything is all over the place." Then: a map of nearby
+clinicians on the finder, and a Profile tab that sets standing filters.
+
+**What was wrong, measured.** The welcome question sat 30px in inside a 560px centred column with
+its own 26px inset, the compose box 22px in on the gutter, the example link centred under a
+left-aligned screen; the box wore two borders at two radii (16 inside 22). The tab bar widened to
+640px at 700px while the shell widened at 820px; the consent notice was 760px wide over a 640px
+app; the Profile tab was 640px beside a 520px finder. Four widths, three insets, two alignments.
+
+**What changed.** One `--shell-w` on `:root` read by the shell, the bar, the sheet, the notice and
+the profile; one `--shell-gutter`; the question, box and link on that edge as one vertically
+centred group; the box one pill. The Profile tab is the person's standing filters (switch rows,
+language chips, distance segments), held in `localStorage`, applied to the roster before ranking,
+and said on results as a strip with Edit and Clear; no listed GP answering every filter is a named
+`no-results` state with both ways out. Results gain the nearby map: gazetteer-projected, rings at
+true radius, route-blue stops keyed to the rows, a stop finding its row by focus.
+
+**Against the reference apps.** NHS App: one hub bar, left-aligned headings, list rows with
+trailing switches — matched. Zocdoc: cold-opens on search, filters live off the query, numbered
+map pins tied to the list — matched, with the tile map refused for the privacy reason in
+`src/geo/local-map.ts`. Apple Health: a settings control top-right, one shell — matched.
+
+**Verified.** `pnpm verify` green; `e2e/app-shell.spec.ts` gained four tests (filters narrow and
+clear, the map keys and finds rows, the no-results way out, the one-shell geometry); the a11y,
+touch, contrast and focus sweeps in the full `pnpm e2e` run; captures at 390 and 1280 from the
+production build.
+
+**Captures:** `qa/o234-welcome-consent-390.png`, `qa/o234-welcome-1280.png`,
+`qa/o234-results-map-390.png`, `qa/o234-results-map-1280.png`, `qa/o234-results-filtered-390.png`,
+`qa/o234-results-empty-390.png`, `qa/o234-profile-filters-390.png`,
+`qa/o234-profile-filters-1280.png`.

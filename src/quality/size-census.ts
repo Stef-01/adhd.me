@@ -69,6 +69,7 @@ const SET_BY_U15 = "2026-09-02";
 const SET_BY_O231 = "2026-09-02";
 const SET_BY_O232 = "2026-09-02";
 const SET_BY_O233 = "2026-09-02";
+const SET_BY_O234 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -181,6 +182,28 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'e2e-support-lines', value: 2422, on: SET_BY_O233, reason: "O233: the working-truth register gained /profile's proof — the sentence the page renders before any session is read." },
   { measure: 'e2e-spec-lines', value: 7749, on: SET_BY_O233, reason: "O233: app-shell.spec.ts gained four tests — the bar holding three destinations, settings reaching About with no bar on it, the Profile tab showing and forgetting what the device holds, and the welcome screen leading with the question and a box tall enough to be the subject." },
   { measure: 'e2e-goto-calls', value: 280, on: SET_BY_O233, reason: "O233: the new tests walk /profile and the settings route out to /story, which are the two surfaces the unit added and moved." },
+
+  // O234 (founder-directed): the map, the filters and the harmony pass. Results gain a nearby map
+  // drawn from the gazetteer (no tile host — the coordinate never leaves the device); /profile
+  // gains the person's own filters, held on the device and applied to the roster before ranking;
+  // one shell-width token replaces the four widths the app's fixed surfaces used to disagree on.
+  { measure: 'app-files', value: 140, on: SET_BY_O234, reason: "O234: app/finder-stages/nearby-map.tsx — the map, as its own stage piece beside the results screen it sits on." },
+  { measure: 'app-lines', value: 16465, on: SET_BY_O234, reason: "O234: the map component, the profile's filter controls (switch rows, language chips, distance segments), the results screen's filter strip and its no-results state, and the reasoning at each — why a filter narrows where a sentence orders, and why a pin is a key and not a rank." },
+  { measure: 'src-modules', value: 301, on: SET_BY_O234, reason: "O234: src/finder/filters.ts (the device-held filter set and its application) and src/geo/local-map.ts (the map's projection and fit)." },
+  { measure: 'src-lines', value: 54607, on: SET_BY_O234, reason: "O234: the two modules above, the two exported nearest-location readers in clinicians.ts the map and the filters share with the ranking, and the two AR24 zero-state classifications." },
+  { measure: 'src-reached-modules', value: 168, on: SET_BY_O234, reason: "O234: filters.ts and local-map.ts are both in the product's closure — the finder applies the one and the results screen draws the other." },
+  { measure: 'src-reached-lines', value: 30657, on: SET_BY_O234, reason: "O234: as src-reached-modules, plus the clinicians.ts readers." },
+  { measure: 'src-unreached-lines', value: 23950, on: SET_BY_O234, reason: "O234: the zero-state register gained the two classifications; it is a law module the product does not import." },
+  { measure: 'src-single-importer-modules', value: 64, on: SET_BY_O234, reason: "O234: local-map.ts is imported by the map alone, which is the seam it was cut on — the geometry is pure and node-tested, the SVG is not. filters.ts has two importers (the finder and the profile) and does not count." },
+  { measure: 'use-client-files', value: 32, on: SET_BY_O234, reason: "O234: nearby-map.tsx handles taps and keys on its stops; it cannot be a server component. It is rendered only by a client stage already." },
+  { measure: 'css-lines', value: 8725, on: SET_BY_O234, reason: "O234: the map, the filter strip, the row keys, the no-results block, the profile's switch rows, chips and segments, and the shell-width block — plus the compose box collapsing to one pill and the welcome screen's one-edge rules, which replace scattered insets rather than add to them." },
+  { measure: 'css-rule-blocks', value: 1591, on: SET_BY_O234, reason: "O234: as css-lines; the profile's controls are most of the count." },
+  { measure: 'css-styled-classes', value: 555, on: SET_BY_O234, reason: "O234: nearby-*, filter-*, row-key, results-empty-*, me-section/switch/chip/segment — every one with markup, per the dead-CSS census." },
+  { measure: 'classname-attributes', value: 1839, on: SET_BY_O234, reason: "O234: the map's SVG parts, the filter strip, the profile's controls." },
+  { measure: 'vitest-files', value: 315, on: SET_BY_O234, reason: "O234: filters.test.ts and local-map.test.ts — the model layer, node-tested before any browser saw it." },
+  { measure: 'vitest-lines', value: 53416, on: SET_BY_O234, reason: "O234: as vitest-files." },
+  { measure: 'e2e-spec-lines', value: 7861, on: SET_BY_O234, reason: "O234: app-shell.spec.ts gained four tests — filters set on the profile narrowing the finder and clearing from results, the map's stops finding their rows, the no-results way out, and the one-shell geometry (notice inside the shell, bar the shell's width, question/box/link on one edge)." },
+  { measure: 'e2e-goto-calls', value: 286, on: SET_BY_O234, reason: "O234: the new tests walk /profile and / in both directions, which is the unit's whole claim." },
 ];
 
 /** The current floor per measure: the last entry wins. */

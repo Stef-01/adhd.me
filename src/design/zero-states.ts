@@ -239,6 +239,18 @@ export const ZERO_STATES: readonly ZeroState[] = [
     sentence: "No vertical has been put together yet.",
     why: "Nothing assembled yet, with the body copy naming it as the product's state and doable work — pathways' sibling exemplar.",
   },
+  {
+    file: "app/finder-stages/results-stage.tsx",
+    kind: "no-results",
+    sentence: "No listed GP answers every filter you set.",
+    why: "O234: the roster was ranked and the device's filters left nobody. The sentence names the filters as the cause because that is the one thing the person can change, and both ways out (clear, edit) stand under it.",
+  },
+  {
+    file: "app/finder-stages/nearby-map.tsx",
+    kind: "no-results",
+    sentence: "Nobody on this list has rooms we can place near ",
+    why: "O234: the list has rows but none has a consulting suburb the gazetteer can place near the person (telehealth-first, or rooms outside coverage) — the map ran and drew no stop, and the caption says so rather than showing an empty ring.",
+  },
 ];
 
 /** Branches whose zero arm renders nothing a reader meets — declared, so coverage can count them. */
