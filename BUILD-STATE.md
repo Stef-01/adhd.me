@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 499fd47 (2026-09-02T06:20Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 499fd47 (typecheck · 304 files / 4477 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 679 KB · gate accounting PASS with this line); full pnpm e2e green (328 passed, 1 skipped, 18.9m, exit 0 read from the command itself, run serially with nothing else building, 329 listed) at the U5 tree (499fd47: packageManager/engines/.nvmrc pins, ci.yml's verify job calling pnpm verify with both jobs reading the pins, ci-parity.test.ts holding the workflow to verify's step list in both directions; no runtime file changed). AR15 visual: unchanged — no surface changed in U4 or U5, the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5 done; U6 blocked on D-CI-BILLING; U7 (crawlers told the truth about the finder) is the next firing's unit`
+`gate: green @ f871137 (2026-09-02T06:50Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at f871137 (typecheck · 305 files / 4485 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 679 KB · gate accounting PASS with this line); full pnpm e2e green (334 passed, 1 skipped, 18.7m, exit 0 read from the command itself, run serially with nothing else building, 335 listed) at the U7 tree (f871137: the crawler register src/security/robots.ts naming /finder, /examples, /demo and /thanks, read by the X-Robots-Tag config entries, each page's metadata.robots, the sitemap filter and app/robots.ts's disallow list; the finder-public-posture founder gate; robots.test.ts holding all four places to the register both directions and e2e/robots.spec.ts reading them off the build). AR15 visual: unchanged — no rendered surface changed in U4, U5 or U7 (U7 adds a meta tag and a response header), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7 done; U6 blocked on D-CI-BILLING; U8 (the finder's state model) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -120,17 +120,40 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **U7 (O229-lane, the sixth unit built of the one-year plan; U6 stays blocked on D-CI-BILLING:
-> crawlers told the truth about the finder) — CLAIMED founder-0902a, 2026-09-02T06:24Z.** Scope is
-> the plan's U7 text and nothing beyond it: a register of the routes this testing deployment hides
-> from crawlers (`/finder`, `/examples`, `/demo`, each with its why) in `src/security/robots.ts`;
-> `noindex, nofollow` on each by `X-Robots-Tag` (a `next.config.ts` headers entry per route) and by
-> `metadata.robots`; the routes filtered out of the sitemap and disallowed in `app/robots.ts`, all
-> three places reading the one register; a `finder-public-posture` entry in `FOUNDER_GATES` (open,
-> `openAt` the register) so reversing any of it is a gate, not an edit. `src/security/robots.test.ts`
-> holds the three places to the register in both directions against `PUBLIC_SURFACES`, and one
-> small spec reads the header, the meta tag, robots.txt and the sitemap off the real build.
-> Continuation if this claim goes stale: nothing is behind a flag; the unit is whole or it is not
-> landed.
+> crawlers told the truth about the finder) — DONE founder-0902a, 2026-09-02 @ f871137.** Scope was
+> the plan's U7 text, with one addition the unit's own invariant forced (below). **Outcome:**
+> `src/security/robots.ts` is the one register of routes this testing deployment hides from
+> crawlers, each with its why — `/finder`, `/examples`, `/demo`, and `/thanks`. Four places read
+> it and nothing else decides: `next.config.ts` mounts an `X-Robots-Tag: noindex, nofollow`
+> entry per register route after the security entry (`robotsHeaders()`); each hidden page's
+> `metadata.robots` is `HIDDEN_ROBOTS_META` from the register (`/demo` and `/thanks` had their
+> own `index: false` — now the register's, not the page's); `app/sitemap.ts` filters the
+> register out; `app/robots.ts` disallows `OPERATOR_DISALLOW` (the four prefixes it always had)
+> plus the register. `finder-public-posture` heads `FOUNDER_GATES`, open at the register, priced
+> at D-FINDER-PUBLIC → U65, quoting the founder's 2026-09-01 words; `founder-gates.test.ts` refuses
+> `/finder`, `/examples` or `/demo` leaving with the DECIDED message. **Why /thanks is a fourth
+> route, not scope creep:** the plan names three; the both-directions rule the plan itself
+> demands (a route hidden anywhere must be hidden everywhere, and vice versa) found `/thanks`
+> already `noindex` since launch item 4 while the sitemap still announced it. The rule leaves
+> two answers — un-hide the post-registration page or put it in the register with its reason —
+> and only the second keeps a decision somebody made; the plan's "three" was a count, not a
+> ruling. `/about` stays the OLDER exception (own gate, own filter) and is written up as such.
+> **Verification:** `src/security/robots.test.ts` (seven tests) walks `PUBLIC_SURFACES` and holds
+> all four places to the register in both directions by path — header entries, page source
+> (comment-stripped, no page outside the register may set `robots:` at all), sitemap, disallow
+> list pinned to operator + register exactly — plus a non-vacuity test on `/faq`; `headers.test.ts`'s
+> U1 pin now names the security entry first and the robots entries after; `sitemap.test.ts`'s
+> `/demo` example inverted with its reason. `e2e/robots.spec.ts` (six tests, triaged
+> single-route-feature) reads the header, the meta tag, robots.txt and the sitemap off the real
+> build for every register route and the absence of all four on `/faq`. Mutation probes before
+> commit: `/finder` removed from the register fails three tests (the gate's DECIDED message, the
+> register pin, the page-source check — the derived places rightly follow the register, which
+> is why the gate exists); the sitemap filter removed fails three; tree restored after each.
+> No rendered surface changed (a `<meta name="robots">` and a response header), so the AR15
+> chain still ends at O229 and the gradient aesthetic and dev-server preview were not
+> re-checked — nothing they cover moved. Verified: `pnpm verify` green (305 files / 4485 tests,
+> 13 skipped; audit PASS; perf PASS 49 routes, /finder 679 KB), full `pnpm e2e` 334 passed / 1 skipped / 18.7m / exit 0 at
+> the U7 tree. The vault log is skipped (unreachable) and the commits say so.
 
 > **U5 (O229-lane, the fifth unit of the one-year plan: toolchain pins and CI parity) — DONE
 > founder-0902a, 2026-09-02 @ 499fd47.** Scope was the plan's U5 text and nothing beyond it.
@@ -11878,7 +11901,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U4 | done | founder-0902a | 2026-09-02T05:50Z | 2041d30 | [P] (M) The reporter seam, a health endpoint, and Web Vitals. -> verify: `src/ops/reporter.test.ts` proves an uncaught server error reaches the sink with route and SHA and that patient text (a finder request) never appears in a report payload — a planted request string must be absent; e2e asserts `/api/health` shape and that the console adapter logs a thrown error from a fixture route. Done as: `src/ops/reporter.ts` seam (console adapter default, `ADHDME_REPORTER` selects, unknown name throws at boot), `onRequestError` through it with route and SHA, `/api/health`, `app/web-vitals.tsx` (LCP/INP/CLS, pathname only) into `/api/vitals`, `/api/csp-report` into the sink with `report-uri` in every posture, `/api/mock/reports` as the e2e's window; the ring under its own `__adhdMeReporter` key with a W51 test that every store's globalThis key is owned by one module. Deviation: U3's boundaries stay on `console.error` — a browser-side error intake would accept arbitrary client text, which the payload law keeps closed. reporter.test.ts 17/17, reporter.spec.ts 5/5, full e2e 328 passed / 1 skipped. |
 | U5 | done | founder-0902a | 2026-09-02T06:20Z | 499fd47 | [P] (S) Toolchain pins and CI parity. -> verify: `src/quality/ci-parity.test.ts` parses `ci.yml` and asserts its script set equals `verify`'s step list (both directions); `pnpm verify` green locally with the pinned versions. Done as: `packageManager: pnpm@10.33.0`, `engines { node: 22.x, pnpm: 10.x }`, `.nvmrc` = 22 (lockfile unchanged); the verify job runs exactly `pnpm verify` (perf:gate and gate:accounting reach CI for the first time), both jobs read the pins (`node-version-file: .nvmrc`, `pnpm/action-setup` without `version`); ci-parity.test.ts 9/9 — script set both directions, call-not-copy, non-vacuous parse, the pre-U5 workflow fails naming perf:gate + gate:accounting, pins agree. U6 stays blocked on D-CI-BILLING. pnpm verify green (304 files / 4477 tests), full e2e 328 passed / 1 skipped. |
 | U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
-| U7 | claimed | founder-0902a | 2026-09-02T06:24Z | — | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
+| U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
 | U8 | available | — | — | — | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
 | U9 | available | — | — | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
