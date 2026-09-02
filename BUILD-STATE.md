@@ -119,6 +119,21 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **U9 (O229-lane, the eighth unit built of the one-year plan: focus, live regions and one mic
+> control) — CLAIMED founder-0902a, 2026-09-02T08:22Z.** Scope is the plan's U9 text and nothing beyond it:
+> the outer `aria-live` wrapping the whole stage machine goes; each stage owns one `role="status"`
+> region that announces exactly its change (listening started and stopped, N results for a place,
+> re-ranked after a refine); focus moves to the stage heading on every transition and to the first
+> result on results; the two microphone buttons become one toggle with `aria-pressed` and
+> `aria-busy`, and the language buttons announce the restart. The announcement script is written
+> before the code (`frontend-design`'s brief-first method) and every line of it passes the
+> compliance linter. Verification is the plan's: `e2e/finder-a11y.spec.ts` asserts the focused
+> element and the single live-region text after each transition (keyboard-only, `reduce` and
+> no-preference), axe on every stage, the `touch-floor` and `keyboard-focus` sweeps extended to the
+> finder's stages, and an AR15 acceptance entry if the single control moves pixels. The gradient
+> aesthetic stays; checked on the dev server. Continuation if this claim goes stale: nothing is
+> behind a flag; the unit is whole or it is not landed.
+
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
 > claim came out differently and is explained below. **Outcome:** `src/finder/state.ts` owns where
@@ -11957,7 +11972,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
 | U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
 | U8 | done | founder-0902a | 2026-09-02T06:52Z | db40bf9 | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
-| U9 | available | — | — | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
+| U9 | claimed | founder-0902a | 2026-09-02T08:22Z | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | available | — | — | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
