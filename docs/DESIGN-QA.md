@@ -3964,3 +3964,49 @@ re-accepted after three agreeing runs (the entry in `src/design/accepted-diffs.t
 
 **Captures:** `qa/o229-landing-390.png`, `qa/o229-landing-1280.png`,
 `qa/o229-clinicians-briefing-390.png`, `qa/o229-console-interop-390.png`.
+
+## U9 — focus, the live line and one microphone control (2026-09-02)
+
+**Subject:** the finder for a keyboard or a screen reader, and the four pixels that moved while
+proving it. Before this unit every stage transition unmounted the control the person was on and
+dropped focus to the top of the document, an `aria-live` wrapper around the whole machine read the
+entire new screen aloud (the results list included, on every re-rank), and the listening screen
+carried two controls that did the same thing — a microphone labelled "Finish voice description"
+and a "Done" button under it.
+
+**Mode:** Operate. The finder is a task; the person is meant to leave it with a GP, and the sound
+of the screen must never get in the way of the words they are saying into it.
+
+**The choice:** one sentence per arrival, one control per action. `src/finder/announce.ts` scripts
+the sentence ("Listening.", "12 matches.", "Re-ranked: 9 matches near Hornsby.", "Profile: Dr
+…", "Listening again in हिन्दी.") and each stage owns exactly one `role="status"` line; the shell
+has no live region at all. Focus lands on the new stage's heading — the first result on the results
+screen, the text box on the typing screen — and only when the person arrived by their own action,
+never on a fresh visit. The microphone is one toggle: `aria-pressed` while listening, `aria-busy`
+and a "Finishing…" caption between the tap and the recogniser's last phrase, the caption under it
+saying what a tap does. The transcript is no longer live: a person hears their own words as they
+say them, and a region reading every revision back talked over them.
+
+**The pixels.** The breathing pulse moves off the microphone and onto a halo behind it — the
+same 9px `--accent-soft` ring, on the same gradient stage — because the whole control used to
+scale on a loop and the one tap target on the screen never held still. The button holds still
+now; the ring breathes. Two floor defects the sweeps had never reached, because they enter
+`/finder` by URL and the welcome screen has neither control: every finder header's round control
+(cancel, back) was 42px and the compare screen's `.compare-open` name button 41px tall; both are 44.
+One hover reading on the results rows (`.row-location` on a hovered row, 4.32:1 on the route
+ground) is `--muted` (5.17:1). The welcome screen is untouched: the gradient aesthetic, the
+wordmark, the door and the `qa/` captures stay byte-identical.
+
+**Compliance:** the scripted sentences are counts, names and states; none makes a claim about a
+GP, and the request text is never in a sentence, a URL or a history entry (plan §2.8 Q-A).
+
+**Verified in a real browser:** `finder-a11y.spec.ts` walks the eight stages under reduced motion
+and without it, proves the focus/live-line landing on each, the toggle's states and the language
+restart, and runs axe (WCAG 2.2 AA) on every stage; the keyboard-focus and touch-floor sweeps now
+cover every finder stage (51 stops, 53 controls, nothing under the floor); voice and
+finder-history green on the one control. Full `pnpm e2e` green at the U9 tree (the ledger holds
+the count). Walked on the built route at 390×844 and 1280×720: the halo breathes behind a still
+microphone, the caption reads under it, and the header controls sit on the floor without the
+header growing.
+
+**Captures:** `qa/u9-listening-390.png`, `qa/u9-listening-1280.png`, `qa/u9-compare-390.png`.
