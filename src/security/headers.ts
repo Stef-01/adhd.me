@@ -45,6 +45,16 @@ export const GA_HOSTS = {
   connect: ["https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com"],
 } as const;
 
+/**
+ * O235: the map's tile host, for images alone. The results screen draws a Leaflet map over the
+ * OpenStreetMap standard tiles once a person types a suburb; the tiles are <img> requests, so this
+ * is the one directive they need and the only one that names the host. What the host learns is
+ * the area being looked at (the typed suburb, at the zoom the map fits) — never a sentence, a
+ * name or a device location; the privacy page says so in plain words. Held to exactly this host
+ * by the headers test.
+ */
+export const TILE_HOSTS = { img: ["https://tile.openstreetmap.org"] } as const;
+
 /** `@vercel/analytics` in development only; in production it is same-origin `/_vercel/insights/`. */
 export const VERCEL_DEBUG_SCRIPT = "https://va.vercel-scripts.com";
 
@@ -57,7 +67,7 @@ export function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string 
     "default-src": ["'self'"],
     "script-src": ["'self'", "'unsafe-inline'", ...ga.script, ...(dev ? DEV_SCRIPT_SOURCES : [])],
     "style-src": ["'self'", "'unsafe-inline'"],
-    "img-src": ["'self'", ...ga.img],
+    "img-src": ["'self'", ...TILE_HOSTS.img, ...ga.img],
     "connect-src": ["'self'", ...ga.connect],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],

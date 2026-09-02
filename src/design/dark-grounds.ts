@@ -169,6 +169,8 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   /* O233: the Profile tab's one action, on the same inverted ground as every other primary. */
   { selector: ".me-primary", token: "ground" },
   { selector: ".mic-button", token: "ground" },
+  // O235: the map's "you" marker — ink dot, paper ring; the same-rule foreground is the ring colour.
+  { selector: ".nearby-marker-you", token: "ink" },
   { selector: ".notfound-primary", token: "ink" },
   { selector: ".primary-button", token: "ground" },
   { selector: ".site-footer", token: "ground" },

@@ -174,6 +174,17 @@ export type Clinician = {
    */
   manner: EIQuality[];
   wheelchairAccessible: boolean;
+  /**
+   * O236 (founder-directed): whether the GP uses an AI scribe — software that records and
+   * transcribes the consult into notes — declared by the practice. "ai-scribe" means they do,
+   * with the patient's consent asked each time; "no-ai" means notes are written without any AI
+   * recording or transcription. Absent means undeclared, which the filter treats as neither: a
+   * person who asks for one or the other is shown only GPs who have said. A practice fact, not a
+   * clinical one — it says nothing about the care — and a real clinician carries it only when
+   * they or their practice have stated it (the real-person law), so today only the example
+   * profiles do.
+   */
+  consultRecording?: "ai-scribe" | "no-ai";
   appointmentLength: string;
   /*
    * `keywords: string[]` stood here until O100 and is deliberately not replaced. It held

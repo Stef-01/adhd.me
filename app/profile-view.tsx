@@ -26,11 +26,13 @@ import { clearRecord, readRecord, placeFrom, type FinderRecord } from "@/finder/
 import {
   activeFilterCount,
   BOOLEAN_FILTER_KEYS,
+  CONSULT_RECORDING_CHOICES,
   DISTANCE_CHOICES,
   emptyFilters,
   readFilters,
   writeFilters,
   type BooleanFilterKey,
+  type ConsultRecordingChoice,
   type DistanceKm,
   type Filters,
 } from "@/finder/filters";
@@ -214,6 +216,35 @@ export function ProfileView() {
             {filters.withinKm !== null && !origin
               ? "A distance needs a suburb above before it can apply."
               : "Straight-line, from the suburb above. GPs who see new people by telehealth first are always included."}
+          </p>
+        </div>
+
+        {/* O236 (founder-directed): a fact modern patients ask about first — whether the consult is
+            recorded and transcribed by AI. A declared practice fact, filtered like the others;
+            GPs who have not said are left out of either choice rather than assumed. */}
+        <div className="me-group">
+          <h3>Notes during the consult</h3>
+          <div className="me-segments me-segments-3" role="group" aria-label="Notes during the consult">
+            {CONSULT_RECORDING_CHOICES.map((choice: ConsultRecordingChoice) => {
+              const on = filters.consultRecording === choice;
+              const label = choice === "any" ? "Any" : choice === "ai-scribe" ? "AI scribe" : "No AI recording";
+              return (
+                <button
+                  key={choice}
+                  type="button"
+                  className={on ? "me-segment is-on" : "me-segment"}
+                  aria-pressed={on}
+                  onClick={() => update({ consultRecording: choice })}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="me-group-note">
+            Some GPs use an AI scribe that records and transcribes the consult into notes, with your
+            consent each time; others write notes without any AI recording. Choosing one shows only
+            GPs who have declared it.
           </p>
         </div>
 

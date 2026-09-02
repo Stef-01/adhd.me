@@ -108,4 +108,9 @@ export interface DeadCssException {
   why: string;
 }
 
-export const DEAD_CSS_EXCEPTIONS: readonly DeadCssException[] = [];
+export const DEAD_CSS_EXCEPTIONS: readonly DeadCssException[] = [
+  {
+    className: "leaflet-control-attribution",
+    why: "O235: emitted by Leaflet (node_modules/leaflet) for the OpenStreetMap attribution its licence requires; the stylesheet restyles it into the app's type and colours. The class never appears in this tree's source because the library writes the element.",
+  },
+];

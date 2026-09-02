@@ -116,7 +116,7 @@ test("a minute with words in hand lands them in the box, said the way any other 
   // the box from the results, must not bring the sentence back over words the person owns.
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  await page.locator(".refine-compact").click();
+  await page.locator(".results-summary-words").click();
   await expect(box).toBeVisible();
   await expect(page.locator(".speech-error")).toHaveCount(0);
 });
@@ -134,7 +134,7 @@ test("a blocked microphone's message does not follow the person back to words th
   await page.getByRole("textbox").fill("someone who understands adult ADHD");
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  await page.locator(".refine-compact").click();
+  await page.locator(".results-summary-words").click();
   await expect(page.getByRole("textbox")).toHaveValue(/adult ADHD/);
   await expect(page.locator(".speech-error")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Try the microphone again" })).toHaveCount(0);
@@ -157,7 +157,7 @@ test("?debug=1 survives a place edit: the flag is read once at arrival, not from
 
   // Back to the microphone the way a person gets there: the box, emptied, then the welcome
   // screen's talk control (a microphone only while the field is empty).
-  await page.locator(".refine-compact").click();
+  await page.locator(".results-summary-words").click();
   await page.getByRole("textbox").fill("");
   await page.getByRole("button", { name: "Go back" }).click();
   await page.getByRole("button", { name: /Talk instead of typing/i }).click();

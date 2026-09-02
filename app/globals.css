@@ -1002,28 +1002,7 @@ textarea:focus-visible {
   .compare-content h1 { font-size: 1.875rem; }
 }
 
-.refine-compact {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 10px;
-  padding: 0;
-  border: 0;
-  /* O226: ink, underlined — O176's ruling (an action is not a live token), applied the day the
-     quote above it was demoted and this became the loudest thing in the head. */
-  color: var(--ink);
-  background: transparent;
-  font-size: 0.875rem;
-  font-weight: 620;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
 
-.refine-compact .waveform-mark svg {
-  width: 96px;
-  height: 26px;
-}
 
 
 .profile-portrait > img {
@@ -1073,28 +1052,6 @@ textarea:focus-visible {
 }
 
 /* Where are you. A label above the input, never a placeholder-as-label. */
-.place-field { margin-top: 22px; }
-.place-field label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-size: 0.78125rem;
-  font-weight: 500;
-}
-.place-field input {
-  width: 100%;
-  min-height: 46px;
-  padding: 0 14px;
-  /* 16px is the iOS threshold below which focusing an input force-zooms the page (O14). */
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--ink);
-  /* O226: paper, not stone — the filled grey slab read as a disabled control. */
-  background: var(--paper);
-  font: inherit;
-  font-size: 1rem;
-}
-.place-field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .place-status { margin: 8px 0 0; color: var(--faint); font-size: 0.875rem; line-height: 1.5; }
 /* The match-quality banner and top-tie note carry the sentence the whole screen turns on —
    "this is not a ranking". They were 12px faint grey: AA-compliant and functionally invisible
@@ -1849,16 +1806,6 @@ textarea:focus-visible {
   font-size: 0.625rem;
 }
 
-.patient-v2 .refine-compact {
-  min-height: 40px;
-  margin-top: 7px;
-  font-size: 0.6875rem;
-}
-
-.patient-v2 .refine-compact .waveform-mark svg {
-  width: 62px;
-  height: 22px;
-}
 
 .patient-v2 .clinician-meta {
   margin-top: 6px;
@@ -1944,35 +1891,8 @@ textarea:focus-visible {
   letter-spacing: -0.03em;
   color: var(--ink);
 }
-/* O46: the person's own words when they earned no headline — quiet, quoted, theirs. */
-.results-head .results-request-quote {
-  margin: 6px 0 0;
-  max-width: 34ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-style: italic;
-  /* O226: down from 1.1875rem — this renders a FAILED reading ("Kind and nicr."), and it was the
-     largest type on the screen. The honest quote stays; the proclamation goes. */
-  font-size: 1rem;
-  line-height: 1.4;
-  color: var(--muted);
-}
-.results-head .refine-compact {
-  /* O226: tight to the quote it acts on — one group (within 8) — and INK, like the base rule
-     above: this later-cascade twin was quietly re-accenting the action (O176's exact defect). */
-  margin-top: 8px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--ink);
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-/* O226: a between-group gap (the quote+edit pair above is one group; this is the next). */
-.results-head .place-field { margin-top: 28px; }
+/* O236 retired `.results-request-quote` and `.refine-compact` on results: the summary card carries the words. */
+.results-notes { display: grid; gap: 4px; margin-top: 14px; }
 
 .patient-v2 .profile-header {
   min-height: 64px;
@@ -4580,7 +4500,6 @@ textarea:focus-visible {
    =========================================================================== */
 .text-action,
 .show-all,
-.refine-compact,
 .cv2-join-link,
 .story-demo-link,
 .story-footer-links a,
@@ -4624,7 +4543,6 @@ textarea:focus-visible {
   /* The last four controls sitting between 40px and 42px. Each is a real button somebody taps with
      a thumb, and each was short by a hair rather than by design. */
   .patient-v2 .scenario-toggle,
-  .results-head .refine-compact,
   .profile-header button { min-height: 44px; }
 }
 
@@ -5809,14 +5727,9 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 
 .profile-more summary,
 .profile-disclosure summary,
-.results-refine-details summary {
-  list-style: none;
-  cursor: pointer;
-}
 
 .profile-more summary::-webkit-details-marker,
-.profile-disclosure summary::-webkit-details-marker,
-.results-refine-details summary::-webkit-details-marker {
+.profile-disclosure summary::-webkit-details-marker::-webkit-details-marker {
   display: none;
 }
 
@@ -5967,25 +5880,8 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 /* Secondary result controls stay available without sitting between the request and first doctor. */
 /* O226: no hairlines — see .results-head. A quiet underlined control, not a bar pretending to be
    a section: it reads as the tertiary thing it is. */
-.results-refine-details {
-  margin-top: 18px;
-}
 
-.results-refine-details summary {
-  display: flex;
-  align-items: center;
-  min-height: 46px;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 620;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
 
-.results-refine-details .clarify {
-  margin: 0;
-  padding: 2px 0 16px;
-}
 
 .results-list-head {
   display: flex;
@@ -6806,7 +6702,6 @@ select { caret-color: var(--route-strong); }
 .patient-v2 .finder-context p { color: var(--muted); }
 
 .patient-v2 .scenario-quote,
-.patient-v2 .refine-compact,
 .patient-v2 .finder-context {
   border-color: var(--route-line);
   border-radius: 14px;
@@ -8251,79 +8146,157 @@ body:has(.app-tabs) .consent-bar {
   }
 }
 
-/* ── The nearby map ────────────────────────────────────────────────────────────────────────
-   Route blue, not the accent: a stop is a place on a route and a key to a row, and DESIGN.md
-   reserves the accent for the next consequential action — which on this screen is the row. */
+/* ── The nearby map (O235: Leaflet over OpenStreetMap) ─────────────────────────────────────
+   Route blue for the markers, not the accent: a marker is a place on a route and a key to a row,
+   and DESIGN.md reserves the accent for the next consequential action — the row. The frame is a
+   card like the rows; the map fills it edge to edge, which is how every reference app frames one. */
 
 .nearby-map {
   margin: 20px 0 0;
-  padding: 14px 14px 12px;
+  padding: 0 0 12px;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--surface-raised);
+  overflow: hidden;
 }
 
-.nearby-map svg {
-  display: block;
-  width: min(100%, 300px);
-  height: auto;
-  margin: 0 auto;
-  overflow: visible;
+.nearby-map-loading { min-height: 300px; }
+
+.nearby-map-frame { position: relative; }
+
+.nearby-map-canvas {
+  height: 300px;
+  width: 100%;
+  background: var(--stone);
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  isolation: isolate;
 }
 
-.nearby-ring {
-  fill: none;
-  stroke: var(--route-line);
-  stroke-width: 0.5;
-  stroke-dasharray: 1.6 1.4;
+@media (min-width: 600px) {
+  .nearby-map-canvas { height: 340px; }
 }
 
-.nearby-ring-label {
-  fill: var(--faint);
-  font-size: 0.24rem;
-  font-weight: 620;
-  font-variant-numeric: tabular-nums;
+/* The zoom control the app owns: 44px targets, stacked at the top right like the reference apps. */
+.nearby-zoom {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.nearby-origin-halo { fill: color-mix(in srgb, var(--route) 16%, transparent); }
-.nearby-origin-dot { fill: var(--ink); }
-.nearby-origin-label { fill: var(--ink); font-size: 0.26rem; font-weight: 700; }
+.nearby-zoom-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--hero-dusk) 14%, transparent);
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui);
+}
 
-.nearby-stop { cursor: pointer; }
-.nearby-stop-hit { fill: transparent; }
-.nearby-stop-pin { fill: var(--route-strong); transition: fill var(--dur-tap) var(--ease-ui); }
-.nearby-stop-key {
-  fill: var(--on-ground);
-  font-size: 0.27rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-.nearby-stop-label {
-  fill: var(--ink);
-  font-size: 0.31rem;
-  font-weight: 620;
-  paint-order: stroke;
-  stroke: var(--surface-raised);
-  stroke-width: 0.9;
-  stroke-linejoin: round;
-}
+.nearby-zoom-button:disabled { color: var(--faint); cursor: default; }
+.nearby-zoom-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 @media (hover: hover) {
-  .nearby-stop:hover .nearby-stop-pin { fill: var(--route); }
+  .nearby-zoom-button:not(:disabled):hover { background: var(--stone); }
 }
 
+/* Markers: a 44px box (Leaflet sizes the box from `iconSize`), the visible key inside it, and the
+   suburb name beside it with a paper halo so it reads over any tile. */
+.nearby-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+}
 
-.nearby-stop:focus-visible .nearby-stop-pin { stroke: var(--accent); stroke-width: 1.1; }
+.nearby-marker-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 7px;
+  border: 2px solid var(--surface-raised);
+  border-radius: 999px;
+  background: var(--route-strong);
+  color: var(--on-ground);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--hero-dusk) 28%, transparent);
+}
+
+.nearby-marker-you {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--surface-raised);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--on-ground);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--route) 22%, transparent);
+}
+
+.nearby-marker-label {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  translate: 0 -50%;
+  white-space: nowrap;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  paint-order: stroke;
+  -webkit-text-stroke: 3px var(--surface-raised);
+  pointer-events: none;
+}
+
+.nearby-marker.is-you .nearby-marker-label { left: 36px; }
+
+.nearby-marker:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 999px; }
+
+@media (hover: hover) {
+  .nearby-marker:hover .nearby-marker-pin { background: var(--route); }
+}
+
+/* Leaflet's attribution, in the app's own type and colours. The link stays: the licence needs it. */
+.nearby-map .leaflet-control-attribution {
+  margin: 0;
+  padding: 3px 8px;
+  border-top-left-radius: 8px;
+  background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
+  color: var(--muted);
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+}
+
+.nearby-map .leaflet-control-attribution a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
 
 .nearby-map figcaption {
   display: grid;
   gap: 3px;
-  margin-top: 8px;
+  margin-top: 10px;
+  padding: 0 14px;
   text-align: center;
 }
 
 .nearby-caption-main { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
 .nearby-caption-note { color: var(--faint); font-size: 0.75rem; line-height: 1.45; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nearby-zoom-button { transition: none; }
+}
 
 /* The row's key while the map shows: a position, never a rank. Over the portrait's corner,
    concentric with the card. */
@@ -8644,7 +8617,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .me-group-note { margin: 8px 0 0; color: var(--faint); font-size: 0.75rem; line-height: 1.5; }
 
 @media (prefers-reduced-motion: reduce) {
-  .nearby-stop-pin,
   .me-switch-track,
   .me-switch-track::after,
   .me-chip,
@@ -8685,20 +8657,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
     0 16px 40px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
 }
 
-/* The results head: the "change" control sits on the heading's edge, not centred under it. */
-.results-head .refine-compact { align-self: flex-start; margin-inline: 0; }
-.nearby-map svg { width: min(100%, 250px); }
-@media (min-width: 600px) { .nearby-map svg { width: min(100%, 290px); } }
-.nearby-stop-rows {
-  fill: var(--muted);
-  font-size: 0.235rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  paint-order: stroke;
-  stroke: var(--surface-raised);
-  stroke-width: 0.9;
-  stroke-linejoin: round;
-}
 
 /* The profile is the finder's sibling: the same band under its header, and on a wide screen the
    same route ground around the same shell, so switching tabs never changes the world. */
@@ -8716,4 +8674,122 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 @media (min-width: 901px) {
   body:has(.me-screen) { color: var(--on-ground); background: var(--route-strong); }
   .me-screen { color: var(--ink); box-shadow: var(--shadow-ambient); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O236 — THE RESULTS SCREEN'S SEARCH SUMMARY, AND THE NOTE-TAKING FILTER.
+   The words and the place as one compact card at the top of results: the search bar every
+   reference finder shows above its list. Both halves are the app's controls in the app's tokens.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+.results-summary {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface-raised);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 6%, transparent);
+}
+
+.results-summary-words {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 13px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui);
+}
+
+.results-summary-words svg { color: var(--muted); }
+
+.results-summary-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+@media (hover: hover) {
+  .results-summary-words:hover { background: var(--stone); }
+}
+
+.results-summary-words:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.results-summary-place {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 13px;
+  background: var(--stone);
+  color: var(--muted);
+}
+
+.results-summary-place.is-set { color: var(--route-strong); }
+
+.results-summary-place input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  /* 16px: the iOS threshold below which focusing an input force-zooms the page (O14). */
+  font-size: 1rem;
+  font-weight: 560;
+}
+
+.results-summary-place input::placeholder { color: var(--muted); font-weight: 500; }
+.results-summary-place:focus-within { outline: 2px solid var(--accent); outline-offset: -2px; }
+/* The ring is drawn on the pill (`:focus-within` above), which is the control a person sees; the
+   input inside keeps a transparent ring of the same size so nothing is suppressed, only moved. */
+.results-summary-place input:focus-visible { outline: 2px solid transparent; outline-offset: -2px; }
+
+.results-title {
+  margin: 18px 0 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: clamp(1.375rem, 5.6vw, 1.75rem);
+  font-weight: 430;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.results-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+
+.clarify-lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.clarify-lead svg { color: var(--accent); }
+.clarify-sub { margin: 2px 0 10px; color: var(--muted); font-size: 0.875rem; }
+
+.me-segments-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .results-summary-words { transition: none; }
 }

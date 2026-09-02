@@ -53,7 +53,7 @@ test("a request the lexicon cannot read says so instead of faking an order", asy
   // O46: unearned words are a quiet quote, not a display headline — and the bare count
   // ("3 of 3.") is gone when everyone is shown anyway, because it said nothing.
   await expect(page.locator(".results-head h1")).toHaveCount(0);
-  await expect(page.locator(".results-request-quote")).toContainText("Hello there");
+  await expect(page.locator(".results-summary-text")).toContainText("Hello there");
   await expect(page.locator(".results-head")).not.toContainText(/\d+ of \d+\./);
   await page.screenshot(shot("04-unmatched-says-so"));
 });

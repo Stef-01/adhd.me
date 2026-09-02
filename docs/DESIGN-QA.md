@@ -4045,3 +4045,55 @@ production build.
 `qa/o234-results-map-390.png`, `qa/o234-results-map-1280.png`, `qa/o234-results-filtered-390.png`,
 `qa/o234-results-empty-390.png`, `qa/o234-profile-filters-390.png`,
 `qa/o234-profile-filters-1280.png`.
+
+## O235 — the map, on a real basemap (2026-09-02)
+
+**Founder-directed.** "Map looks terrible, find a repo online to get a good one implemented."
+
+**What was wrong.** O234's map was an SVG of rings and dots from the gazetteer. A map with no
+streets is a diagram; a person deciding whether they can get somewhere reads streets, and every
+reference finder (Zocdoc, HealthEngine, the NHS service finder) shows a basemap with numbered pins.
+
+**What changed.** Leaflet 1.9.4 (github.com/Leaflet/Leaflet) over OpenStreetMap's standard tiles,
+loaded as a client-only chunk the first time a suburb resolves so the front door carries none of
+it. One 44px marker per consulting suburb with the row key inside and the suburb name beside it;
+an ink "you" marker on the typed suburb; the app's own 44px zoom buttons in place of Leaflet's
+30px ones; OpenStreetMap's attribution restyled into the app's type. A marker's tap or Enter
+finds its row by focus, as before. The CSP admits `tile.openstreetmap.org` for images alone, pinned
+by the headers test; the privacy page says what the tile server learns (the typed suburb's area)
+and that nothing is fetched until a suburb is given.
+
+**Verified.** `pnpm verify` green; app-shell, headers, privacy and public-sweep e2e green; full
+`pnpm e2e`; captures at 390 and 1280 from the production build with live tiles.
+
+**Captures:** `qa/o235-results-map-390.png`, `qa/o235-results-map-1280.png`.
+
+## O236 — the search summary, and the note-taking filter (2026-09-02)
+
+**Founder-directed.** "Remove the where are you, make it more modern looking"; "add in concepts
+that modern patients [are] interested in, like GPs that will allow AI recording of consult or
+won't use AI transcription."
+
+**What was wrong.** The results head stacked a quoted fragment ("Kind."), a grey underlined pill,
+a labelled form field and an underlined "Improve my matches" down the screen — four idioms for two
+facts. Every reference finder opens results on one compact search bar instead.
+
+**What changed.** One **search summary** card: the words (a button that reopens the box, with the
+pencil that says so) and the place (a pill field with a pin, its label read to screen readers and
+not painted, still re-ranking in place as it is typed — finder-flow, finder-history and finder-a11y
+prove that behaviour and were left unchanged). The earned headline sits under the card at a
+calmer size; the clarifier chips stand in the open under a sparkle-led "Improve my matches" line.
+The retired quote, pill and disclosure rules were deleted with their markup.
+
+A declared practice fact joined the roster — `consultRecording`: AI scribe with consent, or no AI
+recording — on the example profiles only (the real-person law: nothing is asserted about a named
+doctor that they have not stated). The Profile tab filters it three ways (Any / AI scribe / No AI
+recording) with a note that a choice shows only GPs who have declared it, and a clinician's page
+carries the fact among its pills.
+
+**Verified.** `pnpm verify` green; finder-flow, finder-a11y, finder-history, matching-verification,
+voice, keyboard-focus, public-sweep, touch-floor, results and fold e2e on the new head; full
+`pnpm e2e`; captures at 390 and 1280 from the production build.
+
+**Captures:** `qa/o236-results-map-390.png`, `qa/o236-results-filtered-390.png`,
+`qa/o236-profile-filters-390.png`, `qa/o236-results-map-1280.png`.

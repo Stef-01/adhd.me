@@ -48,7 +48,16 @@ export interface Filters {
   languages: string[];
   /** Furthest consulting location to include, in km from `place`. Ignored until `place` resolves. */
   withinKm: DistanceKm;
+  /**
+   * O236: how the GP takes notes. "ai-scribe" keeps only GPs who declare they use an AI scribe (with
+   * consent); "no-ai" keeps only GPs who declare they never record or AI-transcribe a consult;
+   * "any" does not narrow. Undeclared GPs are excluded by either choice — silence is not a yes.
+   */
+  consultRecording: ConsultRecordingChoice;
 }
+
+export const CONSULT_RECORDING_CHOICES = ["any", "ai-scribe", "no-ai"] as const;
+export type ConsultRecordingChoice = (typeof CONSULT_RECORDING_CHOICES)[number];
 
 /** The structural slice of a clinician a filter reads — the same shape `holdsPreference` takes, plus the roster facts. */
 export interface Filterable {
@@ -59,6 +68,7 @@ export interface Filterable {
   languages: readonly string[];
   wheelchairAccessible: boolean;
   acceptingNewPatients: boolean;
+  consultRecording?: "ai-scribe" | "no-ai";
 }
 
 export function emptyFilters(): Filters {
@@ -73,6 +83,7 @@ export function emptyFilters(): Filters {
     openBooks: false,
     languages: [],
     withinKm: null,
+    consultRecording: "any",
   };
 }
 
@@ -101,6 +112,7 @@ export function readFilters(storage: Pick<Storage, "getItem">): Filters {
     if (!BOOLEAN_FILTER_KEYS.every((key) => typeof r[key] === "boolean")) return emptyFilters();
     if (!Array.isArray(r.languages) || !r.languages.every((l) => (MATCHABLE_LANGUAGES as readonly string[]).includes(l))) return emptyFilters();
     if (!isDistance(r.withinKm)) return emptyFilters();
+    if (!(CONSULT_RECORDING_CHOICES as readonly unknown[]).includes(r.consultRecording)) return emptyFilters();
     return {
       v: FILTERS_VERSION,
       place: r.place.trim().slice(0, 80),
@@ -112,6 +124,7 @@ export function readFilters(storage: Pick<Storage, "getItem">): Filters {
       openBooks: r.openBooks === true,
       languages: [...r.languages],
       withinKm: r.withinKm ?? null,
+      consultRecording: r.consultRecording as ConsultRecordingChoice,
     };
   } catch {
     return emptyFilters();
@@ -141,6 +154,7 @@ export function activeFilterCount(filters: Filters): number {
   let n = BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
   n += filters.languages.length;
   if (filters.withinKm !== null) n += 1;
+  if (filters.consultRecording !== "any") n += 1;
   return n;
 }
 
@@ -155,6 +169,8 @@ export function describeFilters(filters: Filters): string[] {
   if (filters.openBooks) out.push("Taking new patients");
   for (const language of filters.languages) out.push(`Speaks ${language}`);
   if (filters.withinKm !== null) out.push(`Within ${filters.withinKm} km`);
+  if (filters.consultRecording === "ai-scribe") out.push("Uses an AI scribe");
+  if (filters.consultRecording === "no-ai") out.push("No AI recording");
   return out;
 }
 
@@ -187,6 +203,7 @@ export function applyFilters<T extends Filterable>(
     if (filters.wheelchair && !clinician.wheelchairAccessible) return false;
     if (filters.openBooks && !clinician.acceptingNewPatients) return false;
     if (filters.languages.some((language) => !clinician.languages.includes(language))) return false;
+    if (filters.consultRecording !== "any" && clinician.consultRecording !== filters.consultRecording) return false;
     if (filters.withinKm !== null && origin) {
       if (clinician.telehealthFirstAppointment === true) return true;
       const km = nearestKm(clinician);

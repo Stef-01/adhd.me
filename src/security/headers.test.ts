@@ -26,6 +26,7 @@ import {
   contentSecurityPolicy,
   DEV_SCRIPT_SOURCES,
   GA_HOSTS,
+  TILE_HOSTS,
   securityHeaders,
   VERCEL_DEBUG_SCRIPT,
 } from "./headers";
@@ -158,9 +159,12 @@ describe("U1 the security headers", () => {
 });
 
 describe("U1 the policy (U13: enforced)", () => {
-  it("names no third-party origin at all in the default (GA dark, production) posture", () => {
+  it("names no third-party origin but the map's tile host in the default (GA dark, production) posture", () => {
     const policy = contentSecurityPolicy();
-    expect(policy).not.toMatch(/https?:/);
+    // O235: the one origin the default posture admits, for images only, and this is the pin.
+    const origins = policy.match(/https?:\/\/[^\s;]+/g) ?? [];
+    expect(origins).toEqual([...TILE_HOSTS.img]);
+    expect(directive(policy, "img-src")).toEqual(["'self'", ...TILE_HOSTS.img]);
     expect(directive(policy, "default-src")).toEqual(["'self'"]);
     expect(directive(policy, "script-src")).toEqual(["'self'", "'unsafe-inline'"]);
     expect(directive(policy, "object-src")).toEqual(["'none'"]);
@@ -186,7 +190,7 @@ describe("U1 the policy (U13: enforced)", () => {
   it("admits Google's hosts only when GA is configured, and only in the directives gtag needs", () => {
     const withGa = contentSecurityPolicy({ gaId: "G-TEST" });
     expect(directive(withGa, "script-src")).toEqual(["'self'", "'unsafe-inline'", ...GA_HOSTS.script]);
-    expect(directive(withGa, "img-src")).toEqual(["'self'", ...GA_HOSTS.img]);
+    expect(directive(withGa, "img-src")).toEqual(["'self'", ...TILE_HOSTS.img, ...GA_HOSTS.img]);
     expect(directive(withGa, "connect-src")).toEqual(["'self'", ...GA_HOSTS.connect]);
     // Nothing else moved: the two policies differ only by those hosts.
     const strip = (p: string) => p.replace(/ https:\/\/\*\.[a-z.-]+/g, "");

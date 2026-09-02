@@ -82,7 +82,11 @@ export default function PrivacyPolicyPage() {
           </p>
           <p className="mt-2 text-sm leading-6">
             If you type a suburb, that word is looked up on your device too — the site never asks
-            your browser for your location. If you use the microphone, your browser&apos;s own
+            your browser for your location. Once a suburb is recognised, the results screen shows a
+            map of it drawn from OpenStreetMap: your browser fetches the map tiles for that area from
+            the OpenStreetMap Foundation&apos;s servers, so that service learns which area is being
+            looked at (the suburb you typed, and nothing else you wrote). No map is fetched until you
+            give a suburb. If you use the microphone, your browser&apos;s own
             speech service (Apple&apos;s or Google&apos;s, depending on your browser) converts
             the audio to text, which may happen on that vendor&apos;s servers overseas;
             ADHD.ME never records or receives the audio, and the same in-browser rule applies

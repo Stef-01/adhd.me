@@ -128,7 +128,7 @@ test("O233: the Profile tab shows what the device holds, and can forget it", asy
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Profile", exact: true }).click();
-  await expect(page.getByText("a woman GP in Epping who speaks Mandarin")).toBeVisible();
+  await expect(page.locator(".me-facts").getByText("a woman GP in Epping who speaks Mandarin")).toBeVisible();
 
   await page.getByRole("button", { name: /Forget what I typed/ }).click();
   await expect(page.getByText("a woman GP in Epping who speaks Mandarin")).toHaveCount(0);
@@ -244,7 +244,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   await expect(page.getByLabel("Suburb or postcode")).toHaveValue("Beecroft");
 });
 
-test("a resolved place draws the nearby map, whose stops key the rows and find them", async ({ page }) => {
+test("a resolved place draws the nearby map, whose markers key the rows and find them", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
   await page.keyboard.press("Enter");
@@ -254,17 +254,25 @@ test("a resolved place draws the nearby map, whose stops key the rows and find t
   await page.getByLabel("Where are you?").fill("Beecroft");
   const map = page.locator(".nearby-map");
   await expect(map).toBeVisible();
-  await expect(map.getByRole("img")).toHaveAccessibleName(/centred on Beecroft/);
-  // Every row shown carries a key, and every stop names rows that exist.
+  // O235: a real basemap — Leaflet's container, OpenStreetMap's attribution (the licence needs it),
+  // and the app's own 44px zoom controls in place of Leaflet's 30px ones.
+  await expect(map.locator(".leaflet-container")).toBeVisible({ timeout: 20000 });
+  await expect(map.getByRole("link", { name: "OpenStreetMap" })).toBeVisible();
+  for (const name of ["Zoom in", "Zoom out"]) {
+    const box = await map.getByRole("button", { name, exact: true }).boundingBox();
+    expect(box!.width, `${name} is under the touch floor`).toBeGreaterThanOrEqual(44);
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+  }
+  // Every row shown carries a key, and every marker names rows that exist.
   const keys = page.locator(".row-key");
   await expect(keys.first()).toHaveText("1");
-  const stops = map.getByRole("button");
-  expect(await stops.count()).toBeGreaterThan(0);
-  const label = await stops.first().getAttribute("aria-label");
+  const markers = map.locator(".leaflet-marker-icon.nearby-marker:not(.is-you)");
+  expect(await markers.count()).toBeGreaterThan(0);
+  const label = await markers.first().getAttribute("aria-label");
   expect(label).toMatch(/row/);
 
-  // Tapping a stop finds its row: focus lands on the row the stop names.
-  await stops.first().click();
+  // Tapping a marker finds its row: focus lands on the row the marker names.
+  await markers.first().click({ force: true });
   const focused = page.locator(".clinician-row:focus");
   await expect(focused).toHaveCount(1);
   const position = await focused.locator(".row-key").textContent();

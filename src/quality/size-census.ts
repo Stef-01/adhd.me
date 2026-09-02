@@ -70,6 +70,8 @@ const SET_BY_O231 = "2026-09-02";
 const SET_BY_O232 = "2026-09-02";
 const SET_BY_O233 = "2026-09-02";
 const SET_BY_O234 = "2026-09-02";
+const SET_BY_O235 = "2026-09-02";
+const SET_BY_O236 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -204,6 +206,31 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'vitest-lines', value: 53416, on: SET_BY_O234, reason: "O234: as vitest-files." },
   { measure: 'e2e-spec-lines', value: 7861, on: SET_BY_O234, reason: "O234: app-shell.spec.ts gained four tests — filters set on the profile narrowing the finder and clearing from results, the map's stops finding their rows, the no-results way out, and the one-shell geometry (notice inside the shell, bar the shell's width, question/box/link on one edge)." },
   { measure: 'e2e-goto-calls', value: 286, on: SET_BY_O234, reason: "O234: the new tests walk /profile and / in both directions, which is the unit's whole claim." },
+
+  // O235 (founder-directed): the map, on a real basemap — Leaflet over OpenStreetMap replaces the
+  // O234 SVG. Net of the SVG rules and the layout module that went, the tree grows by the marker
+  // and control markup and the reasoning that names what the tile host learns.
+  { measure: 'app-lines', value: 16491, on: SET_BY_O235, reason: "O235: the Leaflet map component — markers, the app's own zoom control, the fit, and the reasoning that names what the tile host learns — replacing the SVG one, plus the privacy page's sentence on map tiles and the results screen's client-only import." },
+  { measure: 'src-unreached-lines', value: 23971, on: SET_BY_O235, reason: "O235: the two design registers are law modules the product does not import." },
+  { measure: 'css-lines', value: 8784, on: SET_BY_O235, reason: "O235: the map frame, the 44px zoom control, the markers and their labels, and Leaflet's attribution restyled — replacing the SVG ring and pin rules the dead-CSS census required be deleted with their markup." },
+  { measure: 'css-rule-blocks', value: 1594, on: SET_BY_O235, reason: "O235: as css-lines." },
+  { measure: 'e2e-spec-lines', value: 7869, on: SET_BY_O235, reason: "O235: the map test asserts a real basemap — Leaflet's container, the OSM attribution link, 44px zoom controls, markers keyed to rows." },
+  { measure: 'src-lines', value: 54568, on: SET_BY_O235 },
+  { measure: 'src-reached-lines', value: 30597, on: SET_BY_O235 },
+  { measure: 'classname-attributes', value: 1834, on: SET_BY_O235 },
+  { measure: 'vitest-lines', value: 53366, on: SET_BY_O235 },
+  // O236 (founder-directed): the results screen's search summary and the note-taking filter —
+  // the summary card, the AI-scribe fact on every example persona, the three-way filter, and the
+  // retired quote/pill/disclosure rules deleted with their markup.
+  { measure: 'app-lines', value: 16511, on: SET_BY_O236, reason: "O236: the summary card and the note-taking segment on the profile, less the quote, pill and disclosure markup that went." },
+  { measure: 'src-lines', value: 54630, on: SET_BY_O236, reason: "O236: consultRecording on the roster type and every example persona, and the filter's three-way choice with its validation." },
+  { measure: 'src-reached-lines', value: 30645, on: SET_BY_O236, reason: "O236: as src-lines — the roster and the filters are in the product's closure." },
+  { measure: 'src-unreached-lines', value: 23985, on: SET_BY_O236, reason: "O236: the simplicity register's argued length for the synthetic roster." },
+  { measure: 'css-lines', value: 8795, on: SET_BY_O236, reason: "O236: the summary card, the results title, the chip lead — less the retired quote, pill, place-field and disclosure rules." },
+  { measure: 'css-rule-blocks', value: 1598, on: SET_BY_O236, reason: "O236: as css-lines." },
+  { measure: 'css-styled-classes', value: 560, on: SET_BY_O236, reason: "O236: results-summary(-words/-text/-place), results-title, results-notes, clarify-sub, me-segments-3 — less the four retired classes." },
+  { measure: 'classname-attributes', value: 1841, on: SET_BY_O236, reason: "O236: the summary card's markup." },
+  { measure: 'vitest-lines', value: 53376, on: SET_BY_O236, reason: "O236: filters.test.ts covers the note-taking choice and refuses an unknown one." },
 ];
 
 /** The current floor per measure: the last entry wins. */

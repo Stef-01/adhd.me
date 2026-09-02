@@ -74,7 +74,7 @@ describe("W165 the scanner reads code, not prose", () => {
     // document so its z-index is not resolved inside the finder's transformed stage. It was
     // already a dependency Next requires; this is the first time the app's own code imports it,
     // which is exactly the change this pin exists to show in a diff.
-    expect(reach().packages).toEqual(["@phosphor-icons/react", "@vercel/analytics", "motion", "next", "react", "react-dom"]);
+    expect(reach().packages).toEqual(["@phosphor-icons/react", "@vercel/analytics", "leaflet", "motion", "next", "react", "react-dom"]);
   });
 });
 

@@ -47,10 +47,12 @@ const roster: Fixture[] = [
   gp("b", { telehealthFirstAppointment: true, suburb: "Southport" }),
   gp("c", { manner: ["unhurried"], acceptingNewPatients: false }),
   gp("d", { suburb: "Nowhere" }),
+  gp("e", { consultRecording: "ai-scribe" }),
+  gp("f", { consultRecording: "no-ai" }),
 ];
 
 const beecroft = SUBURBS.find((s) => s.suburb === "Beecroft")!;
-const kmOf: Record<string, number | null> = { a: 0, b: 900, c: 3, d: null };
+const kmOf: Record<string, number | null> = { a: 0, b: 900, c: 3, d: null, e: 1, f: 2 };
 const nearest = (c: Fixture) => kmOf[c.id] ?? null;
 
 describe("the device record", () => {
@@ -79,6 +81,7 @@ describe("the device record", () => {
     ["another version", JSON.stringify({ ...emptyFilters(), v: 99 })],
     ["a language the roster does not declare", JSON.stringify({ ...emptyFilters(), languages: ["Klingon"] })],
     ["a distance that is not a choice", JSON.stringify({ ...emptyFilters(), withinKm: 7 })],
+    ["a note-taking choice that is not one", JSON.stringify({ ...emptyFilters(), consultRecording: "maybe" })],
     ["a boolean that is not one", JSON.stringify({ ...emptyFilters(), womanGp: "yes" })],
     ["not JSON", "{nope"],
   ])("refuses %s rather than misreading it", (_label, raw) => {
@@ -135,7 +138,7 @@ describe("counting and naming", () => {
 
 describe("applying", () => {
   it("is the identity with nothing on", () => {
-    expect(applyFilters(roster, emptyFilters(), null, nearest).map((c) => c.id)).toEqual(["a", "b", "c", "d"]);
+    expect(applyFilters(roster, emptyFilters(), null, nearest).map((c) => c.id)).toEqual(["a", "b", "c", "d", "e", "f"]);
   });
 
   it.each([
@@ -144,9 +147,16 @@ describe("applying", () => {
     ["bulkBilling", ["a"]],
     ["longerAppointments", ["c"]],
     ["wheelchair", ["a"]],
-    ["openBooks", ["a", "b", "d"]],
+    ["openBooks", ["a", "b", "d", "e", "f"]],
   ] as const)("%s narrows to the GPs who declare it", (key, expected) => {
     expect(applyFilters(roster, { ...emptyFilters(), [key]: true }, null, nearest).map((c) => c.id)).toEqual([...expected]);
+  });
+
+  it("narrows on the declared note-taking fact, and never counts silence as a yes", () => {
+    expect(applyFilters(roster, { ...emptyFilters(), consultRecording: "ai-scribe" }, null, nearest).map((c) => c.id)).toEqual(["e"]);
+    expect(applyFilters(roster, { ...emptyFilters(), consultRecording: "no-ai" }, null, nearest).map((c) => c.id)).toEqual(["f"]);
+    expect(describeFilters({ ...emptyFilters(), consultRecording: "no-ai" })).toEqual(["No AI recording"]);
+    expect(activeFilterCount({ ...emptyFilters(), consultRecording: "ai-scribe" })).toBe(1);
   });
 
   it("requires every chosen language", () => {
@@ -156,10 +166,10 @@ describe("applying", () => {
 
   it("applies a distance ceiling only once the place resolves, lets telehealth-first through, and never an unplaceable GP", () => {
     const within: Filters = { ...emptyFilters(), withinKm: 5 };
-    expect(applyFilters(roster, within, null, nearest).map((c) => c.id)).toEqual(["a", "b", "c", "d"]);
-    expect(applyFilters(roster, within, beecroft, nearest).map((c) => c.id)).toEqual(["a", "b", "c"]);
+    expect(applyFilters(roster, within, null, nearest).map((c) => c.id)).toEqual(["a", "b", "c", "d", "e", "f"]);
+    expect(applyFilters(roster, within, beecroft, nearest).map((c) => c.id)).toEqual(["a", "b", "c", "e", "f"]);
     const cFurther = (c: Fixture) => (c.id === "c" ? 6 : nearest(c));
-    expect(applyFilters(roster, { ...within, withinKm: DISTANCE_CHOICES[0] }, beecroft, cFurther).map((c) => c.id)).toEqual(["a", "b"]);
+    expect(applyFilters(roster, { ...within, withinKm: DISTANCE_CHOICES[0] }, beecroft, cFurther).map((c) => c.id)).toEqual(["a", "b", "e", "f"]);
   });
 
   it("combines filters as AND", () => {

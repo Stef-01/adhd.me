@@ -105,6 +105,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "titration"],
     manner: ["unhurried", "collaborative"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -133,6 +134,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "depression", "anxiety"],
     manner: ["attuned", "non_judgmental"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -160,6 +162,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "autism-adhd", "non-medication"],
     manner: ["sense_making", "collaborative"],
     wheelchairAccessible: false,
+    consultRecording: "ai-scribe",
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -186,6 +189,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "titration", "substance-history"],
     manner: ["structured", "steadying"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment, scheduled reviews",
     telehealthFirstAppointment: true,
   }),
@@ -213,6 +217,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "emotional-regulation", "trauma-informed"],
     manner: ["attuned", "steadying", "non_judgmental"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Extended first appointment",
   }),
   example({
@@ -240,6 +245,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "shared-care", "complex-mental-health"],
     manner: ["sense_making", "structured"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -268,6 +274,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreasSometimes: ["depression"],
     manner: ["unhurried", "culturally_attuned"],
     wheelchairAccessible: false,
+    consultRecording: "ai-scribe",
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -294,6 +301,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "depression", "emotional-regulation"],
     manner: ["collaborative", "motivating"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment",
     telehealthFirstAppointment: true,
   }),
@@ -321,6 +329,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "anxiety", "emotional-regulation"],
     manner: ["attuned", "steadying"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -347,6 +356,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "titration", "shared-care"],
     manner: ["structured", "collaborative"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
   example({
@@ -374,6 +384,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "non-medication"],
     manner: ["unhurried", "motivating"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Extended first appointment",
   }),
   example({
@@ -401,6 +412,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "depression", "substance-history"],
     manner: ["non_judgmental", "sense_making"],
     wheelchairAccessible: false,
+    consultRecording: "no-ai",
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -427,6 +439,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "trauma-informed", "emotional-regulation"],
     manner: ["attuned", "unhurried"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Extended first appointment",
     telehealthFirstAppointment: true,
   }),
@@ -454,6 +467,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "anxiety", "titration"],
     manner: ["steadying", "structured"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
   example({
@@ -481,6 +495,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "complex-mental-health", "shared-care"],
     manner: ["sense_making", "steadying"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -507,6 +522,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "emotional-regulation", "non-medication"],
     manner: ["collaborative", "non_judgmental"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment",
     telehealthFirstAppointment: true,
   }),
@@ -535,6 +551,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "child-adolescent-adhd", "depression"],
     manner: ["motivating", "culturally_attuned"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -561,6 +578,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "autism-adhd", "complex-mental-health"],
     manner: ["structured", "sense_making"],
     wheelchairAccessible: false,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
   example({
@@ -587,6 +605,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "titration", "anxiety"],
     manner: ["unhurried", "culturally_attuned"],
     wheelchairAccessible: true,
+    consultRecording: "ai-scribe",
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -614,6 +633,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     careAreas: ["adhd-assessment", "substance-history", "shared-care"],
     manner: ["steadying", "non_judgmental"],
     wheelchairAccessible: true,
+    consultRecording: "no-ai",
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
 ];

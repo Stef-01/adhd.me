@@ -3,7 +3,7 @@
 // O95: the results screen, verbatim from care-finder.tsx — including the collapsed-screens
 // history note, because it explains why this one screen carries so much.
 
-import { CaretRight, FunnelSimple } from "@phosphor-icons/react";
+import { CaretRight, FunnelSimple, MagnifyingGlass, MapPin, PencilSimple, Sparkle } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -18,8 +18,14 @@ import { type Clarifier } from "@/matching/clarify";
 import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { CoverageMap } from "../coverage-map";
-import { NearbyMap } from "./nearby-map";
+
+/** O235: Leaflet reads `window` on import, so the map is a client-only chunk fetched the first time a place resolves. */
+const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap), {
+  ssr: false,
+  loading: () => <div className="nearby-map nearby-map-loading" aria-hidden="true" />,
+});
 import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
@@ -122,40 +128,44 @@ export function ResultsStage({
       </header>
 
       <div className="results-head">
-        {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46). When no branch and
-            no reading matched, the fallback headline was the person's own text at display
-            scale — fine for a sentence, absurd for the fragment a cut-short microphone
-            delivers ("Cx." in 40px serif, above a banner admitting nothing was read).
-            Unearned text renders as a quiet quote instead: still their words, no longer a
-            proclamation — and the eyebrow goes with it (O48): "Based on what you told us"
-            above words the product just admitted it could not read was one more line, and
-            a contradiction. */}
-        {requestHeadline !== requestSummary || quality === "informed" ? (
-          <>
-            <p className="eyebrow">Based on what you told us</p>
-            <h1 tabIndex={-1}>{requestHeadline}</h1>
-          </>
-        ) : (
-          <p className="results-request-quote">&ldquo;{requestSummary}&rdquo;</p>
-        )}
-        <button className="refine-compact" type="button" onClick={onRefine}>
-          <span>Change what you said</span>
-        </button>
+        {/* O236 (founder-directed, "more modern"): the results screen opens on a SEARCH SUMMARY —
+            the words and the place as one compact card, the pattern every reference finder uses
+            (Zocdoc's results bar, HealthEngine's chip row) — instead of a quote, an underlined
+            control and a labelled form field stacked down the screen. The words are a button that
+            reopens the box; the place is a pill-shaped field that still re-ranks in place as it is
+            typed (finder-flow/history/a11y prove that), with its label read to screen readers and
+            not painted. */}
+        <div className="results-summary" role="group" aria-label="Your search">
+          <button type="button" className="results-summary-words" onClick={onRefine} aria-label="Change what you said">
+            <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
+            <span className="results-summary-text">{requestSummary}</span>
+            <PencilSimple size={16} weight="bold" aria-hidden="true" />
+          </button>
+          <div className={origin ? "results-summary-place is-set" : "results-summary-place"}>
+            <MapPin size={18} weight={origin ? "fill" : "bold"} aria-hidden="true" />
+            <label className="sr-only" htmlFor="place">Where are you?</label>
+            <input
+              id="place"
+              name="place"
+              list="covered-suburbs"
+              value={place}
+              onChange={(event) => onPlaceChange(event.target.value)}
+              placeholder="Your suburb"
+              autoComplete="address-level2"
+            />
+            <datalist id="covered-suburbs">
+              {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
+            </datalist>
+          </div>
+        </div>
 
-        <div className="place-field">
-          <label htmlFor="place">Where are you?</label>
-          <input
-            id="place"
-            name="place"
-            list="covered-suburbs"
-            value={place}
-            onChange={(event) => onPlaceChange(event.target.value)}
-            placeholder="Beecroft"
-            autoComplete="address-level2"
-          />
-          <datalist id="covered-suburbs">
-            {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
-          </datalist>
+        {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46): the headline renders only
+            when a reading earned it; otherwise the summary card above already shows the words. */}
+        {(requestHeadline !== requestSummary || quality === "informed") && (
+          <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
+        )}
+
+        <div className="results-notes">
           {!empty && quality === "informed" && fitCopy && (
               <motion.p
                 key={fitCopy}
@@ -175,19 +185,8 @@ export function ResultsStage({
             </p>
           )}
 
-          {/* WHEN THE ORDER IS NOT EARNED, SAY SO.
-              A probe over realistic first-person queries found the lexicon reached nothing
-              on nine of seventeen and that ten tied exactly — including "I think I might
-              have ADHD", the likeliest thing anybody types. Every one of those still
-              rendered as a ranked list whose order came from the tie-break: from nothing,
-              presented as from something. This is one line and it only appears when the
-              order means nothing, which is the only time it has anything to add. */}
-          {/* O52's story, finished (design-motion-principles pass): when a clarifier answer
-              or a suburb re-ranks the list, the rows below GLIDE — but these status lines
-              used to teleport in the same frame, the one region changing state with no
-              acknowledgment of it. Each now enters with the product's standard small rise
-              (0.2s, the house ease, exit subtler than enter) and swaps when its text swaps
-              (the key). Under prefers-reduced-motion every line renders in place. */}
+          {/* WHEN THE ORDER IS NOT EARNED, SAY SO (probe over realistic first-person queries: nine
+              of seventeen reached nothing). One line, only when the order means nothing. */}
           <AnimatePresence initial={false}>
           {!empty && quality !== "informed" && (
             <motion.p
@@ -202,9 +201,7 @@ export function ResultsStage({
             </motion.p>
           )}
 
-          {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). "Informed" means an order
-              exists somewhere in the list — not necessarily at the top, which is the one
-              boundary the reader acts on. When the first band is a tie, say so there. */}
+          {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). */}
           {!empty && tieNote && (
             <motion.p
               key="tie-note"
@@ -218,46 +215,42 @@ export function ResultsStage({
             </motion.p>
           )}
 
-          {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY.
-              Saying "this is not a ranking" is honest and it is a dead end: the commonest
-              sentence in the product reaches only the facet every GP declares, so the reader
-              is told the order means nothing and left where they started. These are the
-              facets this roster actually DISAGREES on, so answering one reorders it — a
-              question that could not change the order would be data collection from somebody
-              who came here to find a GP. Tapping appends the answer in the reader's own
-              words and the whole sentence is re-read, so the finder can still say "you said
-              this" about a signal it prompted. */}
+          {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY: the facets this roster
+              actually disagrees on, as chips in the open (O236: no longer folded behind a
+              disclosure — a suggestion row is the modern idiom and the answer is one tap). Tapping
+              appends the answer in the reader's own words. */}
           {!empty && quality !== "informed" && clarifierList.length > 0 && (
-            <motion.details
+            <motion.div
               key="clarify"
-              className="results-refine-details"
+              className="clarify"
               initial={reducedMotion ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
               transition={{ duration: 0.2, ease: EASE_OUT }}
             >
-              <summary>Improve my matches</summary>
-              <div className="clarify">
-                <p className="clarify-lead">One answer would narrow it:</p>
-                <ul className="clarify-row">
-                  {clarifierList.map((clarifier) => (
-                    <li key={clarifier.facetKey}>
-                      <button
-                        type="button"
-                        className="clarify-chip"
-                        onClick={() => onClarify(clarifier.answer)}
-                      >
-                        {clarifier.prompt}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.details>
+              <p className="clarify-lead">
+                <Sparkle size={15} weight="fill" aria-hidden="true" />
+                Improve my matches
+              </p>
+              <p className="clarify-sub">One answer would narrow it:</p>
+              <ul className="clarify-row">
+                {clarifierList.map((clarifier) => (
+                  <li key={clarifier.facetKey}>
+                    <button
+                      type="button"
+                      className="clarify-chip"
+                      onClick={() => onClarify(clarifier.answer)}
+                    >
+                      {clarifier.prompt}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           )}
 
-          {/* A care area nobody on the roster declares is a gap in the LISTING, and the
-              reader should not be left to conclude it is a gap in their question. */}
+          {/* A care area nobody on the roster declares is a gap in the LISTING. O110: the sentence
+              is composed in the matching module. */}
           {!empty && unserved.length > 0 && (
             <motion.p
               key={`unserved-${unserved[0]}`}
@@ -267,26 +260,18 @@ export function ResultsStage({
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
               transition={{ duration: 0.2, ease: EASE_OUT }}
             >
-              {/* O110: the sentence is composed in the matching module now, where it can be
-                  unit-tested — and where it covers preferences and manner, not only care
-                  areas. The screen prints what the reader is owed; it does not decide it. */}
               {unserved[0]}
             </motion.p>
           )}
           </AnimatePresence>
 
-          {/* Only when the answer is no. "We do not cover that one" raises the question of
-              what IS covered, and this answers it in place instead of leaving somebody to
-              guess which suburbs to try. In every other case it would be a block of screen
-              saying something the reader did not ask. */}
+          {/* Only when the answer is no: what IS covered, in place. */}
           {place.trim() !== "" && !origin && (
             <CoverageMap highlight={null} />
           )}
         </div>
 
-        {/* O234: the nearby map — only once the place resolves, because a map of "near you" with
-            no "you" on it is the fabricated-precision mistake W211 removed, drawn. It sits with
-            the place field that governs it and above the list it keys. */}
+        {/* O234/O235: the nearby map — only once the place resolves. */}
         {origin && shown.length > 0 && (
           <NearbyMap origin={origin} shown={shown} onPick={pickFromMap} />
         )}

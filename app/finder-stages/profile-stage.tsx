@@ -27,7 +27,7 @@ function shortTitle(title: string): string {
   return title.split(",")[0]?.trim() || title;
 }
 
-type ProfileFact = { kind: "language" | "telehealth" | "availability"; label: string };
+type ProfileFact = { kind: "language" | "telehealth" | "availability" | "recording"; label: string };
 
 const LANGUAGE_LIST = new Intl.ListFormat("en-AU", { style: "long", type: "conjunction" });
 
@@ -43,7 +43,10 @@ function profileFacts(clinician: Clinician): ProfileFact[] {
   if (clinician.acceptingNewPatients) {
     facts.push({ kind: "availability", label: "Accepting new patients" });
   }
-  return facts.slice(0, 3);
+  // O236: the declared note-taking fact, in the practice's own terms.
+  if (clinician.consultRecording === "ai-scribe") facts.push({ kind: "recording", label: "AI scribe, with your consent" });
+  if (clinician.consultRecording === "no-ai") facts.push({ kind: "recording", label: "No AI recording" });
+  return facts.slice(0, 4);
 }
 
 function usefulPracticalSignals(clinician: Clinician): string[] {

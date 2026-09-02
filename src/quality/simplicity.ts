@@ -33,6 +33,7 @@ export interface LongFile {
 
 const U15 = "2026-09-02";
 const O234 = "2026-09-02";
+const O236 = "2026-09-02";
 
 /**
  * Every file over the floor on the day the law was written. Ordered by path.
@@ -74,9 +75,9 @@ export const LONG_FILES: readonly LongFile[] = [
   },
   {
     file: "src/demo/synthetic-roster.ts",
-    lines: 650,
-    on: "2026-09-02",
-    why: "The 20 example personas (founder decision G-SYN-3). Data, one persona per block. It shortens only by having fewer example profiles, which is the founder's call and not this lane's. O231 raised the argued length by twenty: the booking note it exports became the product's own voice and had to explain, at the point of the change, which defences moved and which did not.",
+    lines: 680,
+    on: O236,
+    why: "The 20 example personas (founder decision G-SYN-3). Data, one persona per block. It shortens only by having fewer example profiles, which is the founder's call and not this lane's. O231 raised the argued length by twenty: the booking note it exports became the product's own voice and had to explain, at the point of the change, which defences moved and which did not. O236 added thirty: every example persona now declares whether the consult is AI-transcribed, one line each, because a filter over a fact nobody declares is a filter that empties the list.",
   },
   {
     file: "src/matching/corpus.ts",
