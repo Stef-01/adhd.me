@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 00d0451 (2026-09-02T14:35Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 00d0451 (typecheck · 311 files / 4539 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 687 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (349 passed, 1 skipped, 23.4m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) at the U14 tree (00d0451: src/quality/size-census-read.ts — the reader, 31 measures over app/, src/, e2e/ and scripts/ with the product's import closure from app/; src/quality/size-census.ts — the append-only register, every floor today's number with no headroom, PLAN_FIGURES beside each floor and verdicts both directions; size-census.test.ts (15) — the tree against its floors on every pnpm test, planted regressions, the plan's §1/§2.5 text held to PLAN_FIGURES; scripts/size-census.mts (pnpm census) — the table and the entries to bank; docs/ONE-YEAR-BUILD-PLAN.md — the corpus path fixed to src/matching/). AR15 visual: unchanged — U14 touches no route, UI or copy (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U15 (the simplicity laws and their registers, R0) is the next firing's unit`
+`gate: green @ 65705df (2026-09-02T16:05Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 65705df (typecheck · 312 files / 4546 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, / heaviest at 703 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (358 passed, 1 skipped, 24.8m, exit 0 read from the command itself, run serially with nothing else building) at the O230 tree (65705df: app/page.tsx — the finder at the root, the app opening on the product rather than a story; app/story/page.tsx — the landing moved whole; next.config.ts — /finder a 308; app/loading.tsx — the streaming boundary moved with the route it guards; src/app-shell/tabs.ts + tabs.test.ts — the four-tab register, held to real routes, to the researched 3-5 and to the compliance linter; app/app-tabs.tsx — one bottom bar, icon and label, 56px targets, aria-current, safe-area padding, hidden inside a task; app/sheet.tsx — a portalled modal bottom sheet with two detents, a dismissing drag, a 48px grabber that cycles them by tap, focus trapped and returned; e2e/app-shell.spec.ts — the front door, the redirect, the bar, the touch floor and the sheet's dialog behaviour; src/security/robots.ts — / hidden, /finder gone with its route; src/quality/size-census.ts — 19 reasoned raises). AR15 visual: O230 reshapes the app's chrome (a bottom tab bar on every tab route, a bottom sheet over the welcome screen) and moves two routes; the finder's own stages, the story's sections and the palette are untouched, and the brand gradient carries into the new chrome as the 2px band lid (the gradient aesthetic and the qa/ welcome captures stay as they are), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; O230 (the app shell, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U15 (the simplicity laws and their registers, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -325,32 +325,72 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > **O230 (FOUNDER-DIRECTED, 2026-09-02: "there should be no landing page, it should function
 > exactly like an app for the demo day and be extremely polished, research online exactly how
 > leading health provider apps are structured with gestures, and visual design and implement") —
-> CLAIMED founder-0902a, 2026-09-02T14:45Z.** This supersedes U15 as the next unit; the U lane
-> resumes after it. **Scope:** the site stops opening on a story and opens on the product.
-> `/` becomes the app's home surface — the finder's entry with the roster beneath it — behind one
-> persistent app shell (a safe-area bottom tab bar on the phone, the same routes as a rail on the
-> desktop), and the marketing story moves whole to its own route rather than being deleted, so no
-> copy, no compliance-linted sentence and no test loses its home. The unit's shape is taken from
-> how consumer health apps are actually built (a researched briefing, cited in the done block):
-> tabbed root, task-first home, provider cards that lead with the bookable facts, bottom-sheet
-> detail with a drag handle, and route changes that read as pushes rather than reloads.
-> **Preserved by law, not by intention:** the warm-orange-to-periwinkle brand gradient and the
-> whole `--hero-*` token scheme (the founder's second instruction of the same hour, with the home
-> screen attached as the reference) — no new colour is introduced, the shell paints from the
-> existing band tokens, and the AR15 visual matrix is re-accepted only for cells this unit
-> deliberately moves, each named. **Founder gates untouched:** the roster stays synthetic and
-> example-labelled, the finder stays hidden from crawlers (U7), no clinical claim, no testimonial
-> or rating, no symptom triage — an app shell is chrome, and chrome may not say anything the copy
-> laws forbid. **Verification:** `pnpm verify`; the moved landing assertions run green at the
-> story's new route (coverage moves, it does not shrink); new e2e for the shell — every tab
-> reachable and labelled, the sheet opening, dragging, dismissing on Escape and returning focus,
-> the tab bar clearing the safe-area inset and every control over the 44 px floor; the a11y,
-> contrast, touch and keyboard sweeps green on the new surfaces; `pnpm census` re-pinned for the
-> lines this unit adds, with the raise reasoned in the ratchet as U14's law requires; a dev-server
-> preview at phone and desktop widths before the gate, per the founder's standing instruction.
-> **Continuation if this claim goes stale:** nothing lands behind a flag — the shell is whole or
-> it is not landed; a partial shell would leave two navigation systems on one site, which is the
-> defect this unit exists to remove.
+> DONE founder-0902a, 2026-09-02 @ 65705df.** Scope was the founder's text; the U lane resumes at U15
+> after it. **The research came first and decided the shape.** Three health apps publish their
+> structure and all three agree: the NHS App is built on three "hub" tabs it deliberately protects
+> from redesign, Apple Health ships three, and Zocdoc — the finding that settled this unit — opens
+> COLD ON SEARCH rather than on a hero. None opens on a marketing page. The practitioner consensus
+> in the same corpus is 4–5 tabs carrying an icon AND a text label, because icon-only navigation
+> reads as a literacy and trust failure in health products specifically. **Outcome:** `/` is the
+> finder. The story that held the front door moved WHOLE to `/story` — not deleted, because it is
+> still the honest account of why the product exists and deleting it would take four
+> compliance-linted sections and the coverage instrument with it. `/finder` is a 308 in
+> `next.config.ts` rather than a page that redirects, and the difference is what a client receives:
+> a page inside a `loading.tsx` boundary streams a 200 and redirects afterwards, which is what the
+> first attempt did. That boundary moved too, to `app/loading.tsx`, where it now guards the route
+> that actually streams. `src/app-shell/tabs.ts` is the register the bar reads — Find, Examples,
+> Questions, About — and `tabs.test.ts` (7) holds every tab to a real page route, holds the count
+> to the researched 3–5, holds tab one to being the finder at the root, and runs each label and
+> purpose through the compliance linter, because chrome is copy too. `app/app-tabs.tsx` renders it:
+> a real `<nav>` of real links, `aria-current="page"` on the one you are in, the whole tab a target
+> at 56px against the 44–48px fingertip floor (WCAG 2.2's 24px is a legal minimum, not a design
+> target), the current tab stated three ways — accent, filled icon weight, and a marker — never
+> colour alone, and the safe-area inset added as padding so the bar paints to the bottom edge of an
+> installed app while its controls sit above the home indicator. It hides inside a task the way a
+> native push hides a tab bar; the finder owns that call, because the finder owns its stages.
+> **The gesture:** `app/sheet.tsx` is a bottom sheet with two detents, a spring drag that dismisses
+> on a downward flick, `overscroll-behavior: contain` on its body so scrolling it to the end does
+> not chain into the page behind — the specific tell that makes a web sheet feel like a div — and a
+> grabber that is a real 48px BUTTON cycling the detents, which is Material's own accessibility
+> rule and the reason nobody has to drag. It is `role="dialog" aria-modal="true"`, moves focus in,
+> traps Tab, closes on Escape and gives focus back to whatever opened it. **Deliberately not built:**
+> pull-to-refresh (the corpus is unanimous that a reimplemented one reads as "web" even when it is
+> good) and any horizontal swipe near the left edge, where iOS's own back gesture lives.
+> **The line that came out differently:** the claim said "provider cards and a drag-handled bottom
+> sheet". The sheet shipped; the provider detail did NOT become one. The profile is a pushed screen
+> with a shared-element portrait morph and its own history entry (U8), which is what Zocdoc does
+> too, and converting it would have traded a working native pattern for a different one while
+> breaking the state model. The sheet went where an app actually opens one and where a presenter
+> will use it on the day: the testing options, previously a `<details>`, same siting and same quiet
+> weight, different container. **Three defects the dev-server preview caught and the tests could
+> not have:** the privacy bar was fixed to the viewport bottom and the new tab bar arrived
+> underneath it, so a first-time visitor met an app whose navigation was covered by a notice; the
+> sheet, nested inside the finder's animated stage, had its `z-index: 60` resolved INSIDE a
+> transformed ancestor's stacking context and rendered behind that same bar (fixed by portalling it
+> to the body, which is where a modal belongs and what makes its scrim mean anything); and each
+> stage is `min-height: 100svh`, so the finder's context line ran under the bar whatever the
+> shell's padding said. **The gradient is preserved by construction, not by intention** (the
+> founder's standing instruction, restated this session with the home screen attached): no new
+> colour was introduced, the bar and the sheet paint from `--band-gradient` and the existing
+> `--hero-*` tokens, and the band appears as a 2px lid on the bar and the sheet exactly as O218 put
+> it under the finder's header. **Registers followed the routes rather than being edited around
+> them:** `/` joined the U7 crawler register (the reason `/finder` was hidden is a fact about what
+> the surface renders, so it moved with it) and `/finder` LEFT it, because it is no longer a route
+> and a row naming it would be the stale entry that register's both-directions test exists to fail
+> on; the founder gate `finder-public-posture` reads the root now, with its question unchanged and
+> still open; the public-surface classification, the standing flag, the compliance dossier's census
+> and governing rows, the working-truth proofs, the route budgets and the taste register's route
+> scope all moved the same way. The dead `.quiet-link` and `.finder-home-link` rules came out with
+> the finder's Home link, which pointed at the front door from the front door. **U14's ratchet did
+> exactly what it was built for:** this is the first unit to RAISE floors, and its raises carry
+> a dated reason in `RATCHET`, per measure, in the same commit as the code that spent them — and it
+> caught its own re-pin twice, since the register's own line count is one of the things it measures.
+> Founder gates untouched; the roster stays synthetic and example-labelled, and the app is hidden
+> from crawlers. **Verification:** `pnpm verify` green at 65705df (typecheck · 312 files / 4546 tests,
+> 13 skipped · build · audit PASS · perf PASS, 49 routes, heaviest `/` at 703 KB · gate accounting
+> PASS · `pnpm census` PASS, 31 measures); full `pnpm e2e` green at 65705df (358 passed, 1 skipped, 24.8m);
+> dev-server preview at 390px and 1280px, four captures re-taken after each fix. Vault log skipped:
+> Stefan-Brain unreachable. U15 is next.
 
 > **U14 (O229-lane, the twelfth unit built of the one-year plan: the size census and the
 > downward ratchet, R0) — DONE founder-0902a, 2026-09-02 @ 00d0451.** Scope was the plan's U14
@@ -12241,7 +12281,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
-| O230 | done | founder-0902a | 2026-09-02T15:20Z | pending | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
+| O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
