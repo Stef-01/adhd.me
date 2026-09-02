@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ f871137 (2026-09-02T06:50Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at f871137 (typecheck · 305 files / 4485 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 679 KB · gate accounting PASS with this line); full pnpm e2e green (334 passed, 1 skipped, 18.7m, exit 0 read from the command itself, run serially with nothing else building, 335 listed) at the U7 tree (f871137: the crawler register src/security/robots.ts naming /finder, /examples, /demo and /thanks, read by the X-Robots-Tag config entries, each page's metadata.robots, the sitemap filter and app/robots.ts's disallow list; the finder-public-posture founder gate; robots.test.ts holding all four places to the register both directions and e2e/robots.spec.ts reading them off the build). AR15 visual: unchanged — no rendered surface changed in U4, U5 or U7 (U7 adds a meta tag and a response header), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7 done; U6 blocked on D-CI-BILLING; U8 (the finder's state model) is the next firing's unit`
+`gate: green @ db40bf9 (2026-09-02T08:16Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at db40bf9 (typecheck · 306 files / 4494 tests, 13 skipped · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 49 routes within budget, /finder heaviest at 683 KB · gate accounting PASS with this line); full pnpm e2e green (338 passed, 1 skipped, 19.3m, exit 0 read from the command itself, run serially with nothing else building, 339 listed) at the U8 tree (db40bf9: src/finder/state.ts — a history entry per stage, the words in sessionStorage under a versioned key, a URL serialiser that carries `place` and nothing else; app/finder-history.ts the one bridge to window; /finder static with the place read at arrival; state.test.ts round-tripping every stage and planting a sentence that reaches nowhere but the tab; e2e/finder-history.spec.ts walking Back, Forward and a reload on the built route; real-roster.ts leaving the finder before re-entering it). AR15 visual: unchanged — U8 moves no pixels (the gradient aesthetic and the qa/ captures stay as they are, walked on the built route and the dev server), the accepted chain ends at O229 (manifest sha 25d66570). **O216 through O229 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8 done; U6 blocked on D-CI-BILLING; U9 (focus, live regions and one mic control) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -120,18 +120,58 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 
 
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
-> Q-A) — CLAIMED founder-0902a, 2026-09-02T06:52Z.** Scope is the plan's U8 text and nothing beyond
-> it: `src/finder/state.ts` owns the stage model — a history entry per stage via
-> `history.pushState` (Back and Forward walk the stages instead of leaving the site), the request
-> text and the chosen match in `sessionStorage` under a versioned key (reload resumes the same
-> tab, a fresh tab starts clean), and a URL serialiser that accepts `place` and nothing else, so
+> Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
+> claim came out differently and is explained below. **Outcome:** `src/finder/state.ts` owns where
+> each stage lives — three homes, one law. A history entry per stage, `{finder: {v, stage, index}}`
+> via `pushState` with no URL, so Back and Forward walk the stages instead of leaving the site and
+> an in-app Back (`backTo`) is the browser's own Back to the nearest earlier entry for the stage
+> (`stepsBackTo`), which is why Cancel on the listening screen creates no entry. The request text,
+> the draft and the chosen match in `sessionStorage` under a versioned key (`adhdme.finder.v1`):
+> a reload resumes the same tab at the entry's stage and index, a fresh tab starts clean, a Back
+> into the listening entry lands on the typing screen (`stageOnRevisit`: WebKit starts a
+> microphone only from a tap), and a trail the tab lost is rebuilt to the entry's index. One URL
+> serialiser, `finderSearch`, that accepts `place` and nothing else, rewritten in place by
+> `replaceState` (a Safari throttle refusal costs a keystroke of address bar, not a crash), so
 > `/finder?place=Footscray` works for a practice and no request ever reaches a URL, a history
-> entry, a log line or an analytics event. `app/finder/page.tsx` reads `place` from `searchParams`.
-> `src/finder/state.test.ts` round-trips every stage and plants a sentence to prove it is absent
-> from the URL and from `history.state`; `e2e/finder-history.spec.ts` drives welcome → listening →
-> results → booking with Back, Forward and a reload. No pixel moves: the gradient aesthetic and
-> the `qa/` captures stay as they are, checked on the dev server. Continuation if this claim goes
-> stale: nothing is behind a flag; the unit is whole or it is not landed.
+> entry, a log line or an analytics event. `app/finder-history.ts` is the one place that touches
+> `window` for it (`useFinderHistory`: `goTo`, `backTo`, `remember`, `rememberPlace`, a layout
+> effect for the arrival so a resumed stage is on screen in the frame the welcome markup hydrates,
+> `AnimatePresence` keyed on the arrival so that welcome plays no exit); `care-finder.tsx` keeps
+> the state machine and derives from what the hook returns. **Where the claim and the outcome
+> differ:** the claim said `app/finder/page.tsx` reads `place` from `searchParams`. That was built
+> first and dropped: a page that reads the query is dynamic and Next keys its segment on the query
+> (`__PAGE__?{"place":…}`), so once the place has been edited the entries behind the person carry
+> the old key — reload, then Back, had the router miss its cache, patch the page from the server
+> and rewrite the entry WITHOUT the finder's stamp (`preserveCustomHistoryState=false` in
+> `HistoryUpdater`). `/finder` stays static (`○` in the build) and `arrive` reads the place from
+> `location.search` on the client, so every entry carries one key and every entry stays walkable;
+> verified on the built route by walking place edit → results → profile → reload → Back → Forward
+> with the stamps intact. `next dev` renders every request on demand and still keys on the query,
+> so that one path shows on the dev server only — documented in `page.tsx`, not a defect of the
+> shipped route. Two smaller notes: `?debug=1` is dropped on a place edit, by law (the serialiser
+> carries a place and nothing else); and on a resumed reload the server's welcome markup is
+> visible until hydration. **Verification:** `src/finder/state.test.ts` (nine tests) round-trips
+> every stage through a fake browser that records every call it is handed, plants a sentence and
+> proves it reaches storage and nowhere the model handed the browser (not a URL, not a state);
+> malformed records and entries read as fresh; a forward move cuts the Forward entries; the place
+> is a `replaceState` in place. `e2e/finder-history.spec.ts` (four tests, triaged in
+> `route-array-triage.ts`) drives welcome → listening → results → profile with Back, Forward and a
+> reload on the built route, asserts the address bar carries the place and never the words and
+> that no entry carries either, that a shared link with a place ranks from it while a fresh visit
+> starts at the beginning, and that Cancel on the listening screen is the browser's Back. The fake
+> recogniser is now `e2e/support/fake-speech.ts`, shared with `voice.spec.ts`. W167 `FOLD_SITES`
+> gains `src/finder/state.ts` with its rationale (a trail is indexed by history position; its
+> order is its meaning). **What the first full run found:** `e2e/support/real-roster.ts` re-entered
+> `/finder` from `/finder` in two loops (AR38, `profile-sweep`); a `goto` to the URL the tab already
+> shows is a reload to Chromium, the entry and its state survive, and the finder resumed the
+> profile it was on — the model working, not the spec's premise. The helper now leaves for
+> `about:blank` first, so a second visit is what it claims to be: a fresh arrival on a new entry.
+> No pixel moves: the gradient aesthetic and the `qa/` captures stay as they are, walked on both
+> the built route and the dev server with a place, the results and a resumed profile on screen.
+> Founder gates untouched: nothing in the model carries patient text anywhere but the tab. Gate:
+> `pnpm verify` green at db40bf9 (306 files / 4494 tests, 13 skipped; audit PASS; perf PASS, 49
+> routes, `/finder` 683 KB); full `pnpm e2e` green (338 passed, 1 skipped, 19.3m, exit 0, 339 listed) at this tree. Vault log skipped
+> (unreachable). U9 (focus, live regions and one mic control) is next.
 
 > **U7 (O229-lane, the sixth unit built of the one-year plan; U6 stays blocked on D-CI-BILLING:
 > crawlers told the truth about the finder) — DONE founder-0902a, 2026-09-02 @ f871137.** Scope was
@@ -11916,7 +11956,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U5 | done | founder-0902a | 2026-09-02T06:20Z | 499fd47 | [P] (S) Toolchain pins and CI parity. -> verify: `src/quality/ci-parity.test.ts` parses `ci.yml` and asserts its script set equals `verify`'s step list (both directions); `pnpm verify` green locally with the pinned versions. Done as: `packageManager: pnpm@10.33.0`, `engines { node: 22.x, pnpm: 10.x }`, `.nvmrc` = 22 (lockfile unchanged); the verify job runs exactly `pnpm verify` (perf:gate and gate:accounting reach CI for the first time), both jobs read the pins (`node-version-file: .nvmrc`, `pnpm/action-setup` without `version`); ci-parity.test.ts 9/9 — script set both directions, call-not-copy, non-vacuous parse, the pre-U5 workflow fails naming perf:gate + gate:accounting, pins agree. U6 stays blocked on D-CI-BILLING. pnpm verify green (304 files / 4477 tests), full e2e 328 passed / 1 skipped. |
 | U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
 | U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
-| U8 | claimed | founder-0902a | 2026-09-02T06:52Z | — | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
+| U8 | done | founder-0902a | 2026-09-02T06:52Z | db40bf9 | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
 | U9 | available | — | — | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
