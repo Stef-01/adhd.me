@@ -102,19 +102,20 @@ function sourceFiles(): Array<{ module: string; text: string }> {
 }
 
 /**
- * Modules with no `// W<n>` / `// O<n>` / `// AR<n>` / `// M<n>` header. W200's Y4 census cannot
- * see them.
+ * Modules with no `// W<n>` / `// O<n>` / `// AR<n>` / `// M<n>` / `// U<n>` header. W200's Y4
+ * census cannot see them.
  *
  * W200 only knew the W-series; the pattern widened (surgically, for AR1) once the O-series and
  * AR-series started landing standalone modules under their own numbering — `src/design/
  * taste-register.ts` is the first — and widened again (surgically, for M5) once Q-M's own
- * numbering did the same with `src/matching/separation-effect.ts`. Narrowing this back to any
+ * numbering did the same with `src/matching/separation-effect.ts`, and again (U1) once the
+ * one-year plan's U-series did with `src/security/headers.ts`. Narrowing this back to any
  * one family would make every future module in the others invisible to the census, which is
  * exactly the failure mode CENSUS-1 exists to catch.
  */
 export function modulesWithNoUnitHeader(): string[] {
   return sourceFiles()
-    .filter(({ text }) => !/^\/\/ (?:W|O|AR|M)\d+/.test(text.split("\n")[0] ?? ""))
+    .filter(({ text }) => !/^\/\/ (?:W|O|AR|M|U)\d+/.test(text.split("\n")[0] ?? ""))
     .map((f) => f.module)
     .sort();
 }

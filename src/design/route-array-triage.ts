@@ -147,6 +147,7 @@ export const SPEC_TRIAGE: readonly SpecTriage[] = [
   { file: "demo.spec.ts", category: "single-route-feature", routes: ["/demo", "/console/ops"], reason: "the demo walkthrough plus the console screen it drives." },
   { file: "education.spec.ts", category: "single-route-feature", routes: ["/console/education"], reason: "single console feature under test." },
   { file: "finder-flow.spec.ts", category: "single-route-feature", routes: ["/finder"], reason: "the finder journey, one route, many client-state steps." },
+  { file: "headers.spec.ts", category: "single-route-feature", routes: ["/", "/finder", "/console/signin", "/faq", "/no-such-route", "/console"], reason: "U1: the security headers are mounted on `/:path*` by one config entry (headers.test.ts pins the source), so the spec reads them off five deliberately different responses — the landing, the finder, a console route, a prose page and a 404 that no derived list can name — and proves the report-only CSP quiet on `/`, `/finder` and the console shell. Named surfaces, not a coverage sweep." },
   { file: "interest.spec.ts", category: "single-route-feature", routes: ["/console/interest"], reason: "single console feature under test." },
   { file: "interop-console.spec.ts", category: "single-route-feature", routes: ["/console/interop"], reason: "single console feature under test." },
   { file: "interview.spec.ts", category: "single-route-feature", routes: ["/console/interview", "/console/matching"], reason: "two related console features in one interview-to-matching flow." },

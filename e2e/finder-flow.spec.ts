@@ -13,12 +13,14 @@
 import { expect, test, type Page } from "@playwright/test";
 import { measured } from "./support/measured";
 import { rankClinicians } from "../src/demo/clinicians";
+import { demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";
 
+// O226: this file's walks assert REAL-roster facts — named rows above the fold, `rankClinicians`
+// over the real `clinicians` export, "1 of 2 listed GPs" — so the flow enters through the
+// real-roster door. The shipped default (examples ON) keeps its own coverage in the first test
+// below, which walks the scenario without touching the switch.
 async function intoResults(page: Page) {
-  await page.goto("/finder");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
-  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await demoResultsRealRosterOnly(page);
 }
 
 test("a scenario reaches results without a loading screen in between", async ({ page }) => {
@@ -267,10 +269,7 @@ test("refinement stays with results while the profile leads with the bio", async
 });
 
 test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
-  await page.goto("/finder");
-  await page.getByRole("button", { name: "Try a demo scenario" }).click();
-  await page.getByRole("button", { name: "Try this scenario" }).click();
-  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await demoResultsRealRosterOnly(page);
   await page.getByRole("button", { name: /Change what you said/i }).click();
   // Every listing declares assessment, so this ties the roster and the clarifier renders.
   await page.getByRole("textbox").fill("I need an ADHD assessment");
@@ -353,7 +352,7 @@ test("collective roster coverage is never presented as one doctor's complete fit
 });
 
 test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {
-  await page.goto("/finder");
+  await gotoFinderRealRosterOnly(page);
   // Deliberately a query the roster SEPARATES on and serves completely: "adult ADHD
   // assessment" alone is a tie (all three declare it), and a tie renders no claim either — so
   // it would have passed this test for the wrong reason.
@@ -389,7 +388,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   );
 
   for (const [i, query] of QUERIES.entries()) {
-    await page.goto("/finder");
+    await gotoFinderRealRosterOnly(page);
     await page.locator("#welcome-request").fill(query);
     await page.getByRole("button", { name: "Find a GP" }).click();
     await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

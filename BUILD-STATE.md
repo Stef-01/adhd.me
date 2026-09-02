@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ 9b9558b (2026-09-01T10:45Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (298 files / 4392 tests, 13 skipped), build, audit PASS, perf gate PASS, gate accounting PASS; full pnpm e2e green (315 passed, 1 skipped, 15.8m), exit code 0 read from the command itself; AR15 visual comparison PASSED against the accepted baseline (zero moved cells). **O216 through O225 done — the founder-directed reskin/refactor session**: brand scheme, twenty synthetic profiles behind the tickbox, motion vocabulary + finder hairline, the accent-law pass, the standalone-app plan with Phases 1a AND 1b's safe-area half shipped, the engine-purity law, the simplify pass with the roster-seam and harness-determinism fixes, DESIGN.md re-captured, matches derived. O215 done. Still owed to the app plan: 1b's mic-B2 reproduction, 1c's offline shell (priced), Phase 2's workspace-package form, the G-APP gates`
+`gate: green @ 6dd819f (2026-09-02T01:33Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green (300 files / 4419 tests, 13 skipped), build, audit PASS, perf gate PASS (48 routes within budget; heaviest /finder at 679 KB), gate accounting PASS; full pnpm e2e green (321 passed, 1 skipped, 15.7m), exit code 0 read from the command itself, run serially with nothing else building, at the U1 tree (headers.spec.ts is the six new tests, so 322 listed). The AR15 visual comparison (PASSED against the O226-accepted baseline, zero moved cells, 9.0m) was made at 1d8067f and is carried forward: U1 changed no rendered pixel — app/ and public/ are byte-identical to 1d8067f and the unit's only runtime change is response headers, which the e2e reads directly — and this line says so. **O216 through O228 done — the founder-directed reskin/refactor/harmony session closed by the one-year build plan, and the U lane now OPEN and building**: U1 is the first U row done (security headers on every route and a report-only CSP, `next.config.mjs` → `next.config.ts`). O215 done. Nine U rows stay blocked on founder decisions the plan's §6 defines; U2 is next`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -119,6 +119,96 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **O228 (U1 — security headers and a report-only CSP; the first unit of the one-year plan, under
+> the founder's `/goal`: "when finalised, for next few hours build according to this developed
+> plan") — 2026-09-02.** `next.config.mjs` became `next.config.ts` so the config can import the
+> tree's own TypeScript (Next transpiles it itself — the build no longer depends on the host Node's
+> type stripping, which only the `.mts` gate scripts use); it now sets `poweredByHeader: false`,
+> `reactStrictMode: true`, and mounts `securityHeaders()` from the new `src/security/headers.ts` on
+> `/:path*`: `Strict-Transport-Security: max-age=63072000; includeSubDomains`,
+> `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
+> `Permissions-Policy: microphone=(self), geolocation=(), camera=()`, `X-Frame-Options: DENY`, and
+> `Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline';
+> style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri
+> 'self'; form-action 'self'; frame-ancestors 'none'` — Google's gtag hosts join `script-src`,
+> `img-src` and `connect-src` only when `NEXT_PUBLIC_GA_ID` is set (it is not), Vercel's debug
+> script host only under `next dev`. **The plan's U1 text was corrected in place, and says so:** it
+> asked for per-script hashes of the three JSON-LD blocks and the GA loader, and the tree, read
+> rather than remembered, refuses them — the JSON-LD blocks are `application/ld+json` DATA that the
+> browser never executes (`script-src` does not govern them); the executable inline scripts on every
+> page are Next's own hydration payloads (`self.__next_f.push`, seven per page in `.next/server/app/
+> index.html`), whose bytes no static config can hash; and one hash in `script-src` switches
+> `'unsafe-inline'` off in every CSP3 browser, so a partial list would have broken every page rather
+> than tightened anything. Nonces (middleware, every route dynamic) versus staying static is U13's
+> decision on a week of reports; the `report-uri` route moved to U4, whose text gained the sentence,
+> so the sink exists before anything posts to it. **What is held instead:** `src/security/
+> headers.test.ts` (12 tests) asserts every header and both flags through `next.config.ts` itself,
+> that the default posture names no third-party origin at all and carries no hash or nonce, that the
+> GA and Vercel hosts appear only under their conditions and only in the directives gtag needs, and
+> — both directions — that the GA loader in `app/analytics.tsx` is the only external script the tree
+> loads and sits inside the policy, that the policy's Vercel host is the one the installed package
+> names, and by census over every `<script>`/`<Script>` and `dangerouslySetInnerHTML` in `app/` and
+> `src/` that the only inline scripts are the three inert JSON-LD blocks and the GA snippet (a
+> planted executable inline script, a bare `dangerouslySetInnerHTML` and a foreign `src` all fail the
+> census; no `javascript:` URL or string event handler anywhere). `e2e/headers.spec.ts` (6 tests)
+> reads the headers off real `next start` responses for `/`, `/finder`, `/console/signin`, `/faq`
+> and a 404 (and no `X-Powered-By`), and proves the report-only policy QUIET in Chromium — zero
+> `securitypolicyviolation` events across the landing, the finder, sign-in, onboarding and the
+> console shell — with a planted third-party script reported (`script-src-elem`, disposition
+> `report`) so the recorder and the policy are both shown live. Design: the fonts are self-hosted
+> (`@fontsource-variable`, so `font-src` stays at `default-src 'self'`); no `data:`/`blob:`, no
+> iframe, worker, media element or client-side `fetch` exists in runtime code, so none is admitted;
+> the mic (Web Speech + `getUserMedia`) needs only the `Permissions-Policy` grant. Not done, and
+> said so: `report-uri` (U4), enforcement and the nonce decision (U13), `images` config (nothing
+> remote is loaded; nothing to configure). The vault log is skipped (unreachable) and the commit
+> says so.
+
+> **O227 (FOUNDER-DIRECTED: "conduct critical appraisal using all relevant skills to understand
+> exactly what is needed to upgrade the whole platform into a perfectly functional app and add that
+> to a consolidated 1 year build plan" + "add to plan a complex multistage refactor for next few
+> months to ensure app is as maintainable and simple as possible … much better optimised and
+> minimal code") — 2026-09-02.** One document answers both sentences: `docs/ONE-YEAR-BUILD-PLAN.md`
+> (1,328 lines). §0 defines "perfectly functional" as five measurable words — durability and
+> security, reachability, honesty, verifiability, simplicity — so the year can be finished rather
+> than felt. §1 measures the premise on the day it opened, by script rather than memory: 47 routes,
+> 15 API routes (14 of them mock fixtures), ≈67,875 lines of product and law with 45% of `src/`
+> (127 of 280 modules) unreached from any route, 21 hand-written stores, 13 `actions.ts` files, a
+> 6,087-line `globals.css` beside 1,654 Tailwind class attributes, 50,358 lines of vitest and 252
+> `goto`s over 16.7 minutes of e2e, CI dead since run 482, no security headers, no error reporting,
+> no durable write anywhere. §2 is the appraisal layer by layer in `impeccable`'s audit shape (a
+> finding is a location, a severity and the unit that answers it), with the finder and console read
+> as Operate surfaces and the landing as Persuade; §2.5 is the refactor premise with its six stages
+> and a **ratchet that only goes down** (every floor in `src/quality/size-census.ts` re-pinned lower
+> by each R unit, the AR15 baseline as the pixel witness, the `expect(` count as the floor); §2.8
+> argues the two open questions (the voice stage's reach, a ranking that can say no) divergently per
+> the `adhd` skill's gate; §2.9 scores each layer. §4 lays **U1–U68** across four quarters — Q1 (Sep–
+> Nov) deployment readiness and refactor stages R0–R2, Q2 (Dec–Feb) stages R3–R5 and durability, Q3
+> (Mar–May) the finder at scale and the installed app, Q4 (Jun–Aug) evidence, enforcement and the
+> year's reckoning — every unit with a size, `[P]`/`Depends:` and a `→ verify:` clause; the refactor
+> is **R0–R5, U14–U34**, six stages from the census and the module-reasons register through one
+> store contract, one action shape, one style system, the client boundary to the leaves, one e2e
+> walk, and the ledger split. §5 names the **nine rows blocked from day one** (U6 D-CI-BILLING, U31
+> D-DORMANT, U37 D-AUTH-PROVIDER, U38 D-PRODUCTION-STORE, U43 D-PRIVACY-COUNSEL, U51 D-IOS-DEVICE,
+> U58 D-EVAL-PANEL, U65 D-FINDER-PUBLIC, U66 D-NATIVE); §6 restates the inherited gates and defines
+> the ten decisions with their constraints; §7 refuses what the founder gates forbid (no symptom
+> triage, no testimonials, no model API on patient words, no fitted weights, no reciprocity); §8
+> says where every open item of the three plans it retires went. **The lock:** a `## Ledger —
+> U-series` table (68 rows, generated from the plan) appended after AR40, and
+> `src/quality/one-year-plan.test.ts` holding it to the plan in both directions — ids, order, `[P]`,
+> size and blocking decision per row; every `Depends:` lower-numbered and existing; no buildable
+> unit reaching a blocked one even transitively; every blocked id defined in §6; four quarters with
+> ≥10 units each — with a planted fixture proving the parser refuses an undefined decision and a
+> false `[P]`. `ledger-integrity` widened to `(W|AR|U)` with U non-vacuity and a blocked matcher
+> that accepts the plan's §6 as a decision's home (and still refuses "blocked because it is hard");
+> `year-six-horizon`, `gate-dossier-y4` and `gate-dossier-y5` exclude the U lane by id, each with the
+> both-directions guard so the exclusion cannot go dead. `docs/PLAN.md` now carries ONE active lane:
+> `ONE-YEAR-BUILD-PLAN.md` ACTIVE, `MATCHING-YEAR-PLAN.md` and `STANDALONE-APP-PLAN.md` REFERENCE,
+> `AESTHETIC-REVIEW-PLAN.md` CLOSED (AR1–AR40 done), `FIVE-YEAR-PLAN.md` untouched; `plan-canon`'s
+> ACTIVE pin is `["ONE-YEAR-BUILD-PLAN.md"]` with the founder's words in the comment. No UI change,
+> so no visual re-baseline; the accepted-diff chain ends where O226 left it. Not installed and said
+> so (plan §9): `code-review`, `security-review`, `simplify`, `supabase`, `run` — the review skills
+> named in `CLAUDE.md` §5 remain the matching plan's standing debt #12.
+
 > **O221 (the engine seam made law — STANDALONE-APP-PLAN.md Phase 2, cheap-correct-first) —
 > 2026-09-01.** The appraisal measured the core's purity; this unit makes it law.
 > `engine-purity.ts` walks the TRANSITIVE import closure from src/matching, src/demo, src/geo,
@@ -146,6 +236,27 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > (register re-sorted), two type-scale exceptions under the OG card's Satori law, PLAN.md canon
 > row ACTIVE. The unit also repaired the accent probe's green case (BARE_ROUTE was a blind index;
 > it now walks for a route with room below the cap, as the spec's own header always demanded).
+>
+> **O226 (FOUNDER-DIRECTED: the results-screen harmony pass; the example switch to the door,
+> default ON) — 2026-09-01.** A production iPhone capture, appraised against the Gestalt
+> literature: the screen had five self-announcing bordered regions in the first viewport, an
+> amber edit action louder than the brand, and the example-roster switch sitting between the
+> reader and their results. The head and refine details lose their boxes (proximity groups,
+> enclosure demoted to the one list-head hairline), the edit action goes ink+underline (its
+> late cascade twin too), the place input sits on paper, the count moves beside the Matches
+> heading as tabular "5 of 22", thumbnails go concentric (18−12=6px, monogram included), and —
+> the founder's amendment, recorded verbatim in the gate register — the examples ship ON with
+> the switch folded into a closed "Testing options" disclosure under the welcome screen's voice
+> entry. The default flip re-taught the e2e suite honestly: real-roster ranking laws now enter
+> through `e2e/support/real-roster.ts`, switching the examples off through that disclosure the
+> way a person would; the keyboard walk's control census learned that closed-details content is
+> boxed but unfocusable (its checkbox was the one "unreachable" control). Visual baseline
+> re-accepted under the AR15 protocol: three runs, zero pairwise diff, exactly four moved cells
+> (the finder, both widths and motions — the disclosure), register row 8. A METHOD INCIDENT is
+> on the record in the commits: the first enumeration run was contaminated by a concurrent
+> `pnpm build` swapping `.next` under the suite's running server — 38 apparent failures, 34 of
+> them asset-starvation artifacts; the clean re-run isolated the real four. Do not build while
+> a suite is running; the gate below is from serial runs only.
 >
 > **O225 (STANDALONE-APP-PLAN.md Phase 1b, the safe-area half) — 2026-09-01.** `viewport-fit:
 > cover`, with the four top bars padding themselves back out of the notch via
@@ -11602,3 +11713,105 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | AR38 | done | loop-0825c2 | 2026-08-25T13:46Z | b867c5f | [renumbered from AR26, collision above] journey: the finder end to end (O121's walk made permanent) -> verify: asserts the OUTCOME — a match ranked — never that a page responded 200. CLAIM SCOPE, measured: e2e/finder-flow.spec.ts (W214) already walks the flow's SHAPE deeply — 16 tests covering scenario->results, profiles, re-ranking on suburb change, clarifier re-sorts, booking handoff, the O121/O178 honesty gates — but every path in it enters via the demo scenario or asserts structure, and NOTHING asserts the ranking OUTCOME: that the rendered order IS the matching engine's own answer for what was typed. A finder whose results screen rendered the roster in a fixed order would pass every existing test. The unit: a journey test in finder-flow.spec.ts driving the TYPED path from the welcome stage (fill the textbox, Find a GP, no scenario) twice, with two queries the engine itself ranks in OPPOSITE orders (computed in-test from rankClinicians — the same function app/care-finder.tsx calls — with a guard that the pair genuinely separates, so the assertion cannot pass vacuously); each run asserts the rendered .clinician-row order equals the engine's order for that exact query string, and the top profile opens under the engine's #1 name. This kills the fixed-order failure class outright: the UI must FOLLOW the engine both ways. Suburb-free queries keep the rankClinicians (not rankCliniciansNear) path, matching the welcome-stage submit. No UI change, no baseline movement expected. Verify: pnpm verify + finder-flow spec green. DONE 2026-08-25T13:52Z @ b867c5f: built exactly as claimed. The separating pair, verified by an engine probe before the test was written: 'I need an ADHD assessment' ranks Anubhav > Anusha; 'a woman GP for ADHD assessment' ranks Anusha > Anubhav — the test recomputes both orders at run time from rankClinicians and a guard fails loudly if a roster change ever makes them agree, so the assertion can never quietly weaken to half its strength. Each typed run asserts the rendered row order equals the engine's order for the exact string and opens the top profile under the engine's #1 name. Non-vacuity is structural rather than mutation-proven: no fixed rendering order can satisfy two opposite engine orders, which is the fixed-order failure class killed outright. finder-flow 16/16 green; pnpm verify 288 files / 4313 tests, build, audit PASS, perf gate PASS. No src change, no rendered file touched, no baseline movement. |
 | AR39 | done | loop-0825c2 | 2026-08-25T14:47Z | 76e43b6 | [renumbered from AR27, collision above] [P] journey: booking through to a confirmed appointment -> verify: asserts an invitation minted and the register changed. CLAIM SCOPE, measured: e2e/booking.spec.ts already asserts the register change AT THE API — invitation statuses sent->booked/expired, appointments booked with generatedByInvitation, the audit-event kinds in order — and the patient's rendered confirmation. What no test asserts is the register change WHERE STAFF READ IT: the ops console's queue counts (queueView, practice-filtered since W181) have never been asserted around a real booking, and the W181 mechanism that makes the journey possible (POST /api/mock/ops re-keys the rail seed to prac-1, the id the console's onboarding mints first) is exercised by no browser flow. The unit: a journey test in booking.spec.ts — reset console, sign in and onboard (prac-1), seed ops (rail re-keyed + feed evidence), assert /console/ops renders the BEFORE counts (Sent 3, Booked 0) from the page; then book one invitation through its real signed token on /book/<token> to the rendered confirmation; then assert /console/ops renders Booked 1 / Sent 2 — the same register, changed by the patient's action, witnessed on the staff surface in the same browser session. Both ends rendered, API state only as the token source. No UI change, no baseline movement expected. Verify: pnpm verify + booking spec green. DONE 2026-08-25T14:54Z @ 76e43b6: built exactly as claimed — before-counts (Sent 3 / Booked 0) and after-counts (Booked 1 / Sent 2) both asserted from the RENDERED ops page in the same session that made the booking through the real signed token, with the patient's confirmation rendered between them. ONE ORDERING FACT DISCOVERED DURING MEASUREMENT AND WRITTEN INTO THE TEST: POST /api/mock/state resets the rail back to the prac-demo seed, so seeding state after ops undoes the W181 re-key — this is exactly why AR37's working-truth sweep rendered an all-zero ops queue (seedFixtures posts state LAST), O174's ordering class in a new place, now documented at both sites. Non-vacuity: the before assertion pins the minted state, so the after assertion cannot pass on a queue that never changed; the existing three tests keep the store-level truth (statuses, generatedByInvitation, audit order). booking 4/4 green; pnpm verify 288 files / 4313 tests, build, audit PASS, perf gate PASS. No src change, no rendered file touched, no baseline movement. |
 | AR40 | done | loop-0825c2 | 2026-08-25T15:47Z | 5d23698 | [renumbered from AR28, second collision above] journey: the console's practice flow -> verify: asserts the register changed, not that the screen rendered. CLAIM SCOPE, measured: the journey largely EXISTS and already asserts outcomes — e2e/console.spec.ts runs sign-in -> onboarding -> dashboard -> rules edit and asserts 'version 2' rendered PLUS the audit event with the exact transition (minDaysSinceLastVisit: 180 -> 240); e2e/registers.spec.ts toggles a register off and asserts the STORE (enabled:false), not just the badge. Two genuine gaps remain, one of them a product defect found by this measurement: (1) THE REGISTER TOGGLE IS NOT AUDITED — app/console/registers/actions.ts's own comment calls it 'a rules-level change' (it changes who the practice will contact) and src/console/store.ts's own law says 'Every change is audited, like every other config change in this store', yet toggleRegister writes no audit event, so a change to contact eligibility is invisible in the practice's audit trail; (2) the toggle-back-ON arm is screen-asserted only — the exact 'screen rendered' failure the row bans, on the remaining arm. The unit: add the audit write to the toggle (config_changed, subject register-<code>, detail naming the direction, timestamp per the actions' convention) via a small exported audit hook on the console store; extend the registers toggle test to assert store AND audit on BOTH arms. No new journey spec — console.spec's round trip is the flow's spine and stays the other half, cited not duplicated. UI unchanged (a server action gains a write); no baseline movement expected. Verify: pnpm verify + registers + console specs green. DONE 2026-08-25T15:56Z @ 5d23698: built exactly as claimed, and the measurement's product defect is FIXED rather than filed: toggleRegister now records 'register <code> turned on/off' through a new recordConfigChange export on the console store (the private audit writer, opened for config changes whose state lives in another store), written only past the store's unknown-code refusal so W41's no-input-in-messages rule holds for the detail string. THE TREE POLICED THE UNIT MID-BUILD, answered not silenced: W209's tenancy census refused the new export until it was classified in the store-reads registry — argued there as a practice-scoped WRITE adding no query surface, the caller owning requirePractice/authorize. The toggle test asserts store AND audit on BOTH arms now (the return arm was screen-only, the exact assertion class this row bans); console.spec's round trip stays the journey's spine, cited not duplicated. With this row Phase 4's body is closed: AR24, AR29-AR33, AR37-AR40 all done — the lane's remaining work is the Closing section (AR34 audit, AR35 dossier, AR36 founder gate list) plus AR17/AR18 in the theme lane (AR18 with loop-0825e). pnpm verify 288 files / 4313 tests, build, audit PASS, perf gate PASS; registers 5/5 + console 2/2 green. No rendered output changed, no baseline movement. |
+
+## Ledger — U-series (the one-year build plan, `docs/ONE-YEAR-BUILD-PLAN.md`)
+
+> **Opened 2026-09-02, founder-commissioned (O227).** The founder asked, in two sentences, for a
+> critical appraisal of "exactly what is needed to upgrade the whole platform into a perfectly
+> functional app" consolidated into a one-year build plan, and for "a complex multistage refactor
+> for next few months" inside it. `docs/ONE-YEAR-BUILD-PLAN.md` is the answer; this table is its
+> lock. Ids are `U#` so they cannot collide with the W lane (closed at W260), the AR lane (closed at
+> AR40) or the O session numbers. Four quarters: Q1 (Sep–Nov 2026) U1–U23 deployment readiness and
+> refactor stages R0–R2 · Q2 (Dec–Feb) U24–U43 refactor stages R3–R5 and durability · Q3 (Mar–May
+> 2027) U44–U56 the finder at scale and the installed app · Q4 (Jun–Aug 2027) U57–U68 evidence,
+> enforcement and the year's reckoning.
+>
+> **The premise, measured on the day it opened** (plan §1): 47 routes, 15 API routes (14 mock
+> fixtures), ≈67,875 lines of product and law with 45% of `src/` (127 of 280 modules) unreached
+> from any route, 21 hand-written stores, 13 `actions.ts` files, a 6,087-line `globals.css` beside
+> 1,654 Tailwind class attributes, 50,358 lines of vitest and 252 `goto`s over 16.7 minutes of
+> e2e, CI dead since run 482, no security headers, no error reporting, no durable write anywhere.
+> The refactor lane (R0–R5, U14–U34) is held to a ratchet that only goes down (plan §2.5), with
+> the AR15 baseline as the pixel witness and the assertion count as the floor.
+>
+> **Claiming.** Same protocol, same lock, same statuses as every other lane. `[P]` rows have no
+> dependency inside the lane and are claimable the day their quarter opens; a row with `Depends:`
+> is claimable only when every named row is `done`; no `available` row depends on a `blocked` one.
+> The nine `blocked` rows name a `FOUNDER DECISION` defined in the plan's §6 — a decision is
+> recorded in `src/design/founder-gates.ts`, never only here. The hourly loop fires against
+> `Stef-01/ADHD`, so U rows are claimed by founder-pointed sessions on this repository (or a loop
+> the founder binds here); O-numbers stay the session ids in the Home blockquotes and each names
+> the U rows it closed. **No unit may weaken a gate, a sweep, a census floor or the compliance
+> laws to pass** — a `→ verify:` clause is what a `done` row proves, and
+> `src/quality/one-year-plan.test.ts` holds this table to the plan in both directions.
+
+| Unit | Status | Session | Claimed (UTC) | SHA | Notes |
+|---|---|---|---|---|---|
+| U1 | done | founder-0902a | 2026-09-02T00:48Z | 6dd819f | [P] (S) Security headers and a report-only CSP. -> verify: `src/security/headers.test.ts` asserts every header and both config flags through `next.config.ts`, holds the policy to the tree in both directions (a third-party origin named only where the tree loads one, nothing the tree loads outside the policy) and proves by census that the only inline scripts in `app/` and `src/` are the inert JSON-LD blocks and the GA snippet (a planted executable inline script fails it); e2e `headers.spec.ts` reads the headers off real responses for `/`, `/finder`, `/console/signin`, `/faq` and a 404 and proves the report-only policy quiet in Chromium across the landing, the finder, sign-in, onboarding and the console shell, with a planted third-party script reported. No script hashes — O228 corrected the plan text (hydration payloads cannot be hashed statically; one hash disables `'unsafe-inline'`); `report-uri` moved to U4, enforcement stays U13. |
+| U2 | claimed | founder-0902a | 2026-09-02T01:32Z | — | [P] (S) Secure cookies, `.env.example`, and a boot-time posture assertion. -> verify: `src/lib/env.test.ts` scans the tree for `process.env.X` reads and asserts `.env.example` names every one and nothing else (both directions); a production-mode test proves the posture assertion throws on each forbidden combination; cookie flags asserted in `src/console/session.test.ts`. |
+| U3 | available | — | — | — | [P] (S) Error boundaries with linted copy. -> verify: a vitest renders each boundary with a thrown error and asserts the copy and the action; `src/compliance/public-surfaces.test.ts` census shows the new constants reached; e2e `error-boundary.spec.ts` triggers a render error on a fixture page and asserts the boundary, not a blank screen. |
+| U4 | available | — | — | — | [P] (M) The reporter seam, a health endpoint, and Web Vitals. -> verify: `src/ops/reporter.test.ts` proves an uncaught server error reaches the sink with route and SHA and that patient text (a finder request) never appears in a report payload — a planted request string must be absent; e2e asserts `/api/health` shape and that the console adapter logs a thrown error from a fixture route. |
+| U5 | available | — | — | — | [P] (S) Toolchain pins and CI parity. -> verify: `src/quality/ci-parity.test.ts` parses `ci.yml` and asserts its script set equals `verify`'s step list (both directions); `pnpm verify` green locally with the pinned versions. |
+| U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
+| U7 | available | — | — | — | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
+| U8 | available | — | — | — | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
+| U9 | available | — | — | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
+| U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
+| U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
+| U12 | available | — | — | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
+| U13 | available | — | — | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
+| U14 | available | — | — | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
+| U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
+| U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
+| U18 | available | — | — | — | (M) R1. The record registry. Depends: U17. -> verify: both-directions test between the registry, the adapters' declared record types and `DOMAIN_TABLES`; a planted unregistered record type fails; parse rejects a malformed JSONL line with a versioned error instead of a cast. |
+| U19 | available | — | — | — | (M) R1. The JSONL stores onto the adapter. Depends: U18. -> verify: the contract suite green on the file adapter; a crash-mid-write test (kill after temp write) leaves the previous file intact; `pnpm e2e:visual` three-run protocol agrees (the matching console reads the pinned-empty store); census: four store implementations → one adapter. |
+| U20 | available | — | — | — | (M) R2. The action registry. Depends: U19. -> verify: every console e2e green unchanged; `app/**/actions.ts` lines down ≥50% per the census; a planted action outside the registry fails the census. |
+| U21 | available | — | — | — | (S) R2. One fixture route. Depends: U20. -> verify: `seedFixtures` and `signInAndOnboard` unchanged and green; the unauthenticated `GET` returns 401; census: mock routes 14 → 1 (+ alias). |
+| U22 | available | — | — | — | (S) R2. The limiter and the origin check, once. Depends: U20. -> verify: `src/security/limits.test.ts` proves every registry action and mutating route declares a limit (both directions) and that a cross-origin POST is refused; the existing sign-in limit test passes through the new path. |
+| U23 | available | — | — | — | (M) R2. The auth seam. Depends: U22. -> verify: provider contract suite on the mock; a revoked session is refused on the next request (e2e); the production-refusal test; `interest/export` returns 200 for a granted staff session in a test and 403 otherwise. |
+| U24 | available | — | — | — | (L) R3. One style system. Depends: U14. -> verify: **pixel-identical** — the AR15 manifest hash unchanged across the whole 180-cell matrix (three-run protocol), or an `ACCEPTED_DIFFS` entry naming each moved cell and why; census: `globals.css` lines and rules down ≥50%, unused selectors 0; the contrast, focus and touch sweeps green. |
+| U25 | available | — | — | — | (M) R3. The client boundary to the leaves. Depends: U14. -> verify: census: client files ≤10; `perf:gate` shows every route budget lowered (the `stale-budget` verdict is the proof the ratchet moved) and the lightest route under 300 KB raw on the way to U54's 250; the AR15 hash unchanged; hydration warnings zero in the e2e console capture. |
+| U26 | available | — | — | — | (L) R3. Console page kinds. Depends: U20, U24. -> verify: the 31 routes still exist (the route census is the both-directions check); the 32 zero-states derived and equal to today's register; the AR15 console cells unchanged or attributed; census: `app/console` lines down ≥40%; keyboard and touch sweeps green. |
+| U27 | available | — | — | — | (M) R3. Story and public section primitives. Depends: U24. -> verify: the AR15 hash unchanged; census: `app/` non-test lines down ≥25% by this point; the honesty and accent-discipline sweeps green. |
+| U28 | available | — | — | — | (L) R4. One walk. Depends: U14. -> verify: the guarantee register equal before and after (pinned in the unit's first commit, re-derived in its last); `gate:accounting` green; e2e wall time ≤8 min on Chromium at `workers: 1`; every `measured()` floor still met. |
+| U29 | available | — | — | — | (M) R4. Census primitives. Depends: U28. -> verify: census: test lines down ≥20% at an equal or greater `expect(` count (both numbers in the ratchet); every test file still names the unit that wrote it in its header (a grep census). |
+| U30 | available | — | — | — | (M) R4. The module-reasons register, executed. Depends: U15, U16. -> verify: the reachability census shows 0 non-law modules unreached from `app/` outside `src/gated/`; `tsc` and the gated tests green; `knip` baseline lowered; the W rows whose code moved are listed in the ledger note so the gate that opens them knows where it lives. |
+| U31 | blocked | — | — | — | FOUNDER DECISION D-DORMANT (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) Delete the quarantined gated modules. Depends: U30. -> verify: `pnpm verify` green with `test:gated` removed; the census re-pinned; the ledger note lists the W rows whose code left this tree. |
+| U32 | available | — | — | — | [P] (M) R5. The ledger split. -> verify: row counts per lane equal before and after (pinned in the reader's test); every re-pointed test green with its assertions unedited; `BUILD-STATE.md` under 1,500 lines; `docs/DESIGN-QA.md` gone and its unit index derived from `docs/design-qa/`. |
+| U33 | available | — | — | — | (S) R5. Dependency reasons. Depends: U16. -> verify: both-directions test between `package.json` and the register; `knip` reports zero unused dependencies; `perf:gate` budgets lowered again if a package left the client graph. |
+| U34 | available | — | — | — | (M) R5. The closing simplicity audit. Depends: U30, U32, U33. -> verify: `src/quality/simplicity-audit.test.ts` re-derives each number in the document on every verify (the AR34 method — a stale number is a red build); every §2.5 target met or its miss recorded with the number and the reason. |
+| U35 | available | — | — | — | (L) Durability: the SQL adapter. Depends: U17. -> verify: the U17 contract suite green on the SQL adapter under PGlite; `schema-consistency` extended to assert every `DOMAIN_TABLES` entry has a policy per scope kind (both directions); the full e2e green with `ADHDME_STORE=pglite`. |
+| U36 | available | — | — | — | (M) Durability: isolation at the SQL layer. Depends: U35. -> verify: every W209 `practice`-scoped function refuses a cross-practice read at the SQL layer; the probe fails for each removed policy; results recorded in `docs/SECURITY-REVIEW-Y1U.md` (name outside the plan-canon regex). |
+| U37 | blocked | — | — | — | FOUNDER DECISION D-AUTH-PROVIDER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) The real auth provider. Depends: U23. -> verify: the provider contract suite green on the real provider against its sandbox; sign-in, revocation and the staff grant proven end-to-end; no credential in the tree (`.env.example` names the vars, the posture assertion refuses their absence in production). |
+| U38 | blocked | — | — | — | FOUNDER DECISION D-PRODUCTION-STORE (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) Connect the production database. Depends: U35, U36. -> verify: `/api/health` reports the SQL adapter; a console write survives a redeploy (recorded by SHA pair in the ledger note). |
+| U39 | available | — | — | — | (M) Consent records and PRIV-2 closed. Depends: U19. -> verify: both-directions test between record classes and the privacy operations that know them; a planted new record class fails until export/delete/retention handle it; the consent text version is the hash of the rendered notice, asserted against the page. |
+| U40 | available | — | — | — | (S) The interest register's lifecycle. Depends: U39. -> verify: retention removes a planted aged record and records the deletion; erasure by token e2e; the notice present on the form route in the public-surfaces census. |
+| U41 | available | — | — | — | (M) A hash-chained audit trail. Depends: U17. -> verify: a planted edit to an earlier entry fails verification; the console-honesty sweep green on the new sentence; the chain survives the file and SQL adapters alike (contract suite). |
+| U42 | available | — | — | — | [P] (S) The console-honesty acceptances, re-read. -> verify: no acceptance past its date in the console-honesty stale-check; `AUDIT-AR`'s derived "console accepted findings" count updated in the same commit. |
+| U43 | blocked | — | — | — | FOUNDER DECISION D-PRIVACY-COUNSEL (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The privacy policy leaves draft. Depends: U39. -> verify: the public-surfaces census sees the new copy; the consent text version (U39) re-hashed and every stored consent marked as pre-dating it; `founder-gates.ts` decision recorded. |
+| U44 | available | — | — | — | [P] (L) A ranking that can say no (§2.8 Q-B). -> verify: a property test over 500 generated profiles and 2,000 generated requests asserting (a) every top-tier result meets every hard ask, (b) every partial-tier result names each unmet ask, (c) an empty top tier renders the linted empty state and never a clinician, and (d) ranking stays under 50 ms at 500 profiles; the explainability-floor test unchanged; the finder e2e green with the two-GP real roster and with examples on. |
+| U45 | available | — | — | — | [P] (M) A real gazetteer. -> verify: the finder resolves every roster suburb, every capital, a misspelt suburb and a postcode (unit tests over a pinned sample); the "not covered" state still renders for a place with no roster within range; the data file's licence test (its header names the source and the licence) is both-directions with the runbook. |
+| U46 | available | — | — | — | [P] (S) Mic locales from the roster. -> verify: both-directions test between the offered locales and the active roster's languages for both rosters; the failure-mode register's F1 row marked resolved with the unit id; the language buttons announce a locale change (U9's live region). |
+| U47 | available | — | — | — | (M) The example roster, persisted and scaled. Depends: U44. -> verify: the counts-law tests green with the scale roster on; the disclosure visible on every stage that shows a generated profile (e2e); a generated profile's `/go/` returns 404; the AR15 finder cells unchanged with examples in their default state. |
+| U48 | available | — | — | — | [P] (M) An offline app shell. -> verify: an e2e that loads `/finder` online, goes offline (`context.setOffline(true)`), reloads and reaches the results stage; a console route offline shows the browser's own failure, not a cached page; a planted fetch of `/api/mock/console` through the worker is refused (mutation probe); `next build` emits the worker with the current SHA in its header. |
+| U49 | available | — | — | — | (M) Installed-mode chrome. Depends: U8. -> verify: AR15 captures gain an *installed* variant for the finder stages (an `ACCEPTED_DIFFS` entry naming the new cells); the touch-floor sweep green in installed mode; the back control walks U8's stages in the e2e with `isMobile` + the standalone media emulated. |
+| U50 | available | — | — | — | (M) The iOS standalone speech branch. Depends: U11. -> verify: the WebKit project runs the voice spec on the fake seam for both branches; the failure-mode register's B2 and A3 rows point at the tests; the copy on the typed-first path passes the linter; real-device confirmation stays U51. |
+| U51 | blocked | — | — | — | FOUNDER DECISION D-IOS-DEVICE (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) Real-device verification. Depends: U50. -> verify: the register's device row filled with date, device and iOS version; any failure found becomes a U row or a W row, never an edit to the register alone. |
+| U52 | available | — | — | — | (M) The finder's stages in every sweep. Depends: U9, U28. -> verify: the guarantee register (U28) gains one family per stage per sweep and shows them asserted; axe zero violations on every stage; zero skipped tests in the suite; `gate:accounting` green. |
+| U53 | available | — | — | — | [P] (M) Fonts and portraits shipped properly. -> verify: an `ACCEPTED_DIFFS` entry for the sub-pixel metric shift if the three-run protocol shows one (the font is the same; the loader is not); no font request to a third-party origin in the e2e network capture; every portrait under 120 KB at its largest rendered size; the `image-size` register empty of past-due acceptances. |
+| U54 | available | — | — | — | (M) The perf gate on real numbers. Depends: U25, U53. -> verify: the lightest route under 250 KB raw and 90 KB compressed; the fixture fails the gate and is removed in the same commit's second step (the AR9 mutation rule); every budget verdict `within` or `stale-budget`, none `over`. |
+| U55 | available | — | — | — | (L) The engine as a package. Depends: U44. -> verify: an import-boundary test (`app/` may import `@adhdme/core` and nothing under `packages/core/src`; the package imports nothing from `app/`); `pnpm verify` green with the workspace; the census unchanged or lower (moving files is not growth); the finder e2e green. |
+| U56 | available | — | — | — | (M) The clarifier and tie honesty at scale. Depends: U47. -> verify: the numbers re-derived by a test on the pinned scale roster (a stale number is red); the clarifier's question set unchanged or reduced; no new question that could read as a symptom prompt (the linter and a review against the TGA boundary register). |
+| U57 | available | — | — | — | (L) The labelled-evaluation harness. Depends: U44. -> verify: the report re-derived on every verify from the pinned request set (a stale report is red); every request passes the linter and the injection defence; the label file's header carries the provisional marker and a test asserts it until D-EVAL-PANEL replaces it. |
+| U58 | blocked | — | — | — | FOUNDER DECISION D-EVAL-PANEL (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) Labels from a panel. Depends: U57. -> verify: the harness runs unchanged on the panel labels; inter-rater agreement reported; the provisional-marker test inverted (its presence is now red). |
+| U59 | available | — | — | — | [P] (S) The honesty-pair mutation probe. -> verify: both plants fail; `AUDIT-AR`'s "enforced rules pinned without a probe" count drops by the rules the probe covers, in the same commit. |
+| U60 | available | — | — | — | (M) Three mechanizable detectors. Depends: U59. -> verify: the `AUDIT-AR` enforced count rises by three with the unenforced count falling by three (both derived); each detector's probe fails on its plant; the AR15 hash unchanged. |
+| U61 | available | — | — | — | (M) The remaining probes. Depends: U60. -> verify: zero enforced rules without a probe in `AUDIT-AR`; the reduced-motion note's fix visible in the register diff; the four probes fail on their plants. |
+| U62 | available | — | — | — | [P] (M) The compliance linter's reach. -> verify: the reached-constants census both directions against every `_COPY` export; a planted clinical claim composed inline on a public route is red; `/demo` in the linted-surfaces list; the vocabulary list's every term carries a source. |
+| U63 | available | — | — | — | (M) Registers into tests, and a threat model. Depends: U62. -> verify: a test walks the threat model's mitigation table and asserts each named test exists and is not skipped; the axe list census; the two register proofs fail on their plants. |
+| U64 | available | — | — | — | [P] (S) The sibling divergence census. -> verify: the script runs against a pinned fixture pair in the tests; the report format pinned; the runbook names how to run it before any founder-directed port. |
+| U65 | blocked | — | — | — | FOUNDER DECISION D-FINDER-PUBLIC (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) Let crawlers in. Depends: U7, U43. -> verify: the `finder-public-posture` gate flipped with its source; the robots census inverted; the AR15 finder cells unchanged. |
+| U66 | blocked | — | — | — | FOUNDER DECISION D-NATIVE (docs/ONE-YEAR-BUILD-PLAN.md §6): (L) A native wrapper. Depends: U48, U55. -> verify: the wrapper passes the e2e suite through its webview on the WebKit project; store metadata carries no claim the linter would refuse; no native surface exists that the web app lacks. |
+| U67 | available | — | — | — | (M) The year's reckoning. Depends: U34, U62. -> verify: `src/quality/one-year-appraisal.test.ts` re-derives every number in the document (the AR34 method); the `PLAN.md` row present; the U ledger's counts equal the document's. |
+| U68 | available | — | — | — | (M) Weight provenance and a sensitivity analysis. Depends: U57. -> verify: the provenance register both directions with `needs.ts`; the sensitivity table re-derived by a test on the pinned set; no weight value changed by this unit (a diff census over `needs.ts`). |

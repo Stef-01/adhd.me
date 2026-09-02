@@ -15,21 +15,24 @@ would produce two answers to "is AR7 done" with no rule for which wins. One fact
 
 ## What is being built right now
 
-Two active lanes. Both are claimed from `BUILD-STATE.md` under the same protocol and the same lock.
+One active lane, claimed from `BUILD-STATE.md` under the same protocol and the same lock as every
+lane before it. **Founder-directed 2026-09-01/02 (O227):** a critical appraisal of "exactly what is
+needed to upgrade the whole platform into a perfectly functional app", consolidated into one
+one-year build plan, with "a complex multistage refactor for next few months" inside it.
 
 | Lane | Units | Spec lives in | What it is for |
 |---|---|---|---|
-| **Matching year plan** | `O#` (current: **O184**) | [`MATCHING-YEAR-PLAN.md`](MATCHING-YEAR-PLAN.md) | The finder: what the reader is heard saying, and how well it is answered. Q1–Q4 plus the continuous lanes (UI refinement & motion, allocation, refactoring, standing debts, explaining the fit). |
-| **Q-M — the arithmetic, made honest** | `M1`–`M12` | [`MATCHING-YEAR-PLAN.md`](MATCHING-YEAR-PLAN.md) §Q-M | A three-month quarter running alongside Q1, opened by the O182 appraisal. Q1 makes the reader HEARD; Q-M makes what is heard COUNT correctly. |
-| **AR — aesthetic review & working-truth** | `AR1`–`AR36` | [`AESTHETIC-REVIEW-PLAN.md`](AESTHETIC-REVIEW-PLAN.md) | The system that reviews the design, and the proof the site actually works. Four phases: the taste law becomes a register · a check that cannot fail is not a check · visual truth · "it is all working". |
+| **U — the one-year build plan** | `U1`–`U68` | [`ONE-YEAR-BUILD-PLAN.md`](ONE-YEAR-BUILD-PLAN.md) | Four quarters, September 2026 to August 2027. Q1 (U1–U23): deployment readiness and the refactor's foundation, stages R0–R2. Q2 (U24–U43): the refactor's second half, R3–R5, and durability — a real store, isolation at the SQL layer, consent and retention. Q3 (U44–U56): the finder at scale and the installed app. Q4 (U57–U68): matching evidence, enforcement and the year's reckoning. The refactor lane (R0–R5, U14–U34) runs on a measured ratchet that only goes down (§2.5). |
 
-**Where the findings behind them come from.** [`MATCHING-APPRAISAL-O182.md`](MATCHING-APPRAISAL-O182.md)
-holds F1–F10 and the founder gate list (G-A1…G-A6); Q-M's items cite those F-numbers, so a unit's
-"why" is one hop away rather than restated.
+**Where the findings behind it come from.** The plan's own §1 (the premise, measured on the day it
+opened) and §2 (the appraisal, layer by layer) — each finding is a location, a severity and the
+unit that answers it, so a unit's "why" is one hop away rather than restated. §8 says where every
+open item of the three plans it retired went, so closing them lost nothing.
 
 **How to choose the next unit.** Follow `BUILD-STATE.md`'s claim protocol — it already orders by
 in-progress, then reclaimable, then lowest-numbered available, and `[P]` units are claimable out of
-order. Alternate lanes rather than draining one.
+order the day their quarter opens. A row with `Depends:` waits for every named row to be `done`;
+the nine `blocked` rows wait on a founder decision the plan's §6 defines.
 
 ---
 
@@ -42,14 +45,15 @@ accumulated without anybody deciding to have eight.
 
 | Document | Status | Why |
 |---|---|---|
-| `MATCHING-YEAR-PLAN.md` | **ACTIVE** | The live backlog: O-series, Q-M (M1–M12), and the continuous lanes. |
-| `AESTHETIC-REVIEW-PLAN.md` | **ACTIVE** | The live AR backlog, AR1–AR36. |
+| `ONE-YEAR-BUILD-PLAN.md` | **ACTIVE** | The live backlog: the U lane, U1–U68, September 2026 to August 2027, with the multistage refactor R0–R5 inside it. Its §8 names where every open item of the three plans below went. |
+| `MATCHING-YEAR-PLAN.md` | **REFERENCE** | Executed on the ledger through O226 (Q1 reach, Q-M M1–M10, the continuous lanes). Its remaining numbered items and standing debts are U rows, gates or recorded refusals in `ONE-YEAR-BUILD-PLAN.md` §8; M11/M12 stay founder-gated where the ledger left them. Kept because the O-series' reasoning cites it. |
+| `AESTHETIC-REVIEW-PLAN.md` | **CLOSED** | AR1–AR40, done on the ledger. `AR-DOSSIER.md` §3's priced gaps are U59–U61; the accepted-diff chain and the three-run protocol continue as the U lane's pixel witness. |
 | `MATCHING-APPRAISAL-O182.md` | **REFERENCE** | Findings F1–F10 and the founder gates. Not a schedule — Q-M schedules it. |
 | `MATCHING-APPRAISAL.md` | **REFERENCE** | The earlier appraisal whose F1–F10 the overhaul executed. Kept because the O-series' reasoning cites it. |
 | `MATCHING-PLAN.md` | **REFERENCE** | Architecture options for the finder and the clinician interview spec. It prices the ways of matching and names the road out; it holds no units and is consulted, not executed. |
 | `FIVE-YEAR-PLAN.md` | **CLOSED** | W1–W260, closed at Year 5 by W260. Kept whole: its rows are the reasoning behind most of the engine, and `plan-ledger`, `year-six-horizon` and the credentials tests all read it. Do NOT reopen it — the Y6 horizon section says what succeeds it. |
 | `MATCHING-OVERHAUL-PLAN.md` | **CLOSED** | O1–O8, executed and merged. The schedule that repaired `MATCHING-APPRAISAL.md`'s findings. |
-| `STANDALONE-APP-PLAN.md` | **ACTIVE** | The app-conversion appraisal and phased plan (O220 lane): Phase 1a shipped with it (installable PWA — manifest + generated icons); 1b/1c and Phase 2 are claimable units; Phase 3 (native) is founder-gated G-APP-1..3 and blocked on sweep parity. |
+| `STANDALONE-APP-PLAN.md` | **REFERENCE** | The app-conversion appraisal (O220 lane). Phase 1a shipped (O220/O221/O225); 1b → U49/U50, 1c → U48, Phase 2 → U55, Phase 3 → U66 under D-NATIVE with G-APP-1..3 kept verbatim in `ONE-YEAR-BUILD-PLAN.md` §6. Its §4 must-not-lose list binds every unit that touches the finder. |
 | `SYNTHETIC-ROSTER-PLAN.md` | **CLOSED** | Executed same-day as O217, collapsed from its five-unit breakdown once the founder answered all three gates (decision `synthetic-roster-tickbox`, which also overrode its recommended eight to twenty). Kept because the non-negotiables in its §3 are the reasoning behind the synthetic-roster census. |
 | `LAUNCH-CHECKLIST.md` | **CLOSED** | Executed at O15, 20 items, one a recorded refusal. |
 
@@ -69,9 +73,11 @@ amount of tidying afterwards.
 
 **Prefer a lane inside an existing plan to a new document.** Q-M is a quarter inside the year plan
 rather than `MATCHING-ARITHMETIC-PLAN.md`, and that was the right call — it kept the finder's work
-in one place where the continuous lanes could see it. The AR series earns its own file because it
-governs a different thing entirely (the review system, not the product), and even that is reachable
-from here in one hop.
+in one place where the continuous lanes could see it. The AR series earned its own file because it
+governed a different thing entirely (the review system, not the product), and even that was
+reachable from here in one hop. O227 applied the rule at the next scale up: the refactor the founder
+asked for is a lane (R0–R5) inside `ONE-YEAR-BUILD-PLAN.md`, not a `REFACTOR-PLAN.md`, and the three
+plans it absorbed went to REFERENCE or CLOSED in the same commit rather than staying ACTIVE beside it.
 
 **When a plan closes, mark it CLOSED here and leave the document alone.** This tree does not rewrite
 its past: a closed plan's rows are the reasoning behind the code that exists, and editing them to

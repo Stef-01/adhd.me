@@ -3866,3 +3866,33 @@ collapses to the old values wherever insets are zero — proven by the gate's vi
 passing unchanged against the standing baseline, which is this unit's capture: the change is
 DESIGNED to be invisible in a browser tab and only exists on device. The plan's other 1b half —
 reproducing the MIC B2 standalone-flag failure — stays owed to the plan and is not claimed here.
+
+## O226 — the results screen finds its rhythm, and the switch moves to the door (2026-09-01)
+
+A production iPhone capture went to review against the Gestalt literature (Full Clarity and
+Uxcel's proximity/common-region write-ups, Toptal's design-principles overview, O'Donnell on
+grouping) and the diagnosis was consistent: the screen had no harmony because it had no grouping
+logic — five bordered regions in the first viewport each announcing itself (head hairline, place
+field, refine box, demo-tools box, list head hairline), an amber "Change what you said" reading
+as the page's loudest element over a task control, and the example-profile switch sitting between
+the reader and their results — configuration interleaved with outcome, a proximity violation at
+the screen's centre.
+
+The fixes follow the sources rather than taste-by-fiat. **Fewer regions:** the results head and
+the refine details lose their borders and boxes — whitespace does the grouping (proximity beats
+enclosure); the one hairline left belongs to the list head, where the content actually changes
+kind. **Quieter controls:** the edit action drops amber for ink + underline — a link-shaped verb,
+not a second brand moment (the later `.results-head` cascade twin that kept re-ambering it is
+fixed too); the place input sits on paper so field and card read as one surface. **The count
+moves to where its noun is:** "Showing 5 of 22" leaves the place field for a quiet tabular
+"5 of 22" beside the **Matches** heading. **Concentric geometry:** row thumbnails at 6px inside
+18px cards (outer − padding), with a proper `.clinician-monogram-thumb` block so monogram and
+portrait share one shape. **And the founder's amendment lands:** the example roster ships ON for
+this testing deployment, and the switch folds into a `details` ("Testing options") under the
+voice entry on the welcome screen — configuration at the door, not between reader and results.
+The founder-gate register carries the amendment verbatim; `e2e/support/real-roster.ts` is how a
+real-roster ranking law switches the examples off the way a person would, through that door.
+
+**Captures:** `qa/o226-welcome-390.png`, `qa/o226-welcome-tools-open-390.png`,
+`qa/o226-results-390.png`, `qa/o226-results-polish-{390,1280}.png`,
+`qa/o226-welcome-polish-390.png`.

@@ -35,8 +35,13 @@ const QUARTER = 13;
  *
  * WHAT WOULD BE A WEAKENING, AND IS NOT DONE: excluding a W-row, or excluding a lane because it
  * happens to be red. The W-filter below is unchanged, and nothing here can hide a five-year unit.
+ *
+ * The U-series (`docs/ONE-YEAR-BUILD-PLAN.md`, opened 2026-09-02 by O227) is the same case one
+ * plan later: a year-long lane whose 68 rows are `available` or `blocked` by design on the day they
+ * were written, priced in that plan's own §6 rather than in this plan's §8. Same narrowing, same
+ * reason, and the same both-directions guard below so the exclusion cannot go dead unnoticed.
  */
-const isOtherPlansLane = (id: string): boolean => /^AR\d+$/.test(id);
+const isOtherPlansLane = (id: string): boolean => /^AR\d+$/.test(id) || /^U\d+$/.test(id);
 
 const rowsWithStatus = (status: string): string[] =>
   LEDGER.split("\n")
@@ -61,16 +66,22 @@ describe("W260 the horizon's figures come from the ledger", () => {
     expect(open.filter((id) => id !== "W260"), `still buildable: ${open.join(", ")}`).toEqual([]);
   });
 
-  it("excludes the AR lane on purpose, and the exclusion is not silently doing nothing", () => {
-    // A filter nobody checks is how a sweep starts measuring the wrong set. Both directions:
-    // the lane must really be there (or this exclusion is dead code pretending to be a decision),
-    // and it must really be excluded (or the scope claim above is false).
-    const arRows = LEDGER.split("\n").filter((line) => /^\| AR\d+ \|/.test(line));
-    expect(arRows.length, "the AR lane is gone — delete this exclusion rather than leaving it").toBeGreaterThan(0);
-    expect(
-      [...rowsWithStatus("available"), ...rowsWithStatus("claimed")].filter((id) => /^AR\d+$/.test(id)),
-      "an AR row reached a five-year-plan count",
-    ).toEqual([]);
+  it("excludes the AR and U lanes on purpose, and neither exclusion is silently doing nothing", () => {
+    // A filter nobody checks is how a sweep starts measuring the wrong set. Both directions, per
+    // lane: the lane must really be there (or this exclusion is dead code pretending to be a
+    // decision), and it must really be excluded (or the scope claim above is false).
+    for (const [lane, rowPattern, idPattern] of [
+      ["AR", /^\| AR\d+ \|/, /^AR\d+$/],
+      ["U", /^\| U\d+ \|/, /^U\d+$/],
+    ] as const) {
+      const rows = LEDGER.split("\n").filter((line) => rowPattern.test(line));
+      expect(rows.length, `the ${lane} lane is gone — delete this exclusion rather than leaving it`).toBeGreaterThan(0);
+      expect(
+        [...rowsWithStatus("available"), ...rowsWithStatus("claimed"), ...rowsWithStatus("blocked")]
+          .filter((id) => idPattern.test(id)),
+        `a ${lane} row reached a five-year-plan count`,
+      ).toEqual([]);
+    }
   });
 
   it("shows the renewed rule declining to expand, by its own arithmetic", () => {
