@@ -650,7 +650,10 @@ every R-lane unit re-runs `scripts/size-census.mts` and lowers the floors it mov
   end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake
   recogniser and the fixed clock.
 
-- **U11** [P] (M) — WebKit in the suite.
+- **U11** (M) — **BLOCKED D-WEBKIT-RUNNER.** WebKit in the suite.
+  Blocked 2026-09-02 (founder-0902a), not from day one: the build environment cannot fetch the
+  engine (its network policy refuses both Playwright CDNs) and pre-provisions Chromium only, so
+  the unit's own verification cannot run where the units are built. The design stands as written.
   A `webkit` Playwright project (Desktop Safari and iPhone 15 device descriptors) over a
   named subset: the finder journey, the voice spec with the fake recogniser, mobile-fit, the
   a11y sweep and the visual matrix at the mobile width; `gate:accounting` taught to account for
@@ -1025,7 +1028,8 @@ every R-lane unit re-runs `scripts/size-census.mts` and lowers the floors it mov
   entry naming the new cells); the touch-floor sweep green in installed mode; the back control
   walks U8's stages in the e2e with `isMobile` + the standalone media emulated.
 
-- **U50** (M) — The iOS standalone speech branch. Depends: U11.
+- **U50** (M) — **BLOCKED D-WEBKIT-RUNNER.** The iOS standalone speech branch. Depends: U11.
+  Blocked through U11 (2026-09-02): its own e2e runs in WebKit.
   MIC failure modes B2 (no recognition in a home-screen app) and A3 (permission state after
   install) handled in code rather than in a debug string (`speech.ts:218-219`): standalone iOS
   offers the typed path first with the honest sentence from the failure-mode register, and the
@@ -1221,6 +1225,11 @@ reaches one of those grounds stops at the same gate and cites the W row.
 - **U65** — D-FINDER-PUBLIC: let crawlers into the finder.
 - **U66** — D-NATIVE: a native wrapper (G-APP-1..3).
 
+One more was laid blocked later, by the session that reached it rather than by the appraisal:
+
+- **U11** — D-WEBKIT-RUNNER (2026-09-02): WebKit in the suite; the build environment cannot fetch or run the engine.
+- **U50** — D-WEBKIT-RUNNER, through U11: the iOS standalone speech branch is proved in WebKit.
+
 ## 6. Gates and founder decisions
 
 The inherited gates keep the numbers and the meaning `docs/FIVE-YEAR-PLAN.md` §4 gave them; they
@@ -1240,6 +1249,7 @@ test — never only here.
 - **G-APP-1** — does the finder go to public stores at all, given the testing posture and the two deployments.
 - **G-APP-2** — wrapper (Capacitor over the shipped web app) versus a rewrite (Expo/React Native); the wrapper is the default and a rewrite needs a named requirement the wrapper fails.
 - **G-APP-3** — sweep parity: no native patient surface before every honesty, compliance, a11y and touch sweep passes inside the wrapper.
+- **D-WEBKIT-RUNNER** — give the suite a machine that can run WebKit: either allow the build environment to fetch the engine (its network policy refuses `cdn.playwright.dev` and `playwright.download.prss.microsoft.com` with 403, and `/opt/pw-browsers` holds Chromium only) and install its system libraries, or pre-provision WebKit there, or name another machine where `pnpm e2e --project=webkit` is run and recorded. Opens U11 (and, through it, U50).
 - **D-CI-BILLING** — resolve the account-level Actions billing that has failed every run since 482 (2026-08-21, `total_ms: 0`), or choose another runner. Opens U6.
 - **D-DORMANT** — will this deployment carry the W lane's gated product code (pathways, PMS interop, pilots, the directory, MBS, collateral, the verticals), or is `Stef-01/ADHD` its only home? Quarantine (U30) happens either way; deletion (U31) only on this decision.
 - **D-AUTH-PROVIDER** — which identity provider stands behind `src/auth/provider.ts`. Constraints: Australian data residency for the identity store; passkeys as the primary factor; a magic-link fallback; no social login on a health surface; a sandbox the contract suite can run against. Opens U37.
