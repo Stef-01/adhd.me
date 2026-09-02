@@ -6240,7 +6240,7 @@ select { caret-color: var(--route-strong); }
   bottom: 8px;
   left: 0;
   height: 2px;
-  background: var(--accent);
+  background: currentColor;
   transform: scaleX(0);
   transform-origin: 0 50%;
   transition: transform var(--dur-move) var(--ease-ui);
@@ -6252,9 +6252,9 @@ select { caret-color: var(--route-strong); }
   padding: 0 20px;
   border: 0;
   border-radius: 999px;
-  color: var(--on-accent);
-  background: var(--accent);
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--on-ground);
+  background: var(--route-strong);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--route-strong) 20%, transparent);
   font-size: 0.8125rem;
   font-weight: 680;
   letter-spacing: 0;
@@ -6277,9 +6277,9 @@ select { caret-color: var(--route-strong); }
   .story-nav-link:hover::after { transform: scaleX(1); }
   .site-nav-link:hover,
   .story-demo-link:hover {
-    color: var(--on-accent);
-    background: var(--hero-orange-deep);
-    box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 26%, transparent);
+    color: var(--on-ground);
+    background: var(--route);
+    box-shadow: 0 12px 26px color-mix(in srgb, var(--route-strong) 26%, transparent);
     transform: translateY(-1px);
   }
 }
@@ -6358,7 +6358,7 @@ select { caret-color: var(--route-strong); }
   white-space: normal;
 }
 
-.story-claim::after { display: none; }
+.story-claim::after { content: none; display: none; }
 
 .story-hero-sub {
   max-width: 32ch;
@@ -6448,8 +6448,9 @@ select { caret-color: var(--route-strong); }
 }
 
 .story-intent-route li:first-child .story-route-stop {
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--on-ground);
+  color: var(--route-strong);
+  background: var(--on-ground);
 }
 
 .story-portrait {
@@ -6579,7 +6580,7 @@ select { caret-color: var(--route-strong); }
   position: absolute;
   top: 31px;
   left: 0;
-  color: var(--accent);
+  color: var(--route-strong);
   font-size: 0.75rem;
   font-weight: 760;
   font-variant-numeric: tabular-nums;
@@ -6612,21 +6613,21 @@ select { caret-color: var(--route-strong); }
 .story-join .story-heading { color: var(--on-ground); }
 .story-join-copy { color: color-mix(in srgb, var(--on-ground) 74%, var(--route)); }
 .story-join-link {
-  border-color: color-mix(in srgb, var(--on-ground) 52%, transparent);
-  color: var(--on-accent);
-  background: var(--accent);
+  border-color: var(--on-ground);
+  color: var(--route-strong);
+  background: var(--on-ground);
 }
 
 @media (hover: hover) {
   .story-join-link:hover {
-    color: var(--on-accent);
-    background: var(--hero-orange-deep);
+    color: var(--route-strong);
+    background: var(--route-soft);
   }
 }
 
 .story-join-link:focus-visible {
-  color: var(--on-accent);
-  background: var(--hero-orange-deep);
+  color: var(--route-strong);
+  background: var(--route-soft);
 }
 
 .story-approach {
@@ -6837,13 +6838,21 @@ select { caret-color: var(--route-strong); }
 .cv2-progress > div { color: var(--muted); }
 .cv2-progress button::after { border-color: var(--route-line); background: var(--paper); }
 .cv2-progress button.is-complete::after,
-.cv2-progress button.is-current::after { border-color: var(--accent); background: var(--accent); }
+.cv2-progress button.is-current::after { border-color: var(--route-strong); background: var(--route-strong); }
 .cv2-intro h1,
 .cv2-learning-body h2 {
   color: var(--ink);
   font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 610;
   letter-spacing: -0.035em;
+}
+/* O229: the learning card sits on the route ground, so its heading keeps the card's light
+   foreground (the shared rule above had put ink on blue); and at phone width Inter's wider set
+   wraps the longest guideline title to five lines where Newsreader took four, which was the
+   ~40px that pushed the briefing stage under the one-screen pin. */
+.cv2-learning-body h2 { color: var(--on-ground); }
+@media (max-width: 640px) {
+  .cv2-learning-body h2 { font-size: 2rem; }
 }
 .cv2-eyebrow { color: var(--muted); text-transform: none; letter-spacing: 0; font-style: italic; }
 .cv2-condition-panel,
@@ -7017,7 +7026,7 @@ select { caret-color: var(--route-strong); }
   .site-nav-wordmark,
   .story-wordmark { font-size: 1.12rem; }
   .site-nav-link,
-  .story-demo-link { min-height: 42px; padding-inline: 16px; }
+  .story-demo-link { min-height: 44px; padding-inline: 16px; }
   .story-wrap { width: calc(100% - 36px); }
   .story-hero-grid { padding-block: 58px 72px; }
   .story-hero-copy h1 { font-size: clamp(2.85rem, 14vw, 4rem); }
@@ -7439,6 +7448,39 @@ select { caret-color: var(--route-strong); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* O229: the console's neutrals are the site's neutrals with the blue cast mixed out — a touch of
+   the accent pulls each one back to hue-free (channel spread under the state sweeps' 24), so a
+   heading, a caption or a card border in the console reads as no colour at all, and the only
+   colour left on a console screen is a state the copy names. The mixes are made one level up,
+   on the shell, so each reads the site token rather than itself; the Tailwind stone scale is
+   resolved at :root, so it is re-declared here or the scoped neutrals would never reach it. The
+   shell also sets its own text colour: what a descendant inherits is the body's computed ink, not
+   the token, so without this line every unstyled paragraph (and every currentColor border) on a
+   console screen would still carry the site's blue-cast ink. */
+.console-app {
+  --console-ink: color-mix(in srgb, var(--ink) 92%, var(--accent));
+  --console-muted: color-mix(in srgb, var(--muted) 90%, var(--accent));
+  --console-faint: color-mix(in srgb, var(--faint) 90%, var(--accent));
+  --console-line: color-mix(in srgb, var(--line) 94%, var(--accent));
+}
+.console-main {
+  color: var(--console-ink);
+  --ink: var(--console-ink);
+  --muted: var(--console-muted);
+  --faint: var(--console-faint);
+  --line: var(--console-line);
+  --color-stone-50: var(--paper);
+  --color-stone-100: var(--stone);
+  --color-stone-200: var(--line);
+  --color-stone-300: color-mix(in srgb, var(--line) 72%, var(--muted));
+  --color-stone-400: var(--faint);
+  --color-stone-500: var(--muted);
+  --color-stone-600: color-mix(in srgb, var(--muted) 82%, var(--ink));
+  --color-stone-700: color-mix(in srgb, var(--ink) 78%, var(--muted));
+  --color-stone-800: color-mix(in srgb, var(--ink) 90%, var(--muted));
+  --color-stone-900: var(--ink);
+}
+
 .console-main h1 {
   color: var(--ink);
   font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
@@ -7453,7 +7495,7 @@ select { caret-color: var(--route-strong); }
 .console-main .bg-white { background-color: var(--surface-raised); }
 .console-main .border-stone-200.bg-white,
 .console-main .border-stone-300.bg-white {
-  border-color: var(--route-line);
+  border-color: var(--line);
   box-shadow: 0 18px 42px color-mix(in srgb, var(--hero-dusk) 6%, transparent);
 }
 
@@ -7466,7 +7508,7 @@ select { caret-color: var(--route-strong); }
   font-weight: 620;
   text-align: left;
 }
-.console-main tbody tr { border-top-color: var(--route-line); }
+.console-main tbody tr { border-top-color: var(--line); }
 
 .console-field { display: flex; flex-direction: column; gap: 7px; }
 .console-field-label { color: var(--ink); font-size: 0.8125rem; font-weight: 620; }
@@ -7506,7 +7548,7 @@ select { caret-color: var(--route-strong); }
 }
 
 @media (hover: hover) {
-  .console-primary-button:hover { background: var(--accent-mid); transform: translateY(-1px); }
+  .console-primary-button:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); transform: translateY(-1px); }
 }
 
 .console-error-note {
