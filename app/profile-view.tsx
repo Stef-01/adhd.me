@@ -227,7 +227,7 @@ export function ProfileView() {
           <div className="me-segments me-segments-3" role="group" aria-label="Notes during the consult">
             {CONSULT_RECORDING_CHOICES.map((choice: ConsultRecordingChoice) => {
               const on = filters.consultRecording === choice;
-              const label = choice === "any" ? "Any" : choice === "ai-scribe" ? "AI scribe" : "No AI recording";
+              const label = choice === "any" ? "Any" : choice === "ai-scribe" ? "AI scribe" : "No AI";
               return (
                 <button
                   key={choice}

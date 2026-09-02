@@ -99,12 +99,15 @@ export function NearbyMap({
     if (!host.current || map.current) return;
     const instance = L.map(host.current, {
       zoomControl: false,
-      attributionControl: true,
+      // The attribution is added below without Leaflet's own "Leaflet" prefix: the licence needs
+      // OpenStreetMap credited, and one credit reads cleaner than two.
+      attributionControl: false,
       scrollWheelZoom: false,
       zoomAnimation: !reducedMotion,
       fadeAnimation: !reducedMotion,
       markerZoomAnimation: !reducedMotion,
     });
+    L.control.attribution({ prefix: false }).addTo(instance);
     L.tileLayer(TILE_URL, { attribution: TILE_ATTRIBUTION, maxZoom: 18 }).addTo(instance);
     instance.on("zoomend", () => setZoom(instance.getZoom()));
     map.current = instance;

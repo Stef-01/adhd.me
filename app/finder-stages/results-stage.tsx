@@ -161,7 +161,7 @@ export function ResultsStage({
 
         {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46): the headline renders only
             when a reading earned it; otherwise the summary card above already shows the words. */}
-        {(requestHeadline !== requestSummary || quality === "informed") && (
+        {requestHeadline !== requestSummary && (
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
