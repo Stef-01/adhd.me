@@ -55,11 +55,9 @@ import { probeVerdict } from "./probe";
  * legitimately filling `/` to the cap broke the instrument rather than the product. The walk
  * below is the green case's `richestReachable`: the first route with room to fill. */
 async function bareReachable(page: Page): Promise<{ route: string; baseline: string[] }> {
-  for (const route of PUBLIC_ROUTES) {
-    const baseline = await meaningsOnFreshLoad(page, route);
-    if (baseline.length < MEANINGS_CAP) return { route, baseline };
-  }
-  throw new Error(
+  return firstRouteWhere(
+    page,
+    (baseline) => baseline.length < MEANINGS_CAP,
     "every public route is at the accent cap — no room anywhere to prove the boundary, which is a product finding, not a probe configuration",
   );
 }
@@ -71,13 +69,26 @@ async function meaningsOnFreshLoad(page: Page, route: string): Promise<string[]>
   return meaningsOf(await accentSites(page));
 }
 
-/** The first public route that paints the accent at all, with what it paints. */
-async function firstPaintingRoute(page: Page): Promise<{ route: string; baseline: string[] }> {
+/** O222: ONE walker for both cases — the red case wants the first route that paints at all, the
+ * green case the first with room below the cap. They were the same loop with different
+ * predicates, and two copies is how a change to how a route is measured lands in one. */
+async function firstRouteWhere(
+  page: Page,
+  holds: (baseline: string[]) => boolean,
+  exhausted: string,
+): Promise<{ route: string; baseline: string[] }> {
   for (const route of PUBLIC_ROUTES) {
     const baseline = await meaningsOnFreshLoad(page, route);
-    if (baseline.length > 0) return { route, baseline };
+    if (holds(baseline)) return { route, baseline };
   }
-  throw new Error(
+  throw new Error(exhausted);
+}
+
+/** The first public route that paints the accent at all, with what it paints. */
+async function firstPaintingRoute(page: Page): Promise<{ route: string; baseline: string[] }> {
+  return firstRouteWhere(
+    page,
+    (baseline) => baseline.length > 0,
     "no public surface paints the accent at all — the sweep this probe exists to test is measuring nothing, " +
       "which is a finding about the site or the detector, not a reason to probe a blank page",
   );

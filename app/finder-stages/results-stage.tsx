@@ -8,7 +8,6 @@ import { AnimatePresence, motion } from "motion/react";
 import {
   closedBooksNote,
   distanceTo,
-  getPersonalizedMatch,
   locationLabel,
   MATCH_QUALITY_COPY,
   type Clinician,
@@ -17,7 +16,7 @@ import {
 import { type Clarifier } from "@/matching/clarify";
 import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
 import { CoverageMap } from "../coverage-map";
-import { ClinicianPortrait, distinguishingSignals, MotionScreen, Wordmark } from "./shared";
+import { ClinicianPortrait, distinguishingSignals, ExampleProfileTag, MotionScreen, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -39,6 +38,7 @@ export function ResultsStage({
   origin,
   matches,
   shown,
+  personalized,
   allSignals,
   request,
   reducedMotion,
@@ -62,6 +62,8 @@ export function ResultsStage({
   origin: SuburbPoint | null;
   matches: readonly Clinician[];
   shown: readonly Clinician[];
+  /** O222: the one personalized-match pass, computed in care-finder; rows index into it. */
+  personalized: readonly { reason: string; signals: string[] }[];
   allSignals: string[][];
   request: string;
   reducedMotion: boolean | null;
@@ -284,7 +286,8 @@ export function ResultsStage({
             without the movement. */}
         <AnimatePresence initial={false}>
           {shown.map((item, index) => {
-          const itemMatch = getPersonalizedMatch(item, request);
+          // `shown` is always a prefix slice of `matches`, so the indices align.
+          const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
           const reasons = distinguishingSignals(itemMatch.signals, allSignals);
           return (
@@ -315,7 +318,7 @@ export function ResultsStage({
                 <strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
-                {item.synthetic && <small className="row-example">Example profile</small>}
+                <ExampleProfileTag clinician={item} className="row-example" />
                 <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms

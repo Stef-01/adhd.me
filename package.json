@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
-    "e2e:visual": "ADHDME_FIXED_CLOCK=2026-03-03T03:03:03.000Z playwright test e2e/support/visual-stability.spec.ts",
+    "e2e:visual": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/run-visual-e2e.mts",
     "gate:accounting": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gate-accounting.mts",
     "audit:gate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/audit-gate.mts",
     "perf:gate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/perf-gate.mts",

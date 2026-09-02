@@ -156,6 +156,15 @@ export function getRequestHeadline(value: string, fallback: string) {
   return fallback;
 }
 
+/** O222: the example-profile disclosure, ONE export — founder decision `synthetic-roster-tickbox`
+ * says every surface that can show an invented entry labels it, and four hand-written guards with
+ * three copy variants is how that promise drifts. The guard and the words live here; the class
+ * stays a prop so the existing CSS (and the dead-css census) does not move. */
+export function ExampleProfileTag({ clinician, className }: { clinician: Clinician; className: string }) {
+  if (!clinician.synthetic) return null;
+  return <small className={className}>Example profile</small>;
+}
+
 export function Wordmark() {
   /* O167: `translate="no"`. The guidelines ask for it on brand names, code tokens and identifiers,
      and this one is all three — a name, a wordmark and a domain. Auto-translation renders "ADHD"

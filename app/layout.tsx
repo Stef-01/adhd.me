@@ -25,6 +25,11 @@ import { SITE_URL } from "./site";
  */
 export const viewport: Viewport = {
   themeColor: "#f7f8fc",
+  // O225 (STANDALONE-APP-PLAN.md Phase 1b): without `cover`, the installed app letterboxes below
+  // the notch and the status-bar strip renders as a paper seam above the brand band. With it, the
+  // band paints to the device edge and the chrome pads itself back out with safe-area insets —
+  // every inset-padded rule is inert in an ordinary browser tab, where the insets are zero.
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {

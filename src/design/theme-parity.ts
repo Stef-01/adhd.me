@@ -36,16 +36,10 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
       "The Acknowledgement of Country artwork: ochre and earth tones that MEAN something in the illustration and deliberately do not participate in the UI palette — retinting the acknowledgement to match the brand would be exactly backwards.",
   },
   {
-    file: "app/apple-icon.tsx",
+    file: "app/brand-mark.tsx",
     sites: 6,
     rationale:
-      "O220: the same art at Apple's 180px, in its own route because iOS reads apple-touch-icon specifically — the same six token-mirroring literals as app/icon.tsx.",
-  },
-  {
-    file: "app/icon.tsx",
-    sites: 6,
-    rationale:
-      "O220: the app icon, Satori-rendered at build like the OG image (opengraph-image.tsx's own rationale applies verbatim). Five gradient stops mirror the --hero-* band tokens and the label mirrors --on-ground.",
+      "O220/O222: the ONE copy of the app-icon art (both icon routes call in), Satori-rendered at build like the OG image. The six sites mirror navigation ink, route, on-route, paper and action tokens in the daylight-wayfinding route tile; the dedup halved the register's declared icon sites from 12 to 6.",
   },
   {
     file: "app/layout.tsx",

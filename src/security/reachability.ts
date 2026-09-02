@@ -47,7 +47,10 @@ const SPECIFIER_RE = /^[^\s{}()<>=,;"']+$/;
  * Replaces each comment with an equal number of newlines rather than deleting it, so nothing
  * downstream depends on offsets shifting.
  */
-function stripComments(source: string): string {
+/** Exported for O222: engine-purity's walk reuses this scanner instead of a fifth copy —
+ * the `[^:]` guard (a URL's `//` is not a comment) and the newline-preserving block strip are
+ * hardening the copies kept losing. */
+export function stripComments(source: string): string {
   return source
     .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "))
     .replace(/(^|[^:])\/\/[^\n]*/g, (_m, lead: string) => lead);
@@ -55,7 +58,9 @@ function stripComments(source: string): string {
 const BARE_IMPORT_RE = /(?:^|\n)\s*import\s*["']([^"']+)["']/g;
 const CANDIDATE_EXTS = [".ts", ".tsx", "/index.ts", "/index.tsx"];
 
-function specifiersIn(rawSource: string): string[] {
+/** Exported for O222 (engine-purity). Handles both quote styles and bare side-effect imports,
+ * and strips comments first so prose can never vouch for — or hide — a dependency. */
+export function specifiersIn(rawSource: string): string[] {
   const source = stripComments(rawSource);
   const found: string[] = [];
   for (const re of [IMPORT_RE, BARE_IMPORT_RE]) {
@@ -71,7 +76,8 @@ function specifiersIn(rawSource: string): string[] {
 }
 
 /** Resolve a first-party specifier to a file, or null when it is an npm package. */
-function resolveFirstParty(specifier: string, fromFile: string, root: string): string | null {
+/** Exported for O222 (engine-purity). `fromFile` absolute; returns an absolute path or null. */
+export function resolveFirstParty(specifier: string, fromFile: string, root: string): string | null {
   let base: string;
   if (specifier.startsWith("@/")) base = join(root, "src", specifier.slice(2));
   else if (specifier.startsWith(".")) base = resolve(dirname(fromFile), specifier);

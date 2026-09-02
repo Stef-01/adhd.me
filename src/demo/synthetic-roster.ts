@@ -50,8 +50,23 @@ export const SYNTHETIC_ABOUT_NOTICE =
 export const SYNTHETIC_BOOKING_NOTE =
   "This is an example profile used for trying the finder. There is nobody to book.";
 
+/**
+ * O222: the four defences every persona repeats verbatim, made structural. `image`, `booking`
+ * and `synthetic` are not per-persona facts — they are the LAW of this file, and 20 hand-copies
+ * of a law are 20 places a hand-edit can silently break it. `reach` is derived from the one
+ * field it always correlated with. Everything DISTINGUISHING — name, suburb, care areas, the
+ * copy a reader meets — stays a literal on the entry, because those are what a reviewer reads.
+ */
+const example = (p: Omit<Clinician, "image" | "booking" | "synthetic" | "reach">): Clinician => ({
+  ...p,
+  image: null,
+  reach: p.telehealthFirstAppointment ? "Telehealth and practice appointments" : "Practice appointments",
+  booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
+  synthetic: true,
+});
+
 export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
-  {
+  example({
     id: "example-mei-chao",
     name: "Dr Mei Chao",
     shortName: "Dr Chao",
@@ -60,8 +75,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Epping",
     practice: "Epping Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-25",
     focus: "ADHD assessment across ages, titration",
@@ -78,10 +91,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "collaborative"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-tomas-rivera",
     name: "Dr Tomás Rivera",
     shortName: "Dr Rivera",
@@ -90,8 +101,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MD FRACGP",
     suburb: "Bondi Junction",
     practice: "Bondi Junction Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     // Stale on purpose: an open declaration past the 90-day freshness window, so the
     // stale-open capacity grade renders somewhere a tester can see it.
@@ -110,10 +119,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["attuned", "non_judgmental"],
     wheelchairAccessible: true,
     appointmentLength: "Appointment lengths set with the practice",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-priya-nair",
     name: "Dr Priya Nair",
     shortName: "Dr Nair",
@@ -122,8 +129,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP DCH",
     suburb: "Hornsby",
     practice: "Hornsby Example Practice",
-    reach: "Practice appointments",
-    image: null,
     // Closed books: the closed-never-outranks-open-at-equal-fit law, visible to a tester.
     acceptingNewPatients: false,
     capacityDeclaredAt: "2026-08-20",
@@ -141,10 +146,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["sense_making", "collaborative"],
     wheelchairAccessible: false,
     appointmentLength: "Long first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-owen-hartley",
     name: "Dr Owen Hartley",
     shortName: "Dr Hartley",
@@ -153,8 +156,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Southport",
     practice: "Southport Example Practice",
-    reach: "Telehealth and practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-28",
     focus: "Structured assessment, titration, substance history taken seriously",
@@ -172,10 +173,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
     telehealthFirstAppointment: true,
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-sarah-whitfield",
     name: "Dr Sarah Whitfield",
     shortName: "Dr Whitfield",
@@ -184,8 +183,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Pennant Hills",
     practice: "Pennant Hills Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-22",
     focus: "Trauma-aware assessment, emotional regulation",
@@ -202,10 +199,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["attuned", "steadying", "non_judgmental"],
     wheelchairAccessible: true,
     appointmentLength: "Extended first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-daniel-okafor",
     name: "Dr Daniel Okafor",
     shortName: "Dr Okafor",
@@ -214,8 +209,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Surfers Paradise",
     practice: "Surfers Paradise Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     // Stale on purpose — the second stale-open grade, so the state is not a single row's quirk.
     capacityDeclaredAt: "2026-03-15",
@@ -233,10 +226,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["sense_making", "structured"],
     wheelchairAccessible: true,
     appointmentLength: "Appointment lengths set with the practice",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-hana-yoshida",
     name: "Dr Hana Yoshida",
     shortName: "Dr Yoshida",
@@ -245,8 +236,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Rose Bay",
     practice: "Rose Bay Example Practice",
-    reach: "Practice appointments",
-    image: null,
     // The second closed-books entry, so closed rows appear in more than one suburb.
     acceptingNewPatients: false,
     capacityDeclaredAt: "2026-08-10",
@@ -265,10 +254,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "culturally_attuned"],
     wheelchairAccessible: false,
     appointmentLength: "Long first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-ash-coleman",
     name: "Dr Ash Coleman",
     shortName: "Dr Coleman",
@@ -277,8 +264,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Robina",
     practice: "Robina Example Practice",
-    reach: "Telehealth and practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-27",
     focus: "ADHD assessment, low mood, emotional regulation",
@@ -296,10 +281,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment",
     telehealthFirstAppointment: true,
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-leila-haddad",
     name: "Dr Leila Haddad",
     shortName: "Dr Haddad",
@@ -308,8 +291,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Edgecliff",
     practice: "Edgecliff Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-26",
     focus: "ADHD assessment alongside anxiety, emotional regulation",
@@ -326,10 +307,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["attuned", "steadying"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-gurpreet-singh",
     name: "Dr Gurpreet Singh",
     shortName: "Dr Singh",
@@ -338,8 +317,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Cheltenham",
     practice: "Cheltenham Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-24",
     focus: "Structured assessment, titration, shared care",
@@ -356,10 +333,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["structured", "collaborative"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-annika-larsen",
     name: "Dr Annika Larsen",
     shortName: "Dr Larsen",
@@ -368,8 +343,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP DCH",
     suburb: "Broadbeach",
     practice: "Broadbeach Example Practice",
-    reach: "Practice appointments",
-    image: null,
     // The third closed-books entry — closed rows on the Gold Coast side of the map too.
     acceptingNewPatients: false,
     capacityDeclaredAt: "2026-08-15",
@@ -387,10 +360,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "motivating"],
     wheelchairAccessible: true,
     appointmentLength: "Extended first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-rohan-pillai",
     name: "Dr Rohan Pillai",
     shortName: "Dr Pillai",
@@ -399,8 +370,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Beecroft",
     practice: "Beecroft Example Practice",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     // Stale on purpose — a third stale-open declaration, in a suburb a real GP also consults.
     capacityDeclaredAt: "2026-05-10",
@@ -418,10 +387,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["non_judgmental", "sense_making"],
     wheelchairAccessible: false,
     appointmentLength: "Appointment lengths set with the practice",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-chloe-bennett",
     name: "Dr Chloe Bennett",
     shortName: "Dr Bennett",
@@ -430,8 +397,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Double Bay",
     practice: "Double Bay Example Practice",
-    reach: "Telehealth and practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-29",
     focus: "Trauma-aware assessment, emotional regulation",
@@ -449,10 +414,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     wheelchairAccessible: true,
     appointmentLength: "Extended first appointment",
     telehealthFirstAppointment: true,
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-minh-tran",
     name: "Dr Minh Tran",
     shortName: "Dr Tran",
@@ -461,8 +424,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Bondi Junction",
     practice: "Bondi Junction Example Clinic",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-21",
     focus: "ADHD assessment alongside anxiety, titration",
@@ -479,10 +440,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["steadying", "structured"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-isla-mcgregor",
     name: "Dr Isla McGregor",
     shortName: "Dr McGregor",
@@ -491,8 +450,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Hornsby",
     practice: "Hornsby Example Clinic",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     // Stale on purpose — the fourth stale-open declaration.
     capacityDeclaredAt: "2026-04-20",
@@ -510,10 +467,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["sense_making", "steadying"],
     wheelchairAccessible: true,
     appointmentLength: "Appointment lengths set with the practice",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-jordan-reyes",
     name: "Dr Jordan Reyes",
     shortName: "Dr Reyes",
@@ -522,8 +477,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Broadbeach",
     practice: "Broadbeach Example Clinic",
-    reach: "Telehealth and practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-27",
     focus: "Emotional regulation, non-medication supports",
@@ -541,10 +494,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment",
     telehealthFirstAppointment: true,
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-amara-obi",
     name: "Dr Amara Obi",
     shortName: "Dr Obi",
@@ -553,8 +504,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP DCH",
     suburb: "Southport",
     practice: "Southport Example Clinic",
-    reach: "Practice appointments",
-    image: null,
     // The fourth closed-books entry.
     acceptingNewPatients: false,
     capacityDeclaredAt: "2026-08-18",
@@ -572,10 +521,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["motivating", "culturally_attuned"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-felix-braun",
     name: "Dr Felix Braun",
     shortName: "Dr Braun",
@@ -584,8 +531,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Epping",
     practice: "Epping Example Clinic",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-23",
     focus: "Co-occurring autism and ADHD, complex presentations",
@@ -602,10 +547,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["structured", "sense_making"],
     wheelchairAccessible: false,
     appointmentLength: "Long first appointment, scheduled reviews",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-sana-qureshi",
     name: "Dr Sana Qureshi",
     shortName: "Dr Qureshi",
@@ -614,8 +557,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Pennant Hills",
     practice: "Pennant Hills Example Clinic",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-26",
     focus: "ADHD assessment, titration, anxiety",
@@ -632,10 +573,8 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "culturally_attuned"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
-  {
+  }),
+  example({
     id: "example-ewan-blake",
     name: "Dr Ewan Blake",
     shortName: "Dr Blake",
@@ -644,8 +583,6 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     title: "General practitioner, MBBS FRACGP",
     suburb: "Robina",
     practice: "Robina Example Clinic",
-    reach: "Practice appointments",
-    image: null,
     acceptingNewPatients: true,
     // Stale on purpose — the oldest declaration in the set, so the grade's far edge renders.
     capacityDeclaredAt: "2026-03-30",
@@ -663,9 +600,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["steadying", "non_judgmental"],
     wheelchairAccessible: true,
     appointmentLength: "Long first appointment, scheduled reviews",
-    booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
-    synthetic: true,
-  },
+  }),
 ];
 
 /**
@@ -674,3 +609,9 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
  * just the honest construction: nothing here removes or reorders a real entry.
  */
 export const demoRoster: readonly Clinician[] = [...clinicians, ...SYNTHETIC_CLINICIANS];
+
+/** O222: the one choice expression for "which roster is in use" — both the render path and the
+ * toggle handler read this, so a future change to what the tickbox composes cannot land in one
+ * branch only. */
+export const rosterFor = (includeSynthetic: boolean): readonly Clinician[] =>
+  includeSynthetic ? demoRoster : clinicians;

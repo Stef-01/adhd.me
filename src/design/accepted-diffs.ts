@@ -77,6 +77,13 @@ export const ACCEPTED_DIFFS: readonly AcceptedDiff[] = [
     captures: 180,
     reason:
       "Exactly twelve cells moved — /, /approach and /console/matching, both widths and motions — from the accent-law pass the full e2e run demanded of the reskin: the landing keeps the accent's two earned meanings (the claim's underline, the live stat) and its other eight accent classes moved to muted/ink/dark-band idioms; /approach dropped to zero; the console page moves under the same commit set through the shared chrome the O218 token substitutions reach. The accent-discipline, contrast and honesty sweeps are all green on the same tree (full suite 315 passed / 1 skipped), which bounds what the moved pixels can be. Three-run protocol agreed (zero pairwise diff) before this acceptance.",
+  },  {
+    unitId: "O222",
+    acceptedAt: "2026-09-01",
+    manifestSha256: "9f88a42a9afdeca9c29cbb7f80fc1b54d77a4e332e3b49d91584e305e259d9ba",
+    captures: 180,
+    reason:
+      "Exactly four cells moved — console/matching, both widths and motions — and this acceptance CLOSES the question the last two carried, because the mover was the HARNESS, not the page: the matching console renders tallyOutbound() and the background audit, both file-backed stores the full e2e suite appends to on every run, so those cells re-hashed at every cross-commit comparison while agreeing within every same-tree protocol. pnpm e2e:visual now pins all four ADHDME_*_PATH stores to a fresh .data-visual/ per invocation, this baseline is the pinned-empty rendering (the console's own AR25/AR26 zero-state copy), and the cells cannot move again unless the page does. O222's code refactor itself was proven pixel-identical everywhere else by the same comparison that exposed the store drift. Three-run protocol agreed (zero pairwise diff) before this acceptance.",
   },
 ];
 

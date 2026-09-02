@@ -1051,7 +1051,7 @@ function asList(items: readonly string[]): string {
   return LIST_FORMAT.format(items);
 }
 
-export function getPersonalizedMatch(clinician: Clinician, query: string) {
+export function getPersonalizedMatch(clinician: Clinician, query: string, roster: readonly Clinician[] = clinicians) {
   /**
    * DERIVED, NOT RE-DERIVED. This used to be a second lexicon: a forty-line if-chain testing its
    * own phrase lists against the same care areas the ranker tested against different ones. Two
@@ -1060,7 +1060,9 @@ export function getPersonalizedMatch(clinician: Clinician, query: string) {
    * print. Both now read `matchEvidence`, so the explanation IS the ranking's evidence and the
    * two cannot disagree. `src/matching/needs.test.ts` asserts that property directly.
    */
-  const evidence = matchEvidence(clinician, query);
+  // O222: `roster` threads through — the evidence weights and the language vocabulary derive
+  // from the roster the RANKING ran over, so the explanation can never describe a different one.
+  const evidence = matchEvidence(clinician, query, roster);
   const signals = evidence.map((need) => need.label);
 
   /**

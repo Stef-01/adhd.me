@@ -3,7 +3,9 @@
 This is the visual system that ships from `app/globals.css`, re-derived on 2026-09-01 after the
 product-wide redesign. It is a contract for extending the product, not a moodboard. The source
 direction is also embedded as inert JSON in `app/layout.tsx` under
-`#adhdme-design-direction`; the reproducible concept seed is `f009e50c`.
+`#adhdme-design-direction`; the reproducible concept seed is `f009e50c`. This capture supersedes
+the earlier O223 reskin description: it is written from the shipping code, not aspiration, and
+records inconsistencies rather than papering over them.
 
 ## Direction: daylight wayfinding
 
@@ -22,6 +24,11 @@ second theme. Do not add a cosmetic dark-mode toggle without deriving and testin
 token set.
 
 ## Colour roles
+
+One role-based token palette, expressed consistently across light working surfaces and deliberate
+inverted route fields:
+
+**The base palette** (`:root`) — porcelain ground, navy neutrals, one burnt-orange action accent:
 
 | Token | Value | Role |
 |---|---|---|
@@ -125,6 +132,10 @@ second. It must explain where an object or state went.
 - The safe-area tokens protect sticky actions and chrome in standalone display mode.
 - Manifest, browser theme colour, generated icons, Apple icon, and Open Graph art must stay in
   palette parity.
+- `app/brand-mark.tsx` is the one source of generated app-icon artwork; both metadata routes call
+  it at their required size so the installed and Apple icons cannot drift.
+- `viewportFit: "cover"` lets the brand field paint through a device notch while safe-area
+  padding keeps controls clear in portrait and landscape.
 - The app is installable through its manifest, but it does not promise offline operation; there
   is no service worker.
 
