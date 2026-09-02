@@ -322,6 +322,36 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **O230 (FOUNDER-DIRECTED, 2026-09-02: "there should be no landing page, it should function
+> exactly like an app for the demo day and be extremely polished, research online exactly how
+> leading health provider apps are structured with gestures, and visual design and implement") —
+> CLAIMED founder-0902a, 2026-09-02T14:45Z.** This supersedes U15 as the next unit; the U lane
+> resumes after it. **Scope:** the site stops opening on a story and opens on the product.
+> `/` becomes the app's home surface — the finder's entry with the roster beneath it — behind one
+> persistent app shell (a safe-area bottom tab bar on the phone, the same routes as a rail on the
+> desktop), and the marketing story moves whole to its own route rather than being deleted, so no
+> copy, no compliance-linted sentence and no test loses its home. The unit's shape is taken from
+> how consumer health apps are actually built (a researched briefing, cited in the done block):
+> tabbed root, task-first home, provider cards that lead with the bookable facts, bottom-sheet
+> detail with a drag handle, and route changes that read as pushes rather than reloads.
+> **Preserved by law, not by intention:** the warm-orange-to-periwinkle brand gradient and the
+> whole `--hero-*` token scheme (the founder's second instruction of the same hour, with the home
+> screen attached as the reference) — no new colour is introduced, the shell paints from the
+> existing band tokens, and the AR15 visual matrix is re-accepted only for cells this unit
+> deliberately moves, each named. **Founder gates untouched:** the roster stays synthetic and
+> example-labelled, the finder stays hidden from crawlers (U7), no clinical claim, no testimonial
+> or rating, no symptom triage — an app shell is chrome, and chrome may not say anything the copy
+> laws forbid. **Verification:** `pnpm verify`; the moved landing assertions run green at the
+> story's new route (coverage moves, it does not shrink); new e2e for the shell — every tab
+> reachable and labelled, the sheet opening, dragging, dismissing on Escape and returning focus,
+> the tab bar clearing the safe-area inset and every control over the 44 px floor; the a11y,
+> contrast, touch and keyboard sweeps green on the new surfaces; `pnpm census` re-pinned for the
+> lines this unit adds, with the raise reasoned in the ratchet as U14's law requires; a dev-server
+> preview at phone and desktop widths before the gate, per the founder's standing instruction.
+> **Continuation if this claim goes stale:** nothing lands behind a flag — the shell is whole or
+> it is not landed; a partial shell would leave two navigation systems on one site, which is the
+> defect this unit exists to remove.
+
 > **U14 (O229-lane, the twelfth unit built of the one-year plan: the size census and the
 > downward ratchet, R0) — DONE founder-0902a, 2026-09-02 @ 00d0451.** Scope was the plan's U14
 > text; the one line the claim said would come out differently did, and is recorded below.
@@ -12211,6 +12241,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | done | founder-0902a | 2026-09-02T12:05Z | a90b248 | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
+| O230 | claimed | founder-0902a | 2026-09-02T14:45Z | — | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
