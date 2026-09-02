@@ -94,11 +94,18 @@ notice and the Profile tab — so the app's chrome is never wider than the app. 
 (22px) is the one inset text and controls sit on inside it: the welcome question, the compose box
 and the example link share that edge as one vertically centred group.
 
-The results screen carries a **nearby map** once the place resolves: an in-tree SVG projected from
-the gazetteer (no tile host, no coordinate leaves the device), with distance rings at true radius
-and one route-blue stop per consulting suburb keyed to the rows below. The keys are list positions,
-never ranks, and they render only while the map does. Pins and keys are route blue; the accent is
-still reserved for the row.
+The results screen carries a **nearby map** once the place resolves (O235): Leaflet over the
+OpenStreetMap standard tiles, loaded as a client-only chunk the first time a suburb is recognised,
+with one route-blue marker per consulting suburb keyed to the rows below, a "you" marker on the
+typed suburb, the app's own 44px zoom controls and OpenStreetMap's attribution restyled into the
+app's type. The keys are list positions, never ranks, and they render only while the map does.
+Markers and keys are route blue; the accent is still reserved for the row. The tile host is the
+one third-party origin the CSP admits, for images alone, and the privacy page says what it learns.
+
+The results screen opens on a **search summary** (O236): one card holding the words (a button that
+reopens the box) and the place (a pill field that re-ranks in place as it is typed, its label read
+to screen readers and not painted). The earned headline sits under it; the clarifier chips stand in
+the open under a "Improve my matches" lead rather than behind a disclosure.
 
 The **Profile tab** holds the person's standing filters — where they are, woman GP, telehealth,
 bulk billing, longer appointments, wheelchair access, open books, languages, distance — as switch
