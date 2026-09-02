@@ -47,8 +47,23 @@ export const SYNTHETIC_ABOUT_NOTICE =
   "This is a fictional example profile used for trying the finder. It describes nobody.";
 
 /** The shared booking explanation — the census pins that no persona carries anything else. */
+/**
+ * O231 (founder-directed, amending `synthetic-roster-tickbox`): the booking route, in the product's
+ * own voice.
+ *
+ * It USED to read "This is an example profile used for trying the finder. There is nobody to book."
+ * and it stood WHERE THE BUTTON GOES, so the journey dead-ended one tap from the end — the largest
+ * single reason the app did not read as finished, found by the O231 screenshot sweep.
+ *
+ * WHAT DID NOT CHANGE, AND THIS IS THE LINE THE UNIT HOLDS: there is still no `url`, so `/go/` has
+ * nothing to read and no control anywhere opens a fabricated booking listing. The variant is still
+ * `synthetic-none` in the type. A route describing how a practice takes appointments is the same
+ * kind of fact as the suburb and the languages beside it — sample data. An invented PHONE NUMBER,
+ * an external listing or a "request sent" confirmation that sends nothing would not be, and none
+ * of the three is here.
+ */
 export const SYNTHETIC_BOOKING_NOTE =
-  "This is an example profile used for trying the finder. There is nobody to book.";
+  "Appointments with this practice are arranged by phone.";
 
 /**
  * O222: the four defences every persona repeats verbatim, made structural. `image`, `booking`

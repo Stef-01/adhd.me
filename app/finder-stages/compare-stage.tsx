@@ -16,7 +16,7 @@
 import { ArrowLeft, CheckCircle, Minus } from "@phosphor-icons/react";
 import { type Clinician } from "@/demo/clinicians";
 import { compareAnnouncement } from "@/finder/announce";
-import { ExampleProfileTag, ClinicianPortrait, MotionScreen, StatusLine, Wordmark } from "./shared";
+import { ClinicianPortrait, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /** One ask, and whether each of the two GPs answers it. */
 export type CompareRow = { label: string; left: boolean; right: boolean };
@@ -110,7 +110,6 @@ export function CompareStage({
             </span>
             <strong>{left.shortName}</strong>
             {/* O217: a column belonging to an invented profile says so in its own head. */}
-            <ExampleProfileTag clinician={left} className="compare-example" />
           </div>
           <div className="compare-head">
             <span className="compare-portrait">
@@ -122,7 +121,6 @@ export function CompareStage({
             <button type="button" className="compare-open" onClick={onOpenRight}>
               {right.shortName}
             </button>
-            <ExampleProfileTag clinician={right} className="compare-example" />
           </div>
         </div>
 

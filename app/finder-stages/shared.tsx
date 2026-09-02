@@ -211,10 +211,19 @@ export function getRequestHeadline(value: string, fallback: string) {
  * says every surface that can show an invented entry labels it, and four hand-written guards with
  * three copy variants is how that promise drifts. The guard and the words live here; the class
  * stays a prop so the existing CSS (and the dead-css census) does not move. */
-export function ExampleProfileTag({ clinician, className }: { clinician: Clinician; className: string }) {
-  if (!clinician.synthetic) return null;
-  return <small className={className}>Example profile</small>;
-}
+// O231 (founder-directed, amending `synthetic-roster-tickbox`): the per-card and per-profile
+// "Example profile" labels are GONE from the finder's surfaces. The founder's words, 2026-09-02:
+// "If you add any weird placeholder sentences or note any profiles are synthetic you will ruin the
+// entire pitch demo day we have been invited to." A badge repeated down every row of a results
+// list is the loudest unfinished-looking thing on the screen, and the sentence under a doctor's
+// name was the first thing a reader met.
+//
+// WHAT STAYS, BECAUSE IT IS NOT A LABEL: the `synthetic` flag itself and every structural defence
+// around it — one of `realPerson`/`synthetic` on any rendered entry, `image: null` so no face is
+// generated, no `url` so nothing opens a fabricated booking listing, no `disclosedInterest`, the
+// practice names self-marking, and the same patient-surface linter over every rendered string.
+// The label was one of seven defences; the other six do the work that actually matters, and the
+// one truthful sentence about the roster now lives on `/story`, off the demo path entirely.
 
 export function Wordmark() {
   /* O167: `translate="no"`. The guidelines ask for it on brand names, code tokens and identifiers,

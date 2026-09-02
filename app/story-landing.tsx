@@ -391,6 +391,25 @@ export function StoryLanding() {
         </div>
       </section>
 
+      {/* O231 (founder-directed): the ONE place the product says what its roster is.
+          The finder, the results, the profiles and the booking flow carry nothing of the kind —
+          the founder's instruction for the pitch was explicit and this is off that path entirely,
+          at the foot of the page about the company rather than in front of anybody being shown the
+          product. It exists because the alternative is a product that lets twenty invented GPs be
+          read as a signed-up network, and one sentence here is the cheapest possible way to not do
+          that. It makes no clinical claim, names nobody, and is written for a reader who went
+          looking. */}
+      <section className="story-roster-note" aria-labelledby="roster-note-title">
+        <div className="story-wrap">
+          <h2 id="roster-note-title">About the GPs shown</h2>
+          <p>
+            The finder runs over a demonstration roster while the network is being built. Listed
+            practices and their declarations are real; the wider set of profiles is sample data
+            used to show how the matching works, and nothing in it is bookable.
+          </p>
+        </div>
+      </section>
+
       <footer className="story-footer">
         <div className="story-wrap story-footer-inner">
           <Link href="/" className="story-footer-wordmark" translate="no">ADHD.ME</Link>

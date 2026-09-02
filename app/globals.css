@@ -959,14 +959,22 @@ textarea:focus-visible {
 
 /* A clinician with no portrait — see ClinicianPortrait in app/care-finder.tsx. Sized from the
    frame rather than a fixed value so the two variants cannot drift apart from their containers. */
+/* O231: THE MONOGRAM IS A DESIGN CHOICE, NOT A MISSING IMAGE.
+   The screenshot sweep is what changed this: `--stone` initials in ink, sitting in a results list
+   beside a real photograph, read as an asset that failed to load — the single most
+   placeholder-looking thing on the screen. It now carries the brand's own band ramp with cream
+   initials on it, which is the same treatment the header hairline and the tab bar use, so a row
+   without a photograph reads as the product's monogram rather than as a gap. Nothing is generated:
+   a face for an invented profile would be a fabricated person, and initials are initials.
+   The ramp is the two `--hero-*` stops the band already uses, not a new colour. */
 .clinician-monogram {
   display: grid;
   place-items: center;
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-  background: var(--stone);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--on-ground);
+  background-image: linear-gradient(142deg, var(--hero-blue-night) 0%, var(--hero-blue-deep) 62%, var(--hero-orange-deep) 190%);
   user-select: none;
 }
 
@@ -5381,43 +5389,10 @@ textarea:focus-visible {
 .finder-demo-toggle strong { color: var(--ink); font-size: 0.875rem; font-weight: 600; }
 .finder-demo-toggle small { margin-top: 3px; color: var(--muted); font-size: 0.78125rem; line-height: 1.5; }
 
-/* The row and compare-column marks: a quiet bordered tag, same visual language as the stone
-   surfaces, so it reads as metadata about the listing rather than a quality of the doctor. */
-.row-example,
-.compare-example {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  margin: 2px 0 4px;
-  padding: 2px 8px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--stone);
-  color: var(--muted);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.compare-example { margin: 4px 0 0; }
-
-/* The profile's first fact after the name, and the booking bar's answer to "what now" —
-   plain sentences at the reading sizes their neighbours use, never fine print. */
-.profile-example-note {
-  margin: 6px 0 0;
-  max-width: 52ch;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.5;
-}
-.profile-example-booking {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  text-align: center;
-}
+/* O231 removed the example-profile marks from every finder surface (the row tag, the compare
+   column tag, the profile's sentence and the booking bar's replacement text), so their rules went
+   with them — a stylesheet that keeps the CSS for deleted markup is how a revert happens by
+   accident. `app/finder-stages/shared.tsx` holds the reasoning and what stays in its place. */
 
 /* Save control on the review editor. */
 .be-save { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
@@ -7939,3 +7914,49 @@ body:has(.app-tabs) .consent-bar {
 @media (prefers-reduced-motion: reduce) {
   .sheet-close, .sheet-handle-bar { transition: none; }
 }
+
+/* O231: the roster note on /story — quiet, factual, and the only place in the product that
+   describes the demonstration roster. Paper, muted, no accent: it is a fact for a reader who went
+   looking, not a warning anybody needs to be stopped by. */
+.story-roster-note {
+  padding: 0 0 clamp(28px, 5vw, 44px);
+}
+
+.story-roster-note h2 {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+}
+
+.story-roster-note p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+/* O231: the practice a practice-booked entry sends you to, sitting with the sentence that names
+   the route rather than in a block at the foot of an empty screen. Ends the screen on information,
+   which is a true terminal state — not a disabled button, and not a link to a fabricated page. */
+.booking-practice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-raised);
+}
+
+.booking-practice-name {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.008em;
+}
+
+.booking-practice > span:last-child { color: var(--muted); font-size: 0.875rem; }

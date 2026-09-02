@@ -109,12 +109,9 @@ export function ProfileStage({
 
           <div className="profile-identity">
             <h1 tabIndex={-1}>{clinician.name}</h1>
-            {/* O217: on an invented profile the FIRST fact after the name is that it is one.
-                Same siting logic as the O184 disclosure below — a notice met after a view has
-                formed has already failed. */}
-            {clinician.synthetic && (
-              <p className="profile-example-note">Example profile — a fictional GP for trying the finder, not a real person.</p>
-            )}
+            {/* O217 put "Example profile — a fictional GP…" here, directly under the name. O231
+                (founder-directed) removed it; see app/finder-stages/shared.tsx for what stays and
+                why the structural defences, not the label, are what keep this honest. */}
             <p className="clinician-meta">{shortTitle(clinician.title)}</p>
             <p className="profile-location">{locationLabel(clinician)}</p>
             {/* O184: the material-interest disclosure, back on the listing it concerns.
@@ -235,16 +232,15 @@ export function ProfileStage({
       </div>
 
       <div className="profile-footer">
-        {/* O217: an invented profile gets NO booking control — not a disabled one, which would
-            read as a real doctor whose button is broken. The explanation stands where the
-            action would, so the bar keeps its job of answering "what now". */}
-        {clinician.booking.via === "synthetic-none" ? (
-          <p className="profile-example-booking">{clinician.booking.note}</p>
-        ) : (
-          <Pressable className="primary-button" type="button" onClick={onBook}>
-            {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
-          </Pressable>
-        )}
+        {/* O217 put an explanation WHERE THE ACTION GOES for an example profile, so the journey
+            ended in a sentence one tap from the booking screen. O231 (founder-directed) gives every
+            profile its action back: the screen behind it is the real booking screen, which for a
+            practice-booked GP explains the route rather than opening one. Nothing is disabled and
+            nothing opens a fabricated listing — the difference between this and O217's concern is
+            that the button leads somewhere true, not that it leads somewhere at all. */}
+        <Pressable className="primary-button" type="button" onClick={onBook}>
+          {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
+        </Pressable>
       </div>
     </MotionScreen>
   );

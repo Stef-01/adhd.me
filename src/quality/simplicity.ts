@@ -73,9 +73,9 @@ export const LONG_FILES: readonly LongFile[] = [
   },
   {
     file: "src/demo/synthetic-roster.ts",
-    lines: 630,
-    on: U15,
-    why: "The 20 example personas (founder decision G-SYN-3). Data, one persona per block. It shortens only by having fewer example profiles, which is the founder's call and not this lane's.",
+    lines: 650,
+    on: "2026-09-02",
+    why: "The 20 example personas (founder decision G-SYN-3). Data, one persona per block. It shortens only by having fewer example profiles, which is the founder's call and not this lane's. O231 raised the argued length by twenty: the booking note it exports became the product's own voice and had to explain, at the point of the change, which defences moved and which did not.",
   },
   {
     file: "src/matching/corpus.ts",

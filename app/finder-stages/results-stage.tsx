@@ -18,7 +18,7 @@ import { type Clarifier } from "@/matching/clarify";
 import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import { CoverageMap } from "../coverage-map";
-import { ClinicianPortrait, distinguishingSignals, ExampleProfileTag, MotionScreen, StatusLine, Wordmark } from "./shared";
+import { ClinicianPortrait, distinguishingSignals, MotionScreen, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -313,7 +313,6 @@ export function ResultsStage({
                 <strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
-                <ExampleProfileTag clinician={item} className="row-example" />
                 <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms

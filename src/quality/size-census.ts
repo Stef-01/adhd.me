@@ -66,6 +66,7 @@ export const PLAN_FIGURES: Readonly<Record<string, number>> = {
 const SET_BY_U14 = "2026-09-02";
 const SET_BY_O230 = "2026-09-02";
 const SET_BY_U15 = "2026-09-02";
+const SET_BY_O231 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -139,6 +140,17 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'src-test-held-modules', value: 99, on: SET_BY_U15, reason: "U15: module-reasons.ts, simplicity.ts and simplicity-read.ts are imported only by simplicity.test.ts, which is what `law` means here (W53's shape: the module decides, the test enforces, the product touches neither). This raise is the one the laws document's Law 4 qualifier exists for, and it applies ONLY to modules tagged `law`." },
   { measure: 'vitest-files', value: 313, on: SET_BY_U15, reason: "U15: simplicity.test.ts — the four laws held to the tree, each with its planted violation." },
   { measure: 'vitest-lines', value: 53158, on: SET_BY_U15, reason: "U15: as vitest-files; the planted-violation tests are the bulk of it, and they are the unit's actual deliverable." },
+
+  // O231 (founder-directed): demo-day readiness — the booking dead-end removed so the journey
+  // completes, the example-profile labels off the finder surfaces, the monogram designed rather
+  // than defaulted, and one truthful roster note on /story. Net of four deleted CSS rules and a
+  // deleted component, the tree is larger by the reasoning that records what changed and why.
+  { measure: 'app-lines', value: 15801, on: SET_BY_O231, reason: "O231: the roster note on /story, the booking screen's terminal block, and the comments recording which of the seven synthetic-roster defences moved and which stayed — the label went, the structure did not, and a future reader needs that distinction at the point of the change." },
+  { measure: 'src-lines', value: 54200, on: SET_BY_O231, reason: "O231: the amended founder decision quoted in full in founder-gates.ts, and the booking note's own account of the line the unit holds (no generated face, no invented number, no fabricated listing)." },
+  { measure: 'src-unreached-lines', value: 23900, on: SET_BY_O231, reason: "O231: as src-lines — founder-gates.ts and the simplicity register are both law modules the product does not import." },
+  { measure: 'src-reached-lines', value: 30320, on: SET_BY_O231, reason: "O231: synthetic-roster.ts is in the product's import closure (the finder ranks over it), and the booking note's own account of what the unit would not fabricate is the bulk of the addition." },
+  { measure: 'css-lines', value: 7962, on: SET_BY_O231, reason: "O231: the monogram's band ramp, the /story roster note and the booking screen's practice block, less the four dead label rules the dead-CSS census required be deleted with their markup." },
+  { measure: 'css-rule-blocks', value: 1462, on: SET_BY_O231, reason: "O231: the monogram's ramp, the /story roster note and the booking screen's practice card, less the four dead label rules the dead-CSS census required be deleted alongside their markup." },
 ];
 
 /** The current floor per measure: the last entry wins. */
