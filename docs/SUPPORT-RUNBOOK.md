@@ -35,3 +35,8 @@ is no diagnosis step before it.
 Operator (us, first line) → practice manager (their side) → practice sponsor. Every Sev 1/2 gets
 a ledger entry: what happened, patient impact, fix, prevention. Prevention items become build
 units in BUILD-STATE.
+
+- **On call (founder's own item, U12, 2026-09-02):** the founder is the operator's first line
+  for the machine side — a deploy that is not answering, a rollback (`docs/DEPLOY-RUNBOOK.md`) —
+  until the founder names a person here. This is a founder item, not a build gate: nothing in
+  the tree waits on it.
