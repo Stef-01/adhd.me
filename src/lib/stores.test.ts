@@ -61,4 +61,19 @@ describe("W51 audit fix: the store registry cannot drift", () => {
     expect(() => resetAllStores()).not.toThrow();
     expect(Object.keys(STORE_RESETTERS).length).toBeGreaterThanOrEqual(10);
   });
+
+  it("U4: gives every store its own globalThis key, so one reset cannot empty another", () => {
+    // The reporter's first draft reused `__adhdMeOps`, the ops store's key. Each module's reset
+    // then replaced the other's state: /console/ops threw on a missing switch after the reporter
+    // reset, and the reporter threw on a missing ring after the demo reset. Both passed alone.
+    const owners = new Map<string, string[]>();
+    for (const file of sourceFiles(SRC)) {
+      for (const m of readFileSync(file, "utf8").matchAll(/globalThis as \{\s*(__adhdMe[A-Za-z0-9_]*)\??:/g)) {
+        owners.set(m[1]!, [...(owners.get(m[1]!) ?? []), path.relative(SRC, file)]);
+      }
+    }
+    expect(owners.size, "no globalThis store keys found — the scanner sees nothing").toBeGreaterThanOrEqual(10);
+    const shared = [...owners].filter(([, files]) => files.length > 1).map(([key, files]) => `${key}: ${files.join(", ")}`);
+    expect(shared, `a globalThis key is owned by more than one module: ${shared.join("; ")}`).toEqual([]);
+  });
 });

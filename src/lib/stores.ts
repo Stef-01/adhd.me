@@ -22,6 +22,7 @@ import { resetVerticals } from "@/verticals/store";
 import { resetLedger } from "@/credentials/ledger";
 import { resetVault } from "@/credentials/vault";
 import { resetRateLimits } from "@/lib/rate-limit";
+import { resetReports } from "@/ops/reporter";
 import { resetOps } from "@/ops/store";
 import { resetPathwayRegistry } from "@/pathways/registry";
 import { resetPrivacy } from "@/privacy/state";
@@ -42,6 +43,7 @@ export const STORE_RESETTERS: Record<string, () => unknown> = {
   resetVault,
   resetRateLimits,
   resetOps,
+  resetReports,
   resetPathwayRegistry,
   resetPrivacy,
   resetReferralRail,

@@ -179,6 +179,13 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     rationale: "W19 holds practice-level switches; the queue view reads the rail rather than copying it.",
   },
   {
+    module: "src/ops/reporter.ts",
+    what: "Reporter ring — the last fifty server-error, Web Vital and CSP-violation reports",
+    handling: "no_patient_identity",
+    rationale:
+      "U4 builds every report from an allow-list: a path with its query stripped, a method, the router's context, an error's name, message and stack, a metric, a commit. Never a query string, a header or a body. reporter.test.ts plants a finder request in every channel and proves it absent from the payload.",
+  },
+  {
     module: "src/console/store.ts",
     what: "Practice profile, rules, roster, memberships",
     handling: "no_patient_identity",

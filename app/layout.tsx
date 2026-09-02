@@ -4,6 +4,7 @@ import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
 import { AcknowledgementOfCountry } from "./acknowledgement-of-country";
+import { WebVitals } from "./web-vitals";
 import { SITE_URL } from "./site";
 
 /**
@@ -135,6 +136,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             deliberate decision app/analytics.tsx's gate exists to require); GA stays dark
             behind its env switch. The privacy page states this layer unconditionally. */}
         <VercelAnalytics />
+        {/* U4: LCP, INP and CLS beaconed to /api/vitals with the pathname only. */}
+        <WebVitals />
       </body>
     </html>
   );

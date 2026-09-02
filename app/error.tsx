@@ -4,7 +4,9 @@
 // lands here instead of on Next's default screen, in the same calm register as the 404: one
 // plain sentence, that the reader did not cause it, and two doors. `reset` re-renders the segment
 // in place; the second door is a full navigation on purpose, so a client tree the boundary caught
-// is left behind rather than re-entered. Reporting goes to the console until U4 wires the seam.
+// is left behind rather than re-entered. A server-render error reaches the reporter sink through
+// `instrumentation.ts`'s `onRequestError` (U4); the browser-side `console.error` is the client
+// tree's own record, because no browser error intake exists and U4 chose not to invent one.
 import { useEffect } from "react";
 import { BOUNDARY_COPY } from "@/compliance/boundary-copy";
 

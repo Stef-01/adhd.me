@@ -108,7 +108,7 @@ describe("U2 .env.example names every variable the tree reads, and nothing else"
     expect(valued).toEqual([]);
   });
 
-  it("is the twenty-name inventory U2 wrote, so a new read is a deliberate addition here too", () => {
+  it("is the twenty-one-name inventory U2 wrote and U4 extended, so a new read is a deliberate addition here too", () => {
     expect([...READS.keys()].sort()).toEqual([
       "ADHDME_BACKGROUND_PATH",
       "ADHDME_CLINICIAN_PATH",
@@ -117,6 +117,7 @@ describe("U2 .env.example names every variable the tree reads, and nothing else"
       "ADHDME_FIXED_CLOCK",
       "ADHDME_INTEREST_PATH",
       "ADHDME_OUTBOUND_PATH",
+      "ADHDME_REPORTER",
       "ADHDME_TOKEN_SECRET",
       "CI",
       "E2E_PORT",
@@ -230,6 +231,8 @@ describe("U2 the production posture assertion", () => {
   it("is what instrumentation.ts runs at boot", () => {
     const text = readFileSync(path.join(ROOT, "instrumentation.ts"), "utf8");
     expect(text).toMatch(/import \{ assertProductionPosture \} from "@\/lib\/env"/);
-    expect(text).toMatch(/export function register\(\): void \{\s*assertProductionPosture\(\);\s*\}/);
+    // The posture is asserted FIRST: U4's sink selection sits after it, so a bad reporter name is
+    // reported on a process that is otherwise sound.
+    expect(text).toMatch(/export function register\(\): void \{\s*assertProductionPosture\(\);\s*selectSink\(\);\s*\}/);
   });
 });

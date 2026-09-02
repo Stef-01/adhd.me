@@ -155,6 +155,12 @@ describe("U1 the report-only policy", () => {
     expect(directive(policy, "form-action")).toEqual(["'self'"]);
   });
 
+  it("U4: sends violations to the tree's own csp-report route, in every posture", () => {
+    for (const policy of [contentSecurityPolicy(), contentSecurityPolicy({ gaId: "G-TEST", dev: true })]) {
+      expect(directive(policy, "report-uri")).toEqual(["/api/csp-report"]);
+    }
+  });
+
   it("carries no hash and no nonce — either would switch 'unsafe-inline' off and break every page", () => {
     for (const policy of [contentSecurityPolicy(), contentSecurityPolicy({ gaId: "G-TEST", dev: true })]) {
       expect(policy).not.toMatch(/'(sha256|sha384|sha512|nonce)-/);

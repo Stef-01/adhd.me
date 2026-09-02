@@ -52,6 +52,8 @@ export function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string 
     "base-uri": ["'self'"],
     "form-action": ["'self'"],
     "frame-ancestors": ["'none'"],
+    // U4: violations of the report-only policy reach the reporter sink through this route.
+    "report-uri": ["/api/csp-report"],
   };
   return Object.entries(directives)
     .map(([name, sources]) => `${name} ${sources.join(" ")}`)
