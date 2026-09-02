@@ -322,6 +322,42 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **O232 (FOUNDER-DIRECTED, 2026-09-02: "using relevant engineering skills you are to make it a
+> fully functioning app that is ready for the demo day, it is perfect and has zero slop text … ui
+> flow is perfectly seamless, buttons are crisp and have no weird formatting or placement, there is
+> strong framer motion and apple level animations and aethethetic glass quality") — CLAIMED
+> founder-0902a, 2026-09-02T18:30Z.** The craft pass, run against the skills CLAUDE.md §5 mandates:
+> `adhdme-taste` (this tree's own law), `impeccable` with its craft floor loaded before any edit,
+> and the product's own `DESIGN.md` and `PRODUCT.md` read through the skill's context script. The
+> finder is **Operate** mode in impeccable's vocabulary — the visitor completes a task, so
+> scanability and the real usage scene outrank expression, and brand lives in precise detail.
+> **Scope, from the craft floor's own verify list rather than from taste:**
+> (1) **Browser surfaces** — `::selection`, `caret-color`, the scrollbar and the focus ring ship as
+> browser defaults today, belonging to no design system; the floor names this "the cheapest signal
+> that a page was built rather than assembled, and the one models skip most reliably", and this tree
+> skipped it. (2) **Slop copy** — the booking screen's eyebrow reads "Booking" directly above the
+> heading "Booking Dr Chao"; the floor bans the kicker outright and this one also repeats its own
+> heading's first word. Every stage's copy is swept for the same defect. (3) **Buttons** — one
+> radius and height system, consistent press behaviour, no control whose hit area, alignment or
+> label differs from its siblings without a reason. (4) **Motion** — spring physics on the stage
+> machine and the shared-element portrait continuity that already exists, extended so the flow
+> reads as one moving object rather than a sequence of replacements; a results list that arrives in
+> order rather than all at once. (5) **Glass, used as a specific effect and not as decoration** —
+> the tab bar and the sheet are the two surfaces content actually scrolls under, which is exactly
+> where a material belongs, and nowhere else gets one.
+> **THE TREE'S LAWS BEAT THE SKILLS AND THE FOUNDER'S ADJECTIVES, AND TWO BITE HERE.** `DESIGN.md`
+> forbids ambient loops and animating more than two major regions at once; "strong motion" is
+> delivered as spatial continuity and spring physics (Jakub-primary, per §5), never as ambient
+> movement on a surface a tired person is reading. And `--dur-*`/`--ease-*` tokens are the vocabulary
+> — no scattered default `ease`. Reduced motion keeps a static equal for every effect, checked at
+> the hook.
+> **Method is impeccable's, not open-ended polishing:** build the batch, inspect ONCE in a batched
+> round at 390px and 1280px together, fix everything that round shows in one batch, confirm with at
+> most one more round, stop. **Verification:** `pnpm verify`; the contrast, touch, focus, hover,
+> reduced-motion and axe sweeps green (they are what stop a craft pass breaking an accessibility
+> law); full `pnpm e2e`; and the two screenshot rounds. **Continuation if this claim goes stale:**
+> nothing here is behind a flag; a half-applied motion or material system is worse than none.
+
 > **O231 (FOUNDER-DIRECTED, 2026-09-02: "run with dev server and screenshot based verify it is all
 > working … it is demo so everything should be production ready looking, remember zero
 > placeholders … If you add any weird placeholder sentences or note any profiles are synthetic you
@@ -12378,6 +12414,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| O232 | claimed | founder-0902a | 2026-09-02T18:30Z | — | FOUNDER-DIRECTED: the craft pass (adhdme-taste + impeccable, Operate mode). Browser surfaces themed (selection, caret, scrollbar, focus); the eyebrow slop removed; one button system; spring motion and shared-element continuity; glass on the two surfaces content scrolls under, nowhere else. DESIGN.md's no-ambient-loops and two-region limits hold. -> verify: pnpm verify; contrast/touch/focus/hover/reduced-motion/axe sweeps green; full e2e; two batched screenshot rounds at 390px and 1280px. |
 | O231 | done | founder-0902a | 2026-09-02T18:05Z | f362deb | FOUNDER-DIRECTED: demo-day readiness. The booking dead-end removed so the journey completes; the example-profile labels off the finder surfaces (amends `synthetic-roster-tickbox`); the monogram avatar designed rather than defaulted. No generated faces, no invented phone numbers, no mock confirmations. One truthful line kept on /story only. -> verify: pnpm verify; roster laws rewritten to the amended decision, not deleted; full e2e; screenshot pass over the whole journey at 390px and 1280px. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
 | U17 | available | — | — | — | (L) R1. One storage contract. Depends: U14. -> verify: `store-reads`, `isolation`, `zero-states`, `stores.test.ts` and the full e2e green without edits to their assertions (the store contract is invisible from outside); the census shows store lines down ≥30% and implementations at 1 adapter; a contract suite (`src/store/contract.test.ts`) runs against the adapter and is reused by U19 and U35. |
