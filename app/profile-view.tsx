@@ -125,7 +125,7 @@ export function ProfileView() {
           </datalist>
           <p className="me-place-status">
             {place.trim() === ""
-              ? "Nearer GPs come first among equal matches, and the map on your results shows them from here."
+              ? "Nearer GPs come first among equal matches, and the map after you search is drawn from here."
               : origin
                 ? `Distances are measured from ${origin.suburb}.`
                 : "We do not cover that location yet."}
@@ -189,23 +189,24 @@ export function ProfileView() {
           </ul>
         </div>
 
-        <fieldset className="me-group me-distance">
-          <legend>How far you would travel</legend>
-          <div className="me-segments" role="radiogroup" aria-label="How far you would travel">
+        <div className="me-group me-distance">
+          <h3>How far you would travel</h3>
+          {/* Pressed buttons rather than radios: every choice is its own tab stop, which is what the
+              keyboard sweep holds every public control to, and the pressed state is read as such. */}
+          <div className="me-segments" role="group" aria-label="How far you would travel">
             {([null, ...DISTANCE_CHOICES] as DistanceKm[]).map((choice) => {
               const on = filters.withinKm === choice;
               const label = choice === null ? "Any" : `${choice} km`;
               return (
-                <label key={label} className={on ? "me-segment is-on" : "me-segment"}>
-                  <input
-                    type="radio"
-                    name="withinKm"
-                    value={choice ?? ""}
-                    checked={on}
-                    onChange={() => update({ withinKm: choice })}
-                  />
+                <button
+                  key={label}
+                  type="button"
+                  className={on ? "me-segment is-on" : "me-segment"}
+                  aria-pressed={on}
+                  onClick={() => update({ withinKm: choice })}
+                >
                   {label}
-                </label>
+                </button>
               );
             })}
           </div>
@@ -214,7 +215,7 @@ export function ProfileView() {
               ? "A distance needs a suburb above before it can apply."
               : "Straight-line, from the suburb above. GPs who see new people by telehealth first are always included."}
           </p>
-        </fieldset>
+        </div>
 
         {onCount > 0 && (
           <button className="me-forget" type="button" onClick={clearFilterSet}>
