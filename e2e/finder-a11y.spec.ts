@@ -80,7 +80,7 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
 
     await toScenarios(page, "keyboard");
-    await expectLanding(page, "main[data-stage=scenarios] h1", "Demo scenarios.");
+    await expectLanding(page, "main[data-stage=scenarios] h1", "Example searches.");
     await press(page, "Back to start");
     await expectStage(page, "welcome");
     await expectLanding(page, "main[data-stage=welcome] h1", "Back at the start.");
