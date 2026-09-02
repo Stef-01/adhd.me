@@ -266,6 +266,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > skipped, 20.3m, exit 0 read from the command itself, run serially with nothing else building,
 > 349 listed) at the 4553ac3 tree. Vault log skipped (unreachable). U13 is next.
 
+> **U13 (O229-lane, the eleventh unit built of the one-year plan: analytics behind consent and
+> the CSP enforced) — CLAIMED founder-0902a, 2026-09-02T12:05Z.** Scope is the plan's U13 text and
+> nothing beyond it: GA4 loads only after the privacy bar records acceptance and is unloaded on
+> withdrawal, and U1's `Content-Security-Policy-Report-Only` becomes `Content-Security-Policy`.
+> The shape: a consent store (`src/privacy/consent.ts`, same `adhdme-privacy-ack` key so existing
+> acks and the e2e storage state stay valid; read, record, withdraw, subscribe, a
+> `useSyncExternalStore` hook), the privacy bar reading it and returning on withdrawal, a withdraw
+> control on `/privacy`, and `app/analytics.tsx` becoming a client component that inserts the
+> gtag loader from an effect only while consent holds — no `next/script`, no inline script, so
+> the tree's only hand-written inline script goes away — and on withdrawal sets the
+> `ga-disable-<id>` flag and removes what it inserted. **The line that comes out differently,
+> stated up front:** the plan's precondition is a week of U4 reports showing zero violations on
+> real routes; this deployment has no public traffic and no hosted sink, so there are no such
+> reports to read. The substitute is the full suite under enforcement — U1's own e2e already calls
+> its violation listener "the plan's week of reports, in miniature" — and the unit fixes any
+> source it finds rather than widening the policy; the policy's directives do not change, only
+> the header name (a dev-only `'unsafe-eval'` if `next dev` needs one, and nothing in
+> production). Nonces stay out: they would force every route dynamic, and the static pages are
+> the deployment. The e2e env gains `NEXT_PUBLIC_GA_ID=G-E2E0000000`, a placeholder that is not a
+> measurement ID (nothing is registered under it; the loader request is intercepted in the spec),
+> so the launch checklist's "no measurement ID lives in this repository" still holds and is
+> reworded to say so. Verification is the plan's: `e2e/analytics.spec.ts` proves no request to
+> the tag host before Agree, one after, and none after Withdraw; `headers.test.ts` asserts the
+> enforced header and the script census at zero external and zero inline; `e2e/headers.spec.ts`
+> sees the planted script blocked with `disposition: "enforce"`; the full suite under enforcement
+> is the proof that the mic and every console route still work. No UI moves beyond the withdraw
+> control on `/privacy`; the gradient aesthetic is untouched. Continuation if this claim goes
+> stale: nothing is behind a flag; the unit is whole or it is not landed.
+
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
 > claim came out differently and is explained below. **Outcome:** `src/finder/state.ts` owns where
@@ -12108,7 +12137,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U10 | done | founder-0902a | 2026-09-02T11:02Z | e40a88b | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | blocked | — | — | — | FOUNDER DECISION D-WEBKIT-RUNNER (docs/ONE-YEAR-BUILD-PLAN.md §6): (M) WebKit in the suite. Blocked 2026-09-02 by founder-0902a — the build environment refuses both Playwright CDNs (403) and pre-provisions Chromium only, so `pnpm e2e --project=webkit` cannot run where the units are built. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | done | founder-0902a | 2026-09-02T11:03Z | 4553ac3 | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
-| U13 | available | — | — | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
+| U13 | claimed | founder-0902a | 2026-09-02T12:05Z | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
 | U14 | available | — | — | — | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | U15 | available | — | — | — | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
 | U16 | available | — | — | — | [P] (M) R0. A linter, dead-export detection, and the junk. -> verify: `pnpm lint` and `pnpm knip` green with the pinned baseline (knip findings may only go down — a ratchet entry); `audit:gate` green with no acceptance past its review date. |
