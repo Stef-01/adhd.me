@@ -172,6 +172,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `/finder` 686 KB); full `pnpm e2e` green (344 passed, 1 skipped, 20.2m, exit 0 read from the command itself, run serially with nothing else building, 345 listed) at the 508ac90 tree. Vault log skipped
 > (unreachable). U10 is next.
 
+
+> **U10 (O229-lane, the ninth unit built of the one-year plan: stale banners, a listening timeout,
+> and the debug clobber) — CLAIMED founder-0902a, 2026-09-02T10:02Z.** Scope is the plan's U10 text
+> and nothing beyond it: `speechMessage`/`speechRetryable` cleared on every path that leaves the
+> listening stage (`findMatches`, `reset`, `onRefine`, the typed path), not only in
+> `startListening`; a listening timeout at 60 s that ends recognition through the existing
+> end-of-speech path with the existing "we did not catch that" copy — never an error; `?debug=1`
+> read once into state at arrival instead of being re-read from a URL that U8's place serialiser
+> rewrites (the clobber). Verification is the plan's: vitest on the reducer paths (the banner is
+> cleared on each exit; the timeout fires the end-of-speech path, not an error) and
+> `e2e/voice.spec.ts` gains the timeout case with the fake recogniser and a fixed clock. The
+> gradient aesthetic stays; nothing here moves a pixel, checked on the built route. Continuation
+> if this claim goes stale: nothing is behind a flag; the unit is whole or it is not landed.
+
 > **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
 > Q-A) — DONE founder-0902a, 2026-09-02 @ db40bf9.** Scope was the plan's U8 text; one line of the
 > claim came out differently and is explained below. **Outcome:** `src/finder/state.ts` owns where
@@ -12011,7 +12025,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
 | U8 | done | founder-0902a | 2026-09-02T06:52Z | db40bf9 | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
 | U9 | done | founder-0902a | 2026-09-02T09:58Z | 508ac90 | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
-| U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
+| U10 | claimed | founder-0902a | 2026-09-02T10:02Z | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
 | U12 | available | — | — | — | (S) The deploy runbook and a smoke script. Depends: U4. -> verify: `pnpm smoke http://localhost:3100` green against `next start`; the runbook's commands are the ones the script runs (a test greps the runbook for each script step). |
 | U13 | available | — | — | — | (S) Analytics behind consent and the CSP enforced. Depends: U1, U4. -> verify: e2e proves no GA request before consent and one after; `headers.test.ts` asserts the enforced header; the finder's mic and every console route still function under enforcement (the full suite is the proof). |
