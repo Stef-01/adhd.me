@@ -119,6 +119,20 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > everything; future expansions should keep more `[P]` units genuinely independent.
 
 
+> **U8 (O229-lane, the seventh unit built of the one-year plan: the finder's state model, §2.8
+> Q-A) — CLAIMED founder-0902a, 2026-09-02T06:52Z.** Scope is the plan's U8 text and nothing beyond
+> it: `src/finder/state.ts` owns the stage model — a history entry per stage via
+> `history.pushState` (Back and Forward walk the stages instead of leaving the site), the request
+> text and the chosen match in `sessionStorage` under a versioned key (reload resumes the same
+> tab, a fresh tab starts clean), and a URL serialiser that accepts `place` and nothing else, so
+> `/finder?place=Footscray` works for a practice and no request ever reaches a URL, a history
+> entry, a log line or an analytics event. `app/finder/page.tsx` reads `place` from `searchParams`.
+> `src/finder/state.test.ts` round-trips every stage and plants a sentence to prove it is absent
+> from the URL and from `history.state`; `e2e/finder-history.spec.ts` drives welcome → listening →
+> results → booking with Back, Forward and a reload. No pixel moves: the gradient aesthetic and
+> the `qa/` captures stay as they are, checked on the dev server. Continuation if this claim goes
+> stale: nothing is behind a flag; the unit is whole or it is not landed.
+
 > **U7 (O229-lane, the sixth unit built of the one-year plan; U6 stays blocked on D-CI-BILLING:
 > crawlers told the truth about the finder) — DONE founder-0902a, 2026-09-02 @ f871137.** Scope was
 > the plan's U7 text, with one addition the unit's own invariant forced (below). **Outcome:**
@@ -11902,7 +11916,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U5 | done | founder-0902a | 2026-09-02T06:20Z | 499fd47 | [P] (S) Toolchain pins and CI parity. -> verify: `src/quality/ci-parity.test.ts` parses `ci.yml` and asserts its script set equals `verify`'s step list (both directions); `pnpm verify` green locally with the pinned versions. Done as: `packageManager: pnpm@10.33.0`, `engines { node: 22.x, pnpm: 10.x }`, `.nvmrc` = 22 (lockfile unchanged); the verify job runs exactly `pnpm verify` (perf:gate and gate:accounting reach CI for the first time), both jobs read the pins (`node-version-file: .nvmrc`, `pnpm/action-setup` without `version`); ci-parity.test.ts 9/9 — script set both directions, call-not-copy, non-vacuous parse, the pre-U5 workflow fails naming perf:gate + gate:accounting, pins agree. U6 stays blocked on D-CI-BILLING. pnpm verify green (304 files / 4477 tests), full e2e 328 passed / 1 skipped. |
 | U6 | blocked | — | — | — | FOUNDER DECISION D-CI-BILLING (docs/ONE-YEAR-BUILD-PLAN.md §6): (S) The first green Actions run since 2026-08-21. -> verify: a green run recorded by URL in the ledger row; `gate-state` line updated from that run's figures. |
 | U7 | done | founder-0902a | 2026-09-02T06:24Z | f871137 | [P] (S) Crawlers told the truth about the finder. -> verify: `src/security/robots.test.ts` asserts the three routes are excluded in all three places (both directions with the public-route census, so a new public route is neither silently indexed nor silently hidden); `founder-gates.test.ts` sees the new entry with its source. |
-| U8 | available | — | — | — | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
+| U8 | claimed | founder-0902a | 2026-09-02T06:52Z | — | [P] (M) The finder's state model (§2.8 Q-A). -> verify: `src/finder/state.test.ts` round-trips every stage and proves the request text is absent from the URL and from `history.state` (a planted sentence must not appear); e2e `finder-history.spec.ts` drives welcome → listening → results → booking with Back/Forward and a reload, asserting the stage and the preserved request; `qa/` captures unchanged (no pixel moves). |
 | U9 | available | — | — | — | (M) Focus, live regions and one mic control. Depends: U8. -> verify: e2e `finder-a11y.spec.ts` asserts the focused element and the single live-region text after each transition (keyboard-only, `reduce` and no-preference); axe on every stage; `touch-floor` and `keyboard-focus` sweeps extended to finder stages (the U52 sweep starts here); AR15 acceptance entry if the single control moves pixels. |
 | U10 | available | — | — | — | [P] (S) Stale banners, a listening timeout, and the debug clobber. -> verify: vitest on the reducer paths (banner cleared on each exit; timeout fires the end-of-speech path, not an error); e2e `voice.spec.ts` gains the timeout case with the fake recogniser and the fixed clock. |
 | U11 | available | — | — | — | [P] (M) WebKit in the suite. -> verify: `pnpm e2e --project=webkit` green locally; `scripts/gate-accounting.mts` fails if either project's tests are unaccounted; `ci.yml` runs both projects once U6 fires. |
