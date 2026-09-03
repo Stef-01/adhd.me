@@ -73,6 +73,7 @@ const SET_BY_O234 = "2026-09-02";
 const SET_BY_O235 = "2026-09-02";
 const SET_BY_O236 = "2026-09-02";
 const SET_BY_O239 = "2026-09-02";
+const SET_BY_O240 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -251,6 +252,15 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'css-rule-blocks', value: 1488, on: SET_BY_O239 },
   { measure: 'css-styled-classes', value: 493, on: SET_BY_O239 },
   { measure: 'classname-attributes', value: 1764, on: SET_BY_O239 },
+  // O240 (founder-directed): the motion pass — the house spring, the travelling tab marker, the
+  // map panel unfolding, Learn cards sliding — and the lighter rows and one-line disclaimer.
+  { measure: 'app-lines', value: 16015, on: SET_BY_O240, reason: "O240: the tab marker as a shared-layout element, the map panel's AnimatePresence, the Learn module's spring wrappers, and the reasoning at each — every effect gated at the hook." },
+  { measure: 'css-lines', value: 8805, on: SET_BY_O240, reason: "O240: the tab marker rule, the row hover lift behind its hover gate, the disclaimer's line, the consent card's entrance keyframe and its reduced-motion equal." },
+  { measure: 'css-rule-blocks', value: 1497, on: SET_BY_O240, reason: "O240: as css-lines." },
+  { measure: 'css-styled-classes', value: 494, on: SET_BY_O240, reason: "O240: app-tab-marker." },
+  { measure: 'classname-attributes', value: 1765, on: SET_BY_O240, reason: "O240: the marker element." },
+  { measure: 'src-lines', value: 54876, on: SET_BY_O240, reason: "O240: this register's entries." },
+  { measure: 'src-unreached-lines', value: 24007, on: SET_BY_O240, reason: "O240: this register's entries; a law module the product does not import." },
 ];
 
 /** The current floor per measure: the last entry wins. */
