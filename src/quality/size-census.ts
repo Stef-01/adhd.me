@@ -311,12 +311,14 @@ export const RATCHET: readonly RatchetEntry[] = [
   // the reason being the merge itself rather than any line either lane would claim.
   { measure: 'app-lines', value: 16294, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-modules', value: 305, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-lines', value: 55513, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-lines', value: 55515, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-reached-modules', value: 172, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-reached-lines', value: 31432, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-unreached-lines', value: 24081, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-unreached-lines', value: 24083, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'vitest-lines', value: 53649, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'e2e-spec-lines', value: 8015, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'css-lines', value: 8980, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'css-rule-blocks', value: 1566, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
 ];
 
 /** The current floor per measure: the last entry wins. */
