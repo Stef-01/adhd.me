@@ -4225,3 +4225,57 @@ at 390 and 1280 from the production build.
 
 **Captures:** `qa/o245-learn-390.png`, `qa/o245-learn-module-390.png`, `qa/o245-results-390.png`,
 `qa/o245-learn-1280.png`.
+
+## O247 — minimalism, researched then applied: the voice screen and the map (2026-09-03)
+
+**Founder-directed.** "Make the voice one look even more polished, 'listening in English' should
+be removed completely, make the listening-on-device text tiny. You clearly have no idea what
+minimalism means, so research and take notes on minimalist app design and learn it. Also make the
+map look even more seamless and polished."
+
+**The research, and the rule it produced.** Rams ("less, but better"; unobtrusive; honest;
+thorough to the last detail), Nielsen Norman on flat design (delete depth but keep the signifier
+on the one control that must look pressable), Apple's clarity and deference with 44pt targets, and
+Wispr Flow's overlay ("invisible until you need it": a hotkey, a waveform, the text). The rule now
+in DESIGN.md: name the one job and one action; delete before you shrink; then make the residue
+tiny and faint; group with whitespace and tint, not boxes; keep the signifier on the primary
+control; type does the hierarchy; motion carries meaning only; secondary tools behind one icon in
+the sheet. If more than three elements survive above the fold besides the content, it is not
+minimal.
+
+**Voice.** "Listening in English." is gone from the screen; the sentence survives only as the
+globe's screen-reader name, and the globe opens the languages in the app's sheet with the current
+one ticked. "Type instead" is a text control. The disclosure that must stay is one line at
+0.625rem in `--faint`. Above the fold: the transcript, the control, the caption, two quiet tools.
+
+**Map.** The card, the hairline, the caption sentence and the "numbers are the rows" line are gone.
+The tiles are the card (a 20px radius and a soft shadow), the zoom buttons are two round 44px
+controls, the licence credit is Leaflet's own control at 0.5625rem, and the only chip is the one
+that says a GP could not be placed, shown only then.
+
+**Verified.** voice, finder-a11y, app-shell, reduced-motion, touch-floor, keyboard-focus, contrast,
+public-sweep and finder-flow e2e green on the new flows; full `pnpm e2e`; captures at 390 and 1280
+from the production build with the fake speech harness for the listening screen.
+
+**Captures:** `qa/o246-listening-390.png`, `qa/o246-listening-lang-390.png`,
+`qa/o247-results-map-390.png`, `qa/o247-results-map-1280.png`.
+
+## O248 — how they work: whole-person, functional health, wearables (2026-09-03)
+
+**Founder-directed.** "Implement holistic health focus and functional health and wearables
+open-minded, more filters and points of personalisation."
+
+**What it is.** A declared set on the roster, closed vocabulary, in the GP's own terms: a
+whole-person view alongside the assessment; openness to functional-health approaches beside
+standard care; a willingness to look at sleep and activity data from a wearable the person brings.
+Each is a statement about a way of working, never a claim about outcomes, and it appears on a
+real clinician only when they have said so — today the example profiles carry a spread.
+
+**Where it shows.** Three chips under "How they work" on the Profile tab, each requiring the
+declaration (GPs who have not said are left out of a chosen chip, never assumed); the results strip
+names them like every other filter; a clinician's page lists them among its pills.
+
+**Verified.** filters, roster and design tests; app-shell e2e toggles a chip and reads the count;
+public sweep over the new copy; full `pnpm e2e`; profile capture at 390.
+
+**Captures:** `qa/o248-profile-filters-390.png`.

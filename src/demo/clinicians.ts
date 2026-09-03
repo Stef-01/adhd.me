@@ -15,7 +15,8 @@ import { type EIQuality } from "./emotional-fit";
  * Both are re-exported below, so this module is still the one every consumer imports and
  * nothing outside these two files changed.
  */
-export type { CareArea, Clinician } from "./roster";
+export type { Approach, CareArea, Clinician } from "./roster";
+export { APPROACHES } from "./roster";
 export { clinicians } from "./roster";
 
 import { clinicians, type Clinician } from "./roster";

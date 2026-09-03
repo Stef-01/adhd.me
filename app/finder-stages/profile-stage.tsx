@@ -17,6 +17,7 @@ import {
   type Clinician,
 } from "@/demo/clinicians";
 import { type NeedSignal } from "@/matching/needs";
+import { APPROACH_LABELS } from "@/finder/filters";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { profileAnnouncement } from "@/finder/announce";
 import { ClinicianPortrait, EASE_OUT, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
@@ -27,7 +28,7 @@ function shortTitle(title: string): string {
   return title.split(",")[0]?.trim() || title;
 }
 
-type ProfileFact = { kind: "language" | "telehealth" | "availability" | "recording"; label: string };
+type ProfileFact = { kind: "language" | "telehealth" | "availability" | "recording" | "approach"; label: string };
 
 const LANGUAGE_LIST = new Intl.ListFormat("en-AU", { style: "long", type: "conjunction" });
 
@@ -46,7 +47,9 @@ function profileFacts(clinician: Clinician): ProfileFact[] {
   // O236: the declared note-taking fact, in the practice's own terms.
   if (clinician.consultRecording === "ai-scribe") facts.push({ kind: "recording", label: "AI scribe, with your consent" });
   if (clinician.consultRecording === "no-ai") facts.push({ kind: "recording", label: "No AI recording" });
-  return facts.slice(0, 4);
+  // O248: how they say they work, in the closed vocabulary's own words.
+  for (const a of clinician.approach ?? []) facts.push({ kind: "approach", label: APPROACH_LABELS[a] });
+  return facts.slice(0, 6);
 }
 
 function usefulPracticalSignals(clinician: Clinician): string[] {

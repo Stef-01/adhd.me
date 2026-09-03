@@ -110,6 +110,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "collaborative"],
     wheelchairAccessible: true,
     consultRecording: "ai-scribe",
+    approach: ["holistic"],
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -139,6 +140,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["attuned", "non_judgmental"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["functional"],
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -167,6 +169,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["sense_making", "collaborative"],
     wheelchairAccessible: false,
     consultRecording: "ai-scribe",
+    approach: ["wearables"],
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -194,6 +197,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["structured", "steadying"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["holistic", "wearables"],
     appointmentLength: "Long first appointment, scheduled reviews",
     telehealthFirstAppointment: true,
   }),
@@ -250,6 +254,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["sense_making", "structured"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["functional", "wearables"],
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -279,6 +284,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "culturally_attuned"],
     wheelchairAccessible: false,
     consultRecording: "ai-scribe",
+    approach: ["holistic"],
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -334,6 +340,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["attuned", "steadying"],
     wheelchairAccessible: true,
     consultRecording: "ai-scribe",
+    approach: ["holistic", "functional", "wearables"],
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -361,6 +368,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["structured", "collaborative"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["wearables"],
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
   example({
@@ -389,6 +397,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "motivating"],
     wheelchairAccessible: true,
     consultRecording: "ai-scribe",
+    approach: ["holistic"],
     appointmentLength: "Extended first appointment",
   }),
   example({
@@ -417,6 +426,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["non_judgmental", "sense_making"],
     wheelchairAccessible: false,
     consultRecording: "no-ai",
+    approach: ["functional"],
     appointmentLength: "Appointment lengths set with the practice",
   }),
   example({
@@ -444,6 +454,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["attuned", "unhurried"],
     wheelchairAccessible: true,
     consultRecording: "ai-scribe",
+    approach: ["wearables"],
     appointmentLength: "Extended first appointment",
     telehealthFirstAppointment: true,
   }),
@@ -472,6 +483,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["steadying", "structured"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["holistic", "wearables"],
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
   example({
@@ -527,6 +539,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["collaborative", "non_judgmental"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["functional", "wearables"],
     appointmentLength: "Long first appointment",
     telehealthFirstAppointment: true,
   }),
@@ -556,6 +569,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["motivating", "culturally_attuned"],
     wheelchairAccessible: true,
     consultRecording: "ai-scribe",
+    approach: ["holistic"],
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -610,6 +624,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["unhurried", "culturally_attuned"],
     wheelchairAccessible: true,
     consultRecording: "ai-scribe",
+    approach: ["holistic", "functional", "wearables"],
     appointmentLength: "Long first appointment",
   }),
   example({
@@ -638,6 +653,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     manner: ["steadying", "non_judgmental"],
     wheelchairAccessible: true,
     consultRecording: "no-ai",
+    approach: ["wearables"],
     appointmentLength: "Long first appointment, scheduled reviews",
   }),
 ];

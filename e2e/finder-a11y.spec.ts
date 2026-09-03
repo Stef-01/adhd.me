@@ -95,6 +95,7 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     // the choices open from the language chip first.
     await press(page, /Listening in English/);
     await press(page, "हिन्दी");
+    await expect(page.getByRole("dialog", { name: "Change language" })).toHaveCount(0);
     await expectStage(page, "listening");
     await expect(live(page)).toHaveText("Listening again in हिन्दी.");
     await expect(page.getByTestId("speech-language")).toContainText("Listening in हिन्दी.");

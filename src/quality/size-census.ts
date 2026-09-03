@@ -76,6 +76,8 @@ const SET_BY_O239 = "2026-09-02";
 const SET_BY_O240 = "2026-09-02";
 const SET_BY_O242 = "2026-09-02";
 const SET_BY_O245 = "2026-09-02";
+const SET_BY_O247 = "2026-09-03";
+const SET_BY_O248 = "2026-09-03";
 const SET_BY_O241 = "2026-09-03";
 const SET_BY_O241_MERGE = "2026-09-03";
 
@@ -290,6 +292,23 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'vitest-lines', value: 53523, on: SET_BY_O245, reason: "O244: progress.test.ts lints every word of the Learn copy against the patient-surface rules and holds every quiz prompt to being about ADHD, never the reader." },
   { measure: 'e2e-spec-lines', value: 7919, on: SET_BY_O245, reason: "O244: app-shell.spec.ts plays a quiz through; the language and clarifier flows open from their chips." },
   { measure: 'e2e-goto-calls', value: 292, on: SET_BY_O245, reason: "O244: the quiz test." },
+  // O247 (founder-directed): minimalism researched then applied — the listening screen's language
+  // line deleted (a globe opens the sheet), the map's card and caption gone. Net, nearly flat.
+  { measure: 'app-lines', value: 16325, on: SET_BY_O247, reason: "O247: the language sheet on the listening screen and the map's caption chip, with the reasoning naming the rule — delete before you shrink." },
+  { measure: 'css-lines', value: 9046, on: SET_BY_O247, reason: "O247: the listening tools and the language list in the sheet; the map without its card — less the chip rules that went." },
+  { measure: 'css-rule-blocks', value: 1584, on: SET_BY_O247, reason: "O247: as css-lines." },
+  { measure: 'css-styled-classes', value: 529, on: SET_BY_O247, reason: "O247: listen-tools/text/globe and listen-lang-choice — less listen-chip and listen-lang." },
+  { measure: 'e2e-spec-lines', value: 7921, on: SET_BY_O247, reason: "O247: moved by the unit; pinned to the tree as measured." },
+  { measure: 'src-lines', value: 55215, on: SET_BY_O247, reason: "O247: this register's entries." },
+  { measure: 'src-unreached-lines', value: 24046, on: SET_BY_O247, reason: "O247: this register's entries." },
+  // O248 (founder-directed): the declared 'how they work' set — three chips, one field, one test.
+  { measure: 'app-lines', value: 16367, on: SET_BY_O248, reason: "O248: the profile's chip group and the clinician page's pills." },
+  { measure: 'src-lines', value: 55270, on: SET_BY_O248, reason: "O248: the Approach vocabulary on the roster, its declaration on the personas, and the filter that requires it." },
+  { measure: 'src-reached-lines', value: 31215, on: SET_BY_O248, reason: "O248: as src-lines — roster and filters are in the closure." },
+  { measure: 'classname-attributes', value: 1813, on: SET_BY_O248, reason: "O248: the chip group's markup." },
+  { measure: 'vitest-lines', value: 53532, on: SET_BY_O248, reason: "O248: filters.test.ts requires every chosen declaration and refuses one the roster does not know." },
+  { measure: 'e2e-spec-lines', value: 7926, on: SET_BY_O248, reason: "O248: app-shell.spec.ts toggles a chip and reads the count." },
+  { measure: 'src-unreached-lines', value: 24055, on: SET_BY_O248, reason: "O248: this register's entries." },
   // O241: the search register. Two GAINS first, and they are the shape of the unit: it deleted a
   // layout rather than adding one, because the thing it was auditing was duplication in the head.
   { measure: 'app-files', value: 139, on: SET_BY_O241 },
@@ -309,16 +328,16 @@ export const RATCHET: readonly RatchetEntry[] = [
   // each pinned its own tree honestly and neither figure describes the tree that holds both. These
   // entries are the sum, measured after the merge — the same rule U14 states for every raise, with
   // the reason being the merge itself rather than any line either lane would claim.
-  { measure: 'app-lines', value: 16294, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'app-lines', value: 16342, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-modules', value: 305, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-lines', value: 55515, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-lines', value: 55580, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-reached-modules', value: 172, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-reached-lines', value: 31432, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-unreached-lines', value: 24083, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'vitest-lines', value: 53649, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'e2e-spec-lines', value: 8015, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'css-lines', value: 8980, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'css-rule-blocks', value: 1566, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-reached-lines', value: 31478, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-unreached-lines', value: 24102, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'vitest-lines', value: 53658, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'e2e-spec-lines', value: 8022, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'css-lines', value: 9046, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'css-rule-blocks', value: 1584, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
 ];
 
 /** The current floor per measure: the last entry wins. */
