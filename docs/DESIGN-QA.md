@@ -4129,3 +4129,28 @@ matching-verification, voice, results, told and reduced-motion e2e; full `pnpm e
 
 **Captures:** `qa/o239-results-390.png`, `qa/o239-results-map-390.png`, `qa/o239-learn-390.png`,
 `qa/o239-learn-1280.png`.
+
+## O240 — simpler, and moving like a modern app (2026-09-02)
+
+**Founder-directed.** "Make it much more simplified and minimalist for the UI and have much more
+modern and polished framer motions."
+
+**Simpler.** Results rows lightened — a 60px portrait, a 16px radius, the hairline mixed toward
+paper, a hover lift on pointer devices only — so five rows read as a list rather than five boxes.
+The welcome disclaimer is one quiet line instead of a tinted panel. Nothing new was added to any
+screen.
+
+**Motion.** One house spring (`STAGE_SPRING`) replaces the tween-with-blur on every stage
+transition; results rows stagger on it; the map panel unfolds and folds on it; the Learn module
+view and its cards arrive on it, from the side they were asked for, and the finished tick pops;
+the tab bar's marker is one element with a shared layout id that travels between tabs; the consent
+card arrives on the spring curve. Every effect is gated by `useReducedMotion` at the hook (the
+AR20 census holds every motion-importing file to a hook, a prop or a declared boundary) or by
+`prefers-reduced-motion` in CSS, and the server render carries no `opacity: 0` (the Learn tiles
+deliberately do not animate on first paint so the no-JavaScript reader gets them at once).
+
+**Verified.** `pnpm verify` green; reduced-motion, keyboard-focus, touch-floor, contrast, a11y,
+landing, app-shell and finder e2e; full `pnpm e2e`; captures at 390 and 1280 from the production
+build.
+
+**Captures:** `qa/o240-results-390.png`, `qa/o240-welcome-390.png`, `qa/o240-learn-module-390.png`.

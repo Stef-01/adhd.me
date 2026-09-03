@@ -146,6 +146,13 @@ the workspace map becomes a bounded, vertically scrollable panel.
 Motion follows a Jakub-primary / Emil-secondary standard: spatial continuity first, polish
 second. It must explain where an object or state went.
 
+O240: the house motion is a **spring** (`STAGE_SPRING` in `app/finder-stages/shared.tsx`:
+stiffness 380, damping 36, mass 0.85) with a short opacity tween beside it, never a blur. Stages
+settle on it; results rows stagger on it; the map panel unfolds on it; Learn cards slide in from the
+side they were asked for on it; the tab bar's one marker travels between tabs on a stiffer spring
+through a shared layout id. Every effect checks `useReducedMotion` at the hook and has a static
+equal.
+
 - `--dur-tap` acknowledges a press; `--dur-move` handles a short reversible move;
   `--dur-enter` handles an arriving state.
 - Use the shared strong out-ramp or spring token. Do not scatter default `ease` transitions.
