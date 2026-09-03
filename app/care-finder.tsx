@@ -570,12 +570,14 @@ export function CareFinder() {
             change read the whole new screen aloud; each stage now owns one `role="status"` line
             (`StatusLine`) scripted in `src/finder/announce.ts`. */}
         <section className="care-shell">
-          {/* O249 (apple-design appraisal, finding 4): no `mode="wait"`. The leaving screen is
-              popped out of flow by MotionScreen (absolute, inert) so the next one mounts at once and
-              a tap during the exit lands on something. `custom` carries the direction to the exit
-              variant; the context carries it to the arrival. */}
+          {/* O249 (apple-design appraisal, finding 4): the leaving screen goes at once — its exit
+              is instant — so the next screen exists on the very next frame and a tap during the
+              change lands on something. Overlapping the two (sync mode) was tried first and left
+              screens stranded when two changes came within a frame of each other; an instant exit
+              is the interruptible version that cannot strand anything. The context carries the
+              direction so the arrival comes from the side the person is moving from. */}
           <StageDirection.Provider value={direction}>
-          <AnimatePresence key={arrivalKey} custom={direction} initial={false}>
+          <AnimatePresence key={arrivalKey} mode="wait" initial={false}>
 
         {stage === "welcome" && (
           <WelcomeStage

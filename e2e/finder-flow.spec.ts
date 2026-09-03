@@ -77,7 +77,10 @@ test("a second consulting location is a fact the reader sees, with the distance 
   // The profile carries the same pair on its compact identity block.
   await anushaRow.click();
   await expect(page.getByText(/Double Bay & Hornsby/).first()).toBeVisible();
-  await expect(page.locator(".disclosure-line")).toHaveCount(0);
+  // The declared-interest line is the clinician's own declaration and belongs on the profile
+  // (ownership-disclosure.spec pins it). O249: this used to expect none and passed only in the
+  // 160 ms before the profile mounted; the exit is instant now.
+  await expect(page.locator(".disclosure-line")).toHaveText(/declared interest/i);
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-desktop.png" });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(300);

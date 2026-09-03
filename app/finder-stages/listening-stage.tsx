@@ -90,7 +90,7 @@ export function ListeningStage({
           their own words as they say them. */}
       <div className="listen-stage">
         <h1 className="listen-eyebrow" tabIndex={-1}>Listening</h1>
-        <p className={heard ? "listen-transcript" : "listen-transcript is-empty"} aria-live="off">
+        <p className={heard ? "listen-transcript" : "listen-transcript is-empty"}>
           {heard || "Say what you’re looking for…"}
         </p>
       </div>

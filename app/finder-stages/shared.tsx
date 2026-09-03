@@ -10,7 +10,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Waveform } from "@phosphor-icons/react";
-import { motion, useIsPresent, useReducedMotion, type Variants } from "motion/react";
+import { motion, useReducedMotion, type Variants } from "motion/react";
 import { createContext, type ComponentProps, type ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { type Clinician } from "@/demo/clinicians";
 
@@ -47,10 +47,10 @@ export const PRESS_SPRING = { type: "spring", stiffness: 420, damping: 32, mass:
 export const STAGE_SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 
 /**
- * O249: the direction of the last move, so a screen enters from the side it is coming from and
- * leaves toward where it came from. Forward: rise in, drift up and out. Back: drop in from above,
- * drift down and out. "If something disappears one way, we expect it to emerge from where it
- * came" — the arrival reads the context, the exit reads AnimatePresence's `custom`.
+ * O249: the direction of the last move, so a screen enters from the side the person is moving
+ * from. Forward: rise in. Back: drop in from above. "If something disappears one way, we expect
+ * it to emerge from where it came." The exit is instant (see care-finder), so only the arrival
+ * carries direction; the arrival reads it from this context.
  */
 export const StageDirection = createContext<1 | -1>(1);
 
@@ -61,17 +61,14 @@ export const stageVariants: Variants = {
     y: 0,
     transition: { ...STAGE_SPRING, opacity: { duration: 0.22, ease: EASE_OUT } },
   },
-  exit: (direction: 1 | -1 = 1) => ({
-    opacity: 0,
-    y: -6 * direction,
-    transition: { duration: 0.16, ease: [0.4, 0, 1, 1] },
-  }),
+  // Instant: the next screen must exist on the next frame (O249, interruptibility).
+  exit: { opacity: 0, transition: { duration: 0 } },
 };
 
 export const reducedStageVariants: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.15 } },
-  exit: { opacity: 0, transition: { duration: 0.1 } },
+  exit: { opacity: 0, transition: { duration: 0 } },
 };
 
 // Welcome intro: children rise in sequence under the screen-level fade.
@@ -112,10 +109,6 @@ export function MotionScreen({
   const shouldPreserveFixedPositioning = className.includes("profile-screen");
   const screen = useRef<HTMLDivElement>(null);
   const direction = useContext(StageDirection);
-  // O249: while this screen is leaving it is popped out of flow and out of the accessibility
-  // tree, so the arriving screen owns the layout, the focus and every role query at once.
-  // `useIsPresent`, not `usePresence`: the latter hands this component the job of removal.
-  const isPresent = useIsPresent();
 
   useEffect(() => {
     if (!focusOnArrival) return;
@@ -128,9 +121,7 @@ export function MotionScreen({
   return (
     <motion.div
       ref={screen}
-      className={isPresent ? `screen ${className}` : `screen ${className} is-leaving`}
-      inert={isPresent ? undefined : true}
-      aria-hidden={isPresent ? undefined : true}
+      className={`screen ${className}`}
       custom={direction}
       variants={shouldReduceMotion || shouldPreserveFixedPositioning ? reducedStageVariants : stageVariants}
       initial="initial"

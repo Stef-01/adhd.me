@@ -337,6 +337,7 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'src-reached-modules', value: 172, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-reached-lines', value: 31478, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-unreached-lines', value: 24102, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-unreached-lines', value: 24105, on: SET_BY_O249, reason: "O249: the history hook's direction and its comment — reached by the finder, counted here by the register's own rule." },
   { measure: 'vitest-lines', value: 53658, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'e2e-spec-lines', value: 8022, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'css-lines', value: 9046, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },

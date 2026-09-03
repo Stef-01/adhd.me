@@ -162,6 +162,23 @@ every screen, in order:
 
 If more than three elements survive above the fold besides the content itself, it is not minimal.
 
+## Fluid interfaces, checked (O249)
+
+The tree was appraised against Apple's fluid-interface talks (the apple-design skill) and the
+gaps closed. The rules that now hold, with the constants that prove them:
+
+- **Springs at ζ ≈ 1 for anything tapped; ζ ≈ 0.8 only after a flick.** `STAGE_SPRING` is
+  380 / 36 / 0.85 (ζ = 1.00, response 0.30 s). Presses use `PRESS_SPRING`. Nothing overshoots on
+  a tap that carried no momentum.
+- **The next screen exists on the next frame.** Stage exits are instant; only the arrival
+  animates, from the side the person is moving from (the history hook's `direction`).
+- **A release goes where it was going.** The sheet projects its rest with Apple's decay curve
+  (`project(v) = v/1000 · d / (1 − d)`, d = 0.998) and chooses from the projection.
+- **Detents move.** The sheet's height is animated, never set.
+- **Three accessibility signals, not one.** Reduced motion, reduced transparency and more
+  contrast each have a CSS answer.
+- **Layout scales with the words.** The gutter and the core controls are in rem.
+
 ## Interaction and motion
 
 Motion follows a Jakub-primary / Emil-secondary standard: spatial continuity first, polish

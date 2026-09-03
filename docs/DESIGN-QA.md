@@ -4279,3 +4279,55 @@ names them like every other filter; a clinician's page lists them among its pill
 public sweep over the new copy; full `pnpm e2e`; profile capture at 390.
 
 **Captures:** `qa/o248-profile-filters-390.png`.
+
+
+## O249 — the apple-design appraisal, acted on (2026-09-03)
+
+**Founder-directed.** "Keep optimising", after a critical appraisal of the finder against the
+apple-design skill (karak/karak-claude-plugin: Designing Fluid Interfaces, WWDC typography, the
+eight principles). The appraisal graded the tree B+: the physics right — the house spring is
+critically damped (ζ = 1.00) at Apple's 0.30 s response — and the seams between screens wrong.
+
+**What changed, by finding.**
+
+1. *Language sheet rows on two grammars.* The non-current rows still carried the O59-era class
+   whose rule indented and underlined them. The class is gone from the markup and the rule from
+   the sheet; every row is one control.
+2. *Arrival focus ring on the first result.* Withdrawn on inspection: the ring appears only after
+   a keyboard submission (Enter), which is a keyboard user, for whom the ring is correct. The
+   capture that showed it was driven by keyboard.
+3. *Learn hero light over its own sentence.* Under 480 px the disc is 140 px and sits further
+   into the corner, clear of the subtitle.
+4. *Screen changes not interruptible.* The exit is now instant, so the next screen exists on the
+   next frame and a tap during a change lands. An overlapping (sync) handover was built first and
+   left screens stranded when two changes came within a frame — the fix that cannot strand
+   anything is the instant exit. Three specs that had only ever passed inside the old 160 ms gap
+   (finder-a11y's live-wrapper count, voice's no-API message, finder-flow's disclosure line) now
+   assert what the tree actually shows; the transcript's redundant `aria-live="off"` is gone.
+5. *A screen left through the ceiling it rose from.* The history hook now reports a direction
+   (forward, or Back — in-app and the browser's own, by entry index); a forward screen rises in,
+   a Back screen drops in from above.
+6. *Sheet detent jump, release by offset.* Height is animated with the sheet's own spring; the
+   release projects its rest with Apple's decay curve and chooses dismiss, half or full from the
+   projection.
+7. *Presses bouncing or tweened.* `Pressable` uses `PRESS_SPRING`; the tab glyph and the profile
+   chips are re-damped to ζ ≈ 1.
+8. *Layout in px under a larger text setting.* The shell gutter, chips, primary button and the
+   language rows are in rem; a 130 % capture is in the set.
+9. *Reduced transparency and more contrast unanswered.* Both media queries now answered: the two
+   materials go solid; pressable objects take a full-ink edge.
+10. *Welcome asked twice.* The placeholder is an example search.
+12. *Empty results repeated the strip.* One sentence remains.
+13. *Hairline under the tab bar.* Withdrawn: it is the product's own 2 px band idiom, carried by
+    the header, the tab bar and the sheet alike.
+The profile's approach note is two lines. Finding 11 (the pinned Learn thesis line) and 14
+("Start over") wait on the founder.
+
+**Verified.** design, quality, finder, compliance, messaging and security registers; app-shell,
+voice, finder-a11y, finder-flow, finder-history, reduced-motion, keyboard, touch-floor, profile,
+public-sweep, landing, matching-verification and ownership-disclosure e2e (90 passed); full
+`pnpm e2e`; captures at 390 and 1280 plus 130 % text.
+
+**Captures:** `qa/o249-listening-lang-390.png` (rows on one grammar), `qa/o249-learn-390.png`
+(the light clear of the sentence), `qa/o249-welcome-390.png`, `qa/o249-results-empty-390.png`,
+`qa/o249-profile-text130-390.png`.

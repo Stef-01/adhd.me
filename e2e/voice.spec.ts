@@ -216,7 +216,10 @@ test("a browser without the API never shows a microphone screen at all", async (
   await openMic(page);
   await expect(page.getByRole("textbox")).toBeVisible();
   await expect(page.locator(".listen-transcript")).toHaveCount(0);
-  await expect(page.locator(".speech-error")).toHaveCount(0);
+  // O12: the typing screen SAYS why it is typing — the silent version was indistinguishable from
+  // a broken button. (O249: this line used to expect no message and passed only because it ran
+  // in the 160 ms before the typing screen mounted; the exit is instant now.)
+  await expect(page.locator(".speech-error")).toContainText(/does not do speech input/);
 });
 
 test("leaving the screen aborts the recogniser, so the mic light cannot outlive its page", async ({ page }) => {

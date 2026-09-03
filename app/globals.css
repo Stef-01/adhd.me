@@ -351,8 +351,6 @@ textarea:focus-visible {
   background: var(--paper);
   animation: screen-in var(--dur-enter) var(--ease-soft) both;
 }
-/* O249: a screen on its way out sits over the one arriving, out of flow and out of reach. */
-.screen.is-leaving { position: absolute; inset: 0 0 auto; pointer-events: none; }
 
 .minimal-header {
   display: flex;
