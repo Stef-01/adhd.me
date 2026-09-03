@@ -77,6 +77,7 @@ const SET_BY_O240 = "2026-09-02";
 const SET_BY_O242 = "2026-09-02";
 const SET_BY_O245 = "2026-09-02";
 const SET_BY_O241 = "2026-09-03";
+const SET_BY_O241_MERGE = "2026-09-03";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -302,6 +303,20 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'vitest-lines', value: 53578, on: SET_BY_O241, reason: "O241: as vitest-files." },
   { measure: 'e2e-spec-files', value: 72, on: SET_BY_O241, reason: "O241: seo.spec.ts — the head as SERVED. A register is a claim about source, and O167 is the case where two heads carried a retired word for months while every source-reading sweep stayed green." },
   { measure: 'e2e-spec-lines', value: 7981, on: SET_BY_O241, reason: "O241: as e2e-spec-files." },
+  // THE MERGE OF TWO CONCURRENT LANES, pinned as its own group so nobody reads these as one
+  // unit's spend. O241 (the search register) and O242-O245 (portraits, motion, the widened Learn
+  // tab, the listening screen) were built at the same time against the same base by two sessions;
+  // each pinned its own tree honestly and neither figure describes the tree that holds both. These
+  // entries are the sum, measured after the merge — the same rule U14 states for every raise, with
+  // the reason being the merge itself rather than any line either lane would claim.
+  { measure: 'app-lines', value: 16294, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-modules', value: 305, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-lines', value: 55513, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-reached-modules', value: 172, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-reached-lines', value: 31432, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'src-unreached-lines', value: 24081, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'vitest-lines', value: 53649, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
+  { measure: 'e2e-spec-lines', value: 8015, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
 ];
 
 /** The current floor per measure: the last entry wins. */
