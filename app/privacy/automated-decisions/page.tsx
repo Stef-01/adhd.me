@@ -12,6 +12,8 @@
 // is written here, because a sentence written here is a sentence that can drift from the code.
 // Add a decision to the register, not to this page.
 
+import { seoMetadata } from "@/seo/pages";
+import { Breadcrumbs } from "../../breadcrumbs";
 import { PublicHeader } from "../../public-header";
 import { SiteFooter } from "../../site-footer";
 import {
@@ -21,18 +23,18 @@ import {
   NEVER_AUTOMATED,
 } from "@/privacy/automated-decisions";
 
-export const metadata = {
-  alternates: { canonical: "/privacy/automated-decisions" },
-  title: "Automated decisions",
-  description: "Exactly what this product decides automatically, what it never decides, and how the ordering of clinicians works.",
-};
+export const metadata = seoMetadata("/privacy/automated-decisions");
 
 export default function AutomatedDecisionsPage() {
   return (
     <>
     <PublicHeader />
     <main id="main-content" className="mx-auto max-w-xl px-6 py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">
+      {/* O241: a route two segments deep says where it sits, on the page and in its
+          BreadcrumbList — the same trail, from the same list, because `Breadcrumbs` renders
+          both. `/privacy/counsel-review` has carried one since O41; this sibling never did. */}
+      <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Privacy", href: "/privacy" }, { label: "Automated decisions", href: "/privacy/automated-decisions" }]} />
+      <h1 className="mt-6 text-3xl font-semibold tracking-tight">
         How ADHD.ME uses automated decision-making
       </h1>
       <p className="mt-4 text-sm leading-6 text-stone-500">

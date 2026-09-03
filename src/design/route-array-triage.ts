@@ -36,6 +36,11 @@
 // routes) for one specific guard behaviour, not a coverage claim, so they are (b) despite the array
 // syntax looking like a sweep at a glance — the plan's own distinction is intent, not shape.
 //
+// O241 ADDED A FOURTH-CATEGORY ENTRY, not a finding: `seo.spec.ts` derives its routes from
+// `src/seo/pages.ts`, which the register's own test pins to `sitemapPaths()` in both directions.
+// The category was named "the independently-derived pair" when there were two; it is a category,
+// not a pair, and a third member is the shape working rather than a gap.
+//
 // This module is filesystem-free, matching `taste-register.ts`'s AR1 choice: the walk that discovers
 // the real spec files and which of them import `./site-routes` lives in the test file, and
 // `diffSpecTriage` below takes both as plain data.
@@ -117,6 +122,17 @@ export const SPEC_TRIAGE: readonly SpecTriage[] = [
       "register distinct from e2e/site-routes.ts and older than it — genuinely derived, not stale, " +
       "and serving a different purpose (audience-tagged compliance surfaces) so not a duplicate to " +
       "collapse into the census, only a second source worth knowing about.",
+  },
+  {
+    file: "seo.spec.ts",
+    category: "independently-derived",
+    routes: [],
+    reason:
+      "walks SEO_PAGES from src/seo/pages.ts (O241), which is itself pinned to sitemapPaths() in " +
+      "both directions — so the routes it visits are the indexable set by construction and cannot " +
+      "drift the way a hand-typed array does. A third independent derivation rather than a " +
+      "duplicate: e2e/site-routes.ts is every route, public-surfaces is every route a stranger can " +
+      "reach, and this one is the strictly smaller set crawlers are allowed to index.",
   },
   {
     file: "console.spec.ts",

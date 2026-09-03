@@ -8,16 +8,13 @@
 // guarantees — a demo that tried to contract out of the ACL would be wrong twice.
 
 import Link from "next/link";
+import { seoMetadata } from "@/seo/pages";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
 import { PublicHeader } from "../public-header";
 
-export const metadata = {
-  alternates: { canonical: "/terms" },
-  title: "Terms of use (draft)",
-  description: "What ADHD.ME is and is not, what you agree to by using it, and where responsibility sits — stated as a draft while the product is a demo.",
-};
+export const metadata = seoMetadata("/terms");
 
 export default function TermsPage() {
   return (

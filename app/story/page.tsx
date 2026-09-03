@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/seo/pages";
 import { StoryLanding } from "../story-landing";
 
 // O230, founder-directed ("there should be no landing page, it should function exactly like an
@@ -18,14 +19,16 @@ import { StoryLanding } from "../story-landing";
 // page. Both said "Why we founded ADHD.ME". A reader meets the title in their tab before they meet
 // a word of the body.
 //
+// O241 CLOSED THAT HOLE PROPERLY, AND THIS PAGE NO LONGER HOLDS ITS OWN HEAD COPY. The title and
+// description now come from `src/seo/pages.ts`, where every one of them is measured against the
+// window a search result truncates at AND run through the same compliance sweep the rendered page
+// answers to — the check whose absence let a retired word sit in two heads for months. The proof
+// that the register reaches the wire is `e2e/seo.spec.ts`, which reads the served head rather than
+// the source, because reading the source is what the body sweep was already doing.
+//
 // Same shape as this session's register findings: the check ran in the direction its author was
 // facing. The sweep now reads the head as well, so the next one cannot hide here.
-export const metadata: Metadata = {
-  alternates: { canonical: "/story" },
-  title: "Why we built ADHD.ME",
-  description:
-    "Why we built ADHD.ME: getting assessed for ADHD in Australia is a test of stamina rather than of need, and the front door was built for somebody with more resources than most people have.",
-};
+export const metadata: Metadata = seoMetadata("/story");
 
 export default function Home() {
   return <StoryLanding />;

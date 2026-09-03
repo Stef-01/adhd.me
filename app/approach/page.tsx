@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/seo/pages";
 import Link from "next/link";
 import { AppSettings } from "../app-settings";
 import { AppTabs } from "../app-tabs";
@@ -10,13 +11,7 @@ import { LearnModules } from "../learn-modules";
 // word for word (`src/learn/scenes.ts`): the argument is the same, the reading is in the
 // person's hands rather than the scroll position's, and the page is the app's own shell — the
 // same header, width and gutter as the finder and the profile — instead of a story chrome.
-export const metadata: Metadata = {
-  alternates: { canonical: "/approach" },
-  title: "Learn",
-  description:
-    "Three short modules: why the search returns no GP, what the old route through assessment cost, " +
-    "and what changed in NSW and Queensland.",
-};
+export const metadata: Metadata = seoMetadata("/approach");
 
 export default function ApproachPage() {
   return (

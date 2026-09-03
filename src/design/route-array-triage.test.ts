@@ -77,7 +77,7 @@ describe("AR5 the hardcoded-route-array triage matches the real tree", () => {
     expect(recount).not.toBe(INCOMPLETE_SWEEP_COUNT);
   });
 
-  it("every triaged file names at least one route, except the independently-derived pair", () => {
+  it("every triaged file names at least one route, except the independently-derived ones", () => {
     for (const t of SPEC_TRIAGE) {
       if (t.category === "independently-derived") {
         expect(t.routes, `${t.file}: independently-derived entries name no routes by design`).toEqual([]);

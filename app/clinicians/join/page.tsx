@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/seo/pages";
+import { Breadcrumbs } from "../../breadcrumbs";
 import { PublicHeader } from "../../public-header";
 import { SiteFooter } from "../../site-footer";
 
@@ -12,12 +14,7 @@ import { SiteFooter } from "../../site-footer";
 // there when a person enters them.
 import { JOIN_EMAIL } from "./email";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/clinicians/join" },
-  title: "Join the directory",
-  description:
-    "For GPs who carry ADHD care. Email us and a person will reply.",
-};
+export const metadata: Metadata = seoMetadata("/clinicians/join");
 
 export default function JoinPage() {
   return (
@@ -30,6 +27,9 @@ export default function JoinPage() {
           are deliberately .story-scoped (see globals.css's note on separate contrast budgets). */}
       <PublicHeader rightHref="/clinicians" rightLabel="For clinicians" />
       <div className="join-wrap">
+        {/* O241: same rule as the privacy cluster — a route two segments deep states its place,
+            on the page and in the BreadcrumbList the same component emits. */}
+        <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "For GPs", href: "/clinicians" }, { label: "Join", href: "/clinicians/join" }]} />
         <header className="join-header">
           <p className="eyebrow">Join the directory</p>
           <h1>Be findable by the people already looking.</h1>

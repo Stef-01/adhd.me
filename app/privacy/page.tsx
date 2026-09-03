@@ -15,17 +15,14 @@
 // handoff. Every claim below is checked against the code that makes it true.
 
 import Link from "next/link";
+import { seoMetadata } from "@/seo/pages";
 import { GA_ID } from "@/privacy/measurement";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
 import { ConsentChoice } from "../consent-choice";
 import { PublicHeader } from "../public-header";
 import { SiteFooter } from "../site-footer";
 
-export const metadata = {
-  alternates: { canonical: "/privacy" },
-  title: "Privacy policy (draft)",
-  description: "What ADHD.ME holds, what it never holds, and the choices you keep — stated as a draft while the product is a demo.",
-};
+export const metadata = seoMetadata("/privacy");
 
 export default function PrivacyPolicyPage() {
   return (

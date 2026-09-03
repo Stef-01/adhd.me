@@ -74,6 +74,7 @@ const SET_BY_O235 = "2026-09-02";
 const SET_BY_O236 = "2026-09-02";
 const SET_BY_O239 = "2026-09-02";
 const SET_BY_O240 = "2026-09-02";
+const SET_BY_O241 = "2026-09-03";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -261,6 +262,19 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'classname-attributes', value: 1765, on: SET_BY_O240, reason: "O240: the marker element." },
   { measure: 'src-lines', value: 54876, on: SET_BY_O240, reason: "O240: this register's entries." },
   { measure: 'src-unreached-lines', value: 24007, on: SET_BY_O240, reason: "O240: this register's entries; a law module the product does not import." },
+  // O241: the search register. Two GAINS first, and they are the shape of the unit: it deleted a
+  // layout rather than adding one, because the thing it was auditing was duplication in the head.
+  { measure: 'app-files', value: 139, on: SET_BY_O241 },
+  { measure: 'app-lines', value: 15986, on: SET_BY_O241 },
+  { measure: 'src-modules', value: 304, on: SET_BY_O241, reason: "O241: src/seo/pages.ts — one entry per indexable route, carrying the title, description and primary keyword the page serves." },
+  { measure: 'src-lines', value: 55165, on: SET_BY_O241, reason: "O241: the register, the argument for each window, and the findings walk that decides them." },
+  { measure: 'src-reached-modules', value: 171, on: SET_BY_O241, reason: "O241: the register is REACHED, deliberately — every indexable page's metadata is derived from it. A register the pages were only checked against would be a second copy of the truth, and the second copy is the one that goes stale." },
+  { measure: 'src-reached-lines', value: 31128, on: SET_BY_O241, reason: "O241: as src-reached-modules." },
+  { measure: 'src-unreached-lines', value: 24037, on: SET_BY_O241, reason: "O241: the fourth-category triage entry in route-array-triage.ts for the new spec." },
+  { measure: 'vitest-files', value: 317, on: SET_BY_O241, reason: "O241: pages.test.ts — coverage against sitemapPaths() in both directions, the windows measured on the RENDERED title, six planted violations, and every title and description through the public-surface sweep." },
+  { measure: 'vitest-lines', value: 53578, on: SET_BY_O241, reason: "O241: as vitest-files." },
+  { measure: 'e2e-spec-files', value: 72, on: SET_BY_O241, reason: "O241: seo.spec.ts — the head as SERVED. A register is a claim about source, and O167 is the case where two heads carried a retired word for months while every source-reading sweep stayed green." },
+  { measure: 'e2e-spec-lines', value: 7981, on: SET_BY_O241, reason: "O241: as e2e-spec-files." },
 ];
 
 /** The current floor per measure: the last entry wins. */

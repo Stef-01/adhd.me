@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/seo/pages";
 import { ClinicianWalkthrough } from "./clinician-walkthrough";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/clinicians" },
-  title: "For GPs",
-  description: "A walkthrough for clinicians: how listing works, what you declare, and how a patient reaches you.",
-};
+export const metadata: Metadata = seoMetadata("/clinicians");
 
 export default function CliniciansPage() {
   return <ClinicianWalkthrough />;

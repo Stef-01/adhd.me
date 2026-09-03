@@ -6,15 +6,12 @@
 // if the product asks people to trust a process, the process is shown.
 
 import Link from "next/link";
+import { seoMetadata } from "@/seo/pages";
 import { PublicHeader } from "../../public-header";
 import { Breadcrumbs } from "../../breadcrumbs";
 import { SiteFooter } from "../../site-footer";
 
-export const metadata = {
-  alternates: { canonical: "/privacy/counsel-review" },
-  title: "The legal check",
-  description: "Why the privacy policy and terms are marked draft, what an independent lawyer is checking, and what has to happen for that banner to come down.",
-};
+export const metadata = seoMetadata("/privacy/counsel-review");
 
 export default function CounselReviewPage() {
   return (

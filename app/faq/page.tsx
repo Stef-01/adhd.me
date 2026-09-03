@@ -3,16 +3,12 @@
 // data is generated from the SAME list the page renders, so the markup cannot say something
 // the reader was not shown.
 import type { Metadata } from "next";
+import { seoMetadata } from "@/seo/pages";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/faq" },
-  title: "Questions",
-  description:
-    "What ADHD.ME is, what it costs, where it operates, and how the order of GPs is decided — answered plainly.",
-};
+export const metadata: Metadata = seoMetadata("/faq");
 
 const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   /*

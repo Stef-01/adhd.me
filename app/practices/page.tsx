@@ -2,12 +2,9 @@ import Link from "next/link";
 import { PublicHeader } from "../public-header";
 import { SiteFooter } from "../site-footer";
 import type { Metadata } from "next";
+import { seoMetadata } from "@/seo/pages";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/practices" },
-  title: "For practices",
-  description: "What ADHD.ME does for a general practice: patients who arrive already matched to the clinician who declared that work.",
-};
+export const metadata: Metadata = seoMetadata("/practices");
 import { LANDING_COPY as C } from "@/compliance/landing-copy";
 
 export default function PracticesPage() {

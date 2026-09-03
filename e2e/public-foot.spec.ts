@@ -12,8 +12,9 @@
 // site", and it was: there was no site navigation on it below the header.
 //
 // THE EXCEPTIONS ARE NAMED AND ARGUED RATHER THAN SKIPPED, which is the whole difference between a
-// census and an allowlist. Four surfaces legitimately carry no site footer, and each says why. A
-// fifth shape — a page with a footer of its OWN rather than the shared one — is accepted as
+// census and an allowlist. Two kinds legitimately carry no site footer: the app's TAB routes,
+// derived from `APP_TABS` for one shared reason (O241 — see the note on `isAppTabRoute`), and three
+// one-off surfaces that each say why here. Another shape — a page with a footer of its OWN rather than the shared one — is accepted as
 // satisfying the rule, because the rule is "the reader can leave from the bottom", not "this exact
 // component is present".
 // NO `taste-rule:` TAG, DELIBERATELY. `public-nav.spec.ts`, the sweep this mirrors, carries none
@@ -23,12 +24,27 @@
 // A first draft tagged `interaction.hover-focus` and AR2 refused it, which is the register working.
 
 import { expect, test } from "@playwright/test";
+import { APP_TABS } from "../src/app-shell/tabs";
 import { PUBLIC_ROUTES } from "./site-routes";
 
-/** Public routes that carry no footer at all, and the reason each is right to. */
+/**
+ * O241: THE APP'S TAB ROUTES ARE ONE EXEMPTION, NOT THREE, and deriving them is what kept the
+ * exemption list from becoming the allowlist the test below refuses.
+ *
+ * `/` and `/profile` were listed here by hand (O230, O233). `/approach` was not, because O239
+ * rebuilt the Learn tab into the same app shell — the finder's header, wordmark, settings control
+ * and tab bar — and nobody re-typed the entry, so the sweep went red on it and stayed red. That is
+ * the failure a hand-typed list has by construction, and the tree already holds the answer: the
+ * tab bar's own register. A route in `APP_TABS` renders `AppTabs`, which IS its way onward; a site
+ * footer beneath it would be two navigations stacked. A fourth tab is exempt the day it is added,
+ * and a route that stops being a tab loses the exemption in the same commit.
+ */
+function isAppTabRoute(route: string): boolean {
+  return APP_TABS.some((tab) => tab.href === route);
+}
+
+/** The remaining one-off exemptions: pages that are not tabs and still carry no footer. */
 const NO_FOOTER: Readonly<Record<string, string>> = {
-  "/": "O230: the root is the finder — a tool, not a document. It runs a full-screen stage machine with its own controls — a fixed booking bar and a back affordance on every stage — and a site footer under a live flow would be chrome competing with the task. The reader's way out is the back affordance on each stage, pinned by e2e/finder-flow.spec.ts. (The corner launch control that used to sit here was the bridge to the network; it left with it when the two interfaces were split onto separate deployments.)",
-  "/profile": "O233: an app tab, not a document. It shows what this device is holding and offers the two actions that act on it; a site footer under a screen whose whole content is three facts and a clear button would be more chrome than page. Its way out is the tab bar it renders and the wordmark in its own header, which public-nav.spec.ts walks.",
   "/demo": "The presenter view. It resets every store on launch and is driven by somebody standing in a room talking; it carries the demo navigator instead, which is the way between stops. Not linked from any patient surface.",
   "/clinicians": "A stage machine like the finder, with its own header carrying the demo map and a 'Patient view' exit link. Its way out is that exit, which public-nav.spec.ts walks. The founder-directed funnel it leads to — /clinicians/join — is a document and does carry the footer.",
   "/book/[token]": "Reached only by invitation, and the one surface where a reader is mid-task on something that expires. Excluded from the derived list here because it is dynamic; noted so the exclusion is a decision rather than a filter's side effect.",
@@ -46,6 +62,10 @@ test("every public page gives the reader a way onward from the bottom", async ({
     // purpose. Skipped and NAMED, never judged footerless and never silently.
     if (res && res.status() === 404) {
       shapes.push(`${route} gated (404) — skipped`);
+      continue;
+    }
+    if (isAppTabRoute(route)) {
+      shapes.push(`${route} exempt (app tab)`);
       continue;
     }
     if (route in NO_FOOTER) {
@@ -83,5 +103,13 @@ test("exempts nothing that is not a real route, and argues every exemption", asy
     expect(known.has(route), `${route} is exempt but is not a public route`).toBe(true);
     expect(why.length, `${route} is exempt without an argument`).toBeGreaterThan(100);
   }
-  expect(Object.keys(NO_FOOTER).length, "the exemption list has grown into an allowlist").toBeLessThan(6);
+  // Every tab route is exempt by derivation, so it is still a real route by the tab register's own
+  // both-directions test — asserted here too, because this sweep is what would silently skip a
+  // route the tab bar named by mistake.
+  for (const tab of APP_TABS) {
+    expect(known.has(tab.href), `${tab.href} is a tab but is not a public route`).toBe(true);
+  }
+  // Three, down from five: the cap now measures what it was written to measure — the exemptions
+  // nobody can derive — rather than a list that grows by one every time the app gains a tab.
+  expect(Object.keys(NO_FOOTER).length, "the exemption list has grown into an allowlist").toBeLessThan(4);
 });
