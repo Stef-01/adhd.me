@@ -275,7 +275,6 @@ textarea {
 /* Numbers that change or align read as one column, per the taste law's numeric rule. The finder's
    counts, distances and money were relying on the default proportional figures of Inter. */
 .results-count,
-.place-status,
 .row-location,
 .booking-practice {
   font-variant-numeric: tabular-nums;
@@ -1052,7 +1051,6 @@ textarea:focus-visible {
 }
 
 /* Where are you. A label above the input, never a placeholder-as-label. */
-.place-status { margin: 8px 0 0; color: var(--faint); font-size: 0.875rem; line-height: 1.5; }
 /* The match-quality banner and top-tie note carry the sentence the whole screen turns on —
    "this is not a ranking". They were 12px faint grey: AA-compliant and functionally invisible
    to the low-vision reader the finder most needs to be honest with (O14).
@@ -1068,13 +1066,6 @@ textarea:focus-visible {
 
    The lesson is filed in this file's map: an unqualified class in a stylesheet this size
    is a global, and a second one is not a conflict anybody sees. */
-.match-quality {
-  margin-top: 8px;
-  max-width: 46ch;
-  color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.5;
-}
 
 /* The computed distance, on its own line so it does not join the metadata dot chain. */
 /* The live transcript. Serif and large, because it is the person's own words being read back. */
@@ -1892,7 +1883,6 @@ textarea:focus-visible {
   color: var(--ink);
 }
 /* O236 retired `.results-request-quote` and `.refine-compact` on results: the summary card carries the words. */
-.results-notes { display: grid; gap: 4px; margin-top: 14px; }
 
 .patient-v2 .profile-header {
   min-height: 64px;
@@ -5321,7 +5311,7 @@ textarea:focus-visible {
    list that already means something. Chips rather than a form: the whole point
    is that answering costs one tap, and a text box would ask the reader to do
    again the thing that just did not work. */
-.clarify { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.clarify { margin-top: 18px; }
 .clarify-lead { margin: 0 0 9px; color: var(--muted); font-size: 0.875rem; }
 .clarify-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .clarify-chip {
@@ -8687,7 +8677,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   display: grid;
   gap: 6px;
   margin-top: 6px;
-  padding: 6px;
+  padding: 4px;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--surface-raised);
@@ -8730,39 +8720,9 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 .results-summary-words:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
-.results-summary-place {
-  position: relative;
-  display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  min-height: 46px;
-  padding: 0 12px;
-  border-radius: 13px;
-  background: var(--stone);
-  color: var(--muted);
-}
 
-.results-summary-place.is-set { color: var(--route-strong); }
 
-.results-summary-place input {
-  width: 100%;
-  min-height: 46px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  /* 16px: the iOS threshold below which focusing an input force-zooms the page (O14). */
-  font-size: 1rem;
-  font-weight: 560;
-}
 
-.results-summary-place input::placeholder { color: var(--muted); font-weight: 500; }
-.results-summary-place:focus-within { outline: 2px solid var(--accent); outline-offset: -2px; }
-/* The ring is drawn on the pill (`:focus-within` above), which is the control a person sees; the
-   input inside keeps a transparent ring of the same size so nothing is suppressed, only moved. */
-.results-summary-place input:focus-visible { outline: 2px solid transparent; outline-offset: -2px; }
 
 .results-title {
   margin: 18px 0 0;
@@ -8786,7 +8746,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 
 .clarify-lead svg { color: var(--accent); }
-.clarify-sub { margin: 2px 0 10px; color: var(--muted); font-size: 0.875rem; }
 
 .me-segments-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 

@@ -16,9 +16,11 @@
 // fresh arrival at the finder, on a new entry, from somewhere else.
 import { expect, type Page } from "@playwright/test";
 
-export async function gotoFinderRealRosterOnly(page: Page): Promise<void> {
+export async function gotoFinderRealRosterOnly(page: Page, place?: string): Promise<void> {
   if (new URL(page.url(), "http://e2e").pathname === "/") await page.goto("about:blank");
-  await page.goto("/");
+  // O237: a place is carried by the link (the one thing a finder URL learns) or set on the
+  // profile; the results screen no longer has a field for it.
+  await page.goto(place ? `/?place=${encodeURIComponent(place)}` : "/");
   await page.getByRole("button", { name: "Settings" }).click();
   await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
   await page.locator(".finder-demo-toggle input").uncheck();
@@ -29,8 +31,8 @@ export async function gotoFinderRealRosterOnly(page: Page): Promise<void> {
 }
 
 /** The same door, walked on into the demo scenario's results — the shape most ranking specs use. */
-export async function demoResultsRealRosterOnly(page: Page): Promise<void> {
-  await gotoFinderRealRosterOnly(page);
+export async function demoResultsRealRosterOnly(page: Page, place?: string): Promise<void> {
+  await gotoFinderRealRosterOnly(page, place);
   await page.getByRole("button", { name: "Try an example search" }).click();
   await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

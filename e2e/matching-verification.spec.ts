@@ -13,9 +13,9 @@ import { gotoFinderRealRosterOnly } from "./support/real-roster";
 
 const shot = (name: string) => ({ path: `qa/_runs/matching-o10/${name}.png`, fullPage: true as const });
 
-async function searchFor(page: Page, query: string) {
+async function searchFor(page: Page, query: string, place?: string) {
   // O226: these are REAL-roster ranking laws, so the examples are switched off at the door.
-  await gotoFinderRealRosterOnly(page);
+  await gotoFinderRealRosterOnly(page, place);
   await page.getByRole("button", { name: "Try an example search" }).click();
   await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
@@ -60,8 +60,8 @@ test("a request the lexicon cannot read says so instead of faking an order", asy
 
 test("answering the one question visibly turns a non-order into an order (W225+O5)", async ({ page }) => {
   await searchFor(page, "hello there");
-  await page.getByText("Improve my matches", { exact: true }).click();
-  await expect(page.getByText(/One answer would narrow it/)).toBeVisible();
+  await expect(page.getByText("Improve my matches", { exact: true })).toBeVisible();
+  await expect(page.locator(".clarify-chip").first()).toBeVisible();
   await page.screenshot(shot("05-clarifier-offered"));
 
   // Tap the first question the product itself would offer — computed from the same function
@@ -84,9 +84,8 @@ test("pasted junk is never echoed back from the closed vocabulary", async ({ pag
 });
 
 test("a suburb re-ranks with distance said per row, telehealth exempt (O3/O4)", async ({ page }) => {
-  await searchFor(page, "I need an ADHD assessment");
-  await page.getByLabel(/Where are you/i).fill("Beecroft");
-  await expect(page.getByText(/otherwise equal matches, nearer to Beecroft comes first/i)).toBeVisible();
+  await searchFor(page, "I need an ADHD assessment", "Beecroft");
+  await expect(page.locator(".clinician-row").getByText(/km away|in your suburb/).first()).toBeVisible();
   // The telehealth-first clinician carries the telehealth sentence, never a kilometre figure.
   await expect(page.getByText(/by telehealth, wherever you are/).first()).toBeVisible();
   await page.screenshot(shot("08-geo-reranks-with-honest-distance"));

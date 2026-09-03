@@ -3,23 +3,21 @@
 // O95: the results screen, verbatim from care-finder.tsx — including the collapsed-screens
 // history note, because it explains why this one screen carries so much.
 
-import { CaretRight, FunnelSimple, MagnifyingGlass, MapPin, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { CaretRight, FunnelSimple, MagnifyingGlass, PencilSimple, Sparkle } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
   closedBooksNote,
   distanceTo,
   locationLabel,
-  MATCH_QUALITY_COPY,
   type Clinician,
   type MatchQuality,
 } from "@/demo/clinicians";
 import { type Clarifier } from "@/matching/clarify";
-import { coveredSuburbs, type SuburbPoint } from "@/geo/suburbs";
+import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { CoverageMap } from "../coverage-map";
 
 /** O235: Leaflet reads `window` on import, so the map is a client-only chunk fetched the first time a place resolves. */
 const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap), {
@@ -40,11 +38,7 @@ export function ResultsStage({
   requestHeadline,
   requestSummary,
   quality,
-  tieNote,
   clarifierList,
-  unserved,
-  fitCopy,
-  place,
   origin,
   matches,
   shown,
@@ -55,7 +49,6 @@ export function ResultsStage({
   focusOnArrival,
   onReset,
   onRefine,
-  onPlaceChange,
   onClarify,
   onShowAll,
   onChoose,
@@ -81,7 +74,6 @@ export function ResultsStage({
   focusOnArrival: boolean;
   onReset: () => void;
   onRefine: () => void;
-  onPlaceChange: (value: string) => void;
   onClarify: (answer: string) => void;
   onShowAll: () => void;
   onChoose: (clinician: Clinician) => void;
@@ -128,35 +120,20 @@ export function ResultsStage({
       </header>
 
       <div className="results-head">
-        {/* O236 (founder-directed, "more modern"): the results screen opens on a SEARCH SUMMARY —
-            the words and the place as one compact card, the pattern every reference finder uses
-            (Zocdoc's results bar, HealthEngine's chip row) — instead of a quote, an underlined
-            control and a labelled form field stacked down the screen. The words are a button that
-            reopens the box; the place is a pill-shaped field that still re-ranks in place as it is
-            typed (finder-flow/history/a11y prove that), with its label read to screen readers and
-            not painted. */}
+        {/* O237 (founder-directed, "improve aesthetic and minimalism … just show the results"):
+            the head is the search summary and, when a suburb is known, the map. The place is set
+            on the Profile tab (or carried by a link); the verdict sentences — "no listed GP matches
+            every part", "the first N answer equally well", "nearer to X comes first" — are gone
+            from the screen. What they said is still true and still enforced: the list heading
+            reads "Matches" only when the words produced an order and "All listed GPs" when they
+            did not, the fold never cuts a tied band, and the clarifier chips stand ready when the
+            words reached nothing. Honesty moved from paragraphs into structure. */}
         <div className="results-summary" role="group" aria-label="Your search">
           <button type="button" className="results-summary-words" onClick={onRefine} aria-label="Change what you said">
             <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
             <span className="results-summary-text">{requestSummary}</span>
             <PencilSimple size={16} weight="bold" aria-hidden="true" />
           </button>
-          <div className={origin ? "results-summary-place is-set" : "results-summary-place"}>
-            <MapPin size={18} weight={origin ? "fill" : "bold"} aria-hidden="true" />
-            <label className="sr-only" htmlFor="place">Where are you?</label>
-            <input
-              id="place"
-              name="place"
-              list="covered-suburbs"
-              value={place}
-              onChange={(event) => onPlaceChange(event.target.value)}
-              placeholder="Your suburb"
-              autoComplete="address-level2"
-            />
-            <datalist id="covered-suburbs">
-              {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
-            </datalist>
-          </div>
         </div>
 
         {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46): the headline renders only
@@ -165,113 +142,32 @@ export function ResultsStage({
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
-        <div className="results-notes">
-          {!empty && quality === "informed" && fitCopy && (
-              <motion.p
-                key={fitCopy}
-                className="place-status"
-                initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, ease: EASE_OUT }}
-              >
-                {fitCopy}
-              </motion.p>
-          )}
-          {place.trim() !== "" && (
-            <p className="place-status">
-              {origin
-                ? `Among otherwise equal matches, nearer to ${origin.suburb} comes first.`
-                : "We do not cover that location yet."}
+        {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY: the facets this roster actually
+            disagrees on, as chips. Tapping appends the answer in the reader's own words. */}
+        {!empty && quality !== "informed" && clarifierList.length > 0 && (
+          <motion.div
+            className="clarify"
+            initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: EASE_OUT }}
+          >
+            <p className="clarify-lead">
+              <Sparkle size={15} weight="fill" aria-hidden="true" />
+              Improve my matches
             </p>
-          )}
+            <ul className="clarify-row">
+              {clarifierList.map((clarifier) => (
+                <li key={clarifier.facetKey}>
+                  <button type="button" className="clarify-chip" onClick={() => onClarify(clarifier.answer)}>
+                    {clarifier.prompt}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
 
-          {/* WHEN THE ORDER IS NOT EARNED, SAY SO (probe over realistic first-person queries: nine
-              of seventeen reached nothing). One line, only when the order means nothing. */}
-          <AnimatePresence initial={false}>
-          {!empty && quality !== "informed" && (
-            <motion.p
-              key={`quality-${quality}`}
-              className="place-status match-quality"
-              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: EASE_OUT }}
-            >
-              {MATCH_QUALITY_COPY[quality]}
-            </motion.p>
-          )}
-
-          {/* THE TIE THE ROSTER-LEVEL VERDICT CANNOT SEE (O3). */}
-          {!empty && tieNote && (
-            <motion.p
-              key="tie-note"
-              className="place-status match-quality"
-              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: EASE_OUT }}
-            >
-              {tieNote}
-            </motion.p>
-          )}
-
-          {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY: the facets this roster
-              actually disagrees on, as chips in the open (O236: no longer folded behind a
-              disclosure — a suggestion row is the modern idiom and the answer is one tap). Tapping
-              appends the answer in the reader's own words. */}
-          {!empty && quality !== "informed" && clarifierList.length > 0 && (
-            <motion.div
-              key="clarify"
-              className="clarify"
-              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: EASE_OUT }}
-            >
-              <p className="clarify-lead">
-                <Sparkle size={15} weight="fill" aria-hidden="true" />
-                Improve my matches
-              </p>
-              <p className="clarify-sub">One answer would narrow it:</p>
-              <ul className="clarify-row">
-                {clarifierList.map((clarifier) => (
-                  <li key={clarifier.facetKey}>
-                    <button
-                      type="button"
-                      className="clarify-chip"
-                      onClick={() => onClarify(clarifier.answer)}
-                    >
-                      {clarifier.prompt}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
-
-          {/* A care area nobody on the roster declares is a gap in the LISTING. O110: the sentence
-              is composed in the matching module. */}
-          {!empty && unserved.length > 0 && (
-            <motion.p
-              key={`unserved-${unserved[0]}`}
-              className="place-status match-quality"
-              initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }}
-              transition={{ duration: 0.2, ease: EASE_OUT }}
-            >
-              {unserved[0]}
-            </motion.p>
-          )}
-          </AnimatePresence>
-
-          {/* Only when the answer is no: what IS covered, in place. */}
-          {place.trim() !== "" && !origin && (
-            <CoverageMap highlight={null} />
-          )}
-        </div>
-
-        {/* O234/O235: the nearby map — only once the place resolves. */}
+        {/* O235: the nearby map — only once the place resolves. */}
         {origin && shown.length > 0 && (
           <NearbyMap origin={origin} shown={shown} onPick={pickFromMap} />
         )}
@@ -316,7 +212,7 @@ export function ResultsStage({
 
       {!empty && (
       <div className="results-list-head">
-        <h2>Matches</h2>
+        <h2>{quality === "informed" ? "Matches" : "All listed GPs"}</h2>
         {/* O226: the count sits with the list it describes, not two groups up the page. */}
         {matches.length > shown.length && (
           <span className="results-count">{shown.length} of {matches.length}</span>

@@ -111,10 +111,8 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     await expectStage(page, "results");
     await expectLanding(page, ".clinician-row", /^\d+ matches\.$/);
 
-    // A place edit re-ranks: the line says the count and the place, once, and nothing else on
-    // the screen is live to read the re-ordered list.
-    await page.getByLabel(/Where are you/i).fill("Hornsby");
-    await expect(live(page)).toHaveText(/^Re-ranked: \d+ matches near Hornsby\.$/);
+    // O237: the place is set on the profile, not here; the one live line is the landing line, and
+    // nothing else on the screen is live to read the list.
     await expect(live(page)).toHaveCount(1);
 
     await toProfile(page, "keyboard");

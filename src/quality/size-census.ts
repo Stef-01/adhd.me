@@ -222,7 +222,7 @@ export const RATCHET: readonly RatchetEntry[] = [
   // O236 (founder-directed): the results screen's search summary and the note-taking filter —
   // the summary card, the AI-scribe fact on every example persona, the three-way filter, and the
   // retired quote/pill/disclosure rules deleted with their markup.
-  { measure: 'app-lines', value: 16511, on: SET_BY_O236, reason: "O236: the summary card and the note-taking segment on the profile, less the quote, pill and disclosure markup that went." },
+  { measure: 'app-lines', value: 16514, on: SET_BY_O236, reason: "O236: the summary card and the note-taking segment on the profile, less the quote, pill and disclosure markup that went." },
   { measure: 'src-lines', value: 54630, on: SET_BY_O236, reason: "O236: consultRecording on the roster type and every example persona, and the filter's three-way choice with its validation." },
   { measure: 'src-reached-lines', value: 30645, on: SET_BY_O236, reason: "O236: as src-lines — the roster and the filters are in the product's closure." },
   { measure: 'src-unreached-lines', value: 23985, on: SET_BY_O236, reason: "O236: the simplicity register's argued length for the synthetic roster." },

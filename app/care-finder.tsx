@@ -529,18 +529,6 @@ export function CareFinder() {
     setShowAll(false);
   }
 
-  /** O234: the place the person types on the results screen is the profile's place too. */
-  function changePlace(value: string) {
-    setPlace(value);
-    rememberPlace(value);
-    setFilters((current) => {
-      const next = { ...current, place: value };
-      writeFilters(window.localStorage, next);
-      return next;
-    });
-    setMatchIndex(0);
-  }
-
   /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
   function clearNarrowingFilters() {
     const next: Filters = { ...emptyFilters(), place: filters.place };
@@ -678,7 +666,6 @@ export function CareFinder() {
               dispatchBanner({ type: "cleared" });
               goTo("type");
             }}
-            onPlaceChange={changePlace}
             filterLabels={activeFilterCount(filters) > 0 ? describeFilters(filters) : []}
             onClearFilters={clearNarrowingFilters}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}

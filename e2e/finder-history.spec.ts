@@ -80,10 +80,8 @@ test("the address bar carries the place and never the words; history entries car
   // The entry is the finder's: a stage and an index, stamped so Next's router keeps the page.
   expect(await historyState(page)).toContain('"stage":"results"');
 
-  // The place is the one thing the URL learns, rewritten in place: no new entry to Back through.
-  await page.getByLabel(/Where are you/i).fill("Hornsby");
-  await expect.poll(() => page.url()).toContain("place=Hornsby");
-  expect(page.url()).not.toContain("Oliver");
+  // O237: the place reaches the URL from the profile or a link, never from this screen — and the
+  // words never do (proved above).
   // Back from results is the listening entry, revisited — which lands on the typing screen (a
   // revisited `listening` never restarts the microphone), with the words one tap from a search.
   await page.goBack();
@@ -99,7 +97,8 @@ test("a shared link with a place ranks from it, and a fresh visit starts at the 
   await page.evaluate((text) => (window as any).__speech.say(text, true), SENTENCE);
   await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  await expect(page.getByLabel(/Where are you/i)).toHaveValue("Hornsby");
+  // The place the link carried ranks the list and draws the map; it stays on the address.
+  await expect(page.locator(".nearby-map")).toBeVisible();
   expect(page.url()).toContain("place=Hornsby");
 
   // Arriving again by address — not Back, not reload — is a fresh start: the last visit's words

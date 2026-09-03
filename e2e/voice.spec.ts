@@ -152,8 +152,8 @@ test("?debug=1 survives a place edit: the flag is read once at arrival, not from
   await page.getByRole("textbox").fill("a GP near me");
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  await page.getByLabel("Where are you?").fill("Epping");
-  await expect.poll(() => page.evaluate(() => window.location.search)).toBe("?place=Epping");
+  // O237: the place is not edited here; the flag read once at arrival is what the next failure
+  // below must still carry.
 
   // Back to the microphone the way a person gets there: the box, emptied, then the welcome
   // screen's talk control (a microphone only while the field is empty).

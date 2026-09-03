@@ -19,8 +19,8 @@ import { demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/r
 // over the real `clinicians` export, "1 of 2 listed GPs" — so the flow enters through the
 // real-roster door. The shipped default (examples ON) keeps its own coverage in the first test
 // below, which walks the scenario without touching the switch.
-async function intoResults(page: Page) {
-  await demoResultsRealRosterOnly(page);
+async function intoResults(page: Page, place?: string) {
+  await demoResultsRealRosterOnly(page, place);
 }
 
 test("a scenario reaches results without a loading screen in between", async ({ page }) => {
@@ -57,16 +57,14 @@ test("every result is reachable and opens a profile", async ({ page }) => {
 });
 
 test("a second consulting location is a fact the reader sees, with the distance honest about which rooms (O85)", async ({ page }) => {
-  await intoResults(page);
+  await intoResults(page, "Hornsby");
 
   // The row shows every place she consults, not only the primary suburb.
   const anushaRow = page.locator(".clinician-row", { hasText: "Dr Anusha Saxena" });
   await expect(anushaRow.getByText(/Double Bay & Hornsby/)).toBeVisible();
 
-  // From Hornsby, the distance is measured to her Hornsby rooms and SAYS so — a kilometre
-  // figure to one location never renders as though it were the other.
-  await page.getByLabel(/Where are you/i).fill("Hornsby");
-  await expect(page.getByText(/otherwise equal matches, nearer to Hornsby comes first/i)).toBeVisible();
+  // From Hornsby (carried by the link), the distance is measured to her Hornsby rooms and SAYS
+  // so — a kilometre figure to one location never renders as though it were the other.
   await expect(anushaRow.getByText(/in your suburb \(their Hornsby rooms\)/)).toBeVisible();
   await anushaRow.screenshot({ path: "qa/_runs/location-o85/row-hornsby-origin.png" });
 
@@ -86,28 +84,30 @@ test("a second consulting location is a fact the reader sees, with the distance 
   await page.locator(".profile-content").screenshot({ path: "qa/_runs/location-o85/profile-mobile.png" });
 });
 
-test("changing the suburb re-ranks in place instead of losing the search", async ({ page }) => {
+test("a suburb set on the profile orders the results and draws the map, without a field on the results screen", async ({ page }) => {
   await intoResults(page);
   const before = await page.locator(".clinician-row strong").allInnerTexts();
+  // O237: no place field on results — the screen is the summary, the map and the list.
+  await expect(page.getByLabel(/Where are you/i)).toHaveCount(0);
 
-  await page.getByLabel(/Where are you/i).fill("Beecroft");
-  await expect(page.getByText(/otherwise equal matches, nearer to Beecroft comes first/i)).toBeVisible();
-
+  await intoResults(page, "Beecroft");
   const after = await page.locator(".clinician-row strong").allInnerTexts();
-  // Re-ranked in place, still on the same screen — editing this field does not send anybody back a
-  // step. With two focus areas, naming a suburb legitimately surfaces nearer clinicians, so the
-  // shown five can change membership; what must hold is that it is still a full, populated results
-  // view that overlaps the previous one rather than a fresh search from nothing.
+  // With two focus areas, naming a suburb legitimately surfaces nearer clinicians, so the shown
+  // five can change membership; what must hold is a full, populated results view that overlaps
+  // the previous one, with distances said per row and the map drawn from the suburb.
   expect(after.length).toBe(before.length);
   expect(after.some((name) => before.includes(name)), "the search was lost, not re-ranked").toBe(true);
+  await expect(page.locator(".clinician-row").getByText(/km away|in your suburb/).first()).toBeVisible();
+  await expect(page.locator(".nearby-map")).toBeVisible();
   expect(new URL(page.url()).pathname).toBe("/");
-  await expect(page.locator(".clinician-list")).toBeVisible();
 });
 
-test("an uncovered suburb says so rather than silently ranking on nothing", async ({ page }) => {
-  await intoResults(page);
-  await page.getByLabel(/Where are you/i).fill("Bondi");
+test("an uncovered suburb says so on the profile rather than silently ranking on nothing", async ({ page }) => {
+  await page.goto("/profile");
+  await page.getByLabel("Suburb or postcode").fill("Bondi");
   await expect(page.getByText(/do not cover that location yet/i)).toBeVisible();
+  await intoResults(page, "Bondi");
+  await expect(page.locator(".nearby-map")).toHaveCount(0);
   await expect(page.locator(".clinician-row")).not.toHaveCount(0);
 });
 
@@ -341,9 +341,8 @@ test("collective roster coverage is never presented as one doctor's complete fit
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
-  await expect(page.getByText(
-    "No listed GP matches every part of your request we understood. Showing the strongest declared matches.",
-  )).toBeVisible();
+  // O237: the verdict sentence is gone from the screen; the list heading carries the honesty.
+  await expect(page.locator(".results-list-head h2")).toBeVisible();
 
   await page.locator(".clinician-row").filter({ hasText: "Dr Anusha Saxena" }).click();
   const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
