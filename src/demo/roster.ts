@@ -49,6 +49,9 @@ import { type EIQuality } from "./emotional-fit";
  * because ADHD is not an Ahpra-recognised specialty and s 133 governs the word.
  */
 
+export const APPROACHES = ["holistic", "functional", "wearables"] as const;
+export type Approach = (typeof APPROACHES)[number];
+
 export type Clinician = {
   id: string;
   name: string;
@@ -185,6 +188,15 @@ export type Clinician = {
    * profiles do.
    */
   consultRecording?: "ai-scribe" | "no-ai";
+  /**
+   * O248 (founder-directed): how the GP says they work, beyond the clinical scope — declared by
+   * them, closed vocabulary, filterable. "holistic": takes a whole-person view (sleep, work,
+   * relationships) alongside the assessment. "functional": open to functional-health approaches
+   * alongside standard care. "wearables": happy to look at data from a wearable the person brings.
+   * Each is a statement about the GP's own way of working, never a claim about outcomes, and a real
+   * clinician carries it only when they have said so — today only the example profiles do.
+   */
+  approach?: readonly Approach[];
   appointmentLength: string;
   /*
    * `keywords: string[]` stood here until O100 and is deliberately not replaced. It held

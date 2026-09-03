@@ -4259,3 +4259,23 @@ from the production build with the fake speech harness for the listening screen.
 
 **Captures:** `qa/o246-listening-390.png`, `qa/o246-listening-lang-390.png`,
 `qa/o247-results-map-390.png`, `qa/o247-results-map-1280.png`.
+
+## O248 — how they work: whole-person, functional health, wearables (2026-09-03)
+
+**Founder-directed.** "Implement holistic health focus and functional health and wearables
+open-minded, more filters and points of personalisation."
+
+**What it is.** A declared set on the roster, closed vocabulary, in the GP's own terms: a
+whole-person view alongside the assessment; openness to functional-health approaches beside
+standard care; a willingness to look at sleep and activity data from a wearable the person brings.
+Each is a statement about a way of working, never a claim about outcomes, and it appears on a
+real clinician only when they have said so — today the example profiles carry a spread.
+
+**Where it shows.** Three chips under "How they work" on the Profile tab, each requiring the
+declaration (GPs who have not said are left out of a chosen chip, never assumed); the results strip
+names them like every other filter; a clinician's page lists them among its pills.
+
+**Verified.** filters, roster and design tests; app-shell e2e toggles a chip and reads the count;
+public sweep over the new copy; full `pnpm e2e`; profile capture at 390.
+
+**Captures:** `qa/o248-profile-filters-390.png`.

@@ -218,6 +218,11 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   await expect(page.getByText("3 on", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Tamil", exact: true }).click();
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
+  // O248: a way of working is a filter like any other, and says so on results.
+  await page.getByRole("button", { name: "Open to wearable data", exact: true }).click();
+  await expect(page.getByText("3 on", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Open to wearable data", exact: true }).click();
+  await expect(page.getByText("2 on", { exact: true })).toBeVisible();
 
   // The place set here is the finder's place, with no ?place= on the link.
   await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Find", exact: true }).click();

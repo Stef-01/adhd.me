@@ -24,8 +24,10 @@ import { useEffect, useState } from "react";
 import { ArrowRight, MapPin, Quotes, Trash } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearRecord, readRecord, placeFrom, type FinderRecord } from "@/finder/state";
+import { APPROACHES, type Approach } from "@/demo/roster";
 import {
   activeFilterCount,
+  APPROACH_LABELS,
   BOOLEAN_FILTER_KEYS,
   CONSULT_RECORDING_CHOICES,
   DISTANCE_CHOICES,
@@ -93,6 +95,11 @@ export function ProfileView() {
   const origin = resolvePlace(place);
   const held = ready && (words.length > 0 || place.length > 0);
   const onCount = activeFilterCount(filters);
+
+  const toggleApproach = (a: Approach): void => {
+    const has = filters.approach.includes(a);
+    update({ approach: has ? filters.approach.filter((x) => x !== a) : [...filters.approach, a] });
+  };
 
   const toggleLanguage = (language: string): void => {
     const has = filters.languages.includes(language);
@@ -240,6 +247,38 @@ export function ProfileView() {
             {filters.withinKm !== null && !origin
               ? "A distance needs a suburb above before it can apply."
               : "Straight-line, from the suburb above. GPs who see new people by telehealth first are always included."}
+          </p>
+        </div>
+
+        {/* O248 (founder-directed): how the GP works — whole-person, functional-health, wearables —
+            as the GP declares it. Each chip requires the declaration; GPs who have not said are
+            left out of a chosen chip rather than assumed. Nothing here is a claim about outcomes. */}
+        <div className="me-group" role="group" aria-labelledby="me-approach-title">
+          <h3 id="me-approach-title">How they work</h3>
+          <ul className="me-chips">
+            {APPROACHES.map((a) => {
+              const on = filters.approach.includes(a);
+              return (
+                <li key={a}>
+                  <motion.button
+                    type="button"
+                    className={on ? "me-chip is-on" : "me-chip"}
+                    aria-pressed={on}
+                    onClick={() => toggleApproach(a)}
+                    whileTap={reducedMotion ? undefined : { scale: 0.94 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 30 }}
+                  >
+                    {on && <span className="me-chip-tick" aria-hidden="true">✓</span>}
+                    {APPROACH_LABELS[a]}
+                  </motion.button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="me-group-note">
+            A whole-person view alongside the assessment, openness to functional-health approaches
+            beside standard care, or a look at sleep and activity data from a wearable you bring.
+            Only GPs who declare it are shown when you choose.
           </p>
         </div>
 
