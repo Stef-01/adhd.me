@@ -9020,7 +9020,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .listen-lang-choices li:last-child .listen-lang-choice { border-bottom: 0; }
 
 /* The one line that must stay: tiny, faint, at the bottom, out of the reading path. */
-.listening-screen .speech-disclosure { max-width: 40ch; margin-top: 18px; color: var(--faint); font-size: 0.625rem; line-height: 1.5; }
+.listening-screen .speech-disclosure { max-width: 48ch; margin-top: 18px; color: var(--faint); font-size: 0.625rem; line-height: 1.5; }
 .listening-screen .mic-caption { font-size: 0.8125rem; color: var(--faint); }
 
 /* The map, seamless: the tiles are the card. */
