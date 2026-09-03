@@ -75,6 +75,7 @@ const SET_BY_O236 = "2026-09-02";
 const SET_BY_O239 = "2026-09-02";
 const SET_BY_O240 = "2026-09-02";
 const SET_BY_O242 = "2026-09-02";
+const SET_BY_O245 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -273,6 +274,20 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'vitest-lines', value: 53485, on: SET_BY_O242, reason: "O242: synthetic-roster.test.ts holds every image to the register, the register to the personas, and never to a real clinician." },
   { measure: 'e2e-spec-lines', value: 7886, on: SET_BY_O242, reason: "O242: moved by the portrait register; pinned to the tree as measured." },
   { measure: 'src-unreached-lines', value: 24019, on: SET_BY_O242, reason: "O242: this register's entries." },
+  // O243–O245 (founder-directed): more motion; the clarifiers behind a star in the sheet; the Learn
+  // tab redesigned around ADHD content — two reading modules, two knowledge quizzes, the route to
+  // care — with every word linted; the listening screen reduced to transcript, control, chips.
+  { measure: 'app-lines', value: 16317, on: SET_BY_O245, reason: "O243–O245: the quiz view and the redesigned list on the Learn tab, the clarifier sheet on results, the listening screen rebuilt, and the motion wrappers — each with the reasoning that names what it replaced." },
+  { measure: 'src-lines', value: 55205, on: SET_BY_O245, reason: "O244: eight new scenes and eleven quiz questions as data in src/learn/scenes.ts, written against the patient-copy rules and linted by their test." },
+  { measure: 'src-reached-lines', value: 31169, on: SET_BY_O245, reason: "O244: as src-lines — the Learn tab renders the scenes." },
+  { measure: 'src-unreached-lines', value: 24036, on: SET_BY_O245, reason: "O243–O245: this register's entries and the dark-ground census's." },
+  { measure: 'css-lines', value: 8975, on: SET_BY_O245, reason: "O244/O245: the Learn tab's field, tiles, cards, quiz options and reveal; the listening screen's chips and the bars inside the control; the star — less the rules retired with the old Learn and listening layouts." },
+  { measure: 'css-rule-blocks', value: 1564, on: SET_BY_O245, reason: "O244/O245: as css-lines." },
+  { measure: 'css-styled-classes', value: 528, on: SET_BY_O245, reason: "O244/O245: learn-hero/rail/shelf/option/reveal/score, listen-*, mic-bars, clarify-star — less the retired ones." },
+  { measure: 'classname-attributes', value: 1808, on: SET_BY_O245, reason: "O244/O245: the Learn tab's and listening screen's markup." },
+  { measure: 'vitest-lines', value: 53523, on: SET_BY_O245, reason: "O244: progress.test.ts lints every word of the Learn copy against the patient-surface rules and holds every quiz prompt to being about ADHD, never the reader." },
+  { measure: 'e2e-spec-lines', value: 7917, on: SET_BY_O245, reason: "O244: app-shell.spec.ts plays a quiz through; the language and clarifier flows open from their chips." },
+  { measure: 'e2e-goto-calls', value: 292, on: SET_BY_O245, reason: "O244: the quiz test." },
 ];
 
 /** The current floor per measure: the last entry wins. */
