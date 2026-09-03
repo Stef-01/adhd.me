@@ -55,7 +55,10 @@ rather than through platform-authored characterisations.
   existing WCAG 2.1 AA sweep remains green.
 - Open founder decisions: Ahpra review of the product name; confirmation of Dr Saxena's listing and
   founder disclosure; source confirmation for indicative public figures; verification of external
-  learning links; and provision/approval of real founder portraits.
+  learning links; provision/approval of real founder portraits; and whether `/clinicians` should
+  publish clinical guidance to GPs at all. All six are indexed with their in-tree anchors in
+  README.md §"What needs a founder decision before this goes live", which is the single list.
+  None is resolved, and none may be resolved here.
 
 ## Brand Commitments
 
@@ -71,7 +74,8 @@ rather than through platform-authored characterisations.
 - Real product and compliance copy in `app/` and `src/compliance/`.
 - A synthetic clinician roster and worked examples in `src/demo/`.
 - Existing founder and partner imagery in `public/`, plus explicit provenance and disclosure flags.
-- Historical design captures and QA records in `design/`, `qa/`, and `docs/DESIGN-QA.md`.
+- Historical design captures and QA records in `design/` and `qa/` (`docs/DESIGN-QA.md` was deleted
+  on 2026-09-03; `AESTHETIC.md` is the live design checklist).
 - No approved founder portrait set, patient testimonials, ratings, verified customer claims, or
   independently confirmed outcome figures may be fabricated for the redesign.
 

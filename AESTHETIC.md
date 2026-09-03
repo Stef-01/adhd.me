@@ -42,6 +42,8 @@ and a one-line commit message are the record.
 
 - [ ] `story-landing.tsx` — founder story; typography and pacing should feel like a person wrote
       it, not a template. Re-check the HSIL/partner logo treatment for contrast and alignment.
+      (Its reduced-motion gaps are closed — see Cross-cutting below — but the typography and logo
+      pass has not been done.)
 - [ ] `app/practices`, `app/clinicians` (walkthrough), `app/faq`, `app/about`, `app/examples` —
       pass for consistent type scale, spacing rhythm, and motion restraint across all public pages;
       these are visited far less often than the finder, so drift is easy to miss.
@@ -60,8 +62,18 @@ and a one-line commit message are the record.
 
 ## Cross-cutting
 
-- [ ] Motion: audit `prefers-reduced-motion` handling holds across every stage transition and the
-      console, not just the ones most recently touched.
+- [x] Motion: `prefers-reduced-motion` audited across every `motion/react` call site in `app/` and
+      `src/` (2026-09-03). The finder was clean — `MotionConfig reducedMotion="user"` in
+      `care-finder.tsx` plus per-prop guards. Four gaps outside it, all now fixed:
+      `story-landing.tsx`'s two nav/hero `whileHover`/`whileTap` lifts and its `whileHover="lift"`
+      step rows were ungated entirely, and both `story-landing.tsx`'s pillar list and
+      `about/team-plates.tsx` carried the *half-gate* AR20 had already named and fixed in `Reveal`
+      on that same page — `initial` gated, `whileInView` not, so a reduce user got the full slide
+      anyway. `team-plates.tsx` even had a header comment asserting the static equal it did not
+      deliver. All four now use the `Reveal` shape: resolve on mount at duration 0, never watch the
+      viewport. Worth knowing for next time: **the AR20 detector cannot catch these.** It samples
+      the rest state after load, so hover/tap states are invisible to it and a half-gate is only
+      visible on scroll. This audit was a read of every call site, not a test run.
 - [ ] Focus visibility: tab through the finder and console end to end; anything with a suppressed
       or invisible focus ring gets fixed on sight.
 - [ ] Dark-mode / theme parity, if the app has one (check `globals.css` and any theme toggle) —

@@ -149,6 +149,48 @@ describe("W98 scale", () => {
   });
 });
 
+/**
+ * THE ONE TIMING HARNESS, SHARED BY THE LINEARITY CHECK AND ITS NON-VACUITY PROBE.
+ *
+ * 2026-09-03: the probe below started reporting 2.15× for a workload that is 4× by construction,
+ * and only ever inside the full suite — run alone the same code measures 4.48×. The bound was not
+ * wrong and the probe was not wrong; the INSTRUMENT was too small to read. The old harness timed a
+ * fixed 40 repeats at each size, so the n=50 sample was 40 × 50² = 100k inner steps — about **31µs**
+ * of wall clock. Vitest runs files in parallel workers, and 31µs is shorter than a scheduler
+ * quantum, so under suite load every one of the five samples caught some other worker's
+ * interruption. That inflates the SMALL sample far more than the large one (the n=200 sample is 16×
+ * longer, so the same fixed hiccup is 16× less of it), and an inflated `per50` compresses the
+ * ratio downwards — straight through the 2.5 line. Best-of-N cannot rescue a sample that is shorter
+ * than the noise it is trying to reject.
+ *
+ * So the repeat count is no longer fixed: each timed sample processes the same number of ITEMS at
+ * every size (`itemsPerSample / n` repeats), which does two things at once. Both sizes now do
+ * comparable work, so they sit in the same JIT tier and the same timer regime instead of being
+ * compared across two different ones; and the smallest sample is milliseconds rather than
+ * microseconds, so a stray context switch is a rounding error rather than the measurement.
+ *
+ * What this does NOT change is the line at 2.5 or the two populations it was chosen between. Under
+ * this harness the real rollout measures 0.86–0.98× per site at 200 vs 50 and the quadratic probe
+ * measures 4.46–4.94× — the same separation the comments below already describe, now read with an
+ * instrument that can see it.
+ */
+const TIMING_SAMPLES = 5;
+/** Enough items that the smallest sample (the quadratic probe at n=50) is milliseconds, not µs. */
+const ITEMS_PER_SAMPLE = 200_000;
+
+/** Best-of-N wall clock per item. Fastest sample wins: an interrupted run can only be slower, so
+ *  the minimum is the cost of the code rather than the cost of the box. */
+function perItem(n: number, run: (n: number) => void): number {
+  const repeats = Math.max(1, Math.round(ITEMS_PER_SAMPLE / n));
+  let best = Infinity;
+  for (let sample = 0; sample < TIMING_SAMPLES; sample += 1) {
+    const started = performance.now();
+    for (let repeat = 0; repeat < repeats; repeat += 1) run(n);
+    best = Math.min(best, performance.now() - started);
+  }
+  return best / (repeats * n);
+}
+
 describe("W98 timing", () => {
   // The unit's gate says "timed e2e". The timing is asserted here rather than in a browser,
   // and the reason is a real constraint rather than convenience: onboarding is create-only
@@ -195,29 +237,26 @@ describe("W98 timing", () => {
     //
     // So the instrument changes, and the floor goes: enough work per sample that the small case
     // clears the noise floor honestly, and best-of-N, because an interrupted run can only ever be
-    // slower and the fastest sample is the cost of the code rather than the cost of the box.
-    const SAMPLES = 5;
-    const REPEATS = 40;
-    const build = (n: number) =>
-      Array.from({ length: n }, (_, i) => site({ practiceId: `s-${i}`, name: `P ${i}` }));
-    const perSite = (n: number) => {
-      const sites = build(n);
-      let best = Infinity;
-      for (let sample = 0; sample < SAMPLES; sample += 1) {
-        const t0 = performance.now();
-        for (let r = 0; r < REPEATS; r += 1) applyRollout(planRollout(config(sites)), () => {});
-        best = Math.min(best, performance.now() - t0);
-      }
-      return best / (REPEATS * n);
+    // slower and the fastest sample is the cost of the code rather than the cost of the box. The
+    // harness itself is `perItem` above — see its header for why the repeat count is derived from
+    // the size rather than fixed.
+    //
+    // The rosters are built ONCE, outside the timer: allocating 200 objects is not the cost this
+    // test is about, and paying it per repeat would make the large size look worse than it is.
+    const rosters = new Map(
+      [50, 200].map((n) => [n, Array.from({ length: n }, (_, i) => site({ practiceId: `s-${i}`, name: `P ${i}` }))]),
+    );
+    const rollout = (n: number) => {
+      applyRollout(planRollout(config(rosters.get(n)!)), () => {});
     };
-    perSite(50); // warm
-    const per50 = perSite(50);
-    const per200 = perSite(200);
+    perItem(50, rollout); // warm
+    const per50 = perItem(50, rollout);
+    const per200 = perItem(200, rollout);
     // A real bound now, with no floor to hide behind, AND CHOSEN FROM TWO MEASURED POPULATIONS
     // rather than picked. Across isolated and full-suite-loaded runs the real rollout measures
-    // 0.72–0.91× per site at 200 vs 50 (sub-1: the larger batch amortises setup), and the quadratic
-    // probe below measures 4.34–4.74×. 2.5 sits between them with margin on both sides — 2.7× above
-    // the linear maximum and 1.7× below the quadratic minimum.
+    // 0.86–0.98× per site at 200 vs 50 (sub-1: the larger batch amortises setup), and the quadratic
+    // probe below measures 4.46–4.94×. 2.5 sits between them with margin on both sides — 2.5× above
+    // the linear maximum and 1.8× below the quadratic minimum.
     //
     // The first draft of this used 4×, and it was wrong for a reason worth keeping: per-item cost
     // of a quadratic grows LINEARLY, so 200-vs-50 is 4× in theory, and a bound of 4 sat 8% under
@@ -233,26 +272,17 @@ describe("W98 timing", () => {
     // NON-VACUITY, AND THIS UNIT EXISTS BECAUSE ITS ABSENCE HID A HOLE FOR AS LONG AS THE TEST HAS
     // EXISTED. The bound above is only worth its comment if something can cross it, so a
     // deliberately quadratic workload is timed through the identical harness at the identical
-    // sizes and must land past the same 2.5× line the real rollout clears (measured 4.34–4.74×).
-    const SAMPLES = 5;
-    const REPEATS = 40;
+    // sizes and must land past the same 2.5× line the real rollout clears (measured 4.46–4.94×).
+    // "Identical" is now literal: both tests call the same `perItem` above, so a change to how the
+    // linearity check measures cannot silently stop applying to the probe that keeps it honest.
+    let sink = 0;
     const quadratic = (n: number) => {
-      let sink = 0;
       for (let a = 0; a < n; a += 1) for (let b = 0; b < n; b += 1) sink += (a ^ b) & 1;
-      return sink;
     };
-    const perItem = (n: number) => {
-      let best = Infinity;
-      for (let sample = 0; sample < SAMPLES; sample += 1) {
-        const t0 = performance.now();
-        for (let r = 0; r < REPEATS; r += 1) quadratic(n);
-        best = Math.min(best, performance.now() - t0);
-      }
-      return best / (REPEATS * n);
-    };
-    perItem(50);
-    const per50 = perItem(50);
-    const per200 = perItem(200);
+    perItem(50, quadratic); // warm
+    const per50 = perItem(50, quadratic);
+    const per200 = perItem(200, quadratic);
+    expect(sink).toBeGreaterThan(0); // the work is observed, so nothing above is dead-code-eliminated
     expect(
       per200 / per50,
       `a genuinely quadratic workload measured ${(per200 / per50).toFixed(2)}× per item — if this is under 2.5 the linearity check above has stopped discriminating`,

@@ -153,7 +153,16 @@ export function StoryLanding() {
           <nav className="story-nav" aria-label="Primary navigation">
             <Link href="/examples" className="story-nav-link">Worked examples</Link>
             <Link href="/practices" className="story-nav-link">For practices</Link>
-            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={PRESS}>
+            {/* 2026-09-03: the last two unguarded motion props on this page. Every ENTRANCE here
+                reads `reduce`, but these two INTERACTION states did not — and AR20's detector
+                cannot see them, because it samples the rest state after load and a hover lift only
+                exists once a pointer is on it. Gated to `undefined` rather than to an instant
+                value: a lift that teleports is a worse answer to "I get motion sick" than no lift. */}
+            <motion.div
+              whileHover={reduce ? undefined : { y: -2 }}
+              whileTap={reduce ? undefined : { scale: 0.97 }}
+              transition={PRESS}
+            >
               <Link href="/" className="story-demo-link">Find a GP</Link>
             </motion.div>
           </nav>
@@ -188,7 +197,11 @@ export function StoryLanding() {
               listed GP appears, so the route stays inspectable from search to booking.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>
-              <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }} transition={PRESS}>
+              <motion.div
+                whileHover={reduce ? undefined : { y: -3 }}
+                whileTap={reduce ? undefined : { scale: 0.98 }}
+                transition={PRESS}
+              >
                 <Link className="story-primary-link" href="/">
                   Find a GP near you<span className="arrow" aria-hidden="true">→</span>
                 </Link>
@@ -311,8 +324,13 @@ export function StoryLanding() {
           </Reveal>
           <motion.ol
             className="story-pillars"
+            // 2026-09-03: the same half-gate AR20 caught in `Reveal` above, still standing here —
+            // `initial` was gated and `whileInView` was not, so a reduce user got the staggered
+            // slide anyway the moment the list crossed the viewport. Same shape as the fix there:
+            // under reduce the list resolves to `show` on mount and never watches the viewport.
             initial={reduce ? false : "hidden"}
-            whileInView="show"
+            animate={reduce ? "show" : undefined}
+            whileInView={reduce ? undefined : "show"}
             viewport={{ once: true, amount: 0.3 }}
             variants={stagger}
           >
@@ -320,7 +338,7 @@ export function StoryLanding() {
                 paired with an `initial`/`animate` of its own: those would override the
                 hidden/show the stagger propagates down from the list and kill the entrance. */}
             {STEPS.map((step) => (
-              <motion.li key={step.title} variants={item} whileHover="lift">
+              <motion.li key={step.title} variants={item} whileHover={reduce ? undefined : "lift"}>
                 {/* The title carries the hover, not the row: a whole ruled row sliding on hover
                     reads as a click target, and this list is not one. */}
                 <motion.h3 variants={{ lift: { x: 6 } }} transition={PRESS}>

@@ -24,13 +24,28 @@ polish the existing shell, question it.
 - [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.
-- [ ] Resolve or explicitly punt (with a written reason) each open founder decision from
-      `README.md` §"What needs a founder decision before this goes live": product-name Ahpra
-      review, Dr Saxena's listing confirmation, indicative-figures sourcing, learning-link checks,
-      founder portraits. These are real legal/ethical flags, not busywork — don't fabricate
-      resolutions, just make sure each one is visibly tracked somewhere findable.
-- [ ] Re-establish a green baseline: `pnpm verify` (typecheck, test, build) and `pnpm e2e` passing
-      on `main` at all times. No new ledger — just don't leave `main` broken overnight.
+- [x] **Tracked** (2026-09-03) — each open founder decision from `README.md` §"What needs a founder
+      decision before this goes live" now carries the live in-tree anchor where it is actually
+      declared, and that section is stated to be the single index. A sixth was added: whether
+      `/clinicians` should publish clinical guidance to GPs at all. The strip had quietly broken
+      this — the section claimed the flags were "recorded in the suite as well", and they are not:
+      `PRODUCT_FLAGS`/`STANDING_FLAGS` lost their tests and nothing imports them. No test was added
+      back, because that is the deleted apparatus wearing a new name; the README is the tracking.
+- [ ] **Resolve them** — and this one is not an engineering task, which is why it is split from the
+      line above. Ahpra review of the *name*, Dr Saxena's confirmation of his own listing, source
+      confirmation for the indicative figures and the NSW/QLD pathway claim, opening and checking
+      the AADPA/NICE/TGA links, the founder portraits, and whether `/clinicians` should publish
+      clinical guidance at all. Every one is a founder or legal call. **Nothing in this repo may
+      answer one, and an agent working this roadmap must not tick this line.** It stays open until
+      a human with the standing to decide has decided, and the decision is written down here.
+- [x] Re-establish a green baseline (2026-09-03) — `pnpm verify` is green on `main`. It was red:
+      `src/tenancy/rollout.test.ts`'s non-vacuity probe failed *only* under full-suite load, because
+      its n=50 timing sample was ~31µs, shorter than a scheduler quantum, so parallel workers
+      inflated the small sample and compressed the ratio through the bound. The harness now derives
+      its repeat count from the size (equal items per sample), which puts both sizes in the same
+      timer regime and makes the smallest sample milliseconds. Bound and margins unchanged.
+- [ ] Keep it green. `pnpm e2e` has not been run this session and is not yet confirmed on `main`
+      — that is the next baseline job. No new ledger; just don't leave `main` broken overnight.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 

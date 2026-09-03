@@ -20,10 +20,16 @@ export function TeamPlates() {
       {TEAM.map((f) => (
         <motion.li
           key={f.name}
+          // 2026-09-03: this was the half-gate AR20 named on the landing's `Reveal` — `initial`
+          // gated, `whileInView` not — and the comment above claimed the static equal that the
+          // markup did not deliver: `initial={false}` leaves the plate at its SSR position and
+          // `whileInView` then ran the full 0.55s rise for a reduce user. Fixed to the shape
+          // `Reveal` already uses: resolve on mount at duration 0, and do not watch the viewport.
           initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={reduce ? { opacity: 1, y: 0 } : undefined}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.55, ease: EASE }}
+          transition={reduce ? { duration: 0 } : { duration: 0.55, ease: EASE }}
         >
           <div className="story-member-plate">
             {f.portrait ? (

@@ -316,15 +316,21 @@ export const VOCABULARY_BOUND =
   "This sweep enforces the vocabulary W6 and W23 hold, not the concept of a clinical claim. Drug names, criteria names and procedure names are not in those lists, so a surface can carry clinical content and pass. Widening the vocabulary is its own unit.";
 
 /**
- * Open questions this sweep is deliberately not answering, kept where the suite can see them.
+ * Open questions this sweep is deliberately not answering.
  *
- * A flag in a document gets re-noticed once a quarter by whoever happens to read it; a flag with
- * a test around it gets read every run. These are founder decisions, so the loop records them and
- * does not resolve them.
+ * THIS DOCSTRING USED TO SAY "kept where the suite can see them", and argue that a flag with a test
+ * around it gets read every run while a flag in a document gets re-noticed once a quarter. The
+ * argument was right and the claim is no longer true: the 2026-09-03 strip removed the register
+ * tests, and nothing now imports `STANDING_FLAGS` or `PRODUCT_FLAGS`. They are prose.
+ *
+ * Re-adding a test would be rebuilding the apparatus the founder had just deleted, so instead both
+ * lists are indexed from README.md §"What needs a founder decision before this goes live", which is
+ * the one place all of them are named together. If you are reading this file and not that section,
+ * read that section. These are founder decisions; nothing here resolves one.
  */
 export const STANDING_FLAGS: Readonly<Record<string, string>> = {
   "/clinicians":
-    "Names real clinical territory (differential diagnosis, pre-stimulant cardiac screening, titration review) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether ADHD.ME should publish clinical guidance at all, and that decision is the founder's. Raised in docs/GATE-DOSSIER-Y2.md, restated in docs/GATE-DOSSIER-Q13.md, and unresolved in both. NARROWED, NOT CLOSED: the walkthrough's learning list now LINKS OUT to AADPA and NICE rather than restating their content, and a link is not a claim — but the page still names the territory.",
+    "Names real clinical territory (differential diagnosis, pre-stimulant cardiac screening, titration review) while G5 has held the register chain for two years over transcribing published cycle-of-care intervals, which is less clinically consequential. Classifying this surface professional makes the SWEEP honest about which rules it applies; it does not decide whether ADHD.ME should publish clinical guidance at all, and that decision is the founder's. Raised in the Y2 gate dossier, restated in the Q13 one, and unresolved in both — those documents were deleted on 2026-09-03, so this entry and README.md's founder-decision index are now the whole record of it. NARROWED, NOT CLOSED: the walkthrough's learning list now LINKS OUT to AADPA and NICE rather than restating their content, and a link is not a claim — but the page still names the territory.",
   // O230 moved the finder to `/`; the flag is about what the surface RENDERS, so it moved too.
   "/":
     "A patient-facing surface whose content is people describing what they want from a clinician, in their own words — which for this product means the rendered page carries 'diagnosis', 'medication', 'psychiatrist' and drug classes. The distinction the rules cannot see is that these are QUOTED REQUESTS rather than claims the product makes: 'I want a GP who will discuss non-stimulant options honestly' is a preference, and the same words in the product's voice would be an offer. That distinction is real and it is a judgement, so the findings it produces are accepted individually in ACCEPTED_FINDINGS with review dates rather than the patient classification being weakened.",
