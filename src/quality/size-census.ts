@@ -333,7 +333,7 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'app-lines', value: 16382, on: SET_BY_O249, reason: "O249: the apple-design appraisal acted on — a direction on the history hook, popped-out leaving screens, the sheet's projected release and animated detent, with the reasoning for each in place." },
   { measure: 'src-modules', value: 305, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-lines', value: 55580, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-lines', value: 55583, on: SET_BY_O249, reason: "O249: the history hook's direction — two lines, so a screen can leave the way it came." },
+  { measure: 'src-lines', value: 55584, on: SET_BY_O249, reason: "O249: the history hook's direction — two lines, so a screen can leave the way it came." },
   { measure: 'src-reached-modules', value: 172, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-reached-lines', value: 31478, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-unreached-lines', value: 24102, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
