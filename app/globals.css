@@ -309,6 +309,30 @@ textarea:focus-visible {
   outline-offset: 4px;
 }
 
+/* The same ring for the three focusable kinds this base rule used to miss. Nothing suppressed
+   them — there is no `outline: none` anywhere in this file — so they fell through to the
+   browser's own ring: a hairline in the platform's blue, not the app's accent, and blind to the
+   high-contrast and forced-colours overrides the rest of the product answers. That left the
+   console's workspace-menu `summary` (a primary nav control), every console field and `select`,
+   and the finder's `.profile-more` / `.profile-disclosure` disclosures wearing a focus state
+   from a different design system than the button beside them. Spatial consistency: one ring.
+
+   The offset is 2px, not the 4px above, and that is deliberate. A button or a link is a shape
+   the size of its own text, so the ring needs air to read as a ring and not a border. A field, a
+   select and a disclosure row are already boxed — `.console-input` is a 44px-tall bordered
+   surface — so a 4px halo detaches and reads as a second, floating rectangle. 2px hugs the
+   shape that is already there, which is what `.nearby-marker:focus-visible` and the console's
+   own per-class rings had each settled on independently. Class-level rules (`.iv-field input`,
+   `.me-switch input ~ track`, `.community-interest-options input + span`) still win on
+   specificity, so every deliberate custom ring is untouched. Visually-hidden inputs get the ring
+   too, but `.sr-only` clips to 1px, so it is invisible there — as it already was. */
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* U9: a stage's heading takes focus when the stage arrives (`MotionScreen`), so a keyboard user
    sees where they landed. The same ring as a control's, wider so it clears the display serif's
    descenders; a pointer tap shows nothing, as `:focus-visible` intends. */
@@ -9101,6 +9125,29 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   padding: 0;
   overflow: visible;
   background: var(--surface-raised);
+  /* The numbered pin gets its edge for free: a navy fill inside a white border reads against any
+     tile the basemap can draw. The face pin has no fill — it is a white border around a
+     photograph — so on the pale greys and creams that make up most of an OSM tile at this zoom
+     its outer boundary simply vanishes, and the portrait floats on the street. This is the
+     hairline that gives it the boundary the fill was providing, in the same navy, outside the
+     white ring rather than replacing it: the white stays as the separation between face and
+     map, the navy states where the object ends. 1px, because the pin is 36px of a person's
+     face and the edge is meant to be found, not looked at. */
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--route-strong) 55%, transparent),
+    0 2px 8px color-mix(in srgb, var(--hero-dusk) 28%, transparent);
+}
+/* The map's pressable objects belong in the `prefers-contrast: more` list above and were missed.
+   The rule lives down here rather than up there because a media query adds no specificity, so an
+   equally-specific `.nearby-marker-pin.has-face` declared later in the file would quietly beat it
+   — the override has to sit after the thing it overrides. Ink goes on the outside as a ring
+   instead of replacing the white border: that border is what separates a pin from the tile under
+   it, and this is the one place where a full-ink edge would have made the marker harder to see
+   rather than easier. */
+@media (prefers-contrast: more) {
+  .nearby-marker-pin, .nearby-marker-pin.has-face {
+    box-shadow: 0 0 0 2px var(--ink), 0 2px 8px color-mix(in srgb, var(--hero-dusk) 28%, transparent);
+  }
 }
 .nearby-marker-pin.has-face img {
   width: 32px;

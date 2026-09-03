@@ -28,8 +28,23 @@ and a one-line commit message are the record.
       listening, not a separate mode.
 - [ ] `profile-stage.tsx` — density check: is this the "one consequential decision at a time"
       screen, or has it accumulated fields since the last pass?
-- [ ] `nearby-map.tsx` — map chrome minimalism (O247 stripped the card/caption/chrome once — check
-      it hasn't crept back). Marker legibility, faces-on-map contrast, touch target size on pins.
+- [x] `nearby-map.tsx` (2026-09-03) — checked the three things this line names. **Touch targets are
+      fine and the comment is honest:** `stopIcon`/`youIcon` pass `iconSize: [44, 44]`, which
+      Leaflet writes as an inline width/height on the `.nearby-marker` button, so the target is the
+      44px box and the 26–36px pin is only the drawing inside it. **Chrome has not crept back:** the
+      caption is still one small chip on the map, not the card O247 removed. **Faces-on-map contrast
+      was a real gap, now fixed:** the numbered pin gets its edge for free — a navy fill inside a
+      white border reads against any tile the basemap can draw — but the face pin has no fill, only
+      a white ring around a photograph, so against the pale greys and creams of an OSM tile at this
+      zoom its outer boundary vanished and the portrait floated on the street. It now carries a 1px
+      navy hairline outside the white ring: the white still separates face from map, the navy states
+      where the object ends, and 1px keeps it findable rather than decorative. While there, the map
+      pins were added to the `prefers-contrast: more` list they had been missed from — as an outer
+      ink ring, not the `border-color: var(--ink)` the other pressables take, because the pin's
+      white border *is* its separation from the tile and replacing it would have made the marker
+      harder to see under a setting asking for the opposite. That override deliberately sits below
+      `.has-face` in the file: a media query adds no specificity, so an equally-specific rule
+      declared later would otherwise beat it.
 - [ ] `compare-stage.tsx` — the comparison view is cognitively the heaviest screen in the flow;
       make sure it isn't presenting more than one consequential decision at once.
 - [ ] `results-stage.tsx` — result ordering explanation should be visible, not just correct
@@ -74,8 +89,24 @@ and a one-line commit message are the record.
       viewport. Worth knowing for next time: **the AR20 detector cannot catch these.** It samples
       the rest state after load, so hover/tap states are invisible to it and a half-gate is only
       visible on scroll. This audit was a read of every call site, not a test run.
-- [ ] Focus visibility: tab through the finder and console end to end; anything with a suppressed
-      or invisible focus ring gets fixed on sight.
+- [x] Focus visibility (2026-09-03) — swept every focusable in `app/` by extracting the class list
+      off each `<button|a|input|select|summary|textarea>` and checking it against every
+      `:focus`/`:focus-visible` selector in `globals.css`. Two things worth recording. **Nothing is
+      suppressed:** there is no `outline: none` anywhere in `globals.css`, and no element in the
+      tree is made focusable with `tabIndex={0}`, so there is no invisible-ring case to fix — the
+      thing the item was written to look for does not exist. **But the base rule only covered three
+      of the six kinds:** `button`, `a`, `textarea` got the app's 2px accent ring, while `input`,
+      `select` and `summary` fell through to the browser's own hairline — the platform's blue, not
+      the accent, and blind to the high-contrast and forced-colours overrides the rest of the
+      product answers. That left the console's workspace-menu `summary` (a primary nav control),
+      every console field and `select`, and the finder's `.profile-more`/`.profile-disclosure`
+      disclosures wearing focus from a different design system than the button beside them. All
+      three now take the same ring at `outline-offset: 2px` rather than the 4px buttons use:
+      buttons and links are shapes the size of their own text and need air to read as a ring, while
+      fields, selects and disclosure rows are already boxed and a 4px halo detaches into a second
+      floating rectangle. That is the offset `.nearby-marker:focus-visible` and the console's
+      per-class rings had each arrived at on their own. Class-level rules still win on specificity,
+      so every deliberate custom ring is untouched.
 - [ ] Dark-mode / theme parity, if the app has one (check `globals.css` and any theme toggle) —
       confirm it isn't a half-finished pass.
 - [ ] Type scale: confirm optical sizing (not just linear scaling) between the finder's large,
