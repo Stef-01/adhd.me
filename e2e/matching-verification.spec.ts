@@ -37,8 +37,9 @@ test("a language ask is ranked on and explained, not just printed (O1)", async (
   // Both current clinicians declare Urdu, so language evidence is computed and shown while the
   // full-list tie is said plainly rather than dressed as an earned order.
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
-  await expect(page.getByText(/everyone we list/)).toHaveCount(0);
-  await expect(page.getByText(/answer what you asked for equally well/)).toBeVisible();
+  // O237: the full-list tie is no longer a sentence — both listed GPs declare Urdu, so the words
+  // produced no order, and the heading says so ("All listed GPs") rather than dressing it as one.
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed GPs");
   await page.screenshot(shot("02-urdu-ranked-and-earned"));
   // And the profile says the reason in the closed vocabulary.
   await page.locator(".clinician-row").first().click();
@@ -49,7 +50,8 @@ test("a language ask is ranked on and explained, not just printed (O1)", async (
 
 test("a request the lexicon cannot read says so instead of faking an order", async ({ page }) => {
   await searchFor(page, "hello there");
-  await expect(page.getByText(/everyone we list/)).toBeVisible();
+  // O237: "this is everyone we list, not an order" is said by the heading now.
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed GPs");
   // O46: unearned words are a quiet quote, not a display headline — and the bare count
   // ("3 of 3.") is gone when everyone is shown anyway, because it said nothing.
   await expect(page.locator(".results-head h1")).toHaveCount(0);

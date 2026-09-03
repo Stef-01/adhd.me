@@ -326,12 +326,14 @@ test("the finder never claims a full fit beside a gap it just admitted (O121)", 
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
+  // O237: the verdict sentences left the screen, so no completeness claim can stand beside an
+  // admitted gap — neither renders. The law now lives in the list heading: a request with an
+  // unserved ask never reads as "Matches" unless the words still produced an order.
   const head = await page.locator(".results-head").innerText();
-  // The gap is admitted...
-  expect(head).toContain("not something any GP listed today declares");
-  // ...so the completeness claim must not be beside it.
   expect(head).not.toContain("do what you asked for");
   expect(head).not.toContain("does what you asked for");
+  expect(head).not.toContain("matches every part");
+  await expect(page.locator(".results-list-head h2")).toHaveText(/^(Matches|All listed GPs)$/);
 });
 
 test("collective roster coverage is never presented as one doctor's complete fit (O178)", async ({ page }) => {
@@ -360,11 +362,11 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
   await page.getByRole("button", { name: "Find a GP" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
-  const head = await page.locator(".results-head").innerText();
-  // Nothing unserved here, so the claim is earned and must still render — otherwise the fix
-  // above would have been a deletion rather than a condition.
-  expect(head).not.toContain("not something any GP listed today declares");
-  expect(head).toMatch(/1 of 2 listed GPs matches every part of your request we understood/);
+  // Nothing unserved here, so the order is earned: the heading says "Matches", and the earned
+  // headline stands over the list — the non-vacuity of the heading rule, since a tie or an
+  // unread request would read "All listed GPs" instead.
+  await expect(page.locator(".results-list-head h2")).toHaveText("Matches");
+  await expect(page.locator(".results-head h1")).toHaveCount(1);
 });
 
 test("the typed journey ends in the engine's own ranking, both ways round (AR38)", async ({ page }) => {

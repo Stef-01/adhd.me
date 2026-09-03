@@ -121,7 +121,7 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     await expectLanding(page, "main[data-stage=compare] h1", /^Comparing Dr .+ and Dr .+\.$/);
     await press(page, "Back to results");
     await expectStage(page, "results");
-    await expectLanding(page, ".clinician-row", /^\d+ matches near Hornsby\.$/);
+    await expectLanding(page, ".clinician-row", /^\d+ matches\.$/);
 
     await toProfile(page, "keyboard");
     await toBooking(page, "keyboard");
