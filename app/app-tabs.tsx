@@ -27,6 +27,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, MagnifyingGlass, UserCircle, type Icon } from "@phosphor-icons/react";
+import { motion, useReducedMotion } from "motion/react";
 import { activeTab, APP_TABS, type AppTab } from "@/app-shell/tabs";
 
 const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, UserCircle, BookOpen };
@@ -34,6 +35,9 @@ const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, UserCircle, BookO
 export function AppTabs({ hidden = false }: { hidden?: boolean }) {
   const pathname = usePathname();
   const current = activeTab(pathname ?? "/");
+  // O240: the marker is ONE element that travels to the current tab (a shared layout id), the
+  // way iOS and Material bars move their indicator — under reduced motion it simply appears.
+  const reducedMotion = useReducedMotion();
   if (hidden) return null;
   return (
     <nav className="app-tabs" aria-label="Sections">
@@ -48,6 +52,14 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
                 className={isCurrent ? "app-tab is-current" : "app-tab"}
                 aria-current={isCurrent ? "page" : undefined}
               >
+                {isCurrent && (
+                  <motion.span
+                    className="app-tab-marker"
+                    layoutId="app-tab-marker"
+                    aria-hidden="true"
+                    transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 }}
+                  />
+                )}
                 <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
                 <span className="app-tab-label">{tab.label}</span>
               </Link>

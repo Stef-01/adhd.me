@@ -24,7 +24,7 @@ const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap),
   ssr: false,
   loading: () => <div className="nearby-map nearby-map-loading" aria-hidden="true" />,
 });
-import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, StatusLine, Wordmark } from "./shared";
+import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -239,11 +239,21 @@ export function ResultsStage({
       )}
 
       {/* O235: the nearby map — only once the place resolves, and only when asked for. */}
-      {mapShown && (
-        <div id="nearby-map-panel" className="nearby-map-panel">
-          <NearbyMap origin={origin!} shown={shown} onPick={pickFromMap} />
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {mapShown && (
+          <motion.div
+            key="map"
+            id="nearby-map-panel"
+            className="nearby-map-panel"
+            initial={reducedMotion ? false : { opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={reducedMotion ? undefined : { opacity: 0, height: 0, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
+            transition={{ ...STAGE_SPRING, opacity: { duration: 0.2 } }}
+          >
+            <NearbyMap origin={origin!} shown={shown} onPick={pickFromMap} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="clinician-list" ref={list}>
         {/* O52: the re-sort, made visible. A clarifier answer re-ranks this list, and the
@@ -267,11 +277,11 @@ export function ResultsStage({
               layout="position"
               data-clinician={item.id}
               onClick={() => onChoose(item)}
-              initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+              initial={reducedMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
-              transition={{ delay: Math.min(index * 0.03, 0.18), duration: 0.26, layout: { duration: 0.34, ease: EASE_OUT, delay: 0 } }}
-              whileTap={reducedMotion ? undefined : { scale: 0.99 }}
+              transition={{ ...STAGE_SPRING, delay: Math.min(index * 0.04, 0.2), opacity: { duration: 0.22 }, layout: { ...STAGE_SPRING, delay: 0 } }}
+              whileTap={reducedMotion ? undefined : { scale: 0.985 }}
             >
               {/* O67: the same layoutId as the profile's portrait frame, so the chosen
                   GP's image travels from this slot into the hero as ONE object — the

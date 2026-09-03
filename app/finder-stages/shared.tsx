@@ -43,19 +43,20 @@ export const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 /** The press. A spring, because a press has no natural duration. */
 export const PRESS_SPRING = { type: "spring", stiffness: 420, damping: 32, mass: 0.7 } as const;
 
+/** O240: the stage spring — arrival settles like a sheet, exit is a short fade. No blur. */
+export const STAGE_SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
+
 export const stageVariants: Variants = {
-  initial: { opacity: 0, y: 12, filter: "blur(3px)" },
+  initial: { opacity: 0, y: 14 },
   animate: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.42, ease: EASE_OUT },
+    transition: { ...STAGE_SPRING, opacity: { duration: 0.22, ease: EASE_OUT } },
   },
   exit: {
     opacity: 0,
-    y: -8,
-    filter: "blur(2px)",
-    transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+    y: -6,
+    transition: { duration: 0.16, ease: [0.4, 0, 1, 1] },
   },
 };
 
@@ -73,7 +74,7 @@ export const introStagger: Variants = {
 
 export const introItem: Variants = {
   initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE_OUT } },
+  animate: { opacity: 1, y: 0, transition: { ...STAGE_SPRING, opacity: { duration: 0.3, ease: EASE_OUT } } },
 };
 
 /**

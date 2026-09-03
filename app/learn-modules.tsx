@@ -20,6 +20,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Clock } from "@phosphor-icons/react";
+import { motion, useReducedMotion } from "motion/react";
 import { markDone, readProgress, type Progress } from "@/learn/progress";
 import { MODULES, scenesOf, type LearnModule } from "@/learn/scenes";
 
@@ -51,8 +52,13 @@ function ModuleMark({ tint }: { tint: LearnModule["tint"] }) {
   );
 }
 
+const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
+
 export function LearnModules() {
+  const reducedMotion = useReducedMotion();
   const [progress, setProgress] = useState<Progress>({ v: 1, done: [] });
+  /** Which way the current card came from: +1 after Next, -1 after Back. */
+  const [direction, setDirection] = useState<1 | -1>(1);
   const [open, setOpen] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [hydrated, setHydrated] = useState(false);
@@ -77,7 +83,14 @@ export function LearnModules() {
       setStep(0);
     };
     return (
-      <section className="learn-module" aria-labelledby="learn-module-title" data-hydrated={hydrated ? "true" : undefined}>
+      <motion.section
+        className="learn-module"
+        aria-labelledby="learn-module-title"
+        data-hydrated={hydrated ? "true" : undefined}
+        initial={hydrated && !reducedMotion ? { opacity: 0, y: 10 } : false}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...SPRING, opacity: { duration: 0.2 } }}
+      >
         <div className="learn-module-bar">
           <button type="button" className="learn-back" onClick={() => { setOpen(null); setStep(0); }}>
             <ArrowLeft size={18} weight="bold" aria-hidden="true" />
@@ -96,7 +109,15 @@ export function LearnModules() {
 
         <div className="learn-cards">
           {cards.map((card, index) => (
-            <article key={card.n} className={index === step ? "learn-card is-current" : "learn-card"} aria-hidden={hydrated && index !== step ? "true" : undefined}>
+            <motion.article
+              key={card.n}
+              className={index === step ? "learn-card is-current" : "learn-card"}
+              aria-hidden={hydrated && index !== step ? "true" : undefined}
+              // The current card arrives from the side it was asked for; the others are display:none.
+              initial={hydrated && !reducedMotion && index === step ? { opacity: 0, x: 28 * direction } : false}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ ...SPRING, opacity: { duration: 0.2 } }}
+            >
               <p className="learn-card-eyebrow">{card.eyebrow}</p>
               <h3 className="learn-card-heading">{card.heading}</h3>
               <p className="learn-card-body">{card.body}</p>
@@ -106,12 +127,12 @@ export function LearnModules() {
                 </ul>
               )}
               {card.foot && <p className="learn-card-foot">{card.foot}</p>}
-            </article>
+            </motion.article>
           ))}
         </div>
 
         <div className="learn-controls">
-          <button type="button" className="learn-secondary" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>
+          <button type="button" className="learn-secondary" onClick={() => { setDirection(-1); setStep((s) => Math.max(0, s - 1)); }} disabled={step === 0}>
             <ArrowLeft size={17} weight="bold" aria-hidden="true" />
             Back
           </button>
@@ -121,13 +142,13 @@ export function LearnModules() {
               Finish
             </button>
           ) : (
-            <button type="button" className="learn-primary" onClick={() => setStep((s) => Math.min(cards.length - 1, s + 1))}>
+            <button type="button" className="learn-primary" onClick={() => { setDirection(1); setStep((s) => Math.min(cards.length - 1, s + 1)); }}>
               Next
               <ArrowRight size={17} weight="bold" aria-hidden="true" />
             </button>
           )}
         </div>
-      </section>
+      </motion.section>
     );
   }
 
@@ -139,11 +160,23 @@ export function LearnModules() {
         <span className="learn-list-count">{finished === 0 ? "None finished yet" : `${finished} of ${MODULES.length} finished`}</span>
       </div>
       <ul className="learn-tiles">
-        {MODULES.map((module) => {
+        {MODULES.map((module, index) => {
           const done = progress.done.includes(module.id);
           return (
-            <li key={module.id}>
-              <button type="button" className={done ? "learn-tile is-done" : "learn-tile"} onClick={() => { setOpen(module.id); setStep(0); }}>
+            <motion.li
+              key={module.id}
+              // No entrance on the first paint: the server render must carry no opacity: 0 (the
+              // landing spec pins that), so the tiles are simply there; the module view animates.
+              initial={false}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...SPRING, delay: index * 0.05, opacity: { duration: 0.22 } }}
+            >
+              <motion.button
+                type="button"
+                className={done ? "learn-tile is-done" : "learn-tile"}
+                onClick={() => { setOpen(module.id); setStep(0); setDirection(1); }}
+                whileTap={reducedMotion ? undefined : { scale: 0.985 }}
+              >
                 <ModuleMark tint={module.tint} />
                 <span className="learn-tile-text">
                   <strong>{module.title}</strong>
@@ -151,14 +184,21 @@ export function LearnModules() {
                 </span>
                 <span className="learn-tile-meta">
                   {done ? (
-                    <span className="learn-tile-done"><Check size={14} weight="bold" aria-hidden="true" />Done</span>
+                    <motion.span
+                      className="learn-tile-done"
+                      initial={reducedMotion ? false : { scale: 0.6, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 520, damping: 28 }}
+                    >
+                      <Check size={14} weight="bold" aria-hidden="true" />Done
+                    </motion.span>
                   ) : (
                     <span className="learn-tile-time"><Clock size={14} weight="bold" aria-hidden="true" />{module.minutes} min</span>
                   )}
                   <ArrowRight size={16} weight="bold" aria-hidden="true" />
                 </span>
-              </button>
-            </li>
+              </motion.button>
+            </motion.li>
           );
         })}
       </ul>

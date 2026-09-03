@@ -1818,21 +1818,31 @@ textarea:focus-visible {
 
 .patient-v2 .clinician-row {
   position: relative;
-  grid-template-columns: 76px 1fr 24px;
-  gap: 13px;
+  /* O240: a lighter row — a 60px portrait, a 16px radius, the hairline mixed toward paper — so
+     five rows read as a list rather than five boxes. */
+  grid-template-columns: 60px 1fr 20px;
+  gap: 14px;
   padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, var(--paper));
+  border-radius: 16px;
+  transition: border-color var(--dur-tap) var(--ease-ui), box-shadow var(--dur-move) var(--ease-ui);
+}
+
+@media (hover: hover) {
+  .patient-v2 .clinician-row:hover {
+    border-color: color-mix(in srgb, var(--route) 30%, var(--line));
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--hero-dusk) 8%, transparent);
+  }
 }
 
 .patient-v2 .row-portrait-anchor {
-  width: 76px;
-  height: 76px;
+  width: 60px;
+  height: 60px;
 }
 
 .patient-v2 .clinician-row img {
-  width: 76px;
-  height: 76px;
+  width: 60px;
+  height: 60px;
   /* O226: CONCENTRIC — inner radius = card radius (18) minus card padding (12). Nested corners
      that do not share a centre read as two components glued together; these now curve as one. */
   border-radius: 6px;
@@ -6396,8 +6406,7 @@ select { caret-color: var(--route-strong); }
 
 .patient-v2 .finder-context p { color: var(--muted); }
 
-.patient-v2 .scenario-quote,
-.patient-v2 .finder-context {
+.patient-v2 .scenario-quote {
   border-color: var(--route-line);
   border-radius: 14px;
   background: var(--route-soft);
@@ -7446,8 +7455,9 @@ select { caret-color: var(--route-strong); }
 
 /* Under the band, not behind it: the lid is painted at top:0 across the whole bar, and a marker
    at the same offset was hidden by it — visible only in the 390px preview capture. */
-.app-tab.is-current::before {
-  content: "";
+/* O240: the marker is an element with a shared layout id (app-tabs.tsx), so it travels between
+   tabs on a spring instead of appearing under the new one. */
+.app-tab-marker {
   position: absolute;
   top: 2px;
   left: 50%;
@@ -8760,4 +8770,36 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 @media (prefers-reduced-motion: reduce) {
   .learn-tile, .learn-cta, .learn-primary, .learn-secondary, .learn-dots li { transition: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O240 — SIMPLER, AND MOVING LIKE A MODERN APP.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* The welcome disclaimer is one quiet line, not a tinted panel. */
+.patient-v2 .finder-context {
+  margin: 0;
+  padding: 10px var(--shell-gutter) max(14px, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.patient-v2 .finder-context p { color: var(--faint); font-size: 0.6875rem; font-weight: 520; }
+
+/* The consent card arrives on a spring-like curve from the bottom edge. */
+@keyframes consent-in {
+  from { opacity: 0; translate: 0 18px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+.consent-bar { animation: consent-in 420ms var(--ease-spring) both; }
+
+/* The monogram tile follows the smaller portrait. */
+.patient-v2 .clinician-monogram-thumb { border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .consent-bar { animation: none; }
+  .patient-v2 .clinician-row { transition: none; }
 }
