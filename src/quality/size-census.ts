@@ -333,16 +333,18 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'app-lines', value: 16382, on: SET_BY_O249, reason: "O249: the apple-design appraisal acted on — a direction on the history hook, popped-out leaving screens, the sheet's projected release and animated detent, with the reasoning for each in place." },
   { measure: 'src-modules', value: 305, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-lines', value: 55580, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-lines', value: 55585, on: SET_BY_O249, reason: "O249: the history hook's direction — two lines, so a screen can leave the way it came." },
+  { measure: 'src-lines', value: 55587, on: SET_BY_O249, reason: "O249: the history hook's direction — two lines, so a screen can leave the way it came." },
   { measure: 'src-reached-modules', value: 172, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-reached-lines', value: 31478, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'src-unreached-lines', value: 24102, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
-  { measure: 'src-unreached-lines', value: 24107, on: SET_BY_O249, reason: "O249: the history hook's direction and its comment — reached by the finder, counted here by the register's own rule." },
+  { measure: 'src-unreached-lines', value: 24109, on: SET_BY_O249, reason: "O249: the history hook's direction and its comment — reached by the finder, counted here by the register's own rule." },
   { measure: 'vitest-lines', value: 53658, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'e2e-spec-lines', value: 8022, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'css-lines', value: 9046, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'css-rule-blocks', value: 1584, on: SET_BY_O241_MERGE, reason: "O241 merge: the sum of the two lanes, measured after the merge." },
   { measure: 'css-lines', value: 9059, on: SET_BY_O249, reason: "O249: two media answers (reduced transparency, more contrast) and the Learn hero's small-width light, less the retired language-row rule." },
+  { measure: 'css-rule-blocks', value: 1586, on: SET_BY_O249, reason: "O249: the two media answers and the Learn hero's small-width light, less the retired language-row rule." },
+  { measure: 'e2e-spec-lines', value: 8028, on: SET_BY_O249, reason: "O249: two specs that had passed inside the old 160 ms exit gap now say why they assert what the tree shows." },
 ];
 
 /** The current floor per measure: the last entry wins. */
