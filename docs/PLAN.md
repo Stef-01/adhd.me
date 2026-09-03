@@ -15,13 +15,16 @@ would produce two answers to "is AR7 done" with no rule for which wins. One fact
 
 ## What is being built right now
 
-One active lane, claimed from `BUILD-STATE.md` under the same protocol and the same lock as every
-lane before it. **Founder-directed 2026-09-01/02 (O227):** a critical appraisal of "exactly what is
+Two active lanes, claimed from `BUILD-STATE.md` under the same protocol and the same lock as every
+lane before them: the U lane builds, the V lane refines and schedules. **Founder-directed
+2026-09-03 (O250):** "a comprehensive refinement and advancement plan with week by week milestones
+for next year with extreme detail with Apple plugin and skill and also engineering skills". **Founder-directed 2026-09-01/02 (O227):** a critical appraisal of "exactly what is
 needed to upgrade the whole platform into a perfectly functional app", consolidated into one
 one-year build plan, with "a complex multistage refactor for next few months" inside it.
 
 | Lane | Units | Spec lives in | What it is for |
 |---|---|---|---|
+| **V — the weekly roadmap's refinement lane** | `V1`–`V40` | [`WEEKLY-ROADMAP-2026-27.md`](WEEKLY-ROADMAP-2026-27.md) | Week-by-week milestones for the year (§4) and forty refinement units (§5): the fluid-interface, design-quality and engineering-practice bars as registers and probes. Founder-commissioned 2026-09-03 (O250). Beside the U lane, never inside it. |
 | **U — the one-year build plan** | `U1`–`U68` | [`ONE-YEAR-BUILD-PLAN.md`](ONE-YEAR-BUILD-PLAN.md) | Four quarters, September 2026 to August 2027. Q1 (U1–U23): deployment readiness and the refactor's foundation, stages R0–R2. Q2 (U24–U43): the refactor's second half, R3–R5, and durability — a real store, isolation at the SQL layer, consent and retention. Q3 (U44–U56): the finder at scale and the installed app. Q4 (U57–U68): matching evidence, enforcement and the year's reckoning. The refactor lane (R0–R5, U14–U34) runs on a measured ratchet that only goes down (§2.5). |
 
 **Where the findings behind it come from.** The plan's own §1 (the premise, measured on the day it
@@ -45,6 +48,7 @@ accumulated without anybody deciding to have eight.
 
 | Document | Status | Why |
 |---|---|---|
+| `WEEKLY-ROADMAP-2026-27.md` | **ACTIVE** | The calendar and the refinement lane: fifty-two weeks (7 September 2026 to 30 August 2027) placing every remaining U unit and every founder decision on a date, and the V lane, V1–V40, that turns the apple-design skill and the karak design, engineering and architecture skills into registers, probes and documents. Founder-commissioned 2026-09-03 (O250). It never re-scopes a U unit; `weekly-roadmap.test.ts` holds it to the ledger. |
 | `ONE-YEAR-BUILD-PLAN.md` | **ACTIVE** | The live backlog: the U lane, U1–U68, September 2026 to August 2027, with the multistage refactor R0–R5 inside it. Its §8 names where every open item of the three plans below went. |
 | `MATCHING-YEAR-PLAN.md` | **REFERENCE** | Executed on the ledger through O226 (Q1 reach, Q-M M1–M10, the continuous lanes). Its remaining numbered items and standing debts are U rows, gates or recorded refusals in `ONE-YEAR-BUILD-PLAN.md` §8; M11/M12 stay founder-gated where the ledger left them. Kept because the O-series' reasoning cites it. |
 | `AESTHETIC-REVIEW-PLAN.md` | **CLOSED** | AR1–AR40, done on the ledger. `AR-DOSSIER.md` §3's priced gaps are U59–U61; the accepted-diff chain and the three-run protocol continue as the U lane's pixel witness. |

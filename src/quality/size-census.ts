@@ -79,6 +79,7 @@ const SET_BY_O245 = "2026-09-02";
 const SET_BY_O247 = "2026-09-03";
 const SET_BY_O248 = "2026-09-03";
 const SET_BY_O249 = "2026-09-03";
+const SET_BY_O250 = "2026-09-03";
 const SET_BY_O241 = "2026-09-03";
 const SET_BY_O241_MERGE = "2026-09-03";
 
@@ -345,6 +346,10 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'css-lines', value: 9059, on: SET_BY_O249, reason: "O249: two media answers (reduced transparency, more contrast) and the Learn hero's small-width light, less the retired language-row rule." },
   { measure: 'css-rule-blocks', value: 1586, on: SET_BY_O249, reason: "O249: the two media answers and the Learn hero's small-width light, less the retired language-row rule." },
   { measure: 'e2e-spec-lines', value: 8028, on: SET_BY_O249, reason: "O249: two specs that had passed inside the old 160 ms exit gap now say why they assert what the tree shows." },
+  { measure: 'vitest-files', value: 318, on: SET_BY_O250, reason: "O250: weekly-roadmap.test.ts — the roadmap and the V lane held to the ledger in both directions." },
+  { measure: 'vitest-lines', value: 53874, on: SET_BY_O250, reason: "O250: the roadmap test, plus the V-lane exclusion taught to the horizon and the two dossier tests." },
+  { measure: 'src-lines', value: 55592, on: SET_BY_O250, reason: "O250: this register's own three rows." },
+  { measure: 'src-unreached-lines', value: 24114, on: SET_BY_O250, reason: "O250: this register's own three rows." },
 ];
 
 /** The current floor per measure: the last entry wins. */

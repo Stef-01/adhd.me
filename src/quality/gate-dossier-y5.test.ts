@@ -67,7 +67,9 @@ function blockedRows(): BlockedRow[] {
       // The U-series (O227's one-year build plan, opened 2026-09-02) is another plan's lane and
       // would pass the un-numbered branch: its nine blocked rows name `FOUNDER DECISION D-…` ids
       // priced in that plan's own §6, so they are excluded here by id, not by their gate field.
-      if (/^U\d+$/.test(row.id)) return false;
+      // The V-series (O250's weekly roadmap, opened 2026-09-03) is the same case: its blocked rows
+      // name decisions priced in that roadmap's own §6.
+      if (/^[UV]\d+$/.test(row.id)) return false;
       const numbered = /^W(\d+)$/.exec(row.id);
       return numbered === null || Number(numbered[1]) <= Y5_LAST_UNIT;
     });

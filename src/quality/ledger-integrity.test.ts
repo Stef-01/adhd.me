@@ -56,7 +56,7 @@ interface Row {
   line: number;
 }
 
-const ROW = /^\| ((W|AR|U)(\d+)) \| ([\w-]+) \| ([^|]*) \| ([^|]*) \| ([^|]*) \| (.*) \|\s*$/;
+const ROW = /^\| ((W|AR|U|V)(\d+)) \| ([\w-]+) \| ([^|]*) \| ([^|]*) \| ([^|]*) \| (.*) \|\s*$/;
 
 const ROWS: Row[] = LEDGER.split("\n").flatMap((line, index) => {
   const m = ROW.exec(line);
@@ -82,7 +82,8 @@ const SERIES_NAMES = [...new Set(ROWS.map((r) => r.series))];
 const named = (note: string): boolean =>
   /FOUNDER GATE G\d/.test(note) ||
   /FOUNDER DECISION[^|]*docs\/GATE-DOSSIER-[\w.-]+\.md/.test(note) ||
-  /FOUNDER DECISION[^|]*docs\/ONE-YEAR-BUILD-PLAN\.md/.test(note);
+  /FOUNDER DECISION[^|]*docs\/ONE-YEAR-BUILD-PLAN\.md/.test(note) ||
+  /FOUNDER DECISION[^|]*docs\/WEEKLY-ROADMAP-2026-27\.md/.test(note);
 
 describe("W168 the ledger is a usable lock", () => {
   it("parses as a table at all", () => {

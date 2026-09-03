@@ -75,6 +75,11 @@ describe("O185 the plan canon", () => {
     // plan of O220) went to REFERENCE or CLOSED in the same commit, and the plan's own §8 says where
     // each of their open items went. `one-year-plan.test.ts` holds that plan to its ledger lane.
     const active = [...CANON.matchAll(/^\| `([A-Z0-9-]+\.md)` \| \*\*ACTIVE\*\* \|/gm)].map((m) => m[1]!);
-    expect(active.sort()).toEqual(["ONE-YEAR-BUILD-PLAN.md"]);
+    // Two, since 2026-09-03 (O250): the founder commissioned "a comprehensive refinement and
+    // advancement plan with week by week milestones for next year" — a calendar over the U lane
+    // and a refinement lane (V1–V40) beside it. It is a second backlog on purpose, decided by the
+    // founder in those words; `weekly-roadmap.test.ts` holds it to its lane and to the U lane's
+    // remaining rows so the two cannot drift apart.
+    expect(active.sort()).toEqual(["ONE-YEAR-BUILD-PLAN.md", "WEEKLY-ROADMAP-2026-27.md"]);
   });
 });

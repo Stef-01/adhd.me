@@ -41,7 +41,12 @@ const QUARTER = 13;
  * were written, priced in that plan's own §6 rather than in this plan's §8. Same narrowing, same
  * reason, and the same both-directions guard below so the exclusion cannot go dead unnoticed.
  */
-const isOtherPlansLane = (id: string): boolean => /^AR\d+$/.test(id) || /^U\d+$/.test(id);
+/**
+ * The V-series (`docs/WEEKLY-ROADMAP-2026-27.md`, opened 2026-09-03 by O250) is the third case:
+ * the refinement lane beside the U plan, its forty rows `available` or `blocked` by design on the
+ * day they were written and scheduled by that roadmap's own calendar. Same narrowing, same guard.
+ */
+const isOtherPlansLane = (id: string): boolean => /^AR\d+$/.test(id) || /^U\d+$/.test(id) || /^V\d+$/.test(id);
 
 const rowsWithStatus = (status: string): string[] =>
   LEDGER.split("\n")
@@ -66,13 +71,14 @@ describe("W260 the horizon's figures come from the ledger", () => {
     expect(open.filter((id) => id !== "W260"), `still buildable: ${open.join(", ")}`).toEqual([]);
   });
 
-  it("excludes the AR and U lanes on purpose, and neither exclusion is silently doing nothing", () => {
+  it("excludes the AR, U and V lanes on purpose, and no exclusion is silently doing nothing", () => {
     // A filter nobody checks is how a sweep starts measuring the wrong set. Both directions, per
     // lane: the lane must really be there (or this exclusion is dead code pretending to be a
     // decision), and it must really be excluded (or the scope claim above is false).
     for (const [lane, rowPattern, idPattern] of [
       ["AR", /^\| AR\d+ \|/, /^AR\d+$/],
       ["U", /^\| U\d+ \|/, /^U\d+$/],
+      ["V", /^\| V\d+ \|/, /^V\d+$/],
     ] as const) {
       const rows = LEDGER.split("\n").filter((line) => rowPattern.test(line));
       expect(rows.length, `the ${lane} lane is gone — delete this exclusion rather than leaving it`).toBeGreaterThan(0);

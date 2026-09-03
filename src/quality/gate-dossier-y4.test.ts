@@ -42,7 +42,9 @@ const blockedRows = (): { id: string; note: string }[] =>
     // rows are priced in that plan's own §6, not in this dossier, and would otherwise pass as
     // "un-numbered" here.
     .filter((row) => {
-      if (/^U\d+$/.test(row.id)) return false;
+      // The V-series (O250's weekly roadmap, opened 2026-09-03) is the same case: its blocked rows
+      // name decisions priced in that roadmap's own §6.
+      if (/^[UV]\d+$/.test(row.id)) return false;
       const numbered = /^W(\d+)$/.exec(row.id);
       return !numbered || Number(numbered[1]) <= Y4_LAST_UNIT;
     });
