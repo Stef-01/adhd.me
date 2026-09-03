@@ -98,7 +98,7 @@ test("a shared link with a place ranks from it, and a fresh visit starts at the 
   await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   // The place the link carried ranks the list and draws the map; it stays on the address.
-  await expect(page.locator(".nearby-map")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();
   expect(page.url()).toContain("place=Hornsby");
 
   // Arriving again by address — not Back, not reload — is a fresh start: the last visit's words

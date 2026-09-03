@@ -224,7 +224,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   await page.getByRole("textbox").fill("someone who can do the whole assessment");
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
-  await expect(page.locator(".nearby-map")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();
 
   const strip = page.getByRole("group", { name: "Your filters" });
   await expect(strip).toContainText("Woman GP");
@@ -237,7 +237,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   await strip.getByRole("button", { name: "Clear", exact: true }).click();
   await expect(page.getByRole("group", { name: "Your filters" })).toHaveCount(0);
   // The place survives a clear — it orders, it never excluded anybody.
-  await expect(page.locator(".nearby-map")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();
   // And the device agrees with the screen.
   await page.goto("/profile");
   await expect(page.getByText("None on", { exact: true })).toBeVisible();
@@ -259,6 +259,9 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  // O238: the map is behind one control, closed by default — the list is the screen.
+  await expect(page.locator(".nearby-map")).toHaveCount(0);
+  await page.getByRole("button", { name: "Map", exact: true }).click();
   const map = page.locator(".nearby-map");
   await expect(map).toBeVisible();
   // O235: a real basemap — Leaflet's container, OpenStreetMap's attribution (the licence needs it),
@@ -292,6 +295,7 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await expect(page.getByRole("button", { name: "Map", exact: true })).toHaveCount(0);
   await expect(page.locator(".nearby-map")).toHaveCount(0);
   await expect(page.locator(".row-key")).toHaveCount(0);
 });

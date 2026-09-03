@@ -98,6 +98,7 @@ test("a suburb set on the profile orders the results and draws the map, without 
   expect(after.length).toBe(before.length);
   expect(after.some((name) => before.includes(name)), "the search was lost, not re-ranked").toBe(true);
   await expect(page.locator(".clinician-row").getByText(/km away|in your suburb/).first()).toBeVisible();
+  await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.locator(".nearby-map")).toBeVisible();
   expect(new URL(page.url()).pathname).toBe("/");
 });
@@ -107,7 +108,7 @@ test("an uncovered suburb says so on the profile rather than silently ranking on
   await page.getByLabel("Suburb or postcode").fill("Bondi");
   await expect(page.getByText(/do not cover that location yet/i)).toBeVisible();
   await intoResults(page, "Bondi");
-  await expect(page.locator(".nearby-map")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Map", exact: true })).toHaveCount(0);
   await expect(page.locator(".clinician-row")).not.toHaveCount(0);
 });
 

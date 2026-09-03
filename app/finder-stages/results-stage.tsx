@@ -3,7 +3,7 @@
 // O95: the results screen, verbatim from care-finder.tsx — including the collapsed-screens
 // history note, because it explains why this one screen carries so much.
 
-import { CaretRight, FunnelSimple, MagnifyingGlass, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { CaretRight, FunnelSimple, MagnifyingGlass, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -102,6 +102,13 @@ export function ResultsStage({
    * they did not choose from a number; finding the row lets them read it first.
    */
   const list = useRef<HTMLDivElement | null>(null);
+  /**
+   * O238 (founder-directed, "make map open up with a button, it causes too much clutter … the
+   * north star is simplicity"): the map is behind one control on the list's own header, closed by
+   * default. The row keys render only while it is open, because they are keys to the map.
+   */
+  const [mapOpen, setMapOpen] = useState(false);
+  const mapShown = mapOpen && origin !== null && shown.length > 0;
   /** O234: the filters left nobody. The verdict lines below describe a roster; with no roster they describe nothing, so they stand down. */
   const empty = matches.length === 0;
   const pickFromMap = (clinician: Clinician) => {
@@ -167,10 +174,6 @@ export function ResultsStage({
           </motion.div>
         )}
 
-        {/* O235: the nearby map — only once the place resolves. */}
-        {origin && shown.length > 0 && (
-          <NearbyMap origin={origin} shown={shown} onPick={pickFromMap} />
-        )}
       </div>
 
       {/* O234: the filters the device is holding, said on the screen they narrow. A person who set
@@ -213,11 +216,33 @@ export function ResultsStage({
       {!empty && (
       <div className="results-list-head">
         <h2>{quality === "informed" ? "Matches" : "All listed GPs"}</h2>
-        {/* O226: the count sits with the list it describes, not two groups up the page. */}
-        {matches.length > shown.length && (
-          <span className="results-count">{shown.length} of {matches.length}</span>
-        )}
+        <span className="results-list-tools">
+          {/* O226: the count sits with the list it describes, not two groups up the page. */}
+          {matches.length > shown.length && (
+            <span className="results-count">{shown.length} of {matches.length}</span>
+          )}
+          {/* O238: the map, behind a control, only when a suburb is known to draw it from. */}
+          {origin && (
+            <button
+              type="button"
+              className={mapShown ? "map-toggle is-open" : "map-toggle"}
+              aria-pressed={mapShown}
+              aria-controls="nearby-map-panel"
+              onClick={() => setMapOpen((open) => !open)}
+            >
+              <MapTrifold size={16} weight={mapShown ? "fill" : "bold"} aria-hidden="true" />
+              {mapShown ? "Hide map" : "Map"}
+            </button>
+          )}
+        </span>
       </div>
+      )}
+
+      {/* O235: the nearby map — only once the place resolves, and only when asked for. */}
+      {mapShown && (
+        <div id="nearby-map-panel" className="nearby-map-panel">
+          <NearbyMap origin={origin!} shown={shown} onPick={pickFromMap} />
+        </div>
       )}
 
       <div className="clinician-list" ref={list}>
@@ -284,7 +309,7 @@ export function ResultsStage({
               <CaretRight size={20} weight="light" aria-hidden="true" />
               {/* O234: the row's KEY on the map — a position, not a rank — shown only while the
                   map is, so a number never stands over the list claiming an order it did not earn. */}
-              {origin && <span className="row-key" aria-hidden="true">{index + 1}</span>}
+              {mapShown && <span className="row-key" aria-hidden="true">{index + 1}</span>}
             </motion.button>
           );
           })}

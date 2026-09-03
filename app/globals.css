@@ -8752,3 +8752,38 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 @media (prefers-reduced-motion: reduce) {
   .results-summary-words { transition: none; }
 }
+
+
+/* O238: the map behind one control on the list header, closed by default. */
+.results-list-tools { display: inline-flex; align-items: center; gap: 10px; }
+
+.map-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui);
+}
+
+.map-toggle.is-open { border-color: var(--route-strong); color: var(--route-strong); }
+.map-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (hover: hover) {
+  .map-toggle:hover { background: var(--stone); }
+}
+
+.nearby-map-panel { padding: 0 var(--shell-gutter) 6px; }
+.nearby-map-panel .nearby-map { margin-top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .map-toggle { transition: none; }
+}
