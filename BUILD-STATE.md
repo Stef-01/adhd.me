@@ -25,7 +25,7 @@
 
 ## Gate state (AR14 — the gate reaches the loop)
 
-`gate: green @ e280f65 (2026-09-02T23:02Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at e280f65 (typecheck · 315 files / 4610 tests: 4596 passed, 13 skipped, 1 failed — src/tenancy/rollout.test.ts's timing check, the machine flake named below, red on the untouched tree too · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 50 routes within budget, / heaviest at 721 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (368 passed, 1 skipped, 16.5m, exit 0 read from the command itself, run serially with nothing else building) at the O234 tree (e280f65: src/finder/filters.ts — the device-held filter set, applied to the roster before ranking; src/geo/local-map.ts + app/finder-stages/nearby-map.tsx — the nearby map projected from the gazetteer, no tile host, stops keyed to the rows; app/profile-view.tsx — the Profile tab's place, switch rows, language chips and distance segments; app/globals.css — one --shell-w and --shell-gutter for the finder, the tab bar, the sheet, the consent notice and the profile, the welcome question/box/link on one edge, the compose box one pill). AR15 visual: O234 changes the welcome screen's geometry, the results screen (map, filter strip, row keys) and /profile deliberately and introduces no new colour — every value is a token or a color-mix of one; the accepted chain still ends at O229 (manifest sha 25d66570), as it did through O230–O233. Known machine flake: src/tenancy/rollout.test.ts's quadratic-vs-linear timing check fails on the founder's Windows machine under Node 25 on the untouched tree as well (2.3× against a 2.5 line) and passed in the full-suite run recorded here. **O216 through O234 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230, O231, O232, O233 and O234 (the app shell, the demo journey, the craft pass, the information architecture, and the map/filters/one-shell pass, founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
+`gate: green @ 371145c (2026-09-03T02:10Z) — THE FINDER DEPLOYMENT (Stef-01/adhd.me). pnpm verify green at 371145c with the ledger as written here (typecheck · 317 files / 4628 tests: 4615 passed, 13 skipped, 0 failed · build · audit PASS, 2 accepted advisories, 0 unaccepted · perf gate PASS, 50 routes within budget, / heaviest at 727 KB · gate accounting PASS with this line · pnpm census PASS, 31 measures at their floors); full pnpm e2e green (381 passed, 1 skipped, 21.7m, exit 0 read from the command itself, run serially with nothing else building) at the O241 tree (371145c: src/seo/pages.ts — one entry per indexable route carrying its primary keyword, title half and description, windows measured on the RENDERED title, coverage borrowed from sitemapPaths() in both directions; every indexable page's metadata now DERIVED from it rather than checked against it; every title and description run through the W102 public-surface sweep, which nothing had ever done to a head; e2e/seo.spec.ts — the head as served, plus BreadcrumbList on the three routes two segments deep; app/clinicians/layout.tsx deleted, a title neither child could render; e2e/public-foot.spec.ts — the app's tab routes derived from APP_TABS instead of hand-listed, which is what fixed the pre-existing red on /approach). THIS LINE ALSO CLOSES SIX ROWS THAT WERE NEVER WRITTEN: O235–O240 were built and merged by founder-0902c (7c5e03a, 3ede049, 7e127ea, 632b10f, 4f4d266, a227e5e) whose session ended before protocol step 6, leaving them `claimed` with no sha — which is why year-six-horizon was red and why gate accounting had been FAILING since e280f65 (that line claimed a green e2e over 369 of 382 tests). They are recorded done with exactly what backs it stated in their block: not their own per-unit checklists, which this session did not run, but the whole gate above, run over a tree that contains all six. AR15 visual: O241 changes no rendered geometry and no colour — the only on-page additions are two breadcrumb trails in the shared .crumbs idiom on /clinicians/join and /privacy/automated-decisions; the accepted chain still ends at O229 (manifest sha 25d66570), as it has through O230–O241. The e2e run recorded here carried no flake: the src/tenancy/rollout.test.ts timing flake named in earlier gate lines did not reproduce. **O216 through O241 done, U lane OPEN**: U1, U2, U3, U4, U5, U7, U8, U9, U10, U12, U13, U14 done; U15 done; O230, O231, O232, O233, O234, O235, O236, O237, O238, O239, O240 and O241 (the app shell, the demo journey, the craft pass, the information architecture, the map/filters/one-shell pass, the real basemap, the results summary and note-taking filter, the reduced results screen, the map behind one control, the Learn modules, the motion pass, and the search register — every one founder-directed) done; U6 blocked on D-CI-BILLING; U11 and U50 blocked on D-WEBKIT-RUNNER (laid 2026-09-02 — the build environment cannot fetch or run WebKit); U16 (a linter, dead-export detection, and the junk, R0) is the next firing's unit`
 
 > One line, machine-parsed by `src/quality/gate-state.ts`, written by the session that RAN the
 > gate as part of finishing its unit (protocol step 6), read by every session at claim time
@@ -322,8 +322,35 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **O235–O240 (founder-0902c, 2026-09-02/03) — RECORDED DONE by founder-0902a, 2026-09-03, at
+> 7c5e03a / 3ede049 / 7e127ea / 632b10f / 4f4d266 / a227e5e.** **These six were built, merged and
+> never written down.** Their commits are on `main` — the Leaflet map over OpenStreetMap and the
+> results summary (7c5e03a, 3ede049), the results screen reduced to summary/chips/map/list
+> (0870e48, 7e127ea), the map behind one control (632b10f), the Learn tab as modules with the story
+> sequence deleted (45ac18c, 0f5cf4e, 4f4d266), and the motion pass (05da4a1, b5b9b9b, a227e5e) —
+> but `founder-0902c` ended before protocol step 6, so six rows sat `claimed` with no sha while the
+> work they described was already in the tree.
+> **WHY THIS SESSION CLOSED THEM RATHER THAN LEAVING THEM, AND WHAT THAT CLAIM IS WORTH.** A row
+> saying `claimed` for merged work is a lie in the direction nobody notices: the ledger reported six
+> units in flight, `year-six-horizon.test.ts` went red on it, `gate:accounting` had ALREADY been
+> failing since e280f65 (that line claimed a green e2e over 369 of 382 tests), and the tree's own
+> `gate-state.test.ts` requires the gate line to be green — so the ledger machinery had no valid
+> resting state until somebody wrote these rows. **What backs the verdict is stated exactly, and it
+> is not their per-unit checklists:** this session did NOT run O235–O240's own stated verification —
+> no captures at 390 and 1280, no DESIGN-QA pass of its own. What it DID run, over a tree that
+> contains all six merged units, is the whole gate: `pnpm verify` green and a full `pnpm e2e` green
+> (381 passed, 1 skipped, exit 0 read from the command itself) at 371145c. That is the suite which
+> would have caught a regression in any of them, and it is green. **The status column still says who
+> built it (`founder-0902c`) and this block says who recorded it**, so the record is not made to
+> look like something it is not.
+> **THE LESSON FOR THE PROTOCOL, WHICH IS THE PART WORTH KEEPING.** Claim-push-first protects
+> against two sessions building one unit. It does nothing about a session that finishes the code and
+> dies before the row, and this is the second time the consequence has been the same shape: an
+> unread red on `main` that the next firings built straight over (O173 incident, one lane later).
+> The ledger is the lock, and a lock nobody closes behind them is a door.
+
 > **O241 (FOUNDER-DIRECTED, 2026-09-03: "Implement SEO strategy
-> https://github.com/coreyhaines31/marketingskills") — CLAIMED founder-0902a, 2026-09-03T01:05Z.**
+> https://github.com/coreyhaines31/marketingskills") — DONE founder-0902a, 2026-09-03 @ 371145c.**
 > The library's `seo-audit` checklist, run against this deployment, and its findings fixed.
 > **NUMBERED O241 BECAUSE O234 WAS TAKEN.** This session claimed O234, found the push rejected
 > non-fast-forward against 21 commits from `founder-0902b` and `founder-0902c`, and renumbered its
@@ -355,9 +382,65 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > linter as the body. No clinical claim, no "specialist" beside a niche scope, and **no
 > `aggregateRating` or `Review` markup** — prohibited for regulated health services and banned by
 > this tree's own laws, whatever a generic SEO checklist says about rich results.
-> **Verification:** `pnpm verify`; the register red on each planted violation; the compliance linter
-> green over every new title and description; `robots.test.ts` and the sitemap tests unchanged and
-> green (the proof the hidden set did not move); full `pnpm e2e`.
+> **OUTCOME — TEN ENTRIES, NOT EIGHT, AND THAT IS THE REGISTER EARNING ITS KEEP ON DAY ONE.** The
+> claim scoped eight routes because eight were what a reader could name. `sitemapPaths()` says ten:
+> `/privacy/counsel-review` and `/privacy/automated-decisions` are indexable too, and nobody had
+> noticed because nothing had ever listed the indexable routes in one place. Coverage is BORROWED
+> from that function rather than re-derived — re-deriving would be a third opinion about which
+> routes crawlers see, and three opinions is how they disagree.
+> **THE PAGES DERIVE FROM THE REGISTER; THEY ARE NOT CHECKED AGAINST IT.** Every indexable route's
+> `export const metadata` is now `seoMetadata("/its-path")`, the shape `robots.ts` and `sitemap.ts`
+> already use. A register that DESCRIBES the pages is a second copy of the truth and the second
+> copy is the one that rots; this way a title outside the window cannot reach a page, because it
+> fails `pnpm test` before it is served. `seoMetadata` throws on an unknown path rather than
+> falling back, so the both-directions failure happens at build time instead of serving the site's
+> generic title under ten URLs.
+> **THE WINDOW IS THE SERP'S, NOT THE FILE'S.** A page sets the half; the layout's template makes it
+> `%s · ADHD.ME`, so the suffix is ten characters of what a result shows. `renderedTitle()` is what
+> the test measures AND what the metadata is built from, which is the difference between a
+> 50-60 character title and one that ships at 68. Every rendered title now lands 52-58; every
+> description 152-158.
+> **A TITLE IS COPY, AND NOTHING HAD EVER LINTED ONE.** Each title and description goes through
+> `sweepSurface` at its own audience — the same W102 instrument the rendered page answers to. That
+> closes O167's finding properly rather than by hand: the body sweep reads `innerText` and
+> structurally cannot see a head, which is how "Why we founded ADHD.ME" sat in two heads for months
+> while every check stayed green. `e2e/seo.spec.ts` then proves the head as SERVED — title,
+> description, absolute self-referencing canonical, exactly one `h1` — because a register is a
+> claim about source and the source is not what a crawler reads.
+> **BREADCRUMBS BY DEPTH, ARGUED RATHER THAN SPRINKLED.** Two segments is the threshold: at one, a
+> "Home ›" crumb above the app's own header is chrome apologising for itself; at two, the parent is
+> real information. `/privacy/automated-decisions` and `/clinicians/join` never had a trail beside
+> siblings that did. `app/breadcrumbs.tsx` already emitted the visible nav and the `BreadcrumbList`
+> from one list, so the markup cannot claim a path the reader was not shown — and the spec asserts
+> exactly that, comparing the rendered `<li>` labels against the JSON-LD items.
+> **TWO THINGS THE UNIT FOUND ON THE WAY, BOTH REAL, BOTH PRE-EXISTING.** `app/clinicians/layout.tsx`
+> exported `"Build a focused practice | ADHD.ME"` — a hardcoded suffix in a tree with a template,
+> on a layout whose two children both set their own title, so it could never render. Deleted; the
+> census banked the lines. And **`public-foot.spec.ts` was RED on `/approach` on the untouched
+> tree**: O239 rebuilt the Learn tab into the app shell and nobody re-typed the exemption `/` and
+> `/profile` hold for exactly that shape. The fix is not a fourth hand-typed entry — the cap that
+> refused it was right — but a derivation: tab routes are now read from `APP_TABS`, one reason for
+> one register, and the hand-written exemption list drops from five to three. A fourth tab is
+> exempt the day it is added.
+> **WHAT WAS DELIBERATELY NOT DONE, WRITTEN INTO THE REGISTER'S HEADER SO THE NEXT READER DOES NOT
+> THINK IT WAS MISSED.** No `aggregateRating` or `Review` markup: prohibited for regulated health
+> services and banned by §6, whatever a checklist says about rich results — the absence is a rule,
+> not a gap. The finder stays hidden; `/`, `/profile`, `/examples`, `/demo` and `/thanks` are absent
+> from the register because they are absent from the sitemap, and moving them is
+> `finder-public-posture` (D-FINDER-PUBLIC), which an SEO unit is precisely the sort of unit that
+> would open quietly for the traffic — `pages.test.ts` asserts their absence rather than trusting
+> it. And **no keyword-in-H1 law yet, recorded as a finding rather than pretended**: four of the ten
+> H1s do not carry their keyword (`/faq` says "Questions", `/clinicians` and `/clinicians/join` open
+> on funnel questions, `/practices` renders a compliance constant), and three are pinned by
+> `working-truth` proofs, so rewriting them is a copy unit with its own verification. The spec
+> enforces the part that IS true today: one `h1` per indexable route.
+> **Verification:** `pnpm verify` green at 371145c (typecheck · 317 files / 4628 tests, 13 skipped ·
+> build · audit PASS, 2 accepted advisories · perf PASS, 50 routes, `/` heaviest at 727 KB · census
+> PASS, 31 measures at their floors); full `pnpm e2e` green — **381 passed, 1 skipped, 21.7m, exit 0
+> read from the command itself**, run serially with nothing else building. The register goes red on
+> each of six planted violations one at a time, and on a twin taking the first page's title,
+> description or keyword. `robots.test.ts` and the sitemap tests are unchanged and green, which is
+> the proof the hidden set did not move.
 > **Continuation if this claim goes stale:** the register and the copy land together — a register
 > describing titles the pages do not carry is worse than no register.
 
@@ -12510,13 +12593,13 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
-| O241 | claimed | founder-0902a | 2026-09-03T01:05Z | — | FOUNDER-DIRECTED: the seo-audit checklist (coreyhaines31/marketingskills), run and fixed. Indexable routes only — the finder stays hidden because D-FINDER-PUBLIC is an open founder gate. src/seo/ register (title/description/keyword per route, both directions), strings rewritten to the 50-60 / 150-160 windows, BreadcrumbList derived from the rendered trail. No rating or review markup: prohibited for regulated health services. -> verify: pnpm verify; planted violations red; compliance linter green over every new string; robots/sitemap tests unchanged; full e2e. |
-| O240 | claimed | founder-0902c | 2026-09-03T00:45Z | — | FOUNDER-DIRECTED: simpler, and moving like a modern app. Spring stage transitions (no blur); one tab marker that travels between tabs on a shared layout id; the map panel unfolding on a spring; Learn cards sliding from the side they were asked for, tiles settling, the tick popping; rows lighter (60px portrait, 16px radius, hairline toward paper, a hover lift on pointer devices); the welcome disclaimer one quiet line; the consent card arriving on the spring curve. Every effect gated by useReducedMotion or prefers-reduced-motion. -> verify: pnpm verify; reduced-motion/keyboard/touch/contrast/a11y/landing e2e; full e2e; shots at 390 and 1280. |
-| O239 | claimed | founder-0902c | 2026-09-03T00:22Z | — | FOUNDER-DIRECTED: the Learn tab as modules. Three short Headspace-shaped modules on the app's own shell — calm tiles with a mark, a title and a length; one card at a time inside, with a dot rail, Back, Next and Finish; finished modules remembered on the device — built from the story sequence's eight scenes word for word (src/learn/scenes.ts); the sequence, its 170 rules and its register entries deleted. -> verify: pnpm verify; progress tests; app-shell/landing/guidelines/public-sweep/keyboard/touch/contrast e2e; full e2e; shots at 390 and 1280. |
-| O238 | claimed | founder-0902c | 2026-09-03T00:22Z | — | FOUNDER-DIRECTED: the map behind one control on the list header, closed by default — the north star is simplicity. Row keys render only while it is open. -> verify: app-shell/finder-flow/finder-history e2e open it by its control. |
-| O237 | claimed | founder-0902c | 2026-09-03T00:22Z | — | FOUNDER-DIRECTED: the results screen shows the results. The place field and every verdict sentence leave the screen; the list heading carries the honesty (Matches vs All listed GPs); the clarifier chips stand ready; the place arrives by link or from the profile. -> verify: the place-field specs rewritten to reach a place by link or profile; full e2e. |
-| O236 | claimed | founder-0902c | 2026-09-02T23:41Z | — | FOUNDER-DIRECTED: the results screen's search summary and the note-taking filter. The results head becomes one compact card — the words (a button back to the box) and the place (a pill field that still re-ranks in place) — in place of a quote, an underlined control and a labelled form field; the clarifier chips stand in the open; the headline renders only when earned. A declared practice fact joins the roster (`consultRecording`: AI scribe with consent / no AI recording; example profiles only, per the real-person law) and the profile filters it three ways. -> verify: pnpm verify; filters tests; finder-flow/a11y/history/voice/matching e2e green on the new head; full e2e; shots at 390 and 1280. |
-| O235 | claimed | founder-0902c | 2026-09-02T23:26Z | — | FOUNDER-DIRECTED: the map, done with a real basemap. The O234 SVG is replaced by Leaflet (github.com/Leaflet/Leaflet, 1.9.4) over OpenStreetMap tiles, loaded only once a place resolves: numbered markers keyed to the rows, a 'you' marker, 44px controls, attribution; the CSP admits the tile host with its reason and the privacy page says what leaves the device and when. -> verify: pnpm verify; headers test pins the tile host; app-shell e2e map test rewritten; a11y/touch/contrast sweeps; full e2e; shots at 390 and 1280. |
+| O241 | done | founder-0902a | 2026-09-03T01:05Z | 371145c | FOUNDER-DIRECTED: the seo-audit checklist (coreyhaines31/marketingskills), run and fixed. Indexable routes only — the finder stays hidden because D-FINDER-PUBLIC is an open founder gate. src/seo/ register (title/description/keyword per route, both directions), strings rewritten to the 50-60 / 150-160 windows, BreadcrumbList derived from the rendered trail. No rating or review markup: prohibited for regulated health services. -> verify: pnpm verify; planted violations red; compliance linter green over every new string; robots/sitemap tests unchanged; full e2e. |
+| O240 | done | founder-0902c | 2026-09-03T00:45Z | a227e5e | FOUNDER-DIRECTED: simpler, and moving like a modern app. Spring stage transitions (no blur); one tab marker that travels between tabs on a shared layout id; the map panel unfolding on a spring; Learn cards sliding from the side they were asked for, tiles settling, the tick popping; rows lighter (60px portrait, 16px radius, hairline toward paper, a hover lift on pointer devices); the welcome disclaimer one quiet line; the consent card arriving on the spring curve. Every effect gated by useReducedMotion or prefers-reduced-motion. -> verify: pnpm verify; reduced-motion/keyboard/touch/contrast/a11y/landing e2e; full e2e; shots at 390 and 1280. |
+| O239 | done | founder-0902c | 2026-09-03T00:22Z | 4f4d266 | FOUNDER-DIRECTED: the Learn tab as modules. Three short Headspace-shaped modules on the app's own shell — calm tiles with a mark, a title and a length; one card at a time inside, with a dot rail, Back, Next and Finish; finished modules remembered on the device — built from the story sequence's eight scenes word for word (src/learn/scenes.ts); the sequence, its 170 rules and its register entries deleted. -> verify: pnpm verify; progress tests; app-shell/landing/guidelines/public-sweep/keyboard/touch/contrast e2e; full e2e; shots at 390 and 1280. |
+| O238 | done | founder-0902c | 2026-09-03T00:22Z | 632b10f | FOUNDER-DIRECTED: the map behind one control on the list header, closed by default — the north star is simplicity. Row keys render only while it is open. -> verify: app-shell/finder-flow/finder-history e2e open it by its control. |
+| O237 | done | founder-0902c | 2026-09-03T00:22Z | 7e127ea | FOUNDER-DIRECTED: the results screen shows the results. The place field and every verdict sentence leave the screen; the list heading carries the honesty (Matches vs All listed GPs); the clarifier chips stand ready; the place arrives by link or from the profile. -> verify: the place-field specs rewritten to reach a place by link or profile; full e2e. |
+| O236 | done | founder-0902c | 2026-09-02T23:41Z | 3ede049 | FOUNDER-DIRECTED: the results screen's search summary and the note-taking filter. The results head becomes one compact card — the words (a button back to the box) and the place (a pill field that still re-ranks in place) — in place of a quote, an underlined control and a labelled form field; the clarifier chips stand in the open; the headline renders only when earned. A declared practice fact joins the roster (`consultRecording`: AI scribe with consent / no AI recording; example profiles only, per the real-person law) and the profile filters it three ways. -> verify: pnpm verify; filters tests; finder-flow/a11y/history/voice/matching e2e green on the new head; full e2e; shots at 390 and 1280. |
+| O235 | done | founder-0902c | 2026-09-02T23:26Z | 7c5e03a | FOUNDER-DIRECTED: the map, done with a real basemap. The O234 SVG is replaced by Leaflet (github.com/Leaflet/Leaflet, 1.9.4) over OpenStreetMap tiles, loaded only once a place resolves: numbered markers keyed to the rows, a 'you' marker, 44px controls, attribution; the CSP admits the tile host with its reason and the privacy page says what leaves the device and when. -> verify: pnpm verify; headers test pins the tile host; app-shell e2e map test rewritten; a11y/touch/contrast sweeps; full e2e; shots at 390 and 1280. |
 | O234 | done | founder-0902b | 2026-09-02T23:02Z | e280f65 | FOUNDER-DIRECTED: the map, the filters and the harmony pass. Results gain a nearby map (in-tree SVG projected from the gazetteer, no tile host, no coordinate leaves the device) with numbered pins tied to the rows; /profile gains the person's own filters (where they are, woman GP, telehealth, bulk billing, longer appointments, languages, wheelchair access, open books, distance) held on the device and applied to the roster before ranking; one shell-width token for the finder, the tab bar, the sheet, the consent notice and the profile so every fixed surface is the same object; welcome gutters and alignment unified. -> verify: pnpm verify; filters + local-map unit tests; app-shell e2e extended; a11y/touch/contrast green; shots at 390 and 1280 against reference health-app patterns. |
 | O233 | done | founder-0902a | 2026-09-02T20:10Z | bd3f6e3 | FOUNDER-DIRECTED: the information architecture. Bar becomes Find · Profile · Learn; About and Questions move into a settings sheet behind a top-right control; /profile is a new route showing what the device holds; the welcome tagline goes and the input becomes the screen. -> verify: pnpm verify; tabs.test.ts rewritten to three destinations; new e2e for settings and /profile; a11y/touch/contrast/axe green; full e2e; shots at 390 and 1280. |
 | O232 | done | founder-0902a | 2026-09-02T19:05Z | a212d0c | FOUNDER-DIRECTED: the craft pass (adhdme-taste + impeccable, Operate mode). Browser surfaces themed (selection, caret, scrollbar, focus); the eyebrow slop removed; one button system; spring motion and shared-element continuity; glass on the two surfaces content scrolls under, nowhere else. DESIGN.md's no-ambient-loops and two-region limits hold. -> verify: pnpm verify; contrast/touch/focus/hover/reduced-motion/axe sweeps green; full e2e; two batched screenshot rounds at 390px and 1280px. |
