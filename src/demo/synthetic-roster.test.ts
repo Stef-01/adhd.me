@@ -6,7 +6,10 @@
 // module's header promises is asserted here, so a persona edited to look more real fails the
 // suite naming the line rather than shipping.
 
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { MONOGRAM_PERSONAS, PORTRAIT_CREDITS } from "./portrait-credits";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { lintLandingCopy } from "@/compliance/landing";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
@@ -60,8 +63,19 @@ describe("O217 — synthetic example roster census", () => {
     for (const entry of eachOf(SYNTHETIC_CLINICIANS, "the synthetic roster")) {
       expect(entry.synthetic, entry.id).toBe(true);
       expect(entry.realPerson, entry.id).toBeUndefined();
-      // No face: a generated portrait is a fabricated person presented as genuine.
-      expect(entry.image, entry.id).toBeNull();
+      // O242: no GENERATED face — an image is either a credited stock portrait from the register
+      // (source, photographer, licence, a file that exists) or, by the register's own list, none.
+      const credit = PORTRAIT_CREDITS.find((c) => c.clinicianId === entry.id);
+      const monogram = MONOGRAM_PERSONAS.find((m) => m.clinicianId === entry.id);
+      expect(Boolean(credit) !== Boolean(monogram), `${entry.id} must be credited or declared monogram, not both or neither`).toBe(true);
+      if (credit) {
+        expect(entry.image, entry.id).toBe(credit.image);
+        expect(existsSync(path.join(process.cwd(), "public", credit.image)), `${credit.image} is missing`).toBe(true);
+        expect(credit.photographer.length, entry.id).toBeGreaterThan(0);
+        expect(credit.page, entry.id).toMatch(/^https:\/\/(www\.pexels\.com|unsplash\.com)\//);
+      } else {
+        expect(entry.image, entry.id).toBeNull();
+      }
       // Nobody to book, and no url that could pretend otherwise.
       expect(entry.booking.via, entry.id).toBe("synthetic-none");
       expect("url" in entry.booking, entry.id).toBe(false);
@@ -149,5 +163,24 @@ describe("O217 — synthetic example roster census", () => {
         expect(findings, `${entry.id}: "${text}" -> ${findings.map((f) => f.rule).join(", ")}`).toEqual([]);
       }
     }
+  });
+});
+
+describe("O242 the portrait register", () => {
+  it("credits only personas that exist, and never a real clinician", () => {
+    const ids = new Set(SYNTHETIC_CLINICIANS.map((c) => c.id));
+    for (const credit of eachOf(PORTRAIT_CREDITS, "the portrait credits")) {
+      expect(ids.has(credit.clinicianId), `${credit.clinicianId} is not an example persona`).toBe(true);
+      expect(credit.image.startsWith("/portraits/example-"), credit.image).toBe(true);
+    }
+    for (const real of eachOf(clinicians, "the real roster")) {
+      expect(PORTRAIT_CREDITS.some((c) => c.clinicianId === real.id), `${real.id} carries a stock portrait`).toBe(false);
+      expect(real.image === null || !real.image.startsWith("/portraits/"), `${real.id} points at the stock folder`).toBe(true);
+    }
+  });
+
+  it("uses no portrait twice — two personas with one face would be one fabricated person", () => {
+    const images = PORTRAIT_CREDITS.map((c) => c.image);
+    expect(new Set(images).size).toBe(images.length);
   });
 });

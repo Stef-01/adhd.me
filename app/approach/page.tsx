@@ -5,12 +5,15 @@ import { AppSettings } from "../app-settings";
 import { AppTabs } from "../app-tabs";
 import { LearnModules } from "../learn-modules";
 
-// O239 (founder-directed): the Learn tab is a learning-module section — three short modules a
-// person finishes one card at a time, finished ones remembered on this device. The eight-scene
-// scroll sequence that lived here (and on the front page before O230) became the modules' cards,
-// word for word (`src/learn/scenes.ts`): the argument is the same, the reading is in the
-// person's hands rather than the scroll position's, and the page is the app's own shell — the
-// same header, width and gutter as the finder and the profile — instead of a story chrome.
+// O239 (founder-directed): the Learn tab is a learning-module section. O244 (founder-directed):
+// what it teaches is ADHD itself — what the word means, what people find useful day to day,
+// two knowledge quizzes — and then the route to care (the story's three modules). The page is
+// the app's own shell; the copy is data (`src/learn/scenes.ts`), linted like every patient
+// surface; finishing is remembered on this device and nothing else is.
+//
+// O241: the head comes from `src/seo/pages.ts` like every other indexable route's, and O244's
+// rewrite moved the register entry with the page — which is the merge this file records. The
+// description O244 wrote is the one in the register now, inside the window and keyword-led.
 export const metadata: Metadata = seoMetadata("/approach");
 
 export default function ApproachPage() {
@@ -20,11 +23,9 @@ export default function ApproachPage() {
         <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
         <AppSettings />
       </div>
-      <header className="me-head learn-head">
-        <p className="learn-eyebrow">Learn</p>
-        <h1>What finding ADHD care actually looks like, and what we changed.</h1>
-        <p>A few minutes each. Read one now, come back for the rest.</p>
-      </header>
+      {/* The page's one heading — the working-truth sentence this route has carried since it existed.
+          Visually it is the small line under the field; the field's own title leads the eye. */}
+      <h1 className="learn-thesis">What finding ADHD care actually looks like, and what we changed.</h1>
       <LearnModules />
       <AppTabs />
     </main>

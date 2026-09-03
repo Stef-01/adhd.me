@@ -91,7 +91,9 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     await expect(mic).toHaveAttribute("aria-pressed", "true");
     await expect(mic).not.toHaveAttribute("aria-busy", /.+/);
 
-    // A language restart says so, in the language's own name; the stage does not change.
+    // A language restart says so, in the language's own name; the stage does not change. O245:
+    // the choices open from the language chip first.
+    await press(page, /Listening in English/);
     await press(page, "हिन्दी");
     await expectStage(page, "listening");
     await expect(live(page)).toHaveText("Listening again in हिन्दी.");

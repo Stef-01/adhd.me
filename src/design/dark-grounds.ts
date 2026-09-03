@@ -175,6 +175,8 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   // O235: the map's "you" marker — ink dot, paper ring; the same-rule foreground is the ring colour.
   { selector: ".nearby-marker-you", token: "ink" },
   { selector: ".notfound-primary", token: "ink" },
+  // O245: the listening screen's one control — ink, carrying the sound in on-ground bars.
+  { selector: ".patient-v2 .listening-screen .mic-button", token: "ink" },
   { selector: ".primary-button", token: "ground" },
   { selector: ".site-footer", token: "ground" },
   { selector: ".site-nav", token: "ground" },

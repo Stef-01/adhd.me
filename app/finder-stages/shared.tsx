@@ -235,8 +235,9 @@ export function getRequestHeadline(value: string, fallback: string) {
 // name was the first thing a reader met.
 //
 // WHAT STAYS, BECAUSE IT IS NOT A LABEL: the `synthetic` flag itself and every structural defence
-// around it — one of `realPerson`/`synthetic` on any rendered entry, `image: null` so no face is
-// generated, no `url` so nothing opens a fabricated booking listing, no `disclosedInterest`, the
+// around it — one of `realPerson`/`synthetic` on any rendered entry, `image` a credited stock
+// portrait or null so no face is generated (O242), no `url` so nothing opens a fabricated booking
+// listing, no `disclosedInterest`, the
 // practice names self-marking, and the same patient-surface linter over every rendered string.
 // The label was one of seven defences; the other six do the work that actually matters, and the
 // one truthful sentence about the roster now lives on `/story`, off the demo path entirely.
@@ -318,12 +319,14 @@ export function ClinicianPortrait({
   /** `fill` for the framed portraits, `thumb` for the fixed-size list row. */
   variant: "fill" | "thumb";
 }) {
-  const alt = `Portrait of ${clinician.name}`;
+  // O242: an example persona's photograph is a licensed stock portrait, and the alt says so — a
+  // screen reader must not be told it is a photograph of a doctor who does not exist.
+  const alt = clinician.synthetic ? `Stock portrait standing in for the example profile ${clinician.name}` : `Portrait of ${clinician.name}`;
 
   if (clinician.image) {
     return variant === "fill"
       ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 520px) 100vw, 440px" priority />
-      : <Image src={clinician.image} alt="" width={76} height={76} />;
+      : <Image src={clinician.image} alt="" width={60} height={60} />;
   }
 
   return (

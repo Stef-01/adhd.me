@@ -122,7 +122,7 @@ the module-reasons register.** The first draft of this document said "always wro
 caught it two hours later, on the three modules this very unit added — which is the register doing
 its job to its author.
 
-This law is a **ceiling, not a list.** Naming all 65 single-importer modules would produce a
+This law is a **ceiling, not a list.** Naming all 66 single-importer modules would produce a
 register nobody reads and every unit would have to edit. What a refactor lane needs is the number,
 moving down.
 

@@ -109,7 +109,10 @@ test("exempts nothing that is not a real route, and argues every exemption", asy
   for (const tab of APP_TABS) {
     expect(known.has(tab.href), `${tab.href} is a tab but is not a public route`).toBe(true);
   }
-  // Three, down from five: the cap now measures what it was written to measure — the exemptions
-  // nobody can derive — rather than a list that grows by one every time the app gains a tab.
+  // Three, down from five, and NOT the seven O239 reached for on `main`. That unit read the shape
+  // correctly — "an app tab, not a document is one category, not creep" — and then raised the cap
+  // by one anyway, which is what a hand-typed list forces you to do. One category means one
+  // derivation: the cap now measures the exemptions nobody can derive, and stops moving when the
+  // app gains a tab.
   expect(Object.keys(NO_FOOTER).length, "the exemption list has grown into an allowlist").toBeLessThan(4);
 });

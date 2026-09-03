@@ -18,6 +18,7 @@ import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { Sheet } from "../sheet";
 
 /** O235: Leaflet reads `window` on import, so the map is a client-only chunk fetched the first time a place resolves. */
 const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap), {
@@ -108,9 +109,12 @@ export function ResultsStage({
    * default. The row keys render only while it is open, because they are keys to the map.
    */
   const [mapOpen, setMapOpen] = useState(false);
+  /** O244 (founder-directed): the clarifiers live behind a star — no label — that opens a sheet. */
+  const [clarifyOpen, setClarifyOpen] = useState(false);
   const mapShown = mapOpen && origin !== null && shown.length > 0;
   /** O234: the filters left nobody. The verdict lines below describe a roster; with no roster they describe nothing, so they stand down. */
   const empty = matches.length === 0;
+  const clarifiable = !empty && quality !== "informed" && clarifierList.length > 0;
   const pickFromMap = (clinician: Clinician) => {
     const row = list.current?.querySelector<HTMLElement>(`[data-clinician="${clinician.id}"]`);
     if (!row) return;
@@ -135,13 +139,20 @@ export function ResultsStage({
             reads "Matches" only when the words produced an order and "All listed GPs" when they
             did not, the fold never cuts a tied band, and the clarifier chips stand ready when the
             words reached nothing. Honesty moved from paragraphs into structure. */}
-        <div className="results-summary" role="group" aria-label="Your search">
+        <motion.div
+          className="results-summary"
+          role="group"
+          aria-label="Your search"
+          initial={reducedMotion ? false : { opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...STAGE_SPRING, opacity: { duration: 0.2 } }}
+        >
           <button type="button" className="results-summary-words" onClick={onRefine} aria-label="Change what you said">
             <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
             <span className="results-summary-text">{requestSummary}</span>
             <PencilSimple size={16} weight="bold" aria-hidden="true" />
           </button>
-        </div>
+        </motion.div>
 
         {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46): the headline renders only
             when a reading earned it; otherwise the summary card above already shows the words. */}
@@ -149,32 +160,31 @@ export function ResultsStage({
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
-        {/* ONE QUESTION, WHEN THE WORDS DID NOT SEPARATE ANYBODY: the facets this roster actually
-            disagrees on, as chips. Tapping appends the answer in the reader's own words. */}
-        {!empty && quality !== "informed" && clarifierList.length > 0 && (
-          <motion.div
-            className="clarify"
-            initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, ease: EASE_OUT }}
-          >
-            <p className="clarify-lead">
-              <Sparkle size={15} weight="fill" aria-hidden="true" />
-              Improve my matches
-            </p>
-            <ul className="clarify-row">
-              {clarifierList.map((clarifier) => (
-                <li key={clarifier.facetKey}>
-                  <button type="button" className="clarify-chip" onClick={() => onClarify(clarifier.answer)}>
-                    {clarifier.prompt}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-
       </div>
+
+      {/* O244: the questions, in the sheet. Tapping one appends the answer in the reader's own
+          words and re-ranks; the sheet closes so the re-ordered list is what they see next. */}
+      <Sheet open={clarifyOpen} title="Improve my matches" onClose={() => setClarifyOpen(false)}>
+        <div className="clarify">
+          <p className="clarify-sub">One answer would narrow it:</p>
+          <ul className="clarify-row">
+            {clarifierList.map((clarifier) => (
+              <li key={clarifier.facetKey}>
+                <button
+                  type="button"
+                  className="clarify-chip"
+                  onClick={() => {
+                    setClarifyOpen(false);
+                    onClarify(clarifier.answer);
+                  }}
+                >
+                  {clarifier.prompt}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Sheet>
 
       {/* O234: the filters the device is holding, said on the screen they narrow. A person who set
           "wheelchair access" on Tuesday must be able to see on Thursday why the list is short —
@@ -186,7 +196,17 @@ export function ResultsStage({
             Your filters
           </span>
           <ul className="filter-chips">
-            {filterLabels.map((label) => <li key={label} className="filter-chip">{label}</li>)}
+            {filterLabels.map((label, index) => (
+              <motion.li
+                key={label}
+                className="filter-chip"
+                initial={reducedMotion ? false : { opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 520, damping: 32, delay: 0.05 + index * 0.04 }}
+              >
+                {label}
+              </motion.li>
+            ))}
           </ul>
           <span className="filter-strip-actions">
             <Link className="filter-edit" href="/profile">Edit</Link>
@@ -214,12 +234,31 @@ export function ResultsStage({
       )}
 
       {!empty && (
-      <div className="results-list-head">
+      <motion.div
+        className="results-list-head"
+        initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
+      >
         <h2>{quality === "informed" ? "Matches" : "All listed GPs"}</h2>
         <span className="results-list-tools">
           {/* O226: the count sits with the list it describes, not two groups up the page. */}
           {matches.length > shown.length && (
             <span className="results-count">{shown.length} of {matches.length}</span>
+          )}
+          {/* O244: the star. One tap opens the questions that would narrow the list; the sheet is
+              the app's one modal idiom, so it drags, closes on Escape and returns focus. */}
+          {clarifiable && (
+            <button
+              type="button"
+              className={clarifyOpen ? "clarify-star is-open" : "clarify-star"}
+              aria-label="Improve my matches"
+              aria-haspopup="dialog"
+              aria-expanded={clarifyOpen}
+              onClick={() => setClarifyOpen(true)}
+            >
+              <Sparkle size={18} weight={clarifyOpen ? "fill" : "bold"} aria-hidden="true" />
+            </button>
           )}
           {/* O238: the map, behind a control, only when a suburb is known to draw it from. */}
           {origin && (
@@ -235,7 +274,7 @@ export function ResultsStage({
             </button>
           )}
         </span>
-      </div>
+      </motion.div>
       )}
 
       {/* O235: the nearby map — only once the place resolves, and only when asked for. */}
@@ -327,9 +366,17 @@ export function ResultsStage({
       </div>
 
       {matches.length > shown.length && (
-        <button className="show-all" type="button" onClick={onShowAll}>
+        <motion.button
+          className="show-all"
+          type="button"
+          onClick={onShowAll}
+          initial={reducedMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25, delay: 0.3 }}
+          whileTap={reducedMotion ? undefined : { scale: 0.985 }}
+        >
           Show the other {matches.length - shown.length}
-        </button>
+        </motion.button>
       )}
     </MotionScreen>
   );

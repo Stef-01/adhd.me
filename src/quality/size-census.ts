@@ -74,6 +74,8 @@ const SET_BY_O235 = "2026-09-02";
 const SET_BY_O236 = "2026-09-02";
 const SET_BY_O239 = "2026-09-02";
 const SET_BY_O240 = "2026-09-02";
+const SET_BY_O242 = "2026-09-02";
+const SET_BY_O245 = "2026-09-02";
 const SET_BY_O241 = "2026-09-03";
 
 /**
@@ -262,6 +264,31 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'classname-attributes', value: 1765, on: SET_BY_O240, reason: "O240: the marker element." },
   { measure: 'src-lines', value: 54876, on: SET_BY_O240, reason: "O240: this register's entries." },
   { measure: 'src-unreached-lines', value: 24007, on: SET_BY_O240, reason: "O240: this register's entries; a law module the product does not import." },
+  // O242 (founder-directed): credited stock portraits on the example personas — the register that
+  // holds them (source, photographer, licence, file), and the test that refuses anything else.
+  { measure: 'app-lines', value: 16018, on: SET_BY_O242, reason: "O242: the portrait's alt says it is a stock portrait standing in for an example profile." },
+  { measure: 'src-modules', value: 304, on: SET_BY_O242, reason: "O242: src/demo/portrait-credits.ts — every example portrait's source, photographer, page and licence, and the two personas that keep the monogram, with why." },
+  { measure: 'src-lines', value: 54960, on: SET_BY_O242, reason: "O242: the register above and the roster's amended defence." },
+  { measure: 'src-reached-modules', value: 171, on: SET_BY_O242, reason: "O242: as src-reached-lines." },
+  { measure: 'src-reached-lines', value: 30941, on: SET_BY_O242, reason: "O242: the register is in the product's closure — the roster reads it." },
+  { measure: 'src-single-importer-modules', value: 66, on: SET_BY_O242, reason: "O242: portrait-credits.ts is imported by the synthetic roster alone — the seam it was cut on; the test imports it too but tests do not count." },
+  { measure: 'vitest-lines', value: 53485, on: SET_BY_O242, reason: "O242: synthetic-roster.test.ts holds every image to the register, the register to the personas, and never to a real clinician." },
+  { measure: 'e2e-spec-lines', value: 7886, on: SET_BY_O242, reason: "O242: moved by the portrait register; pinned to the tree as measured." },
+  { measure: 'src-unreached-lines', value: 24019, on: SET_BY_O242, reason: "O242: this register's entries." },
+  // O243–O245 (founder-directed): more motion; the clarifiers behind a star in the sheet; the Learn
+  // tab redesigned around ADHD content — two reading modules, two knowledge quizzes, the route to
+  // care — with every word linted; the listening screen reduced to transcript, control, chips.
+  { measure: 'app-lines', value: 16319, on: SET_BY_O245, reason: "O243–O245: the quiz view and the redesigned list on the Learn tab, the clarifier sheet on results, the listening screen rebuilt, and the motion wrappers — each with the reasoning that names what it replaced." },
+  { measure: 'src-lines', value: 55205, on: SET_BY_O245, reason: "O244: eight new scenes and eleven quiz questions as data in src/learn/scenes.ts, written against the patient-copy rules and linted by their test." },
+  { measure: 'src-reached-lines', value: 31169, on: SET_BY_O245, reason: "O244: as src-lines — the Learn tab renders the scenes." },
+  { measure: 'src-unreached-lines', value: 24036, on: SET_BY_O245, reason: "O243–O245: this register's entries and the dark-ground census's." },
+  { measure: 'css-lines', value: 8975, on: SET_BY_O245, reason: "O244/O245: the Learn tab's field, tiles, cards, quiz options and reveal; the listening screen's chips and the bars inside the control; the star — less the rules retired with the old Learn and listening layouts." },
+  { measure: 'css-rule-blocks', value: 1564, on: SET_BY_O245, reason: "O244/O245: as css-lines." },
+  { measure: 'css-styled-classes', value: 528, on: SET_BY_O245, reason: "O244/O245: learn-hero/rail/shelf/option/reveal/score, listen-*, mic-bars, clarify-star — less the retired ones." },
+  { measure: 'classname-attributes', value: 1808, on: SET_BY_O245, reason: "O244/O245: the Learn tab's and listening screen's markup." },
+  { measure: 'vitest-lines', value: 53523, on: SET_BY_O245, reason: "O244: progress.test.ts lints every word of the Learn copy against the patient-surface rules and holds every quiz prompt to being about ADHD, never the reader." },
+  { measure: 'e2e-spec-lines', value: 7919, on: SET_BY_O245, reason: "O244: app-shell.spec.ts plays a quiz through; the language and clarifier flows open from their chips." },
+  { measure: 'e2e-goto-calls', value: 292, on: SET_BY_O245, reason: "O244: the quiz test." },
   // O241: the search register. Two GAINS first, and they are the shape of the unit: it deleted a
   // layout rather than adding one, because the thing it was auditing was duplication in the head.
   { measure: 'app-files', value: 139, on: SET_BY_O241 },

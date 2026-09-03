@@ -91,11 +91,15 @@ export const KEYWORD_HEAD = {
  */
 export const SEO_PAGES: readonly SeoPage[] = [
   {
+    // O244 rewrote this page while O241 was in flight — the Learn tab is ADHD itself now, two
+    // knowledge quizzes and five reading modules, not only the route to care. The entry moved with
+    // it in the merge, which is the register doing its job: the page's words and its head cannot
+    // drift apart, because the head is derived from here.
     path: "/approach",
-    keyword: "finding ADHD care",
-    title: "Finding ADHD care in NSW and Queensland today",
+    keyword: "learn about ADHD",
+    title: "Learn about ADHD: short reads and two quizzes",
     description:
-      "Finding ADHD care, in three short modules: why a search can return no GP, what the old route through assessment cost, and what changed in NSW and Queensland.",
+      "Learn about ADHD in short reads and quick quizzes: what the word means, what people find useful day to day, and how the route to a GP assessment works here.",
   },
   {
     path: "/clinicians",

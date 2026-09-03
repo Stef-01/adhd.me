@@ -339,3 +339,27 @@ test("the consent notice, the bar and the finder are one shell at every width", 
   expect(Math.abs(h1!.x - box!.x)).toBeLessThanOrEqual(2);
   expect(Math.abs(link!.x - box!.x)).toBeLessThanOrEqual(3);
 });
+
+test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
+  await page.goto("/approach");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/What finding ADHD care actually looks like/);
+  await page.getByRole("button", { name: /Myth or fact\?/ }).click();
+  const total = 6;
+  for (let i = 0; i < total; i += 1) {
+    await expect(page.locator(".learn-question.is-current")).toHaveCount(1);
+    const options = page.locator(".learn-question.is-current .learn-option");
+    await options.first().click();
+    // The reveal names the outcome and explains; the buttons lock.
+    await expect(page.locator(".learn-question.is-current .learn-reveal")).toBeVisible();
+    await expect(options.first()).toBeDisabled();
+    await page.getByRole("button", { name: i === total - 1 ? "See my score" : "Next", exact: true }).click();
+  }
+  await expect(page.locator(".learn-score.is-current")).toBeVisible();
+  await expect(page.locator(".learn-score")).toContainText(/\d of 6/);
+  await expect(page.locator(".learn-score")).toContainText("never about you");
+  await page.getByRole("button", { name: "Finish", exact: true }).click();
+  await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
+  // Remembered on this device.
+  await page.reload();
+  await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
+});
