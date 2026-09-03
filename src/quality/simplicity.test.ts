@@ -190,8 +190,8 @@ describe("U15 the laws document says what the registers do", () => {
     // whatever was true the day somebody wrote it — U14's stale-check, applied to prose.
     expect(doc).toContain(`**Today: ${MODULE_REASONS.length} modules — ${counts["law"]} \`law\`, ${counts["gated"]} \`gated\`, ${counts["delete"]} \`delete\`.**`);
     expect(doc).toContain(`Naming all ${measureTree()[SINGLE_IMPORTER_MEASURE]} single-importer modules`);
-    expect(doc).toContain(`**Today: ten files.**`);
-    expect(LONG_FILES).toHaveLength(10);
+    expect(doc).toContain(`**Today: nine files.**`);
+    expect(LONG_FILES).toHaveLength(9);
     expect(doc).toContain(`Over ${LONG_FILE_LINES} lines`);
     expect(doc).toContain(`normalised ${DUPLICATE_WINDOW}-line`);
   });

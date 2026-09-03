@@ -167,6 +167,9 @@ export const DARK_GROUND_SELECTORS_DECLARED: readonly DarkGroundSelector[] = [
   { selector: '.iv-answer[aria-pressed="true"]', token: "ground" },
   { selector: ".join-email-cta:hover", token: "ink" },
   /* O233: the Profile tab's one action, on the same inverted ground as every other primary. */
+  // O239: the Learn tab's two pills — the module's Next/Finish and the overview's way to the finder.
+  { selector: ".learn-cta", token: "ground" },
+  { selector: ".learn-primary", token: "ground" },
   { selector: ".me-primary", token: "ground" },
   { selector: ".mic-button", token: "ground" },
   // O235: the map's "you" marker — ink dot, paper ring; the same-rule foreground is the ring colour.

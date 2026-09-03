@@ -97,7 +97,7 @@ when it crosses the line rather than two years later.
   stop being measured. When a file comes back under the floor its entry must go, so the register
   always describes the tree as it is.
 
-**Today: ten files.** Four are data (the compliance corpus, the roster, the example personas, the
+**Today: nine files.** Four are data (the compliance corpus, the roster, the example personas, the
 taste register) and the census pins data separately for exactly that reason; four are the matching
 engine and the finder's state machine, which the R2 units split; two are the story's scene list and
 the fleet simulation, which shorten only by having less to say.
@@ -122,7 +122,7 @@ the module-reasons register.** The first draft of this document said "always wro
 caught it two hours later, on the three modules this very unit added — which is the register doing
 its job to its author.
 
-This law is a **ceiling, not a list.** Naming all 64 single-importer modules would produce a
+This law is a **ceiling, not a list.** Naming all 65 single-importer modules would produce a
 register nobody reads and every unit would have to edit. What a refactor lane needs is the number,
 moving down.
 

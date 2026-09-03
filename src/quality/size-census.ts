@@ -72,6 +72,7 @@ const SET_BY_O233 = "2026-09-02";
 const SET_BY_O234 = "2026-09-02";
 const SET_BY_O235 = "2026-09-02";
 const SET_BY_O236 = "2026-09-02";
+const SET_BY_O239 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -231,6 +232,25 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'css-styled-classes', value: 560, on: SET_BY_O236, reason: "O236: results-summary(-words/-text/-place), results-title, results-notes, clarify-sub, me-segments-3 — less the four retired classes." },
   { measure: 'classname-attributes', value: 1841, on: SET_BY_O236, reason: "O236: the summary card's markup." },
   { measure: 'vitest-lines', value: 53376, on: SET_BY_O236, reason: "O236: filters.test.ts covers the note-taking choice and refuses an unknown one." },
+  // O237–O239 (founder-directed): the results screen reduced to summary, chips, map-behind-a-button
+  // and list; the Learn tab rebuilt as three modules with a device record of which are finished; the
+  // story sequence and its 170 rules deleted with the page they drew. Net, the stylesheet SHRANK.
+  { measure: 'src-modules', value: 303, on: SET_BY_O239, reason: "O239: src/learn/scenes.ts (the story's copy as data, regrouped into modules) and src/learn/progress.ts (which modules this device finished)." },
+  { measure: 'src-lines', value: 54866, on: SET_BY_O239, reason: "O239: the scenes moved from app/ into src/ as data, plus the progress record and its validation." },
+  { measure: 'src-reached-modules', value: 170, on: SET_BY_O239, reason: "O239: both learn modules are in the product's closure — the Learn tab renders one and writes the other." },
+  { measure: 'src-reached-lines', value: 30869, on: SET_BY_O239, reason: "O239: as src-reached-modules." },
+  { measure: 'src-single-importer-modules', value: 65, on: SET_BY_O239, reason: "O239: progress.ts is imported by the Learn tab alone, which is the seam it was cut on — node-tested record, React-free." },
+  { measure: 'vitest-files', value: 316, on: SET_BY_O239, reason: "O239: progress.test.ts — the modules cover every scene once, and the record refuses what it does not recognise." },
+  { measure: 'vitest-lines', value: 53452, on: SET_BY_O239, reason: "O239: as vitest-files." },
+  { measure: 'e2e-spec-lines', value: 7881, on: SET_BY_O239, reason: "O237: the place-field tests rewritten to reach a place by link or profile; O238: the map opened by its control." },
+  { measure: 'e2e-support-lines', value: 2424, on: SET_BY_O239, reason: "O239: moved by the unit; pinned to the tree as measured." },
+  { measure: 'e2e-goto-calls', value: 291, on: SET_BY_O239, reason: "O239: moved by the unit; pinned to the tree as measured." },
+  { measure: 'app-lines', value: 15952, on: SET_BY_O239 },
+  { measure: 'src-unreached-lines', value: 23997, on: SET_BY_O239 },
+  { measure: 'css-lines', value: 8763, on: SET_BY_O239 },
+  { measure: 'css-rule-blocks', value: 1488, on: SET_BY_O239 },
+  { measure: 'css-styled-classes', value: 493, on: SET_BY_O239 },
+  { measure: 'classname-attributes', value: 1764, on: SET_BY_O239 },
 ];
 
 /** The current floor per measure: the last entry wins. */

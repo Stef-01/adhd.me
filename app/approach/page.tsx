@@ -1,85 +1,36 @@
-// The scroll sequence, on its own route.
-//
-// WHY IT IS NOT ON THE LANDING PAGE ANY MORE. It was, and it cost the landing page the thing the
-// landing page is for. Eight pinned scenes is roughly six screens of scrolling that a reader has
-// to travel THROUGH to reach the founders and the form, and somebody who arrived ready to look
-// for a GP now has an essay between them and the finder. The argument is good and it is not the
-// first thing everybody needs.
-//
-// So the landing page is back to what it was — a claim, the change it rests on, what it costs,
-// three steps, the founders, one form — and the sequence is a door at the foot of it, for the
-// reader who wants the long version. Opt-in rather than compulsory.
-//
-// Nothing about the sequence itself changed. `StorySequence` renders identically here; it simply
-// has a page of its own and a way back.
-
+import type { Metadata } from "next";
 import Link from "next/link";
-import { StorySequence } from "../story-sequence";
+import { AppSettings } from "../app-settings";
 import { AppTabs } from "../app-tabs";
+import { LearnModules } from "../learn-modules";
 
-export const metadata = {
+// O239 (founder-directed): the Learn tab is a learning-module section — three short modules a
+// person finishes one card at a time, finished ones remembered on this device. The eight-scene
+// scroll sequence that lived here (and on the front page before O230) became the modules' cards,
+// word for word (`src/learn/scenes.ts`): the argument is the same, the reading is in the
+// person's hands rather than the scroll position's, and the page is the app's own shell — the
+// same header, width and gutter as the finder and the profile — instead of a story chrome.
+export const metadata: Metadata = {
   alternates: { canonical: "/approach" },
-  title: "The approach",
+  title: "Learn",
   description:
-    "The search that returns no GPs, the practice pages read one doctor at a time, the questions " +
-    "a profile page cannot answer, and what changed in NSW and Queensland.",
+    "Three short modules: why the search returns no GP, what the old route through assessment cost, " +
+    "and what changed in NSW and Queensland.",
 };
 
 export default function ApproachPage() {
   return (
-    <main id="main-content" className="story approach-page app-page-with-tabs">
-      <header className="story-header">
-        <div className="story-wrap story-header-inner">
-          <Link href="/" className="story-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
-          <Link href="/" className="story-demo-link">Find a GP</Link>
-        </div>
+    <main id="main-content" className="me-screen learn-screen app-page-with-tabs">
+      <div className="minimal-header has-settings me-chrome">
+        <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
+        <AppSettings />
+      </div>
+      <header className="me-head learn-head">
+        <p className="learn-eyebrow">Learn</p>
+        <h1>What finding ADHD care actually looks like, and what we changed.</h1>
+        <p>A few minutes each. Read one now, come back for the rest.</p>
       </header>
-
-      <section className="approach-open">
-        <div className="story-wrap">
-          <p className="story-eyebrow">The ADHD.ME approach</p>
-          <h1 className="story-heading approach-title">
-            What finding ADHD care actually looks like, and what we changed.
-          </h1>
-          <p className="approach-lede">
-            The long version, in eight scenes. It takes a few minutes to scroll. If you would
-            rather skip it, the finder is the fastest way to a name and a date.
-          </p>
-          <div className="approach-actions">
-            <Link className="story-primary-link" href="/">
-              Find a GP near you<span className="arrow" aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <StorySequence />
-
-      <section className="approach-close">
-        <div className="story-wrap">
-          <h2 className="story-heading">That is the whole argument.</h2>
-          <p className="approach-lede">
-            One GP, from the first appointment to the follow-up. You book with the practice on
-            Healthengine, where the live times are.
-          </p>
-          <div className="approach-actions">
-            <Link className="story-primary-link" href="/">
-              Find a GP near you<span className="arrow" aria-hidden="true">→</span>
-            </Link>
-            <Link className="approach-back" href="/">Back to the front page</Link>
-          </div>
-        </div>
-      </section>
-
-      <footer className="story-footer">
-        <div className="story-wrap story-footer-inner">
-          <Link href="/" className="story-footer-wordmark" translate="no">ADHD.ME</Link>
-          <div className="story-footer-links">
-            <a href="mailto:stefan.thottunkal@gmail.com">Contact</a>
-            <Link href="/privacy">Privacy</Link>
-          </div>
-        </div>
-      </footer>
+      <LearnModules />
       <AppTabs />
     </main>
   );

@@ -59,12 +59,6 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
     rationale:
       "Rendered server-side to a PNG by Satori — no stylesheet exists at render time, so the six literals mirror paper, ink, muted, route, on-route and action tokens in the daylight-wayfinding share card.",
   },
-  {
-    file: "app/story-sequence.tsx",
-    sites: 9,
-    rationale:
-      "Inline SVG illustration colours inside the story sequence's device artwork — drawn shapes, not UI rules. Any NEW hex in this file must justify itself as illustration or migrate to tokens.",
-  },
 ];
 
 /** globals.css raw-hex colour values outside `--token:` definitions and comments, measured 2026-08-24. */
@@ -108,7 +102,8 @@ export const COMPONENT_HEX_EXCEPTIONS: readonly ComponentHexException[] = [
    73 -> 71 (O219, the accent-law pass): the story CTA's #fff label became var(--s-paper) on the
    ink pill, and its hover's color-mix dark stop became var(--s-dark) outright — two more
    untokenised colours retired, none restated. Re-derived in the commit that earned it. */
-export const CSS_RAW_HEX_SITES = 66;
+/* 66 -> 62 (O239): the story sequence and its inline SVG illustration rules were deleted with the page they drew; four raw-hex sites went with them. The ratchet turns down. */
+export const CSS_RAW_HEX_SITES = 62;
 
 /** Raw hex inside `--token:` definitions — where hex belongs. Pinned so a moved definition is noticed. */
 /* AR27: 31 -> 38 — the chart's seven colours moved INTO :root definitions, which is the

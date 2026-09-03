@@ -33,7 +33,7 @@ export const TABULAR_SITES: ReadonlyArray<{
   readonly selector: string;
   readonly why: string;
 }> = [
-  { selector: ".seq-n span", why: "the story sequence's step numerals align down a rail" },
+  { selector: ".learn-step-count", why: "the Learn module's 'n of m' counter changes as the person moves through the cards" },
   { selector: ".mc-weight", why: "matching-console weights are compared down a column" },
   { selector: ".mc-num", why: "matching-console figures are compared down a column" },
   { selector: ".cv2-mix-card strong", why: "the walkthrough's LIVE slider percentage — 31% must not be narrower than 30% while the reader drags" },

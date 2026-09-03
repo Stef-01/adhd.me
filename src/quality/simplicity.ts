@@ -50,12 +50,6 @@ export const LONG_FILES: readonly LongFile[] = [
     why: "The finder's state machine: which stage follows which, the speech-session lifecycle (O69 established it must not split across files), and every derived memo. O95 already took the screens out to app/finder-stages/; what remains is one machine, and cutting it again would put a transition on one side of a file boundary and its guard on the other. R2's stage work is where it gets shorter, if it does. O234 raised the argued length by forty: the device's filters are read on arrival and applied to the roster before ranking, and the two handlers that keep the profile and the results screen writing one record belong beside the state they write.",
   },
   {
-    file: "app/story-sequence.tsx",
-    lines: 620,
-    on: U15,
-    why: "The story's eight scroll-linked scenes. Each scene is short; the length is the count. It shortens by dropping scenes, which is an editorial decision about the argument and not a refactor.",
-  },
-  {
     file: "src/compliance/cdss-boundary.ts",
     lines: 900,
     on: U15,
