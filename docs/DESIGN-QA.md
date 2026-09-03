@@ -4154,3 +4154,25 @@ landing, app-shell and finder e2e; full `pnpm e2e`; captures at 390 and 1280 fro
 build.
 
 **Captures:** `qa/o240-results-390.png`, `qa/o240-welcome-390.png`, `qa/o240-learn-module-390.png`.
+
+## O242 — portraits on the example profiles (2026-09-02)
+
+**Founder-directed.** "Add in dr profile photos with unsplash and pexels."
+
+**The line held.** The roster forbade an image on an example persona because a generated face is
+a fabricated person presented as genuine. A stock photograph is the opposite: a real person who
+licensed their likeness for this use, from a source anybody can check. Eighteen portraits were
+chosen to fit each persona (ten women, eight men), cropped head-and-shoulders, downloaded once
+and served from this origin — no visit reaches Unsplash or Pexels, and the CSP admits no image
+host beyond the map tiles. `src/demo/portrait-credits.ts` names source, photographer, page and
+licence for each; `public/portraits/CREDITS.md` repeats it for a reader of the repository. The
+two non-binary personas keep the drawn monogram, because a stock library cannot say how the
+person photographed identifies. The alt text says "stock portrait standing in for the example
+profile", so a screen reader is never told it is a photograph of a doctor who does not exist.
+Real clinicians are untouched: the test refuses a stock path on any real entry.
+
+**Verified.** `synthetic-roster.test.ts` holds every example image to the register and the file
+on disk, the register to the personas, no portrait twice, and never a real clinician; full
+`pnpm e2e`; captures at 390 and 1280 from the production build.
+
+**Captures:** `qa/o241-results-390.png`, `qa/o241-results-map-1280.png`.

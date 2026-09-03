@@ -11,8 +11,10 @@
 // Every line of defence here is against that, and `synthetic-roster.test.ts` enforces each:
 //   * `synthetic: true` on every entry, never `realPerson` — the surfaces read the flag and say
 //     "Example profile" out loud wherever one renders;
-//   * `image: null` always — the monogram renders; nothing generates a face, because a generated
-//     face IS a fabricated person presented as genuine;
+//   * `image` is a CREDITED STOCK PORTRAIT or null — never a generated face. O242 (founder-directed)
+//     gave the personas photographs from Unsplash and Pexels, self-hosted and credited by name in
+//     `portrait-credits.ts`; a generated face would still be a fabricated person presented as
+//     genuine, and the register's test refuses any image that is not in it;
 //   * `booking.via: "synthetic-none"` with no url — there is nobody to book and no control that
 //     pretends otherwise;
 //   * practice names self-mark ("… Example Practice" / "… Example Clinic"), so no invented name can collide with
@@ -40,6 +42,7 @@
 // anybody.
 
 import type { Clinician } from "./roster";
+import { portraitFor } from "./portrait-credits";
 import { clinicians } from "./roster";
 
 /** The one sentence every persona's `about` must end with — the census pins its presence. */
@@ -74,7 +77,8 @@ export const SYNTHETIC_BOOKING_NOTE =
  */
 const example = (p: Omit<Clinician, "image" | "booking" | "synthetic" | "reach">): Clinician => ({
   ...p,
-  image: null,
+  // O242: a credited stock portrait, or null by the register's own list — never a generated face.
+  image: portraitFor(p.id),
   reach: p.telehealthFirstAppointment ? "Telehealth and practice appointments" : "Practice appointments",
   booking: { via: "synthetic-none", note: SYNTHETIC_BOOKING_NOTE },
   synthetic: true,

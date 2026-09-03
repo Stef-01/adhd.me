@@ -74,6 +74,7 @@ const SET_BY_O235 = "2026-09-02";
 const SET_BY_O236 = "2026-09-02";
 const SET_BY_O239 = "2026-09-02";
 const SET_BY_O240 = "2026-09-02";
+const SET_BY_O242 = "2026-09-02";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -261,6 +262,17 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'classname-attributes', value: 1765, on: SET_BY_O240, reason: "O240: the marker element." },
   { measure: 'src-lines', value: 54876, on: SET_BY_O240, reason: "O240: this register's entries." },
   { measure: 'src-unreached-lines', value: 24007, on: SET_BY_O240, reason: "O240: this register's entries; a law module the product does not import." },
+  // O242 (founder-directed): credited stock portraits on the example personas — the register that
+  // holds them (source, photographer, licence, file), and the test that refuses anything else.
+  { measure: 'app-lines', value: 16018, on: SET_BY_O242, reason: "O242: the portrait's alt says it is a stock portrait standing in for an example profile." },
+  { measure: 'src-modules', value: 304, on: SET_BY_O242, reason: "O242: src/demo/portrait-credits.ts — every example portrait's source, photographer, page and licence, and the two personas that keep the monogram, with why." },
+  { measure: 'src-lines', value: 54960, on: SET_BY_O242, reason: "O242: the register above and the roster's amended defence." },
+  { measure: 'src-reached-modules', value: 171, on: SET_BY_O242, reason: "O242: as src-reached-lines." },
+  { measure: 'src-reached-lines', value: 30941, on: SET_BY_O242, reason: "O242: the register is in the product's closure — the roster reads it." },
+  { measure: 'src-single-importer-modules', value: 66, on: SET_BY_O242, reason: "O242: portrait-credits.ts is imported by the synthetic roster alone — the seam it was cut on; the test imports it too but tests do not count." },
+  { measure: 'vitest-lines', value: 53485, on: SET_BY_O242, reason: "O242: synthetic-roster.test.ts holds every image to the register, the register to the personas, and never to a real clinician." },
+  { measure: 'e2e-spec-lines', value: 7886, on: SET_BY_O242, reason: "O242: moved by the portrait register; pinned to the tree as measured." },
+  { measure: 'src-unreached-lines', value: 24019, on: SET_BY_O242, reason: "O242: this register's entries." },
 ];
 
 /** The current floor per measure: the last entry wins. */
