@@ -275,7 +275,8 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   // Every listing declares assessment, so this ties the roster and the clarifier renders.
   await page.getByRole("textbox").fill("I need an ADHD assessment");
   await page.getByRole("button", { name: "Find a GP" }).click();
-  await page.getByText("Improve my matches", { exact: true }).click();
+  await page.getByRole("button", { name: "Improve my matches" }).click();
+  await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
   await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
 
   const before = await page.locator(".clinician-row strong").allInnerTexts();
@@ -292,7 +293,8 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
       await page.getByRole("button", { name: /Change what you said/i }).click();
       await page.getByRole("textbox").fill("I need an ADHD assessment");
       await page.getByRole("button", { name: "Find a GP" }).click();
-      await page.getByText("Improve my matches", { exact: true }).click();
+      await page.getByRole("button", { name: "Improve my matches" }).click();
+  await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
       await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
     }
     await page.locator(".clarify-chip").nth(chip).click();

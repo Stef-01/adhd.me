@@ -4,10 +4,10 @@
 // orchestrator; this renders them.
 
 import { ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { AppSettings } from "../app-settings";
-import { EASE_OUT, FinderContext, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
+import { EASE_OUT, FinderContext, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
   draft,
@@ -110,16 +110,35 @@ export function WelcomeStage({
             onClick={() => (draft.trim() ? onSearch(draft) : onTalk())}
             aria-label={draft.trim() ? "Find a GP" : "Talk instead of typing"}
           >
-            {draft.trim()
-              ? <ArrowRight size={21} weight="bold" aria-hidden="true" />
-              : <Microphone size={21} weight="fill" aria-hidden="true" />}
+            {/* O243: the glyph MORPHS as the first character lands — the mic turns into the arrow on a
+                spring, which is the screen saying "now it searches" without a sentence. */}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={draft.trim() ? "send" : "talk"}
+                className="dual-input-glyph"
+                initial={reducedMotion ? false : { scale: 0.5, rotate: -30, opacity: 0 }}
+                animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                exit={reducedMotion ? undefined : { scale: 0.5, rotate: 30, opacity: 0, transition: { duration: 0.1 } }}
+                transition={{ type: "spring", stiffness: 560, damping: 30 }}
+              >
+                {draft.trim()
+                  ? <ArrowRight size={21} weight="bold" aria-hidden="true" />
+                  : <Microphone size={21} weight="fill" aria-hidden="true" />}
+              </motion.span>
+            </AnimatePresence>
           </Pressable>
         </div>
 
-        <button className="scenario-toggle" type="button" onClick={onScenarios}>
-          Try an example search
-          <CaretRight size={14} weight="bold" aria-hidden="true" />
-        </button>
+        <motion.div
+          initial={reducedMotion ? undefined : { opacity: 0, y: 8 }}
+          animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ ...STAGE_SPRING, delay: 0.38, opacity: { duration: 0.25, delay: 0.38 } }}
+        >
+          <button className="scenario-toggle" type="button" onClick={onScenarios}>
+            Try an example search
+            <CaretRight size={14} weight="bold" aria-hidden="true" />
+          </button>
+        </motion.div>
 
         {/* O233: the testing options moved into the settings sheet (see the header above), so
             the app has one place a person changes anything. */}

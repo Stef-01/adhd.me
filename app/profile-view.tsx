@@ -22,6 +22,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, MapPin, Quotes, Trash } from "@phosphor-icons/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearRecord, readRecord, placeFrom, type FinderRecord } from "@/finder/state";
 import {
   activeFilterCount,
@@ -50,7 +51,12 @@ const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: st
   { key: "openBooks", title: "Taking new patients", detail: "Leave off to see GPs with a waitlist too." },
 ];
 
+const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
+
 export function ProfileView() {
+  // O243: every entrance here waits for `ready` — the server render carries no opacity: 0 — and
+  // every effect has its static equal under reduced motion.
+  const reducedMotion = useReducedMotion();
   // Read on the client only: `sessionStorage` does not exist during the server render, and a
   // profile that flashed "nothing yet" before hydrating would be lying for one frame.
   const [record, setRecord] = useState<FinderRecord | null>(null);
@@ -140,7 +146,18 @@ export function ProfileView() {
         <div className="me-section-head">
           <h2 id="me-filters-title">Filters</h2>
           <span className="me-filter-count" aria-live="polite">
-            {onCount === 0 ? "None on" : onCount === 1 ? "1 on" : `${onCount} on`}
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={onCount}
+                initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reducedMotion ? undefined : { opacity: 0, y: -6, transition: { duration: 0.1 } }}
+                transition={{ type: "spring", stiffness: 520, damping: 34 }}
+                style={{ display: "inline-block" }}
+              >
+                {onCount === 0 ? "None on" : onCount === 1 ? "1 on" : `${onCount} on`}
+              </motion.span>
+            </AnimatePresence>
           </span>
         </div>
         <p className="me-section-lead">
@@ -148,8 +165,13 @@ export function ProfileView() {
         </p>
 
         <ul className="me-switches">
-          {SWITCHES.map((row) => (
-            <li key={row.key}>
+          {SWITCHES.map((row, index) => (
+            <motion.li
+              key={row.key}
+              initial={ready && !reducedMotion ? { opacity: 0, x: -10 } : false}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ ...SPRING, delay: index * 0.04, opacity: { duration: 0.2, delay: index * 0.04 } }}
+            >
               <label className="me-switch">
                 <span>
                   <strong>{row.title}</strong>
@@ -163,7 +185,7 @@ export function ProfileView() {
                 />
                 <span className="me-switch-track" aria-hidden="true" />
               </label>
-            </li>
+            </motion.li>
           ))}
         </ul>
 
@@ -174,17 +196,19 @@ export function ProfileView() {
               const on = filters.languages.includes(language);
               return (
                 <li key={language}>
-                  <button
+                  <motion.button
                     type="button"
                     className={on ? "me-chip is-on" : "me-chip"}
                     aria-pressed={on}
                     onClick={() => toggleLanguage(language)}
+                    whileTap={reducedMotion ? undefined : { scale: 0.94 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 30 }}
                   >
                     {/* A real tick, hidden from the name: the button is still "Tamil" to a reader,
                         and the on-state is never colour alone. */}
                     {on && <span className="me-chip-tick" aria-hidden="true">✓</span>}
                     {language}
-                  </button>
+                  </motion.button>
                 </li>
               );
             })}

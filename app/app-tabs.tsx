@@ -60,7 +60,13 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
                     transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 }}
                   />
                 )}
-                <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
+                <motion.span
+                  className="app-tab-glyph"
+                  animate={{ scale: isCurrent ? 1.08 : 1, y: isCurrent ? -1 : 0 }}
+                  transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 26 }}
+                >
+                  <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
+                </motion.span>
                 <span className="app-tab-label">{tab.label}</span>
               </Link>
             </li>

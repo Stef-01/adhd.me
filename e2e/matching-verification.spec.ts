@@ -62,7 +62,9 @@ test("a request the lexicon cannot read says so instead of faking an order", asy
 
 test("answering the one question visibly turns a non-order into an order (W225+O5)", async ({ page }) => {
   await searchFor(page, "hello there");
-  await expect(page.getByText("Improve my matches", { exact: true })).toBeVisible();
+  // O244: the questions sit behind a star, and open in the app's sheet.
+  await page.getByRole("button", { name: "Improve my matches" }).click();
+  await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
   await expect(page.locator(".clarify-chip").first()).toBeVisible();
   await page.screenshot(shot("05-clarifier-offered"));
 

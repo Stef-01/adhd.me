@@ -257,7 +257,8 @@ test("choosing a roster language restarts listening in it, with the honesty line
   await expect(languageLine).toContainText("Listening in English");
   await expect(page.locator(".speech-language-note")).toHaveCount(0);
 
-  // The choices are the roster's own languages, in their own script.
+  // The choices are the roster's own languages, in their own script — behind the chip (O245).
+  await languageLine.getByRole("button", { name: /Listening in English/ }).click();
   await languageLine.getByRole("button", { name: "हिन्दी" }).click();
   await expect(page.getByTestId("speech-language")).toContainText("हिन्दी");
 
