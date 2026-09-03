@@ -129,16 +129,17 @@ export function WelcomeStage({
           </Pressable>
         </div>
 
-        <motion.div
+        <motion.button
+          className="scenario-toggle"
+          type="button"
+          onClick={onScenarios}
           initial={reducedMotion ? undefined : { opacity: 0, y: 8 }}
           animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ ...STAGE_SPRING, delay: 0.38, opacity: { duration: 0.25, delay: 0.38 } }}
         >
-          <button className="scenario-toggle" type="button" onClick={onScenarios}>
-            Try an example search
-            <CaretRight size={14} weight="bold" aria-hidden="true" />
-          </button>
-        </motion.div>
+          Try an example search
+          <CaretRight size={14} weight="bold" aria-hidden="true" />
+        </motion.button>
 
         {/* O233: the testing options moved into the settings sheet (see the header above), so
             the app has one place a person changes anything. */}

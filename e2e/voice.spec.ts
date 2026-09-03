@@ -31,7 +31,7 @@ test("a spoken request reaches the results", async ({ page }) => {
   await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Urdu", false));
   // The interim transcript is on screen while somebody is still talking, which is the only
   // reliable signal to them that the microphone is working.
-  await expect(page.locator(".listening-transcript")).toContainText("Urdu");
+  await expect(page.locator(".listen-transcript")).toContainText("Urdu");
 
   await page.evaluate(() => (window as any).__speech.say("I would like an ADHD assessment and I speak Urdu", true));
   /**
@@ -105,7 +105,7 @@ test("a minute with words in hand lands them in the box, said the way any other 
   await openMic(page);
   await expect(page.locator(".listening-screen")).toBeVisible();
   await page.evaluate(() => (window as any).__speech.say("a GP who bulk bills near Hornsby", true));
-  await expect(page.locator(".listening-transcript")).toContainText("Hornsby");
+  await expect(page.locator(".listen-transcript")).toContainText("Hornsby");
   await page.clock.fastForward(61_000);
 
   const box = page.getByRole("textbox");
@@ -215,7 +215,7 @@ test("a browser without the API never shows a microphone screen at all", async (
   await installFakeSpeech(page, { present: false });
   await openMic(page);
   await expect(page.getByRole("textbox")).toBeVisible();
-  await expect(page.locator(".listening-transcript")).toHaveCount(0);
+  await expect(page.locator(".listen-transcript")).toHaveCount(0);
   await expect(page.locator(".speech-error")).toHaveCount(0);
 });
 

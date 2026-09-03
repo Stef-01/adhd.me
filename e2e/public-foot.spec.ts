@@ -84,5 +84,7 @@ test("exempts nothing that is not a real route, and argues every exemption", asy
     expect(known.has(route), `${route} is exempt but is not a public route`).toBe(true);
     expect(why.length, `${route} is exempt without an argument`).toBeGreaterThan(100);
   }
-  expect(Object.keys(NO_FOOTER).length, "the exemption list has grown into an allowlist").toBeLessThan(6);
+  // O239: the cap moved from six to seven for one reason — the app now has THREE tab routes
+  // (/, /profile, /approach), and "an app tab, not a document" is one category, not creep.
+  expect(Object.keys(NO_FOOTER).length, "the exemption list has grown into an allowlist").toBeLessThan(7);
 });
