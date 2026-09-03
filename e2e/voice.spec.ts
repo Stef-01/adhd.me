@@ -257,9 +257,10 @@ test("choosing a roster language restarts listening in it, with the honesty line
   await expect(languageLine).toContainText("Listening in English");
   await expect(page.locator(".speech-language-note")).toHaveCount(0);
 
-  // The choices are the roster's own languages, in their own script — behind the chip (O245).
-  await languageLine.getByRole("button", { name: /Listening in English/ }).click();
-  await languageLine.getByRole("button", { name: "हिन्दी" }).click();
+  // The choices are the roster's own languages, in their own script — behind the globe (O247),
+  // in the app's sheet.
+  await languageLine.click();
+  await page.getByRole("dialog", { name: "Change language" }).getByRole("button", { name: "हिन्दी" }).click();
   await expect(page.getByTestId("speech-language")).toContainText("हिन्दी");
 
   // The recogniser was actually restarted in the chosen language — not just relabelled.

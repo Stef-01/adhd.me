@@ -141,6 +141,27 @@ Do not reintroduce isolated console pages. Diagnostic surfaces such as matching,
 interview live inside the same shell. On phones the primary destinations scroll horizontally and
 the workspace map becomes a bounded, vertically scrollable panel.
 
+## Minimalism, operationalised (O247)
+
+Researched after the founder's correction ("you clearly have no idea what minimalism means"):
+Rams' "less, but better", Nielsen Norman on flat design's signifier problem, Apple's clarity and
+deference, and Wispr Flow's invisible-until-needed overlay. The rule this tree now applies to
+every screen, in order:
+
+1. Name the screen's one job and its one primary action. Everything else is demoted — to a text
+   control, an icon, or the sheet — or deleted.
+2. Delete before you shrink. A sentence that explains the UI is a defect in the UI.
+3. Then make the residue tiny and faint: what must legally stay is one line at 0.625–0.7rem in
+   `--faint`, at the bottom, out of the reading path.
+4. Whitespace and tint do the grouping, not hairlines and boxes. Cards only for discrete objects.
+5. The one primary control still looks pressable (filled, 44px); text controls still read as
+   controls. Outline buttons are for secondary actions, and few.
+6. Type does the hierarchy: one display serif statement, one body size, one tiny residue size.
+7. Motion carries meaning only, with a static equal.
+8. Secondary tools live behind one icon and open in the app's one sheet idiom.
+
+If more than three elements survive above the fold besides the content itself, it is not minimal.
+
 ## Interaction and motion
 
 Motion follows a Jakub-primary / Emil-secondary standard: spatial continuity first, polish

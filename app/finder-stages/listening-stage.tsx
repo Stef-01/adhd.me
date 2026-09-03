@@ -18,11 +18,13 @@
 // So: the h1 is the word "Listening" (the a11y landing line it always was), the transcript is
 // the hero in serif and grows as words arrive, the microphone carries the waveform inside it
 // while it listens and the halo breathes behind it, one caption says what a tap does, and the
-// two secondary actions are chips side by side — "Type instead" and the language, which opens
-// its choices in place. The disclosure stays (voice.spec pins it visible before anything is
-// said), as one faint line. Nothing else is on the screen.
+// two secondary actions are quiet — "Type instead" as a text control and a globe that opens the
+// languages in the app's sheet. O247 (founder-directed): "Listening in English" is gone from the
+// screen altogether; the sentence survives only for screen readers on the globe. The disclosure
+// stays (voice.spec pins it visible before anything is said), as one tiny line. Nothing else is
+// on the screen. The rule applied: delete before you shrink; then make the residue tiny.
 
-import { Microphone, X, CaretDown } from "@phosphor-icons/react";
+import { Microphone, X, Translate } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import {
@@ -34,6 +36,7 @@ import {
 } from "@/voice/speech";
 import { FINDER_ANNOUNCEMENTS, listeningAgainIn } from "@/finder/announce";
 import { MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
+import { Sheet } from "../sheet";
 
 /**
  * U9: one microphone control — a toggle: `aria-pressed` says it is on, `aria-busy` says the
@@ -70,6 +73,7 @@ export function ListeningStage({
       ? listeningAgainIn(restartedIn.label)
       : FINDER_ANNOUNCEMENTS.listening;
   const [langOpen, setLangOpen] = useState(false);
+  const languageLine = `Listening in ${speechLang.label}.`;
 
   return (
     <MotionScreen key="listening" className="listening-screen" focusOnArrival={focusOnArrival}>
@@ -119,38 +123,38 @@ export function ListeningStage({
         </div>
         <p className="mic-caption">{finishing ? "Finishing…" : "Tap when you’ve finished."}</p>
 
-        <div className="listen-chips">
-          <button className="listen-chip" type="button" onClick={onType}>Type instead</button>
-          {/* O59: the language line, as a chip that opens its choices in place — the
-              alternatives are exactly the languages listed GPs declare. */}
-          <div className="listen-lang" data-testid="speech-language">
-            <button
-              className={langOpen ? "listen-chip is-open" : "listen-chip"}
-              type="button"
-              aria-expanded={langOpen}
-              aria-controls="listen-lang-choices"
-              onClick={() => setLangOpen((o) => !o)}
-            >
-              Listening in {speechLang.label}.
-              <CaretDown size={14} weight="bold" aria-hidden="true" />
-            </button>
-            {langOpen && (
-              <ul id="listen-lang-choices" className="listen-lang-choices" aria-label="Change language">
-                {SPEECH_LANGUAGES.filter((l) => l.tag !== speechLang.tag).map((l) => (
-                  <li key={l.tag}>
-                    <button
-                      className="listen-chip speech-language-choice"
-                      type="button"
-                      lang={l.tag}
-                      onClick={() => { setLangOpen(false); onLanguage(l); }}
-                    >
-                      {l.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        <div className="listen-tools">
+          <button className="listen-text" type="button" onClick={onType}>Type instead</button>
+          {/* O59/O247: the language, behind a globe. The sentence is for screen readers and the
+              specs; nothing on the screen says it. Choosing a language restarts listening in it. */}
+          <button
+            className="listen-globe"
+            type="button"
+            data-testid="speech-language"
+            aria-haspopup="dialog"
+            aria-expanded={langOpen}
+            onClick={() => setLangOpen(true)}
+          >
+            <Translate size={18} weight="bold" aria-hidden="true" />
+            <span className="sr-only">{languageLine} Change language</span>
+          </button>
+          <Sheet open={langOpen} title="Change language" onClose={() => setLangOpen(false)}>
+            <ul className="listen-lang-choices" aria-label="Languages">
+              {SPEECH_LANGUAGES.map((l) => (
+                <li key={l.tag}>
+                  <button
+                    className={l.tag === speechLang.tag ? "listen-lang-choice is-current" : "listen-lang-choice speech-language-choice"}
+                    type="button"
+                    lang={l.tag}
+                    aria-current={l.tag === speechLang.tag ? "true" : undefined}
+                    onClick={() => { setLangOpen(false); if (l.tag !== speechLang.tag) onLanguage(l); }}
+                  >
+                    {l.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </Sheet>
         </div>
         {/* The honesty line ships with the picker — see speech.ts. */}
         {speechLang.tag !== DEFAULT_SPEECH_LANGUAGE.tag && (

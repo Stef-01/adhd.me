@@ -163,6 +163,20 @@ export function NearbyMap({
       </p>
       <div className="nearby-map-frame">
         <div ref={host} className="nearby-map-canvas" role="application" aria-label={`Map around ${origin.suburb}`} />
+        {/* O247: the caption sits on the map as one small chip, and only when it has something to
+            say (a GP not placed); the licence credit is Leaflet's own control, made tiny. */}
+        <figcaption>
+          <span className="nearby-caption-main">
+            {stops.length === 0
+              ? `Nobody on this list has rooms we can place near ${origin.suburb}.`
+              : `Numbers are the rows below.`}
+          </span>
+          {unplaced > 0 && (
+            <span className="nearby-caption-note">
+              {unplaced === 1 ? "1 GP by telehealth first, not placed" : `${unplaced} GPs by telehealth first, not placed`}
+            </span>
+          )}
+        </figcaption>
         <div className="nearby-zoom" role="group" aria-label="Zoom">
           <button type="button" className="nearby-zoom-button" onClick={() => zoomBy(1)} aria-label="Zoom in" disabled={zoom !== null && zoom >= 18}>
             <Plus size={18} weight="bold" aria-hidden="true" />
@@ -172,18 +186,6 @@ export function NearbyMap({
           </button>
         </div>
       </div>
-      <figcaption>
-        <span className="nearby-caption-main">
-          {stops.length === 0
-            ? `Nobody on this list has rooms we can place near ${origin.suburb}.`
-            : `Numbers are the rows below. Map data from OpenStreetMap; the map loads only once you give a suburb.`}
-        </span>
-        {unplaced > 0 && (
-          <span className="nearby-caption-note">
-            {unplaced === 1 ? "1 GP sees people by telehealth first and is not placed." : `${unplaced} GPs see people by telehealth first and are not placed.`}
-          </span>
-        )}
-      </figcaption>
     </figure>
   );
 }
