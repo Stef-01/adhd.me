@@ -322,6 +322,45 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 > `pnpm e2e` green at a90b248 (349 passed, 1 skipped, 23.1m, exit 0 read from the command itself, run serially with nothing else building, 350 listed) — every spec under the enforced header, the mic and
 > every console route included. Vault log skipped: Stefan-Brain unreachable. U14 is next.
 
+> **O241 (FOUNDER-DIRECTED, 2026-09-03: "Implement SEO strategy
+> https://github.com/coreyhaines31/marketingskills") — CLAIMED founder-0902a, 2026-09-03T01:05Z.**
+> The library's `seo-audit` checklist, run against this deployment, and its findings fixed.
+> **NUMBERED O241 BECAUSE O234 WAS TAKEN.** This session claimed O234, found the push rejected
+> non-fast-forward against 21 commits from `founder-0902b` and `founder-0902c`, and renumbered its
+> own rather than relabelling theirs (§8). Wipe detection ran and passed: O233's done row is intact
+> on `origin/main`.
+> **THE GATE COMES FIRST AND IS NOT CROSSED.** `finder-public-posture` (U7, D-FINDER-PUBLIC) hides
+> `/`, `/profile`, `/examples`, `/demo` and `/thanks` because the founder has said this deployment
+> is not public. An SEO unit that indexed the finder would answer an open founder question by
+> editing a register, which §4 forbids outright. **This unit touches only the routes that are
+> ALREADY indexable** — `/story`, `/approach`, `/faq`, `/practices`, `/clinicians`,
+> `/clinicians/join`, `/terms`, `/privacy` — and leaves the hidden set exactly as it is.
+> **What the audit found.** The crawlability half is already right and is left alone: `robots.ts`
+> and `sitemap.ts` both DERIVE from the compliance census and the crawler register, so a page
+> cannot be swept for compliance and forgotten by crawlers, and the sitemap never announces a route
+> whose response says `noindex`. Canonicals are present and self-referencing everywhere.
+> **The on-page half is the gap:** every title sits at 5-22 characters against the checklist's
+> 50-60 window ("Learn", "For GPs", "Questions"), none carries the primary keyword, and the
+> descriptions run 62-187 against 150-160 — one truncated in a result, six too short to earn the
+> click. Pages that RENDER breadcrumbs carry no `BreadcrumbList`.
+> **Scope:** `src/seo/` — one entry per indexable route carrying its target title, description and
+> primary keyword, with a test that fails on a length outside the window, a duplicate title or
+> description, a missing keyword, a route in the census with no entry, and an entry naming a route
+> that is hidden or gone. Both directions, the census shape this tree uses everywhere. The strings
+> themselves are rewritten to the window, and `BreadcrumbList` JSON-LD is DERIVED from the same
+> trail the page renders, so the markup cannot describe a path the reader was not shown — the rule
+> `/faq`'s `FAQPage` already follows.
+> **COMPLIANCE OUTRANKS THE CHECKLIST AND THIS IS WHERE IT BITES.** A title is copy: the
+> rendered-copy sweep reads the head (O167's finding), so every new string passes the same patient
+> linter as the body. No clinical claim, no "specialist" beside a niche scope, and **no
+> `aggregateRating` or `Review` markup** — prohibited for regulated health services and banned by
+> this tree's own laws, whatever a generic SEO checklist says about rich results.
+> **Verification:** `pnpm verify`; the register red on each planted violation; the compliance linter
+> green over every new title and description; `robots.test.ts` and the sitemap tests unchanged and
+> green (the proof the hidden set did not move); full `pnpm e2e`.
+> **Continuation if this claim goes stale:** the register and the copy land together — a register
+> describing titles the pages do not carry is worse than no register.
+
 > **O233 (FOUNDER-DIRECTED, 2026-09-02: "The bottom should only have the icons of find, profile and
 > learn. About, is all found in the top right corner filtered away under a settings area … Similarly
 > questions is also filtered away … Remove the [tagline] … The text box should be way bigger and
@@ -12471,6 +12510,7 @@ Session logs still go to Stefan-Brain `wiki/_log/` (non-fatal if unavailable).
 | U14 | done | founder-0902a | 2026-09-02T14:35Z | 00d0451 | [P] (M) R0. The size census and the downward ratchet. -> verify: the pinned floors equal §1/§2.5 on the day (a stale-check, so the plan's numbers are provably the tree's); the test goes red on a planted regression (a vitest that raises one floor in memory must fail); `pnpm verify` runs it. |
 | O230 | done | founder-0902a | 2026-09-02T16:05Z | 65705df | FOUNDER-DIRECTED: the app shell. `/` opens the product, not the story; one persistent shell (bottom tab bar on the phone, rail on the desktop), provider cards and a drag-handled bottom sheet, the story moved whole to its own route. Brand gradient and `--hero-*` scheme preserved. -> verify: the moved landing assertions green at the story's route; new shell e2e (tabs, sheet drag/Escape/focus return, safe-area, 44 px floor); sweeps green; `pnpm census` re-pinned with a reasoned raise; dev-server preview at phone and desktop widths. |
 | U15 | done | founder-0902a | 2026-09-02T17:10Z | 32428a7 | (M) R0. The simplicity laws and their registers. Depends: U14. -> verify: each register's test fails on a planted violation (an untagged unreached module, an unlisted 700-line file, a copied block, a module imported only by its test and not tagged); the module-reasons register covers all 127 unreached modules in both directions. |
+| O241 | claimed | founder-0902a | 2026-09-03T01:05Z | — | FOUNDER-DIRECTED: the seo-audit checklist (coreyhaines31/marketingskills), run and fixed. Indexable routes only — the finder stays hidden because D-FINDER-PUBLIC is an open founder gate. src/seo/ register (title/description/keyword per route, both directions), strings rewritten to the 50-60 / 150-160 windows, BreadcrumbList derived from the rendered trail. No rating or review markup: prohibited for regulated health services. -> verify: pnpm verify; planted violations red; compliance linter green over every new string; robots/sitemap tests unchanged; full e2e. |
 | O240 | claimed | founder-0902c | 2026-09-03T00:45Z | — | FOUNDER-DIRECTED: simpler, and moving like a modern app. Spring stage transitions (no blur); one tab marker that travels between tabs on a shared layout id; the map panel unfolding on a spring; Learn cards sliding from the side they were asked for, tiles settling, the tick popping; rows lighter (60px portrait, 16px radius, hairline toward paper, a hover lift on pointer devices); the welcome disclaimer one quiet line; the consent card arriving on the spring curve. Every effect gated by useReducedMotion or prefers-reduced-motion. -> verify: pnpm verify; reduced-motion/keyboard/touch/contrast/a11y/landing e2e; full e2e; shots at 390 and 1280. |
 | O239 | claimed | founder-0902c | 2026-09-03T00:22Z | — | FOUNDER-DIRECTED: the Learn tab as modules. Three short Headspace-shaped modules on the app's own shell — calm tiles with a mark, a title and a length; one card at a time inside, with a dot rail, Back, Next and Finish; finished modules remembered on the device — built from the story sequence's eight scenes word for word (src/learn/scenes.ts); the sequence, its 170 rules and its register entries deleted. -> verify: pnpm verify; progress tests; app-shell/landing/guidelines/public-sweep/keyboard/touch/contrast e2e; full e2e; shots at 390 and 1280. |
 | O238 | claimed | founder-0902c | 2026-09-03T00:22Z | — | FOUNDER-DIRECTED: the map behind one control on the list header, closed by default — the north star is simplicity. Row keys render only while it is open. -> verify: app-shell/finder-flow/finder-history e2e open it by its control. |
