@@ -242,7 +242,7 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'src-single-importer-modules', value: 65, on: SET_BY_O239, reason: "O239: progress.ts is imported by the Learn tab alone, which is the seam it was cut on — node-tested record, React-free." },
   { measure: 'vitest-files', value: 316, on: SET_BY_O239, reason: "O239: progress.test.ts — the modules cover every scene once, and the record refuses what it does not recognise." },
   { measure: 'vitest-lines', value: 53452, on: SET_BY_O239, reason: "O239: as vitest-files." },
-  { measure: 'e2e-spec-lines', value: 7881, on: SET_BY_O239, reason: "O237: the place-field tests rewritten to reach a place by link or profile; O238: the map opened by its control." },
+  { measure: 'e2e-spec-lines', value: 7885, on: SET_BY_O239, reason: "O237: the place-field tests rewritten to reach a place by link or profile; O238: the map opened by its control." },
   { measure: 'e2e-support-lines', value: 2424, on: SET_BY_O239, reason: "O239: moved by the unit; pinned to the tree as measured." },
   { measure: 'e2e-goto-calls', value: 291, on: SET_BY_O239, reason: "O239: moved by the unit; pinned to the tree as measured." },
   { measure: 'app-lines', value: 15952, on: SET_BY_O239 },
