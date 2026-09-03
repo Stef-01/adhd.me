@@ -77,6 +77,7 @@ const SET_BY_O240 = "2026-09-02";
 const SET_BY_O242 = "2026-09-02";
 const SET_BY_O245 = "2026-09-02";
 const SET_BY_O247 = "2026-09-03";
+const SET_BY_O248 = "2026-09-03";
 
 /**
  * Append-only. The newest entry per measure is its floor.
@@ -298,6 +299,14 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'e2e-spec-lines', value: 7921, on: SET_BY_O247, reason: "O247: moved by the unit; pinned to the tree as measured." },
   { measure: 'src-lines', value: 55215, on: SET_BY_O247, reason: "O247: this register's entries." },
   { measure: 'src-unreached-lines', value: 24046, on: SET_BY_O247, reason: "O247: this register's entries." },
+  // O248 (founder-directed): the declared 'how they work' set — three chips, one field, one test.
+  { measure: 'app-lines', value: 16367, on: SET_BY_O248, reason: "O248: the profile's chip group and the clinician page's pills." },
+  { measure: 'src-lines', value: 55270, on: SET_BY_O248, reason: "O248: the Approach vocabulary on the roster, its declaration on the personas, and the filter that requires it." },
+  { measure: 'src-reached-lines', value: 31215, on: SET_BY_O248, reason: "O248: as src-lines — roster and filters are in the closure." },
+  { measure: 'classname-attributes', value: 1813, on: SET_BY_O248, reason: "O248: the chip group's markup." },
+  { measure: 'vitest-lines', value: 53532, on: SET_BY_O248, reason: "O248: filters.test.ts requires every chosen declaration and refuses one the roster does not know." },
+  { measure: 'e2e-spec-lines', value: 7926, on: SET_BY_O248, reason: "O248: app-shell.spec.ts toggles a chip and reads the count." },
+  { measure: 'src-unreached-lines', value: 24055, on: SET_BY_O248, reason: "O248: this register's entries." },
 ];
 
 /** The current floor per measure: the last entry wins. */
