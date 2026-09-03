@@ -34,9 +34,16 @@ import { X } from "@phosphor-icons/react";
 const DETENT = { half: 0.55, full: 0.92 } as const;
 type Detent = keyof typeof DETENT;
 
-/** Below this fraction of its own height, or faster than this downward flick, a drag dismisses. */
+/** A release whose PROJECTED rest is below this fraction of the sheet's height dismisses. */
 const DISMISS_OFFSET = 0.35;
-const DISMISS_VELOCITY = 520;
+
+/**
+ * O249: where a release is going, not where it is. Apple's own projection from Designing Fluid
+ * Interfaces — exponential decay, the same curve scroll deceleration uses — so a sharp flick just
+ * short of the threshold still dismisses and a slow drag just past it can still settle back.
+ */
+const project = (velocity: number, decelerationRate = 0.998): number =>
+  ((velocity / 1000) * decelerationRate) / (1 - decelerationRate);
 
 export function Sheet({
   open,
@@ -97,6 +104,8 @@ export function Sheet({
   }, [open, onClose]);
 
   const cycleDetent = useCallback(() => setDetent((d) => (d === "half" ? "full" : "half")), []);
+  // O249: the height is animated, not set — a detent change is a move, with the sheet's own spring.
+  const height = `${DETENT[detent] * 100}svh`;
 
   // Mounted only on the client, so the portal below never runs during the server render.
   const [mounted, setMounted] = useState(false);
@@ -133,9 +142,8 @@ export function Sheet({
             aria-modal="true"
             aria-labelledby={titleId}
             tabIndex={-1}
-            style={{ height: `${DETENT[detent] * 100}svh` }}
-            initial={reducedMotion ? { opacity: 0 } : { y: "100%" }}
-            animate={reducedMotion ? { opacity: 1 } : { y: 0 }}
+            initial={reducedMotion ? { opacity: 0, height } : { y: "100%", height }}
+            animate={reducedMotion ? { opacity: 1, height } : { y: 0, height }}
             exit={reducedMotion ? { opacity: 0 } : { y: "100%" }}
             transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 40, mass: 0.9 }}
             drag={reducedMotion ? false : "y"}
@@ -143,10 +151,11 @@ export function Sheet({
             dragElastic={{ top: 0.04, bottom: 0.6 }}
             dragConstraints={{ top: 0, bottom: 0 }}
             onDragEnd={(_, info) => {
-              const height = panel.current?.offsetHeight ?? 1;
-              if (info.offset.y > height * DISMISS_OFFSET || info.velocity.y > DISMISS_VELOCITY) onClose();
-              else if (info.offset.y < -60 && detent === "half") setDetent("full");
-              else if (info.offset.y > 60 && detent === "full") setDetent("half");
+              const own = panel.current?.offsetHeight ?? 1;
+              const projected = info.offset.y + project(info.velocity.y);
+              if (projected > own * DISMISS_OFFSET) onClose();
+              else if (projected < -60 && detent === "half") setDetent("full");
+              else if (projected > 60 && detent === "full") setDetent("half");
             }}
           >
             {/* The grabber. A button, not an ornament: click or Enter cycles the detents, which is

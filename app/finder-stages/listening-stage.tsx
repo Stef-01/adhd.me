@@ -143,7 +143,7 @@ export function ListeningStage({
               {SPEECH_LANGUAGES.map((l) => (
                 <li key={l.tag}>
                   <button
-                    className={l.tag === speechLang.tag ? "listen-lang-choice is-current" : "listen-lang-choice speech-language-choice"}
+                    className={l.tag === speechLang.tag ? "listen-lang-choice is-current" : "listen-lang-choice"}
                     type="button"
                     lang={l.tag}
                     aria-current={l.tag === speechLang.tag ? "true" : undefined}

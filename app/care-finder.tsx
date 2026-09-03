@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
+import { StageDirection } from "./finder-stages/shared";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
 import {
@@ -107,7 +108,7 @@ export function CareFinder() {
     () => applyFilters(rosterFor(includeSynthetic), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
     [includeSynthetic, filters, origin],
   );
-  const { stage, arrivalKey, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
+  const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
     // none — a search started from the front door reads back what the profile set. A place on
     // the URL still wins: a link that carries a suburb must re-rank the way the link says.
@@ -569,7 +570,12 @@ export function CareFinder() {
             change read the whole new screen aloud; each stage now owns one `role="status"` line
             (`StatusLine`) scripted in `src/finder/announce.ts`. */}
         <section className="care-shell">
-          <AnimatePresence key={arrivalKey} mode="wait" initial={false}>
+          {/* O249 (apple-design appraisal, finding 4): no `mode="wait"`. The leaving screen is
+              popped out of flow by MotionScreen (absolute, inert) so the next one mounts at once and
+              a tap during the exit lands on something. `custom` carries the direction to the exit
+              variant; the context carries it to the arrival. */}
+          <StageDirection.Provider value={direction}>
+          <AnimatePresence key={arrivalKey} custom={direction} initial={false}>
 
         {stage === "welcome" && (
           <WelcomeStage
@@ -715,6 +721,7 @@ export function CareFinder() {
         )}
 
           </AnimatePresence>
+          </StageDirection.Provider>
         </section>
       </main>
       <AppTabs hidden={tabsHidden} />

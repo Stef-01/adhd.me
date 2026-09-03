@@ -42,6 +42,12 @@ export interface FinderHistory {
    * should see.
    */
   arrivalKey: number;
+  /**
+   * O249: which way the last move went. `1` for a forward move, `-1` for Back (in-app or the
+   * browser's), so a screen can leave the way it came — Apple's spatial-consistency rule — instead
+   * of always rising. Popstate compares entry indices; a forward popstate (rare) reads as 1.
+   */
+  direction: 1 | -1;
   /** A forward move: a new history entry for `stage`. */
   goTo: (stage: Stage) => void;
   /** An in-app Back: the browser's own Back to the nearest earlier `stage`, or forward if never there. */
@@ -60,6 +66,7 @@ export interface FinderHistory {
 export function useFinderHistory(onArrive: (arrival: Arrival) => void): FinderHistory {
   const [stage, setStage] = useState<Stage>("welcome");
   const [arrivalKey, setArrivalKey] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
   const nav = useRef({ index: 0, record: emptyRecord() });
   const arrived = useRef(onArrive);
   arrived.current = onArrive;
@@ -80,6 +87,7 @@ export function useFinderHistory(onArrive: (arrival: Arrival) => void): FinderHi
       const { record } = nav.current;
       // A trail the tab lost (storage cleared mid-session) is patched from the entry as it is walked.
       if (record.trail[entry.index] !== entry.stage) record.trail[entry.index] = entry.stage;
+      setDirection(entry.index < nav.current.index ? -1 : 1);
       nav.current.index = entry.index;
       setStage(stageOnRevisit(entry.stage));
     };
@@ -89,6 +97,7 @@ export function useFinderHistory(onArrive: (arrival: Arrival) => void): FinderHi
 
   const goTo = useCallback((next: Stage) => {
     nav.current = advance(browserHost(), nav.current.record, nav.current.index, next);
+    setDirection(1);
     setStage(next);
   }, []);
 
@@ -110,5 +119,5 @@ export function useFinderHistory(onArrive: (arrival: Arrival) => void): FinderHi
 
   const rememberPlace = useCallback((place: string) => writePlace(browserHost(), place), []);
 
-  return { stage, arrivalKey, goTo, backTo, remember, rememberPlace };
+  return { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace };
 }

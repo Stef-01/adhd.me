@@ -223,7 +223,7 @@ export function ResultsStage({
           <p className="results-empty-lead">No listed GP answers every filter you set.</p>
           <p className="results-empty-detail">
             {filterLabels.length > 0
-              ? `On right now: ${filterLabels.join(", ")}. Loosening one usually brings the list back.`
+              ? "Loosening one filter usually brings the list back."
               : "Try a different suburb, or change the filters on your profile."}
           </p>
           <div className="results-empty-actions">

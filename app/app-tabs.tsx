@@ -64,7 +64,7 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
                   className="app-tab-glyph"
                   // Under reduced motion the glyph rests untransformed — the sweep holds every element to that.
                   animate={reducedMotion ? { scale: 1, y: 0 } : { scale: isCurrent ? 1.08 : 1, y: isCurrent ? -1 : 0 }}
-                  transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 26 }}
+                  transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 46 }}
                 >
                   <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
                 </motion.span>

@@ -209,7 +209,7 @@ export function ProfileView() {
                     aria-pressed={on}
                     onClick={() => toggleLanguage(language)}
                     whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                    transition={{ type: "spring", stiffness: 600, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 48 }}
                   >
                     {/* A real tick, hidden from the name: the button is still "Tamil" to a reader,
                         and the on-state is never colour alone. */}
@@ -266,7 +266,7 @@ export function ProfileView() {
                     aria-pressed={on}
                     onClick={() => toggleApproach(a)}
                     whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                    transition={{ type: "spring", stiffness: 600, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 48 }}
                   >
                     {on && <span className="me-chip-tick" aria-hidden="true">✓</span>}
                     {APPROACH_LABELS[a]}
@@ -276,9 +276,8 @@ export function ProfileView() {
             })}
           </ul>
           <p className="me-group-note">
-            A whole-person view alongside the assessment, openness to functional-health approaches
-            beside standard care, or a look at sleep and activity data from a wearable you bring.
-            Only GPs who declare it are shown when you choose.
+            As the GP declares it: a whole-person view, openness to functional health, or a look at
+            data from a wearable you bring.
           </p>
         </div>
 

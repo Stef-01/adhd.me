@@ -102,7 +102,7 @@ export function WelcomeStage({
                 if (draft.trim()) onSearch(draft);
               }
             }}
-            placeholder="Describe the GP you're looking for…"
+            placeholder="e.g. a woman GP near Beecroft who bulk bills"
           />
           <Pressable
             className={draft.trim() ? "dual-input-action is-send" : "dual-input-action is-talk"}
