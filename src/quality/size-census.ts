@@ -246,7 +246,7 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'e2e-support-lines', value: 2424, on: SET_BY_O239, reason: "O239: moved by the unit; pinned to the tree as measured." },
   { measure: 'e2e-goto-calls', value: 291, on: SET_BY_O239, reason: "O239: moved by the unit; pinned to the tree as measured." },
   { measure: 'app-lines', value: 15952, on: SET_BY_O239 },
-  { measure: 'src-unreached-lines', value: 23997, on: SET_BY_O239 },
+  { measure: 'src-unreached-lines', value: 23997, on: SET_BY_O239, reason: "O239: this register's own O237–O239 entries and the learn progress module's validation; the sequence's deletion banked more than these cost elsewhere." },
   { measure: 'css-lines', value: 8763, on: SET_BY_O239 },
   { measure: 'css-rule-blocks', value: 1488, on: SET_BY_O239 },
   { measure: 'css-styled-classes', value: 493, on: SET_BY_O239 },

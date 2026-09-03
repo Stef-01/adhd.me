@@ -4097,3 +4097,35 @@ voice, keyboard-focus, public-sweep, touch-floor, results and fold e2e on the ne
 
 **Captures:** `qa/o236-results-map-390.png`, `qa/o236-results-filtered-390.png`,
 `qa/o236-profile-filters-390.png`, `qa/o236-results-map-1280.png`.
+
+## O237–O239 — the results screen shows the results; the map behind a button; the Learn tab as modules (2026-09-02)
+
+**Founder-directed.** "Improve aesthetic and minimalism of this whole page, remove the where are
+you and all of the text saying no GP matched … just show the results." "Make map open up with a
+button, it causes too much clutter. Highest impact metric and North Star is simplicity of the
+entire platform." "Make the learning page a real functioning minimalist Headspace-inspired
+learning module section."
+
+**Results (O237, O238).** The place field and every verdict sentence left the screen. What they
+said is still enforced in structure: the list heading reads "Matches" only when the words produced
+an order and "All listed GPs" when they did not; the fold never cuts a tied band; the clarifier
+chips stand ready when the words reached nothing. The map sits behind a "Map" control on the list
+header, closed by default; the row keys render only while it is open. The place arrives from the
+Profile tab or a link; the specs that typed a suburb into results now reach it that way.
+
+**Learn (O239).** The eight-scene scroll sequence became three modules — Finding a GP, Time,
+money, distance, What changed — as Headspace-shaped tiles (a drawn mark in one of the three token
+families, a title, a length, a tick when done) on the app's own shell. Inside, one card at a
+time with a dot rail, Back, Next and Finish; every card is in the DOM from the first paint so the
+argument survives without JavaScript, and finishing is remembered on the device
+(`src/learn/progress.ts`). The cards are the scenes word for word (`src/learn/scenes.ts`); the
+sequence, its 170 rules and its register entries were deleted, and the raw-hex ceiling fell from
+66 to 62 with them.
+
+**Verified.** `pnpm verify` green; app-shell, landing, guidelines, public-sweep, keyboard-focus,
+touch-floor, contrast, fold, semantics, a11y, finder-flow, finder-history, finder-a11y,
+matching-verification, voice, results, told and reduced-motion e2e; full `pnpm e2e`; captures at
+390 and 1280 from the production build.
+
+**Captures:** `qa/o239-results-390.png`, `qa/o239-results-map-390.png`, `qa/o239-learn-390.png`,
+`qa/o239-learn-1280.png`.

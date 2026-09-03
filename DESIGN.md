@@ -102,10 +102,16 @@ app's type. The keys are list positions, never ranks, and they render only while
 Markers and keys are route blue; the accent is still reserved for the row. The tile host is the
 one third-party origin the CSP admits, for images alone, and the privacy page says what it learns.
 
-The results screen opens on a **search summary** (O236): one card holding the words (a button that
-reopens the box) and the place (a pill field that re-ranks in place as it is typed, its label read
-to screen readers and not painted). The earned headline sits under it; the clarifier chips stand in
-the open under a "Improve my matches" lead rather than behind a disclosure.
+The results screen (O236–O238) is the summary card (the words, a button that reopens the box),
+the earned headline when there is one, the clarifier chips when the words reached nothing, and the
+list. The place is set on the Profile tab or carried by a link; there is no field for it here, and
+no verdict sentence — the list heading reads "Matches" when the words produced an order and "All
+listed GPs" when they did not. The map sits behind one control on the list header, closed by
+default; the row keys render only while it is open.
+
+The **Learn tab** (O239) is three modules on the app's shell: calm tiles with a mark, a title and a
+length, one card at a time inside with a dot rail and Back/Next/Finish, finished modules remembered
+on the device. The cards are the story's eight scenes word for word.
 
 The **Profile tab** holds the person's standing filters — where they are, woman GP, telehealth,
 bulk billing, longer appointments, wheelchair access, open books, languages, distance — as switch
