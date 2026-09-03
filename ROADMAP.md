@@ -44,8 +44,13 @@ polish the existing shell, question it.
       inflated the small sample and compressed the ratio through the bound. The harness now derives
       its repeat count from the size (equal items per sample), which puts both sizes in the same
       timer regime and makes the smallest sample milliseconds. Bound and margins unchanged.
-- [ ] Keep it green. `pnpm e2e` has not been run this session and is not yet confirmed on `main`
-      — that is the next baseline job. No new ledger; just don't leave `main` broken overnight.
+      `pnpm e2e` confirmed green on the same tree: **260 passed in 6.8m**, no flakes. (The
+      `fault fixture: the render error` lines in that run are an intentional fixture, not a
+      failure.) So both halves of the baseline are green as of 2026-09-03.
+- [ ] Keep it green. No new ledger; just don't leave `main` broken overnight. If a timing test
+      starts flaking again, read the harness note in `src/tenancy/rollout.test.ts` first — the
+      failure mode there was a sample too short to measure under parallel-worker load, and it will
+      look like a real regression rather than an instrument problem.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 
