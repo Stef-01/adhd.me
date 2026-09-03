@@ -4176,3 +4176,52 @@ on disk, the register to the personas, no portrait twice, and never a real clini
 `pnpm e2e`; captures at 390 and 1280 from the production build.
 
 **Captures:** `qa/o241-results-390.png`, `qa/o241-results-map-1280.png`.
+
+## O243–O245 — more motion; the star; the Learn tab as ADHD learning; the listening screen uncluttered (2026-09-03)
+
+**Founder-directed.** "Add even more framer motion." "Make improve my matches a pop out so you
+press the star symbol, no label text. Also make the learning page look infinitely more aesthetic
+and completely redesign with impeccable design skill." "Remember the learn tab is to help people
+learn about ADHD and managing symptoms and little Buzzfeed-style trendy cutesy quizzes … It should
+not look vibe coded or blocky at all." "This looks terrible so fix, do thorough RCA and impeccable
+design audit and compare to Wispr Flow and other text-to-speech app interfaces that are far less
+cluttered."
+
+**Motion (O243).** The compose control morphs mic to arrow on a spring as the first character
+lands; the example link rises after the box; the results summary settles first, then the head,
+chips and rows; the profile's switch rows stagger in after hydration and its "n on" count pops;
+the Learn list and module hand over to each other; the tab glyph settles up. Every effect checks
+`useReducedMotion` and the AR20 census holds every motion-importing file to a hook, a prop or a
+declared boundary.
+
+**The star (O244).** "Improve my matches" is a star with no label, beside the map control, that
+opens the app's sheet with the questions; tapping one re-ranks and closes it. The specs that
+reached the chips through the old text now open the star.
+
+**Learn (O244).** The tab now teaches ADHD itself: two reading modules ("What ADHD is",
+"Everyday strategies" — eight cards of general information written against the patient-copy
+rules and linted by `progress.test.ts`), two knowledge quizzes ("Myth or fact?", "Words you'll
+hear") with a reveal per question and a score card that says the quiz was about ADHD and never
+about the reader, and the route-to-care three. An inverted route field opens the tab with a rail
+that fills as modules are finished; tinted cards on two shelves, no hairline boxes; inside, one
+card at a time with its number set large and faint. No quiz asks about the reader — the test
+refuses a prompt with "you"/"your" in it — because a quiz that sorted a person by symptoms would
+be the triage the founder gates forbid.
+
+**Listening (O245).** RCA: seven things competed for one job — a display headline, an example
+paragraph, the transcript in a third size, a 102px near-black microphone whose glyph said "start"
+on a screen already listening, a floating waveform, a two-line caption, a left-aligned full-width
+"Type instead", a four-line disclosure, then the language line with its choices stacked as pills.
+Wispr Flow, the iOS dictation surface and Otter do the opposite. Now: "Listening" is the small
+heading (the a11y landing line it always was), the transcript is the hero in serif and grows as
+words arrive, the one control carries five sound bars while it listens and the microphone glyph
+while it finishes, one caption, two chips side by side ("Type instead"; the language, opening its
+choices in place), the disclosure as one faint line. The language flow's specs open the chip first.
+
+**Verified.** `pnpm verify` green; voice, finder-a11y, finder-history, app-shell (with the quiz
+played through), matching-verification, finder-flow, landing, public-sweep, keyboard-focus,
+touch-floor, contrast, reduced-motion, public-foot, fold and a11y e2e; full `pnpm e2e`; captures
+at 390 and 1280 from the production build.
+
+**Captures:** `qa/o245-learn-390.png`, `qa/o245-learn-module-390.png`, `qa/o245-results-390.png`,
+`qa/o245-learn-1280.png`.
