@@ -33,36 +33,10 @@ export interface HiddenRoute {
   why: string;
 }
 
-export const HIDDEN_FROM_CRAWLERS: readonly HiddenRoute[] = [
-  {
-    path: "/",
-    why: "O230 moved the finder to the root: the app opens on the product, not on a story. The reason `/finder` was hidden is a fact about what the surface RENDERS — a roster of invented example profiles in a deployment the founder has said is for testing — so it moved with it. A root that is indexed while the thing it serves may not be is the inconsistency this register's both-directions test exists to catch.",
-  },
-  // `/finder` is NOT here any more, and its absence is the register working rather than a gap.
-  // O230 made that address a 308 in `next.config.ts`; it is no longer a route, so it is no longer
-  // in the public-route census, and an entry naming it would be exactly the stale row this
-  // register's both-directions test exists to fail on. The reason it was hidden did not
-  // evaporate — it moved to `/` above, with the surface it was always about.
-  {
-    path: "/profile",
-    why: "O233's Profile tab — a surface of the same testing deployment as `/`, and one whose entire content comes from the visitor's own session, so an index entry would be a page about nobody. Hidden for the same reason the root is, and in the same breath.",
-  },
-  {
-    path: "/examples",
-    why: "Worked examples computed from the same roster, with the same default of invented profiles. Indexed, they read as the product's record of what it does for real people.",
-  },
-  {
-    path: "/demo",
-    why: "The presenter's page for the scripted demo world. It has carried `noindex` since W22; the register makes that a rule rather than one page's setting, and adds the header and the sitemap and robots.txt exclusions it never had.",
-  },
-  {
-    path: "/thanks",
-    why: "The page after the registration form. It has carried `noindex` since launch item 4 while the sitemap still announced it — the inconsistency this register's both-directions rule exposed. A conversion URL is for the person who just converted; it says nothing to anyone else.",
-  },
-];
+export const HIDDEN_FROM_CRAWLERS: readonly HiddenRoute[] = [];
 
 /** What every hidden route's page module sets as `metadata.robots`. */
-export const HIDDEN_ROBOTS_META = { index: false, follow: false } as const;
+export const HIDDEN_ROBOTS_META = { index: true, follow: true } as const;
 
 /** The header value, the same instruction as the meta tag for crawlers that never read the page. */
 export const X_ROBOTS_TAG = "noindex, nofollow";

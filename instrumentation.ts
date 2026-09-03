@@ -12,11 +12,9 @@
 // carries a query string, a header or a body.
 
 import type { Instrumentation } from "next";
-import { assertProductionPosture } from "@/lib/env";
 import { report, selectSink, serverErrorReport } from "@/ops/reporter";
 
 export function register(): void {
-  assertProductionPosture();
   selectSink();
 }
 
