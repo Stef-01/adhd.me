@@ -39,7 +39,7 @@ import {
   type DistanceKm,
   type Filters,
 } from "@/finder/filters";
-import { coveredSuburbs, resolvePlace } from "@/geo/suburbs";
+import { resolvePlace, suggestPlaces } from "@/geo/suburbs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { AppSettings } from "./app-settings";
 
@@ -75,6 +75,12 @@ export function ProfileView() {
   }, []);
 
   /** Every change is written as it is made — there is no Save on a profile, because there is nothing to submit. */
+  // O251: the place suggestions — open while the field has focus and two characters, walked with
+  // the arrow keys, chosen with Enter or a tap, dismissed with Escape. The person chooses; the
+  // gazetteer never resolves a half-typed name on its own (W189).
+  const [placeOpen, setPlaceOpen] = useState(false);
+  const [placeActive, setPlaceActive] = useState(0);
+
   const update = (patch: Partial<Filters>): void => {
     setFilters((current) => {
       const next = { ...current, ...patch };
@@ -93,6 +99,27 @@ export function ProfileView() {
   const words = record?.request?.trim() ?? "";
   const place = filters.place;
   const origin = resolvePlace(place);
+  const suggestions = placeOpen ? suggestPlaces(place) : [];
+  const choosePlace = (suburb: string): void => {
+    update({ place: suburb });
+    setPlaceOpen(false);
+    setPlaceActive(0);
+  };
+  const onPlaceKey = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (suggestions.length === 0) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setPlaceActive((i) => (i + 1) % suggestions.length);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setPlaceActive((i) => (i - 1 + suggestions.length) % suggestions.length);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      choosePlace(suggestions[placeActive]?.suburb ?? suggestions[0]!.suburb);
+    } else if (event.key === "Escape") {
+      setPlaceOpen(false);
+    }
+  };
   const held = ready && (words.length > 0 || place.length > 0);
   const onCount = activeFilterCount(filters);
 
@@ -129,20 +156,40 @@ export function ProfileView() {
           <input
             id="me-place"
             name="place"
-            list="me-covered-suburbs"
             value={place}
-            onChange={(event) => update({ place: event.target.value.slice(0, 80) })}
-            placeholder="Beecroft"
-            autoComplete="address-level2"
+            onChange={(event) => { update({ place: event.target.value.slice(0, 80) }); setPlaceOpen(true); setPlaceActive(0); }}
+            onFocus={() => setPlaceOpen(true)}
+            onBlur={() => window.setTimeout(() => setPlaceOpen(false), 120)}
+            onKeyDown={onPlaceKey}
+            placeholder="Southport or 4215"
+            autoComplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={suggestions.length > 0}
+            aria-controls="me-place-options"
+            aria-activedescendant={suggestions.length > 0 ? `me-place-option-${placeActive}` : undefined}
           />
-          <datalist id="me-covered-suburbs">
-            {coveredSuburbs().map((suburb) => <option key={suburb} value={suburb} />)}
-          </datalist>
+          <ul id="me-place-options" className="me-place-options" role="listbox" aria-label="Places" hidden={suggestions.length === 0}>
+            {suggestions.map((s, index) => (
+              <li
+                key={`${s.suburb}-${s.postcode}`}
+                id={`me-place-option-${index}`}
+                role="option"
+                aria-selected={index === placeActive}
+                className={index === placeActive ? "me-place-option is-active" : "me-place-option"}
+                onMouseDown={(event) => { event.preventDefault(); choosePlace(s.suburb); }}
+                onMouseEnter={() => setPlaceActive(index)}
+              >
+                <span className="me-place-option-name">{s.suburb}</span>
+                <span className="me-place-option-code">{s.postcode}</span>
+              </li>
+            ))}
+          </ul>
           <p className="me-place-status">
             {place.trim() === ""
               ? "Nearer GPs come first among equal matches, and the map after you search is drawn from here."
               : origin
-                ? `Distances are measured from ${origin.suburb}.`
+                ? `Distances are measured from ${origin.suburb} (${origin.postcode}).`
                 : "We do not cover that location yet."}
           </p>
         </div>

@@ -9057,3 +9057,74 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 @media (prefers-contrast: more) {
   .me-chip, .clinician-row, .clarify-chip, .map-toggle, .results-summary { border-color: var(--ink); }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   O251 — THE GOLD COAST DEMO: a place chosen from a list, faces on the map.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+.me-place { position: relative; }
+.me-place-options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 4px 0 0;
+  padding: 4px;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--hero-dusk) 14%, transparent);
+}
+.me-place-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 2.75rem;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 560;
+  cursor: pointer;
+}
+.me-place-option.is-active { background: var(--stone); }
+.me-place-option-code { color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+
+.nearby-marker-pin.has-face {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
+  overflow: visible;
+  background: var(--surface-raised);
+}
+.nearby-marker-pin.has-face img {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+}
+.nearby-marker-key {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 2px solid var(--surface-raised);
+  border-radius: 999px;
+  background: var(--route-strong);
+  color: var(--on-ground);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { clinicians } from "@/demo/clinicians";
-import { SUBURBS, coveredSuburbs, describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "./suburbs";
+import { SUBURBS, coveredSuburbs, describeDistance, distanceKm, resolvePlace, type SuburbPoint, suggestPlaces } from "./suburbs";
 
 const at = (name: string) => resolvePlace(name)!;
 
@@ -29,11 +29,48 @@ describe("the gazetteer covers what the roster claims", () => {
       s.lat > -33.9 && s.lat < -33.6 && s.lon > 150.9 && s.lon < 151.2;
     const inEasternSuburbs = (s: SuburbPoint) =>
       s.lat > -33.95 && s.lat < -33.83 && s.lon > 151.2 && s.lon < 151.31;
+    // O251: the whole local-government area, Yatala to Coolangatta and the hinterland to
+    // Springbrook and Tamborine Mountain, plus Tweed Heads over the border and Brisbane City.
     const inGoldCoast = (s: SuburbPoint) =>
-      s.lat > -28.3 && s.lat < -27.8 && s.lon > 153.2 && s.lon < 153.6;
+      s.lat > -28.3 && s.lat < -27.7 && s.lon > 153.15 && s.lon < 153.6;
+    const isBrisbane = (s: SuburbPoint) => s.suburb === "Brisbane City";
     for (const s of SUBURBS) {
-      expect(inSydney(s) || inEasternSuburbs(s) || inGoldCoast(s), `${s.suburb} is outside both focus areas`).toBe(true);
+      expect(inSydney(s) || inEasternSuburbs(s) || inGoldCoast(s) || isBrisbane(s), `${s.suburb} is outside both focus areas`).toBe(true);
       expect(s.postcode).toMatch(/^\d{4}$/);
+    }
+  });
+});
+
+describe("O251 the Gold Coast, as a room of Gold Coast GPs would type it", () => {
+  it("resolves a postcode, and says which suburb it took", () => {
+    expect(resolvePlace("4220")?.suburb).toBe("Burleigh Heads");
+    expect(resolvePlace("4217")?.suburb).toBe("Surfers Paradise");
+  });
+  it("prefers the suburb the person also named when a postcode covers several", () => {
+    expect(resolvePlace("Main Beach 4217")?.suburb).toBe("Main Beach");
+    expect(resolvePlace("4217 benowa")?.suburb).toBe("Benowa");
+  });
+  it("ignores a state name, a comma and doubled spaces", () => {
+    expect(resolvePlace("Southport QLD")?.suburb).toBe("Southport");
+    expect(resolvePlace("Coolangatta, 4225")?.suburb).toBe("Coolangatta");
+    expect(resolvePlace("  helensvale   queensland ")?.suburb).toBe("Helensvale");
+    expect(resolvePlace("Tweed Heads NSW")?.postcode).toBe("2485");
+  });
+  it("still refuses to guess a half-typed name", () => {
+    expect(resolvePlace("Burleigh")).toBeNull();
+    expect(resolvePlace("Coolang")).toBeNull();
+  });
+  it("suggests from two characters, prefixes first, then contains, then postcodes", () => {
+    expect(suggestPlaces("b")).toEqual([]);
+    expect(suggestPlaces("burl").map((s) => s.suburb)).toEqual(["Burleigh Heads", "Burleigh Waters"]);
+    expect(suggestPlaces("coom").map((s) => s.suburb)).toEqual(["Coomera", "Coombabah", "Upper Coomera"]);
+    expect(suggestPlaces("422").map((s) => s.postcode).every((p) => p.startsWith("422"))).toBe(true);
+    expect(suggestPlaces("42").length).toBe(6);
+    expect(suggestPlaces("Southport")).toEqual([]);
+  });
+  it("covers every Gold Coast suburb a persona consults in", () => {
+    for (const name of ["Burleigh Heads", "Coolangatta", "Helensvale", "Nerang", "Varsity Lakes", "Palm Beach"]) {
+      expect(resolvePlace(name)?.suburb).toBe(name);
     }
   });
 });

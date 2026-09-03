@@ -46,7 +46,7 @@ Every row below is asserted against the live source by `ar-audit.test.ts`.
 | public accepted findings | 0 |
 | console accepted findings (data-vs-copy argued) | 2 |
 | standing flags / product flags | 2 / 1 |
-| zero-states classified | 34 (+2 not-a-zero) |
+| zero-states classified | 36 (+2 not-a-zero) |
 | store functions tenancy-classified (W209) | 87 across 12 modules |
 | touch-floor exemptions | 0 |
 | a11y exemptions (WCAG 2.2 AA, all 48 routes) | 0 |

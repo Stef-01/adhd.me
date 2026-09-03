@@ -251,6 +251,18 @@ export const ZERO_STATES: readonly ZeroState[] = [
     sentence: "Nobody on this list has rooms we can place near ",
     why: "O234: the list has rows but none has a consulting suburb the gazetteer can place near the person (telehealth-first, or rooms outside coverage) — the map ran and drew no stop, and the caption says so rather than showing an empty ring.",
   },
+  {
+    file: "app/profile-view.tsx",
+    kind: "no-results",
+    sentence: "We do not cover that location yet.",
+    why: "O251: the place suggestions — nothing in the gazetteer starts with, contains or has a postcode beginning with what was typed, so the list stays hidden and the status line under the field says the place is not covered rather than a guess being made.",
+  },
+  {
+    file: "app/profile-view.tsx",
+    kind: "no-results",
+    sentence: "We do not cover that location yet.",
+    why: "O251: the same empty list, read by the keyboard handler — with nothing to walk, the arrow keys and Enter do nothing rather than choosing a place the person did not see.",
+  },
 ];
 
 /** Branches whose zero arm renders nothing a reader meets — declared, so coverage can count them. */

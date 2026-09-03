@@ -1,3 +1,4 @@
+import { GOLD_COAST } from "@/geo/gold-coast";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -138,7 +139,8 @@ describe("clinician roster and matching", () => {
   it("keeps every clinician in one of the two focus areas", () => {
     const nsw = new Set(["Beecroft", "Cheltenham", "Pennant Hills", "Epping", "Hornsby"]);
     const easternSuburbs = new Set(["Double Bay", "Edgecliff", "Rose Bay", "Bondi Junction"]);
-    const goldCoast = new Set(["Southport", "Surfers Paradise", "Broadbeach", "Robina"]);
+    // O251: the Gold Coast is every suburb in the gazetteer's own list.
+    const goldCoast = new Set(GOLD_COAST.map((s) => s.suburb));
     const focusAreas = new Set([...nsw, ...easternSuburbs, ...goldCoast]);
 
     // O85: the check covers EVERY declared consulting location, not only the primary —

@@ -198,6 +198,14 @@ export const SPEC_TRIAGE: readonly SpecTriage[] = [
   { file: "usefulness.spec.ts", category: "single-route-feature", routes: ["/console/usefulness"], reason: "single console feature under test." },
   { file: "verticals.spec.ts", category: "single-route-feature", routes: ["/console/verticals"], reason: "single console feature under test." },
   { file: "voice.spec.ts", category: "single-route-feature", routes: ["/finder"], reason: "single patient feature under test." },
+  {
+    file: "place.spec.ts",
+    category: "single-route-feature",
+    routes: ["/profile", "/"],
+    reason:
+      "O251: the place field on the profile and the results map it feeds — postcodes, a suburb with " +
+      "its state, the suggestion list, faces on the markers. Two routes by design, not a sweep.",
+  },
 ];
 
 /**

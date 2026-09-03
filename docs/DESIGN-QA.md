@@ -4331,3 +4331,52 @@ public-sweep, landing, matching-verification and ownership-disclosure e2e (90 pa
 **Captures:** `qa/o249-listening-lang-390.png` (rows on one grammar), `qa/o249-learn-390.png`
 (the light clear of the sentence), `qa/o249-welcome-390.png`, `qa/o249-results-empty-390.png`,
 `qa/o249-profile-text130-390.png`.
+
+
+## O251 — the Gold Coast demo: every suburb, a postcode is a place, faces on the map (2026-09-03)
+
+**Founder-directed.** "Make sure for the live demo to the private GP crowd attending from all
+across Gold Coast, they are real clinics and thoroughly test map function including autofill for
+location or if you put postcode instead of suburb name too." Then: "Also make the GP faces live
+too."
+
+**The gazetteer.** `src/geo/gold-coast.ts`: seventy-one localities — every Gold Coast suburb
+from Yatala to Coolangatta and the hinterland to Springbrook and Tamborine Mountain, Tweed Heads
+across the border, Brisbane City — with OpenStreetMap centroids read once through Nominatim (one
+request a second, a named user agent, ODbL attribution beside the data) and Australia Post
+postcodes, the namesake suburb first within a postcode. Merged into `SUBURBS`; the Sydney focus
+areas untouched.
+
+**What a person can type.** `resolvePlace` reads a bare postcode ("4220" → Burleigh Heads), a
+suburb with its state ("Southport QLD"), a comma ("Coolangatta, 4225"), and a suburb beside its
+postcode ("Main Beach 4217", preferring the named suburb over the postcode's first). It still
+refuses to guess a half-typed name (W189). The profile's status line says which place was taken:
+"Distances are measured from Burleigh Heads (4220)."
+
+**Autofill, chosen by the person.** The profile's place field is a combobox: from two characters
+a list of at most six suggestions (name prefixes first, then names containing the text, then
+postcode prefixes), 44 px rows, arrow keys, Enter, Escape, a tap; the person chooses and the
+gazetteer never resolves a half-typed name on its own. The browser's own autofill is off so the
+two lists cannot overlap.
+
+**Faces on the map.** A marker is the first GP's portrait where the roster carries one — a
+credited stock portrait on an example profile, or one a real clinician supplied — with the row
+key as a badge; nothing generates a face. The touch floor (44 px) and the marker's accessible
+name are unchanged.
+
+**The coast, populated.** Six example personas moved from Sydney to Burleigh Heads, Coolangatta,
+Helensvale, Nerang, Varsity Lakes and Palm Beach (declarations and portraits unchanged), so the
+Gold Coast carries thirteen of the twenty examples; twenty stays twenty (G-SYN-3).
+
+**What this does not do, and why.** It adds no real Gold Coast clinic. A real clinician appears
+only with their own declaration (the console onboarding), never from a listing — the real-person
+law. The example profiles carry their testing disclosure on every surface. The room sees its own
+suburbs, its own postcodes and a populated map; it sees a real practice the day that practice
+declares itself.
+
+**Verified.** geo, roster, design and quality registers; `e2e/place.spec.ts` (postcode, state
+and comma forms, arrow-key and tap selection, postcode-prefix suggestions, the coast on the map,
+faces served from the tree's own origin, the `?place=4217` link); app-shell, profile, public
+sweep, matching, finder-flow, touch and keyboard specs; full `pnpm e2e`.
+
+**Captures:** `qa/o251-profile-suggestions-390.png`, `qa/o251-results-map-gold-coast-390.png`.

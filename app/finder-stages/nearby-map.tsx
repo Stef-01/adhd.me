@@ -50,12 +50,23 @@ function stopLabel(stop: MapStop): string {
   return `${stop.suburb}, ${km}: ${rowsPhrase(stop)}`;
 }
 
-/** A 44px target with the visible key inside it — the touch floor is the box, not the drawing. */
-function stopIcon(stop: MapStop): L.DivIcon {
+/**
+ * A 44px target with the visible key inside it — the touch floor is the box, not the drawing.
+ *
+ * O251 (founder-directed, "make the GP faces live too"): the marker is the first GP's portrait
+ * when there is one, with the row key as a badge, so the map reads as people rather than pins.
+ * Only portraits the roster already carries — a credited stock portrait on an example profile, or
+ * one a real clinician supplied — are ever drawn; nothing here generates a face. The `alt` is
+ * empty because the marker's own accessible name (`stopLabel`) already says who and where.
+ */
+function stopIcon(stop: MapStop, image: string | null): L.DivIcon {
   const key = stop.positions.length === 1 ? String(stop.positions[0]) : `${stop.positions[0]}+`;
+  const pin = image
+    ? `<span class="nearby-marker-pin has-face"><img src="${image}" alt="" width="36" height="36" loading="lazy" decoding="async"><b class="nearby-marker-key">${key}</b></span>`
+    : `<span class="nearby-marker-pin">${key}</span>`;
   return L.divIcon({
     className: "nearby-marker",
-    html: `<span class="nearby-marker-pin">${key}</span><span class="nearby-marker-label">${stop.suburb}</span>`,
+    html: `${pin}<span class="nearby-marker-label">${stop.suburb}</span>`,
     iconSize: [44, 44],
     iconAnchor: [22, 22],
   });
@@ -134,7 +145,7 @@ export function NearbyMap({
       const at = L.latLng(stop.point.lat, stop.point.lon);
       points.push(at);
       const first = shown[stop.positions[0]! - 1]!;
-      const marker = L.marker(at, { icon: stopIcon(stop), alt: stopLabel(stop), title: stopLabel(stop), riseOnHover: true });
+      const marker = L.marker(at, { icon: stopIcon(stop, first.image), alt: stopLabel(stop), title: stopLabel(stop), riseOnHover: true });
       // Leaflet writes `alt` on image icons only; a div icon is a button with no name until we
       // give it one, and the name is what a screen reader (and the e2e) reads. Set on `add`, the
       // moment the element exists, so a re-add after a zoom animation keeps it too.

@@ -80,6 +80,7 @@ const SET_BY_O247 = "2026-09-03";
 const SET_BY_O248 = "2026-09-03";
 const SET_BY_O249 = "2026-09-03";
 const SET_BY_O250 = "2026-09-03";
+const SET_BY_O251 = "2026-09-03";
 const SET_BY_O241 = "2026-09-03";
 const SET_BY_O241_MERGE = "2026-09-03";
 
@@ -350,6 +351,21 @@ export const RATCHET: readonly RatchetEntry[] = [
   { measure: 'vitest-lines', value: 53874, on: SET_BY_O250, reason: "O250: the roadmap test, plus the V-lane exclusion taught to the horizon and the two dossier tests." },
   { measure: 'src-lines', value: 55592, on: SET_BY_O250, reason: "O250: this register's own three rows." },
   { measure: 'src-unreached-lines', value: 24114, on: SET_BY_O250, reason: "O250: this register's own three rows." },
+  { measure: 'app-lines', value: 16433, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'src-modules', value: 306, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'src-lines', value: 55756, on: SET_BY_O251, reason: "O251: the gazetteer and the lookup, plus this register's own sixteen rows." },
+  { measure: 'src-reached-modules', value: 173, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'src-reached-lines', value: 31606, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'src-unreached-lines', value: 24150, on: SET_BY_O251, reason: "O251: the gazetteer data reached through suburbs.ts; the register's own rows counted here by its rule." },
+  { measure: 'src-single-importer-modules', value: 67, on: SET_BY_O251, reason: "O251: gold-coast.ts is imported by suburbs.ts alone — the gazetteer's data behind its one lookup module." },
+  { measure: 'css-lines', value: 9130, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'css-rule-blocks', value: 1594, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'css-styled-classes', value: 533, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'classname-attributes', value: 1817, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'vitest-lines', value: 53913, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'e2e-spec-files', value: 73, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'e2e-spec-lines', value: 8128, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
+  { measure: 'e2e-goto-calls', value: 299, on: SET_BY_O251, reason: "O251: the Gold Coast demo — the gazetteer module (71 localities), postcode and state-aware lookup with suggestions, the profile's combobox, faces on the map markers, place.spec.ts." },
 ];
 
 /** The current floor per measure: the last entry wins. */

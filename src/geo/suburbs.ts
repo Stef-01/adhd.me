@@ -25,6 +25,8 @@
 // ranking last. The two areas are hundreds of kilometres apart on purpose: distances are always
 // computed within an area, and a search resolves to whichever point the person names.
 
+import { GOLD_COAST } from "./gold-coast";
+
 export interface SuburbPoint {
   suburb: string;
   postcode: string;
@@ -46,33 +48,65 @@ export const SUBURBS: readonly SuburbPoint[] = [
   { suburb: "Edgecliff", postcode: "2027", lat: -33.8790, lon: 151.2360 },
   { suburb: "Rose Bay", postcode: "2029", lat: -33.8710, lon: 151.2700 },
   { suburb: "Bondi Junction", postcode: "2022", lat: -33.8912, lon: 151.2469 },
-  // Focus area 2 — the Gold Coast, QLD.
-  { suburb: "Southport", postcode: "4215", lat: -27.9676, lon: 153.4000 },
-  { suburb: "Surfers Paradise", postcode: "4217", lat: -28.0027, lon: 153.4309 },
-  { suburb: "Broadbeach", postcode: "4218", lat: -28.0333, lon: 153.4300 },
-  { suburb: "Robina", postcode: "4226", lat: -28.0700, lon: 153.3900 },
+  // Focus area 2 — the Gold Coast, QLD: every suburb, from `./gold-coast` (O251).
+  ...GOLD_COAST,
 ];
 
 const byName = new Map(SUBURBS.map((s) => [s.suburb.toLowerCase(), s]));
 
+/** Trailing state names and country, commas and doubled spaces — the noise around a place name. */
+const STATE_WORDS = /\b(nsw|qld|vic|wa|sa|tas|nt|act|new south wales|queensland|australia)\b/g;
+const normalise = (input: string): string =>
+  input.toLowerCase().replace(/,/g, " ").replace(STATE_WORDS, " ").replace(/\s+/g, " ").trim();
+
 /**
  * Resolve what somebody typed to a point, or null.
  *
- * Exact match only, on either the suburb name or the postcode. No fuzzy matching, for W189's
- * reason: a near-miss silently becoming a hit is the product deciding what somebody meant, and
- * here it would send them to the wrong side of Sydney. An unresolved input is reported as
- * unresolved so the surface can say so.
+ * Exact on the suburb name, or a four-digit postcode anywhere in what was typed — "4220",
+ * "Burleigh Heads 4220", "Southport QLD", "Coolangatta, 4225" all resolve; a state name and a
+ * comma are noise, not meaning. No fuzzy matching, for W189's reason: a near-miss silently
+ * becoming a hit is the product deciding what somebody meant, and here it would send them to the
+ * wrong side of the country. What a person half-typed is `suggestPlaces`'s job — a list they
+ * choose from, never a guess made for them. An unresolved input is reported as unresolved so the
+ * surface can say so.
  *
- * A postcode can cover several suburbs. The first is returned and the caller shows which, because
- * silently picking one of four and not saying is the same guess in a quieter voice.
+ * A postcode can cover several suburbs. When the typed text also names one of them, that one;
+ * otherwise the first, and the caller shows which (the surface prints "Suburb (postcode)"),
+ * because silently picking one of four and not saying is the same guess in a quieter voice.
  */
 export function resolvePlace(input: string): SuburbPoint | null {
-  const cleaned = input.trim().toLowerCase();
+  const cleaned = normalise(input);
   if (!cleaned) return null;
   const exact = byName.get(cleaned);
   if (exact) return exact;
-  if (/^\d{4}$/.test(cleaned)) return SUBURBS.find((s) => s.postcode === cleaned) ?? null;
+  const postcode = /(?:^|\s)(\d{4})(?:\s|$)/.exec(cleaned)?.[1];
+  if (postcode) {
+    const named = SUBURBS.find((s) => s.postcode === postcode && cleaned.includes(s.suburb.toLowerCase()));
+    return named ?? SUBURBS.find((s) => s.postcode === postcode) ?? null;
+  }
   return null;
+}
+
+/**
+ * O251: the places a half-typed input could mean, for the profile's suggestion list.
+ *
+ * Name prefixes first (what somebody is most likely still typing), then names containing the
+ * text, then postcode prefixes — at most `limit`, in gazetteer order within each band. Two
+ * characters or more; a single letter would list half the coast. The person picks; nothing here
+ * resolves anything on its own.
+ */
+export function suggestPlaces(input: string, limit = 6): SuburbPoint[] {
+  const cleaned = normalise(input);
+  if (cleaned.length < 2) return [];
+  const bands: SuburbPoint[][] = [[], [], []];
+  for (const s of SUBURBS) {
+    const name = s.suburb.toLowerCase();
+    if (name === cleaned) continue;
+    if (name.startsWith(cleaned)) bands[0]!.push(s);
+    else if (name.includes(cleaned)) bands[1]!.push(s);
+    else if (/^\d{2,4}$/.test(cleaned) && s.postcode.startsWith(cleaned)) bands[2]!.push(s);
+  }
+  return bands.flat().slice(0, limit);
 }
 
 const EARTH_KM = 6371;
