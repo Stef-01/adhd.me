@@ -4,7 +4,7 @@
 
 import { ArrowLeft } from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
-import { locationLabel, type Clinician } from "@/demo/clinicians";
+import { bookingHandoff, locationLabel, type Clinician } from "@/demo/clinicians";
 import { bookingAnnouncement } from "@/finder/announce";
 import { MotionScreen, StatusLine, Wordmark } from "./shared";
 
@@ -17,6 +17,7 @@ export function BookingStage({
   focusOnArrival: boolean;
   onBack: () => void;
 }) {
+  const handoff = bookingHandoff(clinician);
   return (
     <MotionScreen key="booking" className="booking-screen" focusOnArrival={focusOnArrival}>
       <StatusLine line={bookingAnnouncement(clinician.shortName)} />
@@ -88,8 +89,10 @@ export function BookingStage({
 
       {/* O231: the outbound control exists only where there is somewhere real to go. A
           practice-booked entry with no listing ends on the route itself, which is a true terminal
-          state and a designed one — not a disabled button, and not a link to a fabricated page. */}
-      {clinician.booking.via === "synthetic-none" ? null : (
+          state and a designed one — not a disabled button, and not a link to a fabricated page.
+          `bookingHandoff` returns null for exactly that case, so the absence of the control and
+          the words on it are now one decision rather than two reads of `via` that could diverge. */}
+      {handoff === null ? null : (
       <div className="bottom-action">
         {/* Routed through /go/<id> (O28): outbound booking intent becomes countable per
             clinician from this domain's own logs, with nothing stored — see the route's
@@ -105,11 +108,18 @@ export function BookingStage({
           // identifier travels with it; the payload is the same two fields /go logs.
           onClick={() => track("booking_outbound", { clinician: clinician.id, surface: "finder" })}
         >
-          {clinician.booking.via === "healthengine"
-            ? "See times on Healthengine"
-            : "Open the practice page"}
+          {handoff.label}
         </a>
-        <p>Opens Healthengine in a new tab.</p>
+        {/* THE CAPTION NOW NAMES THE DESTINATION THE BUTTON ACTUALLY HAS. It read a flat "Opens
+            Healthengine in a new tab." under a button that says "Open the practice page" — this
+            block renders for BOTH remaining routes, and on the `practice` route the link is the
+            practice's own `booking.url`, which is not Healthengine and by definition never was
+            (that variant exists precisely because the clinician is not synced to any online
+            platform). Every other sentence on this screen was branched on `via` and this one
+            alone was not, so the one line whose whole job is to say where a reader is about to be
+            sent named the wrong place — on the exit point. Both strings come from
+            `bookingHandoff` so they can no longer drift apart; see the note there. */}
+        <p>{handoff.caption}</p>
         {/* Attribution layer 3 (docs/BOOKING-ATTRIBUTION.md): Healthengine asks new
             patients how they heard about the practice, and the practice sees the
             answer. One factual sentence, no incentive, no claim. */}

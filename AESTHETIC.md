@@ -153,7 +153,55 @@ and a one-line commit message are the record.
       unchanged. Covered by `src/demo/order-note.test.ts` (6 property tests tied to `matchQuality`,
       not to wording) and one e2e walk asserting the earned and unearned states are not
       confusable. 261 e2e green.
-- [ ] `booking-stage.tsx` — the exit point; confirm it's unambiguous and low-friction on mobile.
+- [x] `booking-stage.tsx` (2026-09-04) — the exit point was **ambiguous in the one sentence whose
+      job is to remove ambiguity, and it lost bottom room in the one mode that needs it most.**
+      Three defects, all on the last screen before a reader leaves the product.
+      **1. The caption named the wrong destination.** The outbound button's label was branched on
+      `booking.via` ("See times on Healthengine" / "Open the practice page") and the caption under
+      it was a flat `Opens Healthengine in a new tab.` for both routes. On the `practice` route the
+      href resolves to the practice's own `booking.url` — and that variant exists *because* the
+      clinician is "not synced to any online platform" — so the line telling a reader where they
+      were about to be sent named the single destination it provably was not. Every other sentence
+      on the screen is branched on `via`; this one alone was not. Unreachable from the live roster
+      (both real entries are `healthengine`), which is exactly why no screenshot pass or e2e walk
+      could have caught it, and why the fix is a pure function with a unit test rather than another
+      ternary: `bookingHandoff` in `src/demo/clinicians.ts` returns the label and the caption
+      *together* from one `switch`, and returns `null` for `synthetic-none` so the absence of the
+      control and the words on it are one decision instead of two reads of `via` that can diverge.
+      `src/demo/booking-handoff.test.ts` (6 tests) pins the relationship that actually broke — a
+      handoff names Healthengine in its caption **iff** it names Healthengine in its label — over
+      every `via` the type admits, plus new-tab disclosure on every route that has a control, and
+      it was mutation-checked (reinstating the flat string fails 2 of the 6).
+      **2. Installed display took 10–12px of bottom padding away from the exit control.** A
+      `@media (display-mode: standalone)` block set `padding-bottom: max(16px, var(--safe-bottom))`
+      on `.patient-v2 .bottom-action`, `.patient-v2 .profile-footer`, `.story-sticky-cta` and
+      `.consent-bar`, on the premise that "the app supplies the insets" once browser chrome is
+      gone. That premise is false for all four, and `viewportFit: "cover"` in `app/layout.tsx` is
+      why — **the insets are live in an ordinary tab too**, so every one of those rules already
+      resolved `env()` correctly in both modes, and the override only replaced each element's own
+      designed padding with a flat floor: the finder's exit went from a `max(26px, env())` floor to
+      `max(16px, …)`, and the profile footer and story CTA went from *additive* `calc(12px +
+      env())` / `calc(10px + env())` to a flat `max(16px, …)`, which on a 34px-inset phone is 46px→
+      34px and 44px→34px — the design padding vanishing entirely and the primary button coming to
+      rest on the home indicator. So the installed app, the mode with no chrome and the control
+      nearest the indicator, was the only mode that got *less* room, and it cost the finder's exit,
+      the profile's exit and the story's CTA. Deleted rather than raised to a bigger floor: there
+      is no correct single floor for four elements with three different designed paddings, and each
+      already states its own. The header half of the block is kept — `.site-nav-inner`,
+      `.story-header-inner` and `.cv2-header` genuinely have no `safe-top` of their own.
+      **3. The small print was 10px, and inverted.** `.patient-v2 .bottom-action > p` was
+      `0.625rem` — ten pixels, centred, in `--faint`, smaller than anything else the app draws on
+      purpose (next smallest deliberate step is `0.6875rem`). Two finder lines use it and both
+      carry an instruction: booking's new-tab disclosure and the type screen's "Don't include
+      identifying or urgent health details". It sat directly beside `.booking-heard` at
+      `0.8125rem`, so the *loudest* small text on the booking screen was the optional "you can say
+      ADHD.ME" nudge and the quietest was the disclosure — the hierarchy exactly backwards. Both
+      are now `0.75rem`: up from 10px for the lines that instruct, down from 13px for the one that
+      suggests. One size, because they are one class of thing — a caption under a control — and
+      what separated them was not emphasis but which one mattered more. Contrast was already
+      passing and is unchanged (`--faint` `#626b7b` on `--paper` `#f7f8fc` is 5.06:1); the defect
+      was size alone.
+      `pnpm verify` green (3698 unit tests, 6 of them new); `pnpm e2e` **262 passed in 7.0m**.
 - [x] `shared.tsx` / the fixed finder shell (2026-09-04) — **the container queries were never
       running.** Three finder rules size in `cqw` (the welcome question's `4.4cqw`, the type
       question's `4.4cqw`, and a `5cqw` inline padding on `.voice-core`), and nothing in the tree

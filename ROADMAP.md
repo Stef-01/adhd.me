@@ -55,10 +55,50 @@ polish the existing shell, question it.
       green, `pnpm e2e` at 261 passed in 7.1m, no flakes (262 with the type-screen guard added after
       that run; that spec file re-run green on its own). Re-confirmed 2026-09-04 after the finder
       shell was given the container context its `cqw` rules had always assumed: `pnpm verify` green,
-      `pnpm e2e` **262 passed in 7.0m**, no flakes.
+      `pnpm e2e` **262 passed in 7.0m**, no flakes. Re-confirmed again 2026-09-04 after the
+      booking-stage pass: `pnpm verify` green (3698 unit tests) and `pnpm e2e` **262 passed in
+      7.0m**, no flakes — though it took four attempts to get one trustworthy run, for reasons now
+      written up in the two traps below, all of them process contention and none of them the app.
       **One trap worth knowing:** killing `pnpm e2e` mid-run leaves a half-written `.next`, and the
       next build dies with `TypeError: a[d] is not a function ... Error occurred prerendering page
       "/"`. That reads exactly like a product regression and is not one — `rm -rf .next` and rebuild.
+      **And a second one, which is why every session picks a new port.** On Windows `pnpm e2e`
+      **strands its own server.** `playwright.config.ts` runs `webServer.command` as
+      `next build && next start -p ${PORT}`, so `next start` is a *grandchild* of the shell
+      Playwright spawns; Playwright kills the shell and the grandchild survives. Every run leaves a
+      `next start` listening on its port forever, which is the real reason the port has to be
+      changed each session — the old ones are still occupied — and the strays are not idle, they
+      compound. Found on 2026-09-04 with **five** abandoned servers listening (3455, 3471, 3472,
+      3475, 3491, started 01:52 through 07:06) and 46 `node` processes, and the cost was legible in
+      the suite itself: the same tree ran **262 passed in 7.2m** early in the session and then
+      **8 failed / 254 passed in 8.3m** later, with all eight failures in one spec file
+      (`finder-flow.spec.ts`), all of them 20s timeouts waiting for `.clinician-list`, and all 17
+      tests in that file passing in isolation. That is contention, not a regression — the exact
+      instrument-vs-product confusion this item warns about, in a new place. Killing the five
+      strays took `node` from 46 processes to 17.
+      **AND THE STRANDED SERVERS ARE THE SMALL HALF OF IT.** Chasing the above turned up the
+      bigger leak: `pnpm e2e` can strand *the entire run* — `pnpm e2e` → `playwright test` →
+      `pnpm exec next build` → `next build`, five live processes — long after the foreground
+      command has exited and reported. That is worse than a stranded `next start`, because a
+      stranded `next start` only competes for CPU whereas **a stranded `next build` is writing
+      `.next` while you are.** Two builds in one directory is what actually produced the
+      "corrupted `.next`" signature at the top of this note, and it produced a second and third
+      face of the same thing, so all three are one root cause:
+        * `TypeError: a[d] is not a function` prerendering `/` (a chunk read while being rewritten)
+        * `ENOENT: ... open '.next/server/pages-manifest.json'`
+        * `PageNotFoundError: Cannot find module for page: /_document`
+      Every one of those names a page or a file and reads like a product or dependency fault; none
+      of them names the process that caused it. On 2026-09-04 `rm -rf .next` followed by `pnpm
+      build` failed three times in a row with those three errors while a leaked `next build` from
+      an earlier run was still going, and then succeeded first try — with no source change at all
+      — the moment that tree was killed. So `rm -rf .next` is the *second* step, not the first, and
+      on its own it will look like it did not work.
+      **The check, in order, before believing any e2e or build failure:**
+      `Get-CimInstance Win32_Process -Filter "Name='node.exe'"` and look for any `adhd.me`,
+      `next build`, `next start` or `playwright test` in the command lines (a listening-port sweep
+      alone will NOT find a stranded `next build` — it has no port); kill that whole tree; *then*
+      `rm -rf .next`; *then* build; *then* run the suite, serially, with nothing else touching the
+      repo. Do not run `pnpm verify` and `pnpm e2e` concurrently — they share `.next`.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 

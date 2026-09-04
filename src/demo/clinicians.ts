@@ -562,6 +562,38 @@ export function closedBooksNote(clinician: Clinician, query: string): string | n
   return matchEvidence(clinician, query).length > 0 ? CLOSED_BOOKS_COPY : CLOSED_BOOKS_NEUTRAL_COPY;
 }
 
+/**
+ * THE OUTBOUND CONTROL'S LABEL AND ITS CAPTION, MADE ONE VALUE SO THEY CANNOT DISAGREE AGAIN.
+ *
+ * They did disagree. `booking-stage.tsx` branched the button label on `booking.via` ("See times on
+ * Healthengine" / "Open the practice page") and then wrote the caption under it as a flat string —
+ * "Opens Healthengine in a new tab." — for both routes. On the `practice` route the link is the
+ * practice's own `booking.url`, and that variant exists *because* the clinician is not synced to
+ * any online platform, so the caption named the one destination it provably was not. On the exit
+ * point, in a product whose argument is that it does not make claims it cannot hold.
+ *
+ * The fix is not a second ternary. Two facts about one link, derived separately from the same
+ * discriminant, is the shape that let them drift — so the label and the caption are now produced
+ * together, from one `switch`, and `booking-handoff.test.ts` asserts the invariant that broke: a
+ * handoff mentions Healthengine in its caption if and only if it mentions Healthengine in its
+ * label. Returns `null` for `synthetic-none`, which has no url and therefore no control — the
+ * terminal state O231 designed, rather than a disabled button or a link to a fabricated page.
+ */
+export type BookingHandoff = { label: string; caption: string };
+
+export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
+  switch (clinician.booking.via) {
+    case "healthengine":
+      return { label: "See times on Healthengine", caption: "Opens Healthengine in a new tab." };
+    case "practice":
+      // The practice is named in the paragraph above this control, so the caption stays generic
+      // rather than repeating it a third time on one screen (O231's rule for this screen).
+      return { label: "Open the practice page", caption: "Opens the practice’s own page in a new tab." };
+    case "synthetic-none":
+      return null;
+  }
+}
+
 /** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   informed: "",

@@ -776,7 +776,9 @@ summary:focus-visible {
 .booking-heard {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 0.8125rem;
+  /* 0.75rem, matching `.patient-v2 .bottom-action > p` — see the note there. This was 0.8125rem,
+     which made the screen's most optional sentence its largest piece of small print. */
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -1811,7 +1813,21 @@ summary:focus-visible {
 }
 
 .patient-v2 .bottom-action > p {
-  font-size: 0.625rem;
+  /* ONE SIZE FOR THE SMALL PRINT UNDER THE PRIMARY BUTTON, and it was 0.625rem — TEN PIXELS,
+     centred, in `--faint`. Two lines in the finder use it and both are the kind of sentence a
+     reader is entitled to actually read: the booking screen's "Opens … in a new tab", which is
+     the only warning that the next tap leaves the product, and the type screen's "Don't include
+     identifying or urgent health details", which is a privacy instruction. Ten pixels is smaller
+     than anything else the app draws on purpose (the next smallest deliberate step is 0.6875rem)
+     and it sat directly beside `.booking-heard` at 0.8125rem — so on the booking screen the
+     LOUDEST small text was the optional "you can say ADHD.ME" nudge and the quietest was the
+     disclosure, which is the hierarchy exactly inverted. Both are now 0.75rem: up from 10px for
+     the two that carry an instruction, down from 13px for the one that carries a suggestion. One
+     size, because they are one class of thing — a caption under a control — and the difference
+     between them is not a difference in emphasis, it is that one of them mattered more. Contrast
+     is unchanged and was already passing (`--faint` #626b7b on `--paper` #f7f8fc is 5.06:1); the
+     defect here was size alone. */
+  font-size: 0.75rem;
 }
 
 
@@ -6682,12 +6698,35 @@ select { caret-color: var(--route-strong); }
     padding-top: var(--safe-top);
   }
 
-  .story-sticky-cta,
-  .patient-v2 .bottom-action,
-  .patient-v2 .profile-footer,
-  .consent-bar {
-    padding-bottom: max(16px, var(--safe-bottom));
-  }
+  /* THE BOTTOM HALF OF THIS BLOCK USED TO SIT HERE AND IT TOOK SPACE AWAY INSTEAD OF ADDING IT.
+     It set `padding-bottom: max(16px, var(--safe-bottom))` on the finder's exit control, the
+     profile footer, the story CTA and the consent bar — on the premise, stated in the comment
+     above, that the app has to supply the insets once the browser chrome is gone. That premise is
+     false for these four, and `viewportFit: "cover"` in `app/layout.tsx` is why: the insets are
+     LIVE IN AN ORDINARY TAB TOO, so every one of these rules already resolved `env()` correctly in
+     both modes before this override ran, and all this did was replace each element's own designed
+     padding with a flat 16px floor:
+
+       .patient-v2 .bottom-action  `max(26px, env(...))`     → `max(16px, ...)`  — floor cut by 10px
+       .patient-v2 .profile-footer `calc(12px + env(...))`   → `max(16px, ...)`  — on a 34px-inset
+       .story-sticky-cta           `calc(10px + env(...))`   → `max(16px, ...)`    phone, 46px→34px
+                                                                                   and 44px→34px:
+                                                                                   the additive
+                                                                                   design padding
+                                                                                   disappears and
+                                                                                   the button sits
+                                                                                   on the home
+                                                                                   indicator
+       .consent-bar                a floating card whose inset comes from `bottom:
+                                   max(18px, var(--safe-bottom))`, not from padding at all
+
+     So the installed app — the mode with no browser chrome, where the primary control is nearest
+     the home indicator and wants MORE room — was the one mode that got less of it, and the three
+     surfaces this cost were the finder's exit, the profile's exit, and the story's call to action.
+     Deleted rather than raised to `max(26px, ...)`: there is no correct single floor for four
+     elements with three different designed paddings, and each of them already states its own. The
+     header half above is kept, because `.site-nav-inner`, `.story-header-inner` and `.cv2-header`
+     genuinely have no `safe-top` of their own. */
 }
 
 /* Responsive composition -------------------------------------------------- */
