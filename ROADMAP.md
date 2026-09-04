@@ -51,8 +51,8 @@ polish the existing shell, question it.
       starts flaking again, read the harness note in `src/tenancy/rollout.test.ts` first — the
       failure mode there was a sample too short to measure under parallel-worker load, and it will
       look like a real regression rather than an instrument problem. Standing item, never ticked.
-      Last confirmed green 2026-09-03 after the focus-ring and map-marker CSS: `pnpm verify` at
-      3686 tests over 225 files, `pnpm e2e` at 260 passed in 6.8m, no flakes.
+      Last confirmed green 2026-09-03 after the compare-stage regrouping: `pnpm verify` at
+      3686 tests over 225 files, `pnpm e2e` at 260 passed in 6.7m, no flakes.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 

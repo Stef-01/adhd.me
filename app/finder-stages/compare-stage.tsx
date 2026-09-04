@@ -27,29 +27,43 @@ export type CompareRow = { label: string; left: boolean; right: boolean };
  * Differences first: they are the only rows that can decide anything. Then what both answer,
  * which is why the two were shown together. Then what neither does — the listing gap the
  * finder already says out loud on the results screen, said here about these two.
+ *
+ * ONLY ONE GROUP IS A TABLE, and that is the point of this screen. Two of the three headings
+ * already fix both verdicts: under "Both declare" every cell said "Declared" and under
+ * "Neither declares" every cell said "Not declared", so up to two-thirds of the verdicts on
+ * the screen restated their own heading, in columns, twice per row. A comparison table earns
+ * its columns by putting two different answers next to each other; where the answers cannot
+ * differ there is nothing to put side by side, and the columns are scanning cost with no
+ * information behind them. Those groups are now plain lists of the asks, and the heading
+ * carries the verdict for all of them — which is also the sentence a screen reader gets,
+ * unchanged, because the heading is read before its list. `columns` is the switch.
  */
 const GROUPS: ReadonlyArray<{
   key: "differ" | "both" | "neither";
   heading: string;
   note: string | null;
+  columns: boolean;
   holds: (row: CompareRow) => boolean;
 }> = [
   {
     key: "differ",
     heading: "Where they differ",
     note: null,
+    columns: true,
     holds: (row) => row.left !== row.right,
   },
   {
     key: "both",
-    heading: "Both",
+    heading: "Both declare",
     note: null,
+    columns: false,
     holds: (row) => row.left && row.right,
   },
   {
     key: "neither",
-    heading: "Neither",
+    heading: "Neither declares",
     note: "That is a gap in our listing, not in what you asked for.",
+    columns: false,
     holds: (row) => !row.left && !row.right,
   },
 ];
@@ -118,24 +132,47 @@ export function CompareStage({
             {/* The other GP's name is a way to their profile, not just a column label: somebody
                 who reads this table and prefers the right-hand column should not have to go
                 back two screens to act on it. */}
-            <button type="button" className="compare-open" onClick={onOpenRight}>
+            <button
+              type="button"
+              className="compare-open"
+              // The visible name is the whole control, which leaves a screen reader hearing a
+              // person's name and a role and no idea what pressing it does. The label says.
+              aria-label={`Open ${right.shortName}'s profile`}
+              onClick={onOpenRight}
+            >
               {right.shortName}
             </button>
           </div>
         </div>
 
+        {/* The heads above are a table head only while a table follows them. When these two
+            answered every ask the same way there is nothing to decide between, and saying so
+            is more use than a reader scanning three groups to work it out themselves. */}
+        {rows.length > 0 && !rows.some((row) => row.left !== row.right) && (
+          <p className="compare-same">
+            These two answer everything you asked for the same way.
+          </p>
+        )}
+
         {GROUPS.map((group) => {
           const inGroup = rows.filter(group.holds);
           if (inGroup.length === 0) return null;
           return (
-            <section className="compare-group" key={group.key}>
+            <section
+              className={group.columns ? "compare-group" : "compare-group is-list"}
+              key={group.key}
+            >
               <h2>{group.heading}</h2>
               <ul>
                 {inGroup.map((row) => (
                   <li key={row.label}>
                     <span className="compare-ask">{row.label}</span>
-                    <Cell answered={row.left} who={left.shortName} ask={row.label} />
-                    <Cell answered={row.right} who={right.shortName} ask={row.label} />
+                    {group.columns && (
+                      <>
+                        <Cell answered={row.left} who={left.shortName} ask={row.label} />
+                        <Cell answered={row.right} who={right.shortName} ask={row.label} />
+                      </>
+                    )}
                   </li>
                 ))}
               </ul>

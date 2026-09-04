@@ -63,8 +63,28 @@ and a one-line commit message are the record.
       harder to see under a setting asking for the opposite. That override deliberately sits below
       `.has-face` in the file: a media query adds no specificity, so an equally-specific rule
       declared later would otherwise beat it.
-- [ ] `compare-stage.tsx` — the comparison view is cognitively the heaviest screen in the flow;
-      make sure it isn't presenting more than one consequential decision at once.
+- [x] `compare-stage.tsx` (2026-09-03) — it was presenting one decision, but it was charging for
+      three tables to do it. **Two of the three groups were columns with nothing in them.** The
+      screen groups asks into "where they differ", "both" and "neither", and every group rendered
+      the same three-column grid with a verdict cell per GP. But the heading of the second and
+      third group already fixes both verdicts: under "Both" every cell read "Declared", under
+      "Neither" every cell read "Not declared". On the suite's own multi-ask request that is up to
+      two-thirds of the verdicts on screen restating their own heading, twice per row, in the
+      columns a reader has to track across. Columns are earned by two answers that can differ;
+      where they cannot, they are scanning cost with no information behind them. Only "Where they
+      differ" is a table now. The other two are plain lists of the asks, same rule, same padding,
+      same type, and the ask gets the full measure instead of 1fr of three. **The verdict moved
+      into the heading rather than being deleted:** "Both" → "Both declare", "Neither" →
+      "Neither declares", so the sentence a screen reader gets is unchanged — a heading is read
+      before its list — and the two bare headings that never said *both what?* now say it.
+      **The heads are a table head only while a table follows them,** so when the two answer every
+      ask identically (differ group empty) the screen now says so in one line under the heads
+      instead of leaving the reader to derive it from three group headings. **And the one control
+      in the heads was unnamed:** the right-hand column's name is a button to that profile, and
+      its whole accessible name was a person's name — a screen reader heard "Dr X, button" with no
+      indication of what pressing it does. It carries `aria-label="Open {name}'s profile"` now.
+      No score, no total, no accent on either column — that posture is untouched, and the e2e
+      test that forbids ranking vocabulary in the body still passes. 260 e2e green.
 - [ ] `results-stage.tsx` — result ordering explanation should be visible, not just correct
       (ties to Roadmap Q4 "why this order" item).
 - [ ] `booking-stage.tsx` — the exit point; confirm it's unambiguous and low-friction on mobile.
@@ -142,6 +162,13 @@ and a one-line commit message are the record.
       worse than none: the next reader believes both themes are covered and stops checking.
       Building dark mode was deliberately *not* done here — it is a founder call on the brand
       (see "Explicitly not doing"), not a refinement task.
+- [x] Palette header (2026-09-03) — `globals.css` opened with **two** "THE PALETTE" blocks, stacked,
+      appended one accent change apart. The second still quoted `#8A5A16` with contrast figures for
+      a colour the tree no longer uses; `--accent` is `#a14f19`. Two descriptions of one palette is
+      worse than one: the reader believes whichever they hit first. Merged into a single block with
+      the current token, measured figures for it (5.42:1 on `--paper`, 5.76:1 on white — computed,
+      not carried over), and a pointer to the "THERE IS NO DARK MODE" note further down so the
+      one-theme rule and its reason sit one search apart. No token values changed.
 - [ ] Type scale: confirm optical sizing (not just linear scaling) between the finder's large,
       single-idea headlines and the console's dense tabular text.
 

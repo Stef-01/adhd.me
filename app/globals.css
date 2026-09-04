@@ -41,14 +41,17 @@
    not pass it.
    =========================================================================== */
 
-/* THE PALETTE. One theme, one accent, one place to change either.
-   Neutrals are warm-olive at low lightness, which is the hue the tree has always used;
-   they are darkened rather than re-hued so nothing else has to move.
-   The accent is amber. It replaced Crushed Rose, which replaced sage before it, and the
-   token is finally NAMED for its job rather than for a colour it used to be. */
-/* THE PALETTE. Light paper, warm-olive neutrals, one amber accent.
-   #8A5A16 measures 5.66:1 as text on paper and 5.91:1 under white, so it works as a colour and
-   as a ground. Change either here and every surface follows. */
+/* THE PALETTE. Light paper, one amber accent, one place to change either.
+   There is no second theme — see "THERE IS NO DARK MODE" further down this file.
+   The accent is `--accent` #a14f19. It replaced Crushed Rose, which replaced sage before it,
+   and the token is finally NAMED for its job rather than for a colour it used to be; it
+   measures 5.42:1 as text on --paper and 5.76:1 on white, so it works as a colour and as a
+   ground. Change it here and every surface follows.
+
+   This header was two headers until now, appended one accent change apart, and the second
+   still quoted #8A5A16 with contrast figures for a colour the tree stopped using. Two
+   descriptions of one palette is worse than none: the reader believes whichever they hit
+   first. One block, current values, measured rather than remembered. */
 :root {
   color-scheme: light;
 
@@ -987,6 +990,13 @@ summary:focus-visible {
   border-top: 1px solid var(--line);
 }
 .compare-group li:first-child { border-top: 0; }
+/* "Both declare" and "Neither declares" fix the verdict in the heading, so those rows have
+   nothing to put in a second or third column. They keep the same rhythm — the rule, the
+   padding, the ask's type — and give the ask the full measure instead of 1fr of three. */
+.compare-group.is-list li {
+  display: block;
+  grid-template-columns: none;
+}
 .compare-ask {
   font-size: 0.9375rem;
   line-height: 1.4;
@@ -1001,6 +1011,7 @@ summary:focus-visible {
   font-size: 0.8125rem;
 }
 .compare-cell.is-listed { color: var(--ink); }
+.compare-same,
 .compare-note,
 .compare-basis {
   margin: 10px 0 0;
@@ -1009,6 +1020,8 @@ summary:focus-visible {
   line-height: 1.5;
   max-width: 52ch;
 }
+/* Sits directly under the heads, where the table would have been. */
+.compare-same { margin-top: 16px; }
 .compare-basis {
   margin-top: 26px;
   padding-top: 14px;
