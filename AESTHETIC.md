@@ -19,11 +19,29 @@ and a one-line commit message are the record.
 
 ## Finder (`app/finder-stages/*`) — patient-facing, mobile-first, highest priority
 
-- [ ] `welcome-stage.tsx` — first impression; confirm hierarchy reads in under 2 seconds on a
-      small phone screen with one hand.
-- [ ] `listening-stage.tsx` — voice + typed input; the O246/O247 work already pushed this toward
-      "reads from the top, control near the thumb, one disclosure line." Verify that still holds
-      and hasn't drifted since.
+- [x] `welcome-stage.tsx` (2026-09-03) — **hierarchy reads:** question → compose box → example
+      link → disclaimer, one column, nothing competing; the mic sits inside the box at thumb
+      height. Two things were wrong and are fixed. **The wordmark moved between screens:**
+      `.minimal-header.has-settings` was a `44px 1fr 44px` grid that centred the mark, and it was
+      the only header in the app that did — welcome, `/approach` and the Profile tab centred while
+      the other seven finder stages left-aligned the same `Wordmark`, so the flow's very first
+      transition (welcome → listening) slid the brand mark ~130px sideways. It is now `1fr 44px`,
+      mark on the leading edge, which is the majority rule and the honest one: the wordmark is a
+      home link, not a screen title. All three call sites render exactly two children, and the
+      24px padding comes from the base `.minimal-header`, so the leading edge is now identical
+      across every stage. **The disclaimer was the odd alignment out:** it was centred inside a
+      52ch measure while the question, compose box and example link all sat on the shell gutter —
+      one screen, two alignments. Now left, same gutter. **Copy:** the bare "Sydney." opening a
+      disclaimer read as a coverage claim the tree doesn't support in either direction (the
+      gazetteer covers northern Sydney *and* the Gold Coast, but only Beecroft/Double Bay entries
+      carry `realPerson`), so it now says what is actually true of the listing —
+      "Listed doctors consult in Sydney" — and leaves gazetteer coverage to `coverage-map.tsx`.
+- [x] `listening-stage.tsx` (2026-09-03) — verified the O246/O247 shape still holds and has not
+      drifted: reads from the top (LISTENING eyebrow → "Say what you're looking for…"), the tap
+      target sits low near the thumb, "Type instead" is the one escape, and there is exactly one
+      disclosure line at the foot. Nothing needed changing here — the defect was on the screen
+      before it (see `welcome-stage.tsx`), and with that fixed the wordmark now holds still across
+      the welcome → listening transition. Confirmed on mobile + desktop captures.
 - [ ] `type-stage.tsx`, `scenarios-stage.tsx` — check these feel like one continuous flow with
       listening, not a separate mode.
 - [ ] `profile-stage.tsx` — density check: is this the "one consequential decision at a time"

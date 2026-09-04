@@ -266,10 +266,21 @@ export function FinderContext() {
     <aside className="finder-context">
       {/* O233: was "Early Sydney demo. …". The product should not call itself a demo in its own
           copy, and the sentence's real content — where it operates, and who holds the appointment
-          times — survives without the word. */}
+          times — survives without the word.
+          2026-09-03: the bare "Sydney." went with it. A place name alone at the head of a
+          disclaimer reads as a coverage claim — "this product covers Sydney" — and the tree no
+          longer supports that reading in either direction. The gazetteer (`src/geo/suburbs.ts`)
+          covers TWO focus areas, northern Sydney/Double Bay (NSW) and the Gold Coast (QLD), so
+          "Sydney" understates where a search resolves; but the only entries carrying `realPerson`
+          are in Beecroft and Double Bay, so naming the Gold Coast here would OVERSTATE who is
+          actually listed — the coast is populated entirely by the example personas the settings
+          sheet already labels as fictional. The honest sentence is therefore about the listed
+          doctors, not about the map, and it is the wording `/faq` was already vetted with: "The
+          current listed doctors consult in Sydney." Coverage of the gazetteer's two areas is stated
+          where it belongs, on `app/coverage-map.tsx`. */}
       <p>
-        Sydney. Doctor profiles describe real clinicians. Live appointment times and directions
-        are provided by the booking destination.
+        Listed doctors consult in Sydney; their profiles describe real clinicians. Live appointment
+        times and directions are provided by the booking destination.
       </p>
     </aside>
   );

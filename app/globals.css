@@ -7664,16 +7664,23 @@ body:has(.app-tabs) .consent-bar {
    O233 — THE SETTINGS CONTROL AND THE PROFILE TAB.
    ═══════════════════════════════════════════════════════════════════════════════════════════════ */
 
-/* The finder's header carries the wordmark centred and the settings control at the right edge; the
-   spacer keeps the wordmark optically centred rather than shifted by one icon. */
+/* The wordmark holds the LEADING edge, and the settings control the trailing one.
+   It used to be centred here (a 44px spacer, the mark in the middle column), and that was the one
+   header in the app that did it: welcome, `/approach` and the Profile tab took `has-settings` and
+   centred, while the other seven finder stages — listening, type, scenarios, results, compare,
+   profile-stage, booking — put the same `Wordmark` at the left. So the very first transition of the
+   flow, welcome → listening, slid the brand mark ~130px sideways while the screen under it changed.
+   Spatial consistency: a thing that persists across screens must not move between them, and the
+   wordmark is a brand mark and a home link, not a screen title — a title may centre, an anchor may
+   not. Left everywhere is the majority rule and the one that matches how it behaves. */
 .minimal-header.has-settings {
   display: grid;
-  grid-template-columns: 44px 1fr 44px;
+  grid-template-columns: 1fr 44px;
   align-items: center;
 }
 
-.minimal-header.has-settings > :first-child { grid-column: 2; justify-self: center; }
-.minimal-header.has-settings > :last-child { grid-column: 3; }
+.minimal-header.has-settings > :first-child { grid-column: 1; justify-self: start; }
+.minimal-header.has-settings > :last-child { grid-column: 2; }
 
 .settings-trigger {
   display: flex;
@@ -8849,16 +8856,27 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
    O240 — SIMPLER, AND MOVING LIKE A MODERN APP.
    ═══════════════════════════════════════════════════════════════════════════════════════════════ */
 
-/* The welcome disclaimer is one quiet line, not a tinted panel. */
+/* The welcome disclaimer is one quiet line, not a tinted panel.
+   It is also on the SAME EDGE as everything above it. The screen's composition (see "one edge, one
+   group" below) put the question, the compose box and the example link on the shell gutter and
+   left-aligned; this line stayed centred inside a 52ch measure, so the one screen with three
+   elements had two alignments and the odd one out was the sentence at the foot. Same gutter, same
+   edge — the eye returns down a single margin instead of finding a new one. */
 .patient-v2 .finder-context {
   margin: 0;
   padding: 10px var(--shell-gutter) max(14px, env(safe-area-inset-bottom));
   border: 0;
   border-radius: 0;
   background: transparent;
+  text-align: left;
 }
 
-.patient-v2 .finder-context p { color: var(--faint); font-size: 0.6875rem; font-weight: 520; }
+.patient-v2 .finder-context p {
+  margin-inline: 0;
+  color: var(--faint);
+  font-size: 0.6875rem;
+  font-weight: 520;
+}
 
 /* The consent card arrives on a spring-like curve from the bottom edge. */
 @keyframes consent-in {
