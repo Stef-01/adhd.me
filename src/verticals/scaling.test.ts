@@ -403,7 +403,29 @@ describe("W252 what twenty verticals cost", () => {
     // very difference the threshold exists to catch, so the difference is measured rather than
     // assumed: a deliberately quadratic workload, timed through the identical harness at the
     // identical sizes, must land past the 40× line that the real report clears.
-    const ITERATIONS = 200;
+    //
+    // O194 APPLIED ITS OWN FIX TO THE TEST ABOVE AND NOT TO THIS ONE, AND THIS ONE THEN FAILED ON
+    // `main` FOR THE IDENTICAL REASON. Under full-suite load it reported 32.7× — under the 40× line,
+    // i.e. claiming a deliberately quadratic workload looks linear — then passed in isolation. The
+    // mechanism is the one named twenty lines up: at 200 iterations the small sample is 400 inner
+    // steps × 200 = 80k trivial ops, and it measures **0.052ms**. Fifty-two microseconds is not a
+    // measurement on a loaded machine, it is a coin toss, and here the bias runs the dangerous way:
+    // an over-measured denominator makes the quadratic workload look LESS quadratic, so the flake
+    // reads as "the shape check has stopped discriminating" when the shape check is fine.
+    //
+    // Measured across iteration counts, best-of-5, same harness, same sizes (20 and 200):
+    //   200 →  small 0.052ms, ratio 50.4×   (noise floor; true shape understated by half)
+    //  1000 →  small 0.170ms, ratio 97.0×
+    //  2000 →  small 0.364ms, ratio 92.7×
+    //  5000 →  small 0.903ms, ratio 94.5×   ← converged, and the denominator finally clears 1ms
+    //
+    // 5000 is the first count whose small sample is not sub-millisecond, which is the bar the test
+    // above set for itself. It also converges the ratio on the ~95× a quadratic workload actually
+    // costs at a tenfold size increase — so the assertion now sits 2.4× clear of its threshold
+    // instead of 1.3× clear of it. The threshold, the sizes and the claim are unchanged; only the
+    // sample is large enough to state them. Costs ~0.5s, which is what a gate that does not lie
+    // about its own instrument is worth.
+    const ITERATIONS = 5000;
     const SAMPLES = 5;
     const quadratic = (count: number) => {
       let sink = 0;
