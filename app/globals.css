@@ -5351,10 +5351,19 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   margin-top: 2px;
 }
 
+/* The strip was `grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))` with a `li + li`
+   border-left between cells. That divider is only correct while every fact is on one row: an
+   auto-fit grid wraps at 390px to two columns, and `+` cannot tell a wrap from a neighbour, so
+   every row after the first opened with a hairline hanging against the gutter — and
+   `li:first-child { padding-left: 0 }` only unindented the very first cell, so the wrapped rows
+   also sat 13px inside the shell gutter that the rest of the screen shares. The dividers are gone
+   rather than made wrap-aware: space already separates six short facts, and a rule that is right
+   on one row and wrong on the next two is worse than no rule. */
 .profile-facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 22px;
+  row-gap: 4px;
   margin: 22px 0 0;
   padding: 12px 0;
   border-block: 1px solid var(--line);
@@ -5370,15 +5379,6 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   align-items: center;
   gap: 8px;
   min-height: 32px;
-  padding: 0 13px;
-}
-
-.profile-facts li:first-child {
-  padding-left: 0;
-}
-
-.profile-facts li + li {
-  border-left: 1px solid var(--line);
 }
 
 .profile-fact-icon {

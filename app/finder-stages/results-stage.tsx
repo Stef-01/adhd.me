@@ -65,9 +65,6 @@ export function ResultsStage({
   /** Q4 "why this order": the one sentence saying what built the sequence — see `orderNote` in `src/demo/clinicians.ts`. */
   orderNote: string;
   clarifierList: readonly Clarifier[];
-  unserved: readonly string[];
-  fitCopy: string | null;
-  place: string;
   origin: SuburbPoint | null;
   matches: readonly Clinician[];
   shown: readonly Clinician[];

@@ -28,7 +28,14 @@ function shortTitle(title: string): string {
   return title.split(",")[0]?.trim() || title;
 }
 
-type ProfileFact = { kind: "language" | "telehealth" | "availability" | "recording" | "approach"; label: string };
+type FactKind = "language" | "telehealth" | "availability" | "recording" | "approach";
+type ProfileFact = { kind: FactKind; label: string };
+
+const FACT_ICONS: Partial<Record<FactKind, typeof VideoCamera>> = {
+  telehealth: VideoCamera,
+  language: Translate,
+  availability: UserPlus,
+};
 
 const LANGUAGE_LIST = new Intl.ListFormat("en-AU", { style: "long", type: "conjunction" });
 
@@ -142,16 +149,23 @@ export function ProfileStage({
         </div>
 
         <ul className="profile-facts" aria-label="Profile highlights">
-          {facts.map((fact) => (
-            <li key={fact.kind}>
-              <span className="profile-fact-icon" aria-hidden="true">
-                {fact.kind === "telehealth" && <VideoCamera size={19} weight="regular" />}
-                {fact.kind === "language" && <Translate size={19} weight="regular" />}
-                {fact.kind === "availability" && <UserPlus size={19} weight="regular" />}
-              </span>
-              <span>{fact.label}</span>
-            </li>
-          ))}
+          {facts.map((fact) => {
+            // Three of the five kinds have an icon; `recording` and `approach` never did, and the
+            // span was rendered for them anyway — an empty flex child still takes the row's 8px
+            // gap, so those facts sat one gap in from their iconed neighbours for no mark. The
+            // slot is only drawn when something goes in it.
+            const Icon = FACT_ICONS[fact.kind];
+            return (
+              <li key={fact.kind + fact.label}>
+                {Icon && (
+                  <span className="profile-fact-icon" aria-hidden="true">
+                    <Icon size={19} weight="regular" />
+                  </span>
+                )}
+                <span>{fact.label}</span>
+              </li>
+            );
+          })}
         </ul>
 
         <section className="profile-about">

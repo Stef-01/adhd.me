@@ -44,8 +44,25 @@ and a one-line commit message are the record.
       the welcome → listening transition. Confirmed on mobile + desktop captures.
 - [ ] `type-stage.tsx`, `scenarios-stage.tsx` — check these feel like one continuous flow with
       listening, not a separate mode.
-- [ ] `profile-stage.tsx` — density check: is this the "one consequential decision at a time"
-      screen, or has it accumulated fields since the last pass?
+- [x] `profile-stage.tsx` (2026-09-04) — density check done, and the screen passes it: one
+      decision is on it (the single footer button; "Compare" lives inside the closed *Why matched*
+      disclosure, so it costs nothing until asked for), the body is identity → six-fact strip →
+      About → three closed disclosures, and everything that could have accumulated is already
+      capped in code — `profileFacts` `.slice(0, 6)`, evidence `.slice(0, 3)`, missed `.slice(0, 2)`.
+      Nothing was cut. **What was wrong was the facts strip's alignment, twice over.** Five kinds of
+      fact exist and only three (`telehealth`, `language`, `availability`) have ever had an icon,
+      but the icon `<span>` was rendered unconditionally — an empty flex child still consumes the
+      row's 8px gap, so `recording` and `approach` facts sat one gap in from their iconed
+      neighbours with no mark to earn it. The slot is now drawn only when something goes in it
+      (`FACT_ICONS` lookup, `{Icon && …}`). **And the strip's dividers were only correct on one
+      row:** it was an auto-fit grid with a `li + li` border-left, which at 390px wraps to two
+      columns, and `+` cannot tell a wrap from a neighbour — so every row after the first opened
+      with a hairline hanging against the gutter, while `li:first-child { padding-left: 0 }`
+      unindented only the very first cell and left the wrapped rows 13px inside the shell gutter
+      the rest of the screen shares. The strip is a wrapping flex row now with no dividers: space
+      already separates six short facts, and a rule that is right on the first row and wrong on the
+      next is worse than no rule. (The React `key` was `fact.kind`, which collides as soon as a GP
+      declares two `approach` values — it is `kind + label` now.)
 - [x] `nearby-map.tsx` (2026-09-03) — checked the three things this line names. **Touch targets are
       fine and the comment is honest:** `stopIcon`/`youIcon` pass `iconSize: [44, 44]`, which
       Leaflet writes as an inline width/height on the `.nearby-marker` button, so the target is the

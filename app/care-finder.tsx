@@ -13,10 +13,7 @@ import {
   orderNote,
   rankBands,
   rankCliniciansNear,
-  requestFitCopy,
-  requestFitSummary,
   topTieNote,
-  unservedAsks,
   missedAsks,
   nearestKm,
   type Clinician,
@@ -308,11 +305,6 @@ export function CareFinder() {
    * turn on together.
    */
   const orderCopy = useMemo(() => orderNote(request, roster, { nearest: origin !== null }), [request, roster, origin]);
-  const unserved = useMemo(() => unservedAsks(request, roster), [request, roster]);
-  const fitCopy = useMemo(
-    () => requestFitCopy(requestFitSummary(request, matches), matches.length),
-    [request, matches],
-  );
 
   /**
    * The fold never cuts a tied band (O8 review): topTieNote says "the first N answered equally
@@ -665,9 +657,6 @@ export function CareFinder() {
             tieNote={tieNote}
             orderNote={orderCopy}
             clarifierList={clarifierList}
-            unserved={unserved}
-            fitCopy={fitCopy}
-            place={place}
             origin={origin}
             matches={matches}
             shown={shown}
