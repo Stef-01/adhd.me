@@ -1544,6 +1544,21 @@ summary:focus-visible {
 }
 
 .patient-v2 .care-shell {
+  /* THE SHELL IS THE QUERY CONTAINER. Three finder rules size type and padding in `cqw` — the
+     welcome question, the type question, and (until it was deleted as dead) the welcome group's
+     inline padding. Nothing in the tree ever declared a containment context for them, so per spec
+     they were resolving against the SMALL VIEWPORT, i.e. they were `vw` wearing another name. That
+     is not a cosmetic difference here, because this shell is a FIXED width (`--shell-w`, 520px,
+     640px past 820px) that does not track the window: on a 601px window and an 819px window the
+     frame is the same 520px while `4.4vw` gave the question 26.4px and then 31px inside it. Type
+     scaled with the window; the box it sat in did not. Declaring the container here makes `cqw`
+     mean what every one of those rules reads as if it means — a percentage of the shell — so the
+     question is one size per shell width (24px at 520, 28px at 640) and the finder's optical scale
+     changes exactly where the frame does. Safe to contain: the width is explicit (never derived
+     from content, which inline-size containment forbids), and the only fixed-position chrome —
+     `.app-tabs`, the sheet layer, the consent bar — is rendered outside this element or portalled
+     to `body`, so the containing block and stacking context this creates capture nothing. */
+  container: finder-shell / inline-size;
   width: min(var(--shell-w), 100%);
   min-height: 100svh;
   max-height: none;
@@ -1946,16 +1961,13 @@ summary:focus-visible {
     border: 0;
   }
 
-  .patient-v2 .voice-prompt {
-    padding: 48px 22px 22px;
-  }
-
-  .patient-v2 .voice-prompt h1 {
-    font-size: 3.25rem;
-  }
-
-    .patient-v2 .type-content h1,
-.patient-v2 .booking-content h1 {
+  /* Only the booking heading is still sized here. The welcome question and the type question
+     used to be too, at 3.25rem and 2.75rem — but a media query adds no specificity, and both are
+     re-declared later in the file by a rule of equal or greater weight (`.voice-screen
+     .voice-prompt h1` and the O233 `.type-content h1` block). Neither has applied since those
+     landed, so both were describing a mobile display size the phone has never rendered. Deleted
+     rather than repaired: the two questions are deliberately one size on one shell now. */
+  .patient-v2 .booking-content h1 {
     font-size: 2.75rem;
   }
 }
@@ -6345,7 +6357,12 @@ select { caret-color: var(--route-strong); }
   letter-spacing: -0.045em;
 }
 
-.patient-v2 .voice-core { padding-inline: clamp(22px, 5cqw, 42px); }
+/* (A fluid `padding-inline: clamp(22px, 5cqw, 42px)` sat here and had not applied since the
+   welcome group was moved onto the one shell gutter — the later `.patient-v2 .voice-core`
+   declaration sets the whole `padding` shorthand at `var(--shell-gutter)`. Deleted with the
+   container-query fix rather than revived: the welcome's edge is the shell gutter every other
+   stage sits on, and a second, fluid inset for one screen is the alignment defect that rule was
+   written to end.) */
 .patient-v2 .voice-screen .voice-prompt h1 {
   color: var(--ink);
   font-size: clamp(1.5rem, 4.4cqw, 1.9375rem);

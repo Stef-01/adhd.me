@@ -53,7 +53,9 @@ polish the existing shell, question it.
       look like a real regression rather than an instrument problem. Standing item, never ticked.
       Last confirmed green 2026-09-04 after the profile-facts and type-screen passes: `pnpm verify`
       green, `pnpm e2e` at 261 passed in 7.1m, no flakes (262 with the type-screen guard added after
-      that run; that spec file re-run green on its own).
+      that run; that spec file re-run green on its own). Re-confirmed 2026-09-04 after the finder
+      shell was given the container context its `cqw` rules had always assumed: `pnpm verify` green,
+      `pnpm e2e` **262 passed in 7.0m**, no flakes.
       **One trap worth knowing:** killing `pnpm e2e` mid-run leaves a half-written `.next`, and the
       next build dies with `TypeError: a[d] is not a function ... Error occurred prerendering page
       "/"`. That reads exactly like a product regression and is not one — `rm -rf .next` and rebuild.

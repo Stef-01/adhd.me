@@ -154,8 +154,35 @@ and a one-line commit message are the record.
       not to wording) and one e2e walk asserting the earned and unearned states are not
       confusable. 261 e2e green.
 - [ ] `booking-stage.tsx` — the exit point; confirm it's unambiguous and low-friction on mobile.
-- [ ] `shared.tsx` — the fixed finder shell (PRODUCT.md calls this a cross-stage constraint);
-      re-verify responsive rules are container-aware, not viewport-aware, everywhere it's used.
+- [x] `shared.tsx` / the fixed finder shell (2026-09-04) — **the container queries were never
+      running.** Three finder rules size in `cqw` (the welcome question's `4.4cqw`, the type
+      question's `4.4cqw`, and a `5cqw` inline padding on `.voice-core`), and nothing in the tree
+      declared `container-type` anywhere — no `@container` query, no `container` shorthand, in any
+      CSS or module file. Per spec an unresolved container unit falls back to the **small
+      viewport**, so all three were `vw` wearing another name, and the failure was invisible
+      because on a phone the shell *is* the viewport. It diverges exactly where this shell is
+      unusual: `--shell-w` is **fixed** (520px, 640px past 820px) and does not track the window, so
+      on a 601px window and an 819px window the frame is the same 520px while the question went
+      from 26.4px to its 31px ceiling inside it. Type scaled with the window; the box it sat in did
+      not — the one thing "container-aware, not viewport-aware" was written to prevent.
+      `.patient-v2 .care-shell` now declares `container: finder-shell / inline-size`, and measured
+      after: 24px at 390/601/819 (shell 390/520/520) and 28.07px at 1024/1440 (shell 640). One
+      optical size per shell width, changing exactly where the frame does. **Safe to contain, and
+      checked rather than assumed:** the shell's width is explicit (inline-size containment forbids
+      a content-derived inline size), and the containing block + stacking context containment
+      creates capture nothing, because every fixed-position surface in the app — `.app-tabs`, the
+      sheet layer, `.consent-bar` — renders outside `.care-shell` or portals to `body`, and no
+      `z-index` inside the shell exceeds the tab bar's 40. **Two dead rules deleted while
+      confirming it:** the `5cqw` padding had been superseded by the later `.voice-core` `padding`
+      shorthand on the shell gutter, and the `max-width: 599px` block still sized the welcome
+      question at 3.25rem and the type question at 2.75rem — a media query adds no specificity, and
+      both are re-declared later by rules of equal or greater weight, so neither had applied since
+      those landed. (Only the booking heading is still sized there.) **And one responsive rule in
+      `shared.tsx` itself genuinely cannot be container-aware:** `<Image sizes>` is resolved before
+      layout, so viewport conditions are all there is — which makes it the one place the shell
+      width is restated by hand, and it had drifted to a flat `440px` above 520px against a
+      portrait that is `calc(100% - 36px)` of a 520/640px shell. It upscaled a stock portrait by a
+      third on desktop. Now the shell's own three regimes.
 
 ## Story / public surfaces
 

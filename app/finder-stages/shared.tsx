@@ -343,7 +343,16 @@ export function ClinicianPortrait({
 
   if (clinician.image) {
     return variant === "fill"
-      ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 520px) 100vw, 440px" priority />
+      // `sizes` is the one responsive rule in the finder that CANNOT be container-aware — the
+      // browser picks the source before layout, so container units are not available here and
+      // viewport media conditions are all there is. That makes it the one place the shell's width
+      // has to be restated by hand, and it had drifted: `(max-width: 520px) 100vw, 440px` was a
+      // flat 440px for every window above 520px, while the portrait is `calc(100% - 36px)` of a
+      // shell that is 520px and then 640px past the 820px breakpoint — so it asked for 440px to
+      // fill 484px, and on desktop 440px to fill 604px, and upscaled a stock portrait by a third
+      // on the largest screen the profile is ever seen on. The three regimes below are the
+      // shell's own: fluid under 520, then the two `--shell-w` steps, each less the 18px inset.
+      ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 519px) calc(100vw - 36px), (max-width: 819px) 484px, 604px" priority />
       : <Image src={clinician.image} alt="" width={60} height={60} />;
   }
 
