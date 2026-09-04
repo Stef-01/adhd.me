@@ -634,6 +634,86 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
 }
 
 /**
+ * The asks the order was actually built from, strongest first.
+ *
+ * Deduplicated by the closed-vocabulary label the reader sees, because two facets can share a
+ * label and a sentence that says "sleep, sleep and bulk billing" reads as a bug. Weight is the
+ * number the ranking multiplies through, so descending weight is the honest reading order: the
+ * first label named is the one that moved the list most.
+ */
+function orderedAsks(query: string, roster: readonly Clinician[]): NeedSignal[] {
+  const strongest = new Map<string, NeedSignal>();
+  for (const need of needsFor(query, roster)) {
+    const held = strongest.get(need.label);
+    if (!held || need.weight > held.weight) strongest.set(need.label, need);
+  }
+  return [...strongest.values()].sort((a, b) => b.weight - a.weight);
+}
+
+/**
+ * Why the list is in this order, said on the screen that shows the order.
+ *
+ * Product Principle #1 is "start with the person's words, then show how those words affected the
+ * order", and until now the second half was true underneath and invisible above: the rows carried
+ * their own distinguishing signals, but nothing said what the SEQUENCE was built from — so a
+ * reader could not tell an order earned by their words from an arbitrary one. This is that
+ * sentence, and it is derived from `needsFor`/`matchQuality` — the same read the ranking ran —
+ * so it cannot describe an order the list does not have.
+ *
+ * One branch per `MatchQuality`, because the four cases are four different truths and collapsing
+ * them would mean claiming an order in the three cases where there isn't one:
+ * - `informed` — a real order, named by the asks that produced it.
+ * - `tied` — the words were read and answered, too similarly to rank. Say so; don't imply a rank.
+ * - `unserved` — the words were read and nobody declares them. The list is not ordered by them.
+ * - `unmatched` — nothing in the words is comparable at all.
+ *
+ * `nearest` is the caller's fact, not a re-derivation: `rankCliniciansNear` only reorders when an
+ * origin resolved, so the distance clause appears exactly when distance actually moved something.
+ */
+export function orderNote(
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+  { nearest = false }: { nearest?: boolean } = {},
+): string {
+  const quality = matchQuality(query, roster);
+  if (quality === "unmatched") {
+    return nearest
+      ? "Nothing you said names something this listing can compare on, so this is every listed GP, nearest first."
+      : "Nothing you said names something this listing can compare on, so this is every listed GP, in the order the listing holds them.";
+  }
+  const asks = orderedAsks(query, roster);
+  /**
+   * Three labels is the same ceiling the profile's reason sentence uses; past that the count
+   * carries the rest, so the sentence never implies the order used only what it had room to name.
+   *
+   * TWO CASINGS, ONE RULE. After a colon the labels are a LIST, so they keep the case they were
+   * authored in — O21's finding, that lowering turns "Hindi-speaking" into a typo on the one word
+   * the reader is scanning for. Inside the running prose of the other two branches they are
+   * SENTENCE material, where "No listed GP declares Bulk billing" is the same error the other
+   * way, so those go through `labelInSentence`, which knows the acronym and language exceptions.
+   */
+  const namedWith = (say: (need: NeedSignal) => string) => {
+    const parts = asks.slice(0, 3).map(say);
+    return asks.length > 3 ? `${asList(parts)}, and ${asks.length - 3} more` : asList(parts);
+  };
+  const inProse = namedWith(labelInSentence);
+  if (quality === "unserved") {
+    return nearest
+      ? `No listed GP declares ${inProse}, so nothing below is ordered by it — this is every listed GP, nearest first.`
+      : `No listed GP declares ${inProse}, so nothing below is ordered by it — this is every listed GP, in the order the listing holds them.`;
+  }
+  if (quality === "tied") {
+    return nearest
+      ? `You asked about ${inProse}, and the listed GPs answer that too similarly to rank, so nearer rooms come first.`
+      : `You asked about ${inProse}, and the listed GPs answer that too similarly to rank — read this as a list, not an order.`;
+  }
+  const asListed = namedWith((need) => need.label);
+  return nearest
+    ? `Ordered by what you asked for: ${asListed}. Where two answer the same, nearer comes first.`
+    : `Ordered by what you asked for: ${asListed}.`;
+}
+
+/**
  * The sentence for a top-of-list tie that the roster-global verdict cannot see.
  *
  * `informed` with a tied first band is the case F3 found: an order exists somewhere in the

@@ -85,8 +85,34 @@ and a one-line commit message are the record.
       indication of what pressing it does. It carries `aria-label="Open {name}'s profile"` now.
       No score, no total, no accent on either column — that posture is untouched, and the e2e
       test that forbids ranking vocabulary in the body still passes. 260 e2e green.
-- [ ] `results-stage.tsx` — result ordering explanation should be visible, not just correct
-      (ties to Roadmap Q4 "why this order" item).
+- [x] `results-stage.tsx` (2026-09-03) — **the order now explains itself, in one line.** The screen
+      was correct and mute: each row said why *it* was a match (`distinguishingSignals`), and
+      nothing anywhere said what the *sequence* was built from. A reader could not tell a list
+      their own words earned from the listing's arbitrary order — which is the product's whole
+      claim (Product Principle #1). O237 was right to delete the four verdict paragraphs that used
+      to sit on top of this screen, but deleting them took the honest half out with the wordy half:
+      the list heading kept "Matches" vs "All listed GPs", which says *what* the list is and never
+      *why it is in this order*. There is now a `.results-order-note` under that heading, from a
+      new `orderNote()` in `src/demo/clinicians.ts`. **It branches on `matchQuality`, so it cannot
+      dress up an order that isn't there** — "Ordered by what you asked for: X and Y." only in the
+      `informed` case; `tied` says the GPs answer too similarly to rank and to read it as a list,
+      `unserved` says no listed GP declares the ask, `unmatched` says nothing said was comparable.
+      The distance clause appears on exactly the condition `rankCliniciansNear` reorders on. It
+      reads `needsFor`/`matchQuality` — the ranking's own read — so it can't describe a different
+      order, it names the asks strongest-weight-first so the label that moved the list most is read
+      first, and it caps at three labels with "and N more" rather than silently dropping the rest.
+      **Casing is deliberate on both sides:** after a colon the labels are a list and keep their
+      authored case (O21's "hindi-speaking is a typo" finding); in the running prose of the other
+      branches they go through `labelInSentence`, because "No listed GP declares Bulk billing" is
+      the same error the other way. **Restraint:** one line of small muted text, on the head's own
+      spring at the head's own delay so it reads as part of that block rather than a second event;
+      it sits *under* the heading so a reader who already trusts the order skips a line, not a
+      paragraph; and the existing `tieNote` — computed and passed to this component all along, and
+      never rendered since O237 — joins it as a second sentence in the same paragraph rather than a
+      second grey line. Same gutter and 760px measure as the heading and rows, so the left edge is
+      unchanged. Covered by `src/demo/order-note.test.ts` (6 property tests tied to `matchQuality`,
+      not to wording) and one e2e walk asserting the earned and unearned states are not
+      confusable. 261 e2e green.
 - [ ] `booking-stage.tsx` — the exit point; confirm it's unambiguous and low-friction on mobile.
 - [ ] `shared.tsx` — the fixed finder shell (PRODUCT.md calls this a cross-stage constraint);
       re-verify responsive rules are container-aware, not viewport-aware, everywhere it's used.

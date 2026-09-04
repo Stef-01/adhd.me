@@ -10,6 +10,7 @@ import {
   matchEvidence,
   matchQuality,
   needsFor,
+  orderNote,
   rankBands,
   rankCliniciansNear,
   requestFitCopy,
@@ -300,6 +301,13 @@ export function CareFinder() {
    * no-tie render; conditional, it matches the old cost exactly with the derivation named. */
   const bands = useMemo(() => (tieNote ? rankBands(request, roster) : []), [tieNote, request, roster]);
   const clarifierList = useMemo(() => clarifiers(request, matches), [request, matches]);
+  /**
+   * Q4 "why this order": one sentence naming what produced the sequence, computed here with the
+   * rest of the single pipeline pass rather than in the JSX. `nearest` is the same condition
+   * `rankCliniciansNear` uses to reorder at all, so the distance clause and the distance sort
+   * turn on together.
+   */
+  const orderCopy = useMemo(() => orderNote(request, roster, { nearest: origin !== null }), [request, roster, origin]);
   const unserved = useMemo(() => unservedAsks(request, roster), [request, roster]);
   const fitCopy = useMemo(
     () => requestFitCopy(requestFitSummary(request, matches), matches.length),
@@ -655,6 +663,7 @@ export function CareFinder() {
             requestSummary={requestSummary}
             quality={quality}
             tieNote={tieNote}
+            orderNote={orderCopy}
             clarifierList={clarifierList}
             unserved={unserved}
             fitCopy={fitCopy}

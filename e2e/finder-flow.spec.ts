@@ -374,6 +374,41 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
   await expect(page.locator(".results-head h1")).toHaveCount(1);
 });
 
+/**
+ * The order explains itself, and only when there is an order to explain.
+ *
+ * O237 deleted the verdict paragraphs and left the heading carrying the honesty alone — which
+ * said WHAT the list is ("Matches" / "All listed GPs") but never what the sequence was built
+ * from. The `.results-order-note` line is that missing half of Product Principle #1. This walks
+ * the two states that must not be confusable: a request the roster separates on (a real order,
+ * named by the asks) and a request nobody declares (no order, and the line has to say so rather
+ * than dress the list up as a ranking).
+ */
+test("the list says why it is in this order, and says when it isn't one", async ({ page }) => {
+  await gotoFinderRealRosterOnly(page);
+  await page.locator("#welcome-request").fill("ADHD assessment and titration");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  await expect(page.locator(".results-list-head h2")).toHaveText("Matches");
+  const earned = page.locator(".results-order-note");
+  await expect(earned).toBeVisible();
+  await expect(earned).toContainText("Ordered by what you asked for:");
+
+  // The same screen, a request no listed GP declares. The heading demotes, and so must the line.
+  await page.getByRole("button", { name: "Change what you said" }).click();
+  const box = page.locator("#doctor-request");
+  await box.fill("a bulk billing GP");
+  await page.getByRole("button", { name: "Find a GP" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed GPs");
+  const unearned = page.locator(".results-order-note");
+  await expect(unearned).toBeVisible();
+  await expect(unearned).not.toContainText("Ordered by what you asked for");
+  await expect(unearned).toContainText("No listed GP declares");
+});
+
 test("the typed journey ends in the engine's own ranking, both ways round (AR38)", async ({ page }) => {
   // AR38: the outcome, not the shape. Every walk above enters via the demo scenario or asserts
   // structure — a results screen that rendered the roster in a FIXED order would pass all of

@@ -51,14 +51,22 @@ polish the existing shell, question it.
       starts flaking again, read the harness note in `src/tenancy/rollout.test.ts` first — the
       failure mode there was a sample too short to measure under parallel-worker load, and it will
       look like a real regression rather than an instrument problem. Standing item, never ticked.
-      Last confirmed green 2026-09-03 after the compare-stage regrouping: `pnpm verify` at
-      3686 tests over 225 files, `pnpm e2e` at 260 passed in 6.7m, no flakes.
+      Last confirmed green 2026-09-03 after the results-stage order note: `pnpm verify` at
+      3692 tests over 226 files, `pnpm e2e` at 261 passed in 6.9m, no flakes.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 
-- [ ] Matching engine: make the "why this order" explanation (Product Principle #1 — "start with
-      the person's words, then show how those words affected the order") legible in the UI, not
-      just correct underneath.
+- [x] Matching engine: the "why this order" explanation is legible in the UI (2026-09-03). One
+      sentence under the results list heading, from a new `orderNote()` in `src/demo/clinicians.ts`
+      that branches on `matchQuality` — an order is claimed only in the `informed` case, and the
+      `tied`/`unserved`/`unmatched` cases say plainly that there isn't one rather than letting a
+      list read as a ranking. It derives from the same `needsFor` read the ranking scored, names
+      the asks strongest-weight-first, and the "nearer comes first" clause turns on exactly the
+      condition `rankCliniciansNear` reorders on. See `AESTHETIC.md`'s `results-stage.tsx` entry
+      for the design reasoning; tests in `src/demo/order-note.test.ts` and one e2e walk.
+      **Not closed by this:** the *profile* still explains a single clinician's match rather than
+      its position, and the console's matching module has its own explanation surface. This line
+      was about the results order, and that is what is now visible.
 - [ ] Practice console: pick the 3–4 modules that best carry the demand-matching/shared-care story
       (likely `matching`, `capacity`, `outcomes`, `referrals`) and bring those to real depth —
       empty states, loading states, error states, keyboard access — before touching the rest.

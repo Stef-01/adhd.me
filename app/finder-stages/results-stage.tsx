@@ -39,6 +39,8 @@ export function ResultsStage({
   requestHeadline,
   requestSummary,
   quality,
+  tieNote,
+  orderNote,
   clarifierList,
   origin,
   matches,
@@ -60,6 +62,8 @@ export function ResultsStage({
   requestSummary: string;
   quality: MatchQuality;
   tieNote: string | null;
+  /** Q4 "why this order": the one sentence saying what built the sequence — see `orderNote` in `src/demo/clinicians.ts`. */
+  orderNote: string;
   clarifierList: readonly Clarifier[];
   unserved: readonly string[];
   fitCopy: string | null;
@@ -234,6 +238,7 @@ export function ResultsStage({
       )}
 
       {!empty && (
+      <>
       <motion.div
         className="results-list-head"
         initial={reducedMotion ? false : { opacity: 0, y: 6 }}
@@ -275,6 +280,32 @@ export function ResultsStage({
           )}
         </span>
       </motion.div>
+      {/* WHY THIS ORDER, SAID OUT LOUD (Roadmap Q4; Product Principle #1 — "start with the
+          person's words, then show how those words affected the order"). O237 was right to delete
+          the four verdict paragraphs that used to sit at the top of this screen, but it left the
+          sequence itself unexplained: the rows each said why THEY were a match, and nothing said
+          what the ORDER was. A reader could not tell a list their words earned from a list in the
+          listing's own arbitrary order, which is exactly the claim the product makes.
+          One sentence, derived from the same `needsFor`/`matchQuality` read the ranking used, so
+          it cannot describe an order the list does not have — and it changes voice in the three
+          cases where there is no real order rather than dressing them up as one.
+          It sits under the heading, not above it: the heading names the group, the line qualifies
+          it, and a person who already trusts the order can skip a line of small grey text where
+          they could not skip a paragraph. It arrives on the head's own spring at the head's own
+          delay, so it reads as part of that block rather than a second, later event.
+          The tie note joins it as a second sentence in the same paragraph rather than a second
+          line: it is only ever present in the `informed` case, where it narrows a claim the first
+          sentence just made, and two greys stacked would read as a warning stack. */}
+      <motion.p
+        className="results-order-note"
+        initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
+      >
+        {orderNote}
+        {tieNote ? ` ${tieNote}` : ""}
+      </motion.p>
+      </>
       )}
 
       {/* O235: the nearby map — only once the place resolves, and only when asked for. */}

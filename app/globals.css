@@ -5593,6 +5593,25 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   font-weight: 680;
 }
 
+/* The "why this order" line. Same gutter and measure as the head above it and the rows below, so
+   the screen keeps one left edge; the head's 8px bottom padding is the whole gap between them,
+   because the heading and its qualifier are one block, and the list's own gap is what separates
+   that block from the rows. Muted and one step down in size: it is a qualifier on a heading, not
+   a second heading, and it must not compete with the names it introduces. The measure stays on
+   the shell's 760px rather than a tighter one, because a narrower centred box would pull its left
+   edge off the heading's on desktop — one screen, one left edge, and `text-wrap: pretty` is what
+   keeps the last line from stranding a word. */
+.results-order-note {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 var(--shell-gutter) 12px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
 /* O226: the count describes the LIST, so it sits on the list's own header row — it was a stray
    grey sentence under the place field, two groups away from the thing it counts. */
 .results-count {
