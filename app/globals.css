@@ -4065,32 +4065,18 @@ summary:focus-visible {
   .story-footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
 }
 
-/* ==========================================================================
-   DARK MODE
-   ==========================================================================
-
-   Added by the design audit. The site was light-only, which is a gap rather than a
-   style choice for a page somebody may open at 2am on a phone because they cannot
-   sleep and have started reading about ADHD. That is a real slice of this audience.
-
-   HOW IT WORKS, AND WHY IT IS SHORT. Every surface here already reads its colours
-   from three token blocks (`:root`, `.story`, `.clinician-v2`), so dark mode is a
-   re-declaration of those tokens plus the handful of one-off values that assumed a
-   light ground. No component was touched. If a future rule hardcodes a hex, it will
-   be wrong in exactly one mode, which is the argument for the tokens.
-
-   THE ACCENT LIFTS RATHER THAN DESATURATING. Crushed Rose (var(--accent)) measures 2.2:1
-   on a near-black ground, so it cannot carry text in dark mode. Instead of muddying
-   it into a grey-pink invention, the accent steps up to Tulip Bloom (var(--accent)) — the
-   next value in the SAME founder-supplied rose palette — at 5.6:1 on the dark ground.
-   The brand stays recognisable because the replacement is the brand's own tint.
-
-   NEUTRALS STAY OLIVE-CAST. The light palette is warm-olive paper, not neutral grey,
-   and inverting to a cold grey would change the brand. The dark grounds carry the
-   same green-shifted hue at low lightness.
-
-   NO PURE BLACK, NO PURE WHITE (Section 8.B). #15160f and #f4f1e9 respectively.
-*/
+/* THERE IS NO DARK MODE, AND THAT IS THE DECISION — not an oversight.
+   A ~28-line "DARK MODE" banner used to sit here describing a token re-declaration, an accent
+   that "steps up to Tulip Bloom", and olive-cast dark grounds. None of it exists: there is no
+   `prefers-color-scheme` block anywhere in this file, `:root` declares `color-scheme: light`,
+   and the palette header at the top of the file states the rule — "One theme, one accent, one
+   place to change either." The comment also described the accent as Crushed Rose, which the
+   palette replaced with amber, so it had been stale through at least two accent changes. It was
+   documentation for code somebody removed, and the danger of that is specific: the next person
+   to read it believes both themes are covered and stops checking. `e2e/support/visual.ts` is the
+   honest record — its capture matrix is one theme with the reason written down, and it says the
+   day a second theme ships it is added there and the matrix doubles by construction. If dark
+   mode is ever wanted it is a founder call on the brand, not a cleanup task. */
 /* Clinician joining ----------------------------------------------------------
    O188: the application form is retired; the page is a pitch and one email address. */
 .join-page { min-height: 100dvh; padding: 0 0 96px; background: var(--paper); }

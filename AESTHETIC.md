@@ -125,8 +125,23 @@ and a one-line commit message are the record.
       floating rectangle. That is the offset `.nearby-marker:focus-visible` and the console's
       per-class rings had each arrived at on their own. Class-level rules still win on specificity,
       so every deliberate custom ring is untouched.
-- [ ] Dark-mode / theme parity, if the app has one (check `globals.css` and any theme toggle) —
-      confirm it isn't a half-finished pass.
+- [x] Dark-mode / theme parity (2026-09-03) — **the app has no second theme, and that is a
+      decision, not a gap.** Checked all three places it could live: `globals.css` contains zero
+      `prefers-color-scheme` blocks, `:root` declares `color-scheme: light`, and no theme toggle,
+      `data-theme` attribute or `darkMode` flag exists anywhere in `app/` or `src/`. The palette
+      header states the rule outright — "One theme, one accent, one place to change either" — and
+      `e2e/support/visual.ts` already encodes it honestly: its capture matrix is a list of one
+      theme with the reason recorded and a note that adding a second there doubles the matrix by
+      construction. **The half-finished pass this item was written to look for was real, but it
+      was a comment, not a stylesheet.** A ~28-line "DARK MODE" banner sat in `globals.css`
+      describing a token re-declaration, an accent that "steps up to Tulip Bloom", and olive-cast
+      dark grounds — none of which exist; the section body had been removed and only the heading
+      survived. It also called the accent Crushed Rose, which the palette has since replaced with
+      amber, so it had been stale across at least two accent changes. Deleted and replaced with a
+      short note saying no dark mode exists and why, because documentation for absent code is
+      worse than none: the next reader believes both themes are covered and stops checking.
+      Building dark mode was deliberately *not* done here — it is a founder call on the brand
+      (see "Explicitly not doing"), not a refinement task.
 - [ ] Type scale: confirm optical sizing (not just linear scaling) between the finder's large,
       single-idea headlines and the console's dense tabular text.
 
