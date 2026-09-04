@@ -46,23 +46,30 @@ export function TypeStage({
       </header>
 
       <div className="type-content">
-        <p className="eyebrow">In your own words</p>
         {speechMessage && <p className="speech-error">{speechMessage}</p>}
         {speechRetryable && (
           <button className="speech-retry" type="button" onClick={onRetryMic}>
             Try the microphone again
           </button>
         )}
-        <h1 tabIndex={-1}>
-          <span>ADHD assessment</span>
-          <em>that takes you seriously.</em>
-        </h1>
+        {/* THIS SCREEN WAS STILL RUNNING THE TAGLINE O233 DELETED. The welcome used to open with
+            "ADHD assessment / that takes you seriously." and the founder had it removed — a
+            marketing claim on the screen whose job is to get a sentence out of somebody. The
+            welcome was fixed and the type screen, which is the same box reached by another door,
+            kept it: a person who taps "Type instead" on the listening screen met a slogan the
+            product had already retracted, at display size, above a box it had pushed down. It asks
+            the welcome's question now, word for word — one question, wherever the box is met.
+            The eyebrow ("In your own words") went with it rather than being kept and shrunk: it
+            was the question again in label type, and the flow from listening is continuous only if
+            arriving here costs one line to read, not three. The placeholder is the welcome's too,
+            for the same reason — one field, one example, whichever screen it is on. */}
+        <h1 tabIndex={-1}>What kind of GP are you looking for?</h1>
         <label className="sr-only" htmlFor="doctor-request">Describe the GP you want to see</label>
         <textarea
           id="doctor-request"
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          placeholder="For example: A woman GP who assesses adult ADHD, speaks Tamil, and understands a family who thinks this is an excuse."
+          placeholder="e.g. a woman GP near Beecroft who bulk bills"
         />
       </div>
 

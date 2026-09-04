@@ -3250,28 +3250,9 @@ summary:focus-visible {
   }
 }
 
-.patient-v2 .type-content h1 span,
-.patient-v2 .type-content h1 em {
-  display: block;
-}
-
-.patient-v2 .type-content h1 span {
-  font-family: "Inter Variable", Inter, system-ui, sans-serif;
-  font-size: 0.78em;
-  font-weight: 420;
-  line-height: 1;
-  letter-spacing: -0.055em;
-}
-
-.patient-v2 .type-content h1 em {
-  margin-top: 5px;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.04em;
-  font-weight: 390;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
-  padding-bottom: 4px;
-}
+/* The `span`/`em` pair here set the two halves of the old tagline on the TYPE screen. The tagline
+   is gone from that screen too now (see type-stage.tsx), so the rules went with it — same delete
+   the welcome's copies got when O233 removed it there. */
 
 .patient-v2 .finder-wordmark {
   text-decoration: none;
@@ -3423,10 +3404,6 @@ summary:focus-visible {
   .patient-v2[data-stage="type"] .bottom-action {
     margin-top: 0;
     margin-bottom: auto;
-  }
-
-  .patient-v2[data-stage="type"] .type-content h1 {
-    font-size: clamp(2.875rem, 4.6vw, 3.5rem);
   }
 
   .patient-v2[data-stage="type"] .type-content textarea {
@@ -6422,7 +6399,6 @@ select { caret-color: var(--route-strong); }
   padding: 14px 18px;
 }
 
-.patient-v2 .type-content h1,
 .patient-v2 .booking-content h1,
 .patient-v2 .profile-content h1 {
   color: var(--ink);
@@ -6430,11 +6406,20 @@ select { caret-color: var(--route-strong); }
   font-weight: 590;
   letter-spacing: -0.035em;
 }
-.patient-v2 .type-content h1 em,
-.patient-v2 .type-content h1 span {
-  color: var(--route-strong);
+/* The type screen asks the welcome's question, so it is set like the welcome's question — same
+   serif, same weight, same ceiling. It was display type (3rem, up to 3.5rem past 820px) because it
+   used to be a tagline; at that size the heading, not the box, was the subject of a screen whose
+   only job is the box. `text-wrap: balance` and the measure are the welcome's too, so the sentence
+   breaks the same way on both doors into it. */
+.patient-v2 .type-content h1 {
+  max-width: 440px;
+  color: var(--ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-weight: 440;
+  font-size: clamp(1.5rem, 4.4cqw, 1.9375rem);
+  font-weight: 520;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
 }
 .patient-v2 .type-content textarea {
   border-color: var(--route-line);

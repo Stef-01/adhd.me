@@ -152,6 +152,26 @@ test("O233: the welcome screen leads with the question and the box, not a taglin
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 });
 
+/**
+ * The test above asserts the retracted tagline is gone — on `/`, which is the only screen it
+ * checked, and that is how the type screen kept running it for another six units. The type screen
+ * is the same compose box behind another door, so it gets the same two assertions: the question the
+ * welcome asks, and no slogan. Reached the way `finder-flow.spec.ts` reaches it (from the results,
+ * "Change what you said"), which needs no fake recogniser and is a second real door into the field.
+ */
+test("O233 holds on the type screen too: the same question, no tagline", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#welcome-request").fill("a GP near Epping");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+  await page.getByRole("button", { name: "Change what you said" }).click();
+  await expect(page.locator("#doctor-request")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("What kind of GP are you looking for?");
+  await expect(page.getByText(/takes you seriously/i)).toHaveCount(0);
+  await expect(page.getByText("In your own words")).toHaveCount(0);
+});
+
 test("the sheet is a dialog: it traps focus, closes on Escape and gives focus back", async ({ page }) => {
   await page.goto("/");
   const trigger = page.getByRole("button", { name: "Settings" });

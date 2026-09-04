@@ -42,8 +42,31 @@ and a one-line commit message are the record.
       disclosure line at the foot. Nothing needed changing here — the defect was on the screen
       before it (see `welcome-stage.tsx`), and with that fixed the wordmark now holds still across
       the welcome → listening transition. Confirmed on mobile + desktop captures.
-- [ ] `type-stage.tsx`, `scenarios-stage.tsx` — check these feel like one continuous flow with
-      listening, not a separate mode.
+- [x] `type-stage.tsx`, `scenarios-stage.tsx` (2026-09-04) — checked against listening, and one of
+      the two was a separate mode. **`scenarios-stage.tsx` is fine and was left alone:** back arrow,
+      wordmark, one heading sized like a heading (O232 already fixed that), one quote, one primary
+      action at the foot on the same `.bottom-action` spring as every other stage. It reads as the
+      same product taking a different door. **`type-stage.tsx` was still running the tagline O233
+      deleted.** "ADHD assessment / that takes you seriously." was removed from the welcome as a
+      marketing claim on the screen whose only job is getting a sentence out of somebody — but the
+      type screen is the *same box behind another door*, and it kept the slogan, at display scale
+      (3rem, rising to 3.5rem past 820px), above a box that scale had pushed down. So a person who
+      tapped "Type instead" on the listening screen — where their own words are the hero — landed
+      on a retracted claim shouting over a smaller field. `app-shell.spec.ts` even asserts
+      `/takes you seriously/i` has count 0, but only on `/`, so the leftover was invisible to the
+      suite; a CSS comment at the old `span`/`em` rules already claimed both had been deleted with
+      the tagline, and on this screen neither had. It now asks the welcome's question, word for
+      word — "What kind of GP are you looking for?" — set in the welcome's own type (Newsreader,
+      520, `clamp(1.5rem, 4.4cqw, 1.9375rem)`, balanced, 440px measure), so the two doors into one
+      field are one screen with one question. **Deleted rather than shrunk:** the `In your own
+      words` eyebrow was the question again in label type, and the placeholder is now the welcome's
+      (`e.g. a woman GP near Beecroft who bulk bills`) rather than a second, longer example for the
+      same field. The `span`/`em` rules and the ≥820px display-size override went with the markup
+      they styled. **Not changed, deliberately:** the header. Listening and welcome put the wordmark
+      hard left with a dismiss control right; type, scenarios, profile and the rest put a back arrow
+      left and the wordmark centred. That is two consistent header modes — entry vs. inner screen —
+      and moving type to match listening would break its consistency with the four screens it
+      actually shares a control with.
 - [x] `profile-stage.tsx` (2026-09-04) — density check done, and the screen passes it: one
       decision is on it (the single footer button; "Compare" lives inside the closed *Why matched*
       disclosure, so it costs nothing until asked for), the body is identity → six-fact strip →

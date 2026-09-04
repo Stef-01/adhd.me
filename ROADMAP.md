@@ -51,8 +51,12 @@ polish the existing shell, question it.
       starts flaking again, read the harness note in `src/tenancy/rollout.test.ts` first — the
       failure mode there was a sample too short to measure under parallel-worker load, and it will
       look like a real regression rather than an instrument problem. Standing item, never ticked.
-      Last confirmed green 2026-09-03 after the results-stage order note: `pnpm verify` at
-      3692 tests over 226 files, `pnpm e2e` at 261 passed in 6.9m, no flakes.
+      Last confirmed green 2026-09-04 after the profile-facts and type-screen passes: `pnpm verify`
+      green, `pnpm e2e` at 261 passed in 7.1m, no flakes (262 with the type-screen guard added after
+      that run; that spec file re-run green on its own).
+      **One trap worth knowing:** killing `pnpm e2e` mid-run leaves a half-written `.next`, and the
+      next build dies with `TypeError: a[d] is not a function ... Error occurred prerendering page
+      "/"`. That reads exactly like a product regression and is not one — `rm -rf .next` and rebuild.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 
