@@ -178,6 +178,18 @@ polish the existing shell, question it.
 - [ ] Practice console: pick the 3–4 modules that best carry the demand-matching/shared-care story
       (likely `matching`, `capacity`, `outcomes`, `referrals`) and bring those to real depth —
       empty states, loading states, error states, keyboard access — before touching the rest.
+      **The state of the four likely ones, measured 2026-09-05, so the pick is made on facts.**
+      All four already carry a designed empty state in their own words (`matching` has five, one
+      per feed; `capacity` and `outcomes` a labelled empty region; `referrals` one each for
+      received and sent). Loading and error are the console-wide boundaries `app/console/
+      loading.tsx` and `error.tsx`, exercised by `e2e/error-boundary.spec.ts`; none of the four
+      has a boundary of its own, and for screens this size one shared pair is the right depth.
+      Keyboard access is walked, not assumed: `e2e/keyboard-focus.spec.ts` presses Tab through
+      every console screen (and every public route and finder stage), and every stop shows a
+      visible indicator with no control stranded. So the engineering half of "real depth" holds
+      for all four today; what is left is the founder's pick and the CONTENT depth of the pitch
+      — which data each screen should show a room of practice managers — which is not a code
+      fact. The pick is the same call as the console IA item above.
 - [ ] Geo: decide if Gold Coast stays the flagship regional demo or if a second region should exist
       to prove the gazetteer generalises. Don't add a third without a reason.
 - [x] Voice input (`src/voice/speech.ts`): verify it degrades honestly (visible, non-blocking
@@ -239,8 +251,10 @@ polish the existing shell, question it.
       anywhere. The sweep is `e2e/a11y.spec.ts`, derived from the filesystem and the stage machine
       rather than listed, so a new screen is swept by existing; it is a check with no exemption
       register — a finding is fixed in the same change or the spec says why it cannot be. Still
-      standing in the sense the item is: the automated half cannot see focus order, reading order
-      or whether a label is the right words, and those are walked by hand in the monthly audit.
+      standing in the sense the item is: the automated half cannot see reading order or whether a
+      label is the right words, and those are walked by hand in the monthly audit. Focus order
+      and focus visibility ARE walked, by `e2e/keyboard-focus.spec.ts` (real Tab presses over
+      every public route, console screen and finder stage; clean the same day).
 - [x] Performance: re-baseline bundle size and route weight now that `perf:gate` no longer runs
       automatically. Know the numbers even without an enforced budget. **Baseline 2026-09-05**
       (`pnpm build`, Next 15.5, First Load JS): shared by all routes **103 kB**; `/` (the finder)
