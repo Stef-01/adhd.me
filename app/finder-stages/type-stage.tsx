@@ -46,7 +46,9 @@ export function TypeStage({
       </header>
 
       <div className="type-content">
-        {speechMessage && <p className="speech-error">{speechMessage}</p>}
+        {/* transitions.dev toast: the banner rises in through a cross-blur, slower in than out —
+            a mount animation, because the reducer only ever holds one banner at a time. */}
+        {speechMessage && <p className="speech-error t-toast" role="status">{speechMessage}</p>}
         {speechRetryable && (
           <button className="speech-retry" type="button" onClick={onRetryMic}>
             Try the microphone again

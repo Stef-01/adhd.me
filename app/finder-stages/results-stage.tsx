@@ -242,7 +242,24 @@ export function ResultsStage({
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
       >
-        <h2>{quality === "informed" ? "Matches" : "All listed GPs"}</h2>
+        {/* transitions.dev text states swap: this heading changes in place when a clarifier answer
+            turns "All listed GPs" into "Matches" — the moment the product's claim becomes true. The
+            old word leaves upward through a small blur while the new one rises in from below, on
+            the tap beat, so the change is seen rather than noticed later. */}
+        <h2 className="t-text-swap-slot">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={quality === "informed" ? "matches" : "all"}
+              className="t-text-swap"
+              initial={reducedMotion ? false : { opacity: 0, y: 4, filter: "blur(2px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={reducedMotion ? undefined : { opacity: 0, y: -4, filter: "blur(2px)", transition: { duration: 0.15 } }}
+              transition={{ duration: 0.15, ease: EASE_OUT }}
+            >
+              {quality === "informed" ? "Matches" : "All listed GPs"}
+            </motion.span>
+          </AnimatePresence>
+        </h2>
         <span className="results-list-tools">
           {/* O226: the count sits with the list it describes, not two groups up the page. */}
           {matches.length > shown.length && (

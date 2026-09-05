@@ -118,7 +118,10 @@ export function ListeningStage({
           place, so the words land where the eye already is. Not live (U9): a person hears
           their own words as they say them. */}
       <div className="listen-stage">
-        <h1 className="listen-eyebrow" tabIndex={-1}>Listening</h1>
+        {/* transitions.dev shimmer text, BOUNDED by the state it narrates: the band sweeps the word
+            only while the microphone is live and stops the moment `finishing` is true. Not an
+            ambient loop — it is the label of an in-progress thing, and it ends with the thing. */}
+        <h1 className={finishing ? "listen-eyebrow" : "listen-eyebrow t-shimmer"} data-text="Listening" tabIndex={-1}>Listening</h1>
         <p className={heard ? "listen-transcript" : "listen-transcript is-empty"}>
           {heard ? <StreamedWords text={heard} /> : "Say what you’re looking for…"}
         </p>

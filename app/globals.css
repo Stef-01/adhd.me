@@ -9305,6 +9305,12 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
        checkbox check   the settings tickbox, a drawn box whose tick strokes in
        learn-more       the story page's three arrow links, arms spreading on hover
        badge            the Profile tab shows how many filters are on
+       text swap        the results heading, when a clarifier turns "All listed GPs"
+                        into "Matches" — the moment the product's claim becomes true
+       avatar hover     the two heads on the compare screen lift and settle
+       toast            the speech banner on the type screen rises through a blur
+       shimmer          "Listening", only while it is true — bounded by the state,
+                        not an ambient loop
 
      STILL DECLINED, each for a stated reason rather than by omission:
        skeleton reveal  `rankCliniciansNear` runs in a `useMemo`. There is no load. A
@@ -9319,9 +9325,10 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
        icon swap        `layoutId`, and the compose control morphs mic to arrow.
        card tilt,       decoration on a tool somebody uses tired, at night, looking for
        like button      medical care. `adhdme-taste` rules them out.
-       toast, banner,   no surface holds them; the listening screen has no status line
-       thinking states  that changes (the transcript IS the screen); the type screen has
-       input clear      no clear button, and the dissolve needs per-frame JS.
+       banner stacking, one banner at a time here, so nothing to stack; the listening
+       thinking states  screen has no status line that changes (the transcript IS the
+       input clear      screen); the type screen has no clear button, and the dissolve
+                        needs per-frame JS.
        tooltip          the map markers already carry accessible names, and the product
                         is mobile-first — a hover-only hint helps the one device it is
                         least used on.
@@ -9583,4 +9590,60 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   .finder-demo-toggle input:checked + .t-check svg path { stroke-dashoffset: 0; }
   .t-badge { animation: none !important; }
   .t-learn-arm { transform: none !important; }
+}
+
+/* ── Text states swap — the results heading. The slot clips so the leaving word cannot paint
+   outside the line, and `popLayout` keeps the heading's height while two words overlap. */
+.t-text-swap-slot { overflow: hidden; }
+.t-text-swap { display: inline-block; will-change: transform, filter, opacity; }
+
+/* ── Avatar-group hover — the two heads on the compare screen. In: quick and direct. Out: the
+   return takes longer on the strong bounce, so the head settles instead of snapping back. */
+.compare-portrait {
+  display: inline-block;
+  transform: translateY(0) scale(1);
+  transition: transform var(--dur-enter) cubic-bezier(0.34, 3.85, 0.64, 1);
+  will-change: transform;
+}
+@media (hover: hover) {
+  .compare-head:hover .compare-portrait {
+    transform: translateY(-4px) scale(1.04);
+    transition: transform var(--dur-tap) var(--ease-ui);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .compare-portrait { transition: none !important; transform: none !important; }
+  .t-text-swap { transition: none !important; }
+}
+
+/* ── Toast — the speech banner on the type screen. Rises through a cross-blur on the enter
+   rung; there is no exit lane because the reducer replaces the banner rather than closing it. */
+.t-toast { animation: t-toast-in var(--dur-enter) var(--ease-soft) both; }
+@keyframes t-toast-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* ── Shimmer text — "Listening", only while it is true. A highlight band sweeps the glyphs via
+   a clipped gradient on ::before; the base word stays readable underneath at all times. */
+.t-shimmer { position: relative; }
+.t-shimmer::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--accent) 70%, white) 50%, transparent 60%, transparent 100%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: t-shimmer 2.2s linear infinite;
+}
+@keyframes t-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-toast { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+  .t-shimmer::before { animation: none !important; content: none; }
 }
