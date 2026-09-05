@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# The superpowers bootstrap, repo-local. Mirrors obra/superpowers `hooks/session-start`: the plugin
+# injects its `using-superpowers` skill at SessionStart, and superpowers' own acceptance test for an
+# install is that this bootstrap loads at session start — "without it, the skills are dead weight".
+# The skills are vendored under .agents/skills (symlinked from .claude/skills) like every other
+# skill this repo carries, so the bootstrap reads the vendored copy.
+set -euo pipefail
+ROOT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
+content=$(cat "${ROOT}/.claude/skills/using-superpowers/SKILL.md" 2>&1 || echo "Error reading using-superpowers skill")
+escape() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\r'/\\r}"; s="${s//$'\t'/\\t}"; printf '%s' "$s"; }
+ctx="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n$(escape "$content")\n</EXTREMELY_IMPORTANT>"
+printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$ctx"

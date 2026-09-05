@@ -47,6 +47,18 @@ polish the existing shell, question it.
       `pnpm e2e` confirmed green on the same tree: **260 passed in 6.8m**, no flakes. (The
       `fault fixture: the render error` lines in that run are an intentional fixture, not a
       failure.) So both halves of the baseline are green as of 2026-09-03.
+- [ ] **Monthly design audit — `adhdme-taste` then `impeccable`, every month, never ticked**
+      (founder-directed 2026-09-05: "there is so much AI slop everywhere"). On or about the 5th of
+      each month, one session runs the tree's own taste law (`adhdme-taste`) over every patient
+      surface, then `impeccable`'s audit and critique playbooks (`/audit`, `/critique`, with its
+      MODE vocabulary — the finder, profile and console are **Operate**, the story and join pages
+      **Persuade**), and writes what it found and what it changed into `AESTHETIC.md` under a dated
+      entry. The pass is about the three default AI looks `frontend-design` names and the slop
+      `impeccable` catches — filler copy, decorative motion, cards inside cards, unearned gradients,
+      generic type — and about fluidity: every screen change, open, close and arrival on the house
+      motion scale, nothing snapping. Standing item: tick nothing here, date each pass in
+      `AESTHETIC.md`. **Next due: 2026-10-05.** Last run: 2026-09-05 (this session — the
+      transitions.dev component pass; see `AESTHETIC.md`).
 - [ ] Keep it green. No new ledger; just don't leave `main` broken overnight. If a timing test
       starts flaking again, read the harness note in `src/tenancy/rollout.test.ts` first — the
       failure mode there was a sample too short to measure under parallel-worker load, and it will
@@ -99,6 +111,16 @@ polish the existing shell, question it.
       alone will NOT find a stranded `next build` — it has no port); kill that whole tree; *then*
       `rm -rf .next`; *then* build; *then* run the suite, serially, with nothing else touching the
       repo. Do not run `pnpm verify` and `pnpm e2e` concurrently — they share `.next`.
+      **2026-09-05 — `dashboard.spec.ts` was red on `main`, and it was the test, not the page.**
+      Root-caused with `systematic-debugging` rather than retried: the failure snapshot showed
+      `main` holding only the `Loading…` line from `app/console/loading.tsx`, which U3 added
+      *after* W14 wrote the spec. The spec had put its 30s allowance on the navigation ("the first
+      render builds the full sim"), but a streaming boundary lands the URL instantly and moves the
+      sim's ~4.9s (measured cold) onto the first tile, which still had Playwright's 5s default.
+      Fix: the allowance moved to the content. The page renders correctly — north star 120.6,
+      nothing withheld. **Proposed, not done:** warm `getDashboardData()` at server start (in
+      `instrumentation.ts`'s `register()`) so the presenter's first click on the dashboard does not
+      sit on a loading line for five seconds. That is a product change and gets its own design.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 

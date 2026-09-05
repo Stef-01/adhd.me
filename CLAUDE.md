@@ -32,3 +32,21 @@ the founder's instruction is "every time you code". The skill lives at
 
 This is a working discipline, not resurrected apparatus: `CONTEXT.md` and `docs/adr/` are written
 lazily, only when there is something real to record, and nothing here gates a commit.
+
+## Superpowers (founder-directed, 2026-09-05)
+
+`obra/superpowers` is vendored — all fourteen skills under `.agents/skills/` (symlinked from
+`.claude/skills/`, recorded in `skills-lock.json` at commit `b36e082`) — and its bootstrap runs at
+every session start from `.claude/settings.json` → `.claude/hooks/session-start`, which is the
+plugin's own `using-superpowers` injection done repo-locally. That bootstrap is what makes the
+skills auto-trigger; superpowers' own acceptance test for an install is that it loads.
+
+**How it composes with `grill-with-docs`, which is not replaced:** superpowers' `brainstorming`
+and mattpocock's `grilling` are the same discipline — interview to a shared understanding, get a
+yes, only then build — and `grilling`'s numbered-frontier rounds are the interview method to use
+inside `brainstorming`. `domain-modeling` (CONTEXT.md, `docs/adr/`) is the record both write to.
+Then superpowers carries the rest of the loop: `writing-plans` → `executing-plans` /
+`subagent-driven-development` → `test-driven-development` → `verification-before-completion` →
+`finishing-a-development-branch`, with `systematic-debugging` for any red. When the founder says
+"implement and push", that is the explicit approval both skills wait for — say the classification
+and the design out loud, then proceed.

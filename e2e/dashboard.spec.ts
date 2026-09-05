@@ -11,13 +11,15 @@ test.beforeEach(async ({ page, request }) => {
 
 test("dashboard renders the north star and both arms from sim data", async ({ page }) => {
   await page.getByRole("link", { name: "Incrementality dashboard" }).click();
-  // The dashboard's first render builds the full default sim (W14 cached accessor),
-  // which can exceed the 5s default; allow the navigation extra time.
   await expect(page).toHaveURL(/\/console\/dashboard$/, { timeout: 30_000 });
 
-  // North-star tile carries a real number, not a placeholder.
+  // The dashboard's first render builds the full default sim (W14 cached accessor) — measured at
+  // ~4.9s cold — and since U3 gave /console a streaming `loading.tsx`, that wait no longer sits on
+  // the navigation: the URL lands instantly on the "Loading…" shell and the sim's seconds arrive
+  // HERE, on the first tile. The 30s allowance therefore belongs to the content, not the URL.
+  // (This spec was red on main for exactly that reason: the allowance was on the wrong wait.)
   const northStar = page.getByText("Incremental attended / 1,000").locator("..");
-  await expect(northStar).toBeVisible();
+  await expect(northStar).toBeVisible({ timeout: 30_000 });
   await expect(northStar.locator("div").nth(1)).toHaveText(/^-?\d+\.\d$/);
 
   // The naive count is present but labelled as contrast only.
