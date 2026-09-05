@@ -43,6 +43,35 @@ import { Sheet } from "../sheet";
  * recogniser is finishing its last phrase after the tap, and the caption under it says what a
  * tap does. The language controls restart listening and the live region says so.
  */
+/**
+ * The transcript, one word per span, so a word resolves as it arrives.
+ *
+ * Words are keyed by POSITION, and that is the whole mechanism. Speech
+ * recognition appends and occasionally rewrites the tail of what it heard, so
+ * word 3 keeps its DOM node across every update while a new word 9 gets a new
+ * one — and a CSS mount animation therefore runs exactly once, on the word that
+ * is actually new. No timer, no "which words have I already shown" state, and
+ * nothing to reset when the recogniser revises itself.
+ *
+ * The rendered TEXT is unchanged: each span carries its word and the space after
+ * it, so `textContent` still reads as the sentence the person said. Specs that
+ * match the transcript by text, and a screen reader reading the paragraph, both
+ * see exactly what they saw before.
+ */
+function StreamedWords({ text }: { text: string }) {
+  const words = text.split(/(\s+)/).filter(Boolean);
+  return (
+    <>
+      {words.map((word, i) => (
+        // eslint-disable-next-line react/no-array-index-key -- position IS the identity here; see above.
+        <span key={i} className="t-stream-w">
+          {word}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function ListeningStage({
   heard,
   reducedMotion,
@@ -91,7 +120,7 @@ export function ListeningStage({
       <div className="listen-stage">
         <h1 className="listen-eyebrow" tabIndex={-1}>Listening</h1>
         <p className={heard ? "listen-transcript" : "listen-transcript is-empty"}>
-          {heard || "Say what you’re looking for…"}
+          {heard ? <StreamedWords text={heard} /> : "Say what you’re looking for…"}
         </p>
       </div>
 

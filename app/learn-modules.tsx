@@ -62,6 +62,31 @@ function ModuleMark({ tint, quiz }: { tint: LearnModule["tint"]; quiz: boolean }
   );
 }
 
+/**
+ * The score, digit by digit — the one number in this app that changes.
+ *
+ * Each character is its own span so it rises, unblurs and settles on the
+ * overshoot curve independently, with the second digit a beat behind the first.
+ * The number is inside a heading a screen reader announces as text; splitting it
+ * into spans does not change what is announced, and the sentence beneath it
+ * carries the meaning either way.
+ */
+function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
+  const digits = String(score).split("");
+  return (
+    <>
+      {digits.map((digit, i) => (
+        // eslint-disable-next-line react/no-array-index-key -- digit position is its identity.
+        <span key={i} className="t-digit" data-stagger={i > 0 ? String(Math.min(i, 2)) : undefined}>
+          {digit}
+        </span>
+      ))}
+      {" of "}
+      {outOf}
+    </>
+  );
+}
+
 export function LearnModules() {
   const reducedMotion = useReducedMotion();
   const [progress, setProgress] = useState<Progress>({ v: 1, done: [] });
@@ -239,7 +264,15 @@ export function LearnModules() {
                           transition={POP}
                         >
                           <span className="learn-option-mark" aria-hidden="true">
-                            {answered && o === q.answer && <Check size={16} weight="bold" />}
+                            {/* The tick arrives rotated, blurred and low, and settles — the
+                                success-check beat. The cross does not: being wrong is not a
+                                moment to celebrate, and animating it would read as the app
+                                enjoying itself at the reader's expense. */}
+                            {answered && o === q.answer && (
+                              <span className="t-success-check">
+                                <Check size={16} weight="bold" />
+                              </span>
+                            )}
                             {answered && o === chosen && o !== q.answer && <X size={16} weight="bold" />}
                           </span>
                           {option}
@@ -277,7 +310,7 @@ export function LearnModules() {
           >
             <p className="learn-card-eyebrow">{score === questions.length ? "All of them" : score >= questions.length / 2 ? "Nicely done" : "Now you know"}</p>
             <h3 className="learn-card-heading learn-score-figure">
-              {score} of {questions.length}
+              <ScoreFigure score={score} outOf={questions.length} />
             </h3>
             <p className="learn-card-body">
               {score === questions.length

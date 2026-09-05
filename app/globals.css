@@ -9271,3 +9271,153 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   font-style: normal;
   font-variant-numeric: tabular-nums;
 }
+
+/* ============================================================================
+   TRANSITIONS.DEV (Jakub Antalik) — the four that land on a state this app
+   already has. Namespaced `t-*`, the library's own prefix, so a recipe cannot
+   collide with a class the tree already owns (which is how the `.profile-facts`
+   collision happened once already).
+
+   THE SELECTION RULE, AND IT IS THE WHOLE OF THE PASS. A transition earns its
+   place when there is already a moment it describes. The library has thirty-two;
+   most of them describe moments this product does not have, and installing one
+   of those means inventing the moment to justify the animation. So:
+
+     ADOPTED — a real state change, previously unmarked:
+       streaming text   the voice transcript, which arrived as a finished block
+       number pop-in    the quiz score, which was static text
+       success check    the quiz's correct-answer tick, which appeared instantly
+       error shake      the interest form's invalid fields, which only turned red
+
+     DECLINED, each for a stated reason rather than by omission:
+       skeleton reveal  `rankCliniciansNear` runs in a `useMemo`. There is no
+                        load. A skeleton would animate a wait that does not
+                        happen, which is a lie told in motion.
+       accordion        would collapse the FAQ answers behind a click. Those
+                        answers were just made extractable for answer engines
+                        (`src/seo/faq.ts`); hiding them is a direct cost to that.
+       toggle           the profile switches ALREADY do this. `--ease-spring` is
+                        a sampled `linear()` curve that overshoots and settles,
+                        which is what the recipe's double bounce is. Swapping one
+                        overshoot for another is churn, not craft.
+       tabs sliding,    already built natively — the tab marker travels on a
+       icon swap,       shared `layoutId`, the compose control morphs mic to
+       texts reveal     arrow, and the welcome stage has its own stagger.
+       card tilt,       decoration on a tool somebody uses tired, at night,
+       like button      looking for medical care. `adhdme-taste` rules them out.
+       toast, banner    no surface holds them. Adding one would be new product.
+       shimmer text     would compete with the live waveform for the same
+                        "something is happening" job on the same screen.
+
+   Durations and curves are the HOUSE tokens wherever the usage matches, per the
+   same match-on-usage rule the motion audit used; only the genuinely new
+   per-transition variables are introduced. Every one has a reduced-motion rest
+   state, and the global reduce block above already collapses the timings. */
+
+:root {
+  /* Streaming text: one word every --stream-gap, each resolving over --stream-fade. */
+  --stream-gap: 60ms;
+  --stream-fade: 350ms;
+  --stream-blur: 1px;
+  /* Number pop-in: the digit rises from below, blurred, on an overshoot curve. */
+  --digit-distance: 8px;
+  --digit-blur: 2px;
+  --digit-ease: cubic-bezier(0.34, 1.45, 0.64, 1);
+  /* Success check: the mark arrives rotated, blurred and low, and settles. */
+  --check-rotate-from: -18deg;
+  --check-blur-from: 4px;
+  --check-y-amount: 4px;
+  /* Error shake: two segments out, one back, one settle. */
+  --shake-distance: 8px;
+  --shake-overshoot: 4px;
+  --shake-dur-a: 80ms;
+  --shake-dur-b: 60ms;
+}
+
+/* ── Streaming text — the voice transcript resolving word by word.
+   ADAPTED FROM THE RECIPE, AND THE ADAPTATION IS THE POINT. The published
+   snippet drives each word with a JS class flip on a `--stream-gap` timer,
+   because it is written for replaying a finished string. Here the words arrive
+   from the browser's speech service one at a time and React appends a span per
+   word, so a mount animation does the same job with no timer, no bookkeeping
+   and no replay state: a word animates once, when it appears, because that is
+   when its element appears. Words already on screen keep their DOM node and
+   stay still, which is what a person reading their own sentence needs. */
+.t-stream-w {
+  display: inline;
+  animation: t-stream-in var(--stream-fade) var(--ease-soft) both;
+}
+
+@keyframes t-stream-in {
+  from { opacity: 0; filter: blur(var(--stream-blur)); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+/* ── Number pop-in — the quiz score, which is the one number this app changes. */
+.t-digit {
+  display: inline-block;
+  animation: t-digit-in var(--dur-enter) var(--digit-ease) both;
+}
+
+.t-digit[data-stagger="1"] { animation-delay: var(--dur-stagger); }
+.t-digit[data-stagger="2"] { animation-delay: calc(var(--dur-stagger) * 2); }
+
+@keyframes t-digit-in {
+  from { opacity: 0; translate: 0 var(--digit-distance); filter: blur(var(--digit-blur)); }
+  to { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+
+/* ── Success check — the tick on a correct answer.
+   The wrapper half of the recipe only. The stroke-draw half needs the path's own
+   `getTotalLength()`, and the mark here is a Phosphor icon whose path this file
+   does not own; a dasharray guessed at would either clip the tick or leave a gap
+   in it. The recipe says bring your own icon, so this brings the motion and
+   leaves the drawing to whoever owns the path. */
+.t-success-check {
+  display: inline-flex;
+  transform-origin: center;
+  animation:
+    t-check-fade var(--dur-move) var(--ease-ui) both,
+    t-check-settle var(--dur-enter) var(--ease-spring) both;
+}
+
+@keyframes t-check-fade {
+  from { opacity: 0; filter: blur(var(--check-blur-from)); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes t-check-settle {
+  from { rotate: var(--check-rotate-from); translate: 0 var(--check-y-amount); }
+  to { rotate: 0deg; translate: 0 0; }
+}
+
+/* ── Error shake — a field that was refused.
+   Reinforcement, never the message: the field keeps its `aria-invalid`, its
+   `role="alert"` text and its colour change, and this adds the physical beat
+   that says which field. A shake alone would say nothing to a screen reader and
+   nothing to somebody who cannot see colour, which is why it is the last layer
+   rather than the first. */
+.t-input.is-shaking {
+  animation: t-input-shake calc(var(--shake-dur-a) * 2 + var(--shake-dur-b) * 2) linear;
+}
+
+/* Cumulative stops for 80 / 60 / 80 / 60 = 280ms: 28.57%, 57.14%, 78.57%, 100%.
+   Recompute these if a segment duration changes. */
+@keyframes t-input-shake {
+  0% { transform: translateX(0); animation-timing-function: var(--ease-ui); }
+  28.57% { transform: translateX(var(--shake-distance)); animation-timing-function: var(--ease-ui); }
+  57.14% { transform: translateX(calc(var(--shake-distance) * -1)); animation-timing-function: var(--ease-ui); }
+  78.57% { transform: translateX(var(--shake-overshoot)); animation-timing-function: var(--ease-ui); }
+  100% { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The global reduce block collapses every timing to 0.01ms, so each of these
+     lands on its end state immediately. These rules make the rest state explicit
+     anyway: a word stuck at opacity 0 is an unreadable transcript, and that is
+     too important to leave to a cascade somebody might edit. */
+  .t-stream-w,
+  .t-digit,
+  .t-success-check { animation: none !important; opacity: 1 !important; filter: none !important; translate: none !important; rotate: none !important; }
+  .t-input.is-shaking { animation: none !important; transform: none !important; }
+}
