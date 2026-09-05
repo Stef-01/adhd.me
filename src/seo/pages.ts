@@ -91,6 +91,29 @@ export const KEYWORD_HEAD = {
  */
 export const SEO_PAGES: readonly SeoPage[] = [
   {
+    /*
+      THE FRONT DOOR, ADDED WHEN THE STRIP OPENED IT. O241 wrote this register over the ten routes
+      that were indexable then; `/` was not one of them, because the founder's posture was that the
+      finder was for testing and `src/security/robots.ts` held it back. The 2026-09-03 strip emptied
+      that register — the site is public now — and the page the product IS came out from behind it
+      still carrying a ten-character title and a description nothing had measured. It is the page an
+      answer engine is most likely to be handed and the one a person lands on; it gets the same
+      treatment as the other eleven.
+    */
+    path: "/",
+    keyword: "find a GP who does ADHD assessment",
+    title: "Find a GP who does ADHD assessment in Sydney",
+    description:
+      "Find a GP who does ADHD assessment: describe the care you want in your own words, and the listed Sydney GPs are ordered around them with the reason shown.",
+  },
+  {
+    path: "/examples",
+    keyword: "worked examples",
+    title: "Worked examples of the ADHD GP finder at work",
+    description:
+      "Worked examples of the finder: searches run through the real engine, showing how much it understood, whether the order was earned, and who it showed first.",
+  },
+  {
     // O244 rewrote this page while O241 was in flight — the Learn tab is ADHD itself now, two
     // knowledge quizzes and five reading modules, not only the route to care. The entry moved with
     // it in the merge, which is the register doing its job: the page's words and its head cannot

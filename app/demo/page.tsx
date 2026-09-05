@@ -5,12 +5,12 @@
 
 import type { Metadata } from "next";
 import { getStore } from "@/booking/store";
-import { HIDDEN_ROBOTS_META } from "@/security/robots";
+import { ROBOTS_META } from "@/security/robots";
 
 export const metadata: Metadata = {
   title: "Presenter demo",
   description: "The scripted, fully synthetic demo world for showing the product to a practice.",
-  robots: HIDDEN_ROBOTS_META, // U7: from the crawler register, no longer this page's own setting
+  robots: ROBOTS_META,
 
 };
 import { signBookingToken } from "@/booking/token";

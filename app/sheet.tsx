@@ -45,6 +45,22 @@ const DISMISS_OFFSET = 0.35;
 const project = (velocity: number, decelerationRate = 0.998): number =>
   ((velocity / 1000) * decelerationRate) / (1 - decelerationRate);
 
+/**
+ * How long a dismissal takes — `--dur-exit`, in seconds, because that is what Motion wants.
+ *
+ * The sheet arrived and left on the SAME spring, which is the default when a vocabulary has no
+ * word for leaving. Two things were wrong with it, and they are the same thing seen twice. The
+ * spring is a spring in both directions, so a sheet being dismissed overshot: it dipped below the
+ * screen edge and came back up a few pixels before settling out of view, which reads as the sheet
+ * hesitating about whether it was really asked to close. And it took as long going as coming, so
+ * the fastest way to get rid of it was as slow as the decision to open it.
+ *
+ * An entrance may bounce; a dismissal may not. The exit is a plain tween on `--ease-ui`, the
+ * tree's own press curve, at the exit rung — quicker than the open it undoes and with nothing to
+ * settle. The scrim leaves on the same beat so the two do not separate on the way out.
+ */
+const EXIT_S = 0.15;
+
 export function Sheet({
   open,
   title,
@@ -132,7 +148,7 @@ export function Sheet({
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transition: { duration: reducedMotion ? 0 : EXIT_S } }}
             transition={{ duration: reducedMotion ? 0 : 0.18 }}
           />
           <motion.div
@@ -144,7 +160,11 @@ export function Sheet({
             tabIndex={-1}
             initial={reducedMotion ? { opacity: 0, height } : { y: "100%", height }}
             animate={reducedMotion ? { opacity: 1, height } : { y: 0, height }}
-            exit={reducedMotion ? { opacity: 0 } : { y: "100%" }}
+            exit={
+              reducedMotion
+                ? { opacity: 0 }
+                : { y: "100%", transition: { duration: EXIT_S, ease: [0.32, 0.72, 0, 1] } }
+            }
             transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 40, mass: 0.9 }}
             drag={reducedMotion ? false : "y"}
             dragDirectionLock

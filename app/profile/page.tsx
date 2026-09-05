@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HIDDEN_ROBOTS_META } from "@/security/robots";
+import { ROBOTS_META } from "@/security/robots";
 import { AppTabs } from "../app-tabs";
 import { ProfileView } from "../profile-view";
 
@@ -8,7 +8,7 @@ import { ProfileView } from "../profile-view";
 // a crawler could read anyway, since everything on it comes from this device's own session.
 export const metadata: Metadata = {
   alternates: { canonical: "/profile" },
-  robots: HIDDEN_ROBOTS_META,
+  robots: ROBOTS_META,
   title: "Your details",
   description: "What this device is holding for you: the words you described, the suburb you gave, and the controls over both.",
 };

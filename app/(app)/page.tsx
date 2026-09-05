@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HIDDEN_ROBOTS_META } from "@/security/robots";
+import { seoMetadata } from "@/seo/pages";
 import { CareFinder } from "../care-finder";
 
 // O230, founder-directed ("there should be no landing page, it should function exactly like an
@@ -26,13 +26,7 @@ import { CareFinder } from "../care-finder";
 // streaming a 200 with the loading line instead of a 404, and the fault fixture's thrown render
 // error arrived as a 200 that hid it. Three specs caught it — the gate working exactly as it
 // should. `(app)` is not in any URL; it scopes the boundary to the route that actually streams.
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  robots: HIDDEN_ROBOTS_META,
-  title: "Find a GP",
-  description:
-    "Describe the GP you are looking for and see the listed Sydney GPs who do ADHD assessment ordered around your words, with the access details you asked for.",
-};
+export const metadata: Metadata = seoMetadata("/");
 
 export default function AppHome() {
   return <CareFinder />;

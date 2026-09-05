@@ -12,7 +12,7 @@
 // the product it demonstrates.
 import Link from "next/link";
 import type { Metadata } from "next";
-import { HIDDEN_ROBOTS_META } from "@/security/robots";
+import { seoMetadata } from "@/seo/pages";
 import { careArchetypes } from "@/demo/care-archetypes";
 import { matchQuality, needsFor, rankClinicians } from "@/demo/clinicians";
 import { rosterSizeInWords } from "@/demo/roster-size";
@@ -20,13 +20,7 @@ import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { PublicHeader } from "../public-header";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/examples" },
-  title: "Worked examples",
-  description:
-    "Demo scenarios run through the real finder: how much it understood, whether the order was earned, and who it showed first — with the reasons printed in the product itself.",
-  robots: HIDDEN_ROBOTS_META, // U7: hidden with the finder it demonstrates; the register says why
-};
+export const metadata: Metadata = seoMetadata("/examples");
 
 export default function ExamplesPage() {
   const examples = careArchetypes.slice(0, 3).map((archetype) => {

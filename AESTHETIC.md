@@ -256,6 +256,27 @@ and a one-line commit message are the record.
 
 ## Cross-cutting
 
+- [x] Motion vocabulary audited against the transitions.dev scale (2026-09-05) — see
+      `docs/adr/0002-a-close-is-not-an-open-played-backwards.md` for the reasoning. The house
+      durations already agreed with that scale where they overlapped; the finding was a **missing
+      rung**. Nothing in the vocabulary said how fast a thing LEAVES, so every open/close pair used
+      one duration in both directions, and the sheet — the app's primary modal idiom — closed on the
+      same spring it opened on. A spring overshoots both ways, so a dismissed sheet dipped past the
+      screen edge and bobbed back before settling out of view. `--dur-exit` (150ms) and
+      `--dur-stagger` (40ms) are now in the token block with the rules attached: **a close is
+      shorter than the open it undoes and never overshoots**, and a stagger's cap is on the total
+      (offset x items, under ~300ms) rather than the offset. Fixed with them: the sheet's exit and
+      its scrim, and `story-landing.tsx`'s six-child cascade, which ran 480ms — long enough that the
+      last item landed after the reader had read the first and looked away.
+      Also tokenised in the same pass: every bare `<n>ms ease` in `globals.css`. About a dozen lived
+      in the cv2 console, which the token block's own comment had exempted as "keeping its own
+      tokens" — it had none, only literals on the browser default curve, which is the exact thing
+      `--ease-ui` was introduced to remove. Matched on **usage, not nearest number**: a stage
+      arriving takes `--dur-enter` on `--ease-soft`, a control acknowledging a press takes
+      `--dur-tap` on `--ease-ui`. The story page's choreographed sequences stay timelines and were
+      left alone; only its hover values were tokenised, and its
+      `cubic-bezier(0.16, 1, 0.3, 1)` was replaced with `--ease-soft`, which it already was.
+
 - [x] Motion: `prefers-reduced-motion` audited across every `motion/react` call site in `app/` and
       `src/` (2026-09-03). The finder was clean — `MotionConfig reducedMotion="user"` in
       `care-finder.tsx` plus per-prop guards. Four gaps outside it, all now fixed:

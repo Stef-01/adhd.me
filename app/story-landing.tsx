@@ -119,7 +119,11 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
   );
 }
 
-const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
+// 40ms, not 80: six children at 80ms is a 480ms cascade, and the rule that matters for a stagger
+// is the TOTAL — offset x items — not the offset. Past roughly 300ms the last item arrives after
+// the reader has already read the first and looked away, and the sequence stops reading as one
+// gesture. Six at 40ms is 240ms, which still reads in order and no longer runs late.
+const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item: Variants = { hidden: { y: 10 }, show: { y: 0, transition: { duration: 0.36, ease: EASE } } };
 
 export function StoryLanding() {

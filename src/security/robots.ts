@@ -1,28 +1,22 @@
-// U7 (O229): the routes this deployment hides from crawlers, in one register.
+// The routes this deployment hides from crawlers, in one register — and it is EMPTY, on purpose.
 //
-// The founder's posture for this tree is that the finder is not public — it is for testing, and
-// it defaults to invented example profiles (the synthetic-roster decision in founder-gates.ts).
-// Until U7, `app/robots.ts` allowed `/`, the sitemap announced `/finder` and nothing said
-// `noindex`; the tree was open to crawlers while its owner said it was closed. This register is
-// the one statement of which routes are hidden and why, and the three places a crawler is told
-// read it rather than keeping their own lists:
+// U7 (O229) wrote this file when the founder's posture was that the finder was not public: the
+// register held `/`, `/profile`, `/examples`, `/demo` and `/thanks`, and three enforcement points
+// read it (an `X-Robots-Tag` header from `next.config.ts`, each page's `metadata.robots`, and the
+// sitemap + robots.txt exclusions). The 2026-09-03 strip emptied it. That was a real decision —
+// the site is public now — and nothing here argues with it.
 //
-//   1. `X-Robots-Tag: noindex, nofollow` on the response — `next.config.ts` mounts one headers
-//      entry per route from `robotsHeaders()`; this is the instruction that reaches a crawler
-//      that never parses the HTML.
-//   2. `<meta name="robots">` — each route's page module sets `robots: HIDDEN_ROBOTS_META`.
-//   3. Discovery — `app/sitemap.ts` filters the register's paths out, and `app/robots.ts` adds
-//      them to its disallow list. Disallow alone would be wrong on its own (O19: it stops
-//      crawling, not indexing), which is why it is the third measure and not the first.
+// WHAT THE STRIP LEFT BEHIND WAS A TRAP, AND THE AI-SEARCH PASS IS WHERE IT SURFACED. The constant
+// every page sets as its `metadata.robots` was flipped from `{index: false}` to `{index: true}` and
+// kept its name: five pages read `robots: HIDDEN_ROBOTS_META` and published themselves. A reader
+// adding a sixth page would have copied that line believing it hid the page. It is `ROBOTS_META`
+// now, which is what it means, and this header says why rather than leaving the next reader to
+// diff two years of history to find out.
 //
-// `robots.test.ts` holds all three to this register in BOTH directions against the public-route
-// census: a route here is hidden in every place, and a route in the census that is not here is
-// hidden in none. A new public page can therefore be neither silently indexed nor silently hidden.
-//
-// REVERSING ANY OF THIS IS A FOUNDER GATE, NOT AN EDIT. `finder-public-posture` in
-// `src/design/founder-gates.ts` names this file as where the open state lives; the liveness test
-// fails when the finder leaves the register. The plan's D-FINDER-PUBLIC opens U65, which empties
-// the register in one commit and records the decision.
+// The register itself stays as the shape rather than being deleted: if a route ever needs holding
+// back again, one entry here still reaches robots.txt, the sitemap and the page's own meta tag
+// together, which is the property that made it worth writing. `src/seo/ai-crawlers.ts` is the
+// separate, live question — which AI crawlers may read what is published.
 
 import type { Header } from "./headers";
 
@@ -35,8 +29,12 @@ export interface HiddenRoute {
 
 export const HIDDEN_FROM_CRAWLERS: readonly HiddenRoute[] = [];
 
-/** What every hidden route's page module sets as `metadata.robots`. */
-export const HIDDEN_ROBOTS_META = { index: true, follow: true } as const;
+/**
+ * What a page sets as `metadata.robots`. Indexable, because the register above is empty.
+ *
+ * Named for what it is. It was `HIDDEN_ROBOTS_META` and meant `index: true` — see the header.
+ */
+export const ROBOTS_META = { index: true, follow: true } as const;
 
 /** The header value, the same instruction as the meta tag for crawlers that never read the page. */
 export const X_ROBOTS_TAG = "noindex, nofollow";

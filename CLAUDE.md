@@ -12,3 +12,23 @@ gazetteer, the finder state), `e2e/` (a handful of feature flows), and `vitest` 
 - Production needs `ADHDME_TOKEN_SECRET` set on Vercel for the console's signed sessions.
 
 Commit to main and push. Redesign freely.
+
+## How to work here (founder-directed, 2026-09-05)
+
+**Use `grill-with-docs` on every coding task.** Not only when asked, and not only on large ones —
+the founder's instruction is "every time you code". The skill lives at
+`mattpocock/skills/skills/engineering/grill-with-docs`, and it is a wrapper around two others:
+
+- **`grilling`** (`skills/productivity/grilling`) — interview before building. Map the work as a
+  design tree; ask the whole *frontier* (every decision whose prerequisites are already settled) in
+  one numbered round, each question carrying your recommended answer, then wait. The user's answers
+  push the frontier outward; recompute and ask the next round. **Facts are yours to find** — look
+  things up in the tree rather than asking — **decisions are the user's**. Done when the frontier
+  is empty, and only then build.
+- **`domain-modeling`** (`skills/engineering/domain-modeling`) — keep the vocabulary and the
+  decisions written down as they crystallise: `CONTEXT.md` for terms, `docs/adr/` for decisions.
+  Challenge a term that conflicts with the glossary, sharpen a fuzzy one, and cross-check a claim
+  about how something works against the code before accepting it.
+
+This is a working discipline, not resurrected apparatus: `CONTEXT.md` and `docs/adr/` are written
+lazily, only when there is something real to record, and nothing here gates a commit.

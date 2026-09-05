@@ -124,6 +124,25 @@
   /** Something arriving on screen or leaving it. */
   --dur-enter: 240ms;
 
+  /* THE RUNG THIS SCALE WAS MISSING, and it is a rule rather than a number.
+     Measured against the transitions.dev motion scale (Jakub Antalik), the house durations line up
+     almost exactly — `--dur-tap` 150ms is its `--duration-quick`, `--dur-enter` 240ms its
+     `--duration-fast` (250ms) — with one hole: nothing here said how fast a thing LEAVES. Every
+     open/close pair in this tree used one duration in both directions, because there was no other
+     option in the vocabulary.
+
+     Opening is an invitation and can take its time; closing is the interface getting out of the
+     way, and a dismissal that takes as long as its arrival reads as the app arguing. So a close is
+     `--dur-exit`, always shorter than the open it undoes, and it never overshoots — an entrance
+     may bounce, a close may not, or the thing appears to be pulled back before it goes.
+
+     `--dur-stagger` is the same scale's 40ms per-item offset. The rule that comes with it: keep
+     offset x items under ~300ms, or the last item arrives after the reader has finished looking. */
+  /** Something being dismissed: a sheet, a scrim, a panel closing. */
+  --dur-exit: 150ms;
+  /** The offset between one staggered item and the next. */
+  --dur-stagger: 40ms;
+
   --ground: #172033;
   --on-ground: #ffffff;
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
@@ -2118,7 +2137,7 @@ summary:focus-visible {
 
 .cv2-stage {
   padding: 45px 44px 54px;
-  animation: cv2-stage-in 260ms ease both;
+  animation: cv2-stage-in var(--dur-enter) var(--ease-soft) both;
 }
 
 .cv2-intro {
@@ -2162,7 +2181,7 @@ summary:focus-visible {
   padding: 21px 20px 20px;
   border: 1px solid var(--cv2-line);
   border-radius: 18px;
-  animation: cv2-stage-in 180ms ease both;
+  animation: cv2-stage-in var(--dur-move) var(--ease-soft) both;
 }
 
 .cv2-condition-panel legend {
@@ -2204,7 +2223,7 @@ summary:focus-visible {
   border-radius: 12px;
   background: var(--paper);
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition: border-color var(--dur-tap) var(--ease-ui), background-color var(--dur-tap) var(--ease-ui);
 }
 
 .cv2-condition-list label:focus-within, .cv2-condition-list label.is-checked {
@@ -2281,7 +2300,7 @@ summary:focus-visible {
   opacity: 0;
   pointer-events: none;
   transform: translateY(4px);
-  transition: opacity 140ms ease, transform 140ms ease;
+  transition: opacity var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-ui);
 }
 
 .cv2-coming-tooltip::after {
@@ -2377,7 +2396,7 @@ summary:focus-visible {
   font-size: 0.8125rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 160ms ease, background-color 160ms ease;
+  transition: transform var(--dur-tap) var(--ease-ui), background-color var(--dur-tap) var(--ease-ui);
 }
 
 @media (hover: hover) {
@@ -2404,7 +2423,7 @@ summary:focus-visible {
   font-weight: 700;
   text-decoration: none;
   touch-action: manipulation;
-  transition: transform 160ms ease, background-color 160ms ease;
+  transition: transform var(--dur-tap) var(--ease-ui), background-color var(--dur-tap) var(--ease-ui);
 }
 @media (hover: hover) {
   .cv2-action > .cv2-start-cta:hover { background: #2a2a22; transform: translateY(-1px); }
@@ -2551,7 +2570,7 @@ summary:focus-visible {
   border-radius: 24px;
   color: white;
   background: var(--cv2-ground);
-  animation: cv2-card-in 230ms ease both;
+  animation: cv2-card-in var(--dur-enter) var(--ease-soft) both;
 }
 
 .cv2-learning-meta {
@@ -4438,7 +4457,7 @@ summary:focus-visible {
   font-weight: 560;
   letter-spacing: 0.01em;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--dur-move) var(--ease-ui);
 }
 .story-affiliations li:last-child a { padding-right: 0; }
 .story-affiliations a:focus-visible { color: var(--s-ink); outline-offset: 4px; }
@@ -4451,7 +4470,7 @@ summary:focus-visible {
    wordmark: --s-muted at 0.85 composites to #797b72 and reads 3.87:1 at this size, under the
    4.5:1 that body-sized text owes. Text now runs at the token's own 5.28:1; only the images are
    softened, and an image has no contrast requirement to fail. */
-.story-affiliations img { width: auto; height: 22px; opacity: 0.85; transition: opacity 0.2s ease; }
+.story-affiliations img { width: auto; height: 22px; opacity: 0.85; transition: opacity var(--dur-move) var(--ease-ui); }
 .story-affiliations a:focus-visible img { opacity: 1; }
 
 @media (hover: hover) {
@@ -4688,7 +4707,7 @@ summary:focus-visible {
 .story-primary-link .arrow {
   display: inline-block;
   margin-left: 10px;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.28s var(--ease-soft);
 }
 .story-primary-link:focus-visible .arrow { transform: translateX(5px); }
 
@@ -4787,12 +4806,12 @@ a focus ring that is not the browser default removed {
   font-weight: 620;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color var(--dur-move) var(--ease-ui), color var(--dur-move) var(--ease-ui);
 }
 .story-approach-link .arrow {
   display: inline-block;
   margin-left: 9px;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.28s var(--ease-soft);
 }
 .story-approach-link:focus-visible { background: var(--s-ink); color: #fff; }
 
@@ -4873,9 +4892,9 @@ a focus ring that is not the browser default removed {
   font-weight: 640;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--dur-move) var(--ease-ui);
 }
-.story-join-link .arrow { display: inline-block; margin-left: 10px; transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
+.story-join-link .arrow { display: inline-block; margin-left: 10px; transition: transform 0.28s var(--ease-soft); }
 .story-join-link:focus-visible { background: #ffffff; }
 
 @media (hover: hover) {
@@ -5447,7 +5466,7 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 .profile-more summary svg,
 .profile-disclosure summary svg {
   flex: 0 0 auto;
-  transition: transform 160ms var(--ease-ui);
+  transition: transform var(--dur-tap) var(--ease-ui);
 }
 
 .profile-more > p {
@@ -6968,7 +6987,7 @@ select { caret-color: var(--route-strong); }
   font-size: 0.8125rem;
   font-weight: 590;
   text-decoration: none;
-  transition: color 160ms ease, background-color 160ms ease;
+  transition: color var(--dur-tap) var(--ease-ui), background-color var(--dur-tap) var(--ease-ui);
 }
 
 .console-nav-link::after {
@@ -7020,7 +7039,7 @@ select { caret-color: var(--route-strong); }
   place-items: center;
   border: 1px solid var(--route-line);
   border-radius: 6px;
-  transition: transform 180ms ease, border-color 180ms ease;
+  transition: transform var(--dur-move) var(--ease-ui), border-color var(--dur-move) var(--ease-ui);
 }
 
 .console-workspace-menu[open] > summary span { transform: rotate(180deg); }
@@ -7272,7 +7291,7 @@ select { caret-color: var(--route-strong); }
   font-weight: 650;
   background: var(--accent);
   cursor: pointer;
-  transition: background-color 160ms ease, transform 160ms ease;
+  transition: background-color var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-ui);
 }
 
 @media (hover: hover) {
