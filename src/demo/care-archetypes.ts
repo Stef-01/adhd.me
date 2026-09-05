@@ -178,6 +178,30 @@ export const careArchetypes: CareArchetype[] = [
     expectedFirstMatch: "anusha-saxena",
     requirements: {
       careAreas: ["adhd-assessment"],
+      // The request says "a woman doctor" in its first sentence; the requirement has to say it
+      // too, or the eligibility filter would accept a man for a journey whose whole point is
+      // who the GP is. Caught when the worked-examples page started asserting range.
+      preferredGender: "woman",
     },
   },
 ];
+
+/**
+ * The three the worked-examples page shows, chosen for RANGE rather than by position.
+ *
+ * `/examples` used to take the first three of the list above, and the first three happen to be
+ * three care-area asks: no language, no "who". A reader deciding whether to trust the product saw
+ * the same shape three times and could not tell whether the finder reads anything but symptoms.
+ * These three span the dimensions the roster actually declares — a care-area ask, a language ask
+ * and an ask about who the GP is — and `example-archetypes.test.ts` holds them to that, so a
+ * future edit to the list cannot quietly collapse the page back to one shape.
+ */
+export const EXAMPLE_ARCHETYPE_IDS = ["notetaker-and-understanding", "anxiety-differential-hindi", "woman-gp"] as const;
+
+export function exampleArchetypes(): CareArchetype[] {
+  return EXAMPLE_ARCHETYPE_IDS.map((id) => {
+    const found = careArchetypes.find((a) => a.id === id);
+    if (!found) throw new Error(`worked example "${id}" is not an archetype`);
+    return found;
+  });
+}

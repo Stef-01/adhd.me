@@ -13,7 +13,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { seoMetadata } from "@/seo/pages";
-import { careArchetypes } from "@/demo/care-archetypes";
+import { exampleArchetypes } from "@/demo/care-archetypes";
 import { matchQuality, needsFor, rankClinicians } from "@/demo/clinicians";
 import { rosterSizeInWords } from "@/demo/roster-size";
 import { Breadcrumbs } from "../breadcrumbs";
@@ -23,7 +23,9 @@ import { PublicHeader } from "../public-header";
 export const metadata: Metadata = seoMetadata("/examples");
 
 export default function ExamplesPage() {
-  const examples = careArchetypes.slice(0, 3).map((archetype) => {
+  // Chosen for range — a care-area ask, a language ask, a "who" ask — not the first three of the
+  // list; see `exampleArchetypes` for why the first three were the wrong three.
+  const examples = exampleArchetypes().map((archetype) => {
     const understood = needsFor(archetype.request).length;
     const quality = matchQuality(archetype.request);
     return {

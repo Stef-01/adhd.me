@@ -39,6 +39,20 @@ polish the existing shell, question it.
 - [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.
+      **The facts, measured 2026-09-05, so the decision is made on them and not on a feeling.**
+      Thirty sections. Every one but two is reached by at least one e2e spec — `privacy` and
+      `usefulness` have none. None is linked from the demo navigator (it tours the finder and
+      the story, not the console), so the console is reached only through its own home. By
+      size, the weight sits in six: `matching` (603 lines), `interview` (367), `dashboard` (316),
+      `results` (256), `credentials` (249), `outcomes` / `referrals` (247 each); a dozen others
+      are 100–180-line single screens over a store. **The recommendation, for the founder to
+      accept or change — not applied:** keep a spine of six that carries the demand-matching and
+      shared-care story end to end — `dashboard` (the north star), `matching`, `capacity`,
+      `referrals`, `outcomes`, `results` — bring those to real depth (Q4 below), and fold or hide
+      the rest behind a single "more" surface until a practice asks for one by name. `privacy`
+      and `usefulness`, unspecced and unreached, are the first two to fold. This is the founder's
+      call: which modules a room of practice managers needs to see is a fact about the pitch, not
+      about the code.
 - [x] **Tracked** (2026-09-03) — each open founder decision from `README.md` §"What needs a founder
       decision before this goes live" now carries the live in-tree anchor where it is actually
       declared, and that section is stated to be the single index. A sixth was added: whether
@@ -180,10 +194,27 @@ polish the existing shell, question it.
 - [ ] Learn modules (`app/learn-modules.tsx`) and the two knowledge quizzes: audit against current
       AADPA/NICE/TGA guidance (README flags these links as never actually opened from this tree —
       open them, confirm they still resolve and still say what the copy implies).
+      **Tried 2026-09-05 and could not:** the four links live in
+      `app/clinicians/clinician-walkthrough.tsx` (the Learn modules carry none) —
+      `adhdguideline.aadpa.com.au`, `nice.org.uk/guidance/ng87`, the RACGP Specific Interests PDF,
+      and `tga.gov.au/products/medicines/prescription-medicines` — and every one was refused by
+      this build environment's egress policy before a byte came back, so nothing here can say
+      whether they resolve. This needs a person with a browser; it stays open and is not an
+      engineering item until they have looked.
 - [ ] Public pages (story, practices, examples, FAQ) get an SEO and share-surface pass — this is
       where a prospective practice or a person searching at 2am actually lands first.
-- [ ] Examples page (`app/examples/page.tsx`) — make sure the six-plus example personas actually
-      demonstrate range (care area, language, reach), not just repeat the same shape.
+- [x] Examples page (`app/examples/page.tsx`) — make sure the six-plus example personas actually
+      demonstrate range (care area, language, reach), not just repeat the same shape. **Done
+      2026-09-05:** it was showing the FIRST three of six archetypes, and the first three are three
+      care-area asks — no language, no "who" — so a reader saw one shape three times. The three
+      are now chosen for range (`exampleArchetypes()`: a care-area ask, a Hindi-speaking ask, a
+      woman-GP ask) and `src/demo/example-archetypes.test.ts` holds them to distinct care areas plus
+      at least one language and one "who" ask, so an edit to the list cannot collapse the page
+      back. Reach (telehealth) is not a structured archetype requirement, only request text, so it
+      is not asserted; the notetaker ask's first match is telehealth-first in practice. The test
+      also caught a data defect: the woman-GP journey asked for a woman in its request text but
+      its structured requirements did not say so, so the eligibility filter would have accepted a
+      man for it. Fixed in the archetype.
 
 ## Q2 2027 (Jun–Aug) — scale-readiness
 
