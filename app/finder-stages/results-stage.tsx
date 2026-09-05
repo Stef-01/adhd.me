@@ -246,7 +246,11 @@ export function ResultsStage({
         <span className="results-list-tools">
           {/* O226: the count sits with the list it describes, not two groups up the page. */}
           {matches.length > shown.length && (
-            <span className="results-count">{shown.length} of {matches.length}</span>
+            <span className="results-count">
+              {/* Number pop-in: keyed on the value, so the digits re-enter only when the count
+                  actually changes — a filter narrowing the list, a "show more" widening it. */}
+              <span key={shown.length} className="t-digit">{shown.length}</span> of {matches.length}
+            </span>
           )}
           {/* O244: the star. One tap opens the questions that would narrow the list; the sheet is
               the app's one modal idiom, so it drags, closes on Escape and returns focus. */}
@@ -312,10 +316,14 @@ export function ResultsStage({
             key="map"
             id="nearby-map-panel"
             className="nearby-map-panel"
-            initial={reducedMotion ? false : { opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            // transitions.dev panel reveal: the panel does not only unfold, it comes into FOCUS —
+            // a small blur clears as it opens, so the map reads as arriving rather than as a box
+            // whose height changed. The close keeps its quick tween and drops the blur lane: a
+            // dismissal gets out of the way, it does not un-focus.
+            initial={reducedMotion ? false : { opacity: 0, height: 0, filter: "blur(2px)" }}
+            animate={{ opacity: 1, height: "auto", filter: "blur(0px)" }}
             exit={reducedMotion ? undefined : { opacity: 0, height: 0, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
-            transition={{ ...STAGE_SPRING, opacity: { duration: 0.2 } }}
+            transition={{ ...STAGE_SPRING, opacity: { duration: 0.2 }, filter: { duration: 0.2 } }}
           >
             <NearbyMap origin={origin!} shown={shown} onPick={pickFromMap} />
           </motion.div>
@@ -344,10 +352,15 @@ export function ResultsStage({
               layout="position"
               data-clinician={item.id}
               onClick={() => onChoose(item)}
-              initial={reducedMotion ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              // transitions.dev texts reveal: each row rises AND resolves — a 2px blur clears on
+              // the same beat as the opacity — so the list condenses into place line by line
+              // instead of fading in as a block. The stagger it already had is the recipe's, and
+              // the 0.2s cap keeps the total under the ~300ms the motion scale allows; the exit is
+              // a single quiet fade with no blur, so a row leaving never reverse-reveals.
+              initial={reducedMotion ? false : { opacity: 0, y: 10, filter: "blur(2px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
-              transition={{ ...STAGE_SPRING, delay: Math.min(index * 0.04, 0.2), opacity: { duration: 0.22 }, layout: { ...STAGE_SPRING, delay: 0 } }}
+              transition={{ ...STAGE_SPRING, delay: Math.min(index * 0.04, 0.2), opacity: { duration: 0.22 }, filter: { duration: 0.22 }, layout: { ...STAGE_SPRING, delay: 0 } }}
               whileTap={reducedMotion ? undefined : { scale: 0.985 }}
             >
               {/* O67: the same layoutId as the profile's portrait frame, so the chosen

@@ -55,11 +55,21 @@ export const STAGE_SPRING = { type: "spring", stiffness: 380, damping: 36, mass:
 export const StageDirection = createContext<1 | -1>(1);
 
 export const stageVariants: Variants = {
-  initial: (direction: 1 | -1 = 1) => ({ opacity: 0, y: 14 * direction }),
+  // transitions.dev's page-slide lane: an arriving screen starts a little BLURRED and resolves,
+  // which reads as the screen condensing into place rather than sliding in as a flat card. Three
+  // pixels — its `--blur-medium` — cleared on the same clock as the opacity, so the blur is gone
+  // before the spring has finished settling the position. Exit stays instant (O249) and the
+  // reduced variants stay blur-free: the sweep holds every element to an untransformed rest.
+  initial: (direction: 1 | -1 = 1) => ({ opacity: 0, y: 14 * direction, filter: "blur(3px)" }),
   animate: {
     opacity: 1,
     y: 0,
-    transition: { ...STAGE_SPRING, opacity: { duration: 0.22, ease: EASE_OUT } },
+    filter: "blur(0px)",
+    transition: {
+      ...STAGE_SPRING,
+      opacity: { duration: 0.22, ease: EASE_OUT },
+      filter: { duration: 0.22, ease: EASE_OUT },
+    },
   },
   // Instant: the next screen must exist on the next frame (O249, interruptibility).
   exit: { opacity: 0, transition: { duration: 0 } },

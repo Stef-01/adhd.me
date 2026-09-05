@@ -50,6 +50,15 @@ export function WelcomeStage({
               checked={includeSynthetic}
               onChange={(event) => onToggleSynthetic(event.target.checked)}
             />
+            {/* transitions.dev checkbox check: the native input stays — it is what the label
+                toggles, what the keyboard focuses and what the spec unchecks — and is only moved
+                off-screen; this drawn box is its face. The box fills, then the tick strokes in
+                along its own path; unchecking reverses the stroke rather than snapping. */}
+            <span className="t-check" aria-hidden="true">
+              <svg viewBox="0 0 10.1668 10.1668" fill="none">
+                <path d="M1 5.52L3.92 9.17L9.17 1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
             <span>
               <strong>Include example profiles</strong>
               <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>

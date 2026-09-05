@@ -7488,6 +7488,7 @@ select { caret-color: var(--route-strong); }
    sweep, which measured the anchor at 31x53 while the cell around it was fine: a floor asserted on
    the wrong box is not asserted at all. */
 .app-tab {
+  position: relative; /* the filter badge anchors to the tab */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -7586,6 +7587,11 @@ body:has(.app-tabs) .consent-bar {
   position: absolute;
   inset: 0;
   background: color-mix(in srgb, var(--hero-dusk) 46%, transparent);
+  /* transitions.dev modal: the surface behind a dialog softens as the dialog arrives. The scrim's
+     opacity already fades on the sheet's clock, so a static backdrop blur rides that same fade in
+     and out with no second timer — and reads as depth rather than as a grey lid. */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   cursor: pointer;
 }
 
@@ -9289,25 +9295,36 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
        success check    the quiz's correct-answer tick, which appeared instantly
        error shake      the interest form's invalid fields, which only turned red
 
-     DECLINED, each for a stated reason rather than by omission:
-       skeleton reveal  `rankCliniciansNear` runs in a `useMemo`. There is no
-                        load. A skeleton would animate a wait that does not
-                        happen, which is a lie told in motion.
-       accordion        would collapse the FAQ answers behind a click. Those
-                        answers were just made extractable for answer engines
-                        (`src/seo/faq.ts`); hiding them is a direct cost to that.
-       toggle           the profile switches ALREADY do this. `--ease-spring` is
-                        a sampled `linear()` curve that overshoots and settles,
-                        which is what the recipe's double bounce is. Swapping one
-                        overshoot for another is churn, not craft.
-       tabs sliding,    already built natively — the tab marker travels on a
-       icon swap,       shared `layoutId`, the compose control morphs mic to
-       texts reveal     arrow, and the welcome stage has its own stagger.
-       card tilt,       decoration on a tool somebody uses tired, at night,
-       like button      looking for medical care. `adhdme-taste` rules them out.
-       toast, banner    no surface holds them. Adding one would be new product.
-       shimmer text     would compete with the live waveform for the same
-                        "something is happening" job on the same screen.
+     ADOPTED IN THE SECOND PASS (founder, 2026-09-05: "10x more responsive and fluid" —
+     the first pass declined too much), each again on a state that already exists:
+       page slide       every stage arrival now clears a 3px blur as it rises (shared.tsx)
+       panel reveal     the map panel comes into focus as it unfolds (results-stage.tsx)
+       texts reveal     results rows resolve line by line on their existing stagger
+       modal            the settings scrim blurs what it covers, on its existing fade
+       number pop-in    the results count, keyed on its value
+       checkbox check   the settings tickbox, a drawn box whose tick strokes in
+       learn-more       the story page's three arrow links, arms spreading on hover
+       badge            the Profile tab shows how many filters are on
+
+     STILL DECLINED, each for a stated reason rather than by omission:
+       skeleton reveal  `rankCliniciansNear` runs in a `useMemo`. There is no load. A
+                        skeleton would animate a wait that does not happen, which is a
+                        lie told in motion.
+       accordion        would collapse the FAQ answers behind a click, days after they
+                        were made extractable for answer engines (ADR 0001).
+       toggle           the profile switches ALREADY do this: `--ease-spring` is a sampled
+                        `linear()` that overshoots and settles, which is the recipe's
+                        double bounce. Swapping one overshoot for another is churn.
+       tabs sliding,    already built natively — the tab marker travels on a shared
+       icon swap        `layoutId`, and the compose control morphs mic to arrow.
+       card tilt,       decoration on a tool somebody uses tired, at night, looking for
+       like button      medical care. `adhdme-taste` rules them out.
+       toast, banner,   no surface holds them; the listening screen has no status line
+       thinking states  that changes (the transcript IS the screen); the type screen has
+       input clear      no clear button, and the dissolve needs per-frame JS.
+       tooltip          the map markers already carry accessible names, and the product
+                        is mobile-first — a hover-only hint helps the one device it is
+                        least used on.
 
    Durations and curves are the HOUSE tokens wherever the usage matches, per the
    same match-on-usage rule the motion audit used; only the genuinely new
@@ -9420,4 +9437,150 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   .t-digit,
   .t-success-check { animation: none !important; opacity: 1 !important; filter: none !important; translate: none !important; rotate: none !important; }
   .t-input.is-shaking { animation: none !important; transform: none !important; }
+}
+
+/* ── The second transitions.dev pass (see the ledger at the top of the first block). ── */
+
+:root {
+  /* Checkbox check: fill first, then the tick draws; unchecking reverses over a shorter beat. */
+  --check-len: 15;
+  --check-delay: 60ms;
+  /* Learn-more hover: the chevron shifts and its arms open about the apex. */
+  --learn-shift: 3px;
+  --learn-spread: 12deg;
+  /* Badge: slides in from the trigger's edge, then the dot pops on an overshoot. */
+  --badge-offset-x: -6px;
+  --badge-offset-y: 6px;
+  --badge-blur: 2px;
+  --badge-pop-ease: cubic-bezier(0.34, 1.36, 0.64, 1);
+}
+
+/* ── Checkbox check — the settings tickbox. The native input IS the box (appearance: none), so
+   the label still toggles it, the keyboard still focuses it, and a spec's `uncheck()` still lands
+   on a real 20px control; the drawn tick sits over it in the same grid cell, pointer-events off. */
+.finder-demo-toggle { grid-template-rows: auto; }
+
+.finder-demo-toggle input {
+  grid-column: 1;
+  grid-row: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  border-radius: 6px;
+  border: 1.5px solid var(--line-strong, var(--line));
+  background: var(--surface-raised);
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui);
+}
+
+.finder-demo-toggle input:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.finder-demo-toggle > span:last-child { grid-column: 2; grid-row: 1; }
+
+.t-check {
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  color: var(--on-accent);
+  pointer-events: none;
+}
+
+.t-check svg { width: 12px; height: 12px; overflow: visible; }
+
+.t-check svg path {
+  stroke-dasharray: var(--check-len);
+  stroke-dashoffset: var(--check-len);
+  transition: stroke-dashoffset var(--dur-tap) var(--ease-ui);
+}
+
+/* The tick waits one beat for the fill, then draws along its own path. */
+.finder-demo-toggle input:checked + .t-check svg path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-enter) var(--ease-soft) var(--check-delay);
+}
+
+/* ── Learn-more hover — the story page's arrow links. The existing translateX on hover stays;
+   the arms opening is what makes a chevron read as an arrow that is about to go somewhere. */
+.t-learn-chevron { display: inline-flex; vertical-align: middle; }
+
+.t-learn-arm {
+  transform-box: view-box;
+  transform-origin: 10px 8px;
+  transition: transform var(--dur-move) var(--ease-spring);
+}
+
+@media (hover: hover) {
+  .story-primary-link:hover .t-learn-arm-top,
+  .story-join-link:hover .t-learn-arm-top,
+  .story-approach-link:hover .t-learn-arm-top { transform: rotate(var(--learn-spread)); }
+  .story-primary-link:hover .t-learn-arm-bot,
+  .story-join-link:hover .t-learn-arm-bot,
+  .story-approach-link:hover .t-learn-arm-bot { transform: rotate(calc(var(--learn-spread) * -1)); }
+}
+
+.story-primary-link:focus-visible .t-learn-arm-top,
+.story-join-link:focus-visible .t-learn-arm-top,
+.story-approach-link:focus-visible .t-learn-arm-top { transform: rotate(var(--learn-spread)); }
+.story-primary-link:focus-visible .t-learn-arm-bot,
+.story-join-link:focus-visible .t-learn-arm-bot,
+.story-approach-link:focus-visible .t-learn-arm-bot { transform: rotate(calc(var(--learn-spread) * -1)); }
+
+/* ── Notification badge — the Profile tab, when filters are on. Only the badge moves; the tab
+   never does, so the bar's geometry is untouched by a number appearing on it. */
+.t-badge {
+  position: absolute;
+  top: 6px;
+  left: calc(50% + 8px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.t-badge[data-open="true"] { animation: t-badge-slide-in var(--dur-enter) var(--ease-soft); }
+
+@keyframes t-badge-slide-in {
+  from { transform: translate(var(--badge-offset-x), var(--badge-offset-y)); }
+  to { transform: translate(0, 0); }
+}
+
+.t-badge-dot {
+  display: grid;
+  place-items: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0 0 2px var(--paper);
+  transform: scale(1);
+  opacity: 1;
+  filter: blur(0);
+  transition: transform var(--dur-enter) var(--badge-pop-ease), opacity var(--dur-move) var(--ease-ui), filter var(--dur-enter) var(--badge-pop-ease);
+}
+
+.t-badge[data-open="false"] .t-badge-dot {
+  transform: scale(0);
+  opacity: 0;
+  filter: blur(var(--badge-blur));
+  transition: transform var(--dur-exit) var(--ease-ui), opacity var(--dur-exit) var(--ease-ui), filter var(--dur-exit) var(--ease-ui);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-check, .t-check svg path, .t-learn-arm, .t-badge-dot { transition: none !important; }
+  .finder-demo-toggle input:checked + .t-check svg path { stroke-dashoffset: 0; }
+  .t-badge { animation: none !important; }
+  .t-learn-arm { transform: none !important; }
 }

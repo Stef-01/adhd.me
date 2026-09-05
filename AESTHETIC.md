@@ -256,6 +256,21 @@ and a one-line commit message are the record.
 
 ## Cross-cutting
 
+- [x] **Monthly design audit — 2026-09-05 (first).** Run under the standing ROADMAP item the founder
+      set today ("there is so much AI slop everywhere"). The pass this month was fluidity, because
+      the founder's verdict on the previous transitions.dev pass was that it declined too much:
+      "the aesthetics need to be 10x more responsive and fluid". Second pass, on states the app
+      already has: every stage arrival clears a 3px blur as it rises (`shared.tsx` — the page-slide
+      lane); the map panel comes into focus as it unfolds; results rows resolve line by line on the
+      stagger they already had; the settings scrim blurs what it covers on its existing fade; the
+      results count pops per digit when it changes; the settings tickbox is a drawn box whose tick
+      strokes in; the story page's three arrow links open their arms on hover; the Profile tab
+      wears a badge with the number of filters on. Twelve of the library's thirty-two are now in
+      play; the ledger at the top of the `t-*` block in `globals.css` says which and why, and
+      names each one still declined with its reason (a skeleton where there is no load is a lie
+      told in motion; an accordion would hide the FAQ answers from answer engines; a tooltip helps
+      the one device this product is least used on). **Next due 2026-10-05**, per ROADMAP.
+
 - [x] Motion vocabulary audited against the transitions.dev scale (2026-09-05) — see
       `docs/adr/0002-a-close-is-not-an-open-played-backwards.md` for the reasoning. The house
       durations already agreed with that scale where they overlapped; the finding was a **missing

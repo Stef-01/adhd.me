@@ -207,7 +207,7 @@ export function StoryLanding() {
                 transition={PRESS}
               >
                 <Link className="story-primary-link" href="/">
-                  Find a GP near you<span className="arrow" aria-hidden="true">→</span>
+                  Find a GP near you<span className="arrow t-learn-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"><path className="t-learn-arm t-learn-arm-top" d="M6 4L10 8" /><path className="t-learn-arm t-learn-arm-bot" d="M10 8L6 12" /></svg></span>
                 </Link>
               </motion.div>
             </motion.div>
@@ -387,7 +387,7 @@ export function StoryLanding() {
             </p>
           </div>
           <Link className="story-join-link" href="/clinicians/join">
-            Join the directory<span className="arrow" aria-hidden="true">→</span>
+            Join the directory<span className="arrow t-learn-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"><path className="t-learn-arm t-learn-arm-top" d="M6 4L10 8" /><path className="t-learn-arm t-learn-arm-bot" d="M10 8L6 12" /></svg></span>
           </Link>
         </div>
       </section>
@@ -407,7 +407,7 @@ export function StoryLanding() {
             </p>
           </div>
           <Link className="story-approach-link" href="/approach">
-            See the approach<span className="arrow" aria-hidden="true">→</span>
+            See the approach<span className="arrow t-learn-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"><path className="t-learn-arm t-learn-arm-top" d="M6 4L10 8" /><path className="t-learn-arm t-learn-arm-bot" d="M10 8L6 12" /></svg></span>
           </Link>
         </div>
       </section>

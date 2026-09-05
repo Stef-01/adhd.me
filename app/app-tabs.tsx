@@ -28,6 +28,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, MagnifyingGlass, UserCircle, type Icon } from "@phosphor-icons/react";
 import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useState } from "react";
+import { activeFilterCount, readFilters } from "@/finder/filters";
 import { activeTab, APP_TABS, type AppTab } from "@/app-shell/tabs";
 
 const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, UserCircle, BookOpen };
@@ -38,6 +40,22 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
   // O240: the marker is ONE element that travels to the current tab (a shared layout id), the
   // way iOS and Material bars move their indicator — under reduced motion it simply appears.
   const reducedMotion = useReducedMotion();
+  // transitions.dev notification badge, on a state this device already holds: how many filters are
+  // on. `null` until mounted — localStorage does not exist during the server render, and a badge
+  // that hydrated differently from the server would flash. Re-read on focus and on `storage`, so a
+  // filter changed in another tab of the same site shows here without a reload; on the profile
+  // itself the count is on the page, and it lands here on the next navigation.
+  const [filtersOn, setFiltersOn] = useState<number | null>(null);
+  useEffect(() => {
+    const read = () => setFiltersOn(activeFilterCount(readFilters(window.localStorage)));
+    read();
+    window.addEventListener("focus", read);
+    window.addEventListener("storage", read);
+    return () => {
+      window.removeEventListener("focus", read);
+      window.removeEventListener("storage", read);
+    };
+  }, [current?.href]);
   if (hidden) return null;
   return (
     <nav className="app-tabs" aria-label="Sections">
@@ -69,6 +87,11 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
                   <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
                 </motion.span>
                 <span className="app-tab-label">{tab.label}</span>
+                {tab.href === "/profile" && (
+                  <span className="t-badge" data-open={filtersOn !== null && filtersOn > 0 ? "true" : "false"} aria-hidden="true">
+                    <span className="t-badge-dot">{filtersOn ?? ""}</span>
+                  </span>
+                )}
               </Link>
             </li>
           );
