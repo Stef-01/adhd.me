@@ -269,7 +269,10 @@ and a one-line commit message are the record.
       play; the ledger at the top of the `t-*` block in `globals.css` says which and why, and
       names each one still declined with its reason (a skeleton where there is no load is a lie
       told in motion; an accordion would hide the FAQ answers from answer engines; a tooltip helps
-      the one device this product is least used on). **Next due 2026-10-05**, per ROADMAP.
+      the one device this product is least used on). Same day, the finder re-walk at a real 390 viewport turned up the booking screen twice — its
+      heading in Inter where every other stage heading is Newsreader (a `.patient-v2` leftover), and
+      an example profile's note promising a phone route with no number. Both fixed; the roadmap's
+      re-walk item says what was and was not walked. **Next due 2026-10-05**, per ROADMAP.
 
 - [x] Motion vocabulary audited against the transitions.dev scale (2026-09-05) — see
       `docs/adr/0002-a-close-is-not-an-open-played-backwards.md` for the reasoning. The house

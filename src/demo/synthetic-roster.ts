@@ -60,13 +60,17 @@ export const SYNTHETIC_ABOUT_NOTICE =
  *
  * WHAT DID NOT CHANGE, AND THIS IS THE LINE THE UNIT HOLDS: there is still no `url`, so `/go/` has
  * nothing to read and no control anywhere opens a fabricated booking listing. The variant is still
- * `synthetic-none` in the type. A route describing how a practice takes appointments is the same
- * kind of fact as the suburb and the languages beside it — sample data. An invented PHONE NUMBER,
- * an external listing or a "request sent" confirmation that sends nothing would not be, and none
- * of the three is here.
+ * `synthetic-none` in the type. An invented PHONE NUMBER, an external listing or a "request sent"
+ * confirmation that sends nothing would not be sample data, and none of the three is here.
+ *
+ * 2026-09-05, from the finder re-walk: the note used to read "Appointments with this practice are
+ * arranged by phone." — a sentence that describes a route and then gives no number, so a first-time
+ * reader on the booking screen looked for a phone number that never came. The screen was a designed
+ * terminal state that did not say so. It says so now: an example, nobody to ring, and the two ways
+ * onward (the list, or the switch that hides examples). `synthetic-booking.test.ts` holds it.
  */
 export const SYNTHETIC_BOOKING_NOTE =
-  "Appointments with this practice are arranged by phone.";
+  "This is an example profile, so there is no practice to ring and nothing to book here. Go back to the list to choose a listed GP, or turn example profiles off in Settings.";
 
 /**
  * O222: the four defences every persona repeats verbatim, made structural. `image`, `booking`

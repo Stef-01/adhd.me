@@ -21,6 +21,14 @@ polish the existing shell, question it.
 - [ ] Re-walk the finder end to end (welcome → listening → profile → compare → results → booking)
       as a first-time user on a phone, at night, tired. Cut anything that costs a decision without
       earning it back. "Delete before you shrink" — the prior design ethos was right; keep it.
+      **Walked 2026-09-05** (type → results → profile → why matched → booking, at a real 390
+      viewport; two found, both on the booking screen): the example profile's booking note said
+      "arranged by phone" and then gave no number — a designed terminal state that did not say so;
+      it now says it is an example, that there is nobody to ring, and names the two ways onward
+      (`src/demo/synthetic-booking.test.ts`). And the booking heading was the one stage heading set
+      in Inter, left behind in a `.patient-v2` rule after the profile name moved out from under it;
+      it is Newsreader now like every other stage. **Not yet walked:** listening (the mic cannot be
+      driven headless without the speech fixture) and compare (needs a tied top pair). Still open.
 - [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.

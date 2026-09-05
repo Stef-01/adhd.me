@@ -6451,7 +6451,13 @@ select { caret-color: var(--route-strong); }
   padding: 14px 18px;
 }
 
-.patient-v2 .booking-content h1,
+/* 2026-09-05, from the finder re-walk: `.booking-content h1` was in this selector, and it made the
+   booking screen the one stage whose heading rendered in Inter — 44px sans over a flow whose every
+   other heading is Newsreader (the welcome question, the type screen's question, the results title,
+   the profile's name). The profile name had long since moved out from under this rule; booking had
+   not, and nothing looked at that screen with a real clinician's face fresh in mind until a walk
+   did. Removed from the selector, so the serif rule above it (`.booking-content h1`, with
+   `.patient-v2`'s own size steps) applies as it does to the type screen. */
 .patient-v2 .profile-content h1 {
   color: var(--ink);
   font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
