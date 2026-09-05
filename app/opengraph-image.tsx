@@ -1,11 +1,18 @@
 // Launch item 13: the image a shared link unfurls to. Generated, not a binary in the repo, so
 // the wordmark and the sentence stay editable like any other copy.
 import { ImageResponse } from "next/og";
+import { SHARE_IMAGE } from "@/seo/pages";
 
 export const runtime = "edge";
-export const alt = "ADHD.ME — assessment you can actually reach";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+// From the register, so the tag a page emits and the pixels this route draws are one fact.
+export const alt = SHARE_IMAGE.alt;
+export const size = { width: SHARE_IMAGE.width, height: SHARE_IMAGE.height };
+export const contentType = SHARE_IMAGE.type;
+
+/** The three moments the card names, in the order the finder walks them. */
+const STEPS = ["Your words", "Declared fit", "Booking handoff"] as const;
+/** Row height per step; the connecting line runs from the first row's centre to the last's. */
+const ROW = 64;
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -49,14 +56,28 @@ export default function OpengraphImage() {
           }}
         >
           <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "0.08em" }}>YOUR ROUTE</div>
-          <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 60, paddingLeft: 44 }}>
-            <div style={{ position: "absolute", left: 12, top: 16, bottom: 16, width: 4, borderRadius: 4, background: "currentColor", opacity: 0.7 }} />
-            <div style={{ position: "absolute", left: 0, top: 4, width: 28, height: 28, borderRadius: 28, background: "#d47839" }} />
-            <div style={{ fontSize: 24, fontWeight: 650 }}>Your words</div>
-            <div style={{ position: "absolute", left: 3, top: 96, width: 22, height: 22, borderRadius: 22, border: "4px solid currentColor" }} />
-            <div style={{ fontSize: 24, fontWeight: 650 }}>Declared fit</div>
-            <div style={{ position: "absolute", left: 3, bottom: 6, width: 22, height: 22, borderRadius: 22, border: "4px solid currentColor" }} />
-            <div style={{ fontSize: 24, fontWeight: 650 }}>Booking handoff</div>
+          {/*
+            Each step is a ROW that owns its marker, and the line is the only thing positioned by
+            hand. The first cut placed all three markers absolutely, tuned against label heights
+            that later changed, and the card shipped with the third ring a whole row below
+            "Booking handoff" — on the image every shared link unfurls to. A marker that lives in
+            the same flex row as its label cannot drift from it.
+          */}
+          <div style={{ position: "relative", display: "flex", flexDirection: "column" }}>
+            <div style={{ position: "absolute", left: 12, top: ROW / 2, bottom: ROW / 2, width: 4, borderRadius: 4, background: "currentColor", opacity: 0.7 }} />
+            {STEPS.map((step, i) => (
+              <div key={step} style={{ display: "flex", alignItems: "center", gap: 16, height: ROW }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 28, height: 28 }}>
+                  {i === 0 ? (
+                    <div style={{ width: 28, height: 28, borderRadius: 28, background: "#d47839" }} />
+                  ) : (
+                    // Filled with the card's own colour so the line does not run through the ring.
+                    <div style={{ width: 22, height: 22, borderRadius: 22, border: "4px solid currentColor", background: "#5065a6" }} />
+                  )}
+                </div>
+                <div style={{ fontSize: 24, fontWeight: 650 }}>{step}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

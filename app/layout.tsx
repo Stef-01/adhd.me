@@ -6,6 +6,7 @@ import { PrivacyConsent } from "./privacy-consent";
 import { AcknowledgementOfCountry } from "./acknowledgement-of-country";
 import { WebVitals } from "./web-vitals";
 import { SITE_URL } from "./site";
+import { SHARED_OPEN_GRAPH } from "@/seo/pages";
 
 /**
  * Launch items 11–13 + 17. The template gives every page a UNIQUE title while keeping the site
@@ -41,11 +42,7 @@ export const metadata: Metadata = {
   },
   description:
     "Find a listed Sydney GP who does ADHD assessment, in your language, with the access details you asked for.",
-  openGraph: {
-    siteName: "ADHD.ME",
-    type: "website",
-    locale: "en_AU",
-  },
+  openGraph: SHARED_OPEN_GRAPH,
   twitter: {
     card: "summary_large_image",
   },

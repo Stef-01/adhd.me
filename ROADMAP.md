@@ -201,8 +201,21 @@ polish the existing shell, question it.
       this build environment's egress policy before a byte came back, so nothing here can say
       whether they resolve. This needs a person with a browser; it stays open and is not an
       engineering item until they have looked.
-- [ ] Public pages (story, practices, examples, FAQ) get an SEO and share-surface pass — this is
-      where a prospective practice or a person searching at 2am actually lands first.
+- [x] Public pages (story, practices, examples, FAQ) get an SEO and share-surface pass — this is
+      where a prospective practice or a person searching at 2am actually lands first. **Walked
+      2026-09-05 on the served head of every indexable route.** The SEO half was already sound
+      from the register (per-page title, description and canonical; `sitemap`/`robots` derived).
+      The share half had two findings. The image every link unfurls to had its route card's
+      markers positioned by hand against label heights that later changed, so the third ring sat
+      a whole row under "Booking handoff" — the card is now three rows that each own their marker
+      (`app/opengraph-image.tsx`). And every card said the brand twice, "… · ADHD.ME" over
+      `og:site_name` "ADHD.ME", so `seoMetadata()` now sets an absolute share title and spreads the
+      site-wide fields from one constant, since Next replaces a layout's `openGraph` wholesale
+      the moment a page sets any of it — and that replacement takes the root segment's file-based
+      image with it, which the e2e spec found on its first run: every register page below `/`
+      had lost its picture. The image is now named in the register (`SHARE_IMAGE`) and the image
+      route reads its size and alt from there. Pinned both ways: `src/seo/share.test.ts` on what
+      pages export, `e2e/share-surface.spec.ts` on what is served, image fetched and sized.
 - [x] Examples page (`app/examples/page.tsx`) — make sure the six-plus example personas actually
       demonstrate range (care area, language, reach), not just repeat the same shape. **Done
       2026-09-05:** it was showing the FIRST three of six archetypes, and the first three are three

@@ -282,5 +282,48 @@ export function seoMetadata(path: string): Metadata {
     alternates: { canonical: page.path },
     title: page.title,
     description: page.description,
+    openGraph: {
+      ...SHARED_OPEN_GRAPH,
+      url: page.path,
+      // ABSOLUTE, so the card does not say the brand twice. A share card shows `og:site_name`
+      // beside the title on its own line; with the layout's `· ADHD.ME` template applied here as
+      // well, every unfurl read "… · ADHD.ME" over "ADHD.ME". Twitter derives its title from this
+      // one, so both cards carry the page's half only.
+      title: { absolute: page.title },
+      description: page.description,
+    },
   };
 }
+
+/**
+ * The Open Graph fields every page shares, held once.
+ *
+ * Next does not deep-merge `openGraph` between a layout and a page: a page that sets any of it
+ * replaces all of it. So the site-wide half lives here and both the root layout and
+ * `seoMetadata` spread it, rather than a page setting a title and silently dropping the locale.
+ */
+/**
+ * The one image every shared link unfurls to, named here so a page can carry it.
+ *
+ * `app/opengraph-image.tsx` is a file-based image in the ROOT segment, and Next attaches it to
+ * the root layout's resolved `openGraph` — which is exactly the object a nested page replaces
+ * the moment it sets a share title of its own. The first cut of the absolute title did that and
+ * every register page below `/` shipped without an image; `e2e/share-surface.spec.ts` was
+ * written to fetch the image, and it was the fetch that found it. So the image is named
+ * explicitly, and the route module reads its size and alt from HERE, so the tag and the pixels
+ * cannot disagree. The bare path is the route; the `?hash` Next appends is only a cache key.
+ */
+export const SHARE_IMAGE = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "ADHD.ME — assessment you can actually reach",
+  type: "image/png",
+} as const;
+
+export const SHARED_OPEN_GRAPH = {
+  siteName: "ADHD.ME",
+  type: "website",
+  locale: "en_AU",
+  images: [SHARE_IMAGE],
+} satisfies NonNullable<Metadata["openGraph"]>;
