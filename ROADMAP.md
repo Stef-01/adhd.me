@@ -231,8 +231,16 @@ polish the existing shell, question it.
 
 ## Q2 2027 (Jun–Aug) — scale-readiness
 
-- [ ] Accessibility re-sweep against WCAG 2.1 AA (PRODUCT.md's own bar) — this rots quietly as
-      screens change; don't assume the last sweep still holds.
+- [x] Accessibility re-sweep against WCAG 2.1 AA (PRODUCT.md's own bar) — this rots quietly as
+      screens change; don't assume the last sweep still holds. **Swept 2026-09-05, clean.** axe
+      (WCAG 2.0/2.1 A+AA tags, plus 2.2's `target-size`) over the 16 public routes at a desktop
+      width and again at 390, the finder's eight stages reached through the fake recogniser, and
+      the 30 console screens signed in and seeded so each was scanned populated: zero violations
+      anywhere. The sweep is `e2e/a11y.spec.ts`, derived from the filesystem and the stage machine
+      rather than listed, so a new screen is swept by existing; it is a check with no exemption
+      register — a finding is fixed in the same change or the spec says why it cannot be. Still
+      standing in the sense the item is: the automated half cannot see focus order, reading order
+      or whether a label is the right words, and those are walked by hand in the monthly audit.
 - [x] Performance: re-baseline bundle size and route weight now that `perf:gate` no longer runs
       automatically. Know the numbers even without an enforced budget. **Baseline 2026-09-05**
       (`pnpm build`, Next 15.5, First Load JS): shared by all routes **103 kB**; `/` (the finder)
