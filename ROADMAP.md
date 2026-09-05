@@ -159,8 +159,14 @@ polish the existing shell, question it.
       empty states, loading states, error states, keyboard access — before touching the rest.
 - [ ] Geo: decide if Gold Coast stays the flagship regional demo or if a second region should exist
       to prove the gazetteer generalises. Don't add a third without a reason.
-- [ ] Voice input (`src/voice/speech.ts`): verify it degrades honestly (visible, non-blocking
-      fallback to typed input) on browsers/devices without speech support.
+- [x] Voice input (`src/voice/speech.ts`): verify it degrades honestly (visible, non-blocking
+      fallback to typed input) on browsers/devices without speech support. **Verified 2026-09-05**
+      by removing `SpeechRecognition` and `webkitSpeechRecognition` before the page script ran and
+      pressing the microphone on the welcome screen: the finder lands on the type stage with a
+      visible banner — "This browser does not do speech input, so it is typing from here." — the
+      textarea focused and usable, "Find a GP" live, nothing blocked. Already pinned by
+      `e2e/voice.spec.ts` ("does not do speech input"), which is why no new spec was added; the
+      captures are in this session's cold-look set. Firefox and non-HTTPS origins take this path.
 
 ## Q1 2027 (Mar–May) — growth surface
 
@@ -176,8 +182,14 @@ polish the existing shell, question it.
 
 - [ ] Accessibility re-sweep against WCAG 2.1 AA (PRODUCT.md's own bar) — this rots quietly as
       screens change; don't assume the last sweep still holds.
-- [ ] Performance: re-baseline bundle size and route weight now that `perf:gate` no longer runs
-      automatically. Know the numbers even without an enforced budget.
+- [x] Performance: re-baseline bundle size and route weight now that `perf:gate` no longer runs
+      automatically. Know the numbers even without an enforced budget. **Baseline 2026-09-05**
+      (`pnpm build`, Next 15.5, First Load JS): shared by all routes **103 kB**; `/` (the finder)
+      **224 kB**, route-own 31.2 kB; `/approach` 178 kB; `/profile` 177 kB; `/about` 155 kB;
+      `/clinicians` 114 kB; every other public page 107–108 kB (own size under 1 kB). The finder
+      is the one route that carries real weight — the stage machine, motion, the map's Leaflet and
+      the speech path — and it is where a budget would go if one comes back. Re-run and compare
+      here before the next quarter; a jump on `/` is the only number that would matter.
 - [ ] Revisit whether the console needs real auth/tenancy hardening if it's ever shown to an actual
       practice, vs. staying a synthetic-data demo indefinitely — that's a founder call, not an
       engineering default.
