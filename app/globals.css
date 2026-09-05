@@ -978,11 +978,24 @@ summary:focus-visible {
   font-weight: 600;
   line-height: 1.3;
   text-align: center;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  /* 2026-09-05, from the finder re-walk: this was underlined, and beside a plain-text head it made
+     a symmetric table open on an asymmetric pair — worse when the other GP's short name is a full
+     one ("Dr Anusha Saxena", because there are two Saxenas) and the underline wrapped with it
+     across two lines. The control keeps its role, its label and its 44px floor; the affordance is
+     a trailing mark instead of a line under a name. */
+  text-decoration: none;
   cursor: pointer;
   touch-action: manipulation;
 }
+.compare-open::after {
+  content: " ›";
+  color: var(--muted);
+  font-weight: 500;
+}
+.compare-open:hover::after,
+.compare-open:focus-visible::after { color: var(--accent); }
+.compare-head strong,
+.compare-open { text-wrap: balance; }
 .compare-group { margin-top: 22px; }
 .compare-group h2 {
   margin: 0 0 8px;

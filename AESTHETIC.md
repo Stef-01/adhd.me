@@ -271,8 +271,12 @@ and a one-line commit message are the record.
       told in motion; an accordion would hide the FAQ answers from answer engines; a tooltip helps
       the one device this product is least used on). Same day, the finder re-walk at a real 390 viewport turned up the booking screen twice — its
       heading in Inter where every other stage heading is Newsreader (a `.patient-v2` leftover), and
-      an example profile's note promising a phone route with no number. Both fixed; the roadmap's
-      re-walk item says what was and was not walked. **Next due 2026-10-05**, per ROADMAP.
+      an example profile's note promising a phone route with no number. Both fixed. Listening and
+      compare followed: listening reads clean; compare's two heads were one plain label beside one
+      underlined button wrapping a full name over two lines, so the table opened on an asymmetric
+      pair — the link keeps its role and floor and trades the underline for a trailing mark, and
+      both names balance. Every finder stage has now been looked at cold at 390. **Next due
+      2026-10-05**, per ROADMAP.
 
 - [x] Motion vocabulary audited against the transitions.dev scale (2026-09-05) — see
       `docs/adr/0002-a-close-is-not-an-open-played-backwards.md` for the reasoning. The house

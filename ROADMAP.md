@@ -27,8 +27,15 @@ polish the existing shell, question it.
       it now says it is an example, that there is nobody to ring, and names the two ways onward
       (`src/demo/synthetic-booking.test.ts`). And the booking heading was the one stage heading set
       in Inter, left behind in a `.patient-v2` rule after the profile name moved out from under it;
-      it is Newsreader now like every other stage. **Not yet walked:** listening (the mic cannot be
-      driven headless without the speech fixture) and compare (needs a tied top pair). Still open.
+      it is Newsreader now like every other stage. **Listening and compare walked the same day**
+      (listening driven through `e2e/support/fake-speech.ts`, compare reached on the tied
+      woman-GP pair): the listening screen reads clean — transcript streaming in, one control,
+      "Tap when you've finished", the way to type — and compare had one finding, its two heads:
+      the current GP a plain label, the other an underlined button wrapping "Dr Anusha Saxena"
+      across two lines, so a symmetric table opened on an asymmetric pair. The link keeps its
+      role and its 44px floor and loses the underline for a trailing mark; both names balance.
+      Every stage of the finder has now been looked at cold at 390. Still open only in the sense
+      the item is standing: walk it again after the next round of changes.
 - [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.
