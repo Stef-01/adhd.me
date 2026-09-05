@@ -62,3 +62,17 @@ describe("W51 audit fix: no holdout means no claim, never zero", () => {
     }
   });
 });
+
+describe("warmDashboardData", () => {
+  it("builds the cached sim once, so the first console click does not pay for it", async () => {
+    const mod = await import("./dashboard-data");
+    expect(typeof mod.warmDashboardData).toBe("function");
+    mod.warmDashboardData();
+    const started = performance.now();
+    const data = mod.getDashboardData();
+    // Warm means the accessor is a cache read: well under the ~5s the cold sim costs.
+    expect(performance.now() - started).toBeLessThan(50);
+    expect(data.weeks).toBeGreaterThan(0);
+    expect(mod.getDashboardData()).toBe(data);
+  });
+});

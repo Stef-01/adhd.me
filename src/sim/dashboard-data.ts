@@ -71,3 +71,18 @@ export function getDashboardData(): DashboardData {
   cached ??= buildDashboardData(runSim(DEFAULT_SIM_CONFIG));
   return cached;
 }
+
+/**
+ * Build the cache ahead of the click that would otherwise pay for it.
+ *
+ * The cold sim costs ~4.9s, and it was being paid by the first person to open the incrementality
+ * dashboard — in a demo, the presenter, in front of a room, on a "Loading…" line. Warming it at
+ * boot would move that cost onto every cold start instead, which on a serverless host delays
+ * every route to fix one. So the console layout schedules this with Next's `after()` once any
+ * console page has been SENT: the presenter signs in, the response goes out, the sim runs in the
+ * background, and by the time they reach the dashboard it is a cache read. Idempotent, so a
+ * layout that renders ten times schedules ten no-ops.
+ */
+export function warmDashboardData(): void {
+  getDashboardData();
+}

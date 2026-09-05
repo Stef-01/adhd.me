@@ -389,7 +389,7 @@ export function ResultsStage({
                 layoutId={`gp-portrait-${item.id}`}
                 data-portrait-of={item.id}
               >
-                <ClinicianPortrait clinician={item} variant="thumb" />
+                <ClinicianPortrait clinician={item} variant="thumb" eager={index < 5} />
               </motion.span>
               <span>
                 <strong>{item.name}</strong>

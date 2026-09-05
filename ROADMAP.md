@@ -57,7 +57,15 @@ polish the existing shell, question it.
       `impeccable` catches — filler copy, decorative motion, cards inside cards, unearned gradients,
       generic type — and about fluidity: every screen change, open, close and arrival on the house
       motion scale, nothing snapping. Standing item: tick nothing here, date each pass in
-      `AESTHETIC.md`. **Next due: 2026-10-05.** Last run: 2026-09-05 (this session — the
+      `AESTHETIC.md`. **Cold look 2026-09-05** (finder at 390 and 1280): one real finding and two
+      false alarms, recorded so the next audit does not re-chase them. Real — the results rows'
+      portraits were empty squares at 390: five lazy `next/image` thumbs above the fold, each
+      waiting on the optimiser's cold hit; the first five rows now load eagerly
+      (`src/finder/portrait-loading.test.ts`). False — the sticky booking bar "covering" the
+      profile's section rows, and the tab bar sitting mid-page on Learn: both are what a
+      `fullPage` screenshot does to a sticky or fixed element, and the real-viewport captures show
+      them where they belong. Capture the viewport, not the page, when judging anything sticky.
+      **Next due: 2026-10-05.** Last run: 2026-09-05 (this session — the
       transitions.dev component pass; see `AESTHETIC.md`).
 - [ ] Keep it green. No new ledger; just don't leave `main` broken overnight. If a timing test
       starts flaking again, read the harness note in `src/tenancy/rollout.test.ts` first — the
@@ -118,9 +126,12 @@ polish the existing shell, question it.
       render builds the full sim"), but a streaming boundary lands the URL instantly and moves the
       sim's ~4.9s (measured cold) onto the first tile, which still had Playwright's 5s default.
       Fix: the allowance moved to the content. The page renders correctly — north star 120.6,
-      nothing withheld. **Proposed, not done:** warm `getDashboardData()` at server start (in
-      `instrumentation.ts`'s `register()`) so the presenter's first click on the dashboard does not
-      sit on a loading line for five seconds. That is a product change and gets its own design.
+      nothing withheld. **And the product half, done (2026-09-05, TDD in
+      `src/sim/dashboard-data.test.ts` → `warmDashboardData`):** the presenter's first click no
+      longer sits on a loading line for five seconds. Not warmed at boot — that would move the
+      ~4.9s onto every serverless cold start to fix one route — but with Next's `after()` in
+      `app/console/layout.tsx`: any console page a person opens schedules the build once the
+      response has gone out, so by the time they reach the dashboard it is a cache read.
 
 ## Q4 2026 (Dec–Feb) — depth over breadth
 

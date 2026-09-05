@@ -342,10 +342,18 @@ function initialsOf(name: string) {
 export function ClinicianPortrait({
   clinician,
   variant,
+  eager = false,
 }: {
   clinician: Clinician;
   /** `fill` for the framed portraits, `thumb` for the fixed-size list row. */
   variant: "fill" | "thumb";
+  /**
+   * Fetch the thumb now rather than when the browser gets round to it. The results list's first
+   * rows are above the fold on the screen a presenter shows a room, and a lazy thumb there is a
+   * blank square for as long as the image optimiser takes on a cold hit — the 2026-09-05 cold
+   * look caught five empty slots at 390px. The rows below the fold stay lazy.
+   */
+  eager?: boolean;
 }) {
   // O242: an example persona's photograph is a licensed stock portrait, and the alt says so — a
   // screen reader must not be told it is a photograph of a doctor who does not exist.
@@ -363,7 +371,7 @@ export function ClinicianPortrait({
       // on the largest screen the profile is ever seen on. The three regimes below are the
       // shell's own: fluid under 520, then the two `--shell-w` steps, each less the 18px inset.
       ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 519px) calc(100vw - 36px), (max-width: 819px) 484px, 604px" priority />
-      : <Image src={clinician.image} alt="" width={60} height={60} />;
+      : <Image src={clinician.image} alt="" width={60} height={60} loading={eager ? "eager" : "lazy"} />;
   }
 
   return (
