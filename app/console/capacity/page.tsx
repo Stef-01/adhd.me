@@ -17,6 +17,7 @@
 // happens.
 
 import Link from "next/link";
+import { WEEKDAY_NAMES, type Weekday } from "@/capacity/model";
 import { redirect } from "next/navigation";
 import { capacityView } from "@/console/capacity";
 import { getConsole } from "@/console/store";
@@ -158,16 +159,37 @@ export default async function CapacityPage() {
             <h2 id="opening-heading" className="font-medium text-stone-900">
               If more slots were opened
             </h2>
-            <ul data-testid="capacity-recommendations" className="flex flex-col gap-3 text-sm text-stone-600">
-              {view.sessions.map((row) =>
-                row.recommendation.offered ? (
-                  <li key={row.label} className="flex flex-col gap-1">
-                    <span className="text-stone-900">{row.recommendation.recommendation.sentence}</span>
-                    <span>{row.recommendation.recommendation.demandEvidence}</span>
-                  </li>
-                ) : null,
-              )}
-            </ul>
+            {/* Grouped by weekday, each day a disclosure. The seeded practice has seventy
+                sessions, and seventy two-line paragraphs in one flat list ran to twelve thousand
+                pixels on a phone — the drift verdict and the score above were the page's point
+                and they sat over a wall. A day is how a practice thinks about its diary, so a
+                reader opens the day they are deciding about. The sentences are the engine's
+                and are not shortened here: each states its own basis on purpose. */}
+            <div data-testid="capacity-recommendations" className="flex flex-col gap-2">
+              {(Object.keys(WEEKDAY_NAMES).map(Number) as Weekday[]).map((weekday) => {
+                const onThisDay = view.sessions.filter(
+                  (row) => row.recommendation.offered && row.recommendation.recommendation.key.weekday === weekday,
+                );
+                if (onThisDay.length === 0) return null;
+                return (
+                  <details key={weekday} className="rounded-lg border border-stone-200 bg-white">
+                    <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-stone-900">
+                      {WEEKDAY_NAMES[weekday]} · {onThisDay.length} session{onThisDay.length === 1 ? "" : "s"}
+                    </summary>
+                    <ul className="flex flex-col gap-3 border-t border-stone-100 px-4 py-3 text-sm text-stone-600">
+                      {onThisDay.map((row) =>
+                        row.recommendation.offered ? (
+                          <li key={row.label} className="flex flex-col gap-1">
+                            <span className="text-stone-900">{row.recommendation.recommendation.sentence}</span>
+                            <span>{row.recommendation.recommendation.demandEvidence}</span>
+                          </li>
+                        ) : null,
+                      )}
+                    </ul>
+                  </details>
+                );
+              })}
+            </div>
           </section>
         ) : null}
 

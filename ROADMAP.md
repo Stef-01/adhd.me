@@ -22,8 +22,13 @@ polish the existing shell, question it.
       story, join, privacy; findings and fixes under "Story / public surfaces" in `AESTHETIC.md`):
       four found, four fixed — the figures drifting across three pages, the story header wrapping
       onto two lines, the practices sign-in link stranded on its own row, and a header pill that
-      said "clinicians" where the site says GPs. Standing, as the item is: the console has not
-      had the same cold look at 390 yet.
+      said "clinicians" where the site says GPs. **The console spine looked at cold at 390 the same
+      day** (home, dashboard, matching, capacity, referrals, outcomes, results; signed in and
+      seeded; no screen scrolled sideways): two found, two fixed — the dashboard's title and its
+      meta line sharing one row and colliding, and the capacity page's seventy recommendation
+      paragraphs in one flat list running to twelve thousand pixels over the verdicts that are
+      the page's point, now grouped by weekday behind seven disclosures. Standing, as the item
+      is; the next cold look is the monthly audit's.
 - [ ] Re-walk the finder end to end (welcome → listening → profile → compare → results → booking)
       as a first-time user on a phone, at night, tired. Cut anything that costs a decision without
       earning it back. "Delete before you shrink" — the prior design ethos was right; keep it.

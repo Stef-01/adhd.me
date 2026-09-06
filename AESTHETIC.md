@@ -281,6 +281,20 @@ and a one-line commit message are the record.
 - [ ] Table/list density, empty states, and keyboard navigation are the highest-value console
       aesthetic work — more so than color or type on a tool people use mid-shift.
 
+**Cold look at 390, 2026-09-05** — home, dashboard, matching, capacity, referrals, outcomes,
+results, signed in and seeded, full-page captures read one by one. Nothing scrolled sideways
+(`scrollWidth` 390 on all seven). Referrals, outcomes and results read cleanly on a phone: one
+column, the empty and awaiting states in their own words, tables that fit. Two did not:
+1. *The dashboard's title row.* "Incrementality" and "26 simulated weeks · 4,000 synthetic
+   patients" shared a non-wrapping flex row and collided at 390. It wraps now.
+2. *Capacity's recommendations.* Seventy sessions, seventy two-line paragraphs in one flat list —
+   12,388px of the page's 17,128px — under the drift verdict and the score that are what the
+   page is for. Grouped by weekday behind seven closed disclosures ("Monday · 10 sessions"); the
+   engine's sentences are untouched, each states its own basis on purpose.
+Noted, not changed: `matching` is 10,000px at 390 and is an audit tool for a desk, not a phone;
+the dashboard's line chart labels are too small at 390 and would need a phone-specific chart to
+fix, which the console-depth decision should settle first.
+
 ## Cross-cutting
 
 - [x] **Monthly design audit — 2026-09-05 (first).** Run under the standing ROADMAP item the founder

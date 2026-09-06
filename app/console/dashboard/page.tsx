@@ -33,7 +33,8 @@ export default async function DashboardPage() {
 
   return (
     <ConsoleShell email={email}>
-      <div className="flex items-baseline justify-between">
+      {/* Wraps: at a phone width the meta line sat hard against the title on one row. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Incrementality</h1>
         <span className="text-sm text-stone-500">
           {data.weeks} simulated weeks · {data.patientCount.toLocaleString()} synthetic patients
