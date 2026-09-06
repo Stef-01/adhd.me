@@ -147,18 +147,28 @@ export default async function EducationPage() {
             </div>
           )}
 
-          <div data-testid="library-basis" className="flex flex-col gap-1 text-sm text-stone-600">
-            {describeCuration(curation).map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-          </div>
-          {/* W154: only claimed when it is true. "Every item is above, in full" alongside a
-              list of what was held back would be the page contradicting itself, and the
-              withheld panel already carries the honest version. */}
-          {withheld.length === 0 && (
-            <p data-testid="library-all-shown" className="text-sm text-stone-500">
-              {COPY.libraryAllShown}
-            </p>
+          {/* Both blocks below describe a list, so neither is rendered when there is no list.
+              W154 already drew this line once, for the case where something WAS held back:
+              "only claimed when it is true". The same rule reaches the empty library, which is
+              the state this product actually ships in — with nothing shown, the basis described
+              the order of nothing ("Ordered by item id … Everything relevant is listed") and
+              `libraryAllShown` claimed "Every item … is above, in full" with nothing above it,
+              directly under a paragraph saying the library is empty. The empty paragraph says
+              the whole truthful thing on its own; these two only have work to do once there are
+              rows for them to be about. */}
+          {shown.length > 0 && (
+            <>
+              <div data-testid="library-basis" className="flex flex-col gap-1 text-sm text-stone-600">
+                {describeCuration(curation).map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+              {withheld.length === 0 && (
+                <p data-testid="library-all-shown" className="text-sm text-stone-500">
+                  {COPY.libraryAllShown}
+                </p>
+              )}
+            </>
           )}
         </section>
 

@@ -124,6 +124,16 @@ test("the empty library says why it is empty", async ({ page, request }) => {
   await expect(page.getByTestId("library-empty")).toContainText("cleared sign-off");
   await expect(page.getByTestId("library-empty")).toContainText("failed to load");
   await expect(page.getByTestId("triggers-none")).toContainText("No teaching triggers ship");
+
+  // ...AND SAYS NOTHING ELSE ABOUT A LIST THAT IS NOT THERE. This state was reachable and
+  // rendered by the three lines above, and nobody had read the rest of the section: below the
+  // empty paragraph the page went on to describe the order of nothing ("Ordered by item id …
+  // Everything relevant to this practice's registers is listed") and then to claim "Every item
+  // about a register this practice runs is above, in full" — with nothing above it. Both are
+  // statements about rows, so both are absent when there are no rows. The populated case above
+  // ("every in-scope item is shown…") is the non-vacuity floor for this pair.
+  await expect(page.getByTestId("library-basis")).toHaveCount(0);
+  await expect(page.getByTestId("library-all-shown")).toHaveCount(0);
 });
 
 test("the page makes no clinical claim and gives no instruction", async ({ page, request }) => {
