@@ -411,13 +411,28 @@ the end of the stylesheet:
 
 ## Practice console (`app/console/*`)
 
-- [ ] Desktop-first density is correct here per PRODUCT.md ("calm, dense where useful,
+- [x] Desktop-first density is correct here per PRODUCT.md ("calm, dense where useful,
       operationally explicit") — don't import finder-style whitespace wholesale. Different
-      surface, different rules.
-- [ ] Pick a handful of representative screens (dashboard, matching, capacity, referrals) for a
-      real pass before touching all 25+ subsections — see Roadmap Q4.
+      surface, different rules. **Checked at 1280 on 2026-09-06** (the cold look below): it is.
+      No finder whitespace has leaked in, and nothing wanted loosening.
+- [x] Pick a handful of representative screens (dashboard, matching, capacity, referrals) for a
+      real pass before touching all 25+ subsections — see Roadmap Q4. **Done twice**: at 390 on
+      2026-09-05 and at 1280 on 2026-09-06, both recorded below, the second covering exactly these
+      four plus home and outcomes. Neither pass touched the other 25+ subsections, deliberately.
 - [ ] Table/list density, empty states, and keyboard navigation are the highest-value console
       aesthetic work — more so than color or type on a tool people use mid-shift.
+      **Two of the three are done.** *Keyboard navigation* is covered with no exemptions by
+      `e2e/keyboard-focus.spec.ts`, which derives the console route list from `site-routes.ts`,
+      presses real Tab keys over every screen, and holds both a focus ring on each stop and a
+      reachability floor — so a stranded or ringless console control fails the suite rather than
+      waiting for a cold look. *Table density* was audited at 1280 on 2026-09-06 and the numeric
+      alignment defect it found is fixed in all four console data tables (below).
+      **Still open:** empty states have been read only where the seeded fixtures happen to produce
+      them (referrals, outcomes, capacity, verticals — those four read well and `verticals.spec.ts`
+      holds its two states apart in copy). Nobody has gone looking for the console screens whose
+      empty state is *unreachable* from the demo fixtures and therefore has never been rendered by
+      anything; that sweep is the honest next piece of this item, and it is a fixture question
+      before it is an aesthetic one. List density outside the four tables is also unaudited.
 
 **Cold look at 390, 2026-09-05** — home, dashboard, matching, capacity, referrals, outcomes,
 results, signed in and seeded, full-page captures read one by one. Nothing scrolled sideways
@@ -438,6 +453,36 @@ The same component draws the results page's chart, so both are fixed.
 **Public pages at 1280, the same day.** Nothing to change: the FAQ and the legal pages hold a
 74–75 character measure, the story's and practices' widest boxes are short bullets and rows,
 and the learn tab's phone-width column on a desktop is the app shell's frame, not drift.
+
+**Cold look at 1280, 2026-09-06** — home, dashboard, matching, capacity, referrals, outcomes,
+signed in and seeded (`qa/cold-1280-*.png`). Done *because* 8bcce38 landed "desktop as a desk-width
+app, and one type scale for the whole site": the console's only cold look was at 390 the day
+before, so nothing had read these screens at desk width since the scale changed under them.
+Nothing overflows (`scrollWidth` 1280 on all six). Density reads correct for the surface — the
+home grid, the eligibility-rules panel and the empty states on referrals and outcomes are calm
+without importing finder whitespace, which is the first box above. Two things did not hold, both
+consequences of the re-scale:
+1. *The "All tools" caret was a text character.* `⌄` (U+2304) in a 22px bordered box, and the last
+   text-as-icon on the site. `place-items: center` centres a glyph's line box, not its ink, so it
+   sat low — and its metrics came from whatever font answered for it, which 8bcce38 changed when it
+   moved the stack to Plus Jakarta Sans. It is a Phosphor `CaretDown` now, which is what every
+   other icon here is (`demo-navigator.tsx` already drew its caret that way).
+2. *Every numeric column in the console was left-aligned.* Four data tables — capacity, responses,
+   dashboard, results — and `.console-main table` sets `font-variant-numeric: tabular-nums` for all
+   of them, so the console globally declares that digits should line up. Left alignment lines up
+   the FIRST digit, so the units place only agrees while every value in a column has the same
+   width: it read fine on the seeded fixtures (`779/768/767`) and breaks on `2` under `26`, `100%`
+   under `95%`, or the dashboard's `toFixed(1)` decimals the moment an integer part changes width
+   or an arm goes negative. Right-aligned now, header and cell together.
+   And the header half is why this survived a screenshot: `.console-main th` sets `text-align:
+   left` at specificity 0,1,1, so a `text-right` utility written on a `<th>` is silently
+   discarded — the cells would have moved and their headers stayed. `.console-main th.text-right`
+   is the opt-out, keyed on the utility's name the way `.console-main .rounded-xl` beside it
+   already is.
+Noted, not changed: `matching` is 6,969px at 1280 and remains an audit tool for a desk, the same
+verdict the 390 look reached. And the per-cell `tabular-nums` classes in those four tables are now
+redundant against the global `.console-main table` rule — harmless, not swept, worth a line here so
+the next reader knows the global is the one that matters.
 
 ## Cross-cutting
 

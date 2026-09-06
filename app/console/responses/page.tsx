@@ -100,19 +100,20 @@ export default async function ResponsesPage() {
                 <thead>
                   <tr className="border-b border-stone-200 text-stone-600">
                     <th scope="col" className="py-2 pr-4 font-medium">Kind of message</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">Sent</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">Answered at least once</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">Nothing recorded</th>
+                    {/* Right-aligned with their cells — see the note on /console/capacity. */}
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">Sent</th>
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">Answered at least once</th>
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">Nothing recorded</th>
                   </tr>
                 </thead>
                 <tbody>
                   {view.rates.map((rate) => (
                     <tr key={rate.kind} data-testid={`rate-${rate.kind}`} className="border-b border-stone-100">
                       <th scope="row" className="py-2 pr-4 font-normal text-stone-900">{rate.kind}</th>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{rate.offered}</td>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{rate.answeredAtLeastOnce}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{rate.offered}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{rate.answeredAtLeastOnce}</td>
                       {/* Same weight as the rest of the row. No warning colour — see the header. */}
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{rate.unanswered}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{rate.unanswered}</td>
                     </tr>
                   ))}
                 </tbody>

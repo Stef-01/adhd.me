@@ -1,5 +1,6 @@
 "use client";
 
+import { CaretDown } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
@@ -121,7 +122,12 @@ export function ConsoleNavigation({ isStaff }: { isStaff: boolean }) {
       >
         <summary>
           All tools
-          <span aria-hidden="true">⌄</span>
+          {/* A drawn caret, not the `⌄` character this was. `place-items: center` centres a
+              glyph's LINE BOX, not its ink, so U+2304 sat low in its 22px bordered box — and it
+              was the last text-as-icon on the site, so its metrics came from whatever font
+              answered for it. When 8bcce38 moved the stack to Plus Jakarta Sans that answer
+              changed under it. Phosphor is what every other icon here is. */}
+          <span aria-hidden="true"><CaretDown size={13} weight="bold" /></span>
         </summary>
         {menuOpen && <div className="console-workspace-panel">
           <div className="console-workspace-heading">

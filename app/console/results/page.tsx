@@ -183,22 +183,23 @@ export default async function ResultsPage() {
             <thead>
               <tr className="text-left text-stone-500">
                 <th scope="col" className="py-1.5 pr-4 font-medium">Week starting</th>
-                <th scope="col" className="py-1.5 pr-4 font-medium">
+                {/* Right-aligned with their cells — see the note on /console/capacity. */}
+                <th scope="col" className="py-1.5 pr-4 text-right font-medium">
                   {C.chart.messagedLabel} (per 100)
                 </th>
-                <th scope="col" className="py-1.5 pr-4 font-medium">
+                <th scope="col" className="py-1.5 pr-4 text-right font-medium">
                   {C.chart.comparisonLabel} (per 100)
                 </th>
-                <th scope="col" className="py-1.5 font-medium">Extra appointments</th>
+                <th scope="col" className="py-1.5 text-right font-medium">Extra appointments</th>
               </tr>
             </thead>
             <tbody className="tabular-nums text-stone-800">
               {weekly.map((w) => (
                 <tr key={w.week} className="border-t border-stone-100">
                   <td className="py-1.5 pr-4">{shortDate(w.weekStartIso)}</td>
-                  <td className="py-1.5 pr-4">{w.messagedPer100.toFixed(1)}</td>
-                  <td className="py-1.5 pr-4">{w.comparisonPer100.toFixed(1)}</td>
-                  <td className="py-1.5">{w.extraAppointments}</td>
+                  <td className="py-1.5 pr-4 text-right">{w.messagedPer100.toFixed(1)}</td>
+                  <td className="py-1.5 pr-4 text-right">{w.comparisonPer100.toFixed(1)}</td>
+                  <td className="py-1.5 text-right">{w.extraAppointments}</td>
                 </tr>
               ))}
             </tbody>

@@ -126,11 +126,17 @@ export default async function CapacityPage() {
                 </caption>
                 <thead>
                   <tr className="border-b border-stone-200 text-stone-600">
+                    {/* Numeric columns right-aligned, header and cell together. `tabular-nums`
+                        below already asks for the digits to line up — it makes them equal-width —
+                        but left alignment lines up the FIRST digit, so the units place only
+                        happens to agree while every value has the same digit count. "2" under
+                        "26", or "100%" under "95%", and the column stops being scannable. Right
+                        alignment is what makes the declaration true. */}
                     <th scope="col" className="py-2 pr-4 font-medium">Session</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">Weeks recorded</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">Slots offered</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">Filled</th>
-                    <th scope="col" className="py-2 pr-4 font-medium">How full</th>
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">Weeks recorded</th>
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">Slots offered</th>
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">Filled</th>
+                    <th scope="col" className="py-2 pr-4 text-right font-medium">How full</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -140,12 +146,12 @@ export default async function CapacityPage() {
                       {/* An em dash where the view holds no figure — W234 made these null rather
                           than a fabricated zero, and a zero here would say a session that ran
                           twice ran no weeks at all. */}
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.occurrences ?? "—"}</td>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.slotsOffered ?? "—"}</td>
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.slotsFilled ?? "—"}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.occurrences ?? "—"}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.slotsOffered ?? "—"}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.slotsFilled ?? "—"}</td>
                       {/* The label is composed in the view, where the no-rate branch is reachable
                           by a fixture. An em dash, never a nought — W215's live defect. */}
-                      <td className="py-2 pr-4 tabular-nums text-stone-900">{row.utilisationLabel}</td>
+                      <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.utilisationLabel}</td>
                     </tr>
                   ))}
                 </tbody>

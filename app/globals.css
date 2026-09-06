@@ -7289,6 +7289,11 @@ select { caret-color: var(--route-strong); }
   font-weight: 620;
   text-align: left;
 }
+/* A numeric column header can opt out, because the rule above cannot be opted out of otherwise:
+   `.console-main th` is specificity 0,1,1 and Tailwind's `text-right` is 0,1,0, so a `text-right`
+   written on a `<th>` was silently discarded — the cells moved and their headers did not. Keyed on
+   the utility's own name, the way `.console-main .rounded-xl` above it already is. */
+.console-main th.text-right { text-align: right; }
 .console-main tbody tr { border-top-color: var(--line); }
 
 .console-field { display: flex; flex-direction: column; gap: 7px; }

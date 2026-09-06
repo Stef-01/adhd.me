@@ -90,18 +90,21 @@ export default async function DashboardPage() {
             <thead>
               <tr className="border-b border-stone-200 text-left text-xs uppercase tracking-wide text-stone-500">
                 <th className="py-2 pr-4 font-medium">Week</th>
-                <th className="py-2 pr-4 font-medium">Invite / 1,000</th>
-                <th className="py-2 pr-4 font-medium">Holdout / 1,000</th>
-                <th className="py-2 font-medium">Incremental</th>
+                {/* Right-aligned with their cells — see the note on /console/capacity. These are
+                    `toFixed(1)`, so left alignment misaligns the decimal point the moment the
+                    integer part changes width, and one arm can go negative. */}
+                <th className="py-2 pr-4 text-right font-medium">Invite / 1,000</th>
+                <th className="py-2 pr-4 text-right font-medium">Holdout / 1,000</th>
+                <th className="py-2 text-right font-medium">Incremental</th>
               </tr>
             </thead>
             <tbody>
               {data.weekly.map((p) => (
                 <tr key={p.week} className="border-b border-stone-100 text-stone-700">
                   <td className="py-1.5 pr-4">W{p.week}</td>
-                  <td className="py-1.5 pr-4">{p.invitePer1000.toFixed(1)}</td>
-                  <td className="py-1.5 pr-4">{p.holdoutPer1000.toFixed(1)}</td>
-                  <td className="py-1.5">{p.incrementalPer1000 === null ? "—" : p.incrementalPer1000.toFixed(1)}</td>
+                  <td className="py-1.5 pr-4 text-right">{p.invitePer1000.toFixed(1)}</td>
+                  <td className="py-1.5 pr-4 text-right">{p.holdoutPer1000.toFixed(1)}</td>
+                  <td className="py-1.5 text-right">{p.incrementalPer1000 === null ? "—" : p.incrementalPer1000.toFixed(1)}</td>
                 </tr>
               ))}
             </tbody>
