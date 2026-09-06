@@ -1,6 +1,52 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
+
+/* ===========================================================================
+   THE TYPE IS OPTICALLY SIZED, AND FOR A WHILE IT ONLY LOOKED LIKE IT WAS.
+
+   Both faces ship several builds and the bare package name resolves to
+   `index.css`, which is the **wght-only** cut: one set of outlines, scaled.
+   Read out of the `fvar` tables of what was actually being served —
+   `inter-latin-wght-normal.woff2` carries `wght 100–900` and nothing else,
+   `newsreader-latin-wght-normal.woff2` carries `wght 200–800` and nothing else
+   — while the `opsz` builds sitting unused in the same directory carry
+   `opsz 14–32` and `opsz 6–72` respectively. So `font-optical-sizing: auto`,
+   which is the CSS default and needs no declaration, had no axis to act on:
+   the console's 10px tabular labels and the story hero's 90px headline were
+   the same drawing at two magnifications.
+
+   `inter/opsz.css` is imported instead of the default, because Inter is the
+   face that spans the whole scale — after the story redesign it sets both the
+   90px `h1` and the 10px console label, a 9x range in one typeface — and the
+   axis costs 25KB on the latin subset (48KB → 73KB). Newsreader is left on the
+   wght-only cut deliberately: its `opsz` build is the single largest item
+   available in the type budget (58KB → 132KB) and it no longer earns it, since
+   the redesign moved the display sizes to Inter and left Newsreader a narrow
+   band of accents and mid-size serif. A 6–72pt axis for a face that lives
+   between roughly 16 and 32px is the most expensive way to buy the least.
+
+   `newsreader/wght-italic.css` is imported because **there was no italic face
+   loaded at all.** `index.css` declares only `font-style: normal`, for either
+   family, so every `font-style: italic` in this file was being drawn by the
+   browser shearing the roman ~12°. Newsreader's italic is a separate drawing,
+   not a slant: of 33 letters sampled out of `hmtx`, all 33 have a different
+   advance from their roman counterpart (`e` is 794 units against 923, 14%
+   narrower; `b` 937 against 1092). That matters most where it was most
+   visible — `.story-claim` and `.story-throughline-line em` are the two rules
+   that name Newsreader and italic together, they are the device that marks the
+   hero's central claim, and they are set at display size where a mechanical
+   shear reads as exactly what it is. The face is `font-display: swap` and
+   scoped to `font-style: italic`, so it is fetched only by a page that renders
+   italic Newsreader — `/story`, not the finder.
+
+   The three remaining italics (`.mc-quote` at 14px, `.cv2-eyebrow` at 11px,
+   `.listen-transcript.is-empty`) inherit Inter and stay synthetic on purpose:
+   Inter's italic is a true oblique by design, so the browser's version is far
+   closer to it than it is for a serif, and ~48KB on the finder's critical path
+   to redraw three small labels is the wrong trade.
+   =========================================================================== */
+@import "@fontsource-variable/inter/opsz.css";
 @import "@fontsource-variable/newsreader";
+@import "@fontsource-variable/newsreader/wght-italic.css";
 
 /* ===========================================================================
    THE FILE MAP (O96 — refactor lane, queue item 2)

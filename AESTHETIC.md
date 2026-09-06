@@ -430,8 +430,49 @@ and the learn tab's phone-width column on a desktop is the app shell's frame, no
       the current token, measured figures for it (5.42:1 on `--paper`, 5.76:1 on white — computed,
       not carried over), and a pointer to the "THERE IS NO DARK MODE" note further down so the
       one-theme rule and its reason sit one search apart. No token values changed.
-- [ ] Type scale: confirm optical sizing (not just linear scaling) between the finder's large,
-      single-idea headlines and the console's dense tabular text.
+- [x] Type scale (2026-09-05) — confirmed on all three legs of optical sizing, and **two of them
+      already passed while the third had never been switched on.** Measured rather than eyeballed:
+      every rule in `globals.css` setting both a size and a tracking or leading was parsed out and
+      the pairs sorted by size. **Tracking passes** — 97 pairs, no global `letter-spacing`
+      anywhere, running from `+0.1em` at 10.5px down to `−0.065em` at 86px, monotone in the right
+      direction. The four apparent outliers are all correct on inspection: the one large positive
+      is `.story-member-monogram`, which is *initials*, and letterspacing uppercase is right at any
+      size (the real rule is that tracking follows size *within a case*, which a size-only
+      heuristic can't see); the three small negatives are `−0.005em` to `−0.01em`, i.e. under
+      0.15px, and two of them are logotypes. **Leading passes** — 129 pairs, median line-height
+      1.50 below 14px → 1.55 (14–20px) → 1.15 (20–32px) → 1.05 (32–48px) → 0.98 above 48px, inverse
+      and monotone, with zero large-type outliers. **Optical sizing itself failed, completely.**
+      Both faces come from `@fontsource-variable`, and the bare package name resolves to
+      `index.css`, which is the wght-only cut. Read out of the `fvar` tables of the files actually
+      being served: `inter-latin-wght-normal.woff2` carries `wght 100–900` and no other axis,
+      `newsreader-latin-wght-normal.woff2` carries `wght 200–800` and no other axis — while the
+      `opsz` builds sitting unused in the same directory carry `opsz 14–32` and `opsz 6–72`. So
+      `font-optical-sizing: auto`, which is the CSS default and needs no declaration, had nothing
+      to act on: the console's 10px tabular labels and the story hero's 90px headline were one
+      drawing at two magnifications, which is the exact "linear scaling" this item was written to
+      rule out. Inter now imports `opsz.css` — it is the face that spans the whole scale, setting
+      both ends of that 9x range since the redesign, and the axis costs 25KB on the latin subset
+      (48KB → 73KB). **Newsreader is deliberately left on the wght-only cut:** its `opsz` build is
+      the single largest item available in the type budget (58KB → 132KB) and the redesign moved
+      the display sizes to Inter, leaving it a narrow band of accents and mid-size serif — a 6–72pt
+      axis for a face living between ~16 and 32px is the most expensive way to buy the least.
+      **And a fourth thing the audit was not looking for: no italic face was loaded at all.**
+      `index.css` declares only `font-style: normal`, for either family, so all six
+      `font-style: italic` rules were the browser shearing the roman ~12°. Newsreader's italic is a
+      separate drawing and not a slant — of 33 letters sampled out of `hmtx`, all 33 differ in
+      advance from their roman (`e` is 794 units against 923, 14% narrower). That was worst exactly
+      where it showed most: `.story-claim` and `.story-throughline-line em` are the two rules
+      naming Newsreader and italic together, they are the device marking the hero's central claim
+      (see `story-landing.tsx` above), and they sit at display size. `newsreader/wght-italic.css`
+      is now imported; it is `font-display: swap` and scoped to `font-style: italic`, so only a
+      page rendering italic Newsreader fetches it — `/story`, not the finder. The three remaining
+      italics (`.mc-quote` 14px, `.cv2-eyebrow` 11px, `.listen-transcript.is-empty`) inherit Inter
+      and stay synthetic on purpose: Inter's italic is a true oblique by design, so the browser's
+      version is much closer to it than it would be for a serif, and ~48KB on the finder's critical
+      path to redraw three small labels is the wrong trade. Verified in the built output — the
+      emitted CSS now references `inter-latin-opsz-normal` (replacing `inter-latin-wght-normal`)
+      and `newsreader-latin-wght-italic`, with 9 italic `@font-face` declarations where there were
+      0. `pnpm verify` green (3733 tests); `pnpm e2e` **282 passed in 9.3m**.
 
 ## Explicitly not doing
 
