@@ -227,7 +227,7 @@ export default async function ResultsPage() {
               ["Extra appointments", num(r.extraAppointments)],
             ] as Array<[string, string]>
           ).map(([term, value]) => (
-            <div key={term} className="flex justify-between py-2">
+            <div key={term} className="flex justify-between py-2.5">
               <dt className="text-sm text-stone-500">{term}</dt>
               <dd className="text-sm font-medium tabular-nums text-stone-900">{value}</dd>
             </div>

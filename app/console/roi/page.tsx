@@ -104,7 +104,11 @@ export default async function RoiPage({
           {rows.map(([term, value]) => (
             <div key={term} className="flex justify-between py-2.5">
               <dt className="text-sm text-stone-500">{term}</dt>
-              <dd className="text-sm font-medium text-stone-900">{value}</dd>
+              {/* Every row here is a figure, and they sit flush against the same right edge:
+                  1,240 / 8.4 / 8.4 / 3.2 / $x / $y. Without `tabular-nums` the proportional
+                  digits made that column ragged one row to the next — the same defect the four
+                  data tables were fixed for on 2026-09-06, one rung out from a table. */}
+              <dd className="text-sm font-medium tabular-nums text-stone-900">{value}</dd>
             </div>
           ))}
         </dl>

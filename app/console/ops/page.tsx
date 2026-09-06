@@ -110,7 +110,7 @@ export default async function OpsPage({
         ) : (
           <ul className="divide-y divide-stone-100 text-sm">
             {queue.outstanding.map((o) => (
-              <li key={o.id} className="flex justify-between py-2">
+              <li key={o.id} className="flex justify-between py-2.5">
                 <span className="text-stone-700">{o.id}</span>
                 <span className="text-stone-500">
                   {o.sessionDate} · {o.status}

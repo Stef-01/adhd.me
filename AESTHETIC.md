@@ -452,9 +452,9 @@ the end of the stylesheet:
       real pass before touching all 25+ subsections — see Roadmap Q4. **Done twice**: at 390 on
       2026-09-05 and at 1280 on 2026-09-06, both recorded below, the second covering exactly these
       four plus home and outcomes. Neither pass touched the other 25+ subsections, deliberately.
-- [ ] Table/list density, empty states, and keyboard navigation are the highest-value console
+- [x] Table/list density, empty states, and keyboard navigation are the highest-value console
       aesthetic work — more so than color or type on a tool people use mid-shift.
-      **Two of the three are done.** *Keyboard navigation* is covered with no exemptions by
+      **All three are done.** *Keyboard navigation* is covered with no exemptions by
       `e2e/keyboard-focus.spec.ts`, which derives the console route list from `site-routes.ts`,
       presses real Tab keys over every screen, and holds both a focus ring on each stop and a
       reachability floor — so a stranded or ringless console control fails the suite rather than
@@ -486,7 +486,24 @@ the end of the stylesheet:
       something false. Also noted, not changed: `/console/reporting` renders an empty `<ul>` under
       its "Figures" heading with no zero-line of its own, and is saved by the Coverage section one
       panel down saying "Nothing was reported for this period."
-      **Still open:** list density outside the four tables is unaudited.
+      **List density outside the four tables, audited 2026-09-06 — the last piece of this item.**
+      Method: enumerate every `<ul>`/`<ol>`/`<dl>` under `app/console` (68 of them) and group them
+      by shape rather than by page, because density is only a question between things that are the
+      same thing. Two shapes carry rows: the *record row* (a multi-line entry — `capability` and
+      `complaints` at `py-4`, `applications` and `interest` at `py-5`, both internally consistent
+      and correctly looser than a one-line row), and the *hairline term/value list*, which is one
+      shape repeated five times: `<dl class="divide-y divide-stone-100">` with a
+      `flex justify-between` row, `dt` in `text-sm text-stone-500` and `dd` in
+      `text-sm font-medium text-stone-900`. Two drifts in that five, both fixed:
+      row padding was `py-2.5` on the console home, `roi` and `setup`'s review step but `py-2` on
+      `results` and on `ops`' outstanding queue — unified to the majority `py-2.5`, so the same
+      row is the same height wherever a reader meets it; and `roi`'s value column, which is six
+      figures flush against one right edge (1,240 / 8.4 / 8.4 / 3.2 / $x / $y), was missing
+      `tabular-nums` while `results`' identical column had it — the same numeric-alignment defect
+      the four data tables were fixed for, one rung out from a table. Deliberately *not* given
+      `tabular-nums`: the console home's rules list ("5 days", "Yes"), `setup`'s readiness list and
+      `ops`' `date · status` column are mixed prose, not numeric columns, and lining their figures
+      up would be a rule applied past its reason.
 
 **Cold look at 390, 2026-09-05** — home, dashboard, matching, capacity, referrals, outcomes,
 results, signed in and seeded, full-page captures read one by one. Nothing scrolled sideways

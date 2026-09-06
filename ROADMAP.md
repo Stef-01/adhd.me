@@ -36,8 +36,20 @@ polish the existing shell, question it.
       ordering and completeness of a list of zero items ("Every item … is **above**, in full")
       directly under the paragraph saying the library is empty. Fixed and held by the existing
       empty-library test. Three other unreachable empty states were found and deliberately left
-      as defensive branches; details under the console section of `AESTHETIC.md`. Standing, as the
-      item is; the next cold look is the monthly audit's.
+      as defensive branches; details under the console section of `AESTHETIC.md`. **The five public
+      pages read cold at 1280 on 2026-09-06** — the one thing the type-and-spacing line was still
+      waiting for after 8bcce38 re-scaled the site: two found, two fixed — `/practices` was the
+      last file in the repo spelling `font-serif` (Tailwind's default Georgia, a third family the
+      site never chose), which the new unlayered h1–h4 law overrode on its headings but not on its
+      `strong`s, leaving a 60px chapter statement shouting over the page's own 48px h1 and four
+      display figures still drawn in Georgia at 96px; and `/clinicians` overflowed its condition
+      fieldset by 19px because a leftover `legend` rule outranked `.sr-only` and inflated the
+      hidden legend to full width. **Console list density outside the four data tables audited the
+      same day:** all 68 console lists grouped by shape, the hairline term/value list found drifting
+      in two ways across its five uses (row padding `py-2`/`py-2.5`, and `roi`'s six-figure column
+      missing the `tabular-nums` its twin on `results` had); both unified.
+      **`AESTHETIC.md` now has no unchecked items.** Standing, as the item is; the next cold look
+      is the monthly audit's.
 - [ ] Re-walk the finder end to end (welcome → listening → profile → compare → results → booking)
       as a first-time user on a phone, at night, tired. Cut anything that costs a decision without
       earning it back. "Delete before you shrink" — the prior design ethos was right; keep it.
