@@ -72,6 +72,18 @@ the chrome and the controls as drawn, plus the one thing the tab lacked.
   tick on a chosen pill, so a chosen pill is never told by colour alone. The mockup shows two
   switches; all six stay — dropping four is a product cut, not a restyle.
 
+**RADIANT, unit 3 of 3 (2026-09-06).** The learn tab as the founder's card stack: one line
+under the header, a row of topic chips (All, and the two shelves), the progress line, then the
+seven modules as coloured pill cards with the mockup's stickers as static art. The hero card is
+gone as drawn; what it carried — the count finished — is the line under the chips. Each module
+sits on one of the mockup's eight colours (the eighth, night, is unused with seven modules) and
+every pairing was measured: titles are 20px bold, so large text; three subtitle colours were
+lifted where the mockup's failed 4.5:1 (amber and coral carry the ink, forest carries white),
+the rest are the mockup's own. The mockup's topics are not the tab's content — podcasts,
+dopamine loops, RSD, somatics, sleep — and no content exists for them; the seven modules keep
+their titles and their cards. The app header on the profile and learn tabs closes on a plain
+hairline now rather than the brand ramp, as drawn.
+
 - [x] `welcome-stage.tsx` (2026-09-03) — **hierarchy reads:** question → compose box → example
       link → disclaimer, one column, nothing competing; the mic sits inside the box at thumb
       height. Two things were wrong and are fixed. **The wordmark moved between screens:**

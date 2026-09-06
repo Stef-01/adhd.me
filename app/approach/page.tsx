@@ -25,7 +25,7 @@ export default function ApproachPage() {
       </div>
       {/* The page's one heading — the working-truth sentence this route has carried since it existed.
           Visually it is the small line under the field; the field's own title leads the eye. */}
-      <h1 className="learn-thesis">What finding ADHD care actually looks like, and what we changed.</h1>
+      <h1 className="learn-thesis">Short reads and quick quizzes — on your own schedule. General information, never about you.</h1>
       <LearnModules />
       <AppTabs />
     </main>

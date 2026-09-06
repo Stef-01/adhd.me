@@ -10074,3 +10074,102 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 @media (hover: hover) { .me-show:hover { background: var(--accent-deep); } }
 .me-show:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
+/* ── RADIANT, unit 3: the learn tab as the founder's card stack ────────────────────────────── */
+.me-screen.learn-screen {
+  --learn-amber: #f59e0b;    --learn-amber-ink: #1c1917;
+  --learn-oat: #f5efeb;      --learn-oat-ink: #221a16;    --learn-oat-sub: #705d56;  --learn-oat-line: #e9dfd7;
+  --learn-forest: #0e8345;   --learn-forest-ink: #ffffff;
+  --learn-lilac: #b18fd8;    --learn-lilac-ink: #2e1065;
+  --learn-coral: #f26419;    --learn-coral-ink: #1c1917;
+  --learn-slate: #4a4e57;    --learn-slate-ink: #ffffff;  --learn-slate-sub: #e2e8f0;
+  --learn-saffron: #f3b61f;  --learn-saffron-ink: #1c1917; --learn-saffron-sub: #78350f;
+}
+.learn-tagline { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 500; line-height: 1.45; }
+.learn-chips {
+  display: flex;
+  gap: 8px;
+  margin: 0 calc(var(--shell-gutter) * -1) 10px;
+  padding: 4px var(--shell-gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.learn-chips::-webkit-scrollbar { display: none; }
+.learn-chip {
+  position: relative;
+  flex: none;
+  min-height: 36px;
+  padding: 8px 16px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-spring);
+}
+.learn-chip::after { content: ""; position: absolute; inset: -4px 0; }
+.learn-chip:active { transform: scale(0.95); }
+.learn-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+@media (hover: hover) { .learn-chip:not([aria-pressed="true"]):hover { background: var(--stone); } }
+.learn-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.learn-progress { margin: 0 0 14px; color: var(--faint); font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.learn-stack { display: flex; flex-direction: column; gap: 12px; margin: 0 0 26px; padding: 0; list-style: none; }
+.learn-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 104px;
+  padding: 20px;
+  border: 0;
+  border-radius: 26px;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 6%, transparent);
+  transition: transform var(--dur-tap) var(--ease-spring), box-shadow var(--dur-tap) var(--ease-ui);
+}
+.learn-card:active { transform: scale(0.985); }
+.learn-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.learn-card-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: 70%; }
+.learn-card-text strong { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+.learn-card-text small { font-size: 0.75rem; font-weight: 500; line-height: 1.35; }
+.learn-card-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.learn-card-meta .learn-tile-dot { background: currentColor; opacity: 0.6; }
+.learn-card-done { display: inline-flex; align-items: center; gap: 3px; }
+.learn-card-art { flex: none; width: 64px; height: 64px; filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.08)); }
+.learn-card-art svg { display: block; width: 64px; height: 64px; }
+.learn-card.is-amber { background: var(--learn-amber); color: var(--learn-amber-ink); }
+.learn-card.is-oat { background: var(--learn-oat); color: var(--learn-oat-ink); box-shadow: inset 0 0 0 1px var(--learn-oat-line); }
+.learn-card.is-oat small { color: var(--learn-oat-sub); }
+.learn-card.is-forest { background: var(--learn-forest); color: var(--learn-forest-ink); }
+.learn-card.is-lilac { background: var(--learn-lilac); color: var(--learn-lilac-ink); }
+.learn-card.is-coral { background: var(--learn-coral); color: var(--learn-coral-ink); }
+.learn-card.is-slate { background: var(--learn-slate); color: var(--learn-slate-ink); }
+.learn-card.is-slate small { color: var(--learn-slate-sub); }
+.learn-card.is-saffron { background: var(--learn-saffron); color: var(--learn-saffron-ink); }
+.learn-card.is-saffron small { color: var(--learn-saffron-sub); }
+@media (prefers-reduced-motion: reduce) { .learn-card, .learn-chip { transition: none; } }
+/* The app pages' header closes on a plain hairline, as the founder drew it, not the brand ramp. */
+.me-screen .minimal-header::after { height: 1px; background: var(--line); background-image: none; }
+

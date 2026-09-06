@@ -370,7 +370,7 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/What finding ADHD care actually looks like/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Short reads and quick quizzes/);
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {
