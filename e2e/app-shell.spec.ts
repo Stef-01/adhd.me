@@ -359,7 +359,10 @@ test("the consent notice, the bar and the finder are one shell at every width", 
   // The notice never floats past the app it is talking about, and the bar is the shell's width.
   expect(card!.x).toBeGreaterThanOrEqual(shell!.x - 1);
   expect(card!.x + card!.width).toBeLessThanOrEqual(shell!.x + shell!.width + 1);
-  expect(Math.abs(bar!.width - shell!.width)).toBeLessThanOrEqual(2);
+  // RADIANT: above 900px the bar is a floating dock centred inside the shell, so it is held to
+  // the shell's bounds rather than to its width; below, it is still the shell's width.
+  expect(bar!.x).toBeGreaterThanOrEqual(shell!.x - 1);
+  expect(bar!.x + bar!.width).toBeLessThanOrEqual(shell!.x + shell!.width + 1);
   // The question, the box and the example link share one left edge.
   const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
   const box = await page.getByRole("textbox").boundingBox();

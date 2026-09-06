@@ -191,6 +191,8 @@ function perItem(n: number, run: (n: number) => void): number {
   return best / (repeats * n);
 }
 
+const LINEARITY_BOUND = 1.7;
+
 describe("W98 timing", () => {
   // The unit's gate says "timed e2e". The timing is asserted here rather than in a browser,
   // and the reason is a real constraint rather than convenience: onboarding is create-only
@@ -265,10 +267,16 @@ describe("W98 timing", () => {
     expect(
       per200 / per50,
       `200 sites cost ${(per200 / per50).toFixed(2)}× per site what 50 did (per50=${per50.toFixed(5)}ms per200=${per200.toFixed(5)}ms)`,
-    ).toBeLessThan(2.5);
+    ).toBeLessThan(LINEARITY_BOUND);
   });
 
   it("the linearity check can still tell linear from quadratic, on the same harness", () => {
+    // 2026-09-06: the quadratic probe measured 2.43–2.47× on the build box, not the 4.46–4.94×
+    // recorded when the 2.5 line was drawn — the engine now runs the tight xor loop faster at
+    // the larger size — and the line became a coin toss on the very population it exists to
+    // catch. The bound is one constant for both tests now, at 1.7: 1.7× above the linear maximum
+    // (0.98) and 1.4× below the quadratic minimum measured today. Move it only from two measured
+    // populations, as before.
     // NON-VACUITY, AND THIS UNIT EXISTS BECAUSE ITS ABSENCE HID A HOLE FOR AS LONG AS THE TEST HAS
     // EXISTED. The bound above is only worth its comment if something can cross it, so a
     // deliberately quadratic workload is timed through the identical harness at the identical
@@ -286,6 +294,6 @@ describe("W98 timing", () => {
     expect(
       per200 / per50,
       `a genuinely quadratic workload measured ${(per200 / per50).toFixed(2)}× per item — if this is under 2.5 the linearity check above has stopped discriminating`,
-    ).toBeGreaterThan(2.5);
+    ).toBeGreaterThan(LINEARITY_BOUND);
   });
 });

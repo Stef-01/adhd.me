@@ -84,6 +84,22 @@ dopamine loops, RSD, somatics, sleep — and no content exists for them; the sev
 their titles and their cards. The app header on the profile and learn tabs closes on a plain
 hairline now rather than the brand ramp, as drawn.
 
+**RADIANT, desktop and one type scale (2026-09-06, founder-directed: "not stuck with the iPhone
+window shape and size; consistent text across the whole site").** Two laws in one layer at
+the end of the stylesheet:
+- *One type scale for every page but the console.* Statements (h1) in Newsreader 500 with the
+  same tracking and leading; h2, h3 and h4 in the sans at 600; body and list lines at 1.55.
+  Sizes stay each page's own — family, weight, tracking and leading are one law, and the rule
+  is unlayered so it outranks a page's utility classes. The story's display line and the
+  practices page's serif h2 both fall into line; the learn tab's line under its header, which
+  is the page's h1 for the outline's sake, keeps the sans at a line's weight.
+- *A desk-width shell above 900px:* 1040px wide, the gutter 2.5rem. The finder's single-column
+  stages keep a 780px reading measure inside it; the results list is two columns of cards; the
+  filters screen is two columns, switches left and the rest right, with the sticky button on
+  the right so the dock never covers it; the learn stack is two columns and its reader keeps
+  the measure. The tab bar becomes a dock: a floating pill, icon beside label, the current tab
+  on the soft tint, so a desktop is not a phone bar stretched across a page.
+
 - [x] `welcome-stage.tsx` (2026-09-03) — **hierarchy reads:** question → compose box → example
       link → disclaimer, one column, nothing competing; the mic sits inside the box at thumb
       height. Two things were wrong and are fixed. **The wordmark moved between screens:**
