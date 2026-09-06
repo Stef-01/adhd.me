@@ -3624,18 +3624,15 @@ summary:focus-visible {
   align-self: start;
   max-width: none;
 }
-.story-hero-copy h1 {
-  margin: 22px 0 0;
-  /* Sized to the column it sits in. At 15.5ch the measure was roughly half the available
-     645px and forced the headline to five lines. */
-  max-width: 22ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(2.5rem, 4.5vw, 4.125rem);
-  font-weight: 430;
-  line-height: 1;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
+/* THE HEADLINE WAS TYPESET THREE TIMES IN THIS FILE AND ONLY THE THIRD ONE RAN. Two full
+   `.story-hero-copy h1` blocks stood here — 22ch of Newsreader at clamp(2.5rem, 4.5vw, 4.125rem)
+   with a comment arguing the measure down from 15.5ch, then 15.5ch at clamp(2.625rem, 5vw,
+   4.875rem) a hundred lines later arguing it back — and the redesign layer below restates every
+   single property either of them set (margin, max-width, colour, family, size, weight,
+   line-height, tracking, wrap), in Inter, at 13.5ch. Neither had applied since that landed. Both
+   deleted: this is the same defect the shell's container queries had, one layer up — a reader
+   believes the first description they hit, and an edit to it changes nothing on screen. The page
+   has one type scale now and it is the one at the bottom of the file. */
 
 .story-hero-context {
   display: flex;
@@ -3654,14 +3651,6 @@ summary:focus-visible {
   content: "";
   background: var(--hero-orange);
   box-shadow: 0 0 0 5px color-mix(in srgb, var(--hero-orange) 18%, transparent);
-}
-.story-hero-sub {
-  max-width: 34ch;
-  margin: 30px 0 0;
-  color: var(--s-muted);
-  font-size: clamp(1rem, 1.25vw, 1.1875rem);
-  line-height: 1.65;
-  text-wrap: pretty;
 }
 .story-hero-actions {
   display: flex;
@@ -3703,16 +3692,10 @@ summary:focus-visible {
   border-top: 1px solid var(--s-line);
 }
 
-.story-heading {
-  margin: 0;
-  max-width: 18ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.875rem, 3.6vw, 3.25rem);
-  font-weight: 435;
-  line-height: 1.04;
-  letter-spacing: -0.038em;
-  text-wrap: balance;
-}
+/* Same story as the headline: every type property of `.story-heading` set here — 18ch of
+   Newsreader at clamp(1.875rem, 3.6vw, 3.25rem) — is restated by the redesign layer's
+   `.story-heading, .story-approach-title` rule below, so none of it applied. `margin: 0` was the
+   exception and it has moved there, because these are `h2`s and the UA margin is otherwise live. */
 
 .story-prose { margin-top: 28px; }
 .story-prose p {
@@ -3747,24 +3730,9 @@ summary:focus-visible {
   max-width: none;
   padding-block: 0;
 }
-.story-hero-copy h1 {
-  margin: 22px 0 0;
-  max-width: 15.5ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(2.625rem, 5vw, 4.875rem);
-  font-weight: 430;
-  line-height: 1;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
-.story-hero-sub {
-  max-width: 34ch;
-  margin: 30px 0 0;
-  color: var(--s-muted);
-  font-size: clamp(1rem, 1.25vw, 1.1875rem);
-  line-height: 1.65;
-  text-wrap: pretty;
-}
+/* The second dead `h1` block and the second of two identical `.story-hero-sub` blocks stood here
+   — see the note where the first pair was. `text-wrap: pretty` was the one declaration of the sub
+   that survived the redesign layer (it does not restate it) and it has moved there. */
 .story-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 38px; }
 
 /* THE HERO'S RIGHT COLUMN IS THE COVERAGE DIAGRAM, AND THAT IS THE WHOLE ARGUMENT FOR IT.
@@ -3919,17 +3887,9 @@ summary:focus-visible {
   background: var(--s-dark);
   color: #f4f1e8;
 }
-.story-throughline-line {
-  max-width: 20ch;
-  margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(2.125rem, 5.2vw, 4.625rem);
-  font-weight: 400;
-  line-height: 1.06;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
-}
-.story-throughline-line em { color: var(--on-band); font-style: italic; }
+/* The pull-line's type, likewise restated in full below. `margin: 0`, `text-wrap: balance` and the
+   `em`'s `font-style: italic` were the declarations the redesign layer does not repeat, and they
+   have moved there rather than staying behind as the live remainder of a dead block. */
 /* Pillars. A hairline-ruled list where the title and the body sit on one baseline, not a 3-up
    card row: three cards would give equal weight to three things read in sequence. */
 .story-pillars {
@@ -4689,31 +4649,17 @@ summary:focus-visible {
   }
 }
 
-/* ── The hero's claim, underscored as the reader leaves it ───────────────────
-   "with one GP" is the whole proposition, and it was set in the same ink as the
-   rest of the sentence. A rule draws under it on the way past — scroll-driven
-   where that exists, and simply absent otherwise, since an underline that never
-   arrives costs the sentence nothing. */
-.story-claim { position: relative; white-space: nowrap; }
-.story-claim::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0.06em;
-  height: 3px;
-  background: var(--s-accent);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .story-claim::after {
-    animation: seqUnderline 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
-  }
-  @keyframes seqUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-}
-/* No motion preference: the claim is simply underscored, with no draw. */
-@media (prefers-reduced-motion: reduce) {
-  .story-claim::after { transform: scaleX(1); }
-}
+/* ── The hero's claim ────────────────────────────────────────────────────────
+   AN ANIMATED UNDERLINE USED TO BE DESCRIBED HERE, AND IT HAD ALREADY BEEN SWITCHED OFF. Twenty-six
+   lines drew a 3px accent rule under "with one GP", animated it on scroll under
+   `no-preference` and pinned it under `reduce` — and 1,400 lines further down the redesign layer
+   ended it with `content: none; display: none;`. So the paragraph a reader hit first said the
+   claim gets underscored on the way past, the rules said how, and the page did nothing of the
+   kind. Deleted, with the disabling line, rather than left as a comment nobody can trust: what
+   marks the claim now is the italic Newsreader against the h1's Inter, which is a typographic
+   distinction and not a decoration to be animated. `.story-claim`'s live declaration is in the
+   redesign layer below; `position: relative` and `white-space: nowrap` went with the pseudo-element
+   they existed for (the nowrap was already overridden to `normal` there). */
 
 /* ── The CTA says which way it goes ─────────────────────────────────────────
    A micro-interaction that carries information rather than decoration: the
@@ -4792,14 +4738,9 @@ a focus ring that is not the browser default removed {
   gap: clamp(20px, 4vw, 56px);
   flex-wrap: wrap;
 }
-.story-approach-title {
-  margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
-  font-weight: 450;
-  letter-spacing: -0.025em;
-  color: var(--s-ink);
-}
+/* `.story-approach-title`'s type was set here at clamp(1.375rem, 2.2vw, 1.75rem) of Newsreader and
+   is set again — as a peer of `.story-heading`, four times that at the top end — in the redesign
+   layer, which is what the page actually draws. Deleted; the `margin: 0` moved with it. */
 .story-approach-copy {
   max-width: 52ch;
   margin: 8px 0 0;
@@ -6074,8 +6015,6 @@ select { caret-color: var(--route-strong); }
   white-space: normal;
 }
 
-.story-claim::after { content: none; display: none; }
-
 .story-hero-sub {
   max-width: 32ch;
   margin-top: 28px;
@@ -6083,6 +6022,10 @@ select { caret-color: var(--route-strong); }
   font-size: clamp(1.125rem, 1.6vw, 1.375rem);
   font-weight: 620;
   line-height: 1.4;
+  /* Carried down from the two identical blocks that used to sit in the pre-redesign layer — the
+     only declaration of theirs this rule did not already restate. A one-line deck should not be
+     allowed to break to a single orphaned word. */
+  text-wrap: pretty;
 }
 
 .story-hero-explainer {
@@ -6212,6 +6155,9 @@ select { caret-color: var(--route-strong); }
 
 .story-heading,
 .story-approach-title {
+  /* Both are `h2`s, and the `margin: 0` each used to get from its own dead pre-redesign block is
+     the one declaration those blocks were still doing any work with. */
+  margin: 0;
   max-width: 15ch;
   color: var(--ink);
   font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
@@ -6270,16 +6216,19 @@ select { caret-color: var(--route-strong); }
 }
 .story-throughline-line {
   max-width: 18ch;
+  margin: 0;
   color: var(--on-ground);
   font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 5.1rem);
   font-weight: 560;
   letter-spacing: -0.04em;
   line-height: 0.98;
+  text-wrap: balance;
 }
 .story-throughline-line em {
   color: var(--on-band);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-style: italic;
   font-weight: 430;
 }
 

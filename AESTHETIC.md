@@ -234,10 +234,33 @@ and a one-line commit message are the record.
 
 ## Story / public surfaces
 
-- [ ] `story-landing.tsx` — founder story; typography and pacing should feel like a person wrote
-      it, not a template. Re-check the HSIL/partner logo treatment for contrast and alignment.
-      (Its reduced-motion gaps are closed — see Cross-cutting below — but the typography and logo
-      pass has not been done.)
+- [x] `story-landing.tsx` (2026-09-05) — **the page's typography was written three times and only
+      the last copy ran.** The typography pass found nothing to retune, because the thing wrong
+      with this page's type was not its values but that a reader could not find out what they
+      were. Six blocks in `globals.css` set the story surface's type in Newsreader — two full
+      `.story-hero-copy h1` rules a hundred lines apart (22ch at `clamp(2.5rem, 4.5vw, 4.125rem)`
+      with a comment arguing the measure *down* from 15.5ch, then 15.5ch at
+      `clamp(2.625rem, 5vw, 4.875rem)` arguing it back), two identical `.story-hero-sub` rules,
+      `.story-heading`, `.story-approach-title`, and `.story-throughline-line` — and the redesign
+      layer 1,400 lines further down restates **every** property each of them set, in Inter, at a
+      different scale. None of the six had applied since that layer landed. This is the same defect
+      as the finder shell's container queries one entry up, one layer higher: the first description
+      a reader hits is authoritative-looking and inert, and an edit to it changes nothing on
+      screen. All six deleted; the handful of declarations the redesign layer did *not* restate
+      (`margin: 0` on the two `h2`s, `text-wrap: pretty` on the sub, `text-wrap: balance` and
+      `margin: 0` on the pull-line, `font-style: italic` on its `em`) carried down to the live
+      rules rather than left behind as the working remainder of dead blocks. **And an animated
+      underline that was documented but switched off:** 26 lines drew a 3px accent rule under
+      "with one GP" and animated it on scroll, and the redesign layer killed it with
+      `content: none; display: none`. Deleted with its disabling line rather than kept as a comment
+      nobody can trust — what marks the claim now is italic Newsreader against the h1's Inter,
+      a typographic distinction rather than a decoration to animate. Net −95 lines of CSS, no
+      rendered change. **The logo half of this item does not exist any more:** the founder
+      portraits and the HSIL/partner logo moved to `/about` with the founders register
+      (`about/team-plates.tsx`, `/hsil-logo.png`), so nothing on this page renders an `<Image>` —
+      the hero's figure is the drawn `CoverageMap` — and the now-unused `next/image` import went
+      with them. Contrast/alignment for that logo belongs to the `/about` line below.
+      `pnpm verify` green; `pnpm e2e` **262 passed in 7.1m**.
 - [ ] `app/practices`, `app/clinicians` (walkthrough), `app/faq`, `app/about`, `app/examples` —
       pass for consistent type scale, spacing rhythm, and motion restraint across all public pages;
       these are visited far less often than the finder, so drift is easy to miss.

@@ -12,7 +12,9 @@ import {
   type Variants,
 } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
-import Image from "next/image";
+// `next/image` was imported here for the founder portraits and the HSIL/partner logo, both of
+// which moved to /about with the founders register. Nothing on this page renders an image now —
+// the hero's figure is `CoverageMap`, drawn — so the import went with them.
 import { InterestForm } from "./interest-form";
 import { INDICATIVE_FIGURES } from "@/compliance/landing-copy";
 import { CoverageMap } from "./coverage-map";
