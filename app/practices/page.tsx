@@ -31,9 +31,11 @@ export default function PracticesPage() {
       */}
       <PublicHeader />
 
+      {/* Section links for a wide screen. On a phone the three were already hidden and the
+          sign-in link sat alone on a row of its own, above a hero that repeats it; the row goes. */}
       <nav
         aria-label="On this page"
-        className="border-b border-stone-100"
+        className="hidden border-b border-stone-100 sm:block"
       >
         <div className="mx-auto flex max-w-5xl items-center justify-end gap-6 px-6 py-3 text-sm text-stone-600">
           <a href="#practice-story" className="hidden hover:text-stone-900 sm:inline">{C.nav.story}</a>

@@ -241,6 +241,33 @@ and a one-line commit message are the record.
 - [ ] `app/practices`, `app/clinicians` (walkthrough), `app/faq`, `app/about`, `app/examples` —
       pass for consistent type scale, spacing rhythm, and motion restraint across all public pages;
       these are visited far less often than the finder, so drift is easy to miss.
+      **Cold look at 390, 2026-09-05** (faq, examples, practices, clinicians, approach, story,
+      join, privacy, full-page captures read one by one). Type scale and rhythm hold across the
+      set: Newsreader on every public h1, the same footer band, the same consent bar. Four things
+      did not, all fixed the same day:
+      1. *The figures had drifted.* One label, "common out-of-pocket cost of a private adult
+         assessment", carried "$1k to $2k" on the story, "$1k to $5k" on the learn page and the
+         practices copy; the wait was "6–12 months" on two pages and "Months to years" on the
+         third — under a comment on the story rail promising the figures were copied from one
+         file so they could not drift. A copy is what drifts. They are one exported constant now
+         (`INDICATIVE_FIGURES`, `src/compliance/landing-copy.ts`) that every renderer and the
+         learn scene's footnote read, held by `indicative-figures.test.ts`. The story's third
+         figure, "$270 to $600 via a GP-led pathway", has no register entry and is the one still
+         written by hand; it is on the founder's source-confirmation list with the rest.
+      2. *The story header wrapped.* At 390 the wordmark, both text links and the pill all broke
+         onto two lines. A 900px rule already hid the links — and lost to the phone-width
+         `nav a:not(.hidden)` touch-floor rule, whose own comment claimed it never set `display`
+         while it did. The hide rule now outranks it (`.story-nav > .story-nav-link`) and the
+         touch-floor comment tells the truth. One line: wordmark and pill.
+      3. *A stranded control on /practices.* The section nav hid its three anchor links on a
+         phone and left "Practice sign-in" alone on a row of its own, above a hero that repeats
+         it. The row is desktop furniture now (`hidden sm:block`).
+      4. *One pill said "For clinicians".* The join page's header pill, where every other surface
+         says GPs — the glossary's word. It says "For GPs".
+      Not changed, noted: the clinician walkthrough keeps its own chrome ("ADHD.ME ⌄ · Patient
+      view ↗") and its own footer, which reads as deliberate for a stepped tool rather than as
+      drift; and two of the three worked examples land on the same first GP, which a two-GP
+      roster makes unavoidable.
 - [ ] `learn-modules.tsx` — content-heavy; check line length, contrast, and quiz interaction
       feedback (the O243–O245 "motion pass" touched this — confirm it still reads well).
 

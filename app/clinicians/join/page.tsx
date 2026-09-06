@@ -25,7 +25,7 @@ export default function JoinPage() {
           /approach already carries: a sticky header with the serif wordmark linking home and one
           clearly-pressable nav link. Rebuilt in this page's own palette because the story tokens
           are deliberately .story-scoped (see globals.css's note on separate contrast budgets). */}
-      <PublicHeader rightHref="/clinicians" rightLabel="For clinicians" />
+      <PublicHeader rightHref="/clinicians" rightLabel="For GPs" />
       <div className="join-wrap">
         {/* O241: same rule as the privacy cluster — a route two segments deep states its place,
             on the page and in the BreadcrumbList the same component emits. */}

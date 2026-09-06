@@ -14,6 +14,7 @@ import {
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import Image from "next/image";
 import { InterestForm } from "./interest-form";
+import { INDICATIVE_FIGURES } from "@/compliance/landing-copy";
 import { CoverageMap } from "./coverage-map";
 
 // The founders register moved to app/about/founders.ts when About us became its own
@@ -26,16 +27,18 @@ const STEPS: ReadonlyArray<{ title: string; body: string }> = [
 ];
 
 /**
- * The stat rail. EVERY FIGURE HERE IS COPIED FROM src/compliance/landing-copy.ts RATHER THAN
- * WRITTEN AGAIN, so the two public pages cannot drift into quoting different numbers for the same
- * thing — which is the failure mode that makes a health page indefensible. They are qualitative
- * ranges on purpose: a decimal implies a study somebody checked, and none of these has been
- * confirmed against its source by anybody in this repo. `note` ships beside them, not below the
- * fold.
+ * The stat rail. The wait and the cost are READ from `INDICATIVE_FIGURES` rather than written
+ * again: this comment used to say they were copied from landing-copy.ts so the two pages could
+ * not drift, and a copy is exactly what drifted — this rail said "$1k to $2k" while the practices
+ * and learn pages said "$1k to $5k" under the same label. A shared constant cannot. The third
+ * figure has no register entry yet and is the one line here still written by hand. They are
+ * qualitative ranges on purpose: a decimal implies a study somebody checked, and none of these
+ * has been confirmed against its source by anybody in this repo. `note` ships beside them, not
+ * below the fold.
  */
 const COST: ReadonlyArray<{ value: string; label: string; accent?: boolean }> = [
-  { value: "6–12 months", label: "typical wait for an adult ADHD assessment appointment" },
-  { value: "$1k to $2k", label: "common out-of-pocket cost of a private adult assessment" },
+  INDICATIVE_FIGURES.wait,
+  INDICATIVE_FIGURES.cost,
   { value: "$270 to $600", label: "out-of-pocket via a GP-led pathway, in the states that now allow it" },
   // "the RIGHT training", not "the required training", and the difference is the compliance
   // linter's, not a stylist's: `no-clinical-necessity` fires on "required" and it is right to.

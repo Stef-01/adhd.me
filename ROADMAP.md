@@ -17,7 +17,13 @@ The founder's words were "optimise and redesign from the ground up." Read litera
 polish the existing shell, question it.
 
 - [ ] Full-app aesthetic pass — see `AESTHETIC.md`. Every screen gets looked at with fresh eyes,
-      not just the ones that were mid-refinement when the ledger was deleted.
+      not just the ones that were mid-refinement when the ledger was deleted. **Public pages
+      looked at cold at 390 on 2026-09-05** (faq, examples, practices, clinicians, approach,
+      story, join, privacy; findings and fixes under "Story / public surfaces" in `AESTHETIC.md`):
+      four found, four fixed — the figures drifting across three pages, the story header wrapping
+      onto two lines, the practices sign-in link stranded on its own row, and a header pill that
+      said "clinicians" where the site says GPs. Standing, as the item is: the console has not
+      had the same cold look at 390 yet.
 - [ ] Re-walk the finder end to end (welcome → listening → profile → compare → results → booking)
       as a first-time user on a phone, at night, tired. Cut anything that costs a decision without
       earning it back. "Delete before you shrink" — the prior design ethos was right; keep it.

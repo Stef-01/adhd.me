@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Clock, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { INDICATIVE_FIGURES } from "@/compliance/landing-copy";
 import { markDone, readProgress, type Progress } from "@/learn/progress";
 import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
 
@@ -414,14 +415,14 @@ export function LearnModules() {
         ))}
 
         <dl className="learn-figures">
-          <div>
-            <dt>6–12 months</dt>
-            <dd>typical wait for an adult ADHD assessment appointment</dd>
-          </div>
-          <div>
-            <dt>$1k to $5k</dt>
-            <dd>common out-of-pocket cost of a private adult assessment</dd>
-          </div>
+          {/* Read from the one register every public page quotes, so this page cannot say a
+              different number from the story or the practices page under the same label. */}
+          {[INDICATIVE_FIGURES.wait, INDICATIVE_FIGURES.cost].map((figure) => (
+            <div key={figure.label}>
+              <dt>{figure.value}</dt>
+              <dd>{figure.label}</dd>
+            </div>
+          ))}
         </dl>
         <p className="learn-figures-note">Indicative figures pending source confirmation.</p>
 

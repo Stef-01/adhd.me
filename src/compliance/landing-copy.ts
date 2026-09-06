@@ -4,6 +4,25 @@
 // capacity. B2B throughout — the audience is practice owners and managers, never
 // patients; no therapeutic advertising, no clinical claims, no testimonials.
 
+/**
+ * THE TWO FIGURES EVERY PUBLIC PAGE QUOTES, WRITTEN ONCE.
+ *
+ * The story page's stat rail carried a comment promising that every figure there was copied from
+ * this file so the two pages could not drift — and they had drifted: the story said "6–12 months"
+ * and "$1k to $2k", the learn page "6–12 months" and "$1k to $5k", this file "Months to years"
+ * and "$1k to $5k", all under the one label. Three values for one claim means at most one is
+ * right, and a copied constant is not a shared one. So the two are exported from here and the
+ * story rail, the learn page's figures and the learn scene's footnote all READ them.
+ *
+ * The values are this file's: the qualitative ranges, for the reason the note beside `evidence`
+ * gives — none has been confirmed against its source, and a vaguer true range beats a precise
+ * wrong one beside a health claim. Still indicative; the founder action stands.
+ */
+export const INDICATIVE_FIGURES = {
+  wait: { value: "Months to years", label: "typical wait for an adult ADHD assessment appointment" },
+  cost: { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
+} as const;
+
 export const LANDING_COPY = {
   nav: { story: "Practice story", product: "How it works", measurement: "Measurement", cta: "Practice sign-in" },
   hero: {
@@ -69,8 +88,8 @@ export const LANDING_COPY = {
     // somebody checked, and a wrong decimal beside a health claim is worse than a vaguer true
     // one. Replace each with a sourced number, or delete it. See `evidenceNote`.
     evidence: [
-      { value: "Months to years", label: "typical wait for an adult ADHD assessment appointment" },
-      { value: "$1k to $5k", label: "common out-of-pocket cost of a private adult assessment" },
+      INDICATIVE_FIGURES.wait,
+      INDICATIVE_FIGURES.cost,
       // Phrased around ACCESS rather than the clinical act, because the W23 linter refuses
       // "specialist", "diagnos*" and "prescrib*" here and is right to: this page's reader is a
       // practice manager, and a clinical claim on a B2B page is still therapeutic advertising.

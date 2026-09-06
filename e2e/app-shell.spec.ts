@@ -11,6 +11,7 @@
 // made O225's letterboxing survive a review.
 
 import { expect, test } from "@playwright/test";
+import { INDICATIVE_FIGURES } from "../src/compliance/landing-copy";
 import { APP_TABS } from "../src/app-shell/tabs";
 
 test("the front door is the app, not a story", async ({ page }) => {
@@ -33,7 +34,7 @@ test("the story kept every word it had, at its own address", async ({ page }) =>
   await page.goto("/story");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   // The figures the compliance-linted stat rail carries, still on the page after the move.
-  await expect(page.getByText("6–12 months")).toBeVisible();
+  await expect(page.getByText(INDICATIVE_FIGURES.wait.value)).toBeVisible();
   await expect(page.getByText(/Indicative figures pending source confirmation/i)).toBeVisible();
 });
 

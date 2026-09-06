@@ -1,3 +1,5 @@
+import { INDICATIVE_FIGURES } from "../compliance/landing-copy";
+
 // O239 (founder-directed): the Learn tab's copy, as data. O244 (founder-directed) widened it:
 // "the learn tab is to help people learn about ADHD and managing symptoms, and little
 // Buzzfeed-style trendy quizzes, but also learning content in an engaging way."
@@ -101,9 +103,9 @@ export const SCENES: readonly Scene[] = [
       "Telling the whole story to somebody new",
     ],
     foot:
-      "6–12 months is a typical wait for an adult ADHD assessment appointment; $1k to $5k is a " +
-      "common out-of-pocket cost of a private adult assessment. Both indicative, pending source " +
-      "confirmation.",
+      `${INDICATIVE_FIGURES.wait.value} is a ${INDICATIVE_FIGURES.wait.label}; ` +
+      `${INDICATIVE_FIGURES.cost.value} is a ${INDICATIVE_FIGURES.cost.label}. ` +
+      "Both indicative, pending source confirmation.",
   },
   {
     n: "06",

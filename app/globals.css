@@ -4550,11 +4550,13 @@ summary:focus-visible {
 }
 
 @media (max-width: 720px) {
-  /* Height only, and never `display`. This rule previously set `display: inline-flex` on every
-     anchor inside a nav. Rules in this file are unlayered and Tailwind's utilities live in
-     @layer utilities, so unlayered wins whatever the specificity: it revived the three
-     `hidden sm:inline` links in the /practices header and pushed that page 63px wider than a
-     390px phone. Padding gives the same 44px target without touching the box type. */
+  /* This DOES set `display`, and the comment that used to sit here said it never would.
+     `min-height` does nothing on an inline anchor, so the 44px target needs a box type — and
+     the cost is that (0,1,1) revives any nav link a bare class tried to hide at phone width.
+     Rules in this file are unlayered and Tailwind's utilities live in @layer utilities, so it
+     also beats `hidden`, which is why `:not(.hidden)` is here. Anything else a nav hides on a
+     phone must outrank this or hide the parent: the story header's links do the first
+     (`.story-nav > .story-nav-link`, below) and the /practices section nav does the second. */
   nav a:not(.hidden) { min-height: 44px; display: inline-flex; align-items: center; }
 
   /* The last four controls sitting between 40px and 42px. Each is a real button somebody taps with
@@ -5932,6 +5934,7 @@ select { caret-color: var(--route-strong); }
 
 .site-nav-links { margin-inline: auto 24px; }
 
+
 .site-nav-links a,
 .story-nav-link {
   position: relative;
@@ -6773,7 +6776,11 @@ select { caret-color: var(--route-strong); }
   .story-header-inner,
   .story-wrap { width: min(100% - 40px, 760px); }
   .site-nav-links,
-  .story-nav-link { display: none; }
+  /* The child combinator is load-bearing: the phone-width `nav a:not(.hidden)` touch-floor rule
+     is (0,1,1) and beat the bare class here, so the story header shipped at 390 with the
+     wordmark, both links and the pill all wrapped onto two lines. (0,2,0) outranks it. The
+     footer carries both links; the pill is the one control this header is for. */
+  .story-nav > .story-nav-link { display: none; }
   .story-nav { margin-left: auto; }
   .story-hero { min-height: auto; }
   .story-hero-grid {
