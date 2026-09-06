@@ -27,8 +27,10 @@ polish the existing shell, question it.
       seeded; no screen scrolled sideways): two found, two fixed — the dashboard's title and its
       meta line sharing one row and colliding, and the capacity page's seventy recommendation
       paragraphs in one flat list running to twelve thousand pixels over the verdicts that are
-      the page's point, now grouped by weekday behind seven disclosures. Standing, as the item
-      is; the next cold look is the monthly audit's.
+      the page's point, now grouped by weekday behind seven disclosures; then the chart labels
+      that shrank to five pixels at 390, which scroll now rather than shrink. **Public pages at
+      1280** looked at the same day: nothing to change. Standing, as the item is; the next cold
+      look is the monthly audit's.
 - [ ] Re-walk the finder end to end (welcome → listening → profile → compare → results → booking)
       as a first-time user on a phone, at night, tired. Cut anything that costs a decision without
       earning it back. "Delete before you shrink" — the prior design ethos was right; keep it.

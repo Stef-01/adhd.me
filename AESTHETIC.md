@@ -291,9 +291,15 @@ column, the empty and awaiting states in their own words, tables that fit. Two d
    12,388px of the page's 17,128px — under the drift verdict and the score that are what the
    page is for. Grouped by weekday behind seven closed disclosures ("Monday · 10 sessions"); the
    engine's sentences are untouched, each states its own basis on purpose.
-Noted, not changed: `matching` is 10,000px at 390 and is an audit tool for a desk, not a phone;
-the dashboard's line chart labels are too small at 390 and would need a phone-specific chart to
-fix, which the console-depth decision should settle first.
+Noted, not changed: `matching` is 10,000px at 390 and is an audit tool for a desk, not a phone.
+The dashboard's chart labels, first noted here as needing a phone chart, needed less: the SVG
+scaled its 720-unit box into 326px and its labels with it, to five pixels. Below 560px the chart
+now keeps its size and its box scrolls sideways (labels ten pixels; the page still 390 wide).
+The same component draws the results page's chart, so both are fixed.
+
+**Public pages at 1280, the same day.** Nothing to change: the FAQ and the legal pages hold a
+74–75 character measure, the story's and practices' widest boxes are short bullets and rows,
+and the learn tab's phone-width column on a desktop is the app shell's frame, not drift.
 
 ## Cross-cutting
 

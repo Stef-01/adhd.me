@@ -102,10 +102,14 @@ export function WeeklyArmsChart({
           </span>
         ))}
       </div>
-      <div className="relative">
+      {/* The SVG scales with its box, and its labels scale with it: at a phone width the 720-unit
+          viewBox rendered into 326px put the tick labels at five pixels. Below 560px the chart
+          keeps its size and the box scrolls sideways instead, which keeps every label legible
+          and keeps the hover layer, positioned inside this same box, aligned with the plot. */}
+      <div className="relative overflow-x-auto">
         <svg
           viewBox={`0 0 ${W} ${H}`}
-          className="w-full"
+          className="w-full min-w-[560px]"
           role="img"
           aria-label={`Attended appointments ${labels.unit}, weekly, ${labels.invite} versus ${labels.holdout}`}
           onMouseMove={onMove}
