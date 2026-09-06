@@ -29,8 +29,15 @@ polish the existing shell, question it.
       paragraphs in one flat list running to twelve thousand pixels over the verdicts that are
       the page's point, now grouped by weekday behind seven disclosures; then the chart labels
       that shrank to five pixels at 390, which scroll now rather than shrink. **Public pages at
-      1280** looked at the same day: nothing to change. Standing, as the item is; the next cold
-      look is the monthly audit's.
+      1280** looked at the same day: nothing to change. **The console's empty states swept
+      unseeded on 2026-09-06** — signed in, practice reset, nothing seeded, all 29 screens read
+      one by one, which is the state the product ships in and which no spec had looked at whole:
+      one real defect, in `/console/education`, where three paragraphs went on describing the
+      ordering and completeness of a list of zero items ("Every item … is **above**, in full")
+      directly under the paragraph saying the library is empty. Fixed and held by the existing
+      empty-library test. Three other unreachable empty states were found and deliberately left
+      as defensive branches; details under the console section of `AESTHETIC.md`. Standing, as the
+      item is; the next cold look is the monthly audit's.
 - [ ] Re-walk the finder end to end (welcome → listening → profile → compare → results → booking)
       as a first-time user on a phone, at night, tired. Cut anything that costs a decision without
       earning it back. "Delete before you shrink" — the prior design ethos was right; keep it.

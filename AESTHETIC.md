@@ -394,11 +394,26 @@ the end of the stylesheet:
       doors in the clinician walkthrough were raw `<a href>` to an in-app route, so the one control
       four persuasion stages exist to be pressed did a full document reload and dropped the
       walkthrough's state. Both are `Link`s now, like the page's own "Patient view" exit.
-      **Still open on this item:** the box above is a footer-landmark and dead-class fix, not the
-      full type-scale / spacing-rhythm / motion-restraint pass this line asks for. The 2026-09-05
-      cold look covered type scale and rhythm at 390 by eye and found them holding; motion
-      restraint across these five pages has not been audited at all, and nothing here has been
-      looked at cold on desktop since 8bcce38 re-scaled the site. Leaving unchecked.
+      **Motion restraint, audited 2026-09-06 — and the finding is the opposite of the one this
+      line expected.** Every motion surface on the five pages was enumerated rather than eyeballed:
+      each `motion/react` call site, every `transition-*`/`duration-*`/`animate-*` utility, and
+      every `hover:`/`group-hover:` state. There is **one** `motion/react` call site on the whole
+      set (`about/team-plates.tsx`, already reduced-motion-gated in the 2026-09-03 sweep) and
+      **zero** transition or animation utilities. `/faq`, `/examples`, `/clinicians` and `/about`
+      have no hover state between them at all. So there is no decorative motion to restrain here;
+      what there is instead is `/practices` carrying all eleven hover states the set has — both
+      `/demo` buttons, the console sign-in, the section nav and the six citation links — with a
+      transition on none of them. The practice-facing landing page's primary control therefore
+      snapped `stone-900` → `stone-700` while the identical shape on the story page and everywhere
+      in the console eases on `--dur-tap`, which is the one part of the house scale a hover is
+      supposed to use. Fixed with a `.t-tint` in the `t-*` block — colour, background, border and
+      underline only, `--dur-tap` on `--ease-ui`, no transform, and **no reduced-motion guard,
+      stated as a decision in the rule's own comment**: nothing in it moves, and gating it would
+      hand a reduce user the snap it exists to remove. The eleven sites are the only ones that
+      carry it; nothing new animates on the other four pages, because nothing there should.
+      **Still open on this item:** type scale and spacing rhythm were covered at 390 by eye in the
+      2026-09-05 cold look and found holding, but nothing here has been read cold on **desktop**
+      since 8bcce38 re-scaled the site. Leaving unchecked for that reason alone.
 - [x] `learn-modules.tsx` — content-heavy; check line length, contrast, and quiz interaction
       feedback (the O243–O245 "motion pass" touched this — confirm it still reads well).
       **Walked 2026-09-05 at 390**: a read module card by card, then a quiz answered wrong and
@@ -427,12 +442,33 @@ the end of the stylesheet:
       reachability floor — so a stranded or ringless console control fails the suite rather than
       waiting for a cold look. *Table density* was audited at 1280 on 2026-09-06 and the numeric
       alignment defect it found is fixed in all four console data tables (below).
-      **Still open:** empty states have been read only where the seeded fixtures happen to produce
-      them (referrals, outcomes, capacity, verticals — those four read well and `verticals.spec.ts`
-      holds its two states apart in copy). Nobody has gone looking for the console screens whose
-      empty state is *unreachable* from the demo fixtures and therefore has never been rendered by
-      anything; that sweep is the honest next piece of this item, and it is a fixture question
-      before it is an aesthetic one. List density outside the four tables is also unaudited.
+      **Empty states swept 2026-09-06, and the sweep found one.** Method: sign in, `POST
+      /api/mock/console` to reset the practice, seed *nothing*, then visit all 29 console screens
+      and read the rendered `main` of each one by one — which is the state this product actually
+      ships in, and which no spec had ever looked at as a whole. One real defect, in
+      `/console/education`, and it is the "invisible because nothing reads it" shape one rung up
+      from the footer and caret bugs: the empty state was *rendered* (there is even an
+      `?empty=1` fixture and a test for it) and nobody had read the rest of the section. Under the
+      paragraph saying the library is empty, two more blocks kept describing the list that was not
+      there — `library-basis` gave the ordering basis of nothing ("Ordered by item id … Everything
+      relevant to this practice's registers is listed"), and `library-all-shown` claimed "Every
+      item about a register this practice runs is **above**, in full" with nothing above it. Three
+      paragraphs about a list of zero rows, on the page's *shipping* state (ADHD.ME ships with no
+      material; the library is only populated by the mock fixture). The page had already drawn this
+      exact line once — W154's comment says `libraryAllShown` is "only claimed when it is true"
+      beside a withheld panel — so the fix is that rule reaching its other case: both blocks now
+      render only when `shown.length > 0`, and the existing empty-library test asserts both are
+      absent, with the populated test above it as the non-vacuity floor. **Three more empty states
+      are unreachable and were left alone, deliberately:** `registers` and `case-mix` branch on
+      `registers.length === 0`, but `registersFor` maps the shipped condition catalogue and a
+      practice can only *disable* a row, never remove it; and `/console/applications` and
+      `/console/interest` sit behind an ADHD.ME-staff list that ships empty, so their whole
+      populated body — "No applications yet." included — is below a gate that is closed by design.
+      Those are defensive branches on a state the product forbids, not copy telling a reader
+      something false. Also noted, not changed: `/console/reporting` renders an empty `<ul>` under
+      its "Figures" heading with no zero-line of its own, and is saved by the Coverage section one
+      panel down saying "Nothing was reported for this period."
+      **Still open:** list density outside the four tables is unaudited.
 
 **Cold look at 390, 2026-09-05** — home, dashboard, matching, capacity, referrals, outcomes,
 results, signed in and seeded, full-page captures read one by one. Nothing scrolled sideways
