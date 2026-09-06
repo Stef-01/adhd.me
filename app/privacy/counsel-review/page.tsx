@@ -75,8 +75,9 @@ export default function CounselReviewPage() {
           </p>
         </section>
       </div>
-      <SiteFooter />
     </main>
+    {/* Outside `main`, for the landmark and for the band — see the note on /terms. */}
+    <SiteFooter />
     </>
   );
 }

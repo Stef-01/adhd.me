@@ -143,8 +143,13 @@ export default function TermsPage() {
           </p>
         </section>
       </div>
-      <SiteFooter />
     </main>
+    {/* Outside `main`, on two counts. A `<footer>` scoped to `main` is not the page's
+        `contentinfo` landmark; and `.site-footer` is a full-bleed dark band with an accent rule
+        along its top edge, so inside `max-w-xl px-6 py-16` it drew as a 576px rectangle floating
+        in white with 64px of page padding under it. /privacy, one route over in the same cluster,
+        always had it outside and always ran edge to edge. */}
+    <SiteFooter />
     </>
   );
 }

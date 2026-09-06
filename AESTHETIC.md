@@ -372,6 +372,33 @@ the end of the stylesheet:
       view ↗") and its own footer, which reads as deliberate for a stepped tool rather than as
       drift; and two of the three worked examples land on the same first GP, which a two-GP
       roster makes unavoidable.
+      **Footer landmark, 2026-09-06.** `SiteFooter` is one component placed two different ways:
+      six public routes rendered it INSIDE `<main id="main-content">` and four outside. Per
+      HTML-AAM a `<footer>` is only the page's `contentinfo` landmark when its nearest sectioning
+      ancestor is `body`, so on those six a reader navigating by landmarks found no footer at all
+      — and axe says nothing, because a *missing* landmark is not a violation. On the three whose
+      `main` is a narrow measure (`/terms`, `/privacy/counsel-review`, `/about`) it also drew
+      wrong: `.site-footer` is a full-bleed dark band, so inside `max-w-xl px-6 py-16` it became a
+      576px rectangle floating in white with the page's own 64px of padding beneath it, while
+      `/privacy` one route over ran edge to edge. Fixed on all six — `/faq`, `/examples`,
+      `/thanks` now wrap `main.prose-wrap` in a sibling `div.prose-screen` (`.prose-wrap` already
+      carried the `flex: 1` that keeps the foot down), and `/about`, `/terms`,
+      `/privacy/counsel-review` simply move the footer after `</main>`. Held by
+      `e2e/site-footer.spec.ts`, which derives the route list from `site-routes.ts` rather than
+      transcribing it, asserts both the nesting and the full-bleed width, and carries a
+      non-vacuity floor so a refactor that stops rendering the footer cannot pass mute. Verified
+      by mutation: re-nesting `/terms` fails the spec by name.
+      Two more in the same sweep: `/practices`' three nav anchors carried their own
+      `hidden sm:inline` from before item 3 above made the nav itself `hidden sm:block` — a second
+      copy of the same breakpoint, now just `hover:text-stone-900`; and both "start your journey"
+      doors in the clinician walkthrough were raw `<a href>` to an in-app route, so the one control
+      four persuasion stages exist to be pressed did a full document reload and dropped the
+      walkthrough's state. Both are `Link`s now, like the page's own "Patient view" exit.
+      **Still open on this item:** the box above is a footer-landmark and dead-class fix, not the
+      full type-scale / spacing-rhythm / motion-restraint pass this line asks for. The 2026-09-05
+      cold look covered type scale and rhythm at 390 by eye and found them holding; motion
+      restraint across these five pages has not been audited at all, and nothing here has been
+      looked at cold on desktop since 8bcce38 re-scaled the site. Leaving unchecked.
 - [x] `learn-modules.tsx` — content-heavy; check line length, contrast, and quiz interaction
       feedback (the O243–O245 "motion pass" touched this — confirm it still reads well).
       **Walked 2026-09-05 at 390**: a read module card by card, then a quiz answered wrong and

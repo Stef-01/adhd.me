@@ -30,8 +30,9 @@ export default function AboutPage() {
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Team", href: "/about" }]} />
       <h1 className="mt-6 text-3xl font-semibold tracking-tight">Team</h1>
       <TeamPlates />
-      <SiteFooter />
     </main>
+    {/* Outside `main`, for the landmark and for the band — see the note on /terms. */}
+    <SiteFooter />
     </>
   );
 }

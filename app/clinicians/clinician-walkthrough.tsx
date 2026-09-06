@@ -234,7 +234,7 @@ export function ClinicianWalkthrough() {
               <button type="button" onClick={() => move(1)}>
                 Build my pathway <ArrowRight size={18} weight="bold" aria-hidden="true" />
               </button>
-              <a className="cv2-join-link" href="/clinicians/join">Or start your journey today</a>
+              <Link className="cv2-join-link" href="/clinicians/join">Or start your journey today</Link>
               <p>Demo pathway only. Scope and credentialing remain practice-led.</p>
             </div>
           </section>
@@ -366,9 +366,13 @@ export function ClinicianWalkthrough() {
                 again, and the join link lived three screens back as an aside. The funnel phrase
                 is the founder's, and it lands on the join page's email invitation. */}
             <div className="cv2-action">
-              <a className="cv2-start-cta" href="/clinicians/join">
+              {/* Both join doors are `Link`s, like the "Patient view" exit in this page's own
+                  header: a raw `href` to an in-app route reloads the document, so the one control
+                  the four persuasion stages exist to be pressed was the slowest transition on the
+                  site and dropped the walkthrough's state on the way. */}
+              <Link className="cv2-start-cta" href="/clinicians/join">
                 Start your journey today <ArrowRight size={18} weight="bold" aria-hidden="true" />
-              </a>
+              </Link>
               <button type="button" className="cv2-restart" onClick={restart}>Restart pathway</button>
               <p>Exposure and learning activity are not a competence score.</p>
             </div>

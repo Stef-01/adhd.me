@@ -21,8 +21,9 @@ export default function ThanksPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="prose-screen">
-      <div className="prose-wrap">
+    {/* Footer as a sibling of `main` — see the note on /faq. */}
+    <div className="prose-screen">
+      <main id="main-content" className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Registered", href: "/thanks" }]} />
         <h1>You’re registered.</h1>
         <p>
@@ -37,9 +38,9 @@ export default function ThanksPage() {
           <Link className="notfound-primary" href="/">Find a GP</Link>
           <Link className="notfound-secondary" href="/examples">See a worked example</Link>
         </div>
-      </div>
+      </main>
       <SiteFooter />
-    </main>
+    </div>
     </>
   );
 }

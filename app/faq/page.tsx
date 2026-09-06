@@ -29,8 +29,12 @@ export default function FaqPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="prose-screen">
-      <div className="prose-wrap">
+    {/* The footer is a SIBLING of `main`, not a child: a `<footer>` scoped to `main` is not the
+        page's `contentinfo` landmark, so nesting it cost every prose page its footer landmark.
+        `.prose-screen` is the column that holds the sticky-foot, and `.prose-wrap` already carries
+        `flex: 1`, so `main` can be the measure directly. */}
+    <div className="prose-screen">
+      <main id="main-content" className="prose-wrap">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Questions", href: "/faq" }]} />
         <h1>Questions</h1>
@@ -40,9 +44,9 @@ export default function FaqPage() {
             <p>{f.a}</p>
           </section>
         ))}
-      </div>
+      </main>
       <SiteFooter />
-    </main>
+    </div>
     </>
   );
 }

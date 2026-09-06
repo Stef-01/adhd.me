@@ -63,8 +63,10 @@ export default function ExamplesPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="prose-screen">
-      <div className="prose-wrap">
+    {/* Footer as a sibling of `main` — see the note on /faq: a `<footer>` inside `main` is not the
+        page's `contentinfo` landmark. `.prose-wrap` carries the `flex: 1` that keeps the foot down. */}
+    <div className="prose-screen">
+      <main id="main-content" className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
         <h1>Worked examples</h1>
         <p className="prose-note">
@@ -128,9 +130,9 @@ export default function ExamplesPage() {
         <div className="prose-doors">
           <Link className="notfound-primary" href="/">Try it with your own words</Link>
         </div>
-      </div>
+      </main>
       <SiteFooter />
-    </main>
+    </div>
     </>
   );
 }

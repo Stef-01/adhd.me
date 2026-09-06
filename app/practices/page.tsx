@@ -38,9 +38,12 @@ export default function PracticesPage() {
         className="hidden border-b border-stone-100 sm:block"
       >
         <div className="mx-auto flex max-w-5xl items-center justify-end gap-6 px-6 py-3 text-sm text-stone-600">
-          <a href="#practice-story" className="hidden hover:text-stone-900 sm:inline">{C.nav.story}</a>
-          <a href="#how" className="hidden hover:text-stone-900 sm:inline">{C.nav.product}</a>
-          <a href="#measurement" className="hidden hover:text-stone-900 sm:inline">{C.nav.measurement}</a>
+          {/* The three anchors carried their own `hidden sm:inline` from when this nav was always
+              rendered. The nav itself is `hidden sm:block` now, so those were a second copy of the
+              same breakpoint — and a second copy is what drifts. */}
+          <a href="#practice-story" className="hover:text-stone-900">{C.nav.story}</a>
+          <a href="#how" className="hover:text-stone-900">{C.nav.product}</a>
+          <a href="#measurement" className="hover:text-stone-900">{C.nav.measurement}</a>
           <Link href="/console/signin" className="font-medium text-stone-900 hover:underline">
             {C.nav.cta}
           </Link>
