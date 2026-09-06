@@ -19,6 +19,38 @@ and a one-line commit message are the record.
 
 ## Finder (`app/finder-stages/*`) — patient-facing, mobile-first, highest priority
 
+**RADIANT, unit 1 of 3 (2026-09-06, founder-directed: "make it exactly as the redesign").** The
+founder drew three screens — the results list, the filters, the learn tab — in a warm palette with
+Newsreader and Plus Jakarta Sans, and asked for them exactly. This unit is the palette and the
+results screen. What changed, and where "exactly" met a law:
+- *The palette, everywhere, from the five tokens.* Paper #fff8f6, ink #221a16, muted #58423a,
+  faint #7a655d, line #e6d3ca; the accent family is the mockups' terracotta. Two values are not
+  the mockups' because they failed AA: the meta grey #8c7168 (4.3:1) became #7a655d (5.2:1), and
+  the button fill #d95c2b (3.8:1 under white text) became #bf481b (5.1:1), which is the mockups'
+  own hover shade. #d95c2b stays as `--accent-mid` for the dot, the progress fill, borders, icons
+  and the italic noun — never under small text. Every figure was computed, not eyeballed.
+- *Plus Jakarta Sans replaces Inter* as the sans (self-hosted, variable). The founder chose it
+  over my recommendation to keep Inter; Newsreader stays for statements and is now also the
+  wordmark on the app pages and the clinician's name on each card, as drawn.
+- *The route tokens follow the accent on the app pages only* (`.care-app`, `.me-screen`,
+  `.app-tabs`). A first cut re-pointed them at `:root` and the story's hero band, its stats and
+  its joins — which read the same tokens — went terracotta. The story is its own palette and
+  stays navy; the finder's wide-screen backdrop is the dark ground now, as the mockups frame it.
+- *The results screen as drawn:* the wordmark with the terracotta dot, a place pill beside it
+  when a suburb is set, "Start over"; the search summary as one white card with the magnifier
+  in accent and the words on one line; a scrolling row of quick-filter pills that switch the six
+  yes/no filters in place (filled when on), a "Filters" pill with the count of the others, and
+  Clear; the heading in Newsreader with "GPs" in italic accent; 64px rounded-square portraits,
+  the name in Newsreader, one focus line, the place row with its pin, the chevron.
+- *Where it is not exact, and why.* "All Specialists" is banned by the linter, so the chips are
+  the real filters. "Next Wed" is a time the roster does not hold; the closed-books note stays.
+  The generated headshots of invented doctors are not used: the portrait pipeline (credited
+  stock or the monogram) fills the slot. The lead card's accent edge and the sparkle beside the
+  count appear only when the order was earned — the screen's oldest honesty rule — and in the
+  demo's usual query they appear, so the screen reads as drawn. The tab bar's current tab is in
+  the accent as drawn, which spends the accent's third meaning on this surface; the marker keeps
+  colour from being the only signal.
+
 - [x] `welcome-stage.tsx` (2026-09-03) — **hierarchy reads:** question → compose box → example
       link → disclaimer, one column, nothing competing; the mic sits inside the box at thumb
       height. Two things were wrong and are fixed. **The wordmark moved between screens:**

@@ -102,6 +102,16 @@ export function emptyFilters(): Filters {
 export const BOOLEAN_FILTER_KEYS = ["womanGp", "telehealth", "bulkBilling", "longerAppointments", "wheelchair", "openBooks"] as const;
 export type BooleanFilterKey = (typeof BOOLEAN_FILTER_KEYS)[number];
 
+/** The words each yes/no filter is shown as — on the profile, on the results chips, in the strip's labels. */
+export const BOOLEAN_FILTER_LABELS: Readonly<Record<BooleanFilterKey, string>> = {
+  womanGp: "Woman GP",
+  telehealth: "Telehealth",
+  bulkBilling: "Bulk billing",
+  longerAppointments: "Longer appointments",
+  wheelchair: "Wheelchair access",
+  openBooks: "Taking new patients",
+};
+
 function isDistance(value: unknown): value is DistanceKm {
   return value === null || (DISTANCE_CHOICES as readonly number[]).includes(value as number);
 }
@@ -176,12 +186,7 @@ export function activeFilterCount(filters: Filters): number {
 /** The labels of the filters that are on, in a fixed order, for the results screen's chips. */
 export function describeFilters(filters: Filters): string[] {
   const out: string[] = [];
-  if (filters.womanGp) out.push("Woman GP");
-  if (filters.telehealth) out.push("Telehealth");
-  if (filters.bulkBilling) out.push("Bulk billing");
-  if (filters.longerAppointments) out.push("Longer appointments");
-  if (filters.wheelchair) out.push("Wheelchair access");
-  if (filters.openBooks) out.push("Taking new patients");
+  for (const key of BOOLEAN_FILTER_KEYS) if (filters[key]) out.push(BOOLEAN_FILTER_LABELS[key]);
   for (const language of filters.languages) out.push(`Speaks ${language}`);
   if (filters.withinKm !== null) out.push(`Within ${filters.withinKm} km`);
   if (filters.consultRecording === "ai-scribe") out.push("Uses an AI scribe");

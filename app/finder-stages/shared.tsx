@@ -267,6 +267,7 @@ export function Wordmark() {
   return (
     <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home" translate="no">
       ADHD.ME
+      <span className="wordmark-dot" aria-hidden="true" />
     </Link>
   );
 }

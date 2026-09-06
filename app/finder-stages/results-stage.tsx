@@ -3,7 +3,8 @@
 // O95: the results screen, verbatim from care-finder.tsx — including the collapsed-screens
 // history note, because it explains why this one screen carries so much.
 
-import { CaretRight, FunnelSimple, MagnifyingGlass, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { activeFilterCount, BOOLEAN_FILTER_KEYS, BOOLEAN_FILTER_LABELS, type BooleanFilterKey, type Filters } from "@/finder/filters";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -57,6 +58,9 @@ export function ResultsStage({
   onChoose,
   filterLabels,
   onClearFilters,
+  place,
+  filters,
+  onToggleFilter,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -82,7 +86,14 @@ export function ResultsStage({
   /** O234: the labels of the device's filters that are on — the strip above the list, and the empty state's reason. */
   filterLabels: readonly string[];
   onClearFilters: () => void;
+  /** RADIANT: the suburb the list is measured from, shown as a pill beside the wordmark. */
+  place: string;
+  /** RADIANT: the device's filters, so the quick chips can show which are on and switch them. */
+  filters: Filters;
+  onToggleFilter: (key: BooleanFilterKey) => void;
 }) {
+  /** The filters the chips cannot show — a language, a distance, a way of working — as a count on the Filters pill. */
+  const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
   // U9: the one live line this screen owns. The status paragraphs below used to be five separate
   // `role="status"` regions inside a live shell, so a place edit read the fit line, the distance
   // line, the quality verdict and the whole re-ordered list. Now the region says the count and
@@ -127,7 +138,12 @@ export function ResultsStage({
     <MotionScreen key="results" className="results-screen" focusOnArrival={focusOnArrival} focusTarget=".clinician-row">
       <StatusLine line={line} nonce={reranks} />
       <header className="minimal-header">
-        <Wordmark />
+        <span className="header-brand">
+          <Wordmark />
+          {/* RADIANT: the suburb the search is measured from, beside the brand — the one fact the
+              header holds that changes from person to person. Absent when no place is set. */}
+          {place && <span className="results-place">{place}</span>}
+        </span>
         <button className="text-action" type="button" onClick={onReset}>Start over</button>
       </header>
 
@@ -190,31 +206,32 @@ export function ResultsStage({
       {/* O234: the filters the device is holding, said on the screen they narrow. A person who set
           "wheelchair access" on Tuesday must be able to see on Thursday why the list is short —
           and clear it here, without a trip to the profile. Edit goes there; the set lives there. */}
-      {filterLabels.length > 0 && (
-        <div className="filter-strip" role="group" aria-label="Your filters">
-          <span className="filter-strip-lead">
-            <FunnelSimple size={15} weight="bold" aria-hidden="true" />
-            Your filters
-          </span>
-          <ul className="filter-chips">
-            {filterLabels.map((label, index) => (
-              <motion.li
-                key={label}
-                className="filter-chip"
-                initial={reducedMotion ? false : { opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: "spring", stiffness: 520, damping: 32, delay: 0.05 + index * 0.04 }}
-              >
-                {label}
-              </motion.li>
-            ))}
-          </ul>
-          <span className="filter-strip-actions">
-            <Link className="filter-edit" href="/profile">Edit</Link>
-            <button className="filter-clear" type="button" onClick={onClearFilters}>Clear</button>
-          </span>
-        </div>
-      )}
+      {/* RADIANT: the quick filters. Every yes/no filter is a pill the person can switch here,
+          filled when it is on; the filters that are not yes/no (a language, a distance, a way of
+          working) are counted on the Filters pill, which opens the profile where they are set.
+          The group keeps its name and its Clear control: what is narrowing the list is visible
+          here and can be cleared here, exactly as the grey strip promised. */}
+      <div className="filter-strip" role="group" aria-label="Your filters">
+        <ul className="filter-chips">
+          {BOOLEAN_FILTER_KEYS.map((key) => (
+            <li key={key}>
+              <button type="button" className="filter-chip" aria-pressed={filters[key]} onClick={() => onToggleFilter(key)}>
+                {BOOLEAN_FILTER_LABELS[key]}
+              </button>
+            </li>
+          ))}
+          <li>
+            <Link className="filter-chip" href="/profile">
+              <FunnelSimple size={14} weight="bold" aria-hidden="true" />
+              Filters
+              {otherFilterCount > 0 && <span className="filter-chip-count">{otherFilterCount}</span>}
+            </Link>
+          </li>
+        </ul>
+        {filterLabels.length > 0 && (
+          <button className="filter-clear" type="button" onClick={onClearFilters}>Clear</button>
+        )}
+      </div>
 
       {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
           sentence names the filters as the cause, because that is the one thing the person can
@@ -256,11 +273,18 @@ export function ResultsStage({
               exit={reducedMotion ? undefined : { opacity: 0, y: -4, filter: "blur(2px)", transition: { duration: 0.15 } }}
               transition={{ duration: 0.15, ease: EASE_OUT }}
             >
-              {quality === "informed" ? "Matches" : "All listed GPs"}
+              {quality === "informed" ? "Matches" : <>All listed <em>GPs</em></>}
             </motion.span>
           </AnimatePresence>
         </h2>
         <span className="results-list-tools">
+          {/* RADIANT: the mark beside the count, only when the order was earned — a badge that
+              means "ordered on what you asked for" and is absent when nothing was. */}
+          {quality === "informed" && (
+            <span className="results-spark" role="img" aria-label="Ordered on what you asked for">
+              <Sparkle size={16} weight="fill" aria-hidden="true" />
+            </span>
+          )}
           {/* O226: the count sits with the list it describes, not two groups up the page. */}
           {matches.length > shown.length && (
             <span className="results-count">
@@ -364,7 +388,7 @@ export function ResultsStage({
           return (
             <motion.button
               key={item.id}
-              className="clinician-row"
+              className={index === 0 && quality === "informed" ? "clinician-row is-lead" : "clinician-row"}
               type="button"
               layout="position"
               data-clinician={item.id}
@@ -395,7 +419,7 @@ export function ResultsStage({
                 <strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
-                <small>{reasons.slice(0, 2).join(", ") || item.focus}</small>
+                <small className="row-focus">{reasons.slice(0, 2).join(", ") || item.focus}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}
@@ -404,7 +428,10 @@ export function ResultsStage({
                     roster became real people — and it had been painting a static suburb ever
                     since. A location is not a value that changes; the closed-books note below
                     is, and keeps it. */}
-                <small className="row-location">{away ? `${locationLabel(item)}, ${away}` : locationLabel(item)}</small>
+                <small className="row-location">
+                  <MapPin size={14} weight="fill" aria-hidden="true" />
+                  {away ? `${locationLabel(item)}, ${away}` : locationLabel(item)}
+                </small>
                 {/* Closed books never outrank open ones at equal fit, and never hide
                     either — the row says why somebody unactionable is still here (O4).
                     The "they fit what you asked" sentence only renders when a fit was

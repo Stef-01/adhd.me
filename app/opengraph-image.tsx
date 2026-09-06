@@ -25,8 +25,8 @@ export default function OpengraphImage() {
           alignItems: "stretch",
           gap: 56,
           padding: "64px",
-          background: "#f7f8fc",
-          color: "#172033",
+          background: "#fff8f6",
+          color: "#221a16",
           fontFamily: "Arial, sans-serif",
         }}
       >

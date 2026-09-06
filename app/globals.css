@@ -44,7 +44,7 @@
    closer to it than it is for a serif, and ~48KB on the finder's critical path
    to redraw three small labels is the wrong trade.
    =========================================================================== */
-@import "@fontsource-variable/inter/opsz.css";
+@import "@fontsource-variable/plus-jakarta-sans";
 @import "@fontsource-variable/newsreader";
 @import "@fontsource-variable/newsreader/wght-italic.css";
 
@@ -101,21 +101,27 @@
 :root {
   color-scheme: light;
 
-  --ink: #172033;
+  /* RADIANT (2026-09-06, founder-directed): the warm palette from the founder's mockups. Every
+     value was measured against --paper before it landed: ink 16.3:1, muted 8.9:1 (8.4 on stone),
+     faint 5.2:1 (the mockups' #8c7168 meta grey read 4.3:1 and was lifted one step; 4.9 on
+     stone), accent 4.8:1 as text and 5.1:1 under white text. The brighter terracotta the mockups
+     fill buttons with, #d95c2b, is 3.8:1 under white — decorative only here: the dot, the
+     progress fill, borders, icons and the italic word, never small text on or in it. */
+  --ink: #221a16;
   /* O157: #6e706a → #696b65. Contrast was never checked in this tree until now, and these two
      tokens were not wrong on the two backgrounds anybody had looked at — muted measured 5.01 on
      white and 4.80 on --paper. On --stone, the console's card and tag background, it measured
      4.24 against a 4.5 floor, which put 18 of the console's 30 failures on this one line. Five
      steps darker is the smallest change that clears AA on all THREE backgrounds at once
      (paper 5.17, stone 4.56, white 5.40) — computed rather than eyeballed. */
-  --muted: #565f70;
+  --muted: #58423a;
   /* Has to clear AA at 11px, the smallest size this token is used at. 5.1:1 on --paper. */
   /* O157: 4.48 on --stone, one hundredth under the floor and still under. One step darker
      (paper 5.15, stone 4.55, white 5.37). */
-  --faint: #626b7b;
-  --paper: #f7f8fc;
-  --stone: #edf0f6;
-  --line: #d8deea;
+  --faint: #7a655d;
+  --paper: #fff8f6;
+  --stone: #f7ede8;
+  --line: #e6d3ca;
 
   /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
      validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
@@ -129,11 +135,12 @@
   --chart-end-label: #52514e;
   --chart-point-ring: #ffffff;
 
-  --accent: #a14f19;
+  --accent: #bf481b;
   --on-accent: #ffffff;
-  --accent-soft: #faebe0;
-  --accent-mid: #d47839;
-  --accent-tint: #f0c9aa;
+  --accent-deep: #a53703;
+  --accent-soft: #fff1eb;
+  --accent-mid: #d95c2b;
+  --accent-tint: #ffdbcf;
 
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
@@ -356,7 +363,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -3555,7 +3562,7 @@ summary:focus-visible {
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
-  font-family: "Inter Variable", Inter, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -5905,7 +5912,7 @@ select { caret-color: var(--route-strong); }
 .site-nav-wordmark,
 .story-wordmark {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 1.25rem;
   font-weight: 760;
   letter-spacing: -0.045em;
@@ -6045,7 +6052,7 @@ select { caret-color: var(--route-strong); }
   max-width: 13.5ch;
   margin: 0;
   color: var(--on-ground);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(3.4rem, 6.5vw, 5.65rem);
   font-weight: 610;
   line-height: 0.96;
@@ -6206,7 +6213,7 @@ select { caret-color: var(--route-strong); }
   margin: 0;
   max-width: 15ch;
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 4.8rem);
   font-weight: 590;
   line-height: 0.98;
@@ -6245,7 +6252,7 @@ select { caret-color: var(--route-strong); }
 .story-stats div:last-child { border-bottom-color: var(--route-line); }
 .story-stats dt {
   color: var(--route-strong);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 690;
   letter-spacing: -0.035em;
@@ -6264,7 +6271,7 @@ select { caret-color: var(--route-strong); }
   max-width: 18ch;
   margin: 0;
   color: var(--on-ground);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 5.1rem);
   font-weight: 560;
   letter-spacing: -0.04em;
@@ -6298,7 +6305,7 @@ select { caret-color: var(--route-strong); }
 }
 .story-pillars h3 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
   font-weight: 650;
   letter-spacing: -0.025em;
@@ -6471,7 +6478,7 @@ select { caret-color: var(--route-strong); }
    `.patient-v2`'s own size steps) applies as it does to the type screen. */
 .patient-v2 .profile-content h1 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-weight: 590;
   letter-spacing: -0.035em;
 }
@@ -6580,7 +6587,7 @@ select { caret-color: var(--route-strong); }
 .cv2-intro h1,
 .cv2-learning-body h2 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-weight: 610;
   letter-spacing: -0.035em;
 }
@@ -6627,7 +6634,7 @@ select { caret-color: var(--route-strong); }
 .notfound-code { color: var(--accent); font-variant-numeric: tabular-nums; }
 .notfound-screen h1 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.7rem, 7vw, 5.5rem);
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -6709,7 +6716,7 @@ select { caret-color: var(--route-strong); }
 .site-footer-wordmark,
 .story-footer-wordmark {
   color: var(--on-ground);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 1.3rem;
   font-weight: 760;
   letter-spacing: -0.045em;
@@ -7226,10 +7233,16 @@ select { caret-color: var(--route-strong); }
    the token, so without this line every unstyled paragraph (and every currentColor border) on a
    console screen would still carry the site's blue-cast ink. */
 .console-app {
-  --console-ink: color-mix(in srgb, var(--ink) 92%, var(--accent));
-  --console-muted: color-mix(in srgb, var(--muted) 90%, var(--accent));
-  --console-faint: color-mix(in srgb, var(--faint) 90%, var(--accent));
-  --console-line: color-mix(in srgb, var(--line) 94%, var(--accent));
+  /* RADIANT: the console's greys are NEUTRAL, set here rather than mixed from the app's tokens.
+     They used to be the app's ink and muted warmed 8–10% toward the accent, which read as grey
+     while the ink was navy and the accent was dim; with the warm palette and a saturated
+     terracotta the same mix came out orange, and two console specs that measure neutrality by
+     channel spread (a verdict must not be graded by colour) went red. Stone greys, on the warm
+     paper: ink 16.6:1, muted 7.0:1, faint 4.9:1 on the stone tint, 5.4:1 on paper. */
+  --console-ink: #1c1917;
+  --console-muted: #57534e;
+  --console-faint: #6b665f;
+  --console-line: #e7e5e4;
 }
 .console-main {
   color: var(--console-ink);
@@ -7251,7 +7264,7 @@ select { caret-color: var(--route-strong); }
 
 .console-main h1 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 620;
   letter-spacing: -0.04em;
@@ -7972,7 +7985,7 @@ body:has(.app-tabs) .consent-bar {
   height: 300px;
   width: 100%;
   background: var(--stone);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   isolation: isolate;
 }
 
@@ -8081,7 +8094,7 @@ body:has(.app-tabs) .consent-bar {
   border-top-left-radius: 8px;
   background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
   color: var(--muted);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
 }
 
@@ -8699,7 +8712,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 .learn-tile-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .learn-tile-kind { color: var(--muted); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.learn-tile.is-quiz .learn-tile-kind { color: var(--accent); }
+.learn-tile.is-quiz .learn-tile-kind { color: var(--accent-deep); } /* RADIANT: 5.6:1 on the tinted tile; the accent itself read 4.2 at 11px. */
 .learn-tile-text strong {
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.3125rem;
@@ -9023,7 +9036,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .listen-eyebrow {
   margin: 0 0 10px;
   color: var(--route-strong);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -9668,3 +9681,255 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   .t-toast { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
   .t-shimmer::before { animation: none !important; content: none; }
 }
+
+/* ===========================================================================
+   16. RADIANT — the founder's redesign, results screen (2026-09-06)
+   An override layer at the end of the file, where the cascade lets it win without moving a
+   rule above. The founder drew three screens; this region is the first — the results list as
+   cards, the header with the place pill, the search summary as a white card, the quick-filter
+   chips, and the tab bar in the accent. Where a mockup value failed AA it is the nearest value
+   that passes, and the palette header names each one.
+   =========================================================================== */
+/* On the app's own pages — the finder, the profile, the learn tab and the bar they share — the
+   route cues follow the accent, so no blue cue is left on the warm surface. Scoped here rather
+   than at :root because the story's band, its stats and its joins read the same tokens and stay
+   navy: that page is its own palette. The finder's wide-screen backdrop is the dark ground, as
+   the founder's mockups frame the phone, not the route colour it borrowed before. */
+.care-app.patient-v2,
+.me-screen,
+.app-tabs {
+  --route: var(--accent-mid);
+  --route-strong: var(--accent);
+  --route-soft: color-mix(in srgb, var(--accent-mid) 14%, var(--paper));
+  --route-line: color-mix(in srgb, var(--accent-mid) 34%, var(--paper));
+}
+.care-app.patient-v2 { background: var(--ground); }
+.patient-v2 .minimal-header {
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+}
+.patient-v2 .minimal-header::after { height: 3px; }
+.header-brand { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; }
+.patient-v2 .wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.wordmark-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 2px;
+  border-radius: 50%;
+  background: var(--accent-mid);
+}
+.results-place {
+  flex: none;
+  padding: 2px 10px;
+  border: 1px solid var(--accent-tint);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.patient-v2 .text-action { color: var(--muted); font-size: 0.75rem; font-weight: 600; }
+@media (hover: hover) { .patient-v2 .text-action:hover { color: var(--accent); } }
+
+/* The search summary: one white card, the magnifier in the accent, the words on one line. */
+.results-summary {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 5%, transparent);
+  transition: border-color var(--dur-tap) var(--ease-ui);
+}
+@media (hover: hover) {
+  .results-summary:hover { border-color: color-mix(in srgb, var(--accent-mid) 50%, var(--line)); }
+  .results-summary-words:hover { background: transparent; }
+}
+.results-summary-words {
+  grid-template-columns: 20px minmax(0, 1fr) 28px;
+  min-height: 52px;
+  padding: 10px 12px 10px 16px;
+  border-radius: 16px;
+}
+.results-summary-words > svg:first-child { color: var(--accent-mid); }
+.results-summary-words > svg:last-child {
+  box-sizing: content-box;
+  padding: 6px;
+  border-radius: 50%;
+  color: var(--faint);
+  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
+}
+@media (hover: hover) {
+  .results-summary-words:hover > svg:last-child { color: var(--accent); background: var(--accent-soft); }
+}
+.results-summary-text {
+  -webkit-line-clamp: 1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* The quick filters: one scrolling row of pills, the on ones filled. The row replaces the grey
+   strip; the same group name and the same Clear control stay, because the screen's contract —
+   what is narrowing the list is visible here and can be cleared here — is unchanged. */
+.filter-strip {
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 2px var(--shell-gutter) 6px;
+  border-radius: 0;
+  background: transparent;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-strip::-webkit-scrollbar { display: none; }
+.filter-chips { flex-wrap: nowrap; gap: 8px; }
+.filter-chip {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 14px;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui);
+}
+/* O14's floor without the mockup's pill growing: the hit area reaches 44px above and below. */
+.filter-chip::after { content: ""; position: absolute; inset: -5px 0; }
+.filter-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+@media (hover: hover) {
+  .filter-chip:not([aria-pressed="true"]):hover { border-color: var(--accent-mid); color: var(--ink); }
+}
+.filter-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.filter-clear { flex: none; }
+
+/* The list head: the heading in Newsreader, the noun in italic accent, the count and the mark. */
+.results-list-head { padding: 12px var(--shell-gutter) 8px; }
+.results-list-head h2 {
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.results-list-head h2 em { font-style: italic; font-weight: 400; color: var(--accent-mid); }
+.results-count { color: var(--faint); font-size: 0.75rem; font-weight: 500; }
+.results-spark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 5%, transparent);
+}
+
+/* The rows are cards: 64px portrait in a 12px radius, the name in Newsreader, one focus line,
+   the place row with its pin, the chevron. The lead card, when the order is informed, carries
+   the accent edge — a claim the screen makes only when it is true. */
+.patient-v2 .clinician-list { gap: 12px; }
+.patient-v2 .clinician-row {
+  grid-template-columns: 64px 1fr 20px;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, var(--surface-raised));
+  border-radius: 16px;
+  background: var(--surface-raised);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 5%, transparent);
+}
+.patient-v2 .clinician-row.is-lead {
+  border-color: var(--accent-mid);
+  box-shadow: inset 0 0 0 1px var(--accent-mid), 0 1px 2px color-mix(in srgb, var(--hero-dusk) 5%, transparent);
+}
+@media (hover: hover) {
+  .patient-v2 .clinician-row:hover {
+    border-color: color-mix(in srgb, var(--accent-mid) 60%, var(--line));
+    background: var(--surface-raised);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--hero-dusk) 8%, transparent);
+  }
+  .patient-v2 .clinician-row.is-lead:hover {
+    box-shadow: inset 0 0 0 1px var(--accent-mid), 0 4px 12px color-mix(in srgb, var(--hero-dusk) 8%, transparent);
+  }
+}
+.patient-v2 .row-portrait-anchor,
+.patient-v2 .clinician-row img,
+.patient-v2 .clinician-monogram-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+}
+.patient-v2 .clinician-row img {
+  border: 1px solid var(--stone);
+  background: var(--paper);
+  object-fit: cover;
+}
+.patient-v2 .clinician-row strong {
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.patient-v2 .clinician-row small { font-size: 0.75rem; color: var(--muted); line-height: 1.35; }
+.patient-v2 .clinician-row .row-focus {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.patient-v2 .clinician-row .row-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.patient-v2 .clinician-row .row-location svg { flex: none; color: var(--faint); }
+.patient-v2 .clinician-row.is-lead .row-location svg { color: var(--accent-mid); }
+.patient-v2 .clinician-row > svg { color: var(--faint); }
+
+/* The tab bar: the current tab in the accent, its marker in the brighter terracotta. The founder's
+   mockups paint it so, and the marker keeps colour from being the only signal. */
+.app-tab.is-current { color: var(--accent); }
+.app-tab-marker { background: var(--accent-mid); }
+

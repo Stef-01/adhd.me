@@ -38,6 +38,7 @@ import {
   describeFilters,
   emptyFilters,
   readFilters,
+  type BooleanFilterKey,
   writeFilters,
   type Filters,
 } from "@/finder/filters";
@@ -530,6 +531,15 @@ export function CareFinder() {
     setShowAll(false);
   }
 
+  /** RADIANT: one yes/no filter switched from the results chips; written to the device like the profile does. */
+  function toggleFilter(key: BooleanFilterKey) {
+    const next: Filters = { ...filters, [key]: !filters[key] };
+    writeFilters(window.localStorage, next);
+    setFilters(next);
+    setMatchIndex(0);
+    setShowAll(false);
+  }
+
   /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
   function clearNarrowingFilters() {
     const next: Filters = { ...emptyFilters(), place: filters.place };
@@ -674,6 +684,9 @@ export function CareFinder() {
             }}
             filterLabels={activeFilterCount(filters) > 0 ? describeFilters(filters) : []}
             onClearFilters={clearNarrowingFilters}
+            place={place}
+            filters={filters}
+            onToggleFilter={toggleFilter}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}

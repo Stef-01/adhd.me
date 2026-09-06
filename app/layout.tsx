@@ -26,7 +26,7 @@ import { SHARED_OPEN_GRAPH } from "@/seo/pages";
  * both through a canvas: a palette change that left this stale would put the seam back silently.
  */
 export const viewport: Viewport = {
-  themeColor: "#f7f8fc",
+  themeColor: "#fff8f6",
   // O225 (STANDALONE-APP-PLAN.md Phase 1b): without `cover`, the installed app letterboxes below
   // the notch and the status-bar strip renders as a paper seam above the brand band. With it, the
   // band paints to the device edge and the chrome pads itself back out with safe-area insets —

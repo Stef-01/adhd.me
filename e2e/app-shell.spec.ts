@@ -261,7 +261,9 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   expect(await rows.count()).toBeGreaterThan(0);
 
   await strip.getByRole("button", { name: "Clear", exact: true }).click();
-  await expect(page.getByRole("group", { name: "Your filters" })).toHaveCount(0);
+  // RADIANT: the chip row stays — it is where the filters are switched — with nothing on.
+  await expect(strip.locator('[aria-pressed="true"]')).toHaveCount(0);
+  await expect(strip.getByRole("button", { name: "Clear", exact: true })).toHaveCount(0);
   // The place survives a clear — it orders, it never excluded anybody.
   await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();
   // And the device agrees with the screen.

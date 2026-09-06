@@ -47,7 +47,7 @@ export function brandMark(edge: number) {
               bottom: px(0.16),
               height: px(0.023),
               borderRadius: px(0.023),
-              background: "#f7f8fc",
+              background: "#fff8f6",
             }}
           />
           <div
@@ -69,7 +69,7 @@ export function brandMark(edge: number) {
               width: px(0.078),
               height: px(0.078),
               borderRadius: px(0.078),
-              background: "#f7f8fc",
+              background: "#fff8f6",
             }}
           />
         </div>
