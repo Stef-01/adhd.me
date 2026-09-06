@@ -100,6 +100,38 @@ the end of the stylesheet:
   the measure. The tab bar becomes a dock: a floating pill, icon beside label, the current tab
   on the soft tint, so a desktop is not a phone bar stretched across a page.
 
+**Motion appraisal and the smoothness unit (2026-09-06, founder-directed: "critical appraisal;
+much smoother, more engaging and animated").** Read against `impeccable`'s animate playbook and
+`design-motion-principles`' anti-checklist, weighted Jakub-primary and Emil-secondary because
+the finder, the profile and the learn tab are Operate surfaces. What the appraisal found:
+- *Continuity was the gap, not quantity.* The finder's stages already settle in with the
+  blur-and-rise lane, the results rows stagger and re-rank in place, the sheet drags, the
+  microphone breathes. But the three tabs were three routes each mounting their own tab bar,
+  so every tab change was a hard cut: the bar remounted, its marker appeared under the new tab
+  instead of travelling, the filter badge re-read from nothing. That is the one thing a person
+  feels as "a website" rather than "an app".
+- *Feedback had holes.* Segmented controls swapped a background with no thumb; the sticky
+  count changed with no beat; the pills had no press; on the desk the dock's current tab
+  swapped tint instantly.
+- *Nothing on the anti-checklist fired at the level it flags:* no pulsing indicators, one blur
+  entrance lane rather than blur on everything, no hover-scale-on-everything, one stagger per
+  view, no bouncy springs on utility actions (every spring here is firm, damping 36–46).
+What was built:
+- *One shared layout for the three tabs* (`app/(app)/layout.tsx`), so the bar mounts once and
+  its shared-layout marker springs from tab to tab. The finder hides it on inner stages by
+  stamping its own root; the bar's stylesheet reads the stamp, so no state crosses the layout.
+- *A page arrival* on the profile and learn routes (`template.tsx` → `PageArrival`): opacity
+  and an eight-pixel rise over the enter beat; the finder keeps its own stage motion; nothing
+  under reduced motion.
+- *The dock pill travels on the desk:* the marker is the pill behind the current tab, the same
+  element that is the bar under the icon on a phone.
+- *Segment thumbs* on the two segmented controls, firm spring, no bounce. *The sticky count
+  pops* on the digit lane when it changes. *Press feedback* on every pill on the tap beat.
+  *The learn stack arrives as a stack*, each card a beat after the last, capped at a quarter
+  second, first paint only, and lifts under a pointer.
+Every new motion has its reduced-motion equal: the arrival and the stagger do not run, the
+thumb and the marker jump, the presses do not scale.
+
 - [x] `welcome-stage.tsx` (2026-09-03) — **hierarchy reads:** question → compose box → example
       link → disclaimer, one column, nothing competing; the mic sits inside the box at thumb
       height. Two things were wrong and are fixed. **The wordmark moved between screens:**

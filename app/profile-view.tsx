@@ -57,6 +57,8 @@ const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: st
 ];
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
+/** SMOOTH: the segment thumb slides between choices — firm, no bounce, a control not a toy. */
+const SEGMENT_SPRING = { type: "spring", stiffness: 520, damping: 42, mass: 0.7 } as const;
 
 export function ProfileView() {
   // O243: every entrance here waits for `ready` — the server render carries no opacity: 0 — and
@@ -310,6 +312,7 @@ export function ProfileView() {
                   aria-pressed={on}
                   onClick={() => update({ withinKm: choice })}
                 >
+                  {on && <motion.span className="me-segment-thumb" layoutId="seg-distance" aria-hidden="true" transition={reducedMotion ? { duration: 0 } : SEGMENT_SPRING} />}
                   {label}
                 </button>
               );
@@ -370,6 +373,7 @@ export function ProfileView() {
                   aria-pressed={on}
                   onClick={() => update({ consultRecording: choice })}
                 >
+                  {on && <motion.span className="me-segment-thumb" layoutId="seg-consult" aria-hidden="true" transition={reducedMotion ? { duration: 0 } : SEGMENT_SPRING} />}
                   {label}
                 </button>
               );
@@ -448,7 +452,7 @@ export function ProfileView() {
           for, with the count the filters leave. It goes to the finder, which resumes the search. */}
       <div className="me-sticky">
         <Link className="me-show" href="/">
-          Show {shownCount} GP{shownCount === 1 ? "" : "s"}
+          Show <span key={shownCount} className="t-digit">{shownCount}</span> GP{shownCount === 1 ? "" : "s"}
           <ArrowRight size={16} weight="bold" aria-hidden="true" />
         </Link>
       </div>

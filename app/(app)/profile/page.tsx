@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ROBOTS_META } from "@/security/robots";
-import { AppTabs } from "../app-tabs";
-import { ProfileView } from "../profile-view";
+import { ProfileView } from "../../profile-view";
 
 // O233 (founder-directed): the Profile tab's route. Hidden from crawlers for the same reason `/`
 // is — it is a surface of a deployment the founder has said is for testing — and it holds nothing
@@ -15,9 +14,6 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <>
-      <ProfileView />
-      <AppTabs />
-    </>
+    <ProfileView />
   );
 }

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { seoMetadata } from "@/seo/pages";
 import Link from "next/link";
-import { AppSettings } from "../app-settings";
-import { AppTabs } from "../app-tabs";
-import { LearnModules } from "../learn-modules";
+import { AppSettings } from "../../app-settings";
+import { LearnModules } from "../../learn-modules";
 
 // O239 (founder-directed): the Learn tab is a learning-module section. O244 (founder-directed):
 // what it teaches is ADHD itself — what the word means, what people find useful day to day,
@@ -27,7 +26,6 @@ export default function ApproachPage() {
           Visually it is the small line under the field; the field's own title leads the eye. */}
       <h1 className="learn-thesis">Short reads and quick quizzes — on your own schedule. General information, never about you.</h1>
       <LearnModules />
-      <AppTabs />
     </main>
   );
 }

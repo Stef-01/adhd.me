@@ -454,13 +454,22 @@ export function LearnModules() {
         <ol className="learn-stack">
           {SHELVES.filter((shelf) => shelfFilter === "all" || shelf.title === shelfFilter)
             .flatMap((shelf) => shelf.modules)
-            .map((id) => {
+            .map((id, index) => {
               const module = MODULES.find((m) => m.id === id)!;
               const done = progress.done.includes(module.id);
               const count = cardCount(module);
               const art = CARD_ART[module.id] ?? { card: "oat", sticker: null };
               return (
-                <li key={module.id}>
+                <motion.li
+                  key={module.id}
+                  // SMOOTH: the one list on this tab that appears as a list. Each card rises a beat
+                  // after the last, capped at a quarter second so the seventh is never waited for;
+                  // only on the first paint after hydration, never on a chip change, never under
+                  // reduced motion.
+                  initial={hydrated && !reducedMotion ? { opacity: 0, y: 12 } : false}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...POP, delay: Math.min(index * 0.035, 0.25), opacity: { duration: 0.22, delay: Math.min(index * 0.035, 0.25) } }}
+                >
                   <motion.button
                     type="button"
                     className={`learn-card is-${art.card}${done ? " is-done" : ""}${module.kind === "quiz" ? " is-quiz" : ""}`}
@@ -489,7 +498,7 @@ export function LearnModules() {
                     </span>
                     <span className="learn-card-art" aria-hidden="true">{art.sticker}</span>
                   </motion.button>
-                </li>
+                </motion.li>
               );
             })}
         </ol>

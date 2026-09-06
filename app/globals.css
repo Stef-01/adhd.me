@@ -10266,8 +10266,21 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
     border-radius: 999px;
     font-size: 0.8125rem;
   }
-  .app-tab.is-current { background: var(--accent-soft); }
-  .app-tab-marker { display: none; }
+  /* SMOOTH: on the desk the marker IS the pill behind the current tab — the same shared-layout
+     element that is the bar under the icon on a phone — so it springs from tab to tab. */
+  .app-tab { isolation: isolate; }
+  .app-tab.is-current { background: transparent; }
+  .app-tab-marker {
+    inset: 0;
+    top: auto;
+    left: auto;
+    translate: none;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    border-radius: 999px;
+    background: var(--accent-soft);
+  }
   .app-page-with-tabs { padding-bottom: 104px; }
 
   /* The filters screen in two columns: the switches on the left, the rest on the right; the
@@ -10290,5 +10303,43 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
   .learn-chips { margin-inline: 0; padding-inline: 0; }
   .learn-figures { max-width: 720px; }
   .me-screen.learn-screen:has(.learn-module-bar) { --shell-w: 780px; }
+}
+
+/* ── SMOOTH (2026-09-06): continuity and feedback ────────────────────────────────────────────── */
+/* The finder hides the shared bar on its inner stages by stamping its own root. */
+body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
+.page-arrival { display: contents; }
+@supports not (display: contents) { .page-arrival { display: block; } }
+/* The page-arrival wrapper must not become a containing block once at rest: motion leaves
+   `transform: none`, and `display: contents` keeps it out of the box tree entirely. */
+
+/* Press feedback on every pill, on the tap beat. */
+.filter-chip,
+.me-chip,
+.learn-chip { transition-property: color, background, border-color, transform; transition-duration: var(--dur-tap); transition-timing-function: var(--ease-ui); }
+.filter-chip:active,
+.me-chip:active { transform: scale(0.96); }
+
+/* The segment thumb: one white card that slides between the choices. */
+.me-segment { position: relative; isolation: isolate; }
+/* The active label in the deeper accent: axe measures it against the track the thumb sits on,
+   and the deep shade clears 4.5:1 on the stone as well as on the thumb's white. */
+.me-segment.is-on { background: transparent; box-shadow: none; color: var(--accent-deep); }
+.me-segment-thumb {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 12px;
+  background: var(--surface-raised);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 8%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+/* The learn cards lift under a pointer; the results cards already do. */
+@media (hover: hover) {
+  .learn-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--hero-dusk) 12%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-chip:active, .me-chip:active { transform: none; }
+  .learn-card:hover { transform: none; }
 }
 

@@ -42,7 +42,6 @@ import {
   writeFilters,
   type Filters,
 } from "@/finder/filters";
-import { AppTabs } from "./app-tabs";
 import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
@@ -737,7 +736,6 @@ export function CareFinder() {
           </StageDirection.Provider>
         </section>
       </main>
-      <AppTabs hidden={tabsHidden} />
     </MotionConfig>
   );
 }
