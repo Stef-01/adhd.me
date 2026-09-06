@@ -51,6 +51,27 @@ results screen. What changed, and where "exactly" met a law:
   the accent as drawn, which spends the accent's third meaning on this surface; the marker keeps
   colour from being the only signal.
 
+**RADIANT, unit 2 of 3 (2026-09-06).** The filters screen, which is the Profile tab: the
+founder's mockup is that tab one for one — its labels, the ten languages, the distance and
+consult segments and the ways of working were already the live filter model — so this unit is
+the chrome and the controls as drawn, plus the one thing the tab lacked.
+- *The head as drawn:* "FILTER GPS" eyebrow in the accent with "Reset all" on its row; "Search
+  *Filters*" in Newsreader with the suburb beside it and a round close control that goes back
+  to the finder. Reset all is the same act as "Clear the filters" at the foot of the list.
+- *The controls as drawn:* the six switches in one white card with divided rows, a 48×28 track
+  and a 24px knob, the track in the terracotta when on; language and way-of-working pills in
+  white with the on ones on the soft tint, accent text and terracotta edge; the distance and
+  consult segments in a stone track with the chosen one a white card in accent text. The pills
+  are 36px tall as drawn and their hit area still reaches 44px above and below (O14).
+- *The sticky bar,* which the tab did not have: "Show N GPs" above the tab bar, N being the
+  listed GPs the filters leave from the suburb above, live as each control changes; it goes to
+  the finder, which resumes the search. N counts the listed roster with its example profiles;
+  the examples switch is the finder's own state and this tab cannot see it.
+- *Kept against the mockup:* the "Where you are" field (the suburb the distance and the pill
+  need), the "This search" section with the words and the way to forget them, and the small
+  tick on a chosen pill, so a chosen pill is never told by colour alone. The mockup shows two
+  switches; all six stay — dropping four is a product cut, not a restyle.
+
 - [x] `welcome-stage.tsx` (2026-09-03) — **hierarchy reads:** question → compose box → example
       link → disclaimer, one column, nothing competing; the mic sits inside the box at thumb
       height. Two things were wrong and are fixed. **The wordmark moved between screens:**

@@ -9933,3 +9933,144 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .app-tab.is-current { color: var(--accent); }
 .app-tab-marker { background: var(--accent-mid); }
 
+/* ── RADIANT, unit 2: the filters screen (the Profile tab) ─────────────────────────────────── */
+.me-head { margin-bottom: 4px; }
+.me-head-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.me-eyebrow {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.me-reset {
+  position: relative;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--faint);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
+}
+.me-reset::after { content: ""; position: absolute; inset: -6px 0; }
+@media (hover: hover) { .me-reset:hover { color: var(--accent); background: var(--accent-soft); } }
+.me-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.me-head-title { margin-top: 6px; }
+.me-head-lead { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; }
+.me-head-title h1 {
+  margin: 0;
+  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.me-head-title h1 em { font-style: italic; font-weight: 400; color: var(--accent-mid); }
+.me-head-place { color: var(--faint); font-size: 0.75rem; font-weight: 500; white-space: nowrap; }
+.me-close {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--stone);
+  color: var(--ink);
+  transition: background var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-spring);
+}
+.me-close::after { content: ""; position: absolute; inset: -6px; }
+.me-close:active { transform: scale(0.95); }
+@media (hover: hover) { .me-close:hover { background: var(--line); } }
+.me-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.me-head p { margin: 10px 0 20px; font-size: 0.8125rem; }
+.me-section h2 { font-size: 0.9375rem; font-weight: 600; }
+.me-section-lead { font-size: 0.8125rem; }
+
+/* The toggle card: one white card, its rows divided, the switch as drawn — a 48×28 track, a
+   24px white knob, the track in the terracotta when on. */
+.me-switches {
+  border-radius: 16px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 4%, transparent);
+}
+.me-switches li + li { border-top-color: var(--stone); }
+.me-switch { min-height: 64px; padding: 16px; }
+@media (hover: hover) { .me-switch:hover { background: color-mix(in srgb, var(--stone) 60%, transparent); } }
+.me-switch strong { font-size: 0.9375rem; font-weight: 600; line-height: 1.3; }
+.me-switch small { color: var(--faint); font-size: 0.8125rem; }
+.me-switch-track { width: 48px; height: 28px; background: var(--line); }
+.me-switch-track::after {
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
+}
+.me-switch input:checked ~ .me-switch-track { background: var(--accent-mid); }
+.me-switch input:checked ~ .me-switch-track::after { translate: 20px 0; border-color: transparent; }
+
+/* Pills — languages and ways of working: white, the on ones on the soft tint with the accent
+   text and the terracotta edge. The hit area keeps O14's floor above and below the pill. */
+.me-chip {
+  position: relative;
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 1px 1px color-mix(in srgb, var(--hero-dusk) 3%, transparent);
+}
+.me-chip::after { content: ""; position: absolute; inset: -4px 0; }
+@media (hover: hover) { .me-chip:not(.is-on):hover { border-color: color-mix(in srgb, var(--accent-mid) 60%, var(--line)); } }
+.me-chip.is-on { border-color: var(--accent-mid); background: var(--accent-soft); color: var(--accent); }
+
+/* Segments: the track in the stone tint, the chosen segment a white card with the accent text. */
+.me-segments { gap: 4px; padding: 4px; border-radius: 16px; background: var(--stone); }
+.me-segment { min-height: 40px; border-radius: 12px; color: var(--ink); font-size: 0.75rem; font-weight: 500; }
+@media (hover: hover) { .me-segment:not(.is-on):hover { background: color-mix(in srgb, var(--surface-raised) 60%, transparent); } }
+.me-segment.is-on {
+  color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 8%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent);
+}
+.me-group h3, .me-group legend { font-size: 0.9375rem; font-weight: 600; }
+.me-group-note { font-size: 0.78125rem; }
+
+/* The sticky bar above the tab bar: the one act this screen is for, with the live count. */
+.me-sticky {
+  position: sticky;
+  bottom: calc(58px + var(--safe-bottom));
+  z-index: 5;
+  margin: 8px calc(var(--shell-gutter) * -1) 0;
+  padding: 12px var(--shell-gutter) 10px;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.me-show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 25%, transparent);
+  transition: transform var(--dur-tap) var(--ease-spring), background var(--dur-tap) var(--ease-ui);
+}
+.me-show:active { transform: scale(0.99); }
+@media (hover: hover) { .me-show:hover { background: var(--accent-deep); } }
+.me-show:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+

@@ -21,12 +21,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, MapPin, Quotes, Trash } from "@phosphor-icons/react";
+import { ArrowRight, MapPin, Quotes, Trash, X } from "@phosphor-icons/react";
+import { nearestKm } from "@/demo/clinicians";
+import { rosterFor } from "@/demo/synthetic-roster";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearRecord, readRecord, placeFrom, type FinderRecord } from "@/finder/state";
 import { APPROACHES, type Approach } from "@/demo/roster";
 import {
   activeFilterCount,
+  applyFilters,
   APPROACH_LABELS,
   BOOLEAN_FILTER_KEYS,
   CONSULT_RECORDING_CHOICES,
@@ -122,6 +125,13 @@ export function ProfileView() {
   };
   const held = ready && (words.length > 0 || place.length > 0);
   const onCount = activeFilterCount(filters);
+  /**
+   * RADIANT: the live count on the sticky bar — the listed GPs these filters leave, measured from
+   * the suburb above. Over the listed roster with its example profiles, which is what the finder
+   * shows unless the examples switch on its welcome screen is off; that switch is the finder's
+   * own state and this tab cannot see it, so the number here is the listed count.
+   */
+  const shownCount = applyFilters(rosterFor(true), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)).length;
 
   const toggleApproach = (a: Approach): void => {
     const has = filters.approach.includes(a);
@@ -143,8 +153,23 @@ export function ProfileView() {
         <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
         <AppSettings />
       </div>
+      {/* RADIANT: the founder's filter screen — the eyebrow and Reset all on one row, the title
+          with the suburb beside it and the close control on the next. Reset all is the same act
+          as "Clear the filters" at the foot of the list; the place is kept, as it always was. */}
       <header className="me-head">
-        <h1>Your details</h1>
+        <div className="me-head-row">
+          <span className="me-eyebrow">Filter GPs</span>
+          <button type="button" className="me-reset" onClick={clearFilterSet}>Reset all</button>
+        </div>
+        <div className="me-head-row me-head-title">
+          <span className="me-head-lead">
+            <h1>Search <em>Filters</em></h1>
+            {place && <span className="me-head-place">{place}</span>}
+          </span>
+          <Link href="/" className="me-close" aria-label="Close the filters and go back to the finder">
+            <X size={16} weight="bold" aria-hidden="true" />
+          </Link>
+        </div>
         <p>Everything below is held on this device only, for this tab.</p>
       </header>
 
@@ -419,6 +444,14 @@ export function ProfileView() {
       <p className="me-privacy">
         Nothing you type is sent anywhere. Your filters stay on this device; your words go when this tab closes. <Link href="/privacy">How this works</Link>
       </p>
+      {/* RADIANT: the sticky bar the founder drew above the tab bar — the one act this screen is
+          for, with the count the filters leave. It goes to the finder, which resumes the search. */}
+      <div className="me-sticky">
+        <Link className="me-show" href="/">
+          Show {shownCount} GP{shownCount === 1 ? "" : "s"}
+          <ArrowRight size={16} weight="bold" aria-hidden="true" />
+        </Link>
+      </div>
     </main>
   );
 }
