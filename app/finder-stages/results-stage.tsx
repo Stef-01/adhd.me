@@ -26,7 +26,7 @@ const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap),
   ssr: false,
   loading: () => <div className="nearby-map nearby-map-loading" aria-hidden="true" />,
 });
-import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
+import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, PRESS_SPRING, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -402,7 +402,24 @@ export function ResultsStage({
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
               transition={{ ...STAGE_SPRING, delay: Math.min(index * 0.04, 0.2), opacity: { duration: 0.22 }, filter: { duration: 0.22 }, layout: { ...STAGE_SPRING, delay: 0 } }}
-              whileTap={reducedMotion ? undefined : { scale: 0.985 }}
+              // The lift is HERE and not in `globals.css`, and it has to be: when this row's
+              // entrance settles, motion leaves `transform: none` as an INLINE style, and an
+              // inline declaration beats any stylesheet rule without `!important`. A CSS
+              // `.clinician-row:hover { transform: ... }` therefore computes to `none` and does
+              // nothing — measured, after writing one. Every hover state the app already had is
+              // colour and shadow only, which is why the gap never showed: those are the
+              // properties motion does not write.
+              //
+              // BOTH CARRY THEIR OWN TRANSITION, and that is the point of them. The `transition`
+              // prop above is this component's default for EVERY animation on it, and it holds the
+              // entrance stagger's `delay` — up to 200ms at the fifth row. Inherited, that delay
+              // lands on the pointer states too: the row would wait a fifth of a second before
+              // acknowledging a hover or a press, on the exact interaction where latency is most
+              // felt. `PRESS_SPRING` is the curve the app's other pressables already use, and it
+              // has no delay to inherit. (The press was already here and already inheriting it —
+              // the lift is what made it visible.)
+              whileHover={reducedMotion ? undefined : { y: -2, transition: PRESS_SPRING }}
+              whileTap={reducedMotion ? undefined : { scale: 0.985, transition: PRESS_SPRING }}
             >
               {/* O67: the same layoutId as the profile's portrait frame, so the chosen
                   GP's image travels from this slot into the hero as ONE object — the

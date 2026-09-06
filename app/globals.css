@@ -8485,8 +8485,11 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .me-chrome { position: relative; }
 
 @media (min-width: 901px) {
-  body:has(.me-screen) { color: var(--on-ground); background: var(--route-strong); }
-  .me-screen { color: var(--ink); box-shadow: var(--shadow-ambient); }
+  /* The ground and the window's elevation are section 17's: this route reached the desk by a
+     different selector and a different token (`--route-strong`) than the finder did (`--ground`),
+     so the two app grounds did not agree at the same width. One desk now, painted there. */
+  body:has(.me-screen) { color: var(--on-ground); }
+  .me-screen { color: var(--ink); }
 }
 
 
@@ -10266,22 +10269,9 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
     border-radius: 999px;
     font-size: 0.8125rem;
   }
-  /* SMOOTH: on the desk the marker IS the pill behind the current tab — the same shared-layout
-     element that is the bar under the icon on a phone — so it springs from tab to tab. */
-  .app-tab { isolation: isolate; }
-  .app-tab.is-current { background: transparent; }
-  .app-tab-marker {
-    inset: 0;
-    top: auto;
-    left: auto;
-    translate: none;
-    width: auto;
-    height: auto;
-    z-index: -1;
-    border-radius: 999px;
-    background: var(--accent-soft);
-  }
-  .app-page-with-tabs { padding-bottom: 104px; }
+  /* The current tab's fill and the room the dock takes are section 17's, which draws the fill as
+     the travelling marker rather than as a static background and derives the padding from
+     `--desk-inset`. A static fill here would race the marker for the same state. */
 
   /* The filters screen in two columns: the switches on the left, the rest on the right; the
      sticky bar's button sits to the right so the dock never covers it. */
@@ -10343,3 +10333,354 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
   .learn-card:hover { transform: none; }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   17. DESK — the desktop app window, and the motion the desktop block was hiding (2026-09-06)
+
+   The founder's verdict: "it still looks weird on desktop mode and has barely any animations."
+   Both halves were the same fault, in the same block.
+
+   Section 16 put the app on `--ground` so the desk would frame it, but the frame was never drawn.
+   `.care-shell` still carried `border-radius: 0` and two hairlines in `--line` — a PAPER token,
+   invisible against a near-black ground — and no elevation of any kind. So at 1440 a 1040px paper
+   slab met the dark at a hard square edge with nothing between them: not a window on a desk, a
+   rendering artifact. `/profile` and `/learn` had the same slab and reached it by a different
+   route (`body:has(.me-screen)`) in a different colour (`--route-strong`, not `--ground`), so the
+   two grounds did not even agree.
+
+   The motion half followed from the same place: the `min-width: 900px` block SWITCHED MOTION OFF.
+   `.app-tab-marker { display: none }` retired the one element in this app that already knows how
+   to travel — it carries a shared `layoutId` — on exactly the width where a pointer is present to
+   see it. And the app's most-handled surfaces, `.clinician-row` and `.filter-chip`, declared hover
+   states with no `transition` on them at all, so on the one input where hover exists, every
+   response snapped. `.t-tint` had already fixed that for the public pages; the app never got it.
+
+   The row turned out to be worse than untransitioned, and the finding is worth keeping: it is a
+   `motion.button`, and once its entrance settles motion leaves `transform: none` as an INLINE
+   style, which no stylesheet rule can outrank. A CSS hover lift on it computes to `none` and does
+   nothing — measured, after writing one. That is why every hover state the app already had is
+   colour and shadow only: those are the properties motion does not write. The row's lift is
+   therefore a `whileHover` at its call site in `results-stage.tsx`, not a rule in this file.
+
+   Three rules hold this section together:
+     · ONE INSET TOKEN. `--desk-inset` sets the gap round the window, and the window's height, the
+       dock's offset and each screen's bottom padding are all derived from it — so the chrome can
+       never disagree with the window it sits in, which is how the dock covered the finder's
+       context line at 1920.
+     · TRANSFORM AND OPACITY ONLY. Every hover and press below moves on the compositor.
+     · EVERY TRANSFORM IS GUARDED. Colour-only transitions stay under reduce (a crossfade between
+       two greys is not vestibular); anything that moves is switched off, which is the line the
+       `.t-tint` note draws.
+   =============================================================================================== */
+
+/* THE FRAME STARTS WHERE THE DESK DOES, WHICH IS 641px — NOT 900px.
+   Below 641 the app is paper edge to edge: the `max-width: 640px` block sets `--paper` on
+   `.care-app` and drops the shell's shadow, which is right for a phone. Above it the ground is
+   already `--ground` at every width, so between 641 and 899 the app was the SAME unframed slab as
+   the desktop, one size down — square corners on near-black, with a single `--on-ground` hairline
+   arriving at 700px and nothing else. The window frame therefore lives here, at the desk's own
+   breakpoint; only the things that need desk WIDTH (the pill dock, the two-column lists, the
+   display type) stay in the 900px block below. */
+@media (min-width: 641px) {
+  :root {
+    /* The one gap between the window and the edge of the desk. Smaller on a tablet, where the
+       ground is a margin rather than a surface with room to be one. */
+    --desk-inset: clamp(12px, 2.4vw, 44px);
+    --desk-radius: 20px;
+    /* Elevation in three layers, not one: a contact shadow that keeps the bottom edge ON the desk,
+       a mid cast that gives the window its height, and a wide ambient so the ground reads as a lit
+       surface rather than flat paint. Tuned dark because it falls on `--ground`, where a
+       `--hero-dusk` tint at 12% (`--shadow-ambient`, built for paper) is invisible. */
+    --desk-shadow:
+      0 1px 2px color-mix(in srgb, #000 30%, transparent),
+      0 14px 28px -12px color-mix(in srgb, #000 38%, transparent),
+      0 48px 92px -36px color-mix(in srgb, #000 62%, transparent);
+    /* The window's own edge: paper at low alpha, so it reads as light catching a raised edge. A
+       border in `--line` here is the invisible hairline this section exists to replace. */
+    --desk-edge: color-mix(in srgb, var(--paper) 22%, transparent);
+    --desk-h: calc(100svh - var(--desk-inset) * 2);
+  }
+
+  /* ── The desk ─────────────────────────────────────────────────────────────────────────────
+     One ground for all three app routes, from one token. The radial is what makes it a surface:
+     without it the window's ambient shadow has nothing to fall across and the dark reads flat. */
+  .care-app.patient-v2,
+  body:has(.me-screen) {
+    background-color: var(--ground);
+    background-image:
+      radial-gradient(92% 60% at 50% -6%,
+        color-mix(in srgb, var(--hero-blue-night) 58%, transparent), transparent 70%);
+    background-repeat: no-repeat;
+  }
+
+  .care-app.patient-v2 {
+    display: flex;
+    justify-content: center;
+    /* `min-height: 100svh` above stays honest because preflight makes this border-box. */
+    padding: var(--desk-inset);
+  }
+
+  /* ── The window ───────────────────────────────────────────────────────────────────────────
+     `overflow: clip` and not `hidden` on purpose: clip does not create a scroll container, so the
+     sticky bars inside (`.me-sticky`, the results head) keep sticking to the viewport while the
+     rounded corners still cut the header's 3px brand strip. */
+  .patient-v2 .care-shell,
+  .me-screen {
+    border: 1px solid var(--desk-edge);
+    border-radius: var(--desk-radius);
+    box-shadow: var(--desk-shadow);
+    overflow: clip;
+  }
+
+  .patient-v2 .care-shell {
+    min-height: var(--desk-h);
+    /* The shell was `border-inline` only; the shorthand above now draws all four edges. */
+    border-inline-color: var(--desk-edge);
+  }
+
+  /* Each stage is its own `min-height: 100svh` box. Left alone it overflows the inset window by
+     exactly `--desk-inset * 2` and pushes a scrollbar onto a page that fits. */
+  .patient-v2 .screen { min-height: var(--desk-h); }
+
+  .me-screen {
+    min-height: var(--desk-h);
+    margin-block: var(--desk-inset);
+    /* The `body:has()` rule above paints the desk; this window keeps its own paper. */
+    background: var(--paper);
+  }
+
+  /* ── The welcome composition, centred ─────────────────────────────────────────────────────
+     The stage is a flex column as tall as the window, so its last child — the context line — was
+     pushed to the floor: 100px below the link it belongs under, and at desk width directly into
+     the consent notice fixed 96px up. Two auto margins split the free space above and below the
+     GROUP instead — the header stays at the top where a header belongs, and the question, the box
+     and the line that qualifies them travel together as one block in the middle of the window.
+     Here rather than in the 900px block because the stranding is a function of window HEIGHT, and
+     the window is full height from 641px up. */
+  .patient-v2 .voice-screen .voice-core { margin-top: auto; }
+  .patient-v2 .voice-screen .finder-context { margin-bottom: auto; padding-top: 16px; }
+  /* 68px of floor padding was holding the group off a bottom edge that no longer ends the screen. */
+  .patient-v2 .voice-screen .voice-actions { padding-bottom: 0; }
+}
+
+/* ── The tablet dock ────────────────────────────────────────────────────────────────────────
+   Between 641 and 899 the bar is not yet a floating pill: since 600px it has been the shell's own
+   chrome — shell-width, centred, with its top corners lifted off the ground — glued to the bottom
+   of the VIEWPORT at `bottom: 0`. Inset the window and that glue holds it to the desk instead, a
+   full inset below the app it belongs to. It moves up onto the window's bottom edge, and takes the
+   window's bottom radius so the two corners agree; without that the bar's square feet overhang the
+   window's rounded ones onto the ground. */
+@media (min-width: 641px) and (max-width: 899px) {
+  .app-tabs {
+    bottom: var(--desk-inset);
+    border-radius: 18px 18px calc(var(--desk-radius) - 1px) calc(var(--desk-radius) - 1px);
+  }
+  .care-app[data-tabs="visible"] .screen,
+  .app-page-with-tabs { padding-bottom: calc(var(--desk-inset) + 82px); }
+  body:has(.app-tabs) .consent-bar { bottom: calc(var(--desk-inset) + 70px); }
+  .me-sticky { bottom: calc(var(--desk-inset) + 58px); }
+}
+
+@media (min-width: 900px) {
+  /* ── The dock, inside the window ──────────────────────────────────────────────────────────
+     It was `bottom: 22px` — measured from the viewport, so an inset window leaves it floating on
+     the desk BELOW the app it belongs to. Derived from the inset now, so it cannot drift again. */
+  .app-tabs { bottom: calc(var(--desk-inset) + 26px); }
+
+  /* The room the dock takes, given back. The old value was 104px against a dock whose top edge
+     sits 84px up — 20px of clearance, which is why the finder's context line was cut in half at
+     1920. Dock height (58) + its offset (26) + the inset + a 28px breath. */
+  .care-app[data-tabs="visible"] .screen,
+  .app-page-with-tabs { padding-bottom: calc(var(--desk-inset) + 112px); }
+
+  /* The consent notice rides above the dock, on the same derived offset. */
+  body:has(.app-tabs) .consent-bar { bottom: calc(var(--desk-inset) + 96px); }
+
+  /* ── The travelling pill ──────────────────────────────────────────────────────────────────
+     The marker becomes the pill itself: it fills the tab, sits behind the label, and slides and
+     resizes between tabs on the spring `app-tabs.tsx` already passes it. The static
+     `background: var(--accent-soft)` that replaced it is dropped — two things drawing one state
+     is what made the change snap. */
+  .app-tab-marker {
+    display: block;
+    /* `inset: 0` ALONE, and this is the whole trap. `inset` is the shorthand for all four offsets,
+       so it already clears the base rule's `top: 2px` and `left: 50%`; writing `top: auto;
+       left: auto` after it puts two of the four BACK to auto, which leaves an absolutely
+       positioned box with no content, `width: auto`, and only two edges pinned — it resolves to
+       0x0 and paints nothing. Measured at 0x0 before the line was cut, and worth the words:
+       the SMOOTH pass reached for this same pill independently and wrote exactly that pair, so
+       it is a trap two readers have now walked into. */
+    inset: 0;
+    translate: none;
+    width: auto;
+    height: auto;
+    /* Behind the label, via the tab's own isolation — one declaration instead of lifting the
+       glyph and the label onto a layer each. SMOOTH's idea, kept. */
+    z-index: -1;
+    border-radius: 999px;
+    background: var(--accent-soft);
+  }
+  .app-tab { isolation: isolate; }
+  .app-tab.is-current { background: transparent; }
+
+  /* ── The welcome screen's presence ────────────────────────────────────────────────────────
+     The question was capped at 1.875rem by a `vw` clamp that stopped scaling long before the desk
+     width did, so a 30px heading led a 780px column inside a 1040px window and the screen read as
+     empty rather than calm. The box under it is still the subject; this is the question sized to
+     the room it is asked in. */
+  /* THREE CLASSES, to match `.patient-v2 .voice-screen .voice-prompt h1` in section 15 — a
+     two-class rule here loses to it however late it is declared, and loses SILENTLY: `max-width`
+     applied from the shorter selector while `font-size` did not, so the question kept its 31px
+     inside an 18ch measure computed against a size it never took. The ceiling is what binds, not
+     the `cqw` term: 4.4cqw of a 1040px shell is 45.8px and the clamp cut it to 1.9375rem.
+     (A `@media (min-width: 820px)` block already asks for 4.125rem here. It has been dead since
+     the section-15 rule landed above it — same specificity, later in the file — which is the
+     second time this one heading has been sized by a rule that never applied.) */
+  .patient-v2 .voice-screen .voice-prompt h1 {
+    max-width: 18ch;
+    font-size: clamp(1.875rem, 3.4vw, 2.75rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+  }
+  .patient-v2 .voice-prompt { padding-top: 0; }
+
+  /* ── The results list ─────────────────────────────────────────────────────────────────────
+     Two columns and five matches leaves an orphan card beside a hole. The lead spans instead:
+     it is the one row the screen is already making a claim about (`is-lead` is set only when the
+     order is `informed`), so the span states that claim in the layout and squares the grid in the
+     same move. When the words did not separate the list there is no lead, the rows stay equal,
+     and an orphan is the honest shape. */
+  .patient-v2 .clinician-list > .clinician-row.is-lead { grid-column: 1 / -1; }
+}
+
+/* ── Motion the app never had: hover and press on its own surfaces ───────────────────────────
+   Not scoped to a width — a hover state belongs to a pointer, not to a viewport — but this is
+   where the desktop earns it, because the pointer is what desktop has. `@media (hover: hover)`
+   keeps every transform off touch, where these fire on tap and read as lag. */
+
+/* `.filter-chip` is deliberately absent: the SMOOTH block above already gives it (and `.me-chip`
+   and `.learn-chip`) a tap-beat transition covering `transform`, which is what the hover lift
+   below needs. Naming it again here would be a second author for one property set. */
+.patient-v2 .clinician-row,
+.show-all {
+  transition:
+    transform var(--dur-tap) var(--ease-ui),
+    box-shadow var(--dur-tap) var(--ease-ui),
+    border-color var(--dur-tap) var(--ease-ui),
+    background-color var(--dur-tap) var(--ease-ui),
+    color var(--dur-tap) var(--ease-ui);
+}
+
+@media (hover: hover) {
+  /* The clinician row's lift is NOT here. It is a `whileHover` in `results-stage.tsx`, because
+     the row is a `motion.button` and motion leaves `transform: none` inline once its entrance
+     settles — an inline declaration a stylesheet cannot outrank. The note at that call site has
+     the measurement. The row keeps its colour and shadow hover below, which motion never writes.
+     1px, and no more: a chip that lifts further than the gap to the row of chips beside it starts
+     reading as an object being picked up rather than one answering a pointer. */
+  .filter-chip:not([aria-pressed="true"]):hover { transform: translateY(-1px); }
+  .show-all:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent-mid) 55%, var(--line));
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--hero-dusk) 10%, transparent);
+  }
+}
+
+/* Press feedback on the way DOWN, which is the half of a click a person is actually watching.
+   Only `.show-all`: the row's press is a `whileTap` in `results-stage.tsx` (a CSS rule here would
+   be a second author for one state, and the losing one, for the inline-style reason above), and
+   the chips' press is SMOOTH's at 0.96. 0.97 on a wider control than a chip, so the two read as
+   the same amount of movement. */
+.show-all:active { transform: scale(0.97); }
+
+/* The window arrives. `@starting-style` rather than a keyframe, so it is one interruptible
+   transition with no JS and no hydration flash, and it plays once per load — "rare/first-time"
+   on the frequency table, which is where delight is allowed. Short, and opacity+transform only,
+   so it cannot hold up the largest paint behind it. */
+@media (min-width: 641px) {
+  .patient-v2 .care-shell,
+  .me-screen {
+    transition:
+      opacity var(--dur-enter) var(--ease-soft),
+      transform var(--dur-enter) var(--ease-soft);
+    @starting-style {
+      opacity: 0;
+      transform: translateY(10px) scale(0.994);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .patient-v2 .clinician-row,
+  .show-all {
+    /* Colour keeps easing; nothing moves. */
+    transition:
+      border-color var(--dur-tap) var(--ease-ui),
+      background-color var(--dur-tap) var(--ease-ui),
+      color var(--dur-tap) var(--ease-ui);
+  }
+  /* The row is absent from this list on purpose: its lift and press are motion props gated on
+     `reducedMotion`, and `MotionConfig reducedMotion="user"` in `care-finder.tsx` is what switches
+     them off. Restating it here would be a second guard on a state this file does not set.
+     The chip's PRESS is likewise SMOOTH's to guard, and it does, above; only the hover lift this
+     section added needs stating. */
+  .filter-chip:hover,
+  .show-all:hover,
+  .show-all:active { transform: none; }
+  .patient-v2 .care-shell,
+  .me-screen {
+    transition: none;
+    @starting-style { opacity: 1; transform: none; }
+  }
+}
+
+/* ── Section 17, continued: what the inset window moved ──────────────────────────────────────
+   Three faults the inset surfaced, all of them measured on `/profile` at 1440 rather than
+   guessed at, because each is a collision between two things that were previously flat. */
+
+/* 1. THE PAPER STRIP ABOVE THE DESK. `.me-screen`'s `margin-block` collapsed THROUGH `body` — body
+      has no padding or border on this route, so the child's top margin became the body's and the
+      ground started 34px down the page, leaving `html`'s paper showing as a seam across the top of
+      the window. A block formatting context on the body stops the margin escaping; it is one
+      declaration and it changes no layout inside.
+      AT 641px, NOT 900: the margin it contains is set in the 641px block, so scoping the fix to
+      the desk would leave the seam shipping at every tablet width. */
+@media (min-width: 641px) {
+  body:has(.me-screen) { display: flow-root; }
+}
+
+@media (min-width: 900px) {
+  /* 2. THREE BARS IN ONE BAND. The filters screen carries a sticky "Show N GPs" at `bottom: 0` —
+        measured from the viewport, so once the window was inset it sat ON the dock (an 11px
+        overlap) and half under it. The stack from the floor up is dock, then the screen's own
+        primary action, then the notice; each offset is the one below it plus its height plus a
+        gap, so the three can never be given the same number by accident.
+          dock      bottom: inset + 26   height 58
+          sticky    bottom: inset + 98   height 72   (26 + 58 + 14)
+          consent   bottom: inset + 182             (98 + 72 + 12) */
+  .me-sticky { bottom: calc(var(--desk-inset) + 98px); }
+  body:has(.app-tabs):has(.me-sticky) .consent-bar { bottom: calc(var(--desk-inset) + 182px); }
+
+  /* 3. THE STRETCHED SWITCH CARD. The filters grid spans the switches four rows to sit beside a
+        taller right column, and a grid item stretches to its row by default — so the card grew
+        155px of empty paper below its last switch and read as a panel missing its content. It is
+        a list, and a list ends where it ends. */
+  .me-section[aria-labelledby="me-filters-title"] > .me-switches { align-self: start; }
+
+  /* 4. THE LEAD, SIZED TO ITS SPAN. A row that now runs the full width of the window kept the
+        64px portrait it had in a half-width column, so the card the screen is making its one
+        claim about was mostly empty paper. The portrait carries the extra width instead. */
+  .patient-v2 .clinician-list > .clinician-row.is-lead {
+    grid-template-columns: 88px 1fr 20px;
+    gap: 18px;
+    padding: 18px;
+  }
+  .patient-v2 .clinician-list > .clinician-row.is-lead .row-portrait-anchor,
+  .patient-v2 .clinician-list > .clinician-row.is-lead img,
+  .patient-v2 .clinician-list > .clinician-row.is-lead .clinician-monogram-thumb {
+    width: 88px;
+    height: 88px;
+    border-radius: 14px;
+  }
+  .patient-v2 .clinician-list > .clinician-row.is-lead strong { font-size: 1.125rem; }
+}

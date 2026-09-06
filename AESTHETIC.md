@@ -589,6 +589,56 @@ the next reader knows the global is the one that matters.
 
 ## Cross-cutting
 
+- [x] **The desk becomes a window, and the desktop stops hiding its own motion — 2026-09-06.**
+      Founder-directed, off the monthly cycle: "it still looks weird on desktop mode and has barely
+      any animations." Both halves were one fault in one block, and the block was the previous day's
+      own (`min-width: 900px`, section 16's "desk-width app").
+
+      **The frame was never drawn.** Section 16 painted `--ground` under the app so the desk would
+      frame it, but `.care-shell` kept `border-radius: 0`, two hairlines in `--line` — a PAPER
+      token, invisible on near-black — and no elevation. At 1440 that is a 1040px paper slab
+      meeting the dark at a hard square edge: a rendering artifact, not a window. `/profile` and
+      `/learn` reached the same slab by a different selector (`body:has(.me-screen)`) and a
+      different token (`--route-strong`), so the two app grounds did not even agree at the same
+      width. Section 17 draws it: one ground, a `--desk-inset` the window's height, the dock's
+      offset and every screen's bottom padding all derive from, a 20px radius, and a three-layer
+      shadow tuned dark because `--shadow-ambient` was built for paper and is invisible here.
+      **The frame starts at 641px, not 900** — the ground has been dark from 641 up, so between
+      641 and 899 the same unframed slab was shipping one size down.
+
+      **Three collisions the flat layout had been hiding**, each measured rather than guessed:
+      the finder's context line ran under the dock at 1920 (104px of padding against a dock whose
+      top edge sits 84px up); `.me-screen`'s `margin-block` collapsed THROUGH `body`, so the ground
+      started 34px down and `html`'s paper showed as a seam across the top (`display: flow-root`);
+      and `/profile`'s sticky "Show N GPs" sat at `bottom: 0` — the viewport's, not the window's —
+      overlapping the dock by 11px. The three bars now stack from one derived offset each.
+
+      **The motion was switched off at the width that has a pointer.** `.app-tab-marker` was
+      `display: none` past 900px — the one element in the app that already knows how to travel, on
+      a shared `layoutId`, retired exactly where it would be seen, and replaced by a static
+      `background` on the current tab. It is the pill now: it fills the tab, slides and resizes
+      between them on the spring `app-tabs.tsx` was already passing it (measured 662→774px over
+      ~350ms). Added with it: a 2px row lift, 1px on the chips, press at 0.97, and a
+      `@starting-style` arrival for the window itself.
+
+      **A latency the row's lift exposed.** A `motion` component's `transition` prop is its default
+      for EVERY animation on it, and the clinician row's holds the entrance stagger's `delay` — up
+      to 200ms at the fifth row. `whileHover` and `whileTap` inherit it, so the row waited a fifth
+      of a second before acknowledging a pointer, on the interaction where latency is felt most.
+      The press had been doing this since it was written; adding the lift is what made it visible.
+      Both now carry `PRESS_SPRING` explicitly, which is the curve the app's other pressables
+      already use and has no delay to inherit.
+
+      **And the finding worth keeping.** `.clinician-row` could not have taken a CSS hover lift at
+      all. It is a `motion.button`, and once its entrance settles motion leaves `transform: none`
+      as an INLINE style, which no stylesheet rule outranks — a `:hover { transform }` on it
+      computes to `none`. That is why every hover state the app already had is colour and shadow
+      only: those are the properties motion does not write. The lift lives at the call site as a
+      `whileHover`, and the CSS says so where a reader would otherwise add the rule again.
+      `pnpm verify` green (3733 tests); `pnpm e2e` 283 passed. Before/after captures in
+      `qa/polish/`.
+
+
 - [x] **Monthly design audit — 2026-09-05 (first).** Run under the standing ROADMAP item the founder
       set today ("there is so much AI slop everywhere"). The pass this month was fluidity, because
       the founder's verdict on the previous transitions.dev pass was that it declined too much:

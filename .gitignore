@@ -25,3 +25,9 @@ reports/adhd-me-sales-deck.pptx
 qa/_runs/
 .data-visual/
 .pnpm-store/
+
+# A design pass writes its raw captures here; both sets together are ~17MB and the
+# committed record is qa/polish/compare/, which carries before AND after side by side.
+# Regenerate with scripts/shots.mjs and scripts/finder-flow-shots.mjs.
+qa/polish/before/
+qa/polish/after/
