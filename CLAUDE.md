@@ -9,7 +9,9 @@ gazetteer, the finder state), `e2e/` (a handful of feature flows), and `vitest` 
 
 - `pnpm dev` · `pnpm build` · `pnpm start`
 - `pnpm typecheck` · `pnpm test` · `pnpm e2e`
-- Production needs `ADHDME_TOKEN_SECRET` set on Vercel for the console's signed sessions.
+- Production needs `ADHDME_TOKEN_SECRET` set on Vercel for the console's signed sessions, and
+  `ADHDME_ENABLE_DEMO=1` if `/demo` is to be reachable — it fails closed without it, and the
+  practices page's primary call to action links there.
 
 Commit to main and push. Redesign freely.
 

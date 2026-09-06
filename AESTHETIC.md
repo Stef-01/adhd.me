@@ -268,8 +268,15 @@ and a one-line commit message are the record.
       view ↗") and its own footer, which reads as deliberate for a stepped tool rather than as
       drift; and two of the three worked examples land on the same first GP, which a two-GP
       roster makes unavoidable.
-- [ ] `learn-modules.tsx` — content-heavy; check line length, contrast, and quiz interaction
+- [x] `learn-modules.tsx` — content-heavy; check line length, contrast, and quiz interaction
       feedback (the O243–O245 "motion pass" touched this — confirm it still reads well).
+      **Walked 2026-09-05 at 390**: a read module card by card, then a quiz answered wrong and
+      right. The read card holds a comfortable measure inside its rounded panel; the quiz's
+      answered state shows the tick on the right answer and the cross on the chosen wrong one,
+      the "Not quite." line beneath in the same warm panel, Back and Next below it at the 44px
+      floor. The score card names the count. Contrast passed the axe sweep the same day. And the
+      page pads for the fixed tab bar: scrolled to the bottom, the last line of the footer ends
+      exactly at the viewport's edge, nothing under the bar. Nothing to change.
 
 ## Practice console (`app/console/*`)
 

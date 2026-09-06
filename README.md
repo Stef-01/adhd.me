@@ -22,7 +22,7 @@ worth keeping even though the documents are gone. Current planning lives in `ROA
 
 ## What needs a founder decision before this goes live
 
-**This section is the index. It is the only place all six are listed together.** Each one carries
+**This section is the index. It is the only place all seven are listed together.** Each one carries
 the live anchor in the tree where the constraint is actually enforced or declared, so a reader can
 get from the question to the code without a search.
 
@@ -32,9 +32,10 @@ and `PRODUCT_FLAGS` / `STANDING_FLAGS` in `src/compliance/public-surfaces.ts` ar
 test reading them. Re-erecting a gate around them would be rebuilding the apparatus the founder
 just deleted, so the honest answer is that this README is the tracking, and it has to be read.
 
-**None of the six is resolved. Every one is a founder or legal call, and nothing in this tree may
-answer one on their behalf.** The first five below were always on this list; the sixth was open in
-the code and had never been surfaced here.
+**None of the seven is resolved. Every one is a founder or legal call, and nothing in this tree
+may answer one on their behalf.** The first five below were always on this list; the sixth was
+open in the code and had never been surfaced here; the seventh is a deploy switch found on
+2026-09-05.
 
 1. **The name asserts a diagnosis.** "ADHD.ME" puts a condition in every page title, URL and
    sentence naming the product, which is condition-targeting by construction. It needs an Ahpra
@@ -48,6 +49,9 @@ the code and had never been surfaced here.
 3. **Every figure on the public pages is indicative.** `COST_NOTE` in `app/story-landing.tsx` and
    `evidenceNote` in `src/compliance/landing-copy.ts` both say so on the page, and both are written
    as ranges precisely because none has been confirmed against its source by anybody in this repo.
+   The wait and the cost are one constant, `INDICATIVE_FIGURES` in `landing-copy.ts`, read by
+   every page that quotes them (they had drifted to three values before 2026-09-05); the story's
+   "$270 to $600 via a GP-led pathway" is the one figure with no register entry.
    Anchors: the AADPA Australian evidence-based clinical practice guideline for ADHD (2022) and the
    2023 Senate inquiry into ADHD assessment and support services. `COST_NOTE` carries a second
    unconfirmed claim beyond the figures — that NSW and Queensland now let a GP carry the whole
@@ -68,6 +72,12 @@ than left to whoever next reads that file: whether ADHD.ME should publish clinic
 GPs *at all*. `/clinicians` names real clinical territory — differential diagnosis, pre-stimulant
 cardiac screening, titration review. Linking out instead of restating narrowed it; it did not close
 it. See the `/clinicians` entry in `STANDING_FLAGS` (`src/compliance/public-surfaces.ts`).
+
+7. **Whether `/demo` is reachable in production.** It fails closed unless `ADHDME_ENABLE_DEMO=1`
+   is set (`src/lib/mock-guard.ts`; the e2e config sets it, a bare production start does not), and
+   the practices page's primary call to action, "See a demo", links there twice. Either the flag
+   is set on Vercel, or the button should point somewhere that exists. Found by walking the
+   production build on 2026-09-05; `CLAUDE.md` now names the flag beside the token secret.
 
 ## Layout
 
