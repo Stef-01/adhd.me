@@ -10298,10 +10298,16 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
 /* ── SMOOTH (2026-09-06): continuity and feedback ────────────────────────────────────────────── */
 /* The finder hides the shared bar on its inner stages by stamping its own root. */
 body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
-.page-arrival { display: contents; }
-@supports not (display: contents) { .page-arrival { display: block; } }
-/* The page-arrival wrapper must not become a containing block once at rest: motion leaves
-   `transform: none`, and `display: contents` keeps it out of the box tree entirely. */
+/* The page-arrival wrapper is a PLAIN BLOCK, and it has to be.
+   It was `display: contents`, to stop it becoming a containing block for the fixed chrome once at
+   rest. That reasoning has a hole at each end. `transform: none` — which is what motion leaves —
+   does not establish a containing block, so there was nothing at rest to prevent; and an element
+   with `display: contents` generates no box AT ALL, so `opacity` and `transform` have nothing to
+   apply to. The arrival was therefore inert: measured on `/profile` as a 0x0 box, meaning the fade
+   and the 8px rise had never once rendered. A box brings them back.
+   The transform does own the 240ms it is running, and that is fine here: the dock is a SIBLING of
+   this wrapper in `(app)/layout.tsx`, not a child, so the only positioned descendant it can reach
+   is `.me-sticky` — sticky, on a bar that is off-screen for the whole arrival anyway. */
 
 /* Press feedback on every pill, on the tap beat. */
 .filter-chip,
