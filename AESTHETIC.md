@@ -342,7 +342,7 @@ the end of the stylesheet:
       the hero's figure is the drawn `CoverageMap` — and the now-unused `next/image` import went
       with them. Contrast/alignment for that logo belongs to the `/about` line below.
       `pnpm verify` green; `pnpm e2e` **262 passed in 7.1m**.
-- [ ] `app/practices`, `app/clinicians` (walkthrough), `app/faq`, `app/about`, `app/examples` —
+- [x] `app/practices`, `app/clinicians` (walkthrough), `app/faq`, `app/about`, `app/examples` —
       pass for consistent type scale, spacing rhythm, and motion restraint across all public pages;
       these are visited far less often than the finder, so drift is easy to miss.
       **Cold look at 390, 2026-09-05** (faq, examples, practices, clinicians, approach, story,
@@ -411,9 +411,27 @@ the end of the stylesheet:
       stated as a decision in the rule's own comment**: nothing in it moves, and gating it would
       hand a reduce user the snap it exists to remove. The eleven sites are the only ones that
       carry it; nothing new animates on the other four pages, because nothing there should.
-      **Still open on this item:** type scale and spacing rhythm were covered at 390 by eye in the
-      2026-09-05 cold look and found holding, but nothing here has been read cold on **desktop**
-      since 8bcce38 re-scaled the site. Leaving unchecked for that reason alone.
+      **Type scale and spacing rhythm, read cold at 1280 on 2026-09-06** — the last thing this
+      item was waiting for, and the read found exactly two defects, both left behind by 8bcce38's
+      one type scale rather than by the pages themselves. (1) `/practices` was the only public
+      page still spelling `font-serif`, which resolves to Tailwind's default `ui-serif, Georgia` —
+      a third family the site never chose. On the three `h2`/`h3` chapter statements the new
+      unlayered `h1`–`h4` law overrode it, so their family, weight, leading and tracking silently
+      stopped applying and only the size survived: the practice-story statement drew 60px against
+      the page's own 48px `h1`, making the loudest line on the practice-facing landing page not
+      its pitch. The `sm:` bumps and the inert utilities are deleted, not re-sized — the base
+      sizes already step 36 → 30 under the 48px `h1`. The law does not reach a `strong`, so the
+      four display figures *were* still drawn in Georgia at 96px beside a heading in the house
+      sans; they now follow the house precedent for a display figure (`.story-stats dt`: sans,
+      near-bold, tight tracking), `font-semibold` because `font-medium` was a serif's optical
+      weight and reads thin in the sans at that size. `font-serif` now appears nowhere in `app/`
+      or `components/`. (2) `/clinicians` overflowed its condition fieldset by 19px at desk width:
+      `.cv2-condition-panel legend` outranks `.sr-only`, so its `width: 100%` replaced the 1px box
+      the hidden legend relies on and the clipped legend pushed `scrollWidth` past `clientWidth`.
+      That rule and its `> p` companion — which cleared a float under a paragraph that no longer
+      exists — are deleted rather than narrowed: a rule describing type nobody can see is a
+      description the next reader believes. Spacing rhythm holds elsewhere; `/faq`, `/about` and
+      `/examples` had neither defect and needed nothing.
 - [x] `learn-modules.tsx` — content-heavy; check line length, contrast, and quiz interaction
       feedback (the O243–O245 "motion pass" touched this — confirm it still reads well).
       **Walked 2026-09-05 at 390**: a read module card by card, then a quiz answered wrong and

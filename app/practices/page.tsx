@@ -76,9 +76,17 @@ export default function PracticesPage() {
               <p className="text-sm font-medium uppercase tracking-[0.16em] text-[var(--sage)]">
                 {C.practiceStory.eyebrow}
               </p>
-              <h2 className="mt-4 max-w-3xl font-serif text-4xl font-medium leading-[1.02] tracking-[-0.035em] sm:text-6xl">
-                {C.practiceStory.heading}
-              </h2>
+              {/* This chapter's three statements used to be `font-serif` — which on this page
+                  resolves to Tailwind's default `ui-serif, Georgia`, a third family the site never
+                  chose — and 8bcce38's one type scale moved every `h1`–`h4` outside the console
+                  into the house sans by an unlayered law. So the family, weight, leading and
+                  tracking these three asked for stopped applying; what is left is the size, and
+                  the size no longer had a register to justify it: at desk width this statement
+                  rendered 60px against the page's own 48px `h1`, so the loudest line on the
+                  practice-facing landing page was not its pitch. The `sm:` bumps are deleted
+                  rather than replaced with a new size — the base sizes already step 36 → 30 under
+                  the 48px `h1` — and the inert utilities go with them. */}
+              <h2 className="mt-4 max-w-3xl text-4xl">{C.practiceStory.heading}</h2>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600">{C.practiceStory.body}</p>
             </div>
 
@@ -87,7 +95,13 @@ export default function PracticesPage() {
                 {C.practiceStory.goalLabel}
               </p>
               <div className="mt-7 flex items-end gap-3">
-                <strong className="font-serif text-7xl font-medium leading-none tracking-[-0.06em] sm:text-8xl">
+                {/* The figures were the other half of the same `font-serif`, and the law does not
+                    reach a `strong`, so they were the only text on the site still drawn in Georgia
+                    — at 96px, beside a heading in the house sans. The house precedent for a
+                    display figure is the story's stat row (`.story-stats dt`): the sans, near-bold,
+                    tightly tracked. `font-medium` came from a serif's optical weight and reads
+                    thin in the sans at this size, so it is `font-semibold`. */}
+                <strong className="text-7xl font-semibold leading-none tracking-[-0.06em] sm:text-8xl">
                   {C.practiceStory.goalValue}
                 </strong>
                 <span className="pb-2 text-sm text-stone-200">of clinical work</span>
@@ -112,9 +126,7 @@ export default function PracticesPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--sage)]">
                 {C.practiceStory.communityEyebrow}
               </p>
-              <h3 className="mt-4 max-w-2xl font-serif text-3xl font-medium leading-tight tracking-[-0.025em] sm:text-4xl">
-                {C.practiceStory.communityHeading}
-              </h3>
+              <h3 className="mt-4 max-w-2xl text-3xl">{C.practiceStory.communityHeading}</h3>
               <p className="mt-5 max-w-2xl leading-7 text-stone-600">{C.practiceStory.communityBody}</p>
             </div>
             <ul className="flex flex-col justify-end gap-3">
@@ -132,16 +144,14 @@ export default function PracticesPage() {
               {C.practiceStory.evidenceEyebrow}
             </p>
             <div className="mt-4 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-              <h3 className="font-serif text-3xl font-medium leading-tight tracking-[-0.025em] sm:text-4xl">
-                {C.practiceStory.evidenceHeading}
-              </h3>
+              <h3 className="text-3xl">{C.practiceStory.evidenceHeading}</h3>
               <p className="leading-7 text-stone-600">{C.practiceStory.evidenceBody}</p>
             </div>
 
             <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-stone-200 bg-stone-200 sm:grid-cols-2 lg:grid-cols-4">
               {C.practiceStory.evidence.map((item) => (
                 <div key={item.value} className="min-h-52 bg-white p-6 sm:p-7">
-                  <strong className="font-serif text-5xl font-medium tracking-[-0.05em]">{item.value}</strong>
+                  <strong className="text-5xl font-semibold tracking-[-0.05em]">{item.value}</strong>
                   <p className="mt-8 text-sm leading-6 text-stone-600">{item.label}</p>
                 </div>
               ))}

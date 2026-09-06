@@ -2250,23 +2250,14 @@ summary:focus-visible {
   animation: cv2-stage-in var(--dur-move) var(--ease-soft) both;
 }
 
-.cv2-condition-panel legend {
-  float: left;
-  width: 100%;
-  padding: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.625rem;
-  font-weight: 470;
-  letter-spacing: -0.025em;
-}
-
-.cv2-condition-panel > p {
-  clear: both;
-  margin: 7px 0 0;
-  color: var(--cv2-muted);
-  font-size: 0.625rem;
-  line-height: 1.5;
-}
+/* The panel's legend is `sr-only` and its lead paragraph is gone: the stage's question is the
+   `h1` above the panel, so the fieldset carries a hidden name and nothing else. Two rules used to
+   dress that hidden legend as a 26px Newsreader display line and clear a float under a `> p` that
+   no longer exists; both were inert, and the first was worse than inert — `.cv2-condition-panel
+   legend` outranks `.sr-only`, so its `width: 100%` replaced the 1px box sr-only relies on and the
+   clipped legend pushed the fieldset's scrollWidth 19px past its client width at desk width.
+   Deleted rather than narrowed: a rule describing type nobody can see is a description the next
+   reader believes. */
 
 .cv2-condition-list {
   display: grid;
