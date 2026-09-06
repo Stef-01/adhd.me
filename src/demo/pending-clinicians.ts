@@ -1,6 +1,6 @@
 // W228 (O26/O34): the staging area for a clinician who is asked-for but not yet declarable.
 //
-// Dr Anusha Saxena lived here between the founder's first instruction and her go-live: the
+// Dr Anu Saxena lived here between the founder's first instruction and her go-live: the
 // blockers were her consent, her own claims, and a portrait. On 2026-08-18 the founder
 // relayed her consent ("she has asked us to upload it ASAP") and her published Healthengine
 // bio supplied interest-level claims, so she moved into `clinicians` (O34) with the parts her

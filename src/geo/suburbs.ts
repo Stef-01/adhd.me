@@ -38,7 +38,7 @@ export interface SuburbPoint {
 export const SUBURBS: readonly SuburbPoint[] = [
   // Focus area 1 — Beecroft and its neighbours, northern Sydney, NSW.
   { suburb: "Beecroft", postcode: "2119", lat: -33.7503, lon: 151.0586 },
-  // O85: Dr Anusha Saxena's second consulting location (founder-supplied 2026-08-20).
+  // O85: Dr Anu Saxena's second consulting location (founder-supplied 2026-08-20).
   { suburb: "Hornsby", postcode: "2077", lat: -33.7045, lon: 151.0993 },
   { suburb: "Cheltenham", postcode: "2119", lat: -33.7447, lon: 151.0778 },
   { suburb: "Pennant Hills", postcode: "2120", lat: -33.7383, lon: 151.0719 },

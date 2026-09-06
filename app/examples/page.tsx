@@ -33,7 +33,7 @@ export default function ExamplesPage() {
       understood,
       /*
         O203: THE FULL NAME, NOT `shortName`. Both GPs on this roster are Saxena, so the roster
-        disambiguates hers ("Dr Anusha Saxena") and leaves his as the bare surname ("Dr Saxena") —
+        disambiguates hers ("Dr Anu Saxena") and leaves his as the bare surname ("Dr Saxena") —
         fine in a result row read one at a time, and on this page it produced THREE lines all
         reading "Shown first: Dr Saxena", leaving a reader unable to tell whether that was one
         doctor three times or two different people. O192 round 5 made exactly this ruling on the

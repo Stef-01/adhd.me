@@ -147,7 +147,7 @@ export const careArchetypes: CareArchetype[] = [
   {
     /* O191: replaced "Sleep that has never been right" at the founder's verdict — "takes sleep
        seriously" is another thing no GP would disclaim. The founder's example was a GP who
-       understands the challenges of being a refugee; the roster's honest answer is Dr Anusha
+       understands the challenges of being a refugee; the roster's honest answer is Dr Anu
        Saxena's OWN declarations — culturally sensitive care, Hindi and Urdu, understands your
        background — so the journey is built on those, told from the patient's side: an ADHD
        assessment leans on childhood evidence, and a childhood lived in another country, in
@@ -166,7 +166,7 @@ export const careArchetypes: CareArchetype[] = [
     },
   },
   {
-    /* O34: the journey the roster could not serve before Dr Anusha Saxena joined — the
+    /* O34: the journey the roster could not serve before Dr Anu Saxena joined — the
        most-stated preference in real directory search, finally answerable. */
     id: "woman-gp",
     title: "A woman GP, please",

@@ -61,7 +61,7 @@ open in the code and had never been surfaced here; the seventh is a deploy switc
    restating their content. The URLs are landing pages rather than deep links, and none has been
    opened from this tree.
 5. **Only subject-supplied portraits are used for real people.** The roster includes supplied
-   portraits for Dr Anubhav Saxena and Dr Anusha Saxena (`realPerson` entries in
+   portraits for Dr Anubhav Saxena and Dr Anu Saxena (`realPerson` entries in
    `src/demo/roster.ts`), and the team register in `app/about/team.ts` holds supplied founder
    portraits. Synthetic profiles always use typographic monograms, or a credited stock photograph
    registered in `src/demo/portrait-credits.ts`; nothing in this tree generates or substitutes a

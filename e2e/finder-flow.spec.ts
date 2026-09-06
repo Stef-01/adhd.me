@@ -60,7 +60,7 @@ test("a second consulting location is a fact the reader sees, with the distance 
   await intoResults(page, "Hornsby");
 
   // The row shows every place she consults, not only the primary suburb.
-  const anushaRow = page.locator(".clinician-row", { hasText: "Dr Anusha Saxena" });
+  const anushaRow = page.locator(".clinician-row", { hasText: "Dr Anu Saxena" });
   await expect(anushaRow.getByText(/Double Bay & Hornsby/)).toBeVisible();
 
   // From Hornsby (carried by the link), the distance is measured to her Hornsby rooms and SAYS
@@ -215,13 +215,13 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
    * `unhurried` declarer, so somebody always answered some of it and missed the rest. Two things
    * then happened: he left (O179), and M3 carried Dr Anubhav's own appointment-length answer into
    * the `unhurried` facet it also answers (F6). Against today's roster that query splits into
-   * all-four and none-of-four — Dr Anubhav answers everything, Dr Anusha answers nothing — and a
+   * all-four and none-of-four — Dr Anubhav answers everything, Dr Anu answers nothing — and a
    * profile with NO evidence correctly renders "nothing in what you said pointed here
    * specifically" instead of a missed list, because a missed list beside no evidence would be an
    * account of a match that was never claimed.
    *
    * So the rendering under test was never broken; the query stopped exercising it. The property
-   * needs a PARTIAL fit and this query produces one: Dr Anusha answers the assessment and the
+   * needs a PARTIAL fit and this query produces one: Dr Anu answers the assessment and the
    * Hindi, and does not declare titration.
    */
   await box.fill("I want an ADHD assessment with a GP who speaks Hindi and can review my titration");
@@ -352,7 +352,7 @@ test("collective roster coverage is never presented as one doctor's complete fit
   // O237: the verdict sentence is gone from the screen; the list heading carries the honesty.
   await expect(page.locator(".results-list-head h2")).toBeVisible();
 
-  await page.locator(".clinician-row").filter({ hasText: "Dr Anusha Saxena" }).click();
+  await page.locator(".clinician-row").filter({ hasText: "Dr Anu Saxena" }).click();
   const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
   await why.locator("summary").click();
   await expect(why).toContainText("this listing does not show a telehealth first appointment");

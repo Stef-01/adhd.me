@@ -94,8 +94,8 @@ export function finderAnnouncementSentences(): ReadonlyArray<{ key: string; text
   out.push({ key: "results.one", text: resultsAnnouncement({ count: 1, suburb: null, reranked: false }) });
   out.push({ key: "results.place", text: resultsAnnouncement({ count: 7, suburb: "Footscray", reranked: false }) });
   out.push({ key: "results.reranked", text: resultsAnnouncement({ count: 7, suburb: "Footscray", reranked: true }) });
-  out.push({ key: "profile", text: profileAnnouncement("Dr Anusha Saxena") });
-  out.push({ key: "compare", text: compareAnnouncement("Dr Anusha Saxena", "Dr Tom Reilly") });
+  out.push({ key: "profile", text: profileAnnouncement("Dr Anu Saxena") });
+  out.push({ key: "compare", text: compareAnnouncement("Dr Anu Saxena", "Dr Tom Reilly") });
   out.push({ key: "booking", text: bookingAnnouncement("Dr Saxena") });
   return out;
 }

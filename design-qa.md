@@ -176,7 +176,7 @@ final result: passed
 - Rendered implementation: `/Users/devasiathottunkal/Documents/ChatGPT/Vibe/ADHD/design-qa-implementation-mobile-final.png`
 - Normalized side-by-side evidence: `/Users/devasiathottunkal/Documents/ChatGPT/Vibe/ADHD/design-qa-comparison-mobile-final.png`
 - Additional responsive evidence: `/Users/devasiathottunkal/Documents/ChatGPT/Vibe/ADHD/design-qa-implementation-desktop.png`
-- State: Dr Anusha Saxena profile, all optional disclosures closed, booking CTA visible.
+- State: Dr Anu Saxena profile, all optional disclosures closed, booking CTA visible.
 - CSS viewport: 390 × 844 px at device scale factor 1 for the primary comparison; 1280 × 900 px for the desktop check.
 - Source pixels: 852 × 1846. The source was proportionally normalized to 390 × 844 for comparison.
 - Implementation pixels: 390 × 844. No density conversion was required.

@@ -305,7 +305,7 @@ export const clinicians: Clinician[] = [
     image: "/clinicians/anubhav-saxena.png",
     acceptingNewPatients: true,
     // The date each declaration went on the record, from this file's own history — not a survey
-    // answer we never ran. Both Beecroft declarations landed 2026-08-14 (21196bd), Dr Anusha
+    // answer we never ran. Both Beecroft declarations landed 2026-08-14 (21196bd), Dr Anu
     // Saxena's 2026-08-18 (PR #4). Reconfirming moves the date; nothing else does.
     capacityDeclaredAt: "2026-08-14",
     focus: "Structured assessment, baseline physical screening & titration",
@@ -407,8 +407,8 @@ export const clinicians: Clinician[] = [
      * interview left them.
      */
     id: "anusha-saxena",
-    name: "Dr Anusha Saxena",
-    shortName: "Dr Anusha Saxena",
+    name: "Dr Anu Saxena",
+    shortName: "Dr Anu Saxena",
     gender: "woman",
     pronouns: "she/her",
     // Founder consistency pass (2026-08-20): degrees named as supplied — MD (ANU),
@@ -440,11 +440,11 @@ export const clinicians: Clinician[] = [
     // derivation was always supplying that line.
     practicalSignals: ["Billing set by the practice"],
     summary:
-      "Anusha is an experienced GP with a background in psychology, psychiatry and general medicine. She has completed endorsed ADHD prescriber training and values culturally sensitive, holistic care. She speaks English, Hindi and Urdu.",
+      "Anu is an experienced GP with a background in psychology, psychiatry and general medicine. She has completed endorsed ADHD prescriber training and values culturally sensitive, holistic care. She speaks English, Hindi and Urdu.",
     // O88: her official bio, supplied through the founder (2026-08-20), merged with the
     // already-verified detail from O58 — nothing below is authored for her.
     about:
-      "Anusha is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology — a Bachelor of Psychology with First Class Honours at the University of Sydney — then her MD at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network; she holds a Diploma of Child Health. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport — cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
+      "Anu is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology — a Bachelor of Psychology with First Class Honours at the University of Sydney — then her MD at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network; she holds a Diploma of Child Health. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport — cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
     experience: [
       "General practice, Bay Health Clinic, Double Bay",
       "Fellow of the Royal Australian College of General Practitioners",
@@ -488,7 +488,7 @@ export const clinicians: Clinician[] = [
     },
     disclosedInterestLabel: "Declared interest in ADHD.ME",
     disclosedInterest:
-      "Dr Anusha Saxena has a declared interest in ADHD.ME. Disclosed because she appears in a directory run by a company she is connected with, and a reader cannot see the ranking that put her there.",
+      "Dr Anu Saxena has a declared interest in ADHD.ME. Disclosed because she appears in a directory run by a company she is connected with, and a reader cannot see the ranking that put her there.",
     realPerson: true,
   },
 ];

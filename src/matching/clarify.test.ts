@@ -96,7 +96,7 @@ describe("O5 preference clarifiers (F7)", () => {
     // listed, so the question would set up a disappointment that roster cannot answer.
     const beecroft = clinicians.filter((c) => c.suburb === "Beecroft");
     expect(clarifiers("hello", beecroft, 20).map((c) => c.facetKey)).not.toContain("pref:woman-gp");
-    // And the flip side since O34: Dr Anusha Saxena splits the full roster on it, so the
+    // And the flip side since O34: Dr Anu Saxena splits the full roster on it, so the
     // most-stated preference in real directory search is finally askable here.
     expect(clarifiers("hello", clinicians, 20).map((c) => c.facetKey)).toContain("pref:woman-gp");
   });

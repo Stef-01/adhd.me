@@ -142,7 +142,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
  *  329/180/51/98 at O91 (the bare-without rule: the retagged independence ask left the
  *  run, and its four boundary pins joined — the double-negative wants separate, the
  *  assessment-without-reliving ask lands unseparated on a facet everybody declares);
- *  327/179/52/96 at O88 (Dr Anusha's supplied bio declared Hindi, Urdu and her first two
+ *  327/179/52/96 at O88 (Dr Anu's supplied bio declared Hindi, Urdu and her first two
  *  manner facets: Urdu asks that separated one Saxena now band both above Dr Yadav (partial
  *  ties, honestly said), Hindi asks that separated two-of-three now tie the whole roster,
  *  and culturally_attuned asks tie the two declarers. The rate fell 62%→55% because a REAL

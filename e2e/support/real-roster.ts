@@ -1,5 +1,5 @@
 // O226: the example roster ships ON (founder decision `synthetic-roster-tickbox`, amended), so a
-// spec that asserts a REAL-roster ranking law — "Dr Anusha Saxena ranks first for the woman-GP
+// spec that asserts a REAL-roster ranking law — "Dr Anu Saxena ranks first for the woman-GP
 // ask", "the two GPs tie" — switches the examples off at the door, exactly the way a person
 // would: through the settings sheet the header opens. Through the UI, deliberately, so these
 // specs also keep the switch itself honest; a spec that re-navigates after calling this remounts

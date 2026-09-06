@@ -108,7 +108,7 @@ test("the query that failed in production now reads both halves (O13)", async ({
 test("a psychographic ask ranks, explains, and shows its provenance on screen (O30)", async ({ page }) => {
   // Values-level language on both sides of the roster's manner split: plain-language reaches
   // sense_making (Dr Anubhav declares it), faith-in-the-room reaches culturally_attuned
-  // (Dr Anusha declares it). Both rows must carry their reason, and the profile must quote
+  // (Dr Anu declares it). Both rows must carry their reason, and the profile must quote
   // the provenance — the O21 "from your words" line — for a phrase added in O30.
   await searchFor(page, "explain things in plain language and someone who respects my faith");
   const rows = page.locator(".clinician-row");
@@ -144,20 +144,20 @@ test("a triple ask — language, psychographic, care — reads all three familie
   await page.screenshot({ path: "qa/_runs/matching-o30/04-triple-ask-language-psychographic-care.png", fullPage: true });
 });
 
-test("the woman-GP ask the roster could never answer now ranks Dr Anusha Saxena first (O34)", async ({ page }) => {
+test("the woman-GP ask the roster could never answer now ranks Dr Anu Saxena first (O34)", async ({ page }) => {
   // The founder's instruction, verified in pixels: she is live, she is first on the ask that
   // motivated listing her, the reason is printed, and — since O82 — her portrait renders (the
   // founder supplied it on her behalf; the monogram era ended with the real thing, never a
   // generated one).
   await searchFor(page, "I would prefer a woman doctor for an ADHD assessment");
-  await expect(page.locator(".clinician-row strong").first()).toHaveText(/Anusha/);
+  await expect(page.locator(".clinician-row strong").first()).toHaveText(/Anu Saxena/);
   await expect(page.getByText(/not a ranking|everyone we list/)).toHaveCount(0);
   await expect(
     page.locator(".clinician-row").first().locator(`img[src*="anusha-saxena"]`),
   ).toBeVisible();
   await page.screenshot({ path: "qa/_runs/matching-o34/01-woman-gp-ranked-first.png", fullPage: true });
   await page.locator(".clinician-row").first().click();
-  await expect(page.getByText("Dr Anusha Saxena").first()).toBeVisible();
+  await expect(page.getByText("Dr Anu Saxena").first()).toBeVisible();
   await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
   await expect(page.getByText(/from your words/i).first()).toBeVisible();
   await expect(page.locator(`.profile-screen img[src*="anusha-saxena"], img[src*="anusha-saxena"]`).first()).toBeVisible();

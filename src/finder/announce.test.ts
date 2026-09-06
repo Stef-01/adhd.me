@@ -64,8 +64,8 @@ describe("U9 each line says the one fact the heading does not", () => {
   });
 
   it("names the person on the profile, both on the comparison, and the language on a restart", () => {
-    expect(profileAnnouncement("Dr Anusha Saxena")).toBe("Profile: Dr Anusha Saxena.");
-    expect(compareAnnouncement("Dr Anusha Saxena", "Dr Tom Reilly")).toBe("Comparing Dr Anusha Saxena and Dr Tom Reilly.");
+    expect(profileAnnouncement("Dr Anu Saxena")).toBe("Profile: Dr Anu Saxena.");
+    expect(compareAnnouncement("Dr Anu Saxena", "Dr Tom Reilly")).toBe("Comparing Dr Anu Saxena and Dr Tom Reilly.");
     expect(bookingAnnouncement("Dr Saxena")).toBe("Booking Dr Saxena.");
     expect(listeningAgainIn("Vietnamese")).toBe("Listening again in Vietnamese.");
   });

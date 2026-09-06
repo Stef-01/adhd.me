@@ -44,7 +44,7 @@ polish the existing shell, question it.
       (listening driven through `e2e/support/fake-speech.ts`, compare reached on the tied
       woman-GP pair): the listening screen reads clean — transcript streaming in, one control,
       "Tap when you've finished", the way to type — and compare had one finding, its two heads:
-      the current GP a plain label, the other an underlined button wrapping "Dr Anusha Saxena"
+      the current GP a plain label, the other an underlined button wrapping "Dr Anu Saxena"
       across two lines, so a symmetric table opened on an asymmetric pair. The link keeps its
       role and its 44px floor and loses the underline for a trailing mark; both names balance.
       Every stage of the finder has now been looked at cold at 390. Still open only in the sense
@@ -287,5 +287,5 @@ polish the existing shell, question it.
   point.
 - Adding production credentials, live SMS, symptom-based triage, testimonials, or ratings —
   PRODUCT.md rules these out explicitly.
-- Generating a face for any real person (Dr Saxena, Dr Anusha Saxena, the founders). Synthetic
+- Generating a face for any real person (Dr Saxena, Dr Anu Saxena, the founders). Synthetic
   profiles stay typographic monograms.
