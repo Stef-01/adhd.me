@@ -41,10 +41,10 @@ export default function PracticesPage() {
           {/* The three anchors carried their own `hidden sm:inline` from when this nav was always
               rendered. The nav itself is `hidden sm:block` now, so those were a second copy of the
               same breakpoint — and a second copy is what drifts. */}
-          <a href="#practice-story" className="hover:text-stone-900">{C.nav.story}</a>
-          <a href="#how" className="hover:text-stone-900">{C.nav.product}</a>
-          <a href="#measurement" className="hover:text-stone-900">{C.nav.measurement}</a>
-          <Link href="/console/signin" className="font-medium text-stone-900 hover:underline">
+          <a href="#practice-story" className="t-tint hover:text-stone-900">{C.nav.story}</a>
+          <a href="#how" className="t-tint hover:text-stone-900">{C.nav.product}</a>
+          <a href="#measurement" className="t-tint hover:text-stone-900">{C.nav.measurement}</a>
+          <Link href="/console/signin" className="t-tint font-medium text-stone-900 hover:underline">
             {C.nav.cta}
           </Link>
         </div>
@@ -56,10 +56,10 @@ export default function PracticesPage() {
           <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">{C.hero.heading}</h1>
           <p className="mt-5 max-w-2xl text-lg text-stone-600">{C.hero.sub}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/demo" className="rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
+            <Link href="/demo" className="t-tint rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
               {C.hero.primaryCta}
             </Link>
-            <Link href="/console/signin" className="rounded-lg border border-stone-300 px-6 py-3 font-medium text-stone-800 hover:border-stone-500">
+            <Link href="/console/signin" className="t-tint rounded-lg border border-stone-300 px-6 py-3 font-medium text-stone-800 hover:border-stone-500">
               {C.hero.secondaryCta}
             </Link>
           </div>
@@ -149,11 +149,11 @@ export default function PracticesPage() {
 
             <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
               {C.practiceStory.evidenceNote}{" "}
-              <a className="underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/fampra/cmu028">
+              <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/fampra/cmu028">
                 Gibson-Helm et al.
               </a>{" "}
               and{" "}
-              <a className="underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/humrep/deab101">
+              <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/humrep/deab101">
                 Fernandez et al.
               </a>
             </p>
@@ -171,11 +171,11 @@ export default function PracticesPage() {
               <p className="mt-4 text-sm font-medium text-stone-800">{C.practiceStory.pathwayNote}</p>
               <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
                 Current pathways:{" "}
-                <a className="underline underline-offset-2 hover:text-stone-900" href="https://www.racgp.org.au/FSDEDEV/media/documents/Faculties/SI/2026-RACGP-Specific-Interests-groups.pdf">
+                <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://www.racgp.org.au/FSDEDEV/media/documents/Faculties/SI/2026-RACGP-Specific-Interests-groups.pdf">
                   RACGP Specific Interests 2026
                 </a>{" "}
                 and{" "}
-                <a className="underline underline-offset-2 hover:text-stone-900" href="https://mycollege.acrrm.org.au/search?clive=acrrm~ds-events-public&collection=acrrm~sp-search-public&query=polycystic%20ovarian%20syndrome">
+                <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://mycollege.acrrm.org.au/search?clive=acrrm~ds-events-public&collection=acrrm~sp-search-public&query=polycystic%20ovarian%20syndrome">
                   ACRRM learning search
                 </a>.
               </p>
@@ -217,7 +217,7 @@ export default function PracticesPage() {
         <section className="border-t border-stone-100 py-20">
           <h2 className="text-2xl font-semibold tracking-tight">{C.cta.heading}</h2>
           <p className="mt-3 max-w-xl text-stone-600">{C.cta.body}</p>
-          <Link href="/demo" className="mt-6 inline-block rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
+          <Link href="/demo" className="t-tint mt-6 inline-block rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
             {C.cta.button}
           </Link>
         </section>

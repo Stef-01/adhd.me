@@ -9687,6 +9687,30 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   .t-shimmer::before { animation: none !important; content: none; }
 }
 
+/* ── Tint — a hover/focus colour change that eases instead of jumping. 2026-09-06.
+   FOUND BY AUDITING MOTION RESTRAINT ON THE FIVE PUBLIC PAGES, where the finding was the
+   opposite of the one the item expected: `/faq`, `/examples`, `/clinicians` and `/about` have
+   no hover state and no `transition-*` at all between them (the only `motion/react` call site
+   on the five is `about/team-plates.tsx`, gated), and `/practices` carries every hover state
+   the set has — eleven of them, including both `/demo` buttons and the console sign-in — with
+   no transition on any. So the practice-facing landing page's primary control snapped from
+   `stone-900` to `stone-700` while the same shape on the story page and throughout the console
+   eases on `--dur-tap`. Not decoration: a control that changes instantly has told you nothing
+   about whether it is the thing under your pointer.
+   Colour, background and border only — no transform, because a B2B landing page's links are
+   not objects that move, and `--dur-tap` because this is a control acknowledging a pointer.
+   NO REDUCED-MOTION GUARD, deliberately: nothing here moves. A crossfade between two greys is
+   not vestibular, and `prefers-reduced-motion` overriding it would leave a reduce user with the
+   snap this rule exists to remove. Every guard in this block above covers a transform, a
+   filter or a looping animation, which is the line. */
+.t-tint {
+  transition:
+    color var(--dur-tap) var(--ease-ui),
+    background-color var(--dur-tap) var(--ease-ui),
+    border-color var(--dur-tap) var(--ease-ui),
+    text-decoration-color var(--dur-tap) var(--ease-ui);
+}
+
 /* ===========================================================================
    16. RADIANT — the founder's redesign, results screen (2026-09-06)
    An override layer at the end of the file, where the cascade lets it win without moving a
