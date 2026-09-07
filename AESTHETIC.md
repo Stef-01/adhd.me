@@ -1,5 +1,7 @@
 # Aesthetic refinement
 
+> **New redesign brief, 2026-09-06:** the user requested a substantially more polished platform using six supplied references, with learning led by reference 5 and a complete desktop layout led by reference 6. See the [platform redesign plan and specification](docs/design/2026-platform/PLAN.md) and [latest-app evidence](docs/design/2026-platform/AUDIT.md). The entries below record the preceding refinement work; their completed status does not establish acceptance of the new brief. Implementation of the new plan has not started.
+
 A working list, not a register. The prior design ethos (from the deleted `DESIGN.md` /
 `DESIGN-QA.md`, visible in commit history like O246 "the listening screen reads from the top and
 keeps its control near the thumb" and O247 "delete before you shrink") was minimalism earned by

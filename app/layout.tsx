@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./styles/platform.css";
+import "./styles/learning.css";
+import "./styles/finder.css";
+import "./styles/platform-surfaces.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
@@ -83,14 +87,14 @@ const ORGANIZATION_JSONLD = {
  */
 const DESIGN_DIRECTION = {
   thesis:
-    "A daylight wayfinding instrument that turns a person's words into an inspectable route; it refuses the cream editorial health-page and generic card-dashboard defaults.",
+    "A bright, responsive platform for finding care and understanding ADHD, with clear labelled navigation and approachable illustrated learning.",
   world:
-    "Cool porcelain, navigation ink and periwinkle route fields, with orange reserved for the next consequential action; route lines, stops and open bands replace ornamental cards.",
+    "White surfaces, a cool grey canvas, cobalt blue controls and a warm geometric character cast for learning.",
   story:
     "A visitor understands the GP finder, sees how their words affect the order, and can move from search to a booking handoff without losing context.",
   firstViewport:
-    "A crisp navigation bar opens into a cobalt route field: the claim and primary action lead on the left, while a live coverage instrument and three finder stops prove the mechanism.",
-  form: "Daylight departures board / route-finding system; grounded candidate 4; seed f009e50c.",
+    "A full-width desktop header opens into a generous search workspace, with a focused reading layout and illustrated module library on Learn.",
+  form: "Reference-led platform redesign; specifications in docs/design/2026-platform/PLAN.md.",
   finish:
     "unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance",
 } as const;

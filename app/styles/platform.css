@@ -1,0 +1,110 @@
+/* 2026 platform: shared geometry, navigation and patient surfaces. */
+body:has(.platform-shell) {
+  --paper: #f7f9fc;
+  --surface: #fff;
+  --surface-raised: #fff;
+  --ink: #182230;
+  --muted: #586579;
+  --faint: #586579;
+  --accent: #155eef;
+  --accent-deep: #1249b8;
+  --accent-soft: #edf3ff;
+  --accent-mid: #155eef;
+  --accent-tint: #dbe7ff;
+  --on-accent: #fff;
+  --route: #155eef;
+  --line: #e4e8ef;
+  --stone: #eef2f8;
+  --shell-w: 1440px;
+  --shell-gutter: clamp(20px, 4vw, 64px);
+  background: var(--paper);
+  color: var(--ink);
+  padding-bottom: var(--consent-height, 0px);
+}
+html:has(.platform-shell) { scroll-padding-bottom: calc(var(--consent-height, 0px) + 88px); }
+body:has(.platform-shell) .consent-bar {
+  position: fixed; inset: auto 0 0; width: 100%; max-width: none; margin: 0; transform: none;
+  border: 0; border-top: 1px solid #b3bed0; border-radius: 0; padding: 16px 24px calc(16px + env(safe-area-inset-bottom));
+  background: #fff; color: #182230; box-shadow: 0 -4px 24px #18223008;
+}
+body:has(.platform-shell) .consent-bar > p { color: #586579; }
+body:has(.platform-shell) .consent-agree { background: #155eef; color: #fff; border-radius: 10px; }
+body:has(.platform-shell) .consent-read { color: #182230; border-color: #aab7c9; border-radius: 10px; }
+body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outline: 3px solid #155eef; outline-offset: 3px; }
+.platform-shell { min-height: 100svh; background: var(--paper); }
+.platform-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  min-height: 80px; padding: 12px max(24px, calc((100vw - 1440px) / 2));
+  border-bottom: 1px solid var(--line); background: #fff;
+}
+.platform-brand { display: inline-flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 800; letter-spacing: -.06em; color: var(--ink); text-decoration: none; }
+.platform-brand svg { width: 40px; height: 40px; color: var(--accent); }
+.platform-help { display: inline-flex; gap: 16px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.platform-utilities { display: flex; align-items: center; gap: 24px; }
+.platform-shell .app-tabs {
+  position: static; display: block; width: auto; max-width: none; transform: none;
+  margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none;
+  background: transparent; backdrop-filter: none; z-index: 20;
+}
+.platform-shell .app-tabs-list { display: flex; gap: 8px; padding: 0; }
+.platform-shell .app-tabs-item { flex: 1; list-style: none; }
+.platform-shell .app-tab { position: relative; text-decoration: none; }
+.platform-shell .app-tab-glyph { display: inline-flex; }
+.platform-shell .app-tab { min-height: 48px; padding: 12px 24px; display: flex; flex-direction: row; gap: 10px; border-radius: 12px; color: var(--muted); }
+.platform-shell .app-tab.is-current { background: #edf3ff; color: var(--accent); }
+.platform-shell .app-tab-label { font-size: 14px; font-weight: 700; }
+.platform-shell .app-tab-marker { display: none; }
+.platform-shell .care-app.patient-v2 { min-height: auto; display: block; padding: 0; background: var(--paper); }
+.platform-shell .patient-v2 .care-shell,
+.platform-shell .me-screen,
+.platform-shell .me-screen.learn-screen:has(.learn-module-bar) {
+  width: 100%; max-width: 1440px; min-height: calc(100svh - 80px); margin: 0 auto;
+  padding: 0 var(--shell-gutter) 48px; border: 0; border-radius: 0;
+  box-shadow: none; overflow: visible; background: var(--paper);
+}
+.platform-shell .patient-v2 .screen { width: 100%; min-width: 0; min-height: auto; padding: 0 0 40px; }
+.platform-shell .patient-v2 .screen:not(.results-screen) { padding-inline: 0; max-width: 880px; margin-inline: auto; }
+.platform-shell .minimal-header { min-height: 64px; padding: 12px 0; border: 0; background: transparent; }
+.platform-shell .minimal-header::after { display: none; }
+.platform-shell .minimal-header.has-settings { display: none; }
+.platform-shell .me-screen { padding-top: 40px; }
+.platform-shell .minimal-header .wordmark { display: none; }
+.platform-shell .settings-trigger { background: #fff; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); width: 44px; height: 44px; }
+.platform-shell main h1,
+.platform-shell .voice-prompt h1 { font-family: inherit; font-size: clamp(30px, 3.3vw, 44px); font-weight: 750; letter-spacing: -.045em; line-height: 1.16; }
+.platform-shell h1 em { font-family: inherit; font-style: normal; color: var(--accent); }
+.platform-shell .voice-screen .voice-core { margin: 64px auto 28px; width: 100%; }
+.platform-shell .voice-prompt h1 { max-width: 620px; margin-inline: auto; text-align: center; }
+.platform-shell .voice-actions { width: 100%; max-width: 760px; margin-inline: auto; padding-bottom: 0; }
+.platform-shell .dual-input { border: 1px solid #acb8cb; border-radius: 20px; background: white; box-shadow: 0 8px 32px #18223008; }
+.platform-shell .dual-input textarea { font-size: 17px; line-height: 1.6; min-height: 150px; background: transparent; color: var(--ink); }
+.platform-shell .patient-v2 .voice-actions .dual-input { background: #fff; border-color: #acb8cb; box-shadow: 0 8px 32px #18223008; }
+.platform-shell .patient-v2 .voice-actions .dual-input-field { font-family: inherit; font-size: 17px; background: #fff; border-color: #acb8cb; }
+.platform-shell .voice-screen .finder-context { margin: 24px auto 56px; padding: 0; max-width: 640px; }
+.platform-shell .patient-v2 .clinician-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.platform-shell .clinician-card { border: 1px solid var(--line); border-radius: 16px; background: white; box-shadow: 0 2px 8px #18223003; }
+.platform-shell .results-summary-words { border-radius: 16px; background: white; }
+.platform-shell .me-sticky { position: static; background: transparent; padding-top: 12px; }
+.platform-shell .me-head-title { margin-bottom: 24px; }
+.platform-shell .me-screen:not(.learn-screen) { max-width: 1120px; }
+body:has(.platform-shell) .aoc-band { padding: 24px max(24px, calc((100vw - 1280px) / 2)); min-height: 0; background: #eef2f8; color: #586579; }
+body:has(.platform-shell) .aoc-band svg { display: none; }
+body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-height: 1.6; color: #586579; }
+.platform-shell :is(button, a, input, textarea):focus-visible { outline: 3px solid #155eef; outline-offset: 4px; }
+@media (max-width: 767px) {
+  .platform-header { min-height: 68px; padding: 12px 20px; gap: 16px; }
+  .platform-brand { font-size: 19px; }
+  .platform-brand svg { width: 34px; height: 34px; }
+  .platform-help { font-size: 12px; gap: 6px; }
+  .platform-utilities { gap: 12px; }
+  .platform-help span { display: none; }
+  .platform-shell { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .platform-shell .app-tabs { position: fixed; inset: auto 0 var(--consent-height, 0px); width: 100%; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid var(--line); }
+  .platform-shell .app-tabs-list { gap: 4px; }
+  .platform-shell .app-tab { flex-direction: column; gap: 4px; padding: 8px 16px; min-height: 58px; }
+  .platform-shell .app-tab-label { font-size: 12px; }
+  .platform-shell .patient-v2 .care-shell, .platform-shell .me-screen { min-height: calc(100svh - 144px); }
+  .platform-shell .voice-screen .voice-core { margin-top: 36px; }
+  .platform-shell .patient-v2 .clinician-list { grid-template-columns: minmax(0, 1fr); }
+  body:has(.platform-shell) .aoc-band { padding-bottom: 100px; }
+}

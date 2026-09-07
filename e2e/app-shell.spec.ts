@@ -81,12 +81,11 @@ test("every tab clears the touch floor and the bar clears the safe area", async 
   expect(lastControl!.y + lastControl!.height).toBeLessThanOrEqual(barBox!.y + 1);
 });
 
-test("the bar gets out of the way inside a task", async ({ page }) => {
+test("desktop navigation stays available inside a finder task", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
   await page.getByRole("button", { name: "Try an example search" }).click();
-  // A native push hides the tab bar; so does this one, and the way back is the screen's own.
-  await expect(page.getByRole("navigation", { name: "Sections" })).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
 });
 
 test("O233: the bar holds destinations, and what is consulted once lives in settings", async ({ page }) => {
@@ -373,7 +372,7 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Short reads and quick quizzes/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {
@@ -389,6 +388,8 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await expect(page.locator(".learn-score")).toContainText(/\d of 6/);
   await expect(page.locator(".learn-score")).toContainText("never about you");
   await page.getByRole("button", { name: "Finish", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Continue Myth or fact?", exact: true })).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem("adhdme.learn.cursor.v1"))).toBeNull();
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
   // Remembered on this device.
   await page.reload();

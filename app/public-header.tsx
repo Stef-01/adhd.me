@@ -17,7 +17,7 @@ export function PublicHeader({
   rightLabel?: string;
 } = {}) {
   return (
-    <header className="site-nav">
+    <header className="site-nav platform-public-nav">
       <div className="site-nav-inner">
         <Link href="/" className="site-nav-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
         <nav className="site-nav-links" aria-label="Primary navigation">

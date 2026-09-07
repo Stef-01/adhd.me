@@ -47,7 +47,10 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
   // itself the count is on the page, and it lands here on the next navigation.
   const [filtersOn, setFiltersOn] = useState<number | null>(null);
   useEffect(() => {
-    const read = () => setFiltersOn(activeFilterCount(readFilters(window.localStorage)));
+    const read = () => {
+      try { setFiltersOn(activeFilterCount(readFilters(window.localStorage))); }
+      catch { setFiltersOn(0); }
+    };
     read();
     window.addEventListener("focus", read);
     window.addEventListener("storage", read);

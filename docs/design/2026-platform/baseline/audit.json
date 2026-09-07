@@ -1,0 +1,882 @@
+[
+  {
+    "name": "home-1440-first-visit",
+    "url": "http://127.0.0.1:3116/",
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": {
+        "width": 1440,
+        "height": 1184
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 901.96875,
+            "top": 0,
+            "right": 1440,
+            "bottom": 901.96875,
+            "left": 0
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 1440,
+          "scrollWidth": 1440
+        },
+        ".care-shell": {
+          "rect": {
+            "x": 200,
+            "y": 34.546875,
+            "width": 1040,
+            "height": 832.875,
+            "top": 34.546875,
+            "right": 1240,
+            "bottom": 867.421875,
+            "left": 200
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "clip",
+          "clientWidth": 1038,
+          "scrollWidth": 1040
+        },
+        ".minimal-header": {
+          "rect": {
+            "x": 290,
+            "y": 35.546875,
+            "width": 862,
+            "height": 84,
+            "top": 35.546875,
+            "right": 1152,
+            "bottom": 119.546875,
+            "left": 290
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 862,
+          "scrollWidth": 862
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 556.125,
+            "y": 781.453125,
+            "width": 327.75,
+            "height": 58,
+            "top": 781.453125,
+            "right": 883.875,
+            "bottom": 839.453125,
+            "left": 556.125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 326,
+          "scrollWidth": 326
+        },
+        ".consent-bar": {
+          "rect": {
+            "x": 212,
+            "y": 695.453125,
+            "width": 1016,
+            "height": 74,
+            "top": 695.453125,
+            "right": 1228,
+            "bottom": 769.453125,
+            "left": 212
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 1014,
+          "scrollWidth": 1014
+        },
+        ".learn-module": null,
+        ".learn-card.is-current": null,
+        ".learn-card-heading": null,
+        ".learn-card-body": null,
+        ".learn-controls": null
+      }
+    }
+  },
+  {
+    "name": "learn-library-1440",
+    "url": "http://127.0.0.1:3116/approach",
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": {
+        "width": 1440,
+        "height": 1418
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 200,
+            "y": 34.546875,
+            "width": 1040,
+            "height": 1066.53125,
+            "top": 34.546875,
+            "right": 1240,
+            "bottom": 1101.078125,
+            "left": 200
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "clip",
+          "clientWidth": 1038,
+          "scrollWidth": 1038
+        },
+        ".care-shell": null,
+        ".minimal-header": {
+          "rect": {
+            "x": 201,
+            "y": 35.546875,
+            "width": 1038,
+            "height": 74,
+            "top": 35.546875,
+            "right": 1239,
+            "bottom": 109.546875,
+            "left": 201
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 1038,
+          "scrollWidth": 1038
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 556.125,
+            "y": 781.453125,
+            "width": 327.75,
+            "height": 58,
+            "top": 781.453125,
+            "right": 883.875,
+            "bottom": 839.453125,
+            "left": 556.125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 326,
+          "scrollWidth": 326
+        },
+        ".consent-bar": null,
+        ".learn-module": null,
+        ".learn-card.is-current": null,
+        ".learn-card-heading": null,
+        ".learn-card-body": null,
+        ".learn-controls": null
+      }
+    }
+  },
+  {
+    "name": "learn-lesson-1440",
+    "url": "http://127.0.0.1:3116/approach",
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": {
+        "width": 1440,
+        "height": 1242
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 330,
+            "y": 34.546875,
+            "width": 780,
+            "height": 890.53125,
+            "top": 34.546875,
+            "right": 1110,
+            "bottom": 925.078125,
+            "left": 330
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "clip",
+          "clientWidth": 778,
+          "scrollWidth": 778
+        },
+        ".care-shell": null,
+        ".minimal-header": {
+          "rect": {
+            "x": 331,
+            "y": 35.546875,
+            "width": 778,
+            "height": 74,
+            "top": 35.546875,
+            "right": 1109,
+            "bottom": 109.546875,
+            "left": 331
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 778,
+          "scrollWidth": 778
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 556.125,
+            "y": 781.453125,
+            "width": 327.75,
+            "height": 58,
+            "top": 781.453125,
+            "right": 883.875,
+            "bottom": 839.453125,
+            "left": 556.125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 326,
+          "scrollWidth": 326
+        },
+        ".consent-bar": null,
+        ".learn-module": {
+          "rect": {
+            "x": 371,
+            "y": 144.9375,
+            "width": 698,
+            "height": 632.59375,
+            "top": 144.9375,
+            "right": 1069,
+            "bottom": 777.53125,
+            "left": 371
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 698,
+          "scrollWidth": 698
+        },
+        ".learn-card.is-current": {
+          "rect": {
+            "x": 371,
+            "y": 257.53125,
+            "width": 698,
+            "height": 448,
+            "top": 257.53125,
+            "right": 1069,
+            "bottom": 705.53125,
+            "left": 371
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "hidden",
+          "clientWidth": 698,
+          "scrollWidth": 698
+        },
+        ".learn-card-heading": {
+          "rect": {
+            "x": 443.46875,
+            "y": 394.53125,
+            "width": 188.125,
+            "height": 160,
+            "top": 394.53125,
+            "right": 631.59375,
+            "bottom": 554.53125,
+            "left": 443.46875
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 188,
+          "scrollWidth": 188
+        },
+        ".learn-card-body": {
+          "rect": {
+            "x": 643.59375,
+            "y": 369.9375,
+            "width": 278.140625,
+            "height": 223.171875,
+            "top": 369.9375,
+            "right": 921.734375,
+            "bottom": 593.109375,
+            "left": 643.59375
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 278,
+          "scrollWidth": 278
+        },
+        ".learn-controls": {
+          "rect": {
+            "x": 371,
+            "y": 723.53125,
+            "width": 698,
+            "height": 54,
+            "top": 723.53125,
+            "right": 1069,
+            "bottom": 777.53125,
+            "left": 371
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 698,
+          "scrollWidth": 698
+        }
+      }
+    }
+  },
+  {
+    "name": "learn-quiz-1440",
+    "url": "http://127.0.0.1:3116/approach",
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": {
+        "width": 1440,
+        "height": 1182
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 330,
+            "y": 34.546875,
+            "width": 780,
+            "height": 830.875,
+            "top": 34.546875,
+            "right": 1110,
+            "bottom": 865.421875,
+            "left": 330
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "clip",
+          "clientWidth": 778,
+          "scrollWidth": 778
+        },
+        ".care-shell": null,
+        ".minimal-header": {
+          "rect": {
+            "x": 331,
+            "y": 35.546875,
+            "width": 778,
+            "height": 74,
+            "top": 35.546875,
+            "right": 1109,
+            "bottom": 109.546875,
+            "left": 331
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 778,
+          "scrollWidth": 778
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 556.125,
+            "y": 781.453125,
+            "width": 327.75,
+            "height": 58,
+            "top": 781.453125,
+            "right": 883.875,
+            "bottom": 839.453125,
+            "left": 556.125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 326,
+          "scrollWidth": 326
+        },
+        ".consent-bar": null,
+        ".learn-module": {
+          "rect": {
+            "x": 371,
+            "y": 144.9375,
+            "width": 698,
+            "height": 348.59375,
+            "top": 144.9375,
+            "right": 1069,
+            "bottom": 493.53125,
+            "left": 371
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 698,
+          "scrollWidth": 698
+        },
+        ".learn-card.is-current": {
+          "rect": {
+            "x": 371,
+            "y": 257.53125,
+            "width": 698,
+            "height": 164,
+            "top": 257.53125,
+            "right": 1069,
+            "bottom": 421.53125,
+            "left": 371
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "hidden",
+          "clientWidth": 698,
+          "scrollWidth": 698
+        },
+        ".learn-card-heading": {
+          "rect": {
+            "x": 511.8125,
+            "y": 292.53125,
+            "width": 412.40625,
+            "height": 80,
+            "top": 292.53125,
+            "right": 924.21875,
+            "bottom": 372.53125,
+            "left": 511.8125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 412,
+          "scrollWidth": 412
+        },
+        ".learn-card-body": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        ".learn-controls": {
+          "rect": {
+            "x": 371,
+            "y": 439.53125,
+            "width": 698,
+            "height": 54,
+            "top": 439.53125,
+            "right": 1069,
+            "bottom": 493.53125,
+            "left": 371
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 698,
+          "scrollWidth": 698
+        }
+      }
+    }
+  },
+  {
+    "name": "profile-1440",
+    "url": "http://127.0.0.1:3116/profile",
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": {
+        "width": 1440,
+        "height": 1990
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 200,
+            "y": 34.546875,
+            "width": 1040,
+            "height": 1639.078125,
+            "top": 34.546875,
+            "right": 1240,
+            "bottom": 1673.625,
+            "left": 200
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "clip",
+          "clientWidth": 1038,
+          "scrollWidth": 1038
+        },
+        ".care-shell": null,
+        ".minimal-header": {
+          "rect": {
+            "x": 201,
+            "y": 35.546875,
+            "width": 1038,
+            "height": 74,
+            "top": 35.546875,
+            "right": 1239,
+            "bottom": 109.546875,
+            "left": 201
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 1038,
+          "scrollWidth": 1038
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 556.125,
+            "y": 781.453125,
+            "width": 327.75,
+            "height": 58,
+            "top": 781.453125,
+            "right": 883.875,
+            "bottom": 839.453125,
+            "left": 556.125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 326,
+          "scrollWidth": 326
+        },
+        ".consent-bar": null,
+        ".learn-module": null,
+        ".learn-card.is-current": null,
+        ".learn-card-heading": null,
+        ".learn-card-body": null,
+        ".learn-controls": null
+      }
+    }
+  },
+  {
+    "name": "results-1280-720",
+    "url": "http://127.0.0.1:3116/",
+    "geometry": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "page": {
+        "width": 1280,
+        "height": 1654
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 1375.59375,
+            "top": 0,
+            "right": 1280,
+            "bottom": 1375.59375,
+            "left": 0
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 1280,
+          "scrollWidth": 1280
+        },
+        ".care-shell": {
+          "rect": {
+            "x": 120,
+            "y": 30.71875,
+            "width": 1040,
+            "height": 1314.15625,
+            "top": 30.71875,
+            "right": 1160,
+            "bottom": 1344.875,
+            "left": 120
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "clip",
+          "clientWidth": 1038,
+          "scrollWidth": 1040
+        },
+        ".minimal-header": {
+          "rect": {
+            "x": 121,
+            "y": 31.71875,
+            "width": 1040,
+            "height": 76,
+            "top": 31.71875,
+            "right": 1161,
+            "bottom": 107.71875,
+            "left": 121
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 1040,
+          "scrollWidth": 1040
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 476.125,
+            "y": 605.28125,
+            "width": 327.75,
+            "height": 58,
+            "top": 605.28125,
+            "right": 803.875,
+            "bottom": 663.28125,
+            "left": 476.125
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 326,
+          "scrollWidth": 326
+        },
+        ".consent-bar": null,
+        ".learn-module": null,
+        ".learn-card.is-current": null,
+        ".learn-card-heading": null,
+        ".learn-card-body": null,
+        ".learn-controls": null
+      }
+    }
+  },
+  {
+    "name": "learn-library-390",
+    "url": "http://127.0.0.1:3116/approach",
+    "geometry": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": {
+        "width": 390,
+        "height": 1679
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 1425.109375,
+            "top": 0,
+            "right": 390,
+            "bottom": 1425.109375,
+            "left": 0
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        ".care-shell": null,
+        ".minimal-header": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 74,
+            "top": 0,
+            "right": 390,
+            "bottom": 74,
+            "left": 0
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 0,
+            "y": 788.90625,
+            "width": 390,
+            "height": 55.09375,
+            "top": 788.90625,
+            "right": 390,
+            "bottom": 844,
+            "left": 0
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        ".consent-bar": null,
+        ".learn-module": null,
+        ".learn-card.is-current": null,
+        ".learn-card-heading": null,
+        ".learn-card-body": null,
+        ".learn-controls": null
+      }
+    }
+  },
+  {
+    "name": "learn-lesson-390",
+    "url": "http://127.0.0.1:3116/approach",
+    "geometry": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": {
+        "width": 390,
+        "height": 1473
+      },
+      "elements": {
+        "main": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 1219.265625,
+            "top": 0,
+            "right": 390,
+            "bottom": 1219.265625,
+            "left": 0
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        ".care-shell": null,
+        ".minimal-header": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 74,
+            "top": 0,
+            "right": 390,
+            "bottom": 74,
+            "left": 0
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        ".app-tabs": {
+          "rect": {
+            "x": 0,
+            "y": 788.90625,
+            "width": 390,
+            "height": 55.09375,
+            "top": 788.90625,
+            "right": 390,
+            "bottom": 844,
+            "left": 0
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        ".consent-bar": null,
+        ".learn-module": {
+          "rect": {
+            "x": 22,
+            "y": 126.78125,
+            "width": 346,
+            "height": 1092.484375,
+            "top": 126.78125,
+            "right": 368,
+            "bottom": 1219.265625,
+            "left": 22
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 346,
+          "scrollWidth": 346
+        },
+        ".learn-card.is-current": {
+          "rect": {
+            "x": 22,
+            "y": 239.375,
+            "width": 346,
+            "height": 907.890625,
+            "top": 239.375,
+            "right": 368,
+            "bottom": 1147.265625,
+            "left": 22
+          },
+          "display": "flex",
+          "flexDirection": "row",
+          "overflow": "hidden",
+          "clientWidth": 346,
+          "scrollWidth": 474
+        },
+        ".learn-card-heading": {
+          "rect": {
+            "x": 94.46875,
+            "y": 620.03125,
+            "width": 155.90625,
+            "height": 132.5625,
+            "top": 620.03125,
+            "right": 250.375,
+            "bottom": 752.59375,
+            "left": 94.46875
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 156,
+          "scrollWidth": 156
+        },
+        ".learn-card-body": {
+          "rect": {
+            "x": 262.375,
+            "y": 259.375,
+            "width": 86.15625,
+            "height": 867.890625,
+            "top": 259.375,
+            "right": 348.53125,
+            "bottom": 1127.265625,
+            "left": 262.375
+          },
+          "display": "block",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 86,
+          "scrollWidth": 86
+        },
+        ".learn-controls": {
+          "rect": {
+            "x": 22,
+            "y": 1165.265625,
+            "width": 346,
+            "height": 54,
+            "top": 1165.265625,
+            "right": 368,
+            "bottom": 1219.265625,
+            "left": 22
+          },
+          "display": "grid",
+          "flexDirection": "row",
+          "overflow": "visible",
+          "clientWidth": 346,
+          "scrollWidth": 346
+        }
+      }
+    }
+  }
+]
