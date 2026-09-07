@@ -4,6 +4,7 @@
 // orchestrator; this renders them.
 
 import { ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { AppSettings } from "../app-settings";
@@ -155,6 +156,18 @@ export function WelcomeStage({
       </motion.div>
 
       <FinderContext />
+
+      <aside className="finder-getting-started" aria-label="Getting started">
+        <p className="learning-overline">YOUR NEXT STEP, MADE CLEARER</p>
+        <h2>A GP search that starts with you.</h2>
+        <p>Tell us what matters. Explore the listed doctors, then check the details with the practice.</p>
+        <ol>
+          <li><span>1</span><div><strong>Use your own words</strong><p>Location, language, appointment style — start with what you need.</p></div></li>
+          <li><span>2</span><div><strong>See why a GP appears</strong><p>Read the profile and the reasons behind your results.</p></div></li>
+          <li><span>3</span><div><strong>Choose your next step</strong><p>Check current availability with the booking destination.</p></div></li>
+        </ol>
+        <Link href="/approach">New to ADHD? Explore the learning modules <ArrowRight size={17} aria-hidden="true" /></Link>
+      </aside>
 
     </MotionScreen>
   );

@@ -86,7 +86,7 @@ export default defineConfig({
   webServer: {
     command: `pnpm exec next build && pnpm exec next start -p ${PORT}`,
     url: BASE_URL,
-    timeout: 240_000,
+    timeout: 600_000,
     reuseExistingServer: false,
     // The e2e drives a production build, so supply the signing secret (fail-closed
     // in prod) and opt the mock introspection routes in explicitly.

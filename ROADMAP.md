@@ -1,5 +1,12 @@
 # Roadmap
 
+## Current platform redesign — 2026-09-06
+
+- [x] Fetch latest `main`, preserve the original uncommitted work in its checkout, inspect the actual app and all six references, and write the [comprehensive redesign plan/specification](docs/design/2026-platform/PLAN.md).
+- [x] Implement layout repair, visual proof, shared app shell, finder/profile redesign, character-led learning, and public/console shared styling; verify responsive and interaction criteria in Chromium. Further route-specific console redesign and cross-browser device validation remain separate follow-up work.
+
+The [baseline audit](docs/design/2026-platform/AUDIT.md) records the original defects. The redesign is implemented on `codex/2026-platform-redesign` in an isolated worktree; final verification is recorded in the [review](docs/design/2026-platform/REVIEW.md). It has not been deployed.
+
 No gates, no ledger, no units register — those were deleted on 2026-09-03 on purpose. This is a
 working checklist, not a law. Check items off as they land; rewrite sections freely as the product
 changes underneath them. If a line stops being true, delete it rather than explaining it away.

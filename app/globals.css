@@ -7445,45 +7445,13 @@ select { caret-color: var(--route-strong); }
    installed app while its controls sit above the home indicator.
    ═══════════════════════════════════════════════════════════════════════════════════════════════ */
 
-.app-tabs {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 40;
-  /* O232 — GLASS AS A SPECIFIC EFFECT, NOT AS DECORATION. A material belongs where content passes
-     beneath a surface, which in this app is exactly two places: this bar and the sheet. The list
-     scrolling under a translucent bar is the whole reason iOS uses one, and it is why the bar reads
-     as floating above the app rather than as a strip glued to the bottom of it. Nothing else in the
-     product gets a blur.
-     The opaque `background` stays as the first declaration so a browser without backdrop-filter —
-     and the contrast sweep's ancestor walk, which resolves a painted ground — sees a real colour. */
-  background: var(--surface-raised);
-  padding-bottom: var(--safe-bottom);
-  padding-inline: max(0px, var(--safe-left)) max(0px, var(--safe-right));
-}
-
 /* O232: ON A WIDE SCREEN THE BAR IS THE SHELL'S CHROME, NOT THE PAGE'S.
    Caught in the batched round at 1280px: the bar painted edge to edge across the navy ground while
    the app it belongs to is a centred 640px shell, so the product read as a phone bar stretched over
    a desktop page. It now matches the shell it serves and lifts off the ground at its top corners,
    which is what makes a centred app shell look like an object rather than a column of content. */
-@media (min-width: 600px) {
-  .app-tabs {
-    width: min(var(--shell-w), 100%);
-    margin-inline: auto;
-    border-radius: 18px 18px 0 0;
-    box-shadow: var(--shadow-ambient);
-  }
-
-  .app-tabs::before { border-radius: 18px 18px 0 0; }
-}
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .app-tabs {
-    background: color-mix(in srgb, var(--surface-raised) 78%, transparent);
-    -webkit-backdrop-filter: blur(22px) saturate(150%);
-    backdrop-filter: blur(22px) saturate(150%);
-  }
 
   .sheet {
     background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
@@ -7502,47 +7470,10 @@ select { caret-color: var(--route-strong); }
 /* The band, as a hairline lid. On a pseudo-element for O218's reason: the contrast sweep walks
    ancestors for the painted ground, and a gradient on the bar itself would have it measure the
    labels against the band's darkest stop rather than the paper they actually sit on. */
-.app-tabs::before {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 2px;
-  background-image: var(--band-gradient);
-}
-
-.app-tabs-list {
-  display: flex;
-  width: min(var(--shell-w, 520px), 100%);
-  margin: 0 auto;
-  padding: 0;
-  list-style: none;
-}
-
-.app-tabs-item { display: flex; flex: 1 1 0; }
 
 /* The WHOLE tab is the target, not the glyph — so the anchor fills its cell. Caught by the touch
    sweep, which measured the anchor at 31x53 while the cell around it was fine: a floor asserted on
    the wrong box is not asserted at all. */
-.app-tab {
-  position: relative; /* the filter badge anchors to the tab */
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  min-height: 58px;
-  padding: 8px 4px 10px;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.005em;
-  text-decoration: none;
-  transition: color var(--dur-tap) var(--ease-ui);
-}
-
-.app-tab-label { line-height: 1.1; }
 
 /* Three signals for the current tab, never colour alone: full-strength ink against the muted rest,
    the filled glyph weight the component swaps in, and the marker above the icon.
@@ -7551,36 +7482,11 @@ select { caret-color: var(--route-strong); }
    the rule describing a real defect rather than a technicality. On this product the accent is
    reserved for the next consequential action, which on the finder is the microphone; a bar that is
    always on screen may not compete with it. */
-.app-tab.is-current {
-  color: var(--ink);
-  position: relative;
-}
 
 /* Under the band, not behind it: the lid is painted at top:0 across the whole bar, and a marker
    at the same offset was hidden by it — visible only in the 390px preview capture. */
 /* O240: the marker is an element with a shared layout id (app-tabs.tsx), so it travels between
    tabs on a spring instead of appearing under the new one. */
-.app-tab-marker {
-  position: absolute;
-  top: 2px;
-  left: 50%;
-  translate: -50% 0;
-  width: 26px;
-  height: 3px;
-  border-radius: 0 0 3px 3px;
-  background: var(--route-strong);
-}
-
-@media (hover: hover) {
-  .app-tab:hover { color: var(--ink); }
-  .app-tab.is-current:hover { color: var(--ink); }
-}
-
-.app-tab:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -3px;
-  border-radius: 10px;
-}
 
 /* The room the bar takes, given back to the surface above it, so a fixed bar never covers the last
    control on a screen. Only on the surfaces that show it. */
@@ -7599,14 +7505,6 @@ select { caret-color: var(--route-strong); }
    `:has()` keeps the offset with the pages that actually have a bar under them: the console and
    the booking handoff have no tab bar and their notice still sits on the edge. The sheet is 60
    and the bar is now 50, so a dialog's scrim covers the notice the way it covers everything else. */
-body:has(.app-tabs) .consent-bar {
-  bottom: calc(58px + var(--safe-bottom) + 12px);
-  z-index: 50;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .app-tab { transition: none; }
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════════════════════════
    O230 — THE BOTTOM SHEET. Paper panel, brand hairline, nothing new in the palette.
@@ -8823,16 +8721,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .learn-cards { display: grid; gap: 12px; }
 
 /* Every card is in the DOM; once hydrated only the current one is shown. */
-[data-hydrated] .learn-card:not(.is-current) { display: none; }
-
-.learn-card {
-  position: relative;
-  padding: 26px 22px 22px;
-  border-radius: 24px;
-  background: var(--surface-raised);
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 6%, transparent), 0 14px 40px color-mix(in srgb, var(--hero-dusk) 7%, transparent);
-  overflow: hidden;
-}
 
 .learn-card-number {
   position: absolute;
@@ -9021,7 +8909,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 /* O243: more motion, each with a static equal. */
 .dual-input-glyph { display: inline-flex; align-items: center; justify-content: center; }
-.app-tab-glyph { display: inline-flex; line-height: 0; }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════════════════════════
@@ -9216,7 +9103,8 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 /* Reduced transparency: the two materials become solid. Nothing else in the product blurs. */
 @media (prefers-reduced-transparency: reduce) {
-  .app-tabs, .profile-header, .profile-footer { background: var(--surface-raised); backdrop-filter: none; }
+  .profile-header,
+.profile-footer { background: var(--surface-raised); backdrop-filter: none; }
 }
 
 /* More contrast: the pressable objects get a full-ink edge instead of the hairline. */
@@ -9726,8 +9614,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
    navy: that page is its own palette. The finder's wide-screen backdrop is the dark ground, as
    the founder's mockups frame the phone, not the route colour it borrowed before. */
 .care-app.patient-v2,
-.me-screen,
-.app-tabs {
+.me-screen {
   --route: var(--accent-mid);
   --route-strong: var(--accent);
   --route-soft: color-mix(in srgb, var(--accent-mid) 14%, var(--paper));
@@ -9960,8 +9847,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 /* The tab bar: the current tab in the accent, its marker in the brighter terracotta. The founder's
    mockups paint it so, and the marker keeps colour from being the only signal. */
-.app-tab.is-current { color: var(--accent); }
-.app-tab-marker { background: var(--accent-mid); }
 
 /* ── RADIANT, unit 2: the filters screen (the Profile tab) ─────────────────────────────────── */
 .me-head { margin-bottom: 4px; }
@@ -10153,25 +10038,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .learn-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .learn-progress { margin: 0 0 14px; color: var(--faint); font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .learn-stack { display: flex; flex-direction: column; gap: 12px; margin: 0 0 26px; padding: 0; list-style: none; }
-.learn-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  min-height: 104px;
-  padding: 20px;
-  border: 0;
-  border-radius: 26px;
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 6%, transparent);
-  transition: transform var(--dur-tap) var(--ease-spring), box-shadow var(--dur-tap) var(--ease-ui);
-}
-.learn-card:active { transform: scale(0.985); }
-.learn-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .learn-card-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: 70%; }
 .learn-card-text strong { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
 .learn-card-text small { font-size: 0.75rem; font-weight: 500; line-height: 1.35; }
@@ -10189,17 +10055,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .learn-card-done { display: inline-flex; align-items: center; gap: 3px; }
 .learn-card-art { flex: none; width: 64px; height: 64px; filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.08)); }
 .learn-card-art svg { display: block; width: 64px; height: 64px; }
-.learn-card.is-amber { background: var(--learn-amber); color: var(--learn-amber-ink); }
-.learn-card.is-oat { background: var(--learn-oat); color: var(--learn-oat-ink); box-shadow: inset 0 0 0 1px var(--learn-oat-line); }
-.learn-card.is-oat small { color: var(--learn-oat-sub); }
-.learn-card.is-forest { background: var(--learn-forest); color: var(--learn-forest-ink); }
-.learn-card.is-lilac { background: var(--learn-lilac); color: var(--learn-lilac-ink); }
-.learn-card.is-coral { background: var(--learn-coral); color: var(--learn-coral-ink); }
-.learn-card.is-slate { background: var(--learn-slate); color: var(--learn-slate-ink); }
-.learn-card.is-slate small { color: var(--learn-slate-sub); }
-.learn-card.is-saffron { background: var(--learn-saffron); color: var(--learn-saffron-ink); }
-.learn-card.is-saffron small { color: var(--learn-saffron-sub); }
-@media (prefers-reduced-motion: reduce) { .learn-card, .learn-chip { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .learn-chip { transition: none; } }
 /* The app pages' header closes on a plain hairline, as the founder drew it, not the brand ramp. */
 .me-screen .minimal-header::after { height: 1px; background: var(--line); background-image: none; }
 
@@ -10254,28 +10110,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
   .show-all { max-width: 420px; margin-inline: auto; }
 
   /* The tab bar becomes a dock: a floating pill, icon beside label, the current tab on the tint. */
-  .app-tabs {
-    width: auto;
-    right: auto;
-    left: 50%;
-    bottom: 22px;
-    translate: -50% 0;
-    padding: 6px 8px;
-    border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-    border-radius: 999px;
-    box-shadow: 0 18px 44px color-mix(in srgb, var(--hero-dusk) 18%, transparent);
-  }
-  .app-tabs::before { display: none; }
-  .app-tabs-list { gap: 4px; }
-  .app-tabs-item { flex: none; }
-  .app-tab {
-    flex-direction: row;
-    gap: 8px;
-    min-height: 44px;
-    padding: 8px 18px;
-    border-radius: 999px;
-    font-size: 0.8125rem;
-  }
   /* The current tab's fill and the room the dock takes are section 17's, which draws the fill as
      the travelling marker rather than as a static background and derives the padding from
      `--desk-inset`. A static fill here would race the marker for the same state. */
@@ -10304,7 +10138,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
 
 /* ── SMOOTH (2026-09-06): continuity and feedback ────────────────────────────────────────────── */
 /* The finder hides the shared bar on its inner stages by stamping its own root. */
-body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
 /* The page-arrival wrapper is a PLAIN BLOCK, and it has to be.
    It was `display: contents`, to stop it becoming a containing block for the fixed chrome once at
    rest. That reasoning has a hole at each end. `transform: none` — which is what motion leaves —
@@ -10338,12 +10171,8 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
 }
 
 /* The learn cards lift under a pointer; the results cards already do. */
-@media (hover: hover) {
-  .learn-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--hero-dusk) 12%, transparent); }
-}
 @media (prefers-reduced-motion: reduce) {
   .filter-chip:active, .me-chip:active { transform: none; }
-  .learn-card:hover { transform: none; }
 }
 
 
@@ -10484,13 +10313,8 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
    window's bottom radius so the two corners agree; without that the bar's square feet overhang the
    window's rounded ones onto the ground. */
 @media (min-width: 641px) and (max-width: 899px) {
-  .app-tabs {
-    bottom: var(--desk-inset);
-    border-radius: 18px 18px calc(var(--desk-radius) - 1px) calc(var(--desk-radius) - 1px);
-  }
   .care-app[data-tabs="visible"] .screen,
   .app-page-with-tabs { padding-bottom: calc(var(--desk-inset) + 82px); }
-  body:has(.app-tabs) .consent-bar { bottom: calc(var(--desk-inset) + 70px); }
   .me-sticky { bottom: calc(var(--desk-inset) + 58px); }
 }
 
@@ -10498,7 +10322,6 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
   /* ── The dock, inside the window ──────────────────────────────────────────────────────────
      It was `bottom: 22px` — measured from the viewport, so an inset window leaves it floating on
      the desk BELOW the app it belongs to. Derived from the inset now, so it cannot drift again. */
-  .app-tabs { bottom: calc(var(--desk-inset) + 26px); }
 
   /* The room the dock takes, given back. The old value was 104px against a dock whose top edge
      sits 84px up — 20px of clearance, which is why the finder's context line was cut in half at
@@ -10507,34 +10330,12 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
   .app-page-with-tabs { padding-bottom: calc(var(--desk-inset) + 112px); }
 
   /* The consent notice rides above the dock, on the same derived offset. */
-  body:has(.app-tabs) .consent-bar { bottom: calc(var(--desk-inset) + 96px); }
 
   /* ── The travelling pill ──────────────────────────────────────────────────────────────────
      The marker becomes the pill itself: it fills the tab, sits behind the label, and slides and
      resizes between tabs on the spring `app-tabs.tsx` already passes it. The static
      `background: var(--accent-soft)` that replaced it is dropped — two things drawing one state
      is what made the change snap. */
-  .app-tab-marker {
-    display: block;
-    /* `inset: 0` ALONE, and this is the whole trap. `inset` is the shorthand for all four offsets,
-       so it already clears the base rule's `top: 2px` and `left: 50%`; writing `top: auto;
-       left: auto` after it puts two of the four BACK to auto, which leaves an absolutely
-       positioned box with no content, `width: auto`, and only two edges pinned — it resolves to
-       0x0 and paints nothing. Measured at 0x0 before the line was cut, and worth the words:
-       the SMOOTH pass reached for this same pill independently and wrote exactly that pair, so
-       it is a trap two readers have now walked into. */
-    inset: 0;
-    translate: none;
-    width: auto;
-    height: auto;
-    /* Behind the label, via the tab's own isolation — one declaration instead of lifting the
-       glyph and the label onto a layer each. SMOOTH's idea, kept. */
-    z-index: -1;
-    border-radius: 999px;
-    background: var(--accent-soft);
-  }
-  .app-tab { isolation: isolate; }
-  .app-tab.is-current { background: transparent; }
 
   /* ── The welcome screen's presence ────────────────────────────────────────────────────────
      The question was capped at 1.875rem by a `vw` clamp that stopped scaling long before the desk
@@ -10672,7 +10473,6 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
           sticky    bottom: inset + 98   height 72   (26 + 58 + 14)
           consent   bottom: inset + 182             (98 + 72 + 12) */
   .me-sticky { bottom: calc(var(--desk-inset) + 98px); }
-  body:has(.app-tabs):has(.me-sticky) .consent-bar { bottom: calc(var(--desk-inset) + 182px); }
 
   /* 3. THE STRETCHED SWITCH CARD. The filters grid spans the switches four rows to sit beside a
         taller right column, and a grid item stretches to its row by default — so the card grew

@@ -16,7 +16,8 @@
 // grabber, same Escape, same focus return.
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { CaretRight, Gear } from "@phosphor-icons/react";
 import { Sheet } from "./sheet";
 
@@ -35,11 +36,12 @@ function SettingsLink({ href, title, detail }: { href: string; title: string; de
 
 export function AppSettings({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [mount, setMount] = useState<HTMLElement | null>(null);
+  useEffect(() => { setMount(document.getElementById("platform-settings")); }, []);
+  const trigger = <button className="settings-trigger" type="button" onClick={() => setOpen(true)} aria-label="Settings"><Gear size={21} weight="regular" aria-hidden="true" /></button>;
   return (
     <>
-      <button className="settings-trigger" type="button" onClick={() => setOpen(true)} aria-label="Settings">
-        <Gear size={21} weight="regular" aria-hidden="true" />
-      </button>
+      {mount ? createPortal(trigger, mount) : trigger}
       <Sheet open={open} title="Settings" onClose={() => setOpen(false)}>
         <div className="settings-list">
           <SettingsLink href="/story" title="About ADHD.ME" detail="Why the product exists and what the route through assessment costs today." />

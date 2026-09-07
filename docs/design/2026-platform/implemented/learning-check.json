@@ -1,0 +1,44 @@
+[
+  {
+    "width": 390,
+    "module": "everyday",
+    "visibleWords": 356,
+    "steps": 4,
+    "accessibilityViolations": 0
+  },
+  {
+    "width": 390,
+    "module": "finding",
+    "visibleWords": 289,
+    "steps": 3,
+    "accessibilityViolations": 0
+  },
+  {
+    "width": 390,
+    "module": "myth-or-fact",
+    "visibleWords": 11,
+    "steps": 1,
+    "accessibilityViolations": 0
+  },
+  {
+    "width": 1440,
+    "module": "everyday",
+    "visibleWords": 356,
+    "steps": 4,
+    "accessibilityViolations": 0
+  },
+  {
+    "width": 1440,
+    "module": "finding",
+    "visibleWords": 289,
+    "steps": 3,
+    "accessibilityViolations": 0
+  },
+  {
+    "width": 1440,
+    "module": "myth-or-fact",
+    "visibleWords": 11,
+    "steps": 1,
+    "accessibilityViolations": 0
+  }
+]

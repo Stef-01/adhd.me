@@ -57,7 +57,7 @@ export function ConsoleShell({
   const staff = email ? isAdhdMeStaff(email) : false;
 
   return (
-    <div className={`console-app${email ? "" : " console-app-auth"}`}>
+    <div className={`console-app platform-console${email ? "" : " console-app-auth"}`}>
       <header className="console-header">
         <div className="console-header-inner">
           <div className="console-brand-row">

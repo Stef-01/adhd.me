@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { seoMetadata } from "@/seo/pages";
 import Link from "next/link";
 import { AppSettings } from "../../app-settings";
@@ -24,8 +25,9 @@ export default function ApproachPage() {
       </div>
       {/* The page's one heading — the working-truth sentence this route has carried since it existed.
           Visually it is the small line under the field; the field's own title leads the eye. */}
-      <h1 className="learn-thesis">Short reads and quick quizzes — on your own schedule. General information, never about you.</h1>
-      <LearnModules />
+      <h1 className="learn-thesis">A little more understanding.</h1>
+      <p className="learning-intro">Short reads and quick quizzes — on your own schedule. General information, never about you.</p>
+      <Suspense fallback={<p role="status">Loading learning modules…</p>}><LearnModules /></Suspense>
     </main>
   );
 }

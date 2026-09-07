@@ -3,6 +3,7 @@ import { securityHeaders } from "./src/security/headers";
 import { robotsHeaders } from "./src/security/robots";
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: process.cwd(),
   typescript: { ignoreBuildErrors: false },
   devIndicators: false,
   // U1: no `X-Powered-By: Next.js` advertisement; Strict Mode so a dev render surfaces an effect
@@ -10,6 +11,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   experimental: {
+    cpus: 2,
     // O33, per react-best-practices (bundle-barrel-imports, impact: CRITICAL): the icon and
     // motion packages are barrel files with hundreds of re-exports; this rewrites the named
     // imports to direct ones at build time, keeping TypeScript ergonomics without the barrel

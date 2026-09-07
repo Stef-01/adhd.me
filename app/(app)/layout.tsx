@@ -8,13 +8,13 @@
 // The finder still hides the bar on its inner stages: it stamps `data-tabs` on its own root and
 // the bar's stylesheet reads it (`body:has(.care-app[data-tabs="hidden"]) .app-tabs`), so no
 // state has to cross the layout boundary.
-import { AppTabs } from "../app-tabs";
+import { PlatformHeader } from "../platform-header";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className="platform-shell">
+      <PlatformHeader />
       {children}
-      <AppTabs />
-    </>
+    </div>
   );
 }

@@ -1,0 +1,814 @@
+[
+  {
+    "name": "find-1440",
+    "width": 1440,
+    "documentWidth": 1440,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "learn-1440",
+    "width": 1440,
+    "documentWidth": 1440,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "lesson-1440",
+    "width": 1440,
+    "documentWidth": 1440,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 1158,
+        "scrollWidth": 1158,
+        "height": 1069
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 796,
+        "scrollWidth": 796,
+        "height": 87
+      }
+    ]
+  },
+  {
+    "name": "profile-1440",
+    "width": 1440,
+    "documentWidth": 1440,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "results-1440",
+    "width": 1440,
+    "documentWidth": 1440,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "find-390",
+    "width": 390,
+    "documentWidth": 390,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "learn-390",
+    "width": 390,
+    "documentWidth": 390,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "lesson-390",
+    "width": 390,
+    "documentWidth": 390,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 68
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 348,
+        "scrollWidth": 348,
+        "height": 1432
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 300,
+        "scrollWidth": 300,
+        "height": 173
+      }
+    ]
+  },
+  {
+    "name": "profile-390",
+    "width": 390,
+    "documentWidth": 390,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "results-390",
+    "width": 390,
+    "documentWidth": 390,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 67
+      },
+      {
+        "selector": "app-tabs",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/-320x568-consent",
+    "width": 320,
+    "documentWidth": 320,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/profile-320x568-consent",
+    "width": 320,
+    "documentWidth": 320,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/approach-320x568-consent",
+    "width": 320,
+    "documentWidth": 320,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-320x568-consent",
+    "width": 320,
+    "documentWidth": 320,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 320,
+        "scrollWidth": 320,
+        "height": 68
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 278,
+        "scrollWidth": 278,
+        "height": 1549
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 230,
+        "scrollWidth": 230,
+        "height": 231
+      }
+    ]
+  },
+  {
+    "name": "/-430x932-consent",
+    "width": 430,
+    "documentWidth": 430,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/profile-430x932-consent",
+    "width": 430,
+    "documentWidth": 430,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/approach-430x932-consent",
+    "width": 430,
+    "documentWidth": 430,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 68
+      },
+      {
+        "selector": "app-tabs",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 76
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-430x932-consent",
+    "width": 430,
+    "documentWidth": 430,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 430,
+        "scrollWidth": 430,
+        "height": 68
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 388,
+        "scrollWidth": 388,
+        "height": 1400
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 340,
+        "scrollWidth": 340,
+        "height": 144
+      }
+    ]
+  },
+  {
+    "name": "/-768x1024-consent",
+    "width": 768,
+    "documentWidth": 768,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 768,
+        "scrollWidth": 768,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/profile-768x1024-consent",
+    "width": 768,
+    "documentWidth": 768,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 768,
+        "scrollWidth": 768,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach-768x1024-consent",
+    "width": 768,
+    "documentWidth": 768,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 768,
+        "scrollWidth": 768,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-768x1024-consent",
+    "width": 768,
+    "documentWidth": 768,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 768,
+        "scrollWidth": 768,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 705,
+        "scrollWidth": 705,
+        "height": 1076
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 643,
+        "scrollWidth": 643,
+        "height": 116
+      }
+    ]
+  },
+  {
+    "name": "/-1024x768-consent",
+    "width": 1024,
+    "documentWidth": 1024,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1024,
+        "scrollWidth": 1024,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/profile-1024x768-consent",
+    "width": 1024,
+    "documentWidth": 1024,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1024,
+        "scrollWidth": 1024,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach-1024x768-consent",
+    "width": 1024,
+    "documentWidth": 1024,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1024,
+        "scrollWidth": 1024,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-1024x768-consent",
+    "width": 1024,
+    "documentWidth": 1024,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1024,
+        "scrollWidth": 1024,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 940,
+        "scrollWidth": 940,
+        "height": 1049
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 796,
+        "scrollWidth": 796,
+        "height": 87
+      }
+    ]
+  },
+  {
+    "name": "/-1280x720-consent",
+    "width": 1280,
+    "documentWidth": 1280,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1280,
+        "scrollWidth": 1280,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/profile-1280x720-consent",
+    "width": 1280,
+    "documentWidth": 1280,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1280,
+        "scrollWidth": 1280,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach-1280x720-consent",
+    "width": 1280,
+    "documentWidth": 1280,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1280,
+        "scrollWidth": 1280,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-1280x720-consent",
+    "width": 1280,
+    "documentWidth": 1280,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1280,
+        "scrollWidth": 1280,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 1158,
+        "scrollWidth": 1158,
+        "height": 1069
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 796,
+        "scrollWidth": 796,
+        "height": 87
+      }
+    ]
+  },
+  {
+    "name": "/-1920x1080-consent",
+    "width": 1920,
+    "documentWidth": 1920,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1920,
+        "scrollWidth": 1920,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/profile-1920x1080-consent",
+    "width": 1920,
+    "documentWidth": 1920,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1920,
+        "scrollWidth": 1920,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach-1920x1080-consent",
+    "width": 1920,
+    "documentWidth": 1920,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1920,
+        "scrollWidth": 1920,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-1920x1080-consent",
+    "width": 1920,
+    "documentWidth": 1920,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 1920,
+        "scrollWidth": 1920,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 1158,
+        "scrollWidth": 1158,
+        "height": 1069
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 796,
+        "scrollWidth": 796,
+        "height": 87
+      }
+    ]
+  },
+  {
+    "name": "/-844x390-consent",
+    "width": 844,
+    "documentWidth": 844,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 844,
+        "scrollWidth": 844,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/profile-844x390-consent",
+    "width": 844,
+    "documentWidth": 844,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 844,
+        "scrollWidth": 844,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach-844x390-consent",
+    "width": 844,
+    "documentWidth": 844,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 844,
+        "scrollWidth": 844,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      }
+    ]
+  },
+  {
+    "name": "/approach?module=everyday-844x390-consent",
+    "width": 844,
+    "documentWidth": 844,
+    "elements": [
+      {
+        "selector": "platform-header",
+        "width": 844,
+        "scrollWidth": 844,
+        "height": 79
+      },
+      {
+        "selector": "app-tabs",
+        "width": 367,
+        "scrollWidth": 367,
+        "height": 48
+      },
+      {
+        "selector": "learn-lesson is-current",
+        "width": 775,
+        "scrollWidth": 775,
+        "height": 1058
+      },
+      {
+        "selector": "learn-card-body",
+        "width": 707,
+        "scrollWidth": 707,
+        "height": 116
+      }
+    ]
+  }
+]

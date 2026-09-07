@@ -19,7 +19,7 @@ async function openCompare(page: Page) {
   await expect(page.locator(".compare-screen")).toBeVisible();
 }
 
-test("the comparison heading renders in the display face, not the body face", async ({ page }) => {
+test("the comparison heading uses the platform typeface", async ({ page }) => {
   // O193, and it exists because O192 changed this line without anybody looking at the screen.
   //
   // `.compare-content h1` named `var(--font-display)` — a variable this tree never defines. O192
@@ -37,7 +37,7 @@ test("the comparison heading renders in the display face, not the body face", as
   const family = await page
     .locator(".compare-content h1")
     .evaluate((el) => getComputedStyle(el).fontFamily);
-  expect(family, "the comparison heading fell back to the body face").toContain("Newsreader");
+  expect(family, "the comparison heading must share the platform typography").toContain("Plus Jakarta Sans");
 });
 
 test("comparison is tucked inside the profile's match explanation", async ({ page }) => {

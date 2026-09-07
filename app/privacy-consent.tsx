@@ -12,12 +12,23 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { agree as recordAgreement, useConsent } from "./use-consent";
 
 export function PrivacyConsent() {
   const consent = useConsent();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const barRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const bar = barRef.current;
+    const root = document.documentElement;
+    if (!bar) { root.style.setProperty("--consent-height", "0px"); return; }
+    const measure = () => root.style.setProperty("--consent-height", `${bar.getBoundingClientRect().height}px`);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(bar);
+    return () => { observer.disconnect(); root.style.setProperty("--consent-height", "0px"); };
+  }, [consent]);
 
   // Nothing on the server render and nothing once somebody has agreed: the store answers
   // `unknown` until hydration is done, so the server render and returning visitors agree.
@@ -29,7 +40,7 @@ export function PrivacyConsent() {
   };
 
   return (
-    <div className="consent-bar" role="region" aria-label="Privacy">
+    <div ref={barRef} className="consent-bar" role="region" aria-label="Privacy">
       <p>
         We use only what is needed to run this site, and nothing you enter is used for
         advertising.
