@@ -31,3 +31,8 @@ qa/_runs/
 # Regenerate with scripts/shots.mjs and scripts/finder-flow-shots.mjs.
 qa/polish/before/
 qa/polish/after/
+
+# Round-2 design-pass captures, same rule as qa/polish/{before,after} above: the committed
+# record is qa/polish/compare/.
+qa/polish/r2-before/
+qa/polish/r2-after/

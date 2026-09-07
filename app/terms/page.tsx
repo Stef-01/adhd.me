@@ -20,7 +20,7 @@ export default function TermsPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="mx-auto max-w-xl px-6 py-16">
+    <main id="main-content" className="prose-wrap">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Terms", href: "/terms" }]} />
       <p className="mb-2 mt-6 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
         Draft — not yet in force
@@ -30,7 +30,7 @@ export default function TermsPage() {
         <Link href="/privacy/counsel-review" className="underline">the legal check</Link>.
       </p>
       <h1 className="text-3xl font-semibold tracking-tight">Terms of use</h1>
-      <div className="prose prose-stone mt-8 space-y-6 text-stone-700">
+      <div className="mt-8 space-y-6 text-stone-700">
         <section>
           <h2 className="text-lg font-medium text-stone-900">The short version</h2>
           <p className="mt-2 text-sm leading-6">
@@ -146,7 +146,7 @@ export default function TermsPage() {
     </main>
     {/* Outside `main`, on two counts. A `<footer>` scoped to `main` is not the page's
         `contentinfo` landmark; and `.site-footer` is a full-bleed dark band with an accent rule
-        along its top edge, so inside `max-w-xl px-6 py-16` it drew as a 576px rectangle floating
+        along its top edge, so inside the page's own measure it drew as a narrow rectangle floating
         in white with 64px of page padding under it. /privacy, one route over in the same cluster,
         always had it outside and always ran edge to edge. */}
     <SiteFooter />

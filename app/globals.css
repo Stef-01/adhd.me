@@ -5190,7 +5190,14 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 .prose-wrap p { margin: 0 0 14px; font-size: 1rem; line-height: 1.6; }
 .prose-note { color: var(--muted); }
 .prose-doors { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-.faq-item h2, .example-item h2 {
+/* The long-form heading rhythm belongs to the MEASURE, not to two page-specific item classes.
+   It was `.faq-item h2, .example-item h2`, which is why the legal cluster lost the gap under every
+   heading the moment it moved onto this measure: those pages are `<section>`s without either class,
+   and the 8px they had been relying on came from a Tailwind `mt-2` on the PARAGRAPH — a layered
+   utility that `.prose-wrap p`'s unlayered `margin: 0 0 14px` silently outranks. Both item classes
+   are sections inside `.prose-wrap`, so this selector covers exactly what the old pair did and
+   every page that adopts the measure after it. */
+.prose-wrap h2 {
   margin: 26px 0 8px; font-size: 1.1875rem; font-weight: 620; letter-spacing: -0.01em; line-height: 1.35;
 }
 .example-item p { color: var(--ink); }
@@ -10689,4 +10696,133 @@ body:has(.care-app[data-tabs="hidden"]) .app-tabs { display: none; }
     border-radius: 14px;
   }
   .patient-v2 .clinician-list > .clinician-row.is-lead strong { font-size: 1.125rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   18. ANSWERING THE POINTER — finishing the sweep `.t-tint` started (2026-09-06)
+
+   The `.t-tint` note above records the finding that `/faq`, `/examples`, `/clinicians` and
+   `/about` had "no hover state and no `transition-*` at all between them", and then fixes exactly
+   one page: `/practices`. The rest of the sweep was never run. Measured again today, hovering
+   every visible `main a, main button` on the seven public routes and diffing ten computed
+   properties before and after (colour, background, border, transform, all four text-decoration
+   fields, opacity, box-shadow, filter):
+
+       /practices   7 respond,  0 inert      ← the page `.t-tint` reached
+       /faq         1 respond,  0 inert      ← `.crumbs a:hover` underlines; it was already fine
+       /story      14 respond,  2 inert
+       /examples    1 respond,  1 inert      ← the page's PRIMARY call to action
+       /terms       1 respond,  3 inert      ← every inline link in the body
+       /privacy     0 respond,  3 inert      ← every inline link in the body
+       /clinicians  1 respond,  7 inert      ← the wordmark, the exit, all four progress steps, the join
+
+   Sixteen controls, and the two that matter most are a primary CTA and a whole pathway's
+   navigation. THE FIRST MEASUREMENT OF THIS WAS WRONG and it is worth saying why: the probe
+   diffed `text-decoration-color` but not `text-decoration-line`, so it called `/faq`'s breadcrumb
+   inert when `.crumbs a:hover` had been underlining it all along. A hover probe has to watch the
+   property the hover actually changes.
+
+   Everything here follows the line `.t-tint` draws and states its reason for: colour, background,
+   border and decoration only — no transform, because these are text and controls answering a
+   pointer, not objects that move — on `--dur-tap`, the beat for a control acknowledging a press.
+   NO REDUCED-MOTION GUARD, deliberately, and for `.t-tint`'s reason: nothing here moves, a
+   crossfade between two colours is not vestibular, and guarding it would give a reduce user the
+   snap this section exists to remove.
+   =============================================================================================== */
+
+/* ── Inline links in long-form copy ──────────────────────────────────────────────────────────
+   Scoped to the MEASURE rather than to the four pages that sit on it, so the next page to adopt
+   `.prose-wrap` arrives with its links already answering. `section a` and `p a` and not a bare
+   `.prose-wrap a`, which would also catch the breadcrumb — that control has its own hover two
+   hundred lines up, and one element with two authors is how they end up disagreeing. */
+.prose-wrap section a,
+.prose-wrap p a {
+  text-decoration-thickness: from-font;
+  text-underline-offset: 2px;
+  transition:
+    color var(--dur-tap) var(--ease-ui),
+    text-decoration-color var(--dur-tap) var(--ease-ui);
+}
+
+@media (hover: hover) {
+  .prose-wrap section a:hover,
+  .prose-wrap p a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+}
+
+/* ── The doors on `/examples` and `/not-found` ───────────────────────────────────────────────
+   `.notfound-primary` is a filled ink pill and the one call to action on `/examples`; it had a
+   focus ring and nothing for a pointer. It lightens toward the paper rather than shifting hue,
+   which is the same move `.mic-button:hover` makes in the other direction on the accent. */
+.notfound-primary,
+.notfound-secondary {
+  transition:
+    background-color var(--dur-tap) var(--ease-ui),
+    border-color var(--dur-tap) var(--ease-ui),
+    color var(--dur-tap) var(--ease-ui);
+}
+
+@media (hover: hover) {
+  .notfound-primary:hover { background: color-mix(in srgb, var(--ink) 86%, var(--paper)); }
+  .notfound-secondary:hover { border-color: var(--accent-mid); color: var(--accent-deep); }
+}
+
+/* ── The clinician pathway ───────────────────────────────────────────────────────────────────
+   Seven of its eight controls were inert, including all four steps of its own progress nav —
+   which are real navigation (`goToStage`), not decoration, and were the only way back to a step
+   without a visible affordance for being pressable at all. */
+.cv2-exit,
+.cv2-join-link,
+.demo-nav-trigger,
+.cv2-progress > div > button {
+  transition:
+    color var(--dur-tap) var(--ease-ui),
+    background-color var(--dur-tap) var(--ease-ui),
+    text-decoration-color var(--dur-tap) var(--ease-ui);
+}
+
+@media (hover: hover) {
+  /* Muted to ink: the exit is a real destination and reads as one under a pointer. */
+  .cv2-exit:hover { color: var(--cv2-ink); }
+  /* The join already carries an underline (O176 kept it when the colour moved to ink); the
+     underline is what takes the accent, so the label's contrast is untouched. */
+  .cv2-join-link:hover { text-decoration-color: var(--accent); }
+  .demo-nav-trigger:hover { color: var(--accent); }
+  /* A step that is not the current one lifts toward the accent; the current one is already
+     painted and must not move, or the bar reports the wrong step for as long as a pointer rests
+     on a neighbour. */
+  .cv2-progress > div > button:not(.is-current):hover {
+    background: color-mix(in srgb, var(--cv2-accent) 45%, var(--cv2-line));
+  }
+}
+
+/* ── The story page's two wordmarks ──────────────────────────────────────────────────────────
+   White on the navy band, and the only two links on the site that answered nothing. The band has
+   a token for exactly this — `--on-band`, the light amber that carries an accent where the accent
+   itself is too dark to read — so the wordmark warms rather than dimming. */
+.story-wordmark,
+.story-footer-wordmark { transition: color var(--dur-tap) var(--ease-ui); }
+
+@media (hover: hover) {
+  .story-wordmark:hover,
+  .story-footer-wordmark:hover { color: var(--on-band); }
+}
+
+/* ── The third unframed slab ─────────────────────────────────────────────────────────────────
+   `.cv2-shell` is the same shape section 17 found under the app and fixed twice: a paper column
+   with `min-height: 100svh`, a hairline on the left and right only, no radius and no elevation,
+   meeting a coloured ground at a hard square edge. Its ground is `--route-soft` — a pale
+   periwinkle, not the app's near-black — so it takes `--shadow-ambient`, which is the elevation
+   token built for paper, rather than section 17's `--desk-shadow`, which is tuned to fall on
+   `--ground` and would read as a bruise here.
+   From 641px for the same reason the desk's frame starts there: below it the column is the whole
+   screen and a frame around the whole screen is a border, not a window. */
+@media (min-width: 641px) {
+  .clinician-v2 .cv2-shell {
+    margin-block: var(--desk-inset);
+    min-height: calc(100svh - var(--desk-inset) * 2);
+    border: 1px solid var(--cv2-line);
+    border-radius: var(--desk-radius);
+    box-shadow: var(--shadow-ambient);
+    overflow: clip;
+  }
 }

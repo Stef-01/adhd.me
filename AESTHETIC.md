@@ -589,6 +589,53 @@ the next reader knows the global is the one that matters.
 
 ## Cross-cutting
 
+- [x] **One measure for the long-form pages, and the hover sweep actually finished — 2026-09-06.**
+      Second pass the same day, on the public pages rather than the app.
+
+      **Six widths for one site.** Measured every public route's content column at 1440: `/story`
+      1240 (`.story-wrap`), `/practices` 1024 (Tailwind `max-w-5xl`), `/clinicians` 680
+      (`.cv2-shell`), `/faq` `/examples` `/thanks` 640 (`.prose-wrap`), and `/terms` `/privacy`
+      `/privacy/counsel-review` `/privacy/automated-decisions` 576 (Tailwind `max-w-xl`). The last
+      four are the site's LONGEST reading, set NARROWER than its own long-form measure, by a raw
+      utility rather than by the design system. They now use `.prose-wrap`, so six long-form pages
+      share one column.
+      **Three of them also wore a stylesheet that is not installed.** `prose prose-stone` —
+      Tailwind Typography — on `/terms`, `/privacy` and `/privacy/counsel-review`. The plugin is
+      not in `package.json`, there is no `@plugin` line in `globals.css`, and the built CSS defines
+      `.prose-doors`, `.prose-note`, `.prose-screen` and `.prose-wrap` and no `.prose` or
+      `.prose-stone` at all. The classes styled nothing and are gone.
+      **What adopting the measure broke, and the rule it exposed.** Every heading on the legal
+      pages lost the gap under it, because that 8px had been coming from a Tailwind `mt-2` on the
+      PARAGRAPH — a layered utility, which `.prose-wrap p`'s unlayered `margin: 0 0 14px` silently
+      outranks. The rhythm had been living on `.faq-item h2, .example-item h2`, two page-specific
+      classes, so a page joining the measure got the measure and none of the rhythm. It is
+      `.prose-wrap h2` now: both item classes are sections inside the wrap, so the selector covers
+      exactly what the pair did, plus every page that adopts the measure after it.
+
+      **The `.t-tint` sweep was one page of seven.** The note above records the finding — `/faq`,
+      `/examples`, `/clinicians` and `/about` had "no hover state and no `transition-*` at all
+      between them" — and then fixes `/practices` only. Re-measured by hovering every visible
+      `main a, main button` on the seven public routes and diffing ten computed properties:
+      **sixteen inert controls**, including `/examples`'s primary call to action and all four steps
+      of `/clinicians`'s own progress navigation, which are real `goToStage` buttons with no
+      pointer affordance at all. Fixed to **one**, and that one is the current progress step, held
+      still on purpose so the bar cannot report the wrong step while a pointer rests on a
+      neighbour. Colour, background, border and decoration only, on `--dur-tap`, no transform and
+      no reduce guard — the line `.t-tint` draws and states its reason for.
+      **The first measurement was wrong, which is the part worth keeping.** The probe diffed
+      `text-decoration-color` but not `text-decoration-line`, so it called `/faq`'s breadcrumb inert
+      while `.crumbs a:hover` had been underlining it all along. A hover probe has to watch the
+      property the hover actually changes. The corrected probe is `scripts/hover-audit.mjs`, with
+      that reason in its header so the next one is not written the same way.
+
+      **The third unframed slab.** `.cv2-shell` is the shape section 17 found under the app and
+      fixed twice — paper column, `min-height: 100svh`, hairlines left and right only, no radius,
+      no elevation, meeting a coloured ground at a hard square edge. It takes the same frame from
+      641px, but with `--shadow-ambient` rather than `--desk-shadow`: its ground is `--route-soft`,
+      a pale periwinkle, and the desk's shadow is tuned to fall on near-black and reads as a bruise
+      on paper. `pnpm verify` green (3733 tests); `pnpm e2e` 283 passed.
+
+
 - [x] **The desk becomes a window, and the desktop stops hiding its own motion — 2026-09-06.**
       Founder-directed, off the monthly cycle: "it still looks weird on desktop mode and has barely
       any animations." Both halves were one fault in one block, and the block was the previous day's

@@ -29,7 +29,7 @@ export default function AutomatedDecisionsPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="mx-auto max-w-xl px-6 py-16">
+    <main id="main-content" className="prose-wrap">
       {/* O241: a route two segments deep says where it sits, on the page and in its
           BreadcrumbList — the same trail, from the same list, because `Breadcrumbs` renders
           both. `/privacy/counsel-review` has carried one since O41; this sibling never did. */}

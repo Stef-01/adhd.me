@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
   return (
     <>
     <PublicHeader />
-    <main id="main-content" className="mx-auto max-w-xl px-6 py-16">
+    <main id="main-content" className="prose-wrap">
       <p className="mb-2 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
         Draft — not yet in force
       </p>
@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
         <Link href="/privacy/counsel-review" className="underline">the legal check</Link>.
       </p>
       <h1 className="text-3xl font-semibold tracking-tight">Privacy policy</h1>
-      <div className="prose prose-stone mt-8 space-y-6 text-stone-700">
+      <div className="mt-8 space-y-6 text-stone-700">
         <section>
           <h2 className="text-lg font-medium text-stone-900">The short version</h2>
           <p className="mt-2 text-sm leading-6">
