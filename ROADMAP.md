@@ -30,6 +30,8 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
       support path, the care map, the finder broadened beyond GPs — PR #3.
 - [x] Phase A of the plan, all but one item: five topic surveys, problem-fit matching, the
       precision-survey offer rule, voice reflection, QA captures.
+- [ ] Play: the modules as runs of micro-games — [docs/adhd-life/PLAY-PLAN.md](docs/adhd-life/PLAY-PLAN.md).
+      P1 (engine, twelve mechanics, three runs) in progress.
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 

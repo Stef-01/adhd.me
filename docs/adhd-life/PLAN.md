@@ -72,6 +72,12 @@ line or an analytics event.
 | §75–§76 Usability tests | Real users | **Open** — needs the pilot | — |
 | §77–§80 Targets, outcomes | | **Open** — measured in the pilot | — |
 
+## 3a. Play (2026-09-08)
+
+The modules are being remade as runs of micro-games — much less text, much more interaction,
+Dumb-Ways-to-Die structure without its artwork. The plan is **[PLAY-PLAN.md](PLAY-PLAN.md)**;
+it supersedes the nine-stage module format for the interactive modules.
+
 ## 4. What comes next, in order
 
 Each item is one PR-sized piece. Nothing below is started.
