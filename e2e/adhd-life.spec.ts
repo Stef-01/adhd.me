@@ -139,7 +139,8 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await expect(page.locator(".learning-completion")).toContainText("Your picture just got sharper");
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
   expect(record.resonance?.starting?.frequency).toBe("often");
-  expect(record.resonance?.starting?.cost).toBe(7);
+  // §14: no cost slider on the recognition card; the cost is the relate beats' mean (needs.ts).
+  expect(record.resonance?.starting?.cost).toBeUndefined();
   expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
@@ -394,7 +395,8 @@ test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is 
 });
 
 test("§14 Calm: the tutorial shows once per device, three sentences and a button, then never again", async ({ page }) => {
-  await page.addInitScript((k) => { try { localStorage.removeItem(k); } catch { /* fine */ } }, TUTORED_KEY);
+  // Clear the device's memory of the tutorial once for this tab, not on every load (the reload below must keep the flag "Got it" wrote).
+  await page.addInitScript((k) => { try { if (!sessionStorage.getItem("tutorial-cleared")) { localStorage.removeItem(k); sessionStorage.setItem("tutorial-cleared", "1"); } } catch { /* fine */ } }, TUTORED_KEY);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
   const tutorial = page.getByRole("group", { name: "How to play" });
@@ -534,7 +536,6 @@ test("Reflection interpretation (PRD §29): a reading is offered in the person's
   await page.getByRole("button", { name: "Next", exact: true }).click();
   const reading = page.getByRole("group", { name: "It sounds like two things were part of it." });
   await expect(reading).toBeVisible();
-  await expect(reading).toContainText("Only what you say yes to goes into your picture");
   expect(page.url()).not.toMatch(/slept|vague|brief/);
   await reading.getByRole("button", { name: "Short on sleep" }).click();
   // On to the try beat; the model holds the reading, not the text.

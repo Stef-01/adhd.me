@@ -50,7 +50,9 @@ test("learning remains usable when browser storage is denied", async ({ page }) 
   await expect(page.locator(".learn-lesson.is-current")).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Finish", exact: true }).click();
-  await expect(page.locator(".learning-completion")).toContainText("One more idea to take with you.");
+  // §14: the completion card is the read's last idea and one button, no "MODULE FINISHED" label above it.
+  await expect(page.locator(".learning-completion").getByRole("button", { name: "Read again" })).toBeVisible();
+  await expect(page.locator(".learning-overline")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Time, money, distance/ })).toContainText("Done");
 });
 
