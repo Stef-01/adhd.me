@@ -18,6 +18,19 @@ Coast gazetteer (`src/geo/`), and a large practice-facing console (`app/console/
 capability, capacity, credentials, matching, outcomes, referrals, reporting, and more. Public pages
 cover the founder story, clinician walkthrough, practices, examples, FAQ, privacy, terms.
 
+## ADHD Life — 2026-09-08
+
+The founder's PRD ("ADHD Life: interactive ADHD education, personalisation and precision support")
+is implemented on this app in PR #3 and planned in one place: **[docs/adhd-life/PLAN.md](docs/adhd-life/PLAN.md)**
+— the PRD section by section against what shipped, what is deferred and why, and the ordered next
+phases (topic surveys, problem-fit matching, real allied providers, then the P1 list, then the
+pilot). ADR 0004 records the decision to build the product on this stack rather than the PRD's.
+
+- [x] Four tabs, onboarding, fifteen interactive modules, the personal model, Today, My ADHD, the
+      support path, the care map, the finder broadened beyond GPs — PR #3.
+- [ ] Phase A of the plan: five topic surveys, problem-fit matching, precision-survey offer rule,
+      real allied providers, voice reflection, QA captures.
+
 ## Q3 2026 (Sep–Nov) — make the redesign real
 
 The founder's words were "optimise and redesign from the ground up." Read literally: don't just
