@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { INTERACTIVE_MODULES, strategyById } from "./interactive";
-import { expiryIsHit, INSTRUCTION_WORDS, MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words } from "./play";
+import { expiryIsHit, INSTRUCTION_WORDS, MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words, fasterBefore, FASTER_EVERY } from "./play";
 import { RUNS, runFor } from "./runs";
 import { cardCount, MODULES } from "./scenes";
 
@@ -91,5 +91,23 @@ describe("the runs", () => {
     expect(runPhaseAt(run, run.rounds.length + 3).phase).toBe("try");
     expect(runPhaseAt(run, run.rounds.length + 4).phase).toBe("next");
     expect(runPhaseAt(run, 99).phase).toBe("next");
+  });
+});
+
+describe("the Faster card", () => {
+  it("never shows before the first round, and never before a round that asks about you", () => {
+    for (const run of RUNS) {
+      expect(fasterBefore(run, 0)).toBe(false);
+      run.rounds.forEach((round, i) => { if (round.writes) expect(fasterBefore(run, i)).toBe(false); });
+    }
+  });
+  it("shows before every third round otherwise, and at least once in a run of seven", () => {
+    for (const run of RUNS) {
+      run.rounds.forEach((round, i) => {
+        if (i > 0 && !round.writes) expect(fasterBefore(run, i)).toBe(i % FASTER_EVERY === 0);
+      });
+      const shown = run.rounds.filter((_, i) => fasterBefore(run, i)).length;
+      if (run.rounds.length >= 7 && run.rounds.every((r) => !r.writes)) expect(shown).toBeGreaterThanOrEqual(1);
+    }
   });
 });

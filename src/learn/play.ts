@@ -102,6 +102,19 @@ export function rampedSeconds(run: Run, index: number): number {
 }
 
 /** Whether the timer running out is a hit (the "don't" mechanics) or a miss. */
+/**
+ * The "Faster" card (PLAY-PLAN.md §10, founder 2026-09-08): the clone flashes one word between
+ * levels as the time limit drops. Ours shows it before every third round, where the ramp has
+ * bitten — never before the first round, never before a round that asks about you (those do not
+ * ramp), and the player skips it under reduced motion.
+ */
+export const FASTER_EVERY = 3;
+export function fasterBefore(run: Run, index: number): boolean {
+  const round = run.rounds[index];
+  if (!round || index === 0 || round.writes) return false;
+  return index % FASTER_EVERY === 0;
+}
+
 export function expiryIsHit(mechanic: Mechanic): boolean {
   return mechanic === "dont-tap" || mechanic === "hold";
 }

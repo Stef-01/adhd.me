@@ -159,15 +159,20 @@ that we do not, and two it has that we refuse on purpose:
 - **Taken — the clock pauses when the game is hidden.** The clone pauses on interruption. Ours
   measured elapsed time across a hidden tab, so switching away mid-round expired it behind the
   person's back. Fixed in `run-player.tsx`.
-- **Open — the "FASTER" card.** Between levels the clone flashes one word for under a second as
+- **Taken (founder, 2026-09-08: "use the assets and components") — the "FASTER" card.** Between levels the clone flashes one word for under a second as
   the time limit drops (7s → 2s across six levels; ours drops five percent a round, floor seventy,
   §9). Our ramp is silent. A one-beat "Faster" card when the ramp bites (say before rounds 3 and
   6, skipped under reduced motion) is the most recognisable Dumb Ways to Die beat we lack.
-  Founder's call; recommended.
-- **Open — the instruction runs over the game.** The clone starts the timer at once and slides
+  Built: `fasterBefore` shows it before every third round, never before a round that asks about
+  you, never under reduced motion.
+- **Taken — the instruction runs over the game.** The clone starts the timer at once and slides
   the instruction over the playing scene (0.15s in, 2s hold, 0.5s out). Ours holds a 900ms
   reading beat before the clock starts. The clone's way is more faithful; ours gives the reading
-  moment PRD §33 asks for. Recommended: keep ours.
+  moment PRD §33 asks for. Founder chose the clone's: the clock runs from the first frame and
+  the instruction is called out over the scene for two seconds, then settles. The reading moment
+  is the round's first two seconds; the seconds on each round already allow for it.
+- **Not taken — the art.** The clone's sprites are Metro Trains' characters, and the repo carries
+  no licence. The beans are our own; the components and structure are what we took.
 - **Refused — lives and points.** Three lives, a score with random bonus names ("PITY BONUS",
   "INSULT TO INJURY") and a high score are the clone's; §3 and PRD §34 rule them out. Rounds, not
   lives; beans, not points.

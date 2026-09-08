@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Play, Sparkle } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, rampedSeconds, runPhaseAt, type Run } from "@/learn/play";
+import { expiryIsHit, fasterBefore, rampedSeconds, runPhaseAt, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
@@ -23,6 +23,8 @@ import { VoiceReflection } from "../voice-reflection";
 
 const SPRING = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
 const RESULT_MS = 1500;
+const FASTER_MS = 800;
+const CALLOUT_MS = 2000;
 
 const FREQUENCIES: ReadonlyArray<{ id: Frequency; label: string }> = [{ id: "often", label: "Often" }, { id: "sometimes", label: "Sometimes" }, { id: "rarely", label: "Rarely" }, { id: "unsure", label: "Unsure" }];
 const PRIORITIES: ReadonlyArray<{ id: Priority; label: string }> = [{ id: "yes", label: "Yes" }, { id: "maybe", label: "Maybe" }, { id: "no", label: "No" }];
@@ -196,7 +198,10 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
 function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run; index: number; reducedMotion: boolean; onDone: (hit: boolean, chosen?: string | string[]) => void; onAdvance: () => void }) {
   const round = run.rounds[index]!;
   const seconds = rampedSeconds(run, index);
-  const [beat, setBeat] = useState<"in" | "play" | "result">(reducedMotion ? "play" : "in");
+  // Beats (PLAY-PLAN.md §10): an optional "Faster" card, then play — the clock runs from the first
+  // frame and the instruction sits over the scene for two seconds — then the result.
+  const [beat, setBeat] = useState<"faster" | "play" | "result">(!reducedMotion && fasterBefore(run, index) ? "faster" : "play");
+  const [callout, setCallout] = useState(!reducedMotion);
   const [hit, setHit] = useState<boolean | null>(null);
   const [progress, setProgress] = useState(0);
   const start = useRef<number | null>(null);
@@ -210,12 +215,19 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
     onDone(h, chosen);
   }, [onDone]);
 
-  // Instruction beat, then the clock. Under reduced motion there is no clock: the round waits for a gesture.
+  // The Faster card holds for under a second, then play. Under reduced motion there is no clock
+  // and no card: the round waits for a gesture.
   useEffect(() => {
-    if (reducedMotion) return;
-    const t = window.setTimeout(() => setBeat("play"), 900);
+    if (beat !== "faster") return;
+    const t = window.setTimeout(() => setBeat("play"), FASTER_MS);
     return () => window.clearTimeout(t);
-  }, [reducedMotion]);
+  }, [beat]);
+  // The instruction is called out over the scene while the clock already runs, then settles.
+  useEffect(() => {
+    if (reducedMotion || beat !== "play") return;
+    const t = window.setTimeout(() => setCallout(false), CALLOUT_MS);
+    return () => window.clearTimeout(t);
+  }, [beat, reducedMotion]);
   useEffect(() => {
     if (reducedMotion || beat !== "play") return;
     let raf = 0;
@@ -249,10 +261,16 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
   const mood = beat === "result" ? (hit ? "pleased" : "embarrassed") : (round.mood ?? "neutral");
   return (
     <div className={`play-card is-round${beat === "result" ? (hit ? " is-hit" : " is-miss") : ""}`} data-beat={beat}>
-      {!reducedMotion && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
+      {beat === "faster" && (
+        <motion.div className="play-faster" role="status" initial={{ scale: 0.4, rotate: -8, opacity: 0 }} animate={{ scale: 1, rotate: [-8, 4, 0], opacity: 1 }} transition={{ ...SPRING, rotate: { duration: 0.5 } }}>
+          <Bean who={round.who} mood="pleased" size={96} />
+          <p className="play-faster-word">Faster</p>
+        </motion.div>
+      )}
+      {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
       <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
-      <div className="play-scene"><Bean who={round.who} mood={mood} size={128} /></div>
-      <h2 className="play-title play-instruction" tabIndex={-1}>{round.instruction}</h2>
+      {beat !== "faster" && <div className="play-scene"><Bean who={round.who} mood={mood} size={128} /></div>}
+      {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
       {beat !== "result" && (
         <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} onResult={settle} />
       )}
