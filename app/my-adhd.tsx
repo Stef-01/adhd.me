@@ -18,6 +18,8 @@ import { clearProgress } from "@/learn/progress";
 import { clearCursor } from "@/learn/cursor";
 import { LifeHeader, WhyThis } from "./life-shell";
 import { useModel } from "./use-model";
+import { SurveyOffer } from "./survey-offer";
+import { NWIA_LABELS, nwiaBalance } from "@/wellness/nwia";
 
 const VERDICT_LABEL: Record<InsightVerdict, string> = { yes: "That’s me", partly: "Partly", no: "Not really" };
 
@@ -73,6 +75,17 @@ export function MyAdhd() {
               </ul>
             )}
             {summary.pattern && <p className="learn-card-foot"><strong>Pattern:</strong> {summary.pattern}.</p>}
+            {/* The NWIA balance principle in one line: the nine dimensions affect each other, so say which your signals touch and which nothing has yet. */}
+            {(() => {
+              const balance = nwiaBalance([...new Set([...needs.map((n) => n.subdomain), ...needs.flatMap((n) => n.contributors.map((c) => c.subdomain))])], { goal: Boolean(record.onboarding?.improveFirst) });
+              return (
+                <p className="learn-card-foot" data-testid="nwia-balance">
+                  <strong>Balance:</strong> your picture touches {balance.touched.map((d) => NWIA_LABELS[d].toLowerCase()).join(", ")}.
+                  {balance.untouched.length > 0 && <> Nothing yet on {balance.untouched.map((d) => NWIA_LABELS[d].toLowerCase()).join(", ")} — which is not a gap, only unasked.</>}
+                  {" "}<Link href="/approach/map">See the map</Link>
+                </p>
+              );
+            })()}
           </section>
 
           <section className="life-card" aria-labelledby="my-helps">
@@ -96,6 +109,8 @@ export function MyAdhd() {
               <Link className="learn-secondary" href="/approach/map">See it on the map</Link>
             </div>
           </section>
+
+          <SurveyOffer record={record} />
 
           {rec && (
             <section className="life-card" aria-labelledby="my-next">

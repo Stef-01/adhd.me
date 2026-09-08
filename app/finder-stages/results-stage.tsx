@@ -63,6 +63,7 @@ export function ResultsStage({
   place,
   filters,
   onToggleFilter,
+  fitFor,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -93,6 +94,8 @@ export function ResultsStage({
   /** RADIANT: the device's filters, so the quick chips can show which are on and switch them. */
   filters: Filters;
   onToggleFilter: (key: BooleanFilterKey) => void;
+  /** PRD §42: the problem-fit sentence for an allied provider, from the personal model, or null. */
+  fitFor?: (clinician: Clinician) => string | null;
 }) {
   /** The filters the chips cannot show — a language, a distance, a way of working — as a count on the Filters pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
@@ -438,7 +441,7 @@ export function ResultsStage({
                 <strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
-                <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{reasons.slice(0, 2).join(", ") || item.focus}</small>
+                <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 2).join(", ") || item.focus)}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}

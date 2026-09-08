@@ -19,7 +19,7 @@ describe("the fifteen modules", () => {
     const shelved = SHELVES.flatMap((s) => s.modules);
     for (const id of ids) {
       expect(shelved.filter((s) => s === id).length, id).toBe(1);
-      expect(MODULES.find((m) => m.id === id)?.kind).toBe("interactive");
+      expect(["interactive", "run"]).toContain(MODULES.find((m) => m.id === id)?.kind);
     }
     for (const m of INTERACTIVE_MODULES) {
       expect(m.minutes).toBeGreaterThanOrEqual(6);
@@ -41,7 +41,8 @@ describe("the fifteen modules", () => {
       expect(kinds.at(-1), m.id).toBe("next");
       expect(kinds.indexOf("resonance")).toBeLessThan(kinds.indexOf("explain"));
       expect(kinds.indexOf("explain")).toBeLessThan(kinds.indexOf("strategy"));
-      expect(cardCount(MODULES.find((x) => x.id === m.id)!)).toBe(m.steps.length);
+      const listed = MODULES.find((x) => x.id === m.id)!;
+      if (listed.kind === "interactive") expect(cardCount(listed)).toBe(m.steps.length);
     }
   });
 

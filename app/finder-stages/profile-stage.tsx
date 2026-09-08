@@ -79,6 +79,7 @@ export function ProfileStage({
   onBack,
   onCompare,
   onBook,
+  problemFit = null,
 }: {
   clinician: Clinician;
   personalizedSignals: readonly string[];
@@ -91,6 +92,8 @@ export function ProfileStage({
   onBack: () => void;
   onCompare: () => void;
   onBook: () => void;
+  /** PRD §42: why this provider fits what the personal model has learned, or null. */
+  problemFit?: string | null;
 }) {
   const facts = profileFacts(clinician);
   const accessFacts = [
@@ -132,6 +135,7 @@ export function ProfileStage({
               /* PRD §41: "Best for" — the declared expertise, in the closed taxonomy's own words. */
               <p className="profile-best-for"><span>Best for</span> {clinician.expertise.map((t) => EXPERTISE_LABELS[t]).join(", ")}</p>
             )}
+            {problemFit && <p className="profile-best-for profile-fit"><span>Why you’re seeing them</span> {problemFit}</p>}
             <p className="profile-location">{locationLabel(clinician)}</p>
             {/* O184: the material-interest disclosure, back on the listing it concerns.
                 SITED IN THE IDENTITY BLOCK, because that is where a reader is deciding who this

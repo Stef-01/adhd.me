@@ -1,5 +1,6 @@
 import { INDICATIVE_FIGURES } from "../compliance/landing-copy";
 import { INTERACTIVE_MODULES, type InteractiveModule } from "./interactive";
+import { runFor, runStepCount, type Run } from "./runs-index";
 
 // O239 (founder-directed): the Learn tab's copy, as data. O244 (founder-directed) widened it:
 // "the learn tab is to help people learn about ADHD and managing symptoms, and little
@@ -282,25 +283,31 @@ export type LearnModule = {
   readonly minutes: number;
   /** Which token family the tile's mark is drawn in. Three families, no new colour. */
   readonly tint: "route" | "accent" | "ink";
-  readonly kind: "read" | "quiz" | "interactive";
+  readonly kind: "read" | "quiz" | "interactive" | "run";
   /** Read modules: the scenes, in order. */
   readonly scenes?: readonly string[];
   /** Quiz modules: the questions, in order. */
   readonly questions?: readonly Question[];
   /** Interactive modules (PRD §12): the steps, the characters, the subdomains — see `interactive.ts`. */
   readonly interactive?: InteractiveModule;
+  /** Play (PLAY-PLAN.md): the module as a run of micro-games. When present, the run is what plays. */
+  readonly run?: Run;
 };
 
 /** The interactive modules, in the shape the list, the cursor and the progress record read. */
-const INTERACTIVE: readonly LearnModule[] = INTERACTIVE_MODULES.map((m, i) => ({
-  id: m.id,
-  title: m.title,
-  subtitle: m.subtitle,
-  minutes: m.minutes,
-  tint: (["route", "accent", "ink"] as const)[i % 3]!,
-  kind: "interactive",
-  interactive: m,
-}));
+const INTERACTIVE: readonly LearnModule[] = INTERACTIVE_MODULES.map((m, i) => {
+  const run = runFor(m.id);
+  return {
+    id: m.id,
+    title: run?.title ?? m.title,
+    subtitle: run?.tagline ?? m.subtitle,
+    minutes: run?.minutes ?? m.minutes,
+    tint: (["route", "accent", "ink"] as const)[i % 3]!,
+    kind: run ? "run" : "interactive",
+    interactive: m,
+    run,
+  };
+});
 
 export const MYTH_OR_FACT: readonly Question[] = [
   {
@@ -408,6 +415,7 @@ export function scenesOf(module: LearnModule): Scene[] {
 
 /** How many cards a module has — scenes for a read module, questions for a quiz. */
 export function cardCount(module: LearnModule): number {
+  if (module.kind === "run") return module.run ? runStepCount(module.run) : 0;
   if (module.kind === "interactive") return module.interactive?.steps.length ?? 0;
   return module.kind === "quiz" ? (module.questions ?? []).length : (module.scenes ?? []).length;
 }

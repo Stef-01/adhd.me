@@ -2,7 +2,7 @@
 
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
 import { StageDirection } from "./finder-stages/shared";
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
 import {
   clinicians,
@@ -20,6 +20,10 @@ import {
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
 import { professionsMentioned } from "@/support/professions";
+import { fitReason, orderByProblemFit } from "@/support/problem-fit";
+import { deviceLearningStorage } from "@/learn/cursor";
+import { readModel } from "@/model/store";
+import { topNeed, type Need } from "@/model/needs";
 import { professionOf } from "@/demo/clinicians";
 import { clarifiers } from "@/matching/clarify";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
@@ -152,7 +156,15 @@ export function CareFinder() {
    * null origin IS `rankClinicians`, so one expression covers every former site; the scenarios
    * stage never displays matches, so its priming setters carried no behavior at all.
    */
-  const matches = useMemo(() => rankCliniciansNear(request, origin, roster), [request, origin, roster]);
+  /**
+   * Problem fit (PRD §42): what the personal model has learned about this person — read on the
+   * client, after mount, like every device fact — reorders the ALLIED entries among themselves by
+   * how their declared expertise answers the top need. GPs stay where the engine ranked them.
+   */
+  const [need, setNeed] = useState<Need | null>(null);
+  useEffect(() => { setNeed(topNeed(readModel(deviceLearningStorage))); }, []);
+  const matches = useMemo(() => orderByProblemFit(rankCliniciansNear(request, origin, roster), need), [request, origin, roster, need]);
+  const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // Round 2: sixteen near-identical rows is the "long list" anti-pattern. Five is enough to choose
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
@@ -673,6 +685,7 @@ export function CareFinder() {
         {stage === "results" && (
           <ResultsStage
             key="results"
+            fitFor={fitFor}
             focusOnArrival={focusOnArrival}
             requestHeadline={requestHeadline}
             requestSummary={requestSummary}
@@ -710,6 +723,7 @@ export function CareFinder() {
           <ProfileStage
             key="profile"
             focusOnArrival={focusOnArrival}
+            problemFit={fitFor(clinician)}
             clinician={clinician}
             personalizedSignals={personalizedMatch.signals}
             profileEvidence={profileEvidence}

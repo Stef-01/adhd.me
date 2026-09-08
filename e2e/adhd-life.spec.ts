@@ -7,6 +7,29 @@ import { expect, test } from "@playwright/test";
 
 const MODEL_KEY = "adhdme.model.v1";
 
+/** Play the perfectionism run under reduced motion up to its reflect beat. */
+async function playToReflect(page: import("@playwright/test").Page) {
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await page.getByRole("button", { name: "I held off" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Permission to be rough" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "I held on" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Ask the reader" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /I guess, and aim high/ }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /Being judged/ }).click();
+  await page.getByRole("button", { name: "That’s me" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Partly" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+}
+
+
 test("E2E 1: a new person completes onboarding and is handed a first module", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/today");
@@ -44,50 +67,76 @@ test("E2E 1: a new person completes onboarding and is handed a first module", as
   expect(new URL(page.url()).search).toBe("");
   await page.getByRole("button", { name: /^Start/ }).click();
   await expect(page).toHaveURL(/module=starting/);
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Maya knows exactly what to do");
+  await expect(page.locator(".play-title")).toContainText("The blank page");
 });
 
-test("E2E 3 & 5: a module's answers reach My ADHD, and a rejected insight is never confirmed", async ({ page }) => {
+test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is never confirmed", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/approach?module=starting");
+  await expect(page.locator(".play-title")).toContainText("The blank page");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  // Round 1: don't tap. Under reduced motion there is no clock; the person says they held.
+  await expect(page.locator(".play-card[data-beat=play]")).toBeVisible();
+  await page.getByRole("button", { name: "I held off" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /Write the first sentence, badly/ }).click();
-  await expect(page.locator(".learn-reveal")).toContainText("The barrier is the start");
+  // Round 2: order.
+  for (const label of ["Open the file", "Type the title", "Write one bad sentence"]) await page.getByRole("button", { name: label }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 3: tap — a wrong answer is a beat, not a loss.
+  await page.getByRole("button", { name: "Try harder" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Not this time");
+  await expect(page.locator(".play-result")).toContainText("Effort was never the missing piece");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 4: tap.
+  await page.getByRole("button", { name: "Improve the report" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 5: hold.
+  await page.getByRole("button", { name: "I held on" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 6: pick your bean (writes an answer).
+  await page.getByRole("button", { name: /Vague ones/ }).click();
+  await page.getByRole("button", { name: "That’s me" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 7.
+  await page.getByRole("button", { name: /Another person/ }).click();
+  await page.getByRole("button", { name: "That’s me" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Recognition: Next is held until a frequency is given.
   await expect(page.getByRole("button", { name: "Next", exact: true })).toBeDisabled();
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Often" }).click();
   await page.getByRole("slider").fill("7");
-  await page.getByRole("group", { name: /become easier/ }).getByRole("button", { name: "Yes" }).click();
+  await page.getByRole("group", { name: "Want it easier" }).getByRole("button", { name: "Yes" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Starting is its own function");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: /hardest to start/ }).getByRole("button", { name: "Vague ones" }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: "I’ll try this" }).first().click();
-  await expect(page.locator(".strategy-accepted").first()).toContainText("On your list");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: "Skip" }).click();
+  // Insight: rejected.
+  await expect(page.locator(".play-kicker")).toContainText(/rounds cleared/);
   await page.getByRole("button", { name: "Not really" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Try the first physical action");
+  await page.getByRole("button", { name: "I’ll try this" }).click();
+  await expect(page.locator(".strategy-accepted")).toContainText("On your list");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Finish" }).click();
   await expect(page.locator(".learning-completion")).toContainText("Your picture just got sharper");
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
   expect(record.resonance?.starting?.frequency).toBe("often");
   expect(record.resonance?.starting?.cost).toBe(7);
+  expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
+  expect(record.answers?.["starting.what-helps-start"]).toEqual(["person"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
   expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
+  expect(record.completed).toContain("starting");
 
   await page.goto("/my-adhd");
   await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
   await expect(page.getByText("Activation for ambiguous tasks", { exact: true })).toBeVisible();
-  await expect(page.locator(".layer-pill[data-layer=environment]").first()).toBeVisible();
+  await expect(page.getByText("External accountability helps", { exact: true })).toBeVisible();
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
   // Today follows up the experiment before anything new, and the outcome lands in the history.
-  await page.goto("/start");
   await page.evaluate((k) => { const r = JSON.parse(localStorage.getItem(k) ?? "{}"); r.onboarding = { ...(r.onboarding ?? {}), completedAt: new Date().toISOString() }; localStorage.setItem(k, JSON.stringify(r)); }, MODEL_KEY);
   await page.goto("/today");
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toBeVisible();
@@ -99,13 +148,23 @@ test("E2E 3 & 5: a module's answers reach My ADHD, and a rejected insight is nev
   await expect(page.getByText("Things that help me")).toBeVisible();
 });
 
-test("E2E 8: a safety response interrupts the module, pauses recommendations, and leaves nothing in a URL", async ({ page }) => {
+test("Play: with motion on, the clock runs a round on its own and a held 'don't tap' clears", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/approach?module=starting");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /Sit next to somebody/ }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
-  for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await expect(page.locator(".play-clock")).toBeVisible();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared", { timeout: 12000 });
+  // Auto-advance, then round two waits for a gesture.
+  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 7", { timeout: 4000 });
+  await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible();
+  // Touch floor on the round's controls.
+  for (const box of await page.locator(".play-choice").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(box).toBeGreaterThanOrEqual(44);
+});
+
+test("E2E 8: a safety response interrupts the module, pauses recommendations, and leaves nothing in a URL", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=perfectionism");
+  await playToReflect(page);
   await expect(page.locator(".reflect-field textarea")).toBeVisible();
   await page.locator(".reflect-field textarea").fill("I don't want to be here anymore");
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -192,18 +251,121 @@ test("the care map opens from the Learn page's map icon, and a node explains its
   await expect(bar.getByRole("link", { name: "My ADHD", exact: true })).toBeVisible();
 });
 
-test("E2E 9: under reduced motion the simulations work by buttons, and a module completes", async ({ page }) => {
+test("E2E 9: under reduced motion a run has no clock, the recall round works by buttons, and the keyboard plays it", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=working-memory");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".play-clock")).toHaveCount(0);
+  await page.keyboard.press("Enter"); // "Tap to play" holds focus on the title card
+  await expect(page.locator(".play-kicker")).toContainText("Round 1 of 7");
   await page.getByRole("button", { name: "I have them" }).click();
   await page.getByRole("button", { name: /Reply, then keep walking/ }).click();
-  await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: "Milk" }).click();
-  await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: "Stamps" }).click();
+  for (const item of ["Milk", "The parcel", "Stamps", "Sam’s script"]) await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: item }).click();
   await page.getByRole("button", { name: "Check" }).click();
-  await expect(page.locator(".learn-reveal")).toContainText(/2 of the four came back/);
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator(".play-result")).toContainText("All four");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Rarely" }).click();
+  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 7");
+  await expect(page.locator(".play-clock")).toHaveCount(0);
+});
+
+// ── Phase A ────────────────────────────────────────────────────────────────────────────────
+
+test("Phase A: a topic survey is offered, not launched; answered one screen at a time; and its pattern reaches My ADHD", async ({ page }) => {
+  await page.goto("/my-adhd");
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
+    v: 1, onboarding: { improveFirst: "start-earlier", impact: 8, completedAt: new Date().toISOString() },
+    resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() } },
+    answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+  })), MODEL_KEY);
+  await page.reload();
+  const offer = page.getByRole("link", { name: /Start the survey/ });
+  await expect(offer).toBeVisible();
+  await expect(page).toHaveURL(/\/my-adhd$/);
+  await offer.click();
+  await expect(page).toHaveURL(/\/survey\?id=work-study$/);
+  await page.getByRole("button", { name: /Very — I circle it/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("small table");
+  await page.getByRole("button", { name: "Much harder" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /the night before/ }).click();
+  for (let i = 0; i < 7; i += 1) await page.getByRole("button", { name: /^(Next|Skip)$/ }).click();
+  await page.getByRole("slider").fill("9");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /Once the problem is concrete/ }).click();
+  await page.getByRole("button", { name: "See my pattern" }).click();
+  await expect(page.getByRole("heading", { name: "Your work pattern." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
+  await expect(page.getByText("Environmental amplifier")).toBeVisible();
+  await expect(page.getByText("Sustained engagement once the problem becomes concrete", { exact: false })).toBeVisible();
+  await expect(page.getByRole("button", { name: "I’ll try this" })).toBeVisible();
+  const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
+  expect(record.surveys["work-study"].completedAt).toBeTruthy();
+  expect(record.survey.lastLongAt).toBeTruthy();
+  await page.goto("/my-adhd");
+  await expect(page.getByRole("link", { name: /Start the survey/ })).toHaveCount(0);
+  await expect(page.getByText("Waiting for urgency", { exact: true })).toBeVisible();
+});
+
+test("Phase A: problem fit orders allied providers by the person's top need, and says why", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
+    v: 1, onboarding: null,
+    resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() } },
+    answers: { "starting.hardest-to-start": ["vague"] }, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+  })), MODEL_KEY);
+  await page.reload();
+  await page.getByRole("textbox").fill("an OT or a coach who does telehealth");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  const first = page.locator(".clinician-row").first();
+  await expect(first).toContainText(/Works on task initiation — the thing you said is hardest/);
+  await first.click();
+  await expect(page.getByText("Why you’re seeing them")).toBeVisible();
+});
+
+test("Phase A: voice reflection appends the transcript, and an absent recogniser says so", async ({ page }) => {
+  const { installFakeSpeech } = await import("./support/fake-speech");
+  await installFakeSpeech(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=perfectionism");
+  await playToReflect(page);
+  await page.getByRole("button", { name: "Say it instead" }).click();
+  await expect(page.getByRole("button", { name: /Tap when you’ve finished/ })).toBeVisible();
+  await page.evaluate(() => (window as unknown as { __speech: { say: (t: string, f: boolean) => void; finish: () => void } }).__speech.say("the brief was vague", true));
+  await page.getByRole("button", { name: /Tap when you’ve finished/ }).click();
+  await page.evaluate(() => (window as unknown as { __speech: { finish: () => void } }).__speech.finish());
+  await expect(page.locator(".reflect-field textarea")).toHaveValue(/the brief was vague/);
+});
+
+test("NWIA: the paradigm is on the care map once and attributed, a node names its dimension, and My ADHD says the balance honestly", async ({ page }) => {
+  await page.goto("/approach/map");
+  const intro = page.locator(".care-map-nwia");
+  await expect(intro).toHaveCount(1);
+  await expect(intro).toContainText(/awareness, understanding and active decision-making/);
+  await expect(intro.getByRole("link", { name: /National Wellness Institute of Australia/ })).toHaveAttribute("href", /wellnessaustralia\.org/);
+  await page.getByRole("button", { name: /^Sleep \(Body\)/ }).click();
+  await expect(page.locator(".care-map-nwia")).toContainText(/Wellness dimension\s*Physical/);
+  await page.goto("/my-adhd");
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
+    v: 1, onboarding: { improveFirst: "start-earlier", impact: 7, completedAt: new Date().toISOString() },
+    resonance: { starting: { frequency: "often", cost: 7, priority: "yes", at: new Date().toISOString() } },
+    answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+  })), MODEL_KEY);
+  await page.reload();
+  const balance = page.getByTestId("nwia-balance");
+  await expect(balance).toContainText(/touches work, spiritual values, intellectual/);
+  await expect(balance).toContainText(/Nothing yet on physical, social, emotional/);
+  await expect(balance).toContainText(/unasked/);
+});
+
+test("Play P3: the cast wakes as runs are cleared — discovery, never a streak", async ({ page }) => {
+  await page.goto("/approach");
+  const cast = page.getByRole("list", { name: /Beans collected: 0 of 15/ });
+  await expect(cast).toBeVisible();
+  await expect(cast.locator("li.is-awake")).toHaveCount(0);
+  await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["starting", "sleep"] })));
+  await page.reload();
+  await expect(page.getByRole("list", { name: /Beans collected: 2 of 15/ })).toBeVisible();
+  await expect(page.locator(".play-cast li.is-awake")).toHaveCount(2);
+  await expect(page.locator(".play-cast li.is-awake").first()).toContainText("Maya");
 });

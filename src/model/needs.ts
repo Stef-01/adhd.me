@@ -14,7 +14,10 @@
 import { INTERACTIVE_MODULES, strategyById, type InteractiveModule } from "@/learn/interactive";
 import { improveOption } from "./onboarding";
 import type { Domain, Layer, Subdomain } from "./layers";
-import { subdomain as subdomainEntry } from "./layers";
+import { needLabel } from "./labels";
+import { scoreSurvey } from "./surveys";
+import { topicSurvey } from "@/learn/surveys";
+export { needLabel } from "./labels";
 import type { ExperimentOutcome, ModelRecord } from "./store";
 
 export type Confidence = "low" | "medium" | "high";
@@ -51,32 +54,6 @@ export interface Need {
   readonly sources: readonly string[];
   /** How many separate occasions the signal was recorded — the persistence input. */
   readonly persistence: number;
-}
-
-const SUBDOMAIN_LABELS: Partial<Record<Subdomain, string>> = {
-  activation: "Starting work before deadline pressure takes over",
-  attention: "Keeping attention where you point it",
-  memory: "Holding things in mind",
-  switching: "Getting back to a task after an interruption",
-  time: "Feeling how far away a deadline is",
-  "emotional-regulation": "Feelings arriving fast and settling slowly",
-  sleep: "Sleep, and what a short night costs",
-  movement: "Keeping movement going",
-  "living-environment": "The household load",
-  partner: "Being understood by the people close to you",
-  "deadline-design": "Long deadlines with little structure",
-  "workplace-context": "How work arrives",
-  "study-context": "How study is set up",
-  "medication-experience": "What medication does and does not change",
-  appetite: "Eating regularly",
-  energy: "Energy through the day",
-  structure: "How much structure a day has",
-  noise: "Noise and interruption where you work",
-  workload: "How much is on at once",
-};
-
-export function needLabel(sub: Subdomain): string {
-  return SUBDOMAIN_LABELS[sub] ?? subdomainEntry(sub).label;
 }
 
 const COST_BY_FREQUENCY = { often: 7, sometimes: 5, rarely: 2, unsure: 4 } as const;
@@ -222,10 +199,26 @@ export function deriveNeeds(record: ModelRecord): Need[] {
     }
   }
 
+  // 3. Topic surveys: the friction is a need; the cost is the person's own; contributors and strengths ride with it.
+  for (const [surveyId, held] of Object.entries(record.surveys)) {
+    const survey = topicSurvey(surveyId);
+    if (!survey || !held.completedAt) continue;
+    const result = scoreSurvey(survey, held.answers);
+    if (!result.friction) continue;
+    const d = get(survey.domain, result.friction.subdomain);
+    d.sources.add(`survey:${surveyId}`);
+    d.occasions += 1;
+    if (result.cost !== null) d.costs.push(result.cost);
+    d.priorities.push("yes");
+    for (const s of result.strengths) d.strengths.add(s);
+    for (const c of result.contributors) d.contributors.set(`${c.layer}:${c.note}`, c);
+  }
+
   const context = onboardingContext(record);
   const needs: Need[] = [];
   for (const d of drafts.values()) {
     for (const c of onboardingContributors) d.contributors.set(`${c.layer}:${c.note}`, c);
+    // A completed survey is as strong a source as a module: both are the person's own answers.
     const moduleSources = [...d.sources].filter((s) => s !== "onboarding");
     const answered = [...d.contributors.values()].length > 0;
     const confidence: Confidence = moduleSources.length >= 2 || (moduleSources.length === 1 && answered) ? "high" : moduleSources.length === 1 ? "medium" : "low";

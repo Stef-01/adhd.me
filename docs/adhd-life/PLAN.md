@@ -36,14 +36,14 @@ line or an analytics event.
 | §17 Simulations | Working memory, interruption, ambiguity | **Done**, button-driven | `app/interactive-module.tsx` |
 | §18 Perspective switching | Relationship modules | **Done** (three modules) | same |
 | §19 Resonance capture | Frequency, cost, priority, stored separately | **Done** | `src/model/store.ts` |
-| §20 Progressive surveys, four levels | Micro → precision | **Level 1 done** (in-module questions); levels 2–4 open | — |
+| §20 Progressive surveys, four levels | Micro → precision | **Done** — level 1 in modules; levels 3–4 as topic surveys, offered by rule and never launched | `src/model/offer.ts` |
 | §21 Survey fatigue | Score and rules | **Done** | `src/model/fatigue.ts` |
-| §22–§23 Topic surveys (five) | Work & Study, Relationships, Daily Organisation, Sleep, Emotional Wellbeing | **Open** | — |
+| §22–§23 Topic surveys (five) | Work & Study, Relationships, Daily Organisation, Sleep, Emotional Wellbeing | **Done** — 8–12 questions each, §23 result shape, contradictions named | `src/learn/surveys.ts`, `src/model/surveys.ts`, `/survey` |
 | §24 Personal ADHD model (Need) | Domain, cost, priority, confidence, contributors… | **Done**, derived on read | `src/model/needs.ts` |
 | §25 Eco-bio-psychosocial model | Four layers, subdomains | **Done** + the care map screen | `src/model/layers.ts`, `app/care-map.tsx`, `/approach/map` |
 | §26 My ADHD screen | Friction, contributors, pattern, helps, goal, worth exploring | **Done** | `app/my-adhd.tsx` |
 | §27 My Manual | Editable personal knowledge | **Deferred (P1)** | — |
-| §28 Reflection | Type / select / skip | **Done** (voice open) | player |
+| §28 Reflection | Type / voice / select / skip | **Done** | player, `app/voice-reflection.tsx` |
 | §29 AI reflection interpretation | Suggested interpretation, user confirms | **Deferred (P1)** | — |
 | §30–§32 Strategy → experiment → outcome → history | | **Done** | store, Today, My ADHD |
 | §33–§34 Gamification | Discovery, no streaks | **Done** — completion, insight cards; no streaks or points | — |
@@ -52,7 +52,7 @@ line or an analytics event.
 | §38 Professional categories | Six P0 | **Done**; P1 kinds open | `src/support/professions.ts` |
 | §39–§40 Provider model, expertise taxonomy | | **Done** (`profession`, `expertise` on `Clinician`) | `src/demo/roster.ts` |
 | §41 Provider match card | "Why you're seeing X", Best for | **Done** — reasons from the engine, Best for on profile | finder stages |
-| §42 Matching requirements | Problem fit, scope, preferences | **Partly** — profession scope + existing preference matching; no problem-tag scoring yet | — |
+| §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
 | §45–§47 Institutional navigation, support-person sharing, medication experience | | **Deferred (P1)** | — |
@@ -64,7 +64,7 @@ line or an analytics event.
 | §57 Offline | Cache, queue, sync | **N/A** — device-local by construction | — |
 | §58 Analytics taxonomy | | **Done** (constants + guarded `track`) | `src/model/events.ts` |
 | §59 Fifteen modules | | **Done** | `src/learn/interactive.ts` |
-| §60 Five topic surveys | | **Open** | — |
+| §60 Five topic surveys | | **Done** | `src/learn/surveys.ts` |
 | §61 30–50 curated providers | | **Partly** — 2 real GPs, 20 example GPs, 10 example allied | — |
 | §62–§63 Admin portal, content governance | | **Open**; content is code-reviewed via PR for now | — |
 | §64–§65 Explainability | Stored record + "Why am I seeing this?" | **Done** | recommend, `app/life-shell.tsx` |
@@ -72,27 +72,33 @@ line or an analytics event.
 | §75–§76 Usability tests | Real users | **Open** — needs the pilot | — |
 | §77–§80 Targets, outcomes | | **Open** — measured in the pilot | — |
 
+## 3a. Play (2026-09-08)
+
+The modules are being remade as runs of micro-games — much less text, much more interaction,
+Dumb-Ways-to-Die structure without its artwork. The plan is **[PLAY-PLAN.md](PLAY-PLAN.md)**;
+it supersedes the nine-stage module format for the interactive modules.
+
 ## 4. What comes next, in order
 
 Each item is one PR-sized piece. Nothing below is started.
 
 ### Phase A — close the P0 gaps (PRD §89)
 
-- [ ] **Five topic surveys** (§22–§23, §60): Work & Study, Relationships, Daily Organisation,
-      Sleep, Emotional Wellbeing, 8–12 questions each, offered from My ADHD and the support path,
-      gated by the fatigue engine, output in the §23 "Your work pattern" shape. Data in
-      `src/learn/surveys.ts`; scoring in `src/model/surveys.ts` with §67's tests (valid, skipped,
-      contradictory, empty, incomplete).
-- [ ] **Problem-fit matching** (§42): score allied providers on `expertise` against the top
-      need's subdomain, above the existing preference matching, and say the reason in the card.
-      Paid placement never alters the order (there is none; write the test anyway).
-- [ ] **Precision survey offer rule** (§20 level 4): offered only on explicit request, persistence,
-      or when a provider match would benefit — never launched automatically.
+- [x] **Five topic surveys** (§22–§23, §60) — `src/learn/surveys.ts`, scored in
+      `src/model/surveys.ts` with §67's cases; `/survey?id=…`; offered from My ADHD and the
+      support path; result in the §23 shape.
+- [x] **Problem-fit matching** (§42) — `src/support/problem-fit.ts`: allied providers ordered
+      among themselves by declared expertise against the top need; GPs stay where the engine
+      ranks them; the reason is on the row and the profile. Nothing paid exists to alter it.
+- [x] **Precision survey offer rule** (§20 level 4) — `src/model/offer.ts`: offered on
+      persistence, a stated wish for professional support, or high cost with low confidence;
+      never launched.
 - [ ] **Real allied providers**: the ten allied entries are examples. Curated real providers with
       declarations, on the same real-person law the two GPs hold (`src/demo/roster.ts` header).
-- [ ] **Voice reflection** (§28): the finder's speech session reused for the reflect step.
-- [ ] **Screenshots for the QA record** (`adhdme-taste` §honesty.qa-capture): the eight new
-      screens at 390 and desktop into `qa/`.
+- [x] **Voice reflection** (§28) — `app/voice-reflection.tsx`, the finder's speech session.
+- [x] **Screenshots for the QA record** — `qa/adhd-life/*-390.png` and `*-1280.png`, nine
+      screens; two findings fixed from the cold look (care-map labels clipping, the desktop tab
+      label wrapping).
 
 ### Phase B — P1 (PRD §91), after product-market signal
 

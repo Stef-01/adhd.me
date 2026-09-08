@@ -23,6 +23,7 @@ import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { CharacterMark, CharacterScene } from "./characters";
 import { SafetyScreen } from "./safety-screen";
+import { VoiceReflection } from "./voice-reflection";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
@@ -330,6 +331,7 @@ export function InteractiveView({
             <span className="sr-only">Your reflection</span>
             <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} placeholder="In your own words, or leave it blank." maxLength={2000} />
           </label>
+          <VoiceReflection onText={(text) => setReflection((t) => (t ? `${t} ${text}` : text).slice(0, 2000))} />
           <p className="learn-card-foot">Stays on this device. Never sent anywhere, never used in a URL or an analytics event.</p>
         </>;
       case "insight": {

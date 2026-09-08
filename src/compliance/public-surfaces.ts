@@ -125,6 +125,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The ADHD Life onboarding (PRD §9): ten questions about where a person is and what feels hardest. It asks, it never scores, and it is read by exactly the person the patient rules protect — so every prompt and option answers to them.",
   },
   {
+    path: "/survey",
+    audience: "patient",
+    why: "A topic survey (PRD §22): eight to twelve questions about one part of a life with ADHD, and the pattern it produces. Answered by the person the patient rules protect; no score, no verdict, every prompt swept.",
+  },
+  {
     path: "/today",
     audience: "patient",
     why: "The single most useful next action, derived from this device's own record (PRD §6). A recommendation is the most patient-facing sentence the app writes, and the rule that wrote it is printed beside it; both answer to the patient rules.",

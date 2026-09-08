@@ -19,6 +19,7 @@ import { LAYER_BLURBS, LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Laye
 import { deriveNeeds } from "@/model/needs";
 import { track } from "@/model/events";
 import { useModel } from "./use-model";
+import { NWIA_LABELS, NWIA_MEANINGS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
 
 const COLOURS: Record<Layer, { fill: string; ink: string }> = {
   brain: { fill: "#dfe5f7", ink: "#334679" },
@@ -56,9 +57,11 @@ function nodePositions(): Map<Subdomain, { x: number; y: number; layer: Layer }>
     const subs = subdomainsOf(layer);
     const [a, b] = WEDGE[layer];
     subs.forEach((s, i) => {
-      const ring = i % 2 === 0 ? 160 : 108;
+      // Two rings, and the inner one kept off the wedge edges so neighbours across a boundary never touch.
+      const ring = i % 2 === 0 ? 166 : 116;
       const t = (i + 0.5) / subs.length;
-      const deg = a + (b - a) * t;
+      const inset = i % 2 === 0 ? 0 : 6;
+      const deg = a + inset + (b - a - 2 * inset) * t;
       const [x, y] = polar(deg, ring);
       out.set(s.id, { x, y, layer });
     });
@@ -84,11 +87,17 @@ export function CareMap() {
       <svg className="care-map-svg" viewBox="0 0 440 440" role="group" aria-label="The care map: brain, body, environment and people, with a node for each part of life ADHD touches">
         {LAYERS.map((layer) => {
           const [a, b] = WEDGE[layer];
-          const [lx, ly] = polar((a + b) / 2, R_OUT - 16);
+          // The label sits on the wedge's outer arc, following it, so a long word never runs off the disc.
+          const [x1, y1] = polar(a + 4, R_OUT - 12);
+          const [x2, y2] = polar(b - 4, R_OUT - 12);
+          const arcId = `care-map-arc-${layer}`;
           return (
             <g key={layer}>
               <path d={wedgePath(layer)} fill={COLOURS[layer].fill} stroke="#fff" strokeWidth="4" />
-              <text x={lx} y={ly} textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="1.5" fill={COLOURS[layer].ink} style={{ textTransform: "uppercase" }}>{LAYER_LABELS[layer].toUpperCase()}</text>
+              <defs><path id={arcId} d={`M${x1} ${y1}A${R_OUT - 12} ${R_OUT - 12} 0 0 1 ${x2} ${y2}`} /></defs>
+              <text fontSize="11" fontWeight="800" letterSpacing="1.5" fill={COLOURS[layer].ink}>
+                <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{LAYER_LABELS[layer].toUpperCase()}</textPath>
+              </text>
             </g>
           );
         })}
@@ -109,8 +118,8 @@ export function CareMap() {
               onClick={() => { setSelected(s.id); track("CARE_MAP_OPENED", { node: s.id }); }}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(s.id); } }}
             >
-              <circle cx={p.x} cy={p.y} r={has ? 20 : 17} fill="#fff" stroke={COLOURS[p.layer].ink} strokeWidth={has ? 3 : 1.5} />
-              <text x={p.x} y={p.y + 3.5} textAnchor="middle" fontSize="8.5" fontWeight="700" fill={COLOURS[p.layer].ink}>{s.label.length > 9 ? s.label.split(" ")[0] : s.label}</text>
+              <circle cx={p.x} cy={p.y} r={has ? 21 : 19} fill="#fff" stroke={COLOURS[p.layer].ink} strokeWidth={has ? 3 : 1.5} />
+              <text x={p.x} y={p.y + 3.5} textAnchor="middle" fontSize="9.5" fontWeight="700" fill={COLOURS[p.layer].ink}>{s.label.length > 9 ? s.label.split(" ")[0] : s.label}</text>
             </g>
           );
         })}
@@ -127,6 +136,7 @@ export function CareMap() {
             <h2 id="care-map-title">{entry.label}</h2>
             <p>{entry.meaning}</p>
             {signal.get(entry.id) && <p className="care-map-you"><strong>For you:</strong> {signal.get(entry.id)}</p>}
+            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")} — {NWIA_MEANINGS[nwiaFor(entry.id)[0]!]}</p>
             {teaching.length > 0 ? (
               <>
                 <p>Modules that work on this:</p>
@@ -143,6 +153,8 @@ export function CareMap() {
             <h2 id="care-map-title">Four layers, one life.</h2>
             <p>ADHD is often explained as a brain difference and left there. The map adds the three layers the explanation usually skips — the body the brain runs on, the environment around it, and the people who carry part of the load. Tap any node.</p>
             {LAYERS.map((layer) => <p key={layer}><strong>{LAYER_LABELS[layer]}.</strong> {LAYER_BLURBS[layer]}</p>)}
+            {/* The one place the NWIA paradigm is said (founder-directed, 2026-09-08): attributed, linked, once. */}
+            <p className="care-map-nwia">{NWIA_PARADIGM} <a href={NWIA_URL} rel="noopener noreferrer" target="_blank">{NWIA_NAME}</a>.</p>
           </>
         )}
       </section>
