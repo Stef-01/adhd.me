@@ -13,7 +13,7 @@
   --glass-shadow: 0 10px 30px color-mix(in srgb, var(--ink) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
   --glass-blur: 18px;
 }
-.glass, .platform-shell .app-tabs, .platform-shell .settings-trigger, .play-hut, .play-x, .play-choice, .play-bean-label, .play-fall, .play-note, .play-chip-big, .play-layer, .play-bean-button, .play-hold-button, .life-card, .sheet, .learn-stack button, .learn-card {
+.glass, .platform-shell .app-tabs, .platform-shell .settings-trigger, .play-hut, .play-x, .play-choice, .play-bean-label, .play-fall, .play-note, .play-chip-big, .play-layer, .play-bean-button, .play-hold-button, .life-card, .learn-stack button, .learn-card {
   background: var(--glass-fill);
   border: 1px solid var(--glass-edge);
   box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 color-mix(in srgb, var(--ink) 5%, transparent), var(--glass-shadow);
@@ -22,18 +22,20 @@
 }
 /* Refraction: the backdrop bends through a radial displacement map (the studio's SDF refraction, approximated). Chromium only; elsewhere the blur alone. */
 @supports (backdrop-filter: url("#lg-refract")) {
-  .play-hut, .play-x, .platform-shell .app-tabs, .sheet { backdrop-filter: url("#lg-refract") blur(var(--glass-blur)) saturate(1.5); }
+  .play-hut, .play-x, .platform-shell .app-tabs { backdrop-filter: url("#lg-refract") blur(var(--glass-blur)) saturate(1.5); }
 }
 /* The glare: one bright band at a fixed angle, the way the studio draws it. */
 /* The glare needs a positioned box; these are not positioned by their own rules. The header, the tab bar and the sheet keep the position their own rules give them. */
 .glass, .play-hut, .play-x, .play-choice, .life-card, .learn-stack button { position: relative; }
-.glass::before, .play-hut::before, .play-x::before, .play-choice::before, .life-card::before, .sheet::before, .learn-stack button::before {
+.glass::before, .play-hut::before, .play-x::before, .play-choice::before, .life-card::before, .learn-stack button::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: linear-gradient(115deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.12) 28%, rgba(255, 255, 255, 0) 46%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.22) 100%);
 }
 .play-choice, .play-bean-label, .play-fall, .play-hold-button, .play-bean-button, .play-layer { background: var(--glass-fill-strong); }
 .play-choice[aria-pressed="true"], .play-bean-button[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 22%, var(--paper) 60%); border-color: var(--accent); }
 /* The header holds the tab bar, and a backdrop filter on an ancestor would become the containing block of the bar's fixed position (it would pin to the header, not the viewport). So the header is glass by fill and rim only, no filter. */
+/* The sheet keeps its own box (its handle is measured to a 48px floor), so glass by fill and filter only, no border. */
+.sheet { background: var(--glass-fill-strong); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5); backdrop-filter: blur(var(--glass-blur)) saturate(1.5); }
 .platform-header { background: var(--glass-fill-strong); border-bottom: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-rim); }
 .platform-shell .settings-trigger { background: var(--glass-fill); }
 .life-card { background: var(--glass-fill); }
