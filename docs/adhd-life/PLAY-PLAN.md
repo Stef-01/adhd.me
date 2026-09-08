@@ -200,5 +200,8 @@ runs worked but read as a form with a bean above it. P5 is the answer, built in 
   sort, flip, recall, drag-capture and don't-tap, so no run is under six games. Timing, pause
   and recall now take their reduced-motion choices and decoys from the round itself.
 
-Still open, for the pilot: props that react (the phone that lights up, the bill that slides),
-and the tempo tuned against real people (§9.2).
+- **The scene reacts.** On a hit the bean hops; on a miss the scene shakes. Nothing moves under
+  reduced motion.
+
+Still open, for the pilot: props that react on their own terms (the phone that lights up, the
+bill that slides), and the tempo tuned against real people (§9.2).

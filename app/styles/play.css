@@ -27,6 +27,12 @@
 .play-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .play-scene-bean { position: absolute; left: 16%; bottom: 8px; transform: translateX(-50%); }
 .play-scene[data-prop="none"] .play-scene-bean { left: 50%; }
+/* The scene reacts to the result (§11): a hop on a hit, a shake on a miss; nothing under reduced motion. */
+.play-scene[data-result="hit"] .bean { animation: play-hop 0.5s var(--ease-ui) 1; }
+.play-scene[data-result="miss"] .play-scene-art { animation: play-shake 0.4s var(--ease-ui) 1; }
+@keyframes play-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-22px) scale(1.04); } 70% { transform: translateY(0) scale(0.98); } 100% { transform: translateY(0); } }
+@keyframes play-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .play-scene[data-result] .bean, .play-scene[data-result] .play-scene-art { animation: none; } }
 .play-bean-hit { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
 .play-bean-hit .bean { transition: transform var(--dur-tap) var(--ease-ui); }
 .play-bean-hit.is-holding .bean, .play-bean-hit:active .bean { transform: scale(0.94) translateY(4px); }
