@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
+    "validate:content": "vitest run src/lives/lives.test.ts",
     "smoke": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/smoke.mts",
     "generate:aesthetic-coverage": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-aesthetic-coverage.mts",
     "generate:route-budgets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/perf-gate.mts --pin",
