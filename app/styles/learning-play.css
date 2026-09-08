@@ -12,13 +12,29 @@
 .learning-pause-banner h2 { font-size: 22px; letter-spacing: -.035em; margin: 5px 0; }
 .learning-pause-banner p { font-size: 14px; color: #5a5851; }
 .learning-pause-banner a { display: inline-flex; gap: 12px; align-items: center; min-height: 48px; margin-left: auto; padding: 12px 18px; background: #191a17; color: #fbfaf7; border-radius: 12px; font-size: 14px; font-weight: 650; white-space: nowrap; }
-.platform-shell .learn-module { --lesson-colour: #f4d94f; --lesson-soft: #fff6c8; --on-band: #e99443; --hero-blue: #647bbf; }
-.platform-shell .topic-everyday { --lesson-colour: #b8c9f2; --lesson-soft: #e8edfc; }
-.platform-shell .topic-finding { --lesson-colour: #f3b27d; --lesson-soft: #fff0df; }
-.platform-shell .topic-cost { --lesson-colour: #c3dfcc; --lesson-soft: #e9f5eb; }
-.platform-shell .topic-changed { --lesson-colour: #d5bce9; --lesson-soft: #f3e9fa; }
-.platform-shell .topic-myth-or-fact { --lesson-colour: #bddec7; --lesson-soft: #edf8ef; }
-.platform-shell .topic-words { --lesson-colour: #d5bce9; --lesson-soft: #f3e9fa; }
+.platform-shell .learn-module { --lesson-colour: #f4d94f; --lesson-soft: #fff6c8; --lesson-ink: #34362f; --lesson-ink-quiet: #3f4038; --on-band: #e99443; --hero-blue: #647bbf; }
+/* THE READER TAKES THE COLOUR OF THE CARD IT WAS OPENED FROM.
+   A per-topic set lived here — six pastels, named by module id — beside the eight covers the
+   library paints. Two palettes for one section, and they did not agree: open the lilac card and
+   the lesson came up in a different lilac. The mapping below is the covers (globals.css
+   §RADIANT) at the strongest tint each hue can carry with its own ink on it, so the reader is
+   the cover continued rather than a second scheme, and a module needs no entry here to be
+   coloured — it takes its cover, and unnamed modules take theirs from the ramp.
+
+   Two inks per tone, both the cover's own hue darkened rather than a neutral grey: the reading
+   ink (body, detail, foot, activity copy) at >= 6.5:1, and the quiet ink (eyebrow, activity
+   meta, the 11-12px labels) at >= 4.6:1 — each measured on BOTH the strong fill and the soft
+   one. That is also what let the fills come up: the three greys this replaces held the pastels
+   down, and three of the six — everyday (4.30:1), finding (3.89:1) and changed/words (4.14:1)
+   — did not in fact clear 4.5:1 for the smallest text sitting on them. */
+.platform-shell .learn-module.tone-amber   { --lesson-colour: #ffa000; --lesson-soft: #fcdfad; --lesson-ink: #422700; --lesson-ink-quiet: #663c00; }
+.platform-shell .learn-module.tone-saffron { --lesson-colour: #ffd21f; --lesson-soft: #fceeb6; --lesson-ink: #553f00; --lesson-ink-quiet: #765600; }
+.platform-shell .learn-module.tone-coral   { --lesson-colour: #fb703d; --lesson-soft: #fbd0bf; --lesson-ink: #280d04; --lesson-ink-quiet: #581c08; }
+.platform-shell .learn-module.tone-oat     { --lesson-colour: #ffc9a3; --lesson-soft: #fcebde; --lesson-ink: #633514; --lesson-ink-quiet: #87491b; }
+.platform-shell .learn-module.tone-lilac   { --lesson-colour: #b27ff5; --lesson-soft: #e5d5f6; --lesson-ink: #18092b; --lesson-ink-quiet: #34135e; }
+.platform-shell .learn-module.tone-forest  { --lesson-colour: #5da98a; --lesson-soft: #cbe1d6; --lesson-ink: #021910; --lesson-ink-quiet: #053623; }
+.platform-shell .learn-module.tone-slate   { --lesson-colour: #789ea7; --lesson-soft: #d4dfdf; --lesson-ink: #031316; --lesson-ink-quiet: #072931; }
+.platform-shell .learn-module.tone-night   { --lesson-colour: #9592b9; --lesson-soft: #dcdbe4; --lesson-ink: #0c0b20; --lesson-ink-quiet: #18163f; }
 .platform-shell .learn-module .learn-lesson { background: var(--lesson-soft); border: 0; border-radius: 30px; padding: clamp(24px,4vw,52px); }
 .platform-shell .learn-module .learn-lesson.composition-0 { background: var(--lesson-colour); }
 .platform-shell .learn-module .learning-lesson-art { background: transparent; width: 36%; margin: 0 0 20px 40px; }
@@ -30,9 +46,9 @@
 .platform-shell .learn-module .composition-2 .learning-lesson-art svg { max-height: 160px; }
 .platform-shell .learn-module .learn-card-heading { font-size: clamp(30px,3.8vw,46px); max-width: 22ch; font-weight: 700; line-height: 1.1; }
 .learn-card-heading:focus { outline: none; }
-.platform-shell .learn-module .learn-card-eyebrow { color: #3f4038; }
-.platform-shell .learn-module :is(.learn-card-body,.learn-card-detail,.learn-card-foot) { color: #34362f; }
-.platform-shell .learn-module .learn-card-detail li { color: #34362f; }
+.platform-shell .learn-module .learn-card-eyebrow { color: var(--lesson-ink-quiet); }
+.platform-shell .learn-module :is(.learn-card-body,.learn-card-detail,.learn-card-foot) { color: var(--lesson-ink); }
+.platform-shell .learn-module .learn-card-detail li { color: var(--lesson-ink); }
 .platform-shell .learn-module .learn-card-detail { clear: both; padding-top: 20px; }
 .platform-shell .learn-module .learning-explorer { background: #fbfaf7; }
 .platform-shell .learn-module .learning-care-ring.ring-0 { background: #c2a3e0; }
@@ -45,8 +61,8 @@
 .platform-shell .topic-words .learn-options { clear: both; padding-top: 24px; }
 .platform-shell .learn-module .learn-option.is-right { background: #e4f1d9; border-color: #366247; }
 .platform-shell .learn-module .learn-option.is-wrong { background: #fff0df; border-color: #8a5a16; }
-.activity { clear: both; padding-top: 32px; margin-top: 28px; border-top: 1px solid #191a1726; }
-.activity-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: #42463d; margin-bottom: 20px; }
+.activity { clear: both; padding-top: 32px; margin-top: 28px; border-top: 1px solid color-mix(in srgb, var(--lesson-ink, #191a17) 20%, transparent); }
+.activity-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--lesson-ink-quiet, #42463d); margin-bottom: 20px; }
 .activity-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 750; letter-spacing: .1em; }
 .activity h3 { font-size: 28px; line-height: 1.2; letter-spacing: -.035em; margin: 10px 0 14px; }
 .activity > p { max-width: 64ch; line-height: 1.6; }
@@ -60,7 +76,7 @@
 .activity-feedback:empty { display: none; }
 .discovery-earned { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-weight: 650; }
 .sequence-track { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 24px 0; }
-.sequence-slot { padding: 20px; min-height: 122px; border: 1px dashed #5a5851; border-radius: 18px; display: flex; flex-direction: column; gap: 14px; color: #5a5851; }
+.sequence-slot { padding: 20px; min-height: 122px; border: 1px dashed var(--lesson-ink-quiet, #5a5851); border-radius: 18px; display: flex; flex-direction: column; gap: 14px; color: var(--lesson-ink-quiet, #5a5851); }
 .sequence-slot.is-filled { background: #fbfaf7; color: #191a17; border-style: solid; }
 .sequence-slot > span { font-size: 12px; font-weight: 750; }
 .sequence-options { display: flex; flex-wrap: wrap; gap: 12px; }

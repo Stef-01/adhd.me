@@ -9,19 +9,12 @@
 .platform-shell .learning-intro { margin-bottom: 28px; color: var(--muted); font-size: 16px; }
 .platform-shell .learn-screen:has(.learn-module) :is(.learn-thesis, .learning-intro) { display: none; }
 .platform-shell .me-screen.learn-screen { padding-top: 40px; }
-/* The hero opened cool blue above eight hot covers, so the tab announced one palette and then
-   showed another. It now previews three of them. background-COLOR carries the flat value the
-   text was measured against (#41556c reads 6.98:1 on it); the gradient is background-IMAGE over
-   the top, and its darkest stop still holds 6.46:1, so the wash cannot cost the copy its AA. */
-.learning-feature {
-  display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; min-height: 280px;
-  margin-bottom: 32px; padding: 32px 40px; border-radius: 24px; overflow: hidden;
-  background-color: #fff2e8;
-  background-image: linear-gradient(118deg,
-    color-mix(in srgb, var(--learn-amber) 18%, #fff) 0%,
-    color-mix(in srgb, var(--learn-coral) 12%, #fff) 46%,
-    color-mix(in srgb, var(--learn-lilac) 16%, #fff) 100%);
-}
+/* The hero is a LITE glass surface (app/styles/glass.css) and takes its fill from there. A
+   palette wash was tried here and is deliberately not kept: glass.css loads after this file and
+   owns the fill, so the wash was dead CSS, and the honest fix is to leave the material alone
+   rather than out-specify it. On a warm ground the neutral hero reads as the platform's own
+   material with the covers as the colour, which is the division this tab wants. */
+.learning-feature { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; min-height: 280px; margin-bottom: 32px; padding: 32px 40px; border-radius: 24px; background: var(--stone); overflow: hidden; }
 .learning-feature h2 { max-width: 17ch; font-size: clamp(26px, 3vw, 36px); line-height: 1.2; letter-spacing: -.04em; margin: 10px 0 16px; }
 .learning-feature p:not(.learning-overline) { max-width: 42ch; color: var(--muted); margin-bottom: 24px; }
 .learning-scene { width: 100%; max-height: 300px; }
@@ -70,32 +63,19 @@
 .platform-shell .learn-card-meta { font-size: 12px; gap: 8px; }
 .platform-shell .learn-card-art { width: 148px; height: 132px; filter: none; margin-right: -14px; }
 .platform-shell .learn-card-art svg { width: 148px; height: 132px; }
-/* An open module keeps the colour of the card it was opened from. `--tone` is that cover's hue
-   dark enough to be 12px text on white (5.38:1 at the tightest, forest); `--tone-wash` is the
-   same hue at 14%, which is the lightest mix that still leaves --muted clear of 4.5:1 on it.
-   The action does NOT take the tone: blue means "the next step" everywhere in this app, and a
-   module is not allowed to redefine it three screens deep. */
-.platform-shell .learn-module { --tone: var(--accent); --tone-wash: var(--accent-soft); max-width: 880px; margin: 0 auto; padding: 0; background: transparent; }
-.platform-shell .learn-module.tone-amber   { --tone: var(--learn-amber-deep);   --tone-wash: color-mix(in srgb, var(--learn-amber) 14%, #fff); }
-.platform-shell .learn-module.tone-saffron { --tone: var(--learn-saffron-deep); --tone-wash: color-mix(in srgb, var(--learn-saffron) 14%, #fff); }
-.platform-shell .learn-module.tone-coral   { --tone: var(--learn-coral-deep);   --tone-wash: color-mix(in srgb, var(--learn-coral) 14%, #fff); }
-.platform-shell .learn-module.tone-oat     { --tone: var(--learn-oat-deep);     --tone-wash: color-mix(in srgb, var(--learn-oat) 14%, #fff); }
-.platform-shell .learn-module.tone-lilac   { --tone: var(--learn-lilac-deep);   --tone-wash: color-mix(in srgb, var(--learn-lilac) 14%, #fff); }
-.platform-shell .learn-module.tone-forest  { --tone: var(--learn-forest-deep);  --tone-wash: color-mix(in srgb, var(--learn-forest) 14%, #fff); }
-.platform-shell .learn-module.tone-slate   { --tone: var(--learn-slate-deep);   --tone-wash: color-mix(in srgb, var(--learn-slate) 14%, #fff); }
-.platform-shell .learn-module.tone-night   { --tone: var(--learn-night-deep);   --tone-wash: color-mix(in srgb, var(--learn-night) 14%, #fff); }
+.platform-shell .learn-module { max-width: 1160px; margin: 0 auto; padding: 0; background: transparent; }
 .platform-shell .learn-module-bar { margin: 0 0 24px; }
 .platform-shell .learn-module-kicker { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
 .platform-shell .learn-module-title { font-size: 20px; font-weight: 700; }
 .platform-shell .learn-module-index { font-size: 13px; color: var(--muted); }
 .platform-shell .learn-dots { display: flex; gap: 6px; margin: 0 0 28px; padding: 0; list-style: none; }
 .platform-shell .learn-dots li { flex: 1; height: 5px; border-radius: 8px; background: var(--line); }
-.platform-shell .learn-dots li:is(.is-current,.is-done) { background: var(--tone); }
+.platform-shell .learn-dots li:is(.is-current,.is-done) { background: var(--lesson-ink-quiet, var(--accent)); }
 .platform-shell .learn-cards { display: block; padding: 0; overflow: visible; }
 .platform-shell .learn-lesson { position: relative; display: none; width: 100%; padding: clamp(24px, 4vw, 48px); border: 1px solid var(--line); border-radius: 24px; background: var(--paper); color: var(--ink); }
 .platform-shell .learn-lesson.is-current { display: block; }
 .platform-shell .learn-card-number { display: none; }
-.platform-shell .learn-card-eyebrow { margin-bottom: 16px; color: var(--tone); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.platform-shell .learn-card-eyebrow { margin-bottom: 16px; color: var(--lesson-ink-quiet, var(--accent)); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .platform-shell .learn-card-heading { max-width: 25ch; margin: 0 0 24px; font-family: inherit; font-size: clamp(26px, 3vw, 36px); font-weight: 750; line-height: 1.22; letter-spacing: -.035em; }
 /* The step change moves focus here so a reader is put on the new statement, not left at the top
    of the page. That is a programmatic focus, and it was drawing Chrome's own ring — a black box
@@ -106,9 +86,9 @@
 .platform-shell .learn-card-body { max-width: 64ch; margin: 0 0 24px; font-size: 17px; line-height: 1.7; }
 .platform-shell .learn-card-detail { max-width: 64ch; padding-left: 22px; margin: 0 0 24px; display: block; }
 .platform-shell .learn-card-detail li { padding: 5px 0 5px 22px; font-size: 16px; }
-.platform-shell .learn-module .learn-card-detail li::before { background: var(--tone); }
+.platform-shell .learn-module .learn-card-detail li::before { background: var(--lesson-ink-quiet, var(--accent)); }
 .platform-shell .learn-card-foot { max-width: 66ch; margin-top: 24px; color: var(--muted); font-size: 14px; line-height: 1.6; }
-.learning-lesson-art { float: right; width: 30%; margin: 0 0 24px 28px; border-radius: 20px; background: var(--tone-wash, var(--stone)); }
+.learning-lesson-art { float: right; width: 30%; margin: 0 0 24px 28px; border-radius: 20px; background: var(--stone); }
 .platform-shell .learn-controls { display: flex; justify-content: space-between; gap: 16px; margin: 24px 0 48px; padding: 0; position: static; background: transparent; }
 .platform-shell :is(.learn-primary, .learn-secondary, .learn-back) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border-radius: 12px; padding: 12px 20px; font: inherit; font-size: 14px; font-weight: 700; }
 .platform-shell .learn-primary { background: var(--accent); color: var(--paper); border: 1px solid var(--accent); }
@@ -118,7 +98,7 @@
 .platform-shell .learn-option { display: flex; gap: 12px; align-items: center; width: 100%; min-height: 60px; text-align: left; padding: 16px 20px; background: var(--paper); color: var(--ink); border: 1px solid var(--line-strong); border-radius: 14px; font-size: 16px; }
 .platform-shell .learn-option.is-right { border-color: var(--hero-blue-night); background: var(--stone); }
 .platform-shell .learn-option.is-wrong { border-color: var(--accent-deep); background: var(--accent-soft); }
-.platform-shell .learn-reveal { max-width: 70ch; padding: 20px; margin-top: 24px; border-radius: 14px; background: var(--tone-wash, var(--stone)); color: var(--ink); font-size: 16px; line-height: 1.65; }
+.platform-shell .learn-reveal { max-width: 70ch; padding: 20px; margin-top: 24px; border-radius: 14px; background: var(--lesson-soft, var(--stone)); color: var(--lesson-ink, var(--ink)); font-size: 16px; line-height: 1.65; }
 .learning-explorer { clear: both; margin-top: 32px; padding: 28px; background: var(--stone); border-radius: 20px; }
 .learning-explorer h3 { font-size: 23px; margin-bottom: 20px; }
 .learning-example-choices { display: flex; gap: 12px; flex-wrap: wrap; }
