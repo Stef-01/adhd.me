@@ -200,3 +200,6 @@
 @media (hover: hover) { .learn-map-link:hover { border-color: var(--accent); color: var(--accent); } }
 .learn-map-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .platform-shell .learn-screen:has(.learn-module) .learn-map-link { display: none; }
+.voice-reflection { display: grid; gap: 8px; margin-top: 10px; }
+.voice-reflection .learn-secondary { justify-self: start; }
+.voice-reflection-live { margin: 0; color: var(--muted); font-size: 0.9375rem; font-style: italic; }

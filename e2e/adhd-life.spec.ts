@@ -207,3 +207,75 @@ test("E2E 9: under reduced motion the simulations work by buttons, and a module 
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.locator(".learn-lesson.is-current h2")).toContainText("small table");
 });
+
+// ── Phase A ────────────────────────────────────────────────────────────────────────────────
+
+test("Phase A: a topic survey is offered, not launched; answered one screen at a time; and its pattern reaches My ADHD", async ({ page }) => {
+  await page.goto("/my-adhd");
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
+    v: 1, onboarding: { improveFirst: "start-earlier", impact: 8, completedAt: new Date().toISOString() },
+    resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() } },
+    answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+  })), MODEL_KEY);
+  await page.reload();
+  const offer = page.getByRole("link", { name: /Start the survey/ });
+  await expect(offer).toBeVisible();
+  await expect(page).toHaveURL(/\/my-adhd$/);
+  await offer.click();
+  await expect(page).toHaveURL(/\/survey\?id=work-study$/);
+  await page.getByRole("button", { name: /Very — I circle it/ }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Much harder" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /the night before/ }).click();
+  for (let i = 0; i < 7; i += 1) await page.getByRole("button", { name: /^(Next|Skip)$/ }).click();
+  await page.getByRole("slider").fill("9");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /Once the problem is concrete/ }).click();
+  await page.getByRole("button", { name: "See my pattern" }).click();
+  await expect(page.getByRole("heading", { name: "Your work pattern." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
+  await expect(page.getByText("Environmental amplifier")).toBeVisible();
+  await expect(page.getByText("Sustained engagement once the problem becomes concrete", { exact: false })).toBeVisible();
+  await expect(page.getByRole("button", { name: "I’ll try this" })).toBeVisible();
+  const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
+  expect(record.surveys["work-study"].completedAt).toBeTruthy();
+  expect(record.survey.lastLongAt).toBeTruthy();
+  await page.goto("/my-adhd");
+  await expect(page.getByRole("link", { name: /Start the survey/ })).toHaveCount(0);
+  await expect(page.getByText("Waiting for urgency", { exact: true })).toBeVisible();
+});
+
+test("Phase A: problem fit orders allied providers by the person's top need, and says why", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
+    v: 1, onboarding: null,
+    resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() } },
+    answers: { "starting.hardest-to-start": ["vague"] }, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+  })), MODEL_KEY);
+  await page.reload();
+  await page.getByRole("textbox").fill("an OT or a coach who does telehealth");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  const first = page.locator(".clinician-row").first();
+  await expect(first).toContainText(/Works on task initiation — the thing you said is hardest/);
+  await first.click();
+  await expect(page.getByText("Why you’re seeing them")).toBeVisible();
+});
+
+test("Phase A: voice reflection appends the transcript, and an absent recogniser says so", async ({ page }) => {
+  const { installFakeSpeech } = await import("./support/fake-speech");
+  await installFakeSpeech(page);
+  await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /Sit next to somebody/ }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
+  for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Say it instead" }).click();
+  await expect(page.getByRole("button", { name: /Tap when you’ve finished/ })).toBeVisible();
+  await page.evaluate(() => (window as unknown as { __speech: { say: (t: string, f: boolean) => void; finish: () => void } }).__speech.say("the brief was vague", true));
+  await page.getByRole("button", { name: /Tap when you’ve finished/ }).click();
+  await page.evaluate(() => (window as unknown as { __speech: { finish: () => void } }).__speech.finish());
+  await expect(page.locator(".reflect-field textarea")).toHaveValue(/the brief was vague/);
+});
