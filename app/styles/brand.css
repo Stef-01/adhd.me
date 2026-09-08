@@ -45,3 +45,5 @@ body .aoc-band p, body:has(.platform-shell) .aoc-band p, .site-footer-brand p { 
 @media (hover: hover) { .story-primary-link:hover { background: var(--accent-deep); color: var(--paper); } }
 body .aoc-band::before, .site-footer::before { display: none; }
 @media (max-width: 767px) { .platform-brand::after { left: 46px; } }
+/* Fixed navigation must keep its contrast as colourful content scrolls underneath it. */
+@media (max-width: 767px) { .platform-shell .app-tabs { background: var(--paper); } }

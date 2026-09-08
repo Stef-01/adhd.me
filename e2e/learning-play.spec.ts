@@ -111,6 +111,7 @@ test("colourful activities and the meditation player remain accessible on a phon
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   }
   await page.goto("/approach/meditate");
+  await expectNoViolations(page, "meditation lobby");
   await page.getByRole("button", { name: "Start my moment" }).click();
   await page.getByRole("button", { name: "Chimes off" }).click();
   await expect(page.getByRole("button", { name: "Chimes on" })).toHaveAttribute("aria-pressed", "true");
