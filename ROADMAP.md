@@ -28,8 +28,10 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 
 - [x] Four tabs, onboarding, fifteen interactive modules, the personal model, Today, My ADHD, the
       support path, the care map, the finder broadened beyond GPs — PR #3.
-- [ ] Phase A of the plan: five topic surveys, problem-fit matching, precision-survey offer rule,
-      real allied providers, voice reflection, QA captures.
+- [x] Phase A of the plan, all but one item: five topic surveys, problem-fit matching, the
+      precision-survey offer rule, voice reflection, QA captures.
+- [ ] Real allied providers — a founder decision (real people, on the real-person law), then
+      Phase B (the PRD's P1 list) in the plan's order.
 
 ## Q3 2026 (Sep–Nov) — make the redesign real
 
