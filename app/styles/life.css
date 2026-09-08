@@ -205,3 +205,7 @@
 .voice-reflection-live { margin: 0; color: var(--muted); font-size: 0.9375rem; font-style: italic; }
 /* "My ADHD" is two words; the tab label never wraps at any width. */
 .app-tab-label { white-space: nowrap; }
+/* The NWIA line on the care map and a node: one sentence, muted, attributed. */
+.care-map-nwia { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; line-height: 1.55; }
+.care-map-nwia span { margin-right: 6px; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.care-map-nwia a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }

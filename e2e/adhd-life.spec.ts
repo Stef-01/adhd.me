@@ -279,3 +279,24 @@ test("Phase A: voice reflection appends the transcript, and an absent recogniser
   await page.evaluate(() => (window as unknown as { __speech: { finish: () => void } }).__speech.finish());
   await expect(page.locator(".reflect-field textarea")).toHaveValue(/the brief was vague/);
 });
+
+test("NWIA: the paradigm is on the care map once and attributed, a node names its dimension, and My ADHD says the balance honestly", async ({ page }) => {
+  await page.goto("/approach/map");
+  const intro = page.locator(".care-map-nwia");
+  await expect(intro).toHaveCount(1);
+  await expect(intro).toContainText(/awareness, understanding and active decision-making/);
+  await expect(intro.getByRole("link", { name: /National Wellness Institute of Australia/ })).toHaveAttribute("href", /wellnessaustralia\.org/);
+  await page.getByRole("button", { name: /^Sleep \(Body\)/ }).click();
+  await expect(page.locator(".care-map-nwia")).toContainText(/Wellness dimension\s*Physical/);
+  await page.goto("/my-adhd");
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
+    v: 1, onboarding: { improveFirst: "start-earlier", impact: 7, completedAt: new Date().toISOString() },
+    resonance: { starting: { frequency: "often", cost: 7, priority: "yes", at: new Date().toISOString() } },
+    answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+  })), MODEL_KEY);
+  await page.reload();
+  const balance = page.getByTestId("nwia-balance");
+  await expect(balance).toContainText(/touches work, spiritual values, intellectual/);
+  await expect(balance).toContainText(/Nothing yet on physical, social, emotional/);
+  await expect(balance).toContainText(/unasked/);
+});

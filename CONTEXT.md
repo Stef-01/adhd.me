@@ -86,3 +86,12 @@ and the copy. Written lazily — a term earns a place here when it has already b
 - **Support path** — `/support`: problem → what may help → try yourself → when a person helps →
   professions → providers. "See providers" writes a profession filter to the device; it never
   puts anything on a URL.
+
+## Wellness (NWIA, 2026-09-08)
+
+- **NWIA dimension** — one of the National Wellness Institute of Australia's nine: Physical,
+  Social, Emotional, Work, Spiritual values, Intellectual, Cultural values, Environment, Finances.
+  A second reading of the care map's nodes (`src/wellness/nwia.ts`), never a second map.
+- **Balance** — the Institute's principle that the dimensions affect each other. In the app it
+  is one line on My ADHD: the dimensions the person's signals touch, and the ones nothing has
+  touched yet ("unasked", not a gap).

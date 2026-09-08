@@ -19,6 +19,7 @@ import { LAYER_BLURBS, LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Laye
 import { deriveNeeds } from "@/model/needs";
 import { track } from "@/model/events";
 import { useModel } from "./use-model";
+import { NWIA_LABELS, NWIA_MEANINGS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
 
 const COLOURS: Record<Layer, { fill: string; ink: string }> = {
   brain: { fill: "#dfe5f7", ink: "#334679" },
@@ -135,6 +136,7 @@ export function CareMap() {
             <h2 id="care-map-title">{entry.label}</h2>
             <p>{entry.meaning}</p>
             {signal.get(entry.id) && <p className="care-map-you"><strong>For you:</strong> {signal.get(entry.id)}</p>}
+            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")} — {NWIA_MEANINGS[nwiaFor(entry.id)[0]!]}</p>
             {teaching.length > 0 ? (
               <>
                 <p>Modules that work on this:</p>
@@ -151,6 +153,8 @@ export function CareMap() {
             <h2 id="care-map-title">Four layers, one life.</h2>
             <p>ADHD is often explained as a brain difference and left there. The map adds the three layers the explanation usually skips — the body the brain runs on, the environment around it, and the people who carry part of the load. Tap any node.</p>
             {LAYERS.map((layer) => <p key={layer}><strong>{LAYER_LABELS[layer]}.</strong> {LAYER_BLURBS[layer]}</p>)}
+            {/* The one place the NWIA paradigm is said (founder-directed, 2026-09-08): attributed, linked, once. */}
+            <p className="care-map-nwia">{NWIA_PARADIGM} <a href={NWIA_URL} rel="noopener noreferrer" target="_blank">{NWIA_NAME}</a>.</p>
           </>
         )}
       </section>
