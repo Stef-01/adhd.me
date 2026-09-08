@@ -1,0 +1,47 @@
+[
+  {
+    "foreground": "--ink",
+    "background": "--paper",
+    "ratio": 16.75
+  },
+  {
+    "foreground": "--muted",
+    "background": "--paper",
+    "ratio": 6.82
+  },
+  {
+    "foreground": "--faint",
+    "background": "--paper",
+    "ratio": 5.18
+  },
+  {
+    "foreground": "--faint",
+    "background": "--stone",
+    "ratio": 4.57
+  },
+  {
+    "foreground": "--accent",
+    "background": "--paper",
+    "ratio": 5.66
+  },
+  {
+    "foreground": "--on-band",
+    "background": "--ink",
+    "ratio": 8.04
+  },
+  {
+    "foreground": "--line",
+    "background": "--ink",
+    "ratio": 12.86
+  },
+  {
+    "foreground": "--hero-blue-night",
+    "background": "--paper",
+    "ratio": 5.88
+  },
+  {
+    "foreground": "--chart-tick",
+    "background": "--paper",
+    "ratio": 5.18
+  }
+]

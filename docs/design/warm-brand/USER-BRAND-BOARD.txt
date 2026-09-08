@@ -1,0 +1,349 @@
+ne warm ramp, one amber,
+and a band that carries the name.
+The palette as it exists in app/globals.css, extended to the media a stylesheet cannot reach. Every figure here is measured, and reproduced by node scripts/palette-audit.mjs.
+
+Scheme unchanged
+Neutral hue spread 31° → 5°
+Largest single move ΔE 1.1
+Tokens 37 → 34
+01 — The neutrals
+
+Seven steps, one hue
+Hue ~92°, the paper's own warm cast. The discipline is negative: before this pass the ramp drifted from h91 at the paper to h122 at the mid-tones, so the light end read warm and the middle read faintly olive against it.
+
+--paper
+#fbfaf7
+L 98.5 · C .004 · h 91
+the ground
+Ink label
+--stone
+#eeece5
+L 94.3 · C .010 · h 94
+1.13 on paper
+Ink label
+--line
+#dfddd6
+L 89.7 · C .010 · h 94
+1.30 on paper
+Ink label
+--line-strong
+#c4c1b7
+L 81.1 · C .014 · h 93
+1.73 on paper
+Ink label
+--faint
+#6c6a65
+L 52.5 · C .008 · h 89
+5.18 on paper
+White label
+--muted
+#5a5851
+L 46.0 · C .011 · h 94
+6.82 on paper
+White label
+--ink
+#191a17
+L 21.6 · C .006 · h 122
+16.75 on paper
+White label
+--paper
+Page ground. The default, and the product's resting state.
+--stone
+Raised and inset surfaces — console cards, tags.
+--line
+Hairlines, dividers, the chart's grid.
+--line-strong
+A rule that has to be seen: chart axes, a division carrying weight.
+--faint
+The smallest labels. Sets 11px, so the AA floor fixes its lightness.
+--muted
+Secondary text, quoted examples, chart end-labels.
+--ink
+Primary text, primary button fill, the dark ground.
+#696b65
+#6a6b66
+Before — ΔE 0.23. --muted and --faint at L 52.4 against L 52.5. There is a seam in the middle of this block. You cannot see it, because these are one colour under two names.
+#5a5851
+#6c6a65
+After — ΔE 6.46. The step could only open downward: upward is where the contrast floor sits. Secondary text is now 6.82:1 where it was 5.17 — a legibility gain bought at no cost.
+02 — The amber
+
+The accent, and its ramp
+Six steps, all at the accent's own hue 70°. --accent is the identity and did not move; the other five were re-cut onto its hue holding their lightness and chroma. The largest move was ΔE 1.1.
+
+--accent-soft
+#f9eee2
+L 95.5 · C .020 · h 70
+surface only
+Ink label
+--accent-tint
+#efd3b4
+L 88.2 · C .052 · h 70
+12.19 on ink
+Ink label
+--on-band
+#e1a459
+L 76.2 · C .117 · h 70
+8.04 on ink
+Ink label
+--accent-mid
+#bc8238
+L 65.2 · C .114 · h 70
+5.32 on ink
+Ink label
+--accent
+#8a5a16
+L 50.9 · C .101 · h 70
+5.66 on paper
+White label
+--accent-deep
+#6c4300
+L 42.1 · C .091 · h 70
+8.24 on paper
+White label
+The accent's budget is a rule, not a preference. Under 10% of any surface, and the e2e sweep caps how many distinct meanings the accent may carry on a single route. A second accent hue does not get introduced without a stated reason — the calm is the point.
+
+--accent is not readable on the dark ground at 2.96:1. That is the entire reason --on-band exists. On anything dark, the amber is --on-band.
+
+03 — The blue
+
+Named by role, at last
+The band runs orange to periwinkle and carries the wordmark on every page, which makes the blue a brand colour by any honest reading. Its tokens were named for positions in a gradient, because that is what they were first needed for. The values do not change; what follows is the role each already plays, written down.
+
+--hero-blue
+#647bbf
+L 59.5 · C .108 · h 269
+3.92 — graphics only
+No body-size label
+--hero-blue-deep
+#596eb4
+L 55.4 · C .112 · h 270
+4.66 on paper
+White label
+--hero-blue-night
+#4c5f9c
+L 49.9 · C .100 · h 269
+5.88 — AA text
+White label
+--hero-dusk
+#3f5182
+L 44.3 · C .084 · h 268
+7.42 — AAA text
+White label
+The trap in this ramp. --hero-blue is the brand's blue and it holds a label in neither white nor ink at body size — 4.10 and 4.27, both under the floor. It is a graphics colour. If a blue must be read, it is --hero-blue-night or darker.
+
+The band
+Defined once in :root and referenced by the header, the hero, the footer and the Acknowledgement band — it is not re-typed per surface, which is how two of them drifted apart before. Left-to-right on purpose, so it resolves identically at any height.
+
+100° · #c87d3f 0% → #d9904c 26% → #d9904c 38% → #647bbf 60% → #647bbf 100%
+
+04 — Data colour
+
+A deliberate exception
+The chart's two slots are chosen to be told apart, not to be on-brand, and they are exempt from the ramps above.
+
+--chart-invite
+#2a78d6
+L 57.5 · C .163 · h 256
+categorical slot 1
+No body-size label
+--chart-holdout
+#eb6834
+L 67.1 · C .175 · h 41
+categorical slot 2
+Ink label
+Separation in OKLab ΔE. The floor is 20 — below it, two series stop being two series for a reader with that vision.
+Vision	Kept pair	Brand-blue alternative	Outcome
+Normal	33.6	29.1	—
+Protanopia	24.4	20.8	one point off the floor
+Deuteranopia	26.4	26.7	comparable
+Tritanopia	30.6	29.4	comparable
+Unifying --chart-invite onto the brand blue was tested and rejected. It would have raised the line's contrast from 4.23 to 5.88 — but protan separation falls to 20.8. Where brand fit and discrimination conflict in a data display, discrimination wins and brand fit yields.
+
+The chart's greys are not exempt, and no longer exist separately. They read the neutral ramp: grid → --line, axis → --line-strong, tick → --faint, end-label → --muted. That fold closed a live WCAG failure — an 11px SVG tick label at 3.44:1, invisible to every green axe sweep, because axe does not evaluate text inside an <svg>. It is 5.18 now.
+
+05 — On a dark ground
+
+What survives on #191a17
+Dark appears as deliberate bands — the /practices hero, the footer, the Acknowledgement — never as a default. Video and most poster work are the opposite, so this table matters more off-screen than on.
+
+AAA text — ratio 7 and above
+
+--paper
+16.75
+--accent-soft
+15.28
+--stone
+14.79
+--line
+12.86
+--accent-tint
+12.19
+--line-strong
+9.70
+--on-band
+8.04
+AA text — 4.5 and above
+
+--hero-orange
+6.70
+--chart-holdout
+5.46
+--hero-orange-deep
+5.38
+--accent-mid
+5.32
+Large text and graphics only — 3 and above
+
+--hero-blue
+4.27
+--chart-invite
+3.96
+--hero-blue-deep
+3.59
+--faint
+3.24
+Decorative only — never text
+
+--accent
+2.96
+--hero-blue-night
+2.85
+--muted
+2.45
+--hero-dusk
+2.26
+--accent-deep
+2.03
+--s-accent
+2.03
+Two traps worth naming. --accent and --muted are the product's two hardest-working colours and neither survives here. Amber on dark is --on-band; secondary text on dark is --line-strong or --line.
+
+06 — Video production graphics
+
+Rec.709, studio swing
+Legal 8-bit range is 16–235 per channel. Above 235 a channel clips on broadcast and on most platform transcodes; below 16 it crushes. Six brand colours are not video-legal as they stand — mostly at the light end, which is exactly where a warm-paper brand lives.
+
+screen
+legal
+--paper
+#fbfaf7 → #ebeae7 · ΔE 4.81 · 235,234,231
+screen
+legal
+--stone
+#eeece5 → #ebe9e2 · ΔE 0.91 · 235,233,226
+screen
+legal
+--accent-soft
+#f9eee2 → #ebe0d4 · ΔE 4.23 · 235,224,212
+screen
+legal
+--accent-tint
+#efd3b4 → #ebcfb0 · ΔE 1.23 · 235,207,176
+screen
+legal
+--accent-deep
+#6c4300 → #764c10 · ΔE 3.30 · 118,76,16
+screen
+legal
+--s-dark
+#292800 → #383810 · ΔE 6.22 · 56,56,16
+Each substitute is computed on the same hue and chroma — only lightness moves — so it is the brand's colour at a legal level, not a different colour. Everything else in the palette is already legal, --ink included (its lowest channel is 23), so the dark ground needs no substitute. The paper substitute holds 14.53:1 against it, down from 16.75 and far above any floor.
+
+Ground
+Prefer --ink #191a17 for titles and lower-thirds. It is legal, it is the product's own dark, and it is the ground the tables in §05 are measured against.
+
+Type over footage
+White on --ink. Where type sits over footage rather than a solid, put an --ink scrim under it — never trust footage luminance.
+
+Accent in motion
+--on-band #e1a459 is the amber for video, not --accent. On a dark ground --accent is 2.96:1 and disappears.
+
+Lower third
+Ground #191a17 at 85–92%, rule in --on-band, name in white, role in --line at 12.86:1 — never --muted, which is 2.45:1 there.
+
+The band on screen
+It survives a crop. It does not survive being rebuilt by hand — take the stops from :root, listed in §03.
+
+Chroma
+No brand colour troubles a 4:2:0 subsample. The most saturated is --chart-holdout, and that is a data colour that should not appear in motion graphics at all.
+
+07 — Print
+
+Posters, flyers, clinic collateral
+CMYK below is a naive US Web Coated conversion for specification purposes — a starting point for a printer, not a colour-managed proof. Any job that matters gets a physical proof, and the printer's proof wins over this table.
+
+Token	C	M	Y	K	Total ink	Note
+--paper	0	0	2	2	
+4%
+Don't print it — use the stock's own white
+--stone	0	1	4	7	
+12%
+Lightest tint worth putting on paper
+--line	0	1	4	13	
+18%
+0.5pt minimum, or it drops out
+--line-strong	0	2	7	23	
+32%
+Rules and boxes
+--faint	0	2	6	58	
+66%
+Caption grey
+--muted	0	2	10	65	
+77%
+Body secondary
+--accent-tint	0	12	25	6	
+43%
+Warm panel fill
+--on-band	0	27	60	12	
+99%
+The light amber
+--accent	0	35	84	46	
+165%
+The accent — the one to buy as spot
+--accent-deep	0	38	100	58	
+196%
+Fine on coated
+--hero-orange	0	34	65	15	
+114%
+The band's warm stop
+--hero-blue	48	36	0	25	
+109%
+The band's cool stop
+--ink	4	0	12	90	
+106%
+Don't use as converted — see below
+Black is not --ink as converted
+#191a17 converts to 4/0/12/90 — a 106% black that looks thin and brownish across a large area. Type under 24pt: 100% K alone. Large solid areas: a rich black of 60/40/40/100. Register the two consciously; don't mix them on one page.
+
+Total ink limits
+The table is coated-stock advice. Cap at 260% on uncoated and 240% on newsprint. At those limits --accent-deep is fine — a rich black over an accent panel is not. Don't build ink; knock out.
+
+The band in print
+A gradient from warm orange to cool periwinkle crosses the whole CMYK space and will band on a cheap press. Under 200 lpi, use the two stops as flat fields with a hard edge, or drop the band and use --accent as a flat rule. A muddy gradient is worse than none.
+
+Spot colour
+If a job runs spot, --accent is the one to buy. Ask the printer to match to the hex — do not accept a Pantone number chosen from a screen, including from this page. A spot match is made against a physical book under D50.
+
+Reversed type
+White out of --accent at 8pt fills in on uncoated. Reverse only at 10pt and above, and only out of --accent or darker.
+
+Hairlines
+--line at 18% ink is close to nothing. Below 0.5pt it will not hold. Where a rule must survive, it is --line-strong.
+
+08 — Typography
+
+Two faces, one contrast axis
+Unchanged by this pass, restated so this board stands alone. Both are open-licence — install them for print and video rather than substituting.
+
+Newsreader
+
+Display
+Weight ~430, letter-spacing: -0.035em, line-height: 0.99. Reserved for questions asked of the patient. Clamp ceiling in use is clamp(42px, 11vw, 54px); stay at or under ~96px anywhere. Fallback: Georgia, serif.
+
+Inter
+
+UI and body
+Everything functional. Fallback: ui-sans-serif, system-ui, sans-serif. Use tabular-nums wherever digits line up in a column — every measurement on this page does.
+
+Do not add a third family. The pairing already sits on a genuine contrast axis — a display serif against a geometric-humanist sans. A third face does not add an axis; it adds noise.

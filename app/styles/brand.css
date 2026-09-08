@@ -1,0 +1,47 @@
+/* The supplied warm-ramp board owns colour and type; platform files own geometry. */
+:root {
+  --font-ui: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader Variable", Newsreader, Georgia, serif;
+}
+body { font-family: var(--font-ui); }
+.platform-header, .platform-public-nav.site-nav, .platform-console .console-header {
+  position: relative;
+  border-top: 6px solid transparent;
+  border-image: var(--band-gradient) 1;
+}
+.platform-brand { position: relative; letter-spacing: -.045em; }
+.platform-brand svg { color: var(--ink); }
+.platform-brand::after { content: ""; position: absolute; height: 4px; left: 52px; right: 0; bottom: -6px; background: var(--band-gradient); }
+.platform-shell main h1 { font-family: var(--font-ui); }
+.platform-shell .voice-prompt h1 {
+  font-family: var(--font-display); font-weight: 430;
+  font-size: clamp(42px, 5vw, 54px); line-height: .99; letter-spacing: -.035em;
+}
+.platform-shell .voice-prompt h1 em { font-family: inherit; font-style: italic; color: var(--accent); }
+.platform-shell .app-tab.is-current { color: var(--accent); background: var(--stone); }
+.platform-shell :is(.learn-primary,.me-sticky a), .platform-console :is(.console-button,.console-primary-button), .platform-public-nav .site-nav-link, body:has(.platform-shell) .consent-agree {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+}
+.platform-shell .learn-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.platform-shell .learn-stack .learn-card { background: var(--stone); color: var(--ink); border: 1px solid var(--line); }
+.platform-shell .learn-stack li:nth-child(even) .learn-card { background: var(--paper); }
+.platform-shell .learn-card.is-forest :is(small,.learn-card-meta,.learn-card-done) { color: var(--ink); }
+.learning-example-choices button { background: var(--paper); }
+.learning-example-choices button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.learning-care-ring.ring-0 { background: var(--line); }
+.learning-care-ring.ring-1 { background: var(--stone); }
+.learning-care-ring.ring-2 { background: var(--paper); }
+.learning-care-ring[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--accent); }
+.platform-shell .learn-dots li:is(.is-current,.is-done) { background: var(--ink); }
+.platform-shell .learn-reveal { background: var(--stone); color: var(--ink); }
+.platform-shell .learn-figures dt { font-family: var(--font-ui); font-weight: 600; }
+body .aoc-band, body:has(.platform-shell) .aoc-band, .site-footer {
+  background: var(--ink); background-image: none; color: var(--line);
+  border-top: 4px solid transparent; border-image: var(--band-gradient) 1;
+}
+body .aoc-band p, body:has(.platform-shell) .aoc-band p, .site-footer-brand p { color: var(--line); }
+.site-footer :is(a,.site-footer-wordmark) { color: var(--paper); }
+.story-portrait .coverage-names { color: var(--paper); }
+@media (hover: hover) { .story-primary-link:hover { background: var(--accent-deep); color: var(--paper); } }
+body .aoc-band::before, .site-footer::before { display: none; }
+@media (max-width: 767px) { .platform-brand::after { left: 46px; } }

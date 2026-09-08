@@ -1,0 +1,82 @@
+[
+  {
+    "name": "find",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "learn",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "lesson",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "public",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "console",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "find",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "learn",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "lesson",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "public",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "console",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  }
+]

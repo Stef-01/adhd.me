@@ -17,7 +17,7 @@ export function brandMark(edge: number) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#172033",
+          background: "#191a17",
         }}
       >
         <div
@@ -30,7 +30,7 @@ export function brandMark(edge: number) {
             height: "82%",
             padding: `${px(0.082)}px ${px(0.094)}px`,
             borderRadius: px(0.219),
-            background: "#5065a6",
+            background: "#4c5f9c",
             color: "#ffffff",
             fontFamily: "Georgia, serif",
             fontSize: px(0.484),
@@ -47,7 +47,7 @@ export function brandMark(edge: number) {
               bottom: px(0.16),
               height: px(0.023),
               borderRadius: px(0.023),
-              background: "#fff8f6",
+              background: "#fbfaf7",
             }}
           />
           <div
@@ -58,7 +58,7 @@ export function brandMark(edge: number) {
               width: px(0.078),
               height: px(0.078),
               borderRadius: px(0.078),
-              background: "#d47839",
+              background: "#d9904c",
             }}
           />
           <div
@@ -69,7 +69,7 @@ export function brandMark(edge: number) {
               width: px(0.078),
               height: px(0.078),
               borderRadius: px(0.078),
-              background: "#fff8f6",
+              background: "#fbfaf7",
             }}
           />
         </div>
