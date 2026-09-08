@@ -406,8 +406,11 @@ test("liquid glass (the studio's WebGL layer) runs under the page where WebGL2 c
   const state = await page.evaluate(() => {
     const c = document.createElement("canvas");
     const gl = c.getContext("webgl2");
+    const info = gl?.getExtension("WEBGL_debug_renderer_info");
+    const renderer = gl ? String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)) : "";
     return {
-      able: Boolean(gl && gl.getExtension("EXT_color_buffer_float")),
+      // The layer's own rule (canRunLiquidGlass): WebGL2, float targets, and a hardware renderer.
+      able: Boolean(gl && gl.getExtension("EXT_color_buffer_float")) && !/swiftshader|llvmpipe|software|mesa offscreen/i.test(renderer),
       liquid: document.documentElement.classList.contains("has-liquid"),
       canvas: document.querySelector("canvas.liquid-glass")?.getAttribute("aria-hidden"),
     };

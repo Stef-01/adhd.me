@@ -50,6 +50,13 @@ function radiusOf(el: Element, w: number, h: number): { radius: number; roundnes
   return { radius, roundness: radius >= cap - 0.5 ? 2 : 4 };
 }
 
+/** WebGL2 with float render targets, on a hardware renderer. Exported so a test can ask the same question. */
+export function canRunLiquidGlass(gl: WebGL2RenderingContext): boolean {
+  const info = gl.getExtension("WEBGL_debug_renderer_info");
+  const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : String(gl.getParameter(gl.RENDERER));
+  return !/swiftshader|llvmpipe|software|mesa offscreen/i.test(renderer);
+}
+
 export function LiquidGlass() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -60,6 +67,10 @@ export function LiquidGlass() {
     if (reducedTransparency) return;
     const gl = canvas.getContext("webgl2", { alpha: false, antialias: false, premultipliedAlpha: false });
     if (!gl || !gl.getExtension("EXT_color_buffer_float")) return;
+    // Four full-viewport passes a frame need a GPU. On a software renderer (SwiftShader, llvmpipe,
+    // a headless browser) the layer would starve the page, so it stands aside and the CSS glass
+    // carries the look whole. `canRunLiquidGlass` is the one place this is decided.
+    if (!canRunLiquidGlass(gl)) return;
 
     let renderer: MultiPassRenderer;
     try {
@@ -85,8 +96,11 @@ export function LiquidGlass() {
     const blurWeights = computeGaussianKernelByRadius(STUDIO.blurRadius);
 
     let width = 0, height = 0, dpr = 1;
+    /** Render scale: 1, then 0.5 if frames run long, then off. The glass is decoration; the page is not. */
+    let scale = 1;
+    let slowFrames = 0;
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+      dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP) * scale;
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.round(width * dpr);
@@ -168,8 +182,15 @@ export function LiquidGlass() {
       raf = requestAnimationFrame(frame);
       if (document.hidden) return;
       const dt = Math.min(0.05, (now - last) / 1000);
+      // Governor: a run of frames over 40 ms means this machine cannot afford the layer at this size.
+      if (now - last > 40) slowFrames += 1; else slowFrames = Math.max(0, slowFrames - 1);
       last = now;
-      if (canvas.width !== Math.round(window.innerWidth * Math.min(window.devicePixelRatio || 1, DPR_CAP)) || height !== window.innerHeight) resize();
+      if (slowFrames > 30) {
+        slowFrames = 0;
+        if (scale > 0.5) { scale = 0.5; resize(); }
+        else { cancelAnimationFrame(raf); document.documentElement.classList.remove("has-liquid"); renderer.dispose(); return; }
+      }
+      if (canvas.width !== Math.round(window.innerWidth * Math.min(window.devicePixelRatio || 1, DPR_CAP) * scale) || height !== window.innerHeight) resize();
 
       // Spring (react-spring's default physics, integrated per frame as the studio's Controller does).
       const ax = (SPRING.tension * (pointer.x - spring.x) - SPRING.friction * spring.vx);

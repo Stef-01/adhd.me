@@ -4,6 +4,9 @@
 // the Learn page, and the finder broadened beyond GPs.
 
 import { expect, test } from "@playwright/test";
+import { CURSOR_KEY } from "../src/learn/cursor";
+import { runStepCount } from "../src/learn/play";
+import { RUNS } from "../src/learn/runs";
 
 const MODEL_KEY = "adhdme.model.v1";
 const TUTORED_KEY = "adhdme.play.tutored";
@@ -469,8 +472,12 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/approach?module=starting");
   await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
+  // §14: the share sits on the run's last card. Resume the run there via the device's cursor.
+  const last = runStepCount(RUNS.find((r) => r.id === "starting")!) - 1;
+  await page.goto("/approach");
+  await page.evaluate(([k, step]) => localStorage.setItem(k as string, JSON.stringify({ v: 1, moduleId: "starting", step })), [CURSOR_KEY, last] as const);
+  await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Share this run" }).click();
   await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
   const text = await page.evaluate(() => navigator.clipboard.readText());
