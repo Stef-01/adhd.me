@@ -55,6 +55,7 @@ line or an analytics event.
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
+| PRD v2 ADHD Lives (engine, registries, recommendation) | Phase L | **Engine done**; renderer next | `src/lives/` |
 | §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |
@@ -130,6 +131,41 @@ Each item is one PR-sized piece. Nothing below is started.
       synthetic example of each on the roster, a `regular-eating` expertise tag, and the eating,
       gut, sleep and conflict modules naming them. (2026-09-08)
 - [ ] Accounts and sync — the first thing that needs a backend; ADR 0004 is where to argue it.
+
+### Phase L — ADHD Lives (PRD v2, `docs/adhd-lives/PRD-v2.md`, ADR 0006)
+
+The founder's second PRD: eight lives, a Chaos Run on a session director with lives, score and
+FASTER, and a learning layer that surfaces after play through "this is me". Built on this web app
+with a renderer-independent engine (`src/lives/`), so a Skia renderer can take the same engine on
+native later. Mapped from the PRD's phases 0–6:
+
+- [x] **L0–L1 Engine** (PRD §99–§100): types in design coordinates; seeded randomness (§90);
+      difficulty as eight dimensions (§58); score, three lives, FASTER every four (§59–§61);
+      the session director's eight constraints with a rejection log for the lab (§57); the run
+      reducer (§85–§86). `src/lives/`, unit tests. (2026-09-08)
+- [x] **Registries as data** (§23–§26, §46, §96): eight characters with patterns, mechanics,
+      domains and "things they are trying"; twenty-two games as engine configurations (the six
+      of the vertical slice, eight signature games, eight fun games); sixteen strategies with
+      claims and review status; sixteen modules as block lists, four full (Meeting Anchor, Why
+      Am I Here?, Pause Before Send, Lower the Sensory Floor) and twelve at the same shape.
+      `validate:content` fails the suite on a broken reference (§110). (2026-09-08)
+- [x] **Recommendation engine and profile** (§31–§35, §63–§65, §108): deterministic weights with
+      a reason per row; resonance signals as the only basis for personalisation; the Toolkit,
+      the Learn Later queue, goals and high score on the device. (2026-09-08)
+- [ ] **L2 The six games, playable** (§97, §101): a DOM renderer for the ten engines in
+      `app/lives/` — target swat, semantic filter, trace path, inhibition, object search, goal
+      protection, hold/release, rapid sorting, wipe, precision timing — on the existing beans
+      and props, with the calm rules (§14) outside the microgame and the shouted instruction
+      inside it. Validate that the run is fun before any learning shows.
+- [ ] **L3 Results and Toolkit** (§5–§7, §36, §102): score, AGAIN, then "Anything feel
+      familiar?" cards with This is me / Sometimes / Not me, then up to three strategies with
+      TRY NOW / SAVE / NOT FOR ME; the Toolkit screen; `/dev/recommendations` (§107).
+- [ ] **L4 ModuleRenderer** (§25, §103): one renderer over the block types; the four vertical
+      slice modules end-to-end with MAKE IT YOURS (§39).
+- [ ] **L5–L6 Content** (§104–§105): thirty-two games, sixteen full modules, character stories
+      (§41), Learn home (§28), accessibility (§93–§94), analytics with §68's guardrail.
+- Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
+  the engine portable); the eight lives replacing the five beans in the existing runs.
 
 ### Phase C — pilot (PRD §87–§88)
 

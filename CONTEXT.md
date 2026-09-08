@@ -129,3 +129,17 @@ and the copy. Written lazily — a term earns a place here when it has already b
   moves position while a person reads; one question per card. The *tutorial* is the three cards
   before the first run on a device that say what the bar is, that waiting can be the move, and
   that a miss costs nothing.
+
+## ADHD Lives (PRD v2, 2026-09-08)
+
+- **Life** — one of the eight recurring characters (Maya, Leo, Arjun, Zoe, Theo, Mia, Jax, Nina),
+  each living one pattern. Maya is the same person as the bean.
+- **Chaos Run** — a session of microgames on the *session director*, with three lives, a score and
+  a FASTER beat every four successes. The arcade loop; it must stay fun with learning ignored.
+- **Microgame** — one engine, configured: an instruction of at most three words, 2.5–7 seconds,
+  a comic failure. A *fun game* has no character and carries no learning.
+- **Resonance signal** — "This is me", "Sometimes" or "Not me" on a character's moment. The only
+  basis for personalisation; gameplay performance never is.
+- **Strategy** — a practical thing to try, independent of the game, with a claim, an evidence
+  level and a review status. Its *module* teaches it in blocks; the *Toolkit* is where a person
+  keeps the ones they have decided to try, with their own configuration.
