@@ -55,7 +55,7 @@ line or an analytics event.
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
-| PRD v2 ADHD Lives (engine, registries, recommendation) | Phase L | **Engine done**; renderer next | `src/lives/` |
+| PRD v2 ADHD Lives (engine, registries, recommendation, Chaos Run) | Phase L | **L0–L2 done**; results and Toolkit next | `src/lives/`, `app/lives/` |
 | §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |
@@ -152,11 +152,18 @@ native later. Mapped from the PRD's phases 0–6:
 - [x] **Recommendation engine and profile** (§31–§35, §63–§65, §108): deterministic weights with
       a reason per row; resonance signals as the only basis for personalisation; the Toolkit,
       the Learn Later queue, goals and high score on the device. (2026-09-08)
-- [ ] **L2 The six games, playable** (§97, §101): a DOM renderer for the ten engines in
-      `app/lives/` — target swat, semantic filter, trace path, inhibition, object search, goal
-      protection, hold/release, rapid sorting, wipe, precision timing — on the existing beans
-      and props, with the calm rules (§14) outside the microgame and the shouted instruction
-      inside it. Validate that the run is fun before any learning shows.
+- [x] **L2 The games, playable** (§97, §101): `/lives`, claimed by the Learn tab. A DOM renderer
+      for the ten engines in `app/lives/engines.tsx` — target swat, semantic filter, trace path,
+      inhibition, object search, goal protection, hold/release, rapid sorting, wipe, precision
+      timing — every gesture with a button behind it and a button ending every engine under
+      reduced motion. The Chaos Run (`chaos-run.tsx`): three beats a game on one clock (PRE,
+      ACTIVE, RESULT), hearts and a score in the housing and nothing else, FASTER as one still
+      crossfaded word between games (the PRD's beat and the calm rule both hold). The eight lives
+      as beans (`bean.tsx`) on the play vocabulary. Stage layouts are decided by the engine from
+      the seed (`src/lives/layout.ts`) so a run replays. All twenty-two games play. Front and
+      score screen: one heading, one button, AGAIN. Unit tests on the layouts; an e2e plays a run
+      to Run over under reduced motion. (2026-09-08)
+      Still to validate with a person: that the run is fun before any learning shows (§101).
 - [ ] **L3 Results and Toolkit** (§5–§7, §36, §102): score, AGAIN, then "Anything feel
       familiar?" cards with This is me / Sometimes / Not me, then up to three strategies with
       TRY NOW / SAVE / NOT FOR ME; the Toolkit screen; `/dev/recommendations` (§107).

@@ -155,6 +155,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "Institutional navigation (PRD §45): what a university or a workplace commonly puts on paper for ADHD, who grants it and what to bring. Content only — the app applies for nothing — and every line is a patient surface: no diagnosis named, no entitlement promised, no outcome claimed.",
   },
   {
+    path: "/lives",
+    audience: "patient",
+    why: "ADHD Lives (PRD v2, ADR 0006): the Chaos Run — fast games from eight characters' lives, with a score that is entertainment and nothing else. Every instruction and every word on the stage is a patient surface; nothing on it diagnoses, scores a person, or promises an outcome.",
+  },
+  {
     path: "/support",
     audience: "patient",
     why: "From a problem to the kind of professional who helps with it (PRD §37). Names professions to a patient — which is exactly the sentence the no-specialist and no-claims rules were written for — so it is swept in full.",

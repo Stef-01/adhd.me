@@ -68,6 +68,7 @@ export const APP_TABS: readonly AppTab[] = [
   },
   {
     href: "/approach",
+    also: ["/lives"],
     label: "Learn",
     icon: "BookOpen",
     purpose: "Interactive modules that show ADHD in a life like yours and learn what matters to you, plus the reads, the quizzes and the care map.",
