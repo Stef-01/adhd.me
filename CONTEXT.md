@@ -95,3 +95,8 @@ and the copy. Written lazily — a term earns a place here when it has already b
 - **Balance** — the Institute's principle that the dimensions affect each other. In the app it
   is one line on My ADHD: the dimensions the person's signals touch, and the ones nothing has
   touched yet ("unasked", not a gap).
+
+- **Manual** (My Manual, PRD §27): the person's own account of how they work — what helps, what
+  makes it harder, how to work with them — in three free-text sections on their device. The app
+  offers *suggestions* drawn from the record and never writes a line; a suggestion becomes text only
+  when the person adds it. Distinct from the *picture* (My ADHD), which the app derives.

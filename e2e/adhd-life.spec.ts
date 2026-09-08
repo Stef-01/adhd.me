@@ -408,3 +408,32 @@ test("Play P6: the exercise run's bean is drawn fit", async ({ page }) => {
   await page.getByRole("button", { name: "Tap to play" }).click();
   await expect(page.locator('.play-scene .bean[data-look="fit"]')).toHaveCount(1);
 });
+
+test("My Manual (PRD §27): written by the person, kept on the device, suggestions offered and never inserted", async ({ page }) => {
+  await page.goto("/manual");
+  await expect(page.getByRole("heading", { name: "How I work, in my own words." })).toBeVisible();
+  // Empty to start: nothing written for the person, nothing to copy.
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
+  await page.getByRole("textbox", { name: "What helps me" }).fill("A clear first step");
+  await page.waitForTimeout(600);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeEnabled();
+  // A strategy that helped becomes a suggestion, and only a tap makes it text.
+  await page.evaluate((k) => {
+    const r = JSON.parse(localStorage.getItem(k) ?? "{}");
+    r.onboarding = { stage: "think-so", hardest: ["starting"], impact: 7, improveFirst: "start-earlier", completedAt: new Date().toISOString() };
+    r.experiments = [{ moduleId: "starting", strategyId: "first-physical-action", acceptedAt: new Date().toISOString(), outcome: "a-lot", outcomeAt: new Date().toISOString() }];
+    localStorage.setItem(k, JSON.stringify(r));
+  }, MODEL_KEY);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
+  await page.getByRole("group", { name: "Suggestions for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step\nThe first physical action");
+  expect(page.url()).not.toMatch(/first|step|starting/);
+  // Reachable from My ADHD, and the tab claims it.
+  await page.goto("/my-adhd");
+  await page.getByRole("link", { name: "Open my manual" }).click();
+  await expect(page).toHaveURL(/\/manual$/);
+});

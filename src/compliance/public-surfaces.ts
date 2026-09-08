@@ -140,6 +140,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The person's own picture across brain, body, environment and people (PRD §26), built only from what they said. No diagnosis, no score; every line is a patient surface.",
   },
   {
+    path: "/manual",
+    audience: "patient",
+    why: "My Manual (PRD §27): three sections the person writes about themselves, on this device. The app offers suggestions from the record and never writes a line for them; every prompt and suggestion is a patient surface and answers to the patient rules.",
+  },
+  {
     path: "/support",
     audience: "patient",
     why: "From a problem to the kind of professional who helps with it (PRD §37). Names professions to a patient — which is exactly the sentence the no-specialist and no-claims rules were written for — so it is swept in full.",

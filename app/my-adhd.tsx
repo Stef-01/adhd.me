@@ -100,6 +100,12 @@ export function MyAdhd() {
             )}
           </section>
 
+          <section className="life-card" aria-labelledby="my-manual">
+            <h2 id="my-manual">My Manual</h2>
+            <p>{record.manual.updatedAt ? "How you work, in your own words. Edit it any time." : "What helps you, what makes things harder, how to work with you — written by you, never for you."}</p>
+            <div className="life-actions"><Link className="learn-secondary" href="/manual">{record.manual.updatedAt ? "Open my manual" : "Start my manual"}</Link></div>
+          </section>
+
           <section className="life-card" aria-labelledby="my-goal">
             <h2 id="my-goal">Current goal</h2>
             <p>{summary.goal ?? "Not set yet."}</p>

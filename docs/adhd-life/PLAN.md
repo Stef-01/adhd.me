@@ -102,7 +102,11 @@ Each item is one PR-sized piece. Nothing below is started.
 
 ### Phase B — P1 (PRD §91), after product-market signal
 
-- [ ] My Manual (§27) — editable, never auto-labelled.
+- [x] My Manual (§27) — `/manual`, `src/model/manual.ts`: three sections the person writes
+      (what helps, what makes it harder, how to work with me), device-local, copy-as-text to hand
+      to a person. Suggestions come from the record — a strategy that helped, a need they named —
+      and become text only when tapped; nothing is ever written for them. Pulled forward from
+      Phase B on the founder's "continue advancing" (2026-09-08).
 - [ ] Support-person sharing (§46) — a module by link, no health information unless chosen.
 - [ ] Medication experience (§47) — what improved / what remains / unwanted effects → "discuss
       with your prescriber"; no dosing, no advice.
