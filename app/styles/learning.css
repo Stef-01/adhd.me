@@ -55,7 +55,12 @@
   box-shadow: 0 1px 0 color-mix(in srgb, var(--cover-ink) 14%, transparent),
               0 18px 34px -16px color-mix(in srgb, var(--cover) 90%, #000);
 }
-/* The subtitle and the meta row step back without leaving the cover's hue. */
+/* The subtitle and the meta row step back without leaving the cover's hue.
+   INERT SINCE THE CALM PASS (PLAY-PLAN §14), which took the second line and the meta row off the
+   covers, so this rule currently matches nothing. It and the eight --learn-*-sub values are kept
+   rather than deleted because they are the measured half of the palette: each was computed to
+   clear 4.5:1 on its own fill at 11–12px, and a card that carries a second line again should not
+   have to have that worked out a second time. Nothing here paints while the covers are titles. */
 .platform-shell .learn-stack .learn-card :is(.learn-card-text small, .learn-card-meta) { color: var(--cover-sub); }
 .platform-shell .learn-card-text { max-width: 69%; gap: 10px; }
 .platform-shell .learn-card-text strong { font-size: 23px; line-height: 1.2; letter-spacing: -.03em; }
