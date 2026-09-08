@@ -80,12 +80,16 @@
 .safety-screen .learn-primary { margin-top: 22px; }
 
 /* ── Shared app-page pieces (Today, My ADHD, Support, onboarding) ─────────────────────────── */
+/* The h1 on these pages is Inter 750, set by platform.css and confirmed by brand.css — both
+   outrank a rule here, so the serif this file used to ask for had never rendered at any width.
+   The size, weight, tracking and leading of the statement are the platform's; what this file
+   owns is everything under it. */
 .life-screen { padding-top: 12px; }
 .life-head { margin: 8px 0 22px; }
 .life-eyebrow { display: block; margin-bottom: 6px; color: var(--accent); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 .life-head h1 {
   margin: 0 0 8px; color: var(--ink);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
+  font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
 }
 .life-head p { margin: 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
 .life-card { margin: 0 0 14px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-raised); }
@@ -129,7 +133,7 @@
 .onboarding-question { flex: 1; }
 .onboarding-question h1 {
   margin: 0 0 8px; color: var(--ink);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
+  font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
 }
 .onboarding-note { margin: 0 0 18px; color: var(--muted); font-size: 0.9375rem; }
 .onboarding-options { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
@@ -139,7 +143,7 @@
 .onboarding-controls { display: flex; justify-content: space-between; gap: 12px; margin: 24px 0 calc(24px + var(--safe-bottom)); }
 .onboarding-controls .learn-primary { flex: 1; }
 .onboarding-welcome { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; }
-.onboarding-welcome h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
+.onboarding-welcome h1 { margin: 0; font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
 .onboarding-welcome p { margin: 0; color: var(--muted); font-size: 1.0625rem; line-height: 1.55; max-width: 34ch; }
 .onboarding-cast { display: flex; gap: 6px; margin: 8px 0 12px; }
 .onboarding-cast .character-mark { width: 48px; height: 50px; }
@@ -228,3 +232,59 @@
 .manual-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .manual-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--stone); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 600; cursor: pointer; text-align: left; }
 .manual-chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ═══ TYPOGRAPHY AND RHYTHM ON A DESK (2026-09-08) ═══════════════════════════════════════════
+   Everything above is phone-first and correct on a phone: 15px copy across a 350px column is
+   about 45 characters a line, which is a reading measure. None of it was ever given a desk, so
+   at 1440px the same 15px ran the full 1120px shell — 106 characters a line on the Today and
+   My ADHD ledes, 101 in the cards. Past roughly 75 the eye loses the start of the next line,
+   and this is a product whose own PRODUCT.md names tired, older and low-vision readers.
+
+   So: one step up in size, a measure on every run of prose, and a rhythm that grows with the
+   room rather than staying at phone spacing. Sizes are the mobile scale advanced one step
+   (15 → 16.5 for copy, 17 → 18.5 for the lede), which keeps the two layouts recognisably the
+   same design. Nothing here changes a colour, a control or a hit target. */
+@media (min-width: 768px) {
+  /* The head: a wider gap under it, and a lede that stops before the shell does. */
+  .life-head { margin: 4px 0 34px; }
+  /* A statement at 44px runs to about 48 characters across the shell, which is a paragraph's
+     measure at a headline's size. 24ch holds the short ones on one line and breaks the long
+     ones where a person would break them. */
+  .life-head h1 { max-width: 24ch; margin-bottom: 12px; }
+  .life-head p { max-width: 58ch; font-size: 1.1563rem; line-height: 1.55; }
+
+  /* Cards: more room inside, a real step between the heading and the copy under it. */
+  .life-card { margin-bottom: 18px; padding: 28px 32px; border-radius: 20px; }
+  .life-card h2 { margin-bottom: 10px; font-size: 1.25rem; }
+  .life-card.is-lead h2 { font-size: 1.625rem; letter-spacing: -0.02em; }
+  .life-card > p { max-width: 68ch; margin-bottom: 16px; font-size: 1.0313rem; line-height: 1.6; }
+  .life-actions { margin-top: 14px; }
+  .life-list li { font-size: 1.0313rem; line-height: 1.5; }
+  .life-list { gap: 10px; }
+  .life-why p { max-width: 68ch; font-size: 0.9375rem; }
+
+  /* The empty states carry a page on their own, so they are given the height to look composed
+     rather than the phone's 28px of padding stretched across a desk. */
+  .life-empty { padding: 56px 32px; border-radius: 20px; }
+  .life-empty h2 { margin-bottom: 10px; font-size: 1.3125rem; }
+  .life-empty p { max-width: 56ch; margin: 0 auto 20px; font-size: 1.0313rem; line-height: 1.6; }
+
+  /* The support path: the same step, and the counter grows with the padding it sits in. */
+  .support-steps { gap: 14px; }
+  .support-step { padding: 24px 28px 24px 68px; border-radius: 20px; }
+  .support-step::before { left: 24px; top: 25px; width: 32px; height: 32px; font-size: 0.875rem; }
+  .support-step h2 { margin: 0 0 8px; font-size: 1.1875rem; }
+  .support-step p { max-width: 68ch; font-size: 1.0313rem; line-height: 1.6; }
+  .profession-card { padding: 18px 20px; }
+  .profession-card strong { font-size: 1.0625rem; }
+  .profession-card p { max-width: 66ch; font-size: 0.9688rem; }
+
+  /* The remaining runs of prose on these pages take the same measure. */
+  .care-map-detail { padding: 26px 28px; }
+  .care-map-detail p { max-width: 68ch; font-size: 1.0313rem; }
+  .care-map-nwia { max-width: 68ch; font-size: 0.9375rem; }
+  .strategy-card { padding: 22px 24px; }
+  .strategy-card ol { max-width: 66ch; font-size: 1rem; }
+  .safety-note { max-width: 66ch; font-size: 1rem; }
+  .onboarding-note { max-width: 58ch; font-size: 1.0313rem; }
+}
