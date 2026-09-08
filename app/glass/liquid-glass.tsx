@@ -131,7 +131,10 @@ export function LiquidGlass() {
       return n;
     };
 
-    // The pointer blob on the studio's spring, with its velocity-driven stretch.
+    // The droplet: the studio's one moving shape on its spring, with its velocity-driven stretch.
+    // It follows a mouse or a finger (founder, 2026-09-08: "I don't have the droplet moving
+    // effect" — on a phone there was no pointer to follow), and when nothing has touched the
+    // screen for a moment it drifts on its own, slowly, so the glass is never still.
     const pointer = { x: canvas.width / 2, y: canvas.height / 2, at: -1 };
     const spring = { x: pointer.x, y: pointer.y, vx: 0, vy: 0 };
     let blobAlpha = 0;
@@ -140,11 +143,23 @@ export function LiquidGlass() {
       pointer.y = (height - e.clientY) * dpr;
       pointer.at = performance.now();
     };
-    const onPointerLeave = () => { pointer.at = -1; };
-    if (hoverDevice && !reducedMotion) {
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      pointer.x = t.clientX * dpr;
+      pointer.y = (height - t.clientY) * dpr;
+      pointer.at = performance.now();
+    };
+    if (!reducedMotion) {
       window.addEventListener("pointermove", onPointerMove, { passive: true });
-      document.addEventListener("pointerleave", onPointerLeave);
+      window.addEventListener("touchstart", onTouch, { passive: true });
+      window.addEventListener("touchmove", onTouch, { passive: true });
     }
+    /** Where the droplet wanders when idle: a slow Lissajous over the middle of the screen. */
+    const wander = (t: number): [number, number] => [
+      canvas.width * (0.5 + 0.34 * Math.sin(t * 0.11)),
+      canvas.height * (0.55 + 0.22 * Math.sin(t * 0.17 + 1.3)),
+    ];
 
     let raf = 0;
     let last = performance.now();
@@ -162,7 +177,10 @@ export function LiquidGlass() {
       spring.vx += ax * dt; spring.vy += ay * dt;
       spring.x += spring.vx * dt; spring.y += spring.vy * dt;
       const speedX = Math.abs(spring.vx) / 1000, speedY = Math.abs(spring.vy) / 1000; // device px per ms, the studio's unit
-      const wantBlob = hoverDevice && !reducedMotion && pointer.at > 0 && now - pointer.at < IDLE_MS;
+      // Followed while a pointer or finger is moving; wandering once it has been idle.
+      const following = pointer.at > 0 && now - pointer.at < IDLE_MS;
+      if (!following && !reducedMotion) { const [wx, wy] = wander((now - t0) / 1000); pointer.x = wx; pointer.y = wy; }
+      const wantBlob = !reducedMotion;
       blobAlpha += ((wantBlob ? 1 : 0) - blobAlpha) * Math.min(1, dt * 8);
       const blob = STUDIO.blobSize * blobAlpha;
       const stretchX = blob + (speedX * blob * STUDIO.springSizeFactor) / 100;
@@ -222,7 +240,8 @@ export function LiquidGlass() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchmove", onTouch);
       document.documentElement.classList.remove("has-liquid");
       renderer.dispose();
     };

@@ -32,6 +32,9 @@ point. So:
   wire. Held by the contract test. The premise check reads the clue as part of the screen.
 - **The relate beat follows every result** ("how much is this you?", buttons or slider): a round
   that does not ask about the person is not survey delivery. Held by the contract test.
+- **Nothing moves position, and no card carries a label** (§14, the tester who dropped the
+  phone): a screenshot of any card shows no kicker, no count, no rule line unless "?" is on; the
+  only motion on a round is the clock draining and the bean's reaction to the result.
 - **The premise check, per round, on the review sheet:** read only what is on screen. Can a
   stranger say (1) what the bar means, (2) what to do, (3) what counts as a hit, within two
   seconds? If any answer is "no", the round goes back before it ships.

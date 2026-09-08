@@ -124,3 +124,8 @@ and the copy. Written lazily — a term earns a place here when it has already b
   glass surfaces read from the DOM; its *ground* is the app's paper with a slow tinted drift; its
   *blob* is the studio's pointer-following shape. Distinct from the *CSS glass* (`glass.css`),
   which blurs DOM content under the chrome and is the whole effect where the layer cannot run.
+- **Calm** (PLAY-PLAN §14): the standing rule after the tester who dropped the phone. No label on a
+  patient screen (no kicker, no count, no rule line) unless asked for with Play's "?"; nothing
+  moves position while a person reads; one question per card. The *tutorial* is the three cards
+  before the first run on a device that say what the bar is, that waiting can be the move, and
+  that a miss costs nothing.

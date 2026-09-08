@@ -274,3 +274,40 @@ person who could not infer it from the screen was being marked wrong on a fact a
 - **What stays.** Hit and miss remain, because the bean's reaction and the two result lines are
   the teaching; what changed is that the person can now see the hit coming, and the round asks
   about them either way. The recognition round (frequency, cost, priority) stays at the end.
+
+## 14. Calm (founder, 2026-09-08)
+
+"Create much more minimalism on the learning module and the Today section. Cut down text as much
+as possible, have only a few blocky elements per screen. Remove all labels; you can have a tutorial
+module explain stuff, and then people can see labels pop out. Our tester, who has ADHD, felt so
+overwhelmed that they dropped their phone. The text was reportedly jumping everywhere and causing
+panic."
+
+What was jumping: the instruction called out over the scene and settling (§10), the "Faster"
+card spinning in before every third round, cards sliding up as they arrived, the result scaling
+in on a spring, the miss shaking the scene. What was overwhelming: a kicker on every card
+("ROUND 1 OF 8", "OPTIONAL", "STAYS ON THIS DEVICE", "A READING, YOURS TO CONFIRM", "RUN
+COMPLETE · 6 OF 8 CLEARED"), the rule line under every scene, three questions on the recognition
+card, four suggestion chips over the reflection, the strategy's steps as a list, a cast, a
+progress count, topic chips and figures on the shelf, an eyebrow and a lede and a second card on
+Today.
+
+- **Nothing on a play screen moves position.** Cards crossfade (180 ms, ease-out). The
+  instruction stays where it is. No Faster card, no callout. The result fades in. A hit still
+  hops (a reward); a miss settles with one soft dip instead of a shake. `fasterBefore` stays in
+  the engine as a fact about the ramp; the player no longer draws it.
+- **No labels.** No kicker on any card; the housing carries the dots and nothing else. The rule
+  line and the round count exist only when the person asks: the "?" beside the housing turns
+  labels on, and the device remembers (`adhdme.play.labels`). The clue stays: it is game content,
+  not a label.
+- **A three-card tutorial** before the first run on this device (`adhdme.play.tutored`): the bar
+  is the clock; sometimes waiting is the move; a miss costs nothing and each round asks how much
+  it was you. One sentence a card, one button.
+- **One question per card.** Recognition asks how often, then whether they want it easier; the
+  cost slider is gone (the relate beats carry the cost, §13). The reflection is the prompt and
+  the box; the reading is the sentence and the buttons; the strategy is its title and one
+  button, with the steps behind "The steps"; the last card is the heading and one action.
+- **Today** is a heading, one card, one button, and the "why" fold the PRD requires (§65).
+- **The shelf** is one line, one button, and the tiles: title and art, a tick when done. The cast,
+  the topic chips, the progress count, the figures and the footer call to action are gone from
+  this screen.

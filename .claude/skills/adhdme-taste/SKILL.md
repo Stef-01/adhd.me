@@ -30,6 +30,11 @@ without updating the register is a build failure, not a review finding.
   the shell's header is gone, the stage starts at the top edge, an X at top left backs out,
   and the progress sits beside it in one slim housing (`.play-hut`) over the stage — the only
   chrome the game carries. {#layout.full-bleed-play}
+- **No labels, no jumping text** (founder, 2026-09-08, after a tester with ADHD was overwhelmed:
+  "remove all labels; the text was jumping everywhere"). No kicker or eyebrow on a patient screen.
+  A screen is a heading, at most one line under it, and the control. Anything that moves
+  position while a person is reading is out; cards crossfade. Labels a screen genuinely needs
+  live behind an explicit ask (Play's "?"), taught once by a tutorial. {#layout.calm}
 - **No boxes inside boxes.** One container per idea. A border, a radius or a shadow says
   "separate object" and is spent once per screen; a window inside a window inside a shell is
   never the answer. {#layout.one-container}
