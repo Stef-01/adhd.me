@@ -21,7 +21,7 @@ const results=[];
 for(const width of [390,1440]){
  const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
  const page=await context.newPage();
- for(const [name,path] of [['find','/'],['learn','/approach'],['lesson','/approach?module=everyday'],['public','/faq'],['console','/console/signin']]){
+ for(const [name,path] of [['find','/'],['learn','/approach'],['lesson','/approach?module=everyday'],['public','/faq'],['console','/console/signin'],['today','/today'],['my-adhd','/my-adhd'],['care-map','/approach/map'],['onboarding','/start']]){
   await page.goto(process.env.BRAND_URL+path);
   await page.evaluate(()=>document.fonts.ready);
   await page.waitForLoadState('networkidle');

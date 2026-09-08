@@ -108,5 +108,10 @@ test("colourful activities and the meditation player remain accessible on a phon
   }
   await page.goto("/approach/meditate");
   await page.getByRole("button", { name: "Start my moment" }).click();
+  await page.getByRole("button", { name: "Chimes off" }).click();
+  await expect(page.getByRole("button", { name: "Chimes on" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "Chimes on" }).click();
+  const finish = await page.getByRole("button", { name: "Finish early" }).boundingBox();
+  expect(finish!.y + finish!.height).toBeLessThanOrEqual(844);
   await expectNoViolations(page, "meditation player");
 });
