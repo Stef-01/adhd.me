@@ -282,7 +282,7 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
       {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
       <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
       {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
-      {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
+      {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
       {beat !== "result" && (
         <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} mood={mood} onResult={settle} />
       )}

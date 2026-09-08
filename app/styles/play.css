@@ -60,8 +60,13 @@ body:has(.play-run) { overflow-x: clip; }
 .play-timing-track.in-scene { position: absolute; left: 8%; right: 8%; top: 14px; height: 22px; }
 .play-heat.in-scene { position: absolute; left: 8%; right: 8%; top: 18px; }
 /* The mechanics that own the scene grow with the stage, the scene taking the room. */
-.play-hold, .play-dont, .play-timing, .play-pause { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
-.play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene { flex: 1 0 auto; }
+.play-hold, .play-dont, .play-timing, .play-pause, .play-catch, .play-balance { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
+.play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene, .play-catch .play-scene, .play-balance .play-scene { flex: 1 0 auto; }
+.play-falling { position: absolute; inset: 0; }
+.play-fall { position: absolute; min-height: 44px; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); transition: top 80ms linear; }
+.play-fall.is-decoy { background: var(--stone); color: var(--muted); }
+.play-timing-zone.is-middle { left: 30%; width: 40%; }
+.play-recall .sim-notification { background: var(--paper); color: var(--ink); box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
 .play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .play-controls { width: 100%; }
 .bean { display: block; }

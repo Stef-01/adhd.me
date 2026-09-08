@@ -30,13 +30,13 @@ function PropArt({ prop }: { prop: Prop }) {
   }
 }
 
-export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, children, className }: { prop?: Prop; who: Character; mood: Mood; beanSize?: number; /** Replaces the plain bean (a mechanic's bean button). */ bean?: ReactNode; /** The round's result, once there is one: the scene reacts (PLAY-PLAN.md §11). */ result?: "hit" | "miss"; children?: ReactNode; className?: string }) {
+export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, look, children, className }: { prop?: Prop; who: Character; mood: Mood; beanSize?: number; look?: "fit"; /** Replaces the plain bean (a mechanic's bean button). */ bean?: ReactNode; /** The round's result, once there is one: the scene reacts (PLAY-PLAN.md §11). */ result?: "hit" | "miss"; children?: ReactNode; className?: string }) {
   return (
     <div className={`play-scene${className ? ` ${className}` : ""}`} data-prop={prop} data-result={result} style={{ background: PROP_TINTS[prop] }}>
       <svg className="play-scene-art" viewBox="0 0 360 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
         <PropArt prop={prop} />
       </svg>
-      <div className="play-scene-bean">{bean ?? <Bean who={who} mood={mood} size={beanSize} />}</div>
+      <div className="play-scene-bean">{bean ?? <Bean who={who} mood={mood} size={beanSize} look={look} />}</div>
       {children}
     </div>
   );

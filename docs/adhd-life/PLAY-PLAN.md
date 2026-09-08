@@ -214,3 +214,28 @@ runs worked but read as a form with a bean above it. P5 is the answer, built in 
 
 Still open, for the pilot: props that react on their own terms (the phone that lights up, the
 bill that slides), and the tempo tuned against real people (§9.2).
+
+## 12. Phase P6 — more modules, more mechanics, a QA process (founder, 2026-09-08)
+
+"Add more ADHD modules like diet, exercise with a muscly bean with abs, gut health, many more
+creative modules with creative gameplays so it is not just tapping, and a strong QA process."
+
+- **Five new modules, each a module and a run:** *Forgot to eat again* (hunger as a quiet
+  signal; meal anchors, protein early — from the eating research), *The gut and the brain*
+  (the two-way lane, said with the caution the research warrants: no ADHD gut signature, no
+  supplement shown to change the core difficulties, the plain four that help both ends),
+  *Where did the money go* (impulse and the invisible bill), *Out the door* (the launchpad),
+  *The scroll at midnight* (distance beats the feed). Twenty modules, twenty runs.
+- **Two new mechanics:** *catch* (things fall from the top of the scene, decoys among them; tap
+  what matters before it lands) and *balance* (a marker drifts; tap the bean to steady it;
+  inside the calm zone when the clock ends). Fourteen mechanics in the catalogue.
+- **The fit bean.** `look: "fit"` draws arms and abs; Priya wears it through the exercise run.
+- **QA.** `PLAY-QA.md`: the gates in code (variety — at least four mechanics a run, at most
+  three taps; games not questions; budgets; contracts), in the browser, in the look, and with
+  people. The variety gate is a test, so a mostly-tapping run cannot ship.
+
+Sources read for the eating and gut modules, 2026-09-08: a systematic review of gut microbiota
+composition in ADHD (Microorganisms, 2026) and a narrative review of clinical evidence and
+practice implications (PMC, 2026), both cautious; practitioner writing on interoception,
+hyperfocus and medication appetite effects with the same strategies recurring (labelled alarms,
+no-cook food in reach, protein early, food anchored to fixed events).

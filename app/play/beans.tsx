@@ -22,7 +22,7 @@ const SHAPES: Record<Character, string> = {
   priya: "M60 4c26 0 44 30 44 66s-18 54-44 54S16 106 16 70 34 4 60 4Z",
 };
 
-export function Bean({ who, mood = "neutral", size = 120, className }: { who: Character; mood?: Mood; size?: number; className?: string }) {
+export function Bean({ who, mood = "neutral", size = 120, className, look }: { who: Character; mood?: Mood; size?: number; className?: string; /** "fit": arms and abs, for the exercise run. */ look?: "fit" }) {
   const p = PALETTE[who];
   const eyes = mood === "surprised" || mood === "overwhelmed"
     ? <><circle cx="44" cy="58" r="7" fill={p.ink} /><circle cx="76" cy="58" r="7" fill={p.ink} /><circle cx="46" cy="56" r="2.5" fill="#fff" /><circle cx="78" cy="56" r="2.5" fill="#fff" /></>
@@ -33,9 +33,11 @@ export function Bean({ who, mood = "neutral", size = 120, className }: { who: Ch
     : mood === "anxious" || mood === "embarrassed" || mood === "overwhelmed" ? <><path d="M34 48l16-4" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /><path d="M86 48l-16-4" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /></> : null;
   const mouth = mood === "pleased" || mood === "engaged" || mood === "relieved" ? "M44 80q16 16 32 0" : mood === "frustrated" ? "M46 88q14-12 28 0" : mood === "anxious" || mood === "embarrassed" ? "M48 84q12 4 24 0" : mood === "overwhelmed" ? "M46 82q14-6 28 2" : mood === "surprised" ? "M52 84a8 9 0 1 0 16 0a8 9 0 1 0-16 0" : mood === "thinking" ? "M50 84h20" : "M48 82q12 8 24 0";
   return (
-    <svg viewBox="0 0 120 136" width={size} height={size * 136 / 120} aria-hidden="true" className={className ? `bean ${className}` : "bean"} data-bean={who} data-mood={mood}>
+    <svg viewBox="0 0 120 136" width={size} height={size * 136 / 120} aria-hidden="true" className={className ? `bean ${className}` : "bean"} data-bean={who} data-mood={mood} data-look={look}>
       <path d="M44 122v10M76 122v10" stroke={p.ink} strokeWidth="6" strokeLinecap="round" />
+      {look === "fit" && <><path d="M14 74q-14 8-6 26" stroke={p.body} strokeWidth="14" strokeLinecap="round" fill="none" /><path d="M106 74q14 8 6 26" stroke={p.body} strokeWidth="14" strokeLinecap="round" fill="none" /></>}
       <path d={SHAPES[who]} fill={p.body} />
+      {look === "fit" && <g stroke={p.ink} strokeWidth="3" strokeLinecap="round" fill="none" opacity=".55"><path d="M48 96q12 4 24 0" /><path d="M48 106q12 4 24 0" /><path d="M60 92v18" /></g>}
       {brows}
       {eyes}
       <path d={mouth} stroke={p.ink} strokeWidth="5" strokeLinecap="round" fill="none" />

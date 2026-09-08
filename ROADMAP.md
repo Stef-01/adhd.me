@@ -36,6 +36,9 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [x] Play P5: scene-first rounds (the bean is the thing you touch, flat props of our own,
       controls that fill the card), one question per run and twenty-nine more games, the
       Faster card, the long-form player deleted — PR #5.
+- [x] Play P6: five more modules (eating, the gut, money, mornings, screens), two more
+      mechanics (catch, balance), the fit bean, and the QA process in
+      [docs/adhd-life/PLAY-QA.md](docs/adhd-life/PLAY-QA.md) with the variety gate as a test.
 - [ ] Play P3 (tempo) and P4 (measurement): the clock tuned with five to eight real people and
       the §78 targets read off the round-level events — both need the pilot.
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then

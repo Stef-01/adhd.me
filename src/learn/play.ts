@@ -13,7 +13,10 @@
 import type { Character, Mood, Prop, Step, Strategy } from "./interactive";
 import type { Layer } from "@/model/layers";
 
-export const MECHANICS = ["tap", "dont-tap", "hold", "swipe", "drag-capture", "order", "timing", "recall", "sort", "flip", "pause", "pick-bean"] as const;
+export const MECHANICS = ["tap", "dont-tap", "hold", "swipe", "drag-capture", "order", "timing", "recall", "sort", "flip", "pause", "pick-bean", "catch", "balance"] as const;
+/** A run must use at least this many distinct mechanics, and at most MAX_TAPS plain tap rounds (PLAY-QA.md). */
+export const MIN_MECHANICS = 4;
+export const MAX_TAPS = 3;
 export type Mechanic = (typeof MECHANICS)[number];
 
 export interface RoundOption {
@@ -37,9 +40,11 @@ export interface Round {
   readonly seconds: number;
   readonly who: Character;
   readonly mood?: Mood;
+  /** How the bean is drawn in this round: "fit" adds arms and abs (the exercise run). */
+  readonly look?: "fit";
   readonly prop?: Prop;
   readonly options?: readonly RoundOption[];
-  /** `recall`: the list; `swipe` and `hold`: the distractions; `drag-capture`: the requests. */
+  /** `recall`: the list; `swipe` and `hold`: the distractions; `drag-capture`: the requests; `catch`: what falls and must be caught (`options` are the decoys that fall too). */
   readonly items?: readonly string[];
   /** At most sixteen words each. The teaching. */
   readonly hit: string;
