@@ -27,6 +27,11 @@ point. So:
   that needs the rule explained elsewhere fails.
 - **A timing round carries a scale** — the marks along the line, ending on the moment to act —
   and a verb on the bean ("Start", "Walk out"). Held by the contract test.
+- **A round with a right answer carries a clue** (`needsClue`, founder 2026-09-08: "it's
+  impossible to guess"): the line on the scene that makes the hit inferable, the clone's sparking
+  wire. Held by the contract test. The premise check reads the clue as part of the screen.
+- **The relate beat follows every result** ("how much is this you?", buttons or slider): a round
+  that does not ask about the person is not survey delivery. Held by the contract test.
 - **The premise check, per round, on the review sheet:** read only what is on screen. Can a
   stranger say (1) what the bar means, (2) what to do, (3) what counts as a hit, within two
   seconds? If any answer is "no", the round goes back before it ships.

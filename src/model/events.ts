@@ -43,6 +43,7 @@ export const EVENTS = [
   "INTERPRETATION_OFFERED",
   "INTERPRETATION_CONFIRMED",
   "INTERPRETATION_DECLINED",
+  "ROUND_RELATED",
 ] as const;
 export type EventName = (typeof EVENTS)[number];
 

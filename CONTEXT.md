@@ -113,3 +113,9 @@ and the copy. Written lazily — a term earns a place here when it has already b
   the model, as a contributor (layer, subdomain, note) on the module's need; the text stays in the
   reflection. Distinct from an *insight* (the module's claim, verdict yes/no) and from *safety*
   (the one other reader of reflection text, which interrupts rather than suggests).
+- **Clue** (play, PLAY-PLAN §13): the line on a round's scene that makes the right answer
+  inferable — the clone's sparking wire. Required on every round with a right answer.
+- **Relate beat** (play, PLAY-PLAN §13): "How much is this you?" after a round's result, as
+  three buttons or a 0–10 Likert slider, alternating. Writes `relates[run][round]`; the mean is
+  the need's cost when the recognition round gave none. Distinct from *resonance* (the run's own
+  frequency, cost and priority at the end) and from a *reading* (an interpretation of free text).

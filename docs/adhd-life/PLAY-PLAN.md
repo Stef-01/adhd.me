@@ -244,3 +244,33 @@ composition in ADHD (Microorganisms, 2026) and a narrative review of clinical ev
 practice implications (PMC, 2026), both cautious; practitioner writing on interoception,
 hyperfocus and medication appetite effects with the same strategies recurring (labelled alarms,
 no-cook food in reach, protein early, food anchored to fixed events).
+
+## 13. Survey delivery, not a quiz (founder, 2026-09-08)
+
+"Understand why the games have correct and incorrect answers — it's meant to be a survey
+delivery. Make the correct and incorrect make sense with the context and clues in the game; it's
+impossible to guess. Then it will ask how much it related to you, sometimes the buttons, other
+times the Likert scale. Likert scale as a slider."
+
+Read against the clone once more: in Dumb Ways to Die the right action is never a guess. The
+wires spark before "don't touch the wires"; the piranha tank is labelled. The game is not testing
+what you know; it is staging a scene whose consequence you can see coming. Our tap and timing
+rounds had become quizzes — "Which can Alex actually start?" with a hidden right answer — and a
+person who could not infer it from the screen was being marked wrong on a fact about a bean.
+
+- **The clue.** Every round with a right answer (`needsClue` in `play.ts`: tap with a `correct`
+  option, timing, order, sort, recall, balance) carries a `clue` of at most sixteen words, drawn
+  on the scene under the instruction. The clue is the sparking wire: read only it and the
+  instruction, and a stranger can say which option is the hit. Seventy rounds carry one. The
+  contract test refuses a right answer without a clue; the review sheet's premise check (PLAY-QA
+  §1b) now reads the clue as part of "what is on screen".
+- **The relate beat.** After the result line, before Next: "How much is this you?" Buttons
+  (Not me · A bit · Very me, written as 0 · 5 · 10) on even rounds and a 0–10 Likert slider on
+  odd rounds (`relateFormFor`), never on a round that already asks about you (the pick-bean).
+  Optional — Next is always there — and a round with the beat does not auto-advance. What it
+  writes: `record.relates[run][round]`, and the mean stands in as the need's cost when the
+  recognition round gave none (`needs.ts`). The analytics event carries the round id and the
+  number, never a sentence.
+- **What stays.** Hit and miss remain, because the bean's reaction and the two result lines are
+  the teaching; what changed is that the person can now see the hit coming, and the round asks
+  about them either way. The recognition round (frequency, cost, priority) stays at the end.

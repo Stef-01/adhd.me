@@ -12,10 +12,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Play, ShareNetwork, Sparkle, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, fasterBefore, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run } from "@/learn/play";
+import { expiryIsHit, fasterBefore, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
-import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
 import { Mechanic, ownsScene } from "./mechanics";
 import { Scene } from "./scene";
@@ -293,12 +293,23 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
     raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", onVisibility); };
   }, [beat, reducedMotion, seconds, round.mechanic, settle]);
-  // Auto-advance after the result beat; the button is always there too.
+  // The relate beat (founder, 2026-09-08): after the result, "How much is this you?" — buttons on
+  // one round, the slider on the next. Optional: Next is always there. A round with the beat does
+  // not auto-advance, because a question you have not read is not a question.
+  const relateForm = relateFormFor(round, index);
+  const [related, setRelated] = useState<number | null>(null);
+  const [slid, setSlid] = useState(5);
+  const relate = (value: number) => {
+    setRelated(value);
+    recordRelate(deviceLearningStorage, run.id, round.id, value);
+    track("ROUND_RELATED", { module: run.id, round: round.id, form: relateForm ?? "none", value });
+  };
+  // Auto-advance after the result beat when there is nothing to answer; the button is always there too.
   useEffect(() => {
-    if (beat !== "result" || reducedMotion) return;
+    if (beat !== "result" || reducedMotion || relateForm) return;
     const t = window.setTimeout(onAdvance, RESULT_MS);
     return () => window.clearTimeout(t);
-  }, [beat, reducedMotion, onAdvance]);
+  }, [beat, reducedMotion, onAdvance, relateForm]);
 
   const mood = beat === "result" ? (hit ? "pleased" : "embarrassed") : (round.mood ?? "neutral");
   return (
@@ -312,6 +323,7 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
       {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
       <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
       {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
+      {beat === "play" && round.clue && <p className="play-clue"><Sparkle size={14} weight="fill" aria-hidden="true" /> {round.clue}</p>}
       {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
       {beat !== "result" && (
         <>
@@ -323,7 +335,24 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
         <motion.div className="play-result" role="status" initial={reducedMotion ? false : { scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={SPRING}>
           <p className="play-verdict">{hit ? <><Check size={18} weight="bold" aria-hidden="true" /> Cleared</> : "Not this time"}</p>
           <p className="play-line">{hit ? round.hit : round.miss}</p>
-          <button type="button" className="play-tempt is-go" onClick={onAdvance} autoFocus>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+          {relateForm === "buttons" && (
+            <div className="play-relate" role="group" aria-label={RELATE_PROMPT}>
+              <p className="play-relate-prompt">{RELATE_PROMPT}</p>
+              <div className="play-choices">
+                {RELATE_BUTTONS.map((b) => <button key={b.id} type="button" className="play-choice" aria-pressed={related === b.value} onClick={() => relate(b.value)}>{b.label}</button>)}
+              </div>
+            </div>
+          )}
+          {relateForm === "slider" && (
+            <div className="play-relate">
+              <label className="play-likert">
+                <span className="play-relate-prompt">{RELATE_PROMPT}</span>
+                <input type="range" min={0} max={10} step={1} value={related ?? slid} aria-valuetext={`${related ?? slid} out of 10, ${(related ?? slid) <= 2 ? "not me" : (related ?? slid) >= 8 ? "very me" : "a bit"}`} onChange={(e) => setSlid(Number(e.target.value))} onPointerUp={(e) => relate(Number((e.target as HTMLInputElement).value))} onKeyUp={(e) => relate(Number((e.target as HTMLInputElement).value))} />
+                <span className="play-likert-ends" aria-hidden="true"><span>Not me</span><output className="t-digit">{related ?? slid}</output><span>Very me</span></span>
+              </label>
+            </div>
+          )}
+          <button type="button" className="play-tempt is-go" onClick={onAdvance} autoFocus={!relateForm}>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
         </motion.div>
       )}
     </div>

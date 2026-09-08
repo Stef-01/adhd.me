@@ -18,7 +18,7 @@ import { needLabel } from "./labels";
 import { scoreSurvey } from "./surveys";
 import { topicSurvey } from "@/learn/surveys";
 export { needLabel } from "./labels";
-import type { ExperimentOutcome, ModelRecord } from "./store";
+import { meanRelate, type ExperimentOutcome, type ModelRecord } from "./store";
 
 export type Confidence = "low" | "medium" | "high";
 
@@ -179,7 +179,9 @@ export function deriveNeeds(record: ModelRecord): Need[] {
     const d = get(module.domain, sub);
     d.sources.add(module.id);
     d.occasions += 1;
+    const related = meanRelate(record, module.id);
     if (typeof res.cost === "number") d.costs.push(res.cost);
+    else if (related !== null) d.costs.push(related);
     else if (res.frequency) d.costs.push(COST_BY_FREQUENCY[res.frequency]);
     if (res.priority) d.priorities.push(res.priority);
     if (res.frequency === "often" || res.frequency === "sometimes") d.strengths.add(module.strength);

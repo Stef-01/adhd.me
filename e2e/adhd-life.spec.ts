@@ -162,7 +162,9 @@ test("Play: with motion on, the clock runs a round on its own and a held 'don't 
   await page.getByRole("button", { name: "Tap to play" }).click();
   await expect(page.locator(".play-clock")).toBeVisible();
   await expect(page.locator(".play-verdict")).toContainText("Cleared", { timeout: 12000 });
-  // Auto-advance, then round two waits for a gesture.
+  // The relate beat holds the result (no auto-advance on a round that asks a question); Next moves on, and round two waits for a gesture.
+  await expect(page.getByRole("group", { name: "How much is this you?" })).toBeVisible();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.locator(".play-kicker")).toContainText("Round 2 of 8", { timeout: 4000 });
   await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible();
   // Touch floor on the round's controls.
@@ -516,4 +518,29 @@ test("Reflection interpretation (PRD §29): a reading is offered in the person's
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.locator(".play-run[data-phase=\"try\"]")).toBeVisible();
   await expect(page.locator(".play-reading")).toHaveCount(0);
+});
+
+test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you — buttons, then a slider", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  // Round 1 (dont-tap) has no right answer to infer, so no clue; its relate beat is the buttons.
+  await expect(page.locator(".play-clue")).toHaveCount(0);
+  await page.getByRole("button", { name: "I held off" }).click();
+  const relate = page.getByRole("group", { name: "How much is this you?" });
+  await expect(relate).toBeVisible();
+  await relate.getByRole("button", { name: "Very me" }).click();
+  await expect(relate.getByRole("button", { name: "Very me" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 2 (order) has a right order, so the clue says which; its relate beat is the slider.
+  await expect(page.locator(".play-clue")).toContainText("Opening a file is smaller");
+  for (const step of ["Open the file", "Type the title", "Write one bad sentence"]) await page.getByRole("button", { name: step }).click();
+  const slider = page.getByRole("slider", { name: "How much is this you?" });
+  await expect(slider).toBeVisible();
+  await slider.focus();
+  await page.keyboard.press("End");
+  await expect(slider).toHaveAttribute("aria-valuetext", /10 out of 10, very me/);
+  const held = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}").relates, MODEL_KEY);
+  expect(held.starting).toEqual({ coffee: 10, "first-move": 10 });
+  expect(page.url()).not.toMatch(/relate|very/);
 });
