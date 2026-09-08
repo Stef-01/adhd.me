@@ -14,12 +14,21 @@ import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type Learn
 import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
 import { LearningScene, LearningCoverArt, LearningExplorer, CarePathExplorer } from "./learning-scene";
 import { LearningActivity } from "./learning-activities";
+import { InteractiveView } from "./interactive-module";
+import { CharacterMark } from "./characters";
+import { RunPlayer } from "./play/run-player";
+import { Bean } from "./play/beans";
+import { CHARACTERS, CHARACTER_BIOS } from "@/learn/interactive";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
 
 const COLLECTION_COLOURS: Readonly<Record<string, string>> = {
   adhd: "amber", everyday: "oat", "myth-or-fact": "forest", words: "lilac", finding: "coral", cost: "slate", changed: "saffron",
+  context: "amber", "more-than-attention": "oat", starting: "coral", deadlines: "lilac", "working-memory": "slate", hyperfocus: "saffron",
+  ambiguity: "oat", interruption: "lilac", perfectionism: "amber",
+  "not-listening": "forest", "forgotten-commitments": "oat", conflict: "coral",
+  household: "saffron", sleep: "slate", exercise: "forest",
 };
 
 function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
@@ -49,7 +58,10 @@ function LessonHeading({ active, children, className = "learn-card-heading" }: {
 }
 
 export function LearnModules() {
-  const moduleId = useSearchParams().get("module");
+  const params = useSearchParams();
+  const moduleId = params.get("module");
+  /** PLAY-PLAN.md §6: the nine-stage player stays for one release behind `&long=1`. */
+  const longForm = params.get("long") === "1";
   const reducedMotion = useReducedMotion();
   /** RADIANT: which topic chip is on — "all", or one shelf's title. */
   const [shelfFilter, setShelfFilter] = useState<string>("all");
@@ -119,7 +131,27 @@ export function LearnModules() {
           exit={reducedMotion ? undefined : { opacity: 0, x: 24, transition: { duration: 0.14 } }}
           transition={{ ...SPRING, opacity: { duration: 0.2 } }}
         >
-          {current.kind === "quiz" ? quizView(current) : readView(current)}
+          {current.kind === "quiz" ? quizView(current) : current.kind === "run" && current.run && !longForm ? (
+            <RunPlayer
+              run={current.run}
+              step={step}
+              onStep={(next) => { setDirection(next > step ? 1 : -1); setStep(next); }}
+              onFinish={() => finish(current.id)}
+              onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
+              bar={bar(current, cardCount(current))}
+            />
+          ) : (current.kind === "interactive" || (current.kind === "run" && longForm)) && current.interactive ? (
+            <InteractiveView
+              module={current.interactive}
+              step={step}
+              direction={direction}
+              hydrated={hydrated}
+              onStep={(next) => { setDirection(next > step ? 1 : -1); setStep(next); }}
+              onFinish={() => finish(current.id)}
+              onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
+              bar={bar(current, current.interactive.steps.length)}
+            />
+          ) : readView(current)}
         </motion.div>
       ) : (
         <motion.div
@@ -351,6 +383,17 @@ export function LearnModules() {
           <div><span className="activity-label">MAKE ROOM FOR A MOMENT</span><h2>Less scrolling. A little stillness.</h2><p>A guided pause, or a five-minute session on a shared clock.</p></div>
           <Link href="/approach/meditate">Find a quiet moment <ArrowRight size={19} /></Link>
         </motion.div>
+        {completed && ["interactive", "run"].includes(MODULES.find(module => module.id === completed)?.kind ?? "") && (
+          <div className="learning-feature learning-completion">
+            <div role="status">
+              <p className="learning-overline">MODULE FINISHED</p>
+              <h2>Your picture just got sharper.</h2>
+              <p>What you said is on My ADHD now, with what seems to contribute and what to try next.</p>
+              <Link className="learn-secondary" href="/my-adhd">See My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
+            </div>
+            <LearningScene topic={completed} reaction="complete" />
+          </div>
+        )}
         {completed && MODULES.find(module => module.id === completed)?.kind === "read" && (
           <div className="learning-feature learning-completion">
             <div role="status">
@@ -367,7 +410,7 @@ export function LearnModules() {
             <p className="learning-overline">A LITTLE UNDERSTANDING GOES A LONG WAY</p>
             <h2>Get to know ADHD.<br />One idea at a time.</h2>
             <p>Short reads, everyday examples, and a few things that might surprise you. Take them at your own pace.</p>
-            <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "adhd", Boolean(cursor))}>{cursor ? `Continue ${MODULES.find(module => module.id === cursor.moduleId)?.title}` : "Explore the first module"} <ArrowRight size={18} aria-hidden="true" /></button>
+            <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "context", Boolean(cursor))}>{cursor ? `Continue ${MODULES.find(module => module.id === cursor.moduleId)?.title}` : "Explore the first module"} <ArrowRight size={18} aria-hidden="true" /></button>
           </div>
           <LearningScene />
         </div>
@@ -389,6 +432,26 @@ export function LearnModules() {
         <p className="learn-progress" aria-live="polite">
           {finished === 0 ? "Nothing finished yet" : `${finished} of ${MODULES.length} finished`}
         </p>
+        {/* PLAY-PLAN.md §5: the cast fills in as runs are cleared — discovery, never a streak. A bean
+            wakes up when any run it leads is finished; the count is runs, not points. */}
+        {(() => {
+          const runs = MODULES.filter((m) => m.kind === "run" && m.run);
+          const cleared = runs.filter((m) => progress.done.includes(m.id));
+          return (
+            <ul className="play-cast" aria-label={`Beans collected: ${cleared.length} of ${runs.length} runs cleared`}>
+              {CHARACTERS.map((who) => {
+                const led = runs.filter((m) => m.run!.bean === who);
+                const awake = led.some((m) => progress.done.includes(m.id));
+                return (
+                  <li key={who} className={awake ? "is-awake" : ""} title={`${CHARACTER_BIOS[who].name}: ${led.filter((m) => progress.done.includes(m.id)).length} of ${led.length}`}>
+                    <Bean who={who} mood={awake ? "pleased" : "neutral"} size={44} />
+                    <span>{CHARACTER_BIOS[who].name}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        })()}
         {(finished > 0 || cursor) && <button className="learn-reset" type="button" onClick={() => { clearProgress(deviceLearningStorage); clearCursor(deviceLearningStorage); setProgress({ v: 1, done: [] }); setCursor(null); }}>Reset learning progress on this device</button>}
 
         <ol className="learn-stack">
@@ -421,11 +484,11 @@ export function LearnModules() {
                       <strong>{module.title}</strong>
                       <small>{module.subtitle}</small>
                       <span className="learn-card-meta">
-                        <span>{module.kind === "quiz" ? "Quiz" : "Read"}</span>
+                        <span>{module.kind === "quiz" ? "Quiz" : module.kind === "run" ? "Play" : module.kind === "interactive" ? "Interactive" : "Read"}</span>
                         <span className="learn-tile-dot" aria-hidden="true" />
                         <span className="learn-tile-time"><Clock size={12} weight="bold" aria-hidden="true" />{module.minutes} min</span>
                         <span className="learn-tile-dot" aria-hidden="true" />
-                        <span>{count} {module.kind === "quiz" ? "questions" : "cards"}</span>
+                        <span>{module.kind === "run" ? `${module.run?.rounds.length ?? 0} rounds` : `${count} ${module.kind === "quiz" ? "questions" : module.kind === "interactive" ? "steps" : "cards"}`}</span>
                         {done && (
                           <>
                             <span className="learn-tile-dot" aria-hidden="true" />
@@ -436,7 +499,13 @@ export function LearnModules() {
                         )}
                       </span>
                     </span>
-                    <span className="learn-card-art" aria-hidden="true"><LearningCoverArt id={module.id} /></span>
+                    <span className="learn-card-art" aria-hidden="true">
+                      {module.kind === "run" && module.run
+                        ? <Bean who={module.run.bean} mood="engaged" size={72} />
+                        : module.kind === "interactive" && module.interactive
+                        ? <CharacterMark who={module.interactive.characters[0]!} mood="engaged" />
+                        : <LearningCoverArt id={module.id} />}
+                    </span>
                   </motion.button>
                 </motion.li>
               );
@@ -456,7 +525,7 @@ export function LearnModules() {
         <p className="learn-figures-note">Indicative figures pending source confirmation.</p>
 
         <Link className="learn-cta" href="/">
-          Find a GP near you
+          Find support near you
           <ArrowRight size={17} weight="bold" aria-hidden="true" />
         </Link>
       </section>

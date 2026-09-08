@@ -13,7 +13,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "ADHD.ME",
     short_name: "ADHD.ME",
     description:
-      "A finder. Describe the GP you are looking for in your own words, and it shows you listed Sydney GPs who say they do that work — with the reason each one is shown.",
+      "A finder. Describe the support you are looking for in your own words, and it shows the listed GPs and allied providers who say they do that work — with the reason each one is shown.",
     start_url: "/finder",
     display: "standalone",
     background_color: "#fbfaf7",

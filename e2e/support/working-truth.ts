@@ -29,7 +29,7 @@ export interface RouteProof {
 export const ROUTE_PROOFS: Readonly<Record<string, RouteProof>> = {
   // ── Public, signed out. Copy proofs carry the sentence the page exists to say.
   "/": {
-    proof: /Describe the GP you are looking for, or use the microphone to talk/,
+    proof: /Describe the support you are looking for, or use the microphone to talk/,
     source: "copy",
     why: "O230: the root IS the finder now. Its welcome prompt renders only when the interactive stage machine mounted, which is the work this route does — a stronger proof of a working page than a headline, which an error shell could also paint.",
   },

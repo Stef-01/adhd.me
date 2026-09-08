@@ -47,3 +47,51 @@ and the copy. Written lazily — a term earns a place here when it has already b
   into robots.txt rules. A retrieval bot fetches to answer somebody's question now and cites the
   source; a training bot bulks the site into a corpus with no reader and no citation. The first is
   allowed, the second is not.
+
+## The personal model (ADHD Life, 2026-09-08)
+
+- **Layer** — one of the four parts of a life the model reads a difficulty into: brain, body,
+  environment, people (`src/model/layers.ts`). The eco-bio-psychosocial framing from the GP
+  interview behind the PRD. Every contributor carries one; the care map draws one region each.
+- **Subdomain** — a closed entry inside a layer ("activation", "sleep", "deadline-design",
+  "partner"). A module names the subdomains it teaches; a need is about one.
+- **Signal** — something the person said: an onboarding answer, a module's resonance, a
+  personalisation answer, an insight verdict, an experiment outcome. Stored in the **record**
+  (`adhdme.model.v1`, `src/model/store.ts`), on the device, never in a URL, a log or an event.
+- **Resonance** — the three answers every interactive module asks after its scene: how often,
+  how much it costs (0–10), whether the person wants it easier. Stored separately, never summed.
+- **Need** — a derived reading of the record (`src/model/needs.ts`): domain, subdomain, cost,
+  priority, confidence, contributors by layer, strengths, strategies tried. Never stored; the one
+  reading every screen shares.
+- **Recommendation** — the rule-based next action (`src/model/recommend.ts`): learn, try, change
+  the environment, involve somebody, discuss with an existing clinician, explore a provider, or
+  the safety pathway. Every one carries its rule, its inputs and a "Why am I seeing this?".
+- **Experiment** — a strategy the person said they would try, awaiting "Did this help?".
+- **Insight** — a sentence a module suggests about the person, which only they can confirm. A
+  "Not really" is kept as a rejection so it is never assumed.
+- **Safety event** — a reflection that matched a safety rule (`src/model/safety.ts`). While one
+  stands, ordinary recommendations are suppressed and the safety screen renders.
+
+## Support (broadened finder, 2026-09-08)
+
+- **Profession** — the kind of professional a roster entry is (`src/support/professions.ts`):
+  GP, psychologist, counsellor, occupational therapist, exercise physiologist, ADHD coach. An
+  entry that says nothing is a GP, which is what the roster meant before the broadening.
+- **Provider** — any roster entry, whatever its profession. The finder's copy says "provider" or
+  "support" where it said "GP" unless the profession is known.
+- **Allied provider** — a non-GP entry. Today all ten are **example profiles**; the listed
+  clinicians are still the two real GPs. Coverage claims are unchanged by the broadening.
+- **Expertise tag** — what an allied provider says they work on, in the PRD's closed taxonomy
+  ("task initiation", "ADHD in couples"). Rendered as "Best for" on the profile.
+- **Support path** — `/support`: problem → what may help → try yourself → when a person helps →
+  professions → providers. "See providers" writes a profession filter to the device; it never
+  puts anything on a URL.
+
+## Wellness (NWIA, 2026-09-08)
+
+- **NWIA dimension** — one of the National Wellness Institute of Australia's nine: Physical,
+  Social, Emotional, Work, Spiritual values, Intellectual, Cultural values, Environment, Finances.
+  A second reading of the care map's nodes (`src/wellness/nwia.ts`), never a second map.
+- **Balance** — the Institute's principle that the dimensions affect each other. In the app it
+  is one line on My ADHD: the dimensions the person's signals touch, and the ones nothing has
+  touched yet ("unasked", not a gap).

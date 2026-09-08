@@ -20,6 +20,8 @@ import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Sheet } from "../sheet";
+import { professionOf } from "@/demo/clinicians";
+import { professionLabel } from "@/support/professions";
 
 /** O235: Leaflet reads `window` on import, so the map is a client-only chunk fetched the first time a place resolves. */
 const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap), {
@@ -61,6 +63,7 @@ export function ResultsStage({
   place,
   filters,
   onToggleFilter,
+  fitFor,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -91,6 +94,8 @@ export function ResultsStage({
   /** RADIANT: the device's filters, so the quick chips can show which are on and switch them. */
   filters: Filters;
   onToggleFilter: (key: BooleanFilterKey) => void;
+  /** PRD §42: the problem-fit sentence for an allied provider, from the personal model, or null. */
+  fitFor?: (clinician: Clinician) => string | null;
 }) {
   /** The filters the chips cannot show — a language, a distance, a way of working — as a count on the Filters pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
@@ -238,7 +243,7 @@ export function ResultsStage({
           change, and both ways out are on the screen. */}
       {empty && (
         <div className="results-empty">
-          <p className="results-empty-lead">No listed GP answers every filter you set.</p>
+          <p className="results-empty-lead">No listed provider answers every filter you set.</p>
           <p className="results-empty-detail">
             {filterLabels.length > 0
               ? "Loosening one filter usually brings the list back."
@@ -273,7 +278,7 @@ export function ResultsStage({
               exit={reducedMotion ? undefined : { opacity: 0, y: -4, filter: "blur(2px)", transition: { duration: 0.15 } }}
               transition={{ duration: 0.15, ease: EASE_OUT }}
             >
-              {quality === "informed" ? "Matches" : <>All listed <em>GPs</em></>}
+              {quality === "informed" ? "Matches" : <>All listed <em>providers</em></>}
             </motion.span>
           </AnimatePresence>
         </h2>
@@ -436,7 +441,7 @@ export function ResultsStage({
                 <strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
-                <small className="row-focus">{reasons.slice(0, 2).join(", ") || item.focus}</small>
+                <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 2).join(", ") || item.focus)}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}

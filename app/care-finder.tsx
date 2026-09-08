@@ -2,7 +2,7 @@
 
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
 import { StageDirection } from "./finder-stages/shared";
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { careArchetypes } from "@/demo/care-archetypes";
 import {
   clinicians,
@@ -19,6 +19,12 @@ import {
   type Clinician,
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
+import { professionsMentioned } from "@/support/professions";
+import { fitReason, orderByProblemFit } from "@/support/problem-fit";
+import { deviceLearningStorage } from "@/learn/cursor";
+import { readModel } from "@/model/store";
+import { topNeed, type Need } from "@/model/needs";
+import { professionOf } from "@/demo/clinicians";
 import { clarifiers } from "@/matching/clarify";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
@@ -102,10 +108,20 @@ export function CareFinder() {
   // thing an address carries) and is read at arrival, before the first paint.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
-  const roster = useMemo(
+  const filteredRoster = useMemo(
     () => applyFilters(rosterFor(includeSynthetic), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
     [includeSynthetic, filters, origin],
   );
+  /**
+   * 2026-09-08 (PRD §38): a sentence that NAMES a kind of professional — "a psychologist near
+   * Beecroft", "an OT for starting work" — narrows the roster to that kind before ranking, the way
+   * a filter does. Read from the words alone (`professionsMentioned`), never inferred from what
+   * the person needs; the support path's profession filter (`filters.professions`) is the other
+   * door and rides with the rest of the filters above. Every derived read below threads THIS
+   * roster, so no sentence describes a list the ranking did not run over.
+   */
+  const named = useMemo(() => professionsMentioned(request), [request]);
+  const roster = useMemo(() => (named.length === 0 ? filteredRoster : filteredRoster.filter((c) => named.includes(professionOf(c)))), [filteredRoster, named]);
   const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
     // none — a search started from the front door reads back what the profile set. A place on
@@ -126,7 +142,9 @@ export function CareFinder() {
     setRequest(words);
     setDraft(record.draft);
     const resumedOrigin = resolvePlace(arrivedPlace);
-    const resumedRoster = applyFilters(rosterFor(includeSynthetic), held, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null));
+    const resumedNamed = professionsMentioned(words);
+    const resumedRoster = applyFilters(rosterFor(includeSynthetic), held, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null))
+      .filter((c) => resumedNamed.length === 0 || resumedNamed.includes(professionOf(c)));
     const found = rankCliniciansNear(words, resumedOrigin, resumedRoster).findIndex((item) => item.id === record.matchId);
     setMatchIndex(Math.max(0, found));
   });
@@ -138,7 +156,15 @@ export function CareFinder() {
    * null origin IS `rankClinicians`, so one expression covers every former site; the scenarios
    * stage never displays matches, so its priming setters carried no behavior at all.
    */
-  const matches = useMemo(() => rankCliniciansNear(request, origin, roster), [request, origin, roster]);
+  /**
+   * Problem fit (PRD §42): what the personal model has learned about this person — read on the
+   * client, after mount, like every device fact — reorders the ALLIED entries among themselves by
+   * how their declared expertise answers the top need. GPs stay where the engine ranked them.
+   */
+  const [need, setNeed] = useState<Need | null>(null);
+  useEffect(() => { setNeed(topNeed(readModel(deviceLearningStorage))); }, []);
+  const matches = useMemo(() => orderByProblemFit(rankCliniciansNear(request, origin, roster), need), [request, origin, roster, need]);
+  const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // Round 2: sixteen near-identical rows is the "long list" anti-pattern. Five is enough to choose
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
@@ -659,6 +685,7 @@ export function CareFinder() {
         {stage === "results" && (
           <ResultsStage
             key="results"
+            fitFor={fitFor}
             focusOnArrival={focusOnArrival}
             requestHeadline={requestHeadline}
             requestSummary={requestSummary}
@@ -696,6 +723,7 @@ export function CareFinder() {
           <ProfileStage
             key="profile"
             focusOnArrival={focusOnArrival}
+            problemFit={fitFor(clinician)}
             clinician={clinician}
             personalizedSignals={personalizedMatch.signals}
             profileEvidence={profileEvidence}

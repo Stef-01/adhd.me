@@ -128,6 +128,18 @@ describe("counting and naming", () => {
     expect(labels[0]).toBe("Woman GP");
     expect(labels.at(-1)).toBe("Within 20 km");
     expect(labels).toContain("Speaks Mandarin");
+    const kinds = describeFilters({ ...emptyFilters(), professions: ["psychologist", "adhd-coach"] });
+    expect(kinds).toEqual(["Psychologists or ADHD coaches"]);
+    expect(activeFilterCount({ ...emptyFilters(), professions: ["psychologist", "adhd-coach"] })).toBe(1);
+  });
+
+  it("narrows to the kinds of professional chosen, reading an entry with no profession as a GP", () => {
+    const plain = gp("h");
+    const psych = gp("i", { profession: "psychologist" });
+    const only = applyFilters([plain, psych], { ...emptyFilters(), professions: ["psychologist"] }, null, () => null);
+    expect(only).toEqual([psych]);
+    expect(applyFilters([plain, psych], { ...emptyFilters(), professions: ["gp"] }, null, () => null)).toEqual([plain]);
+    expect(applyFilters([plain, psych], emptyFilters(), null, () => null)).toHaveLength(2);
   });
 
   it("accepts exactly the languages the roster can match", () => {

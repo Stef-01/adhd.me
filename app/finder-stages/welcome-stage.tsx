@@ -62,7 +62,7 @@ export function WelcomeStage({
             </span>
             <span>
               <strong>Include example profiles</strong>
-              <small>Fictional GPs for trying the finder — not real people, and not bookable.</small>
+              <small>Fictional GPs and allied providers for trying the finder — not real people, and not bookable.</small>
             </span>
           </label>
         </AppSettings>
@@ -76,7 +76,7 @@ export function WelcomeStage({
           it is now the question the box answers, at a size that leads without shouting. */}
       <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
         <motion.div className="voice-prompt" variants={reducedMotion ? undefined : introItem}>
-          <h1 tabIndex={-1}>What kind of GP are you looking for?</h1>
+          <h1 tabIndex={-1}>What kind of support are you looking for?</h1>
         </motion.div>
       </motion.div>
 
@@ -91,7 +91,7 @@ export function WelcomeStage({
             same voice/findMatches() path, so speaking and writing rank clinicians identically. */}
         <div className="dual-input">
           <label className="sr-only" htmlFor="welcome-request">
-            Describe the GP you are looking for, or use the microphone to talk
+            Describe the support you are looking for, or use the microphone to talk
           </label>
           {/* O233: a textarea, not a one-line input. The thing a person is asked for is a
               SENTENCE — "a woman GP near Chatswood who speaks Mandarin and can do the whole
@@ -112,13 +112,13 @@ export function WelcomeStage({
                 if (draft.trim()) onSearch(draft);
               }
             }}
-            placeholder="e.g. a woman GP near Beecroft who bulk bills"
+            placeholder="e.g. a psychologist near Beecroft who does telehealth"
           />
           <Pressable
             className={draft.trim() ? "dual-input-action is-send" : "dual-input-action is-talk"}
             type="button"
             onClick={() => (draft.trim() ? onSearch(draft) : onTalk())}
-            aria-label={draft.trim() ? "Find a GP" : "Talk instead of typing"}
+            aria-label={draft.trim() ? "Find support" : "Talk instead of typing"}
           >
             {/* O243: the glyph MORPHS as the first character lands — the mic turns into the arrow on a
                 spring, which is the screen saying "now it searches" without a sentence. */}
@@ -159,13 +159,14 @@ export function WelcomeStage({
 
       <aside className="finder-getting-started" aria-label="Getting started">
         <p className="learning-overline">YOUR NEXT STEP, MADE CLEARER</p>
-        <h2>A GP search that starts with you.</h2>
-        <p>Tell us what matters. Explore the listed doctors, then check the details with the practice.</p>
+        <h2>A search that starts with you.</h2>
+        <p>GPs, psychologists, counsellors, occupational therapists, exercise physiologists and ADHD coaches. Tell us what matters, then check the details with the practice.</p>
         <ol>
           <li><span>1</span><div><strong>Use your own words</strong><p>Location, language, appointment style — start with what you need.</p></div></li>
-          <li><span>2</span><div><strong>See why a GP appears</strong><p>Read the profile and the reasons behind your results.</p></div></li>
+          <li><span>2</span><div><strong>See why somebody appears</strong><p>Read the profile and the reasons behind your results.</p></div></li>
           <li><span>3</span><div><strong>Choose your next step</strong><p>Check current availability with the booking destination.</p></div></li>
         </ol>
+        <Link href="/support">Not sure who to see? Start from the problem <ArrowRight size={17} aria-hidden="true" /></Link>
         <Link href="/approach">New to ADHD? Explore the learning modules <ArrowRight size={17} aria-hidden="true" /></Link>
       </aside>
 

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { TEAM_PAGE_PUBLIC } from "./about/team";
 
 const DOORS: ReadonlyArray<{ label: string; href: string }> = [
-  { label: "Find a GP", href: "/finder" },
+  { label: "Find support", href: "/finder" },
   // The network's door and the mission page that introduced it are not in this list on this
   // deployment: they belong to the other one. The rule they were added under still holds for
   // everything below — a public route with no door here is reachable only by somebody who already
@@ -39,7 +39,7 @@ export function SiteFooter() {
       <div className="site-footer-inner">
         <div className="site-footer-brand">
           <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
-          <p>A GP finder built around the words you use.</p>
+          <p>A support finder built around the words you use.</p>
         </div>
         <nav aria-label="Site">
           <ul>

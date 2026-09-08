@@ -22,7 +22,7 @@ async function searchFor(page: Page, query: string, place?: string) {
   await page.getByRole("button", { name: /Change what you said/i }).click();
   const box = page.getByRole("textbox");
   await box.fill(query);
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
 }
 
@@ -39,7 +39,7 @@ test("a language ask is ranked on and explained, not just printed (O1)", async (
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
   // O237: the full-list tie is no longer a sentence — both listed GPs declare Urdu, so the words
   // produced no order, and the heading says so ("All listed GPs") rather than dressing it as one.
-  await expect(page.locator(".results-list-head h2")).toHaveText("All listed GPs");
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed providers");
   await page.screenshot(shot("02-urdu-ranked-and-earned"));
   // And the profile says the reason in the closed vocabulary.
   await page.locator(".clinician-row").first().click();
@@ -51,7 +51,7 @@ test("a language ask is ranked on and explained, not just printed (O1)", async (
 test("a request the lexicon cannot read says so instead of faking an order", async ({ page }) => {
   await searchFor(page, "hello there");
   // O237: "this is everyone we list, not an order" is said by the heading now.
-  await expect(page.locator(".results-list-head h2")).toHaveText("All listed GPs");
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed providers");
   // O46: unearned words are a quiet quote, not a display headline — and the bare count
   // ("3 of 3.") is gone when everyone is shown anyway, because it said nothing.
   await expect(page.locator(".results-head h1")).toHaveCount(0);

@@ -16,6 +16,7 @@
 // findings register on the twelfth header-less module, exactly as W210 designed it to.
 
 import type { CareArea } from "./care-archetypes";
+import type { ExpertiseTag, Profession } from "@/support/professions";
 
 // Re-exported through clinicians.ts, which is what the tree imports; kept here because the
 // `Clinician` type below is written in terms of it.
@@ -55,6 +56,17 @@ export type Approach = (typeof APPROACHES)[number];
 export type Clinician = {
   id: string;
   name: string;
+  /**
+   * 2026-09-08 (founder-directed, the ADHD Life PRD §38): which kind of professional this is.
+   * The roster began as GPs only, so an entry that says nothing is a GP (`professionOf`); every
+   * allied entry says what it is. A closed vocabulary — `src/support/professions.ts`.
+   */
+  profession?: Profession;
+  /**
+   * PRD §40: what an allied provider says they work on, in the closed expertise taxonomy — the
+   * problem a person would recognise, never "ADHD" alone. A declaration, like every other field.
+   */
+  expertise?: readonly ExpertiseTag[];
   shortName: string;
   gender: "woman" | "man" | "non-binary";
   pronouns: string;
@@ -492,3 +504,8 @@ export const clinicians: Clinician[] = [
     realPerson: true,
   },
 ];
+
+/** The profession an entry carries, with the roster's original meaning — no profession is a GP. */
+export function professionOf(clinician: Pick<Clinician, "profession">): Profession {
+  return clinician.profession ?? "gp";
+}

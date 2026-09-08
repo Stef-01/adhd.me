@@ -44,6 +44,7 @@ import {
 } from "@/finder/filters";
 import { resolvePlace, suggestPlaces } from "@/geo/suburbs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
+import { PROFESSION_ENTRIES, type Profession } from "@/support/professions";
 import { AppSettings } from "./app-settings";
 
 /** The switch rows, in the order a person reads them: who, how, then what the rooms have. */
@@ -135,6 +136,11 @@ export function ProfileView() {
    */
   const shownCount = applyFilters(rosterFor(true), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)).length;
 
+  const toggleProfession = (p: Profession): void => {
+    const has = filters.professions.includes(p);
+    update({ professions: has ? filters.professions.filter((x) => x !== p) : [...filters.professions, p] });
+  };
+
   const toggleApproach = (a: Approach): void => {
     const has = filters.approach.includes(a);
     update({ approach: has ? filters.approach.filter((x) => x !== a) : [...filters.approach, a] });
@@ -160,7 +166,7 @@ export function ProfileView() {
           as "Clear the filters" at the foot of the list; the place is kept, as it always was. */}
       <header className="me-head">
         <div className="me-head-row">
-          <span className="me-eyebrow">Filter GPs</span>
+          <span className="me-eyebrow">Filter providers</span>
           <button type="button" className="me-reset" onClick={clearFilterSet}>Reset all</button>
         </div>
         <div className="me-head-row me-head-title">
@@ -242,7 +248,7 @@ export function ProfileView() {
           </span>
         </div>
         <p className="me-section-lead">
-          Each one narrows the list to GPs who declare it. The words you search with still decide the order.
+          Each one narrows the list to providers who declare it. The words you search with still decide the order.
         </p>
 
         <ul className="me-switches">
@@ -322,6 +328,35 @@ export function ProfileView() {
             {filters.withinKm !== null && !origin
               ? "A distance needs a suburb above before it can apply."
               : "Straight-line, from the suburb above. GPs who see new people by telehealth first are always included."}
+          </p>
+        </div>
+
+        {/* 2026-09-08 (PRD §38): which KIND of professional. Empty is every kind; the support path
+            sets one on the person's behalf when they choose "See providers" from a problem. */}
+        <div className="me-group" role="group" aria-labelledby="me-profession-title">
+          <h3 id="me-profession-title">Kind of support</h3>
+          <ul className="me-chips">
+            {PROFESSION_ENTRIES.map((entry) => {
+              const on = filters.professions.includes(entry.id);
+              return (
+                <li key={entry.id}>
+                  <motion.button
+                    type="button"
+                    className={on ? "me-chip is-on" : "me-chip"}
+                    aria-pressed={on}
+                    onClick={() => toggleProfession(entry.id)}
+                    whileTap={reducedMotion ? undefined : { scale: 0.94 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 48 }}
+                  >
+                    {on && <span className="me-chip-tick" aria-hidden="true">✓</span>}
+                    {entry.plural.charAt(0).toUpperCase() + entry.plural.slice(1)}
+                  </motion.button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="me-group-note">
+            Leave every chip off to see all of them. Not sure which kind? The support path starts from the problem instead.
           </p>
         </div>
 
@@ -452,7 +487,7 @@ export function ProfileView() {
           for, with the count the filters leave. It goes to the finder, which resumes the search. */}
       <div className="me-sticky">
         <Link className="me-show" href="/">
-          Show <span key={shownCount} className="t-digit">{shownCount}</span> GP{shownCount === 1 ? "" : "s"}
+          Show <span key={shownCount} className="t-digit">{shownCount}</span> provider{shownCount === 1 ? "" : "s"}
           <ArrowRight size={16} weight="bold" aria-hidden="true" />
         </Link>
       </div>
