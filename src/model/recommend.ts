@@ -204,7 +204,7 @@ export function recommend(record: ModelRecord, now: Date = new Date()): Recommen
   }
 
   // Everything on this need is tried: go deeper on the next need, or the next module in the domain.
-  const nextModule = MODULES.find((m) => m.kind === "interactive" && !done.has(m.id) && m.interactive?.domain === need.domain) ?? MODULES.find((m) => m.kind === "interactive" && !done.has(m.id));
+  const nextModule = MODULES.find((m) => m.kind === "run" && !done.has(m.id) && m.interactive?.domain === need.domain) ?? MODULES.find((m) => m.kind === "run" && !done.has(m.id));
   return {
     action: "LEARN",
     need,

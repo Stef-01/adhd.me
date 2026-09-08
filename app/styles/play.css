@@ -1,9 +1,22 @@
 /* Play (docs/adhd-life/PLAY-PLAN.md §4): big beans, flat bright rounds, one clock, ≤ 14 words. */
-.play-run { max-width: 640px; margin: 0 auto; }
-.play-stage { min-height: 60dvh; }
-.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 22px 20px 26px; border-radius: 28px; background: var(--route-soft); text-align: center; overflow: hidden; }
+/* Immersive (§11): the stage bleeds to the viewport edges; the chrome sits in one housing above it. */
+body:has(.play-run) { overflow-x: clip; }
+/* Zero header while a run is open: the shell's header goes, the stage starts at the top edge. */
+.platform-shell:has(.play-run) .platform-header { display: none; }
+.platform-shell .me-screen:has(.play-run) { padding-top: 0; }
+.play-run { position: relative; }
+.play-top { position: absolute; top: 14px; left: 12px; right: 12px; z-index: 2; display: flex; align-items: center; gap: 10px; }
+.play-x { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); cursor: pointer; box-shadow: 0 3px 0 color-mix(in srgb, var(--ink) 10%, transparent); }
+.play-x:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.play-hut { display: flex; align-items: center; gap: 12px; flex: 1; max-width: 560px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.play-dots { flex: 1; margin: 0; }
+.play-count { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.play-stage { margin: 0 calc(50% - 50vw); min-height: 100svh; }
+.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 100svh; padding: 76px 16px 32px; border-radius: 0; background: var(--route-soft); text-align: center; overflow: hidden; }
+.play-card > * { width: 100%; max-width: 640px; }
+.play-card > .play-clock { max-width: none; }
 .play-card.is-title { background: var(--accent-soft); padding-top: 34px; }
-.play-card.is-round { background: var(--route-soft); }
+.play-card.is-round { background: var(--route-soft); gap: 12px; }
 .play-card.is-round.is-hit { background: color-mix(in srgb, #0e8345 16%, var(--paper)); }
 .play-card.is-round.is-miss { background: color-mix(in srgb, var(--accent) 14%, var(--paper)); }
 .play-card.is-insight { background: var(--stone); }
@@ -14,31 +27,61 @@
 .play-title { margin: 0; max-width: 20ch; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.5rem, 6.5vw, 2rem); font-weight: 460; letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
 .play-instruction:focus-visible { outline: none; }
 /* The instruction is called out over the scene for two seconds while the clock runs (clone: 0.15s in, 2s hold, 0.5s out), then settles into its place. */
-.play-instruction { transition: transform 0.5s var(--ease-ui), background 0.5s var(--ease-ui), box-shadow 0.5s var(--ease-ui); }
-.play-instruction.is-callout { transform: translateY(-18%) scale(1.1); padding: 10px 18px; border-radius: 18px; background: var(--paper); box-shadow: 0 10px 0 color-mix(in srgb, var(--ink) 10%, transparent); animation: play-callout-in 0.15s var(--ease-ui); }
-@keyframes play-callout-in { from { transform: translateY(-18%) scale(0.6); opacity: 0; } }
+.play-instruction { transition: transform 0.5s var(--ease-ui); }
+.play-instruction.is-callout { transform: scale(1.06); animation: play-callout-in 0.15s var(--ease-ui); }
+@keyframes play-callout-in { from { transform: scale(0.6); opacity: 0; } }
 /* The Faster card: one word, under a second, before every third round. */
 .play-faster { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 260px; justify-content: center; }
 .play-faster-word { margin: 0; color: var(--accent); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(2.8rem, 16vw, 4.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; text-transform: uppercase; }
 @media (prefers-reduced-motion: reduce) { .play-instruction { transition: none; } .play-instruction.is-callout { animation: none; } }
 .play-line { margin: 0; max-width: 34ch; color: var(--ink); font-size: 1.0625rem; line-height: 1.5; }
-.play-scene { display: flex; justify-content: center; }
+/* The scene (P5): a full-width stage with one flat prop, the bean standing in it. */
+/* The scene grows to fill the stage; the art sits on the ground and the tint is the sky above it. */
+.play-scene { position: relative; flex: 1 0 auto; width: calc(100% + 32px); max-width: none; min-height: 236px; margin-inline: -16px; border-radius: 0; overflow: hidden; }
+@media (min-width: 768px) { .play-scene { width: 100%; margin-inline: 0; min-height: 320px; border-radius: 20px; } }
+.play-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.play-scene-bean { position: absolute; left: 16%; bottom: 8px; transform: translateX(-50%); }
+.play-scene[data-prop="none"] .play-scene-bean { left: 50%; }
+/* The scene reacts to the result (§11): a hop on a hit, a shake on a miss; nothing under reduced motion. */
+.play-scene[data-result="hit"] .bean { animation: play-hop 0.5s var(--ease-ui) 1; }
+.play-scene[data-result="miss"] .play-scene-art { animation: play-shake 0.4s var(--ease-ui) 1; }
+@keyframes play-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-22px) scale(1.04); } 70% { transform: translateY(0) scale(0.98); } 100% { transform: translateY(0); } }
+@keyframes play-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .play-scene[data-result] .bean, .play-scene[data-result] .play-scene-art { animation: none; } }
+.play-bean-hit { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.play-bean-hit .bean { transition: transform var(--dur-tap) var(--ease-ui); }
+.play-bean-hit.is-holding .bean, .play-bean-hit:active .bean { transform: scale(0.94) translateY(4px); }
+.play-bean-hit.is-now .bean { transform: scale(1.08); }
+.play-bean-hit:disabled { cursor: default; }
+.play-bean-hit:focus-visible { outline: none; } .play-bean-hit:focus-visible .play-bean-label { outline: 3px solid var(--accent); outline-offset: 3px; }
+.play-bean-label { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 3px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
+.play-bean-hit.is-holding .play-bean-label, .play-bean-hit.is-now .play-bean-label { background: var(--accent); color: var(--on-accent); }
+.play-tempt.in-scene { position: absolute; right: 14px; bottom: 18px; width: auto; box-shadow: 0 6px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
+.play-timing-track.in-scene { position: absolute; left: 8%; right: 8%; top: 14px; height: 22px; }
+.play-heat.in-scene { position: absolute; left: 8%; right: 8%; top: 18px; }
+/* The mechanics that own the scene grow with the stage, the scene taking the room. */
+.play-hold, .play-dont, .play-timing, .play-pause { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
+.play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene { flex: 1 0 auto; }
+.play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.play-controls { width: 100%; }
 .bean { display: block; }
 .play-hero-bean { filter: drop-shadow(0 8px 0 color-mix(in srgb, var(--ink) 8%, transparent)); }
-.play-choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
-.play-choice { min-height: 52px; padding: 12px 20px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: pointer; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
+.play-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.play-choices > :only-child, .play-choice.is-wide { grid-column: 1 / -1; }
+.play-choices > :nth-child(3):last-child { grid-column: 1 / -1; }
+.play-choice { min-height: 64px; padding: 12px 18px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: pointer; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
 .play-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
 .play-choice:disabled { opacity: 0.6; cursor: default; }
 .play-choice:focus-visible, .play-tempt:focus-visible, .play-hold-button:focus-visible, .play-bean-button:focus-visible, .play-layer:focus-visible, .play-note:focus-visible, .play-chip-big:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--ground); color: var(--on-ground); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
 .play-tempt.is-go { background: var(--accent); color: var(--on-accent); }
 .play-tempt:disabled { opacity: 0.5; cursor: default; }
 .play-dont { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .play-hold { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 .play-hold-button { min-width: 160px; min-height: 96px; border: 4px solid var(--accent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1.125rem; font-weight: 700; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
 .play-hold-button.is-holding { background: var(--accent); color: var(--on-accent); transform: scale(0.96); }
-.play-drift { position: relative; display: flex; justify-content: center; gap: 12px; height: 32px; width: 100%; margin: 0; padding: 0; list-style: none; overflow: hidden; }
-.play-drift li { position: absolute; padding: 4px 12px; border-radius: 999px; background: var(--surface-raised); color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
+.play-drift { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; pointer-events: none; }
+.play-drift li { position: absolute; left: 0; padding: 6px 14px; border-radius: 999px; background: var(--surface-raised); color: var(--ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 4px 0 rgba(34, 26, 22, 0.1); }
 .play-swipe { display: grid; gap: 10px; width: 100%; margin: 0; padding: 0; list-style: none; }
 .play-chip-big { display: inline-flex; align-items: center; gap: 8px; width: 100%; min-height: 52px; padding: 12px 18px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: grab; touch-action: pan-y; }
 .play-capture { display: grid; gap: 14px; width: 100%; }
@@ -64,8 +107,9 @@
 .play-layer small { color: var(--muted); font-weight: 500; font-size: 0.75rem; min-height: 1em; }
 .play-layer:disabled { opacity: 0.7; cursor: default; }
 .play-flip, .play-pick { display: grid; gap: 12px; width: 100%; justify-items: center; }
-.play-beans { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-.play-bean-button { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 44px; min-height: 44px; padding: 8px 10px 10px; border: 3px solid transparent; border-radius: 22px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.8125rem; font-weight: 700; cursor: pointer; max-width: 150px; }
+.play-beans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.play-beans > :nth-child(3):last-child { grid-column: 1 / -1; }
+.play-bean-button { display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding: 10px 10px 12px; border: 3px solid transparent; border-radius: 22px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
 .play-bean-button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
 .play-bean-button:disabled { cursor: default; }
 .play-pause { display: grid; gap: 12px; width: 100%; justify-items: center; }
@@ -80,7 +124,7 @@
 .play-scale output { font-size: 1.5rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .play-steps { margin: 0; padding-left: 20px; text-align: left; font-size: 1rem; line-height: 1.5; display: grid; gap: 6px; max-width: 34ch; }
 .platform-shell .learn-card-art .bean { width: 72px; height: auto; }
-@media (max-width: 767px) { .play-card { padding: 20px 16px 24px; border-radius: 22px; } }
+@media (max-width: 767px) { .play-card { padding: 72px 16px 28px; } }
 @media (prefers-reduced-motion: reduce) { .play-choice, .play-heat span { transition: none; } }
 /* The cast (PLAY-PLAN.md §5): five beans, asleep until a run they lead is cleared. */
 .play-cast { display: flex; gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }

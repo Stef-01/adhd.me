@@ -10,14 +10,15 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Play, Sparkle } from "@phosphor-icons/react";
+import { ArrowRight, Check, Play, Sparkle, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, fasterBefore, rampedSeconds, runPhaseAt, type Run } from "@/learn/play";
+import { expiryIsHit, fasterBefore, rampedSeconds, runPhaseAt, runStepCount, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
-import { Mechanic } from "./mechanics";
+import { Mechanic, ownsScene } from "./mechanics";
+import { Scene } from "./scene";
 import { SafetyScreen } from "../safety-screen";
 import { VoiceReflection } from "../voice-reflection";
 
@@ -30,15 +31,16 @@ const FREQUENCIES: ReadonlyArray<{ id: Frequency; label: string }> = [{ id: "oft
 const PRIORITIES: ReadonlyArray<{ id: Priority; label: string }> = [{ id: "yes", label: "Yes" }, { id: "maybe", label: "Maybe" }, { id: "no", label: "No" }];
 const VERDICTS: ReadonlyArray<{ id: InsightVerdict; label: string }> = [{ id: "yes", label: "That’s me" }, { id: "partly", label: "Partly" }, { id: "no", label: "Not really" }];
 
-export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
+export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }: {
   run: Run;
   step: number;
   onStep: (next: number) => void;
   onFinish: () => void;
   onOpenModule: (id: string) => void;
-  bar: React.ReactNode;
+  onLeave: () => void;
 }) {
   const reducedMotion = Boolean(useReducedMotion());
+  const total = runStepCount(run);
   const [record, setRecord] = useState<ModelRecord | null>(null);
   const [cleared, setCleared] = useState<Record<string, boolean>>({});
   const [reflection, setReflection] = useState("");
@@ -67,7 +69,17 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
 
   return (
     <section className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
-      {bar}
+      <h1 id="learn-module-title" className="sr-only">{run.title}</h1>
+      {/* Zero header (founder, 2026-09-08): an X to back out, and the progress in its own small housing. */}
+      <div className="play-top">
+        <button type="button" className="play-x" aria-label="All modules" onClick={onLeave}><X size={20} weight="bold" aria-hidden="true" /></button>
+        <div className="play-hut">
+          <ol className="learn-dots play-dots" aria-hidden="true">
+            {Array.from({ length: total }, (_, i) => <li key={i} className={i === step ? "is-current" : i < step ? "is-done" : ""} />)}
+          </ol>
+          <span className="play-count" aria-live="polite">{Math.min(step + 1, total)} of {total}</span>
+        </div>
+      </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={step} className="play-stage" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -12, transition: { duration: 0.12 } }} transition={{ ...SPRING, opacity: { duration: 0.18 } }}>
           {phase === "title" && (
@@ -269,10 +281,10 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
       )}
       {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
       <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
-      {beat !== "faster" && <div className="play-scene"><Bean who={round.who} mood={mood} size={128} /></div>}
       {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
+      {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
       {beat !== "result" && (
-        <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} onResult={settle} />
+        <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} mood={mood} onResult={settle} />
       )}
       {beat === "result" && (
         <motion.div className="play-result" role="status" initial={reducedMotion ? false : { scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={SPRING}>

@@ -126,8 +126,10 @@ untouched; the long-form player retired.
 **Phase P3 — collection and rhythm.** Bean collection on the Learn page; tempo ramp tuned by
 watching real people (5–8 users, PRD §76: did it feel patronising, could you say what it taught).
 
-**Phase P4 — pilot instrumentation.** Round-level completion in the analytics taxonomy; the §78
-targets (start > 70 %, completion > 65 %) measured on runs.
+**Phase P4 — pilot instrumentation.** Round-level completion is in the analytics taxonomy
+(`MODULE_STARTED` / `MODULE_COMPLETED` with `format: "run"`, `MODULE_STEP_COMPLETED` with the
+mechanic and the hit); the §78 targets (start > 70 %, completion > 65 %) are measured on runs
+in the pilot.
 
 ## 8. Acceptance (tests)
 
@@ -141,8 +143,9 @@ targets (start > 70 %, completion > 65 %) measured on runs.
 
 ## 9. Decisions (founder, 2026-09-08: "those interactive game elements should be there")
 
-1. **The runs are the form.** The long-form player stays hidden behind `?long=1` for one release
-   and is then deleted.
+1. **The runs are the form.** The long-form player stayed hidden behind `?long=1` for one release
+   (PR #4) and was deleted in the next (P5): there is no `interactive` module kind any more, every
+   interactive module is a run, and `scenes.ts` refuses one that is not.
 2. **Timer ramps** — five percent a round, floor seventy percent, never on a round that asks
    about you (`rampedSeconds`). Tuned against real people in P3.
 3. **No sound** in P0.
@@ -176,3 +179,38 @@ that we do not, and two it has that we refuse on purpose:
 - **Refused — lives and points.** Three lives, a score with random bonus names ("PITY BONUS",
   "INSULT TO INJURY") and a high score are the clone's; §3 and PRD §34 rule them out. Rounds, not
   lives; beans, not points.
+
+## 11. Phase P5 — scene-first rounds and more game (founder, 2026-09-08: "get the game modules
+created and iterated asap")
+
+Read against the captures of every round (`qa/play/`, and the review sheet built from them): the
+runs worked but read as a form with a bean above it. P5 is the answer, built in one sitting.
+
+- **The scene.** `app/play/scene.tsx`: a full-width stage with one flat SVG prop (desk, phone,
+  bill, ball, lecture, bed, kitchen, calendar, door — our own art, in the beans' style) and the
+  bean standing in it. Every round has one; the instruction sits above it, the controls below.
+- **The bean is the thing you touch.** Hold, pause and timing put their action on the bean
+  itself (press and hold Alex to stay in the class; tap Maya the moment it becomes real). Don't-tap
+  puts the tempting thing in the scene as a prop-button. The clock, the drift, the heat and the
+  timing track all live inside the scene.
+- **Controls fill the card.** Choices are a two-column grid of 64px buttons; a third option
+  spans the row. The empty lower third is gone.
+- **Less asking, more playing.** One "pick your bean" round per run — the one whose answer the
+  needs engine reads — and twenty-nine new game rounds across the fifteen, favouring timing,
+  sort, flip, recall, drag-capture and don't-tap, so no run is under six games. Timing, pause
+  and recall now take their reduced-motion choices and decoys from the round itself.
+
+- **The scene reacts.** On a hit the bean hops; on a miss the scene shakes. Nothing moves under
+  reduced motion.
+- **Immersive** (founder, 2026-09-08: "full screen bleeding till edge, not boxed windows
+  everywhere, the progress bar outside in its own housing, minimise blackness"). The stage
+  bleeds to the viewport edges with no card around it; on a phone the scene runs edge to edge.
+  Zero header while a run is open (founder, same day: "purely edge to edge, an X in the top
+  left to back out"): the shell's header is hidden, the stage starts at the top edge, an X at
+  top left leaves the run, and the dots and step count sit beside it in one slim housing.
+  No dark blocks: the bean's label and the tempting thing are paper or accent, the props are
+  mid-tone. Rules recorded in the taste file (`layout.full-bleed-play`, `layout.one-container`,
+  `type.no-dark-blocks`).
+
+Still open, for the pilot: props that react on their own terms (the phone that lights up, the
+bill that slides), and the tempo tuned against real people (§9.2).

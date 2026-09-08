@@ -33,8 +33,11 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [x] Play P1–P2: the modules as runs of micro-games — [docs/adhd-life/PLAY-PLAN.md](docs/adhd-life/PLAY-PLAN.md).
       Engine, twelve mechanics, beans, all fifteen runs.
 - [x] Play P3 (collection): the cast on the Learn page wakes as runs are cleared.
-- [ ] Play P3 (tempo) and P4: the clock tuned with five to eight real people, round-level
-      analytics against the §78 targets — both need the pilot.
+- [x] Play P5: scene-first rounds (the bean is the thing you touch, flat props of our own,
+      controls that fill the card), one question per run and twenty-nine more games, the
+      Faster card, the long-form player deleted — PR #5.
+- [ ] Play P3 (tempo) and P4 (measurement): the clock tuned with five to eight real people and
+      the §78 targets read off the round-level events — both need the pilot.
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 
