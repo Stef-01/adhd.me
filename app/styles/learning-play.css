@@ -22,10 +22,14 @@
 .platform-shell .learn-module .learn-lesson { background: var(--lesson-soft); border: 0; border-radius: 30px; padding: clamp(24px,4vw,52px); }
 .platform-shell .learn-module .learn-lesson.composition-0 { background: var(--lesson-colour); }
 .platform-shell .learn-module .learning-lesson-art { background: transparent; width: 36%; margin: 0 0 20px 40px; }
-.platform-shell .learn-module .composition-1 .learning-lesson-art { float: left; margin: 0 40px 20px 0; }
+.platform-shell .learn-module .composition-1 { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.4fr); column-gap: 40px; }
+.platform-shell .learn-module .composition-1 .learning-lesson-art { float: none; width: 100%; margin: 0; grid-column: 1; grid-row: 1 / span 3; align-self: center; }
+.platform-shell .composition-1 :is(.learn-card-eyebrow,.learn-card-heading,.learn-card-body) { grid-column: 2; }
+.platform-shell .composition-1 :is(.learn-card-detail,.learn-card-foot,.activity,.learning-explorer) { grid-column: 1 / -1; }
 .platform-shell .learn-module .composition-2 .learning-lesson-art { float: none; width: 100%; margin: 0 auto 24px; max-height: 160px; }
 .platform-shell .learn-module .composition-2 .learning-lesson-art svg { max-height: 160px; }
 .platform-shell .learn-module .learn-card-heading { font-size: clamp(30px,3.8vw,46px); max-width: 22ch; font-weight: 700; line-height: 1.1; }
+.learn-card-heading:focus { outline: none; }
 .platform-shell .learn-module .learn-card-eyebrow { color: #3f4038; }
 .platform-shell .learn-module :is(.learn-card-body,.learn-card-detail,.learn-card-foot) { color: #34362f; }
 .platform-shell .learn-module .learn-card-detail { clear: both; padding-top: 20px; }
@@ -99,19 +103,20 @@
 .meditation-shared > button { display: inline-flex; gap: 12px; align-items: center; white-space: nowrap; margin-left: auto; padding: 14px 20px; background: #191a17; color: #fbfaf7; border-radius: 14px; min-height: 48px; }
 .meditation-shared > button:disabled { background: #5a5851; }
 body:has(.meditation-studio.is-playing) .platform-shell { background: #de995e; }
-.meditation-studio.is-playing { min-height: calc(100svh - 80px); background: #de995e; max-width: none; }
+.meditation-studio.is-playing { min-height: calc(100svh - 80px); background: #de995e; max-width: none; padding-top: 16px; padding-bottom: 32px; }
+.meditation-studio.is-playing .meditation-topline { margin-bottom: 24px; }
 .meditation-player { text-align: center; max-width: 760px; margin: auto; }
 .meditation-session-label { font-size: 11px; font-weight: 650; letter-spacing: .15em; }
 .platform-shell .meditation-player h1 { font-family: var(--font-display); font-weight: 430; font-size: clamp(38px,5vw,56px); margin-top: 16px; }
-.meditation-orbit { width: 260px; height: 260px; margin: 44px auto; display: grid; place-items: center; position: relative; }
+.meditation-orbit { width: 260px; height: 260px; margin: 28px auto; display: grid; place-items: center; position: relative; }
 .meditation-breath { position: absolute; inset: 0; border-radius: 48% 52% 46% 54%; background: #f7d0a7; }
 .meditation-orbit-center { position: relative; width: 194px; height: 194px; border-radius: 50%; background: #fbfaf7; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
 .meditation-orbit-center span { font-size: 11px; letter-spacing: .12em; }
 .meditation-orbit-center strong { font-size: 40px; font-weight: 450; font-variant-numeric: tabular-nums; }
-.meditation-guide { min-height: 142px; }
+.meditation-guide { min-height: 120px; }
 .meditation-guide h2 { font-size: 24px; margin-bottom: 16px; }
 .meditation-guide p { max-width: 52ch; margin: auto; line-height: 1.75; }
-.meditation-progress { height: 4px; background: #191a1733; border-radius: 8px; overflow: hidden; margin: 30px auto; max-width: 420px; }
+.meditation-progress { height: 4px; background: #191a1733; border-radius: 8px; overflow: hidden; margin: 20px auto; max-width: 420px; }
 .meditation-progress span { display: block; height: 100%; background: #191a17; transform-origin: left; }
 .meditation-controls { display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap; }
 .meditation-controls :is(button,a) { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border: 1px solid #57412b; border-radius: 30px; min-height: 48px; font-size: 14px; }
@@ -121,6 +126,7 @@ body:has(.meditation-studio.is-playing) .platform-shell { background: #de995e; }
  .learning-pause-banner > div:nth-child(2) { flex: 1; min-width: 170px; }
  .learning-pause-banner a { margin: 0; width: 100%; justify-content: space-between; white-space: normal; }
  .platform-shell .learn-module .learning-lesson-art, .platform-shell .learn-module .composition-1 .learning-lesson-art { float: none; width: 100%; max-height: 170px; margin: 0 0 24px; }
+ .platform-shell .learn-module .composition-1 { display: block; }
  .platform-shell .learn-module .learn-card-heading { font-size: 30px; }
  .activity h3 { font-size: 24px; }
  .activity-heading { align-items: flex-start; }
@@ -145,8 +151,10 @@ body:has(.meditation-studio.is-playing) .platform-shell { background: #de995e; }
  .meditation-studio.is-playing { padding-top: 14px; min-height: calc(100svh - 68px); }
  .platform-shell:has(.meditation-studio.is-playing) .app-tabs { display: none; }
  .platform-shell:has(.meditation-studio.is-playing) { padding-bottom: 0; }
- .meditation-orbit { width: 220px; height: 220px; margin: 36px auto; }
- .meditation-orbit-center { width: 166px; height: 166px; }
- .meditation-guide { min-height: 184px; }
+ .meditation-orbit { width: clamp(160px,26svh,220px); height: clamp(160px,26svh,220px); margin: 24px auto; }
+ .meditation-orbit-center { width: 76%; height: 76%; }
+ .meditation-guide { min-height: 130px; }
+ .meditation-controls { gap: 8px; }
+ .meditation-controls :is(button,a) { padding: 10px 12px; font-size: 13px; gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .meditation-breath { transform: none !important; } }
