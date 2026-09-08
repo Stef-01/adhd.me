@@ -99,12 +99,19 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   // Round 5: hold.
   await page.getByRole("button", { name: "I held on" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Round 6: pick your bean (writes an answer).
-  await page.getByRole("button", { name: /Vague ones/ }).click();
-  await page.getByRole("button", { name: "That’s me" }).click();
+  // Round 6: timing — under reduced motion, choose the moment.
+  await page.getByRole("button", { name: "Ten minutes, then stop" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Round 7.
-  await page.getByRole("button", { name: /Another person/ }).click();
+  // Round 7: sort each cause into its layer.
+  for (const [cause, layer] of [["A vague brief", "Environment"], ["Five hours’ sleep", "Body"], ["A manager who will judge it", "People"]] as const) {
+    await page.getByRole("group", { name: "Causes" }).getByRole("button", { name: cause }).click();
+    await page.getByRole("group", { name: "Layers" }).getByRole("button", { name: new RegExp(layer) }).click();
+  }
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 8: pick your bean (writes an answer).
+  await page.getByRole("button", { name: /Vague ones/ }).click();
   await page.getByRole("button", { name: "That’s me" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Recognition: Next is held until a frequency is given.
@@ -126,7 +133,6 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   expect(record.resonance?.starting?.frequency).toBe("often");
   expect(record.resonance?.starting?.cost).toBe(7);
   expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
-  expect(record.answers?.["starting.what-helps-start"]).toEqual(["person"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
   expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
@@ -135,7 +141,6 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await page.goto("/my-adhd");
   await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
   await expect(page.getByText("Activation for ambiguous tasks", { exact: true })).toBeVisible();
-  await expect(page.getByText("External accountability helps", { exact: true })).toBeVisible();
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
@@ -258,7 +263,8 @@ test("E2E 9: under reduced motion a run has no clock, the recall round works by 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=working-memory");
   await expect(page.locator(".play-clock")).toHaveCount(0);
-  await page.keyboard.press("Enter"); // "Tap to play" holds focus on the title card
+  await page.getByRole("button", { name: "Tap to play" }).focus();
+  await page.keyboard.press("Enter");
   await expect(page.locator(".play-kicker")).toContainText("Round 1 of 8");
   await page.getByRole("button", { name: "I have them" }).click();
   await page.getByRole("button", { name: /Reply, then keep walking/ }).click();
