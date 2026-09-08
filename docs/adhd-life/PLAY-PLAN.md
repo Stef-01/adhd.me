@@ -146,3 +146,28 @@ targets (start > 70 %, completion > 65 %) measured on runs.
 2. **Timer ramps** — five percent a round, floor seventy percent, never on a round that asks
    about you (`rampedSeconds`). Tuned against real people in P3.
 3. **No sound** in P0.
+
+## 10. Read against a Dumb Ways to Die clone (2026-09-08)
+
+The founder pointed at `roncrisostomo/dumbwaystodieclone` (Unity 5, C#, 2015; no licence file;
+bundles the Google Play Games and Soomla SDKs). Nothing in it is code we can take: it is a
+different engine, and a repo without a licence grants no rights anyway. What it is useful for is
+confirming the structure, and it does. Its loop is the one in §3: a mini-game on a draining
+timer bar with an instruction line; a short win/lose animation; the next game. Two things it has
+that we do not, and two it has that we refuse on purpose:
+
+- **Taken — the clock pauses when the game is hidden.** The clone pauses on interruption. Ours
+  measured elapsed time across a hidden tab, so switching away mid-round expired it behind the
+  person's back. Fixed in `run-player.tsx`.
+- **Open — the "FASTER" card.** Between levels the clone flashes one word for under a second as
+  the time limit drops (7s → 2s across six levels; ours drops five percent a round, floor seventy,
+  §9). Our ramp is silent. A one-beat "Faster" card when the ramp bites (say before rounds 3 and
+  6, skipped under reduced motion) is the most recognisable Dumb Ways to Die beat we lack.
+  Founder's call; recommended.
+- **Open — the instruction runs over the game.** The clone starts the timer at once and slides
+  the instruction over the playing scene (0.15s in, 2s hold, 0.5s out). Ours holds a 900ms
+  reading beat before the clock starts. The clone's way is more faithful; ours gives the reading
+  moment PRD §33 asks for. Recommended: keep ours.
+- **Refused — lives and points.** Three lives, a score with random bonus names ("PITY BONUS",
+  "INSULT TO INJURY") and a high score are the clone's; §3 and PRD §34 rule them out. Rounds, not
+  lives; beans, not points.

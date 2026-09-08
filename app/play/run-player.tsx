@@ -219,6 +219,7 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
   useEffect(() => {
     if (reducedMotion || beat !== "play") return;
     let raf = 0;
+    let hiddenAt: number | null = null;
     const tick = (now: number) => {
       if (start.current === null) start.current = now;
       const p = Math.min(1, (now - start.current) / (seconds * 1000));
@@ -226,8 +227,17 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
       if (p >= 1) { settle(expiryIsHit(round.mechanic)); return; }
       raf = requestAnimationFrame(tick);
     };
+    // A hidden tab pauses the clock: the round resumes where it was, it does not expire behind
+    // the person's back.
+    const onVisibility = () => {
+      if (document.hidden) { hiddenAt = performance.now(); cancelAnimationFrame(raf); return; }
+      if (hiddenAt !== null && start.current !== null) start.current += performance.now() - hiddenAt;
+      hiddenAt = null;
+      raf = requestAnimationFrame(tick);
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", onVisibility); };
   }, [beat, reducedMotion, seconds, round.mechanic, settle]);
   // Auto-advance after the result beat; the button is always there too.
   useEffect(() => {
