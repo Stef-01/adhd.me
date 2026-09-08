@@ -43,14 +43,19 @@ without updating the register is a build failure, not a review finding.
   non-breaking spaces inside names and units. {#type.numeric-typography}
 - Palette tokens only (`--ink`, `--muted`, `--accent`, `--paper`…); no raw hex in
   components. {#type.palette-tokens}
-- **Glass is the surface for chrome** (founder, 2026-09-08: "implement liquid glass for all
-  UI", after iyinchao/liquid-glass-studio, MIT). Header, tab bar, the play housing and X, choices
-  and labels, cards and sheets carry the glass surface in `app/styles/glass.css`: a blurred,
-  saturated backdrop, a bright inner rim, one glare band, refraction where the engine allows.
-  Two rules the studio cannot teach: a backdrop filter on an ancestor becomes the containing
-  block of any fixed descendant (so the header, which holds the tab bar, is glass by fill and
-  rim only), and a measured control keeps its box (the sheet's handle: no border on the sheet).
-  Ink stays ink; every glass surface is light. {#type.glass-chrome}
+- **Glass is the surface for all UI** (founder, 2026-09-08, twice: "implement liquid glass for
+  all UI", after iyinchao/liquid-glass-studio, MIT). Every raised surface carries the glass in
+  `app/styles/glass.css`: a light fill, a bright inner rim, a dispersion split on the edge (warm
+  one way, cool the other), a Fresnel ring, one glare band at a fixed angle that dims on press,
+  superellipse corners where the engine draws them, and a blurred, saturated backdrop on the FULL
+  tier (chrome, chips, small controls) but not the LITE tier (cards, rows, panels, fields), because
+  a backdrop filter is a compositing layer and a results list has forty rows. The studio's knobs
+  are the `--lg-*` tokens. Accent surfaces are tinted glass: they keep their colour and take the
+  rim and the glare. Two rules the studio cannot teach: a backdrop filter on an ancestor becomes
+  the containing block of any fixed descendant (so the header, which holds the tab bar, is glass
+  by fill and rim only), and a measured control keeps its box (the sheet's handle: no border on
+  the sheet; the profile facts stay transparent). Ink stays ink; every glass surface is light;
+  reduced transparency gets paper. {#type.glass-chrome}
 - **Minimal darkness** (founder, 2026-09-08). Ink is for text. No black or near-black fill as
   a block, a pill or a button on a patient screen; a control sits on paper, stone or the accent.
   Drawn props are mid-tone, never a dark silhouette. {#type.no-dark-blocks}
