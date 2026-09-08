@@ -36,6 +36,21 @@ export interface Round {
   readonly mechanic: Mechanic;
   /** At most fourteen words. */
   readonly instruction: string;
+  /**
+   * The clue (founder, 2026-09-08: "make the correct and incorrect make sense with the context
+   * and clues in the game — it's impossible to guess"). What the scene shows that makes the hit
+   * inferable, the way the clone shows the wires sparking before "don't touch the wires". At most
+   * sixteen words, drawn on the scene. REQUIRED on every round that has a right answer, and the
+   * result lines must follow from it: a stranger reading the clue can say which option is the hit.
+   */
+  readonly clue?: string;
+  /**
+   * The relate beat (founder, 2026-09-08: "then it will ask how much it related to you, sometimes
+   * the buttons, other times the Likert scale"). After the result: "How much is this you?" as
+   * three buttons or a 0–10 slider. Unset → alternates by round index (`relateFormFor`). "none" →
+   * no beat (rounds that already ask about you).
+   */
+  readonly relate?: RelateForm | "none";
   /** How long the timer runs. Under reduced motion there is no timer. */
   readonly seconds: number;
   readonly who: Character;
@@ -73,6 +88,30 @@ export interface Run {
   readonly strategy: Strategy;
   readonly next: Extract<Step, { kind: "next" }>;
 }
+
+export type RelateForm = "buttons" | "slider";
+export const RELATE_FORMS: readonly RelateForm[] = ["buttons", "slider"];
+/** The three buttons, as points on the same 0–10 scale the slider writes. */
+export const RELATE_BUTTONS: ReadonlyArray<{ readonly id: string; readonly label: string; readonly value: number }> = [
+  { id: "not-me", label: "Not me", value: 0 },
+  { id: "a-bit", label: "A bit", value: 5 },
+  { id: "very-me", label: "Very me", value: 10 },
+];
+export const RELATE_PROMPT = "How much is this you?";
+
+/** Buttons on even rounds, the slider on odd ones, unless the round says; none on a round that asks about you. */
+export function relateFormFor(round: Round, index: number): RelateForm | null {
+  if (round.relate === "none" || round.writes) return null;
+  if (round.relate) return round.relate;
+  return RELATE_FORMS[index % RELATE_FORMS.length]!;
+}
+
+/** A round with a right answer is a guess unless the scene says which; the clue is that saying. */
+export function needsClue(round: Round): boolean {
+  return round.mechanic === "order" || round.mechanic === "sort" || round.mechanic === "recall" || Boolean(round.options?.some((o) => o.correct));
+}
+
+export const CLUE_WORDS = 16;
 
 export type RunPhase = "title" | "round" | "recognition" | "insight" | "reflect" | "try" | "next";
 
@@ -159,6 +198,6 @@ export function words(text: string): number {
 /** Every string a run renders, for the linters. */
 export function runText(run: Run): string[] {
   const out = [run.title, run.tagline, run.recognition, run.insight.heading, run.insight.body, ...Object.values(run.insight.byAnswer?.map ?? {}), run.strategy.title, ...run.strategy.steps, run.next.heading, run.next.body, run.reflect?.prompt ?? "", ...(run.reflect?.suggestions ?? [])];
-  for (const r of run.rounds) out.push(r.instruction, r.hit, r.miss, ...(r.items ?? []), ...(r.options ?? []).flatMap((o) => [o.label, o.thought ?? ""]));
+  for (const r of run.rounds) out.push(r.instruction, r.clue ?? "", r.hit, r.miss, ...(r.items ?? []), ...(r.options ?? []).flatMap((o) => [o.label, o.thought ?? ""]));
   return out.filter(Boolean);
 }

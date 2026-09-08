@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { INTERACTIVE_MODULES, strategyById } from "./interactive";
-import { expiryIsHit, INSTRUCTION_WORDS, MAX_TAPS, MECHANICS, MIN_MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words, fasterBefore, FASTER_EVERY } from "./play";
+import {expiryIsHit, INSTRUCTION_WORDS, MAX_TAPS, MECHANICS, MIN_MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words, fasterBefore, FASTER_EVERY , CLUE_WORDS, needsClue, relateFormFor, RELATE_BUTTONS, RELATE_PROMPT } from "./play";
 import { RUNS, runFor } from "./runs";
 import { cardCount, MODULES } from "./scenes";
 
@@ -62,6 +62,30 @@ describe("the runs", () => {
       }
     }
     expect(expiryIsHit("dont-tap")).toBe(true);
+  });
+
+  it("make every right answer inferable: a round with a right answer carries a clue a stranger can read (founder, 2026-09-08)", () => {
+    for (const run of eachOf(RUNS, "the runs")) {
+      for (const r of run.rounds) {
+        if (needsClue(r)) {
+          expect(r.clue, `${run.id}/${r.id} has a right answer and no clue`).toBeTruthy();
+          expect(words(r.clue!), `${run.id}/${r.id} clue too long`).toBeLessThanOrEqual(CLUE_WORDS);
+          expect(lintLandingCopy(r.clue!), `${run.id}/${r.id} clue`).toEqual([]);
+        }
+      }
+    }
+  });
+
+  it("ask how much each round was you, buttons and slider alternating, never on a round that already asks about you", () => {
+    for (const run of eachOf(RUNS, "the runs")) {
+      const forms = run.rounds.map((r, i) => relateFormFor(r, i));
+      expect(forms, run.id).toContain("buttons");
+      expect(forms, run.id).toContain("slider");
+      run.rounds.forEach((r, i) => { if (r.writes) expect(forms[i], `${run.id}/${r.id}`).toBeNull(); });
+    }
+    expect(RELATE_BUTTONS.map((b) => b.value)).toEqual([0, 5, 10]);
+    expect(lintLandingCopy(RELATE_PROMPT)).toEqual([]);
+    for (const b of RELATE_BUTTONS) expect(lintLandingCopy(b.label)).toEqual([]);
     expect(expiryIsHit("hold")).toBe(true);
     expect(expiryIsHit("tap")).toBe(false);
   });

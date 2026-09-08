@@ -75,6 +75,8 @@ export interface ModelRecord {
   insights: Record<string, InsightVerdict>;
   experiments: Experiment[];
   reflections: Reflection[];
+  /** The relate beat (play, founder 2026-09-08): by run id, then round id → 0–10, "how much is this you". */
+  relates: Record<string, Record<string, number>>;
   /** Confirmed readings of reflections (PRD §29). A declined reading leaves nothing. */
   interpretations: ConfirmedInterpretation[];
   safety: SafetyEvent[];
@@ -123,6 +125,7 @@ export function emptyModel(): ModelRecord {
     insights: {},
     experiments: [],
     reflections: [],
+    relates: {},
     interpretations: [],
     safety: [],
     completed: [],
@@ -158,6 +161,7 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       insights: isObject(r.insights) ? (r.insights as Record<string, InsightVerdict>) : {},
       experiments: Array.isArray(r.experiments) ? r.experiments.filter(isObject).map((e) => e as unknown as Experiment) : [],
       reflections: Array.isArray(r.reflections) ? r.reflections.filter((x) => isObject(x) && typeof x.text === "string").map((e) => e as unknown as Reflection) : [],
+      relates: isObject(r.relates) ? (r.relates as Record<string, Record<string, number>>) : {},
       interpretations: Array.isArray(r.interpretations) ? r.interpretations.filter((x) => isObject(x) && typeof x.subdomain === "string" && typeof x.note === "string").map((e) => e as unknown as ConfirmedInterpretation) : [],
       safety: Array.isArray(r.safety) ? r.safety.filter(isObject).map((e) => e as unknown as SafetyEvent) : [],
       completed: isStringArray(r.completed) ? r.completed : [],
@@ -211,6 +215,23 @@ export function recordResonance(storage: ModelStorage, moduleId: string, patch: 
     resonance: { ...r.resonance, [moduleId]: { ...(r.resonance[moduleId] ?? {}), ...patch, at: now() } },
     survey: countAnswered(r.survey, 1),
   }));
+}
+
+/** The relate beat: how much a round was you, 0–10. One answer per round; the latest wins. */
+export function recordRelate(storage: ModelStorage, moduleId: string, roundId: string, value: number): ModelRecord {
+  const v = Math.max(0, Math.min(10, Math.round(value)));
+  return updateModel(storage, (r) => ({
+    ...r,
+    relates: { ...r.relates, [moduleId]: { ...(r.relates[moduleId] ?? {}), [roundId]: v } },
+    survey: countAnswered(r.survey, 1),
+  }));
+}
+
+/** The mean of a run's relate answers, or null when none — the cost a run's rounds implied. */
+export function meanRelate(record: ModelRecord, moduleId: string): number | null {
+  const values = Object.values(record.relates[moduleId] ?? {});
+  if (!values.length) return null;
+  return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
 }
 
 export function recordAnswer(storage: ModelStorage, moduleId: string, questionId: string, value: string | string[]): ModelRecord {
