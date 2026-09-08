@@ -49,7 +49,7 @@ line or an analytics event.
 | §33–§34 Gamification | Discovery, no streaks | **Done** — completion, insight cards; no streaks or points | — |
 | §35–§36 Support engine, priority model | Seven actions, rule-based | **Done** | `src/model/recommend.ts` |
 | §37 Marketplace flow | Problem → … → providers | **Done** | `app/support-path.tsx`, `/support` |
-| §38 Professional categories | Six P0 | **Done**; P1 kinds open | `src/support/professions.ts` |
+| §38 Professional categories | Six P0 + five P1 | **Done** | `src/support/professions.ts` |
 | §39–§40 Provider model, expertise taxonomy | | **Done** (`profession`, `expertise` on `Clinician`) | `src/demo/roster.ts` |
 | §41 Provider match card | "Why you're seeing X", Best for | **Done** — reasons from the engine, Best for on profile | finder stages |
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
@@ -116,8 +116,10 @@ Each item is one PR-sized piece. Nothing below is started.
       person's picture. (2026-09-08)
 - [ ] Institutional navigation (§45) — university accommodations, workplace adjustments.
 - [ ] AI reflection interpretation (§29) — only a confirmed interpretation enters the model.
-- [ ] P1 professions (§38): psychiatrist, dietitian, couples therapist, sleep clinician,
-      university support service.
+- [x] P1 professions (§38): psychiatrist, dietitian, relationship counsellor, sleep clinician,
+      university support service — five kinds in `professions.ts` with cues the finder reads, one
+      synthetic example of each on the roster, a `regular-eating` expertise tag, and the eating,
+      gut, sleep and conflict modules naming them. (2026-09-08)
 - [ ] Accounts and sync — the first thing that needs a backend; ADR 0004 is where to argue it.
 
 ### Phase C — pilot (PRD §87–§88)

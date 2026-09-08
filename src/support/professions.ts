@@ -4,14 +4,28 @@
 // assessment end to end, and that was the product's first job. The PRD's thesis is that the
 // harder problem is knowing WHICH kind of help a life problem needs — a psychologist, an
 // occupational therapist, an exercise physiologist, a coach, a counsellor, or the GP already
-// involved — so the roster carries a profession on every entry and this file is the one place
+// involved, and past those a psychiatrist, a dietitian, a relationship counsellor, a sleep
+// clinician or the university's own support service — so the roster carries a profession on every entry and this file is the one place
 // the vocabulary lives: what each profession is called, what it is typically for, and which words
 // in a person's sentence name it.
 //
 // A closed vocabulary, like `CareArea` and `Approach`: a profession the roster cannot show is a
 // type error rather than an empty list.
 
-export const PROFESSIONS = ["gp", "psychologist", "counsellor", "occupational-therapist", "exercise-physiologist", "adhd-coach"] as const;
+export const PROFESSIONS = [
+  "gp",
+  "psychologist",
+  "counsellor",
+  "occupational-therapist",
+  "exercise-physiologist",
+  "adhd-coach",
+  // P1 kinds (PRD §38): the ones a life problem points at once the six above are not the answer.
+  "psychiatrist",
+  "dietitian",
+  "relationship-counsellor",
+  "sleep-clinician",
+  "university-support",
+] as const;
 export type Profession = (typeof PROFESSIONS)[number];
 
 export interface ProfessionEntry {
@@ -85,6 +99,51 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
     whenToExplore: "External accountability is the thing that works for you, and you want somebody to provide it.",
     cues: ["coach", "coaching", "adhd coach"],
   },
+  {
+    id: "psychiatrist",
+    label: "Psychiatrist",
+    plural: "psychiatrists",
+    aName: "a psychiatrist",
+    typicallyFor: "The complicated picture: other conditions sitting beside ADHD, medication that has not settled after a fair trial, or a history a GP wants a second opinion on.",
+    whenToExplore: "Your GP suggests it, or the medication questions have outgrown what a general practice can hold.",
+    cues: ["psychiatrist", "psychiatry"],
+  },
+  {
+    id: "dietitian",
+    label: "Dietitian",
+    plural: "dietitians",
+    aName: "a dietitian",
+    typicallyFor: "Regular eating when hunger arrives late, appetite on medication days, and food that works without cooking or planning.",
+    whenToExplore: "Meals keep going missing, your weight is shifting in a way that worries you, or eating has become a daily fight.",
+    cues: ["dietitian", "dietician", "nutritionist"],
+  },
+  {
+    id: "relationship-counsellor",
+    label: "Relationship counsellor",
+    plural: "relationship counsellors",
+    aName: "a relationship counsellor",
+    typicallyFor: "Two people in the room: the household load, the sting of reminders, and what ADHD does to a partnership when only one of you has it.",
+    whenToExplore: "The problem is the same argument, and it belongs to both of you.",
+    cues: ["relationship counsellor", "relationship counselling", "couples counsellor", "couples counselling", "couples counseling"],
+  },
+  {
+    id: "sleep-clinician",
+    label: "Sleep clinician",
+    plural: "sleep clinicians",
+    aName: "a sleep clinician",
+    typicallyFor: "A body clock that runs late, nights that will not start, and the checks for sleep conditions that can sit beside ADHD.",
+    whenToExplore: "A month of routine changes has not moved your sleep, or somebody tells you that you snore or stop breathing at night.",
+    cues: ["sleep clinician", "sleep clinic", "sleep doctor", "sleep physician"],
+  },
+  {
+    id: "university-support",
+    label: "University support service",
+    plural: "university support services",
+    aName: "a university support service",
+    typicallyFor: "Study adjustments on paper — extensions, exam arrangements, note-taking — through the accessibility or disability service every university runs.",
+    whenToExplore: "You are studying, deadlines or exams are where it falls apart, and the adjustment exists but you have not asked.",
+    cues: ["university support", "student support", "disability services", "disability service", "accessibility services", "accessibility service"],
+  },
 ];
 
 const BY_ID: ReadonlyMap<Profession, ProfessionEntry> = new Map(PROFESSION_ENTRIES.map((p) => [p.id, p]));
@@ -144,6 +203,7 @@ export const EXPERTISE_TAGS = [
   "late-diagnosis",
   "medication-review",
   "stimulant-appetite-concerns",
+  "regular-eating",
 ] as const;
 export type ExpertiseTag = (typeof EXPERTISE_TAGS)[number];
 
@@ -162,6 +222,7 @@ export const EXPERTISE_LABELS: Readonly<Record<ExpertiseTag, string>> = {
   "late-diagnosis": "Late recognition",
   "medication-review": "Medication review",
   "stimulant-appetite-concerns": "Appetite on stimulants",
+  "regular-eating": "Regular eating",
 };
 
 export function isExpertiseTag(value: unknown): value is ExpertiseTag {

@@ -430,7 +430,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     targets: ["emotional-regulation", "partner"],
     strength: "Feelings that are honest and quick to repair once settled",
     characters: ["jordan", "sam"],
-    professions: ["psychologist", "counsellor"],
+    professions: ["relationship-counsellor", "psychologist", "counsellor"],
     steps: [
       { kind: "scene", stage: "hook", who: "jordan", mood: "frustrated", prop: "kitchen", eyebrow: "A small thing", heading: "It started about the dishes.", body: "Sam mentioned them. Jordan heard a verdict. The heat arrived faster than the thought, and within a minute it was about everything. Twenty minutes later Jordan cannot remember what the dishes had to do with it." },
       { kind: "perspective", heading: "Tap each of them.", body: "Both of them wanted this to go differently.", sides: [
@@ -492,7 +492,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     targets: ["sleep", "energy"],
     strength: "Often most alert and creative late — a rhythm, not a fault",
     characters: ["alex"],
-    professions: ["gp", "psychologist"],
+    professions: ["gp", "sleep-clinician", "psychologist"],
     steps: [
       { kind: "scene", stage: "hook", who: "alex", mood: "engaged", prop: "bed", eyebrow: "1:40am", heading: "Alex is finally getting things done.", body: "The flat is quiet, the phone is silent, and Alex’s brain has arrived. Two hours of work, then a video, then it is 3am. Tomorrow’s 9am lecture will happen to somebody else." },
       { kind: "choice", who: "alex", mood: "thinking", prop: "bed", heading: "Why now?", options: [
@@ -553,7 +553,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     targets: ["appetite", "energy", "attention"],
     strength: "When food is in reach, the afternoon has fuel and the focus follows",
     characters: ["priya", "sam"],
-    professions: ["gp", "occupational-therapist"],
+    professions: ["gp", "dietitian", "occupational-therapist"],
     steps: [
       { kind: "scene", stage: "hook", who: "priya", mood: "overwhelmed", prop: "desk", eyebrow: "3pm, shaky", heading: "Priya has had a coffee since seven. Nothing else.", body: "Deep in the spreadsheet, the morning went. Now she is shaky, snappy, and the report is due at five. She was not hungry once." },
       { kind: "choice", who: "priya", mood: "thinking", prop: "kitchen", heading: "Why did lunch not happen?", options: [
@@ -584,7 +584,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     targets: ["appetite", "energy", "sleep"],
     strength: "On the weeks the routine holds, the stomach settles and so does the week",
     characters: ["jordan", "sam"],
-    professions: ["gp"],
+    professions: ["gp", "dietitian"],
     steps: [
       { kind: "scene", stage: "hook", who: "jordan", mood: "anxious", prop: "kitchen", eyebrow: "Deadline week", heading: "Jordan’s stomach knots before the brain does.", body: "Four days of toast, takeaway and coffee. The stomach is in knots, sleep is worse, and the week feels heavier than the work in it." },
       { kind: "choice", who: "jordan", mood: "thinking", prop: "kitchen", heading: "Is the gut the cause or the effect?", options: [
