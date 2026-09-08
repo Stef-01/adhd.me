@@ -107,9 +107,13 @@ Each item is one PR-sized piece. Nothing below is started.
       to a person. Suggestions come from the record — a strategy that helped, a need they named —
       and become text only when tapped; nothing is ever written for them. Pulled forward from
       Phase B on the founder's "continue advancing" (2026-09-08).
-- [ ] Support-person sharing (§46) — a module by link, no health information unless chosen.
-- [ ] Medication experience (§47) — what improved / what remains / unwanted effects → "discuss
-      with your prescriber"; no dosing, no advice.
+- [x] Support-person sharing (§46) — "Share this run" on every run's title card: the link
+      carries the module id and nothing else, and says so. (2026-09-08)
+- [x] Medication experience (§47) — `/medication`, `src/model/medication.ts`: what it seems to
+      change / what it leaves untouched / anything unwanted, in the person's words, on the
+      device, copy-as-text to take to whoever manages it. No dose, no timing, no verdict; the
+      test refuses those words on the page. Offered from My ADHD when medication is part of the
+      person's picture. (2026-09-08)
 - [ ] Institutional navigation (§45) — university accommodations, workplace adjustments.
 - [ ] AI reflection interpretation (§29) — only a confirmed interpretation enters the model.
 - [ ] P1 professions (§38): psychiatrist, dietitian, couples therapist, sleep clinician,

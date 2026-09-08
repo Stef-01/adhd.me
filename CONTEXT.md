@@ -100,3 +100,6 @@ and the copy. Written lazily — a term earns a place here when it has already b
   makes it harder, how to work with them — in three free-text sections on their device. The app
   offers *suggestions* drawn from the record and never writes a line; a suggestion becomes text only
   when the person adds it. Distinct from the *picture* (My ADHD), which the app derives.
+- **Medication note** (PRD §47): the person's description of what medication seems to change,
+  what it leaves untouched and anything unwanted, to take to whoever manages it. The app never
+  advises on medication; the note is what the person brings to the person who does.

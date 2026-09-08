@@ -74,6 +74,19 @@ export interface ModelRecord {
   surveys: Record<string, { answers: Record<string, string | number>; at: string; completedAt?: string }>;
   /** My Manual (PRD §27): three sections the person writes themselves. Never written for them; suggestions are offered, never inserted. */
   manual: ManualRecord;
+  /** Medication experience (PRD §47): what it seems to change, what it leaves untouched, anything unwanted — described, never advised on. */
+  medication: MedicationNote;
+}
+
+export type MedicationField = "changes" | "untouched" | "unwanted";
+export interface MedicationNote {
+  changes: string;
+  untouched: string;
+  unwanted: string;
+  updatedAt: string | null;
+}
+export function emptyMedicationNote(): MedicationNote {
+  return { changes: "", untouched: "", unwanted: "", updatedAt: null };
 }
 
 export type ManualSection = "helps" | "harder" | "work-with-me";
@@ -103,6 +116,7 @@ export function emptyModel(): ModelRecord {
     survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
     surveys: {},
     manual: emptyManual(),
+    medication: emptyMedicationNote(),
   };
 }
 
@@ -136,6 +150,7 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       survey: isObject(r.survey) ? { ...empty.survey, ...(r.survey as ModelRecord["survey"]) } : empty.survey,
       surveys: isObject(r.surveys) ? (r.surveys as ModelRecord["surveys"]) : {},
       manual: isObject(r.manual) ? { ...emptyManual(), ...(r.manual as Partial<ManualRecord>) } : emptyManual(),
+      medication: isObject(r.medication) ? { ...emptyMedicationNote(), ...(r.medication as Partial<MedicationNote>) } : emptyMedicationNote(),
     };
   } catch {
     return emptyModel();
@@ -258,6 +273,11 @@ export function completeSurvey(storage: ModelStorage, surveyId: string): ModelRe
 /** My Manual (PRD §27): the person's own words for one section. The whole text, as typed; nothing is added to it. */
 export function saveManual(storage: ModelStorage, section: ManualSection, text: string): ModelRecord {
   return updateModel(storage, (r) => ({ ...r, manual: { ...r.manual, [section]: text.slice(0, 4000), updatedAt: now() } }));
+}
+
+/** Medication experience (PRD §47): one field of the note, as typed. Described, never advised on. */
+export function saveMedicationNote(storage: ModelStorage, field: MedicationField, text: string): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, medication: { ...r.medication, [field]: text.slice(0, 4000), updatedAt: now() } }));
 }
 
 export function recordAbandon(storage: ModelStorage, surveyId: string): ModelRecord {

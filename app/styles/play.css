@@ -110,6 +110,9 @@ body:has(.play-run) { overflow-x: clip; }
 .play-scale li:last-child { transform: translateX(-100%); text-align: right; }
 .play-scale li.is-last { color: var(--accent); }
 .play-timing-track.in-scene .play-timing-zone { left: 76%; width: 24%; }
+.play-share { display: grid; gap: 6px; justify-items: center; margin-top: 4px; }
+.play-share .play-choice { width: auto; min-height: 44px; }
+.play-share-note { margin: 0; color: var(--muted); font-size: 0.8125rem; }
 .play-rule { margin: 0; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.4; }
 .play-recall { display: grid; gap: 12px; width: 100%; justify-items: center; }
 .play-recall .sim-list { width: 100%; }

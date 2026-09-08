@@ -10,7 +10,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Play, Sparkle, X } from "@phosphor-icons/react";
+import { ArrowRight, Check, Play, ShareNetwork, Sparkle, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { expiryIsHit, fasterBefore, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
@@ -89,6 +89,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
               <h2 className="play-title">{run.title}</h2>
               <p className="play-line">{run.tagline}</p>
               <button type="button" className="play-tempt is-go" onClick={next} autoFocus><Play size={18} weight="fill" aria-hidden="true" /> Tap to play</button>
+              <ShareRun runId={run.id} />
             </div>
           )}
 
@@ -296,6 +297,29 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
           <button type="button" className="play-tempt is-go" onClick={onAdvance} autoFocus>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
         </motion.div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Support-person sharing (PRD §46): a run by link. The link carries the module id and nothing
+ * else — no answer, no name, nothing from this device — so it can go to a partner, a parent or
+ * a manager as "this is the one I mean". The line under the button says exactly that.
+ */
+function ShareRun({ runId }: { runId: string }) {
+  const [copied, setCopied] = useState(false);
+  const share = async () => {
+    const url = `${window.location.origin}/approach?module=${encodeURIComponent(runId)}`;
+    try {
+      if (navigator.share) await navigator.share({ url });
+      else await navigator.clipboard.writeText(url);
+      setCopied(true); track("SHARE_LINK_COPIED", { module: runId }); window.setTimeout(() => setCopied(false), 2000);
+    } catch { /* Dismissed or refused: the link is not secret; nothing else to do. */ }
+  };
+  return (
+    <div className="play-share">
+      <button type="button" className="play-choice" onClick={share}>{copied ? <><Check size={16} weight="bold" aria-hidden="true" /> Link copied</> : <><ShareNetwork size={16} weight="bold" aria-hidden="true" /> Share this run</>}</button>
+      <p className="play-share-note">Nothing about you is in the link — only which run it is.</p>
     </div>
   );
 }
