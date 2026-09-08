@@ -44,50 +44,76 @@ test("E2E 1: a new person completes onboarding and is handed a first module", as
   expect(new URL(page.url()).search).toBe("");
   await page.getByRole("button", { name: /^Start/ }).click();
   await expect(page).toHaveURL(/module=starting/);
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Maya knows exactly what to do");
+  await expect(page.locator(".play-title")).toContainText("The blank page");
 });
 
-test("E2E 3 & 5: a module's answers reach My ADHD, and a rejected insight is never confirmed", async ({ page }) => {
+test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is never confirmed", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/approach?module=starting");
+  await expect(page.locator(".play-title")).toContainText("The blank page");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  // Round 1: don't tap. Under reduced motion there is no clock; the person says they held.
+  await expect(page.locator(".play-card[data-beat=play]")).toBeVisible();
+  await page.getByRole("button", { name: "I held off" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /Write the first sentence, badly/ }).click();
-  await expect(page.locator(".learn-reveal")).toContainText("The barrier is the start");
+  // Round 2: order.
+  for (const label of ["Open the file", "Type the title", "Write one bad sentence"]) await page.getByRole("button", { name: label }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 3: tap — a wrong answer is a beat, not a loss.
+  await page.getByRole("button", { name: "Try harder" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Not this time");
+  await expect(page.locator(".play-result")).toContainText("Effort was never the missing piece");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 4: tap.
+  await page.getByRole("button", { name: "Improve the report" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 5: hold.
+  await page.getByRole("button", { name: "I held on" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 6: pick your bean (writes an answer).
+  await page.getByRole("button", { name: /Vague ones/ }).click();
+  await page.getByRole("button", { name: "That’s me" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 7.
+  await page.getByRole("button", { name: /Another person/ }).click();
+  await page.getByRole("button", { name: "That’s me" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Recognition: Next is held until a frequency is given.
   await expect(page.getByRole("button", { name: "Next", exact: true })).toBeDisabled();
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Often" }).click();
   await page.getByRole("slider").fill("7");
-  await page.getByRole("group", { name: /become easier/ }).getByRole("button", { name: "Yes" }).click();
+  await page.getByRole("group", { name: "Want it easier" }).getByRole("button", { name: "Yes" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Starting is its own function");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: /hardest to start/ }).getByRole("button", { name: "Vague ones" }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: "I’ll try this" }).first().click();
-  await expect(page.locator(".strategy-accepted").first()).toContainText("On your list");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: "Skip" }).click();
+  // Insight: rejected.
+  await expect(page.locator(".play-kicker")).toContainText(/rounds cleared/);
   await page.getByRole("button", { name: "Not really" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Try the first physical action");
+  await page.getByRole("button", { name: "I’ll try this" }).click();
+  await expect(page.locator(".strategy-accepted")).toContainText("On your list");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Finish" }).click();
   await expect(page.locator(".learning-completion")).toContainText("Your picture just got sharper");
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
   expect(record.resonance?.starting?.frequency).toBe("often");
   expect(record.resonance?.starting?.cost).toBe(7);
+  expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
+  expect(record.answers?.["starting.what-helps-start"]).toEqual(["person"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
   expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
+  expect(record.completed).toContain("starting");
 
   await page.goto("/my-adhd");
   await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
   await expect(page.getByText("Activation for ambiguous tasks", { exact: true })).toBeVisible();
-  await expect(page.locator(".layer-pill[data-layer=environment]").first()).toBeVisible();
+  await expect(page.getByText("External accountability helps", { exact: true })).toBeVisible();
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
   // Today follows up the experiment before anything new, and the outcome lands in the history.
-  await page.goto("/start");
   await page.evaluate((k) => { const r = JSON.parse(localStorage.getItem(k) ?? "{}"); r.onboarding = { ...(r.onboarding ?? {}), completedAt: new Date().toISOString() }; localStorage.setItem(k, JSON.stringify(r)); }, MODEL_KEY);
   await page.goto("/today");
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toBeVisible();
@@ -99,10 +125,23 @@ test("E2E 3 & 5: a module's answers reach My ADHD, and a rejected insight is nev
   await expect(page.getByText("Things that help me")).toBeVisible();
 });
 
-test("E2E 8: a safety response interrupts the module, pauses recommendations, and leaves nothing in a URL", async ({ page }) => {
+test("Play: with motion on, the clock runs a round on its own and a held 'don't tap' clears", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await expect(page.locator(".play-clock")).toBeVisible();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared", { timeout: 12000 });
+  // Auto-advance, then round two waits for a gesture.
+  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 7", { timeout: 4000 });
+  await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible();
+  // Touch floor on the round's controls.
+  for (const box of await page.locator(".play-choice").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(box).toBeGreaterThanOrEqual(44);
+});
+
+test("E2E 8: a safety response interrupts the module, pauses recommendations, and leaves nothing in a URL", async ({ page }) => {
+  await page.goto("/approach?module=perfectionism");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /Sit next to somebody/ }).click();
+  await page.getByRole("button", { name: /permission to do it badly/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
   for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -192,20 +231,21 @@ test("the care map opens from the Learn page's map icon, and a node explains its
   await expect(bar.getByRole("link", { name: "My ADHD", exact: true })).toBeVisible();
 });
 
-test("E2E 9: under reduced motion the simulations work by buttons, and a module completes", async ({ page }) => {
+test("E2E 9: under reduced motion a run has no clock, the recall round works by buttons, and the keyboard plays it", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=working-memory");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".play-clock")).toHaveCount(0);
+  await page.keyboard.press("Enter"); // "Tap to play" holds focus on the title card
+  await expect(page.locator(".play-kicker")).toContainText("Round 1 of 7");
   await page.getByRole("button", { name: "I have them" }).click();
   await page.getByRole("button", { name: /Reply, then keep walking/ }).click();
-  await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: "Milk" }).click();
-  await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: "Stamps" }).click();
+  for (const item of ["Milk", "The parcel", "Stamps", "Sam’s script"]) await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: item }).click();
   await page.getByRole("button", { name: "Check" }).click();
-  await expect(page.locator(".learn-reveal")).toContainText(/2 of the four came back/);
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator(".play-result")).toContainText("All four");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Rarely" }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("small table");
+  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 7");
+  await expect(page.locator(".play-clock")).toHaveCount(0);
 });
 
 // ── Phase A ────────────────────────────────────────────────────────────────────────────────
@@ -266,9 +306,9 @@ test("Phase A: problem fit orders allied providers by the person's top need, and
 test("Phase A: voice reflection appends the transcript, and an absent recogniser says so", async ({ page }) => {
   const { installFakeSpeech } = await import("./support/fake-speech");
   await installFakeSpeech(page);
-  await page.goto("/approach?module=starting");
+  await page.goto("/approach?module=perfectionism");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /Sit next to somebody/ }).click();
+  await page.getByRole("button", { name: /permission to do it badly/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
   for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next", exact: true }).click();

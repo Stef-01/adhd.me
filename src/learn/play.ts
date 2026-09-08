@@ -1,0 +1,98 @@
+// Play (docs/adhd-life/PLAY-PLAN.md): a module as a RUN of micro-games.
+//
+// A run is a title card, six to eight rounds, a recognition round, an insight, one strategy and
+// one next action. A round is one mechanic from a closed catalogue, one instruction of at most
+// fourteen words, a few seconds, and two result lines — hit and miss — that ARE the teaching.
+// There is no paragraph in a run; the long form is the read modules on the shelf.
+//
+// A miss never costs anything (PRD §34): the bean reacts, one line says why, the run goes on.
+// What a run writes to the personal model is exactly what the nine-stage module wrote —
+// resonance, the answers its rounds declare, the insight verdict, the experiment — so
+// `src/model/needs.ts` sees no difference between a run and a module.
+
+import type { Character, Mood, Prop, Step, Strategy } from "./interactive";
+import type { Layer } from "@/model/layers";
+
+export const MECHANICS = ["tap", "dont-tap", "hold", "swipe", "drag-capture", "order", "timing", "recall", "sort", "flip", "pause", "pick-bean"] as const;
+export type Mechanic = (typeof MECHANICS)[number];
+
+export interface RoundOption {
+  readonly id: string;
+  readonly label: string;
+  /** For `tap` and `order`: the right answer(s). For `order`, options are listed in the right order. */
+  readonly correct?: boolean;
+  /** For `sort`: the layer this cause belongs to. */
+  readonly layer?: Layer;
+  /** For `flip` and `pick-bean`: the bean and what it is thinking. */
+  readonly bean?: Character;
+  readonly thought?: string;
+}
+
+export interface Round {
+  readonly id: string;
+  readonly mechanic: Mechanic;
+  /** At most fourteen words. */
+  readonly instruction: string;
+  /** How long the timer runs. Under reduced motion there is no timer. */
+  readonly seconds: number;
+  readonly who: Character;
+  readonly mood?: Mood;
+  readonly prop?: Prop;
+  readonly options?: readonly RoundOption[];
+  /** `recall`: the list; `swipe` and `hold`: the distractions; `drag-capture`: the requests. */
+  readonly items?: readonly string[];
+  /** At most sixteen words each. The teaching. */
+  readonly hit: string;
+  readonly miss: string;
+  /** `pick-bean` and `tap` may record the chosen option as a personalisation answer. */
+  readonly writes?: { readonly question: string; readonly multi?: boolean };
+}
+
+export interface Run {
+  readonly id: string;
+  readonly title: string;
+  /** Under the title on the card. ≤ 10 words. */
+  readonly tagline: string;
+  readonly minutes: number;
+  readonly bean: Character;
+  readonly rounds: readonly Round[];
+  /** The recognition round's question (PRD §19). */
+  readonly recognition: string;
+  readonly insight: Extract<Step, { kind: "insight" }>;
+  readonly strategy: Strategy;
+  readonly next: Extract<Step, { kind: "next" }>;
+}
+
+/** Title, rounds, recognition, insight, try, next. */
+export function runStepCount(run: Run): number {
+  return run.rounds.length + 5;
+}
+
+export type RunPhase = "title" | "round" | "recognition" | "insight" | "try" | "next";
+
+export function runPhaseAt(run: Run, step: number): { phase: RunPhase; round?: Round; index?: number } {
+  if (step <= 0) return { phase: "title" };
+  const n = run.rounds.length;
+  if (step <= n) return { phase: "round", round: run.rounds[step - 1], index: step - 1 };
+  const tail: RunPhase[] = ["recognition", "insight", "try", "next"];
+  return { phase: tail[Math.min(step - n - 1, 3)]! };
+}
+
+/** Whether the timer running out is a hit (the "don't" mechanics) or a miss. */
+export function expiryIsHit(mechanic: Mechanic): boolean {
+  return mechanic === "dont-tap" || mechanic === "hold";
+}
+
+export const INSTRUCTION_WORDS = 14;
+export const RESULT_WORDS = 16;
+
+export function words(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+/** Every string a run renders, for the linters. */
+export function runText(run: Run): string[] {
+  const out = [run.title, run.tagline, run.recognition, run.insight.heading, run.insight.body, ...Object.values(run.insight.byAnswer?.map ?? {}), run.strategy.title, ...run.strategy.steps, run.next.heading, run.next.body];
+  for (const r of run.rounds) out.push(r.instruction, r.hit, r.miss, ...(r.items ?? []), ...(r.options ?? []).flatMap((o) => [o.label, o.thought ?? ""]));
+  return out.filter(Boolean);
+}
