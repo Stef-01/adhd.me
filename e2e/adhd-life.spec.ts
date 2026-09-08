@@ -357,3 +357,15 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
   await expect(balance).toContainText(/Nothing yet on physical, social, emotional/);
   await expect(balance).toContainText(/unasked/);
 });
+
+test("Play P3: the cast wakes as runs are cleared — discovery, never a streak", async ({ page }) => {
+  await page.goto("/approach");
+  const cast = page.getByRole("list", { name: /Beans collected: 0 of 15/ });
+  await expect(cast).toBeVisible();
+  await expect(cast.locator("li.is-awake")).toHaveCount(0);
+  await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["starting", "sleep"] })));
+  await page.reload();
+  await expect(page.getByRole("list", { name: /Beans collected: 2 of 15/ })).toBeVisible();
+  await expect(page.locator(".play-cast li.is-awake")).toHaveCount(2);
+  await expect(page.locator(".play-cast li.is-awake").first()).toContainText("Maya");
+});

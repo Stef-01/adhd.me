@@ -17,6 +17,7 @@ import { InteractiveView } from "./interactive-module";
 import { CharacterMark } from "./characters";
 import { RunPlayer } from "./play/run-player";
 import { Bean } from "./play/beans";
+import { CHARACTERS, CHARACTER_BIOS } from "@/learn/interactive";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
@@ -424,6 +425,26 @@ export function LearnModules() {
         <p className="learn-progress" aria-live="polite">
           {finished === 0 ? "Nothing finished yet" : `${finished} of ${MODULES.length} finished`}
         </p>
+        {/* PLAY-PLAN.md §5: the cast fills in as runs are cleared — discovery, never a streak. A bean
+            wakes up when any run it leads is finished; the count is runs, not points. */}
+        {(() => {
+          const runs = MODULES.filter((m) => m.kind === "run" && m.run);
+          const cleared = runs.filter((m) => progress.done.includes(m.id));
+          return (
+            <ul className="play-cast" aria-label={`Beans collected: ${cleared.length} of ${runs.length} runs cleared`}>
+              {CHARACTERS.map((who) => {
+                const led = runs.filter((m) => m.run!.bean === who);
+                const awake = led.some((m) => progress.done.includes(m.id));
+                return (
+                  <li key={who} className={awake ? "is-awake" : ""} title={`${CHARACTER_BIOS[who].name}: ${led.filter((m) => progress.done.includes(m.id)).length} of ${led.length}`}>
+                    <Bean who={who} mood={awake ? "pleased" : "neutral"} size={44} />
+                    <span>{CHARACTER_BIOS[who].name}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        })()}
         {(finished > 0 || cursor) && <button className="learn-reset" type="button" onClick={() => { clearProgress(deviceLearningStorage); clearCursor(deviceLearningStorage); setProgress({ v: 1, done: [] }); setCursor(null); }}>Reset learning progress on this device</button>}
 
         <ol className="learn-stack">

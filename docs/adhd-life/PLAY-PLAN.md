@@ -110,7 +110,7 @@ with the option), and a `hit` / `miss` flag that is never shown as a score again
 
 ## 7. Phases
 
-Status (2026-09-08): **P1 and P2 done** on PR #4 — the engine, twelve mechanics, the beans, all
+Status (2026-09-08): **P1, P2 and the collection half of P3 done** on PR #4 — the engine, twelve mechanics, the beans, all
 fifteen modules as runs (two carry the reflect beat, which is where the safety pathway lives), the
 nine-stage player kept for one release behind `?module=…&long=1`. P3 and P4 open.
 

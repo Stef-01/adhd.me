@@ -32,8 +32,9 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
       precision-survey offer rule, voice reflection, QA captures.
 - [x] Play P1–P2: the modules as runs of micro-games — [docs/adhd-life/PLAY-PLAN.md](docs/adhd-life/PLAY-PLAN.md).
       Engine, twelve mechanics, beans, all fifteen runs.
-- [ ] Play P3–P4: bean collection on the Learn page, tempo tuned with real people, round-level
-      analytics against the §78 targets.
+- [x] Play P3 (collection): the cast on the Learn page wakes as runs are cleared.
+- [ ] Play P3 (tempo) and P4: the clock tuned with five to eight real people, round-level
+      analytics against the §78 targets — both need the pilot.
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 
