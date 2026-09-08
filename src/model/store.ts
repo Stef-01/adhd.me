@@ -70,6 +70,8 @@ export interface ModelRecord {
   completed: string[];
   /** Survey fatigue inputs (PRD §21). */
   survey: { day: string; answeredToday: number; abandons: string[]; lastLongAt: string | null };
+  /** Topic surveys (PRD §22): answers by question id, when they were last touched, and when finished. */
+  surveys: Record<string, { answers: Record<string, string | number>; at: string; completedAt?: string }>;
 }
 
 type ModelStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
@@ -86,6 +88,7 @@ export function emptyModel(): ModelRecord {
     safety: [],
     completed: [],
     survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
+    surveys: {},
   };
 }
 
@@ -117,6 +120,7 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       safety: Array.isArray(r.safety) ? r.safety.filter(isObject).map((e) => e as unknown as SafetyEvent) : [],
       completed: isStringArray(r.completed) ? r.completed : [],
       survey: isObject(r.survey) ? { ...empty.survey, ...(r.survey as ModelRecord["survey"]) } : empty.survey,
+      surveys: isObject(r.surveys) ? (r.surveys as ModelRecord["surveys"]) : {},
     };
   } catch {
     return emptyModel();
@@ -217,6 +221,23 @@ export function activeSafety(record: ModelRecord): SafetyEvent | null {
 
 export function markModuleComplete(storage: ModelStorage, moduleId: string): ModelRecord {
   return updateModel(storage, (r) => (r.completed.includes(moduleId) ? r : { ...r, completed: [...r.completed, moduleId] }));
+}
+
+export function recordSurveyAnswer(storage: ModelStorage, surveyId: string, questionId: string, value: string | number): ModelRecord {
+  return updateModel(storage, (r) => ({
+    ...r,
+    surveys: { ...r.surveys, [surveyId]: { ...(r.surveys[surveyId] ?? { answers: {} }), answers: { ...(r.surveys[surveyId]?.answers ?? {}), [questionId]: value }, at: now() } },
+    survey: countAnswered(r.survey, 1),
+  }));
+}
+
+/** Finishing a topic survey is the "long survey" the fatigue engine dates. */
+export function completeSurvey(storage: ModelStorage, surveyId: string): ModelRecord {
+  return updateModel(storage, (r) => ({
+    ...r,
+    surveys: { ...r.surveys, [surveyId]: { ...(r.surveys[surveyId] ?? { answers: {} }), at: now(), completedAt: now() } },
+    survey: { ...r.survey, lastLongAt: now() },
+  }));
 }
 
 export function recordAbandon(storage: ModelStorage, surveyId: string): ModelRecord {
