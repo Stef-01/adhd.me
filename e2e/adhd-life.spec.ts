@@ -408,3 +408,57 @@ test("Play P6: the exercise run's bean is drawn fit", async ({ page }) => {
   await page.getByRole("button", { name: "Tap to play" }).click();
   await expect(page.locator('.play-scene .bean[data-look="fit"]')).toHaveCount(1);
 });
+
+test("My Manual (PRD §27): written by the person, kept on the device, suggestions offered and never inserted", async ({ page }) => {
+  await page.goto("/manual");
+  await expect(page.getByRole("heading", { name: "How I work, in my own words." })).toBeVisible();
+  // Empty to start: nothing written for the person, nothing to copy.
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
+  await page.getByRole("textbox", { name: "What helps me" }).fill("A clear first step");
+  await page.waitForTimeout(600);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeEnabled();
+  // A strategy that helped becomes a suggestion, and only a tap makes it text.
+  await page.evaluate((k) => {
+    const r = JSON.parse(localStorage.getItem(k) ?? "{}");
+    r.onboarding = { stage: "think-so", hardest: ["starting"], impact: 7, improveFirst: "start-earlier", completedAt: new Date().toISOString() };
+    r.experiments = [{ moduleId: "starting", strategyId: "first-physical-action", acceptedAt: new Date().toISOString(), outcome: "a-lot", outcomeAt: new Date().toISOString() }];
+    localStorage.setItem(k, JSON.stringify(r));
+  }, MODEL_KEY);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
+  await page.getByRole("group", { name: "Suggestions for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step\nThe first physical action");
+  expect(page.url()).not.toMatch(/first|step|starting/);
+  // Reachable from My ADHD, and the tab claims it.
+  await page.goto("/my-adhd");
+  await page.getByRole("link", { name: "Open my manual" }).click();
+  await expect(page).toHaveURL(/\/manual$/);
+});
+
+test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/approach?module=starting");
+  await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
+  await page.getByRole("button", { name: "Share this run" }).click();
+  await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
+  const text = await page.evaluate(() => navigator.clipboard.readText());
+  expect(text).toMatch(/\/approach\?module=starting$/);
+  await expect(page.getByText("Nothing about you is in the link")).toBeVisible();
+});
+
+test("Medication experience (PRD §47): described in the person's words, kept on the device, never advised on", async ({ page }) => {
+  await page.goto("/medication");
+  await expect(page.getByRole("heading", { name: "What it changes, what it leaves, in your words." })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
+  await page.getByRole("textbox", { name: "What it seems to change" }).fill("Starting is easier before lunch");
+  await page.waitForTimeout(600);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What it seems to change" })).toHaveValue("Starting is easier before lunch");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeEnabled();
+  const body = await page.locator("main, body").first().innerText();
+  expect(body).not.toMatch(/\b(dose|dosage|mg)\b/i);
+  expect(page.url()).not.toMatch(/lunch|easier/);
+});

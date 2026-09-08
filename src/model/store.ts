@@ -72,6 +72,32 @@ export interface ModelRecord {
   survey: { day: string; answeredToday: number; abandons: string[]; lastLongAt: string | null };
   /** Topic surveys (PRD §22): answers by question id, when they were last touched, and when finished. */
   surveys: Record<string, { answers: Record<string, string | number>; at: string; completedAt?: string }>;
+  /** My Manual (PRD §27): three sections the person writes themselves. Never written for them; suggestions are offered, never inserted. */
+  manual: ManualRecord;
+  /** Medication experience (PRD §47): what it seems to change, what it leaves untouched, anything unwanted — described, never advised on. */
+  medication: MedicationNote;
+}
+
+export type MedicationField = "changes" | "untouched" | "unwanted";
+export interface MedicationNote {
+  changes: string;
+  untouched: string;
+  unwanted: string;
+  updatedAt: string | null;
+}
+export function emptyMedicationNote(): MedicationNote {
+  return { changes: "", untouched: "", unwanted: "", updatedAt: null };
+}
+
+export type ManualSection = "helps" | "harder" | "work-with-me";
+export interface ManualRecord {
+  helps: string;
+  harder: string;
+  "work-with-me": string;
+  updatedAt: string | null;
+}
+export function emptyManual(): ManualRecord {
+  return { helps: "", harder: "", "work-with-me": "", updatedAt: null };
 }
 
 type ModelStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
@@ -89,6 +115,8 @@ export function emptyModel(): ModelRecord {
     completed: [],
     survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
     surveys: {},
+    manual: emptyManual(),
+    medication: emptyMedicationNote(),
   };
 }
 
@@ -121,6 +149,8 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       completed: isStringArray(r.completed) ? r.completed : [],
       survey: isObject(r.survey) ? { ...empty.survey, ...(r.survey as ModelRecord["survey"]) } : empty.survey,
       surveys: isObject(r.surveys) ? (r.surveys as ModelRecord["surveys"]) : {},
+      manual: isObject(r.manual) ? { ...emptyManual(), ...(r.manual as Partial<ManualRecord>) } : emptyManual(),
+      medication: isObject(r.medication) ? { ...emptyMedicationNote(), ...(r.medication as Partial<MedicationNote>) } : emptyMedicationNote(),
     };
   } catch {
     return emptyModel();
@@ -238,6 +268,16 @@ export function completeSurvey(storage: ModelStorage, surveyId: string): ModelRe
     surveys: { ...r.surveys, [surveyId]: { ...(r.surveys[surveyId] ?? { answers: {} }), at: now(), completedAt: now() } },
     survey: { ...r.survey, lastLongAt: now() },
   }));
+}
+
+/** My Manual (PRD §27): the person's own words for one section. The whole text, as typed; nothing is added to it. */
+export function saveManual(storage: ModelStorage, section: ManualSection, text: string): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, manual: { ...r.manual, [section]: text.slice(0, 4000), updatedAt: now() } }));
+}
+
+/** Medication experience (PRD §47): one field of the note, as typed. Described, never advised on. */
+export function saveMedicationNote(storage: ModelStorage, field: MedicationField, text: string): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, medication: { ...r.medication, [field]: text.slice(0, 4000), updatedAt: now() } }));
 }
 
 export function recordAbandon(storage: ModelStorage, surveyId: string): ModelRecord {
