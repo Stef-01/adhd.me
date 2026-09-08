@@ -76,6 +76,9 @@
 @media (prefers-reduced-motion: reduce) { .play-choice, .play-heat span { transition: none; } }
 /* The cast (PLAY-PLAN.md §5): five beans, asleep until a run they lead is cleared. */
 .play-cast { display: flex; gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
-.play-cast li { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; color: var(--faint); font-size: 0.6875rem; font-weight: 700; opacity: 0.45; filter: grayscale(1); transition: opacity var(--dur-enter) var(--ease-ui), filter var(--dur-enter) var(--ease-ui); }
-.play-cast li.is-awake { opacity: 1; filter: none; color: var(--ink); }
-@media (prefers-reduced-motion: reduce) { .play-cast li { transition: none; } }
+/* Only the bean art sleeps (dimmed and grey); the name stays a real colour so it clears AA. */
+.play-cast li { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; color: var(--muted); font-size: 0.6875rem; font-weight: 700; }
+.play-cast li .bean { opacity: 0.45; filter: grayscale(1); transition: opacity var(--dur-enter) var(--ease-ui), filter var(--dur-enter) var(--ease-ui); }
+.play-cast li.is-awake { color: var(--ink); }
+.play-cast li.is-awake .bean { opacity: 1; filter: none; }
+@media (prefers-reduced-motion: reduce) { .play-cast li .bean { transition: none; } }
