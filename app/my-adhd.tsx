@@ -18,6 +18,7 @@ import { clearProgress } from "@/learn/progress";
 import { clearCursor } from "@/learn/cursor";
 import { LifeHeader, WhyThis } from "./life-shell";
 import { useModel } from "./use-model";
+import { SurveyOffer } from "./survey-offer";
 
 const VERDICT_LABEL: Record<InsightVerdict, string> = { yes: "That’s me", partly: "Partly", no: "Not really" };
 
@@ -96,6 +97,8 @@ export function MyAdhd() {
               <Link className="learn-secondary" href="/approach/map">See it on the map</Link>
             </div>
           </section>
+
+          <SurveyOffer record={record} />
 
           {rec && (
             <section className="life-card" aria-labelledby="my-next">

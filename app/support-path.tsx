@@ -18,6 +18,8 @@ import { PROFESSION_ENTRIES, profession, type Profession } from "@/support/profe
 import { readFilters, writeFilters } from "@/finder/filters";
 import { LifeHeader, WhyThis } from "./life-shell";
 import { useModel } from "./use-model";
+import { SurveyOffer } from "./survey-offer";
+import { offerSurvey } from "@/model/offer";
 
 export function SupportPath() {
   const { record } = useModel();
@@ -86,6 +88,13 @@ export function SupportPath() {
             )}
             {teaching[0] && <p><Link href={`/approach?module=${teaching[0].id}`}>Open “{teaching[0].title}”</Link></p>}
           </li>
+          {offerSurvey(record) && (
+            <li className="support-step">
+              <h2>Sharpen the picture</h2>
+              <p>Optional. A topic survey says which part of the problem is the friction before anybody is suggested.</p>
+              <SurveyOffer record={record} compact />
+            </li>
+          )}
           <li className="support-step">
             <h2>When another person helps</h2>
             <p>
