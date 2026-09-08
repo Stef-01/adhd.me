@@ -18,7 +18,8 @@ export function SiteMotion({ children }: { children: React.ReactNode }) {
       if (seen.has(element)) return;
       seen.add(element);
       revealed.push(element as HTMLElement);
-      active.push(animate(element, { opacity: [0.35, 1], y: [14, 0] }, { duration: .42, ease: [.22, 1, .36, 1] }));
+      // §14 Calm (PLAY-PLAN): a reveal may fade, never move — text that shifts while a person reads is what the tester felt as panic.
+      active.push(animate(element, { opacity: [0.35, 1] }, { duration: .42, ease: [.22, 1, .36, 1] }));
     }, { margin: "0px 0px -24px 0px" });
     const controls = region.current.querySelectorAll<HTMLElement>(".site-nav-link, .console-button, .console-primary-button, .console-quick-link, .console-nav a, .platform-help, .story-primary-link");
     const cleanups = [...controls].map(element => {

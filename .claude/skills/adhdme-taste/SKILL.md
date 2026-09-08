@@ -30,6 +30,11 @@ without updating the register is a build failure, not a review finding.
   the shell's header is gone, the stage starts at the top edge, an X at top left backs out,
   and the progress sits beside it in one slim housing (`.play-hut`) over the stage — the only
   chrome the game carries. {#layout.full-bleed-play}
+- **No labels, no jumping text** (founder, 2026-09-08, after a tester with ADHD was overwhelmed:
+  "remove all labels; the text was jumping everywhere"). No kicker or eyebrow on a patient screen.
+  A screen is a heading, at most one line under it, and the control. Anything that moves
+  position while a person is reading is out; cards crossfade. Labels a screen genuinely needs
+  live behind an explicit ask (Play's "?"), taught once by a tutorial. {#layout.calm}
 - **No boxes inside boxes.** One container per idea. A border, a radius or a shadow says
   "separate object" and is spent once per screen; a window inside a window inside a shell is
   never the answer. {#layout.one-container}
@@ -55,7 +60,14 @@ without updating the register is a build failure, not a review finding.
   the containing block of any fixed descendant (so the header, which holds the tab bar, is glass
   by fill and rim only), and a measured control keeps its box (the sheet's handle: no border on
   the sheet; the profile facts stay transparent). Ink stays ink; every glass surface is light;
-  reduced transparency gets paper. {#type.glass-chrome}
+  reduced transparency gets paper. Under the CSS layer runs the studio's own WebGL2 pipeline
+  (`app/glass/liquid-glass.tsx`, vendored from the repo under `app/glass/studio/` with its MIT
+  licence, founder 2026-09-08: "install everything from its repo"): the app's paper with a slow
+  tinted drift as the ground, every glass surface read from the DOM as a shape the studio's
+  shader refracts, and the studio's pointer blob on its spring on hover devices, melting into
+  what it passes. Page grounds go transparent while it runs (`html.has-liquid`); it is absent,
+  and the CSS glass whole, without WebGL2 or under reduced transparency. It reads rectangles,
+  never content. {#type.glass-chrome}
 - **Minimal darkness** (founder, 2026-09-08). Ink is for text. No black or near-black fill as
   a block, a pill or a button on a patient screen; a control sits on paper, stone or the accent.
   Drawn props are mid-tone, never a dark silhouette. {#type.no-dark-blocks}

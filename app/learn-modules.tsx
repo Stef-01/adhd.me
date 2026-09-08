@@ -388,9 +388,7 @@ export function LearnModules() {
         {completed && MODULES.find(module => module.id === completed)?.kind === "run" && (
           <div className="learning-feature learning-completion">
             <div role="status">
-              <p className="learning-overline">MODULE FINISHED</p>
               <h2>Your picture just got sharper.</h2>
-              <p>What you said is on My ADHD now, with what seems to contribute and what to try next.</p>
               <Link className="learn-secondary" href="/my-adhd">See My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
             </div>
             <LearningScene topic={completed} reaction="complete" />
@@ -399,66 +397,24 @@ export function LearnModules() {
         {completed && MODULES.find(module => module.id === completed)?.kind === "read" && (
           <div className="learning-feature learning-completion">
             <div role="status">
-              <p className="learning-overline">MODULE FINISHED</p>
-              <h2>One more idea to take with you.</h2>
-              <p>{scenesOf(MODULES.find(module => module.id === completed)! ).at(-1)?.body}</p>
+              <h2>{scenesOf(MODULES.find(module => module.id === completed)! ).at(-1)?.body}</h2>
               <button className="learn-secondary" type="button" onClick={() => start(completed)}>Read again</button>
             </div>
             <LearningScene topic={completed} reaction="complete" />
           </div>
         )}
+        {/* §14 Calm (founder, 2026-09-08): one line and one button; the tiles are the page. No chips, no
+            progress count, no cast, no figures. Finishing is still remembered; it shows on the tile. */}
         <div className="learning-feature">
           <div>
-            <p className="learning-overline">A LITTLE UNDERSTANDING GOES A LONG WAY</p>
             <h2>Get to know ADHD.<br />One idea at a time.</h2>
-            <p>Short reads, everyday examples, and a few things that might surprise you. Take them at your own pace.</p>
             <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "context", Boolean(cursor))}>{cursor ? `Continue ${MODULES.find(module => module.id === cursor.moduleId)?.title}` : "Explore the first module"} <ArrowRight size={18} aria-hidden="true" /></button>
           </div>
           <LearningScene />
         </div>
-        {/* Topic filters and device progress sit above the illustrated collections. */}
         <h2 id="learn-list-title" className="sr-only">ADHD, in your own time.</h2>
-        <nav className="learn-chips" aria-label="Topics">
-          {[{ key: "all", label: "All" }, ...SHELVES.map((shelf) => ({ key: shelf.title, label: shelf.title }))].map((chip) => (
-            <button
-              key={chip.key}
-              type="button"
-              className="learn-chip"
-              aria-pressed={shelfFilter === chip.key}
-              onClick={() => setShelfFilter(chip.key)}
-            >
-              {chip.label}
-            </button>
-          ))}
-        </nav>
-        <p className="learn-progress" aria-live="polite">
-          {finished === 0 ? "Nothing finished yet" : `${finished} of ${MODULES.length} finished`}
-        </p>
-        {/* PLAY-PLAN.md §5: the cast fills in as runs are cleared — discovery, never a streak. A bean
-            wakes up when any run it leads is finished; the count is runs, not points. */}
-        {(() => {
-          const runs = MODULES.filter((m) => m.kind === "run" && m.run);
-          const cleared = runs.filter((m) => progress.done.includes(m.id));
-          return (
-            <ul className="play-cast" aria-label={`Beans collected: ${cleared.length} of ${runs.length} runs cleared`}>
-              {CHARACTERS.map((who) => {
-                const led = runs.filter((m) => m.run!.bean === who);
-                const awake = led.some((m) => progress.done.includes(m.id));
-                return (
-                  <li key={who} className={awake ? "is-awake" : ""} title={`${CHARACTER_BIOS[who].name}: ${led.filter((m) => progress.done.includes(m.id)).length} of ${led.length}`}>
-                    <Bean who={who} mood={awake ? "pleased" : "neutral"} size={44} />
-                    <span>{CHARACTER_BIOS[who].name}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          );
-        })()}
-        {(finished > 0 || cursor) && <button className="learn-reset" type="button" onClick={() => { clearProgress(deviceLearningStorage); clearCursor(deviceLearningStorage); setProgress({ v: 1, done: [] }); setCursor(null); }}>Reset learning progress on this device</button>}
-
         <ol className="learn-stack">
-          {SHELVES.filter((shelf) => shelfFilter === "all" || shelf.title === shelfFilter)
-            .flatMap((shelf) => shelf.modules)
+          {SHELVES.flatMap((shelf) => shelf.modules)
             .map((id, index) => {
               const module = MODULES.find((m) => m.id === id)!;
               const done = progress.done.includes(module.id);
@@ -471,8 +427,8 @@ export function LearnModules() {
                   // after the last, capped at a quarter second so the seventh is never waited for;
                   // only on the first paint after hydration, never on a chip change, never under
                   // reduced motion.
-                  initial={hydrated && !reducedMotion ? { opacity: 0, y: 12 } : false}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={hydrated && !reducedMotion ? { opacity: 0 } : false}
+                  animate={{ opacity: 1 }}
                   transition={{ ...POP, delay: Math.min(index * 0.035, 0.25), opacity: { duration: 0.22, delay: Math.min(index * 0.035, 0.25) } }}
                 >
                   <motion.button
@@ -484,22 +440,7 @@ export function LearnModules() {
                   >
                     <span className="learn-card-text">
                       <strong>{module.title}</strong>
-                      <small>{module.subtitle}</small>
-                      <span className="learn-card-meta">
-                        <span>{module.kind === "quiz" ? "Quiz" : module.kind === "run" ? "Play" : "Read"}</span>
-                        <span className="learn-tile-dot" aria-hidden="true" />
-                        <span className="learn-tile-time"><Clock size={12} weight="bold" aria-hidden="true" />{module.minutes} min</span>
-                        <span className="learn-tile-dot" aria-hidden="true" />
-                        <span>{module.kind === "run" ? `${module.run?.rounds.length ?? 0} rounds` : `${count} ${module.kind === "quiz" ? "questions" : "cards"}`}</span>
-                        {done && (
-                          <>
-                            <span className="learn-tile-dot" aria-hidden="true" />
-                            <motion.span className="learn-card-done" initial={reducedMotion ? false : { scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={POP}>
-                              <Check size={12} weight="bold" aria-hidden="true" />Done
-                            </motion.span>
-                          </>
-                        )}
-                      </span>
+                      {done && <span className="learn-card-done"><Check size={12} weight="bold" aria-hidden="true" />Done</span>}
                     </span>
                     <span className="learn-card-art" aria-hidden="true">
                       {module.kind === "run" && module.run
@@ -512,22 +453,7 @@ export function LearnModules() {
             })}
         </ol>
 
-        <dl className="learn-figures">
-          {/* Read from the one register every public page quotes, so this page cannot say a
-              different number from the story or the practices page under the same label. */}
-          {[INDICATIVE_FIGURES.wait, INDICATIVE_FIGURES.cost].map((figure) => (
-            <div key={figure.label}>
-              <dt>{figure.value}</dt>
-              <dd>{figure.label}</dd>
-            </div>
-          ))}
-        </dl>
-        <p className="learn-figures-note">Indicative figures pending source confirmation.</p>
-
-        <Link className="learn-cta" href="/">
-          Find support near you
-          <ArrowRight size={17} weight="bold" aria-hidden="true" />
-        </Link>
+        {(finished > 0 || cursor) && <button className="learn-reset" type="button" onClick={() => { clearProgress(deviceLearningStorage); clearCursor(deviceLearningStorage); setProgress({ v: 1, done: [] }); setCursor(null); }}>Reset learning progress on this device</button>}
       </section>
     );
   }

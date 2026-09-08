@@ -2,6 +2,12 @@
 
 // The run player (PLAY-PLAN.md §2): title → rounds → recognition → insight → try → next.
 //
+// Calm (PLAY-PLAN.md §14, founder 2026-09-08, after a tester with ADHD was overwhelmed): no labels
+// on any card — no kicker, no round count, no rule line — unless the person asks for them with the
+// "?" in the housing; one question per card; cards crossfade, nothing slides or springs; no
+// "Faster" card and no instruction callout. A three-card tutorial before the first run on this
+// device says what the bar is, that waiting can be the move, and that a miss costs nothing.
+//
 // Each round has four beats — instruction in, play, result, advance — on one clock: the timer
 // bar that drains across the top. Under reduced motion there is no clock and every beat ends on
 // a button. A miss costs nothing: the bean reacts, the miss line says why, the run goes on. What
@@ -10,9 +16,9 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Play, ShareNetwork, Sparkle, X } from "@phosphor-icons/react";
+import { ArrowRight, Check, Play, Question, ShareNetwork, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, fasterBefore, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
+import { expiryIsHit, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
@@ -23,10 +29,19 @@ import { SafetyScreen } from "../safety-screen";
 import { VoiceReflection } from "../voice-reflection";
 import { interpret, type Interpretation } from "@/model/interpret";
 
-const SPRING = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
+/** Cards crossfade. Nothing on a play screen moves position; the tester read moving text as panic. */
+const FADE = { duration: 0.18, ease: "easeOut" } as const;
 const RESULT_MS = 1500;
-const FASTER_MS = 800;
-const CALLOUT_MS = 2000;
+/** The device remembers that the tutorial has been seen, and whether labels are wanted. */
+const TUTORED_KEY = "adhdme.play.tutored";
+const LABELS_KEY = "adhdme.play.labels";
+const TUTORIAL: ReadonlyArray<{ line: string; mood: "engaged" | "thinking" | "pleased" }> = [
+  { line: "The bar at the top is the clock. Do what the line says before it runs out.", mood: "engaged" },
+  { line: "Sometimes the line says do nothing. Waiting is the move.", mood: "thinking" },
+  { line: "A miss costs nothing. After each round, say how much it was you.", mood: "pleased" },
+];
+function readFlag(key: string): boolean { try { return deviceLearningStorage.getItem(key) === "1"; } catch { return false; } }
+function writeFlag(key: string, on: boolean): void { try { if (on) deviceLearningStorage.setItem(key, "1"); else deviceLearningStorage.removeItem(key); } catch { /* memory only */ } }
 
 const FREQUENCIES: ReadonlyArray<{ id: Frequency; label: string }> = [{ id: "often", label: "Often" }, { id: "sometimes", label: "Sometimes" }, { id: "rarely", label: "Rarely" }, { id: "unsure", label: "Unsure" }];
 const PRIORITIES: ReadonlyArray<{ id: Priority; label: string }> = [{ id: "yes", label: "Yes" }, { id: "maybe", label: "Maybe" }, { id: "no", label: "No" }];
@@ -47,14 +62,18 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   const [reflection, setReflection] = useState("");
   /** PRD §29: readings of the reflection just written, offered once, entering the model only on a yes. */
   const [reading, setReading] = useState<readonly Interpretation[] | null>(null);
+  /** The tutorial shows once per device, before the first run's title; `null` until the device is read. */
+  const [tutorial, setTutorial] = useState<number | null>(null);
+  const [labels, setLabels] = useState(false);
   const [safety, setSafety] = useState<ReturnType<typeof activeSafety>>(null);
   const { phase, round, index } = runPhaseAt(run, step);
 
-  useEffect(() => { const r = readModel(deviceLearningStorage); setRecord(r); setSafety(activeSafety(r)); track("MODULE_STARTED", { module: run.id, format: "run" }); }, [run.id]);
+  useEffect(() => { const r = readModel(deviceLearningStorage); setRecord(r); setSafety(activeSafety(r)); setTutorial(readFlag(TUTORED_KEY) ? -1 : 0); setLabels(readFlag(LABELS_KEY)); track("MODULE_STARTED", { module: run.id, format: "run" }); }, [run.id]);
+  const toggleLabels = () => { setLabels((l) => { writeFlag(LABELS_KEY, !l); return !l; }); };
+  const endTutorial = () => { writeFlag(TUTORED_KEY, true); setTutorial(-1); };
   const refresh = (r: ModelRecord) => setRecord(r);
   const next = useCallback(() => onStep(step + 1), [onStep, step]);
   const finish = () => { refresh(markModuleComplete(deviceLearningStorage, run.id)); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onFinish(); };
-  const roundsCleared = Object.values(cleared).filter(Boolean).length;
   /** The reflect beat: save, check for safety, and either stop on the safety screen or move on. */
   const leaveReflection = () => {
     if (reflection.trim()) {
@@ -89,19 +108,24 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           <ol className="learn-dots play-dots" aria-hidden="true">
             {Array.from({ length: total }, (_, i) => <li key={i} className={i === step ? "is-current" : i < step ? "is-done" : ""} />)}
           </ol>
-          <span className="play-count" aria-live="polite">{Math.min(step + 1, total)} of {total}</span>
+          {labels && <span className="play-count" aria-live="polite">{Math.min(step + 1, total)} of {total}</span>}
         </div>
+        <button type="button" className="play-x play-help" aria-label={labels ? "Hide the labels" : "Show the labels"} aria-pressed={labels} onClick={toggleLabels}><Question size={20} weight="bold" aria-hidden="true" /></button>
       </div>
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div key={step} className="play-stage" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -12, transition: { duration: 0.12 } }} transition={{ ...SPRING, opacity: { duration: 0.18 } }}>
-          {phase === "title" && (
+        <motion.div key={phase === "title" && tutorial !== null && tutorial >= 0 ? `tutorial-${tutorial}` : step} className="play-stage" initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }} transition={FADE}>
+          {phase === "title" && tutorial !== null && tutorial >= 0 && (
+            <div className="play-card is-title" role="group" aria-label="How to play">
+              <Bean who={run.bean} mood={TUTORIAL[tutorial]!.mood} size={160} className="play-hero-bean" />
+              <h2 className="play-title">{TUTORIAL[tutorial]!.line}</h2>
+              <button type="button" className="play-tempt is-go" onClick={() => (tutorial + 1 < TUTORIAL.length ? setTutorial(tutorial + 1) : endTutorial())} autoFocus>{tutorial + 1 < TUTORIAL.length ? "Next" : "Got it"} <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+            </div>
+          )}
+          {phase === "title" && (tutorial === null || tutorial < 0) && (
             <div className="play-card is-title">
               <Bean who={run.bean} mood="engaged" size={160} className="play-hero-bean" />
-              <p className="play-kicker">{run.rounds.length} rounds · {run.minutes} min</p>
               <h2 className="play-title">{run.title}</h2>
-              <p className="play-line">{run.tagline}</p>
               <button type="button" className="play-tempt is-go" onClick={next} autoFocus><Play size={18} weight="fill" aria-hidden="true" /> Tap to play</button>
-              <ShareRun runId={run.id} />
             </div>
           )}
 
@@ -111,6 +135,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
               run={run}
               index={index ?? 0}
               reducedMotion={reducedMotion}
+              labels={labels}
               onDone={(hit, chosen) => {
                 setCleared((c) => ({ ...c, [round.id]: hit }));
                 track("MODULE_STEP_COMPLETED", { module: run.id, step, kind: round.mechanic, hit });
@@ -124,26 +149,26 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
             />
           )}
 
-          {phase === "recognition" && (
-            <div className="play-card">
-              <Bean who={run.bean} mood="thinking" size={110} />
-              <p className="play-kicker">Round {run.rounds.length + 1} · you</p>
-              <h2 className="play-title">{run.recognition}</h2>
-              <div className="play-choices" role="group" aria-label="How often">
-                {FREQUENCIES.map((f) => <button key={f.id} type="button" className="play-choice" aria-pressed={record?.resonance[run.id]?.frequency === f.id} onClick={() => { refresh(recordResonance(deviceLearningStorage, run.id, { frequency: f.id })); track("MODULE_RESONANCE_RECORDED", { module: run.id, field: "frequency", value: f.id }); }}>{f.label}</button>)}
+          {phase === "recognition" && (() => {
+            // One question per card: how often, then whether they want it easier. The cost is the
+            // mean of the relate beats (needs.ts), so no slider here.
+            const asked = record?.resonance[run.id]?.frequency;
+            return (
+              <div className="play-card">
+                <Bean who={run.bean} mood="thinking" size={110} />
+                <h2 className="play-title">{asked ? "Want it easier?" : run.recognition}</h2>
+                {!asked ? (
+                  <div className="play-choices" role="group" aria-label="How often">
+                    {FREQUENCIES.map((f) => <button key={f.id} type="button" className="play-choice" onClick={() => { refresh(recordResonance(deviceLearningStorage, run.id, { frequency: f.id })); track("MODULE_RESONANCE_RECORDED", { module: run.id, field: "frequency", value: f.id }); }}>{f.label}</button>)}
+                  </div>
+                ) : (
+                  <div className="play-choices" role="group" aria-label="Want it easier">
+                    {PRIORITIES.map((p) => <button key={p.id} type="button" className="play-choice" aria-pressed={record?.resonance[run.id]?.priority === p.id} onClick={() => { refresh(recordResonance(deviceLearningStorage, run.id, { priority: p.id })); next(); }}>{p.label}</button>)}
+                  </div>
+                )}
               </div>
-              <label className="resonance-scale play-scale">
-                <span className="play-line">How much does it cost you?</span>
-                <input type="range" min={0} max={10} step={1} value={record?.resonance[run.id]?.cost ?? 5} aria-valuetext={`${record?.resonance[run.id]?.cost ?? 5} out of 10`} onChange={(e) => refresh(recordResonance(deviceLearningStorage, run.id, { cost: Number(e.target.value) }))} />
-                <output className="t-digit">{record?.resonance[run.id]?.cost ?? 5}</output>
-              </label>
-              <p className="play-line">Want it easier?</p>
-              <div className="play-choices" role="group" aria-label="Want it easier">
-                {PRIORITIES.map((p) => <button key={p.id} type="button" className="play-choice" aria-pressed={record?.resonance[run.id]?.priority === p.id} onClick={() => refresh(recordResonance(deviceLearningStorage, run.id, { priority: p.id }))}>{p.label}</button>)}
-              </div>
-              <button type="button" className="play-tempt is-go" disabled={!record?.resonance[run.id]?.frequency} onClick={next}>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
-            </div>
-          )}
+            );
+          })()}
 
           {phase === "insight" && (() => {
             const answer = record?.answers[`${run.id}.${run.insight.byAnswer?.question ?? ""}`];
@@ -152,7 +177,6 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
             const verdict = record?.insights[run.insight.id];
             return (
               <div className="play-card is-insight">
-                <p className="play-kicker"><Sparkle size={12} weight="fill" aria-hidden="true" /> Insight · {roundsCleared} of {run.rounds.length} rounds cleared</p>
                 <h2 className="play-title">{run.insight.heading}</h2>
                 <p className="play-line">{run.insight.body}{tail ? ` ${tail}` : ""}</p>
                 <div className="play-choices" role="group" aria-label="Does that fit">
@@ -166,9 +190,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           {phase === "reflect" && reading && (
             <div className="play-card play-reading" role="group" aria-labelledby="play-reading-title">
               <Bean who={run.bean} mood="thinking" size={100} />
-              <p className="play-kicker">A reading, yours to confirm</p>
               <h2 id="play-reading-title" className="play-title">{reading.length === 1 ? reading[0]!.sentence : "It sounds like two things were part of it."}</h2>
-              <p className="play-body">Only what you say yes to goes into your picture. What you wrote stays where it is.</p>
               <div className="play-choices" role="group" aria-label="Readings">
                 {reading.map((r) => (
                   <button key={r.subdomain} type="button" className="play-choice is-wide" onClick={() => confirmReading(r)}>
@@ -183,17 +205,12 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           {phase === "reflect" && run.reflect && !reading && (
             <div className="play-card">
               <Bean who={run.bean} mood="thinking" size={100} />
-              <p className="play-kicker">Optional</p>
               <h2 className="play-title">{run.reflect.prompt}</h2>
-              <div className="play-choices" role="group" aria-label="Suggestions">
-                {run.reflect.suggestions.map((sug) => <button key={sug} type="button" className="play-choice" onClick={() => setReflection((t) => (t ? `${t} ${sug}` : sug))}>{sug}</button>)}
-              </div>
               <label className="reflect-field" style={{ width: "100%" }}>
                 <span className="sr-only">Your reflection</span>
-                <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} placeholder="In your own words, or leave it blank." maxLength={2000} />
+                <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} placeholder="In your own words, or leave it blank. It stays on this device." maxLength={2000} />
               </label>
               <VoiceReflection onText={(text) => setReflection((t) => (t ? `${t} ${text}` : text).slice(0, 2000))} />
-              <p className="play-kicker">Stays on this device</p>
               <button type="button" className="play-tempt is-go" onClick={leaveReflection}>{reflection.trim() ? "Next" : "Skip"} <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
             </div>
           )}
@@ -203,10 +220,12 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
             return (
               <div className="play-card">
                 <Bean who={run.bean} mood="pleased" size={100} />
-                <p className="play-kicker">Try this</p>
                 <h2 className="play-title">{run.strategy.title}</h2>
-                <ol className="play-steps">{run.strategy.steps.map((s) => <li key={s}>{s}</li>)}</ol>
                 {accepted ? <p className="strategy-accepted"><Check size={14} weight="bold" aria-hidden="true" /> On your list</p> : <button type="button" className="play-choice" onClick={() => { refresh(acceptExperiment(deviceLearningStorage, run.id, run.strategy.id)); track("EXPERIMENT_ACCEPTED", { module: run.id, strategy: run.strategy.id }); }}>I’ll try this</button>}
+                <details className="play-steps-fold" open={accepted}>
+                  <summary>The steps</summary>
+                  <ol className="play-steps">{run.strategy.steps.map((s) => <li key={s}>{s}</li>)}</ol>
+                </details>
                 <button type="button" className="play-tempt is-go" onClick={next}>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
               </div>
             );
@@ -215,9 +234,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           {phase === "next" && (
             <div className="play-card is-title">
               <Bean who={run.bean} mood="relieved" size={140} className="play-hero-bean" />
-              <p className="play-kicker">Run complete · {roundsCleared} of {run.rounds.length} cleared</p>
               <h2 className="play-title">{run.next.heading}</h2>
-              <p className="play-line">{run.next.body}</p>
               <div className="next-actions">
                 {run.next.action === "learn" && run.next.moduleId ? (
                   <button type="button" className="play-tempt is-go" onClick={() => { markModuleComplete(deviceLearningStorage, run.id); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onOpenModule(run.next.moduleId!); }}>Play the next one <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
@@ -228,6 +245,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
                 )}
                 {run.next.action !== "try" && <button type="button" className="play-choice" onClick={finish}>Finish for now</button>}
               </div>
+              <ShareRun runId={run.id} />
             </div>
           )}
         </motion.div>
@@ -237,13 +255,11 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
 }
 
 /** One round: instruction in, play on the clock, result, advance. */
-function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run; index: number; reducedMotion: boolean; onDone: (hit: boolean, chosen?: string | string[]) => void; onAdvance: () => void }) {
+function RoundStage({ run, index, reducedMotion, labels, onDone, onAdvance }: { run: Run; index: number; reducedMotion: boolean; labels: boolean; onDone: (hit: boolean, chosen?: string | string[]) => void; onAdvance: () => void }) {
   const round = run.rounds[index]!;
   const seconds = rampedSeconds(run, index);
-  // Beats (PLAY-PLAN.md §10): an optional "Faster" card, then play — the clock runs from the first
-  // frame and the instruction sits over the scene for two seconds — then the result.
-  const [beat, setBeat] = useState<"faster" | "play" | "result">(!reducedMotion && fasterBefore(run, index) ? "faster" : "play");
-  const [callout, setCallout] = useState(!reducedMotion);
+  // Beats: play — the clock runs from the first frame — then the result. (§14: no Faster card, no callout.)
+  const [beat, setBeat] = useState<"play" | "result">("play");
   const [hit, setHit] = useState<boolean | null>(null);
   const [progress, setProgress] = useState(0);
   const start = useRef<number | null>(null);
@@ -257,19 +273,6 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
     onDone(h, chosen);
   }, [onDone]);
 
-  // The Faster card holds for under a second, then play. Under reduced motion there is no clock
-  // and no card: the round waits for a gesture.
-  useEffect(() => {
-    if (beat !== "faster") return;
-    const t = window.setTimeout(() => setBeat("play"), FASTER_MS);
-    return () => window.clearTimeout(t);
-  }, [beat]);
-  // The instruction is called out over the scene while the clock already runs, then settles.
-  useEffect(() => {
-    if (reducedMotion || beat !== "play") return;
-    const t = window.setTimeout(() => setCallout(false), CALLOUT_MS);
-    return () => window.clearTimeout(t);
-  }, [beat, reducedMotion]);
   useEffect(() => {
     if (reducedMotion || beat !== "play") return;
     let raf = 0;
@@ -314,26 +317,19 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
   const mood = beat === "result" ? (hit ? "pleased" : "embarrassed") : (round.mood ?? "neutral");
   return (
     <div className={`play-card is-round${beat === "result" ? (hit ? " is-hit" : " is-miss") : ""}`} data-beat={beat}>
-      {beat === "faster" && (
-        <motion.div className="play-faster" role="status" initial={{ scale: 0.4, rotate: -8, opacity: 0 }} animate={{ scale: 1, rotate: [-8, 4, 0], opacity: 1 }} transition={{ ...SPRING, rotate: { duration: 0.5 } }}>
-          <Bean who={round.who} mood="pleased" size={96} />
-          <p className="play-faster-word">Faster</p>
-        </motion.div>
-      )}
-      {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
-      <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
-      {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
-      {beat === "play" && round.clue && <p className="play-clue"><Sparkle size={14} weight="fill" aria-hidden="true" /> {round.clue}</p>}
-      {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
+      {!reducedMotion && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
+      {labels && <p className="play-label">Round {index + 1} of {run.rounds.length}</p>}
+      <h2 className="play-title play-instruction" tabIndex={-1}>{round.instruction}</h2>
+      {beat === "play" && round.clue && <p className="play-clue">{round.clue}</p>}
+      {(beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
       {beat !== "result" && (
         <>
           <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} mood={mood} onResult={settle} />
-          <p className="play-rule">{reducedMotion ? RULES[round.mechanic].reduced : RULES[round.mechanic].motion}</p>
+          {labels && <p className="play-rule">{reducedMotion ? RULES[round.mechanic].reduced : RULES[round.mechanic].motion}</p>}
         </>
       )}
       {beat === "result" && (
-        <motion.div className="play-result" role="status" initial={reducedMotion ? false : { scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={SPRING}>
-          <p className="play-verdict">{hit ? <><Check size={18} weight="bold" aria-hidden="true" /> Cleared</> : "Not this time"}</p>
+        <motion.div className="play-result" role="status" data-hit={hit ? "true" : "false"} initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>
           <p className="play-line">{hit ? round.hit : round.miss}</p>
           {relateForm === "buttons" && (
             <div className="play-relate" role="group" aria-label={RELATE_PROMPT}>

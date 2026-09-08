@@ -4,8 +4,18 @@
 // the Learn page, and the finder broadened beyond GPs.
 
 import { expect, test } from "@playwright/test";
+import { CURSOR_KEY } from "../src/learn/cursor";
+import { runStepCount } from "../src/learn/play";
+import { RUNS } from "../src/learn/runs";
 
 const MODEL_KEY = "adhdme.model.v1";
+const TUTORED_KEY = "adhdme.play.tutored";
+
+// §14 Calm: the tutorial shows once per device; every flow here starts on a device that has seen it,
+// except the one test that is about the tutorial.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript((k) => { try { localStorage.setItem(k, "1"); } catch { /* denied storage: the tutorial shows, which is also right */ } }, TUTORED_KEY);
+});
 
 /** Play the perfectionism run under reduced motion up to its reflect beat. */
 async function playToReflect(page: import("@playwright/test").Page) {
@@ -27,7 +37,7 @@ async function playToReflect(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: /I guess, and aim high/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("group", { name: "Want it easier" }).getByRole("button", { name: "Maybe" }).click();
   await page.getByRole("button", { name: "Partly" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
 }
@@ -82,15 +92,15 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   // Round 1: don't tap. Under reduced motion there is no clock; the person says they held.
   await expect(page.locator(".play-card[data-beat=play]")).toBeVisible();
   await page.getByRole("button", { name: "I held off" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Round 2: order.
   for (const label of ["Open the file", "Type the title", "Write one bad sentence"]) await page.getByRole("button", { name: label }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Round 3: tap — a wrong answer is a beat, not a loss.
   await page.getByRole("button", { name: "Try harder" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Not this time");
+  await expect(page.locator('.play-result[data-hit="false"]')).toBeVisible();
   await expect(page.locator(".play-result")).toContainText("Effort was never the missing piece");
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Round 4: tap.
@@ -101,27 +111,25 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Round 6: timing — under reduced motion, choose the moment.
   await page.getByRole("button", { name: "Ten minutes, then stop" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Round 7: sort each cause into its layer.
   for (const [cause, layer] of [["A vague brief", "Environment"], ["Five hours’ sleep", "Body"], ["A manager who will judge it", "People"]] as const) {
     await page.getByRole("group", { name: "Causes" }).getByRole("button", { name: cause }).click();
     await page.getByRole("group", { name: "Layers" }).getByRole("button", { name: new RegExp(layer) }).click();
   }
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Round 8: pick your bean (writes an answer).
   await page.getByRole("button", { name: /Vague ones/ }).click();
   await page.getByRole("button", { name: "That’s me" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Recognition: Next is held until a frequency is given.
-  await expect(page.getByRole("button", { name: "Next", exact: true })).toBeDisabled();
+  // Recognition: one question per card (§14). How often, then whether they want it easier; no slider.
+  await expect(page.getByRole("slider")).toHaveCount(0);
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Often" }).click();
-  await page.getByRole("slider").fill("7");
   await page.getByRole("group", { name: "Want it easier" }).getByRole("button", { name: "Yes" }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Insight: rejected.
-  await expect(page.locator(".play-kicker")).toContainText(/rounds cleared/);
+  // Insight: rejected. No kicker anywhere on the card.
+  await expect(page.locator(".play-kicker")).toHaveCount(0);
   await page.getByRole("button", { name: "Not really" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "I’ll try this" }).click();
@@ -131,7 +139,8 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await expect(page.locator(".learning-completion")).toContainText("Your picture just got sharper");
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
   expect(record.resonance?.starting?.frequency).toBe("often");
-  expect(record.resonance?.starting?.cost).toBe(7);
+  // §14: no cost slider on the recognition card; the cost is the relate beats' mean (needs.ts).
+  expect(record.resonance?.starting?.cost).toBeUndefined();
   expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
@@ -161,12 +170,16 @@ test("Play: with motion on, the clock runs a round on its own and a held 'don't 
   await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Tap to play" }).click();
   await expect(page.locator(".play-clock")).toBeVisible();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared", { timeout: 12000 });
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible({ timeout: 12000 });
   // The relate beat holds the result (no auto-advance on a round that asks a question); Next moves on, and round two waits for a gesture.
   await expect(page.getByRole("group", { name: "How much is this you?" })).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 8", { timeout: 4000 });
-  await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible({ timeout: 4000 });
+  // §14: no label unless asked for; the "?" turns the round count and the rule on.
+  await expect(page.locator(".play-label")).toHaveCount(0);
+  await page.getByRole("button", { name: "Show the labels" }).click();
+  await expect(page.locator(".play-label")).toContainText("Round 2 of 8");
+  await expect(page.locator(".play-rule")).toBeVisible();
   // Touch floor on the round's controls.
   for (const box of await page.locator(".play-choice").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(box).toBeGreaterThanOrEqual(44);
 });
@@ -268,15 +281,15 @@ test("E2E 9: under reduced motion a run has no clock, the recall round works by 
   await expect(page.locator(".play-clock")).toHaveCount(0);
   await page.getByRole("button", { name: "Tap to play" }).focus();
   await page.keyboard.press("Enter");
-  await expect(page.locator(".play-kicker")).toContainText("Round 1 of 8");
+  await expect(page.locator(".play-kicker")).toHaveCount(0);
   await page.getByRole("button", { name: "I have them" }).click();
   await page.getByRole("button", { name: /Reply, then keep walking/ }).click();
   for (const item of ["Milk", "The parcel", "Stamps", "Sam’s script"]) await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: item }).click();
   await page.getByRole("button", { name: "Check" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await expect(page.locator(".play-result")).toContainText("All four");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 8");
+  await expect(page.locator('.play-card[data-beat="play"]')).toBeVisible();
   await expect(page.locator(".play-clock")).toHaveCount(0);
 });
 
@@ -370,16 +383,35 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
   await expect(balance).toContainText(/unasked/);
 });
 
-test("Play P3: the cast wakes as runs are cleared — discovery, never a streak", async ({ page }) => {
+test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is a tick on its tile, never a count", async ({ page }) => {
   await page.goto("/approach");
-  const cast = page.getByRole("list", { name: /Beans collected: 0 of 20/ });
-  await expect(cast).toBeVisible();
-  await expect(cast.locator("li.is-awake")).toHaveCount(0);
+  await expect(page.locator(".learn-chips")).toHaveCount(0);
+  await expect(page.locator(".learn-progress")).toHaveCount(0);
+  await expect(page.locator(".play-cast")).toHaveCount(0);
+  await expect(page.locator(".learning-overline")).toHaveCount(0);
   await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["starting", "sleep"] })));
   await page.reload();
-  await expect(page.getByRole("list", { name: /Beans collected: 2 of 20/ })).toBeVisible();
-  await expect(page.locator(".play-cast li.is-awake")).toHaveCount(2);
-  await expect(page.locator(".play-cast li.is-awake").first()).toContainText("Maya");
+  await expect(page.locator(".learn-card.is-done")).toHaveCount(2);
+  await expect(page.locator(".learn-card.is-done").first()).toContainText("Done");
+});
+
+test("§14 Calm: the tutorial shows once per device, three sentences and a button, then never again", async ({ page }) => {
+  // Clear the device's memory of the tutorial once for this tab, not on every load (the reload below must keep the flag "Got it" wrote).
+  await page.addInitScript((k) => { try { if (!sessionStorage.getItem("tutorial-cleared")) { localStorage.removeItem(k); sessionStorage.setItem("tutorial-cleared", "1"); } } catch { /* fine */ } }, TUTORED_KEY);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=starting");
+  const tutorial = page.getByRole("group", { name: "How to play" });
+  await expect(tutorial).toContainText("The bar at the top is the clock");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(tutorial).toContainText("Waiting is the move");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(tutorial).toContainText("A miss costs nothing");
+  await page.getByRole("button", { name: "Got it" }).click();
+  await expect(page.getByRole("button", { name: "Tap to play" })).toBeVisible();
+  expect(await page.evaluate((k) => localStorage.getItem(k), TUTORED_KEY)).toBe("1");
+  await page.reload();
+  await expect(page.getByRole("group", { name: "How to play" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Tap to play" })).toBeVisible();
 });
 
 test("Play P6: the catch and balance mechanics play by buttons under reduced motion, and a run is never mostly tapping", async ({ page }) => {
@@ -389,19 +421,19 @@ test("Play P6: the catch and balance mechanics play by buttons under reduced mot
   await page.getByRole("button", { name: "I held off" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "At 3pm, shaky" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Catch, by buttons: keep the three no-cook foods, leave the decoys.
   const keep = page.getByRole("group", { name: "What to keep" });
   for (const item of ["Yoghurt", "Boiled eggs", "Nuts"]) await keep.getByRole("button", { name: item, exact: true }).click();
   await page.getByRole("button", { name: "Keep these" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await expect(page.locator(".play-result")).toContainText("no cooking");
   // Balance, by buttons, in the gut run.
   await page.goto("/approach?module=gut");
   await page.getByRole("button", { name: "Tap to play" }).click();
   await page.getByRole("button", { name: "A regular-ish meal" }).click();
-  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await expect(page.locator(".play-result")).toContainText("plain routine");
 });
 
@@ -444,6 +476,10 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
+  // §14: the share sits on the run's last card. Resume the run there via the device's cursor.
+  const last = runStepCount(RUNS.find((r) => r.id === "starting")!) - 1;
+  await page.goto("/approach");
+  await page.evaluate(([k, step]) => localStorage.setItem(k as string, JSON.stringify({ v: 1, moduleId: "starting", step })), [CURSOR_KEY, last] as const);
   await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Share this run" }).click();
   await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
@@ -501,7 +537,6 @@ test("Reflection interpretation (PRD §29): a reading is offered in the person's
   await page.getByRole("button", { name: "Next", exact: true }).click();
   const reading = page.getByRole("group", { name: "It sounds like two things were part of it." });
   await expect(reading).toBeVisible();
-  await expect(reading).toContainText("Only what you say yes to goes into your picture");
   expect(page.url()).not.toMatch(/slept|vague|brief/);
   await reading.getByRole("button", { name: "Short on sleep" }).click();
   // On to the try beat; the model holds the reading, not the text.
