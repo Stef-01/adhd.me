@@ -9,8 +9,6 @@ import "./styles/play.css";
 import "./styles/brand.css";
 import "./styles/learning-play.css";
 import { SiteMotion } from "./site-motion";
-import "./styles/life.css";
-import "./styles/play.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
