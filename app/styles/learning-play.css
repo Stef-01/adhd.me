@@ -32,6 +32,7 @@
 .learn-card-heading:focus { outline: none; }
 .platform-shell .learn-module .learn-card-eyebrow { color: #3f4038; }
 .platform-shell .learn-module :is(.learn-card-body,.learn-card-detail,.learn-card-foot) { color: #34362f; }
+.platform-shell .learn-module .learn-card-detail li { color: #34362f; }
 .platform-shell .learn-module .learn-card-detail { clear: both; padding-top: 20px; }
 .platform-shell .learn-module .learning-explorer { background: #fbfaf7; }
 .platform-shell .learn-module .learning-care-ring.ring-0 { background: #c2a3e0; }
