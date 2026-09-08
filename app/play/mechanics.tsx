@@ -107,7 +107,7 @@ function Hold({ round, live, reducedMotion, progress, mood, onResult }: Mechanic
       onKeyUp={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (holding && !reducedMotion) finish(false); setHolding(false); } }}
     >
       <Bean who={round.who} mood={holding ? "engaged" : mood} size={136} look={round.look} />
-      <span className="play-bean-label">{holding ? "Holding…" : "Hold"}</span>
+      <span className="play-bean-label">{holding ? "Holding…" : (round.verb ?? "Hold")}</span>
     </button>
   );
   return (
@@ -193,10 +193,16 @@ function Order({ round, live, onResult }: MechanicProps) {
   );
 }
 
-/** A bar sweeps from "not now" into "now" under the bean. Tap the bean inside "now" for the hit. Under reduced motion, choose the moment. */
+/**
+ * A marker moves along a line of marks — the round's `scale` — from far to the moment to act, which
+ * is the last mark. Tap the bean while the marker is on the last mark for the hit. Under reduced
+ * motion, choose the moment.
+ */
 function Timing({ round, live, reducedMotion, progress, mood, onResult }: MechanicProps) {
   const [done, setDone] = useState(false);
   const inNow = progress >= 0.7 && progress <= 0.95;
+  const scale = round.scale ?? ["Not now", "Now"];
+  const verb = round.verb ?? "Now";
   if (reducedMotion) {
     const choices = round.options?.length ? round.options : [{ id: "weeks", label: "Three weeks out" }, { id: "days", label: "A few days out" }, { id: "tonight", label: "The night before", correct: true }];
     return (
@@ -209,17 +215,18 @@ function Timing({ round, live, reducedMotion, progress, mood, onResult }: Mechan
   const bean = (
     <button type="button" className={`play-bean-hit${inNow ? " is-now" : ""}`} disabled={!live || done} onClick={() => { setDone(true); onResult(inNow, inNow ? "now" : "early"); }}>
       <Bean who={round.who} mood={inNow ? "surprised" : mood} size={136} look={round.look} />
-      <span className="play-bean-label">It’s real now</span>
+      <span className="play-bean-label">{verb}</span>
     </button>
   );
   return (
     <div className="play-timing">
-      <Scene prop={round.prop} who={round.who} mood={mood} bean={bean}>
+      <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} bean={bean}>
         <div className="play-timing-track in-scene" aria-hidden="true">
           <span className="play-timing-zone" />
           <motion.span className="play-timing-marker" style={{ left: `${Math.min(100, progress * 100)}%` }} />
-          <span className="play-timing-label" style={{ left: "10%" }}>not now</span>
-          <span className="play-timing-label" style={{ left: "82%" }}>now</span>
+          <ol className="play-scale">
+            {scale.map((mark, i) => <li key={mark} className={i === scale.length - 1 ? "is-last" : ""} style={{ left: `${(i / (scale.length - 1)) * 100}%` }}>{mark}</li>)}
+          </ol>
         </div>
       </Scene>
     </div>
@@ -332,7 +339,7 @@ function Pause({ round, live, reducedMotion, mood, onResult }: MechanicProps) {
       onKeyUp={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); release(); } }}
     >
       <Bean who={round.who} mood={holding ? (heat < 0.35 ? "relieved" : "thinking") : heat > 0.8 ? "frustrated" : mood} size={136} look={round.look} />
-      <span className="play-bean-label">{holding ? "Pausing…" : "Hold to pause"}</span>
+      <span className="play-bean-label">{holding ? "Pausing…" : (round.verb ?? "Hold to pause")}</span>
     </button>
   );
   return (
@@ -453,7 +460,7 @@ function Balance({ round, live, reducedMotion, progress, mood, onResult }: Mecha
   const bean = (
     <button type="button" className={`play-bean-hit${inZone ? "" : " is-now"}`} disabled={!live || done} onClick={() => setX((v) => v + (0.5 - v) * 0.6)}>
       <Bean who={round.who} mood={inZone ? mood : "overwhelmed"} size={136} look={round.look} />
-      <span className="play-bean-label">Steady</span>
+      <span className="play-bean-label">{round.verb ?? "Steady"}</span>
     </button>
   );
   return (

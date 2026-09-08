@@ -48,6 +48,8 @@ describe("the runs", () => {
         if (["tap", "order", "sort", "flip", "pick-bean", "dont-tap"].includes(r.mechanic)) expect(r.options?.length, `${run.id}/${r.id}`).toBeGreaterThan(0);
         if (["recall", "swipe", "drag-capture", "hold", "catch"].includes(r.mechanic)) expect(r.items?.length, `${run.id}/${r.id}`).toBeGreaterThan(0);
         if (r.mechanic === "balance") expect(r.options?.some((o) => o.correct), `${run.id}/${r.id} needs a steadying move`).toBe(true);
+        // The sense gate (PLAY-QA.md): a timing round says what the line is and what the tap does.
+        if (r.mechanic === "timing") { expect(r.scale?.length, `${run.id}/${r.id} needs a scale`).toBeGreaterThanOrEqual(3); expect(r.verb, `${run.id}/${r.id} needs a verb`).toBeTruthy(); expect(r.options?.some((o) => o.correct), `${run.id}/${r.id} needs the moment`).toBe(true); }
         if (r.mechanic === "tap") expect(r.options!.some((o) => o.correct), `${run.id}/${r.id} needs a right answer`).toBe(true);
         if (r.mechanic === "sort") expect(r.options!.every((o) => o.layer), `${run.id}/${r.id}`).toBe(true);
         if (r.writes) {

@@ -15,6 +15,22 @@ third is a look; the fourth is people.
 - **Answers the model reads.** A round that writes an answer writes a question the module asks.
 - **Structure.** Title, rounds, recognition, insight, (reflect), strategy, next.
 
+## 1b. The sense gate (founder, 2026-09-08)
+
+"The text on the screen and the general premise of the game must make sense." The founder's
+example: a timing round that said *tap the moment it crosses into now* over a bar with no time
+on it — nothing told the person the bar was a deadline approaching, or that waiting was the
+point. So:
+
+- **Every mechanic states its rule on screen**, in one line under the scene (`RULES` in
+  `src/learn/play.ts`): what the bar is, what the tap does, and what waiting means. A round
+  that needs the rule explained elsewhere fails.
+- **A timing round carries a scale** — the marks along the line, ending on the moment to act —
+  and a verb on the bean ("Start", "Walk out"). Held by the contract test.
+- **The premise check, per round, on the review sheet:** read only what is on screen. Can a
+  stranger say (1) what the bar means, (2) what to do, (3) what counts as a hit, within two
+  seconds? If any answer is "no", the round goes back before it ships.
+
 ## 2. The gates in the browser (`e2e/adhd-life.spec.ts`)
 
 - A full run under reduced motion, by buttons and by keyboard.
