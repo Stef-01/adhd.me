@@ -202,7 +202,7 @@ export function StoryLanding() {
               No psychiatrist queue to clear first.
             </motion.p>
             <motion.p className="story-hero-explainer" variants={item}>
-              Describe the GP you are looking for in your own words. The finder shows why each
+              Describe the support you are looking for in your own words. The finder shows why each
               listed GP appears, so the route stays inspectable from search to booking.
             </motion.p>
             <motion.div className="story-hero-actions" variants={item}>

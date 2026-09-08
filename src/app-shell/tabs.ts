@@ -26,13 +26,23 @@
 // range in both directions, so a fifth tab is a decision somebody makes on purpose and a sixth is
 // a failure.
 
+// 2026-09-08 (founder-directed, the ADHD Life PRD §6): the bar is the PRD's four destinations.
+// `Support` is the finder at `/` — the marketplace, and still tab one, still the product; `Today`
+// is the one most useful next action; `Learn` keeps its route; `My ADHD` is the personal life
+// map. The filters screen (`/profile`) leaves the bar: the PRD puts profile and settings behind
+// the top-right control, and the filters are reached from the results screen, the settings sheet
+// and the finder's own welcome. The Support tab claims it as current (`also`), so a person editing
+// filters is still, visibly, inside the finder.
+
 export interface AppTab {
   /** The route this tab is. Must be a real page route in `app/`. */
   readonly href: string;
+  /** Routes this tab also claims as current — deeper screens of the same place. */
+  readonly also?: readonly string[];
   /** The word under the icon. Both are always shown — see the header note. */
   readonly label: string;
   /** The Phosphor icon name the bar renders. */
-  readonly icon: "MagnifyingGlass" | "UserCircle" | "BookOpen";
+  readonly icon: "MagnifyingGlass" | "UserCircle" | "BookOpen" | "Sun" | "Lifebuoy" | "Compass";
   /** What a person is going there to do. The reason the tab earns a place, in one sentence. */
   readonly purpose: string;
 }
@@ -44,21 +54,29 @@ export interface AppTab {
 export const APP_TABS: readonly AppTab[] = [
   {
     href: "/",
-    label: "Find",
-    icon: "MagnifyingGlass",
-    purpose: "Describe the GP you are looking for, in words or out loud, and read the order the description produces.",
+    also: ["/profile", "/support"],
+    label: "Support",
+    icon: "Lifebuoy",
+    purpose: "Describe the support you are looking for, in words or out loud, or start from the problem and be walked to the kind of person who helps with it.",
   },
   {
-    href: "/profile",
-    label: "Profile",
-    icon: "UserCircle",
-    purpose: "What this device is holding for you — where you said you are, the words you last described, and the controls over both.",
+    href: "/today",
+    also: ["/start"],
+    label: "Today",
+    icon: "Sun",
+    purpose: "The single most useful next thing for you today — a module, something to try, or a question about how the last thing went.",
   },
   {
     href: "/approach",
     label: "Learn",
     icon: "BookOpen",
-    purpose: "What the search actually returns, what the old route through assessment cost, and what changed in NSW and Queensland.",
+    purpose: "Interactive modules that show ADHD in a life like yours and learn what matters to you, plus the reads, the quizzes and the care map.",
+  },
+  {
+    href: "/my-adhd",
+    label: "My ADHD",
+    icon: "Compass",
+    purpose: "Your own picture — the biggest friction, what seems to contribute across brain, body, environment and people, and what has helped.",
   },
 ];
 
@@ -72,7 +90,9 @@ export const TAB_COUNT_RANGE = { min: 3, max: 5 } as const;
  */
 export function activeTab(pathname: string): AppTab | undefined {
   if (pathname === "/") return APP_TABS[0];
+  const claims = (tab: AppTab) => [tab.href, ...(tab.also ?? [])].filter((h) => h !== "/");
   return [...APP_TABS]
-    .filter((tab) => tab.href !== "/" && (pathname === tab.href || pathname.startsWith(`${tab.href}/`)))
-    .sort((a, b) => b.href.length - a.href.length)[0];
+    .flatMap((tab) => claims(tab).map((href) => ({ tab, href })))
+    .filter(({ href }) => pathname === href || pathname.startsWith(`${href}/`))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.tab;
 }

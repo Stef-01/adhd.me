@@ -44,6 +44,7 @@ export function AppSettings({ children }: { children?: React.ReactNode }) {
       {mount ? createPortal(trigger, mount) : trigger}
       <Sheet open={open} title="Settings" onClose={() => setOpen(false)}>
         <div className="settings-list">
+          <SettingsLink href="/profile" title="Search filters" detail="Where you are, the kind of support, and the declared facts a provider must have." />
           <SettingsLink href="/story" title="About ADHD.ME" detail="Why the product exists and what the route through assessment costs today." />
           <SettingsLink href="/faq" title="Questions" detail="What this is, what it costs, where it operates, and how the order is decided." />
           <SettingsLink href="/examples" title="Worked examples" detail="The same matching run over written requests, with the reasons printed." />

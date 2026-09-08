@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export function PublicHeader({
   rightHref = "/finder",
-  rightLabel = "Find a GP",
+  rightLabel = "Find support",
 }: {
   rightHref?: string;
   rightLabel?: string;

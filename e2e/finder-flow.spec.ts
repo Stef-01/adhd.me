@@ -160,7 +160,7 @@ test("refine returns to typing with the words already there", async ({ page }) =
   expect((await box.inputValue()).length).toBeGreaterThan(10);
 
   await box.fill("I would like an ADHD assessment and I speak Vietnamese");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 2500 });
 });
 
@@ -225,7 +225,7 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
    * Hindi, and does not declare titration.
    */
   await box.fill("I want an ADHD assessment with a GP who speaks Hindi and can review my titration");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
   // Walk the rows until a profile shows the missed list — the partition property behind it is
@@ -277,7 +277,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   await page.getByRole("button", { name: /Change what you said/i }).click();
   // Every listing declares assessment, so this ties the roster and the clarifier renders.
   await page.getByRole("textbox").fill("I need an ADHD assessment");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await page.getByRole("button", { name: "Improve my matches" }).click();
   await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
   await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
@@ -295,7 +295,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
     if (chip > 0) {
       await page.getByRole("button", { name: /Change what you said/i }).click();
       await page.getByRole("textbox").fill("I need an ADHD assessment");
-      await page.getByRole("button", { name: "Find a GP" }).click();
+      await page.getByRole("button", { name: "Find support" }).click();
       await page.getByRole("button", { name: "Improve my matches" }).click();
   await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
       await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
@@ -328,7 +328,7 @@ test("the finder never claims a full fit beside a gap it just admitted (O121)", 
   await page.locator("#welcome-request").fill(
     "a woman GP who does adult ADHD assessment, bulk billing, and I need a longer first appointment",
   );
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
   // O237: the verdict sentences left the screen, so no completeness claim can stand beside an
@@ -338,7 +338,7 @@ test("the finder never claims a full fit beside a gap it just admitted (O121)", 
   expect(head).not.toContain("do what you asked for");
   expect(head).not.toContain("does what you asked for");
   expect(head).not.toContain("matches every part");
-  await expect(page.locator(".results-list-head h2")).toHaveText(/^(Matches|All listed GPs)$/);
+  await expect(page.locator(".results-list-head h2")).toHaveText(/^(Matches|All listed providers)$/);
 });
 
 test("collective roster coverage is never presented as one doctor's complete fit (O178)", async ({ page }) => {
@@ -346,7 +346,7 @@ test("collective roster coverage is never presented as one doctor's complete fit
   await page.locator("#welcome-request").fill(
     "I need a woman GP who speaks Urdu and offers telehealth",
   );
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
   // O237: the verdict sentence is gone from the screen; the list heading carries the honesty.
@@ -364,7 +364,7 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
   // assessment" alone is a tie (all three declare it), and a tie renders no claim either — so
   // it would have passed this test for the wrong reason.
   await page.locator("#welcome-request").fill("ADHD assessment and titration");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
   // Nothing unserved here, so the order is earned: the heading says "Matches", and the earned
@@ -387,7 +387,7 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
 test("the list says why it is in this order, and says when it isn't one", async ({ page }) => {
   await gotoFinderRealRosterOnly(page);
   await page.locator("#welcome-request").fill("ADHD assessment and titration");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
   await expect(page.locator(".results-list-head h2")).toHaveText("Matches");
@@ -399,10 +399,10 @@ test("the list says why it is in this order, and says when it isn't one", async 
   await page.getByRole("button", { name: "Change what you said" }).click();
   const box = page.locator("#doctor-request");
   await box.fill("a bulk billing GP");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
-  await expect(page.locator(".results-list-head h2")).toHaveText("All listed GPs");
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed providers");
   const unearned = page.locator(".results-order-note");
   await expect(unearned).toBeVisible();
   await expect(unearned).not.toContainText("Ordered by what you asked for");
@@ -432,7 +432,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   for (const [i, query] of QUERIES.entries()) {
     await gotoFinderRealRosterOnly(page);
     await page.locator("#welcome-request").fill(query);
-    await page.getByRole("button", { name: "Find a GP" }).click();
+    await page.getByRole("button", { name: "Find support" }).click();
     await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 
     const rendered = await page.locator(".clinician-row strong").allInnerTexts();

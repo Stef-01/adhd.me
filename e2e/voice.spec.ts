@@ -47,7 +47,7 @@ test("a spoken request reaches the results", async ({ page }) => {
   await expect(box).toHaveValue(/Urdu/);
   await expect(page.locator(".speech-error")).toContainText("stopped on its own");
 
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   // And the words were actually used: the roster's one Urdu speaker ranks first. (This asked
   // for a Vietnamese speaker when the roster was fifteen invented personas; the roster is two
@@ -114,7 +114,7 @@ test("a minute with words in hand lands them in the box, said the way any other 
 
   // U10's other half: the banner belongs to the exit it described. Searching, then coming back to
   // the box from the results, must not bring the sentence back over words the person owns.
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   await page.locator(".results-summary-words").click();
   await expect(box).toBeVisible();
@@ -132,7 +132,7 @@ test("a blocked microphone's message does not follow the person back to words th
   await expect(page.getByRole("button", { name: "Try the microphone again" })).toBeVisible();
 
   await page.getByRole("textbox").fill("someone who understands adult ADHD");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   await page.locator(".results-summary-words").click();
   await expect(page.getByRole("textbox")).toHaveValue(/adult ADHD/);
@@ -150,7 +150,7 @@ test("?debug=1 survives a place edit: the flag is read once at arrival, not from
   await expect(page.locator(".speech-error")).toContainText("[network");
 
   await page.getByRole("textbox").fill("a GP near me");
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
   // O237: the place is not edited here; the flag read once at arrival is what the next failure
   // below must still carry.
@@ -186,7 +186,7 @@ test.describe("every failure lands on the typed route, not a dead end", () => {
       await expect(message).not.toContainText(error);
       // And typing still works from here.
       await page.getByRole("textbox").fill("I think I have ADHD");
-      await page.getByRole("button", { name: "Find a GP" }).click();
+      await page.getByRole("button", { name: "Find support" }).click();
       await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
     });
   }

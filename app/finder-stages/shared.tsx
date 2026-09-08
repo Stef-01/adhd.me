@@ -290,8 +290,9 @@ export function FinderContext() {
           current listed doctors consult in Sydney." Coverage of the gazetteer's two areas is stated
           where it belongs, on `app/coverage-map.tsx`. */}
       <p>
-        Listed doctors consult in Sydney; their profiles describe real clinicians. Live appointment
-        times and directions are provided by the booking destination.
+        Listed doctors consult in Sydney; their profiles describe real clinicians. Allied providers
+        shown are example profiles. Live appointment times and directions are provided by the booking
+        destination.
       </p>
     </aside>
   );

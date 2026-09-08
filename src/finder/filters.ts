@@ -21,6 +21,7 @@
 // language list is `MATCHABLE_LANGUAGES`, the set the roster actually declares; wheelchair access
 // and open books are roster fields. No filter is inferred from anything a person wrote.
 
+import { isProfession, profession, type Profession } from "@/support/professions";
 import { holdsPreference } from "@/matching/needs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { APPROACHES, type Approach } from "@/demo/roster";
@@ -57,6 +58,12 @@ export interface Filters {
   consultRecording: ConsultRecordingChoice;
   /** O248: ways of working the GP must declare. A subset of `APPROACHES`; every chosen one is required. */
   approach: Approach[];
+  /**
+   * 2026-09-08 (PRD §37–§38): the kinds of professional to show. Empty means every kind. Set from
+   * the profile's chips, or by the support path's "See providers", which is how a problem reaches
+   * a profession without the person ever browsing one first.
+   */
+  professions: Profession[];
 }
 
 export const CONSULT_RECORDING_CHOICES = ["any", "ai-scribe", "no-ai"] as const;
@@ -72,6 +79,7 @@ export type ConsultRecordingChoice = (typeof CONSULT_RECORDING_CHOICES)[number];
 /** The structural slice of a clinician a filter reads — the same shape `holdsPreference` takes, plus the roster facts. */
 export interface Filterable {
   gender: string;
+  profession?: Profession;
   telehealthFirstAppointment?: boolean;
   manner: readonly string[];
   practicalSignals: readonly string[];
@@ -96,6 +104,7 @@ export function emptyFilters(): Filters {
     withinKm: null,
     consultRecording: "any",
     approach: [],
+    professions: [],
   };
 }
 
@@ -136,6 +145,8 @@ export function readFilters(storage: Pick<Storage, "getItem">): Filters {
     if (!isDistance(r.withinKm)) return emptyFilters();
     if (!(CONSULT_RECORDING_CHOICES as readonly unknown[]).includes(r.consultRecording)) return emptyFilters();
     if (!Array.isArray(r.approach) || !r.approach.every((a) => (APPROACHES as readonly string[]).includes(a))) return emptyFilters();
+    // Added after the first version shipped: an older record without the field reads as "every kind".
+    const professions = Array.isArray(r.professions) ? r.professions.filter(isProfession) : [];
     return {
       v: FILTERS_VERSION,
       place: r.place.trim().slice(0, 80),
@@ -149,6 +160,7 @@ export function readFilters(storage: Pick<Storage, "getItem">): Filters {
       withinKm: r.withinKm ?? null,
       consultRecording: r.consultRecording as ConsultRecordingChoice,
       approach: [...(r.approach as Approach[])],
+      professions,
     };
   } catch {
     return emptyFilters();
@@ -180,6 +192,7 @@ export function activeFilterCount(filters: Filters): number {
   if (filters.withinKm !== null) n += 1;
   if (filters.consultRecording !== "any") n += 1;
   n += filters.approach.length;
+  if (filters.professions.length > 0) n += 1;
   return n;
 }
 
@@ -192,6 +205,7 @@ export function describeFilters(filters: Filters): string[] {
   if (filters.consultRecording === "ai-scribe") out.push("Uses an AI scribe");
   if (filters.consultRecording === "no-ai") out.push("No AI recording");
   for (const a of filters.approach) out.push(APPROACH_LABELS[a]);
+  if (filters.professions.length > 0) out.push(filters.professions.map((p) => profession(p).plural).join(" or ").replace(/^\w/, (c) => c.toUpperCase()));
   return out;
 }
 
@@ -226,6 +240,7 @@ export function applyFilters<T extends Filterable>(
     if (filters.languages.some((language) => !clinician.languages.includes(language))) return false;
     if (filters.consultRecording !== "any" && clinician.consultRecording !== filters.consultRecording) return false;
     if (filters.approach.some((a) => !(clinician.approach ?? []).includes(a))) return false;
+    if (filters.professions.length > 0 && !filters.professions.includes(clinician.profession ?? "gp")) return false;
     if (filters.withinKm !== null && origin) {
       if (clinician.telehealthFirstAppointment === true) return true;
       const km = nearestKm(clinician);

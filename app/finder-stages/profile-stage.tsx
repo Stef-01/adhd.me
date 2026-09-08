@@ -20,6 +20,8 @@ import { type NeedSignal } from "@/matching/needs";
 import { APPROACH_LABELS } from "@/finder/filters";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { profileAnnouncement } from "@/finder/announce";
+import { professionOf } from "@/demo/clinicians";
+import { EXPERTISE_LABELS, professionLabel } from "@/support/professions";
 import { ClinicianPortrait, EASE_OUT, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 const UNKNOWN_DETAIL = /set (?:by|with) the practice/i;
@@ -125,7 +127,11 @@ export function ProfileStage({
             {/* O217 put "Example profile — a fictional GP…" here, directly under the name. O231
                 (founder-directed) removed it; see app/finder-stages/shared.tsx for what stays and
                 why the structural defences, not the label, are what keep this honest. */}
-            <p className="clinician-meta">{shortTitle(clinician.title)}</p>
+            <p className="clinician-meta">{professionOf(clinician) === "gp" ? shortTitle(clinician.title) : `${professionLabel(professionOf(clinician))} · ${clinician.title.split(",").slice(1).join(",").trim() || shortTitle(clinician.title)}`}</p>
+            {clinician.expertise && clinician.expertise.length > 0 && (
+              /* PRD §41: "Best for" — the declared expertise, in the closed taxonomy's own words. */
+              <p className="profile-best-for"><span>Best for</span> {clinician.expertise.map((t) => EXPERTISE_LABELS[t]).join(", ")}</p>
+            )}
             <p className="profile-location">{locationLabel(clinician)}</p>
             {/* O184: the material-interest disclosure, back on the listing it concerns.
                 SITED IN THE IDENTITY BLOCK, because that is where a reader is deciding who this
@@ -189,7 +195,7 @@ export function ProfileStage({
             <div className="profile-disclosure-body">
               {personalizedSignals.length > 0 ? (
                 <>
-                  <ul className="fit-evidence" aria-label="Why this GP is listed for you">
+                  <ul className="fit-evidence" aria-label="Why this provider is listed for you">
                     {profileEvidence.slice(0, 3).map((need) => (
                       <li key={need.label}>
                         <strong>{need.label}</strong>
@@ -198,7 +204,7 @@ export function ProfileStage({
                     ))}
                   </ul>
                   {profileMissed.length > 0 && (
-                    <ul className="fit-missed" aria-label="What you asked for that this GP has not declared">
+                    <ul className="fit-missed" aria-label="What you asked for that this provider has not declared">
                       {profileMissed.slice(0, 2).map((need) => (
                         <li key={need.label}>
                           {missedAskParts(need).before}

@@ -17,8 +17,8 @@ import { APP_TABS } from "../src/app-shell/tabs";
 test("the front door is the app, not a story", async ({ page }) => {
   await page.goto("/");
   // The finder's own entry field, on the root route. If this ever fails, a landing page came back.
-  await expect(page.getByLabel(/Describe the GP you are looking for/i)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Find a GP" }).or(page.getByRole("button", { name: "Talk instead of typing" }))).toBeVisible();
+  await expect(page.getByLabel(/Describe the support you are looking for/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Find support" }).or(page.getByRole("button", { name: "Talk instead of typing" }))).toBeVisible();
 });
 
 test("the old finder address still lands on the finder, as a redirect", async ({ page }) => {
@@ -27,7 +27,7 @@ test("the old finder address still lands on the finder, as a redirect", async ({
   // A 308 collapses into the final 200 by the time Playwright reports it; the proof the redirect
   // happened is the address bar above and the chain below.
   expect(response?.status()).toBe(200);
-  await expect(page.getByLabel(/Describe the GP you are looking for/i)).toBeVisible();
+  await expect(page.getByLabel(/Describe the support you are looking for/i)).toBeVisible();
 });
 
 test("the story kept every word it had, at its own address", async ({ page }) => {
@@ -91,15 +91,15 @@ test("desktop navigation stays available inside a finder task", async ({ page })
 test("O233: the bar holds destinations, and what is consulted once lives in settings", async ({ page }) => {
   await page.goto("/");
   const bar = page.getByRole("navigation", { name: "Sections" });
-  await expect(bar.getByRole("link")).toHaveCount(3);
-  for (const label of ["Find", "Profile", "Learn"]) {
-    await expect(bar.getByRole("link", { name: label, exact: true })).toBeVisible();
+  await expect(bar.getByRole("link")).toHaveCount(APP_TABS.length);
+  for (const tab of APP_TABS) {
+    await expect(bar.getByRole("link", { name: tab.label, exact: true })).toBeVisible();
   }
   // The three that left the bar are reachable, and reachable from ONE place.
   await page.getByRole("button", { name: "Settings" }).click();
   const settings = page.getByRole("dialog", { name: "Settings" });
   await expect(settings).toBeVisible();
-  for (const name of [/About ADHD\.ME/, /^Questions/, /Worked examples/, /^Privacy/]) {
+  for (const name of [/Search filters/, /About ADHD\.ME/, /^Questions/, /Worked examples/, /^Privacy/]) {
     await expect(settings.getByRole("link", { name })).toBeVisible();
   }
   // The finder's own switch rides in the same sheet, so there is one settings surface.
@@ -115,7 +115,7 @@ test("O233: settings reaches About, and the bar does not claim it", async ({ pag
   await expect(page.getByRole("navigation", { name: "Sections" })).toHaveCount(0);
 });
 
-test("O233: the Profile tab shows what the device holds, and can forget it", async ({ page }) => {
+test("O233: the filters screen shows what the device holds, and can forget it", async ({ page }) => {
   await page.goto("/profile");
   // Before any search the honest state is empty, and the empty state offers the action that fills it.
   await expect(page.getByRole("heading", { name: "Search Filters" })).toBeVisible();
@@ -127,7 +127,11 @@ test("O233: the Profile tab shows what the device holds, and can forget it", asy
   await page.getByRole("textbox").fill("a woman GP in Epping who speaks Mandarin");
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
-  await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Profile", exact: true }).click();
+  // 2026-09-08: the filters left the bar (PRD §6 puts profile behind the top-right control); the
+  // settings sheet is the one place that reaches them from anywhere.
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("dialog", { name: "Settings" }).getByRole("link", { name: /Search filters/ }).click();
+  await expect(page).toHaveURL(/\/profile$/);
   await expect(page.locator(".me-facts").getByText("a woman GP in Epping who speaks Mandarin")).toBeVisible();
 
   await page.getByRole("button", { name: /Forget what I typed/ }).click();
@@ -137,7 +141,7 @@ test("O233: the Profile tab shows what the device holds, and can forget it", asy
 
 test("O233: the welcome screen leads with the question and the box, not a tagline", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("What kind of GP are you looking for?");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("What kind of support are you looking for?");
   await expect(page.getByText(/takes you seriously/i)).toHaveCount(0);
   // The box is the subject of the screen: multi-line, and taller than any control on it.
   const box = page.getByRole("textbox");
@@ -167,7 +171,7 @@ test("O233 holds on the type screen too: the same question, no tagline", async (
 
   await page.getByRole("button", { name: "Change what you said" }).click();
   await expect(page.locator("#doctor-request")).toBeVisible();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("What kind of GP are you looking for?");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("What kind of support are you looking for?");
   await expect(page.getByText(/takes you seriously/i)).toHaveCount(0);
   await expect(page.getByText("In your own words")).toHaveCount(0);
 });

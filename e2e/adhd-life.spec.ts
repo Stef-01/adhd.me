@@ -1,0 +1,208 @@
+// The ADHD Life PRD's critical journeys (§69), in a browser: onboarding to a recommendation, a
+// module writing to My ADHD, a rejected insight never persisting as confirmed, the safety response
+// interrupting a module, the support path reaching matching providers, the care map opening from
+// the Learn page, and the finder broadened beyond GPs.
+
+import { expect, test } from "@playwright/test";
+
+const MODEL_KEY = "adhdme.model.v1";
+
+test("E2E 1: a new person completes onboarding and is handed a first module", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/today");
+  await page.getByRole("link", { name: /^Start/ }).click();
+  await expect(page).toHaveURL(/\/start$/);
+  await page.getByRole("button", { name: /^Start/ }).click();
+  await page.getByRole("button", { name: "I think I may have ADHD" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Starting things" }).click();
+  await page.getByRole("button", { name: "Work" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "I know what to do but cannot start" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Work", exact: true }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("slider").fill("8");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "When something is due right now" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  // Q7 is generated from Q2–Q5: the starting goal must be on offer.
+  await page.getByRole("button", { name: "Start assignments and work earlier" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "No", exact: true }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Practical things to try" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Around 10 minutes" }).click();
+  await page.getByRole("button", { name: "Finish" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/priority seems to be start assignments/i);
+  await expect(page.getByText("Why starting can be harder than doing")).toBeVisible();
+  // Nothing scored, and the record is on the device only.
+  const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
+  expect(record.onboarding?.impact).toBe(8);
+  expect(record.onboarding?.completedAt).toBeTruthy();
+  expect(new URL(page.url()).search).toBe("");
+  await page.getByRole("button", { name: /^Start/ }).click();
+  await expect(page).toHaveURL(/module=starting/);
+  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Maya knows exactly what to do");
+});
+
+test("E2E 3 & 5: a module's answers reach My ADHD, and a rejected insight is never confirmed", async ({ page }) => {
+  await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: /Write the first sentence, badly/ }).click();
+  await expect(page.locator(".learn-reveal")).toContainText("The barrier is the start");
+  await page.getByRole("button", { name: "Next" }).click();
+  // Recognition: Next is held until a frequency is given.
+  await expect(page.getByRole("button", { name: "Next" })).toBeDisabled();
+  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Often" }).click();
+  await page.getByRole("slider").fill("7");
+  await page.getByRole("group", { name: /become easier/ }).getByRole("button", { name: "Yes" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Starting is its own function");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("group", { name: /hardest to start/ }).getByRole("button", { name: "Vague ones" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "I’ll try this" }).first().click();
+  await expect(page.locator(".strategy-accepted").first()).toContainText("On your list");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Not really" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("Try the first physical action");
+  await page.getByRole("button", { name: "Finish" }).click();
+  await expect(page.locator(".learning-completion")).toContainText("Your picture just got sharper");
+  const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
+  expect(record.resonance?.starting?.frequency).toBe("often");
+  expect(record.resonance?.starting?.cost).toBe(7);
+  expect(record.insights?.["starting-threshold"]).toBe("no");
+  expect(Object.values(record.insights ?? {})).not.toContain("yes");
+  expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
+
+  await page.goto("/my-adhd");
+  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
+  await expect(page.getByText("Activation for ambiguous tasks")).toBeVisible();
+  await expect(page.locator(".layer-pill[data-layer=environment]").first()).toBeVisible();
+  await expect(page.getByText("Still testing")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
+
+  // Today follows up the experiment before anything new, and the outcome lands in the history.
+  await page.goto("/start");
+  await page.evaluate((k) => { const r = JSON.parse(localStorage.getItem(k) ?? "{}"); r.onboarding = { ...(r.onboarding ?? {}), completedAt: new Date().toISOString() }; localStorage.setItem(k, JSON.stringify(r)); }, MODEL_KEY);
+  await page.goto("/today");
+  await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toBeVisible();
+  await page.getByRole("button", { name: "A lot" }).click();
+  await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Why am I seeing this?" }).click();
+  await expect(page.locator(".life-why code")).toContainText("rule ");
+  await page.goto("/my-adhd");
+  await expect(page.getByText("Things that help me")).toBeVisible();
+});
+
+test("E2E 8: a safety response interrupts the module, pauses recommendations, and leaves nothing in a URL", async ({ page }) => {
+  await page.goto("/approach?module=starting");
+  for (let i = 0; i < 2; i += 1) await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
+  for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.locator(".reflect-field textarea")).toBeVisible();
+  await page.locator(".reflect-field textarea").fill("I don't want to be here anymore");
+  await page.getByRole("button", { name: "Next" }).click();
+  const alert = page.getByRole("alertdialog");
+  await expect(alert).toBeVisible();
+  await expect(alert).toContainText("13 11 14");
+  await expect(alert).not.toContainText(/diagnos/i);
+  await expect(page.locator(".learn-dots")).toHaveCount(0);
+  expect(page.url()).not.toContain("anymore");
+  await page.goto("/today");
+  await expect(page.getByRole("alertdialog")).toBeVisible();
+  await page.getByRole("button", { name: "I have read this" }).click();
+  await expect(page.getByRole("alertdialog")).toHaveCount(0);
+});
+
+test("E2E 6: the support path walks from the problem to professions, and 'See providers' narrows the finder", async ({ page }) => {
+  await page.goto("/support");
+  await expect(page.getByRole("heading", { name: /Nothing to walk from yet/ })).toBeVisible();
+  await page.evaluate((k) => {
+    localStorage.setItem(k, JSON.stringify({
+      v: 1, onboarding: { improveFirst: "start-earlier", impact: 8, lookingFor: "professional", completedAt: new Date().toISOString() },
+      resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() }, ambiguity: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() } },
+      answers: { "starting.hardest-to-start": ["vague"], "ambiguity.source": ["manager"] },
+      insights: {}, experiments: [
+        { strategyId: "first-physical-action", moduleId: "starting", acceptedAt: "2026-09-01T00:00:00Z", outcome: "no", outcomeAt: "2026-09-02T00:00:00Z" },
+        { strategyId: "define-done", moduleId: "ambiguity", acceptedAt: "2026-09-03T00:00:00Z", outcome: "a-little", outcomeAt: "2026-09-04T00:00:00Z" },
+      ], reflections: [], safety: [], completed: ["starting", "ambiguity"], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
+    }));
+  }, MODEL_KEY);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "The problem" })).toBeVisible();
+  await expect(page.locator(".support-step").nth(0)).toContainText(/Starting work before deadline pressure/);
+  await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
+  await expect(page.locator(".profession-card.is-first")).toContainText("Why this one");
+  await expect(page.getByText(/What I’d like help with/)).toBeVisible();
+  await page.locator(".profession-card.is-first").getByRole("link", { name: /See occupational therapists/ }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole("textbox").fill("help starting ambiguous work, by telehealth");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  const rows = page.locator(".clinician-row");
+  await expect(rows.first()).toContainText("Occupational therapist");
+  for (const text of await rows.allInnerTexts()) expect(text).toContain("Occupational therapist");
+  await rows.first().click();
+  await expect(page.getByText("Best for")).toBeVisible();
+  await expect(page.getByText(/Why this provider is listed/).or(page.locator(".fit-evidence"))).toHaveCount(1);
+});
+
+test("the finder reads a named profession out of the sentence, and every kind is still there without one", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("What kind of support are you looking for?");
+  await page.getByRole("textbox").fill("a psychologist for emotional regulation near Chatswood");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  for (const text of await page.locator(".clinician-row").allInnerTexts()) expect(text).toContain("Psychologist");
+  await page.getByRole("button", { name: "Start over" }).click();
+  await page.getByRole("textbox").fill("someone who takes an ADHD assessment seriously");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  await page.getByRole("button", { name: /Show all|more/ }).click().catch(() => undefined);
+  const all = (await page.locator(".clinician-row").allInnerTexts()).join("\n");
+  expect(all).not.toMatch(/^Psychologist/m);
+  // Filters screen: the kinds of support are chips, held on the device.
+  await page.goto("/profile");
+  await page.getByRole("button", { name: "Psychologists" }).click();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.filters.v1") ?? "{}").professions)).toEqual(["psychologist"]);
+});
+
+test("the care map opens from the Learn page's map icon, and a node explains itself", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach");
+  await page.getByRole("link", { name: "Open the care map" }).click();
+  await expect(page).toHaveURL(/\/approach\/map$/);
+  await expect(page.getByRole("heading", { name: "Four layers, one life." })).toBeVisible();
+  await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
+  await expect(page.getByRole("heading", { name: "Starting" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Why starting can be harder than doing/ })).toBeVisible();
+  // Keyboard reaches a node too.
+  await page.getByRole("button", { name: /^Sleep \(Body\)/ }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("heading", { name: "Sleep" })).toBeVisible();
+  // The four tabs the PRD names, with Learn current here.
+  const bar = page.getByRole("navigation", { name: "Sections" });
+  await expect(bar.getByRole("link", { name: "Learn", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(bar.getByRole("link", { name: "My ADHD", exact: true })).toBeVisible();
+});
+
+test("E2E 9: under reduced motion the simulations work by buttons, and a module completes", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=working-memory");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "I have them" }).click();
+  await page.getByRole("button", { name: /Reply, then keep walking/ }).click();
+  await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: "Milk" }).click();
+  await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: "Stamps" }).click();
+  await page.getByRole("button", { name: "Check" }).click();
+  await expect(page.locator(".learn-reveal")).toContainText(/2 of the four came back/);
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Rarely" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.locator(".learn-lesson.is-current h2")).toContainText("small table");
+});

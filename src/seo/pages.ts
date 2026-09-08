@@ -101,10 +101,10 @@ export const SEO_PAGES: readonly SeoPage[] = [
       treatment as the other eleven.
     */
     path: "/",
-    keyword: "find a GP who does ADHD assessment",
-    title: "Find a GP who does ADHD assessment in Sydney",
+    keyword: "find ADHD support",
+    title: "Find ADHD support: GPs, psychologists and more",
     description:
-      "Find a GP who does ADHD assessment: describe the care you want in your own words, and the listed Sydney GPs are ordered around them with the reason shown.",
+      "Find ADHD support in your own words: describe what you need and the listed GPs, psychologists, OTs, coaches and counsellors are ordered around it, reason shown.",
   },
   {
     path: "/examples",

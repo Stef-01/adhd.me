@@ -17,7 +17,7 @@ import { type EIQuality } from "./emotional-fit";
  */
 export type { Approach, CareArea, Clinician } from "./roster";
 export { APPROACHES } from "./roster";
-export { clinicians } from "./roster";
+export { clinicians, professionOf } from "./roster";
 
 import { clinicians, type Clinician } from "./roster";
 
