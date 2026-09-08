@@ -38,6 +38,8 @@ export const EVENTS = [
   "SHARE_LINK_COPIED",
   "MEDICATION_NOTE_EDITED",
   "MEDICATION_NOTE_COPIED",
+  "ADJUSTMENTS_TRACK",
+  "ADJUSTMENTS_PROVIDERS",
 ] as const;
 export type EventName = (typeof EVENTS)[number];
 

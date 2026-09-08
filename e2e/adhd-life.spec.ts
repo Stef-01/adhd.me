@@ -462,3 +462,30 @@ test("Medication experience (PRD §47): described in the person's words, kept on
   expect(body).not.toMatch(/\b(dose|dosage|mg)\b/i);
   expect(page.url()).not.toMatch(/lunch|easier/);
 });
+
+test("Adjustments on paper (PRD §45): the need's track leads, the other is one tap away, and My ADHD links it", async ({ page }) => {
+  await page.goto("/adjustments");
+  await expect(page.getByRole("heading", { name: "Most of it exists. Most people are never told." })).toBeVisible();
+  // Nothing known: university leads, the track fewer people know exists.
+  await expect(page.getByRole("tab", { name: "University and TAFE" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("heading", { name: "Study adjustments" })).toBeVisible();
+  await page.getByRole("tab", { name: "Work" }).click();
+  await expect(page.getByRole("heading", { name: "Workplace adjustments" })).toBeVisible();
+  await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
+  // A record whose top need is a workplace one leads with work.
+  await page.evaluate((k) => {
+    localStorage.setItem(k, JSON.stringify({
+      v: 1, onboarding: { improveFirst: "reduce-work-overwhelm", impact: 8, affects: "work", completedAt: new Date().toISOString() },
+      resonance: {}, answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
+    }));
+  }, MODEL_KEY);
+  await page.reload();
+  await expect(page.getByRole("tab", { name: "Work" })).toHaveAttribute("aria-selected", "true");
+  expect(page.url()).not.toMatch(/work|overwhelm/);
+  // The support path carries the step for an institutional need.
+  await page.goto("/support");
+  await expect(page.getByRole("heading", { name: "Adjustments on paper" })).toBeVisible();
+  await page.goto("/my-adhd");
+  await page.getByRole("link", { name: "See what is commonly available" }).click();
+  await expect(page).toHaveURL(/\/adjustments$/);
+});

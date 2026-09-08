@@ -55,7 +55,7 @@ line or an analytics event.
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
-| §45–§47 Institutional navigation, support-person sharing, medication experience | | **Deferred (P1)** | — |
+| §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |
 | §52–§54 Stack, services, tables | RN/Expo, Supabase, CMS | **Not adopted** — see ADR 0004 | — |
@@ -114,7 +114,10 @@ Each item is one PR-sized piece. Nothing below is started.
       device, copy-as-text to take to whoever manages it. No dose, no timing, no verdict; the
       test refuses those words on the page. Offered from My ADHD when medication is part of the
       person's picture. (2026-09-08)
-- [ ] Institutional navigation (§45) — university accommodations, workplace adjustments.
+- [x] Institutional navigation (§45) — `/adjustments`: two tracks, university and work, each with
+      what is commonly available, who to ask, what to bring and the order it runs in; the track
+      the person's need points at leads; the support path adds a step for institutional needs;
+      linked from My ADHD. Content only, the app applies for nothing. (2026-09-08)
 - [ ] AI reflection interpretation (§29) — only a confirmed interpretation enters the model.
 - [x] P1 professions (§38): psychiatrist, dietitian, relationship counsellor, sleep clinician,
       university support service — five kinds in `professions.ts` with cues the finder reads, one
