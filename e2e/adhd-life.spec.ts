@@ -254,6 +254,7 @@ test("the care map opens from the Learn page's map icon, and a node explains its
 test("E2E 9: under reduced motion a run has no clock, the recall round works by buttons, and the keyboard plays it", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=working-memory");
+  await expect(page.getByRole("button", { name: "Tap to play" })).toBeFocused();
   await expect(page.locator(".play-clock")).toHaveCount(0);
   await page.keyboard.press("Enter"); // "Tap to play" holds focus on the title card
   await expect(page.locator(".play-kicker")).toContainText("Round 1 of 7");
