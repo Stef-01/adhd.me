@@ -44,7 +44,7 @@ line or an analytics event.
 | §26 My ADHD screen | Friction, contributors, pattern, helps, goal, worth exploring | **Done** | `app/my-adhd.tsx` |
 | §27 My Manual | Editable personal knowledge | **Deferred (P1)** | — |
 | §28 Reflection | Type / voice / select / skip | **Done** | player, `app/voice-reflection.tsx` |
-| §29 AI reflection interpretation | Suggested interpretation, user confirms | **Deferred (P1)** | — |
+| §29 Reflection interpretation | Suggested reading, user confirms | **Done** — a closed lexicon on the device, no language model; only a confirmed reading enters the model | `src/model/interpret.ts` |
 | §30–§32 Strategy → experiment → outcome → history | | **Done** | store, Today, My ADHD |
 | §33–§34 Gamification | Discovery, no streaks | **Done** — completion, insight cards; no streaks or points | — |
 | §35–§36 Support engine, priority model | Seven actions, rule-based | **Done** | `src/model/recommend.ts` |
@@ -118,7 +118,13 @@ Each item is one PR-sized piece. Nothing below is started.
       what is commonly available, who to ask, what to bring and the order it runs in; the track
       the person's need points at leads; the support path adds a step for institutional needs;
       linked from My ADHD. Content only, the app applies for nothing. (2026-09-08)
-- [ ] AI reflection interpretation (§29) — only a confirmed interpretation enters the model.
+- [x] Reflection interpretation (§29) — `src/model/interpret.ts`: a closed lexicon of cues (short on
+      sleep, a vague brief, a manager, a phone…) reads a reflection into at most two readings in the
+      person's own vocabulary, offered after the reflect beat as "It sounds like … was part of it";
+      a yes writes the subdomain and the note as a contributor on the module's need, a "not quite"
+      writes nothing, and the text never leaves the reflection. No language model: the PRD's
+      "AI" is done as a rule the person can see through, and an LLM can replace the lexicon behind
+      the same contract when there is a key and a reason. (2026-09-08)
 - [x] P1 professions (§38): psychiatrist, dietitian, relationship counsellor, sleep clinician,
       university support service — five kinds in `professions.ts` with cues the finder reads, one
       synthetic example of each on the roster, a `regular-eating` expertise tag, and the eating,

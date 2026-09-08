@@ -15,12 +15,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { expiryIsHit, fasterBefore, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
-import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
 import { Mechanic, ownsScene } from "./mechanics";
 import { Scene } from "./scene";
 import { SafetyScreen } from "../safety-screen";
 import { VoiceReflection } from "../voice-reflection";
+import { interpret, type Interpretation } from "@/model/interpret";
 
 const SPRING = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
 const RESULT_MS = 1500;
@@ -44,6 +45,8 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   const [record, setRecord] = useState<ModelRecord | null>(null);
   const [cleared, setCleared] = useState<Record<string, boolean>>({});
   const [reflection, setReflection] = useState("");
+  /** PRD §29: readings of the reflection just written, offered once, entering the model only on a yes. */
+  const [reading, setReading] = useState<readonly Interpretation[] | null>(null);
   const [safety, setSafety] = useState<ReturnType<typeof activeSafety>>(null);
   const { phase, round, index } = runPhaseAt(run, step);
 
@@ -59,9 +62,18 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
       refresh(r);
       setReflection("");
       if (hit) { track("SAFETY_TRIGGERED", { module: run.id, rule: hit }); setSafety(activeSafety(r)); return; }
+      const readings = interpret(reflection);
+      if (readings.length) { setReading(readings); track("INTERPRETATION_OFFERED", { module: run.id, readings: readings.length }); return; }
     }
     next();
   };
+  const confirmReading = (r: Interpretation) => {
+    refresh(confirmInterpretation(deviceLearningStorage, run.id, r));
+    track("INTERPRETATION_CONFIRMED", { module: run.id, subdomain: r.subdomain });
+    setReading(null);
+    next();
+  };
+  const declineReading = () => { track("INTERPRETATION_DECLINED", { module: run.id }); setReading(null); next(); };
 
   if (safety) {
     return <SafetyScreen ruleId={safety.ruleId} onAcknowledge={() => { refresh(acknowledgeSafety(deviceLearningStorage)); setSafety(null); }} />;
@@ -151,7 +163,24 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
             );
           })()}
 
-          {phase === "reflect" && run.reflect && (
+          {phase === "reflect" && reading && (
+            <div className="play-card play-reading" role="group" aria-labelledby="play-reading-title">
+              <Bean who={run.bean} mood="thinking" size={100} />
+              <p className="play-kicker">A reading, yours to confirm</p>
+              <h2 id="play-reading-title" className="play-title">{reading.length === 1 ? reading[0]!.sentence : "It sounds like two things were part of it."}</h2>
+              <p className="play-body">Only what you say yes to goes into your picture. What you wrote stays where it is.</p>
+              <div className="play-choices" role="group" aria-label="Readings">
+                {reading.map((r) => (
+                  <button key={r.subdomain} type="button" className="play-choice is-wide" onClick={() => confirmReading(r)}>
+                    <Check size={16} weight="bold" aria-hidden="true" /> {reading.length === 1 ? "Yes, that was it" : r.note}
+                  </button>
+                ))}
+              </div>
+              <button type="button" className="play-tempt" onClick={declineReading}>Not quite <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+            </div>
+          )}
+
+          {phase === "reflect" && run.reflect && !reading && (
             <div className="play-card">
               <Bean who={run.bean} mood="thinking" size={100} />
               <p className="play-kicker">Optional</p>

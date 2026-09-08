@@ -489,3 +489,31 @@ test("Adjustments on paper (PRD §45): the need's track leads, the other is one 
   await page.getByRole("link", { name: "See what is commonly available" }).click();
   await expect(page).toHaveURL(/\/adjustments$/);
 });
+
+test("Reflection interpretation (PRD §29): a reading is offered in the person's own words, and only a yes enters the model", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=perfectionism");
+  await playToReflect(page);
+  await page.locator(".reflect-field textarea").fill("I hadn't slept and the brief was vague");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  const reading = page.getByRole("group", { name: "It sounds like two things were part of it." });
+  await expect(reading).toBeVisible();
+  await expect(reading).toContainText("Only what you say yes to goes into your picture");
+  expect(page.url()).not.toMatch(/slept|vague|brief/);
+  await reading.getByRole("button", { name: "Short on sleep" }).click();
+  // On to the try beat; the model holds the reading, not the text.
+  await expect(page.locator(".play-run[data-phase=\"try\"]")).toBeVisible();
+  const held = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}").interpretations, MODEL_KEY);
+  expect(held).toHaveLength(1);
+  expect(held[0]).toMatchObject({ moduleId: "perfectionism", subdomain: "sleep", note: "Short on sleep" });
+  expect(JSON.stringify(held)).not.toMatch(/vague|brief/);
+  // A reflection the lexicon cannot read goes straight on, with nothing offered. (Fresh device: the
+  // run would otherwise resume where it left off.)
+  await page.evaluate(() => localStorage.clear());
+  await page.goto("/approach?module=perfectionism");
+  await playToReflect(page);
+  await page.locator(".reflect-field textarea").fill("It went fine, actually.");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".play-run[data-phase=\"try\"]")).toBeVisible();
+  await expect(page.locator(".play-reading")).toHaveCount(0);
+});
