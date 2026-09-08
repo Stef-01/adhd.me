@@ -1,5 +1,6 @@
 /* Play (docs/adhd-life/PLAY-PLAN.md §4): big beans, flat bright rounds, one clock, ≤ 14 words. */
-.play-run { max-width: 640px; margin: 0 auto; }
+/* The bar (title, progress) keeps the shell width; the stage itself is a phone-wide column. */
+.play-stage { max-width: 640px; margin: 0 auto; }
 .play-stage { min-height: 60dvh; }
 .play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 22px 20px 26px; border-radius: 28px; background: var(--route-soft); text-align: center; overflow: hidden; }
 .play-card.is-title { background: var(--accent-soft); padding-top: 34px; }
@@ -23,7 +24,7 @@
 @media (prefers-reduced-motion: reduce) { .play-instruction { transition: none; } .play-instruction.is-callout { animation: none; } }
 .play-line { margin: 0; max-width: 34ch; color: var(--ink); font-size: 1.0625rem; line-height: 1.5; }
 /* The scene (P5): a full-width stage with one flat prop, the bean standing in it. */
-.play-scene { position: relative; width: 100%; height: 216px; border-radius: 20px; overflow: hidden; }
+.play-scene { position: relative; width: 100%; aspect-ratio: 360 / 216; border-radius: 20px; overflow: hidden; }
 .play-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .play-scene-bean { position: absolute; left: 16%; bottom: 8px; transform: translateX(-50%); }
 .play-scene[data-prop="none"] .play-scene-bean { left: 50%; }
