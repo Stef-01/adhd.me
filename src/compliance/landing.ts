@@ -36,7 +36,10 @@ const BANNED_PATTERNS: Array<{ rule: string; pattern: RegExp }> = [
   // No patient-facing therapeutic advertising / clinical claims.
   {
     rule: "no-clinical-claims",
-    pattern: /\b(diagnos\w*|treat(?:s|ment|ing)?|cure\w*|heal(?:s|ing)?|therap\w*|prescrib\w*)\b/i,
+    // "Occupational therapist" is the name of a registered profession, not a therapeutic claim —
+    // the finder lists them beside GPs since the support broadening (2026-09-08). The lookbehind
+    // exempts exactly that title and nothing else: "therapy", "therapist" alone still fire.
+    pattern: /\b(diagnos\w*|treat(?:s|ment|ing)?|cure\w*|heal(?:s|ing)?|(?<!occupational )therap\w*|prescrib\w*)\b/i,
   },
   { rule: "no-health-outcome-promise", pattern: /\b(healthier|better health|improve[sd]? (?:your )?health|live longer|save lives)\b/i },
   { rule: "no-condition-targeting", pattern: /\b(diabetes|blood pressure|hypertension|cancer|kidney|heart disease|mental health)\b/i },
