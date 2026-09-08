@@ -24,6 +24,15 @@ without updating the register is a build failure, not a review finding.
   reader must scan two regions to join one fact, the layout is wrong. {#layout.shared-row}
 - **Five, then the rest.** Long lists show a chooseable few with the remainder one tap away.
   Never render an unbounded list as the default state. {#layout.five-then-rest}
+- **The game bleeds to the edge** (founder, 2026-09-08: "it should feel immersive"). In Play
+  the stage is the screen: its ground runs to the viewport edges, the scene runs edge to edge
+  on a phone, and there is no card drawn around it. There is zero header while a run is open:
+  the shell's header is gone, the stage starts at the top edge, an X at top left backs out,
+  and the progress sits beside it in one slim housing (`.play-hut`) over the stage — the only
+  chrome the game carries. {#layout.full-bleed-play}
+- **No boxes inside boxes.** One container per idea. A border, a radius or a shadow says
+  "separate object" and is spent once per screen; a window inside a window inside a shell is
+  never the answer. {#layout.one-container}
 
 ## Type & colour
 
@@ -34,6 +43,22 @@ without updating the register is a build failure, not a review finding.
   non-breaking spaces inside names and units. {#type.numeric-typography}
 - Palette tokens only (`--ink`, `--muted`, `--accent`, `--paper`…); no raw hex in
   components. {#type.palette-tokens}
+- **Glass is the surface for all UI** (founder, 2026-09-08, twice: "implement liquid glass for
+  all UI", after iyinchao/liquid-glass-studio, MIT). Every raised surface carries the glass in
+  `app/styles/glass.css`: a light fill, a bright inner rim, a dispersion split on the edge (warm
+  one way, cool the other), a Fresnel ring, one glare band at a fixed angle that dims on press,
+  superellipse corners where the engine draws them, and a blurred, saturated backdrop on the FULL
+  tier (chrome, chips, small controls) but not the LITE tier (cards, rows, panels, fields), because
+  a backdrop filter is a compositing layer and a results list has forty rows. The studio's knobs
+  are the `--lg-*` tokens. Accent surfaces are tinted glass: they keep their colour and take the
+  rim and the glare. Two rules the studio cannot teach: a backdrop filter on an ancestor becomes
+  the containing block of any fixed descendant (so the header, which holds the tab bar, is glass
+  by fill and rim only), and a measured control keeps its box (the sheet's handle: no border on
+  the sheet; the profile facts stay transparent). Ink stays ink; every glass surface is light;
+  reduced transparency gets paper. {#type.glass-chrome}
+- **Minimal darkness** (founder, 2026-09-08). Ink is for text. No black or near-black fill as
+  a block, a pill or a button on a patient screen; a control sits on paper, stone or the accent.
+  Drawn props are mid-tone, never a dark silhouette. {#type.no-dark-blocks}
 
 ## Interaction
 

@@ -6,6 +6,7 @@ import "./styles/finder.css";
 import "./styles/platform-surfaces.css";
 import "./styles/life.css";
 import "./styles/play.css";
+import "./styles/glass.css";
 import "./styles/brand.css";
 import "./styles/learning-play.css";
 import { SiteMotion } from "./site-motion";
@@ -132,6 +133,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
         />
+        {/* Liquid glass refraction map (app/styles/glass.css): a radial bulge the backdrop bends through. */}
+        <svg aria-hidden="true" width="0" height="0" style={{ position: "absolute" }}>
+          <filter id="lg-refract" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+            <feImage href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='60%25'%3E%3Cstop offset='0' stop-color='%23808080'/%3E%3Cstop offset='0.82' stop-color='%23808080'/%3E%3Cstop offset='1' stop-color='%23c0a060'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23g)'/%3E%3C/svg%3E" result="map" preserveAspectRatio="none" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="14" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
         <SiteMotion>{children}</SiteMotion>
         <AcknowledgementOfCountry />
         <PrivacyConsent />

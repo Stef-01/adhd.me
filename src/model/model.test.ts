@@ -8,7 +8,7 @@ import { checkSafety, SAFETY_RULES } from "./safety";
 import { ENOUGH_FOR_NOW, mayAskOptional, MAX_CONSECUTIVE_QUESTIONS, surveyFatigue } from "./fatigue";
 import { EVENTS, safeProps, track } from "./events";
 import { improveOptions, improveOption, QUESTIONS } from "./onboarding";
-import { acceptExperiment, acknowledgeSafety, activeSafety, clearModel, completeOnboarding, emptyModel, MODEL_KEY, pendingExperiment, readModel, recordAnswer, recordInsight, recordOutcome, recordReflection, recordResonance, saveOnboarding, writeModel, type ModelRecord } from "./store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, clearModel, completeOnboarding, emptyModel, MODEL_KEY, pendingExperiment, readModel, recordAnswer, recordInsight, recordOutcome, recordReflection, recordResonance, saveOnboarding, writeModel, type ModelRecord, recordRelate, meanRelate } from "./store";
 import { deriveNeeds, priorityScore } from "./needs";
 import { escalationEligible, professionsFor, recommend, summarise } from "./recommend";
 import { LAYERS, SUBDOMAINS, subdomainsOf } from "./layers";
@@ -313,5 +313,22 @@ describe("synthetic profiles (§73)", () => {
       expect(other.action).toBe(base.action);
       expect(other.moduleId).toBe(base.moduleId);
     }
+  });
+});
+
+describe("the relate beat (play, founder 2026-09-08)", () => {
+  it("writes one 0–10 answer per round, clamps, reads back as a mean, and stands in for cost when the run gave none", () => {
+    const s = fakeStorage();
+    recordRelate(s, "starting", "coffee", 10);
+    recordRelate(s, "starting", "help", 14);
+    recordRelate(s, "starting", "help", 3);
+    expect(readModel(s).relates.starting).toEqual({ coffee: 10, help: 3 });
+    expect(meanRelate(readModel(s), "starting")).toBe(7);
+    expect(meanRelate(readModel(s), "sleep")).toBeNull();
+    recordResonance(s, "starting", { frequency: "rarely" });
+    const need = deriveNeeds(readModel(s)).find((n) => n.subdomain === "activation")!;
+    expect(need.functionalCost).toBe(7);
+    recordResonance(s, "starting", { cost: 2 });
+    expect(deriveNeeds(readModel(s)).find((n) => n.subdomain === "activation")!.functionalCost).toBe(2);
   });
 });

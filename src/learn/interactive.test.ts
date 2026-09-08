@@ -13,13 +13,13 @@ const known = new Set(SUBDOMAINS.map((s) => s.id));
 
 describe("the fifteen modules", () => {
   it("are fifteen, each seven to twelve minutes, each in the shelves and the module list exactly once", () => {
-    expect(INTERACTIVE_MODULES.length).toBe(15);
+    expect(INTERACTIVE_MODULES.length).toBe(20);
     const ids = INTERACTIVE_MODULES.map((m) => m.id);
     expect(new Set(ids).size).toBe(ids.length);
     const shelved = SHELVES.flatMap((s) => s.modules);
     for (const id of ids) {
       expect(shelved.filter((s) => s === id).length, id).toBe(1);
-      expect(["interactive", "run"]).toContain(MODULES.find((m) => m.id === id)?.kind);
+      expect(MODULES.find((m) => m.id === id)?.kind).toBe("run");
     }
     for (const m of INTERACTIVE_MODULES) {
       expect(m.minutes).toBeGreaterThanOrEqual(6);
@@ -42,7 +42,6 @@ describe("the fifteen modules", () => {
       expect(kinds.indexOf("resonance")).toBeLessThan(kinds.indexOf("explain"));
       expect(kinds.indexOf("explain")).toBeLessThan(kinds.indexOf("strategy"));
       const listed = MODULES.find((x) => x.id === m.id)!;
-      if (listed.kind === "interactive") expect(cardCount(listed)).toBe(m.steps.length);
     }
   });
 

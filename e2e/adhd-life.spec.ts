@@ -18,10 +18,13 @@ async function playToReflect(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Ask the reader" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /I guess, and aim high/ }).click();
+  await page.getByRole("button", { name: "The night before" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /Being judged/ }).click();
-  await page.getByRole("button", { name: "That’s me" }).click();
+  await page.getByRole("group", { name: "Perspectives" }).getByRole("button", { name: "Priya" }).click();
+  await page.getByRole("group", { name: "Perspectives" }).getByRole("button", { name: "The reader" }).click();
+  await page.getByRole("button", { name: "Both are true" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /I guess, and aim high/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -96,12 +99,19 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   // Round 5: hold.
   await page.getByRole("button", { name: "I held on" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Round 6: pick your bean (writes an answer).
-  await page.getByRole("button", { name: /Vague ones/ }).click();
-  await page.getByRole("button", { name: "That’s me" }).click();
+  // Round 6: timing — under reduced motion, choose the moment.
+  await page.getByRole("button", { name: "Ten minutes, then stop" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Round 7.
-  await page.getByRole("button", { name: /Another person/ }).click();
+  // Round 7: sort each cause into its layer.
+  for (const [cause, layer] of [["A vague brief", "Environment"], ["Five hours’ sleep", "Body"], ["A manager who will judge it", "People"]] as const) {
+    await page.getByRole("group", { name: "Causes" }).getByRole("button", { name: cause }).click();
+    await page.getByRole("group", { name: "Layers" }).getByRole("button", { name: new RegExp(layer) }).click();
+  }
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 8: pick your bean (writes an answer).
+  await page.getByRole("button", { name: /Vague ones/ }).click();
   await page.getByRole("button", { name: "That’s me" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   // Recognition: Next is held until a frequency is given.
@@ -123,7 +133,6 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   expect(record.resonance?.starting?.frequency).toBe("often");
   expect(record.resonance?.starting?.cost).toBe(7);
   expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
-  expect(record.answers?.["starting.what-helps-start"]).toEqual(["person"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
   expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
@@ -132,7 +141,6 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await page.goto("/my-adhd");
   await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
   await expect(page.getByText("Activation for ambiguous tasks", { exact: true })).toBeVisible();
-  await expect(page.getByText("External accountability helps", { exact: true })).toBeVisible();
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
@@ -154,8 +162,10 @@ test("Play: with motion on, the clock runs a round on its own and a held 'don't 
   await page.getByRole("button", { name: "Tap to play" }).click();
   await expect(page.locator(".play-clock")).toBeVisible();
   await expect(page.locator(".play-verdict")).toContainText("Cleared", { timeout: 12000 });
-  // Auto-advance, then round two waits for a gesture.
-  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 7", { timeout: 4000 });
+  // The relate beat holds the result (no auto-advance on a round that asks a question); Next moves on, and round two waits for a gesture.
+  await expect(page.getByRole("group", { name: "How much is this you?" })).toBeVisible();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 8", { timeout: 4000 });
   await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible();
   // Touch floor on the round's controls.
   for (const box of await page.locator(".play-choice").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(box).toBeGreaterThanOrEqual(44);
@@ -256,8 +266,9 @@ test("E2E 9: under reduced motion a run has no clock, the recall round works by 
   await page.goto("/approach?module=working-memory");
   await expect(page.getByRole("button", { name: "Tap to play" })).toBeFocused();
   await expect(page.locator(".play-clock")).toHaveCount(0);
-  await page.keyboard.press("Enter"); // "Tap to play" holds focus on the title card
-  await expect(page.locator(".play-kicker")).toContainText("Round 1 of 7");
+  await page.getByRole("button", { name: "Tap to play" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".play-kicker")).toContainText("Round 1 of 8");
   await page.getByRole("button", { name: "I have them" }).click();
   await page.getByRole("button", { name: /Reply, then keep walking/ }).click();
   for (const item of ["Milk", "The parcel", "Stamps", "Sam’s script"]) await page.getByRole("group", { name: "What was on the list" }).getByRole("button", { name: item }).click();
@@ -265,7 +276,7 @@ test("E2E 9: under reduced motion a run has no clock, the recall round works by 
   await expect(page.locator(".play-verdict")).toContainText("Cleared");
   await expect(page.locator(".play-result")).toContainText("All four");
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 7");
+  await expect(page.locator(".play-kicker")).toContainText("Round 2 of 8");
   await expect(page.locator(".play-clock")).toHaveCount(0);
 });
 
@@ -361,12 +372,176 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
 
 test("Play P3: the cast wakes as runs are cleared — discovery, never a streak", async ({ page }) => {
   await page.goto("/approach");
-  const cast = page.getByRole("list", { name: /Beans collected: 0 of 15/ });
+  const cast = page.getByRole("list", { name: /Beans collected: 0 of 20/ });
   await expect(cast).toBeVisible();
   await expect(cast.locator("li.is-awake")).toHaveCount(0);
   await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["starting", "sleep"] })));
   await page.reload();
-  await expect(page.getByRole("list", { name: /Beans collected: 2 of 15/ })).toBeVisible();
+  await expect(page.getByRole("list", { name: /Beans collected: 2 of 20/ })).toBeVisible();
   await expect(page.locator(".play-cast li.is-awake")).toHaveCount(2);
   await expect(page.locator(".play-cast li.is-awake").first()).toContainText("Maya");
+});
+
+test("Play P6: the catch and balance mechanics play by buttons under reduced motion, and a run is never mostly tapping", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=eating");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await page.getByRole("button", { name: "I held off" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "At 3pm, shaky" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Catch, by buttons: keep the three no-cook foods, leave the decoys.
+  const keep = page.getByRole("group", { name: "What to keep" });
+  for (const item of ["Yoghurt", "Boiled eggs", "Nuts"]) await keep.getByRole("button", { name: item, exact: true }).click();
+  await page.getByRole("button", { name: "Keep these" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator(".play-result")).toContainText("no cooking");
+  // Balance, by buttons, in the gut run.
+  await page.goto("/approach?module=gut");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await page.getByRole("button", { name: "A regular-ish meal" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator(".play-result")).toContainText("plain routine");
+});
+
+test("Play P6: the exercise run's bean is drawn fit", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=exercise");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await expect(page.locator('.play-scene .bean[data-look="fit"]')).toHaveCount(1);
+});
+
+test("My Manual (PRD §27): written by the person, kept on the device, suggestions offered and never inserted", async ({ page }) => {
+  await page.goto("/manual");
+  await expect(page.getByRole("heading", { name: "How I work, in my own words." })).toBeVisible();
+  // Empty to start: nothing written for the person, nothing to copy.
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
+  await page.getByRole("textbox", { name: "What helps me" }).fill("A clear first step");
+  await page.waitForTimeout(600);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeEnabled();
+  // A strategy that helped becomes a suggestion, and only a tap makes it text.
+  await page.evaluate((k) => {
+    const r = JSON.parse(localStorage.getItem(k) ?? "{}");
+    r.onboarding = { stage: "think-so", hardest: ["starting"], impact: 7, improveFirst: "start-earlier", completedAt: new Date().toISOString() };
+    r.experiments = [{ moduleId: "starting", strategyId: "first-physical-action", acceptedAt: new Date().toISOString(), outcome: "a-lot", outcomeAt: new Date().toISOString() }];
+    localStorage.setItem(k, JSON.stringify(r));
+  }, MODEL_KEY);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
+  await page.getByRole("group", { name: "Suggestions for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
+  await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step\nThe first physical action");
+  expect(page.url()).not.toMatch(/first|step|starting/);
+  // Reachable from My ADHD, and the tab claims it.
+  await page.goto("/my-adhd");
+  await page.getByRole("link", { name: "Open my manual" }).click();
+  await expect(page).toHaveURL(/\/manual$/);
+});
+
+test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/approach?module=starting");
+  await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
+  await page.getByRole("button", { name: "Share this run" }).click();
+  await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
+  const text = await page.evaluate(() => navigator.clipboard.readText());
+  expect(text).toMatch(/\/approach\?module=starting$/);
+  await expect(page.getByText("Nothing about you is in the link")).toBeVisible();
+});
+
+test("Medication experience (PRD §47): described in the person's words, kept on the device, never advised on", async ({ page }) => {
+  await page.goto("/medication");
+  await expect(page.getByRole("heading", { name: "What it changes, what it leaves, in your words." })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
+  await page.getByRole("textbox", { name: "What it seems to change" }).fill("Starting is easier before lunch");
+  await page.waitForTimeout(600);
+  await page.reload();
+  await expect(page.getByRole("textbox", { name: "What it seems to change" })).toHaveValue("Starting is easier before lunch");
+  await expect(page.getByRole("button", { name: /Copy as text/ })).toBeEnabled();
+  const body = await page.locator("main, body").first().innerText();
+  expect(body).not.toMatch(/\b(dose|dosage|mg)\b/i);
+  expect(page.url()).not.toMatch(/lunch|easier/);
+});
+
+test("Adjustments on paper (PRD §45): the need's track leads, the other is one tap away, and My ADHD links it", async ({ page }) => {
+  await page.goto("/adjustments");
+  await expect(page.getByRole("heading", { name: "Most of it exists. Most people are never told." })).toBeVisible();
+  // Nothing known: university leads, the track fewer people know exists.
+  await expect(page.getByRole("tab", { name: "University and TAFE" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("heading", { name: "Study adjustments" })).toBeVisible();
+  await page.getByRole("tab", { name: "Work" }).click();
+  await expect(page.getByRole("heading", { name: "Workplace adjustments" })).toBeVisible();
+  await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
+  // A record whose top need is a workplace one leads with work.
+  await page.evaluate((k) => {
+    localStorage.setItem(k, JSON.stringify({
+      v: 1, onboarding: { improveFirst: "reduce-work-overwhelm", impact: 8, affects: "work", completedAt: new Date().toISOString() },
+      resonance: {}, answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
+    }));
+  }, MODEL_KEY);
+  await page.reload();
+  await expect(page.getByRole("tab", { name: "Work" })).toHaveAttribute("aria-selected", "true");
+  expect(page.url()).not.toMatch(/work|overwhelm/);
+  // The support path carries the step for an institutional need.
+  await page.goto("/support");
+  await expect(page.getByRole("heading", { name: "Adjustments on paper" })).toBeVisible();
+  await page.goto("/my-adhd");
+  await page.getByRole("link", { name: "See what is commonly available" }).click();
+  await expect(page).toHaveURL(/\/adjustments$/);
+});
+
+test("Reflection interpretation (PRD §29): a reading is offered in the person's own words, and only a yes enters the model", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=perfectionism");
+  await playToReflect(page);
+  await page.locator(".reflect-field textarea").fill("I hadn't slept and the brief was vague");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  const reading = page.getByRole("group", { name: "It sounds like two things were part of it." });
+  await expect(reading).toBeVisible();
+  await expect(reading).toContainText("Only what you say yes to goes into your picture");
+  expect(page.url()).not.toMatch(/slept|vague|brief/);
+  await reading.getByRole("button", { name: "Short on sleep" }).click();
+  // On to the try beat; the model holds the reading, not the text.
+  await expect(page.locator(".play-run[data-phase=\"try\"]")).toBeVisible();
+  const held = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}").interpretations, MODEL_KEY);
+  expect(held).toHaveLength(1);
+  expect(held[0]).toMatchObject({ moduleId: "perfectionism", subdomain: "sleep", note: "Short on sleep" });
+  expect(JSON.stringify(held)).not.toMatch(/vague|brief/);
+  // A reflection the lexicon cannot read goes straight on, with nothing offered. (Fresh device: the
+  // run would otherwise resume where it left off.)
+  await page.evaluate(() => localStorage.clear());
+  await page.goto("/approach?module=perfectionism");
+  await playToReflect(page);
+  await page.locator(".reflect-field textarea").fill("It went fine, actually.");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".play-run[data-phase=\"try\"]")).toBeVisible();
+  await expect(page.locator(".play-reading")).toHaveCount(0);
+});
+
+test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you — buttons, then a slider", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  // Round 1 (dont-tap) has no right answer to infer, so no clue; its relate beat is the buttons.
+  await expect(page.locator(".play-clue")).toHaveCount(0);
+  await page.getByRole("button", { name: "I held off" }).click();
+  const relate = page.getByRole("group", { name: "How much is this you?" });
+  await expect(relate).toBeVisible();
+  await relate.getByRole("button", { name: "Very me" }).click();
+  await expect(relate.getByRole("button", { name: "Very me" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Round 2 (order) has a right order, so the clue says which; its relate beat is the slider.
+  await expect(page.locator(".play-clue")).toContainText("Opening a file is smaller");
+  for (const step of ["Open the file", "Type the title", "Write one bad sentence"]) await page.getByRole("button", { name: step }).click();
+  const slider = page.getByRole("slider", { name: "How much is this you?" });
+  await expect(slider).toBeVisible();
+  await slider.focus();
+  await page.keyboard.press("End");
+  await expect(slider).toHaveAttribute("aria-valuetext", /10 out of 10, very me/);
+  const held = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}").relates, MODEL_KEY);
+  expect(held.starting).toEqual({ coffee: 10, "first-move": 10 });
+  expect(page.url()).not.toMatch(/relate|very/);
 });

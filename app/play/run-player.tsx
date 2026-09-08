@@ -10,16 +10,18 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Play, Sparkle } from "@phosphor-icons/react";
+import { ArrowRight, Check, Play, ShareNetwork, Sparkle, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, fasterBefore, rampedSeconds, runPhaseAt, type Run } from "@/learn/play";
+import { expiryIsHit, fasterBefore, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
-import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
-import { Mechanic } from "./mechanics";
+import { Mechanic, ownsScene } from "./mechanics";
+import { Scene } from "./scene";
 import { SafetyScreen } from "../safety-screen";
 import { VoiceReflection } from "../voice-reflection";
+import { interpret, type Interpretation } from "@/model/interpret";
 
 const SPRING = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
 const RESULT_MS = 1500;
@@ -30,18 +32,21 @@ const FREQUENCIES: ReadonlyArray<{ id: Frequency; label: string }> = [{ id: "oft
 const PRIORITIES: ReadonlyArray<{ id: Priority; label: string }> = [{ id: "yes", label: "Yes" }, { id: "maybe", label: "Maybe" }, { id: "no", label: "No" }];
 const VERDICTS: ReadonlyArray<{ id: InsightVerdict; label: string }> = [{ id: "yes", label: "That’s me" }, { id: "partly", label: "Partly" }, { id: "no", label: "Not really" }];
 
-export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
+export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }: {
   run: Run;
   step: number;
   onStep: (next: number) => void;
   onFinish: () => void;
   onOpenModule: (id: string) => void;
-  bar: React.ReactNode;
+  onLeave: () => void;
 }) {
   const reducedMotion = Boolean(useReducedMotion());
+  const total = runStepCount(run);
   const [record, setRecord] = useState<ModelRecord | null>(null);
   const [cleared, setCleared] = useState<Record<string, boolean>>({});
   const [reflection, setReflection] = useState("");
+  /** PRD §29: readings of the reflection just written, offered once, entering the model only on a yes. */
+  const [reading, setReading] = useState<readonly Interpretation[] | null>(null);
   const [safety, setSafety] = useState<ReturnType<typeof activeSafety>>(null);
   const { phase, round, index } = runPhaseAt(run, step);
 
@@ -57,9 +62,18 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
       refresh(r);
       setReflection("");
       if (hit) { track("SAFETY_TRIGGERED", { module: run.id, rule: hit }); setSafety(activeSafety(r)); return; }
+      const readings = interpret(reflection);
+      if (readings.length) { setReading(readings); track("INTERPRETATION_OFFERED", { module: run.id, readings: readings.length }); return; }
     }
     next();
   };
+  const confirmReading = (r: Interpretation) => {
+    refresh(confirmInterpretation(deviceLearningStorage, run.id, r));
+    track("INTERPRETATION_CONFIRMED", { module: run.id, subdomain: r.subdomain });
+    setReading(null);
+    next();
+  };
+  const declineReading = () => { track("INTERPRETATION_DECLINED", { module: run.id }); setReading(null); next(); };
 
   if (safety) {
     return <SafetyScreen ruleId={safety.ruleId} onAcknowledge={() => { refresh(acknowledgeSafety(deviceLearningStorage)); setSafety(null); }} />;
@@ -67,7 +81,17 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
 
   return (
     <section className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
-      {bar}
+      <h1 id="learn-module-title" className="sr-only">{run.title}</h1>
+      {/* Zero header (founder, 2026-09-08): an X to back out, and the progress in its own small housing. */}
+      <div className="play-top">
+        <button type="button" className="play-x" aria-label="All modules" onClick={onLeave}><X size={20} weight="bold" aria-hidden="true" /></button>
+        <div className="play-hut">
+          <ol className="learn-dots play-dots" aria-hidden="true">
+            {Array.from({ length: total }, (_, i) => <li key={i} className={i === step ? "is-current" : i < step ? "is-done" : ""} />)}
+          </ol>
+          <span className="play-count" aria-live="polite">{Math.min(step + 1, total)} of {total}</span>
+        </div>
+      </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={step} className="play-stage" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -12, transition: { duration: 0.12 } }} transition={{ ...SPRING, opacity: { duration: 0.18 } }}>
           {phase === "title" && (
@@ -77,6 +101,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
               <h2 className="play-title">{run.title}</h2>
               <p className="play-line">{run.tagline}</p>
               <button type="button" className="play-tempt is-go" onClick={next} autoFocus><Play size={18} weight="fill" aria-hidden="true" /> Tap to play</button>
+              <ShareRun runId={run.id} />
             </div>
           )}
 
@@ -138,7 +163,24 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
             );
           })()}
 
-          {phase === "reflect" && run.reflect && (
+          {phase === "reflect" && reading && (
+            <div className="play-card play-reading" role="group" aria-labelledby="play-reading-title">
+              <Bean who={run.bean} mood="thinking" size={100} />
+              <p className="play-kicker">A reading, yours to confirm</p>
+              <h2 id="play-reading-title" className="play-title">{reading.length === 1 ? reading[0]!.sentence : "It sounds like two things were part of it."}</h2>
+              <p className="play-body">Only what you say yes to goes into your picture. What you wrote stays where it is.</p>
+              <div className="play-choices" role="group" aria-label="Readings">
+                {reading.map((r) => (
+                  <button key={r.subdomain} type="button" className="play-choice is-wide" onClick={() => confirmReading(r)}>
+                    <Check size={16} weight="bold" aria-hidden="true" /> {reading.length === 1 ? "Yes, that was it" : r.note}
+                  </button>
+                ))}
+              </div>
+              <button type="button" className="play-tempt" onClick={declineReading}>Not quite <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+            </div>
+          )}
+
+          {phase === "reflect" && run.reflect && !reading && (
             <div className="play-card">
               <Bean who={run.bean} mood="thinking" size={100} />
               <p className="play-kicker">Optional</p>
@@ -251,12 +293,23 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
     raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", onVisibility); };
   }, [beat, reducedMotion, seconds, round.mechanic, settle]);
-  // Auto-advance after the result beat; the button is always there too.
+  // The relate beat (founder, 2026-09-08): after the result, "How much is this you?" — buttons on
+  // one round, the slider on the next. Optional: Next is always there. A round with the beat does
+  // not auto-advance, because a question you have not read is not a question.
+  const relateForm = relateFormFor(round, index);
+  const [related, setRelated] = useState<number | null>(null);
+  const [slid, setSlid] = useState(5);
+  const relate = (value: number) => {
+    setRelated(value);
+    recordRelate(deviceLearningStorage, run.id, round.id, value);
+    track("ROUND_RELATED", { module: run.id, round: round.id, form: relateForm ?? "none", value });
+  };
+  // Auto-advance after the result beat when there is nothing to answer; the button is always there too.
   useEffect(() => {
-    if (beat !== "result" || reducedMotion) return;
+    if (beat !== "result" || reducedMotion || relateForm) return;
     const t = window.setTimeout(onAdvance, RESULT_MS);
     return () => window.clearTimeout(t);
-  }, [beat, reducedMotion, onAdvance]);
+  }, [beat, reducedMotion, onAdvance, relateForm]);
 
   const mood = beat === "result" ? (hit ? "pleased" : "embarrassed") : (round.mood ?? "neutral");
   return (
@@ -269,18 +322,62 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
       )}
       {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
       <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
-      {beat !== "faster" && <div className="play-scene"><Bean who={round.who} mood={mood} size={128} /></div>}
       {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
+      {beat === "play" && round.clue && <p className="play-clue"><Sparkle size={14} weight="fill" aria-hidden="true" /> {round.clue}</p>}
+      {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} result={beat === "result" ? (hit ? "hit" : "miss") : undefined} />}
       {beat !== "result" && (
-        <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} onResult={settle} />
+        <>
+          <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} mood={mood} onResult={settle} />
+          <p className="play-rule">{reducedMotion ? RULES[round.mechanic].reduced : RULES[round.mechanic].motion}</p>
+        </>
       )}
       {beat === "result" && (
         <motion.div className="play-result" role="status" initial={reducedMotion ? false : { scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={SPRING}>
           <p className="play-verdict">{hit ? <><Check size={18} weight="bold" aria-hidden="true" /> Cleared</> : "Not this time"}</p>
           <p className="play-line">{hit ? round.hit : round.miss}</p>
-          <button type="button" className="play-tempt is-go" onClick={onAdvance} autoFocus>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+          {relateForm === "buttons" && (
+            <div className="play-relate" role="group" aria-label={RELATE_PROMPT}>
+              <p className="play-relate-prompt">{RELATE_PROMPT}</p>
+              <div className="play-choices">
+                {RELATE_BUTTONS.map((b) => <button key={b.id} type="button" className="play-choice" aria-pressed={related === b.value} onClick={() => relate(b.value)}>{b.label}</button>)}
+              </div>
+            </div>
+          )}
+          {relateForm === "slider" && (
+            <div className="play-relate">
+              <label className="play-likert">
+                <span className="play-relate-prompt">{RELATE_PROMPT}</span>
+                <input type="range" min={0} max={10} step={1} value={related ?? slid} aria-valuetext={`${related ?? slid} out of 10, ${(related ?? slid) <= 2 ? "not me" : (related ?? slid) >= 8 ? "very me" : "a bit"}`} onChange={(e) => setSlid(Number(e.target.value))} onPointerUp={(e) => relate(Number((e.target as HTMLInputElement).value))} onKeyUp={(e) => relate(Number((e.target as HTMLInputElement).value))} />
+                <span className="play-likert-ends" aria-hidden="true"><span>Not me</span><output className="t-digit">{related ?? slid}</output><span>Very me</span></span>
+              </label>
+            </div>
+          )}
+          <button type="button" className="play-tempt is-go" onClick={onAdvance} autoFocus={!relateForm}>Next <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
         </motion.div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Support-person sharing (PRD §46): a run by link. The link carries the module id and nothing
+ * else — no answer, no name, nothing from this device — so it can go to a partner, a parent or
+ * a manager as "this is the one I mean". The line under the button says exactly that.
+ */
+function ShareRun({ runId }: { runId: string }) {
+  const [copied, setCopied] = useState(false);
+  const share = async () => {
+    const url = `${window.location.origin}/approach?module=${encodeURIComponent(runId)}`;
+    try {
+      if (navigator.share) await navigator.share({ url });
+      else await navigator.clipboard.writeText(url);
+      setCopied(true); track("SHARE_LINK_COPIED", { module: runId }); window.setTimeout(() => setCopied(false), 2000);
+    } catch { /* Dismissed or refused: the link is not secret; nothing else to do. */ }
+  };
+  return (
+    <div className="play-share">
+      <button type="button" className="play-choice" onClick={share}>{copied ? <><Check size={16} weight="bold" aria-hidden="true" /> Link copied</> : <><ShareNetwork size={16} weight="bold" aria-hidden="true" /> Share this run</>}</button>
+      <p className="play-share-note">Nothing about you is in the link — only which run it is.</p>
     </div>
   );
 }

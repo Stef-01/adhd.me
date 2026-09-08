@@ -95,3 +95,27 @@ and the copy. Written lazily — a term earns a place here when it has already b
 - **Balance** — the Institute's principle that the dimensions affect each other. In the app it
   is one line on My ADHD: the dimensions the person's signals touch, and the ones nothing has
   touched yet ("unasked", not a gap).
+
+- **Manual** (My Manual, PRD §27): the person's own account of how they work — what helps, what
+  makes it harder, how to work with them — in three free-text sections on their device. The app
+  offers *suggestions* drawn from the record and never writes a line; a suggestion becomes text only
+  when the person adds it. Distinct from the *picture* (My ADHD), which the app derives.
+- **Medication note** (PRD §47): the person's description of what medication seems to change,
+  what it leaves untouched and anything unwanted, to take to whoever manages it. The app never
+  advises on medication; the note is what the person brings to the person who does.
+- **Adjustments on paper** (PRD §45, institutional navigation): the study and workplace changes a
+  university's accessibility service or an employer can grant — extensions, briefs in writing, a
+  quieter desk. The app describes what is *commonly available* and who grants it; it applies for
+  nothing and holds no letter. The track (university, work) is what the person's need points at.
+- **Reading** (reflection interpretation, PRD §29): a suggested account of what a reflection was
+  about — "It sounds like being short on sleep was part of it" — from a closed lexicon on the
+  device, offered once and *confirmed or declined by the person*. Only a confirmed reading enters
+  the model, as a contributor (layer, subdomain, note) on the module's need; the text stays in the
+  reflection. Distinct from an *insight* (the module's claim, verdict yes/no) and from *safety*
+  (the one other reader of reflection text, which interrupts rather than suggests).
+- **Clue** (play, PLAY-PLAN §13): the line on a round's scene that makes the right answer
+  inferable — the clone's sparking wire. Required on every round with a right answer.
+- **Relate beat** (play, PLAY-PLAN §13): "How much is this you?" after a round's result, as
+  three buttons or a 0–10 Likert slider, alternating. Writes `relates[run][round]`; the mean is
+  the need's cost when the recognition round gave none. Distinct from *resonance* (the run's own
+  frequency, cost and priority at the end) and from a *reading* (an interpretation of free text).

@@ -283,27 +283,28 @@ export type LearnModule = {
   readonly minutes: number;
   /** Which token family the tile's mark is drawn in. Three families, no new colour. */
   readonly tint: "route" | "accent" | "ink";
-  readonly kind: "read" | "quiz" | "interactive" | "run";
+  readonly kind: "read" | "quiz" | "run";
   /** Read modules: the scenes, in order. */
   readonly scenes?: readonly string[];
   /** Quiz modules: the questions, in order. */
   readonly questions?: readonly Question[];
-  /** Interactive modules (PRD §12): the steps, the characters, the subdomains — see `interactive.ts`. */
+  /** The interactive module behind a run (PRD §12): its steps, characters and subdomains — see `interactive.ts`. The run is what plays; the model reads the module. */
   readonly interactive?: InteractiveModule;
-  /** Play (PLAY-PLAN.md): the module as a run of micro-games. When present, the run is what plays. */
+  /** Play (PLAY-PLAN.md): the module as a run of micro-games. Every interactive module has one. */
   readonly run?: Run;
 };
 
 /** The interactive modules, in the shape the list, the cursor and the progress record read. */
 const INTERACTIVE: readonly LearnModule[] = INTERACTIVE_MODULES.map((m, i) => {
   const run = runFor(m.id);
+  if (!run) throw new Error(`scenes: interactive module ${m.id} has no run (PLAY-PLAN.md §9.1: the runs are the form)`);
   return {
     id: m.id,
     title: run?.title ?? m.title,
     subtitle: run?.tagline ?? m.subtitle,
     minutes: run?.minutes ?? m.minutes,
     tint: (["route", "accent", "ink"] as const)[i % 3]!,
-    kind: run ? "run" : "interactive",
+    kind: "run",
     interactive: m,
     run,
   };
@@ -400,8 +401,8 @@ export const SHELVES: ReadonlyArray<{ readonly title: string; readonly modules: 
   { title: "Understand ADHD", modules: ["context", "more-than-attention", "starting", "deadlines", "working-memory", "hyperfocus", "adhd", "everyday", "myth-or-fact", "words"] },
   { title: "Work & Study", modules: ["ambiguity", "interruption", "perfectionism"] },
   { title: "Relationships", modules: ["not-listening", "forgotten-commitments", "conflict"] },
-  { title: "Daily Life", modules: ["household"] },
-  { title: "Sleep & Body", modules: ["sleep", "exercise"] },
+  { title: "Daily Life", modules: ["household", "money", "mornings"] },
+  { title: "Sleep & Body", modules: ["sleep", "exercise", "eating", "gut", "screens"] },
   { title: "Finding care", modules: ["finding", "cost", "changed"] },
 ];
 
@@ -416,6 +417,5 @@ export function scenesOf(module: LearnModule): Scene[] {
 /** How many cards a module has — scenes for a read module, questions for a quiz. */
 export function cardCount(module: LearnModule): number {
   if (module.kind === "run") return module.run ? runStepCount(module.run) : 0;
-  if (module.kind === "interactive") return module.interactive?.steps.length ?? 0;
   return module.kind === "quiz" ? (module.questions ?? []).length : (module.scenes ?? []).length;
 }

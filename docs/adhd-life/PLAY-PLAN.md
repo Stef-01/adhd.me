@@ -126,8 +126,10 @@ untouched; the long-form player retired.
 **Phase P3 — collection and rhythm.** Bean collection on the Learn page; tempo ramp tuned by
 watching real people (5–8 users, PRD §76: did it feel patronising, could you say what it taught).
 
-**Phase P4 — pilot instrumentation.** Round-level completion in the analytics taxonomy; the §78
-targets (start > 70 %, completion > 65 %) measured on runs.
+**Phase P4 — pilot instrumentation.** Round-level completion is in the analytics taxonomy
+(`MODULE_STARTED` / `MODULE_COMPLETED` with `format: "run"`, `MODULE_STEP_COMPLETED` with the
+mechanic and the hit); the §78 targets (start > 70 %, completion > 65 %) are measured on runs
+in the pilot.
 
 ## 8. Acceptance (tests)
 
@@ -141,8 +143,9 @@ targets (start > 70 %, completion > 65 %) measured on runs.
 
 ## 9. Decisions (founder, 2026-09-08: "those interactive game elements should be there")
 
-1. **The runs are the form.** The long-form player stays hidden behind `?long=1` for one release
-   and is then deleted.
+1. **The runs are the form.** The long-form player stayed hidden behind `?long=1` for one release
+   (PR #4) and was deleted in the next (P5): there is no `interactive` module kind any more, every
+   interactive module is a run, and `scenes.ts` refuses one that is not.
 2. **Timer ramps** — five percent a round, floor seventy percent, never on a round that asks
    about you (`rampedSeconds`). Tuned against real people in P3.
 3. **No sound** in P0.
@@ -176,3 +179,98 @@ that we do not, and two it has that we refuse on purpose:
 - **Refused — lives and points.** Three lives, a score with random bonus names ("PITY BONUS",
   "INSULT TO INJURY") and a high score are the clone's; §3 and PRD §34 rule them out. Rounds, not
   lives; beans, not points.
+
+## 11. Phase P5 — scene-first rounds and more game (founder, 2026-09-08: "get the game modules
+created and iterated asap")
+
+Read against the captures of every round (`qa/play/`, and the review sheet built from them): the
+runs worked but read as a form with a bean above it. P5 is the answer, built in one sitting.
+
+- **The scene.** `app/play/scene.tsx`: a full-width stage with one flat SVG prop (desk, phone,
+  bill, ball, lecture, bed, kitchen, calendar, door — our own art, in the beans' style) and the
+  bean standing in it. Every round has one; the instruction sits above it, the controls below.
+- **The bean is the thing you touch.** Hold, pause and timing put their action on the bean
+  itself (press and hold Alex to stay in the class; tap Maya the moment it becomes real). Don't-tap
+  puts the tempting thing in the scene as a prop-button. The clock, the drift, the heat and the
+  timing track all live inside the scene.
+- **Controls fill the card.** Choices are a two-column grid of 64px buttons; a third option
+  spans the row. The empty lower third is gone.
+- **Less asking, more playing.** One "pick your bean" round per run — the one whose answer the
+  needs engine reads — and twenty-nine new game rounds across the fifteen, favouring timing,
+  sort, flip, recall, drag-capture and don't-tap, so no run is under six games. Timing, pause
+  and recall now take their reduced-motion choices and decoys from the round itself.
+
+- **The scene reacts.** On a hit the bean hops; on a miss the scene shakes. Nothing moves under
+  reduced motion.
+- **Immersive** (founder, 2026-09-08: "full screen bleeding till edge, not boxed windows
+  everywhere, the progress bar outside in its own housing, minimise blackness"). The stage
+  bleeds to the viewport edges with no card around it; on a phone the scene runs edge to edge.
+  Zero header while a run is open (founder, same day: "purely edge to edge, an X in the top
+  left to back out"): the shell's header is hidden, the stage starts at the top edge, an X at
+  top left leaves the run, and the dots and step count sit beside it in one slim housing.
+  No dark blocks: the bean's label and the tempting thing are paper or accent, the props are
+  mid-tone. Rules recorded in the taste file (`layout.full-bleed-play`, `layout.one-container`,
+  `type.no-dark-blocks`).
+
+Still open, for the pilot: props that react on their own terms (the phone that lights up, the
+bill that slides), and the tempo tuned against real people (§9.2).
+
+## 12. Phase P6 — more modules, more mechanics, a QA process (founder, 2026-09-08)
+
+"Add more ADHD modules like diet, exercise with a muscly bean with abs, gut health, many more
+creative modules with creative gameplays so it is not just tapping, and a strong QA process."
+
+- **Five new modules, each a module and a run:** *Forgot to eat again* (hunger as a quiet
+  signal; meal anchors, protein early — from the eating research), *The gut and the brain*
+  (the two-way lane, said with the caution the research warrants: no ADHD gut signature, no
+  supplement shown to change the core difficulties, the plain four that help both ends),
+  *Where did the money go* (impulse and the invisible bill), *Out the door* (the launchpad),
+  *The scroll at midnight* (distance beats the feed). Twenty modules, twenty runs.
+- **Two new mechanics:** *catch* (things fall from the top of the scene, decoys among them; tap
+  what matters before it lands) and *balance* (a marker drifts; tap the bean to steady it;
+  inside the calm zone when the clock ends). Fourteen mechanics in the catalogue.
+- **The fit bean.** `look: "fit"` draws arms and abs; Priya wears it through the exercise run.
+- **QA.** `PLAY-QA.md`: the gates in code (variety — at least four mechanics a run, at most
+  three taps; games not questions; budgets; contracts), in the browser, in the look, and with
+  people. The variety gate is a test, so a mostly-tapping run cannot ship.
+
+- **The sense gate** (founder, same day): every mechanic states its rule on screen; timing
+  rounds carry a scale and a verb; the premise check is on the review sheet. `PLAY-QA.md` §1b.
+- **Liquid glass across the chrome**, after iyinchao/liquid-glass-studio (MIT), as a CSS
+  surface; the rule and its two hard lessons are in the taste file (`type.glass-chrome`).
+
+Sources read for the eating and gut modules, 2026-09-08: a systematic review of gut microbiota
+composition in ADHD (Microorganisms, 2026) and a narrative review of clinical evidence and
+practice implications (PMC, 2026), both cautious; practitioner writing on interoception,
+hyperfocus and medication appetite effects with the same strategies recurring (labelled alarms,
+no-cook food in reach, protein early, food anchored to fixed events).
+
+## 13. Survey delivery, not a quiz (founder, 2026-09-08)
+
+"Understand why the games have correct and incorrect answers — it's meant to be a survey
+delivery. Make the correct and incorrect make sense with the context and clues in the game; it's
+impossible to guess. Then it will ask how much it related to you, sometimes the buttons, other
+times the Likert scale. Likert scale as a slider."
+
+Read against the clone once more: in Dumb Ways to Die the right action is never a guess. The
+wires spark before "don't touch the wires"; the piranha tank is labelled. The game is not testing
+what you know; it is staging a scene whose consequence you can see coming. Our tap and timing
+rounds had become quizzes — "Which can Alex actually start?" with a hidden right answer — and a
+person who could not infer it from the screen was being marked wrong on a fact about a bean.
+
+- **The clue.** Every round with a right answer (`needsClue` in `play.ts`: tap with a `correct`
+  option, timing, order, sort, recall, balance) carries a `clue` of at most sixteen words, drawn
+  on the scene under the instruction. The clue is the sparking wire: read only it and the
+  instruction, and a stranger can say which option is the hit. Seventy rounds carry one. The
+  contract test refuses a right answer without a clue; the review sheet's premise check (PLAY-QA
+  §1b) now reads the clue as part of "what is on screen".
+- **The relate beat.** After the result line, before Next: "How much is this you?" Buttons
+  (Not me · A bit · Very me, written as 0 · 5 · 10) on even rounds and a 0–10 Likert slider on
+  odd rounds (`relateFormFor`), never on a round that already asks about you (the pick-bean).
+  Optional — Next is always there — and a round with the beat does not auto-advance. What it
+  writes: `record.relates[run][round]`, and the mean stands in as the need's cost when the
+  recognition round gave none (`needs.ts`). The analytics event carries the round id and the
+  number, never a sentence.
+- **What stays.** Hit and miss remain, because the bean's reaction and the two result lines are
+  the teaching; what changed is that the person can now see the hit coming, and the round asks
+  about them either way. The recognition round (frequency, cost, priority) stays at the end.

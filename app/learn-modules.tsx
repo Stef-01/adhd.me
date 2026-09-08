@@ -14,8 +14,6 @@ import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type Learn
 import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
 import { LearningScene, LearningCoverArt, LearningExplorer, CarePathExplorer } from "./learning-scene";
 import { LearningActivity } from "./learning-activities";
-import { InteractiveView } from "./interactive-module";
-import { CharacterMark } from "./characters";
 import { RunPlayer } from "./play/run-player";
 import { Bean } from "./play/beans";
 import { CHARACTERS, CHARACTER_BIOS } from "@/learn/interactive";
@@ -60,8 +58,6 @@ function LessonHeading({ active, children, className = "learn-card-heading" }: {
 export function LearnModules() {
   const params = useSearchParams();
   const moduleId = params.get("module");
-  /** PLAY-PLAN.md §6: the nine-stage player stays for one release behind `&long=1`. */
-  const longForm = params.get("long") === "1";
   const reducedMotion = useReducedMotion();
   /** RADIANT: which topic chip is on — "all", or one shelf's title. */
   const [shelfFilter, setShelfFilter] = useState<string>("all");
@@ -131,25 +127,14 @@ export function LearnModules() {
           exit={reducedMotion ? undefined : { opacity: 0, x: 24, transition: { duration: 0.14 } }}
           transition={{ ...SPRING, opacity: { duration: 0.2 } }}
         >
-          {current.kind === "quiz" ? quizView(current) : current.kind === "run" && current.run && !longForm ? (
+          {current.kind === "quiz" ? quizView(current) : current.kind === "run" && current.run ? (
             <RunPlayer
               run={current.run}
               step={step}
               onStep={(next) => { setDirection(next > step ? 1 : -1); setStep(next); }}
               onFinish={() => finish(current.id)}
               onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
-              bar={bar(current, cardCount(current))}
-            />
-          ) : (current.kind === "interactive" || (current.kind === "run" && longForm)) && current.interactive ? (
-            <InteractiveView
-              module={current.interactive}
-              step={step}
-              direction={direction}
-              hydrated={hydrated}
-              onStep={(next) => { setDirection(next > step ? 1 : -1); setStep(next); }}
-              onFinish={() => finish(current.id)}
-              onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
-              bar={bar(current, current.interactive.steps.length)}
+              onLeave={leave}
             />
           ) : readView(current)}
         </motion.div>
@@ -383,7 +368,7 @@ export function LearnModules() {
           <div><span className="activity-label">MAKE ROOM FOR A MOMENT</span><h2>Less scrolling. A little stillness.</h2><p>A guided pause, or a five-minute session on a shared clock.</p></div>
           <Link href="/approach/meditate">Find a quiet moment <ArrowRight size={19} /></Link>
         </motion.div>
-        {completed && ["interactive", "run"].includes(MODULES.find(module => module.id === completed)?.kind ?? "") && (
+        {completed && MODULES.find(module => module.id === completed)?.kind === "run" && (
           <div className="learning-feature learning-completion">
             <div role="status">
               <p className="learning-overline">MODULE FINISHED</p>
@@ -484,11 +469,11 @@ export function LearnModules() {
                       <strong>{module.title}</strong>
                       <small>{module.subtitle}</small>
                       <span className="learn-card-meta">
-                        <span>{module.kind === "quiz" ? "Quiz" : module.kind === "run" ? "Play" : module.kind === "interactive" ? "Interactive" : "Read"}</span>
+                        <span>{module.kind === "quiz" ? "Quiz" : module.kind === "run" ? "Play" : "Read"}</span>
                         <span className="learn-tile-dot" aria-hidden="true" />
                         <span className="learn-tile-time"><Clock size={12} weight="bold" aria-hidden="true" />{module.minutes} min</span>
                         <span className="learn-tile-dot" aria-hidden="true" />
-                        <span>{module.kind === "run" ? `${module.run?.rounds.length ?? 0} rounds` : `${count} ${module.kind === "quiz" ? "questions" : module.kind === "interactive" ? "steps" : "cards"}`}</span>
+                        <span>{module.kind === "run" ? `${module.run?.rounds.length ?? 0} rounds` : `${count} ${module.kind === "quiz" ? "questions" : "cards"}`}</span>
                         {done && (
                           <>
                             <span className="learn-tile-dot" aria-hidden="true" />
@@ -502,8 +487,6 @@ export function LearnModules() {
                     <span className="learn-card-art" aria-hidden="true">
                       {module.kind === "run" && module.run
                         ? <Bean who={module.run.bean} mood="engaged" size={72} />
-                        : module.kind === "interactive" && module.interactive
-                        ? <CharacterMark who={module.interactive.characters[0]!} mood="engaged" />
                         : <LearningCoverArt id={module.id} />}
                     </span>
                   </motion.button>

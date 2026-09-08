@@ -44,18 +44,18 @@ line or an analytics event.
 | §26 My ADHD screen | Friction, contributors, pattern, helps, goal, worth exploring | **Done** | `app/my-adhd.tsx` |
 | §27 My Manual | Editable personal knowledge | **Deferred (P1)** | — |
 | §28 Reflection | Type / voice / select / skip | **Done** | player, `app/voice-reflection.tsx` |
-| §29 AI reflection interpretation | Suggested interpretation, user confirms | **Deferred (P1)** | — |
+| §29 Reflection interpretation | Suggested reading, user confirms | **Done** — a closed lexicon on the device, no language model; only a confirmed reading enters the model | `src/model/interpret.ts` |
 | §30–§32 Strategy → experiment → outcome → history | | **Done** | store, Today, My ADHD |
 | §33–§34 Gamification | Discovery, no streaks | **Done** — completion, insight cards; no streaks or points | — |
 | §35–§36 Support engine, priority model | Seven actions, rule-based | **Done** | `src/model/recommend.ts` |
 | §37 Marketplace flow | Problem → … → providers | **Done** | `app/support-path.tsx`, `/support` |
-| §38 Professional categories | Six P0 | **Done**; P1 kinds open | `src/support/professions.ts` |
+| §38 Professional categories | Six P0 + five P1 | **Done** | `src/support/professions.ts` |
 | §39–§40 Provider model, expertise taxonomy | | **Done** (`profession`, `expertise` on `Clinician`) | `src/demo/roster.ts` |
 | §41 Provider match card | "Why you're seeing X", Best for | **Done** — reasons from the engine, Best for on profile | finder stages |
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
-| §45–§47 Institutional navigation, support-person sharing, medication experience | | **Deferred (P1)** | — |
+| §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |
 | §52–§54 Stack, services, tables | RN/Expo, Supabase, CMS | **Not adopted** — see ADR 0004 | — |
@@ -102,14 +102,33 @@ Each item is one PR-sized piece. Nothing below is started.
 
 ### Phase B — P1 (PRD §91), after product-market signal
 
-- [ ] My Manual (§27) — editable, never auto-labelled.
-- [ ] Support-person sharing (§46) — a module by link, no health information unless chosen.
-- [ ] Medication experience (§47) — what improved / what remains / unwanted effects → "discuss
-      with your prescriber"; no dosing, no advice.
-- [ ] Institutional navigation (§45) — university accommodations, workplace adjustments.
-- [ ] AI reflection interpretation (§29) — only a confirmed interpretation enters the model.
-- [ ] P1 professions (§38): psychiatrist, dietitian, couples therapist, sleep clinician,
-      university support service.
+- [x] My Manual (§27) — `/manual`, `src/model/manual.ts`: three sections the person writes
+      (what helps, what makes it harder, how to work with me), device-local, copy-as-text to hand
+      to a person. Suggestions come from the record — a strategy that helped, a need they named —
+      and become text only when tapped; nothing is ever written for them. Pulled forward from
+      Phase B on the founder's "continue advancing" (2026-09-08).
+- [x] Support-person sharing (§46) — "Share this run" on every run's title card: the link
+      carries the module id and nothing else, and says so. (2026-09-08)
+- [x] Medication experience (§47) — `/medication`, `src/model/medication.ts`: what it seems to
+      change / what it leaves untouched / anything unwanted, in the person's words, on the
+      device, copy-as-text to take to whoever manages it. No dose, no timing, no verdict; the
+      test refuses those words on the page. Offered from My ADHD when medication is part of the
+      person's picture. (2026-09-08)
+- [x] Institutional navigation (§45) — `/adjustments`: two tracks, university and work, each with
+      what is commonly available, who to ask, what to bring and the order it runs in; the track
+      the person's need points at leads; the support path adds a step for institutional needs;
+      linked from My ADHD. Content only, the app applies for nothing. (2026-09-08)
+- [x] Reflection interpretation (§29) — `src/model/interpret.ts`: a closed lexicon of cues (short on
+      sleep, a vague brief, a manager, a phone…) reads a reflection into at most two readings in the
+      person's own vocabulary, offered after the reflect beat as "It sounds like … was part of it";
+      a yes writes the subdomain and the note as a contributor on the module's need, a "not quite"
+      writes nothing, and the text never leaves the reflection. No language model: the PRD's
+      "AI" is done as a rule the person can see through, and an LLM can replace the lexicon behind
+      the same contract when there is a key and a reason. (2026-09-08)
+- [x] P1 professions (§38): psychiatrist, dietitian, relationship counsellor, sleep clinician,
+      university support service — five kinds in `professions.ts` with cues the finder reads, one
+      synthetic example of each on the roster, a `regular-eating` expertise tag, and the eating,
+      gut, sleep and conflict modules naming them. (2026-09-08)
 - [ ] Accounts and sync — the first thing that needs a backend; ADR 0004 is where to argue it.
 
 ### Phase C — pilot (PRD §87–§88)

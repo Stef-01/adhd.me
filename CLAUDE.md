@@ -15,6 +15,10 @@ gazetteer, the finder state), `e2e/` (a handful of feature flows), and `vitest` 
 
 Commit to main and push. Redesign freely.
 
+**Always commit, merge, push to main** (founder, 2026-09-08). Work on a branch and a PR if you
+must for CI, but the PR merges the moment CI is green on its head — never held for a check-in,
+a review, or a later batch. Nothing waits on a branch.
+
 ## How to work here (founder-directed, 2026-09-05)
 
 **Use `grill-with-docs` on every coding task.** Not only when asked, and not only on large ones —

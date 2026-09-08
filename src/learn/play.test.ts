@@ -5,14 +5,14 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { INTERACTIVE_MODULES, strategyById } from "./interactive";
-import { expiryIsHit, INSTRUCTION_WORDS, MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words, fasterBefore, FASTER_EVERY } from "./play";
+import {expiryIsHit, INSTRUCTION_WORDS, MAX_TAPS, MECHANICS, MIN_MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words, fasterBefore, FASTER_EVERY , CLUE_WORDS, needsClue, relateFormFor, RELATE_BUTTONS, RELATE_PROMPT } from "./play";
 import { RUNS, runFor } from "./runs";
 import { cardCount, MODULES } from "./scenes";
 
 describe("the runs", () => {
-  it("are the fifteen modules, each six to eight rounds, three to five minutes, keeping their module's id", () => {
-    expect(RUNS.length).toBe(15);
-    expect(new Set(RUNS.map((r) => r.id)).size).toBe(15);
+  it("are the twenty modules, each six to eight rounds, three to five minutes, keeping their module's id", () => {
+    expect(RUNS.length).toBe(20);
+    expect(new Set(RUNS.map((r) => r.id)).size).toBe(20);
     for (const m of INTERACTIVE_MODULES) expect(RUNS.some((r) => r.id === m.id), m.id).toBe(true);
     for (const run of eachOf(RUNS, "the runs")) {
       expect(run.rounds.length).toBeGreaterThanOrEqual(6);
@@ -46,7 +46,10 @@ describe("the runs", () => {
       for (const r of run.rounds) {
         expect(MECHANICS).toContain(r.mechanic);
         if (["tap", "order", "sort", "flip", "pick-bean", "dont-tap"].includes(r.mechanic)) expect(r.options?.length, `${run.id}/${r.id}`).toBeGreaterThan(0);
-        if (["recall", "swipe", "drag-capture", "hold"].includes(r.mechanic)) expect(r.items?.length, `${run.id}/${r.id}`).toBeGreaterThan(0);
+        if (["recall", "swipe", "drag-capture", "hold", "catch"].includes(r.mechanic)) expect(r.items?.length, `${run.id}/${r.id}`).toBeGreaterThan(0);
+        if (r.mechanic === "balance") expect(r.options?.some((o) => o.correct), `${run.id}/${r.id} needs a steadying move`).toBe(true);
+        // The sense gate (PLAY-QA.md): a timing round says what the line is and what the tap does.
+        if (r.mechanic === "timing") { expect(r.scale?.length, `${run.id}/${r.id} needs a scale`).toBeGreaterThanOrEqual(3); expect(r.verb, `${run.id}/${r.id} needs a verb`).toBeTruthy(); expect(r.options?.some((o) => o.correct), `${run.id}/${r.id} needs the moment`).toBe(true); }
         if (r.mechanic === "tap") expect(r.options!.some((o) => o.correct), `${run.id}/${r.id} needs a right answer`).toBe(true);
         if (r.mechanic === "sort") expect(r.options!.every((o) => o.layer), `${run.id}/${r.id}`).toBe(true);
         if (r.writes) {
@@ -59,6 +62,30 @@ describe("the runs", () => {
       }
     }
     expect(expiryIsHit("dont-tap")).toBe(true);
+  });
+
+  it("make every right answer inferable: a round with a right answer carries a clue a stranger can read (founder, 2026-09-08)", () => {
+    for (const run of eachOf(RUNS, "the runs")) {
+      for (const r of run.rounds) {
+        if (needsClue(r)) {
+          expect(r.clue, `${run.id}/${r.id} has a right answer and no clue`).toBeTruthy();
+          expect(words(r.clue!), `${run.id}/${r.id} clue too long`).toBeLessThanOrEqual(CLUE_WORDS);
+          expect(lintLandingCopy(r.clue!), `${run.id}/${r.id} clue`).toEqual([]);
+        }
+      }
+    }
+  });
+
+  it("ask how much each round was you, buttons and slider alternating, never on a round that already asks about you", () => {
+    for (const run of eachOf(RUNS, "the runs")) {
+      const forms = run.rounds.map((r, i) => relateFormFor(r, i));
+      expect(forms, run.id).toContain("buttons");
+      expect(forms, run.id).toContain("slider");
+      run.rounds.forEach((r, i) => { if (r.writes) expect(forms[i], `${run.id}/${r.id}`).toBeNull(); });
+    }
+    expect(RELATE_BUTTONS.map((b) => b.value)).toEqual([0, 5, 10]);
+    expect(lintLandingCopy(RELATE_PROMPT)).toEqual([]);
+    for (const b of RELATE_BUTTONS) expect(lintLandingCopy(b.label)).toEqual([]);
     expect(expiryIsHit("hold")).toBe(true);
     expect(expiryIsHit("tap")).toBe(false);
   });
@@ -108,6 +135,17 @@ describe("the Faster card", () => {
       });
       const shown = run.rounds.filter((_, i) => fasterBefore(run, i)).length;
       if (run.rounds.length >= 7 && run.rounds.every((r) => !r.writes)) expect(shown).toBeGreaterThanOrEqual(1);
+    }
+  });
+});
+
+describe("the QA gate on variety (PLAY-QA.md)", () => {
+  it("every run uses several mechanics and is never mostly tapping", () => {
+    for (const run of RUNS) {
+      const games = run.rounds.filter((r) => !r.writes);
+      expect(new Set(games.map((r) => r.mechanic)).size, `${run.id} mechanics`).toBeGreaterThanOrEqual(MIN_MECHANICS);
+      expect(games.filter((r) => r.mechanic === "tap").length, `${run.id} taps`).toBeLessThanOrEqual(MAX_TAPS);
+      expect(games.length, `${run.id} games`).toBeGreaterThanOrEqual(6);
     }
   });
 });

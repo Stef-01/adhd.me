@@ -12,6 +12,7 @@ import { ArrowRight, Check, Copy } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
 import { LAYER_LABELS } from "@/model/layers";
 import { deriveNeeds, type Need } from "@/model/needs";
+import { adjustmentTrack, trackForSubdomain } from "@/model/adjustments";
 import { escalationEligible, professionsFor, recommend } from "@/model/recommend";
 import { track } from "@/model/events";
 import { PROFESSION_ENTRIES, profession, type Profession } from "@/support/professions";
@@ -28,6 +29,7 @@ export function SupportPath() {
   const rec = record ? recommend(record) : null;
   const professions = need ? professionsFor(need) : PROFESSION_ENTRIES.map((p) => p.id);
   const eligible = need && record ? escalationEligible(need, record) : false;
+  const institution = need ? trackForSubdomain(need.subdomain) : null;
   const teaching = need ? INTERACTIVE_MODULES.filter((m) => m.targets.includes(need.subdomain)) : [];
   const strategies = teaching.flatMap((m) => m.steps.filter((s) => s.kind === "strategy").flatMap((s) => (s.kind === "strategy" ? s.strategies : [])));
   const tried = new Set((record?.experiments ?? []).map((e) => e.strategyId));
@@ -104,6 +106,13 @@ export function SupportPath() {
             </p>
             {need.contributors.some((c) => c.layer === "people") && <p>Some of what you described involves the people around you — sharing a module with them is one kind of help that costs nothing.</p>}
           </li>
+          {institution && (
+            <li className="support-step">
+              <h2>Adjustments on paper</h2>
+              <p>{institution === "university" ? "This is the kind of problem a university's accessibility service exists for, and most students are never told it does." : "Most of what helps with this is a way of working a manager can agree to, and some of it can be made formal."} What is commonly available, who grants it, and what to bring.</p>
+              <p><Link href="/adjustments">{adjustmentTrack(institution).title} <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></p>
+            </li>
+          )}
           <li className="support-step">
             <h2>Which professions could help</h2>
             <p>In order of fit for this problem. Each card says why.</p>

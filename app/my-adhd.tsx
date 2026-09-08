@@ -100,6 +100,26 @@ export function MyAdhd() {
             )}
           </section>
 
+          <section className="life-card" aria-labelledby="my-manual">
+            <h2 id="my-manual">My Manual</h2>
+            <p>{record.manual.updatedAt ? "How you work, in your own words. Edit it any time." : "What helps you, what makes things harder, how to work with you — written by you, never for you."}</p>
+            <div className="life-actions"><Link className="learn-secondary" href="/manual">{record.manual.updatedAt ? "Open my manual" : "Start my manual"}</Link></div>
+          </section>
+
+          <section className="life-card" aria-labelledby="my-adjustments">
+            <h2 id="my-adjustments">Adjustments on paper</h2>
+            <p>What a university or a workplace can change around you, who grants it, and what to bring when you ask. Most of it exists; most people are never told.</p>
+            <div className="life-actions"><Link className="learn-secondary" href="/adjustments">See what is commonly available</Link></div>
+          </section>
+
+          {record.onboarding?.medication === "yes" && (
+            <section className="life-card" aria-labelledby="my-medication">
+              <h2 id="my-medication">Medication</h2>
+              <p>{record.medication.updatedAt ? "Your note on what it changes and what it leaves. Edit it before the next conversation." : "Describe what it seems to change, what it leaves untouched and anything unwanted — to take to whoever manages it."}</p>
+              <div className="life-actions"><Link className="learn-secondary" href="/medication">{record.medication.updatedAt ? "Open the note" : "Start the note"}</Link></div>
+            </section>
+          )}
+
           <section className="life-card" aria-labelledby="my-goal">
             <h2 id="my-goal">Current goal</h2>
             <p>{summary.goal ?? "Not set yet."}</p>

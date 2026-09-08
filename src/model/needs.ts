@@ -18,7 +18,7 @@ import { needLabel } from "./labels";
 import { scoreSurvey } from "./surveys";
 import { topicSurvey } from "@/learn/surveys";
 export { needLabel } from "./labels";
-import type { ExperimentOutcome, ModelRecord } from "./store";
+import { meanRelate, type ExperimentOutcome, type ModelRecord } from "./store";
 
 export type Confidence = "low" | "medium" | "high";
 
@@ -179,7 +179,9 @@ export function deriveNeeds(record: ModelRecord): Need[] {
     const d = get(module.domain, sub);
     d.sources.add(module.id);
     d.occasions += 1;
+    const related = meanRelate(record, module.id);
     if (typeof res.cost === "number") d.costs.push(res.cost);
+    else if (related !== null) d.costs.push(related);
     else if (res.frequency) d.costs.push(COST_BY_FREQUENCY[res.frequency]);
     if (res.priority) d.priorities.push(res.priority);
     if (res.frequency === "often" || res.frequency === "sometimes") d.strengths.add(module.strength);
@@ -197,6 +199,15 @@ export function deriveNeeds(record: ModelRecord): Need[] {
       if (!found) continue;
       d.strategies.set(experiment.strategyId, { strategyId: experiment.strategyId, title: found.strategy.title, outcome: experiment.outcome ?? "pending" });
     }
+  }
+
+  // 2b. Confirmed interpretations (PRD §29): a reading the person said yes to becomes a contributor on
+  // the need the module is about. A reading they declined was never written, so there is nothing to skip.
+  for (const held of record.interpretations) {
+    const module = INTERACTIVE_MODULES.find((m) => m.id === held.moduleId);
+    if (!module) continue;
+    const d = get(module.domain, module.targets[0]!);
+    d.contributors.set(`${held.layer}:${held.note}`, { layer: held.layer, subdomain: held.subdomain, note: held.note });
   }
 
   // 3. Topic surveys: the friction is a need; the cost is the person's own; contributors and strengths ride with it.

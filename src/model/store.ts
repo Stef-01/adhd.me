@@ -9,6 +9,7 @@
 // the React side owns only the wiring. A malformed or older record is treated as empty rather
 // than half-read: the version is what lets a later shape refuse an old one.
 
+import type { Layer, Subdomain } from "./layers";
 import { isProfession } from "@/support/professions";
 import type { OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
@@ -47,6 +48,15 @@ export interface Reflection {
   at: string;
 }
 
+/** A reading of a reflection the person CONFIRMED (PRD §29). Never the text; the subdomain and the note. */
+export interface ConfirmedInterpretation {
+  moduleId: string;
+  subdomain: Subdomain;
+  layer: Layer;
+  note: string;
+  at: string;
+}
+
 export interface SafetyEvent {
   ruleId: SafetyRuleId;
   at: string;
@@ -65,6 +75,10 @@ export interface ModelRecord {
   insights: Record<string, InsightVerdict>;
   experiments: Experiment[];
   reflections: Reflection[];
+  /** The relate beat (play, founder 2026-09-08): by run id, then round id → 0–10, "how much is this you". */
+  relates: Record<string, Record<string, number>>;
+  /** Confirmed readings of reflections (PRD §29). A declined reading leaves nothing. */
+  interpretations: ConfirmedInterpretation[];
   safety: SafetyEvent[];
   /** Module ids finished, in order (interactive modules; read/quiz progress stays in `src/learn/progress.ts`). */
   completed: string[];
@@ -72,6 +86,32 @@ export interface ModelRecord {
   survey: { day: string; answeredToday: number; abandons: string[]; lastLongAt: string | null };
   /** Topic surveys (PRD §22): answers by question id, when they were last touched, and when finished. */
   surveys: Record<string, { answers: Record<string, string | number>; at: string; completedAt?: string }>;
+  /** My Manual (PRD §27): three sections the person writes themselves. Never written for them; suggestions are offered, never inserted. */
+  manual: ManualRecord;
+  /** Medication experience (PRD §47): what it seems to change, what it leaves untouched, anything unwanted — described, never advised on. */
+  medication: MedicationNote;
+}
+
+export type MedicationField = "changes" | "untouched" | "unwanted";
+export interface MedicationNote {
+  changes: string;
+  untouched: string;
+  unwanted: string;
+  updatedAt: string | null;
+}
+export function emptyMedicationNote(): MedicationNote {
+  return { changes: "", untouched: "", unwanted: "", updatedAt: null };
+}
+
+export type ManualSection = "helps" | "harder" | "work-with-me";
+export interface ManualRecord {
+  helps: string;
+  harder: string;
+  "work-with-me": string;
+  updatedAt: string | null;
+}
+export function emptyManual(): ManualRecord {
+  return { helps: "", harder: "", "work-with-me": "", updatedAt: null };
 }
 
 type ModelStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
@@ -85,10 +125,14 @@ export function emptyModel(): ModelRecord {
     insights: {},
     experiments: [],
     reflections: [],
+    relates: {},
+    interpretations: [],
     safety: [],
     completed: [],
     survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
     surveys: {},
+    manual: emptyManual(),
+    medication: emptyMedicationNote(),
   };
 }
 
@@ -117,10 +161,14 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       insights: isObject(r.insights) ? (r.insights as Record<string, InsightVerdict>) : {},
       experiments: Array.isArray(r.experiments) ? r.experiments.filter(isObject).map((e) => e as unknown as Experiment) : [],
       reflections: Array.isArray(r.reflections) ? r.reflections.filter((x) => isObject(x) && typeof x.text === "string").map((e) => e as unknown as Reflection) : [],
+      relates: isObject(r.relates) ? (r.relates as Record<string, Record<string, number>>) : {},
+      interpretations: Array.isArray(r.interpretations) ? r.interpretations.filter((x) => isObject(x) && typeof x.subdomain === "string" && typeof x.note === "string").map((e) => e as unknown as ConfirmedInterpretation) : [],
       safety: Array.isArray(r.safety) ? r.safety.filter(isObject).map((e) => e as unknown as SafetyEvent) : [],
       completed: isStringArray(r.completed) ? r.completed : [],
       survey: isObject(r.survey) ? { ...empty.survey, ...(r.survey as ModelRecord["survey"]) } : empty.survey,
       surveys: isObject(r.surveys) ? (r.surveys as ModelRecord["surveys"]) : {},
+      manual: isObject(r.manual) ? { ...emptyManual(), ...(r.manual as Partial<ManualRecord>) } : emptyManual(),
+      medication: isObject(r.medication) ? { ...emptyMedicationNote(), ...(r.medication as Partial<MedicationNote>) } : emptyMedicationNote(),
     };
   } catch {
     return emptyModel();
@@ -169,6 +217,23 @@ export function recordResonance(storage: ModelStorage, moduleId: string, patch: 
   }));
 }
 
+/** The relate beat: how much a round was you, 0–10. One answer per round; the latest wins. */
+export function recordRelate(storage: ModelStorage, moduleId: string, roundId: string, value: number): ModelRecord {
+  const v = Math.max(0, Math.min(10, Math.round(value)));
+  return updateModel(storage, (r) => ({
+    ...r,
+    relates: { ...r.relates, [moduleId]: { ...(r.relates[moduleId] ?? {}), [roundId]: v } },
+    survey: countAnswered(r.survey, 1),
+  }));
+}
+
+/** The mean of a run's relate answers, or null when none — the cost a run's rounds implied. */
+export function meanRelate(record: ModelRecord, moduleId: string): number | null {
+  const values = Object.values(record.relates[moduleId] ?? {});
+  if (!values.length) return null;
+  return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
+}
+
 export function recordAnswer(storage: ModelStorage, moduleId: string, questionId: string, value: string | string[]): ModelRecord {
   return updateModel(storage, (r) => ({
     ...r,
@@ -210,6 +275,11 @@ export function recordReflection(storage: ModelStorage, moduleId: string, text: 
   return { record, safety: hit?.id ?? null };
 }
 
+/** PRD §29: only a reading the person confirmed enters the model. Declining is not recorded anywhere. */
+export function confirmInterpretation(storage: ModelStorage, moduleId: string, reading: { subdomain: Subdomain; layer: Layer; note: string }): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, interpretations: [...r.interpretations, { moduleId, subdomain: reading.subdomain, layer: reading.layer, note: reading.note, at: now() }] }));
+}
+
 export function acknowledgeSafety(storage: ModelStorage): ModelRecord {
   return updateModel(storage, (r) => ({ ...r, safety: r.safety.map((e) => (e.acknowledgedAt ? e : { ...e, acknowledgedAt: now() })) }));
 }
@@ -238,6 +308,16 @@ export function completeSurvey(storage: ModelStorage, surveyId: string): ModelRe
     surveys: { ...r.surveys, [surveyId]: { ...(r.surveys[surveyId] ?? { answers: {} }), at: now(), completedAt: now() } },
     survey: { ...r.survey, lastLongAt: now() },
   }));
+}
+
+/** My Manual (PRD §27): the person's own words for one section. The whole text, as typed; nothing is added to it. */
+export function saveManual(storage: ModelStorage, section: ManualSection, text: string): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, manual: { ...r.manual, [section]: text.slice(0, 4000), updatedAt: now() } }));
+}
+
+/** Medication experience (PRD §47): one field of the note, as typed. Described, never advised on. */
+export function saveMedicationNote(storage: ModelStorage, field: MedicationField, text: string): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, medication: { ...r.medication, [field]: text.slice(0, 4000), updatedAt: now() } }));
 }
 
 export function recordAbandon(storage: ModelStorage, surveyId: string): ModelRecord {

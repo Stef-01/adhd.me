@@ -20,6 +20,7 @@ export { APPROACHES } from "./roster";
 export { clinicians, professionOf } from "./roster";
 
 import { clinicians, type Clinician } from "./roster";
+import { profession } from "@/support/professions";
 
 /**
  * Rank the roster against a free-text request.
@@ -702,16 +703,33 @@ function orderedAsks(query: string, roster: readonly Clinician[]): NeedSignal[] 
  * `nearest` is the caller's fact, not a re-derivation: `rankCliniciansNear` only reorders when an
  * origin resolved, so the distance clause appears exactly when distance actually moved something.
  */
+/**
+ * The noun for what a roster holds: "GP"/"GPs" when every entry is one, the profession's own
+ * words when the list has been narrowed to one kind ("occupational therapist"), and "provider"
+ * when it mixes kinds. The sentence about an order must name the list it is about — narrowed to
+ * occupational therapists, "every listed GP" is a false statement about the screen.
+ */
+export function rosterNoun(roster: readonly Clinician[]): { one: string; many: string } {
+  const kinds = new Set(roster.map((c) => c.profession ?? "gp"));
+  if (kinds.size === 1) {
+    const only = [...kinds][0]!;
+    const entry = profession(only);
+    return { one: entry.label === "GP" ? "GP" : entry.label.toLowerCase(), many: entry.plural };
+  }
+  return { one: "provider", many: "providers" };
+}
+
 export function orderNote(
   query: string,
   roster: readonly Clinician[] = clinicians,
   { nearest = false }: { nearest?: boolean } = {},
 ): string {
   const quality = matchQuality(query, roster);
+  const noun = rosterNoun(roster);
   if (quality === "unmatched") {
     return nearest
-      ? "Nothing you said names something this listing can compare on, so this is every listed GP, nearest first."
-      : "Nothing you said names something this listing can compare on, so this is every listed GP, in the order the listing holds them.";
+      ? `Nothing you said names something this listing can compare on, so this is every listed ${noun.one}, nearest first.`
+      : `Nothing you said names something this listing can compare on, so this is every listed ${noun.one}, in the order the listing holds them.`;
   }
   const asks = orderedAsks(query, roster);
   /**
@@ -731,13 +749,13 @@ export function orderNote(
   const inProse = namedWith(labelInSentence);
   if (quality === "unserved") {
     return nearest
-      ? `No listed GP declares ${inProse}, so nothing below is ordered by it — this is every listed GP, nearest first.`
-      : `No listed GP declares ${inProse}, so nothing below is ordered by it — this is every listed GP, in the order the listing holds them.`;
+      ? `No listed ${noun.one} declares ${inProse}, so nothing below is ordered by it — this is every listed ${noun.one}, nearest first.`
+      : `No listed ${noun.one} declares ${inProse}, so nothing below is ordered by it — this is every listed ${noun.one}, in the order the listing holds them.`;
   }
   if (quality === "tied") {
     return nearest
-      ? `You asked about ${inProse}, and the listed GPs answer that too similarly to rank, so nearer rooms come first.`
-      : `You asked about ${inProse}, and the listed GPs answer that too similarly to rank — read this as a list, not an order.`;
+      ? `You asked about ${inProse}, and the listed ${noun.many} answer that too similarly to rank, so nearer rooms come first.`
+      : `You asked about ${inProse}, and the listed ${noun.many} answer that too similarly to rank — read this as a list, not an order.`;
   }
   const asListed = namedWith((need) => need.label);
   return nearest
