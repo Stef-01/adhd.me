@@ -56,7 +56,10 @@ function LessonHeading({ active, children, className = "learn-card-heading" }: {
 }
 
 export function LearnModules() {
-  const moduleId = useSearchParams().get("module");
+  const params = useSearchParams();
+  const moduleId = params.get("module");
+  /** PLAY-PLAN.md §6: the nine-stage player stays for one release behind `&long=1`. */
+  const longForm = params.get("long") === "1";
   const reducedMotion = useReducedMotion();
   /** RADIANT: which topic chip is on — "all", or one shelf's title. */
   const [shelfFilter, setShelfFilter] = useState<string>("all");
@@ -126,7 +129,7 @@ export function LearnModules() {
           exit={reducedMotion ? undefined : { opacity: 0, x: 24, transition: { duration: 0.14 } }}
           transition={{ ...SPRING, opacity: { duration: 0.2 } }}
         >
-          {current.kind === "quiz" ? quizView(current) : current.kind === "run" && current.run ? (
+          {current.kind === "quiz" ? quizView(current) : current.kind === "run" && current.run && !longForm ? (
             <RunPlayer
               run={current.run}
               step={step}
@@ -135,7 +138,7 @@ export function LearnModules() {
               onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
               bar={bar(current, cardCount(current))}
             />
-          ) : current.kind === "interactive" && current.interactive ? (
+          ) : (current.kind === "interactive" || (current.kind === "run" && longForm)) && current.interactive ? (
             <InteractiveView
               module={current.interactive}
               step={step}

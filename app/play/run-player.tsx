@@ -15,9 +15,11 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { expiryIsHit, runPhaseAt, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
-import { acceptExperiment, markModuleComplete, readModel, recordAnswer, recordInsight, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
 import { Mechanic } from "./mechanics";
+import { SafetyScreen } from "../safety-screen";
+import { VoiceReflection } from "../voice-reflection";
 
 const SPRING = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
 const RESULT_MS = 1500;
@@ -37,13 +39,29 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
   const reducedMotion = Boolean(useReducedMotion());
   const [record, setRecord] = useState<ModelRecord | null>(null);
   const [cleared, setCleared] = useState<Record<string, boolean>>({});
+  const [reflection, setReflection] = useState("");
+  const [safety, setSafety] = useState<ReturnType<typeof activeSafety>>(null);
   const { phase, round, index } = runPhaseAt(run, step);
 
-  useEffect(() => { setRecord(readModel(deviceLearningStorage)); track("MODULE_STARTED", { module: run.id, format: "run" }); }, [run.id]);
+  useEffect(() => { const r = readModel(deviceLearningStorage); setRecord(r); setSafety(activeSafety(r)); track("MODULE_STARTED", { module: run.id, format: "run" }); }, [run.id]);
   const refresh = (r: ModelRecord) => setRecord(r);
   const next = useCallback(() => onStep(step + 1), [onStep, step]);
   const finish = () => { refresh(markModuleComplete(deviceLearningStorage, run.id)); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onFinish(); };
   const roundsCleared = Object.values(cleared).filter(Boolean).length;
+  /** The reflect beat: save, check for safety, and either stop on the safety screen or move on. */
+  const leaveReflection = () => {
+    if (reflection.trim()) {
+      const { record: r, safety: hit } = recordReflection(deviceLearningStorage, run.id, reflection);
+      refresh(r);
+      setReflection("");
+      if (hit) { track("SAFETY_TRIGGERED", { module: run.id, rule: hit }); setSafety(activeSafety(r)); return; }
+    }
+    next();
+  };
+
+  if (safety) {
+    return <SafetyScreen ruleId={safety.ruleId} onAcknowledge={() => { refresh(acknowledgeSafety(deviceLearningStorage)); setSafety(null); }} />;
+  }
 
   return (
     <section className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
@@ -117,6 +135,24 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
               </div>
             );
           })()}
+
+          {phase === "reflect" && run.reflect && (
+            <div className="play-card">
+              <Bean who={run.bean} mood="thinking" size={100} />
+              <p className="play-kicker">Optional</p>
+              <h2 className="play-title">{run.reflect.prompt}</h2>
+              <div className="play-choices" role="group" aria-label="Suggestions">
+                {run.reflect.suggestions.map((sug) => <button key={sug} type="button" className="play-choice" onClick={() => setReflection((t) => (t ? `${t} ${sug}` : sug))}>{sug}</button>)}
+              </div>
+              <label className="reflect-field" style={{ width: "100%" }}>
+                <span className="sr-only">Your reflection</span>
+                <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} placeholder="In your own words, or leave it blank." maxLength={2000} />
+              </label>
+              <VoiceReflection onText={(text) => setReflection((t) => (t ? `${t} ${text}` : text).slice(0, 2000))} />
+              <p className="play-kicker">Stays on this device</p>
+              <button type="button" className="play-tempt is-go" onClick={leaveReflection}>{reflection.trim() ? "Next" : "Skip"} <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+            </div>
+          )}
 
           {phase === "try" && (() => {
             const accepted = record?.experiments.some((e) => e.strategyId === run.strategy.id);

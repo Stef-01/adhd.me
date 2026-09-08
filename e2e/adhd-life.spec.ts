@@ -7,6 +7,29 @@ import { expect, test } from "@playwright/test";
 
 const MODEL_KEY = "adhdme.model.v1";
 
+/** Play the perfectionism run under reduced motion up to its reflect beat. */
+async function playToReflect(page: import("@playwright/test").Page) {
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await page.getByRole("button", { name: "I held off" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Permission to be rough" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "I held on" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Ask the reader" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /I guess, and aim high/ }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /Being judged/ }).click();
+  await page.getByRole("button", { name: "That’s me" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Partly" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+}
+
+
 test("E2E 1: a new person completes onboarding and is handed a first module", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/today");
@@ -139,12 +162,9 @@ test("Play: with motion on, the clock runs a round on its own and a held 'don't 
 });
 
 test("E2E 8: a safety response interrupts the module, pauses recommendations, and leaves nothing in a URL", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=perfectionism");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /permission to do it badly/ }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
-  for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next", exact: true }).click();
+  await playToReflect(page);
   await expect(page.locator(".reflect-field textarea")).toBeVisible();
   await page.locator(".reflect-field textarea").fill("I don't want to be here anymore");
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -306,12 +326,9 @@ test("Phase A: problem fit orders allied providers by the person's top need, and
 test("Phase A: voice reflection appends the transcript, and an absent recogniser says so", async ({ page }) => {
   const { installFakeSpeech } = await import("./support/fake-speech");
   await installFakeSpeech(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=perfectionism");
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("button", { name: /permission to do it badly/ }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
-  for (let i = 0; i < 4; i += 1) await page.getByRole("button", { name: "Next", exact: true }).click();
+  await playToReflect(page);
   await page.getByRole("button", { name: "Say it instead" }).click();
   await expect(page.getByRole("button", { name: /Tap when you’ve finished/ })).toBeVisible();
   await page.evaluate(() => (window as unknown as { __speech: { say: (t: string, f: boolean) => void; finish: () => void } }).__speech.say("the brief was vague", true));

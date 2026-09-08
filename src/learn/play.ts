@@ -59,23 +59,29 @@ export interface Run {
   /** The recognition round's question (PRD §19). */
   readonly recognition: string;
   readonly insight: Extract<Step, { kind: "insight" }>;
+  /** Optional reflection beat (PRD §28), after the insight: one prompt, a few suggestions, type or say it, skip. */
+  readonly reflect?: { readonly prompt: string; readonly suggestions: readonly string[] };
   readonly strategy: Strategy;
   readonly next: Extract<Step, { kind: "next" }>;
 }
 
-/** Title, rounds, recognition, insight, try, next. */
-export function runStepCount(run: Run): number {
-  return run.rounds.length + 5;
+export type RunPhase = "title" | "round" | "recognition" | "insight" | "reflect" | "try" | "next";
+
+function tailOf(run: Run): RunPhase[] {
+  return run.reflect ? ["recognition", "insight", "reflect", "try", "next"] : ["recognition", "insight", "try", "next"];
 }
 
-export type RunPhase = "title" | "round" | "recognition" | "insight" | "try" | "next";
+/** Title, rounds, recognition, insight, (reflect), try, next. */
+export function runStepCount(run: Run): number {
+  return run.rounds.length + 1 + tailOf(run).length;
+}
 
 export function runPhaseAt(run: Run, step: number): { phase: RunPhase; round?: Round; index?: number } {
   if (step <= 0) return { phase: "title" };
   const n = run.rounds.length;
   if (step <= n) return { phase: "round", round: run.rounds[step - 1], index: step - 1 };
-  const tail: RunPhase[] = ["recognition", "insight", "try", "next"];
-  return { phase: tail[Math.min(step - n - 1, 3)]! };
+  const tail = tailOf(run);
+  return { phase: tail[Math.min(step - n - 1, tail.length - 1)]! };
 }
 
 /** Whether the timer running out is a hit (the "don't" mechanics) or a miss. */
@@ -92,7 +98,7 @@ export function words(text: string): number {
 
 /** Every string a run renders, for the linters. */
 export function runText(run: Run): string[] {
-  const out = [run.title, run.tagline, run.recognition, run.insight.heading, run.insight.body, ...Object.values(run.insight.byAnswer?.map ?? {}), run.strategy.title, ...run.strategy.steps, run.next.heading, run.next.body];
+  const out = [run.title, run.tagline, run.recognition, run.insight.heading, run.insight.body, ...Object.values(run.insight.byAnswer?.map ?? {}), run.strategy.title, ...run.strategy.steps, run.next.heading, run.next.body, run.reflect?.prompt ?? "", ...(run.reflect?.suggestions ?? [])];
   for (const r of run.rounds) out.push(r.instruction, r.hit, r.miss, ...(r.items ?? []), ...(r.options ?? []).flatMap((o) => [o.label, o.thought ?? ""]));
   return out.filter(Boolean);
 }

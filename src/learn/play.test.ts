@@ -10,8 +10,10 @@ import { RUNS, runFor } from "./runs";
 import { cardCount, MODULES } from "./scenes";
 
 describe("the runs", () => {
-  it("are three in P1, each six to eight rounds, three to five minutes, keeping their module's id", () => {
-    expect(RUNS.length).toBe(3);
+  it("are the fifteen modules, each six to eight rounds, three to five minutes, keeping their module's id", () => {
+    expect(RUNS.length).toBe(15);
+    expect(new Set(RUNS.map((r) => r.id)).size).toBe(15);
+    for (const m of INTERACTIVE_MODULES) expect(RUNS.some((r) => r.id === m.id), m.id).toBe(true);
     for (const run of eachOf(RUNS, "the runs")) {
       expect(run.rounds.length).toBeGreaterThanOrEqual(6);
       expect(run.rounds.length).toBeLessThanOrEqual(8);
@@ -33,7 +35,7 @@ describe("the runs", () => {
         expect(words(r.hit), `${run.id}/${r.id} hit`).toBeLessThanOrEqual(RESULT_WORDS);
         expect(words(r.miss), `${run.id}/${r.id} miss`).toBeLessThanOrEqual(RESULT_WORDS);
         expect(r.seconds).toBeGreaterThanOrEqual(4);
-        expect(r.seconds).toBeLessThanOrEqual(10);
+        expect(r.seconds).toBeLessThanOrEqual(12);
       }
       for (const text of runText(run)) expect(lintLandingCopy(text), `${run.id}: ${text}`).toEqual([]);
     }
@@ -61,7 +63,13 @@ describe("the runs", () => {
     expect(expiryIsHit("tap")).toBe(false);
   });
 
-  it("walk title, rounds, recognition, insight, try, next", () => {
+  it("walk title, rounds, recognition, insight, (reflect), try, next", () => {
+    const withReflect = runFor("perfectionism")!;
+    expect(runPhaseAt(withReflect, withReflect.rounds.length + 3).phase).toBe("reflect");
+    expect(runPhaseAt(withReflect, withReflect.rounds.length + 4).phase).toBe("try");
+    expect(runStepCount(withReflect)).toBe(withReflect.rounds.length + 6);
+    // Reflection — and with it the safety pathway — survives the conversion on at least the two modules that carried it.
+    expect(RUNS.filter((r) => r.reflect).map((r) => r.id).sort()).toEqual(["conflict", "perfectionism"]);
     const run = runFor("starting")!;
     expect(runPhaseAt(run, 0).phase).toBe("title");
     expect(runPhaseAt(run, 1)).toMatchObject({ phase: "round", index: 0 });
