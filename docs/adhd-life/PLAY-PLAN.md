@@ -126,8 +126,10 @@ untouched; the long-form player retired.
 **Phase P3 — collection and rhythm.** Bean collection on the Learn page; tempo ramp tuned by
 watching real people (5–8 users, PRD §76: did it feel patronising, could you say what it taught).
 
-**Phase P4 — pilot instrumentation.** Round-level completion in the analytics taxonomy; the §78
-targets (start > 70 %, completion > 65 %) measured on runs.
+**Phase P4 — pilot instrumentation.** Round-level completion is in the analytics taxonomy
+(`MODULE_STARTED` / `MODULE_COMPLETED` with `format: "run"`, `MODULE_STEP_COMPLETED` with the
+mechanic and the hit); the §78 targets (start > 70 %, completion > 65 %) are measured on runs
+in the pilot.
 
 ## 8. Acceptance (tests)
 
@@ -141,8 +143,9 @@ targets (start > 70 %, completion > 65 %) measured on runs.
 
 ## 9. Decisions (founder, 2026-09-08: "those interactive game elements should be there")
 
-1. **The runs are the form.** The long-form player stays hidden behind `?long=1` for one release
-   and is then deleted.
+1. **The runs are the form.** The long-form player stayed hidden behind `?long=1` for one release
+   (PR #4) and was deleted in the next (P5): there is no `interactive` module kind any more, every
+   interactive module is a run, and `scenes.ts` refuses one that is not.
 2. **Timer ramps** — five percent a round, floor seventy percent, never on a round that asks
    about you (`rampedSeconds`). Tuned against real people in P3.
 3. **No sound** in P0.
