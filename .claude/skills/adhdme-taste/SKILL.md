@@ -24,6 +24,14 @@ without updating the register is a build failure, not a review finding.
   reader must scan two regions to join one fact, the layout is wrong. {#layout.shared-row}
 - **Five, then the rest.** Long lists show a chooseable few with the remainder one tap away.
   Never render an unbounded list as the default state. {#layout.five-then-rest}
+- **The game bleeds to the edge** (founder, 2026-09-08: "it should feel immersive"). In Play
+  the stage is the screen: its ground runs to the viewport edges, the scene runs edge to edge
+  on a phone, and there is no card drawn around it. Chrome that is not the game — back, title,
+  progress, step count — lives in one small housing (`.play-hut`) outside the stage, never
+  inside it. {#layout.full-bleed-play}
+- **No boxes inside boxes.** One container per idea. A border, a radius or a shadow says
+  "separate object" and is spent once per screen; a window inside a window inside a shell is
+  never the answer. {#layout.one-container}
 
 ## Type & colour
 
@@ -34,6 +42,9 @@ without updating the register is a build failure, not a review finding.
   non-breaking spaces inside names and units. {#type.numeric-typography}
 - Palette tokens only (`--ink`, `--muted`, `--accent`, `--paper`…); no raw hex in
   components. {#type.palette-tokens}
+- **Minimal darkness** (founder, 2026-09-08). Ink is for text. No black or near-black fill as
+  a block, a pill or a button on a patient screen; a control sits on paper, stone or the accent.
+  Drawn props are mid-tone, never a dark silhouette. {#type.no-dark-blocks}
 
 ## Interaction
 

@@ -1,8 +1,15 @@
 /* Play (docs/adhd-life/PLAY-PLAN.md §4): big beans, flat bright rounds, one clock, ≤ 14 words. */
-/* The bar (title, progress) keeps the shell width; the stage itself is a phone-wide column. */
-.play-stage { max-width: 640px; margin: 0 auto; }
-.play-stage { min-height: 60dvh; }
-.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 22px 20px 26px; border-radius: 28px; background: var(--route-soft); text-align: center; overflow: hidden; }
+/* Immersive (§11): the stage bleeds to the viewport edges; the chrome sits in one housing above it. */
+body:has(.play-run) { overflow-x: clip; }
+.play-hut { max-width: 640px; margin: 0 auto 14px; padding: 10px 14px 12px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+.platform-shell .play-hut .learn-module-bar { margin: 0 0 4px; }
+.platform-shell .play-hut .learn-module-kicker { margin: 0 0 8px; }
+.platform-shell .play-hut .learn-module-title { font-size: 17px; }
+.play-hut .learn-dots { margin: 0; }
+.play-stage { margin: 0 calc(50% - 50vw); min-height: 60dvh; }
+.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: calc(100svh - 236px); padding: 22px 16px 32px; border-radius: 0; background: var(--route-soft); text-align: center; overflow: hidden; }
+.play-card > * { width: 100%; max-width: 640px; }
+.play-card > .play-clock { max-width: none; }
 .play-card.is-title { background: var(--accent-soft); padding-top: 34px; }
 .play-card.is-round { background: var(--route-soft); gap: 12px; }
 .play-card.is-round.is-hit { background: color-mix(in srgb, #0e8345 16%, var(--paper)); }
@@ -15,8 +22,8 @@
 .play-title { margin: 0; max-width: 20ch; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.5rem, 6.5vw, 2rem); font-weight: 460; letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
 .play-instruction:focus-visible { outline: none; }
 /* The instruction is called out over the scene for two seconds while the clock runs (clone: 0.15s in, 2s hold, 0.5s out), then settles into its place. */
-.play-instruction { transition: transform 0.5s var(--ease-ui), background 0.5s var(--ease-ui), box-shadow 0.5s var(--ease-ui); }
-.play-instruction.is-callout { transform: scale(1.06); padding: 10px 18px; border-radius: 18px; background: var(--paper); box-shadow: 0 10px 0 color-mix(in srgb, var(--ink) 10%, transparent); animation: play-callout-in 0.15s var(--ease-ui); }
+.play-instruction { transition: transform 0.5s var(--ease-ui); }
+.play-instruction.is-callout { transform: scale(1.06); animation: play-callout-in 0.15s var(--ease-ui); }
 @keyframes play-callout-in { from { transform: scale(0.6); opacity: 0; } }
 /* The Faster card: one word, under a second, before every third round. */
 .play-faster { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 260px; justify-content: center; }
@@ -24,7 +31,9 @@
 @media (prefers-reduced-motion: reduce) { .play-instruction { transition: none; } .play-instruction.is-callout { animation: none; } }
 .play-line { margin: 0; max-width: 34ch; color: var(--ink); font-size: 1.0625rem; line-height: 1.5; }
 /* The scene (P5): a full-width stage with one flat prop, the bean standing in it. */
-.play-scene { position: relative; width: 100%; aspect-ratio: 360 / 216; border-radius: 20px; overflow: hidden; }
+/* The scene grows to fill the stage; the art sits on the ground and the tint is the sky above it. */
+.play-scene { position: relative; flex: 1 0 auto; width: calc(100% + 32px); max-width: none; min-height: 236px; margin-inline: -16px; border-radius: 0; overflow: hidden; }
+@media (min-width: 768px) { .play-scene { width: 100%; margin-inline: 0; min-height: 320px; border-radius: 20px; } }
 .play-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .play-scene-bean { position: absolute; left: 16%; bottom: 8px; transform: translateX(-50%); }
 .play-scene[data-prop="none"] .play-scene-bean { left: 50%; }
@@ -40,12 +49,15 @@
 .play-bean-hit.is-now .bean { transform: scale(1.08); }
 .play-bean-hit:disabled { cursor: default; }
 .play-bean-hit:focus-visible { outline: none; } .play-bean-hit:focus-visible .play-bean-label { outline: 3px solid var(--accent); outline-offset: 3px; }
-.play-bean-label { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 0.9375rem; font-weight: 700; }
+.play-bean-label { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 3px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
 .play-bean-hit.is-holding .play-bean-label, .play-bean-hit.is-now .play-bean-label { background: var(--accent); color: var(--on-accent); }
-.play-tempt.in-scene { position: absolute; right: 14px; bottom: 18px; box-shadow: 0 6px 0 rgba(34, 26, 22, 0.14); }
+.play-tempt.in-scene { position: absolute; right: 14px; bottom: 18px; width: auto; box-shadow: 0 6px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
 .play-timing-track.in-scene { position: absolute; left: 8%; right: 8%; top: 14px; height: 22px; }
 .play-heat.in-scene { position: absolute; left: 8%; right: 8%; top: 18px; }
-.play-hold, .play-dont, .play-timing, .play-pause { display: grid; gap: 12px; width: 100%; justify-items: center; }
+/* The mechanics that own the scene grow with the stage, the scene taking the room. */
+.play-hold, .play-dont, .play-timing, .play-pause { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
+.play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene { flex: 1 0 auto; }
+.play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .play-controls { width: 100%; }
 .bean { display: block; }
 .play-hero-bean { filter: drop-shadow(0 8px 0 color-mix(in srgb, var(--ink) 8%, transparent)); }
@@ -56,7 +68,7 @@
 .play-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
 .play-choice:disabled { opacity: 0.6; cursor: default; }
 .play-choice:focus-visible, .play-tempt:focus-visible, .play-hold-button:focus-visible, .play-bean-button:focus-visible, .play-layer:focus-visible, .play-note:focus-visible, .play-chip-big:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--ground); color: var(--on-ground); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
 .play-tempt.is-go { background: var(--accent); color: var(--on-accent); }
 .play-tempt:disabled { opacity: 0.5; cursor: default; }
 .play-dont { display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -107,7 +119,7 @@
 .play-scale output { font-size: 1.5rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .play-steps { margin: 0; padding-left: 20px; text-align: left; font-size: 1rem; line-height: 1.5; display: grid; gap: 6px; max-width: 34ch; }
 .platform-shell .learn-card-art .bean { width: 72px; height: auto; }
-@media (max-width: 767px) { .play-card { padding: 20px 16px 24px; border-radius: 22px; } }
+@media (max-width: 767px) { .play-card { padding: 18px 16px 28px; } }
 @media (prefers-reduced-motion: reduce) { .play-choice, .play-heat span { transition: none; } }
 /* The cast (PLAY-PLAN.md §5): five beans, asleep until a run they lead is cleared. */
 .play-cast { display: flex; gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }

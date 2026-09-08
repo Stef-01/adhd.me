@@ -202,6 +202,13 @@ runs worked but read as a form with a bean above it. P5 is the answer, built in 
 
 - **The scene reacts.** On a hit the bean hops; on a miss the scene shakes. Nothing moves under
   reduced motion.
+- **Immersive** (founder, 2026-09-08: "full screen bleeding till edge, not boxed windows
+  everywhere, the progress bar outside in its own housing, minimise blackness"). The stage
+  bleeds to the viewport edges with no card around it; on a phone the scene runs edge to edge.
+  Back, title, progress and step count sit in one small housing above the stage (`.play-hut`).
+  No dark blocks: the bean's label and the tempting thing are paper or accent, the props are
+  mid-tone. Rules recorded in the taste file (`layout.full-bleed-play`, `layout.one-container`,
+  `type.no-dark-blocks`).
 
 Still open, for the pilot: props that react on their own terms (the phone that lights up, the
 bill that slides), and the tempo tuned against real people (§9.2).

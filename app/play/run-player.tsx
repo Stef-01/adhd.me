@@ -68,7 +68,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
 
   return (
     <section className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
-      {bar}
+      <div className="play-hut">{bar}</div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={step} className="play-stage" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -12, transition: { duration: 0.12 } }} transition={{ ...SPRING, opacity: { duration: 0.18 } }}>
           {phase === "title" && (
