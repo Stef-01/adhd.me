@@ -9991,14 +9991,25 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .me-show:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ── RADIANT, unit 3: the learn tab as the founder's card stack ────────────────────────────── */
+/* The learn tab is the one surface that keeps its own colour: the founder's eight covers, not the
+   platform's blue. Four values a card needs, and each was computed rather than eyeballed —
+   `fill`, the `ink` for the 20px title, the quieter `sub` for the 11–12px subtitle and meta, and
+   `deep`, the same hue dark enough to be 12px text on white when the module is open.
+   Tightest pairs in the set: lilac's sub on its fill (4.60:1) and forest's deep on --paper
+   (5.10:1); every other pair is further clear of the 4.5:1 floor small text has to hold.
+   Chroma against the first cut of this palette: oat 4% → 36%, slate 15% → 80%, lilac 34% → 54%.
+   The pale three were what made a colourful stack read grey. */
 .me-screen.learn-screen {
-  --learn-amber: #f59e0b;    --learn-amber-ink: #1c1917;
-  --learn-oat: #f5efeb;      --learn-oat-ink: #221a16;    --learn-oat-sub: #705d56;  --learn-oat-line: #e9dfd7;
-  --learn-forest: #0e8345;   --learn-forest-ink: #ffffff;
-  --learn-lilac: #b18fd8;    --learn-lilac-ink: #2e1065;
-  --learn-coral: #f26419;    --learn-coral-ink: #1c1917;
-  --learn-slate: #4a4e57;    --learn-slate-ink: #ffffff;  --learn-slate-sub: #e2e8f0;
-  --learn-saffron: #f3b61f;  --learn-saffron-ink: #1c1917; --learn-saffron-sub: #78350f;
+  --learn-amber:   #ffa000;  --learn-amber-ink:   #2b1600;  --learn-amber-sub:   #4d2900;  --learn-amber-deep:   #8a5100;
+  --learn-saffron: #ffd21f;  --learn-saffron-ink: #2e2400;  --learn-saffron-sub: #544000;  --learn-saffron-deep: #7d5c00;
+  --learn-coral:   #fb5a1f;  --learn-coral-ink:   #2e0c00;  --learn-coral-sub:   #401200;  --learn-coral-deep:   #b83a10;
+  --learn-oat:     #ffc9a3;  --learn-oat-ink:     #3b1c05;  --learn-oat-sub:     #63300f;  --learn-oat-deep:     #8a4a1c;
+  --learn-lilac:   #a970f5;  --learn-lilac-ink:   #25054c;  --learn-lilac-sub:   #330a66;  --learn-lilac-deep:   #6d28c4;
+  --learn-forest:  #00794a;  --learn-forest-ink:  #ffffff;  --learn-forest-sub:  #e9fff5;  --learn-forest-deep:  #0a7048;
+  --learn-slate:   #15596b;  --learn-slate-ink:   #ffffff;  --learn-slate-sub:   #e3f6fc;  --learn-slate-deep:   #0f5566;
+  /* Night is the mockup's eighth. It sat unused while there were seven modules; there are
+     twenty-seven now, so the ramp needs its second dark card. */
+  --learn-night:   #2f2a7a;  --learn-night-ink:   #ffffff;  --learn-night-sub:   #e7e5fb;  --learn-night-deep:   #2f2a7a;
 }
 .learn-tagline { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 500; line-height: 1.45; }
 .learn-chips {

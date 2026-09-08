@@ -23,17 +23,21 @@ body { font-family: var(--font-ui); }
   background: var(--ink); color: var(--paper); border-color: var(--ink);
 }
 .platform-shell .learn-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-.platform-shell .learn-stack .learn-card { background: var(--stone); color: var(--ink); border: 1px solid var(--line); }
-.platform-shell .learn-stack li:nth-child(even) .learn-card { background: var(--paper); }
-.platform-shell .learn-card.is-forest :is(small,.learn-card-meta,.learn-card-done) { color: var(--ink); }
+/* THE LEARN COVERS ARE THE ONE SURFACE THE WARM RAMP DOES NOT OWN.
+   This file flattened the stack to alternating --stone and --paper with a hairline, which is a
+   correct instinct everywhere else on the platform and wrong here: the founder drew the library
+   as eight colours, and a shelf of covers is the one place on this product where colour is the
+   content rather than the decoration. The covers, their inks and their tone live in
+   globals.css §RADIANT and app/styles/learning.css; nothing about them is restated here.
+   Everything else on this page — the chip, the primary action, the band, the footer — still
+   takes the ramp below. */
 .learning-example-choices button { background: var(--paper); }
 .learning-example-choices button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
 .learning-care-ring.ring-0 { background: var(--line); }
 .learning-care-ring.ring-1 { background: var(--stone); }
 .learning-care-ring.ring-2 { background: var(--paper); }
 .learning-care-ring[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--accent); }
-.platform-shell .learn-dots li:is(.is-current,.is-done) { background: var(--ink); }
-.platform-shell .learn-reveal { background: var(--stone); color: var(--ink); }
+.platform-shell .learn-reveal { color: var(--ink); }
 .platform-shell .learn-figures dt { font-family: var(--font-ui); font-weight: 600; }
 body .aoc-band, body:has(.platform-shell) .aoc-band, .site-footer {
   background: var(--ink); background-image: none; color: var(--line);
