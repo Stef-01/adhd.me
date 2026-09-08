@@ -176,3 +176,26 @@ that we do not, and two it has that we refuse on purpose:
 - **Refused — lives and points.** Three lives, a score with random bonus names ("PITY BONUS",
   "INSULT TO INJURY") and a high score are the clone's; §3 and PRD §34 rule them out. Rounds, not
   lives; beans, not points.
+
+## 11. Phase P5 — scene-first rounds and more game (founder, 2026-09-08: "get the game modules
+created and iterated asap")
+
+Read against the captures of every round (`qa/play/`, and the review sheet built from them): the
+runs worked but read as a form with a bean above it. P5 is the answer, built in one sitting.
+
+- **The scene.** `app/play/scene.tsx`: a full-width stage with one flat SVG prop (desk, phone,
+  bill, ball, lecture, bed, kitchen, calendar, door — our own art, in the beans' style) and the
+  bean standing in it. Every round has one; the instruction sits above it, the controls below.
+- **The bean is the thing you touch.** Hold, pause and timing put their action on the bean
+  itself (press and hold Alex to stay in the class; tap Maya the moment it becomes real). Don't-tap
+  puts the tempting thing in the scene as a prop-button. The clock, the drift, the heat and the
+  timing track all live inside the scene.
+- **Controls fill the card.** Choices are a two-column grid of 64px buttons; a third option
+  spans the row. The empty lower third is gone.
+- **Less asking, more playing.** One "pick your bean" round per run — the one whose answer the
+  needs engine reads — and twenty-nine new game rounds across the fifteen, favouring timing,
+  sort, flip, recall, drag-capture and don't-tap, so no run is under six games. Timing, pause
+  and recall now take their reduced-motion choices and decoys from the round itself.
+
+Still open, for the pilot: props that react (the phone that lights up, the bill that slides),
+and the tempo tuned against real people (§9.2).

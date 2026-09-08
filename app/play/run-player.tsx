@@ -17,7 +17,8 @@ import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
-import { Mechanic } from "./mechanics";
+import { Mechanic, ownsScene } from "./mechanics";
+import { Scene } from "./scene";
 import { SafetyScreen } from "../safety-screen";
 import { VoiceReflection } from "../voice-reflection";
 
@@ -269,10 +270,10 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
       )}
       {!reducedMotion && beat !== "faster" && <div className="play-clock" aria-hidden="true"><span style={{ transform: `scaleX(${1 - progress})` }} /></div>}
       <p className="play-kicker">Round {index + 1} of {run.rounds.length}</p>
-      {beat !== "faster" && <div className="play-scene"><Bean who={round.who} mood={mood} size={128} /></div>}
       {beat !== "faster" && <h2 className={`play-title play-instruction${callout && beat === "play" ? " is-callout" : ""}`} tabIndex={-1}>{round.instruction}</h2>}
+      {beat !== "faster" && (beat === "result" || !ownsScene(round.mechanic)) && <Scene prop={round.prop} who={round.who} mood={mood} />}
       {beat !== "result" && (
-        <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} onResult={settle} />
+        <Mechanic round={round} live={beat === "play"} reducedMotion={reducedMotion} progress={progress} mood={mood} onResult={settle} />
       )}
       {beat === "result" && (
         <motion.div className="play-result" role="status" initial={reducedMotion ? false : { scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={SPRING}>
