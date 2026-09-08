@@ -31,7 +31,9 @@ test("the brand is text-only and learning activities respond without completing 
 
 test("the step builder gives feedback and can be completed with the keyboard", async ({ page }) => {
   await page.goto("/approach?module=everyday");
+  await expect(page.locator(".learn-lesson:visible")).toHaveCount(1);
   await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".learn-lesson:visible")).toHaveCount(1);
   const activity = page.getByRole("complementary", { name: "Build a first step" });
   await activity.getByRole("button", { name: "Add one bullet" }).click();
   await expect(activity.getByRole("status")).toContainText("Try the action");
@@ -42,6 +44,8 @@ test("the step builder gives feedback and can be completed with the keyboard", a
   await expect(activity).toContainText("3 / 3 placed");
   await activity.getByRole("button", { name: "Try again" }).click();
   await expect(activity).toContainText("0 / 3 placed");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".learn-lesson:visible")).toHaveCount(1);
 });
 
 test("personal meditation pauses, resumes, completes and respects reduced motion", async ({ page }) => {
