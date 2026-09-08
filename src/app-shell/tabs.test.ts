@@ -17,15 +17,23 @@ describe("O230 the app's tabs", () => {
   it("opens on the product: tab one is the finder, and the finder is the root route", () => {
     // The Zocdoc finding, made a law: a finder-shaped app opens on search, not on a story. If
     // this ever fails it means the front door became something other than the thing the app does.
+    // 2026-09-08: the tab is called Support — the PRD's word for the marketplace — and the finder
+    // is still what it opens.
     expect(APP_TABS[0]?.href).toBe("/");
-    expect(APP_TABS[0]?.label).toBe("Find");
+    expect(APP_TABS[0]?.label).toBe("Support");
+  });
+
+  it("is the PRD's four destinations, in its order after the product", () => {
+    expect(APP_TABS.map((t) => t.label)).toEqual(["Support", "Today", "Learn", "My ADHD"]);
   });
 
   it("names a real page route, once each, and never a console or dynamic one", () => {
     for (const tab of eachOf(APP_TABS, "the tab bar")) {
-      expect(pageRoutes.has(tab.href), `${tab.href} is not a page route`).toBe(true);
-      expect(tab.href.startsWith("/console")).toBe(false);
-      expect(tab.href).not.toContain("[");
+      for (const href of [tab.href, ...(tab.also ?? [])]) {
+        expect(pageRoutes.has(href), `${href} is not a page route`).toBe(true);
+        expect(href.startsWith("/console")).toBe(false);
+        expect(href).not.toContain("[");
+      }
     }
     expect(new Set(APP_TABS.map((t) => t.href)).size).toBe(APP_TABS.length);
     expect(new Set(APP_TABS.map((t) => t.label)).size).toBe(APP_TABS.length);
@@ -52,8 +60,16 @@ describe("O230 the app's tabs", () => {
 describe("O230 which tab a path belongs to", () => {
   it("matches the root only to itself, and a section to its own tab", () => {
     expect(activeTab("/")?.href).toBe("/");
-    expect(activeTab("/profile")?.href).toBe("/profile");
     expect(activeTab("/approach")?.href).toBe("/approach");
+    expect(activeTab("/approach/map")?.href).toBe("/approach");
+    expect(activeTab("/today")?.href).toBe("/today");
+    expect(activeTab("/my-adhd")?.href).toBe("/my-adhd");
+  });
+
+  it("a deeper screen of a place is that place: the filters and the support path are the finder's, onboarding is Today's", () => {
+    expect(activeTab("/profile")?.label).toBe("Support");
+    expect(activeTab("/support")?.label).toBe("Support");
+    expect(activeTab("/start")?.label).toBe("Today");
   });
 
   it("claims nothing outside the bar — a route with no tab highlights none", () => {

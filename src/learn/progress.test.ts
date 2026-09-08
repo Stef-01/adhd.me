@@ -29,6 +29,10 @@ describe("the modules", () => {
       if (module.kind === "read") {
         expect(scenesOf(module).map((s) => s.n)).toEqual([...module.scenes!]);
         expect(cardCount(module)).toBeGreaterThan(0);
+      } else if (module.kind === "interactive") {
+        // Held to the PRD's stage list in interactive.test.ts; here only that it has steps.
+        expect(cardCount(module)).toBe(module.interactive?.steps.length);
+        expect(cardCount(module)).toBeGreaterThan(5);
       } else {
         const questions = module.questions ?? [];
         expect(questions.length).toBeGreaterThanOrEqual(3);
@@ -55,7 +59,8 @@ describe("the modules", () => {
   it("state a reading time a person can plan for", () => {
     for (const module of eachOf(MODULES, "the learn modules")) {
       expect(module.minutes).toBeGreaterThan(0);
-      expect(module.minutes).toBeLessThanOrEqual(5);
+      // Reads and quizzes are short; an interactive module is seven to twelve minutes by the PRD.
+      expect(module.minutes).toBeLessThanOrEqual(module.kind === "interactive" ? 12 : 5);
     }
   });
 

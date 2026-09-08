@@ -19,6 +19,8 @@ import {
   type Clinician,
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
+import { professionsMentioned } from "@/support/professions";
+import { professionOf } from "@/demo/clinicians";
 import { clarifiers } from "@/matching/clarify";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
@@ -102,10 +104,20 @@ export function CareFinder() {
   // thing an address carries) and is read at arrival, before the first paint.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
-  const roster = useMemo(
+  const filteredRoster = useMemo(
     () => applyFilters(rosterFor(includeSynthetic), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
     [includeSynthetic, filters, origin],
   );
+  /**
+   * 2026-09-08 (PRD §38): a sentence that NAMES a kind of professional — "a psychologist near
+   * Beecroft", "an OT for starting work" — narrows the roster to that kind before ranking, the way
+   * a filter does. Read from the words alone (`professionsMentioned`), never inferred from what
+   * the person needs; the support path's profession filter (`filters.professions`) is the other
+   * door and rides with the rest of the filters above. Every derived read below threads THIS
+   * roster, so no sentence describes a list the ranking did not run over.
+   */
+  const named = useMemo(() => professionsMentioned(request), [request]);
+  const roster = useMemo(() => (named.length === 0 ? filteredRoster : filteredRoster.filter((c) => named.includes(professionOf(c)))), [filteredRoster, named]);
   const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
     // none — a search started from the front door reads back what the profile set. A place on
@@ -126,7 +138,9 @@ export function CareFinder() {
     setRequest(words);
     setDraft(record.draft);
     const resumedOrigin = resolvePlace(arrivedPlace);
-    const resumedRoster = applyFilters(rosterFor(includeSynthetic), held, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null));
+    const resumedNamed = professionsMentioned(words);
+    const resumedRoster = applyFilters(rosterFor(includeSynthetic), held, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null))
+      .filter((c) => resumedNamed.length === 0 || resumedNamed.includes(professionOf(c)));
     const found = rankCliniciansNear(words, resumedOrigin, resumedRoster).findIndex((item) => item.id === record.matchId);
     setMatchIndex(Math.max(0, found));
   });

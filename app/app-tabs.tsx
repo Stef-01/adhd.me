@@ -26,13 +26,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, MagnifyingGlass, UserCircle, type Icon } from "@phosphor-icons/react";
+import { BookOpen, Compass, Lifebuoy, MagnifyingGlass, Sun, UserCircle, type Icon } from "@phosphor-icons/react";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { activeFilterCount, readFilters } from "@/finder/filters";
 import { activeTab, APP_TABS, type AppTab } from "@/app-shell/tabs";
 
-const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, UserCircle, BookOpen };
+const ICONS: Record<AppTab["icon"], Icon> = { MagnifyingGlass, UserCircle, BookOpen, Sun, Lifebuoy, Compass };
 
 export function AppTabs({ hidden = false }: { hidden?: boolean }) {
   const pathname = usePathname();
@@ -90,7 +90,7 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
                   <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
                 </motion.span>
                 <span className="app-tab-label">{tab.label}</span>
-                {tab.href === "/profile" && (
+                {tab.href === "/" && (
                   <span className="t-badge" data-open={filtersOn !== null && filtersOn > 0 ? "true" : "false"} aria-hidden="true">
                     <span className="t-badge-dot">{filtersOn ?? ""}</span>
                   </span>

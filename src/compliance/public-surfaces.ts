@@ -120,6 +120,31 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "O233's Profile tab. It renders only what this device's own session already holds — the words the person described and the suburb they gave — so it publishes nothing and personalises nothing, but it is a patient-facing app surface and every sentence on it answers to the patient rules.",
   },
   {
+    path: "/start",
+    audience: "patient",
+    why: "The ADHD Life onboarding (PRD §9): ten questions about where a person is and what feels hardest. It asks, it never scores, and it is read by exactly the person the patient rules protect — so every prompt and option answers to them.",
+  },
+  {
+    path: "/today",
+    audience: "patient",
+    why: "The single most useful next action, derived from this device's own record (PRD §6). A recommendation is the most patient-facing sentence the app writes, and the rule that wrote it is printed beside it; both answer to the patient rules.",
+  },
+  {
+    path: "/my-adhd",
+    audience: "patient",
+    why: "The person's own picture across brain, body, environment and people (PRD §26), built only from what they said. No diagnosis, no score; every line is a patient surface.",
+  },
+  {
+    path: "/support",
+    audience: "patient",
+    why: "From a problem to the kind of professional who helps with it (PRD §37). Names professions to a patient — which is exactly the sentence the no-specialist and no-claims rules were written for — so it is swept in full.",
+  },
+  {
+    path: "/approach/map",
+    audience: "patient",
+    why: "The care map: the eco-bio-psychosocial model as a screen (PRD §25). General education about where ADHD sits in a life, plus the person's own signals when the device holds any; the same reader as /approach, the same rules.",
+  },
+  {
     path: "/story",
     audience: "patient",
     why: "Why the product exists, at length: the account that occupied `/` until O230 made the front door the app. Same reader as before — somebody deciding whether to look for a GP — and the same rules, the same linter and the same copy; only the address changed.",

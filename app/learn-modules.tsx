@@ -13,12 +13,18 @@ import { clearProgress, markDone, readProgress, type Progress } from "@/learn/pr
 import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
 import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
 import { LearningScene, LearningCoverArt, LearningExplorer, CarePathExplorer } from "./learning-scene";
+import { InteractiveView } from "./interactive-module";
+import { CharacterMark } from "./characters";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
 
 const COLLECTION_COLOURS: Readonly<Record<string, string>> = {
   adhd: "amber", everyday: "oat", "myth-or-fact": "forest", words: "lilac", finding: "coral", cost: "slate", changed: "saffron",
+  context: "amber", "more-than-attention": "oat", starting: "coral", deadlines: "lilac", "working-memory": "slate", hyperfocus: "saffron",
+  ambiguity: "oat", interruption: "lilac", perfectionism: "amber",
+  "not-listening": "forest", "forgotten-commitments": "oat", conflict: "coral",
+  household: "saffron", sleep: "slate", exercise: "forest",
 };
 
 function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
@@ -118,7 +124,18 @@ export function LearnModules() {
           exit={reducedMotion ? undefined : { opacity: 0, x: 24, transition: { duration: 0.14 } }}
           transition={{ ...SPRING, opacity: { duration: 0.2 } }}
         >
-          {current.kind === "quiz" ? quizView(current) : readView(current)}
+          {current.kind === "quiz" ? quizView(current) : current.kind === "interactive" && current.interactive ? (
+            <InteractiveView
+              module={current.interactive}
+              step={step}
+              direction={direction}
+              hydrated={hydrated}
+              onStep={(next) => { setDirection(next > step ? 1 : -1); setStep(next); }}
+              onFinish={() => finish(current.id)}
+              onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
+              bar={bar(current, current.interactive.steps.length)}
+            />
+          ) : readView(current)}
         </motion.div>
       ) : (
         <motion.div
@@ -344,6 +361,17 @@ export function LearnModules() {
   function listView() {
     return (
       <section className="learn-list" aria-labelledby="learn-list-title">
+        {completed && MODULES.find(module => module.id === completed)?.kind === "interactive" && (
+          <div className="learning-feature learning-completion">
+            <div role="status">
+              <p className="learning-overline">MODULE FINISHED</p>
+              <h2>Your picture just got sharper.</h2>
+              <p>What you said is on My ADHD now, with what seems to contribute and what to try next.</p>
+              <Link className="learn-secondary" href="/my-adhd">See My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
+            </div>
+            <LearningScene topic={completed} reaction="complete" />
+          </div>
+        )}
         {completed && MODULES.find(module => module.id === completed)?.kind === "read" && (
           <div className="learning-feature learning-completion">
             <div role="status">
@@ -360,7 +388,7 @@ export function LearnModules() {
             <p className="learning-overline">A LITTLE UNDERSTANDING GOES A LONG WAY</p>
             <h2>Get to know ADHD.<br />One idea at a time.</h2>
             <p>Short reads, everyday examples, and a few things that might surprise you. Take them at your own pace.</p>
-            <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "adhd", Boolean(cursor))}>{cursor ? `Continue ${MODULES.find(module => module.id === cursor.moduleId)?.title}` : "Explore the first module"} <ArrowRight size={18} aria-hidden="true" /></button>
+            <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "context", Boolean(cursor))}>{cursor ? `Continue ${MODULES.find(module => module.id === cursor.moduleId)?.title}` : "Explore the first module"} <ArrowRight size={18} aria-hidden="true" /></button>
           </div>
           <LearningScene />
         </div>
@@ -414,11 +442,11 @@ export function LearnModules() {
                       <strong>{module.title}</strong>
                       <small>{module.subtitle}</small>
                       <span className="learn-card-meta">
-                        <span>{module.kind === "quiz" ? "Quiz" : "Read"}</span>
+                        <span>{module.kind === "quiz" ? "Quiz" : module.kind === "interactive" ? "Interactive" : "Read"}</span>
                         <span className="learn-tile-dot" aria-hidden="true" />
                         <span className="learn-tile-time"><Clock size={12} weight="bold" aria-hidden="true" />{module.minutes} min</span>
                         <span className="learn-tile-dot" aria-hidden="true" />
-                        <span>{count} {module.kind === "quiz" ? "questions" : "cards"}</span>
+                        <span>{count} {module.kind === "quiz" ? "questions" : module.kind === "interactive" ? "steps" : "cards"}</span>
                         {done && (
                           <>
                             <span className="learn-tile-dot" aria-hidden="true" />
@@ -429,7 +457,11 @@ export function LearnModules() {
                         )}
                       </span>
                     </span>
-                    <span className="learn-card-art" aria-hidden="true"><LearningCoverArt id={module.id} /></span>
+                    <span className="learn-card-art" aria-hidden="true">
+                      {module.kind === "interactive" && module.interactive
+                        ? <CharacterMark who={module.interactive.characters[0]!} mood="engaged" />
+                        : <LearningCoverArt id={module.id} />}
+                    </span>
                   </motion.button>
                 </motion.li>
               );
@@ -449,7 +481,7 @@ export function LearnModules() {
         <p className="learn-figures-note">Indicative figures pending source confirmation.</p>
 
         <Link className="learn-cta" href="/">
-          Find a GP near you
+          Find support near you
           <ArrowRight size={17} weight="bold" aria-hidden="true" />
         </Link>
       </section>

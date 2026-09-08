@@ -6,7 +6,7 @@ const MULTI_ASK =
 async function intoResults(page: Page, request = MULTI_ASK) {
   await page.goto("/");
   await page.locator("#welcome-request").fill(request);
-  await page.getByRole("button", { name: "Find a GP" }).click();
+  await page.getByRole("button", { name: "Find support" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
 }
 

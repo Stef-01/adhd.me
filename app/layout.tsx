@@ -4,6 +4,7 @@ import "./styles/platform.css";
 import "./styles/learning.css";
 import "./styles/finder.css";
 import "./styles/platform-surfaces.css";
+import "./styles/life.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";

@@ -37,7 +37,7 @@ export default function OpengraphImage() {
               Assessment you can actually reach.
             </div>
             <div style={{ fontSize: 28, marginTop: 34, maxWidth: 720, color: "#565f70", lineHeight: 1.35 }}>
-              Describe the GP you are looking for. See why each listed GP appears.
+              Describe the support you are looking for. See why each listed provider appears.
             </div>
           </div>
         </div>
