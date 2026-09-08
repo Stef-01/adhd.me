@@ -6,9 +6,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, Clock, X } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { INDICATIVE_FIGURES } from "@/compliance/landing-copy";
 import { clearProgress, markDone, readProgress, type Progress } from "@/learn/progress";
 import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
 import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
@@ -16,7 +15,6 @@ import { LearningScene, LearningCoverArt, LearningExplorer, CarePathExplorer } f
 import { LearningActivity } from "./learning-activities";
 import { RunPlayer } from "./play/run-player";
 import { Bean } from "./play/beans";
-import { CHARACTERS, CHARACTER_BIOS } from "@/learn/interactive";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
@@ -76,8 +74,6 @@ export function LearnModules() {
   const params = useSearchParams();
   const moduleId = params.get("module");
   const reducedMotion = useReducedMotion();
-  /** RADIANT: which topic chip is on — "all", or one shelf's title. */
-  const [shelfFilter, setShelfFilter] = useState<string>("all");
   const [progress, setProgress] = useState<Progress>({ v: 1, done: [] });
   const [direction, setDirection] = useState<1 | -1>(1);
   const [open, setOpen] = useState<string | null>(null);
@@ -440,6 +436,19 @@ export function LearnModules() {
                   >
                     <span className="learn-card-text">
                       <strong>{module.title}</strong>
+                      {/* §14 took the subtitle and the meta row OFF THE TILE. That is a decision
+                          about a screen a tester with ADHD found overwhelming to look at, and it
+                          stands. A screen reader is not looking at it: before the Calm pass this
+                          control announced what the module was about, whether it was a read, a
+                          quiz or a game, and how long it ran; afterwards it announced a title,
+                          and these titles are evocative rather than descriptive — "1:40am",
+                          "Out the door", "The blank page" say nothing about their content. So the
+                          same facts are given back to the name and to nothing else. Visually this
+                          renders no pixel; axe cannot catch its absence, because a name existed
+                          either way. */}
+                      <span className="sr-only">
+                        {`. ${module.subtitle}. ${module.kind === "quiz" ? "Quiz" : module.kind === "run" ? "Game" : "Read"}, ${module.minutes} minutes, ${count} ${module.kind === "quiz" ? "questions" : module.kind === "run" ? "rounds" : "cards"}.`}
+                      </span>
                       {done && <span className="learn-card-done"><Check size={12} weight="bold" aria-hidden="true" />Done</span>}
                     </span>
                     <span className="learn-card-art" aria-hidden="true">
