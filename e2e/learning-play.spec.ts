@@ -1,6 +1,24 @@
 import { expect, test } from "@playwright/test";
 import { expectNoViolations } from "./support/a11y";
 
+test("all four navigation labels and header controls fit phone, tablet and desktop widths", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach");
+  for (const width of [320, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const nav = page.getByRole("navigation", { name: "Sections" });
+    await expect(nav.getByRole("link")).toHaveCount(4);
+    for (const locator of [page.locator(".platform-brand"), page.locator(".platform-utilities"), ...await nav.getByRole("link").all()]) {
+      const box = await locator.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.x).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+      expect(await locator.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+});
+
 test("the brand is text-only and learning activities respond without completing the module", async ({ page }) => {
   await page.goto("/approach?module=adhd");
   await expect(page.locator(".platform-brand")).toHaveText("ADHD.ME");
