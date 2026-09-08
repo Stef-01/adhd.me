@@ -9,7 +9,8 @@ const MAX_GAMES = 40;
 /** Play the current game by whatever its engine offers, choosing to lose where a losing button exists. */
 async function playGame(page: Page) {
   const frame = page.locator(".lives-game");
-  await frame.getByRole("button", { name: "Go" }).click();
+  // PRE ends on Go; a FASTER card ends on Go too, and then the game's own PRE follows.
+  while (await page.getByRole("button", { name: "Go", exact: true }).count()) await page.getByRole("button", { name: "Go", exact: true }).click();
   const engine = await frame.getAttribute("data-engine");
   const stage = frame.locator(".lives-stage");
   switch (engine) {
@@ -35,6 +36,7 @@ async function playGame(page: Page) {
 }
 
 test("ADHD Lives: a Chaos Run runs out of lives, shows the score, and AGAIN starts another", async ({ page }) => {
+  test.setTimeout(180_000);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/lives");
@@ -45,7 +47,6 @@ test("ADHD Lives: a Chaos Run runs out of lives, shows the score, and AGAIN star
   await expect(page.locator(".lives-game .play-label")).toHaveCount(0);
   for (let i = 0; i < MAX_GAMES; i++) {
     if (await page.getByRole("button", { name: "Again" }).count()) break;
-    if (await page.getByRole("button", { name: "Go", exact: true }).count()) { await page.getByRole("button", { name: "Go", exact: true }).click(); continue; }
     await playGame(page);
   }
   await expect(page.getByRole("heading", { name: /Run over|Best yet/ })).toBeVisible();

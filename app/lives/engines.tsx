@@ -149,7 +149,7 @@ function TracePath({ rng, params, live, reducedMotion, progress, onResult, confi
         {trail.length > 1 && <polyline className="lives-trail" points={trail.map((p) => `${(p.x * 100).toFixed(1)},${(p.y * 100).toFixed(1)}`).join(" ")} />}
       </svg>
       {layout.hazards.map((h) => <span key={h.id} className="lives-thing is-hazard" style={at(h)} aria-hidden="true">{h.item}</span>)}
-      <button type="button" className="lives-thing is-start" style={at(layout.points[0]!)} disabled={!live} aria-label="Start drawing the path" onPointerDown={() => setTracing(true)} onClick={() => { if (reducedMotion) settle("success", 0); }}>{reducedMotion ? "Walk the path" : "Start"}</button>
+      <button type="button" className="lives-thing is-start" style={at(layout.points[0]!)} disabled={!live} aria-label={reducedMotion ? undefined : "Start drawing the path"} onPointerDown={() => setTracing(true)} onClick={() => { if (reducedMotion) settle("success", 0); }}>{reducedMotion ? "Walk the path" : "Start"}</button>
       <span className="lives-thing is-goal" style={at(layout.points.at(-1)!)} aria-hidden="true">Safe</span>
     </div>
   );
