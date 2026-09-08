@@ -133,7 +133,7 @@ export function LearnModules() {
               onStep={(next) => { setDirection(next > step ? 1 : -1); setStep(next); }}
               onFinish={() => finish(current.id)}
               onOpenModule={(id) => { markDone(deviceLearningStorage, current.id); setProgress((p) => ({ v: 1, done: [...new Set([...p.done, current.id])] })); start(id); }}
-              bar={bar(current, cardCount(current))}
+              onLeave={leave}
             />
           ) : readView(current)}
         </motion.div>

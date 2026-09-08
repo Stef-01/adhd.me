@@ -10,9 +10,9 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Play, Sparkle } from "@phosphor-icons/react";
+import { ArrowRight, Check, Play, Sparkle, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, fasterBefore, rampedSeconds, runPhaseAt, type Run } from "@/learn/play";
+import { expiryIsHit, fasterBefore, rampedSeconds, runPhaseAt, runStepCount, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
@@ -31,15 +31,16 @@ const FREQUENCIES: ReadonlyArray<{ id: Frequency; label: string }> = [{ id: "oft
 const PRIORITIES: ReadonlyArray<{ id: Priority; label: string }> = [{ id: "yes", label: "Yes" }, { id: "maybe", label: "Maybe" }, { id: "no", label: "No" }];
 const VERDICTS: ReadonlyArray<{ id: InsightVerdict; label: string }> = [{ id: "yes", label: "That’s me" }, { id: "partly", label: "Partly" }, { id: "no", label: "Not really" }];
 
-export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
+export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }: {
   run: Run;
   step: number;
   onStep: (next: number) => void;
   onFinish: () => void;
   onOpenModule: (id: string) => void;
-  bar: React.ReactNode;
+  onLeave: () => void;
 }) {
   const reducedMotion = Boolean(useReducedMotion());
+  const total = runStepCount(run);
   const [record, setRecord] = useState<ModelRecord | null>(null);
   const [cleared, setCleared] = useState<Record<string, boolean>>({});
   const [reflection, setReflection] = useState("");
@@ -68,7 +69,17 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
 
   return (
     <section className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
-      <div className="play-hut">{bar}</div>
+      <h1 id="learn-module-title" className="sr-only">{run.title}</h1>
+      {/* Zero header (founder, 2026-09-08): an X to back out, and the progress in its own small housing. */}
+      <div className="play-top">
+        <button type="button" className="play-x" aria-label="All modules" onClick={onLeave}><X size={20} weight="bold" aria-hidden="true" /></button>
+        <div className="play-hut">
+          <ol className="learn-dots play-dots" aria-hidden="true">
+            {Array.from({ length: total }, (_, i) => <li key={i} className={i === step ? "is-current" : i < step ? "is-done" : ""} />)}
+          </ol>
+          <span className="play-count" aria-live="polite">{Math.min(step + 1, total)} of {total}</span>
+        </div>
+      </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={step} className="play-stage" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -12, transition: { duration: 0.12 } }} transition={{ ...SPRING, opacity: { duration: 0.18 } }}>
           {phase === "title" && (

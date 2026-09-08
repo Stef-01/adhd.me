@@ -205,7 +205,9 @@ runs worked but read as a form with a bean above it. P5 is the answer, built in 
 - **Immersive** (founder, 2026-09-08: "full screen bleeding till edge, not boxed windows
   everywhere, the progress bar outside in its own housing, minimise blackness"). The stage
   bleeds to the viewport edges with no card around it; on a phone the scene runs edge to edge.
-  Back, title, progress and step count sit in one small housing above the stage (`.play-hut`).
+  Zero header while a run is open (founder, same day: "purely edge to edge, an X in the top
+  left to back out"): the shell's header is hidden, the stage starts at the top edge, an X at
+  top left leaves the run, and the dots and step count sit beside it in one slim housing.
   No dark blocks: the bean's label and the tempting thing are paper or accent, the props are
   mid-tone. Rules recorded in the taste file (`layout.full-bleed-play`, `layout.one-container`,
   `type.no-dark-blocks`).

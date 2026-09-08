@@ -26,9 +26,10 @@ without updating the register is a build failure, not a review finding.
   Never render an unbounded list as the default state. {#layout.five-then-rest}
 - **The game bleeds to the edge** (founder, 2026-09-08: "it should feel immersive"). In Play
   the stage is the screen: its ground runs to the viewport edges, the scene runs edge to edge
-  on a phone, and there is no card drawn around it. Chrome that is not the game — back, title,
-  progress, step count — lives in one small housing (`.play-hut`) outside the stage, never
-  inside it. {#layout.full-bleed-play}
+  on a phone, and there is no card drawn around it. There is zero header while a run is open:
+  the shell's header is gone, the stage starts at the top edge, an X at top left backs out,
+  and the progress sits beside it in one slim housing (`.play-hut`) over the stage — the only
+  chrome the game carries. {#layout.full-bleed-play}
 - **No boxes inside boxes.** One container per idea. A border, a radius or a shadow says
   "separate object" and is spent once per screen; a window inside a window inside a shell is
   never the answer. {#layout.one-container}
