@@ -119,3 +119,8 @@ and the copy. Written lazily — a term earns a place here when it has already b
   three buttons or a 0–10 Likert slider, alternating. Writes `relates[run][round]`; the mean is
   the need's cost when the recognition round gave none. Distinct from *resonance* (the run's own
   frequency, cost and priority at the end) and from a *reading* (an interpretation of free text).
+- **Liquid glass layer**: the WebGL2 pipeline from iyinchao/liquid-glass-studio (MIT), vendored
+  under `app/glass/studio/`, running full-viewport under the page. Its *shapes* are the app's
+  glass surfaces read from the DOM; its *ground* is the app's paper with a slow tinted drift; its
+  *blob* is the studio's pointer-following shape. Distinct from the *CSS glass* (`glass.css`),
+  which blurs DOM content under the chrome and is the whole effect where the layer cannot run.

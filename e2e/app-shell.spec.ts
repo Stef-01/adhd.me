@@ -397,3 +397,26 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await page.reload();
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
+
+test("liquid glass (the studio's WebGL layer) runs under the page where WebGL2 can, and stands aside where it cannot", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") errors.push(m.text()); });
+  await page.goto("/support");
+  await page.waitForTimeout(600);
+  const state = await page.evaluate(() => {
+    const c = document.createElement("canvas");
+    const gl = c.getContext("webgl2");
+    return {
+      able: Boolean(gl && gl.getExtension("EXT_color_buffer_float")),
+      liquid: document.documentElement.classList.contains("has-liquid"),
+      canvas: document.querySelector("canvas.liquid-glass")?.getAttribute("aria-hidden"),
+    };
+  });
+  // The layer is decoration: hidden from assistive tech, and present exactly when the engine can draw it.
+  expect(state.canvas).toBe("true");
+  expect(state.liquid).toBe(state.able);
+  expect(errors.filter((e) => /liquid-glass/.test(e))).toEqual([]);
+  // Nothing the layer does may cover the page: the first heading is still hit-testable.
+  const hit = await page.evaluate(() => { const h = document.querySelector("h1")!; const r = h.getBoundingClientRect(); return document.elementFromPoint(r.left + 4, r.top + 4)?.closest("h1") === h; });
+  expect(hit).toBe(true);
+});

@@ -55,7 +55,14 @@ without updating the register is a build failure, not a review finding.
   the containing block of any fixed descendant (so the header, which holds the tab bar, is glass
   by fill and rim only), and a measured control keeps its box (the sheet's handle: no border on
   the sheet; the profile facts stay transparent). Ink stays ink; every glass surface is light;
-  reduced transparency gets paper. {#type.glass-chrome}
+  reduced transparency gets paper. Under the CSS layer runs the studio's own WebGL2 pipeline
+  (`app/glass/liquid-glass.tsx`, vendored from the repo under `app/glass/studio/` with its MIT
+  licence, founder 2026-09-08: "install everything from its repo"): the app's paper with a slow
+  tinted drift as the ground, every glass surface read from the DOM as a shape the studio's
+  shader refracts, and the studio's pointer blob on its spring on hover devices, melting into
+  what it passes. Page grounds go transparent while it runs (`html.has-liquid`); it is absent,
+  and the CSS glass whole, without WebGL2 or under reduced transparency. It reads rectangles,
+  never content. {#type.glass-chrome}
 - **Minimal darkness** (founder, 2026-09-08). Ink is for text. No black or near-black fill as
   a block, a pill or a button on a patient screen; a control sits on paper, stone or the accent.
   Drawn props are mid-tone, never a dark silhouette. {#type.no-dark-blocks}

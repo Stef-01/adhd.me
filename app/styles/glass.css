@@ -20,10 +20,6 @@
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
   backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
 }
-/* Refraction: the backdrop bends through a radial displacement map (the studio's SDF refraction, approximated). Chromium only; elsewhere the blur alone. */
-@supports (backdrop-filter: url("#lg-refract")) {
-  .play-hut, .play-x, .platform-shell .app-tabs { backdrop-filter: url("#lg-refract") blur(var(--glass-blur)) saturate(1.5); }
-}
 /* The glare: one bright band at a fixed angle, the way the studio draws it. */
 /* The glare needs a positioned box; these are not positioned by their own rules. The header, the tab bar and the sheet keep the position their own rules give them. */
 .glass, .play-hut, .play-x, .play-choice, .life-card, .learn-stack button { position: relative; }
@@ -128,3 +124,12 @@
   .filter-chip, .filter-clear, .me-place input, .nearby-zoom-button, .speech-retry, .consent-dialog, .adjust-tab, .manual-chip, .layer-pill, .learn-map-link, .console-select, .platform-shell .learn-chip, .platform-shell :is(.learn-secondary, .learn-back), .learn-secondary { background: var(--paper); backdrop-filter: none; -webkit-backdrop-filter: none; }
   .filter-chip::before, .filter-clear::before, .adjust-tab::before, .manual-chip::before, .layer-pill::before, .learn-map-link::before, .support-step::before, .profession-card::before, .strategy-card::before, .clinician-row::before, .results-empty::before, .consent-dialog::before, .platform-shell .learn-chip::before, .platform-shell .learn-option::before, .learn-card::before, .learn-secondary::before, .platform-shell :is(.learn-secondary, .learn-back)::before, .learn-primary::before, .primary-button::before, .play-tempt.is-go::before { display: none; }
 }
+
+/* ── The WebGL layer (app/glass/liquid-glass.tsx, the studio's own pipeline) ──────────────────────
+   Under the page, full viewport. When it is running (`html.has-liquid`) the page grounds go
+   transparent so the ambient shows through, and the CSS fills thin so the studio's refraction,
+   dispersion and glare show through the surfaces. Where it is not running nothing here applies. */
+.liquid-glass { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+html.has-liquid, html.has-liquid body, html.has-liquid .app-body, html.has-liquid .platform-shell, html.has-liquid .patient-v2 .screen, html.has-liquid .care-shell, html.has-liquid main.care-app, html.has-liquid main.me-screen, html.has-liquid .app-page-with-tabs,
+html.has-liquid .platform-shell .care-app.patient-v2, html.has-liquid .platform-shell .patient-v2 .care-shell { background: transparent; }
+html.has-liquid { --glass-fill: color-mix(in srgb, var(--paper) 34%, transparent); --glass-fill-strong: color-mix(in srgb, var(--paper) 52%, transparent); }
