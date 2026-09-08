@@ -35,6 +35,12 @@ export default function ApproachPage() {
           Visually it is the small line under the field; the field's own title leads the eye. */}
       <h1 className="learn-thesis">A little more understanding.</h1>
       <p className="learning-intro">Short reads, quick quizzes, and interactive modules that learn what matters to you — on your own schedule.</p>
+      {/* The care map's door, visible at every width: the header icon above is the phone's; on the
+          desktop the page header is the platform's, so the map needs a door in the page itself. */}
+      <Link className="learn-map-link" href="/approach/map" aria-label="Open the care map">
+        <MapTrifold size={18} weight="bold" aria-hidden="true" />
+        The care map — brain, body, environment, people
+      </Link>
       <Suspense fallback={<p role="status">Loading learning modules…</p>}><LearnModules /></Suspense>
     </main>
   );

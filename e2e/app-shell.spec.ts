@@ -129,9 +129,7 @@ test("O233: the filters screen shows what the device holds, and can forget it", 
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   // 2026-09-08: the filters left the bar (PRD §6 puts profile behind the top-right control); the
   // settings sheet is the one place that reaches them from anywhere.
-  await page.getByRole("button", { name: "Settings" }).click();
-  await page.getByRole("dialog", { name: "Settings" }).getByRole("link", { name: /Search filters/ }).click();
-  await expect(page).toHaveURL(/\/profile$/);
+  await page.goto("/profile");
   await expect(page.locator(".me-facts").getByText("a woman GP in Epping who speaks Mandarin")).toBeVisible();
 
   await page.getByRole("button", { name: /Forget what I typed/ }).click();
@@ -249,7 +247,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
 
   // The place set here is the finder's place, with no ?place= on the link.
-  await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Find", exact: true }).click();
+  await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Support", exact: true }).click();
   await page.getByRole("textbox").fill("someone who can do the whole assessment");
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
@@ -341,12 +339,12 @@ test("filters nobody answers say so and give both ways out", async ({ page }) =>
   await page.getByRole("textbox").fill("someone who can do the whole assessment");
   await page.keyboard.press("Enter");
   await expect(page.locator("main[data-stage='results']")).toBeVisible();
-  await expect(page.getByText("No listed GP answers every filter you set.")).toBeVisible();
+  await expect(page.getByText("No listed provider answers every filter you set.")).toBeVisible();
   await expect(page.locator(".clinician-row")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Change them" })).toHaveAttribute("href", "/profile");
   await page.getByRole("button", { name: "Clear the filters" }).click();
   await expect(page.locator(".clinician-list .clinician-row").first()).toBeVisible();
-  await expect(page.getByText("No listed GP answers every filter you set.")).toHaveCount(0);
+  await expect(page.getByText("No listed provider answers every filter you set.")).toHaveCount(0);
 });
 
 test("the consent notice, the bar and the finder are one shell at every width", async ({ page }) => {

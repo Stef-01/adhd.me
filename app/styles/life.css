@@ -195,3 +195,8 @@
 /* ── Finder: the allied providers' "Best for" line (PRD §41) ─────────────────────────────── */
 .profile-best-for { margin: 4px 0 0; color: var(--ink); font-size: 0.875rem; line-height: 1.5; }
 .profile-best-for span { margin-right: 6px; color: var(--muted); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.learn-map-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: -12px 0 24px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font-size: 0.875rem; font-weight: 640; text-decoration: none; }
+.learn-map-link svg { color: var(--route-strong); }
+@media (hover: hover) { .learn-map-link:hover { border-color: var(--accent); color: var(--accent); } }
+.learn-map-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.platform-shell .learn-screen:has(.learn-module) .learn-map-link { display: none; }
