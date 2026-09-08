@@ -9,6 +9,7 @@
 // the React side owns only the wiring. A malformed or older record is treated as empty rather
 // than half-read: the version is what lets a later shape refuse an old one.
 
+import type { Layer, Subdomain } from "./layers";
 import { isProfession } from "@/support/professions";
 import type { OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
@@ -47,6 +48,15 @@ export interface Reflection {
   at: string;
 }
 
+/** A reading of a reflection the person CONFIRMED (PRD §29). Never the text; the subdomain and the note. */
+export interface ConfirmedInterpretation {
+  moduleId: string;
+  subdomain: Subdomain;
+  layer: Layer;
+  note: string;
+  at: string;
+}
+
 export interface SafetyEvent {
   ruleId: SafetyRuleId;
   at: string;
@@ -65,6 +75,8 @@ export interface ModelRecord {
   insights: Record<string, InsightVerdict>;
   experiments: Experiment[];
   reflections: Reflection[];
+  /** Confirmed readings of reflections (PRD §29). A declined reading leaves nothing. */
+  interpretations: ConfirmedInterpretation[];
   safety: SafetyEvent[];
   /** Module ids finished, in order (interactive modules; read/quiz progress stays in `src/learn/progress.ts`). */
   completed: string[];
@@ -111,6 +123,7 @@ export function emptyModel(): ModelRecord {
     insights: {},
     experiments: [],
     reflections: [],
+    interpretations: [],
     safety: [],
     completed: [],
     survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
@@ -145,6 +158,7 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       insights: isObject(r.insights) ? (r.insights as Record<string, InsightVerdict>) : {},
       experiments: Array.isArray(r.experiments) ? r.experiments.filter(isObject).map((e) => e as unknown as Experiment) : [],
       reflections: Array.isArray(r.reflections) ? r.reflections.filter((x) => isObject(x) && typeof x.text === "string").map((e) => e as unknown as Reflection) : [],
+      interpretations: Array.isArray(r.interpretations) ? r.interpretations.filter((x) => isObject(x) && typeof x.subdomain === "string" && typeof x.note === "string").map((e) => e as unknown as ConfirmedInterpretation) : [],
       safety: Array.isArray(r.safety) ? r.safety.filter(isObject).map((e) => e as unknown as SafetyEvent) : [],
       completed: isStringArray(r.completed) ? r.completed : [],
       survey: isObject(r.survey) ? { ...empty.survey, ...(r.survey as ModelRecord["survey"]) } : empty.survey,
@@ -238,6 +252,11 @@ export function recordReflection(storage: ModelStorage, moduleId: string, text: 
     safety: hit ? [...r.safety, { ruleId: hit.id, at: now() }] : r.safety,
   }));
   return { record, safety: hit?.id ?? null };
+}
+
+/** PRD §29: only a reading the person confirmed enters the model. Declining is not recorded anywhere. */
+export function confirmInterpretation(storage: ModelStorage, moduleId: string, reading: { subdomain: Subdomain; layer: Layer; note: string }): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, interpretations: [...r.interpretations, { moduleId, subdomain: reading.subdomain, layer: reading.layer, note: reading.note, at: now() }] }));
 }
 
 export function acknowledgeSafety(storage: ModelStorage): ModelRecord {

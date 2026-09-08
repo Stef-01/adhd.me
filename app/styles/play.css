@@ -150,3 +150,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-cast li.is-awake { color: var(--ink); }
 .play-cast li.is-awake .bean { opacity: 1; filter: none; }
 @media (prefers-reduced-motion: reduce) { .play-cast li .bean { transition: none; } }
+
+/* PRD §29: the reading offered after a reflection — one sentence, a yes per reading, one "not quite". */
+.play-body { margin: 0 0 12px; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; text-align: center; }
+.play-reading .play-choice { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }

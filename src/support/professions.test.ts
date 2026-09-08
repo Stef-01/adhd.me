@@ -4,8 +4,8 @@ import { lintLandingCopy } from "@/compliance/landing";
 import { EXPERTISE_LABELS, EXPERTISE_TAGS, PROFESSION_ENTRIES, PROFESSIONS, professionsMentioned } from "./professions";
 
 describe("professions", () => {
-  it("cover the PRD's six P0 kinds, each with copy that passes the patient rules", () => {
-    expect(PROFESSIONS.length).toBe(6);
+  it("cover the PRD's six P0 and five P1 kinds, each with copy that passes the patient rules", () => {
+    expect(PROFESSIONS.length).toBe(11);
     for (const p of eachOf(PROFESSION_ENTRIES, "the professions")) {
       expect(lintLandingCopy(`${p.label}. ${p.typicallyFor} ${p.whenToExplore}`), p.id).toEqual([]);
       expect(p.cues.length).toBeGreaterThan(0);
@@ -20,5 +20,12 @@ describe("professions", () => {
     expect(professionsMentioned("a hot desk and a spotlight")).toEqual([]);
     expect(professionsMentioned("")).toEqual([]);
     expect(professionsMentioned("Exercise physiologist, please")).toEqual(["exercise-physiologist"]);
+    expect(professionsMentioned("a psychiatrist for a second opinion")).toEqual(["psychiatrist"]);
+    expect(professionsMentioned("a dietician who gets ADHD")).toEqual(["dietitian"]);
+    // A relationship counsellor is also a counsellor; both are named, generic first.
+    expect(professionsMentioned("couples counselling")).toEqual(["counsellor", "relationship-counsellor"]);
+    expect(professionsMentioned("the sleep clinic at the hospital")).toEqual(["sleep-clinician"]);
+    expect(professionsMentioned("disability services at uni")).toEqual(["university-support"]);
+    expect(professionsMentioned("a psych for my sleep")).toEqual(["psychologist"]);
   });
 });

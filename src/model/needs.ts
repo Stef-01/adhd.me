@@ -199,6 +199,15 @@ export function deriveNeeds(record: ModelRecord): Need[] {
     }
   }
 
+  // 2b. Confirmed interpretations (PRD §29): a reading the person said yes to becomes a contributor on
+  // the need the module is about. A reading they declined was never written, so there is nothing to skip.
+  for (const held of record.interpretations) {
+    const module = INTERACTIVE_MODULES.find((m) => m.id === held.moduleId);
+    if (!module) continue;
+    const d = get(module.domain, module.targets[0]!);
+    d.contributors.set(`${held.layer}:${held.note}`, { layer: held.layer, subdomain: held.subdomain, note: held.note });
+  }
+
   // 3. Topic surveys: the friction is a need; the cost is the person's own; contributors and strengths ride with it.
   for (const [surveyId, held] of Object.entries(record.surveys)) {
     const survey = topicSurvey(surveyId);

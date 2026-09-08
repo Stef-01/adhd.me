@@ -103,3 +103,13 @@ and the copy. Written lazily — a term earns a place here when it has already b
 - **Medication note** (PRD §47): the person's description of what medication seems to change,
   what it leaves untouched and anything unwanted, to take to whoever manages it. The app never
   advises on medication; the note is what the person brings to the person who does.
+- **Adjustments on paper** (PRD §45, institutional navigation): the study and workplace changes a
+  university's accessibility service or an employer can grant — extensions, briefs in writing, a
+  quieter desk. The app describes what is *commonly available* and who grants it; it applies for
+  nothing and holds no letter. The track (university, work) is what the person's need points at.
+- **Reading** (reflection interpretation, PRD §29): a suggested account of what a reflection was
+  about — "It sounds like being short on sleep was part of it" — from a closed lexicon on the
+  device, offered once and *confirmed or declined by the person*. Only a confirmed reading enters
+  the model, as a contributor (layer, subdomain, note) on the module's need; the text stays in the
+  reflection. Distinct from an *insight* (the module's claim, verdict yes/no) and from *safety*
+  (the one other reader of reflection text, which interrupts rather than suggests).

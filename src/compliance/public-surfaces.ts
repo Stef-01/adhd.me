@@ -150,6 +150,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "Medication experience (PRD §47): three fields the person describes in their own words to take to whoever manages their medication. The app advises on nothing — no dose, no timing, no verdict — and every prompt on the page answers to the patient rules.",
   },
   {
+    path: "/adjustments",
+    audience: "patient",
+    why: "Institutional navigation (PRD §45): what a university or a workplace commonly puts on paper for ADHD, who grants it and what to bring. Content only — the app applies for nothing — and every line is a patient surface: no diagnosis named, no entitlement promised, no outcome claimed.",
+  },
+  {
     path: "/support",
     audience: "patient",
     why: "From a problem to the kind of professional who helps with it (PRD §37). Names professions to a patient — which is exactly the sentence the no-specialist and no-claims rules were written for — so it is swept in full.",
