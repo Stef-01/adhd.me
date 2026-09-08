@@ -25,8 +25,8 @@ export default function OpengraphImage() {
           alignItems: "stretch",
           gap: 56,
           padding: "64px",
-          background: "#fff8f6",
-          color: "#221a16",
+          background: "#fbfaf7",
+          color: "#191a17",
           fontFamily: "Arial, sans-serif",
         }}
       >
@@ -36,7 +36,7 @@ export default function OpengraphImage() {
             <div style={{ fontSize: 76, lineHeight: 1.02, maxWidth: 720, letterSpacing: "-0.035em" }}>
               Assessment you can actually reach.
             </div>
-            <div style={{ fontSize: 28, marginTop: 34, maxWidth: 720, color: "#565f70", lineHeight: 1.35 }}>
+            <div style={{ fontSize: 28, marginTop: 34, maxWidth: 720, color: "#5a5851", lineHeight: 1.35 }}>
               Describe the support you are looking for. See why each listed provider appears.
             </div>
           </div>
@@ -51,7 +51,7 @@ export default function OpengraphImage() {
             justifyContent: "space-between",
             padding: "42px 38px",
             borderRadius: 44,
-            background: "#5065a6",
+            background: "#4c5f9c",
             color: "#ffffff",
           }}
         >
@@ -69,10 +69,10 @@ export default function OpengraphImage() {
               <div key={step} style={{ display: "flex", alignItems: "center", gap: 16, height: ROW }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 28, height: 28 }}>
                   {i === 0 ? (
-                    <div style={{ width: 28, height: 28, borderRadius: 28, background: "#d47839" }} />
+                    <div style={{ width: 28, height: 28, borderRadius: 28, background: "#d9904c" }} />
                   ) : (
                     // Filled with the card's own colour so the line does not run through the ring.
-                    <div style={{ width: 22, height: 22, borderRadius: 22, border: "4px solid currentColor", background: "#5065a6" }} />
+                    <div style={{ width: 22, height: 22, borderRadius: 22, border: "4px solid currentColor", background: "#4c5f9c" }} />
                   )}
                 </div>
                 <div style={{ fontSize: 24, fontWeight: 650 }}>{step}</div>

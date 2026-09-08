@@ -13,6 +13,7 @@ import { clearProgress, markDone, readProgress, type Progress } from "@/learn/pr
 import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
 import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
 import { LearningScene, LearningCoverArt, LearningExplorer, CarePathExplorer } from "./learning-scene";
+import { LearningActivity } from "./learning-activities";
 import { RunPlayer } from "./play/run-player";
 import { Bean } from "./play/beans";
 import { CHARACTERS, CHARACTER_BIOS } from "@/learn/interactive";
@@ -20,6 +21,19 @@ import { CHARACTERS, CHARACTER_BIOS } from "@/learn/interactive";
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
 
+/**
+ * The eight covers of RADIANT unit 3, in the order they read best down a two-column stack.
+ * A module the map below does not name takes the next colour by its own place in MODULES —
+ * by its place, not by its place in the *filtered* list, so a card keeps its colour when a
+ * topic chip shortens the stack around it.
+ */
+const COVER_RAMP = ["amber", "oat", "forest", "lilac", "coral", "slate", "saffron", "night"] as const;
+
+/**
+ * The covers the founder set by hand. This used to fall back to "oat" for anything unnamed, and
+ * with twenty-seven modules against twenty-two names that put nine of the stack's cards on one
+ * colour — the palest of the eight. The ramp is what spreads the rest.
+ */
 const COLLECTION_COLOURS: Readonly<Record<string, string>> = {
   adhd: "amber", everyday: "oat", "myth-or-fact": "forest", words: "lilac", finding: "coral", cost: "slate", changed: "saffron",
   context: "amber", "more-than-attention": "oat", starting: "coral", deadlines: "lilac", "working-memory": "slate", hyperfocus: "saffron",
@@ -27,6 +41,10 @@ const COLLECTION_COLOURS: Readonly<Record<string, string>> = {
   "not-listening": "forest", "forgotten-commitments": "oat", conflict: "coral",
   household: "saffron", sleep: "slate", exercise: "forest",
 };
+
+/** A module's cover: the founder's if it has one, otherwise its place in the ramp. */
+const coverOf = (module: LearnModule) =>
+  COLLECTION_COLOURS[module.id] ?? COVER_RAMP[MODULES.indexOf(module) % COVER_RAMP.length]!;
 
 function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
   const digits = String(score).split("");
@@ -188,19 +206,19 @@ export function LearnModules() {
     const cards = scenesOf(current);
     const last = step === cards.length - 1;
     return (
-      <section className={`learn-module is-${current.tint}`} aria-labelledby="learn-module-title" data-hydrated={hydrated ? "true" : undefined}>
+      <section className={`learn-module is-${current.tint} topic-${current.id} tone-${coverOf(current)}`} aria-labelledby="learn-module-title" data-hydrated={hydrated ? "true" : undefined}>
         {bar(current, cards.length)}
         <div className="learn-cards">
           {cards.map((card, i) => (
             <motion.article
               key={card.n}
-              className={i === step ? "learn-lesson is-current" : "learn-lesson"}
+              className={`learn-lesson composition-${i % 3}${i === step ? " is-current" : ""}`}
               aria-hidden={hydrated && i !== step ? "true" : undefined}
               initial={hydrated && !reducedMotion && i === step ? { opacity: 0, x: 28 * direction } : false}
               animate={{ opacity: 1, x: 0 }}
               transition={{ ...SPRING, opacity: { duration: 0.2 } }}
             >
-              <div className="learning-lesson-art"><LearningScene topic={current.id} variant={i} /></div>
+              <motion.div className="learning-lesson-art" key={`art-${card.n}-${i === step}`} initial={reducedMotion || i !== step ? false : { opacity: .5, y: 18, rotate: -3 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ ...SPRING, delay: .08 }}><LearningScene topic={current.id} variant={i} /></motion.div>
               <p className="learn-card-eyebrow">{card.eyebrow}</p>
               <LessonHeading active={i === step}>{card.heading}</LessonHeading>
               <p className="learn-card-body">{card.body}</p>
@@ -212,6 +230,7 @@ export function LearnModules() {
               {card.foot && <p className="learn-card-foot">{card.foot}</p>}
               {current.id === "everyday" && i === 0 && <LearningExplorer />}
               {current.id === "finding" && i === 2 && <CarePathExplorer />}
+              {i === step && ((current.id === "everyday" && i === 1) || (current.id !== "everyday" && i === 0)) && <LearningActivity key={card.n} topic={current.id} step={i} />}
             </motion.article>
           ))}
         </div>
@@ -243,7 +262,7 @@ export function LearnModules() {
     const picked = picks[step];
     const score = picks.filter((pick, i) => pick === questions[i]?.answer).length;
     return (
-      <section className={`learn-module learn-quiz is-${current.tint}`} aria-labelledby="learn-module-title" data-hydrated={hydrated ? "true" : undefined}>
+      <section className={`learn-module learn-quiz is-${current.tint} topic-${current.id} tone-${coverOf(current)}`} aria-labelledby="learn-module-title" data-hydrated={hydrated ? "true" : undefined}>
         {bar(current, questions.length)}
         {/* Every question is in the DOM; the current one is shown. A quiz needs JavaScript to be
             answered, and without it a reader gets the questions and their explanations as a page. */}
@@ -361,6 +380,11 @@ export function LearnModules() {
   function listView() {
     return (
       <section className="learn-list" aria-labelledby="learn-list-title">
+        <motion.div className="learning-pause-banner" whileHover={reducedMotion ? undefined : { y: -3 }}>
+          <div className="pause-banner-art" aria-hidden="true"><span>⌣</span></div>
+          <div><span className="activity-label">MAKE ROOM FOR A MOMENT</span><h2>Less scrolling. A little stillness.</h2><p>A guided pause, or a five-minute session on a shared clock.</p></div>
+          <Link href="/approach/meditate">Find a quiet moment <ArrowRight size={19} /></Link>
+        </motion.div>
         {completed && MODULES.find(module => module.id === completed)?.kind === "run" && (
           <div className="learning-feature learning-completion">
             <div role="status">
@@ -395,7 +419,7 @@ export function LearnModules() {
               const module = MODULES.find((m) => m.id === id)!;
               const done = progress.done.includes(module.id);
               const count = cardCount(module);
-              const colour = COLLECTION_COLOURS[module.id] ?? "oat";
+              const colour = coverOf(module);
               return (
                 <motion.li
                   key={module.id}
