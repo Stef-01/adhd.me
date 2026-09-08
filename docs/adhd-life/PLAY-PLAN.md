@@ -234,6 +234,11 @@ creative modules with creative gameplays so it is not just tapping, and a strong
   three taps; games not questions; budgets; contracts), in the browser, in the look, and with
   people. The variety gate is a test, so a mostly-tapping run cannot ship.
 
+- **The sense gate** (founder, same day): every mechanic states its rule on screen; timing
+  rounds carry a scale and a verb; the premise check is on the review sheet. `PLAY-QA.md` §1b.
+- **Liquid glass across the chrome**, after iyinchao/liquid-glass-studio (MIT), as a CSS
+  surface; the rule and its two hard lessons are in the taste file (`type.glass-chrome`).
+
 Sources read for the eating and gut modules, 2026-09-08: a systematic review of gut microbiota
 composition in ADHD (Microorganisms, 2026) and a narrative review of clinical evidence and
 practice implications (PMC, 2026), both cautious; practitioner writing on interoception,
