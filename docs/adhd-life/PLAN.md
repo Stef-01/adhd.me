@@ -36,9 +36,9 @@ line or an analytics event.
 | §17 Simulations | Working memory, interruption, ambiguity | **Done**, button-driven | `app/interactive-module.tsx` |
 | §18 Perspective switching | Relationship modules | **Done** (three modules) | same |
 | §19 Resonance capture | Frequency, cost, priority, stored separately | **Done** | `src/model/store.ts` |
-| §20 Progressive surveys, four levels | Micro → precision | **Level 1 done** (in-module questions); levels 2–4 open | — |
+| §20 Progressive surveys, four levels | Micro → precision | **Done** — level 1 in modules; levels 3–4 as topic surveys, offered by rule and never launched | `src/model/offer.ts` |
 | §21 Survey fatigue | Score and rules | **Done** | `src/model/fatigue.ts` |
-| §22–§23 Topic surveys (five) | Work & Study, Relationships, Daily Organisation, Sleep, Emotional Wellbeing | **Open** | — |
+| §22–§23 Topic surveys (five) | Work & Study, Relationships, Daily Organisation, Sleep, Emotional Wellbeing | **Done** — 8–12 questions each, §23 result shape, contradictions named | `src/learn/surveys.ts`, `src/model/surveys.ts`, `/survey` |
 | §24 Personal ADHD model (Need) | Domain, cost, priority, confidence, contributors… | **Done**, derived on read | `src/model/needs.ts` |
 | §25 Eco-bio-psychosocial model | Four layers, subdomains | **Done** + the care map screen | `src/model/layers.ts`, `app/care-map.tsx`, `/approach/map` |
 | §26 My ADHD screen | Friction, contributors, pattern, helps, goal, worth exploring | **Done** | `app/my-adhd.tsx` |
