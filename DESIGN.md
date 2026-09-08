@@ -4,20 +4,22 @@ The 2026 redesign follows the six user-supplied references and the requirements 
 
 ## Shared visual language
 
-The patient app uses a bright full-width shell, white surfaces, a cool grey canvas, blue actions and labelled navigation. Learning adds friendly flat characters, generous coloured covers and interactive explanations. Reading uses a constrained text measure even when the workspace uses the whole desktop.
+The user's warm brand board supersedes the original redesign's colour and type choices. The app uses warm paper and stone, ink primary controls, restrained amber active states, and one orange-to-periwinkle signature band. Learning retains its original characters and interactions on neutral covers. Reading uses a constrained text measure even when the workspace uses the whole desktop. The supplied board and current evidence live in `docs/design/warm-brand/`.
 
 | Token | Value | Use |
 |---|---|---|
-| Canvas | `#F7F9FC` | Page background |
-| Surface | `#FFFFFF` | Header, inputs, lessons and provider rows |
-| Ink | `#182230` | Main content |
-| Muted | `#586579` | Supporting copy |
-| Action | `#155EEF` | Primary actions, active navigation and focus |
-| Divider | `#E4E8EF` | Non-interactive separation |
-| Control border | `#AAB7C9` / `#B3BED0` | Input and secondary-control boundaries |
-| Learning colours | `#FFD340`, `#FF873C`, `#157C50`, `#C2A3E0` | Collection identities and examples |
+| Paper | `#FBFAF7` | Page ground |
+| Stone | `#EEECE5` | Inset and raised surfaces |
+| Ink | `#191A17` | Main content, primary controls and dark bands |
+| Muted / faint | `#5A5851` / `#6C6A65` | Supporting copy and small labels |
+| Amber | `#8A5A16` | Restrained active states and focus |
+| Amber on dark | `#E1A459` | Accent against ink |
+| Line / strong line | `#DFDDD6` / `#C4C1B7` | Dividers and visible boundaries |
+| Brand blue | `#647BBF` | Graphics; readable blue uses `#4C5F9C` or darker |
 
-Plus Jakarta Sans is self-hosted and used for platform UI. Primary page headings are 30–44px; lesson headings 26–36px; body copy 16–17px; metadata 12–14px. Controls use 10–14px corner radii, provider rows 16px, learning covers 20px, feature/lesson panels 24px. Main interactive targets are at least 44px high.
+Inter is self-hosted for UI and body. Newsreader is reserved for patient questions, at approximately weight 430, -.035em tracking and .99 line height; the finder uses a 54px ceiling. No third font family is introduced. Functional headings remain Inter. Controls retain the responsive redesign's geometry and at least 44px targets.
+
+Amber is a detail in the platform shell, under 10% of a surface. The user's later request explicitly makes colourful educational stages and the immersive meditation player exceptions: these use readable topic palettes, while the surrounding library and navigation remain warm and restrained. Brand blue in the illustrations distinguishes characters by shape and scene as well as colour. The two categorical chart colours remain unchanged. Chart greys use the neutral ramp. Dark text uses paper/line; amber on dark uses on-band. The exact band stops are defined once in `:root`.
 
 ## Component ownership
 
@@ -27,16 +29,22 @@ Plus Jakarta Sans is self-hosted and used for platform UI. Primary page headings
 - `app/styles/finder.css`: desktop search composition and provider/profile refinements.
 - `app/styles/learning.css`: learning library, lesson pages, examples and responsive focus treatment.
 - `app/styles/platform-surfaces.css`: public navigation and operational console primitives.
+- `app/styles/brand.css`: the supplied brand's cross-surface colour/type treatment; `:root` in globals.css owns palette values.
+- `app/styles/learning-play.css`, `app/learning-activities.tsx`: colourful educational compositions, discovery, sequence, collection and timeline activities.
+- `app/site-motion.tsx`: shared route reveals and public/console pointer feedback; reduced-motion users get immediate states.
+- `app/meditation-studio.tsx`, `src/learn/meditation.ts`: personal monotonic timers and server-synchronised shared sessions. No fabricated attendance or human host.
 - `app/learning-scene.tsx`: original vector cast, seven topic-specific scenes, quiz reactions and educational example interactions.
+- `app/play/`, `src/learn/runs.ts`: the twenty immersive game modules integrated from current main; their scenes, clocks, clues and personal-model callbacks remain independent of the reading activities.
+- `app/styles/glass.css`: integrated surface rims, glare, shadows and supported filters, using the shared warm palette.
 - `src/learn/cursor.ts`: validated device-local reading position, separate from v1 completion records.
 
 Library buttons use `.learn-card`; lesson and quiz pages use `.learn-lesson`. Never share those two layout classes again. New navigation rules must stay in the platform stylesheet; obsolete navigation selectors were removed from `globals.css`.
 
 ## Responsive and interaction rules
 
-Desktop navigation is in normal flow at the top. Mobile browsing uses bottom tabs; focused lessons use All modules/Back/Next/Finish. Content scrolls naturally. A ResizeObserver measures consent height, reserving space and positioning mobile navigation above it without fixed guessed offsets.
+Four destinations—Support, Today, Learn and My ADHD—share the route register. Desktop navigation is in normal flow at the top, with a second row at 768–1023px and one row above that. Mobile browsing uses bottom tabs; focused reading lessons use All modules/Back/Next/Finish, while games retain their immersive close/progress controls. Content scrolls naturally. A ResizeObserver measures consent height, reserving space and positioning mobile navigation above it without fixed guessed offsets.
 
-Module URLs contain public module identifiers only. Reading position and completion are separate records. Quiz answers and scores stay in memory; reopening a quiz restarts it. Only Finish marks completion. Storage failures leave the current visit usable. Browser Back returns through module navigation.
+Module URLs contain public module identifiers only. Reading position and completion are separate records. Reading activities and quiz answers stay in memory; reopening a quiz restarts it. Reading/quiz Finish marks completion. The current game modules separately retain their established device-local personal-model behaviour. Storage failures leave reading usable. Browser Back returns through module navigation.
 
 Artwork is decorative unless it forms part of an explicitly labelled interactive example. The examples use real buttons, selected states and status text. Reduced motion disables decorative transitions; controls retain visible state feedback.
 
@@ -44,4 +52,4 @@ Each module has its own cover scene. Everyday examples update both a labelled il
 
 ## Scope and evidence
 
-The patient shell and learning system have the deepest visual changes. Public and console work updates shared navigation/primitives while preserving existing workflows and route content. Consult [REVIEW.md](docs/design/2026-platform/REVIEW.md) for validation, reference matches and remaining gaps; a screenshot alone is not proof of cross-browser behaviour.
+The patient shell and learning system have the deepest visual changes. Public and console work updates shared navigation/primitives while preserving existing workflows and route content. Consult the [current review](docs/design/warm-brand/REVIEW.md) and [reference comparison](docs/design/warm-brand/comparison.html) for validation and reference matches; a screenshot alone is not proof of cross-browser behaviour.

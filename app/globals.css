@@ -44,7 +44,7 @@
    closer to it than it is for a serif, and ~48KB on the finder's critical path
    to redraw three small labels is the wrong trade.
    =========================================================================== */
-@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/inter";
 @import "@fontsource-variable/newsreader";
 @import "@fontsource-variable/newsreader/wght-italic.css";
 
@@ -107,21 +107,21 @@
      stone), accent 4.8:1 as text and 5.1:1 under white text. The brighter terracotta the mockups
      fill buttons with, #d95c2b, is 3.8:1 under white — decorative only here: the dot, the
      progress fill, borders, icons and the italic word, never small text on or in it. */
-  --ink: #221a16;
+  --ink: #191a17;
   /* O157: #6e706a → #696b65. Contrast was never checked in this tree until now, and these two
      tokens were not wrong on the two backgrounds anybody had looked at — muted measured 5.01 on
      white and 4.80 on --paper. On --stone, the console's card and tag background, it measured
      4.24 against a 4.5 floor, which put 18 of the console's 30 failures on this one line. Five
      steps darker is the smallest change that clears AA on all THREE backgrounds at once
      (paper 5.17, stone 4.56, white 5.40) — computed rather than eyeballed. */
-  --muted: #58423a;
+  --muted: #5a5851;
   /* Has to clear AA at 11px, the smallest size this token is used at. 5.1:1 on --paper. */
   /* O157: 4.48 on --stone, one hundredth under the floor and still under. One step darker
      (paper 5.15, stone 4.55, white 5.37). */
-  --faint: #7a655d;
-  --paper: #fff8f6;
-  --stone: #f7ede8;
-  --line: #e6d3ca;
+  --faint: #6c6a65;
+  --paper: #fbfaf7;
+  --stone: #eeece5;
+  --line: #dfddd6;
 
   /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
      validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
@@ -129,18 +129,18 @@
      Identity follows the entity: never repick the categorical slots per page. */
   --chart-invite: #2a78d6;
   --chart-holdout: #eb6834;
-  --chart-axis: #c3c2b7;
-  --chart-grid: #e1e0d9;
-  --chart-tick: #898781;
-  --chart-end-label: #52514e;
+  --chart-axis: var(--line-strong);
+  --chart-grid: var(--line);
+  --chart-tick: var(--faint);
+  --chart-end-label: var(--muted);
   --chart-point-ring: #ffffff;
 
-  --accent: #bf481b;
+  --accent: #8a5a16;
   --on-accent: #ffffff;
-  --accent-deep: #a53703;
-  --accent-soft: #fff1eb;
-  --accent-mid: #d95c2b;
-  --accent-tint: #ffdbcf;
+  --accent-deep: #6c4300;
+  --accent-soft: #f9eee2;
+  --accent-mid: #bc8238;
+  --accent-tint: #efd3b4;
 
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
@@ -196,10 +196,10 @@
   /** The offset between one staggered item and the next. */
   --dur-stagger: 40ms;
 
-  --ground: #172033;
-  --on-ground: #ffffff;
+  --ground: var(--ink);
+  --on-ground: var(--paper);
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
-  --on-band: #ffd9b8;
+  --on-band: #e1a459;
 
   /* THE BRAND SCHEME (ported from the network deployment, Stef-01/ADHD O271/O282/O296/O300,
      founder-directed reskin 2026-09-01): warm golden orange to soft periwinkle blue. The network
@@ -207,23 +207,23 @@
      are one product on two domains, so the finder carries the same scheme from the same tokens.
      Values are copied VERBATIM — a re-derivation here would be the drift the split's own banner
      warns about ("a change to shared code that matters to both has to be made in both"). */
-  --hero-glow: #f5b273;
-  --hero-orange: #d47839;
-  --hero-orange-deep: #a14f19;
-  --hero-blue: #6679b9;
-  --hero-blue-deep: #5065a6;
-  --hero-blue-night: #334679;
-  --hero-dusk: #172033;
+  --hero-glow: #efd3b4;
+  --hero-orange: #d9904c;
+  --hero-orange-deep: #c87d3f;
+  --hero-blue: #647bbf;
+  --hero-blue-deep: #596eb4;
+  --hero-blue-night: #4c5f9c;
+  --hero-dusk: #3f5182;
 
   /* The redesign's functional roles. Blue carries route and state; orange marks the next
      consequential action. Both come from the existing cross-deployment brand family, but they
      no longer blend into an ornamental header gradient. */
-  --route: var(--hero-blue-deep);
-  --route-strong: var(--hero-blue-night);
+  --route: var(--hero-blue-night);
+  --route-strong: var(--hero-dusk);
   --route-soft: color-mix(in srgb, var(--hero-blue) 14%, var(--paper));
   --route-line: color-mix(in srgb, var(--hero-blue) 34%, var(--paper));
   --surface: var(--paper);
-  --surface-raised: var(--on-ground);
+  --surface-raised: var(--stone);
   --shadow-ambient: 0 18px 52px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
@@ -250,7 +250,7 @@
      differently in each and shows a join. */
   /* ACROSS: the header and any mid-page band. */
   --band-gradient:
-    linear-gradient(105deg, var(--hero-blue-night) 0%, var(--hero-blue-deep) 68%, var(--hero-blue) 100%);
+    linear-gradient(100deg, var(--hero-orange-deep) 0%, var(--hero-orange) 26%, var(--hero-orange) 38%, var(--hero-blue) 60%, var(--hero-blue) 100%);
   /* THE LEGIBILITY SCRIM FOR THE ACROSS BAND (network O300). Sits over the ramp and evens out its
      luminance where it peaks, so white type on the band clears the WCAG floor without the brand
      colours being restated as something duller. Alphas are per stop and derived in the network
@@ -261,9 +261,10 @@
   /* DOWN: the closing band. Two stacked elements, so the stops meet exactly at the boundary —
      the footer hands --hero-blue-night to the acknowledgement, which carries it into the dusk. */
   --band-fall-upper:
-    linear-gradient(180deg, var(--hero-blue-deep) 0%, var(--hero-blue-night) 100%);
+    var(--band-gradient);
   --band-fall-lower:
-    linear-gradient(180deg, var(--hero-blue-night) 0%, var(--hero-dusk) 100%);
+    var(--band-gradient);
+  --line-strong: #c4c1b7;
 }
 
 
@@ -363,7 +364,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -3537,23 +3538,23 @@ summary:focus-visible {
    .story-chapter-tint ground and 5.91:1 under white, so it works as a colour and as a ground;
    #E9D6B4 is the focus ring only, never text. */
 .story {
-  --s-paper: #f7f8fc;
-  --s-paper-2: #edf0f6;
-  --s-ink: #172033;
-  --s-muted: #565f70;
-  --s-accent: #a14f19;
-  --s-accent-soft: #faebe0;
-  --s-accent-mid: #f0c9aa;
-  --s-line: #d8deea;
+  --s-paper: var(--paper);
+  --s-paper-2: var(--stone);
+  --s-ink: var(--ink);
+  --s-muted: var(--muted);
+  --s-accent: var(--accent-deep);
+  --s-accent-soft: var(--accent-soft);
+  --s-accent-mid: var(--accent-tint);
+  --s-line: var(--line);
   /* The one dark beat is now the same navigation ink used throughout the app. */
-  --s-dark: #172033;
+  --s-dark: var(--ink);
   --community-ink: #172033;
   --community-muted: #565f70;
   --community-accent: #a14f19;
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -5910,7 +5911,7 @@ select { caret-color: var(--route-strong); }
 .site-nav-wordmark,
 .story-wordmark {
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 1.25rem;
   font-weight: 760;
   letter-spacing: -0.045em;
@@ -6050,7 +6051,7 @@ select { caret-color: var(--route-strong); }
   max-width: 13.5ch;
   margin: 0;
   color: var(--on-ground);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(3.4rem, 6.5vw, 5.65rem);
   font-weight: 610;
   line-height: 0.96;
@@ -6211,7 +6212,7 @@ select { caret-color: var(--route-strong); }
   margin: 0;
   max-width: 15ch;
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 4.8rem);
   font-weight: 590;
   line-height: 0.98;
@@ -6250,7 +6251,7 @@ select { caret-color: var(--route-strong); }
 .story-stats div:last-child { border-bottom-color: var(--route-line); }
 .story-stats dt {
   color: var(--route-strong);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 690;
   letter-spacing: -0.035em;
@@ -6269,7 +6270,7 @@ select { caret-color: var(--route-strong); }
   max-width: 18ch;
   margin: 0;
   color: var(--on-ground);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 5.1rem);
   font-weight: 560;
   letter-spacing: -0.04em;
@@ -6303,7 +6304,7 @@ select { caret-color: var(--route-strong); }
 }
 .story-pillars h3 {
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
   font-weight: 650;
   letter-spacing: -0.025em;
@@ -6476,7 +6477,7 @@ select { caret-color: var(--route-strong); }
    `.patient-v2`'s own size steps) applies as it does to the type screen. */
 .patient-v2 .profile-content h1 {
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 590;
   letter-spacing: -0.035em;
 }
@@ -6585,7 +6586,7 @@ select { caret-color: var(--route-strong); }
 .cv2-intro h1,
 .cv2-learning-body h2 {
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 610;
   letter-spacing: -0.035em;
 }
@@ -6632,7 +6633,7 @@ select { caret-color: var(--route-strong); }
 .notfound-code { color: var(--accent); font-variant-numeric: tabular-nums; }
 .notfound-screen h1 {
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.7rem, 7vw, 5.5rem);
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -6714,7 +6715,7 @@ select { caret-color: var(--route-strong); }
 .site-footer-wordmark,
 .story-footer-wordmark {
   color: var(--on-ground);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 1.3rem;
   font-weight: 760;
   letter-spacing: -0.045em;
@@ -7262,7 +7263,7 @@ select { caret-color: var(--route-strong); }
 
 .console-main h1 {
   color: var(--ink);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 620;
   letter-spacing: -0.04em;
@@ -7886,7 +7887,7 @@ select { caret-color: var(--route-strong); }
   height: 300px;
   width: 100%;
   background: var(--stone);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   isolation: isolate;
 }
 
@@ -7995,7 +7996,7 @@ select { caret-color: var(--route-strong); }
   border-top-left-radius: 8px;
   background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
   color: var(--muted);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
 }
 
@@ -8929,7 +8930,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .listen-eyebrow {
   margin: 0 0 10px;
   color: var(--route-strong);
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -10074,7 +10075,7 @@ main:not(.console-main) h1 {
   text-wrap: balance;
 }
 main:not(.console-main) h2 {
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.15;
@@ -10082,7 +10083,7 @@ main:not(.console-main) h2 {
 }
 main:not(.console-main) h3,
 main:not(.console-main) h4 {
-  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -10092,7 +10093,7 @@ main:not(.console-main) li,
 main:not(.console-main) dd { line-height: 1.55; }
 /* The learn tab's line under its header is the page's h1 for the outline's sake; it reads as a
    line, in the sans, as drawn. The results list heading keeps its own weight. */
-main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; font-weight: 500; letter-spacing: 0; line-height: 1.45; text-wrap: pretty; }
+main h1.learn-thesis { font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 500; letter-spacing: 0; line-height: 1.45; text-wrap: pretty; }
 .results-list-head h2 { letter-spacing: -0.02em; }
 
 /* The desktop: the shell is a desk-width app, not a phone in the middle of a screen. */

@@ -37,7 +37,7 @@ test("the comparison heading uses the platform typeface", async ({ page }) => {
   const family = await page
     .locator(".compare-content h1")
     .evaluate((el) => getComputedStyle(el).fontFamily);
-  expect(family, "the comparison heading must share the platform typography").toContain("Plus Jakarta Sans");
+  expect(family, "the comparison heading must share the platform typography").toContain("Inter");
 });
 
 test("comparison is tucked inside the profile's match explanation", async ({ page }) => {

@@ -264,6 +264,7 @@ test("the care map opens from the Learn page's map icon, and a node explains its
 test("E2E 9: under reduced motion a run has no clock, the recall round works by buttons, and the keyboard plays it", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=working-memory");
+  await expect(page.getByRole("button", { name: "Tap to play" })).toBeFocused();
   await expect(page.locator(".play-clock")).toHaveCount(0);
   await page.getByRole("button", { name: "Tap to play" }).focus();
   await page.keyboard.press("Enter");
@@ -442,8 +443,8 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/approach?module=starting");
   await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
+  await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Share this run" }).click();
   await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
   const text = await page.evaluate(() => navigator.clipboard.readText());

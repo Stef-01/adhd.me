@@ -1,0 +1,140 @@
+[
+  {
+    "module": "adhd",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "everyday",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "finding",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "cost",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "changed",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "myth-or-fact",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "words",
+    "width": 390,
+    "scrollWidth": 390,
+    "lessonWidth": 350,
+    "lessonScroll": 350
+  },
+  {
+    "module": "game-starting",
+    "width": 390,
+    "scrollWidth": 390
+  },
+  {
+    "module": "game-working-memory",
+    "width": 390,
+    "scrollWidth": 390
+  },
+  {
+    "module": "game-sleep",
+    "width": 390,
+    "scrollWidth": 390
+  },
+  {
+    "module": "meditation",
+    "width": 390,
+    "scrollWidth": 390
+  },
+  {
+    "module": "adhd",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "everyday",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "finding",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "cost",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "changed",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "myth-or-fact",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "words",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "lessonWidth": 1160,
+    "lessonScroll": 1160
+  },
+  {
+    "module": "game-starting",
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "module": "game-working-memory",
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "module": "game-sleep",
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "module": "meditation",
+    "width": 1440,
+    "scrollWidth": 1440
+  }
+]

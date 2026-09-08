@@ -7,6 +7,9 @@ import "./styles/platform-surfaces.css";
 import "./styles/life.css";
 import "./styles/play.css";
 import "./styles/glass.css";
+import "./styles/brand.css";
+import "./styles/learning-play.css";
+import { SiteMotion } from "./site-motion";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
@@ -33,7 +36,7 @@ import { SHARED_OPEN_GRAPH } from "@/seo/pages";
  * both through a canvas: a palette change that left this stale would put the seam back silently.
  */
 export const viewport: Viewport = {
-  themeColor: "#fff8f6",
+  themeColor: "#fbfaf7",
   // O225 (STANDALONE-APP-PLAN.md Phase 1b): without `cover`, the installed app letterboxes below
   // the notch and the status-bar strip renders as a paper seam above the brand band. With it, the
   // band paints to the device edge and the chrome pads itself back out with safe-area insets —
@@ -92,7 +95,7 @@ const DESIGN_DIRECTION = {
   thesis:
     "A bright, responsive platform for finding care and understanding ADHD, with clear labelled navigation and approachable illustrated learning.",
   world:
-    "White surfaces, a cool grey canvas, cobalt blue controls and a warm geometric character cast for learning.",
+    "Warm paper and stone, restrained amber, an orange-to-periwinkle name band, Newsreader questions and Inter UI, with original illustrated learning.",
   story:
     "A visitor understands the GP finder, sees how their words affect the order, and can move from search to a booking handoff without losing context.",
   firstViewport:
@@ -137,7 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <feDisplacementMap in="SourceGraphic" in2="map" scale="14" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </svg>
-        {children}
+        <SiteMotion>{children}</SiteMotion>
         <AcknowledgementOfCountry />
         <PrivacyConsent />
         <Analytics />
