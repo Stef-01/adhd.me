@@ -139,9 +139,10 @@ targets (start > 70 %, completion > 65 %) measured on runs.
   experiment — the same record the model reads today; `deriveNeeds` sees no difference.
 - Touch targets ≥ 44 px on every round (the existing touch-floor sweep).
 
-## 9. Open decisions for the founder
+## 9. Decisions (founder, 2026-09-08: "those interactive game elements should be there")
 
-1. **Retire the long-form player** at P2, or keep it as "Read the long version" under each run?
-   Recommendation: retire it; the read modules on the shelf are the long form.
-2. **Timer length** — 6 s default ramping to 4 s, or fixed? Recommendation: ramp, test in P3.
-3. **Sound** — none, or a single tap sound? Recommendation: none in P0.
+1. **The runs are the form.** The long-form player stays hidden behind `?long=1` for one release
+   and is then deleted.
+2. **Timer ramps** — five percent a round, floor seventy percent, never on a round that asks
+   about you (`rampedSeconds`). Tuned against real people in P3.
+3. **No sound** in P0.

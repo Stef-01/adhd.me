@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { INTERACTIVE_MODULES, strategyById } from "./interactive";
-import { expiryIsHit, INSTRUCTION_WORDS, MECHANICS, RESULT_WORDS, runPhaseAt, runStepCount, runText, words } from "./play";
+import { expiryIsHit, INSTRUCTION_WORDS, MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words } from "./play";
 import { RUNS, runFor } from "./runs";
 import { cardCount, MODULES } from "./scenes";
 
@@ -61,6 +61,18 @@ describe("the runs", () => {
     expect(expiryIsHit("dont-tap")).toBe(true);
     expect(expiryIsHit("hold")).toBe(true);
     expect(expiryIsHit("tap")).toBe(false);
+  });
+
+  it("ramp the tempo: each round a little faster, never below the floor, and never on a round that asks about you", () => {
+    const run = runFor("starting")!;
+    expect(rampedSeconds(run, 0)).toBe(run.rounds[0]!.seconds);
+    expect(rampedSeconds(run, 1)).toBeLessThan(run.rounds[1]!.seconds);
+    for (const r of RUNS) r.rounds.forEach((round, i) => {
+      const s = rampedSeconds(r, i);
+      expect(s).toBeGreaterThanOrEqual(round.seconds * RAMP_FLOOR - 0.05);
+      if (round.writes) expect(s).toBe(round.seconds);
+    });
+    expect(rampedSeconds(run, 99)).toBe(0);
   });
 
   it("walk title, rounds, recognition, insight, (reflect), try, next", () => {

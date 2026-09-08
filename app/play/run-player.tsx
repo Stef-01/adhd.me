@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Play, Sparkle } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { expiryIsHit, runPhaseAt, type Run } from "@/learn/play";
+import { expiryIsHit, rampedSeconds, runPhaseAt, type Run } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
@@ -195,6 +195,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, bar }: {
 /** One round: instruction in, play on the clock, result, advance. */
 function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run; index: number; reducedMotion: boolean; onDone: (hit: boolean, chosen?: string | string[]) => void; onAdvance: () => void }) {
   const round = run.rounds[index]!;
+  const seconds = rampedSeconds(run, index);
   const [beat, setBeat] = useState<"in" | "play" | "result">(reducedMotion ? "play" : "in");
   const [hit, setHit] = useState<boolean | null>(null);
   const [progress, setProgress] = useState(0);
@@ -220,14 +221,14 @@ function RoundStage({ run, index, reducedMotion, onDone, onAdvance }: { run: Run
     let raf = 0;
     const tick = (now: number) => {
       if (start.current === null) start.current = now;
-      const p = Math.min(1, (now - start.current) / (round.seconds * 1000));
+      const p = Math.min(1, (now - start.current) / (seconds * 1000));
       setProgress(p);
       if (p >= 1) { settle(expiryIsHit(round.mechanic)); return; }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [beat, reducedMotion, round.seconds, round.mechanic, settle]);
+  }, [beat, reducedMotion, seconds, round.mechanic, settle]);
   // Auto-advance after the result beat; the button is always there too.
   useEffect(() => {
     if (beat !== "result" || reducedMotion) return;

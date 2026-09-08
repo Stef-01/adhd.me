@@ -84,6 +84,23 @@ export function runPhaseAt(run: Run, step: number): { phase: RunPhase; round?: R
   return { phase: tail[Math.min(step - n - 1, tail.length - 1)]! };
 }
 
+/**
+ * Tempo ramp (PLAY-PLAN.md §1.4, founder-approved 2026-09-08): each round runs a little faster
+ * than the last — five percent a round, never below seventy percent of the round's own seconds —
+ * so a run has a rhythm you can feel. Rounds that write an answer are not ramped: choosing
+ * which bean is you is not a race.
+ */
+export const RAMP_PER_ROUND = 0.05;
+export const RAMP_FLOOR = 0.7;
+
+export function rampedSeconds(run: Run, index: number): number {
+  const round = run.rounds[index];
+  if (!round) return 0;
+  if (round.writes) return round.seconds;
+  const factor = Math.max(RAMP_FLOOR, 1 - RAMP_PER_ROUND * index);
+  return Math.round(round.seconds * factor * 10) / 10;
+}
+
 /** Whether the timer running out is a hit (the "don't" mechanics) or a miss. */
 export function expiryIsHit(mechanic: Mechanic): boolean {
   return mechanic === "dont-tap" || mechanic === "hold";
