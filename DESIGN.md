@@ -34,15 +34,17 @@ Amber is a detail in the platform shell, under 10% of a surface. The user's late
 - `app/site-motion.tsx`: shared route reveals and public/console pointer feedback; reduced-motion users get immediate states.
 - `app/meditation-studio.tsx`, `src/learn/meditation.ts`: personal monotonic timers and server-synchronised shared sessions. No fabricated attendance or human host.
 - `app/learning-scene.tsx`: original vector cast, seven topic-specific scenes, quiz reactions and educational example interactions.
+- `app/play/`, `src/learn/runs.ts`: the twenty immersive game modules integrated from current main; their scenes, clocks, clues and personal-model callbacks remain independent of the reading activities.
+- `app/styles/glass.css`: integrated surface rims, glare, shadows and supported filters, using the shared warm palette.
 - `src/learn/cursor.ts`: validated device-local reading position, separate from v1 completion records.
 
 Library buttons use `.learn-card`; lesson and quiz pages use `.learn-lesson`. Never share those two layout classes again. New navigation rules must stay in the platform stylesheet; obsolete navigation selectors were removed from `globals.css`.
 
 ## Responsive and interaction rules
 
-Desktop navigation is in normal flow at the top. Mobile browsing uses bottom tabs; focused lessons use All modules/Back/Next/Finish. Content scrolls naturally. A ResizeObserver measures consent height, reserving space and positioning mobile navigation above it without fixed guessed offsets.
+Four destinations—Support, Today, Learn and My ADHD—share the route register. Desktop navigation is in normal flow at the top, with a second row at 768–1023px and one row above that. Mobile browsing uses bottom tabs; focused reading lessons use All modules/Back/Next/Finish, while games retain their immersive close/progress controls. Content scrolls naturally. A ResizeObserver measures consent height, reserving space and positioning mobile navigation above it without fixed guessed offsets.
 
-Module URLs contain public module identifiers only. Reading position and completion are separate records. Quiz answers and scores stay in memory; reopening a quiz restarts it. Only Finish marks completion. Storage failures leave the current visit usable. Browser Back returns through module navigation.
+Module URLs contain public module identifiers only. Reading position and completion are separate records. Reading activities and quiz answers stay in memory; reopening a quiz restarts it. Reading/quiz Finish marks completion. The current game modules separately retain their established device-local personal-model behaviour. Storage failures leave reading usable. Browser Back returns through module navigation.
 
 Artwork is decorative unless it forms part of an explicitly labelled interactive example. The examples use real buttons, selected states and status text. Reduced motion disables decorative transitions; controls retain visible state feedback.
 
@@ -50,4 +52,4 @@ Each module has its own cover scene. Everyday examples update both a labelled il
 
 ## Scope and evidence
 
-The patient shell and learning system have the deepest visual changes. Public and console work updates shared navigation/primitives while preserving existing workflows and route content. Consult [REVIEW.md](docs/design/2026-platform/REVIEW.md) for validation, reference matches and remaining gaps; a screenshot alone is not proof of cross-browser behaviour.
+The patient shell and learning system have the deepest visual changes. Public and console work updates shared navigation/primitives while preserving existing workflows and route content. Consult the [current review](docs/design/warm-brand/REVIEW.md) and [reference comparison](docs/design/warm-brand/comparison.html) for validation and reference matches; a screenshot alone is not proof of cross-browser behaviour.

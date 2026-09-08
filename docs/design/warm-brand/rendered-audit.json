@@ -40,6 +40,38 @@
     "violations": []
   },
   {
+    "name": "today",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "my-adhd",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "care-map",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "onboarding",
+    "width": 390,
+    "scrollWidth": 390,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
     "name": "find",
     "width": 1440,
     "scrollWidth": 1440,
@@ -73,6 +105,38 @@
   },
   {
     "name": "console",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "today",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "my-adhd",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "care-map",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "paper": "#fbfaf7",
+    "font": "\"Inter Variable\", Inter, ui-sans-serif, system-ui, sans-serif",
+    "violations": []
+  },
+  {
+    "name": "onboarding",
     "width": 1440,
     "scrollWidth": 1440,
     "paper": "#fbfaf7",

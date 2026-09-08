@@ -443,8 +443,8 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/approach?module=starting");
   await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
+  await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Share this run" }).click();
   await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
   const text = await page.evaluate(() => navigator.clipboard.readText());
