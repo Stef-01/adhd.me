@@ -13,7 +13,7 @@ const known = new Set(SUBDOMAINS.map((s) => s.id));
 
 describe("the fifteen modules", () => {
   it("are fifteen, each seven to twelve minutes, each in the shelves and the module list exactly once", () => {
-    expect(INTERACTIVE_MODULES.length).toBe(15);
+    expect(INTERACTIVE_MODULES.length).toBe(20);
     const ids = INTERACTIVE_MODULES.map((m) => m.id);
     expect(new Set(ids).size).toBe(ids.length);
     const shelved = SHELVES.flatMap((s) => s.modules);

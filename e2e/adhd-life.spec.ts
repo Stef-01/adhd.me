@@ -369,12 +369,42 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
 
 test("Play P3: the cast wakes as runs are cleared — discovery, never a streak", async ({ page }) => {
   await page.goto("/approach");
-  const cast = page.getByRole("list", { name: /Beans collected: 0 of 15/ });
+  const cast = page.getByRole("list", { name: /Beans collected: 0 of 20/ });
   await expect(cast).toBeVisible();
   await expect(cast.locator("li.is-awake")).toHaveCount(0);
   await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["starting", "sleep"] })));
   await page.reload();
-  await expect(page.getByRole("list", { name: /Beans collected: 2 of 15/ })).toBeVisible();
+  await expect(page.getByRole("list", { name: /Beans collected: 2 of 20/ })).toBeVisible();
   await expect(page.locator(".play-cast li.is-awake")).toHaveCount(2);
   await expect(page.locator(".play-cast li.is-awake").first()).toContainText("Maya");
+});
+
+test("Play P6: the catch and balance mechanics play by buttons under reduced motion, and a run is never mostly tapping", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=eating");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await page.getByRole("button", { name: "I held off" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "At 3pm, shaky" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  // Catch, by buttons: keep the three no-cook foods, leave the decoys.
+  const keep = page.getByRole("group", { name: "What to keep" });
+  for (const item of ["Yoghurt", "Boiled eggs", "Nuts"]) await keep.getByRole("button", { name: item, exact: true }).click();
+  await page.getByRole("button", { name: "Keep these" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator(".play-result")).toContainText("no cooking");
+  // Balance, by buttons, in the gut run.
+  await page.goto("/approach?module=gut");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await page.getByRole("button", { name: "A regular-ish meal" }).click();
+  await expect(page.locator(".play-verdict")).toContainText("Cleared");
+  await expect(page.locator(".play-result")).toContainText("plain routine");
+});
+
+test("Play P6: the exercise run's bean is drawn fit", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=exercise");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await expect(page.locator('.play-scene .bean[data-look="fit"]')).toHaveCount(1);
 });

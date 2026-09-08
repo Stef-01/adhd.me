@@ -60,8 +60,13 @@ body:has(.play-run) { overflow-x: clip; }
 .play-timing-track.in-scene { position: absolute; left: 8%; right: 8%; top: 14px; height: 22px; }
 .play-heat.in-scene { position: absolute; left: 8%; right: 8%; top: 18px; }
 /* The mechanics that own the scene grow with the stage, the scene taking the room. */
-.play-hold, .play-dont, .play-timing, .play-pause { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
-.play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene { flex: 1 0 auto; }
+.play-hold, .play-dont, .play-timing, .play-pause, .play-catch, .play-balance { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
+.play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene, .play-catch .play-scene, .play-balance .play-scene { flex: 1 0 auto; }
+.play-falling { position: absolute; inset: 0; }
+.play-fall { position: absolute; min-height: 44px; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); transition: top 80ms linear; }
+.play-fall.is-decoy { background: var(--stone); color: var(--muted); }
+.play-timing-zone.is-middle { left: 30%; width: 40%; }
+.play-recall .sim-notification { background: var(--paper); color: var(--ink); box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
 .play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .play-controls { width: 100%; }
 .bean { display: block; }
@@ -98,6 +103,14 @@ body:has(.play-run) { overflow-x: clip; }
 .play-timing-zone { position: absolute; left: 70%; width: 25%; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, #0e8345 30%, transparent); }
 .play-timing-marker { position: absolute; top: -6px; width: 10px; height: 40px; margin-left: -5px; border-radius: 999px; background: var(--accent); }
 .play-timing-label { position: absolute; top: 34px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+/* The scale (the sense gate): the marks along the line, the last one the moment to act. */
+.play-scale { position: absolute; left: 0; right: 0; top: 30px; margin: 0; padding: 0; list-style: none; }
+.play-scale li { position: absolute; transform: translateX(-50%); width: 10ch; color: var(--ink); font-size: 0.72rem; font-weight: 700; line-height: 1.15; text-align: center; }
+.play-scale li:first-child { transform: none; text-align: left; }
+.play-scale li:last-child { transform: translateX(-100%); text-align: right; }
+.play-scale li.is-last { color: var(--accent); }
+.play-timing-track.in-scene .play-timing-zone { left: 76%; width: 24%; }
+.play-rule { margin: 0; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.4; }
 .play-recall { display: grid; gap: 12px; width: 100%; justify-items: center; }
 .play-recall .sim-list { width: 100%; }
 .play-sort { display: grid; gap: 14px; width: 100%; }

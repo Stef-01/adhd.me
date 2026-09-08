@@ -401,8 +401,8 @@ export const SHELVES: ReadonlyArray<{ readonly title: string; readonly modules: 
   { title: "Understand ADHD", modules: ["context", "more-than-attention", "starting", "deadlines", "working-memory", "hyperfocus", "adhd", "everyday", "myth-or-fact", "words"] },
   { title: "Work & Study", modules: ["ambiguity", "interruption", "perfectionism"] },
   { title: "Relationships", modules: ["not-listening", "forgotten-commitments", "conflict"] },
-  { title: "Daily Life", modules: ["household"] },
-  { title: "Sleep & Body", modules: ["sleep", "exercise"] },
+  { title: "Daily Life", modules: ["household", "money", "mornings"] },
+  { title: "Sleep & Body", modules: ["sleep", "exercise", "eating", "gut", "screens"] },
   { title: "Finding care", modules: ["finding", "cost", "changed"] },
 ];
 
