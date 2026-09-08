@@ -39,6 +39,10 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [x] Play P6: five more modules (eating, the gut, money, mornings, screens), two more
       mechanics (catch, balance), the fit bean, and the QA process in
       [docs/adhd-life/PLAY-QA.md](docs/adhd-life/PLAY-QA.md) with the variety gate as a test.
+- [x] Play P7: survey delivery, not a quiz (founder, 2026-09-08) — a clue on every round with a
+      right answer so the hit is inferable from the scene, and a relate beat after each result
+      ("How much is this you?", buttons and a Likert slider alternating) that feeds the need's
+      cost. [docs/adhd-life/PLAY-PLAN.md §13](docs/adhd-life/PLAY-PLAN.md).
 - [ ] Play P3 (tempo) and P4 (measurement): the clock tuned with five to eight real people and
       the §78 targets read off the round-level events — both need the pilot.
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
