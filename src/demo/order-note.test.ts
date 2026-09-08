@@ -71,3 +71,15 @@ describe("orderNote", () => {
     expect(note.toLowerCase()).not.toContain("burleigh");
   });
 });
+
+describe("orderNote names the list it is about", () => {
+  it("says GP for the GP roster, the profession for a list narrowed to one kind, and provider for a mix", async () => {
+    const { ALLIED_CLINICIANS, demoRoster } = await import("./synthetic-roster");
+    const ots = ALLIED_CLINICIANS.filter((c) => c.profession === "occupational-therapist");
+    expect(ots.length).toBeGreaterThan(0);
+    expect(orderNote("help with adjustments at work", clinicians)).toContain("every listed GP");
+    expect(orderNote("help with adjustments at work", ots)).toContain("every listed occupational therapist");
+    expect(orderNote("help with adjustments at work", ots)).not.toMatch(/\bGP\b/);
+    expect(orderNote("help with adjustments at work", demoRoster)).toContain("every listed provider");
+  });
+});
