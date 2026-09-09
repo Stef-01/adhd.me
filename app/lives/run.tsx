@@ -204,6 +204,8 @@ export function ChaosRun({ seed }: { seed?: string }) {
 
           {(phase === "intro" || phase === "active" || phase === "resolution") && current && session && (
             <div className={`play-card is-round lives-card lives-game${phase === "resolution" ? (last?.outcome === "success" ? " is-hit" : " is-miss") : ""}`} data-beat={phase} data-game={current.game.id} data-seed={current.seed}>
+              {/* DESIGN-dwtd2.md: the game's name small over the shouted verb, on the intro beat only. */}
+              {phase === "intro" && !reminding && <p className="lives-game-title">{current.game.title}</p>}
               <p className="lives-shout" aria-live="assertive" tabIndex={-1}>{phase === "intro" && reminding && current.scene.remind ? current.scene.remind : current.game.instruction}</p>
               {!reducedMotion && <div className="lives-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "active" ? 1 - progress : phase === "resolution" ? 0 : 1})` }} /></div>}
               <div className="lives-scene" data-engine={current.game.engine}>

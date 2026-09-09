@@ -61,6 +61,35 @@ A portrait arcade of five-second microgames. The page says it plainly: "Most cha
 4. Under reduced motion there is no clock and every beat ends on a button; the QA and the browser suite drive that path.
 5. Before any learning: the score, then AGAIN, then a rule. Learning never visually outweighs AGAIN.
 
+## Measured with clone-site (2026-09-08, `--analyze-only`)
+
+The `clone-site` skill (cth9191/site-clone) was run on the page with its probe bundle preloaded
+(surface map, motion probe, tokens at 1440/768/390), and the game was driven in-frame to its
+hub, an area and two minigames. The full `TEARDOWN.md` and probe JSON are in the session's
+scratch output (third-party page; not committed). What it settled, with the skill's tags:
+
+- **The host page is DOM; the game is an opaque canvas** in two nested cross-origin iframes
+  (992×558 at 1440). No GPU canvas on the host, no GSAP, no Lenis; transitions only — CONFIRMED.
+  Every claim about the game's interior below is OBSERVED from screenshots, not read from a
+  runtime.
+- **Title → hub map → area card → minigames → between-game card.** Five areas on a map, each
+  with a three-star arch; the area card lists its four minigames by name, shows "Your Best",
+  and has one PLAY pill — OBSERVED. Ours: home → run; the eight lives stand in for the areas,
+  and stars are refused (PRD v2 §62).
+- **The timer is the top edge**: a dark strip along y=0 that shrinks from the right — OBSERVED.
+  Ours: the same single clock, as a rounded bar directly under the shout.
+- **Two-line instruction**: the game's name large in a bold serif ("Tie the rope"), the verb in
+  small caps under it ("JOIN THE STRANDS"), pause top-right, nothing else on screen during play
+  — OBSERVED. Ours shouts the verb (PRD v2 §4) and shows the title small above it on the intro
+  beat only.
+- **Lives and score are drawn between games**, on a "LEVEL COMPLETE" card with the score large
+  and the three characters in lockers — OBSERVED. Ours keeps a small HUD during play (PRD v2
+  §60–§61) and says "One life gone" on the resolution beat.
+- **Failure is a picture**: the character in the water, then on — OBSERVED. Ours: a line and a
+  dip, then on (§61).
+- **Host tokens** (for contrast only, not adopted): Nunito 400/700/800/900; 16/24 body; 16px
+  card radius, 30px pills; primary #6842FF on #0C0D14 — CONFIRMED.
+
 ## Rerun Inputs
 workflow: firecrawl-website-design-clone
 source_url: https://www.crazygames.com/game/dumb-ways-to-die-2-the-games
