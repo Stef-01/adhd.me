@@ -69,7 +69,10 @@ export function ChaosRun({ seed }: { seed?: string }) {
   const highBefore = useRef(0);
 
   useEffect(() => { setTutorial(readFlag(LIVES_TUTORED_KEY) ? -1 : 0); }, []);
-  useEffect(() => { if (profile) highBefore.current = profile.highScore; }, [profile]);
+  // The high score to beat is read before a run begins, never during one: the last game writes the
+  // new score to the profile before the score screen opens, and "New high score" compares against
+  // what stood before it.
+  useEffect(() => { if (profile && phase === "title") highBefore.current = profile.highScore; }, [profile, phase]);
 
   const pool = GAMES;
 

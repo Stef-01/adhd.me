@@ -367,6 +367,8 @@ describe("learning profile (§63–§65)", () => {
     p = removeFromToolkit(s, "launch_pad");
     expect(p.personalStrategies).toEqual([]);
     expect(p.savedStrategyIds).toEqual([]);
+    // Remove takes the Learn Later record too, or the queue would show it again after a reload.
+    expect(p.saved).toEqual([]);
   });
 
   it("completing a module puts the strategy in the Toolkit as 'trying' with its personal configuration, and counts as recent for a week", () => {

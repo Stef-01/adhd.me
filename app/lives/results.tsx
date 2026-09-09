@@ -39,7 +39,10 @@ export function Results({ session, highBefore, onAgain }: { session: SessionStat
       selectedGoals: profile.selectedGoals,
     }, STRATEGIES);
   }, [profile, session]);
-  useEffect(() => { for (const r of recommendations) track("STRATEGY_IMPRESSION", { strategy: r.strategy.id, score: r.score }); }, [recommendations]);
+  // One impression per strategy per score screen: a resonance or a save rebuilds the rows without
+  // showing a new one, and analytics must not count the same card twice.
+  const shown = useRef<Set<string>>(new Set());
+  useEffect(() => { for (const r of recommendations) { if (shown.current.has(r.strategy.id)) continue; shown.current.add(r.strategy.id); track("STRATEGY_IMPRESSION", { strategy: r.strategy.id, score: r.score }); } }, [recommendations]);
   const signalFor = (id: CharacterId) => profile?.resonanceSignals.find((s) => s.sourceType === "character" && s.sourceId === id)?.response;
 
   return (

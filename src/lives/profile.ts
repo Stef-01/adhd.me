@@ -99,7 +99,7 @@ export function markStrategy(storage: ProfileStorage, strategyId: string, status
 }
 
 export function removeFromToolkit(storage: ProfileStorage, strategyId: string): LearningProfile {
-  return update(storage, (p) => ({ ...p, personalStrategies: p.personalStrategies.filter((s) => s.strategyId !== strategyId), savedStrategyIds: p.savedStrategyIds.filter((id) => id !== strategyId) }));
+  return update(storage, (p) => ({ ...p, personalStrategies: p.personalStrategies.filter((s) => s.strategyId !== strategyId), savedStrategyIds: p.savedStrategyIds.filter((id) => id !== strategyId), saved: p.saved.filter((s) => s.strategyId !== strategyId) }));
 }
 
 /** §34: "completed recently" is within a week. */
