@@ -18,5 +18,8 @@ export function useProfile(): { profile: LearningProfile | null; apply: (change:
 
 /** The device remembers that the run's three-card tutorial has been seen. */
 export const LIVES_TUTORED_KEY = "adhdme.lives.tutored";
+/** §93: relaxed timing (half as long again on every clock) and larger instructions, on this device. */
+export const LIVES_RELAXED_KEY = "adhdme.lives.relaxed";
+export const LIVES_LARGE_KEY = "adhdme.lives.large";
 export function readFlag(key: string): boolean { try { return deviceLearningStorage.getItem(key) === "1"; } catch { return false; } }
 export function writeFlag(key: string, on: boolean): void { try { if (on) deviceLearningStorage.setItem(key, "1"); else deviceLearningStorage.removeItem(key); } catch { /* memory only */ } }

@@ -22,9 +22,11 @@ async function drive(page: Page, outcome: "hit" | "miss", until: () => Promise<b
     const go = page.getByRole("button", { name: "Go", exact: true });
     const act = page.locator(`[data-outcome="${outcome}"]:enabled`).first();
     const next = page.getByRole("button", { name: /^(Next|See the score)$/ });
-    if (await go.isVisible().catch(() => false)) { await go.click(); continue; }
+    // Go and Next settle before the next look: a Next that opens the FASTER card must not be followed
+    // by a Go pressed on that card before `until` has seen it. An action may take several taps.
+    if (await go.isVisible().catch(() => false)) { await go.click(); await expect(go).toBeHidden(); continue; }
     if (await act.isVisible().catch(() => false)) { await act.click(); continue; }
-    if (await next.isVisible().catch(() => false)) { await next.click(); continue; }
+    if (await next.isVisible().catch(() => false)) { await next.click(); await expect(next).toBeHidden(); continue; }
     await page.waitForTimeout(60);
   }
   throw new Error(`the run did not reach its end in ${maxSteps} steps`);
@@ -110,4 +112,20 @@ test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on the
   await expect(page.getByRole("heading", { name: "Ranking" })).toBeVisible();
   expect(await page.locator(".lives-lab-ranking > li").count()).toBeGreaterThanOrEqual(1);
   await expect(page.locator(".lives-lab-table tbody tr")).toHaveCount(12);
+});
+
+test("E2E Lives 4: relaxed timing and larger instructions are kept on the device and reach the run (§93)", async ({ page }) => {
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  await page.getByRole("button", { name: "Relaxed timing" }).click();
+  await page.getByRole("button", { name: "Larger instructions" }).click();
+  await expect(page.getByRole("button", { name: "Relaxed timing" })).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await page.locator(".lives-settings summary").click();
+  await expect(page.getByRole("button", { name: "Larger instructions" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("link", { name: "Play" }).click();
+  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run.is-large[data-relaxed='true']")).toBeVisible();
+  // Nothing about the settings in the URL.
+  expect(page.url()).not.toMatch(/relaxed|large/);
 });

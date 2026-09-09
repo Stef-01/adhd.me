@@ -60,9 +60,20 @@ describe("content (§110 validate:content)", () => {
       const module = MODULES.find((m) => m.id === strategy(id).moduleId)!;
       expect(module.blocks.length, id).toBeGreaterThanOrEqual(4);
     }
-    expect(GAMES.length).toBeGreaterThanOrEqual(16);
+    expect(GAMES.length).toBe(32);
     expect(STRATEGIES.length).toBe(16);
     expect(MODULES.length).toBe(16);
+    // L5 (§104): every module is full — recognise, understand, try, personalise, one action — never a stub
+    // of an illustration, a paragraph and a plan.
+    const doing = new Set(["choice", "scenario", "checklist", "timer", "reflection", "interactive_practice"]);
+    for (const m of eachOf(MODULES, "the modules")) {
+      expect(m.blocks.length, m.id).toBeGreaterThanOrEqual(4);
+      expect(m.blocks.some((b) => doing.has(b.type)), `${m.id} asks the person to do something`).toBe(true);
+      expect(m.blocks.at(-1)!.type, `${m.id} ends on the action plan`).toBe("action_plan");
+    }
+    // §56: fun games are a fifth to a third of the roster, so the director can hold its share.
+    const fun = GAMES.filter((g) => g.character === "random").length / GAMES.length;
+    expect(fun).toBeGreaterThanOrEqual(0.2); expect(fun).toBeLessThanOrEqual(0.34);
   });
 
   it("eight lives, each with a pattern, mechanics, domains, and strategies they are trying that exist", () => {
@@ -198,6 +209,10 @@ describe("session reducer (§85–§86)", () => {
     const game = GAMES[0]!;
     expect(allowedMs(game, 8)).toBeLessThan(allowedMs(game, 1));
     expect(allowedMs(game, 1)).toBe(game.activeMs);
+    // §93 relaxed timing: half as long again at every difficulty, and the difficulty still bites.
+    expect(allowedMs(game, 1, true)).toBe(Math.round(game.activeMs * 1.5));
+    expect(allowedMs(game, 8, true)).toBeLessThan(allowedMs(game, 1, true));
+    expect(allowedMs(game, 8, true)).toBeGreaterThan(allowedMs(game, 8));
   });
 
   it("resolveGame reports the FASTER beat and the score delta", () => {

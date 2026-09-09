@@ -1,7 +1,8 @@
 // §24–§26, §70–§71: modules as data. recognise → understand → try → personalise → leave with one
-// action. The vertical slice's four are full; the rest are stubs the validator holds to the same
-// shape so a broken reference fails CI before a person meets it.
-import type { CharacterId, LearningModule } from "../types";
+// action. All sixteen are full (L5, PRD §104): the vertical slice's four first, then the twelve
+// behind the other strategies. The validator holds every one to the same shape, so a broken
+// reference fails CI before a person meets it.
+import type { LearningModule } from "../types";
 
 const meetingAnchor: LearningModule = {
   id: "meeting_anchor_v1", version: 1, title: "The Meeting Anchor", description: "A tiny way to give drifting attention somewhere to return.", estimatedMinutes: 2, domains: ["attention", "working_memory"], safetyCategory: "general",
@@ -50,30 +51,160 @@ const lowerSensoryFloor: LearningModule = {
   ],
 };
 
-const stub = (id: string, title: string, description: string, minutes: number, domains: LearningModule["domains"], characterId: CharacterId, caption: string, action: { prompt: string; options: string[] }): LearningModule => ({
-  id, version: 1, title, description, estimatedMinutes: minutes, domains, safetyCategory: "general",
+const parkingLotNote: LearningModule = {
+  id: "parking_lot_note_v1", version: 1, title: "Parking Lot Note", description: "One note labelled LATER, for every thought that is not this meeting.", estimatedMinutes: 2, domains: ["attention", "working_memory"], safetyCategory: "general",
   blocks: [
-    { type: "illustration", characterId, caption },
-    { type: "text", body: description },
-    { type: "action_plan", prompt: action.prompt, options: action.options },
+    { type: "illustration", characterId: "arjun", caption: "Arjun’s flights, parked. The meeting got him back." },
+    { type: "text", body: "A thought that arrives mid-meeting wants to be dealt with now. Writing it on a note labelled LATER can let it wait without being lost, and attention can go back to the room." },
+    { type: "choice", prompt: "‘Book the flights’ arrives during the revenue question. What is the smallest move?", options: ["Book them now, quickly", "Write ‘flights’ on the LATER note", "Try harder to ignore it"] },
+    { type: "text", body: "Ignoring a thought costs attention every time it comes back. Doing it now costs the meeting. Two words on a note cost almost nothing, and the thought stops knocking." },
+    { type: "interactive_practice", activityId: "meeting_anchor_simulation", instruction: "Three thoughts will arrive. Park each one, then tap the current discussion." },
+    { type: "action_plan", prompt: "Where does LATER live?", options: ["Top of the page", "A sticky note", "A phone note", "The agenda margin"] },
   ],
-});
+};
+
+const putItWhere: LearningModule = {
+  id: "put_it_where_v1", version: 1, title: "Put It Where You’ll Need It", description: "Do not remember it. Place it where the moment happens.", estimatedMinutes: 2, domains: ["working_memory", "environment", "organisation"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "mia", caption: "The parcel, by the door, cannot be forgotten." },
+    { type: "text", body: "An intention kept in the head has to be re-found every time. An object in the place where it is needed does the remembering: the parcel by the door, the question written on the agenda, the form on the chair you sit in first." },
+    { type: "choice", prompt: "The library book is due tomorrow. Where does it go tonight?", options: ["On the shelf, remembered", "On top of the keys", "In a reminder for 8am"] },
+    { type: "text", body: "A reminder fires once and can be swiped away. A shelf hides the book. The keys are the one thing that leaves the house every day, and whatever sits on them leaves too." },
+    { type: "checklist", items: [{ id: "door", label: "By the door" }, { id: "keys", label: "On the keys" }, { id: "chair", label: "On the chair" }, { id: "screen", label: "Stuck to the screen" }, { id: "bag", label: "In the bag, tonight" }], allowCustomItems: true },
+    { type: "action_plan", prompt: "The next thing to remember. Where does it go?", options: ["By the door", "On the keys", "In the bag", "On the agenda"] },
+  ],
+};
+
+const reversePlanning: LearningModule = {
+  id: "reverse_planning_v1", version: 1, title: "Reverse Planning", description: "Plan from the arrival time backwards, one step at a time.", estimatedMinutes: 4, domains: ["time_management", "planning", "transitions"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "theo", caption: "Theo, working backwards from nine." },
+    { type: "text", body: "Estimating forwards asks how long everything will take, and the answer is usually optimistic. Working backwards from the arrival time asks a simpler question at each step: what has to be true just before this?" },
+    { type: "scenario", characterId: "theo", prompt: "Arrive 9:00. Walk in from the car takes five minutes. Parking takes five. The drive takes twenty-five. Shoes and keys take five. When does Theo leave the shower?", choices: [
+      { id: "eight-thirty", text: "8:30", feedback: "Walk 8:55, park 8:50, drive 8:25, shoes 8:20. Leaving the shower at 8:30 is already ten minutes late, before anything goes wrong." },
+      { id: "eight-ten", text: "8:10", feedback: "Walk 8:55, park 8:50, drive 8:25, shoes 8:20. Out of the shower by 8:10 leaves ten minutes to dry off and dress. That is the number." },
+      { id: "eight-forty", text: "8:40", feedback: "That would need the drive, the parking and the walk to take twenty minutes together. They take thirty-five." },
+    ] },
+    { type: "text", body: "The last step backwards is the one that matters: the moment to stop what you are doing. Write that time somewhere it will be seen, not the arrival time." },
+    { type: "reflection", prompt: "Your next arrival time. Work it back, step by step, and write the moment you have to stop." },
+    { type: "action_plan", prompt: "How many steps back do you plan?", options: ["Five steps back", "Three steps back", "The stop time only"] },
+  ],
+};
+
+const launchPad: LearningModule = {
+  id: "launch_pad_v1", version: 1, title: "Launch Pad", description: "One place by the door for everything that leaves with you.", estimatedMinutes: 3, domains: ["environment", "transitions", "organisation"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "theo", caption: "A bowl by the door. Everything that leaves lives there." },
+    { type: "text", body: "Every departure that starts with a search for keys starts late. A launch pad is one fixed spot by the door where the leaving things live: keys, wallet, badge, medication, headphones, charger. Build it once; fill it every time you come in." },
+    { type: "checklist", items: [{ id: "keys", label: "Keys" }, { id: "wallet", label: "Wallet or cards" }, { id: "badge", label: "Work badge" }, { id: "meds", label: "Medication" }, { id: "phone", label: "Phone and charger" }, { id: "headphones", label: "Headphones" }, { id: "glasses", label: "Glasses" }], allowCustomItems: true },
+    { type: "text", body: "The pad works because it is where things land on the way in, not where they are gathered on the way out. Coming home, hands go to the bowl before anything else." },
+    { type: "action_plan", prompt: "Where is your launch pad?", options: ["Bowl by the door", "Hook and shelf", "The bag itself", "Top of the fridge"] },
+  ],
+};
+
+const sixtySecondStart: LearningModule = {
+  id: "sixty_second_start_v1", version: 1, title: "60-Second Start", description: "Find the first physical action, and do sixty seconds of it.", estimatedMinutes: 2, domains: ["task_initiation"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "nina", caption: "Nina typed ‘Hi’. The mountain shrank." },
+    { type: "text", body: "A task that will not start is usually a task that has no first physical action. ‘Write the report’ is a mountain. ‘Open the file and type the title’ is a hand movement. Sixty seconds of the hand movement is often enough for the rest to follow, and if it is not, sixty seconds is all that was promised." },
+    { type: "choice", prompt: "The email has been waiting since Tuesday. Which is a first physical action?", options: ["Write a good email", "Type ‘Hi Sam,’ and nothing else", "Think about what to say"] },
+    { type: "text", body: "‘Hi Sam,’ is two words and the email exists. What comes after it is a different, smaller problem than the one that waited since Tuesday." },
+    { type: "timer", durationSeconds: 60, label: "Sixty seconds of the first action", allowSkip: true },
+    { type: "action_plan", prompt: "Your first physical action.", options: ["Open the file", "Write the title", "Paste the notes", "Type one sentence"] },
+  ],
+};
+
+const imperfectFirstDraft: LearningModule = {
+  id: "imperfect_first_draft_v1", version: 1, title: "Imperfect First Draft", description: "Write it badly on purpose. A rough draft exists; a perfect one is still waiting.", estimatedMinutes: 3, domains: ["task_initiation", "emotional_regulation"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "nina", caption: "Nina’s bad first sentence was a door." },
+    { type: "text", body: "Perfectionism does not stop the work at the end; it stops it at the beginning, because the first line has to be the final line. Giving yourself permission to write a bad version removes the standard the first line had to meet." },
+    { type: "scenario", characterId: "nina", prompt: "The report is due Friday. It is Wednesday. The document is blank. Nina opens it and…", choices: [
+      { id: "outline", text: "Writes the whole thing as bullet points, badly, in ten minutes.", feedback: "A bad version exists on Wednesday. Thursday is for making it good, which is a different and easier job." },
+      { id: "research", text: "Reads three more sources so the first paragraph will be right.", feedback: "The paragraph still does not exist, and now there is more to fit into it. Research after the rough draft tends to find what the draft is missing." },
+      { id: "perfect", text: "Writes the first sentence eleven times.", feedback: "Eleven sentences, one paragraph, no report. The first sentence can be fixed last." },
+    ] },
+    { type: "reflection", prompt: "Something you have been about to start. What would a deliberately rough version of it look like?" },
+    { type: "action_plan", prompt: "Permission to be rough. Where?", options: ["The email", "The report", "The message", "The plan"] },
+  ],
+};
+
+const holdTheKeyword: LearningModule = {
+  id: "hold_the_keyword_v1", version: 1, title: "Hold the Keyword", description: "Keep one word, not the whole sentence, and go back to listening.", estimatedMinutes: 4, domains: ["communication", "relationships", "working_memory"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "zoe", caption: "AIRPORT. Zoe held the word, and listened." },
+    { type: "text", body: "Holding a whole reply in your head while someone else is talking takes the attention that listening needs, so the reply gets said too early or the listening gets lost. One word can hold the whole thought: ‘airport’ is enough to bring back ‘I can drive you on Sunday’." },
+    { type: "choice", prompt: "A friend is telling a long story. Halfway through, you think of the perfect thing to say. What do you keep?", options: ["The whole sentence, rehearsed", "One word for it", "Nothing; say it now"] },
+    { type: "text", body: "Said now, it cuts the story. Rehearsed, it deafens you to the end of it. One word sits quietly until the turn arrives." },
+    { type: "interactive_practice", activityId: "keyword_hold", instruction: "Pick one word for the thought you would want to say next, and say it silently three times while you keep listening." },
+    { type: "action_plan", prompt: "Where does the word go?", options: ["In my head, one word", "On my hand", "A note on the table", "The phone"] },
+  ],
+};
+
+const overwhelmReset: LearningModule = {
+  id: "overwhelm_reset_v1", version: 1, title: "Overwhelm Reset", description: "Remove one layer instead of concentrating harder against all of them.", estimatedMinutes: 3, domains: ["sensory_management", "emotional_regulation", "mindfulness"], safetyCategory: "wellbeing",
+  blocks: [
+    { type: "illustration", characterId: "maya", caption: "Maya turned one layer off. The crossing got quieter." },
+    { type: "text", body: "When everything is loud at once, the instinct is to concentrate harder. For some people, reducing the total input works better than pushing against it: headphones, a step to the side, a quieter route, the directions written down before going in." },
+    { type: "checklist", items: [{ id: "sound", label: "Sound: headphones, or a quieter spot" }, { id: "notifications", label: "Notifications off for the next hour" }, { id: "visual", label: "Visual noise: one tab, one window" }, { id: "people", label: "Step out of the conversation for a minute" }, { id: "written", label: "The next steps written before starting" }], allowCustomItems: true },
+    { type: "timer", durationSeconds: 60, label: "One minute with one layer off", allowSkip: true },
+    { type: "action_plan", prompt: "Which layer goes first?", options: ["Sound", "Notifications", "Visual noise", "People talking"] },
+  ],
+};
+
+const sleepWindDown: LearningModule = {
+  id: "sleep_wind_down_v1", version: 1, title: "Sleep Wind-Down", description: "A five-minute settle for a brain that is still going.", estimatedMinutes: 5, domains: ["sleep", "mindfulness"], safetyCategory: "wellbeing",
+  blocks: [
+    { type: "illustration", characterId: "leo", caption: "Leo, five minutes before the lights." },
+    { type: "text", body: "A body clock that runs late does not stop on command. What some people find useful is a short, repeatable settle before the lights go: the same few minutes, the same order, so the settle itself becomes the signal." },
+    { type: "checklist", items: [{ id: "lights", label: "Lights down" }, { id: "phone", label: "Phone out of reach" }, { id: "breath", label: "Slow breaths, counted" }, { id: "tomorrow", label: "Tomorrow’s one thing, written" }, { id: "warm", label: "Something warm to hold" }], allowCustomItems: true },
+    { type: "timer", durationSeconds: 300, label: "Five minutes, no requirement to finish", allowSkip: true },
+    { type: "text", body: "If a month of settles has not moved your sleep, or somebody tells you that you snore or stop breathing at night, that is worth taking to a GP or a sleep clinician. The settle is for the ordinary late nights, not the ones that need a look." },
+    { type: "action_plan", prompt: "Save for tonight?", options: ["Tonight", "Tomorrow", "Weeknights", "Not now"] },
+  ],
+};
+
+const brainDumpBed: LearningModule = {
+  id: "brain_dump_bed_v1", version: 1, title: "Brain Dump Before Bed", description: "Write down what your brain is trying not to forget, so it can stop rehearsing.", estimatedMinutes: 3, domains: ["sleep", "working_memory"], safetyCategory: "wellbeing",
+  blocks: [
+    { type: "illustration", characterId: "leo", caption: "Leo’s list, on paper instead of in the dark." },
+    { type: "text", body: "A brain that keeps repeating tomorrow’s list in the dark is not being difficult; it is trying not to lose the list. Writing the list down can give it permission to stop." },
+    { type: "reflection", prompt: "What is your brain holding onto tonight? Everything, in any order. It stays on this device." },
+    { type: "text", body: "Nothing on the list has to be solved now. It only has to be somewhere other than your head." },
+    { type: "action_plan", prompt: "Where does the list live?", options: ["Notebook by the bed", "A note on the phone", "The launch pad", "The fridge"] },
+  ],
+};
+
+const parkTheIdea: LearningModule = {
+  id: "park_the_idea_v1", version: 1, title: "Park the New Idea", description: "Capture it, date it, come back in a day.", estimatedMinutes: 2, domains: ["impulsivity", "prioritisation", "planning"], safetyCategory: "general",
+  blocks: [
+    { type: "illustration", characterId: "jax", caption: "Jax parked the kayak. For a day." },
+    { type: "text", body: "A new idea arrives with its own urgency. The urgency is real; the idea may or may not be. A day between wanting and buying keeps the good ideas, because they are still good tomorrow, and loses most of the rest." },
+    { type: "scenario", characterId: "jax", prompt: "Jax went out for milk. There is a kayak on sale, today only, forty per cent off.", choices: [
+      { id: "buy", text: "Buy the kayak. It is forty per cent off.", feedback: "Perhaps a fine kayak. Also the fourth today-only purchase this month, and the milk is still on the shelf." },
+      { id: "park", text: "Write ‘kayak, sale, 9 Sept’ in the parked list and buy the milk.", feedback: "If it is a good idea tomorrow, the kayak is one search away. If it is not, nothing was lost." },
+      { id: "photo", text: "Take a photo of it and decide in the car park.", feedback: "The car park is still today. The point of the day is that it is not today." },
+    ] },
+    { type: "action_plan", prompt: "How long is the park?", options: ["A day", "A week", "Until payday", "Until I tell someone"] },
+  ],
+};
+
+const transitionReset: LearningModule = {
+  id: "transition_reset_v1", version: 1, title: "3-Minute Transition Reset", description: "A short reset between one thing and the next.", estimatedMinutes: 3, domains: ["transitions", "mindfulness"], safetyCategory: "wellbeing",
+  blocks: [
+    { type: "illustration", characterId: "arjun", caption: "Three breaths between the meeting and the report." },
+    { type: "text", body: "The hardest part of the next thing is often the seam between it and the last thing. Some people find a brief, deliberate pause useful there: stop, three slow breaths, name the next thing out loud, begin." },
+    { type: "timer", durationSeconds: 180, label: "Stop. Three breaths. Name the next thing.", allowSkip: true },
+    { type: "choice", prompt: "Where would the seam be, most days?", options: ["After meetings", "Before starting work", "Getting home", "Before bed"] },
+    { type: "action_plan", prompt: "When would you use it?", options: ["After meetings", "Before starting", "Getting home", "Before bed"] },
+  ],
+};
 
 export const MODULES: readonly LearningModule[] = [
   meetingAnchor, externalCue, pauseBeforeSend, lowerSensoryFloor,
-  stub("parking_lot_note_v1", "Parking Lot Note", "Keep one note labelled LATER. Put every unrelated thought there and return to the meeting at once. Review it afterwards, if it still matters.", 2, ["attention", "working_memory"], "arjun", "Arjun’s flights, parked.", { prompt: "Where does LATER live?", options: ["Top of the page", "A sticky note", "A phone note", "The agenda margin"] }),
-  stub("put_it_where_v1", "Put It Where You’ll Need It", "Do not remember it. Place it. The package by the door; the question on the agenda; the document on the chair.", 2, ["working_memory", "environment", "organisation"], "mia", "The parcel, by the door, cannot be forgotten.", { prompt: "The next thing to remember. Where does it go?", options: ["By the door", "On the desk", "In the bag", "On the agenda"] }),
-  stub("reverse_planning_v1", "Reverse Planning", "Arrive 9:00. Walk in 8:55. Park 8:50. Drive 8:25. Leave home 8:20. Shoes and keys 8:15. Plan from arrival backwards.", 4, ["time_management", "planning", "transitions"], "theo", "Theo, working backwards from nine.", { prompt: "Your next arrival time. Work it back.", options: ["Five steps back", "Three steps back", "Leave-home time only"] }),
-  stub("launch_pad_v1", "Launch Pad", "One place by the door for the things you leave with: keys, wallet, badge, medication, headphones, charger. Build it once.", 3, ["environment", "transitions", "organisation"], "theo", "A bowl by the door. Everything that leaves lives there.", { prompt: "Where is your launch pad?", options: ["Bowl by the door", "Backpack", "Desk", "Shelf"] }),
-  stub("sixty_second_start_v1", "60-Second Start", "What is the first physical action? Open the file. Write the title. Paste the notes. Do sixty seconds of it, then keep going or stop.", 2, ["task_initiation"], "nina", "Nina typed ‘Hi’. The mountain shrank.", { prompt: "Your first physical action.", options: ["Open the file", "Write the title", "Paste the notes", "Type one sentence"] }),
-  stub("imperfect_first_draft_v1", "Imperfect First Draft", "Write it badly on purpose. A rough draft exists; a perfect one is still waiting to start.", 3, ["task_initiation", "emotional_regulation"], "nina", "Nina’s bad first sentence was a door.", { prompt: "Permission to be rough. Where?", options: ["The email", "The report", "The message", "The plan"] }),
-  stub("hold_the_keyword_v1", "Hold the Keyword", "Do not store the whole sentence. Pick one word, hold it, and go back to listening. Use the word when your turn arrives.", 4, ["communication", "relationships", "working_memory"], "zoe", "AIRPORT. Zoe held the word, and listened.", { prompt: "Where does the word go?", options: ["In my head, one word", "On my hand", "A note on the table", "The phone"] }),
-  stub("overwhelm_reset_v1", "Overwhelm Reset", "Remove one layer. Headphones, a quieter spot, a step aside, directions written before you go in. Less input is easier than more concentration.", 3, ["sensory_management", "emotional_regulation", "mindfulness"], "maya", "Maya turned one layer off. The crossing got quieter.", { prompt: "Which layer goes first?", options: ["Sound", "Notifications", "Visual noise", "People talking"] }),
-  stub("sleep_wind_down_v1", "Sleep Wind-Down", "A short settle before sleep: lights down, phone away, one slow breath at a time. Five minutes, no requirement to finish.", 5, ["sleep", "mindfulness"], "leo", "Leo, five minutes before the lights.", { prompt: "Save for tonight?", options: ["Tonight", "Tomorrow", "Weeknights", "Not now"] }),
-  stub("brain_dump_bed_v1", "Brain Dump Before Bed", "What is your brain trying not to forget? Write it down. It can stop rehearsing.", 3, ["sleep", "working_memory"], "leo", "Leo’s list, on paper instead of in the dark.", { prompt: "Where does the list live?", options: ["Notebook by the bed", "A note on the phone", "The launch pad", "The fridge"] }),
-  stub("park_the_idea_v1", "Park the New Idea", "Capture it, date it, come back in a day. The kayak will still be there tomorrow, if it is still a good idea.", 2, ["impulsivity", "prioritisation", "planning"], "jax", "Jax parked the kayak. For a day.", { prompt: "How long is the park?", options: ["A day", "A week", "Until payday", "Until I tell someone"] }),
-  stub("transition_reset_v1", "3-Minute Transition Reset", "Between one thing and the next: stop, three slow breaths, name the next thing, begin. Some people find this useful for resetting attention.", 3, ["transitions", "mindfulness"], "arjun", "Three breaths between the meeting and the report.", { prompt: "When would you use it?", options: ["After meetings", "Before starting", "Getting home", "Before bed"] }),
+  parkingLotNote, putItWhere, reversePlanning, launchPad, sixtySecondStart, imperfectFirstDraft, holdTheKeyword, overwhelmReset, sleepWindDown, brainDumpBed, parkTheIdea, transitionReset,
 ];
+
 
 export function learningModule(id: string): LearningModule {
   const m = MODULES.find((x) => x.id === id);

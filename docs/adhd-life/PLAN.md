@@ -173,11 +173,16 @@ native later. Mapped from the PRD's phases 0–6:
       lands in the Toolkit as Trying. `/lives/learn` is §28's home (For you, two-minute tools,
       six shelves); `/lives/characters` is §41; `/lives` is §82 with §83's optional goals.
       `e2e/adhd-lives.spec.ts` drives §98's journey end to end. (2026-09-08)
-- [ ] **L5–L6 Content** (§104–§105): thirty-two games (twenty-two today), sixteen full modules
-      (four full, twelve at shape), balancing against real people. Done already from this list:
-      character stories (§41), Learn home (§28), the §67 events with §68's guardrail as a test,
-      reduced motion and keyboard equals (§93–§94). Still open: sound, haptics, larger
-      instructions and a relaxed-timing setting (§93); audio blocks (§72) have no asset yet.
+- [x] **L5 Content** (§104): thirty-two games as engine configurations (ten more: a game per
+      life across every engine, two more fun ones; fun stays a quarter of the roster), and all
+      sixteen modules full — recognise, understand, try, personalise, one action — with the
+      validator and the suite refusing a stub. Every new game is linked from its strategies so
+      the score screen can bring it back. (2026-09-09)
+- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound and haptics;
+      audio blocks (§72) have no asset yet. Done: a relaxed-timing setting (half as long again on
+      every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
+      the Lives home, kept on the device and read by the run. (2026-09-09) Done already: character stories (§41), Learn home (§28), the §67 events with §68's
+      guardrail as a test, reduced motion and keyboard equals (§93–§94).
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.
 

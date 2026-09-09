@@ -5,10 +5,11 @@
 // sits under a fold, up to three, skip always available; it only orders recommendations.
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { ArrowRight, Play } from "@phosphor-icons/react";
 import { CHARACTERS, selectGoals, strategy, type LearningDomain } from "@/lives";
 import { LifeBean } from "./bean";
-import { useProfile } from "./profile-hook";
+import { LIVES_LARGE_KEY, LIVES_RELAXED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
 
 const GOALS: ReadonlyArray<{ id: LearningDomain; label: string }> = [
   { id: "sleep", label: "Sleep" },
@@ -26,6 +27,11 @@ export function LivesHome() {
   const tools = profile?.personalStrategies.filter((p) => p.status !== "saved").length ?? 0;
   const goals = profile?.selectedGoals ?? [];
   const toggle = (id: LearningDomain) => apply((s) => selectGoals(s, goals.includes(id) ? goals.filter((g) => g !== id) : [...goals, id].slice(0, 3)));
+  // §93: relaxed timing and larger instructions, on this device, read after mount so the server and the client agree.
+  const [relaxed, setRelaxed] = useState(false);
+  const [large, setLarge] = useState(false);
+  useEffect(() => { setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY)); }, []);
+  const flip = (key: string, on: boolean, set: (v: boolean) => void) => { writeFlag(key, !on); set(!on); };
   return (
     <div className="me-screen learn-screen lives-screen lives-home">
       <header className="life-head lives-home-head">
@@ -50,6 +56,15 @@ export function LivesHome() {
         <p className="lives-goals-note">Up to three. It only changes what is suggested first.</p>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>{g.label}</button>)}
+        </div>
+      </details>
+
+      <details className="life-why lives-goals lives-settings">
+        <summary>Play settings</summary>
+        <p className="lives-goals-note">Kept on this device. The score is the same either way.</p>
+        <div className="lives-chips" role="group" aria-label="Play settings">
+          <button type="button" className="lives-chip" aria-pressed={relaxed} onClick={() => flip(LIVES_RELAXED_KEY, relaxed, setRelaxed)}>Relaxed timing</button>
+          <button type="button" className="lives-chip" aria-pressed={large} onClick={() => flip(LIVES_LARGE_KEY, large, setLarge)}>Larger instructions</button>
         </div>
       </details>
     </div>
