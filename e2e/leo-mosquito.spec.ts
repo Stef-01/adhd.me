@@ -115,3 +115,23 @@ test("keyboard focus freezes a moving target in place and hiding the page pauses
   await expect(page.locator(".leo-clock span")).toHaveAttribute("style", bar!);
   await expect(page.getByRole("button", { name: "Catch mosquito 1" })).toBeDisabled();
 });
+
+test("Leo keeps the Chaos Run header in view through a win and the next game", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => localStorage.setItem("adhdme.lives.tutored", "1"));
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/lives/play?seed=leo-qa-2");
+    await page.getByRole("button", { name: "Play", exact: true }).click();
+    await expect(page.locator(".lives-scene")).toHaveAttribute("data-game", "leo_mosquito");
+    await page.getByRole("button", { name: "Go", exact: true }).click();
+    await page.getByRole("button", { name: "Catch mosquito 1" }).click();
+    await expect(page.locator(".lives-result")).toContainText("Quiet at last.");
+    await expect(page.getByRole("link", { name: "Leave the run" })).toBeInViewport();
+    expect(await page.evaluate(() => scrollY)).toBe(0);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBe(844);
+    await page.getByRole("button", { name: "Next", exact: true }).click();
+    await expect(page.locator(".lives-scene")).not.toHaveAttribute("data-game", "leo_mosquito");
+    await expect(page.getByRole("link", { name: "Leave the run" })).toBeInViewport();
+  }
+});

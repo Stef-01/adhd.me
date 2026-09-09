@@ -1,7 +1,11 @@
 /* One game: Leo's midnight room. Original art; four-pose rhythm from the reference clip. */
 body:has(.leo-practice) { background: #c5c6ed; }
-body:has(.leo-practice) .aoc-band { display: none; }
-.platform-shell:has(.leo-practice) { padding-bottom: 0; }
+/* Both entrances to Leo need the same viewport: surrounding page padding lets
+   autofocus on Go/Next scroll the Chaos Run's header out of view. */
+body:has(.lives-run) .aoc-band { display: none; }
+.platform-shell:has(.lives-run) { padding-bottom: 0; }
+.platform-shell .me-screen:has(.lives-run) { padding: 0; max-width: none; }
+.lives-run .lives-card.is-round { height: calc(100svh - var(--consent-height, 0px)); }
 .leo-practice { --leo-ink: #363454; --leo-paper: #fff9ed; color: var(--leo-ink); background: #c5c6ed; min-height: 100svh; padding: 16px 24px 28px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .leo-toolbar { width: 100%; max-width: 900px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 650; }
 .leo-toolbar a, .leo-toolbar button, .leo-toolbar-spacer { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; color: inherit; }

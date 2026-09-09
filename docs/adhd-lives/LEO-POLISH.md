@@ -49,3 +49,26 @@ implementation, so this records the design decision without repeating an approva
 - Type checks, relevant unit/browser tests, then CI, commit, merge and push to main.
 
 Only Leo is in scope for this pass. A second game starts after these checks pass.
+
+## Release and visual review, 2026-09-09
+
+The initial game merged in PR #18 (`90b48b3`), including upstream L5/L6 through `3516959`.
+CI passed 249 test files and 330 browser tests. Both supplied repositories remain separate clones.
+
+The cold screenshot review found three issues beyond the functional checks: desktop artwork
+stretched horizontally; the surrounding footer/padding broke the immersive viewport; and a
+disabled Skip button remained after the result. PR #19 corrects those and freezes a keyboard-focused
+mosquito at its current position. The seeded Chaos Run (`?seed=leo-qa-2`) exposed the same outer
+padding problem when Next received focus, so the run container now sheds its page padding too.
+
+Reference comparison: images 3–5 informed the flat colourful scene, expressive character and one
+clear action. The newer meditation reference informed the continuous coloured viewport and quiet
+surroundings. The desktop reference informed visible navigation and controls without cutoffs.
+The Unity wasp mechanism informs bounded flight and pressed/falling feedback; the supplied beige
+clip informs the four-pose rhythm. This is original artwork, not the reference's sprite assets.
+
+Local production QA covers 320/390/768/1440 × 844, including a fresh visit with the privacy bar,
+keyboard, touch, timed/untimed, pause, page visibility, last-moment catches, replay, accessibility,
+and the Chaos Run's win-to-next-game transition. Raw before/after captures and the reproduction
+scripts are in the ignored `qa/_runs/leo-release/` folder of the working clone. Real-user difficulty
+balancing remains the pilot work from Phase L6, not a claim made by these automated checks.
