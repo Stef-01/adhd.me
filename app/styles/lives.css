@@ -151,6 +151,13 @@
 .lives-row-text span { color: var(--muted); font-size: 0.875rem; }
 @media (hover: hover) { .lives-row:hover { border-color: var(--accent); } }
 .lives-goals { margin-top: 22px; }
+.lives-settings { margin-top: 10px; }
+/* §93 larger instructions: the shout, the things on the stage and the choices grow; nothing else moves. */
+.lives-run.is-large .lives-shout { font-size: clamp(2.25rem, 11vw, 3.4rem); }
+.lives-run.is-large .lives-game-title { font-size: 1.125rem; }
+.lives-run.is-large .lives-thing { font-size: 1.0625rem; }
+.lives-run.is-large .lives-thing:not(:has(.lives-glyph)) { font-size: 1.125rem; min-height: 64px; }
+.lives-run.is-large .lives-choice { font-size: 1.125rem; min-height: 68px; }
 .lives-goals-note { margin: 6px 0 10px; color: var(--muted); font-size: 0.875rem; }
 .lives-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .lives-chip { min-height: 44px; padding: 8px 14px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9rem; font-weight: 650; cursor: pointer; }

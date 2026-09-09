@@ -17,7 +17,7 @@ import { track } from "@/model/events";
 import { LifeBean, type LifeMood } from "./bean";
 import { Engine, EXPIRY_IS_SUCCESS, type EngineResult } from "./engines";
 import { Results } from "./results";
-import { LIVES_TUTORED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
+import { LIVES_LARGE_KEY, LIVES_RELAXED_KEY, LIVES_TUTORED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
 
 const FADE = { duration: 0.18, ease: "easeOut" } as const;
 /** §44: INTRO 350–800 ms; RESOLUTION 500–1500 ms; TRANSITION 150–350 ms. §59: FASTER 700 ms. */
@@ -68,7 +68,10 @@ export function ChaosRun({ seed }: { seed?: string }) {
   const started = useRef<number | null>(null);
   const highBefore = useRef(0);
 
-  useEffect(() => { setTutorial(readFlag(LIVES_TUTORED_KEY) ? -1 : 0); }, []);
+  // §93: the two settings the home offers, read once; the run keeps them for its whole length.
+  const [relaxed, setRelaxed] = useState(false);
+  const [large, setLarge] = useState(false);
+  useEffect(() => { setTutorial(readFlag(LIVES_TUTORED_KEY) ? -1 : 0); setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY)); }, []);
   // The high score to beat is read before a run begins, never during one: the last game writes the
   // new score to the profile before the score screen opens, and "New high score" compares against
   // what stood before it.
@@ -81,7 +84,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
     const begun = beginGame(state, pool);
     const scene = layoutGame(begun.game, begun.state.difficulty, begun.seed);
     setSession(begun.state);
-    setCurrent({ game: begun.game, scene, seed: begun.seed, allowed: allowedMs(begun.game, begun.state.difficulty), instance: begun.state.gameIndex });
+    setCurrent({ game: begun.game, scene, seed: begun.seed, allowed: allowedMs(begun.game, begun.state.difficulty, relaxed), instance: begun.state.gameIndex });
     setLast(null);
     setProgress(0);
     setElapsed(0);
@@ -90,7 +93,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
     setReminding(Boolean(scene.remind));
     setPhase("intro");
     track("MINIGAME_STARTED", { game: begun.game.id, difficulty: begun.state.difficulty, index: begun.state.gameIndex });
-  }, [pool]);
+  }, [pool, relaxed]);
 
   const start = () => {
     const id = seed ?? `${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
@@ -171,7 +174,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
   }
 
   return (
-    <section className="lives-run play-run" aria-labelledby="lives-run-title" data-phase={phase}>
+    <section className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined}>
       <h1 id="lives-run-title" className="sr-only">ADHD Lives</h1>
       <div className="play-top lives-top">
         <Link className="play-x" href="/lives" aria-label="Leave the run"><X size={20} weight="bold" aria-hidden="true" /></Link>

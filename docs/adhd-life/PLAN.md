@@ -178,9 +178,10 @@ native later. Mapped from the PRD's phases 0–6:
       sixteen modules full — recognise, understand, try, personalise, one action — with the
       validator and the suite refusing a stub. Every new game is linked from its strategies so
       the score screen can bring it back. (2026-09-09)
-- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound, haptics,
-      larger instructions and a relaxed-timing setting (§93); audio blocks (§72) have no asset
-      yet. Done already: character stories (§41), Learn home (§28), the §67 events with §68's
+- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound and haptics;
+      audio blocks (§72) have no asset yet. Done: a relaxed-timing setting (half as long again on
+      every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
+      the Lives home, kept on the device and read by the run. (2026-09-09) Done already: character stories (§41), Learn home (§28), the §67 events with §68's
       guardrail as a test, reduced motion and keyboard equals (§93–§94).
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.

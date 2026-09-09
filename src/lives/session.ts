@@ -32,8 +32,11 @@ export function beginGame(state: SessionState, pool: readonly GameDefinition[]):
 }
 
 /** The allowed ACTIVE time for a game at the session's difficulty (§44, §58). */
-export function allowedMs(game: GameDefinition, difficulty: number): number {
-  return Math.round(game.activeMs * difficultyFor(difficulty).timeMultiplier);
+/** §93 relaxed timing: every game keeps half as long again on the clock. The score is unchanged (§59: entertainment). */
+export const RELAXED_TIME_MULTIPLIER = 1.5;
+
+export function allowedMs(game: GameDefinition, difficulty: number, relaxed = false): number {
+  return Math.round(game.activeMs * difficultyFor(difficulty).timeMultiplier * (relaxed ? RELAXED_TIME_MULTIPLIER : 1));
 }
 
 export interface Resolution { readonly state: SessionState; readonly scoreDelta: number; readonly lostLife: boolean; readonly faster: boolean; readonly over: boolean }

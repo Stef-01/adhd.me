@@ -113,3 +113,19 @@ test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on the
   expect(await page.locator(".lives-lab-ranking > li").count()).toBeGreaterThanOrEqual(1);
   await expect(page.locator(".lives-lab-table tbody tr")).toHaveCount(12);
 });
+
+test("E2E Lives 4: relaxed timing and larger instructions are kept on the device and reach the run (§93)", async ({ page }) => {
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  await page.getByRole("button", { name: "Relaxed timing" }).click();
+  await page.getByRole("button", { name: "Larger instructions" }).click();
+  await expect(page.getByRole("button", { name: "Relaxed timing" })).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await page.locator(".lives-settings summary").click();
+  await expect(page.getByRole("button", { name: "Larger instructions" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("link", { name: "Play" }).click();
+  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run.is-large[data-relaxed='true']")).toBeVisible();
+  // Nothing about the settings in the URL.
+  expect(page.url()).not.toMatch(/relaxed|large/);
+});
