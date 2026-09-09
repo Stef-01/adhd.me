@@ -9,8 +9,12 @@ const MAX_GAMES = 40;
 /** Play the current game by whatever its engine offers, choosing to lose where a losing button exists. */
 async function playGame(page: Page) {
   const frame = page.locator(".lives-game");
-  // PRE ends on Go; a FASTER card ends on Go too, and then the game's own PRE follows.
-  while (await page.getByRole("button", { name: "Go", exact: true }).count()) await page.getByRole("button", { name: "Go", exact: true }).click();
+  const go = page.getByRole("button", { name: "Go", exact: true });
+  // A FASTER card may sit between games; it ends on Go, and then the game's own PRE follows.
+  if (await page.locator(".lives-faster").count()) await go.click();
+  await expect(page.locator(".lives-game[data-beat='pre']")).toBeVisible();
+  await go.click();
+  await expect(frame).toHaveAttribute("data-beat", "active");
   const engine = await frame.getAttribute("data-engine");
   const stage = frame.locator(".lives-stage");
   switch (engine) {
@@ -45,8 +49,11 @@ test("ADHD Lives: a Chaos Run runs out of lives, shows the score, and AGAIN star
   await expect(page.getByRole("img", { name: "3 of 3 lives" })).toBeVisible();
   // The shouted instruction is the only line above the stage: no kicker, no round count.
   await expect(page.locator(".lives-game .play-label")).toHaveCount(0);
+  const again = page.getByRole("button", { name: "Again" });
   for (let i = 0; i < MAX_GAMES; i++) {
-    if (await page.getByRole("button", { name: "Again" }).count()) break;
+    // After Next, one of three things is on screen: the score screen, a FASTER card, or the next game's PRE.
+    await expect(again.or(page.locator(".lives-faster")).or(page.locator(".lives-game[data-beat='pre']")).first()).toBeVisible();
+    if (await again.count()) break;
     await playGame(page);
   }
   await expect(page.getByRole("heading", { name: /Run over|Best yet/ })).toBeVisible();
