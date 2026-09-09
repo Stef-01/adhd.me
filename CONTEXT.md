@@ -138,6 +138,11 @@ and the copy. Written lazily — a term earns a place here when it has already b
   a FASTER beat every four successes. The arcade loop; it must stay fun with learning ignored.
 - **Microgame** — one engine, configured: an instruction of at most three words, 2.5–7 seconds,
   a comic failure. A *fun game* has no character and carries no learning.
+- **Beat** — one of a game's three phases on one clock: *PRE* (the life and the shouted
+  instruction, still), *ACTIVE* (the bar drains, the engine is live), *RESULT* (hit or miss).
+  FASTER is a one-word card between games. Under reduced motion every beat ends on a button.
+- **Stage** — the block a game happens in. Its *layout* (where things are, how many) is decided by
+  the engine from the seed (`src/lives/layout.ts`), never by the renderer.
 - **Resonance signal** — "This is me", "Sometimes" or "Not me" on a character's moment. The only
   basis for personalisation; gameplay performance never is.
 - **Strategy** — a practical thing to try, independent of the game, with a claim, an evidence

@@ -10,6 +10,7 @@ import "./styles/lives.css";
 import "./styles/glass.css";
 import "./styles/brand.css";
 import "./styles/learning-play.css";
+import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
 import { LiquidGlass } from "./glass/liquid-glass";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";

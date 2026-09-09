@@ -1,12 +1,13 @@
 "use client";
 
-// The eight lives as beans (PRD §47, §91–§92), in the idiom the five beans already have: one
-// rounded body, two eyes, a mouth, two feet, a colour that never changes and a face that does.
-// Maya is the same person as the existing bean and keeps her colour. Decorative everywhere it is
-// drawn — every screen says its state in words — so `aria-hidden` always.
+// The eight lives as beans (PRD §47, §91–§92), drawn by the same `BeanArt` the five beans use:
+// one rounded body, two eyes, a mouth, two feet, a colour that never changes and a face that
+// does. Maya is the same person as the existing bean and keeps her colour. Decorative everywhere
+// it is drawn — every screen says its state in words — so `aria-hidden` always.
 
 import type { Mood } from "@/learn/interactive";
 import type { CharacterId } from "@/lives";
+import { BeanArt } from "../play/beans";
 
 export type LifeMood = Mood;
 
@@ -23,26 +24,7 @@ const PALETTE: Record<CharacterId, { body: string; ink: string; shape: string }>
 
 export function LifeBean({ who, mood = "neutral", size = 120, className }: { who: CharacterId; mood?: LifeMood; size?: number; className?: string }) {
   const p = PALETTE[who];
-  const eyes = mood === "surprised" || mood === "overwhelmed"
-    ? <><circle cx="44" cy="58" r="7" fill={p.ink} /><circle cx="76" cy="58" r="7" fill={p.ink} /><circle cx="46" cy="56" r="2.5" fill="#fff" /><circle cx="78" cy="56" r="2.5" fill="#fff" /></>
-    : mood === "pleased" || mood === "relieved" || mood === "engaged"
-      ? <><path d="M38 58q6-8 12 0" stroke={p.ink} strokeWidth="5" strokeLinecap="round" fill="none" /><path d="M70 58q6-8 12 0" stroke={p.ink} strokeWidth="5" strokeLinecap="round" fill="none" /></>
-      : mood === "embarrassed"
-        ? <><path d="M38 56l12 6M50 56l-12 6" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /><path d="M70 56l12 6M82 56l-12 6" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /></>
-        : <><circle cx="44" cy="58" r="5" fill={p.ink} /><circle cx="76" cy="58" r="5" fill={p.ink} /></>;
-  const brows = mood === "frustrated" ? <><path d="M34 44l16 5" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /><path d="M86 44l-16 5" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /></>
-    : mood === "anxious" || mood === "overwhelmed" ? <><path d="M34 48l16-4" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /><path d="M86 48l-16-4" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /></> : null;
-  const mouth = mood === "pleased" || mood === "engaged" || mood === "relieved" ? "M44 80q16 16 32 0" : mood === "frustrated" ? "M46 88q14-12 28 0" : mood === "anxious" || mood === "embarrassed" ? "M48 84q12 4 24 0" : mood === "overwhelmed" ? "M46 82q14-6 28 2" : mood === "surprised" ? "M52 84a8 9 0 1 0 16 0a8 9 0 1 0-16 0" : mood === "thinking" ? "M50 84h20" : "M48 82q12 8 24 0";
-  return (
-    <svg viewBox="0 0 120 136" width={size} height={size * 136 / 120} aria-hidden="true" className={className ? `bean lives-bean ${className}` : "bean lives-bean"} data-bean={who} data-mood={mood}>
-      <path d="M44 122v10M76 122v10" stroke={p.ink} strokeWidth="6" strokeLinecap="round" />
-      <path d={p.shape} fill={p.body} />
-      {brows}
-      {eyes}
-      <path d={mouth} stroke={p.ink} strokeWidth="5" strokeLinecap="round" fill="none" />
-      {mood === "embarrassed" && <><circle cx="30" cy="72" r="6" fill="#fff" fillOpacity=".5" /><circle cx="90" cy="72" r="6" fill="#fff" fillOpacity=".5" /></>}
-    </svg>
-  );
+  return <BeanArt id={who} shape={p.shape} body={p.body} ink={p.ink} mood={mood} size={size} className={className ? `lives-bean ${className}` : "lives-bean"} />;
 }
 
 export function beanColour(who: CharacterId): string { return PALETTE[who].body; }
