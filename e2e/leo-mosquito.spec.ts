@@ -74,6 +74,8 @@ test("the scene and controls fit phone, tablet and desktop and remain accessible
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto(URL);
+    await expect(page.locator(".aoc-band")).toBeHidden();
+    expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(844);
     const play = await page.getByRole("button", { name: "Play Leo’s moment" }).boundingBox();
     expect(play!.y + play!.height).toBeLessThanOrEqual(844);
     await page.getByRole("button", { name: "Play Leo’s moment" }).click();
@@ -87,7 +89,29 @@ test("the scene and controls fit phone, tablet and desktop and remain accessible
   }
   await expectNoViolations(page, "Leo active");
   await page.getByRole("button", { name: "Catch mosquito 1" }).click();
+  await expect(page.getByRole("button", { name: "Skip this round" })).toHaveCount(0);
   await expectNoViolations(page, "Leo result");
   await page.getByRole("button", { name: "Change challenge" }).click();
   await expectNoViolations(page, "Leo ready");
+});
+
+test("keyboard focus freezes a moving target in place and hiding the page pauses play", async ({ page }) => {
+  await page.clock.install();
+  await page.goto(URL);
+  await page.getByRole("button", { name: "Play Leo’s moment" }).click();
+  await page.clock.runFor(1200);
+  const position = page.locator(".leo-fly-position");
+  const before = await position.getAttribute("style");
+  await page.getByRole("button", { name: "Catch mosquito 1" }).focus();
+  await page.clock.runFor(200);
+  await expect(position).toHaveAttribute("style", before!);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(page.getByRole("heading", { name: "Take your time." })).toBeVisible();
+  const bar = await page.locator(".leo-clock span").getAttribute("style");
+  await page.clock.fastForward(30000);
+  await expect(page.locator(".leo-clock span")).toHaveAttribute("style", bar!);
+  await expect(page.getByRole("button", { name: "Catch mosquito 1" })).toBeDisabled();
 });
