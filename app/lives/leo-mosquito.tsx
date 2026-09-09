@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import { positionAt, SCENE, type Point } from "@/lives";
+import { SCENE, type Point } from "@/lives";
+import { leoFlightAt } from "@/lives/leo-flight";
 import type { EngineProps } from "./engines";
 
 /** Original scene artwork; the reference Unity clip informs the four-pose timing only. */
@@ -57,28 +58,21 @@ export function LeoMosquito({ scene, live, reducedMotion, elapsedMs, onResult, o
   finish.current = onResult;
   const targets = scene.entities.filter(e => e.role === "target");
   const caught = Object.keys(hits).length;
-  useEffect(() => {
-    if (!live || caught !== targets.length || done.current) return;
-    const timer = setTimeout(() => {
-      if (done.current) return;
-      done.current = true;
-      finish.current({ outcome: "success", mistakes: misses, line: "Quiet at last." });
-    }, reducedMotion ? 0 : 320);
-    return () => clearTimeout(timer);
-  }, [caught, targets.length, live, reducedMotion, misses]);
-
   const swat = (id: string, at: Point) => {
     if (!live || done.current || hitIds.current.has(id)) return;
     hitIds.current.add(id);
     setHits(current => ({ ...current, [id]: at }));
+    if (hitIds.current.size === targets.length) {
+      done.current = true;
+      finish.current({ outcome: "success", mistakes: misses, line: "Quiet at last." });
+    }
   };
   return <div className="leo-room" data-live={live} data-reduced={reducedMotion} aria-label="Leo's bedroom" onPointerDown={event => {
     if (live && !done.current && !(event.target as Element).closest("button")) setMisses(n => n + 1);
   }}>
     <LeoBedroom asleep={outcome === "success" || caught === targets.length} moving={live && !reducedMotion && caught < targets.length} />
     {targets.map(e => {
-      const moving = reducedMotion || focused === e.id ? e : positionAt(e, elapsedMs / 1000);
-      const at = hits[e.id] ?? { x: moving.x, y: 35 + moving.y * .47 };
+      const at = hits[e.id] ?? leoFlightAt(e, elapsedMs / 1000, reducedMotion || focused === e.id);
       const hit = Boolean(hits[e.id]);
       return <div key={e.id} className="leo-fly-position" style={{ transform: `translate(${at.x / SCENE.width * 100}cqw, ${at.y / SCENE.height * 100}cqh)` }}>
         <motion.button type="button" className={`leo-fly${hit ? " is-caught" : ""}`} aria-label={`Catch mosquito ${Number(e.id.slice(1)) + 1}`} disabled={!live || hit} data-outcome="hit"
