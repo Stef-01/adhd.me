@@ -22,9 +22,11 @@ async function drive(page: Page, outcome: "hit" | "miss", until: () => Promise<b
     const go = page.getByRole("button", { name: "Go", exact: true });
     const act = page.locator(`[data-outcome="${outcome}"]:enabled`).first();
     const next = page.getByRole("button", { name: /^(Next|See the score)$/ });
-    if (await go.isVisible().catch(() => false)) { await go.click(); continue; }
+    // Go and Next settle before the next look: a Next that opens the FASTER card must not be followed
+    // by a Go pressed on that card before `until` has seen it. An action may take several taps.
+    if (await go.isVisible().catch(() => false)) { await go.click(); await expect(go).toBeHidden(); continue; }
     if (await act.isVisible().catch(() => false)) { await act.click(); continue; }
-    if (await next.isVisible().catch(() => false)) { await next.click(); continue; }
+    if (await next.isVisible().catch(() => false)) { await next.click(); await expect(next).toBeHidden(); continue; }
     await page.waitForTimeout(60);
   }
   throw new Error(`the run did not reach its end in ${maxSteps} steps`);
