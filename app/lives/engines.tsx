@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { escalatedLabel, markAt, positionAt, releaseVerdict, SCENE, tauntAt, timingHit, traceIsSafe, type Entity, type GameDefinition, type GameScene, type Point } from "@/lives";
 import { Glyph } from "./sticker";
+import { LeoMosquito } from "./leo-mosquito";
 
 export interface EngineResult { readonly outcome: "success" | "failure"; readonly mistakes: number; readonly line?: string }
 
@@ -22,6 +23,7 @@ export interface EngineProps {
   progress: number;
   elapsedMs: number;
   onResult: (result: EngineResult) => void;
+  outcome?: "success" | "failure" | "timeout";
 }
 
 /** Engines whose clock running out is the win (§51: survive the button; §54: nothing got in). */
@@ -49,6 +51,7 @@ function Skip({ live, onSkip }: { live: boolean; onSkip: () => void }) {
 }
 
 export function Engine(props: EngineProps) {
+  if (props.game.id === "leo_mosquito") return <LeoMosquito {...props} />;
   switch (props.game.engine) {
     case "target_swat": return <TargetSwat {...props} />;
     case "semantic_filter": return <SemanticFilter {...props} />;
