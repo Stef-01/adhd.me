@@ -98,6 +98,8 @@ test("the scene and controls fit phone, tablet and desktop and remain accessible
 test("keyboard focus freezes a moving target in place and hiding the page pauses play", async ({ page }) => {
   await page.clock.install();
   await page.goto(URL);
+  // Stop real time between assertions; advance only through runFor below.
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   await page.getByRole("button", { name: "Play Leo’s moment" }).click();
   await page.clock.runFor(1200);
   const position = page.locator(".leo-fly-position");
