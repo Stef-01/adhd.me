@@ -8,7 +8,7 @@ import type { EngineProps } from "./engines";
 
 /** Original scene artwork; the reference Unity clip informs the four-pose timing only. */
 export function LeoBedroom({ asleep = false, moving = false }: { asleep?: boolean; moving?: boolean }) {
-  return <svg className={`leo-bedroom${moving ? " is-moving" : ""}`} viewBox="0 0 390 560" preserveAspectRatio="none" aria-hidden="true">
+  return <svg className={`leo-bedroom${moving ? " is-moving" : ""}`} viewBox="0 0 390 560" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
     <path fill="#c5c6ed" d="M0 0h390v560H0z" />
     <path fill="#abaed9" d="M0 422h390v138H0z" />
     <rect x="247" y="35" width="106" height="151" rx="48" fill="#6d71ac" />
@@ -51,7 +51,7 @@ function Mosquito({ annoyed, hit }: { annoyed: boolean; hit: boolean }) {
 export function LeoMosquito({ scene, live, reducedMotion, elapsedMs, onResult, outcome }: EngineProps) {
   const [hits, setHits] = useState<Record<string, Point>>({});
   const [misses, setMisses] = useState(0);
-  const [focused, setFocused] = useState<string | null>(null);
+  const [focused, setFocused] = useState<{ id: string; at: Point } | null>(null);
   const hitIds = useRef(new Set<string>());
   const done = useRef(false);
   const finish = useRef(onResult);
@@ -72,13 +72,13 @@ export function LeoMosquito({ scene, live, reducedMotion, elapsedMs, onResult, o
   }}>
     <LeoBedroom asleep={outcome === "success" || caught === targets.length} moving={live && !reducedMotion && caught < targets.length} />
     {targets.map(e => {
-      const at = hits[e.id] ?? leoFlightAt(e, elapsedMs / 1000, reducedMotion || focused === e.id);
+      const at = hits[e.id] ?? (focused?.id === e.id ? focused.at : leoFlightAt(e, elapsedMs / 1000, reducedMotion));
       const hit = Boolean(hits[e.id]);
       return <div key={e.id} className="leo-fly-position" style={{ transform: `translate(${at.x / SCENE.width * 100}cqw, ${at.y / SCENE.height * 100}cqh)` }}>
         <motion.button type="button" className={`leo-fly${hit ? " is-caught" : ""}`} aria-label={`Catch mosquito ${Number(e.id.slice(1)) + 1}`} disabled={!live || hit} data-outcome="hit"
           initial={false} animate={hit && !reducedMotion ? { y: 30, rotate: 100, opacity: 0, scale: .8 } : { y: 0, rotate: 0, opacity: 1, scale: 1 }}
           transition={{ duration: .3, delay: hit ? .08 : 0, ease: [.22, 1, .36, 1] }}
-          onFocus={() => setFocused(e.id)} onBlur={() => setFocused(null)}
+          onFocus={() => setFocused({ id: e.id, at })} onBlur={() => setFocused(null)}
           onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); swat(e.id, at); }}
           onClick={event => { if (event.detail === 0) swat(e.id, at); }}>
           <Mosquito annoyed={misses > 0} hit={hit} />
@@ -86,7 +86,7 @@ export function LeoMosquito({ scene, live, reducedMotion, elapsedMs, onResult, o
       </div>;
     })}
     <span className="sr-only" role="status">{caught ? `${caught} of ${targets.length} caught` : "Catch the mosquitoes so Leo can rest."}</span>
-    {reducedMotion && <button className="leo-skip" disabled={!live || done.current} data-outcome="miss" onClick={() => {
+    {reducedMotion && !outcome && <button className="leo-skip" disabled={!live || done.current} data-outcome="miss" onClick={() => {
       if (!live || done.current) return;
       done.current = true; finish.current({ outcome: "failure", mistakes: misses, line: "The mosquito has other plans." });
     }}>Skip this round</button>}
