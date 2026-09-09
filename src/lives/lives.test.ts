@@ -367,6 +367,8 @@ describe("learning profile (§63–§65)", () => {
     p = removeFromToolkit(s, "launch_pad");
     expect(p.personalStrategies).toEqual([]);
     expect(p.savedStrategyIds).toEqual([]);
+    // Remove takes the Learn Later record too, or the queue would show it again after a reload.
+    expect(p.saved).toEqual([]);
   });
 
   it("completing a module puts the strategy in the Toolkit as 'trying' with its personal configuration, and counts as recent for a week", () => {
@@ -387,3 +389,12 @@ describe("learning profile (§63–§65)", () => {
     expect(recordHighScore(broken, 10).highScore).toBe(10);
   });
 });
+
+describe("analytics (§67–§68)", () => {
+  it("every gameplay and learning event the PRD names exists, and none reads like an inferred pathology", async () => {
+    const { EVENTS } = await import("@/model/events");
+    for (const name of eachOf(["SESSION_STARTED", "SESSION_COMPLETED", "MINIGAME_STARTED", "MINIGAME_SUCCESS", "MINIGAME_FAILURE", "DIFFICULTY_INCREASED", "RESONANCE_SELECTED", "STRATEGY_IMPRESSION", "STRATEGY_SAVED", "STRATEGY_DISMISSED", "MODULE_STARTED", "MODULE_COMPLETED", "MODULE_ABANDONED", "STRATEGY_ADDED_TO_TOOLKIT", "STRATEGY_MARKED_USEFUL", "STRATEGY_MARKED_NOT_USEFUL"], "the PRD's events")) expect(EVENTS).toContain(name);
+    for (const name of eachOf(EVENTS, "the events")) expect(name, name).not.toMatch(/INATTEN|DEFICIT|IMPAIR|SEVERE|DISORDER|SYMPTOM/);
+  });
+});
+

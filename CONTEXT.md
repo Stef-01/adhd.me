@@ -138,8 +138,36 @@ and the copy. Written lazily — a term earns a place here when it has already b
   a FASTER beat every four successes. The arcade loop; it must stay fun with learning ignored.
 - **Microgame** — one engine, configured: an instruction of at most three words, 2.5–7 seconds,
   a comic failure. A *fun game* has no character and carries no learning.
+- **Beat** — one of a game's three phases on one clock: *PRE* (the life and the shouted
+  instruction, still), *ACTIVE* (the bar drains, the engine is live), *RESULT* (hit or miss).
+  FASTER is a one-word card between games. Under reduced motion every beat ends on a button.
+- **Stage** — the block a game happens in. Its *layout* (where things are, how many) is decided by
+  the engine from the seed (`src/lives/layout.ts`), never by the renderer.
 - **Resonance signal** — "This is me", "Sometimes" or "Not me" on a character's moment. The only
   basis for personalisation; gameplay performance never is.
 - **Strategy** — a practical thing to try, independent of the game, with a claim, an evidence
   level and a review status. Its *module* teaches it in blocks; the *Toolkit* is where a person
   keeps the ones they have decided to try, with their own configuration.
+
+## ADHD Lives (PRD v2, 2026-09-08)
+
+- **Life** — one of the eight recurring characters of the Chaos Run (Maya, Leo, Arjun, Zoe, Theo,
+  Mia, Jax, Nina; `src/lives/characters.ts`). Also, in the HUD, one of the player's three. The
+  sentence says which; the code says `CharacterId` for the first and `lives` for the second.
+- **Bean** — a character as drawn: the five of the existing runs (`app/play/beans.tsx`) and the
+  eight lives (`app/lives/bean.tsx`). Maya is the same person in both.
+- **Engine** (Lives) — one of the ten reusable mechanics a game is a configuration of
+  (`MECHANIC_ENGINES`). Distinct from *the* engine, `src/lives/`, which is everything that is not
+  a renderer.
+- **Scene** (Lives) — a game laid out in design coordinates from a seed (`layoutGame`): the
+  entities, the routes, the taunts, the timing window. The renderer places it; it does not decide it.
+- **Director** — `eligible`/`nextGame`: the eight constraints that choose the next game and the
+  rejection log the lab shows.
+- **Run** (Lives) — one session from PLAY to the score: `SessionState`, three lives, FASTER every
+  four successes. Not the existing modules-as-runs, which the Learn tab still calls runs.
+- **Resonance signal** (Lives) — This is me / Sometimes / Not me on a character or a game
+  (`ResonanceSignal`), the only basis for personalisation (§3, §35). Separate from the personal
+  model's resonance (frequency, cost, priority), which the existing runs write.
+- **Toolkit** — the strategies a person decided to try, with their personal configuration
+  (`personalStrategies`); **the queue** is what they saved to learn later (`saved`).
+

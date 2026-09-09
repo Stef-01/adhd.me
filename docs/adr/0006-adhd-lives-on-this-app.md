@@ -40,7 +40,9 @@ fourteen mechanics, twenty runs, a relate beat, clues, a tutorial, a personal mo
 ## Consequences
 
 - `docs/adhd-life/PLAN.md` gains Phase L with the PRD's phases 0–6 mapped onto this codebase.
-- `src/lives/` is the engine; `app/lives/` (next round) is the DOM renderer for the Chaos Run,
-  the results screen with resonance cards, and the Toolkit.
+- `src/lives/` is the engine, including the scene layer (`layout.ts`: where things are, from the
+  seed); `app/lives/` is the DOM renderer — the Chaos Run, the results screen with resonance
+  cards, the module renderer, Learn, the Toolkit, the eight lives, the lab — under `/lives`.
+  The structure it follows is written down in `docs/adhd-lives/DESIGN-dwtd2.md`.
 - The taste law's calm rules (no labels, nothing moves while a person reads) apply to every
   Lives screen outside the active microgame; inside a microgame the instruction is the one line.

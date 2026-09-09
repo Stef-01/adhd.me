@@ -36,3 +36,6 @@ qa/polish/after/
 # record is qa/polish/compare/.
 qa/polish/r2-before/
 qa/polish/r2-after/
+
+# Firecrawl captures of reference sites (third-party pages; the notes they informed are in docs/)
+.firecrawl/

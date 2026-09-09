@@ -1,0 +1,200 @@
+/* ADHD Lives (PRD v2, ADR 0006): the Chaos Run, the score screen, the module renderer, Learn, the
+   Toolkit, the eight lives and the lab. Layout after Dumb Ways to Die 2's structure (docs/adhd-lives/
+   DESIGN-dwtd2.md): the shout at the top, the bar under it, lives left and score right, the scene
+   filling the rest. Palette tokens only; 44px floor on every control; every hover behind
+   (hover: hover); motion inside the microgame only, and none under reduced motion. */
+
+/* ── Chrome: the run and the module hide the platform header like the runs do ─────────────── */
+.platform-shell:has(.lives-run, .lives-results, .lives-module) .platform-header { display: none; }
+.platform-shell .me-screen:has(.lives-run, .lives-results, .lives-module) { padding-top: 0; }
+.lives-top { justify-content: space-between; }
+.lives-top .play-x { text-decoration: none; font-weight: 800; }
+.lives-hud { flex: 0 1 auto; justify-content: space-between; gap: 14px; max-width: 260px; margin-left: auto; }
+.lives-lives { display: inline-flex; gap: 2px; }
+.lives-life { display: inline-flex; }
+.lives-life.is-lost { opacity: 0.28; filter: grayscale(1); }
+.lives-score { font-size: 1.125rem; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ── The game card ─────────────────────────────────────────────────────────────────────────── */
+.lives-card.is-round { height: 100svh; min-height: 0; padding: 84px 16px 0; gap: 10px; overflow: hidden; }
+.lives-card.is-title { padding-top: 96px; }
+/* The clock is the bar UNDER the shout (DESIGN-dwtd2.md): in flow, full width, draining left to right. */
+.lives-clock { position: static; height: 12px; width: 100%; max-width: 640px; border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.lives-clock span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transform-origin: left center; transition: none; }
+.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
+.lives-scene { position: relative; width: calc(100% + 32px); max-width: none; margin-inline: -16px; flex: 1 1 auto; min-height: 300px; border-radius: 0; background: var(--route-soft); overflow: hidden; }
+@media (min-width: 768px) { .lives-scene { width: 100%; margin-inline: 0; border-radius: 20px 20px 0 0; } }
+.lives-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6%; background: color-mix(in srgb, var(--ink) 8%, transparent); pointer-events: none; }
+.lives-scene-bean { position: absolute; left: 12px; bottom: 6%; z-index: 1; pointer-events: none; }
+.lives-card.is-hit .lives-scene { background: color-mix(in srgb, #0e8345 18%, var(--paper)); }
+.lives-card.is-miss .lives-scene { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); }
+.lives-card.is-hit .lives-scene-bean .bean { animation: play-hop 0.5s var(--ease-ui) 1; }
+@media (prefers-reduced-motion: reduce) { .lives-card.is-hit .lives-scene-bean .bean { animation: none; } }
+
+/* The field: the 390×560 design box, things placed by percentage so every width keeps the scene. */
+/* The field stops 64px short of the bottom: that band belongs to the skip and never to a target. */
+.lives-field { position: absolute; inset: 0 0 64px 0; }
+.lives-thing { position: absolute; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; aspect-ratio: 1; min-width: 48px; min-height: 48px; padding: 4px; border: 3px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.8125rem; font-weight: 750; line-height: 1.05; text-align: center; cursor: pointer; transform: translate(-50%, -50%); box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.lives-thing .lives-glyph { width: 52%; height: auto; }
+.lives-thing .lives-thing-label { max-width: 100%; overflow-wrap: normal; }
+/* A word-only thing is a pill sized to its words, never a circle the words wrap inside. */
+.lives-thing:not(:has(.lives-glyph)) { aspect-ratio: auto; width: max-content !important; max-width: 46%; min-height: 56px; padding: 10px 16px; font-size: 0.9375rem; }
+.lives-thing:has(.lives-glyph) .lives-thing-label { font-size: 0.7rem; }
+.lives-thing[data-role="target"], .lives-thing[data-role="goal"] { border-color: color-mix(in srgb, var(--ink) 14%, transparent); }
+.lives-thing[data-role="hazard"] { background: color-mix(in srgb, var(--accent) 22%, var(--paper)); border-color: var(--accent); pointer-events: none; }
+.lives-thing.is-keep { background: var(--accent-soft); border-color: var(--accent-tint); }
+.lives-thing.is-intruder { background: var(--paper); }
+.lives-thing:disabled { cursor: default; }
+.lives-thing:focus-visible, .lives-choice:focus-visible, .lives-hold-button:focus-visible, .lives-tile:focus-visible, .lives-skip:focus-visible, .lives-chip:focus-visible, .lives-row:focus-visible, .lives-thought:focus-visible, .lives-check input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) { .lives-thing:not(:disabled):hover { border-color: var(--accent); } }
+
+/* Choices: the two-column grid the runs use; three across for the resonance rows. */
+.lives-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.lives-choices > :only-child, .lives-choice.is-wide { grid-column: 1 / -1; }
+.lives-choices > :nth-child(3):last-child { grid-column: 1 / -1; }
+.lives-choices.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lives-choices.is-three > :nth-child(3):last-child { grid-column: auto; }
+.lives-choices.is-stack { grid-template-columns: 1fr; }
+.lives-choice { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 60px; padding: 12px 16px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 650; text-decoration: none; cursor: pointer; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
+.lives-choice.is-small { min-height: 44px; padding: 8px 14px; font-size: 0.9rem; }
+.lives-choice.is-quiet { border-color: transparent; background: transparent; color: var(--muted); }
+.lives-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.lives-choice:disabled { opacity: 0.6; cursor: default; }
+.lives-choice.is-bin { min-height: 88px; font-size: 1.125rem; text-transform: uppercase; letter-spacing: 0.04em; }
+@media (prefers-reduced-motion: reduce) { .lives-choice { transition: none; } }
+.play-tempt.is-small { min-height: 44px; padding: 8px 16px; font-size: 0.9375rem; }
+
+/* Engine-specific. */
+.lives-field.lives-inhibit, .lives-field.lives-hold, .lives-field.lives-sort, .lives-field.lives-timing, .lives-field.lives-wipe, .lives-field.lives-trace { position: absolute; inset: 0 0 64px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; }
+.lives-field.lives-trace { padding: 0; }
+.lives-thing.is-temptation { background: var(--accent); border-color: var(--accent-deep); color: var(--on-accent); box-shadow: 0 8px 0 var(--accent-deep); font-size: 1.5rem; letter-spacing: 0.06em; }
+.lives-thing.is-temptation.taunt-0 { animation: lives-pulse 0.9s ease-in-out infinite; }
+.lives-thing.is-temptation.taunt-1 { animation: lives-pulse 0.7s ease-in-out infinite; }
+.lives-thing.is-temptation.taunt-2 { animation: lives-shake 0.35s linear infinite; }
+.lives-thing.is-temptation.taunt-3 { animation: lives-shake 0.25s linear infinite; }
+.lives-thing.is-temptation.taunt-3::before, .lives-thing.is-temptation.taunt-4::before { content: "→"; position: absolute; left: -44px; font-size: 2rem; }
+.lives-thing.is-temptation.taunt-3::after, .lives-thing.is-temptation.taunt-4::after { content: "←"; position: absolute; right: -44px; font-size: 2rem; }
+.lives-thing.is-temptation.taunt-4 { animation: lives-pulse 0.4s ease-in-out infinite; }
+@keyframes lives-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.08); } }
+@keyframes lives-shake { 0%, 100% { transform: translate(-50%, -50%) rotate(0); } 25% { transform: translate(-52%, -50%) rotate(-3deg); } 75% { transform: translate(-48%, -50%) rotate(3deg); } }
+@media (prefers-reduced-motion: reduce) { .lives-thing.is-temptation { animation: none !important; } }
+.lives-taunt { position: absolute; bottom: 10%; margin: 0; color: var(--muted); font-size: 0.9375rem; font-weight: 650; }
+.lives-skip { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: inherit; font-size: 0.875rem; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.lives-field > .lives-skip { position: absolute; left: 50%; bottom: -56px; transform: translateX(-50%); z-index: 2; }
+.lives-skip.is-hold { position: absolute; left: 50%; bottom: -60px; transform: translateX(-50%); z-index: 2; min-height: 60px; padding: 14px 28px; border: 2px solid var(--accent); background: var(--paper); color: var(--ink); text-decoration: none; font-size: 1rem; }
+.lives-cue { margin: 0; max-width: 28ch; color: var(--ink); font-size: 1.125rem; font-weight: 650; text-align: center; }
+.lives-hold-button { min-width: 180px; min-height: 120px; padding: 16px; border: 4px solid var(--accent); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 1.25rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 0 color-mix(in srgb, var(--ink) 14%, transparent); touch-action: none; user-select: none; -webkit-user-select: none; }
+.lives-hold-button.is-holding { background: var(--accent-soft); transform: translateY(4px); box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
+.lives-hold-button.is-cued { background: color-mix(in srgb, #0e8345 22%, var(--paper)); border-color: #0e8345; }
+.lives-hold-button:disabled { opacity: 0.6; cursor: default; }
+.lives-sort-item { margin: 0; padding: 18px 26px; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 1.5rem; font-weight: 800; box-shadow: 0 6px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
+.lives-sort-count { margin: 0; color: var(--muted); font-size: 0.875rem; font-weight: 650; }
+.lives-wipe-grid { display: grid; gap: 6px; width: 100%; flex: 1; }
+.lives-tile { display: flex; align-items: center; justify-content: center; min-height: 48px; border: 0; border-radius: 12px; background: var(--accent-tint); color: var(--accent-deep); font: inherit; font-size: 0.75rem; font-weight: 750; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.lives-tile.is-gone { background: transparent; }
+.lives-timing-track { position: relative; width: 100%; height: 34px; margin-bottom: 44px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.lives-timing-zone { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, #0e8345 32%, transparent); }
+.lives-timing-marker { position: absolute; top: -7px; width: 12px; height: 48px; margin-left: -6px; border-radius: 999px; background: var(--accent); }
+.lives-timing-marks { position: absolute; left: 0; right: 0; top: 40px; display: flex; margin: 0; padding: 0; list-style: none; }
+.lives-timing-marks li { color: var(--muted); font-size: 0.75rem; font-weight: 700; text-align: center; }
+.lives-timing-marks li.is-over { color: var(--ink); }
+.lives-trace-surface { position: absolute; inset: 0; cursor: crosshair; }
+.lives-trace-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lives-trace-start { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 4; }
+.lives-trace-goal { fill: color-mix(in srgb, #0e8345 28%, var(--paper)); stroke: #0e8345; stroke-width: 4; }
+.lives-trace-line { stroke: color-mix(in srgb, var(--accent) 55%, transparent); }
+.lives-trace-label { position: absolute; transform: translate(-50%, -50%); color: var(--ink); font-size: 0.8125rem; font-weight: 800; pointer-events: none; }
+.lives-trace .lives-skip { position: absolute; left: 50%; bottom: -56px; transform: translateX(-50%); z-index: 2; }
+.lives-trace .lives-choices { position: absolute; left: 12px; right: 12px; bottom: -58px; z-index: 2; }
+
+/* Result, FASTER. */
+.lives-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; }
+.lives-result-line { font-size: 1.25rem; font-weight: 650; }
+.lives-delta { margin: 0; color: #0e8345; font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.lives-delta.is-life { color: var(--accent-deep); font-size: 1rem; }
+.lives-faster { justify-content: center; background: var(--accent); color: var(--on-accent); }
+.lives-faster-word { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3rem, 18vw, 6rem); font-weight: 700; letter-spacing: -0.02em; color: var(--on-accent); }
+.lives-cast { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
+.lives-play { min-height: 72px; padding: 18px 44px; font-size: 1.375rem; }
+
+/* ── Score screen (§36) ────────────────────────────────────────────────────────────────────── */
+.lives-results { position: relative; margin: 0 calc(50% - 50vw); padding: 72px 16px 40px; background: var(--accent-soft); }
+.lives-results-top { position: absolute; top: 14px; left: 12px; }
+.lives-results-top .play-x { text-decoration: none; }
+.lives-scoreboard { display: grid; justify-items: center; gap: 6px; max-width: 640px; margin: 0 auto 28px; text-align: center; }
+.lives-newhigh { margin: 0; color: var(--accent-deep); font-size: 0.875rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.lives-bigscore { margin: 0; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3.5rem, 20vw, 6rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.lives-survived, .lives-high { margin: 0; color: var(--muted); font-size: 1rem; font-weight: 600; }
+.lives-again { margin-top: 12px; min-height: 72px; padding: 18px 44px; font-size: 1.375rem; }
+.lives-familiar, .lives-try { max-width: 640px; margin: 0 auto; padding-top: 22px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.lives-section-title { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.lives-cards { display: grid; gap: 12px; margin: 0 0 22px; padding: 0; list-style: none; }
+.lives-moment { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; align-items: center; }
+.lives-moment .lives-choices { grid-column: 1 / -1; }
+.lives-moment-text strong, .lives-strategy-text strong { display: block; font-size: 1.0625rem; font-weight: 700; }
+.lives-moment-text p, .lives-strategy-text p { margin: 4px 0 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.45; }
+.lives-minutes, .lives-status { display: inline-block; margin-top: 2px; color: var(--accent-deep); font-size: 0.8125rem; font-weight: 700; }
+.lives-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.lives-saved { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; color: var(--route-strong, #0e8345); font-size: 0.9rem; font-weight: 700; }
+.lives-foot { margin: 8px 0 0; text-align: center; color: var(--muted); font-size: 0.9375rem; }
+.lives-foot a { color: var(--accent-deep); font-weight: 700; }
+
+/* ── Screens: home, learn, toolkit, characters, lab ────────────────────────────────────────── */
+.lives-screen { padding-bottom: 96px; }
+.lives-home-head { display: grid; justify-items: center; gap: 12px; text-align: center; }
+.lives-home-head .lives-play { margin-top: 6px; }
+.lives-tagline { margin: 0; }
+.lives-home-rows, .lives-rows { display: grid; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+.lives-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-raised); color: var(--ink); text-decoration: none; }
+.lives-row-text { display: grid; gap: 2px; }
+.lives-row-text strong { font-size: 1rem; font-weight: 700; }
+.lives-row-text span { color: var(--muted); font-size: 0.875rem; }
+@media (hover: hover) { .lives-row:hover { border-color: var(--accent); } }
+.lives-goals { margin-top: 22px; }
+.lives-goals-note { margin: 6px 0 10px; color: var(--muted); font-size: 0.875rem; }
+.lives-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.lives-chip { min-height: 44px; padding: 8px 14px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9rem; font-weight: 650; cursor: pointer; }
+.lives-chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.lives-shelf { margin-top: 22px; }
+.lives-toolkit-section { margin-top: 18px; }
+.lives-tool-head { display: flex; gap: 12px; align-items: flex-start; }
+.lives-note { display: block; margin-top: 10px; }
+.lives-note textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.9375rem; resize: vertical; }
+.lives-hook { font-style: italic; }
+.lives-pattern { color: var(--accent-deep) !important; font-weight: 650; }
+.lives-moment-line { margin: 10px 0; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 1.125rem; }
+.lives-trying { margin-top: 12px; }
+.lives-kicker { display: block; margin: 0 0 6px; color: var(--muted); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.lives-module-name { margin: 0; color: var(--muted); font-size: 0.875rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.lives-text { font-size: 1.125rem; max-width: 36ch; }
+.lives-caption { max-width: 26ch; }
+.lives-timer { margin: 0; font-size: 3.5rem; font-weight: 700; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
+.lives-breath { display: block; width: 120px; height: 120px; border-radius: 999px; background: var(--accent-tint); animation: lives-breathe 6s ease-in-out infinite; }
+@keyframes lives-breathe { 0%, 100% { transform: scale(0.8); } 50% { transform: scale(1.1); } }
+.lives-checklist { display: grid; gap: 8px; width: 100%; margin: 0; padding: 0; list-style: none; text-align: left; }
+.lives-check { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-raised); font-weight: 650; cursor: pointer; }
+.lives-check input { width: 22px; height: 22px; accent-color: var(--accent); }
+.lives-custom { display: flex; gap: 8px; width: 100%; }
+.lives-custom input { flex: 1; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; }
+.lives-feedback { padding: 14px 18px; border-left: 4px solid var(--accent); border-radius: 0 14px 14px 0; background: var(--stone); text-align: left; }
+.lives-meeting { display: grid; gap: 12px; width: 100%; padding: 16px; border-radius: 16px; background: var(--stone); text-align: left; }
+.lives-meeting-line { margin: 0; color: var(--muted); font-style: italic; }
+.lives-thought { min-height: 56px; padding: 12px 18px; border: 2px dashed var(--accent); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-weight: 800; letter-spacing: 0.04em; cursor: pointer; }
+.lives-thought-hint { color: var(--accent-deep); font-weight: 650; font-size: 0.8125rem; }
+.lives-later { display: grid; gap: 4px; min-height: 64px; padding: 12px; border: 2px dashed color-mix(in srgb, var(--ink) 30%, transparent); border-radius: 14px; background: #fff8d6; }
+.lives-later ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 0.9375rem; font-weight: 600; }
+.lives-lab-set { margin: 12px 0 0; padding: 0; border: 0; }
+.lives-lab-set legend { padding: 0; margin: 0 0 8px; font-weight: 700; }
+.lives-lab-grid { display: grid; gap: 6px; }
+.lives-lab-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
+.lives-lab-row select, .lives-lab-row input { min-height: 44px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font: inherit; }
+.lives-lab-ranking { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
+.lives-lab-ranking ul { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.875rem; }
+.lives-lab-table { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 0.875rem; }
+.lives-lab-table th, .lives-lab-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.lives-lab-modules { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.lives-lab-modules pre { overflow-x: auto; padding: 12px; border-radius: 12px; background: var(--stone); font-size: 0.75rem; }
+.lives-lab code { font-size: 0.8125rem; }
+.lives-strategy.is-dismissed { opacity: 0.6; }
+.lives-saved.is-quiet { color: var(--muted); }
+.lives-game-title { margin: 0 0 -4px; color: var(--muted); font-size: 0.875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
