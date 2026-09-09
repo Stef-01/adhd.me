@@ -73,7 +73,14 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
     const choice = page.getByRole("group", { name: /^(Choices|Responses)$/ }).getByRole("button").first();
     if (await thought.isVisible().catch(() => false)) { await thought.click(); continue; }
     if (await current.isVisible().catch(() => false)) { await current.click(); continue; }
-    if (await next.isVisible().catch(() => false)) { await next.click(); continue; }
+    if (await next.isVisible().catch(() => false)) {
+      const heading = page.locator("#lives-module-title");
+      const previousStep = await heading.textContent();
+      await next.click();
+      // Let this block unmount before selecting another Next from the outgoing screen.
+      await expect(heading).not.toHaveText(previousStep!);
+      continue;
+    }
     if (await yours.isVisible().catch(() => false)) { await yours.click(); continue; }
     if (await choice.isVisible().catch(() => false)) { await choice.click(); continue; }
     await page.waitForTimeout(60);
