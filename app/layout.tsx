@@ -12,6 +12,7 @@ import "./styles/brand.css";
 import "./styles/learning-play.css";
 import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
+import "./styles/leo.css";
 import { LiquidGlass } from "./glass/liquid-glass";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";

@@ -211,10 +211,10 @@ export function ChaosRun({ seed }: { seed?: string }) {
               {phase === "intro" && !reminding && <p className="lives-game-title">{current.game.title}</p>}
               <p className="lives-shout" aria-live="assertive" tabIndex={-1}>{phase === "intro" && reminding && current.scene.remind ? current.scene.remind : current.game.instruction}</p>
               {!reducedMotion && <div className="lives-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "active" ? 1 - progress : phase === "resolution" ? 0 : 1})` }} /></div>}
-              <div className="lives-scene" data-engine={current.game.engine}>
-                {who && <div className="lives-scene-bean"><LifeBean who={who} mood={mood} size={phase === "active" ? 72 : 120} /></div>}
-                {phase === "active" && (
-                  <Engine key={current.instance} game={current.game} scene={current.scene} live={armed} reducedMotion={reducedMotion} progress={progress} elapsedMs={elapsed} onResult={settle} />
+              <div className="lives-scene" data-engine={current.game.engine} data-game={current.game.id}>
+                {who && current.game.id !== "leo_mosquito" && <div className="lives-scene-bean"><LifeBean who={who} mood={mood} size={phase === "active" ? 72 : 120} /></div>}
+                {(phase === "active" || current.game.id === "leo_mosquito") && (
+                  <Engine key={current.instance} game={current.game} scene={current.scene} live={phase === "active" && armed} reducedMotion={reducedMotion} progress={progress} elapsedMs={elapsed} onResult={settle} outcome={phase === "resolution" ? last?.outcome : undefined} />
                 )}
                 {phase === "resolution" && last && (
                   <motion.div className="lives-result" role="status" data-hit={last.outcome === "success" ? "true" : "false"} initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>
