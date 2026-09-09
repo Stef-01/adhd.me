@@ -44,6 +44,22 @@ export const EVENTS = [
   "INTERPRETATION_CONFIRMED",
   "INTERPRETATION_DECLINED",
   "ROUND_RELATED",
+  // ADHD Lives (PRD v2 §67). Gameplay, then learning. §68: these name product behaviour, never a
+  // person — the test beside them refuses a label that reads like an inferred pathology.
+  "SESSION_STARTED",
+  "SESSION_COMPLETED",
+  "MINIGAME_STARTED",
+  "MINIGAME_SUCCESS",
+  "MINIGAME_FAILURE",
+  "DIFFICULTY_INCREASED",
+  "RESONANCE_SELECTED",
+  "STRATEGY_IMPRESSION",
+  "STRATEGY_SAVED",
+  "STRATEGY_DISMISSED",
+  "MODULE_ABANDONED",
+  "STRATEGY_ADDED_TO_TOOLKIT",
+  "STRATEGY_MARKED_USEFUL",
+  "STRATEGY_MARKED_NOT_USEFUL",
 ] as const;
 export type EventName = (typeof EVENTS)[number];
 

@@ -145,6 +145,36 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "My Manual (PRD §27): three sections the person writes about themselves, on this device. The app offers suggestions from the record and never writes a line for them; every prompt and suggestion is a patient surface and answers to the patient rules.",
   },
   {
+    path: "/lives",
+    audience: "patient",
+    why: "ADHD Lives (PRD v2, ADR 0006): the game's home — a PLAY button, one line, the Toolkit and the eight lives. A patient-facing app surface; every sentence answers to the patient rules, and nothing on it claims anything about the person.",
+  },
+  {
+    path: "/lives/play",
+    audience: "patient",
+    why: "The Chaos Run: microgames from eight fictional lives, a score, three lives. Entertainment first (PRD v2 §1); the resonance cards after a run are optional and the copy on them is the character's line, never a reading of the player (§3).",
+  },
+  {
+    path: "/lives/characters",
+    audience: "patient",
+    why: "The eight lives as stories, each with what the character is trying (PRD v2 §41). Fictional people described in plain words (§79); 'This is me' is a signal the person gives, not a conclusion the product draws.",
+  },
+  {
+    path: "/lives/learn",
+    audience: "patient",
+    why: "The strategy shelves and, with ?module=, the module renderer (PRD v2 §25, §28). Strategies are experiments, not commandments (§79); every claim is hedged and every string passes the patient rules in the engine's own suite.",
+  },
+  {
+    path: "/lives/toolkit",
+    audience: "patient",
+    why: "The strategies the person decided to try, as they set them up, on this device (PRD v2 §29). It renders only what this device holds and publishes nothing.",
+  },
+  {
+    path: "/lives/lab",
+    audience: "patient",
+    why: "The recommendation debugger and the director's log (PRD v2 §106–§107): identifiers and scores over fictional inputs, so the engine can show its working. Public because a deterministic engine's auditability is part of the product; it holds nothing about any person.",
+  },
+  {
     path: "/medication",
     audience: "patient",
     why: "Medication experience (PRD §47): three fields the person describes in their own words to take to whoever manages their medication. The app advises on nothing — no dose, no timing, no verdict — and every prompt on the page answers to the patient rules.",

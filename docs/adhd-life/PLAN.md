@@ -55,7 +55,7 @@ line or an analytics event.
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
-| PRD v2 ADHD Lives (engine, registries, recommendation) | Phase L | **Engine done**; renderer next | `src/lives/` |
+| PRD v2 ADHD Lives (engine, renderer, results, modules, Toolkit) | Phase L | **L0–L4 done**; content and balancing next | `src/lives/`, `app/lives/` |
 | §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |
@@ -152,18 +152,32 @@ native later. Mapped from the PRD's phases 0–6:
 - [x] **Recommendation engine and profile** (§31–§35, §63–§65, §108): deterministic weights with
       a reason per row; resonance signals as the only basis for personalisation; the Toolkit,
       the Learn Later queue, goals and high score on the device. (2026-09-08)
-- [ ] **L2 The six games, playable** (§97, §101): a DOM renderer for the ten engines in
-      `app/lives/` — target swat, semantic filter, trace path, inhibition, object search, goal
-      protection, hold/release, rapid sorting, wipe, precision timing — on the existing beans
-      and props, with the calm rules (§14) outside the microgame and the shouted instruction
-      inside it. Validate that the run is fun before any learning shows.
-- [ ] **L3 Results and Toolkit** (§5–§7, §36, §102): score, AGAIN, then "Anything feel
-      familiar?" cards with This is me / Sometimes / Not me, then up to three strategies with
-      TRY NOW / SAVE / NOT FOR ME; the Toolkit screen; `/dev/recommendations` (§107).
-- [ ] **L4 ModuleRenderer** (§25, §103): one renderer over the block types; the four vertical
-      slice modules end-to-end with MAKE IT YOURS (§39).
-- [ ] **L5–L6 Content** (§104–§105): thirty-two games, sixteen full modules, character stories
-      (§41), Learn home (§28), accessibility (§93–§94), analytics with §68's guardrail.
+- [x] **L2 The games, playable** (§97, §101): `src/lives/layout.ts` lays every engine out in
+      design coordinates from the seed (entities, routes, taunts, timing windows, hold cues), held
+      by `layout.test.ts` across every game × difficulty × ten seeds — inside the box, at the
+      48px floor, deterministic, one safe route. `app/lives/engines.tsx` renders the ten engines;
+      `app/lives/run.tsx` drives the beats on one clock — intro, active, resolution, FASTER,
+      transition — with the HUD (three beans, the score, the draining bar) after Dumb Ways to
+      Die 2's structure (`docs/adhd-lives/DESIGN-dwtd2.md`). Under reduced motion there is no
+      clock and every beat ends on a button; the one engine without a natural wrong choice offers
+      "Skip this one (costs a life)". `/lives/play?seed=` replays a run (§90). (2026-09-08)
+- [x] **L3 Results and Toolkit** (§5–§7, §36, §102): `app/lives/results.tsx` — score, new high
+      score, moments survived, AGAIN, then "Anything feel familiar?" with This is me / Sometimes /
+      Not me per character met, then up to three strategies with Try now / Save / Not for me.
+      `/lives/toolkit`: your tools (Trying / Useful / Not for me, a note, remove) and the saved
+      queue. `/lives/lab` is §106–§107: the recommendation debugger with raw scores and reasons,
+      the director's rejection log for a seed, every module as JSON, reset. (2026-09-08)
+- [x] **L4 ModuleRenderer** (§25, §103): `app/lives/module-renderer.tsx` — one renderer over the
+      ten block types, one block a card, the meeting-anchor practice as the first activity, the
+      last action plan as MAKE IT YOURS (§39) writing the personal configuration; the strategy
+      lands in the Toolkit as Trying. `/lives/learn` is §28's home (For you, two-minute tools,
+      six shelves); `/lives/characters` is §41; `/lives` is §82 with §83's optional goals.
+      `e2e/adhd-lives.spec.ts` drives §98's journey end to end. (2026-09-08)
+- [ ] **L5–L6 Content** (§104–§105): thirty-two games (twenty-two today), sixteen full modules
+      (four full, twelve at shape), balancing against real people. Done already from this list:
+      character stories (§41), Learn home (§28), the §67 events with §68's guardrail as a test,
+      reduced motion and keyboard equals (§93–§94). Still open: sound, haptics, larger
+      instructions and a relaxed-timing setting (§93); audio blocks (§72) have no asset yet.
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.
 
