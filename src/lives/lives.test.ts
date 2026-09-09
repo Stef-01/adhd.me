@@ -209,6 +209,10 @@ describe("session reducer (§85–§86)", () => {
     const game = GAMES[0]!;
     expect(allowedMs(game, 8)).toBeLessThan(allowedMs(game, 1));
     expect(allowedMs(game, 1)).toBe(game.activeMs);
+    // §93 relaxed timing: half as long again at every difficulty, and the difficulty still bites.
+    expect(allowedMs(game, 1, true)).toBe(Math.round(game.activeMs * 1.5));
+    expect(allowedMs(game, 8, true)).toBeLessThan(allowedMs(game, 1, true));
+    expect(allowedMs(game, 8, true)).toBeGreaterThan(allowedMs(game, 8));
   });
 
   it("resolveGame reports the FASTER beat and the score delta", () => {
