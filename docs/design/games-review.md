@@ -47,6 +47,21 @@ What the captures showed, and what changed in response.
 Kept on purpose: the clue line under a round's instruction. The founder asked for every right answer
 to be inferable from the scene (2026-09-08), and unit and e2e tests pin it.
 
-## Stages 4 and 5
+## Stage 4: second read of every capture (d8ab320, 7a53c2c, 2fb883d)
 
-Recorded as each recapture is read.
+| Screen | Finding | Change |
+|---|---|---|
+| Run title cards | Lamp cords ran behind the title and the button | The title and button read on a paper scrim |
+| Do not tap | The pale box behind the temptation was its pulse ring, square-cornered at full scale | The ring follows the pill |
+| Hold the lid | "Hold" in a pill over a button that says "Hold", under a shout that says it | The cue shows only once holding or cued |
+| Every crossing | The drawing scaled evenly while touch and labels stretched, so the line sat off the finger and "Safe" sat above its circle | The drawing stretches with its surface |
+| Runaway office chair | The start was a pill reading "It" | A drawn office chair |
+| Leo's bedroom, other rounds | A pale band above the room outside his swarm | Lavender to the top of the card |
+| Don't scroll | The phone covered Leo's face | It glows beside him |
+| The study | Two windows stacked, a lamp hanging into the upper one | A picture on the wall, the lamp beside it |
+| The kitchen | The wall repeated the counter's cabinets | A shelf of jars and a picture |
+| The note | A solid blue slab: class fills beat the outline's `fill="none"` | Outlines stay outlines |
+
+## Stage 5
+
+Recorded when the recapture is read.
