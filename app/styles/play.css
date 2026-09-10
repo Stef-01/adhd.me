@@ -347,3 +347,5 @@ body:has(.play-run) { overflow-x: clip; }
 /* The title and its button read on a soft paper scrim, as the Chaos Run's chrome does over its world. */
 .play-card.is-title:has(.play-place)::before { content: ""; position: absolute; inset: 0 0 auto; height: 260px; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, color-mix(in srgb, var(--paper) 96%, transparent) 0%, color-mix(in srgb, var(--paper) 84%, transparent) 55%, color-mix(in srgb, var(--paper) 0%, transparent) 100%); }
 .play-card.is-title:has(.play-place) > :not(.play-place) { z-index: 2; }
+/* Stage 4: the note's outlines are strokes. The class fills beat the fill="none" attribute and painted the note a solid slab. */
+.play-note-art [fill="none"] { fill: none; }

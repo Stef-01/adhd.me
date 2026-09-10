@@ -386,3 +386,9 @@
 .lives-world .lives-cue:empty { visibility: hidden; }
 .lives-trace-who.is-thing { transform: translate(-50%, -55%); }
 .lives-trace-who.is-thing .lives-sprite { display: block; width: 66px; height: 66px; }
+
+/* Stage 4: Leo's bedroom is lavender to the top of the card in every round played there, not only his swarm. */
+.lives-world[data-world="bedroom"] { background: #c5c6ed; }
+.lives-card.is-round:has(.lives-world[data-world="bedroom"]) { background: #c5c6ed; }
+/* The phone that wants one more scroll glows beside Leo, not over his face. */
+.lives-world[data-world="bedroom"] .lives-thing.is-temptation { translate: -22% -38%; }

@@ -128,8 +128,9 @@ const WALLS: Readonly<Record<Prop, ReactNode>> = {
     <Frame x={222} y={-142} w={82} h={62} />
   </>,
   kitchen: <>
-    <rect x="20" y="-132" width="320" height="88" rx="6" className="f-mid" />
-    {[20, 100, 180, 260].map((x) => <g key={x}><rect x={x + 6} y="-126" width="68" height="76" rx="4" className="f-light" opacity=".35" /><rect x={x + 34} y="-62" width="12" height="4" rx="2" className="f-deep" /></g>)}
+    <rect x="24" y="-66" width="150" height="7" rx="2" className="f-deep" />
+    {[36, 64, 92, 120, 148].map((x, i) => <g key={x}><rect x={x} y={-66 - (18 + (i % 2) * 8)} width="18" height={18 + (i % 2) * 8} rx="4" className={i % 2 ? "f-warm" : "f-light"} /><rect x={x - 1} y={-70 - (18 + (i % 2) * 8)} width="20" height="5" rx="2" className="f-deep" /></g>)}
+    <Frame x={226} y={-150} w={100} h={74} />
     <path d="M60 -202h240" className="s-deep" strokeWidth="4" strokeLinecap="round" /><path d="M100 -202v22M160 -202v28M220 -202v20M270 -202v26" className="s-deep" strokeWidth="3" />
     <circle cx="100" cy="-174" r="7" className="f-warm" /><rect x="154" y="-174" width="12" height="10" rx="2" className="f-accent" /><ellipse cx="220" cy="-178" rx="9" ry="5" className="f-warm" /><rect x="264" y="-176" width="12" height="14" rx="3" className="f-accent" />
   </>,
@@ -159,7 +160,7 @@ const WALLS: Readonly<Record<Prop, ReactNode>> = {
   study: <>
     <rect x="20" y="-232" width="132" height="222" rx="4" className="f-mid" />
     {[-192, -132, -72].map((y) => <g key={y}>{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={30 + i * 18} y={y - (22 + (i % 3) * 6)} width="14" height={22 + (i % 3) * 6} rx="1.5" className={["f-deep", "f-warm", "f-accent", "f-light"][i % 4]} />)}<rect x="20" y={y} width="132" height="6" className="f-deep" /></g>)}
-    <Window x={200} y={-200} w={122} h={112} dark={0.4} /><Pendant x={262} drop={20} />
+    <Frame x={206} y={-168} w={108} h={78} /><Pendant x={300} drop={60} />
   </>,
   none: <><Cloud x={240} y={-380} s={0.9} /><Cloud x={82} y={-182} /><Cloud x={262} y={-122} s={0.8} /></>,
 };
