@@ -174,9 +174,9 @@ describe("W98 scale", () => {
  * measures 4.46–4.94× — the same separation the comments below already describe, now read with an
  * instrument that can see it.
  */
-const TIMING_SAMPLES = 5;
+const TIMING_SAMPLES = 9;
 /** Enough items that the smallest sample (the quadratic probe at n=50) is milliseconds, not µs. */
-const ITEMS_PER_SAMPLE = 200_000;
+const ITEMS_PER_SAMPLE = 400_000;
 
 /** Best-of-N wall clock per item. Fastest sample wins: an interrupted run can only be slower, so
  *  the minimum is the cost of the code rather than the cost of the box. */
@@ -191,7 +191,12 @@ function perItem(n: number, run: (n: number) => void): number {
   return best / (repeats * n);
 }
 
-const LINEARITY_BOUND = 1.7;
+// 2026-09-10: GitHub's runner measured the REAL rollout at 1.77x and 1.81x per site (per50 about
+// 0.00013ms), twice in a day, against 0.86 to 0.98x on the build box: a 200-site working set
+// costs more per site on a small-cache box, which is cache, not quadratic. The quadratic probe on
+// the same runner sits at 2.4x and above. 2.1 keeps 0.3 of margin to the probe's floor and 0.3 to
+// the runner's linear ceiling; the samples are longer (above) so a stall moves the best less.
+const LINEARITY_BOUND = 2.1;
 
 describe("W98 timing", () => {
   // The unit's gate says "timed e2e". The timing is asserted here rather than in a browser,
