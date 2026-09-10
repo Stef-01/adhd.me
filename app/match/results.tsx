@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { DECLINE_REASON_LABELS } from "@/lib/matching/labels";
 import type { PatientView } from "@/lib/matching/views";
+import { Explain } from "../explain";
 import { Badges, Portrait } from "./gp-bits";
 import { FROM_TAB_COPY, MATCH_STATUS_COPY, clearPatientId, clearView, fetchPatient, readPatientId, type HeldView } from "./session";
 
@@ -88,11 +89,21 @@ export function MatchResults() {
             </div>
             <p className="match-headline">{m.rationale.headline}</p>
             <ul className="match-points">
-              {m.rationale.points.map((point) => (
+              {m.rationale.points.slice(0, 2).map((point) => (
                 <li key={point}>{point}</li>
               ))}
             </ul>
-            <Badges gp={m.gp} />
+            {m.rationale.points.length > 2 && (
+              <details className="match-more">
+                <summary>More reasons</summary>
+                <ul className="match-points">
+                  {m.rationale.points.slice(2).map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </details>
+            )}
+            <Badges gp={m.gp} brief />
             <p className="match-status" data-testid="match-status">
               {m.status === "declined" && m.declineReason ? `${MATCH_STATUS_COPY.declined} ${DECLINE_REASON_LABELS[m.declineReason]}.` : MATCH_STATUS_COPY[m.status]}
             </p>
@@ -136,7 +147,7 @@ export function MatchResults() {
           Delete my request
         </button>
       </div>
-      <p className="match-copy-note">Delete removes your words, the matches proposed for you and anything you told us afterwards, from our side as well as this tab.</p>
+      <Explain className="match-copy-note">Delete removes your words, the matches proposed for you and anything you told us afterwards, from our side as well as this tab.</Explain>
     </main>
   );
 }

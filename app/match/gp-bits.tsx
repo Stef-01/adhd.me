@@ -31,8 +31,26 @@ export function Portrait({ gp }: { gp: Pick<GPPublicView, "name" | "image" | "re
   );
 }
 
-export function Badges({ gp }: { gp: GPPublicView }) {
+export function Badges({ gp, brief = false }: { gp: GPPublicView; brief?: boolean }) {
   const v = gp.verification;
+  if (brief) {
+    return (
+      <ul className="match-badges" aria-label="What is declared and what has been checked">
+        <li className={`match-badge ${v.status === "verified" ? "is-verified" : "is-pending"}`}>
+          {v.status === "verified" ? <CheckCircle size={14} weight="bold" aria-hidden="true" /> : <Clock size={14} weight="bold" aria-hidden="true" />}
+          {v.status === "verified" ? "Checked" : "Declared"}
+        </li>
+        <li className={`match-badge ${gp.availability.grade === "closed" ? "is-closed" : "is-open"}`}>{gp.availability.grade === "closed" ? "Full" : "Open"}</li>
+        {gp.telehealthAvailable && (
+          <li className="match-badge">
+            <VideoCamera size={14} weight="bold" aria-hidden="true" />
+            Telehealth
+          </li>
+        )}
+        {!gp.realPerson && <li className="match-badge is-pending">Example</li>}
+      </ul>
+    );
+  }
   return (
     <ul className="match-badges" aria-label="What is declared and what has been checked">
       <li className={`match-badge ${v.status === "verified" ? "is-verified" : "is-pending"}`}>

@@ -5,6 +5,7 @@
 // sits under a fold, up to three, skip always available; it only orders recommendations.
 
 import Link from "next/link";
+import { Explain } from "../explain";
 import { useEffect, useState } from "react";
 import { ArrowRight, Play } from "@phosphor-icons/react";
 import { CHARACTERS, selectGoals, strategy, type LearningDomain } from "@/lives";
@@ -53,7 +54,7 @@ export function LivesHome() {
 
       <details className="life-why lives-goals">
         <summary>What would you most like help with?</summary>
-        <p className="lives-goals-note">Up to three. It only changes what is suggested first.</p>
+        <Explain className="lives-goals-note">Up to three. It only changes what is suggested first.</Explain>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>{g.label}</button>)}
         </div>
@@ -61,7 +62,7 @@ export function LivesHome() {
 
       <details className="life-why lives-goals lives-settings">
         <summary>Play settings</summary>
-        <p className="lives-goals-note">Kept on this device. The score is the same either way.</p>
+        <Explain className="lives-goals-note">Kept on this device. The score is the same either way.</Explain>
         <div className="lives-chips" role="group" aria-label="Play settings">
           <button type="button" className="lives-chip" aria-pressed={relaxed} onClick={() => flip(LIVES_RELAXED_KEY, relaxed, setRelaxed)}>Relaxed timing</button>
           <button type="button" className="lives-chip" aria-pressed={large} onClick={() => flip(LIVES_LARGE_KEY, large, setLarge)}>Larger instructions</button>

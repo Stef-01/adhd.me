@@ -1,5 +1,7 @@
 "use client";
 
+import { Explain } from "./explain";
+
 // My Manual (PRD §27): three sections the person writes about themselves. Yours to edit; nothing
 // here is written for you. Suggestions come from what this device already holds and become text
 // only when tapped. Device-local; nothing leaves the browser; the analytics event carries the
@@ -38,7 +40,8 @@ export function MyManual() {
       <header className="life-head">
         <span className="life-eyebrow">My Manual</span>
         <h1 className="life-title">How I work, in my own words.</h1>
-        <p className="life-lede">Yours to write and change. Nothing here is written for you: what this app has noticed is offered underneath each section, and becomes part of your manual only when you add it. It stays on this device.</p>
+        <p className="life-lede">Yours to write and change.</p>
+        <Explain className="life-lede">Nothing here is written for you: what this app has noticed is offered underneath each section, and becomes part of your manual only when you add it. It stays on this device.</Explain>
       </header>
 
       {MANUAL_SECTIONS.map((s) => (

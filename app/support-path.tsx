@@ -7,6 +7,7 @@
 // they choose — nothing is shared by the app.
 
 import Link from "next/link";
+import { Explain } from "./explain";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check, Copy } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
@@ -52,13 +53,13 @@ export function SupportPath() {
       <header className="life-head">
         <span className="life-eyebrow">Support</span>
         <h1>{need ? "From the problem to the person." : "Start from the problem, not the profession."}</h1>
-        <p>{need ? "Each step is built from what you have told the app. Professional support is the last step, not the first." : "Once the app knows what is hardest for you, this page walks from that problem to the kind of help that fits it."}</p>
+        <Explain>{need ? "Each step is built from what you have told the app. Professional support is the last step, not the first." : "Once the app knows what is hardest for you, this page walks from that problem to the kind of help that fits it."}</Explain>
       </header>
 
       {record && !need && (
         <section className="life-empty" aria-labelledby="support-empty">
           <h2 id="support-empty">Nothing to walk from yet.</h2>
-          <p>Answer the onboarding, or a module’s recognition questions, and the path fills in. You can always search the finder directly.</p>
+          <p>Answer the ten questions, or a module’s, and the path fills in.</p>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href="/start">Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
             <Link className="learn-secondary" href="/">Search the finder</Link>

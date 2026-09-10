@@ -73,6 +73,15 @@
 .results-match-door { margin: 18px 0 0; padding: 14px 16px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
 .results-match-door a { color: var(--accent-deep); font-weight: 700; }
 .match-copy-note { margin: 8px 0 0; color: var(--faint); font-size: 0.8125rem; }
+.match-more { margin: 8px 0 0; }
+.match-more > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--accent-deep); font-size: 0.875rem; font-weight: 700; list-style: none; }
+.match-more > summary::-webkit-details-marker { display: none; }
+.match-more > summary::after { content: "+"; margin-left: 8px; font-weight: 800; }
+.match-more[open] > summary::after { content: "\2212"; }
+.match-more[open] > summary { margin-bottom: 6px; }
+details.match-disclosure > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--muted); font-size: 0.8125rem; font-weight: 650; list-style: none; }
+details.match-disclosure > summary::-webkit-details-marker { display: none; }
+details.match-disclosure > p { margin: 4px 0 0; }
 /* The GP dashboard's field grid: a select with a long option must shrink to the column, not widen the page. */
 .platform-console .gp-fields > * { min-width: 0; }
 .platform-console .gp-fields :is(select, input, textarea) { width: 100%; max-width: 100%; }

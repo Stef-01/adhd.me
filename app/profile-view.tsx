@@ -1,5 +1,7 @@
 "use client";
 
+import { Explain } from "./explain";
+
 // O233 (founder-directed): the Profile tab.
 //
 // A Profile tab in an app without accounts is where a placeholder usually goes — a stub with an
@@ -247,9 +249,9 @@ export function ProfileView() {
             </AnimatePresence>
           </span>
         </div>
-        <p className="me-section-lead">
+        <Explain className="me-section-lead">
           Each one narrows the list to providers who declare it. The words you search with still decide the order.
-        </p>
+        </Explain>
 
         <ul className="me-switches">
           {SWITCHES.map((row, index) => (

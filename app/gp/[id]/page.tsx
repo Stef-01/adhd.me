@@ -11,6 +11,7 @@ import { AGE_GROUP_LABELS, COMORBIDITY_LABELS, MANNER_LABELS, PACE_LABELS, PHILO
 import type { Comorbidity } from "@/lib/matching/types";
 import { gpPublicView } from "@/lib/matching/views";
 import { ROBOTS_META } from "@/security/robots";
+import { Explain } from "../../explain";
 import { Badges, Portrait } from "../../match/gp-bits";
 
 export const dynamic = "force-dynamic";
@@ -50,9 +51,7 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
         <Badges gp={view} />
 
         {!view.realPerson && (
-          <p className="match-note">
-            An invented example profile. The declarations below were generated for the demonstration and describe nobody.
-          </p>
+          <Explain className="match-note">An invented example profile. The declarations below were generated for the demonstration and describe nobody.</Explain>
         )}
 
         {view.feltUnderstood && (
@@ -64,15 +63,29 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
         <section className="match-section" aria-labelledby="how-heading">
           <h2 id="how-heading">How they work</h2>
           <div className="match-bio">
-            {view.bio.split(/(?<=\.)\s+(?=[A-Z])/).reduce<string[]>((paragraphs, sentence) => {
-              const last = paragraphs[paragraphs.length - 1];
-              if (last !== undefined && last.length < 260) paragraphs[paragraphs.length - 1] = `${last} ${sentence}`;
-              else paragraphs.push(sentence);
-              return paragraphs;
-            }, []).map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            {view.prescribingPhilosophyText && <p>{view.prescribingPhilosophyText}</p>}
+            {(() => {
+              const paragraphs = view.bio.split(/(?<=\.)\s+(?=[A-Z])/).reduce<string[]>((acc, sentence) => {
+                const last = acc[acc.length - 1];
+                if (last !== undefined && last.length < 260) acc[acc.length - 1] = `${last} ${sentence}`;
+                else acc.push(sentence);
+                return acc;
+              }, []);
+              const [first, ...rest] = paragraphs;
+              return (
+                <>
+                  {first && <p>{first}</p>}
+                  {(rest.length > 0 || view.prescribingPhilosophyText) && (
+                    <details className="match-more">
+                      <summary>More about how they work</summary>
+                      {rest.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                      {view.prescribingPhilosophyText && <p>{view.prescribingPhilosophyText}</p>}
+                    </details>
+                  )}
+                </>
+              );
+            })()}
           </div>
           {manner.length > 0 && (
             <ul className="match-badges" aria-label="Ways of working, declared">
@@ -152,9 +165,9 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
               <span>{view.credentials.yearsTreatingAdhd === null ? "Not declared" : `${view.credentials.yearsTreatingAdhd}, declared`}</span>
             </li>
           </ul>
-          <p className="match-disclosure">
+          <Explain className="match-disclosure">
             &ldquo;Declared&rdquo; is the GP&rsquo;s own statement. &ldquo;Checked&rdquo; means a named person examined evidence on the date shown.
-          </p>
+          </Explain>
         </section>
 
         <div className="match-actions">

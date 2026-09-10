@@ -5,6 +5,7 @@
 
 import { ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
 import Link from "next/link";
+import { Explain } from "../explain";
 import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { AppSettings } from "../app-settings";
@@ -160,12 +161,14 @@ export function WelcomeStage({
       <aside className="finder-getting-started" aria-label="Getting started">
         <p className="learning-overline">YOUR NEXT STEP, MADE CLEARER</p>
         <h2>A search that starts with you.</h2>
-        <p>GPs, psychologists, counsellors, occupational therapists, exercise physiologists and ADHD coaches. Tell us what matters, then check the details with the practice.</p>
-        <ol>
-          <li><span>1</span><div><strong>Use your own words</strong><p>Location, language, appointment style — start with what you need.</p></div></li>
-          <li><span>2</span><div><strong>See why somebody appears</strong><p>Read the profile and the reasons behind your results.</p></div></li>
-          <li><span>3</span><div><strong>Choose your next step</strong><p>Check current availability with the booking destination.</p></div></li>
-        </ol>
+        <Explain as="div">
+          <p>GPs, psychologists, counsellors, occupational therapists, exercise physiologists and ADHD coaches. Tell us what matters, then check the details with the practice.</p>
+          <ol>
+            <li><span>1</span><div><strong>Use your own words</strong><p>Location, language, appointment style — start with what you need.</p></div></li>
+            <li><span>2</span><div><strong>See why somebody appears</strong><p>Read the profile and the reasons behind your results.</p></div></li>
+            <li><span>3</span><div><strong>Choose your next step</strong><p>Check current availability with the booking destination.</p></div></li>
+          </ol>
+        </Explain>
         <Link href="/support">Not sure who to see? Start from the problem <ArrowRight size={17} aria-hidden="true" /></Link>
         <Link href="/match">Want three GPs picked for you, with a reason each? Get matched <ArrowRight size={17} aria-hidden="true" /></Link>
         <Link href="/approach">New to ADHD? Explore the learning modules <ArrowRight size={17} aria-hidden="true" /></Link>
