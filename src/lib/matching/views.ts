@@ -45,13 +45,15 @@ export interface GPPublicView {
 export function availabilityOf(gp: GP): GPPublicView["availability"] {
   const open = gp.credentials.caseloadCapacityCurrent;
   const max = gp.credentials.caseloadCapacityMax;
-  const grade: AvailabilityGrade = !gp.acceptingNewPatients || open <= 0 ? "closed" : open <= 2 ? "few" : "open";
+  const grade: AvailabilityGrade = !gp.acceptingNewPatients || open <= 0 ? "closed" : max > 1 && open <= 2 ? "few" : "open";
   const copy =
     grade === "closed"
       ? "Not taking new matches right now."
-      : grade === "few"
-        ? `${open} of ${max} declared places open.`
-        : `Taking new matches: ${open} of ${max} declared places open.`;
+      : max === 1
+        ? "Books declared open."
+        : grade === "few"
+          ? `${open} of ${max} declared places open.`
+          : `Taking new matches: ${open} of ${max} declared places open.`;
   return { grade, placesOpen: open, placesMax: max, acceptingNewPatients: gp.acceptingNewPatients, copy };
 }
 

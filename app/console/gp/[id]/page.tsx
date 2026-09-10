@@ -162,7 +162,7 @@ export default async function GPDashboardPage({ params, searchParams }: { params
                         Accept
                       </button>
                     </form>
-                    <form action={answerMatch} className="flex flex-wrap items-end gap-2">
+                    <form action={answerMatch} className="gp-answer flex flex-wrap items-end gap-2">
                       <input type="hidden" name="gpId" value={gp.id} />
                       <input type="hidden" name="matchId" value={r.matchId} />
                       <input type="hidden" name="answer" value="decline" />
@@ -336,7 +336,7 @@ export default async function GPDashboardPage({ params, searchParams }: { params
             <Field label="How you approach medication, in your words">
               <textarea name="philosophyText" rows={3} maxLength={800} defaultValue={gp.credentials.prescribingPhilosophyText} className={inputClass} />
             </Field>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="gp-fields grid gap-4 sm:grid-cols-2">
               <Field label="Medication, in one phrase">
                 <select name="philosophy" defaultValue={gp.credentials.prescribingPhilosophy ?? ""} className={inputClass}>
                   <option value="">Not declared</option>
@@ -413,7 +413,7 @@ export default async function GPDashboardPage({ params, searchParams }: { params
               ))}
             </ul>
           )}
-          <form action={uploadEvidence} className="flex flex-wrap items-end gap-3 rounded-lg border border-stone-200 bg-white p-4">
+          <form action={uploadEvidence} className="gp-evidence flex flex-wrap items-end gap-3 rounded-lg border border-stone-200 bg-white p-4">
             <input type="hidden" name="gpId" value={gp.id} />
             <Field label="Document (PDF, PNG or JPEG, up to 8 MB)">
               <input name="evidence" type="file" accept=".pdf,.png,.jpg,.jpeg" className="min-h-11 text-sm" data-testid="evidence-file" />

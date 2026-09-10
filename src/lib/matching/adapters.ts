@@ -48,8 +48,21 @@ const PHILOSOPHY_TEXT: Record<PrescribingPhilosophy, string> = {
   "non-prescribing": "Does not start ADHD medication; works alongside a psychiatrist or paediatrician who does.",
 };
 
-/** Places open by the roster's capacity grade. Declared-open books get a full list; stale ones a short one. */
+/**
+ * Places open by the roster's capacity grade, for INVENTED examples: declared-open books get a
+ * full list, stale ones a short one. A real person gets no invented count: their roster entry
+ * declares books open or closed and nothing more, so their list is ONE place, open or not, and
+ * the surfaces say "books declared open" rather than a figure nobody stated (README §2).
+ */
 const PLACES_BY_GRADE = { "fresh-open": { current: 6, max: 8 }, "stale-open": { current: 3, max: 8 }, closed: { current: 0, max: 8 } } as const;
+const REAL_PERSON_PLACES = { open: { current: 1, max: 1 }, closed: { current: 0, max: 1 } } as const;
+
+/** A sentence: trimmed, with a full stop if the roster's text ended without one. */
+function sentence(text: string): string {
+  const t = text.trim();
+  if (t === "") return "";
+  return /[.!?]$/.test(t) ? t : `${t}.`;
+}
 
 export function isGeneralPractitioner(clinician: Clinician): boolean {
   return clinician.profession === undefined || clinician.profession === "gp";
@@ -59,13 +72,13 @@ export function gpFromClinician(clinician: Clinician, today: Date = new Date()):
   if (!isGeneralPractitioner(clinician)) return null;
   const areas = [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])];
   const grade = capacityGrade(clinician, today);
-  const places = PLACES_BY_GRADE[grade];
+  const synthetic = clinician.synthetic === true;
+  const places = synthetic ? PLACES_BY_GRADE[grade] : grade === "closed" ? REAL_PERSON_PLACES.closed : REAL_PERSON_PLACES.open;
   const child = areas.includes("child-adolescent-adhd");
   const ageGroups: AgeGroup[] = child ? ["children", "adolescents", "adults"] : ["adults", "older-adults"];
   const caseloadMix = COMORBIDITIES.filter((c) => (areas as string[]).includes(c));
   const telehealth = clinician.telehealthFirstAppointment === true;
   const billing = billingFromSignals(clinician.practicalSignals);
-  const synthetic = clinician.synthetic === true;
   const h = hashOf(clinician.id);
 
   const philosophy: PrescribingPhilosophy | null = synthetic
@@ -73,7 +86,7 @@ export function gpFromClinician(clinician: Clinician, today: Date = new Date()):
       ? "non-stimulant-first"
       : (["stimulant-first", "case-by-case", "case-by-case", "stimulant-first"] as const)[h % 4]!
     : null;
-  const pace: TitrationPace | null = synthetic ? (clinician.manner.includes("unhurried") ? "gradual" : (["standard", "standard", "brisk"] as const)[(h >> 3) % 3]!) : null;
+  const pace: TitrationPace | null = synthetic ? (clinician.manner.includes("unhurried") ? "gradual" : (["standard", "standard", "brisk"] as const)[(h >>> 3) % 3]!) : null;
   const verified = synthetic && h % 3 !== 0;
 
   return {
@@ -85,10 +98,10 @@ export function gpFromClinician(clinician: Clinician, today: Date = new Date()):
     telehealthAvailable: telehealth,
     acceptingNewPatients: clinician.acceptingNewPatients,
     credentials: {
-      racgpSpecificInterestsMember: synthetic ? (h >> 5) % 2 === 0 : null,
-      aadpaTrained: synthetic ? (h >> 7) % 3 !== 0 : null,
+      racgpSpecificInterestsMember: synthetic ? (h >>> 5) % 2 === 0 : null,
+      aadpaTrained: synthetic ? (h >>> 7) % 3 !== 0 : null,
       stateAdhdTrained: clinician.nswAdhdTrained === true ? true : null,
-      yearsTreatingAdhd: synthetic ? 3 + ((h >> 9) % 12) : null,
+      yearsTreatingAdhd: synthetic ? 3 + ((h >>> 9) % 12) : null,
       caseloadCapacityCurrent: places.current,
       caseloadCapacityMax: places.max,
       ageGroupsTreated: ageGroups,
@@ -97,7 +110,15 @@ export function gpFromClinician(clinician: Clinician, today: Date = new Date()):
       titrationPace: pace,
       prescribingPhilosophyText: philosophy ? PHILOSOPHY_TEXT[philosophy] : "",
       communicationStyle: clinician.manner,
-      bioLongText: [clinician.focus, clinician.matchLine, clinician.summary, clinician.about, ...clinician.experience].join(" "),
+      bioLongText: [
+        sentence(clinician.focus),
+        sentence(clinician.matchLine),
+        sentence(clinician.summary),
+        sentence(clinician.about),
+        clinician.experience.length > 0 ? sentence(`Experience: ${clinician.experience.map((e) => e.trim().replace(/\.$/, "")).join("; ")}`) : "",
+      ]
+        .filter((s) => s.length > 0)
+        .join(" "),
       videoIntroUrl: null,
       evidence: [],
     },

@@ -84,8 +84,6 @@ export function explainMatch(input: RationaleInput): MatchRationale {
 
   if (gp.verificationStatus === "verified" && gp.verifiedOn) {
     points.push(`Credentials checked on ${gp.verifiedOn}.`);
-  } else if (gp.verificationStatus === "pending") {
-    points.push("Credentials declared, not yet checked.");
   }
 
   if (gpRank) {

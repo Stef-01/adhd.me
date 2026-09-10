@@ -70,3 +70,11 @@
 .match-bio { font-size: 1rem; line-height: 1.6; max-width: 62ch; }
 .match-bio p { margin: 0 0 12px; }
 @media (max-width: 767px) { .match-profile-head { grid-template-columns: 72px minmax(0, 1fr); } .match-profile-head .match-portrait { width: 72px; height: 72px; } }
+/* The GP dashboard's field grid: a select with a long option must shrink to the column, not widen the page. */
+.platform-console .gp-fields > * { min-width: 0; }
+.platform-console .gp-fields :is(select, input, textarea) { width: 100%; max-width: 100%; }
+.platform-console .gp-evidence > * { min-width: 0; max-width: 100%; }
+.platform-console .gp-evidence input[type="file"] { max-width: 100%; }
+.platform-console .gp-answer > * { min-width: 0; max-width: 100%; }
+.platform-console .gp-answer select { width: 100%; max-width: 100%; }
+.platform-console .gp-answer .console-field { flex: 1 1 200px; }

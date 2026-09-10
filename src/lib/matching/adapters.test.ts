@@ -51,6 +51,20 @@ describe("M1 the roster becomes GPs", () => {
     expect(gp.credentials.caseloadCapacityCurrent).toBeGreaterThan(0);
     const closed = demoRoster.find((c) => !c.acceptingNewPatients && (c.profession === undefined || c.profession === "gp"));
     if (closed) expect(gpFromClinician(closed, TODAY)!.credentials.caseloadCapacityCurrent).toBe(0);
+    // A real person gets no invented count: one place, open or closed, and a bio of sentences.
+    for (const real of clinicians) {
+      const gp = gpFromClinician(real, TODAY)!;
+      expect(gp.credentials.caseloadCapacityMax).toBe(1);
+      expect(gp.credentials.caseloadCapacityCurrent).toBe(real.acceptingNewPatients ? 1 : 0);
+      // The roster's pieces are joined as sentences: the focus line ends with a full stop before the next piece.
+      const focus = real.focus.trim().replace(/[.!?]$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      expect(gp.credentials.bioLongText).toMatch(new RegExp(`${focus}[.!?] `));
+    }
+    // Years are never negative: the derivation uses unsigned shifts.
+    for (const c of demoRoster) {
+      const gp = gpFromClinician(c, TODAY);
+      if (gp?.credentials.yearsTreatingAdhd !== null && gp) expect(gp.credentials.yearsTreatingAdhd).toBeGreaterThanOrEqual(3);
+    }
     const mixed = demoRoster.find((c) => c.practicalSignals.some((s) => /mixed/i.test(s)) && (c.profession === undefined || c.profession === "gp"))!;
     expect(gpFromClinician(mixed, TODAY)!.preferences.billingAccepted).toContain("bulk-billing");
   });

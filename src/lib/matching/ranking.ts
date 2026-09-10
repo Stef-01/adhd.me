@@ -73,6 +73,7 @@ function capacityScore(gp: GP): { raw: number; sentence: string } {
   const { caseloadCapacityCurrent: current, caseloadCapacityMax: max } = gp.credentials;
   if (max <= 0) return { raw: 0, sentence: "No caseload capacity declared." };
   const raw = Math.min(1, Math.max(0, current / max));
+  if (max === 1) return { raw, sentence: current > 0 ? "Books declared open." : "Books declared closed." };
   return { raw, sentence: `${current} of ${max} declared places open.` };
 }
 
