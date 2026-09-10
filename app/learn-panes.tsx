@@ -256,7 +256,7 @@ const FIRST_TILES = 8;
 function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
   const [showAll, setShowAll] = useState(false);
   const allRuns = MODULES.filter((m) => m.kind === "run");
-  const runs = showAll ? allRuns : allRuns.slice(0, FIRST_TILES);
+  const runs = showAll ? allRuns : allRuns.filter((m, i) => i < FIRST_TILES || progress.done.includes(m.id));
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
     <>

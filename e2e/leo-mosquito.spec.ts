@@ -26,7 +26,7 @@ async function timedStart(page: Page) {
 test("all four untimed waves support keyboard, replay, and learning without scoring the learner", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
-  await page.goto("/approach?pane=modules");
+  await page.goto("/approach");
   await page.getByRole("link", { name: /One tiny sound/ }).click();
   await expect(page.getByRole("heading", { name: "One tiny sound." })).toBeFocused();
   await page.getByLabel("Challenge").selectOption("8");

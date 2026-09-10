@@ -373,7 +373,7 @@ function ShareRun({ runId }: { runId: string }) {
   return (
     <div className="play-share">
       <button type="button" className="play-choice" onClick={share}>{copied ? <><Check size={16} weight="bold" aria-hidden="true" /> Link copied</> : <><ShareNetwork size={16} weight="bold" aria-hidden="true" /> Share this run</>}</button>
-      <p className="play-share-note">Only which run it is.</p>
+      <p className="play-share-note">Nothing about you is in the link.</p>
     </div>
   );
 }
