@@ -90,3 +90,20 @@ test("the home is the spine's index, and More holds every folded screen", async 
   await page.getByRole("link", { name: /^Privacy requests/ }).click();
   await expect(page).toHaveURL(/\/console\/privacy$/);
 });
+
+// The two screens the spine folded first, reached by name so the register's "every section is
+// reached by a spec" holds for all thirty.
+test("privacy requests: the page stands, its retention note and empty export state say what is held", async ({ page }) => {
+  await signInAndOnboard(page, MANAGER_EMAIL);
+  await page.goto("/console/privacy");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Privacy/);
+  await expect(page.getByTestId("retention-note")).toBeVisible();
+  await expect(page.getByTestId("export-empty").or(page.getByTestId("export-json"))).toBeVisible();
+});
+
+test("usefulness audit: the page stands and names its basis", async ({ page }) => {
+  await signInAndOnboard(page, MANAGER_EMAIL);
+  await page.goto("/console/usefulness");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Usefulness audit");
+  await expect(page.locator("main")).not.toContainText(/undefined|NaN|\[object/);
+});
