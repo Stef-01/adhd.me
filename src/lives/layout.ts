@@ -200,24 +200,57 @@ function precisionTiming(config: Extract<GameConfig, { kind: "precision_timing" 
   return { entities: [{ id: "act", label: "Now", role: "target", x: 195, y: 330, r: 80, vx: 0, vy: 0 }], timing: { marks: config.marks, hitIndex: config.hitIndex, window: { start: Math.round((centre - half) * 1000) / 1000, end: Math.round((centre + half) * 1000) / 1000 } } };
 }
 
+/** §93 reduced sensory effects: at most this many things compete on the field at once. */
+export const SENSORY_CAP = 4;
+
+export interface LayoutOptions {
+  /** §93: fewer competing entities. The things a game needs (a target, a wrong thing, the goal, the keep, a hazard on every unsafe route) always stay. */
+  readonly reducedSensory?: boolean;
+}
+
+/** The cap, per engine, on a laid-out scene. Drops from the end, so what stays is placed exactly as it was. */
+function calmScene(scene: GameScene, kind: GameConfig["kind"]): GameScene {
+  const all = scene.entities;
+  const of = (role: EntityRole) => all.filter((e) => e.role === role);
+  const keep = (chosen: readonly Entity[]) => ({ ...scene, entities: all.filter((e) => chosen.includes(e)) });
+  switch (kind) {
+    case "target_swat": return keep(all.slice(0, SENSORY_CAP - 1));
+    case "semantic_filter": {
+      const targets = of("target").slice(0, SENSORY_CAP - 1);
+      const wrong = all.filter((e) => e.role !== "target").slice(0, Math.max(1, SENSORY_CAP - targets.length));
+      return keep([...targets, ...wrong]);
+    }
+    // Two hazards: the first two sit on the two unsafe routes, so exactly one route stays safe.
+    case "trace_path": return keep(of("hazard").slice(0, 2));
+    case "object_search": return keep([...of("goal"), ...of("decoy").slice(0, SENSORY_CAP - 1)]);
+    case "goal_protection": return keep([...of("keep"), ...of("intruder").slice(0, SENSORY_CAP - 1)]);
+    default: return scene;
+  }
+}
+
 /** The scene for a game at a difficulty level, from a seed. Pure; the same inputs give the same scene. */
-export function layoutGame(game: GameDefinition, level: number, seed: number): GameScene {
+export function layoutGame(game: GameDefinition, level: number, seed: number, options: LayoutOptions = {}): GameScene {
   const difficulty = difficultyFor(level);
   const rng = seededRng(seed);
   const base = { gameId: game.id, seed, level, difficulty };
   const c = game.config;
-  switch (c.kind) {
-    case "target_swat": return { ...base, entities: targetSwat(c, difficulty, rng) };
-    case "semantic_filter": return { ...base, entities: semanticFilter(c, difficulty, rng) };
-    case "trace_path": return { ...base, ...tracePath(c, difficulty, rng) };
-    case "inhibition": return { ...base, ...inhibition(c, difficulty) };
-    case "object_search": return { ...base, ...objectSearch(c, difficulty, rng) };
-    case "goal_protection": return { ...base, entities: goalProtection(c, difficulty, rng) };
-    case "hold_release": return { ...base, ...holdRelease(c, difficulty, rng) };
-    case "rapid_sorting": return { ...base, ...rapidSorting(c, difficulty, rng) };
-    case "wipe_scrub": return { ...base, ...wipeScrub(c, level) };
-    case "precision_timing": return { ...base, ...precisionTiming(c, difficulty) };
-  }
+  const calm = options.reducedSensory === true;
+  const scene = ((): GameScene => {
+    switch (c.kind) {
+      case "target_swat": return { ...base, entities: targetSwat(c, difficulty, rng) };
+      case "semantic_filter": return { ...base, entities: semanticFilter(c, difficulty, rng) };
+      case "trace_path": return { ...base, ...tracePath(c, difficulty, rng) };
+      case "inhibition": return { ...base, ...inhibition(c, difficulty) };
+      case "object_search": return { ...base, ...objectSearch(c, difficulty, rng) };
+      case "goal_protection": return { ...base, entities: goalProtection(c, difficulty, rng) };
+      case "hold_release": return { ...base, ...holdRelease(c, difficulty, rng) };
+      case "rapid_sorting": return { ...base, ...rapidSorting(c, difficulty, rng) };
+      // The smallest grid under reduced sensory: fewer tiles competing, the same layer to clear.
+      case "wipe_scrub": return { ...base, ...wipeScrub(c, calm ? 1 : level) };
+      case "precision_timing": return { ...base, ...precisionTiming(c, difficulty) };
+    }
+  })();
+  return calm ? calmScene(scene, c.kind) : scene;
 }
 
 // ── Rules the renderer asks, so the facts are testable without a browser ──────────────────────

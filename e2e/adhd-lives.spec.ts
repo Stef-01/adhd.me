@@ -111,10 +111,12 @@ test("E2E Lives 2: a seeded run replays the same first game; FASTER after four s
 test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on their own", async ({ page }) => {
   await page.goto("/lives/characters");
   await expect(page.locator(".lives-character")).toHaveCount(8);
-  await page.locator(".lives-character[data-character='mia']").getByRole("button", { name: "Sometimes" }).click();
+  const mia = page.locator(".lives-character[data-character='mia']");
+  await mia.locator("summary").click();
+  await mia.getByRole("button", { name: "Sometimes" }).click();
   await page.goto("/approach?pane=modules");
-  await expect(page.getByRole("heading", { name: "For you" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Two-minute tools" })).toBeVisible();
+  await expect(page.locator("summary", { hasText: "For you" })).toBeVisible();
+  await expect(page.locator("summary", { hasText: "Two-minute tools" })).toBeVisible();
   await page.goto("/lives/lab");
   await expect(page.getByRole("heading", { name: "Ranking" })).toBeVisible();
   expect(await page.locator(".lives-lab-ranking > li").count()).toBeGreaterThanOrEqual(1);

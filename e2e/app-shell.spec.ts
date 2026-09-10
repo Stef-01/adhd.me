@@ -119,6 +119,7 @@ test("O233: the filters screen shows what the device holds, and can forget it", 
   await page.goto("/profile");
   // Before any search the honest state is empty, and the empty state offers the action that fills it.
   await expect(page.getByRole("heading", { name: "Search Filters" })).toBeVisible();
+  await page.locator("summary", { hasText: "This search" }).click();
   await expect(page.getByRole("link", { name: /Describe what you need/ })).toBeVisible();
 
   // Search, then come back: the words are there.
@@ -129,6 +130,7 @@ test("O233: the filters screen shows what the device holds, and can forget it", 
   // 2026-09-08: the filters left the bar (PRD §6 puts profile behind the top-right control); the
   // settings sheet is the one place that reaches them from anywhere.
   await page.goto("/profile");
+  await page.locator("summary", { hasText: "This search" }).click();
   await expect(page.locator(".me-facts").getByText("a woman GP in Epping who speaks Mandarin")).toBeVisible();
 
   await page.getByRole("button", { name: /Forget what I typed/ }).click();
@@ -229,6 +231,8 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
 
 test("the profile's filters narrow the finder, are said on the results, and clear from there", async ({ page }) => {
   await page.goto("/profile");
+  // Each filter group is a tap; open the three this test uses.
+  for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.getByRole("switch", { name: /Woman GP/ }).check();
   await page.getByRole("switch", { name: /Taking new patients/ }).check();
@@ -269,6 +273,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   // And the device agrees with the screen.
   await page.goto("/profile");
   await expect(page.getByText("None on", { exact: true })).toBeVisible();
+  await page.locator("summary", { hasText: "How far you would travel" }).click();
   await expect(page.getByLabel("Suburb or postcode")).toHaveValue("Beecroft");
 });
 
@@ -282,6 +287,8 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
 
   // The place comes from the profile (or a link), never from a field on results.
   await page.goto("/profile");
+  // Each filter group is a tap; open the three this test uses.
+  for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.goto("/");
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
@@ -333,6 +340,7 @@ test("filters nobody answers say so and give both ways out", async ({ page }) =>
   for (const name of [/Woman GP/, /telehealth/, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
     await page.getByRole("switch", { name }).check();
   }
+  await page.locator("summary", { hasText: "Speaks, besides English" }).click();
   for (const language of ["Arabic", "Igbo", "Urdu"]) await page.getByRole("button", { name: language, exact: true }).click();
   await page.goto("/");
   await page.getByRole("textbox").fill("someone who can do the whole assessment");
@@ -375,6 +383,7 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await page.goto("/approach");
   await page.getByTestId("learn-tab-modules").click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
+  for (const shelf of await page.locator("details.learn-shelf:not([open]) > summary").all()) await shelf.click();
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {

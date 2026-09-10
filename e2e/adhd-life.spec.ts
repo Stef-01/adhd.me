@@ -251,6 +251,7 @@ test("the finder reads a named profession out of the sentence, and every kind is
   expect((await page.locator(".clinician-row").first().innerText())).not.toContain("Psychologist");
   // Filters screen: the kinds of support are chips, held on the device.
   await page.goto("/profile");
+  await page.locator("summary", { hasText: "Kind of support" }).click();
   await page.getByRole("button", { name: "Psychologists" }).click();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.filters.v1") ?? "{}").professions)).toEqual(["psychologist"]);
 });
