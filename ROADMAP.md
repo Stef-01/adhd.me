@@ -121,13 +121,12 @@ polish the existing shell, question it.
       role and its 44px floor and loses the underline for a trailing mark; both names balance.
       Every stage of the finder has now been looked at cold at 390. Still open only in the sense
       the item is standing: walk it again after the next round of changes.
-- [x] Console information architecture review (2026-09-10: `docs/console-spine-brief.md` applied;
-      six tabs and More, a home of six live figures, the matching audit split out). The
-      2026-09-05 facts below stand as the record the decision was made on.
-- [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
+- [x] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.
       **The facts, measured 2026-09-05, so the decision is made on them and not on a feeling.**
+      **Decided and applied 2026-09-10:** `docs/console-spine-brief.md`; six tabs and More, a
+      home of six live figures, the matching audit split out, privacy and usefulness folded first.
       Thirty sections. Every one but two is reached by at least one e2e spec — `privacy` and
       `usefulness` have none. None is linked from the demo navigator (it tours the finder and
       the story, not the console), so the console is reached only through its own home. By
