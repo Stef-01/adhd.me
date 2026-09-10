@@ -10,7 +10,7 @@
 // claims about a phone and both are invisible in a desktop capture — the exact failure mode that
 // made O225's letterboxing survive a review.
 
-import { openModuleShelves } from "./support/learn";
+import { openModuleShelves, openShelves } from "./support/learn";
 import { expect, test } from "@playwright/test";
 import { INDICATIVE_FIGURES } from "../src/compliance/landing-copy";
 import { APP_TABS } from "../src/app-shell/tabs";
@@ -338,7 +338,7 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
 
 test("filters nobody answers say so and give both ways out", async ({ page }) => {
   await page.goto("/profile");
-  for (const name of [/Woman GP/, /telehealth/, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
+  for (const name of [/Woman GP/, /telehealth/i, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
     await page.getByRole("switch", { name }).check();
   }
   await page.locator("summary", { hasText: "Speaks, besides English" }).click();
@@ -401,9 +401,11 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await page.getByRole("button", { name: "Finish", exact: true }).click();
   await expect(page.getByRole("button", { name: "Continue Myth or fact?", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("adhdme.learn.cursor.v1"))).toBeNull();
+  await openShelves(page);
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
   // Remembered on this device.
   await page.reload();
+  await openModuleShelves(page);
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
 

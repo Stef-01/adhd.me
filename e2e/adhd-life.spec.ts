@@ -442,9 +442,13 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   // The starting run opens on a desk; the desk's screen wakes. First the still equal.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
-  // Opened by URL the run may already be past its title card; the tap is there only when it is not.
+  // The title card mounts after hydration; wait for the run, then tap if the card is up.
   const go = page.getByRole("button", { name: "Tap to play" });
-  if (await go.count()) await go.click();
+  const play = async () => {
+    await page.locator(".play-card.is-title, .play-scene").first().waitFor();
+    if (await go.count()) await go.click();
+  };
+  await play();
   const scene = page.locator(".play-scene[data-prop]:not([data-prop='none'])").first();
   await expect(scene).toBeVisible();
   const prop = scene.locator(".play-prop").first();
@@ -453,7 +457,7 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   // With motion: one short animation, inside the prop's own box, and the drawing where it was when it is over.
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.reload();
-  if (await go.count()) await go.click();
+  await play();
   await expect(scene).toBeVisible();
   const art = scene.locator(".play-scene-art");
   const before = (await art.boundingBox())!;
@@ -463,7 +467,11 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   expect(style.count).toBe("1");
   await page.waitForTimeout(1000);
   const after = (await art.boundingBox())!;
-  expect(after).toEqual(before);
+  // The drawing's size and its place in the flow are what the prop must not disturb; the page's
+  // own scrollbar arriving shifts x by its width and is not the prop's doing.
+  expect(after.width).toBeCloseTo(before.width, 0);
+  expect(after.height).toBeCloseTo(before.height, 0);
+  expect(after.y).toBeCloseTo(before.y, 0);
   expect(await prop.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
 });
 

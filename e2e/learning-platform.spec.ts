@@ -21,6 +21,7 @@ test("a reading step stays readable on mobile and resumes without marking comple
   await page.getByRole("button", { name: /Continue Everyday strategies/ }).click();
   await expect(page.locator(".learn-lesson.is-current h2").first()).toHaveText(heading);
   await page.getByRole("button", { name: "All modules" }).click();
+  await openShelves(page);
   await page.locator(".learn-stack").getByRole("button", { name: /Everyday strategies/ }).click();
   await expect(page.locator(".learn-lesson.is-current h2").first()).toHaveText("Put memory outside your head.");
 });
