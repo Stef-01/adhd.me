@@ -32,6 +32,7 @@ test("a request comes back with up to three GPs, each with a reason and a status
   for (let i = 0; i < count; i++) {
     const card = cards.nth(i);
     await expect(card.locator(".match-headline")).not.toBeEmpty();
+    await card.locator(".match-more > summary").click();
     await expect(card.locator(".match-points li").first()).toBeVisible();
     await expect(card.getByTestId("match-status")).toContainText("Waiting on the GP");
     await expect(card).toContainText("Telehealth");

@@ -86,22 +86,16 @@ export function MatchResults() {
               <Portrait gp={m.gp} />
               <div>
                 <strong>{m.gp.name}</strong>
-                <small>
-                  {m.gp.practice}, {m.gp.suburb}
-                </small>
+                <small>{m.gp.suburb}</small>
+                <Explain as="small">{m.gp.practice}</Explain>
               </div>
             </div>
             <p className="match-headline">{m.rationale.headline}</p>
-            <ul className="match-points">
-              {m.rationale.points.slice(0, 1).map((point) => (
-                <li key={point}>{point}</li>
-              ))}
-            </ul>
-            {m.rationale.points.length > 1 && (
+            {m.rationale.points.length > 0 && (
               <details className="match-more">
-                <summary>More reasons</summary>
+                <summary>Why</summary>
                 <ul className="match-points">
-                  {m.rationale.points.slice(1).map((point) => (
+                  {m.rationale.points.map((point) => (
                     <li key={point}>{point}</li>
                   ))}
                 </ul>
