@@ -72,3 +72,23 @@ keyboard, touch, timed/untimed, pause, page visibility, last-moment catches, rep
 and the Chaos Run's win-to-next-game transition. Raw before/after captures and the reproduction
 scripts are in the ignored `qa/_runs/leo-release/` folder of the working clone. Real-user difficulty
 balancing remains the pilot work from Phase L6, not a claim made by these automated checks.
+
+## Swarm challenge — explicit founder request
+
+Replace the single clear with an arriving swarm: 9 mosquitoes in three waves at level 1,
+12 in three waves at level 4, and 20 in four waves at level 8. Every target must be caught.
+Base time is 22 seconds, shortened by existing difficulty and extended by relaxed timing in
+the Chaos Run. This requested longer challenge supersedes the 7-second microgame ceiling
+for Leo only; the content validator retains its existing ceiling for every other game.
+
+Each live mosquito drains 1.8 regulation points per second from a starting 100. The engine
+integrates each mosquito's time alive, so the result does not depend on render frequency.
+Catches remove that mosquito's future noise contribution. A quiet gap is not a win while
+another wave is due. Time expiry with targets remaining or zero regulation ends the round.
+Leo's expression and pose progress from unsettled to overwhelmed as regulation drops.
+
+Optional Web Audio buzzing uses one low-gain voice per live mosquito. Catching, pausing,
+muting, finishing and leaving stop the corresponding voices; replay disposes the old graph.
+Muting never changes the game resource. Reduced-motion/untimed play has the same finite
+swarm, clears a wave before introducing the next, and has no automatic regulation drain.
+This game state never writes learner traits, resonance, or practice scores.

@@ -170,4 +170,11 @@ and the copy. Written lazily — a term earns a place here when it has already b
   model's resonance (frequency, cost, priority), which the existing runs write.
 - **Toolkit** — the strategies a person decided to try, with their personal configuration
   (`personalStrategies`); **the queue** is what they saved to learn later (`saved`).
+# Leo's swarm challenge
+
+- **Swarm** — all the mosquitoes in Leo's round, arriving in successive waves. Clearing the
+  room between waves is a respite; catching the entire swarm wins the round.
+- **Leo's regulation** — the fictional character's remaining tolerance for the swarm's noise.
+  Each mosquito drains it while uncaught. It is a game resource, never a measure of the player
+  or a signal used in their learning profile.
 
