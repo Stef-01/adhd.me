@@ -22,6 +22,11 @@ async function settled(page: Page): Promise<void> {
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
 }
 
+/** Under a fake clock the fixture's timer-driven waits are frozen; this one polls from the test side. */
+export async function hydratedUnderFakeClock(page: Page): Promise<void> {
+  await page.waitForFunction(() => Number(document.documentElement.getAttribute("data-hydrated") ?? "0") >= 2, undefined, { polling: 100, timeout: 10_000 });
+}
+
 export const test = base.extend<{ page: Page }>({
   page: async ({ page }, use) => {
     const goto = page.goto.bind(page);

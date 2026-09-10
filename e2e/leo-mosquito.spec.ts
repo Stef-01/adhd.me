@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { test } from "./support/test";
+import { hydratedUnderFakeClock, test } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/leo-mosquito";
 
@@ -18,9 +18,11 @@ async function clearUntimedSwarm(page: Page, keyboard = false) {
 }
 async function timedStart(page: Page) {
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  // The clock goes in after the screen is live: installed before, it freezes the hydration wait.
-  await page.goto(URL);
+  // The clock goes in before the page so every timer the game makes is fake; the hydration wait
+  // then polls on an interval from the test side, since the fixture's timer-driven wait would be frozen.
   await page.clock.install();
+  await page.goto(URL, { waitUntil: "load" });
+  await hydratedUnderFakeClock(page);
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   await page.getByRole("button", { name: "Play Leo’s moment" }).click();
 }
