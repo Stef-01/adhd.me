@@ -15,16 +15,17 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-practice h1:focus { outline: none; }
 .leo-clock { height: 7px; border-radius: 10px; width: min(100%, 600px); background: #aaaed4; overflow: hidden; }
 .leo-clock span { display: block; height: 100%; background: #514d7d; transform-origin: left; }
-.leo-board { position: relative; width: min(100%, 600px); height: clamp(145px, calc(34svh - var(--consent-height, 0px)), 360px); overflow: hidden; border-radius: 30px; isolation: isolate; }
-.leo-practice:not([data-phase="ready"]) .leo-board { height: clamp(320px, calc(43svh - var(--consent-height, 0px)), 450px); }
-.leo-countdown { width: min(100%, 600px); display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; }
-.leo-countdown [role="timer"] { font-size: 24px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
+.leo-board { position: relative; width: min(100%, 600px); height: clamp(220px, calc(46svh - var(--consent-height, 0px)), 460px); overflow: hidden; border-radius: 30px; isolation: isolate; }
+.leo-practice:not([data-phase="ready"]) .leo-board { height: clamp(360px, calc(64svh - var(--consent-height, 0px)), 620px); }
+.leo-countdown { width: min(100%, 600px); display: flex; align-items: center; gap: 14px; font-size: 14px; }
+.leo-countdown .leo-clock { flex: 1 1 auto; width: auto; }
+.leo-countdown [role="timer"] { min-width: 3.2ch; text-align: right; font-size: 20px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
 .leo-swarm { position: absolute; inset: 0; }
-.leo-swarm .leo-room { top: 88px; }
-.leo-swarm-hud { position: absolute; inset: 0 0 auto; height: 88px; padding: 0 18px 12px; background: #c5c6ed; color: #363454; z-index: 4; }
-.leo-swarm-stats, .leo-regulation-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; font-weight: 650; }
-.leo-sound { background: #fff9ed; border: 1px solid #8b89ad; color: #363454; border-radius: 99px; padding: 7px 12px; min-height: 40px; font: inherit; cursor: pointer; }
-.leo-regulation-label { margin: 5px 0; }
+.leo-swarm .leo-room { top: 60px; }
+.leo-swarm-hud { position: absolute; inset: 0 0 auto; height: 60px; padding: 6px 18px 0; background: #c5c6ed; color: #363454; z-index: 4; display: grid; gap: 6px; align-content: start; }
+.leo-swarm-stats { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.leo-sound { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: #ffffff66; color: #363454; cursor: pointer; }
+.leo-sound[aria-pressed="false"] { opacity: .7; }
 .leo-regulation { height: 10px; border-radius: 99px; overflow: hidden; background: #a2a4cc; }
 .leo-regulation > span { display: block; width: 100%; height: 100%; transform-origin: left; background: #4b692b; }
 .leo-swarm[data-mood="unsettled"] .leo-regulation > span { background: #8e601d; }

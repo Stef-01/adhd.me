@@ -75,8 +75,10 @@ export function LeoPractice() {
       {phase === "playing" || phase === "paused" ? <button onClick={() => changePhase(phase === "paused" ? "playing" : "paused")} aria-label={phase === "paused" ? "Resume game" : "Pause game"}>{phase === "paused" ? <Play size={22} weight="fill" /> : <Pause size={22} />}</button> : <button onClick={() => setBuzzOn(on => !on)} aria-label="Buzz sounds" aria-pressed={buzzOn}>{buzzOn ? <SpeakerHigh size={22} /> : <SpeakerSlash size={22} />}</button>}
     </div>
     <h1 id="leo-title" ref={title} tabIndex={-1}>{phase === "ready" ? "One tiny sound." : phase === "paused" ? "Take your time." : phase === "success" ? "Quiet at last." : phase === "failure" ? "Still wide awake." : "GET IT!"}</h1>
-    <div className="leo-countdown"><span>{still ? "At your own pace" : "Three waves"}</span><span role="timer" aria-label="Time remaining">{still ? "No timer" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span></div>
-    <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "ready" || still ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div>
+    <div className="leo-countdown">
+      <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "ready" || still ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div>
+      <span role="timer" aria-label="Time remaining">{still ? "No timer" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span>
+    </div>
     <div className="leo-board">
       {phase === "ready" ? <LeoBedroom /> : <LeoMosquito key={attempt} game={GAME} scene={scene} live={phase === "playing"} reducedMotion={still} elapsedMs={elapsed} progress={Math.min(1, elapsed / duration)} onResult={finish} outcome={result ? phase : undefined} initialAudio={roundAudio.current} onSoundChange={setBuzzOn} />}
       {phase === "paused" && <div className="leo-pause"><button onClick={() => changePhase("playing")}><Play size={22} weight="fill" /> Resume</button></div>}
@@ -86,7 +88,6 @@ export function LeoPractice() {
         <p>{still ? "Catch every mosquito, one wave at a time." : "Three waves, each bigger. Catch them before Leo can’t settle."}</p>
         <button className="leo-primary" onClick={start}><Play size={20} weight="fill" /> Play Leo’s moment</button>
       </>}
-      {phase === "playing" && <p className="leo-hint">{still ? "No rush." : "Every mosquito adds noise."}</p>}
       {phase === "paused" && <p>The clock and mosquitoes are paused.</p>}
       {result && <>
         <p role="status">{phase === "success" ? "Every mosquito caught. Leo can finally settle." : failureLine}</p>

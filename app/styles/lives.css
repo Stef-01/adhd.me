@@ -21,7 +21,7 @@
 /* The clock is the bar UNDER the shout (DESIGN-dwtd2.md): in flow, full width, draining left to right. */
 .lives-clock { position: static; height: 12px; width: 100%; max-width: 640px; border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--ink) 12%, transparent); }
 .lives-clock span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transform-origin: left center; transition: none; }
-.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
+.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: inherit; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 850; letter-spacing: -0.02em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
 .lives-scene { position: relative; width: calc(100% + 32px); max-width: none; margin-inline: -16px; flex: 1 1 auto; min-height: 300px; border-radius: 0; background: var(--route-soft); overflow: hidden; }
 @media (min-width: 768px) { .lives-scene { width: 100%; margin-inline: 0; border-radius: 20px 20px 0 0; } }
 .lives-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6%; background: color-mix(in srgb, var(--ink) 8%, transparent); pointer-events: none; }
@@ -353,3 +353,25 @@
   .lives-world .lives-sprite, .lives-world .lives-wing, .lives-world .lives-steam, .lives-world .lives-cursor, .lives-world .lives-ripples, .lives-world .lives-glow, .lives-world .lives-jar, .lives-ghost { animation: none !important; }
   .lives-world .lives-thing .lives-sprite { transition: none; }
 }
+
+/* ── The seamless round (design critique, 2026-09-10) ────────────────────────────────────────────
+   The round used to be a pale band (close, lives, the shout, the clock) sitting on a scene that began
+   at a hard edge. Now the world is the whole card, as Leo's room is: the chrome floats over the top
+   of it on a soft paper scrim, the pieces keep to the field below the chrome, and the result reads
+   on a pill over the drawing. Leo's own swarm keeps its room and HUD (it has no .lives-world). */
+.lives-run .lives-top { z-index: 6; }
+.lives-card.is-round:has(.lives-world) .lives-scene { position: absolute; inset: 0; width: 100%; max-width: none; margin: 0; border-radius: 0; min-height: 0; z-index: 0; }
+.lives-card.is-round:has(.lives-world)::before { content: ""; position: absolute; inset: 0 0 auto; height: 236px; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, color-mix(in srgb, var(--paper) 94%, transparent) 0%, color-mix(in srgb, var(--paper) 82%, transparent) 52%, color-mix(in srgb, var(--paper) 0%, transparent) 100%); }
+.lives-card.is-round:has(.lives-world) > :is(.lives-game-title, .lives-shout, .lives-clock, .play-tempt) { position: relative; z-index: 2; }
+.lives-card.is-round:has(.lives-world) .lives-clock { height: 8px; background: color-mix(in srgb, var(--ink) 14%, transparent); }
+.lives-card.is-round:has(.lives-world) .lives-world > .lives-field { top: 176px; }
+.lives-scene:has(.lives-world) .lives-result { z-index: 4; }
+.lives-scene:has(.lives-world) :is(.lives-result-line, .lives-delta) { margin: 0; padding: 8px 18px; border-radius: 999px; background: rgb(255 255 255 / 0.94); color: #172033; box-shadow: 0 4px 14px rgb(23 32 51 / 0.18); }
+
+/* Pieces read at a glance: the drawing is a quarter larger than its hit area, which stays the same. */
+.lives-world .lives-thing:not(.has-caption) .lives-sprite { width: 128%; margin: -14%; }
+.lives-world .lives-thing.has-caption .lives-sprite { width: 96%; }
+/* Leo's round in the Chaos Run: the card is his room's lavender, so the chrome and the room are one surface. */
+.lives-card.is-round[data-game="leo_mosquito"] { background: #c5c6ed; }
+.lives-card.is-round[data-game="leo_mosquito"] .lives-clock { height: 8px; background: #aaaed4; }
+.lives-card.is-round[data-game="leo_mosquito"] .lives-clock span { background: #514d7d; }
