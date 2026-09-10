@@ -62,7 +62,7 @@ export interface InteropView {
 }
 
 export const INTEROP_HEADLINE =
-  "Nothing has been exchanged with any outside system. No connection is configured, nothing has been sent, and nothing has been received — so every count on this page is zero because nothing was attempted, not because everything succeeded.";
+  "Nothing has been exchanged with any outside system. No connection is configured, nothing has been sent, and nothing has been received, so every count on this page is zero because nothing was attempted, not because everything succeeded.";
 
 /**
  * The headline once something HAS been exchanged.
@@ -73,7 +73,7 @@ export const INTEROP_HEADLINE =
  * renders is derived, never chosen by a template.
  */
 export const SOMETHING_EXCHANGED_HEADLINE =
-  "Something has been exchanged with an outside system. The counts below are of attempts this product made, not of deliveries an outside system confirmed — an exchange with no acknowledgement is recorded as unknown, and unknown is counted here the same as any other attempt.";
+  "Something has been exchanged with an outside system. The counts below are of attempts this product made, not of deliveries an outside system confirmed, an exchange with no acknowledgement is recorded as unknown, and unknown is counted here the same as any other attempt.";
 
 export const NOTHING_ATTEMPTED =
   "Zero because nothing was attempted. This is not a count of successful exchanges.";

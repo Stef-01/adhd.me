@@ -26,7 +26,7 @@ import { notDeclaredFrames, reasonsPatientsCanSee, sentencesPatientsSee } from "
 import { serverNow } from "@/lib/server-clock";
 import { ConsoleShell } from "../ui";
 
-export const metadata = { title: "Matching console — ADHD.ME" };
+export const metadata = { title: "Matching console, ADHD.ME" };
 export const dynamic = "force-dynamic";
 
 /** The worked example. Synthetic, and labelled as such on the page. */
@@ -65,7 +65,7 @@ export default async function MatchingConsolePage() {
           <p className="mc-empty">Nothing. The finder says so rather than presenting an order.</p>
         ) : (
           /* O126: the label, the weight, AND the phrase from the reader's own words that
-             reached it — the same `matched` the patient profile renders as "from your words".
+             reached it, the same `matched` the patient profile renders as "from your words".
              It is a cue the lexicon matched (every token stem-matched, in order) rather than a
              verbatim quote, which is why the patient side says "from your words" and this says
              "reached by", both true and neither claiming to quote somebody exactly. */
@@ -85,11 +85,11 @@ export default async function MatchingConsolePage() {
         <div className="mc-table-wrap">
           <table className="mc-table">
             <thead>
-              <tr><th>Clinician</th><th>Score</th><th>Declares</th><th>Matched</th><th>Missed — why they are not first</th></tr>
+              <tr><th>Clinician</th><th>Score</th><th>Declares</th><th>Matched</th><th>Missed, why they are not first</th></tr>
             </thead>
             <tbody>
               {/* Sorted the way the finder actually ranks: score, then capacity grade (O4,
-                  three grades since O56) — a console that sorted by total alone would show
+                  three grades since O56), a console that sorted by total alone would show
                   the opposite of the product on a capacity-broken tie. */}
               {[...audit.rows]
                 .sort((a, b) => b.total - a.total || CAPACITY_ORDER[a.capacity] - CAPACITY_ORDER[b.capacity])
@@ -113,7 +113,7 @@ export default async function MatchingConsolePage() {
       </section>
 
       {/* O117 (explaining the fit, Q4): the lane's only clinician-facing increment. Every other
-          view here is QUERY-driven — pick a sentence, watch the roster score against it — which
+          view here is QUERY-driven, pick a sentence, watch the roster score against it, which
           answers the staff question and not the doctor's. This one is built from DECLARATIONS,
           which is what makes it complete: what the finder can say about a GP is fixed by what
           they declared, so this enumerates all of it rather than sampling a typed query.
@@ -124,7 +124,7 @@ export default async function MatchingConsolePage() {
       <section className="mc-section" aria-labelledby="told-h">
         <h2 id="told-h">What patients are told about each GP</h2>
         <p className="mc-note">
-          Composed by the same functions the finder calls, never authored here — if the wording
+          Composed by the same functions the finder calls, never authored here, if the wording
           on the patient side changes, this changes with it. Read it as the doctor: every line
           below is something a patient can see, and the field beside it is the declaration that
           produced it. Nothing is inferred and nothing is a judgement about them.
@@ -154,7 +154,7 @@ export default async function MatchingConsolePage() {
             </ul>
 
             {/* The half a doctor is most likely to want to check. Both lines are facts about a
-                DECLARATION and never claims about ability (W193) — which is exactly the
+                DECLARATION and never claims about ability (W193), which is exactly the
                 distinction somebody reading their own listing will be looking for. */}
             <p className="mc-note">What a patient is told when they ask for something not declared</p>
             <ul className="mc-told">
@@ -180,7 +180,7 @@ export default async function MatchingConsolePage() {
               <p className="mc-note">
                 Over the reach corpus’s {tie.total} heard requests: how often the words actually
                 separated the top of the list. The unseparated count is the clarifier’s work
-                queue — requests the reader heard but the roster’s declarations could not order.
+                queue, requests the reader heard but the roster’s declarations could not order.
                 Synthetic sentences, real pipeline; the gate pins these numbers in both
                 directions, so this panel and CI cannot drift apart.
               </p>

@@ -116,7 +116,7 @@ export function BackgroundEditor({
       </section>
 
       <section aria-labelledby="be-missed">
-        <h3 className="mc-sub" id="be-missed">Not raised — add anything the interview missed</h3>
+        <h3 className="mc-sub" id="be-missed">Not raised, add anything the interview missed</h3>
         <p className="mc-note">
           A reader that only proposes can only be wrong by commission. These are the rest of the
           vocabulary, so a reviewer can correct in both directions.
@@ -137,7 +137,7 @@ export function BackgroundEditor({
         <h3 className="mc-sub" id="be-bio">The bio this produces</h3>
         <p className="mc-note">
           Assembled from the {accepted} accepted {accepted === 1 ? "facet" : "facets"} above. Not a
-          text field, and it must not become one — see <code>src/onboarding/background.ts</code>.
+          text field, and it must not become one, see <code>src/onboarding/background.ts</code>.
         </p>
         <p className="mc-bio" aria-live="polite">
           {bio || "Nothing accepted yet, so there is no profile. An empty one is honest; a padded one is a claim."}
@@ -167,7 +167,7 @@ export function BackgroundEditor({
 
         <p className="be-persist">
           Saving writes a DRAFT, never a profile. <code>SHIPPED_DIRECTORY_PROFILES</code> is empty
-          behind gate G6 and nothing here changes that — what is stored is which facets were
+          behind gate G6 and nothing here changes that, what is stored is which facets were
           accepted, by whom, and whether the clinician confirmed the read-back, which is the
           material that gate would be opened on. Every save is kept, so “who changed it and when”
           has an answer.

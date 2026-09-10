@@ -47,9 +47,9 @@ export type CapacityEmptyReason = "no_data" | "no_capacity" | "forecaster_unscor
 
 export const CAPACITY_EMPTY_COPY: Record<CapacityEmptyReason, string> = {
   no_data:
-    "Nothing has been recorded about how this practice's sessions ran, so there is nothing here to read. This is not a practice with no room — it is a diary this page has not been given.",
+    "Nothing has been recorded about how this practice's sessions ran, so there is nothing here to read. This is not a practice with no room, it is a diary this page has not been given.",
   no_capacity:
-    "Every session on record filled every slot it offered. There is no spare room in what has been recorded, which is a fact about the diary rather than a gap in it — the opposite of having nothing to show.",
+    "Every session on record filled every slot it offered. There is no spare room in what has been recorded, which is a fact about the diary rather than a gap in it, the opposite of having nothing to show.",
   forecaster_unscored:
     "The sessions are here and the ranges have not been checked against enough weeks to rest anything on yet. Counts are shown; nothing is offered about opening more slots until the ranges have a track record.",
 };

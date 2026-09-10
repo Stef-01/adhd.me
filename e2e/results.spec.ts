@@ -68,7 +68,7 @@ test("Q5: the chart has a legend, a caption and an accessible table equivalent",
 
 test("Q6: continuity is presented as a rule that held, not as a result", async ({ page }) => {
   await page.goto("/console/results");
-  await expect(page.getByText(/confirms the rule held — it is not a result/i)).toBeVisible({
+  await expect(page.getByText(/confirms the rule held, it is not a result/i)).toBeVisible({
     timeout: 30_000,
   });
 });

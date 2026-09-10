@@ -92,7 +92,7 @@ export default async function MatchingAuditPage() {
         <h2 id="handoff-h">Booking handoffs</h2>
         <p className="mc-note">
           Outbound intent this store has seen: every tap of a booking link routes through
-          /go and lands one row — clinician, surface, day, nothing about the person (W235).
+          /go and lands one row, clinician, surface, day, nothing about the person (W235).
           Completed bookings stay invisible by design: Healthengine has no conversion
           endpoint for a third party, so the handoff is the honest end of what this product
           can count. On the hosted demo this store resets with the serverless filesystem;
@@ -117,7 +117,7 @@ export default async function MatchingAuditPage() {
       <section className="mc-section" aria-labelledby="capacity-h">
         <h2 id="capacity-h">Capacity freshness</h2>
         <p className="mc-note">
-          Capacity is the one declared fact that goes wrong by itself — books close without
+          Capacity is the one declared fact that goes wrong by itself, books close without
           anybody editing a profile. A declaration stays fresh for {CAPACITY_FRESH_DAYS} days;
           after that the finder stops vouching for it at a tie (it sorts behind a confirmed one,
           never off the page). Each date below is when the declaration went on the record;
@@ -162,7 +162,7 @@ export default async function MatchingAuditPage() {
       <section className="mc-section" aria-labelledby="tx-h">
         <h2 id="tx-h">A 30-minute interview, read into facets</h2>
         <p className="mc-note">
-          Only the clinician’s own turns are read — the interviewer names every facet by asking
+          Only the clinician’s own turns are read, the interviewer names every facet by asking
           about it. Each proposal carries the sentence it came from, and a person accepts or
           rejects it. Nothing here writes a profile.
         </p>
@@ -188,7 +188,7 @@ export default async function MatchingAuditPage() {
         <h3 className="mc-sub">The same words, heard by the patient’s reader (W227)</h3>
         <p className="mc-note">
           The finder’s own lexicon re-reads the clinician’s turns. A facet both readers reach is
-          one patients genuinely ask for in their own words — confirm those first. A sentence
+          one patients genuinely ask for in their own words, confirm those first. A sentence
           neither reader hears is a candidate patient-side reach gap, caught at onboarding
           instead of in production.
         </p>
@@ -219,12 +219,12 @@ export default async function MatchingAuditPage() {
         <p className="mc-note">
           From real saved onboardings (the interview screen), not the worked example above: for
           each doctor, what the machine could not hear. The two lists grow different things —
-          the proposer’s cue list and the finder’s patient lexicon — which is why they are kept
+          the proposer’s cue list and the finder’s patient lexicon, which is why they are kept
           apart. Most gaps are correctly unreadable (logistics, small talk); the ones that are
           genuine expertise become cues, which is the O13 review moved to onboarding time.
         </p>
         {!reach.hasOnboardings ? (
-          <p className="mc-empty">No onboardings saved yet — the feed starts with the first saved interview.</p>
+          <p className="mc-empty">No onboardings saved yet, the feed starts with the first saved interview.</p>
         ) : reach.entries.length === 0 ? (
           <p className="mc-empty">Every saved onboarding was fully heard. Nothing is waiting for lexicon review.</p>
         ) : (
@@ -235,7 +235,7 @@ export default async function MatchingAuditPage() {
               </h3>
               {entry.patientSilent.length > 0 && (
                 <>
-                  <p className="mc-note">Silent to a patient’s search — candidate lexicon cues:</p>
+                  <p className="mc-note">Silent to a patient’s search, candidate lexicon cues:</p>
                   <ul className="mc-unread">
                     {entry.patientSilent.map((line) => <li key={line}>“{line}”</li>)}
                   </ul>

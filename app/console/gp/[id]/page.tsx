@@ -17,7 +17,7 @@ import { answerMatch, completeMatch, gpFeedback, saveCapacity, savePreferences, 
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "GP profile — ADHD.ME" };
+export const metadata = { title: "GP profile, ADHD.ME" };
 
 const SAVED_COPY: Record<string, string> = {
   profile: "Profile saved. The matcher reads it from the next request on.",

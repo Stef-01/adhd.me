@@ -144,7 +144,7 @@ export default async function ConsoleHome() {
           data-testid="complaint-banner"
           className="mt-4 block rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900 hover:bg-amber-100"
         >
-          {openComplaints} open complaint{openComplaints === 1 ? "" : "s"} — review now. Sending
+          {openComplaints} open complaint{openComplaints === 1 ? "" : "s"}, review now. Sending
           pauses are one click away in Admin ops.
         </Link>
       )}

@@ -107,7 +107,7 @@ export default async function AllocationConsolePage() {
         <p className="mc-query">“{PATIENT_WORDS}”</p>
         {/* O132: the allocator reads this through the finder's own reader, so the vocabulary
             below is the same vocabulary the patient-facing product would derive. Shown rather
-            than asserted — a wiring nobody can see is a wiring nobody checks. */}
+            than asserted, a wiring nobody can see is a wiring nobody checks. */}
         <h3 className="mc-sub">What those words reached, through the finder's reader</h3>
         <ul className="mc-asked">
           {derived.map((need) => (
@@ -119,7 +119,7 @@ export default async function AllocationConsolePage() {
         </ul>
         <p className="mc-note">
           Stated timing preference: {PATIENT.urgency.replace("-", " ")}. It is the patient&rsquo;s own
-          statement and is never read out of their words — a priority inferred from what somebody
+          statement and is never read out of their words, a priority inferred from what somebody
           wrote would be a clinical judgement this product does not make.
         </p>
       </section>

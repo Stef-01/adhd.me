@@ -29,7 +29,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "How full the sessions run — ADHD.ME" };
+export const metadata = { title: "How full the sessions run, ADHD.ME" };
 
 /**
  * The drift block's styling, as a constant.
@@ -167,7 +167,7 @@ export default async function CapacityPage() {
                 <thead>
                   <tr className="border-b border-stone-200 text-stone-600">
                     {/* Numeric columns right-aligned, header and cell together. `tabular-nums`
-                        below already asks for the digits to line up — it makes them equal-width —
+                        below already asks for the digits to line up, it makes them equal-width —
                         but left alignment lines up the FIRST digit, so the units place only
                         happens to agree while every value has the same digit count. "2" under
                         "26", or "100%" under "95%", and the column stops being scannable. Right
@@ -190,7 +190,7 @@ export default async function CapacityPage() {
                       <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.slotsOffered ?? "—"}</td>
                       <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.slotsFilled ?? "—"}</td>
                       {/* The label is composed in the view, where the no-rate branch is reachable
-                          by a fixture. An em dash, never a nought — W215's live defect. */}
+                          by a fixture. An em dash, never a nought, W215's live defect. */}
                       <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.utilisationLabel}</td>
                     </tr>
                   ))}
@@ -207,7 +207,7 @@ export default async function CapacityPage() {
             </h2>
             {/* Grouped by weekday, each day a disclosure. The seeded practice has seventy
                 sessions, and seventy two-line paragraphs in one flat list ran to twelve thousand
-                pixels on a phone — the drift verdict and the score above were the page's point
+                pixels on a phone, the drift verdict and the score above were the page's point
                 and they sat over a wall. A day is how a practice thinks about its diary, so a
                 reader opens the day they are deciding about. The sentences are the engine's
                 and are not shortened here: each states its own basis on purpose. */}

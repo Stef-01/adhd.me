@@ -16,7 +16,7 @@ import { toggleRegister } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Registers — ADHD.ME" };
+export const metadata = { title: "Registers, ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have permission to change registers.",
@@ -46,7 +46,7 @@ export default async function RegistersPage({
           <p className="text-stone-600">
             A register is a group of patients your practice already manages for ongoing care.
             ADHD.ME uses it to decide who to offer an appointment to when a session has room
-            — never to decide anything about their care.
+, never to decide anything about their care.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ export default async function RegistersPage({
                 </dl>
 
                 {/* W62: intervals reach the page only as ViewIntervals, which cannot be
-                    constructed without a complete provenance line — so an interval row
+                    constructed without a complete provenance line, so an interval row
                     without a visible source is not expressible here. */}
                 <ul className="mt-4 flex flex-col gap-3 border-t border-stone-100 pt-4">
                   {(() => {

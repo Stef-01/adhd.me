@@ -106,7 +106,7 @@ export default async function RoiPage({
               <dt className="text-sm text-stone-500">{term}</dt>
               {/* Every row here is a figure, and they sit flush against the same right edge:
                   1,240 / 8.4 / 8.4 / 3.2 / $x / $y. Without `tabular-nums` the proportional
-                  digits made that column ragged one row to the next — the same defect the four
+                  digits made that column ragged one row to the next, the same defect the four
                   data tables were fixed for on 2026-09-06, one rung out from a table. */}
               <dd className="text-sm font-medium tabular-nums text-stone-900">{value}</dd>
             </div>

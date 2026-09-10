@@ -40,7 +40,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Outcomes — ADHD.ME" };
+export const metadata = { title: "Outcomes, ADHD.ME" };
 
 const VERDICT_LABEL: Record<OutcomeVerdict, string> = {
   reached: "Recorded as getting there",
@@ -75,7 +75,7 @@ export default async function OutcomesPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Outcomes</h1>
           <p className="max-w-2xl text-stone-600">
             What the record says happened to the referrals your practice wrote. Every figure here
-            is a count of recorded events — nothing is inferred from a referral having gone quiet.
+            is a count of recorded events, nothing is inferred from a referral having gone quiet.
           </p>
         </div>
 
@@ -90,7 +90,7 @@ export default async function OutcomesPage() {
             </h2>
             <p>
               This is not the same as your practice having written no referrals. It means nothing
-              has been recorded here to follow — so there is no population to report on, rather
+              has been recorded here to follow, so there is no population to report on, rather
               than a population whose outcomes are all unknown.
             </p>
             <p>{DASHBOARD_BASIS}</p>
@@ -166,7 +166,7 @@ export default async function OutcomesPage() {
                 Each referral, and what the verdict rests on
               </h2>
               <p className="max-w-3xl text-sm text-stone-600">
-                In referral-record order. The order carries no meaning — ADHD.ME does not decide
+                In referral-record order. The order carries no meaning, ADHD.ME does not decide
                 which of these matters more.
               </p>
               <table className="w-full text-sm">
@@ -228,7 +228,7 @@ export default async function OutcomesPage() {
           <p data-testid="no-clinician-breakdown">
             There is no breakdown by clinician here, and there is not going to be one. What is
             being counted is largely whether somebody at the other end of a referral wrote
-            something down, which is not a fact about the GP who wrote it — a table of it by name
+            something down, which is not a fact about the GP who wrote it, a table of it by name
             would read as a performance measure of the thing they control least.
           </p>
           <p>

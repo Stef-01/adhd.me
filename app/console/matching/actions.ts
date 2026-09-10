@@ -31,7 +31,7 @@ export async function saveReview(
     return {
       status: "saved",
       message: row.readBackConfirmed
-        ? `Saved. ${accepted} accepted and read back — ready for the gate.`
+        ? `Saved. ${accepted} accepted and read back, ready for the gate.`
         : `Saved as a draft. ${accepted} accepted, not yet read back to the clinician.`,
     };
   } catch (error) {

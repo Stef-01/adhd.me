@@ -10,11 +10,11 @@
 export const RESULTS_COPY = {
   heading: "Your results",
   lede:
-    "What your practice got from ADHD.ME that it would not have got anyway — measured " +
+    "What your practice got from ADHD.ME that it would not have got anyway, measured " +
     "against a group of your own patients we never message.",
   syntheticNote:
     "Demonstration data. Every figure here comes from a simulated practice. The measurement " +
-    "is the real one — the same held-back group and the same arithmetic your practice will " +
+    "is the real one, the same held-back group and the same arithmetic your practice will " +
     "get. Only the patients are invented.",
 
   tiles: {
@@ -37,7 +37,7 @@ export const RESULTS_COPY = {
   comparison: {
     heading: "Why the smaller number is the real one",
     body: [
-      "Some appointments booked from a ADHD.ME message were going to happen anyway — our " +
+      "Some appointments booked from a ADHD.ME message were going to happen anyway, our " +
         "message changed when and how those patients booked, not whether they came.",
       "To separate the two, a share of your patients is picked at random and never messaged. " +
         "They are your comparison group. Whatever they do on their own is what the rest of " +
@@ -55,7 +55,7 @@ export const RESULTS_COPY = {
     attention: "Some checks need your attention.",
     continuityNote:
       "ADHD.ME only offers appointments with the patient's own GP, so every booking above " +
-      "kept that continuity. This confirms the rule held — it is not a result.",
+      "kept that continuity. This confirms the rule held, it is not a result.",
   },
 
   chart: {
@@ -64,7 +64,7 @@ export const RESULTS_COPY = {
       "Appointments attended per 100 patients. Both lines move with your normal demand; the " +
       "gap between them is what ADHD.ME added.",
     caption:
-      "Single weeks bounce around, and some come out negative. That is normal — one week is " +
+      "Single weeks bounce around, and some come out negative. That is normal, one week is " +
       "too small a sample to mean anything on its own. The whole-period total is the number " +
       "to plan around.",
     messagedLabel: "Messaged patients",
@@ -79,11 +79,11 @@ export const RESULTS_COPY = {
     heading: "How this is measured",
     body: [
       "A share of your patients is picked at random and never messaged. Everyone stays in the " +
-        "group they were assigned to, whatever happens next — including patients who opted out " +
+        "group they were assigned to, whatever happens next, including patients who opted out " +
         "or ignored every message. Taking those people out afterwards would tilt the answer in " +
         "our favour.",
       "We count attended appointments only. A booking that is cancelled or missed never counts.",
-      "This is an estimate, not an exact count — it compares two groups of people, so it moves " +
+      "This is an estimate, not an exact count, it compares two groups of people, so it moves " +
         "around. Week-by-week views are each measured over their own span, so the weeks may not " +
         "add to the total exactly.",
     ],

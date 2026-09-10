@@ -56,11 +56,11 @@ export function verifySession(value: string | undefined, nowMs: number = Date.no
   if (given.length !== expected.length || !timingSafeEqual(given, expected)) return null;
   const decoded = Buffer.from(payload, "base64url").toString("utf8");
   const sep = decoded.lastIndexOf("|");
-  if (sep <= 0) return null; // legacy or malformed payload — fail closed
+  if (sep <= 0) return null; // legacy or malformed payload, fail closed
   const email = decoded.slice(0, sep);
   const issuedAtMs = Number(decoded.slice(sep + 1));
   if (!Number.isFinite(issuedAtMs)) return null;
-  if (issuedAtMs > nowMs + FORWARD_SKEW_MS) return null; // future-dated — refuse
+  if (issuedAtMs > nowMs + FORWARD_SKEW_MS) return null; // future-dated, refuse
   if (nowMs - issuedAtMs > SESSION_MAX_AGE_MS) return null; // expired
   return email.includes("@") ? email : null;
 }

@@ -223,7 +223,7 @@ function MeetingAnchor({ instruction, onDone }: { instruction: string; onDone: (
       <p className="lives-kicker">Try it</p>
       <p className="play-line">{instruction}</p>
       <div className="lives-meeting" role="group" aria-label="The meeting">
-        <p className="lives-meeting-line">“So the third-quarter numbers are down, and what we need to decide today is—”</p>
+        <p className="lives-meeting-line">“So the third-quarter numbers are down, and what we need to decide today is, ”</p>
         {current && !returned && <button type="button" className="lives-thought" onClick={() => setParked((p) => [...p, current])}>{current} <span className="lives-thought-hint">→ LATER</span></button>}
         <div className="lives-later" aria-label="Later">
           <span className="play-note-title">Later</span>

@@ -55,7 +55,7 @@ export function LivesLab() {
             {CHARACTERS.map((c) => (
               <label key={c.id} className="lives-lab-row"><span>{c.name}</span>
                 <select value={resonance[c.id] ?? ""} onChange={(e) => setResonance((r) => ({ ...r, [c.id]: e.target.value as ResonanceSignal["response"] | "" }))}>
-                  <option value="">—</option><option value="this_is_me">this is me</option><option value="sometimes">sometimes</option><option value="not_me">not me</option>
+                  <option value="">, </option><option value="this_is_me">this is me</option><option value="sometimes">sometimes</option><option value="not_me">not me</option>
                 </select>
               </label>
             ))}

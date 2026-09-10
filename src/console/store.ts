@@ -45,8 +45,8 @@ export interface PracticeRecord {
   practice: Practice;
   rulesConfig: EligibilityConfig;
   rulesVersion: number;
-  clinicians: ClinicianRecord[]; // W41 — the roster W17 deferred
-  sessionConfig: SessionConfig; // W41 — W17's dials, now practice-editable
+  clinicians: ClinicianRecord[]; // W41, the roster W17 deferred
+  sessionConfig: SessionConfig; // W41, W17's dials, now practice-editable
   /**
    * W41: wizard steps the practice has explicitly saved. Seeded defaults validate
    * clean, so validity alone cannot prove a practice chose its settings — without
@@ -72,7 +72,7 @@ export const BILLING_PER_VISIT_MAX_AUD = 1000;
 export interface ConsoleState {
   practices: PracticeRecord[];
   auditEvents: AuditEvent[];
-  memberships: Membership[]; // W18 — whoever onboards becomes owner
+  memberships: Membership[]; // W18, whoever onboards becomes owner
   /** Monotonic practice id counter. Ids are generated, never a literal (W166). */
   nextPracticeSeq: number;
 }
@@ -192,7 +192,7 @@ export function resetConsole(): ConsoleState {
 export interface OnboardingInput {
   name: string;
   timezone: string;
-  holdoutPercent: number; // 0–50, UI-facing; stored as a 0..1 rate
+  holdoutPercent: number; // 0-50, UI-facing; stored as a 0..1 rate
 }
 
 export function validateOnboarding(input: OnboardingInput): FieldErrors {

@@ -95,7 +95,7 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
   {
     id: "forecast.sentence.singular",
     module: "src/capacity/forecast.ts",
-    when: "The same, asked about exactly one slot — a separate kind because the wording changes.",
+    when: "The same, asked about exactly one slot, a separate kind because the wording changes.",
     composed: true,
     mustContain: "Opening 1 slot on Thursday",
   },
@@ -219,7 +219,7 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
   {
     id: "attribution.withheld.no_arm_recorded",
     module: "src/capacity/attribution.ts",
-    when: "No sessions set aside for comparison — the state of every practice today.",
+    when: "No sessions set aside for comparison, the state of every practice today.",
     composed: false,
     mustContain: "credit the decision with everything else that changed",
   },
@@ -233,7 +233,7 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
   {
     id: "attribution.withheld.arms_overlap",
     module: "src/capacity/attribution.ts",
-    when: "A session appears on both sides — the failure that presents as a bigger sample.",
+    when: "A session appears on both sides, the failure that presents as a bigger sample.",
     composed: false,
     mustContain: "not a larger sample",
   },
@@ -247,7 +247,7 @@ export const CAPACITY_SENTENCE_KINDS: readonly SentenceKind[] = [
   {
     id: "coupling.off",
     module: "src/capacity/coupling.ts",
-    when: "Always, while W231's coupling ships off — which today is always.",
+    when: "Always, while W231's coupling ships off, which today is always.",
     composed: false,
     mustContain: "switched off",
   },

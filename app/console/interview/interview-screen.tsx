@@ -125,7 +125,7 @@ export function InterviewScreen() {
             />
           </label>
           <label className="iv-field">
-            <span>Interviewer — recorded beside every answer</span>
+            <span>Interviewer, recorded beside every answer</span>
             <input
               type="text"
               value={interviewer}
@@ -140,7 +140,7 @@ export function InterviewScreen() {
         <h2 id="iv-tx">The conversation</h2>
         <p className="mc-note">
           Type what is said, one line per turn. Start your own turns with{" "}
-          <code>i:</code> — only the doctor’s words are ever read. Text only, kept internal,
+          <code>i:</code>, only the doctor’s words are ever read. Text only, kept internal,
           never published.
         </p>
         <label className="iv-field iv-transcript">
@@ -156,7 +156,7 @@ export function InterviewScreen() {
 
       <section className="mc-section" aria-labelledby="iv-props">
         <h2 id="iv-props">
-          Heard so far{read.proposed.length > 0 ? ` — ${answered} of ${read.proposed.length} confirmed` : ""}
+          Heard so far{read.proposed.length > 0 ? `, ${answered} of ${read.proposed.length} confirmed` : ""}
         </h2>
         <p className="mc-note">
           Each proposal carries the sentence it came from and the interview’s own question.
@@ -213,7 +213,7 @@ export function InterviewScreen() {
           <>
             <h3 className="mc-sub">Languages mentioned</h3>
             <p className="mc-note">
-              Asked directly in the structured questions — the read-back below is the wording.
+              Asked directly in the structured questions, the read-back below is the wording.
             </p>
             <ul className="mc-unread">
               {languageProposals.map((proposal) => (
@@ -226,10 +226,10 @@ export function InterviewScreen() {
 
       <section className="mc-section" aria-labelledby="iv-sweep">
         <h2 id="iv-sweep">
-          Still to ask{gaps.length > 0 ? ` — ${gapsToAsk} of ${gaps.length}` : ""}
+          Still to ask{gaps.length > 0 ? `, ${gapsToAsk} of ${gaps.length}` : ""}
         </h2>
         <p className="mc-note">
-          The checklist the conversation has not covered yet — it shrinks as the doctor talks.
+          The checklist the conversation has not covered yet, it shrinks as the doctor talks.
           Ask what is left from here, same three answers; a question never asked is recorded
           nowhere.
         </p>
@@ -289,7 +289,7 @@ export function InterviewScreen() {
               </>
             )}
             <p className="mc-note">
-              Kept rather than discarded — this is the lexicon’s to-do list, written by the
+              Kept rather than discarded, this is the lexicon’s to-do list, written by the
               people it is about.
             </p>
           </details>
@@ -323,7 +323,7 @@ export function InterviewScreen() {
           )}
         </div>
         <p className="be-persist">
-          Saving writes the same draft record the review editor writes — which answers were
+          Saving writes the same draft record the review editor writes, which answers were
           recorded, by whom, and whether they were read back. Never a profile:{" "}
           <code>SHIPPED_DIRECTORY_PROFILES</code> stays empty behind gate G6.
         </p>

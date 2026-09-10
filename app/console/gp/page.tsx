@@ -11,7 +11,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "GP profiles — ADHD.ME" };
+export const metadata = { title: "GP profiles, ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   not_found: "That profile does not exist.",

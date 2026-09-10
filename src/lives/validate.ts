@@ -24,7 +24,7 @@ export function validateContent(games: readonly GameDefinition[], strategies: re
     if (g.config.kind !== g.engine) add(`game/${g.id}`, `config ${g.config.kind} does not match engine ${g.engine}`);
     // The founder's multi-wave Leo challenge is a longer round; other microgames keep their bounds.
     const maxActiveMs = g.id === "leo_mosquito" ? 22000 : ACTIVE_MS.max;
-    if (g.activeMs < ACTIVE_MS.min || g.activeMs > maxActiveMs) add(`game/${g.id}`, `active ${g.activeMs}ms outside ${ACTIVE_MS.min}–${maxActiveMs}`);
+    if (g.activeMs < ACTIVE_MS.min || g.activeMs > maxActiveMs) add(`game/${g.id}`, `active ${g.activeMs}ms outside ${ACTIVE_MS.min}, ${maxActiveMs}`);
     if (g.instruction.trim().split(/\s+/).length > 4) add(`game/${g.id}`, "instruction longer than four words");
     if (g.character === "random" && g.learningLinks.length) add(`game/${g.id}`, "a fun game carries no learning");
     for (const link of g.learningLinks) if (!strategyIds.has(link)) add(`game/${g.id}`, `learning link ${link} is not a strategy`);
@@ -38,7 +38,7 @@ export function validateContent(games: readonly GameDefinition[], strategies: re
   }
   for (const m of modules) {
     if (m.blocks.length === 0) add(`module/${m.id}`, "no blocks");
-    if (m.estimatedMinutes < MODULE_MINUTES.min || m.estimatedMinutes > MODULE_MINUTES.max) add(`module/${m.id}`, `estimated ${m.estimatedMinutes} min outside ${MODULE_MINUTES.min}–${MODULE_MINUTES.max}`);
+    if (m.estimatedMinutes < MODULE_MINUTES.min || m.estimatedMinutes > MODULE_MINUTES.max) add(`module/${m.id}`, `estimated ${m.estimatedMinutes} min outside ${MODULE_MINUTES.min}, ${MODULE_MINUTES.max}`);
     if (!m.blocks.some((b) => b.type === "action_plan")) add(`module/${m.id}`, "no action plan: the person must leave with one action (§70)");
     for (const d of m.domains) if (!LEARNING_DOMAINS.includes(d)) add(`module/${m.id}`, `unknown domain ${d}`);
     for (const b of m.blocks) {

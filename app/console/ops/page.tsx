@@ -52,7 +52,7 @@ export default async function OpsPage({
       <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
         <h2 className="mb-1 font-medium text-stone-900">Sending status</h2>
         <p className={`text-sm ${sending ? "text-emerald-700" : "text-red-700"}`} data-testid="sending-status">
-          {sending ? "Sending is active" : killed ? "Sending halted — kill switch engaged" : "Sending paused for this practice"}
+          {sending ? "Sending is active" : killed ? "Sending halted, kill switch engaged" : "Sending paused for this practice"}
         </p>
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">

@@ -37,7 +37,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Clinical content sign-off — ADHD.ME" };
+export const metadata = { title: "Clinical content sign-off, ADHD.ME" };
 
 export default async function PathwaysPage() {
   const { email, record } = await requirePractice();
@@ -114,7 +114,7 @@ export default async function PathwaysPage() {
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h2 className="font-medium">
-                    {row.version.pathwayId} — version {row.version.ordinal}
+                    {row.version.pathwayId}, version {row.version.ordinal}
                   </h2>
                   <span
                     className={`rounded px-2 py-0.5 text-xs ${
@@ -170,7 +170,7 @@ export default async function PathwaysPage() {
 
         <p data-testid="pathways-note" className="text-sm text-stone-500">
           The rules a pathway contains are not shown here. This page is about who checked the
-          content and when, not about the content itself — and unreviewed clinical material
+          content and when, not about the content itself, and unreviewed clinical material
           does not belong in front of a clinician with the product&rsquo;s name on it.
         </p>
       </div>

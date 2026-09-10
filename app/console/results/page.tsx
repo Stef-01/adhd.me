@@ -101,7 +101,7 @@ export default async function ResultsPage({
           detail={
             r.extraPerWeek === null
               ? `Over ${r.weeks} weeks`
-              : `Over ${r.weeks} weeks — about ${r.extraPerWeek} a week`
+              : `Over ${r.weeks} weeks, about ${r.extraPerWeek} a week`
           }
         />
         <Tile

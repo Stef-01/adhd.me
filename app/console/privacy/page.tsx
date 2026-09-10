@@ -70,7 +70,7 @@ export default async function PrivacyPage({
               Export for {exported.patientId}
               {exported.suppressed && (
                 <span className="ml-2 rounded bg-stone-100 px-2 py-0.5 text-xs text-stone-500">
-                  suppressed — will never be contacted
+                  suppressed, will never be contacted
                 </span>
               )}
             </h3>
@@ -125,13 +125,13 @@ export default async function PrivacyPage({
             Apply retention now
           </button>
           <span className="text-xs text-stone-500" data-testid="retention-note">
-            The policy above is not applied on a schedule yet — nothing runs it automatically,
+            The policy above is not applied on a schedule yet, nothing runs it automatically,
             so it is applied when you press this. Scheduled enforcement lands with real
             persistence.
           </span>
         </form>
         {privacy.deletions.length === 0 ? (
-          <p className="mt-3 text-sm text-stone-500">No deletion has been recorded yet — the retention policy has not removed anything.</p>
+          <p className="mt-3 text-sm text-stone-500">No deletion has been recorded yet, the retention policy has not removed anything.</p>
         ) : (
           <ul className="mt-3 divide-y divide-stone-100 text-sm">
             {privacy.deletions.map((d) => (

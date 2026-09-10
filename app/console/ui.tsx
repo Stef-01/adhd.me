@@ -128,7 +128,7 @@ export function ErrorNote({ show }: { show: boolean }) {
   if (!show) return null;
   return (
     <p className="console-error-note" role="alert">
-      Some values couldn't be saved — please check them and try again.
+      Some values couldn't be saved, please check them and try again.
     </p>
   );
 }

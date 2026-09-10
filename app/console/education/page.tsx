@@ -40,7 +40,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Education — ADHD.ME" };
+export const metadata = { title: "Education, ADHD.ME" };
 
 export default async function EducationPage() {
   const { email, record } = await requirePractice();
@@ -140,7 +140,7 @@ export default async function EducationPage() {
               <ul className="mt-2 flex flex-col gap-1">
                 {withheld.map((w) => (
                   <li key={w.itemId} data-testid={`withheld-${w.itemId}`}>
-                    <span className="font-medium">{w.itemId}</span> — {w.reason}
+                    <span className="font-medium">{w.itemId}</span>, {w.reason}
                   </li>
                 ))}
               </ul>
@@ -150,7 +150,7 @@ export default async function EducationPage() {
           {/* Both blocks below describe a list, so neither is rendered when there is no list.
               W154 already drew this line once, for the case where something WAS held back:
               "only claimed when it is true". The same rule reaches the empty library, which is
-              the state this product actually ships in — with nothing shown, the basis described
+              the state this product actually ships in, with nothing shown, the basis described
               the order of nothing ("Ordered by item id … Everything relevant is listed") and
               `libraryAllShown` claimed "Every item … is above, in full" with nothing above it,
               directly under a paragraph saying the library is empty. The empty paragraph says
@@ -223,7 +223,7 @@ export default async function EducationPage() {
                   </div>
                   <p className="mt-1 text-stone-600">
                     {entry.kind === "corrected"
-                      ? `Correction of ${entry.correctsEntryId} — ${entry.note ?? ""}`
+                      ? `Correction of ${entry.correctsEntryId}, ${entry.note ?? ""}`
                       : entry.kind.replace(/_/g, " ")}
                     {" · "}
                     {entry.sourceRef}

@@ -30,7 +30,7 @@ const TYPE_LABELS: Record<string, string> = {
 // Errors arrive as a KEY in the query string and are mapped to copy here, so a
 // crafted link can never render arbitrary text inside the console.
 const SETUP_ERROR_COPY: Record<string, string> = {
-  form: "That step couldn't be saved — please check the values and try again.",
+  form: "That step couldn't be saved, please check the values and try again.",
   name: "Enter a practice name of at least two characters.",
   timezone: "Use an IANA timezone like Australia/Sydney.",
   holdoutPercent: "Holdout must be between 0 and 50 percent.",
@@ -108,7 +108,7 @@ export default async function SetupStepPage({
       <div className="mx-auto max-w-2xl">
         <h1 className="text-2xl font-semibold tracking-tight">Set up your practice</h1>
         <p className="mt-2 text-sm text-stone-500">
-          Step {stepIndex(step) + 1} of {SETUP_STEPS.length} — {definition.blurb}
+          Step {stepIndex(step) + 1} of {SETUP_STEPS.length}, {definition.blurb}
         </p>
         <div className="mt-6">
           <ProgressRail current={step} />
@@ -362,7 +362,7 @@ export default async function SetupStepPage({
                     ],
                     [
                       "Offering window",
-                      `${record!.sessionConfig.schedulingWindow.startHour}:00–${record!.sessionConfig.schedulingWindow.endHour}:00, ` +
+                      `${record!.sessionConfig.schedulingWindow.startHour}:00, ${record!.sessionConfig.schedulingWindow.endHour}:00, ` +
                         `${Math.round(record!.sessionConfig.protectedCapacityFraction * 100)}% protected`,
                       readiness.sessions,
                     ],

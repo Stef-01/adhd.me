@@ -38,7 +38,7 @@ import { withdrawOwnCredential } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Your credentials — ADHD.ME" };
+export const metadata = { title: "Your credentials, ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have access to that.",
@@ -95,7 +95,7 @@ export default async function CredentialsPage({
           <h1 className="text-2xl font-semibold tracking-tight">Your credentials</h1>
           <p className="text-stone-600">
             What the practice holds about your qualifications, and where each one is up to.
-            This is a record of what was checked and by whom — it does not describe how you
+            This is a record of what was checked and by whom, it does not describe how you
             work or what you are good at.
           </p>
         </div>
@@ -217,7 +217,7 @@ export default async function CredentialsPage({
                           </label>
                           {/* O174: 44px hit floor (O14). This measured 236x38 and had never been
                               swept: the touch sweep's `credentials` fixture was returning 500, so
-                              the page rendered its unlinked refusal — 3 controls where 11 exist —
+                              the page rendered its unlinked refusal, 3 controls where 11 exist —
                               and this input was not among them. */}
                           <input
                             id={`reason-${credential.credentialId}`}
@@ -240,7 +240,7 @@ export default async function CredentialsPage({
 
         <p data-testid="credentials-note" className="text-sm text-stone-500">
           You can withdraw a credential you no longer stand behind. You cannot confirm your own
-          — someone else at the practice has to check it, which is what makes it worth
+, someone else at the practice has to check it, which is what makes it worth
           anything. The documents a reviewer looked at are not shown here.
         </p>
       </div>

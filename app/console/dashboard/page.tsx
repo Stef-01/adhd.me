@@ -48,7 +48,7 @@ export default async function DashboardPage() {
         <StatTile
           label="Incremental attended / 1,000"
           value={cf.claimed ? attr.incrementalPer1000!.toFixed(1) : "—"}
-          detail={cf.claimed ? "North star — invite-arm rate above holdout" : "Withheld — see below"}
+          detail={cf.claimed ? "North star, invite-arm rate above holdout" : "Withheld, see below"}
         />
         <StatTile
           label="Incremental attended"
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
       )}
 
       <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="mb-4 font-medium text-stone-900">Weekly attended per 1,000 — by arm</h2>
+        <h2 className="mb-4 font-medium text-stone-900">Weekly attended per 1,000, by arm</h2>
         <WeeklyArmsChart weekly={data.weekly} />
       </section>
 
@@ -121,7 +121,7 @@ export default async function DashboardPage() {
       </PhoneFold>
 
       <p className="mt-6 text-xs text-stone-500">
-        Attribution definitions: docs/ATTRIBUTION.md {attr.version} — intention-to-treat; no claim
+        Attribution definitions: docs/ATTRIBUTION.md {attr.version}, intention-to-treat; no claim
         without a holdout arm. <Link href="/console" className="underline">Back to console</Link>
       </p>
     </ConsoleShell>

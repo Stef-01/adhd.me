@@ -54,7 +54,7 @@ test("the doctor talks, the machine proposes, the interviewer records the answer
   const save = page.getByRole("button", { name: "Save this interview" });
   await expect(save).toBeDisabled();
   await page.getByLabel("Doctor’s name, as patients will see it").fill("Dr Interview Test");
-  await page.getByLabel("Interviewer — recorded beside every answer").fill("Console interviewer");
+  await page.getByLabel("Interviewer, recorded beside every answer").fill("Console interviewer");
   await save.click();
   await expect(page.getByText(/Saved as a draft\. 1 accepted/)).toBeVisible();
 });
@@ -84,7 +84,7 @@ test("the checklist shrinks as the doctor talks, and a gap answer reaches the sa
   // ...and lands in the same saved draft as a transcript answer.
   await page.locator(".iv-proposal", { hasText: "Titration is mine" }).getByRole("button", { name: "Often" }).click();
   await page.getByLabel("Doctor’s name, as patients will see it").fill("Dr Sweep Test");
-  await page.getByLabel("Interviewer — recorded beside every answer").fill("Console interviewer");
+  await page.getByLabel("Interviewer, recorded beside every answer").fill("Console interviewer");
   await page.getByRole("button", { name: "Save this interview" }).click();
   await expect(page.getByText(/Saved as a draft\. 2 accepted/)).toBeVisible();
 });
@@ -98,7 +98,7 @@ test("a saved interview's unheard sentences land in the reach-gap feed (O38)", a
   );
   await page.locator(".iv-proposal", { hasText: "Titration is mine" }).getByRole("button", { name: "Often" }).click();
   await page.getByLabel("Doctor’s name, as patients will see it").fill("Dr Reach Feed");
-  await page.getByLabel("Interviewer — recorded beside every answer").fill("Console interviewer");
+  await page.getByLabel("Interviewer, recorded beside every answer").fill("Console interviewer");
   await page.getByRole("button", { name: "Save this interview" }).click();
   await expect(page.getByText(/Saved as a draft/)).toBeVisible();
 

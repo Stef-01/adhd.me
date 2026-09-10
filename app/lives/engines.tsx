@@ -248,7 +248,7 @@ function HoldRelease({ scene, live, reducedMotion, progress, onResult }: EngineP
   }
   return (
     <div className="lives-field lives-hold" aria-label="The conversation">
-      <p className="lives-cue" aria-live="polite">{cued ? `${plan.releaseAt.charAt(0).toUpperCase()}${plan.releaseAt.slice(1)} — let go` : holding ? "Holding…" : plan.verb}</p>
+      <p className="lives-cue" aria-live="polite">{cued ? `${plan.releaseAt.charAt(0).toUpperCase()}${plan.releaseAt.slice(1)}, let go` : holding ? "Holding…" : plan.verb}</p>
       <button
         type="button"
         className={`lives-hold-button${holding ? " is-holding" : ""}${cued ? " is-cued" : ""}`}

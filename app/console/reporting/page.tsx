@@ -37,7 +37,7 @@ import { serverNow } from "@/lib/server-clock";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Reporting — ADHD.ME" };
+export const metadata = { title: "Reporting, ADHD.ME" };
 
 /**
  * The window this page reports on.
@@ -151,7 +151,7 @@ export default async function ReportingPage() {
           <p className="mt-2 text-sm text-stone-600" data-testid="coverage-not-computed">
             {`Not produced by this product yet: ${report.coverage.notComputed
               .map((k) => KIND_LABELS[k])
-              .join(", ")}. Nothing was looked for, so this says nothing about your practice — it is a gap in ADHD.ME, not in your record.`}
+              .join(", ")}. Nothing was looked for, so this says nothing about your practice, it is a gap in ADHD.ME, not in your record.`}
           </p>
         )}
       </section>
