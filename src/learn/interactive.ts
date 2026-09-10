@@ -32,7 +32,8 @@ export const CHARACTER_BIOS: Readonly<Record<Character, { name: string; who: str
 export type Mood = "neutral" | "pleased" | "anxious" | "frustrated" | "embarrassed" | "overwhelmed" | "surprised" | "engaged" | "thinking" | "relieved";
 
 /** A simple environmental object beside the character. Drawn in `app/characters.tsx`. */
-export type Prop = "desk" | "phone" | "bill" | "ball" | "lecture" | "bed" | "kitchen" | "calendar" | "door" | "none";
+/** The places a scene can be (docs/design/games-to-leo-standard.md §3): the nine original props and the six rooms the run table asks for. */
+export type Prop = "desk" | "phone" | "bill" | "ball" | "lecture" | "bed" | "kitchen" | "calendar" | "door" | "living" | "meeting" | "crossing" | "shop" | "street" | "study" | "none";
 
 export interface Option {
   readonly id: string;

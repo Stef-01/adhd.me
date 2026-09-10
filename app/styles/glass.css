@@ -1,10 +1,11 @@
-/* Liquid glass (founder, 2026-09-08: "implement this for all UI", after iyinchao/liquid-glass-studio, MIT).
-   The studio renders Apple's Liquid Glass in WebGL — refraction, dispersion, Fresnel edge, glare,
-   superellipse shapes, Gaussian blur — over one canvas. A DOM cannot be sampled as a texture, so the
-   same look is carried here as a surface: a Gaussian-blurred, saturated backdrop; a Fresnel-like edge
-   (a bright inner rim fading to nothing); a glare band at a fixed angle; and refraction through an SVG
-   displacement map where the engine supports it (Chromium), degrading to the blurred surface elsewhere.
-   Ink stays ink on it: every glass surface is light, so text contrast holds. */
+/* Liquid glass, in the games section only (founder, 2026-09-10: "apple liquid design over all of the
+   UI on just the games section so all of the colored game modules are interactable droplet liquid
+   glass elements and will have that effect when you touch over them, but keep the finder with no
+   liquid glass, that section just plain"). Glass exists inside [data-liquid] (the Games pane, the
+   Lives home, the Chaos Run, the bean runs, Leo) and nowhere else: the finder, the profile, the
+   life pages and the console are plain paper. The WebGL layer (app/glass/liquid-glass.tsx) runs
+   only while a [data-liquid] scope is on the page and draws only the game surfaces
+   (GLASS_SELECTOR in app/glass/studio/params.ts). The 2026-09-08 "all UI" version is in history. */
 :root {
   --glass-fill: color-mix(in srgb, var(--paper) 58%, transparent);
   --glass-fill-strong: color-mix(in srgb, var(--paper) 78%, transparent);
@@ -12,124 +13,77 @@
   --glass-edge: color-mix(in srgb, var(--ink) 14%, transparent);
   --glass-shadow: 0 10px 30px color-mix(in srgb, var(--ink) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
   --glass-blur: 18px;
-}
-.glass, .platform-shell .app-tabs, .platform-shell .settings-trigger, .play-hut, .play-x, .play-choice, .play-bean-label, .play-fall, .play-note, .play-chip-big, .play-layer, .play-bean-button, .play-hold-button, .life-card, .learn-stack button, .learn-card {
-  background: var(--glass-fill);
-  border: 1px solid var(--glass-edge);
-  box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 color-mix(in srgb, var(--ink) 5%, transparent), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-  backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-}
-/* The glare: one bright band at a fixed angle, the way the studio draws it. */
-/* The glare needs a positioned box; these are not positioned by their own rules. The header, the tab bar and the sheet keep the position their own rules give them. */
-.glass, .play-hut, .play-x, .play-choice, .life-card, .learn-stack button { position: relative; }
-.glass::before, .play-hut::before, .play-x::before, .play-choice::before, .life-card::before, .learn-stack button::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: linear-gradient(115deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.12) 28%, rgba(255, 255, 255, 0) 46%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.22) 100%);
-}
-.play-choice, .play-bean-label, .play-fall, .play-hold-button, .play-bean-button, .play-layer { background: var(--glass-fill-strong); }
-.play-choice[aria-pressed="true"], .play-bean-button[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 22%, var(--paper) 60%); border-color: var(--accent); }
-/* The header holds the tab bar, and a backdrop filter on an ancestor would become the containing block of the bar's fixed position (it would pin to the header, not the viewport). So the header is glass by fill and rim only, no filter. */
-/* The sheet keeps its own box (its handle is measured to a 48px floor), so glass by fill and filter only, no border. */
-.sheet { background: var(--glass-fill-strong); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5); backdrop-filter: blur(var(--glass-blur)) saturate(1.5); }
-.platform-header { background: var(--glass-fill-strong); border-bottom: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-rim); }
-.platform-shell .settings-trigger { background: var(--glass-fill); }
-.life-card { background: var(--glass-fill); }
-
-/* ── All UI (founder, 2026-09-08, repeated: "implement this for all UI") ──────────────────────────
-   The studio's parameters, as tokens, so a surface is tuned in one place the way the studio's
-   panel tunes one canvas: blur, refraction (the SVG map's scale), dispersion (the coloured split
-   on the rim — red one way, blue the other), the Fresnel edge (a bright ring that fades inward),
-   the glare angle, and the superellipse exponent for the shape where the engine can draw one.
-   Two tiers, because a backdrop filter costs a compositing layer and a results list has forty
-   rows: FULL glass (filter + everything) for chrome and small controls; LITE glass (fill, rim,
-   dispersion, Fresnel, glare — no filter) for cards, rows and panels. Same look at rest; only the
-   blur behind differs, and nothing sits behind a card but paper. */
-:root {
-  --lg-dispersion-warm: rgba(255, 128, 96, 0.16);
-  --lg-dispersion-cool: rgba(96, 140, 255, 0.16);
+  --lg-dispersion-warm: rgba(255, 128, 96, 0.18);
+  --lg-dispersion-cool: rgba(96, 140, 255, 0.2);
   --lg-fresnel: rgba(255, 255, 255, 0.55);
   --lg-glare-angle: 115deg;
   --lg-shape: 1.6;
 }
-/* LITE tier: cards, rows, panels, fields. */
-.clinician-row, .platform-shell .patient-v2 .clinician-row.is-lead, .results-empty, .me-facts li, .me-switches,
-.support-step, .profession-card, .strategy-card, .care-map-detail, .safety-screen, .sim-list li, .perspective-thought,
-.console-workspace-panel, .platform-shell .learn-option, .learning-feature, .platform-shell .finder-getting-started, .nearby-map,
-.reflect-field textarea, .manual-text, .brief textarea, .console-main textarea, .cv2-condition-list label {
-  background: var(--glass-fill);
-  border-color: var(--glass-edge);
-  box-shadow:
-    inset 0 1px 0 var(--glass-rim),
-    inset 1px 1px 0 var(--lg-dispersion-warm),
-    inset -1px -1px 0 var(--lg-dispersion-cool),
-    inset 0 0 0 1px color-mix(in srgb, var(--lg-fresnel) 40%, transparent),
-    var(--glass-shadow);
-}
-/* FULL tier: chips, pills, small buttons, floating dialogs. */
-.filter-chip, .filter-clear, .me-place input, .nearby-zoom-button, .speech-retry, .consent-dialog,
-.adjust-tab, .manual-chip, .layer-pill, .learn-map-link, .console-select,
-.platform-shell .learn-chip, .platform-shell :is(.learn-secondary, .learn-back), .learn-secondary {
+
+/* Plain everywhere else: the chrome keeps a solid ground of its own. */
+.platform-header { background: var(--paper); border-bottom: 1px solid var(--line); }
+.profile-facts { background: transparent; }
+
+/* ── Glass controls in the games section ───────────────────────────────────────────────────────── */
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) {
+  position: relative;
   background: var(--glass-fill-strong);
   border-color: var(--glass-edge);
-  box-shadow:
-    inset 0 1px 0 var(--glass-rim),
-    inset 1px 1px 0 var(--lg-dispersion-warm),
-    inset -1px -1px 0 var(--lg-dispersion-cool),
-    var(--glass-shadow);
+  box-shadow: inset 0 1px 0 var(--glass-rim), inset 1px 1px 0 var(--lg-dispersion-warm), inset -1px -1px 0 var(--lg-dispersion-cool), var(--glass-shadow);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
   backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
 }
-/* Dispersion and Fresnel on the surfaces glass already had. */
-.play-hut, .play-x, .play-choice, .life-card, .learn-stack button, .learn-card, .platform-shell .app-tabs {
-  box-shadow:
-    inset 0 1px 0 var(--glass-rim),
-    inset 1px 1px 0 var(--lg-dispersion-warm),
-    inset -1px -1px 0 var(--lg-dispersion-cool),
-    inset 0 -1px 0 color-mix(in srgb, var(--ink) 5%, transparent),
-    var(--glass-shadow);
-}
-/* Tinted glass: the accent surfaces keep their colour and take the rim and the glare, the way
-   the studio tints the glass rather than painting over it. */
-.learn-primary, .platform-shell .learn-primary, .primary-button:not(:disabled), .play-tempt.is-go, .filter-chip[aria-pressed="true"], .platform-shell .learn-chip[aria-pressed="true"] {
-  position: relative;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.12), var(--glass-shadow);
-}
-/* The glare band on every glass surface that can hold a pseudo-element. Fields and rows that
-   hold their own children keep it too; it is pointer-inert and paints above the fill only. */
-.filter-chip, .filter-clear, .adjust-tab, .manual-chip, .layer-pill, .learn-map-link, .support-step, .profession-card, .strategy-card,
-.clinician-row, .results-empty, .consent-dialog, .platform-shell .learn-chip, .platform-shell .learn-option, .learn-card, .learn-secondary,
-.platform-shell :is(.learn-secondary, .learn-back), .learn-primary, .primary-button, .play-tempt.is-go { position: relative; }
-.filter-chip::before, .filter-clear::before, .adjust-tab::before, .manual-chip::before, .layer-pill::before, .learn-map-link::before,
-.support-step::before, .profession-card::before, .strategy-card::before, .clinician-row::before, .results-empty::before, .consent-dialog::before,
-.platform-shell .learn-chip::before, .platform-shell .learn-option::before, .learn-card::before, .learn-secondary::before,
-.platform-shell :is(.learn-secondary, .learn-back)::before, .learn-primary::before, .primary-button::before, .play-tempt.is-go::before {
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 28%, rgba(255, 255, 255, 0) 46%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.18) 100%);
   transition: opacity var(--dur-tap, 120ms) var(--ease-ui, ease);
 }
-/* Press: the glare dims as the surface is pushed in, the one physical cue the studio's glass gives. */
-:is(.filter-chip, .filter-clear, .adjust-tab, .manual-chip, .layer-pill, .play-choice, .learn-secondary, .learn-primary, .primary-button, .play-tempt):active::before { opacity: 0.35; }
-/* Superellipse corners where the engine draws them (Chromium 139+); the radius alone elsewhere. */
-@supports (corner-shape: superellipse(2)) {
-  .play-hut, .play-x, .play-choice, .play-card, .life-card, .learn-card, .support-step, .profession-card, .strategy-card, .clinician-row, .results-empty, .consent-dialog,
-  .filter-chip, .adjust-tab, .manual-chip, .learn-secondary, .learn-primary, .primary-button, .platform-shell .learn-option, .sheet { corner-shape: superellipse(var(--lg-shape)); }
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound):active::before { opacity: 0.35; }
+[data-liquid] .play-tempt.is-go { position: relative; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.12), var(--glass-shadow); }
+
+/* ── The droplets: every coloured game tile, Leo's card and the Play card ──────────────────────────
+   A tile keeps its colour and becomes a lens: a Fresnel rim, the red and blue split on its edge, a
+   specular highlight that follows the finger across it (--lg-x, --lg-y, set by the tile's pointer
+   handlers in app/learn-panes.tsx), and a spring on press that overshoots like a drop. */
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature) {
+  --lg-x: 72%; --lg-y: 18%;
+  position: relative; isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 1.5px 1.5px 0 var(--lg-dispersion-warm),
+    inset -1.5px -1.5px 0 var(--lg-dispersion-cool),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(23, 32, 51, 0.06),
+    0 18px 32px -20px color-mix(in srgb, var(--cover, #172033) 85%, #000);
 }
-/* The step number and the profile facts keep their own boxes: the facts are transparent by design (the profile test pins it), and the number is a pill on stone. */
-.profile-facts { background: transparent; }
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(46% 38% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0) 72%),
+    linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, 0) 74%, rgba(255, 255, 255, 0.12) 100%);
+  opacity: 0.8;
+  transition: opacity 220ms var(--ease-ui, ease);
+}
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.32), inset 0 0 22px rgba(255, 255, 255, 0.16);
+}
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)[data-touch]::before { opacity: 1; }
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature) > * { position: relative; z-index: 2; }
+@supports (corner-shape: superellipse(2)) {
+  [data-liquid] :is(.learn-card, .leo-feature, .play-choice, .play-hut, .play-x, .lives-choice, .lives-row, .learn-show-all) { corner-shape: superellipse(var(--lg-shape)); }
+}
+
+/* ── The WebGL layer (app/glass/liquid-glass.tsx, the studio's own pipeline) ─────────────────────
+   Under the page, full viewport, and only on a page with a games scope. While it runs
+   (html.has-liquid) the page grounds go transparent so the refraction shows around and through the
+   tiles, which thin their fill a little to let it in. */
+.liquid-glass { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+html.has-liquid, html.has-liquid body, html.has-liquid .app-body, html.has-liquid .platform-shell, html.has-liquid main.me-screen { background: transparent; }
+html.has-liquid [data-liquid] .learn-stack .learn-card { background: color-mix(in srgb, var(--cover) 88%, transparent); }
+html.has-liquid [data-liquid] { --glass-fill: color-mix(in srgb, var(--paper) 34%, transparent); --glass-fill-strong: color-mix(in srgb, var(--paper) 52%, transparent); }
 
 @media (prefers-reduced-transparency: reduce) {
-  .glass, .platform-header, .platform-shell .app-tabs, .play-hut, .play-x, .play-choice, .life-card, .sheet, .learn-stack button,
-  .clinician-row, .results-empty, .me-facts li, .me-switches, .support-step, .profession-card, .strategy-card, .care-map-detail, .safety-screen, .console-workspace-panel, .platform-shell .learn-option,
-  .filter-chip, .filter-clear, .me-place input, .nearby-zoom-button, .speech-retry, .consent-dialog, .adjust-tab, .manual-chip, .layer-pill, .learn-map-link, .console-select, .platform-shell .learn-chip, .platform-shell :is(.learn-secondary, .learn-back), .learn-secondary { background: var(--paper); backdrop-filter: none; -webkit-backdrop-filter: none; }
-  .filter-chip::before, .filter-clear::before, .adjust-tab::before, .manual-chip::before, .layer-pill::before, .learn-map-link::before, .support-step::before, .profession-card::before, .strategy-card::before, .clinician-row::before, .results-empty::before, .consent-dialog::before, .platform-shell .learn-chip::before, .platform-shell .learn-option::before, .learn-card::before, .learn-secondary::before, .platform-shell :is(.learn-secondary, .learn-back)::before, .learn-primary::before, .primary-button::before, .play-tempt.is-go::before { display: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::after { display: none; }
 }
-
-/* ── The WebGL layer (app/glass/liquid-glass.tsx, the studio's own pipeline) ──────────────────────
-   Under the page, full viewport. When it is running (`html.has-liquid`) the page grounds go
-   transparent so the ambient shows through, and the CSS fills thin so the studio's refraction,
-   dispersion and glare show through the surfaces. Where it is not running nothing here applies. */
-.liquid-glass { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
-html.has-liquid, html.has-liquid body, html.has-liquid .app-body, html.has-liquid .platform-shell, html.has-liquid .patient-v2 .screen, html.has-liquid .care-shell, html.has-liquid main.care-app, html.has-liquid main.me-screen, html.has-liquid .app-page-with-tabs,
-html.has-liquid .platform-shell .care-app.patient-v2, html.has-liquid .platform-shell .patient-v2 .care-shell { background: transparent; }
-html.has-liquid { --glass-fill: color-mix(in srgb, var(--paper) 34%, transparent); --glass-fill-strong: color-mix(in srgb, var(--paper) 52%, transparent); }

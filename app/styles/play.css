@@ -1,57 +1,69 @@
-/* Play (docs/adhd-life/PLAY-PLAN.md §4): big beans, flat bright rounds, one clock, ≤ 14 words. */
+/* Play (docs/adhd-life/PLAY-PLAN.md §4; docs/design/games-to-leo-standard.md): big beans, drawn pieces, one clock, ≤ 14 words. */
+/* One palette for the run (§2): the product's blue-navy base. The scenes declare their own seven tints on top. */
+.play-run { --play-ink: #172033; --play-paper: #f7f8fc; --play-blue: #5065a6; --play-blue-2: #6679b9; --play-soft: #e4e9f7; --play-line: #cfd6ec; --play-go: #2f7d5b; --play-alert: #d9603f; --play-warm: #f3d9a6; }
 /* Immersive (§11): the stage bleeds to the viewport edges; the chrome sits in one housing above it. */
 body:has(.play-run) { overflow-x: clip; }
 /* Zero header while a run is open: the shell's header goes, the stage starts at the top edge. */
 .platform-shell:has(.play-run) .platform-header { display: none; }
 .platform-shell .me-screen:has(.play-run) { padding-top: 0; }
-.play-run { position: relative; }
+.play-run { position: relative; color: var(--play-ink); }
 .play-top { position: absolute; top: 14px; left: 12px; right: 12px; z-index: 2; display: flex; align-items: center; gap: 10px; }
-.play-x { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); cursor: pointer; box-shadow: 0 3px 0 color-mix(in srgb, var(--ink) 10%, transparent); }
-.play-x:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.play-hut { display: flex; align-items: center; gap: 12px; flex: 1; max-width: 560px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.play-x { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid var(--play-line); border-radius: 999px; background: var(--play-paper); color: var(--play-ink); cursor: pointer; box-shadow: 0 3px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
+.play-x:focus-visible { outline: 3px solid var(--play-blue); outline-offset: 3px; }
+.play-hut { display: flex; align-items: center; gap: 12px; flex: 1; max-width: 560px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--play-line); border-radius: 999px; background: var(--play-paper); }
 .play-dots { flex: 1; margin: 0; }
+.play-run .play-dots li.is-done { background: color-mix(in srgb, var(--play-blue) 55%, var(--play-line)); }
+.play-run .play-dots li.is-current { background: var(--play-blue); }
 .play-count { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .play-stage { margin: 0 calc(50% - 50vw); min-height: 100svh; }
-.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 100svh; padding: 76px 16px 32px; border-radius: 0; background: var(--route-soft); text-align: center; overflow: hidden; }
+.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 100svh; padding: 76px 16px 32px; border-radius: 0; background: var(--play-soft); text-align: center; overflow: hidden; }
 .play-card > * { width: 100%; max-width: 640px; }
 .play-card > .play-clock { max-width: none; }
-.play-card.is-title { background: var(--accent-soft); padding-top: 34px; }
-.play-card.is-round { background: var(--route-soft); gap: 12px; }
-.play-card.is-round.is-hit { background: color-mix(in srgb, #0e8345 16%, var(--paper)); }
-.play-card.is-round.is-miss { background: color-mix(in srgb, var(--accent) 14%, var(--paper)); }
+.play-card.is-title { background: color-mix(in srgb, var(--play-blue-2) 22%, var(--play-paper)); padding-top: 34px; }
+.play-card.is-round { background: var(--play-soft); gap: 12px; }
+.play-card.is-round.is-hit { background: color-mix(in srgb, var(--play-go) 16%, var(--play-paper)); }
+.play-card.is-round.is-miss { background: color-mix(in srgb, var(--play-alert) 14%, var(--play-paper)); }
 .play-card.is-insight { background: var(--stone); }
-.play-clock { position: absolute; inset: 0 0 auto 0; height: 8px; background: color-mix(in srgb, var(--ink) 10%, transparent); }
-.play-clock span { display: block; height: 100%; width: 100%; background: var(--accent); transform-origin: left center; }
+/* The HUD in the world (§2): the clock is the scene's blue, not the app's accent. */
+.play-clock { position: absolute; inset: 0 0 auto 0; height: 8px; background: color-mix(in srgb, var(--play-ink) 10%, transparent); }
+.play-clock span { display: block; height: 100%; width: 100%; background: var(--play-blue); transform-origin: left center; }
 /* §14 Calm: no kicker anywhere. The one label a person can ask for (the "?") is a quiet line. */
 .play-label { margin: 0; color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
 .play-help { margin-left: auto; }
-.play-help[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.play-title { margin: 0; max-width: 20ch; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.5rem, 6.5vw, 2rem); font-weight: 460; letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
+.play-help[aria-pressed="true"] { background: var(--play-blue); color: var(--play-paper); border-color: var(--play-blue); }
+.play-title { margin: 0; max-width: 20ch; color: var(--play-ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.5rem, 6.5vw, 2rem); font-weight: 460; letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
 .play-instruction:focus-visible { outline: none; }
 /* §14 Calm: the instruction stays where it is. No callout, no Faster card. */
 .play-steps-fold { width: 100%; max-width: 640px; text-align: left; }
 .play-steps-fold summary { cursor: pointer; padding: 10px 0; color: var(--muted); font-weight: 600; list-style: none; }
 .play-steps-fold summary::-webkit-details-marker { display: none; }
-.play-steps-fold summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
-.play-line { margin: 0; max-width: 34ch; color: var(--ink); font-size: 1.0625rem; line-height: 1.5; }
-/* The scene (P5): a full-width stage with one flat prop, the bean standing in it. */
+.play-steps-fold summary:focus-visible { outline: 3px solid var(--play-blue); outline-offset: 2px; border-radius: 8px; }
+.play-line { margin: 0; max-width: 34ch; color: var(--play-ink); font-size: 1.0625rem; line-height: 1.5; }
+
+/* ── The scene (P5, §2): a full-width stage, a drawn place, the bean standing in it. ───────────── */
 /* The scene grows to fill the stage; the art sits on the ground and the tint is the sky above it. */
 .play-scene { position: relative; flex: 1 0 auto; width: calc(100% + 32px); max-width: none; min-height: 236px; margin-inline: -16px; border-radius: 0; overflow: hidden; }
 @media (min-width: 768px) { .play-scene { width: 100%; margin-inline: 0; min-height: 320px; border-radius: 20px; } }
 .play-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The seven tints of a place, declared on the scene root by `app/play/scene.tsx`, read by the art. */
+.play-scene-art .f-sky { fill: var(--sc-sky); } .play-scene-art .f-ground { fill: var(--sc-ground); } .play-scene-art .f-deep { fill: var(--sc-deep); } .play-scene-art .f-mid { fill: var(--sc-mid); }
+.play-scene-art .f-light { fill: var(--sc-light); } .play-scene-art .f-warm { fill: var(--sc-warm); } .play-scene-art .f-accent { fill: var(--sc-accent); }
+.play-scene-art .s-deep { stroke: var(--sc-deep); } .play-scene-art .s-mid { stroke: var(--sc-mid); } .play-scene-art .s-light { stroke: var(--sc-light); } .play-scene-art .s-warm { stroke: var(--sc-warm); } .play-scene-art .s-accent { stroke: var(--sc-accent); }
 .play-scene-bean { position: absolute; left: 16%; bottom: 8px; transform: translateX(-50%); }
+.play-scene-bean::before { content: ""; position: absolute; left: 50%; bottom: 2px; width: 110px; height: 14px; transform: translateX(-50%); border-radius: 50%; background: color-mix(in srgb, var(--sc-deep) 22%, transparent); }
 .play-scene[data-prop="none"] .play-scene-bean { left: 50%; }
-/* The scene reacts to the result (§11): a hop on a hit, a shake on a miss; nothing under reduced motion. */
+/* The scene reacts to the result (§11): a hop on a hit, a settle on a miss; nothing under reduced motion. */
 .play-scene[data-result="hit"] .bean { animation: play-hop 0.5s var(--ease-ui) 1; }
 .play-scene[data-result="miss"] .play-scene-art { animation: play-shake 0.4s var(--ease-ui) 1; }
 @keyframes play-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-22px) scale(1.04); } 70% { transform: translateY(0) scale(0.98); } 100% { transform: translateY(0); } }
 /* §14 Calm: a miss settles (one soft dip), it does not shake. */
 @keyframes play-shake { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 @media (prefers-reduced-motion: reduce) { .play-scene[data-result] .bean, .play-scene[data-result] .play-scene-art { animation: none; } }
-/* Props react on their own terms (PLAY-PLAN §11), once, a beat after the scene is up: the phone lights up, the bill
-   slides a few pixels and settles, the ball rolls in place, the desk screen wakes, the slide's lines come up, the moon
-   glows, the steam rises, the marked day pulses, the door swings shut. Every one is inside its own box (§14: nothing
-   moves position), under 700 ms, and ends on the drawing's resting state, which is what reduced motion shows instead. */
+/* Props react on their own terms (PLAY-PLAN §11), once, a beat after the scene is up: the desk's screen wakes, the message
+   lights, the bill slides a few pixels and settles, the ball rolls in place, the slide's lines come up, the moon glows, the
+   steam rises, the marked day pulses, the door swings shut, the lamp glows, the sign pulses, the sale tag pulses, the tree
+   sways. Every one is inside its own box (§14: nothing moves position), under 700 ms, and ends on the drawing's resting
+   state, which is what reduced motion shows instead. */
 .play-scene-art .play-prop { transform-box: fill-box; transform-origin: center; animation: none 0.6s var(--ease-ui) 0.25s 1 both; }
 .play-scene[data-prop="desk"] .play-prop { animation-name: play-prop-wake; }
 .play-scene[data-prop="phone"] .play-prop { animation-name: play-prop-light; }
@@ -62,6 +74,12 @@ body:has(.play-run) { overflow-x: clip; }
 .play-scene[data-prop="kitchen"] .play-prop { animation-name: play-prop-rise; }
 .play-scene[data-prop="calendar"] .play-prop { animation-name: play-prop-pulse; }
 .play-scene[data-prop="door"] .play-prop { animation-name: play-prop-swing; transform-origin: left center; }
+.play-scene[data-prop="living"] .play-prop { animation-name: play-prop-glow; }
+.play-scene[data-prop="meeting"] .play-prop { animation-name: play-prop-wake; }
+.play-scene[data-prop="crossing"] .play-prop { animation-name: play-prop-pulse; }
+.play-scene[data-prop="shop"] .play-prop { animation-name: play-prop-pulse; }
+.play-scene[data-prop="street"] .play-prop { animation-name: play-prop-sway; transform-origin: center bottom; }
+.play-scene[data-prop="study"] .play-prop { animation-name: play-prop-glow; }
 @keyframes play-prop-wake { from { opacity: 0.35; } to { opacity: 1; } }
 @keyframes play-prop-light { 0% { opacity: 0.3; } 45% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes play-prop-slide { from { transform: translateX(-8px); } to { transform: translateX(0); } }
@@ -70,101 +88,215 @@ body:has(.play-run) { overflow-x: clip; }
 @keyframes play-prop-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes play-prop-pulse { 0% { transform: scale(0.8); } 55% { transform: scale(1.15); } 100% { transform: scale(1); } }
 @keyframes play-prop-swing { from { transform: rotate(-3deg); } to { transform: rotate(0); } }
+@keyframes play-prop-sway { 0% { transform: rotate(-3deg); } 60% { transform: rotate(2deg); } 100% { transform: rotate(0); } }
 @media (prefers-reduced-motion: reduce) { .play-scene[data-prop] .play-scene-art .play-prop { animation: none; } }
-.play-bean-hit { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
-.play-bean-hit .bean { transition: transform var(--dur-tap) var(--ease-ui); }
+
+/* ── The bean as the thing you touch (hold, timing, pause, balance). ─────────────────────────────── */
+.play-bean-hit { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0; border: 0; background: none; color: var(--play-ink); font: inherit; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.play-bean-hit .bean { position: relative; transition: transform var(--dur-tap) var(--ease-ui); }
 .play-bean-hit.is-holding .bean, .play-bean-hit:active .bean { transform: scale(0.94) translateY(4px); }
 .play-bean-hit.is-now .bean { transform: scale(1.08); }
 .play-bean-hit:disabled { cursor: default; }
-.play-bean-hit:focus-visible { outline: none; } .play-bean-hit:focus-visible .play-bean-label { outline: 3px solid var(--accent); outline-offset: 3px; }
-.play-bean-label { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 3px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
-.play-bean-hit.is-holding .play-bean-label, .play-bean-hit.is-now .play-bean-label { background: var(--accent); color: var(--on-accent); }
-.play-tempt.in-scene { position: absolute; right: 14px; bottom: 18px; width: auto; box-shadow: 0 6px 0 color-mix(in srgb, var(--ink) 14%, transparent); }
-.play-timing-track.in-scene { position: absolute; left: 8%; right: 8%; top: 14px; height: 22px; }
-.play-heat.in-scene { position: absolute; left: 8%; right: 8%; top: 18px; }
+.play-bean-hit:focus-visible { outline: none; } .play-bean-hit:focus-visible .play-bean-label { outline: 3px solid var(--play-blue); outline-offset: 3px; }
+.play-bean-label { position: relative; display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 3px 0 color-mix(in srgb, var(--play-ink) 14%, transparent); }
+.play-bean-hit.is-holding .play-bean-label, .play-bean-hit.is-now .play-bean-label { background: var(--play-blue); color: var(--play-paper); }
+/* Hold: the ring around the bean fills with the clock and glows when full. */
+.play-ring { position: absolute; left: 50%; top: -6px; width: 166px; height: 166px; transform: translateX(-50%); pointer-events: none; }
+.play-ring svg { display: block; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.play-ring-track { fill: none; stroke: color-mix(in srgb, var(--sc-light, #f7f8fc) 70%, transparent); stroke-width: 7; }
+.play-ring-fill { fill: none; stroke: var(--play-blue); stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 80ms linear, stroke var(--dur-tap) var(--ease-ui); }
+.play-hold-hit.is-holding .play-ring-fill { stroke: var(--play-go); }
+.play-hold-hit.is-full .play-ring-fill { stroke: var(--play-go); filter: drop-shadow(0 0 6px color-mix(in srgb, var(--play-go) 70%, transparent)); }
+/* Pause: the breath ring around the bean, wide and warm when hot, small and blue when calm. */
+.play-breath { position: absolute; left: 50%; top: 66px; width: 130px; height: 130px; margin: -65px 0 0 -65px; border-radius: 50%; border: 5px solid var(--play-alert); background: color-mix(in srgb, var(--play-alert) 12%, transparent); pointer-events: none; }
+.play-breath[data-calm="true"] { border-color: var(--play-go); background: color-mix(in srgb, var(--play-go) 12%, transparent); }
+.play-breath:not([data-hot="true"]):not([data-calm="true"]) { border-color: var(--play-warm); background: color-mix(in srgb, var(--play-warm) 20%, transparent); }
+.play-heat.in-scene { position: absolute; left: 8%; right: 8%; top: 14px; height: 14px; border-radius: 999px; background: color-mix(in srgb, var(--sc-deep) 18%, transparent); overflow: hidden; }
+.play-heat-fill { display: block; height: 100%; width: 100%; transform-origin: left center; background: var(--play-warm); transition: transform 100ms linear, background var(--dur-tap) var(--ease-ui); }
+.play-heat[data-hot="true"] .play-heat-fill { background: var(--play-alert); }
+.play-heat[data-calm="true"] .play-heat-fill { background: var(--play-go); }
+.play-heat-calm { position: absolute; top: 0; bottom: 0; left: 35%; border-left: 3px solid var(--play-go); }
+/* Don't-tap: the tempting object in the scene, with a pull ring pulsing behind it under motion. */
+.play-tempt-spot.in-scene { position: absolute; right: 14px; bottom: 18px; }
+.play-tempt-pull { position: absolute; inset: -4px; border-radius: 24px; border: 3px solid var(--play-alert); pointer-events: none; }
+.play-tempt-thing { position: relative; flex-direction: column; gap: 4px; min-width: 96px; padding: 12px 18px 10px; border-radius: 22px; background: var(--play-paper); color: var(--play-ink); font-size: 0.9375rem; box-shadow: 0 6px 0 color-mix(in srgb, var(--play-ink) 14%, transparent); }
+.play-tempt-thing .play-glyph { color: var(--play-alert); }
+/* Timing: a timeline with stations; the marker is a pin; the last station lights when the marker is on it. */
+.play-timing-track.in-scene { position: absolute; left: 8%; right: 8%; top: 18px; height: 22px; }
+.play-timing-line { position: absolute; left: 0; right: 0; top: 9px; height: 4px; border-radius: 999px; background: color-mix(in srgb, var(--sc-deep) 30%, transparent); }
+.play-timing-track.in-scene .play-timing-zone { left: 70%; width: 25%; top: 5px; bottom: 5px; }
+.play-timing-station { position: absolute; top: 4px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--sc-light); border: 3px solid var(--sc-mid); transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
+.play-timing-station.is-passed { background: var(--sc-mid); }
+.play-timing-station.is-last { border-color: var(--play-go); }
+.play-timing-track[data-now="true"] .play-timing-station.is-last { background: var(--play-go); box-shadow: 0 0 0 6px color-mix(in srgb, var(--play-go) 30%, transparent); }
+.play-timing-track.in-scene .play-timing-marker { top: -12px; width: 20px; height: 28px; margin-left: -10px; background: none; }
+.play-timing-marker svg { display: block; width: 100%; height: 100%; fill: var(--play-blue); overflow: visible; }
+.play-timing-marker svg circle { fill: var(--play-paper); }
+.play-timing-track[data-now="true"] .play-timing-marker svg { fill: var(--play-go); }
+.play-marks { position: absolute; left: 0; right: 0; top: 26px; margin: 0; padding: 0; list-style: none; }
+.play-marks li { position: absolute; transform: translateX(-50%); width: 10ch; color: var(--play-ink); font-size: 0.72rem; font-weight: 700; line-height: 1.15; text-align: center; }
+.play-marks li:first-child { transform: none; text-align: left; }
+.play-marks li:last-child { transform: translateX(-100%); text-align: right; }
+.play-marks li.is-last { color: var(--play-go); }
+/* Balance: a tray on a pivot that tilts with the drift and levels when steadied. */
+.play-tray.in-scene { position: absolute; left: 30%; right: 4%; top: 10px; height: 34%; }
+.play-tray-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.play-tray-arm { transition: transform 90ms linear; }
+.play-tray-arm > g { transition: transform 90ms linear; }
+.play-tray-art .t-deep { fill: var(--sc-deep); stroke: var(--sc-deep); } .play-tray-art .t-mid { fill: var(--sc-mid); } .play-tray-art .t-zone { fill: color-mix(in srgb, var(--play-go) 45%, var(--sc-mid)); }
+.play-tray-art .t-load { fill: var(--sc-light); } .play-tray-art .t-load-s { stroke: var(--sc-light); }
+.play-tray[data-zone="false"] .t-load { fill: var(--play-warm); } .play-tray[data-zone="false"] .t-load-s { stroke: var(--play-warm); }
 /* The mechanics that own the scene grow with the stage, the scene taking the room. */
 .play-hold, .play-dont, .play-timing, .play-pause, .play-catch, .play-balance { display: flex; flex-direction: column; flex: 1 0 auto; gap: 12px; width: 100%; align-items: center; }
 .play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene, .play-catch .play-scene, .play-balance .play-scene { flex: 1 0 auto; }
+/* Catch: things tossed across the scene on an arc; a basket waits at the bottom right; a caught thing squashes. */
 .play-falling { position: absolute; inset: 0; }
-.play-fall { position: absolute; min-height: 44px; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); transition: top 80ms linear; }
+.play-fall { position: absolute; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 12%, transparent); transition: top 80ms linear, left 80ms linear; transform-origin: center bottom; }
+.play-fall .play-glyph { color: var(--play-blue); }
 .play-fall.is-decoy { background: var(--stone); color: var(--muted); }
+.play-fall.is-decoy .play-glyph { color: var(--muted); }
+.play-basket { position: absolute; right: 8%; bottom: 9%; width: 90px; height: 44px; pointer-events: none; }
+.play-basket .b-mid { fill: var(--sc-mid); } .play-basket .b-deep { stroke: var(--sc-deep); }
 .play-timing-zone.is-middle { left: 30%; width: 40%; }
-.play-recall .sim-notification { background: var(--paper); color: var(--ink); box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
-.play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--play-ink) 8%, transparent); }
 .play-controls { width: 100%; }
 .bean { display: block; }
-.play-hero-bean { filter: drop-shadow(0 8px 0 color-mix(in srgb, var(--ink) 8%, transparent)); }
+.play-hero-bean { filter: drop-shadow(0 8px 0 color-mix(in srgb, var(--play-ink) 8%, transparent)); }
+
+/* ── The drawn pieces below the scene: objects, slips, cards, stations, trays. ───────────────────── */
+.play-glyph { display: inline-block; flex: 0 0 auto; vertical-align: middle; }
 .play-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
 .play-choices > :only-child, .play-choice.is-wide { grid-column: 1 / -1; }
 .play-choices > :nth-child(3):last-child { grid-column: 1 / -1; }
-.play-choice { min-height: 64px; padding: 12px 18px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: pointer; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
-.play-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.play-choice { min-height: 64px; padding: 12px 18px; border: 2px solid var(--play-line); border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: pointer; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui), box-shadow var(--dur-tap) var(--ease-ui); }
+.play-choice[aria-pressed="true"] { border-color: var(--play-blue); background: var(--play-soft); }
 .play-choice:disabled { opacity: 0.6; cursor: default; }
-.play-choice:focus-visible, .play-tempt:focus-visible, .play-hold-button:focus-visible, .play-bean-button:focus-visible, .play-layer:focus-visible, .play-note:focus-visible, .play-chip-big:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
-.play-tempt.is-go { background: var(--accent); color: var(--on-accent); }
+.play-choice:focus-visible, .play-tempt:focus-visible, .play-hold-button:focus-visible, .play-bean-button:focus-visible, .play-layer:focus-visible, .play-note:focus-visible, .play-chip-big:focus-visible { outline: 3px solid var(--play-blue); outline-offset: 3px; }
+/* An option as an object: the glyph on a card, the chosen one lifting. */
+.play-object { display: inline-flex; align-items: center; justify-content: flex-start; gap: 12px; text-align: left; border-radius: 20px; box-shadow: 0 3px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
+.play-object .play-glyph { width: 40px; height: 40px; padding: 8px; border-radius: 12px; background: var(--play-soft); color: var(--play-blue); }
+.play-object[aria-pressed="true"] { box-shadow: 0 7px 0 color-mix(in srgb, var(--play-blue) 30%, transparent); }
+.play-object[aria-pressed="true"] .play-glyph { background: var(--play-blue); color: var(--play-paper); }
+.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--play-blue); color: var(--play-paper); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+.play-tempt.is-go { background: var(--play-blue); color: var(--play-paper); }
 .play-tempt:disabled { opacity: 0.5; cursor: default; }
 .play-dont { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .play-hold { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-.play-hold-button { min-width: 160px; min-height: 96px; border: 4px solid var(--accent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1.125rem; font-weight: 700; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
-.play-hold-button.is-holding { background: var(--accent); color: var(--on-accent); transform: scale(0.96); }
+.play-hold-button { min-width: 160px; min-height: 96px; border: 4px solid var(--play-blue); border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 1.125rem; font-weight: 700; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.play-hold-button.is-holding { background: var(--play-blue); color: var(--play-paper); transform: scale(0.96); }
+/* Hold: the distractions drift across the scene as drawn things; still, parked at the edge, under reduced motion. */
 .play-drift { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; pointer-events: none; }
-.play-drift li { position: absolute; left: 0; padding: 6px 14px; border-radius: 999px; background: var(--surface-raised); color: var(--ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 4px 0 rgba(34, 26, 22, 0.1); }
+.play-drift li { position: absolute; left: 0; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
+.play-drift li .play-glyph { color: var(--play-alert); }
+.play-drift[data-still="true"] li { left: auto; right: 12px; }
+/* Swipe: a hand of cards, each a drawn thing; a flick sends one off the edge. */
 .play-swipe { display: grid; gap: 10px; width: 100%; margin: 0; padding: 0; list-style: none; }
-.play-chip-big { display: inline-flex; align-items: center; gap: 8px; width: 100%; min-height: 52px; padding: 12px 18px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: grab; touch-action: pan-y; }
+.play-swipe-slot { position: relative; list-style: none; }
+.play-swipe-slot:nth-child(odd) { transform: rotate(-0.6deg); } .play-swipe-slot:nth-child(even) { transform: rotate(0.6deg); }
+.play-chip-big { display: inline-flex; align-items: center; gap: 8px; width: 100%; min-height: 56px; padding: 12px 18px; border: 2px solid var(--play-line); border-radius: 18px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: grab; touch-action: pan-y; box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
+.play-swipe-card { text-align: left; }
+.play-swipe-card .play-glyph { width: 40px; height: 40px; padding: 8px; border-radius: 12px; background: var(--play-soft); color: var(--play-blue); }
+.play-swipe-card > svg:not(.play-glyph) { color: var(--play-alert); margin-left: auto; }
+/* Drag-capture: slips of paper with a pin, and the place they go, drawn by the world. */
 .play-capture { display: grid; gap: 14px; width: 100%; }
-.play-note { display: grid; gap: 6px; min-height: 96px; padding: 14px; border: 2px dashed color-mix(in srgb, var(--ink) 30%, transparent); border-radius: 16px; background: #fff8d6; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
-.play-note.is-ready { border-style: solid; border-color: var(--accent); }
+.play-slip { display: inline-flex; align-items: center; justify-content: flex-start; gap: 10px; text-align: left; border-radius: 6px 6px 14px 14px; background: var(--play-warm); border-color: color-mix(in srgb, var(--play-ink) 12%, var(--play-warm)); box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 12%, transparent); cursor: grab; position: relative; }
+.play-slip::before { content: ""; position: absolute; left: 50%; top: -5px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--play-alert); box-shadow: 0 1px 0 color-mix(in srgb, var(--play-ink) 30%, transparent); }
+.play-slip .play-glyph { color: var(--play-ink); opacity: 0.7; }
+.play-slip[aria-pressed="true"] { border-color: var(--play-blue); box-shadow: 0 8px 0 color-mix(in srgb, var(--play-blue) 30%, transparent); }
+.play-note { display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 12px; min-height: 108px; padding: 12px 14px; border: 2px dashed color-mix(in srgb, var(--play-ink) 30%, transparent); border-radius: 18px; background: var(--play-paper); color: var(--play-ink); font: inherit; text-align: left; cursor: pointer; }
+.play-note.is-ready { border-style: solid; border-color: var(--play-blue); background: var(--play-soft); }
 .play-note:disabled { cursor: default; }
+.play-note-art { display: block; width: 72px; height: 86px; }
+.play-note-art .n-light { fill: var(--play-paper); } .play-note-art .n-mid { fill: var(--play-blue-2); stroke: var(--play-blue-2); } .play-note-art .n-deep { fill: var(--play-blue); stroke: var(--play-blue); } .play-note-art .n-warm { fill: var(--play-warm); stroke: var(--play-warm); } .play-note-art .n-accent { fill: var(--play-alert); }
+.play-note-body { display: grid; gap: 6px; min-width: 0; }
 .play-note-title { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .play-note ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 0.9375rem; font-weight: 600; }
-.play-note-hint { color: var(--accent); font-size: 0.875rem; font-weight: 700; }
+.play-pinned { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; background: var(--play-warm); animation: play-pin 0.4s var(--ease-ui) 1 both; }
+@keyframes play-pin { 0% { transform: translateY(-8px); opacity: 0; } 60% { transform: translateY(2px); opacity: 1; } 100% { transform: translateY(0); } }
+.play-note-hint { color: var(--play-blue); font-size: 0.875rem; font-weight: 700; }
+/* Order: station cards that slide into rank, with a numbered badge, over a line of stations. */
 .play-order { display: grid; gap: 10px; width: 100%; }
-.play-order-trail { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; color: var(--muted); font-size: 0.875rem; font-weight: 600; }
+.play-station { display: inline-flex; align-items: center; justify-content: flex-start; gap: 10px; text-align: left; border-radius: 18px; }
+.play-station-badge { display: inline-grid; place-items: center; flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--play-line); background: var(--play-paper); color: var(--play-paper); font-size: 0.8125rem; font-weight: 800; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
+.play-station.is-placed { border-color: var(--play-blue); background: var(--play-soft); }
+.play-station.is-placed .play-station-badge { background: var(--play-blue); border-color: var(--play-blue); }
+.play-station.is-wrong { border-color: var(--play-alert); }
+.play-station.is-wrong .play-station-badge { background: var(--play-alert); border-color: var(--play-alert); }
+.play-station .play-glyph { color: var(--play-blue); }
+.play-order-trail { position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 22px; color: var(--muted); font-size: 0.875rem; font-weight: 600; }
+.play-order-trail li { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: var(--play-paper); }
+.play-order-trail li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--play-blue); }
 .play-timing { display: grid; gap: 16px; width: 100%; justify-items: center; }
-.play-timing-track { position: relative; width: 100%; height: 28px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); overflow: visible; }
-.play-timing-zone { position: absolute; left: 70%; width: 25%; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, #0e8345 30%, transparent); }
-.play-timing-marker { position: absolute; top: -6px; width: 10px; height: 40px; margin-left: -5px; border-radius: 999px; background: var(--accent); }
+.play-timing-track { position: relative; width: 100%; height: 28px; border-radius: 999px; background: color-mix(in srgb, var(--play-ink) 10%, transparent); overflow: visible; }
+.play-timing-track.in-scene { background: none; }
+.play-timing-zone { position: absolute; left: 70%; width: 25%; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, var(--play-go) 30%, transparent); }
+.play-timing-marker { position: absolute; top: -6px; width: 10px; height: 40px; margin-left: -5px; border-radius: 999px; background: var(--play-blue); transition: left 80ms linear; }
 .play-timing-label { position: absolute; top: 34px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 /* The scale (the sense gate): the marks along the line, the last one the moment to act. */
 .play-scale { position: absolute; left: 0; right: 0; top: 30px; margin: 0; padding: 0; list-style: none; }
-.play-scale li { position: absolute; transform: translateX(-50%); width: 10ch; color: var(--ink); font-size: 0.72rem; font-weight: 700; line-height: 1.15; text-align: center; }
+.play-scale li { position: absolute; transform: translateX(-50%); width: 10ch; color: var(--play-ink); font-size: 0.72rem; font-weight: 700; line-height: 1.15; text-align: center; }
 .play-scale li:first-child { transform: none; text-align: left; }
 .play-scale li:last-child { transform: translateX(-100%); text-align: right; }
-.play-scale li.is-last { color: var(--accent); }
-.play-timing-track.in-scene .play-timing-zone { left: 76%; width: 24%; }
+.play-scale li.is-last { color: var(--play-go); }
 .play-share { display: grid; gap: 6px; justify-items: center; margin-top: 4px; }
 .play-share .play-choice { width: auto; min-height: 44px; }
 .play-share-note { margin: 0; color: var(--muted); font-size: 0.8125rem; }
 .play-rule { margin: 0; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.4; }
+/* Recall: the list as objects on a table; the interruption covers it; the cover lifts. */
 .play-recall { display: grid; gap: 12px; width: 100%; justify-items: center; }
-.play-recall .sim-list { width: 100%; }
+.play-table { position: relative; width: 100%; padding: 14px 14px 22px; border-radius: 18px; background: color-mix(in srgb, var(--play-warm) 55%, var(--play-paper)); overflow: hidden; }
+.play-table-edge { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: color-mix(in srgb, var(--play-ink) 22%, var(--play-warm)); }
+.play-recall .sim-list.play-table-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; margin: 0; padding: 0; }
+.play-recall .sim-list.play-table-list li { display: inline-flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 12px; background: var(--play-paper); color: var(--play-ink); font-size: 1rem; font-weight: 650; box-shadow: 0 3px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
+.play-recall .sim-list.play-table-list li .play-glyph { color: var(--play-blue); }
+.play-cover { position: absolute; inset: 0; display: grid; place-items: center; padding: 14px; background: color-mix(in srgb, var(--play-ink) 88%, var(--play-blue)); }
+.play-recall .sim-notification { margin: 0; width: 100%; background: var(--play-paper); color: var(--play-ink); box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 12%, transparent); }
+.play-recall .sim-notification strong { color: var(--play-blue); }
+/* Sort: slips of paper, four trays with a glyph each; a tray tilts as a slip lands. */
 .play-sort { display: grid; gap: 14px; width: 100%; }
 .play-layers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.play-layer { display: grid; gap: 2px; min-height: 64px; padding: 10px; border: 2px solid transparent; border-radius: 14px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
+.play-layer { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: center; min-height: 64px; padding: 10px 12px; border: 2px solid transparent; border-radius: 6px 6px 16px 16px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; text-align: left; cursor: pointer; box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--play-ink) 12%, transparent); transform-origin: center bottom; }
+.play-layer .play-layer-glyph { grid-row: 1 / span 2; color: var(--play-blue); }
 .play-layer[data-layer="brain"] { background: #dfe5f7; } .play-layer[data-layer="body"] { background: #fbe4d3; } .play-layer[data-layer="environment"] { background: #dcefe4; } .play-layer[data-layer="people"] { background: #ebe0f7; }
 .play-layer small { color: var(--muted); font-weight: 500; font-size: 0.75rem; min-height: 1em; }
 .play-layer:disabled { opacity: 0.7; cursor: default; }
+.play-layer:not(:disabled) { border-color: var(--play-blue); }
+/* Flip and pick: beans as characters in a row, each on a plinth. */
 .play-flip, .play-pick { display: grid; gap: 12px; width: 100%; justify-items: center; }
 .play-beans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
 .play-beans > :nth-child(3):last-child { grid-column: 1 / -1; }
-.play-bean-button { display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding: 10px 10px 12px; border: 3px solid transparent; border-radius: 22px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
-.play-bean-button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.play-bean-button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding: 10px 10px 12px; border: 3px solid transparent; border-radius: 22px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
+.play-bean-button[aria-pressed="true"] { border-color: var(--play-blue); background: var(--play-soft); }
 .play-bean-button:disabled { cursor: default; }
+.play-wave { display: block; transform-origin: center bottom; }
+.play-plinth { display: block; width: 72px; height: 12px; margin-top: -8px; border-radius: 50%; background: color-mix(in srgb, var(--play-ink) 12%, transparent); transition: background var(--dur-tap) var(--ease-ui); }
+.play-bean-button[aria-pressed="true"] .play-plinth { background: color-mix(in srgb, var(--play-blue) 40%, transparent); }
+/* Flip: one card, two faces, turned to whichever bean was tapped. */
+.play-flip-card { width: 100%; perspective: 1000px; }
+.play-flip-inner { position: relative; display: grid; transform-style: preserve-3d; }
+.play-flip-face { grid-area: 1 / 1; margin: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.play-flip-face[data-face="1"] { transform: rotateY(180deg); }
+.play-flip .perspective-thought { position: relative; border-left: 0; border-radius: 18px; background: var(--play-paper); padding: 16px 18px; box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 12%, transparent); }
+.play-flip .perspective-thought::before { content: ""; position: absolute; top: -10px; left: 25%; width: 18px; height: 18px; margin-left: -9px; background: var(--play-paper); transform: rotate(45deg); border-radius: 3px; }
+.play-flip .perspective-thought[data-face="1"]::before { left: 75%; }
+.play-flip .perspective-thought p { color: var(--play-ink); }
 .play-pause { display: grid; gap: 12px; width: 100%; justify-items: center; }
-.play-heat { position: relative; width: 100%; height: 18px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); overflow: hidden; }
-.play-heat span { display: block; height: 100%; background: var(--accent); transition: width 100ms linear; }
-.play-heat em { position: absolute; top: 0; bottom: 0; border-right: 3px solid #0e8345; }
+.play-heat { position: relative; width: 100%; height: 18px; border-radius: 999px; background: color-mix(in srgb, var(--play-ink) 10%, transparent); overflow: hidden; }
+.play-heat span { display: block; height: 100%; background: var(--play-blue); transition: width 100ms linear; }
+.play-heat em { position: absolute; top: 0; bottom: 0; border-right: 3px solid var(--play-go); }
 .play-heat-label { margin: 0; color: var(--muted); font-size: 0.875rem; font-weight: 600; }
 .play-result { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .play-verdict { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.01em; }
 .play-scale { display: grid; gap: 6px; width: 100%; max-width: 360px; justify-items: center; }
-.play-scale input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--accent); }
-.play-scale output { font-size: 1.5rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.play-scale input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--play-blue); }
+.play-scale output { font-size: 1.5rem; font-weight: 700; color: var(--play-blue); font-variant-numeric: tabular-nums; }
 .play-steps { margin: 0; padding-left: 20px; text-align: left; font-size: 1rem; line-height: 1.5; display: grid; gap: 6px; max-width: 34ch; }
 .platform-shell .learn-card-art .bean { width: 72px; height: auto; }
 @media (max-width: 767px) { .play-card { padding: 72px 16px 28px; } }
-@media (prefers-reduced-motion: reduce) { .play-choice, .play-heat span { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .play-choice, .play-heat span, .play-heat-fill, .play-ring-fill, .play-tray-arm, .play-tray-arm > g, .play-timing-marker, .play-fall, .play-plinth, .play-station-badge { transition: none; }
+  .play-pinned { animation: none; }
+}
 /* The cast (PLAY-PLAN.md §5): five beans, asleep until a run they lead is cleared. */
 .play-cast { display: flex; gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
 /* Only the bean art sleeps (dimmed and grey); the name stays a real colour so it clears AA. */
@@ -179,13 +311,13 @@ body:has(.play-run) { overflow-x: clip; }
 .play-reading .play-choice { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 
 /* The clue (PLAY-PLAN §13): what on the scene makes the hit inferable — one line, under the instruction, marked. */
-.play-clue { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 12%, var(--paper)); color: var(--route-strong); font-size: 0.875rem; font-weight: 650; line-height: 1.3; text-align: left; }
+.play-clue { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--play-blue) 12%, var(--play-paper)); color: var(--play-ink); font-size: 0.875rem; font-weight: 650; line-height: 1.3; text-align: left; }
 /* The relate beat: three buttons on one round, a Likert slider on the next. */
 .play-relate { display: grid; gap: 8px; width: 100%; max-width: 360px; justify-items: center; }
 .play-relate .play-choices { width: 100%; }
-.play-relate-prompt { margin: 0; color: var(--ink); font-size: 1rem; font-weight: 700; }
+.play-relate-prompt { margin: 0; color: var(--play-ink); font-size: 1rem; font-weight: 700; }
 .play-likert { position: static; display: grid; gap: 4px; width: 100%; max-width: 360px; justify-items: center; }
-.play-likert input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--accent); }
+.play-likert input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--play-blue); }
 .play-likert-ends { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: 100%; color: var(--muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 .play-likert-ends > span:last-child { text-align: right; }
 .play-likert-ends output { font-size: 1.375rem; }

@@ -9,7 +9,8 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-practice { --leo-ink: #363454; --leo-paper: #fff9ed; color: var(--leo-ink); background: #c5c6ed; min-height: 100svh; padding: 16px 24px 28px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .leo-toolbar { width: 100%; max-width: 900px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 650; }
 .leo-toolbar a, .leo-toolbar button, .leo-toolbar-spacer { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; color: inherit; }
-.leo-toolbar a, .leo-toolbar button { border-radius: 50%; background: #ffffff55; border: 0; cursor: pointer; }
+.leo-toolbar a, .leo-toolbar button { border-radius: 50%; background: #ffffff55; border: 0; cursor: pointer; color: inherit; }
+.leo-toolbar button[aria-pressed="false"] { opacity: .7; }
 .leo-practice h1 { margin: 4px 0 0; font: 600 clamp(32px, 5vw, 60px)/1.05 "Newsreader Variable", Georgia, serif; color: var(--leo-ink); text-align: center; }
 .leo-practice h1:focus { outline: none; }
 .leo-clock { height: 7px; border-radius: 10px; width: min(100%, 600px); background: #aaaed4; overflow: hidden; }
@@ -52,11 +53,6 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-pause { position: absolute; inset: 0; display: grid; place-items: center; background: #c5c6edbb; z-index: 5; }
 .leo-bottom { width: min(100%, 700px); display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 .leo-bottom p { margin: 0; color: var(--leo-ink); font-size: 16px; line-height: 1.5; }
-.leo-options { display: flex; gap: 24px; align-items: center; justify-content: center; flex-wrap: wrap; }
-.leo-options label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--leo-ink); }
-.leo-options select { background: var(--leo-paper); border: 1px solid #8b89ad; border-radius: 12px; color: var(--leo-ink); min-height: 44px; padding: 8px; font: inherit; }
-.leo-untimed { min-height: 44px; cursor: pointer; }
-.leo-untimed input { accent-color: #514d7d; width: 20px; height: 20px; }
 .leo-primary, .leo-pause button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border: none; border-radius: 99px; padding: 12px 26px; background: #363454; color: #fff9ed; font: inherit; font-weight: 700; cursor: pointer; }
 .leo-secondary { padding: 12px 20px; min-height: 48px; border: 1px solid #777298; background: transparent; color: #363454; border-radius: 99px; font: inherit; cursor: pointer; }
 .leo-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
@@ -72,7 +68,6 @@ body:has(.lives-run) .aoc-band { display: none; }
 @media (max-width: 600px) {
   .leo-practice { padding: 10px 16px 24px; gap: 12px; }
   .leo-board { width: calc(100% + 32px); border-radius: 0; }
-  .leo-options { gap: 4px; flex-direction: column; }
   .leo-feature { padding: 16px; gap: 16px; }
   .leo-feature-art { width: 84px; height: 120px; }
 }

@@ -85,7 +85,11 @@ export function LiquidGlass() {
       console.warn("liquid-glass: renderer unavailable", error);
       return;
     }
-    document.documentElement.classList.add("has-liquid");
+    // Games only (app/styles/glass.css): the layer switches itself on while a [data-liquid] scope is
+    // on the page and off, canvas hidden, everywhere else. The finder never gets it.
+    let scoped = false;
+    let lastScope = -Infinity;
+    canvas.style.visibility = "hidden";
 
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const hoverDevice = matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -181,6 +185,16 @@ export function LiquidGlass() {
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       if (document.hidden) return;
+      if (now - lastScope > REFRESH_MS) {
+        lastScope = now;
+        const next = document.querySelector("[data-liquid]") !== null;
+        if (next !== scoped) {
+          scoped = next;
+          document.documentElement.classList.toggle("has-liquid", scoped);
+          canvas.style.visibility = scoped ? "visible" : "hidden";
+        }
+      }
+      if (!scoped) { last = now; return; }
       const dt = Math.min(0.05, (now - last) / 1000);
       // Governor: a run of frames over 40 ms means this machine cannot afford the layer at this size.
       if (now - last > 40) slowFrames += 1; else slowFrames = Math.max(0, slowFrames - 1);

@@ -187,7 +187,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
   }
 
   return (
-    <section className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined} data-reduced-flashing={reducedFlashing ? "true" : undefined} data-reduced-sensory={reducedSensory ? "true" : undefined} data-haptics={haptics ? "true" : undefined}>
+    <section data-liquid className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined} data-reduced-flashing={reducedFlashing ? "true" : undefined} data-reduced-sensory={reducedSensory ? "true" : undefined} data-haptics={haptics ? "true" : undefined}>
       <h1 id="lives-run-title" className="sr-only">ADHD Lives</h1>
       <div className="play-top lives-top">
         <Link className="play-x" href="/lives" aria-label="Leave the run"><X size={20} weight="bold" aria-hidden="true" /></Link>

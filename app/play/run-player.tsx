@@ -99,7 +99,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   }
 
   return (
-    <section className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
+    <section data-liquid className="learn-module play-run" aria-labelledby="learn-module-title" data-phase={phase} data-round={round?.id}>
       <h1 id="learn-module-title" className="sr-only">{run.title}</h1>
       {/* Zero header (founder, 2026-09-08): an X to back out, and the progress in its own small housing. */}
       <div className="play-top">

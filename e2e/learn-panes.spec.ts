@@ -7,11 +7,14 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByTestId("learn-play")).toBeVisible();
   await expect(page.getByTestId("learn-games").locator(".learn-card")).toHaveCount(8);
+  // The games are the glass scope; the modules are not.
+  await expect(page.locator("[data-liquid] [data-testid='learn-games']")).toHaveCount(1);
   await page.getByTestId("learn-show-all").click();
   await expect(page.getByTestId("learn-games").locator(".learn-card")).toHaveCount(20);
   await page.getByTestId("learn-tab-modules").click();
   await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByTestId("learn-reads").locator(".learn-card")).toHaveCount(7);
+  await expect(page.locator("[data-liquid]")).toHaveCount(0);
   await expect(page.locator("summary", { hasText: "Two-minute tools" })).toBeVisible();
   await page.reload();
   await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");

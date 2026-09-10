@@ -410,10 +410,15 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
 
-test("liquid glass (the studio's WebGL layer) runs under the page where WebGL2 can, and stands aside where it cannot", async ({ page }) => {
+test("liquid glass runs under the games where WebGL2 can, stands aside where it cannot, and never reaches the finder", async ({ page }) => {
   const errors: string[] = [];
   page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") errors.push(m.text()); });
-  await page.goto("/support");
+  // The finder is plain: no games scope, no layer, whatever the engine can do.
+  await page.goto("/");
+  await page.waitForTimeout(600);
+  expect(await page.evaluate(() => ({ scope: document.querySelector("[data-liquid]") !== null, liquid: document.documentElement.classList.contains("has-liquid") }))).toEqual({ scope: false, liquid: false });
+  await page.goto("/approach");
+  await expect(page.locator("[data-liquid] .learn-stack .learn-card").first()).toBeVisible();
   await page.waitForTimeout(600);
   const state = await page.evaluate(() => {
     const c = document.createElement("canvas");

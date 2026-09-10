@@ -7,6 +7,7 @@
 // prop as the fallback. Decorative throughout: the word beside it carries the meaning, so the
 // glyph is `aria-hidden` and never changes an accessible name.
 
+import type { ReactNode } from "react";
 import type { Prop } from "@/learn/interactive";
 import type { Layer } from "@/model/layers";
 
@@ -57,7 +58,7 @@ export function glyphKind(text: string, prop: Prop = "none"): GlyphKind {
   return BY_PROP[prop];
 }
 
-const ART: Readonly<Record<GlyphKind, React.ReactNode>> = {
+const ART: Readonly<Record<GlyphKind, ReactNode>> = {
   phone: <><rect x="6" y="2" width="12" height="20" rx="3" /><path d="M11 18h2" /></>,
   bubble: <><path d="M5 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /><path d="M8 9h8M8 12h5" /></>,
   window: <><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M12 3v18M4 12h16" /></>,
@@ -97,7 +98,7 @@ export function Glyph({ text, prop, size = 22, className }: { text: string; prop
   );
 }
 
-const LAYER_ART: Readonly<Record<Layer, React.ReactNode>> = {
+const LAYER_ART: Readonly<Record<Layer, ReactNode>> = {
   brain: <path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 3 3h3V4zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-3 3h-3V4z" />,
   body: <path d="M12 21s-8-5-8-11a4 4 0 0 1 8-2 4 4 0 0 1 8 2c0 6-8 11-8 11z" />,
   environment: <path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z" />,
