@@ -13,7 +13,7 @@
 // a single do-everything helper would parameterise away the very thing those specs test — so the
 // halves are exported on their own, and the composite is just their obvious composition.
 
-import type { Page } from "@playwright/test";
+import { test, type Page } from "@playwright/test";
 
 /** The demo practice owner the owner-side console specs sign in as. */
 export const OWNER_EMAIL = "owner@demo.practice.example";
@@ -32,6 +32,11 @@ export const MANAGER_EMAIL = "manager@demo.practice.example";
  * has to be aliased away by its second caller is the wrong name.
  */
 export async function signIn(page: Page, email: string = OWNER_EMAIL): Promise<void> {
+  // The console's session cookie is Secure. Over the suite's http origin only Chromium's cookie
+  // model treats localhost as a secure context, so on the other engines a sign-in cannot hold; the
+  // console is desktop Chromium staff tooling, and the second engines sweep the patient surfaces.
+  const engine = page.context().browser()?.browserType().name();
+  test.skip(engine !== undefined && engine !== "chromium", "console sessions need Chromium's localhost cookie model over http");
   await page.goto("/console/signin");
   await page.getByLabel("Work email").fill(email);
   await page.getByRole("button", { name: "Sign in" }).click();

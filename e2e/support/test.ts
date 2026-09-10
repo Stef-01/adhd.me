@@ -20,6 +20,15 @@ export const test = base.extend<{ page: Page }>({
       await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
       return response;
     };
+    // A reload is a goto in every way that matters here.
+    const reload = page.reload.bind(page);
+    page.reload = async (options) => {
+      const response = await reload(options);
+      if (options?.waitUntil) return response;
+      await page.waitForSelector("html[data-hydrated]", { state: "attached", timeout: 10_000 }).catch(() => undefined);
+      await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
+      return response;
+    };
     await use(page);
   },
 });

@@ -513,6 +513,7 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
 });
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
+  test.skip(test.info().project.name !== "chromium", "clipboard permissions are Chromium-only in Playwright");
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
   // §14: the share sits on the run's last card. Resume the run there via the device's cursor.

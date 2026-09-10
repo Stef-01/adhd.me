@@ -186,6 +186,7 @@ test("deleting a request removes it from the GP's side too, and the tab forgets 
 });
 
 test("the prep page offers the timeline headings as text, and says where they went", async ({ page, context }) => {
+  test.skip(test.info().project.name !== "chromium", "clipboard permissions are Chromium-only in Playwright");
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await intake(page);
   await page.goto("/match/prep");
