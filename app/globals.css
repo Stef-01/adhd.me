@@ -2246,6 +2246,10 @@ summary:focus-visible {
 .cv2-condition-panel {
   margin: 10px 0 0;
   padding: 21px 20px 20px;
+  /* A fieldset's default min-inline-size is min-content, which at 320px pushed the two-column
+     list two pixels past the viewport; the panel yields to its container instead. */
+  min-inline-size: 0;
+  max-width: 100%;
   border: 1px solid var(--cv2-line);
   border-radius: 18px;
   animation: cv2-stage-in var(--dur-move) var(--ease-soft) both;

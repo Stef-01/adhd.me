@@ -202,10 +202,11 @@
 .lives-lab-set legend { padding: 0; margin: 0 0 8px; font-weight: 700; }
 .lives-lab-grid { display: grid; gap: 6px; }
 .lives-lab-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
-.lives-lab-row select, .lives-lab-row input { min-height: 44px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font: inherit; }
+.lives-lab-row select, .lives-lab-row input { min-height: 44px; min-width: 0; max-width: 100%; flex: 1 1 auto; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font: inherit; }
+.lives-lab-scroll { width: 100%; overflow-x: auto; }
 .lives-lab-ranking { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
 .lives-lab-ranking ul { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.875rem; }
-.lives-lab-table { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 0.875rem; }
+.lives-lab-table { width: 100%; min-width: 320px; margin-top: 12px; border-collapse: collapse; font-size: 0.875rem; }
 .lives-lab-table th, .lives-lab-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .lives-lab-modules { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .lives-lab-modules pre { overflow-x: auto; padding: 12px; border-radius: 12px; background: var(--stone); font-size: 0.75rem; }

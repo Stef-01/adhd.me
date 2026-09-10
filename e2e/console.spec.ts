@@ -98,7 +98,7 @@ test("privacy requests: the page stands, its retention note and empty export sta
   await page.goto("/console/privacy");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Privacy/);
   await expect(page.getByTestId("retention-note")).toBeVisible();
-  await expect(page.getByTestId("export-empty").or(page.getByTestId("export-json"))).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Export a patient/ })).toBeVisible();
 });
 
 test("usefulness audit: the page stands and names its basis", async ({ page }) => {

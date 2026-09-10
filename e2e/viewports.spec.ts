@@ -15,22 +15,29 @@ type Clip = { tag: string; text: string; scroll: number; client: number };
 async function clippedText(page: Page): Promise<Clip[]> {
   return page.evaluate(() => {
     const out: { tag: string; text: string; scroll: number; client: number }[] = [];
-    const scrolls = (el: Element | null): boolean => {
-      for (let e = el; e && e !== document.body; e = e.parentElement) {
+    // The nearest box that hides or scrolls its overflow decides whether a wider child is cut.
+    const clipper = (el: Element): { box: DOMRect; scrolls: boolean } | null => {
+      for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) {
         const o = getComputedStyle(e).overflowX;
-        if (o === "auto" || o === "scroll") return true;
+        if (o === "auto" || o === "scroll") return { box: e.getBoundingClientRect(), scrolls: true };
+        if (o === "hidden" || o === "clip") return { box: e.getBoundingClientRect(), scrolls: false };
       }
-      return false;
+      return null;
     };
     for (const el of document.querySelectorAll<HTMLElement>("h1, h2, h3, p, li, summary, button, a, label, dt, dd, td, th, small, strong, span")) {
       if (!el.textContent?.trim()) continue;
       const cs = getComputedStyle(el);
       if (cs.display === "none" || cs.visibility === "hidden") continue;
       if (el.closest("details:not([open])") && !el.closest("summary")) continue;
-      if (cs.textOverflow === "ellipsis" || cs.overflowX === "auto" || cs.overflowX === "scroll") continue;
-      if (scrolls(el)) continue;
-      if (el.scrollWidth > el.clientWidth + 1 && el.clientWidth > 0) {
-        out.push({ tag: el.tagName.toLowerCase(), text: (el.textContent ?? "").trim().slice(0, 60), scroll: el.scrollWidth, client: el.clientWidth });
+      if (el.closest(".sr-only, .skip-link") || cs.textOverflow === "ellipsis") continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.width <= 1 || rect.height <= 1) continue;
+      const c = clipper(el);
+      if (!c || c.scrolls) continue;
+      // Wider than the box that hides overflow: the text's right edge is cut.
+      const textRight = rect.left + el.scrollWidth;
+      if (textRight > c.box.right + 1 && el.scrollWidth > el.clientWidth + 1) {
+        out.push({ tag: el.tagName.toLowerCase(), text: (el.textContent ?? "").trim().slice(0, 60), scroll: Math.round(textRight), client: Math.round(c.box.right) });
       }
     }
     return out;
