@@ -11,7 +11,8 @@ the player what is missing rather than ending the round. Untimed mode and reduce
 the clock; the same packing and detour rules remain. Practice never writes learner signals.
 
 The separate practice route is `/lives/play/theo-out-the-door`, linked from Learn and Theo's
-character. The existing short Chaos Run variant retains its established timing and rules.
+character. After merging current main, the Games tab at `/approach?pane=games` is the entry.
+The existing short Chaos Run variant retains its established timing and rules.
 
 The supplied reference clone's Wire/WireMGSceneMaster mechanisms inform drag-to-target,
 disable-after-completion, all-target completion and pause input handling. No Unity code or
@@ -27,3 +28,8 @@ departure communicate actions; reduced motion removes transitions. No ambient at
 QA: packing/duplicates/door gate, detours, invalid drops, pointer drag, touch, keyboard, timeout,
 pause and hidden tabs, replay, no profile writes, hydration, accessibility, 320/390/768/1440 layouts,
 reference comparison, focused tests then app-wide CI before merge to main.
+
+Screenshot review: reduced-motion screens measure 22/26 words before play (phone/desktop),
+49 for the hardest active game, and 48 for success, using the text-budget script's measurement.
+Four-column shelves keep the complete door control in the desktop viewport; the test now checks
+the button's bottom edge, since partial visibility alone missed the initial cutoff.

@@ -71,6 +71,8 @@ test("small phone through desktop keeps controls visible and accessible", async 
     await expect(page.getByRole("button", { name: "Play Theo’s morning" })).toBeInViewport();
     await page.getByLabel("Challenge", { exact: true }).selectOption("8"); await page.getByRole("button", { name: "Play Theo’s morning" }).click();
     await expect(page.getByRole("button", { name: "Open the door" })).toBeInViewport();
+    const door = await page.getByRole("button", { name: "Open the door" }).boundingBox();
+    expect(door!.y + door!.height).toBeLessThanOrEqual(844);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     for (const button of await page.locator(".theo-object").all()) { const box = await button.boundingBox(); expect(box!.width).toBeGreaterThanOrEqual(48); expect(box!.height).toBeGreaterThanOrEqual(48); }
   }

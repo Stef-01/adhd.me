@@ -34,10 +34,10 @@ body:has(.theo-practice) { background: #f8d889; }
 .theo-packing { min-width: 0; }
 .theo-packing-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 12px; }
 .theo-packing-title span { white-space: nowrap; }
-.theo-shelves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 10px; padding: 10px 6px; background: repeating-linear-gradient(transparent 0 95px, #ce9b5c 95px 99px, transparent 99px 107px); }
-.theo-object { position: relative; height: 99px; min-width: 0; border: 0; padding: 4px; border-radius: 14px; background: transparent; color: #34483e; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.theo-shelves { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 10px; padding: 6px; background: repeating-linear-gradient(transparent 0 83px, #ce9b5c 83px 87px, transparent 87px 90px); }
+.theo-object { position: relative; height: 84px; min-width: 0; border: 0; padding: 4px; border-radius: 14px; background: transparent; color: #34483e; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
 .theo-object:disabled { cursor: default; }
-.theo-object .theo-prop { width: 68px; height: 68px; margin: auto; filter: drop-shadow(0 4px 0 #8b64351a); pointer-events: none; }
+.theo-object .theo-prop { width: 58px; height: 58px; margin: auto; filter: drop-shadow(0 4px 0 #8b64351a); pointer-events: none; }
 .theo-object > span { display: block; font-size: 11px; line-height: 1.1; font-weight: 650; pointer-events: none; }
 .theo-prop { display: block; }
 .theo-launch-pad { margin-top: 14px; padding: 10px 12px; background: #fff6dc; border: 2px dashed #b5a167; border-radius: 18px; }
