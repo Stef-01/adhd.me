@@ -107,21 +107,21 @@
      stone), accent 4.8:1 as text and 5.1:1 under white text. The brighter terracotta the mockups
      fill buttons with, #d95c2b, is 3.8:1 under white — decorative only here: the dot, the
      progress fill, borders, icons and the italic word, never small text on or in it. */
-  --ink: #191a17;
+  --ink: #172033;
   /* O157: #6e706a → #696b65. Contrast was never checked in this tree until now, and these two
      tokens were not wrong on the two backgrounds anybody had looked at — muted measured 5.01 on
      white and 4.80 on --paper. On --stone, the console's card and tag background, it measured
      4.24 against a 4.5 floor, which put 18 of the console's 30 failures on this one line. Five
      steps darker is the smallest change that clears AA on all THREE backgrounds at once
      (paper 5.17, stone 4.56, white 5.40) — computed rather than eyeballed. */
-  --muted: #5a5851;
+  --muted: #565f70;
   /* Has to clear AA at 11px, the smallest size this token is used at. 5.1:1 on --paper. */
   /* O157: 4.48 on --stone, one hundredth under the floor and still under. One step darker
      (paper 5.15, stone 4.55, white 5.37). */
-  --faint: #6c6a65;
-  --paper: #fbfaf7;
-  --stone: #eeece5;
-  --line: #dfddd6;
+  --faint: #626b7b;
+  --paper: #f7f8fc;
+  --stone: #edf0f6;
+  --line: #d8deea;
 
   /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
      validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
@@ -135,12 +135,12 @@
   --chart-end-label: var(--muted);
   --chart-point-ring: #ffffff;
 
-  --accent: #8a5a16;
+  --accent: #4c5f9c;
   --on-accent: #ffffff;
-  --accent-deep: #6c4300;
-  --accent-soft: #f9eee2;
-  --accent-mid: #bc8238;
-  --accent-tint: #efd3b4;
+  --accent-deep: #334679;
+  --accent-soft: #e9edf8;
+  --accent-mid: #647bbf;
+  --accent-tint: #c9d3ef;
 
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
@@ -199,7 +199,7 @@
   --ground: var(--ink);
   --on-ground: var(--paper);
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
-  --on-band: #e1a459;
+  --on-band: #ffd9b8;
 
   /* THE BRAND SCHEME (ported from the network deployment, Stef-01/ADHD O271/O282/O296/O300,
      founder-directed reskin 2026-09-01): warm golden orange to soft periwinkle blue. The network
@@ -207,13 +207,13 @@
      are one product on two domains, so the finder carries the same scheme from the same tokens.
      Values are copied VERBATIM — a re-derivation here would be the drift the split's own banner
      warns about ("a change to shared code that matters to both has to be made in both"). */
-  --hero-glow: #efd3b4;
-  --hero-orange: #d9904c;
-  --hero-orange-deep: #c87d3f;
-  --hero-blue: #647bbf;
-  --hero-blue-deep: #596eb4;
-  --hero-blue-night: #4c5f9c;
-  --hero-dusk: #3f5182;
+  --hero-glow: #f5b273;
+  --hero-orange: #d47839;
+  --hero-orange-deep: #a14f19;
+  --hero-blue: #6679b9;
+  --hero-blue-deep: #5065a6;
+  --hero-blue-night: #334679;
+  --hero-dusk: #172033;
 
   /* The redesign's functional roles. Blue carries route and state; orange marks the next
      consequential action. Both come from the existing cross-deployment brand family, but they
@@ -243,6 +243,14 @@
   --color-stone-700: color-mix(in srgb, var(--ink) 78%, var(--muted));
   --color-stone-800: color-mix(in srgb, var(--ink) 90%, var(--muted));
   --color-stone-900: var(--ink);
+  /* 2026-09-10, the blue scheme: the console's amber utilities (its active states and notes) read the
+     accent ramp, so one token change recolours every surface; there is no second warm scale. */
+  --color-amber-50: var(--accent-soft);
+  --color-amber-100: color-mix(in srgb, var(--accent-tint) 55%, var(--paper));
+  --color-amber-200: var(--accent-tint);
+  --color-amber-500: var(--accent-mid);
+  --color-amber-700: var(--accent);
+  --color-amber-900: var(--accent-deep);
   /* THE BRAND GRADIENT, DEFINED ONCE (network O296). Every surface that carries it — the header,
      the footer, the Acknowledgement band — references this, so they cannot drift apart by being
      written out per surface. Purely left-to-right on purpose: the footer and the Acknowledgement
@@ -264,7 +272,7 @@
     var(--band-gradient);
   --band-fall-lower:
     var(--band-gradient);
-  --line-strong: #c4c1b7;
+  --line-strong: #b9c2d6;
 }
 
 
@@ -7242,10 +7250,10 @@ select { caret-color: var(--route-strong); }
      terracotta the same mix came out orange, and two console specs that measure neutrality by
      channel spread (a verdict must not be graded by colour) went red. Stone greys, on the warm
      paper: ink 16.6:1, muted 7.0:1, faint 4.9:1 on the stone tint, 5.4:1 on paper. */
-  --console-ink: #1c1917;
-  --console-muted: #57534e;
-  --console-faint: #6b665f;
-  --console-line: #e7e5e4;
+  --console-ink: #172033;
+  --console-muted: #565f70;
+  --console-faint: #626b7b;
+  --console-line: #d8deea;
 }
 .console-main {
   color: var(--console-ink);

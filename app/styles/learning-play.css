@@ -7,11 +7,11 @@
 .platform-shell .app-tab.is-current { background: transparent; }
 .platform-shell .app-tab-marker { display: block; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px; background: var(--stone); z-index: -1; }
 .platform-shell .app-tab-label { position: relative; }
-.learning-pause-banner { display: flex; align-items: center; gap: 24px; padding: 24px 28px; margin: 0 0 28px; background: #efd3b4; color: #191a17; border-radius: 20px; }
+.learning-pause-banner { display: flex; align-items: center; gap: 24px; padding: 24px 28px; margin: 0 0 28px; background: #efd3b4; color: var(--ink); border-radius: 20px; }
 .pause-banner-art { flex: 0 0 66px; height: 66px; display: grid; place-items: center; border-radius: 46% 54% 45% 55%; background: #d9904c; font-size: 42px; }
 .learning-pause-banner h2 { font-size: 22px; letter-spacing: -.035em; margin: 5px 0; }
 .learning-pause-banner p { font-size: 14px; color: #5a5851; }
-.learning-pause-banner a { display: inline-flex; gap: 12px; align-items: center; min-height: 48px; margin-left: auto; padding: 12px 18px; background: #191a17; color: #fbfaf7; border-radius: 12px; font-size: 14px; font-weight: 650; white-space: nowrap; }
+.learning-pause-banner a { display: inline-flex; gap: 12px; align-items: center; min-height: 48px; margin-left: auto; padding: 12px 18px; background: var(--ink); color: var(--paper); border-radius: 12px; font-size: 14px; font-weight: 650; white-space: nowrap; }
 .platform-shell .learn-module { --lesson-colour: #f4d94f; --lesson-soft: #fff6c8; --lesson-ink: #34362f; --lesson-ink-quiet: #3f4038; --on-band: #e99443; --hero-blue: #647bbf; }
 /* THE READER TAKES THE COLOUR OF THE CARD IT WAS OPENED FROM.
    A per-topic set lived here — six pastels, named by module id — beside the eight covers the
@@ -50,50 +50,50 @@
 .platform-shell .learn-module :is(.learn-card-body,.learn-card-detail,.learn-card-foot) { color: var(--lesson-ink); }
 .platform-shell .learn-module .learn-card-detail li { color: var(--lesson-ink); }
 .platform-shell .learn-module .learn-card-detail { clear: both; padding-top: 20px; }
-.platform-shell .learn-module .learning-explorer { background: #fbfaf7; }
+.platform-shell .learn-module .learning-explorer { background: var(--paper); }
 .platform-shell .learn-module .learning-care-ring.ring-0 { background: #c2a3e0; }
 .platform-shell .learn-module .learning-care-ring.ring-1 { background: #82c9e9; }
 .platform-shell .learn-module .learning-care-ring.ring-2 { background: #ffad62; }
 .platform-shell .learn-module .learn-controls { margin-top: 24px; padding: 16px 0; }
-.platform-shell .learn-module .learn-option { border: 2px solid #858880; border-radius: 20px; background: #fbfaf7; min-height: 76px; }
+.platform-shell .learn-module .learn-option { border: 2px solid #858880; border-radius: 20px; background: var(--paper); min-height: 76px; }
 .platform-shell .topic-myth-or-fact .learn-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; clear: both; padding-top: 24px; }
 .platform-shell .topic-myth-or-fact .learn-option { min-height: 132px; justify-content: center; font-size: 24px; }
 .platform-shell .topic-words .learn-options { clear: both; padding-top: 24px; }
 .platform-shell .learn-module .learn-option.is-right { background: #e4f1d9; border-color: #366247; }
 .platform-shell .learn-module .learn-option.is-wrong { background: #fff0df; border-color: #8a5a16; }
-.activity { clear: both; padding-top: 32px; margin-top: 28px; border-top: 1px solid color-mix(in srgb, var(--lesson-ink, #191a17) 20%, transparent); }
+.activity { clear: both; padding-top: 32px; margin-top: 28px; border-top: 1px solid color-mix(in srgb, var(--lesson-ink, var(--ink)) 20%, transparent); }
 .activity-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--lesson-ink-quiet, #42463d); margin-bottom: 20px; }
 .activity-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 750; letter-spacing: .1em; }
 .activity h3 { font-size: 28px; line-height: 1.2; letter-spacing: -.035em; margin: 10px 0 14px; }
 .activity > p { max-width: 64ch; line-height: 1.6; }
 .discovery-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-top: 24px; }
-.discovery-grid button { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: 24px; background: #fbfaf7; border-radius: 22px; border: 2px solid transparent; text-align: left; }
-.discovery-grid button[aria-pressed="true"] { border-color: #191a17; }
+.discovery-grid button { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: 24px; background: var(--paper); border-radius: 22px; border: 2px solid transparent; text-align: left; }
+.discovery-grid button[aria-pressed="true"] { border-color: var(--ink); }
 .discovery-glyph { width: 66px; height: 66px; border-radius: 18px; display: grid; place-items: center; font-size: 38px; background: var(--lesson-colour); }
 .discovery-grid strong { font-size: 19px; }
 .discovery-grid button > span:last-child { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-.activity-feedback { background: #fbfaf7; border-radius: 16px; padding: 20px; margin-top: 22px; min-height: 68px; line-height: 1.6; }
+.activity-feedback { background: var(--paper); border-radius: 16px; padding: 20px; margin-top: 22px; min-height: 68px; line-height: 1.6; }
 .activity-feedback:empty { display: none; }
 .discovery-earned { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-weight: 650; }
 .sequence-track { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 24px 0; }
 .sequence-slot { padding: 20px; min-height: 122px; border: 1px dashed var(--lesson-ink-quiet, #5a5851); border-radius: 18px; display: flex; flex-direction: column; gap: 14px; color: var(--lesson-ink-quiet, #5a5851); }
-.sequence-slot.is-filled { background: #fbfaf7; color: #191a17; border-style: solid; }
+.sequence-slot.is-filled { background: var(--paper); color: var(--ink); border-style: solid; }
 .sequence-slot > span { font-size: 12px; font-weight: 750; }
 .sequence-options { display: flex; flex-wrap: wrap; gap: 12px; }
-.sequence-options button { display: flex; gap: 16px; align-items: center; padding: 16px 20px; min-height: 52px; background: #191a17; color: #fbfaf7; border-radius: 12px; }
+.sequence-options button { display: flex; gap: 16px; align-items: center; padding: 16px 20px; min-height: 52px; background: var(--ink); color: var(--paper); border-radius: 12px; }
 .sequence-options button:disabled { opacity: .5; }
 .activity-reset { display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: underline; }
 .question-kit { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin: 24px 0; }
-.question-kit button { display: flex; align-items: center; text-align: left; gap: 16px; min-height: 94px; border-radius: 18px; background: #fbfaf7; border: 2px solid transparent; padding: 20px; }
+.question-kit button { display: flex; align-items: center; text-align: left; gap: 16px; min-height: 94px; border-radius: 18px; background: var(--paper); border: 2px solid transparent; padding: 20px; }
 .question-kit button[aria-pressed="true"] { border-color: #366247; }
 .kit-check { display: grid; place-items: center; flex: 0 0 32px; height: 32px; border: 1px solid #5a5851; border-radius: 50%; }
 .timeline-switch { display: flex; gap: 8px; margin: 22px 0; }
-.timeline-switch button { padding: 12px 18px; min-height: 48px; border-radius: 30px; background: #fbfaf7; border: 1px solid #5a5851; }
-.timeline-switch button[aria-pressed="true"] { background: #191a17; color: #fbfaf7; }
+.timeline-switch button { padding: 12px 18px; min-height: 48px; border-radius: 30px; background: var(--paper); border: 1px solid #5a5851; }
+.timeline-switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .timeline-stations { display: flex; gap: 16px; margin: 28px 0; }
-.timeline-stations > div { flex: 1; display: flex; flex-direction: column; gap: 20px; padding: 24px 18px; background: #fbfaf7; border-radius: 18px; }
+.timeline-stations > div { flex: 1; display: flex; flex-direction: column; gap: 20px; padding: 24px 18px; background: var(--paper); border-radius: 18px; }
 .timeline-stations span { display: grid; place-items: center; width: 36px; height: 36px; background: var(--lesson-colour); border-radius: 50%; }
-.meditation-studio { max-width: 1440px; margin: auto; padding: 28px clamp(20px,4vw,64px) 72px; color: #191a17; }
+.meditation-studio { max-width: 1440px; margin: auto; padding: 28px clamp(20px,4vw,64px) 72px; color: var(--ink); }
 .meditation-topline { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 50px; }
 .meditation-topline a { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 14px; }
 .meditation-topline > span { font-size: 11px; letter-spacing: .12em; }
@@ -103,21 +103,21 @@
 .meditation-invitation > p { max-width: 40ch; line-height: 1.7; color: #5a5851; }
 .meditation-length { display: flex; gap: 12px; margin: 30px 0; }
 .meditation-length button { border: 1px solid #6c6a65; border-radius: 30px; padding: 12px 22px; min-height: 48px; }
-.meditation-length button[aria-pressed="true"] { background: #191a17; color: #fbfaf7; }
-.meditation-start { display: inline-flex; align-items: center; gap: 20px; background: #191a17; color: #fbfaf7; padding: 18px 26px; border-radius: 16px; min-height: 64px; font-weight: 650; }
+.meditation-length button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.meditation-start { display: inline-flex; align-items: center; gap: 20px; background: var(--ink); color: var(--paper); padding: 18px 26px; border-radius: 16px; min-height: 64px; font-weight: 650; }
 .meditation-small { font-size: 12px; line-height: 1.6; margin-top: 22px; color: #49463e; }
 .meditation-landscape { min-height: 420px; position: relative; background: #f4d94f; border-radius: 120px 120px 28px 28px; overflow: hidden; }
 .meditation-sun { position: absolute; width: 190px; height: 190px; border-radius: 50%; background: #e58d46; top: 50px; left: calc(50% - 95px); display: grid; place-items: center; font-size: 70px; }
 .meditation-hill { position: absolute; width: 150%; height: 60%; border-radius: 50% 50% 0 0; bottom: -15%; }
 .hill-back { background: #8c9acb; left: -40%; transform: rotate(12deg); }
 .hill-front { background: #4c5f9c; right: -50%; transform: rotate(-10deg); }
-.landscape-caption { position: absolute; bottom: 36px; left: 32px; color: #fbfaf7; font-size: 12px; letter-spacing: .12em; }
+.landscape-caption { position: absolute; bottom: 36px; left: 32px; color: var(--paper); font-size: 12px; letter-spacing: .12em; }
 .meditation-shared { grid-column: 1/-1; display: flex; align-items: center; gap: 28px; padding: 30px; border-radius: 24px; background: #efd3b4; }
-.shared-icon { flex: 0 0 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: #fbfaf7; }
+.shared-icon { flex: 0 0 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: var(--paper); }
 .meditation-shared h2 { font-size: 24px; letter-spacing: -.03em; margin: 8px 0; }
 .meditation-shared p { max-width: 66ch; font-size: 14px; line-height: 1.7; }
 .meditation-shared small { display: block; margin-top: 12px; font-size: 13px; font-weight: 650; }
-.meditation-shared > button { display: inline-flex; gap: 12px; align-items: center; white-space: nowrap; margin-left: auto; padding: 14px 20px; background: #191a17; color: #fbfaf7; border-radius: 14px; min-height: 48px; }
+.meditation-shared > button { display: inline-flex; gap: 12px; align-items: center; white-space: nowrap; margin-left: auto; padding: 14px 20px; background: var(--ink); color: var(--paper); border-radius: 14px; min-height: 48px; }
 .meditation-shared > button:disabled { background: #5a5851; }
 body:has(.meditation-studio.is-playing) .platform-shell { background: #de995e; }
 .meditation-studio.is-playing { min-height: calc(100svh - 80px); background: #de995e; max-width: none; padding-top: 16px; padding-bottom: 32px; }
@@ -127,14 +127,14 @@ body:has(.meditation-studio.is-playing) .platform-shell { background: #de995e; }
 .platform-shell .meditation-player h1 { font-family: var(--font-display); font-weight: 430; font-size: clamp(38px,5vw,56px); margin-top: 16px; }
 .meditation-orbit { width: 260px; height: 260px; margin: 28px auto; display: grid; place-items: center; position: relative; }
 .meditation-breath { position: absolute; inset: 0; border-radius: 48% 52% 46% 54%; background: #f7d0a7; }
-.meditation-orbit-center { position: relative; width: 194px; height: 194px; border-radius: 50%; background: #fbfaf7; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+.meditation-orbit-center { position: relative; width: 194px; height: 194px; border-radius: 50%; background: var(--paper); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
 .meditation-orbit-center span { font-size: 11px; letter-spacing: .12em; }
 .meditation-orbit-center strong { font-size: 40px; font-weight: 450; font-variant-numeric: tabular-nums; }
 .meditation-guide { min-height: 120px; }
 .meditation-guide h2 { font-size: 24px; margin-bottom: 16px; }
 .meditation-guide p { max-width: 52ch; margin: auto; line-height: 1.75; }
-.meditation-progress { height: 4px; background: #191a1733; border-radius: 8px; overflow: hidden; margin: 20px auto; max-width: 420px; }
-.meditation-progress span { display: block; height: 100%; background: #191a17; transform-origin: left; }
+.meditation-progress { height: 4px; background: var(--ink)33; border-radius: 8px; overflow: hidden; margin: 20px auto; max-width: 420px; }
+.meditation-progress span { display: block; height: 100%; background: var(--ink); transform-origin: left; }
 .meditation-controls { display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap; }
 .meditation-controls :is(button,a) { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border: 1px solid #57412b; border-radius: 30px; min-height: 48px; font-size: 14px; }
 @media (max-width: 767px) {
