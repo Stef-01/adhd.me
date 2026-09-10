@@ -183,10 +183,9 @@ test("each mosquito has a buzz voice, and catch, mute, pause and exit stop it", 
     };
   });
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto(URL);
-  await page.getByLabel("Buzz sounds").uncheck();
   await page.getByRole("button", { name: "Play Leo’s moment" }).click();
   const audio = () => page.evaluate(() => (window as unknown as { leoAudio: { created: number; stopped: number; closed: number } }).leoAudio);
-  await page.getByRole("button", { name: "Enable buzzing" }).click();
+  await expect(page.getByRole("button", { name: "Mute buzzing" })).toBeVisible();
   await expect.poll(async () => (await audio()).created).toBe(3);
   await page.getByRole("button", { name: "Catch mosquito 1", exact: true }).click();
   await expect.poll(async () => (await audio()).stopped).toBe(1);
@@ -196,6 +195,9 @@ test("each mosquito has a buzz voice, and catch, mute, pause and exit stop it", 
   await expect.poll(async () => (await audio()).created).toBe(5);
   await page.getByRole("button", { name: "Mute buzzing" }).click();
   await expect.poll(async () => (await audio()).stopped).toBe(5);
+  await page.getByRole("button", { name: "Enable buzzing" }).click();
+  await expect.poll(async () => (await audio()).created).toBe(7);
   await page.getByRole("link", { name: "Back to learning" }).click();
   await expect.poll(async () => (await audio()).closed).toBe(1);
+  await expect.poll(async () => (await audio()).stopped).toBe(7);
 });

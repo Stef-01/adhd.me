@@ -82,7 +82,7 @@ export function LeoPractice() {
     </div>
     <div className="leo-bottom">
       {phase === "ready" && <>
-        <p>They keep coming. Catch every mosquito before time or Leo’s regulation runs out.</p>
+        <p>{still ? "Clear one wave at a time. Catch every mosquito to help Leo settle." : "They keep coming. Catch every mosquito before time or Leo’s regulation runs out."}</p>
         <div className="leo-options">
           <label>Challenge <select value={level} onChange={e => setLevel(Number(e.target.value))}><option value={1}>9 mosquitoes</option><option value={4}>12 mosquitoes</option><option value={8}>20 mosquitoes</option></select></label>
           <label className="leo-untimed"><input type="checkbox" checked={still} disabled={reduced} onChange={e => setUntimed(e.target.checked)} /> No timer or movement</label>

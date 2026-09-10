@@ -110,7 +110,7 @@ export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progr
       <div className="leo-regulation" role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(swarm.regulation)}><span style={{ transform: `scaleX(${swarm.regulation / 100})` }} /></div>
       {audioUnavailable && <span className="sr-only" role="status">Sound unavailable. The visual game still works.</span>}
     </div>
-    <div className="leo-room" data-live={live} data-reduced={reducedMotion} aria-label="Leo's bedroom" onPointerDown={event => {
+    <div className="leo-room" role="group" data-live={live} data-reduced={reducedMotion} aria-label="Leo's bedroom" onPointerDown={event => {
     if (live && !done.current && !(event.target as Element).closest("button")) setMisses(n => n + 1);
   }}>
     <LeoBedroom asleep={outcome === "success" || swarm.complete} moving={live && !reducedMotion && !swarm.complete} regulation={swarm.regulation} />
