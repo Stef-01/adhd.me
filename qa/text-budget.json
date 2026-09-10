@@ -1,0 +1,432 @@
+{
+  "measuredAt": "2026-09-10T06:33:11.541Z",
+  "base": "http://localhost:3620",
+  "budget": {
+    "aboveFold": 40,
+    "card": 8
+  },
+  "results": [
+    {
+      "path": "/",
+      "name": "Support (finder welcome)",
+      "aboveFold": 71,
+      "chrome": 8,
+      "total": 175,
+      "over": true,
+      "longest": [
+        {
+          "w": 27,
+          "text": "Listed doctors consult in Sydney; their profiles describe real clinicians. Allied provider",
+          "tag": "p"
+        },
+        {
+          "w": 21,
+          "text": "GPs, psychologists, counsellors, occupational therapists, exercise physiologists and ADHD ",
+          "tag": "p"
+        },
+        {
+          "w": 8,
+          "text": "What kind of support are you looking for?",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today",
+      "aboveFold": 20,
+      "chrome": 8,
+      "total": 68,
+      "over": false,
+      "longest": [
+        {
+          "w": 9,
+          "text": "Two minutes so this app can be about you.",
+          "tag": "h2"
+        },
+        {
+          "w": 7,
+          "text": "Ten short questions. Nothing is sent anywhere.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "One useful thing.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/approach",
+      "name": "Learn",
+      "aboveFold": 49,
+      "chrome": 8,
+      "total": 187,
+      "over": true,
+      "longest": [
+        {
+          "w": 11,
+          "text": "A guided pause, or a five-minute session on a shared clock.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "The care map — brain, body, environment, people",
+          "tag": "a"
+        },
+        {
+          "w": 5,
+          "text": "MAKE ROOM FOR A MOMENT",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD",
+      "aboveFold": 56,
+      "chrome": 8,
+      "total": 104,
+      "over": true,
+      "longest": [
+        {
+          "w": 23,
+          "text": "Answer a module’s “Does this happen to you?”, or the ten onboarding questions, and this pa",
+          "tag": "p"
+        },
+        {
+          "w": 19,
+          "text": "Built only from what you have said. Nothing here is a verdict, and all of it can be change",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Nothing here yet — and that is honest.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/support",
+      "name": "Support path",
+      "aboveFold": 60,
+      "chrome": 8,
+      "total": 108,
+      "over": true,
+      "longest": [
+        {
+          "w": 23,
+          "text": "Once the app knows what is hardest for you, this page walks from that problem to the kind ",
+          "tag": "p"
+        },
+        {
+          "w": 20,
+          "text": "Answer the onboarding, or a module’s recognition questions, and the path fills in. You can",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Start from the problem, not the profession.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/profile",
+      "name": "Profile (filters)",
+      "aboveFold": 103,
+      "chrome": 8,
+      "total": 424,
+      "over": true,
+      "longest": [
+        {
+          "w": 19,
+          "text": "Each one narrows the list to providers who declare it. The words you search with still dec",
+          "tag": "p"
+        },
+        {
+          "w": 17,
+          "text": "Nearer GPs come first among equal matches, and the map after you search is drawn from here",
+          "tag": "p"
+        },
+        {
+          "w": 11,
+          "text": "Everything below is held on this device only, for this tab.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/start",
+      "name": "Onboarding",
+      "aboveFold": 41,
+      "chrome": 8,
+      "total": 89,
+      "over": true,
+      "longest": [
+        {
+          "w": 19,
+          "text": "Learn how it shows up in your life, what can make things easier, and where extra support m",
+          "tag": "p"
+        },
+        {
+          "w": 11,
+          "text": "Ten short questions, under two minutes. Everything stays on this device.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "ADHD affects much more than attention.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives",
+      "name": "Lives home",
+      "aboveFold": 56,
+      "chrome": 8,
+      "total": 128,
+      "over": true,
+      "longest": [
+        {
+          "w": 10,
+          "text": "Up to three. It only changes what is suggested first.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Everything was under control thirty seconds ago.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Who they are, what they are trying",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/learn",
+      "name": "Lives learn",
+      "aboveFold": 38,
+      "chrome": 8,
+      "total": 207,
+      "over": false,
+      "longest": [
+        {
+          "w": 6,
+          "text": "Put It Where You’ll Need It",
+          "tag": "strong"
+        },
+        {
+          "w": 4,
+          "text": "Park the New Idea",
+          "tag": "strong"
+        },
+        {
+          "w": 3,
+          "text": "One tiny sound.",
+          "tag": "strong"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play",
+      "name": "Lives play",
+      "aboveFold": 17,
+      "chrome": 0,
+      "total": 21,
+      "over": false,
+      "longest": [
+        {
+          "w": 16,
+          "text": "The line at the top says what to do. The bar under it is the clock.",
+          "tag": "h2"
+        },
+        {
+          "w": 1,
+          "text": "Next",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/toolkit",
+      "name": "Toolkit",
+      "aboveFold": 27,
+      "chrome": 8,
+      "total": 75,
+      "over": false,
+      "longest": [
+        {
+          "w": 20,
+          "text": "Nothing here yet. Play a run, and if a moment looks familiar, the strategy behind it can b",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "ADHD Lives",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "My Toolkit",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/characters",
+      "name": "Characters",
+      "aboveFold": 63,
+      "chrome": 8,
+      "total": 428,
+      "over": true,
+      "longest": [
+        {
+          "w": 15,
+          "text": "Can find her way through a spreadsheet. Cannot find her way across a busy intersection.",
+          "tag": "p"
+        },
+        {
+          "w": 8,
+          "text": "Everything at the crossing was loud at once.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Falls asleep anywhere except in bed.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/manual",
+      "name": "My Manual",
+      "aboveFold": 80,
+      "chrome": 8,
+      "total": 184,
+      "over": true,
+      "longest": [
+        {
+          "w": 37,
+          "text": "Yours to write and change. Nothing here is written for you: what this app has noticed is o",
+          "tag": "p"
+        },
+        {
+          "w": 15,
+          "text": "The situations where things reliably go wrong — so they can be planned around, not fought.",
+          "tag": "p"
+        },
+        {
+          "w": 12,
+          "text": "The conditions and small moves that make things go better for you.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/match",
+      "name": "Match intake",
+      "aboveFold": 123,
+      "chrome": 8,
+      "total": 179,
+      "over": true,
+      "longest": [
+        {
+          "w": 44,
+          "text": "Say it the way you would to a friend: what is going on, what you want from a GP, what woul",
+          "tag": "p"
+        },
+        {
+          "w": 28,
+          "text": "Your browser converts speech to text, which means the audio goes to your browser's speech ",
+          "tag": "p"
+        },
+        {
+          "w": 19,
+          "text": "Used for distance only. A suburb we do not hold yet is scored at the midpoint, not against",
+          "tag": "small"
+        }
+      ]
+    },
+    {
+      "path": "/match/results",
+      "name": "Match results",
+      "setup": "intake",
+      "aboveFold": 107,
+      "chrome": 8,
+      "total": 349,
+      "over": true,
+      "longest": [
+        {
+          "w": 13,
+          "text": "adult ADHD assessment, anxiety alongside ADHD, telehealth appointments, something long-sta",
+          "tag": "p"
+        },
+        {
+          "w": 9,
+          "text": "Also in common: telehealth appointments and not being rushed.",
+          "tag": "li"
+        },
+        {
+          "w": 9,
+          "text": "Says they have worked with ADHD for 10 years.",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/match/prep",
+      "name": "Match prep",
+      "setup": "intake",
+      "aboveFold": 140,
+      "chrome": 8,
+      "total": 533,
+      "over": true,
+      "longest": [
+        {
+          "w": 31,
+          "text": "When things started, what changed, and what it costs you now is the first thing a GP asks;",
+          "tag": "p"
+        },
+        {
+          "w": 23,
+          "text": "An ADHD assessment looks for signs before age twelve; a teacher's comment from years ago i",
+          "tag": "p"
+        },
+        {
+          "w": 15,
+          "text": "Some ADHD medications interact with common scripts, so the GP checks this before anything ",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/gp/example-mei-chao",
+      "name": "GP profile",
+      "aboveFold": 136,
+      "chrome": 0,
+      "total": 310,
+      "over": true,
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD assessment across ages, titration. Says she sees ADHD assessment often, for adults an",
+          "tag": "p"
+        },
+        {
+          "w": 41,
+          "text": "She consults in English and Mandarin. Mei is an invented example GP. Her profile declares ",
+          "tag": "p"
+        },
+        {
+          "w": 15,
+          "text": "An invented example profile. The declarations below were generated for the demonstration a",
+          "tag": "p"
+        }
+      ]
+    }
+  ]
+}
