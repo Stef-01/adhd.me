@@ -3,7 +3,8 @@
 // interrupting a module, the support path reaching matching providers, the care map opening from
 // the Learn page, and the finder broadened beyond GPs.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { CURSOR_KEY } from "../src/learn/cursor";
 import { runStepCount } from "../src/learn/play";
 import { RUNS } from "../src/learn/runs";

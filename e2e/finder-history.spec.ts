@@ -6,7 +6,8 @@
 // address bar carries the suburb and never the sentence. The plan's §2.8 Q-A rule — patient text
 // never appears in a URL or a history entry — is asserted here on the real `history.state`.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { installFakeSpeech } from "./support/fake-speech";
 
 const SENTENCE = "my son Oliver cannot sit still in class and the school keeps calling";

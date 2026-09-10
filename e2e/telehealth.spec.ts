@@ -2,7 +2,8 @@
 // session's booking link shows video-appointment copy and confirms as such;
 // the default (in-person) scenario is unchanged (covered by booking.spec.ts).
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 interface MockState {
   invitations: Array<{ id: string; status: string; token: string }>;

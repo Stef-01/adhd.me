@@ -17,7 +17,8 @@
 // existing, and the check is skipped only where there is genuinely no site footer (the finder, the
 // story, the console, the clinician walkthrough — each carries its own foot or none by design).
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { PUBLIC_ROUTES } from "./site-routes";
 
 test("the site footer is a contentinfo landmark and a full-bleed band wherever it renders", async ({ page }) => {

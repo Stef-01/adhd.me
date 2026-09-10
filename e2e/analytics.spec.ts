@@ -5,7 +5,8 @@
 // one after, nothing new after Withdraw on /privacy — and the bar comes back, on the page where
 // the agreement was taken back. Like consent.spec.ts it starts unagreed on purpose.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { sweepSurface, unaccepted } from "../src/compliance/public-surfaces";
 import { gaDisableFlag } from "../src/privacy/measurement";
 

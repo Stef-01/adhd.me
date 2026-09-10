@@ -12,7 +12,8 @@
 // scope for Playwright here (W83's rule against theatre), and the cross-practice write isolation
 // they would test is unit-tested instead.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { createPractice, signIn } from "./support/session";
 
 const OWNER = "owner@demo.practice.example";

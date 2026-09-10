@@ -1,5 +1,6 @@
 // The Learn page's two panes: tabs switch them, the pane is remembered, a module returns to its own side.
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 test("games and modules are two panes, remembered, and a game returns to Games", async ({ page }) => {
   await page.goto("/approach");

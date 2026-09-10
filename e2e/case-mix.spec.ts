@@ -2,7 +2,8 @@
 // The rules (own interest only, appetite not ability) are unit-tested in
 // src/capability/interest.test.ts; this drives the real surface.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 type Page = import("@playwright/test").Page;
 type Request = import("@playwright/test").APIRequestContext;

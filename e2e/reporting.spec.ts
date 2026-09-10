@@ -5,7 +5,8 @@
 // the caveats have to survive on. A module can carry a coverage statement and a page can render
 // three numbers without it.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {

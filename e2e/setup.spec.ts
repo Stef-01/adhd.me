@@ -8,7 +8,8 @@
 // generous wall-clock ceiling as the regression guard against a step that starts
 // blocking (a slow sim build behind a page, say).
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signIn } from "./support/session";
 
 /** Wall-clock ceiling for the whole wizard. Generous: it guards against blocking, not slowness. */

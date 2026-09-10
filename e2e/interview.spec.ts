@@ -1,6 +1,7 @@
 // O30: the onboarding interview screen — the transcript is editable, the proposals are live,
 // and only a recorded answer becomes part of the draft.
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");

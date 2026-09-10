@@ -5,7 +5,8 @@
 // page shows it. The image is fetched, not just named: an `og:image` that points at a broken
 // route is a card with a grey box, and nothing but a fetch finds that.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { SEO_PAGES, SHARED_OPEN_GRAPH, SHARE_IMAGE } from "../src/seo/pages";
 
 const meta = async (page: import("@playwright/test").Page, attr: "property" | "name", key: string) =>

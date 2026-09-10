@@ -2,7 +2,8 @@
 // practice notification banner, triage → resolve, and the opt-out's effect on
 // the patient's outstanding booking link.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 interface MockState {

@@ -2,7 +2,8 @@
 // booking page, and what they set is what gets stored and honoured. The scheduling rule
 // itself is unit-tested in src/messaging/preferences.test.ts.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 interface MockState {
   invitations: Array<{ id: string; status: string; token: string; patientId: string }>;

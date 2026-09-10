@@ -4,7 +4,8 @@
 // finish it, customise it, and find it "Trying". Plus: a seeded run replays (§90), and FASTER
 // arrives after four successes (§59).
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 
 const TUTORED_KEY = "adhdme.lives.tutored";
 const PHONE = { width: 390, height: 844 };

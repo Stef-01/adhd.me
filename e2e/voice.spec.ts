@@ -12,7 +12,8 @@
 // transcribes speech. Nothing can prove the latter in CI, and pretending otherwise with a mocked
 // audio stream would be a test that passes when the feature is broken.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { installFakeClock } from "./support/fake-clock";
 import { installFakeSpeech } from "./support/fake-speech";
 

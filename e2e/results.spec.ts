@@ -3,7 +3,8 @@
 // asserts the on-page element that answers it. The design-QA half (layout, palette,
 // accessibility review) lives in docs/DESIGN-QA.md.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {

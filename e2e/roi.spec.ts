@@ -2,7 +2,8 @@
 // figures and recalculates from the practice's inputs. The economic model itself
 // is unit-tested in src/economics/roi.test.ts.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signIn } from "./support/session";
 
 // Reset clears the W37 sign-in rate limiter too, so a long suite cannot trip it.

@@ -1,5 +1,6 @@
 import { openModuleShelves, openShelves } from "./support/learn";
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 test("a reading step stays readable on mobile and resumes without marking completion", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });

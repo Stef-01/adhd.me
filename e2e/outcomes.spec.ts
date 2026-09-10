@@ -1,7 +1,8 @@
 // W173 verify gate (e2e half): the outcome dashboard states its own denominator and ranks no
 // clinician. The unit half is src/outcomes/dashboard.test.ts; the axe scan is in a11y.spec.ts.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {

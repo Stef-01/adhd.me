@@ -7,7 +7,8 @@
 // absence mean something); a real browser's Web Vital beacon arriving as its own kind; and the
 // enforced policy's violation document arriving through `report-uri` (U13: `disposition: "enforce"`).
 
-import { expect, test, type APIRequestContext } from "@playwright/test";
+import { expect, type APIRequestContext } from "@playwright/test";
+import { test } from "./support/test";
 import type { Report } from "../src/ops/reporter";
 
 const PLANT = "my daughter is nine and cannot sit through a lesson";

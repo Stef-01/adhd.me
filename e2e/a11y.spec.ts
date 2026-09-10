@@ -7,7 +7,8 @@
 // This is a CHECK, not a resurrected gate: there is no exemption register and no verify step. A
 // finding is fixed in the same change, and the spec stays so the fix cannot rot back silently.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { expectNoViolations } from "./support/a11y";
 import { installFakeSpeech } from "./support/fake-speech";

@@ -6,7 +6,8 @@
 // qa/matching-o10/, following the qa/ convention: the picture is the review artefact, so a
 // regression is visible to a reviewer who never reads this file.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { clinicians } from "../src/demo/clinicians";
 import { clarifiers } from "../src/matching/clarify";
 import { gotoFinderRealRosterOnly } from "./support/real-roster";

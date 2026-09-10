@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 
 test("all four navigation labels and header controls fit phone, tablet and desktop widths", async ({ page }) => {

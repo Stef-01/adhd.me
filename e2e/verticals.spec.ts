@@ -6,7 +6,8 @@
 // assert they are DISTINGUISHABLE, not merely non-blank. A single "nothing here" message would
 // pass a naive check and still tell a practice the wrong thing about what to do next.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {

@@ -5,7 +5,8 @@
 // pop out, agree, stay gone — is pinned, and where its patient-facing copy is swept, since the
 // rendered-copy sweep never sees a bar that the shared storage state has already dismissed.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { sweepSurface, unaccepted } from "../src/compliance/public-surfaces";
 
 test.use({ storageState: { cookies: [], origins: [] } });

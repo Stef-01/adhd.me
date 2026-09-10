@@ -1,7 +1,8 @@
 // W19 verify gate: admin ops console — invitation queue visibility, kill-switch,
 // per-practice pause, and the auth guard.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {

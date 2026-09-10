@@ -1,7 +1,8 @@
 // O251 (founder-directed): a live demo to GPs from across the Gold Coast. Every way a person in
 // that room would type where they are has to land: a postcode, a suburb with its state, a comma,
 // a half-typed name chosen from the list. And the map has to show the coast, with faces.
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 
 async function searchFrom(page: Page, place: string) {
   await page.goto("/profile");

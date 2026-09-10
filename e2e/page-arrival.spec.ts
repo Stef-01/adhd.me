@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 for (const reducedMotion of ["reduce", "no-preference"] as const) {
   test(`direct page arrivals hydrate and stay interactive with motion ${reducedMotion}`, async ({ page }) => {

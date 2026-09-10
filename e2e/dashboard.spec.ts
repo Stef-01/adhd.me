@@ -1,7 +1,8 @@
 // W14 verify gate: the incrementality dashboard renders from sim data — north-star
 // tiles, the two-arm weekly chart with its hover layer, and the table view.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {

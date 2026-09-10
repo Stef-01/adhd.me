@@ -13,7 +13,8 @@
 // it — here, as a silently shrunken compliance sweep two files away. W201 and W253 made the same
 // correction in product code: replace the assertion with a refusal that states its reason.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard } from "./support/session";
 
 /** The routes that act for the first seeded practice, and therefore need one to exist. */

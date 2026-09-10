@@ -5,7 +5,8 @@
 // instead. What this spec can and does prove is the half that protects real people: an
 // application actually exists in the store, and neither a signed-out visitor nor a practice
 // account can see one byte of it.
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 // O188: the join form is retired, so the row this spec guards arrives through the synthetic

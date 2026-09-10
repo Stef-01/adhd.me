@@ -11,7 +11,8 @@
 // made O225's letterboxing survive a review.
 
 import { openModuleShelves, openShelves } from "./support/learn";
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { INDICATIVE_FIGURES } from "../src/compliance/landing-copy";
 import { APP_TABS } from "../src/app-shell/tabs";
 

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Hydrated } from "./hydrated";
 import "./globals.css";
 import "./styles/platform.css";
 import "./styles/learning.css";
@@ -124,6 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="min-h-screen antialiased app-body">
+        <Hydrated />
         <script
           id="adhdme-design-direction"
           type="application/json"

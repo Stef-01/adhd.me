@@ -1,7 +1,8 @@
 // W11 verify gate: sign-in → onboarding → dashboard → rules edit, with the
 // auth guard holding on every console page.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {

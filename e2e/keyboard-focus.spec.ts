@@ -13,7 +13,8 @@
 // the console-depth item's "keyboard access" and the re-sweep's manual gap; like `a11y.spec.ts`
 // it is a check with no exemption register.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { installFakeSpeech } from "./support/fake-speech";
 import { STAGES, openStage } from "./support/finder-stages";
