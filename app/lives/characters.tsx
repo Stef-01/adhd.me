@@ -35,6 +35,7 @@ export function LivesCharacters() {
               </div>
               <p className="lives-moment-line">“{c.moment}”</p>
               {c.id === "leo" && <Link className="lives-row" href="/lives/play/leo-mosquito">Play Leo’s moment →</Link>}
+              {c.id === "theo" && <Link className="lives-row" href="/lives/play/theo-out-the-door">Play Theo’s morning →</Link>}
               <div className="lives-choices is-three" role="group" aria-label={`${c.name}: is this you`}>
                 {RESPONSES.map((r) => <button key={r.id} type="button" className="lives-choice is-small" aria-pressed={answer === r.id} onClick={() => { apply((s) => recordResonance(s, { sourceType: "character", sourceId: c.id, response: r.id })); track("RESONANCE_SELECTED", { source: c.id, response: r.id }); }}>{r.label}</button>)}
               </div>

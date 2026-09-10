@@ -1,0 +1,90 @@
+/* Theo's sunlit hallway: butter, apricot, fern, ink, and paper. */
+body:has(.theo-practice) { background: #f8d889; }
+.theo-practice { --theo-ink: #34483e; color: var(--theo-ink); background: #f8d889; min-height: 100svh; padding: 16px 28px 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.theo-toolbar { width: min(100%, 1050px); display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 650; }
+.theo-toolbar a, .theo-toolbar button, .theo-toolbar-space { width: 48px; height: 48px; display: grid; place-items: center; flex-shrink: 0; }
+.theo-toolbar a, .theo-toolbar button { color: inherit; background: #fff6dc80; border: 0; border-radius: 50%; cursor: pointer; }
+.theo-heading { text-align: center; }
+.theo-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.theo-heading h1 { margin: 8px 0 0; font: 650 clamp(30px, 4.5vw, 54px)/1.05 "Newsreader Variable", Georgia, serif; color: #34483e; }
+.theo-heading h1:focus { outline: none; }
+.theo-intro { width: min(100%, 1040px); display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; margin: 24px 0; }
+.theo-intro-art { border-radius: 160px 160px 28px 28px; overflow: hidden; }
+.theo-hallway { display: block; width: 100%; height: 100%; }
+.theo-intro-copy { max-width: 420px; }
+.theo-intro h2 { font: 600 38px/1.1 "Newsreader Variable", Georgia, serif; margin: 14px 0; }
+.theo-intro p { line-height: 1.6; margin: 12px 0; color: #34483e; }
+.theo-rule { font-size: 14px; font-weight: 600; }
+.theo-setting { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 650; margin-top: 22px; }
+.theo-setting select { width: 100%; min-height: 46px; padding: 10px; border: 1px solid #b59151; border-radius: 12px; background: #fff6dc; color: #34483e; font: inherit; }
+.theo-untimed { display: flex; gap: 10px; align-items: center; min-height: 48px; font-size: 14px; }
+.theo-untimed input { width: 20px; height: 20px; accent-color: #34594b; }
+.theo-primary, .theo-secondary, .theo-door-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; border-radius: 99px; padding: 12px 24px; font: inherit; font-weight: 700; cursor: pointer; }
+.theo-primary, .theo-door-button { background: #34594b; color: #fff6dc; border: 0; }
+.theo-secondary { background: transparent; color: #34483e; border: 1px solid #8f8253; }
+.theo-practice button:focus-visible, .theo-practice a:focus-visible, .theo-practice select:focus-visible, .theo-practice input:focus-visible, .theo-game button:focus-visible { outline: 3px solid #34483e; outline-offset: 4px; }
+.theo-time { width: min(100%, 1040px); display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px; }
+.theo-time [role="timer"] { font-size: 24px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.theo-clock { width: min(100%, 1040px); height: 6px; background: #d5b577; border-radius: 6px; overflow: hidden; }
+.theo-clock span { display: block; height: 100%; width: 100%; background: #47694d; transform-origin: left; }
+.theo-play-area { position: relative; width: min(100%, 1040px); }
+.theo-game { color: #34483e; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; align-items: center; }
+.theo-scene { position: relative; min-width: 0; border-radius: 24px; overflow: hidden; background: #edbc6b; }
+.theo-scene-caption { display: block; padding: 8px 12px 14px; font-size: 12px; text-align: center; }
+.theo-packing { min-width: 0; }
+.theo-packing-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+.theo-packing-title span { white-space: nowrap; }
+.theo-shelves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 10px; padding: 10px 6px; background: repeating-linear-gradient(transparent 0 95px, #ce9b5c 95px 99px, transparent 99px 107px); }
+.theo-object { position: relative; height: 99px; min-width: 0; border: 0; padding: 4px; border-radius: 14px; background: transparent; color: #34483e; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.theo-object:disabled { cursor: default; }
+.theo-object .theo-prop { width: 68px; height: 68px; margin: auto; filter: drop-shadow(0 4px 0 #8b64351a); pointer-events: none; }
+.theo-object > span { display: block; font-size: 11px; line-height: 1.1; font-weight: 650; pointer-events: none; }
+.theo-prop { display: block; }
+.theo-launch-pad { margin-top: 14px; padding: 10px 12px; background: #fff6dc; border: 2px dashed #b5a167; border-radius: 18px; }
+.theo-launch-pad[data-dragging="true"] { border-color: #34594b; background: #e8efc9; }
+.theo-launch-pad > div { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.theo-launch-pad ul { display: flex; justify-content: space-around; list-style: none; gap: 5px; padding: 0; margin: 7px 0 0; }
+.theo-launch-pad li { min-width: 0; text-align: center; font-size: 10px; }
+.theo-launch-pad .theo-prop { width: 40px; height: 40px; margin: auto; opacity: .25; filter: grayscale(1); }
+.theo-launch-pad li[data-ready="true"] .theo-prop { opacity: 1; filter: none; }
+.theo-launch-pad li[data-ready="true"] { font-weight: 750; }
+.theo-door-button { width: 100%; margin-top: 10px; }
+.theo-door-button:disabled { opacity: .6; cursor: default; }
+.theo-feedback { grid-column: 1/-1; margin: 0; min-height: 40px; text-align: center; font-size: 13px; line-height: 1.4; }
+.theo-pause { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: #f8d889dd; border-radius: 20px; }
+.theo-result { width: min(100%, 800px); text-align: center; }
+.theo-result p { margin: 0 0 12px; color: #34483e; }
+.theo-result > div { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.theo-result a { display: inline-flex; align-items: center; min-height: 48px; margin-top: 8px; color: #34483e; font-size: 13px; text-underline-offset: 4px; }
+.theo-practice:is([data-phase="success"], [data-phase="failure"]) .theo-shelves, .theo-practice:is([data-phase="success"], [data-phase="failure"]) .theo-door-button { display: none; }
+.theo-practice:is([data-phase="success"], [data-phase="failure"]) .theo-feedback { display: none; }
+.theo-door-leaf { transform-box: fill-box; transform-origin: right center; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.theo-hallway[data-mood="success"] .theo-door-leaf { transform: scaleX(.13); }
+.theo-person { transform-box: fill-box; transform-origin: center bottom; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.theo-hallway[data-mood="success"] .theo-person { transform: translateX(75px) scale(.9); }
+.theo-feature { background: #f8d889; color: #34483e; }
+.theo-feature .leo-feature-art { background: #edbc6b; }
+@media (max-width: 700px) {
+  .theo-practice { padding: 10px 16px 22px; gap: 10px; }
+  .theo-heading h1 { font-size: 30px; }
+  .theo-intro { grid-template-columns: 1fr; gap: 12px; margin: 0; }
+  .theo-intro-art { height: clamp(90px, calc(26svh - var(--consent-height, 0px)), 210px); border-radius: 24px; }
+  .theo-intro-copy { max-width: none; }
+  .theo-intro-copy > .theo-eyebrow, .theo-intro h2 { display: none; }
+  .theo-intro p { font-size: 14px; margin: 8px 0; line-height: 1.45; }
+  .theo-setting { margin-top: 10px; }
+  .theo-intro .theo-primary { width: 100%; }
+  .theo-game { grid-template-columns: 1fr; gap: 8px; }
+  .theo-scene { height: 136px; }
+  .theo-scene-caption { display: none; }
+  .theo-shelves { grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 3px 0; background: repeating-linear-gradient(transparent 0 70px, #ce9b5c 70px 73px, transparent 73px 76px); }
+  .theo-object { height: 74px; padding: 2px; }
+  .theo-object .theo-prop { height: 51px; width: 51px; }
+  .theo-object > span { font-size: 10px; }
+  .theo-launch-pad { margin-top: 7px; padding: 8px; }
+  .theo-launch-pad .theo-prop { width: 32px; height: 32px; }
+  .theo-feedback { min-height: 36px; font-size: 12px; }
+  .theo-door-button { min-height: 46px; margin-top: 7px; }
+  .theo-practice:is([data-phase="success"], [data-phase="failure"]) .theo-scene { height: 240px; }
+}
+@media (prefers-reduced-motion: reduce) { .theo-door-leaf, .theo-person { transition: none; } }
