@@ -289,7 +289,7 @@ function HoldRelease({ game, scene, live, reducedMotion, reducedSensory, progres
   }
   return (
     <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={progress} held={holding} className="lives-hold" label="The conversation">
-      <p className="lives-cue" aria-live="polite">{cued ? `${plan.releaseAt.charAt(0).toUpperCase()}${plan.releaseAt.slice(1)}, let go` : holding ? "Holding…" : plan.verb}</p>
+      <p className="lives-cue" aria-live="polite">{cued ? `${plan.releaseAt.charAt(0).toUpperCase()}${plan.releaseAt.slice(1)}, let go` : holding ? "Holding…" : ""}</p>
       <button
         type="button"
         className={`lives-hold-button${holding ? " is-holding" : ""}${cued ? " is-cued" : ""}`}

@@ -118,7 +118,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-heat-calm { position: absolute; top: 0; bottom: 0; left: 35%; border-left: 3px solid var(--play-go); }
 /* Don't-tap: the tempting object in the scene, with a pull ring pulsing behind it under motion. */
 .play-tempt-spot.in-scene { position: absolute; right: 14px; bottom: 18px; }
-.play-tempt-pull { position: absolute; inset: -4px; border-radius: 24px; border: 3px solid var(--play-alert); pointer-events: none; }
+.play-tempt-pull { position: absolute; inset: -4px; border-radius: 999px; border: 3px solid var(--play-alert); pointer-events: none; }
 .play-tempt-thing { position: relative; flex-direction: column; gap: 4px; min-width: 96px; padding: 12px 18px 10px; border-radius: 22px; background: var(--play-paper); color: var(--play-ink); font-size: 0.9375rem; box-shadow: 0 6px 0 color-mix(in srgb, var(--play-ink) 14%, transparent); }
 .play-tempt-thing .play-glyph { color: var(--play-alert); }
 /* Timing: a timeline with stations; the marker is a pin; the last station lights when the marker is on it. */
@@ -344,3 +344,6 @@ body:has(.play-run) { overflow-x: clip; }
 .play-fall.is-decoy .play-fall-art { background: var(--stone); box-shadow: 0 5px 0 color-mix(in srgb, var(--play-ink) 8%, transparent); }
 /* The title bean stands in the room beside its furniture, not in front of it. */
 .play-card.is-title:has(.play-place) .play-hero-bean { align-self: flex-start; width: 128px; height: auto; margin-left: 5%; }
+/* The title and its button read on a soft paper scrim, as the Chaos Run's chrome does over its world. */
+.play-card.is-title:has(.play-place)::before { content: ""; position: absolute; inset: 0 0 auto; height: 260px; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, color-mix(in srgb, var(--paper) 96%, transparent) 0%, color-mix(in srgb, var(--paper) 84%, transparent) 55%, color-mix(in srgb, var(--paper) 0%, transparent) 100%); }
+.play-card.is-title:has(.play-place) > :not(.play-place) { z-index: 2; }

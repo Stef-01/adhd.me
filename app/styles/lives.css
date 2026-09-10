@@ -382,3 +382,5 @@
 /* The crossing starts where its character stands. */
 .lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; filter: drop-shadow(0 4px 4px rgb(23 32 51 / 0.24)); }
 .lives-trace:has(.lives-trace-who) ~ .lives-scene-bean, .lives-scene:has(.lives-trace-who) .lives-scene-bean { display: none; }
+/* The shout already names the hold; the cue pill shows only once there is something new to say. */
+.lives-world .lives-cue:empty { visibility: hidden; }
