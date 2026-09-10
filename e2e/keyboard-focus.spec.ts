@@ -101,6 +101,7 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
 }
 
 test("every public control is reachable by keyboard and shows where it is", async ({ page }) => {
+  test.skip(test.info().project.name === "webkit", "WebKit headless skips links on Tab and Option+Tab alike; the walk cannot reach them there");
   test.setTimeout(240_000);
   await page.setViewportSize(PHONE);
   expect(PUBLIC_ROUTES.length, "the derived public list collapsed").toBeGreaterThan(8);
@@ -125,6 +126,7 @@ test("every console control is reachable by keyboard and shows where it is", asy
 });
 
 test("every finder stage is reachable by keyboard and shows where it is", async ({ page }) => {
+  test.skip(test.info().project.name === "webkit", "WebKit headless skips links on Tab and Option+Tab alike; the walk cannot reach them there");
   test.setTimeout(240_000);
   await installFakeSpeech(page);
   await page.setViewportSize(PHONE);

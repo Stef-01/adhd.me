@@ -99,6 +99,7 @@ test("a real browser's Web Vital beacon arrives as its own kind, with the pathna
 });
 
 test("the enforced policy's violation document reaches the sink through report-uri", async ({ page, request }) => {
+  test.skip(test.info().project.name === "webkit", "WebKit reports an enforced policy's violation with disposition report; the document's shape is Chromium's");
   await page.goto("/faq");
   await expect(page.getByRole("main")).toBeVisible();
   await page.evaluate(() => {
