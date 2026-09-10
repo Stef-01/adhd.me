@@ -18,8 +18,9 @@ async function clearUntimedSwarm(page: Page, keyboard = false) {
 }
 async function timedStart(page: Page) {
   await page.emulateMedia({ reducedMotion: "no-preference" });
+  // The clock goes in after the screen is live: installed before, it freezes the hydration wait.
+  await page.goto(URL);
   await page.clock.install();
-  await page.goto(URL, { waitUntil: "load" });
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   await page.getByRole("button", { name: "Play Leo’s moment" }).click();
 }
@@ -117,7 +118,7 @@ test("pause and hidden tabs freeze countdown, flight, waves, and regulation", as
 
 test("touch play can clear every wave with untimed mode independently selected", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: "no-preference" });
-  const page = await context.newPage(); await page.goto(URL, { waitUntil: "load" });
+  const page = await context.newPage(); await page.goto(URL);
   await page.getByLabel("No timer or movement").check();
   await page.getByRole("button", { name: "Play Leo’s moment" }).tap();
   for (let i = 0; i < 9; i++) await page.locator(".leo-fly:enabled").first().tap();
@@ -129,7 +130,7 @@ test("swarm controls and meters fit four screen widths and remain accessible", a
   await page.emulateMedia({ reducedMotion: "reduce" });
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   for (const width of [320, 390, 768, 1440]) {
-    await page.setViewportSize({ width, height: 844 }); await page.goto(URL, { waitUntil: "load" });
+    await page.setViewportSize({ width, height: 844 }); await page.goto(URL);
     await expect(page.getByRole("timer")).toHaveText("No timer");
     await expect(page.getByRole("button", { name: "Play Leo’s moment" })).toBeVisible();
     const play = await page.getByRole("button", { name: "Play Leo’s moment" }).boundingBox();
@@ -155,7 +156,7 @@ test("Leo's swarm clears in the Chaos Run and keeps navigation visible", async (
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => localStorage.setItem("adhdme.lives.tutored", "1"));
   for (const width of [390, 1440]) {
-    await page.setViewportSize({ width, height: 844 }); await page.goto("/lives/play?seed=leo-qa-2", { waitUntil: "load" });
+    await page.setViewportSize({ width, height: 844 }); await page.goto("/lives/play?seed=leo-qa-2");
     await page.getByRole("button", { name: "Play", exact: true }).click();
     await expect(page.locator(".lives-scene")).toHaveAttribute("data-game", "leo_mosquito");
     await page.getByRole("button", { name: "Go", exact: true }).click();
@@ -183,7 +184,7 @@ test("each mosquito has a buzz voice, and catch, mute, pause and exit stop it", 
       close() { log.closed++; return super.close(); }
     };
   });
-  await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto(URL, { waitUntil: "load" });
+  await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto(URL);
   await page.getByRole("button", { name: "Play Leo’s moment" }).click();
   const audio = () => page.evaluate(() => (window as unknown as { leoAudio: { created: number; stopped: number; closed: number } }).leoAudio);
   await expect(page.getByRole("button", { name: "Mute buzzing" })).toBeVisible();

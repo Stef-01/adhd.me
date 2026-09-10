@@ -50,8 +50,10 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
     let stops = 0;
     let first = "";
     let passedBody = false;
+    // Safari reaches links with Option+Tab unless a preference is set; plain Tab skips them.
+    const tab = test.info().project.name === "webkit" ? "Alt+Tab" : "Tab";
     for (let i = 0; i < 200; i += 1) {
-      await page.keyboard.press("Tab");
+      await page.keyboard.press(tab);
       const info = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return null;

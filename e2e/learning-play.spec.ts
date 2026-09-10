@@ -51,8 +51,8 @@ test("the step builder gives feedback and can be completed with the keyboard", a
 
 test("personal meditation pauses, resumes, completes and respects reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach/meditate");
   await page.clock.install();
-  await page.goto("/approach/meditate", { waitUntil: "load" });
   await page.getByRole("button", { name: "2 min", exact: true }).click();
   await page.getByRole("button", { name: "Start my moment" }).click();
   await expect(page.getByRole("heading", { name: "Nothing else to do." })).toBeFocused();
@@ -71,12 +71,12 @@ test("personal meditation pauses, resumes, completes and respects reduced motion
 });
 
 test("a delayed server clock cannot change a personal timer and normal-motion focus follows the view", async ({ page }) => {
-  await page.clock.install();
   let answerClock: (() => Promise<void>) | undefined;
   await page.route("**/api/meditation/session", route => new Promise<void>(resolve => {
     answerClock = async () => { await route.fulfill({ json: { serverNow: Date.now() + 3_600_000 } }); resolve(); };
   }));
-  await page.goto("/approach/meditate", { waitUntil: "load" });
+  await page.goto("/approach/meditate");
+  await page.clock.install();
   await page.getByRole("button", { name: "Start my moment" }).click();
   await expect(page.getByRole("heading", { name: "Nothing else to do." })).toBeFocused();
   await answerClock?.();
