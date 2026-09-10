@@ -261,6 +261,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
   return (
     <>
       <Completion completed={completedRun} start={start} />
+      <div className="learn-pane-top">
       <div className="learn-play-card">
         <div className="lives-cast" aria-hidden="true">
           {CHARACTERS.map((c) => (
@@ -286,6 +287,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
           </span>
         </span>
       </Link>
+      </div>
       <Explain>Below, twenty short games. Each is a scene from one person&rsquo;s life, three taps long, and ends by asking whether it is you too.</Explain>
       <ol className="learn-stack" data-testid="learn-games">
         {runs.map((module, index) => (
