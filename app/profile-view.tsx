@@ -220,13 +220,13 @@ export function ProfileView() {
               </li>
             ))}
           </ul>
-          <p className="me-place-status">
-            {place.trim() === ""
-              ? "Nearer GPs come first among equal matches, and the map after you search is drawn from here."
-              : origin
-                ? `Distances are measured from ${origin.suburb} (${origin.postcode}).`
-                : "We do not cover that location yet."}
-          </p>
+          {place.trim() === "" ? (
+            <Explain className="me-place-status">Nearer GPs come first among equal matches, and the map after you search is drawn from here.</Explain>
+          ) : (
+            <p className="me-place-status">
+              {origin ? `Distances are measured from ${origin.suburb} (${origin.postcode}).` : "We do not cover that location yet."}
+            </p>
+          )}
         </div>
       </section>
 

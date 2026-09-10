@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T06:53:54.085Z",
-  "base": "http://localhost:3625",
+  "measuredAt": "2026-09-10T06:57:07.167Z",
+  "base": "http://localhost:3626",
   "budget": {
     "aboveFold": 40,
     "card": 8
@@ -11,7 +11,7 @@
       "name": "Support (finder welcome)",
       "aboveFold": 59,
       "chrome": 8,
-      "total": 135,
+      "total": 126,
       "over": true,
       "longest": [
         {
@@ -20,23 +20,23 @@
           "tag": "p"
         },
         {
+          "w": 9,
+          "text": "Not sure who to see? Start from the problem",
+          "tag": "a"
+        },
+        {
           "w": 8,
           "text": "What kind of support are you looking for?",
           "tag": "h1"
-        },
-        {
-          "w": 6,
-          "text": "A search that starts with you.",
-          "tag": "h2"
         }
       ]
     },
     {
       "path": "/today",
       "name": "Today",
-      "aboveFold": 29,
+      "aboveFold": 20,
       "chrome": 8,
-      "total": 77,
+      "total": 68,
       "over": false,
       "longest": [
         {
@@ -50,18 +50,18 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
+          "w": 3,
+          "text": "One useful thing.",
+          "tag": "h1"
         }
       ]
     },
     {
       "path": "/approach",
       "name": "Learn",
-      "aboveFold": 32,
+      "aboveFold": 23,
       "chrome": 8,
-      "total": 151,
+      "total": 142,
       "over": false,
       "longest": [
         {
@@ -71,22 +71,22 @@
         },
         {
           "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
-        },
-        {
-          "w": 4,
           "text": "A little more understanding.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "The eight lives",
+          "tag": "a"
         }
       ]
     },
     {
       "path": "/my-adhd",
       "name": "My ADHD",
-      "aboveFold": 35,
+      "aboveFold": 26,
       "chrome": 8,
-      "total": 83,
+      "total": 74,
       "over": false,
       "longest": [
         {
@@ -101,17 +101,17 @@
         },
         {
           "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
+          "text": "My ADHD right now.",
+          "tag": "h1"
         }
       ]
     },
     {
       "path": "/support",
       "name": "Support path",
-      "aboveFold": 38,
+      "aboveFold": 29,
       "chrome": 8,
-      "total": 86,
+      "total": 77,
       "over": false,
       "longest": [
         {
@@ -134,9 +134,9 @@
     {
       "path": "/profile",
       "name": "Profile (filters)",
-      "aboveFold": 93,
+      "aboveFold": 58,
       "chrome": 8,
-      "total": 414,
+      "total": 362,
       "over": true,
       "longest": [
         {
@@ -150,18 +150,18 @@
           "tag": "p"
         },
         {
-          "w": 10,
-          "text": "GPs who see new people by phone or video first.",
-          "tag": "small"
+          "w": 4,
+          "text": "First appointment by telehealth",
+          "tag": "strong"
         }
       ]
     },
     {
       "path": "/start",
       "name": "Onboarding",
-      "aboveFold": 26,
+      "aboveFold": 17,
       "chrome": 8,
-      "total": 74,
+      "total": 65,
       "over": false,
       "longest": [
         {
@@ -176,18 +176,18 @@
         },
         {
           "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
+          "text": "I’m supporting someone else",
+          "tag": "button"
         }
       ]
     },
     {
       "path": "/lives",
       "name": "Lives home",
-      "aboveFold": 46,
+      "aboveFold": 32,
       "chrome": 8,
-      "total": 116,
-      "over": true,
+      "total": 80,
+      "over": false,
       "longest": [
         {
           "w": 7,
@@ -196,23 +196,23 @@
         },
         {
           "w": 7,
-          "text": "Who they are, what they are trying",
-          "tag": "span"
+          "text": "What would you most like help with?",
+          "tag": "summary"
         },
         {
-          "w": 7,
-          "text": "Sixteen strategies, two to five minutes each",
-          "tag": "span"
+          "w": 5,
+          "text": "Eight lives. Three of yours.",
+          "tag": "h1"
         }
       ]
     },
     {
       "path": "/lives/learn",
       "name": "Lives learn",
-      "aboveFold": 41,
+      "aboveFold": 38,
       "chrome": 8,
-      "total": 216,
-      "over": true,
+      "total": 207,
+      "over": false,
       "longest": [
         {
           "w": 6,
@@ -221,22 +221,22 @@
         },
         {
           "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
+          "text": "Park the New Idea",
+          "tag": "strong"
         },
         {
           "w": 3,
-          "text": "Show me around",
-          "tag": "button"
+          "text": "One tiny sound.",
+          "tag": "strong"
         }
       ]
     },
     {
       "path": "/lives/play",
       "name": "Lives play",
-      "aboveFold": 26,
+      "aboveFold": 17,
       "chrome": 0,
-      "total": 30,
+      "total": 21,
       "over": false,
       "longest": [
         {
@@ -245,13 +245,8 @@
           "tag": "h2"
         },
         {
-          "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "Show me around",
+          "w": 1,
+          "text": "Next",
           "tag": "button"
         }
       ]
@@ -259,9 +254,9 @@
     {
       "path": "/lives/toolkit",
       "name": "Toolkit",
-      "aboveFold": 36,
+      "aboveFold": 27,
       "chrome": 8,
-      "total": 84,
+      "total": 75,
       "over": false,
       "longest": [
         {
@@ -270,23 +265,23 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Want each screen explained?",
+          "w": 2,
+          "text": "ADHD Lives",
           "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Show me around",
-          "tag": "button"
+          "w": 2,
+          "text": "My Toolkit",
+          "tag": "h1"
         }
       ]
     },
     {
       "path": "/lives/characters",
       "name": "Characters",
-      "aboveFold": 65,
+      "aboveFold": 63,
       "chrome": 8,
-      "total": 437,
+      "total": 428,
       "over": true,
       "longest": [
         {
@@ -300,18 +295,18 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Want each screen explained?",
-          "tag": "span"
+          "w": 6,
+          "text": "Falls asleep anywhere except in bed.",
+          "tag": "p"
         }
       ]
     },
     {
       "path": "/manual",
       "name": "My Manual",
-      "aboveFold": 35,
+      "aboveFold": 26,
       "chrome": 8,
-      "total": 96,
+      "total": 87,
       "over": false,
       "longest": [
         {
@@ -334,16 +329,11 @@
     {
       "path": "/match",
       "name": "Match intake",
-      "aboveFold": 66,
+      "aboveFold": 30,
       "chrome": 8,
-      "total": 118,
-      "over": true,
+      "total": 81,
+      "over": false,
       "longest": [
-        {
-          "w": 28,
-          "text": "Your browser converts speech to text, which means the audio goes to your browser's speech ",
-          "tag": "p"
-        },
         {
           "w": 5,
           "text": "What are you looking for?",
@@ -353,6 +343,11 @@
           "w": 5,
           "text": "No names or Medicare numbers.",
           "tag": "small"
+        },
+        {
+          "w": 4,
+          "text": "In your own words",
+          "tag": "span"
         }
       ]
     },
@@ -360,24 +355,24 @@
       "path": "/match/results",
       "name": "Match results",
       "setup": "intake",
-      "aboveFold": 105,
+      "aboveFold": 74,
       "chrome": 8,
-      "total": 309,
+      "total": 211,
       "over": true,
       "longest": [
         {
-          "w": 13,
-          "text": "adult ADHD assessment, anxiety alongside ADHD, telehealth appointments, something long-sta",
-          "tag": "p"
-        },
-        {
-          "w": 11,
-          "text": "Sent to the GP. They accept or decline from their side.",
-          "tag": "p"
-        },
-        {
           "w": 9,
           "text": "Also in common: telehealth appointments and not being rushed.",
+          "tag": "li"
+        },
+        {
+          "w": 8,
+          "text": "adult ADHD assessment, anxiety alongside ADHD, telehealth appointments",
+          "tag": "p"
+        },
+        {
+          "w": 8,
+          "text": "Sees adults, which is who this is for.",
           "tag": "li"
         }
       ]
@@ -386,24 +381,24 @@
       "path": "/match/prep",
       "name": "Match prep",
       "setup": "intake",
-      "aboveFold": 78,
+      "aboveFold": 56,
       "chrome": 8,
-      "total": 401,
+      "total": 361,
       "over": true,
       "longest": [
         {
-          "w": 14,
-          "text": "A parent, older sibling or long-time friend willing to fill in a short questionnaire",
+          "w": 10,
+          "text": "What did teachers or parents say? What was school like?",
+          "tag": "span"
+        },
+        {
+          "w": 7,
+          "text": "Someone who knew you as a child",
           "tag": "strong"
         },
         {
-          "w": 10,
-          "text": "A list of every medication and supplement you take now",
-          "tag": "strong"
-        },
-        {
-          "w": 10,
-          "text": "School reports from primary school, if they can be found",
+          "w": 5,
+          "text": "Medicare card and photo ID",
           "tag": "strong"
         }
       ]
@@ -411,9 +406,9 @@
     {
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
-      "aboveFold": 160,
+      "aboveFold": 103,
       "chrome": 0,
-      "total": 283,
+      "total": 212,
       "over": true,
       "longest": [
         {
@@ -422,14 +417,14 @@
           "tag": "p"
         },
         {
-          "w": 41,
-          "text": "She consults in English and Mandarin. Mei is an invented example GP. Her profile declares ",
-          "tag": "p"
+          "w": 9,
+          "text": "Taking new matches: 6 of 8 declared places open.",
+          "tag": "li"
         },
         {
-          "w": 16,
-          "text": "It describes nobody. Experience: Structured adult ADHD assessment; Child and adolescent as",
-          "tag": "p"
+          "w": 5,
+          "text": "More about how they work",
+          "tag": "summary"
         }
       ]
     }

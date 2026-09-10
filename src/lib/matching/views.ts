@@ -52,8 +52,8 @@ export function availabilityOf(gp: GP): GPPublicView["availability"] {
       : max === 1
         ? "Books declared open."
         : grade === "few"
-          ? `${open} of ${max} declared places open.`
-          : `Taking new matches: ${open} of ${max} declared places open.`;
+          ? `${open} of ${max} places open.`
+          : `${open} of ${max} places open.`;
   return { grade, placesOpen: open, placesMax: max, acceptingNewPatients: gp.acceptingNewPatients, copy };
 }
 

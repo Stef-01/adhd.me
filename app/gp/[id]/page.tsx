@@ -64,13 +64,10 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
           <h2 id="how-heading">How they work</h2>
           <div className="match-bio">
             {(() => {
-              const paragraphs = view.bio.split(/(?<=\.)\s+(?=[A-Z])/).reduce<string[]>((acc, sentence) => {
-                const last = acc[acc.length - 1];
-                if (last !== undefined && last.length < 260) acc[acc.length - 1] = `${last} ${sentence}`;
-                else acc.push(sentence);
-                return acc;
-              }, []);
-              const [first, ...rest] = paragraphs;
+              // The first sentence is the profile's own line; everything after it opens on request.
+              const sentences = view.bio.split(/(?<=[.!?])\s+(?=[A-Z])/);
+              const first = sentences[0] ?? "";
+              const rest = [sentences.slice(1).join(" ")].filter((s) => s.trim().length > 0);
               return (
                 <>
                   {first && <p>{first}</p>}
