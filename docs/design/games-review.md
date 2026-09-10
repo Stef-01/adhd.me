@@ -62,6 +62,19 @@ to be inferable from the scene (2026-09-08), and unit and e2e tests pin it.
 | The kitchen | The wall repeated the counter's cabinets | A shelf of jars and a picture |
 | The note | A solid blue slab: class fills beat the outline's `fill="none"` | Outlines stay outlines |
 
-## Stage 5
+## Stage 5: verification (build of 2fb883d)
 
-Recorded when the recapture is read.
+Every stage-four change was recaptured and reads as intended: title-card cords fade under the
+scrim, the study and kitchen walls, the note drawn as a fridge note, Lights Out lavender to the top
+with the moment clear of the window, the lid held with one "Hold", the office chair at its start
+with Safe inside its circle.
+
+| Check | Result |
+|---|---|
+| e2e: leo-mosquito, learn-panes, app-shell, adhd-life, adhd-lives, learning-play | 65 passed |
+| Text budget, 31 app screens | 0 over 60 words; median 26; a game run's title card 6, the Chaos Run's first round 4 |
+| Vercel production (adhd.me) | Ready at 2fb883d on adhdme.vercel.app; no runtime errors in 24 hours |
+
+Kept on purpose: the pale glass shape that sometimes crosses a bean-run temptation. Crops with the
+WebGL layer hidden and with the cursor moved away show it is the droplet, the one moving glass
+shape that follows a finger and drifts when idle (founder, 2026-09-08), not a lens on the button.
