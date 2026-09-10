@@ -2,7 +2,7 @@
 // has, unreachable from another practice, and always open to staff.
 
 import { describe, expect, it } from "vitest";
-import { claimGP, gpAccessFor, releaseGP, type Viewer } from "./access";
+import { claimGP, gpAccessFor, recordVerification, releaseGP, type Viewer } from "./access";
 import { resetMatching, saveGP } from "./store";
 import { gp } from "./test-fixtures";
 
@@ -49,5 +49,16 @@ describe("M5 practice scoping", () => {
     expect(released.ok && released.gp.practiceId).toBeNull();
     const byStaff = releaseGP("g1", viewer(null, true), state);
     expect(byStaff.ok && byStaff.gp.practiceId).toBeNull();
+  });
+
+  it("the verifier's act is staff's alone, needs evidence to accept, and records who and when", () => {
+    const g = gp({ id: "g1", credentials: { evidence: [{ id: "ev-1", name: "cert.pdf", uploadedAt: "2026-09-10T00:00:00.000Z" }] } });
+    expect(recordVerification(g, { ...viewer("p1"), email: "manager@example.com" }, "verified", "2026-09-11T03:00:00.000Z")).toEqual({ ok: false, reason: "not_staff" });
+    const bare = gp({ id: "g2" });
+    expect(recordVerification(bare, { ...viewer(null, true), email: "staff@adhdme.example" }, "verified", "2026-09-11")).toEqual({ ok: false, reason: "no_evidence" });
+    const rejected = recordVerification(bare, { ...viewer(null, true), email: "staff@adhdme.example" }, "rejected", "2026-09-11");
+    expect(rejected.ok && rejected.gp.verificationStatus).toBe("rejected");
+    const done = recordVerification(g, { ...viewer(null, true), email: "staff@adhdme.example" }, "verified", "2026-09-11T03:00:00.000Z");
+    expect(done.ok && [done.gp.verificationStatus, done.gp.verifiedBy, done.gp.verifiedOn]).toEqual(["verified", "staff@adhdme.example", "2026-09-11"]);
   });
 });

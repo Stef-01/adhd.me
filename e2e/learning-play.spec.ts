@@ -76,7 +76,7 @@ test("a delayed server clock cannot change a personal timer and normal-motion fo
   await page.route("**/api/meditation/session", route => new Promise<void>(resolve => {
     answerClock = async () => { await route.fulfill({ json: { serverNow: Date.now() + 3_600_000 } }); resolve(); };
   }));
-  await page.goto("/approach/meditate");
+  await page.goto("/approach/meditate", { waitUntil: "load" });
   await page.getByRole("button", { name: "Start my moment" }).click();
   await expect(page.getByRole("heading", { name: "Nothing else to do." })).toBeFocused();
   await answerClock?.();

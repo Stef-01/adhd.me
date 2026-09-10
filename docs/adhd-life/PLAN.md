@@ -257,6 +257,10 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
       MRR 0.804, corpus neighbour agreement 64%, its two misses named); **practice scoping**
       (`access.ts`: a practice claims a profile from `/console/gp`, its members and staff manage
       it, every action re-checks, an orphaned claim is no claim; `0007_matching_practice_scope.sql`);
+      **the verifier's act** (`recordVerification`: staff only, needs offered evidence to accept,
+      records who and the date; the public profile reads it back as "checked on"). What stays
+      founder-gated is the document's bytes: the vault's `content` is synthetic by G2/G6 until the
+      founder rules on real documents, so the upload keeps the name and date and not the file;
       and the learning loop read as a report on `/console/gp` (the
       five declared weights, the weights in use, the correlation each rests on, and the record
       count against the floor), which M6 asked for. **Known on the live site (2026-09-10):** the
