@@ -178,8 +178,10 @@ native later. Mapped from the PRD's phases 0–6:
       sixteen modules full — recognise, understand, try, personalise, one action — with the
       validator and the suite refusing a stub. Every new game is linked from its strategies so
       the score screen can bring it back. (2026-09-09)
-- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound and haptics;
-      audio blocks (§72) have no asset yet. Done: a relaxed-timing setting (half as long again on
+- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound; audio blocks
+      (§72) have no asset yet. Done 2026-09-10: haptics behind a chip (`src/lives/haptics.ts`,
+      off by default), reduced flashing and reduced sensory effects as device flags read by the
+      run, more strategy mappings with coverage asserted, props that react in place. Done: a relaxed-timing setting (half as long again on
       every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
       the Lives home, kept on the device and read by the run. (2026-09-09) Done already: character stories (§41), Learn home (§28), the §67 events with §68's
       guardrail as a test, reduced motion and keyboard equals (§93–§94).
