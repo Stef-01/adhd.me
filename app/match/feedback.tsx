@@ -111,9 +111,7 @@ export function MatchFeedback() {
         <AppSettings />
           <span className="life-eyebrow">After the appointment</span>
           <h1 tabIndex={-1}>Thank you</h1>
-          <p className="match-lede" data-testid="feedback-sent">
-            Recorded against this match. It is used to improve who gets matched with whom, and it is never shown as a score of anybody.
-          </p>
+          <p className="match-lede" data-testid="feedback-sent">Recorded. Never shown as a score.</p>
         </header>
         <div className="match-actions">
           <Link href="/match/results">Your matches</Link>
@@ -128,7 +126,7 @@ export function MatchFeedback() {
         <AppSettings />
         <span className="life-eyebrow">After the appointment</span>
         <h1 tabIndex={-1}>How did it go?</h1>
-        <p className="match-lede">Three questions about the fit, not the outcome. The GP answers two of their own from their side.</p>
+        <p className="match-lede">Three questions about the fit.</p>
       </header>
 
       <form className="match-form" onSubmit={submit}>

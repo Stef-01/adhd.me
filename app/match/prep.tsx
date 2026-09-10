@@ -129,8 +129,8 @@ export function MatchPrep() {
             {copied ? "Copied" : "Copy the headings as text"}
           </button>
         </div>
-        {copied === false && <p className="match-copy-note">Copying did not work here; the headings above can be typed out.</p>}
-        {copied === true && <p className="match-copy-note">On your clipboard and nowhere else. Paste it into your notes and write under each heading.</p>}
+        {copied === false && <p className="match-copy-note">Copy failed; type the headings.</p>}
+        {copied === true && <p className="match-copy-note">Copied.</p>}
       </section>
 
       {view.expectations && (

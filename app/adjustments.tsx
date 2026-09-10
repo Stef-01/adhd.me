@@ -37,7 +37,6 @@ export function Adjustments() {
       <header className="life-head">
         <span className="life-eyebrow">Adjustments on paper</span>
         <h1 className="life-title">Most of it exists. Most people are never told.</h1>
-        <p className="life-lede">A university or a workplace can change the conditions around you, and the adjustments that help with ADHD mostly cost nothing. This page says what is commonly available, who grants it, and what to bring when you ask. It applies for nothing on your behalf.</p>
       </header>
 
       <div className="adjust-tracks" role="tablist" aria-label="Where">

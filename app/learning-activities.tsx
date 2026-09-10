@@ -28,7 +28,7 @@ export function LearningActivity({ topic, step }: { topic: string; step: number 
     const tasks = ["Open the document", "Write a rough title", "Add one bullet"];
     return <aside className="activity activity-sequence" aria-label="Build a first step">
       <div className="activity-heading"><span className="activity-label"><HandTap size={17} /> TRY IT OUT</span><span>{ordered.length} / 3 placed</span></div>
-      <h3>Make the start smaller.</h3><p>Put this example into a helpful order. Choose the next small action.</p>
+      <h3>Put these in a helpful order.</h3><p>Put this example into a helpful order. Choose the next small action.</p>
       <div className="sequence-track">{tasks.map((_, i) => <motion.div key={i} layout className={ordered[i] !== undefined ? "sequence-slot is-filled" : "sequence-slot"}><span>{i + 1}</span>{ordered[i] !== undefined ? tasks[ordered[i]!] : "Next small action"}</motion.div>)}</div>
       <div className="sequence-options">{[2, 0, 1].map(i => <motion.button key={i} whileTap={press} disabled={ordered.includes(i)} onClick={() => {
         if (i === ordered.length) { setOrdered([...ordered, i]); setFeedback(i === 2 ? "A whole task became three visible actions. You built a starting point." : "That gives the next action somewhere to begin."); }

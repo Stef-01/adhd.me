@@ -47,7 +47,7 @@ export function MatchResults() {
         <AppSettings />
           <span className="life-eyebrow">Find a GP</span>
           <h1 tabIndex={-1}>Nothing to show yet</h1>
-          <p className="match-lede">A request lives in this tab only. Start one, or start again.</p>
+          <p className="match-lede">Nothing here yet.</p>
         </header>
         <div className="match-actions">
           <Link className="is-primary" href="/match">

@@ -348,7 +348,7 @@ export function LearnModules() {
                 ? "Every one. You would be hard to surprise about how this works."
                 : "The ones you got wrong are the ones most people get wrong — that is why they are in here."}
             </p>
-            <p className="learn-card-foot">This was about ADHD in general, never about you. The finder is where you talk to a person.</p>
+            <p className="learn-card-foot">About ADHD in general, never about you.</p>
           </motion.article>
         </div>
 

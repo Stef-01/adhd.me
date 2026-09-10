@@ -26,14 +26,8 @@ export default function ThanksPage() {
       <main id="main-content" className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Registered", href: "/thanks" }]} />
         <h1>You’re registered.</h1>
-        <p>
-          Your details reached us, and a person reads every registration — nothing here is
-          automated. We reply within two business days.
-        </p>
-        <p>
-          Until then, the finder works without an account, and the worked examples show what it
-          does with a request like yours.
-        </p>
+        <p>Received. A person replies within two days.</p>
+        <p>Meanwhile, the finder works without an account.</p>
         <div className="prose-doors">
           <Link className="notfound-primary" href="/">Find support</Link>
           <Link className="notfound-secondary" href="/examples">See a worked example</Link>

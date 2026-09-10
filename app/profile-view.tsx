@@ -350,9 +350,7 @@ export function ProfileView() {
               );
             })}
           </ul>
-          <p className="me-group-note">
-            Leave every chip off to see all of them. Not sure which kind? The support path starts from the problem instead.
-          </p>
+          <p className="me-group-note">Leave all off to see everyone.</p>
         </div>
 
         {/* O248 (founder-directed): how the GP works — whole-person, functional-health, wearables —
@@ -380,10 +378,7 @@ export function ProfileView() {
               );
             })}
           </ul>
-          <p className="me-group-note">
-            As the GP declares it: a whole-person view, openness to functional health, or a look at
-            data from a wearable you bring.
-          </p>
+          <p className="me-group-note">As the GP declares it.</p>
         </div>
 
         {/* O236 (founder-directed): a fact modern patients ask about first — whether the consult is
@@ -409,11 +404,7 @@ export function ProfileView() {
               );
             })}
           </div>
-          <p className="me-group-note">
-            Some GPs use an AI scribe that records and transcribes the consult into notes, with your
-            consent each time; others write notes without any AI recording. Choosing one shows only
-            GPs who have declared it.
-          </p>
+          <p className="me-group-note">An AI scribe with consent, or none.</p>
         </div>
 
         {onCount > 0 && (
@@ -464,10 +455,7 @@ export function ProfileView() {
           </>
         ) : (
           <div className="me-empty">
-            <p>
-              Once you describe the GP you are looking for, your words and the suburb you gave will
-              appear here, and you can clear them from this device in one tap.
-            </p>
+            <p>Your words appear here after a search.</p>
             <Link className="me-primary" href="/">
               Describe what you need<ArrowRight size={17} weight="bold" aria-hidden="true" />
             </Link>
@@ -475,9 +463,7 @@ export function ProfileView() {
         )}
       </section>
 
-      <p className="me-privacy">
-        Nothing you type is sent anywhere. Your filters stay on this device; your words go when this tab closes. <Link href="/privacy">How this works</Link>
-      </p>
+      <p className="me-privacy">Stays on this device.</p>
       {/* RADIANT: the sticky bar the founder drew above the tab bar — the one act this screen is
           for, with the count the filters leave. It goes to the finder, which resumes the search. */}
       <div className="me-sticky">

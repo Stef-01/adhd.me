@@ -57,7 +57,7 @@ export function SupportPath() {
       {record && !need && (
         <section className="life-empty" aria-labelledby="support-empty">
           <h2 id="support-empty">Nothing to walk from yet.</h2>
-          <p>Answer the ten questions, or a module’s, and the path fills in.</p>
+          <p>Answer the ten questions and the path fills in.</p>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href="/start">Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
             <Link className="learn-secondary" href="/">Search the finder</Link>
@@ -92,7 +92,7 @@ export function SupportPath() {
           {offerSurvey(record) && (
             <li className="support-step">
               <h2>Sharpen the picture</h2>
-              <p>Optional. A topic survey says which part of the problem is the friction before anybody is suggested.</p>
+              <p>Optional survey.</p>
               <SurveyOffer record={record} compact />
             </li>
           )}
@@ -103,7 +103,7 @@ export function SupportPath() {
                 ? "You have tried what is here and it has not been enough. That is the point at which a person who does this for a living is worth it — not before."
                 : "When the cost stays high after two or three honest attempts, or when you would simply rather work on it with somebody. Nothing here requires that yet."}
             </p>
-            {need.contributors.some((c) => c.layer === "people") && <p>Some of what you described involves the people around you — sharing a module with them is one kind of help that costs nothing.</p>}
+            {need.contributors.some((c) => c.layer === "people") && <p>Sharing a module with them is one kind of help.</p>}
           </li>
           {institution && (
             <li className="support-step">
@@ -132,7 +132,7 @@ export function SupportPath() {
           </li>
           <li className="support-step">
             <h2>Before you book: a brief</h2>
-            <p>Built from what you have said. Edit it, keep it, or copy it to take with you. The app shares nothing.</p>
+            <p>Built from what you said. Edit, keep or copy.</p>
             <ReferralBrief need={need} tried={[...tried]} />
           </li>
         </ol>
@@ -177,7 +177,7 @@ function ReferralBrief({ need, tried }: { need: Need; tried: string[] }) {
           <Copy size={16} weight="bold" aria-hidden="true" /> {copied ? "Copied" : "Copy the brief"}
         </button>
       </div>
-      <p className="learn-card-foot">Nothing is sent to any provider. Copying puts it on your clipboard and nowhere else.</p>
+      <p className="learn-card-foot">Copies to your clipboard only.</p>
     </div>
   );
 }

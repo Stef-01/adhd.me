@@ -41,7 +41,7 @@ export function TopicSurveyScreen() {
     return (
       <main id="main-content" className="me-screen life-screen app-page-with-tabs">
         <LifeHeader />
-        <header className="life-head"><span className="life-eyebrow">Surveys</span><h1>Choose a survey.</h1><p>Eight to twelve questions each, two to four minutes. Offered, never required.</p></header>
+        <header className="life-head"><span className="life-eyebrow">Surveys</span><h1>Choose a survey.</h1><p>Two to four minutes. Optional.</p></header>
         <ul className="life-list">
           {TOPIC_SURVEYS.map((s) => <li key={s.id}><Link href={`/survey?id=${s.id}`}>{s.title} · {s.minutes} min</Link></li>)}
         </ul>
@@ -128,7 +128,7 @@ function SurveyResult({ surveyId, answers, onAccept, accepted }: { surveyId: str
         <p>{result.complete ? "From your answers, and nothing else. No score, no verdict." : `From the ${result.answered} you answered. Come back for the rest whenever you like.`}</p>
       </header>
       {result.contradictions.length > 0 && (
-        <p className="learn-reveal">Two of your answers pointed opposite ways about the same thing, so the app left that part out rather than guess.</p>
+        <p className="learn-reveal">Two answers disagreed, so that part was left out.</p>
       )}
       <section className="life-card is-lead" aria-labelledby="sr-friction">
         <span className="life-eyebrow">Biggest friction</span>

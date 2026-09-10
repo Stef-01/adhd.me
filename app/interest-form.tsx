@@ -97,7 +97,7 @@ export function InterestForm() {
       </label>
 
       <button type="submit" disabled={pending}>{pending ? "Registering…" : "Register interest"}</button>
-      <p className="community-form-privacy">No health history. No mailing list resale. You can ask us to remove your details at any time.</p>
+      <p className="community-form-privacy">No health history. No resale. Removed on request.</p>
     </form>
   );
 }

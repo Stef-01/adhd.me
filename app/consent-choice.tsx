@@ -17,10 +17,7 @@ export function ConsentChoice() {
 
   if (consent === "not-agreed") {
     return (
-      <p className="mt-2 text-sm leading-6" data-consent="not-agreed">
-        Nothing is recorded on this device at the moment; the agreement bar is showing on every
-        page until you choose.
-      </p>
+      <p className="mt-2 text-sm leading-6" data-consent="not-agreed">Nothing is recorded yet.</p>
     );
   }
 
@@ -28,10 +25,7 @@ export function ConsentChoice() {
   // strands the full stop on the next line.
   return (
     <div className="mt-2 text-sm leading-6" data-consent="agreed">
-      <p>
-        You agreed to this policy on this device. You can take that back at any time: the record is
-        removed, site measurement stops, and the bar returns.
-      </p>
+      <p>Agreed on this device. You can take it back.</p>
       <button
         type="button"
         onClick={withdraw}

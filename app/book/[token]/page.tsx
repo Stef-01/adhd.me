@@ -50,11 +50,6 @@ function ContactPreferenceForm({
     >
       <input type="hidden" name="token" value={token} />
       <h2 className="text-base font-medium text-stone-800">When can we contact you?</h2>
-      <p className="text-sm text-stone-500">
-        This only affects messages about appointment times. The practice can always reach you
-        about your care.
-      </p>
-
       <label className="flex items-center gap-2 text-sm text-stone-700">
         <input
           type="checkbox"
@@ -145,9 +140,7 @@ export default async function BookingPage({
   if (!invitation) {
     return (
       <Panel heading="This booking link isn't valid">
-        <p className="text-stone-600">
-          The link may have been copied incompletely. Please contact the practice to book.
-        </p>
+        <p className="text-stone-600">Contact the practice to book.</p>
       </Panel>
     );
   }
@@ -183,10 +176,7 @@ export default async function BookingPage({
   if (invitation.status === "expired") {
     return (
       <Panel heading="This appointment offer is no longer available">
-        <p className="text-stone-600">
-          The session has filled. No action is needed — you can contact {store.practiceName} any
-          time to arrange another appointment.
-        </p>
+        <p className="text-stone-600">This session has filled. Contact the practice.</p>
       </Panel>
     );
   }

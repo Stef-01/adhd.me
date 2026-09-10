@@ -297,7 +297,6 @@ export function LearningExplorer() {
       <LearningScene topic="everyday" variant={selected} />
     </div>
     <p className="learning-example-response" role="status">{example.text}</p>
-    <small>An illustration of the ideas in this module. Nothing you select is saved.</small>
   </aside>;
 }
 
@@ -314,7 +313,7 @@ export function CarePathExplorer() {
     <div>
       <p className="learning-overline">EXPLORE THE ROUTE</p>
       <h3>A conversation, then a next step.</h3>
-      <p>Choose a part of the route to see a question worth asking.</p>
+      <p>Tap a part of the route.</p>
       <div className="learning-care-answer" role="status"><strong>{selected.title}</strong><p>{selected.detail}</p></div>
     </div>
     <div className="learning-care-rings">

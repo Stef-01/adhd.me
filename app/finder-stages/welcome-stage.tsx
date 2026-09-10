@@ -62,7 +62,7 @@ export function WelcomeStage({
             </span>
             <span>
               <strong>Include example profiles</strong>
-              <small>Fictional GPs and allied providers for trying the finder — not real people, and not bookable.</small>
+              <small>Fictional providers, not bookable.</small>
             </span>
           </label>
         </AppSettings>

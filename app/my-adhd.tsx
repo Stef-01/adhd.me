@@ -44,7 +44,7 @@ export function MyAdhd() {
       {record && !hasSignals(record) && (
         <section className="life-empty" aria-labelledby="my-empty">
           <h2 id="my-empty">Nothing here yet — and that is honest.</h2>
-          <p>Answer a module’s “Does this happen to you?”, or the ten questions.</p>
+          <p>Answer a module, or the ten questions.</p>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href={isComplete(record.onboarding) ? "/approach" : "/start"}>{isComplete(record.onboarding) ? "Explore a module" : "Start"} <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
           </div>
@@ -65,7 +65,7 @@ export function MyAdhd() {
           <section className="life-card" aria-labelledby="my-contributes">
             <h2 id="my-contributes">What seems to contribute</h2>
             {summary.contributors.length === 0 ? (
-              <p>Not enough yet. The personalisation questions inside a module are where this fills in.</p>
+              <p>Not enough yet.</p>
             ) : (
               <ul className="life-list">
                 {summary.contributors.map((c) => (
@@ -107,7 +107,7 @@ export function MyAdhd() {
 
           <section className="life-card" aria-labelledby="my-adjustments">
             <h2 id="my-adjustments">Adjustments on paper</h2>
-            <p>What a university or a workplace can change around you, who grants it, and what to bring when you ask. Most of it exists; most people are never told.</p>
+            <p>What a university or workplace can change.</p>
             <div className="life-actions"><Link className="learn-secondary" href="/adjustments">See what is commonly available</Link></div>
           </section>
 
@@ -155,7 +155,7 @@ export function MyAdhd() {
       {record && insights.length > 0 && (
         <section className="life-card" aria-labelledby="my-insights">
           <h2 id="my-insights">Insight cards</h2>
-          <p>What the modules suggested, and what you said about each. Change any of them.</p>
+          <p>What the modules suggested. Change any.</p>
           <div className="strategy-history">
             {insights.map((i) => (
               <div key={i.id} className="insight-card">
@@ -193,7 +193,7 @@ export function MyAdhd() {
       {record && hasSignals(record) && (
         <section className="life-card" aria-labelledby="my-delete">
           <h2 id="my-delete">Your data</h2>
-          <p>Everything on this page lives in this browser. Deleting it here deletes it everywhere, because there is nowhere else.</p>
+          <p>Lives in this browser only.</p>
           {!confirmDelete ? (
             <button type="button" className="learn-secondary" onClick={() => setConfirmDelete(true)}><Trash size={16} weight="bold" aria-hidden="true" /> Delete everything the app holds about me</button>
           ) : (

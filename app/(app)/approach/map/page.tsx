@@ -24,7 +24,6 @@ export default function CareMapPage() {
       <header className="life-head">
         <span className="life-eyebrow">The care map</span>
         <h1>Where ADHD sits in a life.</h1>
-        <p>Brain, body, environment, people. Tap a node to see what it means, what teaches it, and where you are.</p>
       </header>
       <CareMap />
     </main>
