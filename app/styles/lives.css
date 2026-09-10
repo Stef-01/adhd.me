@@ -384,3 +384,5 @@
 .lives-trace:has(.lives-trace-who) ~ .lives-scene-bean, .lives-scene:has(.lives-trace-who) .lives-scene-bean { display: none; }
 /* The shout already names the hold; the cue pill shows only once there is something new to say. */
 .lives-world .lives-cue:empty { visibility: hidden; }
+.lives-trace-who.is-thing { transform: translate(-50%, -55%); }
+.lives-trace-who.is-thing .lives-sprite { display: block; width: 66px; height: 66px; }

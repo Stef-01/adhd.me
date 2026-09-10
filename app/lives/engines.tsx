@@ -170,13 +170,15 @@ function TracePath({ game, scene, live, reducedMotion, reducedSensory, progress,
         onPointerUp={end}
         onPointerCancel={end}
       >
-        <svg viewBox={`0 0 ${SCENE.width} ${SCENE.height}`} className="lives-trace-art" aria-hidden="true">
+        <svg viewBox={`0 0 ${SCENE.width} ${SCENE.height}`} preserveAspectRatio="none" className="lives-trace-art" aria-hidden="true">
           {scene.start && <circle cx={scene.start.x} cy={scene.start.y} r={34} className="lives-trace-start" />}
           {scene.goal && <circle cx={scene.goal.x} cy={scene.goal.y} r={30} className="lives-trace-goal" />}
           {points.length > 1 && <polyline points={points.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" className="lives-trace-line" strokeWidth={scene.pathWidth ?? 40} strokeLinecap="round" strokeLinejoin="round" />}
         </svg>
         {hazards.map((e, i) => <Thing key={e.id} e={e} index={i} caption tabIndex={-1} aria-hidden="true" className="is-hazard" />)}
-        {game.character === "random"
+        {game.id === "office_chair"
+          ? <span className="lives-trace-who is-thing" style={{ left: pct(scene.start?.x ?? 0, SCENE.width), top: pct(scene.start?.y ?? 0, SCENE.height) }}><Sprite kind="chair" /></span>
+          : game.character === "random"
           ? <span className="lives-trace-label is-start" style={{ left: pct(scene.start?.x ?? 0, SCENE.width), top: pct(scene.start?.y ?? 0, SCENE.height) }}>{character}</span>
           : <span className="lives-trace-who" style={{ left: pct(scene.start?.x ?? 0, SCENE.width), top: pct(scene.start?.y ?? 0, SCENE.height) }}><LifeBean who={game.character} mood="engaged" size={56} /></span>}
         <span className="lives-trace-label is-goal" style={{ left: pct(scene.goal?.x ?? 0, SCENE.width), top: pct(scene.goal?.y ?? 0, SCENE.height) }}>Safe</span>
