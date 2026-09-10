@@ -369,7 +369,10 @@ he was right; `docs/design/text-budget-postmortem.md` is the account. What repla
   still over before batch six (adjustments 91, characters 66, profile 62, finder results 98, a
   read card 111, match results 67, match prep 64) are what batch six cut: the reads rewritten to
   a heading, one sentence and three lines; the characters opening on their own name; results
-  rows down to the suburb; adjustments in six words. MEASURE_AFTER_BATCH_SIX
+  rows down to the suburb; adjustments in six words. **After batches six and seven (45 screens,
+  2026-09-10): median app screen 32 words, 0.8x Headspace's home; 20 of 31 app screens at or
+  under 40; 31 of 31 under 60; none over.** The public long-form pages (story, faq, privacy,
+  terms, practices) are documents and are measured but not budgeted.
 - **Standing.** Run `BASE=http://localhost:PORT node scripts/text-budget.mjs` against a
   production build after any copy change and put the numbers in the commit. `CLAUDE.md` carries
   the one law.

@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T11:31:18.982Z",
-  "base": "http://localhost:3655",
+  "measuredAt": "2026-09-10T11:37:04.547Z",
+  "base": "http://localhost:3657",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 8,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "04:35 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -1070,14 +1070,14 @@
       "path": "/",
       "name": "Finder profile (a GP opened)",
       "state": "finder-profile",
-      "total": 72,
-      "fold": 69,
+      "total": 49,
+      "fold": 49,
       "chrome": 8,
-      "ratio": 1.8,
-      "verdict": "OVER",
+      "ratio": 1.2,
+      "verdict": "ceiling",
       "longest": [
         {
-          "w": 37,
+          "w": 18,
           "text": "Anubhav takes a measured approach to ADHD care, with a documented physical basel",
           "tag": "p"
         },
@@ -1146,20 +1146,20 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Zoe deletes the drafts",
+          "w": 3,
+          "text": "Nina starts small",
           "tag": "p"
         },
         {
           "w": 2,
-          "text": "DELETE DRAFTS!",
+          "text": "START SMALL!",
           "tag": "p"
         },
         {

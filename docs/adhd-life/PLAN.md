@@ -280,13 +280,13 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
       visible word on every route at 390 x 844 against Headspace (38, 26, 60) and Finch (19);
       ceiling 60, target 40. Median app screen 87 at the honest baseline, 36 after five cutting
       batches, 17 of 30 app screens at the target and 23 of 30 under the ceiling before batch
-      six. `AESTHETIC.md` holds the account. (2026-09-10) MEASURE_AFTER_BATCH_SIX
+      six; after batches six and seven, 32, with 20 of 31 at the target and 31 of 31 under
+      the ceiling. `AESTHETIC.md` holds the account. (2026-09-10)
 - [x] **The slop pass.** Em-dashes out of every visible string (225 lines), the eyebrows that
       repeated the tab, the uppercase activity labels, the meditation studio's shouting.
       (2026-09-10)
-- [ ] The three match screens and the GP profile at Headspace's home density (40) rather than
-      its list density: match results and prep measured 67 and 64 before batch six, the GP
-      profile 42.
+- [x] The three match screens and the GP profile at Headspace's home density (40): match
+      results 10, prep 17, intake 30, the GP profile 38. (2026-09-10)
 
 ### Phase C — pilot (PRD §87–§88)
 
