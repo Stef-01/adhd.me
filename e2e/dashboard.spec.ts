@@ -22,6 +22,9 @@ test("dashboard renders the north star and both arms from sim data", async ({ pa
   await expect(northStar).toBeVisible({ timeout: 30_000 });
   await expect(northStar.locator("div").nth(1)).toHaveText(/^-?\d+\.\d$/);
 
+  // The period in words above the figures, read off the sim rather than typed.
+  await expect(page.getByTestId("dashboard-period")).toHaveText(/^26 simulated weeks to \d{1,2} \w{3,4} \d{4} · /);
+
   // The naive count is present but labelled as contrast only.
   await expect(page.getByText(/vs naive generated count \d+ \(contrast only\)/)).toBeVisible();
 
@@ -49,4 +52,17 @@ test("dashboard renders the north star and both arms from sim data", async ({ pa
   await expect(page).toHaveURL(/\/console\/signin$/);
   await page.goto("/console/dashboard");
   await expect(page).toHaveURL(/\/console\/signin$/);
+});
+
+test("on a phone the weekly table folds behind a disclosure", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/console/dashboard");
+  const fold = page.getByTestId("dashboard-weekly-table");
+  await expect(fold).toBeVisible({ timeout: 30_000 });
+  // Closed once the client has measured the width; the rows are still in the DOM, not shown.
+  await expect(fold).not.toHaveAttribute("open", "");
+  await expect(fold.locator("tbody tr")).toHaveCount(26);
+  await expect(fold.locator("tbody tr").first()).toBeHidden();
+  await fold.locator("summary").click();
+  await expect(fold.locator("tbody tr").first()).toBeVisible();
 });

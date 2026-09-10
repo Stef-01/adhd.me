@@ -32,6 +32,18 @@ test("renders the sessions, the score and the ranges", async ({ page }) => {
   await expect(page.getByTestId("capacity-score")).toContainText("A wider range is right more often");
   await expect(page.getByTestId("capacity-recommendations")).toContainText("more slots were opened on");
   await expect(page.getByTestId("capacity-empty-no_data")).toHaveCount(0);
+
+  // Console spine: the verdict first and alone, then three fullest and three emptiest as cards,
+  // no session on both sides, and only then the table.
+  await expect(page.getByTestId("capacity-fullest").getByTestId("capacity-card")).toHaveCount(3);
+  await expect(page.getByTestId("capacity-emptiest").getByTestId("capacity-card")).toHaveCount(3);
+  const order = await page.evaluate(() =>
+    [...document.querySelectorAll('[data-testid="capacity-drift"], [data-testid="capacity-card"], [data-testid="capacity-sessions"]')]
+      .map((el) => el.getAttribute("data-testid")),
+  );
+  expect(order).toEqual(["capacity-drift", ...Array(6).fill("capacity-card"), "capacity-sessions"]);
+  const labels = await page.getByTestId("capacity-card-label").allInnerTexts();
+  expect(new Set(labels).size).toBe(6);
 });
 
 test("does not style the drift verdict as a grade", async ({ page }) => {

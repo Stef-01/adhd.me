@@ -5,9 +5,11 @@
 import Link from "next/link";
 import { getDashboardData } from "@/sim/dashboard-data";
 import { counterfactual, withheldCopy } from "@/outcomes/counterfactual";
+import { simulatedPeriod } from "@/console/spine";
 import { requireSession } from "../guard";
 import { ConsoleShell } from "../ui";
 import { WeeklyArmsChart } from "./chart";
+import { PhoneFold } from "./phone-fold";
 
 export const dynamic = "force-dynamic";
 
@@ -36,9 +38,10 @@ export default async function DashboardPage() {
       {/* Wraps: at a phone width the meta line sat hard against the title on one row. */}
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Incrementality</h1>
-        <span className="text-sm text-stone-500">
-          {data.weeks} simulated weeks · {data.patientCount.toLocaleString()} synthetic patients
-        </span>
+        {/* The period in words, read off the sim rather than typed. */}
+        <p data-testid="dashboard-period" className="text-sm text-stone-500">
+          {simulatedPeriod(data)} · {data.patientCount.toLocaleString()} synthetic patients
+        </p>
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -78,14 +81,19 @@ export default async function DashboardPage() {
         <WeeklyArmsChart weekly={data.weekly} />
       </section>
 
-      <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
-        <div className="mb-4 flex items-baseline justify-between">
-          <h2 className="font-medium text-stone-900">Weekly table</h2>
-          <span className="text-xs text-stone-500">
-            opt-outs {data.optOutRatePct.toFixed(1)}% of {data.totals.invitationsSent.toLocaleString()} sent
-          </span>
-        </div>
-        <div className="overflow-x-auto">
+      <PhoneFold
+        className="mt-8 rounded-xl border border-stone-200 bg-white p-6"
+        testId="dashboard-weekly-table"
+        summary={
+          <>
+            <h2 className="font-medium text-stone-900">Weekly table</h2>
+            <span className="text-xs text-stone-500">
+              opt-outs {data.optOutRatePct.toFixed(1)}% of {data.totals.invitationsSent.toLocaleString()} sent
+            </span>
+          </>
+        }
+      >
+        <div className="mt-4 overflow-x-auto">
           <table className="w-full text-sm tabular-nums">
             <thead>
               <tr className="border-b border-stone-200 text-left text-xs uppercase tracking-wide text-stone-500">
@@ -110,7 +118,7 @@ export default async function DashboardPage() {
             </tbody>
           </table>
         </div>
-      </section>
+      </PhoneFold>
 
       <p className="mt-6 text-xs text-stone-500">
         Attribution definitions: docs/ATTRIBUTION.md {attr.version} — intention-to-treat; no claim

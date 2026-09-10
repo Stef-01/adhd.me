@@ -26,7 +26,7 @@ export async function saveReview(
 ): Promise<SaveState> {
   try {
     const row = saveBackground(background, reviewer);
-    revalidatePath("/console/matching");
+    revalidatePath("/console/matching/audit");
     const accepted = row.facets.filter((facet) => facet.status === "accepted").length;
     return {
       status: "saved",

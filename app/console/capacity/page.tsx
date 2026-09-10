@@ -19,7 +19,7 @@
 import Link from "next/link";
 import { WEEKDAY_NAMES, type Weekday } from "@/capacity/model";
 import { redirect } from "next/navigation";
-import { capacityView } from "@/console/capacity";
+import { capacityView, fullestAndEmptiest } from "@/console/capacity";
 import { getConsole } from "@/console/store";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
 import { isoDaysFrom } from "@/lib/dates";
@@ -56,6 +56,9 @@ export default async function CapacityPage() {
     fromIso: sim.config.todayIso,
     toIso: asOfIso,
   });
+  // Console spine: six rows for the cards under the verdict. A view-level pick; the engine's
+  // sentences and rates are the rows' own.
+  const picks = fullestAndEmptiest(view.sessions);
 
   return (
     <ConsoleShell email={email}>
@@ -85,12 +88,6 @@ export default async function CapacityPage() {
           </section>
         ) : null}
 
-        {view.calendarGap !== null ? (
-          <p data-testid="capacity-calendar-gap" className="max-w-3xl text-sm text-stone-600">
-            {view.calendarGap}
-          </p>
-        ) : null}
-
         {view.drift !== null ? (
           <section aria-labelledby="drift-heading" className="flex flex-col gap-2">
             <h2 id="drift-heading" className="font-medium text-stone-900">
@@ -106,6 +103,49 @@ export default async function CapacityPage() {
               {view.drift.copy}
             </p>
           </section>
+        ) : null}
+
+        {picks.fullest.length > 0 ? (
+          <section aria-labelledby="picks-heading" className="flex flex-col gap-3">
+            <h2 id="picks-heading" className="font-medium text-stone-900">
+              Fullest and emptiest sessions
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(
+                [
+                  ["Running fullest", "capacity-fullest", picks.fullest],
+                  ["Running emptiest", "capacity-emptiest", picks.emptiest],
+                ] as const
+              ).map(([title, testId, rows]) => (
+                <div key={testId} className="flex flex-col gap-2">
+                  <h3 className="text-sm text-stone-600">{title}</h3>
+                  <ul data-testid={testId} className="flex flex-col gap-2">
+                    {rows.map((row) => (
+                      <li
+                        key={row.label}
+                        data-testid="capacity-card"
+                        className="flex items-baseline justify-between gap-4 rounded-lg border border-stone-200 bg-white px-4 py-3"
+                      >
+                        <span className="flex flex-col gap-0.5">
+                          <span data-testid="capacity-card-label" className="text-sm text-stone-900">{row.label}</span>
+                          <span className="text-xs text-stone-500">
+                            {row.slotsFilled} of {row.slotsOffered} slots filled over {row.occurrences} weeks
+                          </span>
+                        </span>
+                        <span className="text-2xl font-semibold tabular-nums text-stone-900">{row.utilisationLabel}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {view.calendarGap !== null ? (
+          <p data-testid="capacity-calendar-gap" className="max-w-3xl text-sm text-stone-600">
+            {view.calendarGap}
+          </p>
         ) : null}
 
         {view.score !== null && view.score.scored ? (

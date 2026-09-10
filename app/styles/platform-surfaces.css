@@ -29,3 +29,23 @@ body:has(.platform-public-nav) main h1 { font-family: inherit; font-weight: 750;
   .platform-console .console-main { padding-top: 28px; }
   .platform-public-nav .site-nav-inner { padding-inline: 20px; flex-wrap: wrap; gap: 16px; }
 }
+
+/* Console spine (docs/console-spine-brief.md): the six on the home, one live number each. */
+.platform-console .console-spine { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 24px 0 0; padding: 0; list-style: none; }
+.platform-console .console-spine-card { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.platform-console .console-spine-card h2 { margin: 0; font-size: 0.875rem; font-weight: 650; }
+.platform-console .console-spine-card h2 a { display: inline-flex; min-height: 44px; align-items: center; color: var(--accent); text-decoration: underline; }
+.platform-console .console-spine-figure { margin: 0; font-size: 1.75rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.platform-console .console-spine-detail { margin: 0; font-size: 0.8125rem; color: var(--muted); }
+/* The More page lists tools as a grid of links. */
+.platform-console ul.console-quick-actions { margin-top: 12px; padding: 0; list-style: none; }
+/* A disclosure that starts closed on a phone and open elsewhere (dashboard/phone-fold.tsx). */
+.platform-console .console-phone-fold > summary { display: flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; }
+.platform-console .console-phone-fold > summary h2 { margin: 0; }
+/* Row anchors on referrals and outcomes land clear of the edge. */
+.platform-console [id^="sent-"], .platform-console [id^="outcome-"] { scroll-margin-top: 16px; }
+@media (max-width: 767px) {
+  .platform-console .console-spine { grid-template-columns: 1fr; }
+  /* Closed until the client has decided the width, so a phone never flashes the rows. */
+  .platform-console .console-phone-fold:not([data-decided]) > :not(summary) { display: none; }
+}

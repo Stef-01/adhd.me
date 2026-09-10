@@ -123,3 +123,13 @@ test("the empty state says so on both sides", async ({ page, request }) => {
   await expect(page.getByTestId("received-empty")).toBeVisible();
   await expect(page.getByTestId("sent-empty")).toBeVisible();
 });
+
+test("a sent referral links to its outcome line, and lands on it", async ({ page, request }) => {
+  await request.post("/api/mock/referrals");
+  await page.goto("/console/referrals");
+  const link = page.getByTestId("outcome-link-ref-sent-back");
+  await expect(link).toHaveAttribute("href", "/console/outcomes#outcome-ref-sent-back");
+  await link.click();
+  await expect(page).toHaveURL(/\/console\/outcomes#outcome-ref-sent-back$/);
+  await expect(page.locator("#outcome-ref-sent-back")).toBeVisible();
+});

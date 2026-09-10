@@ -186,10 +186,20 @@ export default async function OutcomesPage() {
                   {outcomes.map((outcome) => (
                     <tr
                       key={outcome.chainId}
+                      id={`outcome-${outcome.chainId}`}
                       data-testid="outcome-row"
                       className="border-b border-stone-100 align-top"
                     >
-                      <td className="py-2 text-stone-900">{outcome.chainId}</td>
+                      <td className="py-2 text-stone-900">
+                        {/* Console spine: back to the referral row this line is about. */}
+                        <Link
+                          href={`/console/referrals#sent-${outcome.chainId}`}
+                          data-testid={`referral-link-${outcome.chainId}`}
+                          className="inline-flex min-h-11 items-center underline hover:text-stone-700"
+                        >
+                          {outcome.chainId}
+                        </Link>
+                      </td>
                       <td className="py-2 text-stone-700">{VERDICT_LABEL[outcome.verdict]}</td>
                       <td className="py-2 text-stone-600">
                         {outcome.furthestStage ?? "Nothing recorded"}

@@ -82,3 +82,37 @@ first two to fold and the first two to consider deleting if nobody asks for them
 Which of the six a demo room should see first; whether "More" is a menu or a page; whether the
 billing assumption should be editable at all before a real practice signs in. Those are the
 edits this document is waiting for.
+
+## Applied, 2026-09-10
+
+The founder directed the brief be built as written. What landed, per screen:
+
+- **Navigation.** The tab bar is the spine (Home, Measurement, Matching, Capacity, Referrals,
+  Outcomes, Results), Setup (kept reachable, as above) and More. The incrementality tab is
+  labelled "Measurement" because the bar sits on the results page, which bans the jargon. `/console/more` is a page
+  listing every folded screen by group; each keeps its path and its spec. Privacy requests and
+  the usefulness audit sit in a "Folded first" group. (`app/console/console-routes.ts`,
+  `console-navigation.tsx`, `more/page.tsx`.)
+- **Home.** Six cards, one live figure each, read from the modules the six pages render:
+  attended per 1,000 above holdout; the tie-quality separation share; sessions that ran under
+  full; referrals awaiting an answer; outcomes the record does not say; extra appointments.
+  A withheld figure prints a word, never a nought. The nine tool links sit under "All tools";
+  the rules card stays. (`app/console/page.tsx`, `src/console/spine.ts`.)
+- **Incrementality.** The period in words above the figures, derived from the sim
+  ("26 simulated weeks to 6 Feb 2027"), and the weekly table folds behind a disclosure below
+  768px. (`dashboard/page.tsx`, `dashboard/phone-fold.tsx`.)
+- **Matching.** Keeps the worked example, what patients are told, and tie quality. The roster
+  tags, booking handoffs, capacity freshness, the interview reader and the reach-gap feed are
+  `/console/matching/audit` ("Matching audit", under More). No engine change.
+- **Capacity.** The verdict first and alone, then three fullest and three emptiest sessions as
+  cards (`fullestAndEmptiest` in `src/console/capacity.ts`, a view-level pick), then the
+  calendar note, the score, the table and the weekday groups.
+- **Referrals and outcomes.** A sent referral on the rail carries an "Outcome" anchor to its
+  line on `/console/outcomes`; each outcome line's referral id links back to the row. Two
+  anchors, nothing else.
+- **Results.** What a visit bills is a setting on the practice record (default 80, whole dollars,
+  1 to 1000), edited on a card on the results page through a re-authorised server action, and
+  used in the estimate and the tile's stated assumption. (`src/console/store.ts`,
+  `results/actions.ts`.)
+
+Not decided by this note, still the founder's: which of the six a demo room sees first.

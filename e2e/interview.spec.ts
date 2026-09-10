@@ -102,8 +102,8 @@ test("a saved interview's unheard sentences land in the reach-gap feed (O38)", a
   await page.getByRole("button", { name: "Save this interview" }).click();
   await expect(page.getByText(/Saved as a draft/)).toBeVisible();
 
-  // The feed on the matching console carries it, as a record rather than a live panel.
-  await page.goto("/console/matching");
+  // The feed on the matching audit carries it, as a record rather than a live panel.
+  await page.goto("/console/matching/audit");
   const feed = page.locator(".mc-section", { has: page.getByRole("heading", { name: "The reach-gap feed" }) });
   const entry = feed.locator(".mc-clinician", { hasText: "Dr Reach Feed" });
   await expect(entry).toBeVisible();
@@ -119,7 +119,7 @@ test("a saved interview's unheard sentences land in the reach-gap feed (O38)", a
 
 test("the matching console prices capacity age: a freshness row and a reconfirm date per declaration (O56)", async ({ page }) => {
   await signIn(page);
-  await page.goto("/console/matching");
+  await page.goto("/console/matching/audit");
 
   const panel = page.locator(".mc-section", { has: page.getByRole("heading", { name: "Capacity freshness" }) });
   await expect(panel).toBeVisible();
@@ -171,7 +171,7 @@ test("a booking handoff lands one countable row on the console (O74)", async ({ 
   expect(redirect.status()).toBe(302);
 
   await signIn(page);
-  await page.goto("/console/matching");
+  await page.goto("/console/matching/audit");
   const panel = page.locator(".mc-section", { has: page.getByRole("heading", { name: "Booking handoffs" }) });
   await expect(panel).toBeVisible();
   const anubhav = panel.getByTestId("handoffs-anubhav-saxena");

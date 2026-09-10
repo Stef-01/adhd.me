@@ -2,7 +2,6 @@
 
 import { signOut, switchPractice } from "./actions";
 import { DemoNavigator } from "../demo-navigator";
-import { isAdhdMeStaff } from "@/tenancy/staff";
 import { ConsoleNavigation } from "./console-navigation";
 
 /**
@@ -54,8 +53,6 @@ export function ConsoleShell({
   activeId?: string;
   children: React.ReactNode;
 }) {
-  const staff = email ? isAdhdMeStaff(email) : false;
-
   return (
     <div className={`console-app platform-console${email ? "" : " console-app-auth"}`}>
       <header className="console-header">
@@ -90,7 +87,7 @@ export function ConsoleShell({
             </div>
           )}
           </div>
-          {email && <ConsoleNavigation isStaff={staff} />}
+          {email && <ConsoleNavigation />}
         </div>
       </header>
       <main id="main-content" className="console-main">{children}</main>
