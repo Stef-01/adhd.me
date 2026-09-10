@@ -388,12 +388,16 @@ until a person looks (2026-09-10).
 - [ ] Loading, empty, disabled, error, first-visit, and returning states look intentional.
       `e2e/error-boundary.spec.ts`, `consent.spec.ts` and the empty states in `matching.spec.ts` exist; "look intentional" is a person's call.
 - [ ] Required checks pass, new screenshots are opened and inspected, and differences from the approved visual proof are resolved or specifically reported.
-      `pnpm verify` and the full Chromium e2e are green on main (2026-09-10). **Cross-engine:** WebKit and Firefox
-      are opt-in projects (`PW_BROWSERS=webkit,firefox`). A WebKit pass over the consumer specs on 2026-09-10 ran
-      37 green and 17 red before it was stopped; every red traced to the spec typing into the finder before
-      React had hydrated, which WebKit reaches later than Chromium, and a probe that waits for the page to
-      settle shows the search working. The specs need a hydration wait before they can claim Safari; the
-      screenshots have not been opened by a person since the text budget cut the screens.
+      `pnpm verify` and the full Chromium e2e are green on main (2026-09-10, 364 of 364 with the
+      text-budget, width-matrix and typography gates included). **Cross-engine, measured 2026-09-10
+      on the patient-facing specs:** WebKit 187 green, Firefox 191 green over the consumer suite
+      once the specs waited for hydration per screen; what stays skipped on the second engines is
+      named in each skip with its reason (console sessions need Chromium's localhost cookie model
+      over http; clipboard permissions are Chromium-only; headless WebKit refuses to resume an
+      AudioContext, reports an enforced CSP as report-only, and skips links on Tab). Three WebKit
+      timeouts under memory pressure (the Leo clock test, a psychographic search, the coast map)
+      are being rerun; a red that stands after that is a finding, not a filter. The screenshots
+      have not been opened by a person since the text budget cut the screens.
 
 ## 11. Decision record and remaining choices
 
