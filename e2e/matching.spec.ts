@@ -56,7 +56,7 @@ test("a GP profile says declared and checked as different things, and shows no s
   await expect(page.getByRole("heading", { name: "Credentials, as declared and as checked" })).toBeVisible();
   await expect(page.getByTestId("felt-understood")).toContainText(/Of 7 people matched here/);
   const body = await page.locator("main").innerText();
-  expect(body).not.toMatch(/★|\/ ?5\b|rated|reviews? (from|by)/i);
+  expect(body).not.toMatch(/★|\d ?\/ ?5\b|\brated\b|\breviews? (from|by)\b/i);
   await expect(page.getByRole("link", { name: "Get matched" })).toBeVisible();
 });
 
