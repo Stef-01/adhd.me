@@ -19,7 +19,7 @@ workspace uses the whole desktop. The warm brand's board and evidence remain in
 | Stone | `#EDF0F6` | Inset and raised surfaces |
 | Ink | `#172033` | Main content, primary controls and dark bands |
 | Muted / faint | `#565F70` / `#626B7B` | Supporting copy and small labels |
-| Blue | `#4C5F9C` | Active states, links and focus; 6.6:1 on paper |
+| Blue | `#4C5F9C` | Active states, links and focus; 5.8:1 on paper |
 | Blue deep / mid / tint / soft | `#334679` / `#647BBF` / `#C9D3EF` / `#E9EDF8` | The accent ramp; the console's amber utilities read it |
 | Line / strong line | `#D8DEEA` / `#B9C2D6` | Dividers and visible boundaries |
 | Band | `#D47839` to `#6679B9` | The signature band, defined once in `:root`; `--on-band` `#FFD9B8` |
