@@ -5,6 +5,9 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   await page.goto("/approach");
   await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByTestId("learn-play")).toBeVisible();
+  await expect(page.getByTestId("learn-games").locator(".learn-card")).toHaveCount(8);
+  await page.getByTestId("learn-show-all").click();
+  await expect(page.getByTestId("learn-games").locator(".learn-card")).toHaveCount(20);
   await page.getByTestId("learn-tab-modules").click();
   await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByTestId("learn-reads").locator(".learn-card")).toHaveCount(7);

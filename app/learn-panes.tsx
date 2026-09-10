@@ -251,8 +251,12 @@ function Completion({ completed, start }: { completed: string | null; start: (id
   );
 }
 
+const FIRST_TILES = 8;
+
 function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
-  const runs = MODULES.filter((m) => m.kind === "run");
+  const [showAll, setShowAll] = useState(false);
+  const allRuns = MODULES.filter((m) => m.kind === "run");
+  const runs = showAll ? allRuns : allRuns.slice(0, FIRST_TILES);
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
     <>
@@ -288,6 +292,11 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
           <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
         ))}
       </ol>
+      {!showAll && allRuns.length > FIRST_TILES && (
+        <button type="button" className="learn-secondary learn-show-all" onClick={() => setShowAll(true)} data-testid="learn-show-all">
+          All {allRuns.length} games
+        </button>
+      )}
     </>
   );
 }

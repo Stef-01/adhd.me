@@ -29,11 +29,14 @@ export function LivesCharacters() {
                 <LifeBean who={c.id} mood={answer === "this_is_me" ? "pleased" : "neutral"} size={72} />
                 <div className="lives-strategy-text">
                   <strong>{c.name}</strong>
-                  <p className="lives-hook">{c.hook}</p>
                   <p className="lives-pattern">{c.pattern}</p>
                 </div>
               </div>
-              <p className="lives-moment-line">“{c.moment}”</p>
+              <details className="match-more lives-more">
+                <summary>Their moment</summary>
+                <p className="lives-hook">{c.hook}</p>
+                <p className="lives-moment-line">“{c.moment}”</p>
+              </details>
               {c.id === "leo" && <Link className="lives-row" href="/lives/play/leo-mosquito">Play Leo’s moment →</Link>}
               <div className="lives-choices is-three" role="group" aria-label={`${c.name}: is this you`}>
                 {RESPONSES.map((r) => <button key={r.id} type="button" className="lives-choice is-small" aria-pressed={answer === r.id} onClick={() => { apply((s) => recordResonance(s, { sourceType: "character", sourceId: c.id, response: r.id })); track("RESONANCE_SELECTED", { source: c.id, response: r.id }); }}>{r.label}</button>)}

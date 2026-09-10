@@ -136,14 +136,12 @@ export function MatchPrep() {
       {view.expectations && (
         <section className="match-section" aria-labelledby="expect-heading">
           <h2 id="expect-heading">What to expect with {view.expectations.gpName}</h2>
-          <dl className="match-expect">
-            {view.expectations.sections.map((s) => (
-              <div key={s.title}>
-                <dt>{s.title}</dt>
-                <dd>{s.body}</dd>
-              </div>
-            ))}
-          </dl>
+          {view.expectations.sections.map((s) => (
+            <details key={s.title} className="match-more">
+              <summary>{s.title}</summary>
+              <p>{s.body}</p>
+            </details>
+          ))}
         </section>
       )}
 

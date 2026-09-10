@@ -35,7 +35,7 @@ export function MedicationExperience() {
       <header className="life-head">
         <span className="life-eyebrow">Medication</span>
         <h1 className="life-title">What it changes, what it leaves, in your words.</h1>
-        <p className="life-lede">A note to take to whoever manages your medication. This app does not advise on medication — not on whether, not on how much, not on when. What it can do is help you describe your experience clearly, which is exactly what that conversation needs. It stays on this device.</p>
+        <p className="life-lede">A note for whoever manages your medication.</p>
       </header>
 
       {MEDICATION_FIELDS.map((f) => (
@@ -48,7 +48,7 @@ export function MedicationExperience() {
 
       <section className="life-card" aria-labelledby="med-bring">
         <h2 id="med-bring">Bring it to the person who manages it</h2>
-        <p>Copy the note as plain text. Questions worth asking them: which of these is the medication, which is the day, and what they would want to know next time.</p>
+        <p>Copy as text.</p>
         <div className="life-actions">
           <button type="button" className="learn-primary" onClick={copy} disabled={!written}>{copied ? <><Check size={17} weight="bold" aria-hidden="true" /> Copied</> : <><Copy size={17} weight="bold" aria-hidden="true" /> Copy as text</>}</button>
           <Link className="learn-secondary" href="/my-adhd">Back to My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>

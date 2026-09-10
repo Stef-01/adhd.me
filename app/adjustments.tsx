@@ -50,7 +50,6 @@ export function Adjustments() {
       <div id="adjust-panel" role="tabpanel" aria-labelledby={`adjust-tab-${entry.id}`}>
         <section className="life-card is-lead" aria-labelledby="adjust-title">
           <h2 id="adjust-title">{entry.title}</h2>
-          <p>{entry.lede}</p>
         </section>
 
         <section className="life-card" aria-labelledby="adjust-available">

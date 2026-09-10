@@ -34,6 +34,7 @@
 .platform-shell .learn-panes .lives-section-title { margin-top: 24px; }
 .platform-shell .learn-panes .lives-shelf { margin-bottom: 8px; }
 .platform-shell .learn-more-rows { margin-top: 24px; }
+.platform-shell .learn-show-all { width: 100%; justify-content: center; margin: 4px 0 24px; }
 .platform-shell .learn-panes .leo-feature > span > span { display: inline-flex; align-items: center; gap: 6px; }
 .platform-shell .learn-pane-top { display: grid; gap: 16px; }
 @media (min-width: 900px) {
