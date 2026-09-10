@@ -10,11 +10,11 @@ import { ArrowLeft, ArrowRight, Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearProgress, markDone, readProgress, type Progress } from "@/learn/progress";
 import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
-import { cardCount, MODULES, scenesOf, SHELVES, type LearnModule, type Question } from "@/learn/scenes";
-import { LearningScene, LearningCoverArt, LearningExplorer, CarePathExplorer } from "./learning-scene";
+import { MODULES, scenesOf, type LearnModule, type Question } from "@/learn/scenes";
+import { LearningScene, LearningExplorer, CarePathExplorer } from "./learning-scene";
+import { LearnPanes, writePane } from "./learn-panes";
 import { LearningActivity } from "./learning-activities";
 import { RunPlayer } from "./play/run-player";
-import { Bean } from "./play/beans";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
@@ -100,6 +100,7 @@ export function LearnModules() {
     internalRoute.current = undefined;
     const module = MODULES.find(module => module.id === moduleId);
     const saved = readCursor(deviceLearningStorage);
+    if (module) writePane(module.kind === "run" ? "games" : "modules");
     setOpen(module?.id ?? null);
     setStep(module && saved?.moduleId === module.id ? saved.step : 0);
     setPicks([]);
@@ -375,95 +376,15 @@ export function LearnModules() {
 
   function listView() {
     return (
-      <section className="learn-list" aria-labelledby="learn-list-title">
-        <motion.div className="learning-pause-banner" whileHover={reducedMotion ? undefined : { y: -3 }}>
-          <div className="pause-banner-art" aria-hidden="true"><span>⌣</span></div>
-          <div><span className="activity-label">MAKE ROOM FOR A MOMENT</span><h2>Less scrolling. A little stillness.</h2><p>A guided pause, or a five-minute session on a shared clock.</p></div>
-          <Link href="/approach/meditate">Find a quiet moment <ArrowRight size={19} /></Link>
-        </motion.div>
-        {completed && MODULES.find(module => module.id === completed)?.kind === "run" && (
-          <div className="learning-feature learning-completion">
-            <div role="status">
-              <h2>Your picture just got sharper.</h2>
-              <Link className="learn-secondary" href="/my-adhd">See My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
-            </div>
-            <LearningScene topic={completed} reaction="complete" />
-          </div>
-        )}
-        {completed && MODULES.find(module => module.id === completed)?.kind === "read" && (
-          <div className="learning-feature learning-completion">
-            <div role="status">
-              <h2>{scenesOf(MODULES.find(module => module.id === completed)! ).at(-1)?.body}</h2>
-              <button className="learn-secondary" type="button" onClick={() => start(completed)}>Read again</button>
-            </div>
-            <LearningScene topic={completed} reaction="complete" />
-          </div>
-        )}
-        {/* §14 Calm (founder, 2026-09-08): one line and one button; the tiles are the page. No chips, no
-            progress count, no cast, no figures. Finishing is still remembered; it shows on the tile. */}
-        <div className="learning-feature">
-          <div>
-            <h2>Get to know ADHD.<br />One idea at a time.</h2>
-            <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "context", Boolean(cursor))}>{cursor ? `Continue ${MODULES.find(module => module.id === cursor.moduleId)?.title}` : "Explore the first module"} <ArrowRight size={18} aria-hidden="true" /></button>
-          </div>
-          <LearningScene />
-        </div>
-        <h2 id="learn-list-title" className="sr-only">ADHD, in your own time.</h2>
-        <ol className="learn-stack">
-          {SHELVES.flatMap((shelf) => shelf.modules)
-            .map((id, index) => {
-              const module = MODULES.find((m) => m.id === id)!;
-              const done = progress.done.includes(module.id);
-              const count = cardCount(module);
-              const colour = coverOf(module);
-              return (
-                <motion.li
-                  key={module.id}
-                  // SMOOTH: the one list on this tab that appears as a list. Each card rises a beat
-                  // after the last, capped at a quarter second so the seventh is never waited for;
-                  // only on the first paint after hydration, never on a chip change, never under
-                  // reduced motion.
-                  initial={hydrated && !reducedMotion ? { opacity: 0 } : false}
-                  animate={{ opacity: 1 }}
-                  transition={{ ...POP, delay: Math.min(index * 0.035, 0.25), opacity: { duration: 0.22, delay: Math.min(index * 0.035, 0.25) } }}
-                >
-                  <motion.button
-                    type="button"
-                    className={`learn-card is-${colour}${done ? " is-done" : ""}${module.kind === "quiz" ? " is-quiz" : ""}`}
-                    onClick={() => start(module.id)}
-                    whileTap={reducedMotion ? undefined : { scale: 0.985 }}
-                    transition={POP}
-                  >
-                    <span className="learn-card-text">
-                      <strong>{module.title}</strong>
-                      {/* §14 took the subtitle and the meta row OFF THE TILE. That is a decision
-                          about a screen a tester with ADHD found overwhelming to look at, and it
-                          stands. A screen reader is not looking at it: before the Calm pass this
-                          control announced what the module was about, whether it was a read, a
-                          quiz or a game, and how long it ran; afterwards it announced a title,
-                          and these titles are evocative rather than descriptive — "1:40am",
-                          "Out the door", "The blank page" say nothing about their content. So the
-                          same facts are given back to the name and to nothing else. Visually this
-                          renders no pixel; axe cannot catch its absence, because a name existed
-                          either way. */}
-                      <span className="sr-only">
-                        {`. ${module.subtitle}. ${module.kind === "quiz" ? "Quiz" : module.kind === "run" ? "Game" : "Read"}, ${module.minutes} minutes, ${count} ${module.kind === "quiz" ? "questions" : module.kind === "run" ? "rounds" : "cards"}.`}
-                      </span>
-                      {done && <span className="learn-card-done"><Check size={12} weight="bold" aria-hidden="true" />Done</span>}
-                    </span>
-                    <span className="learn-card-art" aria-hidden="true">
-                      {module.kind === "run" && module.run
-                        ? <Bean who={module.run.bean} mood="engaged" size={72} />
-                        : <LearningCoverArt id={module.id} />}
-                    </span>
-                  </motion.button>
-                </motion.li>
-              );
-            })}
-        </ol>
-
-        {(finished > 0 || cursor) && <button className="learn-reset" type="button" onClick={() => { clearProgress(deviceLearningStorage); clearCursor(deviceLearningStorage); setProgress({ v: 1, done: [] }); setCursor(null); }}>Reset learning progress on this device</button>}
-      </section>
+      <LearnPanes
+        progress={progress}
+        cursor={cursor}
+        completed={completed}
+        hydrated={hydrated}
+        start={start}
+        finished={finished}
+        reset={() => { clearProgress(deviceLearningStorage); clearCursor(deviceLearningStorage); setProgress({ v: 1, done: [] }); setCursor(null); }}
+      />
     );
   }
 }

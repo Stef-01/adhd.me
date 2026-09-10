@@ -120,9 +120,9 @@ export const SEO_PAGES: readonly SeoPage[] = [
     // drift apart, because the head is derived from here.
     path: "/approach",
     keyword: "learn about ADHD",
-    title: "Learn about ADHD: short reads and two quizzes",
+    title: "Learn about ADHD: games first, then modules",
     description:
-      "Learn about ADHD in short reads and quick quizzes: what the word means, what people find useful day to day, and how the route to a GP assessment works here.",
+      "Learn about ADHD through short games from other people's moments, then structured modules of two to five minutes each, ordered for you by what the games raised.",
   },
   {
     path: "/clinicians",

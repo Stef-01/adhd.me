@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 test("a reading step stays readable on mobile and resumes without marking completion", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/approach");
+  await page.getByTestId("learn-tab-modules").click();
   await page.getByRole("button", { name: /Everyday strategies/ }).click();
   await expect(page.locator(".learn-lesson.is-current")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Sections" })).not.toBeVisible();
@@ -25,6 +26,7 @@ test("a reading step stays readable on mobile and resumes without marking comple
 
 test("the module URL supports browser Back and invalid IDs recover to the library", async ({ page }) => {
   await page.goto("/approach");
+  await page.getByTestId("learn-tab-modules").click();
   await page.getByRole("button", { name: /Everyday strategies/ }).click();
   await expect(page).toHaveURL(/module=everyday/);
   await page.goBack();

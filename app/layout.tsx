@@ -11,6 +11,7 @@ import "./styles/glass.css";
 import "./styles/brand.css";
 import "./styles/learning-play.css";
 import "./styles/match.css";
+import "./styles/walkthrough.css";
 import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
 import "./styles/leo.css";

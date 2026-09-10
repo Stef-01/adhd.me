@@ -374,6 +374,7 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
+  await page.getByTestId("learn-tab-modules").click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
