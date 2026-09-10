@@ -194,6 +194,12 @@ native later. Mapped from the PRD's phases 0–6:
       every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
       the Lives home, kept on the device and read by the run. (2026-09-09) Done already: character stories (§41), Learn home (§28), the §67 events with §68's
       guardrail as a test, reduced motion and keyboard equals (§93–§94).
+- Known divergence, recorded rather than claimed: PRD §88 says never to drive per-frame position
+  from React state, and `app/lives/run.tsx` ticks `progress` and `elapsed` through `useState` from
+  a `requestAnimationFrame`, which every engine reads as props to place its things. Moving that
+  to refs and CSS custom properties is a refactor across all seven engines in the most-tested
+  interactive part of the app; it stays open until a measured frame-time problem on a real phone
+  justifies the risk (the Leo swarm's 22 seconds are green in e2e today).
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.
 
