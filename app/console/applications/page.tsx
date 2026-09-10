@@ -29,7 +29,7 @@ import { attributionFor, ingested, quoteForOperator } from "@/security/untrusted
 const ATTRIBUTION = attributionFor("public_form");
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Clinician applications — ADHD.ME" };
+export const metadata = { title: "Clinician applications, ADHD.ME" };
 
 export default async function ClinicianApplicationsPage() {
   const email = await requireSession();

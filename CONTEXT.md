@@ -130,6 +130,32 @@ and the copy. Written lazily — a term earns a place here when it has already b
   before the first run on a device that say what the bar is, that waiting can be the move, and
   that a miss costs nothing.
 
+## Bidirectional matching (ADR 0007, 2026-09-09)
+
+- **Request** — what a person wrote or said at `/match`, with the four declared facts beside it
+  (suburb, who it is for, appointment style, billing). Held in `src/lib/matching/store.ts` under
+  an opaque id the browser keeps in session storage. Never in a URL, a log line or a reason.
+- **Structured signals** — what the request SAID about the person's own circumstances: a stated
+  duration, a cost constraint, presentations named alongside, an earlier assessment, a medication
+  history, the manner and care asks `readNeeds` heard. Facts stated, never inferred severity.
+- **Concept** — one of the closed vocabulary the embedder can hear (`CONCEPTS` in
+  `src/lib/matching/embedding.ts`). A concept has a patient-safe label; a rationale may say the
+  label and may not quote the sentence that reached it.
+- **Shortlist** — the ten to fifteen GPs that pass the hard filters, ordered by cosine. Every GP
+  who does not pass is named with the reason (`HARD_FILTER_COPY`).
+- **Proposal** — a patient asking a GP, in the deferred-acceptance sense. A GP holds up to
+  their declared places and releases the rest; the three a patient holds at the end are the
+  matches. Held is not booked: a match is `proposed` until the GP accepts or declines it.
+- **Declared / checked** — two words the GP surfaces never merge. "Declared" is the GP's own
+  statement (training, years, how they work). "Checked" means a named person examined evidence
+  on the date shown. A verified profile carries the verifier and the date; the roster's
+  `nswAdhdTrained` remains declared.
+- **Minimum fit** — the GP-side score below which a request is never proposed to that GP.
+  Declared on the dashboard; the loop treats such a patient as unacceptable to that GP.
+- **Felt understood** — the one aggregate a patient may read about a GP: of the people matched
+  there who answered, how many gave fit four or five. A count with a floor of five, never a
+  score; the `no-ratings` rule stands.
+
 ## ADHD Lives (PRD v2, 2026-09-08)
 
 - **Life** — one of the eight recurring characters (Maya, Leo, Arjun, Zoe, Theo, Mia, Jax, Nina),

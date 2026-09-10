@@ -47,9 +47,9 @@ export type CapacityEmptyReason = "no_data" | "no_capacity" | "forecaster_unscor
 
 export const CAPACITY_EMPTY_COPY: Record<CapacityEmptyReason, string> = {
   no_data:
-    "Nothing has been recorded about how this practice's sessions ran, so there is nothing here to read. This is not a practice with no room — it is a diary this page has not been given.",
+    "Nothing has been recorded about how this practice's sessions ran, so there is nothing here to read. This is not a practice with no room, it is a diary this page has not been given.",
   no_capacity:
-    "Every session on record filled every slot it offered. There is no spare room in what has been recorded, which is a fact about the diary rather than a gap in it — the opposite of having nothing to show.",
+    "Every session on record filled every slot it offered. There is no spare room in what has been recorded, which is a fact about the diary rather than a gap in it, the opposite of having nothing to show.",
   forecaster_unscored:
     "The sessions are here and the ranges have not been checked against enough weeks to rest anything on yet. Counts are shown; nothing is offered about opening more slots until the ranges have a track record.",
 };
@@ -174,4 +174,28 @@ export function capacityView(
     calendarGap: calendarGapFor(calendar),
     report,
   };
+}
+
+/**
+ * The three sessions running fullest and the three running emptiest, for the cards above the
+ * table. A view-level pick over the rows: the engine's sentences and rates are untouched.
+ *
+ * Rows with no rate are not candidates for either side, and a row is never on both. Ties break
+ * on the label so the cards do not reorder between renders.
+ */
+export function fullestAndEmptiest(
+  rows: readonly CapacitySessionRow[],
+  n = 3,
+): { fullest: CapacitySessionRow[]; emptiest: CapacitySessionRow[] } {
+  const rated = rows.filter((row) => row.utilisation !== null);
+  const rate = (row: CapacitySessionRow) => row.utilisation as number;
+  const fullest = [...rated]
+    .sort((a, b) => rate(b) - rate(a) || a.label.localeCompare(b.label))
+    .slice(0, n);
+  const taken = new Set(fullest.map((row) => row.label));
+  const emptiest = rated
+    .filter((row) => !taken.has(row.label))
+    .sort((a, b) => rate(a) - rate(b) || a.label.localeCompare(b.label))
+    .slice(0, n);
+  return { fullest, emptiest };
 }

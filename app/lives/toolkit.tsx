@@ -33,7 +33,7 @@ export function Toolkit() {
       <header className="life-head">
         <span className="life-eyebrow">ADHD Lives</span>
         <h1 className="life-title">My Toolkit</h1>
-        {tools.length === 0 && queue.length === 0 && <p className="life-lede">Nothing here yet. Play a run, and if a moment looks familiar, the strategy behind it can be saved here.</p>}
+        {tools.length === 0 && queue.length === 0 && <p className="life-lede">Nothing yet. Play a run; save a strategy.</p>}
       </header>
 
       {tools.length > 0 && (

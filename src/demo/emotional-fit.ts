@@ -72,14 +72,14 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     matchLine: "listens and takes you seriously",
     cues: [
       /* O123: this facet's cues are all CARE-EXPERIENCE — "feel heard", "dismissed", "brushed
-         off", "not believed" — a register about how appointments have gone. "I need someone who
+         off", "not believed", a register about how appointments have gone. "I need someone who
          has seen women like me before" is a plain WANT in that register and was parked under
          the founder question by mistake.
 
          TWO OTHERS WERE CUED AND THEN REVERTED IN-BUILD, and the reason matters more than the
          cues. "leave unheard" and "rehearse what to say" broke §O112's pin, which deliberately
          leaves "I rehearse what to say and still leave unheard" and "I cry in the car after
-         every appointment" unread. There is a real argument for reversing half of it — the
+         every appointment" unread. There is a real argument for reversing half of it, the
          facet already reads bare conduct reports like "brushed off", and leaving an
          appointment unheard is conduct, where crying in the car is the reader's own state.
          But O123's whole thesis is that a G7-adjacent line must not be moved in passing by a
@@ -88,7 +88,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
          that takes it deliberately, with the founder question attached. */
       "seen women like me", "feel heard", "been heard", "not heard", "understood", "really listen", "listened to", "dismissed", "brushed off", "taken seriously", "not believed",
       /* O210: "a doctor who hears me out" reached nothing. Both tenses are cued because
-         `stem("hears")` is "hear" but `stem("heard")` is "heard" — so the present forms collapse
+         `stem("hears")` is "hear" but `stem("heard")` is "heard", so the present forms collapse
          together and the past does not, and "I heard about this from a friend" stays correctly
          unread. Verified against that sentence and "I have heard good things", which are the two
          ways this could have gone wrong. Conduct of the clinician, which is what this facet is —
@@ -104,7 +104,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
          the ask, and O72 would otherwise read the adjacent negator as a refusal of the facet.
 
          "be believed" is authored as a pair that collapses to one token, so O45 demands it in
-         the raw stream — bare "believe" fires on "it is hard to believe how long the wait is". */
+         the raw stream, bare "believe" fires on "it is hard to believe how long the wait is". */
       "actually listen", "like an adult", "be believed",
       "not roll their eyes", "not have to perform",
       // "talked over" was dropped: "over" is a stopword, so it collapsed to the single token [talk]
@@ -142,14 +142,14 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       /* O139 WROTE "what adhd actually is" HERE AND THE PINS REVERSED IT — SPAN THEFT, the third
          instance of this exact failure. The cue strips to [adhd, actually] and CONSUMES the
          token `adhd`, which `care:adhd-assessment` needs, so two pinned sentences stopped
-         reaching assessment — including "um so I think I might have ADHD and I want to actually
+         reaching assessment, including "um so I think I might have ADHD and I want to actually
          get tested", which is the commonest thing anybody types.
          O123 caught it with "more than one diagnosis", O125 with "put a name to", and I wrote
          the cue anyway. A cue that reads its own facet by taking a word another facet needs is
          never a gain; it is now in REFUSED_CUES with `protects` so the next author meets it. */
       
       /* O113: the CONCRETE ways this is asked for. The facet knew abstract nouns for itself and
-         none of the phrasings people use — being walked through something in order, being told
+         none of the phrasings people use, being walked through something in order, being told
          straight, wanting the mechanism rather than the instruction. */
       "step by step", "line by line", "tell me straight", "sugar coating", "the mechanism", "explain the plan", "my own brain", "make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
       // O30 psychographics: the plain-language ask is a values statement about how somebody
@@ -188,19 +188,19 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       /* O210: "a doctor with patience" reached NOTHING, which a probe of eighteen plain phrasings
          found alongside two others. Safe because `stem("patience")` is "patience" and
-         `stem("patient")` is "patient" — checked before the cue was written, because "patient" is
+         `stem("patient")` is "patient", checked before the cue was written, because "patient" is
          the most overloaded word in this product and a cue that collided with it would fire on
          "new patients welcome" and half the roster's own copy. Verified clean against exactly that.
 
          TWO CUES WERE REFUSED HERE AND THE REFUSAL IS THE MORE USEFUL RECORD. "takes their time" and
          "take their time" are the most natural phrasings of all, and both are UNSAFE: "their" is a
          stopword, so the phrase degenerates to "take time" and matched "the wait takes time", "an
-         ADHD assessment takes time" and "getting a diagnosis takes time" — a reader stating a fact
+         ADHD assessment takes time" and "getting a diagnosis takes time", a reader stating a fact
          about how long the process takes, read as asking for an unhurried doctor. That is a false
          read of a patient's words, which is worse than not reading them. Same shape as O7's
          self-reach finding, where "in and out" tokenised to nothing because every word was a
          stopword: this facet's cue list is where stopword collapse keeps biting. Measured, not
-         guessed — the phrasing stays unread until somebody finds a form that survives tokenisation. */
+         guessed, the phrasing stays unread until somebody finds a form that survives tokenisation. */
       "with patience",
       // W221 probe: none of these reached `unhurried`, and every one of them is somebody
       // describing being rushed without using the word.
@@ -262,7 +262,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
     cues: [
       /* O140: asking to be IN the decisions, which is this facet's own label read back. It also
-         fires on "a say in every decision the practice makes about billing" — deliberately not
+         fires on "a say in every decision the practice makes about billing", deliberately not
          treated as a refusal, because a person asking for a say in decisions is asking for
          exactly what this facet declares, and a weak distractor is not a measurement. */
       "every decision", 
@@ -347,7 +347,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
          phrasings that genuinely name the thing, so the pair of units reads as one movement:
          reach that was not earned taken away, reach that is given back.
 
-         "before any script" was REFUSED — it fires on "we talked before my script ran out",
+         "before any script" was REFUSED, it fires on "we talked before my script ran out",
          which is a titration sentence, and O103 refused the identical cue for non-medication
          for the identical reason. A cue refused once should stay refused when it shows up
          wearing a different facet's colours. */

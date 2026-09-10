@@ -48,6 +48,22 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 
+## Bidirectional matching — 2026-09-09
+
+The founder's matching-model brief (rich GP bios, GP-declared preferences and capacity, a
+two-stage pipeline with deferred acceptance presenting a top three with a reason each, mutual
+post-consult feedback) is planned as **Phase M** of [docs/adhd-life/PLAN.md](docs/adhd-life/PLAN.md),
+a six-month sprint to 2027-03-09. ADR 0007 records the decisions.
+
+- [x] M1–M4: the service under `src/lib/matching/`, `/match` and its three, `/gp/[id]`,
+      `/console/gp`, `/match/prep`, `/match/feedback`, the e2e loop. (2026-09-09)
+- [ ] M5: wiring. **Landed 2026-09-10:** Supabase behind the store as a journal with hydration
+      (`src/lib/matching/persistence.ts`, off without its two variables), practice scoping
+      (`access.ts`: claim, then manage), a dense embedder and its bench (`dense-embedder.ts`,
+      `embedder-eval.ts`; lexical baseline pinned), the finder's door. Open: the evidence upload
+      through the credentials vault, a founder decision (ADR 0007), and switching the journal on.
+- [ ] M6: the pilot on real GPs and real records.
+
 ## Q3 2026 (Sep–Nov) — make the redesign real
 
 The founder's words were "optimise and redesign from the ground up." Read literally: don't just
@@ -105,6 +121,9 @@ polish the existing shell, question it.
       role and its 44px floor and loses the underline for a trailing mark; both names balance.
       Every stage of the finder has now been looked at cold at 390. Still open only in the sense
       the item is standing: walk it again after the next round of changes.
+- [x] Console information architecture review (2026-09-10: `docs/console-spine-brief.md` applied;
+      six tabs and More, a home of six live figures, the matching audit split out). The
+      2026-09-05 facts below stand as the record the decision was made on.
 - [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.

@@ -22,7 +22,7 @@ export interface Measurement {
 
 export class NonVacuityError extends Error {
   constructor(label: string, count: number) {
-    super(`measured("${label}") counted ${count} — a sweep that touches nothing must not pass`);
+    super(`measured("${label}") counted ${count}, a sweep that touches nothing must not pass`);
     this.name = "NonVacuityError";
   }
 }

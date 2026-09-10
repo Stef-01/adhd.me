@@ -129,7 +129,7 @@ export function overCapFinding(
   cap: number = MEANINGS_CAP,
 ): string | null {
   if (meanings.length <= cap) return null;
-  return `${route}: ${meanings.length} distinct accent meanings (cap ${cap}) — breaks ${ACCENT_RULE_ID} — ${meanings.join(", ")}`;
+  return `${route}: ${meanings.length} distinct accent meanings (cap ${cap}), breaks ${ACCENT_RULE_ID}, ${meanings.join(", ")}`;
 }
 
 /** The class prefix the probe paints with; distinct enough that no product class can collide. */

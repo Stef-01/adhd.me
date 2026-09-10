@@ -23,6 +23,27 @@
 .platform-shell .learn-chip { min-height: 44px; font-size: 14px; border-color: var(--line-strong); background: var(--paper); }
 .platform-shell .learn-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 .platform-shell .learn-progress { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
+.platform-shell .learn-pane-tabs { display: flex; gap: 8px; margin: 4px 0 18px; max-width: 420px; }
+.platform-shell .learn-pane-tab { flex: 1; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: 0.9375rem; font-weight: 650; cursor: pointer; }
+.platform-shell .learn-pane-tab.is-active { border-color: var(--accent); background: var(--stone); color: var(--ink); }
+.platform-shell .learn-pane-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.platform-shell .learn-pane { touch-action: pan-y; }
+.platform-shell .learn-play-card { display: grid; justify-items: center; gap: 12px; margin: 0 0 20px; padding: 24px 20px 20px; border-radius: 24px; background: var(--stone); }
+.platform-shell .learn-play-card .lives-play { margin: 0; }
+.platform-shell .learn-play-cast-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--accent-deep); font-size: 0.875rem; font-weight: 700; text-decoration: none; }
+.platform-shell .learn-panes .lives-section-title { margin-top: 24px; }
+.platform-shell .learn-panes .lives-shelf { margin-bottom: 8px; }
+.platform-shell .learn-more-rows { margin-top: 24px; }
+.platform-shell .learn-show-all { width: 100%; justify-content: center; margin: 4px 0 24px; }
+.platform-shell .learn-panes .leo-feature > span > span { display: inline-flex; align-items: center; gap: 6px; }
+.platform-shell .learn-pane-top { display: grid; gap: 16px; }
+@media (min-width: 900px) {
+  .platform-shell .learn-pane-top { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  .platform-shell .learn-pane-top > * { margin-bottom: 20px; }
+  .platform-shell .learn-play-card { margin: 0; }
+  .platform-shell .learn-panes .leo-feature { margin-bottom: 0; }
+}
+.platform-shell .learn-panes .learning-feature { min-height: 200px; padding: 24px 28px; }
 .platform-shell .learn-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 32px; }
 /* Each cover names its three values once; the card rule below is what spends them. */
 .platform-shell .learn-card.is-amber   { --cover: var(--learn-amber);   --cover-ink: var(--learn-amber-ink);   --cover-sub: var(--learn-amber-sub); }

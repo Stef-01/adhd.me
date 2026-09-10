@@ -45,8 +45,8 @@ export interface PracticeRecord {
   practice: Practice;
   rulesConfig: EligibilityConfig;
   rulesVersion: number;
-  clinicians: ClinicianRecord[]; // W41 — the roster W17 deferred
-  sessionConfig: SessionConfig; // W41 — W17's dials, now practice-editable
+  clinicians: ClinicianRecord[]; // W41, the roster W17 deferred
+  sessionConfig: SessionConfig; // W41, W17's dials, now practice-editable
   /**
    * W41: wizard steps the practice has explicitly saved. Seeded defaults validate
    * clean, so validity alone cannot prove a practice chose its settings — without
@@ -57,12 +57,22 @@ export interface PracticeRecord {
   nextClinicianSeq: number;
   /** Set when the practice finishes the setup wizard; null while still in setup. */
   setupCompletedAt: string | null;
+  /**
+   * Console spine: what a visit bills, in whole dollars, behind the results page's estimate.
+   * Optional so a record built elsewhere (the case-mix fixture) needs no change; read it through
+   * `billingPerVisitFor`, which supplies the default.
+   */
+  billingPerVisitAud?: number;
 }
+
+export const DEFAULT_BILLING_PER_VISIT_AUD = 80;
+export const BILLING_PER_VISIT_MIN_AUD = 1;
+export const BILLING_PER_VISIT_MAX_AUD = 1000;
 
 export interface ConsoleState {
   practices: PracticeRecord[];
   auditEvents: AuditEvent[];
-  memberships: Membership[]; // W18 — whoever onboards becomes owner
+  memberships: Membership[]; // W18, whoever onboards becomes owner
   /** Monotonic practice id counter. Ids are generated, never a literal (W166). */
   nextPracticeSeq: number;
 }
@@ -87,7 +97,45 @@ function newRecord(practice: Practice): PracticeRecord {
     acknowledgedSteps: [],
     nextClinicianSeq: 0,
     setupCompletedAt: null,
+    billingPerVisitAud: DEFAULT_BILLING_PER_VISIT_AUD,
   };
+}
+
+/** The billing assumption the results page prices with. */
+export function billingPerVisitFor(record: Pick<PracticeRecord, "billingPerVisitAud">): number {
+  return record.billingPerVisitAud ?? DEFAULT_BILLING_PER_VISIT_AUD;
+}
+
+export function validateBillingPerVisit(value: number): FieldErrors {
+  if (!Number.isInteger(value) || value < BILLING_PER_VISIT_MIN_AUD || value > BILLING_PER_VISIT_MAX_AUD) {
+    return {
+      billingPerVisitAud: `Must be a whole number between ${BILLING_PER_VISIT_MIN_AUD} and ${BILLING_PER_VISIT_MAX_AUD}.`,
+    };
+  }
+  return {};
+}
+
+/**
+ * Change what a visit bills. The same grant as every other config change here (edit_rules),
+ * and audited the same way: the estimate a practice reads moves with this number.
+ */
+export function updateBillingPerVisit(
+  practiceId: PracticeId,
+  value: number,
+  at: string,
+  byEmail: string,
+): FieldErrors {
+  const errors = validateBillingPerVisit(value);
+  if (Object.keys(errors).length > 0) return errors;
+  const state = getConsole();
+  const refused = requireEditRules(state, practiceId, byEmail);
+  if (refused) return refused;
+  const record = practiceRecord(practiceId, state)!;
+  const before = billingPerVisitFor(record);
+  if (before === value) return {};
+  record.billingPerVisitAud = value;
+  audit(state, practiceId, at, "billing-per-visit", `billingPerVisitAud: ${before} -> ${value}`);
+  return {};
 }
 
 /** One practice's record, or null. Takes the id as the QUERY — W123's rule. */
@@ -144,7 +192,7 @@ export function resetConsole(): ConsoleState {
 export interface OnboardingInput {
   name: string;
   timezone: string;
-  holdoutPercent: number; // 0–50, UI-facing; stored as a 0..1 rate
+  holdoutPercent: number; // 0-50, UI-facing; stored as a 0..1 rate
 }
 
 export function validateOnboarding(input: OnboardingInput): FieldErrors {

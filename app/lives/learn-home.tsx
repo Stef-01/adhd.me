@@ -12,7 +12,6 @@ import { recentlyCompleted, recommendStrategies, STRATEGIES, type LearningDomain
 import { ModuleRenderer } from "./module-renderer";
 import { useProfile } from "./profile-hook";
 import { LeoBedroom } from "./leo-mosquito";
-import { TheoHallway } from "./theo-art";
 
 const SHELVES: ReadonlyArray<{ title: string; domains: readonly LearningDomain[] }> = [
   { title: "Sleep", domains: ["sleep"] },
@@ -44,7 +43,6 @@ export function LearnHome() {
       </header>
       {forYou.length > 0 && <Shelf title="For you" strategies={forYou.map((r) => r.strategy)} done={profile?.completedModuleIds ?? []} />}
       <Link className="leo-feature" href="/lives/play/leo-mosquito"><span className="leo-feature-art"><LeoBedroom /></span><span><strong>One tiny sound.</strong><span>Play Leo’s moment <ArrowRight size={18} /></span></span></Link>
-      <Link className="leo-feature theo-feature" href="/lives/play/theo-out-the-door"><span className="leo-feature-art"><TheoHallway /></span><span><strong>Just get out the door.</strong><span>Play Theo’s morning <ArrowRight size={18} /></span></span></Link>
       <Shelf title="Two-minute tools" strategies={quick} done={profile?.completedModuleIds ?? []} />
       {SHELVES.map((shelf) => {
         const rows = STRATEGIES.filter((s) => s.domains.some((d) => shelf.domains.includes(d)) && !quick.includes(s));

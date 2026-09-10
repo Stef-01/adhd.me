@@ -145,7 +145,7 @@ export const SPEECH_ERROR_COPY: Readonly<Record<SpeechError, string>> = {
    * and `startSpeech` retries once behind a microphone permission warm-up before saying it.
    */
   "service-not-allowed":
-    "Your phone would not let speech start. If Siri or dictation is on and Safari is allowed to use the microphone, try once more — or just type instead.",
+    "Your phone would not let speech start. If Siri or dictation is on and Safari is allowed to use the microphone, try once more, or just type instead.",
   "language-not-supported": "This device cannot listen in this language. You can type instead.",
   "no-speech": "Nothing was picked up. Try again, or type instead.",
   "audio-capture": "No microphone was found. You can type instead.",

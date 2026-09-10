@@ -116,7 +116,7 @@ test("every console control is reachable by keyboard and shows where it is", asy
   await page.setViewportSize(PHONE);
   expect(CONSOLE_ROUTES.length, "the derived console list collapsed").toBeGreaterThan(20);
   const { ringless, unreachable, totalStops } = await walk(page, byUrl(CONSOLE_ROUTES));
-  expect(totalStops, "the console walk stopped tabbing — a clean result here would mean nothing").toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 5));
+  expect(totalStops, "the console walk stopped tabbing, a clean result here would mean nothing").toBeGreaterThan(derivedFloor(CONSOLE_ROUTES.length, 5));
   expect(ringless, `focused with no visible indicator:\n${ringless.join("\n")}`).toEqual([]);
   expect(unreachable, `controls no keyboard can reach:\n${unreachable.join("\n")}`).toEqual([]);
 });

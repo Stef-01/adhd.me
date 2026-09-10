@@ -22,9 +22,9 @@ export function TheoGame({ scene, live, reducedMotion, progress, onResult, outco
   };
   const mood = outcome === "success" ? "success" : outcome === "failure" || outcome === "timeout" ? "failure" : state.detours.length > 0 || progress > .7 ? "worried" : "ready";
   return <div className="theo-game" data-live={live} data-reduced={reducedMotion} data-packed={state.packed.length}>
-    <div className="theo-scene"><TheoHallway mood={mood} packed={state.packed.length} /><span className="theo-scene-caption">{mood === "success" ? "Made it out." : mood === "failure" ? "The hallway won this one." : "A whole world of little detours."}</span></div>
+    <div className="theo-scene"><TheoHallway mood={mood} packed={state.packed.length} /></div>
     <div className="theo-packing">
-      <div className="theo-packing-title"><strong>Take only what you need</strong><span aria-label={`${state.detours.length} of 3 detours`}>{state.detours.length}/3 detours</span></div>
+      <div className="theo-packing-title"><strong>Pack for today</strong><span aria-label={`${state.detours.length} of 3 detours`}>{state.detours.length}/3 detours</span></div>
       <div className="theo-shelves" role="group" aria-label="Things in the hallway">
         {plan.objects.map((item, index) => {
           const packed = state.packed.includes(item), detour = state.detours.includes(item);

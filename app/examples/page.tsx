@@ -70,13 +70,13 @@ export default function ExamplesPage() {
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
         <h1>Worked examples</h1>
         <p className="prose-note">
-          These are demo scenarios, not patients — nobody’s story is used to sell anything here.
+          These are demo scenarios, not patients, nobody’s story is used to sell anything here.
           Each result below is computed live by the same matching the finder runs, so this page
           shows what the product actually does, not what a brochure says it does.
         </p>
         {/*
           O203: "From that request" USED TO HAVE NO ANTECEDENT. No request appeared anywhere on the
-          page — a reader met a headline, which is not a request, and then a sentence referring to
+          page, a reader met a headline, which is not a request, and then a sentence referring to
           "that request" as though they had read one.
 
           The fix is not to print the request. The page's header records why: a first draft rendered
@@ -97,7 +97,7 @@ export default function ExamplesPage() {
               {/*
                 O203: "From that request," is gone rather than reworded. With the constraint
                 disclosed above, the phrase was doing nothing but pointing at something the reader
-                still cannot see — and the sentence reads better without it.
+                still cannot see, and the sentence reads better without it.
               */}
               The finder read <strong>{example.understood}</strong>{" "}
               {example.understood === 1 ? "thing" : "things"} the person asked for —{" "}
@@ -108,7 +108,7 @@ export default function ExamplesPage() {
         {/*
           O203: THE SAMENESS IS STATED RATHER THAN LEFT TO LOOK LIKE VARIETY. Measured before this
           sentence was written: all three scenarios currently rank the same GP first and produce the
-          same order — the only thing that differs between them is how many asks the finder read.
+          same order, the only thing that differs between them is how many asks the finder read.
           Three sections that look like three demonstrations, when they are one demonstration run
           three times, is the page overstating itself; `honesty.claim-earned` says a page may only
           claim what it has earned. Derived, not transcribed, so the day a third GP joins and the
@@ -124,7 +124,7 @@ export default function ExamplesPage() {
         ) : null}
         <p>
           The order is never a judgement about who is a better doctor. It is overlap between what
-          you asked for and what each GP declares about their own work — and when your words do
+          you asked for and what each GP declares about their own work, and when your words do
           not separate the list, the finder tells you that in as many words.
         </p>
         <div className="prose-doors">

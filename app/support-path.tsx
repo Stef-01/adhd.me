@@ -50,15 +50,13 @@ export function SupportPath() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs">
       <LifeHeader />
       <header className="life-head">
-        <span className="life-eyebrow">Support</span>
         <h1>{need ? "From the problem to the person." : "Start from the problem, not the profession."}</h1>
-        <p>{need ? "Each step is built from what you have told the app. Professional support is the last step, not the first." : "Once the app knows what is hardest for you, this page walks from that problem to the kind of help that fits it."}</p>
       </header>
 
       {record && !need && (
         <section className="life-empty" aria-labelledby="support-empty">
           <h2 id="support-empty">Nothing to walk from yet.</h2>
-          <p>Answer the onboarding, or a module’s recognition questions, and the path fills in. You can always search the finder directly.</p>
+          <p>Answer the ten questions and the path fills in.</p>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href="/start">Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
             <Link className="learn-secondary" href="/">Search the finder</Link>
@@ -84,7 +82,7 @@ export function SupportPath() {
             {strategies.length === 0 ? <p>The modules on this problem carry the strategies.</p> : (
               <ul className="life-list">
                 {strategies.slice(0, 4).map((s) => (
-                  <li key={s.id}>{tried.has(s.id) ? <Check size={16} weight="bold" aria-hidden="true" /> : <ArrowRight size={16} weight="bold" aria-hidden="true" />}<span>{s.title}{tried.has(s.id) ? " — on your list" : ""}</span></li>
+                  <li key={s.id}>{tried.has(s.id) ? <Check size={16} weight="bold" aria-hidden="true" /> : <ArrowRight size={16} weight="bold" aria-hidden="true" />}<span>{s.title}{tried.has(s.id) ? ", on your list" : ""}</span></li>
                 ))}
               </ul>
             )}
@@ -93,7 +91,7 @@ export function SupportPath() {
           {offerSurvey(record) && (
             <li className="support-step">
               <h2>Sharpen the picture</h2>
-              <p>Optional. A topic survey says which part of the problem is the friction before anybody is suggested.</p>
+              <p>Optional survey.</p>
               <SurveyOffer record={record} compact />
             </li>
           )}
@@ -101,10 +99,10 @@ export function SupportPath() {
             <h2>When another person helps</h2>
             <p>
               {eligible
-                ? "You have tried what is here and it has not been enough. That is the point at which a person who does this for a living is worth it — not before."
+                ? "You have tried what is here and it has not been enough. That is the point at which a person who does this for a living is worth it, not before."
                 : "When the cost stays high after two or three honest attempts, or when you would simply rather work on it with somebody. Nothing here requires that yet."}
             </p>
-            {need.contributors.some((c) => c.layer === "people") && <p>Some of what you described involves the people around you — sharing a module with them is one kind of help that costs nothing.</p>}
+            {need.contributors.some((c) => c.layer === "people") && <p>Sharing a module with them is one kind of help.</p>}
           </li>
           {institution && (
             <li className="support-step">
@@ -133,7 +131,7 @@ export function SupportPath() {
           </li>
           <li className="support-step">
             <h2>Before you book: a brief</h2>
-            <p>Built from what you have said. Edit it, keep it, or copy it to take with you. The app shares nothing.</p>
+            <p>Built from what you said. Edit, keep or copy.</p>
             <ReferralBrief need={need} tried={[...tried]} />
           </li>
         </ol>
@@ -178,7 +176,7 @@ function ReferralBrief({ need, tried }: { need: Need; tried: string[] }) {
           <Copy size={16} weight="bold" aria-hidden="true" /> {copied ? "Copied" : "Copy the brief"}
         </button>
       </div>
-      <p className="learn-card-foot">Nothing is sent to any provider. Copying puts it on your clipboard and nowhere else.</p>
+      <p className="learn-card-foot">Copies to your clipboard only.</p>
     </div>
   );
 }

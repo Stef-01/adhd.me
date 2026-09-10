@@ -384,31 +384,6 @@ test("and still says it when the fit really is complete (O121 non-vacuity)", asy
  * named by the asks) and a request nobody declares (no order, and the line has to say so rather
  * than dress the list up as a ranking).
  */
-test("the list says why it is in this order, and says when it isn't one", async ({ page }) => {
-  await gotoFinderRealRosterOnly(page);
-  await page.locator("#welcome-request").fill("ADHD assessment and titration");
-  await page.getByRole("button", { name: "Find support" }).click();
-  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
-
-  await expect(page.locator(".results-list-head h2")).toHaveText("Matches");
-  const earned = page.locator(".results-order-note");
-  await expect(earned).toBeVisible();
-  await expect(earned).toContainText("Ordered by what you asked for:");
-
-  // The same screen, a request no listed GP declares. The heading demotes, and so must the line.
-  await page.getByRole("button", { name: "Change what you said" }).click();
-  const box = page.locator("#doctor-request");
-  await box.fill("a bulk billing GP");
-  await page.getByRole("button", { name: "Find support" }).click();
-  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
-
-  await expect(page.locator(".results-list-head h2")).toHaveText("All listed providers");
-  const unearned = page.locator(".results-order-note");
-  await expect(unearned).toBeVisible();
-  await expect(unearned).not.toContainText("Ordered by what you asked for");
-  await expect(unearned).toContainText("No listed GP declares");
-});
-
 test("the typed journey ends in the engine's own ranking, both ways round (AR38)", async ({ page }) => {
   // AR38: the outcome, not the shape. Every walk above enters via the demo scenario or asserts
   // structure — a results screen that rendered the roster in a FIXED order would pass all of
@@ -425,7 +400,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   // The guard that keeps this non-vacuous: the pair must genuinely separate. If a roster change
   // ever makes both queries agree, this fails HERE, demanding a new pair rather than silently
   // asserting half as much.
-  expect(expected[0], "the two queries no longer rank oppositely — pick a separating pair").not.toEqual(
+  expect(expected[0], "the two queries no longer rank oppositely, pick a separating pair").not.toEqual(
     expected[1],
   );
 

@@ -6,7 +6,7 @@ import { LivesLab } from "../../../lives/lab";
 export const metadata: Metadata = {
   alternates: { canonical: "/lives/lab" },
   robots: ROBOTS_META,
-  title: "The lab — ADHD Lives",
+  title: "The lab, ADHD Lives",
   description: "The recommendation debugger and the session director's log: why the engine suggested what it did, and why the director picked what it picked.",
 };
 

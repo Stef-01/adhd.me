@@ -606,7 +606,7 @@ export function CareFinder() {
             (`StatusLine`) scripted in `src/finder/announce.ts`. */}
         <section className="care-shell">
           {/* O249 (apple-design appraisal, finding 4): the leaving screen goes at once — its exit
-              is instant — so the next screen exists on the very next frame and a tap during the
+              is instant, so the next screen exists on the very next frame and a tap during the
               change lands on something. Overlapping the two (sync mode) was tried first and left
               screens stranded when two changes came within a frame of each other; an instant exit
               is the interruptible version that cannot strand anything. The context carries the

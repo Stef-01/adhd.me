@@ -31,7 +31,7 @@ describe("problem fit (§42)", () => {
   it("says why in the closed vocabulary, and passes the patient rules", () => {
     const top = deriveNeeds(need())[0]!;
     const why = fitReason({ expertise: ["adhd-work-systems", "task-initiation"] }, top);
-    expect(why).toBe("Works on task initiation — the thing you said is hardest.");
+    expect(why).toBe("Works on task initiation, the thing you said is hardest.");
     expect(lintLandingCopy(why!)).toEqual([]);
     expect(fitReason({ expertise: ["university-adhd"] }, top)).toMatch(/part of what you described/);
     expect(fitReason({ expertise: ["sleep-routine"] }, top)).toBeNull();

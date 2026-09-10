@@ -26,12 +26,12 @@ export async function saveReview(
 ): Promise<SaveState> {
   try {
     const row = saveBackground(background, reviewer);
-    revalidatePath("/console/matching");
+    revalidatePath("/console/matching/audit");
     const accepted = row.facets.filter((facet) => facet.status === "accepted").length;
     return {
       status: "saved",
       message: row.readBackConfirmed
-        ? `Saved. ${accepted} accepted and read back — ready for the gate.`
+        ? `Saved. ${accepted} accepted and read back, ready for the gate.`
         : `Saved as a draft. ${accepted} accepted, not yet read back to the clinician.`,
     };
   } catch (error) {

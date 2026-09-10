@@ -131,7 +131,7 @@ test("the neurodiversity ask is read, and unanswered honestly while nobody decla
   await page.screenshot({ path: "qa/_runs/matching-o30/03-neurodiversity-honest-nondeclaration.png", fullPage: true });
 });
 
-test("a triple ask — language, psychographic, care — reads all three families at once (O33)", async ({ page }) => {
+test("a triple ask, language, psychographic, care, reads all three families at once (O33)", async ({ page }) => {
   // The recursive edge case: three vocabularies in one sentence. Urdu (language pipeline),
   // no-jargon (O30 psychographic), titration (care). All three must appear as evidence, and
   // the order must be earned (Dr Saxena declares Urdu + sense_making + titration).

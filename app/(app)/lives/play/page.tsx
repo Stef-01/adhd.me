@@ -7,7 +7,7 @@ import { LivesPlay } from "../../../lives/play";
 export const metadata: Metadata = {
   alternates: { canonical: "/lives/play" },
   robots: ROBOTS_META,
-  title: "Play — ADHD Lives",
+  title: "Play, ADHD Lives",
   description: "The Chaos Run: microgames from eight lives, three lives of yours, faster every four, and a score at the end.",
 };
 

@@ -111,7 +111,7 @@ export default async function ComplaintsPage({
                     )}
                     {c.optOutApplied && c.optOutMatchedPatient === false && (
                       <span className="ml-2 rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-900">
-                        identifier matched no record — check it
+                        identifier matched no record, check it
                       </span>
                     )}
                   </span>
@@ -160,7 +160,7 @@ export default async function ComplaintsPage({
             {resolved.map((c) => (
               <li key={c.id} className="py-2.5">
                 <span className="text-stone-700">{c.summary}</span>{" "}
-                <span className="text-stone-500">— {c.resolution}</span>
+                <span className="text-stone-500">{c.resolution}</span>
               </li>
             ))}
           </ul>

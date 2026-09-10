@@ -68,9 +68,27 @@ test("Q5: the chart has a legend, a caption and an accessible table equivalent",
 
 test("Q6: continuity is presented as a rule that held, not as a result", async ({ page }) => {
   await page.goto("/console/results");
-  await expect(page.getByText(/confirms the rule held — it is not a result/i)).toBeVisible({
+  await expect(page.getByText(/confirms the rule held, it is not a result/i)).toBeVisible({
     timeout: 30_000,
   });
+});
+
+test("Q7: the billing assumption is editable, and the estimate follows it", async ({ page }) => {
+  await page.goto("/console/results");
+  const tile = page.getByText("Extra billings, estimated").locator("..");
+  await expect(tile).toContainText("at an assumed $80 each", { timeout: 30_000 });
+
+  await page.getByLabel("Dollars a visit bills").fill("95");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByTestId("billing-saved")).toBeVisible({ timeout: 30_000 });
+  await expect(tile).toContainText("at an assumed $95 each");
+
+  // The arithmetic uses the new figure: extra appointments times what a visit bills.
+  const extraTile = page.getByText("Extra appointments", { exact: true }).first().locator("..");
+  const extra = Number((await extraTile.locator("div").nth(1).innerText()).replace(/,/g, ""));
+  const billings = Number((await tile.locator("div").nth(1).innerText()).replace(/[$,]/g, ""));
+  expect(billings).toBe(extra * 95);
+  await expect(page.getByTestId("billing-input")).toHaveValue("95");
 });
 
 test("the v1 detailed view is still reachable and unchanged", async ({ page }) => {

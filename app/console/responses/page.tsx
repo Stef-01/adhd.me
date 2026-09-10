@@ -33,7 +33,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "How messages were answered — ADHD.ME" };
+export const metadata = { title: "How messages were answered, ADHD.ME" };
 
 export default async function ResponsesPage() {
   const { email, record } = await requirePractice();
@@ -141,7 +141,7 @@ export default async function ResponsesPage() {
             <ul data-testid="responses-unobserved" className="flex flex-col gap-2 text-sm text-stone-600">
               {view.unobserved.map((kind) => (
                 <li key={kind.kind}>
-                  <span className="text-stone-900">{kind.kind}</span> — {kind.why}
+                  <span className="text-stone-900">{kind.kind}</span>, {kind.why}
                 </li>
               ))}
             </ul>

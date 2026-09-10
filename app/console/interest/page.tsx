@@ -15,7 +15,7 @@ import { attributionFor, ingested, quoteForOperator } from "@/security/untrusted
 const ATTRIBUTION = attributionFor("public_form");
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Community interest — ADHD.ME" };
+export const metadata = { title: "Community interest, ADHD.ME" };
 
 export default async function CommunityInterestPage() {
   const email = await requireSession();
@@ -68,7 +68,7 @@ export default async function CommunityInterestPage() {
               <div>
                 {/* W153: a name typed into a public form. Carried verbatim — editing somebody's
                     name to defend against a machine that does not exist yet is a real harm
-                    traded for a hypothetical one — with the attribution stated once above the
+                    traded for a hypothetical one, with the attribution stated once above the
                     list, so "ADHD.ME Support (verified)" reads as a signup calling itself that
                     rather than as the product saying it. */}
                 <strong className="text-sm">

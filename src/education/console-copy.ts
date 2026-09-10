@@ -31,20 +31,20 @@ export const EDUCATION_CONSOLE_COPY = {
   /** W148's emptiness, stated where a reader would otherwise assume a broken feature. */
   /** W154: material whose cited source is not signed off is not shown — and says so. */
   librarySourceWithheld:
-    "Some material is not shown because the content it cites is not currently signed off. It may have been withdrawn, or the reference may be wrong. Nothing is hidden silently — each item is named below, and the ordering figures further down count material before this check.",
+    "Some material is not shown because the content it cites is not currently signed off. It may have been withdrawn, or the reference may be wrong. Nothing is hidden silently, each item is named below, and the ordering figures further down count material before this check.",
   triggersNone:
-    "No teaching triggers ship with ADHD.ME. Deciding that something written on a record is a moment to put material in front of a clinician is a clinical judgement about that condition, and nobody has made it. The library above does not depend on that — it is offered in full either way.",
+    "No teaching triggers ship with ADHD.ME. Deciding that something written on a record is a moment to put material in front of a clinician is a clinical judgement about that condition, and nobody has made it. The library above does not depend on that, it is offered in full either way.",
 
   /** W144 step 6, on screen: the evaluation and the material are not rendered together. */
   evaluationSeparate:
-    "Where a care pathway has been evaluated against a record, that sits on the pathway surface and is not repeated here. ADHD.ME keeps the two apart on purpose — a statement about a record placed next to material about the same pathway reads as advice, and none was given.",
+    "Where a care pathway has been evaluated against a record, that sits on the pathway surface and is not repeated here. ADHD.ME keeps the two apart on purpose, a statement about a record placed next to material about the same pathway reads as advice, and none was given.",
 
   noPatientHere:
     "Nothing on this page is about a particular patient. It lists what this practice's registers make relevant, and what you have read, and it names nobody.",
 
   /** W149's position, in the one place a practice would go looking for the report it refuses. */
   cpdOwn:
-    "Your own record of what you opened, and when. ADHD.ME shows it to nobody else — there is no practice view of who has read what, and no function in the product that could build one.",
+    "Your own record of what you opened, and when. ADHD.ME shows it to nobody else, there is no practice view of who has read what, and no function in the product that could build one.",
 
   cpdNotComprehension:
     "It records that material was opened. It says nothing about whether it was understood, agreed with, or acted on.",

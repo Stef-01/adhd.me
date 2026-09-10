@@ -91,13 +91,13 @@ export const careArchetypes: CareArchetype[] = [
        differentiates nobody. What actually differentiates is the appointment itself: ADHD is a
        working-memory condition, and the commonest unmet ask is walking out still holding what
        was said. The notetaker is the patient's own tool; the match is on what Dr Saxena
-       DECLARES — sense-making, unhurried, plain explanation — never on tools nobody declared. */
+       DECLARES, sense-making, unhurried, plain explanation, never on tools nobody declared. */
     id: "notetaker-and-understanding",
     title: "Help me actually hold on to what was said",
     eyebrow: "The appointment I can keep",
     example: "A GP who is fine with an AI notetaker in the room and works with you until the condition makes sense.",
     request:
-      "Appointments vanish on me — I forget half of what was said before I reach the car. I want a GP who is fine with me bringing my AI notetaker, will go step by step, explain the plan in plain language, and give me enough time to understand what is going on with my own brain.",
+      "Appointments vanish on me, I forget half of what was said before I reach the car. I want a GP who is fine with me bringing my AI notetaker, will go step by step, explain the plan in plain language, and give me enough time to understand what is going on with my own brain.",
     headline: "Walk out knowing what was decided, and why.",
     expectedFirstMatch: "anubhav-saxena",
     requirements: {
@@ -123,7 +123,7 @@ export const careArchetypes: CareArchetype[] = [
     eyebrow: "After the diagnosis",
     example: "A GP who reviews titration on a schedule instead of when something goes wrong.",
     request:
-      "I am already diagnosed and the dose is not right — it wears off by the afternoon and my appetite is gone. I want the titration reviewed on a schedule rather than whenever I manage to get an appointment.",
+      "I am already diagnosed and the dose is not right, it wears off by the afternoon and my appetite is gone. I want the titration reviewed on a schedule rather than whenever I manage to get an appointment.",
     headline: "Titration reviewed on a schedule, not on a crisis.",
     expectedFirstMatch: "anubhav-saxena",
     requirements: {
@@ -148,17 +148,17 @@ export const careArchetypes: CareArchetype[] = [
     /* O191: replaced "Sleep that has never been right" at the founder's verdict — "takes sleep
        seriously" is another thing no GP would disclaim. The founder's example was a GP who
        understands the challenges of being a refugee; the roster's honest answer is Dr Anu
-       Saxena's OWN declarations — culturally sensitive care, Hindi and Urdu, understands your
-       background — so the journey is built on those, told from the patient's side: an ADHD
+       Saxena's OWN declarations, culturally sensitive care, Hindi and Urdu, understands your
+       background, so the journey is built on those, told from the patient's side: an ADHD
        assessment leans on childhood evidence, and a childhood lived in another country, in
        another language, has none of the usual paper. If the founder wants refugee-health
        expertise CLAIMED, that needs a clinician who declares it, not copy. */
     id: "childhood-in-another-country",
     title: "My childhood happened in another country",
     eyebrow: "Assessment without the paper trail",
-    example: "A GP who understands what assessment means when you arrived as a refugee — no Australian school reports, a childhood lived in another language.",
+    example: "A GP who understands what assessment means when you arrived as a refugee, no Australian school reports, a childhood lived in another language.",
     request:
-      "I came here as a refugee and my whole childhood happened in another country, in another language — there are no school reports to point to. I want a GP who is culturally sensitive, understands my background and my family, and will still work out whether this is ADHD at all.",
+      "I came here as a refugee and my whole childhood happened in another country, in another language, there are no school reports to point to. I want a GP who is culturally sensitive, understands my background and my family, and will still work out whether this is ADHD at all.",
     headline: "Your background understood, your history still taken seriously.",
     expectedFirstMatch: "anusha-saxena",
     requirements: {

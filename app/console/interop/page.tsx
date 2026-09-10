@@ -22,7 +22,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "What has been exchanged — ADHD.ME" };
+export const metadata = { title: "What has been exchanged, ADHD.ME" };
 
 export default async function InteropPage() {
   const { email, record } = await requirePractice();

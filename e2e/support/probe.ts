@@ -35,7 +35,7 @@ export function probeVerdict(
   if (withProbe === null) {
     return {
       kind: "vacuous",
-      reason: `${ruleId} stayed green on ${route} while the probe was breaking the rule in front of it — the sweep cannot fail, so it is not a check`,
+      reason: `${ruleId} stayed green on ${route} while the probe was breaking the rule in front of it, the sweep cannot fail, so it is not a check`,
     };
   }
   return { kind: "discriminates", finding: withProbe };

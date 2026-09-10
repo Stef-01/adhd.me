@@ -48,19 +48,19 @@ export const ADJUSTMENT_TRACKS: readonly AdjustmentEntry[] = [
       "A named contact who can speak to a lecturer for you",
     ],
     whoToAsk: [
-      "The accessibility or disability service — often called Student Support, Accessibility Services or Disability Services",
+      "The accessibility or disability service, often called Student Support, Accessibility Services or Disability Services",
       "A course coordinator, for a one-off extension while registration is under way",
       "A GP, for the letter the service usually asks for",
     ],
     bring: [
-      "A letter from a GP or whoever assessed you — the service usually asks for one",
+      "A letter from a GP or whoever assessed you, the service usually asks for one",
       "Your manual: what helps, what makes it harder, how to work with you",
       "A short list of where it falls apart: deadlines, exams, briefs, mornings",
     ],
     steps: [
       "Find the service on the university's website and book an appointment; most take them online",
       "Ask the GP for a letter that says what you find hard, not a label",
-      "Meet the adviser and agree an access plan — the document that names your adjustments",
+      "Meet the adviser and agree an access plan, the document that names your adjustments",
       "Send the plan to each unit's coordinator at the start of term; the service will show you how",
       "Use it. An extension you are entitled to and do not ask for helps nobody",
     ],
@@ -81,12 +81,12 @@ export const ADJUSTMENT_TRACKS: readonly AdjustmentEntry[] = [
       "Flexible start times where the role allows it",
     ],
     whoToAsk: [
-      "Your manager, for anything that is really just a way of working — most of the list above",
+      "Your manager, for anything that is really just a way of working, most of the list above",
       "HR or a people team, for a formal adjustment, or when a manager will not engage",
       "An occupational therapist, for a written assessment of what would help in your role",
     ],
     bring: [
-      "Your manual, or the part of it you are willing to share — how to work with you",
+      "Your manual, or the part of it you are willing to share, how to work with you",
       "Two or three specific asks, not a label; ‘briefs in writing’ is easier to grant than ‘support’",
       "If you want the formal route, a letter from a GP or an occupational therapist",
     ],

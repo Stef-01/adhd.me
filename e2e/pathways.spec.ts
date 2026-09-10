@@ -40,7 +40,7 @@ test("with nothing signed off it SAYS so, rather than rendering an empty table",
   await expect(page.getByTestId("signed-count")).toContainText("0");
 });
 
-test("the shipped catalogue really is empty — zero signed at ship", async ({ page, request }) => {
+test("the shipped catalogue really is empty, zero signed at ship", async ({ page, request }) => {
   // Not the seeded-empty case: this is the registry in its shipped state, which is what a
   // practice would see on a fresh install.
   const state = await (await request.get("/api/mock/pathways")).json();

@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 
 const STATUS_LABEL: Record<string, string> = {
   queued: "Queued",
-  sent: "Sent — link live",
+  sent: "Sent, link live",
   booked: "Booked",
   expired: "Expired (session filled)",
   opted_out: "Opted out",
@@ -43,7 +43,7 @@ export default function DemoPage() {
         <h1 className="text-3xl font-semibold tracking-tight">ADHD.ME demo</h1>
         <p className="mt-3 max-w-xl text-stone-500">
           A scripted synthetic practice: {rail.practiceName}, {rail.clinicianName}, one open
-          session, three invited patients. No real patient data, no live SMS — the walkthrough
+          session, three invited patients. No real patient data, no live SMS, the walkthrough
           script is docs/DEMO.md.
         </p>
 
@@ -61,7 +61,7 @@ export default function DemoPage() {
             <h2 className="font-medium text-stone-900">Patient booking links</h2>
             <p className="mt-1 text-sm text-stone-500">
               Open one in a second tab when the script reaches the patient moment. Statuses are
-              live — return here after booking to show the third offer expiring.
+              live, return here after booking to show the third offer expiring.
             </p>
             <ul className="mt-4 divide-y divide-stone-100">
               {rail.state.invitations.map((inv, i) => (
@@ -75,7 +75,7 @@ export default function DemoPage() {
                       target="_blank"
                       /* O152: measured 115x40, under O14's floor. It renders only once an
                          invitation is "sent" or "queued", so the touch sweep never saw it when
-                         run alone — it took another spec seeding mock state to expose it. */
+                         run alone, it took another spec seeding mock state to expose it. */
                       className="-my-0.5 inline-flex min-h-11 items-center font-medium text-stone-700 underline hover:text-stone-900"
                       data-testid={`booking-link-${i + 1}`}
                     >

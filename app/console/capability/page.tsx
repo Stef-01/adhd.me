@@ -20,7 +20,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Capability — ADHD.ME" };
+export const metadata = { title: "Capability, ADHD.ME" };
 
 const FRESHNESS_LABEL: Record<string, string> = {
   current: "Current",
@@ -88,7 +88,7 @@ export default async function CapabilityPage({
                   <div>
                     <dt className="text-xs uppercase tracking-wide text-stone-500">Stated interest</dt>
                     <dd className="text-stone-700">
-                      {row.interest ? `${row.interest.strength} of 5 — ${row.interest.reason}` : "None stated"}
+                      {row.interest ? `${row.interest.strength} of 5, ${row.interest.reason}` : "None stated"}
                     </dd>
                   </div>
                   <div>
@@ -118,7 +118,7 @@ export default async function CapabilityPage({
         <h2 className="font-medium text-stone-900">Panel view</h2>
         <p className="mt-1 max-w-2xl text-sm text-stone-500" data-testid="panel-note">
           Whether each record exists and is up to date, across the practice. Visit counts are not
-          shown here — they are on each clinician&apos;s own profile.
+          shown here, they are on each clinician&apos;s own profile.
         </p>
         {panel.length === 0 ? (
           <p className="mt-3 text-sm text-stone-500">No capability records yet.</p>

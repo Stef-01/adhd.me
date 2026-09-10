@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
 import { JOIN_EMAIL } from "../app/clinicians/join/email";
 
 test.describe("the join page after O188", () => {
-  test("joining is one email — present, correct, and a real target", async ({ page }) => {
+  test("joining is one email, present, correct, and a real target", async ({ page }) => {
     await page.goto("/clinicians/join");
     const cta = page.getByRole("link", { name: JOIN_EMAIL });
     await expect(cta).toBeVisible();
@@ -66,6 +66,6 @@ test.describe("the funnel from /clinicians (O189)", () => {
       await expect(next).toBeVisible();
       await next.click();
     }
-    throw new Error("walked twelve actions and never met the funnel — the journey still ends nowhere");
+    throw new Error("walked twelve actions and never met the funnel, the journey still ends nowhere");
   });
 });

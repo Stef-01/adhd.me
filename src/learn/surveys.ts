@@ -63,7 +63,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
     exploreNext: "deadlines",
     questions: [
       { id: "initiation", prompt: "How hard is it to begin important work?", kind: "single", options: [
-        { id: "very", label: "Very — I circle it for ages", signals: [{ subdomain: "activation", weight: 3 }] },
+        { id: "very", label: "Very, I circle it for ages", signals: [{ subdomain: "activation", weight: 3 }] },
         { id: "somewhat", label: "Somewhat, on a bad day", signals: [{ subdomain: "activation", weight: 1.5 }] },
         { id: "not", label: "Not really", signals: [] },
       ] },
@@ -73,12 +73,12 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "some", label: "A bit harder", signals: [{ subdomain: "activation", weight: 1 }] },
       ) },
       { id: "urgency", prompt: "Do deadlines improve your ability to start?", kind: "single", options: yesNo("urgency",
-        { id: "yes", label: "Yes — the night before is when I work", signals: [{ subdomain: "time", weight: 2 }], contributor: { layer: "environment", subdomain: "deadline-design", note: "Waiting for urgency" }, strength: "Fast, high-quality output under a close deadline", claims: { "deadlines-help": true } },
+        { id: "yes", label: "Yes, the night before is when I work", signals: [{ subdomain: "time", weight: 2 }], contributor: { layer: "environment", subdomain: "deadline-design", note: "Waiting for urgency" }, strength: "Fast, high-quality output under a close deadline", claims: { "deadlines-help": true } },
         { id: "no", label: "No, deadlines just add stress", claims: { "deadlines-help": false } },
         { id: "some", label: "Sometimes", signals: [{ subdomain: "time", weight: 1 }] },
       ) },
       { id: "interruption", prompt: "After an interruption, how hard is it to get back in?", kind: "single", options: [
-        { id: "hard", label: "Very hard — I often do not", signals: [{ subdomain: "switching", weight: 3 }] },
+        { id: "hard", label: "Very hard, I often do not", signals: [{ subdomain: "switching", weight: 3 }] },
         { id: "slow", label: "Slower than it should be", signals: [{ subdomain: "switching", weight: 1.5 }] },
         { id: "fine", label: "Fine", signals: [] },
       ] },
@@ -89,9 +89,9 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "night", label: "Late, when the world is quiet", contributor: { layer: "body", subdomain: "sleep", note: "Work spills into the night" } },
       ] },
       { id: "structure", prompt: "How much external structure does your week have?", kind: "single", options: [
-        { id: "little", label: "Very little — I set my own days", contributor: { layer: "environment", subdomain: "structure", note: "Long stretches with little external structure" }, signals: [{ subdomain: "activation", weight: 1 }] },
+        { id: "little", label: "Very little, I set my own days", contributor: { layer: "environment", subdomain: "structure", note: "Long stretches with little external structure" }, signals: [{ subdomain: "activation", weight: 1 }] },
         { id: "some", label: "Some fixed points" },
-        { id: "lots", label: "A lot — fixed times and check-ins", strength: "Performs well inside structure" },
+        { id: "lots", label: "A lot, fixed times and check-ins", strength: "Performs well inside structure" },
       ] },
       { id: "accountability", prompt: "Does anyone check on your progress?", kind: "single", options: yesNo("accountability",
         { id: "yes", label: "Yes, regularly", strength: "Uses accountability well", claims: { "accountability-present": true } },
@@ -103,7 +103,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "rarely", label: "Rarely" },
       ] },
       { id: "perfectionism", prompt: "Do you delay because the work needs to be done well?", kind: "single", options: [
-        { id: "yes", label: "Yes — it has to be right before I can start", contributor: { layer: "brain", subdomain: "emotional-regulation", note: "Perfectionistic starting threshold" }, signals: [{ subdomain: "activation", weight: 1.5 }] },
+        { id: "yes", label: "Yes, it has to be right before I can start", contributor: { layer: "brain", subdomain: "emotional-regulation", note: "Perfectionistic starting threshold" }, signals: [{ subdomain: "activation", weight: 1.5 }] },
         { id: "some", label: "A little" },
         { id: "no", label: "No, rough drafts are fine", strength: "Comfortable starting rough" },
       ] },
@@ -142,7 +142,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "nobody", label: "Nobody, really", contributor: { layer: "environment", subdomain: "structure", note: "No shared system for commitments" } },
       ] },
       { id: "escalation", prompt: "How quickly does a small remark become a big argument?", kind: "single", options: [
-        { id: "fast", label: "Very fast — before I can think", signals: [{ subdomain: "emotional-regulation", weight: 3 }] },
+        { id: "fast", label: "Very fast, before I can think", signals: [{ subdomain: "emotional-regulation", weight: 3 }] },
         { id: "sometimes", label: "Sometimes", signals: [{ subdomain: "emotional-regulation", weight: 1.5 }] },
         { id: "rarely", label: "Rarely" },
       ] },
@@ -184,7 +184,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "sometimes", label: "Sometimes", signals: [{ subdomain: "living-environment", weight: 1.5 }] },
         { id: "rarely", label: "Rarely" },
       ] },
-      { id: "bills", prompt: "Bills and admin — how do they go?", kind: "single", options: [
+      { id: "bills", prompt: "Bills and admin, how do they go?", kind: "single", options: [
         { id: "late", label: "Late fees are a regular thing", signals: [{ subdomain: "memory", weight: 2 }], contributor: { layer: "brain", subdomain: "time", note: "Admin slides out of view" } },
         { id: "close", label: "Close calls, mostly caught", signals: [{ subdomain: "memory", weight: 1 }] },
         { id: "fine", label: "Automated or handled", strength: "Admin is systemised" },
@@ -195,7 +195,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "none", label: "Not really", contributor: { layer: "environment", subdomain: "structure", note: "No capture place outside your head" }, claims: { "capture": false } },
       ] },
       { id: "anchors", prompt: "Are routine jobs fixed to a time or a place?", kind: "single", options: yesNo("anchors",
-        { id: "yes", label: "Yes — bins go out with the kettle", strength: "Routines are anchored" },
+        { id: "yes", label: "Yes, bins go out with the kettle", strength: "Routines are anchored" },
         { id: "no", label: "No, they happen when I remember", contributor: { layer: "environment", subdomain: "structure", note: "Jobs float without anchors" }, signals: [{ subdomain: "living-environment", weight: 1 }] },
       ) },
       { id: "holds", prompt: "Who holds the household list?", kind: "single", options: [
@@ -205,10 +205,10 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "nobody", label: "Nobody", contributor: { layer: "environment", subdomain: "structure", note: "Nobody holds the household list" } },
       ] },
       { id: "visible", prompt: "Do things you need to remember stay in sight?", kind: "single", options: [
-        { id: "yes", label: "Yes — out on a surface", strength: "Keeps things visible" },
+        { id: "yes", label: "Yes, out on a surface", strength: "Keeps things visible" },
         { id: "hidden", label: "They go in a drawer and vanish", contributor: { layer: "environment", subdomain: "living-environment", note: "Out of sight is out of mind" }, signals: [{ subdomain: "memory", weight: 1 }] },
       ] },
-      { id: "money", prompt: "Money — where does it go wrong, if anywhere?", kind: "single", options: [
+      { id: "money", prompt: "Money, where does it go wrong, if anywhere?", kind: "single", options: [
         { id: "impulse", label: "Impulse spending", signals: [{ subdomain: "inhibition", weight: 2 }], contributor: { layer: "brain", subdomain: "inhibition", note: "Spending before the pause" } },
         { id: "admin", label: "Forgetting to pay or cancel", signals: [{ subdomain: "memory", weight: 1 }] },
         { id: "fine", label: "It is fine", strength: "Money is under control" },
@@ -239,7 +239,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
       { id: "keeps", prompt: "What keeps the night going?", kind: "single", options: [
         { id: "work", label: "Finally getting things done", contributor: { layer: "environment", subdomain: "workload", note: "Work spills into the night" } },
         { id: "screens", label: "Screens", contributor: { layer: "environment", subdomain: "noise", note: "Screens hold the night open" } },
-        { id: "quiet", label: "The quiet — attention finally works", contributor: { layer: "environment", subdomain: "noise", note: "The night is the only quiet time" }, strength: "Clear focus in quiet" },
+        { id: "quiet", label: "The quiet, attention finally works", contributor: { layer: "environment", subdomain: "noise", note: "The night is the only quiet time" }, strength: "Clear focus in quiet" },
         { id: "cannot-stop", label: "I cannot stop whatever I am doing", contributor: { layer: "brain", subdomain: "attention", note: "Hyperfocus runs past bedtime" } },
       ] },
       { id: "wake", prompt: "Is your wake time the same most days?", kind: "single", options: yesNo("wake",
@@ -257,7 +257,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
         { id: "no", label: "Rarely", contributor: { layer: "environment", subdomain: "living-environment", note: "Little morning light" } },
       ) },
       { id: "medication", prompt: "If you take medication, does it change your sleep?", kind: "single", options: [
-        { id: "later", label: "Yes — I fall asleep later", contributor: { layer: "body", subdomain: "medication-experience", note: "Medication seems to push sleep later" } },
+        { id: "later", label: "Yes, I fall asleep later", contributor: { layer: "body", subdomain: "medication-experience", note: "Medication seems to push sleep later" } },
         { id: "no", label: "Not noticeably" },
         { id: "na", label: "I do not take medication" },
         { id: "unsure", label: "Not sure" },

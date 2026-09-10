@@ -1,0 +1,1211 @@
+{
+  "measuredAt": "2026-09-10T07:56:01.736Z",
+  "base": "http://localhost:3636",
+  "benchmark": {
+    "headspaceHome": 38,
+    "headspaceDetail": 26,
+    "headspaceList": 60,
+    "finchHome": 19
+  },
+  "budget": {
+    "screen": 60,
+    "target": 40,
+    "card": 8
+  },
+  "results": [
+    {
+      "path": "/",
+      "name": "/",
+      "state": null,
+      "total": 23,
+      "fold": 19,
+      "chrome": 8,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "What kind of support are you looking for?",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Try an example search",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "name": "/about",
+      "state": null,
+      "total": 21,
+      "fold": 17,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "That link is old or mistyped.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "That page does not exist.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/adjustments",
+      "name": "/adjustments",
+      "state": null,
+      "total": 103,
+      "fold": 86,
+      "chrome": 8,
+      "ratio": 2.6,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 11,
+          "text": "A reduced study load without losing full-time status for some purposes",
+          "tag": "span"
+        },
+        {
+          "w": 11,
+          "text": "A named contact who can speak to a lecturer for you",
+          "tag": "span"
+        },
+        {
+          "w": 10,
+          "text": "Assignment briefs in writing with a clear definition of done",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/approach",
+      "name": "/approach",
+      "state": null,
+      "total": 50,
+      "fold": 19,
+      "chrome": 8,
+      "ratio": 1.3,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "A little more understanding.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Same brain, five scenes",
+          "tag": "strong"
+        }
+      ]
+    },
+    {
+      "path": "/approach/map",
+      "name": "/approach/map",
+      "state": null,
+      "total": 155,
+      "fold": 95,
+      "chrome": 8,
+      "ratio": 3.9,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 32,
+          "text": "A well person’s awareness, understanding and active decision-making line up with",
+          "tag": "p"
+        },
+        {
+          "w": 18,
+          "text": "The relationships that carry part of the load, or add to it: partner, family, ma",
+          "tag": "p"
+        },
+        {
+          "w": 16,
+          "text": "How attention, memory, activation and emotion actually run for you — the part mo",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/approach/meditate",
+      "name": "/approach/meditate",
+      "state": null,
+      "total": 50,
+      "fold": 29,
+      "chrome": 8,
+      "ratio": 1.3,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Five minutes, every quarter hour, on a shared clock.",
+          "tag": "h2"
+        },
+        {
+          "w": 5,
+          "text": "A GUIDED MOMENT OF STILLNESS",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Sit comfortably. Follow the prompts.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/clinicians",
+      "name": "/clinicians",
+      "state": null,
+      "total": 69,
+      "fold": 65,
+      "chrome": 3,
+      "ratio": 1.7,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 13,
+          "text": "ADHD is the pathway available now. Pick the parts you want more of.",
+          "tag": "p"
+        },
+        {
+          "w": 9,
+          "text": "What kind of GP do you want to become?",
+          "tag": "h1"
+        },
+        {
+          "w": 8,
+          "text": "Demo pathway only. Scope and credentialing remain practice-led.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/clinicians/join",
+      "name": "/clinicians/join",
+      "state": null,
+      "total": 60,
+      "fold": 56,
+      "chrome": 27,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 23,
+          "text": "Tell us your name, your practice and what your week actually looks like. Everyth",
+          "tag": "p"
+        },
+        {
+          "w": 15,
+          "text": "One email — who you are and where you practise — and a person replies. No forms.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Be findable by the people already looking.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/demo",
+      "name": "/demo",
+      "state": null,
+      "total": 37,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 18,
+          "text": ", one open session, three invited patients. No real patient data, no live SMS — ",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "A scripted synthetic practice:",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/examples",
+      "name": "/examples",
+      "state": null,
+      "total": 247,
+      "fold": 156,
+      "chrome": 26,
+      "ratio": 6.2,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 47,
+          "text": "The order is never a judgement about who is a better doctor. It is overlap betwe",
+          "tag": "p"
+        },
+        {
+          "w": 43,
+          "text": "These are demo scenarios, not patients — nobody’s story is used to sell anything",
+          "tag": "p"
+        },
+        {
+          "w": 35,
+          "text": "The scenarios themselves are not printed here: they are written as somebody woul",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/faq",
+      "name": "/faq",
+      "state": null,
+      "total": 436,
+      "fold": 164,
+      "chrome": 25,
+      "ratio": 10.9,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 53,
+          "text": "The order comes only from matching what you asked for against what each clinicia",
+          "tag": "p"
+        },
+        {
+          "w": 50,
+          "text": "ADHD.ME is a finder for GPs who do ADHD assessment in Australia. You describe wh",
+          "tag": "p"
+        },
+        {
+          "w": 48,
+          "text": "No. ADHD.ME is a finder, not a medical service. Nothing you type is interpreted ",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives",
+      "name": "/lives",
+      "state": null,
+      "total": 36,
+      "fold": 32,
+      "chrome": 8,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Everything was under control thirty seconds ago.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "What would you most like help with?",
+          "tag": "summary"
+        },
+        {
+          "w": 5,
+          "text": "Eight lives. Three of yours.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/characters",
+      "name": "/lives/characters",
+      "state": null,
+      "total": 114,
+      "fold": 33,
+      "chrome": 8,
+      "ratio": 2.9,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 6,
+          "text": "High achievement, wandering attention, deep focus",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Restlessness and sensory intensity",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab",
+      "name": "/lives/lab",
+      "state": null,
+      "total": 495,
+      "fold": 53,
+      "chrome": 8,
+      "ratio": 12.4,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 21,
+          "text": "Why the engine suggests what it suggests, and why the director picked what it pi",
+          "tag": "p"
+        },
+        {
+          "w": 19,
+          "text": "4 character not more than twice in last five; 1 no immediate identical game; 2 n",
+          "tag": "td"
+        },
+        {
+          "w": 16,
+          "text": "1 no immediate identical game; 5 first three games mechanically obvious; 2 no sa",
+          "tag": "td"
+        }
+      ]
+    },
+    {
+      "path": "/lives/learn",
+      "name": "/lives/learn",
+      "state": null,
+      "total": 69,
+      "fold": 20,
+      "chrome": 8,
+      "ratio": 1.7,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 7,
+          "text": "What would you most like help with?",
+          "tag": "summary"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "A little more understanding.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play",
+      "name": "/lives/play",
+      "state": null,
+      "total": 17,
+      "fold": 13,
+      "chrome": 0,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Everything was under control thirty seconds ago.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Eight lives. Three of yours.",
+          "tag": "h2"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/leo-mosquito",
+      "name": "/lives/play/leo-mosquito",
+      "state": null,
+      "total": 39,
+      "fold": 35,
+      "chrome": 0,
+      "ratio": 1,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 13,
+          "text": "Clear one wave at a time. Catch every mosquito to help Leo settle.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Untimed · clear every wave",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/toolkit",
+      "name": "/lives/toolkit",
+      "state": null,
+      "total": 19,
+      "fold": 15,
+      "chrome": 8,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Nothing yet. Play a run; save a strategy.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 2,
+          "text": "ADHD Lives",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/manual",
+      "name": "/manual",
+      "state": null,
+      "total": 43,
+      "fold": 26,
+      "chrome": 8,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "How I work, in my own words.",
+          "tag": "h1"
+        },
+        {
+          "w": 6,
+          "text": "Share it, if you want to",
+          "tag": "h2"
+        },
+        {
+          "w": 5,
+          "text": "Yours to write and change.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/match",
+      "name": "/match",
+      "state": null,
+      "total": 37,
+      "fold": 30,
+      "chrome": 8,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "What are you looking for?",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "No names or Medicare numbers.",
+          "tag": "small"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/match/feedback",
+      "name": "/match/feedback",
+      "state": null,
+      "total": 25,
+      "fold": 21,
+      "chrome": 8,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 10,
+          "text": "This form opens once a GP has accepted your request.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Nothing to tell us about yet",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/match/prep",
+      "name": "/match/prep",
+      "state": null,
+      "total": 25,
+      "fold": 21,
+      "chrome": 8,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 10,
+          "text": "The checklist is written from your request. Start one first.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Before the first appointment",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/match/results",
+      "name": "/match/results",
+      "state": null,
+      "total": 17,
+      "fold": 13,
+      "chrome": 8,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Nothing to show yet",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Find a GP",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/medication",
+      "name": "/medication",
+      "state": null,
+      "total": 50,
+      "fold": 28,
+      "chrome": 8,
+      "ratio": 1.3,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 9,
+          "text": "What it changes, what it leaves, in your words.",
+          "tag": "h1"
+        },
+        {
+          "w": 8,
+          "text": "Bring it to the person who manages it",
+          "tag": "h2"
+        },
+        {
+          "w": 7,
+          "text": "A note for whoever manages your medication.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "/my-adhd",
+      "state": null,
+      "total": 25,
+      "fold": 21,
+      "chrome": 8,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Nothing here yet — and that is honest.",
+          "tag": "h2"
+        },
+        {
+          "w": 7,
+          "text": "Answer a module, or the ten questions.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/practices",
+      "name": "/practices",
+      "state": null,
+      "total": 768,
+      "fold": 59,
+      "chrome": 23,
+      "ratio": 19.2,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 48,
+          "text": "NSW now lets a GP carry ADHD care end to end rather than only refer it onward, a",
+          "tag": "p"
+        },
+        {
+          "w": 45,
+          "text": "A GP opts into a clinical focus and chooses how much of their week it should bec",
+          "tag": "p"
+        },
+        {
+          "w": 38,
+          "text": "Late cancellations and quiet mid-week sessions leave clinician time unused. Manu",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/privacy",
+      "name": "/privacy",
+      "state": null,
+      "total": 1178,
+      "fold": 220,
+      "chrome": 23,
+      "ratio": 29.5,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 130,
+          "text": "If you type a suburb, that word is looked up on your device too — the site never",
+          "tag": "p"
+        },
+        {
+          "w": 100,
+          "text": "ADHD.ME is building software that will offer available appointment times to a pr",
+          "tag": "p"
+        },
+        {
+          "w": 66,
+          "text": "The whole finder runs in your browser. The words you type about what you are loo",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/privacy/automated-decisions",
+      "name": "/privacy/automated-decisions",
+      "state": null,
+      "total": 1553,
+      "fold": 127,
+      "chrome": 27,
+      "ratio": 38.8,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 144,
+          "text": "SWITCHED OFF, and nothing has ever been sent from here in any case. If it were s",
+          "tag": "li"
+        },
+        {
+          "w": 122,
+          "text": "Built and not in use. Where your practice sent you an availability message or wr",
+          "tag": "li"
+        },
+        {
+          "w": 92,
+          "text": "To know whether any of this helps, a share of patients at each practice is set a",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/privacy/counsel-review",
+      "name": "/privacy/counsel-review",
+      "state": null,
+      "total": 328,
+      "fold": 175,
+      "chrome": 27,
+      "ratio": 8.2,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 55,
+          "text": "both carry a “Draft — not yet in force” banner. That is deliberate: both documen",
+          "tag": "p"
+        },
+        {
+          "w": 44,
+          "text": "The lawyer returns a marked-up version of both documents and answers to those qu",
+          "tag": "p"
+        },
+        {
+          "w": 33,
+          "text": "That our central claim holds up in law the way it holds up in code: what you typ",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/profile",
+      "name": "/profile",
+      "state": null,
+      "total": 128,
+      "fold": 38,
+      "chrome": 8,
+      "ratio": 3.2,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 55,
+          "text": "Appointments vanish on me — I forget half of what was said before I reach the ca",
+          "tag": "strong"
+        },
+        {
+          "w": 5,
+          "text": "How far you would travel",
+          "tag": "summary"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/start",
+      "name": "/start",
+      "state": null,
+      "total": 21,
+      "fold": 17,
+      "chrome": 8,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "ADHD affects much more than attention.",
+          "tag": "h1"
+        },
+        {
+          "w": 6,
+          "text": "Ten short questions, under two minutes.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/story",
+      "name": "/story",
+      "state": null,
+      "total": 686,
+      "fold": 66,
+      "chrome": 16,
+      "ratio": 17.2,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 116,
+          "text": "Beecroft, Hornsby, Cheltenham, Pennant Hills, Epping, Double Bay, Edgecliff, Ros",
+          "tag": "span"
+        },
+        {
+          "w": 43,
+          "text": "Indicative figures pending source confirmation, and the NSW and Queensland rule ",
+          "tag": "p"
+        },
+        {
+          "w": 41,
+          "text": "The finder runs over a demonstration roster while the network is being built. Li",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/support",
+      "name": "/support",
+      "state": null,
+      "total": 30,
+      "fold": 26,
+      "chrome": 8,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Answer the ten questions and the path fills in.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Start from the problem, not the profession.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "Nothing to walk from yet.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/survey",
+      "name": "/survey",
+      "state": null,
+      "total": 31,
+      "fold": 27,
+      "chrome": 8,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Two to four minutes. Optional.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 3,
+          "text": "Choose a survey.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/terms",
+      "name": "/terms",
+      "state": null,
+      "total": 702,
+      "fold": 167,
+      "chrome": 25,
+      "ratio": 17.6,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 73,
+          "text": "Nothing in these terms takes away any right or remedy you have under the Austral",
+          "tag": "p"
+        },
+        {
+          "w": 66,
+          "text": "The finder matches the words you type against what each listed clinician declare",
+          "tag": "p"
+        },
+        {
+          "w": 65,
+          "text": "ADHD.ME is a finder: it shows you GPs who say they do the work you describe, wit",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/thanks",
+      "name": "/thanks",
+      "state": null,
+      "total": 29,
+      "fold": 25,
+      "chrome": 25,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Received. A person replies within two days.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Meanwhile, the finder works without an account.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "/today",
+      "state": null,
+      "total": 24,
+      "fold": 20,
+      "chrome": 8,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Two minutes so this app can be about you.",
+          "tag": "h2"
+        },
+        {
+          "w": 7,
+          "text": "Ten short questions. Nothing is sent anywhere.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/gp/example-mei-chao",
+      "name": "GP profile",
+      "state": null,
+      "total": 44,
+      "fold": 40,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 5,
+          "text": "ADHD assessment across ages, titration.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "More about how they work",
+          "tag": "summary"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder results (after a search)",
+      "state": "finder-results",
+      "total": 98,
+      "fold": 68,
+      "chrome": 8,
+      "ratio": 2.5,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Beecroft & Double Bay, by telehealth, wherever you are",
+          "tag": "small"
+        },
+        {
+          "w": 7,
+          "text": "An adult ADHD assessment, telehealth, not rushed.",
+          "tag": "span"
+        },
+        {
+          "w": 7,
+          "text": "Double Bay, by telehealth, wherever you are",
+          "tag": "small"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "state": "finder-profile",
+      "name": "Finder profile (a GP opened)",
+      "error": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('textbox')\u001b[22m\n"
+    },
+    {
+      "path": "/approach?module=everyday",
+      "name": "A read module, first card",
+      "state": null,
+      "total": 114,
+      "fold": 67,
+      "chrome": 3,
+      "ratio": 2.9,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 37,
+          "text": "Working memory is the scratchpad, and with ADHD the scratchpad is small. The mov",
+          "tag": "p"
+        },
+        {
+          "w": 16,
+          "text": "Put the object where the task happens: keys by the door, the form on the keyboar",
+          "tag": "li"
+        },
+        {
+          "w": 11,
+          "text": "Write it down the moment it lands, before the next thing",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/approach?module=starting",
+      "name": "A game run, title card",
+      "state": null,
+      "total": 10,
+      "fold": 6,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 3,
+          "text": "The blank page",
+          "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "Tap to play",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play",
+      "name": "The Chaos Run, first round",
+      "state": "lives-run",
+      "total": 8,
+      "fold": 4,
+      "chrome": 0,
+      "ratio": 0.2,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "Wasps",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/match/results",
+      "name": "Match results",
+      "state": "intake",
+      "total": 75,
+      "fold": 42,
+      "chrome": 8,
+      "ratio": 1.9,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 7,
+          "text": "You both talk about adult ADHD assessment.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "You both talk about adult ADHD assessment.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "You both talk about adult ADHD assessment.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/match/prep",
+      "name": "Match prep",
+      "state": "intake",
+      "total": 71,
+      "fold": 55,
+      "chrome": 8,
+      "ratio": 1.8,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Someone who knew you as a child",
+          "tag": "strong"
+        },
+        {
+          "w": 5,
+          "text": "Medicare card and photo ID",
+          "tag": "strong"
+        },
+        {
+          "w": 5,
+          "text": "What you will be asked",
+          "tag": "summary"
+        }
+      ]
+    }
+  ]
+}

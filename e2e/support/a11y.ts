@@ -40,7 +40,7 @@ export async function expectNoViolations(page: Page, label: string) {
   await settle(page);
   const results = await new AxeBuilder({ page }).withTags(TAGS).analyze();
   const summary = results.violations.map(
-    (v) => `${v.id} (${v.impact}): ${v.nodes.length} node(s) — ${v.help}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`,
+    (v) => `${v.id} (${v.impact}): ${v.nodes.length} node(s), ${v.help}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`,
   );
   expect(summary, `${label} must have no WCAG 2.1 AA violations`).toEqual([]);
 }

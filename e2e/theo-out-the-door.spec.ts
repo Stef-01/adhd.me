@@ -11,7 +11,7 @@ async function pack(page: Page, items = ["Keys", "Phone", "Shoes"]) {
 
 test("Theo's hardest morning supports keyboard, door gate, replay and learning without profile writes", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" }); const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
-  await page.goto("/lives/learn"); await page.getByRole("link", { name: /Just get out the door/ }).click();
+  await page.goto("/approach?pane=games"); await page.getByRole("link", { name: /Just get out the door/ }).click();
   await expect(page.getByRole("heading", { name: "Just get out the door." })).toBeFocused();
   await page.getByLabel("Challenge", { exact: true }).selectOption("8");
   const before = await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"));

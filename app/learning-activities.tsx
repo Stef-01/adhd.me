@@ -28,7 +28,7 @@ export function LearningActivity({ topic, step }: { topic: string; step: number 
     const tasks = ["Open the document", "Write a rough title", "Add one bullet"];
     return <aside className="activity activity-sequence" aria-label="Build a first step">
       <div className="activity-heading"><span className="activity-label"><HandTap size={17} /> TRY IT OUT</span><span>{ordered.length} / 3 placed</span></div>
-      <h3>Make the start smaller.</h3><p>Put this example into a helpful order. Choose the next small action.</p>
+      <h3>Put these in a helpful order.</h3><p>Put this example into a helpful order. Choose the next small action.</p>
       <div className="sequence-track">{tasks.map((_, i) => <motion.div key={i} layout className={ordered[i] !== undefined ? "sequence-slot is-filled" : "sequence-slot"}><span>{i + 1}</span>{ordered[i] !== undefined ? tasks[ordered[i]!] : "Next small action"}</motion.div>)}</div>
       <div className="sequence-options">{[2, 0, 1].map(i => <motion.button key={i} whileTap={press} disabled={ordered.includes(i)} onClick={() => {
         if (i === ordered.length) { setOrdered([...ordered, i]); setFeedback(i === 2 ? "A whole task became three visible actions. You built a starting point." : "That gives the next action somewhere to begin."); }
@@ -45,7 +45,7 @@ export function LearningActivity({ topic, step }: { topic: string; step: number 
     <p role="status" className="activity-feedback">{revealed.length === QUESTIONS.length ? "Your example question kit is ready. Clear answers make the next decision easier to understand." : "Selections stay in this activity only."}</p>
   </aside>;
   if (topic === "changed") return <aside className="activity activity-timeline" aria-label="Explore how the route changes">
-    <span className="activity-label">TWO WAYS TO FOLLOW THE STORY</span><h3>Who holds the next step?</h3>
+    <h3>Who holds the next step?</h3>
     <div className="timeline-switch" role="group" aria-label="Choose a route">{["Several handoffs", "One continuing conversation"].map((label, i) => <button key={label} aria-pressed={(selected ?? 0) === i} onClick={() => setSelected(i)}>{label}</button>)}</div>
     <div className="timeline-stations">{((selected ?? 0) === 0 ? ["First appointment", "Referral", "Another appointment", "Review"] : ["First appointment", "Assessment conversation", "Plan and review"]).map((label, i) => <motion.div key={`${selected}-${label}`} initial={enter} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: reduced ? 0 : i * .06 }}><span>{i + 1}</span><strong>{label}</strong></motion.div>)}</div>
     <p className="activity-feedback" role="status">{selected === 1 ? "An illustration of continuity. What an individual GP can offer depends on their training, authorisation and practice." : "An illustration of handoffs. The module explains how routes differ; it is not a promise of a particular pathway."}</p>

@@ -124,11 +124,11 @@ export function loadCalendar(rows: readonly unknown[]): HolidayCalendar {
       return;
     }
     if (seen.has(candidate.id)) {
-      rejected.push({ id, reason: "duplicate id — a silently overwritten holiday is a day the practice thinks it is closed" });
+      rejected.push({ id, reason: "duplicate id, a silently overwritten holiday is a day the practice thinks it is closed" });
       return;
     }
     if (typeof candidate.jurisdiction !== "string" || candidate.jurisdiction.trim().length === 0) {
-      rejected.push({ id, reason: "jurisdiction missing — a holiday without one applies nowhere" });
+      rejected.push({ id, reason: "jurisdiction missing, a holiday without one applies nowhere" });
       return;
     }
     if (typeof candidate.name !== "string" || candidate.name.trim().length === 0) {
@@ -140,7 +140,7 @@ export function loadCalendar(rows: readonly unknown[]): HolidayCalendar {
       return;
     }
     if (typeof candidate.observedOn !== "string" || !ISO_DATE.test(candidate.observedOn)) {
-      rejected.push({ id, reason: "observedOn missing or not an ISO date — the observed date is the one a diary turns on" });
+      rejected.push({ id, reason: "observedOn missing or not an ISO date, the observed date is the one a diary turns on" });
       return;
     }
     const provenanceProblem = validateProvenance(candidate.provenance);

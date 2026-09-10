@@ -129,7 +129,7 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
   "manner:structured": {
     prompt: "Would you rather it was done to a plan, with follow-up booked?",
     /* Reworded by O7: "a documented plan with follow-up booked" was being claimed by a
-       degenerate strengths cue and never reached manner:structured — the reach pin that now
+       degenerate strengths cue and never reached manner:structured, the reach pin that now
        re-reads every answer is what caught it. */
     answer: "I want it done properly, with a follow-up plan booked",
   },
@@ -247,7 +247,7 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
 
   /* M10: THE RELEVANCE GATE, AND IT IS NOT OPTIONAL. Splitting the roster earns a facet its
      CANDIDACY; only the request can earn it the QUESTION. A candidate must co-occur with
-     something the reader actually said (clarifier-relevance.ts, corpus-derived) — otherwise
+     something the reader actually said (clarifier-relevance.ts, corpus-derived), otherwise
      this function is choosing the axis two doctors happen to differ on and asking the reader
      to care about it, which the year plan names as manipulation, and the 1.5× lift then
      rewards the answer as if the reader had raised it themselves.
@@ -259,7 +259,7 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
 
      ZERO QUESTIONS IS A DESIGNED OUTCOME, not a failure state. Measured on the real roster:
      "English is my second language and appointments move too fast" reaches unhurried and
-     culturally-attuned — everything it suggests is already heard — and the only splitting
+     culturally-attuned, everything it suggests is already heard, and the only splitting
      facets left are anxiety, shared care and child assessment. Before this gate the reader
      got those three; now they get none, and none is correct. */
   const reachedKeys = [...alreadyAsked];
@@ -277,7 +277,7 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
     .filter((entry): entry is Clarifier => entry !== null)
     /* M10 FOUND THIS LATENT, THE GATE DID NOT CAUSE IT. An answer is re-read by readNeeds, and
        some answers reach more than their own facet: manner:unhurried's answer contains "a longer
-       first appointment", which is pref:longer-appointment's own phrase — the file already calls
+       first appointment", which is pref:longer-appointment's own phrase, the file already calls
        those two questions twins where PREF_PROMPTS declines to duplicate the prompt. The key-level
        alreadyAsked check above cannot see that, so "never asks about something the reader already
        said" (the W225 pin) held only because three roster-split questions happened to outrank the

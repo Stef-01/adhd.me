@@ -48,7 +48,7 @@ test("/api/health names the build, the boot instant, the store and the reporter,
   });
   const bootedAt = Date.parse(body.bootedAt);
   expect(bootedAt).toBeLessThanOrEqual(Date.now());
-  expect(Date.now() - bootedAt, "booted within the last day — the instant is the process's, not a constant").toBeLessThan(86_400_000);
+  expect(Date.now() - bootedAt, "booted within the last day, the instant is the process's, not a constant").toBeLessThan(86_400_000);
 });
 
 test("a thrown render error reaches the sink with its route and SHA, and without the planted request", async ({ page, request }) => {

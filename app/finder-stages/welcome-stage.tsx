@@ -8,7 +8,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { AppSettings } from "../app-settings";
-import { EASE_OUT, FinderContext, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
+import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
   draft,
@@ -41,7 +41,7 @@ export function WelcomeStage({
       <header className="minimal-header has-settings">
         <Wordmark />
         {/* O233 (founder-directed): the settings control, top right. About and Questions live in
-            its sheet — things consulted once do not belong in a bar meant for destinations
+            its sheet, things consulted once do not belong in a bar meant for destinations
             somebody returns to. The finder's own testing options ride in the same sheet, so the
             app has one settings surface rather than two that look alike. */}
         <AppSettings>
@@ -52,7 +52,7 @@ export function WelcomeStage({
               onChange={(event) => onToggleSynthetic(event.target.checked)}
             />
             {/* transitions.dev checkbox check: the native input stays — it is what the label
-                toggles, what the keyboard focuses and what the spec unchecks — and is only moved
+                toggles, what the keyboard focuses and what the spec unchecks, and is only moved
                 off-screen; this drawn box is its face. The box fills, then the tick strokes in
                 along its own path; unchecking reverses the stroke rather than snapping. */}
             <span className="t-check" aria-hidden="true">
@@ -62,7 +62,7 @@ export function WelcomeStage({
             </span>
             <span>
               <strong>Include example profiles</strong>
-              <small>Fictional GPs and allied providers for trying the finder — not real people, and not bookable.</small>
+              <small>Fictional providers, not bookable.</small>
             </span>
           </label>
         </AppSettings>
@@ -70,7 +70,7 @@ export function WelcomeStage({
 
       {/* O233 (founder-directed): the tagline is gone. "ADHD assessment that takes you seriously"
           was a marketing claim on the one screen whose whole job is to get a sentence out of
-          somebody — and the founder's question, what does a person practically need to see, has one
+          somebody, and the founder's question, what does a person practically need to see, has one
           answer: what to type, and a box big enough to type it in.
           The `h1` stays because `finder-a11y.spec.ts` walks focus onto it and axe needs the heading;
           it is now the question the box answers, at a size that leads without shouting. */}
@@ -94,8 +94,8 @@ export function WelcomeStage({
             Describe the support you are looking for, or use the microphone to talk
           </label>
           {/* O233: a textarea, not a one-line input. The thing a person is asked for is a
-              SENTENCE — "a woman GP near Chatswood who speaks Mandarin and can do the whole
-              assessment" — and a 66px single line showed them a fifth of it while they typed.
+              SENTENCE, "a woman GP near Chatswood who speaks Mandarin and can do the whole
+              assessment", and a 66px single line showed them a fifth of it while they typed.
               Enter still searches, so the keyboard contract is unchanged; Shift+Enter makes a line
               for anybody who wants one. `rows` sets the resting height and the field grows no
               further, because a box that reflows the screen under a typing hand is worse than one
@@ -154,21 +154,10 @@ export function WelcomeStage({
         {/* O233: the testing options moved into the settings sheet (see the header above), so
             the app has one place a person changes anything. */}
       </motion.div>
-
-      <FinderContext />
-
-      <aside className="finder-getting-started" aria-label="Getting started">
-        <p className="learning-overline">YOUR NEXT STEP, MADE CLEARER</p>
-        <h2>A search that starts with you.</h2>
-        <p>GPs, psychologists, counsellors, occupational therapists, exercise physiologists and ADHD coaches. Tell us what matters, then check the details with the practice.</p>
-        <ol>
-          <li><span>1</span><div><strong>Use your own words</strong><p>Location, language, appointment style — start with what you need.</p></div></li>
-          <li><span>2</span><div><strong>See why somebody appears</strong><p>Read the profile and the reasons behind your results.</p></div></li>
-          <li><span>3</span><div><strong>Choose your next step</strong><p>Check current availability with the booking destination.</p></div></li>
-        </ol>
-        <Link href="/support">Not sure who to see? Start from the problem <ArrowRight size={17} aria-hidden="true" /></Link>
-        <Link href="/approach">New to ADHD? Explore the learning modules <ArrowRight size={17} aria-hidden="true" /></Link>
-      </aside>
+      <p className="finder-doors">
+        <Link href="/support">Start from the problem</Link>
+        <Link href="/match">Get matched instead</Link>
+      </p>
 
     </MotionScreen>
   );

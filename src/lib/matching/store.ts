@@ -1,0 +1,257 @@
+// The matching store: patients, GP profiles, matches, feedback and checklists, in memory behind
+// `globalThis` in the same mock-persistence posture as every other store in the tree
+// (`src/console/store.ts` header). `supabase/migrations/0006_matching.sql` mirrors the shape for
+// the wiring unit (Phase M5); nothing here talks to a database.
+//
+// GP profiles are SEEDED from the roster the first time the store is read, and edits from the GP
+// dashboard land on the copy here: the roster stays the declared record it is, the store holds
+// what a GP has changed since. `resetMatching` drops everything, including the edits.
+//
+// Patient rows hold a narrative. They never leave this process, never reach a log line, and the
+// mock introspection route returns counts, not rows (`app/api/mock/matching`).
+
+import { rosterGPs } from "./adapters";
+import { SupabaseJournal, supabaseEndpointFromEnv, toRow, type JournalWrite } from "./persistence";
+import type { PatientCriterion } from "./ranking";
+import type { DocumentChecklist, Feedback, GP, Match, MatchStatus, Patient } from "./types";
+
+export interface MatchingState {
+  patients: Map<string, Patient>;
+  gps: Map<string, GP>;
+  matches: Map<string, Match>;
+  feedback: Map<string, Feedback>;
+  checklists: Map<string, DocumentChecklist>;
+  /** Learned patient-side weights, or null while the loop has not moved them. */
+  weights: Readonly<Record<PatientCriterion, number>> | null;
+  /** The clock the roster was graded against when seeded. */
+  seededAt: string | null;
+}
+
+const globalStore = globalThis as { __adhdMeMatching?: MatchingState; __adhdMeMatchingJournal?: SupabaseJournal | null };
+
+/**
+ * The journal (Phase M5): present when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, null
+ * otherwise. Every write below is mirrored through `mirror`; a route that must see what another
+ * instance wrote awaits `hydrateMatching()` first. Tests attach a journal with a fake fetch.
+ */
+export function attachMatchingJournal(journal: SupabaseJournal | null): void {
+  globalStore.__adhdMeMatchingJournal = journal;
+}
+
+function journal(): SupabaseJournal | null {
+  if (globalStore.__adhdMeMatchingJournal === undefined) {
+    const endpoint = supabaseEndpointFromEnv();
+    globalStore.__adhdMeMatchingJournal = endpoint ? new SupabaseJournal(endpoint) : null;
+  }
+  return globalStore.__adhdMeMatchingJournal;
+}
+
+function mirror(write: JournalWrite): void {
+  journal()?.record(write);
+}
+
+/** Load what the database holds into this instance, once. A no-op without a journal. */
+export async function hydrateMatching(state: MatchingState = getMatching()): Promise<MatchingState> {
+  await journal()?.hydrate(state);
+  return state;
+}
+
+function initial(): MatchingState {
+  return { patients: new Map(), gps: new Map(), matches: new Map(), feedback: new Map(), checklists: new Map(), weights: null, seededAt: null };
+}
+
+export function getMatching(today: Date = new Date()): MatchingState {
+  globalStore.__adhdMeMatching ??= initial();
+  const state = globalStore.__adhdMeMatching;
+  if (state.seededAt === null) {
+    for (const gp of rosterGPs(today)) state.gps.set(gp.id, gp);
+    state.seededAt = today.toISOString();
+  }
+  return state;
+}
+
+export function resetMatching(): MatchingState {
+  globalStore.__adhdMeMatching = initial();
+  return globalStore.__adhdMeMatching;
+}
+
+export function listGPs(state: MatchingState = getMatching()): GP[] {
+  return [...state.gps.values()];
+}
+
+export function gpById(id: string, state: MatchingState = getMatching()): GP | null {
+  return state.gps.get(id) ?? null;
+}
+
+export function saveGP(gp: GP, state: MatchingState = getMatching()): GP {
+  state.gps.set(gp.id, gp);
+  mirror({ table: "match_gps", op: "upsert", id: gp.id, row: toRow.match_gps(gp) });
+  return gp;
+}
+
+export function savePatient(patient: Patient, state: MatchingState = getMatching()): Patient {
+  state.patients.set(patient.id, patient);
+  mirror({ table: "match_patients", op: "upsert", id: patient.id, row: toRow.match_patients(patient) });
+  return patient;
+}
+
+export function patientById(id: string, state: MatchingState = getMatching()): Patient | null {
+  return state.patients.get(id) ?? null;
+}
+
+/** Patients still waiting: intake or matched, with no accepted match yet. */
+export function openPatients(state: MatchingState = getMatching()): Patient[] {
+  return [...state.patients.values()].filter(
+    (p) => (p.status === "intake" || p.status === "matched") && !matchesForPatient(p.id, state).some((m) => m.matchStatus === "accepted"),
+  );
+}
+
+export function saveMatches(matches: readonly Match[], state: MatchingState = getMatching()): void {
+  for (const m of matches) {
+    state.matches.set(m.id, m);
+    mirror({ table: "match_matches", op: "upsert", id: m.id, row: toRow.match_matches(m) });
+  }
+}
+
+export function matchById(id: string, state: MatchingState = getMatching()): Match | null {
+  return state.matches.get(id) ?? null;
+}
+
+export function matchesForPatient(patientId: string, state: MatchingState = getMatching()): Match[] {
+  return [...state.matches.values()].filter((m) => m.patientId === patientId).sort((a, b) => a.position - b.position);
+}
+
+export function matchesForGP(gpId: string, state: MatchingState = getMatching()): Match[] {
+  return [...state.matches.values()].filter((m) => m.gpId === gpId).sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+}
+
+export function allMatches(state: MatchingState = getMatching()): Match[] {
+  return [...state.matches.values()];
+}
+
+export type StatusChange = { ok: true; match: Match } | { ok: false; reason: "not_found" | "not_open" };
+
+/**
+ * Move a match to a decided status. Only a proposed match can be accepted or declined, and only
+ * an accepted one completed; a second answer from a stale page is refused, not re-applied.
+ */
+export function setMatchStatus(
+  matchId: string,
+  status: Exclude<MatchStatus, "proposed">,
+  at: string,
+  declineReason: Match["declineReason"] = null,
+  state: MatchingState = getMatching(),
+): StatusChange {
+  const match = state.matches.get(matchId);
+  if (!match) return { ok: false, reason: "not_found" };
+  const allowed: Record<Exclude<MatchStatus, "proposed">, MatchStatus[]> = {
+    accepted: ["proposed"],
+    declined: ["proposed"],
+    withdrawn: ["proposed", "accepted"],
+    completed: ["accepted"],
+  };
+  if (!allowed[status].includes(match.matchStatus)) return { ok: false, reason: "not_open" };
+  const next: Match = { ...match, matchStatus: status, decidedAt: at, declineReason: status === "declined" ? declineReason : null };
+  state.matches.set(matchId, next);
+  mirror({ table: "match_matches", op: "upsert", id: next.id, row: toRow.match_matches(next) });
+  if (status === "accepted") {
+    const patient = state.patients.get(match.patientId);
+    if (patient) savePatient({ ...patient, status: "booked" }, state);
+    const gp = state.gps.get(match.gpId);
+    if (gp) {
+      saveGP(
+        {
+          ...gp,
+          credentials: { ...gp.credentials, caseloadCapacityCurrent: Math.max(0, gp.credentials.caseloadCapacityCurrent - 1) },
+        },
+        state,
+      );
+    }
+  }
+  if (status === "completed") {
+    const patient = state.patients.get(match.patientId);
+    if (patient) savePatient({ ...patient, status: "consulted" }, state);
+  }
+  return { ok: true, match: next };
+}
+
+export function saveFeedback(record: Feedback, state: MatchingState = getMatching()): Feedback {
+  state.feedback.set(record.id, record);
+  mirror({ table: "match_feedback", op: "upsert", id: record.id, row: toRow.match_feedback(record) });
+  return record;
+}
+
+export function feedbackForMatch(matchId: string, state: MatchingState = getMatching()): Feedback[] {
+  return [...state.feedback.values()].filter((f) => f.matchId === matchId);
+}
+
+export function allFeedback(state: MatchingState = getMatching()): Feedback[] {
+  return [...state.feedback.values()];
+}
+
+export function saveChecklist(checklist: DocumentChecklist, state: MatchingState = getMatching()): DocumentChecklist {
+  state.checklists.set(checklist.patientId, checklist);
+  mirror({ table: "match_checklists", op: "upsert", id: checklist.id, row: toRow.match_checklists(checklist) });
+  return checklist;
+}
+
+export function checklistFor(patientId: string, state: MatchingState = getMatching()): DocumentChecklist | null {
+  return state.checklists.get(patientId) ?? null;
+}
+
+export function setChecklistItem(patientId: string, itemId: string, done: boolean, state: MatchingState = getMatching()): DocumentChecklist | null {
+  const checklist = state.checklists.get(patientId);
+  if (!checklist) return null;
+  const next: DocumentChecklist = { ...checklist, items: checklist.items.map((i) => (i.id === itemId ? { ...i, done } : i)) };
+  state.checklists.set(patientId, next);
+  mirror({ table: "match_checklists", op: "upsert", id: next.id, row: toRow.match_checklists(next) });
+  return next;
+}
+
+export function setWeights(weights: Readonly<Record<PatientCriterion, number>> | null, state: MatchingState = getMatching()): void {
+  state.weights = weights;
+}
+
+/** Everything held about one patient, for an access request. Null when nothing is held. */
+export function exportMatchingPatient(patientId: string, state: MatchingState = getMatching()) {
+  const patient = state.patients.get(patientId);
+  if (!patient) return null;
+  const matches = matchesForPatient(patientId, state);
+  const matchIds = new Set(matches.map((m) => m.id));
+  return {
+    patient,
+    matches,
+    feedback: [...state.feedback.values()].filter((f) => matchIds.has(f.matchId)),
+    checklist: state.checklists.get(patientId) ?? null,
+  };
+}
+
+/** Erase one patient: the row, their matches, the feedback on those matches, their checklist. */
+export function eraseMatchingPatient(patientId: string, state: MatchingState = getMatching()): { erased: boolean; matches: number; feedback: number } {
+  const held = exportMatchingPatient(patientId, state);
+  if (!held) return { erased: false, matches: 0, feedback: 0 };
+  for (const f of held.feedback) {
+    state.feedback.delete(f.id);
+    mirror({ table: "match_feedback", op: "delete", id: f.id });
+  }
+  for (const m of held.matches) {
+    state.matches.delete(m.id);
+    mirror({ table: "match_matches", op: "delete", id: m.id });
+  }
+  if (held.checklist) mirror({ table: "match_checklists", op: "delete", id: held.checklist.id });
+  state.checklists.delete(patientId);
+  state.patients.delete(patientId);
+  mirror({ table: "match_patients", op: "delete", id: patientId });
+  return { erased: true, matches: held.matches.length, feedback: held.feedback.length };
+}
+
+/** Counts only: what the mock introspection route may say about this store. */
+export function matchingCounts(state: MatchingState = getMatching()): Record<string, number> {
+  return {
+    patients: state.patients.size,
+    gps: state.gps.size,
+    matches: state.matches.size,
+    feedback: state.feedback.size,
+    checklists: state.checklists.size,
+  };
+}

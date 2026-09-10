@@ -17,7 +17,7 @@ export type ReducedMotionFinding = { readonly route: string; readonly kind: "res
 export const ALLOWED_TRANSFORMS: ReadonlyArray<{ readonly selector: string; readonly why: string }> = [
   {
     selector: ".story-progress",
-    why: "The scroll progress bar rests at scaleX(0) at the top of the page by definition — it is scroll FEEDBACK (direct manipulation, vestibular-safe), not preference-gated motion, and it grows only as the reader scrolls.",
+    why: "The scroll progress bar rests at scaleX(0) at the top of the page by definition, it is scroll FEEDBACK (direct manipulation, vestibular-safe), not preference-gated motion, and it grows only as the reader scrolls.",
   },
 ];
 

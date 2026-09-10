@@ -39,7 +39,7 @@ export default function ApproachPage() {
           desktop the page header is the platform's, so the map needs a door in the page itself. */}
       <Link className="learn-map-link" href="/approach/map" aria-label="Open the care map">
         <MapTrifold size={18} weight="bold" aria-hidden="true" />
-        The care map — brain, body, environment, people
+        The care map
       </Link>
       <Suspense fallback={<p role="status">Loading learning modules…</p>}><LearnModules /></Suspense>
     </main>

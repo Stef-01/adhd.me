@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/today" },
   robots: ROBOTS_META,
   title: "Today",
-  description: "The single most useful next thing for you today — a module, something to try, or a question about how the last thing went.",
+  description: "The single most useful next thing for you today, a module, something to try, or a question about how the last thing went.",
 };
 
 export default function TodayPage() {

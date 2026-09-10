@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { ROBOTS_META } from "@/security/robots";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { ROBOTS_META } from "@/security/robots";
 import { LearnHome } from "../../../lives/learn-home";
 
-// ADHD Lives (PRD v2, docs/adhd-lives/PRD-v2.md; ADR 0006). §28: Learn home; ?module= opens the renderer (§25).
 export const metadata: Metadata = {
   alternates: { canonical: "/lives/learn" },
   robots: ROBOTS_META,
-  title: "Learn — ADHD Lives",
-  description: "Sixteen practical strategies, two to five minutes each, opened from a moment that looked familiar or from here.",
+  title: "Learn, ADHD Lives",
+  description: "Sixteen practical strategies, two to five minutes each.",
 };
 
-export default function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ module?: string }> }) {
+  const { module } = await searchParams;
+  if (!module) redirect("/approach?pane=modules");
   return <main id="main-content" className="app-page-with-tabs"><Suspense fallback={<p role="status">Loading…</p>}><LearnHome /></Suspense></main>;
 }

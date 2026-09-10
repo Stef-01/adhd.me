@@ -30,6 +30,12 @@
 .lives-card.is-miss .lives-scene { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); }
 .lives-card.is-hit .lives-scene-bean .bean { animation: play-hop 0.5s var(--ease-ui) 1; }
 @media (prefers-reduced-motion: reduce) { .lives-card.is-hit .lives-scene-bean .bean { animation: none; } }
+/* §93 reduced flashing (data-reduced-flashing on the run; the run withholds `is-flash` from the beats that cut):
+   the hit and miss colour arrives as one fade instead of a cut, FASTER is a still word on paper, and nothing on the
+   field pulses, shakes or flaps. The product may depict overload; it should not create it. */
+.lives-run[data-reduced-flashing] .lives-scene { transition: background 0.5s ease-out; }
+.lives-run[data-reduced-flashing] .lives-thing.is-temptation { animation: none !important; }
+.lives-run[data-reduced-flashing] .leo-buzz-lines, .lives-run[data-reduced-flashing] .leo-wing { animation: none !important; }
 
 /* The field: the 390×560 design box, things placed by percentage so every width keeps the scene. */
 /* The field stops 64px short of the bottom: that band belongs to the skip and never to a target. */
@@ -112,8 +118,10 @@
 .lives-result-line { font-size: 1.25rem; font-weight: 650; }
 .lives-delta { margin: 0; color: #0e8345; font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
 .lives-delta.is-life { color: var(--accent-deep); font-size: 1rem; }
-.lives-faster { justify-content: center; background: var(--accent); color: var(--on-accent); }
-.lives-faster-word { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3rem, 18vw, 6rem); font-weight: 700; letter-spacing: -0.02em; color: var(--on-accent); }
+/* FASTER cuts to the accent (`is-flash`); under reduced flashing the run withholds the class and the word stands on paper. */
+.lives-faster { justify-content: center; background: var(--paper); color: var(--ink); }
+.lives-faster.is-flash { background: var(--accent); color: var(--on-accent); }
+.lives-faster-word { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3rem, 18vw, 6rem); font-weight: 700; letter-spacing: -0.02em; color: inherit; }
 .lives-cast { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
 .lives-play { min-height: 72px; padding: 18px 44px; font-size: 1.375rem; }
 

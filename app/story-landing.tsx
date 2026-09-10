@@ -163,7 +163,7 @@ export function StoryLanding() {
             <Link href="/examples" className="story-nav-link">Worked examples</Link>
             <Link href="/practices" className="story-nav-link">For practices</Link>
             {/* 2026-09-03: the last two unguarded motion props on this page. Every ENTRANCE here
-                reads `reduce`, but these two INTERACTION states did not — and AR20's detector
+                reads `reduce`, but these two INTERACTION states did not, and AR20's detector
                 cannot see them, because it samples the rest state after load and a hover lift only
                 exists once a pointer is on it. Gated to `undefined` rather than to an instant
                 value: a lift that teleports is a worse answer to "I get motion sick" than no lift. */}
@@ -253,7 +253,7 @@ export function StoryLanding() {
           <Reveal delay={0.06} className="story-prose">
             <p>
               You tell your story once. The same GP holds your assessment, medication and
-              follow-up — and what they noted at the first visit is still there at the fourth.
+              follow-up, and what they noted at the first visit is still there at the fourth.
             </p>
           </Reveal>
         </div>
@@ -268,11 +268,11 @@ export function StoryLanding() {
           <Reveal delay={0.06} className="story-prose story-prose-lead">
             <p>
               For years, an ADHD assessment meant a long, costly wait for a psychiatrist. In New
-              South Wales and Queensland, GPs can now do it themselves — so
+              South Wales and Queensland, GPs can now do it themselves, so
               the wait is no longer the only way in.
             </p>
             <p>
-              ADHD.ME connects you straight to those GPs — near you, not at the back of a referral queue.
+              ADHD.ME connects you straight to those GPs, near you, not at the back of a referral queue.
             </p>
             <p className="story-note">
               Every clinician here is a GP focused on ADHD assessment and care,
@@ -292,7 +292,7 @@ export function StoryLanding() {
             <Reveal delay={0.06} className="story-prose">
               <p>
                 The old route ran through a queue with no visible end and a cost most people could
-                not plan for — paid twice, in time and then again at the door.
+                not plan for, paid twice, in time and then again at the door.
               </p>
             </Reveal>
           </div>

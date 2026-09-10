@@ -75,6 +75,31 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The app itself: since O230 the root IS the clinician finder, whose whole shape is a patient looking for care, so it answers to every patient rule regardless of the roster being synthetic. It was the community landing page until that unit moved the story to `/story` and the product to the front door; the reasoning moved with each of them rather than being rewritten.",
   },
   {
+    path: "/match",
+    audience: "patient",
+    why: "Phase M's intake: a person writes or speaks what they are looking for and is shown up to three GPs with a reason each. The most direct patient copy in the product, swept in full.",
+  },
+  {
+    path: "/match/results",
+    audience: "patient",
+    why: "The three matches and their rationales. Every sentence is a fixed template over declared facts and the closed concept vocabulary, and the linter holds it in src/lib/matching/pipeline.test.ts as well as here.",
+  },
+  {
+    path: "/match/prep",
+    audience: "patient",
+    why: "Pre-appointment preparation: the document checklist and what to expect at a first appointment. Practical copy addressed to a patient; the checklist templates are linted in their own test.",
+  },
+  {
+    path: "/match/feedback",
+    audience: "patient",
+    why: "The post-consult feedback form. Asks a patient how the match went; shows no rating of anybody and publishes nothing.",
+  },
+  {
+    path: "/gp/[id]",
+    audience: "patient",
+    why: "A GP's public profile from the matching model: declared credentials with their verification state, how they work, and an availability indicator. The one aggregate it may show is a count of people who said they felt understood, with a floor of five, and never a score.",
+  },
+  {
     path: "/book/[token]",
     audience: "patient",
     why: "A patient following a link from an invitation. The most patient-facing surface in the product, and the only one reached by somebody who was contacted rather than somebody who went looking.",

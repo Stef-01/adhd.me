@@ -35,9 +35,7 @@ export function Adjustments() {
   return (
     <div className="me-screen learn-screen adjust-screen">
       <header className="life-head">
-        <span className="life-eyebrow">Adjustments on paper</span>
         <h1 className="life-title">Most of it exists. Most people are never told.</h1>
-        <p className="life-lede">A university or a workplace can change the conditions around you, and the adjustments that help with ADHD mostly cost nothing. This page says what is commonly available, who grants it, and what to bring when you ask. It applies for nothing on your behalf.</p>
       </header>
 
       <div className="adjust-tracks" role="tablist" aria-label="Where">
@@ -51,26 +49,24 @@ export function Adjustments() {
       <div id="adjust-panel" role="tabpanel" aria-labelledby={`adjust-tab-${entry.id}`}>
         <section className="life-card is-lead" aria-labelledby="adjust-title">
           <h2 id="adjust-title">{entry.title}</h2>
-          <p>{entry.lede}</p>
         </section>
 
-        <section className="life-card" aria-labelledby="adjust-available">
-          <h2 id="adjust-available"><ListChecks size={20} weight="bold" aria-hidden="true" /> Commonly available</h2>
-          <p>Ask for the two that would change most first.</p>
-          <ul className="life-list">
+        <details className="life-card match-more" open>
+          <summary>Commonly available</summary>
+                    <ul className="life-list">
             {entry.commonlyAvailable.map((line) => <li key={line}><Check size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-who">
-          <h2 id="adjust-who"><UsersThree size={20} weight="bold" aria-hidden="true" /> Who to ask</h2>
+        <details className="life-card match-more">
+          <summary>Who to ask</summary>
           <ul className="life-list">
             {entry.whoToAsk.map((line) => <li key={line}><ArrowRight size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-bring">
-          <h2 id="adjust-bring"><Paperclip size={20} weight="bold" aria-hidden="true" /> What to bring</h2>
+        <details className="life-card match-more">
+          <summary>What to bring</summary>
           <ul className="life-list">
             {entry.bring.map((line) => <li key={line}><ArrowRight size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
@@ -78,17 +74,17 @@ export function Adjustments() {
             <Link className="learn-secondary" href="/manual">{record.manual.updatedAt ? "Open my manual" : "Start my manual"}</Link>
             <Link className="learn-secondary" href="/support">The brief for a clinician</Link>
           </div>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-steps">
-          <h2 id="adjust-steps">In order</h2>
+        <details className="life-card match-more">
+          <summary>In order</summary>
           <ol className="adjust-steps">
             {entry.steps.map((line) => <li key={line}>{line}</li>)}
           </ol>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-help">
-          <h2 id="adjust-help">Who can help you ask</h2>
+        <details className="life-card match-more">
+          <summary>Who can help you ask</summary>
           <ul className="profession-list">
             {entry.professions.map((id, i) => {
               const p = profession(id);
@@ -101,7 +97,7 @@ export function Adjustments() {
               );
             })}
           </ul>
-        </section>
+        </details>
       </div>
     </div>
   );

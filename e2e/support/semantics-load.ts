@@ -61,5 +61,5 @@ export async function semanticFindings(
  */
 export function semanticsFinding(route: string, defects: readonly string[]): string | null {
   if (defects.length === 0) return null;
-  return `${route}: ${defects.length} semantic defect(s) — breaks ${SEMANTICS_RULE_ID} — ${defects.join("; ")}`;
+  return `${route}: ${defects.length} semantic defect(s), breaks ${SEMANTICS_RULE_ID}, ${defects.join("; ")}`;
 }

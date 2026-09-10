@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/survey" },
   robots: ROBOTS_META,
   title: "Survey",
-  description: "Eight to twelve questions on one part of life with ADHD, answered in two to four minutes, producing a pattern — never a score.",
+  description: "Eight to twelve questions on one part of life with ADHD, answered in two to four minutes, producing a pattern, never a score.",
 };
 
 export default function SurveyPage() {

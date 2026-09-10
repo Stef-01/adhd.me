@@ -10,7 +10,7 @@ export const THEO_ITEMS = {
 export type TheoItem = keyof typeof THEO_ITEMS;
 export interface TheoPlan { essentials: TheoItem[]; objects: TheoItem[]; duration: number }
 export interface TheoState { packed: TheoItem[]; detours: TheoItem[]; outcome: "playing" | "success" | "failure"; message: string }
-export const freshTheoState = (): TheoState => ({ packed: [], detours: [], outcome: "playing", message: "Drag what you need onto the launch pad. Or tap to pack." });
+export const freshTheoState = (): TheoState => ({ packed: [], detours: [], outcome: "playing", message: "Drag or tap to pack." });
 
 export function createTheoPlan(seed: number, level: number): TheoPlan {
   const essentials: TheoItem[] = ["keys", "phone", "shoes"];

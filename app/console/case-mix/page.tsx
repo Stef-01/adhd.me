@@ -17,7 +17,7 @@ import { stateInterest } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Your case mix — ADHD.ME" };
+export const metadata = { title: "Your case mix, ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have access to that.",
@@ -48,7 +48,7 @@ export default async function CaseMixPage({
           <h1 className="text-2xl font-semibold tracking-tight">Your case mix</h1>
           <p className="text-stone-600">
             Tell the practice how much of each kind of ongoing-care work you would take on.
-            This is about the mix of work you want, not about how experienced you are — and
+            This is about the mix of work you want, not about how experienced you are, and
             saying yes here does not by itself change who is offered an appointment with you.
           </p>
         </div>

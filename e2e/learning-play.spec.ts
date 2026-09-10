@@ -91,7 +91,7 @@ test("shared sessions join the server clock and gracefully handle a failed clock
   await page.goto("/approach/meditate");
   await page.getByRole("button", { name: "Join session" }).click();
   await expect(page.getByRole("timer")).toHaveText(/0[34]:[0-5][0-9]/);
-  await expect(page.getByText("SHARED STILLNESS · LIVE SESSION CLOCK")).toBeVisible();
+  await expect(page.getByText("Shared session")).toBeVisible();
   await expect(page.getByRole("button", { name: "Pause", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Leave this session" }).click();
   await page.route("**/api/meditation/session", route => route.abort());

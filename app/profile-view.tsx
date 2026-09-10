@@ -1,5 +1,6 @@
 "use client";
 
+
 // O233 (founder-directed): the Profile tab.
 //
 // A Profile tab in an app without accounts is where a placeholder usually goes — a stub with an
@@ -154,7 +155,7 @@ export function ProfileView() {
   return (
     <main id="main-content" className="me-screen app-page-with-tabs">
       {/* O233: the app's own header. `public-nav.spec.ts` holds every public route to showing the
-          mark and reaching home from it, and it was right to fail this one — a tab with no header
+          mark and reaching home from it, and it was right to fail this one, a tab with no header
           is a screen a person can be lost on. The settings control sits here for the same reason
           it sits on the finder: one place, every surface. */}
       <div className="minimal-header has-settings me-chrome">
@@ -178,7 +179,6 @@ export function ProfileView() {
             <X size={16} weight="bold" aria-hidden="true" />
           </Link>
         </div>
-        <p>Everything below is held on this device only, for this tab.</p>
       </header>
 
       {/* ── Where you are ─────────────────────────────────────────────────────────────────── */}
@@ -218,13 +218,11 @@ export function ProfileView() {
               </li>
             ))}
           </ul>
-          <p className="me-place-status">
-            {place.trim() === ""
-              ? "Nearer GPs come first among equal matches, and the map after you search is drawn from here."
-              : origin
-                ? `Distances are measured from ${origin.suburb} (${origin.postcode}).`
-                : "We do not cover that location yet."}
-          </p>
+          {place.trim() !== "" && (
+            <p className="me-place-status">
+              {origin ? `Distances are measured from ${origin.suburb} (${origin.postcode}).` : "We do not cover that location yet."}
+            </p>
+          )}
         </div>
       </section>
 
@@ -247,9 +245,6 @@ export function ProfileView() {
             </AnimatePresence>
           </span>
         </div>
-        <p className="me-section-lead">
-          Each one narrows the list to providers who declare it. The words you search with still decide the order.
-        </p>
 
         <ul className="me-switches">
           {SWITCHES.map((row, index) => (
@@ -262,7 +257,6 @@ export function ProfileView() {
               <label className="me-switch">
                 <span>
                   <strong>{row.title}</strong>
-                  <small>{row.detail}</small>
                 </span>
                 <input
                   type="checkbox"
@@ -276,8 +270,8 @@ export function ProfileView() {
           ))}
         </ul>
 
-        <div className="me-group" role="group" aria-labelledby="me-languages-title">
-          <h3 id="me-languages-title">Speaks, besides English</h3>
+        <details className="me-group me-fold">
+          <summary id="me-languages-title">Speaks, besides English</summary>
           <ul className="me-chips">
             {MATCHABLE_LANGUAGES.map((language) => {
               const on = filters.languages.includes(language);
@@ -300,10 +294,10 @@ export function ProfileView() {
               );
             })}
           </ul>
-        </div>
+        </details>
 
-        <div className="me-group me-distance">
-          <h3>How far you would travel</h3>
+        <details className="me-group me-fold me-distance">
+          <summary>How far you would travel</summary>
           {/* Pressed buttons rather than radios: every choice is its own tab stop, which is what the
               keyboard sweep holds every public control to, and the pressed state is read as such. */}
           <div className="me-segments" role="group" aria-label="How far you would travel">
@@ -329,12 +323,12 @@ export function ProfileView() {
               ? "A distance needs a suburb above before it can apply."
               : "Straight-line, from the suburb above. GPs who see new people by telehealth first are always included."}
           </p>
-        </div>
+        </details>
 
         {/* 2026-09-08 (PRD §38): which KIND of professional. Empty is every kind; the support path
             sets one on the person's behalf when they choose "See providers" from a problem. */}
-        <div className="me-group" role="group" aria-labelledby="me-profession-title">
-          <h3 id="me-profession-title">Kind of support</h3>
+        <details className="me-group me-fold">
+          <summary id="me-profession-title">Kind of support</summary>
           <ul className="me-chips">
             {PROFESSION_ENTRIES.map((entry) => {
               const on = filters.professions.includes(entry.id);
@@ -355,16 +349,14 @@ export function ProfileView() {
               );
             })}
           </ul>
-          <p className="me-group-note">
-            Leave every chip off to see all of them. Not sure which kind? The support path starts from the problem instead.
-          </p>
-        </div>
+          <p className="me-group-note">Leave all off to see everyone.</p>
+        </details>
 
         {/* O248 (founder-directed): how the GP works — whole-person, functional-health, wearables —
             as the GP declares it. Each chip requires the declaration; GPs who have not said are
             left out of a chosen chip rather than assumed. Nothing here is a claim about outcomes. */}
-        <div className="me-group" role="group" aria-labelledby="me-approach-title">
-          <h3 id="me-approach-title">How they work</h3>
+        <details className="me-group me-fold">
+          <summary id="me-approach-title">How they work</summary>
           <ul className="me-chips">
             {APPROACHES.map((a) => {
               const on = filters.approach.includes(a);
@@ -385,17 +377,14 @@ export function ProfileView() {
               );
             })}
           </ul>
-          <p className="me-group-note">
-            As the GP declares it: a whole-person view, openness to functional health, or a look at
-            data from a wearable you bring.
-          </p>
-        </div>
+          <p className="me-group-note">As the GP declares it.</p>
+        </details>
 
         {/* O236 (founder-directed): a fact modern patients ask about first — whether the consult is
             recorded and transcribed by AI. A declared practice fact, filtered like the others;
             GPs who have not said are left out of either choice rather than assumed. */}
-        <div className="me-group">
-          <h3>Notes during the consult</h3>
+        <details className="me-group me-fold">
+          <summary>Notes during the consult</summary>
           <div className="me-segments me-segments-3" role="group" aria-label="Notes during the consult">
             {CONSULT_RECORDING_CHOICES.map((choice: ConsultRecordingChoice) => {
               const on = filters.consultRecording === choice;
@@ -414,12 +403,8 @@ export function ProfileView() {
               );
             })}
           </div>
-          <p className="me-group-note">
-            Some GPs use an AI scribe that records and transcribes the consult into notes, with your
-            consent each time; others write notes without any AI recording. Choosing one shows only
-            GPs who have declared it.
-          </p>
-        </div>
+          <p className="me-group-note">An AI scribe with consent, or none.</p>
+        </details>
 
         {onCount > 0 && (
           <button className="me-forget" type="button" onClick={clearFilterSet}>
@@ -430,8 +415,8 @@ export function ProfileView() {
       </section>
 
       {/* ── What this tab holds ───────────────────────────────────────────────────────────── */}
-      <section className="me-section" aria-labelledby="me-held-title">
-        <h2 id="me-held-title">This search</h2>
+      <details className="me-section me-fold">
+        <summary id="me-held-title">This search</summary>
         {held ? (
           <>
             <ul className="me-facts">
@@ -469,20 +454,15 @@ export function ProfileView() {
           </>
         ) : (
           <div className="me-empty">
-            <p>
-              Once you describe the GP you are looking for, your words and the suburb you gave will
-              appear here, and you can clear them from this device in one tap.
-            </p>
+            <p>Your words appear here after a search.</p>
             <Link className="me-primary" href="/">
               Describe what you need<ArrowRight size={17} weight="bold" aria-hidden="true" />
             </Link>
           </div>
         )}
-      </section>
+      </details>
 
-      <p className="me-privacy">
-        Nothing you type is sent anywhere. Your filters stay on this device; your words go when this tab closes. <Link href="/privacy">How this works</Link>
-      </p>
+      <p className="me-privacy">Stays on this device.</p>
       {/* RADIANT: the sticky bar the founder drew above the tab bar — the one act this screen is
           for, with the count the filters leave. It goes to the finder, which resumes the search. */}
       <div className="me-sticky">

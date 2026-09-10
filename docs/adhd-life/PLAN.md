@@ -42,7 +42,7 @@ line or an analytics event.
 | §24 Personal ADHD model (Need) | Domain, cost, priority, confidence, contributors… | **Done**, derived on read | `src/model/needs.ts` |
 | §25 Eco-bio-psychosocial model | Four layers, subdomains | **Done** + the care map screen | `src/model/layers.ts`, `app/care-map.tsx`, `/approach/map` |
 | §26 My ADHD screen | Friction, contributors, pattern, helps, goal, worth exploring | **Done** | `app/my-adhd.tsx` |
-| §27 My Manual | Editable personal knowledge | **Deferred (P1)** | — |
+| §27 My Manual | Editable personal knowledge | **Done**, pulled forward from Phase B (2026-09-08) | `app/manual.tsx`, `src/model/manual.ts`, `/manual` |
 | §28 Reflection | Type / voice / select / skip | **Done** | player, `app/voice-reflection.tsx` |
 | §29 Reflection interpretation | Suggested reading, user confirms | **Done** — a closed lexicon on the device, no language model; only a confirmed reading enters the model | `src/model/interpret.ts` |
 | §30–§32 Strategy → experiment → outcome → history | | **Done** | store, Today, My ADHD |
@@ -55,7 +55,7 @@ line or an analytics event.
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
-| PRD v2 ADHD Lives (engine, renderer, results, modules, Toolkit) | Phase L | **L0–L4 done**; content and balancing next | `src/lives/`, `app/lives/` |
+| PRD v2 ADHD Lives (engine, renderer, results, modules, Toolkit) | Phase L | **L0–L5 done**; L6 balancing, sound and audio assets next | `src/lives/`, `app/lives/` |
 | §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |
@@ -178,13 +178,110 @@ native later. Mapped from the PRD's phases 0–6:
       sixteen modules full — recognise, understand, try, personalise, one action — with the
       validator and the suite refusing a stub. Every new game is linked from its strategies so
       the score screen can bring it back. (2026-09-09)
-- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound and haptics;
-      audio blocks (§72) have no asset yet. Done: a relaxed-timing setting (half as long again on
+- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound; audio blocks
+      (§72) have no asset yet. Done 2026-09-10: haptics behind a chip (`src/lives/haptics.ts`,
+      off by default), reduced flashing and reduced sensory effects as device flags read by the
+      run, more strategy mappings with coverage asserted, props that react in place. Done: a relaxed-timing setting (half as long again on
       every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
       the Lives home, kept on the device and read by the run. (2026-09-09) Done already: character stories (§41), Learn home (§28), the §67 events with §68's
       guardrail as a test, reduced motion and keyboard equals (§93–§94).
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.
+
+### Phase M — bidirectional GP matching, a six-month sprint (ADR 0007, 2026-09-09)
+
+The founder's third brief: move the matching model from one-directional search to a
+bidirectional one, where GPs declare how they work and what they want proposed, patients write
+or speak a narrative, a two-stage pipeline (hard filters plus cosine similarity, then deferred
+acceptance) presents a top three with a reason each, and a mutual post-consult feedback loop
+improves the weights. Built as a modular service under `src/lib/matching/` so it can be
+generalised to another condition by changing the vocabularies. Six months, one milestone a
+month, the first four landed together in this unit; the sprint runs to 2027-03-09.
+
+- [x] **M1 (to 2026-10-09): the service.** Five entities (Patient, GP, Match, Feedback,
+      DocumentChecklist) in `src/lib/matching/types.ts`; a lexical embedder with a closed concept
+      layer behind an `Embedder` interface (`embedding.ts`); candidate generation with eight named
+      hard filters and cosine similarity to a shortlist of ten to fifteen (`candidates.ts`);
+      both-sided ranking with printed breakdowns and global weights pinned to sum to one
+      (`ranking.ts`); many-to-many deferred acceptance, stable by property test
+      (`deferred-acceptance.ts`); the rationale from the concept overlap (`rationale.ts`); roster
+      adapters that invent nothing for a real person (`adapters.ts`); the store, registered for
+      reset, erasure and export (`store.ts`); the SQL mirror (`supabase/migrations/0006`).
+      Ninety-four unit tests, every patient-facing sentence through the landing linter. (2026-09-09)
+- [x] **M2 (to 2026-11-09): intake and the three.** `/match`: the narrative typed or spoken
+      through the finder's speech session, suburb, who it is for, appointment style, billing;
+      `/match/results`: up to three GPs, each with the headline and points the pipeline wrote,
+      the badges (checked on a date, or declared and not yet checked; places open; telehealth;
+      training declared), and where the request stands on the GP's side; `/gp/[id]`: the public
+      profile with how they work, who they see, credentials as declared and as checked, the
+      availability indicator, and the one aggregate sentence with its floor of five. The request
+      id lives in the tab's session storage, never the address bar. (2026-09-09)
+- [x] **M3 (to 2026-12-09): the GP side.** `/console/gp` and `/console/gp/[id]`: the profile the
+      matcher embeds (bio, how they approach medication, dose pace, years, AADPA and RACGP
+      declarations, age groups, what they see alongside, ways of working, telehealth, taking new
+      matches), the bidirectional preferences (age groups wanted, appointment styles, billing,
+      complex comorbidity, the minimum fit below which nobody is proposed), the capacity slider,
+      credential evidence offered by name, and the incoming requests with accept or decline (a
+      reason required) as explicit acts that refuse a second answer. (2026-09-09)
+- [x] **M4 (to 2027-01-09): preparation and the loop.** `/match/prep`: the checklist generated
+      from the narrative's signals with a reason per item, saved ticks, the five-heading timeline
+      template, and what to expect from the GP's own declarations; `/match/feedback` and the GP's
+      two questions on the dashboard: recorded per match, aggregated per GP, and fed to a bounded
+      learning pass over the global weights from eight records up. `e2e/matching.spec.ts` drives
+      the whole loop in a real browser. (2026-09-09)
+- [ ] **M5 (to 2027-02-09): wiring.** Supabase behind the store (`0006_matching.sql` is the
+      shape), practice membership scoping which console account manages which GP profile, the
+      evidence upload through the credentials vault with a verifier's act recording the date, and
+      a dense embedder behind the `Embedder` interface evaluated against the lexical one on the
+      corpus in `src/matching/corpus.ts`. **Landed early (2026-09-10):** the finder's two doors
+      to `/match` (the welcome aside and a sentence under the results); the person's own
+      erasure door ("Delete my request" removes the row, the matches, the feedback and the
+      checklist from the GP's side too, `DELETE /api/match/patient/[id]`); the timeline headings
+      as text on the clipboard; **the store behind Supabase** (`src/lib/matching/persistence.ts`:
+      a journal mirrors every write over PostgREST in order and a cold instance hydrates from
+      the five tables before its first read; present only with `SUPABASE_URL` and
+      `SUPABASE_SERVICE_ROLE_KEY`, otherwise the store is what it was); **the dense embedder and
+      its bench** (`dense-embedder.ts` behind the `Embedder` interface, primed from an
+      OpenAI-compatible endpoint under `ADHDME_EMBED_URL`/`_MODEL`/`_KEY`; `embedder-eval.ts`
+      ranks any embedder on twelve labelled narratives against the roster's bios and on the
+      reach corpus's 451 labelled requests; lexical baseline pinned at top-1 75%, top-3 83%,
+      MRR 0.804, corpus neighbour agreement 64%, its two misses named); **practice scoping**
+      (`access.ts`: a practice claims a profile from `/console/gp`, its members and staff manage
+      it, every action re-checks, an orphaned claim is no claim; `0007_matching_practice_scope.sql`);
+      and the learning loop read as a report on `/console/gp` (the
+      five declared weights, the weights in use, the correlation each rests on, and the record
+      count against the floor), which M6 asked for. **Known on the live site (2026-09-10):** the
+      store is in memory per serverless instance, so the patient's screens keep their own copy
+      in the tab and say when it came from there; a GP answering from the console reaches the
+      patient only on one process. Wiring the store is what M5 is for, and this is why.
+- [ ] **M6 (to 2027-03-09): the pilot.** Real GPs on their own declarations (the real-person
+      law), ten to twenty matched patients, the learning loop run on real records and its weight
+      shifts read as a report, the top-three explanation tested for comprehension, and the
+      bidirectional evidence question the brief cites answered on this product's own numbers:
+      does letting both sides declare improve fit and completion against the one-directional
+      finder.
+- Founder decisions opened by ADR 0007: a GP-facing evidence upload before the vault is wired;
+  "felt understood" counts on a public profile under the Ahpra testimonial guidance; whether the
+  finder routes to `/match` or the two coexist.
+
+### Phase T — the text budget and the two-pane Learn (founder-directed, 2026-09-10)
+
+- [x] **Games and modules apart.** The Learn tab is two panes with a swipe and a tab pair:
+      Games (the Chaos Run's eight lives, Leo's moment, the twenty bean runs: other people's
+      moments, where a person finds out what is theirs) and Modules (For you from the Lives loop,
+      the reads and quizzes, the sixteen strategy modules on shelves, the Toolkit, a quiet
+      moment, the goals: the moves, two to five minutes each). The `/lives/learn` library folded
+      in; a module opened by URL returns to its own side. `app/learn-panes.tsx`,
+      `e2e/walkthrough.spec.ts`. (2026-09-10)
+- [x] **The walkthrough.** Every explanatory sentence renders only while the switch is on;
+      a first visit is offered it once; the settings sheet holds it after. `<Explain>` in
+      `app/explain.tsx`. (2026-09-10)
+- [x] **The text budget, five rounds.** Words above the fold measured per route against
+      Headspace and Finch; 13 of 17 routes over at baseline, 6 after; the Learn page from 49 to
+      19; the worst screen from 140 to 70. The table and what stays over are in `AESTHETIC.md`.
+      (2026-09-10)
+- [ ] The three match screens and the GP profile at Headspace's home density (40) rather than
+      its list density: a second pass once the wiring unit changes what a card has to say.
 
 ### Phase C — pilot (PRD §87–§88)
 

@@ -26,7 +26,7 @@ export default function CounselReviewPage() {
           <p className="mt-2 text-sm leading-6">
             The <Link href="/privacy" className="underline">privacy policy</Link> and{" "}
             <Link href="/terms" className="underline">terms of use</Link> both carry a
-            &ldquo;Draft — not yet in force&rdquo; banner. That is deliberate: both documents
+            &ldquo;Draft, not yet in force&rdquo; banner. That is deliberate: both documents
             were written by us, checked line-by-line against what the software actually does,
             and are now with an independent Australian privacy lawyer to be checked. The banners
             come down when that check says they should, and this page will record the date.
@@ -48,8 +48,8 @@ export default function CounselReviewPage() {
             <li>The terms&apos; consumer-law wording, and the clauses about where our responsibility ends and Healthengine&apos;s or a practice&apos;s begins.</li>
           </ul>
           <p className="mt-3 text-sm leading-6">
-            The full briefing pack — including the register that ties each claim in the policy
-            to the code that makes it true — is public in our repository:{" "}
+            The full briefing pack, including the register that ties each claim in the policy
+            to the code that makes it true, is public in our repository:{" "}
             <a
               className="underline"
               href="https://github.com/Stef-01/ADHD/blob/main/docs/PRIVACY-COUNSEL-BRIEF.md"
@@ -65,7 +65,7 @@ export default function CounselReviewPage() {
           <h2 className="text-lg font-medium text-stone-900">What happens next</h2>
           <p className="mt-2 text-sm leading-6">
             The lawyer returns a marked-up version of both documents and answers to those
-            questions. The changes are made, the banners come down on their word — not before —
+            questions. The changes are made, the banners come down on their word, not before —
             and the date and the changes are recorded on each document. Questions in the
             meantime go to{" "}
             <a className="underline" href="mailto:stefan.thottunkal@gmail.com">

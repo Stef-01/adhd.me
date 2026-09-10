@@ -1,3 +1,5 @@
+.platform-shell .finder-doors { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 0; font-size: 0.875rem; font-weight: 700; }
+.platform-shell .finder-doors a { color: var(--accent-deep); min-height: 44px; display: inline-flex; align-items: center; }
 .platform-shell .finder-getting-started { padding: 32px; border-radius: 24px; background: var(--stone); color: var(--ink); }
 .platform-shell .finder-getting-started h2 { max-width: 20ch; margin: 12px 0 20px; font-size: 27px; line-height: 1.25; letter-spacing: -.035em; }
 .platform-shell .finder-getting-started > p:not(.learning-overline) { color: var(--muted); font-size: 15px; }

@@ -16,9 +16,7 @@ export default function NotFound() {
     <main id="main-content" className="notfound-screen">
       <p className="notfound-code" aria-hidden="true">404</p>
       <h1>That page does not exist.</h1>
-      <p className="notfound-copy">
-        The link may be old, or mistyped. Nothing you did was wrong, and nothing was lost.
-      </p>
+      <p className="notfound-copy">That link is old or mistyped.</p>
       <div className="notfound-doors">
         <Link className="notfound-primary" href="/">Find support</Link>
         <Link className="notfound-secondary" href="/">Start from the beginning</Link>

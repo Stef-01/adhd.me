@@ -111,10 +111,12 @@ test("E2E Lives 2: a seeded run replays the same first game; FASTER after four s
 test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on their own", async ({ page }) => {
   await page.goto("/lives/characters");
   await expect(page.locator(".lives-character")).toHaveCount(8);
-  await page.locator(".lives-character[data-character='mia']").getByRole("button", { name: "Sometimes" }).click();
-  await page.goto("/lives/learn");
-  await expect(page.getByRole("heading", { name: "For you" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Two-minute tools" })).toBeVisible();
+  const mia = page.locator(".lives-character[data-character='mia']");
+  await mia.locator("summary").click();
+  await mia.getByRole("button", { name: "Sometimes" }).click();
+  await page.goto("/approach?pane=modules");
+  await expect(page.locator("summary", { hasText: "For you" })).toBeVisible();
+  await expect(page.locator("summary", { hasText: "Two-minute tools" })).toBeVisible();
   await page.goto("/lives/lab");
   await expect(page.getByRole("heading", { name: "Ranking" })).toBeVisible();
   expect(await page.locator(".lives-lab-ranking > li").count()).toBeGreaterThanOrEqual(1);
@@ -135,4 +137,53 @@ test("E2E Lives 4: relaxed timing and larger instructions are kept on the device
   await expect(page.locator(".lives-run.is-large[data-relaxed='true']")).toBeVisible();
   // Nothing about the settings in the URL.
   expect(page.url()).not.toMatch(/relaxed|large/);
+});
+
+test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kept on the device, reach the run, and bite where they should (§93)", async ({ page }) => {
+  // A device that can buzz, and a record of every buzz it was asked for.
+  await page.addInitScript(() => {
+    (window as unknown as { __buzz: unknown[] }).__buzz = [];
+    Object.defineProperty(navigator, "vibrate", { value: (p: unknown) => { (window as unknown as { __buzz: unknown[] }).__buzz.push(p); return true; }, configurable: true });
+  });
+  const buzzes = () => page.evaluate(() => (window as unknown as { __buzz: unknown[] }).__buzz.length);
+  // Off by default: a whole miss with no buzz and no attributes on the run.
+  await page.goto("/lives/play?seed=quiet");
+  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run:not([data-haptics]):not([data-reduced-flashing]):not([data-reduced-sensory])")).toBeVisible();
+  await drive(page, "miss", async () => (await page.locator(".lives-result[data-hit='false']").count()) > 0);
+  expect(await buzzes()).toBe(0);
+  await expect(page.locator(".lives-game.is-miss.is-flash")).toHaveCount(1);
+  // The three chips, kept on the device.
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  for (const name of ["Reduced flashing", "Reduced sensory effects", "Haptics"]) {
+    const chip = page.getByRole("button", { name, exact: true });
+    expect((await chip.boundingBox())!.height, `${name} touch floor`).toBeGreaterThanOrEqual(44);
+    await chip.click();
+    await expect(chip).toHaveAttribute("aria-pressed", "true");
+  }
+  await page.reload();
+  await page.locator(".lives-settings summary").click();
+  for (const name of ["Reduced flashing", "Reduced sensory effects", "Haptics"]) await expect(page.getByRole("button", { name, exact: true })).toHaveAttribute("aria-pressed", "true");
+  // The run reads them once and says so.
+  await page.goto("/lives/play?seed=quiet");
+  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run[data-reduced-flashing='true'][data-reduced-sensory='true'][data-haptics='true']")).toBeVisible();
+  // Reduced sensory: never more than four things competing on a field, and no taunt strip.
+  await page.getByRole("button", { name: "Go", exact: true }).click();
+  await expect(page.locator(".lives-game[data-beat='active']")).toBeVisible();
+  expect(await page.locator(".lives-field .lives-thing").count()).toBeLessThanOrEqual(4);
+  await expect(page.locator(".lives-taunt")).toHaveCount(0);
+  // Reduced flashing: the result beat carries no flash class, and FASTER stands on paper without one.
+  await drive(page, "hit", async () => (await page.locator(".lives-result[data-hit='true']").count()) > 0);
+  await expect(page.locator(".lives-game.is-hit")).toHaveCount(1);
+  await expect(page.locator(".lives-game.is-flash")).toHaveCount(0);
+  // Haptics: the hit buzzed, once, with a short pattern.
+  expect(await buzzes()).toBe(1);
+  await drive(page, "hit", async () => (await page.locator(".lives-faster").count()) > 0);
+  await expect(page.locator(".lives-faster-word")).toHaveText("FASTER!");
+  await expect(page.locator(".lives-faster.is-flash")).toHaveCount(0);
+  expect(await buzzes()).toBe(4);
+  // Nothing about the settings in the URL.
+  expect(page.url()).not.toMatch(/flash|sensory|haptic/);
 });

@@ -53,11 +53,11 @@ export type ResponsesEmptyReason = "nothing_happened" | "nothing_recorded" | "ev
 
 export const RESPONSES_EMPTY_COPY: Record<ResponsesEmptyReason, string> = {
   nothing_happened:
-    "Nothing went out in this period, so there is nothing to have been answered. This is not a response rate of zero — no messages were sent, so no rate exists to report.",
+    "Nothing went out in this period, so there is nothing to have been answered. This is not a response rate of zero, no messages were sent, so no rate exists to report.",
   nothing_recorded:
     "Messages went out and the record holds no answer to any of them. That is the record being silent, not everybody declining: an answer that was never written down looks exactly like an answer that never came, and this page will not report one as the other.",
   everything_withheld:
-    "Answers were recorded, and every group of them is too small to show. A group this size would identify the people in it, so the counts are withheld rather than displayed with a caveat. A withheld count is not a zero and not a silence — the number exists.",
+    "Answers were recorded, and every group of them is too small to show. A group this size would identify the people in it, so the counts are withheld rather than displayed with a caveat. A withheld count is not a zero and not a silence, the number exists.",
 };
 
 /** Copy for the graph's own refusals, so a refusal never renders as a blank page. */

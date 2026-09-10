@@ -19,7 +19,7 @@
 import Link from "next/link";
 import { WEEKDAY_NAMES, type Weekday } from "@/capacity/model";
 import { redirect } from "next/navigation";
-import { capacityView } from "@/console/capacity";
+import { capacityView, fullestAndEmptiest } from "@/console/capacity";
 import { getConsole } from "@/console/store";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
 import { isoDaysFrom } from "@/lib/dates";
@@ -29,7 +29,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "How full the sessions run — ADHD.ME" };
+export const metadata = { title: "How full the sessions run, ADHD.ME" };
 
 /**
  * The drift block's styling, as a constant.
@@ -56,6 +56,9 @@ export default async function CapacityPage() {
     fromIso: sim.config.todayIso,
     toIso: asOfIso,
   });
+  // Console spine: six rows for the cards under the verdict. A view-level pick; the engine's
+  // sentences and rates are the rows' own.
+  const picks = fullestAndEmptiest(view.sessions);
 
   return (
     <ConsoleShell email={email}>
@@ -85,12 +88,6 @@ export default async function CapacityPage() {
           </section>
         ) : null}
 
-        {view.calendarGap !== null ? (
-          <p data-testid="capacity-calendar-gap" className="max-w-3xl text-sm text-stone-600">
-            {view.calendarGap}
-          </p>
-        ) : null}
-
         {view.drift !== null ? (
           <section aria-labelledby="drift-heading" className="flex flex-col gap-2">
             <h2 id="drift-heading" className="font-medium text-stone-900">
@@ -106,6 +103,49 @@ export default async function CapacityPage() {
               {view.drift.copy}
             </p>
           </section>
+        ) : null}
+
+        {picks.fullest.length > 0 ? (
+          <section aria-labelledby="picks-heading" className="flex flex-col gap-3">
+            <h2 id="picks-heading" className="font-medium text-stone-900">
+              Fullest and emptiest sessions
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(
+                [
+                  ["Running fullest", "capacity-fullest", picks.fullest],
+                  ["Running emptiest", "capacity-emptiest", picks.emptiest],
+                ] as const
+              ).map(([title, testId, rows]) => (
+                <div key={testId} className="flex flex-col gap-2">
+                  <h3 className="text-sm text-stone-600">{title}</h3>
+                  <ul data-testid={testId} className="flex flex-col gap-2">
+                    {rows.map((row) => (
+                      <li
+                        key={row.label}
+                        data-testid="capacity-card"
+                        className="flex items-baseline justify-between gap-4 rounded-lg border border-stone-200 bg-white px-4 py-3"
+                      >
+                        <span className="flex flex-col gap-0.5">
+                          <span data-testid="capacity-card-label" className="text-sm text-stone-900">{row.label}</span>
+                          <span className="text-xs text-stone-500">
+                            {row.slotsFilled} of {row.slotsOffered} slots filled over {row.occurrences} weeks
+                          </span>
+                        </span>
+                        <span className="text-2xl font-semibold tabular-nums text-stone-900">{row.utilisationLabel}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {view.calendarGap !== null ? (
+          <p data-testid="capacity-calendar-gap" className="max-w-3xl text-sm text-stone-600">
+            {view.calendarGap}
+          </p>
         ) : null}
 
         {view.score !== null && view.score.scored ? (
@@ -127,7 +167,7 @@ export default async function CapacityPage() {
                 <thead>
                   <tr className="border-b border-stone-200 text-stone-600">
                     {/* Numeric columns right-aligned, header and cell together. `tabular-nums`
-                        below already asks for the digits to line up — it makes them equal-width —
+                        below already asks for the digits to line up, it makes them equal-width —
                         but left alignment lines up the FIRST digit, so the units place only
                         happens to agree while every value has the same digit count. "2" under
                         "26", or "100%" under "95%", and the column stops being scannable. Right
@@ -150,7 +190,7 @@ export default async function CapacityPage() {
                       <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.slotsOffered ?? "—"}</td>
                       <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.slotsFilled ?? "—"}</td>
                       {/* The label is composed in the view, where the no-rate branch is reachable
-                          by a fixture. An em dash, never a nought — W215's live defect. */}
+                          by a fixture. An em dash, never a nought, W215's live defect. */}
                       <td className="py-2 pr-4 text-right tabular-nums text-stone-900">{row.utilisationLabel}</td>
                     </tr>
                   ))}
@@ -167,7 +207,7 @@ export default async function CapacityPage() {
             </h2>
             {/* Grouped by weekday, each day a disclosure. The seeded practice has seventy
                 sessions, and seventy two-line paragraphs in one flat list ran to twelve thousand
-                pixels on a phone — the drift verdict and the score above were the page's point
+                pixels on a phone, the drift verdict and the score above were the page's point
                 and they sat over a wall. A day is how a practice thinks about its diary, so a
                 reader opens the day they are deciding about. The sentences are the engine's
                 and are not shortened here: each states its own basis on purpose. */}

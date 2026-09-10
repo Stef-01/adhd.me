@@ -14,11 +14,8 @@ export function SafetyScreen({ ruleId, onAcknowledge }: { ruleId: SafetyRuleId; 
       <p className="learn-card-eyebrow">Before anything else</p>
       <h2 id="safety-title" className="learn-card-heading">{rule.message}</h2>
       <p id="safety-body" className="learn-card-body">{rule.recommendedAction}</p>
-      <p className="safety-note">
-        <Phone size={16} weight="bold" aria-hidden="true" />
-        This app is not an emergency service and cannot judge how you are. A person can.
-      </p>
-      <p className="safety-note">Nothing you wrote leaves this device. Ordinary suggestions are paused until you continue.</p>
+      <p className="safety-note">This app cannot judge how you are. A person can.</p>
+      <p className="safety-note">Nothing leaves this device.</p>
       <button type="button" className="learn-primary" onClick={onAcknowledge}>I have read this</button>
     </section>
   );

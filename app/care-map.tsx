@@ -76,7 +76,7 @@ export function CareMap() {
   const needs = record ? deriveNeeds(record) : [];
   const signal = new Map<Subdomain, string>();
   for (const n of needs) {
-    signal.set(n.subdomain, `${n.label}${n.functionalCost ? ` — you put the cost at ${n.functionalCost}/10` : ""}.`);
+    signal.set(n.subdomain, `${n.label}${n.functionalCost ? `, you put the cost at ${n.functionalCost}/10` : ""}.`);
     for (const c of n.contributors) if (!signal.has(c.subdomain)) signal.set(c.subdomain, `${c.note}.`);
   }
   const entry = selected ? SUBDOMAINS.find((s) => s.id === selected) : null;
@@ -136,7 +136,7 @@ export function CareMap() {
             <h2 id="care-map-title">{entry.label}</h2>
             <p>{entry.meaning}</p>
             {signal.get(entry.id) && <p className="care-map-you"><strong>For you:</strong> {signal.get(entry.id)}</p>}
-            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")} — {NWIA_MEANINGS[nwiaFor(entry.id)[0]!]}</p>
+            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")}, {NWIA_MEANINGS[nwiaFor(entry.id)[0]!]}</p>
             {teaching.length > 0 ? (
               <>
                 <p>Modules that work on this:</p>
@@ -144,14 +144,11 @@ export function CareMap() {
                   {teaching.map((m) => <li key={m.id}><Link href={`/approach?module=${m.id}`}>{m.title}<ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>)}
                 </ul>
               </>
-            ) : (
-              <p>No module works on this directly yet — it shows up as a contributor inside the others.</p>
-            )}
+            ) : null}
           </>
         ) : (
           <>
             <h2 id="care-map-title">Four layers, one life.</h2>
-            <p>ADHD is often explained as a brain difference and left there. The map adds the three layers the explanation usually skips — the body the brain runs on, the environment around it, and the people who carry part of the load. Tap any node.</p>
             {LAYERS.map((layer) => <p key={layer}><strong>{LAYER_LABELS[layer]}.</strong> {LAYER_BLURBS[layer]}</p>)}
             {/* The one place the NWIA paradigm is said (founder-directed, 2026-09-08): attributed, linked, once. */}
             <p className="care-map-nwia">{NWIA_PARADIGM} <a href={NWIA_URL} rel="noopener noreferrer" target="_blank">{NWIA_NAME}</a>.</p>

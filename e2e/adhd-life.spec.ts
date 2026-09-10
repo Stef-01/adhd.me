@@ -251,6 +251,7 @@ test("the finder reads a named profession out of the sentence, and every kind is
   expect((await page.locator(".clinician-row").first().innerText())).not.toContain("Psychologist");
   // Filters screen: the kinds of support are chips, held on the device.
   await page.goto("/profile");
+  await page.locator("summary", { hasText: "Kind of support" }).click();
   await page.getByRole("button", { name: "Psychologists" }).click();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.filters.v1") ?? "{}").professions)).toEqual(["psychologist"]);
 });
@@ -308,7 +309,7 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
   await expect(page).toHaveURL(/\/my-adhd$/);
   await offer.click();
   await expect(page).toHaveURL(/\/survey\?id=work-study$/);
-  await page.getByRole("button", { name: /Very — I circle it/ }).click();
+  await page.getByRole("button", { name: /Very, I circle it/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Much harder" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -343,7 +344,7 @@ test("Phase A: problem fit orders allied providers by the person's top need, and
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   const first = page.locator(".clinician-row").first();
-  await expect(first).toContainText(/Works on task initiation — the thing you said is hardest/);
+  await expect(first).toContainText(/Works on task initiation, the thing you said is hardest/);
   await first.click();
   await expect(page.getByText("Why you’re seeing them")).toBeVisible();
 });
@@ -435,6 +436,33 @@ test("Play P6: the catch and balance mechanics play by buttons under reduced mot
   await page.getByRole("button", { name: "A regular-ish meal" }).click();
   await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible();
   await expect(page.locator(".play-result")).toContainText("plain routine");
+});
+
+test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand still under reduced motion", async ({ page }) => {
+  // The starting run opens on a desk; the desk's screen wakes. First the still equal.
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  const scene = page.locator(".play-scene[data-prop]:not([data-prop='none'])").first();
+  await expect(scene).toBeVisible();
+  const prop = scene.locator(".play-prop").first();
+  await expect(prop).toHaveCount(1);
+  expect(await prop.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  // With motion: one short animation, inside the prop's own box, and the drawing where it was when it is over.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.reload();
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await expect(scene).toBeVisible();
+  const art = scene.locator(".play-scene-art");
+  const before = (await art.boundingBox())!;
+  const style = await prop.evaluate((el) => { const cs = getComputedStyle(el); return { name: cs.animationName, duration: parseFloat(cs.animationDuration), count: cs.animationIterationCount }; });
+  expect(style.name).not.toBe("none");
+  expect(style.duration).toBeLessThanOrEqual(0.7);
+  expect(style.count).toBe("1");
+  await page.waitForTimeout(1000);
+  const after = (await art.boundingBox())!;
+  expect(after).toEqual(before);
+  expect(await prop.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
 });
 
 test("Play P6: the exercise run's bean is drawn fit", async ({ page }) => {
@@ -556,7 +584,7 @@ test("Reflection interpretation (PRD §29): a reading is offered in the person's
   await expect(page.locator(".play-reading")).toHaveCount(0);
 });
 
-test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you — buttons, then a slider", async ({ page }) => {
+test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you, buttons, then a slider", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Tap to play" }).click();

@@ -20,8 +20,10 @@
 // Everything on the page is status. The one thing a practice can do here is answer a referral
 // addressed to them, and both answers — accept and decline — are explicit acts (W134).
 
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getConsole } from "@/console/store";
+import { referralChainOutcomes } from "@/outcomes/dashboard";
 import {
   ACCEPTANCE_STATE_COPY,
   acceptanceStatus,
@@ -30,7 +32,7 @@ import {
 import { REFERRAL_REASON_COPY, REFERRAL_REQUEST_COPY } from "@/referrals/document";
 import { detectLeakage } from "@/referrals/leakage";
 import { RETURN_OUTCOME_COPY } from "@/referrals/return-report";
-import { actsFor, eventsFor, returnFor, sentBy, sentTo } from "@/referrals/store";
+import { actsFor, eventsFor, returnFor, sentBy, sentEventsFor, sentTo } from "@/referrals/store";
 import { describeOutstanding, trackReferral } from "@/referrals/tracking";
 import { authorize } from "@/tenancy/tenancy";
 import { requirePractice } from "../guard";
@@ -39,7 +41,7 @@ import { answerReferral } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Referrals — ADHD.ME" };
+export const metadata = { title: "Referrals, ADHD.ME" };
 
 const ERROR_COPY: Record<string, string> = {
   denied: "You do not have access to that.",
@@ -79,6 +81,9 @@ export default async function ReferralsPage({
   const acts = actsFor(practiceId);
   const events = eventsFor(practiceId);
   const leakage = detectLeakage(events, practiceId);
+  // Console spine: which sent referrals have an outcome line to link to. Same query the
+  // outcomes page runs, so a link here always lands on a row there.
+  const onRail = new Set(referralChainOutcomes(sentEventsFor(practiceId)).map((o) => o.chainId));
 
   const sent = sentBy(practiceId).map((document) => ({
     document,
@@ -187,6 +192,7 @@ export default async function ReferralsPage({
               {sent.map(({ document, tracking, returned }) => (
                 <li
                   key={document.referralId}
+                  id={`sent-${document.referralId}`}
                   data-testid={`sent-${document.referralId}`}
                   className="rounded-lg border border-stone-200 bg-white px-4 py-4"
                 >
@@ -197,6 +203,15 @@ export default async function ReferralsPage({
                   <p className="mt-1 text-sm text-stone-600">
                     {REFERRAL_REASON_COPY[document.reason]} {REFERRAL_REQUEST_COPY[document.request]}
                   </p>
+                  {onRail.has(document.referralId) && (
+                    <Link
+                      href={`/console/outcomes#outcome-${document.referralId}`}
+                      data-testid={`outcome-link-${document.referralId}`}
+                      className="inline-flex min-h-11 items-center text-sm text-stone-700 underline hover:text-stone-900"
+                    >
+                      Outcome
+                    </Link>
+                  )}
 
                   {returned.found && (
                     <p data-testid={`returned-${document.referralId}`} className="mt-2 text-sm text-stone-700">

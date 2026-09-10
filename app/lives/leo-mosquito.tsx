@@ -53,7 +53,7 @@ function Mosquito({ annoyed, hit }: { annoyed: boolean; hit: boolean }) {
 }
 
 /** Wasp-like MOVING → PRESSED → FALLING feedback, on the director's existing clock. */
-export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progress, onResult, outcome, initialAudio, onSoundChange }: EngineProps & { initialAudio?: LeoBuzz | null; onSoundChange?: (on: boolean) => void }) {
+export function LeoMosquito({ game, scene, live, reducedMotion, reducedSensory, elapsedMs, progress, onResult, outcome, initialAudio, onSoundChange }: EngineProps & { initialAudio?: LeoBuzz | null; onSoundChange?: (on: boolean) => void }) {
   const [hits, setHits] = useState<Record<string, Point>>({});
   const [catches, setCatches] = useState<SwarmCatches>({});
   const [misses, setMisses] = useState(0);
@@ -66,7 +66,9 @@ export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progr
   const finish = useRef(onResult);
   finish.current = onResult;
   const duration = progress > 0 ? Math.round(elapsedMs / progress) : allowedMs(game, scene.level);
-  const plan = useMemo(() => createLeoSwarm(scene.seed, scene.level, duration), [scene.seed, scene.level, duration]);
+  // §93 reduced sensory effects: the swarm keeps the smallest waves (three at a time), whatever the level.
+  const swarmLevel = reducedSensory ? Math.min(scene.level, 3) : scene.level;
+  const plan = useMemo(() => createLeoSwarm(scene.seed, swarmLevel, duration), [scene.seed, swarmLevel, duration]);
   const swarm = readLeoSwarm(plan, elapsedMs, catches, reducedMotion);
   const voiceIds = swarm.alive.map(t => t.id).join(",");
   useEffect(() => {

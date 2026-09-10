@@ -223,7 +223,7 @@ function proximity(patient: PatientRequest, doctor: DoctorRecord): { raw: number
   if (!from || !to) {
     return {
       raw: 0.5,
-      sentence: "A location here is not in the gazetteer, so distance is scored at the midpoint — a gap in our data, not theirs.",
+      sentence: "A location here is not in the gazetteer, so distance is scored at the midpoint, a gap in our data, not theirs.",
     };
   }
   const km = distanceKm(from, to);
@@ -320,9 +320,9 @@ export function matchPatientsToPrescribers(
 
       let tieNote: string | null = null;
       if (cutTied) {
-        tieNote = `The cut at ${MATCHES_PER_PATIENT} fell inside an exact tie — doctors beyond the list scored the same as the last shown, so the boundary is not a ranking.`;
+        tieNote = `The cut at ${MATCHES_PER_PATIENT} fell inside an exact tie, doctors beyond the list scored the same as the last shown, so the boundary is not a ranking.`;
       } else if (insideTie) {
-        tieNote = "Equal totals inside this list are not an order — the tie-break is alphabetical and means nothing.";
+        tieNote = "Equal totals inside this list are not an order, the tie-break is alphabetical and means nothing.";
       }
 
       return { patientRef: patient.patientRef, matches, tieNote, excluded };

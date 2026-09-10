@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/medication" },
   robots: ROBOTS_META,
   title: "Medication",
-  description: "What medication seems to change for you, what it leaves untouched and anything unwanted — a note in your own words to take to whoever manages it.",
+  description: "What medication seems to change for you, what it leaves untouched and anything unwanted, a note in your own words to take to whoever manages it.",
 };
 
 export default function MedicationPage() {

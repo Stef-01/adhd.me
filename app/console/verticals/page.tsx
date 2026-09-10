@@ -39,7 +39,7 @@ import { ConsoleShell } from "../ui";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Verticals — ADHD.ME" };
+export const metadata = { title: "Verticals, ADHD.ME" };
 
 const STATUS_LABEL: Record<string, string> = {
   ready: "Ready",
@@ -101,7 +101,7 @@ export default async function VerticalsPage() {
               intervals belong together as one care model.
             </p>
             <p>
-              That step does not need anybody&rsquo;s sign-off — it is a statement about what goes
+              That step does not need anybody&rsquo;s sign-off, it is a statement about what goes
               with what. The sign-off is needed afterwards, for the contents.
             </p>
           </section>
@@ -175,7 +175,7 @@ export default async function VerticalsPage() {
                           moment that second case existed. */}
                       {report.outstanding.map((row) => (
                         <li key={row.chain}>
-                          {row.count} × {row.kinds.map((k) => k.replace(/_/g, " ")).join(", ")} — needs{" "}
+                          {row.count} × {row.kinds.map((k) => k.replace(/_/g, " ")).join(", ")}, needs{" "}
                           {row.chain}.
                         </li>
                       ))}
@@ -216,7 +216,7 @@ export default async function VerticalsPage() {
 
         <p data-testid="verticals-note" className="text-sm text-stone-500">
           What a pathway actually says is not shown here. This page is about whether the parts of a
-          care model have been checked and by whom, not about the clinical content itself — and
+          care model have been checked and by whom, not about the clinical content itself, and
           material nobody has reviewed does not belong in front of a clinician with ADHD.ME&rsquo;s
           name on it.
         </p>

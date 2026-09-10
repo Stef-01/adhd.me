@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/support" },
   robots: ROBOTS_META,
   title: "Support",
-  description: "From the problem to the person: what may help, what to try yourself, when another person helps, and which professions fit — with the reason for each.",
+  description: "From the problem to the person: what may help, what to try yourself, when another person helps, and which professions fit, with the reason for each.",
 };
 
 export default function SupportPage() {

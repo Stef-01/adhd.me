@@ -16,10 +16,11 @@ import { getDashboardData } from "@/sim/dashboard-data";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
 import { RESULTS_COPY as C } from "@/console/results-copy";
 import { buildPracticeResults, shortDate, weeklyExtras } from "@/console/results";
-import { DEFAULT_REPORT_OPTIONS } from "@/report/options";
+import { billingPerVisitFor } from "@/console/store";
 import { WeeklyArmsChart } from "../dashboard/chart";
 import { requirePractice } from "../guard";
-import { ConsoleShell } from "../ui";
+import { ConsoleShell, Field, inputClass, primaryButtonClass } from "../ui";
+import { saveBillingAssumption } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -36,8 +37,15 @@ function Tile({ label, value, detail }: { label: string; value: string; detail: 
   );
 }
 
-export default async function ResultsPage() {
+export default async function ResultsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; saved?: string }>;
+}) {
   const { email, record } = await requirePractice();
+  const { error, saved } = await searchParams;
+  // Console spine: the billing assumption is the practice's own, edited on the card below.
+  const billing = billingPerVisitFor(record);
   const data = getDashboardData();
   // Guardrails read the sim result itself; the dashboard cache holds the shaped view.
   // Complaints come from the live store (W51): an empty list here would make the
@@ -57,7 +65,7 @@ export default async function ResultsPage() {
     DEFAULT_GUARDRAILS,
   );
   const r = buildPracticeResults(data, alerts, {
-    revenuePerAttendedVisit: DEFAULT_REPORT_OPTIONS.revenuePerAttendedVisit,
+    revenuePerAttendedVisit: billing,
     guardrails: DEFAULT_GUARDRAILS,
   });
   const weekly = weeklyExtras(data);
@@ -93,13 +101,13 @@ export default async function ResultsPage() {
           detail={
             r.extraPerWeek === null
               ? `Over ${r.weeks} weeks`
-              : `Over ${r.weeks} weeks — about ${r.extraPerWeek} a week`
+              : `Over ${r.weeks} weeks, about ${r.extraPerWeek} a week`
           }
         />
         <Tile
           label={C.tiles.extraBillings.label}
           value={aud(r.extraRevenueAud)}
-          detail={`${num(r.extraAppointments)} visits at an assumed $${DEFAULT_REPORT_OPTIONS.revenuePerAttendedVisit} each`}
+          detail={`${num(r.extraAppointments)} visits at an assumed $${billing} each`}
         />
         <Tile
           label={C.tiles.optOuts.label}
@@ -205,6 +213,38 @@ export default async function ResultsPage() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      {/* The one input the brief asks for: every practice bills differently. */}
+      <section aria-labelledby="billing-heading" className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
+        <h2 id="billing-heading" className="font-medium text-stone-900">{C.settings.heading}</h2>
+        <p className="mt-1 max-w-2xl text-sm text-stone-500">{C.settings.body}</p>
+        {saved === "billing" && (
+          <p role="status" data-testid="billing-saved" className="mt-3 rounded-lg bg-stone-100 px-4 py-3 text-sm text-stone-700">
+            {C.settings.saved}
+          </p>
+        )}
+        {error && (
+          <p role="alert" data-testid="billing-error" className="mt-3 rounded-lg bg-stone-100 px-4 py-3 text-sm text-stone-700">
+            {C.settings.errors[error] ?? C.settings.errors.failed}
+          </p>
+        )}
+        <form action={saveBillingAssumption} className="mt-4 flex flex-wrap items-end gap-3">
+          <Field label={C.settings.label}>
+            <input
+              name="billingPerVisitAud"
+              type="number"
+              required
+              min={1}
+              max={1000}
+              step={1}
+              defaultValue={billing}
+              className={inputClass}
+              data-testid="billing-input"
+            />
+          </Field>
+          <button type="submit" className={primaryButtonClass}>{C.settings.save}</button>
+        </form>
       </section>
 
       <details className="mt-6 rounded-xl border border-stone-200 bg-white p-6">

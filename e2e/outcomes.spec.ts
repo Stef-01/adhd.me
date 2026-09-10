@@ -119,3 +119,14 @@ test("one practice's rail is not visible from another", async ({ page, request }
   // ref-elsewhere belongs to a third practice and is seeded precisely so it can be looked for.
   await expect(page.locator("body")).not.toContainText("ref-elsewhere");
 });
+
+test("each outcome line links back to its referral row, and lands on it", async ({ page, request }) => {
+  await signInAndOnboard(page, MANAGER_EMAIL);
+  await request.post("/api/mock/referrals");
+  await page.goto("/console/outcomes");
+  const link = page.getByTestId("referral-link-ref-sent-back");
+  await expect(link).toHaveAttribute("href", "/console/referrals#sent-ref-sent-back");
+  await link.click();
+  await expect(page).toHaveURL(/\/console\/referrals#sent-ref-sent-back$/);
+  await expect(page.locator("#sent-ref-sent-back")).toBeVisible();
+});

@@ -32,7 +32,7 @@ import { serverNow } from "@/lib/server-clock";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Outreach — ADHD.ME" };
+export const metadata = { title: "Outreach, ADHD.ME" };
 
 /** Availability language only, and linted at render time by W6's gate. */
 const SESSION_WINDOW = "after 5pm this week";
@@ -88,7 +88,7 @@ export default async function OutreachPage() {
       <h1 className="text-2xl font-semibold tracking-tight">Outreach</h1>
       <p className="mt-2 max-w-2xl text-sm text-stone-500">
         Referrals your practice wrote with nothing recorded since. Where an invitation can go
-        out, it is the ordinary availability message — it does not mention the referral, the
+        out, it is the ordinary availability message, it does not mention the referral, the
         service, or anything about the patient&rsquo;s care.
       </p>
 
@@ -120,7 +120,7 @@ export default async function OutreachPage() {
           </span>
         </div>
         <p className="mt-1 text-sm text-stone-500">
-          In referral-record order. The order carries no priority — ADHD.ME does not decide who
+          In referral-record order. The order carries no priority, ADHD.ME does not decide who
           to contact first.
         </p>
         {plan.send.length === 0 ? (
@@ -175,7 +175,7 @@ export default async function OutreachPage() {
       </section>
 
       <p className="mt-6 max-w-2xl text-xs text-stone-500">
-        Referral records here are synthetic. No message is sent from this page — live sending
+        Referral records here are synthetic. No message is sent from this page, live sending
         stays switched off until the practice authorises it.
       </p>
     </ConsoleShell>

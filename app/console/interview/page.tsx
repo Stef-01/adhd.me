@@ -10,7 +10,7 @@ import { requireSession } from "../guard";
 import { InterviewScreen } from "./interview-screen";
 import { ConsoleShell } from "../ui";
 
-export const metadata = { title: "Onboarding interview — ADHD.ME" };
+export const metadata = { title: "Onboarding interview, ADHD.ME" };
 export const dynamic = "force-dynamic";
 
 export default async function InterviewPage() {

@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { MAX_DIFFICULTY } from "./difficulty";
 import { GAMES } from "./games";
-import { escalatedLabel, layoutGame, markAt, MIN_RADIUS, positionAt, releaseVerdict, SCENE, tauntAt, timingHit, traceIsSafe, type GameScene } from "./layout";
+import { escalatedLabel, layoutGame, markAt, MIN_RADIUS, positionAt, releaseVerdict, SCENE, SENSORY_CAP, tauntAt, timingHit, traceIsSafe, type GameScene } from "./layout";
 import { hashSeed } from "./random";
 
 const SEEDS = [1, 2, 3, 7, 11, 19, 23, 42, 71834921, hashSeed("qa")];
@@ -132,5 +132,33 @@ describe("timing, hold and taunts", () => {
     expect(escalatedLabel(config, "mosquito", 1)).toBe("smug mosquito");
     expect(escalatedLabel(config, "mosquito", 9)).toBe("mosquito orchestra");
     expect(escalatedLabel(GAMES.find((g) => g.id === "wasps")!.config, "wasp", 3)).toBe("wasp");
+  });
+  it("reduced sensory effects (§93): no field holds more than the cap at once, every game keeps what it needs, and what stays is placed as before", () => {
+    const concurrent = new Set(["target", "distractor", "near_miss", "goal", "decoy", "hazard", "keep", "intruder"]);
+    for (const { game, level, seed, scene: full } of eachOf(scenes(), "scenes")) {
+      const calm = layoutGame(game, level, seed, { reducedSensory: true });
+      const where = `${game.id}@${level}#${seed}`;
+      expect(calm.entities.filter((e) => concurrent.has(e.role)).length, where).toBeLessThanOrEqual(SENSORY_CAP);
+      expect(calm.entities.length, where).toBeGreaterThan(0);
+      // Nothing moved: a calm scene is the full scene with things taken away, never rearranged (the wipe grid regrids to the smallest).
+      if (game.engine !== "wipe_scrub") for (const e of calm.entities) expect(full.entities.find((f) => f.id === e.id), `${where} ${e.id}`).toEqual(e);
+      switch (game.engine) {
+        case "semantic_filter": expect(calm.entities.some((e) => e.role === "target") && calm.entities.some((e) => e.role !== "target"), where).toBe(true); break;
+        case "object_search": expect(calm.entities.filter((e) => e.role === "goal").length, where).toBe(1); break;
+        case "goal_protection": expect(calm.entities.filter((e) => e.role === "keep").length, where).toBe(1); break;
+        case "trace_path": {
+          // Every unsafe route still meets a hazard; the safe one still passes.
+          for (const route of calm.routes!) expect(traceIsSafe(route.points, calm).safe, `${where} ${route.id}`).toBe(route.safe);
+          break;
+        }
+        case "wipe_scrub": expect(calm.grid, where).toEqual({ columns: 3, rows: 4, covering: calm.grid!.covering }); break;
+        case "rapid_sorting": expect(calm.entities, where).toEqual(full.entities); break;
+        default: break;
+      }
+    }
+    // The cap bites: the busiest full scenes hold more than it.
+    expect(scenes().some(({ scene }) => scene.entities.filter((e) => concurrent.has(e.role)).length > SENSORY_CAP)).toBe(true);
+    // Off is the default and changes nothing.
+    expect(layoutGame(GAMES[0]!, 8, 5, {})).toEqual(layoutGame(GAMES[0]!, 8, 5));
   });
 });

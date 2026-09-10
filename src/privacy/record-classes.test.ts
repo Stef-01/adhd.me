@@ -188,6 +188,7 @@ describe("W106 the classes W51 was about are still covered", () => {
       "src/booking/store.ts",
       "src/complaints/store.ts",
       "src/interest/store.ts",
+      "src/lib/matching/store.ts",
       "src/privacy/state.ts",
       "src/referrals/store.ts",
     ]);

@@ -2,6 +2,7 @@
 // auth guard holding on every console page.
 
 import { expect, test } from "@playwright/test";
+import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -51,4 +52,40 @@ test("sign-in → onboarding → dashboard → rules edit round trip", async ({ 
   await expect(page).toHaveURL(/\/console\/signin$/);
   await page.goto("/console");
   await expect(page).toHaveURL(/\/console\/signin$/);
+});
+
+test("the home is the spine's index, and More holds every folded screen", async ({ page }) => {
+  await signInAndOnboard(page, MANAGER_EMAIL);
+
+  // Six cards, one live figure each. The figures wait on the sim (seconds when cold) and stream
+  // in behind the heading, so the allowance sits here.
+  const cards = page.getByTestId("spine-cards").getByRole("listitem");
+  await expect(cards).toHaveCount(6, { timeout: 30_000 });
+  await expect(page.getByTestId("spine-figure")).toHaveCount(6);
+  for (const name of ["Measurement", "Matching", "Capacity", "Referrals", "Outcomes", "Results"]) {
+    await expect(page.getByTestId("spine-cards").getByRole("link", { name, exact: true })).toBeVisible();
+  }
+  // A withheld figure is a word, never a nought: every figure is a number, a share or a word.
+  for (const text of await page.getByTestId("spine-figure").allInnerTexts()) {
+    expect(text).toMatch(/^([\d,]+(\.\d)?%?|Withheld|None|Not recorded)$/);
+  }
+  await expect(page.getByRole("heading", { name: "All tools" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Incrementality dashboard" })).toBeVisible();
+
+  // The tab bar is the six, Setup and More.
+  const nav = page.getByRole("navigation", { name: "Practice console" });
+  await expect(nav.getByRole("link")).toHaveText([
+    "Home", "Measurement", "Matching", "Capacity", "Referrals", "Outcomes", "Results", "Setup", "More",
+  ]);
+
+  // Everything else keeps its path behind More; privacy and usefulness fold first.
+  await nav.getByRole("link", { name: "More" }).click();
+  await expect(page).toHaveURL(/\/console\/more$/);
+  await expect(page.getByRole("heading", { name: "More tools" })).toBeVisible();
+  for (const name of ["Privacy requests", "Usefulness audit", "Matching audit", "Operations queue"]) {
+    await expect(page.getByRole("link", { name, exact: true })).toBeVisible();
+  }
+  await expect(page.getByTestId("more-folded-first").getByRole("link")).toHaveText(["Privacy requests", "Usefulness audit"]);
+  await page.getByRole("link", { name: "Privacy requests", exact: true }).click();
+  await expect(page).toHaveURL(/\/console\/privacy$/);
 });

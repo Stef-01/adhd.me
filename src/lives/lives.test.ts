@@ -87,6 +87,21 @@ describe("content (§110 validate:content)", () => {
     expect(character("maya").name).toBe("Maya");
   });
 
+  it("§105 more strategy mappings: every life is trying at least three, every strategy is reachable from at least two lives or games, and the links agree both ways", () => {
+    for (const c of eachOf(CHARACTERS, "the characters")) {
+      expect(c.trying.length, `${c.id} is trying`).toBeGreaterThanOrEqual(3);
+      // What a life is trying names that life, so a "this is me" on the life reaches the strategy (§35).
+      for (const id of c.trying) expect(strategy(id).characterIds, `${c.id} trying ${id}`).toContain(c.id);
+    }
+    for (const s of eachOf(STRATEGIES, "the strategies")) {
+      const lives = CHARACTERS.filter((c) => c.trying.includes(s.id)).length;
+      const games = GAMES.filter((g) => g.learningLinks.includes(s.id)).length;
+      expect(lives + games, `${s.id} reachable from ${lives} lives and ${games} games`).toBeGreaterThanOrEqual(2);
+    }
+    // A game's learning links are the strategy's related games, so an encounter or a "this is me" on the game counts (§31, §35).
+    for (const g of eachOf(GAMES.filter((g) => g.learningLinks.length), "the lives games")) for (const id of g.learningLinks) expect(strategy(id).relatedGameIds, `${g.id} links ${id}`).toContain(g.id);
+  });
+
   it("every player-facing string passes the patient rules (§79)", () => {
     const copy: [string, string][] = [];
     for (const g of GAMES) copy.push([`game/${g.id}`, `${g.title}. ${g.instruction}`]);

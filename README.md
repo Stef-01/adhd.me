@@ -84,6 +84,9 @@ it. See the `/clinicians` entry in `STANDING_FLAGS` (`src/compliance/public-surf
 - `app/` — the finder (`/`, rendered by `app/(app)/page.tsx` with the stages in
   `app/finder-stages/*`), the founder story (`/story`), the GP walkthrough (`/clinicians`), the B2B
   page (`/practices`) and the practice console (`/console/*`)
+- `src/lib/matching/` — the bidirectional matching service (ADR 0007): entities, embedder,
+  candidates, both-sided ranking, deferred acceptance, rationale, checklist, feedback, store;
+  its surfaces are `/match/*`, `/gp/[id]` and `/console/gp/*`
 - `src/demo/` — the ADHD care-area vocabulary, the fifteen archetypes and the clinician roster
 - `src/compliance/` — the copy linters and the public-surface sweep
 - `ROADMAP.md`, `AESTHETIC.md` — the whole of the planning surface

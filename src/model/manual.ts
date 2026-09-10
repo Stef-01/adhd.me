@@ -20,7 +20,7 @@ export interface ManualSectionSpec {
 
 export const MANUAL_SECTIONS: readonly ManualSectionSpec[] = [
   { id: "helps", title: "What helps me", prompt: "The conditions and small moves that make things go better for you.", placeholder: "A clear first step. Somebody in the room. Food on the desk." },
-  { id: "harder", title: "What makes it harder", prompt: "The situations where things reliably go wrong — so they can be planned around, not fought.", placeholder: "Vague briefs. Five hours’ sleep. A phone within reach." },
+  { id: "harder", title: "What makes it harder", prompt: "The situations where things reliably go wrong, so they can be planned around, not fought.", placeholder: "Vague briefs. Five hours’ sleep. A phone within reach." },
   { id: "work-with-me", title: "How to work with me", prompt: "What you would tell a manager, a partner or a friend who wants to make it easier.", placeholder: "Tell me the deadline early. One thing at a time. Write it down." },
 ];
 

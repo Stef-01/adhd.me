@@ -11,7 +11,7 @@ import { submitUsefulness } from "./actions";
 export const dynamic = "force-dynamic";
 
 const ERROR_COPY: Record<string, string> = {
-  "1": "Something was missing from that submission — please try again.",
+  "1": "Something was missing from that submission, please try again.",
   unknown_option: "That option wasn't recognised.",
   unnecessary_conflict: "A visit can't be both unnecessary and have a recorded action.",
   reasonable_requires_action: "To mark a visit worthwhile, record at least one thing that happened.",

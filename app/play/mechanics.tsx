@@ -164,7 +164,7 @@ function DragCapture({ round, live, onResult }: MechanicProps) {
           <motion.button key={item} type="button" className="play-choice" aria-pressed={selected === item} disabled={!live} onClick={() => setSelected(item)} drag dragSnapToOrigin onDragEnd={(_, info) => { if (info.offset.y > 80) capture(item); }} whileTap={{ scale: 0.96 }} transition={POP}>{item}</motion.button>
         ))}
       </div>
-      <button type="button" className={`play-note${selected ? " is-ready" : ""}`} disabled={!live || !selected} onClick={() => selected && capture(selected)} aria-label={selected ? `Put “${selected}” on the note` : "The note — pick a request first"}>
+      <button type="button" className={`play-note${selected ? " is-ready" : ""}`} disabled={!live || !selected} onClick={() => selected && capture(selected)} aria-label={selected ? `Put “${selected}” on the note` : "The note, pick a request first"}>
         <span className="play-note-title">The note</span>
         <ul>{captured.map((c) => <li key={c}><Check size={12} weight="bold" aria-hidden="true" /> {c}</li>)}</ul>
         {selected && <span className="play-note-hint">Tap to put “{selected}” here</span>}
