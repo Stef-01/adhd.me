@@ -23,6 +23,11 @@ export async function installFakeSpeech(page: Page, opts: { present?: boolean; h
       delete w.webkitSpeechRecognition;
       return;
     }
+    // The iPhone warm retry asks getUserMedia before showing an error. Headless Chromium rejects
+    // at once; headless Firefox leaves the promise pending, and the error never showed. The fake
+    // refuses like a device with no microphone, on every engine, so the error path is the test's.
+    const media = navigator.mediaDevices;
+    if (media) Object.defineProperty(media, "getUserMedia", { value: () => Promise.reject(new DOMException("fake speech: no microphone", "NotAllowedError")), configurable: true });
     const state = { instance: null as unknown, aborted: false, started: 0 };
     class Fake {
       lang = ""; continuous = false; interimResults = false; maxAlternatives = 0;
