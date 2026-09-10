@@ -4,7 +4,7 @@
 // route empties the store between demonstrations.
 import { NextResponse } from "next/server";
 import { fittedEmbedder } from "@/lib/matching/pipeline";
-import { checklistFor, eraseMatchingPatient, getMatching, listGPs, matchesForPatient, patientById } from "@/lib/matching/store";
+import { checklistFor, eraseMatchingPatient, hydrateMatching, listGPs, matchesForPatient, patientById } from "@/lib/matching/store";
 import { patientView } from "@/lib/matching/views";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ const NO_STORE = { "Cache-Control": "no-store" } as const;
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   if (!/^[0-9a-f-]{36}$/.test(id)) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
-  const state = getMatching();
+  const state = await hydrateMatching();
   const patient = patientById(id, state);
   if (!patient) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
   const embedder = fittedEmbedder(listGPs(state));
@@ -31,7 +31,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
 export async function DELETE(_request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   if (!/^[0-9a-f-]{36}$/.test(id)) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
-  const result = eraseMatchingPatient(id, getMatching());
+  const result = eraseMatchingPatient(id, await hydrateMatching());
   if (!result.erased) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
   return NextResponse.json(result, { headers: NO_STORE });
 }

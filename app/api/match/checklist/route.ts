@@ -1,7 +1,7 @@
 // Phase M (ADR 0007): tick or untick one checklist item. The body names the patient by the
 // opaque id the browser holds; nothing else identifies anybody.
 import { NextResponse } from "next/server";
-import { getMatching, setChecklistItem } from "@/lib/matching/store";
+import { hydrateMatching, setChecklistItem } from "@/lib/matching/store";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   if (typeof p.patientId !== "string" || typeof p.itemId !== "string" || typeof p.done !== "boolean") {
     return NextResponse.json({ error: "bad_request" }, { status: 400, headers: NO_STORE });
   }
-  const checklist = setChecklistItem(p.patientId, p.itemId, p.done, getMatching());
+  const checklist = setChecklistItem(p.patientId, p.itemId, p.done, await hydrateMatching());
   if (!checklist) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
   return NextResponse.json(checklist, { headers: NO_STORE });
 }

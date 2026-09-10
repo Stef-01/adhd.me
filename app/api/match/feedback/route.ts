@@ -4,7 +4,7 @@
 // match per side: a second submission replaces the first rather than counting twice.
 import { NextResponse } from "next/server";
 import { aggregateFeedback, feedbackForGP, isRating, learnWeights, learningSamples, MIN_SAMPLES } from "@/lib/matching/feedback";
-import { allFeedback, allMatches, getMatching, gpById, matchById, saveFeedback, saveGP, setWeights } from "@/lib/matching/store";
+import { allFeedback, allMatches, hydrateMatching, gpById, matchById, saveFeedback, saveGP, setWeights } from "@/lib/matching/store";
 import type { Feedback } from "@/lib/matching/types";
 import { serverNow } from "@/lib/server-clock";
 
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   if (!isRating(p.fit) || !isRating(p.communication) || !isRating(p.clinicalAppropriateness)) {
     return NextResponse.json({ error: "rating" }, { status: 400, headers: NO_STORE });
   }
-  const state = getMatching();
+  const state = await hydrateMatching();
   const match = matchById(p.matchId, state);
   // "Not yours" and "does not exist" get the same answer (the referrals lane's rule).
   if (!match || match.patientId !== p.patientId) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });

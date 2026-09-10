@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 import { patientFromIntake } from "@/lib/matching/adapters";
 import { generateChecklist } from "@/lib/matching/checklist";
 import { fittedEmbedder, matchPatient } from "@/lib/matching/pipeline";
-import { getMatching, listGPs, openPatients, saveChecklist, saveMatches, savePatient } from "@/lib/matching/store";
+import { hydrateMatching, listGPs, openPatients, saveChecklist, saveMatches, savePatient } from "@/lib/matching/store";
 import { patientView, validateIntake } from "@/lib/matching/views";
 import { rateLimit } from "@/lib/rate-limit";
 import { serverNow } from "@/lib/server-clock";
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: NO_STORE });
   }
 
-  const state = getMatching();
+  const state = await hydrateMatching();
   const gps = listGPs(state);
   const embedder = fittedEmbedder(gps);
   const now = serverNow().toISOString();

@@ -6,10 +6,11 @@
 // The dense case is skipped when the variables are absent; nothing is fetched otherwise.
 
 import { describe, expect, it } from "vitest";
+import { REACH_CORPUS } from "@/matching/corpus";
 import { rosterGPs } from "./adapters";
 import { gpBioText } from "./candidates";
 import { DenseEmbedder, denseEndpointFromEnv } from "./dense-embedder";
-import { EVAL_CASES, beatsBaseline, evaluateEmbedder, formatEvalReport } from "./embedder-eval";
+import { EVAL_CASES, beatsBaseline, evaluateEmbedder, evaluateOnCorpus, formatCorpusReport, formatEvalReport } from "./embedder-eval";
 import { LexicalEmbedder } from "./embedding";
 
 const GPS = rosterGPs(new Date("2026-09-10"));
@@ -41,6 +42,15 @@ describe("M5 the harness", () => {
     const text = formatEvalReport(baseline);
     expect(text.split("\n")).toHaveLength(13);
     expect(text).toMatch(/^lexical: top-1 \d+%, top-3 \d+%, MRR 0\.\d{3}, mean margin -?0\.\d{3}/);
+  });
+
+  it("pins the lexical embedder on the reach corpus: paraphrases of one ask sit nearer than different asks", () => {
+    const report = evaluateOnCorpus(lexical, "lexical");
+    console.log(formatCorpusReport(report));
+    expect(report.entries).toBeGreaterThan(400);
+    // Measured 2026-09-10: 451 entries, agreement 64%, same-facet 0.122 against other-facet 0.021.
+    expect(report.neighbourAgreement).toBeGreaterThanOrEqual(0.6);
+    expect(report.meanSameFacet).toBeGreaterThan(report.meanOtherFacet);
   });
 
   it("beatsBaseline holds on every headline number, not the average of them", () => {
@@ -109,6 +119,8 @@ describe("M5 the dense embedder", () => {
     await dense.prime([...GPS.map((gp) => gpBioText(gp)), ...EVAL_CASES.map((c) => c.narrative)]);
     const report = evaluateEmbedder(dense, `dense:${endpoint!.model}`, GPS);
     console.log(formatEvalReport(report));
+    await dense.prime(REACH_CORPUS.map((e) => e.text));
+    console.log(formatCorpusReport(evaluateOnCorpus(dense, `dense:${endpoint!.model}`)));
     console.log(beatsBaseline(report, baseline) ? "beats the lexical baseline" : "does not beat the lexical baseline");
     expect(dense.misses).toBe(0);
   });

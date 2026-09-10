@@ -11,6 +11,7 @@
 // mock introspection route returns counts, not rows (`app/api/mock/matching`).
 
 import { rosterGPs } from "./adapters";
+import { SupabaseJournal, supabaseEndpointFromEnv, toRow, type JournalWrite } from "./persistence";
 import type { PatientCriterion } from "./ranking";
 import type { DocumentChecklist, Feedback, GP, Match, MatchStatus, Patient } from "./types";
 
@@ -26,7 +27,34 @@ export interface MatchingState {
   seededAt: string | null;
 }
 
-const globalStore = globalThis as { __adhdMeMatching?: MatchingState };
+const globalStore = globalThis as { __adhdMeMatching?: MatchingState; __adhdMeMatchingJournal?: SupabaseJournal | null };
+
+/**
+ * The journal (Phase M5): present when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, null
+ * otherwise. Every write below is mirrored through `mirror`; a route that must see what another
+ * instance wrote awaits `hydrateMatching()` first. Tests attach a journal with a fake fetch.
+ */
+export function attachMatchingJournal(journal: SupabaseJournal | null): void {
+  globalStore.__adhdMeMatchingJournal = journal;
+}
+
+function journal(): SupabaseJournal | null {
+  if (globalStore.__adhdMeMatchingJournal === undefined) {
+    const endpoint = supabaseEndpointFromEnv();
+    globalStore.__adhdMeMatchingJournal = endpoint ? new SupabaseJournal(endpoint) : null;
+  }
+  return globalStore.__adhdMeMatchingJournal;
+}
+
+function mirror(write: JournalWrite): void {
+  journal()?.record(write);
+}
+
+/** Load what the database holds into this instance, once. A no-op without a journal. */
+export async function hydrateMatching(state: MatchingState = getMatching()): Promise<MatchingState> {
+  await journal()?.hydrate(state);
+  return state;
+}
 
 function initial(): MatchingState {
   return { patients: new Map(), gps: new Map(), matches: new Map(), feedback: new Map(), checklists: new Map(), weights: null, seededAt: null };
@@ -57,11 +85,13 @@ export function gpById(id: string, state: MatchingState = getMatching()): GP | n
 
 export function saveGP(gp: GP, state: MatchingState = getMatching()): GP {
   state.gps.set(gp.id, gp);
+  mirror({ table: "match_gps", op: "upsert", id: gp.id, row: toRow.match_gps(gp) });
   return gp;
 }
 
 export function savePatient(patient: Patient, state: MatchingState = getMatching()): Patient {
   state.patients.set(patient.id, patient);
+  mirror({ table: "match_patients", op: "upsert", id: patient.id, row: toRow.match_patients(patient) });
   return patient;
 }
 
@@ -77,7 +107,10 @@ export function openPatients(state: MatchingState = getMatching()): Patient[] {
 }
 
 export function saveMatches(matches: readonly Match[], state: MatchingState = getMatching()): void {
-  for (const m of matches) state.matches.set(m.id, m);
+  for (const m of matches) {
+    state.matches.set(m.id, m);
+    mirror({ table: "match_matches", op: "upsert", id: m.id, row: toRow.match_matches(m) });
+  }
 }
 
 export function matchById(id: string, state: MatchingState = getMatching()): Match | null {
@@ -120,26 +153,31 @@ export function setMatchStatus(
   if (!allowed[status].includes(match.matchStatus)) return { ok: false, reason: "not_open" };
   const next: Match = { ...match, matchStatus: status, decidedAt: at, declineReason: status === "declined" ? declineReason : null };
   state.matches.set(matchId, next);
+  mirror({ table: "match_matches", op: "upsert", id: next.id, row: toRow.match_matches(next) });
   if (status === "accepted") {
     const patient = state.patients.get(match.patientId);
-    if (patient) state.patients.set(patient.id, { ...patient, status: "booked" });
+    if (patient) savePatient({ ...patient, status: "booked" }, state);
     const gp = state.gps.get(match.gpId);
     if (gp) {
-      state.gps.set(gp.id, {
-        ...gp,
-        credentials: { ...gp.credentials, caseloadCapacityCurrent: Math.max(0, gp.credentials.caseloadCapacityCurrent - 1) },
-      });
+      saveGP(
+        {
+          ...gp,
+          credentials: { ...gp.credentials, caseloadCapacityCurrent: Math.max(0, gp.credentials.caseloadCapacityCurrent - 1) },
+        },
+        state,
+      );
     }
   }
   if (status === "completed") {
     const patient = state.patients.get(match.patientId);
-    if (patient) state.patients.set(patient.id, { ...patient, status: "consulted" });
+    if (patient) savePatient({ ...patient, status: "consulted" }, state);
   }
   return { ok: true, match: next };
 }
 
 export function saveFeedback(record: Feedback, state: MatchingState = getMatching()): Feedback {
   state.feedback.set(record.id, record);
+  mirror({ table: "match_feedback", op: "upsert", id: record.id, row: toRow.match_feedback(record) });
   return record;
 }
 
@@ -153,6 +191,7 @@ export function allFeedback(state: MatchingState = getMatching()): Feedback[] {
 
 export function saveChecklist(checklist: DocumentChecklist, state: MatchingState = getMatching()): DocumentChecklist {
   state.checklists.set(checklist.patientId, checklist);
+  mirror({ table: "match_checklists", op: "upsert", id: checklist.id, row: toRow.match_checklists(checklist) });
   return checklist;
 }
 
@@ -165,6 +204,7 @@ export function setChecklistItem(patientId: string, itemId: string, done: boolea
   if (!checklist) return null;
   const next: DocumentChecklist = { ...checklist, items: checklist.items.map((i) => (i.id === itemId ? { ...i, done } : i)) };
   state.checklists.set(patientId, next);
+  mirror({ table: "match_checklists", op: "upsert", id: next.id, row: toRow.match_checklists(next) });
   return next;
 }
 
@@ -190,10 +230,18 @@ export function exportMatchingPatient(patientId: string, state: MatchingState = 
 export function eraseMatchingPatient(patientId: string, state: MatchingState = getMatching()): { erased: boolean; matches: number; feedback: number } {
   const held = exportMatchingPatient(patientId, state);
   if (!held) return { erased: false, matches: 0, feedback: 0 };
-  for (const f of held.feedback) state.feedback.delete(f.id);
-  for (const m of held.matches) state.matches.delete(m.id);
+  for (const f of held.feedback) {
+    state.feedback.delete(f.id);
+    mirror({ table: "match_feedback", op: "delete", id: f.id });
+  }
+  for (const m of held.matches) {
+    state.matches.delete(m.id);
+    mirror({ table: "match_matches", op: "delete", id: m.id });
+  }
+  if (held.checklist) mirror({ table: "match_checklists", op: "delete", id: held.checklist.id });
   state.checklists.delete(patientId);
   state.patients.delete(patientId);
+  mirror({ table: "match_patients", op: "delete", id: patientId });
   return { erased: true, matches: held.matches.length, feedback: held.feedback.length };
 }
 

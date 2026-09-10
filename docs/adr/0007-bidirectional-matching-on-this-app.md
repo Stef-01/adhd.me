@@ -71,7 +71,12 @@ surface (`src/compliance/landing.ts`, `src/directory/profile.ts`).
   saying so on the screen; the GP dashboard and the mutual feedback are a single-process
   demonstration (the e2e suite, `pnpm dev`, `/demo`) until Phase M5 wires the store. This is the
   same posture every other store in the tree has, made visible by the first surface where the
-  two sides have to meet.
+  two sides have to meet. **2026-09-10:** the wiring exists as a journal
+  (`src/lib/matching/persistence.ts`): with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` set,
+  every write is mirrored to the `0006_matching.sql` tables in order and a cold instance
+  hydrates from them before its first read, so the two sides meet across instances; without
+  them nothing changes. Switching it on is a founder act, because it is the first time a
+  narrative leaves the process.
 
 - `PLAN.md` gains Phase M, the six-month sprint, with M1 to M4 shipped in this unit and M5 to M6
   planned. `CONTEXT.md` gains the vocabulary.
