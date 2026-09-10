@@ -38,6 +38,17 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
     await open(page);
     await page.evaluate(() => document.fonts.ready);
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    // Firefox loses its sequential-focus starting point when the control that opened a screen is
+    // removed with that screen; anchoring the start on <main> lets the ring be walked and wrapped.
+    if (test.info().project.name === "firefox") {
+      await page.evaluate(() => {
+        const main = document.querySelector<HTMLElement>("main");
+        if (!main) return;
+        main.setAttribute("tabindex", "-1");
+        main.focus();
+        main.removeAttribute("tabindex");
+      });
+    }
 
     await page.evaluate((selector) => {
       document.querySelectorAll(selector).forEach((el, i) => {
