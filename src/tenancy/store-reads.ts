@@ -194,6 +194,9 @@ export const STORE_READS: readonly StoreRead[] = [
   },
 
   // ── src/console/store.ts ───────────────────────────────────────────────────────────────────
+  { module: "src/console/store.ts", fn: "billingPerVisitFor", kind: "no_practice_data", reason: "Pure projection of a caller-supplied billing value with a product default; does not read the store or identify a practice." },
+  { module: "src/console/store.ts", fn: "validateBillingPerVisit", kind: "no_practice_data", reason: "Validates a numeric range only; reads no records or practice-identifiable data." },
+  { module: "src/console/store.ts", fn: "updateBillingPerVisit", kind: "practice_scoped" },
   { module: "src/console/store.ts", fn: "practiceRecord", kind: "practice_scoped" },
   {
     module: "src/console/store.ts",
