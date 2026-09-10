@@ -16,7 +16,8 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   await page.reload();
   await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");
   await page.goto("/approach?module=starting");
-  await expect(page.locator(".play-title")).toContainText("The blank page");
+  // The run opens on its title card, or on the how-to-play card on a first visit; either is the game.
+  await expect(page.locator(".play-run .play-title")).toBeVisible();
   await page.goto("/approach");
   await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("#learn-pane-panel")).toHaveAttribute("aria-labelledby", "learn-tab-games");
