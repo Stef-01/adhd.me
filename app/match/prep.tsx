@@ -6,6 +6,7 @@
 // declarations.
 
 import Link from "next/link";
+import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { TIMELINE_TEMPLATE } from "@/lib/matching/checklist";
@@ -59,6 +60,7 @@ export function MatchPrep() {
     return (
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
+        <AppSettings />
           <span className="life-eyebrow">Before the first appointment</span>
           <h1 tabIndex={-1}>Nothing to prepare yet</h1>
           <p className="match-lede">The checklist is written from your request. Start one first.</p>
@@ -77,6 +79,7 @@ export function MatchPrep() {
   return (
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
+        <AppSettings />
         <span className="life-eyebrow">Before the first appointment</span>
         <h1 tabIndex={-1}>What to bring</h1>
         <p className="match-lede">

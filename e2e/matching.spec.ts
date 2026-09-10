@@ -33,7 +33,7 @@ test("a request comes back with up to three GPs, each with a reason and a status
     const card = cards.nth(i);
     await expect(card.locator(".match-headline")).not.toBeEmpty();
     await expect(card.locator(".match-points li").first()).toBeVisible();
-    await expect(card.getByTestId("match-status")).toContainText("Sent to the GP");
+    await expect(card.getByTestId("match-status")).toContainText("Waiting on the GP");
     await expect(card).toContainText("Telehealth");
   }
   // The person's own words are never rendered back as a reason.

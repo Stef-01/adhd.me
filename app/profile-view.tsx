@@ -264,7 +264,7 @@ export function ProfileView() {
               <label className="me-switch">
                 <span>
                   <strong>{row.title}</strong>
-                  <small>{row.detail}</small>
+                  <Explain as="small">{row.detail}</Explain>
                 </span>
                 <input
                   type="checkbox"

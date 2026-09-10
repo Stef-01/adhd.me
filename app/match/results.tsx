@@ -5,6 +5,7 @@
 // concept overlap and declared facts); nothing on this screen is written by the page.
 
 import Link from "next/link";
+import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { DECLINE_REASON_LABELS } from "@/lib/matching/labels";
 import type { PatientView } from "@/lib/matching/views";
@@ -44,6 +45,7 @@ export function MatchResults() {
     return (
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
+        <AppSettings />
           <span className="life-eyebrow">Find a GP</span>
           <h1 tabIndex={-1}>Nothing to show yet</h1>
           <p className="match-lede">A request lives in this tab only. Start one, or start again.</p>
@@ -62,9 +64,11 @@ export function MatchResults() {
   return (
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
+        <AppSettings />
         <span className="life-eyebrow">Your matches</span>
         <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}, each with a reason`}</h1>
-        {view.heard.length > 0 && <p className="match-lede">Heard in what you wrote: {view.heard.slice(0, 5).join(", ")}.</p>}
+        {view.heard.length > 0 && <p className="match-lede">Heard: {view.heard.slice(0, 3).join(", ")}.</p>}
+        <Explain className="match-lede">Each GP below saw your request and answers from their side. The reason under each name is what you and they have in common.</Explain>
       </header>
 
       {view.fromTab && (

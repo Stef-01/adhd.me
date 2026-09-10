@@ -84,9 +84,9 @@ export const FROM_TAB_COPY =
   "Shown from this tab. The server that took your request has moved on, so answers from a GP's side cannot reach this screen yet; the request itself, and everything below, is intact.";
 
 export const MATCH_STATUS_COPY = {
-  proposed: "Sent to the GP. They accept or decline from their side.",
-  accepted: "Accepted. Prepare for the first appointment below.",
-  declined: "Declined from their side.",
+  proposed: "Waiting on the GP.",
+  accepted: "Accepted.",
+  declined: "Declined.",
   completed: "First appointment done.",
   withdrawn: "Withdrawn.",
 } as const;

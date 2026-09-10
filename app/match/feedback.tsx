@@ -5,6 +5,7 @@
 // learning loop; nothing here is published as a rating of anybody.
 
 import Link from "next/link";
+import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import type { Rating } from "@/lib/matching/types";
 import type { PatientView } from "@/lib/matching/views";
@@ -75,6 +76,7 @@ export function MatchFeedback() {
     return (
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
+        <AppSettings />
           <span className="life-eyebrow">After the appointment</span>
           <h1 tabIndex={-1}>Nothing to tell us about yet</h1>
           <p className="match-lede">This form opens once a GP has accepted your request.</p>
@@ -106,6 +108,7 @@ export function MatchFeedback() {
     return (
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
+        <AppSettings />
           <span className="life-eyebrow">After the appointment</span>
           <h1 tabIndex={-1}>Thank you</h1>
           <p className="match-lede" data-testid="feedback-sent">
@@ -122,6 +125,7 @@ export function MatchFeedback() {
   return (
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
+        <AppSettings />
         <span className="life-eyebrow">After the appointment</span>
         <h1 tabIndex={-1}>How did it go?</h1>
         <p className="match-lede">Three questions about the fit, not the outcome. The GP answers two of their own from their side.</p>

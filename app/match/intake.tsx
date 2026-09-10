@@ -1,5 +1,7 @@
 "use client";
 
+import { AppSettings } from "../app-settings";
+
 // Phase M (ADR 0007): the intake. One box for what the person wants to say, in their own words,
 // typed or spoken (the finder's speech session, same disclosure), three declared facts the
 // matcher needs (where, for whom, how), and a button. The narrative is posted once and lands in
@@ -96,6 +98,7 @@ export function MatchIntake() {
   return (
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
+        <AppSettings />
         <span className="life-eyebrow">Find a GP</span>
         <h1 tabIndex={-1}>What are you looking for?</h1>
         <Explain className="match-lede">

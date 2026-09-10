@@ -58,6 +58,8 @@ async function measure(page) {
       const style = getComputedStyle(el);
       if (style.visibility === "hidden" || style.display === "none" || style.opacity === "0") continue;
       if (el.closest("[aria-hidden='true'], .sr-only, script, style, noscript, template")) continue;
+      const closed = el.closest("details:not([open])");
+      if (closed && !el.closest("summary")) continue;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) continue;
       const fixedAncestor = el.closest("nav, header.platform-header, .app-tabs, .site-footer, footer");
@@ -74,7 +76,10 @@ async function measure(page) {
 const browser = await chromium.launch();
 const context = await browser.newContext({
   viewport: { width: 390, height: 844 },
-  storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: "adhdme-privacy-ack", value: "1" }] }] },
+  storageState: {
+    cookies: [],
+    origins: [{ origin: BASE, localStorage: [{ name: "adhdme-privacy-ack", value: "1" }, { name: "adhdme.walkthrough.v1", value: '{"v":1,"on":false,"offered":true}' }] }],
+  },
 });
 const page = await context.newPage();
 const results = [];

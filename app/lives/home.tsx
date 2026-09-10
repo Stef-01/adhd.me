@@ -48,8 +48,8 @@ export function LivesHome() {
           <li><Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(strategy(started.strategyId).moduleId)}`}><span className="lives-row-text"><strong>Continue learning</strong><span>{strategy(started.strategyId).title} · {strategy(started.strategyId).estimatedMinutes} min</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
         )}
         <li><Link className="lives-row" href="/lives/toolkit"><span className="lives-row-text"><strong>Your Toolkit</strong><span>{tools === 0 ? "Nothing yet" : `${tools} ${tools === 1 ? "strategy" : "strategies"}`}</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
-        <li><Link className="lives-row" href="/lives/characters"><span className="lives-row-text"><strong>The eight lives</strong><span>Who they are, what they are trying</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
-        <li><Link className="lives-row" href="/lives/learn"><span className="lives-row-text"><strong>Learn</strong><span>Sixteen strategies, two to five minutes each</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
+        <li><Link className="lives-row" href="/lives/characters"><span className="lives-row-text"><strong>The eight lives</strong><Explain as="span">Who they are, what they are trying</Explain></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
+        <li><Link className="lives-row" href="/lives/learn"><span className="lives-row-text"><strong>Learn</strong><Explain as="span">Sixteen strategies, two to five minutes each</Explain></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
       </ul>
 
       <details className="life-why lives-goals">
