@@ -23,7 +23,7 @@ export default function TermsPage() {
     <main id="main-content" className="prose-wrap">
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Terms", href: "/terms" }]} />
       <p className="mb-2 mt-6 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
-        Draft — not yet in force
+        Draft, not yet in force
       </p>
       <p className="mb-6 text-sm text-stone-500">
         Why it is a draft, and what is being checked:{" "}
@@ -36,7 +36,7 @@ export default function TermsPage() {
           <p className="mt-2 text-sm leading-6">
             ADHD.ME is a finder: it shows you GPs who say they do the work you describe, with
             the reason each one is shown. It is not a medical service, it does not give medical
-            advice, and using it creates no relationship between you and any doctor — that
+            advice, and using it creates no relationship between you and any doctor, that
             begins when you book and attend an appointment. By using the site you accept these
             terms and the{" "}
             <Link href="/privacy" className="underline">privacy policy</Link>.
@@ -47,7 +47,7 @@ export default function TermsPage() {
           <p className="mt-2 text-sm leading-6">
             The finder matches the words you type against what each listed clinician declares
             about their own work, and shows the result with its reasons. Nothing you type is
-            interpreted as a fact about you — it is read only as a preference about the care
+            interpreted as a fact about you, it is read only as a preference about the care
             you want. Whether any appointment, assessment or care is right for you is a
             conversation with a doctor, not with a website.
           </p>
@@ -87,7 +87,7 @@ export default function TermsPage() {
           <h2 className="text-lg font-medium text-stone-900">Bookings and Healthengine</h2>
           <p className="mt-2 text-sm leading-6">
             Booking happens on Healthengine, under Healthengine&apos;s own terms and privacy
-            policy. Your appointment — its time, fees and everything about it — is between you
+            policy. Your appointment, its time, fees and everything about it, is between you
             and the practice. ADHD.ME is not a party to the booking, does not see it, and does
             not set or receive any part of any fee.
           </p>
@@ -106,7 +106,7 @@ export default function TermsPage() {
           <p className="mt-2 text-sm leading-6">
             The site&apos;s text, design and software are ours or licensed to us. What a
             clinician declares about their own work remains theirs, shown here with their
-            consent, and a person&apos;s words in the finder are theirs and never stored — see
+            consent, and a person&apos;s words in the finder are theirs and never stored, see
             the privacy policy.
           </p>
         </section>
@@ -126,7 +126,7 @@ export default function TermsPage() {
             Australian Consumer Law or any other law that cannot be excluded. To the extent
             the law allows, our responsibility for a failure of the service is limited to
             resupplying it, and we are not responsible for the acts of the third parties named
-            here — Healthengine, or the practice you book with — whose services are governed
+            here, Healthengine, or the practice you book with, whose services are governed
             by their own terms.
           </p>
         </section>
@@ -134,7 +134,7 @@ export default function TermsPage() {
           <h2 className="text-lg font-medium text-stone-900">Governing law, changes and contact</h2>
           <p className="mt-2 text-sm leading-6">
             These terms are governed by the law of New South Wales, Australia. If they change,
-            the date and the change will be stated here — while they are marked draft, they are
+            the date and the change will be stated here, while they are marked draft, they are
             not yet in force. Questions go to{" "}
             <a className="underline" href="mailto:stefan.thottunkal@gmail.com">
               stefan.thottunkal@gmail.com

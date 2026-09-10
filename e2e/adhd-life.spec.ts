@@ -308,7 +308,7 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
   await expect(page).toHaveURL(/\/my-adhd$/);
   await offer.click();
   await expect(page).toHaveURL(/\/survey\?id=work-study$/);
-  await page.getByRole("button", { name: /Very — I circle it/ }).click();
+  await page.getByRole("button", { name: /Very, I circle it/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Much harder" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -343,7 +343,7 @@ test("Phase A: problem fit orders allied providers by the person's top need, and
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   const first = page.locator(".clinician-row").first();
-  await expect(first).toContainText(/Works on task initiation — the thing you said is hardest/);
+  await expect(first).toContainText(/Works on task initiation, the thing you said is hardest/);
   await first.click();
   await expect(page.getByText("Why you’re seeing them")).toBeVisible();
 });
@@ -556,7 +556,7 @@ test("Reflection interpretation (PRD §29): a reading is offered in the person's
   await expect(page.locator(".play-reading")).toHaveCount(0);
 });
 
-test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you — buttons, then a slider", async ({ page }) => {
+test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you, buttons, then a slider", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Tap to play" }).click();

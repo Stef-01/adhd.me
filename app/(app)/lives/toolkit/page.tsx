@@ -6,7 +6,7 @@ import { Toolkit } from "../../../lives/toolkit";
 export const metadata: Metadata = {
   alternates: { canonical: "/lives/toolkit" },
   robots: ROBOTS_META,
-  title: "My Toolkit — ADHD Lives",
+  title: "My Toolkit, ADHD Lives",
   description: "The practical strategies you decided were worth trying, as you set them up, on this device.",
 };
 

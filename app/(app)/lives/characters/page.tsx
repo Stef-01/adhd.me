@@ -6,7 +6,7 @@ import { LivesCharacters } from "../../../lives/characters";
 export const metadata: Metadata = {
   alternates: { canonical: "/lives/characters" },
   robots: ROBOTS_META,
-  title: "The eight lives — ADHD Lives",
+  title: "The eight lives, ADHD Lives",
   description: "Maya, Leo, Arjun, Zoe, Theo, Mia, Jax and Nina: who they are, the pattern each lives, and what each is trying.",
 };
 

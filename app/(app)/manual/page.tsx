@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/manual" },
   robots: ROBOTS_META,
   title: "My Manual",
-  description: "What helps you, what makes things harder, and how to work with you — in your own words, editable, never written for you.",
+  description: "What helps you, what makes things harder, and how to work with you, in your own words, editable, never written for you.",
 };
 
 export default function ManualPage() {

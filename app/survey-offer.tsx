@@ -16,7 +16,7 @@ export function SurveyOffer({ record, compact = false }: { record: ModelRecord; 
   return (
     <section className={offer ? "life-card is-lead" : "life-card"} aria-labelledby="survey-offer-title">
       <span className="life-eyebrow">{offer ? "A few more questions would help" : "Go deeper, if you want to"}</span>
-      <h2 id="survey-offer-title">{offer ? `${offer.survey.title} — ${offer.survey.minutes} min` : "Topic surveys"}</h2>
+      <h2 id="survey-offer-title">{offer ? `${offer.survey.title}, ${offer.survey.minutes} min` : "Topic surveys"}</h2>
       <p>{offer ? offer.why : "Eight to twelve questions on one part of life. Never required; each one sharpens what the app suggests."}</p>
       <div className="life-actions">
         {offer && <Link className="learn-primary" href={`/survey?id=${offer.survey.id}`}>Start the survey <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>}

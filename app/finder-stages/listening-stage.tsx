@@ -120,7 +120,7 @@ export function ListeningStage({
       <div className="listen-stage">
         {/* transitions.dev shimmer text, BOUNDED by the state it narrates: the band sweeps the word
             only while the microphone is live and stops the moment `finishing` is true. Not an
-            ambient loop — it is the label of an in-progress thing, and it ends with the thing. */}
+            ambient loop, it is the label of an in-progress thing, and it ends with the thing. */}
         <h1 className={finishing ? "listen-eyebrow" : "listen-eyebrow t-shimmer"} data-text="Listening" tabIndex={-1}>Listening</h1>
         <p className={heard ? "listen-transcript" : "listen-transcript is-empty"}>
           {heard ? <StreamedWords text={heard} /> : "Say what you’re looking for…"}

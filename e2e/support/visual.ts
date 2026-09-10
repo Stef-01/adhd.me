@@ -142,7 +142,7 @@ export async function captureAll(
         if (stableRuns >= 2) break;
       } else {
         stableRuns = 0;
-        if (attempt >= 15) throw new Error(`capture never settled on ${key.route} @${key.width}·${key.motion} — indefinite motion without a stop`);
+        if (attempt >= 15) throw new Error(`capture never settled on ${key.route} @${key.width}·${key.motion}, indefinite motion without a stop`);
         png = next;
         hash = nextHash;
       }

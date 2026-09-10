@@ -111,7 +111,7 @@ export async function contrastFindings(page: Page): Promise<{ out: string[]; see
  */
 export function contrastFinding(route: string, offenders: readonly string[]): string | null {
   if (offenders.length === 0) return null;
-  return `${route}: ${offenders.length} text element(s) under the contrast floor — breaks ${CONTRAST_RULE_ID} — ${offenders.join("; ")}`;
+  return `${route}: ${offenders.length} text element(s) under the contrast floor, breaks ${CONTRAST_RULE_ID}, ${offenders.join("; ")}`;
 }
 
 /** The text the probe stamps; distinctive enough that no product copy collides with it. */

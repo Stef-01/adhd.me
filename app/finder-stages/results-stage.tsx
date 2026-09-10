@@ -155,8 +155,8 @@ export function ResultsStage({
       <div className="results-head">
         {/* O237 (founder-directed, "improve aesthetic and minimalism … just show the results"):
             the head is the search summary and, when a suburb is known, the map. The place is set
-            on the Profile tab (or carried by a link); the verdict sentences — "no listed GP matches
-            every part", "the first N answer equally well", "nearer to X comes first" — are gone
+            on the Profile tab (or carried by a link); the verdict sentences, "no listed GP matches
+            every part", "the first N answer equally well", "nearer to X comes first", are gone
             from the screen. What they said is still true and still enforced: the list heading
             reads "Matches" only when the words produced an order and "All listed GPs" when they
             did not, the fold never cuts a tied band, and the clarifier chips stand ready when the
@@ -265,7 +265,7 @@ export function ResultsStage({
         transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
       >
         {/* transitions.dev text states swap: this heading changes in place when a clarifier answer
-            turns "All listed GPs" into "Matches" — the moment the product's claim becomes true. The
+            turns "All listed GPs" into "Matches", the moment the product's claim becomes true. The
             old word leaves upward through a small blur while the new one rises in from below, on
             the tap beat, so the change is seen rather than noticed later. */}
         <h2 className="t-text-swap-slot">
@@ -294,7 +294,7 @@ export function ResultsStage({
           {matches.length > shown.length && (
             <span className="results-count">
               {/* Number pop-in: keyed on the value, so the digits re-enter only when the count
-                  actually changes — a filter narrowing the list, a "show more" widening it. */}
+                  actually changes, a filter narrowing the list, a "show more" widening it. */}
               <span key={shown.length} className="t-digit">{shown.length}</span> of {matches.length}
             </span>
           )}
@@ -334,7 +334,7 @@ export function ResultsStage({
           what the ORDER was. A reader could not tell a list their words earned from a list in the
           listing's own arbitrary order, which is exactly the claim the product makes.
           One sentence, derived from the same `needsFor`/`matchQuality` read the ranking used, so
-          it cannot describe an order the list does not have — and it changes voice in the three
+          it cannot describe an order the list does not have, and it changes voice in the three
           cases where there is no real order rather than dressing them up as one.
           It sits under the heading, not above it: the heading names the group, the line qualifies
           it, and a person who already trusts the order can skip a line of small grey text where
@@ -376,7 +376,7 @@ export function ResultsStage({
 
       <div className="clinician-list" ref={list}>
         {/* O52: the re-sort, made visible. A clarifier answer re-ranks this list, and the
-            order changing is the product's whole argument — so rows GLIDE to their new
+            order changing is the product's whole argument, so rows GLIDE to their new
             positions (`layout="position"`) instead of teleporting, and a row pushed out
             of the visible fold leaves visibly rather than vanishing. The surrounding
             MotionConfig reducedMotion="user" is what makes the static equal automatic:
@@ -425,7 +425,7 @@ export function ResultsStage({
               whileTap={reducedMotion ? undefined : { scale: 0.985, transition: PRESS_SPRING }}
             >
               {/* O67: the same layoutId as the profile's portrait frame, so the chosen
-                  GP's image travels from this slot into the hero as ONE object — the
+                  GP's image travels from this slot into the hero as ONE object, the
                   continuity is shown, not asserted by the repeated name. The wrapper
                   exists because layoutId needs a measurable box of its own. */}
               <motion.span
@@ -444,8 +444,8 @@ export function ResultsStage({
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}
                 {/* O130: `row-location`, not `row-availability`. The accent on that class is a
-                    fossil of `nextAvailable` — a written-in appointment time, deleted when the
-                    roster became real people — and it had been painting a static suburb ever
+                    fossil of `nextAvailable`, a written-in appointment time, deleted when the
+                    roster became real people, and it had been painting a static suburb ever
                     since. A location is not a value that changes; the closed-books note below
                     is, and keeps it. */}
                 <small className="row-location">
@@ -453,7 +453,7 @@ export function ResultsStage({
                   {away ? `${locationLabel(item)}, ${away}` : locationLabel(item)}
                 </small>
                 {/* Closed books never outrank open ones at equal fit, and never hide
-                    either — the row says why somebody unactionable is still here (O4).
+                    either, the row says why somebody unactionable is still here (O4).
                     The "they fit what you asked" sentence only renders when a fit was
                     actually computed; otherwise the neutral fact stands alone. */}
                 {!item.acceptingNewPatients && closedBooksNote(item, request) && (

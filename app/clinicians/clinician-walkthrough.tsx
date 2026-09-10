@@ -109,7 +109,7 @@ export function ClinicianWalkthrough() {
 
   function goToStage(next: Stage) {
     setStage(next);
-    window.scrollTo(0, 0); // O190: instant — the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
+    window.scrollTo(0, 0); // O190: instant, the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
   }
 
   function move(direction: 1 | -1) {
@@ -126,7 +126,7 @@ export function ClinicianWalkthrough() {
     }
 
     setResourceIndex((current) => current + 1);
-    window.scrollTo(0, 0); // O190: instant — the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
+    window.scrollTo(0, 0); // O190: instant, the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
   }
 
   function toggleCondition(id: string) {
@@ -142,7 +142,7 @@ export function ClinicianWalkthrough() {
     setSelectedConditions(["adhd-assessment"]);
     setResourceIndex(0);
     setReviewed([]);
-    window.scrollTo(0, 0); // O190: instant — the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
+    window.scrollTo(0, 0); // O190: instant, the stage FADES in at top (cv2-stage-in); a smooth scroll travelling against the fade was the founder's "weird scrolling"
   }
 
   return (
@@ -351,7 +351,7 @@ export function ClinicianWalkthrough() {
             {/* O191: the founder's clutter verdict. The four sub-sentences restated the stage
                 lead ("Relevant cases and deliberate learning, repeated over time") in smaller
                 type, and the skin-cancer analogy band was unrelated clinical content on an ADHD
-                funnel — both gone. Four words carry the loop; the freed height is whitespace. */}
+                funnel, both gone. Four words carry the loop; the freed height is whitespace. */}
             <div className="cv2-loop" role="list">
               {["Choose", "Concentrate", "Learn", "Repeat"].map((title, index) => (
                 <div key={title} role="listitem">
@@ -362,7 +362,7 @@ export function ClinicianWalkthrough() {
             </div>
 
             {/* O189: the journey's destination, not a cul-de-sac. This stage used to end at
-                "Restart pathway" — the only exit from four stages of persuasion was to run them
+                "Restart pathway", the only exit from four stages of persuasion was to run them
                 again, and the join link lived three screens back as an aside. The funnel phrase
                 is the founder's, and it lands on the join page's email invitation. */}
             <div className="cv2-action">

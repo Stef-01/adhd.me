@@ -332,7 +332,7 @@ export const clinicians: Clinician[] = [
     summary:
       "Anubhav takes a measured approach to ADHD care, with a documented physical baseline and scheduled reviews during titration. He also covers cardiovascular and sleep screening, and approaches substance history as a safety question rather than a judgement.",
     about:
-      "Anubhav trained at the University of Sydney and has worked in general practice right across Sydney — Seven Hills, Double Bay, Hoxton Park, Hornsby — before settling at Beecroft. He works from measurement rather than impression: a documented baseline before anything starts, then review at set intervals instead of whenever a problem gets loud enough to prompt a call. He covers cardiovascular and sleep screening before a stimulant is considered, and treats a substance history as a safety question rather than a character one. He also does aged-care and home visits, and gives a good deal of his spare time to the long-suffering cause of the Parramatta Eels.",
+      "Anubhav trained at the University of Sydney and has worked in general practice right across Sydney, Seven Hills, Double Bay, Hoxton Park, Hornsby, before settling at Beecroft. He works from measurement rather than impression: a documented baseline before anything starts, then review at set intervals instead of whenever a problem gets loud enough to prompt a call. He covers cardiovascular and sleep screening before a stimulant is considered, and treats a substance history as a safety question rather than a character one. He also does aged-care and home visits, and gives a good deal of his spare time to the long-suffering cause of the Parramatta Eels.",
     experience: [
       "Structured adult ADHD assessment",
       "Baseline cardiovascular and metabolic screening",
@@ -456,18 +456,18 @@ export const clinicians: Clinician[] = [
     // O88: her official bio, supplied through the founder (2026-08-20), merged with the
     // already-verified detail from O58 — nothing below is authored for her.
     about:
-      "Anu is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology — a Bachelor of Psychology with First Class Honours at the University of Sydney — then her MD at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network; she holds a Diploma of Child Health. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport — cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
+      "Anu is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology, a Bachelor of Psychology with First Class Honours at the University of Sydney, then her MD at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network; she holds a Diploma of Child Health. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport, cricket and tennis included. The finer grain of how she works day to day will still be added from her own onboarding answers.",
     experience: [
       "General practice, Bay Health Clinic, Double Bay",
       "Fellow of the Royal Australian College of General Practitioners",
       "Medical degree, Australian National University",
       "Bachelor of Psychology (First Class Honours), University of Sydney",
-      "Hospital training across NSW — rotations in cardiology, paediatrics and psychiatry",
+      "Hospital training across NSW, rotations in cardiology, paediatrics and psychiatry",
       "Sydney Child Health Program, Sydney Children's Hospital Network",
       "Diploma of Child Health",
-      "Endorsed ADHD prescriber course — completed",
-      "Focused Psychological Strategies — training underway",
-      "Functional medicine, nutrition, lifestyle medicine & health coaching — further qualifications underway",
+      "Endorsed ADHD prescriber course, completed",
+      "Focused Psychological Strategies, training underway",
+      "Functional medicine, nutrition, lifestyle medicine & health coaching, further qualifications underway",
     ],
     // O88: from her supplied bio — "of Indian origin and speaking Hindi and Urdu". Languages
     // are ranked on (O1), so this is a matching fact, not decoration.

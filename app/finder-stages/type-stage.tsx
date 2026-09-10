@@ -55,16 +55,16 @@ export function TypeStage({
           </button>
         )}
         {/* THIS SCREEN WAS STILL RUNNING THE TAGLINE O233 DELETED. The welcome used to open with
-            "ADHD assessment / that takes you seriously." and the founder had it removed — a
+            "ADHD assessment / that takes you seriously." and the founder had it removed, a
             marketing claim on the screen whose job is to get a sentence out of somebody. The
             welcome was fixed and the type screen, which is the same box reached by another door,
             kept it: a person who taps "Type instead" on the listening screen met a slogan the
             product had already retracted, at display size, above a box it had pushed down. It asks
-            the welcome's question now, word for word — one question, wherever the box is met.
+            the welcome's question now, word for word, one question, wherever the box is met.
             The eyebrow ("In your own words") went with it rather than being kept and shrunk: it
             was the question again in label type, and the flow from listening is continuous only if
             arriving here costs one line to read, not three. The placeholder is the welcome's too,
-            for the same reason — one field, one example, whichever screen it is on. */}
+            for the same reason, one field, one example, whichever screen it is on. */}
         <h1 tabIndex={-1}>What kind of support are you looking for?</h1>
         <label className="sr-only" htmlFor="doctor-request">Describe the support you want</label>
         <textarea

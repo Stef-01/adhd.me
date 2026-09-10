@@ -21,7 +21,7 @@ export default function JoinPage() {
     <>
     <main id="main-content" className="join-page">
       {/* O189: the page joins the site. The founder's verdict on the shipped version — no logo,
-          no clear navigation, a back-link that read as plain text — and the fix is the pattern
+          no clear navigation, a back-link that read as plain text, and the fix is the pattern
           /approach already carries: a sticky header with the serif wordmark linking home and one
           clearly-pressable nav link. Rebuilt in this page's own palette because the story tokens
           are deliberately .story-scoped (see globals.css's note on separate contrast budgets). */}
@@ -34,7 +34,7 @@ export default function JoinPage() {
           <p className="eyebrow">Join the directory</p>
           <h1>Be findable by the people already looking.</h1>
           <p className="join-lead">
-            One email — who you are and where you practise — and a person replies. No forms.
+            One email, who you are and where you practise, and a person replies. No forms.
           </p>
         </header>
         <section className="join-email" aria-labelledby="join-start">
@@ -46,19 +46,19 @@ export default function JoinPage() {
           </a>
           <p className="join-email-note">
             Tell us your name, your practice and what your week actually looks like. Everything
-            else — registration details included — we sort out together afterwards.
+            else, registration details included, we sort out together afterwards.
           </p>
         </section>
       </div>
     </main>
 
       {/*
-        O207: THIS PAGE HAD NO FOOTER AT ALL — not a different one, zero `<footer>` elements. O189
+        O207: THIS PAGE HAD NO FOOTER AT ALL, not a different one, zero `<footer>` elements. O189
         found eight public surfaces with no wordmark and gave every one of them `PublicHeader`, and
         `e2e/public-nav.spec.ts` made the top permanent. Nobody asked the same question about the
         foot of the page, so the same class of defect survived at the other end: a reader reached
-        the bottom and the site simply stopped. On this page — the one the founder said "feels
-        disconnected from the site" — that left about 350px of dead space and no way onward at all.
+        the bottom and the site simply stopped. On this page, the one the founder said "feels
+        disconnected from the site", that left about 350px of dead space and no way onward at all.
       */}
       <SiteFooter />
     </>

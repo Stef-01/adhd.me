@@ -155,7 +155,7 @@ export function ProfileView() {
   return (
     <main id="main-content" className="me-screen app-page-with-tabs">
       {/* O233: the app's own header. `public-nav.spec.ts` holds every public route to showing the
-          mark and reaching home from it, and it was right to fail this one — a tab with no header
+          mark and reaching home from it, and it was right to fail this one, a tab with no header
           is a screen a person can be lost on. The settings control sits here for the same reason
           it sits on the finder: one place, every surface. */}
       <div className="minimal-header has-settings me-chrome">

@@ -32,7 +32,7 @@ export function ScenariosStage({
      the reader who asked for less motion got an instant displacement instead of a smooth one.
      The taste law says every effect needs a static equal checked AT THE HOOK, and the enclosing
      config looking like it handles this is exactly why nobody noticed. The static equal here is
-     no displacement at all — the quote simply swaps. */
+     no displacement at all, the quote simply swaps. */
   const reduce = useReducedMotion();
   const slide = reduce ? 0 : matchDirection * 9;
 

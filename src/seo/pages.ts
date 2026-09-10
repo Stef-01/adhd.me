@@ -95,7 +95,7 @@ export const SEO_PAGES: readonly SeoPage[] = [
       THE FRONT DOOR, ADDED WHEN THE STRIP OPENED IT. O241 wrote this register over the ten routes
       that were indexable then; `/` was not one of them, because the founder's posture was that the
       finder was for testing and `src/security/robots.ts` held it back. The 2026-09-03 strip emptied
-      that register — the site is public now — and the page the product IS came out from behind it
+      that register, the site is public now, and the page the product IS came out from behind it
       still carrying a ten-character title and a description nothing had measured. It is the page an
       answer engine is most likely to be handed and the one a person lands on; it gets the same
       treatment as the other eleven.
@@ -157,7 +157,7 @@ export const SEO_PAGES: readonly SeoPage[] = [
     keyword: "privacy policy",
     title: "Privacy policy for the ADHD.ME GP finder (draft)",
     description:
-      "The privacy policy for ADHD.ME: what we hold, what we never hold, and the choices you keep at every point — stated as a draft while the product is a demo.",
+      "The privacy policy for ADHD.ME: what we hold, what we never hold, and the choices you keep at every point, stated as a draft while the product is a demo.",
   },
   {
     path: "/privacy/automated-decisions",
@@ -185,7 +185,7 @@ export const SEO_PAGES: readonly SeoPage[] = [
     keyword: "terms of use",
     title: "Terms of use for the ADHD.ME GP finder (draft)",
     description:
-      "The terms of use for ADHD.ME: what it is and is not, what you agree to by using it, and where responsibility sits — a draft while the product is still a demo.",
+      "The terms of use for ADHD.ME: what it is and is not, what you agree to by using it, and where responsibility sits, a draft while the product is still a demo.",
   },
 ];
 
@@ -246,10 +246,10 @@ export function seoFindings(pages: readonly SeoPage[] = SEO_PAGES): SeoFinding[]
   for (const page of pages) {
     const rendered = renderedTitle(page);
     if (rendered.length < TITLE_WINDOW.min || rendered.length > TITLE_WINDOW.max) {
-      findings.push({ path: page.path, rule: "title-length", detail: `${rendered.length} characters rendered; the window is ${TITLE_WINDOW.min}–${TITLE_WINDOW.max}` });
+      findings.push({ path: page.path, rule: "title-length", detail: `${rendered.length} characters rendered; the window is ${TITLE_WINDOW.min}, ${TITLE_WINDOW.max}` });
     }
     if (page.description.length < DESCRIPTION_WINDOW.min || page.description.length > DESCRIPTION_WINDOW.max) {
-      findings.push({ path: page.path, rule: "description-length", detail: `${page.description.length} characters; the window is ${DESCRIPTION_WINDOW.min}–${DESCRIPTION_WINDOW.max}` });
+      findings.push({ path: page.path, rule: "description-length", detail: `${page.description.length} characters; the window is ${DESCRIPTION_WINDOW.min}, ${DESCRIPTION_WINDOW.max}` });
     }
     if (!keywordLeads(rendered, page.keyword, Math.floor(rendered.length * KEYWORD_HEAD.title))) {
       findings.push({ path: page.path, rule: "keyword-not-leading-title", detail: `"${page.keyword}" does not open "${rendered}"` });
@@ -317,7 +317,7 @@ export const SHARE_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "ADHD.ME — assessment you can actually reach",
+  alt: "ADHD.ME, assessment you can actually reach",
   type: "image/png",
 } as const;
 

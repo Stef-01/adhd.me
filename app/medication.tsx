@@ -33,7 +33,6 @@ export function MedicationExperience() {
   return (
     <div className="me-screen learn-screen manual-screen">
       <header className="life-head">
-        <span className="life-eyebrow">Medication</span>
         <h1 className="life-title">What it changes, what it leaves, in your words.</h1>
         <p className="life-lede">A note for whoever manages your medication.</p>
       </header>

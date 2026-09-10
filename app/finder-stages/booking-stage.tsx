@@ -30,8 +30,8 @@ export function BookingStage({
       </header>
 
       {/* PHASE 1 IS A HANDOFF, NOT A SLOT PICKER, AND THE SCREEN SAYS SO IN PLAIN WORDS.
-          This used to render three times — one from the record, two written into this
-          component — behind a "Send request" button that set a state variable and sent
+          This used to render three times, one from the record, two written into this
+          component, behind a "Send request" button that set a state variable and sent
           nothing. Against invented personas that was a mock. Against named real clinicians
           it would be fabricated appointments under a named doctor's photograph.
 
@@ -67,7 +67,7 @@ export function BookingStage({
           /* O231: said ONCE. The first draft rendered the route in the note and again in the
              paragraph under it ("arranged by phone" / "takes these appointments by phone"), with
              the practice name repeated a third time in a block at the bottom of an otherwise empty
-             screen — caught in the screenshot pass, not by a test. The practice sits with the
+             screen, caught in the screenshot pass, not by a test. The practice sits with the
              sentence it belongs to and the screen ends where the reading ends. */
           <>
             <p>{clinician.booking.note}</p>
@@ -89,13 +89,13 @@ export function BookingStage({
 
       {/* O231: the outbound control exists only where there is somewhere real to go. A
           practice-booked entry with no listing ends on the route itself, which is a true terminal
-          state and a designed one — not a disabled button, and not a link to a fabricated page.
+          state and a designed one, not a disabled button, and not a link to a fabricated page.
           `bookingHandoff` returns null for exactly that case, so the absence of the control and
           the words on it are now one decision rather than two reads of `via` that could diverge. */}
       {handoff === null ? null : (
       <div className="bottom-action">
         {/* Routed through /go/<id> (O28): outbound booking intent becomes countable per
-            clinician from this domain's own logs, with nothing stored — see the route's
+            clinician from this domain's own logs, with nothing stored, see the route's
             header and docs/BOOKING-ATTRIBUTION.md. The destination is unchanged. */}
         <a
           className="primary-button"
@@ -111,13 +111,13 @@ export function BookingStage({
           {handoff.label}
         </a>
         {/* THE CAPTION NOW NAMES THE DESTINATION THE BUTTON ACTUALLY HAS. It read a flat "Opens
-            Healthengine in a new tab." under a button that says "Open the practice page" — this
+            Healthengine in a new tab." under a button that says "Open the practice page", this
             block renders for BOTH remaining routes, and on the `practice` route the link is the
             practice's own `booking.url`, which is not Healthengine and by definition never was
             (that variant exists precisely because the clinician is not synced to any online
             platform). Every other sentence on this screen was branched on `via` and this one
             alone was not, so the one line whose whole job is to say where a reader is about to be
-            sent named the wrong place — on the exit point. Both strings come from
+            sent named the wrong place, on the exit point. Both strings come from
             `bookingHandoff` so they can no longer drift apart; see the note there. */}
         <p>{handoff.caption}</p>
         {/* Attribution layer 3 (docs/BOOKING-ATTRIBUTION.md): Healthengine asks new

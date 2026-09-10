@@ -58,7 +58,7 @@ test("the derived vocabulary is shown, not asserted (O132's wiring, visible)", a
   await expect(asked.first()).toContainText("reached by");
 });
 
-test("every excluded prescriber carries a reason — a refusal is never silent", async ({ page }) => {
+test("every excluded prescriber carries a reason, a refusal is never silent", async ({ page }) => {
   await signInAsPracticeOwner(page);
   await page.goto("/console/allocation");
 

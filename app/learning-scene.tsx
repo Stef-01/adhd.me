@@ -286,7 +286,6 @@ export function LearningExplorer() {
   const [selected, setSelected] = useState(0);
   const example = EXAMPLES[selected] ?? EXAMPLES[0];
   return <aside className="learning-explorer" aria-label="Explore everyday strategies">
-    <p className="learning-overline">TRY AN EXAMPLE</p>
     <h3>Small things, made visible.</h3>
     <div className="learning-example-choices">
       {EXAMPLES.map((example, index) => <button key={example.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)}>
@@ -311,7 +310,6 @@ export function CarePathExplorer() {
   const selected = CARE_LAYERS[layer] ?? CARE_LAYERS[0];
   return <aside className="learning-explorer learning-care-explorer" aria-label="Explore the route to care">
     <div>
-      <p className="learning-overline">EXPLORE THE ROUTE</p>
       <h3>A conversation, then a next step.</h3>
       <p>Tap a part of the route.</p>
       <div className="learning-care-answer" role="status"><strong>{selected.title}</strong><p>{selected.detail}</p></div>

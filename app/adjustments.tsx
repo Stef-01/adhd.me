@@ -35,7 +35,6 @@ export function Adjustments() {
   return (
     <div className="me-screen learn-screen adjust-screen">
       <header className="life-head">
-        <span className="life-eyebrow">Adjustments on paper</span>
         <h1 className="life-title">Most of it exists. Most people are never told.</h1>
       </header>
 

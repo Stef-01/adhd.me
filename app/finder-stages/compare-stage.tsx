@@ -115,7 +115,7 @@ export function CompareStage({
         {/* The heads sit in the SAME grid as every row below, so each name is directly above
             the column of verdicts it owns. They were a separate two-column strip first, which
             put one name over the ask column and left the reader joining a fact across two
-            regions — the thing the layout law names outright. */}
+            regions, the thing the layout law names outright. */}
         <div className="compare-heads">
           <p className="compare-heads-label">What you asked for</p>
           <div className="compare-head">

@@ -51,5 +51,5 @@ test("the scripted demo walkthrough runs clean end-to-end", async ({ page, conte
   await expect(page).toHaveURL(/\/console$/);
   await page.goto("/demo");
   await expect(page.getByTestId("booking-link-1")).toBeVisible();
-  await expect(page.getByText("Patient 1 · Sent — link live")).toBeVisible();
+  await expect(page.getByText("Patient 1 · Sent, link live")).toBeVisible();
 });

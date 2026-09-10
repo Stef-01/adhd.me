@@ -60,7 +60,7 @@ export default function OpengraphImage() {
             Each step is a ROW that owns its marker, and the line is the only thing positioned by
             hand. The first cut placed all three markers absolutely, tuned against label heights
             that later changed, and the card shipped with the third ring a whole row below
-            "Booking handoff" — on the image every shared link unfurls to. A marker that lives in
+            "Booking handoff", on the image every shared link unfurls to. A marker that lives in
             the same flex row as its label cannot drift from it.
           */}
           <div style={{ position: "relative", display: "flex", flexDirection: "column" }}>

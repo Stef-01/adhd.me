@@ -31,7 +31,7 @@ export default function AutomatedDecisionsPage() {
     <PublicHeader />
     <main id="main-content" className="prose-wrap">
       {/* O241: a route two segments deep says where it sits, on the page and in its
-          BreadcrumbList — the same trail, from the same list, because `Breadcrumbs` renders
+          BreadcrumbList, the same trail, from the same list, because `Breadcrumbs` renders
           both. `/privacy/counsel-review` has carried one since O41; this sibling never did. */}
       <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Privacy", href: "/privacy" }, { label: "Automated decisions", href: "/privacy/automated-decisions" }]} />
       <h1 className="mt-6 text-3xl font-semibold tracking-tight">
@@ -85,7 +85,7 @@ export default function AutomatedDecisionsPage() {
     </main>
 
     {/*
-      O207: this page carried no footer at all — see the note on /clinicians/join. A legal notice
+      O207: this page carried no footer at all, see the note on /clinicians/join. A legal notice
       that ends with no way back to the site it governs is the same defect as a marketing page that
       does, and arguably worse: a reader sent here from a privacy link had no route onward.
     */}

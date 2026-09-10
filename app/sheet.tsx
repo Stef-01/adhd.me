@@ -140,7 +140,7 @@ export function Sheet({
         <div className="sheet-layer">
           {/* The scrim dismisses on click, but it is NOT a labelled control: it carried
               `Close <title>` and so answered the same role query as the close button, which made
-              "the close control" ambiguous — caught by the shell spec. Keyboard and screen-reader
+              "the close control" ambiguous, caught by the shell spec. Keyboard and screen-reader
               users dismiss with Escape or the close button; this is the pointer affordance only. */}
           <motion.div
             className="sheet-scrim"

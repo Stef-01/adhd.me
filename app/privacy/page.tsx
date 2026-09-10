@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
     <PublicHeader />
     <main id="main-content" className="prose-wrap">
       <p className="mb-2 inline-block rounded bg-amber-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-900">
-        Draft — not yet in force
+        Draft, not yet in force
       </p>
       <p className="mb-6 text-sm text-stone-500">
         Why it is a draft, and what is being checked:{" "}
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-medium text-stone-900">The short version</h2>
           <p className="mt-2 text-sm leading-6">
             What you type or say into the finder is processed in your own browser and never
-            reaches us. The only information we hold is what you deliberately hand over — a
+            reaches us. The only information we hold is what you deliberately hand over, a
             name and email if you join the community list, or contact preferences if a practice
             invites you. Everything below is the detail of those two sentences.
           </p>
@@ -52,7 +52,7 @@ export default function PrivacyPolicyPage() {
           header above records the O35 restructure: the draft led with a product that was not yet
           running "while the product people actually use today, the public finder, appeared
           nowhere. That inverted the reader's risk." O192 added a second interface and every privacy
-          claim on this page stayed scoped to the first — the word "network" appeared seven-to-nil
+          claim on this page stayed scoped to the first, the word "network" appeared seven-to-nil
           against "finder" on the rendered page.
 
           The honest statement here is the reassuring one, which is exactly why leaving it unsaid
@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
             telling us who you are.
           </p>
           <p className="mt-2 text-sm leading-6">
-            If you type a suburb, that word is looked up on your device too — the site never asks
+            If you type a suburb, that word is looked up on your device too, the site never asks
             your browser for your location. Once a suburb is recognised, the results screen shows a
             map of it drawn from OpenStreetMap: your browser fetches the map tiles for that area from
             the OpenStreetMap Foundation&apos;s servers, so that service learns which area is being
@@ -96,7 +96,7 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
         <section>
-          <h2 className="text-lg font-medium text-stone-900">What we collect today — the complete list</h2>
+          <h2 className="text-lg font-medium text-stone-900">What we collect today, the complete list</h2>
           <p className="mt-2 text-sm leading-6">
             For the community interest list: the name, email address and interest options a
             person chooses, with their consent. We use these details only to contact them about
@@ -105,19 +105,19 @@ export default function PrivacyPolicyPage() {
           </p>
           <p className="mt-3 text-sm leading-6">
             If a practice invites you to book through a personal link, the contact choices you
-            set on that page — whether we may text you and during which hours — are kept, so
+            set on that page, whether we may text you and during which hours, are kept, so
             they can be honoured. That is the whole of it: no accounts, no profiles, and nothing
             collected from the finder itself.
           </p>
         </section>
         <section>
-          <h2 className="text-lg font-medium text-stone-900">When practices connect — not yet in force</h2>
+          <h2 className="text-lg font-medium text-stone-900">When practices connect, not yet in force</h2>
           <p className="mt-2 text-sm leading-6">
             ADHD.ME is building software that will offer available appointment times to a
             practice&apos;s existing patients, on the practice&apos;s instructions. When that
             runs, the practice will remain the custodian of its patient records, and ADHD.ME
             will process only contact details, appointment history and consent flags supplied by
-            the practice&apos;s systems — to determine eligibility for invitations, to send
+            the practice&apos;s systems, to determine eligibility for invitations, to send
             them, and to measure whether they led to attended appointments. It will not process
             clinical notes, diagnoses or test results, and will never use patient information
             for advertising. None of this happens today: no practice is connected and no real
@@ -128,7 +128,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-medium text-stone-900">Access, correction and deletion</h2>
           <p className="mt-2 text-sm leading-6">
             If you are on the community interest list, email us and we will show you what we
-            hold, correct it, or delete it — you do not need to be anyone&apos;s patient to ask.
+            hold, correct it, or delete it, you do not need to be anyone&apos;s patient to ask.
             The same goes for contact preferences set through a booking link.
           </p>
           <p className="mt-3 text-sm leading-6">
@@ -164,9 +164,9 @@ export default function PrivacyPolicyPage() {
               interface where nothing is automated at all. On a page whose job is saying what
               decides things about you, "the network decides nothing" is a fact, not a filler.
             */}
-            Two things are automated, and the network is neither of them — it lists every GP in
+            Two things are automated, and the network is neither of them, it lists every GP in
             roster order and decides nothing. The finder orders clinicians using nothing but the
-            words of your current request and what each clinician has declared — no history, no
+            words of your current request and what each clinician has declared, no history, no
             profile of you. And when appointment invitations run, automation will decide which
             patients are offered available times. Our{" "}
             <Link href="/privacy/automated-decisions" className="underline">
@@ -180,7 +180,7 @@ export default function PrivacyPolicyPage() {
           <p className="mt-2 text-sm leading-6">
             The service runs on Vercel&apos;s hosting platform, and information it holds may be
             stored on infrastructure in the United States. Access is limited to the owners,
-            transport is encrypted, and no production credentials live in the codebase — the
+            transport is encrypted, and no production credentials live in the codebase, the
             product&apos;s own build gates enforce that.
           </p>
         </section>
@@ -206,7 +206,7 @@ export default function PrivacyPolicyPage() {
             The hosting platform (Vercel) counts page visits without cookies: visits are
             grouped by a short-lived hash that is discarded within 24 hours, and no profile of
             you is built or kept. When you follow a booking link to Healthengine, we count that
-            the link was used — not who used it — and from the moment their page opens,
+            the link was used, not who used it, and from the moment their page opens,
             Healthengine&apos;s own privacy policy governs what you enter there.
           </p>
         </section>
@@ -225,14 +225,14 @@ export default function PrivacyPolicyPage() {
             <a className="underline" href="mailto:stefan.thottunkal@gmail.com">
               stefan.thottunkal@gmail.com
             </a>
-            . If the policy changes, the date and the change will be stated here — while it is
+            . If the policy changes, the date and the change will be stated here, while it is
             marked draft, it is not yet in force and no real patient data is processed.
           </p>
         </section>
         {/* Rendered ONLY when measurement is actually switched on (the same environment switch
             that loads the script), so this notice can never describe tracking that is not
             running, or stay silent about tracking that is. U13: the switch is necessary, not
-            sufficient — the tag also waits for the agreement, and stops when it is withdrawn. */}
+            sufficient, the tag also waits for the agreement, and stops when it is withdrawn. */}
         {GA_ID && (
           <section>
             <h2 className="text-lg font-medium text-stone-900">Site measurement</h2>
@@ -249,7 +249,7 @@ export default function PrivacyPolicyPage() {
     </main>
 
     {/*
-      O207: this page carried no footer at all — see the note on /clinicians/join. A legal notice
+      O207: this page carried no footer at all, see the note on /clinicians/join. A legal notice
       that ends with no way back to the site it governs is the same defect as a marketing page that
       does, and arguably worse: a reader sent here from a privacy link had no route onward.
     */}

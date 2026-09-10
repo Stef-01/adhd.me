@@ -116,7 +116,7 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
      */
     /* O56: the O4 boundary, now three grades. A stale open declaration still beats closed
        books (there is still a door to knock on), but no longer beats one confirmed this
-       quarter — capacity that nobody has reconfirmed is capacity the mechanism stops
+       quarter, capacity that nobody has reconfirmed is capacity the mechanism stops
        vouching for at a tie. */
     const byCapacity = CAPACITY_ORDER[capacityGrade(a, today)] - CAPACITY_ORDER[capacityGrade(b, today)];
     if (byCapacity !== 0) return byCapacity;
@@ -369,9 +369,9 @@ export function labelInSentence(need: NeedSignal): string {
  */
 export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
   const facet = need.facet;
-  let after = " — not something they declare. Another listing may.";
+  let after = ", not something they declare. Another listing may.";
   if (facet.kind === "language") {
-    after = " — not listed among the languages they consult in. Another listing may.";
+    after = ", not listed among the languages they consult in. Another listing may.";
   } else if (facet.kind === "preference") {
     const detail: Record<typeof facet.preference, string> = {
       "woman-gp": "this GP does not match that preference",
@@ -379,7 +379,7 @@ export function missedAskParts(need: NeedSignal): { before: string; label: strin
       "bulk-billing": "this listing does not show bulk billing",
       "longer-appointment": "this listing does not show a longer first appointment",
     };
-    after = ` — ${detail[facet.preference]}. Another listing may.`;
+    after = `, ${detail[facet.preference]}. Another listing may.`;
   }
   return {
     before: "You also asked for ",
@@ -553,7 +553,7 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
  * exact defect O1 removed. The caller picks by whether the clinician has match evidence.
  */
 export const CLOSED_BOOKS_COPY =
-  "Their books are closed to new patients right now — shown because they fit what you asked. The practice can say when that changes.";
+  "Their books are closed to new patients right now, shown because they fit what you asked. The practice can say when that changes.";
 export const CLOSED_BOOKS_NEUTRAL_COPY =
   "Their books are closed to new patients right now. The practice can say when that changes.";
 
@@ -598,17 +598,17 @@ export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
 /** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   informed: "",
-  tied: "Both of these answer what you asked for equally well, so this is not a ranking — read both.",
+  tied: "Both of these answer what you asked for equally well, so this is not a ranking, read both.",
   // O48: one sentence, not three lines. The clarifier beneath owns the "say more" invitation,
   // so this line only has to state the fact.
   unmatched:
-    "We could not tell what you are looking for, so this is everyone we list — not an order.",
+    "We could not tell what you are looking for, so this is everyone we list, not an order.",
   /* O111: the sentence for a request that WAS read and that nobody listed answers. The old
      copy claimed a failure of comprehension where the real failure is coverage, which is the
-     product blaming the reader for its own gap — and it rendered directly above the line that
+     product blaming the reader for its own gap, and it rendered directly above the line that
      names the gap. This one is true, and it hands off to that line instead of contradicting
      it. `unservedAsks` supplies the specifics; this only has to stop lying. */
-  unserved: "We understood what you asked for. Nobody listed today answers it — so this is everyone we list, not an order.",
+  unserved: "We understood what you asked for. Nobody listed today answers it, so this is everyone we list, not an order.",
 };
 
 /**
@@ -749,13 +749,13 @@ export function orderNote(
   const inProse = namedWith(labelInSentence);
   if (quality === "unserved") {
     return nearest
-      ? `No listed ${noun.one} declares ${inProse}, so nothing below is ordered by it — this is every listed ${noun.one}, nearest first.`
-      : `No listed ${noun.one} declares ${inProse}, so nothing below is ordered by it — this is every listed ${noun.one}, in the order the listing holds them.`;
+      ? `No listed ${noun.one} declares ${inProse}, so nothing below is ordered by it, this is every listed ${noun.one}, nearest first.`
+      : `No listed ${noun.one} declares ${inProse}, so nothing below is ordered by it, this is every listed ${noun.one}, in the order the listing holds them.`;
   }
   if (quality === "tied") {
     return nearest
       ? `You asked about ${inProse}, and the listed ${noun.many} answer that too similarly to rank, so nearer rooms come first.`
-      : `You asked about ${inProse}, and the listed ${noun.many} answer that too similarly to rank — read this as a list, not an order.`;
+      : `You asked about ${inProse}, and the listed ${noun.many} answer that too similarly to rank, read this as a list, not an order.`;
   }
   const asListed = namedWith((need) => need.label);
   return nearest
@@ -774,7 +774,7 @@ export function topTieNote(query: string, roster: readonly Clinician[] = clinici
   if (matchQuality(query, roster) !== "informed") return null;
   const top = rankBands(query, roster)[0];
   if (!top || top.clinicians.length < 2) return null;
-  return `The first ${top.clinicians.length} all answer what you asked equally well, so the order between them is not a ranking — read them as a group.`;
+  return `The first ${top.clinicians.length} all answer what you asked equally well, so the order between them is not a ranking, read them as a group.`;
 }
 
 /**
@@ -1140,7 +1140,7 @@ export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): st
   if (!nearest) return null;
   const said = describeDistance(nearest.km);
   /* O85: with more than one consulting location the sentence names the rooms it measured
-     whenever they are not the primary suburb — a distance to the Hornsby rooms must never
+     whenever they are not the primary suburb, a distance to the Hornsby rooms must never
      render as though it were the distance to Double Bay. */
   return nearest.suburb === clinician.suburb ? said : `${said} (their ${nearest.suburb} rooms)`;
 }
@@ -1224,7 +1224,7 @@ export function getPersonalizedMatch(clinician: Clinician, query: string, roster
   const reason = signals.length === 0
     ? clinician.matchLine
     /* Labels keep the case they were authored in. Lower-casing them read tidily until a label
-       carried a proper noun — "Hindi-speaking" became "hindi-speaking", which is a typo on the
+       carried a proper noun, "Hindi-speaking" became "hindi-speaking", which is a typo on the
        one word in the sentence a reader is scanning for. */
     : `${clinician.shortName}: ${asList(signals.slice(0, 3))}.`;
 

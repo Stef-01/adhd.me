@@ -77,7 +77,7 @@ export function fitReason(provider: Fittable, need: Need | null): string | null 
   const raw = EXPERTISE_LABELS[lead];
   const label = /^[A-Z]{2,}/.test(raw) ? raw : raw.replace(/^\w/, (c) => c.toLowerCase());
   return primary.has(lead)
-    ? `Works on ${label} — the thing you said is hardest.`
+    ? `Works on ${label}, the thing you said is hardest.`
     : `Works on ${label}, which is part of what you described.`;
 }
 

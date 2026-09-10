@@ -30,7 +30,7 @@ export const FAQS: readonly FaqEntry[] = [
 
     The history is worth keeping because it is the same mistake twice. O204 rewrote this answer
     from "A finder" to "Two ways to find a GP" because O192 had given the product a second
-    interface and this page had gone five units without mentioning it — which mattered more than a
+    interface and this page had gone five units without mentioning it, which mattered more than a
     stale sentence, since the FAQPage JSON-LD is generated from this same list and published the
     out-of-date answer to search engines as structured data.
 
@@ -43,7 +43,7 @@ export const FAQS: readonly FaqEntry[] = [
   },
   {
     q: "Is ADHD.ME a medical service?",
-    a: "No. ADHD.ME is a finder, not a medical service. Nothing you type is interpreted as a fact about you — it is read only as a preference about the care you want. Whether an assessment is right for you is a conversation with a GP, not with a website.",
+    a: "No. ADHD.ME is a finder, not a medical service. Nothing you type is interpreted as a fact about you, it is read only as a preference about the care you want. Whether an assessment is right for you is a conversation with a GP, not with a website.",
   },
   {
     q: "Do I need a referral to see a GP for ADHD?",
@@ -60,7 +60,7 @@ export const FAQS: readonly FaqEntry[] = [
       profiles are invented, labelled on every surface that renders them, and several of them sit
       on the Gold Coast because the gazetteer's flagship regional demo is there. A reader holds
       those apart because the screen labels them. A model reading this page flat does not, and the
-      merge it would make — "ADHD.ME lists GPs in Sydney and on the Gold Coast" — is a claim about
+      merge it would make, "ADHD.ME lists GPs in Sydney and on the Gold Coast", is a claim about
       real availability that only invented profiles support. So the answer states both facts and
       the difference between them, which is also the honest thing to tell a person.
     */
@@ -79,7 +79,7 @@ export const FAQS: readonly FaqEntry[] = [
   },
   {
     q: "What happens to what I type or say into ADHD.ME?",
-    a: "It is matched on your own device and used to order the list, and that is all. If you use the microphone, your browser's own speech service converts the audio — ADHD.ME never records or receives it. The privacy page states what is kept and what is not.",
+    a: "It is matched on your own device and used to order the list, and that is all. If you use the microphone, your browser's own speech service converts the audio, ADHD.ME never records or receives it. The privacy page states what is kept and what is not.",
   },
   {
     q: "How do I book an appointment through ADHD.ME?",

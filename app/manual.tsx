@@ -37,7 +37,6 @@ export function MyManual() {
   return (
     <div className="me-screen learn-screen manual-screen">
       <header className="life-head">
-        <span className="life-eyebrow">My Manual</span>
         <h1 className="life-title">How I work, in my own words.</h1>
         <p className="life-lede">Yours to write and change.</p>
       </header>

@@ -11,17 +11,17 @@ export default function PracticesPage() {
   return (
     <div className="min-h-screen bg-white text-stone-900">
       {/*
-        O206: THIS PAGE CARRIED TWO SITE BARS, 133px OF CHROME BEFORE A WORD OF CONTENT — the only
+        O206: THIS PAGE CARRIED TWO SITE BARS, 133px OF CHROME BEFORE A WORD OF CONTENT, the only
         public route where the site header did not start at y=0.
 
         The top one was `DemoNavigator`, which is a demo TOUR switcher: a dropdown of four "demo
         stops" for walking somebody through the product. Presenter chrome, on a public B2B landing
         page addressed to practice owners who are not on a guided tour. It stays exactly as it is on
-        /demo, /console and the clinician walkthrough — the contexts it was built for.
+        /demo, /console and the clinician walkthrough, the contexts it was built for.
 
         HOW BOTH CAME TO BE HERE. O189 added `PublicHeader` to eight surfaces its census found
         "carried breadcrumbs but NO wordmark", and listed practices among them. This page DID have
-        one — inside `DemoNavigator`, which renders it as a dropdown trigger rather than as the plain
+        one, inside `DemoNavigator`, which renders it as a dropdown trigger rather than as the plain
         home link the census looked for. So a fix for "no wordmark anywhere" put a second one on the
         one page in its list that already had one, and left a stray empty fragment beside it.
 
@@ -40,7 +40,7 @@ export default function PracticesPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-end gap-6 px-6 py-3 text-sm text-stone-600">
           {/* The three anchors carried their own `hidden sm:inline` from when this nav was always
               rendered. The nav itself is `hidden sm:block` now, so those were a second copy of the
-              same breakpoint — and a second copy is what drifts. */}
+              same breakpoint, and a second copy is what drifts. */}
           <a href="#practice-story" className="t-tint hover:text-stone-900">{C.nav.story}</a>
           <a href="#how" className="t-tint hover:text-stone-900">{C.nav.product}</a>
           <a href="#measurement" className="t-tint hover:text-stone-900">{C.nav.measurement}</a>
@@ -78,14 +78,14 @@ export default function PracticesPage() {
               </p>
               {/* This chapter's three statements used to be `font-serif` — which on this page
                   resolves to Tailwind's default `ui-serif, Georgia`, a third family the site never
-                  chose — and 8bcce38's one type scale moved every `h1`–`h4` outside the console
+                  chose, and 8bcce38's one type scale moved every `h1`, `h4` outside the console
                   into the house sans by an unlayered law. So the family, weight, leading and
                   tracking these three asked for stopped applying; what is left is the size, and
                   the size no longer had a register to justify it: at desk width this statement
                   rendered 60px against the page's own 48px `h1`, so the loudest line on the
                   practice-facing landing page was not its pitch. The `sm:` bumps are deleted
-                  rather than replaced with a new size — the base sizes already step 36 → 30 under
-                  the 48px `h1` — and the inert utilities go with them. */}
+                  rather than replaced with a new size, the base sizes already step 36 → 30 under
+                  the 48px `h1`, and the inert utilities go with them. */}
               <h2 className="mt-4 max-w-3xl text-4xl">{C.practiceStory.heading}</h2>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600">{C.practiceStory.body}</p>
             </div>
@@ -97,7 +97,7 @@ export default function PracticesPage() {
               <div className="mt-7 flex items-end gap-3">
                 {/* The figures were the other half of the same `font-serif`, and the law does not
                     reach a `strong`, so they were the only text on the site still drawn in Georgia
-                    — at 96px, beside a heading in the house sans. The house precedent for a
+, at 96px, beside a heading in the house sans. The house precedent for a
                     display figure is the story's stat row (`.story-stats dt`): the sans, near-bold,
                     tightly tracked. `font-medium` came from a serif's optical weight and reads
                     thin in the sans at this size, so it is `font-semibold`. */}
@@ -234,8 +234,8 @@ export default function PracticesPage() {
       </main>
 
       {/*
-        O207: THIS PAGE HAD A `<footer>` AND NO WAY OUT OF IT. The element held two spans — the B2B
-        tagline and the not-medical-advice note — and zero links, so a practice owner who read to the
+        O207: THIS PAGE HAD A `<footer>` AND NO WAY OUT OF IT. The element held two spans, the B2B
+        tagline and the not-medical-advice note, and zero links, so a practice owner who read to the
         bottom was as stranded as on the three pages that had no footer at all. O206 worked on this
         page one unit earlier and did not notice, because it was measuring the top.
 

@@ -77,7 +77,6 @@ export function MatchFeedback() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
         <AppSettings />
-          <span className="life-eyebrow">After the appointment</span>
           <h1 tabIndex={-1}>Nothing to tell us about yet</h1>
           <p className="match-lede">This form opens once a GP has accepted your request.</p>
         </header>
@@ -109,7 +108,6 @@ export function MatchFeedback() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
         <AppSettings />
-          <span className="life-eyebrow">After the appointment</span>
           <h1 tabIndex={-1}>Thank you</h1>
           <p className="match-lede" data-testid="feedback-sent">Recorded. Never shown as a score.</p>
         </header>
@@ -124,7 +122,6 @@ export function MatchFeedback() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <span className="life-eyebrow">After the appointment</span>
         <h1 tabIndex={-1}>How did it go?</h1>
         <p className="match-lede">Three questions about the fit.</p>
       </header>

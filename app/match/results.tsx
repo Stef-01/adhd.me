@@ -45,7 +45,6 @@ export function MatchResults() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
         <AppSettings />
-          <span className="life-eyebrow">Find a GP</span>
           <h1 tabIndex={-1}>Nothing to show yet</h1>
           <p className="match-lede">Nothing here yet.</p>
         </header>
@@ -64,7 +63,6 @@ export function MatchResults() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <span className="life-eyebrow">Your matches</span>
         <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}, each with a reason`}</h1>
       </header>
 

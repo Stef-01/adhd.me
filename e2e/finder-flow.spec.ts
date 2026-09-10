@@ -400,7 +400,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   // The guard that keeps this non-vacuous: the pair must genuinely separate. If a roster change
   // ever makes both queries agree, this fails HERE, demanding a new pair rather than silently
   // asserting half as much.
-  expect(expected[0], "the two queries no longer rank oppositely — pick a separating pair").not.toEqual(
+  expect(expected[0], "the two queries no longer rank oppositely, pick a separating pair").not.toEqual(
     expected[1],
   );
 

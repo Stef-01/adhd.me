@@ -7,7 +7,7 @@ import { LearnHome } from "../../../lives/learn-home";
 export const metadata: Metadata = {
   alternates: { canonical: "/lives/learn" },
   robots: ROBOTS_META,
-  title: "Learn — ADHD Lives",
+  title: "Learn, ADHD Lives",
   description: "Sixteen practical strategies, two to five minutes each.",
 };
 

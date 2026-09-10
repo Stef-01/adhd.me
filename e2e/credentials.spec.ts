@@ -83,7 +83,7 @@ test("withdrawing removes the claim and records why", async ({ page, request }) 
   await expect(after.getByRole("button", { name: "Withdraw" })).toHaveCount(0);
 });
 
-test("the record survives the withdrawal — history is not deleted", async ({ page, request }) => {
+test("the record survives the withdrawal, history is not deleted", async ({ page, request }) => {
   // Withdrawing is a claim being retracted, not a row being erased. An audit that cannot see
   // that a credential once existed is not an audit.
   await request.post(`/api/mock/credentials?linkEmail=${encodeURIComponent(ME)}`);

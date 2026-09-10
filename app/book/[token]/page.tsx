@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 // reached from an SMS deserves its own title regardless.
 // noindex, not just robots.txt-disallowed (O19): a tokened page in a search index is a leaked
 // link even after the token expires.
-export const metadata = { title: "Your appointment — ADHD.ME", robots: { index: false, follow: false } };
+export const metadata = { title: "Your appointment, ADHD.ME", robots: { index: false, follow: false } };
 
 function Panel({ heading, children }: { heading: string; children: React.ReactNode }) {
   return (
@@ -156,7 +156,7 @@ export default async function BookingPage({
       <Panel heading={`Your ${kind} is booked`}>
         <p className="text-stone-600">
           {store.clinicianName} at {store.practiceName}
-          {appointment ? ` — ${new Date(appointment.startsAt).toLocaleString("en-AU")}` : ""}.
+          {appointment ? `, ${new Date(appointment.startsAt).toLocaleString("en-AU")}` : ""}.
         </p>
         <p className="text-sm text-stone-500">
           {isTelehealth

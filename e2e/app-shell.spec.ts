@@ -190,7 +190,7 @@ test("the sheet is a dialog: it traps focus, closes on Escape and gives focus ba
   await expect(trigger).toBeFocused();
 });
 
-test("the sheet's handle is a control, not an ornament — the drag has a tap equivalent", async ({ page }) => {
+test("the sheet's handle is a control, not an ornament, the drag has a tap equivalent", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.getByRole("button", { name: "Settings" }).click();

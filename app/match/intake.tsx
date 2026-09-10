@@ -98,7 +98,6 @@ export function MatchIntake() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <span className="life-eyebrow">Find a GP</span>
         <h1 tabIndex={-1}>What are you looking for?</h1>
       </header>
 

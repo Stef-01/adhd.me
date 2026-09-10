@@ -261,7 +261,7 @@ export function getRequestHeadline(value: string, fallback: string) {
 
 export function Wordmark() {
   /* O167: `translate="no"`. The guidelines ask for it on brand names, code tokens and identifiers,
-     and this one is all three — a name, a wordmark and a domain. Auto-translation renders "ADHD"
+     and this one is all three, a name, a wordmark and a domain. Auto-translation renders "ADHD"
      into the target language in several locales, so a reader who has their browser translating
      sees a product whose name is not the address they typed. */
   return (
@@ -276,15 +276,15 @@ export function FinderContext() {
   return (
     <aside className="finder-context">
       {/* O233: was "Early Sydney demo. …". The product should not call itself a demo in its own
-          copy, and the sentence's real content — where it operates, and who holds the appointment
-          times — survives without the word.
+          copy, and the sentence's real content, where it operates, and who holds the appointment
+          times, survives without the word.
           2026-09-03: the bare "Sydney." went with it. A place name alone at the head of a
-          disclaimer reads as a coverage claim — "this product covers Sydney" — and the tree no
+          disclaimer reads as a coverage claim, "this product covers Sydney", and the tree no
           longer supports that reading in either direction. The gazetteer (`src/geo/suburbs.ts`)
           covers TWO focus areas, northern Sydney/Double Bay (NSW) and the Gold Coast (QLD), so
           "Sydney" understates where a search resolves; but the only entries carrying `realPerson`
           are in Beecroft and Double Bay, so naming the Gold Coast here would OVERSTATE who is
-          actually listed — the coast is populated entirely by the example personas the settings
+          actually listed, the coast is populated entirely by the example personas the settings
           sheet already labels as fictional. The honest sentence is therefore about the listed
           doctors, not about the map, and it is the wording `/faq` was already vetted with: "The
           current listed doctors consult in Sydney." Coverage of the gazetteer's two areas is stated

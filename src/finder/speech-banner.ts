@@ -28,7 +28,7 @@ export interface SpeechBanner {
 export const NO_BANNER: SpeechBanner = { message: null, retryable: false };
 
 /** The browser ended recognition unasked with words in hand (O46): they land in the box, said. */
-export const MIC_STOPPED_COPY = "The microphone stopped on its own. What it heard is below — add to it, or search.";
+export const MIC_STOPPED_COPY = "The microphone stopped on its own. What it heard is below, add to it, or search.";
 
 export type SpeechBannerEvent =
   /** The microphone starting, or the typing screen left by any route: nothing to say. */

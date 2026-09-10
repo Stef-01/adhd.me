@@ -37,13 +37,12 @@ export function MyAdhd() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs">
       <LifeHeader />
       <header className="life-head">
-        <span className="life-eyebrow">My ADHD</span>
         <h1>My ADHD right now.</h1>
       </header>
 
       {record && !hasSignals(record) && (
         <section className="life-empty" aria-labelledby="my-empty">
-          <h2 id="my-empty">Nothing here yet — and that is honest.</h2>
+          <h2 id="my-empty">Nothing here yet, and that is honest.</h2>
           <p>Answer a module, or the ten questions.</p>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href={isComplete(record.onboarding) ? "/approach" : "/start"}>{isComplete(record.onboarding) ? "Explore a module" : "Start"} <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
@@ -57,7 +56,7 @@ export function MyAdhd() {
             <span className="life-eyebrow">Biggest friction</span>
             <h2 id="my-friction">{summary.need.label}.</h2>
             <p>
-              {summary.need.confidence === "high" ? "Consistently, across what you have told the app." : summary.need.confidence === "medium" ? "From one module so far — more will sharpen it." : "From onboarding only; a module would make this surer."}
+              {summary.need.confidence === "high" ? "Consistently, across what you have told the app." : summary.need.confidence === "medium" ? "From one module so far, more will sharpen it." : "From onboarding only; a module would make this surer."}
             </p>
             {summary.need.functionalCost > 0 && <p className="learn-card-foot">You put the cost at <span className="t-digit">{summary.need.functionalCost}</span> out of 10.</p>}
           </section>
@@ -80,7 +79,7 @@ export function MyAdhd() {
               return (
                 <p className="learn-card-foot" data-testid="nwia-balance">
                   <strong>Balance:</strong> your picture touches {balance.touched.map((d) => NWIA_LABELS[d].toLowerCase()).join(", ")}.
-                  {balance.untouched.length > 0 && <> Nothing yet on {balance.untouched.map((d) => NWIA_LABELS[d].toLowerCase()).join(", ")} — which is not a gap, only unasked.</>}
+                  {balance.untouched.length > 0 && <> Nothing yet on {balance.untouched.map((d) => NWIA_LABELS[d].toLowerCase()).join(", ")}, which is not a gap, only unasked.</>}
                   {" "}<Link href="/approach/map">See the map</Link>
                 </p>
               );
@@ -101,7 +100,7 @@ export function MyAdhd() {
 
           <section className="life-card" aria-labelledby="my-manual">
             <h2 id="my-manual">My Manual</h2>
-            <p>{record.manual.updatedAt ? "How you work, in your own words. Edit it any time." : "What helps you, what makes things harder, how to work with you — written by you, never for you."}</p>
+            <p>{record.manual.updatedAt ? "How you work, in your own words. Edit it any time." : "What helps you, what makes things harder, how to work with you, written by you, never for you."}</p>
             <div className="life-actions"><Link className="learn-secondary" href="/manual">{record.manual.updatedAt ? "Open my manual" : "Start my manual"}</Link></div>
           </section>
 
@@ -114,7 +113,7 @@ export function MyAdhd() {
           {record.onboarding?.medication === "yes" && (
             <section className="life-card" aria-labelledby="my-medication">
               <h2 id="my-medication">Medication</h2>
-              <p>{record.medication.updatedAt ? "Your note on what it changes and what it leaves. Edit it before the next conversation." : "Describe what it seems to change, what it leaves untouched and anything unwanted — to take to whoever manages it."}</p>
+              <p>{record.medication.updatedAt ? "Your note on what it changes and what it leaves. Edit it before the next conversation." : "Describe what it seems to change, what it leaves untouched and anything unwanted, to take to whoever manages it."}</p>
               <div className="life-actions"><Link className="learn-secondary" href="/medication">{record.medication.updatedAt ? "Open the note" : "Start the note"}</Link></div>
             </section>
           )}

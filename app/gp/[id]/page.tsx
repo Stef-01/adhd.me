@@ -39,7 +39,6 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
         <header className="match-profile-head">
           <Portrait gp={view} />
           <div>
-            <span className="life-eyebrow">GP profile</span>
             <h1 tabIndex={-1}>{view.name}</h1>
             <p>
               {view.practice}, {view.suburb}

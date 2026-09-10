@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/my-adhd" },
   robots: ROBOTS_META,
   title: "My ADHD",
-  description: "Your own picture — the biggest friction, what seems to contribute across brain, body, environment and people, and what has helped.",
+  description: "Your own picture, the biggest friction, what seems to contribute across brain, body, environment and people, and what has helped.",
 };
 
 export default function MyAdhdPage() {

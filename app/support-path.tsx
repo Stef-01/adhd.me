@@ -50,7 +50,6 @@ export function SupportPath() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs">
       <LifeHeader />
       <header className="life-head">
-        <span className="life-eyebrow">Support</span>
         <h1>{need ? "From the problem to the person." : "Start from the problem, not the profession."}</h1>
       </header>
 
@@ -83,7 +82,7 @@ export function SupportPath() {
             {strategies.length === 0 ? <p>The modules on this problem carry the strategies.</p> : (
               <ul className="life-list">
                 {strategies.slice(0, 4).map((s) => (
-                  <li key={s.id}>{tried.has(s.id) ? <Check size={16} weight="bold" aria-hidden="true" /> : <ArrowRight size={16} weight="bold" aria-hidden="true" />}<span>{s.title}{tried.has(s.id) ? " — on your list" : ""}</span></li>
+                  <li key={s.id}>{tried.has(s.id) ? <Check size={16} weight="bold" aria-hidden="true" /> : <ArrowRight size={16} weight="bold" aria-hidden="true" />}<span>{s.title}{tried.has(s.id) ? ", on your list" : ""}</span></li>
                 ))}
               </ul>
             )}
@@ -100,7 +99,7 @@ export function SupportPath() {
             <h2>When another person helps</h2>
             <p>
               {eligible
-                ? "You have tried what is here and it has not been enough. That is the point at which a person who does this for a living is worth it — not before."
+                ? "You have tried what is here and it has not been enough. That is the point at which a person who does this for a living is worth it, not before."
                 : "When the cost stays high after two or three honest attempts, or when you would simply rather work on it with somebody. Nothing here requires that yet."}
             </p>
             {need.contributors.some((c) => c.layer === "people") && <p>Sharing a module with them is one kind of help.</p>}

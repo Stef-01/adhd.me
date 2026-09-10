@@ -152,12 +152,12 @@ export const SCENES: readonly Scene[] = [
     heading: "Attention that runs on interest, not importance.",
     body:
       "ADHD is a difference in how attention, activity and impulse are regulated. The attention is " +
-      "there — it just does not always go where it is needed, and it can lock on hard when " +
+      "there, it just does not always go where it is needed, and it can lock on hard when " +
       "something is interesting. That is why the same person can lose a whole afternoon to one " +
       "thing and not manage a five-minute form.",
     detail: [
       "It is not a shortage of effort or care",
-      "It shows up across settings — work, home, study — not only in one",
+      "It shows up across settings, work, home, study, not only in one",
       "Hyperactivity can be internal: a restless mind rather than a restless body",
     ],
   },
@@ -182,7 +182,7 @@ export const SCENES: readonly Scene[] = [
     body:
       "The loud, fidgeting picture is the one most people know, and it is the one that gets " +
       "noticed at school. Inattention, daydreaming, internal restlessness and exhaustion from " +
-      "masking are easier to overlook — and are more often the shape it takes in women and girls.",
+      "masking are easier to overlook, and are more often the shape it takes in women and girls.",
     detail: [
       "Trying very hard and still falling behind is a common story",
       "Being organised on the surface can hide a lot of effort underneath",
@@ -212,7 +212,7 @@ export const SCENES: readonly Scene[] = [
     heading: "Put memory outside your head.",
     body:
       "Working memory is the scratchpad, and with ADHD the scratchpad is small. The move most " +
-      "people find useful is not to try harder to remember — it is to stop needing to. One " +
+      "people find useful is not to try harder to remember, it is to stop needing to. One " +
       "list, one place, always open.",
     detail: [
       "One list, not five apps",
@@ -226,8 +226,8 @@ export const SCENES: readonly Scene[] = [
     heading: "One thing, in view.",
     body:
       "Time is hard to feel from the inside, so make it visible. A timer you can see, one task " +
-      "on the screen, and a start that is deliberately small — two minutes, one paragraph, one " +
-      "email — because starting is the hard part and momentum does the rest.",
+      "on the screen, and a start that is deliberately small, two minutes, one paragraph, one " +
+      "email, because starting is the hard part and momentum does the rest.",
     detail: [
       "A visible timer beats a mental one",
       "Shrink the first step until it is silly",
@@ -239,7 +239,7 @@ export const SCENES: readonly Scene[] = [
     eyebrow: "Everyday",
     heading: "Borrow someone’s presence.",
     body:
-      "Doing a dull task next to another person — in the room, or on a call with cameras on — " +
+      "Doing a dull task next to another person, in the room, or on a call with cameras on, " +
       "makes it easier to start and to stay. People call it body doubling. It works for tax " +
       "returns, and it works for cleaning the kitchen.",
     detail: [
@@ -327,7 +327,7 @@ export const MYTH_OR_FACT: readonly Question[] = [
     prompt: "A quiz on the internet can tell you whether you have ADHD.",
     options: ["Myth", "Fact"],
     answer: 0,
-    explain: "Only an assessment with a clinician can. This quiz is about ADHD in general — it says nothing about you.",
+    explain: "Only an assessment with a clinician can. This quiz is about ADHD in general, it says nothing about you.",
   },
   {
     prompt: "ADHD can look quieter in women and girls.",
@@ -378,7 +378,7 @@ export const WORDS_YOU_WILL_HEAR: readonly Question[] = [
     prompt: "“A long appointment” usually means…",
     options: ["Twenty minutes or more, booked as such", "Any appointment that runs late", "A hospital stay"],
     answer: 0,
-    explain: "A long appointment is a booked slot of twenty minutes or more — the kind an assessment conversation needs.",
+    explain: "A long appointment is a booked slot of twenty minutes or more, the kind an assessment conversation needs.",
   },
 ];
 
@@ -386,7 +386,7 @@ export const MODULES: readonly LearnModule[] = [
   { id: "adhd", title: "What ADHD is", subtitle: "The word, adults, who gets overlooked, what assessment is", minutes: 4, tint: "route", kind: "read", scenes: ["09", "10", "11", "12"] },
   { id: "everyday", title: "Everyday strategies", subtitle: "Memory outside your head, one thing in view, borrowed presence", minutes: 3, tint: "accent", kind: "read", scenes: ["13", "14", "15", "16"] },
   { id: "myth-or-fact", title: "Myth or fact?", subtitle: "Six quick calls on what people get wrong", minutes: 2, tint: "ink", kind: "quiz", questions: MYTH_OR_FACT },
-  { id: "words", title: "Words you’ll hear", subtitle: "Titration, shared care, bulk billing — decoded", minutes: 2, tint: "route", kind: "quiz", questions: WORDS_YOU_WILL_HEAR },
+  { id: "words", title: "Words you’ll hear", subtitle: "Titration, shared care, bulk billing, decoded", minutes: 2, tint: "route", kind: "quiz", questions: WORDS_YOU_WILL_HEAR },
   { id: "finding", title: "Finding a GP", subtitle: "Why the search comes back empty", minutes: 3, tint: "accent", kind: "read", scenes: ["01", "02", "03"] },
   { id: "cost", title: "Time, money, distance", subtitle: "The questions nobody publishes", minutes: 2, tint: "ink", kind: "read", scenes: ["04", "05"] },
   { id: "changed", title: "What changed", subtitle: "NSW, Queensland, and one GP end to end", minutes: 2, tint: "route", kind: "read", scenes: ["06", "07", "08"] },

@@ -37,7 +37,7 @@ export function TeamPlates() {
                 className="story-member-photo"
                 src={f.portrait}
                 /* O152: was `${f.name}, co-founder of ADHD.ME`, which asserts a role the entry
-                   may not hold — the page is the TEAM, not only the people who started it. The name alone is
+                   may not hold, the page is the TEAM, not only the people who started it. The name alone is
                    the accurate alt for a portrait, and the role sits beside it in the markup. */
                 alt={f.name}
                 width={260}
@@ -51,7 +51,7 @@ export function TeamPlates() {
           <div className="story-member-id">
             <strong>{f.name}</strong>
             {/* O152: rendered only when supplied. A role and a remit are characterisations, and
-                W193 will not let this tree write one for a named person — so the honest
+                W193 will not let this tree write one for a named person, so the honest
                 intermediate state is a plate without them, not a plate with an invented line.
                 An empty `<span>`/`<p>` would also be the broken-empty-state the web guidelines
                 name. */}

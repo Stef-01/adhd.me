@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/approach/map" },
   robots: ROBOTS_META,
   title: "The care map",
-  description: "ADHD across brain, body, environment and people: a map of where in a life the difficulties sit, which modules work on each, and — on your device — where yours are.",
+  description: "ADHD across brain, body, environment and people: a map of where in a life the difficulties sit, which modules work on each, and, on your device, where yours are.",
 };
 
 export default function CareMapPage() {
@@ -22,7 +22,6 @@ export default function CareMapPage() {
         <AppSettings />
       </div>
       <header className="life-head">
-        <span className="life-eyebrow">The care map</span>
         <h1>Where ADHD sits in a life.</h1>
       </header>
       <CareMap />
