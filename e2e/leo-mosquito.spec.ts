@@ -126,8 +126,11 @@ test("touch play can clear every wave with untimed mode independently selected",
 
 test("swarm controls and meters fit four screen widths and remain accessible", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 844 }); await page.goto(URL);
+    await expect(page.getByRole("timer")).toHaveText("No timer");
+    await expect(page.getByRole("button", { name: "Play Leo’s moment" })).toBeVisible();
     const play = await page.getByRole("button", { name: "Play Leo’s moment" }).boundingBox();
     expect(play!.y + play!.height).toBeLessThanOrEqual(844);
     await page.getByRole("button", { name: "Play Leo’s moment" }).click();
@@ -144,6 +147,7 @@ test("swarm controls and meters fit four screen widths and remain accessible", a
   await clearUntimedSwarm(page);
   await expectNoViolations(page, "Leo swarm result");
   await expect(page.getByRole("button", { name: "Skip this round" })).toHaveCount(0);
+  expect(errors).toEqual([]);
 });
 
 test("Leo's swarm clears in the Chaos Run and keeps navigation visible", async ({ page }) => {

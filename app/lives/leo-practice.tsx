@@ -14,7 +14,11 @@ type Phase = "ready" | "playing" | "paused" | "success" | "failure";
 
 /** Independently replayable. Practice does not write a learning profile or arcade score. */
 export function LeoPractice() {
-  const reduced = Boolean(useReducedMotion());
+  const prefersReduced = useReducedMotion();
+  const [motionReady, setMotionReady] = useState(false);
+  const reduced = motionReady && Boolean(prefersReduced);
+  // Countdown copy must match the server until hydration has completed.
+  useEffect(() => { setMotionReady(true); }, []);
   const [untimed, setUntimed] = useState(false);
   const [buzzOn, setBuzzOn] = useState(true);
   const roundAudio = useRef<LeoBuzz | null>(null);
