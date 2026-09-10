@@ -34,7 +34,9 @@ export function TheoGame({ scene, live, reducedMotion, progress, onResult, outco
             onPointerDown={() => { dragged.current = false; }}
             onDragStart={() => { dragged.current = true; setDragging(item); }}
             onDragEnd={(event) => {
-              setDragging(null); const box = pad.current?.getBoundingClientRect();
+              setDragging(null);
+              if (event.type === "pointercancel" || event.type === "touchcancel") return;
+              const box = pad.current?.getBoundingClientRect();
               if (box && "clientX" in event && event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom) act(item);
             }}
             onClick={() => { if (!dragged.current) act(item); dragged.current = false; }}

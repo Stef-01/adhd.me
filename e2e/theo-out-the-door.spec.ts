@@ -85,3 +85,26 @@ test("phone touch can finish an untimed morning", async ({ browser }) => {
   for (const item of ["Keys", "Phone", "Shoes"]) await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).tap();
   await page.getByRole("button", { name: "Open the door" }).tap(); await expect(page.getByRole("heading", { name: "And you’re off!" })).toBeVisible(); await context.close();
 });
+
+test("an interrupted touch drag does not pack an item; releasing on the pad does", async ({ browser, browserName }) => {
+  test.skip(browserName !== "chromium", "Native touch cancellation is injected through Chromium's input protocol.");
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
+  const page = await context.newPage(); await page.goto(URL); await page.getByLabel("No timer", { exact: true }).check(); await page.getByRole("button", { name: "Play Theo’s morning" }).tap();
+  const cdp = await context.newCDPSession(page);
+  const target = page.getByRole("button", { name: "Pick up Keys", exact: true });
+  const pad = await page.getByRole("group", { name: "Launch pad", exact: true }).boundingBox();
+  for (const cancel of [true, false]) {
+    const box = await target.boundingBox(), x = box!.x + box!.width / 2, y = box!.y + 30;
+    const tx = pad!.x + pad!.width / 2, ty = pad!.y + pad!.height / 2;
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+    for (let step = 1; step <= 10; step++) {
+      await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x + (tx - x) * step / 10, y: y + (ty - y) * step / 10 }] });
+      await page.waitForTimeout(20);
+    }
+    await cdp.send("Input.dispatchTouchEvent", { type: cancel ? "touchCancel" : "touchEnd", touchPoints: [] });
+    await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", cancel ? "0" : "1");
+    // Wait for the cancelled object's spring to settle before grabbing it again.
+    await page.waitForTimeout(500);
+  }
+  await context.close();
+});
