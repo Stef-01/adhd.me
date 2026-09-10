@@ -38,15 +38,17 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
     await open(page);
     await page.evaluate(() => document.fonts.ready);
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
-    // Firefox loses its sequential-focus starting point when the control that opened a screen is
-    // removed with that screen; anchoring the start on <main> lets the ring be walked and wrapped.
+    // Firefox keeps its sequential-focus starting point where the control that opened a screen
+    // used to be, and once Tab leaves the document it does not come back; so on Firefox the
+    // starting point is put back at the top of the body, through a throwaway anchor whose
+    // position survives its removal (the spec's focus fixup), and the ring is walked from there.
     if (test.info().project.name === "firefox") {
       await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>("main");
-        if (!main) return;
-        main.setAttribute("tabindex", "-1");
-        main.focus();
-        main.removeAttribute("tabindex");
+        const anchor = document.createElement("span");
+        anchor.setAttribute("tabindex", "-1");
+        document.body.prepend(anchor);
+        anchor.focus();
+        anchor.remove();
       });
     }
 
