@@ -9,7 +9,13 @@ import { useEffect } from "react";
  */
 export function Hydrated() {
   useEffect(() => {
-    document.documentElement.setAttribute("data-hydrated", "1");
+    // Counted, not flagged: the root layout stamps once, the app template stamps again when the
+    // screen inside the loading boundary is live. The suite waits for the stamp the route needs.
+    const el = document.documentElement;
+    el.setAttribute("data-hydrated", String(Number(el.getAttribute("data-hydrated") ?? "0") + 1));
+    return () => {
+      el.setAttribute("data-hydrated", String(Math.max(0, Number(el.getAttribute("data-hydrated") ?? "1") - 1)));
+    };
   }, []);
   return null;
 }
