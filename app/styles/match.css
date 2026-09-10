@@ -90,3 +90,11 @@ details.match-disclosure > p { margin: 4px 0 0; }
 .platform-console .gp-answer > * { min-width: 0; max-width: 100%; }
 .platform-console .gp-answer select { width: 100%; max-width: 100%; }
 .platform-console .gp-answer .console-field { flex: 1 1 200px; }
+/* Folds everywhere share one shape: a 44px summary, no marker, a plus that turns to a minus. */
+.me-fold > summary, .learn-shelf > summary, .lives-more > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; list-style: none; }
+.me-fold > summary::-webkit-details-marker, .learn-shelf > summary::-webkit-details-marker, .lives-more > summary::-webkit-details-marker { display: none; }
+.me-fold > summary::after, .learn-shelf > summary::after { content: "+"; margin-left: auto; font-weight: 800; color: var(--accent); }
+.me-fold[open] > summary::after, .learn-shelf[open] > summary::after { content: "2"; }
+.platform-shell .learn-shelf > summary.lives-section-title { margin: 0; padding: 6px 0; }
+.platform-shell .learn-shelf[open] > summary.lives-section-title { margin-bottom: 8px; }
+.me-fold > summary { font-size: 0.9375rem; font-weight: 650; }
