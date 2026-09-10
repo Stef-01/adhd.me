@@ -89,7 +89,7 @@
 .life-eyebrow { display: block; margin-bottom: 6px; color: var(--accent); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 .life-head h1 {
   margin: 0 0 8px; color: var(--ink);
-  font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
+  font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
 }
 .life-head p { margin: 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
 .life-card { margin: 0 0 14px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-raised); }
