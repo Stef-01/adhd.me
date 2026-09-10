@@ -43,6 +43,13 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
   await drive(page, "miss", async () => (await page.locator(".lives-results").count()) > 0);
   await expect(page.getByRole("button", { name: "Again" })).toBeVisible();
   await expect(page.locator(".lives-survived")).toContainText("3 moments survived");
+  // §37: one reflection question, the moments met as its options, answered once and noted.
+  const reflection = page.getByTestId("lives-reflection");
+  await expect(reflection.getByRole("heading")).toHaveText("Which moment felt most like your life?");
+  expect(await reflection.getByRole("button").count()).toBeLessThanOrEqual(7);
+  await reflection.getByRole("button").first().click();
+  await expect(page.getByTestId("lives-reflected")).toContainText("Noted");
+  await expect(reflection.getByRole("button")).toHaveCount(0);
   // Anything feel familiar? At least one character came up in three games (the director steers fun to 20–30%).
   const thisIsMe = page.getByRole("button", { name: "This is me" }).first();
   await expect(thisIsMe).toBeVisible();

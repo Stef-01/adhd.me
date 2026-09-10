@@ -134,7 +134,7 @@
 .lives-bigscore { margin: 0; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3.5rem, 20vw, 6rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
 .lives-survived, .lives-high { margin: 0; color: var(--muted); font-size: 1rem; font-weight: 600; }
 .lives-again { margin-top: 12px; min-height: 72px; padding: 18px 44px; font-size: 1.375rem; }
-.lives-familiar, .lives-try { max-width: 640px; margin: 0 auto; padding-top: 22px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.lives-reflection, .lives-familiar, .lives-try { max-width: 640px; margin: 0 auto; padding-top: 22px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
 .lives-section-title { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 .lives-cards { display: grid; gap: 12px; margin: 0 0 22px; padding: 0; list-style: none; }
 .lives-moment { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; align-items: center; }

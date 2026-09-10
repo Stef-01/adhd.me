@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowCounterClockwise, BookmarkSimple, Check, Play, X } from "@phosphor-icons/react";
 import { character, dismissStrategy, recentlyCompleted, recommendStrategies, recordResonance, saveStrategy, STRATEGIES, type CharacterId, type ResonanceSignal, type SessionState } from "@/lives";
 import { track } from "@/model/events";
+import { REFLECTION_NONE, REFLECTION_QUESTION, reflectionOptions } from "@/lives/reflection";
 import { LifeBean } from "./bean";
 import { useProfile } from "./profile-hook";
 
@@ -44,6 +45,16 @@ export function Results({ session, highBefore, onAgain }: { session: SessionStat
   const shown = useRef<Set<string>>(new Set());
   useEffect(() => { for (const r of recommendations) { if (shown.current.has(r.strategy.id)) continue; shown.current.add(r.strategy.id); track("STRATEGY_IMPRESSION", { strategy: r.strategy.id, score: r.score }); } }, [recommendations]);
   const signalFor = (id: CharacterId) => profile?.resonanceSignals.find((s) => s.sourceType === "character" && s.sourceId === id)?.response;
+  // §37: one question per run. `reflected` is "" for "none", a game id once answered, null before.
+  const reflection = useMemo(() => reflectionOptions(session), [session]);
+  const [reflected, setReflected] = useState<string | null>(null);
+  const reflect = (gameId: string | null) => {
+    setReflected(gameId ?? "");
+    if (gameId) {
+      apply((s) => recordResonance(s, { sourceType: "game", sourceId: gameId, response: "this_is_me" }));
+      track("RESONANCE_SELECTED", { source: gameId, response: "this_is_me" });
+    }
+  };
 
   return (
     <section className="lives-results play-run" aria-labelledby="lives-results-title" data-phase="over">
@@ -58,6 +69,21 @@ export function Results({ session, highBefore, onAgain }: { session: SessionStat
         <button type="button" className="play-tempt is-go lives-again" onClick={onAgain} autoFocus><ArrowCounterClockwise size={18} weight="bold" aria-hidden="true" /> Again</button>
       </div>
 
+      {reflection.length > 0 && (
+        <div className="lives-reflection" data-testid="lives-reflection">
+          <h2 className="lives-section-title" id="lives-reflection-title">{REFLECTION_QUESTION}</h2>
+          {reflected === null ? (
+            <div className="lives-choices" role="group" aria-labelledby="lives-reflection-title">
+              {reflection.map((o) => (
+                <button key={o.gameId} type="button" className="lives-choice is-small" onClick={() => reflect(o.gameId)}>{o.label}</button>
+              ))}
+              <button type="button" className="lives-choice is-small is-quiet" onClick={() => reflect(null)}>{REFLECTION_NONE}</button>
+            </div>
+          ) : (
+            <p className="lives-saved" data-testid="lives-reflected">{reflected === "" ? "Noted." : `${reflection.find((o) => o.gameId === reflected)?.label ?? ""}. Noted.`}</p>
+          )}
+        </div>
+      )}
       {met.length > 0 && (
         <div className="lives-familiar">
           <h2 className="lives-section-title">Anything feel familiar?</h2>
