@@ -75,7 +75,7 @@ export function LivesLab() {
       <section className="life-card" aria-labelledby="lab-director">
         <h2 id="lab-director">Director</h2>
         <label className="lives-lab-row"><span>Seed</span><input value={seed} maxLength={40} onChange={(e) => setSeed(e.target.value.replace(/[^a-z0-9_-]/gi, ""))} /></label>
-        <div className="lives-lab-scroll"><table className="lives-lab-table"><thead><tr><th scope="col">#</th><th scope="col">Game</th><th scope="col">Refused</th><th scope="col">Rules that fired</th></tr></thead>
+        <div className="lives-lab-scroll" tabIndex={0} role="region" aria-label="Director run, as a table"><table className="lives-lab-table"><thead><tr><th scope="col">#</th><th scope="col">Game</th><th scope="col">Refused</th><th scope="col">Rules that fired</th></tr></thead>
           <tbody>{run.map((row) => <tr key={row.index}><td className="t-digit">{row.index + 1}</td><td><code>{row.game}</code></td><td className="t-digit">{row.rejected}</td><td>{row.rules.join("; ") || "—"}</td></tr>)}</tbody>
         </table></div>
       </section>
