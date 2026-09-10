@@ -9,10 +9,10 @@ import { useEffect, useState } from "react";
 import { DECLINE_REASON_LABELS } from "@/lib/matching/labels";
 import type { PatientView } from "@/lib/matching/views";
 import { Badges, Portrait } from "./gp-bits";
-import { MATCH_STATUS_COPY, clearPatientId, fetchPatient, readPatientId } from "./session";
+import { FROM_TAB_COPY, MATCH_STATUS_COPY, clearPatientId, clearView, fetchPatient, readPatientId, type HeldView } from "./session";
 
 export function MatchResults() {
-  const [view, setView] = useState<PatientView | null | "none">(null);
+  const [view, setView] = useState<HeldView | null | "none">(null);
 
   useEffect(() => {
     const id = readPatientId();
@@ -66,6 +66,11 @@ export function MatchResults() {
         {view.heard.length > 0 && <p className="match-lede">Heard in what you wrote: {view.heard.slice(0, 5).join(", ")}.</p>}
       </header>
 
+      {view.fromTab && (
+        <p className="match-note" data-testid="from-tab">
+          {FROM_TAB_COPY}
+        </p>
+      )}
       {view.note && <p className="match-note">{view.note}</p>}
 
       <ol className="match-cards" data-testid="match-cards">
@@ -112,6 +117,7 @@ export function MatchResults() {
           type="button"
           onClick={() => {
             clearPatientId();
+            clearView();
             window.location.assign("/match");
           }}
         >
@@ -121,8 +127,9 @@ export function MatchResults() {
           type="button"
           data-testid="delete-request"
           onClick={async () => {
-            await fetch(`/api/match/patient/${encodeURIComponent(view.id)}`, { method: "DELETE" });
+            await fetch(`/api/match/patient/${encodeURIComponent(view.id)}`, { method: "DELETE" }).catch(() => null);
             clearPatientId();
+            clearView();
             window.location.assign("/match");
           }}
         >

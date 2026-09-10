@@ -13,7 +13,7 @@ import { AGE_GROUPS, type AgeGroup, type BillingPreference, type ConsultStyle } 
 import { AGE_GROUP_LABELS, BILLING_LABELS, CONSULT_STYLE_LABELS } from "@/lib/matching/labels";
 import { NARRATIVE_MAX, NARRATIVE_MIN, type PatientView } from "@/lib/matching/views";
 import { SPEECH_DISCLOSURE, speechUnavailable, startSpeech, type SpeechSession } from "@/voice/speech";
-import { writePatientId } from "./session";
+import { writePatientId, writeView } from "./session";
 
 const ERROR_COPY: Record<string, string> = {
   narrative: `Say a little more: between ${NARRATIVE_MIN} and ${NARRATIVE_MAX} characters.`,
@@ -81,6 +81,7 @@ export function MatchIntake() {
       }
       const view = (await response.json()) as PatientView;
       writePatientId(view.id);
+      writeView(view);
       router.push("/match/results");
     } catch {
       setError(ERROR_COPY.failed!);

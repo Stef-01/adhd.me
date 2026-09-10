@@ -10,10 +10,10 @@ import { useEffect, useState } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { TIMELINE_TEMPLATE } from "@/lib/matching/checklist";
 import type { PatientView } from "@/lib/matching/views";
-import { fetchPatient, readPatientId } from "./session";
+import { FROM_TAB_COPY, fetchPatient, readPatientId, writeView, type HeldView } from "./session";
 
 export function MatchPrep() {
-  const [view, setView] = useState<PatientView | null | "none">(null);
+  const [view, setView] = useState<HeldView | null | "none">(null);
   const [copied, setCopied] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -35,12 +35,13 @@ export function MatchPrep() {
     if (!view || view === "none" || !view.checklist) return;
     const optimistic = { ...view, checklist: { ...view.checklist, items: view.checklist.items.map((i) => (i.id === itemId ? { ...i, done } : i)) } };
     setView(optimistic);
-    const response = await fetch("/api/match/checklist", {
+    // The tab keeps the tick either way; the server keeps it when it still holds the request.
+    writeView(optimistic);
+    await fetch("/api/match/checklist", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ patientId: view.id, itemId, done }),
-    });
-    if (!response.ok) setView(view);
+    }).catch(() => null);
   }
 
   if (view === null) {
@@ -82,6 +83,11 @@ export function MatchPrep() {
         </p>
       </header>
 
+      {view.fromTab && (
+        <p className="match-note" data-testid="from-tab">
+          {FROM_TAB_COPY}
+        </p>
+      )}
       <ul className="match-checklist" data-testid="match-checklist">
         {view.checklist.items.map((item) => (
           <li key={item.id} className={item.required ? "is-required" : ""}>

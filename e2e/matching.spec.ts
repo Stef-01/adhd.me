@@ -191,6 +191,22 @@ test("the GP list reads the learning loop as a report, unchanged until eight rec
   await expect(rows.first()).toContainText("0.50");
 });
 
+test("when the server has forgotten the request, the tab still shows it and says so", async ({ page, request }) => {
+  await intake(page);
+  const cards = await page.locator(".match-card").count();
+  // The server moves on (a reset stands in for another serverless instance); the tab remembers.
+  await request.post("/api/mock/matching");
+  await page.reload();
+  await expect(page.getByTestId("from-tab")).toBeVisible();
+  await expect(page.locator(".match-card")).toHaveCount(cards);
+  await page.goto("/match/prep");
+  await expect(page.getByTestId("from-tab")).toBeVisible();
+  const box = page.getByTestId("match-checklist").locator('input[type="checkbox"]').first();
+  await box.check();
+  await page.reload();
+  await expect(page.getByTestId("match-checklist").locator('input[type="checkbox"]').first()).toBeChecked();
+});
+
 test("signed-out access to the GP dashboard redirects to sign-in", async ({ page }) => {
   await page.goto("/console/gp");
   await expect(page).toHaveURL(/\/console\/signin$/);

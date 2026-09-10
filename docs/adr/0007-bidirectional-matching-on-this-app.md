@@ -64,6 +64,15 @@ surface (`src/compliance/landing.ts`, `src/directory/profile.ts`).
 
 ## Consequences
 
+- **On a serverless host the store is per instance, and the two sides only meet on one process.**
+  Found on the first live probe after shipping: the intake succeeded on one instance and the
+  results read landed on another, which had never seen it. The patient side therefore keeps the
+  view it was given in the tab's session storage and reads it back when the server has moved on,
+  saying so on the screen; the GP dashboard and the mutual feedback are a single-process
+  demonstration (the e2e suite, `pnpm dev`, `/demo`) until Phase M5 wires the store. This is the
+  same posture every other store in the tree has, made visible by the first surface where the
+  two sides have to meet.
+
 - `PLAN.md` gains Phase M, the six-month sprint, with M1 to M4 shipped in this unit and M5 to M6
   planned. `CONTEXT.md` gains the vocabulary.
 - Three founder decisions are opened rather than answered here: whether a GP-facing evidence upload

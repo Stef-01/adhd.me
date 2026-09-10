@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Rating } from "@/lib/matching/types";
 import type { PatientView } from "@/lib/matching/views";
-import { fetchPatient, readPatientId } from "./session";
+import { fetchPatient, readPatientId, type HeldView } from "./session";
 
 const QUESTIONS: ReadonlyArray<{ key: "fit" | "communication" | "clinicalAppropriateness"; label: string; low: string; high: string }> = [
   { key: "fit", label: "Did you feel understood?", low: "Not at all", high: "Completely" },
@@ -35,7 +35,7 @@ function Scale({ id, value, onChange, low, high }: { id: string; value: Rating |
 }
 
 export function MatchFeedback() {
-  const [view, setView] = useState<PatientView | null | "none">(null);
+  const [view, setView] = useState<HeldView | null | "none">(null);
   const [matchId, setMatchId] = useState<string>("");
   const [answers, setAnswers] = useState<Record<string, Rating | null>>({ fit: null, communication: null, clinicalAppropriateness: null });
   const [text, setText] = useState("");

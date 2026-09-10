@@ -237,7 +237,10 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
       checklist from the GP's side too, `DELETE /api/match/patient/[id]`); the timeline headings
       as text on the clipboard; and the learning loop read as a report on `/console/gp` (the
       five declared weights, the weights in use, the correlation each rests on, and the record
-      count against the floor), which M6 asked for.
+      count against the floor), which M6 asked for. **Known on the live site (2026-09-10):** the
+      store is in memory per serverless instance, so the patient's screens keep their own copy
+      in the tab and say when it came from there; a GP answering from the console reaches the
+      patient only on one process. Wiring the store is what M5 is for, and this is why.
 - [ ] **M6 (to 2027-03-09): the pilot.** Real GPs on their own declarations (the real-person
       law), ten to twenty matched patients, the learning loop run on real records and its weight
       shifts read as a report, the top-three explanation tested for comprehension, and the
