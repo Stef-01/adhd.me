@@ -632,7 +632,7 @@ function Balance({ round, live, reducedMotion, progress, mood, onResult }: Mecha
   const load = round.prop === "kitchen" ? "mug" : round.prop === "door" ? "key" : "sheet";
   return (
     <div className="play-balance">
-      <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} bean={bean} stake={Math.abs(x - 0.5) * 2}>
+      <Scene prop={round.prop} who={round.who} mood={mood} look={round.look} bean={bean} wall={false} stake={Math.abs(x - 0.5) * 2}>
         <div className="play-tray in-scene" aria-hidden="true" data-zone={inZone}>
           <svg viewBox="0 0 240 100" className="play-tray-art">
             <path d="M108 96l12-24 12 24z" className="t-deep" />

@@ -379,3 +379,6 @@
 /* Stage 3: in Leo's bedroom the window is up on the right, so the moment and its button keep left of it. */
 .lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) { align-items: flex-start; padding-inline: 22px; }
 .lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) .lives-hold-button { margin-left: 6px; }
+/* The crossing starts where its character stands. */
+.lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; filter: drop-shadow(0 4px 4px rgb(23 32 51 / 0.24)); }
+.lives-trace:has(.lives-trace-who) ~ .lives-scene-bean, .lives-scene:has(.lives-trace-who) .lives-scene-bean { display: none; }

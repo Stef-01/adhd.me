@@ -76,7 +76,7 @@ function Window({ x, y, w, h, dark = 0, children }: { x: number; y: number; w: n
 function Pendant({ x, drop = 90 }: { x: number; drop?: number }) {
   const y = -250 + drop;
   return <>
-    <path d={`M${x} -250v${drop}`} className="s-deep" strokeWidth="2" />
+    <path d={`M${x} -900V${y}`} className="s-deep" strokeWidth="2" />
     <ellipse cx={x} cy={y + 34} rx="34" ry="15" className="f-warm" opacity=".26" />
     <path d={`M${x - 20} ${y + 20}h40l-10-20h-20z`} className="f-deep" />
   </>;
@@ -119,7 +119,7 @@ const WALLS: Readonly<Record<Prop, ReactNode>> = {
     <rect x="58" y="-134" width="52" height="34" rx="2" className="f-light" transform="rotate(5 84 -117)" /><circle cx="68" cy="-182" r="4" className="f-accent" /><circle cx="133" cy="-176" r="4" className="f-accent" />
     <rect x="30" y="-196" width="152" height="112" rx="6" fill="none" className="s-deep" strokeWidth="4" /><Pendant x={292} drop={80} />
   </>,
-  ball: <><circle cx="300" cy="-192" r="30" className="f-warm" /><Cloud x={84} y={-202} /><Cloud x={212} y={-142} s={0.8} /><path d="M0 0q60-40 120-10t120-8 120 6v12H0z" className="f-accent" opacity=".55" /><circle cx="40" cy="-18" r="22" className="f-accent" /><circle cx="330" cy="-14" r="18" className="f-accent" /></>,
+  ball: <><Cloud x={250} y={-400} s={0.9} /><circle cx="300" cy="-192" r="30" className="f-warm" /><Cloud x={84} y={-202} /><Cloud x={212} y={-142} s={0.8} /><path d="M0 0q60-40 120-10t120-8 120 6v12H0z" className="f-accent" opacity=".55" /><circle cx="40" cy="-18" r="22" className="f-accent" /><circle cx="330" cy="-14" r="18" className="f-accent" /></>,
   lecture: <><Pendant x={60} drop={60} /><Pendant x={180} drop={60} /><Pendant x={300} drop={60} /><rect x="30" y="-122" width="202" height="42" rx="6" className="f-mid" /><rect x="44" y="-108" width="122" height="10" rx="4" className="f-light" /><Clock cx={318} cy={-104} r={20} /></>,
   bed: <>
     <Window x={40} y={-206} w={98} h={122} dark={0.6} /><circle cx="110" cy="-172" r="12" className="f-warm" />
@@ -150,18 +150,18 @@ const WALLS: Readonly<Record<Prop, ReactNode>> = {
     {[60, 150, 240, 330].map((x) => <path key={x} d={`M${x} -226V-6`} className="s-mid" strokeWidth="3" opacity=".45" />)}<path d="M0 -142h360" className="s-mid" strokeWidth="3" opacity=".45" />
     <rect x="30" y="-112" width="100" height="62" rx="4" className="f-mid" opacity=".5" /><Clock cx={196} cy={-184} r={22} />
   </>,
-  crossing: <><Cloud x={70} y={-214} /><Cloud x={252} y={-190} s={0.9} /><Skyline /></>,
+  crossing: <><Cloud x={210} y={-400} s={0.8} /><Cloud x={70} y={-214} /><Cloud x={252} y={-190} s={0.9} /><Skyline /></>,
   shop: <>
-    {[50, 180, 310].map((x) => <g key={x}><path d={`M${x} -250v40`} className="s-deep" strokeWidth="2" /><rect x={x - 40} y="-210" width="80" height="30" rx="5" className="f-accent" /><rect x={x - 26} y="-199" width="52" height="8" rx="3" className="f-light" /></g>)}
+    {[50, 180, 310].map((x) => <g key={x}><path d={`M${x} -900V-210`} className="s-deep" strokeWidth="2" /><rect x={x - 40} y="-210" width="80" height="30" rx="5" className="f-accent" /><rect x={x - 26} y="-199" width="52" height="8" rx="3" className="f-light" /></g>)}
     {[20, 140, 260].map((x) => <rect key={x} x={x} y="-140" width="80" height="8" rx="3" className="f-light" opacity=".7" />)}
   </>,
-  street: <><Cloud x={92} y={-206} /><circle cx="300" cy="-202" r="24" className="f-warm" opacity=".8" /><Skyline /><path d="M40 0V-122h26" fill="none" className="s-deep" strokeWidth="5" /><ellipse cx="66" cy="-114" rx="12" ry="7" className="f-warm" /></>,
+  street: <><Cloud x={250} y={-390} s={0.85} /><Cloud x={92} y={-206} /><circle cx="300" cy="-202" r="24" className="f-warm" opacity=".8" /><Skyline /><path d="M40 0V-122h26" fill="none" className="s-deep" strokeWidth="5" /><ellipse cx="66" cy="-114" rx="12" ry="7" className="f-warm" /></>,
   study: <>
     <rect x="20" y="-232" width="132" height="222" rx="4" className="f-mid" />
     {[-192, -132, -72].map((y) => <g key={y}>{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={30 + i * 18} y={y - (22 + (i % 3) * 6)} width="14" height={22 + (i % 3) * 6} rx="1.5" className={["f-deep", "f-warm", "f-accent", "f-light"][i % 4]} />)}<rect x="20" y={y} width="132" height="6" className="f-deep" /></g>)}
     <Window x={200} y={-200} w={122} h={112} dark={0.4} /><Pendant x={262} drop={20} />
   </>,
-  none: <><Cloud x={82} y={-182} /><Cloud x={262} y={-122} s={0.8} /></>,
+  none: <><Cloud x={240} y={-380} s={0.9} /><Cloud x={82} y={-182} /><Cloud x={262} y={-122} s={0.8} /></>,
 };
 
 /** One place per prop. The part marked `play-prop` reacts once when the scene is up (PLAY-PLAN §11). */
@@ -334,7 +334,7 @@ function PropArt({ prop, stake }: { prop: Prop; stake: number }) {
 
 function band(stake: number): "low" | "mid" | "high" { return stake < 0.34 ? "low" : stake < 0.67 ? "mid" : "high"; }
 
-export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, look, stake = 0, children, className }: {
+export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, look, stake = 0, wall = true, children, className }: {
   prop?: Prop; who: Character; mood: Mood; beanSize?: number; look?: "fit";
   /** Replaces the plain bean (a mechanic's bean button). */
   bean?: ReactNode;
@@ -342,6 +342,8 @@ export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, 
   result?: "hit" | "miss";
   /** 0 to 1, how far the round's stake has gone: one thing in the place changes with it. */
   stake?: number;
+  /** The wall above the furniture; off where a mechanic puts its own thing in that band. */
+  wall?: boolean;
   children?: ReactNode; className?: string;
 }) {
   const t = SCENE_TINTS[prop];
@@ -350,7 +352,7 @@ export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, 
   return (
     <div className={`play-scene${className ? ` ${className}` : ""}`} data-prop={prop} data-result={result} data-mood={mood} data-stake={band(clamped)} style={style}>
       <svg className="play-scene-art" viewBox="0 -250 360 450" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
-        {WALLS[prop]}
+        {wall && WALLS[prop]}
         <PropArt prop={prop} stake={clamped} />
       </svg>
       <div className="play-scene-bean">{bean ?? <Bean who={who} mood={mood} size={beanSize} look={look} />}</div>

@@ -14,6 +14,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { escalatedLabel, hitFxOf, markAt, positionAt, releaseVerdict, SCENE, tauntAt, timingHit, traceIsSafe, worldOf, type Entity, type GameDefinition, type GameScene, type HitFx, type Point } from "@/lives";
+import { LifeBean } from "./bean";
 import { LeoMosquito } from "./leo-mosquito";
 import { kindFor, SceneArt, Sprite } from "./scenes";
 
@@ -175,7 +176,9 @@ function TracePath({ game, scene, live, reducedMotion, reducedSensory, progress,
           {points.length > 1 && <polyline points={points.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" className="lives-trace-line" strokeWidth={scene.pathWidth ?? 40} strokeLinecap="round" strokeLinejoin="round" />}
         </svg>
         {hazards.map((e, i) => <Thing key={e.id} e={e} index={i} caption tabIndex={-1} aria-hidden="true" className="is-hazard" />)}
-        <span className="lives-trace-label is-start" style={{ left: pct(scene.start?.x ?? 0, SCENE.width), top: pct(scene.start?.y ?? 0, SCENE.height) }}>{character}</span>
+        {game.character === "random"
+          ? <span className="lives-trace-label is-start" style={{ left: pct(scene.start?.x ?? 0, SCENE.width), top: pct(scene.start?.y ?? 0, SCENE.height) }}>{character}</span>
+          : <span className="lives-trace-who" style={{ left: pct(scene.start?.x ?? 0, SCENE.width), top: pct(scene.start?.y ?? 0, SCENE.height) }}><LifeBean who={game.character} mood="engaged" size={56} /></span>}
         <span className="lives-trace-label is-goal" style={{ left: pct(scene.goal?.x ?? 0, SCENE.width), top: pct(scene.goal?.y ?? 0, SCENE.height) }}>Safe</span>
       </div>
       {!pickRoutes && <button type="button" className="lives-skip" disabled={!live} onClick={() => setPickRoutes(true)}>Pick a route instead</button>}

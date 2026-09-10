@@ -342,3 +342,5 @@ body:has(.play-run) { overflow-x: clip; }
 .play-fall-label { padding: 2px 9px; border-radius: 999px; background: color-mix(in srgb, var(--play-paper) 92%, transparent); font-size: 0.75rem; white-space: nowrap; }
 .play-fall.is-decoy { background: transparent; }
 .play-fall.is-decoy .play-fall-art { background: var(--stone); box-shadow: 0 5px 0 color-mix(in srgb, var(--play-ink) 8%, transparent); }
+/* The title bean stands in the room beside its furniture, not in front of it. */
+.play-card.is-title:has(.play-place) .play-hero-bean { align-self: flex-start; width: 128px; height: auto; margin-left: 5%; }

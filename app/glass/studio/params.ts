@@ -28,7 +28,7 @@ export const STUDIO = {
 
 /** The game surfaces the WebGL layer draws, inside a [data-liquid] scope only (app/styles/glass.css). */
 export const GLASS_SELECTOR = [
-  ".learn-stack .learn-card", ".leo-feature", ".learn-play-card", ".lives-play", ".play-tempt", ".play-choice", ".play-hut",
+  ".learn-stack .learn-card", ".leo-feature", ".learn-play-card", ".lives-play", ".play-tempt:not(.play-tempt-thing)", ".play-choice", ".play-hut",
   ".play-x", ".lives-choice", ".lives-row", ".learn-show-all",
 ].map((s) => `[data-liquid] ${s}`).join(", ");
 
