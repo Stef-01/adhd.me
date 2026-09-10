@@ -6,6 +6,7 @@
 // configuration and the strategy joins the Toolkit as "trying". No article walls, no quiz, no
 // "lesson complete"; every card is one thing and one button.
 
+import { transcript } from "@/lives/transcripts";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Check, Pause, Play, Plus, SkipForward } from "@phosphor-icons/react";
@@ -87,7 +88,7 @@ function Block({ block, isLast, onNext, onFinish, onConfig, reducedMotion }: { b
     case "reflection": return <ReflectionBlock prompt={block.prompt} onNext={onNext} />;
     case "interactive_practice": return <Practice activityId={block.activityId} instruction={block.instruction} onDone={onNext} />;
     case "timer": return <TimerBlock seconds={block.durationSeconds} label={block.label} allowSkip={block.allowSkip} onDone={onNext} reducedMotion={reducedMotion} />;
-    case "audio": return <><p className="play-line">{`Audio is not in this build yet. The transcript is ${block.transcriptId}.`}</p><Next onNext={onNext} /></>;
+    case "audio": return <TranscriptBlock transcriptId={block.transcriptId} seconds={block.durationSeconds} onNext={onNext} />;
     case "checklist": return <ChecklistBlock items={block.items} allowCustom={block.allowCustomItems} onDone={(chosen) => { onConfig("checklist", chosen); onNext(); }} />;
     case "scenario": return <ScenarioBlock characterId={block.characterId} prompt={block.prompt} choices={block.choices} onNext={onNext} />;
     case "action_plan": return <ActionPlan prompt={block.prompt} options={block.options} isLast={isLast} onPick={(o) => (isLast ? onFinish(o) : (onConfig("plan", o), onNext()))} />;
@@ -233,5 +234,19 @@ function MeetingAnchor({ instruction, onDone }: { instruction: string; onDone: (
       </div>
       {returned && <><p className="play-line lives-feedback" role="status">Three thoughts parked, three returns. That is the whole move.</p><Next onNext={onDone} /></>}
     </>
+  );
+}
+
+/** §72 without a recording: the session's words, one line at a time, and a way on. */
+function TranscriptBlock({ transcriptId, seconds, onNext }: { transcriptId: string; seconds: number; onNext: () => void }) {
+  const t = transcript(transcriptId);
+  return (
+    <div className="lives-transcript" data-testid="lives-transcript">
+      <p className="lives-kicker">{`About ${Math.max(1, Math.round(seconds / 60))} ${seconds >= 90 ? "minutes" : "minute"}. Read at your own pace.`}</p>
+      <ol className="lives-transcript-lines">
+        {(t?.lines ?? []).map((line, i) => <li key={i}>{line}</li>)}
+      </ol>
+      <Next onNext={onNext} />
+    </div>
   );
 }

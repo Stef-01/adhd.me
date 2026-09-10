@@ -1,4 +1,5 @@
 // §110: content validation. Broken references fail CI (src/lives/lives.test.ts calls this).
+import { transcript } from "./transcripts";
 import { CHARACTER_IDS, INPUT_MECHANICS, LEARNING_DOMAINS, MECHANIC_ENGINES, type GameDefinition, type LearningModule, type StrategyDefinition } from "./types";
 
 export interface ContentProblem { readonly where: string; readonly problem: string }
@@ -43,10 +44,14 @@ export function validateContent(games: readonly GameDefinition[], strategies: re
     for (const d of m.domains) if (!LEARNING_DOMAINS.includes(d)) add(`module/${m.id}`, `unknown domain ${d}`);
     for (const b of m.blocks) {
       if (b.type === "audio" && (!b.audioAssetId || !b.transcriptId)) add(`module/${m.id}`, "audio without asset or transcript");
+      if (b.type === "audio" && b.transcriptId && !transcript(b.transcriptId)) add(`module/${m.id}`, `audio transcript ${b.transcriptId} is not in the register (§72)`);
       if (b.type === "scenario" && b.choices.length < 2) add(`module/${m.id}`, "scenario with fewer than two choices");
       if (b.type === "timer" && b.durationSeconds <= 0) add(`module/${m.id}`, "timer without a duration");
     }
     if (!strategies.some((s) => s.moduleId === m.id)) add(`module/${m.id}`, "no strategy points at this module");
+    // §76: every module names what it rests on. A citation without a type or a type without a citation is neither.
+    if (!m.sources || m.sources.length === 0) add(`module/${m.id}`, "no evidence reference (§76)");
+    for (const src of m.sources ?? []) if (!src.citation.trim()) add(`module/${m.id}`, "evidence reference without a citation");
   }
   return out;
 }

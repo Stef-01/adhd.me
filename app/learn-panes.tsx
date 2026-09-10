@@ -5,7 +5,7 @@
 //
 //   Games are other people's moments. The Chaos Run's eight lives, Leo's mosquito, and the twenty
 //   bean runs all walk a person through a scene of somebody else's ADHD; what they raise is
-//   awareness ("this is me"). Modules are the moves: the sixteen strategy modules the Lives loop
+//   awareness ("this is me"). Modules are the moves: the nineteen strategy modules the Lives loop
 //   recommends from that awareness, and the reads and quizzes about ADHD itself. Two to five
 //   minutes each, structured, and ordered "for you" from what the games surfaced.
 //

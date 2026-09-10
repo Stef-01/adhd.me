@@ -180,8 +180,15 @@ native later. Mapped from the PRD's phases 0–6:
       sixteen modules full — recognise, understand, try, personalise, one action — with the
       validator and the suite refusing a stub. Every new game is linked from its strategies so
       the score screen can bring it back. (2026-09-09)
-- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound; audio blocks
-      (§72) have no asset yet. Done 2026-09-10: haptics behind a chip (`src/lives/haptics.ts`,
+- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound; audio
+      recordings (§72) have no asset yet, though the three sessions that want them exist. Done
+      2026-09-10 (later): §16's five sessions complete (the 60-second reset, before a difficult
+      conversation, brain-everywhere grounding join the sleep settle and the transition reset),
+      each with a visual timer, a skip and its transcript as data behind an audio block
+      (`src/lives/transcripts.ts`; the renderer reads the transcript until a recording exists;
+      the validator refuses an audio block without one); §76 evidence references on all nineteen
+      modules, document-level citations only, the validator refusing a module without one; §37's
+      one post-run reflection question. Done 2026-09-10: haptics behind a chip (`src/lives/haptics.ts`,
       off by default), reduced flashing and reduced sensory effects as device flags read by the
       run, more strategy mappings with coverage asserted, props that react in place. Done: a relaxed-timing setting (half as long again on
       every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
