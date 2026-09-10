@@ -26,7 +26,11 @@ import {
   type TitrationPace,
 } from "@/lib/matching/types";
 import { serverNow } from "@/lib/server-clock";
-import { requireSession } from "../guard";
+import { isAdhdMeStaff } from "@/tenancy/staff";
+import { practiceRecord } from "@/console/store";
+import type { PracticeId } from "@/domain/types";
+import { claimGP, gpAccessFor, releaseGP, type Viewer } from "@/lib/matching/access";
+import { requirePractice } from "../guard";
 
 const PHILOSOPHIES: readonly PrescribingPhilosophy[] = ["stimulant-first", "non-stimulant-first", "case-by-case", "non-prescribing"];
 const PACES: readonly TitrationPace[] = ["gradual", "standard", "brisk"];
@@ -38,12 +42,41 @@ function back(gpId: string, key: string, kind: "saved" | "error"): never {
   redirect(`/console/gp/${encodeURIComponent(gpId)}?${kind}=${key}`);
 }
 
-function gpFromForm(formData: FormData): GP {
+/** The session as the access rule sees it: its practice, whether it is staff. */
+async function viewer(): Promise<Viewer & { practiceId: string }> {
+  const { email, record } = await requirePractice();
+  return { practiceId: record.practice.id as string, staff: isAdhdMeStaff(email), practiceExists: (id) => practiceRecord(id as PracticeId) !== null };
+}
+
+/** The profile named by the form, only when this practice manages it. */
+async function gpFromForm(formData: FormData): Promise<GP> {
+  const who = await viewer();
   const gpId = formData.get("gpId");
   if (typeof gpId !== "string") redirect("/console/gp?error=failed");
   const gp = gpById(gpId);
   if (!gp) redirect("/console/gp?error=not_found");
+  if (gpAccessFor(gp, who) !== "manage") redirect("/console/gp?error=not_yours");
   return gp;
+}
+
+export async function claimProfile(formData: FormData): Promise<void> {
+  const who = await viewer();
+  const gpId = formData.get("gpId");
+  if (typeof gpId !== "string") redirect("/console/gp?error=failed");
+  const result = claimGP(gpId, who, getMatching());
+  if (!result.ok) redirect(`/console/gp?error=${result.reason === "not_found" ? "not_found" : "not_yours"}`);
+  saveGP(result.gp);
+  redirect(`/console/gp/${encodeURIComponent(gpId)}?saved=claimed`);
+}
+
+export async function releaseProfile(formData: FormData): Promise<void> {
+  const who = await viewer();
+  const gpId = formData.get("gpId");
+  if (typeof gpId !== "string") redirect("/console/gp?error=failed");
+  const result = releaseGP(gpId, who, getMatching());
+  if (!result.ok) redirect(`/console/gp?error=${result.reason === "not_found" ? "not_found" : "not_yours"}`);
+  saveGP(result.gp);
+  redirect("/console/gp?saved=released");
 }
 
 function text(formData: FormData, name: string, max: number): string {
@@ -65,8 +98,7 @@ function oneOf<T extends string>(value: FormDataEntryValue | null, allowed: read
 }
 
 export async function saveProfile(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const bio = text(formData, "bio", 3000);
   if (bio.length < 20) back(gp.id, "bio_short", "error");
   const years = formData.get("years");
@@ -100,8 +132,7 @@ export async function saveProfile(formData: FormData): Promise<void> {
 }
 
 export async function savePreferences(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const minimum = Number(formData.get("minimumFit"));
   if (!Number.isFinite(minimum) || minimum < 0 || minimum > 1) back(gp.id, "minimum", "error");
   const ageGroups = picked<AgeGroup>(formData, "prefAgeGroups", AGE_GROUPS);
@@ -122,8 +153,7 @@ export async function savePreferences(formData: FormData): Promise<void> {
 }
 
 export async function saveCapacity(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const current = Number(formData.get("current"));
   const max = Number(formData.get("max"));
   if (!Number.isInteger(max) || max < 0 || max > 60) back(gp.id, "capacity", "error");
@@ -139,8 +169,7 @@ export async function saveCapacity(formData: FormData): Promise<void> {
  * that a document of that name was offered, and when.
  */
 export async function uploadEvidence(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const file = formData.get("evidence");
   if (!(file instanceof File) || file.name.trim() === "") back(gp.id, "evidence_missing", "error");
   if (file.size > 8 * 1024 * 1024) back(gp.id, "evidence_size", "error");
@@ -155,8 +184,7 @@ export async function uploadEvidence(formData: FormData): Promise<void> {
 }
 
 export async function answerMatch(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const matchId = formData.get("matchId");
   const answer = formData.get("answer");
   if (typeof matchId !== "string" || (answer !== "accept" && answer !== "decline")) back(gp.id, "failed", "error");
@@ -177,8 +205,7 @@ export async function answerMatch(formData: FormData): Promise<void> {
 }
 
 export async function completeMatch(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const matchId = formData.get("matchId");
   if (typeof matchId !== "string") back(gp.id, "failed", "error");
   const match = matchById(matchId);
@@ -189,8 +216,7 @@ export async function completeMatch(formData: FormData): Promise<void> {
 }
 
 export async function gpFeedback(formData: FormData): Promise<void> {
-  await requireSession();
-  const gp = gpFromForm(formData);
+  const gp = await gpFromForm(formData);
   const matchId = formData.get("matchId");
   if (typeof matchId !== "string") back(gp.id, "failed", "error");
   const match = matchById(matchId);

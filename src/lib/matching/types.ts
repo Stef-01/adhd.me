@@ -193,6 +193,8 @@ export type GP = {
   realPerson: boolean;
   /** Image path when the roster supplies one. */
   image: string | null;
+  /** The console practice that has claimed this profile, or null while nobody has (M5 scoping). */
+  practiceId: string | null;
 };
 
 /** One criterion of a ranking, as the ranking module scores it. Mirrored here to keep types acyclic. */

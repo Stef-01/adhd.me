@@ -85,5 +85,8 @@ surface (`src/compliance/landing.ts`, `src/directory/profile.ts`).
   add form); whether "felt understood" counts may appear on a public profile at all under the
   Ahpra testimonial guidance, given they are counts rather than scores; and whether the existing
   finder should route to `/match` or the two coexist.
-- The console gains `/console/gp` under Configure. In this build any signed-in console account
-  may manage any listed profile; the page says so.
+- The console gains `/console/gp` under Configure. Since 2026-09-10 a profile is managed by the
+  practice that claimed it (`src/lib/matching/access.ts`, `practiceId` on the GP row, migration
+  0007): unclaimed profiles are claimable by any practice, a claimed one is reachable by that
+  practice's members and ADHD.ME staff only, and every action re-checks. A claim is a declaration,
+  not a verification; the list says so.

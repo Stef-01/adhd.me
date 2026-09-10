@@ -49,6 +49,7 @@ export function gp(overrides: Omit<Partial<GP>, "credentials" | "preferences"> &
     shortName: "Dr Example",
     practice: "Example Practice",
     practiceLocation: { suburb: "Epping", postcode: null },
+    practiceId: null,
     telehealthAvailable: true,
     acceptingNewPatients: true,
     credentials: {

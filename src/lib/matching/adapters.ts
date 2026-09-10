@@ -130,6 +130,7 @@ export function gpFromClinician(clinician: Clinician, today: Date = new Date()):
       minimumFit: 0.3,
     },
     bioEmbedding: null,
+    practiceId: null,
     verificationStatus: verified ? "verified" : "pending",
     verifiedBy: verified ? "example verifier" : null,
     verifiedOn: verified ? "2026-08-01" : null,

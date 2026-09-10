@@ -82,6 +82,7 @@ export const toRow = {
     appointment_length: g.appointmentLength,
     real_person: g.realPerson,
     image: g.image,
+    practice_id: g.practiceId,
   }),
   match_matches: (m: Match) => ({
     id: m.id,
@@ -160,6 +161,7 @@ export const fromRow = {
     appointmentLength: str(r.appointment_length),
     realPerson: r.real_person === true,
     image: strOrNull(r.image),
+    practiceId: strOrNull(r.practice_id),
   }),
   match_matches: (r: Row): Match => ({
     id: str(r.id),

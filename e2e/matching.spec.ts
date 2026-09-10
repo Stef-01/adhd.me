@@ -74,6 +74,12 @@ test("the GP dashboard receives the request, takes a capacity, and accepts it; t
   await signInAndOnboard(gpPage, MANAGER_EMAIL);
   await gpPage.goto("/console/gp");
   await expect(gpPage.getByTestId("gp-list")).toBeVisible();
+  // M5 scoping: the practice claims the profile first; until then the dashboard is not reachable.
+  await gpPage.goto(`/console/gp/${gpId}`);
+  await expect(gpPage).toHaveURL(/\/console\/gp\?error=not_yours$/);
+  await gpPage.getByTestId(`claim-${gpId}`).click();
+  await expect(gpPage).toHaveURL(new RegExp(`/console/gp/${gpId}\\?saved=claimed$`));
+  await expect(gpPage.getByTestId("gp-saved")).toContainText("Claimed");
   await gpPage.goto(`/console/gp/${gpId}`);
   const request = gpPage.locator(`[data-testid="incoming-request"][data-match="${matchId}"]`);
   await expect(request).toBeVisible();
@@ -136,6 +142,8 @@ test("declining needs a reason, and the person sees the reason on their side", a
   const gpPage = await gpContext.newPage();
   await gpPage.request.post("/api/mock/console");
   await signInAndOnboard(gpPage, MANAGER_EMAIL);
+  await gpPage.goto("/console/gp");
+  await gpPage.getByTestId(`claim-${gpId}`).click();
   await gpPage.goto(`/console/gp/${gpId}`);
   const request = gpPage.locator(`[data-testid="incoming-request"][data-match="${matchId}"]`);
   await request.locator('select[name="reason"]').selectOption("outside_scope");
@@ -168,6 +176,8 @@ test("deleting a request removes it from the GP's side too, and the tab forgets 
   const gpPage = await gpContext.newPage();
   await gpPage.request.post("/api/mock/console");
   await signInAndOnboard(gpPage, MANAGER_EMAIL);
+  await gpPage.goto("/console/gp");
+  await gpPage.getByTestId(`claim-${gpId}`).click();
   await gpPage.goto(`/console/gp/${gpId}`);
   await expect(gpPage.locator(`[data-testid="incoming-request"][data-match="${matchId}"]`)).toHaveCount(0);
   await expect(gpPage.getByTestId("requests-empty")).toBeVisible();

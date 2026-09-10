@@ -5,13 +5,17 @@
 // consult went from their side. Credential evidence is offered here by name; the check itself is
 // somebody else's act and is recorded with a date when it happens.
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { EI_QUALITY_KEYS } from "@/demo/emotional-fit";
 import { AGE_GROUP_LABELS, BILLING_LABELS, COMORBIDITY_LABELS, CONSULT_STYLE_LABELS, DECLINE_REASON_LABELS, MANNER_LABELS, PACE_LABELS, PHILOSOPHY_LABELS, VERIFICATION_LABELS } from "@/lib/matching/labels";
 import { allFeedback, allMatches, gpById, matchesForGP, patientById } from "@/lib/matching/store";
 import { AGE_GROUPS, COMORBIDITIES, type DeclineReason, type PrescribingPhilosophy, type TitrationPace } from "@/lib/matching/types";
 import { incomingRequestView } from "@/lib/matching/views";
-import { requireSession } from "../../guard";
+import { isAdhdMeStaff } from "@/tenancy/staff";
+import { practiceRecord } from "@/console/store";
+import type { PracticeId } from "@/domain/types";
+import { gpAccessFor } from "@/lib/matching/access";
+import { requirePractice } from "../../guard";
 import { ConsoleShell, Field, inputClass, primaryButtonClass } from "../../ui";
 import { answerMatch, completeMatch, gpFeedback, saveCapacity, savePreferences, saveProfile, uploadEvidence } from "../actions";
 
@@ -27,6 +31,7 @@ const SAVED_COPY: Record<string, string> = {
   answered: "Answered. The person can see your answer on their side.",
   completed: "Marked as done. The person can now say how it went, and so can you.",
   feedback: "Recorded against the match.",
+  claimed: "Claimed for your practice. Only its members and ADHD.ME staff reach this page now.",
 };
 
 const ERROR_COPY: Record<string, string> = {
@@ -78,10 +83,13 @@ function Checks<T extends string>({ name, options, labels, chosen }: { name: str
 }
 
 export default async function GPDashboardPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string; error?: string }> }) {
-  const email = await requireSession();
+  const { email, record } = await requirePractice();
   const { id } = await params;
   const gp = gpById(id);
   if (!gp) notFound();
+  if (gpAccessFor(gp, { practiceId: record.practice.id as string, staff: isAdhdMeStaff(email), practiceExists: (p) => practiceRecord(p as PracticeId) !== null }) !== "manage") {
+    redirect("/console/gp?error=not_yours");
+  }
   const { saved, error } = await searchParams;
 
   const matches = matchesForGP(gp.id);
@@ -108,7 +116,7 @@ export default async function GPDashboardPage({ params, searchParams }: { params
           <h1 className="text-2xl font-semibold tracking-tight">{gp.name}</h1>
           <p className="max-w-2xl text-stone-600">
             {gp.practice}, {gp.practiceLocation.suburb}. {VERIFICATION_LABELS[gp.verificationStatus]}
-            {gp.verifiedOn ? ` on ${gp.verifiedOn}` : ""}. {gp.realPerson ? "A real person: nothing below was invented, and blank means not declared." : "An invented example: the declarations below were generated for the demonstration."}
+            {gp.verifiedOn ? ` on ${gp.verifiedOn}` : ""}. Managed by {record.practice.name}, as declared. {gp.realPerson ? "A real person: nothing below was invented, and blank means not declared." : "An invented example: the declarations below were generated for the demonstration."}
           </p>
           <p className="max-w-2xl text-sm text-stone-500">
             <Link className="underline underline-offset-2" href={`/gp/${encodeURIComponent(gp.id)}`}>
