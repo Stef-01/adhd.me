@@ -251,6 +251,19 @@ export const STORE_READS: readonly StoreRead[] = [
   { module: "src/console/store.ts", fn: "updateRules", kind: "practice_scoped" },
   {
     module: "src/console/store.ts",
+    fn: "billingPerVisitFor",
+    kind: "no_practice_data",
+    reason: "Reads one field off a record the caller already holds, and supplies the default. It opens no store.",
+  },
+  {
+    module: "src/console/store.ts",
+    fn: "validateBillingPerVisit",
+    kind: "no_practice_data",
+    reason: "A range check on a number. No store is read.",
+  },
+  { module: "src/console/store.ts", fn: "updateBillingPerVisit", kind: "practice_scoped" },
+  {
+    module: "src/console/store.ts",
     fn: "validateClinicians",
     kind: "no_practice_data",
     reason: "Pure validation of roster inputs; touches no store.",
