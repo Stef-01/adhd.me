@@ -267,21 +267,26 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
 ### Phase T — the text budget and the two-pane Learn (founder-directed, 2026-09-10)
 
 - [x] **Games and modules apart.** The Learn tab is two panes with a swipe and a tab pair:
-      Games (the Chaos Run's eight lives, Leo's moment, the twenty bean runs: other people's
-      moments, where a person finds out what is theirs) and Modules (For you from the Lives loop,
-      the reads and quizzes, the sixteen strategy modules on shelves, the Toolkit, a quiet
-      moment, the goals: the moves, two to five minutes each). The `/lives/learn` library folded
-      in; a module opened by URL returns to its own side. `app/learn-panes.tsx`,
-      `e2e/walkthrough.spec.ts`. (2026-09-10)
-- [x] **The walkthrough.** Every explanatory sentence renders only while the switch is on;
-      a first visit is offered it once; the settings sheet holds it after. `<Explain>` in
-      `app/explain.tsx`. (2026-09-10)
-- [x] **The text budget, five rounds.** Words above the fold measured per route against
-      Headspace and Finch; 13 of 17 routes over at baseline, 6 after; the Learn page from 49 to
-      19; the worst screen from 140 to 70. The table and what stays over are in `AESTHETIC.md`.
+      Games (the Chaos Run's eight lives, Leo's moment, the twenty bean runs, eight tiles then
+      the rest on a tap) and Modules (For you from the Lives loop, the reads and quizzes, the
+      sixteen strategy modules on shelves, the Toolkit, a quiet moment, the goals). The
+      `/lives/learn` library folded in; a module opened by URL returns to its own side.
+      `app/learn-panes.tsx`, `e2e/learn-panes.spec.ts`. (2026-09-10)
+- [x] **The walkthrough, deleted.** The first attempt hid every explanatory sentence behind a
+      switch and counted the hiding as a cut. The founder called that a failure of empathy, and
+      the switch, `<Explain>`, its register and its rules were deleted the same day.
+      `docs/design/text-budget-postmortem.md`. (2026-09-10)
+- [x] **The text budget, measured on the whole screen.** `scripts/text-budget.mjs` counts every
+      visible word on every route at 390 x 844 against Headspace (38, 26, 60) and Finch (19);
+      ceiling 60, target 40. Median app screen 87 at the honest baseline, 36 after five cutting
+      batches, 17 of 30 app screens at the target and 23 of 30 under the ceiling before batch
+      six. `AESTHETIC.md` holds the account. (2026-09-10) MEASURE_AFTER_BATCH_SIX
+- [x] **The slop pass.** Em-dashes out of every visible string (225 lines), the eyebrows that
+      repeated the tab, the uppercase activity labels, the meditation studio's shouting.
       (2026-09-10)
 - [ ] The three match screens and the GP profile at Headspace's home density (40) rather than
-      its list density: a second pass once the wiring unit changes what a card has to say.
+      its list density: match results and prep measured 67 and 64 before batch six, the GP
+      profile 42.
 
 ### Phase C — pilot (PRD §87–§88)
 

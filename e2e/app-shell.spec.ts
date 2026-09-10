@@ -236,7 +236,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.getByRole("switch", { name: /Woman GP/ }).check();
-  await page.getByRole("switch", { name: /Taking new patients/ }).check();
+  await page.getByRole("switch", { name: /New patients/ }).check();
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
   // A language chip is a pressed button whose name stays the language — the tick is not in it.
   await page.getByRole("button", { name: "Tamil", exact: true }).click();
@@ -259,7 +259,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
 
   const strip = page.getByRole("group", { name: "Your filters" });
   await expect(strip).toContainText("Woman GP");
-  await expect(strip).toContainText("Taking new patients");
+  await expect(strip).toContainText("New patients");
   // Every row on a narrowed list answers the filters: the roster is narrowed before ranking, so
   // the reasons printed on the rows cannot name a GP the filters excluded.
   const rows = page.locator(".clinician-row");

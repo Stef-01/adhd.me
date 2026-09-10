@@ -40,7 +40,7 @@ export const CHECKLIST_TEMPLATES: readonly ChecklistTemplate[] = [
   },
   {
     id: "medication-list",
-    label: "Current medications and supplements",
+    label: "Medications and supplements",
     why: "Some ADHD medications interact with common scripts, so the GP checks this before anything else.",
     required: true,
     triggers: [],
@@ -58,7 +58,7 @@ export const CHECKLIST_TEMPLATES: readonly ChecklistTemplate[] = [
   },
   {
     id: "someone-who-knew-you",
-    label: "Someone who knew you as a child",
+    label: "Someone from your childhood",
     why: "A parent, older sibling or long-time friend, willing to fill in a short questionnaire: what they saw supports the timeline.",
     required: false,
     triggers: [{ id: "adult", when: (p) => isAdult(p) && !p.structuredSignals.priorAssessment }],

@@ -542,7 +542,7 @@ test("Medication experience (PRD §47): described in the person's words, kept on
 
 test("Adjustments on paper (PRD §45): the need's track leads, the other is one tap away, and My ADHD links it", async ({ page }) => {
   await page.goto("/adjustments");
-  await expect(page.getByRole("heading", { name: "Most of it exists. Most people are never told." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Most of it already exists." })).toBeVisible();
   // Nothing known: university leads, the track fewer people know exists.
   await expect(page.getByRole("tab", { name: "University and TAFE" })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("heading", { name: "Study adjustments" })).toBeVisible();

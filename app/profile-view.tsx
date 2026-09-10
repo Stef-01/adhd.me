@@ -55,7 +55,7 @@ const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: st
   { key: "bulkBilling", title: "Bulk billing", detail: "GPs whose practice declares bulk billing." },
   { key: "longerAppointments", title: "Longer appointments", detail: "GPs who declare they do not rush a first visit." },
   { key: "wheelchair", title: "Wheelchair access", detail: "Rooms declared accessible." },
-  { key: "openBooks", title: "Taking new patients", detail: "Leave off to see GPs with a waitlist too." },
+  { key: "openBooks", title: "New patients", detail: "Leave off to see GPs with a waitlist too." },
 ];
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;

@@ -118,7 +118,7 @@ export const BOOLEAN_FILTER_LABELS: Readonly<Record<BooleanFilterKey, string>> =
   bulkBilling: "Bulk billing",
   longerAppointments: "Longer appointments",
   wheelchair: "Wheelchair access",
-  openBooks: "Taking new patients",
+  openBooks: "New patients",
 };
 
 function isDistance(value: unknown): value is DistanceKm {

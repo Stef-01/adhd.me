@@ -63,7 +63,7 @@ export function MatchResults() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}, each with a reason`}</h1>
+        <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}`}</h1>
       </header>
 
       {view.fromTab && (

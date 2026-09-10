@@ -86,6 +86,7 @@ async function measure(page) {
       const closed = el.closest("details:not([open])");
       if (closed && !el.closest("summary")) continue;
       const rect = el.getBoundingClientRect();
+      if (rect.right <= 0 || rect.bottom <= 0 || rect.left >= window.innerWidth) continue;
       if (rect.width === 0 || rect.height === 0) continue;
       const chrome = !!el.closest("nav, header.platform-header, .app-tabs, .site-footer, footer, .consent-bar, .privacy-consent");
       const aboveFold = rect.top < vh && rect.bottom > 0;
@@ -105,10 +106,6 @@ async function reach(page, route) {
     await page.waitForTimeout(600);
     await page.goto(`${BASE}${route.path}`, { waitUntil: "networkidle" });
     return;
-  }
-  if (route.state === "finder-results" || route.state === "finder-profile") {
-    await page.goto(`${BASE}/`);
-    await page.evaluate(() => sessionStorage.clear());
   }
   await page.goto(`${BASE}${route.path}`, { waitUntil: "networkidle" });
   if (route.state === "finder-results" || route.state === "finder-profile") {
@@ -133,18 +130,25 @@ const routes = [
 ];
 
 const browser = await chromium.launch();
-const context = await browser.newContext({
+const CONTEXT = {
   viewport: { width: 390, height: 844 },
   reducedMotion: "reduce",
   storageState: {
     cookies: [],
     origins: [{ origin: BASE, localStorage: [{ name: "adhdme-privacy-ack", value: "1" }, { name: "adhdme.play.tutored", value: "1" }, { name: "adhdme.lives.tutored", value: "1" }] }],
   },
-});
-const page = await context.newPage();
+};
+let context = await browser.newContext(CONTEXT);
+let page = await context.newPage();
 const results = [];
 for (const route of routes) {
   try {
+    // The finder writes its stage back to the tab on unload, so a cleared tab is not a fresh one.
+    if (route.state === "finder-results" || route.state === "finder-profile") {
+      await context.close();
+      context = await browser.newContext(CONTEXT);
+      page = await context.newPage();
+    }
     await reach(page, route);
   } catch (error) {
     results.push({ ...route, error: String(error).slice(0, 120) });
@@ -158,6 +162,12 @@ for (const route of routes) {
   const longForm = LONG_FORM.has(route.path);
   const verdict = total <= BUDGET.target ? "target" : total <= BUDGET.screen ? "ceiling" : longForm ? "long-form" : "OVER";
   results.push({ path: route.path, name: route.name, state: route.state ?? null, total, fold, chrome, ratio: Math.round((total / BUDGET.target) * 10) / 10, verdict, longest });
+  // DUMP=1 prints every counted line of an over-budget screen: the cutting list.
+  if (process.env.DUMP && verdict === "OVER") {
+    console.log(`
+--- ${route.name} (${total})`);
+    for (const r of rows.filter((r) => !r.chrome)) console.log(`  ${String(words(r.text)).padStart(2)}w <${r.tag}> ${r.text.slice(0, 110)}`);
+  }
 }
 await browser.close();
 

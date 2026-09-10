@@ -40,12 +40,12 @@ export const ADJUSTMENT_TRACKS: readonly AdjustmentEntry[] = [
     eyebrow: "University and TAFE",
     lede: "Every Australian university and TAFE runs an accessibility or disability service, and ADHD is one of the things it exists for. Most students are never told. Registering once puts the adjustments on paper so you are not asking each lecturer from scratch.",
     commonlyAvailable: [
-      "Extensions without a fresh case each time",
+      "Extensions, no fresh case each time",
       "Extra time, quieter exam room",
       "Recorded lectures, or the notes",
       "Briefs in writing, done defined",
       "Reduced load, full-time status kept",
-      "A named contact who speaks for you",
+      "A named contact",
     ],
     whoToAsk: [
       "The accessibility or disability service, often called Student Support, Accessibility Services or Disability Services",

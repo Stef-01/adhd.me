@@ -151,8 +151,8 @@ export const SCENES: readonly Scene[] = [
     eyebrow: "Everyday",
     heading: "Put memory outside your head.",
     body:
-      "Working memory is a small scratchpad. Stop needing to remember: one list, one place, always open.",
-    detail: ["One list, not five apps", "Write it down the moment it lands", "Keys by the door, form on the keyboard"],
+      "A small scratchpad. Stop remembering: one list, one place, always open.",
+    detail: ["One list, not five apps", "Write it down as it lands", "Keys by the door"],
   },
   {
     n: "14",
