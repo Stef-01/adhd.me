@@ -49,7 +49,9 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
 
     let stops = 0;
     let first = "";
-    let passedBody = false;
+    // Firefox parks focus outside the document for a press or two when it leaves a screen that
+    // was replaced under it; three empty presses in a row is the end of the ring, one is not.
+    let emptyPresses = 0;
     // Safari reaches links with Option+Tab unless a preference is set; plain Tab skips them.
     const tab = test.info().project.name === "webkit" ? "Alt+Tab" : "Tab";
     for (let i = 0; i < 200; i += 1) {
@@ -68,10 +70,11 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
         };
       });
       if (!info) {
-        if (passedBody) break;
-        passedBody = true;
+        emptyPresses += 1;
+        if (emptyPresses >= 3) break;
         continue;
       }
+      emptyPresses = 0;
       if (stops > 0 && info.key === first) break;
       if (stops === 0) first = info.key;
       stops += 1;
