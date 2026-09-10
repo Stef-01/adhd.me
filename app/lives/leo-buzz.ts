@@ -1,4 +1,4 @@
-/** One quiet voice per flying mosquito. Created only by a sound-button gesture. */
+/** One quiet voice per flying mosquito. Audio starts through Play or the sound button. */
 export class LeoBuzz {
   private context: AudioContext | null = null;
   private master: GainNode | null = null;

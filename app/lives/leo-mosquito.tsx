@@ -25,12 +25,12 @@ export function LeoBedroom({ asleep = false, moving = false, regulation = 100 }:
     <path d="M111 361q0-19 19-19h194q21 0 21 19v141H111z" fill="#815e83" />
     <rect x="120" y="351" width="214" height="119" rx="24" fill="#f8eddb" />
     <rect x="150" y="360" width="115" height="49" rx="22" fill="#fffaf0" />
-    <g className="leo-sleepy-head">
+    <g transform="translate(205 393) scale(1.3) translate(-205 -393)"><g className="leo-sleepy-head">
       <path d="M161 394v-42q0-40 44-40t44 40v42z" fill={overwhelmed ? "#e9a471" : upset ? "#d4c454" : "#b5d33d"} />
       {asleep ? <path d="M178 353q7 7 14 0m24 0q7 7 14 0" fill="none" stroke="#465a08" strokeWidth="4" strokeLinecap="round" /> : overwhelmed ? <path d="m177 350 14 7-14 6m54-13-14 7 14 6" fill="none" stroke="#603b2d" strokeWidth="4" strokeLinecap="round" /> : <><path d={upset ? "M175 339l18 9m22 0 18-9" : "M175 343l18 3m22-1 18-5"} stroke="#465a08" strokeWidth="4" strokeLinecap="round" /><ellipse cx="186" cy="357" rx="4" ry="6" fill="#465a08" /><ellipse cx="224" cy="357" rx="4" ry="6" fill="#465a08" /></>}
       <path d={asleep ? "M198 374q9 7 17 0" : upset ? "M195 381q11-13 22 0" : "M199 378h14"} stroke="#465a08" strokeWidth="4" strokeLinecap="round" fill="none" />
       {overwhelmed && <><path d="M161 366q-15-3-8-23m95 23q15-3 8-23" fill="none" stroke="#e9a471" strokeWidth="13" strokeLinecap="round" /><path d="m141 332-7-10m136 10 7-10m-79-15 5-11 6 11" fill="none" stroke="#94614a" strokeWidth="3" strokeLinecap="round" /></>}
-    </g>
+    </g></g>
     <path d="M122 393q92-19 211 7v92H122z" fill="#f1b56c" />
     <path d="M122 414q107-14 211 8v22q-112-23-211-8z" fill="#f8d699" />
     <path d="M129 492v20m197-20v20" stroke="#815e83" strokeWidth="12" strokeLinecap="round" />
@@ -53,13 +53,13 @@ function Mosquito({ annoyed, hit }: { annoyed: boolean; hit: boolean }) {
 }
 
 /** Wasp-like MOVING → PRESSED → FALLING feedback, on the director's existing clock. */
-export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progress, onResult, outcome }: EngineProps) {
+export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progress, onResult, outcome, initialAudio, onSoundChange }: EngineProps & { initialAudio?: LeoBuzz | null; onSoundChange?: (on: boolean) => void }) {
   const [hits, setHits] = useState<Record<string, Point>>({});
   const [catches, setCatches] = useState<SwarmCatches>({});
   const [misses, setMisses] = useState(0);
-  const [sound, setSound] = useState(false);
+  const [sound, setSound] = useState(Boolean(initialAudio));
   const [audioUnavailable, setAudioUnavailable] = useState(false);
-  const audio = useRef<LeoBuzz | null>(null);
+  const audio = useRef<LeoBuzz | null>(initialAudio ?? null);
   const [focused, setFocused] = useState<{ id: string; at: Point } | null>(null);
   const hitIds = useRef(new Set<string>());
   const done = useRef(false);
@@ -69,7 +69,16 @@ export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progr
   const plan = useMemo(() => createLeoSwarm(scene.seed, scene.level, duration), [scene.seed, scene.level, duration]);
   const swarm = readLeoSwarm(plan, elapsedMs, catches, reducedMotion);
   const voiceIds = swarm.alive.map(t => t.id).join(",");
-  useEffect(() => { audio.current?.update(voiceIds ? voiceIds.split(",") : [], sound && live && !outcome); }, [voiceIds, sound, live, outcome]);
+  useEffect(() => {
+    let cancelled = false;
+    if (sound && live && !outcome) {
+      audio.current ??= new LeoBuzz();
+      const engine = audio.current;
+      void engine.enable().then(() => { if (!cancelled) engine.update(voiceIds ? voiceIds.split(",") : [], true); })
+        .catch(() => { if (!cancelled) { setAudioUnavailable(true); setSound(false); onSoundChange?.(false); } });
+    } else audio.current?.update([], false);
+    return () => { cancelled = true; };
+  }, [voiceIds, sound, live, outcome, onSoundChange]);
   useEffect(() => () => { audio.current?.dispose(); audio.current = null; }, []);
   useEffect(() => {
     if (live && !done.current && swarm.regulation <= 0) {
@@ -78,10 +87,10 @@ export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progr
     }
   }, [live, swarm.regulation, misses]);
   const toggleSound = async () => {
-    if (sound) { setSound(false); audio.current?.update([], false); return; }
+    if (sound) { setSound(false); onSoundChange?.(false); audio.current?.update([], false); return; }
     try {
       audio.current ??= new LeoBuzz();
-      await audio.current.enable(); setSound(true); setAudioUnavailable(false);
+      await audio.current.enable(); setSound(true); onSoundChange?.(true); setAudioUnavailable(false);
     } catch { setAudioUnavailable(true); setSound(false); }
   };
   const swat = (id: string, at: Point) => {
@@ -97,7 +106,7 @@ export function LeoMosquito({ game, scene, live, reducedMotion, elapsedMs, progr
   return <div className="leo-swarm" data-mood={swarm.mood} data-wave={swarm.wave} data-caught={swarm.caught}>
     <div className="leo-swarm-hud">
       <div className="leo-swarm-stats"><span role="status">Wave {swarm.wave}/{plan.waves} · {swarm.caught}/{plan.targets.length} caught</span><button type="button" className="leo-sound" aria-pressed={sound} onClick={toggleSound}>{sound ? "Mute buzzing" : "Enable buzzing"}</button></div>
-      <div className="leo-regulation-label"><span>Leo’s regulation</span><span>{reducedMotion ? "No drain" : `${Math.ceil(swarm.regulation)}% · ${swarm.mood === "settled" ? "Holding steady" : swarm.mood === "unsettled" ? "On edge" : "Overwhelmed"}`}</span></div>
+      <div className="leo-regulation-label"><span>Leo’s regulation</span><span>{reducedMotion ? "No drain" : `${Math.ceil(swarm.regulation)}% · ${swarm.complete ? "Settling" : swarm.mood === "settled" ? "Holding steady" : swarm.mood === "unsettled" ? "On edge" : "Overwhelmed"}`}</span></div>
       <div className="leo-regulation" role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(swarm.regulation)}><span style={{ transform: `scaleX(${swarm.regulation / 100})` }} /></div>
       {audioUnavailable && <span className="sr-only" role="status">Sound unavailable. The visual game still works.</span>}
     </div>

@@ -14,7 +14,7 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-practice h1:focus { outline: none; }
 .leo-clock { height: 7px; border-radius: 10px; width: min(100%, 600px); background: #aaaed4; overflow: hidden; }
 .leo-clock span { display: block; height: 100%; background: #514d7d; transform-origin: left; }
-.leo-board { position: relative; width: min(100%, 600px); height: clamp(250px, calc(43svh - var(--consent-height, 0px)), 450px); overflow: hidden; border-radius: 30px; isolation: isolate; }
+.leo-board { position: relative; width: min(100%, 600px); height: clamp(145px, calc(34svh - var(--consent-height, 0px)), 360px); overflow: hidden; border-radius: 30px; isolation: isolate; }
 .leo-practice:not([data-phase="ready"]) .leo-board { height: clamp(320px, calc(43svh - var(--consent-height, 0px)), 450px); }
 .leo-countdown { width: min(100%, 600px); display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; }
 .leo-countdown [role="timer"] { font-size: 24px; font-weight: 750; font-variant-numeric: tabular-nums; }

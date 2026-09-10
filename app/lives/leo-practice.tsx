@@ -6,6 +6,7 @@ import { useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight, Pause, Play, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { allowedMs, game, layoutGame } from "@/lives";
 import { LeoBedroom, LeoMosquito } from "./leo-mosquito";
+import { LeoBuzz } from "./leo-buzz";
 import type { EngineResult } from "./engines";
 
 const GAME = game("leo_mosquito");
@@ -15,6 +16,8 @@ type Phase = "ready" | "playing" | "paused" | "success" | "failure";
 export function LeoPractice() {
   const reduced = Boolean(useReducedMotion());
   const [untimed, setUntimed] = useState(false);
+  const [buzzOn, setBuzzOn] = useState(true);
+  const roundAudio = useRef<LeoBuzz | null>(null);
   const [level, setLevel] = useState(1);
   const [attempt, setAttempt] = useState(0);
   const [phase, setPhase] = useState<Phase>("ready");
@@ -53,7 +56,12 @@ export function LeoPractice() {
     return () => { cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", hide); };
   }, [phase, still, duration, changePhase]);
 
-  const start = () => { elapsedRef.current = 0; setElapsed(0); setFailureLine(""); setAttempt(n => n + 1); changePhase("playing"); };
+  const start = () => {
+    roundAudio.current = buzzOn ? new LeoBuzz() : null;
+    // Unlock audio during the explicit Play gesture. The game owns and disposes this graph.
+    if (roundAudio.current) void roundAudio.current.enable().catch(() => {});
+    elapsedRef.current = 0; setElapsed(0); setFailureLine(""); setAttempt(n => n + 1); changePhase("playing");
+  };
   const result = phase === "success" || phase === "failure";
   return <section className="leo-practice lives-run" data-phase={phase} aria-labelledby="leo-title">
     <div className="leo-toolbar">
@@ -65,7 +73,7 @@ export function LeoPractice() {
     <div className="leo-countdown"><span>{still ? "Untimed · clear every wave" : "Clear the whole swarm"}</span><span role="timer" aria-label="Time remaining">{still ? "No timer" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span></div>
     <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "ready" || still ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div>
     <div className="leo-board">
-      {phase === "ready" ? <LeoBedroom /> : <LeoMosquito key={attempt} game={GAME} scene={scene} live={phase === "playing"} reducedMotion={still} elapsedMs={elapsed} progress={Math.min(1, elapsed / duration)} onResult={finish} outcome={result ? phase : undefined} />}
+      {phase === "ready" ? <LeoBedroom /> : <LeoMosquito key={attempt} game={GAME} scene={scene} live={phase === "playing"} reducedMotion={still} elapsedMs={elapsed} progress={Math.min(1, elapsed / duration)} onResult={finish} outcome={result ? phase : undefined} initialAudio={roundAudio.current} onSoundChange={setBuzzOn} />}
       {phase === "paused" && <div className="leo-pause"><button onClick={() => changePhase("playing")}><Play size={22} weight="fill" /> Resume</button></div>}
     </div>
     <div className="leo-bottom">
@@ -74,6 +82,7 @@ export function LeoPractice() {
         <div className="leo-options">
           <label>Challenge <select value={level} onChange={e => setLevel(Number(e.target.value))}><option value={1}>9 mosquitoes</option><option value={4}>12 mosquitoes</option><option value={8}>20 mosquitoes</option></select></label>
           <label className="leo-untimed"><input type="checkbox" checked={still} disabled={reduced} onChange={e => setUntimed(e.target.checked)} /> No timer or movement</label>
+          <label className="leo-untimed"><input type="checkbox" checked={buzzOn} onChange={e => setBuzzOn(e.target.checked)} /> Buzz sounds</label>
         </div>
         <button className="leo-primary" onClick={start}><Play size={20} weight="fill" /> Play Leo’s moment</button>
       </>}

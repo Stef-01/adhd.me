@@ -3,7 +3,8 @@ import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/leo-mosquito";
 
 async function catchWave(page: Page) {
-  for (const target of await page.locator(".leo-fly:enabled").all()) await target.dispatchEvent("pointerdown", { button: 0 });
+  const count = await page.locator(".leo-fly:enabled").count();
+  for (let i = 0; i < count; i++) await page.locator(".leo-fly:enabled").first().dispatchEvent("pointerdown", { button: 0 });
 }
 async function clearUntimedSwarm(page: Page, keyboard = false) {
   for (let i = 0; i < 20; i++) {
@@ -178,6 +179,7 @@ test("each mosquito has a buzz voice, and catch, mute, pause and exit stop it", 
     };
   });
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto(URL);
+  await page.getByLabel("Buzz sounds").uncheck();
   await page.getByRole("button", { name: "Play Leo’s moment" }).click();
   const audio = () => page.evaluate(() => (window as unknown as { leoAudio: { created: number; stopped: number; closed: number } }).leoAudio);
   await page.getByRole("button", { name: "Enable buzzing" }).click();
