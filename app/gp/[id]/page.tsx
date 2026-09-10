@@ -11,7 +11,6 @@ import { AGE_GROUP_LABELS, COMORBIDITY_LABELS, MANNER_LABELS, PACE_LABELS, PHILO
 import type { Comorbidity } from "@/lib/matching/types";
 import { gpPublicView } from "@/lib/matching/views";
 import { ROBOTS_META } from "@/security/robots";
-import { Explain } from "../../explain";
 import { Badges, Portrait } from "../../match/gp-bits";
 
 export const dynamic = "force-dynamic";
@@ -50,9 +49,6 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
 
         <Badges gp={view} brief />
 
-        {!view.realPerson && (
-          <Explain className="match-note">An invented example profile. The declarations below were generated for the demonstration and describe nobody.</Explain>
-        )}
 
         {view.feltUnderstood && (
           <p className="match-status" data-testid="felt-understood">
@@ -162,9 +158,6 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
               <span>{view.credentials.yearsTreatingAdhd === null ? "Not declared" : `${view.credentials.yearsTreatingAdhd}, declared`}</span>
             </li>
           </ul>
-          <Explain className="match-disclosure">
-            &ldquo;Declared&rdquo; is the GP&rsquo;s own statement. &ldquo;Checked&rdquo; means a named person examined evidence on the date shown.
-          </Explain>
         </section>
 
         <div className="match-actions">

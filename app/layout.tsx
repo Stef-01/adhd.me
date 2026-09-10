@@ -11,7 +11,6 @@ import "./styles/glass.css";
 import "./styles/brand.css";
 import "./styles/learning-play.css";
 import "./styles/match.css";
-import "./styles/walkthrough.css";
 import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
 import "./styles/leo.css";
@@ -19,7 +18,6 @@ import { LiquidGlass } from "./glass/liquid-glass";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
-import { AcknowledgementOfCountry } from "./acknowledgement-of-country";
 import { WebVitals } from "./web-vitals";
 import { SITE_URL } from "./site";
 import { SHARED_OPEN_GRAPH } from "@/seo/pages";
@@ -142,7 +140,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
         />
         <SiteMotion>{children}</SiteMotion>
-        <AcknowledgementOfCountry />
         <PrivacyConsent />
         <Analytics />
         {/* O31: Vercel's cookieless pageview analytics — hash-based visitor identity, data

@@ -10,7 +10,6 @@ import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { TIMELINE_TEMPLATE } from "@/lib/matching/checklist";
-import { Explain } from "../explain";
 import type { PatientView } from "@/lib/matching/views";
 import { FROM_TAB_COPY, fetchPatient, readPatientId, writeView, type HeldView } from "./session";
 
@@ -85,7 +84,6 @@ export function MatchPrep() {
         <p className="match-lede">
           {done} of {view.checklist.items.length} ready.
         </p>
-        <Explain className="match-lede">Written from what you told us. Ticks are saved with your request, in this tab.</Explain>
       </header>
 
       {view.fromTab && (
@@ -99,7 +97,6 @@ export function MatchPrep() {
             <input id={`chk-${item.id}`} type="checkbox" checked={item.done} onChange={(e) => toggle(item.id, e.target.checked)} />
             <label htmlFor={`chk-${item.id}`}>
               <strong>{item.label}</strong>
-              <Explain>{item.why}</Explain>
             </label>
           </li>
         ))}
@@ -107,12 +104,10 @@ export function MatchPrep() {
 
       <section className="match-section" aria-labelledby="timeline-heading">
         <h2 id="timeline-heading">The symptom timeline, five headings</h2>
-        <Explain className="match-lede">Write a few lines under each. Bring it on paper or on your phone.</Explain>
         <ol className="match-timeline">
           {TIMELINE_TEMPLATE.map((row) => (
             <li key={row.heading}>
               <strong>{row.heading}</strong>
-              <Explain as="span">{row.prompt}</Explain>
             </li>
           ))}
         </ol>

@@ -15,7 +15,6 @@ import { AGE_GROUPS, type AgeGroup, type BillingPreference, type ConsultStyle } 
 import { AGE_GROUP_LABELS, BILLING_LABELS, CONSULT_STYLE_LABELS } from "@/lib/matching/labels";
 import { NARRATIVE_MAX, NARRATIVE_MIN, type PatientView } from "@/lib/matching/views";
 import { SPEECH_DISCLOSURE, speechUnavailable, startSpeech, type SpeechSession } from "@/voice/speech";
-import { Explain } from "../explain";
 import { writePatientId, writeView } from "./session";
 
 const ERROR_COPY: Record<string, string> = {
@@ -101,9 +100,6 @@ export function MatchIntake() {
         <AppSettings />
         <span className="life-eyebrow">Find a GP</span>
         <h1 tabIndex={-1}>What are you looking for?</h1>
-        <Explain className="match-lede">
-          Say it the way you would to a friend: what is going on, what you want from a GP, what would put you off. Three GPs come back with a reason each, and each of them sees your request and answers from their side.
-        </Explain>
       </header>
 
       <form className="match-form" onSubmit={submit}>
@@ -118,7 +114,6 @@ export function MatchIntake() {
             required
           />
           <small>No names or Medicare numbers.</small>
-          <Explain as="small">Anything that cannot wait for an appointment is a call to your usual GP or emergency services, not this box.</Explain>
         </label>
 
         <div className="match-row">
@@ -140,7 +135,6 @@ export function MatchIntake() {
               <option key={s} value={s} />
             ))}
           </datalist>
-          <Explain as="small">Used for distance only. A suburb we do not hold yet is scored at the midpoint, not against you.</Explain>
         </label>
 
         <div className="match-row">

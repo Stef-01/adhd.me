@@ -112,7 +112,7 @@ test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on the
   await page.goto("/lives/characters");
   await expect(page.locator(".lives-character")).toHaveCount(8);
   await page.locator(".lives-character[data-character='mia']").getByRole("button", { name: "Sometimes" }).click();
-  await page.goto("/lives/learn");
+  await page.goto("/approach?pane=modules");
   await expect(page.getByRole("heading", { name: "For you" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Two-minute tools" })).toBeVisible();
   await page.goto("/lives/lab");

@@ -1,0 +1,19 @@
+// The Learn page's two panes: tabs switch them, the pane is remembered, a module returns to its own side.
+import { expect, test } from "@playwright/test";
+
+test("games and modules are two panes, remembered, and a game returns to Games", async ({ page }) => {
+  await page.goto("/approach");
+  await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByTestId("learn-play")).toBeVisible();
+  await page.getByTestId("learn-tab-modules").click();
+  await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByTestId("learn-reads").locator(".learn-card")).toHaveCount(7);
+  await expect(page.getByRole("heading", { name: "Two-minute tools" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");
+  await page.goto("/approach?module=starting");
+  await expect(page.locator(".play-title")).toContainText("The blank page");
+  await page.goto("/approach");
+  await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#learn-pane-panel")).toHaveAttribute("aria-labelledby", "learn-tab-games");
+});

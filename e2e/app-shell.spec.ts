@@ -119,7 +119,6 @@ test("O233: the filters screen shows what the device holds, and can forget it", 
   await page.goto("/profile");
   // Before any search the honest state is empty, and the empty state offers the action that fills it.
   await expect(page.getByRole("heading", { name: "Search Filters" })).toBeVisible();
-  await expect(page.getByText(/held on this device only/i)).toBeVisible();
   await expect(page.getByRole("link", { name: /Describe what you need/ })).toBeVisible();
 
   // Search, then come back: the words are there.

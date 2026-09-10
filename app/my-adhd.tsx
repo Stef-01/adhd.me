@@ -6,7 +6,6 @@
 // No graphs, no score; every line traces to something the person said.
 
 import Link from "next/link";
-import { Explain } from "./explain";
 import { useState } from "react";
 import { ArrowRight, Check, Sparkle, Trash } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
@@ -40,14 +39,12 @@ export function MyAdhd() {
       <header className="life-head">
         <span className="life-eyebrow">My ADHD</span>
         <h1>My ADHD right now.</h1>
-        <Explain>Built only from what you have said. Nothing here is a verdict, and all of it can be changed.</Explain>
       </header>
 
       {record && !hasSignals(record) && (
         <section className="life-empty" aria-labelledby="my-empty">
           <h2 id="my-empty">Nothing here yet — and that is honest.</h2>
           <p>Answer a module’s “Does this happen to you?”, or the ten questions.</p>
-          <Explain>This page fills with your own words, and nothing else.</Explain>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href={isComplete(record.onboarding) ? "/approach" : "/start"}>{isComplete(record.onboarding) ? "Explore a module" : "Start"} <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
           </div>

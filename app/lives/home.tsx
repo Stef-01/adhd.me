@@ -5,7 +5,6 @@
 // sits under a fold, up to three, skip always available; it only orders recommendations.
 
 import Link from "next/link";
-import { Explain } from "../explain";
 import { useEffect, useState } from "react";
 import { ArrowRight, Play } from "@phosphor-icons/react";
 import { CHARACTERS, selectGoals, strategy, type LearningDomain } from "@/lives";
@@ -48,13 +47,12 @@ export function LivesHome() {
           <li><Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(strategy(started.strategyId).moduleId)}`}><span className="lives-row-text"><strong>Continue learning</strong><span>{strategy(started.strategyId).title} · {strategy(started.strategyId).estimatedMinutes} min</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
         )}
         <li><Link className="lives-row" href="/lives/toolkit"><span className="lives-row-text"><strong>Your Toolkit</strong><span>{tools === 0 ? "Nothing yet" : `${tools} ${tools === 1 ? "strategy" : "strategies"}`}</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
-        <li><Link className="lives-row" href="/lives/characters"><span className="lives-row-text"><strong>The eight lives</strong><Explain as="span">Who they are, what they are trying</Explain></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
-        <li><Link className="lives-row" href="/lives/learn"><span className="lives-row-text"><strong>Learn</strong><Explain as="span">Sixteen strategies, two to five minutes each</Explain></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
+        <li><Link className="lives-row" href="/lives/characters"><span className="lives-row-text"><strong>The eight lives</strong></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
+        <li><Link className="lives-row" href="/lives/learn"><span className="lives-row-text"><strong>Learn</strong></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
       </ul>
 
       <details className="life-why lives-goals">
         <summary>What would you most like help with?</summary>
-        <Explain className="lives-goals-note">Up to three. It only changes what is suggested first.</Explain>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>{g.label}</button>)}
         </div>
@@ -62,7 +60,6 @@ export function LivesHome() {
 
       <details className="life-why lives-goals lives-settings">
         <summary>Play settings</summary>
-        <Explain className="lives-goals-note">Kept on this device. The score is the same either way.</Explain>
         <div className="lives-chips" role="group" aria-label="Play settings">
           <button type="button" className="lives-chip" aria-pressed={relaxed} onClick={() => flip(LIVES_RELAXED_KEY, relaxed, setRelaxed)}>Relaxed timing</button>
           <button type="button" className="lives-chip" aria-pressed={large} onClick={() => flip(LIVES_LARGE_KEY, large, setLarge)}>Larger instructions</button>

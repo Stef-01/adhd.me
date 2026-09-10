@@ -1,6 +1,5 @@
 "use client";
 
-import { Explain } from "./explain";
 
 // The ten-question onboarding (PRD §8–§10), one question a screen. Back is allowed, skip where the
 // question says so, and every answer is written to the device the moment it is given, so closing
@@ -81,13 +80,11 @@ export function Onboarding() {
                 <CharacterMark who="alex" mood="engaged" /><CharacterMark who="maya" mood="pleased" /><CharacterMark who="jordan" mood="neutral" /><CharacterMark who="sam" mood="pleased" /><CharacterMark who="priya" mood="engaged" />
               </div>
               <h1>ADHD affects much more than attention.</h1>
-              <Explain>Learn how it shows up in your life, what can make things easier, and where extra support might help.</Explain>
               <div className="life-actions">
                 <button type="button" className="learn-primary" onClick={() => { track("ONBOARDING_STARTED"); go(0); }}>Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></button>
                 <button type="button" className="learn-secondary" onClick={() => { track("ONBOARDING_STARTED", { supporting: true }); refresh(saveOnboarding(storage, { stage: "supporting" })); go(1); }}>I’m supporting someone else</button>
               </div>
               <p className="learn-card-foot">Ten short questions, under two minutes.</p>
-              <Explain className="learn-card-foot">Everything stays on this device.</Explain>
             </div>
           )}
 

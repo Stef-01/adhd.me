@@ -1,194 +1,330 @@
 {
-  "measuredAt": "2026-09-10T07:10:53.930Z",
-  "base": "http://localhost:3630",
+  "measuredAt": "2026-09-10T07:28:45.961Z",
+  "base": "http://localhost:3633",
+  "benchmark": {
+    "headspaceHome": 38,
+    "headspaceDetail": 26,
+    "headspaceList": 60,
+    "finchHome": 19
+  },
   "budget": {
-    "aboveFold": 40,
+    "screen": 60,
+    "target": 40,
     "card": 8
   },
   "results": [
     {
       "path": "/",
-      "name": "Support (finder welcome)",
-      "aboveFold": 59,
-      "chrome": 8,
+      "name": "/",
+      "state": null,
       "total": 126,
-      "over": true,
+      "fold": 59,
+      "chrome": 8,
+      "ratio": 3.2,
+      "verdict": "OVER",
       "longest": [
         {
-          "w": 27,
-          "text": "Listed doctors consult in Sydney; their profiles describe real clinicians. Allied provider",
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
           "tag": "p"
         },
         {
-          "w": 9,
-          "text": "Not sure who to see? Start from the problem",
-          "tag": "a"
+          "w": 27,
+          "text": "Listed doctors consult in Sydney; their profiles describe real clinicians. Allie",
+          "tag": "p"
         },
         {
-          "w": 8,
-          "text": "What kind of support are you looking for?",
+          "w": 12,
+          "text": "Want three GPs picked for you, with a reason each? Get matched",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "name": "/about",
+      "state": null,
+      "total": 75,
+      "fold": 27,
+      "chrome": 0,
+      "ratio": 1.9,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 16,
+          "text": "The link may be old, or mistyped. Nothing you did was wrong, and nothing was los",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "That page does not exist.",
           "tag": "h1"
         }
       ]
     },
     {
-      "path": "/today",
-      "name": "Today",
-      "aboveFold": 20,
+      "path": "/adjustments",
+      "name": "/adjustments",
+      "state": null,
+      "total": 465,
+      "fold": 125,
       "chrome": 8,
-      "total": 68,
-      "over": false,
+      "ratio": 11.6,
+      "verdict": "OVER",
       "longest": [
         {
-          "w": 9,
-          "text": "Two minutes so this app can be about you.",
-          "tag": "h2"
-        },
-        {
-          "w": 7,
-          "text": "Ten short questions. Nothing is sent anywhere.",
+          "w": 45,
+          "text": "A university or a workplace can change the conditions around you, and the adjust",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "One useful thing.",
-          "tag": "h1"
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 42,
+          "text": "Every Australian university and TAFE runs an accessibility or disability service",
+          "tag": "p"
         }
       ]
     },
     {
       "path": "/approach",
-      "name": "Learn",
-      "aboveFold": 19,
-      "chrome": 8,
+      "name": "/approach",
+      "state": null,
       "total": 138,
-      "over": false,
-      "longest": [
-        {
-          "w": 4,
-          "text": "A little more understanding.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "The care map",
-          "tag": "a"
-        },
-        {
-          "w": 3,
-          "text": "The eight lives",
-          "tag": "a"
-        }
-      ]
-    },
-    {
-      "path": "/my-adhd",
-      "name": "My ADHD",
-      "aboveFold": 26,
+      "fold": 19,
       "chrome": 8,
-      "total": 74,
-      "over": false,
+      "ratio": 3.5,
+      "verdict": "OVER",
       "longest": [
         {
-          "w": 12,
-          "text": "Answer a module’s “Does this happen to you?”, or the ten questions.",
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
           "tag": "p"
-        },
-        {
-          "w": 7,
-          "text": "Nothing here yet — and that is honest.",
-          "tag": "h2"
-        },
-        {
-          "w": 4,
-          "text": "My ADHD right now.",
-          "tag": "h1"
-        }
-      ]
-    },
-    {
-      "path": "/support",
-      "name": "Support path",
-      "aboveFold": 29,
-      "chrome": 8,
-      "total": 77,
-      "over": false,
-      "longest": [
-        {
-          "w": 12,
-          "text": "Answer the ten questions, or a module’s, and the path fills in.",
-          "tag": "p"
-        },
-        {
-          "w": 7,
-          "text": "Start from the problem, not the profession.",
-          "tag": "h1"
         },
         {
           "w": 5,
-          "text": "Nothing to walk from yet.",
-          "tag": "h2"
-        }
-      ]
-    },
-    {
-      "path": "/profile",
-      "name": "Profile (filters)",
-      "aboveFold": 44,
-      "chrome": 8,
-      "total": 345,
-      "over": true,
-      "longest": [
-        {
-          "w": 11,
-          "text": "Everything below is held on this device only, for this tab.",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "First appointment by telehealth",
+          "text": "It has to be excellent",
           "tag": "strong"
         },
         {
-          "w": 3,
-          "text": "Where you are",
-          "tag": "h2"
+          "w": 5,
+          "text": "You said you’d book it",
+          "tag": "strong"
         }
       ]
     },
     {
-      "path": "/start",
-      "name": "Onboarding",
-      "aboveFold": 17,
+      "path": "/approach/map",
+      "name": "/approach/map",
+      "state": null,
+      "total": 261,
+      "fold": 111,
       "chrome": 8,
-      "total": 65,
-      "over": false,
+      "ratio": 6.5,
+      "verdict": "long-form",
       "longest": [
         {
-          "w": 6,
-          "text": "ADHD affects much more than attention.",
-          "tag": "h1"
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
         },
         {
-          "w": 6,
-          "text": "Ten short questions, under two minutes.",
+          "w": 43,
+          "text": "ADHD is often explained as a brain difference and left there. The map adds the t",
+          "tag": "p"
+        },
+        {
+          "w": 32,
+          "text": "A well person’s awareness, understanding and active decision-making line up with",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/approach/meditate",
+      "name": "/approach/meditate",
+      "state": null,
+      "total": 132,
+      "fold": 51,
+      "chrome": 8,
+      "ratio": 3.3,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 19,
+          "text": "Find a comfortable spot. Follow a few gentle prompts. Come back to the next thin",
+          "tag": "p"
+        },
+        {
+          "w": 19,
+          "text": "Five minutes, every quarter hour. Everyone who joins follows the same scheduled ",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/clinicians",
+      "name": "/clinicians",
+      "state": null,
+      "total": 113,
+      "fold": 65,
+      "chrome": 3,
+      "ratio": 2.8,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 13,
+          "text": "ADHD is the pathway available now. Pick the parts you want more of.",
+          "tag": "p"
+        },
+        {
+          "w": 9,
+          "text": "What kind of GP do you want to become?",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/clinicians/join",
+      "name": "/clinicians/join",
+      "state": null,
+      "total": 104,
+      "fold": 56,
+      "chrome": 27,
+      "ratio": 2.6,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 23,
+          "text": "Tell us your name, your practice and what your week actually looks like. Everyth",
+          "tag": "p"
+        },
+        {
+          "w": 15,
+          "text": "One email — who you are and where you practise — and a person replies. No forms.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/demo",
+      "name": "/demo",
+      "state": null,
+      "total": 81,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 2,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 18,
+          "text": ", one open session, three invited patients. No real patient data, no live SMS — ",
           "tag": "p"
         },
         {
           "w": 4,
-          "text": "I’m supporting someone else",
-          "tag": "button"
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/examples",
+      "name": "/examples",
+      "state": null,
+      "total": 291,
+      "fold": 156,
+      "chrome": 26,
+      "ratio": 7.3,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 47,
+          "text": "The order is never a judgement about who is a better doctor. It is overlap betwe",
+          "tag": "p"
+        },
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 43,
+          "text": "These are demo scenarios, not patients — nobody’s story is used to sell anything",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/faq",
+      "name": "/faq",
+      "state": null,
+      "total": 480,
+      "fold": 164,
+      "chrome": 25,
+      "ratio": 12,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 53,
+          "text": "The order comes only from matching what you asked for against what each clinicia",
+          "tag": "p"
+        },
+        {
+          "w": 50,
+          "text": "ADHD.ME is a finder for GPs who do ADHD assessment in Australia. You describe wh",
+          "tag": "p"
+        },
+        {
+          "w": 48,
+          "text": "No. ADHD.ME is a finder, not a medical service. Nothing you type is interpreted ",
+          "tag": "p"
         }
       ]
     },
     {
       "path": "/lives",
-      "name": "Lives home",
-      "aboveFold": 32,
-      "chrome": 8,
+      "name": "/lives",
+      "state": null,
       "total": 80,
-      "over": false,
+      "fold": 32,
+      "chrome": 8,
+      "ratio": 2,
+      "verdict": "OVER",
       "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
         {
           "w": 7,
           "text": "Everything was under control thirty seconds ago.",
@@ -198,142 +334,213 @@
           "w": 7,
           "text": "What would you most like help with?",
           "tag": "summary"
+        }
+      ]
+    },
+    {
+      "path": "/lives/characters",
+      "name": "/lives/characters",
+      "state": null,
+      "total": 428,
+      "fold": 63,
+      "chrome": 8,
+      "ratio": 10.7,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Eight lives. Three of yours.",
-          "tag": "h1"
+          "w": 15,
+          "text": "Can find her way through a spreadsheet. Cannot find her way across a busy inters",
+          "tag": "p"
+        },
+        {
+          "w": 15,
+          "text": "Can estimate the economic impact of a project. Cannot estimate how long a shower",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab",
+      "name": "/lives/lab",
+      "state": null,
+      "total": 539,
+      "fold": 53,
+      "chrome": 8,
+      "ratio": 13.5,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 21,
+          "text": "Why the engine suggests what it suggests, and why the director picked what it pi",
+          "tag": "p"
+        },
+        {
+          "w": 19,
+          "text": "4 character not more than twice in last five; 1 no immediate identical game; 2 n",
+          "tag": "td"
         }
       ]
     },
     {
       "path": "/lives/learn",
-      "name": "Lives learn",
-      "aboveFold": 38,
-      "chrome": 8,
+      "name": "/lives/learn",
+      "state": null,
       "total": 207,
-      "over": false,
+      "fold": 38,
+      "chrome": 8,
+      "ratio": 5.2,
+      "verdict": "OVER",
       "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
         {
           "w": 6,
           "text": "Put It Where You’ll Need It",
           "tag": "strong"
         },
         {
-          "w": 4,
-          "text": "Park the New Idea",
-          "tag": "strong"
-        },
-        {
-          "w": 3,
-          "text": "One tiny sound.",
+          "w": 6,
+          "text": "Why Am I Here? External Cue",
           "tag": "strong"
         }
       ]
     },
     {
       "path": "/lives/play",
-      "name": "Lives play",
-      "aboveFold": 17,
+      "name": "/lives/play",
+      "state": null,
+      "total": 17,
+      "fold": 13,
       "chrome": 0,
-      "total": 21,
-      "over": false,
+      "ratio": 0.4,
+      "verdict": "target",
       "longest": [
         {
-          "w": 16,
-          "text": "The line at the top says what to do. The bar under it is the clock.",
+          "w": 7,
+          "text": "Everything was under control thirty seconds ago.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Eight lives. Three of yours.",
           "tag": "h2"
         },
         {
-          "w": 1,
-          "text": "Next",
-          "tag": "button"
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/leo-mosquito",
+      "name": "/lives/play/leo-mosquito",
+      "state": null,
+      "total": 39,
+      "fold": 35,
+      "chrome": 0,
+      "ratio": 1,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 13,
+          "text": "Clear one wave at a time. Catch every mosquito to help Leo settle.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Untimed · clear every wave",
+          "tag": "span"
         }
       ]
     },
     {
       "path": "/lives/toolkit",
-      "name": "Toolkit",
-      "aboveFold": 27,
-      "chrome": 8,
+      "name": "/lives/toolkit",
+      "state": null,
       "total": 75,
-      "over": false,
+      "fold": 27,
+      "chrome": 8,
+      "ratio": 1.9,
+      "verdict": "OVER",
       "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
         {
           "w": 20,
-          "text": "Nothing here yet. Play a run, and if a moment looks familiar, the strategy behind it can b",
+          "text": "Nothing here yet. Play a run, and if a moment looks familiar, the strategy behin",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "ADHD Lives",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "My Toolkit",
-          "tag": "h1"
-        }
-      ]
-    },
-    {
-      "path": "/lives/characters",
-      "name": "Characters",
-      "aboveFold": 63,
-      "chrome": 8,
-      "total": 428,
-      "over": true,
-      "longest": [
-        {
-          "w": 15,
-          "text": "Can find her way through a spreadsheet. Cannot find her way across a busy intersection.",
-          "tag": "p"
-        },
-        {
-          "w": 8,
-          "text": "Everything at the crossing was loud at once.",
-          "tag": "p"
-        },
-        {
-          "w": 6,
-          "text": "Falls asleep anywhere except in bed.",
-          "tag": "p"
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
         }
       ]
     },
     {
       "path": "/manual",
-      "name": "My Manual",
-      "aboveFold": 26,
-      "chrome": 8,
+      "name": "/manual",
+      "state": null,
       "total": 87,
-      "over": false,
+      "fold": 26,
+      "chrome": 8,
+      "ratio": 2.2,
+      "verdict": "OVER",
       "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
         {
           "w": 7,
           "text": "How I work, in my own words.",
           "tag": "h1"
         },
         {
-          "w": 5,
-          "text": "Yours to write and change.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "How to work with me",
+          "w": 6,
+          "text": "Share it, if you want to",
           "tag": "h2"
         }
       ]
     },
     {
       "path": "/match",
-      "name": "Match intake",
-      "aboveFold": 30,
-      "chrome": 8,
+      "name": "/match",
+      "state": null,
       "total": 81,
-      "over": false,
+      "fold": 30,
+      "chrome": 8,
+      "ratio": 2,
+      "verdict": "OVER",
       "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "What are you looking for?",
@@ -343,27 +550,623 @@
           "w": 5,
           "text": "No names or Medicare numbers.",
           "tag": "small"
+        }
+      ]
+    },
+    {
+      "path": "/match/feedback",
+      "name": "/match/feedback",
+      "state": null,
+      "total": 69,
+      "fold": 21,
+      "chrome": 8,
+      "ratio": 1.7,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 10,
+          "text": "This form opens once a GP has accepted your request.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Nothing to tell us about yet",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/match/prep",
+      "name": "/match/prep",
+      "state": null,
+      "total": 69,
+      "fold": 21,
+      "chrome": 8,
+      "ratio": 1.7,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 10,
+          "text": "The checklist is written from your request. Start one first.",
+          "tag": "p"
         },
         {
           "w": 4,
-          "text": "In your own words",
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/match/results",
+      "name": "/match/results",
+      "state": null,
+      "total": 70,
+      "fold": 22,
+      "chrome": 8,
+      "ratio": 1.8,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 12,
+          "text": "A request lives in this tab only. Start one, or start again.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/medication",
+      "name": "/medication",
+      "state": null,
+      "total": 201,
+      "fold": 97,
+      "chrome": 8,
+      "ratio": 5,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 49,
+          "text": "A note to take to whoever manages your medication. This app does not advise on m",
+          "tag": "p"
+        },
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 29,
+          "text": "Copy the note as plain text. Questions worth asking them: which of these is the ",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "/my-adhd",
+      "state": null,
+      "total": 74,
+      "fold": 26,
+      "chrome": 8,
+      "ratio": 1.9,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 12,
+          "text": "Answer a module’s “Does this happen to you?”, or the ten questions.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Nothing here yet — and that is honest.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/practices",
+      "name": "/practices",
+      "state": null,
+      "total": 812,
+      "fold": 59,
+      "chrome": 23,
+      "ratio": 20.3,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 48,
+          "text": "NSW now lets a GP carry ADHD care end to end rather than only refer it onward, a",
+          "tag": "p"
+        },
+        {
+          "w": 45,
+          "text": "A GP opts into a clinical focus and chooses how much of their week it should bec",
+          "tag": "p"
+        },
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/privacy",
+      "name": "/privacy",
+      "state": null,
+      "total": 1300,
+      "fold": 220,
+      "chrome": 23,
+      "ratio": 32.5,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 130,
+          "text": "If you type a suburb, that word is looked up on your device too — the site never",
+          "tag": "p"
+        },
+        {
+          "w": 100,
+          "text": "ADHD.ME is building software that will offer available appointment times to a pr",
+          "tag": "p"
+        },
+        {
+          "w": 66,
+          "text": "The whole finder runs in your browser. The words you type about what you are loo",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/privacy/automated-decisions",
+      "name": "/privacy/automated-decisions",
+      "state": null,
+      "total": 1597,
+      "fold": 127,
+      "chrome": 27,
+      "ratio": 39.9,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 144,
+          "text": "SWITCHED OFF, and nothing has ever been sent from here in any case. If it were s",
+          "tag": "li"
+        },
+        {
+          "w": 122,
+          "text": "Built and not in use. Where your practice sent you an availability message or wr",
+          "tag": "li"
+        },
+        {
+          "w": 92,
+          "text": "To know whether any of this helps, a share of patients at each practice is set a",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/privacy/counsel-review",
+      "name": "/privacy/counsel-review",
+      "state": null,
+      "total": 372,
+      "fold": 175,
+      "chrome": 27,
+      "ratio": 9.3,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 55,
+          "text": "both carry a “Draft — not yet in force” banner. That is deliberate: both documen",
+          "tag": "p"
+        },
+        {
+          "w": 44,
+          "text": "The lawyer returns a marked-up version of both documents and answers to those qu",
+          "tag": "p"
+        },
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/profile",
+      "name": "/profile",
+      "state": null,
+      "total": 345,
+      "fold": 44,
+      "chrome": 8,
+      "ratio": 8.6,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 55,
+          "text": "Appointments vanish on me — I forget half of what was said before I reach the ca",
+          "tag": "strong"
+        },
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 35,
+          "text": "Some GPs use an AI scribe that records and transcribes the consult into notes, w",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/start",
+      "name": "/start",
+      "state": null,
+      "total": 65,
+      "fold": 17,
+      "chrome": 8,
+      "ratio": 1.6,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "ADHD affects much more than attention.",
+          "tag": "h1"
+        },
+        {
+          "w": 6,
+          "text": "Ten short questions, under two minutes.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/story",
+      "name": "/story",
+      "state": null,
+      "total": 740,
+      "fold": 66,
+      "chrome": 16,
+      "ratio": 18.5,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 116,
+          "text": "Beecroft, Hornsby, Cheltenham, Pennant Hills, Epping, Double Bay, Edgecliff, Ros",
           "tag": "span"
+        },
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 43,
+          "text": "Indicative figures pending source confirmation, and the NSW and Queensland rule ",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/support",
+      "name": "/support",
+      "state": null,
+      "total": 77,
+      "fold": 29,
+      "chrome": 8,
+      "ratio": 1.9,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 12,
+          "text": "Answer the ten questions, or a module’s, and the path fills in.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Start from the problem, not the profession.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/survey",
+      "name": "/survey",
+      "state": null,
+      "total": 82,
+      "fold": 34,
+      "chrome": 8,
+      "ratio": 2.1,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 12,
+          "text": "Eight to twelve questions each, two to four minutes. Offered, never required.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/terms",
+      "name": "/terms",
+      "state": null,
+      "total": 746,
+      "fold": 167,
+      "chrome": 25,
+      "ratio": 18.7,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 73,
+          "text": "Nothing in these terms takes away any right or remedy you have under the Austral",
+          "tag": "p"
+        },
+        {
+          "w": 66,
+          "text": "The finder matches the words you type against what each listed clinician declare",
+          "tag": "p"
+        },
+        {
+          "w": 65,
+          "text": "ADHD.ME is a finder: it shows you GPs who say they do the work you describe, wit",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/thanks",
+      "name": "/thanks",
+      "state": null,
+      "total": 100,
+      "fold": 52,
+      "chrome": 25,
+      "ratio": 2.5,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 21,
+          "text": "Until then, the finder works without an account, and the worked examples show wh",
+          "tag": "p"
+        },
+        {
+          "w": 20,
+          "text": "Your details reached us, and a person reads every registration — nothing here is",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "/today",
+      "state": null,
+      "total": 68,
+      "fold": 20,
+      "chrome": 8,
+      "ratio": 1.7,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 9,
+          "text": "Two minutes so this app can be about you.",
+          "tag": "h2"
+        },
+        {
+          "w": 7,
+          "text": "Ten short questions. Nothing is sent anywhere.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/gp/example-mei-chao",
+      "name": "GP profile",
+      "state": null,
+      "total": 152,
+      "fold": 70,
+      "chrome": 0,
+      "ratio": 3.8,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Stimulant first, when medication is the plan",
+          "tag": "span"
+        },
+        {
+          "w": 6,
+          "text": "Credentials, as declared and as checked",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder results (after a search)",
+      "state": "finder-results",
+      "total": 207,
+      "fold": 104,
+      "chrome": 8,
+      "ratio": 5.2,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 24,
+          "text": "The first 3 all answer what you asked equally well, so the order between them is",
+          "tag": "p"
+        },
+        {
+          "w": 16,
+          "text": "Ordered by what you asked for: Unhurried first appointment, By phone or teleheal",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "state": "finder-profile",
+      "name": "Finder profile (a GP opened)",
+      "error": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('textbox')\u001b[22m\n"
+    },
+    {
+      "path": "/approach?module=everyday",
+      "name": "A read module, first card",
+      "state": null,
+      "total": 171,
+      "fold": 67,
+      "chrome": 3,
+      "ratio": 4.3,
+      "verdict": "OVER",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 37,
+          "text": "Working memory is the scratchpad, and with ADHD the scratchpad is small. The mov",
+          "tag": "p"
+        },
+        {
+          "w": 16,
+          "text": "Put the object where the task happens: keys by the door, the form on the keyboar",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/approach?module=starting",
+      "name": "A game run, title card",
+      "state": null,
+      "total": 54,
+      "fold": 6,
+      "chrome": 0,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 3,
+          "text": "The blank page",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play",
+      "name": "The Chaos Run, first round",
+      "state": "lives-run",
+      "total": 12,
+      "fold": 8,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Maya turns one down",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "CLEAR ONE!",
+          "tag": "p"
         }
       ]
     },
     {
       "path": "/match/results",
       "name": "Match results",
-      "setup": "intake",
-      "aboveFold": 66,
+      "state": "intake",
+      "total": 149,
+      "fold": 54,
       "chrome": 8,
-      "total": 187,
-      "over": true,
+      "ratio": 3.7,
+      "verdict": "OVER",
       "longest": [
         {
-          "w": 9,
-          "text": "Also in common: telehealth appointments and not being rushed.",
-          "tag": "li"
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
+          "tag": "p"
         },
         {
           "w": 8,
@@ -380,51 +1183,27 @@
     {
       "path": "/match/prep",
       "name": "Match prep",
-      "setup": "intake",
-      "aboveFold": 52,
-      "chrome": 8,
+      "state": "intake",
       "total": 319,
-      "over": true,
+      "fold": 52,
+      "chrome": 8,
+      "ratio": 8,
+      "verdict": "OVER",
       "longest": [
         {
-          "w": 7,
-          "text": "Someone who knew you as a child",
-          "tag": "strong"
-        },
-        {
-          "w": 6,
-          "text": "As a teenager and young adult",
-          "tag": "strong"
-        },
-        {
-          "w": 5,
-          "text": "Medicare card and photo ID",
-          "tag": "strong"
-        }
-      ]
-    },
-    {
-      "path": "/gp/example-mei-chao",
-      "name": "GP profile",
-      "aboveFold": 70,
-      "chrome": 0,
-      "total": 152,
-      "over": true,
-      "longest": [
-        {
-          "w": 7,
-          "text": "Stimulant first, when medication is the plan",
-          "tag": "span"
-        },
-        {
-          "w": 5,
-          "text": "ADHD assessment across ages, titration.",
+          "w": 44,
+          "text": "ADHD.ME acknowledges the Traditional Owners of Country throughout Australia, and",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "More about how they work",
-          "tag": "summary"
+          "w": 38,
+          "text": "No answer on the day, no script on the day, and no decision without you. If anyt",
+          "tag": "dd"
+        },
+        {
+          "w": 35,
+          "text": "Nothing is started at a first appointment. If it comes to that, Dr Bennett would",
+          "tag": "dd"
         }
       ]
     }

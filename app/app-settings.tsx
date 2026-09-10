@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { CaretRight, Gear } from "@phosphor-icons/react";
 import { Sheet } from "./sheet";
-import { WalkthroughSwitch } from "./explain";
 
 /** One row of the sheet. A real link, so long-press and open-in-new-tab still work. */
 function SettingsLink({ href, title, detail }: { href: string; title: string; detail: string }) {
@@ -45,13 +44,6 @@ export function AppSettings({ children }: { children?: React.ReactNode }) {
       {mount ? createPortal(trigger, mount) : trigger}
       <Sheet open={open} title="Settings" onClose={() => setOpen(false)}>
         <div className="settings-list">
-          <div className="settings-switch-row">
-            <span>
-              <strong>Explanations</strong>
-              <small>Every screen can explain itself. Off, it shows only what to do.</small>
-            </span>
-            <WalkthroughSwitch compact />
-          </div>
           <SettingsLink href="/profile" title="Search filters" detail="Where you are, the kind of support, and the declared facts a provider must have." />
           <SettingsLink href="/story" title="About ADHD.ME" detail="Why the product exists and what the route through assessment costs today." />
           <SettingsLink href="/faq" title="Questions" detail="What this is, what it costs, where it operates, and how the order is decided." />

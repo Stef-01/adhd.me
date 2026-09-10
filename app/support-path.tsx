@@ -7,7 +7,6 @@
 // they choose — nothing is shared by the app.
 
 import Link from "next/link";
-import { Explain } from "./explain";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check, Copy } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
@@ -53,7 +52,6 @@ export function SupportPath() {
       <header className="life-head">
         <span className="life-eyebrow">Support</span>
         <h1>{need ? "From the problem to the person." : "Start from the problem, not the profession."}</h1>
-        <Explain>{need ? "Each step is built from what you have told the app. Professional support is the last step, not the first." : "Once the app knows what is hardest for you, this page walks from that problem to the kind of help that fits it."}</Explain>
       </header>
 
       {record && !need && (

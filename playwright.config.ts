@@ -79,7 +79,7 @@ export default defineConfig({
     storageState: {
       cookies: [],
       origins: [
-        { origin: BASE_URL, localStorage: [{ name: "adhdme-privacy-ack", value: "1" }, { name: "adhdme.walkthrough.v1", value: '{"v":1,"on":false,"offered":true}' }] },
+        { origin: BASE_URL, localStorage: [{ name: "adhdme-privacy-ack", value: "1" }] },
       ],
     },
   },

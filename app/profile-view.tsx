@@ -1,6 +1,5 @@
 "use client";
 
-import { Explain } from "./explain";
 
 // O233 (founder-directed): the Profile tab.
 //
@@ -220,9 +219,7 @@ export function ProfileView() {
               </li>
             ))}
           </ul>
-          {place.trim() === "" ? (
-            <Explain className="me-place-status">Nearer GPs come first among equal matches, and the map after you search is drawn from here.</Explain>
-          ) : (
+          {place.trim() !== "" && (
             <p className="me-place-status">
               {origin ? `Distances are measured from ${origin.suburb} (${origin.postcode}).` : "We do not cover that location yet."}
             </p>
@@ -249,9 +246,6 @@ export function ProfileView() {
             </AnimatePresence>
           </span>
         </div>
-        <Explain className="me-section-lead">
-          Each one narrows the list to providers who declare it. The words you search with still decide the order.
-        </Explain>
 
         <ul className="me-switches">
           {SWITCHES.map((row, index) => (
@@ -264,7 +258,6 @@ export function ProfileView() {
               <label className="me-switch">
                 <span>
                   <strong>{row.title}</strong>
-                  <Explain as="small">{row.detail}</Explain>
                 </span>
                 <input
                   type="checkbox"

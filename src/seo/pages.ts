@@ -42,7 +42,7 @@
 //   carries the page's primary keyword; four of the ten do not (`/faq` says "Questions",
 //   `/clinicians` and `/clinicians/join` open on funnel questions, and `/practices` renders a
 //   heading that lives in `landing-copy.ts` as a compliance constant). Three of those four H1s are
-//   pinned by `e2e/support/working-truth.ts` proofs, so rewriting them is a copy unit with its own
+//   (once pinned by a working-truth register, deleted 2026-09-10) so rewriting them is a copy unit with its own
 //   verification, not a line in this one. `e2e/seo.spec.ts` enforces the part that IS true today —
 //   exactly one H1 per indexable route — and the rest is written down here instead of pretended.
 

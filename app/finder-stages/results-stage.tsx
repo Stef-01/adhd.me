@@ -343,15 +343,6 @@ export function ResultsStage({
           The tie note joins it as a second sentence in the same paragraph rather than a second
           line: it is only ever present in the `informed` case, where it narrows a claim the first
           sentence just made, and two greys stacked would read as a warning stack. */}
-      <motion.p
-        className="results-order-note"
-        initial={reducedMotion ? false : { opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
-      >
-        {orderNote}
-        {tieNote ? ` ${tieNote}` : ""}
-      </motion.p>
       {/* Phase M (ADR 0007): the other way in. A listing shows everybody and leaves the choosing to
           the reader; a match proposes three, each with a reason, and each GP answers from their
           side. Offered here as a sentence and a link, never as a redirect, because the finder

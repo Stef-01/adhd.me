@@ -9,7 +9,6 @@ import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { DECLINE_REASON_LABELS } from "@/lib/matching/labels";
 import type { PatientView } from "@/lib/matching/views";
-import { Explain } from "../explain";
 import { Badges, Portrait } from "./gp-bits";
 import { FROM_TAB_COPY, MATCH_STATUS_COPY, clearPatientId, clearView, fetchPatient, readPatientId, type HeldView } from "./session";
 
@@ -68,7 +67,6 @@ export function MatchResults() {
         <span className="life-eyebrow">Your matches</span>
         <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}, each with a reason`}</h1>
         {view.heard.length > 0 && <p className="match-lede">Heard: {view.heard.slice(0, 3).join(", ")}.</p>}
-        <Explain className="match-lede">Each GP below saw your request and answers from their side. The reason under each name is what you and they have in common.</Explain>
       </header>
 
       {view.fromTab && (
@@ -87,7 +85,6 @@ export function MatchResults() {
               <div>
                 <strong>{m.gp.name}</strong>
                 <small>{m.gp.suburb}</small>
-                <Explain as="small">{m.gp.practice}</Explain>
               </div>
             </div>
             <p className="match-headline">{m.rationale.headline}</p>
@@ -145,7 +142,6 @@ export function MatchResults() {
           Delete my request
         </button>
       </div>
-      <Explain className="match-copy-note">Delete removes your words, the matches proposed for you and anything you told us afterwards, from our side as well as this tab.</Explain>
     </main>
   );
 }

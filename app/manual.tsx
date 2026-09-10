@@ -1,6 +1,5 @@
 "use client";
 
-import { Explain } from "./explain";
 
 // My Manual (PRD §27): three sections the person writes about themselves. Yours to edit; nothing
 // here is written for you. Suggestions come from what this device already holds and become text
@@ -41,13 +40,11 @@ export function MyManual() {
         <span className="life-eyebrow">My Manual</span>
         <h1 className="life-title">How I work, in my own words.</h1>
         <p className="life-lede">Yours to write and change.</p>
-        <Explain className="life-lede">Nothing here is written for you: what this app has noticed is offered underneath each section, and becomes part of your manual only when you add it. It stays on this device.</Explain>
       </header>
 
       {MANUAL_SECTIONS.map((s) => (
         <section key={s.id} className="life-card manual-section" aria-labelledby={`manual-${s.id}`}>
           <h2 id={`manual-${s.id}`}>{s.title}</h2>
-          <Explain className="manual-prompt">{s.prompt}</Explain>
           <textarea className="manual-text" id={`manual-text-${s.id}`} aria-label={s.title} rows={4} value={record.manual[s.id]} placeholder={s.placeholder} onChange={(e) => save(s.id, e.target.value)} />
           {suggestions[s.id].length > 0 && (
             <div className="manual-suggest" role="group" aria-label={`Suggestions for ${s.title.toLowerCase()}`}>
@@ -64,7 +61,6 @@ export function MyManual() {
 
       <section className="life-card" aria-labelledby="manual-share">
         <h2 id="manual-share">Share it, if you want to</h2>
-        <Explain>Copy the manual as plain text and hand it to whoever it is for. Nothing is sent anywhere by this app.</Explain>
         <div className="life-actions">
           <button type="button" className="learn-primary" onClick={copy} disabled={!written}>{copied ? <><Check size={17} weight="bold" aria-hidden="true" /> Copied</> : <><Copy size={17} weight="bold" aria-hidden="true" /> Copy as text</>}</button>
           <Link className="learn-secondary" href="/my-adhd">Back to My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>

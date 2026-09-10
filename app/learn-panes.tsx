@@ -14,7 +14,7 @@
 //
 // THE WORDS. The gold-standard apps hold about forty words above the fold, so this page holds a
 // heading, two tab names, one card and the tiles' titles. What the panes mean is behind the
-// walkthrough switch (`<Explain>`), where it costs nothing to a person who has read it once.
+// walkthrough switch (deleted 2026-09-10: the words went, not into hiding).
 //
 // EVERY GESTURE NEEDS A TAP EQUIVALENT (the sheet's law): the tabs are the equivalent of the
 // swipe, and under reduced motion the swipe is not offered at all.
@@ -29,7 +29,6 @@ import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
 import type { LearnCursor } from "@/learn/cursor";
 import { deviceLearningStorage } from "@/learn/cursor";
-import { Explain } from "./explain";
 import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
 import { LeoBedroom } from "./lives/leo-mosquito";
@@ -155,9 +154,6 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
           </button>
         ))}
       </div>
-      <Explain>
-        Games are other people&rsquo;s moments: you find out what is yours. Modules are the moves, two to five minutes each, in the order the games suggested. Swipe, or tap.
-      </Explain>
       <div id="learn-pane-panel" role="tabpanel" aria-labelledby={`learn-tab-${pane}`} data-pane={pane}>
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
@@ -274,7 +270,6 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
         <Link className="learn-play-cast-link" href="/lives/characters">
           The eight lives <ArrowRight size={16} weight="bold" aria-hidden="true" />
         </Link>
-        <Explain>Eight people, three lives, thirty seconds a moment. A miss is comedy; nothing you say afterwards is scored.</Explain>
       </div>
       <Link className="leo-feature" href="/lives/play/leo-mosquito">
         <span className="leo-feature-art">
@@ -288,7 +283,6 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
         </span>
       </Link>
       </div>
-      <Explain>Below, twenty short games. Each is a scene from one person&rsquo;s life, three taps long, and ends by asking whether it is you too.</Explain>
       <ol className="learn-stack" data-testid="learn-games">
         {runs.map((module, index) => (
           <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
@@ -353,7 +347,6 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
         </ul>
       )}
       {forYou.length > 0 && <Shelf title="For you" strategies={forYou} done={done} />}
-      <Explain>&ldquo;For you&rdquo; comes from what you said in the games: the moments you marked as yours, the goals below, and what you have already tried.</Explain>
       <h3 className="lives-section-title">Understand ADHD</h3>
       <ol className="learn-stack" data-testid="learn-reads">
         {reads.map((module, index) => (
@@ -386,7 +379,6 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
       </ul>
       <details className="life-why lives-goals">
         <summary>What would you most like help with?</summary>
-        <Explain>Up to three. It only changes what is suggested first.</Explain>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => (
             <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>
