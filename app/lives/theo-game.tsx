@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { actTheo, createTheoPlan, freshTheoState, THEO_ITEMS, type TheoItem, type TheoState } from "@/lives/theo-launch";
+import { actTheo, createTheoPlan, freshTheoState, THEO_ITEMS, type TheoItem } from "@/lives/theo-launch";
 import { TheoHallway, TheoProp } from "./theo-art";
 import type { EngineProps } from "./engines";
 

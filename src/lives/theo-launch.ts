@@ -19,7 +19,7 @@ export function createTheoPlan(seed: number, level: number): TheoPlan {
   const distractions: TheoItem[] = ["book", "plant", "laundry", "email", "coffee", "controller"];
   const objects = [...essentials, ...distractions.slice(0, level >= 7 ? 6 : level >= 4 ? 4 : 3)];
   const rng = seededRng(seed);
-  for (let i = objects.length - 1; i > 0; i--) { const j = Math.floor(rng.next() * (i + 1)); [objects[i], objects[j]] = [objects[j], objects[i]]; }
+  for (let i = objects.length - 1; i > 0; i--) { const j = Math.floor(rng.next() * (i + 1)); [objects[i], objects[j]] = [objects[j]!, objects[i]!]; }
   return { essentials, objects, duration: level >= 7 ? 16000 : level >= 4 ? 20000 : 24000 };
 }
 
