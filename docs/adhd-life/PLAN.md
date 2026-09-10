@@ -130,7 +130,9 @@ Each item is one PR-sized piece. Nothing below is started.
       university support service — five kinds in `professions.ts` with cues the finder reads, one
       synthetic example of each on the roster, a `regular-eating` expertise tag, and the eating,
       gut, sleep and conflict modules naming them. (2026-09-08)
-- [ ] Accounts and sync — the first thing that needs a backend; ADR 0004 is where to argue it.
+- [ ] Accounts and sync — the first thing that needs a backend. **Argued 2026-09-10 in ADR 0008**
+      (three options, a recommendation: sync without identity behind the matching journal's two
+      variables, a recovery code instead of an email); the decision is the founder's.
 
 ### Phase L — ADHD Lives (PRD v2, `docs/adhd-lives/PRD-v2.md`, ADR 0006)
 
