@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T13:15:32.987Z",
-  "base": "http://localhost:3662",
+  "measuredAt": "2026-09-10T23:26:13.476Z",
+  "base": "http://localhost:3685",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -71,10 +71,10 @@
       "path": "/adjustments",
       "name": "/adjustments",
       "state": null,
-      "total": 51,
+      "total": 49,
       "fold": 49,
       "chrome": 8,
-      "ratio": 1.3,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
@@ -126,7 +126,7 @@
       "name": "/approach/map",
       "state": null,
       "total": 148,
-      "fold": 92,
+      "fold": 77,
       "chrome": 8,
       "ratio": 3.7,
       "verdict": "long-form",
@@ -233,26 +233,26 @@
       "path": "/demo",
       "name": "/demo",
       "state": null,
-      "total": 100,
-      "fold": 100,
+      "total": 17,
+      "fold": 17,
       "chrome": 0,
-      "ratio": 2.5,
-      "verdict": "long-form",
+      "ratio": 0.4,
+      "verdict": "target",
       "longest": [
         {
-          "w": 26,
-          "text": "Open one in a second tab when the script reaches the patient moment. Statuses ar",
-          "tag": "p"
-        },
-        {
-          "w": 18,
-          "text": ", one open session, three invited patients. No real patient data, no live SMS, t",
+          "w": 6,
+          "text": "That link is old or mistyped.",
           "tag": "p"
         },
         {
           "w": 5,
-          "text": "Reset demo to the start",
-          "tag": "button"
+          "text": "That page does not exist.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Start from the beginning",
+          "tag": "a"
         }
       ]
     },
@@ -314,10 +314,10 @@
       "path": "/lives",
       "name": "/lives",
       "state": null,
-      "total": 32,
-      "fold": 32,
+      "total": 27,
+      "fold": 27,
       "chrome": 8,
-      "ratio": 0.8,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -326,14 +326,14 @@
           "tag": "p"
         },
         {
-          "w": 7,
-          "text": "What would you most like help with?",
-          "tag": "summary"
-        },
-        {
           "w": 5,
           "text": "Eight lives. Three of yours.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "The eight lives",
+          "tag": "strong"
         }
       ]
     },
@@ -368,10 +368,10 @@
       "path": "/lives/lab",
       "name": "/lives/lab",
       "state": null,
-      "total": 491,
+      "total": 518,
       "fold": 53,
       "chrome": 8,
-      "ratio": 12.3,
+      "ratio": 13,
       "verdict": "long-form",
       "longest": [
         {
@@ -395,17 +395,12 @@
       "path": "/lives/learn",
       "name": "/lives/learn",
       "state": null,
-      "total": 46,
+      "total": 41,
       "fold": 20,
       "chrome": 8,
-      "ratio": 1.2,
+      "ratio": 1,
       "verdict": "ceiling",
       "longest": [
-        {
-          "w": 7,
-          "text": "What would you most like help with?",
-          "tag": "summary"
-        },
         {
           "w": 4,
           "text": "A little more understanding.",
@@ -415,6 +410,11 @@
           "w": 4,
           "text": "Get to know ADHD.",
           "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "The care map",
+          "tag": "a"
         }
       ]
     },
@@ -449,26 +449,26 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 35,
-      "fold": 35,
+      "total": 19,
+      "fold": 19,
       "chrome": 0,
-      "ratio": 0.9,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 13,
-          "text": "Clear one wave at a time. Catch every mosquito to help Leo settle.",
+          "w": 8,
+          "text": "Catch every mosquito, one wave at a time.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Untimed · clear every wave",
+          "w": 3,
+          "text": "Leo & the mosquito",
           "tag": "span"
         },
         {
-          "w": 4,
-          "text": "No timer or movement",
-          "tag": "label"
+          "w": 3,
+          "text": "One tiny sound.",
+          "tag": "h1"
         }
       ]
     },
@@ -638,26 +638,26 @@
       "path": "/medication",
       "name": "/medication",
       "state": null,
-      "total": 45,
-      "fold": 27,
+      "total": 26,
+      "fold": 19,
       "chrome": 8,
-      "ratio": 1.1,
-      "verdict": "ceiling",
+      "ratio": 0.7,
+      "verdict": "target",
       "longest": [
         {
-          "w": 9,
-          "text": "What it changes, what it leaves, in your words.",
-          "tag": "h1"
-        },
-        {
-          "w": 8,
-          "text": "Bring it to the person who manages it",
+          "w": 5,
+          "text": "What it seems to change",
           "tag": "h2"
         },
         {
-          "w": 7,
-          "text": "A note for whoever manages your medication.",
-          "tag": "p"
+          "w": 4,
+          "text": "Medication, in your words.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "What it leaves untouched",
+          "tag": "h2"
         }
       ]
     },
@@ -719,10 +719,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1234,
+      "total": 1174,
       "fold": 220,
       "chrome": 23,
-      "ratio": 30.9,
+      "ratio": 29.4,
       "verdict": "long-form",
       "longest": [
         {
@@ -800,26 +800,26 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 55,
-      "fold": 35,
+      "total": 41,
+      "fold": 27,
       "chrome": 8,
-      "ratio": 1.4,
+      "ratio": 1,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 5,
-          "text": "How far you would travel",
-          "tag": "summary"
+          "w": 3,
+          "text": "Where you are",
+          "tag": "h2"
         },
         {
-          "w": 4,
-          "text": "Notes during the consult",
-          "tag": "summary"
+          "w": 3,
+          "text": "Suburb or postcode",
+          "tag": "label"
         },
         {
-          "w": 4,
-          "text": "Stays on this device.",
-          "tag": "p"
+          "w": 3,
+          "text": "Kind of support",
+          "tag": "summary"
         }
       ]
     },
@@ -1146,26 +1146,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 9,
-      "fold": 9,
+      "total": 4,
+      "fold": 4,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
-        {
-          "w": 4,
-          "text": "Jax at the checkout",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "ONLY THE LIST!",
-          "tag": "p"
-        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "Wasps",
+          "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "SWAT!",
+          "tag": "p"
         }
       ]
     },
