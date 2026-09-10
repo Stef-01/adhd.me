@@ -31,6 +31,22 @@ What the captures showed, and what changed in response.
 | Jax's kayak | Read as a crossed-out eye | A hull, a cockpit, a double paddle and a sale tag |
 | The drone | A speck | A body, four arms, four rotors, a camera and a light |
 
-## Stages 3 to 5
+## Stage 3: whole places (4e1dfd6, 17a0056)
+
+| Screen | Finding | Change |
+|---|---|---|
+| Every bean-run round | The 360 by 200 place filled the bottom quarter of a portrait stage; the rest was bare colour | Each place has a wall drawn above its furniture: lamps whose cords leave the top of the frame, shelves, frames, windows, cabinets, a calendar, a skyline and clouds outside |
+| Run title cards | A bean, a title and a button over empty colour | The card stands in its first round's place; the bean stands beside the furniture |
+| Leo, ready and playing | A band of bare lavender under the room | The room grows into the height the rows leave |
+| Lights Out | The Now button sat on Leo's window | The moment keeps left of the window |
+| Balance | "Steady" on the bean and again under the scene; the tray overlapped the kitchen rail | The line under the scene says "Level"; balance rounds show the room without its wall |
+| Catch | Tossed things were text chips | Each is its drawing on a round tile with a small caption |
+| Do not tap | The temptation sat on the desk, and a pale glass square trailed it | It waits on the wall; the glass lens skips the in-scene temptation |
+| Nina's crossing | The start was a pill with her name | Nina stands at the start |
+
+Kept on purpose: the clue line under a round's instruction. The founder asked for every right answer
+to be inferable from the scene (2026-09-08), and unit and e2e tests pin it.
+
+## Stages 4 and 5
 
 Recorded as each recapture is read.
