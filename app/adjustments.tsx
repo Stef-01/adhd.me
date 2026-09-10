@@ -52,13 +52,12 @@ export function Adjustments() {
           <h2 id="adjust-title">{entry.title}</h2>
         </section>
 
-        <section className="life-card" aria-labelledby="adjust-available">
-          <h2 id="adjust-available"><ListChecks size={20} weight="bold" aria-hidden="true" /> Commonly available</h2>
-          <p>Ask for the two that would change most first.</p>
-          <ul className="life-list">
+        <details className="life-card match-more" open>
+          <summary>Commonly available</summary>
+                    <ul className="life-list">
             {entry.commonlyAvailable.map((line) => <li key={line}><Check size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
-        </section>
+        </details>
 
         <details className="life-card match-more">
           <summary>Who to ask</summary>

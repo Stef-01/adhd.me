@@ -356,12 +356,14 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
         </ul>
       )}
       {forYou.length > 0 && <Shelf title="For you" strategies={forYou} done={done} open />}
-      <h3 className="lives-section-title">Understand ADHD</h3>
+      <details className="lives-shelf learn-shelf" data-shelf="reads">
+        <summary className="lives-section-title">Understand ADHD</summary>
       <ol className="learn-stack" data-testid="learn-reads">
         {reads.map((module, index) => (
           <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
         ))}
       </ol>
+      </details>
       <Shelf title="Two-minute tools" strategies={quick} done={done} />
       {STRATEGY_SHELVES.map((shelf) => {
         const rows = STRATEGIES.filter((s) => s.domains.some((d) => shelf.domains.includes(d)) && !quick.includes(s));

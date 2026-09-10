@@ -146,7 +146,7 @@ export function MatchPrep() {
       )}
 
       <div className="match-actions">
-        <Link href="/match/results">Back to your matches</Link>
+        <Link href="/match/results">Matches</Link>
       </div>
     </main>
   );

@@ -117,7 +117,7 @@ export function MatchResults() {
 
       <div className="match-actions">
         <Link className={anyAccepted ? "" : "is-primary"} href="/match/prep">
-          What to bring, and what to expect
+          Prepare
         </Link>
         {anyAccepted && <Link href="/match/feedback">How did it go?</Link>}
         <button

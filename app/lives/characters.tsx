@@ -36,15 +36,16 @@ export function LivesCharacters() {
                 <summary>Their moment</summary>
                 <p className="lives-hook">{c.hook}</p>
                 <p className="lives-moment-line">“{c.moment}”</p>
+                <div className="lives-choices is-three" role="group" aria-label={`${c.name}: is this you`}>
+                {RESPONSES.map((r) => <button key={r.id} type="button" className="lives-choice is-small" aria-pressed={answer === r.id} onClick={() => { apply((s) => recordResonance(s, { sourceType: "character", sourceId: c.id, response: r.id })); track("RESONANCE_SELECTED", { source: c.id, response: r.id }); }}>{r.label}</button>)}
+              </div>
                 <span className="lives-kicker">Things {c.name} is trying</span>
                 <ul className="lives-rows">
                   {c.trying.map((id) => { const s = strategy(id); return <li key={id}><Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(s.moduleId)}`}><span className="lives-row-text"><strong>{s.title}</strong><span>{s.estimatedMinutes} min</span></span></Link></li>; })}
                 </ul>
               </details>
               {c.id === "leo" && <Link className="lives-row" href="/lives/play/leo-mosquito">Play Leo’s moment →</Link>}
-              <div className="lives-choices is-three" role="group" aria-label={`${c.name}: is this you`}>
-                {RESPONSES.map((r) => <button key={r.id} type="button" className="lives-choice is-small" aria-pressed={answer === r.id} onClick={() => { apply((s) => recordResonance(s, { sourceType: "character", sourceId: c.id, response: r.id })); track("RESONANCE_SELECTED", { source: c.id, response: r.id }); }}>{r.label}</button>)}
-              </div>
+              
             </li>
           );
         })}

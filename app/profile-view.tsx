@@ -415,8 +415,8 @@ export function ProfileView() {
       </section>
 
       {/* ── What this tab holds ───────────────────────────────────────────────────────────── */}
-      <section className="me-section" aria-labelledby="me-held-title">
-        <h2 id="me-held-title">This search</h2>
+      <details className="me-section me-fold">
+        <summary id="me-held-title">This search</summary>
         {held ? (
           <>
             <ul className="me-facts">
@@ -460,7 +460,7 @@ export function ProfileView() {
             </Link>
           </div>
         )}
-      </section>
+      </details>
 
       <p className="me-privacy">Stays on this device.</p>
       {/* RADIANT: the sticky bar the founder drew above the tab bar — the one act this screen is

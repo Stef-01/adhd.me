@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T07:37:53.179Z",
-  "base": "http://localhost:3634",
+  "measuredAt": "2026-09-10T07:56:01.736Z",
+  "base": "http://localhost:3636",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -71,26 +71,26 @@
       "path": "/adjustments",
       "name": "/adjustments",
       "state": null,
-      "total": 334,
+      "total": 103,
       "fold": 86,
       "chrome": 8,
-      "ratio": 8.4,
+      "ratio": 2.6,
       "verdict": "OVER",
       "longest": [
         {
-          "w": 24,
-          "text": "Assessment, medication and its review, the physical checks around it, and referr",
-          "tag": "p"
+          "w": 11,
+          "text": "A reduced study load without losing full-time status for some purposes",
+          "tag": "span"
         },
         {
-          "w": 18,
-          "text": "Send the plan to each unit's coordinator at the start of term; the service will ",
-          "tag": "li"
+          "w": 11,
+          "text": "A named contact who can speak to a lecturer for you",
+          "tag": "span"
         },
         {
-          "w": 17,
-          "text": "Study adjustments on paper — extensions, exam arrangements, note-taking — throug",
-          "tag": "p"
+          "w": 10,
+          "text": "Assignment briefs in writing with a clear definition of done",
+          "tag": "span"
         }
       ]
     },
@@ -152,25 +152,25 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 77,
-      "fold": 37,
+      "total": 50,
+      "fold": 29,
       "chrome": 8,
-      "ratio": 1.9,
-      "verdict": "OVER",
+      "ratio": 1.3,
+      "verdict": "ceiling",
       "longest": [
-        {
-          "w": 19,
-          "text": "Five minutes, every quarter hour. Everyone who joins follows the same scheduled ",
-          "tag": "p"
-        },
         {
           "w": 9,
           "text": "Five minutes, every quarter hour, on a shared clock.",
           "tag": "h2"
         },
         {
-          "w": 8,
-          "text": "Written guidance · Optional soft chimes · No account needed",
+          "w": 5,
+          "text": "A GUIDED MOMENT OF STILLNESS",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Sit comfortably. Follow the prompts.",
           "tag": "p"
         }
       ]
@@ -341,10 +341,10 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 255,
-      "fold": 40,
+      "total": 114,
+      "fold": 33,
       "chrome": 8,
-      "ratio": 6.4,
+      "ratio": 2.9,
       "verdict": "OVER",
       "longest": [
         {
@@ -353,14 +353,14 @@
           "tag": "p"
         },
         {
-          "w": 6,
-          "text": "Why Am I Here? External Cue",
-          "tag": "strong"
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
         },
         {
-          "w": 6,
-          "text": "Put It Where You’ll Need It",
-          "tag": "strong"
+          "w": 4,
+          "text": "Restlessness and sensory intensity",
+          "tag": "p"
         }
       ]
     },
@@ -395,10 +395,10 @@
       "path": "/lives/learn",
       "name": "/lives/learn",
       "state": null,
-      "total": 204,
+      "total": 69,
       "fold": 20,
       "chrome": 8,
-      "ratio": 5.1,
+      "ratio": 1.7,
       "verdict": "OVER",
       "longest": [
         {
@@ -407,14 +407,14 @@
           "tag": "summary"
         },
         {
-          "w": 6,
-          "text": "Put It Where You’ll Need It",
-          "tag": "strong"
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
         },
         {
-          "w": 6,
-          "text": "Why Am I Here? External Cue",
-          "tag": "strong"
+          "w": 4,
+          "text": "A little more understanding.",
+          "tag": "h1"
         }
       ]
     },
@@ -638,25 +638,25 @@
       "path": "/medication",
       "name": "/medication",
       "state": null,
-      "total": 89,
-      "fold": 55,
+      "total": 50,
+      "fold": 28,
       "chrome": 8,
-      "ratio": 2.2,
-      "verdict": "OVER",
+      "ratio": 1.3,
+      "verdict": "ceiling",
       "longest": [
         {
-          "w": 19,
-          "text": "What is different on the days it is working — in your words, with an example if ",
-          "tag": "p"
+          "w": 9,
+          "text": "What it changes, what it leaves, in your words.",
+          "tag": "h1"
         },
         {
-          "w": 10,
-          "text": "The difficulties that are the same with or without it.",
-          "tag": "p"
+          "w": 8,
+          "text": "Bring it to the person who manages it",
+          "tag": "h2"
         },
         {
-          "w": 10,
-          "text": "What you would rather it did not do, and when.",
+          "w": 7,
+          "text": "A note for whoever manages your medication.",
           "tag": "p"
         }
       ]
@@ -800,10 +800,10 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 223,
-      "fold": 44,
+      "total": 128,
+      "fold": 38,
       "chrome": 8,
-      "ratio": 5.6,
+      "ratio": 3.2,
       "verdict": "OVER",
       "longest": [
         {
@@ -812,14 +812,14 @@
           "tag": "strong"
         },
         {
-          "w": 16,
-          "text": "Straight-line, from the suburb above. GPs who see new people by telehealth first",
-          "tag": "p"
+          "w": 5,
+          "text": "How far you would travel",
+          "tag": "summary"
         },
         {
-          "w": 11,
-          "text": "Everything below is held on this device only, for this tab.",
-          "tag": "p"
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
         }
       ]
     },
@@ -1016,26 +1016,26 @@
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
       "state": null,
-      "total": 108,
-      "fold": 70,
+      "total": 44,
+      "fold": 40,
       "chrome": 0,
-      "ratio": 2.7,
-      "verdict": "OVER",
+      "ratio": 1.1,
+      "verdict": "ceiling",
       "longest": [
-        {
-          "w": 7,
-          "text": "Stimulant first, when medication is the plan",
-          "tag": "span"
-        },
-        {
-          "w": 6,
-          "text": "Credentials, as declared and as checked",
-          "tag": "h2"
-        },
         {
           "w": 5,
           "text": "ADHD assessment across ages, titration.",
           "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "More about how they work",
+          "tag": "summary"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
         }
       ]
     },
@@ -1043,17 +1043,12 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 123,
-      "fold": 73,
+      "total": 98,
+      "fold": 68,
       "chrome": 8,
-      "ratio": 3.1,
+      "ratio": 2.5,
       "verdict": "OVER",
       "longest": [
-        {
-          "w": 9,
-          "text": "Three GPs picked for you, each with a reason",
-          "tag": "a"
-        },
         {
           "w": 8,
           "text": "Beecroft & Double Bay, by telehealth, wherever you are",
@@ -1063,6 +1058,11 @@
           "w": 7,
           "text": "An adult ADHD assessment, telehealth, not rushed.",
           "tag": "span"
+        },
+        {
+          "w": 7,
+          "text": "Double Bay, by telehealth, wherever you are",
+          "tag": "small"
         }
       ]
     },
@@ -1130,25 +1130,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 13,
-      "fold": 9,
+      "total": 8,
+      "fold": 4,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
-        {
-          "w": 5,
-          "text": "Theo, out of the shower",
-          "tag": "p"
-        },
         {
           "w": 4,
           "text": "Skip to main content",
           "tag": "a"
         },
         {
-          "w": 2,
-          "text": "OUT NOW!",
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "Wasps",
           "tag": "p"
         }
       ]
@@ -1157,15 +1157,15 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 105,
-      "fold": 54,
+      "total": 75,
+      "fold": 42,
       "chrome": 8,
-      "ratio": 2.6,
+      "ratio": 1.9,
       "verdict": "OVER",
       "longest": [
         {
-          "w": 8,
-          "text": "adult ADHD assessment, anxiety alongside ADHD, telehealth appointments",
+          "w": 7,
+          "text": "You both talk about adult ADHD assessment.",
           "tag": "p"
         },
         {
@@ -1184,10 +1184,10 @@
       "path": "/match/prep",
       "name": "Match prep",
       "state": "intake",
-      "total": 100,
-      "fold": 52,
+      "total": 71,
+      "fold": 55,
       "chrome": 8,
-      "ratio": 2.5,
+      "ratio": 1.8,
       "verdict": "OVER",
       "longest": [
         {
@@ -1196,14 +1196,14 @@
           "tag": "strong"
         },
         {
-          "w": 6,
-          "text": "As a teenager and young adult",
+          "w": 5,
+          "text": "Medicare card and photo ID",
           "tag": "strong"
         },
         {
           "w": 5,
-          "text": "Medicare card and photo ID",
-          "tag": "strong"
+          "text": "What you will be asked",
+          "tag": "summary"
         }
       ]
     }
