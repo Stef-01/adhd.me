@@ -125,6 +125,12 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     rationale: "W94 records barriers as data attached to a referral, which is itself derived — and barriers are never inferred, so there is no independent store.",
   },
   {
+    module: "src/lib/matching/store.ts",
+    what: "Match requests: a patient's intake narrative, its structured signals and embedding, the matches proposed for them, the feedback on each, and their document checklist",
+    handling: "stored",
+    rationale: "Phase M (ADR 0007) holds the most patient-shaped record in the tree: the narrative a person wrote. It is keyed by an opaque random id that lives only in the person's own browser session, never in a URL or a log line, and `eraseMatchingPatient` removes the patient row, every match proposed for them, every feedback record on those matches and the checklist in one call; `exportMatchingPatient` returns the same set for an access request. GP profiles in the same store are not patient data.",
+  },
+  {
     module: "src/referrals/store.ts",
     what: "Referral documents, acceptance acts, chain events and return reports",
     handling: "stored",

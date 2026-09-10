@@ -48,6 +48,18 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 
+## Bidirectional matching — 2026-09-09
+
+The founder's matching-model brief (rich GP bios, GP-declared preferences and capacity, a
+two-stage pipeline with deferred acceptance presenting a top three with a reason each, mutual
+post-consult feedback) is planned as **Phase M** of [docs/adhd-life/PLAN.md](docs/adhd-life/PLAN.md),
+a six-month sprint to 2027-03-09. ADR 0007 records the decisions.
+
+- [x] M1–M4: the service under `src/lib/matching/`, `/match` and its three, `/gp/[id]`,
+      `/console/gp`, `/match/prep`, `/match/feedback`, the e2e loop. (2026-09-09)
+- [ ] M5: wiring (Supabase, practice scoping, the vault, a dense embedder, the finder's door).
+- [ ] M6: the pilot on real GPs and real records.
+
 ## Q3 2026 (Sep–Nov) — make the redesign real
 
 The founder's words were "optimise and redesign from the ground up." Read literally: don't just

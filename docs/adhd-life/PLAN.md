@@ -186,6 +186,63 @@ native later. Mapped from the PRD's phases 0–6:
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.
 
+### Phase M — bidirectional GP matching, a six-month sprint (ADR 0007, 2026-09-09)
+
+The founder's third brief: move the matching model from one-directional search to a
+bidirectional one, where GPs declare how they work and what they want proposed, patients write
+or speak a narrative, a two-stage pipeline (hard filters plus cosine similarity, then deferred
+acceptance) presents a top three with a reason each, and a mutual post-consult feedback loop
+improves the weights. Built as a modular service under `src/lib/matching/` so it can be
+generalised to another condition by changing the vocabularies. Six months, one milestone a
+month, the first four landed together in this unit; the sprint runs to 2027-03-09.
+
+- [x] **M1 (to 2026-10-09): the service.** Five entities (Patient, GP, Match, Feedback,
+      DocumentChecklist) in `src/lib/matching/types.ts`; a lexical embedder with a closed concept
+      layer behind an `Embedder` interface (`embedding.ts`); candidate generation with eight named
+      hard filters and cosine similarity to a shortlist of ten to fifteen (`candidates.ts`);
+      both-sided ranking with printed breakdowns and global weights pinned to sum to one
+      (`ranking.ts`); many-to-many deferred acceptance, stable by property test
+      (`deferred-acceptance.ts`); the rationale from the concept overlap (`rationale.ts`); roster
+      adapters that invent nothing for a real person (`adapters.ts`); the store, registered for
+      reset, erasure and export (`store.ts`); the SQL mirror (`supabase/migrations/0006`).
+      Ninety-four unit tests, every patient-facing sentence through the landing linter. (2026-09-09)
+- [x] **M2 (to 2026-11-09): intake and the three.** `/match`: the narrative typed or spoken
+      through the finder's speech session, suburb, who it is for, appointment style, billing;
+      `/match/results`: up to three GPs, each with the headline and points the pipeline wrote,
+      the badges (checked on a date, or declared and not yet checked; places open; telehealth;
+      training declared), and where the request stands on the GP's side; `/gp/[id]`: the public
+      profile with how they work, who they see, credentials as declared and as checked, the
+      availability indicator, and the one aggregate sentence with its floor of five. The request
+      id lives in the tab's session storage, never the address bar. (2026-09-09)
+- [x] **M3 (to 2026-12-09): the GP side.** `/console/gp` and `/console/gp/[id]`: the profile the
+      matcher embeds (bio, how they approach medication, dose pace, years, AADPA and RACGP
+      declarations, age groups, what they see alongside, ways of working, telehealth, taking new
+      matches), the bidirectional preferences (age groups wanted, appointment styles, billing,
+      complex comorbidity, the minimum fit below which nobody is proposed), the capacity slider,
+      credential evidence offered by name, and the incoming requests with accept or decline (a
+      reason required) as explicit acts that refuse a second answer. (2026-09-09)
+- [x] **M4 (to 2027-01-09): preparation and the loop.** `/match/prep`: the checklist generated
+      from the narrative's signals with a reason per item, saved ticks, the five-heading timeline
+      template, and what to expect from the GP's own declarations; `/match/feedback` and the GP's
+      two questions on the dashboard: recorded per match, aggregated per GP, and fed to a bounded
+      learning pass over the global weights from eight records up. `e2e/matching.spec.ts` drives
+      the whole loop in a real browser. (2026-09-09)
+- [ ] **M5 (to 2027-02-09): wiring.** Supabase behind the store (`0006_matching.sql` is the
+      shape), practice membership scoping which console account manages which GP profile, the
+      evidence upload through the credentials vault with a verifier's act recording the date, a
+      dense embedder behind the `Embedder` interface evaluated against the lexical one on the
+      corpus in `src/matching/corpus.ts`, and the finder's results offering `/match` as the way to
+      be introduced rather than only listed.
+- [ ] **M6 (to 2027-03-09): the pilot.** Real GPs on their own declarations (the real-person
+      law), ten to twenty matched patients, the learning loop run on real records and its weight
+      shifts read as a report, the top-three explanation tested for comprehension, and the
+      bidirectional evidence question the brief cites answered on this product's own numbers:
+      does letting both sides declare improve fit and completion against the one-directional
+      finder.
+- Founder decisions opened by ADR 0007: a GP-facing evidence upload before the vault is wired;
+  "felt understood" counts on a public profile under the Ahpra testimonial guidance; whether the
+  finder routes to `/match` or the two coexist.
+
 ### Phase C — pilot (PRD §87–§88)
 
 - [ ] Closed pilot, 30–50 users, 2–4 weeks: onboarding completion and median time, module

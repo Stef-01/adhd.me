@@ -44,6 +44,7 @@ const routeGroups: ReadonlyArray<{
       { href: "/console/registers", label: "Registers", description: "Included patient registers" },
       { href: "/console/case-mix", label: "Case mix", description: "Cohort and care composition" },
       { href: "/console/credentials", label: "Credentials", description: "Clinician evidence and review" },
+      { href: "/console/gp", label: "GP profiles", description: "Matching profile, capacity and incoming requests" },
     ],
   },
   {

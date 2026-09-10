@@ -172,6 +172,31 @@ export function setWeights(weights: Readonly<Record<PatientCriterion, number>> |
   state.weights = weights;
 }
 
+/** Everything held about one patient, for an access request. Null when nothing is held. */
+export function exportMatchingPatient(patientId: string, state: MatchingState = getMatching()) {
+  const patient = state.patients.get(patientId);
+  if (!patient) return null;
+  const matches = matchesForPatient(patientId, state);
+  const matchIds = new Set(matches.map((m) => m.id));
+  return {
+    patient,
+    matches,
+    feedback: [...state.feedback.values()].filter((f) => matchIds.has(f.matchId)),
+    checklist: state.checklists.get(patientId) ?? null,
+  };
+}
+
+/** Erase one patient: the row, their matches, the feedback on those matches, their checklist. */
+export function eraseMatchingPatient(patientId: string, state: MatchingState = getMatching()): { erased: boolean; matches: number; feedback: number } {
+  const held = exportMatchingPatient(patientId, state);
+  if (!held) return { erased: false, matches: 0, feedback: 0 };
+  for (const f of held.feedback) state.feedback.delete(f.id);
+  for (const m of held.matches) state.matches.delete(m.id);
+  state.checklists.delete(patientId);
+  state.patients.delete(patientId);
+  return { erased: true, matches: held.matches.length, feedback: held.feedback.length };
+}
+
 /** Counts only: what the mock introspection route may say about this store. */
 export function matchingCounts(state: MatchingState = getMatching()): Record<string, number> {
   return {

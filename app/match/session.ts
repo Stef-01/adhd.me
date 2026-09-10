@@ -1,0 +1,43 @@
+// Phase M (ADR 0007): the browser's half of a match request. The opaque patient id lives in
+// sessionStorage, in the tab and never in the address bar (the finder's law, `src/finder/state.ts`).
+import type { PatientView } from "@/lib/matching/views";
+
+export const MATCH_SESSION_KEY = "adhdme.match.v1";
+
+export function readPatientId(): string | null {
+  try {
+    return window.sessionStorage.getItem(MATCH_SESSION_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function writePatientId(id: string): void {
+  try {
+    window.sessionStorage.setItem(MATCH_SESSION_KEY, id);
+  } catch {
+    // Private mode or a blocked store: the results screen will say it has nothing to show.
+  }
+}
+
+export function clearPatientId(): void {
+  try {
+    window.sessionStorage.removeItem(MATCH_SESSION_KEY);
+  } catch {
+    // Nothing to clear.
+  }
+}
+
+export async function fetchPatient(id: string): Promise<PatientView | null> {
+  const response = await fetch(`/api/match/patient/${encodeURIComponent(id)}`, { cache: "no-store" });
+  if (!response.ok) return null;
+  return (await response.json()) as PatientView;
+}
+
+export const MATCH_STATUS_COPY = {
+  proposed: "Sent to the GP. They accept or decline from their side.",
+  accepted: "Accepted. Prepare for the first appointment below.",
+  declined: "Declined from their side.",
+  completed: "First appointment done.",
+  withdrawn: "Withdrawn.",
+} as const;
