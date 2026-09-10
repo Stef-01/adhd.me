@@ -6,6 +6,7 @@
 // replaces all of it with the safety screen.
 
 import Link from "next/link";
+import { LearningScene } from "./learning-scene";
 import { ArrowRight } from "@phosphor-icons/react";
 import { isComplete } from "@/model/onboarding";
 import { recommend } from "@/model/recommend";
@@ -45,6 +46,7 @@ export function Today() {
         <section className="life-card is-lead" aria-labelledby="today-start">
           <h2 id="today-start">Two minutes so this app can be about you.</h2>
           <p>Ten short questions. Nothing is sent anywhere.</p>
+          <div className="life-figure" aria-hidden="true"><LearningScene variant={1} /></div>
           <div className="life-actions">
             <Link className="learn-primary" href="/start">Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
           </div>

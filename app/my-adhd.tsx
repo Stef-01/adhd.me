@@ -6,6 +6,7 @@
 // No graphs, no score; every line traces to something the person said.
 
 import Link from "next/link";
+import { LearningScene } from "./learning-scene";
 import { useState } from "react";
 import { ArrowRight, Check, Sparkle, Trash } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
@@ -44,6 +45,7 @@ export function MyAdhd() {
         <section className="life-empty" aria-labelledby="my-empty">
           <h2 id="my-empty">Nothing here yet, and that is honest.</h2>
           <p>Answer a module, or the ten questions.</p>
+          <div className="life-figure" aria-hidden="true"><LearningScene topic="adhd" /></div>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href={isComplete(record.onboarding) ? "/approach" : "/start"}>{isComplete(record.onboarding) ? "Explore a module" : "Start"} <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
           </div>

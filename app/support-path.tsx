@@ -7,6 +7,7 @@
 // they choose — nothing is shared by the app.
 
 import Link from "next/link";
+import { LearningScene } from "./learning-scene";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check, Copy } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
@@ -57,6 +58,7 @@ export function SupportPath() {
         <section className="life-empty" aria-labelledby="support-empty">
           <h2 id="support-empty">Nothing to walk from yet.</h2>
           <p>Answer the ten questions and the path fills in.</p>
+          <div className="life-figure" aria-hidden="true"><LearningScene topic="finding" /></div>
           <div className="life-actions" style={{ justifyContent: "center" }}>
             <Link className="learn-primary" href="/start">Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
             <Link className="learn-secondary" href="/">Search the finder</Link>

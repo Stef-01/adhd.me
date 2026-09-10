@@ -54,6 +54,7 @@ export function Adjustments() {
           </ul>
         </details>
 
+        <div className="life-folds">
         <details className="life-card match-more">
           <summary>Who to ask</summary>
           <ul className="life-list">
@@ -94,6 +95,7 @@ export function Adjustments() {
             })}
           </ul>
         </details>
+        </div>
       </div>
     </div>
   );

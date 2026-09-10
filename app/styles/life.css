@@ -288,3 +288,14 @@
   .safety-note { max-width: 66ch; font-size: 1rem; }
   .onboarding-note { max-width: 58ch; font-size: 1.0313rem; }
 }
+/* An empty state carries a drawing instead of a paragraph: presence without words. */
+.life-figure { margin: 8px auto 4px; max-width: 320px; }
+.life-figure .learning-scene { width: 100%; height: auto; max-height: 200px; }
+/* The life pages' title, in the display scale the redesign gave Inter (Newsreader is for questions). */
+.life-title { margin: 0 0 16px; font-size: clamp(28px, 6vw, 34px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+/* Closed folds as one list of rows, not a stack of empty cards. */
+.life-folds { margin: 0 0 14px; border-top: 1px solid var(--line); }
+.life-folds .life-card.match-more { margin: 0; padding: 4px 0; border-width: 0 0 1px; border-radius: 0; background: transparent; }
+.life-folds .life-card.match-more > summary { color: var(--ink); font-size: 1rem; font-weight: 600; }
+.life-folds .life-card.match-more > summary::after { margin-left: auto; color: var(--accent); }
+.life-folds .life-card.match-more[open] { padding-bottom: 14px; }
