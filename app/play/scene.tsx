@@ -67,6 +67,103 @@ function Window({ x, y, w, h, dark = 0, children }: { x: number; y: number; w: n
   </>;
 }
 
+// ── The wall (games-review.md stage 3) ──────────────────────────────────────────────────────────
+// Every place was a 360 by 200 strip fitted to the stage's width, so a phone showed a room 216px
+// tall under half a screen of bare colour. Leo's room is a whole room: a wall with a window and a
+// lamp above the bed. Each place now has its wall, drawn in the band above its furniture (y -250
+// to 0), and the canvas reaches up to take it in, so the place fills a portrait stage whole. The
+// walls react to nothing; the one reacting part stays in the furniture below.
+function Pendant({ x, drop = 90 }: { x: number; drop?: number }) {
+  const y = -250 + drop;
+  return <>
+    <path d={`M${x} -250v${drop}`} className="s-deep" strokeWidth="2" />
+    <ellipse cx={x} cy={y + 34} rx="34" ry="15" className="f-warm" opacity=".26" />
+    <path d={`M${x - 20} ${y + 20}h40l-10-20h-20z`} className="f-deep" />
+  </>;
+}
+function Frame({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
+  return <>
+    <rect x={x} y={y} width={w} height={h} rx="4" className="f-light" />
+    <path d={`M${x + 8} ${y + h - 8}l${w * 0.28} ${-h * 0.46} ${w * 0.18} ${h * 0.2} ${w * 0.14} ${-h * 0.14} ${w * 0.4 - 16} ${h * 0.4}z`} className="f-accent" />
+    <circle cx={x + w * 0.72} cy={y + h * 0.3} r={Math.min(w, h) * 0.09} className="f-warm" />
+    <rect x={x} y={y} width={w} height={h} rx="4" fill="none" className="s-mid" strokeWidth="4" />
+  </>;
+}
+function Shelf({ x, y, w }: { x: number; y: number; w: number }) {
+  const books: ReadonlyArray<readonly [string, number]> = [["f-deep", 26], ["f-warm", 20], ["f-accent", 24], ["f-mid", 18]];
+  return <>
+    {books.map(([c, h], i) => <rect key={i} x={x + 8 + i * 14} y={y - h} width="11" height={h} rx="1.5" className={c} />)}
+    <rect x={x + w - 28} y={y - 10} width="18" height="10" rx="2" className="f-warm" /><circle cx={x + w - 19} cy={y - 18} r="11" className="f-accent" />
+    <rect x={x} y={y} width={w} height="7" rx="2" className="f-deep" />
+  </>;
+}
+function Cloud({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
+  return <g transform={`translate(${x} ${y}) scale(${s})`}>
+    <ellipse cx="0" cy="0" rx="34" ry="14" className="f-light" /><ellipse cx="-18" cy="-8" rx="18" ry="13" className="f-light" /><ellipse cx="14" cy="-12" rx="22" ry="16" className="f-light" />
+  </g>;
+}
+function Skyline() {
+  const blocks: ReadonlyArray<readonly [number, number, number]> = [[6, 110, 62], [78, 152, 70], [158, 92, 52], [218, 172, 80], [306, 122, 54]];
+  return <>{blocks.map(([x, h, w]) => <g key={x}>
+    <rect x={x} y={-h} width={w} height={h} className="f-mid" opacity=".8" />
+    {Array.from({ length: Math.floor(h / 30) }, (_, r) => <rect key={r} x={x + 10} y={-h + 12 + r * 26} width={w - 20} height="10" rx="2" className="f-light" opacity=".55" />)}
+  </g>)}</>;
+}
+
+const WALLS: Readonly<Record<Prop, ReactNode>> = {
+  desk: <><Pendant x={70} /><Shelf x={20} y={-56} w={132} /><Frame x={236} y={-176} w={94} h={68} /><rect x="186" y="-126" width="32" height="38" rx="2" className="f-warm" /><path d="M191 -114h22M191 -104h16" className="s-mid" strokeWidth="2" /></>,
+  phone: <><Window x={34} y={-196} w={112} h={132} dark={0.55} /><circle cx="112" cy="-162" r="12" className="f-warm" /><Pendant x={256} drop={70} /><Frame x={214} y={-104} w={72} h={54} /></>,
+  bill: <>
+    <rect x="30" y="-196" width="152" height="112" rx="6" className="f-warm" />
+    <rect x="46" y="-182" width="44" height="30" rx="2" className="f-light" transform="rotate(-6 68 -167)" /><rect x="104" y="-176" width="58" height="38" rx="2" className="f-light" /><path d="M104 -176l29 19 29-19" fill="none" className="s-mid" strokeWidth="2" />
+    <rect x="58" y="-134" width="52" height="34" rx="2" className="f-light" transform="rotate(5 84 -117)" /><circle cx="68" cy="-182" r="4" className="f-accent" /><circle cx="133" cy="-176" r="4" className="f-accent" />
+    <rect x="30" y="-196" width="152" height="112" rx="6" fill="none" className="s-deep" strokeWidth="4" /><Pendant x={292} drop={80} />
+  </>,
+  ball: <><circle cx="300" cy="-192" r="30" className="f-warm" /><Cloud x={84} y={-202} /><Cloud x={212} y={-142} s={0.8} /><path d="M0 0q60-40 120-10t120-8 120 6v12H0z" className="f-accent" opacity=".55" /><circle cx="40" cy="-18" r="22" className="f-accent" /><circle cx="330" cy="-14" r="18" className="f-accent" /></>,
+  lecture: <><Pendant x={60} drop={60} /><Pendant x={180} drop={60} /><Pendant x={300} drop={60} /><rect x="30" y="-122" width="202" height="42" rx="6" className="f-mid" /><rect x="44" y="-108" width="122" height="10" rx="4" className="f-light" /><Clock cx={318} cy={-104} r={20} /></>,
+  bed: <>
+    <Window x={40} y={-206} w={98} h={122} dark={0.6} /><circle cx="110" cy="-172" r="12" className="f-warm" />
+    <path d="M160 -214q100 52 200 0" fill="none" className="s-mid" strokeWidth="2" />
+    {[178, 208, 238, 268, 298, 328].map((x, i) => <circle key={x} cx={x} cy={-214 + Math.round(Math.sin(((i + 1) / 7) * Math.PI) * 25)} r="5" className="f-warm" />)}
+    <Frame x={222} y={-142} w={82} h={62} />
+  </>,
+  kitchen: <>
+    <rect x="20" y="-132" width="320" height="88" rx="6" className="f-mid" />
+    {[20, 100, 180, 260].map((x) => <g key={x}><rect x={x + 6} y="-126" width="68" height="76" rx="4" className="f-light" opacity=".35" /><rect x={x + 34} y="-62" width="12" height="4" rx="2" className="f-deep" /></g>)}
+    <path d="M60 -202h240" className="s-deep" strokeWidth="4" strokeLinecap="round" /><path d="M100 -202v22M160 -202v28M220 -202v20M270 -202v26" className="s-deep" strokeWidth="3" />
+    <circle cx="100" cy="-174" r="7" className="f-warm" /><rect x="154" y="-174" width="12" height="10" rx="2" className="f-accent" /><ellipse cx="220" cy="-178" rx="9" ry="5" className="f-warm" /><rect x="264" y="-176" width="12" height="14" rx="3" className="f-accent" />
+  </>,
+  calendar: <>
+    <rect x="24" y="-212" width="190" height="162" rx="6" className="f-light" /><rect x="24" y="-212" width="190" height="30" rx="6" className="f-deep" />
+    {[0, 1, 2, 3].map((r) => [0, 1, 2, 3, 4].map((c) => <rect key={`${r}-${c}`} x={34 + c * 36} y={-172 + r * 28} width="30" height="22" rx="3" className={r === 2 && c === 3 ? "f-accent" : "f-sky"} />))}
+    <Pendant x={300} drop={40} /><Clock cx={300} cy={-140} r={26} />
+  </>,
+  door: <>
+    <path d="M40 -102h150" className="s-deep" strokeWidth="6" strokeLinecap="round" />{[60, 110, 160].map((x) => <circle key={x} cx={x} cy="-96" r="5" className="f-warm" />)}
+    <path d="M60 -96l-18 70h36z" className="f-accent" /><rect x="100" y="-96" width="22" height="46" rx="6" className="f-mid" />
+    <ellipse cx="290" cy="-142" rx="40" ry="56" className="f-light" /><path d="M270 -172q14-10 26 4" fill="none" className="s-mid" strokeWidth="3" /><ellipse cx="290" cy="-142" rx="40" ry="56" fill="none" className="s-warm" strokeWidth="6" />
+    <Pendant x={196} drop={50} />
+  </>,
+  living: <><Frame x={30} y={-172} w={82} h={62} /><Frame x={126} y={-194} w={58} h={84} /><Pendant x={262} drop={100} /><rect x="212" y="-40" width="130" height="7" rx="2" className="f-deep" /><rect x="228" y="-52" width="20" height="12" className="f-warm" /><circle cx="238" cy="-62" r="14" className="f-accent" /><rect x="292" y="-66" width="12" height="26" rx="2" className="f-mid" /><rect x="308" y="-60" width="12" height="20" rx="2" className="f-warm" /></>,
+  meeting: <>
+    {[40, 160, 280].map((x) => <rect key={x} x={x} y="-246" width="70" height="10" rx="3" className="f-light" />)}
+    {[60, 150, 240, 330].map((x) => <path key={x} d={`M${x} -226V-6`} className="s-mid" strokeWidth="3" opacity=".45" />)}<path d="M0 -142h360" className="s-mid" strokeWidth="3" opacity=".45" />
+    <rect x="30" y="-112" width="100" height="62" rx="4" className="f-mid" opacity=".5" /><Clock cx={196} cy={-184} r={22} />
+  </>,
+  crossing: <><Cloud x={70} y={-214} /><Cloud x={252} y={-190} s={0.9} /><Skyline /></>,
+  shop: <>
+    {[50, 180, 310].map((x) => <g key={x}><path d={`M${x} -250v40`} className="s-deep" strokeWidth="2" /><rect x={x - 40} y="-210" width="80" height="30" rx="5" className="f-accent" /><rect x={x - 26} y="-199" width="52" height="8" rx="3" className="f-light" /></g>)}
+    {[20, 140, 260].map((x) => <rect key={x} x={x} y="-140" width="80" height="8" rx="3" className="f-light" opacity=".7" />)}
+  </>,
+  street: <><Cloud x={92} y={-206} /><circle cx="300" cy="-202" r="24" className="f-warm" opacity=".8" /><Skyline /><path d="M40 0V-122h26" fill="none" className="s-deep" strokeWidth="5" /><ellipse cx="66" cy="-114" rx="12" ry="7" className="f-warm" /></>,
+  study: <>
+    <rect x="20" y="-232" width="132" height="222" rx="4" className="f-mid" />
+    {[-192, -132, -72].map((y) => <g key={y}>{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={30 + i * 18} y={y - (22 + (i % 3) * 6)} width="14" height={22 + (i % 3) * 6} rx="1.5" className={["f-deep", "f-warm", "f-accent", "f-light"][i % 4]} />)}<rect x="20" y={y} width="132" height="6" className="f-deep" /></g>)}
+    <Window x={200} y={-200} w={122} h={112} dark={0.4} /><Pendant x={262} drop={20} />
+  </>,
+  none: <><Cloud x={82} y={-182} /><Cloud x={262} y={-122} s={0.8} /></>,
+};
+
 /** One place per prop. The part marked `play-prop` reacts once when the scene is up (PLAY-PLAN §11). */
 function PropArt({ prop, stake }: { prop: Prop; stake: number }) {
   switch (prop) {
@@ -252,11 +349,26 @@ export function Scene({ prop = "none", who, mood, beanSize = 136, bean, result, 
   const style = { "--sc-sky": t.sky, "--sc-ground": t.ground, "--sc-deep": t.deep, "--sc-mid": t.mid, "--sc-light": t.light, "--sc-warm": t.warm, "--sc-accent": t.accent, background: t.sky } as CSSProperties;
   return (
     <div className={`play-scene${className ? ` ${className}` : ""}`} data-prop={prop} data-result={result} data-mood={mood} data-stake={band(clamped)} style={style}>
-      <svg className="play-scene-art" viewBox="0 0 360 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <svg className="play-scene-art" viewBox="0 -250 360 450" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+        {WALLS[prop]}
         <PropArt prop={prop} stake={clamped} />
       </svg>
       <div className="play-scene-bean">{bean ?? <Bean who={who} mood={mood} size={beanSize} look={look} />}</div>
       {children}
+    </div>
+  );
+}
+
+/** A place without its bean or its reaction: the run's title card stands in its first world. */
+export function PlaceArt({ prop }: { prop: Prop }) {
+  const t = SCENE_TINTS[prop];
+  const style = { "--sc-sky": t.sky, "--sc-ground": t.ground, "--sc-deep": t.deep, "--sc-mid": t.mid, "--sc-light": t.light, "--sc-warm": t.warm, "--sc-accent": t.accent, background: t.sky } as CSSProperties;
+  return (
+    <div className="play-place" data-place={prop} style={style} aria-hidden="true">
+      <svg className="play-scene-art" viewBox="0 -250 360 450" preserveAspectRatio="xMidYMax meet">
+        {WALLS[prop]}
+        <PropArt prop={prop} stake={0} />
+      </svg>
     </div>
   );
 }

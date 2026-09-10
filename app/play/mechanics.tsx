@@ -581,8 +581,8 @@ function Catch({ round, live, reducedMotion, progress, mood, onResult }: Mechani
                 <motion.button key={x.key} type="button" className={`play-fall${x.decoy ? " is-decoy" : ""}`} style={{ left: `${left}%`, top: `${top}%`, rotate: dir * 22 * t }} disabled={!live || done}
                   onClick={() => (x.decoy ? setWrong((w) => [...w, x.label]) : setCaught((c) => [...c, x.label]))}
                   exit={{ scaleY: 0.45, scaleX: 1.2, opacity: 0, transition: { duration: 0.22, ease: "easeOut" } }} whileTap={{ scale: 0.9 }} transition={POP}>
-                  <Glyph text={x.label} prop={round.prop} size={20} />
-                  {x.label}
+                  <span className="play-fall-art"><Glyph text={x.label} prop={round.prop} size={34} /></span>
+                  <span className="play-fall-label">{x.label}</span>
                 </motion.button>
               );
             })}
@@ -648,7 +648,7 @@ function Balance({ round, live, reducedMotion, progress, mood, onResult }: Mecha
           </svg>
         </div>
       </Scene>
-      <p className="play-heat-label" aria-live="polite">{inZone ? "Steady" : x < 0.3 ? "Tipping one way" : "Tipping the other way"}</p>
+      <p className="play-heat-label" aria-live="polite">{inZone ? "Level" : x < 0.3 ? "Tipping one way" : "Tipping the other way"}</p>
     </div>
   );
 }

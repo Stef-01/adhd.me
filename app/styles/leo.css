@@ -75,3 +75,7 @@ body:has(.lives-run) .aoc-band { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .leo-bedroom.is-moving .leo-sleepy-head, .leo-wing { animation: none !important; }
 }
+
+/* Stage 3: the room takes the screen. Both phases left a band of bare lavender under the board;
+   the board now grows into whatever the rows above and below it leave. */
+.leo-practice .leo-board, .leo-practice:not([data-phase="ready"]) .leo-board { flex: 1 1 auto; height: auto; min-height: clamp(220px, calc(46svh - var(--consent-height, 0px)), 460px); max-height: 760px; }

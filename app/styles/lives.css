@@ -375,3 +375,7 @@
 .lives-card.is-round[data-game="leo_mosquito"] { background: #c5c6ed; }
 .lives-card.is-round[data-game="leo_mosquito"] .lives-clock { height: 8px; background: #aaaed4; }
 .lives-card.is-round[data-game="leo_mosquito"] .lives-clock span { background: #514d7d; }
+
+/* Stage 3: in Leo's bedroom the window is up on the right, so the moment and its button keep left of it. */
+.lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) { align-items: flex-start; padding-inline: 22px; }
+.lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) .lives-hold-button { margin-left: 6px; }

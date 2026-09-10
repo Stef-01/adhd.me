@@ -24,7 +24,7 @@ import { track } from "@/model/events";
 import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
 import { Mechanic, ownsScene } from "./mechanics";
-import { Scene } from "./scene";
+import { Scene, PlaceArt } from "./scene";
 import { SafetyScreen } from "../safety-screen";
 import { VoiceReflection } from "../voice-reflection";
 import { interpret, type Interpretation } from "@/model/interpret";
@@ -123,6 +123,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           )}
           {phase === "title" && (tutorial === null || tutorial < 0) && (
             <div className="play-card is-title">
+              <PlaceArt prop={run.rounds.find((r) => r.prop && r.prop !== "none")?.prop ?? "none"} />
               <Bean who={run.bean} mood="engaged" size={160} className="play-hero-bean" />
               <h2 className="play-title">{run.title}</h2>
               <button type="button" className="play-tempt is-go" onClick={next} autoFocus><Play size={18} weight="fill" aria-hidden="true" /> Tap to play</button>
