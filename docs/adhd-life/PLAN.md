@@ -42,7 +42,7 @@ line or an analytics event.
 | §24 Personal ADHD model (Need) | Domain, cost, priority, confidence, contributors… | **Done**, derived on read | `src/model/needs.ts` |
 | §25 Eco-bio-psychosocial model | Four layers, subdomains | **Done** + the care map screen | `src/model/layers.ts`, `app/care-map.tsx`, `/approach/map` |
 | §26 My ADHD screen | Friction, contributors, pattern, helps, goal, worth exploring | **Done** | `app/my-adhd.tsx` |
-| §27 My Manual | Editable personal knowledge | **Deferred (P1)** | — |
+| §27 My Manual | Editable personal knowledge | **Done**, pulled forward from Phase B (2026-09-08) | `app/manual.tsx`, `src/model/manual.ts`, `/manual` |
 | §28 Reflection | Type / voice / select / skip | **Done** | player, `app/voice-reflection.tsx` |
 | §29 Reflection interpretation | Suggested reading, user confirms | **Done** — a closed lexicon on the device, no language model; only a confirmed reading enters the model | `src/model/interpret.ts` |
 | §30–§32 Strategy → experiment → outcome → history | | **Done** | store, Today, My ADHD |
@@ -55,7 +55,7 @@ line or an analytics event.
 | §42 Matching requirements | Problem fit, scope, preferences | **Done** — problem fit on declared expertise orders allied providers, reason on the card; scope is a filter | `src/support/problem-fit.ts` |
 | §43 Booking | Option A external | **Done** already (Healthengine handoff) | — |
 | §44 Referral brief | Editable, never auto-shared | **Done** | support path |
-| PRD v2 ADHD Lives (engine, renderer, results, modules, Toolkit) | Phase L | **L0–L4 done**; content and balancing next | `src/lives/`, `app/lives/` |
+| PRD v2 ADHD Lives (engine, renderer, results, modules, Toolkit) | Phase L | **L0–L5 done**; L6 balancing, sound and audio assets next | `src/lives/`, `app/lives/` |
 | §45–§47 Institutional navigation, support-person sharing, medication experience | `/adjustments`, share a run, `/medication` | **Done** | `app/adjustments.tsx`, `app/play/share-run.tsx`, `app/medication.tsx` |
 | §48–§50 Safety | Rules as data, interrupts, no gamification | **Done** | `src/model/safety.ts`, `app/safety-screen.tsx` |
 | §51 AI architecture | P0 deterministic | **Done** (no generative AI) | — |

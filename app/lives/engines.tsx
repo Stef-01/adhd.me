@@ -19,6 +19,8 @@ export interface EngineProps {
   scene: GameScene;
   live: boolean;
   reducedMotion: boolean;
+  /** §93 reduced sensory effects: the layout has already capped the field; the engines drop their side strips too. */
+  reducedSensory?: boolean;
   /** 0–1 of the allowed time; stays 0 under reduced motion. */
   progress: number;
   elapsedMs: number;
@@ -157,7 +159,7 @@ function TracePath({ game, scene, live, reducedMotion, onResult }: EngineProps) 
 }
 
 /** 4. Inhibition (§51): the button wants to be pressed. Do not. */
-function Inhibition({ scene, live, reducedMotion, progress, onResult }: EngineProps) {
+function Inhibition({ scene, live, reducedMotion, reducedSensory, progress, onResult }: EngineProps) {
   const finish = useOnce(onResult);
   const e = scene.entities[0]!;
   const taunt = tauntAt(progress, scene.taunts ?? []);
@@ -167,7 +169,7 @@ function Inhibition({ scene, live, reducedMotion, progress, onResult }: EnginePr
       <Thing e={{ ...e, r: e.r * grow }} className={`is-temptation${taunt ? ` taunt-${(scene.taunts ?? []).indexOf(taunt)}` : ""}`} data-outcome="miss" disabled={!live} onClick={() => finish({ outcome: "failure", mistakes: 1, line: "Sent." })} aria-label={`${e.label}: do not press`}>
         <span className="lives-temptation-word">{taunt === "says PRESS IT" ? "PRESS IT" : e.label}</span>
       </Thing>
-      {taunt && !reducedMotion && <p className="lives-taunt" aria-live="polite">It {taunt}.</p>}
+      {taunt && !reducedMotion && !reducedSensory && <p className="lives-taunt" aria-live="polite">It {taunt}.</p>}
       {reducedMotion && <button type="button" className="lives-skip is-hold" data-outcome="hit" disabled={!live} onClick={() => finish({ outcome: "success", mistakes: 0 })}>I held off</button>}
     </div>
   );

@@ -2,10 +2,13 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { PracticeId } from "@/domain/types";
 import { DEFAULT_CONFIG } from "@/engine/eligibility";
 import {
+  billingPerVisitFor,
   getConsole,
   onboardPractice,
   resetConsole,
+  updateBillingPerVisit,
   updateRules,
+  validateBillingPerVisit,
   validateOnboarding,
 } from "@/console/store";
 
@@ -78,5 +81,46 @@ describe("rules config", () => {
     expect(updateRules(pid(), { ...DEFAULT_CONFIG, maxInvitesPerQuarter: 99 }, NOW, OWNER)).toHaveProperty("maxInvitesPerQuarter");
     expect(updateRules(pid(), { ...DEFAULT_CONFIG, futureBookingBlockDays: 3.5 }, NOW, OWNER)).toHaveProperty("futureBookingBlockDays");
     expect(rec().rulesVersion).toBe(1);
+  });
+});
+
+describe("billing per visit (console spine)", () => {
+  it("defaults to 80 dollars, and reads the default off a record that never set one", () => {
+    onboardPractice(VALID_ONBOARDING, NOW, OWNER);
+    expect(billingPerVisitFor(rec())).toBe(80);
+    expect(billingPerVisitFor({})).toBe(80);
+  });
+
+  it("stores a new figure and audits the exact change", () => {
+    onboardPractice(VALID_ONBOARDING, NOW, OWNER);
+    expect(updateBillingPerVisit(pid(), 95, NOW, OWNER)).toEqual({});
+    expect(billingPerVisitFor(rec())).toBe(95);
+    const audit = getConsole().auditEvents.at(-1);
+    expect(audit?.subjectId).toBe("billing-per-visit");
+    expect(audit?.detail).toBe("billingPerVisitAud: 80 -> 95");
+  });
+
+  it("accepts 1 to 1000 in whole dollars and nothing else", () => {
+    expect(validateBillingPerVisit(1)).toEqual({});
+    expect(validateBillingPerVisit(1000)).toEqual({});
+    for (const bad of [0, 1001, 3.5, Number.NaN, -80]) {
+      expect(validateBillingPerVisit(bad)).toHaveProperty("billingPerVisitAud");
+    }
+    onboardPractice(VALID_ONBOARDING, NOW, OWNER);
+    expect(updateBillingPerVisit(pid(), 0, NOW, OWNER)).toHaveProperty("billingPerVisitAud");
+    expect(billingPerVisitFor(rec())).toBe(80);
+  });
+
+  it("does not audit a no-op save", () => {
+    onboardPractice(VALID_ONBOARDING, NOW, OWNER);
+    expect(updateBillingPerVisit(pid(), 80, NOW, OWNER)).toEqual({});
+    expect(getConsole().auditEvents).toHaveLength(1);
+  });
+
+  it("refuses a non-member and an unknown practice", () => {
+    onboardPractice(VALID_ONBOARDING, NOW, OWNER);
+    expect(updateBillingPerVisit(pid(), 95, NOW, "stranger@example.com")).toHaveProperty("form");
+    expect(billingPerVisitFor(rec())).toBe(80);
+    expect(updateBillingPerVisit("prac-nobody" as PracticeId, 95, NOW, OWNER)).toHaveProperty("form");
   });
 });

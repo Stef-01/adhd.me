@@ -438,6 +438,33 @@ test("Play P6: the catch and balance mechanics play by buttons under reduced mot
   await expect(page.locator(".play-result")).toContainText("plain routine");
 });
 
+test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand still under reduced motion", async ({ page }) => {
+  // The starting run opens on a desk; the desk's screen wakes. First the still equal.
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?module=starting");
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  const scene = page.locator(".play-scene[data-prop]:not([data-prop='none'])").first();
+  await expect(scene).toBeVisible();
+  const prop = scene.locator(".play-prop").first();
+  await expect(prop).toHaveCount(1);
+  expect(await prop.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  // With motion: one short animation, inside the prop's own box, and the drawing where it was when it is over.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.reload();
+  await page.getByRole("button", { name: "Tap to play" }).click();
+  await expect(scene).toBeVisible();
+  const art = scene.locator(".play-scene-art");
+  const before = (await art.boundingBox())!;
+  const style = await prop.evaluate((el) => { const cs = getComputedStyle(el); return { name: cs.animationName, duration: parseFloat(cs.animationDuration), count: cs.animationIterationCount }; });
+  expect(style.name).not.toBe("none");
+  expect(style.duration).toBeLessThanOrEqual(0.7);
+  expect(style.count).toBe("1");
+  await page.waitForTimeout(1000);
+  const after = (await art.boundingBox())!;
+  expect(after).toEqual(before);
+  expect(await prop.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
+});
+
 test("Play P6: the exercise run's bean is drawn fit", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=exercise");

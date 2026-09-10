@@ -11,7 +11,13 @@ import { isoDaysFrom } from "@/lib/dates";
 import { lintEducationCopy } from "@/education/advice-lint";
 import { CALENDAR_UNKNOWN_COPY, loadCalendar } from "@/capacity/calendar";
 import type { Appointment, AppointmentId, AppointmentStatus, ClinicianId, PracticeId } from "@/domain/types";
-import { CAPACITY_EMPTY_COPY, calendarGapFor, capacityView } from "./capacity";
+import {
+  CAPACITY_EMPTY_COPY,
+  calendarGapFor,
+  capacityView,
+  fullestAndEmptiest,
+  type CapacitySessionRow,
+} from "./capacity";
 
 const sim = runSim({ ...DEFAULT_SIM_CONFIG, weeks: 6 });
 const AS_OF = isoDaysFrom(sim.config.todayIso, 6 * 7 + 1);
@@ -177,5 +183,38 @@ describe("W229 the view decides nothing the lane has already decided", () => {
     expect(CAPACITY_EMPTY_COPY.no_data).toMatch(/not a practice with no room/);
     expect(CAPACITY_EMPTY_COPY.no_capacity).toMatch(/rather than a gap in it/);
     expect(CAPACITY_EMPTY_COPY.forecaster_unscored).toMatch(/Counts are shown/);
+  });
+});
+
+describe("the fullest and emptiest sessions, for the cards above the table", () => {
+  const row = (label: string, utilisation: number | null) => ({ label, utilisation }) as CapacitySessionRow;
+
+  it("picks three of each from the rated rows, fullest first and emptiest first", () => {
+    const picks = fullestAndEmptiest([
+      row("a", 0.2), row("b", 1), row("c", 0.5), row("d", null), row("e", 0.9), row("f", 0.1), row("g", 0.7), row("h", 0.95),
+    ]);
+    expect(picks.fullest.map((r) => r.label)).toEqual(["b", "h", "e"]);
+    expect(picks.emptiest.map((r) => r.label)).toEqual(["f", "a", "c"]);
+  });
+
+  it("never puts one session on both sides, and leaves unrated rows off both", () => {
+    const picks = fullestAndEmptiest([row("a", 0.4), row("b", 0.6), row("c", null), row("d", 0.5), row("e", 0.7)]);
+    expect(picks.fullest.map((r) => r.label)).toEqual(["e", "b", "d"]);
+    expect(picks.emptiest.map((r) => r.label)).toEqual(["a"]);
+  });
+
+  it("breaks a tie on the label so the cards hold still", () => {
+    const picks = fullestAndEmptiest([row("z", 0.5), row("y", 0.5), row("x", 0.5), row("w", 0.5)]);
+    expect(picks.fullest.map((r) => r.label)).toEqual(["w", "x", "y"]);
+    expect(picks.emptiest.map((r) => r.label)).toEqual(["z"]);
+  });
+
+  it("selects six of the simulated practice's seventy, none on both sides", () => {
+    const view = capacityView(sim.appointments, AS_OF, PERIOD);
+    const picks = fullestAndEmptiest(view.sessions);
+    expect(picks.fullest).toHaveLength(3);
+    expect(picks.emptiest).toHaveLength(3);
+    const labels = [...picks.fullest, ...picks.emptiest].map((r) => r.label);
+    expect(new Set(labels).size).toBe(6);
   });
 });

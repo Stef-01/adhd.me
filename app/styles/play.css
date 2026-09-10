@@ -48,6 +48,29 @@ body:has(.play-run) { overflow-x: clip; }
 /* §14 Calm: a miss settles (one soft dip), it does not shake. */
 @keyframes play-shake { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 @media (prefers-reduced-motion: reduce) { .play-scene[data-result] .bean, .play-scene[data-result] .play-scene-art { animation: none; } }
+/* Props react on their own terms (PLAY-PLAN §11), once, a beat after the scene is up: the phone lights up, the bill
+   slides a few pixels and settles, the ball rolls in place, the desk screen wakes, the slide's lines come up, the moon
+   glows, the steam rises, the marked day pulses, the door swings shut. Every one is inside its own box (§14: nothing
+   moves position), under 700 ms, and ends on the drawing's resting state, which is what reduced motion shows instead. */
+.play-scene-art .play-prop { transform-box: fill-box; transform-origin: center; animation: none 0.6s var(--ease-ui) 0.25s 1 both; }
+.play-scene[data-prop="desk"] .play-prop { animation-name: play-prop-wake; }
+.play-scene[data-prop="phone"] .play-prop { animation-name: play-prop-light; }
+.play-scene[data-prop="bill"] .play-prop { animation-name: play-prop-slide; }
+.play-scene[data-prop="ball"] .play-prop { animation-name: play-prop-roll; }
+.play-scene[data-prop="lecture"] .play-prop { animation-name: play-prop-wake; }
+.play-scene[data-prop="bed"] .play-prop { animation-name: play-prop-glow; }
+.play-scene[data-prop="kitchen"] .play-prop { animation-name: play-prop-rise; }
+.play-scene[data-prop="calendar"] .play-prop { animation-name: play-prop-pulse; }
+.play-scene[data-prop="door"] .play-prop { animation-name: play-prop-swing; transform-origin: left center; }
+@keyframes play-prop-wake { from { opacity: 0.35; } to { opacity: 1; } }
+@keyframes play-prop-light { 0% { opacity: 0.3; } 45% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes play-prop-slide { from { transform: translateX(-8px); } to { transform: translateX(0); } }
+@keyframes play-prop-roll { from { transform: rotate(-24deg); } to { transform: rotate(0); } }
+@keyframes play-prop-glow { 0% { opacity: 0.55; transform: scale(0.9); } 60% { opacity: 1; transform: scale(1.06); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes play-prop-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes play-prop-pulse { 0% { transform: scale(0.8); } 55% { transform: scale(1.15); } 100% { transform: scale(1); } }
+@keyframes play-prop-swing { from { transform: rotate(-3deg); } to { transform: rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .play-scene[data-prop] .play-scene-art .play-prop { animation: none; } }
 .play-bean-hit { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
 .play-bean-hit .bean { transition: transform var(--dur-tap) var(--ease-ui); }
 .play-bean-hit.is-holding .bean, .play-bean-hit:active .bean { transform: scale(0.94) translateY(4px); }

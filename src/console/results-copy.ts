@@ -26,7 +26,7 @@ export const RESULTS_COPY = {
       label: "Extra billings, estimated",
       explain:
         "Those extra appointments multiplied by what an average visit bills. Change the " +
-        "per-visit figure on the ROI calculator.",
+        "per-visit figure on this page.",
     },
     optOuts: {
       label: "Patients who asked us to stop",
@@ -87,6 +87,19 @@ export const RESULTS_COPY = {
         "around. Week-by-week views are each measured over their own span, so the weeks may not " +
         "add to the total exactly.",
     ],
+  },
+
+  settings: {
+    heading: "What a visit bills",
+    body: "The extra billings estimate multiplies the extra appointments by this figure. Whole dollars, 1 to 1000.",
+    label: "Dollars a visit bills",
+    save: "Save",
+    saved: "Saved. The estimate now uses it.",
+    errors: {
+      billing: "Enter a whole number from 1 to 1000.",
+      denied: "Your role cannot change this.",
+      failed: "That change could not be saved.",
+    } as Record<string, string>,
   },
 
   footer: "ADHD.ME reports no impact figure for a practice with no comparison group.",

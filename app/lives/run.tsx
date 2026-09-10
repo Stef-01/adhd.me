@@ -12,12 +12,12 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Play, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { allowedMs, beginGame, CHARACTERS, fasterWord, GAMES, hashSeed, layoutGame, recordHighScore, resolveGame, startSession, type CharacterId, type GameDefinition, type GameResult, type GameScene, type SessionState } from "@/lives";
+import { allowedMs, beginGame, CHARACTERS, fasterWord, GAMES, haptic, hashSeed, layoutGame, recordHighScore, resolveGame, startSession, type CharacterId, type GameDefinition, type GameResult, type GameScene, type SessionState } from "@/lives";
 import { track } from "@/model/events";
 import { LifeBean, type LifeMood } from "./bean";
 import { Engine, EXPIRY_IS_SUCCESS, type EngineResult } from "./engines";
 import { Results } from "./results";
-import { LIVES_LARGE_KEY, LIVES_RELAXED_KEY, LIVES_TUTORED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
+import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, LIVES_TUTORED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
 
 const FADE = { duration: 0.18, ease: "easeOut" } as const;
 /** §44: INTRO 350–800 ms; RESOLUTION 500–1500 ms; TRANSITION 150–350 ms. §59: FASTER 700 ms. */
@@ -68,10 +68,21 @@ export function ChaosRun({ seed }: { seed?: string }) {
   const started = useRef<number | null>(null);
   const highBefore = useRef(0);
 
-  // §93: the two settings the home offers, read once; the run keeps them for its whole length.
+  // §93: the settings the home offers, read once; the run keeps them for its whole length.
+  // Reduced flashing bites in the stylesheet through `data-reduced-flashing` and the `is-flash`
+  // class this component withholds; reduced sensory bites in the layout (the entity cap) and the
+  // engines (the taunt strip); haptics bite in `settle`, and never without the flag.
   const [relaxed, setRelaxed] = useState(false);
   const [large, setLarge] = useState(false);
-  useEffect(() => { setTutorial(readFlag(LIVES_TUTORED_KEY) ? -1 : 0); setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY)); }, []);
+  const [reducedFlashing, setReducedFlashing] = useState(false);
+  const [reducedSensory, setReducedSensory] = useState(false);
+  const [haptics, setHaptics] = useState(false);
+  useEffect(() => {
+    setTutorial(readFlag(LIVES_TUTORED_KEY) ? -1 : 0);
+    setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY));
+    setReducedFlashing(readFlag(LIVES_REDUCED_FLASHING_KEY)); setReducedSensory(readFlag(LIVES_REDUCED_SENSORY_KEY)); setHaptics(readFlag(LIVES_HAPTICS_KEY));
+  }, []);
+  const flash = reducedFlashing ? "" : " is-flash";
   // The high score to beat is read before a run begins, never during one: the last game writes the
   // new score to the profile before the score screen opens, and "New high score" compares against
   // what stood before it.
@@ -82,7 +93,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
   /** Begin the next game: the director picks, the engine lays it out, the intro shows. */
   const nextGame = useCallback((state: SessionState) => {
     const begun = beginGame(state, pool);
-    const scene = layoutGame(begun.game, begun.state.difficulty, begun.seed);
+    const scene = layoutGame(begun.game, begun.state.difficulty, begun.seed, { reducedSensory });
     setSession(begun.state);
     setCurrent({ game: begun.game, scene, seed: begun.seed, allowed: allowedMs(begun.game, begun.state.difficulty, relaxed), instance: begun.state.gameIndex });
     setLast(null);
@@ -93,7 +104,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
     setReminding(Boolean(scene.remind));
     setPhase("intro");
     track("MINIGAME_STARTED", { game: begun.game.id, difficulty: begun.state.difficulty, index: begun.state.gameIndex });
-  }, [pool, relaxed]);
+  }, [pool, relaxed, reducedSensory]);
 
   const start = () => {
     const id = seed ?? `${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
@@ -113,10 +124,12 @@ export function ChaosRun({ seed }: { seed?: string }) {
     setLast({ outcome: result.outcome, line: ("line" in result && result.line) || LINES[current.game.engine][success ? "win" : "lose"], delta: resolution.scoreDelta, lostLife: resolution.lostLife });
     setFaster(resolution.faster ? fasterWord(resolution.state.successes) : null);
     setPhase("resolution");
+    // §93 haptics: one short pattern per moment; the end of the run replaces the last miss's.
+    haptic(resolution.over ? "end" : success ? "hit" : "miss", haptics);
     track(success ? "MINIGAME_SUCCESS" : "MINIGAME_FAILURE", { game: current.game.id, difficulty: session.difficulty, outcome: result.outcome });
     if (resolution.faster) track("DIFFICULTY_INCREASED", { to: resolution.state.difficulty });
     if (resolution.over) { apply((s) => recordHighScore(s, resolution.state.score)); track("SESSION_COMPLETED", { games: resolution.state.completedGames, score: resolution.state.score }); }
-  }, [session, current, phase, reducedMotion, apply]);
+  }, [session, current, phase, reducedMotion, apply, haptics]);
 
   /** After the resolution beat: FASTER, the next game, or the end. */
   const advance = useCallback(() => {
@@ -174,7 +187,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
   }
 
   return (
-    <section className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined}>
+    <section className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined} data-reduced-flashing={reducedFlashing ? "true" : undefined} data-reduced-sensory={reducedSensory ? "true" : undefined} data-haptics={haptics ? "true" : undefined}>
       <h1 id="lives-run-title" className="sr-only">ADHD Lives</h1>
       <div className="play-top lives-top">
         <Link className="play-x" href="/lives" aria-label="Leave the run"><X size={20} weight="bold" aria-hidden="true" /></Link>
@@ -199,14 +212,14 @@ export function ChaosRun({ seed }: { seed?: string }) {
           )}
 
           {phase === "faster" && (
-            <div className="play-card lives-card lives-faster" role="status">
+            <div className={`play-card lives-card lives-faster${flash}`} role="status">
               <p className="lives-faster-word">{faster}</p>
               {reducedMotion && <button type="button" className="play-tempt is-go" onClick={() => session && nextGame(session)} autoFocus>Go <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>}
             </div>
           )}
 
           {(phase === "intro" || phase === "active" || phase === "resolution") && current && session && (
-            <div className={`play-card is-round lives-card lives-game${phase === "resolution" ? (last?.outcome === "success" ? " is-hit" : " is-miss") : ""}`} data-beat={phase} data-game={current.game.id} data-seed={current.seed}>
+            <div className={`play-card is-round lives-card lives-game${phase === "resolution" ? (last?.outcome === "success" ? " is-hit" : " is-miss") + flash : ""}`} data-beat={phase} data-game={current.game.id} data-seed={current.seed}>
               {/* DESIGN-dwtd2.md: the game's name small over the shouted verb, on the intro beat only. */}
               {phase === "intro" && !reminding && <p className="lives-game-title">{current.game.title}</p>}
               <p className="lives-shout" aria-live="assertive" tabIndex={-1}>{phase === "intro" && reminding && current.scene.remind ? current.scene.remind : current.game.instruction}</p>
@@ -214,7 +227,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
               <div className="lives-scene" data-engine={current.game.engine} data-game={current.game.id}>
                 {who && current.game.id !== "leo_mosquito" && <div className="lives-scene-bean"><LifeBean who={who} mood={mood} size={phase === "active" ? 72 : 120} /></div>}
                 {(phase === "active" || current.game.id === "leo_mosquito") && (
-                  <Engine key={current.instance} game={current.game} scene={current.scene} live={phase === "active" && armed} reducedMotion={reducedMotion} progress={progress} elapsedMs={elapsed} onResult={settle} outcome={phase === "resolution" ? last?.outcome : undefined} />
+                  <Engine key={current.instance} game={current.game} scene={current.scene} live={phase === "active" && armed} reducedMotion={reducedMotion} reducedSensory={reducedSensory} progress={progress} elapsedMs={elapsed} onResult={settle} outcome={phase === "resolution" ? last?.outcome : undefined} />
                 )}
                 {phase === "resolution" && last && (
                   <motion.div className="lives-result" role="status" data-hit={last.outcome === "success" ? "true" : "false"} initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>

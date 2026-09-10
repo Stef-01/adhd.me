@@ -175,3 +175,27 @@ export function capacityView(
     report,
   };
 }
+
+/**
+ * The three sessions running fullest and the three running emptiest, for the cards above the
+ * table. A view-level pick over the rows: the engine's sentences and rates are untouched.
+ *
+ * Rows with no rate are not candidates for either side, and a row is never on both. Ties break
+ * on the label so the cards do not reorder between renders.
+ */
+export function fullestAndEmptiest(
+  rows: readonly CapacitySessionRow[],
+  n = 3,
+): { fullest: CapacitySessionRow[]; emptiest: CapacitySessionRow[] } {
+  const rated = rows.filter((row) => row.utilisation !== null);
+  const rate = (row: CapacitySessionRow) => row.utilisation as number;
+  const fullest = [...rated]
+    .sort((a, b) => rate(b) - rate(a) || a.label.localeCompare(b.label))
+    .slice(0, n);
+  const taken = new Set(fullest.map((row) => row.label));
+  const emptiest = rated
+    .filter((row) => !taken.has(row.label))
+    .sort((a, b) => rate(a) - rate(b) || a.label.localeCompare(b.label))
+    .slice(0, n);
+  return { fullest, emptiest };
+}
