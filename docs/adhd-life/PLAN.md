@@ -229,10 +229,15 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
       the whole loop in a real browser. (2026-09-09)
 - [ ] **M5 (to 2027-02-09): wiring.** Supabase behind the store (`0006_matching.sql` is the
       shape), practice membership scoping which console account manages which GP profile, the
-      evidence upload through the credentials vault with a verifier's act recording the date, a
-      dense embedder behind the `Embedder` interface evaluated against the lexical one on the
-      corpus in `src/matching/corpus.ts`, and the finder's results offering `/match` as the way to
-      be introduced rather than only listed.
+      evidence upload through the credentials vault with a verifier's act recording the date, and
+      a dense embedder behind the `Embedder` interface evaluated against the lexical one on the
+      corpus in `src/matching/corpus.ts`. **Landed early (2026-09-10):** the finder's two doors
+      to `/match` (the welcome aside and a sentence under the results); the person's own
+      erasure door ("Delete my request" removes the row, the matches, the feedback and the
+      checklist from the GP's side too, `DELETE /api/match/patient/[id]`); the timeline headings
+      as text on the clipboard; and the learning loop read as a report on `/console/gp` (the
+      five declared weights, the weights in use, the correlation each rests on, and the record
+      count against the floor), which M6 asked for.
 - [ ] **M6 (to 2027-03-09): the pilot.** Real GPs on their own declarations (the real-person
       law), ten to twenty matched patients, the learning loop run on real records and its weight
       shifts read as a report, the top-three explanation tested for comprehension, and the

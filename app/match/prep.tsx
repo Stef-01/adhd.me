@@ -7,12 +7,14 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Check, Copy } from "@phosphor-icons/react";
 import { TIMELINE_TEMPLATE } from "@/lib/matching/checklist";
 import type { PatientView } from "@/lib/matching/views";
 import { fetchPatient, readPatientId } from "./session";
 
 export function MatchPrep() {
   const [view, setView] = useState<PatientView | null | "none">(null);
+  const [copied, setCopied] = useState<boolean | null>(null);
 
   useEffect(() => {
     const id = readPatientId();
@@ -103,6 +105,26 @@ export function MatchPrep() {
             </li>
           ))}
         </ol>
+        <div className="match-card-actions">
+          <button
+            type="button"
+            data-testid="copy-timeline"
+            onClick={async () => {
+              const text = TIMELINE_TEMPLATE.map((row) => `${row.heading}\n${row.prompt}\n\n`).join("");
+              try {
+                await navigator.clipboard.writeText(text);
+                setCopied(true);
+              } catch {
+                setCopied(false);
+              }
+            }}
+          >
+            {copied ? <Check size={16} weight="bold" aria-hidden="true" /> : <Copy size={16} weight="bold" aria-hidden="true" />}
+            {copied ? "Copied" : "Copy the headings as text"}
+          </button>
+        </div>
+        {copied === false && <p className="match-copy-note">Copying did not work here; the headings above can be typed out.</p>}
+        {copied === true && <p className="match-copy-note">On your clipboard and nowhere else. Paste it into your notes and write under each heading.</p>}
       </section>
 
       {view.expectations && (

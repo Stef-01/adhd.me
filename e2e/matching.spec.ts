@@ -145,6 +145,52 @@ test("declining needs a reason, and the person sees the reason on their side", a
   await gpContext.close();
 });
 
+test("the finder offers the match as a second door, on the welcome aside and under the results", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("link", { name: /Get matched/ })).toHaveAttribute("href", "/match");
+  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Search with this" }).click();
+  await expect(page.locator(".clinician-list")).toBeVisible();
+  await expect(page.locator(".results-match-door").getByRole("link")).toHaveAttribute("href", "/match");
+});
+
+test("deleting a request removes it from the GP's side too, and the tab forgets it", async ({ page, browser }) => {
+  await intake(page);
+  const first = page.locator(".match-card").first();
+  const matchId = (await first.getAttribute("data-match"))!;
+  const gpId = (await first.getAttribute("data-gp"))!;
+  await page.getByTestId("delete-request").click();
+  await expect(page).toHaveURL(/\/match$/);
+  await page.goto("/match/results");
+  await expect(page.getByRole("heading", { name: "Nothing to show yet" })).toBeVisible();
+  const gpContext = await browser.newContext();
+  const gpPage = await gpContext.newPage();
+  await gpPage.request.post("/api/mock/console");
+  await signInAndOnboard(gpPage, MANAGER_EMAIL);
+  await gpPage.goto(`/console/gp/${gpId}`);
+  await expect(gpPage.locator(`[data-testid="incoming-request"][data-match="${matchId}"]`)).toHaveCount(0);
+  await expect(gpPage.getByTestId("requests-empty")).toBeVisible();
+  await gpContext.close();
+});
+
+test("the prep page offers the timeline headings as text, and says where they went", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await intake(page);
+  await page.goto("/match/prep");
+  await page.getByTestId("copy-timeline").click();
+  await expect(page.locator(".match-copy-note")).toBeVisible();
+});
+
+test("the GP list reads the learning loop as a report, unchanged until eight records exist", async ({ page }) => {
+  await page.request.post("/api/mock/console");
+  await signInAndOnboard(page, MANAGER_EMAIL);
+  await page.goto("/console/gp");
+  await expect(page.getByTestId("learning-note")).toContainText("of the 8 records needed");
+  const rows = page.getByTestId("learning-weights").locator("tbody tr");
+  await expect(rows).toHaveCount(5);
+  await expect(rows.first()).toContainText("0.50");
+});
+
 test("signed-out access to the GP dashboard redirects to sign-in", async ({ page }) => {
   await page.goto("/console/gp");
   await expect(page).toHaveURL(/\/console\/signin$/);

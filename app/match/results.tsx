@@ -117,7 +117,19 @@ export function MatchResults() {
         >
           Start again
         </button>
+        <button
+          type="button"
+          data-testid="delete-request"
+          onClick={async () => {
+            await fetch(`/api/match/patient/${encodeURIComponent(view.id)}`, { method: "DELETE" });
+            clearPatientId();
+            window.location.assign("/match");
+          }}
+        >
+          Delete my request
+        </button>
       </div>
+      <p className="match-copy-note">Delete removes your words, the matches proposed for you and anything you told us afterwards, from our side as well as this tab.</p>
     </main>
   );
 }

@@ -5,6 +5,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
   allFeedback,
   checklistFor,
+  eraseMatchingPatient,
+  exportMatchingPatient,
   feedbackForMatch,
   getMatching,
   gpById,
@@ -98,6 +100,33 @@ describe("M1 matches move through their statuses exactly once", () => {
     expect(matchById("m2", state)!.declineReason).toBe("outside_scope");
     expect(matchesForPatient("p", state).map((m) => m.id)).toEqual(["m1", "m2"]);
     expect(matchesForGP("g1", state).map((m) => m.id)).toEqual(["m1", "m3"]);
+  });
+});
+
+describe("M1 erasure and export reach everything held about one person", () => {
+  it("exports the row, their matches, the feedback on those matches and the checklist, and erases the same set", () => {
+    const state = getMatching(TODAY);
+    savePatient(patient({ id: "p" }), state);
+    savePatient(patient({ id: "q" }), state);
+    saveMatches([match("m1", "p", "g1"), match("m2", "p", "g2", 2), match("m3", "q", "g1")], state);
+    saveFeedback({ id: "f1", matchId: "m1", from: "patient", patientRating: { fit: 4, communication: 4, clinicalAppropriateness: 4 }, gpRating: null, freeTextFeedback: "", createdAt: "2026-09-10" }, state);
+    saveFeedback({ id: "f3", matchId: "m3", from: "patient", patientRating: { fit: 2, communication: 2, clinicalAppropriateness: 2 }, gpRating: null, freeTextFeedback: "", createdAt: "2026-09-10" }, state);
+    saveChecklist({ id: "c", patientId: "p", generatedAt: "2026-09-10", items: [] }, state);
+    const held = exportMatchingPatient("p", state)!;
+    expect(held.matches.map((m) => m.id)).toEqual(["m1", "m2"]);
+    expect(held.feedback.map((f) => f.id)).toEqual(["f1"]);
+    expect(held.checklist?.id).toBe("c");
+    expect(eraseMatchingPatient("p", state)).toEqual({ erased: true, matches: 2, feedback: 1 });
+    expect(patientById("p", state)).toBeNull();
+    expect(matchesForPatient("p", state)).toEqual([]);
+    expect(feedbackForMatch("m1", state)).toEqual([]);
+    expect(checklistFor("p", state)).toBeNull();
+    // The other person is untouched.
+    expect(patientById("q", state)).not.toBeNull();
+    expect(matchesForPatient("q", state).length).toBe(1);
+    expect(feedbackForMatch("m3", state).length).toBe(1);
+    expect(exportMatchingPatient("nobody", state)).toBeNull();
+    expect(eraseMatchingPatient("nobody", state)).toEqual({ erased: false, matches: 0, feedback: 0 });
   });
 });
 

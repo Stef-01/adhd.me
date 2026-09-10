@@ -70,6 +70,9 @@
 .match-bio { font-size: 1rem; line-height: 1.6; max-width: 62ch; }
 .match-bio p { margin: 0 0 12px; }
 @media (max-width: 767px) { .match-profile-head { grid-template-columns: 72px minmax(0, 1fr); } .match-profile-head .match-portrait { width: 72px; height: 72px; } }
+.results-match-door { margin: 18px 0 0; padding: 14px 16px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
+.results-match-door a { color: var(--accent-deep); font-weight: 700; }
+.match-copy-note { margin: 8px 0 0; color: var(--faint); font-size: 0.8125rem; }
 /* The GP dashboard's field grid: a select with a long option must shrink to the column, not widen the page. */
 .platform-console .gp-fields > * { min-width: 0; }
 .platform-console .gp-fields :is(select, input, textarea) { width: 100%; max-width: 100%; }

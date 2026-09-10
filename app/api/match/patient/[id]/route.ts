@@ -4,7 +4,7 @@
 // route empties the store between demonstrations.
 import { NextResponse } from "next/server";
 import { fittedEmbedder } from "@/lib/matching/pipeline";
-import { checklistFor, getMatching, listGPs, matchesForPatient, patientById } from "@/lib/matching/store";
+import { checklistFor, eraseMatchingPatient, getMatching, listGPs, matchesForPatient, patientById } from "@/lib/matching/store";
 import { patientView } from "@/lib/matching/views";
 
 export const dynamic = "force-dynamic";
@@ -20,4 +20,18 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   const embedder = fittedEmbedder(listGPs(state));
   const view = patientView(patient, matchesForPatient(id, state), (gpId) => state.gps.get(gpId) ?? null, checklistFor(id, state), embedder.concepts(patient.narrativeText), null);
   return NextResponse.json(view, { headers: NO_STORE });
+}
+
+/**
+ * Erase the request: the row, every match proposed for it, the feedback on those matches, the
+ * checklist. The privacy record class (src/privacy/record-classes.ts) promises this door; here it
+ * is, behind the same opaque id the person's browser holds. A GP who had accepted sees the match
+ * disappear from their list, which is the honest reading of "delete everything about me".
+ */
+export async function DELETE(_request: Request, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
+  if (!/^[0-9a-f-]{36}$/.test(id)) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
+  const result = eraseMatchingPatient(id, getMatching());
+  if (!result.erased) return NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
+  return NextResponse.json(result, { headers: NO_STORE });
 }

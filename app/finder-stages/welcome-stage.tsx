@@ -167,6 +167,7 @@ export function WelcomeStage({
           <li><span>3</span><div><strong>Choose your next step</strong><p>Check current availability with the booking destination.</p></div></li>
         </ol>
         <Link href="/support">Not sure who to see? Start from the problem <ArrowRight size={17} aria-hidden="true" /></Link>
+        <Link href="/match">Want three GPs picked for you, with a reason each? Get matched <ArrowRight size={17} aria-hidden="true" /></Link>
         <Link href="/approach">New to ADHD? Explore the learning modules <ArrowRight size={17} aria-hidden="true" /></Link>
       </aside>
 

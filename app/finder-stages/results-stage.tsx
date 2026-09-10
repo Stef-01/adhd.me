@@ -352,6 +352,14 @@ export function ResultsStage({
         {orderNote}
         {tieNote ? ` ${tieNote}` : ""}
       </motion.p>
+      {/* Phase M (ADR 0007): the other way in. A listing shows everybody and leaves the choosing to
+          the reader; a match proposes three, each with a reason, and each GP answers from their
+          side. Offered here as a sentence and a link, never as a redirect, because the finder
+          is the product's front door and this is a second one beside it. */}
+      <p className="results-match-door">
+        Rather be introduced than listed?{" "}
+        <Link href="/match">Three GPs picked for you, each with a reason</Link>
+      </p>
       </>
       )}
 
