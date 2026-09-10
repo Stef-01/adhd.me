@@ -112,7 +112,7 @@ export function MatchPrep() {
           {TIMELINE_TEMPLATE.map((row) => (
             <li key={row.heading}>
               <strong>{row.heading}</strong>
-              <span>{row.prompt}</span>
+              <Explain as="span">{row.prompt}</Explain>
             </li>
           ))}
         </ol>

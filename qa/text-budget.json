@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T06:57:07.167Z",
-  "base": "http://localhost:3626",
+  "measuredAt": "2026-09-10T07:06:22.468Z",
+  "base": "http://localhost:3628",
   "budget": {
     "aboveFold": 40,
     "card": 8
@@ -59,20 +59,20 @@
     {
       "path": "/approach",
       "name": "Learn",
-      "aboveFold": 23,
+      "aboveFold": 19,
       "chrome": 8,
-      "total": 142,
+      "total": 138,
       "over": false,
       "longest": [
-        {
-          "w": 7,
-          "text": "The care map — brain, body, environment, people",
-          "tag": "a"
-        },
         {
           "w": 4,
           "text": "A little more understanding.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "The care map",
+          "tag": "a"
         },
         {
           "w": 3,
@@ -134,16 +134,11 @@
     {
       "path": "/profile",
       "name": "Profile (filters)",
-      "aboveFold": 58,
+      "aboveFold": 44,
       "chrome": 8,
-      "total": 362,
+      "total": 345,
       "over": true,
       "longest": [
-        {
-          "w": 17,
-          "text": "Nearer GPs come first among equal matches, and the map after you search is drawn from here",
-          "tag": "p"
-        },
         {
           "w": 11,
           "text": "Everything below is held on this device only, for this tab.",
@@ -153,6 +148,11 @@
           "w": 4,
           "text": "First appointment by telehealth",
           "tag": "strong"
+        },
+        {
+          "w": 3,
+          "text": "Where you are",
+          "tag": "h2"
         }
       ]
     },
@@ -406,25 +406,25 @@
     {
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
-      "aboveFold": 103,
+      "aboveFold": 83,
       "chrome": 0,
-      "total": 212,
+      "total": 169,
       "over": true,
       "longest": [
         {
-          "w": 44,
-          "text": "ADHD assessment across ages, titration. Says she sees ADHD assessment often, for adults an",
-          "tag": "p"
+          "w": 7,
+          "text": "Stimulant first, when medication is the plan",
+          "tag": "span"
         },
         {
-          "w": 9,
-          "text": "Taking new matches: 6 of 8 declared places open.",
+          "w": 5,
+          "text": "6 of 8 places open.",
           "tag": "li"
         },
         {
           "w": 5,
-          "text": "More about how they work",
-          "tag": "summary"
+          "text": "ADHD assessment across ages, titration.",
+          "tag": "p"
         }
       ]
     }

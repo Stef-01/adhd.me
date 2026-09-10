@@ -93,15 +93,15 @@ export function MatchResults() {
             </div>
             <p className="match-headline">{m.rationale.headline}</p>
             <ul className="match-points">
-              {m.rationale.points.slice(0, 2).map((point) => (
+              {m.rationale.points.slice(0, 1).map((point) => (
                 <li key={point}>{point}</li>
               ))}
             </ul>
-            {m.rationale.points.length > 2 && (
+            {m.rationale.points.length > 1 && (
               <details className="match-more">
                 <summary>More reasons</summary>
                 <ul className="match-points">
-                  {m.rationale.points.slice(2).map((point) => (
+                  {m.rationale.points.slice(1).map((point) => (
                     <li key={point}>{point}</li>
                   ))}
                 </ul>

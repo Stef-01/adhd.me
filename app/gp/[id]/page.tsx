@@ -48,7 +48,7 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
           </div>
         </header>
 
-        <Badges gp={view} />
+        <Badges gp={view} brief />
 
         {!view.realPerson && (
           <Explain className="match-note">An invented example profile. The declarations below were generated for the demonstration and describe nobody.</Explain>
