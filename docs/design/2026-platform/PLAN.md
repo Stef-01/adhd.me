@@ -360,17 +360,35 @@ Verification should be proportional: relevant flow checks during each slice, the
 
 ### Acceptance checklist
 
-- [ ] The app opens directly into the working finder and uses the full desktop shell.
+Ticked only where a check in the tree proves it, with the check named. Visual judgements stay open
+until a person looks (2026-09-10).
+
+- [x] The app opens directly into the working finder and uses the full desktop shell.
+      `e2e/app-shell.spec.ts` (O230), `e2e/finder-flow.spec.ts`; `/finder` is a 308 to `/`.
 - [ ] Find, Profile, Learn, and the console visibly share typography, icon discipline, spacing, and controls.
-- [ ] Desktop has a stable masthead; mobile navigation remains reachable and correctly padded.
+      `e2e/a11y.spec.ts` pins the declared font stacks; the visual judgement is still a person's.
+- [x] Desktop has a stable masthead; mobile navigation remains reachable and correctly padded.
+      `e2e/app-shell.spec.ts` (the bar clears the touch floor and the safe area; desktop navigation inside a task).
 - [ ] No heading, paragraph, chip label, availability note, dialog, or focused control is unintentionally clipped or covered.
+      `e2e/keyboard-focus.spec.ts` and `e2e/consent.spec.ts` cover focus and the bar; clipping at every width is not swept.
 - [ ] Content remains readable at the width/zoom matrix above; necessary tables/maps have explicit containment.
+      Only 390 and 1280 to 1440 are exercised by specs; the 320, 430 and 400% zoom cases are not.
 - [ ] All seven learning modules have coordinated artwork and a coherent player; at least the Everyday strategies pilot demonstrates reference 5's activity-led quality.
-- [ ] Both quiz flows retain explanations and usable completion; long reading content also passes geometry and interaction checks.
-- [ ] Existing progress survives migration; resume, restart, replay, invalid IDs, and blocked storage work.
-- [ ] Search, voice, filters, map/list, clinician details, compare, and booking handoff preserve their behaviour and truthful data.
+- [x] Both quiz flows retain explanations and usable completion; long reading content also passes geometry and interaction checks.
+      `e2e/app-shell.spec.ts` (O244), `e2e/learning-platform.spec.ts` (the reading step at 390, resume, Back, invalid ids).
+- [x] Existing progress survives migration; resume, restart, replay, invalid IDs, and blocked storage work.
+      `src/learn/progress.test.ts`, `e2e/learning-platform.spec.ts` (storage denied, invalid id, resume without completion).
+- [x] Search, voice, filters, map/list, clinician details, compare, and booking handoff preserve their behaviour and truthful data.
+      `e2e/finder-flow.spec.ts`, `voice.spec.ts`, `place.spec.ts`, `compare.spec.ts`, `booking.spec.ts`, `matching-verification.spec.ts`; full run 2026-09-10: 352 passed.
 - [ ] Loading, empty, disabled, error, first-visit, and returning states look intentional.
+      `e2e/error-boundary.spec.ts`, `consent.spec.ts` and the empty states in `matching.spec.ts` exist; "look intentional" is a person's call.
 - [ ] Required checks pass, new screenshots are opened and inspected, and differences from the approved visual proof are resolved or specifically reported.
+      `pnpm verify` and the full Chromium e2e are green on main (2026-09-10). **Cross-engine:** WebKit and Firefox
+      are opt-in projects (`PW_BROWSERS=webkit,firefox`). A WebKit pass over the consumer specs on 2026-09-10 ran
+      37 green and 17 red before it was stopped; every red traced to the spec typing into the finder before
+      React had hydrated, which WebKit reaches later than Chromium, and a probe that waits for the page to
+      settle shows the search working. The specs need a hydration wait before they can claim Safari; the
+      screenshots have not been opened by a person since the text budget cut the screens.
 
 ## 11. Decision record and remaining choices
 
