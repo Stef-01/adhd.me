@@ -12,10 +12,12 @@ export const test = base.extend<{ page: Page }>({
     const goto = page.goto.bind(page);
     page.goto = async (url, options) => {
       const response = await goto(url, options);
+      // A spec that names its own `waitUntil` (the fake-clock specs do) keeps Playwright's plain goto.
+      if (options?.waitUntil) return response;
       await page.waitForSelector("html[data-hydrated]", { state: "attached", timeout: 10_000 }).catch(() => undefined);
       // The finder's stages arrive as their own chunks after the shell; wait for the network to
       // go quiet as well, or a stage's input is filled before its code is there to read it.
-      await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => undefined);
+      await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
       return response;
     };
     await use(page);

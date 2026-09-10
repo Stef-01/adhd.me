@@ -52,7 +52,7 @@ test("the step builder gives feedback and can be completed with the keyboard", a
 test("personal meditation pauses, resumes, completes and respects reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.clock.install();
-  await page.goto("/approach/meditate");
+  await page.goto("/approach/meditate", { waitUntil: "load" });
   await page.getByRole("button", { name: "2 min", exact: true }).click();
   await page.getByRole("button", { name: "Start my moment" }).click();
   await expect(page.getByRole("heading", { name: "Nothing else to do." })).toBeFocused();
