@@ -39,71 +39,40 @@ export const SCENES: readonly Scene[] = [
     eyebrow: "Where it starts",
     heading: "You search, and no GP comes back.",
     body:
-      "Type “ADHD GP near me” and you get directories, sponsored clinics, telehealth start-ups and " +
-      "psychiatry waiting lists. Almost none of it is a GP near you who assesses ADHD.",
-    detail: [
-      "No booking site has a filter for it",
-      "The ads are for the expensive route",
-      "Half the results are not in your state",
-    ],
+      "Search “ADHD GP near me” and you get directories, ads and waiting lists. Almost no GP near you.",
+    detail: ["No booking site filters for it", "The ads sell the expensive route", "Half the results are interstate"],
   },
   {
     n: "02",
     eyebrow: "So you go looking",
     heading: "Then you read the doctors one at a time.",
     body:
-      "You open a practice page and work down the list, one GP at a time, looking for the word. " +
-      "Usually it is not there. The profile says “special interests” and lists skin checks and " +
-      "travel medicine, and you are still guessing.",
-    detail: [
-      "Practice pages list doctors, not what they do",
-      "Reception often cannot say either",
-      "There is no public register of who actually does this work",
-      "The one GP who does it is not taking new patients",
-    ],
+      "You read a practice page one GP at a time. The word is not there.",
+    detail: ["Pages list doctors, not what they do", "Reception often cannot say", "No public register exists", "The one who does it is full"],
   },
   {
     n: "03",
     eyebrow: "The part nobody answers",
     heading: "None of it answers what you want to ask.",
     body:
-      "Even when a name finally looks plausible, the page is silent on everything that decides " +
-      "whether this GP is right for you. You book, take the day off, and find out in the room.",
-    detail: [
-      "Will they take me seriously?",
-      "Will they think I’m after something?",
-      "Do they know how this looks in women?",
-      "Will they understand my family, my language?",
-      "Do I need school reports? I don’t have any.",
-      "Will I forget what I meant to say?",
-    ],
+      "Even a plausible name says nothing about whether this GP is right for you.",
+    detail: ["Will they take me seriously?", "Do they know how women present?", "My family, my language?", "No school reports. Is that fine?", "Will I forget what to say?"],
   },
   {
     n: "04",
     eyebrow: "Money, time, distance",
     heading: "How far, how long, how much.",
     body:
-      "The questions that decide whether you go at all are the ones nobody publishes. You ring and " +
-      "ask, or you turn up and find out.",
-    detail: [
-      "Can I get there without a car?",
-      "Is a fifteen-minute appointment enough for this?",
-      "Can I take another day off work?",
-      "Is it bulk billed, or is there a gap?",
-    ],
+      "The questions that decide whether you go are the ones nobody publishes.",
+    detail: ["No car. Can I get there?", "Is fifteen minutes enough?", "Another day off work?", "Bulk billed, or a gap?"],
   },
   {
     n: "05",
     eyebrow: "What the old route cost",
     heading: "The wait was never the care.",
     body:
-      "Before the rule changed, the route ran through a queue with no visible end and a bill most " +
-      "people could not plan for. None of the waiting made the care better. It only made it later.",
-    detail: [
-      "Time off work",
-      "A referral to chase",
-      "Telling the whole story to somebody new",
-    ],
+      "The old route was a queue with no end and a bill nobody could plan for. Waiting made care later, not better.",
+    detail: ["Time off work", "A referral to chase", "The whole story, again"],
     foot:
       `${INDICATIVE_FIGURES.wait.value} is a ${INDICATIVE_FIGURES.wait.label}; ` +
       `${INDICATIVE_FIGURES.cost.value} is a ${INDICATIVE_FIGURES.cost.label}. ` +
@@ -125,12 +94,8 @@ export const SCENES: readonly Scene[] = [
     eyebrow: "What ADHD.ME is",
     heading: "How it works, end to end.",
     body:
-      "The permission already changed. Acting on it is the part that was missing. Three steps.",
-    detail: [
-      "Say what you need, in your words. Not a quiz, and not a score.",
-      "See who is near you, by suburb, care area and language.",
-      "Book the first appointment with one GP who carries it through.",
-    ],
+      "The permission changed. Acting on it was the missing part. Three steps.",
+    detail: ["Say what you need, in your words", "See who is near you", "Book one GP who carries it through"],
   },
   {
     n: "08",
@@ -151,57 +116,32 @@ export const SCENES: readonly Scene[] = [
     eyebrow: "The word",
     heading: "Attention that runs on interest, not importance.",
     body:
-      "ADHD is a difference in how attention, activity and impulse are regulated. The attention is " +
-      "there, it just does not always go where it is needed, and it can lock on hard when " +
-      "something is interesting. That is why the same person can lose a whole afternoon to one " +
-      "thing and not manage a five-minute form.",
-    detail: [
-      "It is not a shortage of effort or care",
-      "It shows up across settings, work, home, study, not only in one",
-      "Hyperactivity can be internal: a restless mind rather than a restless body",
-    ],
+      "Attention is there. It goes where interest is, locks on hard, and skips the five-minute form.",
+    detail: ["Not a shortage of effort", "Shows up across every setting", "Restlessness can be a restless mind"],
   },
   {
     n: "10",
     eyebrow: "Adults too",
     heading: "It does not stop at eighteen.",
     body:
-      "Many people are assessed for the first time as adults, often after a child in the family " +
-      "is, or after years of building systems that quietly stopped working. The pattern is usually " +
-      "older than the label.",
-    detail: [
-      "Assessment in adulthood looks back to childhood as well as at now",
-      "Old school reports help, but their absence does not close the door",
-      "A parent, partner or old friend can fill in the early picture",
-    ],
+      "Many people are assessed first as adults, often after a child is. The pattern is older than the label.",
+    detail: ["It looks back to childhood", "Missing school reports do not close the door", "A parent or old friend fills the early picture"],
   },
   {
     n: "11",
     eyebrow: "Who gets overlooked",
     heading: "It can look quieter in women and girls.",
     body:
-      "The loud, fidgeting picture is the one most people know, and it is the one that gets " +
-      "noticed at school. Inattention, daydreaming, internal restlessness and exhaustion from " +
-      "masking are easier to overlook, and are more often the shape it takes in women and girls.",
-    detail: [
-      "Trying very hard and still falling behind is a common story",
-      "Being organised on the surface can hide a lot of effort underneath",
-      "Being overlooked for years is common, not unusual",
-    ],
+      "The loud, fidgeting picture gets noticed at school. Daydreaming, inner restlessness and masking are overlooked, and are more often the shape in women and girls.",
+    detail: ["Trying hard, still behind", "Organised outside, effort underneath", "Overlooked for years is common"],
   },
   {
     n: "12",
     eyebrow: "What assessment is",
     heading: "A conversation with history, not a single test.",
     body:
-      "An assessment is a structured conversation: your history from childhood to now, how things " +
-      "are across the different parts of your life, and what else could explain the pattern. " +
-      "Questionnaires help organise it. They do not decide it.",
-    detail: [
-      "Expect more than one appointment",
-      "Expect to be asked about sleep, mood and what else is going on",
-      "Expect to be asked what you want to be different",
-    ],
+      "A structured conversation: your history, how life goes in each part of it, what else could explain the pattern. Questionnaires organise it, never decide it.",
+    detail: ["More than one appointment", "Sleep, mood, what else is going on", "What you want to be different"],
     foot: "General information, not advice about you. A GP is the person to talk with about what fits.",
   },
 
@@ -211,56 +151,32 @@ export const SCENES: readonly Scene[] = [
     eyebrow: "Everyday",
     heading: "Put memory outside your head.",
     body:
-      "Working memory is the scratchpad, and with ADHD the scratchpad is small. The move most " +
-      "people find useful is not to try harder to remember, it is to stop needing to. One " +
-      "list, one place, always open.",
-    detail: [
-      "One list, not five apps",
-      "Write it down the moment it lands, before the next thing",
-      "Put the object where the task happens: keys by the door, the form on the keyboard",
-    ],
+      "Working memory is a small scratchpad. Stop needing to remember: one list, one place, always open.",
+    detail: ["One list, not five apps", "Write it down the moment it lands", "Keys by the door, form on the keyboard"],
   },
   {
     n: "14",
     eyebrow: "Everyday",
     heading: "One thing, in view.",
     body:
-      "Time is hard to feel from the inside, so make it visible. A timer you can see, one task " +
-      "on the screen, and a start that is deliberately small, two minutes, one paragraph, one " +
-      "email, because starting is the hard part and momentum does the rest.",
-    detail: [
-      "A visible timer beats a mental one",
-      "Shrink the first step until it is silly",
-      "Close what you are not using",
-    ],
+      "Time is hard to feel, so make it visible. One timer, one task, a start too small to refuse.",
+    detail: ["A visible timer beats a mental one", "Shrink the first step until it is silly", "Close what you are not using"],
   },
   {
     n: "15",
     eyebrow: "Everyday",
     heading: "Borrow someone’s presence.",
     body:
-      "Doing a dull task next to another person, in the room, or on a call with cameras on, " +
-      "makes it easier to start and to stay. People call it body doubling. It works for tax " +
-      "returns, and it works for cleaning the kitchen.",
-    detail: [
-      "A friend, a library, a video call",
-      "Say what you are going to do, out loud, first",
-      "Stop when the timer stops, even mid-task",
-    ],
+      "A dull task beside another person, in the room or on a call, is easier to start and finish. Body doubling.",
+    detail: ["A friend, a library, a video call", "Say what you will do, out loud", "Stop when the timer stops"],
   },
   {
     n: "16",
     eyebrow: "Before the appointment",
     heading: "Write down what you want to say.",
     body:
-      "The appointment is short and the story is long. Write the three things you most want the " +
-      "GP to know before you go, in your own words, and bring them. The box on the finder is a " +
-      "fine place to draft the first sentence.",
-    detail: [
-      "What is hardest right now",
-      "How long it has been like this",
-      "What you want to be different",
-    ],
+      "The appointment is short, the story is long. Write the three things the GP should know and bring them.",
+    detail: ["What is hardest right now", "How long it has been like this", "What you want to be different"],
     foot: "General information, not advice about you. A GP is the person to talk with about what fits.",
   },
 ];

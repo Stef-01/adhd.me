@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T07:56:01.736Z",
-  "base": "http://localhost:3636",
+  "measuredAt": "2026-09-10T10:43:29.301Z",
+  "base": "http://localhost:3650",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -71,10 +71,10 @@
       "path": "/adjustments",
       "name": "/adjustments",
       "state": null,
-      "total": 103,
-      "fold": 86,
+      "total": 91,
+      "fold": 77,
       "chrome": 8,
-      "ratio": 2.6,
+      "ratio": 2.3,
       "verdict": "OVER",
       "longest": [
         {
@@ -125,10 +125,10 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 155,
-      "fold": 95,
+      "total": 152,
+      "fold": 92,
       "chrome": 8,
-      "ratio": 3.9,
+      "ratio": 3.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -143,7 +143,7 @@
         },
         {
           "w": 16,
-          "text": "How attention, memory, activation and emotion actually run for you — the part mo",
+          "text": "How attention, memory, activation and emotion actually run for you, the part mos",
           "tag": "p"
         }
       ]
@@ -152,10 +152,10 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 50,
-      "fold": 29,
+      "total": 43,
+      "fold": 24,
       "chrome": 8,
-      "ratio": 1.3,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -165,13 +165,13 @@
         },
         {
           "w": 5,
-          "text": "A GUIDED MOMENT OF STILLNESS",
-          "tag": "span"
-        },
-        {
-          "w": 5,
           "text": "Sit comfortably. Follow the prompts.",
           "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Skip to main content",
+          "tag": "a"
         }
       ]
     },
@@ -219,7 +219,7 @@
         },
         {
           "w": 15,
-          "text": "One email — who you are and where you practise — and a person replies. No forms.",
+          "text": "One email, who you are and where you practise, and a person replies. No forms.",
           "tag": "p"
         },
         {
@@ -241,7 +241,7 @@
       "longest": [
         {
           "w": 18,
-          "text": ", one open session, three invited patients. No real patient data, no live SMS — ",
+          "text": ", one open session, three invited patients. No real patient data, no live SMS, t",
           "tag": "p"
         },
         {
@@ -273,7 +273,7 @@
         },
         {
           "w": 43,
-          "text": "These are demo scenarios, not patients — nobody’s story is used to sell anything",
+          "text": "These are demo scenarios, not patients, nobody’s story is used to sell anything ",
           "tag": "p"
         },
         {
@@ -341,10 +341,10 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 114,
-      "fold": 33,
+      "total": 66,
+      "fold": 29,
       "chrome": 8,
-      "ratio": 2.9,
+      "ratio": 1.7,
       "verdict": "OVER",
       "longest": [
         {
@@ -395,11 +395,11 @@
       "path": "/lives/learn",
       "name": "/lives/learn",
       "state": null,
-      "total": 69,
+      "total": 50,
       "fold": 20,
       "chrome": 8,
-      "ratio": 1.7,
-      "verdict": "OVER",
+      "ratio": 1.3,
+      "verdict": "ceiling",
       "longest": [
         {
           "w": 7,
@@ -503,10 +503,10 @@
       "path": "/manual",
       "name": "/manual",
       "state": null,
-      "total": 43,
-      "fold": 26,
+      "total": 41,
+      "fold": 24,
       "chrome": 8,
-      "ratio": 1.1,
+      "ratio": 1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -530,7 +530,7 @@
       "path": "/match",
       "name": "/match",
       "state": null,
-      "total": 37,
+      "total": 34,
       "fold": 30,
       "chrome": 8,
       "ratio": 0.9,
@@ -557,8 +557,8 @@
       "path": "/match/feedback",
       "name": "/match/feedback",
       "state": null,
-      "total": 25,
-      "fold": 21,
+      "total": 22,
+      "fold": 18,
       "chrome": 8,
       "ratio": 0.6,
       "verdict": "target",
@@ -584,10 +584,10 @@
       "path": "/match/prep",
       "name": "/match/prep",
       "state": null,
-      "total": 25,
-      "fold": 21,
+      "total": 21,
+      "fold": 17,
       "chrome": 8,
-      "ratio": 0.6,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -602,8 +602,8 @@
         },
         {
           "w": 4,
-          "text": "Before the first appointment",
-          "tag": "span"
+          "text": "Nothing to prepare yet",
+          "tag": "h1"
         }
       ]
     },
@@ -611,8 +611,8 @@
       "path": "/match/results",
       "name": "/match/results",
       "state": null,
-      "total": 17,
-      "fold": 13,
+      "total": 14,
+      "fold": 10,
       "chrome": 8,
       "ratio": 0.4,
       "verdict": "target",
@@ -629,8 +629,8 @@
         },
         {
           "w": 3,
-          "text": "Find a GP",
-          "tag": "span"
+          "text": "Nothing here yet.",
+          "tag": "p"
         }
       ]
     },
@@ -638,10 +638,10 @@
       "path": "/medication",
       "name": "/medication",
       "state": null,
-      "total": 50,
-      "fold": 28,
+      "total": 49,
+      "fold": 27,
       "chrome": 8,
-      "ratio": 1.3,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
@@ -665,15 +665,15 @@
       "path": "/my-adhd",
       "name": "/my-adhd",
       "state": null,
-      "total": 25,
-      "fold": 21,
+      "total": 23,
+      "fold": 19,
       "chrome": 8,
       "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
           "w": 7,
-          "text": "Nothing here yet — and that is honest.",
+          "text": "Nothing here yet, and that is honest.",
           "tag": "h2"
         },
         {
@@ -727,7 +727,7 @@
       "longest": [
         {
           "w": 130,
-          "text": "If you type a suburb, that word is looked up on your device too — the site never",
+          "text": "If you type a suburb, that word is looked up on your device too, the site never ",
           "tag": "p"
         },
         {
@@ -781,7 +781,7 @@
       "longest": [
         {
           "w": 55,
-          "text": "both carry a “Draft — not yet in force” banner. That is deliberate: both documen",
+          "text": "both carry a “Draft, not yet in force” banner. That is deliberate: both document",
           "tag": "p"
         },
         {
@@ -800,17 +800,12 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 128,
+      "total": 62,
       "fold": 38,
       "chrome": 8,
-      "ratio": 3.2,
+      "ratio": 1.6,
       "verdict": "OVER",
       "longest": [
-        {
-          "w": 55,
-          "text": "Appointments vanish on me — I forget half of what was said before I reach the ca",
-          "tag": "strong"
-        },
         {
           "w": 5,
           "text": "How far you would travel",
@@ -820,6 +815,11 @@
           "w": 4,
           "text": "Skip to main content",
           "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "First appointment by telehealth",
+          "tag": "strong"
         }
       ]
     },
@@ -881,10 +881,10 @@
       "path": "/support",
       "name": "/support",
       "state": null,
-      "total": 30,
-      "fold": 26,
+      "total": 29,
+      "fold": 25,
       "chrome": 8,
-      "ratio": 0.8,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -908,8 +908,8 @@
       "path": "/survey",
       "name": "/survey",
       "state": null,
-      "total": 31,
-      "fold": 27,
+      "total": 30,
+      "fold": 26,
       "chrome": 8,
       "ratio": 0.8,
       "verdict": "target",
@@ -1016,8 +1016,8 @@
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
       "state": null,
-      "total": 44,
-      "fold": 40,
+      "total": 42,
+      "fold": 38,
       "chrome": 0,
       "ratio": 1.1,
       "verdict": "ceiling",
@@ -1076,10 +1076,10 @@
       "path": "/approach?module=everyday",
       "name": "A read module, first card",
       "state": null,
-      "total": 114,
+      "total": 111,
       "fold": 67,
       "chrome": 3,
-      "ratio": 2.9,
+      "ratio": 2.8,
       "verdict": "OVER",
       "longest": [
         {
@@ -1130,10 +1130,10 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 4,
+      "total": 27,
+      "fold": 23,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1142,14 +1142,14 @@
           "tag": "a"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 4,
+          "text": "Leo and the mosquito",
+          "tag": "p"
         },
         {
-          "w": 1,
-          "text": "Wasps",
-          "tag": "p"
+          "w": 3,
+          "text": "Skip this round",
+          "tag": "button"
         }
       ]
     },
@@ -1157,10 +1157,10 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 75,
-      "fold": 42,
+      "total": 67,
+      "fold": 40,
       "chrome": 8,
-      "ratio": 1.9,
+      "ratio": 1.7,
       "verdict": "OVER",
       "longest": [
         {
@@ -1184,10 +1184,10 @@
       "path": "/match/prep",
       "name": "Match prep",
       "state": "intake",
-      "total": 71,
-      "fold": 55,
+      "total": 64,
+      "fold": 53,
       "chrome": 8,
-      "ratio": 1.8,
+      "ratio": 1.6,
       "verdict": "OVER",
       "longest": [
         {

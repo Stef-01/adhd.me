@@ -51,7 +51,7 @@ import { AppSettings } from "./app-settings";
 /** The switch rows, in the order a person reads them: who, how, then what the rooms have. */
 const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: string }> = [
   { key: "womanGp", title: "Woman GP", detail: "Only GPs who are women." },
-  { key: "telehealth", title: "First appointment by telehealth", detail: "GPs who see new people by phone or video first." },
+  { key: "telehealth", title: "Telehealth first", detail: "GPs who see new people by phone or video first." },
   { key: "bulkBilling", title: "Bulk billing", detail: "GPs whose practice declares bulk billing." },
   { key: "longerAppointments", title: "Longer appointments", detail: "GPs who declare they do not rush a first visit." },
   { key: "wheelchair", title: "Wheelchair access", detail: "Rooms declared accessible." },

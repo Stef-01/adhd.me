@@ -91,6 +91,8 @@ details.match-disclosure > p { margin: 4px 0 0; }
 .platform-console .gp-answer select { width: 100%; max-width: 100%; }
 .platform-console .gp-answer .console-field { flex: 1 1 200px; }
 /* Folds everywhere share one shape: a 44px summary, no marker, a plus that turns to a minus. */
+.lives-character-fold > summary { min-height: 0; padding: 0; }
+.lives-character-fold > summary .lives-pattern { display: block; }
 .me-fold > summary, .learn-shelf > summary, .lives-more > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; list-style: none; }
 .me-fold > summary::-webkit-details-marker, .learn-shelf > summary::-webkit-details-marker, .lives-more > summary::-webkit-details-marker { display: none; }
 .me-fold > summary::after, .learn-shelf > summary::after { content: "+"; margin-left: auto; font-weight: 800; color: var(--accent); }

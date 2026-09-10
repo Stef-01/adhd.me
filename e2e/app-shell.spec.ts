@@ -10,6 +10,7 @@
 // claims about a phone and both are invisible in a desktop capture — the exact failure mode that
 // made O225's letterboxing survive a review.
 
+import { openModuleShelves } from "./support/learn";
 import { expect, test } from "@playwright/test";
 import { INDICATIVE_FIGURES } from "../src/compliance/landing-copy";
 import { APP_TABS } from "../src/app-shell/tabs";
@@ -381,9 +382,8 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
-  await page.getByTestId("learn-tab-modules").click();
+  await openModuleShelves(page);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
-  for (const shelf of await page.locator("details.learn-shelf:not([open]) > summary").all()) await shelf.click();
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {

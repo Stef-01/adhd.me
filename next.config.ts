@@ -28,7 +28,13 @@ const nextConfig: NextConfig = {
   // afterwards, while this is a real 308 issued before any HTML is written. Permanent, because
   // the move is.
   async redirects() {
-    return [{ source: "/finder", destination: "/", permanent: true }];
+    return [
+      { source: "/finder", destination: "/", permanent: true },
+      // The Lives library folded into the Learn tab (Phase T). Without a module the page has nothing
+      // to show, and a page-level redirect inside the tab shell streamed a 200 and navigated after
+      // load, which raced the next navigation in the footer sweep. Same cure as /finder.
+      { source: "/lives/learn", destination: "/approach?pane=modules", permanent: false, missing: [{ type: "query", key: "module" }] },
+    ];
   },
   async headers() {
     return [

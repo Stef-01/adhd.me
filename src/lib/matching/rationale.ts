@@ -49,7 +49,7 @@ export function explainMatch(input: RationaleInput): MatchRationale {
 
   const headline =
     labels.length > 0
-      ? `You both talk about ${labels[0]}.`
+      ? `In common: ${labels[0]}.`
       : `${gp.shortName} declares what you asked for on the practical side.`;
 
   if (labels.length > 1) points.push(`Also in common: ${asList(labels.slice(1, 4))}.`);

@@ -442,7 +442,9 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   // The starting run opens on a desk; the desk's screen wakes. First the still equal.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
-  await page.getByRole("button", { name: "Tap to play" }).click();
+  // Opened by URL the run may already be past its title card; the tap is there only when it is not.
+  const go = page.getByRole("button", { name: "Tap to play" });
+  if (await go.count()) await go.click();
   const scene = page.locator(".play-scene[data-prop]:not([data-prop='none'])").first();
   await expect(scene).toBeVisible();
   const prop = scene.locator(".play-prop").first();
@@ -451,7 +453,7 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   // With motion: one short animation, inside the prop's own box, and the drawing where it was when it is over.
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.reload();
-  await page.getByRole("button", { name: "Tap to play" }).click();
+  if (await go.count()) await go.click();
   await expect(scene).toBeVisible();
   const art = scene.locator(".play-scene-art");
   const before = (await art.boundingBox())!;

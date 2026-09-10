@@ -83,9 +83,9 @@ test("the home is the spine's index, and More holds every folded screen", async 
   await expect(page).toHaveURL(/\/console\/more$/);
   await expect(page.getByRole("heading", { name: "More tools" })).toBeVisible();
   for (const name of ["Privacy requests", "Usefulness audit", "Matching audit", "Operations queue"]) {
-    await expect(page.getByRole("link", { name, exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: new RegExp(`^${name}`) })).toBeVisible();
   }
   await expect(page.getByTestId("more-folded-first").getByRole("link")).toHaveText(["Privacy requests", "Usefulness audit"]);
-  await page.getByRole("link", { name: "Privacy requests", exact: true }).click();
+  await page.getByRole("link", { name: /^Privacy requests/ }).click();
   await expect(page).toHaveURL(/\/console\/privacy$/);
 });

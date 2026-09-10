@@ -1134,7 +1134,7 @@ export function locationLabel(clinician: Clinician): string {
 /** The distance sentence for a clinician, or null when there is nothing honest to say. */
 export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): string | null {
   // A kilometre figure beside somebody you never travel to is a number that answers no question.
-  if (clinician.telehealthFirstAppointment) return "by telehealth, wherever you are";
+  if (clinician.telehealthFirstAppointment) return "by telehealth";
   if (!origin) return null;
   const nearest = nearestLocation(clinician, origin);
   if (!nearest) return null;

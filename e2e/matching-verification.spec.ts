@@ -91,7 +91,7 @@ test("a suburb re-ranks with distance said per row, telehealth exempt (O3/O4)", 
   await searchFor(page, "I need an ADHD assessment", "Beecroft");
   await expect(page.locator(".clinician-row").getByText(/km away|in your suburb/).first()).toBeVisible();
   // The telehealth-first clinician carries the telehealth sentence, never a kilometre figure.
-  await expect(page.getByText(/by telehealth, wherever you are/).first()).toBeVisible();
+  await expect(page.getByText(/by telehealth/).first()).toBeVisible();
   await page.screenshot(shot("08-geo-reranks-with-honest-distance"));
 });
 

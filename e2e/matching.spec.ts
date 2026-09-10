@@ -188,6 +188,7 @@ test("the prep page offers the timeline headings as text, and says where they we
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await intake(page);
   await page.goto("/match/prep");
+  await page.locator("summary", { hasText: "The symptom timeline" }).click();
   await page.getByTestId("copy-timeline").click();
   await expect(page.locator(".match-copy-note")).toBeVisible();
 });
