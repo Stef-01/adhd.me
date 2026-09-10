@@ -9,11 +9,13 @@
 // the bar's stylesheet reads it (`body:has(.care-app[data-tabs="hidden"]) .app-tabs`), so no
 // state has to cross the layout boundary.
 import { PlatformHeader } from "../platform-header";
+import { WalkthroughOffer } from "../walkthrough-offer";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="platform-shell">
       <PlatformHeader />
+      <WalkthroughOffer />
       {children}
     </div>
   );

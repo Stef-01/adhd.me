@@ -8,3 +8,7 @@ small.explain { display: block; }
 .settings-switch-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
 .settings-switch-row strong { display: block; font-size: 0.9375rem; }
 .settings-switch-row small { display: block; color: var(--muted); font-size: 0.8125rem; line-height: 1.4; }
+.walkthrough-offer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; max-width: var(--shell-w, 640px); margin: 8px auto 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--stone); color: var(--ink); font-size: 0.875rem; }
+.walkthrough-offer > div { display: flex; gap: 8px; }
+.walkthrough-offer button { min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.8125rem; font-weight: 700; }
+.walkthrough-offer button:first-child { background: var(--ground); color: var(--on-ground); border-color: var(--ground); }
