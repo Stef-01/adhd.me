@@ -529,7 +529,7 @@ test("Support-person sharing (PRD §46): a run's link carries the module id and 
 
 test("Medication experience (PRD §47): described in the person's words, kept on the device, never advised on", async ({ page }) => {
   await page.goto("/medication");
-  await expect(page.getByRole("heading", { name: "What it changes, what it leaves, in your words." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Medication, in your words." })).toBeVisible();
   await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
   await page.getByRole("textbox", { name: "What it seems to change" }).fill("Starting is easier before lunch");
   await page.waitForTimeout(600);
@@ -546,9 +546,10 @@ test("Adjustments on paper (PRD §45): the need's track leads, the other is one 
   await expect(page.getByRole("heading", { name: "Most of it already exists." })).toBeVisible();
   // Nothing known: university leads, the track fewer people know exists.
   await expect(page.getByRole("tab", { name: "University and TAFE" })).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("heading", { name: "Study adjustments" })).toBeVisible();
+  await expect(page.getByRole("tabpanel")).toContainText("Extra time, quieter exam room");
   await page.getByRole("tab", { name: "Work" }).click();
-  await expect(page.getByRole("heading", { name: "Workplace adjustments" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Work" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("Flexible start times");
   await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
   // A record whose top need is a workplace one leads with work.
   await page.evaluate((k) => {

@@ -47,10 +47,6 @@ export function Adjustments() {
       </div>
 
       <div id="adjust-panel" role="tabpanel" aria-labelledby={`adjust-tab-${entry.id}`}>
-        <section className="life-card is-lead" aria-labelledby="adjust-title">
-          <h2 id="adjust-title">{entry.title}</h2>
-        </section>
-
         <details className="life-card match-more" open>
           <summary>Available</summary>
                     <ul className="life-list">

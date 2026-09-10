@@ -33,8 +33,7 @@ export function MedicationExperience() {
   return (
     <div className="me-screen learn-screen manual-screen">
       <header className="life-head">
-        <h1 className="life-title">What it changes, what it leaves, in your words.</h1>
-        <p className="life-lede">A note for whoever manages your medication.</p>
+        <h1 className="life-title">Medication, in your words.</h1>
       </header>
 
       {MEDICATION_FIELDS.map((f) => (
@@ -45,8 +44,7 @@ export function MedicationExperience() {
       ))}
 
       <section className="life-card" aria-labelledby="med-bring">
-        <h2 id="med-bring">Bring it to the person who manages it</h2>
-        <p>Copy as text.</p>
+        <h2 id="med-bring">For whoever manages it</h2>
         <div className="life-actions">
           <button type="button" className="learn-primary" onClick={copy} disabled={!written}>{copied ? <><Check size={17} weight="bold" aria-hidden="true" /> Copied</> : <><Copy size={17} weight="bold" aria-hidden="true" /> Copy as text</>}</button>
           <Link className="learn-secondary" href="/my-adhd">Back to My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>

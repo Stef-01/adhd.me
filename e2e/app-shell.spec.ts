@@ -234,7 +234,7 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
 test("the profile's filters narrow the finder, are said on the results, and clear from there", async ({ page }) => {
   await page.goto("/profile");
   // Each filter group is a tap; open the three this test uses.
-  for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.getByRole("switch", { name: /Woman GP/ }).check();
   await page.getByRole("switch", { name: /New patients/ }).check();
@@ -275,7 +275,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   // And the device agrees with the screen.
   await page.goto("/profile");
   await expect(page.getByText("None on", { exact: true })).toBeVisible();
-  await page.locator("summary", { hasText: "How far you would travel" }).click();
+  await page.locator("summary", { hasText: "Distance" }).click();
   await expect(page.getByLabel("Suburb or postcode")).toHaveValue("Beecroft");
 });
 
@@ -290,7 +290,7 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
   // The place comes from the profile (or a link), never from a field on results.
   await page.goto("/profile");
   // Each filter group is a tap; open the three this test uses.
-  for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.goto("/");
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
@@ -342,7 +342,7 @@ test("filters nobody answers say so and give both ways out", async ({ page }) =>
   for (const name of [/Woman GP/, /telehealth/i, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
     await page.getByRole("switch", { name }).check();
   }
-  await page.locator("summary", { hasText: "Speaks, besides English" }).click();
+  await page.locator("summary", { hasText: "Languages" }).click();
   for (const language of ["Arabic", "Igbo", "Urdu"]) await page.getByRole("button", { name: language, exact: true }).click();
   await page.goto("/");
   await page.getByRole("textbox").fill("someone who can do the whole assessment");

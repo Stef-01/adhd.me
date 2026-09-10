@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T11:37:04.547Z",
-  "base": "http://localhost:3657",
+  "measuredAt": "2026-09-10T13:15:32.987Z",
+  "base": "http://localhost:3662",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -233,26 +233,26 @@
       "path": "/demo",
       "name": "/demo",
       "state": null,
-      "total": 33,
-      "fold": 33,
+      "total": 100,
+      "fold": 100,
       "chrome": 0,
-      "ratio": 0.8,
-      "verdict": "target",
+      "ratio": 2.5,
+      "verdict": "long-form",
       "longest": [
+        {
+          "w": 26,
+          "text": "Open one in a second tab when the script reaches the patient moment. Statuses ar",
+          "tag": "p"
+        },
         {
           "w": 18,
           "text": ", one open session, three invited patients. No real patient data, no live SMS, t",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A scripted synthetic practice:",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Demo Family Practice",
-          "tag": "p"
+          "w": 5,
+          "text": "Reset demo to the start",
+          "tag": "button"
         }
       ]
     },
@@ -1146,20 +1146,20 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Nina starts small",
+          "w": 4,
+          "text": "Jax at the checkout",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "START SMALL!",
+          "w": 3,
+          "text": "ONLY THE LIST!",
           "tag": "p"
         },
         {

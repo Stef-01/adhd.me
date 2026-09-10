@@ -58,7 +58,7 @@ export function LivesHome() {
       </ul>
 
       <details className="life-why lives-goals">
-        <summary>What would you most like help with?</summary>
+        <summary>Your goals</summary>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>{g.label}</button>)}
         </div>

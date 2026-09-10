@@ -31,7 +31,7 @@ for (const route of routes()) {
   const rows = await measure(page);
   const result = summarise(route, rows);
   results.push(result);
-  if (process.env.DUMP && result.verdict === "OVER") {
+  if (process.env.DUMP && (result.verdict === "OVER" || (process.env.DUMP === "all" && result.verdict === "ceiling"))) {
     console.log(`
 --- ${route.name} (${result.total})`);
     for (const r of rows.filter((r) => !r.chrome)) console.log(`  ${String(words(r.text)).padStart(2)}w <${r.tag}> ${r.text.slice(0, 110)}`);
