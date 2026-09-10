@@ -98,8 +98,8 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
           )}
         </section>
 
-        <section className="match-section" aria-labelledby="who-heading">
-          <h2 id="who-heading">Who they see</h2>
+        <details className="match-section match-more">
+          <summary>Who they see</summary>
           <ul className="match-facts">
             <li>
               <span>Age groups</span>
@@ -132,10 +132,10 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
               </li>
             )}
           </ul>
-        </section>
+        </details>
 
-        <section className="match-section" aria-labelledby="cred-heading">
-          <h2 id="cred-heading">Credentials, as declared and as checked</h2>
+        <details className="match-section match-more">
+          <summary>Credentials</summary>
           <ul className="match-facts">
             <li>
               <span>Checked</span>
@@ -158,7 +158,7 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
               <span>{view.credentials.yearsTreatingAdhd === null ? "Not declared" : `${view.credentials.yearsTreatingAdhd}, declared`}</span>
             </li>
           </ul>
-        </section>
+        </details>
 
         <div className="match-actions">
           <Link className="is-primary" href="/match">

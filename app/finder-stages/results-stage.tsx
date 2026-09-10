@@ -348,8 +348,7 @@ export function ResultsStage({
           side. Offered here as a sentence and a link, never as a redirect, because the finder
           is the product's front door and this is a second one beside it. */}
       <p className="results-match-door">
-        Rather be introduced than listed?{" "}
-        <Link href="/match">Three GPs picked for you, each with a reason</Link>
+        <Link href="/match">Get matched instead</Link>
       </p>
       </>
       )}
@@ -440,7 +439,7 @@ export function ResultsStage({
                 <strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
-                <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 2).join(", ") || item.focus)}</small>
+                <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 1).join(", ") || item.focus)}</small>
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}
@@ -457,7 +456,7 @@ export function ResultsStage({
                     either — the row says why somebody unactionable is still here (O4).
                     The "they fit what you asked" sentence only renders when a fit was
                     actually computed; otherwise the neutral fact stands alone. */}
-                {closedBooksNote(item, request) && (
+                {!item.acceptingNewPatients && closedBooksNote(item, request) && (
                   <small className="row-availability">{closedBooksNote(item, request)}</small>
                 )}
               </span>

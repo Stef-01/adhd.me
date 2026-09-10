@@ -34,7 +34,7 @@ test("a request comes back with up to three GPs, each with a reason and a status
     await expect(card.locator(".match-headline")).not.toBeEmpty();
     await card.locator(".match-more > summary").click();
     await expect(card.locator(".match-points li").first()).toBeVisible();
-    await expect(card.getByTestId("match-status")).toContainText("Waiting on the GP");
+    await expect(card.getByTestId("match-status")).toHaveCount(0);
     await expect(card).toContainText("Telehealth");
   }
   // The person's own words are never rendered back as a reason.
@@ -54,7 +54,7 @@ test("a GP profile says declared and checked as different things, and shows no s
   await request.post("/api/mock/matching?seedFeedback=1");
   await page.goto("/gp/example-mei-chao");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Dr Mei Chao");
-  await expect(page.getByRole("heading", { name: "Credentials, as declared and as checked" })).toBeVisible();
+  await expect(page.locator("summary", { hasText: "Credentials" })).toBeVisible();
   await expect(page.getByTestId("felt-understood")).toContainText(/Of 7 people matched here/);
   const body = await page.locator("main").innerText();
   expect(body).not.toMatch(/★|\d ?\/ ?5\b|\brated\b|\breviews? (from|by)\b/i);
@@ -103,7 +103,7 @@ test("the GP dashboard receives the request, takes a capacity, and accepts it; t
   await expect(checklist.locator("li")).not.toHaveCount(0);
   await expect(checklist).toContainText("Medicare card and photo ID");
   await expect(checklist).toContainText("School reports");
-  await expect(page.getByRole("heading", { name: /What to expect with/ })).toBeVisible();
+  await expect(page.locator("summary", { hasText: "What to expect with" })).toBeVisible();
   const firstBox = checklist.locator('input[type="checkbox"]').first();
   await firstBox.check();
   await page.reload();

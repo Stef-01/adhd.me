@@ -106,6 +106,10 @@ async function reach(page, route) {
     await page.goto(`${BASE}${route.path}`, { waitUntil: "networkidle" });
     return;
   }
+  if (route.state === "finder-results" || route.state === "finder-profile") {
+    await page.goto(`${BASE}/`);
+    await page.evaluate(() => sessionStorage.clear());
+  }
   await page.goto(`${BASE}${route.path}`, { waitUntil: "networkidle" });
   if (route.state === "finder-results" || route.state === "finder-profile") {
     await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth, not rushed");

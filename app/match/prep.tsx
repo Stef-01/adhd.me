@@ -102,8 +102,8 @@ export function MatchPrep() {
         ))}
       </ul>
 
-      <section className="match-section" aria-labelledby="timeline-heading">
-        <h2 id="timeline-heading">The symptom timeline, five headings</h2>
+      <details className="match-section match-more">
+        <summary>The symptom timeline</summary>
         <ol className="match-timeline">
           {TIMELINE_TEMPLATE.map((row) => (
             <li key={row.heading}>
@@ -131,18 +131,18 @@ export function MatchPrep() {
         </div>
         {copied === false && <p className="match-copy-note">Copy failed; type the headings.</p>}
         {copied === true && <p className="match-copy-note">Copied.</p>}
-      </section>
+      </details>
 
       {view.expectations && (
-        <section className="match-section" aria-labelledby="expect-heading">
-          <h2 id="expect-heading">What to expect with {view.expectations.gpName}</h2>
+        <details className="match-section match-more">
+          <summary>What to expect with {view.expectations.gpName}</summary>
           {view.expectations.sections.map((s) => (
             <details key={s.title} className="match-more">
               <summary>{s.title}</summary>
               <p>{s.body}</p>
             </details>
           ))}
-        </section>
+        </details>
       )}
 
       <div className="match-actions">

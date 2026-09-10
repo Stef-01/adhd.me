@@ -66,7 +66,6 @@ export function MatchResults() {
         <AppSettings />
         <span className="life-eyebrow">Your matches</span>
         <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}, each with a reason`}</h1>
-        {view.heard.length > 0 && <p className="match-lede">Heard: {view.heard.slice(0, 3).join(", ")}.</p>}
       </header>
 
       {view.fromTab && (
@@ -99,11 +98,13 @@ export function MatchResults() {
               </details>
             )}
             <Badges gp={m.gp} brief />
-            <p className="match-status" data-testid="match-status">
-              {m.status === "declined" && m.declineReason ? `${MATCH_STATUS_COPY.declined} ${DECLINE_REASON_LABELS[m.declineReason]}.` : MATCH_STATUS_COPY[m.status]}
-            </p>
+            {m.status !== "proposed" && (
+              <p className="match-status" data-testid="match-status">
+                {m.status === "declined" && m.declineReason ? `${MATCH_STATUS_COPY.declined} ${DECLINE_REASON_LABELS[m.declineReason]}.` : MATCH_STATUS_COPY[m.status]}
+              </p>
+            )}
             <div className="match-card-actions">
-              <Link href={`/gp/${encodeURIComponent(m.gp.id)}`}>See their profile</Link>
+              <Link href={`/gp/${encodeURIComponent(m.gp.id)}`}>Profile</Link>
               {(m.status === "accepted" || m.status === "completed") && (
                 <Link className="is-primary" href="/match/prep">
                   Prepare for the first appointment

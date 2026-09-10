@@ -41,7 +41,6 @@ export function MedicationExperience() {
       {MEDICATION_FIELDS.map((f) => (
         <section key={f.id} className="life-card manual-section" aria-labelledby={`med-${f.id}`}>
           <h2 id={`med-${f.id}`}>{f.title}</h2>
-          <p className="manual-prompt">{f.prompt}</p>
           <textarea className="manual-text" id={`med-text-${f.id}`} aria-label={f.title} rows={4} value={record.medication[f.id]} placeholder={f.placeholder} onChange={(e) => save(f.id, e.target.value)} />
         </section>
       ))}

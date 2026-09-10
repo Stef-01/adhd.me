@@ -179,7 +179,6 @@ export function ProfileView() {
             <X size={16} weight="bold" aria-hidden="true" />
           </Link>
         </div>
-        <p>Everything below is held on this device only, for this tab.</p>
       </header>
 
       {/* ── Where you are ─────────────────────────────────────────────────────────────────── */}
@@ -271,8 +270,8 @@ export function ProfileView() {
           ))}
         </ul>
 
-        <div className="me-group" role="group" aria-labelledby="me-languages-title">
-          <h3 id="me-languages-title">Speaks, besides English</h3>
+        <details className="me-group me-fold">
+          <summary id="me-languages-title">Speaks, besides English</summary>
           <ul className="me-chips">
             {MATCHABLE_LANGUAGES.map((language) => {
               const on = filters.languages.includes(language);
@@ -295,10 +294,10 @@ export function ProfileView() {
               );
             })}
           </ul>
-        </div>
+        </details>
 
-        <div className="me-group me-distance">
-          <h3>How far you would travel</h3>
+        <details className="me-group me-fold me-distance">
+          <summary>How far you would travel</summary>
           {/* Pressed buttons rather than radios: every choice is its own tab stop, which is what the
               keyboard sweep holds every public control to, and the pressed state is read as such. */}
           <div className="me-segments" role="group" aria-label="How far you would travel">
@@ -324,12 +323,12 @@ export function ProfileView() {
               ? "A distance needs a suburb above before it can apply."
               : "Straight-line, from the suburb above. GPs who see new people by telehealth first are always included."}
           </p>
-        </div>
+        </details>
 
         {/* 2026-09-08 (PRD §38): which KIND of professional. Empty is every kind; the support path
             sets one on the person's behalf when they choose "See providers" from a problem. */}
-        <div className="me-group" role="group" aria-labelledby="me-profession-title">
-          <h3 id="me-profession-title">Kind of support</h3>
+        <details className="me-group me-fold">
+          <summary id="me-profession-title">Kind of support</summary>
           <ul className="me-chips">
             {PROFESSION_ENTRIES.map((entry) => {
               const on = filters.professions.includes(entry.id);
@@ -351,13 +350,13 @@ export function ProfileView() {
             })}
           </ul>
           <p className="me-group-note">Leave all off to see everyone.</p>
-        </div>
+        </details>
 
         {/* O248 (founder-directed): how the GP works — whole-person, functional-health, wearables —
             as the GP declares it. Each chip requires the declaration; GPs who have not said are
             left out of a chosen chip rather than assumed. Nothing here is a claim about outcomes. */}
-        <div className="me-group" role="group" aria-labelledby="me-approach-title">
-          <h3 id="me-approach-title">How they work</h3>
+        <details className="me-group me-fold">
+          <summary id="me-approach-title">How they work</summary>
           <ul className="me-chips">
             {APPROACHES.map((a) => {
               const on = filters.approach.includes(a);
@@ -379,13 +378,13 @@ export function ProfileView() {
             })}
           </ul>
           <p className="me-group-note">As the GP declares it.</p>
-        </div>
+        </details>
 
         {/* O236 (founder-directed): a fact modern patients ask about first — whether the consult is
             recorded and transcribed by AI. A declared practice fact, filtered like the others;
             GPs who have not said are left out of either choice rather than assumed. */}
-        <div className="me-group">
-          <h3>Notes during the consult</h3>
+        <details className="me-group me-fold">
+          <summary>Notes during the consult</summary>
           <div className="me-segments me-segments-3" role="group" aria-label="Notes during the consult">
             {CONSULT_RECORDING_CHOICES.map((choice: ConsultRecordingChoice) => {
               const on = filters.consultRecording === choice;
@@ -405,7 +404,7 @@ export function ProfileView() {
             })}
           </div>
           <p className="me-group-note">An AI scribe with consent, or none.</p>
-        </div>
+        </details>
 
         {onCount > 0 && (
           <button className="me-forget" type="button" onClick={clearFilterSet}>

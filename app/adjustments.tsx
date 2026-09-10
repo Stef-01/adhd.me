@@ -60,15 +60,15 @@ export function Adjustments() {
           </ul>
         </section>
 
-        <section className="life-card" aria-labelledby="adjust-who">
-          <h2 id="adjust-who"><UsersThree size={20} weight="bold" aria-hidden="true" /> Who to ask</h2>
+        <details className="life-card match-more">
+          <summary>Who to ask</summary>
           <ul className="life-list">
             {entry.whoToAsk.map((line) => <li key={line}><ArrowRight size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-bring">
-          <h2 id="adjust-bring"><Paperclip size={20} weight="bold" aria-hidden="true" /> What to bring</h2>
+        <details className="life-card match-more">
+          <summary>What to bring</summary>
           <ul className="life-list">
             {entry.bring.map((line) => <li key={line}><ArrowRight size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
@@ -76,17 +76,17 @@ export function Adjustments() {
             <Link className="learn-secondary" href="/manual">{record.manual.updatedAt ? "Open my manual" : "Start my manual"}</Link>
             <Link className="learn-secondary" href="/support">The brief for a clinician</Link>
           </div>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-steps">
-          <h2 id="adjust-steps">In order</h2>
+        <details className="life-card match-more">
+          <summary>In order</summary>
           <ol className="adjust-steps">
             {entry.steps.map((line) => <li key={line}>{line}</li>)}
           </ol>
-        </section>
+        </details>
 
-        <section className="life-card" aria-labelledby="adjust-help">
-          <h2 id="adjust-help">Who can help you ask</h2>
+        <details className="life-card match-more">
+          <summary>Who can help you ask</summary>
           <ul className="profession-list">
             {entry.professions.map((id, i) => {
               const p = profession(id);
@@ -99,7 +99,7 @@ export function Adjustments() {
               );
             })}
           </ul>
-        </section>
+        </details>
       </div>
     </div>
   );

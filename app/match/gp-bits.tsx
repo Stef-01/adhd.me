@@ -41,12 +41,6 @@ export function Badges({ gp, brief = false }: { gp: GPPublicView; brief?: boolea
           {v.status === "verified" ? "Checked" : "Declared"}
         </li>
         <li className={`match-badge ${gp.availability.grade === "closed" ? "is-closed" : "is-open"}`}>{gp.availability.grade === "closed" ? "Full" : "Open"}</li>
-        {gp.telehealthAvailable && (
-          <li className="match-badge">
-            <VideoCamera size={14} weight="bold" aria-hidden="true" />
-            Telehealth
-          </li>
-        )}
         {!gp.realPerson && <li className="match-badge is-pending">Example</li>}
       </ul>
     );

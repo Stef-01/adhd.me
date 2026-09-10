@@ -355,7 +355,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
           </li>
         </ul>
       )}
-      {forYou.length > 0 && <Shelf title="For you" strategies={forYou} done={done} />}
+      {forYou.length > 0 && <Shelf title="For you" strategies={forYou} done={done} open />}
       <h3 className="lives-section-title">Understand ADHD</h3>
       <ol className="learn-stack" data-testid="learn-reads">
         {reads.map((module, index) => (
@@ -400,13 +400,13 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
   );
 }
 
-function Shelf({ title, strategies, done }: { title: string; strategies: readonly StrategyDefinition[]; done: readonly string[] }) {
+function Shelf({ title, strategies, done, open = false }: { title: string; strategies: readonly StrategyDefinition[]; done: readonly string[]; open?: boolean }) {
   const id = `shelf-${title.replace(/\W+/g, "-").toLowerCase()}`;
   return (
-    <section className="lives-shelf" aria-labelledby={id}>
-      <h3 id={id} className="lives-section-title">
+    <details className="lives-shelf learn-shelf" open={open} data-shelf={id}>
+      <summary className="lives-section-title" id={id}>
         {title}
-      </h3>
+      </summary>
       <ul className="lives-rows">
         {strategies.map((s) => (
           <li key={s.id}>
@@ -422,7 +422,7 @@ function Shelf({ title, strategies, done }: { title: string; strategies: readonl
           </li>
         ))}
       </ul>
-    </section>
+    </details>
   );
 }
 
